@@ -47,7 +47,7 @@ gunicorn~=20.0.0
 cryptography~=2.9.0
 # requests-http-signature==0.0.3
 # clone until the branch is merged and released upstream
-git+https://github.com/EliotBerriot/requests-http-signature.git@signature-header-support
+https://github.com/pyauth/requests-http-signature/archive/c0c8fd7255b73001845062f355c2f702bb2903db.zip
 django-cleanup~=5.0.0
 requests~=2.24.0
 pyOpenSSL~=19.1.0
