@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-08-29 12:09+0000\n"
+"PO-Revision-Date: 2020-09-12 01:48+0000\n"
 "Last-Translator: Meliurwen <meliurwen@gmail.com>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -785,7 +785,7 @@ msgstr "Albums"
 #: front/src/components/library/ArtistDetail.vue:21
 msgctxt "Content/Artist/Title"
 msgid "Albums by this artist"
-msgstr "Albums di questo artista"
+msgstr "Album di questo artista"
 
 #: front/src/components/manage/ChannelsTable.vue:13
 #: front/src/components/manage/library/ArtistsTable.vue:13
@@ -1181,7 +1181,7 @@ msgstr "Sfoglia…"
 #: front/src/components/library/Albums.vue:4
 msgctxt "Content/Album/Title"
 msgid "Browsing albums"
-msgstr "Sfogliando album"
+msgstr "Sfogliando gli album"
 
 #: front/src/components/library/Artists.vue:4
 msgctxt "Content/Artist/Title"
