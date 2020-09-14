@@ -4,9 +4,10 @@ msgstr ""
 "Project-Id-Version: French (Funkwhale)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-08-07 06:39+0000\n"
-"Last-Translator: dulz <sroulon@tuta.io>\n"
-"Language-Team: French <https://translate.funkwhale.audio/projects/funkwhale/front/fr/>\n"
+"PO-Revision-Date: 2020-09-14 22:18+0000\n"
+"Last-Translator: appzer0 <appzer0@free.fr>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/funkwhale/"
+"front/fr/>\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -205,7 +206,7 @@ msgstr "%{ minutes } min"
 
 #: front/src/components/audio/ChannelCard.vue:21
 msgid "%{ updatedAgo }"
-msgstr ""
+msgstr "%{ updatedAgo }"
 
 #: front/src/components/notifications/NotificationRow.vue:44
 msgctxt "Content/Notifications/Paragraph"
@@ -401,6 +402,8 @@ msgstr "Accès aux radios"
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to security settings such as password and authorization"
 msgstr ""
+"Accès aux paramètres de sécurité tel que le mot de passe ou le processus "
+"d'authentification"
 
 #: front/src/components/auth/ApplicationEdit.vue:29
 #: front/src/components/auth/ApplicationEdit.vue:22
@@ -698,7 +701,7 @@ msgstr "Champs supplémentaires à afficher dans le formulaire. Visible uniqueme
 #: front/src/components/audio/VolumeControl.vue:62
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Adjust volume"
-msgstr ""
+msgstr "Ajuster le volume"
 
 #: front/src/components/manage/users/UsersTable.vue:64
 #: front/src/components/manage/users/UsersTable.vue:25
@@ -1332,6 +1335,8 @@ msgstr "Changer le mot de passe"
 msgctxt "Content/Settings/Paragraph'"
 msgid "Change the email address associated with your account. We will send a confirmation to the new address."
 msgstr ""
+"Changez l'adresse e-mail associée à votre compte. Nous vous enverrons une "
+"confirmation à la nouvelle adresse."
 
 #: front/src/components/Footer.vue:49
 msgctxt "Footer/Settings/Dropdown.Label/Short, Verb"
@@ -2694,7 +2699,7 @@ msgstr "Exclure"
 #: front/src/components/library/Artists.vue:50
 msgctxt "Content/Search/Checkbox/Noun"
 msgid "Exclude Compilation Artists"
-msgstr ""
+msgstr "Exclure les compilations d'artistes"
 
 #: front/src/components/common/CollapseLink.vue:2
 msgctxt "*/*/Button,Label"
@@ -3098,13 +3103,13 @@ msgstr "Détails de l'import"
 #: front/src/components/library/FsLogs.vue:4
 msgctxt "Content/Library/Paragraph"
 msgid "Import hasn't started yet"
-msgstr ""
+msgstr "L'importation n'a pas encore commencé"
 
 #: front/src/components/library/FileUpload.vue:61
 #: front/src/components/library/FileUpload.vue:2
 msgctxt "Content/Library/Title/Verb"
 msgid "Import music from your server"
-msgstr ""
+msgstr "Importer de la musique depuis votre serveur"
 
 #: front/src/components/library/FileUpload.vue:50
 msgctxt "Content/Library/Input.Label/Noun"
@@ -3476,7 +3481,7 @@ msgstr "Bibliothèque mise à jour"
 #: front/src/components/auth/Plugin.vue:24
 msgctxt "*/*/Paragraph/Noun"
 msgid "Library where files should be imported."
-msgstr ""
+msgstr "L'audiothèque vers laquelle importer les fichiers."
 
 #: front/src/components/channels/LicenseSelect.vue:3
 #: front/src/components/library/TrackDetail.vue:120
@@ -3830,7 +3835,7 @@ msgstr "Plus"
 #: front/src/components/audio/SearchBar.vue:202
 msgctxt "Search/*/*"
 msgid "More results 🡒"
-msgstr ""
+msgstr "Plus de résultats 🡒"
 
 #: front/src/components/audio/PlayButton.vue:105
 #: front/src/components/library/AlbumDropdown.vue:113
@@ -4736,7 +4741,7 @@ msgstr "Merci de vérifier que votre nom d'utilisateur et mot de passe sont corr
 #: front/src/components/auth/Settings.vue:249
 msgctxt "Content/Settings/Title/Noun"
 msgid "Plugins"
-msgstr ""
+msgstr "Greffons"
 
 #: front/src/components/common/AttachmentInput.vue:26
 msgctxt "Content/*/Paragraph"
@@ -5133,7 +5138,7 @@ msgstr "Refusé"
 #: front/src/components/auth/ApplicationEdit.vue:26
 msgctxt "Content/Applications/Label"
 msgid "Regenerate token"
-msgstr ""
+msgstr "Régénérer le jeton"
 
 #: front/src/components/About.vue:85
 msgctxt "*/*/*"
@@ -5440,7 +5445,7 @@ msgstr "Relancer l'importation"
 #: front/src/components/library/FileUpload.vue:3
 msgctxt "Content/Library/Paragraph"
 msgid "Results of your previous import:"
-msgstr ""
+msgstr "Résultats de votre dernière importation :"
 
 #: front/src/components/favorites/List.vue:35
 #: src/components/library/Albums.vue:39
@@ -5780,7 +5785,7 @@ msgstr "Avancer de 5s"
 #: front/src/components/common/ActionTable.vue:280
 msgctxt "Content/*/Select/Verb"
 msgid "Select"
-msgstr ""
+msgstr "Sélectionner"
 
 #: front/src/components/library/radios/Builder.vue:44
 msgctxt "Content/Radio/Dropdown.Placeholder/Verb"
@@ -7273,6 +7278,8 @@ msgstr "Utiliser Funkwhale sur d'autres terminaux avec nos applications"
 msgctxt "Content/Settings/Paragraph"
 msgid "Use plugins to extend Funkwhale and get additional features."
 msgstr ""
+"Utilisez des greffons pour étendre Funkwhale et y ajouter des "
+"fonctionnalités."
 
 #: front/src/components/moderation/ReportModal.vue:38
 msgctxt "*/*/Field,Help"
@@ -7311,6 +7318,8 @@ msgstr "Utilisé"
 msgctxt "*/*/*"
 msgid "Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes."
 msgstr ""
+"Utilisé pour les champs itunes:email et itunes:name, requis par certaines "
+"plateformes comme Spotify ou iTunes."
 
 #: front/src/components/audio/ChannelForm.vue:44
 #: front/src/components/audio/ChannelForm.vue:36
@@ -7844,6 +7853,8 @@ msgstr "Votre modification a été envoyée avec succès."
 msgctxt "*/Auth/Message"
 msgid "Your email has been changed, please check your inbox for our confirmation message."
 msgstr ""
+"Votre adresse e-mail a été modifiée. Merci de relever vos e-mails entrants "
+"pour y trouver notre confirmation."
 
 #: front/src/components/favorites/List.vue:121
 msgctxt "Head/Favorites/Title"
