@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-09-05 16:36+0000\n"
+"PO-Revision-Date: 2020-09-29 17:48+0000\n"
 "Last-Translator: vicdorke <vicdorke@gmail.com>\n"
 "Language-Team: none\n"
 "Language: zh_Hans\n"
@@ -3076,7 +3076,7 @@ msgstr ""
 #: front/src/components/library/FileUpload.vue:2
 msgctxt "Content/Library/Title/Verb"
 msgid "Import music from your server"
-msgstr ""
+msgstr "从服务器导入音乐"
 
 #: front/src/components/library/FileUpload.vue:50
 msgctxt "Content/Library/Input.Label/Noun"
@@ -3447,7 +3447,7 @@ msgstr "更新库"
 #: front/src/components/auth/Plugin.vue:24
 msgctxt "*/*/Paragraph/Noun"
 msgid "Library where files should be imported."
-msgstr ""
+msgstr "应该导入文件的库。"
 
 #: front/src/components/channels/LicenseSelect.vue:3
 #: front/src/components/library/TrackDetail.vue:120
@@ -7530,7 +7530,7 @@ msgstr ""
 #: front/src/components/audio/EmbedWizard.vue:16
 msgctxt "Popup/Embed/Input.Label"
 msgid "Widget width"
-msgstr ""
+msgstr "小部件宽度"
 
 #: front/src/components/auth/ApplicationForm.vue:157
 msgctxt "Content/OAuth Scopes/Label/Verb"
