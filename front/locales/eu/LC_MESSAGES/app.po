@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2019-01-22 08:45+0000\n"
-"Last-Translator: Urtzi Odriozola <uodriozola@codesyntax.com>\n"
+"PO-Revision-Date: 2020-09-30 08:58+0000\n"
+"Last-Translator: Porrumentzio <porrumentzio@riseup.net>\n"
 "Language-Team: none\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.2.2\n"
+"X-Generator: Weblate 3.11.3\n"
 
 #: front/src/components/playlists/PlaylistModal.vue:6
 #: front/src/components/playlists/PlaylistModal.vue:3
@@ -27,45 +27,41 @@ msgstr "\"%{ title }\", %{ artist }"
 #: front/src/components/RemoteSearchForm.vue:71
 msgctxt "Head/Fetch/Field.Placeholder"
 msgid "@channel@pod.example or https://website.example/rss.xml"
-msgstr ""
+msgstr "@channel@pod.example edohttps://website.example/rss.xml"
 
 #: front/src/components/auth/Authorize.vue:16
-#, fuzzy
 msgctxt "Content/Auth/Title"
 msgid "%{ app } wants to access your Funkwhale account"
-msgstr "Sartu zure Funkwhale kontura"
+msgstr "%{ app }-(e)k zure Funkwhale kontura sartu nahi du"
 
 #: front/src/components/About.vue:172 src/components/About.vue:5
 #: front/src/components/Home.vue:55 src/components/Home.vue:5
-#, fuzzy
 msgctxt "Content/Home/Stat"
 msgid "%{ count } active user"
 msgid_plural "%{ count } active users"
-msgstr[0] "abesti %{ count }"
-msgstr[1] "%{ count } abesti"
+msgstr[0] "Erabiltzaile aktibo %{ count }"
+msgstr[1] "%{ count } erabiltzaile aktibo"
 
 #: front/src/components/About.vue:181 src/components/About.vue:14
-#, fuzzy
 msgctxt "Content/Home/Stat"
 msgid "%{ count } albums"
 msgid_plural "%{ count } albums"
-msgstr[0] "abesti %{ count }"
-msgstr[1] "%{ count } abesti"
+msgstr[0] "Album %{ count }"
+msgstr[1] "%{ count } album"
 
 #: front/src/components/About.vue:151
 msgctxt "*/*/*"
 msgid "%{ count } allowed domains"
 msgid_plural "%{ count } allowed domains"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Baimendutako domeinu %{ count }"
+msgstr[1] "%{ count } baimendutako domeinu"
 
 #: front/src/components/About.vue:178 src/components/About.vue:11
-#, fuzzy
 msgctxt "Content/Home/Stat"
 msgid "%{ count } artists"
 msgid_plural "%{ count } artists"
-msgstr[0] "abesti %{ count }"
-msgstr[1] "%{ count } abesti"
+msgstr[0] "Artista %{ count }"
+msgstr[1] "%{ count } artista"
 
 #: front/src/components/audio/ChannelCard.vue:12
 #: front/src/components/audio/ChannelSerieCard.vue:15
@@ -81,51 +77,46 @@ msgstr[1] "%{ count } abesti"
 msgctxt "Content/Channel/Paragraph"
 msgid "%{ count } episode"
 msgid_plural "%{ count } episodes"
-msgstr[0] "abesti %{ count }"
-msgstr[1] "%{ count } abesti"
+msgstr[0] "Jazoera %{ count }"
+msgstr[1] "%{ count } jazoera"
 
 #: front/src/components/favorites/List.vue:10
-#, fuzzy
 msgctxt "Content/Favorites/Title"
 msgid "%{ count } favorite"
 msgid_plural "%{ count } favorites"
-msgstr[0] "gogoko %{ count }"
+msgstr[0] "Gogoko %{ count }"
 msgstr[1] "%{ count } gogoko"
 
 #: front/src/components/channels/UploadModal.vue:98
-#, fuzzy
 msgctxt "*/*/*"
 msgid "%{ count } file"
 msgid_plural "%{ count } files"
-msgstr[0] "gogoko %{ count }"
-msgstr[1] "%{ count } gogoko"
+msgstr[0] "Fitxategi %{ count }"
+msgstr[1] "%{ count } fitxategi"
 
 #: front/src/components/About.vue:175 src/components/About.vue:8
 #: front/src/components/Home.vue:58 src/components/Home.vue:8
-#, fuzzy
 msgctxt "Content/Home/Stat"
 msgid "%{ count } hour of music"
 msgid_plural "%{ count } hours of music"
-msgstr[0] "abesti %{ count }"
-msgstr[1] "%{ count } abesti"
+msgstr[0] "Ordubete musika"
+msgstr[1] "%{ count } ordu musika"
 
 #: front/src/views/channels/DetailBase.vue:26
 #: src/views/channels/DetailBase.vue:21
 #: front/src/views/channels/DetailBase.vue:2
-#, fuzzy
 msgctxt "Content/Channel/Paragraph"
 msgid "%{ count } listening"
 msgid_plural "%{ count } listenings"
-msgstr[0] "abesti %{ count }"
-msgstr[1] "%{ count } abesti"
+msgstr[0] "Entzute %{ count }"
+msgstr[1] "%{ count } entzute"
 
 #: front/src/components/About.vue:187 src/components/About.vue:20
-#, fuzzy
 msgctxt "Content/Home/Stat"
 msgid "%{ count } listenings"
 msgid_plural "%{ count } listenings"
-msgstr[0] "abesti %{ count }"
-msgstr[1] "%{ count } abesti"
+msgstr[0] "Entzute %{ count }"
+msgstr[1] "%{ count } entzute"
 
 #: front/src/components/common/ActionTable.vue:46
 #, fuzzy
