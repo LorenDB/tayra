@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-09-29 17:48+0000\n"
+"PO-Revision-Date: 2020-10-02 23:18+0000\n"
 "Last-Translator: vicdorke <vicdorke@gmail.com>\n"
 "Language-Team: none\n"
 "Language: zh_Hans\n"
@@ -171,7 +171,7 @@ msgstr[0] "%{ count }音乐"
 #: front/src/views/content/libraries/Quota.vue:11
 msgctxt "Content/Library/Paragraph"
 msgid "%{ current } used on %{ max } allowed"
-msgstr "允许在％{max}上使用％{current}"
+msgstr "已经在%{ max } 上使用%{ current }"
 
 #: front/src/components/common/Duration.vue:2
 msgctxt "Content/*/Paragraph"
@@ -196,17 +196,17 @@ msgstr "%{ updatedAgo }"
 #: front/src/components/notifications/NotificationRow.vue:44
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } accepted your follow on library \"%{ library }\""
-msgstr "%{ username } 接受了你的追踪在库\"%{ library }\""
+msgstr "%{ username } 接受了你追踪他的音乐库\"%{ library }\""
 
 #: front/src/components/notifications/NotificationRow.vue:43
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } followed your library \"%{ library }\""
-msgstr "%{ username }跟踪了你的库\"%{ library }\""
+msgstr "%{ username }跟踪了你的音乐库\"%{ library }\""
 
 #: front/src/components/notifications/NotificationRow.vue:46
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } wants to follow your library \"%{ library }\""
-msgstr "%{ username }想跟随你的图书馆\"%{ library }\""
+msgstr "%{ username }想跟随你的音乐库\"%{ library }\""
 
 #: front/src/views/auth/ProfileBase.vue:115
 msgctxt "Head/Profile/Title"
@@ -1433,7 +1433,7 @@ msgstr "单击以显示有关此上载的导入过程的详细信息"
 #: front/src/components/library/FileUpload.vue:97
 msgctxt "Content/Library/Paragraph/Call to action"
 msgid "Click to select files to upload or drag and drop files or directories"
-msgstr "单击此处可选择要上载或拖放文件或目录的文件"
+msgstr "单击以选择要上载的文件或拖放文件的目录"
 
 #: front/src/components/ShortcutsModal.vue:32
 #: front/src/components/channels/UploadModal.vue:42
@@ -1465,7 +1465,7 @@ msgstr "代码"
 #: front/src/components/library/TrackDetail.vue:27
 msgctxt "Content/*/*/Noun"
 msgid "Codec"
-msgstr "代码"
+msgstr "编码格式"
 
 #: front/src/components/common/CollapseLink.vue:3
 msgctxt "*/*/Button,Label"
@@ -1541,7 +1541,7 @@ msgstr "做出贡献"
 #: front/src/components/forms/PasswordInput.vue:43
 msgctxt "*/*/Button.Label/Short, Verb"
 msgid "Copy"
-msgstr "收到"
+msgstr "复制"
 
 #: front/src/components/playlists/Editor.vue:195
 msgctxt "Content/Playlist/Button.Tooltip/Verb"
@@ -2184,10 +2184,9 @@ msgstr "下载"
 
 #: front/src/components/library/TrackDetail.vue:50
 #: front/src/components/library/TrackDetail.vue:45
-#, fuzzy
 msgctxt "Content/*/*"
 msgid "Downloads"
-msgstr "下载"
+msgstr "下载数"
 
 #: front/src/components/mixins/Translations.vue:28
 #: front/src/views/content/libraries/FilesTable.vue:21
@@ -2262,7 +2261,6 @@ msgstr "编辑"
 
 #: front/src/components/playlists/PlaylistModal.vue:42
 #: front/src/components/playlists/PlaylistModal.vue:52
-#, fuzzy
 msgctxt "*/*/*/Verb"
 msgid "Edit"
 msgstr "编辑"
@@ -2406,7 +2404,6 @@ msgid "Enabled"
 msgstr "启用"
 
 #: front/src/components/auth/Plugin.vue:14
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Enabled"
 msgstr "启用"
@@ -2584,7 +2581,6 @@ msgid "Error while saving channel"
 msgstr "保存通道时出错"
 
 #: front/src/components/auth/Plugin.vue:6
-#, fuzzy
 msgctxt "Content/*/Error message.Title"
 msgid "Error while saving plugin"
 msgstr "保存设置时出错"
@@ -2653,7 +2649,6 @@ msgid "Everyone, across all instances"
 msgstr "每个人，在所有的情况下"
 
 #: front/src/components/library/radios/Filter.vue:7
-#, fuzzy
 msgctxt "Popup/Radio/Title/Noun"
 msgid "Exclude"
 msgstr "排除"
@@ -2666,7 +2661,7 @@ msgstr "排除"
 #: front/src/components/library/Artists.vue:50
 msgctxt "Content/Search/Checkbox/Noun"
 msgid "Exclude Compilation Artists"
-msgstr ""
+msgstr "排除编辑艺术家"
 
 #: front/src/components/common/CollapseLink.vue:2
 msgctxt "*/*/Button,Label"
@@ -2902,7 +2897,7 @@ msgstr "完全访问"
 #: front/src/components/auth/SubsonicTokenForm.vue:7
 msgctxt "Content/Settings/Paragraph'"
 msgid "Funkwhale is compatible with other music players that support the Subsonic API."
-msgstr "与其他支持 Subsonic API 的音乐播放器兼容"
+msgstr "与其他支持 Subsonic API 的音乐播放器兼容."
 
 #: front/src/components/Home.vue:87
 msgctxt "Content/Home/Paragraph"
@@ -2949,10 +2944,9 @@ msgid "Go to home page"
 msgstr "访问主页"
 
 #: front/src/components/Footer.vue:19
-#, fuzzy
 msgctxt "Footer/*/List item.Link"
 msgid "Go to Library"
-msgstr "库"
+msgstr "去音乐库"
 
 #: front/src/views/Notifications.vue:27 src/views/Notifications.vue:61
 msgctxt "Content/Notifications/Button.Label"
@@ -3000,10 +2994,9 @@ msgid "Home"
 msgstr "家"
 
 #: front/src/components/Footer.vue:22
-#, fuzzy
 msgctxt "Footer/*/List item.Link"
 msgid "Home Page"
-msgstr "家"
+msgstr "主页"
 
 #: front/src/components/audio/ChannelForm.vue:218
 msgctxt "Content/Channels/Help"
@@ -3057,10 +3050,9 @@ msgid "Illegal content"
 msgstr "非法内容"
 
 #: front/src/components/library/FsBrowser.vue:5
-#, fuzzy
 msgctxt "Content/Library/Button/Verb"
 msgid "Import"
-msgstr "外地传入"
+msgstr "导入"
 
 #: front/src/components/library/ImportStatusModal.vue:3
 msgctxt "Popup/Import/Title"
@@ -3070,7 +3062,7 @@ msgstr "导入细节"
 #: front/src/components/library/FsLogs.vue:4
 msgctxt "Content/Library/Paragraph"
 msgid "Import hasn't started yet"
-msgstr ""
+msgstr "导入还没有开始"
 
 #: front/src/components/library/FileUpload.vue:61
 #: front/src/components/library/FileUpload.vue:2
@@ -3097,10 +3089,9 @@ msgstr "进口状况"
 #: front/src/components/library/FileUpload.vue:71
 #: front/src/components/library/FileUpload.vue:12
 #: front/src/components/library/FileUpload.vue:1
-#, fuzzy
 msgctxt "Content/Library/Title/Verb"
 msgid "Import status"
-msgstr "进口状况"
+msgstr "导入状况"
 
 #: front/src/components/mixins/Translations.vue:41
 #: front/src/components/mixins/Translations.vue:42
@@ -3383,10 +3374,9 @@ msgid "Libraries help you organize and share your music collections. You can upl
 msgstr "库帮助你整理和分享你的音乐收藏。你可以上传你自己的音乐收藏到 Funkwhale，并与你的朋友和家人分享。"
 
 #: front/src/components/library/Home.vue:78
-#, fuzzy
 msgctxt "Head/Home/Title"
 msgid "Library"
-msgstr "库"
+msgstr "音乐库"
 
 #: front/src/views/library/DetailBase.vue:169
 msgctxt "*/*/*"
@@ -3429,10 +3419,9 @@ msgid "Library deleted"
 msgstr "库已删除"
 
 #: front/src/views/content/libraries/Card.vue:39
-#, fuzzy
 msgctxt "Content/Library/Card.Button.Label/Noun"
 msgid "Library Details"
-msgstr "编辑库"
+msgstr "编辑音乐库"
 
 #: front/src/views/admin/library/EditsList.vue:4
 msgctxt "Content/Admin/Title/Noun"
@@ -3596,10 +3585,9 @@ msgid "Log in to your Funkwhale account"
 msgstr "登录您的Funkwhale帐户"
 
 #: front/src/components/auth/Logout.vue:14
-#, fuzzy
 msgctxt "Content/Login/Button.Label"
 msgid "Log in!"
-msgstr "登录"
+msgstr "登陆！"
 
 #: front/src/components/auth/Logout.vue:26
 msgctxt "Head/Login/Title"
@@ -3607,10 +3595,9 @@ msgid "Log Out"
 msgstr "登出"
 
 #: front/src/views/auth/Callback.vue:7
-#, fuzzy
 msgctxt "*/Login/*"
 msgid "Logging in…"
-msgstr "加载库…"
+msgstr "加载中…"
 
 #: front/src/components/Sidebar.vue:78 src/components/auth/LoginForm.vue:44
 msgctxt "*/Login/*/Verb"
@@ -3662,10 +3649,9 @@ msgid "Main menu"
 msgstr "主菜单"
 
 #: front/src/components/Sidebar.vue:86
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Main navigation"
-msgstr "分页"
+msgstr "主导航"
 
 #: front/src/views/admin/library/Base.vue:37
 msgctxt "Head/Admin/Title"
@@ -3683,16 +3669,14 @@ msgid "Manage playlists"
 msgstr "管理播放列表"
 
 #: front/src/components/auth/Settings.vue:254
-#, fuzzy
 msgctxt "Content/Settings/Button.Label"
 msgid "Manage plugins"
-msgstr "管理播放列表"
+msgstr "管理插件"
 
 #: front/src/views/auth/Plugins.vue:42
-#, fuzzy
 msgctxt "Head/Login/Title"
 msgid "Manage plugins"
-msgstr "管理播放列表"
+msgstr "管理插件"
 
 #: front/src/views/admin/users/Base.vue:20
 msgctxt "Head/Admin/Title"
@@ -3802,7 +3786,7 @@ msgstr "更多"
 #: front/src/components/audio/SearchBar.vue:202
 msgctxt "Search/*/*"
 msgid "More results 🡒"
-msgstr ""
+msgstr "更多结果 🡒"
 
 #: front/src/components/audio/PlayButton.vue:105
 #: front/src/components/library/AlbumDropdown.vue:113
@@ -4003,10 +3987,9 @@ msgid "New channels"
 msgstr "新频道"
 
 #: front/src/components/auth/Settings.vue:279
-#, fuzzy
 msgctxt "*/*/*"
 msgid "New email"
-msgstr "新专辑"
+msgstr "新邮件"
 
 #: front/src/components/auth/Settings.vue:73
 #: front/src/views/auth/PasswordResetConfirm.vue:14
@@ -4167,7 +4150,7 @@ msgstr "除了我"
 #: front/src/views/library/Edit.vue:50
 msgctxt "Content/Library/Paragraph"
 msgid "Nobody is following this library"
-msgstr "没有人跟踪这个库"
+msgstr "没有人跟踪这个音乐库"
 
 #: front/src/components/channels/AlbumSelect.vue:8
 #: front/src/components/channels/LicenseSelect.vue:7
@@ -4486,7 +4469,7 @@ msgstr "暂停"
 #: front/src/components/mixins/Translations.vue:33
 msgctxt "Content/Library/*/Short"
 msgid "Pending"
-msgstr ""
+msgstr "未定的"
 
 #: front/src/components/channels/UploadForm.vue:77
 #: front/src/components/channels/UploadForm.vue:50
@@ -4494,7 +4477,7 @@ msgstr ""
 #: front/src/components/channels/UploadForm.vue:3
 msgctxt "Channels/*/*"
 msgid "Pending"
-msgstr ""
+msgstr "未定的"
 
 #: front/src/views/library/Edit.vue:30
 msgctxt "Content/Library/Table/Short"
@@ -4899,12 +4882,12 @@ msgstr "清除跳过的文件？"
 #: front/src/components/Queue.vue:273
 msgctxt "*/*/*"
 msgid "Queue"
-msgstr ""
+msgstr "队列"
 
 #: front/src/components/Queue.vue:339 src/components/audio/Player.vue:328
 msgctxt "Content/Queue/Message"
 msgid "Queue shuffled!"
-msgstr ""
+msgstr "打乱队列！"
 
 #: front/src/views/radios/Detail.vue:95
 msgctxt "Head/Radio/Title"
@@ -5411,7 +5394,7 @@ msgstr "重新启动导入"
 #: front/src/components/library/FileUpload.vue:3
 msgctxt "Content/Library/Paragraph"
 msgid "Results of your previous import:"
-msgstr ""
+msgstr "上一次导入的结果:"
 
 #: front/src/components/favorites/List.vue:35
 #: src/components/library/Albums.vue:39
@@ -5688,7 +5671,7 @@ msgstr "在Discogs上搜索"
 #: front/src/components/audio/SearchBar.vue:167
 msgctxt "Search/*/*"
 msgid "Search on the fediverse"
-msgstr ""
+msgstr "多样性搜索"
 
 #: front/src/components/library/ArtistBase.vue:61
 #: front/src/components/library/ArtistBase.vue:56
@@ -5701,7 +5684,7 @@ msgstr "在维基百科上搜索"
 #: front/src/components/common/InlineSearchBar.vue:24
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search…"
-msgstr ""
+msgstr "搜索…"
 
 #: front/src/components/library/Library.vue:18
 #: src/views/admin/library/Base.vue:38
@@ -5709,7 +5692,7 @@ msgstr ""
 #: src/views/admin/users/Base.vue:21 front/src/views/content/Base.vue:19
 msgctxt "Menu/*/Hidden text"
 msgid "Secondary menu"
-msgstr ""
+msgstr "次要选项单"
 
 #: front/src/views/admin/Settings.vue:11
 msgctxt "Content/Admin/Menu.Title"
@@ -5719,13 +5702,13 @@ msgstr ""
 #: front/src/views/admin/Settings.vue:82
 msgctxt "*/*/*/Noun"
 msgid "Security"
-msgstr ""
+msgstr "安全"
 
 #: front/src/components/mixins/Translations.vue:135
 #: front/src/components/mixins/Translations.vue:136
 msgctxt "*/Admin/*/Noun"
 msgid "Security"
-msgstr ""
+msgstr "安全"
 
 #: front/src/components/ShortcutsModal.vue:93
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
@@ -5735,57 +5718,56 @@ msgstr ""
 #: front/src/components/ShortcutsModal.vue:85
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Seek backwards 5s"
-msgstr ""
+msgstr "向后搜索5秒"
 
 #: front/src/components/ShortcutsModal.vue:97
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Seek forwards 30s"
-msgstr ""
+msgstr "向前搜索30秒"
 
 #: front/src/components/ShortcutsModal.vue:89
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Seek forwards 5s"
-msgstr ""
+msgstr "向前搜索5秒"
 
 #: front/src/components/common/ActionTable.vue:280
 msgctxt "Content/*/Select/Verb"
 msgid "Select"
-msgstr ""
+msgstr "选择"
 
 #: front/src/components/library/radios/Builder.vue:44
 msgctxt "Content/Radio/Dropdown.Placeholder/Verb"
 msgid "Select a filter"
-msgstr ""
+msgstr "选择一个过滤器"
 
 #: front/src/components/common/ActionTable.vue:51
 #: front/src/components/common/ActionTable.vue:2
 msgctxt "Content/*/Link/Verb"
 msgid "Select all %{ total } elements"
 msgid_plural "Select all %{ total } elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "选择所有 %{ total }元素"
 
 #: front/src/components/common/ActionTable.vue:278
 msgctxt "Content/*/Select/Verb"
 msgid "Select all items"
-msgstr ""
+msgstr "选择所有项目"
 
 #: front/src/components/common/ActionTable.vue:56
 #: front/src/components/common/ActionTable.vue:7
 msgctxt "Content/*/Link/Verb"
 msgid "Select only current page"
-msgstr ""
+msgstr "只选择当前页面"
 
 #: front/src/components/channels/AlbumSelect.vue:3
 #: front/src/components/library/TrackDetail.vue:86
 msgctxt "*/*/*"
 msgid "Serie"
-msgstr ""
+msgstr "系列"
 
 #: front/src/views/channels/DetailOverview.vue:52
 msgctxt "Content/Channel/Paragraph"
 msgid "Series"
-msgstr ""
+msgstr "系列"
 
 #: front/src/components/Home.vue:42 src/components/Home.vue:16
 msgctxt "Content/Home/Link"
@@ -5798,27 +5780,27 @@ msgstr "服务器规则"
 #: front/src/views/admin/moderation/AccountsDetail.vue:546
 msgctxt "*/*/*/Noun"
 msgid "Settings"
-msgstr ""
+msgstr "设置"
 
 #: front/src/components/auth/Settings.vue:10
 msgctxt "Content/Settings/Message"
 msgid "Settings updated"
-msgstr ""
+msgstr "设置更新"
 
 #: front/src/components/admin/SettingsGroup.vue:11
 msgctxt "Content/Settings/Paragraph"
 msgid "Settings updated successfully."
-msgstr ""
+msgstr "设置更新成功."
 
 #: front/src/components/manage/users/InvitationForm.vue:27
 msgctxt "Content/Admin/Table.Label/Noun"
 msgid "Share link"
-msgstr ""
+msgstr "分享链接"
 
 #: front/src/views/library/DetailBase.vue:72
 msgctxt "Content/Library/Paragraph"
 msgid "Share this link with other users so they can request access to this library by copy-pasting it in their pod search bar."
-msgstr ""
+msgstr "与其他用户共享这个链接，这样他们就可以通过复制粘贴到他们的pod搜索栏来请求访问这个音乐库。"
 
 #: front/src/views/content/Home.vue:14
 msgctxt "Content/Library/Paragraph"
@@ -5834,17 +5816,17 @@ msgstr "共享链接"
 #: front/src/components/audio/EmbedWizard.vue:5
 msgctxt "Content/Embed/Message"
 msgid "Sharing will not work because this pod doesn't allow anonymous users to access content."
-msgstr ""
+msgstr "共享不会起作用，因为这个豆荚不允许匿名用户访问内容。"
 
 #: front/src/components/admin/SignupFormBuilder.vue:55
 msgctxt "*/*/Form-builder"
 msgid "Short text"
-msgstr ""
+msgstr "短文本"
 
 #: front/src/components/About.vue:155
 msgctxt "*/*/*/Verb"
 msgid "Show"
-msgstr ""
+msgstr "显示"
 
 #: front/src/components/tags/List.vue:6
 msgctxt "Content/*/Button/Label/Verb"
@@ -5856,12 +5838,12 @@ msgstr[0] "显示 %{ count }  个标记"
 #: src/components/library/EditForm.vue:5
 msgctxt "Content/Library/Button.Label"
 msgid "Show all edits"
-msgstr ""
+msgstr "显示所有编辑"
 
 #: front/src/components/ShortcutsModal.vue:59
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Show available keyboard shortcuts"
-msgstr ""
+msgstr "显示可用的键盘快捷键"
 
 #: front/src/views/content/libraries/FilesTable.vue:295
 #, fuzzy
@@ -5875,7 +5857,7 @@ msgstr "单击以显示有关此上载的导入过程的详细信息"
 #: front/src/components/common/RenderedDescription.vue:6
 msgctxt "*/*/Button,Label"
 msgid "Show less"
-msgstr ""
+msgstr "少露一点"
 
 #: front/src/components/audio/ChannelSeries.vue:16
 #: front/src/components/audio/ChannelSeries.vue:3
@@ -5902,12 +5884,12 @@ msgstr "显示更多"
 #: front/src/views/Notifications.vue:72
 msgctxt "Content/Notifications/Form.Label/Verb"
 msgid "Show read notifications"
-msgstr ""
+msgstr "显示阅读通知"
 
 #: front/src/components/forms/PasswordInput.vue:42
 msgctxt "Content/Settings/Button.Tooltip/Verb"
 msgid "Show/hide password"
-msgstr ""
+msgstr "显示/隐藏密码"
 
 #: front/src/components/manage/ChannelsTable.vue:89
 #: front/src/components/manage/library/AlbumsTable.vue:82
@@ -5924,17 +5906,17 @@ msgstr ""
 #: front/src/views/content/libraries/FilesTable.vue:138
 msgctxt "Content/*/Paragraph"
 msgid "Showing results %{ start }-%{ end } on %{ total }"
-msgstr ""
+msgstr "在%{ total }上显示结果%{ start }-%{ end }"
 
 #: front/src/components/ShortcutsModal.vue:129
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Shuffle queue"
-msgstr ""
+msgstr "打乱队列"
 
 #: front/src/components/audio/Player.vue:689
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Shuffle your queue"
-msgstr ""
+msgstr "把你的队列排好"
 
 #: front/src/components/Home.vue:102
 msgctxt "*/Signup/Title"
@@ -6021,12 +6003,12 @@ msgstr "队列中的某些曲目已在此播放列表中："
 #: front/src/views/channels/DetailOverview.vue:2
 msgctxt "Content/Channel/Header"
 msgid "Some uploads couldn't be published"
-msgstr ""
+msgstr "一些上传内容无法发布"
 
 #: front/src/components/PageNotFound.vue:10
 msgctxt "Content/*/Paragraph"
 msgid "Sorry, the page you asked for does not exist:"
-msgstr ""
+msgstr "对不起，您所要求的页面不存在:"
 
 #: front/src/components/audio/SearchBar.vue:57
 msgctxt "Sidebar/Search/Error.Label"
@@ -6048,7 +6030,7 @@ msgstr ""
 #: src/components/radios/Button.vue:4 front/src/components/radios/Button.vue:1
 msgctxt "*/Queue/Button.Label/Short, Verb"
 msgid "Start radio"
-msgstr ""
+msgstr "打开收音机"
 
 #: front/src/components/About.vue:169 src/components/About.vue:2
 #: front/src/components/Home.vue:52 src/components/Home.vue:2
@@ -6065,7 +6047,7 @@ msgstr "统计信息从实例上的已知活动和内容计算，并不反映此
 #: front/src/views/admin/moderation/DomainsDetail.vue:428
 msgctxt "Content/Moderation/Help text"
 msgid "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this domain"
-msgstr ""
+msgstr "统计信息是根据实例上的已知活动和内容计算的，不反映该域的常规活动"
 
 #: front/src/views/admin/ChannelDetail.vue:364
 #: front/src/views/admin/library/AlbumDetail.vue:352
@@ -6076,7 +6058,7 @@ msgstr ""
 #: front/src/views/admin/library/UploadDetail.vue:335
 msgctxt "Content/Moderation/Help text"
 msgid "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
-msgstr ""
+msgstr "统计信息是根据实例上的已知活动和内容计算的，不反映此对象的常规活动"
 
 #: front/src/components/library/FileUpload.vue:110
 #: front/src/components/manage/library/EditsCardList.vue:12
@@ -6170,14 +6152,14 @@ msgstr ""
 #: front/src/components/channels/SubscribeButton.vue:4
 msgctxt "Content/Track/*/Verb"
 msgid "Subscribe"
-msgstr ""
+msgstr "订阅"
 
 #: front/src/views/channels/DetailBase.vue:42
 #: src/views/channels/DetailBase.vue:37
 #: front/src/views/channels/DetailBase.vue:3
 msgctxt "Content/Channels/Header"
 msgid "Subscribe on Funkwhale"
-msgstr ""
+msgstr "订阅 Funkwhale"
 
 #: front/src/views/channels/DetailBase.vue:57
 #: src/views/channels/DetailBase.vue:52
@@ -6207,17 +6189,17 @@ msgstr "订阅这个频道"
 #: front/src/views/channels/DetailBase.vue:3
 msgctxt "Content/Channels/Header"
 msgid "Subscribe via RSS"
-msgstr ""
+msgstr "通过 RSS 订阅"
 
 #: front/src/views/channels/SubscriptionsList.vue:81
 msgctxt "Content/Subscriptions/Header"
 msgid "Subscribed Channels"
-msgstr ""
+msgstr "订阅频道"
 
 #: front/src/views/channels/SubscriptionsList.vue:14
 msgctxt "*/*/*/Noun"
 msgid "Subscription"
-msgstr ""
+msgstr "订阅"
 
 #: front/src/views/admin/Settings.vue:88
 msgctxt "Content/Admin/Menu"
@@ -6232,7 +6214,7 @@ msgstr "Subsonic API 密码"
 #: front/src/components/library/EditForm.vue:38
 msgctxt "Content/Library/Paragraph"
 msgid "Suggest a change using the form below."
-msgstr ""
+msgstr "使用下面的表格提出改变建议。"
 
 #: front/src/components/library/AlbumEdit.vue:5
 msgctxt "Content/*/Title"
@@ -6257,12 +6239,12 @@ msgstr ""
 #: front/src/components/library/FileUpload.vue:3
 msgctxt "Content/Library/Tab.Title/Short"
 msgid "Summary"
-msgstr ""
+msgstr "摘要"
 
 #: front/src/components/library/EditForm.vue:100
 msgctxt "*/*/*"
 msgid "Summary (optional)"
-msgstr ""
+msgstr "摘要(可选)"
 
 #: front/src/components/Footer.vue:59
 msgctxt "Footer/*/Listitem.Link"
@@ -6325,24 +6307,24 @@ msgstr ""
 #: front/src/components/About.vue:34 src/components/About.vue:60
 msgctxt "Content/About/Header"
 msgid "Terms and privacy policy"
-msgstr ""
+msgstr "条款及私隐政策"
 
 #: front/src/components/audio/EmbedWizard.vue:35
 #: front/src/components/common/CopyInput.vue:3
 msgctxt "Content/*/Paragraph"
 msgid "Text copied to clipboard!"
-msgstr ""
+msgstr "已经复制到剪贴板！"
 
 #: front/src/components/library/AlbumDropdown.vue:43
 msgctxt "Content/Moderation/Paragraph"
 msgid "The album will be deleted, as well as any related files and data. This action is irreversible."
-msgstr ""
+msgstr "专辑以及任何相关文件和数据都将被删除。此操作是不可逆的。"
 
 #: front/src/views/admin/library/AlbumDetail.vue:72
 #: front/src/views/admin/library/AlbumDetail.vue:67
 msgctxt "Content/Moderation/Paragraph"
 msgid "The album will be removed, as well as associated uploads, tracks, favorites and listening history. This action is irreversible."
-msgstr ""
+msgstr "该专辑将被删除，以及相关的上传，轨道，收藏夹和收听历史。这个行动是不可逆转的。"
 
 #: front/src/components/auth/Authorize.vue:39
 msgctxt "Content/Auth/Paragraph"
@@ -6366,7 +6348,7 @@ msgstr ""
 #: src/views/admin/ChannelDetail.vue:56
 msgctxt "Content/Moderation/Paragraph"
 msgid "The channel will be removed, as well as associated uploads, tracks, and albums. This action is irreversible."
-msgstr ""
+msgstr "该频道将被删除，以及相关的上传、音轨和专辑。此操作是不可逆的。"
 
 #: front/src/components/Footer.vue:73
 msgctxt "Footer/*/List item.Link"
@@ -6381,7 +6363,7 @@ msgstr ""
 #: front/src/views/content/libraries/Form.vue:34
 msgctxt "Popup/Library/Paragraph"
 msgid "The library and all its tracks will be deleted. This can not be undone."
-msgstr ""
+msgstr "该库及其所有音轨将被删除。此操作无法恢复。"
 
 #: front/src/views/admin/library/LibraryDetail.vue:51
 #: front/src/views/admin/library/LibraryDetail.vue:46
@@ -6397,7 +6379,7 @@ msgstr ""
 #: front/src/components/library/FileUpload.vue:38
 msgctxt "Content/Library/List item"
 msgid "The music files you are uploading are tagged properly."
-msgstr ""
+msgstr "你正在上传的音乐文件被正确标记。"
 
 #: front/src/components/Queue.vue:29 src/components/Queue.vue:22
 msgctxt "Sidebar/Player/Error message.Paragraph"
@@ -6446,12 +6428,12 @@ msgstr ""
 #: front/src/components/manage/library/AlbumsTable.vue:192
 msgctxt "Popup/*/Paragraph"
 msgid "The selected albums will be removed, as well as associated tracks, uploads, favorites and listening history. This action is irreversible."
-msgstr ""
+msgstr "选定的专辑将被删除，以及相关的曲目，上传，收藏和收听历史。此操作是不可逆转的。"
 
 #: front/src/components/manage/library/ArtistsTable.vue:196
 msgctxt "Popup/*/Paragraph"
 msgid "The selected artist will be removed, as well as associated uploads, tracks, albums, favorites and listening history. This action is irreversible."
-msgstr ""
+msgstr "选定的歌手将被删除，以及相关的上传，轨道，专辑，收藏夹和收听历史。这一行动是不可逆转的。"
 
 #: front/src/components/manage/library/LibrariesTable.vue:206
 msgctxt "Popup/*/Paragraph"
@@ -6466,7 +6448,7 @@ msgstr ""
 #: front/src/components/manage/library/TracksTable.vue:191
 msgctxt "Popup/*/Paragraph"
 msgid "The selected tracks will be removed, as well as associated uploads, favorites and listening history. This action is irreversible."
-msgstr ""
+msgstr "选定的曲目将被删除，以及相关的上传、收藏和收听历史。此操作是不可逆转的。"
 
 #: front/src/components/manage/library/UploadsTable.vue:256
 msgctxt "Popup/*/Paragraph"
@@ -6481,7 +6463,7 @@ msgstr ""
 #: front/src/components/auth/SubsonicTokenForm.vue:4
 msgctxt "Content/Settings/Paragraph"
 msgid "The Subsonic API is not available on this Funkwhale instance."
-msgstr ""
+msgstr "这个 Funkwhale 实例不支持Subsonic API 。"
 
 #: front/src/components/library/EditCard.vue:102
 msgctxt "Popup/Library/Paragraph"
@@ -6530,7 +6512,7 @@ msgstr ""
 #: front/src/views/playlists/Detail.vue:67
 msgctxt "Content/Home/Placeholder"
 msgid "There are no tracks in this playlist yet"
-msgstr ""
+msgstr "这个播放列表中还没有曲目"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:66
 msgctxt "Popup/Moderation/Paragraph"
@@ -6585,7 +6567,7 @@ msgstr "这是可以访问您的帐户数据的应用程序列表。"
 #: front/src/components/auth/Settings.vue:194
 msgctxt "Content/Settings/Paragraph"
 msgid "This is the list of applications that you have created."
-msgstr ""
+msgstr "这是您创建的应用程序列表。"
 
 #: front/src/views/auth/ProfileBase.vue:36 src/views/auth/ProfileBase.vue:3
 msgctxt "Content/Profile/Button.Paragraph"
@@ -6651,7 +6633,7 @@ msgstr "此Pod运行Funkwhale，这是一个社区驱动的项目，允许您在
 #: front/src/components/library/FileUpload.vue:51
 msgctxt "Content/Library/Paragraph"
 msgid "This reference will be used to group imported files together."
-msgstr ""
+msgstr "此引用将用于将导入的文件分组在一起。"
 
 #: front/src/components/mixins/Translations.vue:37
 #: front/src/components/mixins/Translations.vue:38
@@ -6663,7 +6645,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:34
 msgctxt "Content/Library/Help text"
 msgid "This track has been uploaded, but hasn't been processed by the server yet"
-msgstr ""
+msgstr "这首歌曲已经上传，但是还没有被服务器处理"
 
 #: front/src/components/mixins/Translations.vue:29
 #: front/src/components/mixins/Translations.vue:30
@@ -6680,7 +6662,7 @@ msgstr ""
 #: front/src/components/audio/PlayButton.vue:108
 msgctxt "*/Queue/Button/Title"
 msgid "This track is not available in any library you have access to"
-msgstr ""
+msgstr "此曲目在您访问的任何库中都不可用"
 
 #: front/src/components/library/TrackDetail.vue:153
 msgctxt "Content/Track/Paragraph"
@@ -6712,7 +6694,7 @@ msgstr ""
 #: front/src/components/auth/SubsonicTokenForm.vue:15
 msgctxt "Popup/Settings/Paragraph"
 msgid "This will completely disable access to the Subsonic API using from account."
-msgstr ""
+msgstr "这将完全禁用从帐户访问Subsonic API 。"
 
 #: front/src/components/manage/moderation/ReportCard.vue:357
 msgctxt "Content/Moderation/Popup,Paragraph"
@@ -6728,17 +6710,17 @@ msgstr "这将从使用当前密码的现有设备注销。"
 #: front/src/components/auth/Settings.vue:227
 msgctxt "Popup/Settings/Paragraph"
 msgid "This will permanently delete the application and all the associated tokens."
-msgstr ""
+msgstr "这将永久删除应用程序和所有相关的令牌。"
 
 #: front/src/components/auth/Settings.vue:170
 msgctxt "Popup/Settings/Paragraph"
 msgid "This will prevent this application from accessing the service on your behalf."
-msgstr ""
+msgstr "这将阻止此应用程序代表您访问服务。"
 
 #: front/src/components/playlists/Editor.vue:44
 msgctxt "Popup/Playlist/Paragraph"
 msgid "This will remove all tracks from this playlist and cannot be undone."
-msgstr ""
+msgstr "这将删除此播放列表中的所有曲目，无法撤消。"
 
 #: front/src/components/audio/track/Table.vue:11
 #: front/src/components/channels/AlbumForm.vue:10
@@ -6776,7 +6758,7 @@ msgstr "切换静音"
 #: front/src/components/ShortcutsModal.vue:125
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Toggle queue looping"
-msgstr ""
+msgstr "切换队列循环"
 
 #: front/src/views/admin/ChannelDetail.vue:250
 #: src/views/admin/ChannelDetail.vue:245
@@ -6806,7 +6788,7 @@ msgstr ""
 #: front/src/views/admin/moderation/DomainsDetail.vue:19
 msgctxt "Content/*/*"
 msgid "Total users"
-msgstr ""
+msgstr "用户总数"
 
 #: front/src/components/audio/SearchBar.vue:36
 #: front/src/components/library/TrackBase.vue:205
@@ -6827,7 +6809,7 @@ msgstr ""
 #: front/src/components/Queue.vue:97
 msgctxt "Sidebar/Queue/Text"
 msgid "Track %{ index } of %{ length }"
-msgstr ""
+msgstr "音乐%{ index } 有 %{ length }"
 
 #: front/src/components/audio/track/Table.vue:10
 msgctxt "*/*/*/Noun"
@@ -6844,7 +6826,7 @@ msgstr ""
 #: front/src/components/library/TrackDetail.vue:2
 msgctxt "Content/*/*"
 msgid "Track Details"
-msgstr ""
+msgstr "音乐信息"
 
 #: front/src/components/mixins/Translations.vue:75
 #: front/src/components/mixins/Translations.vue:76
@@ -6891,17 +6873,17 @@ msgstr ""
 #: src/views/playlists/Detail.vue:1 front/src/views/radios/Detail.vue:34
 msgctxt "*/*/*"
 msgid "Tracks"
-msgstr ""
+msgstr "音乐"
 
 #: front/src/components/library/ArtistDetail.vue:33
 msgctxt "Content/Artist/Title"
 msgid "Tracks by this artist"
-msgstr ""
+msgstr "这位艺术家的歌曲"
 
 #: front/src/components/library/radios/Filter.vue:34
 msgctxt "Popup/Radio/Title/Noun"
 msgid "Tracks matching filter"
-msgstr ""
+msgstr "音乐匹配过滤器"
 
 #: front/src/components/manage/moderation/ReportCard.vue:132
 #: front/src/views/admin/library/UploadDetail.vue:240
@@ -7033,7 +7015,7 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:28
 msgctxt "Content/Settings/Button.Label/Verb"
 msgid "Update settings"
-msgstr ""
+msgstr "更新设置"
 
 #: front/src/views/auth/PasswordResetConfirm.vue:21
 #: front/src/views/auth/PasswordResetConfirm.vue:9
@@ -7137,6 +7119,8 @@ msgstr "已上传"
 msgctxt "Content/Track/Paragraph"
 msgid "Uploaded by <a class=\"internal\" href=\"%{ uploaderUrl }\">%{ uploader }</a> on <time title=\"%{ date }\" datetime=\"%{ date }\">%{ prettyDate }</time>"
 msgstr ""
+"上传来自<a class=\"internal\" href=\"%{ uploaderUrl }\">%{ uploader }</a> 于 <"
+"time title=\"%{ date }\" datetime=\"%{ date }\">%{ prettyDate }</time>"
 
 #: front/src/components/library/TrackBase.vue:287
 msgctxt "Content/Track/Paragraph"
@@ -7149,22 +7133,22 @@ msgstr ""
 #: front/src/components/channels/UploadForm.vue:1
 msgctxt "Channels/*/*"
 msgid "Uploading"
-msgstr ""
+msgstr "上传"
 
 #: front/src/components/library/FileUpload.vue:5
 msgctxt "Content/Library/Tab.Title/Short"
 msgid "Uploading"
-msgstr ""
+msgstr "上传"
 
 #: front/src/components/common/AttachmentInput.vue:32
 msgctxt "Content/*/*/Noun"
 msgid "Uploading file…"
-msgstr ""
+msgstr "上传文件…"
 
 #: front/src/components/library/FileUpload.vue:138
 msgctxt "Content/Library/Table"
 msgid "Uploading…"
-msgstr ""
+msgstr "上传…"
 
 #: front/src/components/manage/library/LibrariesTable.vue:46
 #: front/src/components/manage/library/LibrariesTable.vue:5
@@ -7196,7 +7180,7 @@ msgstr ""
 #: front/src/views/channels/DetailOverview.vue:3
 msgctxt "Content/Channel/Header"
 msgid "Uploads are being processed"
-msgstr ""
+msgstr "正在处理上传"
 
 #: front/src/views/channels/DetailOverview.vue:6
 #: front/src/views/channels/DetailOverview.vue:3
@@ -7207,13 +7191,13 @@ msgstr "上传已成功发布"
 #: front/src/components/library/TrackDetail.vue:129
 msgctxt "Content/*/*/Noun"
 msgid "URL"
-msgstr "URL"
+msgstr "链接"
 
 #: front/src/views/admin/ChannelDetail.vue:129
 #: src/views/admin/ChannelDetail.vue:124
 msgctxt "'Content/*/*/Noun"
 msgid "URL"
-msgstr "URL"
+msgstr "链接"
 
 #: front/src/components/RemoteSearchForm.vue:65
 msgctxt "Head/Fetch/Field.Label"
@@ -7238,7 +7222,7 @@ msgstr "在其他设备上使用我们的应用程序 Funkwhale"
 #: front/src/components/auth/Settings.vue:252
 msgctxt "Content/Settings/Paragraph"
 msgid "Use plugins to extend Funkwhale and get additional features."
-msgstr ""
+msgstr "使用插件扩展 Funkwhale 并获得额外的功能。"
 
 #: front/src/components/moderation/ReportModal.vue:38
 msgctxt "*/*/Field,Help"
@@ -7263,7 +7247,7 @@ msgstr ""
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:111
 msgctxt "Content/Moderation/Help text"
 msgid "Use this setting to temporarily enable/disable the policy without completely removing it."
-msgstr ""
+msgstr "使用此设置临时启用/禁用策略，但不完全删除策略。"
 
 #: front/src/components/manage/users/InvitationsTable.vue:43
 #: front/src/components/manage/users/InvitationsTable.vue:5
@@ -7339,7 +7323,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:87
 msgctxt "Content/*/*"
 msgid "Username"
-msgstr ""
+msgstr "用户名"
 
 #: front/src/components/auth/LoginForm.vue:17
 #: src/components/auth/LoginForm.vue:3
@@ -7430,7 +7414,7 @@ msgstr "查看更多…"
 #: front/src/components/library/TrackDetail.vue:141
 msgctxt "Content/*/*/Clickable, Verb"
 msgid "View on MusicBrainz"
-msgstr ""
+msgstr "浏览 MusicBrainz"
 
 #: front/src/components/manage/moderation/ReportCard.vue:122
 msgctxt "Content/Moderation/Link"
@@ -7483,7 +7467,7 @@ msgstr "无法确认您的电子邮件地址"
 #: front/src/components/auth/Settings.vue:305
 msgctxt "Content/Settings/Error message.Title"
 msgid "We cannot delete your account"
-msgstr ""
+msgstr "我们不能删除您的帐户"
 
 #: front/src/components/auth/LoginForm.vue:3
 msgctxt "Content/Login/Error message.Title"
@@ -7498,7 +7482,7 @@ msgstr ""
 #: front/src/views/Notifications.vue:39
 msgctxt "Content/Notifications/Paragraph"
 msgid "We noticed you've been here for a while. If Funkwhale is useful to you, we could use your help to make it even better!"
-msgstr ""
+msgstr "我们注意到你在这里有一段时间了。如果 Funkwhale 对你有用，我们可以利用你的帮助使它变得更好！"
 
 #: front/src/components/library/FileUpload.vue:39
 msgctxt "Content/Library/Link"
@@ -7560,7 +7544,7 @@ msgstr ""
 #: front/src/components/library/TrackDetail.vue:96
 msgctxt "*/*/*"
 msgid "Year"
-msgstr ""
+msgstr "年代"
 
 #: front/src/components/admin/SignupFormBuilder.vue:65
 #: front/src/components/manage/moderation/AccountsTable.vue:66
@@ -7582,12 +7566,12 @@ msgstr "是的，把我注销！"
 #: front/src/views/content/libraries/Form.vue:19
 msgctxt "Content/Library/Paragraph"
 msgid "You are able to share your library with other people, regardless of its visibility."
-msgstr ""
+msgstr "您可以与其他人共享您的库，而不管它的可见性如何。"
 
 #: front/src/components/library/FileUpload.vue:32
 msgctxt "Content/Library/Paragraph"
 msgid "You are about to upload music to your library. Before proceeding, please ensure that:"
-msgstr ""
+msgstr "您正准备将音乐上传到您的音乐库中。在继续之前，请确保:"
 
 #: front/src/components/SetInstanceModal.vue:12
 msgctxt "Popup/Login/Paragraph"
@@ -7607,7 +7591,7 @@ msgstr "您当前登录为%{ username }"
 #: front/src/components/library/FileUpload.vue:35
 msgctxt "Content/Library/List item"
 msgid "You are not uploading copyrighted content in a public library, otherwise you may be infringing the law"
-msgstr ""
+msgstr "你不能在公共音乐库上传受版权保护的内容，否则你可能会触犯法律"
 
 #: front/src/components/SetInstanceModal.vue:98
 msgctxt "*/Instance/Message"
@@ -7623,7 +7607,7 @@ msgstr "你目前没有登录"
 #: front/src/components/moderation/FilterModal.vue:13
 msgctxt "Popup/Moderation/Paragraph"
 msgid "You can manage and update your filters any time from your account settings."
-msgstr ""
+msgstr "您可以管理和更新您的过滤器任何时候从您的帐户设置。"
 
 #: front/src/views/auth/EmailConfirm.vue:24
 msgctxt "Content/Signup/Paragraph"
@@ -7633,17 +7617,17 @@ msgstr "您现在可以不受限制地使用该服务。"
 #: front/src/components/auth/Settings.vue:298
 msgctxt "Content/Settings/Paragraph'"
 msgid "You can permanently and irreversibly delete your account and all the associated data using the form below. You will be asked for confirmation."
-msgstr ""
+msgstr "您可以永久和不可逆转地删除您的帐户和所有相关的数据使用下面的表单。你会被要求确认。"
 
 #: front/src/components/library/radios/Builder.vue:7
 msgctxt "Content/Radio/Paragraph"
 msgid "You can use this interface to build your own custom radio, which will play tracks according to your criteria."
-msgstr ""
+msgstr "您可以使用这个界面来构建自己的定制收音机，它将根据您的标准播放音轨。"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:7
 msgctxt "Content/Settings/Paragraph"
 msgid "You can use those to enjoy your playlist and music in offline mode, on your smartphone or tablet, for instance."
-msgstr ""
+msgstr "你可以用它们在离线模式下享受你的播放列表和音乐，比如在你的智能手机或平板电脑上。"
 
 #: front/src/components/auth/Settings.vue:178
 msgctxt "Content/Applications/Paragraph"
@@ -7673,12 +7657,12 @@ msgstr ""
 #: front/src/components/channels/UploadForm.vue:5
 msgctxt "Content/Library/Paragraph"
 msgid "You don't have any space left to upload your files. Please contact the moderators."
-msgstr ""
+msgstr "您没有任何空间上传您的文件。请联系版主。"
 
 #: front/src/components/library/EditForm.vue:52
 msgctxt "Content/Library/Paragraph"
 msgid "You don't have the permission to edit this object, but you can suggest changes. Once submitted, suggestions will be reviewed before approval."
-msgstr ""
+msgstr "您没有编辑此对象的权限，但可以建议进行更改。一旦提交，建议将在批准前进行审查。"
 
 #: front/src/components/Queue.vue:148
 msgctxt "Sidebar/Player/Title"
@@ -7724,7 +7708,7 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:82
 msgctxt "Popup/Settings/List item"
 msgid "You will be logged out from this session and have to log in with the new one"
-msgstr ""
+msgstr "您将从此会话中注销，并且必须使用新会话登录"
 
 #: front/src/components/auth/LoginForm.vue:40
 #: src/components/auth/LoginForm.vue:2
@@ -7745,7 +7729,7 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:57
 msgctxt "Content/Settings/Paragraph"
 msgid "You will have to update your password on your clients that use this password."
-msgstr ""
+msgstr "您必须更新使用此密码的客户机的密码。"
 
 #: front/src/components/moderation/FilterModal.vue:16
 #: front/src/components/moderation/FilterModal.vue:2
@@ -7772,11 +7756,13 @@ msgstr "您的帐户已成功创建。请在尝试登录前验证您的电子邮
 msgctxt "Content/Settings/Paragraph'"
 msgid "Your account will be deleted from our servers within a few minutes. We will also notify other servers who may have a copy of some of your data so they can proceed to deletion. Please note that some of these servers may be offline or unwilling to comply though."
 msgstr ""
+"您的帐户将在几分钟内从我们的服务器删除。我们也会通知其他服务器谁可能有一些你的数据副本，以便他们可以进行删除。请注意，其中一些服务器可能已经脱机或者不愿意"
+"遵守这些规定。"
 
 #: front/src/components/auth/Settings.vue:191
 msgctxt "Content/Settings/Title/Noun"
 msgid "Your applications"
-msgstr ""
+msgstr "你的应用"
 
 #: front/src/components/common/AttachmentInput.vue:3
 msgctxt "Content/*/Error message.Title"
@@ -7786,7 +7772,7 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:39
 msgctxt "Content/Settings/Error message.Title"
 msgid "Your avatar cannot be saved"
-msgstr ""
+msgstr "你的头像不能被保存"
 
 #: front/src/components/auth/Settings.vue:269
 msgctxt "Content/Settings/Paragraph'"
@@ -7801,7 +7787,7 @@ msgstr ""
 #: front/src/components/library/EditForm.vue:3
 msgctxt "Content/Library/Paragraph"
 msgid "Your edit was successfully submitted."
-msgstr ""
+msgstr "您的编辑已成功提交。"
 
 #: front/src/components/auth/Settings.vue:573
 msgctxt "*/Auth/Message"
@@ -7821,7 +7807,7 @@ msgstr "你的信息"
 #: front/src/views/Notifications.vue:69
 msgctxt "Content/Notifications/Title"
 msgid "Your notifications"
-msgstr ""
+msgstr "你的通知"
 
 #: front/src/components/auth/Settings.vue:62
 msgctxt "Content/Settings/Error message.Title"
@@ -7847,7 +7833,7 @@ msgstr "请求一个新的亚音速 API 密码？"
 #: front/src/components/auth/Settings.vue:83
 msgctxt "Popup/Settings/List item"
 msgid "Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password"
-msgstr ""
+msgstr "您的Subsonic密码将被更改为一个新的，随机的，从设备登出使用旧的Subsonic密码"
 
 #: front/src/views/channels/DetailOverview.vue:30
 #: front/src/views/channels/DetailOverview.vue:6
