@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: French (Funkwhale)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-09-14 22:18+0000\n"
+"PO-Revision-Date: 2020-10-03 22:46+0000\n"
 "Last-Translator: appzer0 <appzer0@free.fr>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/funkwhale/"
 "front/fr/>\n"
@@ -101,7 +101,6 @@ msgstr[1] "%{ count } heures de musique"
 #: front/src/views/channels/DetailBase.vue:26
 #: src/views/channels/DetailBase.vue:21
 #: front/src/views/channels/DetailBase.vue:2
-#, fuzzy
 msgctxt "Content/Channel/Paragraph"
 msgid "%{ count } listening"
 msgid_plural "%{ count } listenings"
@@ -265,7 +264,6 @@ msgid "A short summary describing your changes."
 msgstr "Une courte description décrivant vos changements."
 
 #: front/src/components/About.vue:221
-#, fuzzy
 msgctxt "Head/About/Title"
 msgid "About"
 msgstr "À propos"
@@ -374,10 +372,9 @@ msgstr "Accès à l'historique d'écoute"
 
 #: front/src/components/mixins/Translations.vue:140
 #: front/src/components/mixins/Translations.vue:141
-#, fuzzy
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to moderation reports"
-msgstr "Accès aux radios"
+msgstr "Accéder aux signalements"
 
 #: front/src/components/mixins/Translations.vue:128
 #: front/src/components/mixins/Translations.vue:129
@@ -407,10 +404,9 @@ msgstr ""
 
 #: front/src/components/auth/ApplicationEdit.vue:29
 #: front/src/components/auth/ApplicationEdit.vue:22
-#, fuzzy
 msgctxt "Content/Applications/Label"
 msgid "Access token"
-msgstr "Accès aux modifications"
+msgstr "Jeton d'accès"
 
 #: front/src/components/manage/library/UploadsTable.vue:61
 #: front/src/components/manage/library/UploadsTable.vue:9
@@ -501,13 +497,11 @@ msgid "Actions"
 msgstr "Actions"
 
 #: front/src/components/audio/track/Table.vue:15
-#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "Actions"
 msgstr "Actions"
 
 #: front/src/components/admin/SignupFormBuilder.vue:44
-#, fuzzy
 msgctxt "*/*/Form-builder,Help"
 msgid "Actions"
 msgstr "Actions"
@@ -816,10 +810,9 @@ msgstr[1] "Tous les %{ count } éléments sélectionnés"
 
 #: front/src/views/channels/DetailBase.vue:183
 #: src/views/channels/DetailBase.vue:178
-#, fuzzy
 msgctxt "Content/Channels/*"
 msgid "All Episodes"
-msgstr "Épisodes"
+msgstr "Tous les épisodes"
 
 #: front/src/components/auth/Authorize.vue:111
 msgctxt "Head/Authorize/Title"
@@ -892,10 +885,9 @@ msgid "Application details"
 msgstr "Détails de l'application"
 
 #: front/src/components/Footer.vue:3
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Application footer"
-msgstr "Secret de l'application"
+msgstr "Pied de page de l'application"
 
 #: front/src/components/auth/ApplicationEdit.vue:21
 #: front/src/components/auth/ApplicationEdit.vue:14
@@ -1072,10 +1064,9 @@ msgid "Audio content"
 msgstr "Contenu audio"
 
 #: front/src/components/audio/Player.vue:3
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Audio player and controls"
-msgstr "Raccourcis du lecteur audio"
+msgstr "Fonctions et raccourcis du lecteur audio"
 
 #: front/src/components/ShortcutsModal.vue:77
 msgctxt "Popup/Keyboard shortcuts/Title"
@@ -1316,10 +1307,9 @@ msgid "Change language"
 msgstr "Changer la langue"
 
 #: front/src/components/auth/Settings.vue:262
-#, fuzzy
 msgctxt "*/*/Button.Label"
 msgid "Change my email address"
-msgstr "Confirmer votre courriel"
+msgstr "Modifier mon adresse e-mail"
 
 #: front/src/components/auth/Settings.vue:54
 msgctxt "Content/Settings/Title/Verb"
@@ -1552,10 +1542,10 @@ msgid "Content filters help you hide content you don't want to see on the servic
 msgstr "Les filtres de contenu vous aident à cacher les contenus que vous ne voulez pas voir sur ce service."
 
 #: front/src/components/common/ActionTable.vue:8
-#, fuzzy
 msgctxt "Content/*/Button.Help text.Paragraph"
 msgid "Content has been updated, click refresh to see up-to-date content"
-msgstr "Le contenu a été modifié, cliquez sur rafraichir pour voir le contenu à jour"
+msgstr ""
+"Le contenu a été modifié, cliquez sur rafraîchir pour voir le contenu à jour"
 
 #: front/src/components/About.vue:45
 msgctxt "Content/About/Header"
@@ -2216,10 +2206,9 @@ msgstr "Télécharger"
 
 #: front/src/components/library/TrackDetail.vue:50
 #: front/src/components/library/TrackDetail.vue:45
-#, fuzzy
 msgctxt "Content/*/*"
 msgid "Downloads"
-msgstr "Télécharger"
+msgstr "Téléchargements"
 
 #: front/src/components/mixins/Translations.vue:28
 #: front/src/views/content/libraries/FilesTable.vue:21
@@ -2438,7 +2427,6 @@ msgid "Enabled"
 msgstr "Activé"
 
 #: front/src/components/auth/Plugin.vue:14
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Enabled"
 msgstr "Activé"
@@ -2601,10 +2589,9 @@ msgstr "Erreur lors de la récupération de l'objet"
 
 #: front/src/components/library/FileUpload.vue:63
 #: front/src/components/library/FileUpload.vue:4
-#, fuzzy
 msgctxt "Content/*/Error message.Title"
 msgid "Error while launching import"
-msgstr "Erreur pendant l'envoi du signalement"
+msgstr "Erreur pendant le démarrage de l'importation"
 
 #: front/src/components/channels/UploadForm.vue:3
 msgctxt "Content/*/Error message.Title"
@@ -2617,10 +2604,9 @@ msgid "Error while saving channel"
 msgstr "Erreur lors de l'enregistrement de la chaîne"
 
 #: front/src/components/auth/Plugin.vue:6
-#, fuzzy
 msgctxt "Content/*/Error message.Title"
 msgid "Error while saving plugin"
-msgstr "Erreur lors de l'enregistrement des paramètres"
+msgstr "Erreur lors de l'enregistrement des paramètres du greffon"
 
 #: front/src/components/admin/SettingsGroup.vue:5
 #: front/src/components/federation/FetchButton.vue:62
@@ -2686,7 +2672,6 @@ msgid "Everyone, across all instances"
 msgstr "Tout le monde, sur toutes les instances"
 
 #: front/src/components/library/radios/Filter.vue:7
-#, fuzzy
 msgctxt "Popup/Radio/Title/Noun"
 msgid "Exclude"
 msgstr "Exclure"
@@ -2982,10 +2967,9 @@ msgid "Go to home page"
 msgstr "Retourner à la page d'accueil"
 
 #: front/src/components/Footer.vue:19
-#, fuzzy
 msgctxt "Footer/*/List item.Link"
 msgid "Go to Library"
-msgstr "Audiothèque"
+msgstr "Accéder à l'audiothèque"
 
 #: front/src/views/Notifications.vue:27 src/views/Notifications.vue:61
 msgctxt "Content/Notifications/Button.Label"
@@ -3033,7 +3017,6 @@ msgid "Home"
 msgstr "Accueil"
 
 #: front/src/components/Footer.vue:22
-#, fuzzy
 msgctxt "Footer/*/List item.Link"
 msgid "Home Page"
 msgstr "Accueil"
@@ -3090,10 +3073,9 @@ msgid "Illegal content"
 msgstr "Contenu illégal"
 
 #: front/src/components/library/FsBrowser.vue:5
-#, fuzzy
 msgctxt "Content/Library/Button/Verb"
 msgid "Import"
-msgstr "Importé"
+msgstr "Importer"
 
 #: front/src/components/library/ImportStatusModal.vue:3
 msgctxt "Popup/Import/Title"
@@ -3130,10 +3112,9 @@ msgstr "Statut de l'import"
 #: front/src/components/library/FileUpload.vue:71
 #: front/src/components/library/FileUpload.vue:12
 #: front/src/components/library/FileUpload.vue:1
-#, fuzzy
 msgctxt "Content/Library/Title/Verb"
 msgid "Import status"
-msgstr "Statut de l'import"
+msgstr "État de l'import"
 
 #: front/src/components/mixins/Translations.vue:41
 #: front/src/components/mixins/Translations.vue:42
@@ -3417,7 +3398,6 @@ msgid "Libraries help you organize and share your music collections. You can upl
 msgstr "Les bibliothèques vous aident à organiser et à partager votre collection de musique. Vous pouvez téléverser votre bibliothèque musicale sur Funkwhale et la partager avec vos amis et votre famille."
 
 #: front/src/components/library/Home.vue:78
-#, fuzzy
 msgctxt "Head/Home/Title"
 msgid "Library"
 msgstr "Audiothèque"
@@ -3630,10 +3610,9 @@ msgid "Log in to your Funkwhale account"
 msgstr "Connectez-vous à votre compte Funkwhale"
 
 #: front/src/components/auth/Logout.vue:14
-#, fuzzy
 msgctxt "Content/Login/Button.Label"
 msgid "Log in!"
-msgstr "Connexion"
+msgstr "Connexion !"
 
 #: front/src/components/auth/Logout.vue:26
 msgctxt "Head/Login/Title"
@@ -5435,10 +5414,9 @@ msgstr "Restreint"
 #: front/src/components/library/FileUpload.vue:76
 #: front/src/components/library/FileUpload.vue:17
 #: front/src/components/library/FileUpload.vue:6
-#, fuzzy
 msgctxt "Content/Library/Paragraph"
 msgid "Results of your import:"
-msgstr "Relancer l'importation"
+msgstr "Résultats de votre importation :"
 
 #: front/src/components/library/FileUpload.vue:73
 #: front/src/components/library/FileUpload.vue:14
@@ -7772,10 +7750,9 @@ msgstr "Vous allez être déconnecté⋅e de cette session et vous devrez vous c
 
 #: front/src/components/auth/LoginForm.vue:40
 #: src/components/auth/LoginForm.vue:2
-#, fuzzy
 msgctxt "Contant/Auth/Paragraph"
 msgid "You will be redirected to %{ domain } to authenticate."
-msgstr "Vous allez être redirigé·e vers <strong>%{ url }</strong>"
+msgstr "Vous allez être redirigé·e vers %{ domain } pour vous authentifier."
 
 #: front/src/components/auth/Authorize.vue:51
 msgctxt "Content/Auth/Paragraph"
@@ -7834,10 +7811,9 @@ msgid "Your avatar cannot be saved"
 msgstr "Impossible de sauvegarder votre avatar"
 
 #: front/src/components/auth/Settings.vue:269
-#, fuzzy
 msgctxt "Content/Settings/Paragraph'"
 msgid "Your current email address is %{ email }."
-msgstr "Vous êtes actuellement connecté·e en tant que %{ username }"
+msgstr "Votre adresse e-mail actuelle est %{ email }."
 
 #: front/src/components/auth/Settings.vue:545
 msgctxt "*/Auth/Message"
