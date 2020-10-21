@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: French (Funkwhale)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-10-03 22:46+0000\n"
+"PO-Revision-Date: 2020-10-21 17:49+0000\n"
 "Last-Translator: appzer0 <appzer0@free.fr>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/funkwhale/"
 "front/fr/>\n"
@@ -2283,7 +2283,6 @@ msgstr "Éditer"
 
 #: front/src/components/playlists/PlaylistModal.vue:42
 #: front/src/components/playlists/PlaylistModal.vue:52
-#, fuzzy
 msgctxt "*/*/*/Verb"
 msgid "Edit"
 msgstr "Éditer"
@@ -3443,10 +3442,9 @@ msgid "Library deleted"
 msgstr "Bibliothèque supprimée"
 
 #: front/src/views/content/libraries/Card.vue:39
-#, fuzzy
 msgctxt "Content/Library/Card.Button.Label/Noun"
 msgid "Library Details"
-msgstr "Modifications de la bibliothèque"
+msgstr "Détails de l'audiothèque"
 
 #: front/src/views/admin/library/EditsList.vue:4
 msgctxt "Content/Admin/Title/Noun"
@@ -3620,10 +3618,9 @@ msgid "Log Out"
 msgstr "Déconnexion"
 
 #: front/src/views/auth/Callback.vue:7
-#, fuzzy
 msgctxt "*/Login/*"
 msgid "Logging in…"
-msgstr "Chargement des bibliothèques…"
+msgstr "Connexion en cours…"
 
 #: front/src/components/Sidebar.vue:78 src/components/auth/LoginForm.vue:44
 msgctxt "*/Login/*/Verb"
@@ -3675,10 +3672,9 @@ msgid "Main menu"
 msgstr "Menu principal"
 
 #: front/src/components/Sidebar.vue:86
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Main navigation"
-msgstr "Pagination"
+msgstr "Navigation"
 
 #: front/src/views/admin/library/Base.vue:37
 msgctxt "Head/Admin/Title"
@@ -3696,16 +3692,14 @@ msgid "Manage playlists"
 msgstr "Gérer les listes de lecture"
 
 #: front/src/components/auth/Settings.vue:254
-#, fuzzy
 msgctxt "Content/Settings/Button.Label"
 msgid "Manage plugins"
-msgstr "Gérer les listes de lecture"
+msgstr "Gérer les greffons"
 
 #: front/src/views/auth/Plugins.vue:42
-#, fuzzy
 msgctxt "Head/Login/Title"
 msgid "Manage plugins"
-msgstr "Gérer les listes de lecture"
+msgstr "Gérer les greffons"
 
 #: front/src/views/admin/users/Base.vue:20
 msgctxt "Head/Admin/Title"
@@ -4015,10 +4009,9 @@ msgid "New channels"
 msgstr "Nouvelles chaînes"
 
 #: front/src/components/auth/Settings.vue:279
-#, fuzzy
 msgctxt "*/*/*"
 msgid "New email"
-msgstr "Nouvel album"
+msgstr "Nouvelle adresse e-mail"
 
 #: front/src/components/auth/Settings.vue:73
 #: front/src/views/auth/PasswordResetConfirm.vue:14
@@ -4043,7 +4036,6 @@ msgid "New value"
 msgstr "Nouvelle valeur"
 
 #: front/src/components/Pagination.vue:45
-#, fuzzy
 msgctxt "Content/*/Link"
 msgid "Next Page"
 msgstr "Étape suivante"
@@ -4251,10 +4243,9 @@ msgstr "Ouvrir un fil de discussion de support (incluez les informations de déb
 
 #: front/src/components/manage/ChannelsTable.vue:183
 #: front/src/components/manage/library/AlbumsTable.vue:177
-#, fuzzy
 msgctxt "Content/Moderation/Verb"
 msgid "Open in moderation interface"
-msgstr "Ouvrir dans l'interface de modérations"
+msgstr "Ouvrir dans l'interface de modération"
 
 #: front/src/components/library/AlbumDropdown.vue:54
 #: front/src/components/library/ArtistBase.vue:83
@@ -4420,18 +4411,16 @@ msgstr "Propriétaire"
 #: front/src/components/audio/ChannelForm.vue:103
 #: front/src/components/audio/ChannelForm.vue:95
 #: front/src/components/audio/ChannelForm.vue:77
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Owner email"
-msgstr "Saisissez votre courriel"
+msgstr "Courriel du propriétaire"
 
 #: front/src/components/audio/ChannelForm.vue:109
 #: front/src/components/audio/ChannelForm.vue:101
 #: front/src/components/audio/ChannelForm.vue:83
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Owner name"
-msgstr "Propriétaire"
+msgstr "Nom du propriétaire"
 
 #: front/src/components/PageNotFound.vue:33
 msgctxt "Head/*/Title"
@@ -4535,10 +4524,9 @@ msgid "Pending review edits"
 msgstr "Vérification des modifications en attente"
 
 #: front/src/components/common/ActionTable.vue:279
-#, fuzzy
 msgctxt "Content/*/Button.Label"
 msgid "Perform actions"
-msgstr "Informations de débogage"
+msgstr "Appliquer les modifications en attente"
 
 #: front/src/components/auth/Settings.vue:154
 #: front/src/components/manage/users/UsersTable.vue:36
@@ -4550,7 +4538,6 @@ msgid "Permissions"
 msgstr "Permissions"
 
 #: front/src/components/audio/track/Table.vue:9
-#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "Play"
 msgstr "Jouer"
@@ -4570,10 +4557,9 @@ msgid "Play"
 msgstr "Jouer"
 
 #: front/src/components/audio/PlayButton.vue:85
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play album"
-msgstr "Lire tous les albums"
+msgstr "Lire l'album"
 
 #: front/src/views/playlists/Detail.vue:20
 msgctxt "Content/Queue/Button.Label/Short, Verb"
@@ -4587,10 +4573,9 @@ msgid "Play all albums"
 msgstr "Lire tous les albums"
 
 #: front/src/components/audio/PlayButton.vue:87
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play artist"
-msgstr "Liste de lecture"
+msgstr "Lire tout l'artiste"
 
 #: front/src/components/audio/PlayButton.vue:97
 msgctxt "*/Queue/Dropdown/Button/Title"
@@ -4608,10 +4593,9 @@ msgid "Play now"
 msgstr "Lire maintenant"
 
 #: front/src/components/audio/PlayButton.vue:89
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play playlist"
-msgstr "Vider la liste de lecture"
+msgstr "Lire la liste de lecture"
 
 #: front/src/components/ShortcutsModal.vue:101
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
@@ -4634,16 +4618,14 @@ msgid "Play track"
 msgstr "Jouer"
 
 #: front/src/components/audio/PlayButton.vue:83
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play track"
-msgstr "Jouer"
+msgstr "Jouer la piste"
 
 #: front/src/components/audio/PlayButton.vue:91
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play tracks"
-msgstr "Jouer"
+msgstr "Jouer les pistes"
 
 #: front/src/components/mixins/Report.vue:84 src/views/playlists/Detail.vue:129
 #: front/src/components/mixins/Report.vue:85
@@ -4780,7 +4762,6 @@ msgid "Preview form"
 msgstr "Aperçu du formulaire"
 
 #: front/src/components/Pagination.vue:44
-#, fuzzy
 msgctxt "Content/*/Link"
 msgid "Previous Page"
 msgstr "Étape précédente"
@@ -5395,10 +5376,9 @@ msgid "Restart import"
 msgstr "Relancer l'importation"
 
 #: front/src/components/Queue.vue:276
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Restart track"
-msgstr "Piste suivante"
+msgstr "Rejouer la piste"
 
 #: front/src/components/library/EditForm.vue:31
 #: src/components/library/EditForm.vue:5
@@ -5507,10 +5487,9 @@ msgid "Save"
 msgstr "Enregistrer"
 
 #: front/src/components/auth/Plugin.vue:54
-#, fuzzy
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Scan"
-msgstr "Analyse démarrée"
+msgstr "Analyse"
 
 #: front/src/views/content/remote/Card.vue:200
 msgctxt "Content/Library/Message"
@@ -5673,10 +5652,9 @@ msgid "Search for artists, albums, tracks…"
 msgstr "Rechercher des artistes, albums, pistes…"
 
 #: front/src/components/audio/SearchBar.vue:29
-#, fuzzy
 msgctxt "Sidebar/Search/Input.Label"
 msgid "Search for content"
-msgstr "Rechercher de la musique"
+msgstr "Rechercher du contenu audio"
 
 #: front/src/components/audio/Search.vue:2
 msgctxt "Content/Search/Title"
@@ -5735,7 +5713,6 @@ msgstr "Sécurité"
 
 #: front/src/components/mixins/Translations.vue:135
 #: front/src/components/mixins/Translations.vue:136
-#, fuzzy
 msgctxt "*/Admin/*/Noun"
 msgid "Security"
 msgstr "Sécurité"
@@ -5779,10 +5756,9 @@ msgstr[0] "Sélectionner l'ensemble de %{ total } élément"
 msgstr[1] "Sélectionner l'ensemble des %{ total } éléments"
 
 #: front/src/components/common/ActionTable.vue:278
-#, fuzzy
 msgctxt "Content/*/Select/Verb"
 msgid "Select all items"
-msgstr "Sélectionner un filtre"
+msgstr "Tout sélectionner"
 
 #: front/src/components/common/ActionTable.vue:56
 #: front/src/components/common/ActionTable.vue:7
@@ -5879,10 +5855,10 @@ msgid "Show available keyboard shortcuts"
 msgstr "Montrer les raccourcis clavier disponibles"
 
 #: front/src/views/content/libraries/FilesTable.vue:295
-#, fuzzy
 msgctxt "Content/Library/Button.Label/Verb"
 msgid "Show information about the upload status for this track"
-msgstr "Cliquer pour afficher plus d'information à propos du processus d'import pour cet envoi"
+msgstr ""
+"Afficher plus d'information à propos du processus d'import pour cet envoi"
 
 #: front/src/components/common/ExpandableDiv.vue:7
 #: front/src/components/common/RenderedDescription.vue:10
@@ -6151,16 +6127,14 @@ msgid "Submit report"
 msgstr "Envoyer le signalement"
 
 #: front/src/views/content/remote/ScanForm.vue:52
-#, fuzzy
 msgctxt "Content/Library/Input.Label"
 msgid "Submit search"
-msgstr "Envoyer le signalement"
+msgstr "Soumettre la recherche"
 
 #: front/src/views/Search.vue:137
-#, fuzzy
 msgctxt "Content/Search/Button.Label/Verb"
 msgid "Submit Search Query"
-msgstr "Envoyer le signalement"
+msgstr "Soumettre la recherche"
 
 #: front/src/components/library/EditForm.vue:108
 msgctxt "Content/Library/Button.Label/Verb"
@@ -6703,10 +6677,9 @@ msgid "This track is present in the following libraries:"
 msgstr "Cette piste est présente dans les bibliothèques suivantes :"
 
 #: front/src/views/auth/ProfileOverview.vue:27
-#, fuzzy
 msgctxt "Content/Profile/Paragraph"
 msgid "This user shared the following libraries..."
-msgstr "Ces utilisateur.trice partage les audiothèques suivantes."
+msgstr "Cet⋅te utilisateur.trice partage les audiothèques suivantes..."
 
 #: front/src/components/manage/moderation/UserRequestCard.vue:98
 msgctxt "Content/Moderation/Paragraph"
@@ -7010,7 +6983,6 @@ msgid "Update"
 msgstr "Mettre à jour"
 
 #: front/src/components/auth/Settings.vue:286
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Update"
 msgstr "Mettre à jour"
@@ -7496,10 +7468,9 @@ msgid "Waiting for result…"
 msgstr "Chargement de vos favoris…"
 
 #: front/src/components/auth/Settings.vue:273
-#, fuzzy
 msgctxt "Content/Settings/Error message.Title"
 msgid "We cannot change your email address"
-msgstr "Nous n'avons pas pu confirmer votre adresse de courriel"
+msgstr "Nous ne pouvons pas modifier votre adresse de courriel"
 
 #: front/src/components/auth/Settings.vue:305
 msgctxt "Content/Settings/Error message.Title"
@@ -7636,10 +7607,9 @@ msgid "You are now using the Funkwhale instance at %{ url }"
 msgstr "Vous utilisez maintenant l’instance Funkwhale sur %{ url }"
 
 #: front/src/components/auth/Logout.vue:12
-#, fuzzy
 msgctxt "Content/Login/Title"
 msgid "You aren't currently logged in"
-msgstr "Vous êtes actuellement connecté·e en tant que %{ username }"
+msgstr "Vous n'êtes pas actuellement connecté·e"
 
 #: front/src/components/moderation/FilterModal.vue:27
 #: front/src/components/moderation/FilterModal.vue:13
@@ -7863,7 +7833,6 @@ msgid "Your settings can't be updated"
 msgstr "Vos paramètres ne peuvent être mis à jour"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:139
-#, fuzzy
 msgctxt "Content/Password/Input.label"
 msgid "Your subsonic API password"
 msgstr "Mot de passe de l'API Subsonic"
