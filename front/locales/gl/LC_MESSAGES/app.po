@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-08-24 14:41+0000\n"
+"PO-Revision-Date: 2020-11-04 11:52+0000\n"
 "Last-Translator: ghose <xosem@disroot.org>\n"
 "Language-Team: none\n"
 "Language: gl\n"
@@ -1397,7 +1397,7 @@ msgstr "Imaxe do canal"
 #: front/src/views/auth/ProfileOverview.vue:8
 msgctxt "*/*/*"
 msgid "Channels"
-msgstr "Canais"
+msgstr "Canles"
 
 #: front/src/components/Footer.vue:60
 msgctxt "Footer/*/List item.Link"
@@ -3040,7 +3040,7 @@ msgstr "Se o enderezo de correo proporcionado no paso anterior é válido e liga
 #: front/src/views/content/Home.vue:13
 msgctxt "Content/Library/Paragraph"
 msgid "If you are a musician or a podcaster, channels are designed for you!"
-msgstr "Se es músico ou podcaster, os canais están deseñados para ti!"
+msgstr "Se es músico ou podcaster, as canles están deseñadas para ti!"
 
 #: front/src/components/auth/Settings.vue:181
 msgctxt "Content/Applications/Paragraph"
@@ -4007,7 +4007,7 @@ msgstr "Novo álbume"
 #: front/src/components/library/Home.vue:2
 msgctxt "*/*/*"
 msgid "New channels"
-msgstr "Novos canais"
+msgstr "Novas canles"
 
 #: front/src/components/auth/Settings.vue:279
 msgctxt "*/*/*"
@@ -6202,7 +6202,7 @@ msgstr "Subscribirse vía RSS"
 #: front/src/views/channels/SubscriptionsList.vue:81
 msgctxt "Content/Subscriptions/Header"
 msgid "Subscribed Channels"
-msgstr "Subscrita a Canais"
+msgstr "Subscricións a canles"
 
 #: front/src/views/channels/SubscriptionsList.vue:14
 msgctxt "*/*/*/Noun"
