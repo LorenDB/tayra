@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-10-07 21:26+0000\n"
-"Last-Translator: Porrumentzio <porrumentzio@riseup.net>\n"
+"PO-Revision-Date: 2020-11-07 15:29+0000\n"
+"Last-Translator: Asier Iturralde Sarasola <asier.iturralde@gmail.com>\n"
 "Language-Team: none\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
@@ -2756,13 +2756,13 @@ msgstr ""
 #: front/src/components/Sidebar.vue:93
 msgctxt "*/*/*/Verb"
 msgid "Explore"
-msgstr ""
+msgstr "Arakatu"
 
 #: front/src/components/manage/library/UploadsTable.vue:25
 #: front/src/views/content/libraries/FilesTable.vue:30
 msgctxt "Content/Library/Dropdown"
 msgid "Failed"
-msgstr ""
+msgstr "Huts egin du"
 
 #: front/src/views/content/remote/Card.vue:66
 #, fuzzy
@@ -2792,54 +2792,49 @@ msgstr "Gogokoak"
 
 #: front/src/components/About.vue:109 src/components/audio/SearchBar.vue:87
 #: front/src/components/audio/SearchBar.vue:169 src/views/admin/Settings.vue:86
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Federation"
-msgstr "Iraupena"
+msgstr "Federazioa"
 
 #: front/src/components/library/EditCard.vue:43
 msgctxt "Content/Library/Card.Table.Header/Short"
 msgid "Field"
-msgstr ""
+msgstr "Eremua"
 
 #: front/src/components/admin/SignupFormBuilder.vue:36
 msgctxt "*/*/Form-builder,Help"
 msgid "Field label"
-msgstr ""
+msgstr "Eremuaren etiketa"
 
 #: front/src/components/admin/SignupFormBuilder.vue:39
 msgctxt "*/*/Form-builder,Help"
 msgid "Field type"
-msgstr ""
+msgstr "Eremu mota"
 
 #: front/src/components/library/FileUpload.vue:108
-#, fuzzy
 msgctxt "Content/Library/Table.Label"
 msgid "Filename"
-msgstr "Fitxategi izena"
+msgstr "Fitxategi-izena"
 
 #: front/src/components/channels/UploadModal.vue:4
-#, fuzzy
 msgctxt "Popup/Channels/Title"
 msgid "Files to upload"
-msgstr "Liburutegi hau ezabatu?"
+msgstr "Fitxategiak kargatzeko"
 
 #: front/src/components/playlists/PlaylistModal.vue:34
-#, fuzzy
 msgctxt "Popup/Playlist/Label"
 msgid "Filter"
-msgstr "Iragazki izena"
+msgstr "Iragazkia"
 
 #: front/src/views/channels/SubscriptionsList.vue:82
-#, fuzzy
 msgctxt "Content/Subscriptions/Form.Placeholder"
 msgid "Filter by name…"
-msgstr "Iragazki izena"
+msgstr "Iragazi izenaren arabera…"
 
 #: front/src/components/library/radios/Builder.vue:59
 msgctxt "Content/Radio/Table.Label/Noun"
 msgid "Filter name"
-msgstr "Iragazki izena"
+msgstr "Iragazkiaren izena"
 
 #: front/src/components/Home.vue:117
 msgctxt "Content/Home/Link"
@@ -2847,10 +2842,9 @@ msgid "Find another pod"
 msgstr ""
 
 #: front/src/components/channels/UploadModal.vue:37
-#, fuzzy
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Finish later"
-msgstr "Amaituta"
+msgstr "Amaitu beranduago"
 
 #: front/src/components/manage/library/UploadsTable.vue:26
 #: front/src/components/mixins/Translations.vue:40
@@ -2884,19 +2878,18 @@ msgstr "Amaituta"
 #: front/src/views/admin/moderation/DomainsDetail.vue:166
 msgctxt "Content/Moderation/Table.Label/Short (Value is a date)"
 msgid "First seen"
-msgstr ""
+msgstr "Lehen aldiz ikusia"
 
 #: front/src/components/mixins/Translations.vue:71
 #: front/src/components/mixins/Translations.vue:72
-#, fuzzy
 msgctxt "Content/Moderation/Dropdown/Noun"
 msgid "First seen date"
-msgstr "Iraungitze data"
+msgstr "Lehen aldiz ikusitako data"
 
 #: front/src/components/ShortcutsModal.vue:63
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Focus searchbar"
-msgstr ""
+msgstr "Fokuratu bilaketa-barra"
 
 #: front/src/components/audio/LibraryFollowButton.vue:5
 #: front/src/views/content/remote/Card.vue:90
@@ -2952,10 +2945,9 @@ msgid "Forward to %{ domain}"
 msgstr ""
 
 #: front/src/components/auth/Authorize.vue:28
-#, fuzzy
 msgctxt "Content/Auth/Label/Noun"
 msgid "Full access"
-msgstr "Sarbidea ezgaitu"
+msgstr "Sarbide osoa"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:7
 msgctxt "Content/Settings/Paragraph'"
@@ -2963,20 +2955,19 @@ msgid "Funkwhale is compatible with other music players that support the Subsoni
 msgstr "Funkwhale Subsonic APIa darabilten beste musika erreproduzitzaileekin bateragarria da."
 
 #: front/src/components/Home.vue:87
-#, fuzzy
 msgctxt "Content/Home/Paragraph"
 msgid "Funkwhale is free and developped by a friendly community of volunteers."
-msgstr "Funkwhale doakoa da eta zure musikaren gaineko kontrola ematen dizu."
+msgstr "Funkwhale doakoa da eta boluntario komunitate jator batek garatzen du."
 
 #: front/src/components/About.vue:77
 msgctxt "*/*/*"
 msgid "Funkwhale version"
-msgstr ""
+msgstr "Funkwhale bertsioa"
 
 #: front/src/components/ShortcutsModal.vue:55
 msgctxt "Popup/Keyboard shortcuts/Title"
 msgid "General shortcuts"
-msgstr ""
+msgstr "Lasterbide orokorrak"
 
 #: front/src/components/manage/users/InvitationForm.vue:16
 msgctxt "Content/Admin/Button.Label/Verb"
@@ -2987,15 +2978,14 @@ msgstr "Lortu gonbidapen berria"
 #: front/src/views/content/Home.vue:37
 msgctxt "Content/Library/Button.Label/Verb"
 msgid "Get started"
-msgstr "Hasi"
+msgstr "Hasi erabiltzen"
 
 #: front/src/components/Footer.vue:57
 #: src/components/library/ImportStatusModal.vue:45
 #: front/src/components/library/ImportStatusModal.vue:26
-#, fuzzy
 msgctxt "Footer/*/Link"
 msgid "Getting help"
-msgstr "Ezarpenak"
+msgstr "Laguntza lortzea"
 
 #: front/src/components/common/ActionTable.vue:27
 #: front/src/components/common/ActionTable.vue:40
@@ -3009,62 +2999,59 @@ msgid "Go to home page"
 msgstr "Joan hasiera orrira"
 
 #: front/src/components/Footer.vue:19
-#, fuzzy
 msgctxt "Footer/*/List item.Link"
 msgid "Go to Library"
-msgstr "Liburutegia"
+msgstr "Joan liburutegira"
 
 #: front/src/views/Notifications.vue:27 src/views/Notifications.vue:61
 msgctxt "Content/Notifications/Button.Label"
 msgid "Got it!"
-msgstr ""
+msgstr "Ulertuta!"
 
 #: front/src/components/admin/SignupFormBuilder.vue:18
 msgctxt "*/*/Label"
 msgid "Help text"
-msgstr ""
+msgstr "Laguntza testua"
 
 #: front/src/components/auth/Settings.vue:108
-#, fuzzy
 msgctxt "Content/Settings/Title"
 msgid "Hidden artists"
-msgstr "Bilatu artistak"
+msgstr "Ezkutuko artistak"
 
 #: front/src/components/About.vue:154
 msgctxt "*/*/*/Verb"
 msgid "Hide"
-msgstr ""
+msgstr "Ezkutatu"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:114
 msgctxt "Content/Moderation/Help text"
 msgid "Hide account or domain content, except from followers."
-msgstr ""
+msgstr "Ezkutatu kontua edo domeinuaren edukia, jarraitzaileentzat ezik."
 
 #: front/src/components/moderation/FilterModal.vue:36
-#, fuzzy
 msgctxt "Popup/*/Button.Label"
 msgid "Hide content"
-msgstr "Edukia sartu"
+msgstr "Ezkutatu edukia"
 
 #: front/src/components/audio/PlayButton.vue:23
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "Hide content from this artist"
-msgstr ""
+msgstr "Ezkutatu artista honen edukia"
 
 #: front/src/components/Queue.vue:275 src/components/audio/Player.vue:691
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Hide content from this artist…"
-msgstr ""
+msgstr "Ezkutatu artista honen edukia…"
 
 #: front/src/components/Home.vue:217
 msgctxt "Head/Home/Title"
 msgid "Home"
-msgstr ""
+msgstr "Hasiera"
 
 #: front/src/components/Footer.vue:22
 msgctxt "Footer/*/List item.Link"
 msgid "Home Page"
-msgstr ""
+msgstr "Hasierako orria"
 
 #: front/src/components/audio/ChannelForm.vue:218
 msgctxt "Content/Channels/Help"
@@ -3087,16 +3074,21 @@ msgstr "Aurreko pausoan emandako emaila zuzena bada eta erabiltzaile kontu bati 
 msgctxt "Content/Library/Paragraph"
 msgid "If you are a musician or a podcaster, channels are designed for you!"
 msgstr ""
+"Musikaria edo podcast egilea bazara, kanalak zuretzat diseinatuta daude!"
 
 #: front/src/components/auth/Settings.vue:181
 msgctxt "Content/Applications/Paragraph"
 msgid "If you authorize third-party applications to access your data, those applications will be listed here."
 msgstr ""
+"Hirugarrengoen aplikazioei zure datuetarako sarbidea baimentzen badiezu, "
+"aplikazio horiek hemen zerrendatuko dira."
 
 #: front/src/components/auth/LoginForm.vue:6
 msgctxt "Content/Login/Error message.List item/Call to action"
 msgid "If you signed-up recently, you may need to wait before our moderation team review your account, or verify your email."
 msgstr ""
+"Duela gutxi erregistratu bazara, baliteke moderazio taldeak zure kontua "
+"berrikusi edo zure helbide elektronikoa egiaztatu arte itxaron behar izatea."
 
 #: front/src/views/channels/DetailBase.vue:59
 #: src/views/channels/DetailBase.vue:54
@@ -3104,48 +3096,47 @@ msgstr ""
 msgctxt "Content/Channels/Label"
 msgid "If you're using Mastodon or other fediverse applications, you can subscribe to this account:"
 msgstr ""
+"Mastodon edo fedibertsoko beste aplikazioren bat erabiltzen ari bazara, "
+"kontu honetara harpidetu zaitezke:"
 
 #: front/src/components/channels/UploadForm.vue:43
 #: front/src/components/channels/UploadForm.vue:16
 #: front/src/components/channels/UploadForm.vue:7
 msgctxt "*/*/*"
 msgid "Ignore"
-msgstr ""
+msgstr "Ez ikusi egin"
 
 #: front/src/components/mixins/Translations.vue:50
 #: front/src/components/mixins/Translations.vue:51
-#, fuzzy
 msgctxt "Content/Moderation/Dropdown"
 msgid "Illegal content"
-msgstr "Edukia sartu"
+msgstr "Eduki ilegala"
 
 #: front/src/components/library/FsBrowser.vue:5
-#, fuzzy
 msgctxt "Content/Library/Button/Verb"
 msgid "Import"
-msgstr "Inportazio data"
+msgstr "Inportatu"
 
 #: front/src/components/library/ImportStatusModal.vue:3
-#, fuzzy
 msgctxt "Popup/Import/Title"
 msgid "Import detail"
-msgstr "Inportazio data"
+msgstr "Inportazioaren xehetasunak"
 
 #: front/src/components/library/FsLogs.vue:4
 msgctxt "Content/Library/Paragraph"
 msgid "Import hasn't started yet"
-msgstr ""
+msgstr "Inportazioa ez da hasi oraindik"
 
 #: front/src/components/library/FileUpload.vue:61
 #: front/src/components/library/FileUpload.vue:2
 msgctxt "Content/Library/Title/Verb"
 msgid "Import music from your server"
-msgstr ""
+msgstr "Inportatu musika zure zerbitzaritik"
 
 #: front/src/components/library/FileUpload.vue:50
 msgctxt "Content/Library/Input.Label/Noun"
 msgid "Import reference"
-msgstr "Inportazio erreferentzia"
+msgstr "Inportazioaren erreferentzia"
 
 #: front/src/components/manage/library/UploadsTable.vue:20
 #: front/src/components/manage/library/UploadsTable.vue:58
@@ -3156,41 +3147,38 @@ msgstr "Inportazio erreferentzia"
 #: front/src/views/content/libraries/FilesTable.vue:86
 msgctxt "Content/*/*/Noun"
 msgid "Import status"
-msgstr "Inportazio egoera"
+msgstr "Inportazioaren egoera"
 
 #: front/src/components/library/FileUpload.vue:71
 #: front/src/components/library/FileUpload.vue:12
 #: front/src/components/library/FileUpload.vue:1
-#, fuzzy
 msgctxt "Content/Library/Title/Verb"
 msgid "Import status"
-msgstr "Inportazio egoera"
+msgstr "Inportatu egoera"
 
 #: front/src/components/mixins/Translations.vue:41
 #: front/src/components/mixins/Translations.vue:42
-#, fuzzy
 msgctxt "Content/Library/Help text"
 msgid "Imported"
-msgstr "Inportazio data"
+msgstr "Inportatuta"
 
 #: front/src/components/federation/FetchButton.vue:40
 #: front/src/components/federation/FetchButton.vue:30
 msgctxt "*/*/Error"
 msgid "Impossible to connect to the remote server"
-msgstr ""
+msgstr "Ezin izan da urruneko zerbitzarira konektatu"
 
 #: front/src/components/moderation/FilterModal.vue:22
 #: front/src/components/moderation/FilterModal.vue:8
-#, fuzzy
 msgctxt "Popup/Moderation/List item"
 msgid "In \"Recently added\" widget"
-msgstr "Azken aldian gehituta"
+msgstr "\"Azken aldian gehituta\" widget-ean"
 
 #: front/src/components/moderation/FilterModal.vue:23
 #: front/src/components/moderation/FilterModal.vue:9
 msgctxt "Popup/Moderation/List item"
 msgid "In artists and album listings"
-msgstr ""
+msgstr "Artista eta albumen zerrendetan"
 
 #: front/src/components/favorites/TrackFavoriteIcon.vue:3
 msgctxt "Content/Track/Button.Message"
@@ -3201,24 +3189,24 @@ msgstr "Gogokoetan"
 #: front/src/components/moderation/FilterModal.vue:7
 msgctxt "Popup/Moderation/List item"
 msgid "In other users favorites and listening history"
-msgstr ""
+msgstr "Beste erabiltzaileen gogokoetan eta entzundakoen historian"
 
 #: front/src/components/moderation/FilterModal.vue:24
 #: front/src/components/moderation/FilterModal.vue:10
 msgctxt "Popup/Moderation/List item"
 msgid "In radio suggestions"
-msgstr ""
+msgstr "Irratien iradokizunetan"
 
 #: front/src/components/manage/users/UsersTable.vue:49
 #: front/src/components/manage/users/UsersTable.vue:10
 msgctxt "Content/Admin/Table"
 msgid "Inactive"
-msgstr "Ez gaituta"
+msgstr "Ez-aktiboa"
 
 #: front/src/components/ShortcutsModal.vue:109
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Increase volume"
-msgstr ""
+msgstr "Igo bolumena"
 
 #: front/src/components/playlists/Editor.vue:34
 #, fuzzy
@@ -3230,23 +3218,20 @@ msgstr[1] "Sartu ilaratik (%{ count } abesti)"
 
 #: front/src/components/mixins/Translations.vue:16
 #: front/src/components/mixins/Translations.vue:17
-#, fuzzy
 msgctxt "Content/Settings/Dropdown/Short"
 msgid "Instance"
-msgstr "Instantziako irratiak"
+msgstr "Instantzia"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:82
 #: front/src/views/admin/moderation/DomainsDetail.vue:77
-#, fuzzy
 msgctxt "Content/Moderation/Title"
 msgid "Instance data"
-msgstr "Instantziako irratiak"
+msgstr "Instantziaren datuak"
 
 #: front/src/views/admin/Settings.vue:80
-#, fuzzy
 msgctxt "Content/Admin/Menu"
 msgid "Instance information"
-msgstr "Instantziako irratiak"
+msgstr "Instantziaren informazioa"
 
 #: front/src/components/library/Radios.vue:9
 msgctxt "Content/Radio/Title"
@@ -3254,16 +3239,14 @@ msgid "Instance radios"
 msgstr "Instantziako irratiak"
 
 #: front/src/views/admin/Settings.vue:75
-#, fuzzy
 msgctxt "Head/Admin/Title"
 msgid "Instance settings"
-msgstr "Instantziako irratiak"
+msgstr "Instantziaren ezarpenak"
 
 #: front/src/components/SetInstanceModal.vue:19
-#, fuzzy
 msgctxt "Popup/Instance/Input.Label/Noun"
 msgid "Instance URL"
-msgstr "Instantziako irratiak"
+msgstr "Instantziaren URLa"
 
 #: front/src/components/manage/moderation/ReportCard.vue:90
 #: front/src/components/manage/moderation/ReportCard.vue:197
@@ -3271,20 +3254,22 @@ msgstr "Instantziako irratiak"
 #: front/src/components/manage/moderation/UserRequestCard.vue:127
 msgctxt "Content/*/*/Noun"
 msgid "Internal notes"
-msgstr ""
+msgstr "Barne oharrak"
 
 #: front/src/components/library/FileUpload.vue:376
 #: front/src/components/library/FileUpload.vue:377
 msgctxt "Content/Library/Help text"
 msgid "Invalid file type, ensure you are uploading an audio file. Supported file extensions are %{ extensions }"
 msgstr ""
+"Fitxategi-mota baliogabea, ziurtatu igotzen ari zarena audio-fitxategi bat "
+"dela. Onartzen diren fitxategi-luzapenak: %{ extensions }"
 
 #: front/src/components/library/ImportStatusModal.vue:139
 #: front/src/components/mixins/Translations.vue:49
 #: front/src/components/mixins/Translations.vue:50
 msgctxt "Popup/Import/Error.Label"
 msgid "Invalid metadata"
-msgstr ""
+msgstr "Metadatu baliogabeak"
 
 #: front/src/components/auth/SignupForm.vue:43
 #: front/src/components/manage/users/InvitationForm.vue:11
@@ -3303,7 +3288,7 @@ msgstr "Gonbidapenak"
 #: front/src/views/admin/moderation/DomainsDetail.vue:84
 msgctxt "Content/Moderation/*/Adjective"
 msgid "Is present on allow-list"
-msgstr ""
+msgstr "Onartuen zerrendan dago"
 
 #: front/src/components/Footer.vue:61
 msgctxt "Footer/*/List item.Link"
@@ -3313,25 +3298,24 @@ msgstr "Arazoen jarraipena"
 #: front/src/components/SetInstanceModal.vue:5
 msgctxt "Popup/Instance/Error message.Title"
 msgid "It is not possible to connect to the given URL"
-msgstr ""
+msgstr "Ezin da konektatu emandako URLarekin"
 
 #: front/src/components/mixins/Translations.vue:80
 #: front/src/components/mixins/Translations.vue:81
 msgctxt "*/*/*/Noun"
 msgid "Items"
-msgstr ""
+msgstr "Elementuak"
 
 #: front/src/components/Footer.vue:45 src/components/ShortcutsModal.vue:3
 msgctxt "*/*/*/Noun"
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "Laster-teklak"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:180
 #: front/src/views/admin/moderation/DomainsDetail.vue:175
-#, fuzzy
 msgctxt "Content/Moderation/Table.Label.Link"
 msgid "Known accounts"
-msgstr "Nire kontua"
+msgstr "Kontu ezagunak"
 
 #: front/src/views/content/remote/Home.vue:14
 #: src/views/content/remote/Home.vue:1
@@ -3342,10 +3326,9 @@ msgstr "Liburutegi ezagunak"
 #: front/src/components/audio/ChannelForm.vue:67
 #: front/src/components/audio/ChannelForm.vue:59
 #: front/src/components/audio/ChannelForm.vue:41
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Language"
-msgstr "Hizkuntza aldatu"
+msgstr "Hizkuntza"
 
 #: front/src/components/manage/users/UsersTable.vue:35
 #: front/src/components/manage/users/UsersTable.vue:5
@@ -3363,7 +3346,7 @@ msgstr "Azken jarduera"
 #: front/src/views/admin/moderation/DomainsDetail.vue:93
 msgctxt "Content/*/Table.Label"
 msgid "Last checked"
-msgstr ""
+msgstr "Azken egiaztapena"
 
 #: front/src/components/playlists/PlaylistModal.vue:44
 msgctxt "Popup/Playlist/Table.Label/Short"
@@ -3374,14 +3357,13 @@ msgstr "Azken aldaketa"
 #: front/src/components/manage/moderation/AccountsTable.vue:5
 msgctxt "Content/Moderation/Table.Label/Noun"
 msgid "Last seen"
-msgstr ""
+msgstr "Ikusi zen azken aldia"
 
 #: front/src/components/mixins/Translations.vue:72
 #: front/src/components/mixins/Translations.vue:73
-#, fuzzy
 msgctxt "Content/Moderation/Dropdown/Noun"
 msgid "Last seen date"
-msgstr "Azken eguneraketa:"
+msgstr "Ikusi zen azken aldiaren data"
 
 #: front/src/views/content/remote/Card.vue:64
 #: src/views/content/remote/Card.vue:1
@@ -3392,18 +3374,17 @@ msgstr "Azken eguneraketa:"
 #: front/src/App.vue:434
 msgctxt "App/Message/Paragraph"
 msgid "Later"
-msgstr ""
+msgstr "Geroago"
 
 #: front/src/views/channels/DetailOverview.vue:44
 msgctxt "Content/Channel/Paragraph"
 msgid "Latest episodes"
-msgstr "Azken saioak"
+msgstr "Azken atalak"
 
 #: front/src/views/channels/DetailOverview.vue:45
-#, fuzzy
 msgctxt "Content/Channel/Paragraph"
 msgid "Latest tracks"
-msgstr "Oraingo abestia"
+msgstr "Azken abestiak"
 
 #: front/src/components/common/ActionTable.vue:37
 msgctxt "Modal/*/Button.Label/Short, Verb"
@@ -3413,12 +3394,12 @@ msgstr "Abiarazi"
 #: front/src/components/Home.vue:34 src/components/Home.vue:8
 msgctxt "Content/Home/Link"
 msgid "Learn more"
-msgstr ""
+msgstr "Ikasi gehiago"
 
 #: front/src/components/manage/users/InvitationForm.vue:58
 msgctxt "Content/Admin/Input.Placeholder"
 msgid "Leave empty for a random code"
-msgstr ""
+msgstr "Utzi hutsik ausazko kode batentzat"
 
 #: front/src/components/audio/EmbedWizard.vue:17
 msgctxt "Popup/Embed/Paragraph"
@@ -3429,7 +3410,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:80
 msgctxt "*/*/*/Noun"
 msgid "Length"
-msgstr ""
+msgstr "Luzera"
 
 #: front/src/views/admin/library/AlbumDetail.vue:245
 #: front/src/views/admin/library/AlbumDetail.vue:240
@@ -3450,10 +3431,9 @@ msgstr "Liburutegiak"
 
 #: front/src/components/mixins/Translations.vue:99
 #: front/src/components/mixins/Translations.vue:100
-#, fuzzy
 msgctxt "Content/OAuth Scopes/Label"
 msgid "Libraries and uploads"
-msgstr "Liburutegiak"
+msgstr "Liburutegiak eta igoerak"
 
 #: front/src/views/content/libraries/Form.vue:2
 msgctxt "Content/Library/Paragraph"
@@ -3488,52 +3468,45 @@ msgid "Library"
 msgstr "Liburutegia"
 
 #: front/src/views/library/Edit.vue:5
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Library contents"
-msgstr "Liburutegi fitxategiak"
+msgstr "Liburutegiaren edukiak"
 
 #: front/src/views/content/libraries/Form.vue:103
-#, fuzzy
 msgctxt "Content/Library/Message"
 msgid "Library created"
-msgstr "Zerrenda sortuta"
+msgstr "Liburutegia sortuta"
 
 #: front/src/views/admin/library/LibraryDetail.vue:68
 #: front/src/views/admin/library/LibraryDetail.vue:63
-#, fuzzy
 msgctxt "Content/Moderation/Title"
 msgid "Library data"
-msgstr "Liburutegia"
+msgstr "Liburutegiaren datuak"
 
 #: front/src/views/content/libraries/Form.vue:123
-#, fuzzy
 msgctxt "Content/Library/Message"
 msgid "Library deleted"
-msgstr "Liburutegi fitxategiak"
+msgstr "Liburutegia ezabatuta"
 
 #: front/src/views/content/libraries/Card.vue:39
-#, fuzzy
 msgctxt "Content/Library/Card.Button.Label/Noun"
 msgid "Library Details"
-msgstr "Liburutegi fitxategiak"
+msgstr "Liburutegiaren xehetasunak"
 
 #: front/src/views/admin/library/EditsList.vue:4
-#, fuzzy
 msgctxt "Content/Admin/Title/Noun"
 msgid "Library edits"
-msgstr "Liburutegi fitxategiak"
+msgstr "Liburutegiaren edizioak"
 
 #: front/src/views/content/libraries/Form.vue:100
-#, fuzzy
 msgctxt "Content/Library/Message"
 msgid "Library updated"
-msgstr "Azken eguneraketa:"
+msgstr "Liburutegia eguneratuta"
 
 #: front/src/components/auth/Plugin.vue:24
 msgctxt "*/*/Paragraph/Noun"
 msgid "Library where files should be imported."
-msgstr ""
+msgstr "Fitxategiak ze liburutegitara inportatu behar diren."
 
 #: front/src/components/channels/LicenseSelect.vue:3
 #: front/src/components/library/TrackDetail.vue:120
@@ -3544,12 +3517,12 @@ msgstr ""
 #: front/src/edits.js:115
 msgctxt "Content/*/*/Noun"
 msgid "License"
-msgstr ""
+msgstr "Lizentzia"
 
 #: front/src/components/Footer.vue:107
 msgctxt "Footer/Settings/Dropdown.Label/Theme name"
 msgid "Light"
-msgstr ""
+msgstr "Argia"
 
 #: front/src/views/admin/ChannelDetail.vue:200
 #: src/views/admin/ChannelDetail.vue:195
@@ -3565,7 +3538,7 @@ msgstr ""
 #: front/src/views/admin/moderation/AccountsDetail.vue:243
 msgctxt "Content/Moderation/Table.Label/Noun"
 msgid "Linked reports"
-msgstr ""
+msgstr "Estekatutako txostenak"
 
 #: front/src/components/Home.vue:134
 msgctxt "Content/Home/Link"
@@ -3590,45 +3563,39 @@ msgstr ""
 #: front/src/components/library/ArtistDetail.vue:28
 msgctxt "Content/*/Button.Label"
 msgid "Load more…"
-msgstr ""
+msgstr "Kargatu gehiago…"
 
 #: front/src/components/audio/ChannelForm.vue:121
 msgctxt "*/*/*"
 msgid "Loading"
-msgstr ""
+msgstr "Kargatzen"
 
 #: front/src/views/library/Edit.vue:14
-#, fuzzy
 msgctxt "Content/Library/Paragraph"
 msgid "Loading followers…"
 msgstr "Jarraitzaileak kargatzen…"
 
 #: front/src/views/content/libraries/Home.vue:3
-#, fuzzy
 msgctxt "Content/Library/Paragraph"
 msgid "Loading Libraries…"
 msgstr "Liburutegiak kargatzen…"
 
 #: front/src/views/Notifications.vue:81
-#, fuzzy
 msgctxt "Content/Notifications/Paragraph"
 msgid "Loading notifications…"
 msgstr "Jakinarazpenak kargatzen…"
 
 #: front/src/views/content/remote/Home.vue:3
-#, fuzzy
 msgctxt "Content/Library/Paragraph"
 msgid "Loading remote libraries…"
 msgstr "Urruneko liburutegiak kargatzen…"
 
 #: front/src/views/content/libraries/Quota.vue:4
-#, fuzzy
 msgctxt "Content/Library/Paragraph"
 msgid "Loading usage data…"
 msgstr "Erabilpen datuak kargatzen…"
 
 #: front/src/components/favorites/List.vue:5
-#, fuzzy
 msgctxt "Content/Favorites/Message"
 msgid "Loading your favorites…"
 msgstr "Zure gogokoak kargatzen…"
@@ -3666,22 +3633,21 @@ msgstr "Zure gogokoak kargatzen…"
 #: front/src/views/admin/library/UploadDetail.vue:3
 msgctxt "Content/Moderation/*/Short, Noun"
 msgid "Local"
-msgstr ""
+msgstr "Lokala"
 
 #: front/src/components/manage/moderation/AccountsTable.vue:53
 #: front/src/components/manage/moderation/AccountsTable.vue:13
 #: front/src/views/admin/moderation/AccountsDetail.vue:18
 #: front/src/views/admin/moderation/AccountsDetail.vue:13
 #: front/src/views/admin/moderation/AccountsDetail.vue:3
-#, fuzzy
 msgctxt "Content/Moderation/*/Short, Noun"
 msgid "Local account"
-msgstr "Nire kontua"
+msgstr "Kontu lokala"
 
 #: front/src/components/Home.vue:95 src/views/auth/Login.vue:29
 msgctxt "Head/Login/Title"
 msgid "Log In"
-msgstr ""
+msgstr "Hasi saioa"
 
 #: front/src/components/auth/SignupForm.vue:10 src/views/auth/Login.vue:4
 msgctxt "Content/Login/Title/Verb"
@@ -3691,18 +3657,17 @@ msgstr "Sartu zure Funkwhale kontura"
 #: front/src/components/auth/Logout.vue:14
 msgctxt "Content/Login/Button.Label"
 msgid "Log in!"
-msgstr ""
+msgstr "Hasi saioa!"
 
 #: front/src/components/auth/Logout.vue:26
 msgctxt "Head/Login/Title"
 msgid "Log Out"
-msgstr ""
+msgstr "Amaitu saioa"
 
 #: front/src/views/auth/Callback.vue:7
-#, fuzzy
 msgctxt "*/Login/*"
 msgid "Logging in…"
-msgstr "Liburutegiak kargatzen…"
+msgstr "Saioa hasten…"
 
 #: front/src/components/Sidebar.vue:78 src/components/auth/LoginForm.vue:44
 msgctxt "*/Login/*/Verb"
@@ -3711,10 +3676,9 @@ msgstr "Sartu"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:133
 #: front/src/views/admin/moderation/AccountsDetail.vue:128
-#, fuzzy
 msgctxt "Content/*/*/Noun"
 msgid "Login status"
-msgstr "Kontuaren egoera"
+msgstr "Saioaren egoera"
 
 #: front/src/components/Sidebar.vue:62 src/components/Sidebar.vue:48
 msgctxt "Sidebar/Login/List item.Link/Verb"
@@ -3724,7 +3688,7 @@ msgstr "Irten"
 #: front/src/components/admin/SignupFormBuilder.vue:58
 msgctxt "*/*/Form-builder"
 msgid "Long text"
-msgstr ""
+msgstr "Testu luzea"
 
 #: front/src/views/content/libraries/Home.vue:9
 #, fuzzy
@@ -3736,41 +3700,39 @@ msgstr "Badirudi ez duzula liburutegirik oraindik, bada bat sortzeko ordua!"
 #: src/components/audio/Player.vue:681
 msgctxt "Sidebar/Player/Icon.Tooltip"
 msgid "Looping disabled. Click to switch to single-track looping."
-msgstr ""
+msgstr "Begizta desgaituta. Egin klik pista bakarreko begiztara aldatzeko."
 
 #: front/src/components/audio/Player.vue:683
 #: src/components/audio/Player.vue:684
 msgctxt "Sidebar/Player/Icon.Tooltip"
 msgid "Looping on a single track. Click to switch to whole queue looping."
-msgstr ""
+msgstr "Pista bakarreko begiztan. Egin klik ilara osoko begiztara aldatzeko."
 
 #: front/src/components/audio/Player.vue:686
 #: src/components/audio/Player.vue:687
 msgctxt "Sidebar/Player/Icon.Tooltip"
 msgid "Looping on whole queue. Click to disable looping."
-msgstr ""
+msgstr "Ilara osoko begiztan. Egin klik begizta desgaitzeko."
 
 #: front/src/components/Sidebar.vue:205
 msgctxt "Sidebar/*/Hidden text"
 msgid "Main menu"
-msgstr ""
+msgstr "Menu nagusia"
 
 #: front/src/components/Sidebar.vue:86
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Main navigation"
-msgstr "Lortu gonbidapen berria"
+msgstr "Nabigazio nagusia"
 
 #: front/src/views/admin/library/Base.vue:37
-#, fuzzy
 msgctxt "Head/Admin/Title"
 msgid "Manage library"
-msgstr "Garbitu liburutegia"
+msgstr "Kudeatu liburutegia"
 
 #: front/src/components/manage/moderation/InstancePolicyModal.vue:8
 msgctxt "Popup/Moderation/Title/Verb"
 msgid "Manage moderation rules for %{ obj }"
-msgstr ""
+msgstr "Kudeatu %{ obj }(r)en moderazio arauak"
 
 #: front/src/components/playlists/PlaylistModal.vue:11
 msgctxt "Popup/Playlist/Title/Verb"
@@ -3778,22 +3740,19 @@ msgid "Manage playlists"
 msgstr "Kudeatu zerrendak"
 
 #: front/src/components/auth/Settings.vue:254
-#, fuzzy
 msgctxt "Content/Settings/Button.Label"
 msgid "Manage plugins"
-msgstr "Kudeatu zerrendak"
+msgstr "Kudeatu pluginak"
 
 #: front/src/views/auth/Plugins.vue:42
-#, fuzzy
 msgctxt "Head/Login/Title"
 msgid "Manage plugins"
-msgstr "Kudeatu zerrendak"
+msgstr "Kudeatu pluginak"
 
 #: front/src/views/admin/users/Base.vue:20
-#, fuzzy
 msgctxt "Head/Admin/Title"
 msgid "Manage users"
-msgstr "Kudeatu zerrendak"
+msgstr "Kudeatu erabiltzaileak"
 
 #: front/src/views/playlists/List.vue:5 src/views/playlists/List.vue:1
 msgctxt "Content/Playlist/Button.Label/Verb"
@@ -3806,21 +3765,19 @@ msgid "Mark all as read"
 msgstr "Markatu dena irakurrita"
 
 #: front/src/components/notifications/NotificationRow.vue:52
-#, fuzzy
 msgctxt "Content/Notifications/Button.Tooltip/Verb"
 msgid "Mark as read"
-msgstr "Markatu dena irakurrita"
+msgstr "Markatu irakurrita"
 
 #: front/src/components/notifications/NotificationRow.vue:53
-#, fuzzy
 msgctxt "Content/Notifications/Button.Tooltip/Verb"
 msgid "Mark as unread"
-msgstr "Markatu dena irakurrita"
+msgstr "Markatu irakurri gabe"
 
 #: front/src/components/common/ContentForm.vue:38
 msgctxt "*/Form/Paragraph"
 msgid "Markdown syntax is supported."
-msgstr ""
+msgstr "Markdown sintaxia onartzen da."
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:305
 #: front/src/views/admin/moderation/AccountsDetail.vue:300
@@ -3831,40 +3788,39 @@ msgstr "MB"
 #: front/src/components/audio/Player.vue:672
 msgctxt "Sidebar/Player/Hidden text"
 msgid "Media player"
-msgstr ""
+msgstr "Multimedia-erreproduzigailua"
 
 #: front/src/components/manage/moderation/ReportCard.vue:107
 #: front/src/components/manage/moderation/UserRequestCard.vue:95
 #: front/src/components/moderation/ReportModal.vue:35
 msgctxt "*/*/Field.Label/Noun"
 msgid "Message"
-msgstr ""
+msgstr "Mezua"
 
 #: front/src/views/channels/DetailBase.vue:117
 #: src/views/channels/DetailBase.vue:112
 msgctxt "Content/Channel/Paragraph"
 msgid "Mirrored from %{ domain }"
-msgstr ""
+msgstr "%{ domain } domeinutik ispilatua"
 
 #: front/src/components/Footer.vue:44
 msgctxt "Footer/*/List item.Link"
 msgid "Mobile and desktop apps"
-msgstr ""
+msgstr "Mugikorreko eta mahaigaineko aplikazioak"
 
 #: front/src/components/Home.vue:142
 msgctxt "Content/Home/Link"
 msgid "Mobile apps"
-msgstr ""
+msgstr "Mugikorreko aplikazioak"
 
 #: front/src/components/Sidebar.vue:32 src/components/Sidebar.vue:18
 #: front/src/components/manage/users/UsersTable.vue:178
 #: front/src/views/admin/Settings.vue:87
 #: front/src/views/admin/moderation/AccountsDetail.vue:542
 #: front/src/views/admin/moderation/Base.vue:56
-#, fuzzy
 msgctxt "*/Moderation/*"
 msgid "Moderation"
-msgstr "Iraupena"
+msgstr "Moderazioa"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:70
 #: front/src/views/admin/moderation/AccountsDetail.vue:65
@@ -3875,35 +3831,34 @@ msgstr "Iraupena"
 msgctxt "Content/Moderation/Card.Paragraph"
 msgid "Moderation policies help you control how your instance interact with a given domain or account."
 msgstr ""
+"Moderazio politikek zure instantziak domeinu edo kontu batekin dituen "
+"elkarrekintzak kontrolatzen laguntzen dizute."
 
 #: front/src/components/manage/moderation/InstancePolicyModal.vue:4
-#, fuzzy
 msgctxt "Content/Moderation/Button.Label"
 msgid "Moderation rules…"
-msgstr "Iraupena"
+msgstr "Moderazio arauak…"
 
 #: front/src/components/library/EditCard.vue:5
-#, fuzzy
 msgctxt "Content/Library/Card/Short"
 msgid "Modification %{ id }"
-msgstr "Jakinarazpenak"
+msgstr "Aldaketa %{ id }"
 
 #: front/src/components/mixins/Translations.vue:73
 #: front/src/components/mixins/Translations.vue:74
-#, fuzzy
 msgctxt "Content/Playlist/Dropdown/Noun"
 msgid "Modification date"
-msgstr "Iraungitze data"
+msgstr "Aldatze data"
 
 #: front/src/components/Sidebar.vue:123
 msgctxt "Footer/About/List item.Link"
 msgid "More"
-msgstr ""
+msgstr "Gehiago"
 
 #: front/src/components/audio/SearchBar.vue:202
 msgctxt "Search/*/*"
 msgid "More results 🡒"
-msgstr ""
+msgstr "Emaitza gehiago 🡒"
 
 #: front/src/components/audio/PlayButton.vue:105
 #: front/src/components/library/AlbumDropdown.vue:113
@@ -3912,17 +3867,17 @@ msgstr ""
 #: front/src/components/library/TrackBase.vue:207
 msgctxt "*/*/Button.Label/Noun"
 msgid "More…"
-msgstr ""
+msgstr "Gehiago…"
 
 #: front/src/components/admin/SignupFormBuilder.vue:146
 msgctxt "*/*/*"
 msgid "Move down"
-msgstr ""
+msgstr "Eraman behera"
 
 #: front/src/components/admin/SignupFormBuilder.vue:145
 msgctxt "*/*/*"
 msgid "Move up"
-msgstr ""
+msgstr "Eraman gora"
 
 #: front/src/components/mixins/Translations.vue:62
 #: front/src/components/mixins/Translations.vue:63
@@ -3940,44 +3895,39 @@ msgstr "Musika"
 #: front/src/components/audio/VolumeControl.vue:61
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Mute"
-msgstr ""
+msgstr "Isilarazi"
 
 #: front/src/components/manage/moderation/InstancePolicyCard.vue:24
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:115
-#, fuzzy
 msgctxt "Content/Moderation/*/Verb"
 msgid "Mute activity"
-msgstr "Azken jarduera"
+msgstr "Isilarazi aktibitatea"
 
 #: front/src/components/manage/moderation/InstancePolicyCard.vue:28
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:119
-#, fuzzy
 msgctxt "Content/Moderation/*/Verb"
 msgid "Mute notifications"
-msgstr "Jakinarazpenak"
+msgstr "Isilarazi jakinarazpenak"
 
 #: front/src/components/library/radios/Builder.vue:236
-#, fuzzy
 msgctxt "Content/Radio/Input.Placeholder"
 msgid "My awesome description"
-msgstr "Deskribapena"
+msgstr "Nire deskribapen txundigarria"
 
 #: front/src/views/content/libraries/Form.vue:72
-#, fuzzy
 msgctxt "Content/Library/Input.Placeholder"
 msgid "My awesome library"
-msgstr "Bilatu liburutegia"
+msgstr "Nire liburutegi txundigarria"
 
 #: front/src/components/playlists/Form.vue:76
-#, fuzzy
 msgctxt "Content/Playlist/Input.Placeholder"
 msgid "My awesome playlist"
-msgstr "Kudeatu zerrendak"
+msgstr "Nire zerrenda txundigarria"
 
 #: front/src/components/library/radios/Builder.vue:235
 msgctxt "Content/Radio/Input.Placeholder"
 msgid "My awesome radio"
-msgstr ""
+msgstr "Nire irrati txundigarria"
 
 #: front/src/views/content/libraries/Home.vue:6
 msgctxt "Content/Library/Title"
@@ -3985,10 +3935,9 @@ msgid "My libraries"
 msgstr "Nire liburutegiak"
 
 #: front/src/components/Sidebar.vue:106
-#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "My Library"
-msgstr "Liburutegia"
+msgstr "Nire liburutegia"
 
 #: front/src/components/About.vue:104 src/components/audio/track/Row.vue:31
 #: front/src/components/library/EditCard.vue:63
@@ -4098,25 +4047,23 @@ msgstr "Izena"
 #: front/src/views/Notifications.vue:24 src/views/Notifications.vue:58
 msgctxt "*/*/*"
 msgid "Never"
-msgstr ""
+msgstr "Inoiz ez"
 
 #: front/src/components/channels/AlbumModal.vue:4
-#, fuzzy
 msgctxt "Popup/Channels/Title"
 msgid "New album"
-msgstr "album 1"
+msgstr "Album berria"
 
 #: front/src/components/Home.vue:174 src/components/library/Home.vue:30
 #: front/src/components/library/Home.vue:2
 msgctxt "*/*/*"
 msgid "New channels"
-msgstr ""
+msgstr "Kanal berriak"
 
 #: front/src/components/auth/Settings.vue:279
-#, fuzzy
 msgctxt "*/*/*"
 msgid "New email"
-msgstr "album 1"
+msgstr "Helbide elektroniko berria"
 
 #: front/src/components/auth/Settings.vue:73
 #: front/src/views/auth/PasswordResetConfirm.vue:14
@@ -4128,7 +4075,7 @@ msgstr "Pasahitz berria"
 #: front/src/components/channels/AlbumModal.vue:3
 msgctxt "Popup/Channels/Title/Verb"
 msgid "New serie"
-msgstr ""
+msgstr "Sail berria"
 
 #: front/src/components/Queue.vue:150
 msgctxt "Sidebar/Player/Paragraph"
@@ -4138,26 +4085,23 @@ msgstr "Abesti berriak hemen gehituko dira automatikoki."
 #: front/src/components/library/EditCard.vue:45
 msgctxt "Content/Library/Card.Table.Header/Short"
 msgid "New value"
-msgstr ""
+msgstr "Balio berria"
 
 #: front/src/components/Pagination.vue:45
-#, fuzzy
 msgctxt "Content/*/Link"
 msgid "Next Page"
-msgstr "Oraingo abestia"
+msgstr "Hurrengo orria"
 
 #: front/src/components/channels/UploadModal.vue:27
 #: front/src/views/auth/ProfileOverview.vue:49
-#, fuzzy
 msgctxt "*/*/Button.Label"
 msgid "Next step"
-msgstr "Oraingo abestia"
+msgstr "Hurrengo pausoa"
 
 #: front/src/App.vue:315 src/components/audio/Player.vue:676
-#, fuzzy
 msgctxt "Sidebar/Player/Icon.Tooltip"
 msgid "Next track"
-msgstr "Oraingo abestia"
+msgstr "Hurrengo pista"
 
 #: front/src/components/admin/SignupFormBuilder.vue:68
 #: front/src/components/manage/moderation/DomainsTable.vue:13
@@ -4168,26 +4112,24 @@ msgid "No"
 msgstr "Ez"
 
 #: front/src/components/audio/Search.vue:25 src/components/audio/Search.vue:7
-#, fuzzy
 msgctxt "Content/Search/Paragraph"
 msgid "No album matched your query"
-msgstr "Barkatu, ez dugu zure bilaketarekin zer ikusirik duen albumik aurkitu"
+msgstr "Ez dago zure bilaketarekin bat datorren albumik"
 
 #: front/src/components/audio/Search.vue:16 src/components/audio/Search.vue:7
-#, fuzzy
 msgctxt "Content/Search/Paragraph"
 msgid "No artist matched your query"
-msgstr "Barkatu, ez dugu zure eskararekin zerikusia duen artistarik aurkitu"
+msgstr "Ez dago zure bilaketarekin bat datorren artistarik"
 
 #: front/src/components/common/RenderedDescription.vue:16
 msgctxt "*/*/Placeholder"
 msgid "No description available"
-msgstr ""
+msgstr "Ez dago deskribapenik"
 
 #: front/src/components/About.vue:24 src/components/Home.vue:24
 msgctxt "Content/Home/Paragraph"
 msgid "No description available."
-msgstr ""
+msgstr "Ez dago deskribapenik."
 
 #: front/src/components/manage/moderation/DomainsTable.vue:80
 msgctxt "Content/Home/Placeholder"
@@ -4197,93 +4139,86 @@ msgstr ""
 #: front/src/components/audio/SearchBar.vue:56
 msgctxt "Sidebar/Search/Error"
 msgid "No matches found"
-msgstr ""
+msgstr "Ez da bat datorren emaitzarik aurkitu"
 
 #: front/src/components/federation/LibraryWidget.vue:6
 msgctxt "Content/Federation/Paragraph"
 msgid "No matching library."
-msgstr "Ez da liburutegirik aurkitu."
+msgstr "Ez da bat datorren liburutegirik aurkitu."
 
 #: front/src/views/Notifications.vue:90
-#, fuzzy
 msgctxt "Content/Notifications/Paragraph"
 msgid "No notification to show."
-msgstr "Jakinarazpenak"
+msgstr "Ez dago jakinarazpenik erakusteko."
 
 #: front/src/components/playlists/PlaylistModal.vue:77
 #: front/src/components/playlists/PlaylistModal.vue:4
 #: front/src/components/playlists/Widget.vue:14
-#, fuzzy
 msgctxt "Content/Home/Placeholder"
 msgid "No playlists have been created yet"
-msgstr "Zerrenda sortuta"
+msgstr "Ez da zerrendarik sortu oraindik"
 
 #: front/src/components/playlists/PlaylistModal.vue:69
 #: front/src/components/playlists/PlaylistModal.vue:3
-#, fuzzy
 msgctxt "Popup/Playlist/EmptyState"
 msgid "No results matching your filter"
-msgstr "abesti %{ count } dator bat iragazki konbinatuekin"
+msgstr "Ez dago zure iragazkiarekin bat datorren emaitzarik"
 
 #: front/src/components/library/Albums.vue:56
-#, fuzzy
 msgctxt "Content/Albums/Placeholder"
 msgid "No results matching your query"
-msgstr "Barkatu, ez dugu zure eskararekin zerikusia duen artistarik aurkitu"
+msgstr "Ez dago zure bilaketarekin bat datorren emaitzarik"
 
 #: front/src/views/playlists/List.vue:49
-#, fuzzy
 msgctxt "Content/Playlists/Placeholder"
 msgid "No results matching your query"
-msgstr "Barkatu, ez dugu zure eskararekin zerikusia duen artistarik aurkitu"
+msgstr "Ez dago zure bilaketarekin bat datorren emaitzarik"
 
 #: front/src/components/library/Artists.vue:65
-#, fuzzy
 msgctxt "Content/Artists/Placeholder"
 msgid "No results matching your query"
-msgstr "Barkatu, ez dugu zure eskararekin zerikusia duen artistarik aurkitu"
+msgstr "Ez dago zure bilaketarekin bat datorren emaitzarik"
 
 #: front/src/components/library/Radios.vue:71
-#, fuzzy
 msgctxt "Content/Radios/Placeholder"
 msgid "No results matching your query"
-msgstr "Barkatu, ez dugu zure eskararekin zerikusia duen artistarik aurkitu"
+msgstr "Ez dago zure bilaketarekin bat datorren emaitzarik"
 
 #: front/src/components/common/EmptyState.vue:7
 msgctxt "Content/*/Paragraph"
 msgid "No results were found."
-msgstr ""
+msgstr "Ez da emaitzarik aurkitu."
 
 #: front/src/components/About.vue:31
 msgctxt "Content/Home/Paragraph"
 msgid "No rules available."
-msgstr ""
+msgstr "Ez dago araurik erabilgarri."
 
 #: front/src/components/About.vue:38
 msgctxt "Content/Home/Paragraph"
 msgid "No terms available."
-msgstr ""
+msgstr "Ez dago baldintzarik erabilgarri."
 
 #: front/src/views/content/libraries/FilesTable.vue:68
 msgctxt "Content/Home/Placeholder"
 msgid "No tracks have been added to this library yet"
-msgstr ""
+msgstr "Ez da pistarik gehitu oraindik liburutegi honetara"
 
 #: front/src/views/radios/Detail.vue:43
 msgctxt "Content/Radios/Placeholder"
 msgid "No tracks have been added to this radio yet"
-msgstr ""
+msgstr "Ez da pistarik gehitu oraindik irrati honetara"
 
 #: front/src/components/favorites/List.vue:52
 msgctxt "Content/Home/Placeholder"
 msgid "No tracks have been added to your favorites yet"
-msgstr ""
+msgstr "Ez da pistarik gehitu oraindik zure gogokoetara"
 
 #: front/src/components/mixins/Translations.vue:10
 #: front/src/components/mixins/Translations.vue:11
 msgctxt "Content/Settings/Dropdown"
 msgid "Nobody except me"
-msgstr ""
+msgstr "Soilik ni"
 
 #: front/src/views/library/Edit.vue:50
 msgctxt "Content/Library/Paragraph"
@@ -4294,7 +4229,7 @@ msgstr "Inor ez da liburutegi hau jarraitzen ari"
 #: front/src/components/channels/LicenseSelect.vue:7
 msgctxt "*/*/*"
 msgid "None"
-msgstr ""
+msgstr "Bat ere ez"
 
 #: front/src/components/manage/users/InvitationsTable.vue:45
 #: front/src/components/manage/users/InvitationsTable.vue:7
@@ -4305,14 +4240,13 @@ msgstr "Ez da erabiltzen"
 #: front/src/components/audio/track/Widget.vue:48
 msgctxt "Content/Home/Placeholder"
 msgid "Nothing found"
-msgstr ""
+msgstr "Ez da ezer aurkitu"
 
 #: front/src/components/common/ContentForm.vue:22
 #: front/src/components/common/ContentForm.vue:10
-#, fuzzy
 msgctxt "*/Form/Paragraph"
 msgid "Nothing to preview."
-msgstr "Fitxategiak faltan"
+msgstr "Aurrebistarako ezer ez."
 
 #: front/src/components/Sidebar.vue:215
 #: src/components/mixins/Translations.vue:127
@@ -4342,7 +4276,7 @@ msgstr "Pasahitz zaharra"
 #: front/src/components/library/EditCard.vue:44
 msgctxt "Content/Library/Card.Table.Header/Short"
 msgid "Old value"
-msgstr ""
+msgstr "Balio zaharra"
 
 #: front/src/components/manage/users/InvitationsTable.vue:20
 msgctxt "Content/Admin/Dropdown/Adjective"
@@ -4363,10 +4297,9 @@ msgstr ""
 
 #: front/src/components/manage/ChannelsTable.vue:183
 #: front/src/components/manage/library/AlbumsTable.vue:177
-#, fuzzy
 msgctxt "Content/Moderation/Verb"
 msgid "Open in moderation interface"
-msgstr "Liburutegi hau ezabatu?"
+msgstr "Ireki moderazio interfazean"
 
 #: front/src/components/library/AlbumDropdown.vue:54
 #: front/src/components/library/ArtistBase.vue:83
@@ -4382,7 +4315,7 @@ msgstr "Liburutegi hau ezabatu?"
 #: front/src/views/library/DetailBase.vue:16
 msgctxt "Content/Moderation/Link"
 msgid "Open in moderation interface"
-msgstr ""
+msgstr "Ireki moderazio interfazean"
 
 #: front/src/views/admin/ChannelDetail.vue:36
 #: src/views/admin/ChannelDetail.vue:31
@@ -4396,7 +4329,7 @@ msgstr ""
 #: front/src/views/admin/library/TrackDetail.vue:32
 msgctxt "Content/Moderation/Link/Verb"
 msgid "Open local profile"
-msgstr ""
+msgstr "Ireki profil lokala"
 
 #: front/src/views/admin/library/AlbumDetail.vue:48
 #: front/src/views/admin/library/AlbumDetail.vue:43
@@ -4406,13 +4339,13 @@ msgstr ""
 #: front/src/views/admin/library/TrackDetail.vue:43
 msgctxt "Content/Moderation/Link/Verb"
 msgid "Open on MusicBrainz"
-msgstr ""
+msgstr "Ireki MusicBrainz-en"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:23
 #: front/src/views/admin/moderation/AccountsDetail.vue:18
 msgctxt "Content/Moderation/Link/Verb"
 msgid "Open profile"
-msgstr ""
+msgstr "Ireki profila"
 
 #: front/src/views/admin/ChannelDetail.vue:51
 #: src/views/admin/ChannelDetail.vue:46
@@ -4430,20 +4363,18 @@ msgstr ""
 #: front/src/views/admin/moderation/AccountsDetail.vue:39
 msgctxt "Content/Moderation/Link/Verb"
 msgid "Open remote profile"
-msgstr ""
+msgstr "Ireki urruneko profila"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:16
 #: front/src/views/admin/moderation/DomainsDetail.vue:11
-#, fuzzy
 msgctxt "Content/Moderation/Link/Verb"
 msgid "Open website"
-msgstr "Webgune ofiziala"
+msgstr "Ireki webgunea"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:40
-#, fuzzy
 msgctxt "Content/Moderation/Card.Title"
 msgid "Or customize your rule"
-msgstr "Iragazkiak sortu zure irratia pertsonalizatzeko"
+msgstr "Edo pertsonalizatu zure araua"
 
 #: front/src/components/favorites/List.vue:28
 #: src/components/library/Radios.vue:47
@@ -4501,35 +4432,33 @@ msgstr "Ordenazio norabidea"
 #: front/src/components/mixins/Translations.vue:53
 msgctxt "Content/Moderation/Dropdown"
 msgid "Other"
-msgstr ""
+msgstr "Beste bat"
 
 #: front/src/components/mixins/Translations.vue:63
 #: front/src/components/mixins/Translations.vue:64
 msgctxt "*/*/*"
 msgid "Other"
-msgstr ""
+msgstr "Beste bat"
 
 #: front/src/views/channels/DetailBase.vue:180
 #: src/views/channels/DetailBase.vue:175
 msgctxt "Content/Channels/Link"
 msgid "Overview"
-msgstr ""
+msgstr "Informazio orokorra"
 
 #: front/src/views/auth/ProfileBase.vue:50
 msgctxt "Content/Profile/Link"
 msgid "Overview"
-msgstr ""
+msgstr "Informazio orokorra"
 
 #: front/src/views/library/DetailBase.vue:28
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Owned by %{ username }"
-msgstr "%{ username } moduan sartuta"
+msgstr "Jabea %{ username } da"
 
 #: front/src/components/manage/moderation/ReportCard.vue:141
 #: front/src/components/manage/users/InvitationsTable.vue:32
 #: front/src/components/manage/users/InvitationsTable.vue:1
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Owner"
 msgstr "Jabea"
@@ -4537,24 +4466,21 @@ msgstr "Jabea"
 #: front/src/components/audio/ChannelForm.vue:103
 #: front/src/components/audio/ChannelForm.vue:95
 #: front/src/components/audio/ChannelForm.vue:77
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Owner email"
-msgstr "E-maila baieztatu"
+msgstr "Jabearen helbide elektronikoa"
 
 #: front/src/components/audio/ChannelForm.vue:109
 #: front/src/components/audio/ChannelForm.vue:101
 #: front/src/components/audio/ChannelForm.vue:83
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Owner name"
-msgstr "Jabea"
+msgstr "Jabearen izena"
 
 #: front/src/components/PageNotFound.vue:33
-#, fuzzy
 msgctxt "Head/*/Title"
 msgid "Page Not Found"
-msgstr "Orrialdea ez da aurkitu!"
+msgstr "Orrialdea ez da aurkitu"
 
 #: front/src/components/PageNotFound.vue:7
 msgctxt "Content/*/Title"
@@ -4564,23 +4490,21 @@ msgstr "Orrialdea ez da aurkitu!"
 #: front/src/components/Pagination.vue:43
 msgctxt "Content/*/Hidden text/Noun"
 msgid "Pagination"
-msgstr ""
+msgstr "Orrialdekatzea"
 
 #: front/src/components/auth/LoginForm.vue:29
 #: src/components/auth/LoginForm.vue:15
 #: front/src/components/auth/Settings.vue:283
 #: src/components/auth/Settings.vue:311
 #: front/src/components/auth/SignupForm.vue:39
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Password"
 msgstr "Pasahitza"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:100
-#, fuzzy
 msgctxt "Content/Settings/Message"
 msgid "Password updated"
-msgstr "Pasahitza arrakastaz eguneratu da"
+msgstr "Pasahitza eguneratuta"
 
 #: front/src/views/auth/PasswordResetConfirm.vue:28
 msgctxt "Content/Signup/Card.Title"
@@ -4591,23 +4515,24 @@ msgstr "Pasahitza arrakastaz eguneratu da"
 msgctxt "Content/Fetch/Paragraph"
 msgid "Paste here the RSS url or the fediverse address to subscribe to its feed."
 msgstr ""
+"Itsatsi hemen RSSaren url-a edo fedibertsoko helbidea bere harira "
+"harpidetzeko."
 
 #: front/src/App.vue:314 src/components/audio/Player.vue:675
-#, fuzzy
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Pause track"
-msgstr "Arazoen jarraipena"
+msgstr "Pausatu pista"
 
 #: front/src/components/ShortcutsModal.vue:81
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Pause/play the current track"
-msgstr ""
+msgstr "Pausatu/erreproduzitu uneko pista"
 
 #: front/src/components/manage/moderation/InstancePolicyCard.vue:12
 #: front/src/components/manage/moderation/InstancePolicyCard.vue:2
 msgctxt "Content/Moderation/Card.List item"
 msgid "Paused"
-msgstr ""
+msgstr "Pausatuta"
 
 #: front/src/components/library/FileUpload.vue:141
 #: front/src/components/manage/library/UploadsTable.vue:23
@@ -4625,7 +4550,6 @@ msgstr "Zain"
 #: front/src/components/channels/UploadForm.vue:50
 #: front/src/components/channels/UploadForm.vue:41
 #: front/src/components/channels/UploadForm.vue:3
-#, fuzzy
 msgctxt "Channels/*/*"
 msgid "Pending"
 msgstr "Zain"
@@ -4641,29 +4565,25 @@ msgid "Pending files"
 msgstr "Fitxategiak faltan"
 
 #: front/src/components/Sidebar.vue:207
-#, fuzzy
 msgctxt "Sidebar/Notifications/Hidden text"
 msgid "Pending follow requests"
-msgstr "Eskaerak zain"
+msgstr "Zain dauden jarraitzeko eskaerak"
 
 #: front/src/components/library/EditCard.vue:27
 #: front/src/components/manage/library/EditsCardList.vue:18
-#, fuzzy
 msgctxt "Content/Admin/*/Noun"
 msgid "Pending review"
-msgstr "Fitxategiak faltan"
+msgstr "Berrikuspenaren zain"
 
 #: front/src/components/Sidebar.vue:208
-#, fuzzy
 msgctxt "Sidebar/Moderation/Hidden text"
 msgid "Pending review edits"
-msgstr "Eskaerak zain"
+msgstr "Berrikuspen edizioak zain"
 
 #: front/src/components/common/ActionTable.vue:279
-#, fuzzy
 msgctxt "Content/*/Button.Label"
 msgid "Perform actions"
-msgstr "Iraupena"
+msgstr "Burutu ekintzak"
 
 #: front/src/components/auth/Settings.vue:154
 #: front/src/components/manage/users/UsersTable.vue:36
@@ -4675,7 +4595,6 @@ msgid "Permissions"
 msgstr "Baimenak"
 
 #: front/src/components/audio/track/Table.vue:9
-#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "Play"
 msgstr "Erreproduzitu"
@@ -4690,16 +4609,14 @@ msgstr "Erreproduzitu"
 
 #: front/src/views/channels/DetailBase.vue:131
 #: src/views/channels/DetailBase.vue:126
-#, fuzzy
 msgctxt "Content/Channels/Button.Label/Verb"
 msgid "Play"
 msgstr "Erreproduzitu"
 
 #: front/src/components/audio/PlayButton.vue:85
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play album"
-msgstr "Erreproduzitu album denak"
+msgstr "Erreproduzitu albuma"
 
 #: front/src/views/playlists/Detail.vue:20
 msgctxt "Content/Queue/Button.Label/Short, Verb"
@@ -4713,10 +4630,9 @@ msgid "Play all albums"
 msgstr "Erreproduzitu album denak"
 
 #: front/src/components/audio/PlayButton.vue:87
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play artist"
-msgstr "Zerrendak"
+msgstr "Erreproduzitu artista"
 
 #: front/src/components/audio/PlayButton.vue:97
 msgctxt "*/Queue/Dropdown/Button/Title"
@@ -4724,10 +4640,9 @@ msgid "Play next"
 msgstr "Erreproduzitu hurrengoa"
 
 #: front/src/components/ShortcutsModal.vue:105
-#, fuzzy
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Play next track"
-msgstr "Erreproduzitu hurrengoa"
+msgstr "Erreproduzitu hurrengo pista"
 
 #: front/src/components/audio/PlayButton.vue:95
 msgctxt "*/Queue/Dropdown/Button/Title"
@@ -4735,59 +4650,52 @@ msgid "Play now"
 msgstr "Erreproduzitu orain"
 
 #: front/src/components/audio/PlayButton.vue:89
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play playlist"
-msgstr "Garbitu zerrenda"
+msgstr "Erreproduzitu zerrenda"
 
 #: front/src/components/ShortcutsModal.vue:101
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Play previous track"
-msgstr ""
+msgstr "Erreproduzitu aurreko pista"
 
 #: front/src/components/audio/PlayButton.vue:98
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play similar songs"
-msgstr ""
+msgstr "Erreproduzitu antzeko kantak"
 
 #: front/src/components/Sidebar.vue:206
-#, fuzzy
 msgctxt "Sidebar/Player/Hidden text"
 msgid "Play this track"
-msgstr "Zerrenda editorea"
+msgstr "Erreproduzitu pista hau"
 
 #: front/src/App.vue:313 src/components/audio/Player.vue:674
-#, fuzzy
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Play track"
-msgstr "Erreproduzitu dena"
+msgstr "Erreproduzitu pista"
 
 #: front/src/components/audio/PlayButton.vue:83
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play track"
-msgstr "Erreproduzitu dena"
+msgstr "Erreproduzitu pista"
 
 #: front/src/components/audio/PlayButton.vue:91
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play tracks"
-msgstr "Erreproduzitu dena"
+msgstr "Erreproduzitu pistak"
 
 #: front/src/components/mixins/Report.vue:84 src/views/playlists/Detail.vue:129
 #: front/src/components/mixins/Report.vue:85
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Playlist"
-msgstr "Zerrendak"
+msgstr "Zerrenda"
 
 #: front/src/views/playlists/Detail.vue:12
-#, fuzzy
 msgctxt "Content/Playlist/Header.Subtitle"
 msgid "Playlist containing %{ count } track, by %{ username }"
 msgid_plural "Playlist containing %{ count } tracks, by %{ username }"
-msgstr[0] "Zerrendak %{ username }-(r)en abesti %{ count } du"
-msgstr[1] "Zerrendak %{ username }-(r)en %{ count } abesti ditu"
+msgstr[0] "Zerrendak %{ username }-(r)en pista %{ count } du"
+msgstr[1] "Zerrendak %{ username }-(r)en %{ count } pista ditu"
 
 #: front/src/components/playlists/Form.vue:9
 #: src/components/playlists/Form.vue:1
@@ -4814,7 +4722,7 @@ msgstr "Zerrenda eguneratuta"
 #: front/src/components/playlists/Form.vue:25
 msgctxt "Content/Playlist/Dropdown.Label"
 msgid "Playlist visibility"
-msgstr "Zerrenda ikuspena"
+msgstr "Zerrendaren ikusgaitasuna"
 
 #: front/src/components/Sidebar.vue:100 src/components/Sidebar.vue:113
 #: front/src/components/library/Home.vue:16 src/components/library/Home.vue:1
@@ -4837,6 +4745,8 @@ msgstr "Zerrendak"
 msgctxt "Content/Embed/Message"
 msgid "Please contact your admins and ask them to update the corresponding setting."
 msgstr ""
+"Jarri zure administratzaileekin harremanetan eta eskatu dagokion ezarpena "
+"eguneratzeko."
 
 #: front/src/components/auth/Settings.vue:65
 msgctxt "Content/Settings/Error message.List item/Call to action"
@@ -4852,12 +4762,14 @@ msgstr "Mesedez egiaztatu erabiltzaile izena eta pasahitza zuzenak direla"
 #: front/src/components/auth/Settings.vue:249
 msgctxt "Content/Settings/Title/Noun"
 msgid "Plugins"
-msgstr ""
+msgstr "Pluginak"
 
 #: front/src/components/common/AttachmentInput.vue:26
 msgctxt "Content/*/Paragraph"
 msgid "PNG or JPG. Dimensions should be between 1400x1400px and 3000x3000px. Maximum file size allowed is 5MB."
 msgstr ""
+"PNG edo JPG. Neurriak 1400x1400px eta 3000x3000px artekoa izan behar du. "
+"Onartzen den gehienezko fitxategi-tamaina 5MB da."
 
 #: front/src/components/About.vue:71
 msgctxt "Content/About/Header/Name"
@@ -4868,84 +4780,83 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:62
 msgctxt "Content/*/Dropdown"
 msgid "Podcast"
-msgstr ""
+msgstr "Podcasta"
 
 #: front/src/views/auth/ProfileOverview.vue:34
 #: src/views/channels/DetailBase.vue:155
 #: front/src/views/channels/DetailBase.vue:150
 msgctxt "Content/Channel/*"
 msgid "Podcast channel"
-msgstr ""
+msgstr "Podcast kanala"
 
 #: front/src/components/audio/ChannelForm.vue:217
 #: front/src/components/audio/SearchBar.vue:91
 #: src/components/audio/SearchBar.vue:187
 msgctxt "*/*/*"
 msgid "Podcasts"
-msgstr ""
+msgstr "Podcastak"
 
 #: front/src/components/channels/UploadMetadataForm.vue:21
 #: front/src/views/admin/library/TrackDetail.vue:135
 #: front/src/views/admin/library/TrackDetail.vue:130 src/edits.js:101
-#, fuzzy
 msgctxt "*/*/*/Short, Noun"
 msgid "Position"
-msgstr "Deskribapena"
+msgstr "Kokapena"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:118
 msgctxt "Content/Moderation/Help text"
 msgid "Prevent account or domain from triggering notifications, except from followers."
 msgstr ""
+"Eragotzi kontu edo domeinuak jakinarazpenak abiaraztea, jarraitzaileengandik "
+"izan ezik."
 
 #: front/src/components/common/ContentForm.vue:8
-#, fuzzy
 msgctxt "*/Form/Menu.item"
 msgid "Preview"
-msgstr "Fitxategiak faltan"
+msgstr "Aurrebista"
 
 #: front/src/components/audio/EmbedWizard.vue:43
 msgctxt "Popup/Embed/Title/Noun"
 msgid "Preview"
-msgstr ""
+msgstr "Aurrebista"
 
 #: front/src/components/admin/SignupFormBuilder.vue:8
 msgctxt "*/Form/Menu.item"
 msgid "Preview form"
-msgstr ""
+msgstr "Formularioaren aurrebista"
 
 #: front/src/components/Pagination.vue:44
 msgctxt "Content/*/Link"
 msgid "Previous Page"
-msgstr ""
+msgstr "Aurreko orria"
 
 #: front/src/components/channels/UploadModal.vue:24
 #: front/src/views/auth/ProfileOverview.vue:46
 msgctxt "*/*/Button.Label/Verb"
 msgid "Previous step"
-msgstr ""
+msgstr "Aurreko pausoa"
 
 #: front/src/components/audio/Player.vue:673
 msgctxt "Sidebar/Player/Icon.Tooltip"
 msgid "Previous track"
-msgstr ""
+msgstr "Aurreko pista"
 
 #: front/src/components/mixins/Translations.vue:15
 #: front/src/components/mixins/Translations.vue:16
 msgctxt "Content/Settings/Dropdown/Short"
 msgid "Private"
-msgstr ""
+msgstr "Pribatua"
 
 #: front/src/views/library/DetailBase.vue:171
 msgctxt "Content/Library/Card.Help text"
 msgid "Private"
-msgstr ""
+msgstr "Pribatua"
 
 #: front/src/views/content/remote/Card.vue:47
 #: src/views/content/remote/Card.vue:2
-#, fuzzy
 msgctxt "Content/Library/Card.List item"
 msgid "Problem during scanning"
-msgstr "Errorea eskaneatzen zen bitartean"
+msgstr "Arazoa eskaneatzean"
 
 #: front/src/components/library/FileUpload.vue:56
 msgctxt "Content/Library/Button.Label"
@@ -4956,15 +4867,14 @@ msgstr "Jarraitu"
 #: front/src/views/auth/PasswordResetConfirm.vue:31
 msgctxt "Content/Signup/Link/Verb"
 msgid "Proceed to login"
-msgstr "Jarraitu sarbidera"
+msgstr "Jarraitu saio hasierara"
 
 #: front/src/views/channels/DetailOverview.vue:9
 #: front/src/views/channels/DetailOverview.vue:33
 #: front/src/views/channels/DetailOverview.vue:6
-#, fuzzy
 msgctxt "Content/Channel/Paragraph"
 msgid "Processed uploads:"
-msgstr "Liburutegiak"
+msgstr "Prozesatutako igoerak:"
 
 #: front/src/components/library/FileUpload.vue:17
 msgctxt "Content/Library/Tab.Title/Short"
@@ -4972,28 +4882,25 @@ msgid "Processing"
 msgstr "Prozesatzen"
 
 #: front/src/components/channels/UploadModal.vue:6
-#, fuzzy
 msgctxt "Popup/Channels/Title"
 msgid "Processing uploads"
-msgstr "Prozesatzen"
+msgstr "Igoerak prozesatzen"
 
 #: front/src/components/mixins/Translations.vue:95
 #: front/src/components/mixins/Translations.vue:96
-#, fuzzy
 msgctxt "Content/OAuth Scopes/Label"
 msgid "Profile"
-msgstr "Erroredun fitxategiak"
+msgstr "Profila"
 
 #: front/src/components/Sidebar.vue:60 src/components/Sidebar.vue:46
-#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "Profile"
-msgstr "Erroredun fitxategiak"
+msgstr "Profila"
 
 #: front/src/views/library/DetailBase.vue:173
 msgctxt "Content/Library/Card.Help text"
 msgid "Public"
-msgstr ""
+msgstr "Publikoa"
 
 #: front/src/components/auth/SignupForm.vue:15
 #, fuzzy
@@ -5004,22 +4911,24 @@ msgstr "Erregistratzea itxita dago instantzia honetan. Gonbidapen kode bat behar
 #: front/src/components/channels/UploadModal.vue:31
 msgctxt "*/Channels/Button.Label"
 msgid "Publish"
-msgstr ""
+msgstr "Argitaratu"
 
 #: front/src/components/channels/UploadModal.vue:3
 msgctxt "Popup/Channels/Title/Verb"
 msgid "Publish audio"
-msgstr ""
+msgstr "Argitaratu audioa"
 
 #: front/src/components/audio/ChannelForm.vue:223
 msgctxt "Content/Channels/Help"
 msgid "Publish music you make as a nice discography of albums and singles."
 msgstr ""
+"Argitaratu zuk egindako musika album eta singlez osatutako diskografia eder "
+"batean."
 
 #: front/src/views/content/Home.vue:10
 msgctxt "Content/Library/Title/Verb"
 msgid "Publish your work in a channel"
-msgstr ""
+msgstr "Argitaratu zure lana kanal batean"
 
 #: front/src/components/manage/moderation/AccountsTable.vue:188
 #: front/src/components/manage/moderation/DomainsTable.vue:192
@@ -5031,22 +4940,22 @@ msgstr ""
 #: front/src/views/content/libraries/Quota.vue:76
 msgctxt "*/*/*/Verb"
 msgid "Purge"
-msgstr "Hustu"
+msgstr "Kendu"
 
 #: front/src/views/content/libraries/Quota.vue:74
 msgctxt "Popup/Library/Title"
 msgid "Purge errored files?"
-msgstr "Hustu errore fitxategiak?"
+msgstr "Erroreak emandako fitxategiak kendu?"
 
 #: front/src/views/content/libraries/Quota.vue:32
 msgctxt "Popup/Library/Title"
 msgid "Purge pending files?"
-msgstr "Hustu zain dauden fitxategiak?"
+msgstr "Zain dauden fitxategiak kendu?"
 
 #: front/src/views/content/libraries/Quota.vue:53
 msgctxt "Popup/Library/Title"
 msgid "Purge skipped files?"
-msgstr "Hustu saltatutako fitxategiak?"
+msgstr "Saltatutako fitxategiak kendu?"
 
 #: front/src/components/Queue.vue:273
 #, fuzzy
@@ -5057,19 +4966,17 @@ msgstr "Ilara"
 #: front/src/components/Queue.vue:339 src/components/audio/Player.vue:328
 msgctxt "Content/Queue/Message"
 msgid "Queue shuffled!"
-msgstr ""
+msgstr "Ilara nahasita!"
 
 #: front/src/views/radios/Detail.vue:95
-#, fuzzy
 msgctxt "Head/Radio/Title"
 msgid "Radio"
-msgstr "Irratiak"
+msgstr "Irratia"
 
 #: front/src/components/library/radios/Builder.vue:233
-#, fuzzy
 msgctxt "Head/Radio/Title"
 msgid "Radio Builder"
-msgstr "Eraikitzailea"
+msgstr "Irrati eraikitzailea"
 
 #: front/src/components/library/radios/Builder.vue:15
 #: front/src/components/library/radios/Builder.vue:1
@@ -5099,29 +5006,29 @@ msgstr "Irratiak"
 #: front/src/components/auth/ApplicationForm.vue:151
 msgctxt "Content/OAuth Scopes/Label/Verb"
 msgid "Read"
-msgstr ""
+msgstr "Irakurri"
 
 #: front/src/components/library/ImportStatusModal.vue:51
 #: front/src/components/library/ImportStatusModal.vue:32
 msgctxt "Popup/Import/Table.Label/Value"
 msgid "Read our documentation for this error"
-msgstr ""
+msgstr "Irakurri errori honi buruzko gure dokumentazioa"
 
 #: front/src/components/auth/Authorize.vue:24
 msgctxt "Content/Auth/Label/Noun"
 msgid "Read-only"
-msgstr ""
+msgstr "Irakurtzeko soilik"
 
 #: front/src/components/auth/ApplicationForm.vue:152
 msgctxt "Content/OAuth Scopes/Help Text"
 msgid "Read-only access to user data"
-msgstr ""
+msgstr "Soilik irakurtzeko sarbidea erabiltzailearen datuetara"
 
 #: front/src/components/manage/moderation/InstancePolicyCard.vue:39
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:25
 msgctxt "Content/Moderation/*/Noun"
 msgid "Reason"
-msgstr ""
+msgstr "Arrazoia"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:231
 #: front/src/views/admin/moderation/AccountsDetail.vue:226
@@ -5129,7 +5036,7 @@ msgstr ""
 #: front/src/views/admin/moderation/DomainsDetail.vue:193
 msgctxt "Content/Moderation/Table.Label/Noun"
 msgid "Received library follows"
-msgstr ""
+msgstr "Jasotako liburutegiaren jarraipenak"
 
 #: front/src/components/manage/moderation/DomainsTable.vue:41
 #: front/src/components/manage/moderation/DomainsTable.vue:3
@@ -5137,20 +5044,19 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:90
 msgctxt "Content/Moderation/*/Noun"
 msgid "Received messages"
-msgstr ""
+msgstr "Jasotako mezuak"
 
 #: front/src/components/library/EditForm.vue:27
 #: src/components/library/EditForm.vue:1
-#, fuzzy
 msgctxt "Content/Library/Paragraph"
 msgid "Recent edits"
-msgstr "Azken aldian gehituta"
+msgstr "Azken aldiko edizioak"
 
 #: front/src/components/library/EditForm.vue:17
 #: src/components/library/EditForm.vue:1
 msgctxt "Content/Library/Paragraph"
 msgid "Recent edits awaiting review"
-msgstr ""
+msgstr "Berrikuspenaren zain dauden azken aldiko edizioak"
 
 #: front/src/components/library/Home.vue:24 src/components/library/Home.vue:1
 msgctxt "Content/Home/Title"
@@ -5178,7 +5084,7 @@ msgstr "Azken aldian entzuna"
 #: front/src/components/auth/ApplicationForm.vue:13
 msgctxt "Content/Applications/Input.Label/Noun"
 msgid "Redirect URI"
-msgstr ""
+msgstr "Birbideratu URIa"
 
 #: front/src/components/auth/Settings.vue:105
 #: src/components/auth/Settings.vue:148
@@ -5187,14 +5093,13 @@ msgstr ""
 #: front/src/views/content/remote/Home.vue:3
 msgctxt "Content/*/Button.Label/Short, Verb"
 msgid "Refresh"
-msgstr "Berriztu"
+msgstr "Freskatu"
 
 #: front/src/components/federation/FetchButton.vue:20
 #: front/src/components/federation/FetchButton.vue:10
-#, fuzzy
 msgctxt "Popup/*/Message.Title"
 msgid "Refresh error"
-msgstr "Berriztu"
+msgstr "Freskatu errorea"
 
 #: front/src/views/admin/ChannelDetail.vue:47
 #: src/views/admin/ChannelDetail.vue:42
@@ -5206,71 +5111,70 @@ msgstr "Berriztu"
 #: front/src/views/admin/library/TrackDetail.vue:47
 msgctxt "Content/Moderation/Button/Verb"
 msgid "Refresh from remote server"
-msgstr ""
+msgstr "Freskatu urruneko zerbitzaritik"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:147
 #: front/src/views/admin/moderation/DomainsDetail.vue:142
 msgctxt "Content/Moderation/Button.Label/Verb"
 msgid "Refresh node info"
-msgstr ""
+msgstr "Freskatu nodoaren informazioa"
 
 #: front/src/components/federation/FetchButton.vue:68
-#, fuzzy
 msgctxt "Popup/*/Message.Title"
 msgid "Refresh pending"
-msgstr "Beheranzkoa"
+msgstr "Freskatu zain daudenak"
 
 #: front/src/components/federation/FetchButton.vue:69
 msgctxt "Popup/*/Message.Content"
 msgid "Refresh request wasn't proceed in time by our server. It will be processed later."
 msgstr ""
+"Freskatze eskaera ez da garaiz prozesatu gure zerbitzarian. Beranduago "
+"prozesatuko da."
 
 #: front/src/components/federation/FetchButton.vue:16
 #: front/src/components/federation/FetchButton.vue:6
-#, fuzzy
 msgctxt "Popup/*/Message.Title"
 msgid "Refresh successful"
-msgstr "Arrakastaz eskaneatuta"
+msgstr "Arrakastaz freskatua"
 
 #: front/src/components/common/ActionTable.vue:277
 msgctxt "Content/*/Button.Tooltip/Verb"
 msgid "Refresh table content"
-msgstr ""
+msgstr "Freskatu taularen edukia"
 
 #: front/src/components/federation/FetchButton.vue:12
 #: front/src/components/federation/FetchButton.vue:2
 msgctxt "Popup/*/Message.Title"
 msgid "Refresh was skipped"
-msgstr ""
+msgstr "Freskatzea saltatu da"
 
 #: front/src/components/federation/FetchButton.vue:7
 msgctxt "Popup/*/Title"
 msgid "Refreshing object from remote…"
-msgstr ""
+msgstr "Objektua freskatzen urrunekotik…"
 
 #: front/src/components/manage/moderation/UserRequestCard.vue:122
 msgctxt "Content/*/Button.Label"
 msgid "Refuse"
-msgstr ""
+msgstr "Ukatu"
 
 #: front/src/components/manage/moderation/UserRequestCard.vue:48
 #: front/src/components/manage/moderation/UserRequestCard.vue:2
 #: front/src/views/admin/moderation/RequestsList.vue:26
 msgctxt "Content/*/*/Short"
 msgid "Refused"
-msgstr ""
+msgstr "Ukatuta"
 
 #: front/src/components/auth/ApplicationEdit.vue:33
 #: front/src/components/auth/ApplicationEdit.vue:26
 msgctxt "Content/Applications/Label"
 msgid "Regenerate token"
-msgstr ""
+msgstr "Birsortu tokena"
 
 #: front/src/components/About.vue:85
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Registrations"
-msgstr "Administrazioa"
+msgstr "Izen-emateak"
 
 #: front/src/components/auth/SignupForm.vue:18
 msgctxt "Content/Signup/Form/Paragraph"
@@ -5279,10 +5183,9 @@ msgstr ""
 
 #: front/src/components/manage/users/UsersTable.vue:66
 #: front/src/components/manage/users/UsersTable.vue:27
-#, fuzzy
 msgctxt "Content/Admin/Table, User role"
 msgid "Regular user"
-msgstr "erabiltzaile normala"
+msgstr "Erabiltzaile arrunta"
 
 #: front/src/components/library/EditCard.vue:96 src/views/library/Edit.vue:44
 msgctxt "Content/Library/Button.Label"
@@ -5290,17 +5193,15 @@ msgid "Reject"
 msgstr "Baztertu"
 
 #: front/src/components/notifications/NotificationRow.vue:79
-#, fuzzy
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Reject"
 msgstr "Baztertu"
 
 #: front/src/components/manage/moderation/InstancePolicyCard.vue:32
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:123
-#, fuzzy
 msgctxt "Content/Moderation/*/Verb"
 msgid "Reject media"
-msgstr "Baztertuta"
+msgstr "Baztertu multimedia"
 
 #: front/src/components/library/EditCard.vue:31
 #: front/src/components/manage/library/EditsCardList.vue:24
@@ -5310,16 +5211,14 @@ msgid "Rejected"
 msgstr "Baztertuta"
 
 #: front/src/components/library/TrackDetail.vue:150
-#, fuzzy
 msgctxt "Content/*/Title/Noun"
 msgid "Related Libraries"
-msgstr "Urruneko liburutegiak"
+msgstr "Erlazionatutako liburutegiak"
 
 #: front/src/components/library/TrackDetail.vue:144
-#, fuzzy
 msgctxt "Content/*/Title/Noun"
 msgid "Related Playlists"
-msgstr "Zerrenda sortu"
+msgstr "Erlazionatutako zerrendak"
 
 #: front/src/components/manage/library/AlbumsTable.vue:37
 #: front/src/components/manage/library/AlbumsTable.vue:5
@@ -5327,24 +5226,23 @@ msgstr "Zerrenda sortu"
 #: front/src/components/mixins/Translations.vue:70 src/edits.js:71
 msgctxt "Content/*/*/Noun"
 msgid "Release date"
-msgstr ""
+msgstr "Argitalpen-data"
 
 #: front/src/components/library/TrackDetail.vue:69
-#, fuzzy
 msgctxt "Content/*/*"
 msgid "Release Details"
-msgstr "Xehetasunak"
+msgstr "Argitalpenaren xehetasunak"
 
 #: front/src/components/library/FileUpload.vue:89
 msgctxt "Content/Library/Paragraph"
 msgid "Remaining storage space"
-msgstr ""
+msgstr "Gelditzen den biltegiratze-lekua"
 
 #: front/src/components/channels/UploadModal.vue:18
 #: front/src/components/channels/UploadModal.vue:1
 msgctxt "Content/Library/Paragraph"
 msgid "Remaining storage space:"
-msgstr ""
+msgstr "Gelditzen den biltegiratze-lekua:"
 
 #: front/src/views/Notifications.vue:18 src/views/Notifications.vue:52
 msgctxt "Content/Notifications/Label"
