@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-11-04 11:52+0000\n"
+"PO-Revision-Date: 2020-11-07 23:51+0000\n"
 "Last-Translator: ghose <xosem@disroot.org>\n"
 "Language-Team: none\n"
 "Language: gl\n"
@@ -856,7 +856,7 @@ msgstr "Houbo un fallo HTTP ao contactar co servidor remoto"
 #: front/src/components/admin/SignupFormBuilder.vue:21
 msgctxt "*/*/Help"
 msgid "An optional text to be displayed at the start of the sign-up form."
-msgstr "Un texto optativo para mostrar ao inicio do formulario de rexistro."
+msgstr "Un texto optativo para mostrar ó inicio do formulario de rexistro."
 
 #: front/src/components/library/ImportStatusModal.vue:145
 msgctxt "Popup/Import/Error.Label"
@@ -2946,7 +2946,7 @@ msgstr "Obter un novo convite"
 #: front/src/views/content/Home.vue:37
 msgctxt "Content/Library/Button.Label/Verb"
 msgid "Get started"
-msgstr "Comezando"
+msgstr "Comezar"
 
 #: front/src/components/Footer.vue:57
 #: src/components/library/ImportStatusModal.vue:45
@@ -5374,7 +5374,7 @@ msgstr "Resolto"
 #: front/src/views/content/libraries/FilesTable.vue:313
 msgctxt "Content/Library/Dropdown/Verb"
 msgid "Restart import"
-msgstr "Volte a lanzar importación"
+msgstr "Volta a lanzar importación"
 
 #: front/src/components/Queue.vue:276
 msgctxt "*/*/*"
