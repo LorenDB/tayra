@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-11-09 03:30+0000\n"
-"Last-Translator: Asier Iturralde Sarasola <asier.iturralde@gmail.com>\n"
+"PO-Revision-Date: 2020-11-09 08:09+0000\n"
+"Last-Translator: Porrumentzio <porrumentzio@riseup.net>\n"
 "Language-Team: none\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
@@ -356,7 +356,7 @@ msgstr "Edizioetara sarbidea"
 #: front/src/components/mixins/Translations.vue:97
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to email, username, and profile information"
-msgstr "Sarbidea e-posta, erabiltzaile-izen eta profil informaziora"
+msgstr "Sarbidea eposta, erabiltzaile-izen eta profil informaziora"
 
 #: front/src/components/mixins/Translations.vue:104
 #: front/src/components/mixins/Translations.vue:105
@@ -466,7 +466,7 @@ msgstr "Kontuaren egoera"
 #: front/src/views/auth/PasswordReset.vue:14
 msgctxt "Content/Signup/Input.Label"
 msgid "Account's email"
-msgstr "Kontuaren e-maila"
+msgstr "Kontuaren eposta"
 
 #: front/src/views/admin/moderation/AccountsList.vue:3
 #: front/src/views/admin/moderation/AccountsList.vue:24
@@ -1323,7 +1323,7 @@ msgstr "Hizkuntza aldatu"
 #: front/src/components/auth/Settings.vue:262
 msgctxt "*/*/Button.Label"
 msgid "Change my email address"
-msgstr "Aldatu nire helbide elektronikoa"
+msgstr "Aldatu nire eposta helbidea"
 
 #: front/src/components/auth/Settings.vue:54
 msgctxt "Content/Settings/Title/Verb"
@@ -1339,8 +1339,8 @@ msgstr "Pasahitza aldatu"
 msgctxt "Content/Settings/Paragraph'"
 msgid "Change the email address associated with your account. We will send a confirmation to the new address."
 msgstr ""
-"Aldatu zure kontuarekin lotutako helbide elektronikoa. Berrespena bidaliko "
-"dizugu helbide berrira."
+"Aldatu zure kontuarekin lotutako eposta helbidea. Berrespena bidaliko dizugu "
+"helbide berrira."
 
 #: front/src/components/Footer.vue:49
 msgctxt "Footer/Settings/Dropdown.Label/Short, Verb"
@@ -1528,7 +1528,7 @@ msgstr "Egiaztatu zure e-posta helbidea"
 #: front/src/views/auth/EmailConfirm.vue:13
 msgctxt "Content/Signup/Form.Label"
 msgid "Confirmation code"
-msgstr "Baieztapen kodea"
+msgstr "Berrespen kodea"
 
 #: front/src/components/About.vue:66 src/components/About.vue:2
 #: front/src/components/Home.vue:64 src/components/Home.vue:2
@@ -2376,13 +2376,13 @@ msgstr "Edizioak"
 #: front/src/components/moderation/ReportModal.vue:25
 msgctxt "Content/*/*/Noun"
 msgid "Email"
-msgstr "Emaila"
+msgstr "Eposta"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:125
 #: front/src/views/admin/moderation/AccountsDetail.vue:120
 msgctxt "Content/*/*"
 msgid "Email address"
-msgstr "Email helbidea"
+msgstr "Eposta helbidea"
 
 #: front/src/components/library/AlbumDropdown.vue:24
 #: front/src/components/library/ArtistBase.vue:57
@@ -2491,12 +2491,12 @@ msgstr "Idatzi erreprodukzio-zerrendaren izena…"
 #: front/src/views/auth/PasswordReset.vue:55
 msgctxt "Content/Signup/Input.Placeholder"
 msgid "Enter the email address linked to your account"
-msgstr "Idatzi zure kontuarekin lotutako helbide elektronikoa"
+msgstr "Idatzi zure kontuarekin lotutako eposta helbidea"
 
 #: front/src/components/auth/SignupForm.vue:138
 msgctxt "Content/Signup/Form/Placeholder"
 msgid "Enter your email"
-msgstr "Idatzi zure e-posta helbidea"
+msgstr "Idatzi zure eposta helbidea"
 
 #: front/src/components/auth/SignupForm.vue:133
 #: front/src/components/auth/SignupForm.vue:135
@@ -2513,7 +2513,7 @@ msgstr "Idatzi zure erabiltzaile-izena"
 #: front/src/components/auth/LoginForm.vue:95
 msgctxt "Content/Login/Input.Placeholder"
 msgid "Enter your username or email"
-msgstr "Idatzi zure erabiltzaile-izena edo e-posta helbidea"
+msgstr "Idatzi zure erabiltzaile-izena edo eposta helbidea"
 
 #: front/src/components/library/TrackDetail.vue:8
 #: front/src/components/library/TrackDetail.vue:3
@@ -3074,8 +3074,8 @@ msgctxt "Content/Signup/Paragraph"
 msgid "If the email address provided in the previous step is valid and linked to a user account, you should receive an email with reset instructions in the next couple of minutes."
 msgstr ""
 "Aurreko pausoan emandako eposta helbidea zuzena bada eta erabiltzaile kontu "
-"bati lotuta badago, datozen minutuetan mezu elektroniko bat jaso beharko "
-"zenuke pasahitza berrezartzeko argibideekin."
+"bati lotuta badago, datozen minututan eposta mezu bat jaso beharko zenuke "
+"pasahitza berrezartzeko argibideekin."
 
 #: front/src/views/content/Home.vue:13
 msgctxt "Content/Library/Paragraph"
@@ -3095,7 +3095,7 @@ msgctxt "Content/Login/Error message.List item/Call to action"
 msgid "If you signed-up recently, you may need to wait before our moderation team review your account, or verify your email."
 msgstr ""
 "Duela gutxi erregistratu bazara, baliteke moderazio taldeak zure kontua "
-"berrikusi edo zure helbide elektronikoa egiaztatu arte itxaron behar izatea."
+"berrikusi edo zure eposta helbidea egiaztatu arte itxaron behar izatea."
 
 #: front/src/views/channels/DetailBase.vue:59
 #: src/views/channels/DetailBase.vue:54
@@ -4065,7 +4065,7 @@ msgstr "Kanal berriak"
 #: front/src/components/auth/Settings.vue:279
 msgctxt "*/*/*"
 msgid "New email"
-msgstr "Helbide elektroniko berria"
+msgstr "Eposta helbide berria"
 
 #: front/src/components/auth/Settings.vue:73
 #: front/src/views/auth/PasswordResetConfirm.vue:14
@@ -4467,7 +4467,7 @@ msgstr "Jabea"
 #: front/src/components/audio/ChannelForm.vue:77
 msgctxt "*/*/*"
 msgid "Owner email"
-msgstr "Jabearen helbide elektronikoa"
+msgstr "Jabearen eposta helbidea"
 
 #: front/src/components/audio/ChannelForm.vue:109
 #: front/src/components/audio/ChannelForm.vue:101
@@ -4757,7 +4757,7 @@ msgctxt "Content/Login/Error message.List item/Call to action"
 msgid "Please double-check your username/password couple is correct and ensure you verified your email."
 msgstr ""
 "Egiaztatu erabiltzaile izena eta pasahitza zuzenak direla eta ziurtatu zure "
-"posta elektronikoa ongi begiratu duzula."
+"eposta ongi begiratu duzula."
 
 #: front/src/components/auth/Settings.vue:249
 msgctxt "Content/Settings/Title/Noun"
@@ -6003,9 +6003,10 @@ msgstr "Erakutsi/ezkutatu pasahitza"
 #: front/src/components/manage/users/InvitationsTable.vue:63
 #: front/src/components/manage/users/UsersTable.vue:75
 #: front/src/views/content/libraries/FilesTable.vue:138
+#, fuzzy
 msgctxt "Content/*/Paragraph"
 msgid "Showing results %{ start }-%{ end } on %{ total }"
-msgstr ""
+msgstr "Emaitzak erakusten: %{ start }-%{ end } guztizko %{ total }(e)tik"
 
 #: front/src/components/ShortcutsModal.vue:129
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
@@ -7409,6 +7410,9 @@ msgstr ""
 msgctxt "Content/Signup/Paragraph"
 msgid "Use this form to request a password reset. We will send an email to the given address with instructions to reset your password."
 msgstr ""
+"Erabili formulario hau pasahitza berrezartzea eskatzeko. Emandako eposta "
+"helbidera mezu bat bidaliko dizugu, zure pasahitza berrezartzeko "
+"argibideekin."
 
 #: front/src/components/RemoteSearchForm.vue:17
 msgctxt "Content/Fetch/Paragraph"
@@ -7510,10 +7514,9 @@ msgstr "Iragazki izena"
 
 #: front/src/components/auth/LoginForm.vue:17
 #: src/components/auth/LoginForm.vue:3
-#, fuzzy
 msgctxt "Content/Login/Input.Label/Noun"
 msgid "Username or email"
-msgstr "E-maila baieztatu"
+msgstr "Erabiltzaile-izena edo eposta helbidea"
 
 #: front/src/components/Sidebar.vue:35 src/components/Sidebar.vue:21
 #: front/src/components/manage/moderation/DomainsTable.vue:40
@@ -7649,10 +7652,9 @@ msgid "Waiting for result…"
 msgstr ""
 
 #: front/src/components/auth/Settings.vue:273
-#, fuzzy
 msgctxt "Content/Settings/Error message.Title"
 msgid "We cannot change your email address"
-msgstr "E-maila baieztatu"
+msgstr "Ezin dugu zure eposta helbidea aldatu"
 
 #: front/src/components/auth/Settings.vue:305
 #, fuzzy
@@ -7684,6 +7686,8 @@ msgstr ""
 msgctxt "*/*/Field,Help"
 msgid "We'll use this email if we need to contact you regarding this report."
 msgstr ""
+"Eposta helbide hau erabiliko dugu salaketa hau dela eta zurekin harremanetan "
+"jartzeko."
 
 #: front/src/components/Home.vue:5
 msgctxt "Content/Home/Header"
@@ -7942,11 +7946,15 @@ msgstr ""
 msgctxt "Content/Signup/Form/Paragraph"
 msgid "Your account request was successfully submitted. You will be notified by email when our moderation team has reviewed your request."
 msgstr ""
+"Zure kontu-eskaera arrakastaz bidali da. Eposta mezu bat jasoko duzu gure "
+"moderazio taldeak zure eskaera berrikusi duenean."
 
 #: front/src/components/auth/SignupForm.vue:7
 msgctxt "Content/Signup/Form/Paragraph"
 msgid "Your account was successfully created. Please verify your email before trying to login."
 msgstr ""
+"Zure kontua arrakastaz sortu da. Egiaztatu zure eposta saio hasten saiatu "
+"aurretik."
 
 #: front/src/components/auth/Settings.vue:301
 msgctxt "Content/Settings/Paragraph'"
@@ -7971,10 +7979,9 @@ msgid "Your avatar cannot be saved"
 msgstr ""
 
 #: front/src/components/auth/Settings.vue:269
-#, fuzzy
 msgctxt "Content/Settings/Paragraph'"
 msgid "Your current email address is %{ email }."
-msgstr "%{ username } moduan sartuta"
+msgstr "Zure uneko eposta helbidea %{ email } da."
 
 #: front/src/components/auth/Settings.vue:545
 msgctxt "*/Auth/Message"
@@ -7990,6 +7997,8 @@ msgstr ""
 msgctxt "*/Auth/Message"
 msgid "Your email has been changed, please check your inbox for our confirmation message."
 msgstr ""
+"Zure eposta helbidea aldatu egin da. Begiratu sarrera ontzian gure berrespen "
+"mezua."
 
 #: front/src/components/favorites/List.vue:121
 #, fuzzy
