@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-09-12 01:48+0000\n"
-"Last-Translator: Meliurwen <meliurwen@gmail.com>\n"
+"PO-Revision-Date: 2020-11-12 23:53+0000\n"
+"Last-Translator: x <hardwired1.0@protonmail.com>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -267,10 +267,9 @@ msgid "A short summary describing your changes."
 msgstr "Un breve riassunto che descrive le tue modifiche."
 
 #: front/src/components/About.vue:221
-#, fuzzy
 msgctxt "Head/About/Title"
 msgid "About"
-msgstr "Pagina di informazioni"
+msgstr "Informazioni su"
 
 #: front/src/components/About.vue:5
 msgctxt "Content/Home/Header"
@@ -2686,7 +2685,7 @@ msgstr "Escludi"
 #: front/src/components/library/Artists.vue:50
 msgctxt "Content/Search/Checkbox/Noun"
 msgid "Exclude Compilation Artists"
-msgstr ""
+msgstr "Escludi gli artisti della compilation"
 
 #: front/src/components/common/CollapseLink.vue:2
 msgctxt "*/*/Button,Label"
@@ -3675,10 +3674,9 @@ msgid "Main menu"
 msgstr "Menu principale"
 
 #: front/src/components/Sidebar.vue:86
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Main navigation"
-msgstr "Impaginazione"
+msgstr "Navigazione principale"
 
 #: front/src/views/admin/library/Base.vue:37
 msgctxt "Head/Admin/Title"
@@ -6757,7 +6755,7 @@ msgstr "Per continuare, per favore seleziona l'istanza Funkwhale alla quale vuoi
 #: front/src/components/ShortcutsModal.vue:137
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Toggle favorite"
-msgstr "Cambia preferito"
+msgstr "Seleziona preferito"
 
 #: front/src/components/ShortcutsModal.vue:117
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
@@ -6821,10 +6819,9 @@ msgid "Track %{ index } of %{ length }"
 msgstr "Traccia %{ index } su %{ length }"
 
 #: front/src/components/audio/track/Table.vue:10
-#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "Track Art"
-msgstr "Dati della traccia"
+msgstr "Copertina del brano"
 
 #: front/src/views/admin/library/TrackDetail.vue:89
 #: front/src/views/admin/library/TrackDetail.vue:84
@@ -7270,6 +7267,8 @@ msgstr "Usati"
 msgctxt "*/*/*"
 msgid "Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes."
 msgstr ""
+"Utilizzato per itunes:email e itunes:name field richiesto da alcune "
+"piattaforme come Spotify o iTunes."
 
 #: front/src/components/audio/ChannelForm.vue:44
 #: front/src/components/audio/ChannelForm.vue:36
