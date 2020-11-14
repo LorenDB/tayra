@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-11-07 23:51+0000\n"
+"PO-Revision-Date: 2020-11-14 08:57+0000\n"
 "Last-Translator: ghose <xosem@disroot.org>\n"
 "Language-Team: none\n"
 "Language: gl\n"
@@ -27,7 +27,7 @@ msgstr "\"%{ title }\", de %{ artist }"
 #: front/src/components/RemoteSearchForm.vue:71
 msgctxt "Head/Fetch/Field.Placeholder"
 msgid "@channel@pod.example or https://website.example/rss.xml"
-msgstr "@canal@pod.exemplo ou https://website.exemplo/rss.xml"
+msgstr "@canle@pod.exemplo ou https://website.exemplo/rss.xml"
 
 #: front/src/components/auth/Authorize.vue:16
 msgctxt "Content/Auth/Title"
@@ -958,7 +958,7 @@ msgstr "Artista"
 #: front/src/views/channels/DetailBase.vue:151
 msgctxt "Content/Channel/*"
 msgid "Artist channel"
-msgstr "Canal da artista"
+msgstr "Canle da artista"
 
 #: front/src/views/admin/library/ArtistDetail.vue:88
 #: front/src/views/admin/library/ArtistDetail.vue:83
@@ -1107,12 +1107,12 @@ msgstr "Avatar"
 #: front/src/components/audio/ChannelForm.vue:238
 msgctxt "Content/Channel/Form.Field.Placeholder"
 msgid "Awesome channel name"
-msgstr "Un nome molón para o canal"
+msgstr "Un nome molón para a canle"
 
 #: front/src/components/audio/ChannelForm.vue:239
 msgctxt "Content/Channel/Form.Field.Placeholder"
 msgid "awesomechannelname"
-msgstr "tremendonomedecanal"
+msgstr "tremendonomedacanle"
 
 #: front/src/views/auth/PasswordReset.vue:18
 #: front/src/views/auth/PasswordResetConfirm.vue:18
@@ -1366,26 +1366,26 @@ msgstr "Cambiar o contrasinal terá as seguintes consecuencias:"
 #: front/src/components/mixins/Report.vue:61
 msgctxt "*/*/*"
 msgid "Channel"
-msgstr "Canal"
+msgstr "Canle"
 
 #: front/src/views/admin/ChannelDetail.vue:78
 #: src/views/admin/ChannelDetail.vue:73
 msgctxt "Content/Moderation/Title"
 msgid "Channel data"
-msgstr "Datos do canal"
+msgstr "Datos da canle"
 
 #: front/src/components/RemoteSearchForm.vue:69
 #: front/src/components/RemoteSearchForm.vue:70
 msgctxt "*/*/*"
 msgid "Channel location"
-msgstr "Localización do canal"
+msgstr "Localización da canle"
 
 #: front/src/components/audio/ChannelForm.vue:50
 #: front/src/components/audio/ChannelForm.vue:42
 #: front/src/components/audio/ChannelForm.vue:24
 msgctxt "Content/Channel/*"
 msgid "Channel Picture"
-msgstr "Imaxe do canal"
+msgstr "Imaxe da canle"
 
 #: front/src/components/Sidebar.vue:119 src/components/library/TagDetail.vue:26
 #: front/src/views/admin/ChannelsList.vue:24 src/views/admin/Settings.vue:84
@@ -1661,12 +1661,12 @@ msgstr "Crear lista reprodución"
 #: front/src/views/auth/ProfileOverview.vue:52
 msgctxt "*/Channels/Button.Label"
 msgid "Create channel"
-msgstr "Crear canal"
+msgstr "Crear canle"
 
 #: front/src/views/auth/ProfileOverview.vue:33
 msgctxt "Content/Channel/*/Verb"
 msgid "Create channel"
-msgstr "Crea un canal"
+msgstr "Crea unha canle"
 
 #: front/src/views/content/libraries/Form.vue:26
 msgctxt "Content/Library/Button.Label/Verb"
@@ -1894,14 +1894,14 @@ msgstr "Eliminar esta biblioteca?"
 #: src/views/admin/ChannelDetail.vue:54
 msgctxt "Popup/Library/Title"
 msgid "Delete this channel?"
-msgstr "Eliminar este canal?"
+msgstr "Eliminar esta canle?"
 
 #: front/src/views/channels/DetailBase.vue:89
 #: src/views/channels/DetailBase.vue:84
 #: front/src/views/channels/DetailBase.vue:7
 msgctxt "Popup/Channel/Title"
 msgid "Delete this Channel?"
-msgstr "Eliminar este canal?"
+msgstr "Eliminar esta Canle?"
 
 #: front/src/views/admin/library/LibraryDetail.vue:49
 #: front/src/views/admin/library/LibraryDetail.vue:44
@@ -2601,7 +2601,7 @@ msgstr "Fallou a publicación"
 #: front/src/components/audio/ChannelForm.vue:3
 msgctxt "Content/*/Error message.Title"
 msgid "Error while saving channel"
-msgstr "Fallo ao gardar o canal"
+msgstr "Fallo ao gardar a canle"
 
 #: front/src/components/auth/Plugin.vue:6
 msgctxt "Content/*/Error message.Title"
@@ -4726,7 +4726,7 @@ msgstr "Podcast"
 #: front/src/views/channels/DetailBase.vue:150
 msgctxt "Content/Channel/*"
 msgid "Podcast channel"
-msgstr "Canal de podcast"
+msgstr "Canle de podcast"
 
 #: front/src/components/audio/ChannelForm.vue:217
 #: front/src/components/audio/SearchBar.vue:91
@@ -4862,7 +4862,7 @@ msgstr "Publica a túa propia música para crear a túa discografía con álbume
 #: front/src/views/content/Home.vue:10
 msgctxt "Content/Library/Title/Verb"
 msgid "Publish your work in a channel"
-msgstr "Publica o teu traballo nun canal"
+msgstr "Publica o teu traballo nunha canle"
 
 #: front/src/components/manage/moderation/AccountsTable.vue:188
 #: front/src/components/manage/moderation/DomainsTable.vue:192
@@ -5261,7 +5261,7 @@ msgstr "Informar sobre este artista…"
 #: src/components/mixins/Report.vue:55
 msgctxt "*/Moderation/*/Verb"
 msgid "Report this channel…"
-msgstr "Denunciar este canal…"
+msgstr "Denunciar esta canle…"
 
 #: front/src/components/mixins/Report.vue:90
 #: src/components/mixins/Report.vue:91
@@ -6190,7 +6190,7 @@ msgstr "Subscribirse ao podcast vía RSS"
 #: src/views/channels/DetailBase.vue:29
 msgctxt "Popup/Channel/Title/Verb"
 msgid "Subscribe to this channel"
-msgstr "Subscribirse a este canal"
+msgstr "Subscribirse a esta canle"
 
 #: front/src/views/channels/DetailBase.vue:49
 #: src/views/channels/DetailBase.vue:44
@@ -6350,13 +6350,17 @@ msgstr "Vaise eliminar o artista, así como todas as subidas asociadas, pistas, 
 #: front/src/views/channels/DetailBase.vue:9
 msgctxt "Content/Moderation/Paragraph"
 msgid "The channel will be deleted, as well as any related files and data. This action is irreversible."
-msgstr "Vaise eliminar o canal e todos os ficheiros e datos relacionados. Esta acción non ten volta."
+msgstr ""
+"Vaise eliminar a canle e todos os ficheiros e datos relacionados. Esta "
+"acción non ten volta."
 
 #: front/src/views/admin/ChannelDetail.vue:61
 #: src/views/admin/ChannelDetail.vue:56
 msgctxt "Content/Moderation/Paragraph"
 msgid "The channel will be removed, as well as associated uploads, tracks, and albums. This action is irreversible."
-msgstr "Vaise eliminar o canal, e as subidas, cancións e álbumes asociados. Esta acción non ten volta."
+msgstr ""
+"Vaise eliminar a canle, e as subidas, cancións e álbumes asociados. Esta "
+"acción non ten volta."
 
 #: front/src/components/Footer.vue:73
 msgctxt "Footer/*/List item.Link"
@@ -7000,7 +7004,7 @@ msgstr "Actualizar lista de reprodución"
 #: src/views/channels/DetailBase.vue:163
 msgctxt "*/Channels/Button.Label"
 msgid "Update channel"
-msgstr "Actualizar canal"
+msgstr "Actualizar canle"
 
 #: front/src/components/common/RenderedDescription.vue:37
 msgctxt "Content/Channels/Button.Label/Verb"
@@ -7274,7 +7278,9 @@ msgstr ""
 #: front/src/components/audio/ChannelForm.vue:3
 msgctxt "Content/Channels/Paragraph"
 msgid "Used in URLs and to follow this channel on the federation. You cannot change it afterwards."
-msgstr "Utilizado en URLs e para seguir este canal na federación. Non poderás cambialo posteriormente."
+msgstr ""
+"Utilizado en URLs e para seguir esta canle na federación. Non poderás "
+"cambialo posteriormente."
 
 #: front/src/components/Home.vue:124
 msgctxt "Content/Home/Header"
@@ -7508,7 +7514,7 @@ msgstr "Benvida a %{ podName }!"
 #: front/src/components/audio/ChannelForm.vue:3
 msgctxt "Content/Channel/Paragraph"
 msgid "What this channel will be used for?"
-msgstr "Para qué se vai usar este canal?"
+msgstr "Para que se vai usar esta canle?"
 
 #: front/src/components/audio/EmbedWizard.vue:23
 #: front/src/components/audio/EmbedWizard.vue:3
@@ -7697,13 +7703,13 @@ msgstr "Poderías ter que seguir esta biblioteca para ver o seu contido."
 #: front/src/components/audio/ChannelEntries.vue:3
 msgctxt "Content/Channels/*"
 msgid "You may need to subscribe to this channel to see its content."
-msgstr "Poderías ter que subscribirte ao canal para ver o seu contido."
+msgstr "Poderías ter que subscribirte á canle para ver o seu contido."
 
 #: front/src/components/audio/ChannelSeries.vue:22
 #: front/src/components/audio/ChannelSeries.vue:3
 msgctxt "Content/Channels/*"
 msgid "You may need to subscribe to this channel to see its contents."
-msgstr "Poderías ter que subscribirte ao canal para ver o seu contido."
+msgstr "Poderías ter que subscribirte á canle para ver o seu contido."
 
 #: front/src/components/notifications/NotificationRow.vue:45
 msgctxt "Content/Notifications/Paragraph"
