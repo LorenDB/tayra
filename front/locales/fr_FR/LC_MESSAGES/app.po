@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: French (Funkwhale)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-10-21 17:49+0000\n"
-"Last-Translator: appzer0 <appzer0@free.fr>\n"
+"PO-Revision-Date: 2020-11-16 07:50+0000\n"
+"Last-Translator: Silver Fox <SilverFox15@protonmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/funkwhale/"
 "front/fr/>\n"
 "Language: fr_FR\n"
@@ -4644,7 +4644,7 @@ msgstr[1] "Liste de lecture contenant %{ count } pistes, par %{ username }"
 #: src/components/playlists/Form.vue:1
 msgctxt "Content/Playlist/Message"
 msgid "Playlist created"
-msgstr "Playlist créée"
+msgstr "Liste de lecture créée"
 
 #: front/src/components/playlists/Editor.vue:4
 msgctxt "Content/Playlist/Title"
@@ -4654,13 +4654,13 @@ msgstr "Éditeur de playlist"
 #: front/src/components/playlists/Form.vue:21
 msgctxt "Content/Playlist/Input.Label"
 msgid "Playlist name"
-msgstr "Nom de la playlist"
+msgstr "Nom de la liste de lecture"
 
 #: front/src/components/playlists/Form.vue:6
 #: src/components/playlists/Form.vue:1
 msgctxt "Content/Playlist/Message"
 msgid "Playlist updated"
-msgstr "Playlist mise à jour"
+msgstr "Liste de lecture mise à jour"
 
 #: front/src/components/playlists/Form.vue:25
 msgctxt "Content/Playlist/Dropdown.Label"
