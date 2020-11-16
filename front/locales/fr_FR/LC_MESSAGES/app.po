@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
 "PO-Revision-Date: 2020-11-16 07:50+0000\n"
-"Last-Translator: Silver Fox <SilverFox15@protonmail.com>\n"
+"Last-Translator: Daniel <daniel.nautre@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/funkwhale/"
 "front/fr/>\n"
 "Language: fr_FR\n"
@@ -6818,10 +6818,9 @@ msgid "Track %{ index } of %{ length }"
 msgstr "Piste %{ index } sur %{ length }"
 
 #: front/src/components/audio/track/Table.vue:10
-#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "Track Art"
-msgstr "Nom de la piste"
+msgstr "Illustration de la piste"
 
 #: front/src/views/admin/library/TrackDetail.vue:89
 #: front/src/views/admin/library/TrackDetail.vue:84
