@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-11-21 21:27+0000\n"
+"PO-Revision-Date: 2020-11-21 23:52+0000\n"
 "Last-Translator: jovuit <jvuitton@disroot.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
@@ -7680,7 +7680,7 @@ msgstr "Schreiben"
 #: front/src/components/common/ContentForm.vue:5
 msgctxt "*/Form/Menu.item"
 msgid "Write"
-msgstr "Verfassen"
+msgstr "Schreiben"
 
 #: front/src/components/common/ContentForm.vue:96
 msgctxt "*/Form/Placeholder"
@@ -7727,12 +7727,18 @@ msgstr "Du kannst deine Mediathek mit Anderen teilen, auch wenn sie privat ist."
 #: front/src/components/library/FileUpload.vue:32
 msgctxt "Content/Library/Paragraph"
 msgid "You are about to upload music to your library. Before proceeding, please ensure that:"
-msgstr "Die Musik wird bald zu deiner Mediathek hochgeladen. Prüfe bitte vorab, dass:"
+msgstr ""
+"Die Titel werden bald zu deiner Mediathek hochgeladen. Prüfe bitte vorab, "
+"dass:"
 
 #: front/src/components/SetInstanceModal.vue:12
 msgctxt "Popup/Login/Paragraph"
 msgid "You are currently connected to <a href=\"%{ url }\" target=\"_blank\">%{ hostname }&nbsp;<i class=\"external icon\"/></a>. If you continue, you will be disconnected from your current instance and all your local data will be deleted."
-msgstr "Du bist derzeit mit <a href=\"%{ url }\" target=\"_blank\">%{ hostname }&nbsp;<i class=\"external icon\"/></a> verbunden. Wenn du fortfährst, wirst du von deiner aktuellen Instanz getrennt und alle deine lokalen Daten werden gelöscht."
+msgstr ""
+"Du bist derzeit mit <a href=\"%{ url }\" target=\"_blank\">%{ hostname "
+"}&nbsp;<i class=\"external icon\"/></a> verbunden. Wenn du fortfährst, wirst "
+"du von deinem aktuellen Pod getrennt und alle deine lokalen Daten werden "
+"gelöscht."
 
 #: front/src/components/library/ArtistDetail.vue:6
 msgctxt "Content/Artist/Paragraph"
@@ -7747,12 +7753,14 @@ msgstr "Du bist als %{ username } angemeldet"
 #: front/src/components/library/FileUpload.vue:35
 msgctxt "Content/Library/List item"
 msgid "You are not uploading copyrighted content in a public library, otherwise you may be infringing the law"
-msgstr "Die lädst kein urheberrechtlich geschütztes Material in eine öffentliche Mediathek hoch. Wenn doch, missachtest Du das Gesetz"
+msgstr ""
+"Die lädst kein urheberrechtlich geschütztes Material in eine öffentliche "
+"Mediathek hoch. Wenn doch, missachtest du das Gesetz"
 
 #: front/src/components/SetInstanceModal.vue:98
 msgctxt "*/Instance/Message"
 msgid "You are now using the Funkwhale instance at %{ url }"
-msgstr "Du verwendest jetzt die Funkwhale-Instanz unter %{ url }"
+msgstr "Du verwendest jetzt den Funkwhale-Pod unter %{ url }"
 
 #: front/src/components/auth/Logout.vue:12
 msgctxt "Content/Login/Title"
@@ -7773,52 +7781,64 @@ msgstr "Du kannst jetzt den Service unbegrenzt nutzen."
 #: front/src/components/auth/Settings.vue:298
 msgctxt "Content/Settings/Paragraph'"
 msgid "You can permanently and irreversibly delete your account and all the associated data using the form below. You will be asked for confirmation."
-msgstr "Mit dem untenstehenden Formular kannst du dein Konto und alle damit verbundenen Daten endgültig und unwiderruflich löschen. Du wirst um eine Bestätigung gebeten."
+msgstr ""
+"Mit dem folgenden Formular kannst du dein Konto und alle damit verbundenen "
+"Daten endgültig und unwiderruflich löschen. Du wirst um eine Bestätigung "
+"gebeten."
 
 #: front/src/components/library/radios/Builder.vue:7
 msgctxt "Content/Radio/Paragraph"
 msgid "You can use this interface to build your own custom radio, which will play tracks according to your criteria."
-msgstr "Dank dieser Schnittstelle kannst du dein eigenes Radio aufbauen, das die entsprechenden Tracks abspielt."
+msgstr ""
+"Dank dieser Schnittstelle kannst du dein eigenes Radio erstellen, das die "
+"Titel entsprechend deinen Kriterien abspielt."
 
 #: front/src/components/auth/SubsonicTokenForm.vue:7
 msgctxt "Content/Settings/Paragraph"
 msgid "You can use those to enjoy your playlist and music in offline mode, on your smartphone or tablet, for instance."
-msgstr "Damit kannst du deine Wiedergabelisten und Musik offline genießen, zum Beispiel auf deinem Smartphone bzw. Tablett."
+msgstr ""
+"Damit kannst du deine Wiedergabelisten und Musik offline genießen, zum "
+"Beispiel auf deinem Smartphone oder Tablett."
 
 #: front/src/components/auth/Settings.vue:178
 msgctxt "Content/Applications/Paragraph"
 msgid "You don't have any application connected with your account."
-msgstr "Du hast keine Moderationsregeln in Kraft für dieses Konto."
+msgstr "Du hast keine aktiven Moderationsregeln für dieses Konto."
 
 #: front/src/components/auth/Settings.vue:235
 msgctxt "Content/Applications/Paragraph"
 msgid "You don't have any configured application yet."
-msgstr "Du hast keine Moderationsregeln in Kraft für dieses Konto."
+msgstr "Du hast keine aktiven Moderationsregeln für dieses Konto."
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:67
 #: front/src/views/admin/moderation/AccountsDetail.vue:62
 #: front/src/views/admin/moderation/AccountsDetail.vue:4
 msgctxt "Content/Moderation/Card.Title"
 msgid "You don't have any rule in place for this account."
-msgstr "Du hast keine Moderationsregeln in Kraft für dieses Konto."
+msgstr "Du hast keine aktiven Moderationsregeln für dieses Konto."
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:57
 #: front/src/views/admin/moderation/DomainsDetail.vue:52
 #: front/src/views/admin/moderation/DomainsDetail.vue:4
 msgctxt "Content/Moderation/Card.Title"
 msgid "You don't have any rule in place for this domain."
-msgstr "Du hast keine Moderationsregeln in Kraft für diese Domain."
+msgstr "Du hast keine aktiven Moderationsregeln für diese Domain."
 
 #: front/src/components/channels/UploadForm.vue:32
 #: front/src/components/channels/UploadForm.vue:5
 msgctxt "Content/Library/Paragraph"
 msgid "You don't have any space left to upload your files. Please contact the moderators."
-msgstr "Du hast keinen Platz mehr, um deine Dateien hochzuladen. Bitte kontaktiere die Moderierenden."
+msgstr ""
+"Du hast keinen Platz mehr, um deine Dateien hochzuladen. Bitte kontaktiere "
+"das Moderationsteam."
 
 #: front/src/components/library/EditForm.vue:52
 msgctxt "Content/Library/Paragraph"
 msgid "You don't have the permission to edit this object, but you can suggest changes. Once submitted, suggestions will be reviewed before approval."
-msgstr "Du hast nicht die Berechtigung, dieses Objekt zu bearbeiten, aber du kannst Änderungen vorschlagen. Die eingereichten Vorschläge werden vor der Genehmigung geprüft."
+msgstr ""
+"Du hast nicht die Berechtigung, dieses Element zu bearbeiten, aber du kannst "
+"Änderungen vorschlagen. Die eingereichten Vorschläge werden vor der "
+"Genehmigung geprüft."
 
 #: front/src/components/Queue.vue:148
 msgctxt "Sidebar/Player/Title"
@@ -7835,14 +7855,14 @@ msgstr "Du hast einige Uploads, die noch nicht veröffentlicht wurden."
 #: front/src/components/Queue.vue:33 src/components/Queue.vue:26
 msgctxt "Sidebar/Player/Error message.Paragraph"
 msgid "You may have a connectivity issue."
-msgstr "Du kannst Verbindungsproblemen erfahren."
+msgstr "Möglicherweise erfährst du Verbindungsprobleme."
 
 #: front/src/views/library/DetailAlbums.vue:6
 #: src/views/library/DetailOverview.vue:10
 #: front/src/views/library/DetailTracks.vue:6
 msgctxt "*/*/*"
 msgid "You may need to follow this library to see its content."
-msgstr "Du musst wahrscheinlich dieser Bibliothek folgen, um ihren Inhalt zu sehen."
+msgstr "Du musst ggf. dieser Mediathek folgen, um ihren Inhalt zu sehen."
 
 #: front/src/components/audio/ChannelEntries.vue:17
 #: front/src/components/audio/ChannelEntries.vue:3
@@ -7859,12 +7879,16 @@ msgstr "Ggf. musst du diesen Kanal abonnieren, um seinen Inhalt zu sehen."
 #: front/src/components/notifications/NotificationRow.vue:45
 msgctxt "Content/Notifications/Paragraph"
 msgid "You rejected %{ username }&#39;s request to follow \"%{ library }\""
-msgstr "Du hast die Anfrage von %{ username } deiner Bibliothek \"%{ library }\" zu folgen abgelehnt"
+msgstr ""
+"Du hast die Anfrage von %{ username } deiner Mediathek \"%{ library }\" zu "
+"folgen abgelehnt"
 
 #: front/src/components/auth/Settings.vue:82
 msgctxt "Popup/Settings/List item"
 msgid "You will be logged out from this session and have to log in with the new one"
-msgstr "Du wirst von dieser Sitzung ausgeloggt und du musst dich mit deinem neuen Kennwort einloggen"
+msgstr ""
+"Du wirst von dieser Sitzung abgemeldet und du musst dich mit deinem neuen "
+"Kennwort anmelden"
 
 #: front/src/components/auth/LoginForm.vue:40
 #: src/components/auth/LoginForm.vue:2
@@ -7880,7 +7904,7 @@ msgstr "Du wirst zu <strong>%{ url }</strong> weitergeleitet"
 #: front/src/components/auth/Authorize.vue:49
 msgctxt "Content/Auth/Paragraph"
 msgid "You will be shown a code to copy-paste in the application."
-msgstr "Dir wird ein Code angezeigt, der in die Anwendung eingefügt werden muss."
+msgstr "Dir wird ein Code angezeigt, der du in die Anwendung einfügen musst."
 
 #: front/src/components/auth/Settings.vue:57
 msgctxt "Content/Settings/Paragraph"
@@ -7893,22 +7917,28 @@ msgstr ""
 #: front/src/components/moderation/FilterModal.vue:2
 msgctxt "Popup/Moderation/Paragraph"
 msgid "You will not see tracks, albums and user activity linked to this artist any more:"
-msgstr "Du wirst keine Titel, Alben und Benutzeraktivitäten mehr sehen, die mit diesem Künstler verknüpft sind:"
+msgstr ""
+"Du wirst keine Titel, Alben und Benutzeraktivität mehr sehen, die mit diesem "
+"Künstler verknüpft sind:"
 
 #: front/src/components/auth/SignupForm.vue:25
 msgctxt "Content/Signup/Form/Paragraph"
 msgid "Your account cannot be created."
-msgstr "Dein Avatar kann nicht erstellt werden."
+msgstr "Dein Profilbild kann nicht erstellt werden."
 
 #: front/src/components/auth/SignupForm.vue:4
 msgctxt "Content/Signup/Form/Paragraph"
 msgid "Your account request was successfully submitted. You will be notified by email when our moderation team has reviewed your request."
-msgstr "Dein Registrierungsantrag wurde erfolgreich übermittelt. Du erhälst eine E-Mail, sobald unser Moderationsteam deine Anfrage geprüft hat."
+msgstr ""
+"Deine Registrierung war erfolgreich. Du erhälst eine E-Mail, sobald unser "
+"Moderationsteam deine Anfrage geprüft hat."
 
 #: front/src/components/auth/SignupForm.vue:7
 msgctxt "Content/Signup/Form/Paragraph"
 msgid "Your account was successfully created. Please verify your email before trying to login."
-msgstr "Dein Konto wurde erfolgreich erstellt. Bitte überprüfe deine E-Mail, bevor du versuchst, dich einzuloggen."
+msgstr ""
+"Dein Konto wurde erfolgreich erstellt. Bitte überprüfe deine E-Mail, bevor "
+"du dich anmeldest."
 
 #: front/src/components/auth/Settings.vue:301
 msgctxt "Content/Settings/Paragraph'"
@@ -7922,17 +7952,17 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:191
 msgctxt "Content/Settings/Title/Noun"
 msgid "Your applications"
-msgstr "Deine Benachrichtigungen"
+msgstr "Deine Anwendungen"
 
 #: front/src/components/common/AttachmentInput.vue:3
 msgctxt "Content/*/Error message.Title"
 msgid "Your attachment cannot be saved"
-msgstr "Dein Angehängte Datei konnte nicht gespeichert werden"
+msgstr "Dein angehängte Datei konnte nicht gespeichert werden"
 
 #: front/src/components/auth/Settings.vue:39
 msgctxt "Content/Settings/Error message.Title"
 msgid "Your avatar cannot be saved"
-msgstr "Dein Avatar kann nicht gespeichert werden"
+msgstr "Dein Profilbild kann nicht gespeichert werden"
 
 #: front/src/components/auth/Settings.vue:269
 msgctxt "Content/Settings/Paragraph'"
@@ -7942,7 +7972,9 @@ msgstr "Deine aktuelle E-Mail-Adresse ist %{ email }."
 #: front/src/components/auth/Settings.vue:545
 msgctxt "*/Auth/Message"
 msgid "Your deletion request was submitted, your account and content will be deleted shortly"
-msgstr "Dein Löschungsantrag wurde eingereicht, dein Konto und deine Inhalte werden in Kürze gelöscht"
+msgstr ""
+"Dein Löschungsantrag wurde eingereicht. Dein Konto und deine Inhalte werden "
+"in Kürze gelöscht"
 
 #: front/src/components/library/EditForm.vue:3
 msgctxt "Content/Library/Paragraph"
@@ -7953,8 +7985,8 @@ msgstr "Die Änderung wurde erfolgreich übertragen."
 msgctxt "*/Auth/Message"
 msgid "Your email has been changed, please check your inbox for our confirmation message."
 msgstr ""
-"Deine E-Mail-Adresse wurde geändert. Bitte bestätige deine neue Adresse mit "
-"der E-Mail, die wir dir geschickt haben."
+"Deine E-Mail-Adresse wurde geändert. Bitte bestätige sie mit der E-Mail, die "
+"wir dir geschickt haben."
 
 #: front/src/components/favorites/List.vue:121
 msgctxt "Head/Favorites/Title"
@@ -7989,12 +8021,15 @@ msgstr "Deine Einstellungen können nicht aktualisiert werden"
 #: front/src/components/auth/SubsonicTokenForm.vue:139
 msgctxt "Content/Password/Input.label"
 msgid "Your subsonic API password"
-msgstr "Subsonic-API-Kennwort"
+msgstr "Subsonic-Kennwort"
 
 #: front/src/components/auth/Settings.vue:83
 msgctxt "Popup/Settings/List item"
 msgid "Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password"
-msgstr "Dein Subsonic-Kennwort wird mit einem neuen zufälligen Kennwort ersetzt. Du wirst auf allen aktuell verbundenen Geräten ausgeloggt, die noch das alte Kennwort nutzen"
+msgstr ""
+"Dein Subsonic-Kennwort wird mit einem neuen zufälligen Kennwort ersetzt. Du "
+"wirst auf allen aktuell verbundenen Geräten abgemeldet, die noch das alte "
+"Kennwort nutzen"
 
 #: front/src/views/channels/DetailOverview.vue:30
 #: front/src/views/channels/DetailOverview.vue:6
@@ -8005,17 +8040,21 @@ msgstr "Deine Uploads werden von Funkwhale verarbeitet und sehr bald abrufbar se
 #: front/src/main.js:121
 msgctxt "*/Error/Paragraph"
 msgid "You sent too many requests and have been rate limited, please try again in %{ delay }"
-msgstr "Du hast zu viele Anfragen gesendet und bist derzeit eingeschränkt worden, bitte versuche es in %{ delay } noch einmal"
+msgstr ""
+"Du hast zu viele Anfragen gesendet und bist derzeit eingeschränkt. Bitte "
+"versuche es in %{ delay } noch einmal"
 
 #: front/src/main.js:124
 msgctxt "*/Error/Paragraph"
 msgid "You sent too many requests and have been rate limited, please try again later"
-msgstr "Du hast zu viele Anfragen gesendet und bist derzeit eingeschränkt worden, bitte versuche es später noch einmal"
+msgstr ""
+"Du hast zu viele Anfragen gesendet und bist derzeit eingeschränkt. Bitte "
+"versuche es später noch einmal"
 
 #: front/src/entities.js:126
 msgctxt "*/*/*/Noun"
 msgid "MusicBrainz ID"
-msgstr "MusicBrainz ID"
+msgstr "MusicBrainz-ID"
 
 #: front/src/edits.js:26
 msgctxt "Content/*/*/Noun"
