@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-11-21 16:58+0000\n"
-"Last-Translator: Arne <trpjabarno@arnemail.de>\n"
+"PO-Revision-Date: 2020-11-21 17:02+0000\n"
+"Last-Translator: jovuit <jvuitton@disroot.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -5849,8 +5849,8 @@ msgstr "Freigabe-Link"
 msgctxt "Content/Library/Paragraph"
 msgid "Share this link with other users so they can request access to this library by copy-pasting it in their pod search bar."
 msgstr ""
-"Teile diesen Link mit anderen Nutzenden, damit diese Zugriff auf deine "
-"Mediathek anfordern können."
+"Teile diesen Link mit Anderen, damit sie Zugriff auf deine Mediathek "
+"anfordern können."
 
 #: front/src/views/content/Home.vue:14
 msgctxt "Content/Library/Paragraph"
@@ -6370,7 +6370,9 @@ msgstr "Text in die Zwischenablage kopiert!"
 #: front/src/components/library/AlbumDropdown.vue:43
 msgctxt "Content/Moderation/Paragraph"
 msgid "The album will be deleted, as well as any related files and data. This action is irreversible."
-msgstr "Die Album wird zusammen mit den zugehörigen Songs und Daten gelöscht. Diese Aktion ist unwiderruflich."
+msgstr ""
+"Das Album und die zugehörigen Daten und Dateien werden gelöscht. Diese "
+"Aktion ist unwiderruflich."
 
 #: front/src/views/admin/library/AlbumDetail.vue:72
 #: front/src/views/admin/library/AlbumDetail.vue:67
