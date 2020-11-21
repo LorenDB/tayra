@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-07-27 17:03+0000\n"
-"Last-Translator: Arne <trpjabarno@arnemail.de>\n"
+"PO-Revision-Date: 2020-11-21 16:52+0000\n"
+"Last-Translator: jovuit <jvuitton@disroot.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -404,7 +404,7 @@ msgstr "Zugang zu den Radios"
 #: front/src/components/mixins/Translations.vue:137
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to security settings such as password and authorization"
-msgstr ""
+msgstr "Zugriff zu den Sicherheitseinstellungen wie Passwort und Berechtigungen"
 
 #: front/src/components/auth/ApplicationEdit.vue:29
 #: front/src/components/auth/ApplicationEdit.vue:22
@@ -1336,6 +1336,8 @@ msgstr "Kennwort ändern"
 msgctxt "Content/Settings/Paragraph'"
 msgid "Change the email address associated with your account. We will send a confirmation to the new address."
 msgstr ""
+"Die E-Mail-Adresse des Kontos ändern. Eine Bestätigung wird an deine neue E"
+"-Mail-Adresse geschickt."
 
 #: front/src/components/Footer.vue:49
 msgctxt "Footer/Settings/Dropdown.Label/Short, Verb"
@@ -3108,7 +3110,7 @@ msgstr ""
 #: front/src/components/library/FileUpload.vue:2
 msgctxt "Content/Library/Title/Verb"
 msgid "Import music from your server"
-msgstr ""
+msgstr "Musik aus deinem Server importieren"
 
 #: front/src/components/library/FileUpload.vue:50
 msgctxt "Content/Library/Input.Label/Noun"
@@ -3480,7 +3482,7 @@ msgstr "Mediathek aktualisiert"
 #: front/src/components/auth/Plugin.vue:24
 msgctxt "*/*/Paragraph/Noun"
 msgid "Library where files should be imported."
-msgstr ""
+msgstr "Mediathek, in der die Dateien importiert werden müssen."
 
 #: front/src/components/channels/LicenseSelect.vue:3
 #: front/src/components/library/TrackDetail.vue:120
@@ -4740,7 +4742,7 @@ msgstr "Bitte überprüfe, ob dein Benutzername und dein Passwort korrekt sind u
 #: front/src/components/auth/Settings.vue:249
 msgctxt "Content/Settings/Title/Noun"
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 #: front/src/components/common/AttachmentInput.vue:26
 msgctxt "Content/*/Paragraph"
@@ -5137,7 +5139,7 @@ msgstr "Abgelehnt"
 #: front/src/components/auth/ApplicationEdit.vue:26
 msgctxt "Content/Applications/Label"
 msgid "Regenerate token"
-msgstr ""
+msgstr "Token nochmals generieren"
 
 #: front/src/components/About.vue:85
 msgctxt "*/*/*"
@@ -5444,7 +5446,7 @@ msgstr "Import erneut starten"
 #: front/src/components/library/FileUpload.vue:3
 msgctxt "Content/Library/Paragraph"
 msgid "Results of your previous import:"
-msgstr ""
+msgstr "Ergebnisse des letzten Imports:"
 
 #: front/src/components/favorites/List.vue:35
 #: src/components/library/Albums.vue:39
@@ -5784,7 +5786,7 @@ msgstr "5s vorspringen"
 #: front/src/components/common/ActionTable.vue:280
 msgctxt "Content/*/Select/Verb"
 msgid "Select"
-msgstr ""
+msgstr "Auswählen"
 
 #: front/src/components/library/radios/Builder.vue:44
 msgctxt "Content/Radio/Dropdown.Placeholder/Verb"
@@ -7276,7 +7278,7 @@ msgstr "Verwende Funkwhale auf anderen Geräten mit unseren Apps"
 #: front/src/components/auth/Settings.vue:252
 msgctxt "Content/Settings/Paragraph"
 msgid "Use plugins to extend Funkwhale and get additional features."
-msgstr ""
+msgstr "Benutze Plugins um Funkwhale mit neuen Funktionalitäten zu erweitern."
 
 #: front/src/components/moderation/ReportModal.vue:38
 msgctxt "*/*/Field,Help"
