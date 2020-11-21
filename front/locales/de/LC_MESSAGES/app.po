@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-11-21 17:19+0000\n"
+"PO-Revision-Date: 2020-11-21 17:21+0000\n"
 "Last-Translator: jovuit <jvuitton@disroot.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
@@ -3401,7 +3401,6 @@ msgid "Libraries help you organize and share your music collections. You can upl
 msgstr "Mediatheken helfen Dir deine Musiksammlungen zu organisieren und teilen. Du kannst deine eigene Musiksammlung zu Funkwhale hochladen und mit deinen Freunden und deiner Familie teilen."
 
 #: front/src/components/library/Home.vue:78
-#, fuzzy
 msgctxt "Head/Home/Title"
 msgid "Library"
 msgstr "Mediathek"
@@ -3447,10 +3446,9 @@ msgid "Library deleted"
 msgstr "Mediathek gelöscht"
 
 #: front/src/views/content/libraries/Card.vue:39
-#, fuzzy
 msgctxt "Content/Library/Card.Button.Label/Noun"
 msgid "Library Details"
-msgstr "Mediathek-Dateien"
+msgstr "Mediathek-Infos"
 
 #: front/src/views/admin/library/EditsList.vue:4
 msgctxt "Content/Admin/Title/Noun"
@@ -3614,7 +3612,6 @@ msgid "Log in to your Funkwhale account"
 msgstr "Melde Dich bei Deinem Funkwhale-Konto an"
 
 #: front/src/components/auth/Logout.vue:14
-#, fuzzy
 msgctxt "Content/Login/Button.Label"
 msgid "Log in!"
 msgstr "Anmelden!"
@@ -3625,10 +3622,9 @@ msgid "Log Out"
 msgstr "Abmelden"
 
 #: front/src/views/auth/Callback.vue:7
-#, fuzzy
 msgctxt "*/Login/*"
 msgid "Logging in…"
-msgstr "Die Mediatheken werden geladen…"
+msgstr "Anmeldung läuft…"
 
 #: front/src/components/Sidebar.vue:78 src/components/auth/LoginForm.vue:44
 msgctxt "*/Login/*/Verb"
@@ -3680,10 +3676,9 @@ msgid "Main menu"
 msgstr "Hauptmenü"
 
 #: front/src/components/Sidebar.vue:86
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Main navigation"
-msgstr "Seitennummerierung"
+msgstr "Hauptmenü"
 
 #: front/src/views/admin/library/Base.vue:37
 msgctxt "Head/Admin/Title"
