@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
 "PO-Revision-Date: 2020-11-21 17:02+0000\n"
-"Last-Translator: jovuit <jvuitton@disroot.org>\n"
+"Last-Translator: Daniel <daniel.nautre@gmail.com>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -7826,10 +7826,9 @@ msgid "Your avatar cannot be saved"
 msgstr "Dein Avatar kann nicht gespeichert werden"
 
 #: front/src/components/auth/Settings.vue:269
-#, fuzzy
 msgctxt "Content/Settings/Paragraph'"
 msgid "Your current email address is %{ email }."
-msgstr "Du bist als %{ username } angemeldet"
+msgstr "Deine aktuelle E-Mail-Adresse ist  %{ email }."
 
 #: front/src/components/auth/Settings.vue:545
 msgctxt "*/Auth/Message"
