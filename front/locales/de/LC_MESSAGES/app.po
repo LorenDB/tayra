@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
 "PO-Revision-Date: 2020-11-21 17:02+0000\n"
-"Last-Translator: jovuit <jvuitton@disroot.org>\n"
+"Last-Translator: Daniel <daniel.nautre@gmail.com>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -7652,10 +7652,9 @@ msgid "You are now using the Funkwhale instance at %{ url }"
 msgstr "Du verwendest jetzt die Funkwhale-Instanz unter %{ url }"
 
 #: front/src/components/auth/Logout.vue:12
-#, fuzzy
 msgctxt "Content/Login/Title"
 msgid "You aren't currently logged in"
-msgstr "Du bist als %{ username } angemeldet"
+msgstr "Du bist derzeit nicht angemeldet"
 
 #: front/src/components/moderation/FilterModal.vue:27
 #: front/src/components/moderation/FilterModal.vue:13
@@ -7766,10 +7765,10 @@ msgstr "Du wirst von dieser Sitzung ausgeloggt und du musst dich mit deinem neue
 
 #: front/src/components/auth/LoginForm.vue:40
 #: src/components/auth/LoginForm.vue:2
-#, fuzzy
 msgctxt "Contant/Auth/Paragraph"
 msgid "You will be redirected to %{ domain } to authenticate."
-msgstr "Du wirst zu <strong>%{ url }</strong> weitergeleitet"
+msgstr ""
+"Du wirst zur Authentifizierung zu <strong>%{ url }</strong> weitergeleitet"
 
 #: front/src/components/auth/Authorize.vue:51
 msgctxt "Content/Auth/Paragraph"
