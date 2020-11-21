@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
 "PO-Revision-Date: 2020-11-21 17:02+0000\n"
-"Last-Translator: Daniel <daniel.nautre@gmail.com>\n"
+"Last-Translator: jovuit <jvuitton@disroot.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -7767,8 +7767,7 @@ msgstr "Du wirst von dieser Sitzung ausgeloggt und du musst dich mit deinem neue
 #: src/components/auth/LoginForm.vue:2
 msgctxt "Contant/Auth/Paragraph"
 msgid "You will be redirected to %{ domain } to authenticate."
-msgstr ""
-"Du wirst zur Authentifizierung zu <strong>%{ url }</strong> weitergeleitet"
+msgstr "Du wirst zur Authentifizierung zu %{ url } weitergeleitet."
 
 #: front/src/components/auth/Authorize.vue:51
 msgctxt "Content/Auth/Paragraph"
