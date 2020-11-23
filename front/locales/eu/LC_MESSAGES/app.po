@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-11-19 19:03+0000\n"
+"PO-Revision-Date: 2020-11-23 08:19+0000\n"
 "Last-Translator: Asier Iturralde Sarasola <asier.iturralde@gmail.com>\n"
 "Language-Team: none\n"
 "Language: eu\n"
@@ -6435,7 +6435,7 @@ msgctxt "Content/Moderation/Paragraph"
 msgid "The album will be removed, as well as associated uploads, tracks, favorites and listening history. This action is irreversible."
 msgstr ""
 "Album hau eta erlazionatutako igoerak, pistak, gogokoak eta entzunaldien "
-"historia ezabatu egingo dira. Ekintza hau ezin da desegin"
+"historia ezabatu egingo dira. Ekintza hau ezin da desegin."
 
 #: front/src/components/auth/Authorize.vue:39
 msgctxt "Content/Auth/Paragraph"
@@ -7915,44 +7915,47 @@ msgstr "Bere edukia ikusteko kanal honetara harpidetu beharko duzu behar bada."
 #: front/src/components/notifications/NotificationRow.vue:45
 msgctxt "Content/Notifications/Paragraph"
 msgid "You rejected %{ username }&#39;s request to follow \"%{ library }\""
-msgstr ""
+msgstr "%{ username }(e)k \"%{ library }\" jarraitzeko eskaera baztertu duzu"
 
 #: front/src/components/auth/Settings.vue:82
 msgctxt "Popup/Settings/List item"
 msgid "You will be logged out from this session and have to log in with the new one"
-msgstr ""
+msgstr "Saio hau amaituko zaizu eta berriarekin hasi beharko duzu"
 
 #: front/src/components/auth/LoginForm.vue:40
 #: src/components/auth/LoginForm.vue:2
 msgctxt "Contant/Auth/Paragraph"
 msgid "You will be redirected to %{ domain } to authenticate."
-msgstr ""
+msgstr "%{ domain } domeinura birbideratua izango zara baimentzeko."
 
 #: front/src/components/auth/Authorize.vue:51
 msgctxt "Content/Auth/Paragraph"
 msgid "You will be redirected to <strong>%{ url }</strong>"
-msgstr ""
+msgstr "<strong>%{ url }</strong>(e)ra birbideratua izango zara"
 
 #: front/src/components/auth/Authorize.vue:49
 msgctxt "Content/Auth/Paragraph"
 msgid "You will be shown a code to copy-paste in the application."
-msgstr ""
+msgstr "Aplikazioan kopiatu eta itsasteko kodea erakutsiko zaizu."
 
 #: front/src/components/auth/Settings.vue:57
 msgctxt "Content/Settings/Paragraph"
 msgid "You will have to update your password on your clients that use this password."
 msgstr ""
+"Pasahitz hau erabiltzen duten bezeroetan pasahitza eguneratu beharko duzu."
 
 #: front/src/components/moderation/FilterModal.vue:16
 #: front/src/components/moderation/FilterModal.vue:2
 msgctxt "Popup/Moderation/Paragraph"
 msgid "You will not see tracks, albums and user activity linked to this artist any more:"
 msgstr ""
+"Artista honen pista, album eta erabiltzaile aktibitatea ez dituzu ikusiko "
+"hemendik aurrera:"
 
 #: front/src/components/auth/SignupForm.vue:25
 msgctxt "Content/Signup/Form/Paragraph"
 msgid "Your account cannot be created."
-msgstr ""
+msgstr "Ezin da zure kontua sortu."
 
 #: front/src/components/auth/SignupForm.vue:4
 msgctxt "Content/Signup/Form/Paragraph"
@@ -7972,23 +7975,25 @@ msgstr ""
 msgctxt "Content/Settings/Paragraph'"
 msgid "Your account will be deleted from our servers within a few minutes. We will also notify other servers who may have a copy of some of your data so they can proceed to deletion. Please note that some of these servers may be offline or unwilling to comply though."
 msgstr ""
+"Zure kontua gure zerbitzarietatik ezabatuko da minutu batzuk barru. Zure "
+"datuen kopia eduki dezaketen beste zerbitzariei ere ezabatzeko jakinaraziko "
+"diegu. Kontuan izan zerbitzari batzuk lineaz kanpo egon daitezkeela edo ez "
+"dutela eskaera osatu nahiko."
 
 #: front/src/components/auth/Settings.vue:191
-#, fuzzy
 msgctxt "Content/Settings/Title/Noun"
 msgid "Your applications"
-msgstr "Jakinarazpenak"
+msgstr "Zure aplikazioak"
 
 #: front/src/components/common/AttachmentInput.vue:3
-#, fuzzy
 msgctxt "Content/*/Error message.Title"
 msgid "Your attachment cannot be saved"
-msgstr "Ezarpenak eguneratuta"
+msgstr "Zure eranskina ezin da gorde"
 
 #: front/src/components/auth/Settings.vue:39
 msgctxt "Content/Settings/Error message.Title"
 msgid "Your avatar cannot be saved"
-msgstr ""
+msgstr "Zure avatarra ezin da gorde"
 
 #: front/src/components/auth/Settings.vue:269
 msgctxt "Content/Settings/Paragraph'"
@@ -7999,11 +8004,12 @@ msgstr "Zure uneko eposta helbidea %{ email } da."
 msgctxt "*/Auth/Message"
 msgid "Your deletion request was submitted, your account and content will be deleted shortly"
 msgstr ""
+"Zure ezabatze eskaera bidali da, zure kontua eta edukia laster ezabatuko dira"
 
 #: front/src/components/library/EditForm.vue:3
 msgctxt "Content/Library/Paragraph"
 msgid "Your edit was successfully submitted."
-msgstr ""
+msgstr "Zure edizioa behar bezala bidalita."
 
 #: front/src/components/auth/Settings.vue:573
 msgctxt "*/Auth/Message"
@@ -8013,72 +8019,71 @@ msgstr ""
 "mezua."
 
 #: front/src/components/favorites/List.vue:121
-#, fuzzy
 msgctxt "Head/Favorites/Title"
 msgid "Your Favorites"
-msgstr "Gogokoak"
+msgstr "Zure gogokoak"
 
 #: front/src/views/Notifications.vue:5
 msgctxt "Content/Notifications/Title"
 msgid "Your messages"
-msgstr ""
+msgstr "Zure mezuak"
 
 #: front/src/views/Notifications.vue:69
-#, fuzzy
 msgctxt "Content/Notifications/Title"
 msgid "Your notifications"
-msgstr "Erakutsi irakurritako jakinarazpenak"
+msgstr "Zure jakinarazpenak"
 
 #: front/src/components/auth/Settings.vue:62
 msgctxt "Content/Settings/Error message.Title"
 msgid "Your password cannot be changed"
-msgstr ""
+msgstr "Zure pasahitza ezin da aldatu"
 
 #: front/src/views/auth/PasswordResetConfirm.vue:29
-#, fuzzy
 msgctxt "Content/Signup/Card.Paragraph"
 msgid "Your password has been updated successfully."
-msgstr "Pasahitza arrakastaz eguneratu da"
+msgstr "Pasahitza arrakastaz eguneratu da."
 
 #: front/src/components/auth/Settings.vue:14
-#, fuzzy
 msgctxt "Content/Settings/Error message.Title"
 msgid "Your settings can't be updated"
-msgstr "Ezarpenak eguneratuta"
+msgstr "Zure ezarpenak ezin dira eguneratu"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:139
-#, fuzzy
 msgctxt "Content/Password/Input.label"
 msgid "Your subsonic API password"
-msgstr "Subsonic API pasahitz berria eskatu?"
+msgstr "Zure Subsonic API pasahitza"
 
 #: front/src/components/auth/Settings.vue:83
 msgctxt "Popup/Settings/List item"
 msgid "Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password"
 msgstr ""
+"Zure Subsonic pasahitza ausazko pasahitz batekin ordezkatuko da, Subsonic "
+"pasahitz zaharra erabiltzen duten gailuetan saioa amaituz"
 
 #: front/src/views/channels/DetailOverview.vue:30
 #: front/src/views/channels/DetailOverview.vue:6
 msgctxt "Content/Channel/Paragraph"
 msgid "Your uploads are being processed by Funkwhale and will be live very soon."
-msgstr ""
+msgstr "Funkwhale zure igoerak prozesatzen ari da eta laster izango dira prest."
 
 #: front/src/main.js:121
 msgctxt "*/Error/Paragraph"
 msgid "You sent too many requests and have been rate limited, please try again in %{ delay }"
 msgstr ""
+"Eskaera gehiegi bidali dituzu eta mugatua izan zara, saiatu %{ delay } "
+"igarotzean"
 
 #: front/src/main.js:124
 msgctxt "*/Error/Paragraph"
 msgid "You sent too many requests and have been rate limited, please try again later"
-msgstr ""
+msgstr "Eskaera gehiegi bidali dituzu eta mugatua izan zara, saiatu beranduago"
 
 #: front/src/entities.js:126
 msgctxt "*/*/*/Noun"
 msgid "MusicBrainz ID"
-msgstr ""
+msgstr "MusicBrainz ID"
 
 #: front/src/edits.js:26
 msgctxt "Content/*/*/Noun"
 msgid "Cover"
-msgstr ""
+msgstr "Azala"
