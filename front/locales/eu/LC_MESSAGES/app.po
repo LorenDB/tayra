@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-11-26 14:49+0000\n"
+"PO-Revision-Date: 2020-11-29 15:29+0000\n"
 "Last-Translator: Porrumentzio <porrumentzio@riseup.net>\n"
 "Language-Team: none\n"
 "Language: eu\n"
@@ -107,21 +107,21 @@ msgstr[1] "%{ count } ordu musika"
 msgctxt "Content/Channel/Paragraph"
 msgid "%{ count } listening"
 msgid_plural "%{ count } listenings"
-msgstr[0] "Entzute %{ count }"
-msgstr[1] "%{ count } entzute"
+msgstr[0] "Entzunaldi %{ count }"
+msgstr[1] "%{ count } entzunaldi"
 
 #: front/src/components/About.vue:187 src/components/About.vue:20
 msgctxt "Content/Home/Stat"
 msgid "%{ count } listenings"
 msgid_plural "%{ count } listenings"
-msgstr[0] "Entzute %{ count }"
-msgstr[1] "%{ count } entzute"
+msgstr[0] "Entzunaldi %{ count }"
+msgstr[1] "%{ count } entzunaldi"
 
 #: front/src/components/common/ActionTable.vue:46
 msgctxt "Content/*/Paragraph"
 msgid "%{ count } on %{ total } selected"
 msgid_plural "%{ count } on %{ total } selected"
-msgstr[0] "%{ count } aukeratutako %{ total }(e)tik"
+msgstr[0] "Aaukeratutako %{ count },%{ total }(e)tik"
 msgstr[1] "%{ count } aukeratutako %{ total }(e)tik"
 
 #: front/src/views/channels/DetailBase.vue:25
@@ -374,7 +374,7 @@ msgstr "Jarraitutakoetara sarbidea"
 #: front/src/components/mixins/Translations.vue:109
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to listening history"
-msgstr "Entzute-historiarako sarbidea"
+msgstr "Entzunaldi-historiarako sarbidea"
 
 #: front/src/components/mixins/Translations.vue:140
 #: front/src/components/mixins/Translations.vue:141
@@ -3562,7 +3562,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:108
 msgctxt "*/*/*/Noun"
 msgid "Listenings"
-msgstr "Entzuteak"
+msgstr "Entzunaldiak"
 
 #: front/src/components/audio/track/Table.vue:23
 #: front/src/components/library/ArtistDetail.vue:28
