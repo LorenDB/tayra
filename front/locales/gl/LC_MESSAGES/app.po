@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-12-02 00:11+0000\n"
+"PO-Revision-Date: 2020-12-02 17:44+0000\n"
 "Last-Translator: ghose <xosem@disroot.org>\n"
 "Language-Team: none\n"
 "Language: gl\n"
@@ -377,7 +377,7 @@ msgstr "Acceso ao historial de escoita"
 #: front/src/components/mixins/Translations.vue:141
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to moderation reports"
-msgstr "Acceso a informes de moderación"
+msgstr "Acceso ás denuncias a moderar"
 
 #: front/src/components/mixins/Translations.vue:128
 #: front/src/components/mixins/Translations.vue:129
@@ -871,7 +871,8 @@ msgstr "Acceso anónimo"
 #: front/src/components/moderation/ReportModal.vue:62
 msgctxt "Popup/Moderation/Error message"
 msgid "Anonymous reports are disabled, please sign-in to submit a report."
-msgstr "Desactiváronse os informes anónimos, conéctate para enviar un informe."
+msgstr ""
+"Desactiváronse as denuncias anónimas, conéctate para enviar unha denuncia."
 
 #: front/src/components/auth/Settings.vue:153
 #: src/components/auth/Settings.vue:201
@@ -2151,7 +2152,7 @@ msgstr[1] "Quere executar %{ action } sobre %{ count } elementos?"
 #: front/src/components/moderation/ReportModal.vue:3
 msgctxt "Popup/Moderation/Title/Verb"
 msgid "Do you want to report this object?"
-msgstr "Quere informar sobre este obxeto?"
+msgstr "Queres denunciar este elemento?"
 
 #: front/src/components/Footer.vue:43
 msgctxt "Footer/*/List item.Link/Short, Noun"
@@ -2536,22 +2537,22 @@ msgstr "Tipo de fallo"
 #: front/src/components/common/ActionTable.vue:62
 msgctxt "Content/*/Error message/Header"
 msgid "Error while applying action"
-msgstr "Fallo mentres se aplicaba a acción"
+msgstr "Fallo ó aplicar a acción"
 
 #: front/src/views/auth/PasswordReset.vue:7
 msgctxt "Content/Signup/Card.Title"
 msgid "Error while asking for a password reset"
-msgstr "Fallo ao solicitar o restablecemento do contrasinal"
+msgstr "Fallo ó solicitar o restablecemento do contrasinal"
 
 #: front/src/components/auth/Authorize.vue:6
 msgctxt "Popup/Moderation/Error message"
 msgid "Error while authorizing application"
-msgstr "Fallo mentres se aplicaba a acción"
+msgstr "Erro ó autorizar a aplicación"
 
 #: front/src/views/auth/PasswordResetConfirm.vue:7
 msgctxt "Content/Signup/Card.Title"
 msgid "Error while changing your password"
-msgstr "Fallo ao intentar cambiar o contrasinal"
+msgstr "Erro ó cambiar o contrasinal"
 
 #: front/src/components/channels/AlbumForm.vue:3
 msgctxt "Content/*/Error message.Title"
@@ -2561,34 +2562,34 @@ msgstr "Fallou a creación"
 #: front/src/views/admin/moderation/DomainsList.vue:6
 msgctxt "Content/Moderation/Message.Title"
 msgid "Error while creating domain"
-msgstr "Fallo ao crear o dominio"
+msgstr "Fallou a creación do dominio"
 
 #: front/src/components/moderation/FilterModal.vue:9
 msgctxt "Popup/Moderation/Error message"
 msgid "Error while creating filter"
-msgstr "Fallo ao crear a regra"
+msgstr "Erro ó crear o filtro"
 
 #: front/src/components/manage/users/InvitationForm.vue:4
 msgctxt "Content/Admin/Error message.Title"
 msgid "Error while creating invitation"
-msgstr "Fallo ao crear o convite"
+msgstr "Erro ó crear o convite"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:7
 msgctxt "Content/Moderation/Error message.Title"
 msgid "Error while creating rule"
-msgstr "Fallo ao crear a regra"
+msgstr "Erro ó crear a regra"
 
 #: front/src/components/auth/Authorize.vue:7
 msgctxt "Popup/Moderation/Error message"
 msgid "Error while fetching application data"
-msgstr "Fallo ao crear o convite"
+msgstr "Erro ó obter datos da aplicación"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:138
 #: front/src/views/admin/moderation/DomainsDetail.vue:133
 #: front/src/views/admin/moderation/DomainsDetail.vue:6
 msgctxt "Content/Moderation/Table"
 msgid "Error while fetching node info"
-msgstr "Fallo ao obter info da instancia"
+msgstr "Erro ó obter info do nodo"
 
 #: front/src/components/RemoteSearchForm.vue:4
 msgctxt "Content/*/Error message.Title"
@@ -2620,12 +2621,12 @@ msgstr "Fallo ao gardar o plugin"
 #: front/src/components/federation/FetchButton.vue:62
 msgctxt "Content/*/Error message.Title"
 msgid "Error while saving settings"
-msgstr "Fallo ao gardar os axustes"
+msgstr "Erro ó gardar os axustes"
 
 #: front/src/components/library/EditForm.vue:46
 msgctxt "Content/Library/Error message.Title"
 msgid "Error while submitting edit"
-msgstr "Fallo ao gardar os axustes"
+msgstr "Erro ó gardar o axuste"
 
 #: front/src/components/manage/moderation/NoteForm.vue:3
 msgctxt "Content/Moderation/Error message.Title"
@@ -2635,7 +2636,7 @@ msgstr "Fallo ao enviar a nota"
 #: front/src/components/moderation/ReportModal.vue:11
 msgctxt "Popup/Moderation/Error message"
 msgid "Error while submitting report"
-msgstr "Fallo ao enviar o informe"
+msgstr "Erro ó enviar a denuncia"
 
 #: front/src/components/common/RenderedDescription.vue:27
 msgctxt "Content/Channels/Error message.Title"
@@ -2665,19 +2666,19 @@ msgstr "Ficheiros con fallos"
 #: front/src/components/mixins/Translations.vue:18
 msgctxt "Content/Settings/Dropdown/Short"
 msgid "Everyone"
-msgstr "Todas"
+msgstr "Todo o mundo"
 
 #: front/src/components/mixins/Translations.vue:11
 #: front/src/components/mixins/Translations.vue:12
 msgctxt "Content/Settings/Dropdown"
 msgid "Everyone on this instance"
-msgstr "Todas en esta instancia"
+msgstr "Todas nesta instancia"
 
 #: front/src/components/mixins/Translations.vue:12
 #: front/src/components/mixins/Translations.vue:13
 msgctxt "Content/Settings/Dropdown"
 msgid "Everyone, across all instances"
-msgstr "Todos, en todas as instancias"
+msgstr "Todas, en tódalas instancias"
 
 #: front/src/components/library/radios/Filter.vue:7
 msgctxt "Popup/Radio/Title/Noun"
@@ -2707,7 +2708,7 @@ msgstr "Despregar cola"
 #: front/src/components/ShortcutsModal.vue:121
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Expand queue/player view"
-msgstr "Expandir vista da cola/reprodutor"
+msgstr "Despregar vista da cola/reprodutor"
 
 #: front/src/components/manage/users/InvitationsTable.vue:35
 #: front/src/components/manage/users/InvitationsTable.vue:4
@@ -2731,7 +2732,11 @@ msgstr "Caducado/utilizado"
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:110
 msgctxt "Content/Moderation/Help text"
 msgid "Explain why you're applying this policy. Depending on your instance configuration, this will help you remember why you acted on this account or domain, and may be displayed publicly to help users understand what moderation rules are in place."
-msgstr "Explicar por que aplica esta política a todas as instancias. Dependendo da configuración da súa instancia esto axudaralle a lembrar por que actuou sobre esta conta ou dominio, e pode ser mostrado públicamente para que as usuarias entendan cales son as regras de moderación que se aplican."
+msgstr ""
+"Explicar por que aplicas esta política. Dependendo da configuración da túa "
+"instancia esto axudarache a lembrar por que actuaches sobre esta conta ou "
+"dominio, e pode ser mostrado públicamente para que as usuarias entendan "
+"cales son as regras de moderación que se aplican."
 
 #: front/src/components/Sidebar.vue:93
 msgctxt "*/*/*/Verb"
@@ -2747,7 +2752,7 @@ msgstr "Fallou"
 #: front/src/views/content/remote/Card.vue:66
 msgctxt "Content/Library/Card.List item/Noun"
 msgid "Failed tracks:"
-msgstr "Cancións fallidas:"
+msgstr "Cancións con fallo:"
 
 #: front/src/views/admin/ChannelDetail.vue:183
 #: src/views/admin/ChannelDetail.vue:178
@@ -2856,13 +2861,13 @@ msgstr "Rematado"
 #: front/src/views/admin/moderation/DomainsDetail.vue:166
 msgctxt "Content/Moderation/Table.Label/Short (Value is a date)"
 msgid "First seen"
-msgstr "Visto primeiro"
+msgstr "Primeira visualización"
 
 #: front/src/components/mixins/Translations.vue:71
 #: front/src/components/mixins/Translations.vue:72
 msgctxt "Content/Moderation/Dropdown/Noun"
 msgid "First seen date"
-msgstr "Data da primeira visión"
+msgstr "Data da primeira visualización"
 
 #: front/src/components/ShortcutsModal.vue:63
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
@@ -2908,22 +2913,24 @@ msgstr "Seguidoras"
 #: front/src/components/mixins/Translations.vue:112
 msgctxt "Content/OAuth Scopes/Label"
 msgid "Follows"
-msgstr "Seguir"
+msgstr "Segue"
 
 #: front/src/components/moderation/ReportModal.vue:50
 msgctxt "*/*/Field,Help"
 msgid "Forward an anonymized copy of your report to the server hosting this element."
-msgstr "Reenviar unha copia anónima do teu informe ao servidor que hospeda este elemento."
+msgstr ""
+"Reenviar unha copia anónima da túa denuncia ó servidor que hospeda este "
+"elemento."
 
 #: front/src/components/moderation/ReportModal.vue:47
 msgctxt "*/*/Field.Label/Verb"
 msgid "Forward to %{ domain}"
-msgstr "Reenviar a %{ domain }"
+msgstr "Reenviar a %{ domain}"
 
 #: front/src/components/auth/Authorize.vue:28
 msgctxt "Content/Auth/Label/Noun"
 msgid "Full access"
-msgstr "Desactivar o acceso"
+msgstr "Acceso completo"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:7
 msgctxt "Content/Settings/Paragraph'"
@@ -2972,7 +2979,7 @@ msgstr "Ir"
 #: front/src/components/PageNotFound.vue:14
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Go to home page"
-msgstr "Ir ao inicio"
+msgstr "Ir ó inicio"
 
 #: front/src/components/Footer.vue:19
 msgctxt "Footer/*/List item.Link"
@@ -2992,7 +2999,7 @@ msgstr "Texto de axuda"
 #: front/src/components/auth/Settings.vue:108
 msgctxt "Content/Settings/Title"
 msgid "Hidden artists"
-msgstr "Buscando artistas"
+msgstr "Artistas ocultos"
 
 #: front/src/components/About.vue:154
 msgctxt "*/*/*/Verb"
@@ -3500,7 +3507,7 @@ msgstr "Claro"
 #: front/src/views/admin/moderation/AccountsDetail.vue:243
 msgctxt "Content/Moderation/Table.Label/Noun"
 msgid "Linked reports"
-msgstr "Informes ligados"
+msgstr "Denuncias ligadas"
 
 #: front/src/components/Home.vue:134
 msgctxt "Content/Home/Link"
@@ -4248,7 +4255,9 @@ msgstr "Abrir"
 #: front/src/components/library/ImportStatusModal.vue:37
 msgctxt "Popup/Import/Table.Label/Value"
 msgid "Open a support thread (include the debug information below in your message)"
-msgstr "Abrir un fío de axuda (incluír información de depuración abaixo na súa mensaxe)"
+msgstr ""
+"Abrir un fío de axuda (incluír información de depuración abaixo na túa "
+"mensaxe)"
 
 #: front/src/components/manage/ChannelsTable.vue:183
 #: front/src/components/manage/library/AlbumsTable.vue:177
@@ -5241,29 +5250,29 @@ msgstr "Elimina as cancións subidas que non se procesaron completamente no serv
 #: front/src/components/mixins/Report.vue:6 src/components/mixins/Report.vue:7
 msgctxt "*/Moderation/*/Verb"
 msgid "Report @%{ username }…"
-msgstr "Informar @%{ username }…"
+msgstr "Denunciar @%{ username }…"
 
 #: front/src/components/manage/moderation/ReportCard.vue:5
 msgctxt "Content/Moderation/Card/Short"
 msgid "Report %{ id }"
-msgstr "Informar %{ id }"
+msgstr "Denunciar %{ id }"
 
 #: front/src/components/moderation/ReportModal.vue:175
 msgctxt "*/Moderation/Message"
 msgid "Report successfully submitted, thank you"
-msgstr "Informe enviado correctamente, grazas"
+msgstr "Denuncia enviada correctamente, grazas"
 
 #: front/src/components/mixins/Report.vue:38
 #: src/components/mixins/Report.vue:39
 msgctxt "*/Moderation/*/Verb"
 msgid "Report this album…"
-msgstr "Informar sobre este álbume…"
+msgstr "Denunciar este álbume…"
 
 #: front/src/components/mixins/Report.vue:66
 #: src/components/mixins/Report.vue:67
 msgctxt "*/Moderation/*/Verb"
 msgid "Report this artist…"
-msgstr "Informar sobre este artista…"
+msgstr "Denunciar este artista…"
 
 #: front/src/components/mixins/Report.vue:54
 #: src/components/mixins/Report.vue:55
@@ -5275,29 +5284,29 @@ msgstr "Denunciar esta canle…"
 #: src/components/mixins/Report.vue:91
 msgctxt "*/Moderation/*/Verb"
 msgid "Report this library…"
-msgstr "Informar sobre esta biblioteca…"
+msgstr "Denunciar esta biblioteca…"
 
 #: front/src/components/mixins/Report.vue:78
 #: src/components/mixins/Report.vue:79
 msgctxt "*/Moderation/*/Verb"
 msgid "Report this playlist…"
-msgstr "Informar sobre esta lista…"
+msgstr "Denunciar esta listaxe…"
 
 #: front/src/components/mixins/Report.vue:24
 #: src/components/mixins/Report.vue:25
 msgctxt "*/Moderation/*/Verb"
 msgid "Report this track…"
-msgstr "Informar sobre esta canción…"
+msgstr "Denunciar esta canción…"
 
 #: front/src/components/audio/PlayButton.vue:99
 msgctxt "*/Moderation/*/Button/Label,Verb"
 msgid "Report…"
-msgstr "Informar…"
+msgstr "Denunciar…"
 
 #: front/src/components/manage/moderation/ReportCard.vue:115
 msgctxt "Content/*/*/Short"
 msgid "Reported object"
-msgstr "Informouse sobre o obxeto"
+msgstr "Elemento denunciado"
 
 #: front/src/components/mixins/Translations.vue:139
 #: front/src/views/admin/moderation/Base.vue:4
@@ -5306,7 +5315,7 @@ msgstr "Informouse sobre o obxeto"
 #: front/src/components/mixins/Translations.vue:140
 msgctxt "*/Moderation/*/Noun"
 msgid "Reports"
-msgstr "Informes"
+msgstr "Denuncias"
 
 #: front/src/components/manage/moderation/UserRequestCard.vue:5
 msgctxt "Content/Moderation/Card/Short"
@@ -6132,7 +6141,7 @@ msgstr "Enviar outra edición"
 #: front/src/components/moderation/ReportModal.vue:69
 msgctxt "Popup/*/Button.Label"
 msgid "Submit report"
-msgstr "Enviar informe"
+msgstr "Enviar denuncia"
 
 #: front/src/views/content/remote/ScanForm.vue:52
 msgctxt "Content/Library/Input.Label"
@@ -6414,7 +6423,7 @@ msgstr "Vai eliminar a nota. Esta acción non ten volta."
 #: front/src/components/manage/moderation/ReportCard.vue:118
 msgctxt "Content/Moderation/Message"
 msgid "The object associated with this report was deleted."
-msgstr "Eliminouse o obxeto asociado con este informe."
+msgstr "Eliminouse o elemento asociado a esta denuncia."
 
 #: front/src/components/playlists/Form.vue:14
 msgctxt "Content/Playlist/Error message.Title"
@@ -6717,7 +6726,9 @@ msgstr "Desactivará o acceso a API Subsonic desde a conta."
 #: front/src/components/manage/moderation/ReportCard.vue:357
 msgctxt "Content/Moderation/Popup,Paragraph"
 msgid "This will delete the object associated with this report and mark the report as resolved. The deletion is irreversible."
-msgstr "Esto vai eliminar o obxeto asociado a este informe e marcar o informe como resolto. Esta eliminación é irreversible."
+msgstr ""
+"Esto vai eliminar o elemento asociado a esta denuncia e marcala como "
+"resolta. Esta eliminación é irreversible."
 
 #: front/src/components/auth/SubsonicTokenForm.vue:32
 #: front/src/components/auth/SubsonicTokenForm.vue:8
@@ -7243,7 +7254,9 @@ msgstr "Usa engadidos para extender Funkwhale e ter características adicionais.
 #: front/src/components/moderation/ReportModal.vue:38
 msgctxt "*/*/Field,Help"
 msgid "Use this field to provide additional context to the moderator that will handle your report."
-msgstr "Utiliza este campo para proporcionar contexto adicional a moderación para xestionar o teu informe."
+msgstr ""
+"Utiliza este campo para proporcionar contexto adicional á moderación para "
+"xestionar a denuncia."
 
 #: front/src/views/auth/PasswordReset.vue:12
 msgctxt "Content/Signup/Paragraph"
@@ -7258,7 +7271,8 @@ msgstr "Utiliza este formulario para obter un obxeto hospedado nalgures no fediv
 #: front/src/components/moderation/ReportModal.vue:18
 msgctxt "*/Moderation/Popup,Paragraph"
 msgid "Use this form to submit a report to our moderation team."
-msgstr "Utiliza este formulario para enviar un informe ao equipo de moderación."
+msgstr ""
+"Utiliza este formulario para enviar unha denuncia ó equipo de moderación."
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:111
 msgctxt "Content/Moderation/Help text"
@@ -7511,7 +7525,9 @@ msgstr "Recomendámoslle utilizar Picard para ese propósito."
 #: front/src/components/moderation/ReportModal.vue:29
 msgctxt "*/*/Field,Help"
 msgid "We'll use this email if we need to contact you regarding this report."
-msgstr "Utilizaremos este correo se precisamos contactar contigo referente a este informe."
+msgstr ""
+"Utilizaremos este correo se precisamos contactar contigo referente a esta "
+"denuncia."
 
 #: front/src/components/Home.vue:5
 msgctxt "Content/Home/Header"
