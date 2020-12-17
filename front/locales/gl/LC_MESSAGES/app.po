@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-12-02 17:44+0000\n"
+"PO-Revision-Date: 2020-12-18 06:29+0000\n"
 "Last-Translator: ghose <xosem@disroot.org>\n"
 "Language-Team: none\n"
 "Language: gl\n"
@@ -823,7 +823,7 @@ msgstr "Permitir aplicación"
 #: front/src/components/About.vue:135
 msgctxt "*/*/*"
 msgid "Allow-list"
-msgstr "Permitir-lista"
+msgstr "Lista de permitidos"
 
 #: front/src/components/About.vue:148
 msgctxt "*/*/*"
@@ -3004,7 +3004,7 @@ msgstr "Artistas ocultos"
 #: front/src/components/About.vue:154
 msgctxt "*/*/*/Verb"
 msgid "Hide"
-msgstr "Ocultar"
+msgstr "Agochar"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:114
 msgctxt "Content/Moderation/Help text"
@@ -3014,17 +3014,17 @@ msgstr "Ocultar contido de conta ou dominio, excepto de seguidoras."
 #: front/src/components/moderation/FilterModal.vue:36
 msgctxt "Popup/*/Button.Label"
 msgid "Hide content"
-msgstr "Engadir contido"
+msgstr "Agochar contido"
 
 #: front/src/components/audio/PlayButton.vue:23
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "Hide content from this artist"
-msgstr "Ocultar contido de este artista"
+msgstr "Ocultar contido deste artista"
 
 #: front/src/components/Queue.vue:275 src/components/audio/Player.vue:691
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Hide content from this artist…"
-msgstr "Ocultar contido de este artista…"
+msgstr "Ocultar contido deste artista…"
 
 #: front/src/components/Home.vue:217
 msgctxt "Head/Home/Title"
@@ -3044,7 +3044,9 @@ msgstr "Hospeda os teus episodios e ten a comunidade ao día."
 #: front/src/components/auth/SubsonicTokenForm.vue:10
 msgctxt "Content/Settings/Paragraph"
 msgid "However, accessing Funkwhale from those clients require a separate password you can set below."
-msgstr "Porén, o acceso a Funkwhale desde estos outros clientes precisa un contrasinal separado que pode establecer aquí abaixo."
+msgstr ""
+"Porén, o acceso a Funkwhale desde estos outros clientes precisa dun "
+"contrasinal diferente que podes establecer aquí abaixo."
 
 #: front/src/views/auth/PasswordResetConfirm.vue:24
 #: front/src/views/auth/PasswordResetConfirm.vue:1
@@ -3060,7 +3062,9 @@ msgstr "Se es músico ou podcaster, as canles están deseñadas para ti!"
 #: front/src/components/auth/Settings.vue:181
 msgctxt "Content/Applications/Paragraph"
 msgid "If you authorize third-party applications to access your data, those applications will be listed here."
-msgstr "Se autoriza o acceso aos seus datos por aplicacións de terceiros, estas aplicacións aparecerán aquí."
+msgstr ""
+"Se autorizas o acceso aos teus datos por aplicacións de terceiros, estas "
+"aplicacións aparecerán aquí."
 
 #: front/src/components/auth/LoginForm.vue:6
 msgctxt "Content/Login/Error message.List item/Call to action"
@@ -3147,7 +3151,7 @@ msgstr "Non se puido conectar ao servidor remoto"
 #: front/src/components/moderation/FilterModal.vue:8
 msgctxt "Popup/Moderation/List item"
 msgid "In \"Recently added\" widget"
-msgstr "Recentemente engadida"
+msgstr "No widget \"Adicións recentes\""
 
 #: front/src/components/moderation/FilterModal.vue:23
 #: front/src/components/moderation/FilterModal.vue:9
@@ -3164,7 +3168,7 @@ msgstr "Nas favoritas"
 #: front/src/components/moderation/FilterModal.vue:7
 msgctxt "Popup/Moderation/List item"
 msgid "In other users favorites and listening history"
-msgstr "En favoritos e historial de escoita de outros usuarios"
+msgstr "En favoritas e historial de escoita de outras usuarias"
 
 #: front/src/components/moderation/FilterModal.vue:24
 #: front/src/components/moderation/FilterModal.vue:10
@@ -3194,7 +3198,7 @@ msgstr[1] "Introducir desde a cola  (%{ count } cancións)"
 #: front/src/components/mixins/Translations.vue:17
 msgctxt "Content/Settings/Dropdown/Short"
 msgid "Instance"
-msgstr "Datos da instancia"
+msgstr "Instancia"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:82
 #: front/src/views/admin/moderation/DomainsDetail.vue:77
@@ -3220,7 +3224,7 @@ msgstr "Axustes da instancia"
 #: front/src/components/SetInstanceModal.vue:19
 msgctxt "Popup/Instance/Input.Label/Noun"
 msgid "Instance URL"
-msgstr "Datos da instancia"
+msgstr "URL da instancia"
 
 #: front/src/components/manage/moderation/ReportCard.vue:90
 #: front/src/components/manage/moderation/ReportCard.vue:197
@@ -3234,7 +3238,9 @@ msgstr "Notas internas"
 #: front/src/components/library/FileUpload.vue:377
 msgctxt "Content/Library/Help text"
 msgid "Invalid file type, ensure you are uploading an audio file. Supported file extensions are %{ extensions }"
-msgstr "Tipo de ficheiro non válido, asegúrese de que sube un ficheiro de audio. Extensións de ficheiros soportadas %{ extensions }"
+msgstr ""
+"Tipo de ficheiro non válido, asegúrate de que subes un ficheiro de audio. "
+"Extensións de ficheiros soportadas %{ extensions }"
 
 #: front/src/components/library/ImportStatusModal.vue:139
 #: front/src/components/mixins/Translations.vue:49
@@ -3260,7 +3266,7 @@ msgstr "Convites"
 #: front/src/views/admin/moderation/DomainsDetail.vue:84
 msgctxt "Content/Moderation/*/Adjective"
 msgid "Is present on allow-list"
-msgstr "Está presente na lista-permitidos"
+msgstr "Está presente na lista de permitidos"
 
 #: front/src/components/Footer.vue:61
 msgctxt "Footer/*/List item.Link"
@@ -3270,7 +3276,7 @@ msgstr "Seguimento de problemas"
 #: front/src/components/SetInstanceModal.vue:5
 msgctxt "Popup/Instance/Error message.Title"
 msgid "It is not possible to connect to the given URL"
-msgstr "Non se puido conectar ao URL dado"
+msgstr "Non se puido conectar ao URL proporcionado"
 
 #: front/src/components/mixins/Translations.vue:80
 #: front/src/components/mixins/Translations.vue:81
@@ -3405,7 +3411,7 @@ msgstr "Bibliotecas"
 #: front/src/components/mixins/Translations.vue:100
 msgctxt "Content/OAuth Scopes/Label"
 msgid "Libraries and uploads"
-msgstr "Biblioteca actualizada"
+msgstr "Bibliotecas e subidas"
 
 #: front/src/views/content/libraries/Form.vue:2
 msgctxt "Content/Library/Paragraph"
