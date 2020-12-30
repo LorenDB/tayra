@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2020-12-30 08:49+0000\n"
+"PO-Revision-Date: 2020-12-31 00:18+0000\n"
 "Last-Translator: Jess Jing <ethereal0106@protonmail.com>\n"
 "Language-Team: none\n"
 "Language: zh_Hans\n"
@@ -57,7 +57,7 @@ msgstr[0] "%{ count } 允许的网域"
 msgctxt "Content/Home/Stat"
 msgid "%{ count } artists"
 msgid_plural "%{ count } artists"
-msgstr[0] "%{ count } 艺术家"
+msgstr[0] "%{ count } 音乐人"
 
 #: front/src/components/audio/ChannelCard.vue:12
 #: front/src/components/audio/ChannelSerieCard.vue:15
