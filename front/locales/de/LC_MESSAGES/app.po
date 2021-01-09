@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
 "PO-Revision-Date: 2021-01-10 13:29+0000\n"
-"Last-Translator: David <duffelbag@posteo.de>\n"
+"Last-Translator: jovuit <jvuitton@disroot.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2998,10 +2998,9 @@ msgid "Go to home page"
 msgstr "Zurück zur Startseite"
 
 #: front/src/components/Footer.vue:19
-#, fuzzy
 msgctxt "Footer/*/List item.Link"
 msgid "Go to Library"
-msgstr "Mediathek"
+msgstr "Zur Mediathek"
 
 #: front/src/views/Notifications.vue:27 src/views/Notifications.vue:61
 msgctxt "Content/Notifications/Button.Label"
@@ -5450,10 +5449,9 @@ msgid "Restart import"
 msgstr "Import erneut starten"
 
 #: front/src/components/Queue.vue:276
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Restart track"
-msgstr "Nächster Track"
+msgstr "Titel erneut abspielen"
 
 #: front/src/components/library/EditForm.vue:31
 #: src/components/library/EditForm.vue:5
