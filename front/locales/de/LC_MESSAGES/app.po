@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
 "PO-Revision-Date: 2021-01-09 12:25+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: jovuit <jvuitton@disroot.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2707,7 +2707,7 @@ msgstr "Ausschließen"
 #: front/src/components/library/Artists.vue:50
 msgctxt "Content/Search/Checkbox/Noun"
 msgid "Exclude Compilation Artists"
-msgstr ""
+msgstr "Kompilation-Künstler ausschließen "
 
 #: front/src/components/common/CollapseLink.vue:2
 msgctxt "*/*/Button,Label"
