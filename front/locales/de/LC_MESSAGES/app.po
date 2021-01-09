@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 15:17+0200\n"
-"PO-Revision-Date: 2021-01-09 12:25+0000\n"
-"Last-Translator: jovuit <jvuitton@disroot.org>\n"
+"PO-Revision-Date: 2021-01-10 13:29+0000\n"
+"Last-Translator: David <duffelbag@posteo.de>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2707,7 +2707,7 @@ msgstr "Ausschließen"
 #: front/src/components/library/Artists.vue:50
 msgctxt "Content/Search/Checkbox/Noun"
 msgid "Exclude Compilation Artists"
-msgstr "Kompilation-Künstler ausschließen "
+msgstr "Kompilation-Künstler·innen ausschließen"
 
 #: front/src/components/common/CollapseLink.vue:2
 msgctxt "*/*/Button,Label"
@@ -2880,7 +2880,6 @@ msgid "First seen date"
 msgstr "Erstmals gesehen"
 
 #: front/src/components/ShortcutsModal.vue:63
-#, fuzzy
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Focus searchbar"
 msgstr "Suchleiste fokussieren"
