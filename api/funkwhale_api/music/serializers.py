@@ -227,6 +227,10 @@ class AlbumSerializer(OptionalDescriptionMixin, serializers.Serializer):
 class TrackAlbumSerializer(serializers.ModelSerializer):
     artist = serializers.SerializerMethodField()
     cover = cover_field
+    tracks_count = serializers.SerializerMethodField()
+
+    def get_tracks_count(self, o):
+        return getattr(o, "_prefetched_tracks_count", len(o.tracks.all()))
 
     class Meta:
         model = models.Album
@@ -240,6 +244,7 @@ class TrackAlbumSerializer(serializers.ModelSerializer):
             "cover",
             "creation_date",
             "is_local",
+            "tracks_count",
         )
 
     def get_artist(self, o):

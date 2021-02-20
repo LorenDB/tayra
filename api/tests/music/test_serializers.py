@@ -196,6 +196,35 @@ def test_album_serializer(factories, to_api_date):
     assert serializer.data == expected
 
 
+def test_track_album_serializer(factories, to_api_date):
+    actor = factories["federation.Actor"]()
+    track1 = factories["music.Track"](
+        position=2, album__attributed_to=actor, album__with_cover=True
+    )
+    factories["music.Track"](position=1, album=track1.album)
+    album = track1.album
+    expected = {
+        "id": album.id,
+        "fid": album.fid,
+        "mbid": str(album.mbid),
+        "title": album.title,
+        "artist": serializers.serialize_artist_simple(album.artist),
+        "creation_date": to_api_date(album.creation_date),
+        "is_playable": False,
+        "cover": common_serializers.AttachmentSerializer(album.attachment_cover).data,
+        "release_date": to_api_date(album.release_date),
+        "tracks_count": 2,
+        "is_local": album.is_local,
+        "tags": [],
+        "attributed_to": federation_serializers.APIActorSerializer(actor).data,
+    }
+    serializer = serializers.AlbumSerializer(
+        album.__class__.objects.with_tracks_count().get(pk=album.pk)
+    )
+
+    assert serializer.data == expected
+
+
 def test_track_serializer(factories, to_api_date):
     actor = factories["federation.Actor"]()
     upload = factories["music.Upload"](
