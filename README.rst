@@ -12,15 +12,7 @@ LICENSE: AGPL3
 Getting help
 ------------
 
-We offer various Matrix.org rooms to discuss about Funkwhale:
-
-- `#funkwhale:matrix.org <https://matrix.to/#/#funkwhale:matrix.org>`_ for general questions about funkwhale
-- `#funkwhale-dev:matrix.org <https://matrix.to/#/#funkwhale-dev:matrix.org>`_ for development-focused discussion
-
-Please join those rooms if you have any questions!
-
-You can also contact `@funkwhale@mastodon.eliotberriot.com <https://mastodon.eliotberriot.com/@funkwhale>`_ on the fediverse.
-
+There are several places to get help or get in touch with other members of the community: https://funkwhale.audio/community/
 
 Contribute
 ----------
@@ -33,7 +25,7 @@ Security issues and vulnerabilities
 
 If you found a vulnerability in Funkwhale, please report it on our Gitlab instance at `https://dev.funkwhale.audio/funkwhale/funkwhale/-/issues`_, ensuring
 you have checked the ``This issue is confidential and should only be visible to team members with at least Reporter access.
-`` box. 
+`` box.
 
 This will ensure only maintainers and developpers have access to the vulnerability. Thank you for your help!
 
