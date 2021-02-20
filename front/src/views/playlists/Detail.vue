@@ -15,40 +15,46 @@
                 :translate-n="playlist.tracks_count"
                 :translate-params="{count: playlist.tracks_count, username: playlist.user.username}"
                 translate-context="Content/Playlist/Header.Subtitle">
-                Playlist containing %{ count } track, by %{ username }
+              Playlist containing %{ count } track, by %{ username }
               </translate><br>
               <duration :seconds="playlist.duration" />
             </div>
           </div>
         </h2>
         <div class="ui hidden divider"></div>
-        <play-button class="vibrant" :is-playable="playlist.is_playable" :tracks="tracks"><translate translate-context="Content/Queue/Button.Label/Short, Verb">Play all</translate></play-button>
-        <button
-          class="ui icon labeled button"
-          v-if="$store.state.auth.profile && playlist.user.id === $store.state.auth.profile.id"
-          @click="edit = !edit">
-          <i class="pencil icon"></i>
-          <template v-if="edit"><translate translate-context="Content/Playlist/Button.Label/Verb">Stop Editing</translate></template>
-          <template v-else><translate translate-context="Content/*/Button.Label/Verb">Edit</translate></template>
-        </button>
-        <button
-          class="ui icon labeled button"
-          v-if="playlist.privacy_level === 'everyone' && playlist.is_playable"
-          @click="showEmbedModal = !showEmbedModal">
-          <i class="code icon"></i>
-          <translate translate-context="Content/*/Button.Label/Verb">Embed</translate>
-        </button>
-
-        <dangerous-button v-if="$store.state.auth.profile && playlist.user.id === $store.state.auth.profile.id" class="ui labeled danger icon button" :action="deletePlaylist">
-          <i class="trash icon"></i> <translate translate-context="*/*/*/Verb">Delete</translate>
-          <p slot="modal-header" v-translate="{playlist: playlist.name}" translate-context="Popup/Playlist/Title/Call to action" :translate-params="{playlist: playlist.name}">
-            Do you want to delete the playlist "%{ playlist }"?
-          </p>
-          <p slot="modal-content"><translate translate-context="Popup/Playlist/Paragraph">This will completely delete this playlist and cannot be undone.</translate></p>
-          <div slot="modal-confirm"><translate translate-context="Popup/Playlist/Button.Label/Verb">Delete playlist</translate></div>
-        </dangerous-button>
-      </div>
-      <modal v-if="playlist.privacy_level === 'everyone' && playlist.is_playable" :show.sync="showEmbedModal">
+        <div class="header-buttons">
+          <div class="ui buttons">
+            <play-button class="vibrant" :is-playable="playlist.is_playable" :tracks="tracks"><translate translate-context="Content/Queue/Button.Label/Short, Verb">Play all</translate></play-button>
+          </div>
+          <div class="ui buttons">
+            <button
+              class="ui icon labeled button"
+              v-if="$store.state.auth.profile && playlist.user.id === $store.state.auth.profile.id"
+              @click="edit = !edit">
+              <i class="pencil icon"></i>
+              <template v-if="edit"><translate translate-context="Content/Playlist/Button.Label/Verb">Stop Editing</translate></template>
+              <template v-else><translate translate-context="Content/*/Button.Label/Verb">Edit</translate></template>
+            </button>
+          </div>
+          <div class="ui buttons">	
+            <button
+              class="ui icon labeled button"
+              v-if="playlist.privacy_level === 'everyone' && playlist.is_playable"
+              @click="showEmbedModal = !showEmbedModal">
+              <i class="code icon"></i>
+              <translate translate-context="Content/*/Button.Label/Verb">Embed</translate>
+            </button>
+            <dangerous-button v-if="$store.state.auth.profile && playlist.user.id === $store.state.auth.profile.id" class="ui labeled danger icon button" :action="deletePlaylist">
+              <i class="trash icon"></i> <translate translate-context="*/*/*/Verb">Delete</translate>
+              <p slot="modal-header" v-translate="{playlist: playlist.name}" translate-context="Popup/Playlist/Title/Call to action" :translate-params="{playlist: playlist.name}">
+              Do you want to delete the playlist "%{ playlist }"?
+              </p>
+              <p slot="modal-content"><translate translate-context="Popup/Playlist/Paragraph">This will completely delete this playlist and cannot be undone.</translate></p>
+              <div slot="modal-confirm"><translate translate-context="Popup/Playlist/Button.Label/Verb">Delete playlist</translate></div>
+            </dangerous-button>
+          </div>
+        </div>
+        <modal v-if="playlist.privacy_level === 'everyone' && playlist.is_playable" :show.sync="showEmbedModal">
         <h4 class="header">
           <translate translate-context="Popup/Album/Title/Verb">Embed this playlist on your website</translate>
         </h4>
@@ -62,7 +68,8 @@
             <translate translate-context="*/*/Button.Label/Verb">Cancel</translate>
           </button>
         </div>
-      </modal>
+        </modal>
+      </div>
     </section>
     <section class="ui vertical stripe segment">
       <template v-if="edit">
