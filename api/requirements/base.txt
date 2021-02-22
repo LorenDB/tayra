@@ -70,5 +70,5 @@ click~=7.1.0
 service_identity~=18.1.0
 markdown~=3.2.0
 bleach~=3.1.0
-feedparser==6.0.0b3
+feedparser~=6.0.0
 watchdog~=1.0.2
