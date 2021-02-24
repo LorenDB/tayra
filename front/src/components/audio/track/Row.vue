@@ -1,19 +1,24 @@
 <template>
   <tr>
     <td>
-      <play-button :class="['basic', {vibrant: currentTrack && isPlaying && track.id === currentTrack.id}, 'icon']" :discrete="true" :is-playable="playable" :track="track"></play-button>
+      <play-button :class="['basic', {vibrant: currentTrack && isPlaying && track.id === currentTrack.id}, 'icon']"
+        :discrete="true"
+        :is-playable="playable"
+        :track="track"
+        :track-index="trackIndex"
+        :tracks="tracks"></play-button>
     </td>
     <td>
       <img alt="" class="ui mini image" v-if="track.album && track.album.cover && track.album.cover.urls.original" v-lazy="$store.getters['instance/absoluteUrl'](track.album.cover.urls.medium_square_crop)">
       <img alt="" class="ui mini image" v-else src="../../../assets/audio/default-cover.png">
     </td>
     <td colspan="6">
-      <router-link class="track" :to="{name: 'library.tracks.detail', params: {id: track.id }}">
+      <button class="track" @click.stop="playSong()">
         <template v-if="displayPosition && track.position">
           {{ track.position }}.
         </template>
         {{ track.title|truncate(40) }}
-      </router-link>
+      </button>
     </td>
     <td colspan="4">
       <router-link class="artist discrete link" :to="{name: 'library.artists.detail', params: {id: track.artist.id }}">
@@ -56,6 +61,8 @@ import PlayButton from '@/components/audio/PlayButton'
 export default {
   props: {
     track: {type: Object, required: true},
+    trackIndex: {type: Number, required: true},
+    tracks: {type: Array, required: false},
     artist: {type: Object, required: false},
     displayPosition: {type: Boolean, default: false},
     displayActions: {type: Boolean, default: true},
@@ -79,6 +86,16 @@ export default {
       } else {
         return this.track.album.artist
       }
+    },
+  },
+  methods: {
+    playSong () {
+      this.$store.dispatch('queue/clean')
+      this.$store.dispatch('queue/appendMany', {
+        tracks: this.tracks
+      }).then(() => {
+        this.$store.dispatch('queue/currentIndex', this.trackIndex)
+      })
     },
   }
 }

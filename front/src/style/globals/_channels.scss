@@ -75,6 +75,18 @@
     }
   }
 }
+
+.album-entry:hover {
+  cursor: pointer;
+
+  // explicitly style the button as if it was hovered itself
+  .ui.inverted.vibrant.button {
+    background-color: var(--vibrant-hover-color);
+    color: white;
+    box-shadow: 0 0 0 2px var(--vibrant-color) inset;
+  }
+}
+
 .album-entry, .channel-entry-card {
   border-radius: 5px;
   padding: 0.5em;

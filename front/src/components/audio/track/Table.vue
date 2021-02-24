@@ -22,6 +22,8 @@
           :display-position="displayPosition"
           :display-actions="displayActions"
           :track="track"
+          :track-index="index"
+          :tracks="allTracks"
           :artist="artist"
           :key="index + '-' + track.id"
           v-for="(track, index) in allTracks"></track-row>

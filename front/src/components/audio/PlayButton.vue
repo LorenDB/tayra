@@ -11,7 +11,7 @@
     </button>
     <button
       v-if="!discrete && !iconOnly"
-      @click.prevent="clicked = true"
+      @click.stop.prevent="clicked = true"
       :class="['ui', {disabled: !playable && !filterableArtist}, 'floating', 'dropdown', {'icon': !dropdownOnly}, {'button': !dropdownOnly}]">
       <i :class="dropdownIconClasses.concat(['icon'])" :title="title" ></i>
       <div class="menu" v-if="clicked">
@@ -27,6 +27,9 @@
         <button v-if="track" class="item basic" :disabled="!playable" @click.stop.prevent="$store.dispatch('radios/start', {type: 'similar', objectId: track.id})" :title="labels.startRadio">
           <i class="feed icon"></i><translate translate-context="*/Queue/Button.Label/Short, Verb">Play radio</translate>
         </button>
+        <button v-if="track" class="item basic" @click.stop.prevent="$router.push(`/library/tracks/${track.id}/`)">
+          <i class="info icon"></i><translate translate-context="*/Queue/Dropdown/Button/Label/Short">Track details</translate>
+        </button>
         <div class="divider"></div>
         <button v-if="filterableArtist" ref="filterArtist" data-ref="filterArtist" class="item basic" :disabled="!filterableArtist" @click.stop.prevent="filterArtist" :title="labels.hideArtist">
           <i class="eye slash outline icon"></i><translate translate-context="*/Queue/Dropdown/Button/Label/Short">Hide content from this artist</translate>
@@ -35,7 +38,7 @@
           v-for="obj in getReportableObjs({track, album, artist, playlist, account, channel})"
           :key="obj.target.type + obj.target.id"
           class="item basic"
-          :ref="`report${obj.target.type}${obj.target.id}`" :data-ref="`report${obj.target.type}${obj.target.id}`" 
+          :ref="`report${obj.target.type}${obj.target.id}`" :data-ref="`report${obj.target.type}${obj.target.id}`"
           @click.stop.prevent="$store.dispatch('moderation/report', obj.target)">
           <i class="share icon" /> {{ obj.label }}
         </button>
@@ -90,7 +93,7 @@ export default {
       } else {
         replacePlay = this.$pgettext('*/Queue/Dropdown/Button/Title', 'Play tracks')
       }
-      
+
       return {
         playNow: this.$pgettext('*/Queue/Dropdown/Button/Title', 'Play now'),
         addToQueue: this.$pgettext('*/Queue/Dropdown/Button/Title', 'Add to current queue'),
@@ -143,7 +146,6 @@ export default {
     },
   },
   methods: {
-
     filterArtist () {
       this.$store.dispatch('moderation/hide', {type: 'artist', target: this.filterableArtist})
     },
@@ -175,7 +177,9 @@ export default {
       let self = this
       this.isLoading = true
       let getTracks = new Promise((resolve, reject) => {
-        if (self.track) {
+        if (self.tracks) {
+          resolve(self.tracks)
+        } else if (self.track) {
           if (!self.track.uploads || self.track.uploads.length === 0) {
             // fetch uploads from api
             axios.get(`tracks/${self.track.id}/`).then((response) => {
@@ -184,8 +188,6 @@ export default {
           } else {
             resolve([self.track])
           }
-        } else if (self.tracks) {
-          resolve(self.tracks)
         } else if (self.playlist) {
           let url = 'playlists/' + self.playlist.id + '/'
           axios.get(url + 'tracks/').then((response) => {
@@ -236,7 +238,14 @@ export default {
       let self = this
       self.$store.dispatch('queue/clean')
       this.getPlayableTracks().then((tracks) => {
-        self.$store.dispatch('queue/appendMany', {tracks: tracks}).then(() => self.addMessage(tracks))
+        self.$store.dispatch('queue/appendMany', {tracks: tracks}).then(() => {
+          if (self.track) {
+            // set queue position to selected track
+            const trackIndex = self.tracks.findIndex(track => track.id === self.track.id)
+            self.$store.dispatch('queue/currentIndex', trackIndex)
+          }
+          self.addMessage(tracks)
+        })
       })
       jQuery(self.$el).find('.ui.dropdown').dropdown('hide')
     },
