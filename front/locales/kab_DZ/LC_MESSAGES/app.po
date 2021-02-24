@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-23 15:17+0200\n"
+"POT-Creation-Date: 2021-02-24 17:09+0100\n"
 "PO-Revision-Date: 2020-07-06 23:30+0000\n"
 "Last-Translator: Slimane Selyan Amiri <selyan.kab@gmail.com>\n"
 "Language-Team: none\n"
@@ -24,7 +24,7 @@ msgctxt "Popup/Playlist/Paragraph"
 msgid "\"%{ title }\", by %{ artist }"
 msgstr ""
 
-#: front/src/components/RemoteSearchForm.vue:71
+#: front/src/components/RemoteSearchForm.vue:80
 msgctxt "Head/Fetch/Field.Placeholder"
 msgid "@channel@pod.example or https://website.example/rss.xml"
 msgstr ""
@@ -78,6 +78,14 @@ msgid "%{ count } episode"
 msgid_plural "%{ count } episodes"
 msgstr[0] ""
 msgstr[1] ""
+
+#: front/src/components/audio/artist/Card.vue:16
+#, fuzzy
+msgctxt "*/*/*"
+msgid "%{ count } episode"
+msgid_plural "%{ count } episodes"
+msgstr[0] "Iɣewwaṛen n umiḍan"
+msgstr[1] "Iɣewwaṛen n umiḍan"
 
 #: front/src/components/favorites/List.vue:10
 msgctxt "Content/Favorites/Title"
@@ -149,7 +157,7 @@ msgstr[1] ""
 #: front/src/views/channels/DetailBase.vue:5
 #: src/views/content/libraries/Card.vue:31
 #: front/src/views/content/remote/Card.vue:34
-#: src/views/library/DetailBase.vue:47
+#: src/views/library/DetailBase.vue:51
 msgctxt "*/*/*"
 msgid "%{ count } track"
 msgid_plural "%{ count } tracks"
@@ -226,7 +234,7 @@ msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } wants to follow your library \"%{ library }\""
 msgstr ""
 
-#: front/src/views/auth/ProfileBase.vue:115
+#: front/src/views/auth/ProfileBase.vue:128
 msgctxt "Head/Profile/Title"
 msgid "%{ username }'s profile"
 msgstr ""
@@ -251,8 +259,8 @@ msgctxt "*/*/*"
 msgid "90 days"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:372
-#: front/src/components/library/FileUpload.vue:373
+#: front/src/components/library/FileUpload.vue:355
+#: front/src/components/library/FileUpload.vue:356
 msgctxt "Content/Library/Help text"
 msgid "A network error occurred while uploading this file"
 msgstr ""
@@ -307,7 +315,7 @@ msgctxt "Content/*/*"
 msgid "About this license"
 msgstr ""
 
-#: front/src/components/Sidebar.vue:127
+#: front/src/components/Sidebar.vue:129
 msgctxt "Sidebar/*/List item.Link"
 msgid "About this pod"
 msgstr ""
@@ -486,22 +494,11 @@ msgid_plural "Action %{ action } was launched successfully on %{ count } element
 msgstr[0] ""
 msgstr[1] ""
 
-#: front/src/components/library/FileUpload.vue:111
-msgctxt "*/*/*"
-msgid "Actions"
-msgstr "Actions"
-
 #: front/src/components/common/ActionTable.vue:18
 #: front/src/components/library/radios/Builder.vue:63
 #: front/src/components/manage/moderation/ReportCard.vue:204
 #: front/src/components/manage/moderation/UserRequestCard.vue:113
 msgctxt "Content/*/*/Noun"
-msgid "Actions"
-msgstr "Actions"
-
-#: front/src/components/audio/track/Table.vue:15
-#, fuzzy
-msgctxt "*/*/*/Noun"
 msgid "Actions"
 msgstr "Actions"
 
@@ -511,16 +508,22 @@ msgctxt "*/*/Form-builder,Help"
 msgid "Actions"
 msgstr "Actions"
 
+#: front/src/components/audio/track/Table.vue:15
+#, fuzzy
+msgctxt "*/*/*/Noun"
+msgid "Actions"
+msgstr "Actions"
+
+#: front/src/components/library/FileUpload.vue:71
+msgctxt "*/*/*"
+msgid "Actions"
+msgstr "Actions"
+
 #: front/src/components/manage/users/UsersTable.vue:48
 #: front/src/components/manage/users/UsersTable.vue:9
 msgctxt "Content/Admin/Table"
 msgid "Active"
 msgstr "Yermed"
-
-#: front/src/views/auth/ProfileBase.vue:53
-msgctxt "Content/Profile/*"
-msgid "Activity"
-msgstr "Aqeddic"
 
 #: front/src/views/admin/ChannelDetail.vue:152
 #: src/views/admin/ChannelDetail.vue:147
@@ -541,6 +544,11 @@ msgstr "Aqeddic"
 #: front/src/views/admin/moderation/DomainsDetail.vue:156
 #: front/src/views/admin/moderation/DomainsDetail.vue:151
 msgctxt "Content/Moderation/Title"
+msgid "Activity"
+msgstr "Aqeddic"
+
+#: front/src/views/auth/ProfileBase.vue:57
+msgctxt "Content/Profile/*"
 msgid "Activity"
 msgstr "Aqeddic"
 
@@ -602,7 +610,7 @@ msgctxt "*/Playlist/Button.Label/Verb"
 msgid "Add anyways"
 msgstr ""
 
-#: front/src/components/Sidebar.vue:214 src/views/content/Base.vue:18
+#: front/src/components/Sidebar.vue:216 src/views/content/Base.vue:18
 msgctxt "*/Library/*/Verb"
 msgid "Add content"
 msgstr ""
@@ -697,7 +705,7 @@ msgctxt "*/*/Help"
 msgid "Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled."
 msgstr ""
 
-#: front/src/components/audio/VolumeControl.vue:62
+#: front/src/components/audio/VolumeControl.vue:63
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Adjust volume"
 msgstr ""
@@ -709,7 +717,7 @@ msgid "Admin"
 msgstr "Anedbal"
 
 #: front/src/components/Sidebar.vue:22 src/components/Sidebar.vue:8
-#: front/src/components/Sidebar.vue:216
+#: front/src/components/Sidebar.vue:218
 msgctxt "Sidebar/Admin/Title/Noun"
 msgid "Administration"
 msgstr "Tadbelt"
@@ -717,8 +725,8 @@ msgstr "Tadbelt"
 #: front/src/components/audio/SearchBar.vue:35
 #: front/src/components/audio/track/Table.vue:13
 #: front/src/components/channels/AlbumSelect.vue:4
-#: front/src/components/library/AlbumBase.vue:223
-#: front/src/components/library/ArtistBase.vue:217
+#: front/src/components/library/AlbumBase.vue:225
+#: front/src/components/library/ArtistBase.vue:233
 #: front/src/components/manage/library/TracksTable.vue:34
 #: front/src/components/manage/library/TracksTable.vue:2
 #: front/src/components/mixins/Report.vue:44
@@ -754,7 +762,7 @@ msgctxt "Content/*/Dropdown/Noun"
 msgid "Album name"
 msgstr "Isem n walbum"
 
-#: front/src/components/Sidebar.vue:98 src/components/Sidebar.vue:111
+#: front/src/components/Sidebar.vue:100 src/components/Sidebar.vue:113
 #: front/src/components/audio/Search.vue:19 src/components/audio/Search.vue:1
 #: front/src/components/library/Albums.vue:144
 #: front/src/components/library/TagDetail.vue:34
@@ -764,7 +772,7 @@ msgstr "Isem n walbum"
 #: front/src/components/manage/library/ArtistsTable.vue:44
 #: front/src/components/manage/library/ArtistsTable.vue:3
 #: front/src/components/manage/library/TagsTable.vue:36
-#: front/src/components/manage/library/TagsTable.vue:3 src/views/Search.vue:158
+#: front/src/components/manage/library/TagsTable.vue:3 src/views/Search.vue:171
 #: front/src/views/admin/ChannelDetail.vue:269
 #: src/views/admin/ChannelDetail.vue:264
 #: front/src/views/admin/library/AlbumsList.vue:24
@@ -780,7 +788,7 @@ msgstr "Isem n walbum"
 #: front/src/views/admin/moderation/DomainsDetail.vue:293
 #: front/src/views/admin/moderation/DomainsDetail.vue:288
 #: front/src/views/channels/DetailOverview.vue:53
-#: src/views/library/DetailBase.vue:85
+#: src/views/library/DetailBase.vue:89
 msgctxt "*/*/*"
 msgid "Albums"
 msgstr ""
@@ -813,8 +821,8 @@ msgid_plural "All %{ count } elements selected"
 msgstr[0] ""
 msgstr[1] ""
 
-#: front/src/views/channels/DetailBase.vue:183
-#: src/views/channels/DetailBase.vue:178
+#: front/src/views/channels/DetailBase.vue:187
+#: src/views/channels/DetailBase.vue:182
 msgctxt "Content/Channels/*"
 msgid "All Episodes"
 msgstr ""
@@ -959,8 +967,8 @@ msgid "Artist"
 msgstr "Artiste"
 
 #: front/src/views/auth/ProfileOverview.vue:35
-#: src/views/channels/DetailBase.vue:156
-#: front/src/views/channels/DetailBase.vue:151
+#: src/views/channels/DetailBase.vue:160
+#: front/src/views/channels/DetailBase.vue:155
 msgctxt "Content/Channel/*"
 msgid "Artist channel"
 msgstr ""
@@ -976,6 +984,12 @@ msgctxt "*/*/*"
 msgid "Artist discography"
 msgstr ""
 
+#: front/src/components/library/Artists.vue:10
+#, fuzzy
+msgctxt "Content/Search/Input.Label/Noun"
+msgid "Artist name"
+msgstr "Isem n unaẓur"
+
 #: front/src/components/mixins/Translations.vue:77
 #: front/src/components/mixins/Translations.vue:78
 msgctxt "Content/*/Dropdown/Noun"
@@ -987,18 +1001,12 @@ msgctxt "*/Search/Input.Placeholder"
 msgid "Artist, album, track…"
 msgstr ""
 
-#: front/src/components/Sidebar.vue:99 src/components/Sidebar.vue:112
-#: front/src/views/library/DetailBase.vue:82
-msgctxt "*/*/*"
-msgid "Artists"
-msgstr ""
-
 #: front/src/components/audio/Search.vue:10 src/components/audio/Search.vue:1
 #: front/src/components/library/Artists.vue:142
 #: front/src/components/library/TagDetail.vue:19
 #: front/src/components/library/TagDetail.vue:2
 #: front/src/components/manage/library/TagsTable.vue:35
-#: front/src/components/manage/library/TagsTable.vue:2 src/views/Search.vue:154
+#: front/src/components/manage/library/TagsTable.vue:2 src/views/Search.vue:165
 #: front/src/views/admin/library/ArtistsList.vue:24
 #: front/src/views/admin/library/Base.vue:5
 #: front/src/views/admin/library/LibraryDetail.vue:212
@@ -1013,10 +1021,17 @@ msgctxt "*/*/*/Noun"
 msgid "Artists"
 msgstr ""
 
+#: front/src/components/Sidebar.vue:101 src/components/Sidebar.vue:114
+#: front/src/views/library/DetailBase.vue:86
+msgctxt "*/*/*"
+msgid "Artists"
+msgstr ""
+
 #: front/src/components/favorites/List.vue:30
 #: src/components/library/Albums.vue:34
 #: front/src/components/library/Artists.vue:34
-#: src/components/library/Radios.vue:50
+#: src/components/library/Podcasts.vue:34
+#: front/src/components/library/Radios.vue:50
 #: front/src/components/manage/ChannelsTable.vue:30
 #: front/src/components/manage/library/AlbumsTable.vue:21
 #: front/src/components/manage/library/ArtistsTable.vue:30
@@ -1099,13 +1114,13 @@ msgctxt "Popup/Playlist/Title"
 msgid "Available playlists"
 msgstr ""
 
-#: front/src/components/auth/Settings.vue:35
-msgctxt "Content/Settings/Title"
+#: front/src/components/auth/Settings.vue:46
+msgctxt "Content/Channel/*"
 msgid "Avatar"
 msgstr "Tugna n umaɣnu"
 
-#: front/src/components/auth/Settings.vue:46
-msgctxt "Content/Channel/*"
+#: front/src/components/auth/Settings.vue:35
+msgctxt "Content/Settings/Title"
 msgid "Avatar"
 msgstr "Tugna n umaɣnu"
 
@@ -1160,7 +1175,7 @@ msgctxt "Content/Moderation/Help text"
 msgid "Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.)"
 msgstr ""
 
-#: front/src/components/Sidebar.vue:97 src/components/Sidebar.vue:110
+#: front/src/components/Sidebar.vue:98 src/components/Sidebar.vue:112
 msgctxt "Sidebar/Navigation/List item.Link/Verb"
 msgid "Browse"
 msgstr "Parcourir "
@@ -1196,6 +1211,12 @@ msgstr ""
 msgctxt "Content/Playlist/Title"
 msgid "Browsing playlists"
 msgstr ""
+
+#: front/src/components/library/Podcasts.vue:4
+#, fuzzy
+msgctxt "Content/Podcasts/Title"
+msgid "Browsing Podcasts"
+msgstr "Podcasts"
 
 #: front/src/components/library/Radios.vue:4
 msgctxt "Content/Radio/Title"
@@ -1243,9 +1264,9 @@ msgstr ""
 #: front/src/components/library/ArtistBase.vue:44
 #: front/src/components/library/ArtistBase.vue:39
 #: front/src/components/library/EditForm.vue:104
-#: front/src/components/library/FileUpload.vue:79
-#: front/src/components/library/FileUpload.vue:20
-#: front/src/components/library/FileUpload.vue:9
+#: front/src/components/library/FileUpload.vue:136
+#: front/src/components/library/FileUpload.vue:10
+#: front/src/components/library/Podcasts.vue:90
 #: front/src/components/library/TrackBase.vue:36
 #: front/src/components/library/TrackBase.vue:31
 #: front/src/components/library/radios/Filter.vue:43
@@ -1256,16 +1277,21 @@ msgstr ""
 #: front/src/components/playlists/PlaylistModal.vue:86
 #: front/src/views/auth/ProfileOverview.vue:43
 #: src/views/channels/DetailBase.vue:66
-#: front/src/views/channels/DetailBase.vue:149
-#: src/views/channels/DetailBase.vue:165
+#: front/src/views/channels/DetailBase.vue:153
+#: src/views/channels/DetailBase.vue:169
 #: front/src/views/channels/DetailBase.vue:61
-#: src/views/channels/DetailBase.vue:144
-#: front/src/views/channels/DetailBase.vue:160
+#: src/views/channels/DetailBase.vue:148
+#: front/src/views/channels/DetailBase.vue:164
 #: front/src/views/channels/SubscriptionsList.vue:21
-#: front/src/views/playlists/Detail.vue:51
+#: front/src/views/playlists/Detail.vue:57
 msgctxt "*/*/Button.Label/Verb"
 msgid "Cancel"
 msgstr "Sefex"
+
+#: front/src/components/audio/LibraryFollowButton.vue:4
+msgctxt "Content/Library/Card.Button.Label/Verb"
+msgid "Cancel follow request"
+msgstr "Sefsex asuter n uḍfaṛ"
 
 #: front/src/views/content/remote/Card.vue:97
 #: src/views/content/remote/Card.vue:9
@@ -1274,18 +1300,13 @@ msgctxt "Content/Library/Card.Paragraph"
 msgid "Cancel follow request"
 msgstr "Sefsex asuter n uḍfaṛ"
 
-#: front/src/components/audio/LibraryFollowButton.vue:4
-msgctxt "Content/Library/Card.Button.Label/Verb"
-msgid "Cancel follow request"
-msgstr "Sefsex asuter n uḍfaṛ"
-
 #: front/src/components/library/radios/Builder.vue:62
 msgctxt "Content/Radio/Table.Label/Noun (Value is a number of Tracks)"
 msgid "Candidates"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:369
-#: front/src/components/library/FileUpload.vue:370
+#: front/src/components/library/FileUpload.vue:352
+#: front/src/components/library/FileUpload.vue:353
 msgctxt "Content/Library/Help text"
 msgid "Cannot upload this file, ensure it is not too big"
 msgstr ""
@@ -1366,7 +1387,7 @@ msgstr ""
 
 #: front/src/components/channels/UploadForm.vue:10
 #: front/src/components/mixins/Report.vue:60
-#: src/views/channels/DetailBase.vue:326
+#: src/views/channels/DetailBase.vue:338
 #: front/src/components/mixins/Report.vue:61
 msgctxt "*/*/*"
 msgid "Channel"
@@ -1378,8 +1399,8 @@ msgctxt "Content/Moderation/Title"
 msgid "Channel data"
 msgstr ""
 
-#: front/src/components/RemoteSearchForm.vue:69
-#: front/src/components/RemoteSearchForm.vue:70
+#: front/src/components/RemoteSearchForm.vue:78
+#: front/src/components/RemoteSearchForm.vue:79
 msgctxt "*/*/*"
 msgid "Channel location"
 msgstr ""
@@ -1391,7 +1412,7 @@ msgctxt "Content/Channel/*"
 msgid "Channel Picture"
 msgstr ""
 
-#: front/src/components/Sidebar.vue:119 src/components/library/TagDetail.vue:26
+#: front/src/components/Sidebar.vue:121 src/components/library/TagDetail.vue:26
 #: front/src/views/admin/ChannelsList.vue:24 src/views/admin/Settings.vue:84
 #: front/src/views/admin/library/Base.vue:4
 #: front/src/views/admin/moderation/AccountsDetail.vue:322
@@ -1418,6 +1439,11 @@ msgctxt "Popup/Instance/Title"
 msgid "Choose your instance"
 msgstr ""
 
+#: front/src/components/Queue.vue:95
+msgctxt "*/Queue/*/Verb"
+msgid "Clear"
+msgstr "Effacer"
+
 #: front/src/components/common/InlineSearchBar.vue:25
 #: front/src/components/library/EditForm.vue:70
 #: front/src/components/library/EditForm.vue:89
@@ -1425,11 +1451,6 @@ msgstr ""
 #: front/src/components/library/EditForm.vue:5
 #: front/src/components/manage/users/InvitationForm.vue:37
 msgctxt "Content/Library/Button.Label"
-msgid "Clear"
-msgstr "Effacer"
-
-#: front/src/components/Queue.vue:92
-msgctxt "*/Queue/*/Verb"
 msgid "Clear"
 msgstr "Effacer"
 
@@ -1444,7 +1465,7 @@ msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Clear queue"
 msgstr ""
 
-#: front/src/components/audio/Player.vue:690
+#: front/src/components/audio/Player.vue:717
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Clear your queue"
 msgstr ""
@@ -1455,10 +1476,16 @@ msgctxt "Content/Library/Link.Title"
 msgid "Click to display more information about the import process for this upload"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:97
+#: front/src/components/library/FileUpload.vue:57
 msgctxt "Content/Library/Paragraph/Call to action"
 msgid "Click to select files to upload or drag and drop files or directories"
 msgstr ""
+
+#: front/src/components/Queue.vue:92
+#, fuzzy
+msgctxt "*/Queue/*/Verb"
+msgid "Close"
+msgstr "Mdel"
 
 #: front/src/components/ShortcutsModal.vue:32
 #: front/src/components/channels/UploadModal.vue:42
@@ -1607,15 +1634,21 @@ msgctxt "Content/Library/Error message.Title"
 msgid "Could not fetch remote library"
 msgstr ""
 
+#: front/src/components/manage/moderation/InstancePolicyForm.vue:58
+msgctxt "Content/Moderation/Card.Button.Label/Verb"
+msgid "Create"
+msgstr "Snulfu-d"
+
 #: front/src/components/channels/AlbumModal.vue:12
 msgctxt "*/*/Button.Label"
 msgid "Create"
 msgstr "Snulfu-d"
 
-#: front/src/components/manage/moderation/InstancePolicyForm.vue:58
-msgctxt "Content/Moderation/Card.Button.Label/Verb"
-msgid "Create"
-msgstr "Snulfu-d"
+#: front/src/components/library/Podcasts.vue:64
+#, fuzzy
+msgctxt "Content/*/Verb"
+msgid "Create a Channel"
+msgstr "Rnu amiḍan"
 
 #: front/src/views/auth/Signup.vue:4
 msgctxt "Content/Signup/Title"
@@ -1771,13 +1804,18 @@ msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Decrease volume"
 msgstr ""
 
+#: front/src/components/admin/SignupFormBuilder.vue:144
+msgctxt "*/*/*"
+msgid "Delete"
+msgstr "Kkes"
+
 #: front/src/components/auth/Settings.vue:130
 #: src/components/auth/Settings.vue:225
-#: front/src/components/library/AlbumDropdown.vue:45
+#: front/src/components/library/AlbumDropdown.vue:50
 #: front/src/components/library/EditCard.vue:99
 #: front/src/components/library/EditCard.vue:104
-#: front/src/components/library/TrackBase.vue:66
-#: front/src/components/library/TrackBase.vue:61
+#: front/src/components/library/TrackBase.vue:70
+#: front/src/components/library/TrackBase.vue:65
 #: front/src/components/manage/library/AlbumsTable.vue:191
 #: front/src/components/manage/library/ArtistsTable.vue:195
 #: front/src/components/manage/library/LibrariesTable.vue:205
@@ -1810,18 +1848,13 @@ msgstr ""
 #: front/src/views/admin/library/UploadDetail.vue:55
 #: front/src/views/admin/library/UploadDetail.vue:60
 #: front/src/views/admin/library/UploadDetail.vue:50
-#: front/src/views/channels/DetailBase.vue:93
-#: src/views/channels/DetailBase.vue:88
+#: front/src/views/channels/DetailBase.vue:97
+#: src/views/channels/DetailBase.vue:92
 #: front/src/views/channels/DetailBase.vue:11
 #: front/src/views/content/libraries/FilesTable.vue:310
 #: front/src/views/content/libraries/Form.vue:29
-#: src/views/playlists/Detail.vue:32
+#: src/views/playlists/Detail.vue:37
 msgctxt "*/*/*/Verb"
-msgid "Delete"
-msgstr "Kkes"
-
-#: front/src/components/admin/SignupFormBuilder.vue:144
-msgctxt "*/*/*"
 msgid "Delete"
 msgstr "Kkes"
 
@@ -1856,7 +1889,7 @@ msgctxt "*/*/Button.Label"
 msgid "Delete my account…"
 msgstr ""
 
-#: front/src/views/playlists/Detail.vue:37
+#: front/src/views/playlists/Detail.vue:42
 msgctxt "Popup/Playlist/Button.Label/Verb"
 msgid "Delete playlist"
 msgstr ""
@@ -1882,7 +1915,7 @@ msgctxt "Popup/Library/Title"
 msgid "Delete this album?"
 msgstr ""
 
-#: front/src/components/library/AlbumDropdown.vue:41
+#: front/src/components/library/AlbumDropdown.vue:46
 msgctxt "Popup/Channel/Title"
 msgid "Delete this album?"
 msgstr ""
@@ -1899,8 +1932,8 @@ msgctxt "Popup/Library/Title"
 msgid "Delete this channel?"
 msgstr ""
 
-#: front/src/views/channels/DetailBase.vue:89
-#: src/views/channels/DetailBase.vue:84
+#: front/src/views/channels/DetailBase.vue:93
+#: src/views/channels/DetailBase.vue:88
 #: front/src/views/channels/DetailBase.vue:7
 msgctxt "Popup/Channel/Title"
 msgid "Delete this Channel?"
@@ -1934,15 +1967,15 @@ msgctxt "Popup/Library/Title"
 msgid "Delete this tag?"
 msgstr ""
 
-#: front/src/components/library/TrackBase.vue:62
-#: front/src/components/library/TrackBase.vue:57
-msgctxt "Popup/Channel/Title"
-msgid "Delete this track?"
-msgstr ""
-
 #: front/src/views/admin/library/TrackDetail.vue:70
 #: front/src/views/admin/library/TrackDetail.vue:65
 msgctxt "Popup/Library/Title"
+msgid "Delete this track?"
+msgstr ""
+
+#: front/src/components/library/TrackBase.vue:66
+#: front/src/components/library/TrackBase.vue:61
+msgctxt "Popup/Channel/Title"
 msgid "Delete this track?"
 msgstr ""
 
@@ -1952,11 +1985,11 @@ msgctxt "Popup/Library/Title"
 msgid "Delete this upload?"
 msgstr ""
 
-#: front/src/components/library/AlbumDropdown.vue:40
-#: front/src/components/library/TrackBase.vue:61
-#: front/src/components/library/TrackBase.vue:56
-#: src/views/channels/DetailBase.vue:88
-#: front/src/views/channels/DetailBase.vue:83
+#: front/src/components/library/AlbumDropdown.vue:45
+#: front/src/components/library/TrackBase.vue:65
+#: front/src/components/library/TrackBase.vue:60
+#: src/views/channels/DetailBase.vue:92
+#: front/src/views/channels/DetailBase.vue:87
 #: src/views/channels/DetailBase.vue:6
 msgctxt "*/*/*/Verb"
 msgid "Delete…"
@@ -1965,7 +1998,8 @@ msgstr ""
 #: front/src/components/favorites/List.vue:31
 #: src/components/library/Albums.vue:35
 #: front/src/components/library/Artists.vue:35
-#: src/components/library/Radios.vue:53
+#: src/components/library/Podcasts.vue:35
+#: front/src/components/library/Radios.vue:53
 #: front/src/components/manage/ChannelsTable.vue:31
 #: front/src/components/manage/library/AlbumsTable.vue:22
 #: front/src/components/manage/library/ArtistsTable.vue:31
@@ -1990,6 +2024,14 @@ msgctxt "Content/Moderation/Placeholder"
 msgid "Describe what actions have been taken, or any other related updates…"
 msgstr ""
 
+#: front/src/components/library/radios/Builder.vue:25
+#: front/src/views/admin/library/LibraryDetail.vue:116
+#: front/src/views/admin/library/LibraryDetail.vue:111
+#: front/src/views/content/libraries/Form.vue:14 src/edits.js:18
+msgctxt "*/*/*/Noun"
+msgid "Description"
+msgstr "Aglam"
+
 #: front/src/components/audio/ChannelForm.vue:78
 #: front/src/components/audio/ChannelForm.vue:70
 #: front/src/components/audio/ChannelForm.vue:52
@@ -2007,14 +2049,6 @@ msgstr "Aglam"
 #: front/src/views/admin/library/TrackDetail.vue:177
 #: front/src/views/admin/library/TrackDetail.vue:172
 msgctxt "'*/*/*/Noun"
-msgid "Description"
-msgstr "Aglam"
-
-#: front/src/components/library/radios/Builder.vue:25
-#: front/src/views/admin/library/LibraryDetail.vue:116
-#: front/src/views/admin/library/LibraryDetail.vue:111
-#: front/src/views/content/libraries/Form.vue:14 src/edits.js:18
-msgctxt "*/*/*/Noun"
 msgid "Description"
 msgstr "Aglam"
 
@@ -2116,7 +2150,7 @@ msgctxt "Modal/*/Title"
 msgid "Do you want to confirm this action?"
 msgstr ""
 
-#: front/src/views/playlists/Detail.vue:33
+#: front/src/views/playlists/Detail.vue:38
 msgctxt "Popup/Playlist/Title/Call to action"
 msgid "Do you want to delete the playlist \"%{ playlist }\"?"
 msgstr ""
@@ -2148,7 +2182,8 @@ msgctxt "Popup/Moderation/Title/Verb"
 msgid "Do you want to report this object?"
 msgstr ""
 
-#: front/src/components/Footer.vue:43
+#: front/src/components/Footer.vue:43 src/components/auth/Plugin.vue:8
+#: front/src/components/auth/Plugin.vue:4
 msgctxt "Footer/*/List item.Link/Short, Noun"
 msgid "Documentation"
 msgstr "Amnir"
@@ -2201,7 +2236,7 @@ msgctxt "Content/Notifications/Button.Label/Verb"
 msgid "Donate"
 msgstr "Tawsa"
 
-#: front/src/components/library/TrackBase.vue:206
+#: front/src/components/library/TrackBase.vue:220
 #: front/src/views/admin/library/UploadDetail.vue:50
 #: front/src/views/admin/library/UploadDetail.vue:45
 msgctxt "Content/Track/Link/Verb"
@@ -2235,6 +2270,11 @@ msgctxt "Content/Channels/Paragraph"
 msgid "Drag and drop your files here or open the browser to upload your files"
 msgstr ""
 
+#: front/src/components/Queue.vue:277
+msgctxt "*/*/*"
+msgid "Duration"
+msgstr "Durée"
+
 #: front/src/components/audio/track/Table.vue:14
 #: front/src/components/library/TrackDetail.vue:14
 #: front/src/components/library/TrackDetail.vue:9
@@ -2248,25 +2288,25 @@ msgctxt "Content/*/*"
 msgid "Duration"
 msgstr "Durée"
 
-#: front/src/components/Queue.vue:274
-msgctxt "*/*/*"
-msgid "Duration"
-msgstr "Durée"
-
 #: front/src/views/auth/EmailConfirm.vue:23
 msgctxt "Content/Signup/Message"
 msgid "E-mail address confirmed"
 msgstr ""
 
+#: front/src/views/playlists/Detail.vue:78
+msgctxt "Content/Home/CreatePlaylist"
+msgid "Edit"
+msgstr "Beddel"
+
 #: front/src/components/auth/Settings.vue:222
 #: front/src/components/channels/UploadForm.vue:205
 #: front/src/components/common/RenderedDescription.vue:22
 #: front/src/components/common/RenderedDescription.vue:4
-#: front/src/components/library/AlbumDropdown.vue:36
+#: front/src/components/library/AlbumDropdown.vue:41
+#: front/src/components/library/ArtistBase.vue:78
 #: front/src/components/library/ArtistBase.vue:73
-#: front/src/components/library/ArtistBase.vue:68
-#: front/src/components/library/TrackBase.vue:57
-#: front/src/components/library/TrackBase.vue:52
+#: front/src/components/library/TrackBase.vue:61
+#: front/src/components/library/TrackBase.vue:56
 #: front/src/components/manage/moderation/InstancePolicyCard.vue:45
 #: front/src/components/radios/Card.vue:20
 #: src/views/admin/library/AlbumDetail.vue:64
@@ -2275,14 +2315,9 @@ msgstr ""
 #: front/src/views/admin/library/ArtistDetail.vue:58
 #: front/src/views/admin/library/TrackDetail.vue:64
 #: front/src/views/admin/library/TrackDetail.vue:59
-#: front/src/views/library/DetailBase.vue:96 src/views/playlists/Detail.vue:24
+#: front/src/views/library/DetailBase.vue:100 src/views/playlists/Detail.vue:28
 #: front/src/views/playlists/Detail.vue:1
 msgctxt "Content/*/Button.Label/Verb"
-msgid "Edit"
-msgstr "Beddel"
-
-#: front/src/views/playlists/Detail.vue:71
-msgctxt "Content/Home/CreatePlaylist"
 msgid "Edit"
 msgstr "Beddel"
 
@@ -2325,8 +2360,8 @@ msgctxt "Content/*/Title"
 msgid "Edit this track"
 msgstr ""
 
-#: front/src/views/channels/DetailBase.vue:85
-#: src/views/channels/DetailBase.vue:80
+#: front/src/views/channels/DetailBase.vue:89
+#: src/views/channels/DetailBase.vue:84
 #: front/src/views/channels/DetailBase.vue:3
 msgctxt "*/*/*/Verb"
 msgid "Edit…"
@@ -2362,13 +2397,13 @@ msgctxt "Content/*/*"
 msgid "Email address"
 msgstr "Tansa n imayl"
 
-#: front/src/components/library/AlbumDropdown.vue:24
+#: front/src/components/library/AlbumDropdown.vue:29
+#: front/src/components/library/ArtistBase.vue:62
 #: front/src/components/library/ArtistBase.vue:57
-#: front/src/components/library/ArtistBase.vue:52
-#: front/src/components/library/TrackBase.vue:45
-#: front/src/components/library/TrackBase.vue:40
+#: front/src/components/library/TrackBase.vue:49
+#: front/src/components/library/TrackBase.vue:44
 #: src/views/channels/DetailBase.vue:75
-#: front/src/views/channels/DetailBase.vue:70 src/views/playlists/Detail.vue:28
+#: front/src/views/channels/DetailBase.vue:70 src/views/playlists/Detail.vue:34
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Embed"
 msgstr "Seddu"
@@ -2385,13 +2420,13 @@ msgstr ""
 
 #: front/src/components/library/ArtistBase.vue:34
 #: front/src/components/library/ArtistBase.vue:29
-#: front/src/views/channels/DetailBase.vue:140
-#: src/views/channels/DetailBase.vue:135
+#: front/src/views/channels/DetailBase.vue:144
+#: src/views/channels/DetailBase.vue:139
 msgctxt "Popup/Artist/Title/Verb"
 msgid "Embed this artist work on your website"
 msgstr ""
 
-#: front/src/views/playlists/Detail.vue:42
+#: front/src/views/playlists/Detail.vue:48
 msgctxt "Popup/Album/Title/Verb"
 msgid "Embed this playlist on your website"
 msgstr ""
@@ -2431,7 +2466,7 @@ msgctxt "*/*/*/State of feature"
 msgid "Enabled"
 msgstr "Yermed"
 
-#: front/src/components/auth/Plugin.vue:14
+#: front/src/components/auth/Plugin.vue:21
 #, fuzzy
 msgctxt "*/*/*"
 msgid "Enabled"
@@ -2450,11 +2485,6 @@ msgstr ""
 #: front/src/components/library/Albums.vue:143
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Enter album title…"
-msgstr ""
-
-#: front/src/components/library/Artists.vue:141
-msgctxt "Content/Search/Input.Placeholder"
-msgid "Enter artist name…"
 msgstr ""
 
 #: front/src/components/playlists/PlaylistModal.vue:174
@@ -2588,13 +2618,12 @@ msgctxt "Content/Moderation/Table"
 msgid "Error while fetching node info"
 msgstr ""
 
-#: front/src/components/RemoteSearchForm.vue:4
+#: front/src/components/RemoteSearchForm.vue:13
 msgctxt "Content/*/Error message.Title"
 msgid "Error while fetching object"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:63
-#: front/src/components/library/FileUpload.vue:4
+#: front/src/components/library/FileUpload.vue:120
 msgctxt "Content/*/Error message.Title"
 msgid "Error while launching import"
 msgstr ""
@@ -2609,7 +2638,7 @@ msgctxt "Content/*/Error message.Title"
 msgid "Error while saving channel"
 msgstr ""
 
-#: front/src/components/auth/Plugin.vue:6
+#: front/src/components/auth/Plugin.vue:13
 msgctxt "Content/*/Error message.Title"
 msgid "Error while saving plugin"
 msgstr ""
@@ -2698,7 +2727,7 @@ msgctxt "*/*/Button,Label"
 msgid "Expand"
 msgstr "Développer"
 
-#: front/src/App.vue:316 src/components/audio/Player.vue:679
+#: front/src/App.vue:316 src/components/audio/Player.vue:706
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Expand queue"
 msgstr ""
@@ -2760,7 +2789,7 @@ msgctxt "*/*/*"
 msgid "Favorited tracks"
 msgstr ""
 
-#: front/src/components/Sidebar.vue:115
+#: front/src/components/Sidebar.vue:117
 #: src/components/mixins/Translations.vue:103
 #: front/src/components/mixins/Translations.vue:104
 msgctxt "Sidebar/Favorites/List item.Link/Noun"
@@ -2772,6 +2801,11 @@ msgstr "Imenyafen"
 msgctxt "*/*/*"
 msgid "Federation"
 msgstr "Tamatut"
+
+#: front/src/components/RemoteSearchForm.vue:7
+msgctxt "Content/Search/Input.Label/Noun"
+msgid "Fediverse"
+msgstr ""
 
 #: front/src/components/library/EditCard.vue:43
 msgctxt "Content/Library/Card.Table.Header/Short"
@@ -2788,7 +2822,7 @@ msgctxt "*/*/Form-builder,Help"
 msgid "Field type"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:108
+#: front/src/components/library/FileUpload.vue:68
 msgctxt "Content/Library/Table.Label"
 msgid "Filename"
 msgstr "Nom de fichier"
@@ -2931,7 +2965,7 @@ msgstr ""
 
 #: front/src/components/Home.vue:87
 msgctxt "Content/Home/Paragraph"
-msgid "Funkwhale is free and developped by a friendly community of volunteers."
+msgid "Funkwhale is free and developed by a friendly community of volunteers."
 msgstr ""
 
 #: front/src/components/About.vue:77
@@ -3014,7 +3048,7 @@ msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "Hide content from this artist"
 msgstr ""
 
-#: front/src/components/Queue.vue:275 src/components/audio/Player.vue:691
+#: front/src/components/Queue.vue:278 src/components/audio/Player.vue:718
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Hide content from this artist…"
 msgstr ""
@@ -3097,16 +3131,17 @@ msgctxt "Content/Library/Paragraph"
 msgid "Import hasn't started yet"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:61
-#: front/src/components/library/FileUpload.vue:2
+#: front/src/components/library/FileUpload.vue:118
 msgctxt "Content/Library/Title/Verb"
 msgid "Import music from your server"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:50
-msgctxt "Content/Library/Input.Label/Noun"
-msgid "Import reference"
-msgstr ""
+#: front/src/components/library/FileUpload.vue:127
+#: front/src/components/library/FileUpload.vue:1
+#, fuzzy
+msgctxt "Content/Library/Title/Verb"
+msgid "Import status"
+msgstr "Addad n umiḍan"
 
 #: front/src/components/manage/library/UploadsTable.vue:20
 #: front/src/components/manage/library/UploadsTable.vue:58
@@ -3118,14 +3153,6 @@ msgstr ""
 msgctxt "Content/*/*/Noun"
 msgid "Import status"
 msgstr ""
-
-#: front/src/components/library/FileUpload.vue:71
-#: front/src/components/library/FileUpload.vue:12
-#: front/src/components/library/FileUpload.vue:1
-#, fuzzy
-msgctxt "Content/Library/Title/Verb"
-msgid "Import status"
-msgstr "Addad n umiḍan"
 
 #: front/src/components/mixins/Translations.vue:41
 #: front/src/components/mixins/Translations.vue:42
@@ -3226,8 +3253,8 @@ msgctxt "Content/*/*/Noun"
 msgid "Internal notes"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:376
-#: front/src/components/library/FileUpload.vue:377
+#: front/src/components/library/FileUpload.vue:359
+#: front/src/components/library/FileUpload.vue:360
 msgctxt "Content/Library/Help text"
 msgid "Invalid file type, ensure you are uploading an audio file. Supported file extensions are %{ extensions }"
 msgstr ""
@@ -3408,19 +3435,8 @@ msgctxt "Content/Library/Paragraph"
 msgid "Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family."
 msgstr ""
 
-#: front/src/components/library/Home.vue:78
-#, fuzzy
-msgctxt "Head/Home/Title"
-msgid "Library"
-msgstr "Tanedlist"
-
-#: front/src/views/library/DetailBase.vue:169
-msgctxt "*/*/*"
-msgid "Library"
-msgstr "Tanedlist"
-
 #: front/src/components/Sidebar.vue:28 src/components/Sidebar.vue:14
-#: front/src/components/auth/Plugin.vue:19
+#: front/src/components/auth/Plugin.vue:26
 #: front/src/components/manage/library/UploadsTable.vue:54
 #: front/src/components/manage/library/UploadsTable.vue:2
 #: front/src/components/manage/users/UsersTable.vue:174
@@ -3430,6 +3446,17 @@ msgstr "Tanedlist"
 #: front/src/views/admin/moderation/AccountsDetail.vue:538
 #: front/src/components/mixins/Report.vue:97 src/entities.js:132
 msgctxt "*/*/*/Noun"
+msgid "Library"
+msgstr "Tanedlist"
+
+#: front/src/components/library/Home.vue:78
+#, fuzzy
+msgctxt "Head/Home/Title"
+msgid "Library"
+msgstr "Tanedlist"
+
+#: front/src/views/library/DetailBase.vue:181
+msgctxt "*/*/*"
 msgid "Library"
 msgstr "Tanedlist"
 
@@ -3470,7 +3497,7 @@ msgctxt "Content/Library/Message"
 msgid "Library updated"
 msgstr ""
 
-#: front/src/components/auth/Plugin.vue:24
+#: front/src/components/auth/Plugin.vue:31
 msgctxt "*/*/Paragraph/Noun"
 msgid "Library where files should be imported."
 msgstr ""
@@ -3663,25 +3690,25 @@ msgctxt "Content/Library/Paragraph"
 msgid "Looks like you don't have a library, it's time to create one."
 msgstr ""
 
-#: front/src/components/audio/Player.vue:680
-#: src/components/audio/Player.vue:681
+#: front/src/components/audio/Player.vue:707
+#: src/components/audio/Player.vue:708
 msgctxt "Sidebar/Player/Icon.Tooltip"
 msgid "Looping disabled. Click to switch to single-track looping."
 msgstr ""
 
-#: front/src/components/audio/Player.vue:683
-#: src/components/audio/Player.vue:684
+#: front/src/components/audio/Player.vue:710
+#: src/components/audio/Player.vue:711
 msgctxt "Sidebar/Player/Icon.Tooltip"
 msgid "Looping on a single track. Click to switch to whole queue looping."
 msgstr ""
 
-#: front/src/components/audio/Player.vue:686
-#: src/components/audio/Player.vue:687
+#: front/src/components/audio/Player.vue:713
+#: src/components/audio/Player.vue:714
 msgctxt "Sidebar/Player/Icon.Tooltip"
 msgid "Looping on whole queue. Click to disable looping."
 msgstr ""
 
-#: front/src/components/Sidebar.vue:205
+#: front/src/components/Sidebar.vue:207
 msgctxt "Sidebar/*/Hidden text"
 msgid "Main menu"
 msgstr "Umuɣ agejdan"
@@ -3755,7 +3782,7 @@ msgctxt "Content/*/*/Unit"
 msgid "MB"
 msgstr "KAṬ"
 
-#: front/src/components/audio/Player.vue:672
+#: front/src/components/audio/Player.vue:699
 msgctxt "Sidebar/Player/Hidden text"
 msgid "Media player"
 msgstr "Imeɣri n ugetmedia"
@@ -3767,8 +3794,8 @@ msgctxt "*/*/Field.Label/Noun"
 msgid "Message"
 msgstr "Izen"
 
-#: front/src/views/channels/DetailBase.vue:117
-#: src/views/channels/DetailBase.vue:112
+#: front/src/views/channels/DetailBase.vue:121
+#: src/views/channels/DetailBase.vue:116
 msgctxt "Content/Channel/Paragraph"
 msgid "Mirrored from %{ domain }"
 msgstr ""
@@ -3818,7 +3845,7 @@ msgctxt "Content/Playlist/Dropdown/Noun"
 msgid "Modification date"
 msgstr ""
 
-#: front/src/components/Sidebar.vue:123
+#: front/src/components/Sidebar.vue:125
 msgctxt "Footer/About/List item.Link"
 msgid "More"
 msgstr "Ugar"
@@ -3829,10 +3856,10 @@ msgid "More results 🡒"
 msgstr ""
 
 #: front/src/components/audio/PlayButton.vue:105
-#: front/src/components/library/AlbumDropdown.vue:113
+#: front/src/components/library/AlbumDropdown.vue:128
 #: front/src/components/library/ArtistBase.vue:50
 #: front/src/components/library/ArtistBase.vue:45
-#: front/src/components/library/TrackBase.vue:207
+#: front/src/components/library/TrackBase.vue:221
 msgctxt "*/*/Button.Label/Noun"
 msgid "More…"
 msgstr "Ugar…"
@@ -3847,19 +3874,19 @@ msgctxt "*/*/*"
 msgid "Move up"
 msgstr "Ali d asawen"
 
+#: front/src/views/admin/Settings.vue:83
+msgctxt "*/*/*/Noun"
+msgid "Music"
+msgstr "Aẓawan"
+
 #: front/src/components/mixins/Translations.vue:62
 #: front/src/components/mixins/Translations.vue:63
 msgctxt "*/*/*"
 msgid "Music"
 msgstr "Aẓawan"
 
-#: front/src/views/admin/Settings.vue:83
-msgctxt "*/*/*/Noun"
-msgid "Music"
-msgstr "Aẓawan"
-
-#: front/src/components/audio/Player.vue:678
-#: front/src/components/audio/VolumeControl.vue:61
+#: front/src/components/audio/Player.vue:705
+#: front/src/components/audio/VolumeControl.vue:62
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Mute"
 msgstr "Sgugem"
@@ -3901,7 +3928,7 @@ msgctxt "Content/Library/Title"
 msgid "My libraries"
 msgstr ""
 
-#: front/src/components/Sidebar.vue:106
+#: front/src/components/Sidebar.vue:108
 msgctxt "*/*/*/Noun"
 msgid "My Library"
 msgstr ""
@@ -4043,7 +4070,7 @@ msgctxt "Popup/Channels/Title/Verb"
 msgid "New serie"
 msgstr ""
 
-#: front/src/components/Queue.vue:150
+#: front/src/components/Queue.vue:153
 msgctxt "Sidebar/Player/Paragraph"
 msgid "New tracks will be appended here automatically."
 msgstr ""
@@ -4065,7 +4092,7 @@ msgctxt "*/*/Button.Label"
 msgid "Next step"
 msgstr ""
 
-#: front/src/App.vue:315 src/components/audio/Player.vue:676
+#: front/src/App.vue:315 src/components/audio/Player.vue:703
 msgctxt "Sidebar/Player/Icon.Tooltip"
 msgid "Next track"
 msgstr "Tafuɣalt tuḍfirt"
@@ -4098,11 +4125,6 @@ msgctxt "Content/Home/Paragraph"
 msgid "No description available."
 msgstr ""
 
-#: front/src/components/manage/moderation/DomainsTable.vue:80
-msgctxt "Content/Home/Placeholder"
-msgid "No interactions with other pods yet"
-msgstr ""
-
 #: front/src/components/audio/SearchBar.vue:56
 msgctxt "Sidebar/Search/Error"
 msgid "No matches found"
@@ -4118,6 +4140,12 @@ msgctxt "Content/Notifications/Paragraph"
 msgid "No notification to show."
 msgstr ""
 
+#: front/src/components/manage/moderation/DomainsTable.vue:69
+#, fuzzy
+msgctxt "Content/Home/Placeholder"
+msgid "No other pods found"
+msgstr "Ur d-nufi ara inmeɣrayen"
+
 #: front/src/components/playlists/PlaylistModal.vue:77
 #: front/src/components/playlists/PlaylistModal.vue:4
 #: front/src/components/playlists/Widget.vue:14
@@ -4131,8 +4159,14 @@ msgctxt "Popup/Playlist/EmptyState"
 msgid "No results matching your filter"
 msgstr ""
 
-#: front/src/components/library/Albums.vue:56
-msgctxt "Content/Albums/Placeholder"
+#: front/src/components/library/Artists.vue:65
+#: src/components/library/Podcasts.vue:58
+msgctxt "Content/Artists/Placeholder"
+msgid "No results matching your query"
+msgstr ""
+
+#: front/src/components/library/Radios.vue:71
+msgctxt "Content/Radios/Placeholder"
 msgid "No results matching your query"
 msgstr ""
 
@@ -4141,13 +4175,8 @@ msgctxt "Content/Playlists/Placeholder"
 msgid "No results matching your query"
 msgstr ""
 
-#: front/src/components/library/Artists.vue:65
-msgctxt "Content/Artists/Placeholder"
-msgid "No results matching your query"
-msgstr ""
-
-#: front/src/components/library/Radios.vue:71
-msgctxt "Content/Radios/Placeholder"
+#: front/src/components/library/Albums.vue:56
+msgctxt "Content/Albums/Placeholder"
 msgid "No results matching your query"
 msgstr ""
 
@@ -4215,7 +4244,7 @@ msgctxt "*/Form/Paragraph"
 msgid "Nothing to preview."
 msgstr ""
 
-#: front/src/components/Sidebar.vue:215
+#: front/src/components/Sidebar.vue:217
 #: src/components/mixins/Translations.vue:127
 #: front/src/views/Notifications.vue:151
 #: src/components/mixins/Translations.vue:128
@@ -4244,13 +4273,13 @@ msgctxt "Content/Library/Card.Table.Header/Short"
 msgid "Old value"
 msgstr ""
 
-#: front/src/components/manage/users/InvitationsTable.vue:20
-msgctxt "Content/Admin/Dropdown/Adjective"
+#: front/src/components/About.vue:89
+msgctxt "*/*/*/State of registrations"
 msgid "Open"
 msgstr "Ldi"
 
-#: front/src/components/About.vue:89
-msgctxt "*/*/*/State of registrations"
+#: front/src/components/manage/users/InvitationsTable.vue:20
+msgctxt "Content/Admin/Dropdown/Adjective"
 msgid "Open"
 msgstr "Ldi"
 
@@ -4266,18 +4295,18 @@ msgctxt "Content/Moderation/Verb"
 msgid "Open in moderation interface"
 msgstr ""
 
-#: front/src/components/library/AlbumDropdown.vue:54
+#: front/src/components/library/AlbumDropdown.vue:59
+#: front/src/components/library/ArtistBase.vue:88
 #: front/src/components/library/ArtistBase.vue:83
-#: front/src/components/library/ArtistBase.vue:78
 #: front/src/components/library/TagDetail.vue:11
-#: front/src/components/library/TrackBase.vue:75
-#: front/src/components/library/TrackBase.vue:70
+#: front/src/components/library/TrackBase.vue:79
+#: front/src/components/library/TrackBase.vue:74
 #: front/src/components/manage/moderation/ReportCard.vue:126
-#: front/src/views/auth/ProfileBase.vue:18
-#: src/views/channels/DetailBase.vue:100
-#: front/src/views/channels/DetailBase.vue:95
+#: front/src/views/auth/ProfileBase.vue:22
+#: src/views/channels/DetailBase.vue:104
+#: front/src/views/channels/DetailBase.vue:99
 #: src/views/channels/DetailBase.vue:4
-#: front/src/views/library/DetailBase.vue:16
+#: front/src/views/library/DetailBase.vue:20
 msgctxt "Content/Moderation/Link"
 msgid "Open in moderation interface"
 msgstr ""
@@ -4355,7 +4384,8 @@ msgstr "Smizzwer"
 #: front/src/components/favorites/List.vue:20
 #: src/components/library/Albums.vue:24
 #: front/src/components/library/Artists.vue:24
-#: src/components/library/Radios.vue:39
+#: src/components/library/Podcasts.vue:24
+#: front/src/components/library/Radios.vue:39
 #: front/src/components/manage/ChannelsTable.vue:20
 #: front/src/components/manage/library/AlbumsTable.vue:11
 #: front/src/components/manage/library/ArtistsTable.vue:20
@@ -4378,6 +4408,7 @@ msgstr "Tri"
 
 #: front/src/components/library/Albums.vue:32
 #: src/components/library/Artists.vue:32
+#: front/src/components/library/Podcasts.vue:32
 #: front/src/components/manage/ChannelsTable.vue:28
 #: front/src/components/manage/library/AlbumsTable.vue:19
 #: front/src/components/manage/library/ArtistsTable.vue:28
@@ -4392,30 +4423,30 @@ msgctxt "Content/Search/Dropdown.Label/Noun"
 msgid "Ordering direction"
 msgstr ""
 
-#: front/src/components/mixins/Translations.vue:52
-#: front/src/components/mixins/Translations.vue:53
-msgctxt "Content/Moderation/Dropdown"
-msgid "Other"
-msgstr "Wiyaḍ"
-
 #: front/src/components/mixins/Translations.vue:63
 #: front/src/components/mixins/Translations.vue:64
 msgctxt "*/*/*"
 msgid "Other"
 msgstr "Wiyaḍ"
 
-#: front/src/views/channels/DetailBase.vue:180
-#: src/views/channels/DetailBase.vue:175
-msgctxt "Content/Channels/Link"
-msgid "Overview"
-msgstr "Agzul"
+#: front/src/components/mixins/Translations.vue:52
+#: front/src/components/mixins/Translations.vue:53
+msgctxt "Content/Moderation/Dropdown"
+msgid "Other"
+msgstr "Wiyaḍ"
 
-#: front/src/views/auth/ProfileBase.vue:50
+#: front/src/views/auth/ProfileBase.vue:54
 msgctxt "Content/Profile/Link"
 msgid "Overview"
 msgstr "Agzul"
 
-#: front/src/views/library/DetailBase.vue:28
+#: front/src/views/channels/DetailBase.vue:184
+#: src/views/channels/DetailBase.vue:179
+msgctxt "Content/Channels/Link"
+msgid "Overview"
+msgstr "Agzul"
+
+#: front/src/views/library/DetailBase.vue:32
 msgctxt "*/*/*"
 msgid "Owned by %{ username }"
 msgstr ""
@@ -4477,12 +4508,12 @@ msgctxt "Content/Signup/Card.Title"
 msgid "Password updated successfully"
 msgstr ""
 
-#: front/src/components/RemoteSearchForm.vue:14
+#: front/src/components/RemoteSearchForm.vue:23
 msgctxt "Content/Fetch/Paragraph"
 msgid "Paste here the RSS url or the fediverse address to subscribe to its feed."
 msgstr ""
 
-#: front/src/App.vue:314 src/components/audio/Player.vue:675
+#: front/src/App.vue:314 src/components/audio/Player.vue:702
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Pause track"
 msgstr ""
@@ -4498,7 +4529,15 @@ msgctxt "Content/Moderation/Card.List item"
 msgid "Paused"
 msgstr "En Pause"
 
-#: front/src/components/library/FileUpload.vue:141
+#: front/src/components/channels/UploadForm.vue:77
+#: front/src/components/channels/UploadForm.vue:50
+#: front/src/components/channels/UploadForm.vue:41
+#: front/src/components/channels/UploadForm.vue:3
+msgctxt "Channels/*/*"
+msgid "Pending"
+msgstr "Yegguni"
+
+#: front/src/components/library/FileUpload.vue:101
 #: front/src/components/manage/library/UploadsTable.vue:23
 #: front/src/components/manage/moderation/UserRequestCard.vue:44
 #: front/src/components/manage/moderation/UserRequestCard.vue:2
@@ -4507,14 +4546,6 @@ msgstr "En Pause"
 #: front/src/views/content/libraries/FilesTable.vue:24
 #: front/src/components/mixins/Translations.vue:33
 msgctxt "Content/Library/*/Short"
-msgid "Pending"
-msgstr "Yegguni"
-
-#: front/src/components/channels/UploadForm.vue:77
-#: front/src/components/channels/UploadForm.vue:50
-#: front/src/components/channels/UploadForm.vue:41
-#: front/src/components/channels/UploadForm.vue:3
-msgctxt "Channels/*/*"
 msgid "Pending"
 msgstr "Yegguni"
 
@@ -4528,7 +4559,7 @@ msgctxt "Content/Library/Label"
 msgid "Pending files"
 msgstr ""
 
-#: front/src/components/Sidebar.vue:207
+#: front/src/components/Sidebar.vue:209
 msgctxt "Sidebar/Notifications/Hidden text"
 msgid "Pending follow requests"
 msgstr ""
@@ -4539,7 +4570,7 @@ msgctxt "Content/Admin/*/Noun"
 msgid "Pending review"
 msgstr "Ittraǧu acegger"
 
-#: front/src/components/Sidebar.vue:208
+#: front/src/components/Sidebar.vue:210
 msgctxt "Sidebar/Moderation/Hidden text"
 msgid "Pending review edits"
 msgstr ""
@@ -4559,9 +4590,9 @@ msgctxt "Content/*/*/Noun"
 msgid "Permissions"
 msgstr "Tisirag"
 
-#: front/src/components/audio/track/Table.vue:9
-#, fuzzy
-msgctxt "*/*/*/Noun"
+#: front/src/views/channels/DetailBase.vue:135
+#: src/views/channels/DetailBase.vue:130
+msgctxt "Content/Channels/Button.Label/Verb"
 msgid "Play"
 msgstr "Seddu"
 
@@ -4573,9 +4604,9 @@ msgctxt "*/Queue/Button.Label/Short, Verb"
 msgid "Play"
 msgstr "Seddu"
 
-#: front/src/views/channels/DetailBase.vue:131
-#: src/views/channels/DetailBase.vue:126
-msgctxt "Content/Channels/Button.Label/Verb"
+#: front/src/components/audio/track/Table.vue:9
+#, fuzzy
+msgctxt "*/*/*/Noun"
 msgid "Play"
 msgstr "Seddu"
 
@@ -4584,7 +4615,7 @@ msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play album"
 msgstr ""
 
-#: front/src/views/playlists/Detail.vue:20
+#: front/src/views/playlists/Detail.vue:22
 msgctxt "Content/Queue/Button.Label/Short, Verb"
 msgid "Play all"
 msgstr ""
@@ -4632,18 +4663,18 @@ msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play similar songs"
 msgstr ""
 
-#: front/src/components/Sidebar.vue:206
+#: front/src/components/Sidebar.vue:208
 msgctxt "Sidebar/Player/Hidden text"
 msgid "Play this track"
 msgstr ""
 
-#: front/src/App.vue:313 src/components/audio/Player.vue:674
-msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
+#: front/src/components/audio/PlayButton.vue:83
+msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play track"
 msgstr ""
 
-#: front/src/components/audio/PlayButton.vue:83
-msgctxt "*/Queue/Dropdown/Button/Title"
+#: front/src/App.vue:313 src/components/audio/Player.vue:701
+msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Play track"
 msgstr ""
 
@@ -4652,7 +4683,7 @@ msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play tracks"
 msgstr ""
 
-#: front/src/components/mixins/Report.vue:84 src/views/playlists/Detail.vue:129
+#: front/src/components/mixins/Report.vue:84 src/views/playlists/Detail.vue:136
 #: front/src/components/mixins/Report.vue:85
 msgctxt "*/*/*"
 msgid "Playlist"
@@ -4692,9 +4723,9 @@ msgctxt "Content/Playlist/Dropdown.Label"
 msgid "Playlist visibility"
 msgstr ""
 
-#: front/src/components/Sidebar.vue:100 src/components/Sidebar.vue:113
+#: front/src/components/Sidebar.vue:102 src/components/Sidebar.vue:115
 #: front/src/components/library/Home.vue:16 src/components/library/Home.vue:1
-#: front/src/components/mixins/Translations.vue:115 src/views/Search.vue:166
+#: front/src/components/mixins/Translations.vue:115 src/views/Search.vue:181
 #: front/src/views/admin/ChannelDetail.vue:191
 #: src/views/admin/ChannelDetail.vue:186 front/src/views/admin/Settings.vue:85
 #: src/views/admin/library/AlbumDetail.vue:176
@@ -4746,16 +4777,28 @@ msgid "Podcast"
 msgstr ""
 
 #: front/src/views/auth/ProfileOverview.vue:34
-#: src/views/channels/DetailBase.vue:155
-#: front/src/views/channels/DetailBase.vue:150
+#: src/views/channels/DetailBase.vue:159
+#: front/src/views/channels/DetailBase.vue:154
 msgctxt "Content/Channel/*"
 msgid "Podcast channel"
 msgstr ""
 
-#: front/src/components/audio/ChannelForm.vue:217
+#: front/src/components/library/Podcasts.vue:10
+#, fuzzy
+msgctxt "Content/Search/Input.Label/Noun"
+msgid "Podcast Title"
+msgstr "Podcasts"
+
+#: front/src/components/Sidebar.vue:99 src/components/audio/ChannelForm.vue:217
 #: front/src/components/audio/SearchBar.vue:91
-#: src/components/audio/SearchBar.vue:187
+#: src/components/audio/SearchBar.vue:187 front/src/views/Search.vue:194
 msgctxt "*/*/*"
+msgid "Podcasts"
+msgstr "Podcasts"
+
+#: front/src/components/library/Podcasts.vue:170
+#, fuzzy
+msgctxt "*/*/*/Noun"
 msgid "Podcasts"
 msgstr "Podcasts"
 
@@ -4798,7 +4841,7 @@ msgctxt "*/*/Button.Label/Verb"
 msgid "Previous step"
 msgstr ""
 
-#: front/src/components/audio/Player.vue:673
+#: front/src/components/audio/Player.vue:700
 msgctxt "Sidebar/Player/Icon.Tooltip"
 msgid "Previous track"
 msgstr "Tafuɣalt tuzwirt"
@@ -4809,7 +4852,7 @@ msgctxt "Content/Settings/Dropdown/Short"
 msgid "Private"
 msgstr "Uslig"
 
-#: front/src/views/library/DetailBase.vue:171
+#: front/src/views/library/DetailBase.vue:183
 msgctxt "Content/Library/Card.Help text"
 msgid "Private"
 msgstr "Uslig"
@@ -4819,11 +4862,6 @@ msgstr "Uslig"
 msgctxt "Content/Library/Card.List item"
 msgid "Problem during scanning"
 msgstr ""
-
-#: front/src/components/library/FileUpload.vue:56
-msgctxt "Content/Library/Button.Label"
-msgid "Proceed"
-msgstr "Kemmel"
 
 #: front/src/views/auth/EmailConfirm.vue:26
 #: front/src/views/auth/PasswordResetConfirm.vue:31
@@ -4838,7 +4876,7 @@ msgctxt "Content/Channel/Paragraph"
 msgid "Processed uploads:"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:17
+#: front/src/components/library/FileUpload.vue:16
 msgctxt "Content/Library/Tab.Title/Short"
 msgid "Processing"
 msgstr ""
@@ -4859,7 +4897,7 @@ msgctxt "*/*/*/Noun"
 msgid "Profile"
 msgstr "Ameγnu"
 
-#: front/src/views/library/DetailBase.vue:173
+#: front/src/views/library/DetailBase.vue:185
 msgctxt "Content/Library/Card.Help text"
 msgid "Public"
 msgstr "Azayez"
@@ -4916,12 +4954,12 @@ msgctxt "Popup/Library/Title"
 msgid "Purge skipped files?"
 msgstr ""
 
-#: front/src/components/Queue.vue:273
+#: front/src/components/Queue.vue:276
 msgctxt "*/*/*"
 msgid "Queue"
 msgstr ""
 
-#: front/src/components/Queue.vue:339 src/components/audio/Player.vue:328
+#: front/src/components/Queue.vue:342 src/components/audio/Player.vue:329
 msgctxt "Content/Queue/Message"
 msgid "Queue shuffled!"
 msgstr ""
@@ -4953,9 +4991,9 @@ msgctxt "Content/Radio/Message"
 msgid "Radio updated"
 msgstr ""
 
-#: front/src/components/Sidebar.vue:101 src/components/Sidebar.vue:114
+#: front/src/components/Sidebar.vue:103 src/components/Sidebar.vue:116
 #: front/src/components/library/Radios.vue:151
-#: front/src/components/mixins/Translations.vue:119 src/views/Search.vue:170
+#: front/src/components/mixins/Translations.vue:119 src/views/Search.vue:185
 #: front/src/components/mixins/Translations.vue:120
 msgctxt "*/*/*"
 msgid "Radios"
@@ -5142,13 +5180,13 @@ msgctxt "Content/Admin/Table, User role"
 msgid "Regular user"
 msgstr ""
 
-#: front/src/components/library/EditCard.vue:96 src/views/library/Edit.vue:44
-msgctxt "Content/Library/Button.Label"
+#: front/src/components/notifications/NotificationRow.vue:79
+msgctxt "Content/*/Button.Label/Verb"
 msgid "Reject"
 msgstr "Agi"
 
-#: front/src/components/notifications/NotificationRow.vue:79
-msgctxt "Content/*/Button.Label/Verb"
+#: front/src/components/library/EditCard.vue:96 src/views/library/Edit.vue:44
+msgctxt "Content/Library/Button.Label"
 msgid "Reject"
 msgstr "Agi"
 
@@ -5188,7 +5226,7 @@ msgctxt "Content/*/*"
 msgid "Release Details"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:89
+#: front/src/components/library/FileUpload.vue:32
 msgctxt "Content/Library/Paragraph"
 msgid "Remaining storage space"
 msgstr ""
@@ -5401,7 +5439,7 @@ msgctxt "Content/Library/Dropdown/Verb"
 msgid "Restart import"
 msgstr ""
 
-#: front/src/components/Queue.vue:276
+#: front/src/components/Queue.vue:279
 #, fuzzy
 msgctxt "*/*/*"
 msgid "Restart track"
@@ -5413,20 +5451,18 @@ msgctxt "Content/Library/Button.Label"
 msgid "Restrict to unreviewed edits"
 msgstr ""
 
-#: front/src/views/library/DetailBase.vue:172
+#: front/src/views/library/DetailBase.vue:184
 msgctxt "Content/Library/Card.Help text"
 msgid "Restricted"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:76
-#: front/src/components/library/FileUpload.vue:17
+#: front/src/components/library/FileUpload.vue:132
 #: front/src/components/library/FileUpload.vue:6
 msgctxt "Content/Library/Paragraph"
 msgid "Results of your import:"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:73
-#: front/src/components/library/FileUpload.vue:14
+#: front/src/components/library/FileUpload.vue:129
 #: front/src/components/library/FileUpload.vue:3
 msgctxt "Content/Library/Paragraph"
 msgid "Results of your previous import:"
@@ -5435,7 +5471,8 @@ msgstr ""
 #: front/src/components/favorites/List.vue:35
 #: src/components/library/Albums.vue:39
 #: front/src/components/library/Artists.vue:39
-#: src/components/library/Radios.vue:58 front/src/views/playlists/List.vue:35
+#: src/components/library/Podcasts.vue:39
+#: front/src/components/library/Radios.vue:58 src/views/playlists/List.vue:35
 msgctxt "Content/Search/Dropdown.Label/Noun"
 msgid "Results per page"
 msgstr ""
@@ -5447,7 +5484,7 @@ msgctxt "*/*/*"
 msgid "Resume"
 msgstr "Reprendre"
 
-#: front/src/components/library/FileUpload.vue:385
+#: front/src/components/library/FileUpload.vue:368
 msgctxt "*/*/*/Verb"
 msgid "Retry"
 msgstr "Eɛreḍ tikkelt-nniḍen"
@@ -5460,7 +5497,7 @@ msgctxt "*/*/*"
 msgid "Retry"
 msgstr "Eɛreḍ tikkelt-nniḍen"
 
-#: front/src/components/library/FileUpload.vue:119
+#: front/src/components/library/FileUpload.vue:79
 msgctxt "Content/Library/Table"
 msgid "Retry failed uploads"
 msgstr ""
@@ -5490,6 +5527,11 @@ msgctxt "Popup/Settings/Title"
 msgid "Revoke access for application \"%{ application }\"?"
 msgstr ""
 
+#: front/src/components/RemoteSearchForm.vue:3
+msgctxt "Content/Search/Input.Label/Noun"
+msgid "RSS"
+msgstr ""
+
 #: front/src/views/admin/ChannelDetail.vue:137
 #: src/views/admin/ChannelDetail.vue:132
 msgctxt "'*/*/*"
@@ -5507,13 +5549,13 @@ msgid "Rules"
 msgstr "Ilugan"
 
 #: front/src/components/admin/SettingsGroup.vue:43
-#: src/components/auth/Plugin.vue:51
+#: src/components/auth/Plugin.vue:58
 #: front/src/components/library/radios/Builder.vue:34
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Save"
 msgstr "Sekles"
 
-#: front/src/components/auth/Plugin.vue:54
+#: front/src/components/auth/Plugin.vue:61
 #, fuzzy
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Scan"
@@ -5564,12 +5606,18 @@ msgctxt "Content/*/*/Noun"
 msgid "Scopes"
 msgstr ""
 
-#: front/src/components/RemoteSearchForm.vue:22
+#: front/src/components/Sidebar.vue:97
+#, fuzzy
+msgctxt "Sidebar/Navigation/List item.Link/Verb"
+msgid "Search"
+msgstr "Anadi"
+
+#: front/src/components/RemoteSearchForm.vue:31
 #: front/src/components/common/InlineSearchBar.vue:4
 #: front/src/components/library/Albums.vue:10
 #: src/components/library/Albums.vue:98
-#: front/src/components/library/Artists.vue:10
-#: src/components/library/Artists.vue:98
+#: front/src/components/library/Artists.vue:98
+#: src/components/library/Podcasts.vue:98
 #: front/src/components/library/Radios.vue:30
 #: src/components/library/Radios.vue:181
 #: front/src/components/manage/ChannelsTable.vue:5
@@ -5584,7 +5632,7 @@ msgstr ""
 #: front/src/components/manage/moderation/DomainsTable.vue:5
 #: front/src/components/manage/users/InvitationsTable.vue:5
 #: front/src/components/manage/users/UsersTable.vue:5 src/views/Search.vue:10
-#: front/src/views/Search.vue:138 src/views/admin/moderation/ReportsList.vue:8
+#: front/src/views/Search.vue:140 src/views/admin/moderation/ReportsList.vue:8
 #: front/src/views/admin/moderation/RequestsList.vue:8
 #: front/src/views/content/libraries/FilesTable.vue:6
 #: src/views/playlists/List.vue:11 front/src/views/playlists/List.vue:132
@@ -5597,7 +5645,7 @@ msgctxt "Content/Library/Input.Label/Verb"
 msgid "Search a remote library"
 msgstr ""
 
-#: front/src/components/RemoteSearchForm.vue:64 src/views/Search.vue:140
+#: front/src/components/RemoteSearchForm.vue:73 src/views/Search.vue:142
 msgctxt "Head/Fetch/Title"
 msgid "Search a remote object"
 msgstr ""
@@ -5690,16 +5738,11 @@ msgctxt "Content/Search/Title"
 msgid "Search for some music"
 msgstr ""
 
-#: front/src/components/library/TagsSelector.vue:6
-msgctxt "*/Dropdown/Placeholder/Verb"
-msgid "Search for tags…"
-msgstr ""
-
-#: front/src/components/library/AlbumDropdown.vue:32
+#: front/src/components/library/AlbumDropdown.vue:37
+#: front/src/components/library/ArtistBase.vue:74
 #: front/src/components/library/ArtistBase.vue:69
-#: front/src/components/library/ArtistBase.vue:64
-#: front/src/components/library/TrackBase.vue:53
-#: front/src/components/library/TrackBase.vue:48
+#: front/src/components/library/TrackBase.vue:57
+#: front/src/components/library/TrackBase.vue:52
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Search on Discogs"
 msgstr ""
@@ -5709,15 +5752,23 @@ msgctxt "Search/*/*"
 msgid "Search on the fediverse"
 msgstr ""
 
+#: front/src/components/library/ArtistBase.vue:66
 #: front/src/components/library/ArtistBase.vue:61
-#: front/src/components/library/ArtistBase.vue:56
-#: front/src/components/library/TrackBase.vue:49
-#: front/src/components/library/TrackBase.vue:44
+#: front/src/components/library/TrackBase.vue:53
+#: front/src/components/library/TrackBase.vue:48
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Search on Wikipedia"
 msgstr ""
 
+#: front/src/components/library/TagsSelector.vue:6
+#, fuzzy
+msgctxt "*/Dropdown/Placeholder/Verb"
+msgid "Search…"
+msgstr "Anadi"
+
 #: front/src/components/common/InlineSearchBar.vue:24
+#: front/src/components/library/Artists.vue:141
+#: front/src/components/library/Podcasts.vue:169
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search…"
 msgstr ""
@@ -5735,15 +5786,15 @@ msgctxt "Content/Admin/Menu.Title"
 msgid "Sections"
 msgstr "Sections"
 
-#: front/src/views/admin/Settings.vue:82
-msgctxt "*/*/*/Noun"
-msgid "Security"
-msgstr "Taγellist"
-
 #: front/src/components/mixins/Translations.vue:135
 #: front/src/components/mixins/Translations.vue:136
 #, fuzzy
 msgctxt "*/Admin/*/Noun"
+msgid "Security"
+msgstr "Taγellist"
+
+#: front/src/views/admin/Settings.vue:82
+msgctxt "*/*/*/Noun"
 msgid "Security"
 msgstr "Taγellist"
 
@@ -5802,6 +5853,12 @@ msgctxt "*/*/*"
 msgid "Serie"
 msgstr ""
 
+#: front/src/views/Search.vue:201
+#, fuzzy
+msgctxt "*/*/*"
+msgid "Series"
+msgstr "SÃ©ries"
+
 #: front/src/views/channels/DetailOverview.vue:52
 msgctxt "Content/Channel/Paragraph"
 msgid "Series"
@@ -5835,7 +5892,7 @@ msgctxt "Content/Admin/Table.Label/Noun"
 msgid "Share link"
 msgstr "Fren aseɣwen"
 
-#: front/src/views/library/DetailBase.vue:72
+#: front/src/views/library/DetailBase.vue:76
 msgctxt "Content/Library/Paragraph"
 msgid "Share this link with other users so they can request access to this library by copy-pasting it in their pod search bar."
 msgstr ""
@@ -5846,7 +5903,7 @@ msgid "Share your work publicly and get subscribers on Funkwhale, the Fediverse 
 msgstr ""
 
 #: front/src/views/content/remote/Card.vue:81
-#: src/views/library/DetailBase.vue:70
+#: src/views/library/DetailBase.vue:74
 msgctxt "Content/Library/Title"
 msgid "Sharing link"
 msgstr ""
@@ -5938,7 +5995,7 @@ msgstr ""
 #: front/src/components/manage/library/TracksTable.vue:84
 #: front/src/components/manage/library/UploadsTable.vue:125
 #: front/src/components/manage/moderation/AccountsTable.vue:75
-#: front/src/components/manage/moderation/DomainsTable.vue:71
+#: front/src/components/manage/moderation/DomainsTable.vue:77
 #: front/src/components/manage/users/InvitationsTable.vue:63
 #: front/src/components/manage/users/UsersTable.vue:75
 #: front/src/views/content/libraries/FilesTable.vue:138
@@ -5951,7 +6008,7 @@ msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Shuffle queue"
 msgstr ""
 
-#: front/src/components/audio/Player.vue:689
+#: front/src/components/audio/Player.vue:716
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Shuffle your queue"
 msgstr ""
@@ -5990,7 +6047,7 @@ msgctxt "*/*/*/Noun"
 msgid "Sign-ups"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:109
+#: front/src/components/library/FileUpload.vue:69
 #: front/src/components/library/TrackDetail.vue:23
 #: front/src/components/library/TrackDetail.vue:18
 #: front/src/components/manage/library/UploadsTable.vue:59
@@ -6098,7 +6155,7 @@ msgctxt "Content/Moderation/Help text"
 msgid "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:110
+#: front/src/components/library/FileUpload.vue:70
 #: front/src/components/manage/library/EditsCardList.vue:12
 #: front/src/components/manage/moderation/ReportCard.vue:55
 #: front/src/components/manage/moderation/UserRequestCard.vue:39
@@ -6117,12 +6174,12 @@ msgctxt "*/*/*"
 msgid "Status"
 msgstr "Addad"
 
-#: front/src/views/playlists/Detail.vue:23 src/views/playlists/Detail.vue:1
+#: front/src/views/playlists/Detail.vue:27 src/views/playlists/Detail.vue:1
 msgctxt "Content/Playlist/Button.Label/Verb"
 msgid "Stop Editing"
 msgstr ""
 
-#: front/src/components/Queue.vue:151 src/components/radios/Button.vue:3
+#: front/src/components/Queue.vue:154 src/components/radios/Button.vue:3
 #: front/src/components/radios/Button.vue:1
 msgctxt "*/Player/Button.Label/Short, Verb"
 msgid "Stop radio"
@@ -6161,7 +6218,7 @@ msgctxt "Content/Library/Input.Label"
 msgid "Submit search"
 msgstr "Envoyer"
 
-#: front/src/views/Search.vue:137
+#: front/src/views/Search.vue:139
 msgctxt "Content/Search/Button.Label/Verb"
 msgid "Submit Search Query"
 msgstr ""
@@ -6177,18 +6234,19 @@ msgctxt "Content/Moderation/*"
 msgid "Submitted by"
 msgstr ""
 
+#: front/src/components/channels/SubscribeButton.vue:4
+msgctxt "Content/Track/*/Verb"
+msgid "Subscribe"
+msgstr "Jerred"
+
 #: front/src/components/channels/SubscribeButton.vue:17
 msgctxt "Content/Channel/Button/Verb"
 msgid "Subscribe"
 msgstr "Jerred"
 
+#: front/src/components/library/Podcasts.vue:94
 #: front/src/views/channels/SubscriptionsList.vue:25
 msgctxt "*/*/*/Verb"
-msgid "Subscribe"
-msgstr "Jerred"
-
-#: front/src/components/channels/SubscribeButton.vue:4
-msgctxt "Content/Track/*/Verb"
 msgid "Subscribe"
 msgstr "Jerred"
 
@@ -6206,10 +6264,16 @@ msgctxt "Content/Channels/Header"
 msgid "Subscribe on the Fediverse"
 msgstr ""
 
-#: front/src/components/RemoteSearchForm.vue:68 src/views/Search.vue:142
+#: front/src/components/RemoteSearchForm.vue:77 src/views/Search.vue:144
 msgctxt "Head/Fetch/Title"
 msgid "Subscribe to a podcast RSS feed"
 msgstr ""
+
+#: front/src/components/library/Podcasts.vue:72
+#, fuzzy
+msgctxt "Content/Profile/Button"
+msgid "Subscribe to feed"
+msgstr "Jerred"
 
 #: front/src/components/audio/SearchBar.vue:185
 msgctxt "Search/*/*"
@@ -6234,6 +6298,7 @@ msgctxt "Content/Subscriptions/Header"
 msgid "Subscribed Channels"
 msgstr ""
 
+#: front/src/components/library/Podcasts.vue:83
 #: front/src/views/channels/SubscriptionsList.vue:14
 msgctxt "*/*/*/Noun"
 msgid "Subscription"
@@ -6274,11 +6339,6 @@ msgctxt "Popup/Instance/List.Label"
 msgid "Suggested choices"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:3
-msgctxt "Content/Library/Tab.Title/Short"
-msgid "Summary"
-msgstr "Agzul"
-
 #: front/src/components/library/EditForm.vue:100
 msgctxt "*/*/*"
 msgid "Summary (optional)"
@@ -6297,7 +6357,7 @@ msgstr ""
 #: front/src/components/channels/UploadForm.vue:98
 #: front/src/components/channels/UploadForm.vue:71
 #: front/src/components/channels/UploadForm.vue:62
-#: front/src/components/library/FileUpload.vue:100
+#: front/src/components/library/FileUpload.vue:60
 msgctxt "Content/Library/Paragraph"
 msgid "Supported extensions: %{ extensions }"
 msgstr ""
@@ -6319,20 +6379,21 @@ msgctxt "Content/Moderation/Title"
 msgid "Tag data"
 msgstr ""
 
-#: front/src/components/channels/UploadMetadataForm.vue:15
-#: front/src/components/library/Albums.vue:20
-#: src/components/library/Artists.vue:20
-#: front/src/views/admin/library/Base.vue:10
-#: src/views/admin/library/TagsList.vue:24 front/src/entities.js:120
-#: src/edits.js:51 src/edits.js:79 src/edits.js:122
-msgctxt "*/*/*/Noun"
+#: front/src/components/audio/ChannelForm.vue:59
+#: front/src/components/audio/ChannelForm.vue:51
+#: front/src/components/audio/ChannelForm.vue:33 src/views/Search.vue:190
+msgctxt "*/*/*"
 msgid "Tags"
 msgstr "Tibzimin"
 
-#: front/src/components/audio/ChannelForm.vue:59
-#: front/src/components/audio/ChannelForm.vue:51
-#: front/src/components/audio/ChannelForm.vue:33 src/views/Search.vue:175
-msgctxt "*/*/*"
+#: front/src/components/channels/UploadMetadataForm.vue:15
+#: front/src/components/library/Albums.vue:20
+#: src/components/library/Artists.vue:20
+#: front/src/components/library/Podcasts.vue:20
+#: src/views/admin/library/Base.vue:10
+#: front/src/views/admin/library/TagsList.vue:24 src/entities.js:120
+#: src/edits.js:51 front/src/edits.js:79 src/edits.js:122
+msgctxt "*/*/*/Noun"
 msgid "Tags"
 msgstr "Tibzimin"
 
@@ -6353,7 +6414,7 @@ msgctxt "Content/*/Paragraph"
 msgid "Text copied to clipboard!"
 msgstr ""
 
-#: front/src/components/library/AlbumDropdown.vue:43
+#: front/src/components/library/AlbumDropdown.vue:48
 msgctxt "Content/Moderation/Paragraph"
 msgid "The album will be deleted, as well as any related files and data. This action is irreversible."
 msgstr ""
@@ -6375,8 +6436,8 @@ msgctxt "Content/Moderation/Paragraph"
 msgid "The artist will be removed, as well as associated uploads, tracks, albums, favorites and listening history. This action is irreversible."
 msgstr ""
 
-#: front/src/views/channels/DetailBase.vue:91
-#: src/views/channels/DetailBase.vue:86
+#: front/src/views/channels/DetailBase.vue:95
+#: src/views/channels/DetailBase.vue:90
 #: front/src/views/channels/DetailBase.vue:9
 msgctxt "Content/Moderation/Paragraph"
 msgid "The channel will be deleted, as well as any related files and data. This action is irreversible."
@@ -6414,7 +6475,12 @@ msgctxt "Popup/Import/Error.Label"
 msgid "The metadata included in the file is invalid or some mandatory fields are missing."
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:38
+#: front/src/components/library/FileUpload.vue:51
+msgctxt "Content/Library/List item"
+msgid "The music files you are uploading are in OGG, Flac, MP3 or AIFF format"
+msgstr ""
+
+#: front/src/components/library/FileUpload.vue:47
 msgctxt "Content/Library/List item"
 msgid "The music files you are uploading are tagged properly."
 msgstr ""
@@ -6524,8 +6590,8 @@ msgctxt "Sidebar/Player/Error message.Title"
 msgid "The track cannot be loaded"
 msgstr ""
 
-#: front/src/components/library/TrackBase.vue:64
-#: front/src/components/library/TrackBase.vue:59
+#: front/src/components/library/TrackBase.vue:68
+#: front/src/components/library/TrackBase.vue:63
 msgctxt "Content/Moderation/Paragraph"
 msgid "The track will be deleted, as well as any related files and data. This action is irreversible."
 msgstr ""
@@ -6542,12 +6608,7 @@ msgctxt "Content/Moderation/Paragraph"
 msgid "The upload will be removed. This action is irreversible."
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:42
-msgctxt "Content/Library/List item"
-msgid "The uploaded music files are in OGG, Flac or MP3 format"
-msgstr ""
-
-#: front/src/views/playlists/Detail.vue:67
+#: front/src/views/playlists/Detail.vue:74
 msgctxt "Content/Home/Placeholder"
 msgid "There are no tracks in this playlist yet"
 msgstr ""
@@ -6557,7 +6618,7 @@ msgctxt "Popup/Moderation/Paragraph"
 msgid "This action is irreversible."
 msgstr ""
 
-#: front/src/components/library/AlbumDetail.vue:26
+#: front/src/components/library/AlbumDetail.vue:27
 #: front/src/components/library/AlbumDetail.vue:5
 msgctxt "Content/Album/Paragraph"
 msgid "This album is present in the following libraries:"
@@ -6606,12 +6667,12 @@ msgctxt "Content/Settings/Paragraph"
 msgid "This is the list of applications that you have created."
 msgstr ""
 
-#: front/src/views/auth/ProfileBase.vue:36 src/views/auth/ProfileBase.vue:3
+#: front/src/views/auth/ProfileBase.vue:40 src/views/auth/ProfileBase.vue:3
 msgctxt "Content/Profile/Button.Paragraph"
 msgid "This is you!"
 msgstr ""
 
-#: front/src/components/RemoteSearchForm.vue:26
+#: front/src/components/RemoteSearchForm.vue:35
 msgctxt "Content/*/Error message.Title"
 msgid "This kind of object isn't supported yet"
 msgstr ""
@@ -6629,18 +6690,18 @@ msgid "This library is empty, you should upload something in it!"
 msgstr ""
 
 #: front/src/views/content/remote/Card.vue:160
-#: src/views/library/DetailBase.vue:176
+#: src/views/library/DetailBase.vue:188
 msgctxt "Content/Library/Card.Help text"
 msgid "This library is private and your approval from its owner is needed to access its content"
 msgstr ""
 
 #: front/src/views/content/remote/Card.vue:161
-#: src/views/library/DetailBase.vue:178
+#: src/views/library/DetailBase.vue:190
 msgctxt "Content/Library/Card.Help text"
 msgid "This library is public and you can access its content freely"
 msgstr ""
 
-#: front/src/views/library/DetailBase.vue:177
+#: front/src/views/library/DetailBase.vue:189
 msgctxt "Content/Library/Card.Help text"
 msgid "This library is restricted to users on this pod only"
 msgstr ""
@@ -6650,7 +6711,7 @@ msgctxt "Modal/*/Paragraph"
 msgid "This may affect a lot of elements or have irreversible consequences, please double check this is really what you want."
 msgstr ""
 
-#: front/src/components/RemoteSearchForm.vue:139
+#: front/src/components/RemoteSearchForm.vue:151
 msgctxt "Content/*/Error message.Title"
 msgid "This object cannot be retrieved"
 msgstr ""
@@ -6665,11 +6726,6 @@ msgstr ""
 #: front/src/components/Home.vue:86
 msgctxt "Content/Home/Paragraph"
 msgid "This pod runs Funkwhale, a community-driven project that lets you listen and share music and audio within a decentralized, open network."
-msgstr ""
-
-#: front/src/components/library/FileUpload.vue:51
-msgctxt "Content/Library/Paragraph"
-msgid "This reference will be used to group imported files together."
 msgstr ""
 
 #: front/src/components/mixins/Translations.vue:37
@@ -6716,7 +6772,7 @@ msgctxt "Content/Moderation/Paragraph"
 msgid "This user wants to sign-up on your pod."
 msgstr ""
 
-#: front/src/views/playlists/Detail.vue:36
+#: front/src/views/playlists/Detail.vue:41
 msgctxt "Popup/Playlist/Paragraph"
 msgid "This will completely delete this playlist and cannot be undone."
 msgstr ""
@@ -6827,7 +6883,7 @@ msgid "Total users"
 msgstr ""
 
 #: front/src/components/audio/SearchBar.vue:36
-#: front/src/components/library/TrackBase.vue:205
+#: front/src/components/library/TrackBase.vue:219
 #: front/src/components/library/TrackDetail.vue:205
 #: front/src/components/mixins/Report.vue:30
 #: front/src/views/admin/library/UploadDetail.vue:189
@@ -6842,7 +6898,7 @@ msgctxt "Content/Library/Card/Short"
 msgid "Track #%{ id } - %{ name }"
 msgstr ""
 
-#: front/src/components/Queue.vue:97
+#: front/src/components/Queue.vue:100
 msgctxt "Sidebar/Queue/Text"
 msgid "Track %{ index } of %{ length }"
 msgstr ""
@@ -6887,7 +6943,7 @@ msgstr ""
 #: front/src/components/manage/library/ArtistsTable.vue:4
 #: front/src/components/manage/library/TagsTable.vue:37
 #: front/src/components/manage/library/TagsTable.vue:4
-#: front/src/components/playlists/PlaylistModal.vue:45 src/views/Search.vue:162
+#: front/src/components/playlists/PlaylistModal.vue:45 src/views/Search.vue:177
 #: front/src/views/admin/ChannelDetail.vue:279
 #: src/views/admin/ChannelDetail.vue:274
 #: front/src/views/admin/library/AlbumDetail.vue:265
@@ -6904,9 +6960,9 @@ msgstr ""
 #: front/src/views/admin/moderation/AccountsDetail.vue:362
 #: front/src/views/admin/moderation/DomainsDetail.vue:303
 #: front/src/views/admin/moderation/DomainsDetail.vue:298
-#: front/src/views/channels/DetailBase.vue:184
-#: src/views/channels/DetailBase.vue:179 front/src/views/content/Base.vue:4
-#: src/views/library/DetailBase.vue:88 front/src/views/playlists/Detail.vue:61
+#: front/src/views/channels/DetailBase.vue:188
+#: src/views/channels/DetailBase.vue:183 front/src/views/content/Base.vue:4
+#: src/views/library/DetailBase.vue:92 front/src/views/playlists/Detail.vue:68
 #: src/views/playlists/Detail.vue:1 front/src/views/radios/Detail.vue:34
 msgctxt "*/*/*"
 msgid "Tracks"
@@ -6944,11 +7000,6 @@ msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Unfocus searchbar"
 msgstr ""
 
-#: front/src/components/audio/LibraryFollowButton.vue:3
-msgctxt "Content/Library/Card.Button.Label/Verb"
-msgid "Unfollow"
-msgstr "Ur ḍḍafaṛ ara"
-
 #: front/src/views/content/remote/Card.vue:102
 #: src/views/content/remote/Card.vue:107
 #: front/src/views/content/remote/Card.vue:14
@@ -6956,6 +7007,11 @@ msgstr "Ur ḍḍafaṛ ara"
 #: front/src/views/content/remote/Card.vue:2
 #: src/views/content/remote/Card.vue:7
 msgctxt "*/Library/Button.Label/Verb"
+msgid "Unfollow"
+msgstr "Ur ḍḍafaṛ ara"
+
+#: front/src/components/audio/LibraryFollowButton.vue:3
+msgctxt "Content/Library/Card.Button.Label/Verb"
 msgid "Unfollow"
 msgstr "Ur ḍḍafaṛ ara"
 
@@ -6975,8 +7031,8 @@ msgctxt "*/*/Error"
 msgid "Unknown error"
 msgstr "Tuccḍa tarussint"
 
-#: front/src/components/audio/Player.vue:677
-#: front/src/components/audio/VolumeControl.vue:60
+#: front/src/components/audio/Player.vue:704
+#: front/src/components/audio/VolumeControl.vue:61
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Unmute"
 msgstr "Rétablir le son"
@@ -6992,29 +7048,24 @@ msgctxt "Content/*/*/Short"
 msgid "Unresolved"
 msgstr "Ur yefra ara"
 
-#: front/src/components/channels/SubscribeButton.vue:3
-msgctxt "Content/Track/Button.Message"
-msgid "Unsubscribe"
-msgstr "Ur ṭafar ara"
-
 #: front/src/components/channels/SubscribeButton.vue:19
 msgctxt "Content/Channel/Button/Verb"
 msgid "Unsubscribe"
 msgstr "Ur ṭafar ara"
 
-#: front/src/components/channels/UploadModal.vue:25
-msgctxt "*/*/Button.Label/Verb"
-msgid "Update"
-msgstr "Leqqem"
-
-#: front/src/App.vue:427
-msgctxt "App/Message/Paragraph"
-msgid "Update"
-msgstr "Leqqem"
+#: front/src/components/channels/SubscribeButton.vue:3
+msgctxt "Content/Track/Button.Message"
+msgid "Unsubscribe"
+msgstr "Ur ṭafar ara"
 
 #: front/src/components/auth/Settings.vue:286
 #, fuzzy
 msgctxt "*/*/*"
+msgid "Update"
+msgstr "Leqqem"
+
+#: front/src/components/channels/UploadModal.vue:25
+msgctxt "*/*/Button.Label/Verb"
 msgid "Update"
 msgstr "Leqqem"
 
@@ -7023,13 +7074,18 @@ msgctxt "Content/Moderation/Card.Button.Label/Verb"
 msgid "Update"
 msgstr "Leqqem"
 
+#: front/src/App.vue:427
+msgctxt "App/Message/Paragraph"
+msgid "Update"
+msgstr "Leqqem"
+
 #: front/src/components/auth/ApplicationForm.vue:56
 msgctxt "Content/Applications/Button.Label/Verb"
 msgid "Update application"
 msgstr ""
 
-#: front/src/views/channels/DetailBase.vue:168
-#: src/views/channels/DetailBase.vue:163
+#: front/src/views/channels/DetailBase.vue:172
+#: src/views/channels/DetailBase.vue:167
 msgctxt "*/Channels/Button.Label"
 msgid "Update channel"
 msgstr ""
@@ -7066,15 +7122,15 @@ msgctxt "*/*/*"
 msgid "Updated on %{ date }"
 msgstr ""
 
-#: front/src/views/content/libraries/Card.vue:36
-#: src/views/library/DetailBase.vue:92
-msgctxt "Content/Library/Card.Button.Label/Verb"
+#: front/src/views/channels/DetailBase.vue:130
+#: src/views/channels/DetailBase.vue:125
+msgctxt "Content/Channels/Button.Label/Verb"
 msgid "Upload"
 msgstr "Sali"
 
-#: front/src/views/channels/DetailBase.vue:126
-#: src/views/channels/DetailBase.vue:121
-msgctxt "Content/Channels/Button.Label/Verb"
+#: front/src/views/content/libraries/Card.vue:36
+#: src/views/library/DetailBase.vue:96
+msgctxt "Content/Library/Card.Button.Label/Verb"
 msgid "Upload"
 msgstr "Sali"
 
@@ -7090,8 +7146,8 @@ msgctxt "*/*/*/Noun"
 msgid "Upload date"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:366
-#: front/src/components/library/FileUpload.vue:367
+#: front/src/components/library/FileUpload.vue:349
+#: front/src/components/library/FileUpload.vue:350
 msgctxt "Content/Library/Help text"
 msgid "Upload denied, ensure the file is not too big and that you have not reached your quota"
 msgstr ""
@@ -7106,14 +7162,14 @@ msgctxt "Popup/Import/Message"
 msgid "Upload is still pending and will soon be processed by the server."
 msgstr ""
 
+#: front/src/components/library/FileUpload.vue:39
+msgctxt "Content/Library/Title/Verb"
+msgid "Upload music from your local storage"
+msgstr ""
+
 #: front/src/components/common/AttachmentInput.vue:21
 msgctxt "*/*/*"
 msgid "Upload New Picture…"
-msgstr ""
-
-#: front/src/components/library/FileUpload.vue:30
-msgctxt "Content/Library/Title/Verb"
-msgid "Upload new tracks"
 msgstr ""
 
 #: front/src/components/About.vue:98
@@ -7128,7 +7184,7 @@ msgctxt "Content/Library/Title/Verb"
 msgid "Upload third-party content in a library"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:375
+#: front/src/components/library/FileUpload.vue:358
 msgctxt "Content/Library/Help text"
 msgid "Upload timeout, please try again"
 msgstr ""
@@ -7148,17 +7204,17 @@ msgctxt "Content/Library/Paragraph"
 msgid "Upload your personal music library to Funkwhale to enjoy it from anywhere and share it with friends and family."
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:135
+#: front/src/components/library/FileUpload.vue:95
 msgctxt "Content/Library/Table"
 msgid "Uploaded"
 msgstr ""
 
-#: front/src/components/library/TrackBase.vue:279
+#: front/src/components/library/TrackBase.vue:293
 msgctxt "Content/Track/Paragraph"
 msgid "Uploaded by <a class=\"internal\" href=\"%{ uploaderUrl }\">%{ uploader }</a> on <time title=\"%{ date }\" datetime=\"%{ date }\">%{ prettyDate }</time>"
 msgstr ""
 
-#: front/src/components/library/TrackBase.vue:287
+#: front/src/components/library/TrackBase.vue:301
 msgctxt "Content/Track/Paragraph"
 msgid "Uploaded on <time title=\"%{ date }\" datetime=\"%{ date }\">%{ prettyDate }</time>"
 msgstr ""
@@ -7171,7 +7227,7 @@ msgctxt "Channels/*/*"
 msgid "Uploading"
 msgstr "Tuzzna n ifuyla"
 
-#: front/src/components/library/FileUpload.vue:5
+#: front/src/components/library/FileUpload.vue:4
 msgctxt "Content/Library/Tab.Title/Short"
 msgid "Uploading"
 msgstr "Tuzzna n ifuyla"
@@ -7181,7 +7237,7 @@ msgctxt "Content/*/*/Noun"
 msgid "Uploading file…"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:138
+#: front/src/components/library/FileUpload.vue:98
 msgctxt "Content/Library/Table"
 msgid "Uploading…"
 msgstr "Asali …"
@@ -7224,18 +7280,18 @@ msgctxt "Content/Channel/Header"
 msgid "Uploads published successfully"
 msgstr ""
 
-#: front/src/components/library/TrackDetail.vue:129
-msgctxt "Content/*/*/Noun"
-msgid "URL"
-msgstr "Tansa URL"
-
 #: front/src/views/admin/ChannelDetail.vue:129
 #: src/views/admin/ChannelDetail.vue:124
 msgctxt "'Content/*/*/Noun"
 msgid "URL"
 msgstr "Tansa URL"
 
-#: front/src/components/RemoteSearchForm.vue:65
+#: front/src/components/library/TrackDetail.vue:129
+msgctxt "Content/*/*/Noun"
+msgid "URL"
+msgstr "Tansa URL"
+
+#: front/src/components/RemoteSearchForm.vue:74
 msgctxt "Head/Fetch/Field.Label"
 msgid "URL or @username"
 msgstr ""
@@ -7270,7 +7326,7 @@ msgctxt "Content/Signup/Paragraph"
 msgid "Use this form to request a password reset. We will send an email to the given address with instructions to reset your password."
 msgstr ""
 
-#: front/src/components/RemoteSearchForm.vue:17
+#: front/src/components/RemoteSearchForm.vue:26
 msgctxt "Content/Fetch/Paragraph"
 msgid "Use this form to retrieve an object hosted somewhere else in the fediverse."
 msgstr ""
@@ -7326,7 +7382,7 @@ msgctxt "Content/Admin/Menu"
 msgid "User Interface"
 msgstr "Interface utilisateur"
 
-#: front/src/components/library/AlbumDetail.vue:23
+#: front/src/components/library/AlbumDetail.vue:24
 #: front/src/components/library/AlbumDetail.vue:2
 #: front/src/components/library/ArtistDetail.vue:39
 msgctxt "Content/*/Title/Noun"
@@ -7406,11 +7462,11 @@ msgctxt "Content/Library/Link/Verb"
 msgid "View files"
 msgstr ""
 
-#: front/src/components/library/AlbumDropdown.vue:58
+#: front/src/components/library/AlbumDropdown.vue:63
+#: front/src/components/library/ArtistBase.vue:92
 #: front/src/components/library/ArtistBase.vue:87
-#: front/src/components/library/ArtistBase.vue:82
-#: front/src/components/library/TrackBase.vue:79
-#: front/src/components/library/TrackBase.vue:74
+#: front/src/components/library/TrackBase.vue:83
+#: front/src/components/library/TrackBase.vue:78
 #: src/views/admin/ChannelDetail.vue:43
 #: front/src/views/admin/ChannelDetail.vue:38
 #: front/src/views/admin/library/AlbumDetail.vue:44
@@ -7444,9 +7500,21 @@ msgctxt "Content/Home/Link"
 msgid "View more…"
 msgstr ""
 
-#: front/src/components/library/AlbumDropdown.vue:28
+#: front/src/components/library/AlbumDropdown.vue:24
+#: front/src/components/library/ArtistBase.vue:57
+#: front/src/components/library/ArtistBase.vue:52
+#: front/src/components/library/TrackBase.vue:45
+#: front/src/components/library/TrackBase.vue:40
+#: src/views/auth/ProfileBase.vue:13 front/src/views/channels/DetailBase.vue:79
+#: src/views/channels/DetailBase.vue:74
+#: front/src/views/library/DetailBase.vue:11
+msgctxt "Content/*/Button.Label/Verb"
+msgid "View on %{ domain }"
+msgstr ""
+
+#: front/src/components/library/AlbumDropdown.vue:33
+#: front/src/components/library/ArtistBase.vue:70
 #: front/src/components/library/ArtistBase.vue:65
-#: front/src/components/library/ArtistBase.vue:60
 #: front/src/components/library/TrackDetail.vue:141
 msgctxt "Content/*/*/Clickable, Verb"
 msgid "View on MusicBrainz"
@@ -7483,8 +7551,8 @@ msgctxt "Content/Home/Link"
 msgid "Visit funkwhale.audio"
 msgstr ""
 
-#: front/src/components/library/AlbumDetail.vue:11
-#: front/src/components/library/AlbumDetail.vue:3
+#: front/src/components/library/AlbumDetail.vue:12
+#: front/src/components/library/AlbumDetail.vue:4
 msgctxt "Content/Album/"
 msgid "Volume %{ number }"
 msgstr ""
@@ -7519,7 +7587,7 @@ msgctxt "Content/Notifications/Paragraph"
 msgid "We noticed you've been here for a while. If Funkwhale is useful to you, we could use your help to make it even better!"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:39
+#: front/src/components/library/FileUpload.vue:48
 msgctxt "Content/Library/Link"
 msgid "We recommend using Picard for that purpose."
 msgstr ""
@@ -7603,7 +7671,7 @@ msgctxt "Content/Library/Paragraph"
 msgid "You are able to share your library with other people, regardless of its visibility."
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:32
+#: front/src/components/library/FileUpload.vue:41
 msgctxt "Content/Library/Paragraph"
 msgid "You are about to upload music to your library. Before proceeding, please ensure that:"
 msgstr ""
@@ -7623,7 +7691,7 @@ msgctxt "Content/Login/Paragraph"
 msgid "You are currently logged in as %{ username }"
 msgstr ""
 
-#: front/src/components/library/FileUpload.vue:35
+#: front/src/components/library/FileUpload.vue:44
 msgctxt "Content/Library/List item"
 msgid "You are not uploading copyrighted content in a public library, otherwise you may be infringing the law"
 msgstr ""
@@ -7699,7 +7767,7 @@ msgctxt "Content/Library/Paragraph"
 msgid "You don't have the permission to edit this object, but you can suggest changes. Once submitted, suggestions will be reviewed before approval."
 msgstr ""
 
-#: front/src/components/Queue.vue:148
+#: front/src/components/Queue.vue:151
 msgctxt "Sidebar/Player/Title"
 msgid "You have a radio playing"
 msgstr ""
