@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
 "PO-Revision-Date: 2021-02-27 22:18+0000\n"
-"Last-Translator: jovuit <jvuitton@disroot.org>\n"
+"Last-Translator: David <duffelbag@posteo.de>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2014,10 +2014,11 @@ msgid "Descending"
 msgstr "Absteigend"
 
 #: front/src/components/manage/moderation/NoteForm.vue:37
-#, fuzzy
 msgctxt "Content/Moderation/Placeholder"
 msgid "Describe what actions have been taken, or any other related updates…"
-msgstr "Beschreibe, welche Maßnahmen ergriffen wurden, oder andere damit zusammenhängende Aktualisierungen…"
+msgstr ""
+"Beschreibe ergriffene Maßnahmen oder andere damit zusammenhängende "
+"Aktualisierungen…"
 
 #: front/src/components/library/radios/Builder.vue:25
 #: front/src/views/admin/library/LibraryDetail.vue:116
