@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
 "PO-Revision-Date: 2021-02-27 22:18+0000\n"
-"Last-Translator: David <duffelbag@posteo.de>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -3889,10 +3889,9 @@ msgid "Mute notifications"
 msgstr "Benachrichtigungen stummschalten"
 
 #: front/src/components/library/radios/Builder.vue:236
-#, fuzzy
 msgctxt "Content/Radio/Input.Placeholder"
 msgid "My awesome description"
-msgstr "Meine klasse Beschreibung"
+msgstr "Meine großartige Beschreibung"
 
 #: front/src/views/content/libraries/Form.vue:72
 msgctxt "Content/Library/Input.Placeholder"
