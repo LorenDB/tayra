@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
 "PO-Revision-Date: 2021-02-27 22:23+0000\n"
-"Last-Translator: Daniel <daniel.nautre@gmail.com>\n"
+"Last-Translator: David <duffelbag@posteo.de>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -6191,10 +6191,9 @@ msgid "Submit search"
 msgstr "Suchen"
 
 #: front/src/views/Search.vue:139
-#, fuzzy
 msgctxt "Content/Search/Button.Label/Verb"
 msgid "Submit Search Query"
-msgstr "Suchen"
+msgstr "Suchanfrage abschicken"
 
 #: front/src/components/library/EditForm.vue:108
 msgctxt "Content/Library/Button.Label/Verb"
