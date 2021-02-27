@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: 2021-01-10 13:29+0000\n"
+"PO-Revision-Date: 2021-02-27 22:18+0000\n"
 "Last-Translator: jovuit <jvuitton@disroot.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
@@ -80,7 +80,6 @@ msgstr[0] "%{ count } Folge"
 msgstr[1] "%{ count } Folgen"
 
 #: front/src/components/audio/artist/Card.vue:16
-#, fuzzy
 msgctxt "*/*/*"
 msgid "%{ count } episode"
 msgid_plural "%{ count } episodes"
@@ -2798,7 +2797,7 @@ msgstr "Föderation"
 #: front/src/components/RemoteSearchForm.vue:7
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "Fediverse"
-msgstr ""
+msgstr "Fediverse"
 
 #: front/src/components/library/EditCard.vue:43
 msgctxt "Content/Library/Card.Table.Header/Short"
@@ -3114,10 +3113,9 @@ msgid "Import"
 msgstr "Importieren"
 
 #: front/src/components/library/ImportStatusModal.vue:3
-#, fuzzy
 msgctxt "Popup/Import/Title"
 msgid "Import detail"
-msgstr "Importstatus"
+msgstr "Importinfos"
 
 #: front/src/components/library/FsLogs.vue:4
 msgctxt "Content/Library/Paragraph"
@@ -3463,7 +3461,6 @@ msgstr "Mediathek erstellt"
 
 #: front/src/views/admin/library/LibraryDetail.vue:68
 #: front/src/views/admin/library/LibraryDetail.vue:63
-#, fuzzy
 msgctxt "Content/Moderation/Title"
 msgid "Library data"
 msgstr "Mediathek-Infos"
