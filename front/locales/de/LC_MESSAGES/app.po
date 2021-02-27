@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: 2021-02-27 22:25+0000\n"
+"PO-Revision-Date: 2021-02-28 15:51+0000\n"
 "Last-Translator: jovuit <jvuitton@disroot.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
@@ -326,7 +326,7 @@ msgstr "Über diese Instanz"
 #: front/src/views/library/Edit.vue:41
 msgctxt "Content/Library/Button.Label"
 msgid "Accept"
-msgstr "Akzeptieren"
+msgstr "Annehmen"
 
 #: front/src/views/library/Edit.vue:33
 msgctxt "Content/Library/Table/Short"
@@ -741,10 +741,9 @@ msgstr "Album"
 
 #: front/src/views/admin/library/TrackDetail.vue:126
 #: front/src/views/admin/library/TrackDetail.vue:121
-#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "Album artist"
-msgstr "Alben von dieser kunstschaffenden Person"
+msgstr "Künstler·in dieses Albums"
 
 #: front/src/views/admin/library/AlbumDetail.vue:89
 #: front/src/views/admin/library/AlbumDetail.vue:84
@@ -814,8 +813,8 @@ msgstr "Alles"
 msgctxt "Content/*/Paragraph"
 msgid "All %{ count } element selected"
 msgid_plural "All %{ count } elements selected"
-msgstr[0] "%{ count } von %{ total } ausgewählt"
-msgstr[1] "%{ count } von %{ total } ausgewählt"
+msgstr[0] "Einziges Element ausgewählt"
+msgstr[1] "Alle %{ count } Elemente ausgewählt"
 
 #: front/src/views/channels/DetailBase.vue:187
 #: src/views/channels/DetailBase.vue:182
@@ -1208,10 +1207,9 @@ msgid "Browsing playlists"
 msgstr "Wiedergabelisten durchsuchen"
 
 #: front/src/components/library/Podcasts.vue:4
-#, fuzzy
 msgctxt "Content/Podcasts/Title"
 msgid "Browsing Podcasts"
-msgstr "Künstler·innen durchsuchen"
+msgstr "Podcasts durchsuchen"
 
 #: front/src/components/library/Radios.vue:4
 msgctxt "Content/Radio/Title"
@@ -1431,7 +1429,7 @@ msgstr "Beim Aktivieren der übergeordneten Bereiche \"Lesen\" oder \"Schreiben\
 #: front/src/components/SetInstanceModal.vue:2
 msgctxt "Popup/Instance/Title"
 msgid "Choose your instance"
-msgstr "Wähle deine Instanz"
+msgstr "Wähle deine Instanz aus"
 
 #: front/src/components/Queue.vue:95
 msgctxt "*/Queue/*/Verb"
@@ -1476,7 +1474,6 @@ msgid "Click to select files to upload or drag and drop files or directories"
 msgstr "Zum Hochladen klicken oder Dateien und Ordner hierher ziehen und ablegen"
 
 #: front/src/components/Queue.vue:92
-#, fuzzy
 msgctxt "*/Queue/*/Verb"
 msgid "Close"
 msgstr "Schließen"
@@ -1639,7 +1636,6 @@ msgid "Create"
 msgstr "Erstellen"
 
 #: front/src/components/library/Podcasts.vue:64
-#, fuzzy
 msgctxt "Content/*/Verb"
 msgid "Create a Channel"
 msgstr "Kanal erstellen"
@@ -2421,10 +2417,9 @@ msgid "Embed this artist work on your website"
 msgstr "Bette Titel von dieser Kunstschaffenden Person auf deiner Webseite ein"
 
 #: front/src/views/playlists/Detail.vue:48
-#, fuzzy
 msgctxt "Popup/Album/Title/Verb"
 msgid "Embed this playlist on your website"
-msgstr "Bette diese Playlist in deine Webseite ein"
+msgstr "Bette diese Wiedergabeliste in deine Webseite ein"
 
 #: front/src/components/library/TrackBase.vue:27
 #: front/src/components/library/TrackBase.vue:22
@@ -4066,7 +4061,6 @@ msgid "New value"
 msgstr "Neuer Wert"
 
 #: front/src/components/Pagination.vue:45
-#, fuzzy
 msgctxt "Content/*/Link"
 msgid "Next Page"
 msgstr "Nächster Schritt"
@@ -5122,7 +5116,7 @@ msgstr "Aktualisierung wurde übersprungen"
 #: front/src/components/federation/FetchButton.vue:7
 msgctxt "Popup/*/Title"
 msgid "Refreshing object from remote…"
-msgstr "Objekt wird aus dem Remote-Server aktualisiert …"
+msgstr "Objekt wird aus dem Remote-Server aktualisiert…"
 
 #: front/src/components/manage/moderation/UserRequestCard.vue:122
 msgctxt "Content/*/Button.Label"
@@ -5703,10 +5697,9 @@ msgid "Search for artists, albums, tracks…"
 msgstr "Nach Künstler·innen, Alben und Titeln suchen…"
 
 #: front/src/components/audio/SearchBar.vue:29
-#, fuzzy
 msgctxt "Sidebar/Search/Input.Label"
 msgid "Search for content"
-msgstr "Musik suchen"
+msgstr "Inhalte suchen"
 
 #: front/src/components/audio/Search.vue:2
 msgctxt "Content/Search/Title"
@@ -6969,10 +6962,9 @@ msgid "Under moderation rule"
 msgstr "Unterliegt einer Moderationsregel"
 
 #: front/src/components/ShortcutsModal.vue:67
-#, fuzzy
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Unfocus searchbar"
-msgstr "Suchleiste defokussieren"
+msgstr "Suchleiste abwählen"
 
 #: front/src/views/content/remote/Card.vue:102
 #: src/views/content/remote/Card.vue:107
@@ -7136,10 +7128,9 @@ msgid "Upload is still pending and will soon be processed by the server."
 msgstr "Der Upload steht noch aus und wird bald vom Server verarbeitet."
 
 #: front/src/components/library/FileUpload.vue:39
-#, fuzzy
 msgctxt "Content/Library/Title/Verb"
 msgid "Upload music from your local storage"
-msgstr "Musik aus deinem Server importieren"
+msgstr "Musik aus deinem Computer importieren"
 
 #: front/src/components/common/AttachmentInput.vue:21
 msgctxt "*/*/*"
@@ -7174,10 +7165,12 @@ msgid "Upload was successfully processed by the server."
 msgstr "Der Upload wurde vom Server erfolgreich verarbeitet."
 
 #: front/src/views/content/Home.vue:25
-#, fuzzy
 msgctxt "Content/Library/Paragraph"
 msgid "Upload your personal music library to Funkwhale to enjoy it from anywhere and share it with friends and family."
-msgstr "Lade deine persönliche Musikbibliothek auf Funkwhale hoch, um sie von überall aus zu genießen und um sie mit Freunden und Familie zu teilen."
+msgstr ""
+"Lade deine persönliche Musikbibliothek auf Funkwhale hoch, um sie von "
+"überall aus zu genießen und um sie mit Freunden, Freundinnen und Familie zu "
+"teilen."
 
 #: front/src/components/library/FileUpload.vue:95
 msgctxt "Content/Library/Table"
@@ -7483,10 +7476,9 @@ msgstr "Mehr anzeigen…"
 #: src/views/auth/ProfileBase.vue:13 front/src/views/channels/DetailBase.vue:79
 #: src/views/channels/DetailBase.vue:74
 #: front/src/views/library/DetailBase.vue:11
-#, fuzzy
 msgctxt "Content/*/Button.Label/Verb"
 msgid "View on %{ domain }"
-msgstr "Von %{ domain } gespiegelt"
+msgstr "Auf %{ domain } ansehen"
 
 #: front/src/components/library/AlbumDropdown.vue:33
 #: front/src/components/library/ArtistBase.vue:70
