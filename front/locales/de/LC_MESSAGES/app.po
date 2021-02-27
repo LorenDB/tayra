@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
 "PO-Revision-Date: 2021-02-27 22:25+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: jovuit <jvuitton@disroot.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -6293,7 +6293,7 @@ msgstr "Schlage eine Änderung mit dem untenstehenden Formular vor."
 #: front/src/components/library/AlbumEdit.vue:5
 msgctxt "Content/*/Title"
 msgid "Suggest an edit on this album"
-msgstr "Eine Änderung dieses Albums vorschlagen"
+msgstr "Eine Änderung auf dieses Album vorschlagen"
 
 #: front/src/components/library/ArtistEdit.vue:5
 msgctxt "Content/*/Title"
@@ -6301,7 +6301,6 @@ msgid "Suggest an edit on this artist"
 msgstr "Eine Änderung dieses Künstler·in vorschlagen"
 
 #: front/src/components/library/TrackEdit.vue:5
-#, fuzzy
 msgctxt "Content/*/Title"
 msgid "Suggest an edit on this track"
 msgstr "Eine Änderung auf diesen Titel vorschlagen"
@@ -6448,10 +6447,10 @@ msgid "The metadata included in the file is invalid or some mandatory fields are
 msgstr "Die in der Datei enthaltenen Metadaten sind ungültig oder es fehlen einige Pflichtfelder."
 
 #: front/src/components/library/FileUpload.vue:51
-#, fuzzy
 msgctxt "Content/Library/List item"
 msgid "The music files you are uploading are in OGG, Flac, MP3 or AIFF format"
-msgstr "Die Dateien, die du hochlädst, sind richtig verschlagwortet."
+msgstr ""
+"Die Dateien, die du hochlädst, sind im OGG-, Flac-, MP3- oder AIFF-Format"
 
 #: front/src/components/library/FileUpload.vue:47
 msgctxt "Content/Library/List item"
