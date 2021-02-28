@@ -45,7 +45,9 @@ uvicorn[standard]~=0.12.0
 gunicorn~=20.0.0
 
 cryptography~=2.9.0
-requests-http-signature==0.2.0
+# requests-http-signature==0.0.3
+# clone until the branch is merged and released upstream
+git+https://github.com/agateblue/requests-http-signature.git@signature-header-support
 django-cleanup~=5.0.0
 requests~=2.24.0
 pyOpenSSL~=19.1.0
