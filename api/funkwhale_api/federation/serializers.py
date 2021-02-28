@@ -258,9 +258,15 @@ class ActorSerializer(jsonld.JsonLdSerializer):
     )
     attributedTo = serializers.URLField(max_length=500, required=False)
 
-    tags = serializers.ListField(
-        child=TagSerializer(), min_length=0, required=False, allow_null=True
-    )
+    tags = serializers.ListField(min_length=0, required=False, allow_null=True)
+
+    def validate_tags(self, tags):
+        valid_tags = []
+        for tag in tags:
+            s = TagSerializer(data=tag)
+            if s.is_valid():
+                valid_tags.append(s.validated_data)
+        return valid_tags
 
     category = serializers.CharField(required=False)
     # languages = serializers.Char(
