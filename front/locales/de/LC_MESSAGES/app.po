@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
 "PO-Revision-Date: 2021-03-01 16:37+0000\n"
-"Last-Translator: David <duffelbag@posteo.de>\n"
+"Last-Translator: jovuit <jvuitton@disroot.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -4270,10 +4270,9 @@ msgstr "Öffne einen Support-Anfrage (füge die Debug-Informationen unten in dei
 
 #: front/src/components/manage/ChannelsTable.vue:183
 #: front/src/components/manage/library/AlbumsTable.vue:177
-#, fuzzy
 msgctxt "Content/Moderation/Verb"
 msgid "Open in moderation interface"
-msgstr "Moderationsregel ändern"
+msgstr "In der Moderationsseite öffnen"
 
 #: front/src/components/library/AlbumDropdown.vue:59
 #: front/src/components/library/ArtistBase.vue:88
