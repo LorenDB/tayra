@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
 "PO-Revision-Date: 2021-03-01 16:37+0000\n"
-"Last-Translator: jovuit <jvuitton@disroot.org>\n"
+"Last-Translator: Georg Krause <mail@georg-krause.net>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -979,7 +979,6 @@ msgid "Artist discography"
 msgstr "Künstler-Diskographie"
 
 #: front/src/components/library/Artists.vue:10
-#, fuzzy
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "Artist name"
 msgstr "Name der Künstler·in"
@@ -2954,10 +2953,11 @@ msgstr ""
 "unterstützen."
 
 #: front/src/components/Home.vue:87
-#, fuzzy
 msgctxt "Content/Home/Paragraph"
 msgid "Funkwhale is free and developed by a friendly community of volunteers."
-msgstr "Funkwhale ist kostenlos und wird von einer freundlichen Gemeinschaft von Freiwilligen entwickelt."
+msgstr ""
+"Funkwhale ist kostenlos und wird von einer freundlichen Gemeinschaft von "
+"Freiwilligen entwickelt."
 
 #: front/src/components/About.vue:77
 msgctxt "*/*/*"
@@ -6003,7 +6003,6 @@ msgstr "Registrierung"
 #: front/src/views/admin/moderation/AccountsDetail.vue:177
 #: front/src/views/admin/moderation/AccountsDetail.vue:172
 #: front/src/components/mixins/Translations.vue:85
-#, fuzzy
 msgctxt "Content/Admin/Table.Label/Noun"
 msgid "Sign-up date"
 msgstr "Anmeldedatum"
