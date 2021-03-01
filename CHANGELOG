@@ -10,6 +10,20 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.1-rc2 (2021-03-01)
+--------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Bugfixes:
+
+- Fixed follows from Pleroma with custom Emoji as Tag by ignoring not supported tag types #1342
+- Update pleroma JSON-LD Schema (#1341)
+- Revert fork replacement of http-signature since official package breaks federation
+- Pin twisted version to 20.3.0
+
+
 1.1-rc1 (2021-02-24)
 --------------------
 
