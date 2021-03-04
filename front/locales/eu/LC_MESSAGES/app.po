@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: 2021-02-28 15:51+0000\n"
+"PO-Revision-Date: 2021-03-05 03:54+0000\n"
 "Last-Translator: Asier Iturralde Sarasola <asier.iturralde@gmail.com>\n"
 "Language-Team: none\n"
 "Language: eu\n"
@@ -80,7 +80,6 @@ msgstr[0] "Saio %{ count }"
 msgstr[1] "%{ count } saio"
 
 #: front/src/components/audio/artist/Card.vue:16
-#, fuzzy
 msgctxt "*/*/*"
 msgid "%{ count } episode"
 msgid_plural "%{ count } episodes"
@@ -1636,7 +1635,6 @@ msgid "Create"
 msgstr "Sortu"
 
 #: front/src/components/library/Podcasts.vue:64
-#, fuzzy
 msgctxt "Content/*/Verb"
 msgid "Create a Channel"
 msgstr "Sortu kanala"
@@ -2951,10 +2949,11 @@ msgid "Funkwhale is compatible with other music players that support the Subsoni
 msgstr "Funkwhale Subsonic APIa darabilten beste musika erreproduzitzaileekin bateragarria da."
 
 #: front/src/components/Home.vue:87
-#, fuzzy
 msgctxt "Content/Home/Paragraph"
 msgid "Funkwhale is free and developed by a friendly community of volunteers."
-msgstr "Funkwhale doakoa da eta boluntario komunitate jator batek garatzen du."
+msgstr ""
+"Funkwhale librea eta doakoa da eta boluntario komunitate jator batek "
+"garatzen du."
 
 #: front/src/components/About.vue:77
 msgctxt "*/*/*"
@@ -3358,7 +3357,7 @@ msgstr "Geroago"
 #: front/src/views/channels/DetailOverview.vue:44
 msgctxt "Content/Channel/Paragraph"
 msgid "Latest episodes"
-msgstr "Azken atalak"
+msgstr "Azken saioak"
 
 #: front/src/views/channels/DetailOverview.vue:45
 msgctxt "Content/Channel/Paragraph"
@@ -4046,7 +4045,7 @@ msgstr "Pasahitz berria"
 #: front/src/components/channels/AlbumModal.vue:3
 msgctxt "Popup/Channels/Title/Verb"
 msgid "New serie"
-msgstr "Sail berria"
+msgstr "Serie berria"
 
 #: front/src/components/Queue.vue:153
 msgctxt "Sidebar/Player/Paragraph"
@@ -5817,7 +5816,6 @@ msgid "Serie"
 msgstr "Seriea"
 
 #: front/src/views/Search.vue:201
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Series"
 msgstr "Serieak"
@@ -5962,7 +5960,6 @@ msgstr "Erakutsi/ezkutatu pasahitza"
 #: front/src/components/manage/users/InvitationsTable.vue:63
 #: front/src/components/manage/users/UsersTable.vue:75
 #: front/src/views/content/libraries/FilesTable.vue:138
-#, fuzzy
 msgctxt "Content/*/Paragraph"
 msgid "Showing results %{ start }-%{ end } on %{ total }"
 msgstr "Emaitzak erakusten: %{ start }-%{ end } guztizko %{ total }(e)tik"
@@ -7469,7 +7466,6 @@ msgstr "Ikusi gehiago…"
 #: src/views/auth/ProfileBase.vue:13 front/src/views/channels/DetailBase.vue:79
 #: src/views/channels/DetailBase.vue:74
 #: front/src/views/library/DetailBase.vue:11
-#, fuzzy
 msgctxt "Content/*/Button.Label/Verb"
 msgid "View on %{ domain }"
 msgstr "Ikusi %{ domain }(e)n"
