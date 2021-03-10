@@ -20,6 +20,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
+from django.db.models import Prefetch, Count
 
 from funkwhale_api import musicbrainz
 from funkwhale_api.common import fields
@@ -420,7 +421,13 @@ def import_album(v):
 class TrackQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
     def for_nested_serialization(self):
         return self.prefetch_related(
-            "artist", "album__artist", "album__attachment_cover"
+            "artist",
+            Prefetch(
+                "album",
+                queryset=Album.objects.select_related(
+                    "artist", "attachment_cover"
+                ).annotate(_prefetched_tracks_count=Count("tracks")),
+            ),
         )
 
     def annotate_playable_by_actor(self, actor):
@@ -855,8 +862,7 @@ class Upload(models.Model):
         if not input:
             return
 
-        input_format = utils.MIMETYPE_TO_EXTENSION[self.mimetype]
-        audio = pydub.AudioSegment.from_file(input, format=input_format)
+        audio = pydub.AudioSegment.from_file(input)
         return audio
 
     def save(self, **kwargs):

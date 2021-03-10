@@ -316,8 +316,8 @@ CONTEXTS = [
         "shortId": "LITEPUB",
         "contextUrl": None,
         "documentUrl": "http://litepub.social/ns",
+        # from https://git.pleroma.social/pleroma/pleroma/-/blob/release/2.2.3/priv/static/schemas/litepub-0.1.jsonld
         "document": {
-            # from https://ap.thequietplace.social/schemas/litepub-0.1.jsonld
             "@context": {
                 "Emoji": "toot:Emoji",
                 "Hashtag": "as:Hashtag",
@@ -326,6 +326,7 @@ CONTEXTS = [
                 "conversation": {"@id": "ostatus:conversation", "@type": "@id"},
                 "discoverable": "toot:discoverable",
                 "manuallyApprovesFollowers": "as:manuallyApprovesFollowers",
+                "capabilities": "litepub:capabilities",
                 "ostatus": "http://ostatus.org#",
                 "schema": "http://schema.org#",
                 "toot": "http://joinmastodon.org/ns#",
@@ -340,6 +341,7 @@ CONTEXTS = [
                     "@type": "@id",
                 },
                 "EmojiReact": "litepub:EmojiReact",
+                "ChatMessage": "litepub:ChatMessage",
                 "alsoKnownAs": {"@id": "as:alsoKnownAs", "@type": "@id"},
             }
         },

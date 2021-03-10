@@ -88,7 +88,7 @@ services:
     volumes:
       - "./nginx/funkwhale.template:/etc/nginx/conf.d/funkwhale.template:ro"
       - "./nginx/funkwhale_proxy.conf:/etc/nginx/funkwhale_proxy.conf:ro"
-      - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:ro"
+      - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_PATH-/music}:ro"
       - "${MEDIA_ROOT}:${MEDIA_ROOT}:ro"
       - "${STATIC_ROOT}:${STATIC_ROOT}:ro"
       - "${FUNKWHALE_FRONTEND_PATH}:/frontend:ro"

@@ -59,6 +59,10 @@ AUDIO_EXTENSIONS_AND_MIMETYPE = [
     ("m4a", "audio/x-m4a"),
     ("flac", "audio/x-flac"),
     ("flac", "audio/flac"),
+    ("aif", "audio/aiff"),
+    ("aif", "audio/x-aiff"),
+    ("aiff", "audio/aiff"),
+    ("aiff", "audio/x-aiff"),
 ]
 
 EXTENSION_TO_MIMETYPE = {ext: mt for ext, mt in AUDIO_EXTENSIONS_AND_MIMETYPE}
@@ -101,7 +105,7 @@ def get_actor_from_request(request):
     return actor
 
 
-def transcode_file(input, output, input_format, output_format, **kwargs):
+def transcode_file(input, output, input_format=None, output_format="mp3", **kwargs):
     with input.open("rb"):
         audio = pydub.AudioSegment.from_file(input, format=input_format)
     return transcode_audio(audio, output, output_format, **kwargs)

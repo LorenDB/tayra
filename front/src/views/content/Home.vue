@@ -11,7 +11,7 @@
           <translate translate-context="Content/Library/Title/Verb">Publish your work in a channel</translate>
         </h2>
         <p>
-          <translate translate-context="Content/Library/Paragraph">If you are a musician or a podcaster, channels are designed for you!</translate>
+          <translate translate-context="Content/Library/Paragraph">If you are a musician or a podcaster, channels are designed for you!</translate>&#32;
           <translate translate-context="Content/Library/Paragraph">Share your work publicly and get subscribers on Funkwhale, the Fediverse or any podcasting application.</translate>
         </p>
         <router-link :to="{name: 'profile.overview', params: {username: $store.state.auth.username}, hash: '#channels'}" class="ui primary button">

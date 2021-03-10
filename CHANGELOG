@@ -10,6 +10,168 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.1 (unreleased)
+----------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Enhancements:
+
+- Add number of tracks and discs of an album to API (#1238)
+- Add spacing after "Play all" button in playlist view (!1271)
+- Added a ListenBrainz plugin to submit listenings
+- Added ability to choose fediverse addresses from channel subscription page/podcast screen (#1294)
+- Added new search functions to allow users to more easily search for podcasts in the UI.
+- Added padding to volume slider to ease mouse control (#1241)
+- Logarithmic scale for volume slider (#1222)
+- More user-friendly subsonic tokens (#1269)
+- Remove manual entry of Import Reference on front-end import (#1284)
+- Support AIFF file format (#1243)
+
+
+Bugfixes:
+
+- "Add check for empty/null covers (#1281)"
+- Added an album filter to fix problem where channel entries would show up in the wrong series (#1282)
+- Avoid broken Faker version (#1323)
+- Changed audio format detection to happen via sniffing and not file extensions (#1274)
+- Changed default behaviour of channel entries to use channel artwork if no entry artwork available (#1289)
+- Fix delete library modal closing immediately (#1272)
+- Fix public shared remote library radio button being disabled (#1292)
+- Fixed an issue that prevented disabling plugins
+- Fixed an issue where channel albums don't show up in the album search (#1300)
+- Fixed an issue where modals would prevent users being able to interact with channels (#1295)
+- Update MediaSession metadata for initially loaded track (#1252)
+- Update playback position slider also when track is paused (#1266)
+- Fixed follows from Pleroma with custom Emoji as Tag by ignoring not supported tag types #1342
+- Update pleroma JSON-LD Schema (#1341)
+- Pin twisted version to 20.3.0
+
+Contributors to this release (development, documentation, reviews):
+
+Adam Novak
+Agate
+alemairebe
+Alicia Blasco Leon
+anonymous
+Amaranthe
+appzer0
+Arne
+Asier Iturralde Sarasola
+Christian Paul
+Ciarán Ainsworth
+Daniel
+David
+Dominik Danelski
+Eorn le goéland
+Eleos
+Erik Duxstad
+Esteban
+Fred Uggla
+Freyja Wildes
+Georg Krause
+ghose
+hellekin
+heyarne
+interfect
+Jess Jing
+Johannes H.
+jovuit
+marzzzello
+Meliurwen
+Mehdi
+Nitai Bezerra da Silva
+Philipp Wolfer
+Pierre Couy
+Porrumentzio
+Reg
+Robert Kaye
+Rubén Cabrera
+Silver Fox
+Snack Capt
+SpcCw
+Strom Lin
+vicdorke
+x
+
+
+1.1-rc2 (2021-03-01)
+--------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Bugfixes:
+
+- Fixed follows from Pleroma with custom Emoji as Tag by ignoring not supported tag types #1342
+- Update pleroma JSON-LD Schema (#1341)
+- Revert fork replacement of http-signature since official package breaks federation
+- Pin twisted version to 20.3.0
+
+
+1.1-rc1 (2021-02-24)
+--------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Enhancements:
+
+- Add number of tracks and discs of an album to API (#1238)
+- Add spacing after "Play all" button in playlist view (!1271)
+- Added a ListenBrainz plugin to submit listenings
+- Added ability to choose fediverse addresses from channel subscription page/podcast screen (#1294)
+- Added new search functions to allow users to more easily search for podcasts in the UI.
+- Added padding to volume slider to ease mouse control (#1241)
+- Logarithmic scale for volume slider (#1222)
+- More user-friendly subsonic tokens (#1269)
+- Remove manual entry of Import Reference on front-end import (#1284)
+- Replaced forked http-signature dependency with official package (#876)
+- Support AIFF file format (#1243)
+
+
+Bugfixes:
+
+- "Add check for empty/null covers (#1281)"
+- Added an album filter to fix problem where channel entries would show up in the wrong series (#1282)
+- Avoid broken Faker version (#1323)
+- Changed audio format detection to happen via sniffing and not file extensions (#1274)
+- Changed default behaviour of channel entries to use channel artwork if no entry artwork available (#1289)
+- Fix delete library modal closing immediately (#1272)
+- Fix public shared remote library radio button being disabled (#1292)
+- Fixed an issue that prevented disabling plugins
+- Fixed an issue where channel albums don't show up in the album search (#1300)
+- Fixed an issue where modals would prevent users being able to interact with channels (#1295)
+- Update MediaSession metadata for initially loaded track (#1252)
+- Update playback position slider also when track is paused (#1266)
+
+Contributors to this release (development, documentation, reviews):
+
+- Reg
+- hellekin
+- Esteban
+- Freyja Wildes
+- Amaranthe
+- Eleos
+- Johannes H.
+- Mehdi
+- Adam Novak
+- Agate
+- Christian Paul
+- Ciarán Ainsworth
+- Erik Duxstad
+- Fred Uggla
+- Georg Krause
+- heyarne
+- interfect
+- jovuit
+- Nitai Bezerra da Silva
+- Philipp Wolfer
+- Pierre Couy
+- Robert Kaye
+- Strom Lin
+
 1.0.1 (2020-10-31)
 ------------------
 

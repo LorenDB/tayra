@@ -199,7 +199,7 @@ Once everything is up, you can access the various funkwhale's components:
 
 - The Vue webapp, on http://localhost:8000
 - The API, on http://localhost:8000/api/v1/
-- The django admin, on http://localhost:800/api/admin/
+- The django admin, on http://localhost:8000/api/admin/
 
 Stopping everything
 ^^^^^^^^^^^^^^^^^^^
@@ -687,7 +687,7 @@ useful when testing components that depend on each other:
 
     def test_downgrade_not_superuser_skips_email(factories, mocker):
         mocked_notify = mocker.patch('funkwhale_api.myapp.notifications.notify')
-        user = factories['users.User'](is_superuser=True)
+        user = factories['users.User'](is_superuser=False)
         users.downgrade_user(user)
 
         # here, we ensure no email was sent

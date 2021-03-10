@@ -24,10 +24,10 @@
               </router-link>
             </strong>
             <div class="meta">
-              <router-link @click.stop.prevent="" class="discrete link" :to="{name: 'library.artists.detail', params: {id: currentTrack.artist.id }}">
-                {{ currentTrack.artist.name }}</router-link><template v-if="currentTrack.album"> /<router-link @click.stop.prevent="" class="discrete link" :to="{name: 'library.albums.detail', params: {id: currentTrack.album.id }}">
-                {{ currentTrack.album.title }}
-              </router-link></template>
+              <router-link @click.stop.prevent="" class="discrete link" :to="{name: 'library.artists.detail', params: {id: currentTrack.artist.id }}">{{ currentTrack.artist.name }}</router-link>
+              <template v-if="currentTrack.album"> /
+                <router-link @click.stop.prevent="" class="discrete link" :to="{name: 'library.albums.detail', params: {id: currentTrack.album.id }}">{{ currentTrack.album.title }}</router-link>
+              </template>
             </div>
           </div>
         </div>
@@ -277,6 +277,7 @@ export default {
     })
     if (this.currentTrack) {
       this.getSound(this.currentTrack)
+      this.updateMetadata()
     }
     // Add controls for notification drawer
     if ('mediaSession' in navigator) {
@@ -550,6 +551,10 @@ export default {
         this.updateProgressThrottled.cancel()
       }
       this.currentSound.seek(t)
+      // If player is paused update progress immediately to ensure updated UI
+      if (!this.$store.state.player.playing) {
+        this.updateProgress()
+      }
     },
     ended: function () {
       let onlyTrack = this.$store.state.queue.tracks.length === 1
@@ -642,6 +647,28 @@ export default {
 
       }
     },
+    updateMetadata () {
+      // If the session is playing as a PWA, populate the notification
+      // with details from the track
+      if (this.currentTrack && 'mediaSession' in navigator) {
+        let metadata = {
+          title: this.currentTrack.title,
+          artist: this.currentTrack.artist.name,
+        }
+        if (this.currentTrack.album && this.currentTrack.album.cover) {
+          metadata.album = this.currentTrack.album.title
+          metadata.artwork = [
+            { src: this.currentTrack.album.cover.urls.original, sizes: '96x96',   type: 'image/png' },
+            { src: this.currentTrack.album.cover.urls.original, sizes: '128x128', type: 'image/png' },
+            { src: this.currentTrack.album.cover.urls.original, sizes: '192x192', type: 'image/png' },
+            { src: this.currentTrack.album.cover.urls.original, sizes: '256x256', type: 'image/png' },
+            { src: this.currentTrack.album.cover.urls.original, sizes: '384x384', type: 'image/png' },
+            { src: this.currentTrack.album.cover.urls.original, sizes: '512x512', type: 'image/png' },
+          ]
+        }
+        navigator.mediaSession.metadata = new MediaMetadata(metadata)
+      }
+    }
   },
   computed: {
     ...mapState({
@@ -723,26 +750,7 @@ export default {
         this.playTimeout = setTimeout(async () => {
           await self.loadSound(newValue, oldValue)
         }, 500);
-        // If the session is playing as a PWA, populate the notification
-        // with details from the track
-        if (this.currentTrack && 'mediaSession' in navigator) {
-          let metadata = {
-            title: this.currentTrack.title,
-            artist: this.currentTrack.artist.name,
-          }
-          if (this.currentTrack.album && this.currentTrack.album.cover) {
-            metadata.album = this.currentTrack.album.title
-            metadata.artwork = [
-              { src: this.currentTrack.album.cover.urls.original, sizes: '96x96',   type: 'image/png' },
-              { src: this.currentTrack.album.cover.urls.original, sizes: '128x128', type: 'image/png' },
-              { src: this.currentTrack.album.cover.urls.original, sizes: '192x192', type: 'image/png' },
-              { src: this.currentTrack.album.cover.urls.original, sizes: '256x256', type: 'image/png' },
-              { src: this.currentTrack.album.cover.urls.original, sizes: '384x384', type: 'image/png' },
-              { src: this.currentTrack.album.cover.urls.original, sizes: '512x512', type: 'image/png' },
-            ]
-          }
-          navigator.mediaSession.metadata = new MediaMetadata(metadata);
-        }
+        this.updateMetadata()
       },
       immediate: false
     },

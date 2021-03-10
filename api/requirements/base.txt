@@ -47,7 +47,7 @@ gunicorn~=20.0.0
 cryptography~=2.9.0
 # requests-http-signature==0.0.3
 # clone until the branch is merged and released upstream
-git+https://github.com/EliotBerriot/requests-http-signature.git@signature-header-support
+git+https://github.com/agateblue/requests-http-signature.git@signature-header-support
 django-cleanup~=5.0.0
 requests~=2.24.0
 pyOpenSSL~=19.1.0
@@ -70,5 +70,8 @@ click~=7.1.0
 service_identity~=18.1.0
 markdown~=3.2.0
 bleach~=3.1.0
-feedparser==6.0.0b3
-watchdog~=0.10.0
+feedparser~=6.0.0
+watchdog~=1.0.2
+
+## Pin third party dependency to avoid issue with latest version
+twisted==20.3.0
