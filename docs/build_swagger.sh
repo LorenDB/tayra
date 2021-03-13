@@ -7,4 +7,4 @@ git clone --branch="v$SWAGGER_VERSION" --depth=1 "https://github.com/swagger-api
 mv /tmp/swagger-ui/dist $TARGET_PATH
 cp swagger.yml $TARGET_PATH
 cp -r api $TARGET_PATH/api
-sed -i "s,http://petstore.swagger.io/v2/swagger.json,swagger.yml,g" $TARGET_PATH/index.html
+sed -i "s,https://petstore.swagger.io/v2/swagger.json,swagger.yml,g" $TARGET_PATH/index.html
