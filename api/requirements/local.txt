@@ -14,7 +14,7 @@ black==19.10b0
 #profiling
 
 asynctest~=0.12.0
-aioresponses~=0.6.0
+aioresponses~=0.7.2
 #line_profiler<3
 #https://github.com/dmclain/django-debug-toolbar-line-profiler/archive/master.zip
 #django-silk
