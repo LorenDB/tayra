@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: 2021-03-05 03:54+0000\n"
-"Last-Translator: Asier Iturralde Sarasola <asier.iturralde@gmail.com>\n"
+"PO-Revision-Date: 2021-03-19 13:58+0000\n"
+"Last-Translator: Porrumentzio <porrumentzio@riseup.net>\n"
 "Language-Team: none\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
@@ -1171,49 +1171,49 @@ msgstr "Blokeatu kontu edo domeinu honetako guztia. Erakundearekin edozein harre
 #: front/src/components/Sidebar.vue:98 src/components/Sidebar.vue:112
 msgctxt "Sidebar/Navigation/List item.Link/Verb"
 msgid "Browse"
-msgstr "Bilatu"
+msgstr "Arakatu"
 
 #: front/src/components/Home.vue:131
 msgctxt "Content/Home/Link"
 msgid "Browse public content"
-msgstr "Bilatu eduki publikoa"
+msgstr "Arakatu eduki publikoa"
 
 #: front/src/components/favorites/List.vue:56
 msgctxt "Content/*/Verb"
 msgid "Browse the library"
-msgstr "Bilatu liburutegia"
+msgstr "Arakatu liburutegia"
 
 #: front/src/components/channels/UploadForm.vue:109
 #: front/src/components/channels/UploadForm.vue:82
 #: front/src/components/channels/UploadForm.vue:73
 msgctxt "*/*/*"
 msgid "Browse…"
-msgstr "Bilatu…"
+msgstr "Arakatu…"
 
 #: front/src/components/library/Albums.vue:4
 msgctxt "Content/Album/Title"
 msgid "Browsing albums"
-msgstr "Albumak bilatzen"
+msgstr "Albumak arakatzen"
 
 #: front/src/components/library/Artists.vue:4
 msgctxt "Content/Artist/Title"
 msgid "Browsing artists"
-msgstr "Bilatu artistak"
+msgstr "Artistak arakatzen"
 
 #: front/src/views/playlists/List.vue:3
 msgctxt "Content/Playlist/Title"
 msgid "Browsing playlists"
-msgstr "Zerrendak bilatzen"
+msgstr "Zerrendak arakatzen"
 
 #: front/src/components/library/Podcasts.vue:4
 msgctxt "Content/Podcasts/Title"
 msgid "Browsing Podcasts"
-msgstr "Podcastak bilatzen"
+msgstr "Podcastak arakatzen"
 
 #: front/src/components/library/Radios.vue:4
 msgctxt "Content/Radio/Title"
 msgid "Browsing radios"
-msgstr "Irratiak bilatzen"
+msgstr "Irratiak arakatzen"
 
 #: front/src/components/library/radios/Builder.vue:5
 msgctxt "Content/Radio/Title"
