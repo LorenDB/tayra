@@ -59,6 +59,9 @@
               <header>
                 <h2 class="ui header" :title="object.title">
                   {{ object.title }}
+                  <span class="ui sub header" v-if="object.release_date">
+                    {{ object.release_date | moment('Y') }}
+                  </span>                   
                 </h2>
                 <artist-label class="rounded" :artist="artist"></artist-label>
               </header>

@@ -17,6 +17,9 @@
             {{ album.artist.name }}
           </router-link>
         </span>
+        <div v-if="album.release_date">
+          {{ album.release_date | moment('Y') }}
+        </div>         
       </div>
     </div>
     <div class="extra content">
