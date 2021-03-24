@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: 2020-12-18 06:29+0000\n"
+"PO-Revision-Date: 2021-03-24 21:38+0000\n"
 "Last-Translator: ghose <xosem@disroot.org>\n"
 "Language-Team: none\n"
 "Language: gl\n"
@@ -80,7 +80,6 @@ msgstr[0] "%{ count } episodio"
 msgstr[1] "%{ count } episodios"
 
 #: front/src/components/audio/artist/Card.vue:16
-#, fuzzy
 msgctxt "*/*/*"
 msgid "%{ count } episode"
 msgid_plural "%{ count } episodes"
@@ -980,7 +979,6 @@ msgid "Artist discography"
 msgstr "Discografía da artista"
 
 #: front/src/components/library/Artists.vue:10
-#, fuzzy
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "Artist name"
 msgstr "Nome do artista"
@@ -1208,10 +1206,9 @@ msgid "Browsing playlists"
 msgstr "Buscando nas listaxes"
 
 #: front/src/components/library/Podcasts.vue:4
-#, fuzzy
 msgctxt "Content/Podcasts/Title"
 msgid "Browsing Podcasts"
-msgstr "Buscando artistas"
+msgstr "Buscando Podcast"
 
 #: front/src/components/library/Radios.vue:4
 msgctxt "Content/Radio/Title"
@@ -1476,7 +1473,6 @@ msgid "Click to select files to upload or drag and drop files or directories"
 msgstr "Preme para escoller os ficheiros a subir ou arrastra e solta ficheiros ou directorios"
 
 #: front/src/components/Queue.vue:92
-#, fuzzy
 msgctxt "*/Queue/*/Verb"
 msgid "Close"
 msgstr "Pechar"
@@ -1639,10 +1635,9 @@ msgid "Create"
 msgstr "Crear"
 
 #: front/src/components/library/Podcasts.vue:64
-#, fuzzy
 msgctxt "Content/*/Verb"
 msgid "Create a Channel"
-msgstr "Crear canle"
+msgstr "Crear Canle"
 
 #: front/src/views/auth/Signup.vue:4
 msgctxt "Content/Signup/Title"
@@ -2795,7 +2790,7 @@ msgstr "Federación"
 #: front/src/components/RemoteSearchForm.vue:7
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "Fediverse"
-msgstr ""
+msgstr "Fediverso"
 
 #: front/src/components/library/EditCard.vue:43
 msgctxt "Content/Library/Card.Table.Header/Short"
@@ -2954,10 +2949,10 @@ msgid "Funkwhale is compatible with other music players that support the Subsoni
 msgstr "Funkwhale é compatible con outros reprodutores de música compatibles coa API Subsonic."
 
 #: front/src/components/Home.vue:87
-#, fuzzy
 msgctxt "Content/Home/Paragraph"
 msgid "Funkwhale is free and developed by a friendly community of volunteers."
-msgstr "Funkwhale é libre e desenvolto por unha amigable comunidade de voluntarias."
+msgstr ""
+"Funkwhale é libre e desenvolto por unha amigable comunidade de voluntarias."
 
 #: front/src/components/About.vue:77
 msgctxt "*/*/*"
@@ -4121,10 +4116,9 @@ msgid "No notification to show."
 msgstr "Sen notificación para mostrar."
 
 #: front/src/components/manage/moderation/DomainsTable.vue:69
-#, fuzzy
 msgctxt "Content/Home/Placeholder"
 msgid "No other pods found"
-msgstr "Non hai coincidencias"
+msgstr "Non se atoparon outras instancias"
 
 #: front/src/components/playlists/PlaylistModal.vue:77
 #: front/src/components/playlists/PlaylistModal.vue:4
@@ -4758,10 +4752,9 @@ msgid "Podcast channel"
 msgstr "Canle de podcast"
 
 #: front/src/components/library/Podcasts.vue:10
-#, fuzzy
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "Podcast Title"
-msgstr "Podcast"
+msgstr "Título do podcast"
 
 #: front/src/components/Sidebar.vue:99 src/components/audio/ChannelForm.vue:217
 #: front/src/components/audio/SearchBar.vue:91
@@ -4771,7 +4764,6 @@ msgid "Podcasts"
 msgstr "Podcasts"
 
 #: front/src/components/library/Podcasts.vue:170
-#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "Podcasts"
 msgstr "Podcasts"
@@ -5502,7 +5494,7 @@ msgstr "Retirar acceso para a aplicación \"%{ application }\"?"
 #: front/src/components/RemoteSearchForm.vue:3
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "RSS"
-msgstr ""
+msgstr "RSS"
 
 #: front/src/views/admin/ChannelDetail.vue:137
 #: src/views/admin/ChannelDetail.vue:132
@@ -5578,7 +5570,6 @@ msgid "Scopes"
 msgstr "Ámbitos"
 
 #: front/src/components/Sidebar.vue:97
-#, fuzzy
 msgctxt "Sidebar/Navigation/List item.Link/Verb"
 msgid "Search"
 msgstr "Buscar"
@@ -5731,7 +5722,6 @@ msgid "Search on Wikipedia"
 msgstr "Buscar en Wikipedia"
 
 #: front/src/components/library/TagsSelector.vue:6
-#, fuzzy
 msgctxt "*/Dropdown/Placeholder/Verb"
 msgid "Search…"
 msgstr "Buscar…"
@@ -5823,7 +5813,6 @@ msgid "Serie"
 msgstr "Serie"
 
 #: front/src/views/Search.vue:201
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Series"
 msgstr "Series"
@@ -6238,10 +6227,9 @@ msgid "Subscribe to a podcast RSS feed"
 msgstr "Subscribirse a fonte RSS do podcast"
 
 #: front/src/components/library/Podcasts.vue:72
-#, fuzzy
 msgctxt "Content/Profile/Button"
 msgid "Subscribe to feed"
-msgstr "Subscribirse a fonte RSS do podcast"
+msgstr "Subscribirse a fonte"
 
 #: front/src/components/audio/SearchBar.vue:185
 msgctxt "Search/*/*"
@@ -6444,10 +6432,11 @@ msgid "The metadata included in the file is invalid or some mandatory fields are
 msgstr "Os metadatos incluídos no ficheiro non son válidos ou faltan algúns campos requeridos."
 
 #: front/src/components/library/FileUpload.vue:51
-#, fuzzy
 msgctxt "Content/Library/List item"
 msgid "The music files you are uploading are in OGG, Flac, MP3 or AIFF format"
-msgstr "Os ficheiros de música que está a subir están correctamente etiquetados."
+msgstr ""
+"Os ficheiros de música que estás a subir están en formato OGG, Flac, MP3 ou "
+"AIFF."
 
 #: front/src/components/library/FileUpload.vue:47
 msgctxt "Content/Library/List item"
@@ -7130,10 +7119,9 @@ msgid "Upload is still pending and will soon be processed by the server."
 msgstr "A subida está pendente e axiña será procesada polo servidor."
 
 #: front/src/components/library/FileUpload.vue:39
-#, fuzzy
 msgctxt "Content/Library/Title/Verb"
 msgid "Upload music from your local storage"
-msgstr "Importa música desde o teu servidor"
+msgstr "Importa música desde a almacenaxe local"
 
 #: front/src/components/common/AttachmentInput.vue:21
 msgctxt "*/*/*"
@@ -7476,10 +7464,9 @@ msgstr "Ver máis…"
 #: src/views/auth/ProfileBase.vue:13 front/src/views/channels/DetailBase.vue:79
 #: src/views/channels/DetailBase.vue:74
 #: front/src/views/library/DetailBase.vue:11
-#, fuzzy
 msgctxt "Content/*/Button.Label/Verb"
 msgid "View on %{ domain }"
-msgstr "Réplica de %{ domain }"
+msgstr "Ver en %{ domain }"
 
 #: front/src/components/library/AlbumDropdown.vue:33
 #: front/src/components/library/ArtistBase.vue:70
