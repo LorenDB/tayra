@@ -74,7 +74,7 @@
             v-if="!playing"
             :title="labels.play"
             :aria-label="labels.play"
-            @click.prevent.stop="togglePlay"
+            @click.prevent.stop="resumePlayback"
             class="circular button control">
               <i :class="['ui', 'big', 'play', {'disabled': !currentTrack}, 'icon']"></i>
           </button>
@@ -82,7 +82,7 @@
             v-else
             :title="labels.pause"
             :aria-label="labels.pause"
-            @click.prevent.stop="togglePlay"
+            @click.prevent.stop="pausePlayback"
             class="circular button control">
               <i :class="['ui', 'big', 'pause', {'disabled': !currentTrack}, 'icon']"></i>
           </button>
@@ -203,7 +203,7 @@
       </div>
     </div>
     <GlobalEvents
-      @keydown.p.prevent.exact="togglePlay"
+      @keydown.p.prevent.exact="togglePlayback"
       @keydown.esc.prevent.exact="$store.commit('ui/queueFocused', null)"
       @keydown.ctrl.shift.left.prevent.exact="previous"
       @keydown.ctrl.shift.right.prevent.exact="next"
@@ -281,8 +281,8 @@ export default {
     }
     // Add controls for notification drawer
     if ('mediaSession' in navigator) {
-      navigator.mediaSession.setActionHandler('play', this.togglePlay);
-      navigator.mediaSession.setActionHandler('pause', this.togglePlay);
+      navigator.mediaSession.setActionHandler('play', this.resumePlayback);
+      navigator.mediaSession.setActionHandler('pause', this.pausePlayback);
       navigator.mediaSession.setActionHandler('seekforward', this.seekForward);
       navigator.mediaSession.setActionHandler('seekbackward', this.seekBackward);
       navigator.mediaSession.setActionHandler('nexttrack', this.next);
@@ -297,7 +297,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      togglePlay: "player/togglePlay",
+      resumePlayback: "player/resumePlayback",
+      pausePlayback: "player/pausePlayback",
+      togglePlayback: "player/togglePlayback",
       mute: "player/mute",
       unmute: "player/unmute",
       clean: "queue/clean",

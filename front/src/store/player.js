@@ -99,7 +99,7 @@ export default {
       commit('errored', false)
       commit('resetErrorCount')
     },
-    togglePlay ({commit, state, dispatch}) {
+    togglePlayback ({commit, state, dispatch}) {
       commit('playing', !state.playing)
       if (state.errored && state.errorCount < state.maxConsecutiveErrors) {
         setTimeout(() => {
@@ -108,6 +108,19 @@ export default {
           }
         }, 3000)
       }
+    },
+    resumePlayback ({commit, state, dispatch}) {
+      commit('playing', true)
+      if (state.errored && state.errorCount < state.maxConsecutiveErrors) {
+        setTimeout(() => {
+          if (state.playing) {
+            dispatch('queue/next', null, {root: true})
+          }
+        }, 3000)
+      }
+    },
+    pausePlayback ({commit}) {
+      commit('playing', false)
     },
     toggleMute({commit, state}) {
       if (state.volume > 0) {
