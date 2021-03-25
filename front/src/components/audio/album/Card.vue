@@ -16,13 +16,11 @@
           <router-link class="discrete link" :to="{name: 'library.artists.detail', params: {id: album.artist.id}}">
             {{ album.artist.name }}
           </router-link>
-        </span>
-        <div v-if="album.release_date">
-          {{ album.release_date | moment('Y') }}
-        </div>         
+        </span>       
       </div>
     </div>
     <div class="extra content">
+      <span v-if="album.release_date">{{ album.release_date | moment('Y') }} · </span>
       <translate translate-context="*/*/*" :translate-params="{count: album.tracks_count}" :translate-n="album.tracks_count" translate-plural="%{ count } tracks">%{ count } track</translate>
       <play-button class="right floated basic icon" :dropdown-only="true" :is-playable="album.is_playable" :dropdown-icon-classes="['ellipsis', 'horizontal', 'large really discrete']" :album="album"></play-button>
     </div>
