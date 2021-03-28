@@ -264,7 +264,7 @@ def get_user_detail_data(user):
         "playlistRole": "true",
         "streamRole": "true",
         "jukeboxRole": "true",
-        "folder": [{"value": f["id"]} for f in get_folders(user)],
+        "folder": [f["id"] for f in get_folders(user)],
     }
 
 
