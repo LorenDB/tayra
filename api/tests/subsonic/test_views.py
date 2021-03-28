@@ -810,8 +810,7 @@ def test_get_user(f, db, logged_in_api_client, factories):
             "coverArtRole": "false",
             "shareRole": "false",
             "folder": [
-                {"value": f["id"]}
-                for f in serializers.get_folders(logged_in_api_client.user)
+                f["id"] for f in serializers.get_folders(logged_in_api_client.user)
             ],
         }
     }
