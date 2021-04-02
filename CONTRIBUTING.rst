@@ -361,7 +361,7 @@ Here is a shortcut you can use/adapt to easily create new fragments from command
     issue="42"
     content="Fixed an overflowing issue on small resolutions (#$issue)"
     category="bugfix"
-    echo $content > changes/changelog.d/$issue.$category
+    echo "$content ($issue)" > changes/changelog.d/$issue.$category
 
 You can of course create fragments by hand in your text editor, or from Gitlab's
 interface as well.
