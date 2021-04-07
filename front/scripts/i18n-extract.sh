@@ -1,4 +1,8 @@
-#!/bin/bash -eux
+#!/usr/bin/env -S bash -eux
+
+cd "$(dirname $0)/.." # change into base directory
+source scripts/utils.sh
+
 locales=$(tail -n +2 src/locales.js | sed -e 's/export default //' | jq '.locales[].code' | xargs echo)
 locales_dir="locales"
 sources=$(find src -name '*.vue' -o -name '*.html' 2> /dev/null)
@@ -7,7 +11,7 @@ touch $locales_dir/app.pot
 GENERATE=${GENERATE-true}
 # Create a main .pot template, then generate .po files for each available language.
 # Extract gettext strings from templates files and create a POT dictionary template.
-$(yarn bin)/gettext-extract --attribute v-translate --quiet --output $locales_dir/app.pot $sources
+$(npm_binaries)/gettext-extract --attribute v-translate --quiet --output $locales_dir/app.pot $sources
 xgettext --language=JavaScript --keyword=npgettext:1c,2,3 \
     --from-code=utf-8 --join-existing --no-wrap \
     --package-name=$(node -e "console.log(require('./package.json').name);") \

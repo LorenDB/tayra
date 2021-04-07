@@ -1,4 +1,6 @@
-#!/bin/bash -eux
+#!/usr/bin/env -S bash -eux
+
+cd "$(dirname $0)/.." # change into base directory
 
 find node_modules/fomantic-ui-css/components -name "*.min.css" -delete
 mkdir -p node_modules/fomantic-ui-css/tweaked
