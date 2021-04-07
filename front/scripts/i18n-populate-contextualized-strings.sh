@@ -1,10 +1,12 @@
-#!/bin/bash -eu
+#!/usr/bin/env -S bash -eux
 
 # Typical use:
 # cp -r locales old_locales
 # ./scripts/i18n-extract.sh
 # ./scripts/i18n-populate-contextualized-strings.sh old_locales locales
 # Then review/commit the changes
+
+cd "$(dirname $0)/.." # change into base directory
 
 old_locales_dir=$1
 new_locales_dir=$2

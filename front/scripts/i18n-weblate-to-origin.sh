@@ -1,4 +1,4 @@
-#!/bin/bash -eux
+#!/usr/bin/env -S bash -eux
 integration_branch="translations-integration"
 git remote add weblate https://translate.funkwhale.audio/git/funkwhale/front/ || echo "remote already exists"
 git fetch weblate
