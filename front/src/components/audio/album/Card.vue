@@ -16,7 +16,7 @@
           <router-link class="discrete link" :to="{name: 'library.artists.detail', params: {id: album.artist.id}}">
             {{ album.artist.name }}
           </router-link>
-        </span>       
+        </span>
       </div>
     </div>
     <div class="extra content">
