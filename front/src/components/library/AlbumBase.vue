@@ -62,9 +62,9 @@
                 </h2>
                 <artist-label class="rounded" :artist="artist"></artist-label>
               </header>
-              <div class="ui small hidden divider"></div>
+              <div v-if="object.release_date || (totalTracks > 0)" class="ui small hidden divider"></div>
+              <span v-if="object.release_date">{{ object.release_date | moment('Y') }} · </span>
               <template v-if="totalTracks > 0">
-                <div class="ui hidden very small divider"></div>
                 <translate key="1" v-if="isSerie" translate-context="Content/Channel/Paragraph"
                   translate-plural="%{ count } episodes"
                   :translate-n="totalTracks"
