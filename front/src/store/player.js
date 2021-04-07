@@ -126,7 +126,7 @@ export default {
         logger.default.error('Could not record track in history')
       })
     },
-    trackEnded ({dispatch, rootState}, track) {
+    trackEnded ({commit, dispatch, rootState}, track) {
       let queueState = rootState.queue
       if (queueState.currentIndex === queueState.tracks.length - 1) {
         // we've reached last track of queue, trigger a reload
@@ -134,6 +134,11 @@ export default {
         dispatch('radios/populateQueue', null, {root: true})
       }
       dispatch('queue/next', null, {root: true})
+      if (queueState.ended) {
+        // Reset playback
+        commit('playing', false)
+        dispatch('updateProgress', 0)
+      }
     },
     trackErrored ({commit, dispatch, state}) {
       commit('errored', true)
