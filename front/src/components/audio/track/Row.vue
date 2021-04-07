@@ -32,6 +32,10 @@
       <translate translate-context="*/*/*">N/A</translate>
     </td>
     <td colspan="2" v-if="displayActions" class="align right">
+      <track-favorite-icon class="favorite-icon" :track="track"></track-favorite-icon>
+      <track-playlist-icon
+        v-if="$store.state.auth.authenticated"
+        :track="track"></track-playlist-icon>
       <play-button
         class="play-button basic icon"
         :dropdown-only="true"
@@ -39,10 +43,6 @@
         :dropdown-icon-classes="['ellipsis', 'vertical', 'large really discrete']"
         :track="track"
       ></play-button>
-      <track-playlist-icon
-        v-if="$store.state.auth.authenticated"
-        :track="track"></track-playlist-icon>
-      <track-favorite-icon class="favorite-icon" :track="track"></track-favorite-icon>
     </td>
   </tr>
 </template>
