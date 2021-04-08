@@ -304,21 +304,15 @@ export default {
       toggleMute: "player/toggleMute",
     }),
     async getTrackData (trackData) {
-      let data = null
-      if (!trackData.uploads.length || trackData.uploads.length === 0) {
-        // we don't have upload informations for this track, we need to fetch it
-        await axios.get(`tracks/${trackData.id}/`).then((response) => {
-          data = response.data
-        }, error => {
-          data = null
-        })
-      } else {
-        return trackData
-      }
-      if (data === null) {
-        return
-      }
-      return data
+      // use previously fetched trackData
+      if (trackData.uploads.length) return trackData
+
+      // we don't have any information for this track, we need to fetch it
+      return axios.get(`tracks/${trackData.id}/`)
+                  .then(
+                    response => response.data,
+                    err => null
+                  )
     },
     shuffle() {
       let disabled = this.queue.tracks.length === 0
@@ -611,8 +605,11 @@ export default {
     async loadSound (newValue, oldValue) {
       let trackData = newValue
       let oldSound = this.currentSound
+      // stop all other sounds!
+      // we do this here (before the track has loaded) to get a predictable
+      // song order.
+      Howler.stop()
       if (oldSound && trackData !== oldValue) {
-        oldSound.stop(this.soundId)
         this.soundId = null
       }
       if (!trackData) {
@@ -620,7 +617,7 @@ export default {
       }
       if (!this.isShuffling && trackData != oldValue) {
         trackData = await this.getTrackData(trackData)
-        if (trackData === null) {
+        if (trackData == null) {
           this.handleError({})
         }
         this.currentSound = this.getSound(trackData)
