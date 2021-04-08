@@ -104,4 +104,5 @@ if env.bool("WEAK_PASSWORDS", default=False):
 MIDDLEWARE = (
     "funkwhale_api.common.middleware.DevHttpsMiddleware",
     "funkwhale_api.common.middleware.ProfilerMiddleware",
+    "funkwhale_api.common.middleware.PymallocMiddleware",
 ) + MIDDLEWARE

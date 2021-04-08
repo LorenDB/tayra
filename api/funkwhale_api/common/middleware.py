@@ -14,6 +14,7 @@ from django.middleware import csrf
 from django.contrib import auth
 from django import urls
 from rest_framework import views
+import tracemalloc
 
 from funkwhale_api.federation import utils as federation_utils
 
@@ -405,3 +406,20 @@ class ProfilerMiddleware:
         response = http.HttpResponse("<pre>%s</pre>" % stream.getvalue())
 
         return response
+
+
+class PymallocMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+
+        if tracemalloc.is_tracing():
+            snapshot = tracemalloc.take_snapshot()
+            stats = snapshot.statistics("lineno")
+
+            print("Memory trace")
+            for stat in stats[:25]:
+                print(stat)
+
+        return self.get_response(request)
