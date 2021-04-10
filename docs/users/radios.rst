@@ -40,7 +40,7 @@ Listening to a Radio
 To start listening to a radio:
 
 - Navigate to ``https://your-instance/library/radios`` or click "Browse Library" and select "Radios" along the top of the screen
-- Find the radio you want to listen to and click on "Start radio"
+- Find the radio you want to listen to and click on "Play radio"
 - Your queue will be populated with the **currently playing** song and the **next song on the radio**
 
 To stop listening to a radio:
