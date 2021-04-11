@@ -636,6 +636,7 @@ class RssFeedItemSerializer(serializers.Serializer):
     links = serializers.ListField()
     tags = serializers.ListField(required=False)
     summary_detail = serializers.DictField(required=False)
+    content = serializers.ListField(required=False)
     published_parsed = DummyField(required=False)
     image = serializers.DictField(required=False)
 
@@ -645,6 +646,16 @@ class RssFeedItemSerializer(serializers.Serializer):
             return
         return {
             "content_type": v.get("type", "text/plain"),
+            "text": content,
+        }
+
+    def validate_content(self, v):
+        # TODO: Are there RSS feeds that use more than one content item?
+        content = v[0].get("value")
+        if not content:
+            return
+        return {
+            "content_type": v[0].get("type", "text/plain"),
             "text": content,
         }
 
@@ -782,7 +793,16 @@ class RssFeedItemSerializer(serializers.Serializer):
         if tags:
             tags_models.set_tags(track, *tags)
 
-        summary = validated_data.get("summary_detail")
+        # "content" refers to the <content:encoded> node in the RSS feed,
+        # whereas "summary_detail" refers to the <description> node.
+        # <description> is intended to be used as a short summary and is often
+        # encoded merely as plain text, whereas <content:encoded> contains
+        # the full episode description and is generally encoded as HTML.
+        #
+        # For details, see https://www.rssboard.org/rss-profile#element-channel-item-description
+        summary = validated_data.get("content")
+        if not summary:
+            summary = validated_data.get("summary_detail")
         if summary:
             common_utils.attach_content(track, "description", summary)
 
