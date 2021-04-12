@@ -96,7 +96,7 @@
                       v-if="!playing"
                       :title="labels.play"
                       :aria-label="labels.play"
-                      @click.prevent.stop="togglePlay"
+                      @click.prevent.stop="resumePlayback"
                       class="control">
                         <i :class="['ui', 'play', {'disabled': !currentTrack}, 'icon']"></i>
                     </span>
@@ -105,7 +105,7 @@
                       v-else
                       :title="labels.pause"
                       :aria-label="labels.pause"
-                      @click.prevent.stop="togglePlay"
+                      @click.prevent.stop="pausePlayback"
                       class="control">
                         <i :class="['ui', 'pause', {'disabled': !currentTrack}, 'icon']"></i>
                     </span>
@@ -308,7 +308,8 @@ export default {
       unmute: "player/unmute",
       clean: "queue/clean",
       toggleMute: "player/toggleMute",
-      togglePlay: "player/togglePlay",
+      resumePlayback: "player/resumePlayback",
+      pausePlayback: "player/pausePlayback",
     }),
     reorder: function(event) {
       this.$store.commit("queue/reorder", {

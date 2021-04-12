@@ -112,19 +112,36 @@ describe('store/player', () => {
         ]
       })
     })
-    it('toggle play false', () => {
+    it('toggle playback false', () => {
       testAction({
-        action: store.actions.togglePlay,
+        action: store.actions.togglePlayback,
         params: {state: {playing: false}},
         expectedMutations: [
           { type: 'playing', payload: true }
         ]
       })
     })
-    it('toggle play true', () => {
+    it('toggle playback true', () => {
       testAction({
-        action: store.actions.togglePlay,
+        action: store.actions.togglePlayback,
         params: {state: {playing: true}},
+        expectedMutations: [
+          { type: 'playing', payload: false }
+        ]
+      })
+    })
+    it('resume playback', () => {
+      testAction({
+        action: store.actions.resumePlayback,
+        params: {state: {}},
+        expectedMutations: [
+          { type: 'playing', payload: true }
+        ]
+      })
+    })
+    it('pause playback', () => {
+      testAction({
+        action: store.actions.pausePlayback,
         expectedMutations: [
           { type: 'playing', payload: false }
         ]
