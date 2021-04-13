@@ -10,6 +10,26 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.1.1 (2021-04-13)
+------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Enhancements:
+
+- Improve UI consistency in artist tracks (#1286)
+- Adds year to album's card and album's base UI
+
+Bugfixes:
+
+- Fix playback issues when pausing close the the end of a track (#1324)
+- Fix tracks playing in the background without the ability to control them (#1213) (#1387)
+- Fixed track playback indicator to reset on queue end (#1380)
+- Frontend build tooling is less dependent on `npm` or `yarn` being used (!1285)
+- Fixed a small discrepancy to the subsonic api 1374
+
+
 1.1 (2021-03-10)
 ----------------
 
