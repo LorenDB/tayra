@@ -5,6 +5,8 @@
       <div class="ui stackable grid row container">
         <div class="six wide column">
           <template v-if="upload">
+            <img alt="Cover Image" class="ui fluid image track-cover-image" v-if="track.cover && track.cover.urls.large_square_crop" v-lazy="$store.getters['instance/absoluteUrl'](track.cover.urls.large_square_crop)">
+            <img alt="Cover Image" class="ui fluid image track-cover-image" v-else-if="track.album.cover && track.album.cover.urls.large_square_crop" v-lazy="$store.getters['instance/absoluteUrl'](track.album.cover.urls.large_square_crop)">
             <h3 class="ui header">
               <translate key="1" v-if="track.artist.content_category === 'music'" translate-context="Content/*/*">Track Details</translate>
               <translate key="2" v-else translate-context="Content/*/*">Episode Details</translate>
