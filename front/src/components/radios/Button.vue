@@ -2,7 +2,7 @@
   <button @click="toggleRadio" :class="['ui', 'primary', {'inverted': running}, 'icon', 'labeled', 'button']">
     <i class="ui feed icon" role="button"></i>
     <template v-if="running"><translate translate-context="*/Player/Button.Label/Short, Verb">Stop radio</translate></template>
-    <template v-else><translate translate-context="*/Queue/Button.Label/Short, Verb">Start radio</translate></template>
+    <template v-else><translate translate-context="*/Queue/Button.Label/Short, Verb">Play radio</translate></template>
   </button>
 </template>
 

@@ -25,7 +25,7 @@
           <i class="play icon"></i>{{ labels.playNow }}
         </button>
         <button v-if="track" class="item basic" :disabled="!playable" @click.stop.prevent="$store.dispatch('radios/start', {type: 'similar', objectId: track.id})" :title="labels.startRadio">
-          <i class="feed icon"></i><translate translate-context="*/Queue/Button.Label/Short, Verb">Start radio</translate>
+          <i class="feed icon"></i><translate translate-context="*/Queue/Button.Label/Short, Verb">Play radio</translate>
         </button>
         <div class="divider"></div>
         <button v-if="filterableArtist" ref="filterArtist" data-ref="filterArtist" class="item basic" :disabled="!filterableArtist" @click.stop.prevent="filterArtist" :title="labels.hideArtist">
