@@ -142,7 +142,7 @@ test_api:
     - pip3 install -r requirements/local.txt
     - pip3 install -r requirements/test.txt
   script:
-    - pytest --cov=funkwhale_api --junit=report.xml tests/
+    - pytest --cov=funkwhale_api --junitxml=report.xml tests/
   tags:
     - docker
   artifacts:
