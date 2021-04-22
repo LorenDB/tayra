@@ -142,9 +142,13 @@ test_api:
     - pip3 install -r requirements/local.txt
     - pip3 install -r requirements/test.txt
   script:
-    - pytest --cov=funkwhale_api tests/
+    - pytest --cov=funkwhale_api --junit=report.xml tests/
   tags:
     - docker
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
 
 test_front:
   interruptible: true
@@ -166,6 +170,8 @@ test_front:
     name: "front_${CI_COMMIT_REF_NAME}"
     paths:
       - front/dist/
+    reports:
+      junit: front/test-results.xml
   tags:
     - docker
 
@@ -285,3 +291,7 @@ build_api:
     - tags@funkwhale/funkwhale
     - master@funkwhale/funkwhale
     - develop@funkwhale/funkwhale
+
+include:
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml

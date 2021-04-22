@@ -7,7 +7,7 @@
   "scripts": {
     "serve": "[ ! -d src/translations ] && npm run i18n-compile; vue-cli-service serve --port ${VUE_PORT:-8080} --host ${VUE_HOST:-0.0.0.0}",
     "build": "scripts/i18n-compile.sh && vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
+    "test:unit": "vue-cli-service test:unit --reporter mocha-junit-reporter",
     "lint": "vue-cli-service lint",
     "i18n-compile": "scripts/i18n-compile.sh",
     "i18n-extract": "scripts/i18n-extract.sh",
@@ -58,6 +58,7 @@
     "eslint-plugin-vue": "^6.1.2",
     "glob-all": "^3.1.0",
     "mocha": "^5.2.0",
+    "mocha-junit-reporter": "^2.0.0",
     "moxios": "^0.4.0",
     "preload-webpack-plugin": "^3.0.0-beta.4",
     "purgecss-webpack-plugin": "^1.6.0",
