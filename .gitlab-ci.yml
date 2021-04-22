@@ -148,7 +148,7 @@ test_api:
   artifacts:
     when: always
     reports:
-      junit: report.xml
+      junit: api/report.xml
 
 test_front:
   interruptible: true
