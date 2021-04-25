@@ -37,7 +37,6 @@ mutagen~=1.45.0
 pymemoize~=1.0.0
 
 django-dynamic-preferences~=1.10
-raven~=6.10.0
 python-magic~=0.4.0
 channels~=2.4.0
 channels_redis~=3.0.0

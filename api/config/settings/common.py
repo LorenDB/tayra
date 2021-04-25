@@ -11,8 +11,6 @@ from urllib.parse import urlsplit
 import environ
 from celery.schedules import crontab
 
-from funkwhale_api import __version__
-
 logger = logging.getLogger("funkwhale_api.config")
 ROOT_DIR = environ.Path(__file__) - 3  # (/a/b/myfile.py - 3 = /)
 APPS_DIR = ROOT_DIR.path("funkwhale_api")
@@ -33,11 +31,6 @@ logging.config.dictConfig(
         },
         "handlers": {
             "console": {"class": "logging.StreamHandler", "formatter": "console"},
-            # # Add Handler for Sentry for `warning` and above
-            # 'sentry': {
-            #     'level': 'WARNING',
-            #     'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-            # },
         },
         "loggers": {
             "funkwhale_api": {
@@ -226,19 +219,6 @@ THIRD_PARTY_APPS = (
     "versatileimagefield",
 )
 
-
-# Sentry
-RAVEN_ENABLED = env.bool("RAVEN_ENABLED", default=False)
-RAVEN_DSN = env("RAVEN_DSN", default="")
-
-if RAVEN_ENABLED:
-    RAVEN_CONFIG = {
-        "dsn": RAVEN_DSN,
-        # If you are using git, you can also automatically configure the
-        # release based on the git info.
-        "release": __version__,
-    }
-    THIRD_PARTY_APPS += ("raven.contrib.django.raven_compat",)
 
 # Apps specific for this project go here.
 LOCAL_APPS = (

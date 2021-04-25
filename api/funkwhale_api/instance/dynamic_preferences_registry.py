@@ -4,7 +4,6 @@ from django.core.validators import FileExtensionValidator
 from dynamic_preferences import types
 from dynamic_preferences.registries import global_preferences_registry
 
-raven = types.Section("raven")
 instance = types.Section("instance")
 ui = types.Section("ui")
 
@@ -105,22 +104,6 @@ class InstanceFunkwhaleSupportMessageEnabled(types.BooleanPreference):
         "If this is enabled, we will periodically display a message to encourage "
         "local users to support Funkwhale."
     )
-
-
-@global_preferences_registry.register
-class RavenDSN(types.StringPreference):
-    show_in_api = True
-    section = raven
-    name = "front_dsn"
-    default = "https://9e0562d46b09442bb8f6844e50cbca2b@sentry.eliotberriot.com/4"
-    verbose_name = "Raven DSN key (front-end)"
-
-    help_text = (
-        "A Raven DSN key used to report front-ent errors to "
-        "a sentry instance. Keeping the default one will report errors to "
-        "Funkwhale developers."
-    )
-    field_kwargs = {"required": False}
 
 
 @global_preferences_registry.register
