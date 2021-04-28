@@ -1,9 +1,4 @@
 from django.urls import reverse
-from rest_framework_jwt.settings import api_settings
-
-jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
-
 
 def test_can_authenticate_using_oauth_token_param_in_url(
     factories, preferences, client, mocker
