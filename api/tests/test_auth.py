@@ -1,5 +1,6 @@
 from django.urls import reverse
 
+
 def test_can_authenticate_using_oauth_token_param_in_url(
     factories, preferences, client, mocker
 ):
