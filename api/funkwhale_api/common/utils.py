@@ -75,11 +75,15 @@ def set_query_parameter(url, **kwargs):
 
 @deconstructible
 class ChunkedPath(object):
+    def sanitize_filename(self, filename):
+        return filename.replace("/", "-")
+
     def __init__(self, root, preserve_file_name=True):
         self.root = root
         self.preserve_file_name = preserve_file_name
 
     def __call__(self, instance, filename):
+        self.sanitize_filename(filename)
         uid = str(uuid.uuid4())
         chunk_size = 2
         chunks = [uid[i : i + chunk_size] for i in range(0, len(uid), chunk_size)]
