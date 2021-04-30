@@ -164,6 +164,7 @@ def discard_unused_icons(rule):
         ".wikipedia",
         ".wrench",
         ".x",
+        ".key",
     ]
     if ":before" not in rule["lines"][0]:
         return False
