@@ -39,5 +39,5 @@ const allowedAttributes = {
 }
 
 export default function sanitize(input) {
-  return sanitizeHtml(input, {allowedAttributes, allowedAttributes})
+  return sanitizeHtml(input, {allowedAttributes, allowedTags})
 }

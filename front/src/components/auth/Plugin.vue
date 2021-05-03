@@ -48,7 +48,6 @@
         <input :id="`plugin-${field.name}`" type="url" v-model="values[field.name]">
         <div v-if="field.help" v-html="markdown.makeHtml(field.help)"></div>
       </div>
-      </div>
       <div v-if="field.type === 'password'" class="field">
         <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
         <input :id="`plugin-${field.name}`" type="password" v-model="values[field.name]">
