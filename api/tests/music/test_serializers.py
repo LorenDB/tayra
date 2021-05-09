@@ -255,6 +255,7 @@ def test_track_serializer(factories, to_api_date):
         "attributed_to": federation_serializers.APIActorSerializer(actor).data,
         "cover": common_serializers.AttachmentSerializer(track.attachment_cover).data,
         "downloads_count": track.downloads_count,
+        "is_playable": bool(track.playable_uploads),
     }
     serializer = serializers.TrackSerializer(track)
     assert serializer.data == expected

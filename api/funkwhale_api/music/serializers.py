@@ -201,7 +201,6 @@ class AlbumSerializer(OptionalDescriptionMixin, serializers.Serializer):
     release_date = serializers.DateField()
     creation_date = serializers.DateTimeField()
     is_local = serializers.BooleanField()
-    is_playable = serializers.SerializerMethodField()
 
     get_attributed_to = serialize_attributed_to
 
@@ -302,6 +301,7 @@ class TrackSerializer(OptionalDescriptionMixin, serializers.Serializer):
     license = serializers.SerializerMethodField()
     cover = cover_field
     get_attributed_to = serialize_attributed_to
+    is_playable = serializers.SerializerMethodField()
 
     def get_artist(self, o):
         return serialize_artist_simple(o.artist)
@@ -322,6 +322,9 @@ class TrackSerializer(OptionalDescriptionMixin, serializers.Serializer):
 
     def get_license(self, o):
         return o.license_id
+
+    def get_is_playable(self, obj):
+        return bool(getattr(obj, "playable_uploads", []))
 
 
 @common_serializers.track_fields_for_update("name", "description", "privacy_level")
