@@ -10,6 +10,25 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.1.2 (2021-05-19)
+------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Enhancements:
+
+- Added modal to prompt users to log in when subscribing to channels (#1296)
+
+
+Bugfixes:
+
+- Added missing is_playable serializer for the tracks endpoint.
+- Fixed minor graphical bug where loaders would appear white in dark theme (#1442)
+- Fixed systemd unit for funkwhale-worker (#1160)
+- Several minor fixes for the Frontend
+
+
 1.1.1 (2021-04-13)
 ------------------
 
