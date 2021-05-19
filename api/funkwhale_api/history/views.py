@@ -56,7 +56,9 @@ class ListeningViewSet(
         )
         tracks = Track.objects.with_playable_uploads(
             music_utils.get_actor_from_request(self.request)
-        ).select_related("artist", "album__artist", "attributed_to")
+        ).select_related(
+            "artist", "album__artist", "attributed_to", "artist__attachment_cover"
+        )
         return queryset.prefetch_related(Prefetch("track", queryset=tracks))
 
     def get_serializer_context(self):
