@@ -8,6 +8,8 @@
       <div :class="['item', itemClasses]" v-for="object in objects" :key="object.id">
         <div class="ui tiny image">
           <img alt="" v-if="object.track.album && object.track.album.cover" v-lazy="$store.getters['instance/absoluteUrl'](object.track.album.cover.urls.medium_square_crop)">
+          <img alt="" v-else-if="object.track.cover" v-lazy="$store.getters['instance/absoluteUrl'](object.track.cover.urls.medium_square_crop)"/>
+          <img alt="" v-else-if="object.track.artist.cover" v-lazy="$store.getters['instance/absoluteUrl'](object.track.artist.cover.urls.medium_square_crop)"/>
           <img alt="" v-else src="../../../assets/audio/default-cover.png">
           <play-button class="play-overlay" :icon-only="true" :button-classes="['ui', 'circular', 'tiny', 'vibrant', 'icon', 'button']" :track="object.track"></play-button>
         </div>
