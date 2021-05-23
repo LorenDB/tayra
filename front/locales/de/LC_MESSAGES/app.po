@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
 "PO-Revision-Date: 2021-05-23 14:41+0000\n"
-"Last-Translator: jovuit <jvuitton@disroot.org>\n"
+"Last-Translator: Georg Krause <mail@georg-krause.net>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -7357,9 +7357,10 @@ msgid "User libraries"
 msgstr "Nutzermediatheken"
 
 #: front/src/views/auth/ProfileOverview.vue:18
+#, fuzzy
 msgctxt "Content/Profile/Header"
 msgid "User Libraries"
-msgstr "Nutzer-Mediatheken"
+msgstr "Mediatheken der Nutzenden"
 
 #: front/src/components/library/Radios.vue:21
 msgctxt "Content/Radio/Title"
