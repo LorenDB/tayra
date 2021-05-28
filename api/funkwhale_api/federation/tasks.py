@@ -461,7 +461,9 @@ class PreserveSomeDataCollector(Collector):
 
     def related_objects(self, related, *args, **kwargs):
         qs = super().related_objects(related, *args, **kwargs)
-        if related.name == "outbox_activities":
+        # We can only exclude the actions if these fields are available, most likely its a
+        # model.Activity than
+        if hasattr(related, "type") and hasattr(related, "creation_date"):
             # exclude the delete activity can be broadcasted properly
             qs = qs.exclude(type="Delete", creation_date__gte=self.creation_date)
 

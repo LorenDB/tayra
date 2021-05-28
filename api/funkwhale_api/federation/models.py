@@ -142,7 +142,6 @@ class Domain(models.Model):
         from funkwhale_api.music import models as music_models
 
         data = Domain.objects.filter(pk=self.pk).aggregate(
-            actors=models.Count("actors", distinct=True),
             outbox_activities=models.Count("actors__outbox_activities", distinct=True),
             libraries=models.Count("actors__libraries", distinct=True),
             channels=models.Count("actors__owned_channels", distinct=True),
@@ -152,6 +151,7 @@ class Domain(models.Model):
             emitted_library_follows=models.Count(
                 "actors__library_follows", distinct=True
             ),
+            actors=models.Count("actors", distinct=True),
         )
         data["artists"] = music_models.Artist.objects.filter(
             from_activity__actor__domain_id=self.pk
@@ -283,12 +283,12 @@ class Actor(models.Model):
 
         data = Actor.objects.filter(pk=self.pk).aggregate(
             outbox_activities=models.Count("outbox_activities", distinct=True),
-            libraries=models.Count("libraries", distinct=True),
             channels=models.Count("owned_channels", distinct=True),
             received_library_follows=models.Count(
                 "libraries__received_follows", distinct=True
             ),
             emitted_library_follows=models.Count("library_follows", distinct=True),
+            libraries=models.Count("libraries", distinct=True),
         )
         data["artists"] = music_models.Artist.objects.filter(
             from_activity__actor=self.pk

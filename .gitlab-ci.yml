@@ -13,8 +13,8 @@ variables:
 stages:
   - review
   - lint
-  - test
   - build
+  - test
   - deploy
   - deps
 
@@ -123,7 +123,7 @@ test_api:
     - postgres:11
     - redis:5
   stage: test
-  image: funkwhale/funkwhale:develop
+  image: $CI_REGISTRY/$IMAGE
   cache:
     key: "$CI_PROJECT_ID__pip_cache"
     paths:
@@ -136,20 +136,21 @@ test_api:
   only:
     - branches
   before_script:
-    - apk add make git gcc python3-dev musl-dev
+    - apk add make git gcc python3-dev musl-dev python3-dev openssl-dev cargo
     - apk add postgresql-dev py3-psycopg2 libldap libffi-dev make zlib-dev jpeg-dev openldap-dev
     - cd api
     - pip3 install -r requirements/base.txt
     - pip3 install -r requirements/local.txt
     - pip3 install -r requirements/test.txt
   script:
-    - pytest --cov=funkwhale_api --junitxml=report.xml tests/
+    - pytest --cov-report xml --cov=funkwhale_api --junitxml=report.xml tests/
   tags:
     - docker
   artifacts:
     when: always
     reports:
       junit: api/report.xml
+      cobertura: api/coverage.xml
 
 test_front:
   interruptible: true
@@ -198,9 +199,20 @@ build_front:
     - tags@funkwhale/funkwhale
     - master@funkwhale/funkwhale
     - develop@funkwhale/funkwhale
-
   tags:
     - docker
+
+build_backend:
+  stage: build
+  image: bash
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - cd api
+    - docker build -t $CI_REGISTRY/$IMAGE .
+    - docker push $CI_REGISTRY/$IMAGE
+  tags:
+    - docker-build
 
 pages:
   stage: test
@@ -296,7 +308,7 @@ build_api:
 check_api_dependencies:
   interruptible: true
   stage: deps
-  image: funkwhale/funkwhale:develop
+  image: $CI_REGISTRY/$IMAGE
   cache:
     key: "$CI_PROJECT_ID__pip_cache"
     paths:
