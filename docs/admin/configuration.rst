@@ -163,6 +163,15 @@ Subsonic
 
 .. autodata:: config.settings.common.SUBSONIC_DEFAULT_TRANSCODING_FORMAT
 
+Email configuration
+^^^^^^^^^^^^^^^^^^^
+
+.. autodata:: config.settings.common.EMAIL_CONFIG
+    :annotation: = consolemail://
+.. autodata:: config.settings.common.DEFAULT_FROM_EMAIL
+    :annotation: = Funkwhale <noreply@yourdomain>
+.. autodata:: config.settings.common.EMAIL_SUBJECT_PREFIX
+
 Other settings
 ^^^^^^^^^^^^^^
 
