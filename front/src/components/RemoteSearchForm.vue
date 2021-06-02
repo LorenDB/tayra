@@ -21,10 +21,10 @@
           {{ labels.fieldLabel }}
         </label>
         <p v-if="type === 'rss'">
-          <translate translate-context="Content/Fetch/Paragraph">Paste here the RSS url or the fediverse address to subscribe to its feed.</translate>
+          <translate translate-context="Content/Fetch/Paragraph">Use this form to subscribe to an RSS feed from its URL.</translate>
         </p>
         <p v-else-if="type === 'artists'">
-          <translate translate-context="Content/Fetch/Paragraph">Use this form to retrieve an object hosted somewhere else in the fediverse.</translate>
+          <translate translate-context="Content/Fetch/Paragraph">Use this form to subscribe to a channel hosted somewhere else on the Fediverse.</translate>
         </p>
         <input type="text" name="object-id" id="object-id" :placeholder="labels.fieldPlaceholder" v-model="id" required>
       </div>
@@ -62,7 +62,6 @@ export default {
     if (this.id) {
       if (this.type === 'rss') {
         this.rssSubscribe()
-
       } else if (this.type === 'artists') {
         this.createFetch()
       }
@@ -70,14 +69,17 @@ export default {
   },
   computed: {
     labels() {
-      let title = this.$pgettext('Head/Fetch/Title', "Search a remote object")
-      let fieldLabel = this.$pgettext('Head/Fetch/Field.Label', "URL or @username")
+      let title = ""
+      let fieldLabel = ""
       let fieldPlaceholder = ""
       if (this.type === "rss") {
         title = this.$pgettext('Head/Fetch/Title', "Subscribe to a podcast RSS feed")
-        fieldLabel = this.$pgettext('*/*/*', "Channel location")
-        fieldLabel = this.$pgettext('*/*/*', "Channel location")
-        fieldPlaceholder = this.$pgettext('Head/Fetch/Field.Placeholder', "@channel@pod.example or https://website.example/rss.xml")
+        fieldLabel = this.$pgettext('*/*/*', "RSS feed location")
+        fieldPlaceholder = this.$pgettext('Head/Fetch/Field.Placeholder', "https://website.example.com/rss.xml")
+      } else if (this.type === 'artists') {
+        title = this.$pgettext('Head/Fetch/Title', "Subscribe to a podcast hosted on the Fediverse")
+        fieldLabel = this.$pgettext('*/*/*', "Fediverse object")
+        fieldPlaceholder = this.$pgettext('Head/Fetch/Field.Placeholder', "@username@example.com")
       }
       return {
         title,
