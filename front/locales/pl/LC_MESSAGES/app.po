@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
 "PO-Revision-Date: 2021-06-19 10:00+0000\n"
-"Last-Translator: Damian Szetela <funkwhale@dszetela.net>\n"
+"Last-Translator: Dominik Danelski <dominik@danelski.pl>\n"
 "Language-Team: \n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -6283,10 +6283,11 @@ msgid "Statistics"
 msgstr "Statystyki"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:530
-#, fuzzy
 msgctxt "Content/Moderation/Help text"
 msgid "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this account"
-msgstr "Statystyki są obliczone na podstawie aktywności i zawartości całego serwera i nie są reprezentatywne dla tego konta"
+msgstr ""
+"Statystyki są obliczone na podstawie aktywności i zawartości całego serwera "
+"i nie są reprezentatywne dla tej domeny"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:428
 msgctxt "Content/Moderation/Help text"
