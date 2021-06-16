@@ -28,6 +28,11 @@ Each category comes with its own set of diagnose tools and/or commands we will d
 steps for each type of problem. Please try those to see if it fix your issues. If none of those works, please report your issue on our
 issue tracker.
 
+.. note::
+
+    To get detailed log messages you might want to set the environment variable ``LOGLEVEL=debug``. If you are
+    using the docker setup you can configure this in the .env file.
+
 Backend issues
 ^^^^^^^^^^^^^^
 
