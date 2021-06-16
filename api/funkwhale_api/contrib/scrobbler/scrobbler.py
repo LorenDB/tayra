@@ -90,7 +90,7 @@ def get_scrobble_payload(track, date, suffix="[0]"):
         "l{}".format(suffix): upload.duration if upload else 0,
         "b{}".format(suffix): (track.album.title if track.album else "") or "",
         "n{}".format(suffix): track.position or "",
-        "m{}".format(suffix): str(track.mbid) or "",
+        "m{}".format(suffix): str(track.mbid or ""),
         "o{}".format(suffix): "P",  # Source: P = chosen by user
     }
     if date:
@@ -115,7 +115,7 @@ def get_scrobble2_payload(track, date, suffix="[0]"):
     if track.position:
         data["trackNumber"] = track.position
     if track.mbid:
-        data["mbid"] = str(track.mbid)
+        data["mbid"] = str(track.mbid or "")
     if date:
         offset = upload.duration / 2 if upload.duration else 0
         data["timestamp"] = int(int(date.timestamp()) - offset)
