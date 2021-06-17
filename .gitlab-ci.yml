@@ -308,7 +308,7 @@ build_api:
 check_api_dependencies:
   interruptible: true
   stage: deps
-  image: $CI_REGISTRY/$IMAGE
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
   cache:
     key: "$CI_PROJECT_ID__pip_cache"
     paths:
