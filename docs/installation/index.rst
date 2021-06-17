@@ -1,5 +1,5 @@
 Installation
-=============
+============
 
 Requirements
 ------------
@@ -11,11 +11,82 @@ Regardless of your chosen installation method, the following requirements must b
 
 .. note::
 
-    Because of the federated nature of Funkwhale, **we strongly recommend you not to change the Funkwhale domain after initial deployment**, as it is likely to break
+    Because of the federated nature of Funkwhale, **it is strongly recommended not to change the Funkwhale domain after initial deployment**, as it is likely to break
     your installation.
+
+Project architecture
+--------------------
+
+The project relies on the following components and services to work:
+
+- A web application server (Python/Django/Gunicorn)
+- A PostgreSQL database to store application data
+- A redis server to store cache and tasks data
+- A celery worker to run asynchronous tasks (such as music import)
+- A celery scheduler to run recurrent tasks
+- A `ntp-synced clock <https://wiki.debian.org/NTP>`_ to ensure federation is working seamlessly
+
+.. note::
+
+    The synced clock is needed for federation purpose, to assess
+    the validity of incoming requests.
+
+Hardware requirements
+---------------------
+
+Funkwhale is not especially CPU hungry. On a dockerized instance with 2 CPUs
+and a few active users, the memory footprint is around 500Mb::
+
+   CONTAINER                   MEM USAGE
+   funkwhale_api_1             202  MiB
+   funkwhale_celerybeat_1      96   MiB
+   funkwhale_celeryworker_1    168  MiB
+   funkwhale_postgres_1        22   MiB
+   funkwhale_redis_1           1    MiB
+
+Some users have reported running Funkwhale on Raspberry Pis with a memory
+consumption of less than 350 MiB.
+
+Thus, Funkwhale should run fine on commodity hardware, small hosting boxes and
+Raspberry Pi. We lack real-world examples of such deployments, so don't hesitate
+do give us your feedback (either positive or negative).
+
+Check out :doc:`../admin/optimization` for advice on how to tune your instance on small
+configurations.
+
+Software requirements
+---------------------
+
+Software requirements will vary depending of your installation method. For
+Docker-based installations, the only requirement will be an Nginx reverse-proxy
+that will expose your instance to the outside world.
+
+If you plan to install your Funkwhale instance without Docker, most of the
+dependencies should be available in your distribution's repositories.
+
+.. note::
+
+   Funkwhale works only with Python >= 3.5, as we need support for async/await.
+   Older versions of Python are not supported.
 
 Available installation methods
 -------------------------------
+
+Funkwhale can be installed using one of the following method:
+  
+- Quick install, the most straight forward way to get Funkwhale;
+- Mono-container Docker installation;
+- Multi-container Docker installation;
+- Manual Debian and Arch Linux installation;
+- `Ansible role <https://dev.funkwhale.audio/funkwhale/ansible/>`_.
+
+Further, Funkwhale packages are available for the following platforms:
+
+- `YunoHost 3 <https://yunohost.org/>`_: https://github.com/YunoHost-Apps/funkwhale_ynh (kindly maintained by `@Jibec <https://github.com/Jibec>`_)
+- ArchLinux (as an AUR package): if you'd rather use a package, check out this alternative installation method on ArchLinux: https://wiki.archlinux.org/index.php/Funkwhale (package and wiki kindly maintained by getzee)
+- `NixOS <https://github.com/mmai/funkwhale-nixos>`_ (kindly maintained by @mmai)
+- `Helm chart <https://gitlab.com/ananace/charts/>`_ to install Funkwhale on Kubernetes (kindly maintained by `@ananace <https://gitlab.com/ananace>`_)
+- `HomelabOS <https://homelabos.com/docs/software/funkwhale/>`_
 
 Quick install
 ^^^^^^^^^^^^^
@@ -40,84 +111,12 @@ Additional info:
 Alternative installation methods
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We also offer Docker images, an installation guide for Debian 9 and Arch Linux, and `an
-Ansible role <https://dev.funkwhale.audio/funkwhale/ansible/>`_.
-
 .. toctree::
    :maxdepth: 1
 
-   external_dependencies
    debian
    docker
-   systemd
    non_amd64_architectures
-
-Third-party packages
-^^^^^^^^^^^^^^^^^^^^
-
-Funkwhale packages are available for the following platforms:
-
-- `YunoHost 3 <https://yunohost.org/>`_: https://github.com/YunoHost-Apps/funkwhale_ynh (kindly maintained by `@Jibec <https://github.com/Jibec>`_)
-- ArchLinux (as an AUR package): if you'd rather use a package, check out this alternative installation method on ArchLinux: https://wiki.archlinux.org/index.php/Funkwhale (package and wiki kindly maintained by getzee)
-- `NixOS <https://github.com/mmai/funkwhale-nixos>`_ (kindly maintained by @mmai)
-- `Helm chart <https://gitlab.com/ananace/charts/>`_ to install Funkwhale on Kubernetes (kindly maintained by `@ananace <https://gitlab.com/ananace>`_)
-- `HomelabOS <https://homelabos.com/docs/software/funkwhale/>`_
-
-Project architecture
---------------------
-
-The project relies on the following components and services to work:
-
-- A web application server (Python/Django/Gunicorn)
-- A PostgreSQL database to store application data
-- A redis server to store cache and tasks data
-- A celery worker to run asynchronous tasks (such as music import)
-- A celery scheduler to run recurrent tasks
-- A `ntp-synced clock <https://wiki.debian.org/NTP>`_ to ensure federation is working seamlessly
-
-.. note::
-
-    The synced clock is needed for federation purpose, to assess
-    the validity of incoming requests.
-
-
-Hardware requirements
----------------------
-
-Funkwhale is not especially CPU hungry. On a dockerized instance with 2 CPUs
-and a few active users, the memory footprint is around ~500Mb::
-
-   CONTAINER                   MEM USAGE
-   funkwhale_api_1             202.1 MiB
-   funkwhale_celerybeat_1      96.52 MiB
-   funkwhale_celeryworker_1    168.7 MiB
-   funkwhale_postgres_1        22.73 MiB
-   funkwhale_redis_1           1.496 MiB
-
-Some users have reported running Funkwhale on Raspberry Pis with a memory
-consumption of less than 350MiB.
-
-Thus, Funkwhale should run fine on commodity hardware, small hosting boxes and
-Raspberry Pi. We lack real-world examples of such deployments, so don't hesitate
-do give us your feedback (either positive or negative).
-
-Check out :doc:`optimization` for advice on how to tune your instance on small
-configurations.
-
-Software requirements
----------------------
-
-Software requirements will vary depending of your installation method. For
-Docker-based installations, the only requirement will be an Nginx reverse-proxy
-that will expose your instance to the outside world.
-
-If you plan to install your Funkwhale instance without Docker, most of the
-dependencies should be available in your distribution's repositories.
-
-.. note::
-
-   Funkwhale works only with Python >= 3.5, as we need support for async/await.
-   Older versions of Python are not supported.
 
 Running Funkwhale on the develop branch
 ---------------------------------------
@@ -144,18 +143,20 @@ since you may have to apply manual actions for your instance to continue to work
 
 .. _frontend-setup:
 
-Frontend setup
----------------
+Serving only the frontend
+-------------------------
 
 .. note::
 
     You do not need to do this if you are deploying using Docker, as frontend files
     are already included in the docker image.
 
+    You also do not need to do this if you are deploying manually on Debian or Arch, as this is covered by the corresponding documentation already.
+
 
 Files for the web frontend are purely static and can simply be downloaded, unzipped and served from any webserver:
 
-.. parsed-literal::
+.. code-block:: shell
 
     cd /srv/funkwhale
     curl -L -o front.zip "https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/|version|/download?job=build_front"
@@ -163,24 +164,32 @@ Files for the web frontend are purely static and can simply be downloaded, unzip
 
 .. _reverse-proxy-setup:
 
-Reverse proxy
---------------
+Reverse proxy configuration
+---------------------------
 
 In order to make Funkwhale accessible from outside your server and to play nicely with other applications on your machine, you should configure a reverse proxy.
+
+We offer sample configurations for Nginx, Apache2 and Caddy.
+
+.. note::
+
+    You can freely adapt the proposed configuration to your own needs, as we cannot
+    cover every use case with a single template, especially when it's related
+    to SSL configuration.
 
 Nginx
 ^^^^^
 
 Ensure you have a recent version of nginx on your server. On Debian-like system, you would have to run the following:
 
-.. code-block:: bash
+.. code-block:: shell
 
     sudo apt-get update
     sudo apt-get install nginx
 
 On Arch Linux and its derivatives:
 
-.. code-block:: bash
+.. code-block:: shell
 
     sudo pacman -S nginx
 
@@ -188,11 +197,15 @@ To avoid configuration errors at this level, we will generate an nginx configura
 using your .env file. This will ensure your reverse-proxy configuration always
 match the application configuration and make upgrade/maintenance easier.
 
+.. note::
+    The following commands need to be run as superuser.
+
 On docker deployments, run the following commands:
 
-.. parsed-literal::
+.. code-block:: shell
 
     export FUNKWHALE_VERSION="|version|"
+
     # download the needed files
     curl -L -o /etc/nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/|version|/deploy/funkwhale_proxy.conf"
     curl -L -o /etc/nginx/sites-available/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/|version|/deploy/docker.proxy.template"
@@ -208,7 +221,6 @@ On docker deployments, run the following commands:
     ln -s /etc/nginx/sites-available/funkwhale.conf /etc/nginx/sites-enabled/
 
 On non-docker deployments, run the following commands:
-
 
 .. parsed-literal::
 
@@ -235,12 +247,6 @@ On non-docker deployments, run the following commands:
 
         grep '${' /etc/nginx/sites-available/funkwhale.conf
 
-.. note::
-
-    You can freely adapt the resulting file to your own needs, as we cannot
-    cover every use case with a single template, especially when it's related
-    to SSL configuration.
-
 Finally, enable the resulting configuration:
 
 .. code-block:: bash
@@ -249,38 +255,30 @@ Finally, enable the resulting configuration:
 
 .. warning::
 
-    If you plan to use to in-place import, ensure the alias value
+    If you plan to use in-place import, ensure the alias value
     in the ``_protected/music`` location matches your MUSIC_DIRECTORY_SERVE_PATH
     env var.
 
-HTTPS Configuration
-:::::::::::::::::::
+Finally, check that the configuration is valid with ``nginx -t`` then reload your nginx server with ``sudo systemctl reload nginx``.
 
-At this point you will need a SSL certificate to enable HTTPS on your server.
-The default nginx configuration assumes you have those available at ``/etc/letsencrypt/live/${FUNKWHALE_HOSTNAME}/``, which
-is the path used by `certbot <https://certbot.eff.org/docs/>`_ when generating certificates with Let's Encrypt.
+.. note::
+    Music (and other static) files are never served by the app itself, but by the reverse
+    proxy. This is needed because a webserver is way more efficient at serving
+    files than a Python process.
 
-In you already have a certificate you'd like to use, simply update the nginx configuration
-and replace ``ssl_certificate`` and ``ssl_certificate_key`` values with the proper paths.
+    However, we do want to ensure users have the right to access music files, and
+    it can't be done at the proxy's level. To tackle this issue, `we use
+    nginx's internal directive <http://nginx.org/en/docs/http/ngx_http_core_module.html#internal>`_.
 
-If you don't have one, comment or remove the lines starting with ``ssl_certificate`` and ``ssl_certificate_key``. You can then proceed to generate
-a certificate, as shown below:
+    When the API receives a request on its music serving endpoint, it will check
+    that the user making the request can access the file. Then, it will return an empty
+    response with a ``X-Accel-Redirect`` header. This header will contain the path
+    to the file to serve to the user, and will be picked by nginx, but never sent
+    back to the client.
 
-.. code-block:: shell
-
-    # install certbot with nginx support
-    sudo apt install python-certbot-nginx
-    # generate the certificate
-    # (accept the terms of service if prompted)
-    sudo certbot --nginx -d yourfunkwhale.domain
-
-This should create a valid certificate and edit the nginx configuration to use the new certificate.
-
-Reloading
-:::::::::
-
-Check the configuration is valid with ``nginx -t`` then reload your nginx server with ``sudo systemctl reload nginx``.
-
+    Using this technique, we can ensure music files are covered by the authentication
+    and permission policy of your instance, while remaining as performant
+    as possible.
 
 Apache2
 ^^^^^^^
@@ -312,11 +310,6 @@ You can tweak the configuration file according to your setup, especially the
 TLS configuration. Otherwise, defaults should work if you followed the
 installation guide.
 
-.. note::
-
-    To obtain a certificate to enable HTTPS on your server, please refer to the note in
-    the nginx chapter above.
-
 Check the configuration is valid with ``apache2ctl configtest``, and once you're
 done, load the new configuration with ``service apache2 restart``.
 
@@ -342,24 +335,36 @@ Caddy v1::
         }
     }
 
+HTTPS configuration
+^^^^^^^^^^^^^^^^^^^
 
-About internal locations
-^^^^^^^^^^^^^^^^^^^^^^^^
+After configuring the reverse proxy, you need a SSL certificate to enable HTTPS on your server.
 
-Music (and other static) files are never served by the app itself, but by the reverse
-proxy. This is needed because a webserver is way more efficient at serving
-files than a Python process.
+The default reverse proxy configuration assumes you have those available at ``/etc/letsencrypt/live/${FUNKWHALE_HOSTNAME}/``, which
+is the path used by `certbot <https://certbot.eff.org/docs/>`_ when generating certificates with Let's Encrypt.
 
-However, we do want to ensure users have the right to access music files, and
-it can't be done at the proxy's level. To tackle this issue, `we use
-nginx's internal directive <http://nginx.org/en/docs/http/ngx_http_core_module.html#internal>`_.
+If you already have a certificate you would like to use, simply update the reverse proxy configuration
+and replace the following values with the proper paths:
+- For nginx: ``ssl_certificate`` and ``ssl_certificate_key``;
+- For Apache2: ``SSLCertificateFile`` and ``SSLCertificateKeyFile``.
 
-When the API receives a request on its music serving endpoint, it will check
-that the user making the request can access the file. Then, it will return an empty
-response with a ``X-Accel-Redirect`` header. This header will contain the path
-to the file to serve to the user, and will be picked by nginx, but never sent
-back to the client.
+If you don't have one, comment or remove the lines starting with ``ssl_certificate`` and ``ssl_certificate_key`` for nginx, and ``SSLCertificateFile`` and ``SSLCertificateKeyFile`` for Apache2. You can then proceed to generate
+a certificate, as shown below. These instructions are provided by `certbot <https://certbot.eff.org/instructions>`:
 
-Using this technique, we can ensure music files are covered by the authentication
-and permission policy of your instance, while remaining as performant
-as possible.
+.. code-block:: shell
+
+    # install certbot
+    sudo snap install core; sudo snap refresh core
+    sudo snap install --classic certbot
+    sudo ln -s /snap/bin/certbot /usr/bin/certbot
+
+    # if you are using nginx: generate the certificate
+    sudo certbot --nginx -d yourfunkwhale.domain
+
+    # if you are using Apache2: generate the certificate
+    sudo certbot --apache -d yourfunkwhale.domain
+
+This creates a valid certificate and edit the nginx or Apache2 configuration to use the new certificate. The certificate will be automatically renewed when they expire.
+    
+
+

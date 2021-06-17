@@ -13,8 +13,8 @@ of registered policies, in turn. Each policy can mutate the message, leave it as
 
 Some of our built-in moderation tools are actually implemented as a MRF policy, e.g:
 
-- Allow-list, when checking incoming messages (`code <https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/api/funkwhale_api/moderation/mrf_policies.py>`_)
-- Domain and user blocking, when checking incoming messages (`code <https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/api/funkwhale_api/federation/mrf_policies.py>`_)
+- Allow-list, when checking incoming messages (`code <https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/api/funkwhale_api/moderation/mrf_policies.py>`__)
+- Domain and user blocking, when checking incoming messages (`code <https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/api/funkwhale_api/federation/mrf_policies.py>`__)
 
 .. note::
 

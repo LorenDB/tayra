@@ -2,8 +2,9 @@ Instance configuration
 ======================
 
 General configuration is achieved using two type of settings:
-:ref:`environment variables <environment-variables>` and
-:ref:`instance settings <instance-settings>`.
+
+- :ref:`environment variables <environment-variables>` and
+- :ref:`instance settings <instance-settings>`.
 
 .. _environment-variables:
 
@@ -11,8 +12,7 @@ Environment variables
 ---------------------
 
 Those are located in your ``.env`` file, which you should have created
-during installation. A full list of available variables can be seen
-:ref:`below <environment-variables>`.
+during installation. A full list of available variables is given :ref:`below <environment-variables>`.
 
 Options from this file are heavily commented, and usually target lower level
 and technical aspects of your instance, such as database credentials.
@@ -20,7 +20,9 @@ and technical aspects of your instance, such as database credentials.
 .. note::
 
     You should restart all Funkwhale processes when you change the values
-    on environment variables.
+    on environment variables::
+        
+        sudo systemctl restart funkwhale.target
 
 
 .. note::
@@ -28,10 +30,11 @@ and technical aspects of your instance, such as database credentials.
     Some characters are unsafe to use in configuration variables that are URLs,
     such as the user and password in the database and SMTP sections.
     If those variables contain such characters, they must be urlencoded, for
-    instance using the following command:
-    ``python3 -c 'import urllib.parse; print(urllib.parse.quote_plus("p@ssword"))``
+    instance using the following command::
 
-    cf. https://github.com/joke2k/django-environ#using-unsafe-characters-in-urls
+        python3 -c 'import urllib.parse; print(urllib.parse.quote_plus("p@ssword"))
+
+    See as well https://github.com/joke2k/django-environ#using-unsafe-characters-in-urls
 
 .. _instance-settings:
 
@@ -186,21 +189,20 @@ User permissions
 
 Funkwhale's permission model works as follows:
 
-- Anonymous users cannot do anything unless configured specifically
-- Logged-in users can use the application, but cannot do things that affect
-  the whole instance
-- Superusers can do anything
+- Anonymous users cannot do anything unless configured specifically;
+- Logged-in users can use the application, but cannot do things that affect the whole instance;
+- Superusers can do anything.
 
 To make things more granular and allow some delegation of responsibility,
 superusers can grant specific permissions to specific users. Available
 permissions are:
 
 - **Manage instance-level settings**: users with this permission can edit instance
-  settings as described in :ref:`instance-settings`
+  settings as described in :ref:`instance-settings`;
 - **Manage library**: users with this permission can import new music in the
-  instance
+  instance;
 - **Manage library federation**: users with this permission can ask to federate with
-  other instances, and accept/deny federation requests from other instances
+  other instances, and accept/deny federation requests from other instances.
 
 There is no dedicated interface to manage users permissions, but superusers
 can login on the :doc:`Django's admin <django>` at ``/api/admin/`` and grant permissions
@@ -216,7 +218,7 @@ on ``https://yourinstanceurl/settings.json``.
 On typical deployments, this url returns a 404 error, which is simply ignored.
 
 Set-up
-------
+^^^^^^
 
 First, create the settings file:
 
@@ -244,11 +246,11 @@ If you are using nginx, add the following snippet to your vhost configuration::
         alias /srv/funkwhale/custom/settings.json;
     }
 
-On apache, add the following to your vhost configuration::
+On Apache, add the following to your vhost configuration::
 
     Alias /settings.json /srv/funkwhale/custom/settings.json
 
-Then reload your reverse proxy.
+Then, reload your reverse proxy.
 
 At this point, visiting ``https://yourinstanceurl/settings.json`` should serve the content
 of the settings.json file.
@@ -285,8 +287,8 @@ Theming
 
 To theme your Funkwhale instance, you need:
 
-1. A CSS file for your theme, that can be loaded by the front-end
-2. To update the value of ``additionalStylesheets`` in your settings.json file to point to your CSS file URL
+1. A CSS file for your theme, that can be loaded by the front-end;
+2. To update the value of ``additionalStylesheets`` in your settings.json file to point to your CSS file URL.
 
 .. code-block:: shell
 
@@ -311,7 +313,7 @@ On nginx, add the following snippet to your vhost config::
         alias /srv/funkwhale/custom;
     }
 
-On apache, use the following::
+On Apache, use the following::
 
     Alias /custom /srv/funkwhale/custom
 

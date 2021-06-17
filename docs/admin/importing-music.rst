@@ -93,8 +93,8 @@ following behaviour during import:
 Because those files are not managed by Funkwhale, we offer additional
 configuration options to ensure the webserver can serve them properly:
 
-- :ref:`setting-MUSIC_DIRECTORY_PATH`
-- :ref:`setting-MUSIC_DIRECTORY_SERVE_PATH`
+- :data:`MUSIC_DIRECTORY_PATH <config.settings.common.MUSIC_DIRECTORY_PATH>`
+- :data:`MUSIC_DIRECTORY_SERVING_PATH <config.settings.common.MUSIC_DIRECTORY_SERVE_PATH>`
 
 We recommend you symlink all your music directories into ``/srv/funkwhale/data/music``
 and run the `import_files` command from that directory. This will make it possible

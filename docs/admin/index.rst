@@ -15,7 +15,11 @@ Setup Guides
    configuration
    importing-music
    external-storages
+   optimization
+   backup
    migration
+   uninstall
+   ldap
 
 Administration
 --------------
@@ -29,10 +33,11 @@ Administration
    upgrading
    mrf
 
-Troubleshooting Issues
-----------------------
+Troubleshooting
+---------------
 
 .. toctree::
    :maxdepth: 2
 
    troubleshooting
+   debugging

@@ -6,6 +6,8 @@ existing Funkwhale setup to a new server. This can be helpful
 if you need to boost resources or if you wish to use a different
 hosting platform.
 
+In this guide, the existing Funkwhale setup is called the origin server, and the new setup the destination server.
+
 Requirements
 ------------
 
@@ -18,67 +20,83 @@ following:
 Non-Docker
 ----------
 
-- On the target server, run through the :doc:`installation steps<../installation/debian>` but skip the Database setup steps
-- Stop all funkwhale related services on the destination server
-- On the original server, create a database backup
+On the destination server, run through the :doc:`installation steps<../installation/debian>` with the exception of the following points:
+
+- Do not enable the extensions ``unaccent`` and ``citext`` when setting up the database;
+- Do not initialize the database by applying the migrate command;
+- Do not create an admin account.
+
+Stop all funkwhale related services on the destination server:
+
+.. code-block:: shell
+
+    sudo systemctl stop funkwhale.target
+
+On the origin server, create a database backup:
 
 .. code-block:: shell
 
     sudo -u funkwhale pg_dump -d funkwhale > "db.dump"
 
-- On the destination server, use rsync to copy the contents of `/srv/funwkhale/data/media/music` and `/srv/funkwhale/data/music` from the original server
+On the destination server, use rsync to fetch the contents of ``/srv/funwkhale/data/media/music/`` and ``/srv/funkwhale/data/media/`` from the origin server, as well as the database dump and the ``.env`` file:
 
 .. code-block:: shell
 
-    rsync -a <your username>@<original server IP/hostname>:/srv/funkwhale/data/media/ /srv/funkwhale/data/media/
-    rsync -a <your username>@<original server IP/hostname>:/srv/funkwhale/data/music/ /srv/funkwhale/data/music/
+    origin = <origin server IP/hostname>
+    username = <your username>
 
-- Copy your .env file and database backup from your original server
+    rsync -a $username@$origin:/srv/funkwhale/data/media/ /srv/funkwhale/data/media/
+    rsync -a $username@$origin:/srv/funkwhale/data/music/ /srv/funkwhale/data/music/
+
+    rsync -a $username@$origin:/srv/funkwhale/config/.env /srv/funkwhale/config/
+    rsync -a $username@$origin:/srv/funkwhale/db.dump /srv/funkwhale/
+
+On the destination server, restore the database dump:
 
 .. code-block:: shell
 
-    rsync -a <your username>@<original server IP/hostname>:/srv/funkwhale/config/.env /srv/funkwhale/config/
-    rsync -a <your username>@<original server IP/hostname>:/srv/funkwhale/db.dump /srv/funkwhale/
+    sudo psql -d funkwhale db.dump
 
-- Restore the database dump
+Once the database has been restored, follow the database migration steps from the non-docker installation guide to complete the installation on the destination server.
+
+Ensure that all DNS changes have been made and start the services:
 
 .. code-block:: shell
 
-    sudo -u funkwhale pg_restore -d funkwhale db.dump
-
-- Once the database has been restored, follow the database migration steps from the guide to complete the installation
-- Ensure that all DNS changes have been made and start the services
+    sudo systemctl start funkwhale.target
 
 Docker
 ------
 
-- On the target server, run through the :doc:`installation steps<../installation/docker>` but skip the `docker-compose run --rm api python manage.py migrate` step
-- Stop all funkwhale related containers on the destination server
-- On the original server, create a database backup
+On the destination server, run through the :doc:`installation steps<../installation/docker>` but skip the ``docker-compose run --rm api python manage.py migrate`` step.
+
+Stop all funkwhale related containers on the destination server.
+
+On the origin server, create a database backup:
 
 .. code-block:: shell
 
     docker exec -t funkwhale_postgres_1 pg_dumpall -c -U postgres > "db.dump"
 
-- On the destination server, use rsync to copy the contents of `/srv/funwkhale/data/media/music` and `/srv/funkwhale/data/music` from the original server
+On the destination server, use rsync to fetch the contents of ``/srv/funwkhale/data/media/music`` and ``/srv/funkwhale/data/media`` from the origin server, as well as the database dump nd the ``.env`` file:
 
 .. code-block:: shell
 
-    rsync -a <your username>@<original server IP/hostname>:/srv/funkwhale/data/media/ /srv/funkwhale/data/media/
-    rsync -a <your username>@<original server IP/hostname>:/srv/funkwhale/data/music/ /srv/funkwhale/data/music/
+    origin = <origin server IP/hostname>
+    username = <your username>
 
-- Copy your .env file and database backup from your original server
+    rsync -a $username@$origin:/srv/funkwhale/data/media/ /srv/funkwhale/data/media/
+    rsync -a $username@$origin:/srv/funkwhale/data/music/ /srv/funkwhale/data/music/
 
-.. code-block:: shell
+    rsync -a $username@$origin:/srv/funkwhale/.env /srv/funkwhale/
+    rsync -a $username@$origin:/srv/funkwhale/db.dump /srv/funkwhale/
 
-    rsync -a <your username>@<original server IP/hostname>:/srv/funkwhale/.env /srv/funkwhale/
-    rsync -a <your username>@<original server IP/hostname>:/srv/funkwhale/db.dump /srv/funkwhale/
-
-- Restore the database dump
+Restore the database dump:
 
 .. code-block:: shell
 
     docker exec -i funkwhale_postgres_1 pg_restore -c -U postgres -d postgres < "db.dump"
 
-- Once the database has been restored, run the migrations
-- Ensure that all DNS changes have been made and start the services
+Once the database has been restored, run the migrations following the docker installation guide. 
+
+Ensure that all DNS changes have been made and start the services.

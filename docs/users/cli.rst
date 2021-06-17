@@ -16,8 +16,6 @@ Here is a (non-exhaustive) list of operations you can perform via the CLI:
 
 .. contents:: Table of Contents
 
-
-
 Installation
 ------------
 
@@ -53,13 +51,6 @@ Here are a couple of commands you can try to get started:
 
     # Search artists matching "zebra" on open.audio
     funkwhale -H https://open.audio artists ls "zebra"
-
-More examples
--------------
-
-You should find enough in this reference document to start using the CLI on your own.
-
-However, we've compiled :doc:`a list of example uses of the CLI <examples>` with advice and explanations, if you want to check it out ;)
 
 Getting help
 ------------
@@ -126,8 +117,8 @@ List of configuration options
 | ``-q``, ``--quiet``                  | ``FUNKWHALE_QUIET``                            | ``true``                                   | Completely disable logging                                    |
 +--------------------------------------+------------------------------------------------+--------------------------------------------+---------------------------------------------------------------+
 
-Listing results
----------------
+Read commands
+-------------
 
 All commands that list results - such as ``funkwhale albums ls`` or ``funkwhale tracks ls`` - share similar behaviors and sets of arguments.
 
@@ -238,8 +229,11 @@ The ``-i`` or ``--ids`` flag displays only the IDs of results, one per line::
 This is especially useful in conjunction with other commands (like deletion commands) and piping.
 Note that this is also technically equivalent to applying the ``--no-headers``, ``--format plain`` and ``--column ID`` flags.
 
+Write commands
+--------------
+
 Deleting objects
-----------------
+^^^^^^^^^^^^^^^^
 
 Some resources support deletion, via commands such as ``funkwhale libraries rm`` or ``funkwhale playlists rm``, followed by one or more IDs::
 
@@ -250,3 +244,68 @@ By default, the ``rm`` command will ask for confirmation, but you can disable th
 
 
 .. _API Documentation: https://docs.funkwhale.audio/swagger/
+
+Examples
+--------
+
+Uploading local files
+^^^^^^^^^^^^^^^^^^^^^
+
+**Goal**: create a library and upload all MP3 files from ``~/Music`` to it
+
+**Commands**::
+
+    funkwhale libraries create --name "My awesome library" --visibility me
+    # copy the returned UUID
+    funkwhale uploads create <UUID> ~/Music/**/*.mp3
+
+
+Favorite an entire album
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Goal**: retrieve all the tracks from an album and add these to your favorites
+
+**Commands**::
+
+    # retrieve the album ID
+    funkwhale albums ls "The Slip"
+
+    # Copy the ID, then retrieve 100 pages of tracks from that album
+    # get only the IDs and pipe those to the favorite creation command
+    funkwhale tracks ls -f "album=<ID>" --ids --limit 100 \
+        | xargs funkwhale favorites tracks create
+
+
+Mirror an artist discography locally
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Goal**: Download the discography of an artist locally, in the ``~/Music`` directory, in an ``Artist/Album/Track`` folder hierarchy
+
+**Commands**::
+
+    # retrieve the artist ID
+    funkwhale artists ls "Nine Inch Nails"
+
+    # Copy the ID, then retrieve 100 pages of tracks from that artist
+    # get only the IDs and pipe those to the download command
+    funkwhale tracks ls -f "artist=<ID>" --ids --limit 100 \
+        | xargs funkwhale tracks download \
+            -f mp3 -d ~/Music -t "{artist}/{album}/{title}.{extension}"
+
+
+Open a remote album in VLC
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Goal**: Variation of the previous example, but instead of downloading an artist discography, we listen to an album in VLC
+
+**Commands**::
+
+    # retrieve the album ID
+    funkwhale albums ls "The Slip"
+
+    # Copy the ID, then retrieve 100 pages of tracks from that album
+    # get only the IDs, download the corresponding tracks and pipe the audio
+    # directly to VLC
+    funkwhale tracks ls -f "album=<ID>" --ids --limit 100 \
+        | xargs funkwhale tracks download \
+        | vlc -

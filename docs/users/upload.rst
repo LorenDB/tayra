@@ -3,11 +3,11 @@ Uploading Content To Funkwhale
 
 To upload content to any Funkwhale instance, you need:
 
-1. :doc:`An account on that instance <create>`
-2. :ref:`Storage space <upload-storage>`
-3. :ref:`A library <upload-library>` or :ref:`channel <upload-channel>`
-4. :ref:`Properly tagged files <upload-tagging>`
-5. :ref:`To upload your files <upload-upload>`
+1. :doc:`An account on that instance <create>`;
+2. :ref:`Storage space <upload-storage>`;
+3. :ref:`A library <upload-library>` or :ref:`channel <upload-channel>`;
+4. :ref:`Properly tagged files <upload-tagging>`;
+5. To upload your files :ref:`to a library <upload_library>` or :ref:`to a channel <channel_upload>`.
 
 .. _upload-storage:
 
@@ -93,14 +93,14 @@ However, Funkwhale can understand and use additional tags to enhance user experi
 | ``Artist`` (required)            | ``Nine Inch Nails``                        | The artist name                                               |
 |                                  |                                            |                                                               |
 +----------------------------------+--------------------------------------------+---------------------------------------------------------------+
-| ``Album``                        | ``The Slip``                               | The album title. If none is provided, an [Unknown Album]     |
+| ``Album``                        | ``The Slip``                               | The album title. If none is provided, an [Unknown Album]      |
 |                                  |                                            | entry will be created                                         |
 +----------------------------------+--------------------------------------------+---------------------------------------------------------------+
 | ``Album artist``                 | ``Trent Reznor``                           | The album artist name (can be different than the track        |
 |                                  |                                            | artist)                                                       |
 |                                  |                                            |                                                               |
 +----------------------------------+--------------------------------------------+---------------------------------------------------------------+
-| ``Genre``                        | ``Industrial, Metal``                      | A comma separated list of tags to associate with the track     |
+| ``Genre``                        | ``Industrial, Metal``                      | A comma separated list of tags to associate with the track    |
 |                                  |                                            | Other supported separators: ``;`` and ``/``                   |
 +----------------------------------+--------------------------------------------+---------------------------------------------------------------+
 | ``Track number``                 | ``4``                                      | The position of the track in the album/release                |
