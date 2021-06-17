@@ -123,7 +123,7 @@ test_api:
     - postgres:11
     - redis:5
   stage: test
-  image: $CI_REGISTRY/$IMAGE
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
   cache:
     key: "$CI_PROJECT_ID__pip_cache"
     paths:
