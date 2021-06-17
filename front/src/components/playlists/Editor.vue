@@ -192,7 +192,7 @@ export default {
     }),
     labels () {
       return {
-        copyTitle: this.$pgettext('Content/Playlist/Button.Tooltip/Verb', 'Copy queued tracks to playlist')
+        copyTitle: this.$pgettext('Content/Playlist/Button.Tooltip/Verb', 'Copy the current queue to this playlist')
       }
     },
     status () {

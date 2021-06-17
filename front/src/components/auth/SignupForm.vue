@@ -2,10 +2,10 @@
   <div v-if="submitted">
     <div class="ui success message">
       <p v-if="signupRequiresApproval">
-        <translate translate-context="Content/Signup/Form/Paragraph">Your account request was successfully submitted. You will be notified by email when our moderation team has reviewed your request.</translate>
+        <translate translate-context="Content/Signup/Form/Paragraph">Your account request was successfully submitted. You will be notified by e-mail when our moderation team has reviewed your request.</translate>
       </p>
       <p v-else>
-        <translate translate-context="Content/Signup/Form/Paragraph">Your account was successfully created. Please verify your email before trying to login.</translate>
+        <translate translate-context="Content/Signup/Form/Paragraph">Your account was successfully created. Please verify your e-mail address before trying to login.</translate>
       </p>
     </div>
     <h2><translate translate-context="Content/Login/Title/Verb">Log in to your Funkwhale account</translate></h2>
@@ -44,7 +44,7 @@
       v-model="username">
     </div>
     <div class="required field">
-      <label for="email-field"><translate translate-context="Content/*/*/Noun">Email</translate></label>
+      <label for="email-field"><translate translate-context="Content/*/*/Noun">E-mail address</translate></label>
       <input
       id="email-field"
       ref="email"
@@ -135,7 +135,7 @@ export default {
         "Enter your invitation code (case insensitive)"
       )
       let usernamePlaceholder = this.$pgettext("Content/Signup/Form/Placeholder", "Enter your username")
-      let emailPlaceholder = this.$pgettext("Content/Signup/Form/Placeholder", "Enter your email")
+      let emailPlaceholder = this.$pgettext("Content/Signup/Form/Placeholder", "Enter your e-mail address")
       return {
         usernamePlaceholder,
         emailPlaceholder,

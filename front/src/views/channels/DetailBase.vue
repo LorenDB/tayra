@@ -54,7 +54,7 @@
                           <i class="feed icon"></i>
                           <translate translate-context="Content/Channels/Header">Subscribe via RSS</translate>
                         </h3>
-                        <p><translate translate-context="Content/Channels/Label">Copy-paste the following URL in your favorite podcasting app:</translate></p>
+                        <p><translate translate-context="Content/Channels/Label">Copy-paste the following URL in your favorite podcatcher:</translate></p>
                         <copy-input :value="object.rss_url" />
                       </template>
                       <template v-if="object.actor">

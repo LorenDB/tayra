@@ -13,11 +13,11 @@ Clicking on this link will bring you to the list of unresolved reports. For conv
 the number of unresolved reports (if any) is also displayed directly next to this link, and updated in real time
 when new reports are submitted.
 
-Email notifications
+E-mail notifications
 -------------------
 
-In addition to the web UI, all moderators will receive a notification email whenever a report is 
-submitted or resolved providing your pod has a valid email sending configuration. 
+In addition to the web UI, all moderators will receive a notification e-mail whenever a report is 
+submitted or resolved providing your pod has a valid e-mail sending configuration. 
 This notification will include a link to review and handle the report, as well as additional 
 information about the report itself.
 
@@ -28,7 +28,7 @@ When viewing the moderation queue, you will be presented with the list of unreso
 
 Each report in the queue should include all the information you need to handle it, in particular:
 
-- Who submitted the report (or the email adress of the submitter if it's an accountless report)
+- Who submitted the report (or the e-mail adress of the submitter if it's an accountless report)
 - The report content
 - A link to the reported object, and a copy of this object data at the time the report was submitted
 

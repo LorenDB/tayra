@@ -28,7 +28,7 @@ def authenticate(username, password):
         raise exceptions.AuthenticationFailed("Wrong username or password.")
 
     if common_authentication.should_verify_email(user):
-        raise exceptions.AuthenticationFailed("You need to verify your email.")
+        raise exceptions.AuthenticationFailed("You need to verify your e-mail address.")
 
     return (user, None)
 
@@ -47,7 +47,7 @@ def authenticate_salt(username, salt, token):
         raise exceptions.AuthenticationFailed("Wrong username or password.")
 
     if common_authentication.should_verify_email(user):
-        raise exceptions.AuthenticationFailed("You need to verify your email.")
+        raise exceptions.AuthenticationFailed("You need to verify your e-mail address.")
 
     return (user, None)
 

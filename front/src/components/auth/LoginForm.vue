@@ -4,10 +4,10 @@
       <h4 class="header"><translate translate-context="Content/Login/Error message.Title">We cannot log you in</translate></h4>
       <ul class="list">
         <li v-if="error == 'invalid_credentials' && $store.state.instance.settings.moderation.signup_approval_enabled.value">
-          <translate translate-context="Content/Login/Error message.List item/Call to action">If you signed-up recently, you may need to wait before our moderation team review your account, or verify your email.</translate>
+          <translate translate-context="Content/Login/Error message.List item/Call to action">If you signed-up recently, you may need to wait before our moderation team review your account, or verify your e-mail address.</translate>
         </li>
         <li v-else-if="error == 'invalid_credentials'">
-          <translate translate-context="Content/Login/Error message.List item/Call to action">Please double-check your username/password couple is correct and ensure you verified your email.</translate>
+          <translate translate-context="Content/Login/Error message.List item/Call to action">Please double-check that your username and password combination is correct and make sure you verified your e-mail address.</translate>
         </li>
         <li v-else>{{ error }}</li>
       </ul>
@@ -15,7 +15,7 @@
     <template v-if="$store.getters['instance/appDomain'] === $store.getters['instance/domain']" >
       <div class="field">
         <label for="username-field">
-          <translate translate-context="Content/Login/Input.Label/Noun">Username or email</translate>
+          <translate translate-context="Content/Login/Input.Label/Noun">Username or e-mail address</translate>
           <template v-if="showSignup">
             |
             <router-link :to="{path: '/signup'}">
@@ -92,7 +92,7 @@ export default {
   },
   computed: {
     labels() {
-      let usernamePlaceholder = this.$pgettext('Content/Login/Input.Placeholder', "Enter your username or email")
+      let usernamePlaceholder = this.$pgettext('Content/Login/Input.Placeholder', "Enter your username or e-mail address")
       return {
         usernamePlaceholder,
       }

@@ -30,7 +30,7 @@
         </div>
       </h2>
       <library-widget :url="`federation/actors/${object.full_username}/libraries/`">
-        <translate translate-context="Content/Profile/Paragraph" slot="title">This user shared the following libraries...</translate>
+        <translate translate-context="Content/Profile/Paragraph" slot="title">This user shared the following libraries</translate>
       </library-widget>
     </div>
 

@@ -10,9 +10,9 @@
               <li v-for="error in errors">{{ error }}</li>
             </ul>
           </div>
-          <p><translate translate-context="Content/Signup/Paragraph">Use this form to request a password reset. We will send an email to the given address with instructions to reset your password.</translate></p>
+          <p><translate translate-context="Content/Signup/Paragraph">Use this form to request a password reset. We will send an e-mail to the given address with instructions to reset your password.</translate></p>
           <div class="field">
-            <label for="account-email"><translate translate-context="Content/Signup/Input.Label">Account's email</translate></label>
+            <label for="account-email"><translate translate-context="Content/Signup/Input.Label">Account's e-mail address</translate></label>
             <input
               id="account-email"
               required
@@ -52,7 +52,7 @@ export default {
   computed: {
     labels() {
       let reset = this.$pgettext('*/Login/*/Verb', "Reset your password")
-      let placeholder = this.$pgettext('Content/Signup/Input.Placeholder', "Enter the email address linked to your account"
+      let placeholder = this.$pgettext('Content/Signup/Input.Placeholder', "Enter the e-mail address linked to your account"
       )
       return {
         reset,

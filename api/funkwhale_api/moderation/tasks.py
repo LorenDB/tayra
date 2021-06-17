@@ -106,14 +106,16 @@ def send_new_report_email_to_moderators(report):
         "",
         "—",
         "",
-        "You are receiving this email because you are a moderator for {}.".format(
+        "You are receiving this e-mail because you are a moderator for {}.".format(
             settings.FUNKWHALE_HOSTNAME
         ),
     ]
 
     for moderator in moderators:
         if not moderator.email:
-            logger.warning("Moderator %s has no email configured", moderator.username)
+            logger.warning(
+                "Moderator %s has no e-mail address configured", moderator.username
+            )
             continue
         mail.send_mail(
             subject,
@@ -192,14 +194,16 @@ def notify_mods_signup_request_pending(obj):
         "",
         "—",
         "",
-        "You are receiving this email because you are a moderator for {}.".format(
+        "You are receiving this e-mail because you are a moderator for {}.".format(
             settings.FUNKWHALE_HOSTNAME
         ),
     ]
 
     for moderator in moderators:
         if not moderator.email:
-            logger.warning("Moderator %s has no email configured", moderator.username)
+            logger.warning(
+                "Moderator %s has no e-mail address configured", moderator.username
+            )
             continue
         mail.send_mail(
             subject,
@@ -213,7 +217,7 @@ def notify_submitter_signup_request_approved(user_request):
     submitter_repr = user_request.submitter.preferred_username
     submitter_email = user_request.submitter.user.email
     if not submitter_email:
-        logger.warning("User %s has no email configured", submitter_repr)
+        logger.warning("User %s has no e-mail address configured", submitter_repr)
         return
     subject = "Welcome to {}, {}!".format(settings.FUNKWHALE_HOSTNAME, submitter_repr)
     login_url = federation_utils.full_url("/login")
@@ -223,7 +227,7 @@ def notify_submitter_signup_request_approved(user_request):
         "Our moderation team has approved your account request and you can now start "
         "using the service. Please visit {} to get started.".format(login_url),
         "",
-        "Before your first login, you may need to verify your email address if you didn't already.",
+        "Before your first login, you may need to verify your e-mail address if you didn't already.",
     ]
 
     mail.send_mail(
@@ -238,7 +242,7 @@ def notify_submitter_signup_request_refused(user_request):
     submitter_repr = user_request.submitter.preferred_username
     submitter_email = user_request.submitter.user.email
     if not submitter_email:
-        logger.warning("User %s has no email configured", submitter_repr)
+        logger.warning("User %s has no e-mail address configured", submitter_repr)
         return
     subject = "Your account request at {} was refused".format(
         settings.FUNKWHALE_HOSTNAME

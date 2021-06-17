@@ -107,7 +107,7 @@
           </h3>
           <template v-if="openRegistrations">
             <p>
-              <translate translate-context="Content/Home/Paragraph">Sign up now to keep a track of your favorites, create playlists, discover new content and much more!</translate>
+              <translate translate-context="Content/Home/Paragraph">Sign up now to keep track of your favorites, create playlists, discover new content and much more!</translate>
             </p>
             <p v-if="defaultUploadQuota">
               <translate translate-context="Content/Home/Paragraph" :translate-params="{quota: humanSize(defaultUploadQuota * 1000 * 1000)}">Users on this pod also get %{ quota } of free storage to upload their own content!</translate>

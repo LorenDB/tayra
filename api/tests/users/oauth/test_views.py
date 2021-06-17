@@ -427,5 +427,5 @@ def test_token_auth(
     assert response.status_code == expected_status_code
 
     if expected_status_code != 200:
-        # confirmation email should have been sent again
+        # confirmation e-mail should have been sent again
         assert len(mailoutbox) == sent_emails + 1

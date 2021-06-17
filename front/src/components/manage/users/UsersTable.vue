@@ -87,8 +87,10 @@
 
       <span v-if="result && result.results.length > 0">
         <translate translate-context="Content/*/Paragraph"
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}">
-          Showing results %{ start }-%{ end } on %{ total }
+          translate-plural="Showing results %{ start } to %{ end } from %{ total }"
+          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
+          :translate-n="result.count">
+          Showing one result
         </translate>
       </span>
     </div>

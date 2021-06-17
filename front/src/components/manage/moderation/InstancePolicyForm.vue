@@ -107,7 +107,7 @@ export default {
   computed: {
     labels () {
       return {
-        summaryHelp: this.$pgettext('Content/Moderation/Help text', "Explain why you're applying this policy. Depending on your instance configuration, this will help you remember why you acted on this account or domain, and may be displayed publicly to help users understand what moderation rules are in place."),
+        summaryHelp: this.$pgettext('Content/Moderation/Help text', "Explain why you're applying this policy: this will help you remember why you added this rule. Depending on your pod configuration, this may be displayed publicly to help users understand the moderation rules in place."),
         isActiveHelp: this.$pgettext('Content/Moderation/Help text', "Use this setting to temporarily enable/disable the policy without completely removing it."),
         blockAllHelp: this.$pgettext('Content/Moderation/Help text', "Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.)"),
         silenceActivity: {

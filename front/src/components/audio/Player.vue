@@ -697,8 +697,8 @@ export default {
     labels() {
       let audioPlayer = this.$pgettext('Sidebar/Player/Hidden text', "Media player")
       let previous = this.$pgettext('Sidebar/Player/Icon.Tooltip', "Previous track")
-      let play = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Play track")
-      let pause = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Pause track")
+      let play = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Play")
+      let pause = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Pause")
       let next = this.$pgettext('Sidebar/Player/Icon.Tooltip', "Next track")
       let unmute = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Unmute")
       let mute = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Mute")

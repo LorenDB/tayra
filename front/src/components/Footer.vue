@@ -14,7 +14,7 @@
           </h4>
           <div class="ui list">
             <router-link v-if="this.$route.path != '/about'" class="link item" to="/about">
-              <translate translate-context="Footer/About/List item.Link">About page</translate>
+              <translate translate-context="Footer/About/List item.Link">About</translate>
             </router-link>
             <router-link v-else-if="this.$route.path == '/about' && $store.state.auth.authenticated" class="link item" to="/library">
               <translate translate-context="Footer/*/List item.Link">Go to Library</translate>
@@ -71,7 +71,7 @@
           </div>
           <div class="ui hidden divider"></div>
           <p>
-            <translate translate-context="Footer/*/List item.Link">The funkwhale logo was kindly designed and provided by Francis Gading.</translate>
+            <translate translate-context="Footer/*/List item.Link">The Funkwhale logo was kindly designed and provided by Francis Gading.</translate>
           </p>
         </section>
       </div>

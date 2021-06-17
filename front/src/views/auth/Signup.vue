@@ -2,7 +2,7 @@
   <main class="main pusher" v-title="labels.title">
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
-        <h2><translate translate-context="Content/Signup/Title">Create a funkwhale account</translate></h2>
+        <h2><translate translate-context="Content/Signup/Title">Create a Funkwhale account</translate></h2>
         <signup-form :default-invitation="defaultInvitation" :next="next"></signup-form>
       </div>
     </section>

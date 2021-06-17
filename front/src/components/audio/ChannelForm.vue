@@ -9,7 +9,7 @@
     <template v-if="metadataChoices">
       <fieldset v-if="creating && step === 1" class="ui grouped channel-type required field">
         <legend>
-          <translate translate-context="Content/Channel/Paragraph">What this channel will be used for?</translate>
+          <translate translate-context="Content/Channel/Paragraph">What will this channel be used for?</translate>
         </legend>
         <div class="ui hidden divider"></div>
         <div class="field">
@@ -33,7 +33,7 @@
         </div>
         <div class="ui required field">
           <label for="channel-username">
-            <translate translate-context="Content/Channel/*">Social Network Name</translate>
+            <translate translate-context="Content/Channel/*">Fediverse handle</translate>
           </label>
           <div class="ui left labeled input">
             <div class="ui basic label">@</div>
@@ -42,7 +42,7 @@
           <template v-if="creating">
             <div class="ui small hidden divider"></div>
             <p>
-              <translate translate-context="Content/Channels/Paragraph">Used in URLs and to follow this channel on the federation. You cannot change it afterwards.</translate>
+              <translate translate-context="Content/Channels/Paragraph">Used in URLs and to follow this channel in the Fediverse. It cannot be changed later.</translate>
             </p>
           </template>
         </div>
@@ -123,7 +123,7 @@
         <div class="ui two fields" v-if="newValues.content_category === 'podcast'">
           <div class="ui field">
             <label for="channel-itunes-email">
-              <translate translate-context="*/*/*">Owner email</translate>
+              <translate translate-context="*/*/*">Owner e-mail address</translate>
             </label>
             <input
               name="channel-itunes-email"

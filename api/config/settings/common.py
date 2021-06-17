@@ -308,7 +308,7 @@ DEFAULT_FROM_EMAIL = env(
     "DEFAULT_FROM_EMAIL", default="Funkwhale <noreply@{}>".format(FUNKWHALE_HOSTNAME)
 )
 """
-Name and email address used to send system emails.
+Name and e-mail address used to send system e-mails.
 
 Default: ``Funkwhale <noreply@yourdomain>``
 
@@ -320,17 +320,17 @@ Default: ``Funkwhale <noreply@yourdomain>``
 """
 EMAIL_SUBJECT_PREFIX = env("EMAIL_SUBJECT_PREFIX", default="[Funkwhale] ")
 """
-Subject prefix for system emails.
+Subject prefix for system e-mails.
 """
 SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 
 
 EMAIL_CONFIG = env.email_url("EMAIL_CONFIG", default="consolemail://")
 """
-SMTP configuration for sending emails. Possible values:
+SMTP configuration for sending e-mails. Possible values:
 
-- ``EMAIL_CONFIG=consolemail://``: output emails to console (the default)
-- ``EMAIL_CONFIG=dummymail://``: disable email sending completely
+- ``EMAIL_CONFIG=consolemail://``: output e-mails to console (the default)
+- ``EMAIL_CONFIG=dummymail://``: disable e-mail sending completely
 
 On a production instance, you'll usually want to use an external SMTP server:
 
@@ -591,10 +591,11 @@ ACCOUNT_EMAIL_VERIFICATION_ENFORCE = env.bool(
     "ACCOUNT_EMAIL_VERIFICATION_ENFORCE", default=False
 )
 """
-Determine wether users need to verify their email address before using
-the service. Enabling this can be useful to reduce spam or bots accounts,
-however, you'll need to configure a mail server so that your users can receive
-the verification emails, using :attr:`EMAIL_CONFIG`.
+Determine wether users need to verify their e-mail address before using the service. Enabling this can be useful
+to reduce spam or bots accounts, however, you'll need to configure a mail server so that your users can receive the
+verification e-mails, using :attr:`EMAIL_CONFIG`.
+
+Note that regardless of the setting value, superusers created through the command line will never require verification.
 
 Note that regardless of the setting value, superusers created through the
 command line will never require verification.
@@ -1255,7 +1256,7 @@ MODERATION_EMAIL_NOTIFICATIONS_ENABLED = env.bool(
     "MODERATION_EMAIL_NOTIFICATIONS_ENABLED", default=True
 )
 """
-Whether to enable email notifications to moderators and pods admins.
+Whether to enable e-mail notifications to moderators and pods admins.
 """
 FEDERATION_AUTHENTIFY_FETCHES = True
 FEDERATION_SYNCHRONOUS_FETCH = env.bool("FEDERATION_SYNCHRONOUS_FETCH", default=True)

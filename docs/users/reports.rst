@@ -29,7 +29,7 @@ Accountless reports
 If this feature is enabled on the pod you are browsing, you'll be able to submit reports without an account.
 
 This works exactly the same, but the report form will have an extra "email" field where you should include a working
-email address, in the event moderators need to contact you.
+e-mail address, in the event moderators need to contact you.
 
 Reporting an account
 --------------------

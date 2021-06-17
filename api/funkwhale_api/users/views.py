@@ -38,7 +38,7 @@ class RegisterView(registration_views.RegisterView):
     def perform_create(self, serializer):
         user = super().perform_create(serializer)
         if not user.is_active:
-            # manual approval, we need to send the confirmation email by hand
+            # manual approval, we need to send the confirmation e-mail by hand
             authentication.send_email_confirmation(self.request, user)
         return user
 

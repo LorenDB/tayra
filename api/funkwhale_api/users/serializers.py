@@ -294,7 +294,7 @@ class UserChangeEmailSerializer(serializers.Serializer):
             .exclude(user=self.context["user"])
             .exists()
         ):
-            raise serializers.ValidationError("This email address is already in use")
+            raise serializers.ValidationError("This e-mail address is already in use")
         return value
 
     def save(self, request):

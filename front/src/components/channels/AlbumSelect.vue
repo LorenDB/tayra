@@ -1,7 +1,7 @@
 <template>
   <div>
     <label for="album-dropdown">
-      <translate v-if="channel && channel.artist.content_category === 'podcast'" key="1" translate-context="*/*/*">Serie</translate>
+      <translate v-if="channel && channel.artist.content_category === 'podcast'" key="1" translate-context="*/*/*">Series</translate>
       <translate v-else key="2" translate-context="*/*/*">Album</translate>
     </label>
     <select id="album-dropdown" :value="value" @input="$emit('input', $event.target.value)" class="ui search normal dropdown">

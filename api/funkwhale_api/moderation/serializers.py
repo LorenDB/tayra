@@ -304,7 +304,7 @@ class ReportSerializer(serializers.ModelSerializer):
 
         if not validated_data.get("submitter_email"):
             raise serializers.ValidationError(
-                "You need to provide an email address to submit this report"
+                "You need to provide an e-mail address to submit this report"
             )
 
         return validated_data

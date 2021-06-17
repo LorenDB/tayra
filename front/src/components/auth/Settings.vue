@@ -72,7 +72,7 @@
             </ul>
           </div>
           <div class="field">
-            <label for="old-password-field"><translate translate-context="Content/Settings/Input.Label">Old password</translate></label>
+            <label for="old-password-field"><translate translate-context="Content/Settings/Input.Label">Current password</translate></label>
             <password-input field-id="old-password-field" required v-model="old_password" />
           </div>
           <div class="field">
@@ -205,9 +205,9 @@
             <translate translate-context="Content/Settings/Title/Noun">Your applications</translate>
           </div>
         </h2>
-        <p><translate translate-context="Content/Settings/Paragraph">This is the list of applications that you have created.</translate></p>
+        <p><translate translate-context="Content/Settings/Paragraph">This is the list of applications that you have registered.</translate></p>
         <router-link class="ui success button" :to="{name: 'settings.applications.new'}">
-          <translate translate-context="Content/Settings/Button.Label">Create a new application</translate>
+          <translate translate-context="Content/Settings/Button.Label">Register a new application</translate>
         </router-link>
         <table v-if="ownedApps.length > 0" class="ui compact very basic unstackable table">
           <thead>
@@ -238,10 +238,10 @@
                 <dangerous-button
                   class="ui tiny danger button"
                   @confirm="deleteApp(app.client_id)">
-                  <translate translate-context="*/*/*/Verb">Delete</translate>
-                  <p slot="modal-header" v-translate="{application: app.name}" translate-context="Popup/Settings/Title">Delete application "%{ application }"?</p>
-                  <p slot="modal-content"><translate translate-context="Popup/Settings/Paragraph">This will permanently delete the application and all the associated tokens.</translate></p>
-                  <div slot="modal-confirm"><translate translate-context="*/Settings/Button.Label/Verb">Delete application</translate></div>
+                  <translate translate-context="*/*/*/Verb">Remove</translate>
+                  <p slot="modal-header" v-translate="{application: app.name}" translate-context="Popup/Settings/Title">Remove application "%{ application }"?</p>
+                  <p slot="modal-content"><translate translate-context="Popup/Settings/Paragraph">This will permanently remove the application and all the associated tokens.</translate></p>
+                  <div slot="modal-confirm"><translate translate-context="*/Settings/Button.Label/Verb">Remove application</translate></div>
                 </dangerous-button>
               </td>
             </tr>
@@ -249,10 +249,10 @@
         </table>
         <empty-state v-else>
           <translate slot="title" translate-context="Content/Applications/Paragraph">
-            You don't have any configured application yet.
+            You don't have registered any application yet.
           </translate>
           <translate translate-context="Content/Applications/Paragraph">
-            Create one to integrate Funkwhale with third-party applications.
+            Register one to integrate Funkwhale with third-party applications.
           </translate>
         </empty-state>
       </section>
@@ -275,24 +275,24 @@
         <h2 class="ui header">
           <i class="comment icon"></i>
           <div class="content">
-            <translate translate-context="*/*/Button.Label">Change my email address</translate>
+            <translate translate-context="*/*/Button.Label">Change my e-mail address</translate>
           </div>
         </h2>
         <p>
-          <translate translate-context="Content/Settings/Paragraph'">Change the email address associated with your account. We will send a confirmation to the new address.</translate>
+          <translate translate-context="Content/Settings/Paragraph'">Change the e-mail address associated with your account. We will send a confirmation to the new address.</translate>
         </p>
         <p>
-          <translate :translate-params="{email: $store.state.auth.profile.email}" translate-context="Content/Settings/Paragraph'">Your current email address is %{ email }.</translate>
+          <translate :translate-params="{email: $store.state.auth.profile.email}" translate-context="Content/Settings/Paragraph'">Your current e-mail address is %{ email }.</translate>
         </p>
         <form class="ui form" @submit.prevent="changeEmail">
           <div v-if="changeEmailErrors.length > 0" role="alert" class="ui negative message">
-            <h4 class="header"><translate translate-context="Content/Settings/Error message.Title">We cannot change your email address</translate></h4>
+            <h4 class="header"><translate translate-context="Content/Settings/Error message.Title">We cannot change your e-mail address</translate></h4>
             <ul class="list">
               <li v-for="error in changeEmailErrors">{{ error }}</li>
             </ul>
           </div>
           <div class="field">
-            <label for="new-email"><translate translate-context="*/*/*">New email</translate></label>
+            <label for="new-email"><translate translate-context="*/*/*">New e-mail address</translate></label>
             <input id="new-email" required v-model="newEmail" type="email" />
           </div>
           <div class="field">
@@ -570,7 +570,7 @@ export default {
             self.isChangingEmail = false
             self.newEmail = null
             self.emailPassword = null
-            let msg = self.$pgettext('*/Auth/Message', 'Your email has been changed, please check your inbox for our confirmation message.')
+            let msg = self.$pgettext('*/Auth/Message', 'Your e-mail address has been changed, please check your inbox for our confirmation message.')
             self.$store.commit('ui/addMessage', {
               content: msg,
               date: new Date()
