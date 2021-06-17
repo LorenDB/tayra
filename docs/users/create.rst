@@ -15,7 +15,7 @@ Signing up to an Instance
 Once you have chosen the instance you would like to sign up to, creating an account is easy.
 
 1. Click on the "Create an account" option on the left-hand side
-2. Enter your preferred username, email address, and password
+2. Enter your preferred username, e-mail address, and password
 3. [Optional] enter an Invitation code if you received an invite from an existing user
 4. Click on "Create my Account"
 5. Once you have created your account, you will be required to log in.

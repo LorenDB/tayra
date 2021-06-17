@@ -3,7 +3,7 @@
 Local settings
 
 - Run in Debug mode
-- Use console backend for emails
+- Use console backend for e-mails
 - Add Django Debug Toolbar
 - Add django-extensions as app
 """

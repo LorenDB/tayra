@@ -285,7 +285,7 @@ paths:
     post:
       summary: Request a password reset
       description: |
-        Request a password reset. An email with reset instructions will be sent to the provided email,
+        Request a password reset. An e-mail with reset instructions will be sent to the provided e-mail address,
         if it's associated with a user account.
       tags:
         - "Auth and security"
@@ -341,7 +341,7 @@ paths:
                 $ref: "./api/definitions.yml#/Me"
   /api/v1/users/users/change-email/:
     post:
-      summary: Update the email address associated with a user account
+      summary: Update the e-mail address associated with a user account
       tags:
         - "Auth and security"
       requestBody:

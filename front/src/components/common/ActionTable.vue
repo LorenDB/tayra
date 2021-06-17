@@ -82,7 +82,7 @@
                         :translate-n="objectsData.count"
                         :translate-params="{total: objectsData.count}"
                         translate-plural="Select all %{ total } elements">
-                        Select all %{ total } elements
+                        Select one element
                       </translate>
                     </a>
                     <a @click.prevent="selectAll = false" v-else href="">

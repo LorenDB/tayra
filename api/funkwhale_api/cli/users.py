@@ -37,7 +37,7 @@ def handler_create_user(
     utils.logger.debug("Validating user data…")
     serializer.is_valid(raise_exception=True)
 
-    # Override email validation, we assume accounts created from CLI have a valid email
+    # Override e-mail validation, we assume accounts created from CLI have a valid e-mail
     request = FakeRequest(session={"account_verified_email": email})
     utils.logger.debug("Creating user…")
     user = serializer.save(request=request)

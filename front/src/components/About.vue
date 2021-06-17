@@ -7,7 +7,7 @@
             v-translate="{podName: podName}"
             translate-context="Content/Home/Header"
             :translate-params="{podName: podName}">
-            About %{ podName }!
+            About %{ podName }
           </span>
           <div v-if="shortDescription" class="sub header">
             {{ shortDescription }}
@@ -179,16 +179,16 @@
                   <i class="music really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: parseInt(stats.hours).toLocaleString($store.state.ui.momentLocale)}" :translate-n="parseInt(stats.hours)" translate-plural="%{ count } hours of music">%{ count } hour of music</translate>
                 </p>
                 <p v-if="stats.artists">
-                  <i class="users really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.artists.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.artists" translate-plural="%{ count } artists">%{ count } artists</translate>
+                  <i class="users really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.artists.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.artists" translate-plural="%{ count } artists">%{ count } artist</translate>
                 </p>
                 <p v-if="stats.albums">
-                  <i class="headphones really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.albums.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.albums" translate-plural="%{ count } albums">%{ count } albums</translate>
+                  <i class="headphones really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.albums.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.albums" translate-plural="%{ count } albums">%{ count } album</translate>
                 </p>
                 <p v-if="stats.tracks">
-                  <i class="file really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.tracks.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.tracks" translate-plural="%{ count } tracks">%{ count } tracks</translate>
+                  <i class="file really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.tracks.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.tracks" translate-plural="%{ count } tracks">%{ count } track</translate>
                 </p>
                 <p v-if="stats.listenings">
-                  <i class="play really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.listenings.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.listenings" translate-plural="%{ count } listenings">%{ count } listenings</translate>
+                  <i class="play really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.listenings.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.listenings" translate-plural="%{ count } listenings">%{ count } listening</translate>
                 </p>
               </template>
             </div>

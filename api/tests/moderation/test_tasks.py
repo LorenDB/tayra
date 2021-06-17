@@ -15,9 +15,9 @@ def test_report_created_signal_calls_send_new_report_mail(factories, mocker):
 def test_report_created_signal_sends_email_to_mods(factories, mailoutbox, settings):
     mod1 = factories["users.User"](permission_moderation=True)
     mod2 = factories["users.User"](permission_moderation=True)
-    # inactive, so no email
+    # inactive, so no e-mail
     factories["users.User"](permission_moderation=True, is_active=False)
-    # no moderation permission, so no email
+    # no moderation permission, so no e-mail
     factories["users.User"]()
 
     report = factories["moderation.Report"]()

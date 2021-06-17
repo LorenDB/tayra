@@ -33,7 +33,7 @@
             </label>
             <input type="email" v-model="submitterEmail" name="report-submitter-email" id="report-submitter-email" required>
             <p>
-              <translate translate-context="*/*/Field,Help">We'll use this email if we need to contact you regarding this report.</translate>
+              <translate translate-context="*/*/Field,Help">We'll use this e-mail address if we need to contact you regarding this report.</translate>
             </p>
           </div>
         </div>

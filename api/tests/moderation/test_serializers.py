@@ -203,9 +203,9 @@ def test_report_serializer_repr(factories, to_api_date):
             {"type": "other", "submitter_email": "hello@example.test"},
             False,
         ),
-        # anonymous reports enabled for the category, but invalid email
+        # anonymous reports enabled for the category, but invalid e-mail
         (["other"], {}, {"type": "other", "submitter_email": "hello@"}, False),
-        # anonymous reports enabled for the category, no email
+        # anonymous reports enabled for the category, no e-mail
         (["other"], {}, {"type": "other"}, False),
         # anonymous reports enabled for the category, actor object is empty
         (["other"], {"submitter": None}, {"type": "other"}, False),

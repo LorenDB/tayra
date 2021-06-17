@@ -38,8 +38,8 @@ urlpatterns = [
         name="change_password",
     ),
     # This url is used by django-allauth and empty TemplateView is
-    # defined just to allow reverse() call inside app, for example when email
-    # with verification link is being sent, then it's required to render email
+    # defined just to allow reverse() call inside app, for example when e-mail
+    # with verification link is being sent, then it's required to render e-mail
     # content.
     # account_confirm_email - You should override this view to handle it in
     # your API client somehow and then, send post to /verify-email/ endpoint

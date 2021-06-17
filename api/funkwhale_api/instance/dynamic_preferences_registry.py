@@ -73,7 +73,7 @@ class InstanceContactEmail(types.StringPreference):
     name = "contact_email"
     verbose_name = "Contact email"
     default = ""
-    help_text = "A contact email for visitors who need to contact an admin or moderator"
+    help_text = "A contact e-mail address for visitors who need to contact an admin or moderator"
     field_kwargs = {"required": False}
 
 

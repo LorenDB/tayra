@@ -5,7 +5,7 @@
     </div>
     <modal class="small" :show.sync="showModal">
       <h3 class="header">
-        <translate translate-context="Popup/*/Title">Refreshing object from remote…</translate>
+        <translate translate-context="Popup/*/Title">Refreshing object from remote server…</translate>
       </h3>
       <div class="scrolling content">
         <template v-if="fetch && fetch.status != 'pending'">
@@ -78,7 +78,7 @@
         </div>
         <div v-else-if="fetch && fetch.status === 'pending' && pollsCount >= maxPolls" role="alert" class="ui warning message">
           <h4 class="header"><translate translate-context="Popup/*/Message.Title">Refresh pending</translate></h4>
-          <p><translate translate-context="Popup/*/Message.Content">Refresh request wasn't proceed in time by our server. It will be processed later.</translate></p>
+          <p><translate translate-context="Popup/*/Message.Content">The refresh request hasn't been processed in time by our server. It will be processed later.</translate></p>
         </div>
       </div>
       <div class="actions">

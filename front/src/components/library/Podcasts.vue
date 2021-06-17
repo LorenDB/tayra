@@ -2,13 +2,13 @@
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate translate-context="Content/Podcasts/Title">Browsing Podcasts</translate>
+        <translate translate-context="Content/Podcasts/Title">Browsing podcasts</translate>
       </h2>
       <form :class="['ui', {'loading': isLoading}, 'form']" @submit.prevent="updatePage();updateQueryString();fetchData()">
         <div class="fields">
           <div class="field">
             <label for="artist-search">
-              <translate translate-context="Content/Search/Input.Label/Noun">Podcast Title</translate>
+              <translate translate-context="Content/Search/Input.Label/Noun">Podcast title</translate>
             </label>
             <div class="ui action input">
               <input id="artist-search" type="text" name="search" v-model="query" :placeholder="labels.searchPlaceholder"/>

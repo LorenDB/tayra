@@ -77,7 +77,7 @@ export default {
           album_title: this.$pgettext('Content/*/Dropdown/Noun', 'Album name'),
           artist_name: this.$pgettext('Content/*/Dropdown/Noun', 'Artist name'),
           name: this.$pgettext('*/*/*/Noun', 'Name'),
-          length: this.$pgettext('*/*/*/Noun', 'Length'),
+          length: this.$pgettext('*/*/*/Noun', 'Duration'),
           items_count: this.$pgettext('*/*/*/Noun', 'Items'),
           size: this.$pgettext('Content/*/*/Noun', 'Size'),
           bitrate: this.$pgettext('Content/Track/*/Noun', 'Bitrate'),
@@ -94,7 +94,7 @@ export default {
         scopes: {
           profile: {
             label: this.$pgettext('Content/OAuth Scopes/Label', 'Profile'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to email, username, and profile information'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to e-mail, username, and profile information'),
           },
           libraries: {
             label: this.$pgettext('Content/OAuth Scopes/Label', 'Libraries and uploads'),

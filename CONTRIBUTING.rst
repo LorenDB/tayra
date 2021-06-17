@@ -649,11 +649,11 @@ useful when testing components that depend on each other:
 
     def notify(email, message):
         """
-        A function that sends an email to the given recipient
+        A function that sends an e-mail to the given recipient
         with the given message
         """
 
-        # our email sending logic here
+        # our e-mail sending logic here
         # ...
 
     # funkwhale_api/myapp/users.py
@@ -675,9 +675,9 @@ useful when testing components that depend on each other:
     def test_downgrade_superuser_sends_email(factories, mocker):
         """
         Your downgrade logic is already tested, however, we want to ensure
-        an email is sent when user is downgraded, but we don't have any email
+        an e-mail is sent when user is downgraded, but we don't have any e-mail
         server available in our testing environment. Thus, we need to mock
-        the email sending process.
+        the e-mail sending process.
         """
         mocked_notify = mocker.patch('funkwhale_api.myapp.notifications.notify')
         user = factories['users.User'](is_superuser=True)
@@ -692,7 +692,7 @@ useful when testing components that depend on each other:
         user = factories['users.User'](is_superuser=False)
         users.downgrade_user(user)
 
-        # here, we ensure no email was sent
+        # here, we ensure no e-mail was sent
         mocked_notify.assert_not_called()
 
 Views: you can find some readable views tests in file: ``api/tests/users/test_views.py``

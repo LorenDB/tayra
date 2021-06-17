@@ -8,7 +8,7 @@
       <translate translate-context="Content/Settings/Paragraph'">Funkwhale is compatible with other music players that support the Subsonic API.</translate>&nbsp;<translate translate-context="Content/Settings/Paragraph">You can use those to enjoy your playlist and music in offline mode, on your smartphone or tablet, for instance.</translate>
     </p>
     <p>
-      <translate translate-context="Content/Settings/Paragraph">However, accessing Funkwhale from those clients require a separate password you can set below.</translate>
+      <translate translate-context="Content/Settings/Paragraph">However, accessing Funkwhale from those clients requires a separate password you can set below.</translate>
     </p>
     <p><a href="https://docs.funkwhale.audio/users/apps.html#subsonic-compatible-clients" target="_blank">
       <translate translate-context="Content/Settings/Link">Discover how to use Funkwhale from other apps</translate>

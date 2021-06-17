@@ -1,7 +1,7 @@
 <template>
   <modal class="small" :show.sync="show">
     <h4 class="header">
-      <translate key="1" v-if="channel.content_category === 'podcasts'" translate-context="Popup/Channels/Title/Verb">New serie</translate>
+      <translate key="1" v-if="channel.content_category === 'podcasts'" translate-context="Popup/Channels/Title/Verb">New series</translate>
       <translate key="2" v-else translate-context="Popup/Channels/Title">New album</translate>
     </h4>
     <div class="scrolling content">
