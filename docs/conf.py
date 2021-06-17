@@ -64,8 +64,8 @@ master_doc = "index"
 # General information about the project.
 year = datetime.datetime.now().year
 project = "funkwhale"
-copyright = "{}, Eliot Berriot".format(year)
-author = "Eliot Berriot"
+copyright = "{}, The Funkwhale Collective".format(year)
+author = "The Funkwhale Collective"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -107,7 +107,7 @@ html_theme = "sphinx_rtd_theme"
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-html_theme_options = {"gitlab_url": "https://dev.funkwhale.audio/funkwhale/funkwhale"}
+#html_theme_options = {}
 html_context = {
     "display_gitlab": True,
     "gitlab_host": "dev.funkwhale.audio",
@@ -115,13 +115,15 @@ html_context = {
     "gitlab_user": "funkwhale",
     "gitlab_version": "master",
     "conf_py_path": "/docs/",
+    "gitlab_url": "https://dev.funkwhale.audio/funkwhale/funkwhale",
 }
 html_logo = "logo.svg"
+html_favicon = "../front/public/favicon.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
+# html_static_path = ["_static"]
 
 # -- Options for HTMLHelp output ------------------------------------------
 
@@ -190,6 +192,13 @@ redirect_files = [
     ("upgrading/index.html", "../admin/upgrading.html"),
     ("upgrading/0.17.html", "../admin/0.17.html"),
     ("users/django.html", "../admin/django.html"),
+    ("cli/index.html", "../users/cli.html"),
+    ("cli/examples.html", "../users/cli.html#examples"),
+    ("installation/ldap.html", "../admin/ldap.html"),
+    ("installation/optimization.html", "../admin/optimization.html"),
+    ("installation/external_dependencies.html", "debian.html"),
+    ("installation/systemd.html", "debian.html#systemd-unit-file"),
+    ("backup.html", "../admin/backup.html"),
 ]
 
 # Generate redirect template

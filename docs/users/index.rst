@@ -33,7 +33,7 @@ Using Funkwhale
    follow
    apps
    reports
-   ../cli/index
+   cli
 
 Troubleshooting Issues
 ----------------------

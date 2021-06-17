@@ -882,8 +882,8 @@ Tags are used in various places to enhance user experience:
 - The custom radio builder now supports using tags
 - Subsonic apps that support genres - such as DSub or Ultrasonic - should display this information as well
 
-If you are a pod admin and want to extract tags from already uploaded content, you run `this snippet <https://dev.funkwhale.audio/funkwhale/funkwhale/snippets/43>`_
-and `this snippet <https://dev.funkwhale.audio/funkwhale/funkwhale/snippets/44>`_ in a ``python manage.py shell``.
+If you are a pod admin and want to extract tags from already uploaded content, you run `this snippet <https://dev.funkwhale.audio/funkwhale/funkwhale/snippets/43>`__
+and `this snippet <https://dev.funkwhale.audio/funkwhale/funkwhale/snippets/44>`__ in a ``python manage.py shell``.
 
 Content and account reports
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -899,8 +899,8 @@ Federation of the reports will be supported in a future release.
 
 For more information about this feature, please check out our documentation:
 
--  `User documentation <https://docs.funkwhale.audio/moderator/reports.html>`_
--  `Moderator documentation <https://docs.funkwhale.audio/users/reports.html>`_
+-  `User documentation <https://docs.funkwhale.audio/moderator/reports.html>`__
+-  `Moderator documentation <https://docs.funkwhale.audio/users/reports.html>`__
 
 Account deletion
 ^^^^^^^^^^^^^^^^
@@ -913,7 +913,7 @@ to other known servers on the federation.
 
 For more information about this feature, please check out our documentation:
 
--  `User documentation <https://docs.funkwhale.audio/users/account.html>`_
+-  `User documentation <https://docs.funkwhale.audio/users/account.html>`__
 
 Landing and about page redesign [Manual action suggested]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -977,7 +977,7 @@ Both messages will appear for the first time 15 days after signup, in the notifi
 
 
 Replaced Daphne by Gunicorn/Uvicorn [manual action required, non-docker only]
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To improve the performance, stability and reliability of Funkwhale's web processes,
 we now recommend using Gunicorn and Uvicorn instead of Daphne. This combination unlock new use cases such as:
@@ -1295,7 +1295,7 @@ special permissions, such as modifying instance settings or moderation (but this
 enabled in a future release).
 
 If you want to start building an app on top of Funkwhale's API, please check-out
-`https://docs.funkwhale.audio/api.html`_ and `https://docs.funkwhale.audio/developers/authentication.html`_.
+https://docs.funkwhale.audio/api.html and https://docs.funkwhale.audio/developers/authentication.html.
 
 Better error handling and display during import
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1313,7 +1313,7 @@ Storing all media files on the Funkwhale server itself may not be possible or de
 in all scenarios. You can now configure Funkwhale to store those files in a S3
 bucket instead.
 
-Check-out `https://docs.funkwhale.audio/admin/external-storages.html`_ if you want to use
+Check-out https://docs.funkwhale.audio/admin/external-storages.html if you want to use
 this feature.
 
 Prune library command
@@ -1324,7 +1324,7 @@ metadata even if no associated files exist.
 
 To help with that, we now offer a ``prune_library`` management command you can run
 to purge your database from obsolete entries. `Please refer to our documentation
-for usage instructions <https://docs.funkwhale.audio/admin/commands.html#pruning-library>`_.
+for usage instructions <https://docs.funkwhale.audio/admin/commands.html#pruning-library>`__.
 
 Check in-place files command
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1335,7 +1335,7 @@ files in the database, which results in unplayable tracks.
 
 To help with that, we now offer a ``check_inplace_files`` management command you can run
 to purge your database from obsolete files. `Please refer to our documentation
-for usage instructions <https://docs.funkwhale.audio/admin/commands.html#remove-obsolete-files-from-database>`_.
+for usage instructions <https://docs.funkwhale.audio/admin/commands.html#remove-obsolete-files-from-database>`__.
 
 
 Features:
@@ -2994,7 +2994,7 @@ Starting from this release, we now offer a dedicated interface directly
 in the front-end. You can view and edit all your instance settings from here,
 assuming you have the required permissions.
 
-This interface is available at ``/manage/settings` and via link in the sidebar.
+This interface is available at ``/manage/settings`` and via link in the sidebar.
 
 
 Storage of bitrate, size and length in database
@@ -3626,7 +3626,7 @@ Features:
 - Switched to django-channels and daphne for serving HTTP and websocket (#34)
 
 Upgrades notes
-**************
+^^^^^^^^^^^^^^
 
 This version contains breaking changes in the way funkwhale is deployed,
 please read the notes carefully.

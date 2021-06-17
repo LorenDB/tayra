@@ -50,12 +50,12 @@ Diagnostic tools:
 Common problems
 ***************
 
-Instance work properly, but audio files are not served (404 error)
+Instance works properly, but audio files are not served (404 error)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - If you're using docker, ensure the ``MEDIA_ROOT`` variable is commented in your env file
 - Ensure the ``_protected/media`` block points toward the path where media files are stored (``/srv/funkwhale/data/media``, by default)
-- If you're using in-place import, ensure :ref:`setting-MUSIC_DIRECTORY_PATH`, :ref:`setting-MUSIC_DIRECTORY_SERVE_PATH` and :ref:`setting-REVERSE_PROXY_TYPE` are configured properly, and that the files are readable by the webserver
+- If you're using in-place import, ensure :data:`MUSIC_DIRECTORY_PATH <config.settings.common.MUSIC_DIRECTORY_PATH>`, :data:`MUSIC_DIRECTORY_SERVE_PATH <config.settings.common.MUSIC_DIRECTORY_SERVE_PATH>` and :data:`REVERSE_PROXY_TYPE <config.settings.common.REVERSE_PROXY_TYPE>` are configured properly, and that the files are readable by the webserver
 
 Weakref error when running ``python manage.py <command>``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

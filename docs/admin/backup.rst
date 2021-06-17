@@ -14,8 +14,8 @@ If you've followed the setup instructions in :doc:`../installation/docker`, here
 Multi-container installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Backup the db
-^^^^^^^^^^^^^
+Backup the database
+^^^^^^^^^^^^^^^^^^^
 
 On docker setups, you have to ``pg_dumpall`` in container ``funkwhale_postgres_1``:
 
@@ -47,8 +47,8 @@ On docker setups, the configuration file is located at the root level:
 Non-docker setup
 ----------------
 
-Backup the db
-^^^^^^^^^^^^^
+Backup the database
+^^^^^^^^^^^^^^^^^^^
 
 On non-docker setups, you have to ``pg_dump`` as user ``postgres``:
 
