@@ -5,11 +5,12 @@ from django.db import connection
 from django.db.models import Q
 from rest_framework import serializers
 
-from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import fields as federation_fields
+from funkwhale_api.federation import models as federation_models
 from funkwhale_api.moderation import filters as moderation_filters
 from funkwhale_api.music.models import Artist, Library, Track, Upload
 from funkwhale_api.tags.models import Tag
+
 from . import filters, models
 from .registries import registry
 
@@ -320,3 +321,10 @@ class LibraryRadio(RelatedObjectRadio):
 
     def get_related_object_id_repr(self, obj):
         return obj.uuid
+
+
+@registry.register(name="recently-added")
+class RecentlyAdded(SessionRadio):
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        return qs.filter(artist__content_category="music").order_by("-creation_date")

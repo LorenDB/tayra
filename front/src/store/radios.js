@@ -27,6 +27,10 @@ export default {
         'less-listened': {
           name: 'Less listened',
           description: "Listen to tracks you usually don't. It's time to restore some balance."
+        },
+        'recently-added': {
+          name: 'Recently Added',
+          description: "Newest content on the network. Get some fresh air."
         }
       }
     }
