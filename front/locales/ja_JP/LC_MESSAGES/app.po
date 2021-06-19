@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: 2021-06-19 10:00+0000\n"
+"PO-Revision-Date: 2021-06-19 18:06+0000\n"
 "Last-Translator: Dignified Silence <5dd12ck@protonmail.com>\n"
 "Language-Team: none\n"
 "Language: ja_JP\n"
@@ -75,7 +75,6 @@ msgid_plural "%{ count } episodes"
 msgstr[0] "%{ count } 人のエピソード"
 
 #: front/src/components/audio/artist/Card.vue:16
-#, fuzzy
 msgctxt "*/*/*"
 msgid "%{ count } episode"
 msgid_plural "%{ count } episodes"
@@ -258,10 +257,9 @@ msgid "A short summary describing your changes."
 msgstr "変更点の端的な概要。"
 
 #: front/src/components/About.vue:221
-#, fuzzy
 msgctxt "Head/About/Title"
 msgid "About"
-msgstr "ページについて"
+msgstr "このポッドについて"
 
 #: front/src/components/About.vue:5
 msgctxt "Content/Home/Header"
@@ -539,7 +537,7 @@ msgstr "アクティビティ"
 #: front/src/components/mixins/Translations.vue:8
 msgctxt "Content/Settings/Dropdown.Label/Noun"
 msgid "Activity visibility"
-msgstr "アクティビティの公開"
+msgstr "アクティビティの公開範囲"
 
 #: front/src/views/admin/moderation/DomainsList.vue:22
 msgctxt "Content/Moderation/Button/Verb"
@@ -1334,7 +1332,7 @@ msgstr "パスワードを変更"
 #: front/src/components/auth/Settings.vue:266
 msgctxt "Content/Settings/Paragraph'"
 msgid "Change the email address associated with your account. We will send a confirmation to the new address."
-msgstr ""
+msgstr "アカウントに登録されているEメールアドレスを変更します。変更後、新しいメールアドレスに確認のメールが送られます。"
 
 #: front/src/components/Footer.vue:49
 msgctxt "Footer/Settings/Dropdown.Label/Short, Verb"
@@ -1553,7 +1551,7 @@ msgstr "コンテンツフィルター"
 #: front/src/components/auth/Settings.vue:101
 msgctxt "Content/Settings/Paragraph"
 msgid "Content filters help you hide content you don't want to see on the service."
-msgstr "コンテンツを絞り込むと見たくないものを隠してくれます。"
+msgstr "コンテンツフィルターは見たくないコンテンツを隠すのに役立ちます。"
 
 #: front/src/components/common/ActionTable.vue:8
 #, fuzzy
@@ -2324,7 +2322,7 @@ msgstr ""
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:3
 msgctxt "Content/Moderation/Card.Title/Verb"
 msgid "Edit moderation rule"
-msgstr ""
+msgstr "モデレーションルールを編集する"
 
 #: front/src/components/library/AlbumEdit.vue:4
 msgctxt "Content/*/Title"
@@ -2679,7 +2677,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:12
 msgctxt "Content/Settings/Dropdown"
 msgid "Everyone on this instance"
-msgstr ""
+msgstr "このポッドのユーザー全員に公開する"
 
 #: front/src/components/mixins/Translations.vue:12
 #: front/src/components/mixins/Translations.vue:13
@@ -2774,7 +2772,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:104
 msgctxt "Sidebar/Favorites/List item.Link/Noun"
 msgid "Favorites"
-msgstr ""
+msgstr "お気に入り"
 
 #: front/src/components/About.vue:109 src/components/audio/SearchBar.vue:87
 #: front/src/components/audio/SearchBar.vue:169 src/views/admin/Settings.vue:86
@@ -3006,7 +3004,7 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:108
 msgctxt "Content/Settings/Title"
 msgid "Hidden artists"
-msgstr ""
+msgstr "フィルターをかけたアーティスト"
 
 #: front/src/components/About.vue:154
 msgctxt "*/*/*/Verb"
@@ -3310,7 +3308,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:86
 msgctxt "Content/Profile/Table.Label/Short, Noun (Value is a date)"
 msgid "Last activity"
-msgstr ""
+msgstr "最後のアクティビティ"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:168
 #: front/src/views/admin/moderation/AccountsDetail.vue:163
@@ -3548,7 +3546,7 @@ msgstr ""
 #: front/src/views/content/libraries/Home.vue:3
 msgctxt "Content/Library/Paragraph"
 msgid "Loading Libraries…"
-msgstr ""
+msgstr "ライブラリをロードしています…"
 
 #: front/src/views/Notifications.vue:81
 msgctxt "Content/Notifications/Paragraph"
@@ -3558,7 +3556,7 @@ msgstr ""
 #: front/src/views/content/remote/Home.vue:3
 msgctxt "Content/Library/Paragraph"
 msgid "Loading remote libraries…"
-msgstr ""
+msgstr "リモートライブラリをロードしています…"
 
 #: front/src/views/content/libraries/Quota.vue:4
 msgctxt "Content/Library/Paragraph"
@@ -3568,7 +3566,7 @@ msgstr ""
 #: front/src/components/favorites/List.vue:5
 msgctxt "Content/Favorites/Message"
 msgid "Loading your favorites…"
-msgstr ""
+msgstr "お気に入りを読み込んでいます…"
 
 #: front/src/components/manage/ChannelsTable.vue:70
 #: front/src/components/manage/ChannelsTable.vue:21
@@ -3711,12 +3709,12 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:254
 msgctxt "Content/Settings/Button.Label"
 msgid "Manage plugins"
-msgstr ""
+msgstr "プラグインの管理"
 
 #: front/src/views/auth/Plugins.vue:42
 msgctxt "Head/Login/Title"
 msgid "Manage plugins"
-msgstr ""
+msgstr "プラグインの管理"
 
 #: front/src/views/admin/users/Base.vue:20
 msgctxt "Head/Admin/Title"
@@ -3731,17 +3729,17 @@ msgstr ""
 #: front/src/views/Notifications.vue:76
 msgctxt "Content/Notifications/Button.Label/Verb"
 msgid "Mark all as read"
-msgstr ""
+msgstr "全てを既読にする"
 
 #: front/src/components/notifications/NotificationRow.vue:52
 msgctxt "Content/Notifications/Button.Tooltip/Verb"
 msgid "Mark as read"
-msgstr ""
+msgstr "既読にする"
 
 #: front/src/components/notifications/NotificationRow.vue:53
 msgctxt "Content/Notifications/Button.Tooltip/Verb"
 msgid "Mark as unread"
-msgstr ""
+msgstr "この通知を未読扱いにする"
 
 #: front/src/components/common/ContentForm.vue:38
 msgctxt "*/Form/Paragraph"
@@ -3970,7 +3968,7 @@ msgstr ""
 #: front/src/components/audio/ChannelForm.vue:3
 msgctxt "Content/Channel/*"
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 #: front/src/components/auth/ApplicationForm.vue:9
 #: front/src/components/auth/Settings.vue:113
@@ -4007,7 +4005,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:79 src/edits.js:42
 msgctxt "*/*/*/Noun"
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 #: front/src/views/Notifications.vue:24 src/views/Notifications.vue:58
 msgctxt "*/*/*"
@@ -4028,14 +4026,14 @@ msgstr "新しいチャンネル"
 #: front/src/components/auth/Settings.vue:279
 msgctxt "*/*/*"
 msgid "New email"
-msgstr ""
+msgstr "新しいEメールアドレス"
 
 #: front/src/components/auth/Settings.vue:73
 #: front/src/views/auth/PasswordResetConfirm.vue:14
 #: front/src/views/auth/PasswordResetConfirm.vue:2
 msgctxt "Content/Settings/Input.Label"
 msgid "New password"
-msgstr ""
+msgstr "新しいパスワード"
 
 #: front/src/components/channels/AlbumModal.vue:3
 msgctxt "Popup/Channels/Title/Verb"
@@ -4094,7 +4092,7 @@ msgstr "説明がまだありません"
 #: front/src/components/About.vue:24 src/components/Home.vue:24
 msgctxt "Content/Home/Paragraph"
 msgid "No description available."
-msgstr "説明がまだありません。"
+msgstr "自己紹介がまだありません。"
 
 #: front/src/components/audio/SearchBar.vue:56
 msgctxt "Sidebar/Search/Error"
@@ -4104,12 +4102,12 @@ msgstr "マッチするコンテンツがありません"
 #: front/src/components/federation/LibraryWidget.vue:6
 msgctxt "Content/Federation/Paragraph"
 msgid "No matching library."
-msgstr ""
+msgstr "マッチするライブラリがありません。"
 
 #: front/src/views/Notifications.vue:90
 msgctxt "Content/Notifications/Paragraph"
 msgid "No notification to show."
-msgstr ""
+msgstr "通知はありません。"
 
 #: front/src/components/manage/moderation/DomainsTable.vue:69
 msgctxt "Content/Home/Placeholder"
@@ -4178,13 +4176,13 @@ msgstr ""
 #: front/src/components/favorites/List.vue:52
 msgctxt "Content/Home/Placeholder"
 msgid "No tracks have been added to your favorites yet"
-msgstr ""
+msgstr "お気に入りに加えられた曲がまだありません"
 
 #: front/src/components/mixins/Translations.vue:10
 #: front/src/components/mixins/Translations.vue:11
 msgctxt "Content/Settings/Dropdown"
 msgid "Nobody except me"
-msgstr ""
+msgstr "誰にも公開しない"
 
 #: front/src/views/library/Edit.vue:50
 msgctxt "Content/Library/Paragraph"
@@ -4220,7 +4218,7 @@ msgstr "プレビューする内容がありません。"
 #: src/components/mixins/Translations.vue:128
 msgctxt "*/Notifications/*"
 msgid "Notifications"
-msgstr ""
+msgstr "通知"
 
 #: front/src/components/mixins/Translations.vue:51
 #: front/src/components/mixins/Translations.vue:52
@@ -4236,7 +4234,7 @@ msgstr "公式ウェブサイト"
 #: front/src/components/auth/Settings.vue:69
 msgctxt "Content/Settings/Input.Label"
 msgid "Old password"
-msgstr ""
+msgstr "現在のパスワード"
 
 #: front/src/components/library/EditCard.vue:44
 msgctxt "Content/Library/Card.Table.Header/Short"
@@ -4310,7 +4308,7 @@ msgstr ""
 #: front/src/views/admin/moderation/AccountsDetail.vue:18
 msgctxt "Content/Moderation/Link/Verb"
 msgid "Open profile"
-msgstr ""
+msgstr "プロフィールを開く"
 
 #: front/src/views/admin/ChannelDetail.vue:51
 #: src/views/admin/ChannelDetail.vue:46
@@ -4409,13 +4407,13 @@ msgstr ""
 #: front/src/views/auth/ProfileBase.vue:54
 msgctxt "Content/Profile/Link"
 msgid "Overview"
-msgstr ""
+msgstr "概要"
 
 #: front/src/views/channels/DetailBase.vue:184
 #: src/views/channels/DetailBase.vue:179
 msgctxt "Content/Channels/Link"
 msgid "Overview"
-msgstr ""
+msgstr "概要"
 
 #: front/src/views/library/DetailBase.vue:32
 msgctxt "*/*/*"
@@ -4485,7 +4483,7 @@ msgstr ""
 #: front/src/App.vue:314 src/components/audio/Player.vue:702
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Pause track"
-msgstr "止める"
+msgstr "停止する"
 
 #: front/src/components/ShortcutsModal.vue:81
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
@@ -4677,7 +4675,7 @@ msgstr ""
 #: front/src/components/playlists/Form.vue:21
 msgctxt "Content/Playlist/Input.Label"
 msgid "Playlist name"
-msgstr ""
+msgstr "プレイリストの名前"
 
 #: front/src/components/playlists/Form.vue:6
 #: src/components/playlists/Form.vue:1
@@ -4725,7 +4723,7 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:249
 msgctxt "Content/Settings/Title/Noun"
 msgid "Plugins"
-msgstr ""
+msgstr "プラグイン"
 
 #: front/src/components/common/AttachmentInput.vue:26
 msgctxt "Content/*/Paragraph"
@@ -4854,12 +4852,12 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:96
 msgctxt "Content/OAuth Scopes/Label"
 msgid "Profile"
-msgstr ""
+msgstr "プロフィール"
 
 #: front/src/components/Sidebar.vue:60 src/components/Sidebar.vue:46
 msgctxt "*/*/*/Noun"
 msgid "Profile"
-msgstr ""
+msgstr "プロフィール"
 
 #: front/src/views/library/DetailBase.vue:185
 msgctxt "Content/Library/Card.Help text"
@@ -4931,12 +4929,12 @@ msgstr "キューがシャッフルされました！"
 #: front/src/views/radios/Detail.vue:95
 msgctxt "Head/Radio/Title"
 msgid "Radio"
-msgstr ""
+msgstr "ラジオ"
 
 #: front/src/components/library/radios/Builder.vue:233
 msgctxt "Head/Radio/Title"
 msgid "Radio Builder"
-msgstr ""
+msgstr "ラジオビルダー"
 
 #: front/src/components/library/radios/Builder.vue:15
 #: front/src/components/library/radios/Builder.vue:1
@@ -5032,13 +5030,13 @@ msgstr "最近追加されたアルバム"
 #: front/src/views/auth/ProfileActivity.vue:14
 msgctxt "Content/Home/Title"
 msgid "Recently favorited"
-msgstr ""
+msgstr "最近お気に入りされた曲"
 
 #: front/src/components/library/Home.vue:6 src/components/library/Home.vue:1
 #: front/src/views/auth/ProfileActivity.vue:5
 msgctxt "Content/Home/Title"
 msgid "Recently listened"
-msgstr "最近聞いた曲"
+msgstr "最近聞かれた曲"
 
 #: front/src/components/auth/ApplicationForm.vue:13
 msgctxt "Content/Applications/Input.Label/Noun"
@@ -5240,7 +5238,7 @@ msgstr ""
 #: front/src/components/favorites/TrackFavoriteIcon.vue:27
 msgctxt "Content/Track/Icon.Tooltip/Verb"
 msgid "Remove from favorites"
-msgstr ""
+msgstr "お気に入りから外す"
 
 #: front/src/views/content/libraries/Quota.vue:33
 msgctxt "Popup/Library/Paragraph"
@@ -5935,7 +5933,7 @@ msgstr "さらに表示"
 #: front/src/views/Notifications.vue:72
 msgctxt "Content/Notifications/Form.Label/Verb"
 msgid "Show read notifications"
-msgstr ""
+msgstr "既読の通知を表示する"
 
 #: front/src/components/forms/PasswordInput.vue:42
 msgctxt "Content/Settings/Button.Tooltip/Verb"
@@ -6227,7 +6225,7 @@ msgstr ""
 #: front/src/components/library/Podcasts.vue:72
 msgctxt "Content/Profile/Button"
 msgid "Subscribe to feed"
-msgstr ""
+msgstr "RSSフィードを購読する"
 
 #: front/src/components/audio/SearchBar.vue:185
 msgctxt "Search/*/*"
@@ -6256,7 +6254,7 @@ msgstr ""
 #: front/src/views/channels/SubscriptionsList.vue:14
 msgctxt "*/*/*/Noun"
 msgid "Subscription"
-msgstr ""
+msgstr "購読"
 
 #: front/src/views/admin/Settings.vue:88
 msgctxt "Content/Admin/Menu"
@@ -6266,7 +6264,7 @@ msgstr ""
 #: front/src/components/auth/SubsonicTokenForm.vue:2
 msgctxt "Content/Settings/Title"
 msgid "Subsonic API password"
-msgstr ""
+msgstr "Subsonic API パスワード"
 
 #: front/src/components/library/EditForm.vue:38
 msgctxt "Content/Library/Paragraph"
@@ -6604,7 +6602,7 @@ msgstr ""
 #: front/src/views/content/Home.vue:5
 msgctxt "Content/Library/Paragraph"
 msgid "This instance offers up to %{quota} of storage space for every user."
-msgstr ""
+msgstr "このポッドは全てのユーザーに%{quota}のストレージを提供しています。"
 
 #: front/src/components/auth/Settings.vue:318
 msgctxt "Popup/Settings/Paragraph"
@@ -6624,7 +6622,7 @@ msgstr ""
 #: front/src/views/auth/ProfileBase.vue:40 src/views/auth/ProfileBase.vue:3
 msgctxt "Content/Profile/Button.Paragraph"
 msgid "This is you!"
-msgstr ""
+msgstr "あなたのアカウントです！"
 
 #: front/src/components/RemoteSearchForm.vue:35
 msgctxt "Content/*/Error message.Title"
@@ -7016,7 +7014,7 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:286
 msgctxt "*/*/*"
 msgid "Update"
-msgstr ""
+msgstr "変更"
 
 #: front/src/components/channels/UploadModal.vue:25
 msgctxt "*/*/Button.Label/Verb"
@@ -7047,7 +7045,7 @@ msgstr ""
 #: front/src/components/common/RenderedDescription.vue:37
 msgctxt "Content/Channels/Button.Label/Verb"
 msgid "Update description"
-msgstr ""
+msgstr "自己紹介を更新する"
 
 #: front/src/views/content/libraries/Form.vue:25
 msgctxt "Content/Library/Button.Label/Verb"
@@ -7191,7 +7189,7 @@ msgstr ""
 #: front/src/components/common/AttachmentInput.vue:32
 msgctxt "Content/*/*/Noun"
 msgid "Uploading file…"
-msgstr ""
+msgstr "ファイルをアップロードしています…"
 
 #: front/src/components/library/FileUpload.vue:98
 msgctxt "Content/Library/Table"
@@ -7270,7 +7268,7 @@ msgstr "Funkwhaleを他の端末で利用する"
 #: front/src/components/auth/Settings.vue:252
 msgctxt "Content/Settings/Paragraph"
 msgid "Use plugins to extend Funkwhale and get additional features."
-msgstr ""
+msgstr "プラグインを使うことでFunkwhaleを拡張し、追加の機能を導入します。"
 
 #: front/src/components/moderation/ReportModal.vue:38
 msgctxt "*/*/Field,Help"
@@ -7371,7 +7369,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:87
 msgctxt "Content/*/*"
 msgid "Username"
-msgstr ""
+msgstr "ユーザーネーム"
 
 #: front/src/components/auth/LoginForm.vue:17
 #: src/components/auth/LoginForm.vue:3
@@ -7768,7 +7766,7 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:82
 msgctxt "Popup/Settings/List item"
 msgid "You will be logged out from this session and have to log in with the new one"
-msgstr ""
+msgstr "このセッションからログアウトされ、新しくログインする必要があります"
 
 #: front/src/components/auth/LoginForm.vue:40
 #: src/components/auth/LoginForm.vue:2
@@ -7789,7 +7787,7 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:57
 msgctxt "Content/Settings/Paragraph"
 msgid "You will have to update your password on your clients that use this password."
-msgstr ""
+msgstr "以前のSubsonic API パスワードを使っているクライアントアプリのパスワードを更新する必要があります。"
 
 #: front/src/components/moderation/FilterModal.vue:16
 #: front/src/components/moderation/FilterModal.vue:2
@@ -7825,7 +7823,7 @@ msgstr ""
 #: front/src/components/common/AttachmentInput.vue:3
 msgctxt "Content/*/Error message.Title"
 msgid "Your attachment cannot be saved"
-msgstr ""
+msgstr "アップロードしたファイルを保存できませんでした"
 
 #: front/src/components/auth/Settings.vue:39
 msgctxt "Content/Settings/Error message.Title"
@@ -7835,7 +7833,7 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:269
 msgctxt "Content/Settings/Paragraph'"
 msgid "Your current email address is %{ email }."
-msgstr ""
+msgstr "現在のEメールアドレスは%{ email }です。"
 
 #: front/src/components/auth/Settings.vue:545
 msgctxt "*/Auth/Message"
@@ -7855,7 +7853,7 @@ msgstr ""
 #: front/src/components/favorites/List.vue:121
 msgctxt "Head/Favorites/Title"
 msgid "Your Favorites"
-msgstr ""
+msgstr "あなたのお気に入り"
 
 #: front/src/views/Notifications.vue:5
 msgctxt "Content/Notifications/Title"
@@ -7865,7 +7863,7 @@ msgstr ""
 #: front/src/views/Notifications.vue:69
 msgctxt "Content/Notifications/Title"
 msgid "Your notifications"
-msgstr ""
+msgstr "あなたへの通知"
 
 #: front/src/components/auth/Settings.vue:62
 msgctxt "Content/Settings/Error message.Title"
@@ -7891,6 +7889,8 @@ msgstr ""
 msgctxt "Popup/Settings/List item"
 msgid "Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password"
 msgstr ""
+"Subsonic API パスワードはランダムなそれに新しく変更され、以前のSubsonic API "
+"パスワードを使用していたデバイスからログアウトされます"
 
 #: front/src/views/channels/DetailOverview.vue:30
 #: front/src/views/channels/DetailOverview.vue:6
