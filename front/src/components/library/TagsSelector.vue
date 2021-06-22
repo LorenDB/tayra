@@ -52,7 +52,16 @@ export default {
               ...response,
             }
             if (currentSearch) {
-              response.results = [{name: currentSearch}, ...response.results]
+              let existingTag = response.results.find((result) => result.name === currentSearch)
+              if (existingTag) {
+                if (response.results.indexOf(existingTag) !== 0) {
+                  response.results = [existingTag, ...response.results]
+                  response.results.splice(response.results.indexOf(existingTag) + 1, 1)
+                }
+              }
+              else {
+                response.results = [{name: currentSearch}, ...response.results]
+              }
             }
             return response
           }
