@@ -63,10 +63,32 @@ by hand (which is outside the scope of this guide).
 
     At the moment, we do not support S3 when using Apache as a reverse proxy.
 
+.. note::
+
+    If you are attempting to integrate your docker deployment with an existing nginx webserver, 
+    such as the one provided by `linuxserver/swag <https://docs.linuxserver.io/images/docker-swag>`_ 
+    (formerly `linuxserver/letsencrypt <https://docs.linuxserver.io/images/docker-swag#migrating-from-the-old-linuxserver-letsencrypt-image>`_),
+    you may run into an issue where an additional ``Content-Security-Policy`` header appears in responses from the server, 
+    without the newly included S3 URL values.
+
+    In this case, you can suppress the extraneous ``Content-Security-Policy`` header by specifying it in a ``proxy_hide_header`` 
+    `directive <http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_hide_header>`_ in the ``location /`` block.
+
+    .. code-block:: shell
+
+        location / {
+            proxy_pass http://funkwhale:80;
+            # ... 
+            # ... include the rest of the preset directives
+            # ...
+            proxy_hide_header Content-Security-Policy;
+        }
+
+
 Serving audio files directly from the bucket
 ********************************************
 
-Depending on your setup, you may want to serve audio fils directly from the S3 bucket
+Depending on your setup, you may want to serve audio files directly from the S3 bucket
 instead of proxying them through Funkwhale, e.g to reduce the bandwidth consumption on your server,
 or get better performance.
 
