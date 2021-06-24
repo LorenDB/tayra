@@ -38,7 +38,6 @@
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from "vuex"
-import { toLinearVolumeScale, toLogarithmicVolumeScale } from '@/audio/volume'
 
 export default {
   data () {
@@ -50,10 +49,10 @@ export default {
   computed: {
     sliderVolume: {
       get () {
-        return toLogarithmicVolumeScale(this.$store.state.player.volume)
+        return this.$store.state.player.volume
       },
       set (v) {
-        this.$store.commit("player/volume", toLinearVolumeScale(v))
+        this.$store.commit("player/volume", v)
       }
     },
     labels () {

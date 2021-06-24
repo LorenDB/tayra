@@ -226,6 +226,7 @@
 <script>
 import { mapState, mapGetters, mapActions } from "vuex"
 import GlobalEvents from "@/components/utils/global-events"
+import { toLinearVolumeScale } from '@/audio/volume'
 import { Howl } from "howler"
 import $ from 'jquery'
 import _ from '@/lodash'
@@ -265,8 +266,6 @@ export default {
     this.$store.commit("player/isLoadingAudio", false)
     Howler.unload()  // clear existing cache, if any
     this.nextTrackPreloaded = false
-    // we trigger the watcher explicitely it does not work otherwise
-    this.sliderVolume = this.volume
     // this is needed to unlock audio playing under some browsers,
     // cf https://github.com/goldfire/howler.js#mobilechrome-playback
     // but we never actually load those audio files
@@ -364,7 +363,6 @@ export default {
         loop: false,
         html5: true,
         preload: true,
-        volume: this.volume,
         onend: function () {
           self.ended()
         },
@@ -757,11 +755,12 @@ export default {
       },
       immediate: false
     },
-    volume(newValue) {
-      this.sliderVolume = newValue
-      if (this.currentSound) {
-        this.currentSound.volume(newValue)
-      }
+    volume: {
+      immediate: true,
+      handler(newValue) {
+        this.sliderVolume = newValue
+        Howler.volume(toLinearVolumeScale(newValue))
+      },
     },
     sliderVolume(newValue) {
       this.$store.commit("player/volume", newValue)
