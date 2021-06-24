@@ -743,14 +743,13 @@ export default {
         }
         this.nextTrackPreloaded = false
         clearTimeout(this.playTimeout)
-        let self = this
         if (this.currentSound) {
           this.currentSound.pause()
         }
         this.$store.commit("player/isLoadingAudio", true)
         this.playTimeout = setTimeout(async () => {
-          await self.loadSound(newValue, oldValue)
-        }, 500);
+          await this.loadSound(newValue, oldValue)
+        }, 100);
         this.updateMetadata()
       },
       immediate: false
