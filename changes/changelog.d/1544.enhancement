@@ -1,0 +1,1 @@
+Changed volume dynamic range from 60dB to 40dB (fixes #1544)

@@ -1,31 +1,25 @@
-
-// Provides functions to convert between linear and logarithmic volume scales.
-// The logarithmic volume from the UI is converted to a linear volume with a
-// logarithmic function like exp(b*x)/a.
-// Compare https://www.dr-lex.be/info-stuff/volumecontrols.html for how the
-// values for a and b got derived.
-
-const PARAM_A = 1000
-const PARAM_B = Math.log(1000)  // ~ 6.908
+const DYNAMIC_RANGE = 40 // dB
 
 function toLinearVolumeScale(v) {
-    // Or as approximation:
-    // return Math.pow(v, 4)
-    if (v == 0.0) {
+    if (v <= 0.0) {
         return 0.0
     }
 
-    return Math.min(Math.exp(PARAM_B * v) / PARAM_A, 1.0)
+	// (1.0; 0.0) -> (0; -DYNAMIC_RANGE) dB
+	let dB = (v-1)*DYNAMIC_RANGE
+
+    return Math.pow(10, dB / 20)
 }
 
 function toLogarithmicVolumeScale(v) {
-    // Or as approximation:
-    // return Math.exp(Math.log(v) / 4)
-    if (v == 0.0) {
+    if (v <= 0.0) {
         return 0.0
     }
 
-    return Math.log(v * PARAM_A) / PARAM_B
+	let dB = 20 * Math.log10(v)
+
+	// (0; -DYNAMIC_RANGE) [dB] -> (1.0; 0.0)
+    return 1 - (dB / -DYNAMIC_RANGE)
 }
 
 exports.toLinearVolumeScale = toLinearVolumeScale
