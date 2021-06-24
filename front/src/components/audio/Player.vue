@@ -384,6 +384,10 @@ export default {
           })
         },
         onplay: function () {
+          if (this != self.currentSound) {
+            this.stop()
+            return
+          }
           self.$store.commit('player/isLoadingAudio', false)
           self.$store.commit('player/resetErrorCount')
           self.$store.commit('player/errored', false)
