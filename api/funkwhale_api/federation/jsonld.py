@@ -46,6 +46,17 @@ def expand(doc, options=None, default_contexts=["AS", "FW", "SEC"]):
             # probably an already expanded document
             pass
 
+    # XXX This is a hotfix for a bug in pyld. The JSON-LD allows empty dicts or lists as part of the
+    # context, but this makes pyld failing to parse the context the right way. So we remove all
+    # empty items from the contexts
+    try:
+        for active_ctx in doc["@context"]:
+            if len(active_ctx) == 0:
+                doc["@context"].remove(active_ctx)
+    except KeyError:
+        # Nothing to do here if no context is available at all
+        pass
+
     result = pyld.jsonld.expand(doc, options=options)
     try:
         # jsonld.expand returns a list, which is useless for us

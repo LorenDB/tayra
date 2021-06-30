@@ -37,7 +37,7 @@ On Debian-like systems, you can install them using:
 
     sudo apt-get update
     # Install system dependencies
-    sudo apt-get install curl python3-pip python3-venv git unzip libldap2-dev libsasl2-dev gettext-base zlib1g-dev libffi-dev libssl-dev
+    sudo apt-get install curl python3-pip python3-venv git unzip libldap2-dev libsasl2-dev gettext-base zlib1g-dev libffi-dev libssl-dev libxml2-dev libxslti1-dev
 
     # Funkwhale dependencies
     sudo apt install build-essential ffmpeg libjpeg-dev libmagic-dev libpq-dev postgresql-client python3-dev make
@@ -389,7 +389,7 @@ And start the services:
 To ensure all Funkwhale processes are started automatically after a reboot, run:
 
 .. code-block:: shell
-    
+
     sudo systemctl enable funkwhale-server
     sudo systemctl enable funkwhale-worker
     sudo systemctl enable funkwhale-beat

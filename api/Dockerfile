@@ -17,6 +17,8 @@ RUN \
     openldap-dev \
     openssl-dev \
     cargo \
+    libxml2-dev \
+    libxslt-dev \
     && \
     \
     ln -s /usr/bin/python3 /usr/bin/python
@@ -57,6 +59,8 @@ RUN apk add --no-cache \
     jpeg-dev \
     ffmpeg             \
     libpq              \
+    libxml2 \
+    libxslt \
     && \
     \
     ln -s /usr/bin/python3 /usr/bin/python
