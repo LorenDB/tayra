@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2021-07-02 02:54+0000\n"
+"Last-Translator: vachan-maker <revsamtp@hotmail.com>\n"
 "Language-Team: none\n"
 "Language: ml\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.6.2\n"
 
 #: front/src/components/playlists/PlaylistModal.vue:6
 #: front/src/components/playlists/PlaylistModal.vue:3
@@ -38,8 +39,8 @@ msgstr ""
 msgctxt "Content/Home/Stat"
 msgid "%{ count } active user"
 msgid_plural "%{ count } active users"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "% {count} സജീവ ഉപയോക്താവ്"
+msgstr[1] "% {count} സജീവ ഉപയോക്താക്കൾ"
 
 #: front/src/components/About.vue:181 src/components/About.vue:14
 msgctxt "Content/Home/Stat"
@@ -52,8 +53,8 @@ msgstr[1] ""
 msgctxt "*/*/*"
 msgid "%{ count } allowed domains"
 msgid_plural "%{ count } allowed domains"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "% {count} അനുവദനീയ മേഖലകൾ"
+msgstr[1] "% {count} അനുവദനീയ മേഖലകൾ"
 
 #: front/src/components/About.vue:178 src/components/About.vue:11
 msgctxt "Content/Home/Stat"
@@ -80,8 +81,8 @@ msgstr[1] ""
 msgctxt "*/*/*"
 msgid "%{ count } episode"
 msgid_plural "%{ count } episodes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{ count } എപ്പിസോഡ്"
+msgstr[1] "%{ count } എപ്പിസോഡുകൾ"
 
 #: front/src/components/favorites/List.vue:10
 msgctxt "Content/Favorites/Title"
@@ -94,8 +95,8 @@ msgstr[1] ""
 msgctxt "*/*/*"
 msgid "%{ count } file"
 msgid_plural "%{ count } files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{ count } ഫയൽ"
+msgstr[1] "%{ count } ഫയലുകൾ"
 
 #: front/src/components/About.vue:175 src/components/About.vue:8
 #: front/src/components/Home.vue:58 src/components/Home.vue:8
@@ -225,7 +226,7 @@ msgstr ""
 #: front/src/views/auth/ProfileBase.vue:128
 msgctxt "Head/Profile/Title"
 msgid "%{ username }'s profile"
-msgstr ""
+msgstr "%{ username } ന്റെ പ്രൊഫൈൽ"
 
 #: front/src/components/playlists/PlaylistModal.vue:18
 msgctxt "Popup/Playlist/Paragraph"
@@ -235,17 +236,17 @@ msgstr ""
 #: front/src/views/Notifications.vue:21 src/views/Notifications.vue:55
 msgctxt "*/*/*"
 msgid "30 days"
-msgstr ""
+msgstr "30 ദിവസം"
 
 #: front/src/views/Notifications.vue:22 src/views/Notifications.vue:56
 msgctxt "*/*/*"
 msgid "60 days"
-msgstr ""
+msgstr "60 ദിവസം"
 
 #: front/src/views/Notifications.vue:23 src/views/Notifications.vue:57
 msgctxt "*/*/*"
 msgid "90 days"
-msgstr ""
+msgstr "90 ദിവസം"
 
 #: front/src/components/library/FileUpload.vue:355
 #: front/src/components/library/FileUpload.vue:356
@@ -256,7 +257,7 @@ msgstr ""
 #: front/src/App.vue:420
 msgctxt "App/Message/Paragraph"
 msgid "A new version of the app is available."
-msgstr ""
+msgstr "ഈ ആപ്പിന്റെ പുതിയ പതിപ്പ് ലഭ്യമാണ്."
 
 #: front/src/components/library/EditForm.vue:179
 msgctxt "*/*/Placeholder"
@@ -266,27 +267,27 @@ msgstr ""
 #: front/src/components/About.vue:221
 msgctxt "Head/About/Title"
 msgid "About"
-msgstr ""
+msgstr "കുറിച്ച്"
 
 #: front/src/components/About.vue:5
 msgctxt "Content/Home/Header"
 msgid "About %{ podName }!"
-msgstr ""
+msgstr "%{ podName } നെ കുറിച്ച്!"
 
 #: front/src/components/Footer.vue:9
 msgctxt "Footer/About/Title"
 msgid "About %{instanceName}"
-msgstr ""
+msgstr "%{instanceName} നെ കുറിച്ച്"
 
 #: front/src/components/Footer.vue:12
 msgctxt "Footer/About/Title"
 msgid "About %{instanceUrl}"
-msgstr ""
+msgstr "%{instanceUrl} നെ കുറിച്ച്"
 
 #: front/src/components/Footer.vue:65 src/components/Home.vue:84
 msgctxt "Footer/*/Title/Short"
 msgid "About Funkwhale"
-msgstr ""
+msgstr "Funkwhale നെ കുറിച്ച്"
 
 #: front/src/components/Footer.vue:16
 msgctxt "Footer/About/List item.Link"
@@ -296,7 +297,7 @@ msgstr ""
 #: front/src/components/Home.vue:18
 msgctxt "Content/Home/Header"
 msgid "About this Funkwhale pod"
-msgstr ""
+msgstr "ഈ Funkwhale പോഡിനെ കുറിച്ച്"
 
 #: front/src/components/channels/LicenseSelect.vue:14
 msgctxt "Content/*/*"
@@ -306,22 +307,22 @@ msgstr ""
 #: front/src/components/Sidebar.vue:129
 msgctxt "Sidebar/*/List item.Link"
 msgid "About this pod"
-msgstr ""
+msgstr "ഈ പോഡിനെ കുറിച്ച്"
 
 #: front/src/components/About.vue:20 src/components/About.vue:50
 msgctxt "Content/About/Header"
 msgid "About this pod"
-msgstr ""
+msgstr "ഈ പോഡിനെ കുറിച്ച്"
 
 #: front/src/views/library/Edit.vue:41
 msgctxt "Content/Library/Button.Label"
 msgid "Accept"
-msgstr ""
+msgstr "സ്വീകരിക്കുക"
 
 #: front/src/views/library/Edit.vue:33
 msgctxt "Content/Library/Table/Short"
 msgid "Accepted"
-msgstr ""
+msgstr "സ്വീകരിച്ചു"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:117
 msgctxt "Content/Settings/Message"
@@ -432,7 +433,7 @@ msgstr ""
 #: front/src/components/mixins/Report.vue:15
 msgctxt "*/*/*/Noun"
 msgid "Account"
-msgstr ""
+msgstr "അക്കൗണ്ട്"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:92
 #: front/src/views/admin/moderation/AccountsDetail.vue:87
@@ -443,30 +444,30 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:5
 msgctxt "Content/Settings/Title"
 msgid "Account settings"
-msgstr ""
+msgstr "അക്കൗണ്ട് ക്രമീകരണങ്ങൾ"
 
 #: front/src/components/auth/Settings.vue:589
 msgctxt "Head/Settings/Title"
 msgid "Account Settings"
-msgstr ""
+msgstr "അക്കൗണ്ട് ക്രമീകരണങ്ങൾ"
 
 #: front/src/components/manage/users/UsersTable.vue:33
 #: front/src/components/manage/users/UsersTable.vue:3
 msgctxt "Content/Admin/Table.Label/Short, Noun"
 msgid "Account status"
-msgstr ""
+msgstr "അക്കൗണ്ടിന്റെ അവസ്ഥ"
 
 #: front/src/views/auth/PasswordReset.vue:14
 msgctxt "Content/Signup/Input.Label"
 msgid "Account's email"
-msgstr ""
+msgstr "അക്കൗണ്ടിന്റെ ഇമെയിൽ"
 
 #: front/src/views/admin/moderation/AccountsList.vue:3
 #: front/src/views/admin/moderation/AccountsList.vue:24
 #: front/src/views/admin/moderation/Base.vue:12
 msgctxt "*/Moderation/Title"
 msgid "Accounts"
-msgstr ""
+msgstr "അക്കൗണ്ടുകൾ"
 
 #: front/src/views/library/Edit.vue:22
 msgctxt "Content/Library/Table.Label"
@@ -544,7 +545,7 @@ msgstr ""
 #: front/src/views/admin/moderation/DomainsList.vue:22
 msgctxt "Content/Moderation/Button/Verb"
 msgid "Add"
-msgstr ""
+msgstr "ചേർക്കുക"
 
 #: front/src/components/library/AlbumBase.vue:78
 #: front/src/components/library/AlbumBase.vue:87
@@ -553,12 +554,12 @@ msgstr ""
 #: front/src/components/library/AlbumBase.vue:5
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Add a description…"
-msgstr ""
+msgstr "ഒരു വിവരണം ചേർക്കുക…"
 
 #: front/src/views/admin/moderation/DomainsList.vue:13
 msgctxt "Content/Moderation/Form.Label/Verb"
 msgid "Add a domain"
-msgstr ""
+msgstr "ഒരു മേഖല ചേർക്കുക"
 
 #: front/src/components/channels/UploadForm.vue:23
 msgctxt "Content/Channels/Popup.Paragraph"
@@ -575,7 +576,7 @@ msgstr ""
 #: front/src/components/admin/SignupFormBuilder.vue:82
 msgctxt "*/*/Form-builder"
 msgid "Add a new field"
-msgstr ""
+msgstr "ഒരു പുതിയ ഫീൽഡ് ചേർക്കുക"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:4
 msgctxt "Content/Moderation/Card.Button.Label/Verb"
@@ -591,7 +592,7 @@ msgstr ""
 #: front/src/components/playlists/PlaylistModal.vue:22
 msgctxt "*/Playlist/Button.Label/Verb"
 msgid "Add anyways"
-msgstr ""
+msgstr "എന്തായാലും ചേർക്കുക"
 
 #: front/src/components/Sidebar.vue:216 src/views/content/Base.vue:18
 msgctxt "*/Library/*/Verb"
@@ -613,12 +614,12 @@ msgstr ""
 #: front/src/views/channels/SubscriptionsList.vue:8
 msgctxt "Content/Profile/Button"
 msgid "Add new"
-msgstr ""
+msgstr "പുതിയത് ചേർക്കുക"
 
 #: front/src/components/manage/moderation/NoteForm.vue:12
 msgctxt "Content/Moderation/Button.Label/Verb"
 msgid "Add note"
-msgstr ""
+msgstr "കുറിപ്പ് ചേർക്കുക"
 
 #: front/src/components/library/Albums.vue:62 src/components/library/Artists.vue:71
 msgctxt "Content/*/Verb"
@@ -654,7 +655,7 @@ msgstr ""
 #: front/src/components/playlists/TrackPlaylistIcon.vue:35
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Add to playlist…"
-msgstr ""
+msgstr "പ്ലേലിസ്റ്റിലേക്ക് ചേർക്കുക…"
 
 #: front/src/components/audio/PlayButton.vue:10
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
@@ -664,12 +665,12 @@ msgstr ""
 #: front/src/components/playlists/PlaylistModal.vue:173
 msgctxt "Popup/Playlist/Table.Button.Tooltip/Verb"
 msgid "Add to this playlist"
-msgstr ""
+msgstr "ഈ പ്ലേലിസ്റ്റിലേക്ക് ചേർക്കുക"
 
 #: front/src/components/playlists/PlaylistModal.vue:60
 msgctxt "Popup/Playlist/Table.Button.Label/Verb"
 msgid "Add track"
-msgstr ""
+msgstr "ട്രാക്ക് ചേർക്കുക"
 
 #: front/src/components/admin/SignupFormBuilder.vue:156
 msgctxt "*/*/Form-builder"
@@ -718,18 +719,19 @@ msgstr ""
 #: front/src/components/mixins/Report.vue:45
 msgctxt "*/*/*"
 msgid "Album"
-msgstr ""
+msgstr "ആൽബം"
 
 #: front/src/components/library/TrackDetail.vue:85
 msgctxt "*/*/*/Noun"
 msgid "Album"
-msgstr ""
+msgstr "ആൽബം"
 
 #: front/src/views/admin/library/TrackDetail.vue:126
 #: front/src/views/admin/library/TrackDetail.vue:121
+#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "Album artist"
-msgstr ""
+msgstr "അൽബം കലാകാരൻ"
 
 #: front/src/views/admin/library/AlbumDetail.vue:89
 #: front/src/views/admin/library/AlbumDetail.vue:84
@@ -770,7 +772,7 @@ msgstr ""
 #: front/src/views/channels/DetailOverview.vue:53 src/views/library/DetailBase.vue:89
 msgctxt "*/*/*"
 msgid "Albums"
-msgstr ""
+msgstr "ആൽബങ്ങളും"
 
 #: front/src/components/library/ArtistDetail.vue:21
 msgctxt "Content/Artist/Title"
@@ -791,7 +793,7 @@ msgstr ""
 #: front/src/views/content/libraries/FilesTable.vue:18
 msgctxt "Content/*/Dropdown"
 msgid "All"
-msgstr ""
+msgstr "എല്ലാം"
 
 #: front/src/components/common/ActionTable.vue:43
 msgctxt "Content/*/Paragraph"
@@ -803,7 +805,7 @@ msgstr[1] ""
 #: front/src/views/channels/DetailBase.vue:187 src/views/channels/DetailBase.vue:182
 msgctxt "Content/Channels/*"
 msgid "All Episodes"
-msgstr ""
+msgstr "എല്ലാ എപ്പിസോഡുകൾ"
 
 #: front/src/components/auth/Authorize.vue:111
 msgctxt "Head/Authorize/Title"
@@ -901,7 +903,7 @@ msgstr ""
 #: front/src/components/notifications/NotificationRow.vue:73
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Approve"
-msgstr ""
+msgstr "അംഗീകരിക്കുക"
 
 #: front/src/components/library/EditCard.vue:23
 #: front/src/components/manage/library/EditsCardList.vue:21
@@ -910,7 +912,7 @@ msgstr ""
 #: front/src/views/admin/moderation/RequestsList.vue:23
 msgctxt "Content/*/*/Short"
 msgid "Approved"
-msgstr ""
+msgstr "അംഗീകരിച്ചു"
 
 #: front/src/components/library/EditCard.vue:19
 msgctxt "Content/Library/Card/Short"
@@ -939,7 +941,7 @@ msgstr ""
 #: front/src/components/mixins/Report.vue:73 src/entities.js:12
 msgctxt "*/*/*/Noun"
 msgid "Artist"
-msgstr ""
+msgstr "കലാകാരൻ"
 
 #: front/src/views/auth/ProfileOverview.vue:35 src/views/channels/DetailBase.vue:160
 #: front/src/views/channels/DetailBase.vue:155
@@ -961,18 +963,18 @@ msgstr ""
 #: front/src/components/library/Artists.vue:10
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "Artist name"
-msgstr ""
+msgstr "കലാകാരന്റെ പേര്"
 
 #: front/src/components/mixins/Translations.vue:77
 #: front/src/components/mixins/Translations.vue:78
 msgctxt "Content/*/Dropdown/Noun"
 msgid "Artist name"
-msgstr ""
+msgstr "കലാകാരന്റെ പേര്"
 
 #: front/src/components/audio/Search.vue:65
 msgctxt "*/Search/Input.Placeholder"
 msgid "Artist, album, track…"
-msgstr ""
+msgstr "കലാകാരൻ, ആൽബം, ട്രാക്ക്…"
 
 #: front/src/components/audio/Search.vue:10 src/components/audio/Search.vue:1
 #: front/src/components/library/Artists.vue:142
@@ -992,13 +994,13 @@ msgstr ""
 #: front/src/views/admin/moderation/DomainsDetail.vue:278
 msgctxt "*/*/*/Noun"
 msgid "Artists"
-msgstr ""
+msgstr "കലാകാരന്മാർ"
 
 #: front/src/components/Sidebar.vue:101 src/components/Sidebar.vue:114
 #: front/src/views/library/DetailBase.vue:86
 msgctxt "*/*/*"
 msgid "Artists"
-msgstr ""
+msgstr "കലാകാരന്മാര്‍"
 
 #: front/src/components/favorites/List.vue:30 src/components/library/Albums.vue:34
 #: front/src/components/library/Artists.vue:34 src/components/library/Podcasts.vue:34
@@ -1020,7 +1022,7 @@ msgstr ""
 #: front/src/views/playlists/List.vue:30
 msgctxt "Content/Search/Dropdown"
 msgid "Ascending"
-msgstr ""
+msgstr "ആരോഹണം"
 
 #: front/src/views/auth/PasswordReset.vue:21
 msgctxt "Content/Signup/Button.Label/Verb"
@@ -1067,7 +1069,7 @@ msgstr ""
 #: front/src/components/auth/Authorize.vue:47
 msgctxt "Content/Signup/Button.Label/Verb"
 msgid "Authorize %{ app }"
-msgstr ""
+msgstr "%{ app } അനുവദിക്കുക"
 
 #: front/src/components/auth/Authorize.vue:4
 msgctxt "Content/Auth/Title/Verb"
@@ -1087,12 +1089,12 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:46
 msgctxt "Content/Channel/*"
 msgid "Avatar"
-msgstr ""
+msgstr "അവതാർ"
 
 #: front/src/components/auth/Settings.vue:35
 msgctxt "Content/Settings/Title"
 msgid "Avatar"
-msgstr ""
+msgstr "അവതാർ"
 
 #: front/src/components/audio/ChannelForm.vue:238
 msgctxt "Content/Channel/Form.Field.Placeholder"
@@ -1132,7 +1134,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:83
 msgctxt "Content/Track/*/Noun"
 msgid "Bitrate"
-msgstr ""
+msgstr "ബിറ്റ്റേറ്റ്"
 
 #: front/src/components/manage/moderation/InstancePolicyCard.vue:19
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:34
@@ -1148,7 +1150,7 @@ msgstr ""
 #: front/src/components/Sidebar.vue:98 src/components/Sidebar.vue:112
 msgctxt "Sidebar/Navigation/List item.Link/Verb"
 msgid "Browse"
-msgstr ""
+msgstr "കണ്ടെത്തുക"
 
 #: front/src/components/Home.vue:131
 msgctxt "Content/Home/Link"
@@ -1250,7 +1252,7 @@ msgstr ""
 #: front/src/views/playlists/Detail.vue:57
 msgctxt "*/*/Button.Label/Verb"
 msgid "Cancel"
-msgstr ""
+msgstr "റദ്ദാക്കുക"
 
 #: front/src/components/audio/LibraryFollowButton.vue:4
 msgctxt "Content/Library/Card.Button.Label/Verb"
@@ -1266,7 +1268,7 @@ msgstr ""
 #: front/src/components/library/radios/Builder.vue:62
 msgctxt "Content/Radio/Table.Label/Noun (Value is a number of Tracks)"
 msgid "Candidates"
-msgstr ""
+msgstr "സ്ഥാനാർത്ഥികൾ"
 
 #: front/src/components/library/FileUpload.vue:352
 #: front/src/components/library/FileUpload.vue:353
@@ -1288,17 +1290,17 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:47
 msgctxt "*/*/*"
 msgid "Category"
-msgstr ""
+msgstr "വിഭാഗം"
 
 #: front/src/components/Footer.vue:33
 msgctxt "Footer/Settings/Dropdown.Label/Short, Verb"
 msgid "Change language"
-msgstr ""
+msgstr "ഭാഷ മാറ്റുക"
 
 #: front/src/components/auth/Settings.vue:262
 msgctxt "*/*/Button.Label"
 msgid "Change my email address"
-msgstr ""
+msgstr "എൻ്റെ ഇമെയിൽ വിലാസം മാറ്റുക"
 
 #: front/src/components/auth/Settings.vue:54
 msgctxt "Content/Settings/Title/Verb"
@@ -1350,7 +1352,7 @@ msgstr ""
 #: front/src/components/mixins/Report.vue:61
 msgctxt "*/*/*"
 msgid "Channel"
-msgstr ""
+msgstr "ചാനൽ"
 
 #: front/src/views/admin/ChannelDetail.vue:78 src/views/admin/ChannelDetail.vue:73
 msgctxt "Content/Moderation/Title"
@@ -1368,7 +1370,7 @@ msgstr ""
 #: front/src/components/audio/ChannelForm.vue:24
 msgctxt "Content/Channel/*"
 msgid "Channel Picture"
-msgstr ""
+msgstr "ചാനൽ ചിത്രം"
 
 #: front/src/components/Sidebar.vue:121 src/components/library/TagDetail.vue:26
 #: front/src/views/admin/ChannelsList.vue:24 src/views/admin/Settings.vue:84
@@ -1380,12 +1382,12 @@ msgstr ""
 #: front/src/views/auth/ProfileOverview.vue:8
 msgctxt "*/*/*"
 msgid "Channels"
-msgstr ""
+msgstr "ചാനലുകൾ"
 
 #: front/src/components/Footer.vue:60
 msgctxt "Footer/*/List item.Link"
 msgid "Chat room"
-msgstr ""
+msgstr "ചാറ്റ് റൂം"
 
 #: front/src/components/auth/ApplicationForm.vue:24
 msgctxt "Content/Applications/Paragraph/"
@@ -1400,7 +1402,7 @@ msgstr ""
 #: front/src/components/Queue.vue:95
 msgctxt "*/Queue/*/Verb"
 msgid "Clear"
-msgstr ""
+msgstr "മായ്ക്കുക"
 
 #: front/src/components/common/InlineSearchBar.vue:25
 #: front/src/components/library/EditForm.vue:70
@@ -1409,7 +1411,7 @@ msgstr ""
 #: front/src/components/manage/users/InvitationForm.vue:37
 msgctxt "Content/Library/Button.Label"
 msgid "Clear"
-msgstr ""
+msgstr "മായ്ക്കുക"
 
 #: front/src/components/playlists/Editor.vue:40
 #: front/src/components/playlists/Editor.vue:45
@@ -1441,7 +1443,7 @@ msgstr ""
 #: front/src/components/Queue.vue:92
 msgctxt "*/Queue/*/Verb"
 msgid "Close"
-msgstr ""
+msgstr "അടയ്ക്കുക"
 
 #: front/src/components/ShortcutsModal.vue:32
 #: front/src/components/channels/UploadModal.vue:42
@@ -1450,7 +1452,7 @@ msgstr ""
 #: front/src/components/manage/moderation/InstancePolicyModal.vue:27
 msgctxt "*/*/Button.Label/Verb"
 msgid "Close"
-msgstr ""
+msgstr "അടയ്ക്കുക"
 
 #: front/src/components/federation/FetchButton.vue:76
 msgctxt "*/*/Button.Label/Verb"
@@ -1460,14 +1462,14 @@ msgstr ""
 #: front/src/components/About.vue:93
 msgctxt "*/*/*/State of registrations"
 msgid "Closed"
-msgstr ""
+msgstr "അടച്ചു"
 
 #: front/src/components/manage/users/InvitationForm.vue:26
 #: front/src/components/manage/users/InvitationsTable.vue:36
 #: front/src/components/manage/users/InvitationsTable.vue:5
 msgctxt "Content/Admin/Table.Label/Noun"
 msgid "Code"
-msgstr ""
+msgstr "കോഡ്"
 
 #: front/src/components/library/TrackDetail.vue:32
 #: front/src/components/library/TrackDetail.vue:27
@@ -1478,7 +1480,7 @@ msgstr ""
 #: front/src/components/common/CollapseLink.vue:3
 msgctxt "*/*/Button,Label"
 msgid "Collapse"
-msgstr ""
+msgstr "ചുരുക്കുക"
 
 #: front/src/components/library/radios/Builder.vue:61
 msgctxt "Content/Radio/Table.Label/Verb (Value is a List of Parameters)"
@@ -1488,12 +1490,12 @@ msgstr ""
 #: front/src/components/common/DangerousButton.vue:21
 msgctxt "Modal/*/Button.Label/Short, Verb"
 msgid "Confirm"
-msgstr ""
+msgstr "ഉറപ്പാക്കുക"
 
 #: front/src/views/auth/EmailConfirm.vue:51
 msgctxt "Head/Signup/Title"
 msgid "Confirm your e-mail address"
-msgstr ""
+msgstr "നിങ്ങളുടെ ഇ-മെയിൽ വിലാസം ഉറപ്പാക്കുക"
 
 #: front/src/views/auth/EmailConfirm.vue:13
 msgctxt "Content/Signup/Form.Label"
@@ -1504,7 +1506,7 @@ msgstr ""
 #: front/src/components/Home.vue:64 src/components/Home.vue:2
 msgctxt "Content/Home/Header/Name"
 msgid "Contact"
-msgstr ""
+msgstr "ബന്ധപ്പെടുക"
 
 #: front/src/components/mixins/Translations.vue:59
 #: front/src/components/mixins/Translations.vue:60
@@ -1537,7 +1539,7 @@ msgstr ""
 #: front/src/components/About.vue:45
 msgctxt "Content/About/Header"
 msgid "Contents"
-msgstr ""
+msgstr "ഉള്ളടക്കം"
 
 #: front/src/components/Footer.vue:68
 msgctxt "Footer/*/List item.Link"
@@ -1549,7 +1551,7 @@ msgstr ""
 #: front/src/components/forms/PasswordInput.vue:43
 msgctxt "*/*/Button.Label/Short, Verb"
 msgid "Copy"
-msgstr ""
+msgstr "പകർത്തുക"
 
 #: front/src/components/playlists/Editor.vue:195
 msgctxt "Content/Playlist/Button.Tooltip/Verb"
@@ -1592,22 +1594,22 @@ msgstr ""
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:58
 msgctxt "Content/Moderation/Card.Button.Label/Verb"
 msgid "Create"
-msgstr ""
+msgstr "സൃഷ്ടിക്കുക"
 
 #: front/src/components/channels/AlbumModal.vue:12
 msgctxt "*/*/Button.Label"
 msgid "Create"
-msgstr ""
+msgstr "സൃഷ്ടിക്കുക"
 
 #: front/src/components/library/Podcasts.vue:64
 msgctxt "Content/*/Verb"
 msgid "Create a Channel"
-msgstr ""
+msgstr "ഒരു ചാനൽ സൃഷ്ടിക്കുക"
 
 #: front/src/views/auth/Signup.vue:4
 msgctxt "Content/Signup/Title"
 msgid "Create a funkwhale account"
-msgstr ""
+msgstr "ഒരു funkwhale അക്കൗണ്ട് സൃഷ്ടിക്കുക"
 
 #: front/src/components/auth/ApplicationNew.vue:8
 #: front/src/components/auth/ApplicationNew.vue:41
@@ -1650,12 +1652,12 @@ msgstr ""
 #: front/src/views/auth/ProfileOverview.vue:52
 msgctxt "*/Channels/Button.Label"
 msgid "Create channel"
-msgstr ""
+msgstr "ചാനൽ സൃഷ്ടിക്കുക"
 
 #: front/src/views/auth/ProfileOverview.vue:33
 msgctxt "Content/Channel/*/Verb"
 msgid "Create channel"
-msgstr ""
+msgstr "ചാനൽ സൃഷ്ടിക്കുക"
 
 #: front/src/views/content/libraries/Form.vue:26
 msgctxt "Content/Library/Button.Label/Verb"
@@ -1720,7 +1722,7 @@ msgstr ""
 #: front/src/views/content/libraries/Quota.vue:2
 msgctxt "Content/Library/Title"
 msgid "Current usage"
-msgstr ""
+msgstr "നിലവിലെ ഉപയോഗം"
 
 #: front/src/components/Footer.vue:111
 msgctxt "Footer/Settings/Dropdown.Label/Theme name"
@@ -1742,7 +1744,7 @@ msgstr ""
 #: front/src/views/library/Edit.vue:20
 msgctxt "Content/Library/Table.Label"
 msgid "Date"
-msgstr ""
+msgstr "തീയതി"
 
 #: front/src/components/library/ImportStatusModal.vue:64
 #: front/src/components/library/ImportStatusModal.vue:45
@@ -1758,7 +1760,7 @@ msgstr ""
 #: front/src/components/admin/SignupFormBuilder.vue:144
 msgctxt "*/*/*"
 msgid "Delete"
-msgstr ""
+msgstr "ഇല്ലാതാക്കുക"
 
 #: front/src/components/auth/Settings.vue:130 src/components/auth/Settings.vue:225
 #: front/src/components/library/AlbumDropdown.vue:50
@@ -1803,7 +1805,7 @@ msgstr ""
 #: front/src/views/content/libraries/Form.vue:29 src/views/playlists/Detail.vue:37
 msgctxt "*/*/*/Verb"
 msgid "Delete"
-msgstr ""
+msgstr "ഇല്ലാതാക്കുക"
 
 #: front/src/components/auth/Settings.vue:228
 msgctxt "*/Settings/Button.Label/Verb"
@@ -1818,7 +1820,7 @@ msgstr ""
 #: front/src/views/content/libraries/Form.vue:39
 msgctxt "Popup/Library/Button.Label/Verb"
 msgid "Delete library"
-msgstr ""
+msgstr "ലൈബ്രറി ഇല്ലാതാക്കുക"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:69
 msgctxt "Popup/Moderation/Button.Label/Verb"
@@ -1828,22 +1830,22 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:294 src/components/auth/Settings.vue:320
 msgctxt "*/*/Button.Label"
 msgid "Delete my account"
-msgstr ""
+msgstr "എന്റെ അക്കൗണ്ട് ഇല്ലാതാക്കുക"
 
 #: front/src/components/auth/Settings.vue:315
 msgctxt "*/*/Button.Label"
 msgid "Delete my account…"
-msgstr ""
+msgstr "എന്റെ അക്കൗണ്ട് ഇല്ലാതാക്കുക…"
 
 #: front/src/views/playlists/Detail.vue:42
 msgctxt "Popup/Playlist/Button.Label/Verb"
 msgid "Delete playlist"
-msgstr ""
+msgstr "പ്ലേലിസ്റ്റ് ഇല്ലാതാക്കുക"
 
 #: front/src/views/radios/Detail.vue:28 src/views/radios/Detail.vue:9
 msgctxt "Popup/Radio/Button.Label/Verb"
 msgid "Delete radio"
-msgstr ""
+msgstr "റേഡിയോ ഇല്ലാതാക്കുക"
 
 #: front/src/components/manage/moderation/ReportCard.vue:355
 msgctxt "Content/Moderation/Button/Verb"
@@ -1864,7 +1866,7 @@ msgstr ""
 #: front/src/components/library/AlbumDropdown.vue:46
 msgctxt "Popup/Channel/Title"
 msgid "Delete this album?"
-msgstr ""
+msgstr "ഈ ആൽബം ഇല്ലാതാക്കണോ?"
 
 #: front/src/views/admin/library/ArtistDetail.vue:69
 #: front/src/views/admin/library/ArtistDetail.vue:64
@@ -1881,7 +1883,7 @@ msgstr ""
 #: front/src/views/channels/DetailBase.vue:7
 msgctxt "Popup/Channel/Title"
 msgid "Delete this Channel?"
-msgstr ""
+msgstr "ഈ ചാനൽ ഇല്ലാതാക്കണോ?"
 
 #: front/src/views/admin/library/LibraryDetail.vue:49
 #: front/src/views/admin/library/LibraryDetail.vue:44
@@ -1935,7 +1937,7 @@ msgstr ""
 #: front/src/views/channels/DetailBase.vue:87 src/views/channels/DetailBase.vue:6
 msgctxt "*/*/*/Verb"
 msgid "Delete…"
-msgstr ""
+msgstr "ഇല്ലാതാക്കുക…"
 
 #: front/src/components/favorites/List.vue:31 src/components/library/Albums.vue:35
 #: front/src/components/library/Artists.vue:35 src/components/library/Podcasts.vue:35
@@ -1970,7 +1972,7 @@ msgstr ""
 #: front/src/views/content/libraries/Form.vue:14 src/edits.js:18
 msgctxt "*/*/*/Noun"
 msgid "Description"
-msgstr ""
+msgstr "വിവരണം"
 
 #: front/src/components/audio/ChannelForm.vue:78
 #: front/src/components/audio/ChannelForm.vue:70
@@ -1978,7 +1980,7 @@ msgstr ""
 #: front/src/components/channels/UploadMetadataForm.vue:28
 msgctxt "*/*/*"
 msgid "Description"
-msgstr ""
+msgstr "വിവരണം"
 
 #: front/src/views/admin/ChannelDetail.vue:123 src/views/admin/ChannelDetail.vue:118
 #: front/src/views/admin/library/AlbumDetail.vue:124
@@ -1989,12 +1991,12 @@ msgstr ""
 #: front/src/views/admin/library/TrackDetail.vue:172
 msgctxt "'*/*/*/Noun"
 msgid "Description"
-msgstr ""
+msgstr "വിവരണം"
 
 #: front/src/views/content/remote/Card.vue:58
 msgctxt "Content/Library/Card.Button.Label/Noun"
 msgid "Details"
-msgstr ""
+msgstr "വിശദാംങ്ങൾ"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:531
 msgctxt "Content/Moderation/Help text"
@@ -2062,7 +2064,7 @@ msgstr ""
 #: front/src/views/admin/moderation/AccountsDetail.vue:112
 msgctxt "'Content/*/*/Noun'"
 msgid "Display name"
-msgstr ""
+msgstr "പ്രദർശന നാമം"
 
 #: front/src/components/library/radios/Builder.vue:30
 msgctxt "Content/Radio/Checkbox.Label/Verb"
@@ -2160,14 +2162,14 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:88
 msgctxt "Content/Moderation/*/Noun"
 msgid "Domain"
-msgstr ""
+msgstr "മേഖല"
 
 #: front/src/views/admin/moderation/Base.vue:11
 #: front/src/views/admin/moderation/DomainsList.vue:3
 #: front/src/views/admin/moderation/DomainsList.vue:54
 msgctxt "*/Moderation/*/Noun"
 msgid "Domains"
-msgstr ""
+msgstr "മേഖലകൾ"
 
 #: front/src/views/Notifications.vue:42
 msgctxt "Content/Notifications/Button.Label/Verb"
@@ -2227,12 +2229,12 @@ msgstr ""
 #: front/src/views/auth/EmailConfirm.vue:23
 msgctxt "Content/Signup/Message"
 msgid "E-mail address confirmed"
-msgstr ""
+msgstr "ഇ-മെയിൽ വിലാസം ഉറപ്പാക്കി"
 
 #: front/src/views/playlists/Detail.vue:78
 msgctxt "Content/Home/CreatePlaylist"
 msgid "Edit"
-msgstr ""
+msgstr "തിരുത്തുക"
 
 #: front/src/components/auth/Settings.vue:222
 #: front/src/components/channels/UploadForm.vue:205
@@ -2254,13 +2256,13 @@ msgstr ""
 #: front/src/views/playlists/Detail.vue:1
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Edit"
-msgstr ""
+msgstr "തിരുത്തുക"
 
 #: front/src/components/playlists/PlaylistModal.vue:42
 #: front/src/components/playlists/PlaylistModal.vue:52
 msgctxt "*/*/*/Verb"
 msgid "Edit"
-msgstr ""
+msgstr "തിരുത്തുക"
 
 #: front/src/components/auth/ApplicationEdit.vue:38
 #: front/src/components/auth/ApplicationEdit.vue:31
@@ -2282,7 +2284,7 @@ msgstr ""
 #: front/src/components/library/AlbumEdit.vue:4
 msgctxt "Content/*/Title"
 msgid "Edit this album"
-msgstr ""
+msgstr "ഈ അൽബം തിരുത്തുക"
 
 #: front/src/components/library/ArtistEdit.vue:4
 msgctxt "Content/*/Title"
@@ -2312,7 +2314,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:132
 msgctxt "*/Admin/*/Noun"
 msgid "Edits"
-msgstr ""
+msgstr "തിരുത്തുക…"
 
 #: front/src/components/auth/SignupForm.vue:35
 #: front/src/components/manage/users/UsersTable.vue:32
@@ -2320,13 +2322,13 @@ msgstr ""
 #: front/src/components/moderation/ReportModal.vue:25
 msgctxt "Content/*/*/Noun"
 msgid "Email"
-msgstr ""
+msgstr "ഇമെയിൽ"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:125
 #: front/src/views/admin/moderation/AccountsDetail.vue:120
 msgctxt "Content/*/*"
 msgid "Email address"
-msgstr ""
+msgstr "ഇമെയിൽ വിലാസം"
 
 #: front/src/components/library/AlbumDropdown.vue:29
 #: front/src/components/library/ArtistBase.vue:62
@@ -2403,7 +2405,7 @@ msgstr ""
 #: front/src/views/content/remote/ScanForm.vue:51
 msgctxt "Content/Library/Input.Placeholder"
 msgid "Enter a library URL"
-msgstr ""
+msgstr "ഒരു ലൈബ്രറി യുആർഎൽ നൽകുക"
 
 #: front/src/components/library/Radios.vue:150
 msgctxt "Content/Search/Input.Placeholder"
@@ -2433,7 +2435,7 @@ msgstr ""
 #: front/src/components/auth/SignupForm.vue:138
 msgctxt "Content/Signup/Form/Placeholder"
 msgid "Enter your email"
-msgstr ""
+msgstr "നിങ്ങളുടെ ഇമെയിൽ നൽകുക"
 
 #: front/src/components/auth/SignupForm.vue:133
 #: front/src/components/auth/SignupForm.vue:135
@@ -2460,7 +2462,7 @@ msgstr ""
 #: front/src/components/library/AlbumDetail.vue:3
 msgctxt "Content/Channels/*"
 msgid "Episodes"
-msgstr ""
+msgstr "എപ്പിസോഡുകൾ"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:19
 #: front/src/views/content/libraries/Form.vue:4
@@ -2620,7 +2622,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:18
 msgctxt "Content/Settings/Dropdown/Short"
 msgid "Everyone"
-msgstr ""
+msgstr "എല്ലാവർക്കും"
 
 #: front/src/components/mixins/Translations.vue:11
 #: front/src/components/mixins/Translations.vue:12
@@ -2750,7 +2752,7 @@ msgstr ""
 #: front/src/components/library/FileUpload.vue:68
 msgctxt "Content/Library/Table.Label"
 msgid "Filename"
-msgstr ""
+msgstr "ഫയൽനാമം"
 
 #: front/src/components/channels/UploadModal.vue:4
 msgctxt "Popup/Channels/Title"
@@ -2830,7 +2832,7 @@ msgstr ""
 #: front/src/views/content/remote/Card.vue:90 src/views/content/remote/Card.vue:2
 msgctxt "Content/Library/Card.Button.Label/Verb"
 msgid "Follow"
-msgstr ""
+msgstr "പിന്തുടരുക"
 
 #: front/src/views/content/Home.vue:35
 msgctxt "Content/Library/Paragraph"
@@ -2950,7 +2952,7 @@ msgstr ""
 #: front/src/components/About.vue:154
 msgctxt "*/*/*/Verb"
 msgid "Hide"
-msgstr ""
+msgstr "മറയ്ക്കുക"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:114
 msgctxt "Content/Moderation/Help text"
@@ -2975,7 +2977,7 @@ msgstr ""
 #: front/src/components/Home.vue:217
 msgctxt "Head/Home/Title"
 msgid "Home"
-msgstr ""
+msgstr "ഹോം"
 
 #: front/src/components/Footer.vue:22
 msgctxt "Footer/*/List item.Link"
@@ -3191,7 +3193,7 @@ msgstr ""
 #: front/src/views/admin/users/InvitationsList.vue:24
 msgctxt "*/Admin/*/Noun"
 msgid "Invitations"
-msgstr ""
+msgstr "ക്ഷണങ്ങൾ"
 
 #: front/src/components/manage/moderation/DomainsTable.vue:9
 #: front/src/views/admin/moderation/DomainsDetail.vue:89
@@ -3214,7 +3216,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:81
 msgctxt "*/*/*/Noun"
 msgid "Items"
-msgstr ""
+msgstr "ഇനങ്ങൾ"
 
 #: front/src/components/Footer.vue:45 src/components/ShortcutsModal.vue:3
 msgctxt "*/*/*/Noun"
@@ -3237,7 +3239,7 @@ msgstr ""
 #: front/src/components/audio/ChannelForm.vue:41
 msgctxt "*/*/*"
 msgid "Language"
-msgstr ""
+msgstr "ഭാഷ"
 
 #: front/src/components/manage/users/UsersTable.vue:35
 #: front/src/components/manage/users/UsersTable.vue:5
@@ -3282,7 +3284,7 @@ msgstr ""
 #: front/src/App.vue:434
 msgctxt "App/Message/Paragraph"
 msgid "Later"
-msgstr ""
+msgstr "പിന്നീട്"
 
 #: front/src/views/channels/DetailOverview.vue:44
 msgctxt "Content/Channel/Paragraph"
@@ -3335,7 +3337,7 @@ msgstr ""
 #: front/src/views/content/Base.vue:3
 msgctxt "*/*/*/Noun"
 msgid "Libraries"
-msgstr ""
+msgstr "ലൈബ്രറികൾ"
 
 #: front/src/components/mixins/Translations.vue:99
 #: front/src/components/mixins/Translations.vue:100
@@ -3360,17 +3362,17 @@ msgstr ""
 #: front/src/components/mixins/Report.vue:97 src/entities.js:132
 msgctxt "*/*/*/Noun"
 msgid "Library"
-msgstr ""
+msgstr "ലൈബ്രറി"
 
 #: front/src/components/library/Home.vue:78
 msgctxt "Head/Home/Title"
 msgid "Library"
-msgstr ""
+msgstr "ലൈബ്രറി"
 
 #: front/src/views/library/DetailBase.vue:181
 msgctxt "*/*/*"
 msgid "Library"
-msgstr ""
+msgstr "ലൈബ്രറി"
 
 #: front/src/views/library/Edit.vue:5
 msgctxt "*/*/*"
@@ -3471,7 +3473,7 @@ msgstr ""
 #: front/src/components/audio/ChannelForm.vue:121
 msgctxt "*/*/*"
 msgid "Loading"
-msgstr ""
+msgstr "ലഭ്യമാക്കുന്നു"
 
 #: front/src/views/library/Edit.vue:14
 msgctxt "Content/Library/Paragraph"
@@ -3574,7 +3576,7 @@ msgstr ""
 #: front/src/components/Sidebar.vue:78 src/components/auth/LoginForm.vue:44
 msgctxt "*/Login/*/Verb"
 msgid "Login"
-msgstr ""
+msgstr "പ്രവേശിക്കുക"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:133
 #: front/src/views/admin/moderation/AccountsDetail.vue:128
@@ -3748,7 +3750,7 @@ msgstr ""
 #: front/src/components/Sidebar.vue:125
 msgctxt "Footer/About/List item.Link"
 msgid "More"
-msgstr ""
+msgstr "കൂടുതൽ"
 
 #: front/src/components/audio/SearchBar.vue:202
 msgctxt "Search/*/*"
@@ -3762,7 +3764,7 @@ msgstr ""
 #: front/src/components/library/TrackBase.vue:221
 msgctxt "*/*/Button.Label/Noun"
 msgid "More…"
-msgstr ""
+msgstr "കൂടുതൽ…"
 
 #: front/src/components/admin/SignupFormBuilder.vue:146
 msgctxt "*/*/*"
@@ -3897,7 +3899,7 @@ msgstr ""
 #: front/src/components/audio/ChannelForm.vue:3
 msgctxt "Content/Channel/*"
 msgid "Name"
-msgstr ""
+msgstr "പേര്"
 
 #: front/src/components/auth/ApplicationForm.vue:9
 #: front/src/components/auth/Settings.vue:113
@@ -3933,7 +3935,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:79 src/edits.js:42
 msgctxt "*/*/*/Noun"
 msgid "Name"
-msgstr ""
+msgstr "പേര്"
 
 #: front/src/views/Notifications.vue:24 src/views/Notifications.vue:58
 msgctxt "*/*/*"
@@ -4143,7 +4145,7 @@ msgstr ""
 #: front/src/views/Notifications.vue:151 src/components/mixins/Translations.vue:128
 msgctxt "*/Notifications/*"
 msgid "Notifications"
-msgstr ""
+msgstr "അറിയിപ്പുകൾ"
 
 #: front/src/components/mixins/Translations.vue:51
 #: front/src/components/mixins/Translations.vue:52
@@ -4169,12 +4171,12 @@ msgstr ""
 #: front/src/components/About.vue:89
 msgctxt "*/*/*/State of registrations"
 msgid "Open"
-msgstr ""
+msgstr "തുറക്കുക"
 
 #: front/src/components/manage/users/InvitationsTable.vue:20
 msgctxt "Content/Admin/Dropdown/Adjective"
 msgid "Open"
-msgstr ""
+msgstr "തുറക്കുക"
 
 #: front/src/components/library/ImportStatusModal.vue:56
 #: front/src/components/library/ImportStatusModal.vue:37
@@ -4267,7 +4269,7 @@ msgstr ""
 #: front/src/views/playlists/List.vue:28
 msgctxt "Content/Search/Dropdown.Label/Noun"
 msgid "Order"
-msgstr ""
+msgstr "ക്രമം"
 
 #: front/src/components/favorites/List.vue:20 src/components/library/Albums.vue:24
 #: front/src/components/library/Artists.vue:24 src/components/library/Podcasts.vue:24
@@ -4312,23 +4314,23 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:64
 msgctxt "*/*/*"
 msgid "Other"
-msgstr ""
+msgstr "മറ്റുള്ളവ"
 
 #: front/src/components/mixins/Translations.vue:52
 #: front/src/components/mixins/Translations.vue:53
 msgctxt "Content/Moderation/Dropdown"
 msgid "Other"
-msgstr ""
+msgstr "മറ്റുള്ളവ"
 
 #: front/src/views/auth/ProfileBase.vue:54
 msgctxt "Content/Profile/Link"
 msgid "Overview"
-msgstr ""
+msgstr "അവലോകനം"
 
 #: front/src/views/channels/DetailBase.vue:184 src/views/channels/DetailBase.vue:179
 msgctxt "Content/Channels/Link"
 msgid "Overview"
-msgstr ""
+msgstr "അവലോകനം"
 
 #: front/src/views/library/DetailBase.vue:32
 msgctxt "*/*/*"
@@ -4340,7 +4342,7 @@ msgstr ""
 #: front/src/components/manage/users/InvitationsTable.vue:1
 msgctxt "*/*/*"
 msgid "Owner"
-msgstr ""
+msgstr "ഉടമ"
 
 #: front/src/components/audio/ChannelForm.vue:103
 #: front/src/components/audio/ChannelForm.vue:95
@@ -4467,7 +4469,7 @@ msgstr ""
 #: front/src/views/admin/moderation/AccountsDetail.vue:144
 msgctxt "Content/*/*/Noun"
 msgid "Permissions"
-msgstr ""
+msgstr "അനുമതികൾ"
 
 #: front/src/views/channels/DetailBase.vue:135 src/views/channels/DetailBase.vue:130
 msgctxt "Content/Channels/Button.Label/Verb"
@@ -4561,7 +4563,7 @@ msgstr ""
 #: front/src/components/mixins/Report.vue:85
 msgctxt "*/*/*"
 msgid "Playlist"
-msgstr ""
+msgstr "പ്ലേലിസ്റ്റ്"
 
 #: front/src/views/playlists/Detail.vue:12
 msgctxt "Content/Playlist/Header.Subtitle"
@@ -4609,7 +4611,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:116
 msgctxt "*/*/*"
 msgid "Playlists"
-msgstr ""
+msgstr "പ്ലേലിസ്റ്റുകൾ"
 
 #: front/src/components/audio/EmbedWizard.vue:9
 msgctxt "Content/Embed/Message"
@@ -4645,7 +4647,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:62
 msgctxt "Content/*/Dropdown"
 msgid "Podcast"
-msgstr ""
+msgstr "പോഡ്‌കാസ്റ്റ്"
 
 #: front/src/views/auth/ProfileOverview.vue:34 src/views/channels/DetailBase.vue:159
 #: front/src/views/channels/DetailBase.vue:154
@@ -4663,12 +4665,12 @@ msgstr ""
 #: front/src/views/Search.vue:194
 msgctxt "*/*/*"
 msgid "Podcasts"
-msgstr ""
+msgstr "പോഡ്‌കാസ്റ്റുകൾ"
 
 #: front/src/components/library/Podcasts.vue:170
 msgctxt "*/*/*/Noun"
 msgid "Podcasts"
-msgstr ""
+msgstr "പോഡ്‌കാസ്റ്റുകൾ"
 
 #: front/src/components/channels/UploadMetadataForm.vue:21
 #: front/src/views/admin/library/TrackDetail.vue:135
@@ -4756,12 +4758,12 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:96
 msgctxt "Content/OAuth Scopes/Label"
 msgid "Profile"
-msgstr ""
+msgstr "പ്രൊഫൈൽ"
 
 #: front/src/components/Sidebar.vue:60 src/components/Sidebar.vue:46
 msgctxt "*/*/*/Noun"
 msgid "Profile"
-msgstr ""
+msgstr "പ്രൊഫൈൽ"
 
 #: front/src/views/library/DetailBase.vue:185
 msgctxt "Content/Library/Card.Help text"
@@ -4833,7 +4835,7 @@ msgstr ""
 #: front/src/views/radios/Detail.vue:95
 msgctxt "Head/Radio/Title"
 msgid "Radio"
-msgstr ""
+msgstr "റേഡിയോ"
 
 #: front/src/components/library/radios/Builder.vue:233
 msgctxt "Head/Radio/Title"
@@ -4863,7 +4865,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:120
 msgctxt "*/*/*"
 msgid "Radios"
-msgstr ""
+msgstr "റേഡിയോകൾ"
 
 #: front/src/components/auth/ApplicationForm.vue:151
 msgctxt "Content/OAuth Scopes/Label/Verb"
@@ -4890,7 +4892,7 @@ msgstr ""
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:25
 msgctxt "Content/Moderation/*/Noun"
 msgid "Reason"
-msgstr ""
+msgstr "കാരണം"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:231
 #: front/src/views/admin/moderation/AccountsDetail.vue:226
@@ -4950,7 +4952,7 @@ msgstr ""
 #: front/src/views/content/remote/Home.vue:3
 msgctxt "Content/*/Button.Label/Short, Verb"
 msgid "Refresh"
-msgstr ""
+msgstr "പുതുക്കുക"
 
 #: front/src/components/federation/FetchButton.vue:20
 #: front/src/components/federation/FetchButton.vue:10
@@ -5044,12 +5046,12 @@ msgstr ""
 #: front/src/components/notifications/NotificationRow.vue:79
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Reject"
-msgstr ""
+msgstr "നിരസിക്കുക"
 
 #: front/src/components/library/EditCard.vue:96 src/views/library/Edit.vue:44
 msgctxt "Content/Library/Button.Label"
 msgid "Reject"
-msgstr ""
+msgstr "നിരസിക്കുക"
 
 #: front/src/components/manage/moderation/InstancePolicyCard.vue:32
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:123
@@ -5062,7 +5064,7 @@ msgstr ""
 #: front/src/views/library/Edit.vue:36
 msgctxt "Content/Library/*/Short"
 msgid "Rejected"
-msgstr ""
+msgstr "നിരസിച്ചു"
 
 #: front/src/components/library/TrackDetail.vue:150
 msgctxt "Content/*/Title/Noun"
@@ -5252,7 +5254,7 @@ msgstr ""
 #: front/src/views/admin/moderation/AccountsDetail.vue:253
 msgctxt "Content/Moderation/Table.Label/Noun"
 msgid "Requests"
-msgstr ""
+msgstr "അഭ്യർത്ഥനകൾ"
 
 #: front/src/components/admin/SignupFormBuilder.vue:42
 msgctxt "*/*/Form-builder,Help"
@@ -5337,7 +5339,7 @@ msgstr ""
 #: front/src/components/library/FileUpload.vue:368
 msgctxt "*/*/*/Verb"
 msgid "Retry"
-msgstr ""
+msgstr "വീണ്ടും ശ്രമിക്കുക"
 
 #: front/src/components/channels/UploadForm.vue:86
 #: front/src/components/channels/UploadForm.vue:59
@@ -5345,7 +5347,7 @@ msgstr ""
 #: front/src/components/channels/UploadForm.vue:3
 msgctxt "*/*/*"
 msgid "Retry"
-msgstr ""
+msgstr "വീണ്ടും ശ്രമിക്കുക"
 
 #: front/src/components/library/FileUpload.vue:79
 msgctxt "Content/Library/Table"
@@ -5401,7 +5403,7 @@ msgstr ""
 #: front/src/components/library/radios/Builder.vue:34
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Save"
-msgstr ""
+msgstr "സംരക്ഷിക്കുക"
 
 #: front/src/components/auth/Plugin.vue:61
 msgctxt "Content/*/Button.Label/Verb"
@@ -5452,7 +5454,7 @@ msgstr ""
 #: front/src/components/Sidebar.vue:97
 msgctxt "Sidebar/Navigation/List item.Link/Verb"
 msgid "Search"
-msgstr ""
+msgstr "തിരയുക"
 
 #: front/src/components/RemoteSearchForm.vue:31
 #: front/src/components/common/InlineSearchBar.vue:4
@@ -5477,7 +5479,7 @@ msgstr ""
 #: front/src/views/playlists/List.vue:132
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "Search"
-msgstr ""
+msgstr "തിരയുക"
 
 #: front/src/views/content/remote/ScanForm.vue:9
 msgctxt "Content/Library/Input.Label/Verb"
@@ -5601,14 +5603,14 @@ msgstr ""
 #: front/src/components/library/TagsSelector.vue:6
 msgctxt "*/Dropdown/Placeholder/Verb"
 msgid "Search…"
-msgstr ""
+msgstr "തിരയുക…"
 
 #: front/src/components/common/InlineSearchBar.vue:24
 #: front/src/components/library/Artists.vue:141
 #: front/src/components/library/Podcasts.vue:169
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search…"
-msgstr ""
+msgstr "തിരയുക…"
 
 #: front/src/components/library/Library.vue:18 src/views/admin/library/Base.vue:38
 #: front/src/views/admin/moderation/Base.vue:57 src/views/admin/users/Base.vue:21
@@ -5709,7 +5711,7 @@ msgstr ""
 #: front/src/views/admin/moderation/AccountsDetail.vue:546
 msgctxt "*/*/*/Noun"
 msgid "Settings"
-msgstr ""
+msgstr "ക്രമീകരണങ്ങൾ"
 
 #: front/src/components/auth/Settings.vue:10
 msgctxt "Content/Settings/Message"
@@ -6002,7 +6004,7 @@ msgstr ""
 #: front/src/views/admin/moderation/RequestsList.vue:14 src/views/library/Edit.vue:21
 msgctxt "*/*/*"
 msgid "Status"
-msgstr ""
+msgstr "അവസ്ഥ"
 
 #: front/src/views/playlists/Detail.vue:27 src/views/playlists/Detail.vue:1
 msgctxt "Content/Playlist/Button.Label/Verb"
@@ -6020,12 +6022,12 @@ msgstr ""
 #: front/src/components/audio/ChannelForm.vue:67
 msgctxt "*/*/*"
 msgid "Subcategory"
-msgstr ""
+msgstr "ഉപവിഭാഗം"
 
 #: front/src/components/SetInstanceModal.vue:23
 msgctxt "*/*/Button.Label/Verb"
 msgid "Submit"
-msgstr ""
+msgstr "സമർപ്പിക്കുക"
 
 #: front/src/components/library/EditForm.vue:107
 msgctxt "Content/Library/Button.Label/Verb"
@@ -6797,7 +6799,7 @@ msgstr ""
 #: front/src/views/admin/moderation/AccountsDetail.vue:155
 msgctxt "Content/Track/Table.Label/Noun"
 msgid "Type"
-msgstr ""
+msgstr "തരം"
 
 #: front/src/components/manage/moderation/AccountsTable.vue:38
 #: front/src/components/manage/moderation/AccountsTable.vue:6
