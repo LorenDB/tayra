@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: 2021-07-02 02:54+0000\n"
+"PO-Revision-Date: 2021-07-02 20:56+0000\n"
 "Last-Translator: vachan-maker <revsamtp@hotmail.com>\n"
 "Language-Team: none\n"
 "Language: ml\n"
@@ -2864,7 +2864,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:112
 msgctxt "Content/OAuth Scopes/Label"
 msgid "Follows"
-msgstr ""
+msgstr "പിന്തുടരുന്നു"
 
 #: front/src/components/moderation/ReportModal.vue:50
 msgctxt "*/*/Field,Help"
@@ -3683,7 +3683,7 @@ msgstr ""
 #: front/src/views/admin/moderation/AccountsDetail.vue:300
 msgctxt "Content/*/*/Unit"
 msgid "MB"
-msgstr ""
+msgstr "എംബി"
 
 #: front/src/components/audio/Player.vue:699
 msgctxt "Sidebar/Player/Hidden text"
@@ -4002,7 +4002,7 @@ msgstr ""
 #: front/src/views/admin/moderation/DomainsDetail.vue:88
 msgctxt "*/*/*"
 msgid "No"
-msgstr ""
+msgstr "ഇല്ല"
 
 #: front/src/components/audio/Search.vue:25 src/components/audio/Search.vue:7
 msgctxt "Content/Search/Paragraph"
