@@ -393,6 +393,10 @@ class RefreshToken(oauth2_models.AbstractRefreshToken):
     pass
 
 
+class IdToken(oauth2_models.AbstractIDToken):
+    pass
+
+
 def get_actor_data(username, **kwargs):
     slugified_username = federation_utils.slugify_username(username)
     domain = kwargs.get("domain")
