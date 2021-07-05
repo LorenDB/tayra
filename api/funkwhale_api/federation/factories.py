@@ -98,7 +98,7 @@ def get_cached_key_pair():
 
 
 @registry.register
-class ActorFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
+class ActorFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
     public_key = None
     private_key = None
     preferred_username = factory.Faker("user_name")
@@ -154,7 +154,7 @@ class ActorFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
 
 
 @registry.register
-class FollowFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
+class FollowFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
     target = factory.SubFactory(ActorFactory)
     actor = factory.SubFactory(ActorFactory)
 
@@ -234,7 +234,7 @@ class DeliveryFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
 
 
 @registry.register
-class LibraryFollowFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
+class LibraryFollowFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
     target = factory.SubFactory(MusicLibraryFactory)
     actor = factory.SubFactory(ActorFactory)
 

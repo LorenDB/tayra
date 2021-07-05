@@ -9,7 +9,7 @@ from . import serializers
 
 
 @registry.register
-class InstancePolicyFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
+class InstancePolicyFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
     summary = factory.Faker("paragraph")
     actor = factory.SubFactory(federation_factories.ActorFactory)
     block_all = True
@@ -28,7 +28,7 @@ class InstancePolicyFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
 
 
 @registry.register
-class UserFilterFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
+class UserFilterFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
     user = factory.SubFactory(users_factories.UserFactory)
     target_artist = None
 
@@ -42,7 +42,7 @@ class UserFilterFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
 
 
 @registry.register
-class NoteFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
+class NoteFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
     author = factory.SubFactory(federation_factories.ActorFactory)
     target = None
     summary = factory.Faker("paragraph")
@@ -52,7 +52,7 @@ class NoteFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
 
 
 @registry.register
-class ReportFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
+class ReportFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
     submitter = factory.SubFactory(federation_factories.ActorFactory)
     target = factory.SubFactory(music_factories.ArtistFactory)
     summary = factory.Faker("paragraph")
@@ -77,7 +77,7 @@ class ReportFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
 
 
 @registry.register
-class UserRequestFactory(NoUpdateOnCreate, factory.DjangoModelFactory):
+class UserRequestFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
     submitter = factory.SubFactory(federation_factories.ActorFactory, local=True)
 
     class Meta:
