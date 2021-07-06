@@ -38,7 +38,7 @@ django-dynamic-preferences~=1.10
 python-magic~=0.4.0
 channels~=2.4.0
 channels_redis~=3.3.0
-uvicorn[standard]~=0.13.4
+uvicorn[standard]~=0.14.0
 gunicorn~=20.1.0
 
 cryptography~=3.4.7
