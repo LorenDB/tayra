@@ -75,3 +75,4 @@ watchdog~=1.0.2
 
 ## Pin third party dependency to avoid issue with latest version
 twisted==20.3.0
+asgiref==3.3.4
