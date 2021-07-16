@@ -117,6 +117,24 @@ flake8:
     paths:
       - "$PIP_CACHE_DIR"
 
+eslint:
+  interruptible: true
+  image: node:12-buster
+  stage: lint
+  allow_failure: true
+  before_script:
+    - cd front
+    - yarn install
+  script:
+    # We search for all files ending with .vue or .js in src which changed in relation to develop
+    # and lint them. This way we focus on some errors instead of checking the hole repository
+    - export changedFiles=$(git diff --relative --name-only --diff-filter=d origin/develop -- src/ | grep -E "\.(vue|js)$")
+    - yarn run eslint --quiet -f table $changedFiles
+  cache:
+    key: "$CI_PROJECT_ID__eslint_npm_cache"
+    paths:
+      - front/node_modules
+
 test_api:
   interruptible: true
   services:
