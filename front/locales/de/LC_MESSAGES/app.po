@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: 2021-07-17 23:30+0000\n"
+"PO-Revision-Date: 2021-07-19 18:39+0000\n"
 "Last-Translator: Ryan Harg <ryan.harg@mailbox.org>\n"
 "Language-Team: none\n"
 "Language: de\n"
@@ -3077,7 +3077,9 @@ msgstr "Wenn du Musik oder Podcasts produzierst, sind Kanäle für dich bestimmt
 #: front/src/components/auth/Settings.vue:181
 msgctxt "Content/Applications/Paragraph"
 msgid "If you authorize third-party applications to access your data, those applications will be listed here."
-msgstr "Wenn du Anwendungen von Drittanbietern den Zugriff auf deine Daten gewährt, werden sie hier aufgelistet."
+msgstr ""
+"Wenn du Anwendungen von Drittanbietern den Zugriff auf deine Daten gewährst, "
+"werden sie hier aufgelistet."
 
 #: front/src/components/auth/LoginForm.vue:6
 msgctxt "Content/Login/Error message.List item/Call to action"
