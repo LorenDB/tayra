@@ -1,7 +1,7 @@
 <template>
   <footer id="footer" role="contentinfo" class="ui vertical footer segment" aria-labelledby="footer-label">
     <h1 id="footer-label" class="visually-hidden">
-      <translate translate-context="*/*/*">Application footer</translate>      
+      <translate translate-context="*/*/*">Application footer</translate>
     </h1>
     <div class="ui container">
       <div class="ui stackable equal height stackable grid">
@@ -57,7 +57,7 @@
         <section class="four wide column">
           <h4 v-translate translate-context="Footer/*/Link" class="ui header">Getting help</h4>
           <div class="ui list">
-            <a href="https://governance.funkwhale.audio/g/kQgxNq15/funkwhale" class="link item" target="_blank"><translate translate-context="Footer/*/Listitem.Link">Support forum</translate></a>
+            <a href="https://forum.funkwhale.audio/" class="link item" target="_blank"><translate translate-context="Footer/*/Listitem.Link">Support forum</translate></a>
             <a href="https://riot.im/app/#/room/#funkwhale-troubleshooting:matrix.org" class="link item" target="_blank"><translate translate-context="Footer/*/List item.Link">Chat room</translate></a>
             <a href="https://dev.funkwhale.audio/funkwhale/funkwhale/issues" class="link item" target="_blank"><translate translate-context="Footer/*/List item.Link">Issue tracker</translate></a>
           </div>

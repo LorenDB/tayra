@@ -126,7 +126,7 @@ export default {
     getErrorData (upload) {
       let payload = upload.import_details || {}
       let d = {
-        supportUrl: 'https://governance.funkwhale.audio/g/246YOJ1m/funkwhale-support',
+        supportUrl: 'https://forum.funkwhale.audio/t/support',
         errorRows: []
       }
       if (!payload.error_code) {
