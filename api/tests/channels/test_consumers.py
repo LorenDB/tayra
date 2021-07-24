@@ -1,26 +1,18 @@
-from funkwhale_api.common import consumers
+import pytest
+from channels.testing import WebsocketCommunicator
+from funkwhale_api.common.consumers import JsonAuthConsumer
 
 
-def test_auth_consumer_requires_valid_user(mocker):
-    m = mocker.patch("funkwhale_api.common.consumers.JsonAuthConsumer.close")
-    scope = {"user": None}
-    consumer = consumers.JsonAuthConsumer(scope=scope)
-    consumer.connect()
-    m.assert_called_once_with()
+@pytest.mark.asyncio
+async def test_auth_consumer_requires_valid_user():
+    communicator = WebsocketCommunicator(JsonAuthConsumer.as_asgi(), "api/v1/activity")
+    communicator.scope["user"] = None
+    connected, subprotocol = await communicator.connect()
+    assert not connected
 
 
-def test_auth_consumer_requires_user_in_scope(mocker):
-    m = mocker.patch("funkwhale_api.common.consumers.JsonAuthConsumer.close")
-    scope = {}
-    consumer = consumers.JsonAuthConsumer(scope=scope)
-    consumer.connect()
-    m.assert_called_once_with()
-
-
-def test_auth_consumer_accepts_connection(mocker, factories):
-    user = factories["users.User"]()
-    m = mocker.patch("funkwhale_api.common.consumers.JsonAuthConsumer.accept")
-    scope = {"user": user}
-    consumer = consumers.JsonAuthConsumer(scope=scope)
-    consumer.connect()
-    m.assert_called_once_with()
+@pytest.mark.asyncio
+async def test_auth_consumer_requires_user_in_scope():
+    communicator = WebsocketCommunicator(JsonAuthConsumer.as_asgi(), "api/v1/activity")
+    connected, subprotocol = await communicator.connect()
+    assert not connected
