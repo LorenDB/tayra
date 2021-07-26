@@ -1025,6 +1025,7 @@ export default new Router({
     },
     {
       path: '*',
+      name: '404',
       component: () =>
         import(/* webpackChunkName: "core" */ '@/components/PageNotFound')
     }
