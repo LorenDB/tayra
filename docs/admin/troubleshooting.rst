@@ -30,8 +30,8 @@ issue tracker.
 
 .. note::
 
-    To get detailed log messages you might want to set the environment variable ``LOGLEVEL=debug``. If you are
-    using the docker setup you can configure this in the .env file.
+    To get detailed log messages, set the environment variable ``LOGLEVEL=debug``. 
+    If you are using the docker setup you can configure this in the ``.env`` file.
 
 Backend issues
 ^^^^^^^^^^^^^^
