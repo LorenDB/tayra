@@ -1,23 +1,21 @@
 import Vue from 'vue'
 import axios from 'axios'
 import logger from '@/logging'
-import router from '@/router'
 import lodash from '@/lodash'
 
 function getDefaultScopedTokens () {
   return {
-    listen: null,
+    listen: null
   }
 }
 
 function asForm (obj) {
-  let data = new FormData()
+  const data = new FormData()
   Object.entries(obj).forEach((e) => {
     data.set(e[0], e[1])
   })
   return data
 }
-
 
 let baseUrl = `${window.location.protocol}//${window.location.hostname}`
 if (window.location.port) {
@@ -28,14 +26,14 @@ function getDefaultOauth () {
     clientId: null,
     clientSecret: null,
     accessToken: null,
-    refreshToken: null,
+    refreshToken: null
   }
 }
 const NEEDED_SCOPES = [
-  "read",
-  "write",
+  'read',
+  'write'
 ].join(' ')
-async function createOauthApp(domain) {
+async function createOauthApp (domain) {
   const payload = {
     name: `Funkwhale web client at ${window.location.hostname}`,
     website: baseUrl,
@@ -112,9 +110,9 @@ export default {
       state.token = value
     },
     scopedTokens: (state, value) => {
-      state.scopedTokens = {...value}
+      state.scopedTokens = { ...value }
     },
-    permission: (state, {key, status}) => {
+    permission: (state, { key, status }) => {
       state.availablePermissions[key] = status
     },
     profilePartialUpdate: (state, payload) => {
@@ -133,8 +131,9 @@ export default {
   },
   actions: {
     // Send a request to the login URL and save the returned JWT
-    login ({commit, dispatch}, {next, credentials, onError}) {
-      var form = new FormData();
+    login ({ commit, dispatch }, { next, credentials, onError }) {
+      const router = require('@/router').default
+      var form = new FormData()
       Object.keys(credentials).forEach((k) => {
         form.set(k, credentials[k])
       })
@@ -150,13 +149,13 @@ export default {
         onError(response)
       })
     },
-    async logout ({state, commit}) {
+    async logout ({ state, commit }) {
       try {
         await axios.post('users/logout')
       } catch {
         console.log('Error while logging out, probably logged in via oauth')
       }
-      let modules = [
+      const modules = [
         'auth',
         'favorites',
         'player',
@@ -165,22 +164,21 @@ export default {
         'radios'
       ]
       modules.forEach(m => {
-        commit(`${m}/reset`, null, {root: true})
+        commit(`${m}/reset`, null, { root: true })
       })
       logger.default.info('Log out, goodbye!')
     },
-    async check ({commit, dispatch, state}) {
+    async check ({ commit, dispatch, state }) {
       logger.default.info('Checking authentication…')
       commit('authenticated', false)
-      let profile = await dispatch('fetchProfile')
+      const profile = await dispatch('fetchProfile')
       if (profile) {
         commit('authenticated', true)
       } else {
         logger.default.info('Anonymous user')
       }
     },
-    fetchProfile ({commit, dispatch, state}) {
-
+    fetchProfile ({ commit, dispatch, state }) {
       return new Promise((resolve, reject) => {
         axios.get('users/me/').then((response) => {
           logger.default.info('Successfully fetched user profile')
@@ -204,22 +202,22 @@ export default {
           dispatch('playlists/fetchOwn', null, { root: true })
         }, (response) => {
           logger.default.info('Error while fetching user profile')
-          reject()
+          reject(new Error('Error while fetching user profile'))
         })
       })
     },
-    updateProfile({ commit }, data) {
+    updateProfile ({ commit }, data) {
       return new Promise((resolve, reject) => {
-        commit("authenticated", true)
-        commit("profile", data)
-        commit("username", data.username)
-        commit("fullUsername", data.full_username)
+        commit('authenticated', true)
+        commit('profile', data)
+        commit('username', data.username)
+        commit('fullUsername', data.full_username)
         if (data.tokens) {
-          commit("scopedTokens", data.tokens)
+          commit('scopedTokens', data.tokens)
         }
-        Object.keys(data.permissions).forEach(function(key) {
+        Object.keys(data.permissions).forEach(function (key) {
           // this makes it easier to check for permissions in templates
-          commit("permission", {
+          commit('permission', {
             key,
             status: data.permissions[String(key)]
           })
@@ -227,45 +225,45 @@ export default {
         resolve()
       })
     },
-    async oauthLogin({ state, rootState, commit, getters }, next) {
-      let app = await createOauthApp(getters["appDomain"])
-      commit("oauthApp", app)
+    async oauthLogin ({ state, rootState, commit, getters }, next) {
+      const app = await createOauthApp(getters.appDomain)
+      commit('oauthApp', app)
       const redirectUri = encodeURIComponent(`${baseUrl}/auth/callback`)
-      let params = `response_type=code&scope=${encodeURIComponent(NEEDED_SCOPES)}&redirect_uri=${redirectUri}&state=${next}&client_id=${state.oauth.clientId}`
+      const params = `response_type=code&scope=${encodeURIComponent(NEEDED_SCOPES)}&redirect_uri=${redirectUri}&state=${next}&client_id=${state.oauth.clientId}`
       const authorizeUrl = `${rootState.instance.instanceUrl}authorize?${params}`
       console.log('Redirecting user...', authorizeUrl)
       window.location = authorizeUrl
     },
-    async handleOauthCallback({ state, commit, dispatch }, authorizationCode) {
+    async handleOauthCallback ({ state, commit, dispatch }, authorizationCode) {
       console.log('Fetching token...')
       const payload = {
         client_id: state.oauth.clientId,
         client_secret: state.oauth.clientSecret,
-        grant_type: "authorization_code",
+        grant_type: 'authorization_code',
         code: authorizationCode,
         redirect_uri: `${baseUrl}/auth/callback`
       }
       const response = await axios.post(
         'oauth/token/',
         asForm(payload),
-        {headers: {'Content-Type': 'multipart/form-data'}}
+        { headers: { 'Content-Type': 'multipart/form-data' } }
       )
-      commit("oauthToken", response.data)
+      commit('oauthToken', response.data)
       await dispatch('fetchProfile')
     },
-    async refreshOauthToken({ state, commit }, authorizationCode) {
+    async refreshOauthToken ({ state, commit }, authorizationCode) {
       const payload = {
         client_id: state.oauth.clientId,
         client_secret: state.oauth.clientSecret,
-        grant_type: "refresh_token",
-        refresh_token: state.oauth.refreshToken,
+        grant_type: 'refresh_token',
+        refresh_token: state.oauth.refreshToken
       }
-      let response = await axios.post(
-        `oauth/token/`,
+      const response = await axios.post(
+        'oauth/token/',
         asForm(payload),
-        {headers: {'Content-Type': 'multipart/form-data'}}
+        { headers: { 'Content-Type': 'multipart/form-data' } }
       )
       commit('oauthToken', response.data)
-    },
+    }
   }
 }
