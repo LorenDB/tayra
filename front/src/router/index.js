@@ -1,107 +1,135 @@
-import Vue from "vue"
-import Router from "vue-router"
+import Vue from 'vue'
+import Router from 'vue-router'
+import store from '@/store'
 
 Vue.use(Router)
 
+function adminPermissions (to, from, next) {
+  if (store.state.auth.authenticated === true && store.state.auth.availablePermissions.settings === true) {
+    next()
+  } else {
+    console.log('Not authenticated. Redirecting to library.')
+    next({ name: 'library.index' })
+  }
+}
+
+function moderatorPermissions (to, from, next) {
+  if (store.state.auth.authenticated === true && store.state.auth.availablePermissions.moderation === true) {
+    next()
+  } else {
+    console.log('Not authenticated. Redirecting to library.')
+    next({ name: 'library.index' })
+  }
+}
+
+function libraryPermissions (to, from, next) {
+  if (store.state.auth.authenticated === true && store.state.auth.availablePermissions.library === true) {
+    next()
+  } else {
+    console.log('Not authenticated. Redirecting to library.')
+    next({ name: 'library.index' })
+  }
+}
+
 console.log('PROCESS', process.env)
 export default new Router({
-  mode: "history",
-  linkActiveClass: "active",
-  base: process.env.VUE_APP_ROUTER_BASE_URL || "/",
-  scrollBehavior(to, from, savedPosition) {
+  mode: 'history',
+  linkActiveClass: 'active',
+  base: process.env.VUE_APP_ROUTER_BASE_URL || '/',
+  scrollBehavior (to, from, savedPosition) {
     if (to.meta.preserveScrollPosition) {
       return savedPosition
     }
     return new Promise(resolve => {
       setTimeout(() => {
         if (to.hash) {
-          resolve({ selector: to.hash });
+          resolve({ selector: to.hash })
         }
-        let pos = savedPosition || { x: 0, y: 0 };
-        resolve(pos);
-      }, 100);
-    });
+        const pos = savedPosition || { x: 0, y: 0 }
+        resolve(pos)
+      }, 100)
+    })
   },
   routes: [
     {
-      path: "/",
-      name: "index",
+      path: '/',
+      name: 'index',
       component: () =>
-        import(/* webpackChunkName: "core" */ "@/components/Home")
+        import(/* webpackChunkName: "core" */ '@/components/Home')
     },
     {
-      path: "/front",
-      name: "front",
+      path: '/front',
+      name: 'front',
       redirect: to => {
         const { hash, query } = to
         return { name: 'index', hash, query }
       }
     },
     {
-      path: "/about",
-      name: "about",
+      path: '/about',
+      name: 'about',
       component: () =>
-        import(/* webpackChunkName: "about" */ "@/components/About")
+        import(/* webpackChunkName: "about" */ '@/components/About')
     },
     {
-      path: "/login",
-      name: "login",
+      path: '/login',
+      name: 'login',
       component: () =>
-        import(/* webpackChunkName: "login" */ "@/views/auth/Login"),
-      props: route => ({ next: route.query.next || "/library" })
+        import(/* webpackChunkName: "login" */ '@/views/auth/Login'),
+      props: route => ({ next: route.query.next || '/library' })
     },
     {
-      path: "/notifications",
-      name: "notifications",
+      path: '/notifications',
+      name: 'notifications',
       component: () =>
-        import(/* webpackChunkName: "notifications" */ "@/views/Notifications")
+        import(/* webpackChunkName: "notifications" */ '@/views/Notifications')
     },
     {
-      path: "/auth/password/reset",
-      name: "auth.password-reset",
+      path: '/auth/password/reset',
+      name: 'auth.password-reset',
       component: () =>
-        import(/* webpackChunkName: "password-reset" */ "@/views/auth/PasswordReset"),
+        import(/* webpackChunkName: "password-reset" */ '@/views/auth/PasswordReset'),
       props: route => ({
         defaultEmail: route.query.email
       })
     },
     {
-      path: "/auth/callback",
-      name: "auth.callback",
+      path: '/auth/callback',
+      name: 'auth.callback',
       component: () =>
-        import(/* webpackChunkName: "auth-callback" */ "@/views/auth/Callback"),
+        import(/* webpackChunkName: "auth-callback" */ '@/views/auth/Callback'),
       props: route => ({
         code: route.query.code,
-        state: route.query.state,
+        state: route.query.state
       })
     },
     {
-      path: "/auth/email/confirm",
-      name: "auth.email-confirm",
+      path: '/auth/email/confirm',
+      name: 'auth.email-confirm',
       component: () =>
-        import(/* webpackChunkName: "signup" */ "@/views/auth/EmailConfirm"),
+        import(/* webpackChunkName: "signup" */ '@/views/auth/EmailConfirm'),
       props: route => ({
         defaultKey: route.query.key
       })
     },
     {
-      path: "/search",
-      name: "search",
+      path: '/search',
+      name: 'search',
       component: () =>
-        import(/* webpackChunkName: "core" */ "@/views/Search"),
+        import(/* webpackChunkName: "core" */ '@/views/Search'),
       props: route => ({
         initialId: route.query.id,
         initialType: route.query.type || 'artists',
         initialQuery: route.query.q,
-        initialPage: parseInt(route.query.page) || 1,
+        initialPage: parseInt(route.query.page) || 1
       })
     },
     {
-      path: "/auth/password/reset/confirm",
-      name: "auth.password-reset-confirm",
+      path: '/auth/password/reset/confirm',
+      name: 'auth.password-reset-confirm',
       component: () =>
         import(
-          /* webpackChunkName: "password-reset" */ "@/views/auth/PasswordResetConfirm"
+          /* webpackChunkName: "password-reset" */ '@/views/auth/PasswordResetConfirm'
         ),
       props: route => ({
         defaultUid: route.query.uid,
@@ -109,10 +137,10 @@ export default new Router({
       })
     },
     {
-      path: "/authorize",
-      name: "authorize",
+      path: '/authorize',
+      name: 'authorize',
       component: () =>
-        import(/* webpackChunkName: "settings" */ "@/components/auth/Authorize"),
+        import(/* webpackChunkName: "settings" */ '@/components/auth/Authorize'),
       props: route => ({
         clientId: route.query.client_id,
         redirectUri: route.query.redirect_uri,
@@ -123,29 +151,29 @@ export default new Router({
       })
     },
     {
-      path: "/signup",
-      name: "signup",
+      path: '/signup',
+      name: 'signup',
       component: () =>
-        import(/* webpackChunkName: "signup" */ "@/views/auth/Signup"),
+        import(/* webpackChunkName: "signup" */ '@/views/auth/Signup'),
       props: route => ({
         defaultInvitation: route.query.invitation
       })
     },
     {
-      path: "/logout",
-      name: "logout",
+      path: '/logout',
+      name: 'logout',
       component: () =>
-        import(/* webpackChunkName: "login" */ "@/components/auth/Logout")
+        import(/* webpackChunkName: "login" */ '@/components/auth/Logout')
     },
     {
-      path: "/settings",
-      name: "settings",
+      path: '/settings',
+      name: 'settings',
       component: () =>
-        import(/* webpackChunkName: "settings" */ "@/components/auth/Settings")
+        import(/* webpackChunkName: "settings" */ '@/components/auth/Settings')
     },
     {
-      path: "/settings/applications/new",
-      name: "settings.applications.new",
+      path: '/settings/applications/new',
+      name: 'settings.applications.new',
       props: route => ({
         scopes: route.query.scopes,
         name: route.query.name,
@@ -153,58 +181,58 @@ export default new Router({
       }),
       component: () =>
         import(
-          /* webpackChunkName: "settings" */ "@/components/auth/ApplicationNew"
+          /* webpackChunkName: "settings" */ '@/components/auth/ApplicationNew'
         )
     },
     {
-      path: "/settings/plugins",
-      name: "settings.plugins",
+      path: '/settings/plugins',
+      name: 'settings.plugins',
       component: () =>
         import(
-          /* webpackChunkName: "settings" */ "@/views/auth/Plugins"
+          /* webpackChunkName: "settings" */ '@/views/auth/Plugins'
         )
     },
     {
-      path: "/settings/applications/:id/edit",
-      name: "settings.applications.edit",
+      path: '/settings/applications/:id/edit',
+      name: 'settings.applications.edit',
       component: () =>
         import(
-          /* webpackChunkName: "settings" */ "@/components/auth/ApplicationEdit"
+          /* webpackChunkName: "settings" */ '@/components/auth/ApplicationEdit'
         ),
       props: true
     },
-    ...[{suffix: '.full', path: '/@:username@:domain'}, {suffix: '', path: '/@:username'}].map((route) => {
+    ...[{ suffix: '.full', path: '/@:username@:domain' }, { suffix: '', path: '/@:username' }].map((route) => {
       return {
         path: route.path,
         name: `profile${route.suffix}`,
         component: () =>
-        import(/* webpackChunkName: "core" */ "@/views/auth/ProfileBase"),
+          import(/* webpackChunkName: "core" */ '@/views/auth/ProfileBase'),
         props: true,
         children: [
           {
-            path: "",
+            path: '',
             name: `profile${route.suffix}.overview`,
             component: () =>
               import(
-                /* webpackChunkName: "core" */ "@/views/auth/ProfileOverview"
+                /* webpackChunkName: "core" */ '@/views/auth/ProfileOverview'
               )
           },
           {
-            path: "activity",
+            path: 'activity',
             name: `profile${route.suffix}.activity`,
             component: () =>
               import(
-                /* webpackChunkName: "core" */ "@/views/auth/ProfileActivity"
+                /* webpackChunkName: "core" */ '@/views/auth/ProfileActivity'
               )
-          },
+          }
         ]
       }
     }),
     {
-      path: "/favorites",
-      name: "favorites",
+      path: '/favorites',
+      name: 'favorites',
       component: () =>
-        import(/* webpackChunkName: "favorites" */ "@/components/favorites/List"),
+        import(/* webpackChunkName: "favorites" */ '@/components/favorites/List'),
       props: route => ({
         defaultOrdering: route.query.ordering,
         defaultPage: route.query.page,
@@ -212,29 +240,29 @@ export default new Router({
       })
     },
     {
-      path: "/content",
+      path: '/content',
       component: () =>
-        import(/* webpackChunkName: "core" */ "@/views/content/Base"),
+        import(/* webpackChunkName: "core" */ '@/views/content/Base'),
       children: [
         {
-          path: "",
-          name: "content.index",
+          path: '',
+          name: 'content.index',
           component: () =>
-            import(/* webpackChunkName: "core" */ "@/views/content/Home")
+            import(/* webpackChunkName: "core" */ '@/views/content/Home')
         }
       ]
     },
     {
-      path: "/content/libraries/tracks",
+      path: '/content/libraries/tracks',
       component: () =>
-        import(/* webpackChunkName: "auth-libraries" */ "@/views/content/Base"),
+        import(/* webpackChunkName: "auth-libraries" */ '@/views/content/Base'),
       children: [
         {
-          path: "",
-          name: "content.libraries.files",
+          path: '',
+          name: 'content.libraries.files',
           component: () =>
             import(
-              /* webpackChunkName: "auth-libraries" */ "@/views/content/libraries/Files"
+              /* webpackChunkName: "auth-libraries" */ '@/views/content/libraries/Files'
             ),
           props: route => ({
             query: route.query.q
@@ -243,50 +271,52 @@ export default new Router({
       ]
     },
     {
-      path: "/content/libraries",
+      path: '/content/libraries',
       component: () =>
-        import(/* webpackChunkName: "auth-libraries" */ "@/views/content/Base"),
+        import(/* webpackChunkName: "auth-libraries" */ '@/views/content/Base'),
       children: [
         {
-          path: "",
-          name: "content.libraries.index",
+          path: '',
+          name: 'content.libraries.index',
           component: () =>
             import(
-              /* webpackChunkName: "auth-libraries" */ "@/views/content/libraries/Home"
+              /* webpackChunkName: "auth-libraries" */ '@/views/content/libraries/Home'
             )
         }
       ]
     },
     {
-      path: "/content/remote",
+      path: '/content/remote',
       component: () =>
-        import(/* webpackChunkName: "auth-libraries" */ "@/views/content/Base"),
+        import(/* webpackChunkName: "auth-libraries" */ '@/views/content/Base'),
       children: [
         {
-          path: "",
-          name: "content.remote.index",
+          path: '',
+          name: 'content.remote.index',
           component: () =>
-            import(/* webpackChunkName: "auth-libraries" */ "@/views/content/remote/Home")
+            import(/* webpackChunkName: "auth-libraries" */ '@/views/content/remote/Home')
         }
       ]
     },
     {
-      path: "/manage/settings",
-      name: "manage.settings",
+      path: '/manage/settings',
+      name: 'manage.settings',
+      beforeEnter: adminPermissions,
       component: () =>
-        import(/* webpackChunkName: "admin" */ "@/views/admin/Settings")
+        import(/* webpackChunkName: "admin" */ '@/views/admin/Settings')
     },
     {
-      path: "/manage/library",
+      path: '/manage/library',
+      beforeEnter: libraryPermissions,
       component: () =>
-        import(/* webpackChunkName: "admin" */ "@/views/admin/library/Base"),
+        import(/* webpackChunkName: "admin" */ '@/views/admin/library/Base'),
       children: [
         {
-          path: "edits",
-          name: "manage.library.edits",
+          path: 'edits',
+          name: 'manage.library.edits',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/EditsList"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/EditsList'
             ),
           props: route => {
             return {
@@ -295,11 +325,11 @@ export default new Router({
           }
         },
         {
-          path: "artists",
-          name: "manage.library.artists",
+          path: 'artists',
+          name: 'manage.library.artists',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/ArtistsList"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/ArtistsList'
             ),
           props: route => {
             return {
@@ -308,20 +338,20 @@ export default new Router({
           }
         },
         {
-          path: "artists/:id",
-          name: "manage.library.artists.detail",
+          path: 'artists/:id',
+          name: 'manage.library.artists.detail',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/ArtistDetail"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/ArtistDetail'
             ),
           props: true
         },
         {
-          path: "channels",
-          name: "manage.channels",
+          path: 'channels',
+          name: 'manage.channels',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/ChannelsList"
+              /* webpackChunkName: "admin" */ '@/views/admin/ChannelsList'
             ),
           props: route => {
             return {
@@ -330,20 +360,20 @@ export default new Router({
           }
         },
         {
-          path: "channels/:id",
-          name: "manage.channels.detail",
+          path: 'channels/:id',
+          name: 'manage.channels.detail',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/ChannelDetail"
+              /* webpackChunkName: "admin" */ '@/views/admin/ChannelDetail'
             ),
           props: true
         },
         {
-          path: "albums",
-          name: "manage.library.albums",
+          path: 'albums',
+          name: 'manage.library.albums',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/AlbumsList"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/AlbumsList'
             ),
           props: route => {
             return {
@@ -352,20 +382,20 @@ export default new Router({
           }
         },
         {
-          path: "albums/:id",
-          name: "manage.library.albums.detail",
+          path: 'albums/:id',
+          name: 'manage.library.albums.detail',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/AlbumDetail"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/AlbumDetail'
             ),
           props: true
         },
         {
-          path: "tracks",
-          name: "manage.library.tracks",
+          path: 'tracks',
+          name: 'manage.library.tracks',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/TracksList"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/TracksList'
             ),
           props: route => {
             return {
@@ -374,20 +404,20 @@ export default new Router({
           }
         },
         {
-          path: "tracks/:id",
-          name: "manage.library.tracks.detail",
+          path: 'tracks/:id',
+          name: 'manage.library.tracks.detail',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/TrackDetail"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/TrackDetail'
             ),
           props: true
         },
         {
-          path: "libraries",
-          name: "manage.library.libraries",
+          path: 'libraries',
+          name: 'manage.library.libraries',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/LibrariesList"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/LibrariesList'
             ),
           props: route => {
             return {
@@ -396,20 +426,20 @@ export default new Router({
           }
         },
         {
-          path: "libraries/:id",
-          name: "manage.library.libraries.detail",
+          path: 'libraries/:id',
+          name: 'manage.library.libraries.detail',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/LibraryDetail"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/LibraryDetail'
             ),
           props: true
         },
         {
-          path: "uploads",
-          name: "manage.library.uploads",
+          path: 'uploads',
+          name: 'manage.library.uploads',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/UploadsList"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/UploadsList'
             ),
           props: route => {
             return {
@@ -418,20 +448,20 @@ export default new Router({
           }
         },
         {
-          path: "uploads/:id",
-          name: "manage.library.uploads.detail",
+          path: 'uploads/:id',
+          name: 'manage.library.uploads.detail',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/UploadDetail"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/UploadDetail'
             ),
           props: true
         },
         {
-          path: "tags",
-          name: "manage.library.tags",
+          path: 'tags',
+          name: 'manage.library.tags',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/TagsList"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/TagsList'
             ),
           props: route => {
             return {
@@ -440,67 +470,69 @@ export default new Router({
           }
         },
         {
-          path: "tags/:id",
-          name: "manage.library.tags.detail",
+          path: 'tags/:id',
+          name: 'manage.library.tags.detail',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/library/TagDetail"
+              /* webpackChunkName: "admin" */ '@/views/admin/library/TagDetail'
             ),
           props: true
         }
       ]
     },
     {
-      path: "/manage/users",
+      path: '/manage/users',
+      beforeEnter: adminPermissions,
       component: () =>
-        import(/* webpackChunkName: "admin" */ "@/views/admin/users/Base"),
+        import(/* webpackChunkName: "admin" */ '@/views/admin/users/Base'),
       children: [
         {
-          path: "users",
-          name: "manage.users.users.list",
+          path: 'users',
+          name: 'manage.users.users.list',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/users/UsersList"
+              /* webpackChunkName: "admin" */ '@/views/admin/users/UsersList'
             )
         },
         {
-          path: "invitations",
-          name: "manage.users.invitations.list",
+          path: 'invitations',
+          name: 'manage.users.invitations.list',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/users/InvitationsList"
+              /* webpackChunkName: "admin" */ '@/views/admin/users/InvitationsList'
             )
         }
       ]
     },
     {
-      path: "/manage/moderation",
+      path: '/manage/moderation',
+      beforeEnter: moderatorPermissions,
       component: () =>
-        import(/* webpackChunkName: "admin" */ "@/views/admin/moderation/Base"),
+        import(/* webpackChunkName: "admin" */ '@/views/admin/moderation/Base'),
       children: [
         {
-          path: "domains",
-          name: "manage.moderation.domains.list",
+          path: 'domains',
+          name: 'manage.moderation.domains.list',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/moderation/DomainsList"
+              /* webpackChunkName: "admin" */ '@/views/admin/moderation/DomainsList'
             )
         },
         {
-          path: "domains/:id",
-          name: "manage.moderation.domains.detail",
+          path: 'domains/:id',
+          name: 'manage.moderation.domains.detail',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/moderation/DomainsDetail"
+              /* webpackChunkName: "admin" */ '@/views/admin/moderation/DomainsDetail'
             ),
           props: true
         },
         {
-          path: "accounts",
-          name: "manage.moderation.accounts.list",
+          path: 'accounts',
+          name: 'manage.moderation.accounts.list',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/moderation/AccountsList"
+              /* webpackChunkName: "admin" */ '@/views/admin/moderation/AccountsList'
             ),
           props: route => {
             return {
@@ -509,20 +541,20 @@ export default new Router({
           }
         },
         {
-          path: "accounts/:id",
-          name: "manage.moderation.accounts.detail",
+          path: 'accounts/:id',
+          name: 'manage.moderation.accounts.detail',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/moderation/AccountsDetail"
+              /* webpackChunkName: "admin" */ '@/views/admin/moderation/AccountsDetail'
             ),
           props: true
         },
         {
-          path: "reports",
-          name: "manage.moderation.reports.list",
+          path: 'reports',
+          name: 'manage.moderation.reports.list',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/moderation/ReportsList"
+              /* webpackChunkName: "admin" */ '@/views/admin/moderation/ReportsList'
             ),
           props: route => {
             return {
@@ -532,20 +564,20 @@ export default new Router({
           }
         },
         {
-          path: "reports/:id",
-          name: "manage.moderation.reports.detail",
+          path: 'reports/:id',
+          name: 'manage.moderation.reports.detail',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/moderation/ReportDetail"
+              /* webpackChunkName: "admin" */ '@/views/admin/moderation/ReportDetail'
             ),
           props: true
         },
         {
-          path: "requests",
-          name: "manage.moderation.requests.list",
+          path: 'requests',
+          name: 'manage.moderation.requests.list',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/moderation/RequestsList"
+              /* webpackChunkName: "admin" */ '@/views/admin/moderation/RequestsList'
             ),
           props: route => {
             return {
@@ -555,42 +587,42 @@ export default new Router({
           }
         },
         {
-          path: "requests/:id",
-          name: "manage.moderation.requests.detail",
+          path: 'requests/:id',
+          name: 'manage.moderation.requests.detail',
           component: () =>
             import(
-              /* webpackChunkName: "admin" */ "@/views/admin/moderation/RequestDetail"
+              /* webpackChunkName: "admin" */ '@/views/admin/moderation/RequestDetail'
             ),
           props: true
-        },
+        }
       ]
     },
     {
-      path: "/library",
+      path: '/library',
       component: () =>
-        import(/* webpackChunkName: "core" */ "@/components/library/Library"),
+        import(/* webpackChunkName: "core" */ '@/components/library/Library'),
       children: [
         {
-          path: "",
+          path: '',
           component: () =>
-            import(/* webpackChunkName: "core" */ "@/components/library/Home"),
-          name: "library.index"
+            import(/* webpackChunkName: "core" */ '@/components/library/Home'),
+          name: 'library.index'
         },
         {
-          path: "me",
+          path: 'me',
           component: () =>
-            import(/* webpackChunkName: "core" */ "@/components/library/Home"),
-          name: "library.me",
+            import(/* webpackChunkName: "core" */ '@/components/library/Home'),
+          name: 'library.me',
           props: route => ({
-            scope: 'me',
+            scope: 'me'
           })
         },
         {
-          path: "artists/",
-          name: "library.artists.browse",
+          path: 'artists/',
+          name: 'library.artists.browse',
           component: () =>
             import(
-              /* webpackChunkName: "artists" */ "@/components/library/Artists"
+              /* webpackChunkName: "artists" */ '@/components/library/Artists'
             ),
           props: route => ({
             defaultOrdering: route.query.ordering,
@@ -603,63 +635,11 @@ export default new Router({
           })
         },
         {
-          path: "me/artists",
-          name: "library.artists.me",
+          path: 'me/artists',
+          name: 'library.artists.me',
           component: () =>
             import(
-              /* webpackChunkName: "artists" */ "@/components/library/Artists"
-            ),
-          props: route => ({
-            scope: 'me',
-            defaultOrdering: route.query.ordering,
-            defaultQuery: route.query.query,
-            defaultTags: Array.isArray(route.query.tag || [])
-              ? route.query.tag
-              : [route.query.tag],
-            defaultPaginateBy: route.query.paginateBy,
-            defaultPage: route.query.page
-          })
-        },
-        {
-          path: "albums/",
-          name: "library.albums.browse",
-          component: () =>
-            import(
-              /* webpackChunkName: "albums" */ "@/components/library/Albums"
-            ),
-          props: route => ({
-            defaultOrdering: route.query.ordering,
-            defaultQuery: route.query.query,
-            defaultTags: Array.isArray(route.query.tag || [])
-              ? route.query.tag
-              : [route.query.tag],
-            defaultPaginateBy: route.query.paginateBy,
-            defaultPage: route.query.page
-          })
-        },
-        {
-          path: "podcasts/",
-          name: "library.podcasts.browse",
-          component: () =>
-            import(
-              /* webpackChunkName: "podcasts" */ "@/components/library/Podcasts"
-            ),
-          props: route => ({
-            defaultOrdering: route.query.ordering,
-            defaultQuery: route.query.query,
-            defaultTags: Array.isArray(route.query.tag || [])
-              ? route.query.tag
-              : [route.query.tag],
-            defaultPaginateBy: route.query.paginateBy,
-            defaultPage: route.query.page
-          })
-        },
-        {
-          path: "me/albums",
-          name: "library.albums.me",
-          component: () =>
-            import(
-              /* webpackChunkName: "albums" */ "@/components/library/Albums"
+              /* webpackChunkName: "artists" */ '@/components/library/Artists'
             ),
           props: route => ({
             scope: 'me',
@@ -673,11 +653,63 @@ export default new Router({
           })
         },
         {
-          path: "radios/",
-          name: "library.radios.browse",
+          path: 'albums/',
+          name: 'library.albums.browse',
           component: () =>
             import(
-              /* webpackChunkName: "radios" */ "@/components/library/Radios"
+              /* webpackChunkName: "albums" */ '@/components/library/Albums'
+            ),
+          props: route => ({
+            defaultOrdering: route.query.ordering,
+            defaultQuery: route.query.query,
+            defaultTags: Array.isArray(route.query.tag || [])
+              ? route.query.tag
+              : [route.query.tag],
+            defaultPaginateBy: route.query.paginateBy,
+            defaultPage: route.query.page
+          })
+        },
+        {
+          path: 'podcasts/',
+          name: 'library.podcasts.browse',
+          component: () =>
+            import(
+              /* webpackChunkName: "podcasts" */ '@/components/library/Podcasts'
+            ),
+          props: route => ({
+            defaultOrdering: route.query.ordering,
+            defaultQuery: route.query.query,
+            defaultTags: Array.isArray(route.query.tag || [])
+              ? route.query.tag
+              : [route.query.tag],
+            defaultPaginateBy: route.query.paginateBy,
+            defaultPage: route.query.page
+          })
+        },
+        {
+          path: 'me/albums',
+          name: 'library.albums.me',
+          component: () =>
+            import(
+              /* webpackChunkName: "albums" */ '@/components/library/Albums'
+            ),
+          props: route => ({
+            scope: 'me',
+            defaultOrdering: route.query.ordering,
+            defaultQuery: route.query.query,
+            defaultTags: Array.isArray(route.query.tag || [])
+              ? route.query.tag
+              : [route.query.tag],
+            defaultPaginateBy: route.query.paginateBy,
+            defaultPage: route.query.page
+          })
+        },
+        {
+          path: 'radios/',
+          name: 'library.radios.browse',
+          component: () =>
+            import(
+              /* webpackChunkName: "radios" */ '@/components/library/Radios'
             ),
           props: route => ({
             defaultOrdering: route.query.ordering,
@@ -687,11 +719,11 @@ export default new Router({
           })
         },
         {
-          path: "me/radios/",
-          name: "library.radios.me",
+          path: 'me/radios/',
+          name: 'library.radios.me',
           component: () =>
             import(
-              /* webpackChunkName: "radios" */ "@/components/library/Radios"
+              /* webpackChunkName: "radios" */ '@/components/library/Radios'
             ),
           props: route => ({
             scope: 'me',
@@ -702,35 +734,35 @@ export default new Router({
           })
         },
         {
-          path: "radios/build",
-          name: "library.radios.build",
+          path: 'radios/build',
+          name: 'library.radios.build',
           component: () =>
             import(
-              /* webpackChunkName: "radios" */ "@/components/library/radios/Builder"
+              /* webpackChunkName: "radios" */ '@/components/library/radios/Builder'
             ),
           props: true
         },
         {
-          path: "radios/build/:id",
-          name: "library.radios.edit",
+          path: 'radios/build/:id',
+          name: 'library.radios.edit',
           component: () =>
             import(
-              /* webpackChunkName: "radios" */ "@/components/library/radios/Builder"
+              /* webpackChunkName: "radios" */ '@/components/library/radios/Builder'
             ),
           props: true
         },
         {
-          path: "radios/:id",
-          name: "library.radios.detail",
+          path: 'radios/:id',
+          name: 'library.radios.detail',
           component: () =>
-            import(/* webpackChunkName: "radios" */ "@/views/radios/Detail"),
+            import(/* webpackChunkName: "radios" */ '@/views/radios/Detail'),
           props: true
         },
         {
-          path: "playlists/",
-          name: "library.playlists.browse",
+          path: 'playlists/',
+          name: 'library.playlists.browse',
           component: () =>
-            import(/* webpackChunkName: "playlists" */ "@/views/playlists/List"),
+            import(/* webpackChunkName: "playlists" */ '@/views/playlists/List'),
           props: route => ({
             defaultOrdering: route.query.ordering,
             defaultQuery: route.query.query,
@@ -739,10 +771,10 @@ export default new Router({
           })
         },
         {
-          path: "me/playlists/",
-          name: "library.playlists.me",
+          path: 'me/playlists/',
+          name: 'library.playlists.me',
           component: () =>
-            import(/* webpackChunkName: "playlists" */ "@/views/playlists/List"),
+            import(/* webpackChunkName: "playlists" */ '@/views/playlists/List'),
           props: route => ({
             scope: 'me',
             defaultOrdering: route.query.ordering,
@@ -752,190 +784,190 @@ export default new Router({
           })
         },
         {
-          path: "playlists/:id",
-          name: "library.playlists.detail",
+          path: 'playlists/:id',
+          name: 'library.playlists.detail',
           component: () =>
-            import(/* webpackChunkName: "playlists" */ "@/views/playlists/Detail"),
+            import(/* webpackChunkName: "playlists" */ '@/views/playlists/Detail'),
           props: route => ({
             id: route.params.id,
-            defaultEdit: route.query.mode === "edit"
+            defaultEdit: route.query.mode === 'edit'
           })
         },
         {
-          path: "tags/:id",
-          name: "library.tags.detail",
+          path: 'tags/:id',
+          name: 'library.tags.detail',
           component: () =>
             import(
-              /* webpackChunkName: "tags" */ "@/components/library/TagDetail"
+              /* webpackChunkName: "tags" */ '@/components/library/TagDetail'
             ),
           props: true
         },
         {
-          path: "artists/:id",
+          path: 'artists/:id',
           component: () =>
             import(
-              /* webpackChunkName: "artists" */ "@/components/library/ArtistBase"
+              /* webpackChunkName: "artists" */ '@/components/library/ArtistBase'
             ),
           props: true,
           children: [
             {
-              path: "",
-              name: "library.artists.detail",
+              path: '',
+              name: 'library.artists.detail',
               component: () =>
                 import(
-                  /* webpackChunkName: "artists" */ "@/components/library/ArtistDetail"
+                  /* webpackChunkName: "artists" */ '@/components/library/ArtistDetail'
                 )
             },
             {
-              path: "edit",
-              name: "library.artists.edit",
+              path: 'edit',
+              name: 'library.artists.edit',
               component: () =>
                 import(
-                  /* webpackChunkName: "edits" */ "@/components/library/ArtistEdit"
+                  /* webpackChunkName: "edits" */ '@/components/library/ArtistEdit'
                 )
             },
             {
-              path: "edit/:editId",
-              name: "library.artists.edit.detail",
+              path: 'edit/:editId',
+              name: 'library.artists.edit.detail',
               component: () =>
                 import(
-                  /* webpackChunkName: "edits" */ "@/components/library/EditDetail"
+                  /* webpackChunkName: "edits" */ '@/components/library/EditDetail'
                 ),
               props: true
             }
           ]
         },
         {
-          path: "albums/:id",
+          path: 'albums/:id',
           component: () =>
             import(
-              /* webpackChunkName: "albums" */ "@/components/library/AlbumBase"
+              /* webpackChunkName: "albums" */ '@/components/library/AlbumBase'
             ),
           props: true,
           children: [
             {
-              path: "",
-              name: "library.albums.detail",
+              path: '',
+              name: 'library.albums.detail',
               component: () =>
                 import(
-                  /* webpackChunkName: "albums" */ "@/components/library/AlbumDetail"
+                  /* webpackChunkName: "albums" */ '@/components/library/AlbumDetail'
                 )
             },
             {
-              path: "edit",
-              name: "library.albums.edit",
+              path: 'edit',
+              name: 'library.albums.edit',
               component: () =>
                 import(
-                  /* webpackChunkName: "edits" */ "@/components/library/AlbumEdit"
+                  /* webpackChunkName: "edits" */ '@/components/library/AlbumEdit'
                 )
             },
             {
-              path: "edit/:editId",
-              name: "library.albums.edit.detail",
+              path: 'edit/:editId',
+              name: 'library.albums.edit.detail',
               component: () =>
                 import(
-                  /* webpackChunkName: "edits" */ "@/components/library/EditDetail"
+                  /* webpackChunkName: "edits" */ '@/components/library/EditDetail'
                 ),
               props: true
             }
           ]
         },
         {
-          path: "tracks/:id",
+          path: 'tracks/:id',
           component: () =>
             import(
-              /* webpackChunkName: "tracks" */ "@/components/library/TrackBase"
+              /* webpackChunkName: "tracks" */ '@/components/library/TrackBase'
             ),
           props: true,
           children: [
             {
-              path: "",
-              name: "library.tracks.detail",
+              path: '',
+              name: 'library.tracks.detail',
               component: () =>
                 import(
-                  /* webpackChunkName: "tracks" */ "@/components/library/TrackDetail"
+                  /* webpackChunkName: "tracks" */ '@/components/library/TrackDetail'
                 )
             },
             {
-              path: "edit",
-              name: "library.tracks.edit",
+              path: 'edit',
+              name: 'library.tracks.edit',
               component: () =>
                 import(
-                  /* webpackChunkName: "edits" */ "@/components/library/TrackEdit"
+                  /* webpackChunkName: "edits" */ '@/components/library/TrackEdit'
                 )
             },
             {
-              path: "edit/:editId",
-              name: "library.tracks.edit.detail",
+              path: 'edit/:editId',
+              name: 'library.tracks.edit.detail',
               component: () =>
                 import(
-                  /* webpackChunkName: "edits" */ "@/components/library/EditDetail"
+                  /* webpackChunkName: "edits" */ '@/components/library/EditDetail'
                 ),
               props: true
             }
           ]
         },
         {
-          path: "uploads/:id",
-          name: "library.uploads.detail",
+          path: 'uploads/:id',
+          name: 'library.uploads.detail',
           props: true,
           component: () =>
             import(
-              /* webpackChunkName: "uploads" */ "@/components/library/UploadDetail"
-            ),
+              /* webpackChunkName: "uploads" */ '@/components/library/UploadDetail'
+            )
         },
         {
           // browse a single library via it's uuid
-          path: ":id([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})",
+          path: ':id([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})',
           props: true,
           component: () =>
             import(
-              /* webpackChunkName: "library" */ "@/views/library/DetailBase"
+              /* webpackChunkName: "library" */ '@/views/library/DetailBase'
             ),
           children: [
             {
-              path: "",
-              name: "library.detail",
+              path: '',
+              name: 'library.detail',
               component: () =>
                 import(
-                  /* webpackChunkName: "library" */ "@/views/library/DetailOverview"
+                  /* webpackChunkName: "library" */ '@/views/library/DetailOverview'
                 )
             },
             {
-              path: "albums",
-              name: "library.detail.albums",
+              path: 'albums',
+              name: 'library.detail.albums',
               component: () =>
                 import(
-                  /* webpackChunkName: "library" */ "@/views/library/DetailAlbums"
+                  /* webpackChunkName: "library" */ '@/views/library/DetailAlbums'
                 )
             },
             {
-              path: "tracks",
-              name: "library.detail.tracks",
+              path: 'tracks',
+              name: 'library.detail.tracks',
               component: () =>
                 import(
-                  /* webpackChunkName: "library" */ "@/views/library/DetailTracks"
+                  /* webpackChunkName: "library" */ '@/views/library/DetailTracks'
                 )
             },
             {
-              path: "edit",
-              name: "library.detail.edit",
+              path: 'edit',
+              name: 'library.detail.edit',
               component: () =>
                 import(
-                  /* webpackChunkName: "auth-libraries" */ "@/views/library/Edit"
+                  /* webpackChunkName: "auth-libraries" */ '@/views/library/Edit'
                 )
             },
             {
-              path: "upload",
-              name: "library.detail.upload",
+              path: 'upload',
+              name: 'library.detail.upload',
               component: () =>
                 import(
-                  /* webpackChunkName: "auth-libraries" */ "@/views/library/Upload"
+                  /* webpackChunkName: "auth-libraries" */ '@/views/library/Upload'
                 ),
               props: route => ({
                 defaultImportReference: route.query.import
               })
-            },
+            }
             // {
             //   path: "episodes",
             //   name: "library.detail.episodes",
@@ -949,34 +981,34 @@ export default new Router({
       ]
     },
     {
-      path: "/channels/:id",
+      path: '/channels/:id',
       props: true,
       component: () =>
         import(
-          /* webpackChunkName: "channels" */ "@/views/channels/DetailBase"
+          /* webpackChunkName: "channels" */ '@/views/channels/DetailBase'
         ),
       children: [
         {
-          path: "",
-          name: "channels.detail",
+          path: '',
+          name: 'channels.detail',
           component: () =>
             import(
-              /* webpackChunkName: "channels" */ "@/views/channels/DetailOverview"
+              /* webpackChunkName: "channels" */ '@/views/channels/DetailOverview'
             )
         },
         {
-          path: "episodes",
-          name: "channels.detail.episodes",
+          path: 'episodes',
+          name: 'channels.detail.episodes',
           component: () =>
             import(
-              /* webpackChunkName: "channels" */ "@/views/channels/DetailEpisodes"
+              /* webpackChunkName: "channels" */ '@/views/channels/DetailEpisodes'
             )
-        },
+        }
       ]
     },
     {
-      path: "/subscriptions",
-      name: "subscriptions",
+      path: '/subscriptions',
+      name: 'subscriptions',
       props: route => {
         return {
           defaultQuery: route.query.q
@@ -984,17 +1016,17 @@ export default new Router({
       },
       component: () =>
         import(
-          /* webpackChunkName: "channels-auth" */ "@/views/channels/SubscriptionsList"
-        ),
+          /* webpackChunkName: "channels-auth" */ '@/views/channels/SubscriptionsList'
+        )
     },
     {
-      path: "*/index.html",
-      redirect: "/"
+      path: '*/index.html',
+      redirect: '/'
     },
     {
-      path: "*",
+      path: '*',
       component: () =>
-        import(/* webpackChunkName: "core" */ "@/components/PageNotFound")
+        import(/* webpackChunkName: "core" */ '@/components/PageNotFound')
     }
   ]
 })
