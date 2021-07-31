@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: 2021-07-19 18:39+0000\n"
-"Last-Translator: Ciarán Ainsworth <ciaranainsworth@outlook.com>\n"
+"PO-Revision-Date: 2021-08-01 19:34+0000\n"
+"Last-Translator: Dignified Silence <5dd12ck@protonmail.com>\n"
 "Language-Team: none\n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
@@ -6390,7 +6390,7 @@ msgstr "チャンネルは削除され、関連したアップロードファイ
 #: front/src/components/Footer.vue:73
 msgctxt "Footer/*/List item.Link"
 msgid "The funkwhale logo was kindly designed and provided by Francis Gading."
-msgstr ""
+msgstr "The funkwhale logo was kindly designed and provided by Francis Gading."
 
 #: front/src/components/SetInstanceModal.vue:8
 msgctxt "Popup/Instance/Error message.List item"
