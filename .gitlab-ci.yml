@@ -233,8 +233,8 @@ docker_release:
     - docker build -t $IMAGE $DOCKER_LATEST_TAG .
     - docker push $IMAGE
     - if [[ ! -z "$DOCKER_LATEST_TAG" ]]; then docker push $IMAGE_LATEST; fi
-    - if [[ $stable == 1 ]]; then docker tag $IMAGE $IMAGE_NAME:major && docker push $IMAGE_NAME:major; fi
-    - if [[ $stable == 1 ]]; then docker tag $IMAGE $IMAGE_NAME:minor && docker push $IMAGE_NAME:minor; fi
+    - if [[ $stable == 1 ]]; then docker tag $IMAGE $IMAGE_NAME:$major && docker push $IMAGE_NAME:$major; fi
+    - if [[ $stable == 1 ]]; then docker tag $IMAGE $IMAGE_NAME:$minor && docker push $IMAGE_NAME:$minor; fi
   only:
     - develop@funkwhale/funkwhale
     - master@funkwhale/funkwhale
