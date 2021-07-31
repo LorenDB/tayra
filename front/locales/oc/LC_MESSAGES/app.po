@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: 2020-09-01 14:01+0000\n"
+"PO-Revision-Date: 2021-08-01 19:34+0000\n"
 "Last-Translator: Quentin PAGÈS <quentinantonin@free.fr>\n"
 "Language-Team: none\n"
 "Language: oc\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.11.3\n"
+"X-Generator: Weblate 4.6.2\n"
 
 #: front/src/components/playlists/PlaylistModal.vue:6
 #: front/src/components/playlists/PlaylistModal.vue:3
@@ -80,7 +80,6 @@ msgstr[0] "%{ count } episòdi"
 msgstr[1] "%{ count } episòdis"
 
 #: front/src/components/audio/artist/Card.vue:16
-#, fuzzy
 msgctxt "*/*/*"
 msgid "%{ count } episode"
 msgid_plural "%{ count } episodes"
@@ -980,7 +979,6 @@ msgid "Artist discography"
 msgstr "Discografia de l’artista"
 
 #: front/src/components/library/Artists.vue:10
-#, fuzzy
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "Artist name"
 msgstr "Nom de l’artista"
@@ -1208,10 +1206,9 @@ msgid "Browsing playlists"
 msgstr "Percórrer las listas de lectura"
 
 #: front/src/components/library/Podcasts.vue:4
-#, fuzzy
 msgctxt "Content/Podcasts/Title"
 msgid "Browsing Podcasts"
-msgstr "Percórrer los artistas"
+msgstr "Percórrer los Podcasts"
 
 #: front/src/components/library/Radios.vue:4
 msgctxt "Content/Radio/Title"
@@ -1476,7 +1473,6 @@ msgid "Click to select files to upload or drag and drop files or directories"
 msgstr "Clicatz per causir los fichièrs d’enviar o lisatz los fichièrs o repertòris"
 
 #: front/src/components/Queue.vue:92
-#, fuzzy
 msgctxt "*/Queue/*/Verb"
 msgid "Close"
 msgstr "Tampar"
@@ -1639,7 +1635,6 @@ msgid "Create"
 msgstr "Crear"
 
 #: front/src/components/library/Podcasts.vue:64
-#, fuzzy
 msgctxt "Content/*/Verb"
 msgid "Create a Channel"
 msgstr "Crear una cadena"
@@ -2710,7 +2705,7 @@ msgstr "Exclure"
 #: front/src/components/library/Artists.vue:50
 msgctxt "Content/Search/Checkbox/Noun"
 msgid "Exclude Compilation Artists"
-msgstr ""
+msgstr "Exclure las compilacions d’artistas"
 
 #: front/src/components/common/CollapseLink.vue:2
 msgctxt "*/*/Button,Label"
@@ -2795,7 +2790,7 @@ msgstr "Federacion"
 #: front/src/components/RemoteSearchForm.vue:7
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "Fediverse"
-msgstr ""
+msgstr "Fedivers"
 
 #: front/src/components/library/EditCard.vue:43
 msgctxt "Content/Library/Card.Table.Header/Short"
@@ -2954,10 +2949,11 @@ msgid "Funkwhale is compatible with other music players that support the Subsoni
 msgstr "Funkwhale es compatible amb d’autres lectors de musica compatibles amb l’API Subsonic."
 
 #: front/src/components/Home.vue:87
-#, fuzzy
 msgctxt "Content/Home/Paragraph"
 msgid "Funkwhale is free and developed by a friendly community of volunteers."
-msgstr "Funkwhale es gratuit e desvolopat per de una comunautat de volontaris simpatics."
+msgstr ""
+"Funkwhale es gratuit e desvolopat per de una comunautat de volontaris "
+"simpatics."
 
 #: front/src/components/About.vue:77
 msgctxt "*/*/*"
@@ -4121,10 +4117,9 @@ msgid "No notification to show."
 msgstr "Cap de notificacion de mostrar."
 
 #: front/src/components/manage/moderation/DomainsTable.vue:69
-#, fuzzy
 msgctxt "Content/Home/Placeholder"
 msgid "No other pods found"
-msgstr "Cap de correspondéncia pas trobada"
+msgstr "Cap de podcast pas trobat"
 
 #: front/src/components/playlists/PlaylistModal.vue:77
 #: front/src/components/playlists/PlaylistModal.vue:4
@@ -4758,10 +4753,9 @@ msgid "Podcast channel"
 msgstr "Cadena del podcast"
 
 #: front/src/components/library/Podcasts.vue:10
-#, fuzzy
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "Podcast Title"
-msgstr "Podcast"
+msgstr "Títol del Podcast"
 
 #: front/src/components/Sidebar.vue:99 src/components/audio/ChannelForm.vue:217
 #: front/src/components/audio/SearchBar.vue:91
@@ -4771,10 +4765,9 @@ msgid "Podcasts"
 msgstr "Podcast"
 
 #: front/src/components/library/Podcasts.vue:170
-#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "Podcasts"
-msgstr "Podcast"
+msgstr "Podcasts"
 
 #: front/src/components/channels/UploadMetadataForm.vue:21
 #: front/src/views/admin/library/TrackDetail.vue:135
@@ -5421,7 +5414,7 @@ msgstr "Recomençar la pista"
 #: src/components/library/EditForm.vue:5
 msgctxt "Content/Library/Button.Label"
 msgid "Restrict to unreviewed edits"
-msgstr "Restrénher  a la modifications pas repassadas"
+msgstr "Restrénher a las modificacions pas repassadas"
 
 #: front/src/views/library/DetailBase.vue:184
 msgctxt "Content/Library/Card.Help text"
@@ -5502,7 +5495,7 @@ msgstr "Revocar l’accès a l’aplicacion « %{ application } » ?"
 #: front/src/components/RemoteSearchForm.vue:3
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "RSS"
-msgstr ""
+msgstr "RSS"
 
 #: front/src/views/admin/ChannelDetail.vue:137
 #: src/views/admin/ChannelDetail.vue:132
@@ -5578,7 +5571,6 @@ msgid "Scopes"
 msgstr "Visibilitats"
 
 #: front/src/components/Sidebar.vue:97
-#, fuzzy
 msgctxt "Sidebar/Navigation/List item.Link/Verb"
 msgid "Search"
 msgstr "Recercar"
@@ -5731,7 +5723,6 @@ msgid "Search on Wikipedia"
 msgstr "Recercar sus Wikipèdia"
 
 #: front/src/components/library/TagsSelector.vue:6
-#, fuzzy
 msgctxt "*/Dropdown/Placeholder/Verb"
 msgid "Search…"
 msgstr "Recercar…"
@@ -5823,7 +5814,6 @@ msgid "Serie"
 msgstr "Seria"
 
 #: front/src/views/Search.vue:201
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Series"
 msgstr "Serias"
@@ -6238,10 +6228,9 @@ msgid "Subscribe to a podcast RSS feed"
 msgstr "S’abonar al flux RSS d’un podcast"
 
 #: front/src/components/library/Podcasts.vue:72
-#, fuzzy
 msgctxt "Content/Profile/Button"
 msgid "Subscribe to feed"
-msgstr "S’abonar al flux RSS d’un podcast"
+msgstr "S’abonar al flux RSS"
 
 #: front/src/components/audio/SearchBar.vue:185
 msgctxt "Search/*/*"
@@ -6444,10 +6433,10 @@ msgid "The metadata included in the file is invalid or some mandatory fields are
 msgstr "La metadonada inclusa al fichièr es invalida o de camps obligatòris son absents."
 
 #: front/src/components/library/FileUpload.vue:51
-#, fuzzy
 msgctxt "Content/Library/List item"
 msgid "The music files you are uploading are in OGG, Flac, MP3 or AIFF format"
-msgstr "Los fichièrs musicals que sètz a enviar son etiquetats coma cal."
+msgstr ""
+"Los fichièrs musicals que sètz a enviar son al format OGG, Flac, MP3 o AIFF"
 
 #: front/src/components/library/FileUpload.vue:47
 msgctxt "Content/Library/List item"
@@ -7130,10 +7119,9 @@ msgid "Upload is still pending and will soon be processed by the server."
 msgstr "Lo mandadís es encara en espèra e serà lèu tractat pel servidor."
 
 #: front/src/components/library/FileUpload.vue:39
-#, fuzzy
 msgctxt "Content/Library/Title/Verb"
 msgid "Upload music from your local storage"
-msgstr "Importar de la musica de vòstre servidor estant"
+msgstr "Importar de la musica de vòstre emmagazinatge local"
 
 #: front/src/components/common/AttachmentInput.vue:21
 msgctxt "*/*/*"
@@ -7321,6 +7309,8 @@ msgstr "Utilizat"
 msgctxt "*/*/*"
 msgid "Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes."
 msgstr ""
+"Utilizat pels camps itunes:email e itunes:name, requerits per d’unas "
+"platafòrmas coma Spotify o iTunes."
 
 #: front/src/components/audio/ChannelForm.vue:44
 #: front/src/components/audio/ChannelForm.vue:36
@@ -7476,10 +7466,9 @@ msgstr "Ne veire mai…"
 #: src/views/auth/ProfileBase.vue:13 front/src/views/channels/DetailBase.vue:79
 #: src/views/channels/DetailBase.vue:74
 #: front/src/views/library/DetailBase.vue:11
-#, fuzzy
 msgctxt "Content/*/Button.Label/Verb"
 msgid "View on %{ domain }"
-msgstr "miralh de %{ domain }"
+msgstr "Veire sus %{ domain }"
 
 #: front/src/components/library/AlbumDropdown.vue:33
 #: front/src/components/library/ArtistBase.vue:70
