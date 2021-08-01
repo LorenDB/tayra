@@ -10,6 +10,23 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.1.3 (unreleased)
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Enhancements:
+
+- Test better tagging of Docker Images (#1505)
+
+Bugfixes:
+
+- Fix the scrobbler plugin submitting literal "None" as MusicBrainz ID (#1498)
+- Add worker-src to nginx header to prevent issues (#1489)
+- Only suggest typed tag once if it already exists
+- Implement access control on the moderation views (#1494)
+- Prevent open redirect on login (#1492)
+
+
 1.1.2 (2021-05-19)
 ------------------
 
