@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: 2021-06-27 12:04+0000\n"
-"Last-Translator: Damian Szetela <funkwhale@dszetela.net>\n"
+"PO-Revision-Date: 2021-08-01 19:34+0000\n"
+"Last-Translator: JuniorJPDJ <git@juniorjpdj.pl>\n"
 "Language-Team: \n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -28,12 +28,12 @@ msgstr "„%{ title }”, od %{ artist }"
 #: front/src/components/RemoteSearchForm.vue:80
 msgctxt "Head/Fetch/Field.Placeholder"
 msgid "@channel@pod.example or https://website.example/rss.xml"
-msgstr "@kanał@instancja.przyklad albo https://strona.przyklad/rss.xml"
+msgstr "@kanał@adres.instancji albo https://adres.strony/rss.xml"
 
 #: front/src/components/auth/Authorize.vue:16
 msgctxt "Content/Auth/Title"
 msgid "%{ app } wants to access your Funkwhale account"
-msgstr "Zaloguj się na swoje konto Funkwhale"
+msgstr "Aplikacja %{ app } chciałaby uzyskać dostęp do twojego konta Funkwhale"
 
 #: front/src/components/About.vue:172 src/components/About.vue:5
 #: front/src/components/Home.vue:55 src/components/Home.vue:5
@@ -65,7 +65,7 @@ msgctxt "Content/Home/Stat"
 msgid "%{ count } artists"
 msgid_plural "%{ count } artists"
 msgstr[0] "%{ count } artysta"
-msgstr[1] "%{ count } artyści"
+msgstr[1] "%{ count } artystów"
 msgstr[2] "%{ count } artystów"
 
 #: front/src/components/audio/ChannelCard.vue:12
@@ -98,8 +98,8 @@ msgctxt "Content/Favorites/Title"
 msgid "%{ count } favorite"
 msgid_plural "%{ count } favorites"
 msgstr[0] "%{ count } polubienie"
-msgstr[1] "%{ count} polubienia"
-msgstr[2] "%{ count} polubień"
+msgstr[1] "%{ count } polubienia"
+msgstr[2] "%{ count } polubień"
 
 #: front/src/components/channels/UploadModal.vue:98
 msgctxt "*/*/*"
@@ -124,17 +124,17 @@ msgstr[2] "%{ count } godzin muzyki"
 msgctxt "Content/Channel/Paragraph"
 msgid "%{ count } listening"
 msgid_plural "%{ count } listenings"
-msgstr[0] "%{ count } wysłuchanie"
-msgstr[1] "%{ count } wysłuchania"
-msgstr[2] "%{ count } wysłuchań"
+msgstr[0] "%{ count } odsłuchanie"
+msgstr[1] "%{ count } odsłuchania"
+msgstr[2] "%{ count } odsłuchań"
 
 #: front/src/components/About.vue:187 src/components/About.vue:20
 msgctxt "Content/Home/Stat"
 msgid "%{ count } listenings"
 msgid_plural "%{ count } listenings"
-msgstr[0] "%{ count } wysłuchanie"
-msgstr[1] "%{ count } wysłuchania"
-msgstr[2] "%{ count } wysłuchań"
+msgstr[0] "%{ count } odsłuchanie"
+msgstr[1] "%{ count } odsłuchania"
+msgstr[2] "%{ count } odsłuchań"
 
 #: front/src/components/common/ActionTable.vue:46
 msgctxt "Content/*/Paragraph"
@@ -179,6 +179,7 @@ msgstr[2] "%{ count } utworów"
 
 #: front/src/components/library/ArtistBase.vue:13
 #: front/src/components/library/ArtistBase.vue:8
+#, fuzzy
 msgctxt "Content/Artist/Paragraph"
 msgid "%{ count } track in %{ albumsCount } albums"
 msgid_plural "%{ count } tracks in %{ albumsCount } albums"
@@ -214,7 +215,7 @@ msgstr[2] "%{ count } utworów"
 #: front/src/views/content/libraries/Quota.vue:11
 msgctxt "Content/Library/Paragraph"
 msgid "%{ current } used on %{ max } allowed"
-msgstr "Wykorzystano %{ current } z dozwolonego %{ max }"
+msgstr "Wykorzystano %{ current } z przydzielonego %{ max }"
 
 #: front/src/components/common/Duration.vue:2
 msgctxt "Content/*/Paragraph"
@@ -225,7 +226,7 @@ msgstr "%{ hours } godz. %{ minutes } min"
 #: src/components/audio/Player.vue:111
 msgctxt "Sidebar/Queue/Text"
 msgid "%{ index } of %{ length }"
-msgstr "(%{ index } z %{ length })"
+msgstr "%{ index } z %{ length }"
 
 #: front/src/components/common/Duration.vue:3
 msgctxt "Content/*/Paragraph"
@@ -239,17 +240,19 @@ msgstr "%{ updatedAgo }"
 #: front/src/components/notifications/NotificationRow.vue:44
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } accepted your follow on library \"%{ library }\""
-msgstr "%{ username } zaakceptował(-a) twoją prośbę o śledzenie biblioteki \"%{ library }\""
+msgstr ""
+"%{ username } zaakceptował(-a) twoją prośbę o obserwowanie biblioteki \"%{ "
+"library }\""
 
 #: front/src/components/notifications/NotificationRow.vue:43
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } followed your library \"%{ library }\""
-msgstr "%{ username } śledzi twoją bibliotekę \"%{ library }\""
+msgstr "%{ username } zaobserwował twoją bibliotekę \"%{ library }\""
 
 #: front/src/components/notifications/NotificationRow.vue:46
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } wants to follow your library \"%{ library }\""
-msgstr "%{ username } chce śledzić twoją bibliotekę \"%{ library }\""
+msgstr "%{ username } chciałby obserwować twoją bibliotekę \"%{ library }\""
 
 #: front/src/views/auth/ProfileBase.vue:128
 msgctxt "Head/Profile/Title"
@@ -259,7 +262,9 @@ msgstr "Profil %{ username }"
 #: front/src/components/playlists/PlaylistModal.vue:18
 msgctxt "Popup/Playlist/Paragraph"
 msgid "<strong>%{ track }</strong> is already in <strong>%{ playlist }</strong>."
-msgstr "<strong>%{ track }</strong> jest już w <strong>%{ playlist }</strong>."
+msgstr ""
+"<strong>%{ track }</strong> jest już w liście odtwarzania <strong>%{ "
+"playlist }</strong>."
 
 #: front/src/views/Notifications.vue:21 src/views/Notifications.vue:55
 msgctxt "*/*/*"
@@ -290,12 +295,12 @@ msgstr "Dostępna jest nowa wersja aplikacji."
 #: front/src/components/library/EditForm.vue:179
 msgctxt "*/*/Placeholder"
 msgid "A short summary describing your changes."
-msgstr "Kilka słów opisujące twoje zmiany."
+msgstr "Kilka słów opisujących twoje zmiany."
 
 #: front/src/components/About.vue:221
 msgctxt "Head/About/Title"
 msgid "About"
-msgstr "Na temat"
+msgstr "O…"
 
 #: front/src/components/About.vue:5
 msgctxt "Content/Home/Header"
@@ -305,7 +310,7 @@ msgstr "O %{ podName }!"
 #: front/src/components/Footer.vue:9
 msgctxt "Footer/About/Title"
 msgid "About %{instanceName}"
-msgstr "O %{ instance }"
+msgstr "O %{instanceName}"
 
 #: front/src/components/Footer.vue:12
 msgctxt "Footer/About/Title"
@@ -320,12 +325,12 @@ msgstr "O Funkwhale"
 #: front/src/components/Footer.vue:16
 msgctxt "Footer/About/List item.Link"
 msgid "About page"
-msgstr "Strona albumu"
+msgstr "O…"
 
 #: front/src/components/Home.vue:18
 msgctxt "Content/Home/Header"
 msgid "About this Funkwhale pod"
-msgstr "O tej instancji Funkwhale"
+msgstr "O tej instancji"
 
 #: front/src/components/channels/LicenseSelect.vue:14
 msgctxt "Content/*/*"
@@ -355,7 +360,7 @@ msgstr "Zaakceptowano"
 #: front/src/components/auth/SubsonicTokenForm.vue:117
 msgctxt "Content/Settings/Message"
 msgid "Access disabled"
-msgstr "Brak dostępu"
+msgstr "Dostęp wyłączony"
 
 #: front/src/components/mixins/Translations.vue:100
 #: front/src/components/mixins/Translations.vue:101
@@ -367,25 +372,25 @@ msgstr "Dostęp do plików audio, bibliotek, artystów, albumów i utworów"
 #: front/src/components/mixins/Translations.vue:125
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to content filters"
-msgstr "Zaznacz filtr"
+msgstr "Dostęp do filtrów treści"
 
 #: front/src/components/mixins/Translations.vue:132
 #: front/src/components/mixins/Translations.vue:133
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to edits"
-msgstr "Brak dostępu"
+msgstr "Dostęp do edycji"
 
 #: front/src/components/mixins/Translations.vue:96
 #: front/src/components/mixins/Translations.vue:97
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to email, username, and profile information"
-msgstr "Dostęp do adresu email, nazwy użytkownika i informacji o profilu"
+msgstr "Dostęp do adresu e-mail, nazwy użytkownika i informacji o profilu"
 
 #: front/src/components/mixins/Translations.vue:104
 #: front/src/components/mixins/Translations.vue:105
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to favorites"
-msgstr "Dodaj do ulubionych"
+msgstr "Dostęp do ulubionych"
 
 #: front/src/components/mixins/Translations.vue:112
 #: front/src/components/mixins/Translations.vue:113
@@ -403,7 +408,7 @@ msgstr "Dostęp do historii odtwarzania"
 #: front/src/components/mixins/Translations.vue:141
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to moderation reports"
-msgstr "Dostęp do raportów moderacyjnych"
+msgstr "Dostęp do zgłoszeń moderacyjnych"
 
 #: front/src/components/mixins/Translations.vue:128
 #: front/src/components/mixins/Translations.vue:129
@@ -421,14 +426,13 @@ msgstr "Dostęp do list odtwarzania"
 #: front/src/components/mixins/Translations.vue:121
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to radios"
-msgstr "Dostęp do stacji radiowych"
+msgstr "Dostęp do radia"
 
 #: front/src/components/mixins/Translations.vue:136
 #: front/src/components/mixins/Translations.vue:137
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to security settings such as password and authorization"
-msgstr ""
-"Dostęp do ustawień związanych z bezpieczeństwem np. hasłami oraz autoryzacją"
+msgstr "Dostęp do ustawień związanych z bezpieczeństwem np. haseł i autoryzacji"
 
 #: front/src/components/auth/ApplicationEdit.vue:29
 #: front/src/components/auth/ApplicationEdit.vue:22
@@ -444,7 +448,7 @@ msgstr "Token dostępowy"
 #: front/src/components/mixins/Translations.vue:71
 msgctxt "Content/*/*/Noun"
 msgid "Accessed date"
-msgstr "Brak dostępu"
+msgstr "Data dostępu"
 
 #: front/src/components/manage/ChannelsTable.vue:43
 #: front/src/components/manage/ChannelsTable.vue:2
@@ -463,13 +467,13 @@ msgstr "Brak dostępu"
 #: front/src/components/mixins/Report.vue:15
 msgctxt "*/*/*/Noun"
 msgid "Account"
-msgstr "Stan konta"
+msgstr "Konto"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:92
 #: front/src/views/admin/moderation/AccountsDetail.vue:87
 msgctxt "Content/Moderation/Title"
 msgid "Account data"
-msgstr "Konto aktywne"
+msgstr "Konto"
 
 #: front/src/components/auth/Settings.vue:5
 msgctxt "Content/Settings/Title"
@@ -490,14 +494,14 @@ msgstr "Stan konta"
 #: front/src/views/auth/PasswordReset.vue:14
 msgctxt "Content/Signup/Input.Label"
 msgid "Account's email"
-msgstr "Adres e-mail konta"
+msgstr "Adres e-mail"
 
 #: front/src/views/admin/moderation/AccountsList.vue:3
 #: front/src/views/admin/moderation/AccountsList.vue:24
 #: front/src/views/admin/moderation/Base.vue:12
 msgctxt "*/Moderation/Title"
 msgid "Accounts"
-msgstr "Stan konta"
+msgstr "Konta"
 
 #: front/src/views/library/Edit.vue:22
 msgctxt "Content/Library/Table.Label"
@@ -508,9 +512,12 @@ msgstr "Działanie"
 msgctxt "Content/*/Paragraph"
 msgid "Action %{ action } was launched successfully on %{ count } element"
 msgid_plural "Action %{ action } was launched successfully on %{ count } elements"
-msgstr[0] "Działanie %{ action } zostało rozpoczęte pomyślnie na %{ count } elemencie"
-msgstr[1] "Działanie %{ action } zostało rozpoczęte pomyślnie na %{ count } elementach"
-msgstr[2] "Działanie %{ action } zostało rozpoczęte pomyślnie na %{ count } elementach"
+msgstr[0] ""
+"Działanie %{ action } zostało pomyślnie uruchomione na %{ count } elemencie"
+msgstr[1] ""
+"Działanie %{ action } zostało pomyślnie uruchomione na %{ count } elementach"
+msgstr[2] ""
+"Działanie %{ action } zostało pomyślnie uruchomione na %{ count } elementach"
 
 #: front/src/components/common/ActionTable.vue:18
 #: front/src/components/library/radios/Builder.vue:63
@@ -586,7 +593,7 @@ msgstr "Dodaj"
 #: front/src/components/library/AlbumBase.vue:5
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Add a description…"
-msgstr "Dodaj opis …"
+msgstr "Dodaj opis…"
 
 #: front/src/views/admin/moderation/DomainsList.vue:13
 msgctxt "Content/Moderation/Form.Label/Verb"
@@ -989,7 +996,7 @@ msgstr "Wykonawca"
 #: front/src/views/channels/DetailBase.vue:155
 msgctxt "Content/Channel/*"
 msgid "Artist channel"
-msgstr "Kanał wykonawcy"
+msgstr "Kanał artysty"
 
 #: front/src/views/admin/library/ArtistDetail.vue:88
 #: front/src/views/admin/library/ArtistDetail.vue:83
@@ -1190,7 +1197,10 @@ msgstr "Zablokuj wszystko"
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:112
 msgctxt "Content/Moderation/Help text"
 msgid "Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.)"
-msgstr "Zablokuj wszystko z tego konta lub domeny. To uniemożliwi jakąkolwiek interakcję z jednostką, i usunie powiązaną zawartość (wrzucone pliki, biblioteki, śledzenia itp.)"
+msgstr ""
+"Zablokuj wszystko z tego konta lub domeny. To uniemożliwi jakąkolwiek "
+"interakcję z jednostką, i usunie powiązaną zawartość (wrzucone pliki, "
+"biblioteki, obserwowane itp.)"
 
 #: front/src/components/Sidebar.vue:98 src/components/Sidebar.vue:112
 msgctxt "Sidebar/Navigation/List item.Link/Verb"
@@ -1307,14 +1317,14 @@ msgstr "Anuluj"
 #: front/src/components/audio/LibraryFollowButton.vue:4
 msgctxt "Content/Library/Card.Button.Label/Verb"
 msgid "Cancel follow request"
-msgstr "Cofnij prośbę o śledzenie"
+msgstr "Cofnij prośbę o obserwowanie"
 
 #: front/src/views/content/remote/Card.vue:97
 #: src/views/content/remote/Card.vue:9
 #: front/src/views/content/remote/Card.vue:5
 msgctxt "Content/Library/Card.Paragraph"
 msgid "Cancel follow request"
-msgstr "Cofnij prośbę o śledzenię"
+msgstr "Cofnij prośbę o obserwowanie"
 
 #: front/src/components/library/radios/Builder.vue:62
 msgctxt "Content/Radio/Table.Label/Noun (Value is a number of Tracks)"
@@ -1425,7 +1435,7 @@ msgstr "Umiejscowienie kanału"
 #: front/src/components/audio/ChannelForm.vue:24
 msgctxt "Content/Channel/*"
 msgid "Channel Picture"
-msgstr "Obrazek Kanału"
+msgstr "Obrazek kanału"
 
 #: front/src/components/Sidebar.vue:121 src/components/library/TagDetail.vue:26
 #: front/src/views/admin/ChannelsList.vue:24 src/views/admin/Settings.vue:84
@@ -2459,7 +2469,7 @@ msgstr "Osadź ten utwór na swojej stronie internetowej"
 #: front/src/views/admin/moderation/DomainsDetail.vue:201
 msgctxt "Content/Moderation/Table.Label/Noun"
 msgid "Emitted library follows"
-msgstr "Wprowadź adres URL biblioteki"
+msgstr "Wychodzące obserwacje bibliotek"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:223
 #: front/src/views/admin/moderation/AccountsDetail.vue:218
@@ -2719,7 +2729,7 @@ msgstr "Wszyscy na tej instancji"
 #: front/src/components/mixins/Translations.vue:13
 msgctxt "Content/Settings/Dropdown"
 msgid "Everyone, across all instances"
-msgstr "Wszyscy na tej instancji"
+msgstr "Wszyscy na każdej instancji"
 
 #: front/src/components/library/radios/Filter.vue:7
 msgctxt "Popup/Radio/Title/Noun"
@@ -2921,7 +2931,7 @@ msgstr "Przywołaj pasek wyszukiwania"
 #: src/views/content/remote/Card.vue:2
 msgctxt "Content/Library/Card.Button.Label/Verb"
 msgid "Follow"
-msgstr "Śledź"
+msgstr "Obserwuj"
 
 #: front/src/views/content/Home.vue:35
 msgctxt "Content/Library/Paragraph"
@@ -2935,14 +2945,14 @@ msgstr ""
 #: front/src/views/content/Home.vue:33
 msgctxt "Content/Library/Title/Verb"
 msgid "Follow remote libraries"
-msgstr "Śledź zdalne biblioteki"
+msgstr "Obserwuj zdalne biblioteki"
 
 #: front/src/views/content/remote/Card.vue:94
 #: src/views/content/remote/Card.vue:6
 #: front/src/views/content/remote/Card.vue:2
 msgctxt "Content/Library/Card.Paragraph"
 msgid "Follow request pending approval"
-msgstr "Śledzenie oczekuje na zatwierdzenie"
+msgstr "Obserwowanie oczekuje na zatwierdzenie"
 
 #: front/src/components/manage/library/LibrariesTable.vue:47
 #: front/src/components/manage/library/LibrariesTable.vue:6
@@ -2953,13 +2963,13 @@ msgstr "Śledzenie oczekuje na zatwierdzenie"
 #: front/src/components/mixins/Translations.vue:92
 msgctxt "Content/Federation/*/Noun"
 msgid "Followers"
-msgstr "Śledzący"
+msgstr "Obserwatorzy"
 
 #: front/src/components/mixins/Translations.vue:111
 #: front/src/components/mixins/Translations.vue:112
 msgctxt "Content/OAuth Scopes/Label"
 msgid "Follows"
-msgstr "Śledź"
+msgstr "Obserwacje"
 
 #: front/src/components/moderation/ReportModal.vue:50
 msgctxt "*/*/Field,Help"
@@ -3240,13 +3250,13 @@ msgstr[2] "Dodaj z kolejki (%{ count } utworów)"
 #: front/src/components/mixins/Translations.vue:17
 msgctxt "Content/Settings/Dropdown/Short"
 msgid "Instance"
-msgstr "Radia instancji"
+msgstr "Instancja"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:82
 #: front/src/views/admin/moderation/DomainsDetail.vue:77
 msgctxt "Content/Moderation/Title"
 msgid "Instance data"
-msgstr "Radia instancji"
+msgstr "Dane o instancji"
 
 #: front/src/views/admin/Settings.vue:80
 msgctxt "Content/Admin/Menu"
@@ -3266,7 +3276,7 @@ msgstr "Ustawienia instancji"
 #: front/src/components/SetInstanceModal.vue:19
 msgctxt "Popup/Instance/Input.Label/Noun"
 msgid "Instance URL"
-msgstr "Radia instancji"
+msgstr "Adres URL instancji"
 
 #: front/src/components/manage/moderation/ReportCard.vue:90
 #: front/src/components/manage/moderation/ReportCard.vue:197
@@ -3588,7 +3598,7 @@ msgstr "Wczytywanie"
 #: front/src/views/library/Edit.vue:14
 msgctxt "Content/Library/Paragraph"
 msgid "Loading followers…"
-msgstr "Ładowanie śledzących…"
+msgstr "Ładowanie obserwujących…"
 
 #: front/src/views/content/libraries/Home.vue:3
 msgctxt "Content/Library/Paragraph"
@@ -4236,7 +4246,7 @@ msgstr "Nikt poza mną"
 #: front/src/views/library/Edit.vue:50
 msgctxt "Content/Library/Paragraph"
 msgid "Nobody is following this library"
-msgstr "Nikt nie śledzi tej biblioteki"
+msgstr "Nikt nie obserwuje tej biblioteki"
 
 #: front/src/components/channels/AlbumSelect.vue:8
 #: front/src/components/channels/LicenseSelect.vue:7
@@ -4577,7 +4587,7 @@ msgstr "Oczekujące pliki"
 #: front/src/components/Sidebar.vue:209
 msgctxt "Sidebar/Notifications/Hidden text"
 msgid "Pending follow requests"
-msgstr "Oczekujące prośby o możliwość śledzenia"
+msgstr "Oczekujące prośby o możliwość obserwowania"
 
 #: front/src/components/library/EditCard.vue:27
 #: front/src/components/manage/library/EditsCardList.vue:18
@@ -4704,9 +4714,9 @@ msgstr "Playlista"
 msgctxt "Content/Playlist/Header.Subtitle"
 msgid "Playlist containing %{ count } track, by %{ username }"
 msgid_plural "Playlist containing %{ count } tracks, by %{ username }"
-msgstr[0] "Playlista zawierająca %{ count } utwór od %{ username }"
-msgstr[1] "Playlista zawierająca %{ count } utwory od %{ username }"
-msgstr[2] "Playlista zawierająca %{ count } utworów od %{ username }"
+msgstr[0] "Playlista od %{ username } zawierająca %{ count } utwór"
+msgstr[1] "Playlista od %{ username } zawierająca %{ count } utwory"
+msgstr[2] "Playlista od %{ username } zawierająca %{ count } utworów"
 
 #: front/src/components/playlists/Form.vue:9
 #: src/components/playlists/Form.vue:1
@@ -4824,7 +4834,8 @@ msgstr "Opis"
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:118
 msgctxt "Content/Moderation/Help text"
 msgid "Prevent account or domain from triggering notifications, except from followers."
-msgstr "Zapobiegnij notyfikacjom z konta lub domeny poza swoimi fanami."
+msgstr ""
+"Zapobiegnij powiadomieniom z konta lub domeny poza swoimi obserwatorami."
 
 #: front/src/components/common/ContentForm.vue:8
 msgctxt "*/Form/Menu.item"
@@ -5045,7 +5056,7 @@ msgstr "Powód"
 #: front/src/views/admin/moderation/DomainsDetail.vue:193
 msgctxt "Content/Moderation/Table.Label/Noun"
 msgid "Received library follows"
-msgstr "Wprowadź adres URL biblioteki"
+msgstr "Przychodzące obserwacje bibliotek"
 
 #: front/src/components/manage/moderation/DomainsTable.vue:41
 #: front/src/components/manage/moderation/DomainsTable.vue:3
@@ -6099,7 +6110,7 @@ msgstr "Pominięte pliki"
 #: front/src/components/audio/ChannelForm.vue:9
 msgctxt "Content/Channel/*"
 msgid "Social Network Name"
-msgstr "Nazwa Sieci Społecznościowej"
+msgstr "Nazwa sieci społecznościowej"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:109
 #: front/src/views/admin/moderation/DomainsDetail.vue:104
@@ -6500,8 +6511,8 @@ msgstr "Biblioteka i wszystkie utwory z niej zostaną usunięte. To działanie j
 msgctxt "Content/Moderation/Paragraph"
 msgid "The library will be removed, as well as associated uploads, and follows. This action is irreversible."
 msgstr ""
-"Biblioteka zostanie usunięta razem z powiązanymi plikami oraz subskrybcjami. "
-"Ta akcja jest nieodwracalna."
+"Biblioteka zostanie usunięta razem z powiązanymi plikami i obserwacjami. Ta "
+"akcja jest nieodwracalna."
 
 #: front/src/components/library/ImportStatusModal.vue:140
 msgctxt "Popup/Import/Error.Label"
@@ -6583,7 +6594,7 @@ msgctxt "Popup/*/Paragraph"
 msgid "The selected library will be removed, as well as associated uploads and follows. This action is irreversible."
 msgstr ""
 "Wybrana biblioteka będzie usunięta wraz z powiązanymi plikami i "
-"subskrybcjami. Ta akcja jest nieodwracalna."
+"obserwacjami. Ta akcja jest nieodwracalna."
 
 #: front/src/components/manage/library/TagsTable.vue:180
 msgctxt "Popup/*/Paragraph"
@@ -7075,19 +7086,19 @@ msgstr "Wyłącz skupienie paska szukania"
 #: src/views/content/remote/Card.vue:7
 msgctxt "*/Library/Button.Label/Verb"
 msgid "Unfollow"
-msgstr "Przestań śledzić"
+msgstr "Przestań obserwować"
 
 #: front/src/components/audio/LibraryFollowButton.vue:3
 msgctxt "Content/Library/Card.Button.Label/Verb"
 msgid "Unfollow"
-msgstr "Przestań śledzić"
+msgstr "Przestań obserwować"
 
 #: front/src/views/content/remote/Card.vue:103
 #: src/views/content/remote/Card.vue:15
 #: front/src/views/content/remote/Card.vue:3
 msgctxt "Popup/Library/Title"
 msgid "Unfollow this library?"
-msgstr "Czy chcesz przestać śledzić tę bibliotekę?"
+msgstr "Czy chcesz przestać obserwować tę bibliotekę?"
 
 #: front/src/components/federation/FetchButton.vue:43
 #: front/src/components/federation/FetchButton.vue:44
@@ -7446,8 +7457,8 @@ msgstr ""
 msgctxt "Content/Channels/Paragraph"
 msgid "Used in URLs and to follow this channel on the federation. You cannot change it afterwards."
 msgstr ""
-"Użyte w adresie URL i do śledzenia tego kanału w federacji. Nie możesz tego "
-"zmienić później."
+"Używana w adresie URL i do śledzenia tego kanału w federacji. Nie możesz "
+"zmienić jej później."
 
 #: front/src/components/Home.vue:124
 msgctxt "Content/Home/Header"
@@ -7897,7 +7908,7 @@ msgstr "Możesz mieć problem z połączeniem."
 #: front/src/views/library/DetailTracks.vue:6
 msgctxt "*/*/*"
 msgid "You may need to follow this library to see its content."
-msgstr "Powinieneś śledzić tą bibliotekę, aby zobaczyć jej zawartość."
+msgstr "Powinieneś śledzić tą bibliotekę, aby widzieć jej zawartość."
 
 #: front/src/components/audio/ChannelEntries.vue:17
 #: front/src/components/audio/ChannelEntries.vue:3
@@ -7915,7 +7926,7 @@ msgstr "Powinieneś zasubskrybować ten kanał, aby zobaczyć jego zawartość."
 msgctxt "Content/Notifications/Paragraph"
 msgid "You rejected %{ username }&#39;s request to follow \"%{ library }\""
 msgstr ""
-"Odrzuciłeś(-aś) prośbę %{ username } &#39; do śledzenia \"%{ library }\""
+"Odrzuciłeś(-aś) prośbę %{ username } śledzenia biblioteki \"%{ library }\""
 
 #: front/src/components/auth/Settings.vue:82
 msgctxt "Popup/Settings/List item"
