@@ -1,1 +1,0 @@
-Fix the scrobbler plugin submitting literal "None" as MusicBrainz ID (#1498)
