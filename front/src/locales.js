@@ -83,7 +83,7 @@ export default {
     },
     {
       "code": "pl",
-      "label": "Polszczyzna"
+      "label": "Polski"
     },
     {
       "code": "pt_BR",
