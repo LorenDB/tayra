@@ -25,4 +25,4 @@ by requesting a document be written. There are three ways to request new documen
 
 - Open a new issue on `Gitlab <https://dev.funkwhale.audio/funkwhale/funkwhale/issues>`_, providing as much detail as possible
 - Start a new thread on `the forum <https://forum.funkwhale.audio/>`_ with more details about your requests
-- Ask somebody on our `chat room <https://riot.im/app/#/room/#funkwhale:matrix.org>`_
+- Ask somebody on our `chat room <https://matrix.to/#/#funkwhale:matrix.org>`_

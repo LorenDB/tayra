@@ -58,7 +58,7 @@
           <h4 v-translate translate-context="Footer/*/Link" class="ui header">Getting help</h4>
           <div class="ui list">
             <a href="https://forum.funkwhale.audio/" class="link item" target="_blank"><translate translate-context="Footer/*/Listitem.Link">Support forum</translate></a>
-            <a href="https://riot.im/app/#/room/#funkwhale-troubleshooting:matrix.org" class="link item" target="_blank"><translate translate-context="Footer/*/List item.Link">Chat room</translate></a>
+            <a href="https://matrix.to/#/#funkwhale-troubleshooting:matrix.org" class="link item" target="_blank"><translate translate-context="Footer/*/List item.Link">Chat room</translate></a>
             <a href="https://dev.funkwhale.audio/funkwhale/funkwhale/issues" class="link item" target="_blank"><translate translate-context="Footer/*/List item.Link">Issue tracker</translate></a>
           </div>
         </section>

@@ -79,7 +79,7 @@ Report an issue or get help
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Well be more than happy to help you to debug installation and configuration issues. The main channel
-for receiving support about your Funkwhale installation is the `#funkwhale-troubleshooting:matrix.org <https://riot.im/app/#/room/#funkwhale-troubleshooting:matrix.org>`_ Matrix channel.
+for receiving support about your Funkwhale installation is the `#funkwhale-troubleshooting:matrix.org <https://matrix.to/#/#funkwhale-troubleshooting:matrix.org>`_ Matrix channel.
 
 Before asking for help, we'd really appreciate if you took the time to go through this document and try to diagnose the problem yourself. But if you don't find
 anything relevant or don't have the time, we'll be there for you!
