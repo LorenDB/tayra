@@ -87,7 +87,7 @@ To work, the CLI needs to be pointed to a Funkwhale server. This can be done in 
 Env file
 ^^^^^^^^
 
-The CLI will try to read configuration options from a ``.env`` file in the current directory, or from ``~/.config/funkwhale/env``.
+The CLI will try to read configuration options from a ``.env`` file in the current directory. If this file is not present, it will read the configuration options from ``~/.config/funkwhale/env`` on Linux or ``~/Library/Application Support/funkwhale/env`` on macOS.
 
 You can also give it a path to another env file via the ``-e /path/to/.envfile`` flag or the ``ENV_FILE`` environment variable.
 
