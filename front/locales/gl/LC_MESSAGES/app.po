@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-07 18:30+0000\n"
-"PO-Revision-Date: 2021-03-24 21:38+0000\n"
+"PO-Revision-Date: 2021-08-09 08:21+0000\n"
 "Last-Translator: ghose <xosem@disroot.org>\n"
 "Language-Team: none\n"
 "Language: gl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.11.3\n"
+"X-Generator: Weblate 4.6.2\n"
 
 #: front/src/components/playlists/PlaylistModal.vue:6
 #: front/src/components/playlists/PlaylistModal.vue:3
@@ -27,7 +27,7 @@ msgstr "\"%{ title }\", de %{ artist }"
 #: front/src/components/RemoteSearchForm.vue:82
 msgctxt "Head/Fetch/Field.Placeholder"
 msgid "@username@example.com"
-msgstr ""
+msgstr "@usuaria@exemplo.com"
 
 #: front/src/components/auth/Authorize.vue:16
 msgctxt "Content/Auth/Title"
@@ -43,7 +43,6 @@ msgstr[0] "%{ count } usuaria activa"
 msgstr[1] "%{ count } usuarias activas"
 
 #: front/src/components/About.vue:181 src/components/About.vue:14
-#, fuzzy
 msgctxt "Content/Home/Stat"
 msgid "%{ count } album"
 msgid_plural "%{ count } albums"
@@ -58,7 +57,6 @@ msgstr[0] "%{ count } dominio permitido"
 msgstr[1] "%{ count } dominios permitidos"
 
 #: front/src/components/About.vue:178 src/components/About.vue:11
-#, fuzzy
 msgctxt "Content/Home/Stat"
 msgid "%{ count } artist"
 msgid_plural "%{ count } artists"
@@ -121,7 +119,6 @@ msgstr[0] "%{ count } escoita"
 msgstr[1] "%{ count } escoitas"
 
 #: front/src/components/About.vue:187 src/components/About.vue:20
-#, fuzzy
 msgctxt "Content/Home/Stat"
 msgid "%{ count } listening"
 msgid_plural "%{ count } listenings"
@@ -168,12 +165,11 @@ msgstr[0] "%{ count } canción"
 msgstr[1] "%{ count } cancións"
 
 #: front/src/components/About.vue:184 src/components/About.vue:17
-#, fuzzy
 msgctxt "Content/Home/Stat"
 msgid "%{ count } track"
 msgid_plural "%{ count } tracks"
-msgstr[0] "%{ count } canción"
-msgstr[1] "%{ count } cancións"
+msgstr[0] "%{ count } pista"
+msgstr[1] "%{ count } pistas"
 
 #: front/src/components/library/ArtistBase.vue:13
 #: front/src/components/library/ArtistBase.vue:8
@@ -280,7 +276,6 @@ msgid "A short summary describing your changes."
 msgstr "Un breve resumen describindo os cambios."
 
 #: front/src/components/Footer.vue:16
-#, fuzzy
 msgctxt "Footer/About/List item.Link"
 msgid "About"
 msgstr "Acerca de"
@@ -291,10 +286,9 @@ msgid "About"
 msgstr "Acerca de"
 
 #: front/src/components/About.vue:5
-#, fuzzy
 msgctxt "Content/Home/Header"
 msgid "About %{ podName }"
-msgstr "Acerca de %{ podName }!"
+msgstr "Acerca de %{ podName }"
 
 #: front/src/components/Footer.vue:9
 msgctxt "Footer/About/Title"
@@ -360,7 +354,6 @@ msgstr "Establecer filtros do contido"
 
 #: front/src/components/mixins/Translations.vue:96
 #: front/src/components/mixins/Translations.vue:97
-#, fuzzy
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to e-mail, username, and profile information"
 msgstr "Acesso a email, nome de usuaria, e información do perfil"
@@ -477,10 +470,9 @@ msgid "Account status"
 msgstr "Estado da conta"
 
 #: front/src/views/auth/PasswordReset.vue:14
-#, fuzzy
 msgctxt "Content/Signup/Input.Label"
 msgid "Account's e-mail address"
-msgstr "Email da conta"
+msgstr "Enderezo de email da conta"
 
 #: front/src/views/admin/moderation/AccountsList.vue:3
 #: front/src/views/admin/moderation/AccountsList.vue:24
@@ -1216,7 +1208,6 @@ msgid "Browsing playlists"
 msgstr "Buscando nas listaxes"
 
 #: front/src/components/library/Podcasts.vue:4
-#, fuzzy
 msgctxt "Content/Podcasts/Title"
 msgid "Browsing podcasts"
 msgstr "Buscando Podcast"
@@ -1337,10 +1328,9 @@ msgid "Change language"
 msgstr "Cambiar idioma"
 
 #: front/src/components/auth/Settings.vue:262
-#, fuzzy
 msgctxt "*/*/Button.Label"
 msgid "Change my e-mail address"
-msgstr "Cambiar enderezo de email"
+msgstr "Cambiar o meu enderezo de email"
 
 #: front/src/components/auth/Settings.vue:54
 msgctxt "Content/Settings/Title/Verb"
@@ -1353,10 +1343,11 @@ msgid "Change password"
 msgstr "Cambiar contrasinal"
 
 #: front/src/components/auth/Settings.vue:266
-#, fuzzy
 msgctxt "Content/Settings/Paragraph'"
 msgid "Change the e-mail address associated with your account. We will send a confirmation to the new address."
-msgstr "Cambiar o enderezo de email asociado á miña conta. Enviarémosche un email para confirmar o novo enderezo."
+msgstr ""
+"Cambiar o enderezo de email asociado á túa conta. Enviarémosche un email "
+"para confirmar o novo enderezo."
 
 #: front/src/components/Footer.vue:49
 msgctxt "Footer/Settings/Dropdown.Label/Short, Verb"
@@ -1593,7 +1584,6 @@ msgid "Copy"
 msgstr "Copiar"
 
 #: front/src/components/playlists/Editor.vue:195
-#, fuzzy
 msgctxt "Content/Playlist/Button.Tooltip/Verb"
 msgid "Copy the current queue to this playlist"
 msgstr "Copiar cancións da cola a lista de reprodución"
@@ -1606,7 +1596,6 @@ msgstr "Copiar-pegar o seguinte código na aplicación:"
 #: front/src/views/channels/DetailBase.vue:51
 #: src/views/channels/DetailBase.vue:46
 #: front/src/views/channels/DetailBase.vue:5
-#, fuzzy
 msgctxt "Content/Channels/Label"
 msgid "Copy-paste the following URL in your favorite podcatcher:"
 msgstr "Copiar-pegar este URL na túa app de podcasting:"
@@ -1649,10 +1638,9 @@ msgid "Create a Channel"
 msgstr "Crear Canle"
 
 #: front/src/views/auth/Signup.vue:4
-#, fuzzy
 msgctxt "Content/Signup/Title"
 msgid "Create a Funkwhale account"
-msgstr "Crear unha conta funkwhale"
+msgstr "Crear unha conta Funkwhale"
 
 #: front/src/components/auth/ApplicationNew.vue:8
 #: front/src/components/auth/ApplicationNew.vue:41
@@ -1760,10 +1748,9 @@ msgid "Current image"
 msgstr "Imaxe actual"
 
 #: front/src/components/auth/Settings.vue:69
-#, fuzzy
 msgctxt "Content/Settings/Input.Label"
 msgid "Current password"
-msgstr "Novo contrasinal"
+msgstr "Contrasinal actual"
 
 #: front/src/views/content/libraries/Quota.vue:2
 msgctxt "Content/Library/Title"
@@ -2264,7 +2251,6 @@ msgstr "Duración"
 
 #: front/src/components/mixins/Translations.vue:79
 #: front/src/components/mixins/Translations.vue:80
-#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "Duration"
 msgstr "Duración"
@@ -2283,7 +2269,6 @@ msgid "Duration"
 msgstr "Duración"
 
 #: front/src/components/auth/SignupForm.vue:35
-#, fuzzy
 msgctxt "Content/*/*/Noun"
 msgid "E-mail address"
 msgstr "Enderezo de email"
@@ -2495,16 +2480,14 @@ msgid "Enter playlist name…"
 msgstr "Nome da lista de reprodución…"
 
 #: front/src/views/auth/PasswordReset.vue:55
-#, fuzzy
 msgctxt "Content/Signup/Input.Placeholder"
 msgid "Enter the e-mail address linked to your account"
-msgstr "Introducir o enderezo de correo ligado a súa conta"
+msgstr "Escribe o enderezo de correo ligado a túa conta"
 
 #: front/src/components/auth/SignupForm.vue:138
-#, fuzzy
 msgctxt "Content/Signup/Form/Placeholder"
 msgid "Enter your e-mail address"
-msgstr "Confirma o teu email"
+msgstr "Escribe o teu email"
 
 #: front/src/components/auth/SignupForm.vue:133
 #: front/src/components/auth/SignupForm.vue:135
@@ -2518,7 +2501,6 @@ msgid "Enter your username"
 msgstr "Escribe o teu nome de usuaria"
 
 #: front/src/components/auth/LoginForm.vue:95
-#, fuzzy
 msgctxt "Content/Login/Input.Placeholder"
 msgid "Enter your username or e-mail address"
 msgstr "Escribe o teu nome de usuaria ou email"
@@ -2756,10 +2738,13 @@ msgid "Expired/used"
 msgstr "Caducado/utilizado"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:110
-#, fuzzy
 msgctxt "Content/Moderation/Help text"
 msgid "Explain why you're applying this policy: this will help you remember why you added this rule. Depending on your pod configuration, this may be displayed publicly to help users understand the moderation rules in place."
-msgstr "Explicar por que aplicas esta política. Dependendo da configuración da túa instancia esto axudarache a lembrar por que actuaches sobre esta conta ou dominio, e pode ser mostrado públicamente para que as usuarias entendan cales son as regras de moderación que se aplican."
+msgstr ""
+"Explica por que aplicas esta política. Dependendo da configuración da túa "
+"instancia esto axudarache a lembrar por que actuaches sobre esta conta ou "
+"dominio, e pode ser mostrado públicamente para que as usuarias entendan "
+"cales son as regras de moderación que se aplican."
 
 #: front/src/components/Sidebar.vue:93
 msgctxt "*/*/*/Verb"
