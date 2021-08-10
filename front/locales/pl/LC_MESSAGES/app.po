@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-07 18:30+0000\n"
-"PO-Revision-Date: 2021-08-09 07:32+0000\n"
+"PO-Revision-Date: 2021-08-11 17:04+0000\n"
 "Last-Translator: JuniorJPDJ <git@juniorjpdj.pl>\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -297,12 +297,12 @@ msgstr "Kilka słów opisujących twoje zmiany."
 #: front/src/components/Footer.vue:16
 msgctxt "Footer/About/List item.Link"
 msgid "About"
-msgstr "O…"
+msgstr "O tej instancji"
 
 #: front/src/components/About.vue:221
 msgctxt "Head/About/Title"
 msgid "About"
-msgstr "O…"
+msgstr "O tej instancji"
 
 #: front/src/components/About.vue:5
 msgctxt "Content/Home/Header"
