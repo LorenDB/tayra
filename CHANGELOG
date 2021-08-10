@@ -10,7 +10,13 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
-1.1.3 (unreleased)
+1.1.4 (2021-08-02)
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+- Pinned version of asgiref to avoid trouble with latest release. For further information, see #1516
+
+1.1.3 (2021-08-02)
 Upgrade instructions are available at
 https://docs.funkwhale.audio/admin/upgrading.html
 
