@@ -1,7 +1,7 @@
 Message Rewrite Facility (MRF)
 ==============================
 
-Funkwhale includes a feature that mimics `Pleroma's Message Rewrite Facility <https://docs-develop.pleroma.social/mrf.html>`_.
+Funkwhale includes a feature that mimics `Pleroma's Message Rewrite Facility <https://docs-develop.pleroma.social/backend/configuration/mrf/>`_.
 Using the MRF, instance admins can write and configure custom and automated moderation rules
 that couldn't be implemented otherwise using :doc:`our other built-in moderation tools <../moderator/index>`.
 
