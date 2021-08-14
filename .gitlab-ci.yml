@@ -141,7 +141,7 @@ test_api:
     - postgres:11
     - redis:5
   stage: test
-  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  image: $CI_REGISTRY/funkwhale/backend-test-docker:latest
   cache:
     key: "$CI_PROJECT_ID__pip_cache"
     paths:
@@ -151,11 +151,10 @@ test_api:
     FUNKWHALE_URL: "https://funkwhale.ci"
     DJANGO_SETTINGS_MODULE: config.settings.local
     POSTGRES_HOST_AUTH_METHOD: trust
+    CACHE_URL: "redis://redis:6379/0"
   only:
     - branches
   before_script:
-    - apk add make git gcc python3-dev musl-dev python3-dev openssl-dev cargo
-    - apk add postgresql-dev py3-psycopg2 libldap libffi-dev make zlib-dev jpeg-dev openldap-dev
     - cd api
     - pip3 install -r requirements/base.txt
     - pip3 install -r requirements/local.txt
@@ -219,19 +218,6 @@ build_front:
     - develop@funkwhale/funkwhale
   tags:
     - docker
-
-build_backend:
-  stage: build
-  image: bash
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:
-    - docker system prune -af
-    - cd api
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
-  tags:
-    - docker-build
 
 pages:
   stage: test
