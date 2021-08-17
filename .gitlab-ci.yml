@@ -280,7 +280,7 @@ docker_all_in_one_release:
     - if [[ ! -z "$CI_COMMIT_TAG" ]]; then (./docs/get-releases-json.py | scripts/is-docker-latest.py $CI_COMMIT_TAG -) && export DOCKER_LATEST_TAG="-t $ALL_IN_ONE_IMAGE_LATEST" || export DOCKER_LATEST_TAG=; fi
     - wget $ALL_IN_ONE_ARTIFACT_URL -O all_in_one.zip
     - unzip -o all_in_one.zip -d tmpdir
-    - mv tmpdir/docker-funkwhale-$ALL_IN_ONE_REF $BUILD_PATH && rmdir tmpdir
+    - mv tmpdir/funkwhale-docker-all-in-one-$ALL_IN_ONE_REF $BUILD_PATH && rmdir tmpdir
     - cp -r api $BUILD_PATH/src/api
     - cp -r front $BUILD_PATH/src/front
     - cd $BUILD_PATH
