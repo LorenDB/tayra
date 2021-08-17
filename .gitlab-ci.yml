@@ -271,7 +271,7 @@ docker_all_in_one_release:
   image: bash
   variables:
     ALL_IN_ONE_REF: main
-    ALL_IN_ONE_ARTIFACT_URL: https://dev.funkwhale.audio/funkwhale/funkwhale-docker-all-in-one/-/archive/$ALL_IN_ONE_REF/funkwhale-docker-all-in-one-$ALL_IN_ONE_REF.tar.gz
+    ALL_IN_ONE_ARTIFACT_URL: https://dev.funkwhale.audio/funkwhale/funkwhale-docker-all-in-one/-/archive/$ALL_IN_ONE_REF/funkwhale-docker-all-in-one-$ALL_IN_ONE_REF.zip
     BUILD_PATH: all_in_one
   before_script:
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
