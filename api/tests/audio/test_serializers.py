@@ -684,8 +684,8 @@ def test_rss_feed_item_serializer_create(factories):
     )
     assert upload.track.get_tags() == ["pop", "rock"]
     assert upload.track.attachment_cover.url == "https://image.url/"
-    assert upload.track.description.text == "<p>Html content</p>"
-    assert upload.track.description.content_type == "text/html"
+    assert upload.track.description.text == "Html content"
+    assert upload.track.description.content_type == "text/plain"
 
 
 def test_rss_feed_item_serializer_update(factories):
@@ -754,8 +754,8 @@ def test_rss_feed_item_serializer_update(factories):
     )
     assert upload.track.get_tags() == ["pop", "rock"]
     assert upload.track.attachment_cover.url == "https://image.url/"
-    assert upload.track.description.text == "<p>Html content</p>"
-    assert upload.track.description.content_type == "text/html"
+    assert upload.track.description.text == "Html content"
+    assert upload.track.description.content_type == "text/plain"
 
 
 def test_get_channel_from_rss_url(db, r_mock, mocker):

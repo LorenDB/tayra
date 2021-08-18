@@ -114,7 +114,7 @@ def test_join_url(start, end, expected):
             "<strong>hello world</strong>",
         ),
         # images and other non whitelisted html should be removed
-        ("hello world\n![img](src)", "text/markdown", False, "<p>hello world</p>"),
+        ("hello world\n![img](src)", "text/markdown", False, "<p>hello world<br></p>"),
         (
             "hello world\n\n<script></script>\n\n<style></style>",
             "text/markdown",
