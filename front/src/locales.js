@@ -113,6 +113,7 @@ export default {
       "code": "fa_IR",
       "label": "فارسی"
     },
+    {
       "code": "ml",
       "label": "മലയാളം"
     },
