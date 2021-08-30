@@ -29,7 +29,7 @@ persisting-theory~=0.2.0
 django-versatileimagefield~=2.2.0
 django-filter~=2.4.0
 django-rest-auth~=0.9.0
-ipython~=7.25.0
+ipython~=7.27.0
 mutagen~=1.45.0
 
 pymemoize~=1.0.0
