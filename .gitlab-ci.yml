@@ -245,7 +245,7 @@ pages:
 
 docker_release:
   stage: deploy
-  image: bash
+  image: egon0/docker-with-buildx-and-git
   before_script:
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
     - cp -r front/dist api/frontend
@@ -263,12 +263,10 @@ docker_release:
     - develop@funkwhale/funkwhale
     - master@funkwhale/funkwhale
     - tags@funkwhale/funkwhale
-  tags:
-    - docker-build
 
 docker_all_in_one_release:
   stage: deploy
-  image: bash
+  image: egon0/docker-with-buildx-and-git
   variables:
     ALL_IN_ONE_REF: main
     ALL_IN_ONE_ARTIFACT_URL: https://dev.funkwhale.audio/funkwhale/funkwhale-docker-all-in-one/-/archive/$ALL_IN_ONE_REF/funkwhale-docker-all-in-one-$ALL_IN_ONE_REF.zip
@@ -292,8 +290,6 @@ docker_all_in_one_release:
     - develop@funkwhale/funkwhale
     - master@funkwhale/funkwhale
     - tags@funkwhale/funkwhale
-  tags:
-    - docker-build
 
 build_api:
   # Simply publish a zip containing api/ directory
