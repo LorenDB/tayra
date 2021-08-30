@@ -51,7 +51,7 @@ pyOpenSSL~=20.0.1
 
 # for LDAP authentication
 python-ldap~=3.3.0
-django-auth-ldap~=2.4.0
+django-auth-ldap~=3.0.0
 
 pydub~=0.25.1
 pyld~=2.0.3
