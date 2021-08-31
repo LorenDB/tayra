@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-07 18:30+0000\n"
-"PO-Revision-Date: 2021-08-09 08:21+0000\n"
+"PO-Revision-Date: 2021-09-01 04:04+0000\n"
 "Last-Translator: ghose <xosem@disroot.org>\n"
 "Language-Team: none\n"
 "Language: gl\n"
@@ -2795,16 +2795,14 @@ msgstr "Fediverso"
 #: front/src/components/audio/ChannelForm.vue:35
 #: front/src/components/audio/ChannelForm.vue:27
 #: front/src/components/audio/ChannelForm.vue:9
-#, fuzzy
 msgctxt "Content/Channel/*"
 msgid "Fediverse handle"
-msgstr "Fediverso"
+msgstr "Identificador no Fediverso"
 
 #: front/src/components/RemoteSearchForm.vue:81
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Fediverse object"
-msgstr "Fediverso"
+msgstr "Obxecto no Fediverso"
 
 #: front/src/components/library/EditCard.vue:43
 msgctxt "Content/Library/Card.Table.Header/Short"
@@ -3067,23 +3065,25 @@ msgid "Host your episodes and keep your community updated."
 msgstr "Hospeda os teus episodios e ten a comunidade ao día."
 
 #: front/src/components/auth/SubsonicTokenForm.vue:10
-#, fuzzy
 msgctxt "Content/Settings/Paragraph"
 msgid "However, accessing Funkwhale from those clients requires a separate password you can set below."
-msgstr "Porén, o acceso a Funkwhale desde estos outros clientes precisa dun contrasinal diferente que podes establecer aquí abaixo."
+msgstr ""
+"Porén, o acceso a Funkwhale desde estos outros clientes precisa dun "
+"contrasinal diferente que podes establecer aquí embaixo."
 
 #: front/src/components/RemoteSearchForm.vue:78
-#, fuzzy
 msgctxt "Head/Fetch/Field.Placeholder"
 msgid "https://website.example.com/rss.xml"
-msgstr "@canle@pod.exemplo ou https://website.exemplo/rss.xml"
+msgstr "https://web.exemplo.com/rss.xml"
 
 #: front/src/views/auth/PasswordResetConfirm.vue:24
 #: front/src/views/auth/PasswordResetConfirm.vue:1
-#, fuzzy
 msgctxt "Content/Signup/Paragraph"
 msgid "If the e-mail address provided in the previous step is valid and linked to a user account, you should receive an e-mail with reset instructions in the next couple of minutes."
-msgstr "Se o enderezo de correo proporcionado no paso anterior é válido e ligado a unha conta de usuaria, debería recibir un correo coas instrucións de restablecemento nun par de minutos."
+msgstr ""
+"Se o enderezo de correo proporcionado no paso anterior é válido e ligado a "
+"unha conta de usuaria, deberías recibir un correo coas instrucións de "
+"restablecemento nun par de minutos."
 
 #: front/src/views/content/Home.vue:13
 msgctxt "Content/Library/Paragraph"
@@ -3096,10 +3096,11 @@ msgid "If you authorize third-party applications to access your data, those appl
 msgstr "Se autorizas o acceso aos teus datos por aplicacións de terceiros, estas aplicacións aparecerán aquí."
 
 #: front/src/components/auth/LoginForm.vue:6
-#, fuzzy
 msgctxt "Content/Login/Error message.List item/Call to action"
 msgid "If you signed-up recently, you may need to wait before our moderation team review your account, or verify your e-mail address."
-msgstr "Se te rexistraches recentemente, poderías ter que agardar un pouco para que se revise a conta ou verifique o teu email."
+msgstr ""
+"Se te rexistraches recentemente, poderías ter que agardar un pouco para que "
+"se revise a conta ou verifique o teu email."
 
 #: front/src/views/channels/DetailBase.vue:59
 #: src/views/channels/DetailBase.vue:54
@@ -3635,10 +3636,9 @@ msgid "Local account"
 msgstr "Conta local"
 
 #: front/src/components/common/LoginModal.vue:57
-#, fuzzy
 msgctxt "*/*/Button.Label/Verb"
 msgid "Log in"
-msgstr "Conecta!"
+msgstr "Conectar"
 
 #: front/src/components/Home.vue:95 src/views/auth/Login.vue:39
 msgctxt "Head/Login/Title"
@@ -4052,10 +4052,9 @@ msgid "New channels"
 msgstr "Novas canles"
 
 #: front/src/components/auth/Settings.vue:279
-#, fuzzy
 msgctxt "*/*/*"
 msgid "New e-mail address"
-msgstr "Enderezo de email"
+msgstr "Novo enderezo de email"
 
 #: front/src/components/auth/Settings.vue:73
 #: front/src/views/auth/PasswordResetConfirm.vue:14
@@ -4065,7 +4064,6 @@ msgid "New password"
 msgstr "Novo contrasinal"
 
 #: front/src/components/channels/AlbumModal.vue:3
-#, fuzzy
 msgctxt "Popup/Channels/Title/Verb"
 msgid "New series"
 msgstr "Nova serie"
@@ -4454,10 +4452,9 @@ msgstr "Dona"
 #: front/src/components/audio/ChannelForm.vue:103
 #: front/src/components/audio/ChannelForm.vue:95
 #: front/src/components/audio/ChannelForm.vue:77
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Owner e-mail address"
-msgstr "Cambiar enderezo de email"
+msgstr "Enderezo de email da dona"
 
 #: front/src/components/audio/ChannelForm.vue:109
 #: front/src/components/audio/ChannelForm.vue:101
@@ -4501,10 +4498,9 @@ msgid "Password updated successfully"
 msgstr "Contrasinal actualizado correctamente"
 
 #: front/src/components/audio/Player.vue:703
-#, fuzzy
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Pause"
-msgstr "Pausada"
+msgstr "Pausar"
 
 #: front/src/App.vue:319
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
@@ -4602,7 +4598,6 @@ msgid "Play"
 msgstr "Reproducir"
 
 #: front/src/components/audio/Player.vue:702
-#, fuzzy
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Play"
 msgstr "Reproducir"
@@ -4655,10 +4650,9 @@ msgstr "Reproducir canción anterior"
 
 #: front/src/components/audio/PlayButton.vue:19
 #: src/components/radios/Button.vue:4 front/src/components/radios/Button.vue:1
-#, fuzzy
 msgctxt "*/Queue/Button.Label/Short, Verb"
 msgid "Play radio"
-msgstr "Reproducir canción"
+msgstr "Reproducir radio"
 
 #: front/src/components/audio/PlayButton.vue:101
 msgctxt "*/Queue/Dropdown/Button/Title"
