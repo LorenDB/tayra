@@ -75,7 +75,12 @@ def dict_to_xml_tree(root_tag, d, parent=None):
             root.append(dict_to_xml_tree(key, value, parent=root))
         elif isinstance(value, list):
             for obj in value:
-                root.append(dict_to_xml_tree(key, obj, parent=root))
+                if isinstance(obj, dict):
+                    el = dict_to_xml_tree(key, obj, parent=root)
+                else:
+                    el = ET.Element(key)
+                    el.text = str(obj)
+                root.append(el)
         else:
             if key == "value":
                 root.text = str(value)

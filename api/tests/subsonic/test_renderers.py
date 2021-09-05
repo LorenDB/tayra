@@ -70,9 +70,10 @@ def test_xml_renderer_dict_to_xml():
     payload = {
         "hello": "world",
         "item": [{"this": 1, "value": "text"}, {"some": "node"}],
+        "list": [1, 2],
     }
     expected = """<?xml version="1.0" encoding="UTF-8"?>
-<key hello="world"><item this="1">text</item><item some="node" /></key>"""
+<key hello="world"><item this="1">text</item><item some="node" /><list>1</list><list>2</list></key>"""
     result = renderers.dict_to_xml_tree("key", payload)
     exp = ET.fromstring(expected)
     assert ET.tostring(result) == ET.tostring(exp)
