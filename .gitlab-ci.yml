@@ -245,7 +245,7 @@ pages:
 
 docker_release:
   stage: deploy
-  image: egon0/docker-with-buildx-and-git
+  image: docker:20
   before_script:
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
     - cp -r front/dist api/frontend
