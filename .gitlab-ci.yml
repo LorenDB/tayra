@@ -246,6 +246,8 @@ pages:
 docker_release:
   stage: deploy
   image: docker:20
+  services:
+    - docker:20-dind
   before_script:
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
     - cp -r front/dist api/frontend
