@@ -245,7 +245,7 @@ pages:
 
 docker_release:
   stage: deploy
-  image: docker:20
+  image: egon0/docker-with-buildx-and-git:bash
   services:
     - docker:20-dind
   before_script:
@@ -268,7 +268,9 @@ docker_release:
 
 docker_all_in_one_release:
   stage: deploy
-  image: egon0/docker-with-buildx-and-git
+  image: egon0/docker-with-buildx-and-git:bash
+  services:
+    - docker:20-dind
   variables:
     ALL_IN_ONE_REF: main
     ALL_IN_ONE_ARTIFACT_URL: https://dev.funkwhale.audio/funkwhale/funkwhale-docker-all-in-one/-/archive/$ALL_IN_ONE_REF/funkwhale-docker-all-in-one-$ALL_IN_ONE_REF.zip
