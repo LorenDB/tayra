@@ -120,6 +120,10 @@ export default {
     {
       "code": "sv",
       "label": "Svenska"
+    },
+    {
+      "code": "el_GR",
+      "label": "Ελληνικά"
     }
   ]
 }
