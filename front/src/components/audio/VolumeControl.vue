@@ -29,9 +29,9 @@
       <input
         id="volume-slider"
         type="range"
-        step="0.02"
+        step="any"
         min="0"
-        max="1"
+	 v-bind:max="volumeSteps"
         v-model="sliderVolume" />
     </div>
   </button>
@@ -44,15 +44,16 @@ export default {
     return {
       expanded: false,
       timeout: null,
+      volumeSteps: 100,
     }
   },
   computed: {
     sliderVolume: {
       get () {
-        return this.$store.state.player.volume
+        return this.$store.state.player.volume * this.volumeSteps;
       },
       set (v) {
-        this.$store.commit("player/volume", v)
+        this.$store.commit("player/volume", v / this.volumeSteps)
       }
     },
     labels () {
