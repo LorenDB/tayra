@@ -2,25 +2,24 @@ FROM alpine:3.13 as builder
 
 RUN \
     echo 'installing dependencies' && \
-    apk add --no-cache               \
-    git             \
-    musl-dev           \
+    apk add --no-cache \
+    git \
+    musl-dev \
     gcc \
     postgresql-dev \
-    python3-dev        \
-    py3-psycopg2       \
-    libldap            \
-    libffi-dev         \
-    make         \
-    zlib-dev           \
-    jpeg-dev           \
+    python3-dev \
+    py3-psycopg2 \
+    libldap \
+    libffi-dev \
+    make \
+    zlib-dev \
+    jpeg-dev \
     openldap-dev \
     openssl-dev \
     cargo \
     libxml2-dev \
     libxslt-dev \
     && \
-    \
     ln -s /usr/bin/python3 /usr/bin/python
 
 # create virtual env for next stage
@@ -53,21 +52,21 @@ ENV PATH="/venv/bin:$PATH"
 
 RUN apk add --no-cache \
     libmagic \
-    bash             \
-    gettext            \
-    python3        \
+    bash \
+    gettext \
+    python3 \
     jpeg-dev \
-    ffmpeg             \
-    libpq              \
+    ffmpeg \
+    libpq \
     libxml2 \
     libxslt \
     && \
-    \
     ln -s /usr/bin/python3 /usr/bin/python
-
-
-ENTRYPOINT ["./compose/django/entrypoint.sh"]
-CMD ["./compose/django/server.sh"]
 
 COPY . /app
 WORKDIR /app
+
+RUN chmod 755 compose compose/django
+
+ENTRYPOINT ["./compose/django/entrypoint.sh"]
+CMD ["./compose/django/server.sh"]

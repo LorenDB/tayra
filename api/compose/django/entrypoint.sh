@@ -19,8 +19,7 @@ if [ -z "$CELERY_BROKER_URL" ]; then
 fi
 
 # we copy the frontend files, if any so we can serve them from the outside
-if [ -d "frontend" ]; then
-  mkdir -p /frontend
+if [ -d "frontend" ] && [ -d "/frontend" ]; then
   cp -r frontend/* /frontend/
   export FUNKWHALE_SPA_HTML_ROOT=/frontend/index.html
 fi

@@ -1,0 +1,1 @@
+Allow running multi-container setup on non-root user inside docker (!1375) (fixes #1334)
