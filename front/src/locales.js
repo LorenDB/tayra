@@ -122,7 +122,7 @@ export default {
       "label": "Svenska"
     },
     {
-      "code": "el_GR",
+      "code": "el",
       "label": "Ελληνικά"
     }
   ]
