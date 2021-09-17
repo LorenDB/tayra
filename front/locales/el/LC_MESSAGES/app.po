@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-07 18:30+0000\n"
-"PO-Revision-Date: 2021-09-13 16:55+0000\n"
-"Last-Translator: Georgios B <webmaster@hanac.gr>\n"
+"PO-Revision-Date: 2021-09-18 18:55+0000\n"
+"Last-Translator: Konstantinos G <getimiskon@hanac.gr>\n"
 "Language-Team: none\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -2490,7 +2490,7 @@ msgstr "Εισάγετε όνομα λίστας αναπαραγωγής"
 #: front/src/views/playlists/List.vue:124
 msgctxt "Content/Playlist/Placeholder/Call to action"
 msgid "Enter playlist name…"
-msgstr ""
+msgstr "Εισάγετε όνομα λίστας αναπαραγωγής…"
 
 #: front/src/views/auth/PasswordReset.vue:55
 msgctxt "Content/Signup/Input.Placeholder"
@@ -2511,12 +2511,12 @@ msgstr ""
 #: front/src/components/auth/SignupForm.vue:137
 msgctxt "Content/Signup/Form/Placeholder"
 msgid "Enter your username"
-msgstr ""
+msgstr "Εισάγετε το όνομα χρήστη σας"
 
 #: front/src/components/auth/LoginForm.vue:95
 msgctxt "Content/Login/Input.Placeholder"
 msgid "Enter your username or e-mail address"
-msgstr ""
+msgstr "Εισάγετε το όνομα χρήστη ή τη διεύθυνση e-mail σας"
 
 #: front/src/components/library/TrackDetail.vue:10
 #: front/src/components/library/TrackDetail.vue:5
@@ -2527,13 +2527,13 @@ msgstr ""
 #: front/src/components/library/AlbumDetail.vue:3
 msgctxt "Content/Channels/*"
 msgid "Episodes"
-msgstr ""
+msgstr "Επεισόδια"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:19
 #: front/src/views/content/libraries/Form.vue:4
 msgctxt "Content/*/Error message.Title"
 msgid "Error"
-msgstr ""
+msgstr "Σφάλμα"
 
 #: front/src/components/federation/FetchButton.vue:34
 #: front/src/components/federation/FetchButton.vue:24
@@ -2546,7 +2546,7 @@ msgstr ""
 #: front/src/views/admin/Settings.vue:91
 msgctxt "Content/Admin/Menu"
 msgid "Error reporting"
-msgstr ""
+msgstr "Αναφορά σφάλματος"
 
 #: front/src/components/federation/FetchButton.vue:26
 #: front/src/components/federation/FetchButton.vue:16
@@ -2554,7 +2554,7 @@ msgstr ""
 #: front/src/components/library/ImportStatusModal.vue:5
 msgctxt "Popup/Import/Table.Label/Noun"
 msgid "Error type"
-msgstr ""
+msgstr "Τύπος σφάλματος"
 
 #: front/src/components/common/ActionTable.vue:62
 msgctxt "Content/*/Error message/Header"
@@ -2579,27 +2579,27 @@ msgstr ""
 #: front/src/components/channels/AlbumForm.vue:3
 msgctxt "Content/*/Error message.Title"
 msgid "Error while creating"
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία"
 
 #: front/src/views/admin/moderation/DomainsList.vue:6
 msgctxt "Content/Moderation/Message.Title"
 msgid "Error while creating domain"
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία διεύθυνσης"
 
 #: front/src/components/moderation/FilterModal.vue:9
 msgctxt "Popup/Moderation/Error message"
 msgid "Error while creating filter"
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία φίλτρου"
 
 #: front/src/components/manage/users/InvitationForm.vue:4
 msgctxt "Content/Admin/Error message.Title"
 msgid "Error while creating invitation"
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία πρόσκλησης"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:7
 msgctxt "Content/Moderation/Error message.Title"
 msgid "Error while creating rule"
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία κανόνα"
 
 #: front/src/components/auth/Authorize.vue:7
 msgctxt "Popup/Moderation/Error message"
@@ -2626,43 +2626,43 @@ msgstr ""
 #: front/src/components/channels/UploadForm.vue:3
 msgctxt "Content/*/Error message.Title"
 msgid "Error while publishing"
-msgstr ""
+msgstr "Σφάλμα κατά τη δημοσίευση"
 
 #: front/src/components/audio/ChannelForm.vue:3
 msgctxt "Content/*/Error message.Title"
 msgid "Error while saving channel"
-msgstr ""
+msgstr "Σφάλμα κατά την αποθήκευση του καναλιού"
 
 #: front/src/components/auth/Plugin.vue:13
 msgctxt "Content/*/Error message.Title"
 msgid "Error while saving plugin"
-msgstr ""
+msgstr "Σφάλμα κατά την αποθήκευση πρόσθετου"
 
 #: front/src/components/admin/SettingsGroup.vue:5
 #: front/src/components/federation/FetchButton.vue:62
 msgctxt "Content/*/Error message.Title"
 msgid "Error while saving settings"
-msgstr ""
+msgstr "Σφάλμα κατά την αποθήκευση ρυθμίσεων"
 
 #: front/src/components/library/EditForm.vue:46
 msgctxt "Content/Library/Error message.Title"
 msgid "Error while submitting edit"
-msgstr ""
+msgstr "Σφάλμα κατά την υποβολή αλλαγών"
 
 #: front/src/components/manage/moderation/NoteForm.vue:3
 msgctxt "Content/Moderation/Error message.Title"
 msgid "Error while submitting note"
-msgstr ""
+msgstr "Σφάλμα κατά την υποβολή σημείωσης"
 
 #: front/src/components/moderation/ReportModal.vue:11
 msgctxt "Popup/Moderation/Error message"
 msgid "Error while submitting report"
-msgstr ""
+msgstr "Σφάλμα κατά την υποβολή αναφοράς"
 
 #: front/src/components/common/RenderedDescription.vue:27
 msgctxt "Content/Channels/Error message.Title"
 msgid "Error while updating description"
-msgstr ""
+msgstr "Σφάλμα κατά την ενημέρωση της περιγραφής"
 
 #: front/src/components/channels/UploadForm.vue:76
 #: front/src/components/channels/UploadForm.vue:49
@@ -2687,19 +2687,19 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:18
 msgctxt "Content/Settings/Dropdown/Short"
 msgid "Everyone"
-msgstr ""
+msgstr "Όλοι"
 
 #: front/src/components/mixins/Translations.vue:11
 #: front/src/components/mixins/Translations.vue:12
 msgctxt "Content/Settings/Dropdown"
 msgid "Everyone on this instance"
-msgstr ""
+msgstr "Όλοι σε αυτό το instance"
 
 #: front/src/components/mixins/Translations.vue:12
 #: front/src/components/mixins/Translations.vue:13
 msgctxt "Content/Settings/Dropdown"
 msgid "Everyone, across all instances"
-msgstr ""
+msgstr "Όλοι, μεταξύ όλων των instances"
 
 #: front/src/components/library/radios/Builder.vue:60
 msgctxt "Content/Radio/Table.Label/Verb"
@@ -2737,7 +2737,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:75
 msgctxt "Content/Admin/Table.Label/Noun"
 msgid "Expiration date"
-msgstr ""
+msgstr "Ημερομηνία λήξης"
 
 #: front/src/components/manage/users/InvitationsTable.vue:44
 #: front/src/components/manage/users/InvitationsTable.vue:6
@@ -2748,7 +2748,7 @@ msgstr ""
 #: front/src/components/manage/users/InvitationsTable.vue:21
 msgctxt "Content/Admin/Dropdown/Adjective"
 msgid "Expired/used"
-msgstr ""
+msgstr "Ληγμένο/χρησιμοποιημένο"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:110
 msgctxt "Content/Moderation/Help text"
@@ -2758,7 +2758,7 @@ msgstr ""
 #: front/src/components/Sidebar.vue:93
 msgctxt "*/*/*/Verb"
 msgid "Explore"
-msgstr ""
+msgstr "Ανακάλυψε"
 
 #: front/src/components/manage/library/UploadsTable.vue:25
 #: front/src/views/content/libraries/FilesTable.vue:30
@@ -2769,7 +2769,7 @@ msgstr ""
 #: front/src/views/content/remote/Card.vue:66
 msgctxt "Content/Library/Card.List item/Noun"
 msgid "Failed tracks:"
-msgstr ""
+msgstr "Αποτυχημένα κομμάτια:"
 
 #: front/src/views/admin/ChannelDetail.vue:183 src/views/admin/ChannelDetail.vue:178
 #: front/src/views/admin/library/AlbumDetail.vue:168
@@ -2780,13 +2780,13 @@ msgstr ""
 #: front/src/views/admin/library/TrackDetail.vue:216
 msgctxt "*/*/*"
 msgid "Favorited tracks"
-msgstr ""
+msgstr "Αγαπημένα κομμάτια"
 
 #: front/src/components/Sidebar.vue:117 src/components/mixins/Translations.vue:103
 #: front/src/components/mixins/Translations.vue:104
 msgctxt "Sidebar/Favorites/List item.Link/Noun"
 msgid "Favorites"
-msgstr ""
+msgstr "Αγαπημένα"
 
 #: front/src/components/About.vue:109 src/components/audio/SearchBar.vue:87
 #: front/src/components/audio/SearchBar.vue:169 src/views/admin/Settings.vue:86
@@ -2797,7 +2797,7 @@ msgstr ""
 #: front/src/components/RemoteSearchForm.vue:7
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "Fediverse"
-msgstr ""
+msgstr "Fediverse"
 
 #: front/src/components/audio/ChannelForm.vue:35
 #: front/src/components/audio/ChannelForm.vue:27
@@ -2814,7 +2814,7 @@ msgstr ""
 #: front/src/components/library/EditCard.vue:43
 msgctxt "Content/Library/Card.Table.Header/Short"
 msgid "Field"
-msgstr ""
+msgstr "Πεδίο"
 
 #: front/src/components/admin/SignupFormBuilder.vue:36
 msgctxt "*/*/Form-builder,Help"
@@ -2824,22 +2824,22 @@ msgstr ""
 #: front/src/components/admin/SignupFormBuilder.vue:39
 msgctxt "*/*/Form-builder,Help"
 msgid "Field type"
-msgstr ""
+msgstr "Τύπος πεδίου"
 
 #: front/src/components/library/FileUpload.vue:68
 msgctxt "Content/Library/Table.Label"
 msgid "Filename"
-msgstr ""
+msgstr "Όνομα αρχείου"
 
 #: front/src/components/channels/UploadModal.vue:4
 msgctxt "Popup/Channels/Title"
 msgid "Files to upload"
-msgstr ""
+msgstr "Αρχεία προς ανέβασμα"
 
 #: front/src/components/playlists/PlaylistModal.vue:34
 msgctxt "Popup/Playlist/Label"
 msgid "Filter"
-msgstr ""
+msgstr "Φίλτρο"
 
 #: front/src/views/channels/SubscriptionsList.vue:82
 msgctxt "Content/Subscriptions/Form.Placeholder"
@@ -2849,12 +2849,12 @@ msgstr ""
 #: front/src/components/library/radios/Builder.vue:59
 msgctxt "Content/Radio/Table.Label/Noun"
 msgid "Filter name"
-msgstr ""
+msgstr "Όνομα φίλτρου"
 
 #: front/src/components/Home.vue:117
 msgctxt "Content/Home/Link"
 msgid "Find another pod"
-msgstr ""
+msgstr "Βρείτε άλλο pod"
 
 #: front/src/components/channels/UploadModal.vue:37
 msgctxt "Content/*/Button.Label/Verb"
@@ -2909,17 +2909,20 @@ msgstr ""
 #: front/src/views/content/remote/Card.vue:90 src/views/content/remote/Card.vue:2
 msgctxt "Content/Library/Card.Button.Label/Verb"
 msgid "Follow"
-msgstr ""
+msgstr "Ακολούθησε"
 
 #: front/src/views/content/Home.vue:35
 msgctxt "Content/Library/Paragraph"
 msgid "Follow libraries from other users to get access to new music. Public libraries can be followed immediately, while following a private library requires approval from its owner."
 msgstr ""
+"Ακολούθησε βιβλιοθήκες από άλλους χρήστες για να αποκτήσεις πρόσβαση σε νέα "
+"μουσική. Οι δημόσιες βιβλιοθήκες μπορούν να ακολουθηθούν άμεσα, ενώ σε "
+"ιδιωτικές βιβλιοθήκες απαιτείται έγκριση από τον ιδιοκτήτη της."
 
 #: front/src/views/content/Home.vue:33
 msgctxt "Content/Library/Title/Verb"
 msgid "Follow remote libraries"
-msgstr ""
+msgstr "Ακολούθησε απομακρυσμένες βιβλιοθήκες"
 
 #: front/src/views/content/remote/Card.vue:94 src/views/content/remote/Card.vue:6
 #: front/src/views/content/remote/Card.vue:2
@@ -2935,59 +2938,65 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:92
 msgctxt "Content/Federation/*/Noun"
 msgid "Followers"
-msgstr ""
+msgstr "Ακόλουθοι"
 
 #: front/src/components/mixins/Translations.vue:111
 #: front/src/components/mixins/Translations.vue:112
 msgctxt "Content/OAuth Scopes/Label"
 msgid "Follows"
-msgstr ""
+msgstr "Ακολουθούν"
 
 #: front/src/components/moderation/ReportModal.vue:50
 msgctxt "*/*/Field,Help"
 msgid "Forward an anonymized copy of your report to the server hosting this element."
 msgstr ""
+"Προωθήστε ένα ανωνυμοποιημένο αντίγραφο της αναφοράς σας στον διακομιστή που "
+"φιλοξενεί αυτό το στοιχείο."
 
 #: front/src/components/moderation/ReportModal.vue:47
 msgctxt "*/*/Field.Label/Verb"
 msgid "Forward to %{ domain}"
-msgstr ""
+msgstr "Προώθηση στο %{ domain}"
 
 #: front/src/components/auth/Authorize.vue:28
 msgctxt "Content/Auth/Label/Noun"
 msgid "Full access"
-msgstr ""
+msgstr "Πλήρης πρόσβαση"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:7
 msgctxt "Content/Settings/Paragraph'"
 msgid "Funkwhale is compatible with other music players that support the Subsonic API."
 msgstr ""
+"Το Funkwhale είναι συμβατό με άλλα προγράμματα αναπαραγωγής μουσικής που "
+"υποστηρίζουν το Subsonic API."
 
 #: front/src/components/Home.vue:87
 msgctxt "Content/Home/Paragraph"
 msgid "Funkwhale is free and developed by a friendly community of volunteers."
 msgstr ""
+"Το Funkwhale είναι δωρεάν και αναπτύσσεται από μια φιλική κοινότητα από "
+"εθελοντές."
 
 #: front/src/components/About.vue:77
 msgctxt "*/*/*"
 msgid "Funkwhale version"
-msgstr ""
+msgstr "Έκδοση Funkwhale"
 
 #: front/src/components/ShortcutsModal.vue:55
 msgctxt "Popup/Keyboard shortcuts/Title"
 msgid "General shortcuts"
-msgstr ""
+msgstr "Γενικές συντομεύσεις"
 
 #: front/src/components/manage/users/InvitationForm.vue:16
 msgctxt "Content/Admin/Button.Label/Verb"
 msgid "Get a new invitation"
-msgstr ""
+msgstr "Αποκτήστε μια νέα πρόσκληση"
 
 #: front/src/views/content/Home.vue:17 src/views/content/Home.vue:27
 #: front/src/views/content/Home.vue:37
 msgctxt "Content/Library/Button.Label/Verb"
 msgid "Get started"
-msgstr ""
+msgstr "Ξεκινήστε"
 
 #: front/src/components/Footer.vue:57 src/components/library/ImportStatusModal.vue:45
 #: front/src/components/library/ImportStatusModal.vue:26
@@ -2999,17 +3008,17 @@ msgstr ""
 #: front/src/components/common/ActionTable.vue:40
 msgctxt "Content/*/Button.Label/Short, Verb"
 msgid "Go"
-msgstr ""
+msgstr "Ξεκινήστε"
 
 #: front/src/components/PageNotFound.vue:14
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Go to home page"
-msgstr ""
+msgstr "Πηγαίνετε στην αρχική σελίδα"
 
 #: front/src/components/Footer.vue:19
 msgctxt "Footer/*/List item.Link"
 msgid "Go to Library"
-msgstr ""
+msgstr "Πηγαίνετε στη Βιβλιοθήκη"
 
 #: front/src/views/Notifications.vue:27 src/views/Notifications.vue:61
 msgctxt "Content/Notifications/Button.Label"
@@ -3029,7 +3038,7 @@ msgstr ""
 #: front/src/components/About.vue:154
 msgctxt "*/*/*/Verb"
 msgid "Hide"
-msgstr ""
+msgstr "Απόκρυψη"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:114
 msgctxt "Content/Moderation/Help text"
@@ -3039,27 +3048,27 @@ msgstr ""
 #: front/src/components/moderation/FilterModal.vue:36
 msgctxt "Popup/*/Button.Label"
 msgid "Hide content"
-msgstr ""
+msgstr "Απόκρυψη περιεχομένου"
 
 #: front/src/components/audio/PlayButton.vue:26
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "Hide content from this artist"
-msgstr ""
+msgstr "Απόκρυψη περιεχομένου από αυτόν τον καλλιτέχνη"
 
 #: front/src/components/Queue.vue:278 src/components/audio/Player.vue:719
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Hide content from this artist…"
-msgstr ""
+msgstr "Απόκρυψη περιεχομένου από αυτόν τον καλλιτέχνη…"
 
 #: front/src/components/Home.vue:217
 msgctxt "Head/Home/Title"
 msgid "Home"
-msgstr ""
+msgstr "Αρχική"
 
 #: front/src/components/Footer.vue:22
 msgctxt "Footer/*/List item.Link"
 msgid "Home Page"
-msgstr ""
+msgstr "Αρχική Σελίδα"
 
 #: front/src/components/audio/ChannelForm.vue:218
 msgctxt "Content/Channels/Help"
@@ -3070,38 +3079,50 @@ msgstr ""
 msgctxt "Content/Settings/Paragraph"
 msgid "However, accessing Funkwhale from those clients requires a separate password you can set below."
 msgstr ""
+"Ωστόσο, η πρόσβαση στο Funkwhale από αυτούς τους clients απαιτεί έναν "
+"ξεχωριστό κωδικό τον οποίο μπορείτε να ορίσετε παρακάτω."
 
 #: front/src/components/RemoteSearchForm.vue:78
 msgctxt "Head/Fetch/Field.Placeholder"
 msgid "https://website.example.com/rss.xml"
-msgstr ""
+msgstr "https://website.example.com/rss.xml"
 
 #: front/src/views/auth/PasswordResetConfirm.vue:24
 #: front/src/views/auth/PasswordResetConfirm.vue:1
 msgctxt "Content/Signup/Paragraph"
 msgid "If the e-mail address provided in the previous step is valid and linked to a user account, you should receive an e-mail with reset instructions in the next couple of minutes."
 msgstr ""
+"Εάν η διεύθυνση e-mail που δόθηκε στο προηγούμενο βήμα είναι έγκυρη και "
+"συνδεδεμένη με ένα λογαριασμό χρήστη, θα πρέπει να παραλάβετε ένα e-mail με "
+"οδηγίες επαναφοράς στα επόμενα λεπτά."
 
 #: front/src/views/content/Home.vue:13
 msgctxt "Content/Library/Paragraph"
 msgid "If you are a musician or a podcaster, channels are designed for you!"
-msgstr ""
+msgstr "Εάν είσαι μουσικός ή podcaster, τα κανάλια σχεδιάστηκαν για 'σένα!"
 
 #: front/src/components/auth/Settings.vue:181
 msgctxt "Content/Applications/Paragraph"
 msgid "If you authorize third-party applications to access your data, those applications will be listed here."
 msgstr ""
+"Εάν εξουσιοδοτήσετε τρίτες εφαρμογές να έχουν πρόσβαση στα δεδομένα σας, "
+"αυτές οι εφαρμογές θα είναι καταγεγραμμένες εδώ."
 
 #: front/src/components/auth/LoginForm.vue:6
 msgctxt "Content/Login/Error message.List item/Call to action"
 msgid "If you signed-up recently, you may need to wait before our moderation team review your account, or verify your e-mail address."
 msgstr ""
+"Εάν γραφτήκατε πρόσφατα, μπορεί να χρειαστεί να περιμένετε μέχρι οι "
+"διαχειριστές να ελέγξουν το λογαριασμό σας, ή να επαληθεύσουν τη διεύθυνση e-"
+"mail σας."
 
 #: front/src/views/channels/DetailBase.vue:59 src/views/channels/DetailBase.vue:54
 #: front/src/views/channels/DetailBase.vue:5
 msgctxt "Content/Channels/Label"
 msgid "If you're using Mastodon or other fediverse applications, you can subscribe to this account:"
 msgstr ""
+"Εάν χρησιμοποιείτε το Mastodon ή άλλες εφαρμογές του fediverse, μπορείτε να "
+"γίνετε συνδρομητές σε αυτόν το λογαριασμό:"
 
 #: front/src/components/channels/UploadForm.vue:43
 #: front/src/components/channels/UploadForm.vue:16
@@ -3114,7 +3135,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:51
 msgctxt "Content/Moderation/Dropdown"
 msgid "Illegal content"
-msgstr ""
+msgstr "Παράνομο περιεχόμενο"
 
 #: front/src/components/library/FsBrowser.vue:5
 msgctxt "Content/Library/Button/Verb"
@@ -7810,17 +7831,19 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:39
 msgctxt "Content/Settings/Error message.Title"
 msgid "Your avatar cannot be saved"
-msgstr ""
+msgstr "Το avatar σας δε μπορεί να αποθηκευτεί"
 
 #: front/src/components/auth/Settings.vue:269
 msgctxt "Content/Settings/Paragraph'"
 msgid "Your current e-mail address is %{ email }."
-msgstr ""
+msgstr "Η τρέχουσα διεύθυνση e-mail σας είναι %{ email }."
 
 #: front/src/components/auth/Settings.vue:545
 msgctxt "*/Auth/Message"
 msgid "Your deletion request was submitted, your account and content will be deleted shortly"
 msgstr ""
+"Το αίτημα διαγραφής σας υποβλήθηκε, ο λογαριαμός σας και το περιεχόμενό του "
+"θα διαγραφούν σύντομα."
 
 #: front/src/components/auth/Settings.vue:573
 msgctxt "*/Auth/Message"
