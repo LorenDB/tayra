@@ -7,7 +7,7 @@
       <div
         :class="['ui', 'top attached', 'small', 'inverted', {'indicating': isLoadingAudio}, 'progress']">
         <div class="buffer bar" :data-percent="bufferProgress" :style="{ 'width': bufferProgress + '%' }"></div>
-        <div class="position bar" :data-percent="progress" :style="{ 'width': progress + '%' }"></div>
+        <div class="position bar" :data-percent="progress" :style="{ 'transform': 'scale(' + progress + ', 1)' }"></div>
       </div>
       <div class="controls-row">
 

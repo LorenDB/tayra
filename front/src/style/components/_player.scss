@@ -75,7 +75,9 @@
   .ui.progress:not([data-percent]):not(.indeterminate)
     .bar.position:not(.buffer) {
     background: var(--vibrant-color);
-    min-width: 0;
+    width: 100%;
+    transition: transform 1.1s linear 0s;
+    transform-origin: left center 0px;
   }
 
   .track-controls {

@@ -88,7 +88,7 @@ export default {
       return time.parse(Math.round(state.currentTime))
     },
     progress: state => {
-      return Math.round((state.currentTime / state.duration * 100) * 10) / 10
+      return state.currentTime / state.duration
     }
   },
   actions: {
