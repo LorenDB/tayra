@@ -66,7 +66,7 @@ RUN apk add --no-cache \
 COPY . /app
 WORKDIR /app
 
-RUN chmod 755 compose compose/django
+RUN find . -type d -exec chmod 755 {} \+
 
 ENTRYPOINT ["./compose/django/entrypoint.sh"]
 CMD ["./compose/django/server.sh"]
