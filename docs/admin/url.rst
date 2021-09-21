@@ -1,6 +1,11 @@
 Changing Your Instance URL
 ==========================
 
+.. DANGER::
+
+   We highly recommend not to change your instance URL. Members of the community tried to do this and documented their steps here. 
+   This guide might be incomplete or fail for your instance. There is no support for this procedure and likely no way back. 
+
 At some point, you may wish to change your instance URL. In order to
 do this, you will need to change the following:
 
