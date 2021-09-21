@@ -26,7 +26,7 @@
               <a role="button" :aria-label="labels.download" v-if="upload" :href="downloadUrl" target="_blank" class="ui basic circular icon button" :title="labels.download">
                 <i class="download icon"></i>
               </a>
-              <modal v-if="publicLibraries.length > 0" :show.sync="showEmbedModal">
+              <modal v-if="isEmbedable" :show.sync="showEmbedModal">
                 <h4 class="header">
                   <translate translate-context="Popup/Track/Title">Embed this track on your website</translate>
                 </h4>
@@ -54,7 +54,7 @@
                   </a>
                   <div
                     role="button"
-                    v-if="publicLibraries.length > 0"
+                    v-if="isEmbedable"
                     @click="showEmbedModal = !showEmbedModal"
                     class="basic item">
                     <i class="code icon"></i>
@@ -209,6 +209,10 @@ export default {
         return l.privacy_level === 'everyone'
       })
     },
+    isEmbedable () {
+      let self = this
+      return self.artist && self.artist.channel && self.artist.channel.actor || this.publicLibraries.length > 0
+		},
     upload() {
       if (this.track.uploads) {
         return this.track.uploads[0]
