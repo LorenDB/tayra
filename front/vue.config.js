@@ -2,10 +2,7 @@ const baseUrl = process.env.BASE_URL || '/front/'
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const webpack = require('webpack');
-//const PurgecssPlugin = require('purgecss-webpack-plugin')
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
-//const glob = require('glob-all')
-//const path = require('path')
 let plugins = [
   // do not include moment.js locales since it's quite heavy
   new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
