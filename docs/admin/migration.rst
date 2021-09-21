@@ -95,7 +95,7 @@ Restore the database dump:
 
 .. code-block:: shell
 
-    docker exec -i funkwhale_postgres_1 pg_restore -c -U postgres -d postgres < "db.dump"
+    docker exec -i funkwhale_postgres_1 psql -U postgres -d postgres < db.dump
 
 Once the database has been restored, run the migrations following the docker installation guide. 
 
