@@ -58,8 +58,8 @@ templates_path = ["_templates"]
 # source_suffix = ['.rst', '.md']
 source_suffix = ".rst"
 
-# The master toctree document.
-master_doc = "index"
+# The root toctree document.
+root_doc = "index"
 
 # General information about the project.
 year = datetime.datetime.now().year
@@ -113,7 +113,7 @@ html_context = {
     "gitlab_host": "dev.funkwhale.audio",
     "gitlab_repo": "funkwhale",
     "gitlab_user": "funkwhale",
-    "gitlab_version": "master",
+    "gitlab_version": "stable",
     "conf_py_path": "/docs/",
     "gitlab_url": "https://dev.funkwhale.audio/funkwhale/funkwhale",
 }
@@ -152,7 +152,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "funkwhale.tex", "funkwhale Documentation", "Eliot Berriot", "manual")
+    (root_doc, "funkwhale.tex", "funkwhale Documentation", "The Funkwhale Collective", "manual")
 ]
 
 
@@ -160,7 +160,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "funkwhale", "funkwhale Documentation", [author], 1)]
+man_pages = [(root_doc, "funkwhale", "funkwhale Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output -------------------------------------------
@@ -170,7 +170,7 @@ man_pages = [(master_doc, "funkwhale", "funkwhale Documentation", [author], 1)]
 #  dir menu entry, description, category)
 texinfo_documents = [
     (
-        master_doc,
+        root_doc,
         "funkwhale",
         "funkwhale Documentation",
         author,

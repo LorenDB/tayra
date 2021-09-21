@@ -100,7 +100,7 @@ Visit https://dev.funkwhale.audio/funkwhale/funkwhale and clone the repository u
 A note about branches
 ^^^^^^^^^^^^^^^^^^^^^
 
-Next release development occurs on the "develop" branch, and releases are made on the "master" branch. Therefore, when submitting Merge Requests, ensure you are merging on the develop branch.
+Next release development occurs on the "develop" branch, and releases are made on the "stable" branch. Therefore, when submitting Merge Requests, ensure you are merging on the develop branch.
 
 
 Working with docker
@@ -750,7 +750,7 @@ To make a new 3.4 release::
     export PREVIOUS_RELEASE=3.3  # replace with the previous release number
 
     # ensure you have an up-to-date repo
-    git checkout develop  # use master if you're doing a hotfix release
+    git checkout develop  # use stable if you're doing a hotfix release
     git pull
 
     # compile changelog
@@ -775,11 +775,11 @@ To make a new 3.4 release::
     # publish
     git push --tags && git push
 
-    # if you're doing a hotfix release from master
-    git checkout develop && git merge master && git push
+    # if you're doing a hotfix release from stable
+    git checkout develop && git merge stable && git push
 
     # if you're doing a non-hotfix release, and a real release (not a real release) from develop
-    git checkout master && git merge develop && git push
+    git checkout stable && git merge develop && git push
 
 Then, visit https://dev.funkwhale.audio/funkwhale/funkwhale/-/tags, copy-paste the changelog on the corresponding
 tag, and announce the good news ;)

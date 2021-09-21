@@ -140,10 +140,10 @@ Then we will download the frontend files:
         cd /srv
 
         rm -r funkwhale
-        git clone -b master https://dev.funkwhale.audio/funkwhale/funkwhale funkwhale
+        git clone -b stable https://dev.funkwhale.audio/funkwhale/funkwhale funkwhale
         cd funkwhale
 
-    The above clone command uses the master branch instead of the default develop branch, as master is stable and more suited for production setups.
+    The above clone command uses the stable branch instead of the default develop branch, as stable is stable and more suited for production setups.
 
     You'll also need to re-create the folders we make earlier::
 
@@ -210,7 +210,7 @@ Download the sample environment file:
 
 .. parsed-literal::
 
-    curl -L -o config/.env "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/master/deploy/env.prod.sample"
+    curl -L -o config/.env "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/stable/deploy/env.prod.sample"
 
 .. note::
 

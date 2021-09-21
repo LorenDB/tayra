@@ -21,7 +21,7 @@ Installation
 
 We provide a prebuilt binary for Linux::
 
-    curl -L "https://dev.funkwhale.audio/funkwhale/cli/-/jobs/artifacts/master/raw/funkwhale?job=build-linux" -o /usr/local/bin/funkwhale
+    curl -L "https://dev.funkwhale.audio/funkwhale/cli/-/jobs/artifacts/stable/raw/funkwhale?job=build-linux" -o /usr/local/bin/funkwhale
     chmod +x /usr/local/bin/funkwhale
 
 You can also install from source with::

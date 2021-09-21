@@ -1,4 +1,4 @@
-.. funkwhale documentation master file, created by
+.. funkwhale documentation root file, created by
    sphinx-quickstart on Sun Jun 25 18:49:23 2017.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
