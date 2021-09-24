@@ -159,7 +159,13 @@ describe('store/auth', () => {
           { type: 'permission', payload: {key: 'admin', status: true} }
         ],
         expectedActions: [
+          { type: 'ui/initSettings', payload: { root: true } },
+          { type: 'updateProfile', payload: profile },
+          { type: 'ui/fetchUnreadNotifications', payload: null },
           { type: 'favorites/fetch', payload: null, options: {root: true} },
+          { type: 'channels/fetchSubscriptions', payload: null, options: {root: true} },
+          { type: 'libraries/fetchFollows', payload: null, options: {root: true} },
+          { type: 'moderation/fetchContentFilters', payload: null, options: {root: true} },
           { type: 'playlists/fetchOwn', payload: null, options: {root: true} }
         ]
       })

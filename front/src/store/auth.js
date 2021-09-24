@@ -183,10 +183,7 @@ export default {
         axios.get('users/me/').then((response) => {
           logger.default.info('Successfully fetched user profile')
           dispatch('ui/initSettings', response.data.settings, { root: true })
-          dispatch('updateProfile', response.data).then(() => {
-            resolve(response.data)
-          })
-
+          dispatch('updateProfile', response.data)
           dispatch('ui/fetchUnreadNotifications', null, { root: true })
           if (response.data.permissions.library) {
             dispatch('ui/fetchPendingReviewEdits', null, { root: true })
@@ -200,6 +197,7 @@ export default {
           dispatch('libraries/fetchFollows', null, { root: true })
           dispatch('moderation/fetchContentFilters', null, { root: true })
           dispatch('playlists/fetchOwn', null, { root: true })
+          resolve(response.data)
         }, (response) => {
           logger.default.info('Error while fetching user profile')
           reject(new Error('Error while fetching user profile'))

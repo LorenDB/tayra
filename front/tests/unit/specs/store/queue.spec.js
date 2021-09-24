@@ -274,7 +274,7 @@ describe('store/queue', () => {
     it('shuffle', () => {
       let _shuffle = sandbox.stub(_, 'shuffle')
       let tracks = ['a', 'b', 'c', 'd', 'e']
-      let shuffledTracks = ['e', 'd', 'c']
+      let shuffledTracks = ['a', 'b', 'e', 'd', 'c']
       _shuffle.returns(shuffledTracks)
       testAction({
         action: store.actions.shuffle,
@@ -283,7 +283,8 @@ describe('store/queue', () => {
           { type: 'tracks', payload: [] }
         ],
         expectedActions: [
-          { type: 'appendMany', payload: {tracks: ['a', 'b'].concat(shuffledTracks)} }
+          { type: 'appendMany', payload: {tracks: shuffledTracks} },
+          { type: 'currentIndex', payload: {tracks: shuffledTracks} }
         ]
       })
     })

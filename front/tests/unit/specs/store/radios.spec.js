@@ -51,7 +51,7 @@ describe('store/radios', () => {
           { type: 'running', payload: true }
         ],
         expectedActions: [
-          { type: 'populateQueue' }
+          { type: 'populateQueue', payload: true }
         ]
       })
     })
