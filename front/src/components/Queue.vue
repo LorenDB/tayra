@@ -207,20 +207,18 @@
   </section>
 </template>
 <script>
-import { mapState, mapGetters, mapActions } from "vuex"
+import { mapState, mapGetters, mapActions } from 'vuex'
 import $ from 'jquery'
-import moment from "moment"
+import moment from 'moment'
 import lodash from '@/lodash'
-import time from "@/utils/time"
+import time from '@/utils/time'
 import createFocusTrap from 'focus-trap'
-import store from "@/store"
 
 export default {
   components: {
-    TrackFavoriteIcon:  () => import(/* webpackChunkName: "auth-audio" */ "@/components/favorites/TrackFavoriteIcon"),
-    TrackPlaylistIcon:  () => import(/* webpackChunkName: "auth-audio" */ "@/components/playlists/TrackPlaylistIcon"),
-    VolumeControl:  () => import(/* webpackChunkName: "audio" */ "@/components/audio/VolumeControl"),
-    draggable:  () => import(/* webpackChunkName: "draggable" */ "vuedraggable"),
+    TrackFavoriteIcon: () => import(/* webpackChunkName: "auth-audio" */ '@/components/favorites/TrackFavoriteIcon'),
+    TrackPlaylistIcon: () => import(/* webpackChunkName: "auth-audio" */ '@/components/playlists/TrackPlaylistIcon'),
+    draggable: () => import(/* webpackChunkName: "draggable" */ 'vuedraggable')
   },
   data () {
     return {
@@ -232,14 +230,13 @@ export default {
     }
   },
   mounted () {
-    let self = this
-    this.focusTrap = createFocusTrap(this.$el, {allowOutsideClick: () => { return true }})
+    this.focusTrap = createFocusTrap(this.$el, { allowOutsideClick: () => { return true } })
     this.focusTrap.activate()
     this.$nextTick(() => {
       setTimeout(() => {
         this.scrollToCurrent()
         // delay is to let transition work
-      }, 400);
+      }, 400)
     })
   },
   computed: {
@@ -256,18 +253,18 @@ export default {
       queue: state => state.queue
     }),
     ...mapGetters({
-      currentTrack: "queue/currentTrack",
-      hasNext: "queue/hasNext",
-      emptyQueue: "queue/isEmpty",
-      durationFormatted: "player/durationFormatted",
-      currentTimeFormatted: "player/currentTimeFormatted",
-      progress: "player/progress"
+      currentTrack: 'queue/currentTrack',
+      hasNext: 'queue/hasNext',
+      emptyQueue: 'queue/isEmpty',
+      durationFormatted: 'player/durationFormatted',
+      currentTimeFormatted: 'player/currentTimeFormatted',
+      progress: 'player/progress'
     }),
     tracks: {
-      get() {
+      get () {
         return this.$store.state.queue.tracks
       },
-      set(value) {
+      set (value) {
         this.tracksChangeBuffer = value
       }
     },
@@ -276,11 +273,11 @@ export default {
         queue: this.$pgettext('*/*/*', 'Queue'),
         duration: this.$pgettext('*/*/*', 'Duration'),
         addArtistContentFilter: this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…'),
-        restart: this.$pgettext('*/*/*', 'Restart track'),
+        restart: this.$pgettext('*/*/*', 'Restart track')
       }
     },
     timeLeft () {
-      let seconds = lodash.sum(
+      const seconds = lodash.sum(
         this.queue.tracks.slice(this.queue.currentIndex).map((t) => {
           return (t.uploads || []).map((u) => {
             return u.duration || 0
@@ -294,7 +291,7 @@ export default {
         return this.volume
       },
       set (v) {
-        this.$store.commit("player/volume", v)
+        this.$store.commit('player/volume', v)
       }
     },
     playerFocused () {
@@ -303,58 +300,57 @@ export default {
   },
   methods: {
     ...mapActions({
-      cleanTrack: "queue/cleanTrack",
-      mute: "player/mute",
-      unmute: "player/unmute",
-      clean: "queue/clean",
-      toggleMute: "player/toggleMute",
-      resumePlayback: "player/resumePlayback",
-      pausePlayback: "player/pausePlayback",
+      cleanTrack: 'queue/cleanTrack',
+      mute: 'player/mute',
+      unmute: 'player/unmute',
+      clean: 'queue/clean',
+      toggleMute: 'player/toggleMute',
+      resumePlayback: 'player/resumePlayback',
+      pausePlayback: 'player/pausePlayback'
     }),
-    reorder: function(event) {
-      this.$store.commit("queue/reorder", {
+    reorder: function (event) {
+      this.$store.commit('queue/reorder', {
         tracks: this.tracksChangeBuffer,
         oldIndex: event.oldIndex,
         newIndex: event.newIndex
       })
     },
-    scrollToCurrent() {
-      let current = $(this.$el).find('.queue-item.active')[0]
+    scrollToCurrent () {
+      const current = $(this.$el).find('.queue-item.active')[0]
       if (!current) {
         return
       }
-      const elementRect = current.getBoundingClientRect();
-      const absoluteElementTop = elementRect.top + window.pageYOffset;
-      const middle = absoluteElementTop - (window.innerHeight / 2);
-      window.scrollTo({top: middle, behaviour: 'smooth'});
+      const elementRect = current.getBoundingClientRect()
+      const absoluteElementTop = elementRect.top + window.pageYOffset
+      const middle = absoluteElementTop - (window.innerHeight / 2)
+      window.scrollTo({ top: middle, behaviour: 'smooth' })
     },
-    touchProgress(e) {
-      let time
-      let target = this.$refs.progress
-      time = (e.layerX / target.offsetWidth) * this.duration
+    touchProgress (e) {
+      const target = this.$refs.progress
+      const time = (e.layerX / target.offsetWidth) * this.duration
       this.$emit('touch-progress', time)
     },
-    shuffle() {
-      let disabled = this.queue.tracks.length === 0
+    shuffle () {
+      const disabled = this.queue.tracks.length === 0
       if (this.isShuffling || disabled) {
         return
       }
-      let self = this
-      let msg = this.$pgettext('Content/Queue/Message', "Queue shuffled!")
+      const self = this
+      const msg = this.$pgettext('Content/Queue/Message', 'Queue shuffled!')
       this.isShuffling = true
       setTimeout(() => {
-        self.$store.dispatch("queue/shuffle", () => {
+        self.$store.dispatch('queue/shuffle', () => {
           self.isShuffling = false
-          self.$store.commit("ui/addMessage", {
+          self.$store.commit('ui/addMessage', {
             content: msg,
             date: new Date()
           })
         })
       }, 100)
-    },
+    }
   },
   watch: {
-    "$store.state.ui.queueFocused": {
+    '$store.state.ui.queueFocused': {
       handler (v) {
         if (v === 'queue') {
           this.$nextTick(() => {
@@ -369,7 +365,7 @@ export default {
         this.$nextTick(() => {
           this.scrollToCurrent()
         })
-      },
+      }
     },
     '$store.state.queue.tracks': {
       handler (v) {
@@ -379,7 +375,7 @@ export default {
       },
       immediate: true
     },
-    "$route.fullPath" () {
+    '$route.fullPath' () {
       this.$store.commit('ui/queueFocused', null)
     }
   }

@@ -92,86 +92,85 @@ export default {
     }
   },
   actions: {
-    incrementVolume ({commit, state}, value) {
+    incrementVolume ({ commit, state }, value) {
       commit('volume', state.volume + value)
     },
-    stop ({commit}) {
+    stop ({ commit }) {
       commit('errored', false)
       commit('resetErrorCount')
     },
-    togglePlayback ({commit, state, dispatch}) {
+    togglePlayback ({ commit, state, dispatch }) {
       commit('playing', !state.playing)
       if (state.errored && state.errorCount < state.maxConsecutiveErrors) {
         setTimeout(() => {
           if (state.playing) {
-            dispatch('queue/next', null, {root: true})
+            dispatch('queue/next', null, { root: true })
           }
         }, 3000)
       }
     },
-    resumePlayback ({commit, state, dispatch}) {
+    resumePlayback ({ commit, state, dispatch }) {
       commit('playing', true)
       if (state.errored && state.errorCount < state.maxConsecutiveErrors) {
         setTimeout(() => {
           if (state.playing) {
-            dispatch('queue/next', null, {root: true})
+            dispatch('queue/next', null, { root: true })
           }
         }, 3000)
       }
     },
-    pausePlayback ({commit}) {
+    pausePlayback ({ commit }) {
       commit('playing', false)
     },
-    toggleMute({commit, state}) {
+    toggleMute ({ commit, state }) {
       if (state.volume > 0) {
         commit('tempVolume', state.volume)
         commit('volume', 0)
-      }
-      else {
+      } else {
         commit('volume', state.tempVolume)
       }
     },
-    trackListened ({commit, rootState}, track) {
+    trackListened ({ commit, rootState }, track) {
       if (!rootState.auth.authenticated) {
         return
       }
-      return axios.post('history/listenings/', {'track': track.id}).then((response) => {}, (response) => {
+      return axios.post('history/listenings/', { track: track.id }).then((response) => {}, (response) => {
         logger.default.error('Could not record track in history')
       })
     },
-    trackEnded ({commit, dispatch, rootState}, track) {
-      let queueState = rootState.queue
+    trackEnded ({ commit, dispatch, rootState }, track) {
+      const queueState = rootState.queue
       if (queueState.currentIndex === queueState.tracks.length - 1) {
         // we've reached last track of queue, trigger a reload
         // from radio if any
-        dispatch('radios/populateQueue', null, {root: true})
+        dispatch('radios/populateQueue', null, { root: true })
       }
-      dispatch('queue/next', null, {root: true})
+      dispatch('queue/next', null, { root: true })
       if (queueState.ended) {
         // Reset playback
         commit('playing', false)
         dispatch('updateProgress', 0)
       }
     },
-    trackErrored ({commit, dispatch, state}) {
+    trackErrored ({ commit, dispatch, state }) {
       commit('errored', true)
       commit('incrementErrorCount')
       if (state.errorCount < state.maxConsecutiveErrors) {
         setTimeout(() => {
           if (state.playing) {
-            dispatch('queue/next', null, {root: true})
+            dispatch('queue/next', null, { root: true })
           }
         }, 3000)
       }
     },
-    updateProgress ({commit}, t) {
+    updateProgress ({ commit }, t) {
       commit('currentTime', t)
     },
-    mute({commit, state}) {
+    mute ({ commit, state }) {
       commit('tempVolume', state.volume)
       commit('volume', 0)
     },
-    unmute({commit, state}) {
+    unmute ({ commit, state }) {
       commit('volume', state.tempVolume)
     }
   }

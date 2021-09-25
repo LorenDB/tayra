@@ -224,23 +224,22 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from "vuex"
-import GlobalEvents from "@/components/utils/global-events"
+import { mapState, mapGetters, mapActions } from 'vuex'
+import GlobalEvents from '@/components/utils/global-events'
 import { toLinearVolumeScale } from '@/audio/volume'
-import { Howl } from "howler"
-import $ from 'jquery'
+import { Howl, Howler } from 'howler'
 import _ from '@/lodash'
 import url from '@/utils/url'
 import axios from 'axios'
 
 export default {
   components: {
-    VolumeControl:  () => import(/* webpackChunkName: "audio" */ "./VolumeControl"),
-    TrackFavoriteIcon:  () => import(/* webpackChunkName: "auth-audio" */ "@/components/favorites/TrackFavoriteIcon"),
-    TrackPlaylistIcon:  () => import(/* webpackChunkName: "auth-audio" */ "@/components/playlists/TrackPlaylistIcon"),
-    GlobalEvents,
+    VolumeControl: () => import(/* webpackChunkName: "audio" */ './VolumeControl'),
+    TrackFavoriteIcon: () => import(/* webpackChunkName: "auth-audio" */ '@/components/favorites/TrackFavoriteIcon'),
+    TrackPlaylistIcon: () => import(/* webpackChunkName: "auth-audio" */ '@/components/playlists/TrackPlaylistIcon'),
+    GlobalEvents
   },
-  data() {
+  data () {
     return {
       isShuffling: false,
       sliderVolume: this.volume,
@@ -260,11 +259,11 @@ export default {
       nextTrackPreloaded: false
     }
   },
-  mounted() {
+  mounted () {
     this.$store.dispatch('player/updateProgress', 0)
     this.$store.commit('player/playing', false)
-    this.$store.commit("player/isLoadingAudio", false)
-    Howler.unload()  // clear existing cache, if any
+    this.$store.commit('player/isLoadingAudio', false)
+    Howler.unload() // clear existing cache, if any
     this.nextTrackPreloaded = false
     // this is needed to unlock audio playing under some browsers,
     // cf https://github.com/goldfire/howler.js#mobilechrome-playback
@@ -272,7 +271,7 @@ export default {
     this.dummyAudio = new Howl({
       preload: false,
       autoplay: false,
-      src: ["noop.webm", "noop.mp3"]
+      src: ['noop.webm', 'noop.mp3']
     })
     if (this.currentTrack) {
       this.getSound(this.currentTrack)
@@ -280,29 +279,29 @@ export default {
     }
     // Add controls for notification drawer
     if ('mediaSession' in navigator) {
-      navigator.mediaSession.setActionHandler('play', this.resumePlayback);
-      navigator.mediaSession.setActionHandler('pause', this.pausePlayback);
-      navigator.mediaSession.setActionHandler('seekforward', this.seekForward);
-      navigator.mediaSession.setActionHandler('seekbackward', this.seekBackward);
-      navigator.mediaSession.setActionHandler('nexttrack', this.next);
-      navigator.mediaSession.setActionHandler('previoustrack', this.previous);
+      navigator.mediaSession.setActionHandler('play', this.resumePlayback)
+      navigator.mediaSession.setActionHandler('pause', this.pausePlayback)
+      navigator.mediaSession.setActionHandler('seekforward', this.seekForward)
+      navigator.mediaSession.setActionHandler('seekbackward', this.seekBackward)
+      navigator.mediaSession.setActionHandler('nexttrack', this.next)
+      navigator.mediaSession.setActionHandler('previoustrack', this.previous)
     }
   },
   beforeDestroy () {
     this.dummyAudio.unload()
     this.observeProgress(false)
   },
-  destroyed() {
+  destroyed () {
   },
   methods: {
     ...mapActions({
-      resumePlayback: "player/resumePlayback",
-      pausePlayback: "player/pausePlayback",
-      togglePlayback: "player/togglePlayback",
-      mute: "player/mute",
-      unmute: "player/unmute",
-      clean: "queue/clean",
-      toggleMute: "player/toggleMute",
+      resumePlayback: 'player/resumePlayback',
+      pausePlayback: 'player/pausePlayback',
+      togglePlayback: 'player/togglePlayback',
+      mute: 'player/mute',
+      unmute: 'player/unmute',
+      clean: 'queue/clean',
+      toggleMute: 'player/toggleMute'
     }),
     async getTrackData (trackData) {
       // use previously fetched trackData
@@ -310,53 +309,53 @@ export default {
 
       // we don't have any information for this track, we need to fetch it
       return axios.get(`tracks/${trackData.id}/`)
-                  .then(
-                    response => response.data,
-                    err => null
-                  )
+        .then(
+          response => response.data,
+          () => null
+        )
     },
-    shuffle() {
-      let disabled = this.queue.tracks.length === 0
+    shuffle () {
+      const disabled = this.queue.tracks.length === 0
       if (this.isShuffling || disabled) {
         return
       }
-      let self = this
-      let msg = this.$pgettext('Content/Queue/Message', "Queue shuffled!")
+      const self = this
+      const msg = this.$pgettext('Content/Queue/Message', 'Queue shuffled!')
       this.isShuffling = true
       setTimeout(() => {
-        self.$store.dispatch("queue/shuffle", () => {
+        self.$store.dispatch('queue/shuffle', () => {
           self.isShuffling = false
-          self.$store.commit("ui/addMessage", {
+          self.$store.commit('ui/addMessage', {
             content: msg,
             date: new Date()
           })
         })
       }, 100)
     },
-    next() {
-      let self = this
-      this.$store.dispatch("queue/next").then(() => {
-        self.$emit("next")
+    next () {
+      const self = this
+      this.$store.dispatch('queue/next').then(() => {
+        self.$emit('next')
       })
     },
-    previous() {
-      let self = this
-      this.$store.dispatch("queue/previous").then(() => {
-        self.$emit("previous")
+    previous () {
+      const self = this
+      this.$store.dispatch('queue/previous').then(() => {
+        self.$emit('previous')
       })
     },
-    handleError({ sound, error }) {
-      this.$store.commit("player/isLoadingAudio", false)
-      this.$store.dispatch("player/trackErrored")
+    handleError ({ sound, error }) {
+      this.$store.commit('player/isLoadingAudio', false)
+      this.$store.dispatch('player/trackErrored')
     },
     getSound (trackData) {
-      let cached = this.getSoundFromCache(trackData)
+      const cached = this.getSoundFromCache(trackData)
       if (cached) {
         return cached.sound
       }
-      let srcs = this.getSrcs(trackData)
-      let self = this
-      let sound = new Howl({
+      const srcs = this.getSrcs(trackData)
+      const self = this
+      const sound = new Howl({
         src: srcs.map((s) => { return s.url }),
         format: srcs.map((s) => { return s.type }),
         autoplay: false,
@@ -372,17 +371,17 @@ export default {
           }
         },
         onload: function () {
-          let sound = this
-          let node = this._sounds[0]._node;
+          const sound = this
+          const node = this._sounds[0]._node
           node.addEventListener('progress', () => {
-            if (sound != self.currentSound) {
+            if (sound !== self.currentSound) {
               return
             }
             self.updateBuffer(node)
           })
         },
         onplay: function () {
-          if (this != self.currentSound) {
+          if (this !== self.currentSound) {
             this.stop()
             return
           }
@@ -390,30 +389,29 @@ export default {
           self.$store.commit('player/resetErrorCount')
           self.$store.commit('player/errored', false)
           self.$store.commit('player/duration', this.duration())
-
         },
         onloaderror: function (sound, error) {
           self.removeFromCache(this)
-          if (this != self.currentSound) {
+          if (this !== self.currentSound) {
             return
           }
           console.log('Error while playing:', sound, error)
-          self.handleError({sound, error})
-        },
+          self.handleError({ sound, error })
+        }
       })
       this.addSoundToCache(sound, trackData)
       return sound
     },
     getSrcs: function (trackData) {
-      let a = document.createElement('audio')
-      let allowed = ['probably', 'maybe']
-      let sources = trackData.uploads.filter(u => {
-        let canPlay = a.canPlayType(u.mimetype)
+      const a = document.createElement('audio')
+      const allowed = ['probably', 'maybe']
+      const sources = trackData.uploads.filter(u => {
+        const canPlay = a.canPlayType(u.mimetype)
         return allowed.indexOf(canPlay) > -1
       }).map(u => {
         return {
           type: u.extension,
-          url: this.$store.getters['instance/absoluteUrl'](u.listen_url),
+          url: this.$store.getters['instance/absoluteUrl'](u.listen_url)
         }
       })
       a.remove()
@@ -433,12 +431,12 @@ export default {
         // so authentication can be checked by the backend
         // because for audio files we cannot use the regular Authentication
         // header
-        let param = "jwt"
+        let param = 'jwt'
         let value = this.$store.state.auth.token
         if (this.$store.state.auth.scopedTokens && this.$store.state.auth.scopedTokens.listen) {
           // used scoped tokens instead of JWT to reduce the attack surface if the token
           // is leaked
-          param = "token"
+          param = 'token'
           value = this.$store.state.auth.scopedTokens.listen
         }
         sources.forEach(e => {
@@ -450,30 +448,30 @@ export default {
 
     updateBuffer (node) {
       // from https://github.com/goldfire/howler.js/issues/752#issuecomment-372083163
-      let range = 0;
-      let bf = node.buffered;
-      let time = node.currentTime;
+      let range = 0
+      const bf = node.buffered
+      const time = node.currentTime
       try {
-        while(!(bf.start(range) <= time && time <= bf.end(range))) {
-          range += 1;
+        while (!(bf.start(range) <= time && time <= bf.end(range))) {
+          range += 1
         }
       } catch (IndexSizeError) {
         return
       }
       let loadPercentage
-      let start =  bf.start(range)
-      let end =  bf.end(range)
+      const start = bf.start(range)
+      const end = bf.end(range)
       if (range === 0) {
         // easy case, no user-seek
-        let loadStartPercentage = start / node.duration;
-        let loadEndPercentage = end / node.duration;
-        loadPercentage = loadEndPercentage - loadStartPercentage;
+        const loadStartPercentage = start / node.duration
+        const loadEndPercentage = end / node.duration
+        loadPercentage = loadEndPercentage - loadStartPercentage
       } else {
-        let loaded = end - start
-        let remainingToLoad = node.duration - start
+        const loaded = end - start
+        const remainingToLoad = node.duration - start
         // user seeked a specific position in the audio, our progress must be
         // computed based on the remaining portion of the track
-        loadPercentage = loaded / remainingToLoad;
+        loadPercentage = loaded / remainingToLoad
       }
       if (loadPercentage * 100 === this.bufferProgress) {
         return
@@ -483,18 +481,17 @@ export default {
     updateProgress: function () {
       this.isUpdatingTime = true
       if (this.currentSound && this.currentSound.state() === 'loaded') {
-        let t = this.currentSound.seek()
-        let d = this.currentSound.duration()
+        const t = this.currentSound.seek()
+        const d = this.currentSound.duration()
         this.$store.dispatch('player/updateProgress', t)
         this.updateBuffer(this.currentSound._sounds[0]._node)
-        let toPreload = this.$store.state.queue.tracks[this.currentIndex + 1]
+        const toPreload = this.$store.state.queue.tracks[this.currentIndex + 1]
         if (!this.nextTrackPreloaded && toPreload && !this.getSoundFromCache(toPreload) && (t > this.preloadDelay || d - t < 30)) {
           this.getSound(toPreload)
           this.nextTrackPreloaded = true
         }
         if (t > (d / 2)) {
-          let onlyTrack = this.$store.state.queue.tracks.length === 1
-          if (this.listeningRecorded != this.currentTrack) {
+          if (this.listeningRecorded !== this.currentTrack) {
             this.listeningRecorded = this.currentTrack
             this.$store.dispatch('player/trackListened', this.currentTrack)
           }
@@ -505,25 +502,24 @@ export default {
       if (step > 0) {
         // seek right
         if (this.currentTime + step < this.duration) {
-        this.$store.dispatch('player/updateProgress', (this.currentTime + step))
+          this.$store.dispatch('player/updateProgress', (this.currentTime + step))
         } else {
-        this.next() // parenthesis where missing here
+          this.next() // parenthesis where missing here
         }
-      }
-      else {
+      } else {
         // seek left
-        let position = Math.max(this.currentTime + step, 0)
+        const position = Math.max(this.currentTime + step, 0)
         this.$store.dispatch('player/updateProgress', position)
       }
     },
     seekForward () {
-      this.seek (5)
+      this.seek(5)
     },
     seekBackward () {
-      this.seek (-5)
+      this.seek(-5)
     },
     observeProgress: function (enable) {
-      let self = this
+      const self = this
       if (enable) {
         if (self.progressInterval) {
           clearInterval(self.progressInterval)
@@ -555,7 +551,7 @@ export default {
       }
     },
     ended: function () {
-      let onlyTrack = this.$store.state.queue.tracks.length === 1
+      const onlyTrack = this.$store.state.queue.tracks.length === 1
       if (this.looping === 1 || (onlyTrack && this.looping === 2)) {
         this.currentSound.seek(0)
         this.$store.dispatch('player/updateProgress', 0)
@@ -574,7 +570,7 @@ export default {
       })[0]
     },
     addSoundToCache (sound, trackData) {
-      let data = {
+      const data = {
         date: new Date(),
         track: trackData,
         sound: sound
@@ -583,20 +579,19 @@ export default {
       this.checkCache()
     },
     checkCache () {
-      let self = this
-      let toKeep = []
+      const self = this
+      const toKeep = []
       _.reverse(this.soundsCache).forEach((e) => {
         if (toKeep.length < self.maxPreloaded) {
           toKeep.push(e)
         } else {
-          let src = e.sound._src
           e.sound.unload()
         }
       })
       this.soundsCache = _.reverse(toKeep)
     },
     removeFromCache (sound) {
-      let toKeep = []
+      const toKeep = []
       this.soundsCache.forEach((e) => {
         if (e.sound === sound) {
           e.sound.unload()
@@ -608,7 +603,7 @@ export default {
     },
     async loadSound (newValue, oldValue) {
       let trackData = newValue
-      let oldSound = this.currentSound
+      const oldSound = this.currentSound
       // stop all other sounds!
       // we do this here (before the track has loaded) to get a predictable
       // song order.
@@ -619,7 +614,7 @@ export default {
       if (!trackData) {
         return
       }
-      if (!this.isShuffling && trackData != oldValue) {
+      if (!this.isShuffling && trackData !== oldValue) {
         trackData = await this.getTrackData(trackData)
         if (trackData == null) {
           this.handleError({})
@@ -645,29 +640,28 @@ export default {
         this.$store.commit('ui/queueFocused', 'queue')
       } else {
         this.$store.commit('ui/queueFocused', 'player')
-
       }
     },
     updateMetadata () {
       // If the session is playing as a PWA, populate the notification
       // with details from the track
       if (this.currentTrack && 'mediaSession' in navigator) {
-        let metadata = {
+        const metadata = {
           title: this.currentTrack.title,
-          artist: this.currentTrack.artist.name,
+          artist: this.currentTrack.artist.name
         }
         if (this.currentTrack.album && this.currentTrack.album.cover) {
           metadata.album = this.currentTrack.album.title
           metadata.artwork = [
-            { src: this.currentTrack.album.cover.urls.original, sizes: '96x96',   type: 'image/png' },
+            { src: this.currentTrack.album.cover.urls.original, sizes: '96x96', type: 'image/png' },
             { src: this.currentTrack.album.cover.urls.original, sizes: '128x128', type: 'image/png' },
             { src: this.currentTrack.album.cover.urls.original, sizes: '192x192', type: 'image/png' },
             { src: this.currentTrack.album.cover.urls.original, sizes: '256x256', type: 'image/png' },
             { src: this.currentTrack.album.cover.urls.original, sizes: '384x384', type: 'image/png' },
-            { src: this.currentTrack.album.cover.urls.original, sizes: '512x512', type: 'image/png' },
+            { src: this.currentTrack.album.cover.urls.original, sizes: '512x512', type: 'image/png' }
           ]
         }
-        navigator.mediaSession.metadata = new MediaMetadata(metadata)
+        navigator.mediaSession.metadata = new window.MediaMetadata(metadata)
       }
     }
   },
@@ -685,38 +679,38 @@ export default {
       queue: state => state.queue
     }),
     ...mapGetters({
-      currentTrack: "queue/currentTrack",
-      hasNext: "queue/hasNext",
-      hasPrevious: "queue/hasPrevious",
-      emptyQueue: "queue/isEmpty",
-      durationFormatted: "player/durationFormatted",
-      currentTimeFormatted: "player/currentTimeFormatted",
-      progress: "player/progress"
+      currentTrack: 'queue/currentTrack',
+      hasNext: 'queue/hasNext',
+      hasPrevious: 'queue/hasPrevious',
+      emptyQueue: 'queue/isEmpty',
+      durationFormatted: 'player/durationFormatted',
+      currentTimeFormatted: 'player/currentTimeFormatted',
+      progress: 'player/progress'
     }),
     updateProgressThrottled () {
       return _.throttle(this.updateProgress, 50)
     },
-    labels() {
-      let audioPlayer = this.$pgettext('Sidebar/Player/Hidden text', "Media player")
-      let previous = this.$pgettext('Sidebar/Player/Icon.Tooltip', "Previous track")
-      let play = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Play")
-      let pause = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Pause")
-      let next = this.$pgettext('Sidebar/Player/Icon.Tooltip', "Next track")
-      let unmute = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Unmute")
-      let mute = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Mute")
-      let expandQueue = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Expand queue")
-      let loopingDisabled = this.$pgettext('Sidebar/Player/Icon.Tooltip',
-        "Looping disabled. Click to switch to single-track looping."
+    labels () {
+      const audioPlayer = this.$pgettext('Sidebar/Player/Hidden text', 'Media player')
+      const previous = this.$pgettext('Sidebar/Player/Icon.Tooltip', 'Previous track')
+      const play = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Play')
+      const pause = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Pause')
+      const next = this.$pgettext('Sidebar/Player/Icon.Tooltip', 'Next track')
+      const unmute = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Unmute')
+      const mute = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Mute')
+      const expandQueue = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Expand queue')
+      const loopingDisabled = this.$pgettext('Sidebar/Player/Icon.Tooltip',
+        'Looping disabled. Click to switch to single-track looping.'
       )
-      let loopingSingle = this.$pgettext('Sidebar/Player/Icon.Tooltip',
-        "Looping on a single track. Click to switch to whole queue looping."
+      const loopingSingle = this.$pgettext('Sidebar/Player/Icon.Tooltip',
+        'Looping on a single track. Click to switch to whole queue looping.'
       )
-      let loopingWhole = this.$pgettext('Sidebar/Player/Icon.Tooltip',
-        "Looping on whole queue. Click to disable looping."
+      const loopingWhole = this.$pgettext('Sidebar/Player/Icon.Tooltip',
+        'Looping on whole queue. Click to disable looping.'
       )
-      let shuffle = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Shuffle your queue")
-      let clear = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Clear your queue")
-      let addArtistContentFilter = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…')
+      const shuffle = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Shuffle your queue')
+      const clear = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Clear your queue')
+      const addArtistContentFilter = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…')
       return {
         audioPlayer,
         previous,
@@ -731,9 +725,9 @@ export default {
         shuffle,
         clear,
         expandQueue,
-        addArtistContentFilter,
+        addArtistContentFilter
       }
-    },
+    }
   },
   watch: {
     currentTrack: {
@@ -746,23 +740,23 @@ export default {
         if (this.currentSound) {
           this.currentSound.pause()
         }
-        this.$store.commit("player/isLoadingAudio", true)
+        this.$store.commit('player/isLoadingAudio', true)
         this.playTimeout = setTimeout(async () => {
           await this.loadSound(newValue, oldValue)
-        }, 100);
+        }, 100)
         this.updateMetadata()
       },
       immediate: false
     },
     volume: {
       immediate: true,
-      handler(newValue) {
+      handler (newValue) {
         this.sliderVolume = newValue
         Howler.volume(toLinearVolumeScale(newValue))
-      },
+      }
     },
-    sliderVolume(newValue) {
-      this.$store.commit("player/volume", newValue)
+    sliderVolume (newValue) {
+      this.$store.commit('player/volume', newValue)
     },
     playing: async function (newValue) {
       if (this.currentSound) {
