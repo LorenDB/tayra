@@ -14,6 +14,7 @@ from rest_framework import permissions as rest_permissions
 from rest_framework import renderers, response, viewsets
 from rest_framework.decorators import action
 from rest_framework.serializers import ValidationError
+from config import plugins
 
 import funkwhale_api
 from funkwhale_api.activity import record
@@ -810,6 +811,11 @@ class SubsonicViewSet(viewsets.GenericViewSet):
             )
         if serializer.validated_data["submission"]:
             listening = serializer.save()
+            plugins.trigger_hook(
+                plugins.LISTENING_CREATED,
+                listening=listening,
+                confs=plugins.get_confs(request.user),
+            )
             record.send(listening)
         return response.Response({})
 

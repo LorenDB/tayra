@@ -1,0 +1,1 @@
+Fixes subsonic scrobble not triggering plugin hook (#1416)
