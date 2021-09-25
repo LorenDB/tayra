@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-24 17:09+0100\n"
-"PO-Revision-Date: 2021-07-02 20:56+0000\n"
+"PO-Revision-Date: 2021-09-26 13:36+0000\n"
 "Last-Translator: vachan-maker <revsamtp@hotmail.com>\n"
 "Language-Team: none\n"
 "Language: ml\n"
@@ -202,11 +202,11 @@ msgstr ""
 #: front/src/components/common/Duration.vue:3
 msgctxt "Content/*/Paragraph"
 msgid "%{ minutes } min"
-msgstr ""
+msgstr "%{ minutes } മിനിറ്റ്"
 
 #: front/src/components/audio/ChannelCard.vue:21
 msgid "%{ updatedAgo }"
-msgstr ""
+msgstr "%{ updatedAgo }"
 
 #: front/src/components/notifications/NotificationRow.vue:44
 msgctxt "Content/Notifications/Paragraph"
@@ -302,7 +302,7 @@ msgstr "ഈ Funkwhale പോഡിനെ കുറിച്ച്"
 #: front/src/components/channels/LicenseSelect.vue:14
 msgctxt "Content/*/*"
 msgid "About this license"
-msgstr ""
+msgstr "ഈ ലൈസൻസിനെ കുറിച്ച്"
 
 #: front/src/components/Sidebar.vue:129
 msgctxt "Sidebar/*/List item.Link"
@@ -439,7 +439,7 @@ msgstr "അക്കൗണ്ട്"
 #: front/src/views/admin/moderation/AccountsDetail.vue:87
 msgctxt "Content/Moderation/Title"
 msgid "Account data"
-msgstr ""
+msgstr "അക്കൗണ്ട് ഡാറ്റാ"
 
 #: front/src/components/auth/Settings.vue:5
 msgctxt "Content/Settings/Title"
@@ -472,7 +472,7 @@ msgstr "അക്കൗണ്ടുകൾ"
 #: front/src/views/library/Edit.vue:22
 msgctxt "Content/Library/Table.Label"
 msgid "Action"
-msgstr ""
+msgstr "പ്രവർത്തന"
 
 #: front/src/components/common/ActionTable.vue:69
 msgctxt "Content/*/Paragraph"
@@ -571,7 +571,7 @@ msgstr ""
 #: front/src/views/admin/moderation/AccountsDetail.vue:8
 msgctxt "Content/Moderation/Button/Verb"
 msgid "Add a moderation policy"
-msgstr ""
+msgstr "ഒരു മോഡറെഷൻ പോളിസി ചേർക്കുക"
 
 #: front/src/components/admin/SignupFormBuilder.vue:82
 msgctxt "*/*/Form-builder"
@@ -649,7 +649,7 @@ msgstr ""
 #: front/src/components/playlists/PlaylistModal.vue:2
 msgctxt "Popup/Playlist/Title/Verb"
 msgid "Add to playlist"
-msgstr ""
+msgstr "പ്ലേലിസ്റ്റിലേക്ക് ചേർക്കുക"
 
 #: front/src/components/playlists/TrackPlaylistIcon.vue:3
 #: front/src/components/playlists/TrackPlaylistIcon.vue:35
@@ -696,7 +696,7 @@ msgstr ""
 #: front/src/components/manage/users/UsersTable.vue:25
 msgctxt "Content/Admin/Table.User role"
 msgid "Admin"
-msgstr ""
+msgstr "അഡ്മിൻ"
 
 #: front/src/components/Sidebar.vue:22 src/components/Sidebar.vue:8
 #: front/src/components/Sidebar.vue:218
@@ -737,13 +737,13 @@ msgstr "അൽബം കലാകാരൻ"
 #: front/src/views/admin/library/AlbumDetail.vue:84
 msgctxt "Content/Moderation/Title"
 msgid "Album data"
-msgstr ""
+msgstr "അൽബം ഡാറ്റ്"
 
 #: front/src/components/mixins/Translations.vue:76
 #: front/src/components/mixins/Translations.vue:77
 msgctxt "Content/*/Dropdown/Noun"
 msgid "Album name"
-msgstr ""
+msgstr "അൽബത്തിന്റെ പേര്"
 
 #: front/src/components/Sidebar.vue:100 src/components/Sidebar.vue:113
 #: front/src/components/audio/Search.vue:19 src/components/audio/Search.vue:1
@@ -922,7 +922,7 @@ msgstr ""
 #: front/src/components/auth/Logout.vue:5
 msgctxt "Content/Login/Title"
 msgid "Are you sure you want to log out?"
-msgstr ""
+msgstr "നിങ്ങൾക്ക് പുറത്ത് കടക്കാൻ ആഗ്രഹം ഉണ്ടോ?"
 
 #: front/src/components/audio/SearchBar.vue:34
 #: front/src/components/audio/track/Table.vue:12
@@ -947,7 +947,7 @@ msgstr "കലാകാരൻ"
 #: front/src/views/channels/DetailBase.vue:155
 msgctxt "Content/Channel/*"
 msgid "Artist channel"
-msgstr ""
+msgstr "കലാകരന്റെ ചാനൽ"
 
 #: front/src/views/admin/library/ArtistDetail.vue:88
 #: front/src/views/admin/library/ArtistDetail.vue:83
