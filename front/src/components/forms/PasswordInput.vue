@@ -1,58 +1,82 @@
 <template>
   <div class="ui fluid action input">
     <input
-    required
-    name="password"
-    :type="passwordInputType"
-    @input="$emit('input', $event.target.value)"
-    :id="fieldId"
-    :value="value">
-    <button @click.prevent="showPassword = !showPassword" type="button" :title="labels.title" class="ui icon button">
+      required
+      name="password"
+      :type="passwordInputType"
+      @input="$emit('input', $event.target.value)"
+      :id="fieldId"
+      :value="value"
+    />
+    <button
+      @click.prevent="showPassword = !showPassword"
+      type="button"
+      :title="labels.title"
+      class="ui icon button"
+    >
       <i class="eye icon"></i>
     </button>
-    <button v-if="copyButton" @click.prevent="copy" type="button" class="ui icon button" :title="labels.copy">
+    <button
+      v-if="copyButton"
+      @click.prevent="copyPassword"
+      type="button"
+      class="ui icon button"
+      :title="labels.copy"
+    >
       <i class="copy icon"></i>
     </button>
   </div>
 </template>
 <script>
-
-function copyStringToClipboard (str) {
-  // cf https://techoverflow.net/2018/03/30/copying-strings-to-the-clipboard-using-pure-javascript/
-  let el = document.createElement('textarea');
-  el.value = str;
-  el.setAttribute('readonly', '');
-  el.style = {position: 'absolute', left: '-9999px'};
-  document.body.appendChild(el);
-  el.select();
-  document.execCommand('copy');
-  document.body.removeChild(el);
-}
-
 export default {
-  props: ['value', 'defaultShow', 'copyButton', 'fieldId'],
-  data () {
+  props: ["value", "defaultShow", "copyButton", "fieldId"],
+  data() {
     return {
       showPassword: this.defaultShow || false,
-    }
+    };
   },
   computed: {
     labels () {
       return {
-        title: this.$pgettext('Content/Settings/Button.Tooltip/Verb', 'Show/hide password'),
-        copy: this.$pgettext('*/*/Button.Label/Short, Verb', 'Copy')
+        title: this.$pgettext(
+          "Content/Settings/Button.Tooltip/Verb",
+          "Show/hide password"
+        ),
+        copy: this.$pgettext("*/*/Button.Label/Short, Verb", "Copy"),
       }
     },
-    passwordInputType () {
+    passwordInputType() {
       if (this.showPassword) {
-        return 'text'
+        return "text";
       }
-      return 'password'
+      return "password";
     }
   },
   methods: {
-    copy () {
-      copyStringToClipboard(this.value)
+    copyPassword () {
+      try {
+        this._copyStringToClipboard(this.value)
+        this.$store.commit('ui/addMessage', {
+          content: this.$pgettext(
+            'Content/*/Paragraph',
+            'Text copied to clipboard!'
+          ),
+          date: new Date()
+        })
+      } catch ($e) {
+        console.error('Cannot copy', $e)
+      }
+    },
+    _copyStringToClipboard (str) {
+      // cf https://techoverflow.net/2018/03/30/copying-strings-to-the-clipboard-using-pure-javascript/
+      const el = document.createElement('textarea')
+      el.value = str
+      el.setAttribute('readonly', '')
+      el.style = { position: 'absolute', left: '-9999px' }
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
     }
   }
 }
