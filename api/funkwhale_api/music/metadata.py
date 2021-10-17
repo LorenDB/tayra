@@ -357,6 +357,8 @@ class Metadata(Mapping):
         self._file = kind(filething)
         if self._file is None:
             raise ValueError("Cannot parse metadata from {}".format(filething))
+        if len(self._file) == 0:
+            raise ValueError("No tags found in {}".format(filething))
         self.fallback = self.load_fallback(filething, self._file)
         ft = self.get_file_type(self._file)
         try:

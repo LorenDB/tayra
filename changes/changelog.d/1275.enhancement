@@ -1,0 +1,1 @@
+Prevents an uncontrolled exception when uploading a file without tags, and prints user friendly message (1275)
