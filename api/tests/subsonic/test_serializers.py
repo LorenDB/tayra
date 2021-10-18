@@ -67,10 +67,12 @@ def test_get_track_path(factory_kwargs, suffix, expected, factories):
 
 
 def test_get_artists_serializer(factories):
-    artist1 = factories["music.Artist"](name="eliot")
-    artist2 = factories["music.Artist"](name="Ellena")
-    artist3 = factories["music.Artist"](name="Rilay")
-    artist4 = factories["music.Artist"](name="")  # Shouldn't be serialised
+    artist1 = factories["music.Artist"](name="eliot", with_cover=True)
+    artist2 = factories["music.Artist"](name="Ellena", with_cover=True)
+    artist3 = factories["music.Artist"](name="Rilay", with_cover=True)
+    artist4 = factories["music.Artist"](
+        name="", with_cover=False
+    )  # Shouldn't be serialised
 
     factories["music.Album"].create_batch(size=3, artist=artist1)
     factories["music.Album"].create_batch(size=2, artist=artist2)
@@ -81,13 +83,30 @@ def test_get_artists_serializer(factories):
             {
                 "name": "E",
                 "artist": [
-                    {"id": artist1.pk, "name": artist1.name, "albumCount": 3},
-                    {"id": artist2.pk, "name": artist2.name, "albumCount": 2},
+                    {
+                        "id": artist1.pk,
+                        "name": artist1.name,
+                        "albumCount": 3,
+                        "coverArt": "ar-{}".format(artist1.id),
+                    },
+                    {
+                        "id": artist2.pk,
+                        "name": artist2.name,
+                        "albumCount": 2,
+                        "coverArt": "ar-{}".format(artist2.id),
+                    },
                 ],
             },
             {
                 "name": "R",
-                "artist": [{"id": artist3.pk, "name": artist3.name, "albumCount": 0}],
+                "artist": [
+                    {
+                        "id": artist3.pk,
+                        "name": artist3.name,
+                        "albumCount": 0,
+                        "coverArt": "ar-{}".format(artist3.id),
+                    }
+                ],
             },
         ],
     }
@@ -100,7 +119,7 @@ def test_get_artists_serializer(factories):
 
 
 def test_get_artist_serializer(factories):
-    artist = factories["music.Artist"]()
+    artist = factories["music.Artist"](with_cover=True)
     album = factories["music.Album"](artist=artist, with_cover=True)
     tracks = factories["music.Track"].create_batch(size=3, album=album)
 
@@ -108,6 +127,7 @@ def test_get_artist_serializer(factories):
         "id": artist.pk,
         "name": artist.name,
         "albumCount": 1,
+        "coverArt": "ar-{}".format(artist.id),
         "album": [
             {
                 "id": album.pk,

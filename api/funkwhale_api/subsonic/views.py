@@ -773,6 +773,19 @@ class SubsonicViewSet(viewsets.GenericViewSet):
                     {"error": {"code": 70, "message": "cover art not found."}}
                 )
             attachment = album.attachment_cover
+        elif id.startswith("ar-"):
+            try:
+                artist_id = int(id.replace("ar-", ""))
+                artist = (
+                    music_models.Artist.objects.exclude(attachment_cover=None)
+                    .select_related("attachment_cover")
+                    .get(pk=artist_id)
+                )
+            except (TypeError, ValueError, music_models.Album.DoesNotExist):
+                return response.Response(
+                    {"error": {"code": 70, "message": "cover art not found."}}
+                )
+            attachment = artist.attachment_cover
         elif id.startswith("at-"):
             try:
                 attachment_id = id.replace("at-", "")
@@ -932,7 +945,7 @@ class SubsonicViewSet(viewsets.GenericViewSet):
         )
         uploads_qs = (
             music_models.Upload.objects.playable_by(request.user.actor)
-            .select_related("track__attachment_cover", "track__description",)
+            .select_related("track__attachment_cover", "track__description")
             .order_by("-track__creation_date")
         )
 

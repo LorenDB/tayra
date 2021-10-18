@@ -49,6 +49,7 @@ def get_artist_data(artist_values):
         "id": artist_values["id"],
         "name": artist_values["name"],
         "albumCount": artist_values["_albums_count"],
+        "coverArt": "ar-{}".format(artist_values["id"]),
     }
 
 
@@ -82,6 +83,8 @@ class GetArtistSerializer(serializers.Serializer):
             "albumCount": len(albums),
             "album": [],
         }
+        if artist.attachment_cover_id:
+            payload["coverArt"] = "ar-{}".format(artist.id)
         for album in albums:
             album_data = {
                 "id": album.id,
