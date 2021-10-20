@@ -46,6 +46,7 @@ server {
 
     add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:; worker-src 'self'";
     add_header Referrer-Policy "strict-origin-when-cross-origin";
+    add_header X-Frame-Options "SAMEORIGIN" always;
 
     root ${FUNKWHALE_FRONTEND_PATH};
 
@@ -74,8 +75,8 @@ server {
         text/vtt
         text/x-component
         text/x-cross-domain-policy;
-
     # end of compression settings
+
     location / {
         include /etc/nginx/funkwhale_proxy.conf;
         # this is needed if you have file import via upload enabled
@@ -87,7 +88,6 @@ server {
         add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:; worker-src 'self'";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
         add_header Service-Worker-Allowed "/";
-        add_header X-Frame-Options "SAMEORIGIN";
         alias ${FUNKWHALE_FRONTEND_PATH}/;
         expires 30d;
         add_header Pragma public;
@@ -97,7 +97,7 @@ server {
         add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; media-src 'self' data:; worker-src 'self'";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
 
-        add_header X-Frame-Options "ALLOW";
+        add_header X-Frame-Options "" always;
         alias ${FUNKWHALE_FRONTEND_PATH}/embed.html;
         expires 30d;
         add_header Pragma public;
