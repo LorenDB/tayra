@@ -59,7 +59,7 @@ a {
   }
 }
 .tablet-and-below {
-  @include media(">=desktop") {
+  @include media(">=tablet") {
     display: none !important;
   }
 }
@@ -103,4 +103,11 @@ span.diff.removed {
 }
 .really.discrete {
   color: var(--really-discrete-text-color);
+}
+
+.ui.inverted.dimmer {
+  background-color: var(--dimmer-background);
+  > .ui.dimmer {
+    color: var(--dimmer-color);
+  }
 }

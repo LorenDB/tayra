@@ -6,7 +6,8 @@
       :disabled="!playable"
       :aria-label="labels.replacePlay"
       :class="buttonClasses.concat(['ui', {loading: isLoading}, {'mini': discrete}, {disabled: !playable}])">
-      <i :class="[playIconClass, 'icon']"></i>
+      <i v-if="playing" class="pause icon"></i>
+      <i v-else :class="[playIconClass, 'icon']"></i>
       <template v-if="!discrete && !iconOnly">&nbsp;<slot><translate translate-context="*/Queue/Button.Label/Short, Verb">Play</translate></slot></template>
     </button>
     <button
@@ -27,8 +28,14 @@
         <button v-if="track" class="item basic" :disabled="!playable" @click.stop.prevent="$store.dispatch('radios/start', {type: 'similar', objectId: track.id})" :title="labels.startRadio">
           <i class="feed icon"></i><translate translate-context="*/Queue/Button.Label/Short, Verb">Play radio</translate>
         </button>
+        <button v-if="track" class="item basic" :disabled="!playable" @click.stop="$store.commit('playlists/chooseTrack', track)">
+          <i class="list icon"></i>
+          <translate translate-context="Sidebar/Player/Icon.Tooltip/Verb">Add to playlist…</translate>
+        </button>
         <button v-if="track" class="item basic" @click.stop.prevent="$router.push(`/library/tracks/${track.id}/`)">
-          <i class="info icon"></i><translate translate-context="*/Queue/Dropdown/Button/Label/Short">Track details</translate>
+          <i class="info icon"></i>
+          <translate v-if="track.artist.content_category === 'podcast'" translate-context="*/Queue/Dropdown/Button/Label/Short">Episode details</translate>
+          <translate v-else translate-context="*/Queue/Dropdown/Button/Label/Short">Track details</translate>
         </button>
         <div class="divider"></div>
         <button v-if="filterableArtist" ref="filterArtist" data-ref="filterArtist" class="item basic" :disabled="!filterableArtist" @click.stop.prevent="filterArtist" :title="labels.hideArtist">
@@ -52,9 +59,10 @@ import axios from 'axios'
 import jQuery from 'jquery'
 
 import ReportMixin from '@/components/mixins/Report'
+import PlayOptionsMixin from '@/components/mixins/PlayOptions'
 
 export default {
-  mixins: [ReportMixin],
+  mixins: [ReportMixin, PlayOptionsMixin],
   props: {
     // we can either have a single or multiple tracks to play when clicked
     tracks: {type: Array, required: false},
@@ -71,7 +79,9 @@ export default {
     album: {type: Object, required: false},
     library: {type: Object, required: false},
     channel: {type: Object, required: false},
-    isPlayable: {type: Boolean, required: false, default: null}
+    isPlayable: {type: Boolean, required: false, default: null},
+    playing: {type: Boolean, required: false, default: false},
+    paused: {type: Boolean, required: false, default: false}
   },
   data () {
     return {
@@ -100,6 +110,7 @@ export default {
         playNext: this.$pgettext('*/Queue/Dropdown/Button/Title', 'Play next'),
         startRadio: this.$pgettext('*/Queue/Dropdown/Button/Title', 'Play similar songs'),
         report: this.$pgettext('*/Moderation/*/Button/Label,Verb', 'Report…'),
+        addToPlaylist: this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Add to playlist…'),
         replacePlay,
       }
     },
@@ -111,165 +122,6 @@ export default {
           return this.$pgettext('*/Queue/Button/Title', 'This track is not available in any library you have access to')
         }
       }
-    },
-    playable () {
-      if (this.isPlayable) {
-        return true
-      }
-      if (this.track) {
-        return this.track.uploads && this.track.uploads.length > 0
-      } else if (this.artist && this.artist.tracks_count) {
-        return this.artist.tracks_count > 0
-      } else if (this.artist && this.artist.albums) {
-        return this.artist.albums.filter((a) => {
-          return a.is_playable === true
-        }).length > 0
-      } else if (this.album) {
-        return true
-      } else if (this.tracks) {
-        return this.tracks.filter((t) => {
-          return t.uploads && t.uploads.length > 0
-        }).length > 0
-      }
-      return false
-    },
-    filterableArtist () {
-      if (this.track) {
-        return this.track.artist
-      }
-      if (this.album) {
-        return this.album.artist
-      }
-      if (this.artist) {
-        return this.artist
-      }
-    },
-  },
-  methods: {
-    filterArtist () {
-      this.$store.dispatch('moderation/hide', {type: 'artist', target: this.filterableArtist})
-    },
-    getTracksPage (page, params, resolve, tracks) {
-      if (page > 10) {
-        // it's 10 * 100 tracks already, let's stop here
-        resolve(tracks)
-      }
-      // when fetching artists/or album tracks, sometimes, we may have to fetch
-      // multiple pages
-      let self = this
-      params['page_size'] = 100
-      params['page'] = page
-      params['hidden'] = ''
-      params['playable'] = 'true'
-      tracks = tracks || []
-      axios.get('tracks/', {params: params}).then((response) => {
-        response.data.results.forEach(t => {
-          tracks.push(t)
-        })
-        if (response.data.next) {
-          self.getTracksPage(page + 1, params, resolve, tracks)
-        } else {
-          resolve(tracks)
-        }
-      })
-    },
-    getPlayableTracks () {
-      let self = this
-      this.isLoading = true
-      let getTracks = new Promise((resolve, reject) => {
-        if (self.tracks) {
-          resolve(self.tracks)
-        } else if (self.track) {
-          if (!self.track.uploads || self.track.uploads.length === 0) {
-            // fetch uploads from api
-            axios.get(`tracks/${self.track.id}/`).then((response) => {
-              resolve([response.data])
-            })
-          } else {
-            resolve([self.track])
-          }
-        } else if (self.playlist) {
-          let url = 'playlists/' + self.playlist.id + '/'
-          axios.get(url + 'tracks/').then((response) => {
-            let artistIds = self.$store.getters['moderation/artistFilters']().map((f) => {
-              return f.target.id
-            })
-            let tracks = response.data.results.map(plt => {
-              return plt.track
-            })
-            if (artistIds.length > 0) {
-              // skip tracks from hidden artists
-              tracks = tracks.filter((t) => {
-                let matchArtist = artistIds.indexOf(t.artist.id) > -1
-                return !(matchArtist || t.album && artistIds.indexOf(t.album.artist.id) > -1)
-              })
-            }
-
-            resolve(tracks)
-          })
-        } else if (self.artist) {
-          let params = {'artist': self.artist.id, include_channels: 'true', 'ordering': 'album__release_date,disc_number,position'}
-          self.getTracksPage(1, params, resolve)
-        } else if (self.album) {
-          let params = {'album': self.album.id, include_channels: 'true', 'ordering': 'disc_number,position'}
-          self.getTracksPage(1, params, resolve)
-        } else if (self.library) {
-          let params = {'library': self.library.uuid, 'ordering': '-creation_date'}
-          self.getTracksPage(1, params, resolve)
-        }
-      })
-      return getTracks.then((tracks) => {
-        setTimeout(e => {
-          self.isLoading = false
-        }, 250)
-        return tracks.filter(e => {
-          return e.uploads && e.uploads.length > 0
-        })
-      })
-    },
-    add () {
-      let self = this
-      this.getPlayableTracks().then((tracks) => {
-        self.$store.dispatch('queue/appendMany', {tracks: tracks}).then(() => self.addMessage(tracks))
-      })
-      jQuery(self.$el).find('.ui.dropdown').dropdown('hide')
-    },
-    replacePlay () {
-      let self = this
-      self.$store.dispatch('queue/clean')
-      this.getPlayableTracks().then((tracks) => {
-        self.$store.dispatch('queue/appendMany', {tracks: tracks}).then(() => {
-          if (self.track) {
-            // set queue position to selected track
-            const trackIndex = self.tracks.findIndex(track => track.id === self.track.id)
-            self.$store.dispatch('queue/currentIndex', trackIndex)
-          }
-          self.addMessage(tracks)
-        })
-      })
-      jQuery(self.$el).find('.ui.dropdown').dropdown('hide')
-    },
-    addNext (next) {
-      let self = this
-      let wasEmpty = this.$store.state.queue.tracks.length === 0
-      this.getPlayableTracks().then((tracks) => {
-        self.$store.dispatch('queue/appendMany', {tracks: tracks, index: self.$store.state.queue.currentIndex + 1}).then(() => self.addMessage(tracks))
-        let goNext = next && !wasEmpty
-        if (goNext) {
-          self.$store.dispatch('queue/next')
-        }
-      })
-      jQuery(self.$el).find('.ui.dropdown').dropdown('hide')
-    },
-    addMessage (tracks) {
-      if (tracks.length < 1) {
-        return
-      }
-      let msg = this.$npgettext('*/Queue/Message', '%{ count } track was added to your queue', '%{ count } tracks were added to your queue', tracks.length)
-      this.$store.commit('ui/addMessage', {
-        content: this.$gettextInterpolate(msg, {count: tracks.length}),
-        date: new Date()
-      })
     },
   },
   watch: {

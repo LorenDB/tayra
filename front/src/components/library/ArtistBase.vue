@@ -195,7 +195,7 @@ export default {
       if (!self.object) {
         return
       }
-      let trackPromise = axios.get("tracks/", { params: { artist: this.id, hidden: '' } }).then(response => {
+      let trackPromise = axios.get("tracks/", { params: { artist: this.id, hidden: '', ordering: "-creation_date" } }).then(response => {
         self.tracks = response.data.results
         self.nextTracksUrl = response.data.next
         self.totalTracks = response.data.count

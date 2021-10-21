@@ -1,6 +1,6 @@
 <template>
   <section>
-    <channel-entries :limit="25" :filters="{channel: object.uuid, ordering: 'creation_date'}">
+    <channel-entries :default-cover="object.artist.cover" :is-podcast="object.artist.content_category === 'podcast'" :limit="25" :filters="{channel: object.uuid, ordering: 'creation_date'}">
     </channel-entries>
   </section>
 </template>

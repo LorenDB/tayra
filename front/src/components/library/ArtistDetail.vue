@@ -14,6 +14,16 @@
         </button>
       </div>
     </div>
+    <section v-if="tracks.length > 0" class="ui vertical stripe segment">
+      <track-table :is-artist="true" :show-position="false" :track-only="true" :tracks="tracks.slice(0,5)">
+        <template slot="header">
+          <h2>
+            <translate translate-context="Content/Artist/Title">New tracks by this artist</translate>
+          </h2>
+          <div class="ui hidden divider"></div>
+        </template>
+      </track-table>
+    </section>
     <section v-if="isLoadingAlbums" class="ui vertical stripe segment">
       <div :class="['ui', 'centered', 'active', 'inline', 'loader']"></div>
     </section>
@@ -28,12 +38,6 @@
       <button :class="['ui', {loading: isLoadingMoreAlbums}, 'button']" v-if="nextAlbumsUrl && loadMoreAlbumsUrl" @click="loadMoreAlbums(loadMoreAlbumsUrl)">
         <translate translate-context="Content/*/Button.Label">Load more…</translate>
       </button>
-    </section>
-    <section v-if="tracks.length > 0" class="ui vertical stripe segment">
-      <h2>
-        <translate translate-context="Content/Artist/Title">Tracks by this artist</translate>
-      </h2>
-      <track-table :display-position="true" :tracks="tracks" :next-url="nextTracksUrl"></track-table>
     </section>
     <section class="ui vertical stripe segment">
       <h2>

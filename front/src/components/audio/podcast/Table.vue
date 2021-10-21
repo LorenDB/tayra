@@ -1,76 +1,26 @@
 <template>
   <div>
-    <!-- Show the search bar if search is true -->
-    <inline-search-bar
-      v-model="query"
-      v-if="search"
-      @search="
-        additionalTracks = [];
-        fetchData();
-      "
-    ></inline-search-bar>
     <div class="ui hidden divider"></div>
 
     <!-- Add a header if needed -->
 
     <slot name="header"></slot>
 
-    <!-- Show a message if no tracks are available -->
-
-    <slot v-if="!isLoading && allTracks.length === 0" name="empty-state">
-      <empty-state
-        @refresh="fetchData('tracks/')"
-        :refresh="true"
-      ></empty-state>
-    </slot>
-    <div v-else>
+    <div>
       <div
         :class="['track-table', 'ui', 'unstackable', 'grid', 'tablet-and-up']"
       >
-        <div v-if="isLoading" class="ui inverted active dimmer">
-          <div class="ui loader"></div>
-        </div>
-        <div class="track-table row">
-          <div v-if="showPosition" class="actions left floated column">
-            <i class="hashtag icon"></i>
-          </div>
-          <div v-else class="actions left floated column"></div>
-          <div v-if="showArt" class="image left floated column"></div>
-          <div class="content ellipsis left floated column">
-            <b>{{ labels.title }}</b>
-          </div>
-          <div v-if="showAlbum" class="content ellipsisleft floated column">
-            <b>{{ labels.album }}</b>
-          </div>
-          <div v-if="showArtist" class="content ellipsis left floated column">
-            <b>{{ labels.artist }}</b>
-          </div>
-          <div
-            v-if="$store.state.auth.authenticated"
-            class="meta right floated column"
-          ></div>
-          <div v-if="showDuration" class="meta right floated column">
-            <i class="clock outline icon" style="padding: 0.5rem" />
-          </div>
-          <div v-if="displayActions" class="meta right floated column"></div>
-        </div>
-
         <!-- For each item, build a row -->
-
-        <track-row
-          v-for="(track, index) in allTracks"
+        <podcast-row
+          v-for="(track, index) in tracks"
           :track="track"
           :key="track.id"
           :index="index"
-          :tracks="allTracks"
-          :show-album="showAlbum"
-          :show-artist="showArtist"
-          :show-position="showPosition"
-          :show-art="showArt"
+          :tracks="tracks"
           :display-actions="displayActions"
           :show-duration="showDuration"
           :is-podcast="isPodcast"
-        ></track-row>
+        ></podcast-row>
       </div>
       <div v-if="paginateResults" class="ui center aligned basic segment desktop-and-up">
         <pagination
@@ -92,11 +42,11 @@
       <!-- For each item, build a row -->
 
       <track-mobile-row
-        v-for="(track, index) in allTracks"
+        v-for="(track, index) in tracks"
         :track="track"
         :key="track.id"
         :index="index"
-        :tracks="allTracks"
+        :tracks="tracks"
         :show-position="showPosition"
         :show-art="showArt"
         :show-duration="showDuration"
@@ -118,8 +68,8 @@
 
 <script>
 import _ from "@/lodash";
-import axios from "axios";
 import TrackRow from "@/components/audio/track/Row";
+import PodcastRow from "@/components/audio/podcast/Row";
 import TrackMobileRow from "@/components/audio/track/MobileRow";
 import Pagination from "@/components/Pagination";
 
@@ -128,6 +78,7 @@ export default {
     TrackRow,
     TrackMobileRow,
     Pagination,
+    PodcastRow,
   },
 
   props: {
@@ -143,27 +94,21 @@ export default {
     showDuration: { type: Boolean, required: false, default: true },
     isArtist: { type: Boolean, required: false, default: false },
     isAlbum: { type: Boolean, required: false, default: false },
-    isPodcast: { type: Boolean, required: false, default: false },
     paginateResults: { type: Boolean, required: false, default: true},
     total: { type: Number, required: false},
     page: {type: Number, required: false, default: 1},
-    paginateBy: {type: Number, required: false, default: 25}
+    paginateBy: {type: Number, required: false, default: 25},
+    isPodcast: {type: Boolean, required: true},
+    defaultCover: {type: Object, required: false},
   },
 
   data() {
     return {
-      fetchDataUrl: this.nextUrl,
       isLoading: false,
-      additionalTracks: [],
-      query: "",
     };
   },
 
   computed: {
-    allTracks() {
-      return (this.tracks || []).concat(this.additionalTracks);
-    },
-
     labels() {
       return {
         title: this.$pgettext("*/*/*/Noun", "Title"),
@@ -173,36 +118,8 @@ export default {
     },
   },
   methods: {
-    async fetchData(url) {
-      if (!url) {
-        return;
-      }
-      this.isLoading = true;
-      let self = this;
-      let params = _.clone(this.filters);
-      let tracksPromise = axios.get(url, { params: params })
-      params.page_size = this.limit;
-      params.page = this.page;
-      params.include_channels = true;
-      try {
-        await tracksPromise
-        self.nextPage = tracksPromise.data.next;
-        self.objects = tracksPromise.data.results;
-        self.count = tracksPromise.data.count;
-        self.$emit("fetched", tracksPromise.data);
-        self.isLoading = false;
-      } catch(e) {
-          self.isLoading = false;
-          self.errors = error.backendErrors;
-      }
-    },
     updatePage: function(page) {
       this.$emit('page-changed', page)
-    }
-  },
-  created() {
-    if (!this.tracks) {
-      this.fetchData("tracks/");
     }
   },
 };

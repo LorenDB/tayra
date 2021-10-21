@@ -8,15 +8,13 @@
       :class="[{'disabled': current - 1 < 1}, 'item']"><i class="angle left icon"></i></a>
     <template v-if="!compact">
       <a href
-        v-if="page !== 'skip'"
         v-for="page in pages"
+        :key="page"
         @click.prevent.stop="selectPage(page)"
-        :class="[{'active': page === current}, 'item']">
-        {{ page }}
+        :class="[{'active': page === current}, {'disabled': page === 'skip'}, 'item']">
+        <span v-if="page !== 'skip'">{{ page }}</span>
+        <span v-else>…</span>
       </a>
-      <div v-else class="disabled item">
-        …
-      </div>
     </template>
     <a href
       :disabled="current + 1 > maxPage"

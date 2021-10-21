@@ -24,7 +24,7 @@
           <div class="field">
             <label for="favorites-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
             <select id="favorites-ordering" class="ui dropdown" v-model="ordering">
-              <option v-for="option in orderingOptions" :value="option[0]">
+              <option v-for="option in orderingOptions" :value="option[0]" :key="option[0]">
                 {{ sharedLabels.filters[option[1]] }}
               </option>
             </select>
@@ -46,7 +46,7 @@
           </div>
         </div>
       </div>
-      <track-table v-if="results" :tracks="results.results"></track-table>
+      <track-table :show-artist="true" :show-album="true" v-if="results" :tracks="results.results"></track-table>
       <div class="ui center aligned basic segment">
         <pagination
           v-if="results && results.count > paginateBy"
@@ -76,21 +76,21 @@
 import axios from "axios"
 import $ from "jquery"
 import logger from "@/logging"
-import TrackTable from "@/components/audio/track/Table"
 import RadioButton from "@/components/radios/Button"
 import Pagination from "@/components/Pagination"
 import OrderingMixin from "@/components/mixins/Ordering"
 import PaginationMixin from "@/components/mixins/Pagination"
 import TranslationsMixin from "@/components/mixins/Translations"
 import {checkRedirectToLogin} from '@/utils'
+import TrackTable from '@/components/audio/track/Table'
 const FAVORITES_URL = "tracks/"
 
 export default {
   mixins: [OrderingMixin, PaginationMixin, TranslationsMixin],
   components: {
-    TrackTable,
     RadioButton,
-    Pagination
+    Pagination,
+    TrackTable
   },
   data() {
     return {

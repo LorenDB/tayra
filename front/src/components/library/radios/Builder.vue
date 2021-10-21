@@ -85,7 +85,13 @@
             translate-context="Content/Radio/Table.Paragraph/Short">
             %{ count } track matching combined filters
           </h3>
-          <track-table v-if="checkResult.candidates.sample" :tracks="checkResult.candidates.sample" :playable="true"></track-table>
+          <track-table 
+            v-if="checkResult.candidates.sample" 
+            :tracks="checkResult.candidates.sample" 
+            :playable="true"
+            :show-position="false"
+            :show-duration="false"
+            :display-actions="false"></track-table>
         </template>
       </section>
     </div>

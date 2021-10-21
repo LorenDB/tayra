@@ -21,10 +21,10 @@
           <input :id="f.name" v-if="f.type === 'list' && config[f.name]" :value="config[f.name].join(',')" type="hidden">
           <div v-if="config[f.name]" class="ui menu">
             <div
-              v-if="f.type === 'list'"
               v-for="(v, index) in config[f.name]"
               class="ui item"
-              :data-value="v">
+              :data-value="v"
+              :key="v">
                 <template v-if="config.names">
                   {{ config.names[index] }}
                 </template>

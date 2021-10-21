@@ -1,0 +1,36 @@
+.favorite-icon.favorited {
+  animation: .5s linear burst;
+  outline-color: transparent;
+  @keyframes burst{
+    0%,10%{
+        transform: scale(1);
+        opacity: .5;
+        color:lavender;
+        box-shadow: none;
+    }
+    45%{
+        transform: scale(.2) rotate(30deg);
+        opacity: .75;
+        box-shadow: none;
+    }
+    50%{
+        transform: scale(2) rotate(-37.5deg);
+        opacity: 1;
+        color: #E03997;
+        text-shadow: 2px 2px 6px rgba(235, 9, 9, 0.5);
+        box-shadow: none;
+    }
+    90%,95%{
+        transform: scale(1) rotate(10deg);
+        text-shadow: none;
+    }
+    100% {
+        transform: rotate(-2.5deg);
+    }
+
+  }
+}
+
+.ui.basic.button.really.favorite-icon {
+  box-shadow: none;
+}

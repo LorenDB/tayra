@@ -309,6 +309,11 @@ REPLACEMENTS = {
             ("color", "var(--button-basic-hover-color)"),
             ("box-shadow", "var(--button-basic-hover-box-shadow)"),
         ],
+        (".ui.basic.button:focus",): [
+            ("background", "var(--button-basic-hover-background)"),
+            ("color", "var(--button-basic-hover-color)"),
+            ("box-shadow", "var(--button-basic-hover-box-shadow)"),
+        ],
     },
     "card": {
         "skip": [

@@ -2,59 +2,12 @@
   <div
     :class="[
       { active: currentTrack && track.id === currentTrack.id },
-      'track-row row',
+      'track-row podcast row',
     ]"
     @mouseover="hover = track.id"
     @mouseleave="hover = null"
     @dblclick="activateTrack(track, index)"
   >
-    <div
-      class="actions one wide left floated column"
-      role="button"
-      @click.prevent.exact="activateTrack(track, index)"
-    >
-      <play-indicator
-        v-if="
-          !$store.state.player.isLoadingAudio &&
-          currentTrack &&
-          isPlaying &&
-          track.id === currentTrack.id &&
-          !(track.id == hover)
-        "
-      >
-      </play-indicator>
-      <button
-        v-else-if="
-          currentTrack &&
-          !isPlaying &&
-          track.id === currentTrack.id &&
-          !track.id == hover
-        "
-        class="ui really tiny basic icon button play-button paused"
-      >
-        <i class="pause icon" />
-      </button>
-      <button
-        v-else-if="
-          currentTrack &&
-          isPlaying &&
-          track.id === currentTrack.id &&
-          track.id == hover
-        "
-        class="ui really tiny basic icon button play-button"
-      >
-        <i class="pause icon" />
-      </button>
-      <button
-        v-else-if="track.id == hover"
-        class="ui really tiny basic icon button play-button"
-      >
-        <i class="play icon" />
-      </button>
-      <span class="track-position" v-else-if="showPosition">
-        {{ prettyPosition(track.position) }}
-      </span>
-    </div>
     <div
       v-if="showArt"
       class="image left floated column"
@@ -65,18 +18,6 @@
         alt=""
         class="ui artist-track mini image"
         v-if="
-          track.album && track.album.cover && track.album.cover.urls.original
-        "
-        v-lazy="
-          $store.getters['instance/absoluteUrl'](
-            track.album.cover.urls.medium_square_crop
-          )
-        "
-      />
-      <img
-        alt=""
-        class="ui artist-track mini image"
-        v-else-if="
           track.cover && track.cover.urls.original
         "
         v-lazy="
@@ -89,11 +30,11 @@
         alt=""
         class="ui artist-track mini image"
         v-else-if="
-          track.artist && track.artist.cover && track.album.cover.urls.original
+          defaultCover
         "
         v-lazy="
           $store.getters['instance/absoluteUrl'](
-            track.cover.urls.medium_square_crop
+            defaultCover.cover.urls.medium_square_crop
           )
         "
       />
@@ -104,44 +45,11 @@
         src="../../../assets/audio/default-cover.png"
       />
     </div>
-    <div tabindex=0 class="content ellipsis left floated column">
+    <div tabindex=0 class="content left floated column">
       <a
-        @click="activateTrack(track, index)"
-      >
-        {{ track.title }}
-      </a>
-    </div>
-    <div v-if="showAlbum" class="content ellipsis left floated column">
-      <router-link
-        :to="{ name: 'library.albums.detail', params: { id: track.album.id } }"
-        >{{ track.album.title }}</router-link
-      >
-    </div>
-    <div v-if="showArtist" class="content ellipsis left floated column">
-      <router-link
-        class="artist link"
-        :to="{
-          name: 'library.artists.detail',
-          params: { id: track.artist.id },
-        }"
-        >{{ track.artist.name }}</router-link
-      >
-    </div>
-    <div
-      v-if="$store.state.auth.authenticated"
-      class="meta right floated column"
-    >
-      <track-favorite-icon
-        class="tiny"
-        :border="false"
-        :track="track"
-      ></track-favorite-icon>
-    </div>
-    <div v-if="showDuration" class="meta right floated column">
-      <human-duration
-        v-if="track.uploads[0] && track.uploads[0].duration"
-        :duration="track.uploads[0].duration"
-      ></human-duration>
+        class="podcast-episode-title ellipsis"
+        @click.prevent.exact="activateTrack(track, index)">{{ track.title }}</a>
+      <p class="podcast-episode-meta">{{ description.text }}</p>
     </div>
     <div v-if="displayActions" class="meta right floated column">
       <play-button
@@ -161,9 +69,9 @@
 </template>
 
 <script>
+import axios from 'axios'
 import PlayIndicator from "@/components/audio/track/PlayIndicator";
 import { mapActions, mapGetters } from "vuex";
-import TrackFavoriteIcon from "@/components/favorites/TrackFavoriteIcon";
 import PlayButton from "@/components/audio/PlayButton";
 import PlayOptions from "@/components/mixins/PlayOptions";
 
@@ -182,17 +90,23 @@ export default {
     showDuration: { type: Boolean, required: false, default: true },
     index: { type: Number, required: true },
     track: { type: Object, required: true },
+    defaultCover: { type: Object, required: false },
   },
 
   data() {
     return {
       hover: null,
+      errors: null,
+      description: null,
     }
   },
 
+  created () {
+    this.fetchData('tracks/' + this.track.id + '/' )
+	},
+
   components: {
     PlayIndicator,
-    TrackFavoriteIcon,
     PlayButton,
   },
 
@@ -207,6 +121,21 @@ export default {
   },
 
   methods: {
+    async fetchData (url) {
+      if (!url) {
+        return
+      }
+      this.isLoading = true
+      let self = this
+      try {
+        let channelsPromise = await axios.get(url)
+        self.description = channelsPromise.data.description
+        self.isLoading = false
+      } catch(e) {
+        self.isLoading = false
+        self.errors = error.backendErrors
+      }
+    },
 
     prettyPosition(position, size) {
       var s = String(position);
@@ -215,7 +144,7 @@ export default {
       }
       return s;
     },
-    
+
     ...mapActions({
       resumePlayback: "player/resumePlayback",
       pausePlayback: "player/pausePlayback",
