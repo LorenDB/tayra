@@ -34,6 +34,7 @@ Using Funkwhale
    apps
    reports
    cli
+   builtinplugins
 
 Troubleshooting Issues
 ----------------------

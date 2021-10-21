@@ -7,7 +7,7 @@ PLUGIN = plugins.get_plugin_config(
         "A plugin that enables scrobbling to ListenBrainz and Last.fm. "
         "It must be configured on the server if you use Last.fm."
     ),
-    homepage="https://dev.funkwhale.audio/funkwhale/funkwhale/-/blob/develop/api/funkwhale_api/contrib/scrobbler/README.rst",  # noqa
+    homepage="https://docs.funkwhale.audio/users/builtinplugins.html#scrobbler-plugin",  # noqa
     version="0.1",
     user=True,
     conf=[
