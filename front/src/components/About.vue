@@ -38,7 +38,7 @@
                     <translate translate-context="Content/About/Paragraph">Sign up now to keep a track of your favorites, create playlists, discover new content and much more!</translate>
                   </p>
                   <p v-if="defaultUploadQuota">
-                    <translate translate-context="Content/About/Paragraph" :translate-params="{quota: humanSize(defaultUploadQuota * 1000 * 1000)}">Users on this pod also get %{ quota } of free storage to upload their own content!</translate>
+                    <translate translate-context="Content/About/Paragraph" :translate-params="{quota: defaultUploadQuota}">Users on this pod also get %{ quota } of free storage to upload their own content!</translate>
                   </p>
                   <signup-form button-classes="success" :show-login="false"></signup-form>
                 </template>
@@ -141,6 +141,7 @@
 import { mapState } from "vuex"
 import _ from '@/lodash'
 import showdown from 'showdown'
+import {humanSize} from '@/filters'
 
 import SignupForm from "@/components/auth/SignupForm"
 import LogoText from "@/components/LogoText"
@@ -217,7 +218,7 @@ export default {
       return _.get(this.nodeinfo, 'openRegistrations')
     },
     defaultUploadQuota () {
-      return _.get(this.nodeinfo, 'metadata.defaultUploadQuota')
+      return humanSize(_.get(this.nodeinfo, 'metadata.defaultUploadQuota') * 1000 * 1000)
     },
     federationEnabled () {
       return _.get(this.nodeinfo, 'metadata.library.federationEnabled')
