@@ -98,7 +98,7 @@ describe('store/player', () => {
     })
     it('progress', () => {
       const state = { currentTime: 4, duration: 10 }
-      expect(store.getters['progress'](state)).to.equal(0.4)
+      expect(store.getters['progress'](state)).to.equal(40)
     })
   })
   describe('actions', () => {

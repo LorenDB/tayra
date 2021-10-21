@@ -57,7 +57,7 @@
                       :class="['ui', 'small', 'vibrant', {'indicating': isLoadingAudio}, 'progress']"
                       @click="touchProgress">
                       <div class="buffer bar" :data-percent="bufferProgress" :style="{ 'width': bufferProgress + '%' }"></div>
-                      <div class="position bar" :data-percent="progress" :style="{ 'transform': 'scale(' + progress + ', 1)' }"></div>
+                      <div class="position bar" :data-percent="progress" :style="{ 'width': progress + '%' }"></div>
                     </div>
                   </div>
                   <div class="progress-area" v-else>
