@@ -3,6 +3,24 @@
     padding: 0;
   }
 
+  .ui.basic.segment {
+    margin: 0;
+  }
+
+  section.ui.segment.head {
+    border-radius: .5em;
+  }
+
+  table.ui.very.basic {
+    border-radius: 0;
+    border-top: var(--table-border);
+    border-bottom: var(--table-border);
+
+    tr:last-child {
+      border-bottom: 0;
+    }
+  }
+
   h1.header, h1 .sub.header {
     text-shadow: 0 2px 0 rgba(0,0,0,.8);
     color: #fff !important;
@@ -26,6 +44,127 @@
   #pod {
     font-size: 110%;
     display: block;
+  }
+
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .about-pod-info-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+
+    margin-top: 2em;
+
+    .about-pod-info-toc {
+      margin-bottom: 2em;
+
+      .ui.secondary.pointing.menu {
+        &.vertical {
+          border-right-width: 0;
+          border-right-style: none;
+          border-left: var(--table-border);
+          border-left-width: 2px;
+
+          .item {
+            border-right-style: none;
+            border-right-width: 0;
+            border-left-color: transparent;
+            border-left-style: solid;
+            border-left-width: 2px;
+            margin: 0 0 0 -2px;
+
+            transition: all .2s ease-in-out;
+
+            padding-top: .5em;
+            padding-bottom: .5em;
+
+            &.active {
+              border-left-color: currentColor;
+
+              &:not(.router-link-exact-active) {
+                border-left: 4px solid currentColor;
+                margin-left: -3px;
+                margin-right: -1px;
+              }
+            }
+          }
+        }
+
+        .active.item {
+          color: var(--vibrant-color);
+        }
+      }
+    }
+  }
+
+  .statistics-container {
+    padding-top: .5rem;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+
+    .statistics-statistic {
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+      display: inline-flex;
+      flex-basis: 25%;
+
+      .statistics-figure {
+        color: var(--really-discrete-text-color);
+        padding-bottom: 1rem;
+
+        span {
+          display: inline-block;
+          padding-bottom: .25rem;
+        }
+      }
+    }
+  }
+
+  .features-container {
+    padding-top: .5rem;
+    padding-bottom: 1rem;
+
+    .features-status {
+      color: var(--really-discrete-text-color);
+    }
+  }
+
+  @include media('>desktop') {
+    .about-pod-info-container {
+      flex-direction: row-reverse;
+
+      .about-pod-info-toc {
+        width: 25%;
+      }
+
+      .about-pod-info {
+        width: 75%;
+        padding-right: 2em;
+      }
+    }
+  }
+
+  @include media('<tablet') {
+    .statistics-container {
+      .statistics-statistic {
+        flex-basis: 50%;
+      }
+    }
+
+    .features-container {
+      .column {
+        padding: 0 !important;
+
+        & + .column table {
+          border-top: 0;
+        }
+      }
+    }
   }
 
 }

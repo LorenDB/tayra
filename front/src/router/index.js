@@ -72,6 +72,12 @@ export default new Router({
         import(/* webpackChunkName: "about" */ '@/components/About')
     },
     {
+      path: '/about/pod',
+      name: 'about-pod',
+      component: () =>
+        import(/* webpackChunkName: "about" */ '@/components/AboutPod')
+    },
+    {
       path: '/login',
       name: 'login',
       component: () =>

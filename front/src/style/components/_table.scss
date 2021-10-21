@@ -36,3 +36,9 @@
 td.align.right {
   text-align: right;
 }
+
+
+
+.ui.basic.table > tbody > tr {
+  border-bottom: var(--table-border);
+}

@@ -1,201 +1,139 @@
 <template>
   <main class="main pusher page-about" v-title="labels.title">
-    <section :class="['ui', 'head', {'with-background': banner}, 'vertical', 'center', 'aligned', 'stripe', 'segment']" :style="headerStyle">
-      <div class="segment-content">
-        <h1 class="ui center aligned large header">
-          <span
-            v-translate="{podName: podName}"
-            translate-context="Content/Home/Header"
-            :translate-params="{podName: podName}">
-            About %{ podName }
-          </span>
-          <div v-if="shortDescription" class="sub header">
-            {{ shortDescription }}
-          </div>
-        </h1>
-      </div>
-    </section>
-    <section class="ui vertical stripe segment">
-      <div class="ui container">
-        <div class="ui mobile reversed stackable grid">
-          <div class="ten wide column">
+    <div class="ui container">
+      <div class="ui horizontally fitted basic stripe segment">
+        <div class="ui horizontally fitted basic very padded segment">
+          <div class="ui center aligned text container">
             <div class="ui text container">
-              <h2 class="ui header" id="description">
-                <translate translate-context="Content/About/Header">About this pod</translate>
-              </h2>
-              <div v-html="markdown.makeHtml(longDescription)" v-if="longDescription"></div>
-              <p v-else>
-                <translate translate-context="Content/Home/Paragraph">No description available.</translate>
-              </p>
-              <h3 class="ui header" id="rules">
-                <translate translate-context="Content/About/Header">Rules</translate>
-              </h3>
-              <div v-html="markdown.makeHtml(rules)" v-if="rules"></div>
-              <p v-else>
-                <translate translate-context="Content/Home/Paragraph">No rules available.</translate>
-              </p>
-              <h3 class="ui header" id="terms">
-                <translate translate-context="Content/About/Header">Terms and privacy policy</translate>
-              </h3>
-              <div v-html="markdown.makeHtml(terms)" v-if="terms"></div>
-              <p v-else>
-                <translate translate-context="Content/Home/Paragraph">No terms available.</translate>
-              </p>
-            </div>
-          </div>
-          <div class="six wide column">
-            <div class="ui raised segment">
-              <h3 class="ui header">
-                <translate translate-context="Content/About/Header">Contents</translate>
-              </h3>
-              <div class="ui list">
-                <div class="ui item">
-                  <a href="#description">
-                    <translate translate-context="Content/About/Header">About this pod</translate>
-                  </a>
+              <div class="ui equal width compact stackable grid">
+                <div class="column"></div>
+                <div class="ten wide column">
+                  <div class="ui vertically fitted basic segment">
+                    <router-link to="/">
+                      <logo-text />
+                    </router-link>
+                  </div>
                 </div>
-                <div class="ui item">
-                  <a href="#rules">
-                    <translate translate-context="Content/About/Header">Rules</translate>
-                  </a>
-                </div>
-                <div class="ui item">
-                  <a href="#terms">
-                    <translate translate-context="Content/About/Header">Terms and privacy policy</translate>
-                  </a>
-                </div>
+                <div class="column"></div>
               </div>
-              <template v-if="contactEmail">
-                <h3 class="header">
-                  <translate translate-context="Content/Home/Header/Name">Contact</translate>
-                </h3>
-                <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
-              </template>
-              <h3 class="header">
-                <translate translate-context="Content/About/Header/Name">Pod configuration</translate>
-              </h3>
-              <table class="ui very basic table">
-                <tbody>
-                  <tr v-if="version">
-                    <td>
-                      <translate translate-context="*/*/*">Funkwhale version</translate>
-                    </td>
-                    <td>
-                      {{ version }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <translate translate-context="*/*/*">Registrations</translate>
-                    </td>
-                    <td v-if="openRegistrations">
-                      <i class="check icon"></i>
-                      <translate translate-context="*/*/*/State of registrations">Open</translate>
-                    </td>
-                    <td v-else>
-                      <i class="x icon"></i>
-                      <translate translate-context="*/*/*/State of registrations">Closed</translate>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <translate translate-context="*/*/*">Upload quota</translate>
-                    </td>
-                    <td v-if="defaultUploadQuota">
-                      {{ defaultUploadQuota * 1000 * 1000 | humanSize }}
-                    </td>
-                    <td v-else>
-                      <translate translate-context="*/*/*">N/A</translate>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <translate translate-context="*/*/*">Federation</translate>
-                    </td>
-                    <td v-if="federationEnabled">
-                      <i class="check icon"></i>
-                      <translate translate-context="*/*/*/State of feature">Enabled</translate>
-                    </td>
-                    <td v-else>
-                      <i class="x icon"></i>
-                      <translate translate-context="*/*/*/State of feature">Disabled</translate>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <translate translate-context="*/*/*">Anonymous access</translate>
-                    </td>
-                    <td v-if="anonymousCanListen">
-                      <i class="check icon"></i>
-                      <translate translate-context="*/*/*/State of feature">Enabled</translate>
-                    </td>
-                    <td v-else>
-                      <i class="x icon"></i>
-                      <translate translate-context="*/*/*/State of feature">Disabled</translate>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <translate translate-context="*/*/*">Allow-list</translate>
-                    </td>
-                    <td v-if="allowListEnabled">
-                      <i class="check icon"></i>
-                      <translate translate-context="*/*/*/State of feature">Enabled</translate>
-                    </td>
-                    <td v-else>
-                      <i class="x icon"></i>
-                      <translate translate-context="*/*/*/State of feature">Disabled</translate>
-                    </td>
-                  </tr>
-                  <tr v-if="allowListDomains">
-                    <td>
-                      <translate translate-context="*/*/*">Allowed domains</translate>
-                    </td>
-                    <td>
-                      <translate :translate-n="allowListDomains.length"  translate-plural="%{ count } allowed domains" :translate-params="{count: allowListDomains.length}" translate-context="*/*/*">%{ count } allowed domains</translate>
-                      <br>
-                      <a @click.prevent="showAllowedDomains = !showAllowedDomains">
-                        <translate v-if="showAllowedDomains" key="1" translate-context="*/*/*/Verb">Hide</translate>
-                        <translate v-else key="2" translate-context="*/*/*/Verb">Show</translate>
-                      </a>
-                      <ul class="ui list" v-if="showAllowedDomains">
-                        <li v-for="domain in allowListDomains" :key="domain">
-                          <a :href="`https://${domain}`" target="_blank" rel="noopener">{{ domain }}</a>
-                        </li>
-                      </ul>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-              <template v-if="stats">
-                <h3 class="header">
-                  <translate translate-context="Content/Home/Header">Statistics</translate>
-                </h3>
-                <p>
-                  <i class="user really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.users.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.users" translate-plural="%{ count } active users">%{ count } active user</translate>
-                </p>
-                <p>
-                  <i class="music really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: parseInt(stats.hours).toLocaleString($store.state.ui.momentLocale)}" :translate-n="parseInt(stats.hours)" translate-plural="%{ count } hours of music">%{ count } hour of music</translate>
-                </p>
-                <p v-if="stats.artists">
-                  <i class="users really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.artists.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.artists" translate-plural="%{ count } artists">%{ count } artist</translate>
-                </p>
-                <p v-if="stats.albums">
-                  <i class="headphones really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.albums.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.albums" translate-plural="%{ count } albums">%{ count } album</translate>
-                </p>
-                <p v-if="stats.tracks">
-                  <i class="file really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.tracks.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.tracks" translate-plural="%{ count } tracks">%{ count } track</translate>
-                </p>
-                <p v-if="stats.listenings">
-                  <i class="play really discrete icon"></i><translate translate-context="Content/Home/Stat" :translate-params="{count: stats.listenings.toLocaleString($store.state.ui.momentLocale) }" :translate-n="stats.listenings" translate-plural="%{ count } listenings">%{ count } listening</translate>
-                </p>
-              </template>
+              <h2 class="header">
+                <translate translate-context="Content/About/Heading">A social platform to enjoy and share music</translate>
+              </h2>
+              <p>
+                <translate translate-context="Content/About/Paragraph">Funkwhale is a community-driven project that lets you listen and share music and audio within a decentralized, open network.</translate>
+              </p>
             </div>
           </div>
         </div>
+        <div class="ui hidden divider"></div>
+        <div class="ui vertically fitted basic stripe segment">
+          <div class="ui two stackable cards">
+            <div class="ui card">
+              <div class="signup-form content">
+                <h3 class="header">
+                  <translate translate-context="*/Signup/Title">Sign up</translate>
+                </h3>
+                <template v-if="openRegistrations">
+                  <p>
+                    <translate translate-context="Content/About/Paragraph">Sign up now to keep a track of your favorites, create playlists, discover new content and much more!</translate>
+                  </p>
+                  <p v-if="defaultUploadQuota">
+                    <translate translate-context="Content/About/Paragraph" :translate-params="{quota: humanSize(defaultUploadQuota * 1000 * 1000)}">Users on this pod also get %{ quota } of free storage to upload their own content!</translate>
+                  </p>
+                  <signup-form button-classes="success" :show-login="false"></signup-form>
+                </template>
+                <div v-else>
+                  <p translate-context="Content/About/Paragraph">Registrations are closed on this pod. You can signup on another pod using the link below.</p>
+
+                  <a target="_blank" rel="noopener" href="https://funkwhale.audio/#get-started">
+                    <translate translate-context="Content/About/Link">Find another pod</translate>
+                    <i class="external alternate icon margin-left"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="ui card">
+              <section :class="['ui', 'head', {'with-background': banner}, 'vertical', 'center', 'aligned', 'stripe', 'segment']" :style="headerStyle">
+              </section>
+              <div class="content padding-top padding-bottom">
+                <h3 class="ui header" id="description">
+                  <translate translate-context="Content/About/Header">About this pod</translate>
+                </h3>
+                <div v-if="shortDescription" class="sub header">
+                  {{ shortDescription }}
+                </div>
+                <p v-else>
+                  <translate translate-context="Content/About/Paragraph">No description available.</translate>
+                </p>
+
+                <template v-if="stats">
+                  <div class="statistics-container ui doubling grid">
+                    <div class="ui six wide column">
+                      <span class="statistics-figure ui text">
+                        <span class="ui big text"><strong>{{ stats.users.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
+                        <br />
+                        <translate translate-context="Content/About/*" :translate-n="stats.users" translate-plural="active users">active user</translate>
+                      </span>
+                    </div>
+                    <div class="ui six wide column">
+                      <span class="statistics-figure ui text">
+                        <span class="ui big text"><strong>{{ parseInt(stats.hours).toLocaleString($store.state.ui.momentLocale) }}</strong></span>
+                        <br />
+                        <translate translate-context="Content/About/*" :translate-n="parseInt(stats.hours)" translate-plural="hours of music">hour of music</translate>
+                      </span>
+                    </div>
+                  </div>
+                </template>
+
+                <router-link to="/about/pod" class="ui fluid basic secondary button">
+                  <translate translate-context="Content/About/Paragraph">Learn More</translate>
+                </router-link>
+              </div>
+            </div>
+          </div>
+          <div class="ui three stackable cards">
+            <router-link to="/" class="ui card">
+              <div class="content">
+                <h3 class="ui header" id="description">
+                  <translate translate-context="Content/About/Header">Browse public content</translate>
+                </h3>
+                <p>
+                  <translate translate-context="Content/About/Paragraph">Listen to public albums and playlists shared on this pod.</translate>
+                </p>
+              </div>
+            </router-link>
+            <a href="https://funkwhale.audio/#get-started" class="ui card">
+              <div class="content">
+                <h3 class="ui header" id="description">
+                  <translate translate-context="Content/About/Header">Find another pod</translate>
+                  <i class="external alternate icon margin-left"></i>
+                </h3>
+                <p>
+                  <translate translate-context="Content/About/Paragraph">Listen to public albums and playlists shared on this pod.</translate>
+                </p>
+              </div>
+            </a>
+            <a href="https://funkwhale.audio/apps" class="ui card">
+              <div class="content">
+                <h3 class="ui header" id="description">
+                  <translate translate-context="Content/About/Header">Find an app</translate>
+                  <i class="external alternate icon margin-left"></i>
+                </h3>
+                <p>
+                  <translate translate-context="Content/About/Paragraph">Use Funkwhale on other devices with our apps.</translate>
+                </p>
+              </div>
+            </a>
+          </div>
+          <div class="ui fluid horizontally fitted basic clearing segment container">
+            <router-link to="/about/pod" class="ui right floated basic secondary button">
+              <translate translate-context="Content/About/Paragraph">About this pod</translate>
+              <i class="icon arrow right"></i>
+            </router-link>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
   </main>
 </template>
 
@@ -204,7 +142,14 @@ import { mapState } from "vuex"
 import _ from '@/lodash'
 import showdown from 'showdown'
 
+import SignupForm from "@/components/auth/SignupForm"
+import LogoText from "@/components/LogoText"
+
 export default {
+  components: {
+    SignupForm,
+    LogoText,
+  },
   data () {
     return {
       markdown: new showdown.Converter(),
@@ -290,3 +235,21 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.margin-left {
+    margin-left: 5px;
+}
+
+.padding-top {
+    padding-top: 20px !important;
+}
+
+.padding-bottom {
+    padding-bottom: 20px !important;
+}
+h3 i {
+    display: inline !important;
+    font-size: 14px !important;
+}
+</style>
