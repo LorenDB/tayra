@@ -88,6 +88,7 @@ sys.path.append(FUNKWHALE_PLUGINS_PATH)
 CORE_PLUGINS = [
     "funkwhale_api.contrib.scrobbler",
     "funkwhale_api.contrib.listenbrainz",
+    "funkwhale_api.contrib.maloja",
 ]
 
 LOAD_CORE_PLUGINS = env.bool("FUNKWHALE_LOAD_CORE_PLUGINS", default=True)
