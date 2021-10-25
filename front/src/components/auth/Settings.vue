@@ -391,7 +391,7 @@ export default {
           privacy_level: {
             type: "dropdown",
             initial: this.$store.state.auth.profile.privacy_level,
-            choices: ["me", "instance"]
+            choices: ["me", "instance", "everyone"]
           }
         }
       }
