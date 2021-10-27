@@ -1,4 +1,6 @@
 
+------------------
+
 Upgrade instructions are available at
 https://docs.funkwhale.audio/admin/upgrading.html
 
