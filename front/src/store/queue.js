@@ -97,18 +97,18 @@ export default {
 
     cleanTrack ({state, dispatch, commit}, index) {
       // are we removing current playin track
-      let current = index === state.currentIndex
+      const current = index === state.currentIndex
       if (current) {
         dispatch('player/stop', null, {root: true})
       }
       commit('splice', {start: index, size: 1})
       if (index < state.currentIndex) {
         commit('currentIndex', state.currentIndex - 1)
-      } else if (index > 0 && index === state.tracks.length) {
+      } else if (index > 0 && index === state.tracks.length && current) {
         // kind of a edge case: if you delete the last track of the queue
-        // we set current index to the previous one to avoid the queue tab from
-        // being stuck because the player disappeared
-        // cf #1092
+        // while it's playing we set current index to the previous one to
+        // avoid the queue tab from being stuck because the player
+        // disappeared cf #1092
         commit('currentIndex', state.tracks.length - 1)
       } else if (current) {
         // we play next track, which now have the same index

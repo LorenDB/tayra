@@ -164,6 +164,20 @@ describe('store/queue', () => {
         ]
       })
     })
+    it('cleanTrack current is last', () => {
+      testAction({
+        action: store.actions.cleanTrack,
+        payload: 5,
+        params: { state: { currentIndex: 5, tracks: [1, 2, 3, 4, 5] } },
+        expectedMutations: [
+          { type: 'splice', payload: { start: 5, size: 1 } },
+          { type: 'currentIndex', payload: 4 }
+        ],
+        expectedActions: [
+          { type: 'player/stop', payload: null, options: { root: true } }
+        ]
+      })
+    })
     it('previous when at beginning', () => {
       testAction({
         action: store.actions.previous,
