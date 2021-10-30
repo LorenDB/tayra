@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: French (Funkwhale)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-07 18:30+0000\n"
-"PO-Revision-Date: 2021-08-13 11:04+0000\n"
-"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"PO-Revision-Date: 2021-10-31 16:48+0000\n"
+"Last-Translator: appzer0 <appzer0@free.fr>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/funkwhale/"
 "front/fr/>\n"
 "Language: fr_FR\n"
@@ -7049,7 +7049,7 @@ msgstr "Type"
 #: front/src/components/common/LoginModal.vue:56
 msgctxt "Popup/Title/Noun"
 msgid "Unauthenticated"
-msgstr ""
+msgstr "Déconnecté⋅e"
 
 #: front/src/components/manage/moderation/AccountsTable.vue:38
 #: front/src/components/manage/moderation/AccountsTable.vue:6
@@ -7400,6 +7400,7 @@ msgstr "Utilisez ce formulaire pour récupérer un objet hébergé ailleurs sur 
 msgctxt "Content/Fetch/Paragraph"
 msgid "Use this form to subscribe to an RSS feed from its URL."
 msgstr ""
+"Utilisez ce formulaire pour vous abonner à un flux RSS via une adresse URL."
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:111
 msgctxt "Content/Moderation/Help text"
@@ -7805,7 +7806,7 @@ msgstr "Vous pouvez les utiliser pour profiter de vos playlists et de votre musi
 #: front/src/components/common/LoginModal.vue:59
 msgctxt "Popup/*/Paragraph"
 msgid "You don't have access!"
-msgstr ""
+msgstr "Vous n'avez pas accès à ceci !"
 
 #: front/src/components/auth/Settings.vue:178
 msgctxt "Content/Applications/Paragraph"
