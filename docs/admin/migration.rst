@@ -91,11 +91,22 @@ On the destination server, use rsync to fetch the contents of ``/srv/funwkhale/d
     rsync -a $username@$origin:/srv/funkwhale/.env /srv/funkwhale/
     rsync -a $username@$origin:/srv/funkwhale/db.dump /srv/funkwhale/
 
-Restore the database dump:
+Initialize the Postgres container with the funkwhale database and its user. For easier, we create a db init dump file than we import in the postgres container:
 
 .. code-block:: shell
 
-    docker exec -i funkwhale_postgres_1 psql -U postgres -d postgres < db.dump
+    echo "CREATE DATABASE "funkwhale"
+  WITH ENCODING 'utf8';
+  CREATE USER funkwhale;
+  GRANT ALL PRIVILEGES ON DATABASE funkwhale TO funkwhale;" > init.dump
+
+    docker exec -i funkwhale_postgres_1 psql -U postgres -d postgres < "init.dump"
+
+After that, we can restore the database dump:
+
+.. code-block:: shell
+
+    docker exec -i funkwhale_postgres_1 psql -U postgres -d postgres < "db.dump"
 
 Once the database has been restored, run the migrations following the docker installation guide. 
 
