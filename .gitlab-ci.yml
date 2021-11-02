@@ -104,6 +104,9 @@ black:
     - pip install black==19.10b0
   script:
     - black --check --diff api/
+  only: 
+    changes:
+      - api/**/*
 
 flake8:
   interruptible: true
@@ -119,6 +122,9 @@ flake8:
     key: "$CI_PROJECT_ID__flake8_pip_cache"
     paths:
       - "$PIP_CACHE_DIR"
+  only: 
+    changes:
+      - api/**/*
 
 eslint:
   interruptible: true
@@ -137,6 +143,9 @@ eslint:
     key: "$CI_PROJECT_ID__eslint_npm_cache"
     paths:
       - front/node_modules
+  only:
+    changes:
+      - front/**/*
 
 test_api:
   interruptible: true
@@ -156,7 +165,10 @@ test_api:
     POSTGRES_HOST_AUTH_METHOD: trust
     CACHE_URL: "redis://redis:6379/0"
   only:
-    - branches
+    refs:
+      - branches
+    changes:
+      - api/**/*
   before_script:
     - cd api
     - pip3 install -r requirements/base.txt
@@ -179,7 +191,10 @@ test_front:
   before_script:
     - cd front
   only:
-    - branches
+    refs:
+      - branches
+    changes:
+      - front/**/*
   script:
     - yarn install --check-files
     - yarn test:unit
