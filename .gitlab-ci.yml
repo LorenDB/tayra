@@ -12,6 +12,7 @@ variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
+  BUILD_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
 
 stages:
   - review
@@ -262,28 +263,55 @@ pages:
   tags:
     - docker
 
-docker_release:
+.docker_publish:
   stage: deploy
   image: egon0/docker-with-buildx-and-git:bash
+  tags:
+    - multiarch
   services:
     - docker:20-dind
   before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
     - cp -r front/dist api/frontend
-    - (if [ "$CI_COMMIT_REF_NAME" == "develop" ] || [ "$CI_COMMIT_REF_NAME" == "stable" ]; then ./scripts/set-api-build-metadata.sh $(echo $CI_COMMIT_SHA | cut -c 1-8); fi);
   script:
-    - if [[ ! -z "$CI_COMMIT_TAG" ]]; then (./docs/get-releases-json.py | scripts/is-docker-latest.py $CI_COMMIT_TAG -) && export DOCKER_LATEST_TAG="-t $IMAGE_LATEST" || export DOCKER_LATEST_TAG=; fi
-    - if [[ "$CI_COMMIT_REF_NAME" =~ ^[0-9]+(.[0-9]+){1,2}$ ]]; then export stable=1 && export major="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1)" && export minor="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1,2)"; fi
+
+docker_publish_stable_release:
+  # Publish a docker image for releases
+  extends: .docker_publish
+  rules:
+    - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_NAME =~ /^[0-9]+(.[0-9]+){1,2}$/
+  script:
+    # Check if this is the latest release
+    - ./docs/get-releases-json.py | scripts/is-docker-latest.py $CI_COMMIT_TAG - && export DOCKER_LATEST_TAG="-t $IMAGE_LATEST" || export DOCKER_LATEST_TAG=;
+    - export major="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1)" 
+    - export minor="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1,2)"; fi
     - cd api
-    - docker build -t $IMAGE $DOCKER_LATEST_TAG .
-    - docker push $IMAGE
-    - if [[ ! -z "$DOCKER_LATEST_TAG" ]]; then docker push $IMAGE_LATEST; fi
-    - if [[ $stable == 1 ]]; then docker tag $IMAGE $IMAGE_NAME:$major && docker push $IMAGE_NAME:$major; fi
-    - if [[ $stable == 1 ]]; then docker tag $IMAGE $IMAGE_NAME:$minor && docker push $IMAGE_NAME:$minor; fi
+    - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
+    - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE -t $DOCKER_LATEST_TAG -t $IMAGE_NAME:$major -t $IMAGE_NAME:$minor .
+
+docker_publish_unstable_release:
+  # Publish a docker image for releases
+  extends: .docker_publish
+  rules:
+    - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_NAME !~ /^[0-9]+(.[0-9]+){1,2}$/
+  script:
+    # Check if this is the latest release
+    - cd api
+    - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
+    - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE .
+
+docker_published_non-release:
+  # Publish a docker image for each commit on develop
+  extends: .docker_publish
   only:
     - develop@funkwhale/funkwhale
     - stable@funkwhale/funkwhale
-    - tags@funkwhale/funkwhale
+  script:
+    - ./scripts/set-api-build-metadata.sh $CI_COMMIT_SHORT_SHA
+    - cd api
+    - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
+    - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE .
 
 docker_all_in_one_release:
   stage: deploy
