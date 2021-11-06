@@ -8,121 +8,100 @@ WEBLATE_URL = "https://translate.funkwhale.audio"
 WEBLATE_COMPONENT_ID = "funkwhale/front"
 
 
-def get_commits(ref_name, since):
-    url = GITLAB_URL + "/api/v4/projects/{}/repository/commits".format(
-        GITLAB_PROJECT_ID
+def get_issues(next_release):
+    url = GITLAB_URL + "/api/v4/issues"
+    # TODO assumes we have less than 100 issues per Milestone
+    response = requests.get(
+        url,
+        params={"per_page": 100, "milestone": next_release, "scope": "all"},
+        headers={"PRIVATE-TOKEN": os.environ["PRIVATE_TOKEN"]},
     )
-    while url:
-        response = requests.get(
-            url, params={"since": since, "ref_name": ref_name, "per_page": 100}
-        )
-        response.raise_for_status()
+    response.raise_for_status()
 
-        yield from response.json()
-
-        if "next" in response.links:
-            url = response.links["next"]["url"]
-        else:
-            url = None
+    return response.json()
 
 
-def get_commit_stats(commits):
-    stats = {"total": 0, "commiters": {}}
-    for commit in commits:
-        if commit["message"].startswith("Merge branch "):
-            continue
-        stats["total"] += 1
-        try:
-            stats["commiters"][commit["author_name"]] += 1
-        except KeyError:
-            stats["commiters"][commit["author_name"]] = 1
-
-    return stats
-
-
-def get_tag_date(ref):
-    url = GITLAB_URL + "/api/v4/projects/{}/repository/tags/{}".format(
-        GITLAB_PROJECT_ID, ref
+def get_merge_requests(next_release):
+    url = GITLAB_URL + "/api/v4/merge_requests"
+    # TODO assumes we have less than 100 issues per Milestone
+    response = requests.get(
+        url,
+        params={"per_page": 100, "milestone": next_release, "scope": "all"},
+        headers={"PRIVATE-TOKEN": os.environ["PRIVATE_TOKEN"]},
     )
-    response = requests.get(url)
     response.raise_for_status()
-    data = response.json()
-    return data["commit"]["committed_date"]
+
+    return response.json()
 
 
-def get_translations(since):
-    url = WEBLATE_URL + "/api/components/{}/changes/".format(WEBLATE_COMPONENT_ID)
-    while url:
-        response = requests.get(url)
-        response.raise_for_status()
-        if "next" in response.json():
-            url = response.json()["next"]
-        else:
-            url = None
-        for t in response.json()["results"]:
-            if t["timestamp"] < since:
-                url = None
-                break
+def get_participants(project_id, issue_iid, object_type="issues"):
+    if object_type not in ["issues", "merge_requests"]:
+        raise ValueError("object_type needs to be `issues` or `merge_requests`")
+    url = GITLAB_URL + "/api/v4/projects/{}/{}/{}/participants".format(
+        project_id, object_type, issue_iid
+    )
 
-            yield t
-
-
-def get_translations_stats(translations):
-    stats = {"total": 0, "translators": {}}
-    for translation in translations:
-        if not translation["author"]:
-            continue
-            print("translation", translation["action_name"])
-            continue
-        stats["total"] += 1
-        try:
-            stats["translators"][translation["author"]] += 1
-        except KeyError:
-            stats["translators"][translation["author"]] = 1
-
-    return stats
-
-
-def get_group_usernames(group):
-    url = GITLAB_URL + "/api/v4/groups/{}/members".format(group)
-    response = requests.get(url, headers={"PRIVATE-TOKEN": os.environ["PRIVATE_TOKEN"]})
+    response = requests.get(
+        url,
+        params={"per_page": 100},
+        headers={"PRIVATE-TOKEN": os.environ["PRIVATE_TOKEN"]},
+    )
     response.raise_for_status()
-    data = response.json()
-    return [r["name"] for r in data]
+
+    participants = []
+    for participant in response.json():
+        participants.append(participant["name"])
+
+    return participants
+
+
+def clear_list(inList):
+    outList = list(dict.fromkeys(inList))
+    try:
+        outList.remove("funkwhale-bot")
+    except:
+        pass
+    try:
+        outList.remove("weblate (bot)")
+    except:
+        pass
+    outList.sort()
+    return outList
 
 
 def main():
+    if "PRIVATE_TOKEN" not in os.environ:
+        print("Please configure an Gitlab Access token in $PRIVATE_TOKEN")
+        return
     parser = argparse.ArgumentParser()
-    parser.add_argument("ref_name")
-    parser.add_argument("last_tag")
+    parser.add_argument("next_tag")
     args = parser.parse_args()
-    since = get_tag_date(args.last_tag)
-    commits = get_commits(args.ref_name, since)
-    commits_stats = get_commit_stats(commits)
-    groups = [(588, "funkwhale/reviewers-python"), (589, "funkwhale/reviewers-front")]
-    reviewers = []
-    for id, _ in groups:
-        reviewers += get_group_usernames(id)
-    print("\nReviewers:\n")
-    for reviewer in reviewers:
-        print(reviewer)
-    commiter_names = commits_stats["commiters"].keys()
-    print("\nCommiters:\n")
-    for commiter in sorted(commits_stats["commiters"].keys(), key=lambda v: v.upper()):
-        print(commiter)
-    translations = get_translations(since)
-    translations_stats = get_translations_stats(translations)
-    translators_ids = sorted(translations_stats["translators"].keys())
-    # There is no way to query user/author info via weblate API and we need the names…
-    print(
-        "\nExecute the following SQL query on the weblate server to get the translators names:"
-    )
-    print("$ weblate dbshell")
-    print(
-        "SELECT full_name FROM weblate_auth_user WHERE id in ({});".format(
-            ", ".join([str(i) for i in translators_ids])
-        )
-    )
+    issues = get_issues(args.next_tag)
+    mrs = get_merge_requests(args.next_tag)
+
+    print("\nContributors to our Issues:\n")
+    issue_participants = []
+
+    for issue in issues:
+        participants = get_participants(issue["project_id"], issue["iid"])
+        issue_participants.extend(participants)
+
+    issue_participants = clear_list(issue_participants)
+    for contributor in issue_participants:
+        print(contributor)
+
+    print("\nContributors to our Merge Requests:\n")
+    mr_participants = []
+
+    for mr in mrs:
+        participants = get_participants(mr["project_id"], mr["iid"], "merge_requests")
+        mr_participants.extend(participants)
+
+    mr_participants = clear_list(mr_participants)
+    for contributor in mr_participants:
+        print(contributor)
+
+    return
 
 
 if __name__ == "__main__":
