@@ -604,11 +604,8 @@ export default {
     async loadSound (newValue, oldValue) {
       let trackData = newValue
       const oldSound = this.currentSound
-      // stop all other sounds!
-      // we do this here (before the track has loaded) to get a predictable
-      // song order.
-      Howler.stop()
       if (oldSound && trackData !== oldValue) {
+        oldSound.stop(this.soundId)
         this.soundId = null
       }
       if (!trackData) {
