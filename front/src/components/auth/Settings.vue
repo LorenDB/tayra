@@ -80,7 +80,7 @@
             <password-input field-id="new-password-field" required v-model="new_password" />
           </div>
           <dangerous-button
-            :class="['ui', {'loading': isLoading}, 'warning', 'button']"
+            :class="['ui', {'loading': isLoading}, {disabled: !new_password || !old_password}, 'warning', 'button']"
             :action="submitPassword">
             <translate translate-context="Content/Settings/Button.Label">Change password</translate>
             <p slot="modal-header"><translate translate-context="Popup/Settings/Title">Change your password?</translate></p>
