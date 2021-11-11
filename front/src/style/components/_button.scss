@@ -92,10 +92,18 @@ button.reset {
   margin-right: 0;
 }
 
-
 .ui.inverted.buttons .button:hover,
 .ui.inverted.button:hover,
 .ui.inverted.buttons .button:focus,
 .ui.inverted.button:focus {
   color: white;
+}
+
+.ui.button:disabled, .ui.buttons .disabled.button:not(.basic), .ui.disabled.active.button, .ui.disabled.button, .ui.disabled.button:hover {
+  cursor: default;
+  opacity: .45 !important;
+  background-image: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  pointer-events: none !important;
 }

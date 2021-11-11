@@ -328,7 +328,7 @@
             <password-input field-id="current-password-field" required v-model="password" />
           </div>
           <dangerous-button
-            :class="['ui', {'loading': isDeletingAccount}, {disabled: !password}, 'danger', 'button']"
+            :class="['ui', {'loading': isDeletingAccount}, {disabled: !password}, {danger: password}, 'button']"
             :action="deleteAccount">
             <translate translate-context="*/*/Button.Label">Delete my account…</translate>
             <p slot="modal-header"><translate translate-context="Popup/Settings/Title">Do you want to delete your account?</translate></p>
