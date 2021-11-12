@@ -1,4 +1,7 @@
 import datetime
+
+from django.db.models.aggregates import Count, Sum
+from django.db.models.expressions import OuterRef, Subquery
 import pytest
 
 from funkwhale_api.music import models as music_models
@@ -171,7 +174,13 @@ def test_get_album_serializer(factories):
     album = factories["music.Album"](artist=artist, with_cover=True)
     track = factories["music.Track"](album=album, disc_number=42)
     upload = factories["music.Upload"](track=track, bitrate=42000, duration=43, size=44)
-
+    tagged_item = factories["tags.TaggedItem"](content_object=album, tag__name="foo")
+    # takes one upload per track
+    subquery = Subquery(
+        music_models.Upload.objects.filter(track_id=OuterRef("id"))
+        .order_by("id")
+        .values("id")[:1]
+    )
     expected = {
         "id": album.pk,
         "artistId": artist.pk,
@@ -181,6 +190,12 @@ def test_get_album_serializer(factories):
         "created": serializers.to_subsonic_date(album.creation_date),
         "year": album.release_date.year,
         "coverArt": "al-{}".format(album.id),
+        "genre": tagged_item.tag.name,
+        "duration": album.tracks.filter(uploads__in=subquery).aggregate(
+            d=Sum("uploads__duration")
+        )["d"]
+        or 0,
+        "playCount": album.tracks.aggregate(l=Count("listenings"))["l"] or 0,
         "song": [
             {
                 "id": track.pk,
