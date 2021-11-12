@@ -1,4 +1,6 @@
 from django.db import models, transaction
+from django.db.models.expressions import OuterRef, Subquery
+from django.db.models import Q
 from django.utils import timezone
 from rest_framework import exceptions
 
@@ -11,8 +13,18 @@ class PlaylistQuerySet(models.QuerySet):
         return self.annotate(_tracks_count=models.Count("playlist_tracks"))
 
     def with_duration(self):
+        subquery = Subquery(
+            music_models.Upload.objects.filter(
+                track_id=OuterRef("playlist_tracks__track__id")
+            )
+            .order_by("id")
+            .values("id")[:1]
+        )
         return self.annotate(
-            duration=models.Sum("playlist_tracks__track__uploads__duration")
+            duration=models.Sum(
+                "playlist_tracks__track__uploads__duration",
+                filter=Q(playlist_tracks__track__uploads=subquery),
+            )
         )
 
     def with_covers(self):

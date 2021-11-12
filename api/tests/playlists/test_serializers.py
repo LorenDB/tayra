@@ -29,15 +29,46 @@ def test_playlist_serializer_include_covers(factories, api_request):
     assert serializer.data["album_covers"] == expected
 
 
-def test_playlist_serializer_include_duration(factories, api_request):
+def test_playlist_serializer_include_duration(tmpfile, factories):
     playlist = factories["playlists.Playlist"]()
-    upload1 = factories["music.Upload"](duration=15)
-    upload2 = factories["music.Upload"](duration=30)
-    playlist.insert_many([upload1.track, upload2.track])
+    event = {
+        "path": tmpfile.name,
+    }
+    library = factories["music.Library"]()
+    track1 = factories["music.Track"]()
+    track2 = factories["music.Track"]()
+    factories["music.Upload"](
+        source="file://{}".format(event["path"]),
+        track=track1,
+        checksum="old",
+        library=library,
+        import_status="finished",
+        audio_file=None,
+        duration=21,
+    )
+    factories["music.Upload"](
+        source="file://{}".format(event["path"]),
+        track=track1,
+        checksum="old",
+        library=library,
+        import_status="finished",
+        audio_file=None,
+        duration=21,
+    )
+    factories["music.Upload"](
+        source="file://{}".format(event["path"]),
+        track=track2,
+        checksum="old",
+        library=library,
+        import_status="finished",
+        audio_file=None,
+        duration=21,
+    )
+    playlist.insert_many([track1, track2])
     qs = playlist.__class__.objects.with_duration().with_tracks_count()
 
     serializer = serializers.PlaylistSerializer(qs.get())
-    assert serializer.data["duration"] == 45
+    assert serializer.data["duration"] == 42
 
 
 def test_playlist_serializer(factories, to_api_date):
