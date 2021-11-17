@@ -29,7 +29,7 @@
         <div class="ui vertically fitted basic stripe segment">
           <div class="ui two stackable cards">
             <div class="ui card">
-              <div class="signup-form content">
+              <div class="signup-form content" v-if="!$store.state.auth.authenticated">
                 <h3 class="header">
                   <translate translate-context="*/Signup/Title">Sign up</translate>
                 </h3>
@@ -49,6 +49,14 @@
                     <translate translate-context="Content/About/Link">Find another pod</translate>
                     <i class="external alternate icon margin-left"></i>
                   </a>
+                </div>
+              </div>
+              <div class="signup-form content" v-else>
+                <div class="ui positive message">
+                  <div class="header">
+                    <translate translate-context="Content/About/Message">You're already signed in!</translate>
+                  </div>
+                  <p><translate translate-contect="Content/About/Hello">Hello</translate> {{ $store.state.auth.username }}</p>
                 </div>
               </div>
             </div>
