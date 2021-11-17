@@ -68,19 +68,21 @@
 
                 <template v-if="stats">
                   <div class="statistics-container ui doubling grid">
-                    <div class="ui six wide column">
-                      <span class="statistics-figure ui text">
-                        <span class="ui big text"><strong>{{ stats.users.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
-                        <br />
-                        <translate translate-context="Content/About/*" :translate-n="stats.users" translate-plural="active users">active user</translate>
-                      </span>
-                    </div>
-                    <div class="ui six wide column">
-                      <span class="statistics-figure ui text">
-                        <span class="ui big text"><strong>{{ parseInt(stats.hours).toLocaleString($store.state.ui.momentLocale) }}</strong></span>
-                        <br />
-                        <translate translate-context="Content/About/*" :translate-n="parseInt(stats.hours)" translate-plural="hours of music">hour of music</translate>
-                      </span>
+                    <div class="two column row">
+                      <div class="column">
+                        <span class="statistics-figure ui text">
+                          <span class="ui big text"><strong>{{ stats.users.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
+                          <br />
+                          <translate translate-context="Content/About/*" :translate-n="stats.users" translate-plural="active users">active user</translate>
+                        </span>
+                      </div>
+                      <div class="column">
+                        <span class="statistics-figure ui text">
+                          <span class="ui big text"><strong>{{ parseInt(stats.hours).toLocaleString($store.state.ui.momentLocale) }}</strong></span>
+                          <br />
+                          <translate translate-context="Content/About/*" :translate-n="parseInt(stats.hours)" translate-plural="hours of music">hour of music</translate>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </template>
