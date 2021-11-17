@@ -1,12 +1,12 @@
 <template>
   <main class="main pusher page-about" v-title="labels.title">
-    <div class="ui container">
+    <div class="ui">
       <div class="ui horizontally fitted stripe basic segment">
         <div class="ui basic vertically fitted stripe segment content">
           <section :class="['ui', 'head', {'with-background': banner}, 'vertical', 'center', 'aligned', 'stripe', 'segment']" :style="headerStyle">
           </section>
         </div>
-        <div class="ui basic vertically fitted stripe segment content">
+        <div class="ui basic vertically fitted stripe segment content container">
           <!-- See layout in _about.scss -->
           <div class="about-pod-info-container">
             <!-- TODO: Table of contents -->

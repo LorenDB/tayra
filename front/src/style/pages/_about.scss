@@ -150,6 +150,18 @@
   }
 
   @include media('<tablet') {
+    .about-pod-info-container {
+      padding: 0 2em;
+    }
+    .ui.horizontally.fitted.stripe.basic.segment {
+      padding-top: 0px;
+    }
+    .ui.basic.vertically.fitted.stripe.segment.content {
+      padding: 0px;
+    }
+    .ui.head.vertical.center.aligned.stripe.segment {
+      border-radius: 0 !important;
+    }
     .statistics-container {
       .statistics-statistic {
         flex-basis: 50%;
