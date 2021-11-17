@@ -9,7 +9,6 @@
         <div class="ui basic vertically fitted stripe segment content container">
           <!-- See layout in _about.scss -->
           <div class="about-pod-info-container">
-            <!-- TODO: Table of contents -->
             <div class="about-pod-info-toc">
               <div class="ui vertical pointing secondary menu">
                 <router-link to="/about/pod" class="item">
