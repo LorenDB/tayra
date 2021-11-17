@@ -225,10 +225,8 @@
                 <h3 class="ui header" id="contact">
                   <translate translate-context="Content/About/Header">Contact</translate>
                 </h3>
-                <!-- TODO: Moderators -->
-                <div class="ui"></div>
                 <a v-if="contactEmail" :href="`mailto:${contactEmail}`">
-                  <translate translate-context="Content/About/Email" :translate-params="{ email: contactEmail }">Send us an email: %{ contactEmail }</translate>
+                  <translate translate-context="Content/About/Email" :translate-params="{ email: contactEmail }">Send us an email: {{ contactEmail }}</translate>
                 </a>
               </template>
 
