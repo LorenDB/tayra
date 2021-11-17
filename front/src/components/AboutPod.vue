@@ -60,7 +60,7 @@
               </h3>
               <div class="features-container ui two column stackable grid">
                 <div class="column">
-                  <table class="ui very basic table">
+                  <table class="ui very basic table unstackable">
                     <tbody>
                       <tr>
                         <td>
@@ -115,7 +115,7 @@
                   </table>
                 </div>
                 <div class="column">
-                  <table class="ui very basic table">
+                  <table class="ui very basic table unstackable">
                     <tbody>
                       <tr>
                         <td>
