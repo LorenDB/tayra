@@ -1,12 +1,15 @@
 <template>
-  <main class="main pusher page-about" v-title="labels.title">
-    <div class="ui">
+  <main
+    v-title="labels.title"
+    class="main pusher page-about"
+  >
+    <div class="ui" :class="{ container: onDesktop}">
       <div class="ui horizontally fitted stripe basic segment">
         <div class="ui basic vertically fitted stripe segment content">
           <section :class="['ui', 'head', {'with-background': banner}, 'vertical', 'center', 'aligned', 'stripe', 'segment']" :style="headerStyle">
           </section>
         </div>
-        <div class="ui basic vertically fitted stripe segment content container">
+        <div class="ui basic vertically fitted stripe segment content">
           <!-- See layout in _about.scss -->
           <div class="about-pod-info-container">
             <div class="about-pod-info-toc">
@@ -337,6 +340,10 @@ export default {
         ")"
       )
     },
+    onDesktop () {
+      if(window.innerWidth > 800) return true;
+      return false;
+    }
   }
 }
 </script>
