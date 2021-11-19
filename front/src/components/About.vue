@@ -62,6 +62,10 @@
             </div>
             <div class="ui card">
               <section :class="['ui', 'head', {'with-background': banner}, 'vertical', 'center', 'aligned', 'stripe', 'segment']" :style="headerStyle">
+            <h1>
+              <i class="music icon"></i>
+              {{ podName }}
+            </h1>
               </section>
               <div class="content padding-top padding-bottom">
                 <h3 class="ui header" id="description">

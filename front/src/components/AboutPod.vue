@@ -7,6 +7,10 @@
       <div class="ui horizontally fitted stripe basic segment">
         <div class="ui basic vertically fitted stripe segment content">
           <section :class="['ui', 'head', {'with-background': banner}, 'vertical', 'center', 'aligned', 'stripe', 'segment']" :style="headerStyle">
+            <h1>
+              <i class="music icon"></i>
+              {{ podName }}
+            </h1>
           </section>
         </div>
         <div class="ui basic vertically fitted stripe segment content">
