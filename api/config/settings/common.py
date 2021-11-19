@@ -621,7 +621,9 @@ OAUTH2_PROVIDER = {
     # we keep expired tokens for 15 days, for tracability
     "REFRESH_TOKEN_EXPIRE_SECONDS": 3600 * 24 * 15,
     "AUTHORIZATION_CODE_EXPIRE_SECONDS": 5 * 60,
-    "ACCESS_TOKEN_EXPIRE_SECONDS": 60 * 60 * 10,
+    "ACCESS_TOKEN_EXPIRE_SECONDS": env.int(
+        "ACCESS_TOKEN_EXPIRE_SECONDS", default=60 * 60 * 10
+    ),
     "OAUTH2_SERVER_CLASS": "funkwhale_api.users.oauth.server.OAuth2Server",
 }
 OAUTH2_PROVIDER_APPLICATION_MODEL = "users.Application"
