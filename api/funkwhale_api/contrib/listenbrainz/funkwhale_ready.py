@@ -1,4 +1,5 @@
 from config import plugins
+import funkwhale_api
 from .funkwhale_startup import PLUGIN
 from .client import ListenBrainzClient, Track
 
@@ -21,7 +22,10 @@ def get_track(track):
     title = track.title
     album = None
     additional_info = {
-        "listening_from": "Funkwhale",
+        "media_player": "Funkwhale",
+        "media_player_version": funkwhale_api.__version__,
+        "submission_client": "Funkwhale ListenBrainz plugin",
+        "submission_client_version": PLUGIN["version"],
         "tracknumber": track.position,
         "discnumber": track.disc_number,
     }
