@@ -4,15 +4,17 @@ Installation
 Requirements
 ------------
 
-Regardless of your chosen installation method, the following requirements must be met in order to successfully deploy Funkwhale:
+Regardless of your chosen installation method,
+the following is required to successfully deploy Funkwhale:
 
 - **A dedicated domain or subdomain**: it is not possible to deploy Funkwhale on a subdirectory of an existing domain.
 - **Access to ports 80 and/or 443**: if you cannot serve the Funkwhale web app and API on these ports, federation will not work
 
 .. note::
 
-    Because of the federated nature of Funkwhale, **it is strongly recommended not to change the Funkwhale domain after initial deployment**, as it is likely to break
-    your installation.
+    Because of the federated nature of Funkwhale,
+    **it is strongly recommended not to change the Funkwhale domain after initial deployment**,
+    as it is likely to break your installation.
 
 Project architecture
 --------------------
@@ -34,8 +36,9 @@ The project relies on the following components and services to work:
 Hardware requirements
 ---------------------
 
-Funkwhale is not especially CPU hungry. On a dockerized instance with 2 CPUs
-and a few active users, the memory footprint is around 500Mb::
+Funkwhale is not especially CPU hungry.
+On a dockerized instance with 2 CPUs and a few active users,
+the memory footprint is around 500Mb::
 
    CONTAINER                   MEM USAGE
    funkwhale_api_1             202  MiB
@@ -148,10 +151,11 @@ Serving only the frontend
 
 .. note::
 
-    You do not need to do this if you are deploying using Docker, as frontend files
-    are already included in the docker image.
+    You do not need to do this if you are deploying using Docker,
+    as frontend files are already included in the docker image.
 
-    You also do not need to do this if you are deploying manually on Debian or Arch, as this is covered by the corresponding documentation already.
+    You also do not need to do this if you are deploying manually on Debian or Arch,
+    as this is covered by the corresponding documentation already.
 
 
 Files for the web frontend are purely static and can simply be downloaded, unzipped and served from any webserver:
@@ -167,20 +171,23 @@ Files for the web frontend are purely static and can simply be downloaded, unzip
 Reverse proxy configuration
 ---------------------------
 
-In order to make Funkwhale accessible from outside your server and to play nicely with other applications on your machine, you should configure a reverse proxy.
+In order to make Funkwhale accessible from outside your server
+and to play nicely with other applications on your machine,
+you should configure a reverse proxy.
 
 We offer sample configurations for Nginx, Apache2 and Caddy.
 
 .. note::
 
-    You can freely adapt the proposed configuration to your own needs, as we cannot
-    cover every use case with a single template, especially when it's related
-    to SSL configuration.
+    You can freely adapt the proposed configuration to your own needs,
+    as we cannot cover every use case with a single template,
+    especially when it's related to SSL configuration.
 
 Nginx
 ^^^^^
 
-Ensure you have a recent version of nginx on your server. On Debian-like system, you would have to run the following:
+Ensure you have a recent version of nginx on your server.
+On a Debian-based system use apt:
 
 .. code-block:: shell
 
@@ -193,9 +200,11 @@ On Arch Linux and its derivatives:
 
     sudo pacman -S nginx
 
-To avoid configuration errors at this level, we will generate an nginx configuration
-using your .env file. This will ensure your reverse-proxy configuration always
-match the application configuration and make upgrade/maintenance easier.
+To avoid configuration errors at this level,
+we will generate an nginx configuration using your .env file.
+This will ensure your reverse-proxy configuration
+always matches the application configuration
+and makes upgrade/maintenance easier.
 
 .. note::
     The following commands need to be run as superuser.
@@ -297,7 +306,8 @@ Add the following to your ``.env`` file::
 
     REVERSE_PROXY_TYPE=apache2
 
-Then restart Funkwhale. This is needed to ensure Funkwhale provides proper headers for media file serving.
+Then restart Funkwhale.
+This is needed to ensure Funkwhale provides proper headers for media file serving.
 
 Then, download our sample virtualhost file:
 
@@ -306,18 +316,23 @@ Then, download our sample virtualhost file:
     curl -L -o /etc/apache2/sites-available/funkwhale.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/|version|/deploy/apache.conf"
     ln -s /etc/apache2/sites-available/funkwhale.conf /etc/apache2/sites-enabled/
 
-You can tweak the configuration file according to your setup, especially the
-TLS configuration. Otherwise, defaults should work if you followed the
-installation guide.
+Tweak the configuration file according to your setup,
+especially the TLS configuration.
+Otherwise, defaults should work if you followed the installation guide.
 
-Check the configuration is valid with ``apache2ctl configtest``, and once you're
-done, load the new configuration with ``service apache2 restart``.
+Check the configuration with ``apache2ctl configtest``
+and once you're done,
+load the new configuration with ``service apache2 restart``.
 
 Caddy
 ^^^^^
 
-If you're using Caddy as a reverse proxy in front of your docker containers (either mono or multi-container setup),
-you can use the following Caddyfile configuration:
+We currently do not support a Caddy-only setup, but you can
+`help develop it <https://dev.funkwhale.audio/funkwhale/funkwhale/-/merge_requests/1384>`_!
+
+To employ Caddy as a reverse proxy in front of your docker containers
+(either mono- or multi-container setup),
+use the following Caddyfile configuration:
 
 Caddy v2::
 
@@ -338,7 +353,9 @@ Caddy v1::
 HTTPS configuration
 ^^^^^^^^^^^^^^^^^^^
 
-After configuring the reverse proxy, you need a SSL certificate to enable HTTPS on your server.
+After configuring the reverse proxy,
+you need a SSL certificate to enable HTTPS on your server
+(unless you use Caddy, which handles them automatically).
 
 The default reverse proxy configuration assumes you have those available at ``/etc/letsencrypt/live/${FUNKWHALE_HOSTNAME}/``, which
 is the path used by `certbot <https://certbot.eff.org/docs/>`_ when generating certificates with Let's Encrypt.
@@ -365,6 +382,3 @@ a certificate, as shown below. These instructions are provided by `certbot <http
     sudo certbot --apache -d yourfunkwhale.domain
 
 This creates a valid certificate and edit the nginx or Apache2 configuration to use the new certificate. The certificate will be automatically renewed when they expire.
-    
-
-
