@@ -182,7 +182,11 @@ def test_get_album(
     url = reverse("api:subsonic-get_album")
     assert url.endswith("getAlbum") is True
     artist = factories["music.Artist"]()
-    album = factories["music.Album"](artist=artist)
+    album = (
+        factories["music.Album"](artist=artist)
+        .__class__.objects.with_duration()
+        .first()
+    )
     factories["music.Track"].create_batch(size=3, album=album, playable=True)
     playable_by = mocker.spy(music_models.AlbumQuerySet, "playable_by")
     expected = {"album": serializers.GetAlbumSerializer(album).data}
@@ -192,7 +196,7 @@ def test_get_album(
     assert response.data == expected
 
     playable_by.assert_called_once_with(
-        music_models.Album.objects.select_related("artist"), None
+        music_models.Album.objects.with_duration().select_related("artist"), None
     )
 
 
@@ -422,8 +426,12 @@ def test_get_album_list2(
 ):
     url = reverse("api:subsonic-get_album_list2")
     assert url.endswith("getAlbumList2") is True
-    album1 = factories["music.Album"](playable=True)
-    album2 = factories["music.Album"](playable=True)
+    album1 = factories["music.Album"](playable=True).__class__.objects.with_duration()[
+        0
+    ]
+    album2 = factories["music.Album"](playable=True).__class__.objects.with_duration()[
+        1
+    ]
     factories["music.Album"]()
     playable_by = mocker.spy(music_models.AlbumQuerySet, "playable_by")
     response = logged_in_api_client.get(url, {"f": f, "type": "newest"})
@@ -439,8 +447,12 @@ def test_get_album_list2_recent(db, logged_in_api_client, factories):
     url = reverse("api:subsonic-get_album_list2")
     assert url.endswith("getAlbumList2") is True
     factories["music.Album"](playable=True, release_date=None)
-    album2 = factories["music.Album"](playable=True)
-    album3 = factories["music.Album"](playable=True)
+    album2 = factories["music.Album"](playable=True).__class__.objects.with_duration()[
+        1
+    ]
+    album3 = factories["music.Album"](playable=True).__class__.objects.with_duration()[
+        2
+    ]
     response = logged_in_api_client.get(url, {"f": "json", "type": "recent"})
 
     assert response.status_code == 200
@@ -454,7 +466,11 @@ def test_get_album_list2_recent(db, logged_in_api_client, factories):
 def test_get_album_list2_pagination(f, db, logged_in_api_client, factories):
     url = reverse("api:subsonic-get_album_list2")
     assert url.endswith("getAlbumList2") is True
-    album1 = factories["music.Album"](playable=True)
+    album1 = (
+        factories["music.Album"](playable=True)
+        .__class__.objects.with_duration()
+        .first()
+    )
     factories["music.Album"](playable=True)
     response = logged_in_api_client.get(
         url, {"f": f, "type": "newest", "size": 1, "offset": 1}
@@ -472,10 +488,10 @@ def test_get_album_list2_by_genre(f, db, logged_in_api_client, factories):
     assert url.endswith("getAlbumList2") is True
     album1 = factories["music.Album"](
         artist__name="Artist1", playable=True, set_tags=["Rock"]
-    )
+    ).__class__.objects.with_duration()[0]
     album2 = factories["music.Album"](
         artist__name="Artist2", playable=True, artist__set_tags=["Rock"]
-    )
+    ).__class__.objects.with_duration()[1]
     factories["music.Album"](playable=True, set_tags=["Pop"])
     response = logged_in_api_client.get(
         url, {"f": f, "type": "byGenre", "size": 5, "offset": 0, "genre": "rock"}
@@ -500,7 +516,7 @@ def test_get_album_list2_by_year(params, expected, db, logged_in_api_client, fac
     albums = [
         factories["music.Album"](
             playable=True, release_date=datetime.date(1900 + i, 1, 1)
-        )
+        ).__class__.objects.with_duration()[i]
         for i in range(5)
     ]
     url = reverse("api:subsonic-get_album_list2")
@@ -562,7 +578,9 @@ def test_search3(f, db, logged_in_api_client, factories):
     artist = factories["music.Artist"](name="testvalue", playable=True)
     factories["music.Artist"](name="nope")
     factories["music.Artist"](name="nope2", playable=True)
-    album = factories["music.Album"](title="testvalue", playable=True)
+    album = factories["music.Album"](
+        title="testvalue", playable=True
+    ).__class__.objects.with_duration()[2]
     factories["music.Album"](title="nope")
     factories["music.Album"](title="nope2", playable=True)
     track = factories["music.Track"](title="testvalue", playable=True)

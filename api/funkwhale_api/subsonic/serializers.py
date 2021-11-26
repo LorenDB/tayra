@@ -1,8 +1,6 @@
 import collections
 
 from django.db.models import Count, functions
-from django.db.models import Sum
-from django.db.models.expressions import OuterRef, Subquery
 from rest_framework import serializers
 
 from funkwhale_api.history import models as history_models
@@ -143,22 +141,13 @@ def get_track_data(album, track, upload):
 
 
 def get_album2_data(album):
-    # takes one upload per track
-    subquery = Subquery(
-        music_models.Upload.objects.filter(track_id=OuterRef("id"))
-        .order_by("id")
-        .values("id")[:1]
-    )
     payload = {
         "id": album.id,
         "artistId": album.artist.id,
         "name": album.title,
         "artist": album.artist.name,
         "created": to_subsonic_date(album.creation_date),
-        "duration": album.tracks.filter(uploads__in=subquery).aggregate(
-            d=Sum("uploads__duration")
-        )["d"]
-        or 0,
+        "duration": album.duration,
         "playCount": album.tracks.aggregate(l=Count("listenings"))["l"] or 0,
     }
     if album.attachment_cover_id:

@@ -5,6 +5,9 @@ import tempfile
 import urllib.parse
 import uuid
 
+from django.db.models.expressions import OuterRef, Subquery
+from django.db.models.query_utils import Q
+
 import arrow
 import pydub
 from django.conf import settings
@@ -318,6 +321,19 @@ class AlbumQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
             return self.filter(pk__in=matches)
         else:
             return self.exclude(pk__in=matches)
+
+    def with_duration(self):
+        # takes one upload per track
+        subquery = Subquery(
+            Upload.objects.filter(track_id=OuterRef("tracks"))
+            .order_by("id")
+            .values("id")[:1]
+        )
+        return self.annotate(
+            duration=models.Sum(
+                "tracks__uploads__duration", filter=Q(tracks__uploads=subquery),
+            )
+        )
 
 
 class Album(APIModelMixin):

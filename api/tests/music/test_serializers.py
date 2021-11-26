@@ -182,6 +182,7 @@ def test_album_serializer(factories, to_api_date):
         "artist": serializers.serialize_artist_simple(album.artist),
         "creation_date": to_api_date(album.creation_date),
         "is_playable": False,
+        "duration": 0,
         "cover": common_serializers.AttachmentSerializer(album.attachment_cover).data,
         "release_date": to_api_date(album.release_date),
         "tracks_count": 2,
@@ -214,6 +215,7 @@ def test_track_album_serializer(factories, to_api_date):
         "cover": common_serializers.AttachmentSerializer(album.attachment_cover).data,
         "release_date": to_api_date(album.release_date),
         "tracks_count": 2,
+        "duration": 0,
         "is_local": album.is_local,
         "tags": [],
         "attributed_to": federation_serializers.APIActorSerializer(actor).data,
@@ -605,3 +607,44 @@ def test_sort_uploads_for_listen(factories):
         remote_upload_with_local_version,
     ]
     assert serializers.sort_uploads_for_listen(unsorted) == expected
+
+
+def test_album_serializer_includes_duration(tmpfile, factories):
+    album = factories["music.Album"]()
+    event = {
+        "path": tmpfile.name,
+    }
+    library = factories["music.Library"]()
+    track1 = factories["music.Track"](album=album)
+    track2 = factories["music.Track"](album=album)
+    factories["music.Upload"](
+        source="file://{}".format(event["path"]),
+        track=track1,
+        checksum="old",
+        library=library,
+        import_status="finished",
+        audio_file=None,
+        duration=21,
+    )
+    factories["music.Upload"](
+        source="file://{}".format(event["path"]),
+        track=track1,
+        checksum="old",
+        library=library,
+        import_status="finished",
+        audio_file=None,
+        duration=21,
+    )
+    factories["music.Upload"](
+        source="file://{}".format(event["path"]),
+        track=track2,
+        checksum="old",
+        library=library,
+        import_status="finished",
+        audio_file=None,
+        duration=21,
+    )
+    qs = album.__class__.objects.with_duration()
+
+    serializer = serializers.AlbumSerializer(qs.get())
+    assert serializer.data["duration"] == 42

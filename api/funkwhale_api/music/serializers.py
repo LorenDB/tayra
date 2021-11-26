@@ -201,6 +201,7 @@ class AlbumSerializer(OptionalDescriptionMixin, serializers.Serializer):
     release_date = serializers.DateField()
     creation_date = serializers.DateTimeField()
     is_local = serializers.BooleanField()
+    duration = serializers.SerializerMethodField(read_only=True)
 
     get_attributed_to = serialize_attributed_to
 
@@ -221,6 +222,13 @@ class AlbumSerializer(OptionalDescriptionMixin, serializers.Serializer):
     def get_tags(self, obj):
         tagged_items = getattr(obj, "_prefetched_tagged_items", [])
         return [ti.tag.name for ti in tagged_items]
+
+    def get_duration(self, obj):
+        try:
+            return obj.duration
+        except AttributeError:
+            # no annotation?
+            return 0
 
 
 class TrackAlbumSerializer(serializers.ModelSerializer):
