@@ -1,35 +1,47 @@
 <template>
-  <div id="app" :key="String($store.state.instance.instanceUrl)" :class="[$store.state.ui.queueFocused ? 'queue-focused' : '', {'has-bottom-player': $store.state.queue.tracks.length > 0}, `is-${ $store.getters['ui/windowSize']}`]">
+  <div
+    id="app"
+    :key="String($store.state.instance.instanceUrl)"
+    :class="[$store.state.ui.queueFocused ? 'queue-focused' : '', {'has-bottom-player': $store.state.queue.tracks.length > 0}, `is-${ $store.getters['ui/windowSize']}`]"
+  >
     <!-- here, we display custom stylesheets, if any -->
     <link
       v-for="url in customStylesheets"
+      :key="url"
       rel="stylesheet"
       property="stylesheet"
       :href="url"
-      :key="url"
     >
-    <template>
-      <sidebar></sidebar>
-      <set-instance-modal @update:show="showSetInstanceModal = $event" :show="showSetInstanceModal"></set-instance-modal>
-      <service-messages></service-messages>
-      <transition name="queue">
-        <queue @touch-progress="$refs.player.setCurrentTime($event)" v-if="$store.state.ui.queueFocused"></queue>
-      </transition>
-      <router-view role="main" :class="{hidden: $store.state.ui.queueFocused}"></router-view>
-      <player ref="player"></player>
-      <app-footer
-        :class="{hidden: $store.state.ui.queueFocused}"
-        :version="version"
-        @show:shortcuts-modal="showShortcutsModal = !showShortcutsModal"
-        @show:set-instance-modal="showSetInstanceModal = !showSetInstanceModal"
-      ></app-footer>
-      <playlist-modal v-if="$store.state.auth.authenticated"></playlist-modal>
-      <channel-upload-modal v-if="$store.state.auth.authenticated"></channel-upload-modal>
-      <filter-modal v-if="$store.state.auth.authenticated"></filter-modal>
-      <report-modal></report-modal>
-      <shortcuts-modal @update:show="showShortcutsModal = $event" :show="showShortcutsModal"></shortcuts-modal>
-      <GlobalEvents @keydown.h.exact="showShortcutsModal = !showShortcutsModal"/>
-    </template>
+    <sidebar
+      :width="width"
+      @show:set-instance-modal="showSetInstanceModal = !showSetInstanceModal"
+      @show:shortcuts-modal="showShortcutsModal = !showShortcutsModal"
+    />
+    <set-instance-modal
+      :show="showSetInstanceModal"
+      @update:show="showSetInstanceModal = $event"
+    />
+    <service-messages />
+    <transition name="queue">
+      <queue
+        v-if="$store.state.ui.queueFocused"
+        @touch-progress="$refs.player.setCurrentTime($event)"
+      />
+    </transition>
+    <router-view
+      role="main"
+      :class="{hidden: $store.state.ui.queueFocused}"
+    />
+    <player ref="player" />
+    <playlist-modal v-if="$store.state.auth.authenticated" />
+    <channel-upload-modal v-if="$store.state.auth.authenticated" />
+    <filter-modal v-if="$store.state.auth.authenticated" />
+    <report-modal />
+    <shortcuts-modal
+      :show="showShortcutsModal"
+      @update:show="showShortcutsModal = $event"
+    />
+    <GlobalEvents @keydown.h.exact="showShortcutsModal = !showShortcutsModal" />
   </div>
 </template>
 
@@ -37,28 +49,26 @@
 import Vue from 'vue'
 import axios from 'axios'
 import _ from '@/lodash'
-import {mapState, mapGetters, mapActions} from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { WebSocketBridge } from 'django-channels'
 import GlobalEvents from '@/components/utils/global-events'
-import moment from  'moment'
 import locales from './locales'
-import {getClientOnlyRadio} from '@/radios'
+import { getClientOnlyRadio } from '@/radios'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    Player:  () => import(/* webpackChunkName: "audio" */ "@/components/audio/Player"),
-    Queue:  () => import(/* webpackChunkName: "audio" */ "@/components/Queue"),
-    PlaylistModal:  () => import(/* webpackChunkName: "auth-audio" */ "@/components/playlists/PlaylistModal"),
-    ChannelUploadModal:  () => import(/* webpackChunkName: "auth-audio" */ "@/components/channels/UploadModal"),
-    Sidebar:  () => import(/* webpackChunkName: "core" */ "@/components/Sidebar"),
-    AppFooter:  () => import(/* webpackChunkName: "core" */ "@/components/Footer"),
-    ServiceMessages:  () => import(/* webpackChunkName: "core" */ "@/components/ServiceMessages"),
-    SetInstanceModal:  () => import(/* webpackChunkName: "core" */ "@/components/SetInstanceModal"),
-    ShortcutsModal:  () => import(/* webpackChunkName: "core" */ "@/components/ShortcutsModal"),
-    FilterModal:  () => import(/* webpackChunkName: "moderation" */ "@/components/moderation/FilterModal"),
-    ReportModal:  () => import(/* webpackChunkName: "moderation" */ "@/components/moderation/ReportModal"),
-    GlobalEvents,
+    Player: () => import(/* webpackChunkName: "audio" */ '@/components/audio/Player'),
+    Queue: () => import(/* webpackChunkName: "audio" */ '@/components/Queue'),
+    PlaylistModal: () => import(/* webpackChunkName: "auth-audio" */ '@/components/playlists/PlaylistModal'),
+    ChannelUploadModal: () => import(/* webpackChunkName: "auth-audio" */ '@/components/channels/UploadModal'),
+    Sidebar: () => import(/* webpackChunkName: "core" */ '@/components/Sidebar'),
+    ServiceMessages: () => import(/* webpackChunkName: "core" */ '@/components/ServiceMessages'),
+    SetInstanceModal: () => import(/* webpackChunkName: "core" */ '@/components/SetInstanceModal'),
+    ShortcutsModal: () => import(/* webpackChunkName: "core" */ '@/components/ShortcutsModal'),
+    FilterModal: () => import(/* webpackChunkName: "moderation" */ '@/components/moderation/FilterModal'),
+    ReportModal: () => import(/* webpackChunkName: "moderation" */ '@/components/moderation/ReportModal'),
+    GlobalEvents
   },
   data () {
     return {
@@ -70,23 +80,168 @@ export default {
       width: window.innerWidth
     }
   },
+  computed: {
+    ...mapState({
+      messages: state => state.ui.messages,
+      nodeinfo: state => state.instance.nodeinfo,
+      playing: state => state.player.playing,
+      bufferProgress: state => state.player.bufferProgress,
+      isLoadingAudio: state => state.player.isLoadingAudio,
+      serviceWorker: state => state.ui.serviceWorker
+    }),
+    ...mapGetters({
+      hasNext: 'queue/hasNext',
+      currentTrack: 'queue/currentTrack',
+      progress: 'player/progress'
+    }),
+    labels () {
+      const play = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Play track')
+      const pause = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Pause track')
+      const next = this.$pgettext('Sidebar/Player/Icon.Tooltip', 'Next track')
+      const expandQueue = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Expand queue')
+      return {
+        play,
+        pause,
+        next,
+        expandQueue
+      }
+    },
+    suggestedInstances () {
+      const instances = this.$store.state.instance.knownInstances.slice(0)
+      if (this.$store.state.instance.frontSettings.defaultServerUrl) {
+        let serverUrl = this.$store.state.instance.frontSettings.defaultServerUrl
+        if (!serverUrl.endsWith('/')) {
+          serverUrl = serverUrl + '/'
+        }
+        instances.push(serverUrl)
+      }
+      instances.push(this.$store.getters['instance/defaultUrl'](), 'https://demo.funkwhale.audio/')
+      return _.uniq(instances.filter((e) => { return e }))
+    },
+    version () {
+      if (!this.nodeinfo) {
+        return null
+      }
+      return _.get(this.nodeinfo, 'software.version')
+    },
+    customStylesheets () {
+      if (this.$store.state.instance.frontSettings) {
+        return this.$store.state.instance.frontSettings.additionalStylesheets || []
+      }
+      return null
+    }
+  },
+  watch: {
+    '$store.state.instance.instanceUrl' (v) {
+      this.$store.dispatch('instance/fetchSettings')
+      this.fetchNodeInfo()
+    },
+    '$store.state.ui.theme': {
+      immediate: true,
+      handler (newValue, oldValue) {
+        const oldTheme = oldValue || 'light'
+        document.body.classList.remove(`theme-${oldTheme}`)
+        document.body.classList.add(`theme-${newValue}`)
+      }
+    },
+    '$store.state.auth.authenticated' (newValue) {
+      if (!newValue) {
+        this.disconnect()
+      } else {
+        this.openWebsocket()
+      }
+    },
+    '$store.state.ui.currentLanguage': {
+      immediate: true,
+      handler (newValue) {
+        const self = this
+        const htmlLocale = newValue.toLowerCase().replace('_', '-')
+        document.documentElement.setAttribute('lang', htmlLocale)
+        if (newValue === 'en_US') {
+          self.$language.current = 'noop'
+          self.$language.current = newValue
+          return self.$store.commit('ui/momentLocale', 'en')
+        }
+        import(/* webpackChunkName: "locale-[request]" */ `./translations/${newValue}.json`).then((response) => {
+          Vue.$translations[newValue] = response.default[newValue]
+        }).finally(() => {
+          // set current language twice, otherwise we seem to have a cache somewhere
+          // and rendering does not happen
+          self.$language.current = 'noop'
+          self.$language.current = newValue
+        })
+        const momentLocale = newValue.replace('_', '-').toLowerCase()
+        import(/* webpackChunkName: "moment-locale-[request]" */ `moment/locale/${momentLocale}.js`).then(() => {
+          self.$store.commit('ui/momentLocale', momentLocale)
+        }).catch(() => {
+          console.log('No momentjs locale available for', momentLocale)
+          const shortLocale = momentLocale.split('-')[0]
+          import(/* webpackChunkName: "moment-locale-[request]" */ `moment/locale/${shortLocale}.js`).then(() => {
+            self.$store.commit('ui/momentLocale', shortLocale)
+          }).catch(() => {
+            console.log('No momentjs locale available for', shortLocale)
+          })
+        })
+      }
+    },
+    currentTrack: {
+      immediate: true,
+      handler (newValue) {
+        this.updateDocumentTitle()
+      }
+    },
+    '$store.state.ui.pageTitle': {
+      immediate: true,
+      handler (newValue) {
+        this.updateDocumentTitle()
+      }
+    },
+    'serviceWorker.updateAvailable': {
+      handler (v) {
+        if (!v) {
+          return
+        }
+        const self = this
+        this.$store.commit('ui/addMessage', {
+          content: this.$pgettext('App/Message/Paragraph', 'A new version of the app is available.'),
+          date: new Date(),
+          key: 'refreshApp',
+          displayTime: 0,
+          classActions: 'bottom attached opaque',
+          actions: [
+            {
+              text: this.$pgettext('App/Message/Paragraph', 'Update'),
+              class: 'primary',
+              click: function () {
+                self.updateApp()
+              }
+            },
+            {
+              text: this.$pgettext('App/Message/Paragraph', 'Later'),
+              class: 'basic'
+            }
+          ]
+        })
+      },
+      immediate: true
+    }
+  },
   async created () {
-
     if (navigator.serviceWorker) {
       navigator.serviceWorker.addEventListener(
         'controllerchange', () => {
-          if (this.serviceWorker.refreshing) return;
+          if (this.serviceWorker.refreshing) return
           this.$store.commit('ui/serviceWorker', {
             refreshing: true
           })
-          window.location.reload();
+          window.location.reload()
         }
-      );
+      )
     }
-    window.addEventListener('resize', this.handleResize);
-    this.handleResize();
+    window.addEventListener('resize', this.handleResize)
+    this.handleResize()
     this.openWebsocket()
-    let self = this
+    const self = this
     if (!this.$store.state.ui.selectedLanguage) {
       this.autodetectLanguage()
     }
@@ -94,7 +249,7 @@ export default {
       // used to redraw ago dates every minute
       self.$store.commit('ui/computeLastDate')
     }, 1000 * 60)
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.location.search)
     const serverUrl = urlParams.get('_server')
     if (serverUrl) {
       this.$store.commit('instance/instanceUrl', serverUrl)
@@ -102,13 +257,12 @@ export default {
     const url = urlParams.get('_url')
     if (url) {
       this.$router.replace(url)
-    }
-    else if (!this.$store.state.instance.instanceUrl) {
+    } else if (!this.$store.state.instance.instanceUrl) {
       // we have several way to guess the API server url. By order of precedence:
       // 1. use the url provided in settings.json, if any
       // 2. use the url specified when building via VUE_APP_INSTANCE_URL
       // 3. use the current url
-      let defaultInstanceUrl = this.$store.state.instance.frontSettings.defaultServerUrl || process.env.VUE_APP_INSTANCE_URL || this.$store.getters['instance/defaultUrl']()
+      const defaultInstanceUrl = this.$store.state.instance.frontSettings.defaultServerUrl || process.env.VUE_APP_INSTANCE_URL || this.$store.getters['instance/defaultUrl']()
       this.$store.commit('instance/instanceUrl', defaultInstanceUrl)
     } else {
       // needed to trigger initialization of axios / service worker
@@ -153,80 +307,78 @@ export default {
     })
   },
   mounted () {
-    let self = this
+    const self = this
     // slight hack to allow use to have internal links in <translate> tags
     // while preserving router behaviour
     document.documentElement.addEventListener('click', function (event) {
-      if (!event.target.matches('a.internal')) return;
+      if (!event.target.matches('a.internal')) return
       self.$router.push(event.target.getAttribute('href'))
-      event.preventDefault();
-    }, false);
+      event.preventDefault()
+    }, false)
     this.$nextTick(() => {
       document.getElementById('fake-content').classList.add('loaded')
     })
-
   },
   destroyed () {
     this.$store.commit('ui/removeWebsocketEventHandler', {
       eventName: 'inbox.item_added',
-      id: 'sidebarCount',
+      id: 'sidebarCount'
     })
     this.$store.commit('ui/removeWebsocketEventHandler', {
       eventName: 'mutation.created',
-      id: 'sidebarReviewEditCount',
+      id: 'sidebarReviewEditCount'
     })
     this.$store.commit('ui/removeWebsocketEventHandler', {
       eventName: 'mutation.updated',
-      id: 'sidebarReviewEditCount',
+      id: 'sidebarReviewEditCount'
     })
     this.$store.commit('ui/removeWebsocketEventHandler', {
       eventName: 'mutation.updated',
-      id: 'sidebarPendingReviewReportCount',
+      id: 'sidebarPendingReviewReportCount'
     })
     this.$store.commit('ui/removeWebsocketEventHandler', {
       eventName: 'user_request.created',
-      id: 'sidebarPendingReviewRequestCount',
+      id: 'sidebarPendingReviewRequestCount'
     })
     this.$store.commit('ui/removeWebsocketEventHandler', {
       eventName: 'Listen',
-      id: 'handleListen',
+      id: 'handleListen'
     })
     this.disconnect()
   },
   methods: {
     incrementNotificationCountInSidebar (event) {
-      this.$store.commit('ui/incrementNotifications', {type: 'inbox', count: 1})
+      this.$store.commit('ui/incrementNotifications', { type: 'inbox', count: 1 })
     },
     incrementReviewEditCountInSidebar (event) {
-      this.$store.commit('ui/incrementNotifications', {type: 'pendingReviewEdits', value: event.pending_review_count})
+      this.$store.commit('ui/incrementNotifications', { type: 'pendingReviewEdits', value: event.pending_review_count })
     },
     incrementPendingReviewReportsCountInSidebar (event) {
-      this.$store.commit('ui/incrementNotifications', {type: 'pendingReviewReports', value: event.unresolved_count})
+      this.$store.commit('ui/incrementNotifications', { type: 'pendingReviewReports', value: event.unresolved_count })
     },
     incrementPendingReviewRequestsCountInSidebar (event) {
-      this.$store.commit('ui/incrementNotifications', {type: 'pendingReviewRequests', value: event.pending_count})
+      this.$store.commit('ui/incrementNotifications', { type: 'pendingReviewRequests', value: event.pending_count })
     },
     handleListen (event) {
       if (this.$store.state.radios.current && this.$store.state.radios.running) {
-        let current = this.$store.state.radios.current
+        const current = this.$store.state.radios.current
         if (current.clientOnly && current.type === 'account') {
           getClientOnlyRadio(current).handleListen(current, event, this.$store)
         }
       }
     },
     async fetchNodeInfo () {
-      let response = await axios.get('instance/nodeinfo/2.0/')
+      const response = await axios.get('instance/nodeinfo/2.0/')
       this.$store.commit('instance/nodeinfo', response.data)
     },
     autodetectLanguage () {
-      let userLanguage = navigator.language || navigator.userLanguage
-      let available = locales.locales.map(e => { return e.code })
-      let self = this
+      const userLanguage = navigator.language || navigator.userLanguage
+      const available = locales.locales.map(e => { return e.code })
       let candidate
-      let matching = available.filter((a) => {
+      const matching = available.filter((a) => {
         return userLanguage.replace('-', '_') === a
       })
-      let almostMatching = available.filter((a) => {
+      const almostMatching = available.filter((a) => {
         return userLanguage.replace('-', '_').split('_')[0] === a.split('_')[0]
       })
       if (matching.length > 0) {
@@ -242,15 +394,15 @@ export default {
       if (!this.bridge) {
         return
       }
-      this.bridge.socket.close(1000, 'goodbye', {keepClosed: true})
+      this.bridge.socket.close(1000, 'goodbye', { keepClosed: true })
     },
     openWebsocket () {
       if (!this.$store.state.auth.authenticated) {
         return
       }
       this.disconnect()
-      let self = this
-      let token = this.$store.state.auth.token
+      const self = this
+      const token = this.$store.state.auth.token
       // let token = 'test'
       const bridge = new WebSocketBridge()
       this.bridge = bridge
@@ -260,7 +412,7 @@ export default {
       bridge.connect(
         url,
         [],
-        {reconnectInterval: 1000 * 60})
+        { reconnectInterval: 1000 * 60 })
       bridge.listen(function (event) {
         self.$store.dispatch('ui/websocketEvent', event)
       })
@@ -268,7 +420,7 @@ export default {
         console.log('Connected to WebSocket')
       })
     },
-    getTrackInformationText(track) {
+    getTrackInformationText (track) {
       const trackTitle = track.title
       const albumArtist = (track.album) ? track.album.artist.name : null
       const artistName = (
@@ -276,11 +428,12 @@ export default {
       const text = `♫ ${trackTitle} – ${artistName} ♫`
       return text
     },
-    updateDocumentTitle() {
-      let parts = []
+    updateDocumentTitle () {
+      const parts = []
       const currentTrackPart = (
-        (this.currentTrack) ? this.getTrackInformationText(this.currentTrack)
-        : null)
+        (this.currentTrack)
+          ? this.getTrackInformationText(this.currentTrack)
+          : null)
       if (currentTrackPart) {
         parts.push(currentTrackPart)
       }
@@ -292,157 +445,12 @@ export default {
     },
 
     updateApp () {
-      this.$store.commit('ui/serviceWorker', {updateAvailable: false})
-      if (!this.serviceWorker.registration || !this.serviceWorker.registration.waiting) { return; }
-      this.serviceWorker.registration.waiting.postMessage({command: 'skipWaiting'})
+      this.$store.commit('ui/serviceWorker', { updateAvailable: false })
+      if (!this.serviceWorker.registration || !this.serviceWorker.registration.waiting) { return }
+      this.serviceWorker.registration.waiting.postMessage({ command: 'skipWaiting' })
     },
-    handleResize() {
+    handleResize () {
       this.width = window.innerWidth
-    }
-  },
-  computed: {
-    ...mapState({
-      messages: state => state.ui.messages,
-      nodeinfo: state => state.instance.nodeinfo,
-      playing: state => state.player.playing,
-      bufferProgress: state => state.player.bufferProgress,
-      isLoadingAudio: state => state.player.isLoadingAudio,
-      serviceWorker: state => state.ui.serviceWorker,
-    }),
-    ...mapGetters({
-      hasNext: "queue/hasNext",
-      currentTrack: 'queue/currentTrack',
-      progress: "player/progress",
-    }),
-    labels() {
-      let play = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Play track")
-      let pause = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Pause track")
-      let next = this.$pgettext('Sidebar/Player/Icon.Tooltip', "Next track")
-      let expandQueue = this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', "Expand queue")
-      return {
-        play,
-        pause,
-        next,
-        expandQueue,
-      }
-    },
-    suggestedInstances () {
-      let instances = this.$store.state.instance.knownInstances.slice(0)
-      if (this.$store.state.instance.frontSettings.defaultServerUrl) {
-        let serverUrl = this.$store.state.instance.frontSettings.defaultServerUrl
-        if (!serverUrl.endsWith('/')) {
-          serverUrl = serverUrl + '/'
-        }
-        instances.push(serverUrl)
-      }
-      instances.push(this.$store.getters['instance/defaultUrl'](), 'https://demo.funkwhale.audio/')
-      return _.uniq(instances.filter((e) => {return e}))
-    },
-    version () {
-      if (!this.nodeinfo) {
-        return null
-      }
-      return _.get(this.nodeinfo, 'software.version')
-    },
-    customStylesheets () {
-      if (this.$store.state.instance.frontSettings) {
-        return this.$store.state.instance.frontSettings.additionalStylesheets || []
-      }
-    },
-  },
-  watch: {
-    '$store.state.instance.instanceUrl' (v) {
-      this.$store.dispatch('instance/fetchSettings')
-      this.fetchNodeInfo()
-    },
-    '$store.state.ui.theme': {
-      immediate: true,
-      handler (newValue, oldValue) {
-        let oldTheme = oldValue || 'light'
-        document.body.classList.remove(`theme-${oldTheme}`)
-        document.body.classList.add(`theme-${newValue}`)
-      },
-    },
-    '$store.state.auth.authenticated' (newValue) {
-      if (!newValue) {
-        this.disconnect()
-      } else {
-        this.openWebsocket()
-      }
-    },
-    '$store.state.ui.currentLanguage': {
-      immediate: true,
-      handler(newValue) {
-        let self = this
-        let htmlLocale = newValue.toLowerCase().replace('_', '-')
-        document.documentElement.setAttribute('lang', htmlLocale);
-        if (newValue === 'en_US') {
-          self.$language.current = 'noop'
-          self.$language.current = newValue
-          return self.$store.commit('ui/momentLocale', 'en')
-        }
-        import(/* webpackChunkName: "locale-[request]" */ `./translations/${newValue}.json`).then((response) =>{
-          Vue.$translations[newValue] = response.default[newValue]
-        }).finally(() => {
-          // set current language twice, otherwise we seem to have a cache somewhere
-          // and rendering does not happen
-          self.$language.current = 'noop'
-          self.$language.current = newValue
-        })
-        let momentLocale = newValue.replace('_', '-').toLowerCase()
-        import(/* webpackChunkName: "moment-locale-[request]" */ `moment/locale/${momentLocale}.js`).then(() => {
-          self.$store.commit('ui/momentLocale', momentLocale)
-        }).catch(() => {
-          console.log('No momentjs locale available for', momentLocale)
-          let shortLocale = momentLocale.split('-')[0]
-          import(/* webpackChunkName: "moment-locale-[request]" */ `moment/locale/${shortLocale}.js`).then(() => {
-            self.$store.commit('ui/momentLocale', shortLocale)
-          }).catch(() => {
-            console.log('No momentjs locale available for', shortLocale)
-          })
-        })
-      }
-    },
-    'currentTrack': {
-      immediate: true,
-      handler(newValue) {
-        this.updateDocumentTitle()
-      },
-    },
-    '$store.state.ui.pageTitle': {
-      immediate: true,
-      handler(newValue) {
-        this.updateDocumentTitle()
-      },
-    },
-    'serviceWorker.updateAvailable': {
-      handler (v) {
-        if (!v) {
-          return
-        }
-        let self = this
-        this.$store.commit('ui/addMessage', {
-          content: this.$pgettext("App/Message/Paragraph", "A new version of the app is available."),
-          date: new Date(),
-          key: 'refreshApp',
-          displayTime: 0,
-          classActions: 'bottom attached opaque',
-          actions: [
-            {
-              text: this.$pgettext("App/Message/Paragraph", "Update"),
-              class: "primary",
-              click: function () {
-                self.updateApp()
-              },
-            },
-            {
-              text: this.$pgettext("App/Message/Paragraph", "Later"),
-              class: "basic",
-            }
-          ]
-        })
-      },
-      immediate: true,
     }
   }
 }

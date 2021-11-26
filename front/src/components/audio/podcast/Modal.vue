@@ -1,15 +1,14 @@
 <template>
   <modal
-    @update:show="$emit('update:show', $event)"
+    ref="modal"
     :show="show"
     :scrolling="true"
-    :additionalClasses="['scrolling-track-options']"
+    :additional-classes="['scrolling-track-options']"
+    @update:show="$emit('update:show', $event)"
   >
     <div class="header">
       <div class="ui large centered rounded image">
         <img
-          alt=""
-          class="ui centered image"
           v-if="
             track.album && track.album.cover && track.album.cover.urls.original
           "
@@ -18,43 +17,50 @@
               track.album.cover.urls.medium_square_crop
             )
           "
-        />
-        <img
           alt=""
           class="ui centered image"
+        >
+        <img
           v-else-if="track.cover"
           v-lazy="
             $store.getters['instance/absoluteUrl'](
               track.cover.urls.medium_square_crop
             )
           "
-        />
-        <img
           alt=""
           class="ui centered image"
+        >
+        <img
           v-else-if="track.artist.cover"
           v-lazy="
             $store.getters['instance/absoluteUrl'](
               track.artist.cover.urls.medium_square_crop
             )
           "
-        />
-        <img
           alt=""
           class="ui centered image"
+        >
+        <img
           v-else
+          alt=""
+          class="ui centered image"
           src="../../../assets/audio/default-cover.png"
-        />
+        >
       </div>
-      <h3 class="track-modal-title">{{ track.title }}</h3>
-      <h4 class="track-modal-subtitle">{{ track.artist.name }}</h4>
+      <h3 class="track-modal-title">
+        {{ track.title }}
+      </h3>
+      <h4 class="track-modal-subtitle">
+        {{ track.artist.name }}
+      </h4>
     </div>
-    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider" />
     <div class="content">
       <div class="ui one column unstackable grid">
-        <div 
+        <div
+          v-if="$store.state.auth.authenticated && track.artist.content_category !== 'podcast'"
           class="row"
-          v-if="$store.state.auth.authenticated && this.track.artist.content_category !== 'podcast'">
+        >
           <div
             tabindex="0"
             class="column"
@@ -80,11 +86,11 @@
           <div
             class="column"
             role="button"
+            :aria-label="labels.addToQueue"
             @click.stop.prevent="
               add();
-              closeModal();
+              $refs.modal.closeModal();
             "
-            :aria-label="labels.addToQueue"
           >
             <i class="plus icon track-modal list-icon" />
             <span class="track-modal list-item">{{ labels.addToQueue }}</span>
@@ -94,11 +100,11 @@
           <div
             class="column"
             role="button"
+            :aria-label="labels.playNext"
             @click.stop.prevent="
               addNext(true);
-              closeModal();
+              $refs.modal.closeModal();
             "
-            :aria-label="labels.playNext"
           >
             <i class="step forward icon track-modal list-icon" />
             <span class="track-modal list-item">{{ labels.playNext }}</span>
@@ -108,14 +114,14 @@
           <div
             class="column"
             role="button"
+            :aria-label="labels.startRadio"
             @click.stop.prevent="
               $store.dispatch('radios/start', {
                 type: 'similar',
                 objectId: track.id,
               });
-              closeModal();
+              $refs.modal.closeModal();
             "
-            :aria-label="labels.startRadio"
           >
             <i class="rss icon track-modal list-icon" />
             <span class="track-modal list-item">{{ labels.startRadio }}</span>
@@ -125,8 +131,8 @@
           <div
             class="column"
             role="button"
-            @click.stop="$store.commit('playlists/chooseTrack', track)"
             :aria-label="labels.addToPlaylist"
+            @click.stop="$store.commit('playlists/chooseTrack', track)"
           >
             <i class="list icon track-modal list-icon" />
             <span class="track-modal list-item">{{
@@ -134,8 +140,11 @@
             }}</span>
           </div>
         </div>
-        <div class="ui divider"></div>
-        <div v-if="!isAlbum && track.album" class="row">
+        <div class="ui divider" />
+        <div
+          v-if="!isAlbum && track.album"
+          class="row"
+        >
           <div
             class="column"
             role="button"
@@ -153,7 +162,10 @@
             }}</span>
           </div>
         </div>
-        <div v-if="!isArtist" class="row">
+        <div
+          v-if="!isArtist"
+          class="row"
+        >
           <div
             class="column"
             role="button"
@@ -189,7 +201,7 @@
             }}</span>
           </div>
         </div>
-        <div class="ui divider"></div>
+        <div class="ui divider" />
         <div
           v-for="obj in getReportableObjs({
             track,
@@ -197,16 +209,15 @@
             artist,
           })"
           :key="obj.target.type + obj.target.id"
-          class="row"
           :ref="`report${obj.target.type}${obj.target.id}`"
+          class="row"
           :data-ref="`report${obj.target.type}${obj.target.id}`"
           @click.stop.prevent="$store.dispatch('moderation/report', obj.target)"
         >
           <div class="column">
             <i class="share icon track-modal list-icon" /><span
               class="track-modal list-item"
-              >{{ obj.label }}</span
-            >
+            >{{ obj.label }}</span>
           </div>
         </div>
       </div>
@@ -215,90 +226,83 @@
 </template>
 
 <script>
-import Modal from "@/components/semantic/Modal";
-import TrackFavoriteIcon from "@/components/favorites/TrackFavoriteIcon";
+import Modal from '@/components/semantic/Modal'
 import ReportMixin from '@/components/mixins/Report'
 import PlayOptionsMixin from '@/components/mixins/PlayOptions'
 
 export default {
+  components: {
+    Modal
+  },
   mixins: [ReportMixin, PlayOptionsMixin],
   props: {
     show: { type: Boolean, required: true, default: false },
     track: { type: Object, required: true },
     index: { type: Number, required: true },
     isArtist: { type: Boolean, required: false, default: false },
-    isAlbum: { type: Boolean, required: false, default: false },
+    isAlbum: { type: Boolean, required: false, default: false }
   },
-  components: {
-    Modal,
-    TrackFavoriteIcon,
-  },
-  data() {
+  data () {
     return {
       isShowing: this.show,
       tracks: [this.track],
       album: this.track.album,
-      artist: this.track.artist,
-    };
+      artist: this.track.artist
+    }
   },
   computed: {
-    isFavorite() {
-      return this.$store.getters["favorites/isFavorite"](this.track.id);
+    isFavorite () {
+      return this.$store.getters['favorites/isFavorite'](this.track.id)
     },
-    favoriteButton() {
+    favoriteButton () {
       if (this.isFavorite) {
         return this.$pgettext(
-          "Content/Track/Icon.Tooltip/Verb",
-          "Remove from favorites"
-        );
+          'Content/Track/Icon.Tooltip/Verb',
+          'Remove from favorites'
+        )
       } else {
-        return this.$pgettext("Content/Track/*/Verb", "Add to favorites");
+        return this.$pgettext('Content/Track/*/Verb', 'Add to favorites')
       }
     },
-    trackDetailsButton() {
+    trackDetailsButton () {
       if (this.track.artist.content_category === 'podcast') {
-        return this.$pgettext("*/Queue/Dropdown/Button/Label/Short", "Episode details")
+        return this.$pgettext('*/Queue/Dropdown/Button/Label/Short', 'Episode details')
       } else {
-        return this.$pgettext("*/Queue/Dropdown/Button/Label/Short", "Track details")
+        return this.$pgettext('*/Queue/Dropdown/Button/Label/Short', 'Track details')
       }
     },
-    albumDetailsButton() {
+    albumDetailsButton () {
       if (this.track.artist.content_category === 'podcast') {
-        return this.$pgettext("*/Queue/Dropdown/Button/Label/Short", "View series")
+        return this.$pgettext('*/Queue/Dropdown/Button/Label/Short', 'View series')
       } else {
-        return this.$pgettext("*/Queue/Dropdown/Button/Label/Short", "View album")
+        return this.$pgettext('*/Queue/Dropdown/Button/Label/Short', 'View album')
       }
     },
-    artistDetailsButton() {
+    artistDetailsButton () {
       if (this.track.artist.content_category === 'podcast') {
-        return this.$pgettext("*/Queue/Dropdown/Button/Label/Short", "View channel")
+        return this.$pgettext('*/Queue/Dropdown/Button/Label/Short', 'View channel')
       } else {
-        return this.$pgettext("*/Queue/Dropdown/Button/Label/Short", "View artist")
+        return this.$pgettext('*/Queue/Dropdown/Button/Label/Short', 'View artist')
       }
     },
-    labels() {
+    labels () {
       return {
         startRadio: this.$pgettext(
-          "*/Queue/Dropdown/Button/Title",
-          "Play radio"
+          '*/Queue/Dropdown/Button/Title',
+          'Play radio'
         ),
-        playNow: this.$pgettext("*/Queue/Dropdown/Button/Title", "Play now"),
+        playNow: this.$pgettext('*/Queue/Dropdown/Button/Title', 'Play now'),
         addToQueue: this.$pgettext(
-          "*/Queue/Dropdown/Button/Title",
-          "Add to queue"
+          '*/Queue/Dropdown/Button/Title',
+          'Add to queue'
         ),
-        playNext: this.$pgettext("*/Queue/Dropdown/Button/Title", "Play next"),
+        playNext: this.$pgettext('*/Queue/Dropdown/Button/Title', 'Play next'),
         addToPlaylist: this.$pgettext(
-          "Sidebar/Player/Icon.Tooltip/Verb",
-          "Add to playlist…"
-        ),
-      };
-    },
-  },
-  methods: {
-    closeModal() {
-      this.$emit("update:show", false);
-    },
-  },
-};
+          'Sidebar/Player/Icon.Tooltip/Verb',
+          'Add to playlist…'
+        )
+      }
+    }
+  }
+}
 </script>

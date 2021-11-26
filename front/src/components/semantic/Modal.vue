@@ -1,9 +1,10 @@
 <template>
   <div :class="additionalClasses.concat(['ui', {'active': show}, {'scrolling': scrolling} ,{'overlay fullscreen': fullscreen && ['phone', 'tablet'].indexOf($store.getters['ui/windowSize']) > -1},'modal'])">
-    <i tabindex=0 class="close inside icon"></i>
-    <slot v-if="show">
-
-    </slot>
+    <i
+      tabindex="0"
+      class="close inside icon"
+    />
+    <slot v-if="show" />
   </div>
 </template>
 
@@ -13,15 +14,41 @@ import createFocusTrap from 'focus-trap'
 
 export default {
   props: {
-    show: {type: Boolean, required: true},
-    fullscreen: {type: Boolean, default: true},
-    scrolling: {type: Boolean, required: false, default: false},
-    additionalClasses: {type: Array, required: false, default: () => []}
+    show: { type: Boolean, required: true },
+    fullscreen: { type: Boolean, default: true },
+    scrolling: { type: Boolean, required: false, default: false },
+    additionalClasses: { type: Array, required: false, default: () => [] }
   },
   data () {
     return {
       control: null,
-      focusTrap: null,
+      focusTrap: null
+    }
+  },
+  watch: {
+    show: {
+      handler (newValue) {
+        if (newValue) {
+          this.initModal()
+          this.$emit('show')
+          this.control.modal('show')
+          this.focusTrap.activate()
+          this.focusTrap.unpause()
+          document.body.classList.add('scrolling')
+        } else {
+          if (this.control) {
+            this.$emit('hide')
+            this.control.modal('hide')
+            this.control.remove()
+            this.focusTrap.deactivate()
+            this.focusTrap.pause()
+            document.body.classList.remove('scrolling')
+          }
+        }
+      }
+    },
+    $route (to, from) {
+      this.closeModal()
     }
   },
   mounted () {
@@ -52,29 +79,9 @@ export default {
           this.focusTrap.unpause()
         }.bind(this)
       })
-    }
-  },
-  watch: {
-    show: {
-      handler (newValue) {
-        if (newValue) {
-          this.initModal()
-          this.$emit('show')
-          this.control.modal('show')
-          this.focusTrap.activate()
-          this.focusTrap.unpause()
-          document.body.classList.add('scrolling')
-        } else {
-          if (this.control) {
-            this.$emit('hide')
-            this.control.modal('hide')
-            this.control.remove()
-            this.focusTrap.deactivate()
-            this.focusTrap.pause()
-            document.body.classList.remove('scrolling')
-          }
-        }
-      }
+    },
+    closeModal () {
+      this.$emit('update:show', false)
     }
   }
 
