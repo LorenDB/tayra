@@ -101,6 +101,16 @@
         </template>
         <div class="row">
           <a
+             class="column"
+             href="https://funkwhale.audio/help"
+             target="_blank"
+             >
+             <i class="user-modal list-icon life ring outline icon" />
+               <span class="user-modal list-item">{{ labels.help }}</span>
+          </a>
+        </div>
+        <div class="row">
+          <a
             class="column"
             href="https://docs.funkwhale.audio"
             target="_blank"
@@ -186,6 +196,7 @@ export default {
         support: this.$pgettext('Sidebar/*/Listitem.Link', 'Help'),
         forum: this.$pgettext('Sidebar/*/Listitem.Link', 'Forum'),
         docs: this.$pgettext('Sidebar/*/Listitem.Link', 'Documentation'),
+        help: this.$pgettext('Sidebar/*/Listitem.Link', 'Help'),
         language: this.$pgettext(
           'Sidebar/Settings/Dropdown.Label/Short, Verb',
           'Language'
