@@ -3,7 +3,7 @@ Changelog
 
 You can subscribe to release announcements by:
 
-- Following `funkwhale@mastodon.eliotberriot.com <https://mastodon.eliotberriot.com/@funkwhale>`_ on Mastodon
+- Following `@funkwhale@fosstodon.org <https://fosstodon.org/@funkwhale>`_ on Mastodon
 - Subscribing to the following Atom feed: https://dev.funkwhale.audio/funkwhale/funkwhale/commits/develop?format=atom&search=Merge+tag
 
 This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.html.
