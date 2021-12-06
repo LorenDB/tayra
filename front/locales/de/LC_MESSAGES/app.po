@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-07 18:30+0000\n"
-"PO-Revision-Date: 2021-07-19 18:39+0000\n"
-"Last-Translator: Ryan Harg <ryan.harg@mailbox.org>\n"
+"PO-Revision-Date: 2021-12-07 14:36+0000\n"
+"Last-Translator: Philipp Wolfer <ph.wolfer@gmail.com>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -360,7 +360,6 @@ msgstr "Zugriff zu den Filter-Inhalten"
 
 #: front/src/components/mixins/Translations.vue:96
 #: front/src/components/mixins/Translations.vue:97
-#, fuzzy
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to e-mail, username, and profile information"
 msgstr "Zugriff auf E-Mail-Adresse, Benutzernamen und Profilinformationen"
@@ -1216,7 +1215,6 @@ msgid "Browsing playlists"
 msgstr "Wiedergabelisten durchsuchen"
 
 #: front/src/components/library/Podcasts.vue:4
-#, fuzzy
 msgctxt "Content/Podcasts/Title"
 msgid "Browsing podcasts"
 msgstr "Podcasts durchsuchen"
@@ -1337,7 +1335,6 @@ msgid "Change language"
 msgstr "Sprache ändern"
 
 #: front/src/components/auth/Settings.vue:262
-#, fuzzy
 msgctxt "*/*/Button.Label"
 msgid "Change my e-mail address"
 msgstr "Meine E-Mail-Adresse ändern"
@@ -1649,7 +1646,6 @@ msgid "Create a Channel"
 msgstr "Kanal erstellen"
 
 #: front/src/views/auth/Signup.vue:4
-#, fuzzy
 msgctxt "Content/Signup/Title"
 msgid "Create a Funkwhale account"
 msgstr "Funkwhale-Konto erstellen"
@@ -1760,10 +1756,9 @@ msgid "Current image"
 msgstr "Aktuelles Bild"
 
 #: front/src/components/auth/Settings.vue:69
-#, fuzzy
 msgctxt "Content/Settings/Input.Label"
 msgid "Current password"
-msgstr "Neues Kennwort"
+msgstr "Aktuelles Kennwort"
 
 #: front/src/views/content/libraries/Quota.vue:2
 msgctxt "Content/Library/Title"
@@ -2264,7 +2259,6 @@ msgstr "Dauer"
 
 #: front/src/components/mixins/Translations.vue:79
 #: front/src/components/mixins/Translations.vue:80
-#, fuzzy
 msgctxt "*/*/*/Noun"
 msgid "Duration"
 msgstr "Dauer"
@@ -2283,7 +2277,6 @@ msgid "Duration"
 msgstr "Dauer"
 
 #: front/src/components/auth/SignupForm.vue:35
-#, fuzzy
 msgctxt "Content/*/*/Noun"
 msgid "E-mail address"
 msgstr "E-Mail-Adresse"
@@ -2495,16 +2488,14 @@ msgid "Enter playlist name…"
 msgstr "Name der Wiedergabeliste eingeben…"
 
 #: front/src/views/auth/PasswordReset.vue:55
-#, fuzzy
 msgctxt "Content/Signup/Input.Placeholder"
 msgid "Enter the e-mail address linked to your account"
-msgstr "Gib die E-Mail-Adresse ein, die zu deinem Konto verknüpft ist"
+msgstr "Gib die E-Mail-Adresse ein, die mit deinem Konto verknüpft ist"
 
 #: front/src/components/auth/SignupForm.vue:138
-#, fuzzy
 msgctxt "Content/Signup/Form/Placeholder"
 msgid "Enter your e-mail address"
-msgstr "E-Mail-Adresse bestätigen"
+msgstr "E-Mail-Adresse eingeben"
 
 #: front/src/components/auth/SignupForm.vue:133
 #: front/src/components/auth/SignupForm.vue:135
@@ -2518,7 +2509,6 @@ msgid "Enter your username"
 msgstr "Benutzername eingeben"
 
 #: front/src/components/auth/LoginForm.vue:95
-#, fuzzy
 msgctxt "Content/Login/Input.Placeholder"
 msgid "Enter your username or e-mail address"
 msgstr "Benutzername oder E-Mail-Adresse eingeben"
@@ -3088,10 +3078,9 @@ msgid "However, accessing Funkwhale from those clients requires a separate passw
 msgstr "Der Zugriff auf Funkwhale von diesen Apps benötigt ein zusätzliches Kennwort. Du kannst dieses Kennwort hier erstellen."
 
 #: front/src/components/RemoteSearchForm.vue:78
-#, fuzzy
 msgctxt "Head/Fetch/Field.Placeholder"
 msgid "https://website.example.com/rss.xml"
-msgstr "@channel@pod.example oder https://website.example/rss.xml"
+msgstr "https://website.example.com/rss.xml"
 
 #: front/src/views/auth/PasswordResetConfirm.vue:24
 #: front/src/views/auth/PasswordResetConfirm.vue:1
@@ -3650,10 +3639,9 @@ msgid "Local account"
 msgstr "Lokales Konto"
 
 #: front/src/components/common/LoginModal.vue:57
-#, fuzzy
 msgctxt "*/*/Button.Label/Verb"
 msgid "Log in"
-msgstr "Anmelden!"
+msgstr "Anmelden"
 
 #: front/src/components/Home.vue:95 src/views/auth/Login.vue:39
 msgctxt "Head/Login/Title"
@@ -4067,10 +4055,9 @@ msgid "New channels"
 msgstr "Neue Kanäle"
 
 #: front/src/components/auth/Settings.vue:279
-#, fuzzy
 msgctxt "*/*/*"
 msgid "New e-mail address"
-msgstr "E-Mail-Adresse"
+msgstr "Neue E-Mail-Adresse"
 
 #: front/src/components/auth/Settings.vue:73
 #: front/src/views/auth/PasswordResetConfirm.vue:14
@@ -4617,7 +4604,6 @@ msgid "Play"
 msgstr "Abspielen"
 
 #: front/src/components/audio/Player.vue:702
-#, fuzzy
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Play"
 msgstr "Abspielen"
@@ -4670,10 +4656,9 @@ msgstr "Vorheriger Titel abspielen"
 
 #: front/src/components/audio/PlayButton.vue:19
 #: src/components/radios/Button.vue:4 front/src/components/radios/Button.vue:1
-#, fuzzy
 msgctxt "*/Queue/Button.Label/Short, Verb"
 msgid "Play radio"
-msgstr "Titel abspielen"
+msgstr "Radio abspielen"
 
 #: front/src/components/audio/PlayButton.vue:101
 msgctxt "*/Queue/Dropdown/Button/Title"
@@ -5177,10 +5162,9 @@ msgid "Regenerate token"
 msgstr "Token nochmals generieren"
 
 #: front/src/components/auth/Settings.vue:196
-#, fuzzy
 msgctxt "Content/Settings/Button.Label"
 msgid "Register a new application"
-msgstr "Eine neue Anwendung erstellen"
+msgstr "Eine neue Anwendung registrieren"
 
 #: front/src/components/auth/Settings.vue:238
 #, fuzzy
@@ -5277,7 +5261,6 @@ msgid "Remote libraries are owned by other users on the network. You can access 
 msgstr "Fernmediatheken sind im Besitz anderer Personen des Netzwerks. Du kannst darauf zugreifen, wenn diese öffentlich sind, oder du die Erlaubnis hast."
 
 #: front/src/components/auth/Settings.vue:225
-#, fuzzy
 msgctxt "*/*/*/Verb"
 msgid "Remove"
 msgstr "Entfernen"
@@ -6062,7 +6045,6 @@ msgid "Shuffle your queue"
 msgstr "Warteschlange mischen"
 
 #: front/src/components/common/LoginModal.vue:58
-#, fuzzy
 msgctxt "*/*/Button.Label/Verb"
 msgid "Sign up"
 msgstr "Registrieren"
@@ -6972,7 +6954,6 @@ msgid "Track data"
 msgstr "Titeldaten"
 
 #: front/src/components/audio/PlayButton.vue:22
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "Track details"
 msgstr "Titeldetails"
@@ -7677,7 +7658,6 @@ msgstr "Willkommen bei %{ podName }!"
 
 #: front/src/components/audio/ChannelForm.vue:11
 #: front/src/components/audio/ChannelForm.vue:3
-#, fuzzy
 msgctxt "Content/Channel/Paragraph"
 msgid "What will this channel be used for?"
 msgstr "Wofür wird dieser Kanal verwendet?"
