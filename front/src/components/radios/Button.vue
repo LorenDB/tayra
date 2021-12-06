@@ -28,7 +28,7 @@ export default {
     customRadioId: { type: Number, default: 0, required: false },
     type: { type: String, required: false, default: '' },
     clientOnly: { type: Boolean, default: false },
-    objectId: { type: Number, default: null }
+    objectId: { type: String, default: null }
   },
   computed: {
     running () {

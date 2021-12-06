@@ -6,7 +6,7 @@
 <script>
 export default {
   props: {
-    duration: { type: Object, required: true }
+    duration: { type: Number, required: true }
   }
 }
 </script>

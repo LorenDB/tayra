@@ -89,7 +89,7 @@ import clip from 'text-clipper'
 
 export default {
   props: {
-    content: { type: String, required: true },
+    content: { type: String, default: '' },
     fieldName: { type: String, required: false, default: 'description' },
     updateUrl: { required: false, type: String, default: '' },
     canUpdate: { required: false, default: true, type: Boolean },

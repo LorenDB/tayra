@@ -52,8 +52,8 @@ export default {
   },
   props: {
     type: { type: String, required: true, default: '' },
-    customRadio: { type: Boolean, required: false },
-    objectId: { type: Number, required: false, default: 0 }
+    customRadio: { type: Object, required: false, default: () => { return {} } },
+    objectId: { type: String, required: false, default: '' }
   },
   computed: {
     radio () {

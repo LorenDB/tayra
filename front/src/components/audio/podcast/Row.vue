@@ -53,7 +53,10 @@
         class="podcast-episode-title ellipsis"
         @click.prevent.exact="activateTrack(track, index)"
       >{{ track.title }}</a>
-      <p class="podcast-episode-meta">
+      <p
+        v-if="description"
+        class="podcast-episode-meta"
+      >
         {{ description.text }}
       </p>
     </div>

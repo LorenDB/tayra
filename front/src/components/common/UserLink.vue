@@ -23,7 +23,7 @@ import { hashCode, intToRGB } from '@/utils/color'
 
 export default {
   props: {
-    user: { type: String, required: true },
+    user: { type: Object, required: true },
     avatar: { type: Boolean, default: true }
   },
   computed: {
