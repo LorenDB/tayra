@@ -20,5 +20,7 @@ module.exports = {
     'vue'
   ],
   rules: {
+    "vue/no-v-html": "off", // TODO: tackle this properly
+    "vue/no-use-v-if-with-v-for": "off"
   }
 }

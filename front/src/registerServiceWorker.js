@@ -15,15 +15,15 @@ if (process.env.NODE_ENV === 'production') {
     registered (registration) {
       console.log('Service worker has been registered.')
       // check for updates every 2 hours
-      var checkInterval = 1000 * 60 * 60 * 2
+      const checkInterval = 1000 * 60 * 60 * 2
       // var checkInterval = 1000 * 5
       setInterval(() => {
         console.log('Checking for service worker update…')
-        registration.update();
-      }, checkInterval);
-      store.commit('ui/serviceWorker', {registration: registration})
+        registration.update()
+      }, checkInterval)
+      store.commit('ui/serviceWorker', { registration: registration })
       if (registration.active) {
-        registration.active.postMessage({command: 'serverChosen', serverUrl: store.state.instance.instanceUrl})
+        registration.active.postMessage({ command: 'serverChosen', serverUrl: store.state.instance.instanceUrl })
       }
     },
     cached () {
@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === 'production') {
     },
     updated (registration) {
       console.log('New content is available; please refresh!')
-      store.commit('ui/serviceWorker', {updateAvailable: true, registration: registration})
+      store.commit('ui/serviceWorker', { updateAvailable: true, registration: registration })
     },
     offline () {
       console.log('No internet connection found. App is running in offline mode.')

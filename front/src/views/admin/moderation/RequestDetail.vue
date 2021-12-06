@@ -1,46 +1,48 @@
 <template>
   <main>
-    <div v-if="isLoading" class="ui vertical segment">
-      <div :class="['ui', 'centered', 'active', 'inline', 'loader']"></div>
+    <div
+      v-if="isLoading"
+      class="ui vertical segment"
+    >
+      <div :class="['ui', 'centered', 'active', 'inline', 'loader']" />
     </div>
     <template v-if="object">
-
       <div class="ui vertical stripe segment">
-        <user-request-card :obj="object"></user-request-card>
+        <user-request-card :obj="object" />
       </div>
     </template>
   </main>
 </template>
 
 <script>
-import axios from "axios"
+import axios from 'axios'
 
-import UserRequestCard from "@/components/manage/moderation/UserRequestCard"
+import UserRequestCard from '@/components/manage/moderation/UserRequestCard'
 
 export default {
-  props: ["id"],
   components: {
-    UserRequestCard,
+    UserRequestCard
   },
-  data() {
+  props: { id: { type: Number, required: true } },
+  data () {
     return {
       isLoading: true,
-      object: null,
+      object: null
     }
   },
-  created() {
+  created () {
     this.fetchData()
   },
   methods: {
-    fetchData() {
-      var self = this
+    fetchData () {
+      const self = this
       this.isLoading = true
-      let url = `manage/moderation/requests/${this.id}/`
+      const url = `manage/moderation/requests/${this.id}/`
       axios.get(url).then(response => {
         self.object = response.data
         self.isLoading = false
       })
-    },
-  },
+    }
+  }
 }
 </script>

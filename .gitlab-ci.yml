@@ -136,10 +136,7 @@ eslint:
     - cd front
     - yarn install
   script:
-    # We search for all files ending with .vue or .js in src which changed in relation to develop
-    # and lint them. This way we focus on some errors instead of checking the hole repository
-    - export changedFiles=$(git diff --relative --name-only --diff-filter=d origin/develop -- src/ | grep -E "\.(vue|js)$")
-    - yarn run eslint --quiet -f table $(echo $changedFiles | tr '\n' ' ')
+    - yarn lint
   cache:
     key: "$CI_PROJECT_ID__eslint_npm_cache"
     paths:

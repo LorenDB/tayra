@@ -2,140 +2,197 @@
   <div v-if="submitted">
     <div class="ui success message">
       <p v-if="signupRequiresApproval">
-        <translate translate-context="Content/Signup/Form/Paragraph">Your account request was successfully submitted. You will be notified by e-mail when our moderation team has reviewed your request.</translate>
+        <translate translate-context="Content/Signup/Form/Paragraph">
+          Your account request was successfully submitted. You will be notified by e-mail when our moderation team has reviewed your request.
+        </translate>
       </p>
       <p v-else>
-        <translate translate-context="Content/Signup/Form/Paragraph">Your account was successfully created. Please verify your e-mail address before trying to login.</translate>
+        <translate translate-context="Content/Signup/Form/Paragraph">
+          Your account was successfully created. Please verify your e-mail address before trying to login.
+        </translate>
       </p>
     </div>
-    <h2><translate translate-context="Content/Login/Title/Verb">Log in to your Funkwhale account</translate></h2>
-    <login-form button-classes="basic success" :show-signup="false"></login-form>
+    <h2>
+      <translate translate-context="Content/Login/Title/Verb">
+        Log in to your Funkwhale account
+      </translate>
+    </h2>
+    <login-form
+      button-classes="basic success"
+      :show-signup="false"
+    />
   </div>
   <form
     v-else
     :class="['ui', {'loading': isLoadingInstanceSetting}, 'form']"
-    @submit.prevent="submit()">
-    <p class="ui message" v-if="!$store.state.instance.settings.users.registration_enabled.value">
-      <translate translate-context="Content/Signup/Form/Paragraph">Public registrations are not possible on this instance. You will need an invitation code to sign up.</translate>
+    @submit.prevent="submit()"
+  >
+    <p
+      v-if="!$store.state.instance.settings.users.registration_enabled.value"
+      class="ui message"
+    >
+      <translate translate-context="Content/Signup/Form/Paragraph">
+        Public registrations are not possible on this instance. You will need an invitation code to sign up.
+      </translate>
     </p>
-    <p class="ui message" v-else-if="signupRequiresApproval">
-      <translate translate-context="Content/Signup/Form/Paragraph">Registrations on this pod are open, but reviewed by moderators before approval.</translate>
+    <p
+      v-else-if="signupRequiresApproval"
+      class="ui message"
+    >
+      <translate translate-context="Content/Signup/Form/Paragraph">
+        Registrations on this pod are open, but reviewed by moderators before approval.
+      </translate>
     </p>
     <template v-if="formCustomization && formCustomization.help_text">
-      <rendered-description :content="formCustomization.help_text" :fetch-html="fetchDescriptionHtml" :permissive="true"></rendered-description>
-      <div class="ui hidden divider"></div>
+      <rendered-description
+        :content="formCustomization.help_text"
+        :fetch-html="fetchDescriptionHtml"
+        :permissive="true"
+      />
+      <div class="ui hidden divider" />
     </template>
-    <div v-if="errors.length > 0" role="alert" class="ui negative message">
-      <h4 class="header"><translate translate-context="Content/Signup/Form/Paragraph">Your account cannot be created.</translate></h4>
+    <div
+      v-if="errors.length > 0"
+      role="alert"
+      class="ui negative message"
+    >
+      <h4 class="header">
+        <translate translate-context="Content/Signup/Form/Paragraph">
+          Your account cannot be created.
+        </translate>
+      </h4>
       <ul class="list">
-        <li v-for="error in errors">{{ error }}</li>
+        <li
+          v-for="(error, key) in errors"
+          :key="key"
+        >
+          {{ error }}
+        </li>
       </ul>
     </div>
     <div class="required field">
       <label for="username-field"><translate translate-context="Content/*/*">Username</translate></label>
       <input
-      ref="username"
-      name="username"
-      required
-      id="username-field"
-      type="text"
-      autofocus
-      :placeholder="labels.usernamePlaceholder"
-      v-model="username">
+        id="username-field"
+        ref="username"
+        v-model="username"
+        name="username"
+        required
+        type="text"
+        autofocus
+        :placeholder="labels.usernamePlaceholder"
+      >
     </div>
     <div class="required field">
       <label for="email-field"><translate translate-context="Content/*/*/Noun">E-mail address</translate></label>
       <input
-      id="email-field"
-      ref="email"
-      name="email"
-      required
-      type="email"
-      :placeholder="labels.emailPlaceholder"
-      v-model="email">
+        id="email-field"
+        ref="email"
+        v-model="email"
+        name="email"
+        required
+        type="email"
+        :placeholder="labels.emailPlaceholder"
+      >
     </div>
     <div class="required field">
       <label for="password-field"><translate translate-context="*/*/*">Password</translate></label>
-      <password-input field-id="password-field" v-model="password" />
+      <password-input
+        v-model="password"
+        field-id="password-field"
+      />
     </div>
-    <div class="required field" v-if="!$store.state.instance.settings.users.registration_enabled.value">
+    <div
+      v-if="!$store.state.instance.settings.users.registration_enabled.value"
+      class="required field"
+    >
       <label for="invitation-code"><translate translate-context="Content/*/Input.Label">Invitation code</translate></label>
       <input
-      id="invitation-code"
-      required
-      type="text"
-      name="invitation"
-      :placeholder="labels.placeholder"
-      v-model="invitation">
+        id="invitation-code"
+        v-model="invitation"
+        required
+        type="text"
+        name="invitation"
+        :placeholder="labels.placeholder"
+      >
     </div>
     <template v-if="signupRequiresApproval && formCustomization && formCustomization.fields && formCustomization.fields.length > 0">
-      <div :class="[{required: field.required}, 'field']" v-for="(field, idx) in formCustomization.fields" :key="idx">
+      <div
+        v-for="(field, idx) in formCustomization.fields"
+        :key="idx"
+        :class="[{required: field.required}, 'field']"
+      >
         <label :for="`custom-field-${idx}`">{{ field.label }}</label>
         <textarea
           v-if="field.input_type === 'long_text'"
           :id="`custom-field-${idx}`"
           :value="customFields[field.label]"
           :required="field.required"
-          @input="$set(customFields, field.label, $event.target.value)" rows="5"></textarea>
-        <input v-else :id="`custom-field-${idx}`" type="text" :value="customFields[field.label]" :required="field.required" @input="$set(customFields, field.label, $event.target.value)">
+          rows="5"
+          @input="$set(customFields, field.label, $event.target.value)"
+        />
+        <input
+          v-else
+          :id="`custom-field-${idx}`"
+          type="text"
+          :value="customFields[field.label]"
+          :required="field.required"
+          @input="$set(customFields, field.label, $event.target.value)"
+        >
       </div>
     </template>
-    <button :class="['ui', buttonClasses, {'loading': isLoading}, ' right floated button']" type="submit">
-      <translate translate-context="Content/Signup/Button.Label">Create my account</translate>
+    <button
+      :class="['ui', buttonClasses, {'loading': isLoading}, ' right floated button']"
+      type="submit"
+    >
+      <translate translate-context="Content/Signup/Button.Label">
+        Create my account
+      </translate>
     </button>
   </form>
 </template>
 
 <script>
-import axios from "axios"
-import logger from "@/logging"
+import axios from 'axios'
+import logger from '@/logging'
 
-import LoginForm from "@/components/auth/LoginForm"
-import PasswordInput from "@/components/forms/PasswordInput"
+import LoginForm from '@/components/auth/LoginForm'
+import PasswordInput from '@/components/forms/PasswordInput'
 
 export default {
-  props: {
-    defaultInvitation: { type: String, required: false, default: null },
-    next: { type: String, default: "/" },
-    buttonClasses: { type: String, default: "success" },
-    customization: { type: Object, default: null},
-    fetchDescriptionHtml: { type: Boolean, default: false},
-    fetchDescriptionHtml: { type: Boolean, default: false},
-    signupApprovalEnabled: {type: Boolean, default: null, required: false},
-  },
   components: {
     LoginForm,
-    PasswordInput,
+    PasswordInput
   },
-  data() {
+  props: {
+    defaultInvitation: { type: String, required: false, default: null },
+    next: { type: String, default: '/' },
+    buttonClasses: { type: String, default: 'success' },
+    customization: { type: Object, default: null },
+    fetchDescriptionHtml: { type: Boolean, default: false },
+    signupApprovalEnabled: { type: Boolean, default: null, required: false }
+  },
+  data () {
     return {
-      username: "",
-      email: "",
-      password: "",
+      username: '',
+      email: '',
+      password: '',
       isLoadingInstanceSetting: true,
       errors: [],
       isLoading: false,
       invitation: this.defaultInvitation,
       customFields: {},
-      submitted: false,
+      submitted: false
     }
   },
-  created() {
-    let self = this
-    this.$store.dispatch("instance/fetchSettings", {
-      callback: function() {
-        self.isLoadingInstanceSetting = false
-      }
-    })
-  },
   computed: {
-    labels() {
-      let placeholder = this.$pgettext(
-        "Content/Signup/Form/Placeholder",
-        "Enter your invitation code (case insensitive)"
+    labels () {
+      const placeholder = this.$pgettext(
+        'Content/Signup/Form/Placeholder',
+        'Enter your invitation code (case insensitive)'
       )
-      let usernamePlaceholder = this.$pgettext("Content/Signup/Form/Placeholder", "Enter your username")
-      let emailPlaceholder = this.$pgettext("Content/Signup/Form/Placeholder", "Enter your e-mail address")
+      const usernamePlaceholder = this.$pgettext('Content/Signup/Form/Placeholder', 'Enter your username')
+      const emailPlaceholder = this.$pgettext('Content/Signup/Form/Placeholder', 'Enter your e-mail address')
       return {
         usernamePlaceholder,
         emailPlaceholder,
@@ -152,22 +209,30 @@ export default {
       return this.signupApprovalEnabled
     }
   },
+  created () {
+    const self = this
+    this.$store.dispatch('instance/fetchSettings', {
+      callback: function () {
+        self.isLoadingInstanceSetting = false
+      }
+    })
+  },
   methods: {
-    submit() {
-      var self = this
+    submit () {
+      const self = this
       self.isLoading = true
       this.errors = []
-      var payload = {
+      const payload = {
         username: this.username,
         password1: this.password,
         password2: this.password,
         email: this.email,
         invitation: this.invitation,
-        request_fields: this.customFields,
+        request_fields: this.customFields
       }
-      return axios.post("auth/registration/", payload).then(
+      return axios.post('auth/registration/', payload).then(
         response => {
-          logger.default.info("Successfully created account")
+          logger.default.info('Successfully created account')
           self.submitted = true
           self.isLoading = false
         },

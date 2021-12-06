@@ -1,9 +1,10 @@
 <script>
 import axios from 'axios'
+import jQuery from 'jquery'
 
 export default {
   computed: {
-      playable () {
+    playable () {
       if (this.isPlayable) {
         return true
       }
@@ -34,27 +35,28 @@ export default {
       if (this.artist) {
         return this.artist
       }
-    },
+      return null
+    }
   },
   methods: {
     filterArtist () {
-      this.$store.dispatch('moderation/hide', {type: 'artist', target: this.filterableArtist})
+      this.$store.dispatch('moderation/hide', { type: 'artist', target: this.filterableArtist })
     },
-    activateTrack(track, index) {
+    activateTrack (track, index) {
       if (
         this.currentTrack &&
         this.isPlaying &&
         track.id === this.currentTrack.id
       ) {
-        this.pausePlayback();
+        this.pausePlayback()
       } else if (
         this.currentTrack &&
         !this.isPlaying &&
         track.id === this.currentTrack.id
       ) {
-        this.resumePlayback();
+        this.resumePlayback()
       } else {
-        this.replacePlay(this.tracks, index);
+        this.replacePlay(this.tracks, index)
       }
     },
     getTracksPage (page, params, resolve, tracks) {
@@ -64,13 +66,13 @@ export default {
       }
       // when fetching artists/or album tracks, sometimes, we may have to fetch
       // multiple pages
-      let self = this
-      params['page_size'] = 100
-      params['page'] = page
-      params['hidden'] = ''
-      params['playable'] = 'true'
+      const self = this
+      params.page_size = 100
+      params.page = page
+      params.hidden = ''
+      params.playable = 'true'
       tracks = tracks || []
-      axios.get('tracks/', {params: params}).then((response) => {
+      axios.get('tracks/', { params: params }).then((response) => {
         response.data.results.forEach(t => {
           tracks.push(t)
         })
@@ -82,9 +84,9 @@ export default {
       })
     },
     getPlayableTracks () {
-      let self = this
+      const self = this
       this.isLoading = true
-      let getTracks = new Promise((resolve, reject) => {
+      const getTracks = new Promise((resolve, reject) => {
         if (self.tracks) {
           resolve(self.tracks)
         } else if (self.track) {
@@ -97,9 +99,9 @@ export default {
             resolve([self.track])
           }
         } else if (self.playlist) {
-          let url = 'playlists/' + self.playlist.id + '/'
+          const url = 'playlists/' + self.playlist.id + '/'
           axios.get(url + 'tracks/').then((response) => {
-            let artistIds = self.$store.getters['moderation/artistFilters']().map((f) => {
+            const artistIds = self.$store.getters['moderation/artistFilters']().map((f) => {
               return f.target.id
             })
             let tracks = response.data.results.map(plt => {
@@ -108,21 +110,21 @@ export default {
             if (artistIds.length > 0) {
               // skip tracks from hidden artists
               tracks = tracks.filter((t) => {
-                let matchArtist = artistIds.indexOf(t.artist.id) > -1
-                return !(matchArtist || t.album && artistIds.indexOf(t.album.artist.id) > -1)
+                const matchArtist = artistIds.indexOf(t.artist.id) > -1
+                return !((matchArtist || t.album) && artistIds.indexOf(t.album.artist.id) > -1)
               })
             }
 
             resolve(tracks)
           })
         } else if (self.artist) {
-          let params = {'artist': self.artist.id, include_channels: 'true', 'ordering': 'album__release_date,disc_number,position'}
+          const params = { artist: self.artist.id, include_channels: 'true', ordering: 'album__release_date,disc_number,position' }
           self.getTracksPage(1, params, resolve)
         } else if (self.album) {
-          let params = {'album': self.album.id, include_channels: 'true', 'ordering': 'disc_number,position'}
+          const params = { album: self.album.id, include_channels: 'true', ordering: 'disc_number,position' }
           self.getTracksPage(1, params, resolve)
         } else if (self.library) {
-          let params = {'library': self.library.uuid, 'ordering': '-creation_date'}
+          const params = { library: self.library.uuid, ordering: '-creation_date' }
           self.getTracksPage(1, params, resolve)
         }
       })
@@ -136,17 +138,17 @@ export default {
       })
     },
     add () {
-      let self = this
+      const self = this
       this.getPlayableTracks().then((tracks) => {
-        self.$store.dispatch('queue/appendMany', {tracks: tracks}).then(() => self.addMessage(tracks))
+        self.$store.dispatch('queue/appendMany', { tracks: tracks }).then(() => self.addMessage(tracks))
       })
       jQuery(self.$el).find('.ui.dropdown').dropdown('hide')
     },
     replacePlay () {
-      let self = this
+      const self = this
       self.$store.dispatch('queue/clean')
       this.getPlayableTracks().then((tracks) => {
-        self.$store.dispatch('queue/appendMany', {tracks: tracks}).then(() => {
+        self.$store.dispatch('queue/appendMany', { tracks: tracks }).then(() => {
           if (self.track) {
             // set queue position to selected track
             const trackIndex = self.tracks.findIndex(track => track.id === self.track.id)
@@ -158,11 +160,11 @@ export default {
       jQuery(self.$el).find('.ui.dropdown').dropdown('hide')
     },
     addNext (next) {
-      let self = this
-      let wasEmpty = this.$store.state.queue.tracks.length === 0
+      const self = this
+      const wasEmpty = this.$store.state.queue.tracks.length === 0
       this.getPlayableTracks().then((tracks) => {
-        self.$store.dispatch('queue/appendMany', {tracks: tracks, index: self.$store.state.queue.currentIndex + 1}).then(() => self.addMessage(tracks))
-        let goNext = next && !wasEmpty
+        self.$store.dispatch('queue/appendMany', { tracks: tracks, index: self.$store.state.queue.currentIndex + 1 }).then(() => self.addMessage(tracks))
+        const goNext = next && !wasEmpty
         if (goNext) {
           self.$store.dispatch('queue/next')
         }
@@ -173,12 +175,12 @@ export default {
       if (tracks.length < 1) {
         return
       }
-      let msg = this.$npgettext('*/Queue/Message', '%{ count } track was added to your queue', '%{ count } tracks were added to your queue', tracks.length)
+      const msg = this.$npgettext('*/Queue/Message', '%{ count } track was added to your queue', '%{ count } tracks were added to your queue', tracks.length)
       this.$store.commit('ui/addMessage', {
-        content: this.$gettextInterpolate(msg, {count: tracks.length}),
+        content: this.$gettextInterpolate(msg, { count: tracks.length }),
         date: new Date()
       })
-    },
+    }
   }
 }
 </script>

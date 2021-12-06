@@ -1,17 +1,48 @@
 <template>
   <div class="component-track-widget">
-    <h3 v-if="!!this.$slots.title">
-      <slot name="title"></slot>
-      <span v-if="showCount" class="ui tiny circular label">{{ count }}</span>
+    <h3 v-if="!!$slots.title">
+      <slot name="title" />
+      <span
+        v-if="showCount"
+        class="ui tiny circular label"
+      >{{ count }}</span>
     </h3>
-    <div v-if="count > 0" class="ui divided unstackable items">
-      <div :class="['item', itemClasses]" v-for="object in objects" :key="object.id">
+    <div
+      v-if="count > 0"
+      class="ui divided unstackable items"
+    >
+      <div
+        v-for="object in objects"
+        :key="object.id"
+        :class="['item', itemClasses]"
+      >
         <div class="ui tiny image">
-          <img alt="" v-if="object.track.album && object.track.album.cover" v-lazy="$store.getters['instance/absoluteUrl'](object.track.album.cover.urls.medium_square_crop)">
-          <img alt="" v-else-if="object.track.cover" v-lazy="$store.getters['instance/absoluteUrl'](object.track.cover.urls.medium_square_crop)"/>
-          <img alt="" v-else-if="object.track.artist.cover" v-lazy="$store.getters['instance/absoluteUrl'](object.track.artist.cover.urls.medium_square_crop)"/>
-          <img alt="" v-else src="../../../assets/audio/default-cover.png">
-          <play-button class="play-overlay" :icon-only="true" :button-classes="['ui', 'circular', 'tiny', 'vibrant', 'icon', 'button']" :track="object.track"></play-button>
+          <img
+            v-if="object.track.album && object.track.album.cover"
+            v-lazy="$store.getters['instance/absoluteUrl'](object.track.album.cover.urls.medium_square_crop)"
+            alt=""
+          >
+          <img
+            v-else-if="object.track.cover"
+            v-lazy="$store.getters['instance/absoluteUrl'](object.track.cover.urls.medium_square_crop)"
+            alt=""
+          >
+          <img
+            v-else-if="object.track.artist.cover"
+            v-lazy="$store.getters['instance/absoluteUrl'](object.track.artist.cover.urls.medium_square_crop)"
+            alt=""
+          >
+          <img
+            v-else
+            alt=""
+            src="../../../assets/audio/default-cover.png"
+          >
+          <play-button
+            class="play-overlay"
+            :icon-only="true"
+            :button-classes="['ui', 'circular', 'tiny', 'vibrant', 'icon', 'button']"
+            :track="object.track"
+          />
         </div>
         <div class="middle aligned content">
           <div class="ui unstackable grid">
@@ -23,15 +54,32 @@
               </div>
               <div class="meta ellipsis">
                 <span>
-                  <router-link class="discrete link" :to="{name: 'library.artists.detail', params: {id: object.track.artist.id}}">
+                  <router-link
+                    class="discrete link"
+                    :to="{name: 'library.artists.detail', params: {id: object.track.artist.id}}"
+                  >
                     {{ object.track.artist.name }}
                   </router-link>
                 </span>
               </div>
-              <tags-list label-classes="tiny" :truncate-size="20" :limit="2" :show-more="false" :tags="object.track.tags"></tags-list>
+              <tags-list
+                label-classes="tiny"
+                :truncate-size="20"
+                :limit="2"
+                :show-more="false"
+                :tags="object.track.tags"
+              />
 
-              <div class="extra" v-if="isActivity">
-                <router-link class="left floated" :to="{name: 'profile.overview', params: {username: object.user.username}}">@{{ object.user.username }}</router-link>
+              <div
+                v-if="isActivity"
+                class="extra"
+              >
+                <router-link
+                  class="left floated"
+                  :to="{name: 'profile.overview', params: {username: object.user.username}}"
+                >
+                  @{{ object.user.username }}
+                </router-link>
                 <span class="right floated"><human-date :date="object.creation_date" /></span>
               </div>
             </div>
@@ -41,30 +89,46 @@
                 :account="object.actor"
                 :dropdown-only="true"
                 :dropdown-icon-classes="['ellipsis', 'vertical', 'large really discrete']"
-                :track="object.track"></play-button>
+                :track="object.track"
+              />
             </div>
           </div>
         </div>
       </div>
-      <div v-if="isLoading" class="ui inverted active dimmer">
-        <div class="ui loader"></div>
+      <div
+        v-if="isLoading"
+        class="ui inverted active dimmer"
+      >
+        <div class="ui loader" />
       </div>
     </div>
-    <div v-else class="ui placeholder segment">
+    <div
+      v-else
+      class="ui placeholder segment"
+    >
       <div class="ui icon header">
-        <i class="music icon"></i>
+        <i class="music icon" />
         <translate translate-context="Content/Home/Placeholder">
           Nothing found
         </translate>
       </div>
-      <div v-if="isLoading" class="ui inverted active dimmer">
-        <div class="ui loader"></div>
+      <div
+        v-if="isLoading"
+        class="ui inverted active dimmer"
+      >
+        <div class="ui loader" />
       </div>
     </div>
     <template v-if="nextPage">
-      <div class="ui hidden divider"></div>
-      <button v-if="nextPage" @click="fetchData(nextPage)" :class="['ui', 'basic', 'button']">
-        <translate translate-context="*/*/Button,Label">Show more</translate>
+      <div class="ui hidden divider" />
+      <button
+        v-if="nextPage"
+        :class="['ui', 'basic', 'button']"
+        @click="fetchData(nextPage)"
+      >
+        <translate translate-context="*/*/Button,Label">
+          Show more
+        </translate>
       </button>
     </template>
   </div>
@@ -74,20 +138,20 @@
 import _ from '@/lodash'
 import axios from 'axios'
 import PlayButton from '@/components/audio/PlayButton'
-import TagsList from "@/components/tags/List"
+import TagsList from '@/components/tags/List'
 
 export default {
-  props: {
-    filters: {type: Object, required: true},
-    url: {type: String, required: true},
-    isActivity: {type: Boolean, default: true},
-    showCount: {type: Boolean, default: false},
-    limit: {type: Number, default: 5},
-    itemClasses: {type: String, default: ''},
-  },
   components: {
     PlayButton,
     TagsList
+  },
+  props: {
+    filters: { type: Object, required: true },
+    url: { type: String, required: true },
+    isActivity: { type: Boolean, default: true },
+    showCount: { type: Boolean, default: false },
+    limit: { type: Number, default: 5 },
+    itemClasses: { type: String, default: '' }
   },
   data () {
     return {
@@ -99,6 +163,17 @@ export default {
       nextPage: null
     }
   },
+  watch: {
+    offset () {
+      this.fetchData()
+    },
+    '$store.state.moderation.lastUpdate': function () {
+      this.fetchData(this.url)
+    },
+    count (v) {
+      this.$emit('count', v)
+    }
+  },
   created () {
     this.fetchData(this.url)
   },
@@ -108,11 +183,11 @@ export default {
         return
       }
       this.isLoading = true
-      let self = this
-      let params = _.clone(this.filters)
+      const self = this
+      const params = _.clone(this.filters)
       params.page_size = this.limit
       params.offset = this.offset
-      axios.get(url, {params: params}).then((response) => {
+      axios.get(url, { params: params }).then((response) => {
         self.previousPage = response.data.previous
         self.nextPage = response.data.next
         self.isLoading = false
@@ -123,7 +198,7 @@ export default {
           newObjects = response.data.results
         } else {
           newObjects = response.data.results.map((r) => {
-            return {track: r}
+            return { track: r }
           })
         }
         self.objects = [...self.objects, ...newObjects]
@@ -138,17 +213,6 @@ export default {
       } else {
         this.offset = Math.max(this.offset - this.limit, 0)
       }
-    }
-  },
-  watch: {
-    offset () {
-      this.fetchData()
-    },
-    "$store.state.moderation.lastUpdate": function () {
-      this.fetchData(this.url)
-    },
-    count (v) {
-      this.$emit('count', v)
     }
   }
 }

@@ -1,19 +1,27 @@
 <template>
-  <main class="main pusher" v-title="labels.title">
+  <main
+    v-title="labels.title"
+    class="main pusher"
+  >
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>{{ labels.title }}</h2>
-        <div v-if="isLoading" class="ui inverted active dimmer">
-          <div class="ui loader"></div>
+        <div
+          v-if="isLoading"
+          class="ui inverted active dimmer"
+        >
+          <div class="ui loader" />
         </div>
 
-        <plugin-form
-          v-if="plugins && plugins.length > 0"
-          v-for="plugin in plugins"
-          :plugin="plugin"
-          :libraries="libraries"
-          :key="plugin.name"></plugin-form>
-        <empty-state v-else></empty-state>
+        <template v-if="plugins && plugins.length > 0">
+          <plugin-form
+            v-for="plugin in plugins"
+            :key="plugin.name"
+            :plugin="plugin"
+            :libraries="libraries"
+          />
+        </template>
+        <empty-state v-else />
       </div>
     </section>
   </main>
@@ -31,26 +39,26 @@ export default {
     return {
       isLoading: true,
       plugins: null,
-      libraries: null,
+      libraries: null
     }
   },
-  async created () {
-    await this.fetchData()
-  },
   computed: {
-    labels() {
-      let title = this.$pgettext('Head/Login/Title', "Manage plugins")
+    labels () {
+      const title = this.$pgettext('Head/Login/Title', 'Manage plugins')
       return {
         title
       }
     }
+  },
+  async created () {
+    await this.fetchData()
   },
   methods: {
     async fetchData () {
       this.isLoading = true
       let response = await axios.get('plugins')
       this.plugins = response.data
-      response = await axios.get('libraries', {paramis: {scope: 'me', page_size: 50}})
+      response = await axios.get('libraries', { paramis: { scope: 'me', page_size: 50 } })
       this.libraries = response.data.results
       this.isLoading = false
     }

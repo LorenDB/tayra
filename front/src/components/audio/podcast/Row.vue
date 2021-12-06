@@ -15,8 +15,6 @@
       @click.prevent.exact="activateTrack(track, index)"
     >
       <img
-        alt=""
-        class="ui artist-track mini image"
         v-if="
           track.cover && track.cover.urls.original
         "
@@ -25,10 +23,10 @@
             track.cover.urls.medium_square_crop
           )
         "
-      />
-      <img
         alt=""
         class="ui artist-track mini image"
+      >
+      <img
         v-else-if="
           defaultCover
         "
@@ -37,21 +35,32 @@
             defaultCover.cover.urls.medium_square_crop
           )
         "
-      />
-      <img
         alt=""
         class="ui artist-track mini image"
+      >
+      <img
         v-else
+        alt=""
+        class="ui artist-track mini image"
         src="../../../assets/audio/default-cover.png"
-      />
+      >
     </div>
-    <div tabindex=0 class="content left floated column">
+    <div
+      tabindex="0"
+      class="content left floated column"
+    >
       <a
         class="podcast-episode-title ellipsis"
-        @click.prevent.exact="activateTrack(track, index)">{{ track.title }}</a>
-      <p class="podcast-episode-meta">{{ description.text }}</p>
+        @click.prevent.exact="activateTrack(track, index)"
+      >{{ track.title }}</a>
+      <p class="podcast-episode-meta">
+        {{ description.text }}
+      </p>
     </div>
-    <div v-if="displayActions" class="meta right floated column">
+    <div
+      v-if="displayActions"
+      class="meta right floated column"
+    >
       <play-button
         id="playmenu"
         class="play-button basic icon"
@@ -63,22 +72,25 @@
           'large really discrete',
         ]"
         :track="track"
-      ></play-button>
+      />
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import PlayIndicator from "@/components/audio/track/PlayIndicator";
-import { mapActions, mapGetters } from "vuex";
-import PlayButton from "@/components/audio/PlayButton";
-import PlayOptions from "@/components/mixins/PlayOptions";
+import { mapActions, mapGetters } from 'vuex'
+import PlayButton from '@/components/audio/PlayButton'
+import PlayOptions from '@/components/mixins/PlayOptions'
 
 export default {
+
+  components: {
+    PlayButton
+  },
   mixins: [PlayOptions],
   props: {
-    tracks: Array,
+    tracks: { type: Array, required: true },
     showAlbum: { type: Boolean, required: false, default: true },
     showArtist: { type: Boolean, required: false, default: true },
     showPosition: { type: Boolean, required: false, default: false },
@@ -90,34 +102,29 @@ export default {
     showDuration: { type: Boolean, required: false, default: true },
     index: { type: Number, required: true },
     track: { type: Object, required: true },
-    defaultCover: { type: Object, required: false },
+    defaultCover: { type: Object, required: false, default: () => { return {} } }
   },
 
-  data() {
+  data () {
     return {
       hover: null,
       errors: null,
-      description: null,
+      description: null
     }
-  },
-
-  created () {
-    this.fetchData('tracks/' + this.track.id + '/' )
-	},
-
-  components: {
-    PlayIndicator,
-    PlayButton,
   },
 
   computed: {
     ...mapGetters({
-      currentTrack: "queue/currentTrack",
+      currentTrack: 'queue/currentTrack'
     }),
 
-    isPlaying() {
-      return this.$store.state.player.playing;
-    },
+    isPlaying () {
+      return this.$store.state.player.playing
+    }
+  },
+
+  created () {
+    this.fetchData('tracks/' + this.track.id + '/')
   },
 
   methods: {
@@ -126,29 +133,29 @@ export default {
         return
       }
       this.isLoading = true
-      let self = this
+      const self = this
       try {
-        let channelsPromise = await axios.get(url)
+        const channelsPromise = await axios.get(url)
         self.description = channelsPromise.data.description
         self.isLoading = false
-      } catch(e) {
+      } catch (e) {
         self.isLoading = false
-        self.errors = error.backendErrors
+        self.errors = e.backendErrors
       }
     },
 
-    prettyPosition(position, size) {
-      var s = String(position);
+    prettyPosition (position, size) {
+      let s = String(position)
       while (s.length < (size || 2)) {
-        s = "0" + s;
+        s = '0' + s
       }
-      return s;
+      return s
     },
 
     ...mapActions({
-      resumePlayback: "player/resumePlayback",
-      pausePlayback: "player/pausePlayback",
-    }),
-  },
-};
+      resumePlayback: 'player/resumePlayback',
+      pausePlayback: 'player/pausePlayback'
+    })
+  }
+}
 </script>

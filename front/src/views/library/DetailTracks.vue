@@ -4,11 +4,24 @@
       :key="object.uploads_count"
       :display-actions="false"
       :search="true"
-      :filters="{playable: true, library: object.uuid, ordering: '-creation_date'}">
+      :filters="{playable: true, library: object.uuid, ordering: '-creation_date'}"
+    >
       <empty-state slot="empty-state">
         <p>
-          <translate key="1" v-if="isOwner" translate-context="*/*/*">This library is empty, you should upload something in it!</translate>
-          <translate key="2" v-else translate-context="*/*/*">You may need to follow this library to see its content.</translate>
+          <translate
+            v-if="isOwner"
+            key="1"
+            translate-context="*/*/*"
+          >
+            This library is empty, you should upload something in it!
+          </translate>
+          <translate
+            v-else
+            key="2"
+            translate-context="*/*/*"
+          >
+            You may need to follow this library to see its content.
+          </translate>
         </p>
       </empty-state>
     </track-table>
@@ -19,9 +32,12 @@
 import TrackTable from '@/components/audio/track/Table'
 
 export default {
-  props: ['object', 'isOwner'],
   components: {
-    TrackTable,
+    TrackTable
   },
+  props: {
+    object: { type: String, required: true },
+    isOwner: { type: Boolean, required: true }
+  }
 }
 </script>

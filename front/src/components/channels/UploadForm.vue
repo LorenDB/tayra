@@ -1,70 +1,132 @@
 <template>
-  <form @submit.stop.prevent :class="['ui', {loading: isLoadingStep1}, 'form component-file-upload']">
-    <div v-if="errors.length > 0" role="alert" class="ui negative message">
-      <h4 class="header"><translate translate-context="Content/*/Error message.Title">Error while publishing</translate></h4>
+  <form
+    :class="['ui', {loading: isLoadingStep1}, 'form component-file-upload']"
+    @submit.stop.prevent
+  >
+    <div
+      v-if="errors.length > 0"
+      role="alert"
+      class="ui negative message"
+    >
+      <h4 class="header">
+        <translate translate-context="Content/*/Error message.Title">
+          Error while publishing
+        </translate>
+      </h4>
       <ul class="list">
-        <li v-for="error in errors">{{ error }}</li>
+        <li
+          v-for="(error, key) in errors"
+          :key="key"
+        >
+          {{ error }}
+        </li>
       </ul>
     </div>
     <div :class="['ui', 'required', {hidden: step > 1}, 'field']">
       <label for="channel-dropdown">
         <translate translate-context="*/*/*">Channel</translate>
       </label>
-      <div id="channel-dropdown" class="ui search normal selection dropdown">
-        <div class="text"></div>
-        <i class="dropdown icon"></i>
+      <div
+        id="channel-dropdown"
+        class="ui search normal selection dropdown"
+      >
+        <div class="text" />
+        <i class="dropdown icon" />
       </div>
     </div>
-    <album-select v-model.number="values.album" :channel="selectedChannel" :class="['ui', {hidden: step > 1}, 'field']"></album-select>
-    <license-select v-model="values.license" :class="['ui', {hidden: step > 1}, 'field']"></license-select>
+    <album-select
+      v-model.number="values.album"
+      :channel="selectedChannel"
+      :class="['ui', {hidden: step > 1}, 'field']"
+    />
+    <license-select
+      v-model="values.license"
+      :class="['ui', {hidden: step > 1}, 'field']"
+    />
     <div :class="['ui', {hidden: step > 1}, 'message']">
       <div class="content">
         <p>
-          <i class="copyright icon"></i>
-          <translate translate-context="Content/Channels/Popup.Paragraph">Add a license to your upload to ensure some freedoms to your public.</translate>
+          <i class="copyright icon" />
+          <translate translate-context="Content/Channels/Popup.Paragraph">
+            Add a license to your upload to ensure some freedoms to your public.
+          </translate>
         </p>
       </div>
     </div>
     <template v-if="step >= 2 && step < 4">
-      <div role="alert" class="ui warning message" v-if="remainingSpace === 0">
+      <div
+        v-if="remainingSpace === 0"
+        role="alert"
+        class="ui warning message"
+      >
         <div class="content">
           <p>
-            <i class="warning icon"></i>
-            <translate translate-context="Content/Library/Paragraph">You don't have any space left to upload your files. Please contact the moderators.</translate>
+            <i class="warning icon" />
+            <translate translate-context="Content/Library/Paragraph">
+              You don't have any space left to upload your files. Please contact the moderators.
+            </translate>
           </p>
         </div>
       </div>
       <template v-else>
-        <div class="ui visible info message" v-if="step === 2 && draftUploads && draftUploads.length > 0 && includeDraftUploads === null">
+        <div
+          v-if="step === 2 && draftUploads && draftUploads.length > 0 && includeDraftUploads === null"
+          class="ui visible info message"
+        >
           <p>
-            <i class="redo icon"></i>
-            <translate translate-context="Popup/Channels/Paragraph">You have some draft uploads pending publication.</translate>
+            <i class="redo icon" />
+            <translate translate-context="Popup/Channels/Paragraph">
+              You have some draft uploads pending publication.
+            </translate>
           </p>
-          <button @click.stop.prevent="includeDraftUploads = false" class="ui basic button">
-            <translate translate-context="*/*/*">Ignore</translate>
+          <button
+            class="ui basic button"
+            @click.stop.prevent="includeDraftUploads = false"
+          >
+            <translate translate-context="*/*/*">
+              Ignore
+            </translate>
           </button>
-          <button @click.stop.prevent="includeDraftUploads = true" class="ui basic button">
-            <translate translate-context="*/*/*">Resume</translate>
+          <button
+            class="ui basic button"
+            @click.stop.prevent="includeDraftUploads = true"
+          >
+            <translate translate-context="*/*/*">
+              Resume
+            </translate>
           </button>
         </div>
-        <div v-if="uploadedFiles.length > 0" :class="[{hidden: step === 3}]">
-          <div class="channel-file" v-for="(file, idx) in uploadedFiles">
+        <div
+          v-if="uploadedFiles.length > 0"
+          :class="[{hidden: step === 3}]"
+        >
+          <div
+            v-for="(file, idx) in uploadedFiles"
+            :key="idx"
+            class="channel-file"
+          >
             <div class="content">
-              <div role="button"
+              <div
                 v-if="file.response.uuid"
-                @click.stop.prevent="selectedUploadId = file.response.uuid"
+                role="button"
                 class="ui basic icon button"
-                :title="labels.editTitle">
-                <i class="pencil icon"></i>
+                :title="labels.editTitle"
+                @click.stop.prevent="selectedUploadId = file.response.uuid"
+              >
+                <i class="pencil icon" />
               </div>
               <div
                 v-if="file.error"
-                @click.stop.prevent="selectedUploadId = file.response.uuid"
                 class="ui basic danger icon label"
-                :title="file.error">
-                <i class="warning sign icon"></i>
+                :title="file.error"
+                @click.stop.prevent="selectedUploadId = file.response.uuid"
+              >
+                <i class="warning sign icon" />
               </div>
-              <div v-else-if="file.active" class="ui active slow inline loader"></div>
+              <div
+                v-else-if="file.active"
+                class="ui active slow inline loader"
+              />
             </div>
             <h4 class="ui header">
               <template v-if="file.metadata.title">
@@ -77,20 +139,39 @@
                 <template v-if="file.response.uuid">
                   {{ file.size | humanSize }}
                   <template v-if="file.response.duration">
-                    · <human-duration :duration="file.response.duration"></human-duration>
+                    · <human-duration :duration="file.response.duration" />
                   </template>
                 </template>
                 <template v-else>
-                  <translate key="1" v-if="file.active" translate-context="Channels/*/*">Uploading</translate>
-                  <translate key="2" v-else-if="file.error" translate-context="Channels/*/*">Errored</translate>
-                  <translate key="3" v-else translate-context="Channels/*/*">Pending</translate>
+                  <translate
+                    v-if="file.active"
+                    key="1"
+                    translate-context="Channels/*/*"
+                  >
+                    Uploading
+                  </translate>
+                  <translate
+                    v-else-if="file.error"
+                    key="2"
+                    translate-context="Channels/*/*"
+                  >
+                    Errored
+                  </translate>
+                  <translate
+                    v-else
+                    key="3"
+                    translate-context="Channels/*/*"
+                  >
+                    Pending
+                  </translate>
                   · {{ file.size | humanSize }}
                   · {{ parseInt(file.progress) }}%
                 </template>
                 · <a @click.stop.prevent="remove(file)">
                   <translate translate-context="Content/Radio/Button.Label/Verb">Remove</translate>
                 </a>
-                <template v-if="file.error"> ·
+                <template v-if="file.error">
+                  ·
                   <a @click.stop.prevent="retry(file)">
                     <translate translate-context="*/*/*">Retry</translate>
                   </a>
@@ -100,20 +181,30 @@
           </div>
         </div>
         <upload-metadata-form
-          :key="selectedUploadId"
           v-if="selectedUpload"
+          :key="selectedUploadId"
           :upload="selectedUpload"
           :values="uploadImportData[selectedUploadId]"
-          @values="setDynamic('uploadImportData', selectedUploadId, $event)"></upload-metadata-form>
-        <div class="ui message" v-if="step === 2">
+          @values="setDynamic('uploadImportData', selectedUploadId, $event)"
+        />
+        <div
+          v-if="step === 2"
+          class="ui message"
+        >
           <div class="content">
             <p>
-              <i class="info icon"></i>
-              <translate translate-context="Content/Library/Paragraph" :translate-params="{extensions: $store.state.ui.supportedExtensions.join(', ')}">Supported extensions: %{ extensions }</translate>
+              <i class="info icon" />
+              <translate
+                translate-context="Content/Library/Paragraph"
+                :translate-params="{extensions: $store.state.ui.supportedExtensions.join(', ')}"
+              >
+                Supported extensions: %{ extensions }
+              </translate>
             </p>
           </div>
         </div>
         <file-upload-widget
+          ref="upload"
           :class="['ui', 'icon', 'basic', 'button', 'channels', {hidden: step === 3}]"
           :post-action="uploadUrl"
           :multiple="true"
@@ -121,21 +212,25 @@
           :drop="true"
           :extensions="$store.state.ui.supportedExtensions"
           :value="files"
-          @input="updateFiles"
           name="audio_file"
           :thread="1"
+          @input="updateFiles"
           @input-file="inputFile"
-          ref="upload">
+        >
           <div>
-            <i class="upload icon"></i>&nbsp;
-            <translate translate-context="Content/Channels/Paragraph">Drag and drop your files here or open the browser to upload your files</translate>
+            <i class="upload icon" />&nbsp;
+            <translate translate-context="Content/Channels/Paragraph">
+              Drag and drop your files here or open the browser to upload your files
+            </translate>
           </div>
-          <div class="ui very small divider"></div>
+          <div class="ui very small divider" />
           <div>
-            <translate translate-context="*/*/*">Browse…</translate>
+            <translate translate-context="*/*/*">
+              Browse…
+            </translate>
           </div>
         </file-upload-widget>
-        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider" />
       </template>
     </template>
   </form>
@@ -146,31 +241,31 @@ import $ from 'jquery'
 
 import LicenseSelect from '@/components/channels/LicenseSelect'
 import AlbumSelect from '@/components/channels/AlbumSelect'
-import FileUploadWidget from "@/components/library/FileUploadWidget";
+import FileUploadWidget from '@/components/library/FileUploadWidget'
 import UploadMetadataForm from '@/components/channels/UploadMetadataForm'
 
 function setIfEmpty (obj, k, v) {
-  if (obj[k] != undefined) {
+  if (obj[k] !== undefined) {
     return
   }
   obj[k] = v
 }
 
 export default {
-  props: {
-    channel: {type: Object, default: null, required: false},
-  },
   components: {
     AlbumSelect,
     LicenseSelect,
     FileUploadWidget,
-    UploadMetadataForm,
+    UploadMetadataForm
+  },
+  props: {
+    channel: { type: Object, default: null, required: false }
   },
   data () {
     return {
       availableChannels: {
         results: [],
-        count: 0,
+        count: 0
       },
       audioMetadata: {},
       uploadData: {},
@@ -180,29 +275,22 @@ export default {
       errors: [],
       removed: [],
       includeDraftUploads: null,
-      uploadUrl: this.$store.getters['instance/absoluteUrl']("/api/v1/uploads/"),
+      uploadUrl: this.$store.getters['instance/absoluteUrl']('/api/v1/uploads/'),
       quotaStatus: null,
       isLoadingStep1: true,
       step: 1,
       values: {
         channel: (this.channel || {}).uuid,
         license: null,
-        album: null,
+        album: null
       },
-      selectedUploadId: null,
+      selectedUploadId: null
     }
-  },
-  async created () {
-    this.isLoadingStep1 = true
-    let p1 = this.fetchChannels()
-    await p1
-    this.isLoadingStep1 = false
-    this.fetchQuota()
   },
   computed: {
     labels () {
       return {
-        editTitle: this.$pgettext('Content/*/Button.Label/Verb', 'Edit'),
+        editTitle: this.$pgettext('Content/*/Button.Label/Verb', 'Edit')
 
       }
     },
@@ -210,7 +298,7 @@ export default {
       return {
         channel: this.values.channel,
         import_status: 'draft',
-        import_metadata: {license: this.values.license, album: this.values.album || null}
+        import_metadata: { license: this.values.license, album: this.values.album || null }
       }
     },
     remainingSpace () {
@@ -220,18 +308,18 @@ export default {
       return Math.max(0, this.quotaStatus.remaining - (this.uploadedSize / (1000 * 1000)))
     },
     selectedChannel () {
-      let self = this
+      const self = this
       return this.availableChannels.results.filter((c) => {
         return c.uuid === self.values.channel
       })[0]
     },
     selectedUpload () {
-      let self = this
+      const self = this
       if (!this.selectedUploadId) {
         return null
       }
-      let selected = this.uploadedFiles.filter((f) => {
-        return f.response && f.response.uuid == self.selectedUploadId
+      const selected = this.uploadedFiles.filter((f) => {
+        return f.response && f.response.uuid === self.selectedUploadId
       })[0]
       return {
         ...selected.response,
@@ -239,27 +327,24 @@ export default {
       }
     },
     uploadedFilesById () {
-      let data = {}
+      const data = {}
       this.uploadedFiles.forEach((u) => {
         data[u.response.uuid] = u
       })
       return data
     },
     uploadedFiles () {
-      let self = this
-      self.uploadData
-      self.audioMetadata
-      let files = this.files.map((f) => {
-        let data = {
+      const self = this
+      const files = this.files.map((f) => {
+        const data = {
           ...f,
           _fileObj: f,
           metadata: {}
         }
-        let metadata = {}
         if (f.response && f.response.uuid) {
-          let uploadImportMetadata = self.uploadImportData[f.response.uuid] || self.uploadData[f.response.uuid].import_metadata
+          const uploadImportMetadata = self.uploadImportData[f.response.uuid] || self.uploadData[f.response.uuid].import_metadata
           data.metadata = {
-            ...uploadImportMetadata,
+            ...uploadImportMetadata
           }
           data.removed = self.removed.indexOf(f.response.uuid) >= 0
         }
@@ -308,7 +393,7 @@ export default {
         canSubmit: !this.activeFile && this.uploadedFiles.length > 0,
         speed,
         remaining,
-        quotaStatus: this.quotaStatus,
+        quotaStatus: this.quotaStatus
       }
     },
     totalSize () {
@@ -335,44 +420,92 @@ export default {
       })[0]
     }
   },
+  watch: {
+    'availableChannels.results' () {
+      this.setupChannelsDropdown()
+    },
+    'values.channel': {
+      async handler (v) {
+        this.files = []
+        if (v) {
+          await this.fetchDraftUploads(v)
+        }
+      },
+      immediate: true
+    },
+    step: {
+      handler (value) {
+        this.$emit('step', value)
+        if (value === 2) {
+          this.selectedUploadId = null
+        }
+      },
+      immediate: true
+    },
+    async selectedUploadId (v, o) {
+      if (v) {
+        this.step = 3
+      } else {
+        this.step = 2
+      }
+      if (o) {
+        await this.patchUpload(o, { import_metadata: this.uploadImportData[o] })
+      }
+    },
+    summaryData: {
+      handler (v) {
+        this.$emit('status', v)
+      },
+      immediate: true
+
+    }
+  },
+  async created () {
+    this.isLoadingStep1 = true
+    const p1 = this.fetchChannels()
+    await p1
+    this.isLoadingStep1 = false
+    this.fetchQuota()
+  },
   methods: {
     async fetchChannels () {
-      let response = await axios.get('channels/', {params: {scope: 'me'}})
+      const response = await axios.get('channels/', { params: { scope: 'me' } })
       this.availableChannels = response.data
     },
     async patchUpload (id, data) {
-      let response = await axios.patch(`uploads/${id}/`, data)
+      const response = await axios.patch(`uploads/${id}/`, data)
       this.uploadData[id] = response.data
       this.uploadImportData[id] = response.data.import_metadata
     },
     fetchQuota () {
-      let self = this
+      const self = this
       axios.get('users/me/').then((response) => {
         self.quotaStatus = response.data.quota_status
       })
     },
     publish () {
-      let self = this
+      const self = this
       self.isLoading = true
       self.errors = []
-      let ids = this.uploadedFiles.map((f) => {
+      const ids = this.uploadedFiles.map((f) => {
         return f.response.uuid
       })
-      let payload = {
+      const payload = {
         action: 'publish',
-        objects: ids,
+        objects: ids
       }
       return axios.post('uploads/action/', payload).then(
         response => {
           self.isLoading = false
-          self.$emit("published", {
+          self.$emit('published', {
             uploads: self.uploadedFiles.map((u) => {
               return {
                 ...u.response,
-                import_status: 'pending',
+                import_status: 'pending'
               }
             }),
-            channel: self.selectedChannel})
+            channel: self.selectedChannel
+          })
         },
         error => {
           self.errors = error.backendErrors
@@ -380,32 +513,31 @@ export default {
       )
     },
     setupChannelsDropdown () {
-      let self = this
+      const self = this
       $(this.$el).find('#channel-dropdown').dropdown({
         onChange (value, text, $choice) {
           self.values.channel = value
         },
         values: this.availableChannels.results.map((c) => {
-          let d = {
+          const d = {
             name: c.artist.name,
             value: c.uuid,
-            selected: self.channel && self.channel.uuid === c.uuid,
+            selected: self.channel && self.channel.uuid === c.uuid
           }
           if (c.artist.cover && c.artist.cover.urls.medium_square_crop) {
-            let coverUrl = self.$store.getters['instance/absoluteUrl'](c.artist.cover.urls.medium_square_crop)
+            const coverUrl = self.$store.getters['instance/absoluteUrl'](c.artist.cover.urls.medium_square_crop)
             d.image = coverUrl
             if (c.artist.content_category === 'podcast') {
               d.imageClass = 'ui image'
             } else {
-              d.imageClass = "ui avatar image"
+              d.imageClass = 'ui avatar image'
             }
           } else {
-            d.icon = "user"
+            d.icon = 'user'
             if (c.artist.content_category === 'podcast') {
-              d.iconClass = "bordered icon"
+              d.iconClass = 'bordered icon'
             } else {
-              d.iconClass = "circular icon"
-
+              d.iconClass = 'circular icon'
             }
           }
           return d
@@ -413,23 +545,23 @@ export default {
       })
       $(this.$el).find('#channel-dropdown').dropdown('hide')
     },
-    inputFile(newFile, oldFile) {
+    inputFile (newFile, oldFile) {
       if (!newFile) {
         return
       }
       if (this.remainingSpace < newFile.size / (1000 * 1000)) {
         newFile.error = 'denied'
       } else {
-        this.$refs.upload.active = true;
+        this.$refs.upload.active = true
       }
     },
     fetchAudioMetadata (uuid) {
-      let self = this
+      const self = this
       self.audioMetadata[uuid] = null
       axios.get(`uploads/${uuid}/audio-file-metadata/`).then((response) => {
         self.setDynamic('audioMetadata', uuid, response.data)
-        let uploadedFile = self.uploadedFilesById[uuid]
-        if (uploadedFile._fileObj && uploadedFile.response.import_metadata.title === uploadedFile._fileObj.name.replace(/\.[^/.]+$/, "") && response.data.title) {
+        const uploadedFile = self.uploadedFilesById[uuid]
+        if (uploadedFile._fileObj && uploadedFile.response.import_metadata.title === uploadedFile._fileObj.name.replace(/\.[^/.]+$/, '') && response.data.title) {
           // replace existing title deduced from file by the one in audio file metadat, if any
           self.uploadImportData[uuid].title = response.data.title
         } else {
@@ -439,17 +571,17 @@ export default {
         setIfEmpty(self.uploadImportData[uuid], 'position', response.data.position)
         setIfEmpty(self.uploadImportData[uuid], 'tags', response.data.tags)
         setIfEmpty(self.uploadImportData[uuid], 'description', (response.data.description || {}).text)
-        self.patchUpload(uuid, {import_metadata: self.uploadImportData[uuid]})
+        self.patchUpload(uuid, { import_metadata: self.uploadImportData[uuid] })
       })
     },
     setDynamic (objName, key, data) {
       // cf https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats
-      let newData = {}
+      const newData = {}
       newData[key] = data
       this[objName] = Object.assign({}, this[objName], newData)
     },
     updateFiles (value) {
-      let self = this
+      const self = this
       this.files = value
       this.files.forEach((f) => {
         if (f.response && f.response.uuid && self.audioMetadata[f.response.uuid] === undefined) {
@@ -462,9 +594,9 @@ export default {
       })
     },
     async fetchDraftUploads (channel) {
-      let self = this
+      const self = this
       this.draftUploads = null
-      let response = await axios.get('uploads', {params: {import_status: 'draft', channel: channel}})
+      const response = await axios.get('uploads', { params: { import_status: 'draft', channel: channel } })
       this.draftUploads = response.data.results
       this.draftUploads.forEach((u) => {
         self.uploadImportData[u.uuid] = u.import_metadata
@@ -479,49 +611,8 @@ export default {
       }
     },
     retry (file) {
-      this.$refs.upload.update(file, {error: '', progress: '0.00'})
-      this.$refs.upload.active = true;
-
-    }
-  },
-  watch: {
-    "availableChannels.results" () {
-      this.setupChannelsDropdown()
-    },
-    "values.channel": {
-      async handler (v) {
-        this.files = []
-        if (v) {
-          await this.fetchDraftUploads(v)
-        }
-      },
-      immediate: true,
-    },
-    step: {
-      handler (value) {
-        this.$emit('step', value)
-        if (value === 2) {
-          this.selectedUploadId = null
-        }
-      },
-      immediate: true,
-    },
-    async selectedUploadId (v, o) {
-      if (v) {
-        this.step = 3
-      } else {
-        this.step = 2
-      }
-      if (o) {
-        await this.patchUpload(o, {import_metadata: this.uploadImportData[o]})
-      }
-    },
-    summaryData: {
-      handler (v) {
-        this.$emit('status', v)
-      },
-      immediate: true,
-
+      this.$refs.upload.update(file, { error: '', progress: '0.00' })
+      this.$refs.upload.active = true
     }
   }
 }

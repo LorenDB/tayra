@@ -1,38 +1,96 @@
 <template>
-  <form class="ui form" @submit.prevent="submit()">
-    <h4 v-if="title" class="ui header"><translate translate-context="Popup/Playlist/Title/Verb">Create a new playlist</translate></h4>
-    <div v-if="success" class="ui positive message">
+  <form
+    class="ui form"
+    @submit.prevent="submit()"
+  >
+    <h4
+      v-if="title"
+      class="ui header"
+    >
+      <translate translate-context="Popup/Playlist/Title/Verb">
+        Create a new playlist
+      </translate>
+    </h4>
+    <div
+      v-if="success"
+      class="ui positive message"
+    >
       <h4 class="header">
         <template v-if="playlist">
-          <translate translate-context="Content/Playlist/Message">Playlist updated</translate>
+          <translate translate-context="Content/Playlist/Message">
+            Playlist updated
+          </translate>
         </template>
         <template v-else>
-          <translate translate-context="Content/Playlist/Message">Playlist created</translate>
+          <translate translate-context="Content/Playlist/Message">
+            Playlist created
+          </translate>
         </template>
       </h4>
     </div>
-    <div v-if="errors.length > 0" role="alert" class="ui negative message">
-      <h4 class="header"><translate translate-context="Content/Playlist/Error message.Title">The playlist could not be created</translate></h4>
+    <div
+      v-if="errors.length > 0"
+      role="alert"
+      class="ui negative message"
+    >
+      <h4 class="header">
+        <translate translate-context="Content/Playlist/Error message.Title">
+          The playlist could not be created
+        </translate>
+      </h4>
       <ul class="list">
-        <li v-for="error in errors">{{ error }}</li>
+        <li
+          v-for="(error, key) in errors"
+          :key="key"
+        >
+          {{ error }}
+        </li>
       </ul>
     </div>
     <div class="three fields">
       <div class="field">
         <label for="playlist-name"><translate translate-context="Content/Playlist/Input.Label">Playlist name</translate></label>
-        <input id ="playlist-name" name="name" v-model="name" required type="text" :placeholder="labels.placeholder" />
+        <input
+          id="playlist-name"
+          v-model="name"
+          name="name"
+          required
+          type="text"
+          :placeholder="labels.placeholder"
+        >
       </div>
       <div class="field">
         <label for="playlist-visibility"><translate translate-context="Content/Playlist/Dropdown.Label">Playlist visibility</translate></label>
-        <select id="playlist-visibility" class="ui dropdown" v-model="privacyLevel">
-          <option :value="c.value" v-for="c in privacyLevelChoices">{{ c.label }}</option>
+        <select
+          id="playlist-visibility"
+          v-model="privacyLevel"
+          class="ui dropdown"
+        >
+          <option
+            v-for="(c, key) in privacyLevelChoices"
+            :key="key"
+            :value="c.value"
+          >
+            {{ c.label }}
+          </option>
         </select>
       </div>
       <div class="field">
-        <span id="updatePlaylistLabel"></span>
-        <button :class="['ui', 'fluid', {'loading': isLoading}, 'button']" type="submit">
-          <template v-if="playlist"><translate translate-context="Content/Playlist/Button.Label/Verb">Update playlist</translate></template>
-          <template v-else><translate translate-context="Content/Playlist/Button.Label/Verb">Create playlist</translate></template>
+        <span id="updatePlaylistLabel" />
+        <button
+          :class="['ui', 'fluid', {'loading': isLoading}, 'button']"
+          type="submit"
+        >
+          <template v-if="playlist">
+            <translate translate-context="Content/Playlist/Button.Label/Verb">
+              Update playlist
+            </translate>
+          </template>
+          <template v-else>
+            <translate translate-context="Content/Playlist/Button.Label/Verb">
+              Create playlist
+            </translate>
+          </template>
         </button>
       </div>
     </div>
@@ -42,21 +100,18 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
-import TranslationsMixin from "@/components/mixins/Translations"
+import TranslationsMixin from '@/components/mixins/Translations'
 
 import logger from '@/logging'
 
 export default {
   mixins: [TranslationsMixin],
   props: {
-    title: {type: Boolean, default: true},
-    playlist: {type: Object, default: null}
-  },
-  mounted () {
-    $(this.$el).find('.dropdown').dropdown()
+    title: { type: Boolean, default: true },
+    playlist: { type: Object, default: null }
   },
   data () {
-    let d = {
+    const d = {
       errors: [],
       success: false,
       isLoading: false
@@ -80,26 +135,29 @@ export default {
       return [
         {
           value: 'me',
-          label: this.sharedLabels.fields.privacy_level.choices['me']
+          label: this.sharedLabels.fields.privacy_level.choices.me
         },
         {
           value: 'instance',
-          label: this.sharedLabels.fields.privacy_level.choices['instance']
+          label: this.sharedLabels.fields.privacy_level.choices.instance
         },
         {
           value: 'everyone',
-          label: this.sharedLabels.fields.privacy_level.choices['everyone']
+          label: this.sharedLabels.fields.privacy_level.choices.everyone
         }
       ]
     }
+  },
+  mounted () {
+    $(this.$el).find('.dropdown').dropdown()
   },
   methods: {
     submit () {
       this.isLoading = true
       this.success = false
       this.errors = []
-      let self = this
-      let payload = {
+      const self = this
+      const payload = {
         name: this.name,
         privacy_level: this.privacyLevel
       }

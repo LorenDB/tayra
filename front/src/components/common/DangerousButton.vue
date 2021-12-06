@@ -1,43 +1,58 @@
 <template>
-  <button @click="showModal = true" :class="[{disabled: disabled}]" :disabled="disabled">
-    <slot></slot>
+  <button
+    :class="[{disabled: disabled}]"
+    :disabled="disabled"
+    @click="showModal = true"
+  >
+    <slot />
 
-    <modal class="small" :show.sync="showModal">
+    <modal
+      class="small"
+      :show.sync="showModal"
+    >
       <h4 class="header">
         <slot name="modal-header">
-          <translate translate-context="Modal/*/Title">Do you want to confirm this action?</translate>
+          <translate translate-context="Modal/*/Title">
+            Do you want to confirm this action?
+          </translate>
         </slot>
       </h4>
       <div class="scrolling content">
         <div class="description">
-          <slot name="modal-content"></slot>
+          <slot name="modal-content" />
         </div>
       </div>
       <div class="actions">
         <button class="ui basic cancel button">
-          <translate translate-context="*/*/Button.Label/Verb">Cancel</translate>
+          <translate translate-context="*/*/Button.Label/Verb">
+            Cancel
+          </translate>
         </button>
-        <button :class="['ui', 'confirm', confirmButtonColor, 'button']" @click="confirm">
+        <button
+          :class="['ui', 'confirm', confirmButtonColor, 'button']"
+          @click="confirm"
+        >
           <slot name="modal-confirm">
-            <translate translate-context="Modal/*/Button.Label/Short, Verb">Confirm</translate>
+            <translate translate-context="Modal/*/Button.Label/Short, Verb">
+              Confirm
+            </translate>
           </slot>
         </button>
       </div>
     </modal>
   </button>
-
 </template>
 <script>
 import Modal from '@/components/semantic/Modal'
 
 export default {
-  props: {
-    action: {type: Function, required: false},
-    disabled: {type: Boolean, default: false},
-    confirmColor: {type: String, default: "danger", required: false}
-  },
   components: {
     Modal
+  },
+  props: {
+    action: { type: Function, required: false, default: () => {} },
+    disabled: { type: Boolean, default: false },
+    confirmColor: { type: String, default: 'danger', required: false }
   },
   data () {
     return {

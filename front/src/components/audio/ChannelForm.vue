@@ -1,24 +1,55 @@
 <template>
-  <form class="ui form" @submit.prevent.stop="submit">
-    <div v-if="errors.length > 0" role="alert" class="ui negative message">
-      <h4 class="header"><translate translate-context="Content/*/Error message.Title">Error while saving channel</translate></h4>
+  <form
+    class="ui form"
+    @submit.prevent.stop="submit"
+  >
+    <div
+      v-if="errors.length > 0"
+      role="alert"
+      class="ui negative message"
+    >
+      <h4 class="header">
+        <translate translate-context="Content/*/Error message.Title">
+          Error while saving channel
+        </translate>
+      </h4>
       <ul class="list">
-        <li v-for="error in errors">{{ error }}</li>
+        <li
+          v-for="(error, key) in errors"
+          :key="key"
+        >
+          {{ error }}
+        </li>
       </ul>
     </div>
     <template v-if="metadataChoices">
-      <fieldset v-if="creating && step === 1" class="ui grouped channel-type required field">
+      <fieldset
+        v-if="creating && step === 1"
+        class="ui grouped channel-type required field"
+      >
         <legend>
-          <translate translate-context="Content/Channel/Paragraph">What will this channel be used for?</translate>
+          <translate translate-context="Content/Channel/Paragraph">
+            What will this channel be used for?
+          </translate>
         </legend>
-        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider" />
         <div class="field">
-          <div :class="['ui', 'radio', 'checkbox', {selected: choice.value == newValues.content_category}]" v-for="choice in categoryChoices">
-            <input type="radio" name="channel-category" :id="`category-${choice.value}`" :value="choice.value" v-model="newValues.content_category">
+          <div
+            v-for="(choice, key) in categoryChoices"
+            :key="key"
+            :class="['ui', 'radio', 'checkbox', {selected: choice.value == newValues.content_category}]"
+          >
+            <input
+              :id="`category-${choice.value}`"
+              v-model="newValues.content_category"
+              type="radio"
+              name="channel-category"
+              :value="choice.value"
+            >
             <label :for="`category-${choice.value}`">
-              <span :class="['right floated', 'placeholder', 'image', {circular: choice.value === 'music'}]"></span>
+              <span :class="['right floated', 'placeholder', 'image', {circular: choice.value === 'music'}]" />
               <strong>{{ choice.label }}</strong>
-              <div class="ui small hidden divider"></div>
+              <div class="ui small hidden divider" />
               {{ choice.helpText }}
             </label>
           </div>
@@ -29,20 +60,35 @@
           <label for="channel-name">
             <translate translate-context="Content/Channel/*">Name</translate>
           </label>
-          <input type="text" required v-model="newValues.name" :placeholder="labels.namePlaceholder">
+          <input
+            v-model="newValues.name"
+            type="text"
+            required
+            :placeholder="labels.namePlaceholder"
+          >
         </div>
         <div class="ui required field">
           <label for="channel-username">
             <translate translate-context="Content/Channel/*">Fediverse handle</translate>
           </label>
           <div class="ui left labeled input">
-            <div class="ui basic label">@</div>
-            <input type="text" :required="creating" :disabled="!creating" :placeholder="labels.usernamePlaceholder" v-model="newValues.username">
+            <div class="ui basic label">
+              @
+            </div>
+            <input
+              v-model="newValues.username"
+              type="text"
+              :required="creating"
+              :disabled="!creating"
+              :placeholder="labels.usernamePlaceholder"
+            >
           </div>
           <template v-if="creating">
-            <div class="ui small hidden divider"></div>
+            <div class="ui small hidden divider" />
             <p>
-              <translate translate-context="Content/Channels/Paragraph">Used in URLs and to follow this channel in the Fediverse. It cannot be changed later.</translate>
+              <translate translate-context="Content/Channels/Paragraph">
+                Used in URLs and to follow this channel in the Fediverse. It cannot be changed later.
+              </translate>
             </p>
           </template>
         </div>
@@ -51,12 +97,17 @@
             v-model="newValues.cover"
             :required="false"
             :image-class="newValues.content_category === 'podcast' ? '' : 'circular'"
-            @delete="newValues.cover = null">
-            <translate translate-context="Content/Channel/*" slot="label">Channel Picture</translate>
+            @delete="newValues.cover = null"
+          >
+            <translate
+              slot="label"
+              translate-context="Content/Channel/*"
+            >
+              Channel Picture
+            </translate>
           </attachment-input>
-
         </div>
-        <div class="ui small hidden divider"></div>
+        <div class="ui small hidden divider" />
         <div class="ui stackable grid row">
           <div class="ten wide column">
             <div class="ui field">
@@ -64,46 +115,67 @@
                 <translate translate-context="*/*/*">Tags</translate>
               </label>
               <tags-selector
-                v-model="newValues.tags"
                 id="channel-tags"
-                :required="false"></tags-selector>
+                v-model="newValues.tags"
+                :required="false"
+              />
             </div>
           </div>
-          <div class="six wide column" v-if="newValues.content_category === 'podcast'">
+          <div
+            v-if="newValues.content_category === 'podcast'"
+            class="six wide column"
+          >
             <div class="ui required field">
               <label for="channel-language">
                 <translate translate-context="*/*/*">Language</translate>
               </label>
               <select
-                name="channel-language"
                 id="channel-language"
                 v-model="newValues.metadata.language"
+                name="channel-language"
                 required
-                class="ui search selection dropdown">
-                <option v-for="v in metadataChoices.language" :value="v.value">{{ v.label }}</option>
+                class="ui search selection dropdown"
+              >
+                <option
+                  v-for="(v, key) in metadataChoices.language"
+                  :key="key"
+                  :value="v.value"
+                >
+                  {{ v.label }}
+                </option>
               </select>
             </div>
           </div>
         </div>
-        <div class="ui small hidden divider"></div>
+        <div class="ui small hidden divider" />
         <div class="ui field">
           <label for="channel-name">
             <translate translate-context="*/*/*">Description</translate>
           </label>
-          <content-form v-model="newValues.description"></content-form>
+          <content-form v-model="newValues.description" />
         </div>
-        <div class="ui two fields" v-if="newValues.content_category === 'podcast'">
+        <div
+          v-if="newValues.content_category === 'podcast'"
+          class="ui two fields"
+        >
           <div class="ui required field">
             <label for="channel-itunes-category">
               <translate translate-context="*/*/*">Category</translate>
             </label>
             <select
-              name="itunes-category"
               id="itunes-category"
               v-model="newValues.metadata.itunes_category"
+              name="itunes-category"
               required
-              class="ui dropdown">
-              <option v-for="v in metadataChoices.itunes_category" :value="v.value">{{ v.label }}</option>
+              class="ui dropdown"
+            >
+              <option
+                v-for="(v, key) in metadataChoices.itunes_category"
+                :key="key"
+                :value="v.value"
+              >
+                {{ v.label }}
+              </option>
             </select>
           </div>
           <div class="ui field">
@@ -111,45 +183,64 @@
               <translate translate-context="*/*/*">Subcategory</translate>
             </label>
             <select
-              name="itunes-category"
               id="itunes-category"
               v-model="newValues.metadata.itunes_subcategory"
+              name="itunes-category"
               :disabled="!newValues.metadata.itunes_category"
-              class="ui dropdown">
-              <option v-for="v in itunesSubcategories" :value="v">{{ v }}</option>
+              class="ui dropdown"
+            >
+              <option
+                v-for="(v, key) in itunesSubcategories"
+                :key="key"
+                :value="v"
+              >
+                {{ v }}
+              </option>
             </select>
           </div>
         </div>
-        <div class="ui two fields" v-if="newValues.content_category === 'podcast'">
+        <div
+          v-if="newValues.content_category === 'podcast'"
+          class="ui two fields"
+        >
           <div class="ui field">
             <label for="channel-itunes-email">
               <translate translate-context="*/*/*">Owner e-mail address</translate>
             </label>
             <input
-              name="channel-itunes-email"
               id="channel-itunes-email"
+              v-model="newValues.metadata.owner_email"
+              name="channel-itunes-email"
               type="email"
-              v-model="newValues.metadata.owner_email">
+            >
           </div>
           <div class="ui field">
             <label for="channel-itunes-name">
               <translate translate-context="*/*/*">Owner name</translate>
             </label>
             <input
-              name="channel-itunes-name"
               id="channel-itunes-name"
+              v-model="newValues.metadata.owner_name"
+              name="channel-itunes-name"
               maxlength="255"
-              v-model="newValues.metadata.owner_name">
+            >
           </div>
         </div>
         <p>
-          <translate translate-context="*/*/*">Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes.</translate>
+          <translate translate-context="*/*/*">
+            Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes.
+          </translate>
         </p>
       </template>
     </template>
-    <div v-else class="ui active inverted dimmer">
+    <div
+      v-else
+      class="ui active inverted dimmer"
+    >
       <div class="ui text loader">
-        <translate translate-context="*/*/*">Loading</translate>
+        <translate translate-context="*/*/*">
+          Loading
+        </translate>
       </div>
     </div>
   </form>
@@ -161,29 +252,25 @@ import axios from 'axios'
 import AttachmentInput from '@/components/common/AttachmentInput'
 import TagsSelector from '@/components/library/TagsSelector'
 
-function slugify(text) {
+function slugify (text) {
   return text.toString().toLowerCase()
-    .replace(/\s+/g, '')           // Remove spaces
-    .replace(/[^\w]+/g, '')        // Remove all non-word chars
+    .replace(/\s+/g, '') // Remove spaces
+    .replace(/[^\w]+/g, '') // Remove all non-word chars
 }
 
 export default {
-  props: {
-    object: {type: Object, required: false, default: null},
-    step: {type: Number, required: false, default: 1},
-  },
   components: {
     AttachmentInput,
     TagsSelector
   },
-
-  created () {
-    this.fetchMetadataChoices()
+  props: {
+    object: { type: Object, required: false, default: null },
+    step: { type: Number, required: false, default: 1 }
   },
   data () {
-    let oldValues = {}
+    const oldValues = {}
     if (this.object) {
-      oldValues.metadata = {...(this.object.metadata || {})}
+      oldValues.metadata = { ...(this.object.metadata || {}) }
       oldValues.name = this.object.artist.name
       oldValues.description = this.object.artist.description
       oldValues.cover = this.object.artist.cover
@@ -196,13 +283,13 @@ export default {
       errors: [],
       metadataChoices: null,
       newValues: {
-        name: oldValues.name || "",
-        username: oldValues.username || "",
+        name: oldValues.name || '',
+        username: oldValues.username || '',
         tags: oldValues.tags || [],
-        description: (oldValues.description || {}).text || "",
+        description: (oldValues.description || {}).text || '',
         cover: (oldValues.cover || {}).uuid || null,
-        content_category: oldValues.content_category || "podcast",
-        metadata: oldValues.metadata || {},
+        content_category: oldValues.content_category || 'podcast',
+        metadata: oldValues.metadata || {}
       }
     }
   },
@@ -213,20 +300,20 @@ export default {
     categoryChoices () {
       return [
         {
-          value: "podcast",
-          label: this.$pgettext('*/*/*', "Podcasts"),
-          helpText: this.$pgettext('Content/Channels/Help', "Host your episodes and keep your community updated."),
+          value: 'podcast',
+          label: this.$pgettext('*/*/*', 'Podcasts'),
+          helpText: this.$pgettext('Content/Channels/Help', 'Host your episodes and keep your community updated.')
         },
         {
-          value: "music",
-          label: this.$pgettext('*/*/*', "Artist discography"),
-          helpText: this.$pgettext('Content/Channels/Help', "Publish music you make as a nice discography of albums and singles."),
+          value: 'music',
+          label: this.$pgettext('*/*/*', 'Artist discography'),
+          helpText: this.$pgettext('Content/Channels/Help', 'Publish music you make as a nice discography of albums and singles.')
         }
       ]
     },
     itunesSubcategories () {
       for (let index = 0; index < this.metadataChoices.itunes_category.length; index++) {
-        const element = this.metadataChoices.itunes_category[index];
+        const element = this.metadataChoices.itunes_category[index]
         if (element.value === this.newValues.metadata.itunes_category) {
           return element.children || []
         }
@@ -235,8 +322,8 @@ export default {
     },
     labels () {
       return {
-        namePlaceholder: this.$pgettext('Content/Channel/Form.Field.Placeholder', "Awesome channel name"),
-        usernamePlaceholder: this.$pgettext('Content/Channel/Form.Field.Placeholder', "awesomechannelname"),
+        namePlaceholder: this.$pgettext('Content/Channel/Form.Field.Placeholder', 'Awesome channel name'),
+        usernamePlaceholder: this.$pgettext('Content/Channel/Form.Field.Placeholder', 'awesomechannelname')
       }
     },
     submittable () {
@@ -247,9 +334,41 @@ export default {
       return !!v
     }
   },
+  watch: {
+    'newValues.name' (v) {
+      if (this.creating) {
+        this.newValues.username = slugify(v)
+      }
+    },
+    'newValues.metadata.itunes_category' (v) {
+      this.newValues.metadata.itunes_subcategory = null
+    },
+    'newValues.content_category': {
+      handler (v) {
+        this.$emit('category', v)
+      },
+      immediate: true
+    },
+    isLoading: {
+      handler (v) {
+        this.$emit('loading', v)
+      },
+      immediate: true
+    },
+    submittable: {
+      handler (v) {
+        this.$emit('submittable', v)
+      },
+      immediate: true
+    }
+  },
+
+  created () {
+    this.fetchMetadataChoices()
+  },
   methods: {
     fetchMetadataChoices () {
-      let self = this
+      const self = this
       axios.get('channels/metadata-choices').then((response) => {
         self.metadataChoices = response.data
       }, error => {
@@ -258,21 +377,21 @@ export default {
     },
     submit () {
       this.isLoading = true
-      let self = this
-      let handler = this.creating ? axios.post : axios.patch
-      let url = this.creating ? `channels/` : `channels/${this.object.uuid}`
-      let payload = {
+      const self = this
+      const handler = this.creating ? axios.post : axios.patch
+      const url = this.creating ? 'channels/' : `channels/${this.object.uuid}`
+      const payload = {
         name: this.newValues.name,
         username: this.newValues.username,
         tags: this.newValues.tags,
         content_category: this.newValues.content_category,
         cover: this.newValues.cover,
-        metadata: this.newValues.metadata,
+        metadata: this.newValues.metadata
       }
       if (this.newValues.description) {
         payload.description = {
           content_type: 'text/markdown',
-          text: this.newValues.description,
+          text: this.newValues.description
         }
       } else {
         payload.description = null
@@ -291,34 +410,6 @@ export default {
         self.$emit('errored', self.errors)
       })
     }
-  },
-  watch: {
-    "newValues.name" (v) {
-      if (this.creating) {
-        this.newValues.username = slugify(v)
-      }
-    },
-    "newValues.metadata.itunes_category" (v) {
-      this.newValues.metadata.itunes_subcategory = null
-    },
-    "newValues.content_category": {
-      handler (v) {
-        this.$emit("category", v)
-      },
-      immediate: true
-    },
-    isLoading: {
-      handler (v) {
-        this.$emit("loading", v)
-      },
-      immediate: true
-    },
-    submittable: {
-      handler (v) {
-        this.$emit("submittable", v)
-      },
-      immediate: true
-    },
   }
 }
 </script>

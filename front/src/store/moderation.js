@@ -11,11 +11,11 @@ export default {
     lastUpdate: new Date(),
     filterModalTarget: {
       type: null,
-      target: null,
+      target: null
     },
     reportModalTarget: {
       type: null,
-      target: null,
+      target: null
     }
   },
   mutations: {
@@ -39,7 +39,7 @@ export default {
       if (!value) {
         state.filterModalTarget = {
           type: null,
-          target: null,
+          target: null
         }
       }
     },
@@ -48,7 +48,7 @@ export default {
       if (!value) {
         state.reportModalTarget = {
           type: null,
-          target: null,
+          target: null
         }
       }
     },
@@ -61,41 +61,41 @@ export default {
     },
     deleteContentFilter (state, uuid) {
       state.filters = state.filters.filter((e) => {
-        return e.uuid != uuid
+        return e.uuid !== uuid
       })
     }
   },
   getters: {
     artistFilters: (state) => () => {
-      let f = state.filters.filter((f) => {
+      const f = state.filters.filter((f) => {
         return f.target.type === 'artist'
       })
-      let p = _.sortBy(f, [(e) => { return e.creation_date }])
+      const p = _.sortBy(f, [(e) => { return e.creation_date }])
       p.reverse()
       return p
-    },
+    }
   },
   actions: {
-    hide ({commit}, payload) {
+    hide ({ commit }, payload) {
       commit('filterModalTarget', payload)
       commit('showFilterModal', true)
     },
-    report ({commit}, payload) {
+    report ({ commit }, payload) {
       commit('reportModalTarget', payload)
       commit('showReportModal', true)
     },
-    fetchContentFilters ({dispatch, state, commit, rootState}, url) {
+    fetchContentFilters ({ dispatch, state, commit, rootState }, url) {
       let params = {}
       let promise
       if (url) {
         promise = axios.get(url)
       } else {
-          commit('empty')
-          params = {
-            page_size: 100,
-            ordering: '-creation_date'
-          }
-          promise = axios.get('moderation/content-filters/', {params: params})
+        commit('empty')
+        params = {
+          page_size: 100,
+          ordering: '-creation_date'
+        }
+        promise = axios.get('moderation/content-filters/', { params: params })
       }
       return promise.then((response) => {
         logger.default.info('Fetched a batch of ' + response.data.results.length + ' filters')
@@ -107,8 +107,8 @@ export default {
         })
       })
     },
-    deleteContentFilter ({commit}, uuid) {
-      return axios.delete(`moderation/content-filters/${ uuid }/`).then((response) => {
+    deleteContentFilter ({ commit }, uuid) {
+      return axios.delete(`moderation/content-filters/${uuid}/`).then((response) => {
         commit('deleteContentFilter', uuid)
       })
     }

@@ -1,57 +1,68 @@
 <template>
-  <div v-if='maxPage > 1' class="ui pagination menu component-pagination" role="navigation" :aria-label="labels.pagination">
-    <a href
+  <div
+    v-if="maxPage > 1"
+    class="ui pagination menu component-pagination"
+    role="navigation"
+    :aria-label="labels.pagination"
+  >
+    <a
+      href
       :disabled="current - 1 < 1"
       role="button"
       :aria-label="labels.previousPage"
+      :class="[{'disabled': current - 1 < 1}, 'item']"
       @click.prevent.stop="selectPage(current - 1)"
-      :class="[{'disabled': current - 1 < 1}, 'item']"><i class="angle left icon"></i></a>
+    ><i class="angle left icon" /></a>
     <template v-if="!compact">
-      <a href
+      <a
         v-for="page in pages"
         :key="page"
+        href
+        :class="[{'active': page === current}, {'disabled': page === 'skip'}, 'item']"
         @click.prevent.stop="selectPage(page)"
-        :class="[{'active': page === current}, {'disabled': page === 'skip'}, 'item']">
+      >
         <span v-if="page !== 'skip'">{{ page }}</span>
         <span v-else>…</span>
       </a>
     </template>
-    <a href
+    <a
+      href
       :disabled="current + 1 > maxPage"
       role="button"
       :aria-label="labels.nextPage"
+      :class="[{'disabled': current + 1 > maxPage}, 'item']"
       @click.prevent.stop="selectPage(current + 1)"
-      :class="[{'disabled': current + 1 > maxPage}, 'item']"><i class="angle right icon"></i></a>
+    ><i class="angle right icon" /></a>
   </div>
 </template>
 
 <script>
-import _ from "@/lodash"
+import _ from '@/lodash'
 
 export default {
   props: {
     current: { type: Number, default: 1 },
     paginateBy: { type: Number, default: 25 },
-    total: { type: Number },
+    total: { type: Number, required: true },
     compact: { type: Boolean, default: false }
   },
   computed: {
-    labels() {
+    labels () {
       return {
-        pagination: this.$pgettext('Content/*/Hidden text/Noun', "Pagination"),
-        previousPage: this.$pgettext('Content/*/Link', "Previous Page"),
-        nextPage: this.$pgettext('Content/*/Link', "Next Page")
+        pagination: this.$pgettext('Content/*/Hidden text/Noun', 'Pagination'),
+        previousPage: this.$pgettext('Content/*/Link', 'Previous Page'),
+        nextPage: this.$pgettext('Content/*/Link', 'Next Page')
       }
     },
-    pages: function() {
-      let range = 2
-      let current = this.current
-      let beginning = _.range(1, Math.min(this.maxPage, 1 + range))
-      let middle = _.range(
+    pages: function () {
+      const range = 2
+      const current = this.current
+      const beginning = _.range(1, Math.min(this.maxPage, 1 + range))
+      const middle = _.range(
         Math.max(1, current - range + 1),
         Math.min(this.maxPage, current + range)
       )
-      let end = _.range(this.maxPage, Math.max(1, this.maxPage - range))
+      const end = _.range(this.maxPage, Math.max(1, this.maxPage - range))
       let allowed = beginning.concat(middle, end)
       allowed = _.uniq(allowed)
       allowed = _.sortBy(allowed, [
@@ -59,11 +70,11 @@ export default {
           return e
         }
       ])
-      let final = []
+      const final = []
       allowed.forEach(p => {
-        let last = final.slice(-1)[0]
+        const last = final.slice(-1)[0]
         let consecutive = true
-        if (last === "skip") {
+        if (last === 'skip') {
           consecutive = false
         } else {
           if (!last) {
@@ -75,25 +86,25 @@ export default {
         if (consecutive) {
           final.push(p)
         } else {
-          if (p !== "skip") {
-            final.push("skip")
+          if (p !== 'skip') {
+            final.push('skip')
             final.push(p)
           }
         }
       })
       return final
     },
-    maxPage: function() {
+    maxPage: function () {
       return Math.ceil(this.total / this.paginateBy)
     }
   },
   methods: {
-    selectPage: function(page) {
+    selectPage: function (page) {
       if (page > this.maxPage || page < 1) {
         return
       }
       if (this.current !== page) {
-        this.$emit("page-changed", page)
+        this.$emit('page-changed', page)
       }
     }
   }

@@ -1,41 +1,92 @@
 <template>
   <div>
-    <form class="ui form" @submit.prevent="submit">
-      <div v-if="errors.length > 0" role="alert" class="ui negative message">
-        <h4 class="header"><translate translate-context="Content/Admin/Error message.Title">Error while creating invitation</translate></h4>
+    <form
+      class="ui form"
+      @submit.prevent="submit"
+    >
+      <div
+        v-if="errors.length > 0"
+        role="alert"
+        class="ui negative message"
+      >
+        <h4 class="header">
+          <translate translate-context="Content/Admin/Error message.Title">
+            Error while creating invitation
+          </translate>
+        </h4>
         <ul class="list">
-          <li v-for="error in errors">{{ error }}</li>
+          <li
+            v-for="(error, key) in errors"
+            :key="key"
+          >
+            {{ error }}
+          </li>
         </ul>
       </div>
       <div class="inline fields">
         <div class="ui field">
           <label for="invitation-code"><translate translate-context="Content/*/Input.Label">Invitation code</translate></label>
-          <input for="invitation-code" name="code" type="text" v-model="code" :placeholder="labels.placeholder" />
+          <input
+            v-model="code"
+            for="invitation-code"
+            name="code"
+            type="text"
+            :placeholder="labels.placeholder"
+          >
         </div>
         <div class="ui field">
-          <button :class="['ui', {loading: isLoading}, 'button']" :disabled="isLoading" type="submit">
-            <translate translate-context="Content/Admin/Button.Label/Verb">Get a new invitation</translate>
+          <button
+            :class="['ui', {loading: isLoading}, 'button']"
+            :disabled="isLoading"
+            type="submit"
+          >
+            <translate translate-context="Content/Admin/Button.Label/Verb">
+              Get a new invitation
+            </translate>
           </button>
         </div>
       </div>
     </form>
     <div v-if="invitations.length > 0">
-      <div class="ui hidden divider"></div>
+      <div class="ui hidden divider" />
       <table class="ui ui basic table">
         <thead>
           <tr>
-            <th><translate translate-context="Content/Admin/Table.Label/Noun">Code</translate></th>
-            <th><translate translate-context="Content/Admin/Table.Label/Noun">Share link</translate></th>
+            <th>
+              <translate translate-context="Content/Admin/Table.Label/Noun">
+                Code
+              </translate>
+            </th>
+            <th>
+              <translate translate-context="Content/Admin/Table.Label/Noun">
+                Share link
+              </translate>
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="invitation in invitations" :key="invitation.code">
+          <tr
+            v-for="invitation in invitations"
+            :key="invitation.code"
+          >
             <td>{{ invitation.code.toUpperCase() }}</td>
-            <td><a :href="getUrl(invitation.code)" target="_blank">{{ getUrl(invitation.code) }}</a></td>
+            <td>
+              <a
+                :href="getUrl(invitation.code)"
+                target="_blank"
+              >{{ getUrl(invitation.code) }}</a>
+            </td>
           </tr>
         </tbody>
       </table>
-      <button class="ui basic button" @click="invitations = []"><translate translate-context="Content/Library/Button.Label">Clear</translate></button>
+      <button
+        class="ui basic button"
+        @click="invitations = []"
+      >
+        <translate translate-context="Content/Library/Button.Label">
+          Clear
+        </translate>
+      </button>
     </div>
   </div>
 </template>
@@ -61,11 +112,11 @@ export default {
   },
   methods: {
     submit () {
-      let self = this
+      const self = this
       this.isLoading = true
       this.errors = []
-      let url = 'manage/users/invitations/'
-      let payload = {
+      const url = 'manage/users/invitations/'
+      const payload = {
         code: this.code
       }
       axios.post(url, payload).then((response) => {
@@ -77,7 +128,7 @@ export default {
       })
     },
     getUrl (code) {
-      return this.$store.getters['instance/absoluteUrl'](this.$router.resolve({name: 'signup', query: {invitation: code.toUpperCase()}}).href)
+      return this.$store.getters['instance/absoluteUrl'](this.$router.resolve({ name: 'signup', query: { invitation: code.toUpperCase() } }).href)
     }
   }
 }

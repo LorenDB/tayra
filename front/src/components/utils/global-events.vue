@@ -18,13 +18,12 @@ function extractEventOptions (eventDescriptor) {
 }
 
 export default {
-  render: h => h(),
 
   mounted () {
     this._listeners = Object.create(null)
     Object.keys(this.$listeners).forEach(event => {
       const handler = this.$listeners[event]
-      let wrapper = function (event) {
+      const wrapper = function (event) {
         // we check here the event is not triggered from an input
         // to avoid collisions
         if (!$(event.target).is('.field, :input, [contenteditable]')) {
@@ -47,6 +46,7 @@ export default {
         this._listeners[event]
       )
     }
-  }
+  },
+  render: h => h()
 }
 </script>

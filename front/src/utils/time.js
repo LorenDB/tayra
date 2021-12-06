@@ -9,7 +9,7 @@ function pad (val) {
 export default {
   parse: function (sec) {
     let min = 0
-    let hours = Math.floor(sec/3600)
+    const hours = Math.floor(sec / 3600)
     if (hours >= 1) {
       sec = sec % 3600
     }

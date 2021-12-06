@@ -1,21 +1,21 @@
 <template>
   <div class="main pusher page-library">
-    <router-view :key="$router.currentRoute.fullPath"></router-view>
+    <router-view :key="$router.currentRoute.fullPath" />
   </div>
 </template>
 
 <script>
 export default {
   computed: {
-    showImports() {
+    showImports () {
       return (
-        this.$store.state.auth.availablePermissions["upload"] ||
-        this.$store.state.auth.availablePermissions["library"]
+        this.$store.state.auth.availablePermissions.upload ||
+        this.$store.state.auth.availablePermissions.library
       )
     },
-    labels() {
+    labels () {
       return {
-        secondaryMenu: this.$pgettext('Menu/*/Hidden text', "Secondary menu")
+        secondaryMenu: this.$pgettext('Menu/*/Hidden text', 'Secondary menu')
       }
     }
   }

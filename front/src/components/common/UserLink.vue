@@ -2,11 +2,16 @@
   <span class="component-user-link">
     <template v-if="avatar">
       <img
+        v-if="user.avatar && user.avatar.urls.medium_square_crop"
+        v-lazy="$store.getters['instance/absoluteUrl'](user.avatar.urls.medium_square_crop)"
         class="ui tiny circular avatar"
         alt=""
-        v-if="user.avatar && user.avatar.urls.medium_square_crop"
-        v-lazy="$store.getters['instance/absoluteUrl'](user.avatar.urls.medium_square_crop)" />
-      <span v-else :style="defaultAvatarStyle" class="ui circular label">{{ user.username[0]}}</span>
+      >
+      <span
+        v-else
+        :style="defaultAvatarStyle"
+        class="ui circular label"
+      >{{ user.username[0] }}</span>
       &nbsp;
     </template>
     @{{ user.username }}
@@ -14,12 +19,12 @@
 </template>
 
 <script>
-import {hashCode, intToRGB} from '@/utils/color'
+import { hashCode, intToRGB } from '@/utils/color'
 
 export default {
   props: {
-    user: {required: true},
-    avatar: {type: Boolean, default: true}
+    user: { type: String, required: true },
+    avatar: { type: Boolean, default: true }
   },
   computed: {
     userColor () {

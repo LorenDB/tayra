@@ -8,13 +8,13 @@ export default {
     count: 0
   },
   mutations: {
-    track: (state, {id, value}) => {
+    track: (state, { id, value }) => {
       if (value) {
         if (state.tracks.indexOf(id) === -1) {
           state.tracks.push(id)
         }
       } else {
-        let i = state.tracks.indexOf(id)
+        const i = state.tracks.indexOf(id)
         if (i > -1) {
           state.tracks.splice(i, 1)
         }
@@ -32,39 +32,39 @@ export default {
     }
   },
   actions: {
-    set ({commit, state}, {id, value}) {
-      commit('track', {id, value})
+    set ({ commit, state }, { id, value }) {
+      commit('track', { id, value })
       if (value) {
-        return axios.post('favorites/tracks/', {'track': id}).then((response) => {
+        return axios.post('favorites/tracks/', { track: id }).then((response) => {
           logger.default.info('Successfully added track to favorites')
         }, (response) => {
           logger.default.info('Error while adding track to favorites')
-          commit('track', {id, value: !value})
+          commit('track', { id, value: !value })
         })
       } else {
-        return axios.post('favorites/tracks/remove/', {'track': id}).then((response) => {
+        return axios.post('favorites/tracks/remove/', { track: id }).then((response) => {
           logger.default.info('Successfully removed track from favorites')
         }, (response) => {
           logger.default.info('Error while removing track from favorites')
-          commit('track', {id, value: !value})
+          commit('track', { id, value: !value })
         })
       }
     },
-    toggle ({getters, dispatch}, id) {
-      dispatch('set', {id, value: !getters['isFavorite'](id)})
+    toggle ({ getters, dispatch }, id) {
+      dispatch('set', { id, value: !getters.isFavorite(id) })
     },
-    fetch ({dispatch, state, commit, rootState}, url) {
+    fetch ({ dispatch, state, commit, rootState }, url) {
       // will fetch favorites by batches from API to have them locally
-      let params = {
+      const params = {
         user: rootState.auth.profile.id,
         page_size: 50,
         ordering: '-creation_date'
       }
-      let promise = axios.get('favorites/tracks/all/', {params: params})
+      const promise = axios.get('favorites/tracks/all/', { params: params })
       return promise.then((response) => {
         logger.default.info('Fetched a batch of ' + response.data.results.length + ' favorites')
         response.data.results.forEach(result => {
-          commit('track', {id: result.track, value: true})
+          commit('track', { id: result.track, value: true })
         })
       })
     }

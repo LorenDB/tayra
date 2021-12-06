@@ -1,36 +1,58 @@
 <template>
   <div>
-    <h3 v-if="!!this.$slots.title" class="ui header">
-      <slot name="title"></slot>
+    <h3
+      v-if="!!$slots.title"
+      class="ui header"
+    >
+      <slot name="title" />
     </h3>
-    <div v-if="isLoading" class="ui inverted active dimmer">
-      <div class="ui loader"></div>
+    <div
+      v-if="isLoading"
+      class="ui inverted active dimmer"
+    >
+      <div class="ui loader" />
     </div>
-    <div v-if="playlistsExist" class="ui cards app-cards">
-      <playlist-card v-for="playlist in objects" :key="playlist.id" :playlist="playlist"></playlist-card>
+    <div
+      v-if="playlistsExist"
+      class="ui cards app-cards"
+    >
+      <playlist-card
+        v-for="playlist in objects"
+        :key="playlist.id"
+        :playlist="playlist"
+      />
     </div>
-    <div v-else class="ui placeholder segment">
+    <div
+      v-else
+      class="ui placeholder segment"
+    >
       <div class="ui icon header">
-        <i class="list icon"></i>
+        <i class="list icon" />
         <translate translate-context="Content/Home/Placeholder">
           No playlists have been created yet
         </translate>
       </div>
       <button
         v-if="$store.state.auth.authenticated"
-        @click="$store.commit('playlists/chooseTrack', null)"
         class="ui success icon labeled button"
-        >
-        <i class="list icon"></i>
+        @click="$store.commit('playlists/chooseTrack', null)"
+      >
+        <i class="list icon" />
         <translate translate-context="Content/Home/CreatePlaylist">
           Create Playlist
         </translate>
       </button>
     </div>
     <template v-if="nextPage">
-      <div class="ui hidden divider"></div>
-      <button v-if="nextPage" @click="fetchData(nextPage)" :class="['ui', 'basic', 'button']">
-        <translate translate-context="*/*/Button,Label">Show more</translate>
+      <div class="ui hidden divider" />
+      <button
+        v-if="nextPage"
+        :class="['ui', 'basic', 'button']"
+        @click="fetchData(nextPage)"
+      >
+        <translate translate-context="*/*/Button,Label">
+          Show more
+        </translate>
       </button>
     </template>
   </div>
@@ -42,12 +64,12 @@ import axios from 'axios'
 import PlaylistCard from '@/components/playlists/Card'
 
 export default {
-  props: {
-    filters: {type: Object, required: true},
-    url: {type: String, required: true}
-  },
   components: {
     PlaylistCard
+  },
+  props: {
+    filters: { type: Object, required: true },
+    url: { type: String, required: true }
   },
   data () {
     return {
@@ -59,13 +81,21 @@ export default {
       nextPage: null
     }
   },
-  created () {
-    this.fetchData(this.url)
-  },
   computed: {
     playlistsExist: function () {
       return this.objects.length > 0
     }
+  },
+  watch: {
+    offset () {
+      this.fetchData()
+    },
+    '$store.state.moderation.lastUpdate': function () {
+      this.fetchData(this.url)
+    }
+  },
+  created () {
+    this.fetchData(this.url)
   },
   methods: {
     fetchData (url) {
@@ -73,11 +103,11 @@ export default {
         return
       }
       this.isLoading = true
-      let self = this
-      let params = _.clone(this.filters)
+      const self = this
+      const params = _.clone(this.filters)
       params.page_size = this.limit
       params.offset = this.offset
-      axios.get(url, {params: params}).then((response) => {
+      axios.get(url, { params: params }).then((response) => {
         self.previousPage = response.data.previous
         self.nextPage = response.data.next
         self.isLoading = false
@@ -93,14 +123,6 @@ export default {
       } else {
         this.offset = Math.max(this.offset - this.limit, 0)
       }
-    }
-  },
-  watch: {
-    offset () {
-      this.fetchData()
-    },
-    "$store.state.moderation.lastUpdate": function () {
-      this.fetchData(this.url)
     }
   }
 }

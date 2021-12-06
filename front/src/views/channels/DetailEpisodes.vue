@@ -1,18 +1,21 @@
 <template>
   <section>
-    <channel-entries :default-cover="object.artist.cover" :is-podcast="object.artist.content_category === 'podcast'" :limit="25" :filters="{channel: object.uuid, ordering: 'creation_date'}">
-    </channel-entries>
+    <channel-entries
+      :default-cover="object.artist.cover"
+      :is-podcast="object.artist.content_category === 'podcast'"
+      :limit="25"
+      :filters="{channel: object.uuid, ordering: 'creation_date'}"
+    />
   </section>
 </template>
 
 <script>
-import ChannelEntries from "@/components/audio/ChannelEntries"
-
+import ChannelEntries from '@/components/audio/ChannelEntries'
 
 export default {
-  props: ['object'],
   components: {
-    ChannelEntries,
+    ChannelEntries
   },
+  props: { object: { type: Object, required: true } }
 }
 </script>

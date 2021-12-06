@@ -75,18 +75,18 @@ export default new Vuex.Store({
             tracks: state.queue.tracks.map(track => {
               // we keep only valuable fields to make the cache lighter and avoid
               // cyclic value serialization errors
-              let artist = {
+              const artist = {
                 id: track.artist.id,
                 mbid: track.artist.mbid,
                 name: track.artist.name
               }
-              let data = {
+              const data = {
                 id: track.id,
                 title: track.title,
                 mbid: track.mbid,
                 uploads: track.uploads,
                 listen_url: track.listen_url,
-                artist: artist,
+                artist: artist
               }
               if (track.album) {
                 data.album = {

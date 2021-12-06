@@ -10,12 +10,12 @@ export default {
             choices: {
               me: this.$pgettext('Content/Settings/Dropdown', 'Nobody except me'),
               instance: this.$pgettext('Content/Settings/Dropdown', 'Everyone on this instance'),
-              everyone: this.$pgettext('Content/Settings/Dropdown', 'Everyone, across all instances'),
+              everyone: this.$pgettext('Content/Settings/Dropdown', 'Everyone, across all instances')
             },
             shortChoices: {
               me: this.$pgettext('Content/Settings/Dropdown/Short', 'Private'),
               instance: this.$pgettext('Content/Settings/Dropdown/Short', 'Instance'),
-              everyone: this.$pgettext('Content/Settings/Dropdown/Short', 'Everyone'),
+              everyone: this.$pgettext('Content/Settings/Dropdown/Short', 'Everyone')
             }
           },
           import_status: {
@@ -23,46 +23,46 @@ export default {
             choices: {
               skipped: {
                 label: this.$pgettext('Content/Library/*', 'Skipped'),
-                help: this.$pgettext('Content/Library/Help text', 'This track is already present in one of your libraries'),
+                help: this.$pgettext('Content/Library/Help text', 'This track is already present in one of your libraries')
               },
               draft: {
                 label: this.$pgettext('Content/Library/*/Short', 'Draft'),
-                help: this.$pgettext('Content/Library/Help text', 'This track has been uploaded, but hasn\'t been scheduled for processing yet'),
+                help: this.$pgettext('Content/Library/Help text', 'This track has been uploaded, but hasn\'t been scheduled for processing yet')
               },
               pending: {
                 label: this.$pgettext('Content/Library/*/Short', 'Pending'),
-                help: this.$pgettext('Content/Library/Help text', 'This track has been uploaded, but hasn\'t been processed by the server yet'),
+                help: this.$pgettext('Content/Library/Help text', 'This track has been uploaded, but hasn\'t been processed by the server yet')
               },
               errored: {
                 label: this.$pgettext('Content/Library/Table/Short', 'Errored'),
-                help: this.$pgettext('Content/Library/Help text', 'This track could not be processed, please make sure it is tagged correctly'),
+                help: this.$pgettext('Content/Library/Help text', 'This track could not be processed, please make sure it is tagged correctly')
               },
               finished: {
                 label: this.$pgettext('Content/Library/*', 'Finished'),
-                help: this.$pgettext('Content/Library/Help text', 'Imported'),
-              },
+                help: this.$pgettext('Content/Library/Help text', 'Imported')
+              }
             }
           },
           report_type: {
             label: this.$pgettext('*/*/*', 'Category'),
             choices: {
-              takedown_request: this.$pgettext("Content/Moderation/Dropdown", "Takedown request"),
-              invalid_metadata: this.$pgettext("Popup/Import/Error.Label", "Invalid metadata"),
-              illegal_content: this.$pgettext("Content/Moderation/Dropdown", "Illegal content"),
-              offensive_content: this.$pgettext("Content/Moderation/Dropdown", "Offensive content"),
-              other: this.$pgettext("Content/Moderation/Dropdown", "Other"),
-            },
+              takedown_request: this.$pgettext('Content/Moderation/Dropdown', 'Takedown request'),
+              invalid_metadata: this.$pgettext('Popup/Import/Error.Label', 'Invalid metadata'),
+              illegal_content: this.$pgettext('Content/Moderation/Dropdown', 'Illegal content'),
+              offensive_content: this.$pgettext('Content/Moderation/Dropdown', 'Offensive content'),
+              other: this.$pgettext('Content/Moderation/Dropdown', 'Other')
+            }
           },
           summary: {
-            label: this.$pgettext('Content/Account/*', 'Bio'),
+            label: this.$pgettext('Content/Account/*', 'Bio')
           },
           content_category: {
             label: this.$pgettext('Content/*/Dropdown.Label/Noun', 'Content category'),
             choices: {
               podcast: this.$pgettext('Content/*/Dropdown', 'Podcast'),
               music: this.$pgettext('*/*/*', 'Music'),
-              other: this.$pgettext('*/*/*', 'Other'),
-            },
+              other: this.$pgettext('*/*/*', 'Other')
+            }
           }
         },
         filters: {
@@ -89,56 +89,56 @@ export default {
           users: this.$pgettext('*/*/*/Noun', 'Users'),
           received_messages: this.$pgettext('Content/Moderation/*/Noun', 'Received messages'),
           uploads: this.$pgettext('*/*/*', 'Uploads'),
-          followers: this.$pgettext('Content/Federation/*/Noun', 'Followers'),
+          followers: this.$pgettext('Content/Federation/*/Noun', 'Followers')
         },
         scopes: {
           profile: {
             label: this.$pgettext('Content/OAuth Scopes/Label', 'Profile'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to e-mail, username, and profile information'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to e-mail, username, and profile information')
           },
           libraries: {
             label: this.$pgettext('Content/OAuth Scopes/Label', 'Libraries and uploads'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to audio files, libraries, artists, albums and tracks'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to audio files, libraries, artists, albums and tracks')
           },
           favorites: {
             label: this.$pgettext('Sidebar/Favorites/List item.Link/Noun', 'Favorites'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to favorites'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to favorites')
           },
           listenings: {
             label: this.$pgettext('*/*/*/Noun', 'Listenings'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to listening history'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to listening history')
           },
           follows: {
             label: this.$pgettext('Content/OAuth Scopes/Label', 'Follows'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to follows'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to follows')
           },
           playlists: {
             label: this.$pgettext('*/*/*', 'Playlists'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to playlists'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to playlists')
           },
           radios: {
             label: this.$pgettext('*/*/*', 'Radios'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to radios'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to radios')
           },
           filters: {
             label: this.$pgettext('Content/Settings/Title/Noun', 'Content filters'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to content filters'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to content filters')
           },
           notifications: {
             label: this.$pgettext('*/Notifications/*', 'Notifications'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to notifications'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to notifications')
           },
           edits: {
             label: this.$pgettext('*/Admin/*/Noun', 'Edits'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to edits'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to edits')
           },
           security: {
             label: this.$pgettext('*/Admin/*/Noun', 'Security'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to security settings such as password and authorization'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to security settings such as password and authorization')
           },
           reports: {
             label: this.$pgettext('*/Moderation/*/Noun', 'Reports'),
-            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to moderation reports'),
+            description: this.$pgettext('Content/OAuth Scopes/Paragraph', 'Access to moderation reports')
           }
         }
       }

@@ -7,12 +7,10 @@
   >
     <div
       v-if="showArt"
-      @click.prevent.exact="activateTrack(track, index)"
       class="image left floated column"
+      @click.prevent.exact="activateTrack(track, index)"
     >
       <img
-        alt=""
-        class="ui artist-track mini image"
         v-if="
           track.album && track.album.cover && track.album.cover.urls.original
         "
@@ -21,10 +19,10 @@
             track.album.cover.urls.medium_square_crop
           )
         "
-      />
-      <img
         alt=""
         class="ui artist-track mini image"
+      >
+      <img
         v-else-if="
           track.cover
         "
@@ -33,10 +31,10 @@
             track.cover.urls.medium_square_crop
           )
         "
-      />
-      <img
         alt=""
         class="ui artist-track mini image"
+      >
+      <img
         v-else-if="
           track.artist.cover
         "
@@ -45,19 +43,21 @@
             track.artist.cover.urls.medium_square_crop
           )
         "
-      />
-      <img
         alt=""
         class="ui artist-track mini image"
+      >
+      <img
         v-else
+        alt=""
+        class="ui artist-track mini image"
         src="../../../assets/audio/default-cover.png"
-      />
+      >
     </div>
     <div
-      tabindex=0
-      @click="activateTrack(track, index)"
+      tabindex="0"
       role="button"
       class="content ellipsis left floated column"
+      @click="activateTrack(track, index)"
     >
       <p
         :class="[
@@ -68,24 +68,33 @@
       >
         {{ track.title }}
       </p>
-      <p v-if="track.artist.content_category === 'podcast'" class="track-meta mobile">
-        <human-date class="really discrete" :date="track.creation_date"></human-date>
+      <p
+        v-if="track.artist.content_category === 'podcast'"
+        class="track-meta mobile"
+      >
+        <human-date
+          class="really discrete"
+          :date="track.creation_date"
+        />
         <span>&#183;</span>
         <human-duration
           v-if="track.uploads[0] && track.uploads[0].duration"
           :duration="track.uploads[0].duration"
-        ></human-duration>
+        />
       </p>
-      <p v-else class="track-meta mobile">
+      <p
+        v-else
+        class="track-meta mobile"
+      >
         {{ track.artist.name }} <span>&#183;</span>
         <human-duration
           v-if="track.uploads[0] && track.uploads[0].duration"
           :duration="track.uploads[0].duration"
-        ></human-duration>
+        />
       </p>
     </div>
     <div
-      v-if="$store.state.auth.authenticated && this.track.artist.content_category !== 'podcast'"
+      v-if="$store.state.auth.authenticated && track.artist.content_category !== 'podcast'"
       :class="[
         'meta',
         'right',
@@ -100,12 +109,11 @@
         class="tiny"
         :border="false"
         :track="track"
-      ></track-favorite-icon>
+      />
     </div>
     <div
       role="button"
       :aria-label="actionsButtonLabel"
-      @click.prevent.exact="showTrackModal = !showTrackModal"
       :class="[
         'modal-button',
         'right',
@@ -114,36 +122,36 @@
         'mobile',
         { 'with-art': showArt },
       ]"
+      @click.prevent.exact="showTrackModal = !showTrackModal"
     >
       <i class="ellipsis large vertical icon" />
     </div>
     <track-modal
-      @update:show="showTrackModal = $event;"
       :show="showTrackModal"
       :track="track"
       :index="index"
       :is-artist="isArtist"
       :is-album="isAlbum"
-    ></track-modal>
+      @update:show="showTrackModal = $event;"
+    />
   </div>
 </template>
 
 <script>
-import PlayIndicator from "@/components/audio/track/PlayIndicator";
-import { mapActions, mapGetters } from "vuex";
-import TrackFavoriteIcon from "@/components/favorites/TrackFavoriteIcon";
-import TrackModal from "@/components/audio/track/Modal";
-import PlayOptionsMixin from "@/components/mixins/PlayOptions"
+import { mapActions, mapGetters } from 'vuex'
+import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon'
+import TrackModal from '@/components/audio/track/Modal'
+import PlayOptionsMixin from '@/components/mixins/PlayOptions'
 
 export default {
-  mixins: [PlayOptionsMixin],
-  data() {
-    return {
-      showTrackModal: false,
-    }
+
+  components: {
+    TrackFavoriteIcon,
+    TrackModal
   },
+  mixins: [PlayOptionsMixin],
   props: {
-    tracks: Array,
+    tracks: { type: Array, required: true },
     showAlbum: { type: Boolean, required: false, default: true },
     showArtist: { type: Boolean, required: false, default: true },
     showPosition: { type: Boolean, required: false, default: false },
@@ -155,41 +163,40 @@ export default {
     showDuration: { type: Boolean, required: false, default: true },
     index: { type: Number, required: true },
     track: { type: Object, required: true },
-    isArtist: {type: Boolean, required: false, default: false},
-    isAlbum: {type: Boolean, required: false, default: false},
+    isArtist: { type: Boolean, required: false, default: false },
+    isAlbum: { type: Boolean, required: false, default: false }
   },
-
-  components: {
-    PlayIndicator,
-    TrackFavoriteIcon,
-    TrackModal,
+  data () {
+    return {
+      showTrackModal: false
+    }
   },
   computed: {
     ...mapGetters({
-      currentTrack: "queue/currentTrack",
+      currentTrack: 'queue/currentTrack'
     }),
 
-    isPlaying() {
-      return this.$store.state.player.playing;
+    isPlaying () {
+      return this.$store.state.player.playing
     },
     actionsButtonLabel () {
-        return this.$pgettext('Content/Track/Icon.Tooltip/Verb', 'Show track actions')
-    },
+      return this.$pgettext('Content/Track/Icon.Tooltip/Verb', 'Show track actions')
+    }
   },
 
   methods: {
-    prettyPosition(position, size) {
-      var s = String(position);
+    prettyPosition (position, size) {
+      let s = String(position)
       while (s.length < (size || 2)) {
-        s = "0" + s;
+        s = '0' + s
       }
-      return s;
+      return s
     },
 
     ...mapActions({
-      resumePlayback: "player/resumePlayback",
-      pausePlayback: "player/pausePlayback",
-    }),
-  },
-};
+      resumePlayback: 'player/resumePlayback',
+      pausePlayback: 'player/pausePlayback'
+    })
+  }
+}
 </script>

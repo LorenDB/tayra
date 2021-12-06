@@ -1,22 +1,36 @@
 <template>
   <main>
-    <div v-if="isLoading" class="ui vertical segment">
-      <div :class="['ui', 'centered', 'active', 'inline', 'loader']"></div>
+    <div
+      v-if="isLoading"
+      class="ui vertical segment"
+    >
+      <div :class="['ui', 'centered', 'active', 'inline', 'loader']" />
     </div>
     <template v-if="object">
-      <section :class="['ui', 'head', 'vertical', 'stripe', 'segment']" v-title="object.name">
+      <section
+        v-title="object.name"
+        :class="['ui', 'head', 'vertical', 'stripe', 'segment']"
+      >
         <div class="ui stackable one column grid">
           <div class="ui column">
             <div class="segment-content">
               <h2 class="ui header">
-                <img alt="" v-if="object.cover && object.cover.urls.medium_square_crop" v-lazy="$store.getters['instance/absoluteUrl'](object.cover.urls.medium_square_crop)">
-                <img alt="" v-else src="../../../assets/audio/default-cover.png">
+                <img
+                  v-if="object.cover && object.cover.urls.medium_square_crop"
+                  v-lazy="$store.getters['instance/absoluteUrl'](object.cover.urls.medium_square_crop)"
+                  alt=""
+                >
+                <img
+                  v-else
+                  alt=""
+                  src="../../../assets/audio/default-cover.png"
+                >
                 <div class="content">
                   {{ object.name | truncate(100) }}
                   <div class="sub header">
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
-                        <i class="home icon"></i>
+                        <i class="home icon" />
                         <translate translate-context="Content/Moderation/*/Short, Noun">Local</translate>
                       </span>
                       &nbsp;
@@ -25,38 +39,69 @@
                 </div>
               </h2>
               <template v-if="object.tags && object.tags.length > 0">
-                <tags-list :limit="5" detail-route="manage.library.tags.detail" :tags="object.tags"></tags-list>
-                <div class="ui hidden divider"></div>
+                <tags-list
+                  :limit="5"
+                  detail-route="manage.library.tags.detail"
+                  :tags="object.tags"
+                />
+                <div class="ui hidden divider" />
               </template>
 
               <div class="header-buttons">
-
                 <div class="ui icon buttons">
-                  <router-link class="ui labeled icon button" :to="{name: 'library.artists.detail', params: {id: object.id }}">
-                    <i class="info icon"></i>
-                    <translate translate-context="Content/Moderation/Link/Verb">Open local profile</translate>&nbsp;
+                  <router-link
+                    class="ui labeled icon button"
+                    :to="{name: 'library.artists.detail', params: {id: object.id }}"
+                  >
+                    <i class="info icon" />
+                    <translate translate-context="Content/Moderation/Link/Verb">
+                      Open local profile
+                    </translate>&nbsp;
                   </router-link>
-                  <button class="ui floating dropdown icon button" v-dropdown>
-                    <i class="dropdown icon"></i>
+                  <button
+                    v-dropdown
+                    class="ui floating dropdown icon button"
+                  >
+                    <i class="dropdown icon" />
                     <div class="menu">
                       <a
                         v-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
                         class="basic item"
                         :href="$store.getters['instance/absoluteUrl'](`/api/admin/music/artist/${object.id}`)"
-                        target="_blank" rel="noopener noreferrer">
-                        <i class="wrench icon"></i>
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i class="wrench icon" />
                         <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
                       </a>
-                      <a class="basic item" v-if="object.mbid" :href="`https://musicbrainz.org/artist/${object.mbid}`" target="_blank" rel="noopener noreferrer">
-                        <i class="external icon"></i>
+                      <a
+                        v-if="object.mbid"
+                        class="basic item"
+                        :href="`https://musicbrainz.org/artist/${object.mbid}`"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i class="external icon" />
                         <translate translate-context="Content/Moderation/Link/Verb">Open on MusicBrainz</translate>&nbsp;
                       </a>
-                      <fetch-button @refresh="fetchData" v-if="!object.is_local" class="basic item" :url="`artists/${object.id}/fetches/`">
-                        <i class="refresh icon"></i>&nbsp;
-                        <translate translate-context="Content/Moderation/Button/Verb">Refresh from remote server</translate>&nbsp;
+                      <fetch-button
+                        v-if="!object.is_local"
+                        class="basic item"
+                        :url="`artists/${object.id}/fetches/`"
+                        @refresh="fetchData"
+                      >
+                        <i class="refresh icon" />&nbsp;
+                        <translate translate-context="Content/Moderation/Button/Verb">
+                          Refresh from remote server
+                        </translate>&nbsp;
                       </fetch-button>
-                      <a class="basic item" :href="object.url || object.fid" target="_blank" rel="noopener noreferrer">
-                        <i class="external icon"></i>
+                      <a
+                        class="basic item"
+                        :href="object.url || object.fid"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i class="external icon" />
                         <translate translate-context="Content/Moderation/Link/Verb">Open remote profile</translate>&nbsp;
                       </a>
                     </div>
@@ -66,21 +111,39 @@
                   <router-link
                     v-if="object.is_local"
                     :to="{name: 'library.artists.edit', params: {id: object.id }}"
-                    class="ui labeled icon button">
-                    <i class="edit icon"></i>
-                    <translate translate-context="Content/*/Button.Label/Verb">Edit</translate>
+                    class="ui labeled icon button"
+                  >
+                    <i class="edit icon" />
+                    <translate translate-context="Content/*/Button.Label/Verb">
+                      Edit
+                    </translate>
                   </router-link>
                 </div>
                 <div class="ui buttons">
                   <dangerous-button
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
-                    :action="remove">
-                    <translate translate-context="*/*/*/Verb">Delete</translate>
-                    <p slot="modal-header"><translate translate-context="Popup/Library/Title">Delete this artist?</translate></p>
+                    :action="remove"
+                  >
+                    <translate translate-context="*/*/*/Verb">
+                      Delete
+                    </translate>
+                    <p slot="modal-header">
+                      <translate translate-context="Popup/Library/Title">
+                        Delete this artist?
+                      </translate>
+                    </p>
                     <div slot="modal-content">
-                      <p><translate translate-context="Content/Moderation/Paragraph">The artist will be removed, as well as associated uploads, tracks, albums, favorites and listening history. This action is irreversible.</translate></p>
+                      <p>
+                        <translate translate-context="Content/Moderation/Paragraph">
+                          The artist will be removed, as well as associated uploads, tracks, albums, favorites and listening history. This action is irreversible.
+                        </translate>
+                      </p>
                     </div>
-                    <p slot="modal-confirm"><translate translate-context="*/*/*/Verb">Delete</translate></p>
+                    <p slot="modal-confirm">
+                      <translate translate-context="*/*/*/Verb">
+                        Delete
+                      </translate>
+                    </p>
                   </dangerous-button>
                 </div>
               </div>
@@ -93,16 +156,20 @@
           <div class="column">
             <section>
               <h3 class="ui header">
-                <i class="info icon"></i>
+                <i class="info icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">Artist data</translate>
+                  <translate translate-context="Content/Moderation/Title">
+                    Artist data
+                  </translate>
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">Name</translate>
+                      <translate translate-context="*/*/*/Noun">
+                        Name
+                      </translate>
                     </td>
                     <td>
                       {{ object.name }}
@@ -111,7 +178,9 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('category', object.content_category) }}">
-                        <translate translate-context="*/*/*">Category</translate>
+                        <translate translate-context="*/*/*">
+                          Category
+                        </translate>
                       </router-link>
                     </td>
                     <td>
@@ -121,7 +190,9 @@
                   <tr v-if="!object.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        <translate translate-context="Content/Moderation/*/Noun">Domain</translate>
+                        <translate translate-context="Content/Moderation/*/Noun">
+                          Domain
+                        </translate>
                       </router-link>
                     </td>
                     <td>
@@ -130,9 +201,11 @@
                   </tr>
                   <tr v-if="object.description">
                     <td>
-                      <translate translate-context="'*/*/*/Noun">Description</translate>
+                      <translate translate-context="'*/*/*/Noun">
+                        Description
+                      </translate>
                     </td>
-                    <td v-html="object.description.html"></td>
+                    <td v-html="object.description.html" />
                   </tr>
                 </tbody>
               </table>
@@ -141,32 +214,43 @@
           <div class="column">
             <section>
               <h3 class="ui header">
-                <i class="feed icon"></i>
+                <i class="feed icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">Activity</translate>&nbsp;
-                  <span :data-tooltip="labels.statsWarning"><i class="question circle icon"></i></span>
-
+                  <translate translate-context="Content/Moderation/Title">
+                    Activity
+                  </translate>&nbsp;
+                  <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
-              <div v-if="isLoadingStats" class="ui placeholder">
-                <div class="full line"></div>
-                <div class="short line"></div>
-                <div class="medium line"></div>
-                <div class="long line"></div>
+              <div
+                v-if="isLoadingStats"
+                class="ui placeholder"
+              >
+                <div class="full line" />
+                <div class="short line" />
+                <div class="medium line" />
+                <div class="long line" />
               </div>
-              <table v-else class="ui very basic table">
+              <table
+                v-else
+                class="ui very basic table"
+              >
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">First seen</translate>
+                      <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
+                        First seen
+                      </translate>
                     </td>
                     <td>
-                      <human-date :date="object.creation_date"></human-date>
+                      <human-date :date="object.creation_date" />
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">Listenings</translate>
+                      <translate translate-context="*/*/*/Noun">
+                        Listenings
+                      </translate>
                     </td>
                     <td>
                       {{ stats.listenings }}
@@ -174,7 +258,9 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*">Favorited tracks</translate>
+                      <translate translate-context="*/*/*">
+                        Favorited tracks
+                      </translate>
                     </td>
                     <td>
                       {{ stats.track_favorites }}
@@ -182,7 +268,9 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*">Playlists</translate>
+                      <translate translate-context="*/*/*">
+                        Playlists
+                      </translate>
                     </td>
                     <td>
                       {{ stats.playlists }}
@@ -191,7 +279,9 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `artist:${object.id}`) }}">
-                        <translate translate-context="Content/Moderation/Table.Label/Noun">Linked reports</translate>
+                        <translate translate-context="Content/Moderation/Table.Label/Noun">
+                          Linked reports
+                        </translate>
                       </router-link>
                     </td>
                     <td>
@@ -201,7 +291,9 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.edits', query: {q: getQuery('target', 'artist ' + object.id)}}">
-                        <translate translate-context="*/Admin/*/Noun">Edits</translate>
+                        <translate translate-context="*/Admin/*/Noun">
+                          Edits
+                        </translate>
                       </router-link>
                     </td>
                     <td>
@@ -215,25 +307,33 @@
           <div class="column">
             <section>
               <h3 class="ui header">
-                <i class="music icon"></i>
+                <i class="music icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">Audio content</translate>&nbsp;
-                  <span :data-tooltip="labels.statsWarning"><i class="question circle icon"></i></span>
-
+                  <translate translate-context="Content/Moderation/Title">
+                    Audio content
+                  </translate>&nbsp;
+                  <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
-              <div v-if="isLoadingStats" class="ui placeholder">
-                <div class="full line"></div>
-                <div class="short line"></div>
-                <div class="medium line"></div>
-                <div class="long line"></div>
+              <div
+                v-if="isLoadingStats"
+                class="ui placeholder"
+              >
+                <div class="full line" />
+                <div class="short line" />
+                <div class="medium line" />
+                <div class="long line" />
               </div>
-              <table v-else class="ui very basic table">
+              <table
+                v-else
+                class="ui very basic table"
+              >
                 <tbody>
-
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">Cached size</translate>
+                      <translate translate-context="Content/Moderation/Table.Label/Noun">
+                        Cached size
+                      </translate>
                     </td>
                     <td>
                       {{ stats.media_downloaded_size | humanSize }}
@@ -241,7 +341,9 @@
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label">Total size</translate>
+                      <translate translate-context="Content/Moderation/Table.Label">
+                        Total size
+                      </translate>
                     </td>
                     <td>
                       {{ stats.media_total_size | humanSize }}
@@ -251,7 +353,9 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('artist_id', object.id) }}">
-                        <translate translate-context="*/*/*/Noun">Libraries</translate>
+                        <translate translate-context="*/*/*/Noun">
+                          Libraries
+                        </translate>
                       </router-link>
                     </td>
                     <td>
@@ -261,7 +365,9 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('artist_id', object.id) }}">
-                        <translate translate-context="*/*/*">Uploads</translate>
+                        <translate translate-context="*/*/*">
+                          Uploads
+                        </translate>
                       </router-link>
                     </td>
                     <td>
@@ -271,7 +377,9 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('artist_id', object.id) }}">
-                        <translate translate-context="*/*/*">Albums</translate>
+                        <translate translate-context="*/*/*">
+                          Albums
+                        </translate>
                       </router-link>
                     </td>
                     <td>
@@ -281,7 +389,9 @@
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('artist_id', object.id) }}">
-                        <translate translate-context="*/*/*">Tracks</translate>
+                        <translate translate-context="*/*/*">
+                          Tracks
+                        </translate>
                       </router-link>
                     </td>
                     <td>
@@ -290,82 +400,79 @@
                   </tr>
                 </tbody>
               </table>
-
             </section>
           </div>
         </div>
       </div>
-
     </template>
   </main>
 </template>
 
 <script>
-import axios from "axios"
-import logger from "@/logging"
+import axios from 'axios'
 
-import TagsList from "@/components/tags/List"
-import FetchButton from "@/components/federation/FetchButton"
+import TagsList from '@/components/tags/List'
+import FetchButton from '@/components/federation/FetchButton'
 
 export default {
-  props: ["id"],
   components: {
     FetchButton,
     TagsList
   },
-  data() {
+  props: { id: { type: Number, required: true } },
+  data () {
     return {
       isLoading: true,
       isLoadingStats: false,
       object: null,
-      stats: null,
+      stats: null
     }
   },
-  created() {
+  computed: {
+    labels () {
+      return {
+        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
+      }
+    }
+  },
+  created () {
     this.fetchData()
     this.fetchStats()
   },
   methods: {
-    fetchData() {
-      var self = this
+    fetchData () {
+      const self = this
       this.isLoading = true
-      let url = `manage/library/artists/${this.id}/`
+      const url = `manage/library/artists/${this.id}/`
       axios.get(url).then(response => {
         if (response.data.channel) {
-          self.$router.push({name: "manage.channels.detail", params: {id: response.data.channel}})
+          self.$router.push({ name: 'manage.channels.detail', params: { id: response.data.channel } })
         } else {
           self.object = response.data
           self.isLoading = false
         }
       })
     },
-    fetchStats() {
-      var self = this
+    fetchStats () {
+      const self = this
       this.isLoadingStats = true
-      let url = `manage/library/artists/${this.id}/stats/`
+      const url = `manage/library/artists/${this.id}/stats/`
       axios.get(url).then(response => {
         self.stats = response.data
         self.isLoadingStats = false
       })
     },
     remove () {
-      var self = this
+      const self = this
       this.isLoading = true
-      let url = `manage/library/artists/${this.id}/`
+      const url = `manage/library/artists/${this.id}/`
       axios.delete(url).then(response => {
-        self.$router.push({name: 'manage.library.artists'})
+        self.$router.push({ name: 'manage.library.artists' })
       })
     },
     getQuery (field, value) {
       return `${field}:"${value}"`
     }
-  },
-  computed: {
-    labels() {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object'),
-      }
-    },
   }
 }
 </script>

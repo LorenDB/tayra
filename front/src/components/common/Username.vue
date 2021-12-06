@@ -3,6 +3,6 @@
 </template>
 <script>
 export default {
-  props: ['username']
+  props: { username: { type: String, required: true } }
 }
 </script>

@@ -1,10 +1,19 @@
 <template>
-  <div ref="dropdown" class="ui multiple search selection dropdown">
+  <div
+    ref="dropdown"
+    class="ui multiple search selection dropdown"
+  >
     <input type="hidden">
-    <i class="dropdown icon"></i>
-    <input id="tags-search" type="text" class="search">
+    <i class="dropdown icon" />
+    <input
+      id="tags-search"
+      type="text"
+      class="search"
+    >
     <div class="default text">
-      <translate translate-context="*/Dropdown/Placeholder/Verb">Search…</translate>
+      <translate translate-context="*/Dropdown/Placeholder/Verb">
+        Search…
+      </translate>
     </div>
   </div>
 </template>
@@ -13,54 +22,62 @@ import $ from 'jquery'
 
 import lodash from '@/lodash'
 export default {
-  props: ['value'],
+  props: { value: { type: String, required: true } },
+  watch: {
+    value: {
+      handler (v) {
+        const current = $(this.$refs.dropdown).dropdown('get value').split(',').sort()
+        if (!lodash.isEqual([...v].sort(), current)) {
+          $(this.$refs.dropdown).dropdown('set exactly', v)
+        }
+      },
+      deep: true
+    }
+  },
   mounted () {
     this.$nextTick(() => {
       this.initDropdown()
-
     })
   },
   methods: {
     initDropdown () {
-      let self = this
-      let handleUpdate = () => {
-        let value = $(self.$refs.dropdown).dropdown('get value').split(',')
+      const self = this
+      const handleUpdate = () => {
+        const value = $(self.$refs.dropdown).dropdown('get value').split(',')
         self.$emit('input', value)
         return value
       }
-      let settings = {
-        keys : {
-          delimiter  : 32,
+      const settings = {
+        keys: {
+          delimiter: 32
         },
         forceSelection: false,
         saveRemoteData: false,
         filterRemoteData: true,
-        preserveHTML : false,
+        preserveHTML: false,
         apiSettings: {
           url: this.$store.getters['instance/absoluteUrl']('/api/v1/tags/?name__startswith={query}&ordering=length&page_size=5'),
           beforeXHR: function (xhrObject) {
-
             if (self.$store.state.auth.oauth.accessToken) {
               xhrObject.setRequestHeader('Authorization', self.$store.getters['auth/header'])
             }
             return xhrObject
           },
-          onResponse(response) {
-            let currentSearch = $(self.$refs.dropdown).dropdown('get query')
+          onResponse (response) {
+            const currentSearch = $(self.$refs.dropdown).dropdown('get query')
             response = {
               results: [],
-              ...response,
+              ...response
             }
             if (currentSearch) {
-              let existingTag = response.results.find((result) => result.name === currentSearch)
+              const existingTag = response.results.find((result) => result.name === currentSearch)
               if (existingTag) {
                 if (response.results.indexOf(existingTag) !== 0) {
                   response.results = [existingTag, ...response.results]
                   response.results.splice(response.results.indexOf(existingTag) + 1, 1)
                 }
-              }
-              else {
-                response.results = [{name: currentSearch}, ...response.results]
+              } else {
+                response.results = [{ name: currentSearch }, ...response.results]
               }
             }
             return response
@@ -75,21 +92,10 @@ export default {
         onAdd: handleUpdate,
         onRemove: handleUpdate,
         onLabelRemove: handleUpdate,
-        onChange: handleUpdate,
+        onChange: handleUpdate
       }
       $(this.$refs.dropdown).dropdown(settings)
       $(this.$refs.dropdown).dropdown('set exactly', this.value)
-    }
-  },
-  watch: {
-    value: {
-      handler (v) {
-        let current = $(this.$refs.dropdown).dropdown('get value').split(',').sort()
-        if (!lodash.isEqual([...v].sort(), current)) {
-          $(this.$refs.dropdown).dropdown('set exactly', v)
-        }
-      },
-      deep: true
     }
   }
 }

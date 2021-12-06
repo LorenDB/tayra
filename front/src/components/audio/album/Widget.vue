@@ -1,25 +1,54 @@
 <template>
   <div class="wrapper">
-    <h3 v-if="!!this.$slots.title" class="ui header">
-      <slot name="title"></slot>
-      <span v-if="showCount" class="ui tiny circular label">{{ count }}</span>
+    <h3
+      v-if="!!$slots.title"
+      class="ui header"
+    >
+      <slot name="title" />
+      <span
+        v-if="showCount"
+        class="ui tiny circular label"
+      >{{ count }}</span>
     </h3>
-    <slot></slot>
-    <inline-search-bar v-model="query" v-if="search" @search="albums = []; fetchData()"></inline-search-bar>
-    <div class="ui hidden divider"></div>
+    <slot />
+    <inline-search-bar
+      v-if="search"
+      v-model="query"
+      @search="albums = []; fetchData()"
+    />
+    <div class="ui hidden divider" />
     <div class="ui app-cards cards">
-      <div v-if="isLoading" class="ui inverted active dimmer">
-        <div class="ui loader"></div>
+      <div
+        v-if="isLoading"
+        class="ui inverted active dimmer"
+      >
+        <div class="ui loader" />
       </div>
-      <album-card v-for="album in albums" :album="album" :key="album.id" />
+      <album-card
+        v-for="album in albums"
+        :key="album.id"
+        :album="album"
+      />
     </div>
-    <slot v-if="!isLoading && albums.length === 0" name="empty-state">
-      <empty-state @refresh="fetchData" :refresh="true"></empty-state>
+    <slot
+      v-if="!isLoading && albums.length === 0"
+      name="empty-state"
+    >
+      <empty-state
+        :refresh="true"
+        @refresh="fetchData"
+      />
     </slot>
     <template v-if="nextPage">
-      <div class="ui hidden divider"></div>
-      <button v-if="nextPage" @click="fetchData(nextPage)" :class="['ui', 'basic', 'button']">
-        <translate translate-context="*/*/Button,Label">Show more</translate>
+      <div class="ui hidden divider" />
+      <button
+        v-if="nextPage"
+        :class="['ui', 'basic', 'button']"
+        @click="fetchData(nextPage)"
+      >
+        <translate translate-context="*/*/Button,Label">
+          Show more
+        </translate>
       </button>
     </template>
   </div>
@@ -30,15 +59,15 @@ import axios from 'axios'
 import AlbumCard from '@/components/audio/album/Card'
 
 export default {
-  props: {
-    filters: {type: Object, required: true},
-    controls: {type: Boolean, default: true},
-    showCount: {type: Boolean, default: false},
-    search: {type: Boolean, default: false},
-    limit: {type: Number, default: 12},
-  },
   components: {
     AlbumCard
+  },
+  props: {
+    filters: { type: Object, required: true },
+    controls: { type: Boolean, default: true },
+    showCount: { type: Boolean, default: false },
+    search: { type: Boolean, default: false },
+    limit: { type: Number, default: 12 }
   },
   data () {
     return {
@@ -48,7 +77,15 @@ export default {
       errors: null,
       previousPage: null,
       nextPage: null,
-      query: '',
+      query: ''
+    }
+  },
+  watch: {
+    offset () {
+      this.fetchData()
+    },
+    '$store.state.moderation.lastUpdate': function () {
+      this.fetchData()
     }
   },
   created () {
@@ -58,11 +95,11 @@ export default {
     fetchData (url) {
       url = url || 'albums/'
       this.isLoading = true
-      let self = this
-      let params = {q: this.query, ...this.filters}
+      const self = this
+      const params = { q: this.query, ...this.filters }
       params.page_size = this.limit
       params.offset = this.offset
-      axios.get(url, {params: params}).then((response) => {
+      axios.get(url, { params: params }).then((response) => {
         self.previousPage = response.data.previous
         self.nextPage = response.data.next
         self.isLoading = false
@@ -79,14 +116,6 @@ export default {
       } else {
         this.offset = Math.max(this.offset - this.limit, 0)
       }
-    },
-  },
-  watch: {
-    offset () {
-      this.fetchData()
-    },
-    "$store.state.moderation.lastUpdate": function () {
-      this.fetchData()
     }
   }
 }

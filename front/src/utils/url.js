@@ -1,7 +1,7 @@
 export default {
   updateQueryString (uri, key, value) {
-    var re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i')
-    var separator = uri.indexOf('?') !== -1 ? '&' : '?'
+    const re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i')
+    const separator = uri.indexOf('?') !== -1 ? '&' : '?'
     if (uri.match(re)) {
       return uri.replace(re, '$1' + key + '=' + value + '$2')
     } else {

@@ -3,8 +3,7 @@
     <h4 class="ui header">
       <div class="content">
         <slot name="title">
-
-          <i class="search icon"></i>
+          <i class="search icon" />
           <translate translate-context="Content/*/Paragraph">
             No results were found.
           </translate>
@@ -12,8 +11,12 @@
       </div>
     </h4>
     <div class="inline center aligned text">
-      <slot></slot>
-      <button v-if="refresh" class="ui button" @click="$emit('refresh')">
+      <slot />
+      <button
+        v-if="refresh"
+        class="ui button"
+        @click="$emit('refresh')"
+      >
         <translate translate-context="Content/*/Button.Label/Short, Verb">
           Refresh
         </translate>
@@ -24,7 +27,7 @@
 <script>
 export default {
   props: {
-    refresh: {type: Boolean, default: false}
+    refresh: { type: Boolean, default: false }
   }
 }
 </script>

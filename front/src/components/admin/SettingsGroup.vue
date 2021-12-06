@@ -1,86 +1,156 @@
 <template>
-  <form :id="group.id" class="ui form component-settings-group" @submit.prevent="save">
+  <form
+    :id="group.id"
+    class="ui form component-settings-group"
+    @submit.prevent="save"
+  >
     <div class="ui divider" />
-    <h3 class="ui header">{{ group.label }}</h3>
-    <div v-if="errors.length > 0" role="alert" class="ui negative message">
-      <h4 class="header"><translate translate-context="Content/*/Error message.Title">Error while saving settings</translate></h4>
+    <h3 class="ui header">
+      {{ group.label }}
+    </h3>
+    <div
+      v-if="errors.length > 0"
+      role="alert"
+      class="ui negative message"
+    >
+      <h4 class="header">
+        <translate translate-context="Content/*/Error message.Title">
+          Error while saving settings
+        </translate>
+      </h4>
       <ul class="list">
-        <li v-for="error in errors">{{ error }}</li>
+        <li
+          v-for="(error, key) in errors"
+          :key="key"
+        >
+          {{ error }}
+        </li>
       </ul>
     </div>
-    <div v-if="result" class="ui positive message">
-      <translate translate-context="Content/Settings/Paragraph">Settings updated successfully.</translate>
+    <div
+      v-if="result"
+      class="ui positive message"
+    >
+      <translate translate-context="Content/Settings/Paragraph">
+        Settings updated successfully.
+      </translate>
     </div>
-    <p v-if="group.help">{{ group.help }}</p>
-    <div v-for="setting in settings" class="ui field">
+    <p v-if="group.help">
+      {{ group.help }}
+    </p>
+    <div
+      v-for="(setting, key) in settings"
+      :key="key"
+      class="ui field"
+    >
       <template v-if="setting.field.widget.class !== 'CheckboxInput'">
         <label :for="setting.identifier">{{ setting.verbose_name }}</label>
-        <p v-if="setting.help_text">{{ setting.help_text }}</p>
+        <p v-if="setting.help_text">
+          {{ setting.help_text }}
+        </p>
       </template>
-      <content-form v-if="setting.fieldType === 'markdown'" v-model="values[setting.identifier]" v-bind="setting.fieldParams" />
+      <content-form
+        v-if="setting.fieldType === 'markdown'"
+        v-model="values[setting.identifier]"
+        v-bind="setting.fieldParams"
+      />
       <signup-form-builder
         v-else-if="setting.fieldType === 'formBuilder'"
         :value="values[setting.identifier]"
         :signup-approval-enabled="values.moderation__signup_approval_enabled"
-        @input="set(setting.identifier, $event)" />
+        @input="set(setting.identifier, $event)"
+      />
       <input
-        :id="setting.identifier"
-        :name="setting.identifier"
         v-else-if="setting.field.widget.class === 'PasswordInput'"
+        :id="setting.identifier"
+        v-model="values[setting.identifier]"
+        :name="setting.identifier"
         type="password"
         class="ui input"
-        v-model="values[setting.identifier]" />
+      >
       <input
-        :id="setting.identifier"
-        :name="setting.identifier"
         v-else-if="setting.field.widget.class === 'TextInput'"
+        :id="setting.identifier"
+        v-model="values[setting.identifier]"
+        :name="setting.identifier"
         type="text"
         class="ui input"
-        v-model="values[setting.identifier]" />
+      >
       <input
-        :id="setting.identifier"
-        :name="setting.identifier"
         v-else-if="setting.field.class === 'IntegerField'"
+        :id="setting.identifier"
+        v-model.number="values[setting.identifier]"
+        :name="setting.identifier"
         type="number"
         class="ui input"
-        v-model.number="values[setting.identifier]" />
+      >
       <textarea
-        :id="setting.identifier"
-        :name="setting.identifier"
         v-else-if="setting.field.widget.class === 'Textarea'"
+        :id="setting.identifier"
+        v-model="values[setting.identifier]"
+        :name="setting.identifier"
         type="text"
         class="ui input"
-        v-model="values[setting.identifier]" />
-      <div v-else-if="setting.field.widget.class === 'CheckboxInput'" class="ui toggle checkbox">
+      />
+      <div
+        v-else-if="setting.field.widget.class === 'CheckboxInput'"
+        class="ui toggle checkbox"
+      >
         <input
           :id="setting.identifier"
-          :name="setting.identifier"
           v-model="values[setting.identifier]"
-          type="checkbox" />
+          :name="setting.identifier"
+          type="checkbox"
+        >
         <label :for="setting.identifier">{{ setting.verbose_name }}</label>
-        <p v-if="setting.help_text">{{ setting.help_text }}</p>
+        <p v-if="setting.help_text">
+          {{ setting.help_text }}
+        </p>
       </div>
       <select
-        :id="setting.identifier"
         v-else-if="setting.field.class === 'MultipleChoiceField'"
+        :id="setting.identifier"
         v-model="values[setting.identifier]"
         multiple
-        class="ui search selection dropdown">
-        <option v-for="v in setting.additional_data.choices" :value="v[0]">{{ v[1] }}</option>
+        class="ui search selection dropdown"
+      >
+        <option
+          v-for="(v, index) in setting.additional_data.choices"
+          :key="index"
+          :value="v[0]"
+        >
+          {{ v[1] }}
+        </option>
       </select>
       <div v-else-if="setting.field.widget.class === 'ImageWidget'">
-        <input :id="setting.identifier" type="file" :ref="setting.identifier">
+        <input
+          :id="setting.identifier"
+          :ref="setting.identifier"
+          type="file"
+        >
         <div v-if="values[setting.identifier]">
-          <div class="ui hidden divider"></div>
-          <h3 class="ui header"><translate translate-context="Content/Settings/Title/Noun">Current image</translate></h3>
-          <img class="ui image" alt="" v-if="values[setting.identifier]" :src="$store.getters['instance/absoluteUrl'](values[setting.identifier])" />
+          <div class="ui hidden divider" />
+          <h3 class="ui header">
+            <translate translate-context="Content/Settings/Title/Noun">
+              Current image
+            </translate>
+          </h3>
+          <img
+            v-if="values[setting.identifier]"
+            class="ui image"
+            alt=""
+            :src="$store.getters['instance/absoluteUrl'](values[setting.identifier])"
+          >
         </div>
       </div>
     </div>
     <button
       type="submit"
-      :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']">
-        <translate translate-context="Content/*/Button.Label/Verb">Save</translate>
+      :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
+    >
+      <translate translate-context="Content/*/Button.Label/Verb">
+        Save
+      </translate>
     </button>
   </form>
 </template>
@@ -91,12 +161,12 @@ import axios from 'axios'
 import lodash from '@/lodash'
 
 export default {
-  props: {
-    group: {type: Object, required: true},
-    settingsData: {type: Array, required: true}
-  },
   components: {
-    SignupFormBuilder:  () => import(/* webpackChunkName: "signup-form-builder" */ "@/components/admin/SignupFormBuilder"),
+    SignupFormBuilder: () => import(/* webpackChunkName: "signup-form-builder" */ '@/components/admin/SignupFormBuilder')
+  },
+  props: {
+    group: { type: Object, required: true },
+    settingsData: { type: Array, required: true }
   },
   data () {
     return {
@@ -106,28 +176,44 @@ export default {
       isLoading: false
     }
   },
+  computed: {
+    settings () {
+      const byIdentifier = {}
+      this.settingsData.forEach(e => {
+        byIdentifier[e.identifier] = e
+      })
+      return this.group.settings.map(e => {
+        return { ...byIdentifier[e.name], fieldType: e.fieldType, fieldParams: e.fieldParams || {} }
+      })
+    },
+    fileSettings () {
+      return this.settings.filter((s) => {
+        return s.field.widget.class === 'ImageWidget'
+      })
+    }
+  },
   created () {
-    let self = this
+    const self = this
     this.settings.forEach(e => {
       self.values[e.identifier] = e.value
     })
   },
   methods: {
     save () {
-      let self = this
+      const self = this
       this.isLoading = true
       self.errors = []
       self.result = null
       let postData = self.values
       let contentType = 'application/json'
-      let fileSettingsIDs = this.fileSettings.map((s) => {return s.identifier})
+      const fileSettingsIDs = this.fileSettings.map((s) => { return s.identifier })
       if (fileSettingsIDs.length > 0) {
         contentType = 'multipart/form-data'
         postData = new FormData()
         this.settings.forEach((s) => {
           if (fileSettingsIDs.indexOf(s.identifier) > -1) {
-            let input = self.$refs[s.identifier][0]
-            let files = input.files
+            const input = self.$refs[s.identifier][0]
+            const files = input.files
             console.log('ref', input, files)
             if (files && files.length > 0) {
               postData.append(s.identifier, files[0])
@@ -139,8 +225,8 @@ export default {
       }
       axios.post('instance/admin/settings/bulk/', postData, {
         headers: {
-          'Content-Type': contentType,
-        },
+          'Content-Type': contentType
+        }
       }).then((response) => {
         self.result = true
         response.data.forEach((s) => {
@@ -157,22 +243,6 @@ export default {
       // otherwise reactivity doesn't trigger :/
       this.values = lodash.cloneDeep(this.values)
       this.$set(this.values, key, value)
-    }
-  },
-  computed: {
-    settings () {
-      let byIdentifier = {}
-      this.settingsData.forEach(e => {
-        byIdentifier[e.identifier] = e
-      })
-      return this.group.settings.map(e => {
-        return {...byIdentifier[e.name], fieldType: e.fieldType, fieldParams: e.fieldParams || {}}
-      })
-    },
-    fileSettings () {
-      return this.settings.filter((s) => {
-        return s.field.widget.class === 'ImageWidget'
-      })
     }
   }
 }

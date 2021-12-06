@@ -133,7 +133,7 @@ export default {
     // Send a request to the login URL and save the returned JWT
     login ({ commit, dispatch }, { next, credentials, onError }) {
       const router = require('@/router').default
-      var form = new FormData()
+      const form = new FormData()
       Object.keys(credentials).forEach((k) => {
         form.set(k, credentials[k])
       })

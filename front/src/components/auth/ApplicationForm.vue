@@ -1,19 +1,45 @@
 <template>
-
-  <form class="ui form component-form" role="alert" @submit.prevent="submit()">
-    <div v-if="errors.length > 0" class="ui negative message">
-      <h4 class="header"><translate translate-context="Content/*/Error message.Title">We cannot save your changes</translate></h4>
+  <form
+    class="ui form component-form"
+    role="alert"
+    @submit.prevent="submit()"
+  >
+    <div
+      v-if="errors.length > 0"
+      class="ui negative message"
+    >
+      <h4 class="header">
+        <translate translate-context="Content/*/Error message.Title">
+          We cannot save your changes
+        </translate>
+      </h4>
       <ul class="list">
-        <li v-for="error in errors">{{ error }}</li>
+        <li
+          v-for="(error, key) in errors"
+          :key="key"
+        >
+          {{ error }}
+        </li>
       </ul>
     </div>
     <div class="ui field">
       <label for="application-name"><translate translate-context="*/*/*/Noun">Name</translate></label>
-      <input id="application-name" name="name" required type="text" v-model="fields.name" />
+      <input
+        id="application-name"
+        v-model="fields.name"
+        name="name"
+        required
+        type="text"
+      >
     </div>
     <div class="ui field">
       <label for="redirect-uris"><translate translate-context="Content/Applications/Input.Label/Noun">Redirect URI</translate></label>
-      <input id="redirect-uris" name="redirect_uris" type="text" v-model="fields.redirect_uris" />
+      <input
+        id="redirect-uris"
+        v-model="fields.redirect_uris"
+        name="redirect_uris"
+        type="text"
+      >
       <p class="help">
         <translate translate-context="Content/Applications/Help Text">
           Use "urn:ietf:wg:oauth:2.0:oob" as a redirect URI if your application is not served on the web.
@@ -28,13 +54,18 @@
         </translate>
       </p>
       <div class="ui stackable two column grid">
-        <div v-for="parent in allScopes" class="column">
+        <div
+          v-for="(parent, key) in allScopes"
+          :key="key"
+          class="column"
+        >
           <div class="ui parent checkbox">
             <input
+              :id="parent.id"
               v-model="scopeArray"
               :value="parent.id"
-              :id="parent.id"
-              type="checkbox">
+              type="checkbox"
+            >
             <label :for="parent.id">
               {{ parent.label }}
               <p class="help">
@@ -43,13 +74,17 @@
             </label>
           </div>
 
-          <div v-for="child in parent.children">
+          <div
+            v-for="(child, index) in parent.children"
+            :key="index"
+          >
             <div class="ui child checkbox">
               <input
+                :id="child.id"
                 v-model="scopeArray"
                 :value="child.id"
-                :id="child.id"
-                type="checkbox">
+                type="checkbox"
+              >
               <label :for="child.id">
                 {{ child.id }}
                 <p class="help">
@@ -60,29 +95,43 @@
           </div>
         </div>
       </div>
-
-      </div>
-    <button :class="['ui', {'loading': isLoading}, 'success', 'button']" type="submit">
-      <translate v-if="updating" key="2" translate-context="Content/Applications/Button.Label/Verb">Update application</translate>
-      <translate v-else key="3" translate-context="Content/Applications/Button.Label/Verb">Create application</translate>
+    </div>
+    <button
+      :class="['ui', {'loading': isLoading}, 'success', 'button']"
+      type="submit"
+    >
+      <translate
+        v-if="updating"
+        key="2"
+        translate-context="Content/Applications/Button.Label/Verb"
+      >
+        Update application
+      </translate>
+      <translate
+        v-else
+        key="3"
+        translate-context="Content/Applications/Button.Label/Verb"
+      >
+        Create application
+      </translate>
     </button>
   </form>
 </template>
 
 <script>
-import _ from "@/lodash"
-import axios from "axios"
-import TranslationsMixin from "@/components/mixins/Translations"
+import _ from '@/lodash'
+import axios from 'axios'
+import TranslationsMixin from '@/components/mixins/Translations'
 
 export default {
   mixins: [TranslationsMixin],
   props: {
-    app: {type: Object, required: false},
-    defaults: {type: Object, required: false}
+    app: { type: Object, required: false, default: () => { return {} } },
+    defaults: { type: Object, required: false, default: () => { return {} } }
   },
-  data() {
-    let app = this.app || {}
-    let defaults = this.defaults || {}
+  data () {
+    const app = this.app || {}
+    const defaults = this.defaults || {}
     return {
       isLoading: false,
       errors: [],
@@ -92,44 +141,18 @@ export default {
         scopes: app.scopes || defaults.scopes || 'read'
       },
       scopes: [
-        {id: "profile", icon: 'user'},
-        {id: "libraries", icon: 'book'},
-        {id: "favorites", icon: 'heart'},
-        {id: "listenings", icon: 'music'},
-        {id: "follows", icon: 'users'},
-        {id: "playlists", icon: 'list'},
-        {id: "radios", icon: 'rss'},
-        {id: "filters", icon: 'eye slash'},
-        {id: "notifications", icon: 'bell'},
-        {id: "edits", icon: 'pencil alternate'},
+        { id: 'profile', icon: 'user' },
+        { id: 'libraries', icon: 'book' },
+        { id: 'favorites', icon: 'heart' },
+        { id: 'listenings', icon: 'music' },
+        { id: 'follows', icon: 'users' },
+        { id: 'playlists', icon: 'list' },
+        { id: 'radios', icon: 'rss' },
+        { id: 'filters', icon: 'eye slash' },
+        { id: 'notifications', icon: 'bell' },
+        { id: 'edits', icon: 'pencil alternate' }
       ]
     }
-  },
-  methods: {
-    submit () {
-      this.errors = []
-      let self = this
-      self.isLoading = true
-      let payload = this.fields
-      let event, promise, message
-      if (this.updating) {
-        event = 'updated'
-        promise = axios.patch(`oauth/apps/${this.app.client_id}/`, payload)
-      }  else {
-        event = 'created'
-        promise = axios.post(`oauth/apps/`, payload)
-      }
-      return promise.then(
-        response => {
-          self.isLoading = false
-          self.$emit(event, response.data)
-        },
-        error => {
-          self.isLoading = false
-          self.errors = error.backendErrors
-        }
-      )
-    },
   },
   computed: {
     updating () {
@@ -144,8 +167,8 @@ export default {
       }
     },
     allScopes () {
-      let self = this
-      let parents = [
+      const self = this
+      const parents = [
         {
           id: 'read',
           label: this.$pgettext('Content/OAuth Scopes/Label/Verb', 'Read'),
@@ -157,18 +180,44 @@ export default {
           label: this.$pgettext('Content/OAuth Scopes/Label/Verb', 'Write'),
           description: this.$pgettext('Content/OAuth Scopes/Help Text', 'Write-only access to user data'),
           value: this.scopeArray.indexOf('write') > -1
-        },
+        }
       ]
       parents.forEach((p) => {
         p.children = self.scopes.map(s => {
-          let id = `${p.id}:${s.id}`
+          const id = `${p.id}:${s.id}`
           return {
             id,
-            value: this.scopeArray.indexOf(id) > -1,
+            value: this.scopeArray.indexOf(id) > -1
           }
         })
       })
       return parents
+    }
+  },
+  methods: {
+    submit () {
+      this.errors = []
+      const self = this
+      self.isLoading = true
+      const payload = this.fields
+      let event, promise
+      if (this.updating) {
+        event = 'updated'
+        promise = axios.patch(`oauth/apps/${this.app.client_id}/`, payload)
+      } else {
+        event = 'created'
+        promise = axios.post('oauth/apps/', payload)
+      }
+      return promise.then(
+        response => {
+          self.isLoading = false
+          self.$emit(event, response.data)
+        },
+        error => {
+          self.isLoading = false
+          self.errors = error.backendErrors
+        }
+      )
     }
   }
 }

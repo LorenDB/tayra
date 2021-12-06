@@ -4,57 +4,133 @@
       <div class="fields">
         <div class="ui field">
           <label for="domains-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-          <input id="domains-search" name="search" type="text" v-model="search" :placeholder="labels.searchPlaceholder" />
+          <input
+            id="domains-search"
+            v-model="search"
+            name="search"
+            type="text"
+            :placeholder="labels.searchPlaceholder"
+          >
         </div>
-        <div class="field" v-if="allowListEnabled">
+        <div
+          v-if="allowListEnabled"
+          class="field"
+        >
           <label for="domains-allow-list"><translate translate-context="Content/Moderation/*/Adjective">Is present on allow-list</translate></label>
-          <select id="domains-allow-list" class="ui dropdown" v-model="allowed">
-            <option :value="null"><translate translate-context="Content/*/Dropdown">All</translate></option>
-            <option :value="true"><translate translate-context="*/*/*">Yes</translate></option>
-            <option :value="false"><translate translate-context="*/*/*">No</translate></option>
+          <select
+            id="domains-allow-list"
+            v-model="allowed"
+            class="ui dropdown"
+          >
+            <option :value="null">
+              <translate translate-context="Content/*/Dropdown">
+                All
+              </translate>
+            </option>
+            <option :value="true">
+              <translate translate-context="*/*/*">
+                Yes
+              </translate>
+            </option>
+            <option :value="false">
+              <translate translate-context="*/*/*">
+                No
+              </translate>
+            </option>
           </select>
         </div>
         <div class="field">
           <label for="domains-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
-          <select id="domains-ordering" class="ui dropdown" v-model="ordering">
-            <option v-for="option in orderingOptions" :value="option[0]">
+          <select
+            id="domains-ordering"
+            v-model="ordering"
+            class="ui dropdown"
+          >
+            <option
+              v-for="(option, key) in orderingOptions"
+              :key="key"
+              :value="option[0]"
+            >
               {{ sharedLabels.filters[option[1]] }}
             </option>
           </select>
         </div>
         <div class="field">
           <label for="domains-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate></label>
-          <select id="domains-ordering-direction" class="ui dropdown" v-model="orderingDirection">
-            <option value="+"><translate translate-context="Content/Search/Dropdown">Ascending</translate></option>
-            <option value="-"><translate translate-context="Content/Search/Dropdown">Descending</translate></option>
+          <select
+            id="domains-ordering-direction"
+            v-model="orderingDirection"
+            class="ui dropdown"
+          >
+            <option value="+">
+              <translate translate-context="Content/Search/Dropdown">
+                Ascending
+              </translate>
+            </option>
+            <option value="-">
+              <translate translate-context="Content/Search/Dropdown">
+                Descending
+              </translate>
+            </option>
           </select>
         </div>
       </div>
-      </div>
+    </div>
     <div class="dimmable">
-      <div v-if="isLoading" class="ui active inverted dimmer">
-        <div class="ui loader"></div>
+      <div
+        v-if="isLoading"
+        class="ui active inverted dimmer"
+      >
+        <div class="ui loader" />
       </div>
       <action-table
         v-if="result && result.results.length > 0"
-        @action-launched="fetchData"
         :objects-data="result"
         :actions="actions"
         action-url="manage/federation/domains/action/"
-        idField="name"
-        :filters="actionFilters">
+        id-field="name"
+        :filters="actionFilters"
+        @action-launched="fetchData"
+      >
         <template slot="header-cells">
-          <th><translate translate-context="*/*/*/Noun">Name</translate></th>
-          <th><translate translate-context="*/*/*/Noun">Users</translate></th>
-          <th><translate translate-context="Content/Moderation/*/Noun">Received messages</translate></th>
-          <th><translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">First seen</translate></th>
-          <th><translate translate-context="Content/Moderation/Table.Label/Short">Under moderation rule</translate></th>
+          <th>
+            <translate translate-context="*/*/*/Noun">
+              Name
+            </translate>
+          </th>
+          <th>
+            <translate translate-context="*/*/*/Noun">
+              Users
+            </translate>
+          </th>
+          <th>
+            <translate translate-context="Content/Moderation/*/Noun">
+              Received messages
+            </translate>
+          </th>
+          <th>
+            <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
+              First seen
+            </translate>
+          </th>
+          <th>
+            <translate translate-context="Content/Moderation/Table.Label/Short">
+              Under moderation rule
+            </translate>
+          </th>
         </template>
-        <template slot="row-cells" slot-scope="scope">
+        <template
+          slot="row-cells"
+          slot-scope="scope"
+        >
           <td>
             <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: scope.obj.name }}">
               {{ scope.obj.name }}
-              <i v-if="allowListEnabled && scope.obj.allowed" class="success check icon" :title="labels.allowListTitle"></i>
+              <i
+                v-if="allowListEnabled && scope.obj.allowed"
+                class="success check icon"
+                :title="labels.allowListTitle"
+              />
             </router-link>
           </td>
           <td>
@@ -64,33 +140,40 @@
             {{ scope.obj.outbox_activities_count }}
           </td>
           <td>
-            <human-date :date="scope.obj.creation_date"></human-date>
+            <human-date :date="scope.obj.creation_date" />
           </td>
           <td>
-            <span v-if="scope.obj.instance_policy"><i class="shield icon"></i> <translate translate-context="*/*/*">Yes</translate></span>
+            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> <translate translate-context="*/*/*">Yes</translate></span>
           </td>
         </template>
       </action-table>
-      <div v-else class="ui placeholder segment">
+      <div
+        v-else
+        class="ui placeholder segment"
+      >
         <div class="ui icon header">
-          <i class="server icon"></i>
-          <translate translate-context="Content/Home/Placeholder">No other pods found</translate>
+          <i class="server icon" />
+          <translate translate-context="Content/Home/Placeholder">
+            No other pods found
+          </translate>
         </div>
       </div>
     </div>
     <div>
       <pagination
         v-if="result && result.count > paginateBy"
-        @page-changed="selectPage"
         :compact="true"
         :current="page"
         :paginate-by="paginateBy"
         :total="result.count"
-        ></pagination>
+        @page-changed="selectPage"
+      />
 
       <span v-if="result && result.results.length > 0">
-        <translate translate-context="Content/*/Paragraph"
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}">
+        <translate
+          translate-context="Content/*/Paragraph"
+          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
+        >
           Showing results %{ start }-%{ end } on %{ total }
         </translate>
       </span>
@@ -108,17 +191,17 @@ import OrderingMixin from '@/components/mixins/Ordering'
 import TranslationsMixin from '@/components/mixins/Translations'
 
 export default {
-  mixins: [OrderingMixin, TranslationsMixin],
-  props: {
-    filters: {type: Object, required: false},
-    allowListEnabled: {type: Boolean, default: false},
-  },
   components: {
     Pagination,
     ActionTable
   },
+  mixins: [OrderingMixin, TranslationsMixin],
+  props: {
+    filters: { type: Object, required: false, default: function () { return {} } },
+    allowListEnabled: { type: Boolean, default: false }
+  },
   data () {
-    let defaultOrdering = this.getOrderingFromString(this.defaultOrdering || '-creation_date')
+    const defaultOrdering = this.getOrderingFromString(this.defaultOrdering || '-creation_date')
     return {
       time,
       isLoading: false,
@@ -138,45 +221,15 @@ export default {
 
     }
   },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      let baseFilters = {
-        'page': this.page,
-        'page_size': this.paginateBy,
-        'q': this.search,
-        'ordering': this.getOrderingAsString(),
-      }
-      if (this.allowed !== null) {
-        baseFilters.allowed = this.allowed
-      }
-      let params = _.merge(baseFilters, this.filters)
-      let self = this
-      self.isLoading = true
-      self.checked = []
-      axios.get('/manage/federation/domains/', {params: params}).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  },
   computed: {
     labels () {
       return {
         searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by name…'),
-        allowListTitle: this.$pgettext('Content/Moderation/Popup', 'This domain is present in your allow-list'),
+        allowListTitle: this.$pgettext('Content/Moderation/Popup', 'This domain is present in your allow-list')
       }
     },
     actionFilters () {
-      var currentFilters = {
+      const currentFilters = {
         q: this.search
       }
       if (this.filters) {
@@ -205,7 +258,7 @@ export default {
           filterCheckable: (obj) => {
             return obj.allowed
           }
-        },
+        }
       ]
     }
   },
@@ -225,6 +278,36 @@ export default {
     },
     orderingDirection () {
       this.fetchData()
+    }
+  },
+  created () {
+    this.fetchData()
+  },
+  methods: {
+    fetchData () {
+      const baseFilters = {
+        page: this.page,
+        page_size: this.paginateBy,
+        q: this.search,
+        ordering: this.getOrderingAsString()
+      }
+      if (this.allowed !== null) {
+        baseFilters.allowed = this.allowed
+      }
+      const params = _.merge(baseFilters, this.filters)
+      const self = this
+      self.isLoading = true
+      self.checked = []
+      axios.get('/manage/federation/domains/', { params: params }).then((response) => {
+        self.result = response.data
+        self.isLoading = false
+      }, error => {
+        self.isLoading = false
+        self.errors = error.backendErrors
+      })
+    },
+    selectPage: function (page) {
+      this.page = page
     }
   }
 }

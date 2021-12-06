@@ -1,36 +1,84 @@
 <template>
   <div class="ui form">
-    <div v-if="errors.length > 0" role="alert" class="ui negative message">
-      <h4 class="header"><translate translate-context="Content/*/Error message.Title">Your attachment cannot be saved</translate></h4>
+    <div
+      v-if="errors.length > 0"
+      role="alert"
+      class="ui negative message"
+    >
+      <h4 class="header">
+        <translate translate-context="Content/*/Error message.Title">
+          Your attachment cannot be saved
+        </translate>
+      </h4>
       <ul class="list">
-        <li v-for="error in errors">{{ error }}</li>
+        <li
+          v-for="(error, key) in errors"
+          :key="key"
+        >
+          {{ error }}
+        </li>
       </ul>
     </div>
     <div class="ui field">
       <span id="avatarLabel">
-        <slot name="label"></slot>
+        <slot name="label" />
       </span>
       <div class="ui stackable grid row">
         <div class="three wide column">
-          <img alt="" :class="['ui', imageClass, 'image']" v-if="value && value === initialValue" :src="$store.getters['instance/absoluteUrl'](`api/v1/attachments/${value}/proxy?next=medium_square_crop`)" />
-          <img alt="" :class="['ui', imageClass, 'image']" v-else-if="attachment" :src="$store.getters['instance/absoluteUrl'](`api/v1/attachments/${attachment.uuid}/proxy?next=medium_square_crop`)" />
-          <div :class="['ui', imageClass, 'static', 'large placeholder image']" v-else></div>
+          <img
+            v-if="value && value === initialValue"
+            alt=""
+            :class="['ui', imageClass, 'image']"
+            :src="$store.getters['instance/absoluteUrl'](`api/v1/attachments/${value}/proxy?next=medium_square_crop`)"
+          >
+          <img
+            v-else-if="attachment"
+            alt=""
+            :class="['ui', imageClass, 'image']"
+            :src="$store.getters['instance/absoluteUrl'](`api/v1/attachments/${attachment.uuid}/proxy?next=medium_square_crop`)"
+          >
+          <div
+            v-else
+            :class="['ui', imageClass, 'static', 'large placeholder image']"
+          />
         </div>
         <div class="eleven wide column">
           <div class="file-input">
             <label :for="attachmentId">
               <translate translate-context="*/*/*">Upload New Picture…</translate>
             </label>
-            <input class="ui input" ref="attachment" type="file" :id="attachmentId" accept="image/x-png,image/jpeg" @change="submit" />
+            <input
+              :id="attachmentId"
+              ref="attachment"
+              class="ui input"
+              type="file"
+              accept="image/x-png,image/jpeg"
+              @change="submit"
+            >
           </div>
-          <div class="ui very small hidden divider"></div>
-          <p><translate translate-context="Content/*/Paragraph">PNG or JPG. Dimensions should be between 1400x1400px and 3000x3000px. Maximum file size allowed is 5MB.</translate></p>
-          <button class="ui basic tiny button" v-if="value" @click.stop.prevent="remove(value)">
-            <translate translate-context="Content/Radio/Button.Label/Verb">Remove</translate>
+          <div class="ui very small hidden divider" />
+          <p>
+            <translate translate-context="Content/*/Paragraph">
+              PNG or JPG. Dimensions should be between 1400x1400px and 3000x3000px. Maximum file size allowed is 5MB.
+            </translate>
+          </p>
+          <button
+            v-if="value"
+            class="ui basic tiny button"
+            @click.stop.prevent="remove(value)"
+          >
+            <translate translate-context="Content/Radio/Button.Label/Verb">
+              Remove
+            </translate>
           </button>
-          <div v-if="isLoading" class="ui active inverted dimmer">
+          <div
+            v-if="isLoading"
+            class="ui active inverted dimmer"
+          >
             <div class="ui indeterminate text loader">
-              <translate translate-context="Content/*/*/Noun">Uploading file…</translate>
+              <translate translate-context="Content/*/*/Noun">
+                Uploading file…
+              </translate>
             </div>
           </div>
         </div>
@@ -43,8 +91,8 @@ import axios from 'axios'
 
 export default {
   props: {
-    value: {},
-    imageClass: {default: '', required: false}
+    value: { type: String, required: true },
+    imageClass: { type: String, default: '', required: false }
   },
   data () {
     return {
@@ -52,21 +100,29 @@ export default {
       isLoading: false,
       errors: [],
       initialValue: this.value,
-      attachmentId: Math.random().toString(36).substring(7),
+      attachmentId: Math.random().toString(36).substring(7)
+    }
+  },
+  watch: {
+    value (v) {
+      if (this.attachment && v === this.initialValue) {
+        // we had a reset to initial value
+        this.remove(this.attachment.uuid)
+      }
     }
   },
   methods: {
-    submit() {
+    submit () {
       this.isLoading = true
       this.errors = []
-      let self = this
+      const self = this
       this.file = this.$refs.attachment.files[0]
-      let formData = new FormData()
-      formData.append("file", this.file)
+      const formData = new FormData()
+      formData.append('file', this.file)
       axios
-        .post(`attachments/`, formData, {
+        .post('attachments/', formData, {
           headers: {
-            "Content-Type": "multipart/form-data"
+            'Content-Type': 'multipart/form-data'
           }
         })
         .then(
@@ -81,10 +137,10 @@ export default {
           }
         )
     },
-    remove(uuid) {
+    remove (uuid) {
       this.isLoading = true
       this.errors = []
-      let self = this
+      const self = this
       axios.delete(`attachments/${uuid}/`)
         .then(
           response => {
@@ -97,14 +153,6 @@ export default {
             self.errors = error.backendErrors
           }
         )
-    },
-  },
-  watch: {
-    value (v) {
-      if (this.attachment && v === this.initialValue) {
-        // we had a reset to initial value
-        this.remove(this.attachment.uuid)
-      }
     }
   }
 }

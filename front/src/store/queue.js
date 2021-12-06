@@ -6,7 +6,7 @@ export default {
   state: {
     tracks: [],
     currentIndex: -1,
-    ended: true,
+    ended: true
   },
   mutations: {
     reset (state) {
@@ -20,16 +20,16 @@ export default {
     ended (state, value) {
       state.ended = value
     },
-    splice (state, {start, size}) {
+    splice (state, { start, size }) {
       state.tracks.splice(start, size)
     },
     tracks (state, value) {
       state.tracks = value
     },
-    insert (state, {track, index}) {
+    insert (state, { track, index }) {
       state.tracks.splice(index, 0, track)
     },
-    reorder (state, {tracks, oldIndex, newIndex}) {
+    reorder (state, { tracks, oldIndex, newIndex }) {
       // called when the user uses drag / drop to reorder
       // tracks in queue
       state.tracks = tracks
@@ -60,18 +60,18 @@ export default {
     isEmpty: state => state.tracks.length === 0
   },
   actions: {
-    append ({commit, state, dispatch}, {track, index}) {
+    append ({ commit, state, dispatch }, { track, index }) {
       index = index || state.tracks.length
       if (index > state.tracks.length - 1) {
         // we simply push to the end
-        commit('insert', {track, index: state.tracks.length})
+        commit('insert', { track, index: state.tracks.length })
       } else {
         // we insert the track at given position
-        commit('insert', {track, index})
+        commit('insert', { track, index })
       }
     },
 
-    appendMany ({state, commit, dispatch}, {tracks, index, callback}) {
+    appendMany ({ state, commit, dispatch }, { tracks, index, callback }) {
       logger.default.info('Appending many tracks to the queue', tracks.map(e => { return e.title }))
       let shouldPlay = false
       if (state.tracks.length === 0) {
@@ -80,9 +80,9 @@ export default {
       } else {
         index = index || state.tracks.length
       }
-      let total = tracks.length
+      const total = tracks.length
       tracks.forEach((t, i) => {
-        let p = dispatch('append', {track: t, index: index})
+        const p = dispatch('append', { track: t, index: index })
         index += 1
         if (callback && i + 1 === total) {
           p.then(callback)
@@ -95,13 +95,13 @@ export default {
       })
     },
 
-    cleanTrack ({state, dispatch, commit}, index) {
+    cleanTrack ({ state, dispatch, commit }, index) {
       // are we removing current playin track
       const current = index === state.currentIndex
       if (current) {
-        dispatch('player/stop', null, {root: true})
+        dispatch('player/stop', null, { root: true })
       }
-      commit('splice', {start: index, size: 1})
+      commit('splice', { start: index, size: 1 })
       if (index < state.currentIndex) {
         commit('currentIndex', state.currentIndex - 1)
       } else if (index > 0 && index === state.tracks.length && current) {
@@ -115,18 +115,18 @@ export default {
         commit('currentIndex', index)
       }
       if (state.currentIndex + 1 === state.tracks.length) {
-        dispatch('radios/populateQueue', null, {root: true})
+        dispatch('radios/populateQueue', null, { root: true })
       }
     },
 
-    previous ({state, dispatch, rootState}) {
+    previous ({ state, dispatch, rootState }) {
       if (state.currentIndex > 0 && rootState.player.currentTime < 3) {
         dispatch('currentIndex', state.currentIndex - 1)
       } else {
         dispatch('currentIndex', state.currentIndex)
       }
     },
-    next ({state, dispatch, commit, rootState}) {
+    next ({ state, dispatch, commit, rootState }) {
       if (rootState.player.looping === 2 && state.currentIndex >= state.tracks.length - 1) {
         logger.default.info('Going back to the beginning of the queue')
         return dispatch('currentIndex', 0)
@@ -139,29 +139,29 @@ export default {
         }
       }
     },
-    last ({state, dispatch}) {
+    last ({ state, dispatch }) {
       dispatch('currentIndex', state.tracks.length - 1)
     },
-    currentIndex ({commit, state, rootState, dispatch}, index) {
+    currentIndex ({ commit, state, rootState, dispatch }, index) {
       commit('ended', false)
-      commit('player/currentTime', 0, {root: true})
+      commit('player/currentTime', 0, { root: true })
       commit('currentIndex', index)
       if (state.tracks.length - index <= 2 && rootState.radios.running) {
-        dispatch('radios/populateQueue', null, {root: true})
+        dispatch('radios/populateQueue', null, { root: true })
       }
     },
-    clean ({dispatch, commit}) {
-      dispatch('radios/stop', null, {root: true})
-      dispatch('player/stop', null, {root: true})
+    clean ({ dispatch, commit }) {
+      dispatch('radios/stop', null, { root: true })
+      dispatch('player/stop', null, { root: true })
       commit('tracks', [])
       dispatch('currentIndex', -1)
       // so we replay automatically on next track append
       commit('ended', true)
     },
-    async shuffle ({dispatch, commit, state}, callback) {
-      let shuffled = _.shuffle(state.tracks)
+    async shuffle ({ dispatch, commit, state }, callback) {
+      const shuffled = _.shuffle(state.tracks)
       commit('tracks', [])
-      let params = {tracks: shuffled}
+      const params = { tracks: shuffled }
       if (callback) {
         params.callback = callback
       }

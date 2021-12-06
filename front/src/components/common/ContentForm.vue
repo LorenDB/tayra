@@ -2,48 +2,71 @@
   <div class="content-form ui segments">
     <div class="ui segment">
       <div class="ui tiny secondary pointing menu">
-        <button @click.prevent="isPreviewing = false" :class="[{active: !isPreviewing}, 'item']">
-          <translate translate-context="*/Form/Menu.item">Write</translate>
+        <button
+          :class="[{active: !isPreviewing}, 'item']"
+          @click.prevent="isPreviewing = false"
+        >
+          <translate translate-context="*/Form/Menu.item">
+            Write
+          </translate>
         </button>
-        <button @click.prevent="isPreviewing = true" :class="[{active: isPreviewing}, 'item']">
-          <translate translate-context="*/Form/Menu.item">Preview</translate>
+        <button
+          :class="[{active: isPreviewing}, 'item']"
+          @click.prevent="isPreviewing = true"
+        >
+          <translate translate-context="*/Form/Menu.item">
+            Preview
+          </translate>
         </button>
       </div>
-      <template v-if="isPreviewing" >
-
-        <div class="ui placeholder" v-if="isLoadingPreview">
+      <template v-if="isPreviewing">
+        <div
+          v-if="isLoadingPreview"
+          class="ui placeholder"
+        >
           <div class="paragraph">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
+            <div class="line" />
+            <div class="line" />
+            <div class="line" />
+            <div class="line" />
           </div>
         </div>
         <p v-else-if="preview === null">
-          <translate translate-context="*/Form/Paragraph">Nothing to preview.</translate>
+          <translate translate-context="*/Form/Paragraph">
+            Nothing to preview.
+          </translate>
         </p>
-        <div v-html="preview" v-else></div>
+        <div
+          v-else
+          v-html="preview"
+        />
       </template>
       <template v-else>
         <div class="ui transparent input">
           <textarea
-            ref="textarea"
-            :name="fieldId"
             :id="fieldId"
-            :rows="rows"
+            ref="textarea"
             v-model="newValue"
+            :name="fieldId"
+            :rows="rows"
             :required="required"
-            :placeholder="placeholder || labels.placeholder"></textarea>
+            :placeholder="placeholder || labels.placeholder"
+          />
         </div>
-        <div class="ui very small hidden divider"></div>
+        <div class="ui very small hidden divider" />
       </template>
     </div>
     <div class="ui bottom attached segment">
-      <span :class="['right', 'floated', {'ui danger text': remainingChars < 0}]" v-if="charLimit">
+      <span
+        v-if="charLimit"
+        :class="['right', 'floated', {'ui danger text': remainingChars < 0}]"
+      >
         {{ remainingChars }}
       </span>
       <p>
-        <translate translate-context="*/Form/Paragraph">Markdown syntax is supported.</translate>
+        <translate translate-context="*/Form/Paragraph">
+          Markdown syntax is supported.
+        </translate>
       </p>
     </div>
   </div>
@@ -54,50 +77,31 @@ import axios from 'axios'
 
 export default {
   props: {
-    value: {type: String, default: ""},
-    fieldId: {type: String, default: "change-content"},
-    placeholder: {type: String, default: null},
-    autofocus: {type: Boolean, default: false},
-    charLimit: {type: Number, default: 5000, required: false},
-    rows: {type: Number, default: 5, required: false},
-    permissive: {type: Boolean, default: false},
-    required: {type: Boolean, default: false},
+    value: { type: String, default: '' },
+    fieldId: { type: String, default: 'change-content' },
+    placeholder: { type: String, default: null },
+    autofocus: { type: Boolean, default: false },
+    charLimit: { type: Number, default: 5000, required: false },
+    rows: { type: Number, default: 5, required: false },
+    permissive: { type: Boolean, default: false },
+    required: { type: Boolean, default: false }
   },
   data () {
     return {
       isPreviewing: false,
       preview: null,
       newValue: this.value,
-      isLoadingPreview: false,
-    }
-  },
-  mounted () {
-    if (this.autofocus) {
-      this.$nextTick(() => {
-        this.$refs.textarea.focus()
-      })
-    }
-  },
-  methods: {
-    async loadPreview () {
-      this.isLoadingPreview = true
-      try {
-        let response = await axios.post('text-preview/', {text: this.newValue, permissive: this.permissive})
-        this.preview = response.data.rendered
-      } catch {
-
-      }
-      this.isLoadingPreview = false
+      isLoadingPreview: false
     }
   },
   computed: {
     labels () {
       return {
-        placeholder: this.$pgettext("*/Form/Placeholder", "Write a few words here…")
+        placeholder: this.$pgettext('*/Form/Placeholder', 'Write a few words here…')
       }
     },
     remainingChars () {
-      return this.charLimit - (this.value || "").length
+      return this.charLimit - (this.value || '').length
     }
   },
   watch: {
@@ -113,7 +117,7 @@ export default {
           await this.loadPreview()
         }
       },
-      immediate: true,
+      immediate: true
     },
     async isPreviewing (v) {
       if (v && !!this.value && this.preview === null && !this.isLoadingPreview) {
@@ -124,6 +128,25 @@ export default {
           this.$refs.textarea.focus()
         })
       }
+    }
+  },
+  mounted () {
+    if (this.autofocus) {
+      this.$nextTick(() => {
+        this.$refs.textarea.focus()
+      })
+    }
+  },
+  methods: {
+    async loadPreview () {
+      this.isLoadingPreview = true
+      try {
+        const response = await axios.post('text-preview/', { text: this.newValue, permissive: this.permissive })
+        this.preview = response.data.rendered
+      } catch {
+
+      }
+      this.isLoadingPreview = false
     }
   }
 }

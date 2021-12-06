@@ -101,12 +101,12 @@
         </template>
         <div class="row">
           <a
-             class="column"
-             href="https://funkwhale.audio/help"
-             target="_blank"
-             >
-             <i class="user-modal list-icon life ring outline icon" />
-               <span class="user-modal list-item">{{ labels.help }}</span>
+            class="column"
+            href="https://funkwhale.audio/help"
+            target="_blank"
+          >
+            <i class="user-modal list-icon life ring outline icon" />
+            <span class="user-modal list-item">{{ labels.help }}</span>
           </a>
         </div>
         <div class="row">

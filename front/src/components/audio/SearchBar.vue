@@ -1,11 +1,19 @@
 <template>
   <div class="ui fluid category search">
-    <slot></slot><div class="ui icon input">
-      <input :aria-label="labels.searchContent" ref="search" type="search" class="prompt" name="search" :placeholder="labels.placeholder" @keydown.esc="$event.target.blur()">
-      <i class="search icon"></i>
+    <slot /><div class="ui icon input">
+      <input
+        ref="search"
+        :aria-label="labels.searchContent"
+        type="search"
+        class="prompt"
+        name="search"
+        :placeholder="labels.placeholder"
+        @keydown.esc="$event.target.blur()"
+      >
+      <i class="search icon" />
     </div>
-    <div class="results"></div>
-    <slot name="after"></slot>
+    <div class="results" />
+    <slot name="after" />
     <GlobalEvents
       @keydown.shift.f.prevent.exact="focusSearch"
     />
@@ -16,11 +24,11 @@
 import jQuery from 'jquery'
 import router from '@/router'
 import lodash from '@/lodash'
-import GlobalEvents from "@/components/utils/global-events"
+import GlobalEvents from '@/components/utils/global-events'
 
 export default {
   components: {
-  GlobalEvents,
+    GlobalEvents
   },
   computed: {
     labels () {
@@ -31,22 +39,21 @@ export default {
     }
   },
   mounted () {
-    let artistLabel = this.$pgettext('*/*/*/Noun', 'Artist')
-    let albumLabel = this.$pgettext('*/*/*', 'Album')
-    let trackLabel = this.$pgettext('*/*/*/Noun', 'Track')
-    let tagLabel = this.$pgettext('*/*/*/Noun', 'Tag')
-    let self = this
-    var searchQuery;
+    const artistLabel = this.$pgettext('*/*/*/Noun', 'Artist')
+    const albumLabel = this.$pgettext('*/*/*', 'Album')
+    const trackLabel = this.$pgettext('*/*/*/Noun', 'Track')
+    const tagLabel = this.$pgettext('*/*/*/Noun', 'Tag')
+    const self = this
+    let searchQuery
 
-    jQuery(this.$el).keypress(function(e) {
-      if(e.which == 13) {
+    jQuery(this.$el).keypress(function (e) {
+      if (e.which === 13) {
         // Cancel any API search request to backend…
-        jQuery(this.$el).search('cancel query');
+        jQuery(this.$el).search('cancel query')
         // Go direct to the artist page…
-        router.push(`/search?q=${searchQuery}&type=artists`);
-	}
-    });
-
+        router.push(`/search?q=${searchQuery}&type=artists`)
+      }
+    })
 
     jQuery(this.$el).search({
       type: 'category',
@@ -57,9 +64,9 @@ export default {
         noResults: this.$pgettext('Sidebar/Search/Error.Label', 'Sorry, there are no results for this search')
       },
       onSelect (result, response) {
-        jQuery(self.$el).search("set value", searchQuery)
+        jQuery(self.$el).search('set value', searchQuery)
         router.push(result.routerUrl)
-        jQuery(self.$el).search("hide results")
+        jQuery(self.$el).search('hide results')
         return false
       },
       onSearchQuery (query) {
@@ -78,17 +85,17 @@ export default {
           return xhrObject
         },
         onResponse: function (initialResponse) {
-          let objId = self.extractObjId(searchQuery)
-          let results = {}
+          const objId = self.extractObjId(searchQuery)
+          const results = {}
           let isEmptyResults = true
-          let categories = [
+          const categories = [
             {
               code: 'federation',
-              name: self.$pgettext('*/*/*', 'Federation'),
+              name: self.$pgettext('*/*/*', 'Federation')
             },
             {
               code: 'podcasts',
-              name: self.$pgettext('*/*/*', 'Podcasts'),
+              name: self.$pgettext('*/*/*', 'Podcasts')
             },
             {
               code: 'artists',
@@ -148,12 +155,12 @@ export default {
               },
               getId (t) {
                 return t.name
-              },
+              }
             },
             {
               code: 'more',
-              name: '',
-            },
+              name: ''
+            }
           ]
           categories.forEach(category => {
             results[category.code] = {
@@ -161,29 +168,27 @@ export default {
               results: []
             }
             if (category.code === 'federation') {
-
               if (objId) {
                 isEmptyResults = false
-                let searchMessage = self.$pgettext('Search/*/*', 'Search on the fediverse')
-                results['federation'] = {
+                const searchMessage = self.$pgettext('Search/*/*', 'Search on the fediverse')
+                results.federation = {
                   name: self.$pgettext('*/*/*', 'Federation'),
                   results: [{
                     title: searchMessage,
                     routerUrl: {
                       name: 'search',
                       query: {
-                        id: objId,
+                        id: objId
                       }
                     }
                   }]
                 }
               }
-            }
-            else if (category.code === 'podcasts') {
+            } else if (category.code === 'podcasts') {
               if (objId) {
                 isEmptyResults = false
-                let searchMessage = self.$pgettext('Search/*/*', 'Subscribe to podcast via RSS')
-                results['podcasts'] = {
+                const searchMessage = self.$pgettext('Search/*/*', 'Subscribe to podcast via RSS')
+                results.podcasts = {
                   name: self.$pgettext('*/*/*', 'Podcasts'),
                   results: [{
                     title: searchMessage,
@@ -191,33 +196,31 @@ export default {
                       name: 'search',
                       query: {
                         id: objId,
-                        type: "rss"
+                        type: 'rss'
                       }
                     }
                   }]
                 }
               }
-            }
-            else if (category.code === 'more') {
-              let searchMessage = self.$pgettext('Search/*/*', 'More results 🡒')
-              results['more'] = {
+            } else if (category.code === 'more') {
+              const searchMessage = self.$pgettext('Search/*/*', 'More results 🡒')
+              results.more = {
                 name: '',
                 results: [{
                   title: searchMessage,
                   routerUrl: {
                     name: 'search',
                     query: {
-                      type: "artists",
+                      type: 'artists',
                       q: searchQuery
                     }
                   }
                 }]
               }
-            }
-            else {
+            } else {
               initialResponse[category.code].forEach(result => {
                 isEmptyResults = false
-                let id = category.getId(result)
+                const id = category.getId(result)
                 results[category.code].results.push({
                   title: category.getTitle(result),
                   id,

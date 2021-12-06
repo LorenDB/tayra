@@ -1,27 +1,27 @@
 <template>
-  <div></div>
+  <div />
 </template>
 <script>
 import $ from 'jquery'
 
 export default {
-  props: ['message'],
+  props: { message: { type: Object, required: true } },
   mounted () {
-    let self = this
-    let params = {
-      context: "#app",
+    const self = this
+    const params = {
+      context: '#app',
       message: this.message.content,
       showProgress: 'top',
-      position: "bottom right",
+      position: 'bottom right',
       progressUp: true,
       onRemove () {
-        self.$store.commit("ui/removeMessage", self.message.key)
+        self.$store.commit('ui/removeMessage', self.message.key)
       },
-      ...this.message,
+      ...this.message
     }
-    $("body").toast(params)
+    $('body').toast(params)
 
-    $(".ui.toast.visible").last().attr('role', 'alert')
+    $('.ui.toast.visible').last().attr('role', 'alert')
   }
 }
 </script>

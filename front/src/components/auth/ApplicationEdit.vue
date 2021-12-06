@@ -1,16 +1,26 @@
 <template>
-  <main class="main pusher" v-title="labels.title">
+  <main
+    v-title="labels.title"
+    class="main pusher"
+  >
     <div class="ui vertical stripe segment">
       <section class="ui text container">
-        <div v-if="isLoading" class="ui inverted active dimmer">
-          <div class="ui loader"></div>
+        <div
+          v-if="isLoading"
+          class="ui inverted active dimmer"
+        >
+          <div class="ui loader" />
         </div>
         <template v-else>
           <router-link :to="{name: 'settings'}">
-            <translate translate-context="Content/Applications/Link">Back to settings</translate>
+            <translate translate-context="Content/Applications/Link">
+              Back to settings
+            </translate>
           </router-link>
           <h2 class="ui header">
-            <translate translate-context="Content/Applications/Title">Application details</translate>
+            <translate translate-context="Content/Applications/Title">
+              Application details
+            </translate>
           </h2>
           <div class="ui form">
             <p>
@@ -20,25 +30,45 @@
             </p>
             <div class="field">
               <label for="copy-id"><translate translate-context="Content/Applications/Label">Application ID</translate></label>
-              <copy-input id="copy-id" :value="application.client_id" />
+              <copy-input
+                id="copy-id"
+                :value="application.client_id"
+              />
             </div>
             <div class="field">
               <label for="copy-secret"><translate translate-context="Content/Applications/Label">Application secret</translate></label>
-              <copy-input id="copy-secret" :value="application.client_secret" />
+              <copy-input
+                id="copy-secret"
+                :value="application.client_secret"
+              />
             </div>
-            <div class="field" v-if="application.token != undefined">
+            <div
+              v-if="application.token != undefined"
+              class="field"
+            >
               <label for="copy-secret"><translate translate-context="Content/Applications/Label">Access token</translate></label>
-              <copy-input id="copy-secret" :value="application.token" />
-              <a href="" @click.prevent="refreshToken">
-                <i class="refresh icon"></i>
+              <copy-input
+                id="copy-secret"
+                :value="application.token"
+              />
+              <a
+                href=""
+                @click.prevent="refreshToken"
+              >
+                <i class="refresh icon" />
                 <translate translate-context="Content/Applications/Label">Regenerate token</translate>
               </a>
             </div>
           </div>
           <h2 class="ui header">
-            <translate translate-context="Content/Applications/Title">Edit application</translate>
+            <translate translate-context="Content/Applications/Title">
+              Edit application
+            </translate>
           </h2>
-          <application-form @updated="application = $event" :app="application" />
+          <application-form
+            :app="application"
+            @updated="application = $event"
+          />
         </template>
       </section>
     </div>
@@ -46,19 +76,26 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from 'axios'
 
-import ApplicationForm from "@/components/auth/ApplicationForm"
+import ApplicationForm from '@/components/auth/ApplicationForm'
 
 export default {
-  props: ['id'],
   components: {
     ApplicationForm
   },
-  data() {
+  props: { id: { type: Number, required: true } },
+  data () {
     return {
       application: null,
-      isLoading: false,
+      isLoading: false
+    }
+  },
+  computed: {
+    labels () {
+      return {
+        title: this.$pgettext('Content/Applications/Title', 'Edit application')
+      }
     }
   },
   created () {
@@ -67,7 +104,7 @@ export default {
   methods: {
     fetchApplication () {
       this.isLoading = true
-      let self = this
+      const self = this
       axios.get(`oauth/apps/${this.id}/`).then((response) => {
         self.isLoading = false
         self.application = response.data
@@ -78,17 +115,10 @@ export default {
     },
     async refreshToken () {
       self.isLoading = true
-      let response = await axios.post(`oauth/apps/${this.id}/refresh-token`)
+      const response = await axios.post(`oauth/apps/${this.id}/refresh-token`)
       this.application = response.data
       self.isLoading = false
     }
-  },
-  computed: {
-    labels() {
-      return {
-        title: this.$pgettext('Content/Applications/Title', "Edit application")
-      }
-    },
   }
 }
 </script>

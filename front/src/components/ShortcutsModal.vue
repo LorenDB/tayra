@@ -1,42 +1,59 @@
 <template>
-  <modal @update:show="$emit('update:show', $event)" :show="show">
+  <modal
+    :show="show"
+    @update:show="$emit('update:show', $event)"
+  >
     <header class="header">
-      <translate translate-context="*/*/*/Noun">Keyboard shortcuts</translate>
+      <translate translate-context="*/*/*/Noun">
+        Keyboard shortcuts
+      </translate>
     </header>
     <section class="scrolling content">
       <div class="ui stackable two column grid">
         <div class="column">
           <table
-            class="ui compact basic table"
             v-for="section in player"
-            :key="section.title">
-          <caption>{{ section.title }}</caption>
-          <tbody>
-            <tr v-for="shortcut in section.shortcuts" :key="shortcut.summary">
-              <td>{{ shortcut.summary }}</td>
-              <td><span class="ui label">{{ shortcut.key }}</span></td>
-            </tr>
-          </tbody>
+            :key="section.title"
+            class="ui compact basic table"
+          >
+            <caption>{{ section.title }}</caption>
+            <tbody>
+              <tr
+                v-for="shortcut in section.shortcuts"
+                :key="shortcut.summary"
+              >
+                <td>{{ shortcut.summary }}</td>
+                <td><span class="ui label">{{ shortcut.key }}</span></td>
+              </tr>
+            </tbody>
           </table>
         </div>
         <div class="column">
           <table
-            class="ui compact basic table"
             v-for="section in general"
-            :key="section.title">
-          <caption>{{ section.title }}</caption>
-          <tbody>
-            <tr v-for="shortcut in section.shortcuts" :key="shortcut.summary">
-              <td>{{ shortcut.summary }}</td>
-              <td><span class="ui label">{{ shortcut.key }}</span></td>
-            </tr>
-          </tbody>
+            :key="section.title"
+            class="ui compact basic table"
+          >
+            <caption>{{ section.title }}</caption>
+            <tbody>
+              <tr
+                v-for="shortcut in section.shortcuts"
+                :key="shortcut.summary"
+              >
+                <td>{{ shortcut.summary }}</td>
+                <td><span class="ui label">{{ shortcut.key }}</span></td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
     </section>
     <footer class="actions">
-      <button class="ui basic cancel button"><translate translate-context="*/*/Button.Label/Verb">Close</translate></button>
+      <button class="ui basic cancel button">
+        <translate translate-context="*/*/Button.Label/Verb">
+          Close
+        </translate>
+      </button>
     </footer>
   </modal>
 </template>
@@ -44,10 +61,10 @@
 <script>
 
 export default {
-  props: ['show'],
   components: {
-    Modal:  () => import(/* webpackChunkName: "modal" */ "@/components/semantic/Modal"),
+    Modal: () => import(/* webpackChunkName: "modal" */ '@/components/semantic/Modal')
   },
+  props: { show: { type: Boolean, required: true } },
   computed: {
     general () {
       return [
@@ -65,9 +82,9 @@ export default {
             {
               key: 'esc',
               summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Unfocus searchbar')
-            },
+            }
           ]
-        },
+        }
       ]
     },
 
@@ -135,7 +152,7 @@ export default {
             {
               key: 'f',
               summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Toggle favorite')
-            },
+            }
           ]
         }
       ]

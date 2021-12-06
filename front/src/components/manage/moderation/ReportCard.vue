@@ -3,48 +3,69 @@
     <div class="content">
       <h4 class="header">
         <router-link :to="{name: 'manage.moderation.reports.detail', params: {id: obj.uuid}}">
-          <translate translate-context="Content/Moderation/Card/Short" :translate-params="{id: obj.uuid.substring(0, 8)}">Report %{ id }</translate>
+          <translate
+            translate-context="Content/Moderation/Card/Short"
+            :translate-params="{id: obj.uuid.substring(0, 8)}"
+          >
+            Report %{ id }
+          </translate>
         </router-link>
-        <collapse-link class="right floated" v-model="isCollapsed"></collapse-link>
+        <collapse-link
+          v-model="isCollapsed"
+          class="right floated"
+        />
       </h4>
       <div class="content">
-        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider" />
         <div class="ui stackable two column grid">
           <div class="column">
             <table class="ui very basic unstackable table">
               <tbody>
                 <tr>
                   <td>
-                    <translate translate-context="Content/Moderation/*">Submitted by</translate>
+                    <translate translate-context="Content/Moderation/*">
+                      Submitted by
+                    </translate>
                   </td>
                   <td>
                     <div v-if="obj.submitter">
-                      <actor-link :admin="true" :actor="obj.submitter" />
+                      <actor-link
+                        :admin="true"
+                        :actor="obj.submitter"
+                      />
                     </div>
-                    <div v-else="obj.submitter_email">
+                    <div v-else-if="obj.submitter_email">
                       {{ obj.submitter_email }}
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="*/*/*">Category</translate>
+                    <translate translate-context="*/*/*">
+                      Category
+                    </translate>
                   </td>
                   <td>
                     <report-category-dropdown
                       :value="obj.type"
-                      @input="update({type: $event})">
+                      @input="update({type: $event})"
+                    >
                       &#32;
-                      <action-feedback :is-loading="updating.type"></action-feedback>
+                      <action-feedback :is-loading="updating.type" />
                     </report-category-dropdown>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">Creation date</translate>
+                    <translate translate-context="Content/*/*/Noun">
+                      Creation date
+                    </translate>
                   </td>
                   <td>
-                    <human-date :date="obj.creation_date" :icon="true"></human-date>
+                    <human-date
+                      :date="obj.creation_date"
+                      :icon="true"
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -55,45 +76,72 @@
               <tbody>
                 <tr>
                   <td>
-                    <translate translate-context="*/*/*">Status</translate>
+                    <translate translate-context="*/*/*">
+                      Status
+                    </translate>
                   </td>
                   <td v-if="obj.is_handled">
                     <span v-if="obj.is_handled">
-                      <i class="success check icon"></i>
+                      <i class="success check icon" />
                       <translate translate-context="Content/*/*/Short">Resolved</translate>
                     </span>
                   </td>
                   <td v-else>
-                    <i class="danger x icon"></i>
-                    <translate translate-context="Content/*/*/Short">Unresolved</translate>
+                    <i class="danger x icon" />
+                    <translate translate-context="Content/*/*/Short">
+                      Unresolved
+                    </translate>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/Moderation/*">Assigned to</translate>
+                    <translate translate-context="Content/Moderation/*">
+                      Assigned to
+                    </translate>
                   </td>
                   <td>
                     <div v-if="obj.assigned_to">
-                      <actor-link :admin="true" :actor="obj.assigned_to" />
+                      <actor-link
+                        :admin="true"
+                        :actor="obj.assigned_to"
+                      />
                     </div>
-                    <translate v-else translate-context="*/*/*">N/A</translate>
+                    <translate
+                      v-else
+                      translate-context="*/*/*"
+                    >
+                      N/A
+                    </translate>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">Resolution date</translate>
+                    <translate translate-context="Content/*/*/Noun">
+                      Resolution date
+                    </translate>
                   </td>
                   <td>
-                    <human-date v-if="obj.handled_date" :date="obj.handled_date" :icon="true"></human-date>
-                    <translate v-else translate-context="*/*/*">N/A</translate>
+                    <human-date
+                      v-if="obj.handled_date"
+                      :date="obj.handled_date"
+                      :icon="true"
+                    />
+                    <translate
+                      v-else
+                      translate-context="*/*/*"
+                    >
+                      N/A
+                    </translate>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">Internal notes</translate>
+                    <translate translate-context="Content/*/*/Noun">
+                      Internal notes
+                    </translate>
                   </td>
                   <td>
-                    <i class="comment icon"></i>
+                    <i class="comment icon" />
                     {{ obj.notes.length }}
                   </td>
                 </tr>
@@ -103,95 +151,165 @@
         </div>
       </div>
     </div>
-    <div class="main content" v-if="!isCollapsed">
+    <div
+      v-if="!isCollapsed"
+      class="main content"
+    >
       <div class="ui stackable two column grid">
         <div class="column">
           <h3>
-            <translate translate-context="*/*/Field.Label/Noun">Message</translate>
+            <translate translate-context="*/*/Field.Label/Noun">
+              Message
+            </translate>
           </h3>
-          <expandable-div v-if="obj.summary" class="summary" :content="obj.summary">
-            <div v-html="markdown.makeHtml(obj.summary)"></div>
+          <expandable-div
+            v-if="obj.summary"
+            class="summary"
+            :content="obj.summary"
+          >
+            <div v-html="markdown.makeHtml(obj.summary)" />
           </expandable-div>
         </div>
         <aside class="column">
           <h3>
-            <translate translate-context="Content/*/*/Short">Reported object</translate>
+            <translate translate-context="Content/*/*/Short">
+              Reported object
+            </translate>
           </h3>
-          <div v-if="!obj.target" role="alert" class="ui warning message">
-            <translate translate-context="Content/Moderation/Message">The object associated with this report was deleted.</translate>
+          <div
+            v-if="!obj.target"
+            role="alert"
+            class="ui warning message"
+          >
+            <translate translate-context="Content/Moderation/Message">
+              The object associated with this report was deleted.
+            </translate>
           </div>
-          <router-link class="ui basic button" v-if="target && configs[target.type].urls.getDetail" :to="configs[target.type].urls.getDetail(obj.target_state)">
-            <i class="eye icon"></i>
-            <translate translate-context="Content/Moderation/Link">View public page</translate>
+          <router-link
+            v-if="target && configs[target.type].urls.getDetail"
+            class="ui basic button"
+            :to="configs[target.type].urls.getDetail(obj.target_state)"
+          >
+            <i class="eye icon" />
+            <translate translate-context="Content/Moderation/Link">
+              View public page
+            </translate>
           </router-link>
-          <router-link class="ui basic button" v-if="target && configs[target.type].urls.getAdminDetail" :to="configs[target.type].urls.getAdminDetail(obj.target_state)">
-            <i class="wrench icon"></i>
-            <translate translate-context="Content/Moderation/Link">Open in moderation interface</translate>
+          <router-link
+            v-if="target && configs[target.type].urls.getAdminDetail"
+            class="ui basic button"
+            :to="configs[target.type].urls.getAdminDetail(obj.target_state)"
+          >
+            <i class="wrench icon" />
+            <translate translate-context="Content/Moderation/Link">
+              Open in moderation interface
+            </translate>
           </router-link>
           <table class="ui very basic unstackable table">
             <tbody>
               <tr v-if="target">
                 <td>
-                  <translate translate-context="Content/Track/Table.Label/Noun">Type</translate>
+                  <translate translate-context="Content/Track/Table.Label/Noun">
+                    Type
+                  </translate>
                 </td>
                 <td colspan="2">
-                  <i :class="[configs[target.type].icon, 'icon']"></i>
+                  <i :class="[configs[target.type].icon, 'icon']" />
                   {{ configs[target.type].label }}
                 </td>
               </tr>
               <tr v-if="obj.target_owner && (!target || target.type !== 'account')">
                 <td>
-                  <translate translate-context="*/*/*">Owner</translate>
+                  <translate translate-context="*/*/*">
+                    Owner
+                  </translate>
                 </td>
                 <td>
-                  <actor-link :admin="true" :actor="obj.target_owner"></actor-link>
+                  <actor-link
+                    :admin="true"
+                    :actor="obj.target_owner"
+                  />
                 </td>
                 <td>
                   <instance-policy-modal
                     v-if="!obj.target_owner.is_local"
-                    class="right floated mini basic" type="actor" :target="obj.target_owner.full_username" />
+                    class="right floated mini basic"
+                    type="actor"
+                    :target="obj.target_owner.full_username"
+                  />
                 </td>
               </tr>
               <tr v-if="target && target.type === 'account'">
                 <td>
-                  <translate translate-context="*/*/*/Noun">Account</translate>
+                  <translate translate-context="*/*/*/Noun">
+                    Account
+                  </translate>
                 </td>
                 <td>
-                  <actor-link :admin="true" :actor="obj.target_owner"></actor-link>
+                  <actor-link
+                    :admin="true"
+                    :actor="obj.target_owner"
+                  />
                 </td>
                 <td>
                   <instance-policy-modal
                     v-if="!obj.target_owner.is_local"
-                    class="right floated mini basic" type="actor" :target="obj.target_owner.full_username" />
+                    class="right floated mini basic"
+                    type="actor"
+                    :target="obj.target_owner.full_username"
+                  />
                 </td>
               </tr>
               <tr v-if="obj.target_state.is_local">
                 <td>
-                  <translate translate-context="Content/Moderation/*/Noun">Domain</translate>
+                  <translate translate-context="Content/Moderation/*/Noun">
+                    Domain
+                  </translate>
                 </td>
                 <td colspan="2">
-                  <i class="home icon"></i>
-                  <translate translate-context="Content/Moderation/*/Short, Noun">Local</translate>
+                  <i class="home icon" />
+                  <translate translate-context="Content/Moderation/*/Short, Noun">
+                    Local
+                  </translate>
                 </td>
               </tr>
               <tr v-else-if="obj.target_state.domain">
                 <td>
                   <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: obj.target_state.domain }}">
-                    <translate translate-context="Content/Moderation/*/Noun">Domain</translate>
+                    <translate translate-context="Content/Moderation/*/Noun">
+                      Domain
+                    </translate>
                   </router-link>
                 </td>
                 <td>
                   {{ obj.target_state.domain }}
                 </td>
                 <td>
-                  <instance-policy-modal class="right floated mini basic" type="domain" :target="obj.target_state.domain" />
+                  <instance-policy-modal
+                    class="right floated mini basic"
+                    type="domain"
+                    :target="obj.target_state.domain"
+                  />
                 </td>
               </tr>
-              <tr v-for="field in targetFields" :key="field.id">
+              <tr
+                v-for="field in targetFields"
+                :key="field.id"
+              >
                 <td>{{ field.label }}</td>
-                <td colspan="2" v-if="field.repr">{{ field.repr }}</td>
-                <td colspan="2" v-else>
-                  <translate translate-context="*/*/*">N/A</translate>
+                <td
+                  v-if="field.repr"
+                  colspan="2"
+                >
+                  {{ field.repr }}
+                </td>
+                <td
+                  v-else
+                  colspan="2"
+                >
+                  <translate translate-context="*/*/*">
+                    N/A
+                  </translate>
                 </td>
               </tr>
             </tbody>
@@ -201,42 +319,66 @@
       <div class="ui stackable two column grid">
         <div class="column">
           <h3>
-            <translate translate-context="Content/*/*/Noun">Internal notes</translate>
+            <translate translate-context="Content/*/*/Noun">
+              Internal notes
+            </translate>
           </h3>
-          <notes-thread @deleted="handleRemovedNote($event)" :notes="obj.notes" />
-          <note-form @created="obj.notes.push($event)" :target="{type: 'report', uuid: obj.uuid}" />
+          <notes-thread
+            :notes="obj.notes"
+            @deleted="handleRemovedNote($event)"
+          />
+          <note-form
+            :target="{type: 'report', uuid: obj.uuid}"
+            @created="obj.notes.push($event)"
+          />
         </div>
         <div class="column">
           <h3>
-            <translate translate-context="Content/*/*/Noun">Actions</translate>
+            <translate translate-context="Content/*/*/Noun">
+              Actions
+            </translate>
           </h3>
           <div class="ui labelled icon basic buttons">
             <button
               v-if="obj.is_handled === false"
+              :class="['ui', {loading: isLoading}, 'button']"
               @click="resolve(true)"
-              :class="['ui', {loading: isLoading}, 'button']">
-              <i class="success check icon"></i>&nbsp;
-              <translate translate-context="Content/*/Button.Label/Verb">Resolve</translate>
+            >
+              <i class="success check icon" />&nbsp;
+              <translate translate-context="Content/*/Button.Label/Verb">
+                Resolve
+              </translate>
             </button>
             <button
               v-if="obj.is_handled === true"
+              :class="['ui', {loading: isLoading}, 'button']"
               @click="resolve(false)"
-              :class="['ui', {loading: isLoading}, 'button']">
-              <i class="warning redo icon"></i>&nbsp;
-              <translate translate-context="Content/*/Button.Label">Unresolve</translate>
+            >
+              <i class="warning redo icon" />&nbsp;
+              <translate translate-context="Content/*/Button.Label">
+                Unresolve
+              </translate>
             </button>
-            <template v-for="action in actions">
+            <template
+              v-for="(action, key) in actions"
+            >
               <dangerous-button
                 v-if="action.dangerous && action.show(obj)"
+                :key="key"
                 :class="['ui', {loading: isLoading}, 'button']"
-                :action="action.handler">
-                <i :class="[action.iconColor, action.icon, 'icon']"></i>&nbsp;
+                :action="action.handler"
+              >
+                <i :class="[action.iconColor, action.icon, 'icon']" />&nbsp;
                 {{ action.label }}
-                <p slot="modal-header">{{ action.modalHeader}}</p>
+                <p slot="modal-header">
+                  {{ action.modalHeader }}
+                </p>
                 <div slot="modal-content">
                   <p>{{ action.modalContent }}</p>
                 </div>
-                <p slot="modal-confirm">{{ action.modalConfirmLabel }}</p>
+                <p slot="modal-confirm">
+                  {{ action.modalConfirmLabel }}
+                </p>
               </dangerous-button>
             </template>
           </div>
@@ -248,15 +390,13 @@
 
 <script>
 import axios from 'axios'
-import { diffWordsWithSpace } from 'diff'
 import NoteForm from '@/components/manage/moderation/NoteForm'
 import NotesThread from '@/components/manage/moderation/NotesThread'
 import ReportCategoryDropdown from '@/components/moderation/ReportCategoryDropdown'
 import InstancePolicyModal from '@/components/manage/moderation/InstancePolicyModal'
 import entities from '@/entities'
-import {setUpdate} from '@/utils'
+import { setUpdate } from '@/utils'
 import showdown from 'showdown'
-
 
 function castValue (value) {
   if (value === null || value === undefined) {
@@ -266,23 +406,24 @@ function castValue (value) {
 }
 
 export default {
-  props: {
-    obj: {required: true},
-    currentState: {required: false}
-  },
   components: {
     NoteForm,
     NotesThread,
     ReportCategoryDropdown,
-    InstancePolicyModal,
+    InstancePolicyModal
+  },
+  props: {
+    initObj: { type: Object, required: true },
+    currentState: { type: String, required: false, default: '' }
   },
   data () {
     return {
+      obj: this.initObj,
       markdown: new showdown.Converter(),
       isLoading: false,
       isCollapsed: false,
       updating: {
-        type: false,
+        type: false
       }
     }
   },
@@ -303,7 +444,7 @@ export default {
         return ''
       }
       let namespace
-      let id = this.target.id
+      const id = this.target.id
       if (this.target.type === 'track') {
         namespace = 'library.tracks.edit.detail'
       }
@@ -313,24 +454,23 @@ export default {
       if (this.target.type === 'artist') {
         namespace = 'library.artists.edit.detail'
       }
-      return this.$router.resolve({name: namespace, params: {id, editId: this.obj.uuid}}).href
+      return this.$router.resolve({ name: namespace, params: { id, editId: this.obj.uuid } }).href
     },
 
     targetFields () {
       if (!this.target) {
         return []
       }
-      let payload = this.obj.target_state
-      let fields = this.configs[this.target.type].moderatedFields
-      let self = this
+      const payload = this.obj.target_state
+      const fields = this.configs[this.target.type].moderatedFields
       return fields.map((fieldConfig) => {
-        let dummyRepr = (v) => { return v }
-        let getValueRepr = fieldConfig.getValueRepr || dummyRepr
-        let d = {
+        const dummyRepr = (v) => { return v }
+        const getValueRepr = fieldConfig.getValueRepr || dummyRepr
+        const d = {
           id: fieldConfig.id,
           label: fieldConfig.label,
           value: payload[fieldConfig.id],
-          repr: castValue(getValueRepr(payload[fieldConfig.id])),
+          repr: castValue(getValueRepr(payload[fieldConfig.id]))
         }
         return d
       })
@@ -346,11 +486,11 @@ export default {
       if (!this.target) {
         return []
       }
-      let self = this
-      let actions = []
-      let typeConfig = this.configs[this.target.type]
+      const self = this
+      const actions = []
+      const typeConfig = this.configs[this.target.type]
       if (typeConfig.getDeleteUrl) {
-        let deleteUrl = typeConfig.getDeleteUrl(this.target)
+        const deleteUrl = typeConfig.getDeleteUrl(this.target)
         actions.push({
           label: this.$pgettext('Content/Moderation/Button/Verb', 'Delete reported object'),
           modalHeader: this.$pgettext('Content/Moderation/Popup/Header', 'Delete reported object?'),
@@ -365,7 +505,7 @@ export default {
               console.log('Target deleted')
               self.obj.target = null
               self.resolve(true)
-            }, error => {
+            }, () => {
               console.log('Error while deleting target')
             })
           }
@@ -376,8 +516,8 @@ export default {
   },
   methods: {
     update (payload) {
-      let url = `manage/moderation/reports/${this.obj.uuid}/`
-      let self = this
+      const url = `manage/moderation/reports/${this.obj.uuid}/`
+      const self = this
       this.isLoading = true
       setUpdate(payload, this.updating, true)
       axios.patch(url, payload).then((response) => {
@@ -385,16 +525,16 @@ export default {
         Object.assign(self.obj, payload)
         self.isLoading = false
         setUpdate(payload, self.updating, false)
-      }, error => {
+      }, () => {
         self.isLoading = false
         setUpdate(payload, self.updating, false)
       })
     },
     resolve (v) {
-      let url = `manage/moderation/reports/${this.obj.uuid}/`
-      let self = this
+      const url = `manage/moderation/reports/${this.obj.uuid}/`
+      const self = this
       this.isLoading = true
-      axios.patch(url, {is_handled: v}).then((response) => {
+      axios.patch(url, { is_handled: v }).then((response) => {
         self.$emit('handled', v)
         self.isLoading = false
         self.obj.is_handled = v
@@ -405,16 +545,16 @@ export default {
         } else {
           increment = 1
         }
-        self.$store.commit('ui/incrementNotifications', {count: increment, type: 'pendingReviewReports'})
-      }, error => {
+        self.$store.commit('ui/incrementNotifications', { count: increment, type: 'pendingReviewReports' })
+      }, () => {
         self.isLoading = false
       })
     },
     handleRemovedNote (uuid) {
       this.obj.notes = this.obj.notes.filter((note) => {
-        return note.uuid != uuid
+        return note.uuid !== uuid
       })
-    },
+    }
   }
 }
 </script>

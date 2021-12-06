@@ -6,20 +6,23 @@
         <span
           v-if="library.privacy_level === 'me'"
           class="right floated"
-          :data-tooltip="privacy_tooltips('me')">
-          <i class="small lock icon"></i>
+          :data-tooltip="privacy_tooltips('me')"
+        >
+          <i class="small lock icon" />
         </span>
         <span
           v-else-if="library.privacy_level === 'instance'"
           class="right floated"
-          :data-tooltip="privacy_tooltips('instance')">
-          <i class="small circle outline icon"></i>
+          :data-tooltip="privacy_tooltips('instance')"
+        >
+          <i class="small circle outline icon" />
         </span>
         <span
           v-else-if="library.privacy_level === 'everyone'"
           class="right floated"
-          :data-tooltip="privacy_tooltips('everyone')">
-          <i class="small globe icon"></i>
+          :data-tooltip="privacy_tooltips('everyone')"
+        >
+          <i class="small globe icon" />
         </span>
       </h4>
       <div class="meta">
@@ -30,23 +33,45 @@
       </div>
       <div class="description">
         {{ library.description }}
-        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider" />
       </div>
       <div class="content">
-        <span v-if="library.size" class="right floated" :data-tooltip="size_label">
-          <i class="database icon"></i>
+        <span
+          v-if="library.size"
+          class="right floated"
+          :data-tooltip="size_label"
+        >
+          <i class="database icon" />
           {{ library.size | humanSize }}
         </span>
-        <i class="music icon"></i>
-        <translate translate-context="*/*/*" :translate-params="{count: library.uploads_count}" :translate-n="library.uploads_count" translate-plural="%{ count } tracks">%{ count } track</translate>
+        <i class="music icon" />
+        <translate
+          translate-context="*/*/*"
+          :translate-params="{count: library.uploads_count}"
+          :translate-n="library.uploads_count"
+          translate-plural="%{ count } tracks"
+        >
+          %{ count } track
+        </translate>
       </div>
     </div>
     <div class="ui bottom basic attached buttons">
-      <router-link :to="{name: 'library.detail.upload', params: {id: library.uuid}}" class="ui button">
-        <translate translate-context="Content/Library/Card.Button.Label/Verb">Upload</translate>
+      <router-link
+        :to="{name: 'library.detail.upload', params: {id: library.uuid}}"
+        class="ui button"
+      >
+        <translate translate-context="Content/Library/Card.Button.Label/Verb">
+          Upload
+        </translate>
       </router-link>
-      <router-link :to="{name: 'library.detail', params: {id: library.uuid}}" exact class="ui button">
-        <translate translate-context="Content/Library/Card.Button.Label/Noun">Library Details</translate>
+      <router-link
+        :to="{name: 'library.detail', params: {id: library.uuid}}"
+        exact
+        class="ui button"
+      >
+        <translate translate-context="Content/Library/Card.Button.Label/Noun">
+          Library Details
+        </translate>
       </router-link>
     </div>
   </div>
@@ -57,16 +82,16 @@ import TranslationsMixin from '@/components/mixins/Translations'
 
 export default {
   mixins: [TranslationsMixin],
-  props: ['library'],
-  methods: {
-    privacy_tooltips (level) {
-      return 'Visibility: ' + this.sharedLabels.fields.privacy_level.choices[level].toLowerCase()
-    },
-  },
+  props: { library: { type: Object, required: true } },
   computed: {
     size_label () {
       return this.$pgettext('Content/Library/Card.Help text', 'Total size of the files in this library')
-    },
+    }
+  },
+  methods: {
+    privacy_tooltips (level) {
+      return 'Visibility: ' + this.sharedLabels.fields.privacy_level.choices[level].toLowerCase()
+    }
   }
 }
 </script>

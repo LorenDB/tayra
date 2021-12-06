@@ -1,29 +1,69 @@
 <template>
   <div>
-    <h2><translate translate-context="Content/Search/Title">Search for some music</translate></h2>
+    <h2>
+      <translate translate-context="Content/Search/Title">
+        Search for some music
+      </translate>
+    </h2>
     <div :class="['ui', {'loading': isLoading }, 'search']">
       <div class="ui icon big input">
-        <i class="search icon"></i>
-        <input ref="search" class="prompt" :placeholder="labels.searchPlaceholder" v-model.trim="query" type="text" />
+        <i class="search icon" />
+        <input
+          ref="search"
+          v-model.trim="query"
+          class="prompt"
+          :placeholder="labels.searchPlaceholder"
+          type="text"
+        >
       </div>
     </div>
     <template v-if="query.length > 0">
-      <h3 class="ui title"><translate translate-context="*/*/*/Noun">Artists</translate></h3>
+      <h3 class="ui title">
+        <translate translate-context="*/*/*/Noun">
+          Artists
+        </translate>
+      </h3>
       <div v-if="results.artists.length > 0">
         <div class="ui cards">
-          <artist-card :key="artist.id" v-for="artist in results.artists" :artist="artist" ></artist-card>
+          <artist-card
+            v-for="artist in results.artists"
+            :key="artist.id"
+            :artist="artist"
+          />
         </div>
       </div>
-      <p v-else><translate translate-context="Content/Search/Paragraph">No artist matched your query</translate></p>
+      <p v-else>
+        <translate translate-context="Content/Search/Paragraph">
+          No artist matched your query
+        </translate>
+      </p>
     </template>
     <template v-if="query.length > 0">
-      <h3 class="ui title"><translate translate-context="*/*/*">Albums</translate></h3>
-      <div v-if="results.albums.length > 0" class="ui stackable three column grid">
-        <div class="column" :key="album.id" v-for="album in results.albums">
-          <album-card class="fluid" :album="album" ></album-card>
+      <h3 class="ui title">
+        <translate translate-context="*/*/*">
+          Albums
+        </translate>
+      </h3>
+      <div
+        v-if="results.albums.length > 0"
+        class="ui stackable three column grid"
+      >
+        <div
+          v-for="album in results.albums"
+          :key="album.id"
+          class="column"
+        >
+          <album-card
+            class="fluid"
+            :album="album"
+          />
         </div>
       </div>
-      <p v-else><translate translate-context="Content/Search/Paragraph">No album matched your query</translate></p>
+      <p v-else>
+        <translate translate-context="Content/Search/Paragraph">
+          No album matched your query
+        </translate>
+      </p>
     </template>
   </div>
 </template>
@@ -41,7 +81,7 @@ export default {
     ArtistCard
   },
   props: {
-    autofocus: {type: Boolean, default: false}
+    autofocus: { type: Boolean, default: false }
   },
   data () {
     return {
@@ -53,12 +93,6 @@ export default {
       isLoading: false
     }
   },
-  mounted () {
-    if (this.autofocus) {
-      this.$refs.search.focus()
-    }
-    this.search()
-  },
   computed: {
     labels () {
       return {
@@ -66,15 +100,26 @@ export default {
       }
     }
   },
+  watch: {
+    query () {
+      this.search()
+    }
+  },
+  mounted () {
+    if (this.autofocus) {
+      this.$refs.search.focus()
+    }
+    this.search()
+  },
   methods: {
     search: _.debounce(function () {
       if (this.query.length < 1) {
         return
       }
-      var self = this
+      const self = this
       self.isLoading = true
       logger.default.debug('Searching track matching "' + this.query + '"')
-      let params = {
+      const params = {
         query: this.query
       }
       axios.get('search', {
@@ -89,11 +134,6 @@ export default {
         albums: results.albums,
         artists: results.artists
       }
-    }
-  },
-  watch: {
-    query () {
-      this.search()
     }
   }
 }

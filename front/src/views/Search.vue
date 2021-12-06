@@ -1,83 +1,136 @@
 <template>
-  <main class="main pusher" v-title="labels.title">
+  <main
+    v-title="labels.title"
+    class="main pusher"
+  >
     <section class="ui vertical stripe segment">
-      <div class="ui small text container" v-if="initialId">
+      <div
+        v-if="initialId"
+        class="ui small text container"
+      >
         <h2>{{ labels.title }}</h2>
-        <remote-search-form :initial-id="initialId" :type="initialType"></remote-search-form>
+        <remote-search-form
+          :initial-id="initialId"
+          :type="initialType"
+        />
       </div>
-      <div class="ui container" v-else>
+      <div
+        v-else
+        class="ui container"
+      >
         <h2>
           <label for="query">
             <translate translate-context="Content/Search/Input.Label/Noun">Search</translate>
           </label>
         </h2>
-        <form class="ui form" @submit.prevent="page = 1; search()">
+        <form
+          class="ui form"
+          @submit.prevent="page = 1; search()"
+        >
           <div class="ui field">
             <div class="ui action input">
-              <input class="ui input" id="query" name="query" type="text" v-model="query">
-              <button :aria-label="labels.submitSearch" type="submit" class="ui icon button">
-                <i class="search icon"></i>
+              <input
+                id="query"
+                v-model="query"
+                class="ui input"
+                name="query"
+                type="text"
+              >
+              <button
+                :aria-label="labels.submitSearch"
+                type="submit"
+                class="ui icon button"
+              >
+                <i class="search icon" />
               </button>
             </div>
           </div>
         </form>
         <div class="ui secondary pointing menu">
           <a
-            :class="['item', {active: type === t.id}]" 
-            @click.prevent="type = t.id"
             v-for="t in types"
+            :key="t.id"
+            :class="['item', {active: type === t.id}]"
             href=""
-            :key="t.id">
+            @click.prevent="type = t.id"
+          >
             {{ t.label }}
             <span
               v-if="results[t.id]"
-              class="ui circular mini right floated label">
+              class="ui circular mini right floated label"
+            >
               {{ results[t.id].count }}</span>
-            </a>
+          </a>
         </div>
-        <div v-if="isLoading" >
-          <div v-if="isLoading" class="ui inverted active dimmer">
-            <div class="ui loader"></div>
+        <div v-if="isLoading">
+          <div
+            v-if="isLoading"
+            class="ui inverted active dimmer"
+          >
+            <div class="ui loader" />
           </div>
         </div>
-    
-        <empty-state v-else-if="!currentResults || currentResults.count === 0" @refresh="search" :refresh="true"></empty-state>
-        
-        <div v-else-if="type === 'artists' || type === 'podcasts'" class="ui five app-cards cards">
-          <artist-card :artist="artist" v-for="artist in currentResults.results" :key="artist.id"></artist-card>
+
+        <empty-state
+          v-else-if="!currentResults || currentResults.count === 0"
+          :refresh="true"
+          @refresh="search"
+        />
+
+        <div
+          v-else-if="type === 'artists' || type === 'podcasts'"
+          class="ui five app-cards cards"
+        >
+          <artist-card
+            v-for="artist in currentResults.results"
+            :key="artist.id"
+            :artist="artist"
+          />
         </div>
-        
-        <div v-else-if="type === 'albums' || type === 'series'" class="ui five app-cards cards">
+
+        <div
+          v-else-if="type === 'albums' || type === 'series'"
+          class="ui five app-cards cards"
+        >
           <album-card
             v-for="album in currentResults.results"
             :key="album.id"
-            :album="album"></album-card>        
+            :album="album"
+          />
         </div>
-        <track-table v-else-if="type === 'tracks'" :tracks="currentResults.results"></track-table>    
-        <playlist-card-list v-else-if="type === 'playlists'"  :playlists="currentResults.results"></playlist-card-list>
+        <track-table
+          v-else-if="type === 'tracks'"
+          :tracks="currentResults.results"
+        />
+        <playlist-card-list
+          v-else-if="type === 'playlists'"
+          :playlists="currentResults.results"
+        />
         <div
           v-else-if="type === 'radios'"
-          class="ui cards">
+          class="ui cards"
+        >
           <radio-card
-            type="custom"
             v-for="radio in currentResults.results"
             :key="radio.id"
-            :custom-radio="radio"></radio-card>
+            type="custom"
+            :custom-radio="radio"
+          />
         </div>
         <tags-list
           v-else-if="type === 'tags'"
           :truncate-size="200"
           :limit="paginateBy"
-          :tags="currentResults.results.map(t => {return t.name })"></tags-list>
-      
+          :tags="currentResults.results.map(t => {return t.name })"
+        />
+
         <pagination
           v-if="currentResults && currentResults.count > paginateBy"
-          @page-changed="page = $event"
           :current="page"
           :paginate-by="paginateBy"
           :total="currentResults.count"
-          ></pagination>
-      
+          @page-changed="page = $event"
+        />
       </div>
     </section>
   </main>
@@ -85,23 +138,17 @@
 
 <script>
 import RemoteSearchForm from '@/components/RemoteSearchForm'
-import ArtistCard from "@/components/audio/artist/Card"
-import AlbumCard from "@/components/audio/album/Card"
-import TrackTable from "@/components/audio/track/Table"
+import ArtistCard from '@/components/audio/artist/Card'
+import AlbumCard from '@/components/audio/album/Card'
+import TrackTable from '@/components/audio/track/Table'
 import Pagination from '@/components/Pagination'
-import PlaylistCardList from "@/components/playlists/CardList"
-import RadioCard from "@/components/radios/Card"
-import TagsList from "@/components/tags/List"
+import PlaylistCardList from '@/components/playlists/CardList'
+import RadioCard from '@/components/radios/Card'
+import TagsList from '@/components/tags/List'
 
 import axios from 'axios'
 
 export default {
-  props: {
-    initialId: { type: String, required: false},
-    initialType: { type: String, required: false},
-    initialQuery: { type: String, required: false},
-    initialPage: { type: Number, required: false},
-  },
   components: {
     RemoteSearchForm,
     ArtistCard,
@@ -110,7 +157,13 @@ export default {
     Pagination,
     PlaylistCardList,
     RadioCard,
-    TagsList,
+    TagsList
+  },
+  props: {
+    initialId: { type: String, required: false, default: '' },
+    initialType: { type: String, required: false, default: '' },
+    initialQuery: { type: String, required: false, default: '' },
+    initialPage: { type: Number, required: false, default: 0 }
   },
   data () {
     return {
@@ -125,84 +178,81 @@ export default {
         radios: null,
         tags: null,
         podcasts: null,
-        series: null,
+        series: null
       },
       isLoading: false,
-      paginateBy: 25,
+      paginateBy: 25
     }
   },
-  created () {
-    this.search()
-  },
   computed: {
-    labels() {
-      let submitSearch = this.$pgettext("Content/Search/Button.Label/Verb", "Submit Search Query")
-      let title = this.$pgettext("Content/Search/Input.Label/Noun", "Search")
+    labels () {
+      const submitSearch = this.$pgettext('Content/Search/Button.Label/Verb', 'Submit Search Query')
+      let title = this.$pgettext('Content/Search/Input.Label/Noun', 'Search')
       if (this.initialId) {
-        title = this.$pgettext('Head/Fetch/Title', "Search a remote object")
-        if (this.type === "rss") {
-          title = this.$pgettext('Head/Fetch/Title', "Subscribe to a podcast RSS feed")
+        title = this.$pgettext('Head/Fetch/Title', 'Search a remote object')
+        if (this.type === 'rss') {
+          title = this.$pgettext('Head/Fetch/Title', 'Subscribe to a podcast RSS feed')
         }
-      } 
+      }
       return {
         title,
         submitSearch
       }
     },
-    axiosParams() {
-      const params = new URLSearchParams();
-      params.append('q', this.query);
-      params.append('page', this.page);
-      params.append('page_size', this.paginateBy);
-      if(this.currentType.contentCategory != undefined) {params.append('content_category', this.currentType.contentCategory)};
-      if(this.currentType.includeChannels != undefined) {params.append('include_channels', this.currentType.includeChannels)};
-      return params;
+    axiosParams () {
+      const params = new URLSearchParams()
+      params.append('q', this.query)
+      params.append('page', this.page)
+      params.append('page_size', this.paginateBy)
+      if (this.currentType.contentCategory !== undefined) { params.append('content_category', this.currentType.contentCategory) };
+      if (this.currentType.includeChannels !== undefined) { params.append('include_channels', this.currentType.includeChannels) };
+      return params
     },
     types () {
       return [
         {
           id: 'artists',
-          label: this.$pgettext("*/*/*/Noun", "Artists"),
+          label: this.$pgettext('*/*/*/Noun', 'Artists'),
           includeChannels: true,
-          contentCategory: 'music',
+          contentCategory: 'music'
         },
         {
           id: 'albums',
-          label: this.$pgettext("*/*/*", "Albums"),
+          label: this.$pgettext('*/*/*', 'Albums'),
           includeChannels: true,
-          contentCategory: 'music',
+          contentCategory: 'music'
         },
         {
           id: 'tracks',
-          label: this.$pgettext("*/*/*", "Tracks"),
+          label: this.$pgettext('*/*/*', 'Tracks')
         },
         {
           id: 'playlists',
-          label: this.$pgettext("*/*/*", "Playlists"),
+          label: this.$pgettext('*/*/*', 'Playlists')
         },
         {
           id: 'radios',
-          label: this.$pgettext("*/*/*", "Radios"),
-          endpoint: 'radios/radios',
+          label: this.$pgettext('*/*/*', 'Radios'),
+          endpoint: 'radios/radios'
         },
         {
           id: 'tags',
-          label: this.$pgettext("*/*/*", "Tags"),
+          label: this.$pgettext('*/*/*', 'Tags')
         },
         {
           id: 'podcasts',
-          label: this.$pgettext("*/*/*", "Podcasts"),
+          label: this.$pgettext('*/*/*', 'Podcasts'),
           endpoint: '/artists',
           contentCategory: 'podcast',
-          includeChannels: true,
+          includeChannels: true
         },
         {
           id: 'series',
-          label: this.$pgettext("*/*/*", "Series"),
+          label: this.$pgettext('*/*/*', 'Series'),
           endpoint: '/albums',
           includeChannels: true,
-          contentCategory: 'podcast',
-        },
+          contentCategory: 'podcast'
+        }
       ]
     },
     currentType () {
@@ -214,48 +264,6 @@ export default {
       return this.results[this.currentType.id]
     }
   },
-  methods: {
-    async search () {
-      this.updateQueryString()
-      if (!this.query) {
-        this.types.forEach(t => {
-          this.results[t.id] = null
-        })
-        return
-      }
-      this.isLoading = true
-      let response = await axios.get(
-        this.currentType.endpoint || this.currentType.id,
-        {params: this.axiosParams}
-      )
-      this.results[this.currentType.id] = response.data
-      this.isLoading = false
-      this.types.forEach(t => {
-        if (t.id != this.currentType.id) {
-          axios.get(t.endpoint || t.id, {params: {
-              q: this.query, 
-              page_size: 1,
-              content_category: t.contentCategory,
-              include_channels: t.includeChannels,
-            }}).then(response => {
-            this.results[t.id] = response.data
-          })
-        }
-      })
-    },
-    updateQueryString: function() {
-      history.pushState(
-        {},
-        null,
-        this.$route.path + '?' + new URLSearchParams(
-          {
-          q: this.query,
-          page: this.page,
-          type: this.type,
-        }).toString()
-      )
-    },
-  },
   watch: {
     async type () {
       this.page = 1
@@ -266,10 +274,57 @@ export default {
       this.updateQueryString()
       await this.search()
     },
-    "$route.query.q": async function (v) {
+    '$route.query.q': async function (v) {
       this.query = v
       this.updateQueryString()
       await this.search()
+    }
+  },
+  created () {
+    this.search()
+  },
+  methods: {
+    async search () {
+      this.updateQueryString()
+      if (!this.query) {
+        this.types.forEach(t => {
+          this.results[t.id] = null
+        })
+        return
+      }
+      this.isLoading = true
+      const response = await axios.get(
+        this.currentType.endpoint || this.currentType.id,
+        { params: this.axiosParams }
+      )
+      this.results[this.currentType.id] = response.data
+      this.isLoading = false
+      this.types.forEach(t => {
+        if (t.id !== this.currentType.id) {
+          axios.get(t.endpoint || t.id, {
+            params: {
+              q: this.query,
+              page_size: 1,
+              content_category: t.contentCategory,
+              include_channels: t.includeChannels
+            }
+          }).then(response => {
+            this.results[t.id] = response.data
+          })
+        }
+      })
+    },
+    updateQueryString: function () {
+      history.pushState(
+        {},
+        null,
+        this.$route.path + '?' + new URLSearchParams(
+          {
+            q: this.query,
+            page: this.page,
+            type: this.type
+          }).toString()
+      )
     }
   }
 }

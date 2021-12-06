@@ -1,18 +1,22 @@
 <template>
   <button
-    @click.stop="$store.commit('playlists/chooseTrack', track)"
     v-if="button"
-    :class="['ui', 'icon', 'labeled', 'button']">
-    <i class="list icon"></i>
-    <translate translate-context="Sidebar/Player/Icon.Tooltip/Verb">Add to playlist…</translate>
+    :class="['ui', 'icon', 'labeled', 'button']"
+    @click.stop="$store.commit('playlists/chooseTrack', track)"
+  >
+    <i class="list icon" />
+    <translate translate-context="Sidebar/Player/Icon.Tooltip/Verb">
+      Add to playlist…
+    </translate>
   </button>
   <button
     v-else
-    @click.stop="$store.commit('playlists/chooseTrack', track)"
     :class="['ui', 'basic', 'circular', 'icon', {'really': !border}, 'button']"
     :aria-label="labels.addToPlaylist"
-    :title="labels.addToPlaylist">
-    <i :class="['list', 'basic', 'icon']"></i>
+    :title="labels.addToPlaylist"
+    @click.stop="$store.commit('playlists/chooseTrack', track)"
+  >
+    <i :class="['list', 'basic', 'icon']" />
   </button>
 </template>
 
@@ -20,9 +24,9 @@
 
 export default {
   props: {
-    track: {type: Object},
-    button: {type: Boolean, default: false},
-    border: {type: Boolean, default: false},
+    track: { type: Object, default: function () { return {} } },
+    button: { type: Boolean, default: false },
+    border: { type: Boolean, default: false }
   },
   data () {
     return {

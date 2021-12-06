@@ -52,15 +52,15 @@ export default {
       },
       moderation: {
         signup_approval_enabled: {
-          value: false,
+          value: false
         },
-        signup_form_customization: {value: null}
+        signup_form_customization: { value: null }
       },
       subsonic: {
         enabled: {
           value: true
         }
-      },
+      }
     }
   },
   mutations: {
@@ -87,12 +87,12 @@ export default {
         value = value + '/'
       }
       state.instanceUrl = value
-      notifyServiceWorker(state.registration, {command: 'serverChosen', serverUrl: state.instanceUrl})
+      notifyServiceWorker(state.registration, { command: 'serverChosen', serverUrl: state.instanceUrl })
       // append the URL to the list (and remove existing one if needed)
       if (value) {
-        let index = state.knownInstances.indexOf(value);
+        const index = state.knownInstances.indexOf(value)
         if (index > -1) {
-          state.knownInstances.splice(index, 1);
+          state.knownInstances.splice(index, 1)
         }
         state.knownInstances.splice(0, 0, value)
       }
@@ -100,7 +100,7 @@ export default {
         axios.defaults.baseURL = null
         return
       }
-      let suffix = 'api/v1/'
+      const suffix = 'api/v1/'
       axios.defaults.baseURL = state.instanceUrl + suffix
     }
   },
@@ -116,12 +116,12 @@ export default {
         relativeUrl = relativeUrl.slice(1)
       }
 
-      let instanceUrl = state.instanceUrl || getDefaultUrl()
+      const instanceUrl = state.instanceUrl || getDefaultUrl()
       return instanceUrl + relativeUrl
     },
     domain: (state) => {
-      let url = state.instanceUrl
-      let parser = document.createElement("a")
+      const url = state.instanceUrl
+      const parser = document.createElement('a')
       parser.href = url
       return parser.hostname
     },
@@ -130,9 +130,9 @@ export default {
     }
   },
   actions: {
-    setUrl ({commit, dispatch}, url) {
+    setUrl ({ commit, dispatch }, url) {
       commit('instanceUrl', url)
-      let modules = [
+      const modules = [
         'auth',
         'favorites',
         'moderation',
@@ -142,14 +142,14 @@ export default {
         'radios'
       ]
       modules.forEach(m => {
-        commit(`${m}/reset`, null, {root: true})
+        commit(`${m}/reset`, null, { root: true })
       })
     },
     // Send a request to the login URL and save the returned JWT
-    fetchSettings ({commit}, payload) {
+    fetchSettings ({ commit }, payload) {
       return axios.get('instance/settings/').then(response => {
         logger.default.info('Successfully fetched instance settings')
-        let sections = {}
+        const sections = {}
         response.data.forEach(e => {
           sections[e.section] = {}
         })
@@ -164,7 +164,7 @@ export default {
         logger.default.error('Error while fetching settings', response.data)
       })
     },
-    fetchFrontSettings ({commit}) {
+    fetchFrontSettings ({ commit }) {
       return axios.get('/front/settings.json').then(response => {
         commit('frontSettings', response.data)
       }, response => {

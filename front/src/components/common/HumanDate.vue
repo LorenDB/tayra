@@ -1,15 +1,21 @@
 <template>
-  <time :datetime="date" :title="date | moment">
-    <i v-if="icon" class="outline clock icon"></i>
+  <time
+    :datetime="date"
+    :title="date | moment"
+  >
+    <i
+      v-if="icon"
+      class="outline clock icon"
+    />
     {{ realDate | ago($store.state.ui.momentLocale) }}
   </time>
 </template>
 <script>
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 export default {
   props: {
-    date: {required: true},
-    icon: {type: Boolean, required: false, default: false},
+    date: { type: String, required: true },
+    icon: { type: Boolean, required: false, default: false }
   },
   computed: {
     ...mapState({

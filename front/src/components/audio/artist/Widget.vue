@@ -1,24 +1,50 @@
 <template>
   <div class="wrapper">
-    <h3 v-if="header" class="ui header">
-      <slot name="title"></slot>
+    <h3
+      v-if="header"
+      class="ui header"
+    >
+      <slot name="title" />
       <span class="ui tiny circular label">{{ count }}</span>
     </h3>
-    <inline-search-bar v-model="query" v-if="search" @search="objects = []; fetchData()"></inline-search-bar>
-    <div class="ui hidden divider"></div>
+    <inline-search-bar
+      v-if="search"
+      v-model="query"
+      @search="objects = []; fetchData()"
+    />
+    <div class="ui hidden divider" />
     <div class="ui five app-cards cards">
-      <div v-if="isLoading" class="ui inverted active dimmer">
-        <div class="ui loader"></div>
+      <div
+        v-if="isLoading"
+        class="ui inverted active dimmer"
+      >
+        <div class="ui loader" />
       </div>
-      <artist-card :artist="artist" v-for="artist in objects" :key="artist.id"></artist-card>
+      <artist-card
+        v-for="artist in objects"
+        :key="artist.id"
+        :artist="artist"
+      />
     </div>
-    <slot v-if="!isLoading && objects.length === 0" name="empty-state">
-      <empty-state @refresh="fetchData" :refresh="true"></empty-state>
+    <slot
+      v-if="!isLoading && objects.length === 0"
+      name="empty-state"
+    >
+      <empty-state
+        :refresh="true"
+        @refresh="fetchData"
+      />
     </slot>
     <template v-if="nextPage">
-      <div class="ui hidden divider"></div>
-      <button v-if="nextPage" @click="fetchData(nextPage)" :class="['ui', 'basic', 'button']">
-        <translate translate-context="*/*/Button,Label">Show more</translate>
+      <div class="ui hidden divider" />
+      <button
+        v-if="nextPage"
+        :class="['ui', 'basic', 'button']"
+        @click="fetchData(nextPage)"
+      >
+        <translate translate-context="*/*/Button,Label">
+          Show more
+        </translate>
       </button>
     </template>
   </div>
@@ -26,17 +52,17 @@
 
 <script>
 import axios from 'axios'
-import ArtistCard from "@/components/audio/artist/Card"
+import ArtistCard from '@/components/audio/artist/Card'
 
 export default {
-  props: {
-    filters: {type: Object, required: true},
-    controls: {type: Boolean, default: true},
-    header: {type: Boolean, default: true},
-    search: {type: Boolean, default: false},
-  },
   components: {
-    ArtistCard,
+    ArtistCard
+  },
+  props: {
+    filters: { type: Object, required: true },
+    controls: { type: Boolean, default: true },
+    header: { type: Boolean, default: true },
+    search: { type: Boolean, default: false }
   },
   data () {
     return {
@@ -47,7 +73,15 @@ export default {
       errors: null,
       previousPage: null,
       nextPage: null,
-      query: '',
+      query: ''
+    }
+  },
+  watch: {
+    offset () {
+      this.fetchData()
+    },
+    '$store.state.moderation.lastUpdate': function () {
+      this.fetchData()
     }
   },
   created () {
@@ -57,11 +91,11 @@ export default {
     fetchData (url) {
       url = url || 'artists/'
       this.isLoading = true
-      let self = this
-      let params = {q: this.query, ...this.filters}
+      const self = this
+      const params = { q: this.query, ...this.filters }
       params.page_size = this.limit
       params.offset = this.offset
-      axios.get(url, {params: params}).then((response) => {
+      axios.get(url, { params: params }).then((response) => {
         self.previousPage = response.data.previous
         self.nextPage = response.data.next
         self.isLoading = false
@@ -78,14 +112,6 @@ export default {
       } else {
         this.offset = Math.max(this.offset - this.limit, 0)
       }
-    },
-  },
-  watch: {
-    offset () {
-      this.fetchData()
-    },
-    "$store.state.moderation.lastUpdate": function () {
-      this.fetchData()
     }
   }
 }

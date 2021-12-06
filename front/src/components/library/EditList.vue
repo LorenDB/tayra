@@ -1,16 +1,43 @@
 <template>
   <div class="wrapper">
     <h3 class="ui header">
-      <slot name="title"></slot>
+      <slot name="title" />
     </h3>
-    <slot v-if="!isLoading && objects.length === 0" name="empty-state"></slot>
-    <button v-if="nextPage || previousPage" :disabled="!previousPage" @click="fetchData(previousPage)" :class="['ui', {disabled: !previousPage}, 'circular', 'icon', 'basic', 'button']"><i :class="['ui', 'angle left', 'icon']"></i></button>
-    <button v-if="nextPage || previousPage" :disabled="!nextPage" @click="fetchData(nextPage)" :class="['ui', {disabled: !nextPage}, 'circular', 'icon', 'basic', 'button']"><i :class="['ui', 'angle right', 'icon']"></i></button>
-    <div class="ui hidden divider"></div>
-    <div v-if="isLoading" class="ui inverted active dimmer">
-      <div class="ui loader"></div>
+    <slot
+      v-if="!isLoading && objects.length === 0"
+      name="empty-state"
+    />
+    <button
+      v-if="nextPage || previousPage"
+      :disabled="!previousPage"
+      :class="['ui', {disabled: !previousPage}, 'circular', 'icon', 'basic', 'button']"
+      @click="fetchData(previousPage)"
+    >
+      <i :class="['ui', 'angle left', 'icon']" />
+    </button>
+    <button
+      v-if="nextPage || previousPage"
+      :disabled="!nextPage"
+      :class="['ui', {disabled: !nextPage}, 'circular', 'icon', 'basic', 'button']"
+      @click="fetchData(nextPage)"
+    >
+      <i :class="['ui', 'angle right', 'icon']" />
+    </button>
+    <div class="ui hidden divider" />
+    <div
+      v-if="isLoading"
+      class="ui inverted active dimmer"
+    >
+      <div class="ui loader" />
     </div>
-    <edit-card @updated="fetchData(url)" @deleted="fetchData(url)" v-for="obj in objects" :key="obj.uuid" :obj="obj" :current-state="currentState" />
+    <edit-card
+      v-for="obj in objects"
+      :key="obj.uuid"
+      :obj="obj"
+      :current-state="currentState"
+      @updated="fetchData(url)"
+      @deleted="fetchData(url)"
+    />
   </div>
 </template>
 
@@ -21,13 +48,13 @@ import axios from 'axios'
 import EditCard from '@/components/library/EditCard'
 
 export default {
-  props: {
-    url: {type: String, required: true},
-    filters: {type: Object, required: false, default: () => {return {}}},
-    currentState: {required: false},
-  },
   components: {
     EditCard
+  },
+  props: {
+    url: { type: String, required: true },
+    filters: { type: Object, required: false, default: () => { return {} } },
+    currentState: { type: Object, required: false, default: () => { return { } } }
   },
   data () {
     return {
@@ -39,6 +66,14 @@ export default {
       nextPage: null
     }
   },
+  watch: {
+    filters: {
+      handler () {
+        this.fetchData(this.url)
+      },
+      deep: true
+    }
+  },
   created () {
     this.fetchData(this.url)
   },
@@ -48,10 +83,10 @@ export default {
         return
       }
       this.isLoading = true
-      let self = this
-      let params = _.clone(this.filters)
+      const self = this
+      const params = _.clone(this.filters)
       params.page_size = this.limit
-      axios.get(url, {params: params}).then((response) => {
+      axios.get(url, { params: params }).then((response) => {
         self.previousPage = response.data.previous
         self.nextPage = response.data.next
         self.isLoading = false
@@ -60,14 +95,6 @@ export default {
         self.isLoading = false
         self.errors = error.backendErrors
       })
-    },
-  },
-  watch: {
-    filters: {
-      handler () {
-        this.fetchData(this.url)
-      },
-      deep: true
     }
   }
 }

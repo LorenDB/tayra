@@ -19,5 +19,5 @@ export default {
   sum: require('lodash/sum'),
   startCase: require('lodash/startCase'),
   tap: require('lodash/tap'),
-  trim: require('lodash/trim'),
+  trim: require('lodash/trim')
 }

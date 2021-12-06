@@ -1,77 +1,111 @@
 <template>
   <div>
     <template v-if="content && !isUpdating">
-      <div v-html="html"></div>
+      <div v-html="html" />
       <template v-if="isTruncated">
-        <div class="ui small hidden divider"></div>
-        <a href="" @click.stop.prevent="showMore = true" v-if="showMore === false">
+        <div class="ui small hidden divider" />
+        <a
+          v-if="showMore === false"
+          href=""
+          @click.stop.prevent="showMore = true"
+        >
           <translate translate-context="*/*/Button,Label">Show more</translate>
         </a>
-        <a href="" @click.stop.prevent="showMore = false" v-else="showMore === true">
+        <a
+          v-else
+          href=""
+          @click.stop.prevent="showMore = false"
+        >
           <translate translate-context="*/*/Button,Label">Show less</translate>
         </a>
-
       </template>
     </template>
     <p v-else-if="!isUpdating">
-      <translate translate-context="*/*/Placeholder">No description available</translate>
+      <translate translate-context="*/*/Placeholder">
+        No description available
+      </translate>
     </p>
     <template v-if="!isUpdating && canUpdate && updateUrl">
-      <div class="ui hidden divider"></div>
-      <span role="button" @click="isUpdating = true">
-        <i class="pencil icon"></i>
+      <div class="ui hidden divider" />
+      <span
+        role="button"
+        @click="isUpdating = true"
+      >
+        <i class="pencil icon" />
         <translate translate-context="Content/*/Button.Label/Verb">Edit</translate>
       </span>
     </template>
-    <form v-if="isUpdating" class="ui form" @submit.prevent="submit()">
-      <div v-if="errors.length > 0" role="alert" class="ui negative message">
-        <h4 class="header"><translate translate-context="Content/Channels/Error message.Title">Error while updating description</translate></h4>
+    <form
+      v-if="isUpdating"
+      class="ui form"
+      @submit.prevent="submit()"
+    >
+      <div
+        v-if="errors.length > 0"
+        role="alert"
+        class="ui negative message"
+      >
+        <h4 class="header">
+          <translate translate-context="Content/Channels/Error message.Title">
+            Error while updating description
+          </translate>
+        </h4>
         <ul class="list">
-          <li v-for="error in errors">{{ error }}</li>
+          <li
+            v-for="(error, key) in errors"
+            :key="key"
+          >
+            {{ error }}
+          </li>
         </ul>
       </div>
-      <content-form v-model="newText" :autofocus="true"></content-form>
-      <a @click.prevent="isUpdating = false" class="left floated">
+      <content-form
+        v-model="newText"
+        :autofocus="true"
+      />
+      <a
+        class="left floated"
+        @click.prevent="isUpdating = false"
+      >
         <translate translate-context="*/*/Button.Label/Verb">Cancel</translate>
       </a>
-      <button :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']" type="submit" :disabled="isLoading">
-        <translate translate-context="Content/Channels/Button.Label/Verb">Update description</translate>
+      <button
+        :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
+        type="submit"
+        :disabled="isLoading"
+      >
+        <translate translate-context="Content/Channels/Button.Label/Verb">
+          Update description
+        </translate>
       </button>
-      <div class="ui clearing hidden divider"></div>
+      <div class="ui clearing hidden divider" />
     </form>
   </div>
 </template>
 
 <script>
-import {secondsToObject} from '@/filters'
 import axios from 'axios'
 import clip from 'text-clipper'
 
 export default {
   props: {
-    content: {required: true},
-    fieldName: {required: false, default: 'description'},
-    updateUrl: {required: false, type: String},
-    canUpdate: {required: false, default: true, type: Boolean},
-    fetchHtml: {required: false, default: false, type: Boolean},
-    permissive: {required: false, default: false, type: Boolean},
-    truncateLength: {required: false, default: 500, type: Number},
+    content: { type: String, required: true },
+    fieldName: { type: String, required: false, default: 'description' },
+    updateUrl: { required: false, type: String, default: '' },
+    canUpdate: { required: false, default: true, type: Boolean },
+    fetchHtml: { required: false, default: false, type: Boolean },
+    permissive: { required: false, default: false, type: Boolean },
+    truncateLength: { required: false, default: 500, type: Number }
 
   },
   data () {
     return {
       isUpdating: false,
       showMore: false,
-      newText: (this.content || {text: ''}).text,
-      errors: null,
+      newText: (this.content || { text: '' }).text,
       isLoading: false,
       errors: [],
       preview: null
-    }
-  },
-  async created () {
-    if (this.fetchHtml) {
-      await this.fetchPreview()
     }
   },
   computed: {
@@ -91,21 +125,26 @@ export default {
       return this.truncateLength > 0 && this.truncatedHtml.length < this.content.html.length
     }
   },
+  async created () {
+    if (this.fetchHtml) {
+      await this.fetchPreview()
+    }
+  },
   methods: {
     async fetchPreview () {
-      let response = await axios.post('text-preview/', {text: this.content.text, permissive: this.permissive})
+      const response = await axios.post('text-preview/', { text: this.content.text, permissive: this.permissive })
       this.preview = response.data.rendered
     },
     submit () {
-      let self = this
+      const self = this
       this.isLoading = true
       this.errors = []
-      let payload = {}
+      const payload = {}
       payload[this.fieldName] = null
       if (this.newText) {
         payload[this.fieldName] = {
-          content_type: "text/markdown",
-          text: this.newText,
+          content_type: 'text/markdown',
+          text: this.newText
         }
       }
       axios.patch(this.updateUrl, payload).then((response) => {
@@ -116,7 +155,7 @@ export default {
         self.errors = error.backendErrors
         self.isLoading = false
       })
-    },
+    }
   }
 }
 </script>

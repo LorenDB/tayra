@@ -1,35 +1,103 @@
 <template>
-  <form class="ui form" @submit.prevent="submit">
-    <p v-if="!library"><translate translate-context="Content/Library/Paragraph">Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family.</translate></p>
-    <div v-if="errors.length > 0" role="alert" class="ui negative message">
-      <h4 class="header"><translate translate-context="Content/*/Error message.Title">Error</translate></h4>
+  <form
+    class="ui form"
+    @submit.prevent="submit"
+  >
+    <p v-if="!library">
+      <translate translate-context="Content/Library/Paragraph">
+        Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family.
+      </translate>
+    </p>
+    <div
+      v-if="errors.length > 0"
+      role="alert"
+      class="ui negative message"
+    >
+      <h4 class="header">
+        <translate translate-context="Content/*/Error message.Title">
+          Error
+        </translate>
+      </h4>
       <ul class="list">
-        <li v-for="error in errors">{{ error }}</li>
+        <li
+          v-for="(error, key) in errors"
+          :key="key"
+        >
+          {{ error }}
+        </li>
       </ul>
     </div>
     <div class="required field">
       <label for="current-name"><translate translate-context="*/*/*/Noun">Name</translate></label>
-      <input id="current-name" name="name" v-model="currentName" :placeholder="labels.namePlaceholder" required maxlength="100">
+      <input
+        id="current-name"
+        v-model="currentName"
+        name="name"
+        :placeholder="labels.namePlaceholder"
+        required
+        maxlength="100"
+      >
     </div>
     <div class="field">
       <label for="current-description"><translate translate-context="*/*/*/Noun">Description</translate></label>
-      <textarea id="current-description" v-model="currentDescription" :placeholder="labels.descriptionPlaceholder" maxlength="2000"></textarea>
+      <textarea
+        id="current-description"
+        v-model="currentDescription"
+        :placeholder="labels.descriptionPlaceholder"
+        maxlength="2000"
+      />
     </div>
     <div class="field">
       <label for="visibility-level"><translate translate-context="*/*/*">Visibility</translate></label>
-      <p><translate translate-context="Content/Library/Paragraph">You are able to share your library with other people, regardless of its visibility.</translate></p>
-      <select id="visibility-level" class="ui dropdown" v-model="currentVisibilityLevel">
-        <option :value="c" v-for="c in ['me', 'instance', 'everyone']">{{ sharedLabels.fields.privacy_level.choices[c] }}</option>
+      <p>
+        <translate translate-context="Content/Library/Paragraph">
+          You are able to share your library with other people, regardless of its visibility.
+        </translate>
+      </p>
+      <select
+        id="visibility-level"
+        v-model="currentVisibilityLevel"
+        class="ui dropdown"
+      >
+        <option
+          v-for="(c, key) in ['me', 'instance', 'everyone']"
+          :key="key"
+          :value="c"
+        >
+          {{ sharedLabels.fields.privacy_level.choices[c] }}
+        </option>
       </select>
     </div>
-    <button class="ui submit button" type="submit">
-      <translate translate-context="Content/Library/Button.Label/Verb" v-if="library">Update library</translate>
-      <translate translate-context="Content/Library/Button.Label/Verb" v-else>Create library</translate>
+    <button
+      class="ui submit button"
+      type="submit"
+    >
+      <translate
+        v-if="library"
+        translate-context="Content/Library/Button.Label/Verb"
+      >
+        Update library
+      </translate>
+      <translate
+        v-else
+        translate-context="Content/Library/Button.Label/Verb"
+      >
+        Create library
+      </translate>
     </button>
-    <dangerous-button v-if="library" type="button" class="ui right floated basic danger button" @confirm="remove()">
-      <translate translate-context="*/*/*/Verb">Delete</translate>
+    <dangerous-button
+      v-if="library"
+      type="button"
+      class="ui right floated basic danger button"
+      @confirm="remove()"
+    >
+      <translate translate-context="*/*/*/Verb">
+        Delete
+      </translate>
       <p slot="modal-header">
-        <translate translate-context="Popup/Library/Title">Delete this library?</translate>
+        <translate translate-context="Popup/Library/Title">
+          Delete this library?
+        </translate>
       </p>
       <p slot="modal-content">
         <translate translate-context="Popup/Library/Paragraph">
@@ -37,7 +105,9 @@
         </translate>
       </p>
       <div slot="modal-confirm">
-        <translate translate-context="Popup/Library/Button.Label/Verb">Delete library</translate>
+        <translate translate-context="Popup/Library/Button.Label/Verb">
+          Delete library
+        </translate>
       </div>
     </dangerous-button>
   </form>
@@ -49,9 +119,9 @@ import MixinsTranslation from '@/components/mixins/Translations.vue'
 
 export default {
   mixins: [MixinsTranslation],
-  props: ['library'],
+  props: { library: { type: Object, required: true } },
   data () {
-    let d = {
+    const d = {
       isLoading: false,
       over: false,
       errors: []
@@ -69,19 +139,19 @@ export default {
   },
   computed: {
     labels () {
-      let namePlaceholder = this.$pgettext('Content/Library/Input.Placeholder', 'My awesome library')
-      let descriptionPlaceholder = this.$pgettext('Content/Library/Input.Placeholder', 'This library contains my personal music, I hope you like it.')
+      const namePlaceholder = this.$pgettext('Content/Library/Input.Placeholder', 'My awesome library')
+      const descriptionPlaceholder = this.$pgettext('Content/Library/Input.Placeholder', 'This library contains my personal music, I hope you like it.')
       return {
         namePlaceholder,
-        descriptionPlaceholder,
+        descriptionPlaceholder
       }
     }
   },
   methods: {
     submit () {
-      let self = this
+      const self = this
       this.isLoading = true
-      let payload = {
+      const payload = {
         name: this.currentName,
         description: this.currentDescription,
         privacy_level: this.currentVisibilityLevel
@@ -117,10 +187,10 @@ export default {
       this.currentDescription = ''
     },
     remove () {
-      let self = this
+      const self = this
       axios.delete(`libraries/${this.library.uuid}/`).then((response) => {
         self.isLoading = false
-        let msg = this.$pgettext('Content/Library/Message', 'Library deleted')
+        const msg = this.$pgettext('Content/Library/Message', 'Library deleted')
         self.$emit('deleted', {})
         self.$store.commit('ui/addMessage', {
           content: msg,

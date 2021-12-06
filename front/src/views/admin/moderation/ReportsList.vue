@@ -1,77 +1,130 @@
 <template>
   <main v-title="labels.reports">
     <section class="ui vertical stripe segment">
-      <h2 class="ui header"><translate translate-context="*/Moderation/*/Noun">Reports</translate></h2>
-      <div class="ui hidden divider"></div>
+      <h2 class="ui header">
+        <translate translate-context="*/Moderation/*/Noun">
+          Reports
+        </translate>
+      </h2>
+      <div class="ui hidden divider" />
       <div class="ui inline form">
         <div class="fields">
           <div class="ui field">
             <label for="reports-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
             <form @submit.prevent="search.query = $refs.search.value">
-              <input id="reports-search" name="search" ref="search" type="text" :value="search.query" :placeholder="labels.searchPlaceholder" />
+              <input
+                id="reports-search"
+                ref="search"
+                name="search"
+                type="text"
+                :value="search.query"
+                :placeholder="labels.searchPlaceholder"
+              >
             </form>
           </div>
           <div class="field">
             <label for="reports-status"><translate translate-context="*/*/*">Status</translate></label>
-            <select id="reports-status" class="ui dropdown" @change="addSearchToken('resolved', $event.target.value)" :value="getTokenValue('resolved', '')">
+            <select
+              id="reports-status"
+              class="ui dropdown"
+              :value="getTokenValue('resolved', '')"
+              @change="addSearchToken('resolved', $event.target.value)"
+            >
               <option value="">
-                <translate translate-context="Content/*/Dropdown">All</translate>
+                <translate translate-context="Content/*/Dropdown">
+                  All
+                </translate>
               </option>
               <option value="yes">
-                <translate translate-context="Content/*/*/Short">Resolved</translate>
+                <translate translate-context="Content/*/*/Short">
+                  Resolved
+                </translate>
               </option>
               <option value="no">
-                <translate translate-context="Content/*/*/Short">Unresolved</translate>
+                <translate translate-context="Content/*/*/Short">
+                  Unresolved
+                </translate>
               </option>
             </select>
           </div>
           <report-category-dropdown
             class="field"
-            @input="addSearchToken('category', $event)"
             :all="true"
             :label="true"
-            :value="getTokenValue('category', '')"></report-category-dropdown>
+            :value="getTokenValue('category', '')"
+            @input="addSearchToken('category', $event)"
+          />
           <div class="field">
             <label for="reports-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
-            <select id="reports-ordering" class="ui dropdown" v-model="ordering">
-              <option v-for="option in orderingOptions" :value="option[0]">
+            <select
+              id="reports-ordering"
+              v-model="ordering"
+              class="ui dropdown"
+            >
+              <option
+                v-for="(option, key) in orderingOptions"
+                :key="key"
+                :value="option[0]"
+              >
                 {{ sharedLabels.filters[option[1]] }}
               </option>
             </select>
           </div>
           <div class="field">
             <label for="reports-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Order</translate></label>
-            <select id="reports-ordering-direction" class="ui dropdown" v-model="orderingDirection">
-              <option value="+"><translate translate-context="Content/Search/Dropdown">Ascending</translate></option>
-              <option value="-"><translate translate-context="Content/Search/Dropdown">Descending</translate></option>
+            <select
+              id="reports-ordering-direction"
+              v-model="orderingDirection"
+              class="ui dropdown"
+            >
+              <option value="+">
+                <translate translate-context="Content/Search/Dropdown">
+                  Ascending
+                </translate>
+              </option>
+              <option value="-">
+                <translate translate-context="Content/Search/Dropdown">
+                  Descending
+                </translate>
+              </option>
             </select>
           </div>
         </div>
       </div>
-      <div v-if="isLoading" class="ui active inverted dimmer">
-        <div class="ui loader"></div>
+      <div
+        v-if="isLoading"
+        class="ui active inverted dimmer"
+      >
+        <div class="ui loader" />
       </div>
       <div v-else-if="!result || result.count === 0">
-        <empty-state @refresh="fetchData()" :refresh="true"></empty-state>
+        <empty-state
+          :refresh="true"
+          @refresh="fetchData()"
+        />
       </div>
       <div v-else-if="mode === 'card'">
-        <report-card @handled="fetchData" :obj="obj" v-for="obj in result.results" :key="obj.uuid" />
+        <report-card
+          v-for="obj in result.results"
+          :key="obj.uuid"
+          :obj="obj"
+          @handled="fetchData"
+        />
       </div>
       <div class="ui center aligned basic segment">
         <pagination
           v-if="result && result.count > paginateBy"
-          @page-changed="selectPage"
           :current="page"
           :paginate-by="paginateBy"
           :total="result.count"
-          ></pagination>
+          @page-changed="selectPage"
+        />
       </div>
     </section>
   </main>
 </template>
 
 <script>
-
 
 import axios from 'axios'
 import _ from '@/lodash'
@@ -81,22 +134,21 @@ import OrderingMixin from '@/components/mixins/Ordering'
 import TranslationsMixin from '@/components/mixins/Translations'
 import ReportCard from '@/components/manage/moderation/ReportCard'
 import ReportCategoryDropdown from '@/components/moderation/ReportCategoryDropdown'
-import {normalizeQuery, parseTokens} from '@/search'
+import { normalizeQuery, parseTokens } from '@/search'
 import SmartSearchMixin from '@/components/mixins/SmartSearch'
 
-
 export default {
-  mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
   components: {
     Pagination,
     ReportCard,
-    ReportCategoryDropdown,
+    ReportCategoryDropdown
   },
+  mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
   props: {
-    mode: {default: 'card'},
+    mode: { type: String, default: 'card' }
   },
   data () {
-    let defaultOrdering = this.getOrderingFromString(this.defaultOrdering || '-creation_date')
+    const defaultOrdering = this.getOrderingFromString(this.defaultOrdering || '-creation_date')
     return {
       time,
       isLoading: false,
@@ -111,11 +163,34 @@ export default {
       ordering: defaultOrdering.field,
       orderingOptions: [
         ['creation_date', 'creation_date'],
-        ['applied_date', 'applied_date'],
+        ['applied_date', 'applied_date']
       ],
       targets: {
         track: {}
       }
+    }
+  },
+  computed: {
+    labels () {
+      return {
+        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by account, summary, domain…'),
+        reports: this.$pgettext('*/Moderation/*/Noun', 'Reports')
+      }
+    }
+  },
+  watch: {
+    search (newValue) {
+      this.page = 1
+      this.fetchData()
+    },
+    page () {
+      this.fetchData()
+    },
+    ordering () {
+      this.fetchData()
+    },
+    orderingDirection () {
+      this.fetchData()
     }
   },
   created () {
@@ -123,58 +198,25 @@ export default {
   },
   methods: {
     fetchData () {
-      let params = _.merge({
-        'page': this.page,
-        'page_size': this.paginateBy,
-        'q': this.search.query,
-        'ordering': this.getOrderingAsString()
+      const params = _.merge({
+        page: this.page,
+        page_size: this.paginateBy,
+        q: this.search.query,
+        ordering: this.getOrderingAsString()
       }, this.filters)
-      let self = this
+      const self = this
       self.isLoading = true
       this.result = null
-      axios.get('manage/moderation/reports/', {params: params}).then((response) => {
+      axios.get('manage/moderation/reports/', { params: params }).then((response) => {
         self.result = response.data
         self.isLoading = false
         if (self.search.query === 'resolved:no') {
           console.log('Refreshing sidebar notifications')
-          self.$store.commit('ui/incrementNotifications', {type: 'pendingReviewReports', value: response.data.count})
+          self.$store.commit('ui/incrementNotifications', { type: 'pendingReviewReports', value: response.data.count })
         }
       }, error => {
         self.isLoading = false
         self.errors = error.backendErrors
-      })
-    },
-    fetchTargets () {
-      // we request target data via the API so we can display previous state
-      // additionnal data next to the edit card
-      let self = this
-      let typesAndIds = {
-        track: {
-          url: 'tracks/',
-          ids: [],
-        }
-      }
-      this.result.results.forEach((m) => {
-        if (!m.target || !typesAndIds[m.target.type]) {
-          return
-        }
-        typesAndIds[m.target.type]['ids'].push(m.target.id)
-      })
-      Object.keys(typesAndIds).forEach((k) => {
-        let config = typesAndIds[k]
-        if (config.ids.length === 0) {
-          return
-        }
-        axios.get(config.url, {params: {id: _.uniq(config.ids), hidden: 'null'}}).then((response) => {
-          response.data.results.forEach((e) => {
-            self.$set(self.targets[k], e.id, {
-              payload: e,
-              currentState: edits.getCurrentStateForObj(e, edits.getConfigs.bind(self)()[k])
-            })
-          })
-        }, error => {
-          self.errors = error.backendErrors
-        })
       })
     },
     selectPage: function (page) {
@@ -199,29 +241,6 @@ export default {
         return this.targets[target.type][String(target.id)].currentState
       }
       return {}
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by account, summary, domain…'),
-        reports: this.$pgettext('*/Moderation/*/Noun', "Reports"),
-      }
-    },
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    ordering () {
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.fetchData()
     }
   }
 }

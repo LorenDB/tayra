@@ -16,7 +16,7 @@ export default {
       type: 'content',
       required: true,
       label: this.$pgettext('*/*/*/Noun', 'Description'),
-      getValue: (obj) => { return obj.description || {text: null, content_type: 'text/markdown'}},
+      getValue: (obj) => { return obj.description || { text: null, content_type: 'text/markdown' } },
       getValueRepr: getContentValueRepr
     }
     const cover = {
@@ -51,7 +51,7 @@ export default {
             label: this.$pgettext('*/*/*/Noun', 'Tags'),
             getValue: (obj) => { return obj.tags },
             getValueRepr: getTagsValueRepr
-          },
+          }
         ]
       },
       album: {
@@ -113,7 +113,7 @@ export default {
             type: 'license',
             required: false,
             label: this.$pgettext('Content/*/*/Noun', 'License'),
-            getValue: (obj) => { return obj.license },
+            getValue: (obj) => { return obj.license }
           },
           {
             id: 'tags',
@@ -132,23 +132,23 @@ export default {
     return this.configs[this.objectType]
   },
   getFieldConfig (configs, type, fieldId) {
-    let c = configs[type]
+    const c = configs[type]
     return c.fields.filter((f) => {
-      return f.id == fieldId
+      return f.id === fieldId
     })[0]
   },
   getCurrentState () {
-    let self = this
-    let s = {}
+    const self = this
+    const s = {}
     this.config.fields.forEach(f => {
-      s[f.id] = {value: f.getValue(self.object)}
+      s[f.id] = { value: f.getValue(self.object) }
     })
     return s
   },
   getCurrentStateForObj (obj, config) {
-    let s = {}
+    const s = {}
     config.fields.forEach(f => {
-      s[f.id] = {value: f.getValue(obj)}
+      s[f.id] = { value: f.getValue(obj) }
     })
     return s
   },
@@ -161,8 +161,8 @@ export default {
       return false
     }
     return (
-      this.obj.created_by.full_username === this.$store.state.auth.fullUsername
-      || this.$store.state.auth.availablePermissions['library']
+      this.obj.created_by.full_username === this.$store.state.auth.fullUsername ||
+      this.$store.state.auth.availablePermissions.library
     )
   },
   getCanApprove () {
@@ -172,20 +172,20 @@ export default {
     if (!this.$store.state.auth.authenticated) {
       return false
     }
-    return this.$store.state.auth.availablePermissions['library']
+    return this.$store.state.auth.availablePermissions.library
   },
   getCanEdit () {
     if (!this.$store.state.auth.authenticated) {
       return false
     }
 
-    let libraryPermission = this.$store.state.auth.availablePermissions['library']
-    let objData = this.object || {}
+    const libraryPermission = this.$store.state.auth.availablePermissions.library
+    const objData = this.object || {}
     let isOwner = false
     if (objData.attributed_to) {
       isOwner = this.$store.state.auth.fullUsername === objData.attributed_to.full_username
     }
     return libraryPermission || isOwner
-  },
+  }
 
 }

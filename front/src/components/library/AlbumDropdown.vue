@@ -1,13 +1,19 @@
 <template>
   <span>
 
-    <modal v-if="isEmbedable" :show.sync="showEmbedModal">
+    <modal
+      v-if="isEmbedable"
+      :show.sync="showEmbedModal"
+    >
       <h4 class="header">
         <translate translate-context="Popup/Album/Title/Verb">Embed this album on your website</translate>
       </h4>
       <div class="scrolling content">
         <div class="description">
-          <embed-wizard type="album" :id="object.id" />
+          <embed-wizard
+            :id="object.id"
+            type="album"
+          />
 
         </div>
       </div>
@@ -17,46 +23,69 @@
         </button>
       </div>
     </modal>
-    <button class="ui floating dropdown circular icon basic button" :title="labels.more" v-dropdown="{direction: 'downward'}">
-      <i class="ellipsis vertical icon"></i>
+    <button
+      v-dropdown="{direction: 'downward'}"
+      class="ui floating dropdown circular icon basic button"
+      :title="labels.more"
+    >
+      <i class="ellipsis vertical icon" />
       <div class="menu">
         <a
-          :href="object.fid"
           v-if="domain != $store.getters['instance/domain']"
+          :href="object.fid"
           target="_blank"
-          class="basic item">
-          <i class="external icon"></i>
-          <translate :translate-params="{domain: domain}" translate-context="Content/*/Button.Label/Verb">View on %{ domain }</translate>
+          class="basic item"
+        >
+          <i class="external icon" />
+          <translate
+            :translate-params="{domain: domain}"
+            translate-context="Content/*/Button.Label/Verb"
+          >View on %{ domain }</translate>
         </a>
 
         <div
-          role="button"
           v-if="isEmbedable"
+          role="button"
+          class="basic item"
           @click="showEmbedModal = !showEmbedModal"
-          class="basic item">
-          <i class="code icon"></i>
+        >
+          <i class="code icon" />
           <translate translate-context="Content/*/Button.Label/Verb">Embed</translate>
         </div>
-        <a v-if="isAlbum && musicbrainzUrl" :href="musicbrainzUrl" target="_blank" rel="noreferrer noopener" class="basic item">
-          <i class="external icon"></i>
+        <a
+          v-if="isAlbum && musicbrainzUrl"
+          :href="musicbrainzUrl"
+          target="_blank"
+          rel="noreferrer noopener"
+          class="basic item"
+        >
+          <i class="external icon" />
           <translate translate-context="Content/*/*/Clickable, Verb">View on MusicBrainz</translate>
         </a>
-        <a v-if="!isChannel && isAlbum" :href="discogsUrl" target="_blank" rel="noreferrer noopener" class="basic item">
-          <i class="external icon"></i>
+        <a
+          v-if="!isChannel && isAlbum"
+          :href="discogsUrl"
+          target="_blank"
+          rel="noreferrer noopener"
+          class="basic item"
+        >
+          <i class="external icon" />
           <translate translate-context="Content/*/Button.Label/Verb">Search on Discogs</translate>
-                    </a>
+        </a>
         <router-link
           v-if="object.is_local"
           :to="{name: 'library.albums.edit', params: {id: object.id }}"
-          class="basic item">
-          <i class="edit icon"></i>
+          class="basic item"
+        >
+          <i class="edit icon" />
           <translate translate-context="Content/*/Button.Label/Verb">Edit</translate>
         </router-link>
         <dangerous-button
-          :class="['ui', {loading: isLoading}, 'item']"
           v-if="artist && $store.state.auth.authenticated && artist.channel && artist.attributed_to.full_username === $store.state.auth.fullUsername"
-          @confirm="remove()">
-          <i class="ui trash icon"></i>
+          :class="['ui', {loading: isLoading}, 'item']"
+          @confirm="remove()"
+        >
+          <i class="ui trash icon" />
           <translate translate-context="*/*/*/Verb">Delete…</translate>
           <p slot="modal-header"><translate translate-context="Popup/Channel/Title">Delete this album?</translate></p>
           <div slot="modal-content">
@@ -64,26 +93,33 @@
           </div>
           <p slot="modal-confirm"><translate translate-context="*/*/*/Verb">Delete</translate></p>
         </dangerous-button>
-        <div class="divider"></div>
+        <div class="divider" />
         <div
-          role="button"
-          class="basic item"
           v-for="obj in getReportableObjs({album: object, channel: artist.channel})"
           :key="obj.target.type + obj.target.id"
-          @click.stop.prevent="$store.dispatch('moderation/report', obj.target)">
+          role="button"
+          class="basic item"
+          @click.stop.prevent="$store.dispatch('moderation/report', obj.target)"
+        >
           <i class="share icon" /> {{ obj.label }}
         </div>
-        <div class="divider"></div>
-        <router-link class="basic item" v-if="$store.state.auth.availablePermissions['library']" :to="{name: 'manage.library.albums.detail', params: {id: object.id}}">
-          <i class="wrench icon"></i>
+        <div class="divider" />
+        <router-link
+          v-if="$store.state.auth.availablePermissions['library']"
+          class="basic item"
+          :to="{name: 'manage.library.albums.detail', params: {id: object.id}}"
+        >
+          <i class="wrench icon" />
           <translate translate-context="Content/Moderation/Link">Open in moderation interface</translate>
         </router-link>
         <a
           v-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
           class="basic item"
           :href="$store.getters['instance/absoluteUrl'](`/api/admin/music/album/${object.id}`)"
-          target="_blank" rel="noopener noreferrer">
-          <i class="wrench icon"></i>
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="wrench icon" />
           <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
         </a>
       </div>
@@ -91,30 +127,30 @@
   </span>
 </template>
 <script>
-import EmbedWizard from "@/components/audio/EmbedWizard"
+import EmbedWizard from '@/components/audio/EmbedWizard'
 import Modal from '@/components/semantic/Modal'
 import ReportMixin from '@/components/mixins/Report'
 
-import {getDomain} from '@/utils'
+import { getDomain } from '@/utils'
 
 export default {
+  components: {
+    EmbedWizard,
+    Modal
+  },
   mixins: [ReportMixin],
   props: {
     isLoading: Boolean,
-    artist: Object,
-    object: Object,
-    publicLibraries: Array,
+    artist: { type: Object, required: true },
+    object: { type: Object, required: true },
+    publicLibraries: { type: Array, required: true },
     isAlbum: Boolean,
     isChannel: Boolean,
-    isSerie: Boolean,
-  },
-  components: {
-    EmbedWizard,
-    Modal,
+    isSerie: Boolean
   },
   data () {
     return {
-      showEmbedModal: false,
+      showEmbedModal: false
     }
   },
   computed: {
@@ -122,28 +158,30 @@ export default {
       if (this.object) {
         return getDomain(this.object.fid)
       }
+      return null
     },
-    labels() {
+    labels () {
       return {
-        more: this.$pgettext('*/*/Button.Label/Noun', "More…"),
+        more: this.$pgettext('*/*/Button.Label/Noun', 'More…')
       }
     },
     isEmbedable () {
       return (this.isChannel && this.artist.channel.actor) || this.publicLibraries.length > 0
     },
 
-    musicbrainzUrl() {
+    musicbrainzUrl () {
       if (this.object.mbid) {
-        return "https://musicbrainz.org/release/" + this.object.mbid
+        return 'https://musicbrainz.org/release/' + this.object.mbid
       }
+      return null
     },
-    discogsUrl() {
+    discogsUrl () {
       return (
-        "https://discogs.com/search/?type=release&title=" +
-        encodeURI(this.object.title) + "&artist=" +
+        'https://discogs.com/search/?type=release&title=' +
+        encodeURI(this.object.title) + '&artist=' +
         encodeURI(this.object.artist.name)
       )
-    },
+    }
   }
 }
 </script>

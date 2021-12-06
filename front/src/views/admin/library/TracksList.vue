@@ -1,25 +1,30 @@
 <template>
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
-      <h2 class="ui header">{{ labels.title }}</h2>
-      <div class="ui hidden divider"></div>
-      <tracks-table :update-url="true" :default-query="defaultQuery"></tracks-table>
+      <h2 class="ui header">
+        {{ labels.title }}
+      </h2>
+      <div class="ui hidden divider" />
+      <tracks-table
+        :update-url="true"
+        :default-query="defaultQuery"
+      />
     </section>
   </main>
 </template>
 
 <script>
-import TracksTable from "@/components/manage/library/TracksTable"
+import TracksTable from '@/components/manage/library/TracksTable'
 
 export default {
   components: {
     TracksTable
   },
   props: {
-    defaultQuery: {type: String, required: false},
+    defaultQuery: { type: String, required: false, default: '' }
   },
   computed: {
-    labels() {
+    labels () {
       return {
         title: this.$pgettext('*/*/*', 'Tracks')
       }

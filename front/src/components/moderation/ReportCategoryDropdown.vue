@@ -1,11 +1,26 @@
 <template>
   <div>
     <label v-if="label"><translate translate-context="*/*/*">Category</translate></label>
-    <select class="ui dropdown" :value="value" @change="$emit('input', $event.target.value)" :required="required">
-      <option v-if="empty" disabled value=''></option>
-      <option :value="option.value" v-for="option in allCategories">{{ option.label }}</option>
+    <select
+      class="ui dropdown"
+      :value="value"
+      :required="required"
+      @change="$emit('input', $event.target.value)"
+    >
+      <option
+        v-if="empty"
+        disabled
+        value=""
+      />
+      <option
+        v-for="(option, key) in allCategories"
+        :key="key"
+        :value="option.value"
+      >
+        {{ option.label }}
+      </option>
     </select>
-    <slot></slot>
+    <slot />
   </div>
 </template>
 
@@ -15,26 +30,26 @@ import lodash from '@/lodash'
 export default {
   mixins: [TranslationsMixin],
   props: {
-    value: {},
-    all: {},
-    label: {},
-    empty: {},
-    required: {},
-    restrictTo: {default: () => { return [] }}
+    value: { type: String, required: true },
+    all: { type: String, required: true },
+    label: { type: String, required: true },
+    empty: { type: String, required: true },
+    required: { type: String, required: true },
+    restrictTo: { type: Array, default: () => { return [] } }
   },
   computed: {
     allCategories () {
-      let c = []
+      const c = []
       if (this.all) {
         c.push(
           {
             value: '',
             label: this.$pgettext('Content/*/Dropdown', 'All')
-          },
+          }
         )
       }
       let choices
-      if (this.restrictTo.length > 0)  {
+      if (this.restrictTo.length > 0) {
         choices = this.restrictTo
       } else {
         choices = lodash.keys(this.sharedLabels.fields.report_type.choices)

@@ -1,55 +1,60 @@
 <template>
   <div class="ui fluid action input">
     <input
+      :id="fieldId"
       required
       name="password"
       :type="passwordInputType"
-      @input="$emit('input', $event.target.value)"
-      :id="fieldId"
       :value="value"
-    />
+      @input="$emit('input', $event.target.value)"
+    >
     <button
-      @click.prevent="showPassword = !showPassword"
       type="button"
       :title="labels.title"
       class="ui icon button"
+      @click.prevent="showPassword = !showPassword"
     >
-      <i class="eye icon"></i>
+      <i class="eye icon" />
     </button>
     <button
       v-if="copyButton"
-      @click.prevent="copyPassword"
       type="button"
       class="ui icon button"
       :title="labels.copy"
+      @click.prevent="copyPassword"
     >
-      <i class="copy icon"></i>
+      <i class="copy icon" />
     </button>
   </div>
 </template>
 <script>
 export default {
-  props: ["value", "defaultShow", "copyButton", "fieldId"],
-  data() {
+  props: {
+    value: { type: String, required: true },
+    defaultShow: { type: Boolean, default: false },
+    copyButton: { type: Boolean, default: false },
+    fieldId: { type: Number, default: 0 }
+  },
+  data () {
     return {
-      showPassword: this.defaultShow || false,
-    };
+      showPassword: this.defaultShow || false
+    }
   },
   computed: {
     labels () {
       return {
         title: this.$pgettext(
-          "Content/Settings/Button.Tooltip/Verb",
-          "Show/hide password"
+          'Content/Settings/Button.Tooltip/Verb',
+          'Show/hide password'
         ),
-        copy: this.$pgettext("*/*/Button.Label/Short, Verb", "Copy"),
+        copy: this.$pgettext('*/*/Button.Label/Short, Verb', 'Copy')
       }
     },
-    passwordInputType() {
+    passwordInputType () {
       if (this.showPassword) {
-        return "text";
+        return 'text'
       }
-      return "password";
+      return 'password'
     }
   },
   methods: {

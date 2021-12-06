@@ -1,93 +1,153 @@
 <template>
   <section>
-    <library-form :library="object" @updated="$emit('updated')" @deleted="$router.push({name: 'profile.overview', params: {username: $store.state.auth.username}})" />
-    <div class="ui hidden divider"></div>
+    <library-form
+      :library="object"
+      @updated="$emit('updated')"
+      @deleted="$router.push({name: 'profile.overview', params: {username: $store.state.auth.username}})"
+    />
+    <div class="ui hidden divider" />
     <h2 class="ui header">
-      <translate translate-context="*/*/*">Library contents</translate>
+      <translate translate-context="*/*/*">
+        Library contents
+      </translate>
     </h2>
-    <library-files-table :filters="{library: object.uuid}"></library-files-table>
+    <library-files-table :filters="{library: object.uuid}" />
 
-    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider" />
     <h2 class="ui header">
-      <translate translate-context="Content/Federation/*/Noun">Followers</translate>
+      <translate translate-context="Content/Federation/*/Noun">
+        Followers
+      </translate>
     </h2>
-    <div v-if="isLoadingFollows" :class="['ui', {'active': isLoadingFollows}, 'inverted', 'dimmer']">
-      <div class="ui text loader"><translate translate-context="Content/Library/Paragraph">Loading followers…</translate></div>
+    <div
+      v-if="isLoadingFollows"
+      :class="['ui', {'active': isLoadingFollows}, 'inverted', 'dimmer']"
+    >
+      <div class="ui text loader">
+        <translate translate-context="Content/Library/Paragraph">
+          Loading followers…
+        </translate>
+      </div>
     </div>
-    <table v-else-if="follows && follows.count > 0" class="ui table">
+    <table
+      v-else-if="follows && follows.count > 0"
+      class="ui table"
+    >
       <thead>
         <tr>
-          <th><translate translate-context="Content/Library/Table.Label">User</translate></th>
-          <th><translate translate-context="Content/Library/Table.Label">Date</translate></th>
-          <th><translate translate-context="*/*/*">Status</translate></th>
-          <th><translate translate-context="Content/Library/Table.Label">Action</translate></th>
+          <th>
+            <translate translate-context="Content/Library/Table.Label">
+              User
+            </translate>
+          </th>
+          <th>
+            <translate translate-context="Content/Library/Table.Label">
+              Date
+            </translate>
+          </th>
+          <th>
+            <translate translate-context="*/*/*">
+              Status
+            </translate>
+          </th>
+          <th>
+            <translate translate-context="Content/Library/Table.Label">
+              Action
+            </translate>
+          </th>
         </tr>
       </thead>
-      <tr v-for="follow in follows.results" :key="follow.fid">
+      <tr
+        v-for="follow in follows.results"
+        :key="follow.fid"
+      >
         <td><actor-link :actor="follow.actor" /></td>
         <td><human-date :date="follow.creation_date" /></td>
         <td>
-          <span :class="['ui', 'warning', 'basic', 'label']" v-if="follow.approved === null">
+          <span
+            v-if="follow.approved === null"
+            :class="['ui', 'warning', 'basic', 'label']"
+          >
             <translate translate-context="Content/Library/Table/Short">Pending approval</translate>
           </span>
-          <span :class="['ui', 'success', 'basic', 'label']" v-else-if="follow.approved === true">
+          <span
+            v-else-if="follow.approved === true"
+            :class="['ui', 'success', 'basic', 'label']"
+          >
             <translate translate-context="Content/Library/Table/Short">Accepted</translate>
           </span>
-          <span :class="['ui', 'danger', 'basic', 'label']" v-else-if="follow.approved === false">
+          <span
+            v-else-if="follow.approved === false"
+            :class="['ui', 'danger', 'basic', 'label']"
+          >
             <translate translate-context="Content/Library/*/Short">Rejected</translate>
           </span>
         </td>
         <td>
-          <button @click="updateApproved(follow, true)" :class="['ui', 'mini', 'icon', 'labeled', 'success', 'button']" v-if="follow.approved === null || follow.approved === false">
-            <i class="ui check icon"></i> <translate translate-context="Content/Library/Button.Label">Accept</translate>
+          <button
+            v-if="follow.approved === null || follow.approved === false"
+            :class="['ui', 'mini', 'icon', 'labeled', 'success', 'button']"
+            @click="updateApproved(follow, true)"
+          >
+            <i class="ui check icon" /> <translate translate-context="Content/Library/Button.Label">
+              Accept
+            </translate>
           </button>
-          <button @click="updateApproved(follow, false)" :class="['ui', 'mini', 'icon', 'labeled', 'danger', 'button']" v-if="follow.approved === null || follow.approved === true">
-            <i class="ui x icon"></i> <translate translate-context="Content/Library/Button.Label">Reject</translate>
+          <button
+            v-if="follow.approved === null || follow.approved === true"
+            :class="['ui', 'mini', 'icon', 'labeled', 'danger', 'button']"
+            @click="updateApproved(follow, false)"
+          >
+            <i class="ui x icon" /> <translate translate-context="Content/Library/Button.Label">
+              Reject
+            </translate>
           </button>
         </td>
       </tr>
-
     </table>
-    <p v-else><translate translate-context="Content/Library/Paragraph">Nobody is following this library</translate></p>
+    <p v-else>
+      <translate translate-context="Content/Library/Paragraph">
+        Nobody is following this library
+      </translate>
+    </p>
   </section>
 </template>
 
 <script>
-import LibraryFilesTable from "@/views/content/libraries/FilesTable"
-import LibraryForm from "@/views/content/libraries/Form"
-import axios from "axios"
+import LibraryFilesTable from '@/views/content/libraries/FilesTable'
+import LibraryForm from '@/views/content/libraries/Form'
+import axios from 'axios'
 
 export default {
-  props: ['object'],
   components: {
     LibraryForm,
     LibraryFilesTable
   },
+  props: { object: { type: String, required: true } },
   data () {
     return {
       isLoadingFollows: false,
       follows: null
     }
   },
-  created() {
+  created () {
     this.fetchFollows()
   },
   methods: {
-    fetchFollows() {
-      let self = this
+    fetchFollows () {
+      const self = this
       self.isLoadingLibrary = true
       axios.get(`libraries/${this.object.uuid}/follows/`).then(response => {
         self.follows = response.data
         self.isLoadingFollows = false
       })
     },
-    updateApproved(follow, value) {
-      let self = this
+    updateApproved (follow, value) {
       let action
       if (value) {
-        action = "accept"
+        action = 'accept'
       } else {
-        action = "reject"
+        action = 'reject'
       }
       axios
         .post(`federation/follows/library/${follow.uuid}/${action}/`)

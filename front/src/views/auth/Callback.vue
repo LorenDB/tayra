@@ -2,10 +2,14 @@
   <main class="main pusher">
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
-        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider" />
         <div class="ui active inverted dimmer">
           <div class="ui text loader">
-            <h2><translate translate-context="*/Login/*">Logging in…</translate></h2>
+            <h2>
+              <translate translate-context="*/Login/*">
+                Logging in…
+              </translate>
+            </h2>
           </div>
         </div>
       </div>
@@ -16,7 +20,10 @@
 <script>
 
 export default {
-  props: ["state", "code"],
+  props: {
+    state: { type: String, required: true },
+    code: { type: String, required: true }
+  },
   async mounted () {
     await this.$store.dispatch('auth/handleOauthCallback', this.code)
     this.$router.push(this.state || '/library')

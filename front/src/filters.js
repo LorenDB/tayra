@@ -14,14 +14,14 @@ export function truncate (str, max, ellipsis, middle) {
     return str
   }
   if (middle) {
-    var sepLen = 1,
-        charsToShow = max - sepLen,
-        frontChars = Math.ceil(charsToShow/2),
-        backChars = Math.floor(charsToShow/2);
+    const sepLen = 1
+    const charsToShow = max - sepLen
+    const frontChars = Math.ceil(charsToShow / 2)
+    const backChars = Math.floor(charsToShow / 2)
 
     return str.substr(0, frontChars) +
            ellipsis +
-           str.substr(str.length - backChars);
+           str.substr(str.length - backChars)
   } else {
     return str.slice(0, max) + ellipsis
   }
@@ -51,20 +51,20 @@ export function fromNow (date, locale) {
     relativeTime: {
       future: 'in %s',
       past: '%s ago',
-      s:  'seconds',
+      s: 'seconds',
       ss: '%ss',
-      m:  'a minute',
+      m: 'a minute',
       mm: '%dm',
-      h:  'an hour',
+      h: 'an hour',
       hh: '%dh',
-      d:  'a day',
+      d: 'a day',
       dd: '%dd',
-      M:  'a month',
+      M: 'a month',
       MM: '%dM',
-      y:  'a year',
+      y: 'a year',
       yy: '%dY'
     }
-  });
+  })
   const m = moment(date)
   m.locale(locale)
   return m.fromNow(true)
@@ -73,7 +73,7 @@ export function fromNow (date, locale) {
 Vue.filter('fromNow', fromNow)
 
 export function secondsToObject (seconds) {
-  let m = moment.duration(seconds, 'seconds')
+  const m = moment.duration(seconds, 'seconds')
   return {
     seconds: m.seconds(),
     minutes: m.minutes(),
@@ -84,9 +84,9 @@ export function secondsToObject (seconds) {
 Vue.filter('secondsToObject', secondsToObject)
 
 export function padDuration (duration) {
-  var s = String(duration);
-  while (s.length < 2) {s = "0" + s;}
-  return s;
+  let s = String(duration)
+  while (s.length < 2) { s = '0' + s }
+  return s
 }
 
 Vue.filter('padDuration', padDuration)
@@ -117,15 +117,15 @@ export function capitalize (str) {
 Vue.filter('capitalize', capitalize)
 
 export function humanSize (bytes) {
-  let si = true
-  var thresh = si ? 1000 : 1024
+  const si = true
+  const thresh = si ? 1000 : 1024
   if (Math.abs(bytes) < thresh) {
     return bytes + ' B'
   }
-  var units = si
+  const units = si
     ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
     : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
-  var u = -1
+  let u = -1
   do {
     bytes /= thresh
     ++u

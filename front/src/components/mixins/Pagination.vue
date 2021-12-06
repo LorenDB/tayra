@@ -1,8 +1,8 @@
 <script>
 export default {
   props: {
-    defaultPage: {required: false, default: 1},
-    defaultPaginateBy: {required: false}
+    defaultPage: { type: Number, required: false, default: 1 },
+    defaultPaginateBy: { type: Number, required: false, default: 1 }
   }
 }
 </script>

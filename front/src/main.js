@@ -1,10 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import logger from '@/logging'
-
-logger.default.info('Loading environment:', process.env.NODE_ENV)
-logger.default.debug('Environment variables:', process.env)
-import jQuery from "jquery"
+import jQuery from 'jquery'
 
 import Vue from 'vue'
 import moment from 'moment'
@@ -16,12 +13,15 @@ import store from './store'
 import GetTextPlugin from 'vue-gettext'
 import { sync } from 'vuex-router-sync'
 import locales from '@/locales'
-import createAuthRefreshInterceptor from 'axios-auth-refresh';
+import createAuthRefreshInterceptor from 'axios-auth-refresh'
 
 import filters from '@/filters' // eslint-disable-line
-import {parseAPIErrors} from '@/utils'
+import { parseAPIErrors } from '@/utils'
 import globals from '@/components/globals' // eslint-disable-line
 import './registerServiceWorker'
+
+logger.default.info('Loading environment:', process.env.NODE_ENV)
+logger.default.debug('Environment variables:', process.env)
 
 sync(store, router)
 
@@ -29,8 +29,8 @@ window.$ = window.jQuery = require('jquery')
 require('./semantic.js')
 let APP = null
 
-let availableLanguages = (function () {
-  let l = {}
+const availableLanguages = (function () {
+  const l = {}
   locales.locales.forEach(c => {
     l[c.code] = c.label
   })
@@ -69,7 +69,7 @@ Vue.directive('dropdown', function (el, binding) {
     action: function (text, value, $el) {
       // used to ensure focusing the dropdown and clicking via keyboard
       // works as expected
-      let button = $el[0]
+      const button = $el[0]
       button.click()
       jQuery(el).find('.ui.dropdown').dropdown('hide')
     },
@@ -79,10 +79,9 @@ Vue.directive('dropdown', function (el, binding) {
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 axios.interceptors.request.use(function (config) {
-
   // Do something before request is sent
   if (store.state.auth.oauth.accessToken) {
-    config.headers['Authorization'] = store.getters['auth/header']
+    config.headers.Authorization = store.getters['auth/header']
   }
   return config
 }, function (error) {
@@ -98,7 +97,7 @@ axios.interceptors.response.use(function (response) {
   if (store.state.auth.authenticated && !store.state.auth.oauth.accessToken && error.response.status === 401) {
     store.commit('auth/authenticated', false)
     logger.default.warn('Received 401 response from API, redirecting to login form', router.currentRoute.fullPath)
-    router.push({name: 'login', query: {next: router.currentRoute.fullPath}})
+    router.push({ name: 'login', query: { next: router.currentRoute.fullPath } })
   }
   if (error.response.status === 404) {
     error.backendErrors.push('Resource not found')
@@ -106,28 +105,28 @@ axios.interceptors.response.use(function (response) {
     error.backendErrors.push('Permission denied')
   } else if (error.response.status === 429) {
     let message
-    let rateLimitStatus = {
+    const rateLimitStatus = {
       limit: error.response.headers['x-ratelimit-limit'],
       scope: error.response.headers['x-ratelimit-scope'],
       remaining: error.response.headers['x-ratelimit-remaining'],
       duration: error.response.headers['x-ratelimit-duration'],
       availableSeconds: error.response.headers['retry-after'],
       reset: error.response.headers['x-ratelimit-reset'],
-      resetSeconds: error.response.headers['x-ratelimit-resetseconds'],
+      resetSeconds: error.response.headers['x-ratelimit-resetseconds']
     }
     if (rateLimitStatus.availableSeconds) {
       rateLimitStatus.availableSeconds = parseInt(rateLimitStatus.availableSeconds)
-      let tryAgain = moment().add(rateLimitStatus.availableSeconds, 's').toNow(true)
+      const tryAgain = moment().add(rateLimitStatus.availableSeconds, 's').toNow(true)
       message = APP.$pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again in %{ delay }')
-      message = APP.$gettextInterpolate(message, {delay: tryAgain})
+      message = APP.$gettextInterpolate(message, { delay: tryAgain })
     } else {
-      message =  APP.$pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again later')
+      message = APP.$pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again later')
     }
     error.backendErrors.push(message)
-    store.commit("ui/addMessage", {
+    store.commit('ui/addMessage', {
       content: message,
       date: new Date(),
-      class: 'error',
+      class: 'error'
     })
     logger.default.error('This client is rate-limited!', rateLimitStatus)
   } else if (error.response.status === 500) {
@@ -137,7 +136,7 @@ axios.interceptors.response.use(function (response) {
       error.backendErrors.push(error.response.data.detail)
     } else {
       error.rawPayload = error.response.data
-      let parsedErrors = parseAPIErrors(error.response.data)
+      const parsedErrors = parseAPIErrors(error.response.data)
       error.backendErrors = [...error.backendErrors, ...parsedErrors]
     }
   }
@@ -153,15 +152,15 @@ const refreshAuth = (failedRequest) => {
     console.log('Failed request, refreshing auth…')
     // maybe the token was expired, let's try to refresh it
     return store.dispatch('auth/refreshOauthToken').then(() => {
-      failedRequest.response.config.headers['Authorization'] = store.getters["auth/header"];
-      return Promise.resolve();
+      failedRequest.response.config.headers.Authorization = store.getters['auth/header']
+      return Promise.resolve()
     })
   } else {
-    return Promise.resolve();
+    return Promise.resolve()
   }
 }
 
-createAuthRefreshInterceptor(axios, refreshAuth);
+createAuthRefreshInterceptor(axios, refreshAuth)
 
 store.dispatch('instance/fetchFrontSettings').finally(() => {
   /* eslint-disable no-new */
@@ -169,26 +168,26 @@ store.dispatch('instance/fetchFrontSettings').finally(() => {
     el: '#app',
     router,
     store,
-    render (h) {
-      return h('App')
-    },
     components: { App },
     created () {
       APP = this
       window.addEventListener('resize', this.handleResize)
-      this.handleResize();
+      this.handleResize()
     },
-    destroyed() {
+    destroyed () {
       window.removeEventListener('resize', this.handleResize)
     },
     methods: {
-      handleResize() {
+      handleResize () {
         this.$store.commit('ui/window', {
           width: window.innerWidth,
-          height: window.innerHeight,
+          height: window.innerHeight
         })
       }
     },
+    render (h) {
+      return h('App')
+    }
   })
 
   logger.default.info('Everything loaded!')

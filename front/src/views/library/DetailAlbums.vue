@@ -5,11 +5,24 @@
       :header="false"
       :search="true"
       :controls="false"
-      :filters="{playable: true, ordering: '-creation_date', library: object.uuid}">
+      :filters="{playable: true, ordering: '-creation_date', library: object.uuid}"
+    >
       <empty-state slot="empty-state">
         <p>
-          <translate key="1" v-if="isOwner" translate-context="*/*/*">This library is empty, you should upload something in it!</translate>
-          <translate key="2" v-else translate-context="*/*/*">You may need to follow this library to see its content.</translate>
+          <translate
+            v-if="isOwner"
+            key="1"
+            translate-context="*/*/*"
+          >
+            This library is empty, you should upload something in it!
+          </translate>
+          <translate
+            v-else
+            key="2"
+            translate-context="*/*/*"
+          >
+            You may need to follow this library to see its content.
+          </translate>
         </p>
       </empty-state>
     </album-widget>
@@ -17,12 +30,15 @@
 </template>
 
 <script>
-import AlbumWidget from "@/components/audio/album/Widget"
+import AlbumWidget from '@/components/audio/album/Widget'
 
 export default {
-  props: ['object', 'isOwner'],
   components: {
-    AlbumWidget,
+    AlbumWidget
   },
+  props: {
+    object: { type: String, required: true },
+    isOwner: { type: Boolean, required: true }
+  }
 }
 </script>

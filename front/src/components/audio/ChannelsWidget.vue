@@ -1,21 +1,37 @@
 <template>
   <div>
-    <slot></slot>
-    <div class="ui hidden divider"></div>
+    <slot />
+    <div class="ui hidden divider" />
     <div class="ui app-cards cards">
-      <div v-if="isLoading" class="ui inverted active dimmer">
-        <div class="ui loader"></div>
+      <div
+        v-if="isLoading"
+        class="ui inverted active dimmer"
+      >
+        <div class="ui loader" />
       </div>
-      <channel-card v-for="object in objects" :object="object" :key="object.uuid" />
+      <channel-card
+        v-for="object in objects"
+        :key="object.uuid"
+        :object="object"
+      />
     </div>
     <template v-if="nextPage">
-      <div class="ui hidden divider"></div>
-      <button v-if="nextPage" @click="fetchData(nextPage)" :class="['ui', 'basic', 'button']">
-        <translate translate-context="*/*/Button,Label">Show more</translate>
+      <div class="ui hidden divider" />
+      <button
+        v-if="nextPage"
+        :class="['ui', 'basic', 'button']"
+        @click="fetchData(nextPage)"
+      >
+        <translate translate-context="*/*/Button,Label">
+          Show more
+        </translate>
       </button>
     </template>
     <template v-if="!isLoading && objects.length === 0">
-      <empty-state @refresh="fetchData('channels/')" :refresh="true"></empty-state>
+      <empty-state
+        :refresh="true"
+        @refresh="fetchData('channels/')"
+      />
     </template>
   </div>
 </template>
@@ -26,12 +42,12 @@ import axios from 'axios'
 import ChannelCard from '@/components/audio/ChannelCard'
 
 export default {
-  props: {
-    filters: {type: Object, required: true},
-    limit: {type: Number, default: 5},
-  },
   components: {
     ChannelCard
+  },
+  props: {
+    filters: { type: Object, required: true },
+    limit: { type: Number, default: 5 }
   },
   data () {
     return {
@@ -51,11 +67,11 @@ export default {
         return
       }
       this.isLoading = true
-      let self = this
-      let params = _.clone(this.filters)
+      const self = this
+      const params = _.clone(this.filters)
       params.page_size = this.limit
       params.include_channels = true
-      axios.get(url, {params: params}).then((response) => {
+      axios.get(url, { params: params }).then((response) => {
         self.nextPage = response.data.next
         self.isLoading = false
         self.objects = self.objects.concat(response.data.results)
@@ -65,7 +81,7 @@ export default {
         self.isLoading = false
         self.errors = error.backendErrors
       })
-    },
+    }
   }
 }
 </script>

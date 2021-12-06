@@ -1,75 +1,128 @@
 <template>
   <main v-title="labels.reports">
     <section class="ui vertical stripe segment">
-      <h2 class="ui header"><translate translate-context="*/Moderation/*/Noun">User Requests</translate></h2>
-      <div class="ui hidden divider"></div>
+      <h2 class="ui header">
+        <translate translate-context="*/Moderation/*/Noun">
+          User Requests
+        </translate>
+      </h2>
+      <div class="ui hidden divider" />
       <div class="ui inline form">
         <div class="fields">
           <div class="ui field">
             <label for="requests-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
             <form @submit.prevent="search.query = $refs.search.value">
-              <input id="requests-search" name="search" ref="search" type="text" :value="search.query" :placeholder="labels.searchPlaceholder" />
+              <input
+                id="requests-search"
+                ref="search"
+                name="search"
+                type="text"
+                :value="search.query"
+                :placeholder="labels.searchPlaceholder"
+              >
             </form>
           </div>
           <div class="field">
             <label for="requests-status"><translate translate-context="*/*/*">Status</translate></label>
-            <select id="requests-status" class="ui dropdown" @change="addSearchToken('status', $event.target.value)" :value="getTokenValue('status', '')">
+            <select
+              id="requests-status"
+              class="ui dropdown"
+              :value="getTokenValue('status', '')"
+              @change="addSearchToken('status', $event.target.value)"
+            >
               <option value="">
-                <translate translate-context="Content/*/Dropdown">All</translate>
+                <translate translate-context="Content/*/Dropdown">
+                  All
+                </translate>
               </option>
               <option value="pending">
-                <translate translate-context="Content/Library/*/Short">Pending</translate>
+                <translate translate-context="Content/Library/*/Short">
+                  Pending
+                </translate>
               </option>
               <option value="approved">
-                <translate translate-context="Content/*/*/Short">Approved</translate>
+                <translate translate-context="Content/*/*/Short">
+                  Approved
+                </translate>
               </option>
               <option value="refused">
-                <translate translate-context="Content/*/*/Short">Refused</translate>
+                <translate translate-context="Content/*/*/Short">
+                  Refused
+                </translate>
               </option>
             </select>
           </div>
           <div class="field">
             <label for="requests-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
-            <select id="requests-ordering" class="ui dropdown" v-model="ordering">
-              <option v-for="option in orderingOptions" :value="option[0]">
+            <select
+              id="requests-ordering"
+              v-model="ordering"
+              class="ui dropdown"
+            >
+              <option
+                v-for="(option, key) in orderingOptions"
+                :key="key"
+                :value="option[0]"
+              >
                 {{ sharedLabels.filters[option[1]] }}
               </option>
             </select>
           </div>
           <div class="field">
             <label for="requests-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Order</translate></label>
-            <select id="requests-ordering-direction" class="ui dropdown" v-model="orderingDirection">
-              <option value="+"><translate translate-context="Content/Search/Dropdown">Ascending</translate></option>
-              <option value="-"><translate translate-context="Content/Search/Dropdown">Descending</translate></option>
+            <select
+              id="requests-ordering-direction"
+              v-model="orderingDirection"
+              class="ui dropdown"
+            >
+              <option value="+">
+                <translate translate-context="Content/Search/Dropdown">
+                  Ascending
+                </translate>
+              </option>
+              <option value="-">
+                <translate translate-context="Content/Search/Dropdown">
+                  Descending
+                </translate>
+              </option>
             </select>
           </div>
         </div>
       </div>
-      <div v-if="isLoading" class="ui active inverted dimmer">
-        <div class="ui loader"></div>
+      <div
+        v-if="isLoading"
+        class="ui active inverted dimmer"
+      >
+        <div class="ui loader" />
       </div>
       <div v-else-if="!result || result.count === 0">
-        <empty-state @refresh="fetchData()" :refresh="true"></empty-state>
+        <empty-state
+          :refresh="true"
+          @refresh="fetchData()"
+        />
       </div>
       <template v-else>
-        <user-request-card @handled="fetchData" :obj="obj" v-for="obj in result.results" :key="obj.uuid" />
+        <user-request-card
+          v-for="obj in result.results"
+          :key="obj.uuid"
+          :obj="obj"
+          @handled="fetchData"
+        />
         <div class="ui center aligned basic segment">
           <pagination
             v-if="result.count > paginateBy"
-            @page-changed="selectPage"
             :current="page"
             :paginate-by="paginateBy"
             :total="result.count"
-            ></pagination>
+            @page-changed="selectPage"
+          />
         </div>
-
       </template>
     </section>
   </main>
 </template>
 
 <script>
-
 
 import axios from 'axios'
 import _ from '@/lodash'
@@ -78,16 +131,15 @@ import Pagination from '@/components/Pagination'
 import OrderingMixin from '@/components/mixins/Ordering'
 import TranslationsMixin from '@/components/mixins/Translations'
 import UserRequestCard from '@/components/manage/moderation/UserRequestCard'
-import {normalizeQuery, parseTokens} from '@/search'
+import { normalizeQuery, parseTokens } from '@/search'
 import SmartSearchMixin from '@/components/mixins/SmartSearch'
 
-
 export default {
-  mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
   components: {
     Pagination,
-    UserRequestCard,
+    UserRequestCard
   },
+  mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
   data () {
     return {
       time,
@@ -100,49 +152,20 @@ export default {
       },
       orderingOptions: [
         ['creation_date', 'creation_date'],
-        ['handled_date', 'handled_date'],
+        ['handled_date', 'handled_date']
       ],
       targets: {
         track: {}
       }
     }
   },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      let params = _.merge({
-        'page': this.page,
-        'page_size': this.paginateBy,
-        'q': this.search.query,
-        'ordering': this.getOrderingAsString()
-      }, this.filters)
-      let self = this
-      self.isLoading = true
-      this.result = null
-      axios.get('manage/moderation/requests/', {params: params}).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-        if (self.search.query === 'status:pending') {
-          self.$store.commit('ui/incrementNotifications', {type: 'pendingReviewRequests', value: response.data.count})
-        }
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    },
-  },
   computed: {
     labels () {
       return {
         searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by username…'),
-        reports: this.$pgettext('*/Moderation/*/Noun', "User Requests"),
+        reports: this.$pgettext('*/Moderation/*/Noun', 'User Requests')
       }
-    },
+    }
   },
   watch: {
     search (newValue) {
@@ -157,6 +180,35 @@ export default {
     },
     orderingDirection () {
       this.fetchData()
+    }
+  },
+  created () {
+    this.fetchData()
+  },
+  methods: {
+    fetchData () {
+      const params = _.merge({
+        page: this.page,
+        page_size: this.paginateBy,
+        q: this.search.query,
+        ordering: this.getOrderingAsString()
+      }, this.filters)
+      const self = this
+      self.isLoading = true
+      this.result = null
+      axios.get('manage/moderation/requests/', { params: params }).then((response) => {
+        self.result = response.data
+        self.isLoading = false
+        if (self.search.query === 'status:pending') {
+          self.$store.commit('ui/incrementNotifications', { type: 'pendingReviewRequests', value: response.data.count })
+        }
+      }, error => {
+        self.isLoading = false
+        self.errors = error.backendErrors
+      })
+    },
+    selectPage: function (page) {
+      this.page = page
     }
   }
 }

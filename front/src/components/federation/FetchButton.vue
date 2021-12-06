@@ -1,30 +1,73 @@
 <template>
-  <div @click="createFetch" role="button">
+  <div
+    role="button"
+    @click="createFetch"
+  >
     <div>
-      <slot></slot>
+      <slot />
     </div>
-    <modal class="small" :show.sync="showModal">
+    <modal
+      class="small"
+      :show.sync="showModal"
+    >
       <h3 class="header">
-        <translate translate-context="Popup/*/Title">Refreshing object from remote server…</translate>
+        <translate translate-context="Popup/*/Title">
+          Refreshing object from remote server…
+        </translate>
       </h3>
       <div class="scrolling content">
         <template v-if="fetch && fetch.status != 'pending'">
-          <div v-if="fetch.status === 'skipped'" class="ui message">
-            <h4 class="header"><translate translate-context="Popup/*/Message.Title">Refresh was skipped</translate></h4>
-            <p><translate translate-context="Popup/*/Message.Content">The remote server answered, but returned data was unsupported by Funkwhale.</translate></p>
+          <div
+            v-if="fetch.status === 'skipped'"
+            class="ui message"
+          >
+            <h4 class="header">
+              <translate translate-context="Popup/*/Message.Title">
+                Refresh was skipped
+              </translate>
+            </h4>
+            <p>
+              <translate translate-context="Popup/*/Message.Content">
+                The remote server answered, but returned data was unsupported by Funkwhale.
+              </translate>
+            </p>
           </div>
-          <div v-else-if="fetch.status === 'finished'" class="ui success message">
-            <h4 class="header"><translate translate-context="Popup/*/Message.Title">Refresh successful</translate></h4>
-            <p><translate translate-context="Popup/*/Message.Content">Data was refreshed successfully from remote server.</translate></p>
+          <div
+            v-else-if="fetch.status === 'finished'"
+            class="ui success message"
+          >
+            <h4 class="header">
+              <translate translate-context="Popup/*/Message.Title">
+                Refresh successful
+              </translate>
+            </h4>
+            <p>
+              <translate translate-context="Popup/*/Message.Content">
+                Data was refreshed successfully from remote server.
+              </translate>
+            </p>
           </div>
-          <div v-else-if="fetch.status === 'errored'" class="ui error message">
-            <h4 class="header"><translate translate-context="Popup/*/Message.Title">Refresh error</translate></h4>
-            <p><translate translate-context="Popup/*/Message.Content">An error occurred while trying to refresh data:</translate></p>
+          <div
+            v-else-if="fetch.status === 'errored'"
+            class="ui error message"
+          >
+            <h4 class="header">
+              <translate translate-context="Popup/*/Message.Title">
+                Refresh error
+              </translate>
+            </h4>
+            <p>
+              <translate translate-context="Popup/*/Message.Content">
+                An error occurred while trying to refresh data:
+              </translate>
+            </p>
             <table class="ui very basic collapsing celled table">
               <tbody>
                 <tr>
                   <td>
-                    <translate translate-context="Popup/Import/Table.Label/Noun">Error type</translate>
+                    <translate translate-context="Popup/Import/Table.Label/Noun">
+                      Error type
+                    </translate>
                   </td>
                   <td>
                     {{ fetch.detail.error_code }}
@@ -32,61 +75,136 @@
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Popup/Import/Table.Label/Noun">Error detail</translate>
+                    <translate translate-context="Popup/Import/Table.Label/Noun">
+                      Error detail
+                    </translate>
                   </td>
                   <td>
                     <translate
                       v-if="fetch.detail.error_code === 'http' && fetch.detail.status_code"
                       :translate-params="{status: fetch.detail.status_code}"
-                      translate-context="*/*/Error">The remote server answered with HTTP %{ status }</translate>
+                      translate-context="*/*/Error"
+                    >
+                      The remote server answered with HTTP %{ status }
+                    </translate>
                     <translate
                       v-else-if="['http', 'request'].indexOf(fetch.detail.error_code) > -1"
-                      translate-context="*/*/Error">An HTTP error occurred while contacting the remote server</translate>
+                      translate-context="*/*/Error"
+                    >
+                      An HTTP error occurred while contacting the remote server
+                    </translate>
                     <translate
                       v-else-if="fetch.detail.error_code === 'timeout'"
-                      translate-context="*/*/Error">The remote server didn't respond quickly enough</translate>
+                      translate-context="*/*/Error"
+                    >
+                      The remote server didn't respond quickly enough
+                    </translate>
                     <translate
                       v-else-if="fetch.detail.error_code === 'connection'"
-                      translate-context="*/*/Error">Impossible to connect to the remote server</translate>
+                      translate-context="*/*/Error"
+                    >
+                      Impossible to connect to the remote server
+                    </translate>
                     <translate
                       v-else-if="['invalid_json', 'invalid_jsonld', 'missing_jsonld_type'].indexOf(fetch.detail.error_code) > -1"
-                      translate-context="*/*/Error">The remote server returned invalid JSON or JSON-LD data</translate>
-                    <translate v-else-if="fetch.detail.error_code === 'validation'" translate-context="*/*/Error">Data returned by the remote server had invalid or missing attributes</translate>
-                    <translate v-else-if="fetch.detail.error_code === 'unhandled'" translate-context="*/*/Error">Unknown error</translate>
-                    <translate v-else translate-context="*/*/Error">Unknown error</translate>
+                      translate-context="*/*/Error"
+                    >
+                      The remote server returned invalid JSON or JSON-LD data
+                    </translate>
+                    <translate
+                      v-else-if="fetch.detail.error_code === 'validation'"
+                      translate-context="*/*/Error"
+                    >
+                      Data returned by the remote server had invalid or missing attributes
+                    </translate>
+                    <translate
+                      v-else-if="fetch.detail.error_code === 'unhandled'"
+                      translate-context="*/*/Error"
+                    >
+                      Unknown error
+                    </translate>
+                    <translate
+                      v-else
+                      translate-context="*/*/Error"
+                    >
+                      Unknown error
+                    </translate>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </template>
-        <div v-else-if="isCreatingFetch" class="ui active inverted dimmer">
+        <div
+          v-else-if="isCreatingFetch"
+          class="ui active inverted dimmer"
+        >
           <div class="ui text loader">
-            <translate translate-context="Popup/*/Loading.Title">Requesting a fetch…</translate>
+            <translate translate-context="Popup/*/Loading.Title">
+              Requesting a fetch…
+            </translate>
           </div>
         </div>
-        <div v-else-if="isWaitingFetch" class="ui active inverted dimmer">
+        <div
+          v-else-if="isWaitingFetch"
+          class="ui active inverted dimmer"
+        >
           <div class="ui text loader">
-            <translate translate-context="Popup/*/Loading.Title">Waiting for result…</translate>
+            <translate translate-context="Popup/*/Loading.Title">
+              Waiting for result…
+            </translate>
           </div>
         </div>
-        <div v-if="errors.length > 0" role="alert" class="ui negative message">
-          <h4 class="header"><translate translate-context="Content/*/Error message.Title">Error while saving settings</translate></h4>
+        <div
+          v-if="errors.length > 0"
+          role="alert"
+          class="ui negative message"
+        >
+          <h4 class="header">
+            <translate translate-context="Content/*/Error message.Title">
+              Error while saving settings
+            </translate>
+          </h4>
           <ul class="list">
-            <li v-for="error in errors">{{ error }}</li>
+            <li
+              v-for="(error, key) in errors"
+              :key="key"
+            >
+              {{ error }}
+            </li>
           </ul>
         </div>
-        <div v-else-if="fetch && fetch.status === 'pending' && pollsCount >= maxPolls" role="alert" class="ui warning message">
-          <h4 class="header"><translate translate-context="Popup/*/Message.Title">Refresh pending</translate></h4>
-          <p><translate translate-context="Popup/*/Message.Content">The refresh request hasn't been processed in time by our server. It will be processed later.</translate></p>
+        <div
+          v-else-if="fetch && fetch.status === 'pending' && pollsCount >= maxPolls"
+          role="alert"
+          class="ui warning message"
+        >
+          <h4 class="header">
+            <translate translate-context="Popup/*/Message.Title">
+              Refresh pending
+            </translate>
+          </h4>
+          <p>
+            <translate translate-context="Popup/*/Message.Content">
+              The refresh request hasn't been processed in time by our server. It will be processed later.
+            </translate>
+          </p>
         </div>
       </div>
       <div class="actions">
         <button class="ui basic cancel button">
-          <translate translate-context="*/*/Button.Label/Verb">Close</translate>
+          <translate translate-context="*/*/Button.Label/Verb">
+            Close
+          </translate>
         </button>
-        <button @click.prevent="showModal = false; $emit('refresh')" class="ui confirm success button" v-if="fetch && fetch.status === 'finished'">
-          <translate translate-context="*/*/Button.Label/Verb">Close and reload page</translate>
+        <button
+          v-if="fetch && fetch.status === 'finished'"
+          class="ui confirm success button"
+          @click.prevent="showModal = false; $emit('refresh')"
+        >
+          <translate translate-context="*/*/Button.Label/Verb">
+            Close and reload page
+          </translate>
         </button>
       </div>
     </modal>
@@ -94,14 +212,14 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from 'axios'
 import Modal from '@/components/semantic/Modal'
 
 export default {
-  props: ['url'],
   components: {
     Modal
   },
+  props: { url: { type: String, required: true } },
   data () {
     return {
       fetch: null,
@@ -110,12 +228,12 @@ export default {
       showModal: false,
       isWaitingFetch: false,
       maxPolls: 15,
-      pollsCount: 0,
+      pollsCount: 0
     }
   },
   methods: {
     createFetch () {
-      let self = this
+      const self = this
       this.fetch = null
       this.pollsCount = 0
       this.errors = []
@@ -134,8 +252,8 @@ export default {
     pollFetch () {
       this.isWaitingFetch = true
       this.pollsCount += 1
-      let url = `federation/fetches/${this.fetch.id}/`
-      let self = this
+      const url = `federation/fetches/${this.fetch.id}/`
+      const self = this
       self.showModal = true
       axios.get(url).then((response) => {
         self.isCreatingFetch = false

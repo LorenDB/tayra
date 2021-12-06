@@ -25,18 +25,17 @@ export default {
     }
   },
   actions: {
-    async fetchOwn ({commit, rootState}) {
-      let userId = rootState.auth.profile.id
+    async fetchOwn ({ commit, rootState }) {
+      const userId = rootState.auth.profile.id
       if (!userId) {
         return
       }
       let playlists = []
       let url = 'playlists/'
       while (url != null) {
-        let response = await axios.get(url, {params: {scope: "me"}})
+        const response = await axios.get(url, { params: { scope: 'me' } })
         playlists = [...playlists, ...response.data.results]
         url = response.data.next
-
       }
       commit('playlists', playlists)
     }

@@ -1,46 +1,58 @@
 <template>
-  <main class="main pusher" v-title="labels.title">
+  <main
+    v-title="labels.title"
+    class="main pusher"
+  >
     <div class="ui vertical stripe segment">
       <section class="ui text container">
         <router-link :to="{name: 'settings'}">
-          <translate translate-context="Content/Applications/Link">Back to settings</translate>
+          <translate translate-context="Content/Applications/Link">
+            Back to settings
+          </translate>
         </router-link>
         <h2 class="ui header">
-          <translate translate-context="Content/Settings/Button.Label">Create a new application</translate>
+          <translate translate-context="Content/Settings/Button.Label">
+            Create a new application
+          </translate>
         </h2>
         <application-form
           :defaults="defaults"
-          @created="$router.push({name: 'settings.applications.edit', params: {id: $event.client_id}})" />
+          @created="$router.push({name: 'settings.applications.edit', params: {id: $event.client_id}})"
+        />
       </section>
     </div>
   </main>
 </template>
 
 <script>
-import ApplicationForm from "@/components/auth/ApplicationForm"
+import ApplicationForm from '@/components/auth/ApplicationForm'
 
 export default {
-  props: ['name', 'redirect_uris', 'scopes'],
   components: {
     ApplicationForm
   },
-   data() {
+  props: {
+    name: { type: String, required: true },
+    redirectUris: { type: String, required: true },
+    scopes: { type: Array, required: true }
+  },
+  data () {
     return {
       application: null,
       isLoading: false,
       defaults: {
         name: this.name,
-        redirect_uris: this.redirect_uris,
-        scopes: this.scopes,
+        redirectUris: this.redirectUris,
+        scopes: this.scopes
       }
     }
   },
   computed: {
-    labels() {
+    labels () {
       return {
-        title: this.$pgettext('Content/Settings/Button.Label', "Create a new application")
+        title: this.$pgettext('Content/Settings/Button.Label', 'Create a new application')
       }
-    },
+    }
   }
 }
 </script>

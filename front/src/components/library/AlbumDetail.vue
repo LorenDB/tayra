@@ -1,21 +1,45 @@
 <template>
   <div v-if="object">
     <h2 class="ui header">
-      <translate key="1" v-if="isSerie" translate-context="Content/Channels/*">Episodes</translate>
-      <translate key="2" v-else translate-context="*/*/*">Tracks</translate>
+      <translate
+        v-if="isSerie"
+        key="1"
+        translate-context="Content/Channels/*"
+      >
+        Episodes
+      </translate>
+      <translate
+        v-else
+        key="2"
+        translate-context="*/*/*"
+      >
+        Tracks
+      </translate>
     </h2>
-    <channel-entries v-if="artist.channel && isSerie" :is-podcast="isSerie" :limit="50" :filters="{channel: artist.channel.uuid, album: object.id, ordering: '-creation_date'}">
-    </channel-entries>
+    <channel-entries
+      v-if="artist.channel && isSerie"
+      :is-podcast="isSerie"
+      :limit="50"
+      :filters="{channel: artist.channel.uuid, album: object.id, ordering: '-creation_date'}"
+    />
     <template v-else-if="discs && discs.length > 1">
-      <div v-for="tracks in discs" :key="tracks.disc_number">
-        <div class="ui hidden divider"></div>
-        <play-button class="right floated mini inverted vibrant" :tracks="tracks"></play-button>
+      <div
+        v-for="tracks in discs"
+        :key="tracks.disc_number"
+      >
+        <div class="ui hidden divider" />
+        <play-button
+          class="right floated mini inverted vibrant"
+          :tracks="tracks"
+        />
         <translate
           tag="h3"
           :translate-params="{number: tracks[0].disc_number}"
           translate-context="Content/Album/"
-        >Volume %{ number }</translate>
-        <track-table 
+        >
+          Volume %{ number }
+        </translate>
+        <track-table
           :is-album="true"
           :tracks="object.tracks"
           :show-position="true"
@@ -26,12 +50,12 @@
           :total="totalTracks"
           :paginate-by="paginateBy"
           :page="page"
-          @page-changed="updatePage">
-        </track-table>
+          @page-changed="updatePage"
+        />
       </div>
     </template>
     <template v-else>
-      <track-table 
+      <track-table
         :is-album="true"
         :tracks="object.tracks"
         :show-position="true"
@@ -42,15 +66,25 @@
         :total="totalTracks"
         :paginate-by="paginateBy"
         :page="page"
-        @page-changed="updatePage">
-      </track-table>
+        @page-changed="updatePage"
+      />
     </template>
     <template v-if="!artist.channel && !isSerie">
       <h2>
-        <translate translate-context="Content/*/Title/Noun">User libraries</translate>
+        <translate translate-context="Content/*/Title/Noun">
+          User libraries
+        </translate>
       </h2>
-      <library-widget @loaded="$emit('libraries-loaded', $event)" :url="'albums/' + object.id + '/libraries/'">
-        <translate slot="subtitle" translate-context="Content/Album/Paragraph">This album is present in the following libraries:</translate>
+      <library-widget
+        :url="'albums/' + object.id + '/libraries/'"
+        @loaded="$emit('libraries-loaded', $event)"
+      >
+        <translate
+          slot="subtitle"
+          translate-context="Content/Album/Paragraph"
+        >
+          This album is present in the following libraries:
+        </translate>
       </library-widget>
     </template>
   </div>
@@ -58,30 +92,38 @@
 
 <script>
 
-import time from "@/utils/time"
-import LibraryWidget from "@/components/federation/LibraryWidget"
+import time from '@/utils/time'
+import LibraryWidget from '@/components/federation/LibraryWidget'
 import ChannelEntries from '@/components/audio/ChannelEntries'
 import TrackTable from '@/components/audio/track/Table'
-import PlayButton from "@/components/audio/PlayButton"
+import PlayButton from '@/components/audio/PlayButton'
 
 export default {
-  props: ["object", "libraries", "discs", "isSerie", "artist", "page", "paginateBy", "totalTracks"],
   components: {
     LibraryWidget,
     TrackTable,
     ChannelEntries,
     PlayButton
   },
-  data() {
+  props: {
+    object: { type: Object, required: true },
+    discs: { type: Array, required: true },
+    isSerie: { type: Boolean, required: true },
+    artist: { type: Object, required: true },
+    page: { type: Number, required: true },
+    paginateBy: { type: Number, required: true },
+    totalTracks: { type: Number, required: true }
+  },
+  data () {
     return {
       time,
-      id: this.object.id,
+      id: this.object.id
     }
   },
   methods: {
-    updatePage: function(page) {
+    updatePage: function (page) {
       this.$emit('page-changed', page)
     }
-  },
+  }
 }
 </script>
