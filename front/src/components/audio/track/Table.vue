@@ -9,7 +9,6 @@
         fetchData();
       "
     />
-    <div class="ui hidden divider" />
 
     <!-- Add a header if needed -->
 
