@@ -24,7 +24,7 @@
       <div class="ui hidden divider" />
       <div class="ui row">
         <artist-widget
-          :key="id"
+          :key="'artist' + id"
           :controls="false"
           :filters="{playable: true, ordering: '-creation_date', tag: id, include_channels: 'false'}"
         >
@@ -44,7 +44,7 @@
           </translate>
         </h3>
         <channels-widget
-          :key="id"
+          :key="'channels' + id"
           :show-modification-date="true"
           :limit="12"
           :filters="{tag: id, ordering: '-creation_date'}"
@@ -52,7 +52,7 @@
         <div class="ui hidden divider" />
         <div class="ui hidden divider" />
         <album-widget
-          :key="id"
+          :key="'album' + id"
           :show-count="true"
           :controls="false"
           :filters="{playable: true, ordering: '-creation_date', tag: id}"
@@ -68,7 +68,7 @@
         <div class="ui hidden divider" />
         <div class="ui hidden divider" />
         <track-widget
-          :key="id"
+          :key="'track' + id"
           :show-count="true"
           :limit="12"
           item-classes="track-item inline"
