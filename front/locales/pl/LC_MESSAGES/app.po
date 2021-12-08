@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
 "PO-Revision-Date: 2021-12-11 20:27+0000\n"
-"Last-Translator: Deleted User <noreply+242@weblate.org>\n"
+"Last-Translator: JuniorJPDJ <git@juniorjpdj.pl>\n"
 "Language-Team: \n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -512,13 +512,12 @@ msgstr "Aktywny"
 
 #: front/src/components/About.vue:109 src/components/About.vue:7
 #: front/src/components/AboutPod.vue:251 src/components/AboutPod.vue:39
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "active user"
 msgid_plural "active users"
-msgstr[0] "%{ count } aktywny użytkownik"
-msgstr[1] "%{ count } aktywni użytkownicy"
-msgstr[2] "%{ count } aktywnych użytkowników"
+msgstr[0] "aktywny użytkownik"
+msgstr[1] "aktywni użytkownicy"
+msgstr[2] "aktywnych użytkowników"
 
 #: front/src/views/admin/ChannelDetail.vue:185
 #: src/views/admin/ChannelDetail.vue:180
@@ -734,13 +733,12 @@ msgid "Administration"
 msgstr "Administracja"
 
 #: front/src/components/AboutPod.vue:237 src/components/AboutPod.vue:25
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "album"
 msgid_plural "albums"
-msgstr[0] "Album"
-msgstr[1] "Album"
-msgstr[2] "Album"
+msgstr[0] "album"
+msgstr[1] "albumy"
+msgstr[2] "albumów"
 
 #: front/src/components/audio/SearchBar.vue:43
 #: front/src/components/channels/AlbumSelect.vue:4
@@ -964,13 +962,12 @@ msgid "Are you sure you want to log out?"
 msgstr "Czy na pewno chcesz się wylogować?"
 
 #: front/src/components/AboutPod.vue:230 src/components/AboutPod.vue:18
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "artist"
 msgid_plural "artists"
-msgstr[0] "Wykonawca"
-msgstr[1] "Wykonawca"
-msgstr[2] "Wykonawca"
+msgstr[0] "wykonawca"
+msgstr[1] "wykonawców"
+msgstr[2] "wykonawców"
 
 #: front/src/components/audio/SearchBar.vue:42
 #: front/src/components/audio/podcast/Table.vue:123
@@ -1206,7 +1203,6 @@ msgid "Browse"
 msgstr "Przeglądaj"
 
 #: front/src/components/About.vue:135
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Browse public content"
 msgstr "Przeglądaj publiczne treści"
@@ -1454,7 +1450,6 @@ msgstr "Pokój czatowy"
 
 #: front/src/components/common/UserMenu.vue:172
 #: front/src/components/common/UserModal.vue:208
-#, fuzzy
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Chat room"
 msgstr "Pokój czatowy"
@@ -1574,7 +1569,6 @@ msgid "Confirmation code"
 msgstr "Kod potwierdzenia"
 
 #: front/src/components/AboutPod.vue:266 src/components/AboutPod.vue:2
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Contact"
 msgstr "Kontakt"
@@ -1806,7 +1800,6 @@ msgid "Dark"
 msgstr "Ciemny"
 
 #: front/src/components/Sidebar.vue:600
-#, fuzzy
 msgctxt "Sidebar/Settings/Dropdown.Label/Theme name"
 msgid "Dark"
 msgstr "Ciemny"
@@ -2222,7 +2215,6 @@ msgstr "Dokumentacja"
 
 #: front/src/components/common/UserMenu.vue:169
 #: front/src/components/common/UserModal.vue:198
-#, fuzzy
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Documentation"
 msgstr "Dokumentacja"
@@ -2571,7 +2563,6 @@ msgstr "Wprowadź swoją nazwę użytkownika lub adres e-mail"
 #: front/src/components/audio/PlayButton.vue:28
 #: front/src/components/audio/podcast/Modal.vue:269
 #: front/src/components/audio/track/Modal.vue:269
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "Episode details"
 msgstr "Szczegóły odcinka"
