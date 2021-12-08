@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-07 18:30+0000\n"
-"PO-Revision-Date: 2021-12-07 14:36+0000\n"
+"PO-Revision-Date: 2021-12-08 17:57+0000\n"
 "Last-Translator: Philipp Wolfer <ph.wolfer@gmail.com>\n"
 "Language-Team: none\n"
 "Language: de\n"
@@ -2806,10 +2806,9 @@ msgid "Fediverse handle"
 msgstr "Fediverse"
 
 #: front/src/components/RemoteSearchForm.vue:81
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Fediverse object"
-msgstr "Fediverse"
+msgstr "Fediverse-Objekt"
 
 #: front/src/components/library/EditCard.vue:43
 msgctxt "Content/Library/Card.Table.Header/Short"
@@ -4067,7 +4066,6 @@ msgid "New password"
 msgstr "Neues Kennwort"
 
 #: front/src/components/channels/AlbumModal.vue:3
-#, fuzzy
 msgctxt "Popup/Channels/Title/Verb"
 msgid "New series"
 msgstr "Neue Serie"
@@ -4456,10 +4454,9 @@ msgstr "Besitzer·in"
 #: front/src/components/audio/ChannelForm.vue:103
 #: front/src/components/audio/ChannelForm.vue:95
 #: front/src/components/audio/ChannelForm.vue:77
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Owner e-mail address"
-msgstr "Meine E-Mail-Adresse ändern"
+msgstr "E-Mail-Adresse des Besitzers"
 
 #: front/src/components/audio/ChannelForm.vue:109
 #: front/src/components/audio/ChannelForm.vue:101
@@ -4503,10 +4500,9 @@ msgid "Password updated successfully"
 msgstr "Kennwort erfolgreich aktualisiert"
 
 #: front/src/components/audio/Player.vue:703
-#, fuzzy
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Pause"
-msgstr "Pausiert"
+msgstr "Pausieren"
 
 #: front/src/App.vue:319
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
@@ -5275,7 +5271,6 @@ msgid "Remove"
 msgstr "Entfernen"
 
 #: front/src/components/auth/Settings.vue:228
-#, fuzzy
 msgctxt "*/Settings/Button.Label/Verb"
 msgid "Remove application"
 msgstr "Anwendung löschen"
