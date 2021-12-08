@@ -182,11 +182,11 @@
             </translate>
           </button>
         </template>
-        <div v-if="!lodash.isEqual(values[fieldConfig.id], initialValues[fieldConfig.id])">
+        <div v-if="fieldValuesChanged(fieldConfig.id)">
           <button
             class="ui tiny basic right floated reset button"
             form="noop"
-            @click.prevent="values[fieldConfig.id] = lodash.clone(initialValues[fieldConfig.id])"
+            @click.prevent="resetField(fieldConfig.id)"
           >
             <i class="undo icon" />
             <translate translate-context="Content/Library/Button.Label">
@@ -361,7 +361,14 @@ export default {
           self.isLoading = false
         }
       )
+    },
+    fieldValuesChanged (fieldId) {
+      return !_.isEqual(this.values[fieldId], this.initialValues[fieldId])
+    },
+    resetField (fieldId) {
+      this.values[fieldId] = _.clone(this.initialValues[fieldId])
     }
   }
+
 }
 </script>

@@ -120,8 +120,8 @@ export default {
     tracks: { type: Array, required: true },
     albums: { type: Array, required: true },
     isLoadingAlbums: { type: Boolean, required: true },
-    nextTracksUrl: { type: String, required: true },
-    nextAlbumsUrl: { type: String, required: true }
+    nextTracksUrl: { type: String, default: null },
+    nextAlbumsUrl: { type: String, default: null }
   },
   data () {
     return {

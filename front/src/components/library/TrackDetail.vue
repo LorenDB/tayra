@@ -301,7 +301,7 @@ export default {
   },
   props: {
     track: { type: Object, required: true },
-    libraries: { type: Array, required: true }
+    libraries: { type: Array, default: null }
   },
   data () {
     return {

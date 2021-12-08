@@ -197,7 +197,7 @@
             <notification-row
               v-for="item in notifications.results"
               :key="item.id"
-              :item="item"
+              :initial-item="item"
             />
           </tbody>
         </table>

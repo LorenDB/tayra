@@ -273,7 +273,7 @@ export default {
     ArtistLabel,
     AlbumDropdown
   },
-  props: { id: { type: Number, required: true } },
+  props: { id: { type: [String, Number], required: true } },
   data () {
     return {
       isLoading: true,

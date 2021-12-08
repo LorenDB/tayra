@@ -33,7 +33,7 @@
         :key="library.uuid"
         :display-scan="false"
         :display-follow="$store.state.auth.authenticated && library.actor.full_username != $store.state.auth.fullUsername"
-        :library="library"
+        :initial-library="library"
         :display-copy-fid="true"
       />
     </div>

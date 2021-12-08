@@ -53,11 +53,11 @@ export default {
   props: {
     type: { type: String, required: true, default: '' },
     customRadio: { type: Object, required: false, default: () => { return {} } },
-    objectId: { type: String, required: false, default: '' }
+    objectId: { type: String, required: false, default: null }
   },
   computed: {
     radio () {
-      if (this.customRadio) {
+      if (Object.keys(this.customRadio).length > 0) {
         return this.customRadio
       }
       return this.$store.getters['radios/types'][this.type]

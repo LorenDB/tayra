@@ -16,7 +16,7 @@
 import { secondsToObject } from '@/filters'
 
 export default {
-  props: { seconds: { type: Number, required: true } },
+  props: { seconds: { type: Number, default: null } },
   computed: {
     durationData () {
       return secondsToObject(this.seconds)

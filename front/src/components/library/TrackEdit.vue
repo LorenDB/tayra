@@ -53,7 +53,7 @@ export default {
   props: {
     objectType: { type: String, required: true },
     object: { type: Object, required: true },
-    libraries: { type: Array, required: true }
+    libraries: { type: Array, default: null }
   },
   data () {
     return {

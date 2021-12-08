@@ -252,7 +252,7 @@ export default {
     EmbedWizard
   },
   mixins: [ReportMixin],
-  props: { id: { type: Number, required: true } },
+  props: { id: { type: [String, Number], required: true } },
   data () {
     return {
       time,

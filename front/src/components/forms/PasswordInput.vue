@@ -33,7 +33,7 @@ export default {
     value: { type: String, required: true },
     defaultShow: { type: Boolean, default: false },
     copyButton: { type: Boolean, default: false },
-    fieldId: { type: Number, default: 0 }
+    fieldId: { type: String, required: true }
   },
   data () {
     return {

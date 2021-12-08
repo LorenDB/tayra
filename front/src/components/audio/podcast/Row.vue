@@ -105,7 +105,7 @@ export default {
     showDuration: { type: Boolean, required: false, default: true },
     index: { type: Number, required: true },
     track: { type: Object, required: true },
-    defaultCover: { type: Object, required: false, default: () => { return {} } }
+    defaultCover: { type: Object, required: false, default: null }
   },
 
   data () {

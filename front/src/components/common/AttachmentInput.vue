@@ -91,7 +91,7 @@ import axios from 'axios'
 
 export default {
   props: {
-    value: { type: String, required: true },
+    value: { type: String, default: null },
     imageClass: { type: String, default: '', required: false }
   },
   data () {

@@ -189,7 +189,7 @@ export default {
     EmbedWizard
   },
   props: {
-    id: { type: Number, required: true },
+    id: { type: [Number, String], required: true },
     defaultEdit: { type: Boolean, default: false }
   },
   data: function () {

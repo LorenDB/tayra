@@ -42,7 +42,7 @@
             <div class="ui buttons">
               <radio-button
                 type="artist"
-                :object-id="object.id"
+                :object-id="String(object.id)"
               />
             </div>
             <div class="ui buttons">
@@ -234,7 +234,7 @@ export default {
     TagsList
   },
   mixins: [ReportMixin],
-  props: { id: { type: Number, required: true } },
+  props: { id: { type: [String, Number], required: true } },
   data () {
     return {
       isLoading: true,

@@ -30,11 +30,11 @@ import lodash from '@/lodash'
 export default {
   mixins: [TranslationsMixin],
   props: {
-    value: { type: String, required: true },
-    all: { type: String, required: true },
-    label: { type: String, required: true },
-    empty: { type: String, required: true },
-    required: { type: String, required: true },
+    value: { type: String, default: null },
+    all: { type: String, default: null },
+    label: { type: Boolean },
+    empty: { type: Boolean },
+    required: { type: Boolean },
     restrictTo: { type: Array, default: () => { return [] } }
   },
   computed: {

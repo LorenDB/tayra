@@ -25,10 +25,10 @@
 import lodash from '@/lodash'
 export default {
   props: {
-    customRadioId: { type: Number, default: 0, required: false },
+    customRadioId: { type: Number, required: false, default: null },
     type: { type: String, required: false, default: '' },
     clientOnly: { type: Boolean, default: false },
-    objectId: { type: String, default: null }
+    objectId: { type: [String, Number, Object], default: null }
   },
   computed: {
     running () {

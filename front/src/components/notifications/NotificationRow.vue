@@ -107,7 +107,7 @@ export default {
           let acceptFollow = null
           let rejectFollow = null
           let message = null
-          if (a.related_object.approved === null) {
+          if (a.related_object && a.related_object.approved === null) {
             message = this.labels.libraryPendingFollowMessage
             acceptFollow = {
               buttonClass: 'success',
@@ -121,7 +121,7 @@ export default {
               label: this.$pgettext('Content/*/Button.Label/Verb', 'Reject'),
               handler: () => { self.rejectLibraryFollow(a.related_object) }
             }
-          } else if (a.related_object.approved) {
+          } else if (a.related_object && a.related_object.approved) {
             message = this.labels.libraryFollowMessage
           } else {
             message = this.labels.libraryRejectMessage

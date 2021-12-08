@@ -244,7 +244,7 @@ export default {
       isLoadingFollow: false,
       showScan: false,
       scanTimeout: null,
-      latestScan: this.library.latest_scan
+      latestScan: this.initialLibrary.latest_scan
     }
   },
   computed: {
