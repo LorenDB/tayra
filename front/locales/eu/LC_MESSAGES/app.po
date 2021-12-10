@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
 "PO-Revision-Date: 2021-12-11 10:29+0000\n"
-"Last-Translator: Sergio Varela <sergitroll9@gmail.com>\n"
+"Last-Translator: Asier Iturralde Sarasola <asier.iturralde@gmail.com>\n"
 "Language-Team: none\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
@@ -668,10 +668,9 @@ msgstr "Ilaran gehitu"
 #: front/src/components/audio/track/Modal.vue:295
 #: front/src/components/audio/podcast/Modal.vue:297
 #: front/src/components/audio/track/Modal.vue:297
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Add to queue"
-msgstr "Ilaran gehitu"
+msgstr "Gehitu ilarara"
 
 #: front/src/components/playlists/PlaylistModal.vue:228
 msgctxt "Popup/Playlist/Table.Button.Tooltip/Verb"
@@ -4320,10 +4319,9 @@ msgid "No rules available."
 msgstr "Ez dago araurik erabilgarri."
 
 #: front/src/components/AboutPod.vue:77
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "No terms available."
-msgstr "Ez dago baldintzarik erabilgarri."
+msgstr "Ez dago baldintzarik eskuragarri."
 
 #: front/src/views/content/libraries/FilesTable.vue:86
 msgctxt "Content/Home/Placeholder"
@@ -4492,10 +4490,9 @@ msgid "Open website"
 msgstr "Ireki webgunea"
 
 #: front/src/components/common/UserModal.vue:190
-#, fuzzy
 msgctxt "Popup/Title/Noun"
 msgid "Options"
-msgstr "Ekintzak"
+msgstr "Aukerak"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:50
 msgctxt "Content/Moderation/Card.Title"
