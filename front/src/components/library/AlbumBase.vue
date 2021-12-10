@@ -332,7 +332,7 @@ export default {
   methods: {
     async fetchData () {
       this.isLoading = true
-      let tracksResponse = axios.get('tracks/', { params: { ordering: 'disc_number,position', album: this.id, page_size: this.paginateBy, page: this.page, include_channels: 'true', playable: 'true' } })
+      let tracksResponse = axios.get('tracks/', { params: { ordering: 'disc_number,position', album: this.id, page_size: this.paginateBy, page: this.page, include_channels: 'true' } })
       const albumResponse = await axios.get(`albums/${this.id}/`, { params: { refresh: 'true' } })
       const artistResponse = await axios.get(`artists/${albumResponse.data.artist.id}/`)
       this.artist = artistResponse.data

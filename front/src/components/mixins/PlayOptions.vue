@@ -16,8 +16,6 @@ export default {
         return this.artist.albums.filter((a) => {
           return a.is_playable === true
         }).length > 0
-      } else if (this.album) {
-        return true
       } else if (this.tracks) {
         return this.tracks.filter((t) => {
           return t.uploads && t.uploads.length > 0
