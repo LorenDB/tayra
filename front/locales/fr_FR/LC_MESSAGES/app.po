@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: French (Funkwhale)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2021-12-10 11:01+0000\n"
-"Last-Translator: manuelviens <manuelviens@protonmail.com>\n"
+"PO-Revision-Date: 2021-12-11 20:27+0000\n"
+"Last-Translator: Manuel Viens <manu@fedi.quebec>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/funkwhale/"
 "front/fr/>\n"
 "Language: fr_FR\n"
@@ -2840,13 +2840,11 @@ msgstr "Fédivers"
 #: front/src/components/audio/ChannelForm.vue:43
 #: front/src/components/audio/ChannelForm.vue:29
 #: front/src/components/audio/ChannelForm.vue:9
-#, fuzzy
 msgctxt "Content/Channel/*"
 msgid "Fediverse handle"
 msgstr "Identifiant du Fédiverse"
 
 #: front/src/components/RemoteSearchForm.vue:131
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Fediverse object"
 msgstr "Objet du Fédiverse"
@@ -4746,7 +4744,6 @@ msgid "Play"
 msgstr "Jouer"
 
 #: front/src/components/audio/Player.vue:407
-#, fuzzy
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Play"
 msgstr "Jouer"
@@ -4940,7 +4937,6 @@ msgid "Podcast channel"
 msgstr "Chaîne de podcasts"
 
 #: front/src/components/library/Podcasts.vue:12
-#, fuzzy
 msgctxt "Content/Search/Input.Label/Noun"
 msgid "Podcast title"
 msgstr "Titre du podcast"
@@ -5294,7 +5290,6 @@ msgid "Refresh was skipped"
 msgstr "Rafraîchissement non effectué"
 
 #: front/src/components/federation/FetchButton.vue:7
-#, fuzzy
 msgctxt "Popup/*/Title"
 msgid "Refreshing object from remote server…"
 msgstr "Rafraîchissement de l'objet depuis le serveur distant…"
@@ -5318,13 +5313,11 @@ msgid "Regenerate token"
 msgstr "Régénérer le jeton"
 
 #: front/src/components/auth/Settings.vue:310
-#, fuzzy
 msgctxt "Content/Settings/Button.Label"
 msgid "Register a new application"
 msgstr "Créer une nouvelle application"
 
 #: front/src/components/auth/Settings.vue:380
-#, fuzzy
 msgctxt "Content/Applications/Paragraph"
 msgid "Register one to integrate Funkwhale with third-party applications."
 msgstr "Créez-en une pour intégrer Funkwhale avec des applications tierces."
@@ -5418,7 +5411,6 @@ msgid "Remote libraries are owned by other users on the network. You can access 
 msgstr "Les bibliothèques distantes appartiennent à d'autres utilisateurs du réseau. Vous pouvez y accéder tant qu'elles sont publiques ou qu'on vous en donne l'accès."
 
 #: front/src/components/auth/Settings.vue:355
-#, fuzzy
 msgctxt "*/*/*/Verb"
 msgid "Remove"
 msgstr "Retirer"
@@ -5433,13 +5425,11 @@ msgid "Remove"
 msgstr "Retirer"
 
 #: front/src/components/auth/Settings.vue:367
-#, fuzzy
 msgctxt "*/Settings/Button.Label/Verb"
 msgid "Remove application"
 msgstr "Supprimer l'application"
 
 #: front/src/components/auth/Settings.vue:358
-#, fuzzy
 msgctxt "Popup/Settings/Title"
 msgid "Remove application \"%{ application }\"?"
 msgstr "Supprimer l'application « %{ application } » ?"
@@ -6167,7 +6157,6 @@ msgstr "Afficher les notifications lues"
 
 #: front/src/components/audio/podcast/MobileRow.vue:183
 #: front/src/components/audio/track/MobileRow.vue:166
-#, fuzzy
 msgctxt "Content/Track/Icon.Tooltip/Verb"
 msgid "Show track actions"
 msgstr "Afficher les actions de piste"
@@ -8049,7 +8038,6 @@ msgid "You don't have any space left to upload your files. Please contact the mo
 msgstr "Vous ne disposez plus de suffisamment d'espace de stockage pour envoyer de nouveaux fichiers. Merci de contacter l'équipe de modération."
 
 #: front/src/components/auth/Settings.vue:377
-#, fuzzy
 msgctxt "Content/Applications/Paragraph"
 msgid "You don't have registered any application yet."
 msgstr "Vous n'avez pas encore créé d'application."
