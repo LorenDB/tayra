@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2021-10-22 17:48+0000\n"
+"PO-Revision-Date: 2021-12-11 20:27+0000\n"
 "Last-Translator: Dignified Silence <5dd12ck@protonmail.com>\n"
 "Language-Team: none\n"
 "Language: ja_JP\n"
@@ -4540,9 +4540,10 @@ msgstr ""
 #: front/src/views/admin/moderation/RequestsList.vue:43
 #: front/src/views/content/libraries/FilesTable.vue:51
 #: front/src/views/playlists/List.vue:28
+#, fuzzy
 msgctxt "Content/Search/Dropdown.Label/Noun"
 msgid "Ordering"
-msgstr "表示順"
+msgstr "Ordering"
 
 #: front/src/components/library/Albums.vue:34
 #: src/components/library/Artists.vue:34
@@ -7887,9 +7888,10 @@ msgid "Write"
 msgstr "入力"
 
 #: front/src/components/auth/ApplicationForm.vue:180
+#, fuzzy
 msgctxt "Content/OAuth Scopes/Label/Verb"
 msgid "Write"
-msgstr "入力"
+msgstr "Write"
 
 #: front/src/components/common/ContentForm.vue:100
 msgctxt "*/Form/Placeholder"
@@ -7986,7 +7988,7 @@ msgstr ""
 #: front/src/components/library/radios/Builder.vue:10
 msgctxt "Content/Radio/Paragraph"
 msgid "You can use this interface to build your own custom radio, which will play tracks according to your criteria."
-msgstr ""
+msgstr "あなたの好みに合わせた曲を再生する、自分用にカスタマイズされたラジオを作るために、ラジオビルダーを使うことができます。"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:15
 msgctxt "Content/Settings/Paragraph"
