@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2021-11-08 11:17+0000\n"
-"Last-Translator: Asier Iturralde Sarasola <asier.iturralde@gmail.com>\n"
+"PO-Revision-Date: 2021-12-11 10:29+0000\n"
+"Last-Translator: Sergio Varela <sergitroll9@gmail.com>\n"
 "Language-Team: none\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
@@ -242,7 +242,7 @@ msgstr "Zure aldaketak deskribatzen dituen laburpentxoa."
 #: front/src/components/About.vue:19
 msgctxt "Content/About/Heading"
 msgid "A social platform to enjoy and share music"
-msgstr ""
+msgstr "Musikaz gozatzeko eta partekatzeko plataforma soziala"
 
 #: front/src/components/Footer.vue:18
 msgctxt "Footer/About/List item.Link"
@@ -256,7 +256,6 @@ msgstr "Honi buruz"
 
 #: front/src/components/common/UserMenu.vue:165
 #: front/src/components/common/UserModal.vue:194
-#, fuzzy
 msgctxt "Sidebar/About/List item.Link"
 msgid "About"
 msgstr "Honi buruz"
@@ -293,7 +292,6 @@ msgid "About this pod"
 msgstr "Instantzia honi buruz"
 
 #: front/src/components/About.vue:171
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "About this pod"
 msgstr "Instantzia honi buruz"
@@ -497,12 +495,11 @@ msgstr "Aktibo"
 
 #: front/src/components/About.vue:109 src/components/About.vue:7
 #: front/src/components/AboutPod.vue:251 src/components/AboutPod.vue:39
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "active user"
 msgid_plural "active users"
-msgstr[0] "Erabiltzaile aktibo %{ count }"
-msgstr[1] "%{ count } erabiltzaile aktibo"
+msgstr[0] "erabiltzaile aktibo"
+msgstr[1] "erabiltzaile aktibo"
 
 #: front/src/views/admin/ChannelDetail.vue:185
 #: src/views/admin/ChannelDetail.vue:180
@@ -718,12 +715,11 @@ msgid "Administration"
 msgstr "Administrazioa"
 
 #: front/src/components/AboutPod.vue:237 src/components/AboutPod.vue:25
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "album"
 msgid_plural "albums"
-msgstr[0] "Albuma"
-msgstr[1] "Albuma"
+msgstr[0] "albuma"
+msgstr[1] "albuma"
 
 #: front/src/components/audio/SearchBar.vue:43
 #: front/src/components/channels/AlbumSelect.vue:4
@@ -946,12 +942,11 @@ msgid "Are you sure you want to log out?"
 msgstr "Ziur al zaude saioa itxi nahi duzula?"
 
 #: front/src/components/AboutPod.vue:230 src/components/AboutPod.vue:18
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "artist"
 msgid_plural "artists"
-msgstr[0] "Artista"
-msgstr[1] "Artista"
+msgstr[0] "artista"
+msgstr[1] "artista"
 
 #: front/src/components/audio/SearchBar.vue:42
 #: front/src/components/audio/podcast/Table.vue:123
@@ -1187,10 +1182,9 @@ msgid "Browse"
 msgstr "Arakatu"
 
 #: front/src/components/About.vue:135
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Browse public content"
-msgstr "Arakatu eduki publikoa"
+msgstr "Eduki publikoak aztertu"
 
 #: front/src/components/Home.vue:163
 msgctxt "Content/Home/Link"
@@ -1435,7 +1429,6 @@ msgstr "Txat gela"
 
 #: front/src/components/common/UserMenu.vue:172
 #: front/src/components/common/UserModal.vue:208
-#, fuzzy
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Chat room"
 msgstr "Txat gela"
@@ -1555,7 +1548,6 @@ msgid "Confirmation code"
 msgstr "Berrespen kodea"
 
 #: front/src/components/AboutPod.vue:266 src/components/AboutPod.vue:2
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Contact"
 msgstr "Kontaktua"
@@ -1787,7 +1779,6 @@ msgid "Dark"
 msgstr "Iluna"
 
 #: front/src/components/Sidebar.vue:600
-#, fuzzy
 msgctxt "Sidebar/Settings/Dropdown.Label/Theme name"
 msgid "Dark"
 msgstr "Iluna"
@@ -2202,7 +2193,6 @@ msgstr "Dokumentazioa"
 
 #: front/src/components/common/UserMenu.vue:169
 #: front/src/components/common/UserModal.vue:198
-#, fuzzy
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Documentation"
 msgstr "Dokumentazioa"
@@ -2551,7 +2541,6 @@ msgstr "Idatzi zure erabiltzaile-izena edo eposta helbidea"
 #: front/src/components/audio/PlayButton.vue:28
 #: front/src/components/audio/podcast/Modal.vue:269
 #: front/src/components/audio/track/Modal.vue:269
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "Episode details"
 msgstr "Saioaren xehetasunak"
@@ -2826,12 +2815,12 @@ msgstr "Gogokoak"
 #: front/src/components/AboutPod.vue:33
 msgctxt "Content/About/Header"
 msgid "Features"
-msgstr ""
+msgstr "Ezaugarriak"
 
 #: front/src/components/AboutPod.vue:83
 msgctxt "Content/About/Header/Name"
 msgid "Features"
-msgstr ""
+msgstr "Ezaugarriak"
 
 #: front/src/components/AboutPod.vue:110 src/components/audio/SearchBar.vue:94
 #: front/src/components/audio/SearchBar.vue:175 src/views/admin/Settings.vue:75
@@ -2897,19 +2886,16 @@ msgid "Filter name"
 msgstr "Iragazkiaren izena"
 
 #: front/src/components/About.vue:160
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Find an app"
-msgstr "Aurkitu beste instantzia bat"
+msgstr "Aplikazio bat aurkitu"
 
 #: front/src/components/About.vue:149
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Find another pod"
 msgstr "Aurkitu beste instantzia bat"
 
 #: front/src/components/About.vue:60
-#, fuzzy
 msgctxt "Content/About/Link"
 msgid "Find another pod"
 msgstr "Aurkitu beste instantzia bat"
@@ -3014,7 +3000,7 @@ msgstr "Jarraitutakoak"
 #: front/src/components/common/UserModal.vue:197
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Forum"
-msgstr ""
+msgstr "Foroa"
 
 #: front/src/components/moderation/ReportModal.vue:64
 msgctxt "*/*/Field,Help"
@@ -3032,10 +3018,11 @@ msgid "Full access"
 msgstr "Sarbide osoa"
 
 #: front/src/components/About.vue:24
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Funkwhale is a community-driven project that lets you listen and share music and audio within a decentralized, open network."
-msgstr "Instantzia honek Funkwhale erabiltzen du, sare ireki eta deszentralizatu batean musika eta audioak entzun eta partekatzeko aukera ematen duen komunitateak gidatutako proiektu bat."
+msgstr ""
+"Funkwhale komunitateak bultzatutako proiektua da, eta musika eta audioa sare "
+"deszentralizatu eta ireki batean entzuteko eta partekatzeko aukera ematen du."
 
 #: front/src/components/auth/SubsonicTokenForm.vue:13
 msgctxt "Content/Settings/Paragraph'"
@@ -3098,15 +3085,14 @@ msgstr "Ulertuta!"
 
 #: front/src/components/About.vue:73
 msgid "Hello"
-msgstr ""
+msgstr "Kaixo"
 
 #: front/src/components/common/UserMenu.vue:167
 #: front/src/components/common/UserModal.vue:196
 #: front/src/components/common/UserModal.vue:199
-#, fuzzy
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Help"
-msgstr "Laguntza testua"
+msgstr "Laguntza"
 
 #: front/src/components/admin/SignupFormBuilder.vue:21
 msgctxt "*/*/Label"
@@ -3155,12 +3141,11 @@ msgstr "Ostatatu zure saioak eta mantendu zure komunitatea eguneratuta."
 
 #: front/src/components/About.vue:116 src/components/About.vue:14
 #: front/src/components/AboutPod.vue:223 src/components/AboutPod.vue:11
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "hour of music"
 msgid_plural "hours of music"
-msgstr[0] "Ordubete musika"
-msgstr[1] "%{ count } ordu musika"
+msgstr[0] "ordubete musika"
+msgstr[1] "ordu musika"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:20
 msgctxt "Content/Settings/Paragraph"
@@ -3351,10 +3336,9 @@ msgid "Internal notes"
 msgstr "Barne oharrak"
 
 #: front/src/components/AboutPod.vue:279
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Introduction"
-msgstr "Gonbidapenak"
+msgstr "Introducción"
 
 #: front/src/components/library/FileUpload.vue:374
 #: front/src/components/library/FileUpload.vue:375
@@ -3394,7 +3378,6 @@ msgid "Issue tracker"
 msgstr "Arazoen jarraipena"
 
 #: front/src/components/common/UserModal.vue:209
-#, fuzzy
 msgctxt "Sidebar/*/List item.Link"
 msgid "Issue tracker"
 msgstr "Arazoen jarraipena"
@@ -3438,7 +3421,6 @@ msgstr "Hizkuntza"
 
 #: front/src/components/Sidebar.vue:527 src/components/common/UserModal.vue:200
 #: front/src/components/common/UserModal.vue:202 src/components/Sidebar.vue:529
-#, fuzzy
 msgctxt "Sidebar/Settings/Dropdown.Label/Short, Verb"
 msgid "Language"
 msgstr "Hizkuntza"
@@ -3510,7 +3492,6 @@ msgid "Learn more"
 msgstr "Ikasi gehiago"
 
 #: front/src/components/About.vue:124
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Learn More"
 msgstr "Ikasi gehiago"
@@ -3636,7 +3617,6 @@ msgid "Light"
 msgstr "Argia"
 
 #: front/src/components/Sidebar.vue:596
-#, fuzzy
 msgctxt "Sidebar/Settings/Dropdown.Label/Theme name"
 msgid "Light"
 msgstr "Argia"
@@ -3663,18 +3643,17 @@ msgid "Listen to public albums and playlists shared on this pod"
 msgstr "Entzun instantzia honetan partekatutako album eta erreprodukzio-zerrenda publikoak"
 
 #: front/src/components/About.vue:140 src/components/About.vue:153
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Listen to public albums and playlists shared on this pod."
-msgstr "Entzun instantzia honetan partekatutako album eta erreprodukzio-zerrenda publikoak"
+msgstr ""
+"Entzun pod honetan partekatutako album eta erreprodukzio-zerrenda publikoak."
 
 #: front/src/components/AboutPod.vue:258 src/components/AboutPod.vue:46
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "listening"
 msgid_plural "listenings"
-msgstr[0] "Entzunaldiak"
-msgstr[1] "Entzunaldiak"
+msgstr[0] "entzunaldi"
+msgstr[1] "entzunaldiak"
 
 #: front/src/components/mixins/Translations.vue:107
 #: front/src/views/admin/ChannelDetail.vue:211
@@ -3798,7 +3777,6 @@ msgstr "Hasi saioa!"
 
 #: front/src/components/common/UserMenu.vue:164
 #: front/src/components/common/UserModal.vue:193
-#, fuzzy
 msgctxt "Sidebar/Login/List item.Link/Verb"
 msgid "Log out"
 msgstr "Amaitu saioa"
@@ -4214,10 +4192,9 @@ msgstr "Serie berria"
 
 #: front/src/components/library/ArtistDetail.vue:26
 #: front/src/components/library/ArtistDetail.vue:2
-#, fuzzy
 msgctxt "Content/Artist/Title"
 msgid "New tracks by this artist"
-msgstr "Artista honen pistak"
+msgstr "Artista honen pista berriak"
 
 #: front/src/components/Queue.vue:170
 msgctxt "Sidebar/Player/Paragraph"
@@ -4269,10 +4246,9 @@ msgid "No description available"
 msgstr "Ez dago deskribapenik"
 
 #: front/src/components/About.vue:97 src/components/AboutPod.vue:53
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "No description available."
-msgstr "Ez dago deskribapenik."
+msgstr "Ez dago deskribapenik eskuragarri."
 
 #: front/src/components/Home.vue:26
 msgctxt "Content/Home/Paragraph"
@@ -4339,7 +4315,6 @@ msgid "No results were found."
 msgstr "Ez da emaitzarik aurkitu."
 
 #: front/src/components/AboutPod.vue:65
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "No rules available."
 msgstr "Ez dago araurik erabilgarri."
@@ -4823,7 +4798,6 @@ msgstr "Erreproduzitu irratia"
 #: front/src/components/audio/track/Modal.vue:290
 #: front/src/components/audio/podcast/Modal.vue:292
 #: front/src/components/audio/track/Modal.vue:292
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play radio"
 msgstr "Erreproduzitu irratia"
@@ -6038,7 +6012,7 @@ msgstr "Aukeratu orrialde hau bakarrik"
 #: front/src/components/AboutPod.vue:271 src/components/AboutPod.vue:7
 msgctxt "Content/About/Email"
 msgid "Send us an email: {{ contactEmail }}"
-msgstr ""
+msgstr "Bidal iezaguzu mezu elektroniko bat: {{ contactEmail }}"
 
 #: front/src/components/library/TrackDetail.vue:123
 msgctxt "*/*/*"
@@ -6169,10 +6143,9 @@ msgstr "Erakutsi irakurritako jakinarazpenak"
 
 #: front/src/components/audio/podcast/MobileRow.vue:183
 #: front/src/components/audio/track/MobileRow.vue:166
-#, fuzzy
 msgctxt "Content/Track/Icon.Tooltip/Verb"
 msgid "Show track actions"
-msgstr "Erakutsi irakurritako jakinarazpenak"
+msgstr "Erakutsi pistako ekintzak"
 
 #: front/src/components/forms/PasswordInput.vue:46
 #: front/src/components/forms/PasswordInput.vue:48
@@ -6231,10 +6204,11 @@ msgid "Sign Up"
 msgstr "Erregistratu"
 
 #: front/src/components/About.vue:43 src/components/About.vue:2
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Sign up now to keep a track of your favorites, create playlists, discover new content and much more!"
-msgstr "Erregistratu orain zure gogokoen jarraipena egiteko, zerrendak sortzeko, eduki berria aurkitzeko eta asko gehiago!"
+msgstr ""
+"Erregistratu orain zure gogokoenak jarraitzeko, erreprodukzio-zerrendak "
+"sortzeko, eduki berriak aurkitzeko eta askoz gehiago!"
 
 #: front/src/components/Home.vue:130 src/components/Home.vue:2
 msgctxt "Content/Home/Paragraph"
@@ -6329,7 +6303,6 @@ msgstr "Taldeko kidea"
 
 #: front/src/components/AboutPod.vue:38 src/components/AboutPod.vue:214
 #: front/src/components/AboutPod.vue:2
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Statistics"
 msgstr "Estatistikak"
@@ -6829,7 +6802,7 @@ msgstr "Igoera ezabatu egingo da. Ekintza hau ezin da desegin."
 #: front/src/components/common/UserModal.vue:206 src/components/Sidebar.vue:532
 msgctxt "Sidebar/Settings/Dropdown.Label/Short, Verb"
 msgid "Theme"
-msgstr ""
+msgstr "Gaia"
 
 #: front/src/views/playlists/Detail.vue:106
 msgctxt "Content/Home/Placeholder"
@@ -7107,12 +7080,11 @@ msgid "Total users"
 msgstr "Erabiltzaileak guztira"
 
 #: front/src/components/AboutPod.vue:244 src/components/AboutPod.vue:32
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "track"
 msgid_plural "tracks"
-msgstr[0] "Pista"
-msgstr[1] "Pista"
+msgstr[0] "pista"
+msgstr[1] "pistak"
 
 #: front/src/components/audio/SearchBar.vue:44
 #: front/src/components/library/TrackBase.vue:290
@@ -7535,7 +7507,6 @@ msgstr "Erabili beste instantzia bat"
 
 #: front/src/components/common/UserModal.vue:213
 #: front/src/components/common/UserModal.vue:215
-#, fuzzy
 msgctxt "Sidebar/*/List item.Link"
 msgid "Use another instance"
 msgstr "Erabili beste instantzia bat"
@@ -7546,10 +7517,9 @@ msgid "Use Funkwhale on other devices with our apps"
 msgstr "Erabili Funkwhale beste gailuetan gure aplikazioekin"
 
 #: front/src/components/About.vue:164
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Use Funkwhale on other devices with our apps."
-msgstr "Erabili Funkwhale beste gailuetan gure aplikazioekin"
+msgstr "Erabili Funkwhale beste gailuetan gure aplikazioekin."
 
 #: front/src/components/auth/Settings.vue:397
 msgctxt "Content/Settings/Paragraph"
@@ -7680,10 +7650,11 @@ msgid "Users"
 msgstr "Erabiltzaileak"
 
 #: front/src/components/About.vue:48 src/components/About.vue:7
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Users on this pod also get %{ quota } of free storage to upload their own content!"
-msgstr "Instantzia honetako erabiltzaileek %{ quota }eko doako ostatatzea dute beren eduki propioa igotzeko!"
+msgstr ""
+"Instantzia honetako erabiltzaileek %{ quota }eko doako ostatatzea dute beren "
+"eduki propioa igotzeko!"
 
 #: front/src/components/Home.vue:135 src/components/Home.vue:7
 msgctxt "Content/Home/Paragraph"
@@ -7702,24 +7673,21 @@ msgstr "Bertsioa %{version}"
 
 #: front/src/components/audio/podcast/Modal.vue:278
 #: front/src/components/audio/track/Modal.vue:278
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "View album"
-msgstr "Album berria"
+msgstr "Albuma ikusi"
 
 #: front/src/components/audio/podcast/Modal.vue:285
 #: front/src/components/audio/track/Modal.vue:285
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "View artist"
-msgstr "Ezkutuko artistak"
+msgstr "Artista ikusi"
 
 #: front/src/components/audio/podcast/Modal.vue:283
 #: front/src/components/audio/track/Modal.vue:283
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "View channel"
-msgstr "Kanal berriak"
+msgstr "Ikusi kanala"
 
 #: front/src/views/channels/DetailOverview.vue:29
 #: front/src/views/channels/DetailOverview.vue:13
@@ -7800,10 +7768,9 @@ msgstr "Ikusi orrialde publikoa"
 
 #: front/src/components/audio/podcast/Modal.vue:276
 #: front/src/components/audio/track/Modal.vue:276
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "View series"
-msgstr "Serie berria"
+msgstr "Ikusi serieak"
 
 #: front/src/views/channels/DetailOverview.vue:24
 #: front/src/views/channels/DetailOverview.vue:8
@@ -8132,7 +8099,7 @@ msgstr "Artista honen pista, album eta erabiltzaile aktibitatea ez dituzu ikusik
 #: front/src/components/About.vue:68
 msgctxt "Content/About/Message"
 msgid "You're already signed in!"
-msgstr ""
+msgstr "Saioa hasita zenuen!"
 
 #: front/src/components/auth/SignupForm.vue:38
 msgctxt "Content/Signup/Form/Paragraph"
