@@ -701,7 +701,11 @@ export default {
           // works as expected
           const link = $($el).closest('a')
           const url = link.attr('href')
-          self.$router.push(url)
+          if (url.startsWith('http')) {
+            window.open(url, '_blank').focus()
+          } else {
+            self.$router.push(url)
+          }
           $(self.$el).find(selector).dropdown('hide')
         }
       })
