@@ -82,7 +82,7 @@
           <translate translate-context="Sidebar/Player/Icon.Tooltip/Verb">Add to playlist…</translate>
         </button>
         <button
-          v-if="track"
+          v-if="track && !onTrackPage"
           class="item basic"
           @click.stop.prevent="$router.push(`/library/tracks/${track.id}/`)"
         >
@@ -191,6 +191,9 @@ export default {
         }
       }
       return null
+    },
+    onTrackPage () {
+      return this.$router.currentRoute.name === 'library.tracks.detail'
     }
   },
   watch: {
