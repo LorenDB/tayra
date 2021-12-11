@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2021-06-23 22:27+0000\n"
-"Last-Translator: ian Vatega <ianvatega@protonmail.com>\n"
+"PO-Revision-Date: 2021-12-12 15:09+0000\n"
+"Last-Translator: Tony Simoes <asrmail@protonmail.com>\n"
 "Language-Team: none\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr "\"%{ title }\", por %{ artist }"
 #: front/src/components/RemoteSearchForm.vue:132
 msgctxt "Head/Fetch/Field.Placeholder"
 msgid "@username@example.com"
-msgstr ""
+msgstr "@usuario@ejemplo.com"
 
 #: front/src/components/auth/Authorize.vue:31
 msgctxt "Content/Auth/Title"
@@ -247,7 +247,7 @@ msgstr "Ha ocurrido un error al guardar los cambios"
 #: front/src/components/About.vue:19
 msgctxt "Content/About/Heading"
 msgid "A social platform to enjoy and share music"
-msgstr ""
+msgstr "Una plataforma social para disfrutar y compartir música"
 
 #: front/src/components/Footer.vue:18
 #, fuzzy
@@ -345,6 +345,8 @@ msgstr "Seleccionar un filtro"
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to e-mail, username, and profile information"
 msgstr ""
+"Acceso al correo electrónico, al nombre de usuario y a la información del "
+"perfil"
 
 #: front/src/components/mixins/Translations.vue:132
 #: front/src/components/mixins/Translations.vue:133
