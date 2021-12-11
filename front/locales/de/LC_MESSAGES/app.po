@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
 "PO-Revision-Date: 2021-12-11 20:27+0000\n"
-"Last-Translator: Georg Krause <mail@georg-krause.net>\n"
+"Last-Translator: Christoph Pomaska <funkwhale@slrie.de>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -714,12 +714,11 @@ msgid "Administration"
 msgstr "Verwaltung"
 
 #: front/src/components/AboutPod.vue:237 src/components/AboutPod.vue:25
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "album"
 msgid_plural "albums"
 msgstr[0] "Album"
-msgstr[1] "Album"
+msgstr[1] "Alben"
 
 #: front/src/components/audio/SearchBar.vue:43
 #: front/src/components/channels/AlbumSelect.vue:4
@@ -942,12 +941,11 @@ msgid "Are you sure you want to log out?"
 msgstr "Möchtest du dich wirklich abmelden?"
 
 #: front/src/components/AboutPod.vue:230 src/components/AboutPod.vue:18
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "artist"
 msgid_plural "artists"
 msgstr[0] "Künstler·in"
-msgstr[1] "Künstler·in"
+msgstr[1] "Künstler·innen"
 
 #: front/src/components/audio/SearchBar.vue:42
 #: front/src/components/audio/podcast/Table.vue:123
@@ -1183,7 +1181,6 @@ msgid "Browse"
 msgstr "Durchsuchen"
 
 #: front/src/components/About.vue:135
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Browse public content"
 msgstr "Öffentliche Inhalte durchsuchen"
@@ -1356,10 +1353,11 @@ msgid "Change password"
 msgstr "Kennwort ändern"
 
 #: front/src/components/auth/Settings.vue:418
-#, fuzzy
 msgctxt "Content/Settings/Paragraph'"
 msgid "Change the e-mail address associated with your account. We will send a confirmation to the new address."
-msgstr "Die E-Mail-Adresse des Kontos ändern. Eine Bestätigung wird an deine neue E-Mail-Adresse geschickt."
+msgstr ""
+"Die E-Mail-Adresse des Kontos ändern. Eine Bestätigung wird an deine neue E"
+"-Mail-Adresse geschickt."
 
 #: front/src/components/Footer.vue:61 src/components/common/UserMenu.vue:171
 msgctxt "Footer/Settings/Dropdown.Label/Short, Verb"
@@ -1551,7 +1549,6 @@ msgid "Confirmation code"
 msgstr "Bestätigungscode"
 
 #: front/src/components/AboutPod.vue:266 src/components/AboutPod.vue:2
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Contact"
 msgstr "Kontakt"
@@ -1602,7 +1599,6 @@ msgid "Copy"
 msgstr "Kopieren"
 
 #: front/src/components/playlists/Editor.vue:207
-#, fuzzy
 msgctxt "Content/Playlist/Button.Tooltip/Verb"
 msgid "Copy the current queue to this playlist"
 msgstr "Die Warteschlange zur Wiedergabeliste hinzufügen"
@@ -1615,7 +1611,6 @@ msgstr "Kopiere den folgenden Code in die Anwendung:"
 #: front/src/views/channels/DetailBase.vue:63
 #: src/views/channels/DetailBase.vue:58
 #: front/src/views/channels/DetailBase.vue:8
-#, fuzzy
 msgctxt "Content/Channels/Label"
 msgid "Copy-paste the following URL in your favorite podcatcher:"
 msgstr "Kopiere die folgende URL in deinen Lieblings-Podcatcher:"
@@ -1785,7 +1780,6 @@ msgid "Dark"
 msgstr "Dunkel"
 
 #: front/src/components/Sidebar.vue:600
-#, fuzzy
 msgctxt "Sidebar/Settings/Dropdown.Label/Theme name"
 msgid "Dark"
 msgstr "Dunkel"
@@ -2200,7 +2194,6 @@ msgstr "Dokumentation"
 
 #: front/src/components/common/UserMenu.vue:169
 #: front/src/components/common/UserModal.vue:198
-#, fuzzy
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Documentation"
 msgstr "Dokumentation"
@@ -2549,10 +2542,9 @@ msgstr "Benutzername oder E-Mail-Adresse eingeben"
 #: front/src/components/audio/PlayButton.vue:28
 #: front/src/components/audio/podcast/Modal.vue:269
 #: front/src/components/audio/track/Modal.vue:269
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "Episode details"
-msgstr "Details zur Folge"
+msgstr "Details zu dieser Folge"
 
 #: front/src/components/library/TrackDetail.vue:12
 #: front/src/components/library/TrackDetail.vue:7
