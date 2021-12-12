@@ -192,6 +192,7 @@
             <a
               href="https://funkwhale.audio/#get-started"
               class="ui card"
+              target="_blank"
             >
               <div class="content">
                 <h3
@@ -209,6 +210,7 @@
             <a
               href="https://funkwhale.audio/apps"
               class="ui card"
+              target="_blank"
             >
               <div class="content">
                 <h3
