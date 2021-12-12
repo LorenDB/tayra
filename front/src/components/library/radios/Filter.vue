@@ -41,13 +41,13 @@
             class="ui menu"
           >
             <div
-              v-for="v in config[f.name]"
+              v-for="(v, i) in config[f.name]"
               :key="v"
               class="ui item"
               :data-value="v"
             >
               <template v-if="config.names">
-                {{ config.names[index] }}
+                {{ config.names[i] }}
               </template>
               <template v-else>
                 {{ v }}
