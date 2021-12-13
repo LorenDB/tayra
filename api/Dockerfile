@@ -36,7 +36,7 @@ RUN \
     echo 'installing pip requirements' && \
     pip3 install --upgrade pip && \
     pip3 install setuptools wheel && \
-    pip3 install -r /requirements/base.txt cryptography=3.3.2 && \
+    pip3 install -r /requirements/base.txt cryptography==3.3.2 && \
     rm -rf $PIP_DOWNLOAD_CACHE
 
 ARG install_dev_deps=0
