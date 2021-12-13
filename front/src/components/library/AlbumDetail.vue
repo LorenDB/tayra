@@ -41,7 +41,7 @@
         </translate>
         <track-table
           :is-album="true"
-          :tracks="object.tracks"
+          :tracks="tracks"
           :show-position="true"
           :show-art="false"
           :show-album="false"
