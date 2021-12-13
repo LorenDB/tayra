@@ -9,6 +9,7 @@ RUN \
     postgresql-dev \
     python3-dev \
     py3-psycopg2 \
+    py3-cryptography \
     libldap \
     libffi-dev \
     make \
@@ -23,7 +24,7 @@ RUN \
     ln -s /usr/bin/python3 /usr/bin/python
 
 # create virtual env for next stage
-RUN python -m venv /venv
+RUN python -m venv --system-site-packages /venv
 # emulate activation by prefixing PATH
 ENV PATH="/venv/bin:$PATH" VIRTUAL_ENV=/venv
 
@@ -60,6 +61,7 @@ RUN apk add --no-cache \
     libpq \
     libxml2 \
     libxslt \
+    py3-cryptography \
     && \
     ln -s /usr/bin/python3 /usr/bin/python
 
