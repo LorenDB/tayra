@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2021-12-12 15:09+0000\n"
+"PO-Revision-Date: 2021-12-14 10:36+0000\n"
 "Last-Translator: Tony Simoes <asrmail@protonmail.com>\n"
 "Language-Team: none\n"
 "Language: es\n"
@@ -401,7 +401,7 @@ msgstr "Acceso deshabilitado"
 #: front/src/components/mixins/Translations.vue:137
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to security settings such as password and authorization"
-msgstr ""
+msgstr "Acceso a los ajustes de seguridad, tales que contraseña y autorizacion"
 
 #: front/src/components/auth/ApplicationEdit.vue:33
 #: front/src/components/auth/ApplicationEdit.vue:26
