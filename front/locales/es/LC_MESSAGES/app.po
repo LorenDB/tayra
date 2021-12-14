@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
 "PO-Revision-Date: 2021-12-15 11:36+0000\n"
-"Last-Translator: Georg Krause <mail@georg-krause.net>\n"
+"Last-Translator: Rubén Cabrera <dev@rubencabrera.es>\n"
 "Language-Team: none\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -8553,7 +8553,7 @@ msgstr ""
 #: front/src/edits.js:26
 msgctxt "Content/*/*/Noun"
 msgid "Cover"
-msgstr ""
+msgstr "Carátula"
 
 #: front/src/entities.js:126
 #, fuzzy
