@@ -10,28 +10,36 @@ WEBLATE_COMPONENT_ID = "funkwhale/front"
 
 def get_issues(next_release):
     url = GITLAB_URL + "/api/v4/issues"
-    # TODO assumes we have less than 100 issues per Milestone
-    response = requests.get(
-        url,
-        params={"per_page": 100, "milestone": next_release, "scope": "all"},
-        headers={"PRIVATE-TOKEN": os.environ["PRIVATE_TOKEN"]},
-    )
-    response.raise_for_status()
+    while url:
+        response = requests.get(
+            url,
+            params={"per_page": 20, "milestone": next_release, "scope": "all"},
+            headers={"PRIVATE-TOKEN": os.environ["PRIVATE_TOKEN"]},
+        )
+        response.raise_for_status()
+        yield from response.json()
 
-    return response.json()
+        if "next" in response.links:
+            url = response.links["next"]["url"]
+        else:
+            url = None
 
 
 def get_merge_requests(next_release):
     url = GITLAB_URL + "/api/v4/merge_requests"
-    # TODO assumes we have less than 100 issues per Milestone
-    response = requests.get(
-        url,
-        params={"per_page": 100, "milestone": next_release, "scope": "all"},
-        headers={"PRIVATE-TOKEN": os.environ["PRIVATE_TOKEN"]},
-    )
-    response.raise_for_status()
+    while url:
+        response = requests.get(
+            url,
+            params={"per_page": 20, "milestone": next_release, "scope": "all"},
+            headers={"PRIVATE-TOKEN": os.environ["PRIVATE_TOKEN"]},
+        )
+        response.raise_for_status()
+        yield from response.json()
 
-    return response.json()
+        if "next" in response.links:
+            url = response.links["next"]["url"]
+        else:
+            url = None
 
 
 def get_participants(project_id, issue_iid, object_type="issues"):
