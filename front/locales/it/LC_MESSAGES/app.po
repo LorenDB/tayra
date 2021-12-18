@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
 "PO-Revision-Date: 2021-12-19 21:36+0000\n"
-"Last-Translator: Riccardo Sacchetto <weblate@occhioverde.anonaddy.com>\n"
+"Last-Translator: Stefano Pigozzi <ste.pigozzi@gmail.com>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -7058,7 +7058,7 @@ msgstr "Per continuare, per favore seleziona l'istanza Funkwhale alla quale vuoi
 #: front/src/components/ShortcutsModal.vue:154
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
 msgid "Toggle favorite"
-msgstr "Seleziona preferito"
+msgstr "Inverti preferito"
 
 #: front/src/components/ShortcutsModal.vue:134
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
