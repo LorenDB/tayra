@@ -267,7 +267,7 @@ export default {
     },
 
     updatedFields () {
-      if (!this.obj.target) {
+      if (!this.obj || this.obj.target) {
         return []
       }
       const payload = this.obj.payload

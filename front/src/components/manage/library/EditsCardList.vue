@@ -152,19 +152,15 @@ export default {
     filters: { type: Object, required: false, default: () => { return {} } }
   },
   data () {
-    const defaultOrdering = this.getOrderingFromString(this.defaultOrdering || '-creation_date')
     return {
       time,
       isLoading: false,
       result: null,
       page: 1,
-      paginateBy: 25,
       search: {
         query: this.defaultQuery,
         tokens: parseTokens(normalizeQuery(this.defaultQuery))
       },
-      orderingDirection: defaultOrdering.direction || '+',
-      ordering: defaultOrdering.field,
       orderingOptions: [
         ['creation_date', 'creation_date'],
         ['applied_date', 'applied_date']

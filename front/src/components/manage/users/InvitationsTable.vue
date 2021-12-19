@@ -174,17 +174,13 @@ export default {
     filters: { type: Object, required: false, default: function () { return {} } }
   },
   data () {
-    const defaultOrdering = this.getOrderingFromString(this.defaultOrdering || '-creation_date')
     return {
       moment,
       isLoading: false,
       result: null,
       page: 1,
-      paginateBy: 50,
       search: '',
       isOpen: null,
-      orderingDirection: defaultOrdering.direction || '+',
-      ordering: defaultOrdering.field,
       orderingOptions: [
         ['expiration_date', 'expiration_date'],
         ['creation_date', 'creation_date']

@@ -299,7 +299,7 @@ export default {
   data () {
     return {
       time,
-      detailedUpload: null,
+      detailedUpload: {},
       showUploadDetailModal: false,
       isLoading: false,
       result: null,

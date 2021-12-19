@@ -217,16 +217,12 @@ export default {
     filters: { type: Object, required: false, default: function () { return {} } }
   },
   data () {
-    const defaultOrdering = this.getOrderingFromString(this.defaultOrdering || '-date_joined')
     return {
       time,
       isLoading: false,
       result: null,
       page: 1,
-      paginateBy: 50,
       search: '',
-      orderingDirection: defaultOrdering.direction || '+',
-      ordering: defaultOrdering.field,
       orderingOptions: [
         ['date_joined', 'date_joined'],
         ['last_activity', 'last_activity'],

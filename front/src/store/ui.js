@@ -105,6 +105,66 @@ export default {
         orderingDirection: '-',
         ordering: 'creation_date'
       },
+      'manage.channels': {
+        paginateBy: 50,
+        orderingDirection: '-',
+        ordering: 'creation_date'
+      },
+      'manage.library.tags': {
+        paginateBy: 50,
+        orderingDirection: '-',
+        ordering: 'creation_date'
+      },
+      'manage.library.uploads': {
+        paginateBy: 50,
+        orderingDirection: '-',
+        ordering: 'creation_date'
+      },
+      'manage.library.libraries': {
+        paginateBy: 50,
+        orderingDirection: '-',
+        ordering: 'creation_date'
+      },
+      'manage.library.tracks': {
+        paginateBy: 50,
+        orderingDirection: '-',
+        ordering: 'creation_date'
+      },
+      'manage.library.albums': {
+        paginateBy: 50,
+        orderingDirection: '-',
+        ordering: 'creation_date'
+      },
+      'manage.library.artists': {
+        paginateBy: 50,
+        orderingDirection: '-',
+        ordering: 'creation_date'
+      },
+      'manage.library.edits': {
+        paginateBy: 25,
+        orderingDirection: '-',
+        ordering: 'creation_date'
+      },
+      'manage.users.users.list': {
+        paginateBy: 50,
+        orderingDirection: '-',
+        ordering: 'creation_date'
+      },
+      'manage.users.invitations.list': {
+        paginateBy: 50,
+        orderingDirection: '-',
+        ordering: 'creation_date'
+      },
+      'manage.moderation.accounts.list': {
+        paginateBy: 50,
+        orderingDirection: '-',
+        ordering: 'creation_date'
+      },
+      'manage.moderation.domains.list': {
+        paginateBy: 50,
+        orderingDirection: '-',
+        ordering: 'creation_date'
+      },
       'manage.moderation.requests.list': {
         paginateBy: 25,
         orderingDirection: '-',

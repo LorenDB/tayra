@@ -31,7 +31,7 @@ export default {
   mixins: [TranslationsMixin],
   props: {
     value: { type: String, default: null },
-    all: { type: String, default: null },
+    all: { type: Boolean, default: null },
     label: { type: Boolean },
     empty: { type: Boolean },
     required: { type: Boolean },

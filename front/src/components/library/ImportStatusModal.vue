@@ -6,7 +6,7 @@
       </translate>
     </h4>
     <div
-      v-if="upload"
+      v-if="Object.keys(upload).length > 0"
       class="content"
     >
       <div class="description">

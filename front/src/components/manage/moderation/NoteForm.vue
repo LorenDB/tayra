@@ -49,7 +49,7 @@ import showdown from 'showdown'
 
 export default {
   props: {
-    target: { type: String, required: true }
+    target: { type: Object, required: true }
   },
   data () {
     return {

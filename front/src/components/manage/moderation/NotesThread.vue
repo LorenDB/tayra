@@ -62,7 +62,7 @@ import showdown from 'showdown'
 
 export default {
   props: {
-    notes: { type: String, required: true }
+    notes: { type: Array, required: true }
   },
   data () {
     return {
