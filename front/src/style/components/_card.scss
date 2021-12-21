@@ -1,13 +1,11 @@
-
-
-.card .description {
-  word-wrap: break-word;
+.ui.cards {
+  align-items: flex-start;
 }
-
 .ui.cards > .card,
 .ui.card {
   color: var(--card-text-color);
   background: var(--card-background);
+  min-height: 200px;
   &:not(.flat) {
     box-shadow: var(--card-box-shadow);
   }
@@ -22,8 +20,21 @@
   .meta {
     color: var(--discrete-text-color);
   }
+  .description {
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+  }
+  .description.expanded {
+    text-overflow: initial;
+    overflow: initial;
+    -webkit-line-clamp: initial;
+    -webkit-box-orient: initial;
+  }
 }
-
 
 .ui.cards.app-cards {
   $card-width: 14em;

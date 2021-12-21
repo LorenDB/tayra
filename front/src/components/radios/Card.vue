@@ -13,7 +13,11 @@
           {{ radio.name }}
         </template>
       </h4>
-      <div class="description">
+      <div
+        class="description"
+        :class="{expanded: isDescriptionExpanded}"
+        @click="isDescriptionExpanded = !isDescriptionExpanded"
+      >
         {{ radio.description }}
       </div>
     </div>
@@ -54,6 +58,11 @@ export default {
     type: { type: String, required: true, default: '' },
     customRadio: { type: Object, required: false, default: () => { return {} } },
     objectId: { type: String, required: false, default: null }
+  },
+  data () {
+    return {
+      isDescriptionExpanded: false
+    }
   },
   computed: {
     radio () {
