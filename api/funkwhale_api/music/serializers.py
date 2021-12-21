@@ -214,7 +214,10 @@ class AlbumSerializer(OptionalDescriptionMixin, serializers.Serializer):
     def get_is_playable(self, obj):
         try:
             return any(
-                [bool(getattr(t, "playable_uploads", [])) for t in obj.tracks.all()]
+                [
+                    bool(getattr(t, "is_playable_by_actor", None))
+                    for t in obj.tracks.all()
+                ]
             )
         except AttributeError:
             return None

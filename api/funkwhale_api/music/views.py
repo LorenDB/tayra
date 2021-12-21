@@ -185,9 +185,7 @@ class AlbumViewSet(
     queryset = (
         models.Album.objects.all()
         .order_by("-creation_date")
-        .prefetch_related(
-            "artist__channel", "attributed_to", "attachment_cover", "tracks"
-        )
+        .prefetch_related("artist__channel", "attributed_to", "attachment_cover")
     )
     serializer_class = serializers.AlbumSerializer
     permission_classes = [oauth_permissions.ScopePermission]
@@ -223,8 +221,14 @@ class AlbumViewSet(
             queryset = queryset.exclude(artist__channel=None).filter(
                 artist__attributed_to=self.request.user.actor
             )
-        qs = queryset.prefetch_related(TAG_PREFETCH)
-        return qs
+
+        tracks = models.Track.objects.all().prefetch_related("album")
+        tracks = tracks.annotate_playable_by_actor(
+            utils.get_actor_from_request(self.request)
+        )
+        return queryset.prefetch_related(
+            Prefetch("tracks", queryset=tracks), TAG_PREFETCH
+        )
 
     libraries = action(methods=["get"], detail=True)(
         get_libraries(filter_uploads=lambda o, uploads: uploads.filter(track__album=o))

@@ -58,7 +58,12 @@ def test_album_list_serializer(api_request, factories, logged_in_api_client):
     ).track
     album = track.album
     request = api_request.get("/")
-    qs = album.__class__.objects.with_tracks_count()
+
+    tracks = models.Track.objects.all().prefetch_related("album")
+    tracks = tracks.annotate_playable_by_actor(None)
+
+    qs = album.__class__.objects.with_tracks_count().annotate_playable_by_actor(None)
+    qs = qs.prefetch_related(Prefetch("tracks", queryset=tracks))
     serializer = serializers.AlbumSerializer(
         qs, many=True, context={"request": request}
     )
