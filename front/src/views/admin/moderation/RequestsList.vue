@@ -105,7 +105,7 @@
         <user-request-card
           v-for="obj in result.results"
           :key="obj.uuid"
-          :obj="obj"
+          :init-obj="obj"
           @handled="fetchData"
         />
         <div class="ui center aligned basic segment">
