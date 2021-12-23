@@ -75,7 +75,7 @@
                     href="https://funkwhale.audio/#get-started"
                   >
                     <translate translate-context="Content/About/Link">Find another pod</translate>
-                    <i class="external alternate icon margin-left" />
+                    &nbsp;<i class="external alternate icon" />
                   </a>
                 </div>
               </div>
@@ -83,18 +83,23 @@
                 v-else
                 class="signup-form content"
               >
-                <div class="ui positive message">
-                  <div class="header">
-                    <translate translate-context="Content/About/Message">
-                      You're already signed in!
-                    </translate>
+                <h3 class="header">
+                  <translate translate-context="*/Signup/Title">
+                    Sign up
+                  </translate>
+                  <div class="ui positive message">
+                    <div class="header">
+                      <translate translate-context="Content/About/Message">
+                        You're already signed in!
+                      </translate>
+                    </div>
+                    <p>
+                      <translate translate-contect="Content/About/Hello">
+                        Hello
+                      </translate> {{ $store.state.auth.username }}
+                    </p>
                   </div>
-                  <p>
-                    <translate translate-contect="Content/About/Hello">
-                      Hello
-                    </translate> {{ $store.state.auth.username }}
-                  </p>
-                </div>
+                </h3>
               </div>
             </div>
             <div class="ui card">
@@ -107,7 +112,7 @@
                   {{ podName }}
                 </h1>
               </section>
-              <div class="content padding-top padding-bottom">
+              <div class="content pod-description">
                 <h3
                   id="description"
                   class="ui header"
@@ -200,7 +205,7 @@
                   class="ui header"
                 >
                   <translate translate-context="Content/About/Header">Find another pod</translate>
-                  <i class="external alternate icon margin-left" />
+                  &nbsp;<i class="external alternate icon" />
                 </h3>
                 <p>
                   <translate translate-context="Content/About/Paragraph">Listen to public albums and playlists shared on this pod.</translate>
@@ -218,7 +223,7 @@
                   class="ui header"
                 >
                   <translate translate-context="Content/About/Header">Find an app</translate>
-                  <i class="external alternate icon margin-left" />
+                  &nbsp;<i class="external alternate icon" />
                 </h3>
                 <p>
                   <translate translate-context="Content/About/Paragraph">Use Funkwhale on other devices with our apps.</translate>
@@ -342,21 +347,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.margin-left {
-    margin-left: 5px;
-}
-
-.padding-top {
-    padding-top: 20px !important;
-}
-
-.padding-bottom {
-    padding-bottom: 20px !important;
-}
-h3 i {
-    display: inline !important;
-    font-size: 14px !important;
-}
-</style>

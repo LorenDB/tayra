@@ -1,11 +1,7 @@
-.ui.cards {
-  align-items: flex-start;
-}
 .ui.cards > .card,
 .ui.card {
   color: var(--card-text-color);
-  background: var(--card-background);
-  min-height: 200px;
+  background: var(--card-background);  
   &:not(.flat) {
     box-shadow: var(--card-box-shadow);
   }

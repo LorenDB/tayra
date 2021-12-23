@@ -1,5 +1,11 @@
 
 .page-library {
+  .ui.cards {
+    align-items: flex-start;
+    .ui.card {
+      min-height: 200px;
+    }
+  }   
   .ui.segment.head {
     background-size: cover;
     background-position: center;

@@ -181,5 +181,21 @@
       }
     }
   }
-
+  h3.ui.header i {
+    display: inline;
+    font-size: 14px;
+  }
+  .ui.card {
+    .signup-form.content {
+      flex-grow: initial;
+    }
+    .pod-description {
+      flex-direction: column;
+      display: flex; 
+      p {
+        margin: auto;
+        padding: 1.2em;
+      }       
+    }    
+  }
 }
