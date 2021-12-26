@@ -76,6 +76,11 @@ This is already cover in the relevant documentations:
 - https://docs.docker.com/install/
 - https://docs.docker.com/compose/install/
 
+.. note::
+
+    If you are on Fedora, know that you can't use `podman` or `moby-engine` to set up the development environment.
+    Stick to `docker-ce` and you'll be fine.
+
 Cloning the project
 ^^^^^^^^^^^^^^^^^^^
 
