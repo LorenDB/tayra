@@ -37,7 +37,7 @@ export default {
     AlbumWidget
   },
   props: {
-    object: { type: String, required: true },
+    object: { type: Object, required: true },
     isOwner: { type: Boolean, required: true }
   }
 }

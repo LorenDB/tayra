@@ -83,6 +83,7 @@
                   <play-button
                     class="vibrant"
                     :tracks="object.tracks"
+                    :is-playable="object.is_playable"
                   />
                   <div class="ui hidden horizontal divider" />
                   <album-dropdown
@@ -170,6 +171,7 @@
               <play-button
                 class="vibrant"
                 :album="object"
+                :is-playable="object.is_playable"
               />
               <div class="ui horizontal hidden divider" />
               <album-dropdown
