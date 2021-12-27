@@ -1,1 +1,0 @@
-Fix an error in a Subsonic methods that return lists of numbers/strings like getUser

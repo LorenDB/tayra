@@ -1,1 +1,0 @@
-Use global Howler volume instead of setting it separatly for each track (fixes #1542)

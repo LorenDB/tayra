@@ -10,6 +10,77 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.2.0 (2021-12-27)
+------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Features:
+
+- Implemented awesome recently added radio (part of #1390)
+- Rework the instance about page (#1376)
+- Made changes to the track table to make it more visibly pleasing
+
+
+Enhancements:
+
+- Add linting for Frontend code (#1602)
+- Add xmlns:content to feed schemas fixes #1535
+- Add a Maloja plugin to submit listenings
+- Add artist cover art in subsonic API response (#1528)
+- Allow listen activities privacy level to be set public
+- Allow running multi-container setup on non-root user inside docker (!1375) (fixes #1334)
+- Change volume dynamic range from 60dB to 40dB (fixes #1544)
+- Change Start Radio to Play Radio (#1400)
+- Display toast when subsonic password is copied (#1496)
+- Expose more metadata in Subsonic's getAlbumList endpoint (#623)
+- ListenBrainz: Submit media player and submission client information
+- Make "play in list" the default when interacting with individual tracks (#1274)
+- Prevent an uncontrolled exception when uploading a file without tags, and prints user friendly message (1275)
+- Remove deprecated JWT Authentication (#1108) (1108)
+- Remove Raven SDK to report errors to Sentry (#1425) (1425)
+- Replace psycopg2-binary with psycopg2 (#1513)
+
+
+Bugfixes:
+
+- Add worker-src to nginx header to prevent issues (#1489)
+- Enable stepless adjustment of the volume slider (!1294)
+- Fix an error in a Subsonic methods that return lists of numbers/strings like getUser
+- Fix showing too long radio descriptions (#1556)
+- Fix X-Frame-Options HTTP header for embed and force it to SAMEORIGIN value for other pages (fix #1022)
+- Fix before last track starts playing when last track removed (#1485)
+- Fix delete account button is not disalbed when missing password (#1591)
+- Fix omputed properties already defined in components data (#1649)
+- Fix the all in one docker image building process, related to #1503
+- Fix crash in album moderation interface when missing cover (#1474)
+- Fix subsonic scrobble not triggering plugin hook (#1416)
+- Improve formatting of RSS episode descriptions (#1405)
+- Only suggest typed tag once if it already exists
+- Partially fixed playing two tracks at same time (#1213)
+- Revert changes that break mobile browser playback (#1509)
+- Sanitize remote tracks' saving locations with slashes on their names (#1435)
+- Show embed option for channel tracks (#1278)
+- Store volume in logarithmic scale and convert when setting it to audio (fixes #1543)
+- Use global Howler volume instead of setting it separatly for each track (fixes #1542)
+
+
+Documentation:
+
+- Add email configuration to the documentation (#1481)
+- Add server uninstallation documentation (\!1314)
+- Document location of cli env file on macOS (\!1354)
+- Fix broken backup documentation (#1345)
+- Refactore installation documentation and other small documentation adjustments (\!1314)
+- Add User documentation for built-in plugins
+
+
+Other:
+
+- Create stable branch, master is now deprecated and will be removed in 1.3 (#1476)
+
+
 1.1.4 (2021-08-02)
 ------------------
 

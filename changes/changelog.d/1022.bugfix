@@ -1,1 +1,0 @@
-Fix X-Frame-Options HTTP header for embed and force it to SAMEORIGIN value for other pages (fix #1022)
