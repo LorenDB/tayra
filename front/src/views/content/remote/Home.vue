@@ -33,7 +33,7 @@
         <library-card
           v-for="library in scanResult.results"
           :key="library.fid"
-          :library="library"
+          :initial-library="library"
         />
       </div>
       <template v-if="existingFollows && existingFollows.count > 0">
@@ -54,7 +54,7 @@
           <library-card
             v-for="follow in existingFollows.results"
             :key="follow.fid"
-            :library="getLibraryFromFollow(follow)"
+            :initial-library="getLibraryFromFollow(follow)"
             @deleted="fetch()"
             @followed="fetch()"
           />
