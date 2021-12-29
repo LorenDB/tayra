@@ -16,6 +16,10 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 Upgrade instructions are available at
 https://docs.funkwhale.audio/admin/upgrading.html
 
+Due to a bug in our CI Pipeline frontend artifacts are not available at 
+https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/1.2.0/download?job=build_front as they would usually.
+Please use this URL to get your frontend build: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/81069/artifacts/download
+
 Features:
 
 - Implemented awesome recently added radio (part of #1390)
