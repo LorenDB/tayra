@@ -282,10 +282,10 @@ docker_publish_stable_release:
     # Check if this is the latest release
     - ./docs/get-releases-json.py | scripts/is-docker-latest.py $CI_COMMIT_TAG - && export DOCKER_LATEST_TAG="-t $IMAGE_LATEST" || export DOCKER_LATEST_TAG=;
     - export major="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1)" 
-    - export minor="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1,2)"; fi
+    - export minor="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1,2)"
     - cd api
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
-    - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE -t $DOCKER_LATEST_TAG -t $IMAGE_NAME:$major -t $IMAGE_NAME:$minor .
+    - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE $DOCKER_LATEST_TAG -t $IMAGE_NAME:$major -t $IMAGE_NAME:$minor .
 
 docker_publish_unstable_release:
   # Publish a docker image for releases
