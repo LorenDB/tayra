@@ -119,7 +119,7 @@ import MixinsTranslation from '@/components/mixins/Translations.vue'
 
 export default {
   mixins: [MixinsTranslation],
-  props: { library: { type: Object, default: Null } },
+  props: { library: { type: Object, default: null } },
   data () {
     const d = {
       isLoading: false,
