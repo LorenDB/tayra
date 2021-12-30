@@ -44,6 +44,11 @@ guide.
 Building the mono-container Docker image (funkwhale/all-in-one)
 ---------------------------------------------------------------
 
+.. warning::
+
+   The All-In-One-Container or Mono-Container installation is deprecated, don't use it for new installations.
+   For more information, visit our blog: https://blog.funkwhale.audio/deprecation-all-in-one-container.html
+
 This image is intended to be used in conjunction with our :ref:`Mono-container installation guide <docker-mono-container>`.
 guide.
 
