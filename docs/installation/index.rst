@@ -76,6 +76,11 @@ Available installation methods
 -------------------------------
 
 Funkwhale can be installed using one of the following method:
+
+.. warning::
+
+   The All-In-One-Container or Mono-Container installation is deprecated, don't use it for new installations.
+   For more information, visit our blog: https://blog.funkwhale.audio/deprecation-all-in-one-container.html
   
 - Quick install, the most straight forward way to get Funkwhale;
 - Mono-container Docker installation;
