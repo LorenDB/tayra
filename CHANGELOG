@@ -20,6 +20,16 @@ Due to a bug in our CI Pipeline frontend artifacts are not available at
 https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/1.2.0/download?job=build_front as they would usually.
 Please use this URL to get your frontend build: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/81069/artifacts/download
 
+If you are running the All-in-One-Container since a longer time, you probably need to manually migrate your database information. If thats the case, you will get a message like this:
+
+`DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 13.5.`
+
+Make sure the Funkwhale version is set to `1.1.4` in `docker-compose.yml`. Now you can run this command to dump the database into a file:
+
+`docker-compose exec funkwhale pg_dump -c -U funkwhale > "db.dump"`
+
+Now you can update the Funkwhale version in `docker-compose.yml` to `1.2.0`. Additionally you should save your `data` directory, eg by running `mv data data.bak && mkdir data`. Stop Funkwhale and start it again with the new version, by using `docker-compose down && docker-compose up -d`. This will initialize a fresh DB and applies all migrations. Now you can restore your database with the following command: `cat db.dump | docker-compose exec funkwhale psql -U funkwhale`. Thats it, enjoy!
+
 Features:
 
 - Implemented awesome recently added radio (part of #1390)
