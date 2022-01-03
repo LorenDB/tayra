@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2021-12-11 20:27+0000\n"
+"PO-Revision-Date: 2022-01-05 21:36+0000\n"
 "Last-Translator: Dignified Silence <5dd12ck@protonmail.com>\n"
 "Language-Team: none\n"
 "Language: ja_JP\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: front/src/components/playlists/PlaylistModal.vue:5
 msgctxt "Popup/Playlist/Paragraph"
 msgid "\"%{ title }\", by %{ artist }"
-msgstr "\"%{ title }\" by %{ artist }"
+msgstr "%{ artist }による\"%{ title }\""
 
 #: front/src/components/RemoteSearchForm.vue:132
 msgctxt "Head/Fetch/Field.Placeholder"
@@ -143,7 +143,7 @@ msgstr[0] "%{ count } 曲がフィルターにマッチしました"
 msgctxt "*/Queue/Message"
 msgid "%{ count } track was added to your queue"
 msgid_plural "%{ count } tracks were added to your queue"
-msgstr[0] "%{ count } 曲が再生キューに追加されてます"
+msgstr[0] "%{ count } 曲が再生キューに追加されました"
 
 #: front/src/views/content/libraries/Quota.vue:21
 msgctxt "Content/Library/Paragraph"
@@ -173,17 +173,17 @@ msgstr "%{ updatedAgo }"
 #: front/src/components/notifications/NotificationRow.vue:86
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } accepted your follow on library \"%{ library }\""
-msgstr "%{ username } が ライブラリ「%{ library }」のフォローを許可しました"
+msgstr "%{ username } が ライブラリ\"%{ library }\"のフォローを許可しました"
 
 #: front/src/components/notifications/NotificationRow.vue:85
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } followed your library \"%{ library }\""
-msgstr "%{ username } があなたの 「%{ library }」をフォローしました"
+msgstr "%{ username } があなたの \"%{ library }\"をフォローしました"
 
 #: front/src/components/notifications/NotificationRow.vue:88
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } wants to follow your library \"%{ library }\""
-msgstr "%{ username } があなたの「%{ library }」をフォローしようとしています"
+msgstr "%{ username } があなたの\"%{ library }\"をフォローしたいようです"
 
 #: front/src/views/auth/ProfileBase.vue:162
 msgctxt "Head/Profile/Title"
@@ -219,7 +219,7 @@ msgstr "ファイルのアップロード中にネットワークエラーが発
 #: front/src/App.vue:206
 msgctxt "App/Message/Paragraph"
 msgid "A new version of the app is available."
-msgstr "新しいバージョンが利用可能になりました。"
+msgstr "新しいバージョンのアプリが利用可能になりました。"
 
 #: front/src/components/library/EditForm.vue:281
 msgctxt "*/*/Placeholder"
@@ -229,7 +229,7 @@ msgstr "変更点の端的な概要。"
 #: front/src/components/About.vue:19
 msgctxt "Content/About/Heading"
 msgid "A social platform to enjoy and share music"
-msgstr ""
+msgstr "音楽を楽しみ、シェアするためのソーシャルプラットフォーム"
 
 #: front/src/components/Footer.vue:18
 msgctxt "Footer/About/List item.Link"
@@ -243,7 +243,6 @@ msgstr "このポッドについて"
 
 #: front/src/components/common/UserMenu.vue:165
 #: front/src/components/common/UserModal.vue:194
-#, fuzzy
 msgctxt "Sidebar/About/List item.Link"
 msgid "About"
 msgstr "このポッドについて"
@@ -280,7 +279,6 @@ msgid "About this pod"
 msgstr "このポッドについて"
 
 #: front/src/components/About.vue:171
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "About this pod"
 msgstr "このポッドについて"
@@ -303,7 +301,7 @@ msgstr "許可されました"
 #: front/src/components/auth/SubsonicTokenForm.vue:210
 msgctxt "Content/Settings/Message"
 msgid "Access disabled"
-msgstr "アクセスが拒否されました"
+msgstr "アクセスが無効になっています"
 
 #: front/src/components/mixins/Translations.vue:100
 #: front/src/components/mixins/Translations.vue:101
@@ -327,7 +325,7 @@ msgstr "メールアドレス、ユーザーネーム、プロフィールへの
 #: front/src/components/mixins/Translations.vue:133
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to edits"
-msgstr "編集へのアクセス"
+msgstr ""
 
 #: front/src/components/mixins/Translations.vue:104
 #: front/src/components/mixins/Translations.vue:105
@@ -375,7 +373,7 @@ msgstr "ラジオへのアクセス"
 #: front/src/components/mixins/Translations.vue:137
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to security settings such as password and authorization"
-msgstr "パスワードや認証のようなセキュリティ設定にアクセス"
+msgstr "パスワードや認証のような、セキュリティ設定にアクセス"
 
 #: front/src/components/auth/ApplicationEdit.vue:33
 #: front/src/components/auth/ApplicationEdit.vue:26
@@ -455,7 +453,7 @@ msgstr "アクション"
 msgctxt "Content/*/Paragraph"
 msgid "Action %{ action } was launched successfully on %{ count } element"
 msgid_plural "Action %{ action } was launched successfully on %{ count } elements"
-msgstr[0] "アクション %{ action } を %{ count } 個の要素に実行しました"
+msgstr[0] ""
 
 #: front/src/components/library/FileUpload.vue:102
 msgctxt "*/*/*"
@@ -483,11 +481,10 @@ msgstr "アクティブ"
 
 #: front/src/components/About.vue:109 src/components/About.vue:7
 #: front/src/components/AboutPod.vue:251 src/components/AboutPod.vue:39
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "active user"
 msgid_plural "active users"
-msgstr[0] "%{ count } 人のアクティブユーザー"
+msgstr[0] "アクティブユーザー"
 
 #: front/src/views/admin/ChannelDetail.vue:185
 #: src/views/admin/ChannelDetail.vue:180
@@ -534,7 +531,7 @@ msgstr "追加"
 #: front/src/components/library/AlbumBase.vue:5
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Add a description…"
-msgstr "説明…"
+msgstr "説明を追加…"
 
 #: front/src/views/admin/moderation/DomainsList.vue:23
 msgctxt "Content/Moderation/Form.Label/Verb"
@@ -544,7 +541,7 @@ msgstr "ドメインの追加"
 #: front/src/components/channels/UploadForm.vue:29
 msgctxt "Content/Channels/Popup.Paragraph"
 msgid "Add a license to your upload to ensure some freedoms to your public."
-msgstr "アップロードしたコンテンツにライセンスを追加して、リスナーにある程度の自由を保証します。"
+msgstr "アップロードしたコンテンツにライセンスを添えて、あなたの公開コンテンツに一定程度の自由を保証します。"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:78
 #: front/src/views/admin/moderation/AccountsDetail.vue:73
@@ -556,12 +553,12 @@ msgstr "モデレーションポリシーを追加"
 #: front/src/components/admin/SignupFormBuilder.vue:103
 msgctxt "*/*/Form-builder"
 msgid "Add a new field"
-msgstr "フィールドを追加"
+msgstr "新しいフィールドを追加"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:6
 msgctxt "Content/Moderation/Card.Button.Label/Verb"
 msgid "Add a new moderation rule"
-msgstr "モデレーションルールを追加"
+msgstr "新しいモデレーションルールを追加"
 
 #: front/src/views/content/Home.vue:91
 msgctxt "Content/Library/Title/Verb"
@@ -656,7 +653,6 @@ msgstr "再生キューに追加"
 #: front/src/components/audio/track/Modal.vue:295
 #: front/src/components/audio/podcast/Modal.vue:297
 #: front/src/components/audio/track/Modal.vue:297
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Add to queue"
 msgstr "再生キューに追加"
@@ -684,7 +680,7 @@ msgstr "追加情報"
 #: front/src/components/admin/SignupFormBuilder.vue:35
 msgctxt "*/*/Help"
 msgid "Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled."
-msgstr "フォームに表示される追加のフィールド。 手動サインアップ検証が有効な場合にのみ表示されます。"
+msgstr "フォームに表示される追加のフィールド。 マニュアルでの新規アカウント登録の検査が有効な場合にのみ、表示されます。"
 
 #: front/src/components/audio/VolumeControl.vue:76
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
@@ -703,7 +699,6 @@ msgid "Administration"
 msgstr "管理"
 
 #: front/src/components/AboutPod.vue:237 src/components/AboutPod.vue:25
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "album"
 msgid_plural "albums"
@@ -839,7 +834,7 @@ msgstr "変更の保存中にエラーが発生しました"
 #: front/src/components/federation/FetchButton.vue:32
 msgctxt "Popup/*/Message.Content"
 msgid "An error occurred while trying to refresh data:"
-msgstr "更新中にエラーが発生しました:"
+msgstr "データの更新中にエラーが発生しました:"
 
 #: front/src/components/federation/FetchButton.vue:70
 #: front/src/components/federation/FetchButton.vue:58
@@ -850,7 +845,7 @@ msgstr "リモートサーバーとの通信中にHTTPエラーが発生しま�
 #: front/src/components/admin/SignupFormBuilder.vue:24
 msgctxt "*/*/Help"
 msgid "An optional text to be displayed at the start of the sign-up form."
-msgstr "アカウント登録時のフォームの最初に表示される追加のテキスト。"
+msgstr "新規アカウント登録を始める際に表示される追加のテキスト。"
 
 #: front/src/components/library/ImportStatusModal.vue:204
 msgctxt "Popup/Import/Error.Label"
@@ -865,7 +860,7 @@ msgstr "匿名アクセス"
 #: front/src/components/moderation/ReportModal.vue:74
 msgctxt "Popup/Moderation/Error message"
 msgid "Anonymous reports are disabled, please sign-in to submit a report."
-msgstr "匿名の通報は許可されていません。ログインして通報を送信してください。"
+msgstr "匿名での通報は許可されていません。ログインして通報を送信してください。"
 
 #: front/src/components/auth/Settings.vue:242
 #: src/components/auth/Settings.vue:318
@@ -880,10 +875,9 @@ msgid "Application details"
 msgstr "アプリケーションの詳細"
 
 #: front/src/components/Footer.vue:3
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Application footer"
-msgstr "Application footer"
+msgstr "アプリケーションのフッター"
 
 #: front/src/components/auth/ApplicationEdit.vue:25
 #: front/src/components/auth/ApplicationEdit.vue:18
@@ -895,7 +889,9 @@ msgstr "アプリケーションID"
 #: front/src/components/auth/ApplicationEdit.vue:13
 msgctxt "Content/Application/Paragraph/"
 msgid "Application ID and secret are really sensitive values and must be treated like passwords. Do not share those with anyone else."
-msgstr "アプリケーションIDとシークレットは極めて機密性の高いものであり、パスワードと同等に扱う必要があります。これらを他の人と共有しないでください。"
+msgstr ""
+"アプリケーションIDとアプリケーションシークレットは極めて機密性の高いものであり、パスワードと同等に扱う必要があります。これらを他の人と共有しないでくださ"
+"い。"
 
 #: front/src/components/auth/ApplicationEdit.vue:29
 #: front/src/components/auth/ApplicationEdit.vue:22
@@ -922,7 +918,7 @@ msgstr "承認されました"
 #: front/src/components/library/EditCard.vue:23
 msgctxt "Content/Library/Card/Short"
 msgid "Approved and applied"
-msgstr "承認され適用されました"
+msgstr "承認され、適用されました"
 
 #: front/src/components/auth/Logout.vue:5
 msgctxt "Content/Login/Title"
@@ -930,7 +926,6 @@ msgid "Are you sure you want to log out?"
 msgstr "本当にログアウトしますか?"
 
 #: front/src/components/AboutPod.vue:230 src/components/AboutPod.vue:18
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "artist"
 msgid_plural "artists"
@@ -988,7 +983,7 @@ msgstr "アーティスト名"
 #: front/src/components/audio/Search.vue:99
 msgctxt "*/Search/Input.Placeholder"
 msgid "Artist, album, track…"
-msgstr "アーティスト、アルバム、楽曲…"
+msgstr "アーティスト、アルバム、曲…"
 
 #: front/src/components/Sidebar.vue:171 src/components/Sidebar.vue:206
 #: front/src/views/library/DetailBase.vue:96
@@ -1116,12 +1111,12 @@ msgstr "アバター"
 #: front/src/components/audio/ChannelForm.vue:325
 msgctxt "Content/Channel/Form.Field.Placeholder"
 msgid "Awesome channel name"
-msgstr "あなたが考えた最高のチャンネル名をここに"
+msgstr "あなたが考えた最高のチャンネル名"
 
 #: front/src/components/audio/ChannelForm.vue:326
 msgctxt "Content/Channel/Form.Field.Placeholder"
 msgid "awesomechannelname"
-msgstr "awesome channel name"
+msgstr "awesomechannelname"
 
 #: front/src/views/auth/PasswordReset.vue:32
 #: front/src/views/auth/PasswordResetConfirm.vue:24
@@ -1160,17 +1155,20 @@ msgid "Block everything"
 msgstr "すべてブロック"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:206
+#, fuzzy
 msgctxt "Content/Moderation/Help text"
 msgid "Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.)"
-msgstr "このアカウントやドメインによるものすべてをブロックします。これにより、いかなるエンティティとの相互関係よりも強力で、関連するコンテンツ(アップロード、ライブラリ、フォローなど)が削除されます"
+msgstr ""
+"Block everything from this account or domain. This will prevent any "
+"interaction with the entity, and purge related content (uploads, libraries, "
+"follows, etc.)"
 
 #: front/src/components/Sidebar.vue:156 src/components/Sidebar.vue:196
 msgctxt "Sidebar/Navigation/List item.Link/Verb"
 msgid "Browse"
-msgstr "ライブラリ"
+msgstr "曲を探す"
 
 #: front/src/components/About.vue:135
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Browse public content"
 msgstr "公開コンテンツを探す"
@@ -1190,7 +1188,7 @@ msgstr "ライブラリを探す"
 #: front/src/components/channels/UploadForm.vue:90
 msgctxt "*/*/*"
 msgid "Browse…"
-msgstr "探索…"
+msgstr "探す…"
 
 #: front/src/components/library/Albums.vue:4
 msgctxt "Content/Album/Title"
@@ -1418,7 +1416,6 @@ msgstr "matrixルーム"
 
 #: front/src/components/common/UserMenu.vue:172
 #: front/src/components/common/UserModal.vue:208
-#, fuzzy
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Chat room"
 msgstr "matrixルーム"
@@ -1431,7 +1428,7 @@ msgstr "「読み取り」または「書き込み」スコープをチェック
 #: front/src/components/SetInstanceModal.vue:3
 msgctxt "Popup/Instance/Title"
 msgid "Choose your instance"
-msgstr "ポッドを選んでください"
+msgstr "インスタンスを選んでください"
 
 #: front/src/components/Queue.vue:106
 msgctxt "*/Queue/*/Verb"
@@ -1538,7 +1535,6 @@ msgid "Confirmation code"
 msgstr "確認コード"
 
 #: front/src/components/AboutPod.vue:266 src/components/AboutPod.vue:2
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Contact"
 msgstr "お問い合わせ"
@@ -1591,7 +1587,7 @@ msgstr "コピー"
 #: front/src/components/playlists/Editor.vue:207
 msgctxt "Content/Playlist/Button.Tooltip/Verb"
 msgid "Copy the current queue to this playlist"
-msgstr "キューの楽曲をプレイリストへコピー"
+msgstr "キューの曲をプレイリストへコピー"
 
 #: front/src/components/auth/Authorize.vue:76
 msgctxt "Content/Auth/Paragraph"
@@ -1603,7 +1599,7 @@ msgstr "アプリ内にこのコードをコピーアンドペースト:"
 #: front/src/views/channels/DetailBase.vue:8
 msgctxt "Content/Channels/Label"
 msgid "Copy-paste the following URL in your favorite podcatcher:"
-msgstr "あなたの好きなポッドキャストアプリに、次のURLをコピーアンドペースト:"
+msgstr "あなたの好きなポッドキャストアプリに、次のURLをコピー＆ペースト:"
 
 #: front/src/components/audio/EmbedWizard.vue:42
 msgctxt "Popup/Embed/Paragraph"
@@ -1770,7 +1766,6 @@ msgid "Dark"
 msgstr "ダーク"
 
 #: front/src/components/Sidebar.vue:600
-#, fuzzy
 msgctxt "Sidebar/Settings/Dropdown.Label/Theme name"
 msgid "Dark"
 msgstr "ダーク"
@@ -1897,12 +1892,12 @@ msgstr "ラジオを削除"
 #: front/src/components/manage/moderation/ReportCard.vue:495
 msgctxt "Content/Moderation/Button/Verb"
 msgid "Delete reported object"
-msgstr "通報された対象を削除"
+msgstr "通報対象を削除"
 
 #: front/src/components/manage/moderation/ReportCard.vue:496
 msgctxt "Content/Moderation/Popup/Header"
 msgid "Delete reported object?"
-msgstr "この対象を削除しますか？"
+msgstr "この通報対象を削除しますか？"
 
 #: front/src/components/library/AlbumDropdown.vue:46
 msgctxt "Popup/Channel/Title"
@@ -2055,7 +2050,7 @@ msgstr "詳細"
 #: front/src/views/admin/moderation/AccountsDetail.vue:603
 msgctxt "Content/Moderation/Help text"
 msgid "Determine how much content the user can upload. Leave empty to use the default value of the instance."
-msgstr "ユーザーがアップロードできるコンテンツの容量を決定します。 空のままにすると、ポッドのデフォルトの値が使用されます。"
+msgstr "ユーザーがアップロードできるコンテンツの容量を決定します。 空のままにすると、インスタンスのデフォルトの値が使用されます。"
 
 #: front/src/components/mixins/Translations.vue:8
 #: front/src/components/mixins/Translations.vue:9
@@ -2091,7 +2086,7 @@ msgstr "Subsonic APIへのアクセスを無効化しますか？"
 #: front/src/views/admin/moderation/AccountsDetail.vue:165
 msgctxt "*/*/*/State of feature"
 msgid "Disabled"
-msgstr "無効化"
+msgstr "無効"
 
 #: front/src/views/admin/library/TrackDetail.vue:174
 #: front/src/views/admin/library/TrackDetail.vue:169
@@ -2118,7 +2113,7 @@ msgstr "他の支援方法を見つける"
 #: front/src/views/admin/moderation/AccountsDetail.vue:130
 msgctxt "'Content/*/*/Noun'"
 msgid "Display name"
-msgstr "表示名"
+msgstr "ユーザーネーム"
 
 #: front/src/components/library/radios/Builder.vue:40
 msgctxt "Content/Radio/Checkbox.Label/Verb"
@@ -2174,7 +2169,7 @@ msgstr[0] ""
 #: front/src/components/moderation/ReportModal.vue:3
 msgctxt "Popup/Moderation/Title/Verb"
 msgid "Do you want to report this object?"
-msgstr "この対象を通報しますか？"
+msgstr "この通報対象を通報しますか？"
 
 #: front/src/components/Footer.vue:55 src/components/auth/Plugin.vue:8
 #: front/src/components/auth/Plugin.vue:4
@@ -2184,7 +2179,6 @@ msgstr "ドキュメント"
 
 #: front/src/components/common/UserMenu.vue:169
 #: front/src/components/common/UserModal.vue:198
-#, fuzzy
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Documentation"
 msgstr "ドキュメント"
@@ -2255,7 +2249,7 @@ msgstr "ダウンロード回数"
 #: front/src/components/mixins/Translations.vue:29
 msgctxt "Content/Library/*/Short"
 msgid "Draft"
-msgstr ""
+msgstr "下書き"
 
 #: front/src/components/playlists/Editor.vue:78
 #: src/components/playlists/Editor.vue:2
@@ -2464,7 +2458,7 @@ msgstr ""
 #: front/src/components/auth/Plugin.vue:27
 msgctxt "*/*/*"
 msgid "Enabled"
-msgstr "有効化"
+msgstr "有効"
 
 #: front/src/components/AboutPod.vue:117 src/components/AboutPod.vue:136
 #: front/src/components/AboutPod.vue:161
@@ -2533,7 +2527,6 @@ msgstr "ユーザーネームかメールアドレスを入力"
 #: front/src/components/audio/PlayButton.vue:28
 #: front/src/components/audio/podcast/Modal.vue:269
 #: front/src/components/audio/track/Modal.vue:269
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "Episode details"
 msgstr "エピソードの詳細"
@@ -2574,7 +2567,7 @@ msgstr "エラータイプ"
 #: front/src/components/common/ActionTable.vue:76
 msgctxt "Content/*/Error message/Header"
 msgid "Error while applying action"
-msgstr ""
+msgstr "アクションの適用中にエラーが発生しました"
 
 #: front/src/views/auth/PasswordReset.vue:12
 msgctxt "Content/Signup/Card.Title"
@@ -2619,14 +2612,14 @@ msgstr "サーバールール作成中にエラーが発生しました"
 #: front/src/components/auth/Authorize.vue:16
 msgctxt "Popup/Moderation/Error message"
 msgid "Error while fetching application data"
-msgstr ""
+msgstr "アプリケーションのデータをフェッチ中にエラーが発生しました"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:172
 #: front/src/views/admin/moderation/DomainsDetail.vue:167
 #: front/src/views/admin/moderation/DomainsDetail.vue:8
 msgctxt "Content/Moderation/Table"
 msgid "Error while fetching node info"
-msgstr ""
+msgstr "node infoをフェッチ中にエラーが発生しました"
 
 #: front/src/components/RemoteSearchForm.vue:20
 msgctxt "Content/*/Error message.Title"
@@ -2636,12 +2629,12 @@ msgstr "ユーザーデータをフェッチしている間にエラーが発生
 #: front/src/components/library/FileUpload.vue:165
 msgctxt "Content/*/Error message.Title"
 msgid "Error while launching import"
-msgstr ""
+msgstr "インポート中にエラーが発生しました"
 
 #: front/src/components/channels/UploadForm.vue:4
 msgctxt "Content/*/Error message.Title"
 msgid "Error while publishing"
-msgstr ""
+msgstr "投稿中にエラーが発生しました"
 
 #: front/src/components/audio/ChannelForm.vue:4
 msgctxt "Content/*/Error message.Title"
@@ -2672,7 +2665,7 @@ msgstr ""
 #: front/src/components/moderation/ReportModal.vue:14
 msgctxt "Popup/Moderation/Error message"
 msgid "Error while submitting report"
-msgstr ""
+msgstr "通報内容の投稿中にエラーが発生しました"
 
 #: front/src/components/common/RenderedDescription.vue:29
 msgctxt "Content/Channels/Error message.Title"
@@ -2685,18 +2678,18 @@ msgstr "説明の更新中にエラーが発生しました"
 #: front/src/components/channels/UploadForm.vue:4
 msgctxt "Channels/*/*"
 msgid "Errored"
-msgstr ""
+msgstr "エラー"
 
 #: front/src/components/mixins/Translations.vue:36
 #: front/src/components/mixins/Translations.vue:37
 msgctxt "Content/Library/Table/Short"
 msgid "Errored"
-msgstr ""
+msgstr "エラー"
 
 #: front/src/views/content/libraries/Quota.vue:113
 msgctxt "Content/Library/Label"
 msgid "Errored files"
-msgstr ""
+msgstr "エラーファイル"
 
 #: front/src/components/mixins/Translations.vue:17
 #: front/src/components/mixins/Translations.vue:18
@@ -2708,23 +2701,23 @@ msgstr "全員"
 #: front/src/components/mixins/Translations.vue:12
 msgctxt "Content/Settings/Dropdown"
 msgid "Everyone on this instance"
-msgstr "このポッドのユーザー全員に公開する"
+msgstr "このインスタンスのユーザー全員に公開する"
 
 #: front/src/components/mixins/Translations.vue:12
 #: front/src/components/mixins/Translations.vue:13
 msgctxt "Content/Settings/Dropdown"
 msgid "Everyone, across all instances"
-msgstr "全てのポッドのユーザー全員に公開する"
+msgstr "全てのインスタンスのユーザー全員に公開する"
 
 #: front/src/components/library/radios/Builder.vue:83
 msgctxt "Content/Radio/Table.Label/Verb"
 msgid "Exclude"
-msgstr "除外する"
+msgstr "除く"
 
 #: front/src/components/library/radios/Filter.vue:7
 msgctxt "Popup/Radio/Title/Noun"
 msgid "Exclude"
-msgstr "除外する"
+msgstr "除く"
 
 #: front/src/components/library/Artists.vue:66
 msgctxt "Content/Search/Checkbox/Noun"
@@ -2734,7 +2727,7 @@ msgstr "コンピレーションアーティストを除く"
 #: front/src/components/common/CollapseLink.vue:2
 msgctxt "*/*/Button,Label"
 msgid "Expand"
-msgstr ""
+msgstr "広げる"
 
 #: front/src/App.vue:101 src/components/audio/Player.vue:412
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
@@ -2779,12 +2772,12 @@ msgstr "コンテンツを探す"
 #: front/src/views/content/libraries/FilesTable.vue:38
 msgctxt "Content/Library/Dropdown"
 msgid "Failed"
-msgstr ""
+msgstr "失敗しました"
 
 #: front/src/views/content/remote/Card.vue:80
 msgctxt "Content/Library/Card.List item/Noun"
 msgid "Failed tracks:"
-msgstr ""
+msgstr "失敗した曲:"
 
 #: front/src/views/admin/ChannelDetail.vue:221
 #: src/views/admin/ChannelDetail.vue:216
@@ -2808,12 +2801,12 @@ msgstr "お気に入り"
 #: front/src/components/AboutPod.vue:33
 msgctxt "Content/About/Header"
 msgid "Features"
-msgstr ""
+msgstr "機能"
 
 #: front/src/components/AboutPod.vue:83
 msgctxt "Content/About/Header/Name"
 msgid "Features"
-msgstr ""
+msgstr "機能"
 
 #: front/src/components/AboutPod.vue:110 src/components/audio/SearchBar.vue:94
 #: front/src/components/audio/SearchBar.vue:175 src/views/admin/Settings.vue:75
@@ -2829,41 +2822,39 @@ msgstr "Fediverse"
 #: front/src/components/audio/ChannelForm.vue:43
 #: front/src/components/audio/ChannelForm.vue:29
 #: front/src/components/audio/ChannelForm.vue:9
-#, fuzzy
 msgctxt "Content/Channel/*"
 msgid "Fediverse handle"
-msgstr "Fediverse handle"
+msgstr "FediverseアプリケーションのアカウントID"
 
 #: front/src/components/RemoteSearchForm.vue:131
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Fediverse object"
-msgstr "Fediverse object"
+msgstr "Fediverseのコンテンツ"
 
 #: front/src/components/library/EditCard.vue:48
 msgctxt "Content/Library/Card.Table.Header/Short"
 msgid "Field"
-msgstr ""
+msgstr "フィールド"
 
 #: front/src/components/admin/SignupFormBuilder.vue:43
 msgctxt "*/*/Form-builder,Help"
 msgid "Field label"
-msgstr ""
+msgstr "フィールドラベル"
 
 #: front/src/components/admin/SignupFormBuilder.vue:48
 msgctxt "*/*/Form-builder,Help"
 msgid "Field type"
-msgstr ""
+msgstr "フィールドタイプ"
 
 #: front/src/components/library/FileUpload.vue:87
 msgctxt "Content/Library/Table.Label"
 msgid "Filename"
-msgstr "ファイルネーム"
+msgstr "ファイル名"
 
 #: front/src/components/channels/UploadModal.vue:6
 msgctxt "Popup/Channels/Title"
 msgid "Files to upload"
-msgstr ""
+msgstr "アップロードするファイル"
 
 #: front/src/components/playlists/PlaylistModal.vue:56
 msgctxt "Popup/Playlist/Label"
@@ -2873,7 +2864,7 @@ msgstr "フィルター"
 #: front/src/views/channels/SubscriptionsList.vue:103
 msgctxt "Content/Subscriptions/Form.Placeholder"
 msgid "Filter by name…"
-msgstr "名前でフィルタリングする…"
+msgstr "ユーザーネームでフィルタリングする…"
 
 #: front/src/components/library/radios/Builder.vue:78
 msgctxt "Content/Radio/Table.Label/Noun"
@@ -2881,19 +2872,16 @@ msgid "Filter name"
 msgstr "フィルターネーム"
 
 #: front/src/components/About.vue:160
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Find an app"
-msgstr "他のポッドを探す"
+msgstr "アプリを探す"
 
 #: front/src/components/About.vue:149
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Find another pod"
 msgstr "他のポッドを探す"
 
 #: front/src/components/About.vue:60
-#, fuzzy
 msgctxt "Content/About/Link"
 msgid "Find another pod"
 msgstr "他のポッドを探す"
@@ -2914,7 +2902,7 @@ msgstr ""
 #: front/src/components/mixins/Translations.vue:41
 msgctxt "Content/Library/*"
 msgid "Finished"
-msgstr ""
+msgstr "完了しました"
 
 #: front/src/components/manage/moderation/AccountsTable.vue:57
 #: front/src/components/manage/moderation/AccountsTable.vue:17
@@ -2940,13 +2928,13 @@ msgstr ""
 #: front/src/views/admin/moderation/DomainsDetail.vue:205
 msgctxt "Content/Moderation/Table.Label/Short (Value is a date)"
 msgid "First seen"
-msgstr ""
+msgstr "最初のログイン"
 
 #: front/src/components/mixins/Translations.vue:71
 #: front/src/components/mixins/Translations.vue:72
 msgctxt "Content/Moderation/Dropdown/Noun"
 msgid "First seen date"
-msgstr ""
+msgstr "最初にログインした日付"
 
 #: front/src/components/ShortcutsModal.vue:80
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
@@ -2964,6 +2952,8 @@ msgstr "フォロー"
 msgctxt "Content/Library/Paragraph"
 msgid "Follow libraries from other users to get access to new music. Public libraries can be followed immediately, while following a private library requires approval from its owner."
 msgstr ""
+"他のユーザーのライブラリをフォローして、新しい音楽に出会いましょう。公開ライブラリはすぐにフォローできますが、プライベートライブラリへのフォローはその所有"
+"者からの承認が必須です。"
 
 #: front/src/views/content/Home.vue:49
 msgctxt "Content/Library/Title/Verb"
@@ -2998,7 +2988,7 @@ msgstr "フォロー"
 #: front/src/components/common/UserModal.vue:197
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Forum"
-msgstr ""
+msgstr "フォーラム"
 
 #: front/src/components/moderation/ReportModal.vue:64
 msgctxt "*/*/Field,Help"
@@ -3016,10 +3006,10 @@ msgid "Full access"
 msgstr "フルアクセス"
 
 #: front/src/components/About.vue:24
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Funkwhale is a community-driven project that lets you listen and share music and audio within a decentralized, open network."
-msgstr "このポッドは、非中央集権的な開かれたネットワークの中で音楽や音声を聞いたりシェアする、コミュニティによるプロジェクトFunkwhaleを実装しています。"
+msgstr ""
+"Funkwhaleはコミュニティによるプロジェクトであり、非中央集権的で開かれたネットワークの中で音楽や音声を聞いたり、シェアすることができます。"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:13
 msgctxt "Content/Settings/Paragraph'"
@@ -3050,7 +3040,7 @@ msgstr ""
 #: front/src/views/content/Home.vue:59
 msgctxt "Content/Library/Button.Label/Verb"
 msgid "Get started"
-msgstr "始める"
+msgstr "早速始める"
 
 #: front/src/components/Footer.vue:71
 #: src/components/library/ImportStatusModal.vue:59
@@ -3082,19 +3072,19 @@ msgstr ""
 
 #: front/src/components/About.vue:73
 msgid "Hello"
-msgstr ""
+msgstr "こんにちは"
 
 #: front/src/components/common/UserMenu.vue:167
 #: front/src/components/common/UserModal.vue:196
 #: front/src/components/common/UserModal.vue:199
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Help"
-msgstr ""
+msgstr "ヘルプ"
 
 #: front/src/components/admin/SignupFormBuilder.vue:21
 msgctxt "*/*/Label"
 msgid "Help text"
-msgstr ""
+msgstr "ヘルプテキスト"
 
 #: front/src/components/auth/Settings.vue:176
 msgctxt "Content/Settings/Title"
@@ -3138,11 +3128,10 @@ msgstr ""
 
 #: front/src/components/About.vue:116 src/components/About.vue:14
 #: front/src/components/AboutPod.vue:223 src/components/AboutPod.vue:11
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "hour of music"
 msgid_plural "hours of music"
-msgstr[0] "%{ count } 時間分の音楽"
+msgstr[0] "時間の音楽"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:20
 msgctxt "Content/Settings/Paragraph"
@@ -3163,7 +3152,7 @@ msgstr ""
 #: front/src/views/content/Home.vue:15
 msgctxt "Content/Library/Paragraph"
 msgid "If you are a musician or a podcaster, channels are designed for you!"
-msgstr ""
+msgstr "あなたがミュージシャンまたはポッドキャスターなら、専用のチャンネルが提供されます！"
 
 #: front/src/components/auth/Settings.vue:289
 msgctxt "Content/Applications/Paragraph"
@@ -3187,7 +3176,7 @@ msgstr "マストドンや他のfediverseアプリケーションを利用して
 #: front/src/components/channels/UploadForm.vue:9
 msgctxt "*/*/*"
 msgid "Ignore"
-msgstr ""
+msgstr "無視する"
 
 #: front/src/components/mixins/Translations.vue:50
 #: front/src/components/mixins/Translations.vue:51
@@ -3213,7 +3202,7 @@ msgstr "インポートはまだ始まっていません"
 #: front/src/components/library/FileUpload.vue:159
 msgctxt "Content/Library/Title/Verb"
 msgid "Import music from your server"
-msgstr "ポッドから音楽をインポートする"
+msgstr "サーバーから音楽をインポートする"
 
 #: front/src/components/manage/library/UploadsTable.vue:30
 #: front/src/components/manage/library/UploadsTable.vue:117
@@ -3295,33 +3284,33 @@ msgstr[0] "再生キューから(%{ count } 曲)が加えられます"
 #: front/src/components/mixins/Translations.vue:17
 msgctxt "Content/Settings/Dropdown/Short"
 msgid "Instance"
-msgstr "ポッド"
+msgstr "インスタンス"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:96
 #: front/src/views/admin/moderation/DomainsDetail.vue:91
 msgctxt "Content/Moderation/Title"
 msgid "Instance data"
-msgstr "ポッドのデータ"
+msgstr "インスタンスのデータ"
 
 #: front/src/views/admin/Settings.vue:69
 msgctxt "Content/Admin/Menu"
 msgid "Instance information"
-msgstr "ポッドの情報"
+msgstr "インスタンスの情報"
 
 #: front/src/components/library/Radios.vue:11
 msgctxt "Content/Radio/Title"
 msgid "Instance radios"
-msgstr "ポッドラジオ"
+msgstr "インスタンスのラジオ"
 
 #: front/src/views/admin/Settings.vue:64
 msgctxt "Head/Admin/Title"
 msgid "Instance settings"
-msgstr "ポッドの設定"
+msgstr "インスタンスの設定"
 
 #: front/src/components/SetInstanceModal.vue:37
 msgctxt "Popup/Instance/Input.Label/Noun"
 msgid "Instance URL"
-msgstr "FunkwhaleポッドのURL"
+msgstr "FunkwhaleインスタンスのURL"
 
 #: front/src/components/manage/moderation/ReportCard.vue:110
 #: front/src/components/manage/moderation/ReportCard.vue:245
@@ -3329,13 +3318,12 @@ msgstr "FunkwhaleポッドのURL"
 #: front/src/components/manage/moderation/UserRequestCard.vue:165
 msgctxt "Content/*/*/Noun"
 msgid "Internal notes"
-msgstr ""
+msgstr "管理用ノート"
 
 #: front/src/components/AboutPod.vue:279
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Introduction"
-msgstr "招待"
+msgstr "イントロダクション"
 
 #: front/src/components/library/FileUpload.vue:374
 #: front/src/components/library/FileUpload.vue:375
@@ -3375,7 +3363,6 @@ msgid "Issue tracker"
 msgstr "issueトラッカー"
 
 #: front/src/components/common/UserModal.vue:209
-#, fuzzy
 msgctxt "Sidebar/*/List item.Link"
 msgid "Issue tracker"
 msgstr "issueトラッカー"
@@ -3419,7 +3406,6 @@ msgstr "言語"
 
 #: front/src/components/Sidebar.vue:527 src/components/common/UserModal.vue:200
 #: front/src/components/common/UserModal.vue:202 src/components/Sidebar.vue:529
-#, fuzzy
 msgctxt "Sidebar/Settings/Dropdown.Label/Short, Verb"
 msgid "Language"
 msgstr "言語"
@@ -3440,7 +3426,7 @@ msgstr "最後のアクティビティ"
 #: front/src/views/admin/moderation/DomainsDetail.vue:115
 msgctxt "Content/*/Table.Label"
 msgid "Last checked"
-msgstr ""
+msgstr "最後のチェック"
 
 #: front/src/components/playlists/PlaylistModal.vue:71
 msgctxt "Popup/Playlist/Table.Label/Short"
@@ -3451,13 +3437,13 @@ msgstr "最後の修正"
 #: front/src/components/manage/moderation/AccountsTable.vue:22
 msgctxt "Content/Moderation/Table.Label/Noun"
 msgid "Last seen"
-msgstr ""
+msgstr "最後のログイン"
 
 #: front/src/components/mixins/Translations.vue:72
 #: front/src/components/mixins/Translations.vue:73
 msgctxt "Content/Moderation/Dropdown/Noun"
 msgid "Last seen date"
-msgstr ""
+msgstr "最後にログインした日付"
 
 #: front/src/views/content/remote/Card.vue:76
 #: src/views/content/remote/Card.vue:1
@@ -3468,7 +3454,7 @@ msgstr "最後の更新:"
 #: front/src/App.vue:220
 msgctxt "App/Message/Paragraph"
 msgid "Later"
-msgstr ""
+msgstr "後で"
 
 #: front/src/views/channels/DetailOverview.vue:59
 msgctxt "Content/Channel/Paragraph"
@@ -3491,7 +3477,6 @@ msgid "Learn more"
 msgstr "さらに詳しく"
 
 #: front/src/components/About.vue:124
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Learn More"
 msgstr "さらに詳しく"
@@ -3527,12 +3512,14 @@ msgstr "ライブラリ"
 #: front/src/components/mixins/Translations.vue:100
 msgctxt "Content/OAuth Scopes/Label"
 msgid "Libraries and uploads"
-msgstr ""
+msgstr "ライブラリとアップロード"
 
 #: front/src/views/content/libraries/Form.vue:3
 msgctxt "Content/Library/Paragraph"
 msgid "Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family."
 msgstr ""
+"ライブラリはあなたの音楽コレクションをまとめたり、シェアするための助けになります。あなただけの音楽コレクションをFunkwhaleにアップロードし、友達や"
+"家族とシェアすることができます。"
 
 #: front/src/views/library/DetailBase.vue:258
 msgctxt "*/*/*"
@@ -3596,7 +3583,7 @@ msgstr "ライブラリがアップデートされました"
 #: front/src/components/auth/Plugin.vue:39
 msgctxt "*/*/Paragraph/Noun"
 msgid "Library where files should be imported."
-msgstr ""
+msgstr "ライブラリにはファイルがインポートされるべきでしょう。"
 
 #: front/src/components/channels/LicenseSelect.vue:3
 #: front/src/components/library/TrackDetail.vue:167
@@ -3617,7 +3604,6 @@ msgid "Light"
 msgstr "ライト"
 
 #: front/src/components/Sidebar.vue:596
-#, fuzzy
 msgctxt "Sidebar/Settings/Dropdown.Label/Theme name"
 msgid "Light"
 msgstr "ライト"
@@ -3644,17 +3630,15 @@ msgid "Listen to public albums and playlists shared on this pod"
 msgstr "このポッドでシェアされている、公開アルバムやプレイリストを聞く"
 
 #: front/src/components/About.vue:140 src/components/About.vue:153
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Listen to public albums and playlists shared on this pod."
-msgstr "このポッドでシェアされている、公開アルバムやプレイリストを聞く"
+msgstr "このポッドでシェアされている、公開アルバムやプレイリストを聞く。"
 
 #: front/src/components/AboutPod.vue:258 src/components/AboutPod.vue:46
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "listening"
 msgid_plural "listenings"
-msgstr[0] "%{ count } の再生数"
+msgstr[0] "再生"
 
 #: front/src/components/mixins/Translations.vue:107
 #: front/src/views/admin/ChannelDetail.vue:211
@@ -3668,7 +3652,7 @@ msgstr[0] "%{ count } の再生数"
 #: front/src/components/mixins/Translations.vue:108
 msgctxt "*/*/*/Noun"
 msgid "Listenings"
-msgstr ""
+msgstr "再生数"
 
 #: front/src/components/library/ArtistDetail.vue:48
 msgctxt "Content/*/Button.Label"
@@ -3678,7 +3662,7 @@ msgstr "さらに読み込む…"
 #: front/src/components/audio/ChannelForm.vue:142
 msgctxt "*/*/*"
 msgid "Loading"
-msgstr ""
+msgstr "読み込み中"
 
 #: front/src/views/library/Edit.vue:19
 msgctxt "Content/Library/Paragraph"
@@ -3778,7 +3762,6 @@ msgstr "ログイン！"
 
 #: front/src/components/common/UserMenu.vue:164
 #: front/src/components/common/UserModal.vue:193
-#, fuzzy
 msgctxt "Sidebar/Login/List item.Link/Verb"
 msgid "Log out"
 msgstr "ログアウト"
@@ -3818,7 +3801,7 @@ msgstr "まだライブラリが無いようです。ライブラリを作りま
 #: src/components/audio/Player.vue:414
 msgctxt "Sidebar/Player/Icon.Tooltip"
 msgid "Looping disabled. Click to switch to single-track looping."
-msgstr "ループ機能がオフになってます。クリックして一曲だけループにします。"
+msgstr "ループ機能が無効になってます。クリックして一曲だけループにします。"
 
 #: front/src/components/audio/Player.vue:416
 #: src/components/audio/Player.vue:417
@@ -3840,7 +3823,7 @@ msgstr "メインメニュー"
 #: front/src/components/Sidebar.vue:135
 msgctxt "*/*/*"
 msgid "Main navigation"
-msgstr ""
+msgstr "メインナビゲーション"
 
 #: front/src/views/admin/library/Base.vue:84
 msgctxt "Head/Admin/Title"
@@ -3919,7 +3902,7 @@ msgstr "メッセージ"
 #: src/views/channels/DetailBase.vue:155
 msgctxt "Content/Channel/Paragraph"
 msgid "Mirrored from %{ domain }"
-msgstr ""
+msgstr "%{ domain }からミラーしました"
 
 #: front/src/components/Footer.vue:56
 msgctxt "Footer/*/List item.Link"
@@ -3958,7 +3941,7 @@ msgstr "モデレーションルール…"
 #: front/src/components/library/EditCard.vue:5
 msgctxt "Content/Library/Card/Short"
 msgid "Modification %{ id }"
-msgstr ""
+msgstr "修正 %{ id }"
 
 #: front/src/components/mixins/Translations.vue:73
 #: front/src/components/mixins/Translations.vue:74
@@ -3983,7 +3966,7 @@ msgstr "次の検索結果🡒"
 #: front/src/components/library/TrackBase.vue:292
 msgctxt "*/*/Button.Label/Noun"
 msgid "More…"
-msgstr "More…"
+msgstr "さらに…"
 
 #: front/src/components/admin/SignupFormBuilder.vue:200
 msgctxt "*/*/*"
@@ -4016,7 +3999,7 @@ msgstr "ミュート"
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:209
 msgctxt "Content/Moderation/*/Verb"
 msgid "Mute activity"
-msgstr ""
+msgstr "アクティビティのミュート"
 
 #: front/src/components/manage/moderation/InstancePolicyCard.vue:39
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:213
@@ -4150,14 +4133,14 @@ msgstr "N/A"
 #: front/src/components/mixins/Translations.vue:79
 msgctxt "*/*/*/Noun"
 msgid "Name"
-msgstr "名前"
+msgstr "ユーザーネーム"
 
 #: front/src/components/audio/ChannelForm.vue:37
 #: front/src/components/audio/ChannelForm.vue:23
 #: front/src/components/audio/ChannelForm.vue:3
 msgctxt "Content/Channel/*"
 msgid "Name"
-msgstr "名前"
+msgstr "ユーザーネーム"
 
 #: front/src/views/Notifications.vue:43 src/views/Notifications.vue:99
 msgctxt "*/*/*"
@@ -4194,7 +4177,6 @@ msgstr "新しいシリーズ"
 
 #: front/src/components/library/ArtistDetail.vue:26
 #: front/src/components/library/ArtistDetail.vue:2
-#, fuzzy
 msgctxt "Content/Artist/Title"
 msgid "New tracks by this artist"
 msgstr "このアーティストによる曲一覧"
@@ -4231,7 +4213,7 @@ msgstr "次の曲"
 #: front/src/views/admin/moderation/DomainsDetail.vue:108
 msgctxt "*/*/*"
 msgid "No"
-msgstr ""
+msgstr "いいえ"
 
 #: front/src/components/audio/Search.vue:42 src/components/audio/Search.vue:12
 msgctxt "Content/Search/Paragraph"
@@ -4249,7 +4231,6 @@ msgid "No description available"
 msgstr "説明がまだありません"
 
 #: front/src/components/About.vue:97 src/components/AboutPod.vue:53
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "No description available."
 msgstr "自己紹介がまだありません。"
@@ -4319,13 +4300,11 @@ msgid "No results were found."
 msgstr "コンテンツが見つかりませんでした。"
 
 #: front/src/components/AboutPod.vue:65
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "No rules available."
 msgstr "サーバールールがまだありません。"
 
 #: front/src/components/AboutPod.vue:77
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "No terms available."
 msgstr "まだ利用規約やプライバシーポリシーがありません。"
@@ -4392,7 +4371,7 @@ msgstr "通知"
 #: front/src/components/mixins/Translations.vue:52
 msgctxt "Content/Moderation/Dropdown"
 msgid "Offensive content"
-msgstr ""
+msgstr "攻撃的なコンテンツ"
 
 #: front/src/components/Footer.vue:85
 msgctxt "Footer/*/List item.Link"
@@ -4412,7 +4391,7 @@ msgstr "可能"
 #: front/src/components/manage/users/InvitationsTable.vue:25
 msgctxt "Content/Admin/Dropdown/Adjective"
 msgid "Open"
-msgstr ""
+msgstr "開く"
 
 #: front/src/components/library/ImportStatusModal.vue:72
 #: front/src/components/library/ImportStatusModal.vue:43
@@ -4434,14 +4413,13 @@ msgstr ""
 #: front/src/views/library/DetailBase.vue:20
 msgctxt "Content/Moderation/Link"
 msgid "Open in moderation interface"
-msgstr ""
+msgstr "モデレーション画面で開く"
 
 #: front/src/components/manage/ChannelsTable.vue:246
 #: front/src/components/manage/library/AlbumsTable.vue:232
-#, fuzzy
 msgctxt "Content/Moderation/Verb"
 msgid "Open in moderation interface"
-msgstr "Open in moderation interface"
+msgstr "モデレーション画面を開く"
 
 #: front/src/views/admin/ChannelDetail.vue:35
 #: src/views/admin/ChannelDetail.vue:30
@@ -4498,10 +4476,9 @@ msgid "Open website"
 msgstr "Webサイトを開く"
 
 #: front/src/components/common/UserModal.vue:190
-#, fuzzy
 msgctxt "Popup/Title/Noun"
 msgid "Options"
-msgstr "アクション"
+msgstr "オプション"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:50
 msgctxt "Content/Moderation/Card.Title"
@@ -4517,7 +4494,7 @@ msgstr ""
 #: front/src/views/playlists/List.vue:36
 msgctxt "Content/Search/Dropdown.Label/Noun"
 msgid "Order"
-msgstr ""
+msgstr "並び順"
 
 #: front/src/components/favorites/List.vue:22
 #: src/components/library/Albums.vue:26
@@ -4540,7 +4517,6 @@ msgstr ""
 #: front/src/views/admin/moderation/RequestsList.vue:43
 #: front/src/views/content/libraries/FilesTable.vue:51
 #: front/src/views/playlists/List.vue:28
-#, fuzzy
 msgctxt "Content/Search/Dropdown.Label/Noun"
 msgid "Ordering"
 msgstr "Ordering"
@@ -4588,34 +4564,33 @@ msgstr "概要"
 #: front/src/views/library/DetailBase.vue:34
 msgctxt "*/*/*"
 msgid "Owned by %{ username }"
-msgstr ""
+msgstr "%{ username }が所有しています"
 
 #: front/src/components/manage/moderation/ReportCard.vue:175
 #: front/src/components/manage/users/InvitationsTable.vue:45
 #: front/src/components/manage/users/InvitationsTable.vue:2
 msgctxt "*/*/*"
 msgid "Owner"
-msgstr ""
+msgstr "所有者"
 
 #: front/src/components/audio/ChannelForm.vue:122
 #: front/src/components/audio/ChannelForm.vue:108
 #: front/src/components/audio/ChannelForm.vue:88
-#, fuzzy
 msgctxt "*/*/*"
 msgid "Owner e-mail address"
-msgstr "Owner e-mail address"
+msgstr "所有者のメールアドレス"
 
 #: front/src/components/audio/ChannelForm.vue:128
 #: front/src/components/audio/ChannelForm.vue:114
 #: front/src/components/audio/ChannelForm.vue:94
 msgctxt "*/*/*"
 msgid "Owner name"
-msgstr ""
+msgstr "所有者のユーザーネーム"
 
 #: front/src/components/PageNotFound.vue:47
 msgctxt "Head/*/Title"
 msgid "Page Not Found"
-msgstr "ページが見つかりません"
+msgstr "ページが見つかりませんでした"
 
 #: front/src/components/PageNotFound.vue:7
 msgctxt "Content/*/Title"
@@ -4625,7 +4600,7 @@ msgstr "ページが見つかりません！"
 #: front/src/components/Pagination.vue:52
 msgctxt "Content/*/Hidden text/Noun"
 msgid "Pagination"
-msgstr ""
+msgstr "ページ付け"
 
 #: front/src/components/auth/LoginForm.vue:39
 #: src/components/auth/LoginForm.vue:15
@@ -4644,7 +4619,7 @@ msgstr "パスワードが変更されました"
 #: front/src/views/auth/PasswordResetConfirm.vue:44
 msgctxt "Content/Signup/Card.Title"
 msgid "Password updated successfully"
-msgstr "パスワードが変更されました"
+msgstr "パスワードの変更に成功しました"
 
 #: front/src/components/audio/Player.vue:408
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
@@ -4665,7 +4640,7 @@ msgstr "曲を止める・再生する"
 #: front/src/components/manage/moderation/InstancePolicyCard.vue:2
 msgctxt "Content/Moderation/Card.List item"
 msgid "Paused"
-msgstr ""
+msgstr "停止"
 
 #: front/src/components/channels/UploadForm.vue:97
 #: front/src/components/channels/UploadForm.vue:62
@@ -4673,7 +4648,7 @@ msgstr ""
 #: front/src/components/channels/UploadForm.vue:7
 msgctxt "Channels/*/*"
 msgid "Pending"
-msgstr ""
+msgstr "進行中"
 
 #: front/src/components/library/FileUpload.vue:139
 #: front/src/components/manage/library/UploadsTable.vue:38
@@ -4700,13 +4675,13 @@ msgstr ""
 #: front/src/components/Sidebar.vue:525
 msgctxt "Sidebar/Notifications/Hidden text"
 msgid "Pending follow requests"
-msgstr "フォローリクエストを保留する"
+msgstr "フォローリクエストを保留中"
 
 #: front/src/components/library/EditCard.vue:31
 #: front/src/components/manage/library/EditsCardList.vue:20
 msgctxt "Content/Admin/*/Noun"
 msgid "Pending review"
-msgstr ""
+msgstr "保留中の審査"
 
 #: front/src/components/Sidebar.vue:526
 msgctxt "Sidebar/Moderation/Hidden text"
@@ -4714,7 +4689,6 @@ msgid "Pending review edits"
 msgstr ""
 
 #: front/src/components/common/ActionTable.vue:301
-#, fuzzy
 msgctxt "Content/*/Button.Label"
 msgid "Perform actions"
 msgstr "Perform actions"
@@ -4807,7 +4781,6 @@ msgstr "ラジオを再生する"
 #: front/src/components/audio/track/Modal.vue:290
 #: front/src/components/audio/podcast/Modal.vue:292
 #: front/src/components/audio/track/Modal.vue:292
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play radio"
 msgstr "ラジオを再生する"
@@ -4874,7 +4847,7 @@ msgstr "プレイリストが更新されました"
 #: front/src/components/playlists/Form.vue:39
 msgctxt "Content/Playlist/Dropdown.Label"
 msgid "Playlist visibility"
-msgstr ""
+msgstr "プレイリストの公開範囲"
 
 #: front/src/components/Sidebar.vue:176 src/components/Sidebar.vue:211
 #: front/src/components/library/Home.vue:25 src/components/library/Home.vue:1
@@ -4901,7 +4874,8 @@ msgstr "管理者に連絡を取るか、対応する設定を管理者に更新
 #: front/src/components/auth/LoginForm.vue:15
 msgctxt "Content/Login/Error message.List item/Call to action"
 msgid "Please double-check that your username and password combination is correct and make sure you verified your e-mail address."
-msgstr "ユーザーネームとパスワードの組み合わせが正しいことをダブルチェックして下さい。そして、あなたのメールアドレスが認証済みであることを確認して下さい。"
+msgstr ""
+"ユーザーネームとパスワードの組み合わせが正しいかどうか、ダブルチェックして下さい。そして、あなたのメールアドレスが認証済みであることを確認して下さい。"
 
 #: front/src/components/auth/Settings.vue:100
 msgctxt "Content/Settings/Error message.List item/Call to action"
@@ -4974,7 +4948,7 @@ msgstr "プレビュー"
 #: front/src/components/admin/SignupFormBuilder.vue:9
 msgctxt "*/Form/Menu.item"
 msgid "Preview form"
-msgstr ""
+msgstr "プレビューフォーム"
 
 #: front/src/components/Pagination.vue:53
 msgctxt "Content/*/Link"
@@ -4995,19 +4969,19 @@ msgstr "前の曲"
 #: front/src/views/library/DetailBase.vue:260
 msgctxt "Content/Library/Card.Help text"
 msgid "Private"
-msgstr ""
+msgstr "プライベート"
 
 #: front/src/components/mixins/Translations.vue:15
 #: front/src/components/mixins/Translations.vue:16
 msgctxt "Content/Settings/Dropdown/Short"
 msgid "Private"
-msgstr ""
+msgstr "プライベート"
 
 #: front/src/views/content/remote/Card.vue:53
 #: src/views/content/remote/Card.vue:2
 msgctxt "Content/Library/Card.List item"
 msgid "Problem during scanning"
-msgstr ""
+msgstr "スキャン中に問題が発生しました"
 
 #: front/src/views/auth/EmailConfirm.vue:43
 #: front/src/views/auth/PasswordResetConfirm.vue:54
@@ -5021,17 +4995,17 @@ msgstr "ログインに進む"
 #: front/src/views/channels/DetailOverview.vue:13
 msgctxt "Content/Channel/Paragraph"
 msgid "Processed uploads:"
-msgstr ""
+msgstr "処理されたアップロードデータ:"
 
 #: front/src/components/library/FileUpload.vue:16
 msgctxt "Content/Library/Tab.Title/Short"
 msgid "Processing"
-msgstr ""
+msgstr "処理中"
 
 #: front/src/components/channels/UploadModal.vue:12
 msgctxt "Popup/Channels/Title"
 msgid "Processing uploads"
-msgstr ""
+msgstr "アップロードの処理中"
 
 #: front/src/components/common/UserMenu.vue:162
 #: front/src/components/common/UserModal.vue:191
@@ -5048,12 +5022,12 @@ msgstr "プロフィール"
 #: front/src/views/library/DetailBase.vue:262
 msgctxt "Content/Library/Card.Help text"
 msgid "Public"
-msgstr ""
+msgstr "公開"
 
 #: front/src/components/auth/SignupForm.vue:23
 msgctxt "Content/Signup/Form/Paragraph"
 msgid "Public registrations are not possible on this instance. You will need an invitation code to sign up."
-msgstr "このポッドでの新規登録はできません。新規登録には招待コードが必要です。"
+msgstr "このインスタンスでの新規アカウント登録はできません。新規アカウント登録には招待コードが必要です。"
 
 #: front/src/components/channels/UploadModal.vue:55
 msgctxt "*/Channels/Button.Label"
@@ -5063,7 +5037,7 @@ msgstr "公開"
 #: front/src/components/channels/UploadModal.vue:3
 msgctxt "Popup/Channels/Title/Verb"
 msgid "Publish audio"
-msgstr ""
+msgstr "曲を公開する"
 
 #: front/src/components/audio/ChannelForm.vue:310
 msgctxt "Content/Channels/Help"
@@ -5085,12 +5059,12 @@ msgstr ""
 #: front/src/views/content/libraries/Quota.vue:139
 msgctxt "*/*/*/Verb"
 msgid "Purge"
-msgstr ""
+msgstr "削除"
 
 #: front/src/views/content/libraries/Quota.vue:129
 msgctxt "Popup/Library/Title"
 msgid "Purge errored files?"
-msgstr ""
+msgstr "エラーファイルを削除しますか？"
 
 #: front/src/views/content/libraries/Quota.vue:51
 msgctxt "Popup/Library/Title"
@@ -5100,7 +5074,7 @@ msgstr ""
 #: front/src/views/content/libraries/Quota.vue:90
 msgctxt "Popup/Library/Title"
 msgid "Purge skipped files?"
-msgstr ""
+msgstr "スキップしたファイルを削除しますか？"
 
 #: front/src/components/Queue.vue:398
 msgctxt "*/*/*"
@@ -5271,12 +5245,12 @@ msgstr ""
 #: front/src/components/federation/FetchButton.vue:15
 msgctxt "Popup/*/Message.Title"
 msgid "Refresh successful"
-msgstr "更新が成功しました"
+msgstr "更新に成功しました"
 
 #: front/src/components/common/ActionTable.vue:299
 msgctxt "Content/*/Button.Tooltip/Verb"
 msgid "Refresh table content"
-msgstr ""
+msgstr "テーブルのコンテンツを更新しました"
 
 #: front/src/components/federation/FetchButton.vue:15
 #: front/src/components/federation/FetchButton.vue:3
@@ -5287,7 +5261,7 @@ msgstr "更新がスキップされました"
 #: front/src/components/federation/FetchButton.vue:7
 msgctxt "Popup/*/Title"
 msgid "Refreshing object from remote server…"
-msgstr ""
+msgstr "リモートサーバーからのコンテンツを更新中…"
 
 #: front/src/components/manage/moderation/UserRequestCard.vue:158
 msgctxt "Content/*/Button.Label"
@@ -5299,7 +5273,7 @@ msgstr "拒否する"
 #: front/src/views/admin/moderation/RequestsList.vue:36
 msgctxt "Content/*/*/Short"
 msgid "Refused"
-msgstr ""
+msgstr "拒否"
 
 #: front/src/components/auth/ApplicationEdit.vue:37
 #: front/src/components/auth/ApplicationEdit.vue:30
@@ -5325,36 +5299,36 @@ msgstr "アカウントの登録"
 #: front/src/components/auth/SignupForm.vue:28
 msgctxt "Content/Signup/Form/Paragraph"
 msgid "Registrations on this pod are open, but reviewed by moderators before approval."
-msgstr "このポッドでは新規登録は開放されてますが、登録を認める前にモデレーターによって審査されます。"
+msgstr "このポッドでは新規アカウント登録は開放されてますが、登録を認める前にモデレーターによって審査されます。"
 
 #: front/src/components/manage/users/UsersTable.vue:110
 #: front/src/components/manage/users/UsersTable.vue:35
 msgctxt "Content/Admin/Table, User role"
 msgid "Regular user"
-msgstr ""
+msgstr "一般ユーザー"
 
 #: front/src/components/notifications/NotificationRow.vue:121
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Reject"
-msgstr ""
+msgstr "拒否"
 
 #: front/src/components/library/EditCard.vue:116 src/views/library/Edit.vue:70
 msgctxt "Content/Library/Button.Label"
 msgid "Reject"
-msgstr ""
+msgstr "拒否"
 
 #: front/src/components/manage/moderation/InstancePolicyCard.vue:47
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:217
 msgctxt "Content/Moderation/*/Verb"
 msgid "Reject media"
-msgstr ""
+msgstr "拒否したメディア"
 
 #: front/src/components/library/EditCard.vue:35
 #: front/src/components/manage/library/EditsCardList.vue:30
 #: front/src/views/library/Edit.vue:60
 msgctxt "Content/Library/*/Short"
 msgid "Rejected"
-msgstr ""
+msgstr "拒否"
 
 #: front/src/components/library/TrackDetail.vue:204
 msgctxt "Content/*/Title/Noun"
@@ -5382,18 +5356,18 @@ msgstr "リリース情報"
 #: front/src/components/library/FileUpload.vue:32
 msgctxt "Content/Library/Paragraph"
 msgid "Remaining storage space"
-msgstr ""
+msgstr "残りのストレージ容量"
 
 #: front/src/components/channels/UploadModal.vue:26
 #: front/src/components/channels/UploadModal.vue:1
 msgctxt "Content/Library/Paragraph"
 msgid "Remaining storage space:"
-msgstr ""
+msgstr "残りのストレージ容量:"
 
 #: front/src/views/Notifications.vue:24 src/views/Notifications.vue:80
 msgctxt "Content/Notifications/Label"
 msgid "Remind me in:"
-msgstr ""
+msgstr "自分へのリマインダー:"
 
 #: front/src/views/content/remote/Home.vue:11
 msgctxt "Content/Library/Title/Noun"
@@ -5404,6 +5378,8 @@ msgstr "リモートのライブラリ"
 msgctxt "Content/Library/Paragraph"
 msgid "Remote libraries are owned by other users on the network. You can access them as long as they are public or you are granted access."
 msgstr ""
+"リモートのライブラリは、Funkwhaleネットワーク上の他のユーザーが所有しています。ライブラリが公開されている、またはライブラリへのアクセス権を得てい"
+"る限りは、アクセスできます。"
 
 #: front/src/components/auth/Settings.vue:355
 msgctxt "*/*/*/Verb"
@@ -5439,7 +5415,7 @@ msgstr "フィルターの除去"
 #: front/src/views/admin/moderation/DomainsDetail.vue:27
 msgctxt "Content/Moderation/Action/Verb"
 msgid "Remove from allow-list"
-msgstr ""
+msgstr "許可リストから除く"
 
 #: front/src/components/audio/podcast/Modal.vue:259
 #: front/src/components/audio/track/Modal.vue:259
@@ -5524,7 +5500,7 @@ msgstr "通報する…"
 #: front/src/components/manage/moderation/ReportCard.vue:139
 msgctxt "Content/*/*/Short"
 msgid "Reported object"
-msgstr ""
+msgstr "通報した対象"
 
 #: front/src/components/mixins/Translations.vue:139
 #: front/src/views/admin/moderation/Base.vue:4
@@ -5538,7 +5514,7 @@ msgstr "通報"
 #: front/src/components/manage/moderation/UserRequestCard.vue:5
 msgctxt "Content/Moderation/Card/Short"
 msgid "Request %{ id }"
-msgstr ""
+msgstr "%{ id }をリクエスト"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:52
 #: front/src/components/auth/SubsonicTokenForm.vue:66
@@ -5563,7 +5539,7 @@ msgstr "パスワードをリクエストする"
 #: front/src/components/federation/FetchButton.vue:99
 msgctxt "Popup/*/Loading.Title"
 msgid "Requesting a fetch…"
-msgstr ""
+msgstr "フェッチをリクエストする…"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:311
 #: front/src/views/admin/moderation/AccountsDetail.vue:306
@@ -5574,12 +5550,12 @@ msgstr "リクエスト"
 #: front/src/components/admin/SignupFormBuilder.vue:53
 msgctxt "*/*/Form-builder,Help"
 msgid "Required"
-msgstr ""
+msgstr "必須"
 
 #: front/src/components/library/EditForm.vue:112
 msgctxt "Content/Library/Button.Label"
 msgid "Reset to initial value"
-msgstr ""
+msgstr "初期値にリセットする"
 
 #: front/src/components/auth/LoginForm.vue:41
 #: src/components/auth/LoginForm.vue:17
@@ -5592,18 +5568,18 @@ msgstr "パスワードをリセットする"
 #: front/src/components/manage/moderation/UserRequestCard.vue:87
 msgctxt "Content/*/*/Noun"
 msgid "Resolution date"
-msgstr ""
+msgstr "解決日"
 
 #: front/src/components/manage/moderation/ReportCard.vue:261
 msgctxt "Content/*/Button.Label/Verb"
 msgid "Resolve"
-msgstr ""
+msgstr "解決"
 
 #: front/src/components/manage/moderation/ReportCard.vue:70
 #: front/src/views/admin/moderation/ReportsList.vue:26
 msgctxt "Content/*/*/Short"
 msgid "Resolved"
-msgstr ""
+msgstr "解決"
 
 #: front/src/views/content/libraries/FilesTable.vue:345
 #: front/src/views/content/libraries/FilesTable.vue:347
@@ -5739,29 +5715,29 @@ msgstr "スキャン"
 #: front/src/views/content/remote/Card.vue:305
 msgctxt "Content/Library/Message"
 msgid "Scan launched"
-msgstr ""
+msgstr "スキャンが始まりました"
 
 #: front/src/views/content/remote/Card.vue:87
 msgctxt "Content/Library/Card.Button.Label/Verb"
 msgid "Scan now"
-msgstr ""
+msgstr "スキャン"
 
 #: front/src/views/content/remote/Card.vue:41
 #: src/views/content/remote/Card.vue:2
 msgctxt "Content/Library/Card.List item"
 msgid "Scan pending"
-msgstr ""
+msgstr "スキャンの保留"
 
 #: front/src/views/content/remote/Card.vue:306
 msgctxt "Content/Library/Message"
 msgid "Scan skipped (previous scan is too recent)"
-msgstr ""
+msgstr "スキャンをスキップしました（つい最近、スキャンされているため）"
 
 #: front/src/views/content/remote/Card.vue:59
 #: src/views/content/remote/Card.vue:2
 msgctxt "Content/Library/Card.List item"
 msgid "Scanned"
-msgstr ""
+msgstr "スキャンしました"
 
 #: front/src/views/content/remote/Card.vue:65
 #: src/views/content/remote/Card.vue:2
@@ -5773,7 +5749,7 @@ msgstr ""
 #: src/views/content/remote/Card.vue:2
 msgctxt "Content/Library/Card.List item"
 msgid "Scanning… (%{ progress }%)"
-msgstr ""
+msgstr "スキャンしています… (%{ progress }%)"
 
 #: front/src/components/auth/ApplicationForm.vue:28
 #: front/src/components/auth/Settings.vue:323
@@ -5828,78 +5804,78 @@ msgstr "リモートのコンテンツを検索する"
 #: front/src/views/admin/moderation/ReportsList.vue:176
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search by account, summary, domain…"
-msgstr ""
+msgstr "アカウント、概要、ドメインで検索…"
 
 #: front/src/components/manage/library/LibrariesTable.vue:261
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search by domain, actor, name, description…"
-msgstr ""
+msgstr "ドメイン、アクター、ライブラリ名、説明で検索…"
 
 #: front/src/components/manage/library/UploadsTable.vue:360
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search by domain, actor, name, reference, source…"
-msgstr ""
+msgstr "ドメイン、アクター、ライブラリ名、参照、ソースで検索…"
 
 #: front/src/components/manage/ChannelsTable.vue:245
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search by domain, name, account…"
-msgstr "ドメイン、アカウント名、アカウントを検索…"
+msgstr "ドメイン、チャンネル名、アカウントで検索…"
 
 #: front/src/components/manage/library/ArtistsTable.vue:229
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search by domain, name, MusicBrainz ID…"
-msgstr "ドメイン、アカウント名、MusicBrainz IDを検索…"
+msgstr "ドメイン、ライブラリ名、MusicBrainz IDで検索…"
 
 #: front/src/components/manage/library/TracksTable.vue:242
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search by domain, title, artist, album, MusicBrainz ID…"
-msgstr "ドメイン、曲名、アーティスト、アルバム名、MusicBrainz IDを検索…"
+msgstr "ドメイン、曲名、アーティスト、アルバム、MusicBrainz IDで検索…"
 
 #: front/src/components/manage/library/AlbumsTable.vue:231
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search by domain, title, artist, MusicBrainz ID…"
-msgstr "ドメイン、曲名、アーティスト名、MusicBrainz IDを検索…"
+msgstr "ドメイン、曲名、アーティスト名、MusicBrainz IDで検索…"
 
 #: front/src/components/manage/moderation/AccountsTable.vue:219
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search by domain, username, bio…"
-msgstr "ドメイン、ユーザーネーム、自己紹介を検索…"
+msgstr "ドメイン、ユーザーネーム、自己紹介で検索…"
 
 #: front/src/components/manage/library/TagsTable.vue:197
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search by name"
-msgstr "アカウント名を検索"
+msgstr "名前で検索"
 
 #: front/src/components/manage/moderation/DomainsTable.vue:227
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search by name…"
-msgstr "アカウント名を検索…"
+msgstr "名前で検索…"
 
 #: front/src/views/content/libraries/FilesTable.vue:325
 #: front/src/views/content/libraries/FilesTable.vue:327
 msgctxt "Content/Library/Input.Placeholder"
 msgid "Search by title, artist, album…"
-msgstr "曲名やアーティストやアルバムを検索…"
+msgstr "曲名やアーティストやアルバムで検索…"
 
 #: front/src/components/manage/users/InvitationsTable.vue:198
 msgctxt "Content/Admin/Input.Placeholder/Verb"
 msgid "Search by username, e-mail address, code…"
-msgstr "ユーザーネーム、メールアドレス、招待コードで検索する…"
+msgstr "ユーザーネーム、メールアドレス、招待コードで検索…"
 
 #: front/src/components/manage/users/UsersTable.vue:241
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search by username, e-mail address, name…"
-msgstr "ユーザーネーム、メールアドレス、アカウント名を検索…"
+msgstr "ユーザーネーム、メールアドレス、アカウント名で検索…"
 
 #: front/src/views/admin/moderation/RequestsList.vue:165
 msgctxt "Content/Search/Input.Placeholder"
 msgid "Search by username…"
-msgstr "ユーザーネームを検索…"
+msgstr "ユーザーネームで検索…"
 
 #: front/src/components/audio/SearchBar.vue:36
 msgctxt "Sidebar/Search/Input.Placeholder"
 msgid "Search for artists, albums, tracks…"
-msgstr "アーティスト、アルバム、曲を検索…"
+msgstr "アーティスト、アルバム、曲で検索…"
 
 #: front/src/components/audio/SearchBar.vue:37
 msgctxt "Sidebar/Search/Input.Label"
@@ -5909,7 +5885,7 @@ msgstr "コンテンツの検索"
 #: front/src/components/audio/Search.vue:3
 msgctxt "Content/Search/Title"
 msgid "Search for some music"
-msgstr "楽曲の検索"
+msgstr "曲の検索"
 
 #: front/src/components/library/AlbumDropdown.vue:37
 #: front/src/components/library/ArtistBase.vue:82
@@ -5956,7 +5932,7 @@ msgstr ""
 #: front/src/views/admin/Settings.vue:12
 msgctxt "Content/Admin/Menu.Title"
 msgid "Sections"
-msgstr ""
+msgstr "セクション"
 
 #: front/src/views/admin/Settings.vue:71
 msgctxt "*/*/*/Noun"
@@ -6002,11 +5978,10 @@ msgstr "フィルターを選ぶ"
 #: front/src/components/common/ActionTable.vue:300
 msgctxt "Content/*/Select/Verb"
 msgid "Select all items"
-msgstr ""
+msgstr "全てのアイテムを選択"
 
 #: front/src/components/common/ActionTable.vue:64
 #: front/src/components/common/ActionTable.vue:2
-#, fuzzy
 msgctxt "Content/*/Link/Verb"
 msgid "Select one element"
 msgid_plural "Select all %{ total } elements"
@@ -6016,12 +5991,12 @@ msgstr[0] "Select all %{ total } elements"
 #: front/src/components/common/ActionTable.vue:7
 msgctxt "Content/*/Link/Verb"
 msgid "Select only current page"
-msgstr ""
+msgstr "現在のページのみ選択"
 
 #: front/src/components/AboutPod.vue:271 src/components/AboutPod.vue:7
 msgctxt "Content/About/Email"
 msgid "Send us an email: {{ contactEmail }}"
-msgstr ""
+msgstr "メールを送る: {{ contactEmail }}"
 
 #: front/src/components/library/TrackDetail.vue:123
 msgctxt "*/*/*"
@@ -6110,10 +6085,9 @@ msgid "Show available keyboard shortcuts"
 msgstr "キーボードショートカット集を表示する"
 
 #: front/src/views/content/libraries/FilesTable.vue:329
-#, fuzzy
 msgctxt "Content/Library/Button.Label/Verb"
 msgid "Show information about the upload status for this track"
-msgstr "Show information about the upload status for this track"
+msgstr "この曲のアップロード経過の情報を表示"
 
 #: front/src/components/common/ExpandableDiv.vue:7
 #: front/src/components/common/RenderedDescription.vue:10
@@ -6152,10 +6126,9 @@ msgstr "既読の通知を表示する"
 
 #: front/src/components/audio/podcast/MobileRow.vue:183
 #: front/src/components/audio/track/MobileRow.vue:166
-#, fuzzy
 msgctxt "Content/Track/Icon.Tooltip/Verb"
 msgid "Show track actions"
-msgstr "既読の通知を表示する"
+msgstr "Show track actions"
 
 #: front/src/components/forms/PasswordInput.vue:46
 #: front/src/components/forms/PasswordInput.vue:48
@@ -6200,34 +6173,33 @@ msgstr "再生キューをシャッフルする"
 #: front/src/components/common/UserModal.vue:211
 msgctxt "*/*/Button.Label/Verb"
 msgid "Sign up"
-msgstr "新規登録する"
+msgstr "新規アカウント登録をする"
 
 #: front/src/components/About.vue:37 src/components/Home.vue:124
 msgctxt "*/Signup/Title"
 msgid "Sign up"
-msgstr "新規登録する"
+msgstr "新規アカウント登録をする"
 
 #: front/src/views/auth/Signup.vue:47
 msgctxt "*/Signup/Title"
 msgid "Sign Up"
-msgstr "新規登録する"
+msgstr "新規アカウント登録をする"
 
 #: front/src/components/About.vue:43 src/components/About.vue:2
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Sign up now to keep a track of your favorites, create playlists, discover new content and much more!"
-msgstr "今すぐ新規登録して好みの曲をお気に入りに入れる、プレイリストの作成、新しいコンテンツを探す、などをしましょう！"
+msgstr "今すぐ新規アカウント登録をして、好みの曲をお気に入りに加える、プレイリストを作成、新しいコンテンツを探す、等々をしてみましょう！"
 
 #: front/src/components/Home.vue:130 src/components/Home.vue:2
 msgctxt "Content/Home/Paragraph"
 msgid "Sign up now to keep track of your favorites, create playlists, discover new content and much more!"
-msgstr "今すぐ新規登録して好みの曲をお気に入りに入れる、プレイリストの作成、新しいコンテンツを探す、などをしましょう！"
+msgstr "今すぐ新規アカウント登録をして好みの曲をお気に入りに入れる、プレイリストの作成、新しいコンテンツを探す、等々をしてみましょう！"
 
 #: front/src/components/manage/users/UsersTable.vue:55
 #: front/src/components/manage/users/UsersTable.vue:17
 msgctxt "Content/Admin/Table.Label/Short, Noun (Value is a date)"
 msgid "Sign-up"
-msgstr "新規登録"
+msgstr "新規アカウント登録"
 
 #: front/src/components/mixins/Translations.vue:84
 #: front/src/views/admin/moderation/AccountsDetail.vue:215
@@ -6235,12 +6207,12 @@ msgstr "新規登録"
 #: front/src/components/mixins/Translations.vue:85
 msgctxt "Content/Admin/Table.Label/Noun"
 msgid "Sign-up date"
-msgstr "新規登録日"
+msgstr "新規アカウント登録日"
 
 #: front/src/views/admin/Settings.vue:70
 msgctxt "*/*/*/Noun"
 msgid "Sign-ups"
-msgstr "新規登録"
+msgstr "新規アカウント登録"
 
 #: front/src/components/library/FileUpload.vue:92
 #: front/src/components/library/TrackDetail.vue:35
@@ -6263,12 +6235,12 @@ msgstr "サイズ"
 #: front/src/components/mixins/Translations.vue:25
 msgctxt "Content/Library/*"
 msgid "Skipped"
-msgstr ""
+msgstr "スキップ"
 
 #: front/src/views/content/libraries/Quota.vue:74
 msgctxt "Content/Library/Label"
 msgid "Skipped files"
-msgstr ""
+msgstr "スキップしたファイル"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:135
 #: front/src/views/admin/moderation/DomainsDetail.vue:130
@@ -6311,7 +6283,6 @@ msgstr "スタッフメンバー"
 
 #: front/src/components/AboutPod.vue:38 src/components/AboutPod.vue:214
 #: front/src/components/AboutPod.vue:2
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Statistics"
 msgstr "統計"
@@ -6383,7 +6354,7 @@ msgstr "サブカテゴリー"
 #: front/src/components/SetInstanceModal.vue:41
 msgctxt "*/*/Button.Label/Verb"
 msgid "Submit"
-msgstr "移動する"
+msgstr ""
 
 #: front/src/components/library/EditForm.vue:128
 msgctxt "Content/Library/Button.Label/Verb"
@@ -6398,7 +6369,7 @@ msgstr ""
 #: front/src/components/moderation/ReportModal.vue:87
 msgctxt "Popup/*/Button.Label"
 msgid "Submit report"
-msgstr "通報する"
+msgstr ""
 
 #: front/src/views/content/remote/ScanForm.vue:61
 msgctxt "Content/Library/Input.Label"
@@ -6455,7 +6426,7 @@ msgstr "Fediverseで登録する"
 #: front/src/components/RemoteSearchForm.vue:130
 msgctxt "Head/Fetch/Title"
 msgid "Subscribe to a podcast hosted on the Fediverse"
-msgstr "Fediverse上でホストされている、ポッドキャストを購読する"
+msgstr "Fediverse上でホストされている、ポッドキャストを登録する"
 
 #: front/src/components/RemoteSearchForm.vue:126 src/views/Search.vue:194
 msgctxt "Head/Fetch/Title"
@@ -6534,17 +6505,17 @@ msgstr "おすすめのポッド"
 #: front/src/components/library/EditForm.vue:119
 msgctxt "*/*/*"
 msgid "Summary (optional)"
-msgstr "要約（オプション）"
+msgstr "概要（オプション）"
 
 #: front/src/components/Footer.vue:75
 msgctxt "Footer/*/Listitem.Link"
 msgid "Support forum"
-msgstr "フォーラム"
+msgstr "サポートフォーラム"
 
 #: front/src/views/Notifications.vue:14
 msgctxt "Content/Notifications/Header"
 msgid "Support this Funkwhale pod"
-msgstr "このFunkwhaleポッドをサポートする"
+msgstr "このFunkwhaleポッドを支援する"
 
 #: front/src/components/channels/UploadForm.vue:121
 #: front/src/components/channels/UploadForm.vue:86
@@ -6651,7 +6622,7 @@ msgstr "The funkwhale logo was kindly designed and provided by Francis Gading."
 #: front/src/components/SetInstanceModal.vue:21
 msgctxt "Popup/Instance/Error message.List item"
 msgid "The given address is not a Funkwhale server"
-msgstr "入力されたURL先はFunkwhaleのポッドではありません"
+msgstr "入力されたURL先はFunkwhaleのサーバーではありません"
 
 #: front/src/views/content/libraries/Form.vue:58
 msgctxt "Popup/Library/Paragraph"
@@ -6687,12 +6658,12 @@ msgstr "次の曲を数秒以内に自動的に再生します…"
 #: front/src/components/manage/moderation/NotesThread.vue:31
 msgctxt "Content/Moderation/Paragraph"
 msgid "The note will be removed. This action is irreversible."
-msgstr ""
+msgstr "ノートは削除されます。元に戻すことはできません。"
 
 #: front/src/components/manage/moderation/ReportCard.vue:144
 msgctxt "Content/Moderation/Message"
 msgid "The object associated with this report was deleted."
-msgstr ""
+msgstr "この通報に関係した通報対象は削除されました。"
 
 #: front/src/components/playlists/Form.vue:23
 msgctxt "Content/Playlist/Error message.Title"
@@ -6761,12 +6732,12 @@ msgstr "選んだアップロードファイルは削除されます。元には
 #: front/src/components/SetInstanceModal.vue:16
 msgctxt "Popup/Instance/Error message.List item"
 msgid "The server might be down"
-msgstr "ポッドがダウンしてるかもしれません"
+msgstr "サーバーがダウンしてるかもしれません"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:8
 msgctxt "Content/Settings/Paragraph"
 msgid "The Subsonic API is not available on this Funkwhale instance."
-msgstr "Subsonic APIはこのFunkwhaleポッドでは利用できません。"
+msgstr "Subsonic APIはこのFunkwhaleインスタンスでは利用できません。"
 
 #: front/src/components/library/EditCard.vue:131
 msgctxt "Popup/Library/Paragraph"
@@ -6811,7 +6782,7 @@ msgstr "アップロードファイルは削除されます。元には戻せま
 #: front/src/components/common/UserModal.vue:206 src/components/Sidebar.vue:532
 msgctxt "Sidebar/Settings/Dropdown.Label/Short, Verb"
 msgid "Theme"
-msgstr ""
+msgstr "テーマ"
 
 #: front/src/views/playlists/Detail.vue:106
 msgctxt "Content/Home/Placeholder"
@@ -6821,18 +6792,18 @@ msgstr "まだこのプレイリストには曲がありません"
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:88
 msgctxt "Popup/Moderation/Paragraph"
 msgid "This action is irreversible."
-msgstr ""
+msgstr "このアクションは、実行すると元に戻せません。"
 
 #: front/src/components/library/AlbumDetail.vue:31
 #: front/src/components/library/AlbumDetail.vue:7
 msgctxt "Content/Album/Paragraph"
 msgid "This album is present in the following libraries:"
-msgstr ""
+msgstr "このアルバムは、次のライブラリにあります:"
 
 #: front/src/components/library/ArtistDetail.vue:60
 msgctxt "Content/Artist/Paragraph"
 msgid "This artist is present in the following libraries:"
-msgstr ""
+msgstr "このアーティストは、次のライブラリにあります:"
 
 #: front/src/components/manage/moderation/DomainsTable.vue:228
 msgctxt "Content/Moderation/Popup"
@@ -6855,7 +6826,7 @@ msgstr ""
 #: front/src/views/content/Home.vue:5
 msgctxt "Content/Library/Paragraph"
 msgid "This instance offers up to %{quota} of storage space for every user."
-msgstr "このポッドは全てのユーザーに%{quota}のストレージを提供しています。"
+msgstr "このインスタンスは全てのユーザーに%{quota}のストレージを提供しています。"
 
 #: front/src/components/auth/Settings.vue:503
 msgctxt "Popup/Settings/Paragraph"
@@ -6865,12 +6836,12 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:228
 msgctxt "Content/Settings/Paragraph"
 msgid "This is the list of applications that have access to your account data."
-msgstr ""
+msgstr "あなたのアカウントのデータにアクセスした、アプリケーションのリストです。"
 
 #: front/src/components/auth/Settings.vue:305
 msgctxt "Content/Settings/Paragraph"
 msgid "This is the list of applications that you have registered."
-msgstr ""
+msgstr "あなたが登録したアプリケーションのリストです。"
 
 #: front/src/views/auth/ProfileBase.vue:42 src/views/auth/ProfileBase.vue:3
 msgctxt "Content/Profile/Button.Paragraph"
@@ -6880,7 +6851,7 @@ msgstr "あなたのアカウントです！"
 #: front/src/components/RemoteSearchForm.vue:54
 msgctxt "Content/*/Error message.Title"
 msgid "This kind of object isn't supported yet"
-msgstr ""
+msgstr "このようなタイプのオブジェクトは、サポートしていません"
 
 #: front/src/views/content/libraries/Form.vue:143
 msgctxt "Content/Library/Input.Placeholder"
@@ -6892,7 +6863,7 @@ msgstr ""
 #: front/src/views/library/DetailTracks.vue:5
 msgctxt "*/*/*"
 msgid "This library is empty, you should upload something in it!"
-msgstr ""
+msgstr "このライブラリにはまだ何もありません。コンテンツをアップロードしましょう！"
 
 #: front/src/views/content/remote/Card.vue:252
 #: src/views/library/DetailBase.vue:265
@@ -6968,7 +6939,6 @@ msgid "This track is present in the following libraries:"
 msgstr "この曲は以下のライブラリにあります:"
 
 #: front/src/views/auth/ProfileOverview.vue:33
-#, fuzzy
 msgctxt "Content/Profile/Paragraph"
 msgid "This user shared the following libraries"
 msgstr "This user shared the following libraries"
@@ -6976,7 +6946,7 @@ msgstr "This user shared the following libraries"
 #: front/src/components/manage/moderation/UserRequestCard.vue:124
 msgctxt "Content/Moderation/Paragraph"
 msgid "This user wants to sign-up on your pod."
-msgstr ""
+msgstr "このユーザーは、あなたのポッドでの新規アカウント登録を望んでいます。"
 
 #: front/src/views/playlists/Detail.vue:58
 msgctxt "Popup/Playlist/Paragraph"
@@ -7090,7 +7060,6 @@ msgid "Total users"
 msgstr "合計ユーザー"
 
 #: front/src/components/AboutPod.vue:244 src/components/AboutPod.vue:32
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "track"
 msgid_plural "tracks"
@@ -7195,12 +7164,12 @@ msgstr ""
 #: front/src/views/admin/moderation/AccountsDetail.vue:187
 msgctxt "Content/Track/Table.Label/Noun"
 msgid "Type"
-msgstr ""
+msgstr "タイプ"
 
 #: front/src/components/common/LoginModal.vue:73
 msgctxt "Popup/Title/Noun"
 msgid "Unauthenticated"
-msgstr ""
+msgstr "認証されていません"
 
 #: front/src/components/manage/moderation/AccountsTable.vue:67
 #: front/src/components/manage/moderation/AccountsTable.vue:27
@@ -7223,19 +7192,19 @@ msgstr "検索窓から離れる"
 #: src/views/content/remote/Card.vue:18
 msgctxt "*/Library/Button.Label/Verb"
 msgid "Unfollow"
-msgstr ""
+msgstr "フォロー解除"
 
 #: front/src/components/audio/LibraryFollowButton.vue:3
 msgctxt "Content/Library/Card.Button.Label/Verb"
 msgid "Unfollow"
-msgstr ""
+msgstr "フォロー解除"
 
 #: front/src/views/content/remote/Card.vue:129
 #: src/views/content/remote/Card.vue:25
 #: front/src/views/content/remote/Card.vue:6
 msgctxt "Popup/Library/Title"
 msgid "Unfollow this library?"
-msgstr ""
+msgstr "このライブラリのフォローを解除しますか？"
 
 #: front/src/components/federation/FetchButton.vue:85
 #: front/src/components/federation/FetchButton.vue:88
@@ -7255,13 +7224,13 @@ msgstr "ミュート解除"
 #: front/src/components/manage/moderation/ReportCard.vue:267
 msgctxt "Content/*/Button.Label"
 msgid "Unresolve"
-msgstr ""
+msgstr "未解決"
 
 #: front/src/components/manage/moderation/ReportCard.vue:75
 #: front/src/views/admin/moderation/ReportsList.vue:31
 msgctxt "Content/*/*/Short"
 msgid "Unresolved"
-msgstr ""
+msgstr "未解決"
 
 #: front/src/components/channels/SubscribeButton.vue:56
 msgctxt "Content/Channel/Button/Verb"
@@ -7276,65 +7245,65 @@ msgstr "登録をやめる"
 #: front/src/components/auth/Settings.vue:449
 msgctxt "*/*/*"
 msgid "Update"
-msgstr "変更"
+msgstr "更新"
 
 #: front/src/components/channels/UploadModal.vue:44
 msgctxt "*/*/Button.Label/Verb"
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 #: front/src/App.vue:213
 msgctxt "App/Message/Paragraph"
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:71
 msgctxt "Content/Moderation/Card.Button.Label/Verb"
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 #: front/src/components/auth/ApplicationForm.vue:61
 msgctxt "Content/Applications/Button.Label/Verb"
 msgid "Update application"
-msgstr ""
+msgstr "アプリケーションの更新"
 
 #: front/src/views/channels/DetailBase.vue:224
 #: src/views/channels/DetailBase.vue:219
 msgctxt "*/Channels/Button.Label"
 msgid "Update channel"
-msgstr ""
+msgstr "チャンネルの更新"
 
 #: front/src/components/common/RenderedDescription.vue:44
 msgctxt "Content/Channels/Button.Label/Verb"
 msgid "Update description"
-msgstr "自己紹介を更新する"
+msgstr "自己紹介の更新"
 
 #: front/src/views/content/libraries/Form.vue:41
 msgctxt "Content/Library/Button.Label/Verb"
 msgid "Update library"
-msgstr ""
+msgstr "ライブラリの更新"
 
 #: front/src/components/playlists/Form.vue:50
 #: src/components/playlists/Form.vue:1
 msgctxt "Content/Playlist/Button.Label/Verb"
 msgid "Update playlist"
-msgstr ""
+msgstr "プレイリストの更新"
 
 #: front/src/components/auth/Settings.vue:42
 msgctxt "Content/Settings/Button.Label/Verb"
 msgid "Update settings"
-msgstr ""
+msgstr "設定の更新"
 
 #: front/src/views/auth/PasswordResetConfirm.vue:29
 #: front/src/views/auth/PasswordResetConfirm.vue:11
 msgctxt "Content/Signup/Button.Label"
 msgid "Update your password"
-msgstr ""
+msgstr "パスワードの変更"
 
 #: front/src/components/audio/ChannelCard.vue:110
 msgctxt "*/*/*"
 msgid "Updated on %{ date }"
-msgstr ""
+msgstr "%{ date }に更新"
 
 #: front/src/views/channels/DetailBase.vue:169
 #: src/views/channels/DetailBase.vue:164
@@ -7352,13 +7321,13 @@ msgstr "アップロード"
 #: front/src/views/admin/library/UploadDetail.vue:83
 msgctxt "Content/Moderation/Title"
 msgid "Upload data"
-msgstr ""
+msgstr "アップロード日付"
 
 #: front/src/views/content/libraries/FilesTable.vue:109
 #: front/src/views/content/libraries/FilesTable.vue:17
 msgctxt "*/*/*/Noun"
 msgid "Upload date"
-msgstr ""
+msgstr "アップロード日付"
 
 #: front/src/components/library/FileUpload.vue:364
 #: front/src/components/library/FileUpload.vue:365
@@ -7369,17 +7338,17 @@ msgstr ""
 #: front/src/components/channels/UploadModal.vue:9
 msgctxt "Popup/Channels/Title"
 msgid "Upload details"
-msgstr ""
+msgstr "アップロードの詳細"
 
 #: front/src/components/library/ImportStatusModal.vue:10
 msgctxt "Popup/Import/Message"
 msgid "Upload is still pending and will soon be processed by the server."
-msgstr ""
+msgstr "アップロードは保留となっていますが、まもなくサーバーによってアップロード処理がされるでしょう。"
 
 #: front/src/components/library/FileUpload.vue:42
 msgctxt "Content/Library/Title/Verb"
 msgid "Upload music from your local storage"
-msgstr ""
+msgstr "あなたのローカルストレージから音楽をアップロード"
 
 #: front/src/components/common/AttachmentInput.vue:27
 msgctxt "*/*/*"
@@ -7396,7 +7365,7 @@ msgstr "アップロード上限"
 #: front/src/views/content/Home.vue:31
 msgctxt "Content/Library/Title/Verb"
 msgid "Upload third-party content in a library"
-msgstr ""
+msgstr "サードパーティー・コンテンツをライブラリにアップロード"
 
 #: front/src/components/library/FileUpload.vue:373
 msgctxt "Content/Library/Help text"
@@ -7411,7 +7380,7 @@ msgstr ""
 #: front/src/components/library/ImportStatusModal.vue:15
 msgctxt "Popup/Import/Message"
 msgid "Upload was successfully processed by the server."
-msgstr ""
+msgstr "サーバーによるアップロード処理は成功しました。"
 
 #: front/src/views/content/Home.vue:36
 msgctxt "Content/Library/Paragraph"
@@ -7432,6 +7401,8 @@ msgstr "<a class=\"internal\" href=\"%{ uploaderUrl }\">%{ uploader }</a>が <ti
 msgctxt "Content/Track/Paragraph"
 msgid "Uploaded on <time title=\"%{ date }\" datetime=\"%{ date }\">%{ prettyDate }</time>"
 msgstr ""
+"<time title=\"%{ date }\" datetime=\"%{ date }\">%{ prettyDate "
+"}</time>にアップロードしました"
 
 #: front/src/components/channels/UploadForm.vue:91
 #: front/src/components/channels/UploadForm.vue:56
@@ -7439,12 +7410,12 @@ msgstr ""
 #: front/src/components/channels/UploadForm.vue:1
 msgctxt "Channels/*/*"
 msgid "Uploading"
-msgstr ""
+msgstr "アップロード中"
 
 #: front/src/components/library/FileUpload.vue:4
 msgctxt "Content/Library/Tab.Title/Short"
 msgid "Uploading"
-msgstr ""
+msgstr "アップロード中"
 
 #: front/src/components/common/AttachmentInput.vue:44
 msgctxt "Content/*/*/Noun"
@@ -7486,7 +7457,7 @@ msgstr "アップロード"
 #: front/src/views/channels/DetailOverview.vue:3
 msgctxt "Content/Channel/Header"
 msgid "Uploads are being processed"
-msgstr ""
+msgstr "アップロードは処理中です"
 
 #: front/src/views/channels/DetailOverview.vue:6
 #: front/src/views/channels/DetailOverview.vue:3
@@ -7513,25 +7484,23 @@ msgstr ""
 #: front/src/components/Footer.vue:36
 msgctxt "Footer/*/List item.Link"
 msgid "Use another instance"
-msgstr "他のポッドを利用する"
+msgstr "他のインスタンスを利用する"
 
 #: front/src/components/common/UserModal.vue:213
 #: front/src/components/common/UserModal.vue:215
-#, fuzzy
 msgctxt "Sidebar/*/List item.Link"
 msgid "Use another instance"
-msgstr "他のポッドを利用する"
+msgstr "他のインスタンスを利用する"
 
 #: front/src/components/Home.vue:181
 msgctxt "Content/Home/Link"
 msgid "Use Funkwhale on other devices with our apps"
-msgstr "Funkwhaleを他の端末で利用する"
+msgstr "Funkwhaleを他の端末で、公式のアプリを通して利用する"
 
 #: front/src/components/About.vue:164
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Use Funkwhale on other devices with our apps."
-msgstr "Funkwhaleを他の端末で利用する"
+msgstr "Funkwhaleを他の端末で、公式のアプリを通して利用する。"
 
 #: front/src/components/auth/Settings.vue:397
 msgctxt "Content/Settings/Paragraph"
@@ -7554,10 +7523,11 @@ msgid "Use this form to submit a report to our moderation team."
 msgstr "このフォームを使ってモデレーションチームに通報の届け出をしてください。"
 
 #: front/src/components/RemoteSearchForm.vue:40
-#, fuzzy
 msgctxt "Content/Fetch/Paragraph"
 msgid "Use this form to subscribe to a channel hosted somewhere else on the Fediverse."
-msgstr "Use this form to subscribe to a channel hosted somewhere else on the Fediverse."
+msgstr ""
+"Use this form to subscribe to a channel hosted somewhere else on the "
+"Fediverse."
 
 #: front/src/components/RemoteSearchForm.vue:35
 msgctxt "Content/Fetch/Paragraph"
@@ -7663,10 +7633,9 @@ msgid "Users"
 msgstr "ユーザー"
 
 #: front/src/components/About.vue:48 src/components/About.vue:7
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Users on this pod also get %{ quota } of free storage to upload their own content!"
-msgstr "またこのポッドのユーザーには、自分のコンテンツをアップロードするための%{ quota }の無料ストレージがあります！"
+msgstr "また、このポッドのユーザーは自分のコンテンツをアップロードするための、%{ quota }の無料ストレージを使えます！"
 
 #: front/src/components/Home.vue:135 src/components/Home.vue:7
 msgctxt "Content/Home/Paragraph"
@@ -7685,37 +7654,34 @@ msgstr "バージョン%{version}"
 
 #: front/src/components/audio/podcast/Modal.vue:278
 #: front/src/components/audio/track/Modal.vue:278
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "View album"
-msgstr "新しいアルバム"
+msgstr "アルバムを見る"
 
 #: front/src/components/audio/podcast/Modal.vue:285
 #: front/src/components/audio/track/Modal.vue:285
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "View artist"
-msgstr "フィルターをかけたアーティスト"
+msgstr "アーティストを見る"
 
 #: front/src/components/audio/podcast/Modal.vue:283
 #: front/src/components/audio/track/Modal.vue:283
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "View channel"
-msgstr "新しいチャンネル"
+msgstr "チャンネルを見る"
 
 #: front/src/views/channels/DetailOverview.vue:29
 #: front/src/views/channels/DetailOverview.vue:13
 msgctxt "Content/Channel/Button"
 msgid "View errored uploads"
-msgstr ""
+msgstr "エラーが発生したアップロードの詳細について見る"
 
 #: front/src/views/content/libraries/Quota.vue:41
 #: front/src/views/content/libraries/Quota.vue:81
 #: front/src/views/content/libraries/Quota.vue:120
 msgctxt "Content/Library/Link/Verb"
 msgid "View files"
-msgstr ""
+msgstr "ファイルを見る"
 
 #: front/src/components/library/AlbumDropdown.vue:63
 #: front/src/components/library/ArtistBase.vue:104
@@ -7753,7 +7719,7 @@ msgstr ""
 #: front/src/components/Home.vue:212
 msgctxt "Content/Home/Link"
 msgid "View more…"
-msgstr ""
+msgstr "さらに見る…"
 
 #: front/src/components/library/AlbumDropdown.vue:24
 #: front/src/components/library/ArtistBase.vue:63
@@ -7766,7 +7732,7 @@ msgstr ""
 #: front/src/views/library/DetailBase.vue:11
 msgctxt "Content/*/Button.Label/Verb"
 msgid "View on %{ domain }"
-msgstr ""
+msgstr "%{ domain }で見る"
 
 #: front/src/components/library/AlbumDropdown.vue:33
 #: front/src/components/library/ArtistBase.vue:78
@@ -7779,20 +7745,19 @@ msgstr "MusicBrainzで見る"
 #: front/src/components/manage/moderation/ReportCard.vue:150
 msgctxt "Content/Moderation/Link"
 msgid "View public page"
-msgstr ""
+msgstr "公開ページを見る"
 
 #: front/src/components/audio/podcast/Modal.vue:276
 #: front/src/components/audio/track/Modal.vue:276
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "View series"
-msgstr "新しいシリーズ"
+msgstr "シリーズを見る"
 
 #: front/src/views/channels/DetailOverview.vue:24
 #: front/src/views/channels/DetailOverview.vue:8
 msgctxt "Content/Channel/Button"
 msgid "View skipped uploads"
-msgstr ""
+msgstr "スキップされたアップロードを見る"
 
 #: front/src/components/manage/library/LibrariesTable.vue:11
 #: front/src/components/manage/library/LibrariesTable.vue:76
@@ -7818,12 +7783,12 @@ msgstr "Funkwhale公式サイトへ"
 #: front/src/components/library/AlbumDetail.vue:4
 msgctxt "Content/Album/"
 msgid "Volume %{ number }"
-msgstr ""
+msgstr "音量 %{ number }"
 
 #: front/src/components/federation/FetchButton.vue:106
 msgctxt "Popup/*/Loading.Title"
 msgid "Waiting for result…"
-msgstr ""
+msgstr "フェッチの結果を待っています…"
 
 #: front/src/components/auth/Settings.vue:430
 msgctxt "Content/Settings/Error message.Title"
@@ -7838,12 +7803,12 @@ msgstr "アカウントを削除できません"
 #: front/src/components/auth/LoginForm.vue:4
 msgctxt "Content/Login/Error message.Title"
 msgid "We cannot log you in"
-msgstr "ログインで来ません"
+msgstr "ログインできません"
 
 #: front/src/components/auth/ApplicationForm.vue:4
 msgctxt "Content/*/Error message.Title"
 msgid "We cannot save your changes"
-msgstr ""
+msgstr "変更を保存できません"
 
 #: front/src/views/Notifications.vue:65
 msgctxt "Content/Notifications/Paragraph"
@@ -7869,7 +7834,7 @@ msgstr "%{ podName }へようこそ！"
 #: front/src/components/audio/ChannelForm.vue:3
 msgctxt "Content/Channel/Paragraph"
 msgid "What will this channel be used for?"
-msgstr ""
+msgstr "このチャンネルはどのように利用されますか？"
 
 #: front/src/components/audio/EmbedWizard.vue:29
 #: front/src/components/audio/EmbedWizard.vue:3
@@ -7888,10 +7853,9 @@ msgid "Write"
 msgstr "入力"
 
 #: front/src/components/auth/ApplicationForm.vue:180
-#, fuzzy
 msgctxt "Content/OAuth Scopes/Label/Verb"
 msgid "Write"
-msgstr "Write"
+msgstr "入力"
 
 #: front/src/components/common/ContentForm.vue:100
 msgctxt "*/Form/Placeholder"
@@ -7901,12 +7865,12 @@ msgstr "ここに書き込んでください…"
 #: front/src/components/auth/Authorize.vue:39
 msgctxt "Content/Auth/Label/Noun"
 msgid "Write-only"
-msgstr ""
+msgstr "書き込み専用"
 
 #: front/src/components/auth/ApplicationForm.vue:181
 msgctxt "Content/OAuth Scopes/Help Text"
 msgid "Write-only access to user data"
-msgstr ""
+msgstr "書き込み専用のユーザーデーター"
 
 #: front/src/components/library/TrackDetail.vue:135
 msgctxt "*/*/*"
@@ -7922,7 +7886,7 @@ msgstr "年"
 #: front/src/views/admin/moderation/DomainsDetail.vue:105
 msgctxt "*/*/*"
 msgid "Yes"
-msgstr ""
+msgstr "はい"
 
 #: front/src/components/auth/Logout.vue:13
 msgctxt "Content/Login/Button.Label"
@@ -7952,7 +7916,7 @@ msgstr "あなたは現在このアーティストに関するコンテンツの
 #: front/src/components/auth/Logout.vue:9
 msgctxt "Content/Login/Paragraph"
 msgid "You are currently logged in as %{ username }"
-msgstr "あなたは%{ username }のアカウントでログインしています"
+msgstr "%{ username }のアカウントでログインしています"
 
 #: front/src/components/library/FileUpload.vue:54
 msgctxt "Content/Library/List item"
@@ -7962,7 +7926,7 @@ msgstr ""
 #: front/src/components/SetInstanceModal.vue:189
 msgctxt "*/Instance/Message"
 msgid "You are now using the Funkwhale instance at %{ url }"
-msgstr "あなたは現在%{ url }のFunkwhaleポッドを利用しています"
+msgstr "現在%{ url }のFunkwhaleインスタンスを利用しています"
 
 #: front/src/components/auth/Logout.vue:20
 msgctxt "Content/Login/Title"
@@ -7998,12 +7962,12 @@ msgstr "API を利用することで、スマートフォンやタブレット�
 #: front/src/components/common/LoginModal.vue:76
 msgctxt "Popup/*/Paragraph"
 msgid "You don't have access!"
-msgstr ""
+msgstr "あなたにこのインスタンスへのアクセス権はありません！"
 
 #: front/src/components/auth/Settings.vue:286
 msgctxt "Content/Applications/Paragraph"
 msgid "You don't have any application connected with your account."
-msgstr ""
+msgstr "あなたのアカウントに紐付けられたアプリケーションはありません。"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:67
 #: front/src/views/admin/moderation/AccountsDetail.vue:62
@@ -8028,7 +7992,7 @@ msgstr ""
 #: front/src/components/auth/Settings.vue:377
 msgctxt "Content/Applications/Paragraph"
 msgid "You don't have registered any application yet."
-msgstr ""
+msgstr "まだアプリケーションを登録していません。"
 
 #: front/src/components/library/EditForm.vue:61
 msgctxt "Content/Library/Paragraph"
@@ -8050,14 +8014,14 @@ msgstr ""
 #: front/src/components/Queue.vue:42 src/components/Queue.vue:35
 msgctxt "Sidebar/Player/Error message.Paragraph"
 msgid "You may have a connectivity issue."
-msgstr "何らかの接続に問題があるかもしれません。"
+msgstr "接続に何らかの問題があるかもしれません。"
 
 #: front/src/views/library/DetailAlbums.vue:8
 #: src/views/library/DetailOverview.vue:12
 #: front/src/views/library/DetailTracks.vue:8
 msgctxt "*/*/*"
 msgid "You may need to follow this library to see its content."
-msgstr ""
+msgstr "コンテンツを見るには、ライブラリをフォローする必要があるかもしれません。"
 
 #: front/src/components/audio/ChannelEntries.vue:12
 #: front/src/components/audio/ChannelEntries.vue:3
@@ -8090,7 +8054,7 @@ msgstr "このセッションからログアウトされ、新しくログイン
 #: src/components/auth/LoginForm.vue:2
 msgctxt "Contant/Auth/Paragraph"
 msgid "You will be redirected to %{ domain } to authenticate."
-msgstr ""
+msgstr "認証のために%{ domain }にリダイレクトされます。"
 
 #: front/src/components/auth/Authorize.vue:71
 msgctxt "Content/Auth/Paragraph"
@@ -8116,7 +8080,7 @@ msgstr ""
 #: front/src/components/About.vue:68
 msgctxt "Content/About/Message"
 msgid "You're already signed in!"
-msgstr ""
+msgstr "既にサインインしています！"
 
 #: front/src/components/auth/SignupForm.vue:38
 msgctxt "Content/Signup/Form/Paragraph"
@@ -8196,7 +8160,7 @@ msgstr "パスワードを変更できません"
 #: front/src/views/auth/PasswordResetConfirm.vue:49
 msgctxt "Content/Signup/Card.Paragraph"
 msgid "Your password has been updated successfully."
-msgstr "パスワードが変更されました。"
+msgstr "パスワードの変更に成功しました。"
 
 #: front/src/components/auth/Settings.vue:19
 msgctxt "Content/Settings/Error message.Title"
@@ -8211,7 +8175,9 @@ msgstr "あなたのSubsonic API パスワード"
 #: front/src/components/auth/Settings.vue:136
 msgctxt "Popup/Settings/List item"
 msgid "Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password"
-msgstr "Subsonic API パスワードはランダムなそれに新しく変更され、以前のSubsonic API パスワードを使用していたデバイスからログアウトされます"
+msgstr ""
+"Subsonic API パスワードはランダムなパスワードに変更されます。以前のSubsonic API "
+"パスワードを使用していたデバイスからは、ログアウトされます"
 
 #: front/src/views/channels/DetailOverview.vue:42
 #: front/src/views/channels/DetailOverview.vue:8
@@ -8232,7 +8198,7 @@ msgstr ""
 #: front/src/edits.js:26
 msgctxt "Content/*/*/Noun"
 msgid "Cover"
-msgstr ""
+msgstr "カバー"
 
 #: front/src/entities.js:126
 msgctxt "*/*/*/Noun"
