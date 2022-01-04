@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2021-12-11 20:27+0000\n"
+"PO-Revision-Date: 2022-01-05 21:36+0000\n"
 "Last-Translator: JuniorJPDJ <git@juniorjpdj.pl>\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -270,7 +270,6 @@ msgstr "O tej instancji"
 
 #: front/src/components/common/UserMenu.vue:165
 #: front/src/components/common/UserModal.vue:194
-#, fuzzy
 msgctxt "Sidebar/About/List item.Link"
 msgid "About"
 msgstr "O tej instancji"
@@ -307,7 +306,6 @@ msgid "About this pod"
 msgstr "O tej instancji"
 
 #: front/src/components/About.vue:171
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "About this pod"
 msgstr "O tej instancji"
@@ -686,7 +684,6 @@ msgstr "Dodaj do kolejki odtwarzania"
 #: front/src/components/audio/track/Modal.vue:295
 #: front/src/components/audio/podcast/Modal.vue:297
 #: front/src/components/audio/track/Modal.vue:297
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Add to queue"
 msgstr "Dodaj do kolejki odtwarzania"
@@ -2837,12 +2834,12 @@ msgstr "Ulubione"
 #: front/src/components/AboutPod.vue:33
 msgctxt "Content/About/Header"
 msgid "Features"
-msgstr ""
+msgstr "Informacje dodatkowe"
 
 #: front/src/components/AboutPod.vue:83
 msgctxt "Content/About/Header/Name"
 msgid "Features"
-msgstr ""
+msgstr "Informacje dodatkowe"
 
 #: front/src/components/AboutPod.vue:110 src/components/audio/SearchBar.vue:94
 #: front/src/components/audio/SearchBar.vue:175 src/views/admin/Settings.vue:75
@@ -2908,19 +2905,16 @@ msgid "Filter name"
 msgstr "Nazwa filtra"
 
 #: front/src/components/About.vue:160
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Find an app"
-msgstr "Znajdź inną instancję"
+msgstr "Poznaj kompatybilne aplikacje"
 
 #: front/src/components/About.vue:149
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Find another pod"
 msgstr "Znajdź inną instancję"
 
 #: front/src/components/About.vue:60
-#, fuzzy
 msgctxt "Content/About/Link"
 msgid "Find another pod"
 msgstr "Znajdź inną instancję"
@@ -3025,7 +3019,7 @@ msgstr "Obserwacje"
 #: front/src/components/common/UserModal.vue:197
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Forum"
-msgstr ""
+msgstr "Forum dyskusyjne"
 
 #: front/src/components/moderation/ReportModal.vue:64
 msgctxt "*/*/Field,Help"
@@ -3043,10 +3037,11 @@ msgid "Full access"
 msgstr "Pełen dostęp"
 
 #: front/src/components/About.vue:24
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Funkwhale is a community-driven project that lets you listen and share music and audio within a decentralized, open network."
-msgstr "Ta instancja używa Funkwhale - tworzonego przez społeczność projektu, który pozwala Ci słuchać i udostępniać muzykę w zdecentralizowanej, otwartej sieci."
+msgstr ""
+"Ta instancja używa Funkwhale - tworzonego przez społeczność projektu, który "
+"pozwala Ci słuchać i udostępniać muzykę w zdecentralizowanej, otwartej sieci."
 
 #: front/src/components/auth/SubsonicTokenForm.vue:13
 msgctxt "Content/Settings/Paragraph'"
@@ -3109,12 +3104,11 @@ msgstr "Zrozumiano!"
 
 #: front/src/components/About.vue:73
 msgid "Hello"
-msgstr ""
+msgstr "Cześć"
 
 #: front/src/components/common/UserMenu.vue:167
 #: front/src/components/common/UserModal.vue:196
 #: front/src/components/common/UserModal.vue:199
-#, fuzzy
 msgctxt "Sidebar/*/Listitem.Link"
 msgid "Help"
 msgstr "Podręcznik pomocy"
@@ -3166,7 +3160,6 @@ msgstr "Publikuj swoje odcinki i informuj o tym swoją społeczność na bieżą
 
 #: front/src/components/About.vue:116 src/components/About.vue:14
 #: front/src/components/AboutPod.vue:223 src/components/AboutPod.vue:11
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "hour of music"
 msgid_plural "hours of music"
@@ -3364,10 +3357,9 @@ msgid "Internal notes"
 msgstr "Notatki wewnętrzne"
 
 #: front/src/components/AboutPod.vue:279
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Introduction"
-msgstr "Zaproszenia"
+msgstr "Wprowadzenie"
 
 #: front/src/components/library/FileUpload.vue:374
 #: front/src/components/library/FileUpload.vue:375
@@ -3407,10 +3399,9 @@ msgid "Issue tracker"
 msgstr "Śledzenie problemów"
 
 #: front/src/components/common/UserModal.vue:209
-#, fuzzy
 msgctxt "Sidebar/*/List item.Link"
 msgid "Issue tracker"
-msgstr "Śledzenie problemów"
+msgstr "Zgłoś problem"
 
 #: front/src/components/SetInstanceModal.vue:10
 msgctxt "Popup/Instance/Error message.Title"
@@ -3451,7 +3442,6 @@ msgstr "Język"
 
 #: front/src/components/Sidebar.vue:527 src/components/common/UserModal.vue:200
 #: front/src/components/common/UserModal.vue:202 src/components/Sidebar.vue:529
-#, fuzzy
 msgctxt "Sidebar/Settings/Dropdown.Label/Short, Verb"
 msgid "Language"
 msgstr "Język"
@@ -3523,7 +3513,6 @@ msgid "Learn more"
 msgstr "Dowiedz się więcej"
 
 #: front/src/components/About.vue:124
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Learn More"
 msgstr "Dowiedz się więcej"
@@ -3649,7 +3638,6 @@ msgid "Light"
 msgstr "Jasny"
 
 #: front/src/components/Sidebar.vue:596
-#, fuzzy
 msgctxt "Sidebar/Settings/Dropdown.Label/Theme name"
 msgid "Light"
 msgstr "Jasny"
@@ -3676,19 +3664,19 @@ msgid "Listen to public albums and playlists shared on this pod"
 msgstr "Słuchaj publicznych albumów i list odtwarzania udostępnianych na tej instancji"
 
 #: front/src/components/About.vue:140 src/components/About.vue:153
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Listen to public albums and playlists shared on this pod."
-msgstr "Słuchaj publicznych albumów i list odtwarzania udostępnianych na tej instancji"
+msgstr ""
+"Słuchaj publicznych albumów i list odtwarzania udostępnianych na tej "
+"instancji."
 
 #: front/src/components/AboutPod.vue:258 src/components/AboutPod.vue:46
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "listening"
 msgid_plural "listenings"
-msgstr[0] "Odsłuchania"
-msgstr[1] "Odsłuchania"
-msgstr[2] "Odsłuchania"
+msgstr[0] "odsłuchania"
+msgstr[1] "odsłuchania"
+msgstr[2] "odsłuchań"
 
 #: front/src/components/mixins/Translations.vue:107
 #: front/src/views/admin/ChannelDetail.vue:211
@@ -3812,7 +3800,6 @@ msgstr "Zaloguj się!"
 
 #: front/src/components/common/UserMenu.vue:164
 #: front/src/components/common/UserModal.vue:193
-#, fuzzy
 msgctxt "Sidebar/Login/List item.Link/Verb"
 msgid "Log out"
 msgstr "Wyloguj się"
@@ -4228,10 +4215,9 @@ msgstr "Nowy serial"
 
 #: front/src/components/library/ArtistDetail.vue:26
 #: front/src/components/library/ArtistDetail.vue:2
-#, fuzzy
 msgctxt "Content/Artist/Title"
 msgid "New tracks by this artist"
-msgstr "Utwory tego wykonawcy"
+msgstr "Nowe utwory tego wykonawcy"
 
 #: front/src/components/Queue.vue:170
 msgctxt "Sidebar/Player/Paragraph"
@@ -4283,10 +4269,9 @@ msgid "No description available"
 msgstr "Żaden opis nie jest dostępny"
 
 #: front/src/components/About.vue:97 src/components/AboutPod.vue:53
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "No description available."
-msgstr "Żaden opis nie jest dostępny."
+msgstr "Opis nie jest dostępny."
 
 #: front/src/components/Home.vue:26
 msgctxt "Content/Home/Paragraph"
@@ -4353,13 +4338,11 @@ msgid "No results were found."
 msgstr "Nic nie znaleziono."
 
 #: front/src/components/AboutPod.vue:65
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "No rules available."
 msgstr "Nie ustalono reguł."
 
 #: front/src/components/AboutPod.vue:77
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "No terms available."
 msgstr "Nie ustalono warunków."
@@ -4531,10 +4514,9 @@ msgid "Open website"
 msgstr "Otwórz stronę internetową"
 
 #: front/src/components/common/UserModal.vue:190
-#, fuzzy
 msgctxt "Popup/Title/Noun"
 msgid "Options"
-msgstr "Działania"
+msgstr "Opcje"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:50
 msgctxt "Content/Moderation/Card.Title"
@@ -4837,7 +4819,6 @@ msgstr "Odtwarzaj stację radiową"
 #: front/src/components/audio/track/Modal.vue:290
 #: front/src/components/audio/podcast/Modal.vue:292
 #: front/src/components/audio/track/Modal.vue:292
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Title"
 msgid "Play radio"
 msgstr "Odtwarzaj stację radiową"
@@ -6054,7 +6035,7 @@ msgstr "Zaznacz tylko obecną stronę"
 #: front/src/components/AboutPod.vue:271 src/components/AboutPod.vue:7
 msgctxt "Content/About/Email"
 msgid "Send us an email: {{ contactEmail }}"
-msgstr ""
+msgstr "Wyślij nam wiadomość e-mail: {{ contactEmail }}"
 
 #: front/src/components/library/TrackDetail.vue:123
 msgctxt "*/*/*"
@@ -6186,10 +6167,9 @@ msgstr "Pokaż odczytane powiadomienia"
 
 #: front/src/components/audio/podcast/MobileRow.vue:183
 #: front/src/components/audio/track/MobileRow.vue:166
-#, fuzzy
 msgctxt "Content/Track/Icon.Tooltip/Verb"
 msgid "Show track actions"
-msgstr "Pokaż odczytane powiadomienia"
+msgstr "Wyświetl akcje dla utworu"
 
 #: front/src/components/forms/PasswordInput.vue:46
 #: front/src/components/forms/PasswordInput.vue:48
@@ -6249,10 +6229,11 @@ msgid "Sign Up"
 msgstr "Rejestracja"
 
 #: front/src/components/About.vue:43 src/components/About.vue:2
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Sign up now to keep a track of your favorites, create playlists, discover new content and much more!"
-msgstr "Zarejestruj się teraz, aby śledzić swoich ulubionych wykonawców, tworzyć listy odtwarzania, odkrywać nowe treści i wiele więcej!"
+msgstr ""
+"Zarejestruj się teraz, aby śledzić swoich ulubionych wykonawców, tworzyć "
+"listy odtwarzania, odkrywać nowe treści i wiele więcej!"
 
 #: front/src/components/Home.vue:130 src/components/Home.vue:2
 msgctxt "Content/Home/Paragraph"
@@ -6347,7 +6328,6 @@ msgstr "Członek administracji"
 
 #: front/src/components/AboutPod.vue:38 src/components/AboutPod.vue:214
 #: front/src/components/AboutPod.vue:2
-#, fuzzy
 msgctxt "Content/About/Header"
 msgid "Statistics"
 msgstr "Statystyki"
@@ -6847,7 +6827,7 @@ msgstr "Ten plik zostanie usunięty. To działanie jest nieodwracalne."
 #: front/src/components/common/UserModal.vue:206 src/components/Sidebar.vue:532
 msgctxt "Sidebar/Settings/Dropdown.Label/Short, Verb"
 msgid "Theme"
-msgstr ""
+msgstr "Motyw"
 
 #: front/src/views/playlists/Detail.vue:106
 msgctxt "Content/Home/Placeholder"
@@ -7125,13 +7105,12 @@ msgid "Total users"
 msgstr "Wszyscy użytkownicy"
 
 #: front/src/components/AboutPod.vue:244 src/components/AboutPod.vue:32
-#, fuzzy
 msgctxt "Content/About/*"
 msgid "track"
 msgid_plural "tracks"
-msgstr[0] "Utwór"
-msgstr[1] "Utwór"
-msgstr[2] "Utwór"
+msgstr[0] "utwór"
+msgstr[1] "utwory"
+msgstr[2] "utworów"
 
 #: front/src/components/audio/SearchBar.vue:44
 #: front/src/components/library/TrackBase.vue:290
@@ -7554,7 +7533,6 @@ msgstr "Skorzystaj z innej instancji"
 
 #: front/src/components/common/UserModal.vue:213
 #: front/src/components/common/UserModal.vue:215
-#, fuzzy
 msgctxt "Sidebar/*/List item.Link"
 msgid "Use another instance"
 msgstr "Skorzystaj z innej instancji"
@@ -7565,10 +7543,9 @@ msgid "Use Funkwhale on other devices with our apps"
 msgstr "Używaj Funkwhale na innych urządzeniach za pomocą naszych aplikacji"
 
 #: front/src/components/About.vue:164
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Use Funkwhale on other devices with our apps."
-msgstr "Używaj Funkwhale na innych urządzeniach za pomocą naszych aplikacji"
+msgstr "Używaj Funkwhale na innych urządzeniach za pomocą naszych aplikacji."
 
 #: front/src/components/auth/Settings.vue:397
 msgctxt "Content/Settings/Paragraph"
@@ -7699,10 +7676,10 @@ msgid "Users"
 msgstr "Użytkownicy"
 
 #: front/src/components/About.vue:48 src/components/About.vue:7
-#, fuzzy
 msgctxt "Content/About/Paragraph"
 msgid "Users on this pod also get %{ quota } of free storage to upload their own content!"
-msgstr "Użytkownicy tej instancji dostają też %{ quota } przestrzeni na swoje utwory!"
+msgstr ""
+"Użytkownicy tej instancji dostają też %{ quota } przestrzeni na swoje utwory!"
 
 #: front/src/components/Home.vue:135 src/components/Home.vue:7
 msgctxt "Content/Home/Paragraph"
@@ -7721,24 +7698,21 @@ msgstr "Wersja %{version}"
 
 #: front/src/components/audio/podcast/Modal.vue:278
 #: front/src/components/audio/track/Modal.vue:278
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "View album"
-msgstr "Nowy album"
+msgstr "Zobacz album"
 
 #: front/src/components/audio/podcast/Modal.vue:285
 #: front/src/components/audio/track/Modal.vue:285
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "View artist"
-msgstr "Ukryci wykonawcy"
+msgstr "Zobacz wykonawcę"
 
 #: front/src/components/audio/podcast/Modal.vue:283
 #: front/src/components/audio/track/Modal.vue:283
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "View channel"
-msgstr "Nowe kanały"
+msgstr "Zobacz kanał"
 
 #: front/src/views/channels/DetailOverview.vue:29
 #: front/src/views/channels/DetailOverview.vue:13
@@ -7819,10 +7793,9 @@ msgstr "Zobacz publiczną stronę"
 
 #: front/src/components/audio/podcast/Modal.vue:276
 #: front/src/components/audio/track/Modal.vue:276
-#, fuzzy
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "View series"
-msgstr "Nowy serial"
+msgstr "Zobacz serial"
 
 #: front/src/views/channels/DetailOverview.vue:24
 #: front/src/views/channels/DetailOverview.vue:8
@@ -8151,7 +8124,7 @@ msgstr "Nie będziesz więcej widział utworów, albumów oraz aktywności użyt
 #: front/src/components/About.vue:68
 msgctxt "Content/About/Message"
 msgid "You're already signed in!"
-msgstr ""
+msgstr "Jesteś już zalogowany!"
 
 #: front/src/components/auth/SignupForm.vue:38
 msgctxt "Content/Signup/Form/Paragraph"
