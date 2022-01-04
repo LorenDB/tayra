@@ -28,7 +28,7 @@
           class="scrolling content"
         >
           <remote-search-form
-            type="both"
+            initial-type="both"
             :show-submit="false"
             :standalone="false"
             :redirect="true"
