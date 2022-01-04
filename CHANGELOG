@@ -28,7 +28,7 @@ Make sure the Funkwhale version is set to `1.1.4` in `docker-compose.yml`. Now y
 
 `docker-compose exec -T funkwhale pg_dump -c -U funkwhale > "db.dump"`
 
-Now you can update the Funkwhale version in `docker-compose.yml` to `1.2.0`. Additionally you should save your `data` directory, eg by running `mv data data.bak && mkdir data`. Stop Funkwhale and start it again with the new version, by using `docker-compose down && docker-compose up -d`. This will initialize a fresh DB and applies all migrations. Now you can restore your database with the following command: `cat db.dump | docker-compose exec -t funkwhale psql -U funkwhale`. Thats it, enjoy!
+Now you can update the Funkwhale version in `docker-compose.yml` to `1.2.0`. Additionally you should save your `data` directory, eg by running `mv data data.bak && mkdir data`. Stop Funkwhale and start it again with the new version, by using `docker-compose down && docker-compose up -d`. This will initialize a fresh DB and applies all migrations. Now you can restore your database with the following command: `cat db.dump | docker-compose exec -T funkwhale psql -U funkwhale`. Thats it, enjoy!
 
 Features:
 
