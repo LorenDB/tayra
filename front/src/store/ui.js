@@ -13,7 +13,7 @@ export default {
     messageDisplayDuration: 5 * 1000,
     supportedExtensions: ['flac', 'ogg', 'mp3', 'opus', 'aac', 'm4a', 'aiff', 'aif'],
     messages: [],
-    theme: 'light',
+    theme: 'system',
     window: {
       height: 0,
       width: 0

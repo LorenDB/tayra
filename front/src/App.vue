@@ -129,6 +129,12 @@ export default {
         return this.$store.state.instance.frontSettings.additionalStylesheets || []
       }
       return null
+    },
+    matchDarkColorScheme () {
+      if (window.matchMedia) {
+        return window.matchMedia('(prefers-color-scheme: dark)')
+      }
+      return null
     }
   },
   watch: {
@@ -138,10 +144,21 @@ export default {
     },
     '$store.state.ui.theme': {
       immediate: true,
-      handler (newValue, oldValue) {
-        const oldTheme = oldValue || 'light'
-        document.body.classList.remove(`theme-${oldTheme}`)
-        document.body.classList.add(`theme-${newValue}`)
+      handler (newValue) {
+        const matchesDark = this.matchDarkColorScheme
+        if (matchesDark) {
+          if (newValue === 'system') {
+            newValue = matchesDark.matches ? 'dark' : 'light'
+            matchesDark.addEventListener('change', this.handleThemeChange)
+          } else {
+            matchesDark.removeEventListener('change', this.handleThemeChange)
+          }
+        } else {
+          if (newValue === 'system') {
+            newValue = 'light'
+          }
+        }
+        this.setTheme(newValue)
       }
     },
     '$store.state.auth.authenticated' (newValue) {
@@ -451,6 +468,14 @@ export default {
     },
     handleResize () {
       this.width = window.innerWidth
+    },
+    handleThemeChange (event) {
+      this.setTheme(event.matches ? 'dark' : 'light')
+    },
+    setTheme (theme) {
+      const oldTheme = (theme === 'light') ? 'dark' : 'light'
+      document.body.classList.remove(`theme-${oldTheme}`)
+      document.body.classList.add(`theme-${theme}`)
     }
   }
 }

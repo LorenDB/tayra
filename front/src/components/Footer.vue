@@ -212,9 +212,11 @@
 
 <script>
 import { mapState } from 'vuex'
+import ThemesMixin from '@/components/mixins/Themes'
 import _ from '@/lodash'
 
 export default {
+  mixins: [ThemesMixin],
   props: { version: { type: String, required: true } },
   computed: {
     ...mapState({
@@ -229,18 +231,6 @@ export default {
       const parser = document.createElement('a')
       parser.href = url
       return parser.hostname
-    },
-    themes () {
-      return [
-        {
-          name: this.$pgettext('Footer/Settings/Dropdown.Label/Theme name', 'Light'),
-          key: 'light'
-        },
-        {
-          name: this.$pgettext('Footer/Settings/Dropdown.Label/Theme name', 'Dark'),
-          key: 'dark'
-        }
-      ]
     }
   }
 }

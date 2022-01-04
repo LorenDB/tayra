@@ -155,7 +155,10 @@
 
 import { mapGetters } from 'vuex'
 
+import ThemesMixin from '@/components/mixins/Themes'
+
 export default {
+  mixins: [ThemesMixin],
   computed: {
     labels () {
       return {
@@ -175,20 +178,6 @@ export default {
         signup: this.$pgettext('*/*/Button.Label/Verb', 'Sign up'),
         notifications: this.$pgettext('*/Notifications/*', 'Notifications')
       }
-    },
-    themes () {
-      return [
-        {
-          icon: 'sun icon',
-          name: this.$pgettext('Footer/Settings/Dropdown.Label/Theme name', 'Light'),
-          key: 'light'
-        },
-        {
-          icon: 'moon icon',
-          name: this.$pgettext('Footer/Settings/Dropdown.Label/Theme name', 'Dark'),
-          key: 'dark'
-        }
-      ]
     },
     ...mapGetters({
       additionalNotifications: 'ui/additionalNotifications'

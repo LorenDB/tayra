@@ -475,6 +475,7 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import UserModal from '@/components/common/UserModal'
 import Logo from '@/components/Logo'
 import SearchBar from '@/components/audio/SearchBar'
+import ThemesMixin from '@/components/mixins/Themes'
 import UserMenu from '@/components/common/UserMenu'
 import Modal from '@/components/semantic/Modal'
 
@@ -489,6 +490,7 @@ export default {
     UserModal,
     Modal
   },
+  mixins: [ThemesMixin],
   props: {
     width: { type: Number, required: true }
   },
@@ -589,18 +591,6 @@ export default {
     },
     production () {
       return process.env.NODE_ENV === 'production'
-    },
-    themes () {
-      return [
-        {
-          name: this.$pgettext('Sidebar/Settings/Dropdown.Label/Theme name', 'Light'),
-          key: 'light'
-        },
-        {
-          name: this.$pgettext('Sidebar/Settings/Dropdown.Label/Theme name', 'Dark'),
-          key: 'dark'
-        }
-      ]
     }
   },
   watch: {

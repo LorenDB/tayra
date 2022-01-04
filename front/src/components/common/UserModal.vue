@@ -175,12 +175,14 @@
 
 <script>
 import Modal from '@/components/semantic/Modal'
+import ThemesMixin from '@/components/mixins/Themes'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
     Modal
   },
+  mixins: [ThemesMixin],
   props: {
     show: { type: Boolean, required: true }
   },
@@ -215,26 +217,6 @@ export default {
           'Use another instance'
         )
       }
-    },
-    themes () {
-      return [
-        {
-          icon: 'sun icon',
-          name: this.$pgettext(
-            'Footer/Settings/Dropdown.Label/Theme name',
-            'Light'
-          ),
-          key: 'light'
-        },
-        {
-          icon: 'moon icon',
-          name: this.$pgettext(
-            'Footer/Settings/Dropdown.Label/Theme name',
-            'Dark'
-          ),
-          key: 'dark'
-        }
-      ]
     },
     ...mapGetters({
       additionalNotifications: 'ui/additionalNotifications'
