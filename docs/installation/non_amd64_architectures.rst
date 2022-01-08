@@ -13,7 +13,6 @@ Building the mono-process Docker image (funkwhale/funkwhale)
 -------------------------------------------------------------
 
 This image is intended to be used in conjunction with our :ref:`Multi-container installation guide <docker-multi-container>`.
-guide.
 
 .. parsed-literal::
 
