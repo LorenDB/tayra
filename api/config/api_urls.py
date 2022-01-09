@@ -73,7 +73,10 @@ v1_patterns += [
         r"^history/",
         include(("funkwhale_api.history.urls", "history"), namespace="history"),
     ),
-    url(r"^", include(("funkwhale_api.users.api_urls", "users"), namespace="users"),),
+    url(
+        r"^",
+        include(("funkwhale_api.users.api_urls", "users"), namespace="users"),
+    ),
     # XXX: remove if Funkwhale 1.1
     url(
         r"^users/",

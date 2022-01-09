@@ -128,7 +128,9 @@ class ActorFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
         model = models.Actor
 
     class Params:
-        with_real_keys = factory.Trait(keys=factory.LazyFunction(keys.get_key_pair),)
+        with_real_keys = factory.Trait(
+            keys=factory.LazyFunction(keys.get_key_pair),
+        )
 
     @factory.post_generation
     def local(self, create, extracted, **kwargs):

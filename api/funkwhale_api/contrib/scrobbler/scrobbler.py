@@ -139,7 +139,13 @@ def handshake_v2(username, password, session, api_key, api_secret, scrobble_url)
 
 
 def submit_scrobble_v2(
-    session, track, scrobble_time, session_key, scrobble_url, api_key, api_secret,
+    session,
+    track,
+    scrobble_time,
+    session_key,
+    scrobble_url,
+    api_key,
+    api_secret,
 ):
     params = {
         "method": "track.scrobble",

@@ -192,7 +192,9 @@ def prepare_for_serializer(payload, config, fallbacks={}):
             for a in aliases:
                 try:
                     value = get_value(
-                        payload[a["property"]], keep=a.get("keep"), attr=a.get("attr"),
+                        payload[a["property"]],
+                        keep=a.get("keep"),
+                        attr=a.get("attr"),
                     )
                 except (IndexError, KeyError):
                     continue

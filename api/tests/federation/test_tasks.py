@@ -530,7 +530,9 @@ def test_fetch_channel_actor_returns_channel_and_fetch_outbox(
     assert fetch.status == "finished"
     assert fetch.object == obj
     fetch_collection.assert_called_once_with(
-        obj.actor.outbox_url, channel_id=obj.pk, max_pages=1,
+        obj.actor.outbox_url,
+        channel_id=obj.pk,
+        max_pages=1,
     )
     fetch_collection_delayed.assert_called_once_with(
         "http://outbox.url/page2",
@@ -655,7 +657,10 @@ def test_fetch_collection(mocker, r_mock):
     r_mock.get(payloads["outbox"]["id"], json=payloads["outbox"])
     r_mock.get(payloads["outbox"]["first"], json=payloads["page1"])
     r_mock.get(payloads["page1"]["next"], json=payloads["page2"])
-    result = tasks.fetch_collection(payloads["outbox"]["id"], max_pages=2,)
+    result = tasks.fetch_collection(
+        payloads["outbox"]["id"],
+        max_pages=2,
+    )
     assert result["items"] == [
         payloads["page1"]["orderedItems"][2],
         payloads["page2"]["orderedItems"][1],

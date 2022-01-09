@@ -174,7 +174,7 @@ def discard_unused_icons(rule):
         ".gitlab",
         ".chevron",
         ".right",
-        ".left"
+        ".left",
     ]
     if ":before" not in rule["lines"][0]:
         return False
@@ -355,7 +355,9 @@ REPLACEMENTS = {
             ".ui.checkbox input:focus ~ label",
             ".ui.toggle.checkbox input:focus:checked ~ label",
             ".ui.checkbox input:active ~ label",
-        ): [("color", "var(--form-label-color)"),],
+        ): [
+            ("color", "var(--form-label-color)"),
+        ],
         (".ui.toggle.checkbox label:before",): [
             ("background", "var(--input-background)"),
         ],
@@ -365,7 +367,9 @@ REPLACEMENTS = {
             ("border-top", "var(--divider)"),
             ("border-bottom", "var(--divider)"),
         ],
-        (".ui.divider",): [("color", "var(--text-color)"),],
+        (".ui.divider",): [
+            ("color", "var(--text-color)"),
+        ],
     },
     "dimmer": {
         (".ui.inverted.dimmer",): [
@@ -374,7 +378,12 @@ REPLACEMENTS = {
         ],
     },
     "dropdown": {
-        "skip": [".error", ".info", ".success", ".warning",],
+        "skip": [
+            ".error",
+            ".info",
+            ".success",
+            ".warning",
+        ],
         (
             ".ui.selection.dropdown",
             ".ui.selection.visible.dropdown > .text:not(.default)",
@@ -383,7 +392,9 @@ REPLACEMENTS = {
             ("background", "var(--dropdown-background)"),
             ("color", "var(--dropdown-color)"),
         ],
-        (".ui.dropdown .menu > .item",): [("color", "var(--dropdown-item-color)"),],
+        (".ui.dropdown .menu > .item",): [
+            ("color", "var(--dropdown-item-color)"),
+        ],
         (".ui.dropdown .menu > .item:hover",): [
             ("color", "var(--dropdown-item-hover-color)"),
             ("background", "var(--dropdown-item-hover-background)"),
@@ -395,10 +406,18 @@ REPLACEMENTS = {
         (".ui.dropdown .menu > .header:not(.ui)",): [
             ("color", "var(--dropdown-header-color)"),
         ],
-        (".ui.dropdown .menu > .divider",): [("border-top", "var(--divider)"),],
+        (".ui.dropdown .menu > .divider",): [
+            ("border-top", "var(--divider)"),
+        ],
     },
     "form": {
-        "skip": [".inverted", ".success", ".warning", ".error", ".info",],
+        "skip": [
+            ".inverted",
+            ".success",
+            ".warning",
+            ".error",
+            ".info",
+        ],
         ('.ui.form input[type="text"]', ".ui.form select", ".ui.input textarea"): [
             ("background", "var(--input-background)"),
             ("color", "var(--input-color)"),
@@ -415,12 +434,16 @@ REPLACEMENTS = {
             ".ui.form ::-webkit-input-placeholder",
             ".ui.form :-ms-input-placeholder",
             ".ui.form ::-moz-placeholder",
-        ): [("color", "var(--input-placeholder-color)"),],
+        ): [
+            ("color", "var(--input-placeholder-color)"),
+        ],
         (
             ".ui.form :focus::-webkit-input-placeholder",
             ".ui.form :focus:-ms-input-placeholder",
             ".ui.form :focus::-moz-placeholder",
-        ): [("color", "var(--input-focus-placeholder-color)"),],
+        ): [
+            ("color", "var(--input-focus-placeholder-color)"),
+        ],
         (".ui.form .field > label", ".ui.form .inline.fields .field > label",): [
             ("color", "var(--form-label-color)"),
         ],
@@ -475,16 +498,24 @@ REPLACEMENTS = {
             ".ui.input > input::-webkit-input-placeholder",
             ".ui.input > input::-moz-placeholder",
             ".ui.input > input:-ms-input-placeholder",
-        ): [("color", "var(--input-placeholder-color)"),],
+        ): [
+            ("color", "var(--input-placeholder-color)"),
+        ],
         (
             ".ui.input > input:focus::-webkit-input-placeholder",
             ".ui.input > input:focus::-moz-placeholder",
             ".ui.input > input:focus:-ms-input-placeholder",
-        ): [("color", "var(--input-focus-placeholder-color)"),],
+        ): [
+            ("color", "var(--input-focus-placeholder-color)"),
+        ],
     },
     "item": {
-        (".ui.divided.items > .item",): [("border-top", "var(--divider)"),],
-        (".ui.items > .item > .content",): [("color", "var(--text-color)"),],
+        (".ui.divided.items > .item",): [
+            ("border-top", "var(--divider)"),
+        ],
+        (".ui.items > .item > .content",): [
+            ("color", "var(--text-color)"),
+        ],
         (".ui.items > .item .extra",): [
             ("color", "var(--really-discrete-text-color)"),
         ],
@@ -503,8 +534,12 @@ REPLACEMENTS = {
             ".black",
             ".pink",
         ],
-        (".ui.header",): [("color", "var(--header-color)"),],
-        (".ui.header .sub.header",): [("color", "var(--header-color)"),],
+        (".ui.header",): [
+            ("color", "var(--header-color)"),
+        ],
+        (".ui.header .sub.header",): [
+            ("color", "var(--header-color)"),
+        ],
     },
     "label": {
         "skip": [
@@ -580,7 +615,9 @@ REPLACEMENTS = {
             ".danger",
             ".elastic",
         ],
-        (".ui.inverted.dimmer > .ui.loader",): [("color", "var(--dimmer-color)"),],
+        (".ui.inverted.dimmer > .ui.loader",): [
+            ("color", "var(--dimmer-color)"),
+        ],
     },
     "message": {
         "skip": [
@@ -620,7 +657,9 @@ REPLACEMENTS = {
             ".fitted",
             "fixed",
         ],
-        (".ui.menu .item",): [("color", "var(--menu-item-color)"),],
+        (".ui.menu .item",): [
+            ("color", "var(--menu-item-color)"),
+        ],
         (".ui.vertical.inverted.menu .menu .item", ".ui.inverted.menu .item"): [
             ("color", "var(--inverted-menu-item-color)"),
         ],
@@ -633,7 +672,9 @@ REPLACEMENTS = {
         (
             ".ui.secondary.pointing.menu a.item:hover",
             ".ui.secondary.pointing.menu .active.item:hover",
-        ): [("color", "var(--secondary-menu-hover-item-color)"),],
+        ): [
+            ("color", "var(--secondary-menu-hover-item-color)"),
+        ],
         (".ui.menu .ui.dropdown .menu > .item",): [
             ("color", "var(--dropdown-item-color) !important"),
         ],
@@ -656,7 +697,9 @@ REPLACEMENTS = {
             ("border-bottom", "var(--divider)"),
             ("border-top", "var(--divider)"),
         ],
-        (".ui.modal > .close.inside",): [("color", "var(--text-color)"),],
+        (".ui.modal > .close.inside",): [
+            ("color", "var(--text-color)"),
+        ],
         (".ui.modal > .header",): [
             ("color", "var(--header-color)"),
             ("background", "var(--modal-background)"),
@@ -680,7 +723,9 @@ REPLACEMENTS = {
         (
             ".ui.search > .results .result .title",
             ".ui.search > .results .result .description",
-        ): [("color", "var(--dropdown-item-color)"),],
+        ): [
+            ("color", "var(--dropdown-item-color)"),
+        ],
         (".ui.search > .results .result:hover",): [
             ("color", "var(--dropdown-item-hover-color)"),
             ("background", "var(--dropdown-item-hover-background)"),
@@ -696,7 +741,9 @@ REPLACEMENTS = {
         ],
     },
     "sidebar": {
-        (".ui.left.visible.sidebar",): [("box-shadow", "var(--sidebar-box-shadow)"),]
+        (".ui.left.visible.sidebar",): [
+            ("box-shadow", "var(--sidebar-box-shadow)"),
+        ]
     },
     "statistic": {
         (".ui.statistic > .value", ".ui.statistic > .label"): [
@@ -704,7 +751,9 @@ REPLACEMENTS = {
         ],
     },
     "progress": {
-        (".ui.progress.success > .label",): [("color", "var(--text-color)"),],
+        (".ui.progress.success > .label",): [
+            ("color", "var(--text-color)"),
+        ],
     },
     "table": {
         "skip": [

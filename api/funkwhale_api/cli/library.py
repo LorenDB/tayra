@@ -6,7 +6,8 @@ from . import base
 
 
 def handler_add_tags_from_tracks(
-    artists=False, albums=False,
+    artists=False,
+    albums=False,
 ):
     result = None
     if artists:

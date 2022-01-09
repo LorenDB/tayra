@@ -57,7 +57,12 @@ from funkwhale_api.cli import users
         ),
         (
             ("users", "rm"),
-            ("testuser1", "testuser2", "--no-input", "--hard",),
+            (
+                "testuser1",
+                "testuser2",
+                "--no-input",
+                "--hard",
+            ),
             [
                 (
                     users,

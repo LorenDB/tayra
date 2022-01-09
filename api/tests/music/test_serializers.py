@@ -427,7 +427,8 @@ def test_upload_with_channel(factories, uploaded_audio_file):
         "import_status": "draft",
     }
     serializer = serializers.UploadForOwnerSerializer(
-        data=data, context={"user": user},
+        data=data,
+        context={"user": user},
     )
     assert serializer.is_valid(raise_exception=True) is True
     upload = serializer.save()
@@ -443,7 +444,8 @@ def test_upload_with_not_owned_channel_fails(factories, uploaded_audio_file):
         "audio_file": uploaded_audio_file,
     }
     serializer = serializers.UploadForOwnerSerializer(
-        data=data, context={"user": user},
+        data=data,
+        context={"user": user},
     )
     assert serializer.is_valid() is False
     assert "channel" in serializer.errors
@@ -457,7 +459,8 @@ def test_upload_with_not_owned_library_fails(factories, uploaded_audio_file):
         "audio_file": uploaded_audio_file,
     }
     serializer = serializers.UploadForOwnerSerializer(
-        data=data, context={"user": user},
+        data=data,
+        context={"user": user},
     )
     assert serializer.is_valid() is False
     assert "library" in serializer.errors
@@ -469,7 +472,8 @@ def test_upload_requires_library_or_channel(factories, uploaded_audio_file):
         "audio_file": uploaded_audio_file,
     }
     serializer = serializers.UploadForOwnerSerializer(
-        data=data, context={"user": user},
+        data=data,
+        context={"user": user},
     )
 
     with pytest.raises(
@@ -491,7 +495,8 @@ def test_upload_requires_library_or_channel_but_not_both(
         "channel": channel.uuid,
     }
     serializer = serializers.UploadForOwnerSerializer(
-        data=data, context={"user": user},
+        data=data,
+        context={"user": user},
     )
     with pytest.raises(
         serializers.serializers.ValidationError,
@@ -547,7 +552,8 @@ def test_upload_with_channel_keeps_import_metadata(factories, uploaded_audio_fil
         "import_metadata": {"title": "hello"},
     }
     serializer = serializers.UploadForOwnerSerializer(
-        data=data, context={"user": user},
+        data=data,
+        context={"user": user},
     )
     assert serializer.is_valid(raise_exception=True) is True
     upload = serializer.save()
@@ -564,7 +570,8 @@ def test_upload_with_channel_validates_import_metadata(factories, uploaded_audio
         "import_metadata": {"title": None},
     }
     serializer = serializers.UploadForOwnerSerializer(
-        data=data, context={"user": user},
+        data=data,
+        context={"user": user},
     )
     with pytest.raises(serializers.serializers.ValidationError):
         assert serializer.is_valid(raise_exception=True)

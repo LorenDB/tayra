@@ -31,7 +31,10 @@ def test_authenticate_skips_anonymous_fetch_when_allow_list_enabled(
 ):
     preferences["moderation__allow_list_enabled"] = True
     library = factories["music.Library"]()
-    url = reverse("federation:music:libraries-detail", kwargs={"uuid": library.uuid},)
+    url = reverse(
+        "federation:music:libraries-detail",
+        kwargs={"uuid": library.uuid},
+    )
     response = api_client.get(url)
 
     assert response.status_code == 403
@@ -470,7 +473,10 @@ def test_upload_retrieve_redirects_to_html_if_header_set(
 ):
     upload = factories["music.Upload"](library__local=True, playable=True)
 
-    url = reverse("federation:music:uploads-detail", kwargs={"uuid": upload.uuid},)
+    url = reverse(
+        "federation:music:uploads-detail",
+        kwargs={"uuid": upload.uuid},
+    )
     response = api_client.get(url, HTTP_ACCEPT="text/html")
     expected_url = utils.join_url(
         settings.FUNKWHALE_URL,
@@ -485,7 +491,10 @@ def test_track_retrieve_redirects_to_html_if_header_set(
 ):
     track = factories["music.Track"](local=True)
 
-    url = reverse("federation:music:tracks-detail", kwargs={"uuid": track.uuid},)
+    url = reverse(
+        "federation:music:tracks-detail",
+        kwargs={"uuid": track.uuid},
+    )
     response = api_client.get(url, HTTP_ACCEPT="text/html")
     expected_url = utils.join_url(
         settings.FUNKWHALE_URL,
@@ -500,7 +509,10 @@ def test_album_retrieve_redirects_to_html_if_header_set(
 ):
     album = factories["music.Album"](local=True)
 
-    url = reverse("federation:music:albums-detail", kwargs={"uuid": album.uuid},)
+    url = reverse(
+        "federation:music:albums-detail",
+        kwargs={"uuid": album.uuid},
+    )
     response = api_client.get(url, HTTP_ACCEPT="text/html")
     expected_url = utils.join_url(
         settings.FUNKWHALE_URL,
@@ -515,7 +527,10 @@ def test_artist_retrieve_redirects_to_html_if_header_set(
 ):
     artist = factories["music.Artist"](local=True)
 
-    url = reverse("federation:music:artists-detail", kwargs={"uuid": artist.uuid},)
+    url = reverse(
+        "federation:music:artists-detail",
+        kwargs={"uuid": artist.uuid},
+    )
     response = api_client.get(url, HTTP_ACCEPT="text/html")
     expected_url = utils.join_url(
         settings.FUNKWHALE_URL,
@@ -548,7 +563,9 @@ def test_index_channels_retrieve(factories, api_client):
         },
     ).data
 
-    url = reverse("federation:index:index-channels",)
+    url = reverse(
+        "federation:index:index-channels",
+    )
     response = api_client.get(url)
 
     assert response.status_code == 200

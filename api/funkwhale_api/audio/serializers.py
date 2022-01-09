@@ -135,7 +135,8 @@ class ChannelCreateSerializer(serializers.Serializer):
             metadata=validated_data["metadata"],
         )
         channel.actor = models.generate_actor(
-            validated_data["username"], name=validated_data["name"],
+            validated_data["username"],
+            name=validated_data["name"],
         )
 
         channel.library = music_models.Library.objects.create(
@@ -571,7 +572,8 @@ class RssFeedSerializer(serializers.Serializer):
 
         # create/update the channel
         channel, created = models.Channel.objects.update_or_create(
-            pk=existing.pk if existing else None, defaults=channel_defaults,
+            pk=existing.pk if existing else None,
+            defaults=channel_defaults,
         )
         return channel
 
@@ -773,7 +775,8 @@ class RssFeedItemSerializer(serializers.Serializer):
 
         # create/update the track
         track, created = music_models.Track.objects.update_or_create(
-            **track_kwargs, defaults=track_defaults,
+            **track_kwargs,
+            defaults=track_defaults,
         )
         # optimisation for reducing SQL queries, because we cannot use select_related with
         # update or create, so we restore the cache by hand

@@ -180,7 +180,9 @@ def set_conf(name, conf, user=None, registry=_plugins):
     if not registry[name]["conf"] and not registry[name]["source"]:
         return
     conf_serializer = get_serializer_from_conf_template(
-        registry[name]["conf"], user=user, source=registry[name]["source"],
+        registry[name]["conf"],
+        user=user,
+        source=registry[name]["source"],
     )(data=conf)
     conf_serializer.is_valid(raise_exception=True)
     if "library" in conf_serializer.validated_data:

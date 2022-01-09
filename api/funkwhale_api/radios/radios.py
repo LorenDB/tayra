@@ -316,7 +316,9 @@ class LibraryRadio(RelatedObjectRadio):
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
-        actor_uploads = Upload.objects.filter(library=self.session.related_object,)
+        actor_uploads = Upload.objects.filter(
+            library=self.session.related_object,
+        )
         return qs.filter(pk__in=actor_uploads.values("track"))
 
     def get_related_object_id_repr(self, obj):

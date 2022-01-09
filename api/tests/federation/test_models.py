@@ -257,7 +257,9 @@ def test_update_library_follow_approved_create_entries(
         assert list(music_models.Track.objects.playable_by(actor)) == expected_tracks
 
 
-def test_update_library_follow_delete_delete_denormalization_entries(factories,):
+def test_update_library_follow_delete_delete_denormalization_entries(
+    factories,
+):
     updated_playable_tracks = {"owner": [0], "follower": []}
     actors = {
         "owner": factories["federation.Actor"](local=True),

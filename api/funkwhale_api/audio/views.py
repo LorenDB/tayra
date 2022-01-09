@@ -27,7 +27,10 @@ from funkwhale_api.users.oauth import permissions as oauth_permissions
 from . import categories, filters, models, renderers, serializers
 
 ARTIST_PREFETCH_QS = (
-    music_models.Artist.objects.select_related("description", "attachment_cover",)
+    music_models.Artist.objects.select_related(
+        "description",
+        "attachment_cover",
+    )
     .prefetch_related(music_views.TAG_PREFETCH)
     .annotate(_tracks_count=Count("tracks"))
 )
@@ -192,7 +195,9 @@ class ChannelViewSet(
                     "track",
                     queryset=music_models.Track.objects.select_related(
                         "attachment_cover", "description"
-                    ).prefetch_related(music_views.TAG_PREFETCH,),
+                    ).prefetch_related(
+                        music_views.TAG_PREFETCH,
+                    ),
                 ),
             )
             .select_related("track__attachment_cover", "track__description")
@@ -232,7 +237,9 @@ class ChannelViewSet(
         if not serializer.is_valid():
             return response.Response(serializer.errors, status=400)
         channel = (
-            models.Channel.objects.filter(rss_url=serializer.validated_data["url"],)
+            models.Channel.objects.filter(
+                rss_url=serializer.validated_data["url"],
+            )
             .order_by("id")
             .first()
         )
@@ -243,7 +250,10 @@ class ChannelViewSet(
                     serializer.validated_data["url"]
                 )
             except serializers.FeedFetchException as e:
-                return response.Response({"detail": str(e)}, status=400,)
+                return response.Response(
+                    {"detail": str(e)},
+                    status=400,
+                )
 
         subscription = federation_models.Follow(actor=request.user.actor)
         subscription.fid = subscription.get_federation_id()

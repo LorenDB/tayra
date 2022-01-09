@@ -1082,7 +1082,9 @@ def test_process_channel_upload_forces_artist_and_attributed_to(
     upload.refresh_from_db()
 
     expected_final_metadata = tasks.collections.ChainMap(
-        {"upload_source": None}, expected_forced_values, {"funkwhale": {}},
+        {"upload_source": None},
+        expected_forced_values,
+        {"funkwhale": {}},
     )
     assert upload.import_status == "finished"
     get_track_from_import_metadata.assert_called_once_with(
@@ -1175,7 +1177,8 @@ def test_tag_albums_from_tracks(queryset_equal_queries, factories, mocker):
     )
 
     add_tags_batch.assert_called_once_with(
-        get_tags_from_foreign_key.return_value, model=models.Album,
+        get_tags_from_foreign_key.return_value,
+        model=models.Album,
     )
 
 
@@ -1200,7 +1203,8 @@ def test_tag_artists_from_tracks(queryset_equal_queries, factories, mocker):
     )
 
     add_tags_batch.assert_called_once_with(
-        get_tags_from_foreign_key.return_value, model=models.Artist,
+        get_tags_from_foreign_key.return_value,
+        model=models.Artist,
     )
 
 

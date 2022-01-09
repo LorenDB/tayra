@@ -53,7 +53,9 @@ class SignatureAuthentication(authentication.BaseAuthentication):
             actor = actors.get_actor(actor_url)
         except Exception as e:
             logger.info(
-                "Discarding HTTP request from actor/domain %s, %s", actor_url, str(e),
+                "Discarding HTTP request from actor/domain %s, %s",
+                actor_url,
+                str(e),
             )
             raise rest_exceptions.AuthenticationFailed(
                 "Cannot fetch remote actor to authenticate signature"

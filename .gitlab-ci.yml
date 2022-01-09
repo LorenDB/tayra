@@ -102,12 +102,13 @@ black:
   variables:
     GIT_STRATEGY: fetch
   before_script:
-    - pip install black==19.10b0
+    - pip install black
   script:
-    - black --check --diff api/
+    - black --check --diff .
   only: 
     changes:
-      - api/**/*
+      - "**/*.py"
+      - .gitlab-ci.yml
 
 flake8:
   interruptible: true

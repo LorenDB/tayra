@@ -27,7 +27,9 @@ def generate_scoped_token(user_id, user_secret, scopes):
 def authenticate_scoped_token(token):
     try:
         payload = signing.loads(
-            token, salt="scoped_tokens", max_age=settings.SCOPED_TOKENS_MAX_AGE,
+            token,
+            salt="scoped_tokens",
+            max_age=settings.SCOPED_TOKENS_MAX_AGE,
         )
     except signing.BadSignature:
         raise exceptions.AuthenticationFailed("Invalid token signature")

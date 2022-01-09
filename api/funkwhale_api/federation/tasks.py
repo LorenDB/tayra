@@ -338,7 +338,9 @@ def fetch(fetch_obj):
             if not payload:
                 return error("blocked", message="Blocked by MRF")
         response = session.get_session().get(
-            auth=auth, url=url, headers={"Accept": "application/activity+json"},
+            auth=auth,
+            url=url,
+            headers={"Accept": "application/activity+json"},
         )
         logger.debug("Remote answered with %s: %s", response.status_code, response.text)
         response.raise_for_status()
@@ -425,7 +427,9 @@ def fetch(fetch_obj):
                 # first page fetch is synchronous, so that at least some data is available
                 # in the UI after subscription
                 result = fetch_collection(
-                    obj.actor.outbox_url, channel_id=obj.pk, max_pages=1,
+                    obj.actor.outbox_url,
+                    channel_id=obj.pk,
+                    max_pages=1,
                 )
             except Exception:
                 logger.exception(
@@ -473,7 +477,8 @@ class PreserveSomeDataCollector(Collector):
 @celery.app.task(name="federation.remove_actor")
 @transaction.atomic
 @celery.require_instance(
-    models.Actor.objects.all(), "actor",
+    models.Actor.objects.all(),
+    "actor",
 )
 def remove_actor(actor):
     # Then we broadcast the info over federation. We do this *before* deleting objects
@@ -531,7 +536,9 @@ def match_serializer(payload, conf):
 
 @celery.app.task(name="federation.fetch_collection")
 @celery.require_instance(
-    audio_models.Channel.objects.all(), "channel", allow_null=True,
+    audio_models.Channel.objects.all(),
+    "channel",
+    allow_null=True,
 )
 def fetch_collection(url, max_pages, channel, is_page=False):
     actor = actors.get_service_actor()
@@ -564,7 +571,11 @@ def fetch_collection(url, max_pages, channel, is_page=False):
     for i in range(max_pages):
         page_url = results["next_page"]
         logger.debug("Handling page %s on max %s, at %s", i + 1, max_pages, page_url)
-        page = utils.retrieve_ap_object(page_url, actor=actor, serializer_class=None,)
+        page = utils.retrieve_ap_object(
+            page_url,
+            actor=actor,
+            serializer_class=None,
+        )
         try:
             items = page["orderedItems"]
         except KeyError:

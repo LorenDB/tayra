@@ -500,7 +500,10 @@ def create_or_update_channel(actor, rss_url, attributed_to_fid, **validated_data
             reverse("federation:music:libraries-detail", kwargs={"uuid": uid})
         )
         library = attributed_to.libraries.create(
-            privacy_level="everyone", name=artist_defaults["name"], fid=fid, uuid=uid,
+            privacy_level="everyone",
+            name=artist_defaults["name"],
+            fid=fid,
+            uuid=uid,
         )
     else:
         library = artist.channel.library
@@ -512,7 +515,9 @@ def create_or_update_channel(actor, rss_url, attributed_to_fid, **validated_data
         "library": library,
     }
     channel, created = audio_models.Channel.objects.update_or_create(
-        actor=actor, attributed_to=attributed_to, defaults=channel_defaults,
+        actor=actor,
+        attributed_to=attributed_to,
+        defaults=channel_defaults,
     )
     return channel
 
@@ -1734,7 +1739,8 @@ class FlagSerializer(jsonld.JsonLdSerializer):
         }
 
         report, created = moderation_models.Report.objects.update_or_create(
-            fid=validated_data["id"], defaults=kwargs,
+            fid=validated_data["id"],
+            defaults=kwargs,
         )
         moderation_signals.report_created.send(sender=None, report=report)
         return report

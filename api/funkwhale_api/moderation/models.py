@@ -205,7 +205,9 @@ class UserRequest(models.Model):
         max_length=40, choices=USER_REQUEST_STATUSES, default="pending"
     )
     submitter = models.ForeignKey(
-        "federation.Actor", related_name="requests", on_delete=models.CASCADE,
+        "federation.Actor",
+        related_name="requests",
+        on_delete=models.CASCADE,
     )
     assigned_to = models.ForeignKey(
         "federation.Actor",

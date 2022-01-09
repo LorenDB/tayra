@@ -66,7 +66,8 @@ def test_signup_request_pending_sends_email_to_mods(factories, mailoutbox, setti
     for i, mod in enumerate([mod1, mod2]):
         m = mailoutbox[i]
         assert m.subject == "[{} moderation] New sign-up request from {}".format(
-            settings.FUNKWHALE_HOSTNAME, signup_request.submitter.preferred_username,
+            settings.FUNKWHALE_HOSTNAME,
+            signup_request.submitter.preferred_username,
         )
         assert detail_url in m.body
         assert unresolved_requests_url in m.body
@@ -91,7 +92,8 @@ def test_approved_request_sends_email_to_submitter_and_set_active(
     m = mailoutbox[-1]
     login_url = federation_utils.full_url("/login")
     assert m.subject == "Welcome to {}, {}!".format(
-        settings.FUNKWHALE_HOSTNAME, signup_request.submitter.preferred_username,
+        settings.FUNKWHALE_HOSTNAME,
+        signup_request.submitter.preferred_username,
     )
     assert login_url in m.body
     assert list(m.to) == [user.email]

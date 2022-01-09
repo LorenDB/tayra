@@ -157,13 +157,16 @@ def users():
     type=click.INT,
 )
 @click.option(
-    "--superuser/--no-superuser", default=False,
+    "--superuser/--no-superuser",
+    default=False,
 )
 @click.option(
-    "--staff/--no-staff", default=False,
+    "--staff/--no-staff",
+    default=False,
 )
 @click.option(
-    "--permission", multiple=True,
+    "--permission",
+    multiple=True,
 )
 def create(username, password, email, superuser, staff, permission, upload_quota):
     """Create a new user"""
@@ -210,7 +213,9 @@ def delete(username, hard):
 @click.option("--permission-settings/--no-permission-settings", default=None)
 @click.option("--password", default=None, envvar="FUNKWHALE_CLI_USER_UPDATE_PASSWORD")
 @click.option(
-    "-q", "--upload-quota", type=click.INT,
+    "-q",
+    "--upload-quota",
+    type=click.INT,
 )
 def update(username, **kwargs):
     """Update attributes for given users"""

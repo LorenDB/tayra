@@ -173,7 +173,8 @@ def fail_import(upload, error_code, detail=None, **fields):
 @celery.app.task(name="music.process_upload")
 @celery.require_instance(
     models.Upload.objects.filter(import_status="pending").select_related(
-        "library__actor__user", "library__channel__artist",
+        "library__actor__user",
+        "library__channel__artist",
     ),
     "upload",
 )
@@ -239,7 +240,9 @@ def process_upload(upload, update_denormalization=True):
         )
     else:
         final_metadata = collections.ChainMap(
-            additional_data, forced_values, internal_config,
+            additional_data,
+            forced_values,
+            internal_config,
         )
     try:
         track = get_track_from_import_metadata(
@@ -310,7 +313,8 @@ def process_upload(upload, update_denormalization=True):
     # update album cover, if needed
     if track.album and not track.album.attachment_cover:
         populate_album_cover(
-            track.album, source=final_metadata.get("upload_source"),
+            track.album,
+            source=final_metadata.get("upload_source"),
         )
 
     if broadcast:
@@ -793,7 +797,9 @@ def albums_set_tags_from_tracks(ids=None, dry_run=False):
     if ids is not None:
         qs = qs.filter(pk__in=ids)
     data = tags_tasks.get_tags_from_foreign_key(
-        ids=qs, foreign_key_model=models.Track, foreign_key_attr="album",
+        ids=qs,
+        foreign_key_model=models.Track,
+        foreign_key_attr="album",
     )
     logger.info("Found automatic tags for %s albums…", len(data))
     if dry_run:
@@ -801,7 +807,8 @@ def albums_set_tags_from_tracks(ids=None, dry_run=False):
         return
 
     tags_tasks.add_tags_batch(
-        data, model=models.Album,
+        data,
+        model=models.Album,
     )
     return data
 
@@ -815,7 +822,9 @@ def artists_set_tags_from_tracks(ids=None, dry_run=False):
     if ids is not None:
         qs = qs.filter(pk__in=ids)
     data = tags_tasks.get_tags_from_foreign_key(
-        ids=qs, foreign_key_model=models.Track, foreign_key_attr="artist",
+        ids=qs,
+        foreign_key_model=models.Track,
+        foreign_key_attr="artist",
     )
     logger.info("Found automatic tags for %s artists…", len(data))
     if dry_run:
@@ -823,7 +832,8 @@ def artists_set_tags_from_tracks(ids=None, dry_run=False):
         return
 
     tags_tasks.add_tags_batch(
-        data, model=models.Artist,
+        data,
+        model=models.Artist,
     )
     return data
 

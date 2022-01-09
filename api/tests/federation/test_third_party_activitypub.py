@@ -296,7 +296,8 @@ def test_reel2bits_upload_delete(factories):
     }
 
     routes.inbox_delete(
-        payload, context={"actor": actor, "raise_exception": True, "activity": payload},
+        payload,
+        context={"actor": actor, "raise_exception": True, "activity": payload},
     )
 
     with pytest.raises(upload.track.DoesNotExist):

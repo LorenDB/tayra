@@ -686,7 +686,10 @@ class ManageChannelViewSet(
     queryset = (
         audio_models.Channel.objects.all()
         .order_by("-id")
-        .select_related("attributed_to", "actor",)
+        .select_related(
+            "attributed_to",
+            "actor",
+        )
         .prefetch_related(
             Prefetch(
                 "artist",

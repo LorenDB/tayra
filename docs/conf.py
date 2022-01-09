@@ -47,7 +47,13 @@ for key, value in FUNKWHALE_CONFIG.items():
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ["sphinx.ext.graphviz", "sphinx.ext.autodoc"]
-autodoc_mock_imports = ["celery", "django_auth_ldap", "ldap", "persisting_theory", "rest_framework"]
+autodoc_mock_imports = [
+    "celery",
+    "django_auth_ldap",
+    "ldap",
+    "persisting_theory",
+    "rest_framework",
+]
 add_module_names = False
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -107,7 +113,7 @@ html_theme = "sphinx_rtd_theme"
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-#html_theme_options = {}
+# html_theme_options = {}
 html_context = {
     "display_gitlab": True,
     "gitlab_host": "dev.funkwhale.audio",
@@ -152,7 +158,13 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (root_doc, "funkwhale.tex", "funkwhale Documentation", "The Funkwhale Collective", "manual")
+    (
+        root_doc,
+        "funkwhale.tex",
+        "funkwhale Documentation",
+        "The Funkwhale Collective",
+        "manual",
+    )
 ]
 
 

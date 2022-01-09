@@ -9,7 +9,9 @@ def test_generate_scoped_token(mocker):
     dumps = mocker.patch("django.core.signing.dumps")
 
     result = authentication.generate_scoped_token(
-        user_id=42, user_secret="hello", scopes=["read"],
+        user_id=42,
+        user_secret="hello",
+        scopes=["read"],
     )
 
     assert result == dumps.return_value

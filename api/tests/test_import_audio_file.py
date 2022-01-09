@@ -297,7 +297,10 @@ def test_handle_modified_skips_existing_checksum(tmpfile, factories, mocker):
         import_status="finished",
     )
     import_files.handle_modified(
-        event=event, stdout=stdout, library=library, in_place=True,
+        event=event,
+        stdout=stdout,
+        library=library,
+        in_place=True,
     )
     assert library.uploads.count() == 1
 
@@ -322,10 +325,14 @@ def test_handle_modified_update_existing_path_if_found(tmpfile, factories, mocke
         audio_file=None,
     )
     import_files.handle_modified(
-        event=event, stdout=stdout, library=library, in_place=True,
+        event=event,
+        stdout=stdout,
+        library=library,
+        in_place=True,
     )
     update_track_metadata.assert_called_once_with(
-        get_metadata.return_value, upload.track,
+        get_metadata.return_value,
+        upload.track,
     )
 
 
@@ -349,7 +356,10 @@ def test_handle_modified_update_existing_path_if_found_and_attributed_to(
         audio_file=None,
     )
     import_files.handle_modified(
-        event=event, stdout=stdout, library=library, in_place=True,
+        event=event,
+        stdout=stdout,
+        library=library,
+        in_place=True,
     )
     update_track_metadata.assert_not_called()
 

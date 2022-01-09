@@ -222,7 +222,8 @@ class Attachment(models.Model):
         validators=[
             validators.ImageDimensionsValidator(min_width=50, min_height=50),
             validators.FileValidator(
-                allowed_extensions=["png", "jpg", "jpeg"], max_size=1024 * 1024 * 5,
+                allowed_extensions=["png", "jpg", "jpeg"],
+                max_size=1024 * 1024 * 5,
             ),
         ],
     )

@@ -52,7 +52,8 @@ def test_channel_create(logged_in_api_client):
 
 
 @pytest.mark.parametrize(
-    "field", ["uuid", "actor.preferred_username", "actor.full_username"],
+    "field",
+    ["uuid", "actor.preferred_username", "actor.full_username"],
 )
 def test_channel_detail(field, factories, logged_in_api_client):
     channel = factories["audio.Channel"](
@@ -423,7 +424,10 @@ def test_subscribe_to_rss_creates_channel(factories, logged_in_api_client, mocke
 
 
 def test_refresh_channel_when_param_is_true(
-    factories, mocker, logged_in_api_client, queryset_equal_queries,
+    factories,
+    mocker,
+    logged_in_api_client,
+    queryset_equal_queries,
 ):
     obj = factories["audio.Channel"]()
     refetch_obj = mocker.patch(

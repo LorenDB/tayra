@@ -331,7 +331,8 @@ class AlbumQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
         )
         return self.annotate(
             duration=models.Sum(
-                "tracks__uploads__duration", filter=Q(tracks__uploads=subquery),
+                "tracks__uploads__duration",
+                filter=Q(tracks__uploads=subquery),
             )
         )
 
@@ -1177,7 +1178,10 @@ class LibraryQuerySet(models.QuerySet):
         ).values_list("target", flat=True)
         followed_channels_libraries = (
             Follow.objects.exclude(target__channel=None)
-            .filter(actor=actor, approved=True,)
+            .filter(
+                actor=actor,
+                approved=True,
+            )
             .values_list("target__channel__library", flat=True)
         )
         return self.filter(

@@ -364,12 +364,15 @@ class Command(BaseCommand):
             time_stats = ""
             if i > 0:
                 time_stats = " - running for {}s, previous batch took {}s".format(
-                    int(time.time() - start_time), int(batch_duration),
+                    int(time.time() - start_time),
+                    int(batch_duration),
                 )
             if entries:
                 self.stdout.write(
                     "Handling batch {} ({} items){}".format(
-                        i + 1, len(entries), time_stats,
+                        i + 1,
+                        len(entries),
+                        time_stats,
                     )
                 )
                 batch_errors = self.handle_batch(
@@ -536,7 +539,8 @@ class Command(BaseCommand):
         watchdog_queue = queue.Queue()
         # Set up a worker thread to process database load
         worker = threading.Thread(
-            target=process_load_queue(self.stdout, **kwargs), args=(watchdog_queue,),
+            target=process_load_queue(self.stdout, **kwargs),
+            args=(watchdog_queue,),
         )
         worker.setDaemon(True)
         worker.start()
@@ -544,7 +548,9 @@ class Command(BaseCommand):
         # setup watchdog to monitor directory for trigger files
         patterns = ["*.{}".format(e) for e in extensions]
         event_handler = Watcher(
-            stdout=self.stdout, queue=watchdog_queue, patterns=patterns,
+            stdout=self.stdout,
+            queue=watchdog_queue,
+            patterns=patterns,
         )
         observer = watchdog.observers.Observer()
         observer.schedule(event_handler, path, recursive=recursive)
@@ -581,7 +587,14 @@ def prune():
 
 
 def create_upload(
-    path, reference, library, async_, replace, in_place, dispatch_outbox, broadcast,
+    path,
+    reference,
+    library,
+    async_,
+    replace,
+    in_place,
+    dispatch_outbox,
+    broadcast,
 ):
     import_handler = tasks.process_upload.delay if async_ else tasks.process_upload
     upload = models.Upload(library=library, import_reference=reference)
@@ -692,7 +705,9 @@ def handle_modified(event, stdout, library, in_place, **kwargs):
             existing_candidates.in_place()
             .filter(source=source)
             .select_related(
-                "track__attributed_to", "track__artist", "track__album__artist",
+                "track__attributed_to",
+                "track__artist",
+                "track__album__artist",
             )
             .first()
         )
@@ -792,7 +807,12 @@ def check_updates(stdout, library, extensions, paths, batch_size):
     stdout.write("Found {} files to check in database!".format(total))
     uploads = existing.order_by("source")
     for i, rows in enumerate(batch(uploads.iterator(), batch_size)):
-        stdout.write("Handling batch {} ({} items)".format(i + 1, len(rows),))
+        stdout.write(
+            "Handling batch {} ({} items)".format(
+                i + 1,
+                len(rows),
+            )
+        )
 
         for upload in rows:
 

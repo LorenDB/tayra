@@ -805,7 +805,9 @@ def test_activity_pub_album_serializer_to_ap(factories):
 
 def test_activity_pub_album_serializer_to_ap_channel_artist(factories):
     channel = factories["audio.Channel"]()
-    album = factories["music.Album"](artist=channel.artist,)
+    album = factories["music.Album"](
+        artist=channel.artist,
+    )
 
     serializer = serializers.AlbumSerializer(album)
 

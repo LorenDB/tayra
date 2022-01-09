@@ -470,7 +470,8 @@ class IndexViewSet(FederationMixin, viewsets.GenericViewSet):
         return super().dispatch(request, *args, **kwargs)
 
     @action(
-        methods=["get"], detail=False,
+        methods=["get"],
+        detail=False,
     )
     def libraries(self, request, *args, **kwargs):
         libraries = (
@@ -497,7 +498,8 @@ class IndexViewSet(FederationMixin, viewsets.GenericViewSet):
         return response.Response({}, status=200)
 
     @action(
-        methods=["get"], detail=False,
+        methods=["get"],
+        detail=False,
     )
     def channels(self, request, *args, **kwargs):
         actors = (

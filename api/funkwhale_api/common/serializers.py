@@ -310,7 +310,9 @@ class ContentSerializer(serializers.Serializer):
     text = serializers.CharField(
         max_length=models.CONTENT_TEXT_MAX_LENGTH, allow_null=True
     )
-    content_type = serializers.ChoiceField(choices=models.CONTENT_TEXT_SUPPORTED_TYPES,)
+    content_type = serializers.ChoiceField(
+        choices=models.CONTENT_TEXT_SUPPORTED_TYPES,
+    )
     html = serializers.SerializerMethodField()
 
     def get_html(self, o):

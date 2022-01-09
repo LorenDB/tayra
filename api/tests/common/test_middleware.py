@@ -301,13 +301,17 @@ def test_rewrite_manifest_json_url(link, new_url, expected, mocker, settings):
     request = mocker.Mock(path="/", META={})
     mocker.patch.object(middleware, "get_spa_html", return_value=spa_html)
     mocker.patch.object(
-        middleware, "get_default_head_tags", return_value=[],
+        middleware,
+        "get_default_head_tags",
+        return_value=[],
     )
     response = middleware.serve_spa(request)
 
     assert response.status_code == 200
-    expected_html = "<html><head><link rel=before>{}<link rel=after>\n\n</head></html>".format(
-        expected
+    expected_html = (
+        "<html><head><link rel=before>{}<link rel=after>\n\n</head></html>".format(
+            expected
+        )
     )
     assert response.content == expected_html.encode()
 
@@ -319,7 +323,9 @@ def test_rewrite_manifest_json_url_rewrite_disabled(mocker, settings):
     request = mocker.Mock(path="/", META={})
     mocker.patch.object(middleware, "get_spa_html", return_value=spa_html)
     mocker.patch.object(
-        middleware, "get_default_head_tags", return_value=[],
+        middleware,
+        "get_default_head_tags",
+        return_value=[],
     )
     response = middleware.serve_spa(request)
 
@@ -338,13 +344,17 @@ def test_rewrite_manifest_json_url_rewrite_default_url(mocker, settings):
     request = mocker.Mock(path="/", META={})
     mocker.patch.object(middleware, "get_spa_html", return_value=spa_html)
     mocker.patch.object(
-        middleware, "get_default_head_tags", return_value=[],
+        middleware,
+        "get_default_head_tags",
+        return_value=[],
     )
     response = middleware.serve_spa(request)
 
     assert response.status_code == 200
-    expected_html = '<html><head><link rel=manifest href="{}">\n\n</head></html>'.format(
-        expected_url
+    expected_html = (
+        '<html><head><link rel=manifest href="{}">\n\n</head></html>'.format(
+            expected_url
+        )
     )
     assert response.content == expected_html.encode()
 
@@ -410,10 +420,34 @@ def test_get_request_head_tags_calls_view_with_proper_arg_when_accept_header_set
             "username",
             "actor.preferred_username",
         ),
-        ("music.Artist", {}, "library_artist", "pk", "pk",),
-        ("music.Album", {}, "library_album", "pk", "pk",),
-        ("music.Track", {}, "library_track", "pk", "pk",),
-        ("music.Library", {}, "library_library", "uuid", "uuid",),
+        (
+            "music.Artist",
+            {},
+            "library_artist",
+            "pk",
+            "pk",
+        ),
+        (
+            "music.Album",
+            {},
+            "library_album",
+            "pk",
+            "pk",
+        ),
+        (
+            "music.Track",
+            {},
+            "library_track",
+            "pk",
+            "pk",
+        ),
+        (
+            "music.Library",
+            {},
+            "library_library",
+            "uuid",
+            "uuid",
+        ),
         # when a track as a public upload, we should redirect to the upload instead
         ("music.Upload", {"playable": True}, "library_track", "pk", "track.pk"),
     ],

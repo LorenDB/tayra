@@ -137,8 +137,12 @@ def test_get_confs_user(factories):
 
 
 def test_filter_is_called_with_plugin_conf(mocker, factories):
-    plugins.get_plugin_config("test1",)
-    plugins.get_plugin_config("test2",)
+    plugins.get_plugin_config(
+        "test1",
+    )
+    plugins.get_plugin_config(
+        "test2",
+    )
     factories["common.PluginConfiguration"](code="test1", enabled=True)
     factories["common.PluginConfiguration"](
         code="test2", conf={"foo": "baz"}, enabled=True
@@ -411,7 +415,10 @@ def test_set_plugin_source_conf_valid(factories):
 def test_can_trigger_scan(logged_in_api_client, mocker, factories):
     library = factories["music.Library"](actor=logged_in_api_client.user.create_actor())
     plugin = plugins.get_plugin_config(
-        name="test_plugin", description="Hello world", conf=[], source=True,
+        name="test_plugin",
+        description="Hello world",
+        conf=[],
+        source=True,
     )
     handler = mocker.Mock()
     plugins.register_hook(plugins.SCAN, plugin)(handler)

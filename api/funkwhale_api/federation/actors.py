@@ -15,7 +15,8 @@ logger = logging.getLogger(__name__)
 def get_actor_data(actor_url):
     logger.debug("Fetching actor %s", actor_url)
     response = session.get_session().get(
-        actor_url, headers={"Accept": "application/activity+json"},
+        actor_url,
+        headers={"Accept": "application/activity+json"},
     )
     response.raise_for_status()
     try:

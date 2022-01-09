@@ -211,7 +211,9 @@ class UploadFilter(audio_filters.IncludeChannelsFilterSet):
     library = filters.UUIDFilter("library__uuid")
     playable = filters.BooleanFilter(field_name="_", method="filter_playable")
     scope = common_filters.ActorScopeFilter(
-        actor_field="library__actor", distinct=True, library_field="library",
+        actor_field="library__actor",
+        distinct=True,
+        library_field="library",
     )
     import_status = common_filters.MultipleQueryFilter(coerce=str)
     q = fields.SmartSearchFilter(
@@ -291,9 +293,13 @@ class AlbumFilter(
 
 
 class LibraryFilter(filters.FilterSet):
-    q = fields.SearchFilter(search_fields=["name"],)
+    q = fields.SearchFilter(
+        search_fields=["name"],
+    )
     scope = common_filters.ActorScopeFilter(
-        actor_field="actor", distinct=True, library_field="pk",
+        actor_field="actor",
+        distinct=True,
+        library_field="pk",
     )
 
     class Meta:
