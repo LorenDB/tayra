@@ -157,9 +157,7 @@ eslint:
       - branches
   before_script:
     - cd api
-    - pip3 install -r requirements/base.txt
-    - pip3 install -r requirements/local.txt
-    - pip3 install -r requirements/test.txt
+    - poetry install --no-root
   script:
     - pytest --cov-report xml --cov-report term-missing:skip-covered --cov=funkwhale_api --junitxml=report.xml tests/
   tags:
