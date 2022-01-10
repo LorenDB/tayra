@@ -28,21 +28,24 @@ RUN python -m venv --system-site-packages /venv
 # emulate activation by prefixing PATH
 ENV PATH="/venv/bin:$PATH" VIRTUAL_ENV=/venv
 
-RUN mkdir /requirements
-COPY ./requirements/base.txt /requirements/base.txt
+COPY pyproject.toml poetry.lock /
 # hack around https://github.com/pypa/pip/issues/6158#issuecomment-456619072
 ENV PIP_DOWNLOAD_CACHE=/noop/
 RUN \
     echo 'installing pip requirements' && \
-    pip3 install --upgrade pip && \
+    pip3 install --upgrade pip poetry && \
     pip3 install setuptools wheel && \
-    pip3 install -r /requirements/base.txt cryptography==3.3.2 && \
+    poetry export --without-hashes | grep -v cryptography | pip3 install -r /dev/stdin cryptography==3.3.2 && \
     rm -rf $PIP_DOWNLOAD_CACHE
 
 ARG install_dev_deps=0
-COPY ./requirements/*.txt /requirements/
 RUN \
-    if [ "$install_dev_deps" = "1" ] ; then echo "Installing dev dependencies" && pip3 install --no-cache-dir -r /requirements/local.txt -r /requirements/test.txt ; else echo "Skipping dev deps installation" ; fi
+    if [ "$install_dev_deps" = "1" ] ; then \
+      echo "Installing dev dependencies" && \
+    poetry export --dev --without-hashes | grep -v cryptography | pip3 install -r /dev/stdin cryptography==3.3.2 && \
+    ; else  \
+      echo "Skipping dev deps installation" \
+    ; fi
 
 
 FROM alpine:3.13 as build-image
