@@ -35,6 +35,10 @@ RUN \
     echo 'installing pip requirements' && \
     pip3 install --upgrade pip poetry && \
     pip3 install setuptools wheel && \
+    # Currently we are unable to relieably build cryptography on armv7. This
+    # is why we need to use the package shipped by Alpine Linux, which is currently
+    # version 3.3.2. Since poetry does not allow in-place dependency pinning, we need
+    # to install the deps using pip.
     poetry export --without-hashes | grep -v cryptography | pip3 install -r /dev/stdin cryptography==3.3.2 && \
     rm -rf $PIP_DOWNLOAD_CACHE
 
