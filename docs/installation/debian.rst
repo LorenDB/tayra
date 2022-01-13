@@ -89,7 +89,7 @@ Now let's setup our directory layout. Here is how it will look like::
     ├── api         # api code of your instance
     ├── data        # persistent data, such as music files
     ├── front       # frontend files for the web user interface
-    └── virtualenv  # python dependencies for Funkwhale
+    └── .venv       # python dependencies for Funkwhale
 
 Create the aforementioned directories:
 
@@ -163,40 +163,33 @@ Go back to the base directory:
 
 .. code-block:: shell
 
-    cd /srv/funkwhale
+    cd /srv/funkwhale/api
 
-To avoid collisions with other software on your system, Python dependencies
-will be installed in a dedicated
-`virtualenv <https://docs.python.org/3/library/venv.html>`_.
+We use poetry to manage our python dependencies. To avoid collisions with
+other software and its dependencies on your system, poetry allows to
+install everything in a so called
+`virtualenv <https://docs.python.org/3/library/venv.html>`_. But poetry will
+take care for this automatically. In order to install poetry, please visit
+`their documentation <https://python-poetry.org/docs/#installation>`_.
 
-First, create the virtualenv:
+If you want to have this `virtualenv` placed inside the Funkwhale directory, eg `/srv/funkwhale`, you need to configure poetry to do this. This is optional:
 
 .. code-block:: shell
 
-    python3 -m venv /srv/funkwhale/virtualenv
+   poetry config virtualenvs.in-project true
 
 This will result in a ``virtualenv`` directory being created in
-``/srv/funkwhale/virtualenv``.
+``/srv/funkwhale/api/.venv``.
 
-In the rest of this guide, we'll need to activate this environment to ensure
-dependencies are installed within it, and not directly on your host system. This is done with the following command:
-
-.. code-block:: shell
-
-    source /srv/funkwhale/virtualenv/bin/activate
+In order to run Funkwhale commands, you can either activate the `venv` by
+running `poetry shell` or prefix each command with `poetry run`. In order to
+make this guide safe for copy and pasting of commands, we will use the latter.
 
 Finally, install the python dependencies:
 
 .. code-block:: shell
 
-    pip install wheel
-    pip install -r api/requirements.txt
-
-.. important::
-
-    Further commands involving python should always be run after you activated
-    the virtualenv, as described earlier, otherwise those commands will raise
-    errors
+   poetry install
 
 
 Environment file
@@ -299,7 +292,7 @@ Now that the database has been created, import the initial database structure us
 
 .. code-block:: shell
 
-    python api/manage.py migrate
+    poetry run python api/manage.py migrate
 
 This will create the required tables and rows.
 
@@ -324,13 +317,13 @@ Using the virtualenv created before, create your first user account:
 
 .. code-block:: shell
 
-    python api/manage.py createsuperuser
+    poetry run python api/manage.py createsuperuser
 
 If you ever want to change a user's password from the command line, just run:
 
 .. code-block:: shell
 
-    python api/manage.py changepassword <user>
+    poetry run python api/manage.py changepassword <user>
 
 Collect static files
 --------------------
@@ -340,7 +333,7 @@ We need to collect them explicitly, so they can be served by the webserver:
 
 .. code-block:: shell
 
-    python api/manage.py collectstatic
+    poetry run python api/manage.py collectstatic
 
 This should populate the directory you choose for the ``STATIC_ROOT`` variable
 in your ``.env`` file.
