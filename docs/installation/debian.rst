@@ -164,7 +164,7 @@ Poetry installs packages in a `virtualenv <https://docs.python.org/3/library/ven
 This prevents collisions with other Python packages on your system. To install poetry,
 check out `their documentation <https://python-poetry.org/docs/#installation>`_.
 
-By default, poetry creates a virtualenv `in`{cache-dir}/virtualenvs`.
+By default, poetry creates a virtualenv in `{cache-dir}/virtualenvs`.
 We recommend creating your virtualenv inside your Funkwhale `api` directory.
 To do this, navigate to the directory and run the :command:`poetry config virtualenvs.in-project` 
 command.
