@@ -156,36 +156,35 @@ Then we will download the frontend files:
 You can leave the ZIP archives in the directory, this will help you know
 which version you've installed next time you want to upgrade your installation.
 
-Python dependencies
---------------------
+Install Python dependencies
+----------------------------
 
-Go back to the base directory:
+We use `poetry <https://python-poetry.org/>`_ to manage Python dependencies.
+Poetry installs packages in a `virtualenv <https://docs.python.org/3/library/venv.html>`_.
+This prevents collisions with other Python packages on your system. To install poetry,
+check out `their documentation <https://python-poetry.org/docs/#installation>`_.
 
-.. code-block:: shell
-
-    cd /srv/funkwhale/api
-
-We use poetry to manage our python dependencies. To avoid collisions with
-other software and its dependencies on your system, poetry allows to
-install everything in a so called
-`virtualenv <https://docs.python.org/3/library/venv.html>`_. But poetry will
-take care for this automatically. In order to install poetry, please visit
-`their documentation <https://python-poetry.org/docs/#installation>`_.
-
-If you want to have this `virtualenv` placed inside the Funkwhale directory, eg `/srv/funkwhale`, you need to configure poetry to do this. This is optional:
+By default, poetry creates a virtualenv `in`{cache-dir}/virtualenvs`.
+We recommend creating your virtualenv inside your Funkwhale `api` directory.
+To do this, navigate to the directory and run the :command:`poetry config virtualenvs.in-project` 
+command.
 
 .. code-block:: shell
 
-   poetry config virtualenvs.in-project true
+    cd /srv/funkwhale/api // navigate to the Funkwhale api directory
+    poetry config virtualenvs.in-project true // create the virtualenv
 
-This will result in a ``virtualenv`` directory being created in
-``/srv/funkwhale/api/.venv``.
+Poetry creates a virtualenv in `/srv/funkwhale/api/.venv`.
 
-In order to run Funkwhale commands, you can either activate the `venv` by
-running `poetry shell` or prefix each command with `poetry run`. In order to
-make this guide safe for copy and pasting of commands, we will use the latter.
+.. note::
+    To run Funkwhale commands, you need to activate the virtualenv using poetry.
+    To make copying and pasting from this guide easier, we prefix all commands 
+    with :command:`poetry run`. If you use :command:`poetry shell` to enter
+    your virtualenv, make sure you remove :command:`poetry run` from each
+    command.
 
-Finally, install the python dependencies:
+Once you have set up your virtualenv, install the dependencies using
+:command:`poetry install`.
 
 .. code-block:: shell
 
@@ -294,7 +293,7 @@ Now that the database has been created, import the initial database structure us
 
     poetry run python api/manage.py migrate
 
-This will create the required tables and rows.
+This creates the required tables and rows.
 
 .. note::
 
