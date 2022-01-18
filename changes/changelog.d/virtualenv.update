@@ -1,0 +1,2 @@
+With this update Funkwhale starts using poetry to maintain its dependencies. We therefore recommend
+removing the old virtualenv by running `rm -rf /srv/funkwhale/virtualenv`.
