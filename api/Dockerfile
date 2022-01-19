@@ -20,20 +20,22 @@ RUN \
     cargo \
     libxml2-dev \
     libxslt-dev \
+    curl \
     && \
-    ln -s /usr/bin/python3 /usr/bin/python
+    ln -s /usr/bin/python3 /usr/bin/python && \
+    curl -sSL https://install.python-poetry.org | python3 -
 
 # create virtual env for next stage
 RUN python -m venv --system-site-packages /venv
 # emulate activation by prefixing PATH
-ENV PATH="/venv/bin:$PATH" VIRTUAL_ENV=/venv
+ENV PATH="/venv/bin:/root/.local/bin:$PATH" VIRTUAL_ENV=/venv
 
 COPY pyproject.toml poetry.lock /
 # hack around https://github.com/pypa/pip/issues/6158#issuecomment-456619072
 ENV PIP_DOWNLOAD_CACHE=/noop/
 RUN \
     echo 'installing pip requirements' && \
-    pip3 install --upgrade pip poetry && \
+    pip3 install --upgrade pip && \
     pip3 install setuptools wheel && \
     # Currently we are unable to relieably build cryptography on armv7. This
     # is why we need to use the package shipped by Alpine Linux, which is currently
