@@ -76,7 +76,7 @@ review_docs:
     - cd docs
     - apt-get update
     - apt-get install -y graphviz
-    - pip install sphinx sphinx_rtd_theme django-environ django
+    - pip install sphinx sphinx_rtd_theme django-environ django myst-parser sphinx-panels
   script:
     - ./build_docs.sh
   cache:
@@ -246,7 +246,7 @@ pages:
     - cd docs
     - apt-get update
     - apt-get install -y graphviz
-    - pip install sphinx sphinx_rtd_theme django-environ django
+    - pip install sphinx sphinx_rtd_theme django-environ django myst-parser sphinx-panels
   script:
     - ./build_docs.sh
   cache:

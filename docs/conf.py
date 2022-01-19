@@ -46,7 +46,12 @@ for key, value in FUNKWHALE_CONFIG.items():
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx.ext.graphviz", "sphinx.ext.autodoc", "myst_parser"]
+extensions = [
+    "sphinx.ext.graphviz",
+    "sphinx.ext.autodoc",
+    "myst_parser",
+    "sphinx_panels",
+]
 autodoc_mock_imports = [
     "celery",
     "django_auth_ldap",
@@ -204,13 +209,28 @@ redirect_files = [
     ("upgrading/index.html", "../admin/upgrading.html"),
     ("upgrading/0.17.html", "../admin/0.17.html"),
     ("users/django.html", "../admin/django.html"),
-    ("cli/index.html", "../users/cli.html"),
-    ("cli/examples.html", "../users/cli.html#examples"),
+    ("cli/index.html", "../user_documentation/info/cli.html"),
+    ("cli/examples.html", "../user_documentation/info/cli.html#examples"),
     ("installation/ldap.html", "../admin/ldap.html"),
     ("installation/optimization.html", "../admin/optimization.html"),
     ("installation/external_dependencies.html", "debian.html"),
     ("installation/systemd.html", "debian.html#systemd-unit-file"),
     ("backup.html", "../admin/backup.html"),
+    ("users/create.html", "../user_documentation/accounts/create_account.html"),
+    ("users/tagging.html", "../user_documentation/libraries/tag_music.html"),
+    ("users/upload.html", "../user_documentation/libraries/upload_content.html"),
+    ("users/editing.html", "../user_documentation/libraries/edit_content.html"),
+    ("users/account.html", "../user_documentation/accounts/index.html"),
+    ("users/queue.html", "../user_documentation/queue/index.html"),
+    ("users/managing.html", "../user_documentation/libraries/index.html"),
+    ("users/channels.html", "../user_documentation/channels/index.html"),
+    ("users/playlists.html", "../user_documentation/radios/index.html"),
+    ("users/favorites.html", "../user_documentation/favorites/index.html"),
+    ("users/radios.html", "../user_documentation/radios/index.html"),
+    ("users/followchannel.html", "../user_documentation/channels/follow_channel.html"),
+    ("users/follow.html", "../user_documentation/libraries/follow_library.html"),
+    ("users/reports.html", "../user_documentation/reports/index.html"),
+    ("users/builtinplugins.html", "../user_documentation/plugins/index.html"),
 ]
 
 # Generate redirect template
