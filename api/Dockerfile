@@ -48,7 +48,7 @@ ARG install_dev_deps=0
 RUN \
     if [ "$install_dev_deps" = "1" ] ; then \
       echo "Installing dev dependencies" && \
-    poetry export --dev --without-hashes | grep -v cryptography | pip3 install -r /dev/stdin cryptography==3.3.2 && \
+    poetry export --dev --without-hashes | grep -v cryptography | pip3 install -r /dev/stdin cryptography==3.3.2 \
     ; else  \
       echo "Skipping dev deps installation" \
     ; fi
