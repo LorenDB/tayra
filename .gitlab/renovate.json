@@ -6,6 +6,7 @@
   "prConcurrentLimit": 5,
   "ignoreDeps": ["$CI_REGISTRY/funkwhale/backend-test-docker"],
   "rangeStrategy": "bump",
+  "lockFileMaintenance": { "enabled": true },
   "baseBranches": ["stable", "develop"],
   "packageRules": [
     {
