@@ -12,6 +12,11 @@
       "matchUpdateTypes": ["major", "minor"],
       "matchBaseBranches": ["stable"],
       "enabled": false
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchBaseBranches": ["stable"],
+      "enabled": false
     }
   ]
 }
