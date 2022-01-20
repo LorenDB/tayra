@@ -3,7 +3,7 @@
   "poetry": {
     "fileMatch": ["api/pyproject.toml"]
   },
-  "prConcurrentLimit": 5,
+  "prConcurrentLimit": 1,
   "ignoreDeps": ["$CI_REGISTRY/funkwhale/backend-test-docker"],
   "rangeStrategy": "bump",
   "lockFileMaintenance": { "enabled": true },
