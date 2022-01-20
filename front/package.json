@@ -22,7 +22,7 @@
     "django-channels": "1.1.6",
     "focus-trap": "^5.1.0",
     "fomantic-ui-css": "^2.8.8",
-    "howler": "^2.2.1",
+    "howler": "^2.2.3",
     "js-logger": "^1.4.1",
     "lodash": "^4.17.21",
     "moment": "^2.22.2",
