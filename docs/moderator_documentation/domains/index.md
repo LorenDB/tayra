@@ -21,6 +21,6 @@ maxdepth: 1
 
 add_rule
 edit_rule
-remove_rule
+delete_rule
 
 ```
