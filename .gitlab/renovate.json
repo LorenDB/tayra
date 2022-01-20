@@ -1,0 +1,18 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "poetry": {
+    "fileMatch": ["api/pyproject.toml"]
+  },
+  "prConcurrentLimit": 5,
+  "ignoreDeps": ["$CI_REGISTRY/funkwhale/backend-test-docker"],
+  "rangeStrategy": "bump",
+  "baseBranches": ["stable", "develop"],
+  "packageRules": [
+    {
+      "_comment": "We do this to avoid breaking updates for the stable branch",
+      "matchUpdateTypes": ["major", "minor"],
+      "matchBaseBranches": ["stable"],
+      "enabled": false
+    }
+  ]
+}
