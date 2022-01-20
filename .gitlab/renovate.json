@@ -9,7 +9,6 @@
   "baseBranches": ["stable", "develop"],
   "packageRules": [
     {
-      "_comment": "We do this to avoid breaking updates for the stable branch",
       "matchUpdateTypes": ["major", "minor"],
       "matchBaseBranches": ["stable"],
       "enabled": false
