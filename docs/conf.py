@@ -231,6 +231,11 @@ redirect_files = [
     ("users/follow.html", "../user_documentation/libraries/follow_library.html"),
     ("users/reports.html", "../user_documentation/reports/index.html"),
     ("users/builtinplugins.html", "../user_documentation/plugins/index.html"),
+    ("moderator/index.html", "../moderator_documentation/index.html"),
+    ("moderator/reports.html", "../moderator_documentation/reports/index.html"),
+    ("moderator/domains.html", "../moderator_documentation/domains/index.html"),
+    ("moderator/users.html", "../moderator_documentation/users/index.html"),
+    ("moderator/listing.html", "../moderator_documentation/allow_listing/index.html"),
 ]
 
 # Generate redirect template
