@@ -44,7 +44,8 @@ caption: Moderator documentation
 hidden: true
 ---
 
-moderator/index
+moderator_documentation/index
+moderator_documentation/reports/index
 
 ```
 
@@ -127,6 +128,20 @@ Want to host your own Funkwhale pod? Our admin documentation guides you through 
 
 ---
 
+{fa}`shield` Moderators
+^^^^^^^^^^^^^^^^^^
+
+Keeping your users safe from harassment and spam or clearing illegal content? Check out our moderator docs.
+
++++
+
+```{link-button} moderator_documentation/index
+:type: ref
+:text: Get started
+:classes: btn-outline-primary btn-block stretched-link
+
+---
+
 {fa}`code` Developers
 ^^^^^^^^^^^^^^^^^
 
@@ -140,6 +155,7 @@ Want to use Funkwhale's API or help with the project? Our developer docs give yo
 :classes: btn-outline-primary btn-block stretched-link
 
 ---
+:column: col-lg-12 p-2
 
 {fa}`users` Contributors
 ^^^^^^^^^^^^^^^^^^
