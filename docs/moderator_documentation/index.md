@@ -1,6 +1,6 @@
 # Get started
 
-{term}`Pod` moderators are responsible for . Follow the guides in our moderator documentation to handle moderation tasks.
+{term}`Pod` moderators are responsible for enforcing the rules of a pod. Follow the guides in our moderator documentation to handle moderation tasks.
 
 ```{contents}
 :local:
