@@ -46,6 +46,7 @@ hidden: true
 
 moderator_documentation/index
 moderator_documentation/reports/index
+moderator_documentation/domains/index
 
 ```
 
