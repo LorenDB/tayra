@@ -46,8 +46,9 @@ hidden: true
 
 moderator_documentation/index
 moderator_documentation/reports/index
+moderator_documentation/internal_users/index
 moderator_documentation/domains/index
-moderator_documentation/users/index
+moderator_documentation/external_users/index
 moderator_documentation/allow_listing/index
 
 ```
