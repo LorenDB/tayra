@@ -252,7 +252,7 @@ function getURLParams () {
   const decode = function (s) { return decodeURIComponent(s.replace(pl, ' ')) }
   const query = window.location.search.substring(1)
 
-  while (match === search.exec(query)) { urlParams[decode(match[1])] = decode(match[2]) }
+  while ((match = search.exec(query)) !== null) { urlParams[decode(match[1])] = decode(match[2]) }
   return urlParams
 }
 export default {
