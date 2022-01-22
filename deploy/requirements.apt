@@ -9,3 +9,13 @@ python3-dev
 libldap2-dev
 libsasl2-dev
 make
+unzip
+zlib1g-dev
+libffi-dev
+libssl-dev
+libxml2-dev
+libxslt1-dev
+libjpeg-dev
+redis-server
+python3-venv
+git
