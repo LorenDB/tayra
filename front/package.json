@@ -37,7 +37,7 @@
     "vue-lazyload": "^1.2.6",
     "vue-plyr": "^5.0.4",
     "vue-router": "^3.0.1",
-    "vue-upload-component": "^2.8.11",
+    "vue-upload-component": "^2.8.22",
     "vuedraggable": "^2.16.0",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.4",
