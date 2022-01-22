@@ -2,6 +2,10 @@
 
 {term}`Pod` admins can enable manual sign-up validation. This setting requires moderators to approve or refuse account creations.
 
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
 Requests appear in the {guilabel}`User Requests` list. Each request contains the following information:
 
 - The user the request was {guilabel}`Submitted by`

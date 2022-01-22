@@ -4,7 +4,13 @@
 Purging a domain's data removes all objects and caches associated to that domain. This impacts users who have objects from these domains in their libraries.
 ```
 
-You can change a moderation rule on a domain at any time. To do this:
+You can change a moderation rule on a domain at any time.
+
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
+To update an existing moderation rule:
 
 ```{tabbed} Desktop
 

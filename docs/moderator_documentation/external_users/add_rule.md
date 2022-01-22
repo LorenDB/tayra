@@ -6,6 +6,10 @@ Purging a user's data removes all objects and caches associated to that user. Th
 
 Add moderation rules to users to control how they can interact with your {term}`pod`. Moderation rules enable you to restrict content from a user showing on your pod.
 
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
 To add a moderation rule to a user:
 
 ```{tabbed} Desktop

@@ -1,6 +1,12 @@
 # Handle reported users
 
-If a user has reported another user on your pod, you need to open the reported user's moderation page. To do this:
+If a user has reported another user on your pod, you can make changes to the reported user's profile. Use the user's moderation page to take the appropriate steps to handle the report.
+
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
+To open a user's moderation page:
 
 ```{tabbed} Desktop
 

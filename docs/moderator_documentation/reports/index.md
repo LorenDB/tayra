@@ -1,4 +1,4 @@
-# Reports
+# Handle reports
 
 As a Funkwhale moderator, you have extra permissions. These permissions enable you to handle reports submitted by users and anonymous browsers.
 

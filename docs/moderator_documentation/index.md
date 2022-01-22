@@ -1,6 +1,11 @@
 # Get started
 
-{term}`Pod` moderators are responsible for enforcing the rules of a pod. Follow the guides in our moderator documentation to handle moderation tasks.
+{term}`Pod` moderators are responsible for enforcing the rules of a pod. Moderation permissions enable moderators to provide specific tasks:
+
+- {guilabel}`Moderation` – enables the moderator to moderate users, domains, and the allow-list.
+- {guilabel}`Library` – enables the moderator to make changes to library content. This includes deleting local objects and handling edit suggestions.
+
+Follow the guides in our moderator documentation to handle moderation tasks.
 
 ```{contents}
 :local:
@@ -13,6 +18,10 @@ One of the most important duties of a moderator is handling reports. If a user f
 ## Moderate your pod's users
 
 As a moderator, you are responsible for moderating the behavior of users on your pod. Funkwhale provides you with tools to help you handle users that violate your pod's rules. Check out our [Moderate your pod's users](internal_users/index.md) section for more information.
+
+## Moderate content on your pod
+
+Funkwhale's moderation tools enable moderators to handle the content on a pod. This means you can update, delete, or hide content. It also enables you to approve or reject edits submitted by users on your pod. Check out the guides in the [Moderate content on your pod](content/index.md) for more information.
 
 ## Moderate external domains
 

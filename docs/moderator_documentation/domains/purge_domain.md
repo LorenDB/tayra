@@ -4,7 +4,13 @@
 Purging a domain's data removes all objects and caches associated to that domain. This impacts users who have objects from these domains in their libraries.
 ```
 
-When users follow content from another domain that content is visible on your {term}`pod`. If a domain hosts illegal or offensive content you can purge the content associated with it. To do this:
+When users follow content from another domain that content is visible on your {term}`pod`. If a domain hosts illegal or offensive content you can purge the content associated with it.
+
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
+To purge content from a domain:
 
 ```{tabbed} Desktop
 

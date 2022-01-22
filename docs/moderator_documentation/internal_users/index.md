@@ -10,7 +10,7 @@ caption: Moderate users
 maxdepth: 1
 ---
 
-manage_users
+../reports/handle_users.md
 
 ```
 

@@ -6,6 +6,11 @@ Deleting reported objects is irreversible. This action deletes the associated fi
 
 You can handle content reports from the {guilabel}`Reports` page or from the reported object's moderation page. You only need to open the moderation page to edit objects.
 
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+- {guilabel}`Library` – enables the moderator to delete objects.
+```
+
 ```{contents}
 :local:
 ```

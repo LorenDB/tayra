@@ -2,6 +2,10 @@
 
 Use internal notes to add information to a report. This can be a summary of your actions or an update on your investigation. Internal notes are only visible to pod admins and moderators.
 
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
 ## Add notes to a report
 
 You can add notes to __Unresolved__ and __Resolved__ reports. To add an internal note:

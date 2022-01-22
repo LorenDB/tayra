@@ -6,6 +6,10 @@ If you have allow-listing enabled, you need to add a domain to your allow-list t
 :local:
 ```
 
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
 ## Add a new domain
 
 To add a domain that is not currently in your domains list:

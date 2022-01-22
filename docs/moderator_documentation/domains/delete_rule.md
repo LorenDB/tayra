@@ -1,6 +1,12 @@
 # Delete a moderation rule
 
-If you no longer need a moderation rule, you can delete it completely. To do this:
+If you no longer need a moderation rule, you can delete it completely. This allows the other server to interact with your pod normally.
+
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
+To delete an existing moderation rule:
 
 ```{tabbed} Desktop
 

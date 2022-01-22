@@ -1,6 +1,12 @@
 # Remove a domain from your allow-list
 
-You can remove a domain from your {term}`pod's <Pod>` allow-list to stop communicating with it. To do this:
+You can remove a domain from your {term}`pod's <Pod>` allow-list to stop communicating with it.
+
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
+To remove a domain from your allow-list:
 
 ```{tabbed} Desktop
 

@@ -6,6 +6,10 @@ Purging a domain's data removes all objects and caches associated to that domain
 
 Add moderation rules to domains to control how they can interact with your {term}`pod`. Moderation rules enable you to restrict content from a domain showing on your pod.
 
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
 To add a moderation rule to a domain:
 
 ```{tabbed} Desktop

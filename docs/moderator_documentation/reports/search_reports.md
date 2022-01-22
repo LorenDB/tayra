@@ -2,6 +2,10 @@
 
 The {guilabel}`Reports` page contains filters that enable you to search for reports. Use these filters to find reports by category, status, or key words.
 
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
 ```{tabbed} Desktop
 
 1. Log in to your {term}`pod`.

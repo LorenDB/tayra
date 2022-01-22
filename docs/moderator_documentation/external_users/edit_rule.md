@@ -4,7 +4,13 @@
 Purging a user's data removes all objects and caches associated to that user. This impacts users who have objects from these users in their libraries.
 ```
 
-You can change a moderation rule on a user at any time. To do this:
+You can change a moderation rule on a user at any time.
+
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
+To update an existing moderation rule:
 
 ```{tabbed} Desktop
 

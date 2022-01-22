@@ -4,7 +4,13 @@
 Purging a user's data removes all objects and caches associated to that user. This impacts users who have objects from these users in their libraries.
 ```
 
-When users follow users from another domain their content is visible on your {term}`pod`. If a user posts illegal or offensive content you can purge the content associated with them. To do this:
+When users follow users from another domain their content is visible on your {term}`pod`. If a user posts illegal or offensive content you can purge the content associated with them.
+
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
+To purge a user's content:
 
 ```{tabbed} Desktop
 

@@ -2,6 +2,10 @@
 
 When a user reports an object on your {term}`pod`, the report gets sent to a moderation queue. You can check this moderation queue to handle any reports that users have submitted.
 
+```{dropdown} Required permissions
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+```
+
 ## Check the Reports page
 
 You can see a list of unresolved reports by going to the {guilabel}`Reports` page. To do this:
