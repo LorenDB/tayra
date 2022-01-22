@@ -33,7 +33,8 @@ caption: Admin documentation
 hidden: true
 ---
 
-admin/index
+administrator_documentation/index
+administrator_documentation/installation_docs/index
 
 ```
 
@@ -126,7 +127,7 @@ Want to host your own Funkwhale pod? Our admin documentation guides you through 
 
 +++
 
-```{link-button} admin/index
+```{link-button} administrator_documentation/index
 :type: ref
 :text: Get started
 :classes: btn-outline-primary btn-block stretched-link
