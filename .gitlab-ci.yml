@@ -314,6 +314,7 @@ docker_published_non-release:
 docker_all_in_one_release:
   stage: deploy
   image: egon0/docker-with-buildx-and-git:bash
+  allow_failure: true
   services:
     - docker:20-dind
   variables:
