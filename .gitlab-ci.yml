@@ -125,7 +125,6 @@ eslint:
   interruptible: true
   image: node:12-buster
   stage: lint
-  allow_failure: true
   before_script:
     - cd front
     - yarn install
