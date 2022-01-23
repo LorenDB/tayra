@@ -9,7 +9,7 @@ import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager as BaseUserManager
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.urls import reverse

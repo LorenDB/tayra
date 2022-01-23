@@ -3,7 +3,7 @@ import urllib.parse
 import uuid
 
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
@@ -198,7 +198,7 @@ class Actor(models.Model):
     private_key = models.TextField(max_length=5000, null=True, blank=True)
     creation_date = models.DateTimeField(default=timezone.now)
     last_fetch_date = models.DateTimeField(default=timezone.now)
-    manually_approves_followers = models.NullBooleanField(default=None)
+    manually_approves_followers = models.BooleanField(default=None, null=True)
     followers = models.ManyToManyField(
         to="self",
         symmetrical=False,
@@ -488,7 +488,7 @@ class AbstractFollow(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     creation_date = models.DateTimeField(default=timezone.now)
     modification_date = models.DateTimeField(auto_now=True)
-    approved = models.NullBooleanField(default=None)
+    approved = models.BooleanField(default=None, null=True)
 
     class Meta:
         abstract = True

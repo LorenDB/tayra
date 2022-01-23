@@ -381,6 +381,9 @@ MIGRATION_MODULES = {
     "sites": "funkwhale_api.contrib.sites.migrations",
 }
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+# see https://docs.djangoproject.com/en/4.0/releases/3.2/
+
 # GENERAL CONFIGURATION
 # ------------------------------------------------------------------------------
 # Local time zone for this installation. Choices can be found here:

@@ -2,7 +2,7 @@ import uuid
 import magic
 import mimetypes
 
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
@@ -116,10 +116,10 @@ class Mutation(models.Model):
 
     type = models.CharField(max_length=100, db_index=True)
     # None = no choice, True = approved, False = refused
-    is_approved = models.NullBooleanField(default=None)
+    is_approved = models.BooleanField(default=None, null=True)
 
     # None = not applied, True = applied, False = failed
-    is_applied = models.NullBooleanField(default=None)
+    is_applied = models.BooleanField(default=None, null=True)
     creation_date = models.DateTimeField(default=timezone.now, db_index=True)
     applied_date = models.DateTimeField(null=True, blank=True, db_index=True)
     summary = models.TextField(max_length=2000, null=True, blank=True)

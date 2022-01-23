@@ -237,7 +237,9 @@ class ActorSerializer(jsonld.JsonLdSerializer):
         choices=[getattr(contexts.AS, c[0]) for c in models.TYPE_CHOICES]
     )
     preferredUsername = serializers.CharField()
-    manuallyApprovesFollowers = serializers.NullBooleanField(required=False)
+    manuallyApprovesFollowers = serializers.BooleanField(
+        required=False, allow_null=True
+    )
     name = serializers.CharField(
         required=False, max_length=200, allow_blank=True, allow_null=True
     )
