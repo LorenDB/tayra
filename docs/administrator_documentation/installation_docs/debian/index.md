@@ -7,21 +7,17 @@ We support [Debian](https://debian.org) and Debian-based Linux distributions. Fo
 :depth: 1
 ```
 
-## 1. Install Funkwhale dependencies
-
-To install Funkwhale on your server, you first need to install its dependencies. We provide all dependencies in a single file to enable you to install everything at once.
-
-### Before you begin
+## Before you begin
 
 Set a `FUNKWHALE_VERSION` variable to the version you want to install. You will use this version for all commands in this guide.
 
-```{code} bash
-export FUNKWHALE_VERSION=1.2.1
+```{parsed-literal}
+export FUNKWHALE_VERSION={sub-ref}`version`
 ```
 
-### Install Funkwhale dependencies
+## 1. Install Funkwhale dependencies
 
-To install all Funkwhale dependencies, you need to download the dependencies file. You can pass the information from this file to `apt` using the following command:
+To install Funkwhale on your server, you first need to install its dependencies. We provide all dependencies in a single file to enable you to install everything at once. You can pass the information from this file to `apt` using the following command:
 
 ```{code} bash
 sudo apt install $(curl https://dev.funkwhale.audio/funkwhale/funkwhale/-/raw/$FUNKWHALE_VERSION/api/requirements.apt)
@@ -141,7 +137,7 @@ You're done! Poetry installs all Python dependencies.
 
 The environment file contains options you can use to control your Funkwhale pod. Follow these steps to get a working environment up and running.
 
-1. Download the `.env` file to your `/srv/funkwhale/config` directory.
+1. Download the `.env` template to your `/srv/funkwhale/config` directory.
 
    ```{code} bash
    curl -L -o /srv/funkwhale/config/.env "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/env.prod.sample"
@@ -166,7 +162,7 @@ The environment file contains options you can use to control your Funkwhale pod.
    ```
 
 5. Update the following settings:
-   - Paste the seccret key in the `DJANGO_SECRET_KEY` field.
+   - Paste the secret key in the `DJANGO_SECRET_KEY` field.
    - Populate the `DATABASE_URL` field:
 
       ```{code}
