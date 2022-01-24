@@ -123,11 +123,6 @@ export default {
         artist: this.$pgettext('*/*/*/Noun', 'Artist')
       }
     }
-  },
-  methods: {
-    updatePage: function (page) {
-      this.$emit('page-changed', page)
-    }
   }
 }
 </script>
