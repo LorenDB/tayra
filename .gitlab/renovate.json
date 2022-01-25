@@ -1,8 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "poetry": {
-    "fileMatch": ["api/pyproject.toml"]
-  },
   "prConcurrentLimit": 1,
   "ignoreDeps": ["$CI_REGISTRY/funkwhale/backend-test-docker"],
   "rangeStrategy": "bump",
