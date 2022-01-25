@@ -19,6 +19,12 @@ This guide assumes you are using a [Debian](https://debian.org)-based system.
    ```
 
 - Install [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
+- Install `curl`.
+
+   ```{code} bash
+   sudo apt update # update apt cache
+   sudo apt install curl
+   ```
 
 ## 1. Download the project files
 

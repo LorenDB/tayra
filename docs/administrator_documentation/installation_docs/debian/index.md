@@ -9,11 +9,18 @@ We support [Debian](https://debian.org) and Debian-based Linux distributions. Fo
 
 ## Before you begin
 
-Set a `FUNKWHALE_VERSION` variable to the version you want to install. You will use this version for all commands in this guide.
+- Set a `FUNKWHALE_VERSION` variable to the version you want to install. You will use this version for all commands in this guide.
 
-```{parsed-literal}
-export FUNKWHALE_VERSION={sub-ref}`version`
-```
+   ```{parsed-literal}
+   export FUNKWHALE_VERSION={sub-ref}`version`
+   ```
+
+- Install `curl`.
+
+   ```{code} bash
+   sudo apt update # update apt cache
+   sudo apt install curl
+   ```
 
 ## 1. Install Funkwhale dependencies
 
