@@ -357,3 +357,30 @@ That's it! You've created your Nginx file. Run the following command to check th
 ```{code} bash
 grep '${' /etc/nginx/sites-enabled/funkwhale.conf
 ```
+
+## 10. Set up TLS
+
+To enable your users to connect to your pod securely, you need to set up {abbr}`TLS (Transport Layer Security)`. To do this, we recommend using the <acme.sh> script.
+
+1. Download and run `acme.sh`. Replace `my@example.com` with your email address.
+
+   ```{code} bash
+   curl https://get.acme.sh | sh -s email=my@example.com
+   ```
+
+2. Generate a certificate. Replace `example.com` with your Funkwhale pod name.
+
+   ```{code} bash
+   acme.sh --issue -d example.com -w /home/funkwhale/public_html
+   ```
+
+3. Install the certificate to your Nginx config. Replace `example.com` with your Funkwhale pod name.
+
+   ```{code} bash
+   acme.sh --install-cert -d example.com \
+   --key-file       /path/to/keyfile/in/nginx/key.pem  \
+   --fullchain-file /path/to/fullchain/nginx/cert.pem \
+   --reloadcmd     "service nginx force-reload"
+   ```
+
+That's it! acme.sh renews your certificate every 60 days, so you don't need to about renewing it.
