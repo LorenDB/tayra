@@ -198,7 +198,7 @@ export default {
       additionalTracks: [],
       query: '',
       totalTracks: this.total,
-      currentPage: this.page,
+      currentPage: this.page
     }
   },
   computed: {
