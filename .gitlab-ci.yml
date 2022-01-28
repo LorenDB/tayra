@@ -15,9 +15,9 @@ variables:
   BUILD_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
 
 stages:
+  - build
   - review
   - lint
-  - build
   - test
   - deploy
   - deps
@@ -209,6 +209,35 @@ test_front:
       junit: front/test-results.xml
   tags:
     - docker
+
+build_docs:
+  stage: build
+  image: $CI_REGISTRY/funkwhale/backend-test-docker:latest
+  services:
+    - postgres:11
+    - redis:5
+  cache:
+    key: "$CI_PROJECT_ID__pip_cache"
+    paths:
+      - "$PIP_CACHE_DIR"
+  variables:
+    DATABASE_URL: "postgresql://postgres@postgres/postgres"
+    FUNKWHALE_URL: "https://funkwhale.ci"
+    DJANGO_SETTINGS_MODULE: config.settings.local
+    POSTGRES_HOST_AUTH_METHOD: trust
+    CACHE_URL: "redis://redis:6379/0"
+  before_script:
+    - cd api
+    - pip3 install poetry
+    - poetry install
+    - poetry run python manage.py migrate
+  script:
+    - poetry run python manage.py spectacular --file ../docs/schema.yml
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - docs/schema.yml
 
 build_front:
   stage: build
