@@ -15,8 +15,8 @@ caption: Choose your installation method
 maxdepth: 1
 ---
 
-quick_install/index
-docker/index
-debian/index
+quick_install
+docker
+debian
 
 ```
