@@ -1,4 +1,4 @@
-FROM alpine:3.13 as builder
+FROM alpine:3.15 as builder
 
 RUN \
     echo 'installing dependencies' && \
@@ -54,7 +54,7 @@ RUN \
     ; fi
 
 
-FROM alpine:3.13 as build-image
+FROM alpine:3.15 as build-image
 
 COPY --from=builder /venv /venv
 # emulate activation by prefixing PATH
