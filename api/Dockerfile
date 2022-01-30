@@ -1,4 +1,4 @@
-FROM alpine:3.15 as builder
+FROM alpine:3.14 as builder
 
 RUN \
     echo 'installing dependencies' && \
