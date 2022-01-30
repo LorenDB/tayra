@@ -54,7 +54,7 @@ RUN \
     ; fi
 
 
-FROM alpine:3.15 as build-image
+FROM alpine:3.14 as build-image
 
 COPY --from=builder /venv /venv
 # emulate activation by prefixing PATH
