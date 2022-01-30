@@ -41,7 +41,7 @@ RUN \
     # is why we need to use the package shipped by Alpine Linux, which is currently
     # version 3.3.2. Since poetry does not allow in-place dependency pinning, we need
     # to install the deps using pip.
-    poetry export --without-hashes | grep -v cryptography | pip3 install -r /dev/stdin cryptography==3.3.2 && \
+    poetry export --without-hashes | grep -v cryptography | pip3 install -r /dev/stdin cryptography==3.3.2 autobahn==21.3.1 && \
     rm -rf $PIP_DOWNLOAD_CACHE
 
 ARG install_dev_deps=0
