@@ -1289,16 +1289,16 @@
   dependencies:
     "@vue/cli-shared-utils" "^4.5.15"
 
-"@vue/cli-plugin-unit-mocha@4.2.3":
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-unit-mocha/-/cli-plugin-unit-mocha-4.2.3.tgz#b7c926799f90b845d9623d4714dd670a473ee36b"
-  integrity sha512-6fNBQ6qpvvbXgafvT7SyVNhY4bZpeOr1Klb3DHYa+w55AWjMWbiDSp+xpL3X1OkTO2U7YUUFZkRuvTpy5FW4Dw==
+"@vue/cli-plugin-unit-mocha@4.5.15":
+  version "4.5.15"
+  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-unit-mocha/-/cli-plugin-unit-mocha-4.5.15.tgz#86f625e54d759334822453b0e03ed4af799e7735"
+  integrity sha512-ZCUnZynnSe69zyEdPa7VLMR/4IpMykGTkZQHmvqP9KYlz0QtM7UkCxYcL5xqRcnh4lda8rmKasMVnLPD0NUbPw==
   dependencies:
-    "@vue/cli-shared-utils" "^4.2.3"
+    "@vue/cli-shared-utils" "^4.5.15"
     jsdom "^15.2.1"
     jsdom-global "^3.0.2"
     mocha "^6.2.2"
-    mochapack "^1.1.13"
+    mochapack "^1.1.15"
 
 "@vue/cli-plugin-vuex@^4.2.3":
   version "4.5.15"
@@ -6569,7 +6569,7 @@ mocha@^6.2.2:
     yargs-parser "13.1.2"
     yargs-unparser "1.6.0"
 
-mochapack@^1.1.13:
+mochapack@^1.1.15:
   version "1.1.15"
   resolved "https://registry.yarnpkg.com/mochapack/-/mochapack-1.1.15.tgz#426c793b871ed006c781172da2b15f612f11f2dc"
   integrity sha512-/gOsgJk3CWlNiOdef7hrNhp37VpatB9IiWzSCxS2p8pG21R7NAKJBBsU5T0eUWT9oz1NQhyubXdQgh51U7oVZA==
