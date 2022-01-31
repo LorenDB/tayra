@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2022-01-28 06:36+0000\n"
+"PO-Revision-Date: 2022-02-01 17:36+0000\n"
 "Last-Translator: Michael Long <mchobbylong@gmail.com>\n"
 "Language-Team: none\n"
 "Language: zh_Hans\n"
@@ -136,7 +136,7 @@ msgstr[0] "%{ albumsCount }张专辑中的%{ count }首歌曲"
 msgctxt "Content/Radio/Table.Paragraph/Short"
 msgid "%{ count } track matching combined filters"
 msgid_plural "%{ count } tracks matching combined filters"
-msgstr[0] "%{ count }首歌曲符合搜索条件"
+msgstr[0] "%{ count } 首歌曲符合搜索条件"
 
 #: front/src/components/mixins/PlayOptions.vue:177
 #: front/src/components/mixins/PlayOptions.vue:178
@@ -159,7 +159,7 @@ msgstr "%{ hours }小时{ minutes } 分钟"
 #: src/components/audio/Player.vue:119
 msgctxt "Sidebar/Queue/Text"
 msgid "%{ index } of %{ length }"
-msgstr "%{ length }中的第%{ index }首"
+msgstr "%{ length } 中的第 %{ index } 首"
 
 #: front/src/components/common/Duration.vue:3
 msgctxt "Content/*/Paragraph"
@@ -260,33 +260,33 @@ msgstr "关于%{instanceUrl}"
 #: front/src/components/Footer.vue:81 src/components/Home.vue:98
 msgctxt "Footer/*/Title/Short"
 msgid "About Funkwhale"
-msgstr "关于Funkwhale"
+msgstr "关于 Funkwhale"
 
 #: front/src/components/Home.vue:18
 msgctxt "Content/Home/Header"
 msgid "About this Funkwhale pod"
-msgstr "关于这个Funkwhale"
+msgstr "关于此 Funkwhale 实例"
 
 #: front/src/components/channels/LicenseSelect.vue:18
 msgctxt "Content/*/*"
 msgid "About this license"
-msgstr "关于这个许可证"
+msgstr "关于此许可证"
 
 #: front/src/components/About.vue:89 src/components/AboutPod.vue:18
 #: front/src/components/AboutPod.vue:47
 msgctxt "Content/About/Header"
 msgid "About this pod"
-msgstr "关于这个实例"
+msgstr "关于此实例"
 
 #: front/src/components/About.vue:171
 msgctxt "Content/About/Paragraph"
 msgid "About this pod"
-msgstr "关于这个实例"
+msgstr "关于此实例"
 
 #: front/src/components/Sidebar.vue:240
 msgctxt "Sidebar/*/List item.Link"
 msgid "About this pod"
-msgstr "关于这个实例"
+msgstr "关于此实例"
 
 #: front/src/views/library/Edit.vue:65
 msgctxt "Content/Library/Button.Label"
@@ -307,7 +307,7 @@ msgstr "禁止访问"
 #: front/src/components/mixins/Translations.vue:101
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to audio files, libraries, artists, albums and tracks"
-msgstr "查看音频文件，曲库，音乐人，专辑和歌曲"
+msgstr "访问音频文件，曲库，音乐人，专辑和歌曲"
 
 #: front/src/components/mixins/Translations.vue:124
 #: front/src/components/mixins/Translations.vue:125
@@ -331,55 +331,55 @@ msgstr "访问编辑"
 #: front/src/components/mixins/Translations.vue:105
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to favorites"
-msgstr "访问收藏夹"
+msgstr "访问收藏"
 
 #: front/src/components/mixins/Translations.vue:112
 #: front/src/components/mixins/Translations.vue:113
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to follows"
-msgstr "访问以下内容"
+msgstr "访问关注列表"
 
 #: front/src/components/mixins/Translations.vue:108
 #: front/src/components/mixins/Translations.vue:109
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to listening history"
-msgstr "获取收听历史"
+msgstr "访问收听历史"
 
 #: front/src/components/mixins/Translations.vue:140
 #: front/src/components/mixins/Translations.vue:141
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to moderation reports"
-msgstr "访问审核报告"
+msgstr "访问监管报告"
 
 #: front/src/components/mixins/Translations.vue:128
 #: front/src/components/mixins/Translations.vue:129
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to notifications"
-msgstr "获取通知"
+msgstr "访问通知"
 
 #: front/src/components/mixins/Translations.vue:116
 #: front/src/components/mixins/Translations.vue:117
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to playlists"
-msgstr "访问播放列表"
+msgstr "访问歌单"
 
 #: front/src/components/mixins/Translations.vue:120
 #: front/src/components/mixins/Translations.vue:121
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to radios"
-msgstr "获得收音机"
+msgstr "访问电台"
 
 #: front/src/components/mixins/Translations.vue:136
 #: front/src/components/mixins/Translations.vue:137
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to security settings such as password and authorization"
-msgstr "访问安全设置，如密码和授权"
+msgstr "访问安全设置，如密码和第三方应用授权"
 
 #: front/src/components/auth/ApplicationEdit.vue:33
 #: front/src/components/auth/ApplicationEdit.vue:26
 msgctxt "Content/Applications/Label"
 msgid "Access token"
-msgstr "存取令牌"
+msgstr "访问令牌"
 
 #: front/src/components/manage/library/UploadsTable.vue:132
 #: front/src/components/manage/library/UploadsTable.vue:42
@@ -447,23 +447,23 @@ msgstr "帐户"
 #: front/src/views/library/Edit.vue:43
 msgctxt "Content/Library/Table.Label"
 msgid "Action"
-msgstr "动作"
+msgstr "操作"
 
 #: front/src/components/common/ActionTable.vue:88
 msgctxt "Content/*/Paragraph"
 msgid "Action %{ action } was launched successfully on %{ count } element"
 msgid_plural "Action %{ action } was launched successfully on %{ count } elements"
-msgstr[0] "操作％{action}已在％{count}个元素上成功启动"
+msgstr[0] "操作 ％{action} 已对 ％{count} 个项目成功执行"
 
 #: front/src/components/library/FileUpload.vue:102
 msgctxt "*/*/*"
 msgid "Actions"
-msgstr "动作"
+msgstr "操作"
 
 #: front/src/components/admin/SignupFormBuilder.vue:57
 msgctxt "*/*/Form-builder,Help"
 msgid "Actions"
-msgstr "动作"
+msgstr "操作"
 
 #: front/src/components/common/ActionTable.vue:18
 #: front/src/components/library/radios/Builder.vue:98
@@ -471,7 +471,7 @@ msgstr "动作"
 #: front/src/components/manage/moderation/UserRequestCard.vue:145
 msgctxt "Content/*/*/Noun"
 msgid "Actions"
-msgstr "动作"
+msgstr "操作"
 
 #: front/src/components/manage/users/UsersTable.vue:88
 #: front/src/components/manage/users/UsersTable.vue:13
@@ -517,7 +517,7 @@ msgstr "活动"
 #: front/src/components/mixins/Translations.vue:8
 msgctxt "Content/Settings/Dropdown.Label/Noun"
 msgid "Activity visibility"
-msgstr "活动能见度"
+msgstr "活动可见性"
 
 #: front/src/views/admin/moderation/DomainsList.vue:32
 msgctxt "Content/Moderation/Button/Verb"
@@ -541,14 +541,14 @@ msgstr "添加域名"
 #: front/src/components/channels/UploadForm.vue:29
 msgctxt "Content/Channels/Popup.Paragraph"
 msgid "Add a license to your upload to ensure some freedoms to your public."
-msgstr "为你的上传添加一个许可证，以确保你的公众有一些自由。"
+msgstr "为您的上传添加一个许可证，以确保您的受众有部分自由。"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:78
 #: front/src/views/admin/moderation/AccountsDetail.vue:73
 #: front/src/views/admin/moderation/AccountsDetail.vue:15
 msgctxt "Content/Moderation/Button/Verb"
 msgid "Add a moderation policy"
-msgstr "添加一个适度策略"
+msgstr "添加一个监管策略"
 
 #: front/src/components/admin/SignupFormBuilder.vue:103
 msgctxt "*/*/Form-builder"
@@ -558,7 +558,7 @@ msgstr "添加一个新字段"
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:6
 msgctxt "Content/Moderation/Card.Button.Label/Verb"
 msgid "Add a new moderation rule"
-msgstr "增加一个新的适度规则"
+msgstr "添加一条新的监管规则"
 
 #: front/src/views/content/Home.vue:91
 msgctxt "Content/Library/Title/Verb"
@@ -569,7 +569,7 @@ msgstr "添加和管理内容"
 #: front/src/components/playlists/PlaylistModal.vue:31
 msgctxt "*/Playlist/Button.Label/Verb"
 msgid "Add anyways"
-msgstr "不管怎么说"
+msgstr "继续添加"
 
 #: front/src/components/Sidebar.vue:540 src/views/content/Base.vue:35
 msgctxt "*/Library/*/Verb"
@@ -579,12 +579,12 @@ msgstr "添加内容"
 #: front/src/components/library/radios/Builder.vue:65
 msgctxt "Content/Radio/Button.Label/Verb"
 msgid "Add filter"
-msgstr "添加过滤器"
+msgstr "添加过滤规则"
 
 #: front/src/components/library/radios/Builder.vue:53
 msgctxt "Content/Radio/Paragraph"
 msgid "Add filters to customize your radio"
-msgstr "添加过滤器来定制您的收音机"
+msgstr "添加过滤规则来定制您的电台"
 
 #: front/src/views/auth/ProfileOverview.vue:14
 #: src/views/auth/ProfileOverview.vue:26
@@ -597,13 +597,13 @@ msgstr "添加新的"
 #: front/src/components/manage/moderation/NoteForm.vue:18
 msgctxt "Content/Moderation/Button.Label/Verb"
 msgid "Add note"
-msgstr "加注"
+msgstr "添加注释"
 
 #: front/src/components/library/Albums.vue:78
 #: src/components/library/Artists.vue:87
 msgctxt "Content/*/Verb"
 msgid "Add some music"
-msgstr "加入一些音乐"
+msgstr "添加音乐"
 
 #: front/src/components/manage/moderation/DomainsTable.vue:250
 #: front/src/views/admin/moderation/DomainsDetail.vue:38
@@ -624,7 +624,7 @@ msgstr "添加到当前队列"
 #: front/src/components/favorites/TrackFavoriteIcon.vue:44
 msgctxt "Content/Track/*/Verb"
 msgid "Add to favorites"
-msgstr "添加到收藏夹"
+msgstr "添加到收藏"
 
 #: front/src/components/playlists/PlaylistModal.vue:5
 #: front/src/components/playlists/PlaylistModal.vue:2
