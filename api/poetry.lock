@@ -780,7 +780,7 @@ doc = ["sphinx", "sphinx-rtd-theme", "sphinxcontrib-spelling"]
 
 [[package]]
 name = "faker"
-version = "8.12.3"
+version = "8.16.0"
 description = "Faker is a Python package that generates fake data for you."
 category = "dev"
 optional = false
@@ -2056,7 +2056,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "3cd559ab2327e0389bef7fa4356f2f776bd0cbf6c26d62f6aaf3adbc7168176c"
+content-hash = "50db06be9b1a0cd9262ac25ea6c1be58837cdf5bfeb5ab0cccbf6a85bff406e6"
 
 [metadata.files]
 aiohttp = [
@@ -2444,8 +2444,8 @@ factory-boy = [
     {file = "factory_boy-3.2.1.tar.gz", hash = "sha256:a98d277b0c047c75eb6e4ab8508a7f81fb03d2cb21986f627913546ef7a2a55e"},
 ]
 faker = [
-    {file = "Faker-8.12.3-py3-none-any.whl", hash = "sha256:ef79c46612040de4af285361cd2f85ca1f2b6cfb5d4599e2bd0c3064f6eef71f"},
-    {file = "Faker-8.12.3.tar.gz", hash = "sha256:6ed41ed6c5093c5ad812aab51e81168ed64feb5aceb80f60e9ce97855227016e"},
+    {file = "Faker-8.16.0-py3-none-any.whl", hash = "sha256:bb10913b9d3ac2aa37180f816c82040e81f9e0c32cb08445533f293cec8930bf"},
+    {file = "Faker-8.16.0.tar.gz", hash = "sha256:d70b375d0af0e4c3abd594003691a1055a96281a414884e623d27bccc7d781da"},
 ]
 feedparser = [
     {file = "feedparser-6.0.8-py3-none-any.whl", hash = "sha256:1b7f57841d9cf85074deb316ed2c795091a238adb79846bc46dccdaf80f9c59a"},
