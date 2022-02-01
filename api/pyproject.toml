@@ -7,7 +7,7 @@ license = "GNU AGPLv3"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-Django = "==3.2.11"
+Django = "==3.2.12"
 setuptools = "==57.4.0"
 django-environ = "==0.4.5"
 Pillow = "==8.4.0"
