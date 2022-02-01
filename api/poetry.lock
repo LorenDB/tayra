@@ -694,7 +694,7 @@ requests = ">=2.13.0"
 
 [[package]]
 name = "django-redis"
-version = "5.0.0"
+version = "5.2.0"
 description = "Full featured redis cache backend for Django."
 category = "main"
 optional = false
@@ -702,7 +702,10 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 Django = ">=2.2"
-redis = ">=3.0.0"
+redis = ">=3,<4.0.0 || >4.0.0,<4.0.1 || >4.0.1"
+
+[package.extras]
+hiredis = ["redis[hiredis] (>=3,!=4.0.0,!=4.0.1)"]
 
 [[package]]
 name = "django-rest-auth"
@@ -2084,7 +2087,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "a463c281574ba29bf87850b0da11341e9bb727531096a53c3b072332f6339b33"
+content-hash = "f2412b0a424e8657be73a86ab0978d244fb198977171b68aa0f6edb872742a1c"
 
 [metadata.files]
 aiohttp = [
@@ -2480,8 +2483,8 @@ django-oauth-toolkit = [
     {file = "django_oauth_toolkit-1.7.0-py3-none-any.whl", hash = "sha256:596b1884a3351a7952ddab37ad151da4c15ef27c057bc99c37c703cfff7af59c"},
 ]
 django-redis = [
-    {file = "django-redis-5.0.0.tar.gz", hash = "sha256:048f665bbe27f8ff2edebae6aa9c534ab137f1e8fa7234147ef470df3f3aa9b8"},
-    {file = "django_redis-5.0.0-py3-none-any.whl", hash = "sha256:97739ca9de3f964c51412d1d7d8aecdfd86737bb197fce6e1ff12620c63c97ee"},
+    {file = "django-redis-5.2.0.tar.gz", hash = "sha256:8a99e5582c79f894168f5865c52bd921213253b7fd64d16733ae4591564465de"},
+    {file = "django_redis-5.2.0-py3-none-any.whl", hash = "sha256:1d037dc02b11ad7aa11f655d26dac3fb1af32630f61ef4428860a2e29ff92026"},
 ]
 django-rest-auth = [
     {file = "django-rest-auth-0.9.5.tar.gz", hash = "sha256:f11e12175dafeed772f50d740d22caeab27e99a3caca24ec65e66a8d6de16571"},
