@@ -15,7 +15,7 @@
     "postinstall": "yarn run fix-fomantic-css"
   },
   "dependencies": {
-    "axios": "0.21.4",
+    "axios": "0.25.0",
     "axios-auth-refresh": "2.2.8",
     "core-js": "3.20.3",
     "diff": "4.0.2",
