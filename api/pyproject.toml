@@ -62,7 +62,7 @@ uvicorn = {version = "==0.17.1", extras = ["standard"]}
 flake8 = "==3.9.2"
 pytest = "==6.2.5"
 pytest-cov = "==2.12.1"
-pytest-django = "==4.4.0"
+pytest-django = "==4.5.2"
 pytest-env = "==0.6.2"
 pytest-mock = "==3.6.1"
 pytest-randomly = "==3.10.3"
