@@ -49,7 +49,7 @@ django-cacheops = "==6.0"
 service-identity = "==21.1.0"
 click = "==8.0.3"
 Markdown = "==3.3.6"
-bleach = "==3.3.1"
+bleach = "==4.1.0"
 feedparser = "==6.0.8"
 watchdog = "==2.1.6"
 asgiref = "==3.5.0" #1516
