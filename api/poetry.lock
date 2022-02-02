@@ -596,7 +596,7 @@ six = ">=1.4.0"
 
 [[package]]
 name = "django-cleanup"
-version = "5.2.0"
+version = "6.0.0"
 description = "Deletes old files."
 category = "main"
 optional = false
@@ -2077,7 +2077,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "5e905028db934264d37d30bfd0b84ae64b3ac67a8de7e7f696b9f0288a8146af"
+content-hash = "0307cc5cd6a0b6de1b9ff5aa39ba6550fa60a47a7c2ab461d9bde2d62acbcee4"
 
 [metadata.files]
 aiohttp = [
@@ -2451,8 +2451,8 @@ django-cacheops = [
     {file = "django_cacheops-6.0-py2.py3-none-any.whl", hash = "sha256:ee38b969c9fc68f7c88e769b6c811e19563cca1ae08210d9f553ff758b6c3e17"},
 ]
 django-cleanup = [
-    {file = "django-cleanup-5.2.0.tar.gz", hash = "sha256:909d10ff574f5ce1a40fa63bd5c94c9ed866fd7ae770994c46cdf66c3db3e846"},
-    {file = "django_cleanup-5.2.0-py2.py3-none-any.whl", hash = "sha256:193cf69de54b9fc0a0f4547edbb3a63bbe01728cb029f9f4b7912098cc1bced7"},
+    {file = "django-cleanup-6.0.0.tar.gz", hash = "sha256:922e06ef8839c92bd3ab37a84db6058b8764f3fe44dbb4487bbca941d288280a"},
+    {file = "django_cleanup-6.0.0-py2.py3-none-any.whl", hash = "sha256:997feab3b1f7a2e84f71c29e83b1d664459ec0d4b1924977b1fa25b5babb8703"},
 ]
 django-cors-headers = [
     {file = "django-cors-headers-3.11.0.tar.gz", hash = "sha256:eb98389bf7a2afc5d374806af4a9149697e3a6955b5a2dc2bf049f7d33647456"},
