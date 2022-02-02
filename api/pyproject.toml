@@ -55,7 +55,7 @@ watchdog = "==2.1.6"
 asgiref = "==3.5.0" #1516
 ipython = "==7.31.1"
 python-ldap = "==3.4.0"
-django-auth-ldap = "==3.0.0"
+django-auth-ldap = "==4.0.0"
 uvicorn = {version = "==0.17.1", extras = ["standard"]}
 
 [tool.poetry.dev-dependencies]
