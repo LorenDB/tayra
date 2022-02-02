@@ -31,3 +31,18 @@
     display: block;
   }
 }
+
+#renderedDescription {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+#renderedDescription p {
+  margin: 0;
+}
+
+#renderedDescription *:not(:first-child) {
+  display: none;
+}

@@ -39,23 +39,24 @@
           >
             <div class="ui stackable grid">
               <div class="eight wide column">
-                <p v-if="!truncatedDescription">
+                <p v-if="!renderedDescription">
                   <translate translate-context="Content/Home/Paragraph">
                     No description available.
                   </translate>
                 </p>
-                <template v-if="truncatedDescription || rules">
+                <template v-if="renderedDescription || rules">
                   <div
-                    v-if="truncatedDescription"
-                    v-html="truncatedDescription"
+                    v-if="renderedDescription"
+                    id="renderedDescription"
+                    v-html="renderedDescription"
                   />
                   <div
-                    v-if="truncatedDescription"
+                    v-if="renderedDescription"
                     class="ui hidden divider"
                   />
                   <div class="ui relaxed list">
                     <div
-                      v-if="truncatedDescription"
+                      v-if="renderedDescription"
                       class="item"
                     >
                       <i class="arrow right icon" />
@@ -324,7 +325,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 import _ from '@/lodash'
 import { mapState } from 'vuex'
 import showdown from 'showdown'
@@ -372,22 +372,12 @@ export default {
     rules () {
       return _.get(this.nodeinfo, 'metadata.rules')
     },
-    truncatedDescription () {
+    renderedDescription () {
       if (!this.longDescription) {
         return
       }
       const doc = this.markdown.makeHtml(this.longDescription)
-      const nodes = $.parseHTML(doc)
-      const excerptParts = []
-      let handled = 0
-      nodes.forEach((n) => {
-        const content = n.innerHTML || n.nodeValue
-        if (handled < this.excerptLength && content.trim()) {
-          excerptParts.push(n)
-          handled += 1
-        }
-      })
-      return excerptParts.map((p) => { return p.outerHTML }).join('')
+      return doc
     },
     stats () {
       const data = {
