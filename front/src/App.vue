@@ -430,8 +430,8 @@ export default {
         url,
         [],
         { reconnectInterval: 1000 * 60 })
-      bridge.listen(function (event) {
-        self.$store.dispatch('ui/websocketEvent', event)
+      bridge.addEventListener("message", function(event) {
+        self.$store.dispatch('ui/websocketEvent', event.data)
       })
       bridge.socket.addEventListener('open', function () {
         console.log('Connected to WebSocket')
