@@ -25,7 +25,7 @@ stages:
 review_front:
   interruptible: true
   stage: review
-  image: node:12-buster
+  image: node:16-buster
   when: manual
   allow_failure: true
   variables:
@@ -123,7 +123,7 @@ flake8:
 
 eslint:
   interruptible: true
-  image: node:12-buster
+  image: node:16-buster
   stage: lint
   before_script:
     - cd front
@@ -187,7 +187,7 @@ test_api_3.10:
 test_front:
   interruptible: true
   stage: test
-  image: node:12-buster
+  image: node:16-buster
   before_script:
     - cd front
   only:
@@ -241,7 +241,7 @@ build_docs:
 
 build_front:
   stage: build
-  image: node:12-buster
+  image: node:16-buster
   before_script:
     - curl -L -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
     - chmod +x /usr/local/bin/jq
@@ -310,7 +310,7 @@ docker_publish_stable_release:
   script:
     # Check if this is the latest release
     - ./docs/get-releases-json.py | scripts/is-docker-latest.py $CI_COMMIT_TAG - && export DOCKER_LATEST_TAG="-t $IMAGE_LATEST" || export DOCKER_LATEST_TAG=;
-    - export major="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1)" 
+    - export major="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1)"
     - export minor="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1,2)"
     - cd api
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
