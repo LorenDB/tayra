@@ -139,7 +139,7 @@ eslint:
   interruptible: true
   services:
     - postgres:11
-    - redis:5
+    - redis:6
   stage: test
   cache:
     key: "$CI_PROJECT_ID__pip_cache"
@@ -215,7 +215,7 @@ build_docs:
   image: $CI_REGISTRY/funkwhale/backend-test-docker:latest
   services:
     - postgres:11
-    - redis:5
+    - redis:6
   cache:
     key: "$CI_PROJECT_ID__pip_cache"
     paths:
