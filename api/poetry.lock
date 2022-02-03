@@ -1429,14 +1429,15 @@ python-versions = "*"
 
 [[package]]
 name = "pyopenssl"
-version = "22.0.0"
+version = "21.0.0"
 description = "Python wrapper module around the OpenSSL library"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*"
 
 [package.dependencies]
-cryptography = ">=35.0"
+cryptography = ">=3.3"
+six = ">=1.5.2"
 
 [package.extras]
 docs = ["sphinx", "sphinx-rtd-theme"]
@@ -2084,7 +2085,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "30fd770679438369651768924ca0bf37cd3a63d1d39de1090e8f0fc17823b19e"
+content-hash = "981478469e3a6115efaee8e514b9b00b29a596f4f99db8498a6266ec932a7cbd"
 
 [metadata.files]
 aiohttp = [
@@ -3078,8 +3079,8 @@ pymemoize = [
     {file = "PyMemoize-1.0.3.tar.gz", hash = "sha256:07c7b8f592b1f03af74289ef0e554520022dae378ba36d0dbc1f80532130197b"},
 ]
 pyopenssl = [
-    {file = "pyOpenSSL-22.0.0-py2.py3-none-any.whl", hash = "sha256:ea252b38c87425b64116f808355e8da644ef9b07e429398bfece610f893ee2e0"},
-    {file = "pyOpenSSL-22.0.0.tar.gz", hash = "sha256:660b1b1425aac4a1bea1d94168a85d99f0b3144c869dd4390d27629d0087f1bf"},
+    {file = "pyOpenSSL-21.0.0-py2.py3-none-any.whl", hash = "sha256:8935bd4920ab9abfebb07c41a4f58296407ed77f04bd1a92914044b848ba1ed6"},
+    {file = "pyOpenSSL-21.0.0.tar.gz", hash = "sha256:5e2d8c5e46d0d865ae933bef5230090bdaf5506281e9eec60fa250ee80600cb3"},
 ]
 pyparsing = [
     {file = "pyparsing-3.0.7-py3-none-any.whl", hash = "sha256:a6c06a88f252e6c322f65faf8f418b16213b51bdfaece0524c1c1bc30c63c484"},
