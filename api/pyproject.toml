@@ -37,7 +37,7 @@ cryptography = "==36.0.1"
 requests-http-signature = {git = "https://github.com/agateblue/requests-http-signature.git", rev = "signature-header-support"}
 django-cleanup = "==6.0.0"
 requests = "==2.27.1"
-pyOpenSSL = "==20.0.1"
+pyOpenSSL = "==22.0.0"
 pydub = "==0.25.1"
 PyLD = "==2.0.3"
 aiohttp = "==3.8.1"
