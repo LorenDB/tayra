@@ -347,7 +347,7 @@ import $ from 'jquery'
 import moment from 'moment'
 import lodash from '@/lodash'
 import time from '@/utils/time'
-import createFocusTrap from 'focus-trap'
+import { createFocusTrap } from 'focus-trap'
 
 export default {
   components: {
