@@ -10,6 +10,63 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.2.2 (2020-02-04)
+------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Bugfixes:
+
+- Fix an issue where the tracks tab in a library doesn't show any tracks (#1683)
+- Fix an issue with the embedded player not showing any content (#1675)
+- Fix broken instance description if it contains a line break #1673
+
+Dependency Updates:
+
+Update dependency vue-template-compiler to 2.6.14
+Update dependency vue to ^2.6.14
+Update dependency vuex-persistedstate to ^2.7.1
+Update dependency vuedraggable to ^2.24.3
+Update dependency vue-lazyload to ^1.3.3
+Update dependency vue-plyr to ^5.1.3
+Update dependency vue-upload-component to ^2.8.22
+Update dependency vue-gettext to ^2.1.12
+Update dependency showdown to ^1.9.1
+Update dependency js-logger to ^1.6.1
+Update dependency register-service-worker to ^1.7.2
+Update dependency howler to ^2.2.3
+Update dependency fomantic-ui-css to ^2.8.8
+Update dependency diff to ^4.0.2
+Update dependency axios-auth-refresh to ^2.2.8
+
+Contributors to our Issues:
+
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Marcos Peña
+- Mathieu Jourdan
+- Micha Gläß-Stöcker
+- Ricardo
+- petitminion
+
+Contributors to our Merge Requests:
+
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Marcos Peña
+
+Committers
+
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Keunes
+- Marcos Peña
+
+
 1.2.1 (2022-01-06)
 ------------------
 
@@ -47,7 +104,7 @@ nztvar
 Upgrade instructions are available at
 https://docs.funkwhale.audio/admin/upgrading.html
 
-Due to a bug in our CI Pipeline frontend artifacts are not available at 
+Due to a bug in our CI Pipeline frontend artifacts are not available at
 https://dev.funkwhale.audio/funkwhale/funkwhale/builds/artifacts/1.2.0/download?job=build_front as they would usually.
 Please use this URL to get your frontend build: https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/81069/artifacts/download
 
