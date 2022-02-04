@@ -6,6 +6,7 @@
   "lockFileMaintenance": { "enabled": true },
   "dependencyDashboard": true,
   "baseBranches": ["stable", "develop"],
+  "semanticCommits": "disabled",
   "packageRules": [
     {
       "matchUpdateTypes": ["major", "minor"],
