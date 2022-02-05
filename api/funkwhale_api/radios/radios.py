@@ -330,6 +330,5 @@ class RecentlyAdded(SessionRadio):
         date = datetime.date.today() - datetime.timedelta(days=30)
         qs = super().get_queryset(**kwargs)
         return qs.filter(
-            Q(artist__content_category="music"),
-            Q(creation_date__gt=date),
+            Q(artist__content_category="music"), Q(creation_date__gt=date),
         )
