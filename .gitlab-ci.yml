@@ -152,7 +152,7 @@ eslint:
     paths:
       - front/node_modules
 
-.test_api:
+test_api:
   interruptible: true
   services:
     - postgres:14
@@ -183,23 +183,10 @@ eslint:
     reports:
       junit: api/report.xml
       cobertura: api/coverage.xml
-
-test_api_3.7:
-  extends: .test_api
-  image: $CI_REGISTRY/funkwhale/backend-test-docker:3.7
-
-test_api_3.8:
-  extends: .test_api
-  image: $CI_REGISTRY/funkwhale/backend-test-docker:3.8
-
-test_api_3.9:
-  extends: .test_api
-  image: $CI_REGISTRY/funkwhale/backend-test-docker:3.9
-
-test_api_3.10:
-  extends: .test_api
-  image: $CI_REGISTRY/funkwhale/backend-test-docker:3.10
-  allow_failure: true # We do not yet support python 3.10, see #1653
+  parallel:
+    matrix:
+      - PY_VER: ["3.7", "3.8", "3.9", "3.10"]
+  image: $CI_REGISTRY/funkwhale/backend-test-docker:$PY_VER
 
 test_front:
   interruptible: true
