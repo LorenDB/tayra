@@ -1,4 +1,4 @@
-import memoize.djangocache
+from cache_memoize import cache_memoize
 
 from django.urls import reverse
 
@@ -10,9 +10,6 @@ from funkwhale_api.moderation import models as moderation_models
 from funkwhale_api.music import utils as music_utils
 
 from . import stats
-
-store = memoize.djangocache.Cache("default")
-memo = memoize.Memoizer(store, namespace="instance:stats")
 
 
 def get():
@@ -72,7 +69,7 @@ def get():
     }
 
     if share_stats:
-        getter = memo(lambda: stats.get(), max_age=600)
+        getter = cache_memoize(600, prefix="memoize:instance:stats")(stats.get)
         statistics = getter()
         data["usage"]["users"]["total"] = statistics["users"]["total"]
         data["usage"]["users"]["activeHalfyear"] = statistics["users"][

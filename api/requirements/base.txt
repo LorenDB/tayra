@@ -32,8 +32,7 @@ django-rest-auth~=0.9.0
 ipython~=7.27.0
 mutagen~=1.45.0
 
-pymemoize~=1.0.0
-
+django-cache-memoize~=0.1.0
 django-dynamic-preferences~=1.10
 python-magic~=0.4.0
 channels~=3.0.3
