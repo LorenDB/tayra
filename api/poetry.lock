@@ -584,6 +584,17 @@ Django = ">=2.2"
 python-ldap = ">=3.1"
 
 [[package]]
+name = "django-cache-memoize"
+version = "0.1.10"
+description = "Django utility for a memoization decorator that uses the Django cache framework."
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.extras]
+dev = ["flake8", "tox", "twine", "therapist", "black"]
+
+[[package]]
 name = "django-cacheops"
 version = "6.0"
 description = "A slick ORM cache with automatic granular event-driven invalidation for Django."
@@ -1420,14 +1431,6 @@ frozendict = ["frozendict"]
 requests = ["requests"]
 
 [[package]]
-name = "pymemoize"
-version = "1.0.3"
-description = "Simple memoizing module."
-category = "main"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "pyopenssl"
 version = "21.0.0"
 description = "Python wrapper module around the OpenSSL library"
@@ -2085,7 +2088,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "ca5f7edc67e0b0c9feeb5b24a24fa74517bced0bd4c52d663e62987a63cabb7c"
+content-hash = "795509eb06dc1c88a068fc192ab5c503fd20c23a807c3a783383384defacd1e9"
 
 [metadata.files]
 aiohttp = [
@@ -2453,6 +2456,10 @@ django-allauth = [
 django-auth-ldap = [
     {file = "django-auth-ldap-4.0.0.tar.gz", hash = "sha256:276f79e624ce083ce13f161387f65ff1c0efe83ef8a42f2b9830d43317b15239"},
     {file = "django_auth_ldap-4.0.0-py3-none-any.whl", hash = "sha256:94119c94981809124d3dc4bed974f71c7a980666896df626f556a88a5fe0b59c"},
+]
+django-cache-memoize = [
+    {file = "django-cache-memoize-0.1.10.tar.gz", hash = "sha256:63e8faa245a41c0dbad843807e9f21a6e59eba8e6e50df310fdf6485a6749843"},
+    {file = "django_cache_memoize-0.1.10-py3-none-any.whl", hash = "sha256:676299313079cde9242ae84db0160e80b1d44e8dd6bc9b1f4f1247e11b30c9e0"},
 ]
 django-cacheops = [
     {file = "django-cacheops-6.0.tar.gz", hash = "sha256:78e161ebd96a32e28e19ec7da31f2afed9e62a79726b8b5f0ed12dd16c2e5841"},
@@ -3077,9 +3084,6 @@ pygments = [
 ]
 pyld = [
     {file = "PyLD-2.0.3.tar.gz", hash = "sha256:287445f888c3a332ccbd20a14844c66c2fcbaeab3c99acd506a0788e2ebb2f82"},
-]
-pymemoize = [
-    {file = "PyMemoize-1.0.3.tar.gz", hash = "sha256:07c7b8f592b1f03af74289ef0e554520022dae378ba36d0dbc1f80532130197b"},
 ]
 pyopenssl = [
     {file = "pyOpenSSL-21.0.0-py2.py3-none-any.whl", hash = "sha256:8935bd4920ab9abfebb07c41a4f58296407ed77f04bd1a92914044b848ba1ed6"},

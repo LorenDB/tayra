@@ -27,7 +27,6 @@ django-versatileimagefield = "==2.2"
 django-filter = "==21.1"
 django-rest-auth = "==0.9.5"
 mutagen = "==1.45.1"
-PyMemoize = "==1.0.3"
 django-dynamic-preferences = "==1.11.0"
 python-magic = "==0.4.25"
 channels = "==3.0.4"
@@ -57,6 +56,7 @@ ipython = "==7.31.1"
 python-ldap = "==3.4.0"
 django-auth-ldap = "==4.0.0"
 uvicorn = {version = "==0.17.4", extras = ["standard"]}
+django-cache-memoize = "^0.1.10"
 
 [tool.poetry.dev-dependencies]
 flake8 = "==3.9.2"
