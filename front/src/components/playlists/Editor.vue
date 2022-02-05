@@ -301,7 +301,7 @@ export default {
         // if backendErrors isn't populated (e.g. duplicate track exceptions raised by
         // the playlist model), read directly from the response
         if (error.rawPayload.playlist) {
-          self.errored(error.rawPayload.playlist.non_field_errors)
+          self.errored(error.rawPayload.playlist)
         } else {
           self.errored(error.backendErrors)
         }
