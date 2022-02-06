@@ -258,6 +258,9 @@ function getURLParams () {
 export default {
   name: 'App',
   components: { Logo },
+  props: {
+    artistCover: { type: Object, required: false },
+  },
   data () {
     return {
       time,
@@ -455,7 +458,7 @@ export default {
           title: t.title,
           artist: t.artist,
           album: t.album,
-          cover: self.getCover((t.album || {}).cover),
+          cover: self.getCover((t || t.album).cover),
           sources: self.getSources(t.uploads)
         }
       })
