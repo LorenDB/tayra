@@ -113,7 +113,7 @@ export default {
   props: {
     type: { type: String, required: true },
     id: { type: Number, required: true },
-    cover: { type: Object, required: false },
+    cover: { type: Object, required: false, default: () => { return null } }
   },
   data () {
     const d = {

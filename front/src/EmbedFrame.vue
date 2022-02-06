@@ -259,7 +259,7 @@ export default {
   name: 'App',
   components: { Logo },
   props: {
-    artistCover: { type: Object, required: false },
+    artistCover: { type: Object, required: false, default: () => { return null } }
   },
   data () {
     return {
