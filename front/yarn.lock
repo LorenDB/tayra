@@ -3289,7 +3289,7 @@ core-js-compat@^3.20.0, core-js-compat@^3.20.2, core-js-compat@^3.6.5:
     browserslist "^4.19.1"
     semver "7.0.0"
 
-core-js@3.21.0:
+core-js@3.21.0, core-js@^3.10.1:
   version "3.21.0"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.21.0.tgz#f479dbfc3dffb035a0827602dd056839a774aa71"
   integrity sha512-YUdI3fFu4TF/2WykQ2xzSiTQdldLB4KVuL9WeAy5XONZYt5Cun/fpQvctoKbCgvPhmzADeesTk/j2Rdx77AcKQ==
@@ -3299,7 +3299,7 @@ core-js@^2.4.0, core-js@^2.6.5:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
   integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
 
-core-js@^3.20.0, core-js@^3.6.5:
+core-js@^3.6.5:
   version "3.20.3"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.20.3.tgz#c710d0a676e684522f3db4ee84e5e18a9d11d69a"
   integrity sha512-vVl8j8ph6tRS3B8qir40H7yw7voy17xL0piAjlbBUsH7WIfzoedL/ZOr1OV9FyZQLWXsayOJyV4tnRyXR85/ag==
@@ -7676,12 +7676,12 @@ pkg-dir@^4.1.0:
   dependencies:
     find-up "^4.0.0"
 
-plyr@^3.5.2:
-  version "3.6.12"
-  resolved "https://registry.yarnpkg.com/plyr/-/plyr-3.6.12.tgz#e64481f163f9188d783447aedbf424fefd2ee92f"
-  integrity sha512-42WhYpMS/FEyX2unSEvhYtj1RvJgWvOsjZQFDongOQHA4eVzsyr7b06bzVpinMAOVC9e5H7RCbK+6CCAFIl2VQ==
+"plyr@github:sampotts/plyr#develop":
+  version "3.6.9"
+  uid "1b835cb657b7a86e574f88ba7f7215d1fcafc4b4"
+  resolved "https://codeload.github.com/sampotts/plyr/tar.gz/1b835cb657b7a86e574f88ba7f7215d1fcafc4b4"
   dependencies:
-    core-js "^3.20.0"
+    core-js "^3.10.1"
     custom-event-polyfill "^1.0.7"
     loadjs "^4.2.0"
     rangetouch "^2.0.1"
@@ -10137,12 +10137,13 @@ vue-loader@^15.9.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-plyr@5.1.3:
-  version "5.1.3"
-  resolved "https://registry.yarnpkg.com/vue-plyr/-/vue-plyr-5.1.3.tgz#38da58f71b952c3dbfa8c7fccc5b2471a118c654"
-  integrity sha512-Nx9uyn7OUfJ4FlcWs4u2N1YHuAdVhmlc/CEbT8IvwFOU9WP/8nxwOxMoAycMWrHK23a4MdYjrADEKC2QHWsw4A==
+vue-plyr@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/vue-plyr/-/vue-plyr-7.0.0.tgz#938257e2a4def4582b5803a16087371a8e96209e"
+  integrity sha512-NvbO/ZzV1IxlBQQbQlon5Sk8hKuGAj3k4k0XVdi7gM4oSqu8mZMhJ3WM3FfAtNfV790jbLnb8P3dHYqaBqIv6g==
   dependencies:
-    plyr "^3.5.2"
+    plyr "github:sampotts/plyr#develop"
+    vue "^2.6.12"
 
 vue-router@3.5.3:
   version "3.5.3"
@@ -10175,7 +10176,7 @@ vue-upload-component@2.8.22:
   resolved "https://registry.yarnpkg.com/vue-upload-component/-/vue-upload-component-2.8.22.tgz#7a1573149a4afa5ca6e8c7e0bc70533925fe26b7"
   integrity sha512-AJpETqiZrgqs8bwJQpWTFrRg3i6s7cUodRRZVnb1f94Jvpd0YYfzGY4zluBqPmssNSkUaYu7EteXaK8aW17Osw==
 
-vue@2.6.14:
+vue@2.6.14, vue@^2.6.12:
   version "2.6.14"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
