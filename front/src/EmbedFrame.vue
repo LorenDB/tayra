@@ -35,6 +35,12 @@
           alt="Cover"
         >
         <img
+          v-else-if="artistCover"
+          height="120"
+          :src="artistCover"
+          alt="Cover"
+        >
+        <img
           v-else
           height="120"
           src="./assets/embed/default-cover.jpeg"
@@ -258,9 +264,6 @@ function getURLParams () {
 export default {
   name: 'App',
   components: { Logo },
-  props: {
-    artistCover: { type: Object, required: false, default: () => { return null } }
-  },
   data () {
     return {
       time,
@@ -275,6 +278,7 @@ export default {
       isLoading: true,
       theme: 'dark',
       currentIndex: -1,
+      artistCover: null,
       themes: {
         dark: {
           textColor: 'white'
@@ -385,6 +389,7 @@ export default {
       }
       if (type === 'artist') {
         this.fetchTracks({ artist: id, playable: true, include_channels: 'true', ordering: '-album__release_date,disc_number,position' })
+        this.fetchArtistCover(id)
       }
       if (type === 'playlist') {
         this.fetchTracks({}, `/api/v1/playlists/${id}/tracks/`)
@@ -461,6 +466,15 @@ export default {
           cover: self.getCover((t || t.album).cover),
           sources: self.getSources(t.uploads)
         }
+      })
+    },
+    fetchArtistCover (id) {
+      const self = this
+      self.isLoading = true
+      const url = `${this.baseUrl}/api/v1/artists/${id}/`
+      axios.get(url).then(response => {
+        self.isLoading = false
+        self.artistCover = response.data.cover.urls.medium_square_crop
       })
     },
     bindEvents () {

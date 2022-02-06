@@ -320,7 +320,6 @@
                   <div class="description">
                     <embed-wizard
                       :id="object.artist.id"
-                      :cover="object.artist.cover"
                       type="artist"
                     />
                   </div>

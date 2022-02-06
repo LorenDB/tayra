@@ -98,7 +98,6 @@
         scrolling="no"
         frameborder="no"
         :src="iframeSrc"
-        :artist-cover="cover"
       />
     </div>
   </div>
@@ -112,8 +111,7 @@ import _ from '@/lodash'
 export default {
   props: {
     type: { type: String, required: true },
-    id: { type: Number, required: true },
-    cover: { type: Object, required: false, default: () => { return null } }
+    id: { type: Number, required: true }
   },
   data () {
     const d = {
