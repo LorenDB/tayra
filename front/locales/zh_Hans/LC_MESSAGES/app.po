@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2022-02-08 08:36+0000\n"
+"PO-Revision-Date: 2022-02-09 13:36+0000\n"
 "Last-Translator: Michael Long <mchobbylong@gmail.com>\n"
 "Language-Team: none\n"
 "Language: zh_Hans\n"
@@ -44,7 +44,7 @@ msgstr[0] "%{ count } 位活跃用户"
 msgctxt "*/*/*"
 msgid "%{ count } episode"
 msgid_plural "%{ count } episodes"
-msgstr[0] "%{ count } 期单集"
+msgstr[0] "%{ count } 个节目"
 
 #: front/src/components/audio/ChannelCard.vue:12
 #: front/src/components/audio/ChannelSerieCard.vue:15
@@ -3161,7 +3161,7 @@ msgstr "如果您刚刚完成注册，您可能需要等待我们的审核团队
 #: front/src/views/channels/DetailBase.vue:8
 msgctxt "Content/Channels/Label"
 msgid "If you're using Mastodon or other fediverse applications, you can subscribe to this account:"
-msgstr "如果你正在使用 Mastodon 或其他联邦宇宙内的应用程序，你可以订阅这个账户："
+msgstr "如果您正在使用 Mastodon 或其他联邦宇宙内的应用程序，您可以订阅这个账户："
 
 #: front/src/components/channels/UploadForm.vue:55
 #: front/src/components/channels/UploadForm.vue:20
@@ -3509,7 +3509,7 @@ msgstr "曲库和上传"
 #: front/src/views/content/libraries/Form.vue:3
 msgctxt "Content/Library/Paragraph"
 msgid "Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family."
-msgstr "曲库帮助你整理和分享您的音乐。您可以上传自己的音乐到 Funkwhale，并与您的朋友和家人分享。"
+msgstr "曲库帮助您整理和分享您的音乐。您可以上传自己的音乐到 Funkwhale，并与您的朋友和家人分享。"
 
 #: front/src/views/library/DetailBase.vue:258
 msgctxt "*/*/*"
@@ -4312,7 +4312,7 @@ msgstr "这个电台还没有添加任何歌曲"
 #: front/src/components/favorites/List.vue:68
 msgctxt "Content/Home/Placeholder"
 msgid "No tracks have been added to your favorites yet"
-msgstr "目前还没有任何歌曲被添加到你的收藏中"
+msgstr "您的收藏内还没有任何歌曲"
 
 #: front/src/components/mixins/Translations.vue:10
 #: front/src/components/mixins/Translations.vue:11
@@ -6650,7 +6650,7 @@ msgstr "此注释将被删除。此操作不可逆转。"
 #: front/src/components/manage/moderation/ReportCard.vue:144
 msgctxt "Content/Moderation/Message"
 msgid "The object associated with this report was deleted."
-msgstr "报告的目标对象已被删除。"
+msgstr "报告所指对象已被删除。"
 
 #: front/src/components/playlists/Form.vue:23
 msgctxt "Content/Playlist/Error message.Title"
@@ -6954,7 +6954,7 @@ msgstr "账户将被禁止调用 Subsonic API。"
 #: front/src/components/manage/moderation/ReportCard.vue:497
 msgctxt "Content/Moderation/Popup,Paragraph"
 msgid "This will delete the object associated with this report and mark the report as resolved. The deletion is irreversible."
-msgstr "这将删除此报告的目标对象，并将报告标记为已解决。删除操作无法逆转。"
+msgstr "这将删除此报告所指的对象，并将报告标记为已解决。删除操作无法逆转。"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:61
 #: front/src/components/auth/SubsonicTokenForm.vue:15
@@ -7997,7 +7997,7 @@ msgstr "您有一个电台正在播放"
 #: front/src/components/channels/UploadForm.vue:4
 msgctxt "Popup/Channels/Paragraph"
 msgid "You have some draft uploads pending publication."
-msgstr "您有一些临时上传的内容未完成发布。"
+msgstr "您有一些暂存的内容未完成发布。"
 
 #: front/src/components/Queue.vue:42 src/components/Queue.vue:35
 msgctxt "Sidebar/Player/Error message.Paragraph"
