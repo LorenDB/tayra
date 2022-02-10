@@ -18,7 +18,7 @@
             >
             <img
               v-else
-              src="../../assets/embed/default-cover.jpeg"
+              src="../../assets/audio/default-cover.png"
               alt="Cover Image"
               class="ui fluid image track-cover-image"
             >
