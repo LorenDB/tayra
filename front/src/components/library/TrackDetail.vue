@@ -17,10 +17,10 @@
               class="ui fluid image track-cover-image"
             >
             <img
-            v-else
-            src="../../assets/embed/default-cover.jpeg"
-            alt="Cover Image"
-            class="ui fluid image track-cover-image"
+              v-else
+              src="../../assets/embed/default-cover.jpeg"
+              alt="Cover Image"
+              class="ui fluid image track-cover-image"
             >
             <h3 class="ui header">
               <translate
