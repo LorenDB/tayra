@@ -17,6 +17,11 @@
       "matchDepTypes": ["devDependencies"],
       "matchBaseBranches": ["stable"],
       "enabled": false
+    },
+    {
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "matchBaseBranches": ["develop"],
+      "automerge": true
     }
   ]
 }
