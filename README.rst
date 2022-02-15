@@ -27,7 +27,7 @@ If you found a vulnerability in Funkwhale, please report it on our Gitlab instan
 you have checked the ``This issue is confidential and should only be visible to team members with at least Reporter access.
 `` box.
 
-This will ensure only maintainers and developpers have access to the vulnerability. Thank you for your help!
+This will ensure that only maintainers and developers have access to the vulnerability. Thank you for your help!
 
 
 Translate
@@ -38,4 +38,4 @@ Translators willing to help can refer to `TRANSLATORS <TRANSLATORS.rst>`_ for in
 Code of Conduct
 ---------------
 
-`Our Code of Conduct <https://funkwhale.audio/code-of-conduct/>`_ applies to all the community spaces, including our GitLab instance. Please, take a moment to read it.
+`Our Code of Conduct <https://funkwhale.audio/en_GB/code-of-conduct/>`_ applies to all the community spaces, including our GitLab instance. Please, take a moment to read it.
