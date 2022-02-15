@@ -185,7 +185,7 @@ test_api:
 test_front:
   interruptible: true
   stage: test
-  image: node:12-buster
+  image: node:16-buster
   before_script:
     - cd front
   only:
