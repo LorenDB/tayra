@@ -60,7 +60,7 @@ django-cache-memoize = "0.1.10"
 
 [tool.poetry.dev-dependencies]
 flake8 = "==3.9.2"
-pytest = "==6.2.5"
+pytest = "==7.0.1"
 pytest-cov = "==3.0.0"
 pytest-django = "==4.5.2"
 pytest-env = "==0.6.2"
