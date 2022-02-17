@@ -234,14 +234,14 @@ webencodings = "*"
 
 [[package]]
 name = "boto3"
-version = "1.21.1"
+version = "1.21.2"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
 python-versions = ">= 3.6"
 
 [package.dependencies]
-botocore = ">=1.24.1,<1.25.0"
+botocore = ">=1.24.2,<1.25.0"
 jmespath = ">=0.7.1,<1.0.0"
 s3transfer = ">=0.5.0,<0.6.0"
 
@@ -250,7 +250,7 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.24.1"
+version = "1.24.2"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
@@ -2088,7 +2088,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "9754aecef2dac5d92716eae1f9824b1bc56f2d0eb4d6f497f2b5ede713cc5f25"
+content-hash = "94cb40ef7f589feaf1c4264c95653e2bf529f8e199a87c0abc95007f28529587"
 
 [metadata.files]
 aiohttp = [
@@ -2254,12 +2254,12 @@ bleach = [
     {file = "bleach-4.1.0.tar.gz", hash = "sha256:0900d8b37eba61a802ee40ac0061f8c2b5dee29c1927dd1d233e075ebf5a71da"},
 ]
 boto3 = [
-    {file = "boto3-1.21.1-py3-none-any.whl", hash = "sha256:d83e0f2dad07441c8d56542f5140e8cf264b05936e7bf64c88805ebda605cab9"},
-    {file = "boto3-1.21.1.tar.gz", hash = "sha256:9ce450f97e0368cf2535acfbc562b6684ca2ef4c9f58e36dda3ab0bac91f2b5e"},
+    {file = "boto3-1.21.2-py3-none-any.whl", hash = "sha256:50de4ae3dc9cbc3065b184247580160540273b25e7eaf72cdc18b979294a1b54"},
+    {file = "boto3-1.21.2.tar.gz", hash = "sha256:e46133e44d5600e3de6739c60af2cc47d23742234df149aab3ccff4f1edec64d"},
 ]
 botocore = [
-    {file = "botocore-1.24.1-py3-none-any.whl", hash = "sha256:fbeb774c4542f4e85a3348c1e9928a31da4f9d743669686fbd5290bf94e8cc03"},
-    {file = "botocore-1.24.1.tar.gz", hash = "sha256:913542189e1df4487e354df942b9013ded7a5dc6c4e9f11af996a6c7d4aa6334"},
+    {file = "botocore-1.24.2-py3-none-any.whl", hash = "sha256:d1547d0bd8428df2dc1ad95b227e271914bb01f8edbd16a45766465c2090bc9b"},
+    {file = "botocore-1.24.2.tar.gz", hash = "sha256:c017dd174285a07db4e1b844750c43550c1f51e8256e722f1e69030c4f6c78f1"},
 ]
 cached-property = [
     {file = "cached-property-1.5.2.tar.gz", hash = "sha256:9fa5755838eecbb2d234c3aa390bd80fbd3ac6b6869109bfc1b499f7bd89a130"},
