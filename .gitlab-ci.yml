@@ -158,6 +158,7 @@ test_api:
     - postgres:14
     - redis:6
   stage: test
+  retry: 1
   cache:
     key: "$CI_PROJECT_ID__pip_cache"
     paths:
