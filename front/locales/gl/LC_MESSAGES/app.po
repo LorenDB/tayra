@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2021-12-12 15:09+0000\n"
+"PO-Revision-Date: 2022-02-19 14:17+0000\n"
 "Last-Translator: ghose <xosem@disroot.org>\n"
 "Language-Team: none\n"
 "Language: gl\n"
@@ -940,7 +940,7 @@ msgstr "Aprobada e aplicada"
 #: front/src/components/auth/Logout.vue:5
 msgctxt "Content/Login/Title"
 msgid "Are you sure you want to log out?"
-msgstr "Tes certeza de querer desconectar?"
+msgstr "Tes certeza de querer saír?"
 
 #: front/src/components/AboutPod.vue:230 src/components/AboutPod.vue:18
 msgctxt "Content/About/*"
@@ -1141,7 +1141,7 @@ msgstr "tremendonomedacanle"
 #: front/src/views/auth/PasswordResetConfirm.vue:6
 msgctxt "Content/Signup/Link"
 msgid "Back to login"
-msgstr "Voltar a conectar"
+msgstr "Volve a entrar"
 
 #: front/src/components/auth/ApplicationEdit.vue:9
 #: front/src/components/auth/ApplicationEdit.vue:2
@@ -1207,7 +1207,7 @@ msgstr "Buscar…"
 #: front/src/components/library/Albums.vue:4
 msgctxt "Content/Album/Title"
 msgid "Browsing albums"
-msgstr "Mirando álbums"
+msgstr "Ollando álbums"
 
 #: front/src/components/library/Artists.vue:4
 msgctxt "Content/Artist/Title"
@@ -3758,12 +3758,12 @@ msgstr "Conta local"
 #: front/src/components/common/UserModal.vue:210
 msgctxt "*/*/Button.Label/Verb"
 msgid "Log in"
-msgstr "Conectar"
+msgstr "Acceder"
 
 #: front/src/components/Home.vue:115 src/views/auth/Login.vue:36
 msgctxt "Head/Login/Title"
 msgid "Log In"
-msgstr "Conectar"
+msgstr "Acceder"
 
 #: front/src/components/auth/SignupForm.vue:15 src/views/auth/Login.vue:5
 msgctxt "Content/Login/Title/Verb"
@@ -3773,28 +3773,28 @@ msgstr "Conecte coa súa conta Funkwhale"
 #: front/src/components/auth/Logout.vue:25
 msgctxt "Content/Login/Button.Label"
 msgid "Log in!"
-msgstr "Conecta!"
+msgstr "Entra!"
 
 #: front/src/components/common/UserMenu.vue:164
 #: front/src/components/common/UserModal.vue:193
 msgctxt "Sidebar/Login/List item.Link/Verb"
 msgid "Log out"
-msgstr "Desconectar"
+msgstr "Saír"
 
 #: front/src/components/auth/Logout.vue:58
 msgctxt "Head/Login/Title"
 msgid "Log Out"
-msgstr "Desconectar"
+msgstr "Saír"
 
 #: front/src/views/auth/Callback.vue:8
 msgctxt "*/Login/*"
 msgid "Logging in…"
-msgstr "Conectando…"
+msgstr "Accedendo…"
 
 #: front/src/components/Sidebar.vue:122 src/components/auth/LoginForm.vue:55
 msgctxt "*/Login/*/Verb"
 msgid "Login"
-msgstr "Conectar"
+msgstr "Acceder"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:155
 #: front/src/views/admin/moderation/AccountsDetail.vue:150
@@ -5002,7 +5002,7 @@ msgstr "Problema ao escanear"
 #: front/src/views/auth/PasswordResetConfirm.vue:54
 msgctxt "Content/Signup/Link/Verb"
 msgid "Proceed to login"
-msgstr "Ir a conectar"
+msgstr "Accede"
 
 #: front/src/views/channels/DetailOverview.vue:11
 #: front/src/views/channels/DetailOverview.vue:47
@@ -5666,7 +5666,7 @@ msgstr "Voltar a intentar as subidas"
 #: front/src/views/auth/EmailConfirm.vue:23
 msgctxt "Content/Signup/Link/Verb"
 msgid "Return to login"
-msgstr "Voltar a conectar"
+msgstr "Volver a entrar"
 
 #: front/src/components/library/ArtistDetail.vue:11
 msgctxt "Content/Moderation/Link"
@@ -6865,7 +6865,9 @@ msgstr "Esta instancia ofrece %{quota} de almacenamento a cada usuaria."
 #: front/src/components/auth/Settings.vue:503
 msgctxt "Popup/Settings/Paragraph"
 msgid "This is irreversible and will permanently remove your data from our servers. You will we immediatly logged out."
-msgstr "Esto non ten volta e eliminará permanentemente os teus datos dos nosos servidorese. Serás desconectado inmediatamente."
+msgstr ""
+"Esto non ten volta e eliminará permanentemente os teus datos dos nosos "
+"servidorese. Sairás inmediatamente."
 
 #: front/src/components/auth/Settings.vue:228
 msgctxt "Content/Settings/Paragraph"
@@ -7007,7 +7009,9 @@ msgstr "Esto vai eliminar o elemento asociado a esta denuncia e marcala como res
 #: front/src/components/auth/SubsonicTokenForm.vue:15
 msgctxt "Popup/Settings/Paragraph"
 msgid "This will log you out from existing devices that use the current password."
-msgstr "Será desconectada dos dispositivos existentes que utilicen o contrasinal actual."
+msgstr ""
+"Esto pechará sesión nos dispositivos existentes que utilicen o contrasinal "
+"actual."
 
 #: front/src/components/auth/Settings.vue:362
 msgctxt "Popup/Settings/Paragraph"
@@ -7046,7 +7050,9 @@ msgstr "Título"
 #: front/src/components/SetInstanceModal.vue:32
 msgctxt "Popup/Instance/Paragraph"
 msgid "To continue, please select the Funkwhale instance you want to connect to. Enter the address directly, or select one of the suggested choices."
-msgstr "Para continuar, escolle a instancia de Funkwhale a que te queres conectar. Introducir o enderezo directamente, ou escoller unha das opcións suxeridas."
+msgstr ""
+"Para continuar, elixe a instancia de Funkwhale á que te queres conectar. "
+"Escribe o enderezo directamente, ou elixe unha das opcións suxeridas."
 
 #: front/src/components/ShortcutsModal.vue:154
 msgctxt "Popup/Keyboard shortcuts/Table.Label/Verb"
@@ -7836,7 +7842,7 @@ msgstr "Non podemos eliminar a túa conta"
 #: front/src/components/auth/LoginForm.vue:4
 msgctxt "Content/Login/Error message.Title"
 msgid "We cannot log you in"
-msgstr "Non podemos conectala"
+msgstr "Non podemos darche acceso"
 
 #: front/src/components/auth/ApplicationForm.vue:4
 msgctxt "Content/*/Error message.Title"
@@ -7939,7 +7945,10 @@ msgstr "Vai subir música a súa biblioteca. Antes de seguir, asegúrese de que:
 #: front/src/components/SetInstanceModal.vue:28
 msgctxt "Popup/Login/Paragraph"
 msgid "You are currently connected to <a href=\"%{ url }\" target=\"_blank\">%{ hostname }&nbsp;<i class=\"external icon\"/></a>. If you continue, you will be disconnected from your current instance and all your local data will be deleted."
-msgstr "Estás conectada a <a href=\"%{ url }\" target=\"_blank\">%{ hostname }<i class=\"external icon\"/></a>. Se continúas serás desconectada da instancia actual e os teus datos serán eliminados."
+msgstr ""
+"Estás conectada a <a href=\"%{ url }\" target=\"_blank\">%{ hostname }<i "
+"class=\"external icon\"/></a>. Se continúas sairás da instancia actual e os "
+"teus datos serán eliminados."
 
 #: front/src/components/library/ArtistDetail.vue:6
 msgctxt "Content/Artist/Paragraph"
@@ -7949,7 +7958,7 @@ msgstr "Actualmente estás a ocultar contido relacionado con este artista."
 #: front/src/components/auth/Logout.vue:9
 msgctxt "Content/Login/Paragraph"
 msgid "You are currently logged in as %{ username }"
-msgstr "Está conectada como %{ username }"
+msgstr "Accedeches como %{ username }"
 
 #: front/src/components/library/FileUpload.vue:54
 msgctxt "Content/Library/List item"
@@ -7964,7 +7973,7 @@ msgstr "Estás utilizando a instancia Funkwhale en %{ url }"
 #: front/src/components/auth/Logout.vue:20
 msgctxt "Content/Login/Title"
 msgid "You aren't currently logged in"
-msgstr "Non estás conectada"
+msgstr "Non iniciaches sesión"
 
 #: front/src/components/moderation/FilterModal.vue:50
 #: front/src/components/moderation/FilterModal.vue:29
@@ -8071,7 +8080,7 @@ msgstr "Poderías ter que subscribirte á canle para ver o seu contido."
 #: front/src/components/channels/SubscribeButton.vue:64
 msgctxt "Popup/Message/Paragraph"
 msgid "You need to be logged in to subscribe to this channel"
-msgstr "Tes que estar conectada para subscribirte a esta canle"
+msgstr "Tes que iniciar sesión para subscribirte a esta canle"
 
 #: front/src/components/notifications/NotificationRow.vue:87
 msgctxt "Content/Notifications/Paragraph"
@@ -8081,7 +8090,7 @@ msgstr "Rexeitaches a solicitude de %{ username } para seguir \"%{ library }\""
 #: front/src/components/auth/Settings.vue:131
 msgctxt "Popup/Settings/List item"
 msgid "You will be logged out from this session and have to log in with the new one"
-msgstr "Será desconectada de esta sesión e deberá conectar co novo"
+msgstr "Pecharemos esta sesión e deberás acceder co novo"
 
 #: front/src/components/auth/LoginForm.vue:49
 #: src/components/auth/LoginForm.vue:2
@@ -8130,12 +8139,18 @@ msgstr "A solicitude da conta enviouse correctamente. Serás notificada por emai
 #: front/src/components/auth/SignupForm.vue:9
 msgctxt "Content/Signup/Form/Paragraph"
 msgid "Your account was successfully created. Please verify your e-mail address before trying to login."
-msgstr "Creouse correctamente a conta. Verifica o teu email antes de intentar conectarte."
+msgstr ""
+"Creouse correctamente a conta. Verifica o teu email antes de intentar "
+"acceder."
 
 #: front/src/components/auth/Settings.vue:471
 msgctxt "Content/Settings/Paragraph'"
 msgid "Your account will be deleted from our servers within a few minutes. We will also notify other servers who may have a copy of some of your data so they can proceed to deletion. Please note that some of these servers may be offline or unwilling to comply though."
-msgstr "Vaise eliminar a túa conta dos nosos servidores dentro duns minutos. Contactaremos con outros servidores que puidesen ter unha copia dos teus datos para que os borren. Por favor, ten en conta que algún de estos servidores podería estar desconectado ou non poder levar a fin a operación."
+msgstr ""
+"Vaise eliminar a túa conta dos nosos servidores dentro duns minutos. "
+"Contactaremos con outros servidores que puidesen ter unha copia dos teus "
+"datos para que os borren. Por favor, ten en conta que algún de estos "
+"servidores podería estar desconectado ou non poder levar a fin a operación."
 
 #: front/src/components/auth/Settings.vue:299
 msgctxt "Content/Settings/Title/Noun"
