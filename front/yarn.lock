@@ -9698,10 +9698,10 @@ terser@^5.7.2:
     source-map "~0.7.2"
     source-map-support "~0.5.20"
 
-text-clipper@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/text-clipper/-/text-clipper-1.3.0.tgz#9cdda9a36f955b3600d73dfffd7487143aac890f"
-  integrity sha512-6MjWFsTsXI8VyqqpGxTkb7685IPUInyJzG8sNhHHD2xbrnwv9xENQg5dAAabaFLIUa1QXDtRd406HYTauM010Q==
+text-clipper@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/text-clipper/-/text-clipper-2.2.0.tgz#4b81a4d01ffcc51096ceab84b26856f88643990a"
+  integrity sha512-tfHW2GUfXLGto6gx9JB3CFL9qgX8+SbX6db0oM1kqkbPsemAX5whdXf4da6r1V/7lij34J1oOODj+0j3crl0UA==
 
 text-table@^0.2.0:
   version "0.2.0"
