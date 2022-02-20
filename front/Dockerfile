@@ -1,7 +1,7 @@
 FROM node:16-buster
 
 # needed to compile translations
-RUN curl -L -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x /usr/local/bin/jq
+RUN apt-get update && apt-get install -y jq
 
 EXPOSE 8080
 WORKDIR /app/
