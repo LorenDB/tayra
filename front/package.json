@@ -30,7 +30,7 @@
     "register-service-worker": "1.7.2",
     "sanitize-html": "2.7.0",
     "sass": "1.49.8",
-    "showdown": "1.9.1",
+    "showdown": "2.0.0",
     "text-clipper": "1.3.0",
     "vue": "2.6.14",
     "vue-gettext": "2.1.12",
