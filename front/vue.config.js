@@ -5,7 +5,10 @@ const webpack = require('webpack');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 let plugins = [
   // do not include moment.js locales since it's quite heavy
-  new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+  new webpack.IgnorePlugin({
+    resourceRegExp: /^\.\/locale$/,
+    contextRegExp: /moment$/
+  }),
   new PreloadWebpackPlugin({
     rel: 'preload',
     include: ['audio', 'core', 'about']

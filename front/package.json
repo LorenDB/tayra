@@ -9,9 +9,9 @@
     "build": "scripts/i18n-compile.sh && vue-cli-service build",
     "test:unit": "vue-cli-service test:unit --reporter mocha-junit-reporter",
     "lint": "eslint --ext .js,.vue src",
+    "fix-fomantic-css": "scripts/fix-fomantic-css.sh",
     "i18n-compile": "scripts/i18n-compile.sh",
     "i18n-extract": "scripts/i18n-extract.sh",
-    "fix-fomantic-css": "scripts/fix-fomantic-css.sh",
     "postinstall": "yarn run fix-fomantic-css"
   },
   "dependencies": {
@@ -45,10 +45,10 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.17.0",
-    "@vue/cli-plugin-babel": "4.5.15",
-    "@vue/cli-plugin-pwa": "4.5.15",
-    "@vue/cli-plugin-unit-mocha": "5.0.1",
-    "@vue/cli-service": "4.5.15",
+    "@vue/cli-plugin-babel": "~5.0.1",
+    "@vue/cli-plugin-pwa": "~5.0.1",
+    "@vue/cli-plugin-unit-mocha": "~5.0.1",
+    "@vue/cli-service": "~5.0.1",
     "@vue/test-utils": "1.3.0",
     "chai": "4.3.6",
     "easygettext": "2.17.0",
