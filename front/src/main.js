@@ -19,16 +19,13 @@ import filters from '@/filters' // eslint-disable-line
 import { parseAPIErrors } from '@/utils'
 import globals from '@/components/globals' // eslint-disable-line
 import './registerServiceWorker'
+import '@/jquery'
+import '@/semantic'
 
 logger.default.info('Loading environment:', import.meta.env.NODE_ENV)
 logger.default.debug('Environment variables:', import.meta.env)
 
 sync(store, router)
-
-window.$ = window.jQuery = jQuery
-
-// NOTE: We cannot use normal import statements after doing some stuff, so we'll just await a dynamic import
-await import('./semantic.js')
 
 let APP = null
 
