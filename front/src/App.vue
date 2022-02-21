@@ -3,7 +3,7 @@
     id="app"
     :key="String($store.state.instance.instanceUrl)"
     :class="[$store.state.ui.queueFocused ? 'queue-focused' : '',
-    {'has-bottom-player': $store.state.queue.tracks.length > 0}]"
+             {'has-bottom-player': $store.state.queue.tracks.length > 0}]"
   >
     <!-- here, we display custom stylesheets, if any -->
     <link
@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import axios from 'axios'
 import _ from '@/lodash'
 import { mapState, mapGetters } from 'vuex'
@@ -59,11 +58,11 @@ import { getClientOnlyRadio } from '@/radios'
 import Player from '@/components/audio/Player.vue'
 import Queue from '@/components/Queue.vue'
 import PlaylistModal from '@/components/playlists/PlaylistModal.vue'
-import UploadModal from '@/components/channels/UploadModal.vue'
+import ChannelUploadModal from '@/components/channels/UploadModal.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import ServiceMessages from '@/components/ServiceMessages.vue'
 import SetInstanceModal from '@/components/SetInstanceModal.vue'
-import ShortcutsModel from '@/components/ShortcutsModal.vue'
+import ShortcutsModal from '@/components/ShortcutsModal.vue'
 import FilterModal from '@/components/moderation/FilterModal.vue'
 import ReportModal from '@/components/moderation/ReportModal.vue'
 
@@ -191,26 +190,6 @@ export default {
           self.$language.current = newValue
           return self.$store.commit('ui/momentLocale', 'en')
         }
-        import('./translations/en_GB.json').then((response) => {
-          Vue.$translations[newValue] = response.default[newValue]
-        }).finally(() => {
-          // set current language twice, otherwise we seem to have a cache somewhere
-          // and rendering does not happen
-          self.$language.current = 'noop'
-          self.$language.current = newValue
-        })
-        const momentLocale = newValue.replace('_', '-').toLowerCase()
-        import('moment/locale/en-gb.js').then(() => {
-          self.$store.commit('ui/momentLocale', momentLocale)
-        }).catch(() => {
-          console.log('No momentjs locale available for', momentLocale)
-          const shortLocale = momentLocale.split('-')[0]
-          import('moment/locale/en-gb.js').then(() => {
-            self.$store.commit('ui/momentLocale', shortLocale)
-          }).catch(() => {
-            console.log('No momentjs locale available for', shortLocale)
-          })
-        })
       }
     },
     currentTrack: {
@@ -293,7 +272,7 @@ export default {
       // 3. use the current url
       const defaultInstanceUrl =
         this.$store.state.instance.frontSettings.defaultServerUrl ||
-        import.meta.env.VUE_APP_INSTANCE_URL || this.$store.getters['instance/defaultUrl']()
+        process.env.VUE_APP_INSTANCE_URL || this.$store.getters['instance/defaultUrl']()
       this.$store.commit('instance/instanceUrl', defaultInstanceUrl)
     } else {
       // needed to trigger initialization of axios / service worker
@@ -434,11 +413,10 @@ export default {
       this.disconnect()
       const self = this
       const token = this.$store.state.auth.token
-      // let token = 'test'
       const bridge = new WebSocketBridge()
       this.bridge = bridge
       let url =
-        this.$store.getters['instance/absoluteUrl']('api/v1/activity?token=${token}')
+        this.$store.getters['instance/absoluteUrl'](`api/v1/activity?token=${token}`)
       url = url.replace('http://', 'ws://')
       url = url.replace('https://', 'wss://')
       bridge.connect(
@@ -457,7 +435,7 @@ export default {
       const albumArtist = (track.album) ? track.album.artist.name : null
       const artistName = (
         (track.artist) ? track.artist.name : albumArtist)
-      const text = '♫ ${trackTitle} – ${artistName} ♫'
+      const text = `♫ ${trackTitle} – ${artistName} ♫`
       return text
     },
     updateDocumentTitle () {
@@ -489,8 +467,8 @@ export default {
     },
     setTheme (theme) {
       const oldTheme = (theme === 'light') ? 'dark' : 'light'
-      document.body.classList.remove('theme-${oldTheme}')
-      document.body.classList.add('theme-${theme}')
+      document.body.classList.remove(`theme-${oldTheme}`)
+      document.body.classList.add(`theme-${theme}`)
     }
   }
 }
