@@ -158,7 +158,7 @@
 <script>
 import axios from 'axios'
 import moment from 'moment'
-import _ from '@/lodash'
+import _ from 'lodash'
 import Pagination from '@/components/Pagination.vue'
 import ActionTable from '@/components/common/ActionTable.vue'
 import OrderingMixin from '@/components/mixins/Ordering.vue'

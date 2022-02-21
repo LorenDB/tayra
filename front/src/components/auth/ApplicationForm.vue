@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import _ from '@/lodash'
+import _ from 'lodash'
 import axios from 'axios'
 import TranslationsMixin from '@/components/mixins/Translations.vue'
 

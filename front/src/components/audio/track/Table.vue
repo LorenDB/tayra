@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import _ from '@/lodash'
+import _ from 'lodash'
 import axios from 'axios'
 import TrackRow from '@/components/audio/track/Row.vue'
 import TrackMobileRow from '@/components/audio/track/MobileRow.vue'

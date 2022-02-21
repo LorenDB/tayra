@@ -125,7 +125,7 @@
 <script>
 
 import axios from 'axios'
-import _ from '@/lodash'
+import _ from 'lodash'
 import time from '@/utils/time.js'
 import Pagination from '@/components/Pagination.vue'
 import OrderingMixin from '@/components/mixins/Ordering.vue'

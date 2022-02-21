@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import _ from '@/lodash'
+import _ from 'lodash'
 import axios from 'axios'
 import PodcastTable from '@/components/audio/podcast/Table.vue'
 import TrackTable from '@/components/audio/track/Table.vue'

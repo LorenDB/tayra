@@ -20,7 +20,7 @@
 <script>
 import $ from 'jquery'
 
-import lodash from '@/lodash.js'
+import lodash from 'lodash'
 export default {
   props: { value: { type: Array, required: true } },
   watch: {

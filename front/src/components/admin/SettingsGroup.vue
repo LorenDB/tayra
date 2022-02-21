@@ -157,7 +157,7 @@
 
 <script>
 import axios from 'axios'
-import lodash from '@/lodash'
+import lodash from 'lodash'
 import SignupFormBuilder from '@/components/admin/SignupFormBuilder.vue'
 
 export default {

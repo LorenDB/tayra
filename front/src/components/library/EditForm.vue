@@ -240,7 +240,7 @@
 
 <script>
 import $ from 'jquery'
-import _ from '@/lodash.js'
+import _ from 'lodash'
 import axios from 'axios'
 import AttachmentInput from '@/components/common/AttachmentInput.vue'
 import EditList from '@/components/library/EditList.vue'

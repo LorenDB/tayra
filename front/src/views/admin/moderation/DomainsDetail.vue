@@ -458,7 +458,7 @@
 
 <script>
 import axios from 'axios'
-import lodash from '@/lodash'
+import lodash from 'lodash'
 
 import InstancePolicyForm from '@/components/manage/moderation/InstancePolicyForm.vue'
 import InstancePolicyCard from '@/components/manage/moderation/InstancePolicyCard.vue'

@@ -311,7 +311,7 @@
 </template>
 
 <script>
-import _ from '@/lodash.js'
+import _ from 'lodash'
 import axios from 'axios'
 import FileUploadWidget from './FileUploadWidget.vue'
 import FsBrowser from './FsBrowser.vue'

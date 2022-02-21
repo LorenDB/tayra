@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import _ from '@/lodash.js'
+import _ from 'lodash'
 import axios from 'axios'
 
 import EditCard from '@/components/library/EditCard.vue'

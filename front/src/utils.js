@@ -1,4 +1,4 @@
-import lodash from '@/lodash'
+import lodash from 'lodash'
 
 export function setUpdate (obj, statuses, value) {
   const updatedKeys = lodash.keys(obj)

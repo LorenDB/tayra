@@ -26,7 +26,7 @@
 
 <script>
 import TranslationsMixin from '@/components/mixins/Translations.vue'
-import lodash from '@/lodash'
+import lodash from 'lodash'
 export default {
   mixins: [TranslationsMixin],
   props: {

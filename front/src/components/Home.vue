@@ -325,7 +325,7 @@
 </template>
 
 <script>
-import _ from '@/lodash'
+import _ from 'lodash'
 import { mapState } from 'vuex'
 import showdown from 'showdown'
 import AlbumWidget from '@/components/audio/album/Widget.vue'

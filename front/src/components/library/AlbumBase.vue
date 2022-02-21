@@ -249,7 +249,7 @@
 
 <script>
 import axios from 'axios'
-import lodash from '@/lodash'
+import lodash from 'lodash'
 import PlayButton from '@/components/audio/PlayButton.vue'
 import TagsList from '@/components/tags/List.vue'
 import ArtistLabel from '@/components/audio/ArtistLabel.vue'

@@ -250,7 +250,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import _ from '@/lodash'
+import _ from 'lodash'
 import showdown from 'showdown'
 import { humanSize } from '@/filters'
 

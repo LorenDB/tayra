@@ -568,7 +568,7 @@
 <script>
 import axios from 'axios'
 import logger from '@/logging'
-import lodash from '@/lodash'
+import lodash from 'lodash'
 import $ from 'jquery'
 
 import InstancePolicyForm from '@/components/manage/moderation/InstancePolicyForm.vue'

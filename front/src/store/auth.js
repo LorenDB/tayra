@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import logger from '@/logging'
-import lodash from '@/lodash'
+import lodash from 'lodash'
 
 function getDefaultScopedTokens () {
   return {

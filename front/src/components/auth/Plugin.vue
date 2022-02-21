@@ -166,7 +166,7 @@
 
 <script>
 import axios from 'axios'
-import lodash from '@/lodash'
+import lodash from 'lodash'
 import showdown from 'showdown'
 export default {
   props: {

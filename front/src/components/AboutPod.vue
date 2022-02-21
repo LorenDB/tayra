@@ -434,7 +434,7 @@ We render some markdown to html here, the content is set by the admin so we shou
 
 <script>
 import { mapState } from 'vuex'
-import _ from '@/lodash'
+import _ from 'lodash'
 import showdown from 'showdown'
 
 export default {

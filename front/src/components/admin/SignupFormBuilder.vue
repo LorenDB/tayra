@@ -161,7 +161,7 @@
 </template>
 
 <script>
-import lodash from '@/lodash'
+import lodash from 'lodash'
 
 import SignupForm from '@/components/auth/SignupForm.vue'
 

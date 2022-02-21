@@ -201,7 +201,7 @@
 
 <script>
 import axios from 'axios'
-import _ from '@/lodash'
+import _ from 'lodash'
 import time from '@/utils/time.js'
 import { normalizeQuery, parseTokens } from '@/search'
 import Pagination from '@/components/Pagination.vue'

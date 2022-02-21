@@ -345,7 +345,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import $ from 'jquery'
 import moment from 'moment'
-import lodash from '@/lodash'
+import lodash from 'lodash'
 import time from '@/utils/time.js'
 import { createFocusTrap } from 'focus-trap'
 import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
