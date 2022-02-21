@@ -163,7 +163,7 @@
 <script>
 import lodash from '@/lodash'
 
-import SignupForm from '@/components/auth/SignupForm'
+import SignupForm from '@/components/auth/SignupForm.vue'
 
 function arrayMove (arr, oldIndex, newIndex) {
   if (newIndex >= arr.length) {

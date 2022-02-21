@@ -436,14 +436,14 @@
 
 <script>
 import axios from 'axios'
-import PlayButton from '@/components/audio/PlayButton'
-import EmbedWizard from '@/components/audio/EmbedWizard'
-import Modal from '@/components/semantic/Modal'
-import TagsList from '@/components/tags/List'
-import ReportMixin from '@/components/mixins/Report'
+import PlayButton from '@/components/audio/PlayButton.vue'
+import EmbedWizard from '@/components/audio/EmbedWizard.vue'
+import Modal from '@/components/semantic/Modal.vue'
+import TagsList from '@/components/tags/List.vue'
+import ReportMixin from '@/components/mixins/Report.vue'
 
-import SubscribeButton from '@/components/channels/SubscribeButton'
-import ChannelForm from '@/components/audio/ChannelForm'
+import SubscribeButton from '@/components/channels/SubscribeButton.vue'
+import ChannelForm from '@/components/audio/ChannelForm.vue'
 
 export default {
   components: {

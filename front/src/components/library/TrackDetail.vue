@@ -289,9 +289,9 @@
 
 <script>
 import axios from 'axios'
-import LibraryWidget from '@/components/federation/LibraryWidget'
-import TagsList from '@/components/tags/List'
-import PlaylistWidget from '@/components/playlists/Widget'
+import LibraryWidget from '@/components/federation/LibraryWidget.vue'
+import TagsList from '@/components/tags/List.vue'
+import PlaylistWidget from '@/components/playlists/Widget.vue'
 
 export default {
   components: {

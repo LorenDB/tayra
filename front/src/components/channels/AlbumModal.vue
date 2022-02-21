@@ -48,8 +48,8 @@
 </template>
 
 <script>
-import Modal from '@/components/semantic/Modal'
-import ChannelAlbumForm from '@/components/channels/AlbumForm'
+import Modal from '@/components/semantic/Modal.vue'
+import ChannelAlbumForm from '@/components/channels/AlbumForm.vue'
 
 export default {
   components: {

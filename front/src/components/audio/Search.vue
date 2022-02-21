@@ -72,8 +72,8 @@
 import _ from '@/lodash'
 import axios from 'axios'
 import logger from '@/logging'
-import AlbumCard from '@/components/audio/album/Card'
-import ArtistCard from '@/components/audio/artist/Card'
+import AlbumCard from '@/components/audio/album/Card.vue'
+import ArtistCard from '@/components/audio/artist/Card.vue'
 
 export default {
   components: {

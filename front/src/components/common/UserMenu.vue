@@ -155,7 +155,7 @@
 
 import { mapGetters } from 'vuex'
 
-import ThemesMixin from '@/components/mixins/Themes'
+import ThemesMixin from '@/components/mixins/Themes.vue'
 
 export default {
   mixins: [ThemesMixin],

@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import LibrariesTable from '@/components/manage/library/LibrariesTable'
+import LibrariesTable from '@/components/manage/library/LibrariesTable.vue'
 
 export default {
   components: {

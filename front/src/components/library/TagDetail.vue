@@ -89,11 +89,11 @@
 </template>
 
 <script>
-import ChannelsWidget from '@/components/audio/ChannelsWidget'
-import TrackWidget from '@/components/audio/track/Widget'
-import AlbumWidget from '@/components/audio/album/Widget'
-import ArtistWidget from '@/components/audio/artist/Widget'
-import RadioButton from '@/components/radios/Button'
+import ChannelsWidget from '@/components/audio/ChannelsWidget.vue'
+import TrackWidget from '@/components/audio/track/Widget.vue'
+import AlbumWidget from '@/components/audio/album/Widget.vue'
+import ArtistWidget from '@/components/audio/artist/Widget.vue'
+import RadioButton from '@/components/radios/Button.vue'
 
 export default {
   components: {

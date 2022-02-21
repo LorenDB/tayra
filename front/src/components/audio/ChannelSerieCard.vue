@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import PlayButton from '@/components/audio/PlayButton'
+import PlayButton from '@/components/audio/PlayButton.vue'
 
 export default {
   components: {

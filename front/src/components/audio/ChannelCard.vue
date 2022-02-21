@@ -75,8 +75,8 @@
 </template>
 
 <script>
-import PlayButton from '@/components/audio/PlayButton'
-import TagsList from '@/components/tags/List'
+import PlayButton from '@/components/audio/PlayButton.vue'
+import TagsList from '@/components/tags/List.vue'
 
 import { momentFormat } from '@/filters'
 import moment from 'moment'

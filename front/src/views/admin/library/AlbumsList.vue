@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import AlbumsTable from '@/components/manage/library/AlbumsTable'
+import AlbumsTable from '@/components/manage/library/AlbumsTable.vue'
 
 export default {
   components: {

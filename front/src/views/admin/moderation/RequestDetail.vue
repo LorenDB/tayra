@@ -17,7 +17,7 @@
 <script>
 import axios from 'axios'
 
-import UserRequestCard from '@/components/manage/moderation/UserRequestCard'
+import UserRequestCard from '@/components/manage/moderation/UserRequestCard.vue'
 
 export default {
   components: {

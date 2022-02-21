@@ -92,7 +92,7 @@
 
 <script>
 
-import time from '@/utils/time.vue'
+import time from '@/utils/time.js'
 import LibraryWidget from '@/components/federation/LibraryWidget.vue'
 import ChannelEntries from '@/components/audio/ChannelEntries.vue'
 import TrackTable from '@/components/audio/track/Table.vue'

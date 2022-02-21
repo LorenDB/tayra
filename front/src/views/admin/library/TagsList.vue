@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import TagsTable from '@/components/manage/library/TagsTable'
+import TagsTable from '@/components/manage/library/TagsTable.vue'
 
 export default {
   components: {

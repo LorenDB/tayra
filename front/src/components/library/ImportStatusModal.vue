@@ -132,7 +132,7 @@
   </modal>
 </template>
 <script>
-import Modal from '@/components/semantic/Modal'
+import Modal from '@/components/semantic/Modal.vue'
 
 function getErrors (payload) {
   const errors = []

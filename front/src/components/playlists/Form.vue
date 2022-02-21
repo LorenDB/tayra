@@ -100,7 +100,7 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
-import TranslationsMixin from '@/components/mixins/Translations'
+import TranslationsMixin from '@/components/mixins/Translations.vue'
 
 import logger from '@/logging'
 

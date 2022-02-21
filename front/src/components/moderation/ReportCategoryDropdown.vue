@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import TranslationsMixin from '@/components/mixins/Translations'
+import TranslationsMixin from '@/components/mixins/Translations.vue'
 import lodash from '@/lodash'
 export default {
   mixins: [TranslationsMixin],

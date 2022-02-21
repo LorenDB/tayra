@@ -121,7 +121,7 @@
 <script>
 import _ from '@/lodash'
 import axios from 'axios'
-import TranslationsMixin from '@/components/mixins/Translations'
+import TranslationsMixin from '@/components/mixins/Translations.vue'
 
 export default {
   mixins: [TranslationsMixin],

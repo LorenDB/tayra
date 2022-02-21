@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import RadioButton from './Button'
+import RadioButton from './Button.vue'
 
 export default {
   components: {

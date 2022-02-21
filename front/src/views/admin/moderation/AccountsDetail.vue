@@ -571,8 +571,8 @@ import logger from '@/logging'
 import lodash from '@/lodash'
 import $ from 'jquery'
 
-import InstancePolicyForm from '@/components/manage/moderation/InstancePolicyForm'
-import InstancePolicyCard from '@/components/manage/moderation/InstancePolicyCard'
+import InstancePolicyForm from '@/components/manage/moderation/InstancePolicyForm.vue'
+import InstancePolicyCard from '@/components/manage/moderation/InstancePolicyCard.vue'
 
 export default {
   components: {

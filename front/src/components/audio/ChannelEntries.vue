@@ -56,8 +56,8 @@
 <script>
 import _ from '@/lodash'
 import axios from 'axios'
-import PodcastTable from '@/components/audio/podcast/Table'
-import TrackTable from '@/components/audio/track/Table'
+import PodcastTable from '@/components/audio/podcast/Table.vue'
+import TrackTable from '@/components/audio/track/Table.vue'
 
 export default {
   components: {

@@ -142,7 +142,7 @@
 </template>
 
 <script>
-import TranslationsMixin from '@/components/mixins/Translations'
+import TranslationsMixin from '@/components/mixins/Translations.vue'
 
 import axios from 'axios'
 

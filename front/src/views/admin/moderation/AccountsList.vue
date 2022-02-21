@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import AccountsTable from '@/components/manage/moderation/AccountsTable'
+import AccountsTable from '@/components/manage/moderation/AccountsTable.vue'
 
 export default {
   components: {

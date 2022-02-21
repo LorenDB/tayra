@@ -156,8 +156,8 @@
 import axios from 'axios'
 import logger from '@/logging'
 
-import LoginForm from '@/components/auth/LoginForm'
-import PasswordInput from '@/components/forms/PasswordInput'
+import LoginForm from '@/components/auth/LoginForm.vue'
+import PasswordInput from '@/components/forms/PasswordInput.vue'
 
 export default {
   components: {

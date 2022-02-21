@@ -160,9 +160,9 @@
 <script>
 import _ from '@/lodash'
 import axios from 'axios'
-import TrackRow from '@/components/audio/track/Row'
-import TrackMobileRow from '@/components/audio/track/MobileRow'
-import Pagination from '@/components/Pagination'
+import TrackRow from '@/components/audio/track/Row.vue'
+import TrackMobileRow from '@/components/audio/track/MobileRow.vue'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
   components: {

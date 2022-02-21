@@ -1,6 +1,6 @@
 const DYNAMIC_RANGE = 40 // dB
 
-function toLinearVolumeScale (v) {
+export function toLinearVolumeScale (v) {
   if (v <= 0.0) {
     return 0.0
   }
@@ -11,7 +11,7 @@ function toLinearVolumeScale (v) {
   return Math.pow(10, dB / 20)
 }
 
-function toLogarithmicVolumeScale (v) {
+export function toLogarithmicVolumeScale (v) {
   if (v <= 0.0) {
     return 0.0
   }

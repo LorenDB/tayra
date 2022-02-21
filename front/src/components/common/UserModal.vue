@@ -174,8 +174,8 @@
 </template>
 
 <script>
-import Modal from '@/components/semantic/Modal'
-import ThemesMixin from '@/components/mixins/Themes'
+import Modal from '@/components/semantic/Modal.vue'
+import ThemesMixin from '@/components/mixins/Themes.vue'
 import { mapGetters } from 'vuex'
 
 export default {

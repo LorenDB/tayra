@@ -187,13 +187,13 @@
 <script>
 import axios from 'axios'
 import _ from '@/lodash'
-import time from '@/utils/time'
+import time from '@/utils/time.js'
 import { normalizeQuery, parseTokens } from '@/search'
-import Pagination from '@/components/Pagination'
-import ActionTable from '@/components/common/ActionTable'
-import OrderingMixin from '@/components/mixins/Ordering'
-import TranslationsMixin from '@/components/mixins/Translations'
-import SmartSearchMixin from '@/components/mixins/SmartSearch'
+import Pagination from '@/components/Pagination.vue'
+import ActionTable from '@/components/common/ActionTable.vue'
+import OrderingMixin from '@/components/mixins/Ordering.vue'
+import TranslationsMixin from '@/components/mixins/Translations.vue'
+import SmartSearchMixin from '@/components/mixins/SmartSearch.vue'
 
 export default {
   components: {

@@ -77,8 +77,8 @@
 </template>
 
 <script>
-import PlayButton from '@/components/audio/PlayButton'
-import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon'
+import PlayButton from '@/components/audio/PlayButton.vue'
+import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
 import { mapGetters } from 'vuex'
 
 export default {

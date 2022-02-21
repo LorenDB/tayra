@@ -215,15 +215,15 @@
 
 <script>
 import axios from 'axios'
-import logger from '@/logging'
-import PlayButton from '@/components/audio/PlayButton'
-import EmbedWizard from '@/components/audio/EmbedWizard'
-import Modal from '@/components/semantic/Modal'
-import RadioButton from '@/components/radios/Button'
-import TagsList from '@/components/tags/List'
-import ReportMixin from '@/components/mixins/Report'
+import logger from '@/logging.js'
+import PlayButton from '@/components/audio/PlayButton.vue'
+import EmbedWizard from '@/components/audio/EmbedWizard.vue'
+import Modal from '@/components/semantic/Modal.vue'
+import RadioButton from '@/components/radios/Button.vue'
+import TagsList from '@/components/tags/List.vue'
+import ReportMixin from '@/components/mixins/Report.vue'
 
-import { getDomain } from '@/utils'
+import { getDomain } from '@/utils.js'
 
 export default {
   components: {

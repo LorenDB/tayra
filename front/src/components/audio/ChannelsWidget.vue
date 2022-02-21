@@ -39,7 +39,7 @@
 <script>
 import _ from '@/lodash'
 import axios from 'axios'
-import ChannelCard from '@/components/audio/ChannelCard'
+import ChannelCard from '@/components/audio/ChannelCard.vue'
 
 export default {
   components: {

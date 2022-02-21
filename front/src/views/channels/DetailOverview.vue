@@ -143,9 +143,9 @@
 import axios from 'axios'
 import qs from 'qs'
 
-import ChannelEntries from '@/components/audio/ChannelEntries'
-import ChannelSeries from '@/components/audio/ChannelSeries'
-import AlbumModal from '@/components/channels/AlbumModal'
+import ChannelEntries from '@/components/audio/ChannelEntries.vue'
+import ChannelSeries from '@/components/audio/ChannelSeries.vue'
+import AlbumModal from '@/components/channels/AlbumModal.vue'
 
 export default {
   components: {

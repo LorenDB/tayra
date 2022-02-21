@@ -217,7 +217,7 @@ import axios from 'axios'
 import showdown from 'showdown'
 import moment from 'moment'
 
-import NotificationRow from '@/components/notifications/NotificationRow'
+import NotificationRow from '@/components/notifications/NotificationRow.vue'
 
 export default {
   components: {

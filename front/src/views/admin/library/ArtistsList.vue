@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import ArtistsTable from '@/components/manage/library/ArtistsTable'
+import ArtistsTable from '@/components/manage/library/ArtistsTable.vue'
 
 export default {
   components: {

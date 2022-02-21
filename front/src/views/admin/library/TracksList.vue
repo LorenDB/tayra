@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import TracksTable from '@/components/manage/library/TracksTable'
+import TracksTable from '@/components/manage/library/TracksTable.vue'
 
 export default {
   components: {

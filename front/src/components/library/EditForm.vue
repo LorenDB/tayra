@@ -240,13 +240,13 @@
 
 <script>
 import $ from 'jquery'
-import _ from '@/lodash'
+import _ from '@/lodash.js'
 import axios from 'axios'
-import AttachmentInput from '@/components/common/AttachmentInput'
-import EditList from '@/components/library/EditList'
-import EditCard from '@/components/library/EditCard'
-import TagsSelector from '@/components/library/TagsSelector'
-import edits from '@/edits'
+import AttachmentInput from '@/components/common/AttachmentInput.vue'
+import EditList from '@/components/library/EditList.vue'
+import EditCard from '@/components/library/EditCard.vue'
+import TagsSelector from '@/components/library/TagsSelector.vue'
+import edits from '@/edits.js'
 
 export default {
   components: {

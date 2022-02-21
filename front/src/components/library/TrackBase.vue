@@ -219,17 +219,17 @@
 </template>
 
 <script>
-import time from '@/utils/time'
+import time from '@/utils/time.js'
 import axios from 'axios'
-import url from '@/utils/url'
-import { getDomain } from '@/utils'
-import logger from '@/logging'
-import PlayButton from '@/components/audio/PlayButton'
-import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon'
-import TrackPlaylistIcon from '@/components/playlists/TrackPlaylistIcon'
-import Modal from '@/components/semantic/Modal'
-import EmbedWizard from '@/components/audio/EmbedWizard'
-import ReportMixin from '@/components/mixins/Report'
+import url from '@/utils/url.js'
+import { getDomain } from '@/utils.js'
+import logger from '@/logging.js'
+import PlayButton from '@/components/audio/PlayButton.vue'
+import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
+import TrackPlaylistIcon from '@/components/playlists/TrackPlaylistIcon.vue'
+import Modal from '@/components/semantic/Modal.vue'
+import EmbedWizard from '@/components/audio/EmbedWizard.vue'
+import ReportMixin from '@/components/mixins/Report.vue'
 import { momentFormat } from '@/filters'
 
 const FETCH_URL = 'tracks/'

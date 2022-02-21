@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import EditForm from '@/components/library/EditForm'
+import EditForm from '@/components/library/EditForm.vue'
 export default {
   components: {
     EditForm

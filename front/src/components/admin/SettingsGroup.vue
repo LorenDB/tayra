@@ -162,7 +162,7 @@ import lodash from '@/lodash'
 
 export default {
   components: {
-    SignupFormBuilder: () => import(/* webpackChunkName: "signup-form-builder" */ '@/components/admin/SignupFormBuilder')
+    SignupFormBuilder: () => import(/* webpackChunkName: "signup-form-builder" */ '@/components/admin/SignupFormBuilder.vue')
   },
   props: {
     group: { type: Object, required: true },

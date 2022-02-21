@@ -212,7 +212,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import ThemesMixin from '@/components/mixins/Themes'
+import ThemesMixin from '@/components/mixins/Themes.vue'
 import _ from '@/lodash'
 
 export default {

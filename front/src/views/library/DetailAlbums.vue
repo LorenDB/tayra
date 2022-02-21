@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import AlbumWidget from '@/components/audio/album/Widget'
+import AlbumWidget from '@/components/audio/album/Widget.vue'
 
 export default {
   components: {

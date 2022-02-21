@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import EditsCardList from '@/components/manage/library/EditsCardList'
+import EditsCardList from '@/components/manage/library/EditsCardList.vue'
 
 export default {
   components: {
