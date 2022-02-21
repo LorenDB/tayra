@@ -25,8 +25,11 @@ logger.default.debug('Environment variables:', import.meta.env)
 
 sync(store, router)
 
-window.$ = window.jQuery = require('jquery')
-require('./semantic.js')
+window.$ = window.jQuery = jQuery
+
+// NOTE: We cannot use normal import statements after doing some stuff, so we'll just await a dynamic import
+await import('./semantic.js')
+
 let APP = null
 
 const availableLanguages = (function () {

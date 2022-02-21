@@ -25,6 +25,7 @@ import jQuery from 'jquery'
 import router from '@/router'
 import lodash from 'lodash'
 import GlobalEvents from '@/components/utils/global-events.vue'
+console.log(jQuery)
 
 export default {
   components: {

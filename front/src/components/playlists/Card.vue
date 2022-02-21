@@ -56,6 +56,7 @@
 
 <script>
 import PlayButton from '@/components/audio/PlayButton.vue'
+import defaultCover from '@/assets/audio/default-cover.png'
 
 export default {
   components: {
@@ -69,9 +70,7 @@ export default {
         return self.$store.getters['instance/absoluteUrl'](url)
       }).slice(0, 4)
       while (urls.length < 4) {
-        urls.push(
-          require('../../assets/audio/default-cover.png')
-        )
+        urls.push(defaultCover)
       }
       return urls
     }
