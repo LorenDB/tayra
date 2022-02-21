@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import showdown from 'showdown'
 
 export default {
   props: {
@@ -94,10 +95,7 @@ export default {
     }
   },
   created () {
-    const self = this
-    import(/* webpackChunkName: "showdown" */ 'showdown').then(module => {
-      self.markdown = new module.default.Converter({ simplifiedAutoLink: true, openLinksInNewWindow: true })
-    })
+    this.markdown = showdown.Converter({ simplifiedAutoLink: true, openLinksInNewWindow: true })
   }
 }
 </script>
