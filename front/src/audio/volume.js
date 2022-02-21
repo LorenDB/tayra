@@ -21,6 +21,3 @@ export function toLogarithmicVolumeScale (v) {
   // (0; -DYNAMIC_RANGE) [dB] -> (1.0; 0.0)
   return 1 - (dB / -DYNAMIC_RANGE)
 }
-
-exports.toLinearVolumeScale = toLinearVolumeScale
-exports.toLogarithmicVolumeScale = toLogarithmicVolumeScale
