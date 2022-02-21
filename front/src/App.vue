@@ -2,7 +2,8 @@
   <div
     id="app"
     :key="String($store.state.instance.instanceUrl)"
-    :class="[$store.state.ui.queueFocused ? 'queue-focused' : '', {'has-bottom-player': $store.state.queue.tracks.length > 0}, `is-${ $store.getters['ui/windowSize']}`]"
+    :class="[$store.state.ui.queueFocused ? 'queue-focused' : '',
+    {'has-bottom-player': $store.state.queue.tracks.length > 0}]"
   >
     <!-- here, we display custom stylesheets, if any -->
     <link
@@ -51,23 +52,23 @@ import axios from 'axios'
 import _ from '@/lodash'
 import { mapState, mapGetters } from 'vuex'
 import { WebSocketBridge } from 'django-channels'
-import GlobalEvents from '@/components/utils/global-events'
+import GlobalEvents from '@/components/utils/global-events.vue'
 import locales from './locales'
 import { getClientOnlyRadio } from '@/radios'
 
 export default {
   name: 'App',
   components: {
-    Player: () => import(/* webpackChunkName: "audio" */ '@/components/audio/Player'),
-    Queue: () => import(/* webpackChunkName: "audio" */ '@/components/Queue'),
-    PlaylistModal: () => import(/* webpackChunkName: "auth-audio" */ '@/components/playlists/PlaylistModal'),
-    ChannelUploadModal: () => import(/* webpackChunkName: "auth-audio" */ '@/components/channels/UploadModal'),
-    Sidebar: () => import(/* webpackChunkName: "core" */ '@/components/Sidebar'),
-    ServiceMessages: () => import(/* webpackChunkName: "core" */ '@/components/ServiceMessages'),
-    SetInstanceModal: () => import(/* webpackChunkName: "core" */ '@/components/SetInstanceModal'),
-    ShortcutsModal: () => import(/* webpackChunkName: "core" */ '@/components/ShortcutsModal'),
-    FilterModal: () => import(/* webpackChunkName: "moderation" */ '@/components/moderation/FilterModal'),
-    ReportModal: () => import(/* webpackChunkName: "moderation" */ '@/components/moderation/ReportModal'),
+    Player: () => import('@/components/audio/Player.vue'),
+    Queue: () => import('@/components/Queue.vue'),
+    PlaylistModal: () => import('@/components/playlists/PlaylistModal.vue'),
+    ChannelUploadModal: () => import('@/components/channels/UploadModal.vue'),
+    Sidebar: () => import('@/components/Sidebar.vue'),
+    ServiceMessages: () => import('@/components/ServiceMessages.vue'),
+    SetInstanceModal: () => import('@/components/SetInstanceModal.vue'),
+    ShortcutsModal: () => import('@/components/ShortcutsModal.vue'),
+    FilterModal: () => import('@/components/moderation/FilterModal.vue'),
+    ReportModal: () => import('@/components/moderation/ReportModal.vue'),
     GlobalEvents
   },
   data () {
@@ -179,7 +180,7 @@ export default {
           self.$language.current = newValue
           return self.$store.commit('ui/momentLocale', 'en')
         }
-        import(/* webpackChunkName: "locale-[request]" */ `./translations/${newValue}.json`).then((response) => {
+        import('./translations/en_GB.json').then((response) => {
           Vue.$translations[newValue] = response.default[newValue]
         }).finally(() => {
           // set current language twice, otherwise we seem to have a cache somewhere
@@ -188,12 +189,12 @@ export default {
           self.$language.current = newValue
         })
         const momentLocale = newValue.replace('_', '-').toLowerCase()
-        import(/* webpackChunkName: "moment-locale-[request]" */ `moment/locale/${momentLocale}.js`).then(() => {
+        import('moment/locale/en-gb.js').then(() => {
           self.$store.commit('ui/momentLocale', momentLocale)
         }).catch(() => {
           console.log('No momentjs locale available for', momentLocale)
           const shortLocale = momentLocale.split('-')[0]
-          import(/* webpackChunkName: "moment-locale-[request]" */ `moment/locale/${shortLocale}.js`).then(() => {
+          import('moment/locale/en-gb.js').then(() => {
             self.$store.commit('ui/momentLocale', shortLocale)
           }).catch(() => {
             console.log('No momentjs locale available for', shortLocale)
@@ -279,7 +280,9 @@ export default {
       // 1. use the url provided in settings.json, if any
       // 2. use the url specified when building via VUE_APP_INSTANCE_URL
       // 3. use the current url
-      const defaultInstanceUrl = this.$store.state.instance.frontSettings.defaultServerUrl || process.env.VUE_APP_INSTANCE_URL || this.$store.getters['instance/defaultUrl']()
+      const defaultInstanceUrl =
+        this.$store.state.instance.frontSettings.defaultServerUrl ||
+        import.meta.env.VUE_APP_INSTANCE_URL || this.$store.getters['instance/defaultUrl']()
       this.$store.commit('instance/instanceUrl', defaultInstanceUrl)
     } else {
       // needed to trigger initialization of axios / service worker
@@ -423,7 +426,8 @@ export default {
       // let token = 'test'
       const bridge = new WebSocketBridge()
       this.bridge = bridge
-      let url = this.$store.getters['instance/absoluteUrl'](`api/v1/activity?token=${token}`)
+      let url =
+        this.$store.getters['instance/absoluteUrl']('api/v1/activity?token=${token}')
       url = url.replace('http://', 'ws://')
       url = url.replace('https://', 'wss://')
       bridge.connect(
@@ -442,7 +446,7 @@ export default {
       const albumArtist = (track.album) ? track.album.artist.name : null
       const artistName = (
         (track.artist) ? track.artist.name : albumArtist)
-      const text = `♫ ${trackTitle} – ${artistName} ♫`
+      const text = '♫ ${trackTitle} – ${artistName} ♫'
       return text
     },
     updateDocumentTitle () {
@@ -474,8 +478,8 @@ export default {
     },
     setTheme (theme) {
       const oldTheme = (theme === 'light') ? 'dark' : 'light'
-      document.body.classList.remove(`theme-${oldTheme}`)
-      document.body.classList.add(`theme-${theme}`)
+      document.body.classList.remove('theme-${oldTheme}')
+      document.body.classList.add('theme-${theme}')
     }
   }
 }

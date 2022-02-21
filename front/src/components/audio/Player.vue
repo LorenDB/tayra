@@ -342,8 +342,8 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import GlobalEvents from '@/components/utils/global-events'
-import { toLinearVolumeScale } from '@/audio/volume'
+import GlobalEvents from '@/components/utils/global-events.vue'
+import { toLinearVolumeScale } from '@/audio/volume.js'
 import { Howl, Howler } from 'howler'
 import _ from '@/lodash'
 import url from '@/utils/url'
@@ -351,9 +351,11 @@ import axios from 'axios'
 
 export default {
   components: {
-    VolumeControl: () => import(/* webpackChunkName: "audio" */ './VolumeControl'),
-    TrackFavoriteIcon: () => import(/* webpackChunkName: "auth-audio" */ '@/components/favorites/TrackFavoriteIcon'),
-    TrackPlaylistIcon: () => import(/* webpackChunkName: "auth-audio" */ '@/components/playlists/TrackPlaylistIcon'),
+    VolumeControl: () => import('./VolumeControl.vue'),
+    TrackFavoriteIcon: () =>
+    import('@/components/favorites/TrackFavoriteIcon.vue'),
+    TrackPlaylistIcon: () =>
+    import('@/components/playlists/TrackPlaylistIcon.vue'),
     GlobalEvents
   },
   data () {

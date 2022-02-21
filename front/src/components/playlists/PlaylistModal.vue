@@ -200,8 +200,8 @@ import axios from 'axios'
 import { mapState } from 'vuex'
 
 import logger from '@/logging'
-import Modal from '@/components/semantic/Modal'
-import PlaylistForm from '@/components/playlists/Form'
+import Modal from '@/components/semantic/Modal.vue'
+import PlaylistForm from '@/components/playlists/Form.vue'
 
 export default {
   components: {

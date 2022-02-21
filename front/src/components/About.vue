@@ -254,8 +254,8 @@ import _ from '@/lodash'
 import showdown from 'showdown'
 import { humanSize } from '@/filters'
 
-import SignupForm from '@/components/auth/SignupForm'
-import LogoText from '@/components/LogoText'
+import SignupForm from '@/components/auth/SignupForm.vue'
+import LogoText from '@/components/LogoText.vue'
 
 export default {
   components: {

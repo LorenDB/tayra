@@ -351,9 +351,11 @@ import { createFocusTrap } from 'focus-trap'
 
 export default {
   components: {
-    TrackFavoriteIcon: () => import(/* webpackChunkName: "auth-audio" */ '@/components/favorites/TrackFavoriteIcon'),
-    TrackPlaylistIcon: () => import(/* webpackChunkName: "auth-audio" */ '@/components/playlists/TrackPlaylistIcon'),
-    draggable: () => import(/* webpackChunkName: "draggable" */ 'vuedraggable')
+    TrackFavoriteIcon: () =>
+    import('@/components/favorites/TrackFavoriteIcon.vue'),
+    TrackPlaylistIcon: () =>
+    import('@/components/playlists/TrackPlaylistIcon.vue'),
+    draggable: () => import('vuedraggable')
   },
   data () {
     return {

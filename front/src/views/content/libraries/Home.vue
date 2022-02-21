@@ -66,9 +66,9 @@
 
 <script>
 import axios from 'axios'
-import LibraryForm from './Form'
-import LibraryCard from './Card'
-import Quota from './Quota'
+import LibraryForm from './Form.vue'
+import LibraryCard from './Card.vue'
+import Quota from './Quota.vue'
 
 export default {
   components: {

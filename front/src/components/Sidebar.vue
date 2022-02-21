@@ -472,12 +472,12 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import UserModal from '@/components/common/UserModal'
-import Logo from '@/components/Logo'
-import SearchBar from '@/components/audio/SearchBar'
-import ThemesMixin from '@/components/mixins/Themes'
-import UserMenu from '@/components/common/UserMenu'
-import Modal from '@/components/semantic/Modal'
+import UserModal from '@/components/common/UserModal.vue'
+import Logo from '@/components/Logo.vue'
+import SearchBar from '@/components/audio/SearchBar.vue'
+import ThemesMixin from '@/components/mixins/Themes.vue'
+import UserMenu from '@/components/common/UserMenu.vue'
+import Modal from '@/components/semantic/Modal.vue'
 
 import $ from 'jquery'
 

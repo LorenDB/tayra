@@ -165,8 +165,9 @@ function urlDomain (data) {
 
 export default {
   components: {
-    ReportCategoryDropdown: () => import(/* webpackChunkName: "reports" */ '@/components/moderation/ReportCategoryDropdown'),
-    Modal: () => import(/* webpackChunkName: "modal" */ '@/components/semantic/Modal')
+    ReportCategoryDropdown: () =>
+    import('@/components/moderation/ReportCategoryDropdown.vue'),
+    Modal: () => import('@/components/semantic/Modal.vue')
   },
   data () {
     return {

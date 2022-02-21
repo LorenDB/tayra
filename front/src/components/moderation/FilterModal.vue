@@ -93,7 +93,7 @@ import axios from 'axios'
 import { mapState } from 'vuex'
 
 import logger from '@/logging'
-import Modal from '@/components/semantic/Modal'
+import Modal from '@/components/semantic/Modal.vue'
 
 export default {
   components: {

@@ -250,10 +250,10 @@
 <script>
 import axios from 'axios'
 import lodash from '@/lodash'
-import PlayButton from '@/components/audio/PlayButton'
-import TagsList from '@/components/tags/List'
-import ArtistLabel from '@/components/audio/ArtistLabel'
-import AlbumDropdown from './AlbumDropdown'
+import PlayButton from '@/components/audio/PlayButton.vue'
+import TagsList from '@/components/tags/List.vue'
+import ArtistLabel from '@/components/audio/ArtistLabel.vue'
+import AlbumDropdown from './AlbumDropdown.vue'
 
 function groupByDisc (initial) {
   function inner (acc, track) {

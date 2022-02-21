@@ -179,11 +179,11 @@ import $ from 'jquery'
 
 import logger from '@/logging'
 
-import OrderingMixin from '@/components/mixins/Ordering'
-import PaginationMixin from '@/components/mixins/Pagination'
-import TranslationsMixin from '@/components/mixins/Translations'
-import RadioCard from '@/components/radios/Card'
-import Pagination from '@/components/Pagination'
+import OrderingMixin from '@/components/mixins/Ordering.vue'
+import PaginationMixin from '@/components/mixins/Pagination.vue'
+import TranslationsMixin from '@/components/mixins/Translations.vue'
+import RadioCard from '@/components/radios/Card.vue'
+import Pagination from '@/components/Pagination.vue'
 
 const FETCH_URL = 'radios/radios/'
 

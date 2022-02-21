@@ -62,7 +62,7 @@
 
 export default {
   components: {
-    Modal: () => import(/* webpackChunkName: "modal" */ '@/components/semantic/Modal')
+    Modal: () => import('@/components/semantic/Modal.vue')
   },
   props: { show: { type: Boolean, required: true } },
   computed: {

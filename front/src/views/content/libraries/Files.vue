@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import LibraryFilesTable from './FilesTable'
+import LibraryFilesTable from './FilesTable.vue'
 
 export default {
   components: {

@@ -66,8 +66,8 @@
 
 <script>
 import axios from 'axios'
-import ScanForm from './ScanForm'
-import LibraryCard from './Card'
+import ScanForm from './ScanForm.vue'
+import LibraryCard from './Card.vue'
 
 export default {
   components: {

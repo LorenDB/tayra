@@ -153,12 +153,12 @@ import $ from 'jquery'
 
 import logger from '@/logging'
 
-import OrderingMixin from '@/components/mixins/Ordering'
-import PaginationMixin from '@/components/mixins/Pagination'
-import TranslationsMixin from '@/components/mixins/Translations'
-import AlbumCard from '@/components/audio/album/Card'
-import Pagination from '@/components/Pagination'
-import TagsSelector from '@/components/library/TagsSelector'
+import OrderingMixin from '@/components/mixins/Ordering.vue'
+import PaginationMixin from '@/components/mixins/Pagination.vue'
+import TranslationsMixin from '@/components/mixins/Translations.vue'
+import AlbumCard from '@/components/audio/album/Card.vue'
+import Pagination from '@/components/Pagination.vue'
+import TagsSelector from '@/components/library/TagsSelector.vue'
 
 const FETCH_URL = 'albums/'
 

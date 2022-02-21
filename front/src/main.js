@@ -5,7 +5,7 @@ import jQuery from 'jquery'
 
 import Vue from 'vue'
 import moment from 'moment'
-import App from './App'
+import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import VueLazyload from 'vue-lazyload'
@@ -20,8 +20,8 @@ import { parseAPIErrors } from '@/utils'
 import globals from '@/components/globals' // eslint-disable-line
 import './registerServiceWorker'
 
-logger.default.info('Loading environment:', process.env.NODE_ENV)
-logger.default.debug('Environment variables:', process.env)
+logger.default.info('Loading environment:', import.meta.env.NODE_ENV)
+logger.default.debug('Environment variables:', import.meta.env)
 
 sync(store, router)
 
@@ -59,7 +59,6 @@ Vue.use(GetTextPlugin, {
 })
 
 Vue.use(VueLazyload)
-Vue.config.productionTip = false
 Vue.directive('title', function (el, binding) {
   store.commit('ui/pageTitle', binding.value)
 })
