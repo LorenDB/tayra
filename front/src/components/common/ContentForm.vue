@@ -143,8 +143,8 @@ export default {
       try {
         const response = await axios.post('text-preview/', { text: this.newValue, permissive: this.permissive })
         this.preview = response.data.rendered
-      } catch {
-
+      } catch (error) {
+        console.error(error);
       }
       this.isLoadingPreview = false
     }

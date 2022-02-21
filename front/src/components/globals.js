@@ -1,23 +1,42 @@
 import Vue from 'vue'
+import HumanDate from '@/components/common/HumanDate.vue'
+import HumanDuration from '@/components/common/HumanDuration.vue'
+import Username from '@/components/common/Username.vue'
+import UserLink from '@/components/common/UserLink.vue'
+import ActorLink from '@/components/common/ActorLink.vue'
+import ActorAvatar from '@/components/common/ActorAvatar.vue'
+import Duration from '@/components/common/Duration.vue'
+import DangerousButton from '@/components/common/DangerousButton.vue'
+import Message from '@/components/common/Message.vue'
+import CopyInput from '@/components/common/CopyInput.vue'
+import AjaxButton from '@/components/common/AjaxButton.vue'
+import Tooltip from '@/components/common/Tooltip.vue'
+import EmptyState from '@/components/common/EmptyState.vue'
+import ExpandableDiv from '@/components/common/ExpandableDiv.vue'
+import CollapseLink from '@/components/common/CollapseLink.vue'
+import ActionFeedback from '@/components/common/ActionFeedback.vue'
+import RenderedDescription from '@/components/common/RenderedDescription.vue'
+import ContentForm from '@/components/common/ContentForm.vue'
+import InlineSearchBar from '@/components/common/InlineSearchBar.vue'
 
-Vue.component('HumanDate', () => import('@/components/common/HumanDate.vue'))
-Vue.component('HumanDuration', () => import('@/components/common/HumanDuration.vue'))
-Vue.component('Username', () => import('@/components/common/Username.vue'))
-Vue.component('UserLink', () => import('@/components/common/UserLink.vue'))
-Vue.component('ActorLink', () => import('@/components/common/ActorLink.vue'))
-Vue.component('ActorAvatar', () => import('@/components/common/ActorAvatar.vue'))
-Vue.component('Duration', () => import('@/components/common/Duration.vue'))
-Vue.component('DangerousButton', () => import('@/components/common/DangerousButton.vue'))
-Vue.component('Message', () => import('@/components/common/Message.vue'))
-Vue.component('CopyInput', () => import('@/components/common/CopyInput.vue'))
-Vue.component('AjaxButton', () => import('@/components/common/AjaxButton.vue'))
-Vue.component('Tooltip', () => import('@/components/common/Tooltip.vue'))
-Vue.component('EmptyState', () => import('@/components/common/EmptyState.vue'))
-Vue.component('ExpandableDiv', () => import('@/components/common/ExpandableDiv.vue'))
-Vue.component('CollapseLink', () => import('@/components/common/CollapseLink.vue'))
-Vue.component('ActionFeedback', () => import('@/components/common/ActionFeedback.vue'))
-Vue.component('RenderedDescription', () => import('@/components/common/RenderedDescription.vue'))
-Vue.component('ContentForm', () => import('@/components/common/ContentForm.vue'))
-Vue.component('InlineSearchBar', () => import('@/components/common/InlineSearchBar.vue'))
+Vue.component('HumanDate', HumanDate)
+Vue.component('HumanDuration', HumanDuration)
+Vue.component('Username', Username)
+Vue.component('UserLink', UserLink)
+Vue.component('ActorLink', ActorLink)
+Vue.component('ActorAvatar', ActorAvatar)
+Vue.component('Duration', Duration)
+Vue.component('DangerousButton', DangerousButton)
+Vue.component('Message', Message)
+Vue.component('CopyInput', CopyInput)
+Vue.component('AjaxButton', AjaxButton)
+Vue.component('Tooltip', Tooltip)
+Vue.component('EmptyState', EmptyState)
+Vue.component('ExpandableDiv', ExpandableDiv)
+Vue.component('CollapseLink', CollapseLink)
+Vue.component('ActionFeedback', ActionFeedback)
+Vue.component('RenderedDescription', RenderedDescription)
+Vue.component('ContentForm', ContentForm)
+Vue.component('InlineSearchBar', InlineSearchBar)
 
 export default {}

@@ -152,7 +152,7 @@ export default {
     async logout ({ state, commit }) {
       try {
         await axios.post('users/logout')
-      } catch {
+      } catch (error) {
         console.log('Error while logging out, probably logged in via oauth')
       }
       const modules = [

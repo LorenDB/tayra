@@ -60,9 +60,11 @@
 
 <script>
 
+import Modal from '@/components/semantic/Modal.vue'
+
 export default {
   components: {
-    Modal: () => import('@/components/semantic/Modal.vue')
+    Modal
   },
   props: { show: { type: Boolean, required: true } },
   computed: {

@@ -157,12 +157,12 @@
 
 <script>
 import axios from 'axios'
-
 import lodash from '@/lodash'
+import SignupFormBuilder from '@/components/admin/SignupFormBuilder.vue'
 
 export default {
   components: {
-    SignupFormBuilder: () => import(/* webpackChunkName: "signup-form-builder" */ '@/components/admin/SignupFormBuilder.vue')
+    SignupFormBuilder
   },
   props: {
     group: { type: Object, required: true },

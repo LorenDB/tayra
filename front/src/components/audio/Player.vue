@@ -348,14 +348,15 @@ import { Howl, Howler } from 'howler'
 import _ from '@/lodash'
 import url from '@/utils/url'
 import axios from 'axios'
+import VolumeControl from './VolumeControl.vue'
+import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
+import  TrackPlaylistIcon from '@/components/playlists/TrackPlaylistIcon.vue'
 
 export default {
   components: {
-    VolumeControl: () => import('./VolumeControl.vue'),
-    TrackFavoriteIcon: () =>
-    import('@/components/favorites/TrackFavoriteIcon.vue'),
-    TrackPlaylistIcon: () =>
-    import('@/components/playlists/TrackPlaylistIcon.vue'),
+    VolumeControl,
+    TrackFavoriteIcon,
+    TrackPlaylistIcon,
     GlobalEvents
   },
   data () {

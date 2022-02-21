@@ -348,14 +348,15 @@ import moment from 'moment'
 import lodash from '@/lodash'
 import time from '@/utils/time.js'
 import { createFocusTrap } from 'focus-trap'
+import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
+import TrackPlaylistIcon from '@/components/playlists/TrackPlaylistIcon.vue'
+import draggable from 'vuedraggable'
 
 export default {
   components: {
-    TrackFavoriteIcon: () =>
-    import('@/components/favorites/TrackFavoriteIcon.vue'),
-    TrackPlaylistIcon: () =>
-    import('@/components/playlists/TrackPlaylistIcon.vue'),
-    draggable: () => import('vuedraggable')
+    TrackFavoriteIcon,
+    TrackPlaylistIcon,
+    draggable
   },
   data () {
     return {
