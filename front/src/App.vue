@@ -56,19 +56,30 @@ import GlobalEvents from '@/components/utils/global-events.vue'
 import locales from './locales'
 import { getClientOnlyRadio } from '@/radios'
 
+import Player from '@/components/audio/Player.vue'
+import Queue from '@/components/Queue.vue'
+import PlaylistModal from '@/components/playlists/PlaylistModal.vue'
+import UploadModal from '@/components/channels/UploadModal.vue'
+import Sidebar from '@/components/Sidebar.vue'
+import ServiceMessages from '@/components/ServiceMessages.vue'
+import SetInstanceModal from '@/components/SetInstanceModal.vue'
+import ShortcutsModel from '@/components/ShortcutsModal.vue'
+import FilterModal from '@/components/moderation/FilterModal.vue'
+import ReportModal from '@/components/moderation/ReportModal.vue'
+
 export default {
   name: 'App',
   components: {
-    Player: () => import('@/components/audio/Player.vue'),
-    Queue: () => import('@/components/Queue.vue'),
-    PlaylistModal: () => import('@/components/playlists/PlaylistModal.vue'),
-    ChannelUploadModal: () => import('@/components/channels/UploadModal.vue'),
-    Sidebar: () => import('@/components/Sidebar.vue'),
-    ServiceMessages: () => import('@/components/ServiceMessages.vue'),
-    SetInstanceModal: () => import('@/components/SetInstanceModal.vue'),
-    ShortcutsModal: () => import('@/components/ShortcutsModal.vue'),
-    FilterModal: () => import('@/components/moderation/FilterModal.vue'),
-    ReportModal: () => import('@/components/moderation/ReportModal.vue'),
+    Player,
+    Queue,
+    PlaylistModal,
+    ChannelUploadModal,
+    Sidebar,
+    ServiceMessages,
+    SetInstanceModal,
+    ShortcutsModal,
+    FilterModal,
+    ReportModal,
     GlobalEvents
   },
   data () {
