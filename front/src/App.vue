@@ -272,7 +272,7 @@ export default {
       // 3. use the current url
       const defaultInstanceUrl =
         this.$store.state.instance.frontSettings.defaultServerUrl ||
-        process.env.VUE_APP_INSTANCE_URL || this.$store.getters['instance/defaultUrl']()
+        import.meta.env.VUE_APP_INSTANCE_URL || this.$store.getters['instance/defaultUrl']()
       this.$store.commit('instance/instanceUrl', defaultInstanceUrl)
     } else {
       // needed to trigger initialization of axios / service worker

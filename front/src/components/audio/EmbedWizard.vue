@@ -134,7 +134,7 @@ export default {
       return _.get(this.nodeinfo, 'metadata.library.anonymousCanListen', false)
     },
     iframeSrc () {
-      let base = process.env.BASE_URL
+      let base = import.meta.env.BASE_URL
       if (base.startsWith('/')) {
         // include hostname/protocol too so that the iframe link is absolute
         base = `${window.location.protocol}//${window.location.host}${base}`
