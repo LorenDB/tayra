@@ -350,7 +350,7 @@ import url from '@/utils/url'
 import axios from 'axios'
 import VolumeControl from './VolumeControl.vue'
 import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
-import  TrackPlaylistIcon from '@/components/playlists/TrackPlaylistIcon.vue'
+import TrackPlaylistIcon from '@/components/playlists/TrackPlaylistIcon.vue'
 
 export default {
   components: {
