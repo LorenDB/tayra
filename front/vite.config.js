@@ -10,6 +10,14 @@ export default defineConfig({
   plugins: [
     vue(),
     {
+      name: 'fix-fomantic-ui-css',
+      transform (src, id) {
+        if (id.includes('fomantic-ui-css') && id.endsWith('.min.js')) {
+          return `import jQuery from 'jquery';${src}`
+        }
+      }
+    },
+    {
       name: 'fix-django-channels',
       transform (src, id) {
         if (id.includes('django-channels')) {
@@ -18,6 +26,11 @@ export default defineConfig({
       }
     }
   ],
+  build: {
+    // NOTE: For debugging builds
+    // TODO: Remove before #1664 is merged
+    sourcemap: 'inline'
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

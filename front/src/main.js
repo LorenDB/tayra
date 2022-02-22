@@ -19,7 +19,6 @@ import filters from '@/filters' // eslint-disable-line
 import { parseAPIErrors } from '@/utils'
 import globals from '@/components/globals' // eslint-disable-line
 import './registerServiceWorker'
-import '@/jquery'
 import '@/semantic'
 
 logger.default.info('Loading environment:', import.meta.env.NODE_ENV)
