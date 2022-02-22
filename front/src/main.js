@@ -1,7 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import logger from '@/logging'
-import jQuery from 'jquery'
+import jQuery from '@/jquery'
 
 import Vue from 'vue'
 import moment from 'moment'
@@ -13,7 +13,7 @@ import store from './store'
 import GetTextPlugin from 'vue-gettext'
 import { sync } from 'vuex-router-sync'
 import locales from '@/locales'
-import createAuthRefreshInterceptor from 'axios-auth-refresh'
+import axiosAuthRefresh from 'axios-auth-refresh'
 
 import filters from '@/filters' // eslint-disable-line
 import { parseAPIErrors } from '@/utils'
@@ -157,6 +157,13 @@ const refreshAuth = (failedRequest) => {
     return Promise.resolve()
   }
 }
+
+// TODO: This seems like a vite error, in production it thinks that
+//       axiosAuthRefresh is a following object: { default () { /* ... */} }
+//       Maybe we need to tweak the config?
+const createAuthRefreshInterceptor = import.meta.env.DEV
+  ? axiosAuthRefresh
+  : axiosAuthRefresh.default
 
 createAuthRefreshInterceptor(axios, refreshAuth)
 
