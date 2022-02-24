@@ -21,7 +21,7 @@ import globals from '@/components/globals' // eslint-disable-line
 import './registerServiceWorker'
 import '@/semantic'
 
-logger.default.info('Loading environment:', import.meta.env.NODE_ENV)
+logger.default.info('Loading environment:', import.meta.env.MODE)
 logger.default.debug('Environment variables:', import.meta.env)
 
 sync(store, router)

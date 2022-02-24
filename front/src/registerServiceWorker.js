@@ -4,7 +4,7 @@ import { register } from 'register-service-worker'
 
 import store from './store'
 
-if (import.meta.env.NODE_ENV === 'production') {
+if (import.meta.env.PROD) {
   register(`${import.meta.env.BASE_URL}service-worker.js`, {
     registrationOptions: { scope: '/' },
     ready () {
