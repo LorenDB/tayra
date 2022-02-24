@@ -13,7 +13,7 @@ import store from './store'
 import GetTextPlugin from 'vue-gettext'
 import { sync } from 'vuex-router-sync'
 import locales from '@/locales'
-import axiosAuthRefresh from 'axios-auth-refresh'
+import createAuthRefreshInterceptor from 'axios-auth-refresh'
 
 import filters from '@/filters' // eslint-disable-line
 import { parseAPIErrors } from '@/utils'
@@ -157,13 +157,6 @@ const refreshAuth = (failedRequest) => {
     return Promise.resolve()
   }
 }
-
-// TODO: This seems like a vite error, in production it thinks that
-//       axiosAuthRefresh is a following object: { default () { /* ... */} }
-//       Maybe we need to tweak the config?
-const createAuthRefreshInterceptor = import.meta.env.DEV
-  ? axiosAuthRefresh
-  : axiosAuthRefresh.default
 
 createAuthRefreshInterceptor(axios, refreshAuth)
 

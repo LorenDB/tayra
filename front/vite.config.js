@@ -26,9 +26,6 @@ export default defineConfig({
       }
     }
   ],
-  build: {
-    transformMixedEsModules: true
-  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
