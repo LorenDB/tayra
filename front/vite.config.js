@@ -27,9 +27,6 @@ export default defineConfig({
     }
   ],
   build: {
-    // NOTE: For debugging builds
-    // TODO: Remove before #1664 is merged
-    sourcemap: 'inline',
     transformMixedEsModules: true
   },
   resolve: {
