@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2022-02-09 13:36+0000\n"
+"PO-Revision-Date: 2022-02-26 16:17+0000\n"
 "Last-Translator: Michael Long <mchobbylong@gmail.com>\n"
 "Language-Team: none\n"
 "Language: zh_Hans\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: front/src/components/playlists/PlaylistModal.vue:5
 msgctxt "Popup/Playlist/Paragraph"
 msgid "\"%{ title }\", by %{ artist }"
-msgstr "%{ artist }的《%{ title }》"
+msgstr "%{ title } - %{ artist }"
 
 #: front/src/components/RemoteSearchForm.vue:132
 msgctxt "Head/Fetch/Field.Placeholder"
@@ -32,7 +32,7 @@ msgstr "格式：@username@example.com"
 #: front/src/components/auth/Authorize.vue:31
 msgctxt "Content/Auth/Title"
 msgid "%{ app } wants to access your Funkwhale account"
-msgstr "%{ app } 想要访问您的Funkwhale帐户"
+msgstr "%{ app } 想要访问您的 Funkwhale 帐户"
 
 #: front/src/components/Home.vue:65 src/components/Home.vue:7
 msgctxt "Content/Home/Stat"
@@ -60,19 +60,19 @@ msgstr[0] "%{ count } 个节目"
 msgctxt "Content/Channel/Paragraph"
 msgid "%{ count } episode"
 msgid_plural "%{ count } episodes"
-msgstr[0] "%{ count }期单集"
+msgstr[0] "%{ count } 个节目"
 
 #: front/src/components/favorites/List.vue:12
 msgctxt "Content/Favorites/Title"
 msgid "%{ count } favorite"
 msgid_plural "%{ count } favorites"
-msgstr[0] "%{ count }个收藏的作品"
+msgstr[0] "%{ count } 个收藏"
 
 #: front/src/components/channels/UploadModal.vue:175
 msgctxt "*/*/*"
 msgid "%{ count } file"
 msgid_plural "%{ count } files"
-msgstr[0] "%{ count }个文件"
+msgstr[0] "%{ count } 个文件"
 
 #: front/src/components/Home.vue:70 src/components/Home.vue:12
 msgctxt "Content/Home/Stat"
@@ -100,7 +100,7 @@ msgstr[0] "在 %{ total } 中已选定 %{ count } 个"
 msgctxt "Content/Channel/Paragraph"
 msgid "%{ count } subscriber"
 msgid_plural "%{ count } subscribers"
-msgstr[0] "%{ count }个订阅"
+msgstr[0] "%{ count } 个订阅者"
 
 #: front/src/components/audio/ChannelCard.vue:15
 #: front/src/components/audio/album/Card.vue:21
@@ -122,14 +122,14 @@ msgstr[0] "%{ count }个订阅"
 msgctxt "*/*/*"
 msgid "%{ count } track"
 msgid_plural "%{ count } tracks"
-msgstr[0] "%{ count }首歌曲"
+msgstr[0] "%{ count } 首歌曲"
 
 #: front/src/components/library/ArtistBase.vue:13
 #: front/src/components/library/ArtistBase.vue:8
 msgctxt "Content/Artist/Paragraph"
 msgid "%{ count } track in %{ albumsCount } albums"
 msgid_plural "%{ count } tracks in %{ albumsCount } albums"
-msgstr[0] "%{ albumsCount }张专辑中的%{ count }首歌曲"
+msgstr[0] "共有 %{ albumsCount } 张专辑中的 %{ count } 首歌曲"
 
 #: front/src/components/library/radios/Builder.vue:109
 #: front/src/components/library/radios/Builder.vue:1
@@ -143,17 +143,17 @@ msgstr[0] "%{ count } 首歌曲符合搜索条件"
 msgctxt "*/Queue/Message"
 msgid "%{ count } track was added to your queue"
 msgid_plural "%{ count } tracks were added to your queue"
-msgstr[0] "%{ count }首歌曲已添加到您的音乐队列中"
+msgstr[0] "%{ count } 首歌曲已添加到您的播放队列中"
 
 #: front/src/views/content/libraries/Quota.vue:21
 msgctxt "Content/Library/Paragraph"
 msgid "%{ current } used on %{ max } allowed"
-msgstr "共%{ max }，已使用%{ current }"
+msgstr "共 %{ max }，已使用 %{ current }"
 
 #: front/src/components/common/Duration.vue:2
 msgctxt "Content/*/Paragraph"
 msgid "%{ hours } h %{ minutes } min"
-msgstr "%{ hours }小时{ minutes } 分钟"
+msgstr "%{ hours } 小时 %{ minutes } 分钟"
 
 #: front/src/components/audio/Player.vue:113
 #: src/components/audio/Player.vue:119
@@ -164,7 +164,7 @@ msgstr "%{ length } 中的第 %{ index } 首"
 #: front/src/components/common/Duration.vue:3
 msgctxt "Content/*/Paragraph"
 msgid "%{ minutes } min"
-msgstr "%{ minutes }分钟"
+msgstr "%{ minutes } 分钟"
 
 #: front/src/components/audio/ChannelCard.vue:22
 msgid "%{ updatedAgo }"
@@ -173,42 +173,42 @@ msgstr "%{ updatedAgo }"
 #: front/src/components/notifications/NotificationRow.vue:86
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } accepted your follow on library \"%{ library }\""
-msgstr "%{ username }已接受您关注其曲库\"%{ library }\""
+msgstr "%{ username } 已接受您关注了曲库“%{ library }”"
 
 #: front/src/components/notifications/NotificationRow.vue:85
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } followed your library \"%{ library }\""
-msgstr "%{ username }关注了你的曲库\"%{ library }\""
+msgstr "%{ username } 关注了您的曲库“%{ library }”"
 
 #: front/src/components/notifications/NotificationRow.vue:88
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } wants to follow your library \"%{ library }\""
-msgstr "%{ username }想关注你的曲库\"%{ library }\""
+msgstr "%{ username } 想关注您的曲库“%{ library }”"
 
 #: front/src/views/auth/ProfileBase.vue:162
 msgctxt "Head/Profile/Title"
 msgid "%{ username }'s profile"
-msgstr "%{ username }的个人资料"
+msgstr "%{ username } 的个人资料"
 
 #: front/src/components/playlists/PlaylistModal.vue:22
 msgctxt "Popup/Playlist/Paragraph"
 msgid "<strong>%{ track }</strong> is already in <strong>%{ playlist }</strong>."
-msgstr "<strong>%{ track }</strong>已在<strong>%{ playlist }</strong>中."
+msgstr "歌曲 <strong>%{ track }</strong> 已经在歌单 <strong>%{ playlist }</strong> 中。"
 
 #: front/src/views/Notifications.vue:28 src/views/Notifications.vue:84
 msgctxt "*/*/*"
 msgid "30 days"
-msgstr "30天"
+msgstr "30 天"
 
 #: front/src/views/Notifications.vue:33 src/views/Notifications.vue:89
 msgctxt "*/*/*"
 msgid "60 days"
-msgstr "60天"
+msgstr "60 天"
 
 #: front/src/views/Notifications.vue:38 src/views/Notifications.vue:94
 msgctxt "*/*/*"
 msgid "90 days"
-msgstr "90天"
+msgstr "90 天"
 
 #: front/src/components/library/FileUpload.vue:370
 #: front/src/components/library/FileUpload.vue:371
@@ -255,7 +255,7 @@ msgstr "关于 %{instanceName}"
 #: front/src/components/Footer.vue:14
 msgctxt "Footer/About/Title"
 msgid "About %{instanceUrl}"
-msgstr "关于%{instanceUrl}"
+msgstr "关于 %{instanceUrl}"
 
 #: front/src/components/Footer.vue:81 src/components/Home.vue:98
 msgctxt "Footer/*/Title/Short"
