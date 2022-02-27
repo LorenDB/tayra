@@ -137,7 +137,6 @@
                       <select
                         v-if="object.is_local"
                         v-model="object.privacy_level"
-                        v-dropdown
                         class="ui search selection dropdown"
 
                         @change="updateObj('privacy_level')"
