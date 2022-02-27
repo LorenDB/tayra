@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:deployment": "vite build --base /front",
+    "build:deployment": "vite build --base /front/",
     "serve": "vite preview",
     "test:unit": "true",
     "lint": "eslint --ext .js,.vue src",
