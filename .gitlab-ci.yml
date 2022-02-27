@@ -43,7 +43,7 @@ review_front:
     - yarn install
     # this is to ensure we don't have any errors in the output,
     # cf https://dev.funkwhale.audio/funkwhale/funkwhale/issues/169
-    - yarn run build | tee /dev/stderr | (! grep -i 'ERROR in')
+    - yarn run build --base ./ | tee /dev/stderr | (! grep -i 'ERROR in')
     - cp -r dist/* ../front-review
   artifacts:
     expire_in: 2 weeks
