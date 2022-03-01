@@ -10,6 +10,7 @@ RUN \
     python3-dev \
     py3-psycopg2 \
     py3-cryptography \
+		py3-pip \
     libldap \
     libffi-dev \
     make \
