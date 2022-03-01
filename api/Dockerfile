@@ -1,3 +1,15 @@
+FROM alpine:3.14 as pre-build
+
+# We need this additional step to avoid having poetrys deps interacting with our
+# dependencies. This is only required until alpine 3.16 is released, since this
+# allows us to install poetry as package.
+
+RUN apk add --no-cache python3 py3-cryptography py3-pip && \
+		pip3 install poetry
+COPY pyproject.toml poetry.lock /
+RUN poetry export --without-hashes > requirements.txt
+RUN poetry export --dev --without-hashes > dev-requirements.txt
+
 FROM alpine:3.14 as builder
 
 RUN \
@@ -23,15 +35,15 @@ RUN \
     libxslt-dev \
     curl \
     && \
-    ln -s /usr/bin/python3 /usr/bin/python && \
-		pip3 install --user poetry
+    ln -s /usr/bin/python3 /usr/bin/python
 
 # create virtual env for next stage
 RUN python -m venv --system-site-packages /venv
 # emulate activation by prefixing PATH
 ENV PATH="/venv/bin:/root/.local/bin:$PATH" VIRTUAL_ENV=/venv
 
-COPY pyproject.toml poetry.lock /
+COPY --from=0 /requirements.txt /requirements.txt
+COPY --from=0 /dev-requirements.txt /dev-requirements.txt
 # hack around https://github.com/pypa/pip/issues/6158#issuecomment-456619072
 ENV PIP_DOWNLOAD_CACHE=/noop/
 RUN \
@@ -42,14 +54,14 @@ RUN \
     # is why we need to use the package shipped by Alpine Linux, which is currently
     # version 3.3.2. Since poetry does not allow in-place dependency pinning, we need
     # to install the deps using pip.
-    poetry export --without-hashes | grep -Ev 'cryptography|autobahn' | pip3 install -r /dev/stdin cryptography==3.3.2 autobahn==21.2.1 && \
+    cat /requirements.txt | grep -Ev 'cryptography|autobahn' | pip3 install -r /dev/stdin cryptography==3.3.2 autobahn==21.2.1 && \
     rm -rf $PIP_DOWNLOAD_CACHE
 
 ARG install_dev_deps=0
 RUN \
     if [ "$install_dev_deps" = "1" ] ; then \
       echo "Installing dev dependencies" && \
-    poetry export --dev --without-hashes | grep -Ev 'cryptography|autobahn' | pip3 install -r /dev/stdin cryptography==3.3.2 autobahn==21.2.1 \
+    cat /dev-requirements.txt | grep -Ev 'cryptography|autobahn' | pip3 install -r /dev/stdin cryptography==3.3.2 autobahn==21.2.1 \
     ; else  \
       echo "Skipping dev deps installation" \
     ; fi
