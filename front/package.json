@@ -55,7 +55,7 @@
     "eslint-plugin-promise": "6.0.0",
     "eslint-plugin-vue": "7.20.0",
     "glob-all": "3.2.1",
-    "vite": "2.8.4",
+    "vite": "2.8.5",
     "vite-plugin-vue2": "1.9.3",
     "vue-template-compiler": "2.6.14"
   },
