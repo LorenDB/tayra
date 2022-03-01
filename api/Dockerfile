@@ -23,7 +23,7 @@ RUN \
     curl \
     && \
     ln -s /usr/bin/python3 /usr/bin/python && \
-    curl -sSL https://install.python-poetry.org | python3 -
+		pip3 install --user poetry
 
 # create virtual env for next stage
 RUN python -m venv --system-site-packages /venv
