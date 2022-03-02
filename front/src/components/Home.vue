@@ -254,7 +254,7 @@
               <div class="content">
                 <a
                   class="header"
-                  href="https://funkwhale.audio/apps"
+                  href="https://funkwhale.audio/en_US/apps"
                   target="_blank"
                   rel="noopener"
                 >
