@@ -67,7 +67,7 @@ review_docs:
   stage: review
   when: manual
   allow_failure: true
-  image: python:3.6
+  image: python:3.10
   variables:
     BUILD_PATH: "../docs-review"
   before_script:
@@ -75,8 +75,12 @@ review_docs:
     - mkdir docs-review
     - cd docs
     - apt-get update
-    - apt-get install -y graphviz
-    - pip install sphinx sphinx_rtd_theme django-environ django myst-parser sphinx-panels
+    - apt-get install -y graphviz git
+    - pip install poetry
+    - poetry install
+    - git switch develop
+    - git switch stable
+    - git switch $CI_COMMIT_BRANCH
   script:
     - ./build_docs.sh
   cache:
@@ -272,14 +276,16 @@ build_front:
 
 pages:
   stage: test
-  image: python:3.6
+  image: python:3.10
   variables:
     BUILD_PATH: "../public"
   before_script:
     - cd docs
     - apt-get update
-    - apt-get install -y graphviz
-    - pip install sphinx sphinx_rtd_theme django-environ django myst-parser sphinx-panels
+    - apt-get install -y graphviz git
+    - pip install poetry
+    - poetry install
+    - git fetch origin develop && git fetch origin stable
   script:
     - ./build_docs.sh
   cache:
