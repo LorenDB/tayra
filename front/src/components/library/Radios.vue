@@ -39,6 +39,7 @@
         </translate>
       </h3>
       <router-link
+        v-if="isAuthenticated"
         class="ui success button"
         to="/library/radios/build"
         exact
