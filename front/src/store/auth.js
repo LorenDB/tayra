@@ -132,7 +132,6 @@ export default {
   actions: {
     // Send a request to the login URL and save the returned JWT
     login ({ commit, dispatch }, { next, credentials, onError }) {
-      const router = require('@/router').default
       const form = new FormData()
       Object.keys(credentials).forEach((k) => {
         form.set(k, credentials[k])
@@ -142,7 +141,7 @@ export default {
         // commit('token', response.data.token)
         dispatch('fetchProfile').then(() => {
           // Redirect to a specified route
-          router.push(next)
+          return this.$router.push(next)
         })
       }, response => {
         logger.default.error('Error while logging in', response.data)
