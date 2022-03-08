@@ -26,9 +26,16 @@ export default defineConfig({
       }
     }
   ],
+  server: {
+    port: process.env.VUE_PORT || '8080',
+    hmr: {
+      port: '8000',
+      protocol: 'ws',
+    }
+  },  
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-  },
+  },  
 })
