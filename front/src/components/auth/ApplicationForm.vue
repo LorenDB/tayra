@@ -126,12 +126,12 @@ import TranslationsMixin from '@/components/mixins/Translations'
 export default {
   mixins: [TranslationsMixin],
   props: {
-    app: { type: Object, required: false, default: () => { return {} } },
+    app: { type: Object, required: false, default: () => { return null } },
     defaults: { type: Object, required: false, default: () => { return {} } }
   },
   data () {
-    const app = this.app || {}
     const defaults = this.defaults || {}
+    const app = this.app || {}
     return {
       isLoading: false,
       errors: [],
