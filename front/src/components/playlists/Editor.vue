@@ -157,10 +157,12 @@
                   {{ plt.track.artist.name }}
                 </td>
                 <td class="right aligned">
-                  <button class="ui circular danger basic icon button">
+                  <button 
+                    class="ui circular danger basic icon button"
+                    @click.stop="removePlt(index)"
+                  >
                     <i
                       class="trash icon"
-                      @click.stop="removePlt(index)"
                     />
                   </button>
                 </td>
