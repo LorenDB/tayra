@@ -5,7 +5,7 @@
   "description": "Funkwhale front-end",
   "author": "Funkwhale Collective <contact@funkwhale.audio>",
   "scripts": {
-    "dev": "vite --host --base=front",
+    "dev": "vite --host --base /front/",
     "build": "vite build",
     "build:deployment": "vite build --base /front/",
     "serve": "vite preview",
