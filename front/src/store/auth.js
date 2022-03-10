@@ -2,6 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import logger from '@/logging'
 import lodash from 'lodash'
+import router from '@/router'
 
 function getDefaultScopedTokens () {
   return {
@@ -141,7 +142,7 @@ export default {
         // commit('token', response.data.token)
         dispatch('fetchProfile').then(() => {
           // Redirect to a specified route
-          return this.$router.push(next)
+          return router.push(next)
         })
       }, response => {
         logger.default.error('Error while logging in', response.data)
