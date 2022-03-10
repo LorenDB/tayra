@@ -2,7 +2,7 @@
 
 {% block document %}
 
-  {% if current_version.name == "develop" %}
+  {% if current_version and current_version.name == "develop" %}
     <div class="admonition warning">
       <p class="admonition-title">Warning</p>
       <p>This documentation only applies for the development version of
