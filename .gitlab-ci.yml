@@ -82,7 +82,7 @@ review_docs:
     - git switch stable
     - git switch $CI_COMMIT_BRANCH
   script:
-    - ./build_docs.sh
+    - poetry run python -m sphinx . $BUILD_PATH
   cache:
     key: "$CI_PROJECT_ID__sphinx"
     paths:
