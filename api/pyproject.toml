@@ -55,7 +55,7 @@ asgiref = "==3.5.0" #1516
 ipython = "==7.31.1"
 python-ldap = "==3.4.0"
 django-auth-ldap = "==4.0.0"
-uvicorn = {version = "==0.17.5", extras = ["standard"]}
+uvicorn = {version = "==0.17.6", extras = ["standard"]}
 django-cache-memoize = "0.1.10"
 
 [tool.poetry.dev-dependencies]
