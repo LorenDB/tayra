@@ -9,7 +9,7 @@
     "build": "vite build",
     "build:deployment": "vite build --base /front/",
     "serve": "vite preview",
-    "test:unit": "true",
+    "test:unit": "jest",
     "lint": "eslint --ext .js,.vue src",
     "fix-fomantic-css": "scripts/fix-fomantic-css.sh",
     "i18n-compile": "scripts/i18n-compile.sh",
@@ -45,7 +45,14 @@
     "vuex-router-sync": "5.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@vue/test-utils": "^1.0.0-beta.22",
     "autoprefixer": "10.4.4",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^27.5.1",
+    "chai": "^4.3.6",
     "easygettext": "2.17.0",
     "eslint": "8.11.0",
     "eslint-config-standard": "16.0.3",
@@ -55,8 +62,12 @@
     "eslint-plugin-promise": "6.0.0",
     "eslint-plugin-vue": "7.20.0",
     "glob-all": "3.3.0",
+    "jest-cli": "^27.5.1",
+    "moxios": "^0.4.0",
+    "sinon": "^13.0.1",
     "vite": "2.8.6",
     "vite-plugin-vue2": "1.9.3",
+    "vue-jest": "^3.0.7",
     "vue-template-compiler": "2.6.14"
   },
   "resolutions": {
@@ -109,5 +120,20 @@
     "iOS >= 9",
     "Android >= 4",
     "not dead"
-  ]
+  ],
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      ".*\\.(vue)$": "vue-jest",
+      "^.+\\.js$": "babel-jest"
+    },
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "testEnvironment": "jsdom"
+  }
 }
