@@ -17,7 +17,7 @@ services:
       - "./po:/po"
     networks:
       - internal
-    command: "yarn dev"
+    command: "yarn dev --base /front/"
 
   postgres:
     env_file:
