@@ -97,8 +97,9 @@ export default {
             dispatch('queue/last', null, { root: true })
           })
         }
-      }, (response) => {
+      }, () => {
         logger.default.error('Error while adding track to queue from radio')
+        commit('reset')
       })
     }
   }
