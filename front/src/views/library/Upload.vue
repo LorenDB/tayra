@@ -31,8 +31,8 @@ export default {
     }
   },
   props: {
-    object: { type: String, required: true },
-    defaultImportReference: { type: String, required: true }
+    object: { type: Object, required: true },
+    defaultImportReference: { type: String, default: '' }
   }
 }
 </script>

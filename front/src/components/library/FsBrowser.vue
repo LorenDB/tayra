@@ -54,7 +54,7 @@ export default {
   props: {
     data: { type: Object, required: true },
     loading: { type: Boolean, required: true },
-    value: { type: String, required: true }
+    value: { type: Array, required: true }
   },
   methods: {
     handleClick (element) {

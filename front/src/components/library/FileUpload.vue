@@ -332,7 +332,12 @@ export default {
   },
   data () {
     const importReference = this.defaultImportReference || moment().format()
-    this.$router.replace({ query: { import: importReference } })
+    // Since $router.replace is pushing the same route, it raises NavigationDuplicated
+    this.$router.replace({ query: { import: importReference } }).catch((error) => {
+      if (error.name !== 'NavigationDuplicated') {
+        throw error
+      }
+    })
     return {
       files: [],
       needsRefresh: false,
@@ -349,7 +354,7 @@ export default {
         objects: {}
       },
       processTimestamp: new Date(),
-      fsStatus: null,
+      fsStatus: {},
       fsPath: [],
       isLoadingFs: false,
       fsInterval: null,
