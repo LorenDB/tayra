@@ -45,7 +45,7 @@
     "vuex-router-sync": "5.0.0"
   },
   "devDependencies": {
-    "autoprefixer": "10.4.3",
+    "autoprefixer": "10.4.4",
     "easygettext": "2.17.0",
     "eslint": "8.11.0",
     "eslint-config-standard": "16.0.3",
