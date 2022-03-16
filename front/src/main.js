@@ -99,6 +99,11 @@ axios.interceptors.response.use(function (response) {
   }
   if (error.response.status === 404) {
     error.backendErrors.push('Resource not found')
+    const message = error.response.data
+    store.commit('ui/addMessage', {
+      content: message,
+      class: 'error'
+    })
   } else if (error.response.status === 403) {
     error.backendErrors.push('Permission denied')
   } else if (error.response.status === 429) {

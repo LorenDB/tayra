@@ -137,7 +137,12 @@ class RadioSessionTrackViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet)
             )
         except AssertionError:
             return Response(status=status.HTTP_403_FORBIDDEN)
-        session.radio.pick()
+        try:
+            session.radio.pick()
+        except ValueError:
+            return Response(
+                "Radio doesn't have more candidates", status=status.HTTP_404_NOT_FOUND
+            )
         session_track = session.session_tracks.all().latest("id")
         # self.perform_create(serializer)
         # dirty override here, since we use a different serializer for creation and detail
