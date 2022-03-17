@@ -251,7 +251,9 @@ pages:
     - apt-get install -y graphviz git
     - pip install poetry
     - poetry install
-    - git fetch origin develop && git fetch origin stable
+    - git switch develop
+    - git switch stable
+    - git switch $CI_COMMIT_BRANCH
   script:
     - ./build_docs.sh
   cache:
