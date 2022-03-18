@@ -11,8 +11,14 @@
               class="ui fluid image track-cover-image"
             >
             <img
-              v-else-if="track.album.cover && track.album.cover.urls.large_square_crop"
+              v-else-if="track.album && track.album.cover && track.album.cover.urls.large_square_crop"
               v-lazy="$store.getters['instance/absoluteUrl'](track.album.cover.urls.large_square_crop)"
+              alt="Cover Image"
+              class="ui fluid image track-cover-image"
+            >
+            <img
+              v-else
+              src="../../assets/audio/default-cover.png"
               alt="Cover Image"
               class="ui fluid image track-cover-image"
             >

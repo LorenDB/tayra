@@ -157,10 +157,12 @@
                   {{ plt.track.artist.name }}
                 </td>
                 <td class="right aligned">
-                  <button class="ui circular danger basic icon button">
+                  <button 
+                    class="ui circular danger basic icon button"
+                    @click.stop="removePlt(index)"
+                  >
                     <i
                       class="trash icon"
-                      @click.stop="removePlt(index)"
                     />
                   </button>
                 </td>
@@ -301,7 +303,7 @@ export default {
         // if backendErrors isn't populated (e.g. duplicate track exceptions raised by
         // the playlist model), read directly from the response
         if (error.rawPayload.playlist) {
-          self.errored(error.rawPayload.playlist.non_field_errors)
+          self.errored(error.rawPayload.playlist)
         } else {
           self.errored(error.backendErrors)
         }

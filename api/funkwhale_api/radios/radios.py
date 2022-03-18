@@ -1,3 +1,4 @@
+import datetime
 import random
 
 from django.core.exceptions import ValidationError
@@ -328,5 +329,8 @@ class LibraryRadio(RelatedObjectRadio):
 @registry.register(name="recently-added")
 class RecentlyAdded(SessionRadio):
     def get_queryset(self, **kwargs):
+        date = datetime.date.today() - datetime.timedelta(days=30)
         qs = super().get_queryset(**kwargs)
-        return qs.filter(artist__content_category="music").order_by("-creation_date")
+        return qs.filter(
+            Q(artist__content_category="music"), Q(creation_date__gt=date),
+        )

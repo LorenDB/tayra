@@ -10,6 +10,65 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.2.3 (2022-03-18)
+------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Enhancements:
+
+- Added support for all cover sources in the embedded player (#1697).
+- Change unmaintained PyMemoize library to django-cache-memoize
+  to enable Python 3.10 support
+
+Bugfixes:
+
+- Catch ValueError on radio end (#1596)
+- Fix bug that prevents users from creating a new oauth application (#1706)
+- Fix failed track adding to playlist being silent (#1020)
+- Fix recently added radio not working has expected (#1674)
+- Fixed an issue where you couldn't load the details page for tracks with no associated album (#1703)
+- Fixed library visibility dropdown (#1384)
+- In playlist editor can now click outside the trashcan but inside the button to delete entry (#1348)
+
+Contributors to our Issues:
+
+- Agate
+- Baudouin Feildel
+- Christoph Pomaska
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Kasper Seweryn
+- Marcos Peña
+- Mathieu Jourdan
+- MattDHarding
+- Micha Gläß-Stöcker
+- dnikolov
+- jovuit
+- petitminion
+
+Contributors to our Merge Requests:
+
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Kasper Seweryn
+- Marcos Peña
+- MattDHarding
+- petitminion
+
+Committers
+
+- Ciaran Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- MattDHarding
+- Petitminion
+- Reinhard Prechtl
+
+
 1.2.2 (2022-02-04)
 ------------------
 

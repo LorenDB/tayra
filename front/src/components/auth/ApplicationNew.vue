@@ -32,9 +32,9 @@ export default {
     ApplicationForm
   },
   props: {
-    name: { type: String, required: true },
-    redirectUris: { type: String, required: true },
-    scopes: { type: Array, required: true }
+    name: { type: String, default: '' },
+    redirectUris: { type: String, default: '' },
+    scopes: { type: String, default: '' }
   },
   data () {
     return {
