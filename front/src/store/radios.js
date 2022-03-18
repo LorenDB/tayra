@@ -76,7 +76,7 @@ export default {
       commit('current', null)
       commit('running', false)
     },
-    populateQueue ({ rootState, state, dispatch }, playNow) {
+    populateQueue ({ commit, rootState, state, dispatch }, playNow) {
       if (!state.running) {
         return
       }
