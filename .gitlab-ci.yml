@@ -78,9 +78,9 @@ review_docs:
     - apt-get install -y graphviz git
     - pip install poetry
     - poetry install
-    - git switch develop
-    - git switch stable
-    - git switch $CI_COMMIT_BRANCH
+    - git switch develop && git pull
+    - git switch stable && git pull
+    - git switch $CI_COMMIT_BRANCH && git pull
   script:
     - poetry run python -m sphinx . $BUILD_PATH
   cache:
@@ -251,9 +251,9 @@ pages:
     - apt-get install -y graphviz git
     - pip install poetry
     - poetry install
-    - git switch develop
-    - git switch stable
-    - git switch $CI_COMMIT_BRANCH
+    - git switch develop && git pull
+    - git switch stable && git pull
+    - git switch $CI_COMMIT_BRANCH && git pull
   script:
     - ./build_docs.sh
   cache:
