@@ -250,7 +250,7 @@ def test_channel_serializer_external_representation(factories, to_api_date):
         "metadata": {},
         "rss_url": channel.get_rss_url(),
         "url": channel.actor.url,
-        "downloads_count": None,
+        "downloads_count": 0,
     }
     expected["artist"]["description"] = common_serializers.ContentSerializer(
         content

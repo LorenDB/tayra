@@ -108,7 +108,7 @@
       >
         <pagination
           :total="totalTracks"
-          :current=" tracks.length > 0 ? page : {currentPage}"
+          :current=" tracks.length > 0 ? page : currentPage"
           :paginate-by="paginateBy"
           @page-changed="updatePage"
         />
@@ -163,6 +163,7 @@ import axios from 'axios'
 import TrackRow from '@/components/audio/track/Row.vue'
 import TrackMobileRow from '@/components/audio/track/MobileRow.vue'
 import Pagination from '@/components/Pagination.vue'
+import { unique } from '@/filters'
 
 export default {
   components: {
@@ -178,7 +179,7 @@ export default {
     showPosition: { type: Boolean, required: false, default: false },
     showArt: { type: Boolean, required: false, default: true },
     search: { type: Boolean, required: false, default: false },
-    filters: { type: Object, required: false, default: null },
+    filters: { type: Object, required: false, default: () => { return {} } },
     nextUrl: { type: String, required: false, default: null },
     displayActions: { type: Boolean, required: false, default: true },
     showDuration: { type: Boolean, required: false, default: true },
@@ -203,7 +204,8 @@ export default {
   },
   computed: {
     allTracks () {
-      return (this.tracks || []).concat(this.additionalTracks)
+      const tracks = (this.tracks || []).concat(this.additionalTracks)
+      return unique(tracks, 'id')
     },
 
     labels () {

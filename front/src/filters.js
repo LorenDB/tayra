@@ -135,4 +135,13 @@ export function humanSize (bytes) {
 
 Vue.filter('humanSize', humanSize)
 
+// Removes duplicates from a list
+export function unique (list, property) {
+  property = property || 'id'
+  const unique = []
+  list.map(x => unique.filter(a => a[property] === x[property]).length > 0 ? null : unique.push(x))
+  return unique
+}
+Vue.filter('unique', unique)
+
 export default {}

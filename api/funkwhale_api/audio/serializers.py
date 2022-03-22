@@ -268,7 +268,7 @@ class ChannelSerializer(serializers.ModelSerializer):
         return obj.actor.received_follows.exclude(approved=False).count()
 
     def get_downloads_count(self, obj):
-        return getattr(obj, "_downloads_count", None)
+        return getattr(obj, "_downloads_count", None) or 0
 
     def get_actor(self, obj):
         if obj.attributed_to == actors.get_service_actor():

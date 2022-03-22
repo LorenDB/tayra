@@ -292,7 +292,7 @@ export default {
       return this.object.tracks_count
     },
     isChannel () {
-      return this.object.artist.channel
+      return this.object.artist.channel !== null
     },
     isSerie () {
       return this.object.artist.content_category === 'podcast'

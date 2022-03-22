@@ -2,7 +2,7 @@
   <button
     :class="[{disabled: disabled}]"
     :disabled="disabled"
-    @click="showModal = true"
+    @click.prevent.stop="showModal = true"
   >
     <slot />
 

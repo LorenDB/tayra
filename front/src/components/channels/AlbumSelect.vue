@@ -2,7 +2,7 @@
   <div>
     <label for="album-dropdown">
       <translate
-        v-if="channel && channel.artist.content_category === 'podcast'"
+        v-if="channel && channel.artist && channel.artist.content_category === 'podcast'"
         key="1"
         translate-context="*/*/*"
       >Series</translate>
@@ -45,8 +45,8 @@ import axios from 'axios'
 
 export default {
   props: {
-    value: { type: String, required: true },
-    channel: { type: Object, required: true }
+    value: { type: Number, default: null },
+    channel: { type: Object, default: () => ({}) }
   },
   data () {
     return {
@@ -65,7 +65,7 @@ export default {
   methods: {
     async fetchData () {
       this.albums = []
-      if (!this.channel) {
+      if (!this.channel || !this.channel.artist) {
         return
       }
       this.isLoading = true
