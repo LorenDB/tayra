@@ -42,7 +42,7 @@
 import axios from 'axios'
 
 export default {
-  props: { value: { type: String, required: true } },
+  props: { value: { type: String, default: null } },
   data () {
     return {
       availableLicenses: [],

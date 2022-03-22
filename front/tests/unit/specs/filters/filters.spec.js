@@ -1,6 +1,6 @@
 import {expect} from 'chai'
 import moment from 'moment'
-import {truncate, ago, capitalize, year} from '@/filters'
+import {truncate, ago, capitalize, year, unique} from '@/filters'
 
 describe('filters', () => {
   describe('truncate', () => {
@@ -46,7 +46,14 @@ describe('filters', () => {
     it('works', () => {
       const input = 'hello world'
       let output = capitalize(input)
-      expect(output).to.equal('Hello world')
+      expect(output).to.deep.equal('Hello world')
+    })
+  })
+  describe('unique', () => {
+    it('works', () => {
+      const list = [{id: 1}, {id: 2}, {id: 3}, {id: 1}]
+      const dedupedList = unique(list, 'id')
+      expect(dedupedList).to.have.deep.members([{id: 1}, {id: 3}, {id: 2}])
     })
   })
 })

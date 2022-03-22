@@ -196,6 +196,7 @@
                         href=""
                         @click.stop.prevent="showEditModal = true"
                       >
+                        <i class="edit icon" />
                         <translate translate-context="*/*/*/Verb">Edit…</translate>
                       </a>
                       <dangerous-button
@@ -203,6 +204,7 @@
                         :class="['ui', {loading: isLoading}, 'item']"
                         @confirm="remove()"
                       >
+                        <i class="ui trash icon" />
                         <translate translate-context="*/*/*/Verb">
                           Delete…
                         </translate>
@@ -505,6 +507,11 @@ export default {
   watch: {
     id () {
       this.fetchData()
+    },
+    '$store.state.channels.latestPublication' (v) {
+      if (v && v.uploads && v.channel.uuid === this.object.uuid) {
+        this.fetchData()
+      }
     }
   },
   async created () {
@@ -531,10 +538,8 @@ export default {
             self.$router.replace({ name: 'channels.detail', params: { id: actor.full_username } })
           }
         }
-        axios.get('tracks', { params: { channel: response.data.uuid, page_size: 1, playable: true, include_channels: true } }).then(response => {
-          self.totalTracks = response.data.count
-          self.isLoading = false
-        })
+        self.totalTracks = response.data.artist.tracks_count
+        self.isLoading = false
       })
       await channelPromise
     },

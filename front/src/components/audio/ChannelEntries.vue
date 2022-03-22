@@ -67,7 +67,7 @@ export default {
   props: {
     filters: { type: Object, required: true },
     limit: { type: Number, default: 10 },
-    defaultCover: { type: Object, required: true },
+    defaultCover: { type: Object, default: () => ({}) },
     isPodcast: { type: Boolean, required: true }
   },
   data () {
