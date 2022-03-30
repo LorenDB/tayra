@@ -240,8 +240,8 @@ build_front:
   tags:
     - docker
 
-pages:
-  stage: test
+build_documentation:
+  stage: build
   image: python:3.10
   variables:
     BUILD_PATH: "../public"
@@ -267,6 +267,24 @@ pages:
     - stable@funkwhale/funkwhale
   tags:
     - docker
+
+deploy_documentation:
+  stage: deploy
+  image: alpine
+  dependencies:
+    - build_documentation
+  before_script:
+    - apk add openssh-client rsync
+    - mkdir -p ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - eval `ssh-agent -s`
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+  script:
+    - rsync -r -e "ssh -p 2282" $CI_PROJECT_DIR/public/ docs@docs.funkwhale.audio:/htdocs/
+  only:
+    - stable
+
 
 .docker_publish:
   stage: deploy
