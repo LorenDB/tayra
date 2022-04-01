@@ -221,7 +221,7 @@ test_front:
 
 build_docs:
   stage: build
-  image: $CI_REGISTRY/funkwhale/backend-test-docker:latest
+  image: $CI_REGISTRY/funkwhale/backend-test-docker:3.10
   services:
     - postgres:14
     - redis:6
