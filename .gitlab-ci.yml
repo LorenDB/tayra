@@ -178,6 +178,7 @@ test_api:
       - branches
   before_script:
     - cd api
+    - poetry run pip install setuptools==59.1.1 # Hotfix for failing pipelines #1745
     - poetry install --no-root
   script:
     - poetry run pytest --cov-report xml --cov-report term-missing:skip-covered --cov=funkwhale_api --junitxml=report.xml tests/
