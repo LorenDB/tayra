@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.utils.http import parse_http_date
 
 import requests
-import requests_http_signature
+import requests_http_message_signatures
 
 from . import exceptions, utils
 
@@ -45,8 +45,8 @@ def verify(request, public_key):
     )
     verify_date(date)
     try:
-        return requests_http_signature.HTTPSignatureAuth.verify(
-            request, key_resolver=lambda **kwargs: public_key, use_auth_header=False
+        return requests_http_message_signatures.HTTPSignatureHeaderAuth.verify(
+            request, key_resolver=lambda **kwargs: public_key
         )
     except cryptography.exceptions.InvalidSignature:
         logger.warning(
@@ -65,7 +65,7 @@ def verify_django(django_request, public_key):
     headers = utils.clean_wsgi_headers(django_request.META)
     for h, v in list(headers.items()):
         # we include lower-cased version of the headers for compatibility
-        # with requests_http_signature
+        # with requests_http_message_signatures
         headers[h.lower()] = v
     try:
         signature = headers["Signature"]
@@ -98,8 +98,7 @@ def verify_django(django_request, public_key):
 
 
 def get_auth(private_key, private_key_id):
-    return requests_http_signature.HTTPSignatureAuth(
-        use_auth_header=False,
+    return requests_http_message_signatures.HTTPSignatureHeaderAuth(
         headers=["(request-target)", "user-agent", "host", "date"],
         algorithm="rsa-sha256",
         key=private_key.encode("utf-8"),
