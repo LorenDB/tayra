@@ -238,6 +238,7 @@ build_docs:
   before_script:
     - cd api
     - pip3 install poetry
+    - poetry run pip install setuptools==59.1.1 # Hotfix for failing pipelines #1745
     - poetry install
     - poetry run python manage.py migrate
   script:
