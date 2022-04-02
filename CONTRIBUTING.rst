@@ -47,8 +47,8 @@ Setup front-end only development environment
 
 5. Launch the development server::
 
-    # this will serve the front-end on http://localhost:8080
-    yarn dev
+    # this will serve the front-end on http://localhost:8000
+    VUE_PORT=8000 yarn dev
 
 6. Make the front-end talk with an existing server (like https://demo.funkwhale.audio or https://open.audio),
    by clicking on the corresponding link in the footer

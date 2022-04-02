@@ -29,13 +29,13 @@ export default defineConfig({
   server: {
     port: process.env.VUE_PORT || '8080',
     hmr: {
-      port: '8000',
-      protocol: 'ws',
+      port: process.env.FUNKWHALE_PROTOCOL === 'https' ? 443 : 8000,
+      protocol: process.env.FUNKWHALE_PROTOCOL === 'https' ? 'wss' : 'ws',
     }
-  },  
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-  },  
+  },
 })
