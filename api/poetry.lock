@@ -1711,8 +1711,8 @@ use_chardet_on_py3 = ["chardet (>=3.0.2,<5)"]
 
 [[package]]
 name = "requests-http-message-signatures"
-version = "0.3.0.dev1"
-description = ""
+version = "0.3.0rc5"
+description = "A request authentication plugin implementing IETF HTTP Message Signatures"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
@@ -2108,7 +2108,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "1578e0a71904f98af5bd80f1b7efafaf6a8d6291d458cf27345c179062d6110d"
+content-hash = "9a0fb758e4aa6cf2a2b6f7fb037b920a04c0935f26b2d1f45dad31b008e853a7"
 
 [metadata.files]
 aiohttp = [
@@ -3249,8 +3249,8 @@ requests = [
     {file = "requests-2.27.1.tar.gz", hash = "sha256:68d7c56fd5a8999887728ef304a6d12edc7be74f1cfa47714fc8b414525c9a61"},
 ]
 requests-http-message-signatures = [
-    {file = "requests-http-message-signatures-0.3.0.dev1.tar.gz", hash = "sha256:6608fd762397b281d411c6ee3439aacc6886f5562ade7fc7e63653f8f045bf92"},
-    {file = "requests_http_message_signatures-0.3.0.dev1-py3-none-any.whl", hash = "sha256:9b5b2c2f733b94d835465c47d7c1d7376c05e6dc50aae25afda7d4aaf800a618"},
+    {file = "requests-http-message-signatures-0.3.0rc5.tar.gz", hash = "sha256:48d72ba29f1524dbf37de6774112346f11838460b8f58ed9cd6adfeb74f6e363"},
+    {file = "requests_http_message_signatures-0.3.0rc5-py3-none-any.whl", hash = "sha256:9f6f23d79c6ff5f384b8cfce0e3f98268a08971fe471d379c2cf6ea18a2f355f"},
 ]
 requests-mock = [
     {file = "requests-mock-1.9.3.tar.gz", hash = "sha256:8d72abe54546c1fc9696fa1516672f1031d72a55a1d66c85184f972a24ba0eba"},
