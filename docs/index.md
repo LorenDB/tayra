@@ -35,6 +35,7 @@ hidden: true
 
 administrator_documentation/index
 administrator_documentation/installation_docs/index
+administrator_documentation/migration_guide/index
 
 ```
 
