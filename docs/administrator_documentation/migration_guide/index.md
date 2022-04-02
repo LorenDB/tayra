@@ -21,7 +21,7 @@ Follow this guide to migrate a mono-container installation to a multi-container 
 
    ```{code} bash
    cd /srv/
-   cp funkwhale funkwhale.bak
+   sudo cp funkwhale funkwhale.bak
    ```
 
 3. Go to the original `/srv/funkwhale` folder to run the migration.
@@ -54,7 +54,13 @@ Follow this guide to migrate a mono-container installation to a multi-container 
    export FUNKWHALE_VERSION={sub-ref}`version`
    ```
 
-2. Download the required template files.
+2. Take a backup of your current `docker-compose.yml` file.
+
+   ```{code} bash
+   mv docker-compose.yml docker-compose.yml.bak
+   ```
+
+3. Download the required template files.
 
    ```{code} bash
    curl -L -o docker-compose.yml "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker-compose.yml"
@@ -88,7 +94,7 @@ Follow this guide to migrate a mono-container installation to a multi-container 
    sed -i "s/FUNKWHALE_VERSION=latest/FUNKWHALE_VERSION=$FUNKWHALE_VERSION/" .env
    ```
 
-5. Copy the settings from your old `.env` file to your new `.env` file. These will be added to the bottom of the file. Check the file and remove any duplicated settings after copying.
+5. Copy the settings from your old `.env` file to your new `.env` file.
 
    ```{code} bash
    cat .env.bak >> .env
@@ -99,6 +105,8 @@ Follow this guide to migrate a mono-container installation to a multi-container 
    ```{code} bash
    echo "DATABASE_URL=postgresql://funkwhale@postgres:5432/funkwhale" >> .env
    ```
+
+Check the file and remove any duplicated settings after copying.
 
 ## Migrate your database
 
