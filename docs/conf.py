@@ -233,6 +233,10 @@ redirect_files = [
     ("moderator/domains.html", "../moderator_documentation/domains/index.html"),
     ("moderator/users.html", "../moderator_documentation/users/index.html"),
     ("moderator/listing.html", "../moderator_documentation/allow_listing/index.html"),
+    ("installation/index.html", "../administrator_documentation/installation_docs/index.html"),
+    ("installation/index.html#quick-install", "../administrator_documentation/installation_docs/quick_install.html"),
+    ("installation/docker.html", "../administrator_documentation/installation_docs/docker.html"),
+    ("installation/debian.html", "../administrator_documentation/installation_docs/debian.html"),
 ]
 
 # Generate redirect template
