@@ -132,6 +132,11 @@ Create it like this::
 
     touch .env
 
+These two environment variables must be included for the images to load in front-end and django admin pages::
+
+    MEDIA_URL=http://localhost:8000/media/
+    STATIC_URL=http://localhost:8000/staticfiles/
+
 
 Create docker network
 ^^^^^^^^^^^^^^^^^^^^^
