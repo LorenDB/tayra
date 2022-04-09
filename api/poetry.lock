@@ -301,7 +301,7 @@ python-versions = "~=3.7"
 
 [[package]]
 name = "celery"
-version = "5.2.3"
+version = "5.2.6"
 description = "Distributed Task Queue."
 category = "main"
 optional = false
@@ -313,6 +313,7 @@ click = ">=8.0.3,<9.0"
 click-didyoumean = ">=0.0.3"
 click-plugins = ">=1.1.1"
 click-repl = ">=0.2.0"
+importlib-metadata = {version = ">=1.4.0", markers = "python_version < \"3.8\""}
 kombu = ">=5.2.3,<6.0"
 pytz = ">=2021.3"
 vine = ">=5.0.0,<6.0"
@@ -2108,7 +2109,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "1830f49ae88d269c0bf0a420999d542c05a40e6d9244d16e27898fc47adf4a99"
+content-hash = "98bf13f7d04d6d6021965f7df0e24cd9e2a3f777142fd7de7d56753e39ab8834"
 
 [metadata.files]
 aiohttp = [
@@ -2294,8 +2295,8 @@ cachetools = [
     {file = "cachetools-5.0.0.tar.gz", hash = "sha256:486471dfa8799eb7ec503a8059e263db000cdda20075ce5e48903087f79d5fd6"},
 ]
 celery = [
-    {file = "celery-5.2.3-py3-none-any.whl", hash = "sha256:8aacd02fc23a02760686d63dde1eb0daa9f594e735e73ea8fb15c2ff15cb608c"},
-    {file = "celery-5.2.3.tar.gz", hash = "sha256:e2cd41667ad97d4f6a2f4672d1c6a6ebada194c619253058b5f23704aaadaa82"},
+    {file = "celery-5.2.6-py3-none-any.whl", hash = "sha256:da31f8eae7607b1582e5ee2d3f2d6f58450585afd23379491e3d9229d08102d0"},
+    {file = "celery-5.2.6.tar.gz", hash = "sha256:d1398cadf30f576266b34370e28e880306ec55f7a4b6307549b0ae9c15663481"},
 ]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
