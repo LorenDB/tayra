@@ -71,7 +71,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "django"
-version = "4.0.3"
+version = "4.0.4"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
@@ -471,7 +471,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "494b7b89250425af2d67c6a998ff94ee77c0487e6ed6475fc303b20d3ba9a9af"
+content-hash = "72cd5310d892583ced62cbb420144b12646a6938457bcbc35eb36116ba938be0"
 
 [metadata.files]
 alabaster = [
@@ -503,8 +503,8 @@ colorama = [
     {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
 ]
 django = [
-    {file = "Django-4.0.3-py3-none-any.whl", hash = "sha256:1239218849e922033a35d2a2f777cb8bee18bd725416744074f455f34ff50d0c"},
-    {file = "Django-4.0.3.tar.gz", hash = "sha256:77ff2e7050e3324c9b67e29b6707754566f58514112a9ac73310f60cd5261930"},
+    {file = "Django-4.0.4-py3-none-any.whl", hash = "sha256:07c8638e7a7f548dc0acaaa7825d84b7bd42b10e8d22268b3d572946f1e9b687"},
+    {file = "Django-4.0.4.tar.gz", hash = "sha256:4e8177858524417563cc0430f29ea249946d831eacb0068a1455686587df40b5"},
 ]
 django-environ = [
     {file = "django-environ-0.8.1.tar.gz", hash = "sha256:6f0bc902b43891656b20486938cba0861dc62892784a44919170719572a534cb"},
