@@ -71,7 +71,7 @@
     "webpack-bundle-size-analyzer": "~3.0.0"
   },
   "resolutions": {
-    "vue-plyr/plyr": "3.6.2"
+    "vue-plyr/plyr": "3.6.12"
   },
   "eslintConfig": {
     "root": true,
