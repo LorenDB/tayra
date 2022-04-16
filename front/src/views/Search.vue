@@ -219,8 +219,8 @@ export default {
       params.append('q', this.query)
       params.append('page', this.page)
       params.append('page_size', this.paginateBy)
-      if (this.currentType.contentCategory !== undefined) { params.append('content_category', this.currentType.contentCategory) };
-      if (this.currentType.includeChannels !== undefined) { params.append('include_channels', this.currentType.includeChannels) };
+      if (this.currentType.contentCategory !== undefined) { params.append('content_category', this.currentType.contentCategory) }
+      if (this.currentType.includeChannels !== undefined) { params.append('include_channels', this.currentType.includeChannels) }
       return params
     },
     types () {

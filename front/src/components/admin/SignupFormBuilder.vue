@@ -174,7 +174,7 @@ function arrayMove (arr, oldIndex, newIndex) {
   }
   arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0])
   return arr
-};
+}
 
 // v-model with objects is complex, cf
 // https://simonkollross.de/posts/vuejs-using-v-model-with-objects-for-custom-components

@@ -22,6 +22,10 @@ module.exports = {
   ],
   rules: {
     'vue/no-v-html': 'off', // TODO: tackle this properly
-    'vue/no-use-v-if-with-v-for': 'off'
+    'vue/no-use-v-if-with-v-for': 'off',
+
+    // TODO: Enable typescript rules later
+    '@typescript-eslint/no-this-alias': 'off',
+    '@typescript-eslint/no-empty-function': 'off'
   }
 }

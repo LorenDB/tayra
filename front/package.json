@@ -10,7 +10,7 @@
     "build:deployment": "vite build --base /front/",
     "serve": "vite preview",
     "test:unit": "jest",
-    "lint": "eslint --ext .js,.vue src",
+    "lint": "eslint --ext .ts,.js,.vue src",
     "fix-fomantic-css": "scripts/fix-fomantic-css.sh",
     "i18n-compile": "scripts/i18n-compile.sh",
     "i18n-extract": "scripts/i18n-extract.sh",
