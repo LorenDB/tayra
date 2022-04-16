@@ -1,7 +1,7 @@
-// vite.config.js
-
 import { defineConfig } from 'vite'
-import { createVuePlugin as vue } from 'vite-plugin-vue2'
+import { createVuePlugin as Vue2 } from 'vite-plugin-vue2'
+import Components from 'unplugin-vue-components/vite'
+import ScriptSetup from 'unplugin-vue2-script-setup/vite'
 
 import path from 'path'
 
@@ -23,7 +23,18 @@ if (process.env.GITPOD_WORKSPACE_URL) {
 export default defineConfig({
   envPrefix: "VUE_",
   plugins: [
-    vue(),
+    // https://github.com/underfin/vite-plugin-vue2
+    Vue2(),
+
+    // https://github.com/antfu/unplugin-vue2-script-setup
+    ScriptSetup(),
+
+    // https://github.com/antfu/unplugin-vue-components
+    Components({
+      dts: 'src/components.d.ts',
+      transformer: 'vue2'
+    }),
+
     {
       name: 'fix-fomantic-ui-css',
       transform (src, id) {

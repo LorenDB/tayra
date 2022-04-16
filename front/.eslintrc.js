@@ -5,7 +5,9 @@ module.exports = {
   },
   extends: [
     'plugin:vue/recommended',
-    'standard'
+    '@vue/typescript/recommended',
+    '@vue/standard'
+
   ],
   globals: {
     Atomics: 'readonly',
@@ -13,13 +15,13 @@ module.exports = {
   },
   parserOptions: {
     ecmaVersion: 2020,
-    sourceType: 'module',
+    sourceType: 'module'
   },
   plugins: [
     'vue'
   ],
   rules: {
-    "vue/no-v-html": "off", // TODO: tackle this properly
-    "vue/no-use-v-if-with-v-for": "off"
+    'vue/no-v-html': 'off', // TODO: tackle this properly
+    'vue/no-use-v-if-with-v-for': 'off'
   }
 }
