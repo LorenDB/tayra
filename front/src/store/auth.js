@@ -54,7 +54,6 @@ export default {
       moderation: false
     },
     profile: null,
-    token: '',
     oauth: getDefaultOauth(),
     scopedTokens: getDefaultScopedTokens()
   },
@@ -71,7 +70,6 @@ export default {
       state.profile = null
       state.username = ''
       state.fullUsername = ''
-      state.token = ''
       state.scopedTokens = getDefaultScopedTokens()
       state.oauth = getDefaultOauth()
       state.availablePermissions = {
@@ -89,7 +87,6 @@ export default {
       if (value === false) {
         state.username = null
         state.fullUsername = null
-        state.token = null
         state.profile = null
         state.scopedTokens = getDefaultScopedTokens()
         state.availablePermissions = {}
@@ -105,9 +102,6 @@ export default {
       if (state.profile) {
         state.profile.avatar = value
       }
-    },
-    token: (state, value) => {
-      state.token = value
     },
     scopedTokens: (state, value) => {
       state.scopedTokens = { ...value }
@@ -138,7 +132,6 @@ export default {
       })
       return axios.post('users/login', form).then(response => {
         logger.default.info('Successfully logged in as', credentials.username)
-        // commit('token', response.data.token)
         dispatch('fetchProfile').then(() => {
           // Redirect to a specified route
           import('@/router').then((router) => {
@@ -168,16 +161,6 @@ export default {
         commit(`${m}/reset`, null, { root: true })
       })
       logger.default.info('Log out, goodbye!')
-    },
-    async check ({ commit, dispatch, state }) {
-      logger.default.info('Checking authentication…')
-      commit('authenticated', false)
-      const profile = await dispatch('fetchProfile')
-      if (profile) {
-        commit('authenticated', true)
-      } else {
-        logger.default.info('Anonymous user')
-      }
     },
     fetchProfile ({ commit, dispatch, state }) {
       return new Promise((resolve, reject) => {

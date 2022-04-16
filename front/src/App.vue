@@ -50,7 +50,7 @@
 import axios from 'axios'
 import _ from 'lodash'
 import { mapState, mapGetters } from 'vuex'
-import { WebSocketBridge } from 'django-channels'
+import { useWebSocket, whenever } from '@vueuse/core'
 import GlobalEvents from '@/components/utils/global-events.vue'
 import locales from './locales'
 import { getClientOnlyRadio } from '@/radios'
@@ -65,6 +65,7 @@ import SetInstanceModal from '@/components/SetInstanceModal.vue'
 import ShortcutsModal from '@/components/ShortcutsModal.vue'
 import FilterModal from '@/components/moderation/FilterModal.vue'
 import ReportModal from '@/components/moderation/ReportModal.vue'
+import { watch, watchEffect } from '@vue/composition-api'
 
 export default {
   name: 'App',
@@ -81,9 +82,32 @@ export default {
     ReportModal,
     GlobalEvents
   },
+  setup (props, { root }) {
+    const store = root.$store
+
+    const url = store.getters['instance/absoluteUrl']('api/v1/activity')
+      .replace(/^http/, 'ws')
+
+    const { data, status, open, close } = useWebSocket(url, {
+      autoReconnect: true,
+      immediate: false
+    })
+
+    watch(() => store.state.auth.authenticated, (authenticated) => {
+      if (authenticated) return open()
+      close()
+    })
+
+    whenever(data, () => {
+      store.dispatch('ui/websocketEvent', JSON.parse(data.value))
+    })
+
+    watchEffect(() => {
+      console.log('Websocket status:', status.value)
+    })
+  },
   data () {
     return {
-      bridge: null,
       instanceUrl: null,
       showShortcutsModal: false,
       showSetInstanceModal: false,
@@ -172,13 +196,6 @@ export default {
         this.setTheme(newValue)
       }
     },
-    '$store.state.auth.authenticated' (newValue) {
-      if (!newValue) {
-        this.disconnect()
-      } else {
-        this.openWebsocket()
-      }
-    },
     '$store.state.ui.currentLanguage': {
       immediate: true,
       handler (newValue) {
@@ -248,7 +265,6 @@ export default {
     }
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
-    this.openWebsocket()
     const self = this
     if (!this.$store.state.ui.selectedLanguage) {
       this.autodetectLanguage()
@@ -264,7 +280,7 @@ export default {
     }
     const url = urlParams.get('_url')
     if (url) {
-      this.$router.replace(url)
+      await this.$router.replace(url)
     } else if (!this.$store.state.instance.instanceUrl) {
       // we have several way to guess the API server url. By order of precedence:
       // 1. use the url provided in settings.json, if any
@@ -279,11 +295,6 @@ export default {
       this.$store.commit('instance/instanceUrl', this.$store.state.instance.instanceUrl)
     }
     await this.fetchNodeInfo()
-    this.$store.dispatch('auth/check')
-    setInterval(() => {
-      // used to refresh profile every now and then (important for refreshing scoped tokens)
-      self.$store.dispatch('auth/check')
-    }, 1000 * 60 * 60 * 8)
     this.$store.dispatch('instance/fetchSettings')
     this.$store.commit('ui/addWebsocketEventHandler', {
       eventName: 'inbox.item_added',
@@ -354,7 +365,6 @@ export default {
       eventName: 'Listen',
       id: 'handleListen'
     })
-    this.disconnect()
   },
   methods: {
     incrementNotificationCountInSidebar (event) {
@@ -399,36 +409,6 @@ export default {
         return
       }
       this.$store.commit('ui/currentLanguage', candidate)
-    },
-    disconnect () {
-      if (!this.bridge) {
-        return
-      }
-      this.bridge.socket.close(1000, 'goodbye', { keepClosed: true })
-    },
-    openWebsocket () {
-      if (!this.$store.state.auth.authenticated) {
-        return
-      }
-      this.disconnect()
-      const self = this
-      const token = this.$store.state.auth.token
-      const bridge = new WebSocketBridge()
-      this.bridge = bridge
-      let url =
-        this.$store.getters['instance/absoluteUrl'](`api/v1/activity?token=${token}`)
-      url = url.replace('http://', 'ws://')
-      url = url.replace('https://', 'wss://')
-      bridge.connect(
-        url,
-        [],
-        { reconnectInterval: 1000 * 60 })
-      bridge.addEventListener('message', function (event) {
-        self.$store.dispatch('ui/websocketEvent', event.data)
-      })
-      bridge.socket.addEventListener('open', function () {
-        console.log('Connected to WebSocket')
-      })
     },
     getTrackInformationText (track) {
       const trackTitle = track.title

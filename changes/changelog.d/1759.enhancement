@@ -1,0 +1,1 @@
+Replace django-channels package with web socket implementation from @vueuse/core (#1715)

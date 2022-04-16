@@ -14,6 +14,7 @@ import GetTextPlugin from 'vue-gettext'
 import { sync } from 'vuex-router-sync'
 import locales from '@/locales'
 import createAuthRefreshInterceptor from 'axios-auth-refresh'
+import VueCompositionAPI from '@vue/composition-api'
 
 import filters from '@/filters' // eslint-disable-line
 import { parseAPIErrors } from '@/utils'
@@ -57,6 +58,7 @@ Vue.use(GetTextPlugin, {
   silent: true
 })
 
+Vue.use(VueCompositionAPI)
 Vue.use(VueLazyload)
 Vue.directive('title', function (el, binding) {
   store.commit('ui/pageTitle', binding.value)

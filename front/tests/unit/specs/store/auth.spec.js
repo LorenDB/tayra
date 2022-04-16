@@ -37,27 +37,14 @@ describe('store/auth', () => {
     it('authenticated false', () => {
       const state = {
         username: 'dummy',
-        token: 'dummy',
         profile: 'dummy',
         availablePermissions: 'dummy'
       }
       store.mutations.authenticated(state, false)
       expect(state.authenticated).to.equal(false)
       expect(state.username).to.equal(null)
-      expect(state.token).to.equal(null)
       expect(state.profile).to.equal(null)
       expect(state.availablePermissions).to.deep.equal({})
-    })
-    it('token null', () => {
-      const state = {}
-      store.mutations.token(state, null)
-      expect(state.token).to.equal(null)
-    })
-    it('token real', () => {
-      const state = {}
-      let token = 'eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwczovL2p3dC1pZHAuZXhhbXBsZS5jb20iLCJzdWIiOiJtYWlsdG86bWlrZUBleGFtcGxlLmNvbSIsIm5iZiI6MTUxNTUzMzQyOSwiZXhwIjoxNTE1NTM3MDI5LCJpYXQiOjE1MTU1MzM0MjksImp0aSI6ImlkMTIzNDU2IiwidHlwIjoiaHR0cHM6Ly9leGFtcGxlLmNvbS9yZWdpc3RlciJ9.'
-      store.mutations.token(state, token)
-      expect(state.token).to.equal(token)
     })
     it('permissions', () => {
       const state = { availablePermissions: {} }
@@ -83,19 +70,6 @@ describe('store/auth', () => {
           { type: 'playlists/reset', payload: null, options: {root: true} },
           { type: 'queue/reset', payload: null, options: {root: true} },
           { type: 'radios/reset', payload: null, options: {root: true} }
-        ]
-      })
-    })
-    it('check jwt null', () => {
-      testAction({
-        action: store.actions.check,
-        params: {state: {}},
-        expectedMutations: [
-          { type: 'authenticated', payload: false },
-          { type: 'authenticated', payload: true },
-        ],
-        expectedActions: [
-          { type: 'fetchProfile' },
         ]
       })
     })

@@ -17,14 +17,6 @@ export default defineConfig({
         }
       }
     },
-    {
-      name: 'fix-django-channels',
-      transform (src, id) {
-        if (id.includes('django-channels')) {
-          return `var parcelRequire;${src}`
-        }
-      }
-    }
   ],
   server: {
     port: process.env.VUE_PORT || '8080',
