@@ -1,6 +1,6 @@
 import axios from 'axios'
 import logger from '@/logging'
-import _ from 'lodash'
+import { merge } from 'lodash-es'
 
 function getDefaultUrl () {
   return (
@@ -65,7 +65,7 @@ export default {
   },
   mutations: {
     settings: (state, value) => {
-      _.merge(state.settings, value)
+      merge(state.settings, value)
     },
     event: (state, value) => {
       state.events.unshift(value)
@@ -112,11 +112,11 @@ export default {
       if (relativeUrl.startsWith('http')) {
         return relativeUrl
       }
-      if (state.instanceUrl.endsWith('/') && relativeUrl.startsWith('/')) {
+      if (state.instanceUrl?.endsWith('/') && relativeUrl.startsWith('/')) {
         relativeUrl = relativeUrl.slice(1)
       }
 
-      const instanceUrl = state.instanceUrl || getDefaultUrl()
+      const instanceUrl = state.instanceUrl ?? getDefaultUrl()
       return instanceUrl + relativeUrl
     },
     domain: (state) => {
@@ -149,17 +149,15 @@ export default {
     fetchSettings ({ commit }, payload) {
       return axios.get('instance/settings/').then(response => {
         logger.default.info('Successfully fetched instance settings')
-        const sections = {}
-        response.data.forEach(e => {
-          sections[e.section] = {}
-        })
-        response.data.forEach(e => {
-          sections[e.section][e.name] = e
-        })
+
+        const sections = response.data.reduce((map, entry) => {
+          map[entry.section] ??= {}
+          map[entry.section][entry.name] = entry
+          return map
+        }, {})
+
         commit('settings', sections)
-        if (payload && payload.callback) {
-          payload.callback()
-        }
+        payload?.callback?.()
       }, response => {
         logger.default.error('Error while fetching settings', response.data)
       })

@@ -193,7 +193,7 @@
                         </translate>
                       </td>
                       <td>
-                        {{ lodash.get(object, 'nodeinfo.payload.software.name', $pgettext('*/*/*', 'N/A')) }} ({{ lodash.get(object, 'nodeinfo.payload.software.version', $pgettext('*/*/*', 'N/A')) }})
+                        {{ get(object, 'nodeinfo.payload.software.name', $pgettext('*/*/*', 'N/A')) }} ({{ get(object, 'nodeinfo.payload.software.version', $pgettext('*/*/*', 'N/A')) }})
                       </td>
                     </tr>
                     <tr>
@@ -203,7 +203,7 @@
                         </translate>
                       </td>
                       <td>
-                        {{ lodash.get(object, 'nodeinfo.payload.metadata.nodeName', $pgettext('*/*/*', 'N/A')) }}
+                        {{ get(object, 'nodeinfo.payload.metadata.nodeName', $pgettext('*/*/*', 'N/A')) }}
                       </td>
                     </tr>
                     <tr>
@@ -213,7 +213,7 @@
                         </translate>
                       </td>
                       <td>
-                        {{ lodash.get(object, 'nodeinfo.payload.usage.users.total', $pgettext('*/*/*', 'N/A')) }}
+                        {{ get(object, 'nodeinfo.payload.usage.users.total', $pgettext('*/*/*', 'N/A')) }}
                       </td>
                     </tr>
                   </template>
@@ -458,7 +458,7 @@
 
 <script>
 import axios from 'axios'
-import lodash from 'lodash'
+import { get } from 'lodash-es'
 
 import InstancePolicyForm from '@/components/manage/moderation/InstancePolicyForm.vue'
 import InstancePolicyCard from '@/components/manage/moderation/InstancePolicyCard.vue'
@@ -471,7 +471,7 @@ export default {
   props: { id: { type: String, required: true }, allowListEnabled: { type: Boolean, required: true } },
   data () {
     return {
-      lodash,
+      get,
       isLoading: true,
       isLoadingStats: false,
       isLoadingPolicy: false,

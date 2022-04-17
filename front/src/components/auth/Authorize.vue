@@ -229,8 +229,8 @@ export default {
       })
     }
   },
-  created () {
-    checkRedirectToLogin(this.$store, this.$router)
+  async created () {
+    await checkRedirectToLogin(this.$store, this.$router)
     if (this.clientId) {
       this.fetchApplication()
     }

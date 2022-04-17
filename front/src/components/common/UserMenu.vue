@@ -26,14 +26,14 @@
         class="menu"
       >
         <a
-          v-for="theme in themes"
-          :key="theme.key"
-          :class="[{'active': $store.state.ui.theme === theme.key}, 'item']"
-          :value="theme.key"
-          @click="$store.dispatch('ui/theme', theme.key)"
+          v-for="t in themes"
+          :key="t.key"
+          :class="[{'active': theme === t.key}, 'item']"
+          :value="t.key"
+          @click="theme = t.key"
         >
-          <i :class="theme.icon" />
-          {{ theme.name }}
+          <i :class="t.icon" />
+          {{ t.name }}
         </a>
       </div>
     </div>
@@ -154,11 +154,16 @@
 <script>
 
 import { mapGetters } from 'vuex'
-
-import ThemesMixin from '@/components/mixins/Themes.vue'
+import useThemeList from '@/composables/useThemeList'
+import useTheme from '@/composables/useTheme'
 
 export default {
-  mixins: [ThemesMixin],
+  setup () {
+    return {
+      theme: useTheme(),
+      themes: useThemeList()
+    }
+  },
   computed: {
     labels () {
       return {

@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { humanSize } from '@/filters'
+import { humanSize } from '@/modules/filters'
 
 export default {
   computed: {

@@ -1,18 +1,18 @@
+import { AppModule } from '~/types'
+
 import Vue from 'vue'
-
-import time from '@/utils/time'
-
+import time from '~/utils/time'
 import moment from 'moment'
 
-export function truncate (str, max, ellipsis, middle) {
+export function truncate (str: string, max = 100, ellipsis = '…', middle = false) {
   if (max === 0) {
-    return
+    return ''
   }
-  max = max || 100
-  ellipsis = ellipsis || '…'
+
   if (str.length <= max) {
     return str
   }
+
   if (middle) {
     const sepLen = 1
     const charsToShow = max - sepLen
@@ -27,9 +27,7 @@ export function truncate (str, max, ellipsis, middle) {
   }
 }
 
-Vue.filter('truncate', truncate)
-
-export function ago (date, locale) {
+export function ago (date: Date, locale: string) {
   locale = locale || 'en'
   const m = moment(date)
   m.locale(locale)
@@ -43,9 +41,7 @@ export function ago (date, locale) {
   })
 }
 
-Vue.filter('ago', ago)
-
-export function fromNow (date, locale) {
+export function fromNow (date: Date, locale: string) {
   locale = 'en'
   moment.locale('en', {
     relativeTime: {
@@ -70,9 +66,7 @@ export function fromNow (date, locale) {
   return m.fromNow(true)
 }
 
-Vue.filter('fromNow', fromNow)
-
-export function secondsToObject (seconds) {
+export function secondsToObject (seconds: number) {
   const m = moment.duration(seconds, 'seconds')
   return {
     seconds: m.seconds(),
@@ -81,42 +75,30 @@ export function secondsToObject (seconds) {
   }
 }
 
-Vue.filter('secondsToObject', secondsToObject)
-
-export function padDuration (duration) {
+export function padDuration (duration: string) {
   let s = String(duration)
   while (s.length < 2) { s = '0' + s }
   return s
 }
 
-Vue.filter('padDuration', padDuration)
-
-export function duration (seconds) {
-  return time.parse(seconds)
+export function duration (seconds: string) {
+  return time.parse(+seconds)
 }
 
-Vue.filter('duration', duration)
-
-export function momentFormat (date, format) {
+export function momentFormat (date: Date, format: string) {
   format = format || 'lll'
   return moment(date).format(format)
 }
 
-Vue.filter('moment', momentFormat)
-
-export function year (date) {
+export function year (date: Date) {
   return moment(date).year()
 }
 
-Vue.filter('year', year)
-
-export function capitalize (str) {
+export function capitalize (str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
-Vue.filter('capitalize', capitalize)
-
-export function humanSize (bytes) {
+export function humanSize (bytes: number) {
   const si = true
   const thresh = si ? 1000 : 1024
   if (Math.abs(bytes) < thresh) {
@@ -133,15 +115,24 @@ export function humanSize (bytes) {
   return bytes.toFixed(1) + ' ' + units[u]
 }
 
-Vue.filter('humanSize', humanSize)
-
 // Removes duplicates from a list
-export function unique (list, property) {
+export function unique (list: { [key: string]: unknown }[], property: string) {
   property = property || 'id'
-  const unique = []
+  const unique: { [key: string]: unknown }[] = []
   list.map(x => unique.filter(a => a[property] === x[property]).length > 0 ? null : unique.push(x))
   return unique
 }
-Vue.filter('unique', unique)
 
-export default {}
+export const install: AppModule = () => {
+  Vue.filter('humanSize', humanSize)
+  Vue.filter('unique', unique)
+  Vue.filter('capitalize', capitalize)
+  Vue.filter('moment', momentFormat)
+  Vue.filter('year', year)
+  Vue.filter('duration', duration)
+  Vue.filter('padDuration', padDuration)
+  Vue.filter('secondsToObject', secondsToObject)
+  Vue.filter('fromNow', fromNow)
+  Vue.filter('ago', ago)
+  Vue.filter('truncate', truncate)
+}

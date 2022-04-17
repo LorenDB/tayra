@@ -199,7 +199,7 @@ import qs from 'qs'
 import axios from 'axios'
 import $ from 'jquery'
 
-import logger from '@/logging.js'
+import logger from '@/logging'
 
 import OrderingMixin from '@/components/mixins/Ordering.vue'
 import PaginationMixin from '@/components/mixins/Pagination.vue'

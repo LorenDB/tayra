@@ -169,7 +169,7 @@
 
 <script>
 import axios from 'axios'
-import _ from 'lodash'
+import { get } from 'lodash-es'
 
 export default {
   props: {
@@ -183,12 +183,12 @@ export default {
       isLoading: false,
       errors: [],
       current: {
-        summary: _.get(current, 'summary', ''),
-        isActive: _.get(current, 'is_active', true),
-        blockAll: _.get(current, 'block_all', true),
-        silenceActivity: _.get(current, 'silence_activity', false),
-        silenceNotifications: _.get(current, 'silence_notifications', false),
-        rejectMedia: _.get(current, 'reject_media', false)
+        summary: get(current, 'summary', ''),
+        isActive: get(current, 'is_active', true),
+        blockAll: get(current, 'block_all', true),
+        silenceActivity: get(current, 'silence_activity', false),
+        silenceNotifications: get(current, 'silence_notifications', false),
+        rejectMedia: get(current, 'reject_media', false)
       },
       fieldConfig: [
         // we hide those until we actually have the related features implemented :)

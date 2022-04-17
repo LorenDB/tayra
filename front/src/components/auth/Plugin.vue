@@ -166,7 +166,7 @@
 
 <script>
 import axios from 'axios'
-import lodash from 'lodash'
+import { clone } from 'lodash-es'
 import showdown from 'showdown'
 export default {
   props: {
@@ -178,7 +178,7 @@ export default {
       markdown: new showdown.Converter(),
       isLoading: false,
       enabled: this.plugin.enabled,
-      values: lodash.clone(this.plugin.values || {}),
+      values: clone(this.plugin.values || {}),
       errors: []
     }
   },

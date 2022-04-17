@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import { clone } from 'lodash-es'
 import axios from 'axios'
 import LibraryCard from '@/views/content/remote/Card.vue'
 
@@ -86,7 +86,7 @@ export default {
     fetchData (url) {
       this.isLoading = true
       const self = this
-      const params = _.clone({})
+      const params = clone({})
       params.page_size = this.limit
       params.offset = this.offset
       axios.get(url, { params: params }).then((response) => {

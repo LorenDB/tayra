@@ -215,7 +215,7 @@
 
 <script>
 import axios from 'axios'
-import logger from '@/logging.js'
+import logger from '@/logging'
 import PlayButton from '@/components/audio/PlayButton.vue'
 import EmbedWizard from '@/components/audio/EmbedWizard.vue'
 import Modal from '@/components/semantic/Modal.vue'
@@ -223,7 +223,7 @@ import RadioButton from '@/components/radios/Button.vue'
 import TagsList from '@/components/tags/List.vue'
 import ReportMixin from '@/components/mixins/Report.vue'
 
-import { getDomain } from '@/utils.js'
+import { getDomain } from '@/utils'
 
 export default {
   components: {

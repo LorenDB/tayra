@@ -158,12 +158,12 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import { clone } from 'lodash-es'
 import axios from 'axios'
 import TrackRow from '@/components/audio/track/Row.vue'
 import TrackMobileRow from '@/components/audio/track/MobileRow.vue'
 import Pagination from '@/components/Pagination.vue'
-import { unique } from '@/filters'
+import { unique } from '@/modules/filters'
 
 export default {
   components: {
@@ -228,7 +228,7 @@ export default {
       }
       this.isLoading = true
       const self = this
-      const params = _.clone(this.filters)
+      const params = clone(this.filters)
       params.page_size = this.paginateBy
       params.page = this.currentPage
       params.include_channels = true

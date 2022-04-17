@@ -1,6 +1,6 @@
 import axios from 'axios'
 import logger from '@/logging'
-import _ from 'lodash'
+import {sortBy} from "lodash-es";
 
 export default {
   namespaced: true,
@@ -70,7 +70,7 @@ export default {
       const f = state.filters.filter((f) => {
         return f.target.type === 'artist'
       })
-      const p = _.sortBy(f, [(e) => { return e.creation_date }])
+      const p = sortBy(f, [(e) => { return e.creation_date }])
       p.reverse()
       return p
     }

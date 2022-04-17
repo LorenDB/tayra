@@ -1,5 +1,5 @@
 import logger from '@/logging'
-import _ from 'lodash'
+import { shuffle } from 'lodash-es'
 
 export default {
   namespaced: true,
@@ -159,7 +159,7 @@ export default {
       commit('ended', true)
     },
     async shuffle ({ dispatch, commit, state }, callback) {
-      const shuffled = _.shuffle(state.tracks)
+      const shuffled = shuffle(state.tracks)
       commit('tracks', [])
       const params = { tracks: shuffled }
       if (callback) {

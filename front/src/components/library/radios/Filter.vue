@@ -107,7 +107,7 @@
 <script>
 import axios from 'axios'
 import $ from 'jquery'
-import _ from 'lodash'
+import { clone } from 'lodash-es'
 
 import Modal from '@/components/semantic/Modal.vue'
 import TrackTable from '@/components/audio/track/Table.vue'
@@ -181,7 +181,7 @@ export default {
     fetchCandidates: function () {
       const self = this
       const url = 'radios/radios/validate/'
-      let final = _.clone(this.config)
+      let final = clone(this.config)
       final.type = this.filter.type
       final = { filters: [final] }
       axios.post(url, final).then((response) => {

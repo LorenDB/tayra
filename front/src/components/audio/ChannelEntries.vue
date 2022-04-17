@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import { clone } from 'lodash-es'
 import axios from 'axios'
 import PodcastTable from '@/components/audio/podcast/Table.vue'
 import TrackTable from '@/components/audio/track/Table.vue'
@@ -96,7 +96,7 @@ export default {
       }
       this.isLoading = true
       const self = this
-      const params = _.clone(this.filters)
+      const params = clone(this.filters)
       params.page_size = this.limit
       params.page = this.page
       params.include_channels = true

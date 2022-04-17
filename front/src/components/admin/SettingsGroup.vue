@@ -157,7 +157,7 @@
 
 <script>
 import axios from 'axios'
-import lodash from 'lodash'
+import { cloneDeep } from 'lodash-es'
 import SignupFormBuilder from '@/components/admin/SignupFormBuilder.vue'
 
 export default {
@@ -241,7 +241,7 @@ export default {
     },
     set (key, value) {
       // otherwise reactivity doesn't trigger :/
-      this.values = lodash.cloneDeep(this.values)
+      this.values = cloneDeep(this.values)
       this.$set(this.values, key, value)
     }
   }

@@ -131,8 +131,8 @@
 
 <script>
 import axios from 'axios'
-import _ from 'lodash'
-import time from '@/utils/time.js'
+import { uniq, merge } from 'lodash-es'
+import time from '@/utils/time'
 import Pagination from '@/components/Pagination.vue'
 import OrderingMixin from '@/components/mixins/Ordering.vue'
 import TranslationsMixin from '@/components/mixins/Translations.vue'
@@ -197,7 +197,7 @@ export default {
   },
   methods: {
     fetchData () {
-      const params = _.merge({
+      const params = merge({
         page: this.page,
         page_size: this.paginateBy,
         q: this.search.query,
@@ -236,7 +236,7 @@ export default {
         if (config.ids.length === 0) {
           return
         }
-        axios.get(config.url, { params: { id: _.uniq(config.ids), hidden: 'null' } }).then((response) => {
+        axios.get(config.url, { params: { id: uniq(config.ids), hidden: 'null' } }).then((response) => {
           response.data.results.forEach((e) => {
             self.$set(self.targets[k], e.id, {
               payload: e,

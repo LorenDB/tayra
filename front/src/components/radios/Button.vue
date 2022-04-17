@@ -13,7 +13,7 @@
 
 <script>
 
-import lodash from 'lodash'
+import { isEqual } from 'lodash-es'
 export default {
   props: {
     customRadioId: { type: Number, required: false, default: null },
@@ -29,7 +29,7 @@ export default {
       if (!state.running) {
         return false
       } else {
-        return current.type === this.type && lodash.isEqual(current.objectId, this.objectId) && current.customRadioId === this.customRadioId
+        return current.type === this.type && isEqual(current.objectId, this.objectId) && current.customRadioId === this.customRadioId
       }
     },
     label () {

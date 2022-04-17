@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import { clone } from 'lodash-es'
 import axios from 'axios'
 import ChannelSerieCard from '@/components/audio/ChannelSerieCard.vue'
 import AlbumCard from '@/components/audio/album/Card.vue'
@@ -87,7 +87,7 @@ export default {
       }
       this.isLoading = true
       const self = this
-      const params = _.clone(this.filters)
+      const params = clone(this.filters)
       params.page_size = this.limit
       params.include_channels = true
       axios.get(url, { params: params }).then((response) => {

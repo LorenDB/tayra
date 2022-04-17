@@ -183,8 +183,8 @@
 
 <script>
 import axios from 'axios'
-import _ from 'lodash'
-import time from '@/utils/time.js'
+import { merge } from 'lodash-es'
+import time from '@/utils/time'
 import Pagination from '@/components/Pagination.vue'
 import ActionTable from '@/components/common/ActionTable.vue'
 import OrderingMixin from '@/components/mixins/Ordering.vue'
@@ -229,7 +229,7 @@ export default {
         q: this.search
       }
       if (this.filters) {
-        return _.merge(currentFilters, this.filters)
+        return merge(currentFilters, this.filters)
       } else {
         return currentFilters
       }
@@ -290,7 +290,7 @@ export default {
       if (this.allowed !== null) {
         baseFilters.allowed = this.allowed
       }
-      const params = _.merge(baseFilters, this.filters)
+      const params = merge(baseFilters, this.filters)
       const self = this
       self.isLoading = true
       self.checked = []

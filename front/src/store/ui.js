@@ -13,7 +13,6 @@ export default {
     messageDisplayDuration: 5 * 1000,
     supportedExtensions: ['flac', 'ogg', 'mp3', 'opus', 'aac', 'm4a', 'aiff', 'aif'],
     messages: [],
-    theme: 'system',
     window: {
       height: 0,
       width: 0
@@ -268,9 +267,6 @@ export default {
       state.queueFocused = value
     },
 
-    theme: (state, value) => {
-      state.theme = value
-    },
     addMessage (state, message) {
       const finalMessage = {
         displayTime: state.messageDisplayDuration,
@@ -350,20 +346,10 @@ export default {
       }
     },
 
-    async theme ({ state, commit, rootState }, value) {
-      commit('theme', value)
-      if (rootState.auth.authenticated) {
-        await axios.post('users/settings', { theme: value })
-      }
-    },
-
     async initSettings ({ commit }, settings) {
       settings = settings || {}
       if (settings.language) {
         commit('currentLanguage', settings.language)
-      }
-      if (settings.theme) {
-        commit('theme', settings.theme)
       }
     },
     websocketEvent ({ state }, event) {

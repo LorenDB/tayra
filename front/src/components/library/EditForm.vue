@@ -240,7 +240,7 @@
 
 <script>
 import $ from 'jquery'
-import _ from 'lodash'
+import { isEqual, clone } from 'lodash-es'
 import axios from 'axios'
 import AttachmentInput from '@/components/common/AttachmentInput.vue'
 import EditList from '@/components/library/EditList.vue'
@@ -296,7 +296,7 @@ export default {
     mutationPayload () {
       const self = this
       const changedFields = this.config.fields.filter(f => {
-        return !_.isEqual(self.values[f.id], self.initialValues[f.id])
+        return !isEqual(self.values[f.id], self.initialValues[f.id])
       })
       if (changedFields.length === 0) {
         return null
@@ -339,15 +339,15 @@ export default {
     setValues () {
       const self = this
       this.config.fields.forEach(f => {
-        self.$set(self.values, f.id, _.clone(f.getValue(self.object)))
-        self.$set(self.initialValues, f.id, _.clone(self.values[f.id]))
+        self.$set(self.values, f.id, clone(f.getValue(self.object)))
+        self.$set(self.initialValues, f.id, clone(self.values[f.id]))
       })
     },
     submit () {
       const self = this
       self.isLoading = true
       self.errors = []
-      const payload = _.clone(this.mutationPayload || {})
+      const payload = clone(this.mutationPayload || {})
       if (this.canEdit) {
         payload.is_approved = true
       }
@@ -363,10 +363,10 @@ export default {
       )
     },
     fieldValuesChanged (fieldId) {
-      return !_.isEqual(this.values[fieldId], this.initialValues[fieldId])
+      return !isEqual(this.values[fieldId], this.initialValues[fieldId])
     },
     resetField (fieldId) {
-      this.values[fieldId] = _.clone(this.initialValues[fieldId])
+      this.values[fieldId] = clone(this.initialValues[fieldId])
     }
   }
 

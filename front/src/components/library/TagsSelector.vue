@@ -20,14 +20,14 @@
 <script>
 import $ from 'jquery'
 
-import lodash from 'lodash'
+import { isEqual } from 'lodash-es'
 export default {
   props: { value: { type: Array, required: true } },
   watch: {
     value: {
       handler (v) {
         const current = $(this.$refs.dropdown).dropdown('get value').split(',').sort()
-        if (!lodash.isEqual([...v].sort(), current)) {
+        if (!isEqual([...v].sort(), current)) {
           $(this.$refs.dropdown).dropdown('set exactly', v)
         }
       },

@@ -1,6 +1,6 @@
 <script>
 import FileUpload from 'vue-upload-component'
-import { setCsrf } from '@/utils.js'
+import { setCsrf } from '@/utils'
 
 export default {
   extends: FileUpload,

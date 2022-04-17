@@ -247,7 +247,7 @@
 <script>
 import axios from 'axios'
 import Logo from '@/components/Logo.vue'
-import url from '@/utils/url'
+import updateQueryString from './composables/updateQueryString'
 import time from '@/utils/time'
 
 function getURLParams () {
@@ -516,7 +516,7 @@ export default {
         // not support other codecs to be able to play it :)
         sources.push({
           type: 'audio/mpeg',
-          src: url.updateQueryString(
+          src: updateQueryString(
             self.fullUrl(sources[0].src),
             'to',
             'mp3'

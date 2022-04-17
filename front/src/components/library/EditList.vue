@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import { clone } from 'lodash-es'
 import axios from 'axios'
 
 import EditCard from '@/components/library/EditCard.vue'
@@ -84,7 +84,7 @@ export default {
       }
       this.isLoading = true
       const self = this
-      const params = _.clone(this.filters)
+      const params = clone(this.filters)
       params.page_size = this.limit
       axios.get(url, { params: params }).then((response) => {
         self.previousPage = response.data.previous

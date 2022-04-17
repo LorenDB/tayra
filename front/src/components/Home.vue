@@ -325,14 +325,14 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import { get } from 'lodash-es'
 import { mapState } from 'vuex'
 import showdown from 'showdown'
 import AlbumWidget from '@/components/audio/album/Widget.vue'
 import ChannelsWidget from '@/components/audio/ChannelsWidget.vue'
 import LoginForm from '@/components/auth/LoginForm.vue'
 import SignupForm from '@/components/auth/SignupForm.vue'
-import { humanSize } from '@/filters'
+import { humanSize } from '@/modules/filters'
 
 export default {
   components: {
@@ -358,19 +358,19 @@ export default {
       }
     },
     podName () {
-      return _.get(this.nodeinfo, 'metadata.nodeName') || 'Funkwhale'
+      return get(this.nodeinfo, 'metadata.nodeName') || 'Funkwhale'
     },
     banner () {
-      return _.get(this.nodeinfo, 'metadata.banner')
+      return get(this.nodeinfo, 'metadata.banner')
     },
     shortDescription () {
-      return _.get(this.nodeinfo, 'metadata.shortDescription')
+      return get(this.nodeinfo, 'metadata.shortDescription')
     },
     longDescription () {
-      return _.get(this.nodeinfo, 'metadata.longDescription')
+      return get(this.nodeinfo, 'metadata.longDescription')
     },
     rules () {
-      return _.get(this.nodeinfo, 'metadata.rules')
+      return get(this.nodeinfo, 'metadata.rules')
     },
     renderedDescription () {
       if (!this.longDescription) {
@@ -381,8 +381,8 @@ export default {
     },
     stats () {
       const data = {
-        users: _.get(this.nodeinfo, 'usage.users.activeMonth', null),
-        hours: _.get(this.nodeinfo, 'metadata.library.music.hours', null)
+        users: get(this.nodeinfo, 'usage.users.activeMonth', null),
+        hours: get(this.nodeinfo, 'metadata.library.music.hours', null)
       }
       if (data.users === null || data.artists === null) {
         return
@@ -390,16 +390,16 @@ export default {
       return data
     },
     contactEmail () {
-      return _.get(this.nodeinfo, 'metadata.contactEmail')
+      return get(this.nodeinfo, 'metadata.contactEmail')
     },
     defaultUploadQuota () {
-      return _.get(this.nodeinfo, 'metadata.defaultUploadQuota')
+      return get(this.nodeinfo, 'metadata.defaultUploadQuota')
     },
     anonymousCanListen () {
-      return _.get(this.nodeinfo, 'metadata.library.anonymousCanListen')
+      return get(this.nodeinfo, 'metadata.library.anonymousCanListen')
     },
     openRegistrations () {
-      return _.get(this.nodeinfo, 'openRegistrations')
+      return get(this.nodeinfo, 'openRegistrations')
     },
     headerStyle () {
       if (!this.banner) {

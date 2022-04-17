@@ -72,7 +72,7 @@
 
 <script>
 import axios from 'axios'
-import logger from '@/logging.js'
+import logger from '@/logging'
 import ChannelsWidget from '@/components/audio/ChannelsWidget.vue'
 import TrackWidget from '@/components/audio/track/Widget.vue'
 import AlbumWidget from '@/components/audio/album/Widget.vue'

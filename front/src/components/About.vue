@@ -250,9 +250,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import _ from 'lodash'
+import { get } from 'lodash-es'
 import showdown from 'showdown'
-import { humanSize } from '@/filters'
+import { humanSize } from '@/modules/filters'
 
 import SignupForm from '@/components/auth/SignupForm.vue'
 import LogoText from '@/components/LogoText.vue'
@@ -279,31 +279,31 @@ export default {
       }
     },
     podName () {
-      return _.get(this.nodeinfo, 'metadata.nodeName') || 'Funkwhale'
+      return get(this.nodeinfo, 'metadata.nodeName') || 'Funkwhale'
     },
     banner () {
-      return _.get(this.nodeinfo, 'metadata.banner')
+      return get(this.nodeinfo, 'metadata.banner')
     },
     shortDescription () {
-      return _.get(this.nodeinfo, 'metadata.shortDescription')
+      return get(this.nodeinfo, 'metadata.shortDescription')
     },
     longDescription () {
-      return _.get(this.nodeinfo, 'metadata.longDescription')
+      return get(this.nodeinfo, 'metadata.longDescription')
     },
     rules () {
-      return _.get(this.nodeinfo, 'metadata.rules')
+      return get(this.nodeinfo, 'metadata.rules')
     },
     terms () {
-      return _.get(this.nodeinfo, 'metadata.terms')
+      return get(this.nodeinfo, 'metadata.terms')
     },
     stats () {
       const data = {
-        users: _.get(this.nodeinfo, 'usage.users.activeMonth', null),
-        hours: _.get(this.nodeinfo, 'metadata.library.music.hours', null),
-        artists: _.get(this.nodeinfo, 'metadata.library.artists.total', null),
-        albums: _.get(this.nodeinfo, 'metadata.library.albums.total', null),
-        tracks: _.get(this.nodeinfo, 'metadata.library.tracks.total', null),
-        listenings: _.get(this.nodeinfo, 'metadata.usage.listenings.total', null)
+        users: get(this.nodeinfo, 'usage.users.activeMonth', null),
+        hours: get(this.nodeinfo, 'metadata.library.music.hours', null),
+        artists: get(this.nodeinfo, 'metadata.library.artists.total', null),
+        albums: get(this.nodeinfo, 'metadata.library.albums.total', null),
+        tracks: get(this.nodeinfo, 'metadata.library.tracks.total', null),
+        listenings: get(this.nodeinfo, 'metadata.usage.listenings.total', null)
       }
       if (data.users === null || data.artists === null) {
         return
@@ -311,28 +311,28 @@ export default {
       return data
     },
     contactEmail () {
-      return _.get(this.nodeinfo, 'metadata.contactEmail')
+      return get(this.nodeinfo, 'metadata.contactEmail')
     },
     anonymousCanListen () {
-      return _.get(this.nodeinfo, 'metadata.library.anonymousCanListen')
+      return get(this.nodeinfo, 'metadata.library.anonymousCanListen')
     },
     allowListEnabled () {
-      return _.get(this.nodeinfo, 'metadata.allowList.enabled')
+      return get(this.nodeinfo, 'metadata.allowList.enabled')
     },
     allowListDomains () {
-      return _.get(this.nodeinfo, 'metadata.allowList.domains')
+      return get(this.nodeinfo, 'metadata.allowList.domains')
     },
     version () {
-      return _.get(this.nodeinfo, 'software.version')
+      return get(this.nodeinfo, 'software.version')
     },
     openRegistrations () {
-      return _.get(this.nodeinfo, 'openRegistrations')
+      return get(this.nodeinfo, 'openRegistrations')
     },
     defaultUploadQuota () {
-      return humanSize(_.get(this.nodeinfo, 'metadata.defaultUploadQuota') * 1000 * 1000)
+      return humanSize(get(this.nodeinfo, 'metadata.defaultUploadQuota') * 1000 * 1000)
     },
     federationEnabled () {
-      return _.get(this.nodeinfo, 'metadata.library.federationEnabled')
+      return get(this.nodeinfo, 'metadata.library.federationEnabled')
     },
     headerStyle () {
       if (!this.banner) {

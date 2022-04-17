@@ -57,7 +57,7 @@
             <i class="palette icon user-modal list-icon" />
             <span class="user-modal list-item">{{ labels.theme }}:</span>
             <div class="right floated">
-              <span class="user-modal list-item"> {{ themes.find(x => x.key ===$store.state.ui.theme).name }}</span>
+              <span class="user-modal list-item"> {{ themes.find(x => x.key === theme).name }}</span>
               <i class="action-hint chevron right icon user-modal" />
             </div>
           </div>
@@ -175,16 +175,22 @@
 
 <script>
 import Modal from '@/components/semantic/Modal.vue'
-import ThemesMixin from '@/components/mixins/Themes.vue'
 import { mapGetters } from 'vuex'
+import useThemeList from '@/composables/useThemeList'
+import useTheme from '@/composables/useTheme'
 
 export default {
   components: {
     Modal
   },
-  mixins: [ThemesMixin],
   props: {
     show: { type: Boolean, required: true }
+  },
+  setup () {
+    return {
+      theme: useTheme(),
+      themes: useThemeList()
+    }
   },
   computed: {
     labels () {

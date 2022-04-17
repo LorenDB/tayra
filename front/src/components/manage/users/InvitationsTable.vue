@@ -158,7 +158,7 @@
 <script>
 import axios from 'axios'
 import moment from 'moment'
-import _ from 'lodash'
+import { merge } from 'lodash-es'
 import Pagination from '@/components/Pagination.vue'
 import ActionTable from '@/components/common/ActionTable.vue'
 import OrderingMixin from '@/components/mixins/Ordering.vue'
@@ -199,7 +199,7 @@ export default {
         q: this.search
       }
       if (this.filters) {
-        return _.merge(currentFilters, this.filters)
+        return merge(currentFilters, this.filters)
       } else {
         return currentFilters
       }
@@ -243,7 +243,7 @@ export default {
   },
   methods: {
     fetchData () {
-      const params = _.merge({
+      const params = merge({
         page: this.page,
         page_size: this.paginateBy,
         q: this.search,

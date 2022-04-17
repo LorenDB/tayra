@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import { range as lodashRange, sortBy, uniq } from 'lodash-es'
 
 export default {
   props: {
@@ -57,15 +57,15 @@ export default {
     pages: function () {
       const range = 2
       const current = this.current
-      const beginning = _.range(1, Math.min(this.maxPage, 1 + range))
-      const middle = _.range(
+      const beginning = lodashRange(1, Math.min(this.maxPage, 1 + range))
+      const middle = lodashRange(
         Math.max(1, current - range + 1),
         Math.min(this.maxPage, current + range)
       )
-      const end = _.range(this.maxPage, Math.max(1, this.maxPage - range))
+      const end = lodashRange(this.maxPage, Math.max(1, this.maxPage - range))
       let allowed = beginning.concat(middle, end)
-      allowed = _.uniq(allowed)
-      allowed = _.sortBy(allowed, [
+      allowed = uniq(allowed)
+      allowed = sortBy(allowed, [
         e => {
           return e
         }

@@ -13,7 +13,7 @@
   </span>
 </template>
 <script>
-import { secondsToObject } from '@/filters'
+import { secondsToObject } from '@/modules/filters'
 
 export default {
   props: { seconds: { type: Number, default: null } },

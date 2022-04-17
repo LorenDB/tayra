@@ -345,8 +345,8 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import $ from 'jquery'
 import moment from 'moment'
-import lodash from 'lodash'
-import time from '@/utils/time.js'
+import { sum } from 'lodash-es'
+import time from '@/utils/time'
 import { createFocusTrap } from 'focus-trap'
 import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '@/components/playlists/TrackPlaylistIcon.vue'
@@ -405,7 +405,7 @@ export default {
       }
     },
     timeLeft () {
-      const seconds = lodash.sum(
+      const seconds = sum(
         this.queue.tracks.slice(this.queue.currentIndex).map((t) => {
           return (t.uploads || []).map((u) => {
             return u.duration || 0

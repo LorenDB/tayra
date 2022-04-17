@@ -186,7 +186,7 @@
 <script>
 import axios from 'axios'
 import $ from 'jquery'
-import _ from 'lodash'
+import { clone } from 'lodash-es'
 import BuilderFilter from './Filter.vue'
 import TrackTable from '@/components/audio/track/Table.vue'
 import RadioButton from '@/components/radios/Button.vue'
@@ -309,7 +309,7 @@ export default {
       const self = this
       const url = 'radios/radios/validate/'
       let final = this.filters.map(f => {
-        const c = _.clone(f.config)
+        const c = clone(f.config)
         c.type = f.filter.type
         return c
       })
@@ -326,7 +326,7 @@ export default {
       self.isLoading = true
 
       let final = this.filters.map(f => {
-        const c = _.clone(f.config)
+        const c = clone(f.config)
         c.type = f.filter.type
         return c
       })

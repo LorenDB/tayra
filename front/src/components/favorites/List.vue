@@ -191,8 +191,8 @@ export default {
       this.updateQueryString()
     }
   },
-  created () {
-    checkRedirectToLogin(this.$store, this.$router)
+  async created () {
+    await checkRedirectToLogin(this.$store, this.$router)
     this.fetchFavorites(FAVORITES_URL)
   },
   mounted () {

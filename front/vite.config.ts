@@ -1,16 +1,16 @@
-import { defineConfig } from 'vite'
+import { defineConfig, HmrOptions } from 'vite'
 import { createVuePlugin as Vue2 } from 'vite-plugin-vue2'
-import Components from 'unplugin-vue-components/vite'
 import ScriptSetup from 'unplugin-vue2-script-setup/vite'
 
+// @ts-ignore
 import path from 'path'
 
-const port = process.env.VUE_PORT ?? 8080
+const port = +(process.env.VUE_PORT ?? 8080)
 
 const hmr = {
   port: process.env.HMR_PORT || (process.env.FUNKWHALE_PROTOCOL === 'https' ? 443 : port),
   protocol: process.env.HMR_PROTOCOL || (process.env.FUNKWHALE_PROTOCOL === 'https' ? 'wss' : 'ws')
-}
+} as HmrOptions
 
 if (process.env.GITPOD_WORKSPACE_URL) {
   hmr.host = process.env.GITPOD_WORKSPACE_URL.replace('https://', `${process.env.HMR_PORT ?? process.env.VUE_PORT ?? 4000}-`)
@@ -20,20 +20,14 @@ if (process.env.GITPOD_WORKSPACE_URL) {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  envPrefix: "VUE_",
+export default defineConfig(() => ({
+  envPrefix: 'VUE_',
   plugins: [
     // https://github.com/underfin/vite-plugin-vue2
     Vue2(),
 
     // https://github.com/antfu/unplugin-vue2-script-setup
     ScriptSetup(),
-
-    // https://github.com/antfu/unplugin-vue-components
-    Components({
-      dts: 'src/components.d.ts',
-      transformer: 'vue2'
-    }),
 
     {
       name: 'fix-fomantic-ui-css',
@@ -47,6 +41,9 @@ export default defineConfig({
   server: { port, hmr },
   resolve: {
     alias: {
+      '~': path.resolve(__dirname, './src'),
+
+      // TODO: Remove @/dependency from all files as `@` is used as an organization prefix
       '@': path.resolve(__dirname, './src')
     }
   },
@@ -58,4 +55,4 @@ export default defineConfig({
       }
     }
   }
-})
+}))

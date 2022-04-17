@@ -11,7 +11,7 @@ cd "$(dirname $0)/.." # change into base directory
 old_locales_dir=$1
 new_locales_dir=$2
 
-locales=$(tail -n +2 src/locales.js | sed -e 's/export default //' | jq '.locales[].code' | xargs echo)
+locales=$(tail -n +3 src/locales.ts | sed -E 's/^[^[]+\[] =//' | jq -r '.[].code')
 
 # Generate .po files for each available language.
 echo $locales

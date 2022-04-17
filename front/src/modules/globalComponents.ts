@@ -1,4 +1,5 @@
-import Vue from 'vue'
+import { AppModule } from '@/types'
+
 import HumanDate from '@/components/common/HumanDate.vue'
 import HumanDuration from '@/components/common/HumanDuration.vue'
 import Username from '@/components/common/Username.vue'
@@ -19,24 +20,24 @@ import RenderedDescription from '@/components/common/RenderedDescription.vue'
 import ContentForm from '@/components/common/ContentForm.vue'
 import InlineSearchBar from '@/components/common/InlineSearchBar.vue'
 
-Vue.component('HumanDate', HumanDate)
-Vue.component('HumanDuration', HumanDuration)
-Vue.component('Username', Username)
-Vue.component('UserLink', UserLink)
-Vue.component('ActorLink', ActorLink)
-Vue.component('ActorAvatar', ActorAvatar)
-Vue.component('Duration', Duration)
-Vue.component('DangerousButton', DangerousButton)
-Vue.component('Message', Message)
-Vue.component('CopyInput', CopyInput)
-Vue.component('AjaxButton', AjaxButton)
-Vue.component('Tooltip', Tooltip)
-Vue.component('EmptyState', EmptyState)
-Vue.component('ExpandableDiv', ExpandableDiv)
-Vue.component('CollapseLink', CollapseLink)
-Vue.component('ActionFeedback', ActionFeedback)
-Vue.component('RenderedDescription', RenderedDescription)
-Vue.component('ContentForm', ContentForm)
-Vue.component('InlineSearchBar', InlineSearchBar)
-
-export default {}
+export const install: AppModule = ({ app }) => {
+  app.component('HumanDate', HumanDate)
+  app.component('HumanDuration', HumanDuration)
+  app.component('Username', Username)
+  app.component('UserLink', UserLink)
+  app.component('ActorLink', ActorLink)
+  app.component('ActorAvatar', ActorAvatar)
+  app.component('Duration', Duration)
+  app.component('DangerousButton', DangerousButton)
+  app.component('Message', Message)
+  app.component('CopyInput', CopyInput)
+  app.component('AjaxButton', AjaxButton)
+  app.component('Tooltip', Tooltip)
+  app.component('EmptyState', EmptyState)
+  app.component('ExpandableDiv', ExpandableDiv)
+  app.component('CollapseLink', CollapseLink)
+  app.component('ActionFeedback', ActionFeedback)
+  app.component('RenderedDescription', RenderedDescription)
+  app.component('ContentForm', ContentForm)
+  app.component('InlineSearchBar', InlineSearchBar)
+}

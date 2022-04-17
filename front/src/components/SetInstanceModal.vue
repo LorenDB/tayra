@@ -107,7 +107,7 @@
 <script>
 import Modal from '@/components/semantic/Modal.vue'
 import axios from 'axios'
-import _ from 'lodash'
+import { uniq } from 'lodash-es'
 
 export default {
   components: {
@@ -135,7 +135,7 @@ export default {
       }
       const self = this
       instances.push(this.$store.getters['instance/defaultUrl'](), 'https://demo.funkwhale.audio/')
-      return _.uniq(instances.filter((e) => { return e !== self.$store.state.instance.instanceUrl }))
+      return uniq(instances.filter((e) => { return e !== self.$store.state.instance.instanceUrl }))
     },
     instanceHostname () {
       const url = this.$store.state.instance.instanceUrl

@@ -219,18 +219,18 @@
 </template>
 
 <script>
-import time from '@/utils/time.js'
+import time from '@/utils/time'
 import axios from 'axios'
-import url from '@/utils/url.js'
-import { getDomain } from '@/utils.js'
-import logger from '@/logging.js'
+import { getDomain } from '@/utils'
+import logger from '@/logging'
 import PlayButton from '@/components/audio/PlayButton.vue'
 import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '@/components/playlists/TrackPlaylistIcon.vue'
 import Modal from '@/components/semantic/Modal.vue'
 import EmbedWizard from '@/components/audio/EmbedWizard.vue'
 import ReportMixin from '@/components/mixins/Report.vue'
-import { momentFormat } from '@/filters'
+import { momentFormat } from '@/modules/filters'
+import updateQueryString from '@/composables/updateQueryString'
 
 const FETCH_URL = 'tracks/'
 
@@ -322,7 +322,7 @@ export default {
           param = 'token'
           value = this.$store.state.auth.scopedTokens.listen
         }
-        u = url.updateQueryString(
+        u = updateQueryString(
           u,
           param,
           encodeURI(value)

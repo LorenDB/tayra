@@ -267,8 +267,8 @@
 
 <script>
 import axios from 'axios'
-import _ from 'lodash'
-import time from '@/utils/time.js'
+import { merge } from 'lodash-es'
+import time from '@/utils/time'
 import { normalizeQuery, parseTokens } from '@/search'
 
 import Pagination from '@/components/Pagination.vue'
@@ -335,7 +335,7 @@ export default {
         include_channels: 'true'
       }
       if (this.filters) {
-        return _.merge(currentFilters, this.filters)
+        return merge(currentFilters, this.filters)
       } else {
         return currentFilters
       }
@@ -388,7 +388,7 @@ export default {
   methods: {
     fetchData () {
       this.$emit('fetch-start')
-      const params = _.merge(
+      const params = merge(
         {
           page: this.page,
           page_size: this.paginateBy,

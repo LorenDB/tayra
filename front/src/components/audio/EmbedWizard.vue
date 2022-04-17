@@ -106,7 +106,7 @@
 <script>
 
 import { mapState } from 'vuex'
-import _ from 'lodash'
+import { get } from 'lodash-es'
 
 export default {
   props: {
@@ -131,7 +131,7 @@ export default {
       nodeinfo: state => state.instance.nodeinfo
     }),
     anonymousCanListen () {
-      return _.get(this.nodeinfo, 'metadata.library.anonymousCanListen', false)
+      return get(this.nodeinfo, 'metadata.library.anonymousCanListen', false)
     },
     iframeSrc () {
       let base = import.meta.env.BASE_URL

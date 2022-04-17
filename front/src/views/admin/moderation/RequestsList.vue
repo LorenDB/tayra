@@ -125,8 +125,8 @@
 <script>
 
 import axios from 'axios'
-import _ from 'lodash'
-import time from '@/utils/time.js'
+import { merge } from 'lodash-es'
+import time from '@/utils/time'
 import Pagination from '@/components/Pagination.vue'
 import OrderingMixin from '@/components/mixins/Ordering.vue'
 import TranslationsMixin from '@/components/mixins/Translations.vue'
@@ -187,7 +187,7 @@ export default {
   },
   methods: {
     fetchData () {
-      const params = _.merge({
+      const params = merge({
         page: this.page,
         page_size: this.paginateBy,
         q: this.search.query,

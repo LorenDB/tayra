@@ -13,13 +13,22 @@
     "noUnusedLocals": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "types": [
       "vite/client",
       "vue/ref-macros",
+      "unplugin-vue2-script-setup/types",
+      "vue-gettext/types"
     ],
     "paths": {
+      "~/*": ["src/*"],
       "@/*": ["src/*"]
     }
+  },
+  "vueCompilerOptions": {
+    "experimentalCompatMode": 2
   },
   "include": ["src/*.d.ts", "src/**/*.ts", "src/**/*.vue"]
 }

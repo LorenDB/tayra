@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import { uniq } from 'lodash-es'
 import axios from 'axios'
 import TranslationsMixin from '@/components/mixins/Translations.vue'
 
@@ -163,7 +163,7 @@ export default {
         return this.fields.scopes.split(' ')
       },
       set (v) {
-        this.fields.scopes = _.uniq(v).join(' ')
+        this.fields.scopes = uniq(v).join(' ')
       }
     },
     allScopes () {

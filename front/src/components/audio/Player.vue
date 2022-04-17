@@ -342,12 +342,12 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import GlobalEvents from '@/components/utils/global-events.vue'
 import { toLinearVolumeScale } from '@/audio/volume.js'
 import { Howl, Howler } from 'howler'
-import _ from 'lodash'
-import url from '@/utils/url'
+import { throttle, reverse } from 'lodash-es'
 import axios from 'axios'
 import VolumeControl from './VolumeControl.vue'
 import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '@/components/playlists/TrackPlaylistIcon.vue'
+import updateQueryString from '@/composables/updateQueryString'
 
 export default {
   components: {
@@ -399,7 +399,7 @@ export default {
       progress: 'player/progress'
     }),
     updateProgressThrottled () {
-      return _.throttle(this.updateProgress, 50)
+      return throttle(this.updateProgress, 50)
     },
     labels () {
       const audioPlayer = this.$pgettext('Sidebar/Player/Hidden text', 'Media player')
@@ -660,7 +660,7 @@ export default {
       // not support other codecs to be able to play it :)
       sources.push({
         type: 'mp3',
-        url: url.updateQueryString(
+        url: updateQueryString(
           this.$store.getters['instance/absoluteUrl'](trackData.listen_url),
           'to',
           'mp3'
@@ -680,7 +680,7 @@ export default {
           value = this.$store.state.auth.scopedTokens.listen
         }
         sources.forEach(e => {
-          e.url = url.updateQueryString(e.url, param, value)
+          e.url = updateQueryString(e.url, param, value)
         })
       }
       return sources
@@ -821,14 +821,14 @@ export default {
     checkCache () {
       const self = this
       const toKeep = []
-      _.reverse(this.soundsCache).forEach((e) => {
+      reverse(this.soundsCache).forEach((e) => {
         if (toKeep.length < self.maxPreloaded) {
           toKeep.push(e)
         } else {
           e.sound.unload()
         }
       })
-      this.soundsCache = _.reverse(toKeep)
+      this.soundsCache = reverse(toKeep)
     },
     removeFromCache (sound) {
       const toKeep = []

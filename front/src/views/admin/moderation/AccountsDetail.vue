@@ -568,7 +568,6 @@
 <script>
 import axios from 'axios'
 import logger from '@/logging'
-import lodash from 'lodash'
 import $ from 'jquery'
 
 import InstancePolicyForm from '@/components/manage/moderation/InstancePolicyForm.vue'
@@ -582,7 +581,6 @@ export default {
   props: { id: { type: Number, required: true } },
   data () {
     return {
-      lodash,
       isLoading: true,
       isLoadingStats: false,
       isLoadingPolicy: false,

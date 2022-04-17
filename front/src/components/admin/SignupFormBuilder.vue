@@ -161,7 +161,7 @@
 </template>
 
 <script>
-import lodash from 'lodash'
+import { cloneDeep, tap, set } from 'lodash-es'
 
 import SignupForm from '@/components/auth/SignupForm.vue'
 
@@ -209,7 +209,7 @@ export default {
   },
   methods: {
     addField () {
-      const newValue = lodash.tap(lodash.cloneDeep(this.local), v => v.fields.push({
+      const newValue = tap(cloneDeep(this.local), v => v.fields.push({
         label: this.$pgettext('*/*/Form-builder', 'Additional field') + ' ' + (this.local.fields.length + 1),
         required: true,
         input_type: 'short_text'
@@ -217,7 +217,7 @@ export default {
       this.$emit('input', newValue)
     },
     remove (idx) {
-      this.$emit('input', lodash.tap(lodash.cloneDeep(this.local), v => v.fields.splice(idx, 1)))
+      this.$emit('input', tap(cloneDeep(this.local), v => v.fields.splice(idx, 1)))
     },
     move (idx, incr) {
       if (idx === 0 && incr < 0) {
@@ -226,7 +226,7 @@ export default {
       if (idx + incr >= this.local.fields.length) {
         return
       }
-      const newFields = arrayMove(lodash.cloneDeep(this.local).fields, idx, idx + incr)
+      const newFields = arrayMove(cloneDeep(this.local).fields, idx, idx + incr)
       this.update('fields', newFields)
     },
     update (key, value) {
@@ -241,7 +241,7 @@ export default {
           }
         }
       }
-      this.$emit('input', lodash.tap(lodash.cloneDeep(this.local), v => lodash.set(v, key, value)))
+      this.$emit('input', tap(cloneDeep(this.local), v => set(v, key, value)))
     }
   }
 }

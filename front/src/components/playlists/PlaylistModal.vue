@@ -192,9 +192,7 @@
 </template>
 
 <script>
-import filter from 'lodash/fp/filter'
-import sortBy from 'lodash/fp/sortBy'
-import flow from 'lodash/fp/flow'
+import { filter, sortBy, flow } from 'lodash-es'
 
 import axios from 'axios'
 import { mapState } from 'vuex'

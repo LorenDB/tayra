@@ -23,7 +23,7 @@
 <script>
 import jQuery from 'jquery'
 import router from '@/router'
-import lodash from 'lodash'
+import { trim } from 'lodash-es'
 import GlobalEvents from '@/components/utils/global-events.vue'
 
 export default {
@@ -248,8 +248,8 @@ export default {
       this.$refs.search.focus()
     },
     extractObjId (query) {
-      query = lodash.trim(query)
-      query = lodash.trim(query, '@')
+      query = trim(query)
+      query = trim(query, '@')
       if (query.indexOf(' ') > -1) {
         return
       }

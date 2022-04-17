@@ -3,7 +3,7 @@
 cd "$(dirname $0)/.." # change into base directory
 source scripts/utils.sh
 
-locales=$(tail -n +2 src/locales.js | sed -e 's/export default //' | jq '.locales[].code' | xargs echo)
+locales=$(tail -n +3 src/locales.ts | sed -E 's/^[^[]+\[] =//' | jq -r '.[].code')
 locales_dir="locales"
 sources=$(find src -name '*.vue' -o -name '*.html' 2> /dev/null)
 js_sources=$(find src -name '*.vue' -o -name '*.js')

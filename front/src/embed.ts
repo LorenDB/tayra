@@ -1,4 +1,3 @@
-
 import Vue from 'vue'
 import EmbedFrame from './EmbedFrame.vue'
 import VuePlyr from 'vue-plyr'

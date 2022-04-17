@@ -311,7 +311,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import { sortBy, debounce } from 'lodash-es'
 import axios from 'axios'
 import FileUploadWidget from './FileUploadWidget.vue'
 import FsBrowser from './FsBrowser.vue'
@@ -435,7 +435,7 @@ export default {
     sortedFiles () {
       // return errored files on top
 
-      return _.sortBy(this.files.map(f => {
+      return sortBy(this.files.map(f => {
         let statusIndex = 0
         if (f.errored) {
           statusIndex = -1
@@ -467,7 +467,7 @@ export default {
     }
   },
   watch: {
-    importReference: _.debounce(function () {
+    importReference: debounce(function () {
       this.$router.replace({ query: { import: this.importReference } })
     }, 500),
     remainingSpace (newValue) {

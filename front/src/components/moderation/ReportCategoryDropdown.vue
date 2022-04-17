@@ -26,7 +26,6 @@
 
 <script>
 import TranslationsMixin from '@/components/mixins/Translations.vue'
-import lodash from 'lodash'
 export default {
   mixins: [TranslationsMixin],
   props: {
@@ -52,7 +51,7 @@ export default {
       if (this.restrictTo.length > 0) {
         choices = this.restrictTo
       } else {
-        choices = lodash.keys(this.sharedLabels.fields.report_type.choices)
+        choices = Object.keys(this.sharedLabels.fields.report_type.choices)
       }
       return c.concat(
         choices.sort().map((v) => {

@@ -208,17 +208,17 @@
           </div>
           <div class="content">
             <fieldset
-              v-for="theme in themes"
-              :key="theme.key"
+              v-for="t in themes"
+              :key="t.key"
             >
               <input
-                :id="theme.key"
-                v-model="themeSelection"
+                :id="t.key"
+                v-model="theme"
                 type="radio"
                 name="theme"
-                :value="theme.key"
+                :value="t.key"
               >
-              <label :for="theme.key">{{ theme.name }}</label>
+              <label :for="t.key">{{ t.name }}</label>
             </fieldset>
           </div>
         </modal>
@@ -475,11 +475,11 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import UserModal from '@/components/common/UserModal.vue'
 import Logo from '@/components/Logo.vue'
 import SearchBar from '@/components/audio/SearchBar.vue'
-import ThemesMixin from '@/components/mixins/Themes.vue'
 import UserMenu from '@/components/common/UserMenu.vue'
 import Modal from '@/components/semantic/Modal.vue'
 
 import $ from 'jquery'
+import useThemeList from '@/composables/useThemeList'
 
 export default {
   name: 'Sidebar',
@@ -490,9 +490,14 @@ export default {
     UserModal,
     Modal
   },
-  mixins: [ThemesMixin],
   props: {
     width: { type: Number, required: true }
+  },
+  setup () {
+    const theme = useTheme()
+    const themes = useThemeList()
+
+    return { theme, themes }
   },
   data () {
     return {
@@ -504,8 +509,7 @@ export default {
       showUserModal: false,
       showLanguageModal: false,
       showThemeModal: false,
-      languageSelection: this.$language.current,
-      themeSelection: this.$store.state.ui.theme
+      languageSelection: this.$language.current
     }
   },
   destroy () {
@@ -645,10 +649,6 @@ export default {
     languageSelection: function (v) {
       this.$store.dispatch('ui/currentLanguage', v)
       this.$refs.languageModal.closeModal()
-    },
-    themeSelection: function (v) {
-      this.$store.dispatch('ui/theme', v)
-      this.$refs.themeModal.closeModal()
     }
   },
   mounted () {
@@ -691,11 +691,14 @@ export default {
           // works as expected
           const link = $($el).closest('a')
           const url = link.attr('href')
-          if (url.startsWith('http')) {
-            window.open(url, '_blank').focus()
-          } else {
-            self.$router.push(url)
+          if (url) {
+            if (url.startsWith('http')) {
+              window.open(url, '_blank').focus()
+            } else {
+              self.$router.push(url)
+            }
           }
+
           $(self.$el).find(selector).dropdown('hide')
         }
       })

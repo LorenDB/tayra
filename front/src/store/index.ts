@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 
 import favorites from './favorites'
@@ -16,7 +16,7 @@ import ui from './ui'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+export default <Store<any>> new Vuex.Store({
   modules: {
     ui,
     auth,
@@ -44,7 +44,7 @@ export default new Vuex.Store({
     }),
     createPersistedState({
       key: 'ui',
-      paths: ['ui.currentLanguage', 'ui.selectedLanguage', 'ui.momentLocale', 'ui.theme', 'ui.routePreferences']
+      paths: ['ui.currentLanguage', 'ui.selectedLanguage', 'ui.momentLocale', 'ui.routePreferences']
     }),
     createPersistedState({
       key: 'radios',

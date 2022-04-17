@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import logger from '@/logging'
-import lodash from 'lodash'
 
 function getDefaultScopedTokens () {
   return {
@@ -110,7 +109,7 @@ export default {
       state.availablePermissions[key] = status
     },
     profilePartialUpdate: (state, payload) => {
-      lodash.keys(payload).forEach((k) => {
+      Object.keys(payload).forEach((k) => {
         Vue.set(state.profile, k, payload[k])
       })
     },

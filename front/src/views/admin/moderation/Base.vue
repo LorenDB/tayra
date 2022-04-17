@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import { get } from 'lodash-es'
 import axios from 'axios'
 
 export default {
@@ -85,7 +85,7 @@ export default {
     fetchNodeInfo () {
       const self = this
       axios.get('instance/nodeinfo/2.0/').then(response => {
-        self.allowListEnabled = _.get(response.data, 'metadata.allowList.enabled', false)
+        self.allowListEnabled = get(response.data, 'metadata.allowList.enabled', false)
       })
     }
   }
