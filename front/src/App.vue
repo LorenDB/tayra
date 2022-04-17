@@ -9,12 +9,18 @@ import SetInstanceModal from '@/components/SetInstanceModal.vue'
 import ShortcutsModal from '@/components/ShortcutsModal.vue'
 import FilterModal from '@/components/moderation/FilterModal.vue'
 import ReportModal from '@/components/moderation/ReportModal.vue'
-import {useIntervalFn, useWindowSize} from '@vueuse/core'
+import { useIntervalFn, useWindowSize } from '@vueuse/core'
 import GlobalEvents from '@/components/utils/global-events.vue'
 
 import { computed, nextTick, onMounted, ref, watchEffect } from '@vue/composition-api'
 import store from '@/store'
-import { PendingReviewReports, Track } from '@/types'
+import {
+  ListenWSEvent,
+  PendingReviewEditsWSEvent,
+  PendingReviewReportsWSEvent,
+  PendingReviewRequestsWSEvent,
+  Track
+} from '@/types'
 import useWebSocketHandler from '~/composables/useWebSocketHandler'
 import { getClientOnlyRadio } from '@/radios'
 
@@ -58,19 +64,31 @@ useWebSocketHandler('inbox.item_added', () => {
 })
 
 useWebSocketHandler('mutation.created', (event) => {
-  store.commit('ui/incrementNotifications', { type: 'pendingReviewEdits', value: event.pending_review_count })
+  store.commit('ui/incrementNotifications', {
+    type: 'pendingReviewEdits',
+    value: (event as PendingReviewEditsWSEvent).pending_review_count
+  })
 })
 
 useWebSocketHandler('mutation.updated', (event) => {
-  store.commit('ui/incrementNotifications', { type: 'pendingReviewEdits', value: event.pending_review_count })
+  store.commit('ui/incrementNotifications', {
+    type: 'pendingReviewEdits',
+    value: (event as PendingReviewEditsWSEvent).pending_review_count
+  })
 })
 
 useWebSocketHandler('report.created', (event) => {
-  store.commit('ui/incrementNotifications', { type: 'pendingReviewReports', value: event.unresolved_count })
+  store.commit('ui/incrementNotifications', {
+    type: 'pendingReviewReports',
+    value: (event as PendingReviewReportsWSEvent).unresolved_count
+  })
 })
 
 useWebSocketHandler('user_request.created', (event) => {
-  store.commit('ui/incrementNotifications', { type: 'pendingReviewRequests', value: event.pending_count })
+  store.commit('ui/incrementNotifications', {
+    type: 'pendingReviewRequests',
+    value: (event as PendingReviewRequestsWSEvent).pending_count
+  })
 })
 
 useWebSocketHandler('Listen', (event) => {
@@ -78,7 +96,7 @@ useWebSocketHandler('Listen', (event) => {
     const { current } = store.state.radios
 
     if (current.clientOnly && current.type === 'account') {
-      getClientOnlyRadio(current).handleListen(current, event, store)
+      getClientOnlyRadio(current).handleListen(current, event as ListenWSEvent, store)
     }
   }
 })

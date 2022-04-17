@@ -1,6 +1,6 @@
 import axios from 'axios'
 import logger from '@/logging'
-import {sortBy} from "lodash-es";
+import { sortBy } from 'lodash-es'
 
 export default {
   namespaced: true,
