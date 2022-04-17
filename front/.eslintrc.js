@@ -26,7 +26,7 @@ module.exports = {
 
     '@typescript-eslint/ban-ts-comment': 'off',
     'no-undef': 'off',
-    // TODO: Enable typescript rules later
+    // TODO (wvffle): Enable typescript rules later
     '@typescript-eslint/no-this-alias': 'off',
     '@typescript-eslint/no-empty-function': 'off'
   }
