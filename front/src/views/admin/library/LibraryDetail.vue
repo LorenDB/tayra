@@ -365,7 +365,7 @@ export default {
   mixins: [
     TranslationsMixin
   ],
-  props: { id: { type: Number, required: true } },
+  props: { id: { type: String, required: true } },
   data () {
     return {
       isLoading: true,

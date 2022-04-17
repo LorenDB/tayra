@@ -468,7 +468,7 @@ export default {
     InstancePolicyForm,
     InstancePolicyCard
   },
-  props: { id: { type: Number, required: true }, allowListEnabled: { type: Boolean, required: true } },
+  props: { id: { type: String, required: true }, allowListEnabled: { type: Boolean, required: true } },
   data () {
     return {
       lodash,
