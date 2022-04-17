@@ -221,5 +221,4 @@ const showSetInstanceModal = ref(false)
 
 <style lang="scss">
 @import "style/_main";
-
 </style>

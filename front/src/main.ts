@@ -1,5 +1,4 @@
 import logger from '~/logging'
-import App from '~/App.vue'
 import router from '~/router'
 import VueLazyload from 'vue-lazyload'
 import store from '~/store'
@@ -15,21 +14,36 @@ sync(store, router)
 const app = createApp({
   store,
   router,
-  render: (h: CreateElement) => h(App)
+  data: () => ({ isMounted: false }),
+  async mounted () {
+    this.isMounted = true
+  },
+  render (h: CreateElement) {
+    if (this.isMounted) {
+      return import('~/App.vue')
+    }
+
+    // TODO (wvffle): Import fake app component
+    return h()
+  }
 })
 
 app.use(VueCompositionAPI)
 app.use(VueLazyload)
 
+const modules: Promise<unknown>[] = []
 for (const module of Object.values(import.meta.globEager('./modules/*.ts'))) {
-  module.install?.({
+  modules.push(module.install?.({
     app,
     router,
     store
-  })
+  }))
 }
 
-store.dispatch('instance/fetchFrontSettings').finally(() => {
+store.dispatch('instance/fetchFrontSettings').finally(async () => {
+  // Wait for all modules to load
+  await Promise.all(modules)
+
   app.mount('#app')
   logger.default.info('Everything loaded!')
 })
