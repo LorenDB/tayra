@@ -480,6 +480,7 @@ import Modal from '@/components/semantic/Modal.vue'
 
 import $ from 'jquery'
 import useThemeList from '@/composables/useThemeList'
+import useTheme from '@/composables/useTheme'
 
 export default {
   name: 'Sidebar',

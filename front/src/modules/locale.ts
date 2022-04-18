@@ -58,7 +58,7 @@ export const install: AppModule = ({ store, app }) => {
     document.documentElement.setAttribute('lang', htmlLocale)
 
     if (locale === 'en_US') {
-      Vue.prototype.$language.current = locale
+      Vue.config.language = locale
       store.commit('ui/momentLocale', 'en')
     }
   }, { immediate: true })

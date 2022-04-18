@@ -4,7 +4,9 @@ import VueLazyload from 'vue-lazyload'
 import store from '~/store'
 import { sync } from 'vuex-router-sync'
 import VueCompositionAPI, { createApp } from '@vue/composition-api'
-import { CreateElement } from 'vue'
+import Vue, { CreateElement } from 'vue'
+
+Vue.config.devtools = true
 
 logger.default.info('Loading environment:', import.meta.env.MODE)
 logger.default.debug('Environment variables:', import.meta.env)
@@ -14,13 +16,16 @@ sync(store, router)
 const app = createApp({
   store,
   router,
+  components: {
+    App: () => import('~/App.vue')
+  },
   data: () => ({ isMounted: false }),
   async mounted () {
     this.isMounted = true
   },
   render (h: CreateElement) {
     if (this.isMounted) {
-      return import('~/App.vue')
+      return h('app')
     }
 
     // TODO (wvffle): Import fake app component
