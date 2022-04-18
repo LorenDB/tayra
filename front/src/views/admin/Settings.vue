@@ -46,10 +46,23 @@ import axios from 'axios'
 import $ from 'jquery'
 
 import SettingsGroup from '~/components/admin/SettingsGroup.vue'
+import { nextTick } from 'vue'
+import { useRoute } from 'vue-router'
 
 export default {
   components: {
     SettingsGroup
+  },
+  async setup () {
+    await this.fetchSettings()
+    await nextTick()
+
+    const route = useRoute()
+    if (route.hash) {
+      this.scrollTo(route.hash.slice(1))
+    }
+
+    $('select.dropdown').dropdown()
   },
   data () {
     return {
@@ -189,23 +202,12 @@ export default {
       })
     }
   },
-  created () {
-    const self = this
-    this.fetchSettings().then(r => {
-      self.$nextTick(() => {
-        if (self.$store.state.route.hash) {
-          self.scrollTo(self.$store.state.route.hash.substr(1))
-        }
-        $('select.dropdown').dropdown()
-      })
-    })
-  },
   methods: {
     scrollTo (id) {
       this.current = id
       document.getElementById(id).scrollIntoView()
     },
-    fetchSettings () {
+    async fetchSettings () {
       const self = this
       self.isLoading = true
       return axios.get('instance/admin/settings/').then(response => {

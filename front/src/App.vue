@@ -144,10 +144,21 @@ const showSetInstanceModal = ref(false)
         @touch-progress="player.setCurrentTime($event)"
       />
     </transition>
+
     <router-view
       role="main"
       :class="{hidden: store.state.ui.queueFocused}"
-    />
+      v-slot="{ Component }"
+    >
+      <Suspense v-if="Component">
+        <component :is="Component" />
+        <template #fallback>
+          <!-- TODO (wvffle): Add loader -->
+          Loading...
+        </template>
+      </Suspense>
+    </router-view>
+
     <audio-player ref="player" />
     <playlist-modal v-if="store.state.auth.authenticated" />
     <channel-upload-modal v-if="store.state.auth.authenticated" />

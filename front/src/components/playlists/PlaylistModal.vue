@@ -200,11 +200,21 @@ import { mapState } from 'vuex'
 import logger from '~/logging'
 import Modal from '~/components/semantic/Modal.vue'
 import PlaylistForm from '~/components/playlists/Form.vue'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
 export default {
   components: {
     Modal,
     PlaylistForm
+  },
+  setup () {
+    const guard = () => {
+      this.$store.commit('playlists/showModal', false)
+      this.showDuplicateTrackAddConfirmation = false
+    }
+
+    onBeforeRouteUpdate(guard)
+    onBeforeRouteLeave(guard)
   },
   data () {
     return {
@@ -238,10 +248,6 @@ export default {
     }
   },
   watch: {
-    '$store.state.route.path' () {
-      this.$store.commit('playlists/showModal', false)
-      this.showDuplicateTrackAddConfirmation = false
-    },
     '$store.state.playlists.showModal' () {
       this.formKey = String(new Date())
       this.showDuplicateTrackAddConfirmation = false

@@ -1,3 +1,28 @@
+<script setup lang="ts">
+import LoginForm from '~/components/auth/LoginForm.vue'
+import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from 'vuex'
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('Head/Login/Title', 'Log In')
+}))
+
+const props = withDefaults(
+  defineProps<{ next?: string }>(),
+  { next: '/library' }
+)
+
+const store = useStore()
+if (store.state.auth.authenticated) {
+  const router = useRouter()
+  const resolved = router.resolve(props.next)
+  router.push(resolved.name === '404' ? '/library' : props.next)
+}
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -15,39 +40,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import LoginForm from '~/components/auth/LoginForm.vue'
-
-export default {
-  components: {
-    LoginForm
-  },
-  props: {
-    next: { type: String, default: '/library' }
-  },
-  data () {
-    return {
-      redirectTo: this.next
-    }
-  },
-  computed: {
-    labels () {
-      const title = this.$pgettext('Head/Login/Title', 'Log In')
-      return {
-        title
-      }
-    }
-  },
-  created () {
-    const resolved = this.$router.resolve(this.redirectTo)
-    console.log(resolved.route.name)
-    if (resolved.route.name === '404') {
-      this.redirectTo = '/library'
-    }
-    if (this.$store.state.auth.authenticated) {
-      this.$router.push(this.redirectTo)
-    }
-  }
-}
-</script>

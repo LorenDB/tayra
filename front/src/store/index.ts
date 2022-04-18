@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import Vuex, { Store } from 'vuex'
+import { createStore, Store } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 
 import favorites from './favorites'
@@ -14,9 +13,7 @@ import player from './player'
 import playlists from './playlists'
 import ui from './ui'
 
-Vue.use(Vuex)
-
-export default <Store<any>> new Vuex.Store({
+export default <Store<any>> createStore({
   modules: {
     ui,
     auth,

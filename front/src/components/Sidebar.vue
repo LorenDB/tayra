@@ -481,6 +481,8 @@ import Modal from '~/components/semantic/Modal.vue'
 import $ from 'jquery'
 import useThemeList from '~/composables/useThemeList'
 import useTheme from '~/composables/useTheme'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 
 export default {
   name: 'Sidebar',
@@ -498,7 +500,14 @@ export default {
     const theme = useTheme()
     const themes = useThemeList()
 
-    return { theme, themes }
+    const route = useRoute()
+    const url = computed(() => route.path)
+
+    return {
+      theme,
+      themes,
+      url
+    }
   },
   data () {
     return {
@@ -521,7 +530,6 @@ export default {
   computed: {
     ...mapState({
       queue: state => state.queue,
-      url: state => state.route.path
     }),
     ...mapGetters({
       additionalNotifications: 'ui/additionalNotifications'

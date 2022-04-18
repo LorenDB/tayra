@@ -9,11 +9,17 @@
     <td>
       <router-link
         v-if="notificationData.detailUrl"
-        tag="span"
-        class="link"
+        v-slot="{ navigate }"
+        custom
         :to="notificationData.detailUrl"
-        v-html="notificationData.message"
-      />
+      >
+        <span
+          class="link"
+          @click="navigate"
+          @keypress.enter="navigate"
+          v-html="notificationData.message"
+        />
+      </router-link>
       <template
         v-else
         v-html="notificationData.message"

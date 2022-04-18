@@ -2,21 +2,14 @@ import logger from '~/logging'
 import router from '~/router'
 import VueLazyload from 'vue-lazyload'
 import store from '~/store'
-import { sync } from 'vuex-router-sync'
-import Vue, { createApp } from 'vue'
+import { createApp } from 'vue'
 import useTheme from '~/composables/useTheme'
 useTheme()
-
-Vue.config.devtools = true
 
 logger.default.info('Loading environment:', import.meta.env.MODE)
 logger.default.debug('Environment variables:', import.meta.env)
 
-sync(store, router)
-
 const app = createApp({
-  store,
-  router,
   components: {
     App: () => import('~/App.vue')
   },
@@ -34,6 +27,8 @@ const app = createApp({
   }
 })
 
+app.use(router)
+app.use(store)
 app.use(VueLazyload)
 
 const modules: Promise<unknown>[] = []

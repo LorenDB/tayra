@@ -145,11 +145,20 @@
 import Modal from '~/components/semantic/Modal.vue'
 import ChannelUploadForm from '~/components/channels/UploadForm.vue'
 import { humanSize } from '~/init/filters'
+import {onBeforeRouteLeave, onBeforeRouteUpdate} from 'vue-router'
 
 export default {
   components: {
     Modal,
     ChannelUploadForm
+  },
+  setup () {
+    const guard = () => {
+      this.$store.commit('channels/showUploadModal', { show: false })
+    }
+
+    onBeforeRouteUpdate(guard)
+    onBeforeRouteLeave(guard)
   },
   data () {
     return {
@@ -184,11 +193,6 @@ export default {
         info.push(`${humanSize(this.statusData.speed)}/s`)
       }
       return info
-    }
-  },
-  watch: {
-    '$store.state.route.path' () {
-      this.$store.commit('channels/showUploadModal', { show: false })
     }
   },
   methods: {

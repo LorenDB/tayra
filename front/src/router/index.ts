@@ -1,8 +1,5 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import store from '~/store'
-
-Vue.use(Router)
 
 function adminPermissions (to, from, next) {
   if (store.state.auth.authenticated === true && store.state.auth.availablePermissions.settings === true) {
@@ -32,10 +29,9 @@ function libraryPermissions (to, from, next) {
 }
 
 console.log('PROCESS', import.meta.env)
-export default new Router({
-  mode: 'history',
+export default createRouter({
+  history: createWebHistory(import.meta.env.VUE_APP_ROUTER_BASE_URL as string ?? '/'),
   linkActiveClass: 'active',
-  base: import.meta.env.VUE_APP_ROUTER_BASE_URL || '/',
   scrollBehavior (to, from, savedPosition) {
     if (to.meta.preserveScrollPosition) {
       return savedPosition
@@ -1018,11 +1014,11 @@ export default new Router({
         )
     },
     {
-      path: '*/index.html',
+      path: '/index.html',
       redirect: '/'
     },
     {
-      path: '*',
+      path: '/:pathMatch(.*)*',
       name: '404',
       component: () =>
         import('~/components/PageNotFound.vue')

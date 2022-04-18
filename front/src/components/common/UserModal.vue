@@ -77,24 +77,36 @@
           <div class="row">
             <router-link
               v-if="$store.state.auth.authenticated"
-              tag="div"
-              class="column"
-              :to="{name: 'notifications'}"
-              role="button"
+              v-slot="{ navigate }"
+              custom
+              :to="{ name: 'notifications' }"
             >
-              <i class="user-modal list-icon bell icon" />
-              <span class="user-modal list-item">{{ labels.notifications }}</span>
+              <div
+                class="column"
+                role="button"
+                @click="navigate"
+                @keypress.enter="navigate"
+              >
+                <i class="user-modal list-icon bell icon" />
+                <span class="user-modal list-item">{{ labels.notifications }}</span>
+              </div>
             </router-link>
           </div>
           <div class="row">
             <router-link
-              tag="div"
-              class="column"
+              v-slot="{ navigate }"
+              custom
               :to="{ path: '/settings' }"
-              role="button"
             >
-              <i class="user-modal list-icon cog icon" />
-              <span class="user-modal list-item">{{ labels.settings }}</span>
+              <div
+                class="column"
+                role="button"
+                @click="navigate"
+                @keypress.enter="navigate"
+              >
+                <i class="user-modal list-icon cog icon" />
+                <span class="user-modal list-item">{{ labels.settings }}</span>
+              </div>
             </router-link>
           </div>
           <div class="ui divider" />
@@ -121,53 +133,71 @@
         </div>
         <div class="row">
           <router-link
-            tag="div"
-            class="column"
+            v-slot="{ navigate }"
+            custom
             :to="{ name: 'about' }"
-            role="button"
           >
-            <i class="user-modal list-icon question circle outline icon" />
-            <span class="user-modal list-item">{{ labels.about }}</span>
+            <div
+              class="column"
+              role="button"
+              @click="navigate"
+              @keypress.enter="navigate"
+            >
+              <i class="user-modal list-icon question circle outline icon" />
+              <span class="user-modal list-item">{{ labels.about }}</span>
+            </div>
           </router-link>
         </div>
         <div class="ui divider" />
-        <template v-if="$store.state.auth.authenticated">
-          <router-link
-            tag="div"
+
+        <router-link
+          v-if="$store.state.auth.authenticated"
+          v-slot="{ navigate }"
+          custom
+          :to="{ name: 'logout' }"
+        >
+          <div
             class="column"
-            :to="{ name: 'logout' }"
             role="button"
+            @click="navigate"
+            @keypress.enter="navigate"
           >
             <i class="user-modal list-icon sign out alternate icon" />
             <span class="user-modal list-item">{{ labels.logout }}</span>
-          </router-link>
-        </template>
-        <template v-if="!$store.state.auth.authenticated">
-          <router-link
-            tag="div"
+          </div>
+        </router-link>
+        <router-link
+          v-else
+          v-slot="{ navigate }"
+          custom
+          :to="{ name: 'login' }"
+        >
+          <div
             class="column"
-            :to="{ name: 'login' }"
             role="button"
+            @click="navigate"
+            @keypress.enter="navigate"
           >
             <i class="user-modal list-icon sign in alternate icon" />
             <span class="user-modal list-item">{{ labels.login }}</span>
-          </router-link>
-        </template>
-        <template
-          v-if="!$store.state.auth.authenticated"
-          &&
-          $store.state.instance.settings.users.registration_enabled.value
+          </div>
+        </router-link>
+        <router-link
+          v-if="!$store.state.auth.authenticated && $store.state.instance.settings.users.registration_enabled.value"
+          v-slot="{ navigate }"
+          custom
+          :to="{ name: 'signup' }"
         >
-          <router-link
-            tag="div"
+          <div
             class="column"
-            :to="{ name: 'signup' }"
             role="button"
+            @click="navigate"
+            @keypress.enter="navigate"
           >
             <i class="user-modal list-item user icon" />
             <span class="user-modal list-item">{{ labels.signup }}</span>
-          </router-link>
-        </template>
+          </div>
+        </router-link>
       </div>
     </div>
   </modal>
