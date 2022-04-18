@@ -1,36 +1,24 @@
-import Vue from 'vue'
-import GetText from 'vue-gettext'
-import locales from '~/locales.json'
+import { watch } from 'vue'
+import { locales } from '~/locales'
 import { usePreferredLanguages } from '@vueuse/core'
-import { watch } from '@vue/composition-api'
+import { createGettext } from 'vue3-gettext'
 import { InitModule } from '~/types'
+import store from '~/store'
+
+const defaultLanguage = store.state.ui.currentLanguage ?? 'en_US'
+const availableLanguages = locales.reduce((map: { [key: string]: string }, locale) => {
+  map[locale.code] = locale.label
+  return map
+}, {})
+
+export const gettext = createGettext({
+  availableLanguages,
+  defaultLanguage,
+  silent: true
+})
 
 export const install: InitModule = ({ store, app }) => {
-  const defaultLanguage = store.state.ui.currentLanguage ?? 'en_US'
-  const availableLanguages = locales.reduce((map: { [key: string]: string }, locale) => {
-    map[locale.code] = locale.label
-    return map
-  }, {})
-
-  app.use(GetText, {
-    availableLanguages,
-    defaultLanguage,
-
-    // cf https://github.com/Polyconseil/vue-gettext#configuration
-    // not recommended but this is fixing weird bugs with translation nodes
-    // not being updated when in v-if/v-else clauses
-    autoAddKeyAttributes: true,
-    languageVmMixin: {
-      computed: {
-        currentKebabCase (): string {
-          // @ts-ignore
-          return this.current.toLowerCase().replace('_', '-')
-        }
-      }
-    },
-    translations: {},
-    silent: true
-  })
+  app.use(gettext)
 
   // Set default language
   if (!store.state.ui.selectedLanguage) {
@@ -58,7 +46,7 @@ export const install: InitModule = ({ store, app }) => {
     document.documentElement.setAttribute('lang', htmlLocale)
 
     if (locale === 'en_US') {
-      Vue.config.language = locale
+      gettext.current = locale
       store.commit('ui/momentLocale', 'en')
     }
   }, { immediate: true })

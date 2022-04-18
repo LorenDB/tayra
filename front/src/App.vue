@@ -12,7 +12,7 @@ import ReportModal from '~/components/moderation/ReportModal.vue'
 import { useIntervalFn, useWindowSize } from '@vueuse/core'
 import GlobalEvents from '~/components/utils/global-events.vue'
 
-import { computed, nextTick, onMounted, ref, watchEffect } from '@vue/composition-api'
+import { computed, nextTick, onMounted, ref, watchEffect } from 'vue'
 import store from '~/store'
 import {
   ListenWSEvent,

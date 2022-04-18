@@ -1,27 +1,34 @@
+<script setup lang="ts">
+import $ from 'jquery'
+import { onMounted } from 'vue'
+import store from '~/store'
+
+interface Message {
+  content: string
+  key: string
+}
+
+const props = defineProps<{ message: Message }>()
+
+onMounted(() => {
+  const params = {
+    context: '#app',
+    message: props.message.content,
+    showProgress: 'top',
+    position: 'bottom right',
+    progressUp: true,
+    onRemove () {
+      store.commit('ui/removeMessage', props.message.key)
+    },
+    ...props.message
+  }
+
+  // @ts-ignore
+  $('body').toast(params)
+  $('.ui.toast.visible').last().attr('role', 'alert')
+})
+</script>
+
 <template>
   <div />
 </template>
-<script>
-import $ from 'jquery'
-
-export default {
-  props: { message: { type: Object, required: true } },
-  mounted () {
-    const self = this
-    const params = {
-      context: '#app',
-      message: this.message.content,
-      showProgress: 'top',
-      position: 'bottom right',
-      progressUp: true,
-      onRemove () {
-        self.$store.commit('ui/removeMessage', self.message.key)
-      },
-      ...this.message
-    }
-    $('body').toast(params)
-
-    $('.ui.toast.visible').last().attr('role', 'alert')
-  }
-}
-</script>

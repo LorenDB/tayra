@@ -1,7 +1,7 @@
 import type { ThemeEntry } from '~/types'
-import Vue from 'vue'
+import { gettext } from '~/init/locale'
 
-const { $pgettext } = Vue.prototype
+const { $pgettext } = gettext
 
 const themeList: ThemeEntry[] = [
   {

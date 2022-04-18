@@ -1,4 +1,4 @@
-import type { App } from '@vue/composition-api'
+import type { App } from 'vue'
 import type { Store } from 'vuex'
 import type VueRouter from 'vue-router'
 

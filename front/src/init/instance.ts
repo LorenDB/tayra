@@ -1,5 +1,5 @@
-import { InitModule } from '~/types'
-import { watch } from '@vue/composition-api'
+import { AppModule } from '~/types'
+import { watch } from 'vue'
 import axios from 'axios'
 
 export const install: InitModule = async ({ store, router }) => {

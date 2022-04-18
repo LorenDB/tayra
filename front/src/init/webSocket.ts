@@ -1,5 +1,5 @@
 import { InitModule } from '~/types'
-import { watchEffect, watch } from '@vue/composition-api'
+import { watchEffect, watch } from 'vue'
 import { useWebSocket, whenever } from '@vueuse/core'
 
 export const install: InitModule = ({ store }) => {

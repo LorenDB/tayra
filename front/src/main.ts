@@ -3,8 +3,7 @@ import router from '~/router'
 import VueLazyload from 'vue-lazyload'
 import store from '~/store'
 import { sync } from 'vuex-router-sync'
-import VueCompositionAPI, { createApp } from '@vue/composition-api'
-import Vue, { CreateElement } from 'vue'
+import Vue, { createApp } from 'vue'
 import useTheme from '~/composables/useTheme'
 useTheme()
 
@@ -25,16 +24,16 @@ const app = createApp({
   async mounted () {
     this.isMounted = true
   },
-  render (h: CreateElement) {
+  render (h) {
     if (this.isMounted) {
       return h('app')
     }
 
+    // TODO (wvffle): Import fake app component
     return h()
   }
 })
 
-app.use(VueCompositionAPI)
 app.use(VueLazyload)
 
 const modules: Promise<unknown>[] = []

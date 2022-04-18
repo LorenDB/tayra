@@ -1,6 +1,5 @@
 import { defineConfig, HmrOptions } from 'vite'
-import { createVuePlugin as Vue2 } from 'vite-plugin-vue2'
-import ScriptSetup from 'unplugin-vue2-script-setup/vite'
+import Vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
 
@@ -23,10 +22,15 @@ export default defineConfig(() => ({
   envPrefix: 'VUE_',
   plugins: [
     // https://github.com/underfin/vite-plugin-vue2
-    Vue2(),
-
-    // https://github.com/antfu/unplugin-vue2-script-setup
-    ScriptSetup(),
+    Vue({
+      template: {
+        compilerOptions: {
+          compatConfig: {
+            MODE: 2
+          }
+        }
+      }
+    }),
 
     // https://github.com/antfu/vite-plugin-pwa
     VitePWA({
@@ -52,6 +56,7 @@ export default defineConfig(() => ({
   server: { port, hmr },
   resolve: {
     alias: {
+      vue: '@vue/compat',
       '~': resolve(__dirname, './src')
     }
   },

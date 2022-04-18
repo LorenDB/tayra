@@ -268,19 +268,16 @@ export default {
         key: String(new Date()),
         ...message
       }
+
       const key = finalMessage.key
-      state.messages = state.messages.filter((m) => {
-        return m.key !== key
-      })
+      state.messages.splice(state.messages.findIndex(message => message.key === key), 1)
       state.messages.push(finalMessage)
       if (state.messages.length > state.maxMessages) {
         state.messages.shift()
       }
     },
     removeMessage (state, key) {
-      state.messages = state.messages.filter((m) => {
-        return m.key !== key
-      })
+      state.messages.splice(state.messages.findIndex(message => message.key === key), 1)
     },
     notifications (state, { type, count }) {
       state.notifications[type] = count
