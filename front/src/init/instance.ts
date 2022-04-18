@@ -1,8 +1,9 @@
-import { AppModule } from '~/types'
+import { InitModule } from '~/types'
 import { watch } from 'vue'
 import axios from 'axios'
 
 export const install: InitModule = async ({ store, router }) => {
+  await store.dispatch('instance/fetchFrontSettings')
   watch(() => store.state.instance.instanceUrl, async () => {
     const [{ data }] = await Promise.all([
       axios.get('instance/nodeinfo/2.0/'),

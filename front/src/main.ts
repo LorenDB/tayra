@@ -1,13 +1,13 @@
-import logger from '~/logging'
 import router from '~/router'
-import VueLazyload from 'vue-lazyload'
 import store from '~/store'
 import { createApp } from 'vue'
+import useLogger from '~/composables/useLogger'
 import useTheme from '~/composables/useTheme'
 useTheme()
 
-logger.default.info('Loading environment:', import.meta.env.MODE)
-logger.default.debug('Environment variables:', import.meta.env)
+const logger = useLogger()
+logger.info('Loading environment:', import.meta.env.MODE)
+logger.debug('Environment variables:', import.meta.env)
 
 const app = createApp({
   components: {
@@ -29,7 +29,6 @@ const app = createApp({
 
 app.use(router)
 app.use(store)
-app.use(VueLazyload)
 
 const modules: Promise<unknown>[] = []
 for (const module of Object.values(import.meta.globEager('./init/*.ts'))) {
@@ -40,10 +39,8 @@ for (const module of Object.values(import.meta.globEager('./init/*.ts'))) {
   }))
 }
 
-store.dispatch('instance/fetchFrontSettings').finally(async () => {
-  // Wait for all modules to load
-  await Promise.all(modules)
-
+// Wait for all modules to load
+Promise.all(modules).finally(() => {
   app.mount('#app')
-  logger.default.info('Everything loaded!')
+  logger.info('Everything loaded!')
 })
