@@ -1,29 +1,30 @@
 import router from '~/router'
 import store from '~/store'
-import { createApp, defineAsyncComponent } from 'vue'
+import { configureCompat, createApp, defineAsyncComponent, h } from 'vue'
 import useLogger from '~/composables/useLogger'
 import useTheme from '~/composables/useTheme'
 useTheme()
+
+configureCompat({
+  RENDER_FUNCTION: false
+})
 
 const logger = useLogger()
 logger.info('Loading environment:', import.meta.env.MODE)
 logger.debug('Environment variables:', import.meta.env)
 
 const app = createApp({
-  components: {
-    App: defineAsyncComponent(() => import('~/App.vue'))
+  name: 'Root',
+  data: () => ({ ready: false }),
+  mounted () {
+    this.ready = true
   },
-  data: () => ({ isMounted: false }),
-  async mounted () {
-    this.isMounted = true
-  },
-  render (h) {
-    if (this.isMounted) {
-      return h('app')
+  render () {
+    if (this.ready) {
+      return h(defineAsyncComponent(() => import('~/App.vue')))
     }
 
-    // TODO (wvffle): Import fake app component
-    return h()
+    return null
   }
 })
 

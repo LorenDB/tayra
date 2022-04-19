@@ -30,7 +30,7 @@
           :total="total"
           :current="page"
           :paginate-by="paginateBy"
-          v-on="$listeners"
+          v-bind="$attrs"
         />
       </div>
     </div>
@@ -69,7 +69,7 @@
           :total="total"
           :current="page"
           :compact="true"
-          v-on="$listeners"
+          v-bind="$attrs"
         />
       </div>
     </div>

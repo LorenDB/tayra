@@ -119,7 +119,7 @@
               </div>
               <user-menu
                 :width="width"
-                v-on="$listeners"
+                v-bind="$attrs"
               />
             </div>
           </div>
@@ -522,7 +522,7 @@ export default {
       languageSelection: this.$language.current
     }
   },
-  unmount () {
+  destroy () {
     if (this.fetchInterval) {
       clearInterval(this.fetchInterval)
     }
