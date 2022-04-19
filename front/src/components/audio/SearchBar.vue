@@ -14,9 +14,6 @@
     </div>
     <div class="results" />
     <slot name="after" />
-    <GlobalEvents
-      @keydown.shift.f.prevent.exact="focusSearch"
-    />
   </div>
 </template>
 
@@ -24,11 +21,19 @@
 import jQuery from 'jquery'
 import router from '~/router'
 import { trim } from 'lodash-es'
-import GlobalEvents from '~/components/utils/global-events.vue'
+import { useFocus } from '@vueuse/core'
+import { ref } from 'vue'
+import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
 
 export default {
-  components: {
-    GlobalEvents
+  setup () {
+    const search = ref()
+    const { focused } = useFocus(search)
+    onKeyboardShortcut(['shift', 'f'], () => (focused.value = true), true)
+
+    return {
+      search
+    }
   },
   computed: {
     labels () {
@@ -244,9 +249,6 @@ export default {
     })
   },
   methods: {
-    focusSearch () {
-      this.$refs.search.focus()
-    },
     extractObjId (query) {
       query = trim(query)
       query = trim(query, '@')

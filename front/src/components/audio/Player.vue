@@ -156,7 +156,7 @@
             :title="labels.play"
             :aria-label="labels.play"
             class="circular button control"
-            @click.prevent.stop="resumePlayback"
+            @click.prevent.stop="playback = true"
           >
             <i :class="['ui', 'big', 'play', {'disabled': !currentTrack}, 'icon']" />
           </button>
@@ -165,7 +165,7 @@
             :title="labels.pause"
             :aria-label="labels.pause"
             class="circular button control"
-            @click.prevent.stop="pausePlayback"
+            @click.prevent.stop="playback = false"
           >
             <i :class="['ui', 'big', 'pause', {'disabled': !currentTrack}, 'icon']" />
           </button>
@@ -234,7 +234,7 @@
             </button>
             <button
               class="circular control button"
-              :disabled="queue.tracks.length === 0"
+              :disabled="queueIsEmpty"
               :title="labels.shuffle"
               :aria-label="labels.shuffle"
               @click.prevent.stop="shuffle()"
@@ -245,7 +245,7 @@
               />
               <i
                 v-else
-                :class="['ui', 'random', {'disabled': queue.tracks.length === 0}, 'icon']"
+                :class="['ui', 'random', {'disabled': queueIsEmpty}, 'icon']"
               />
             </button>
           </div>
@@ -316,30 +316,11 @@
         </div>
       </div>
     </div>
-    <GlobalEvents
-      @keydown.p.prevent.exact="togglePlayback"
-      @keydown.esc.prevent.exact="$store.commit('ui/queueFocused', null)"
-      @keydown.ctrl.shift.left.prevent.exact="previous"
-      @keydown.ctrl.shift.right.prevent.exact="next"
-      @keydown.shift.down.prevent.exact="$store.commit('player/incrementVolume', -0.1)"
-      @keydown.shift.up.prevent.exact="$store.commit('player/incrementVolume', 0.1)"
-      @keydown.right.prevent.exact="seek (5)"
-      @keydown.left.prevent.exact="seek (-5)"
-      @keydown.shift.right.prevent.exact="seek (30)"
-      @keydown.shift.left.prevent.exact="seek (-30)"
-      @keydown.m.prevent.exact="toggleMute"
-      @keydown.l.exact="$store.commit('player/toggleLooping')"
-      @keydown.s.exact="shuffle"
-      @keydown.f.exact="$store.dispatch('favorites/toggle', currentTrack.id)"
-      @keydown.q.exact="clean"
-      @keydown.e.exact="toggleMobilePlayer"
-    />
   </section>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
-import GlobalEvents from '~/components/utils/global-events.vue'
+import { useStore, mapState, mapGetters, mapActions } from 'vuex'
 import { toLinearVolumeScale } from '~/audio/volume.js'
 import { Howl, Howler } from 'howler'
 import { throttle, reverse } from 'lodash-es'
@@ -348,13 +329,122 @@ import VolumeControl from './VolumeControl.vue'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import updateQueryString from '~/composables/updateQueryString'
+import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
+import { useThrottleFn, useTimeoutFn, useToggle } from '@vueuse/core'
+import { computed, watch, defineEmits } from 'vue'
+import { useGettext } from 'vue3-gettext'
 
 export default {
   components: {
     VolumeControl,
     TrackFavoriteIcon,
-    TrackPlaylistIcon,
-    GlobalEvents
+    TrackPlaylistIcon
+  },
+  setup () {
+    const emit = defineEmits(['next', 'previous'])
+
+    const store = useStore()
+    const { $pgettext } = useGettext()
+
+    const queue = computed(() => store.state.queue)
+    const queueIsEmpty = computed(() => queue.value.tracks.length === 0)
+    const currentTrack = computed(() => store.getters['queue/currentTrack'])
+    const currentTime = computed(() => store.state.player.currentTime)
+
+    const toggleMobilePlayer = () => {
+      store.commit('ui/queueFocused', ['queue', 'player'].indexOf(store.state.ui.queueFocused) > -1 ? null : 'player')
+    }
+
+    const shuffledMessage = $pgettext('Content/Queue/Message', 'Queue shuffled!')
+    const shuffle = useThrottleFn(() => {
+      if (queueIsEmpty.value) return
+      useTimeoutFn(async () => {
+        await store.dispatch('queue/shuffle')
+        store.commit('ui/addMessage', {
+          content: shuffledMessage,
+          date: new Date()
+        })
+      }, 100)
+    }, 101, false)
+
+    const seek = (step) => {
+      if (step > 0) {
+        // seek right
+        if (currentTime.value + step < this.duration) {
+          store.dispatch('player/updateProgress', (currentTime.value + step))
+        } else {
+          this.next() // parenthesis where missing here
+        }
+      } else {
+        // seek left
+        const position = Math.max(currentTime.value + step, 0)
+        store.dispatch('player/updateProgress', position)
+      }
+    }
+
+    const next = async () => {
+      await store.dispatch('queue/next')
+      emit('next')
+    }
+
+    const previous = async () => {
+      await store.dispatch('queue/previous')
+      emit('previous')
+    }
+
+    // Playback
+    const playing = computed(() => store.state.player.playing)
+    const [playback, togglePlayback] = useToggle()
+    watch(playback, isPlaying => store.dispatch(
+      isPlaying
+        ? 'player/resumePlayback'
+        : 'player/pausePlayback'
+    ))
+
+    // Add controls for notification drawer
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.setActionHandler('play', () => (playback.value = true))
+      navigator.mediaSession.setActionHandler('pause', () => (playback.value = false))
+      navigator.mediaSession.setActionHandler('seekforward', () => seek(5))
+      navigator.mediaSession.setActionHandler('seekbackward', () => seek(-5))
+      navigator.mediaSession.setActionHandler('nexttrack', next)
+      navigator.mediaSession.setActionHandler('previoustrack', previous)
+    }
+
+    // Key binds
+    onKeyboardShortcut('e', toggleMobilePlayer)
+    onKeyboardShortcut('p', togglePlayback)
+    onKeyboardShortcut('s', shuffle)
+    onKeyboardShortcut('q', () => store.dispatch('queue/clean'))
+    onKeyboardShortcut('m', () => store.dispatch('player/toggleMute'))
+    onKeyboardShortcut('l', () => store.commit('player/toggleLooping'))
+    onKeyboardShortcut('f', () => store.dispatch('favorites/toggle', currentTrack.value?.id))
+    onKeyboardShortcut('escape', () => store.commit('ui/queueFocused', null))
+
+    onKeyboardShortcut(['shift', 'up'], () => store.commit('player/incrementVolume', 0.1), true)
+    onKeyboardShortcut(['shift', 'down'], () => store.commit('player/incrementVolume', -0.1), true)
+
+    onKeyboardShortcut('right', () => seek(5), true)
+    onKeyboardShortcut(['shift', 'right'], () => seek(30), true)
+    onKeyboardShortcut('left', () => seek(-5), true)
+    onKeyboardShortcut(['shift', 'left'], () => seek(-30), true)
+
+    onKeyboardShortcut(['ctrl', 'shift', 'left'], previous, true)
+    onKeyboardShortcut(['ctrl', 'shift', 'right'], next, true)
+
+    return {
+      queue,
+      queueIsEmpty,
+      currentTrack,
+
+      toggleMobilePlayer,
+      shuffle,
+
+      next,
+      previous,
+      playback,
+      playing
+    }
   },
   data () {
     return {
@@ -379,18 +469,14 @@ export default {
   computed: {
     ...mapState({
       currentIndex: state => state.queue.currentIndex,
-      playing: state => state.player.playing,
       isLoadingAudio: state => state.player.isLoadingAudio,
       volume: state => state.player.volume,
       looping: state => state.player.looping,
       duration: state => state.player.duration,
       bufferProgress: state => state.player.bufferProgress,
-      errored: state => state.player.errored,
-      currentTime: state => state.player.currentTime,
-      queue: state => state.queue
+      errored: state => state.player.errored
     }),
     ...mapGetters({
-      currentTrack: 'queue/currentTrack',
       hasNext: 'queue/hasNext',
       hasPrevious: 'queue/hasPrevious',
       emptyQueue: 'queue/isEmpty',
@@ -512,31 +598,17 @@ export default {
       this.getSound(this.currentTrack)
       this.updateMetadata()
     }
-    // Add controls for notification drawer
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.setActionHandler('play', this.resumePlayback)
-      navigator.mediaSession.setActionHandler('pause', this.pausePlayback)
-      navigator.mediaSession.setActionHandler('seekforward', this.seekForward)
-      navigator.mediaSession.setActionHandler('seekbackward', this.seekBackward)
-      navigator.mediaSession.setActionHandler('nexttrack', this.next)
-      navigator.mediaSession.setActionHandler('previoustrack', this.previous)
-    }
   },
-  beforeDestroy () {
+  beforeUnmount () {
     this.dummyAudio.unload()
     this.observeProgress(false)
   },
-  destroyed () {
+  unmounted () {
   },
   methods: {
     ...mapActions({
-      resumePlayback: 'player/resumePlayback',
-      pausePlayback: 'player/pausePlayback',
-      togglePlayback: 'player/togglePlayback',
       mute: 'player/mute',
-      unmute: 'player/unmute',
-      clean: 'queue/clean',
-      toggleMute: 'player/toggleMute'
+      unmute: 'player/unmute'
     }),
     async getTrackData (trackData) {
       // use previously fetched trackData
@@ -548,36 +620,6 @@ export default {
           response => response.data,
           () => null
         )
-    },
-    shuffle () {
-      const disabled = this.queue.tracks.length === 0
-      if (this.isShuffling || disabled) {
-        return
-      }
-      const self = this
-      const msg = this.$pgettext('Content/Queue/Message', 'Queue shuffled!')
-      this.isShuffling = true
-      setTimeout(() => {
-        self.$store.dispatch('queue/shuffle', () => {
-          self.isShuffling = false
-          self.$store.commit('ui/addMessage', {
-            content: msg,
-            date: new Date()
-          })
-        })
-      }, 100)
-    },
-    next () {
-      const self = this
-      this.$store.dispatch('queue/next').then(() => {
-        self.$emit('next')
-      })
-    },
-    previous () {
-      const self = this
-      this.$store.dispatch('queue/previous').then(() => {
-        self.$emit('previous')
-      })
     },
     handleError ({ sound, error }) {
       this.$store.commit('player/isLoadingAudio', false)
@@ -737,20 +779,6 @@ export default {
         }
       }
     },
-    seek (step) {
-      if (step > 0) {
-        // seek right
-        if (this.currentTime + step < this.duration) {
-          this.$store.dispatch('player/updateProgress', (this.currentTime + step))
-        } else {
-          this.next() // parenthesis where missing here
-        }
-      } else {
-        // seek left
-        const position = Math.max(this.currentTime + step, 0)
-        this.$store.dispatch('player/updateProgress', position)
-      }
-    },
     seekForward () {
       this.seek(5)
     },
@@ -862,13 +890,6 @@ export default {
         this.$store.commit('player/playing', true)
         this.$store.dispatch('player/updateProgress', 0)
         this.observeProgress(true)
-      }
-    },
-    toggleMobilePlayer () {
-      if (['queue', 'player'].indexOf(this.$store.state.ui.queueFocused) > -1) {
-        this.$store.commit('ui/queueFocused', null)
-      } else {
-        this.$store.commit('ui/queueFocused', 'player')
       }
     },
     switchTab () {

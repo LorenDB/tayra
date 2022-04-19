@@ -9,8 +9,7 @@ import SetInstanceModal from '~/components/SetInstanceModal.vue'
 import ShortcutsModal from '~/components/ShortcutsModal.vue'
 import FilterModal from '~/components/moderation/FilterModal.vue'
 import ReportModal from '~/components/moderation/ReportModal.vue'
-import { useIntervalFn, useWindowSize } from '@vueuse/core'
-import GlobalEvents from '~/components/utils/global-events.vue'
+import { useIntervalFn, useToggle, useWindowSize } from '@vueuse/core'
 
 import { computed, nextTick, onMounted, ref, watchEffect } from 'vue'
 import store from '~/store'
@@ -23,6 +22,7 @@ import {
 } from '~/types'
 import useWebSocketHandler from '~/composables/useWebSocketHandler'
 import { getClientOnlyRadio } from '~/radios'
+import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
 
 // Tracks
 const currentTrack = computed(() => store.getters['queue/currentTrack'])
@@ -102,14 +102,18 @@ useWebSocketHandler('Listen', (event) => {
 })
 
 // Time ago
+// TODO (wvffle): Migrate to useTimeAgo
 useIntervalFn(() => {
   // used to redraw ago dates every minute
   store.commit('ui/computeLastDate')
 }, 1000 * 60)
 
+// Shortcuts
+const [showShortcutsModal, toggleShortcutsModal] = useToggle(false)
+onKeyboardShortcut('h', () => toggleShortcutsModal())
+
 const { width } = useWindowSize()
 const player = ref()
-const showShortcutsModal = ref(false)
 const showSetInstanceModal = ref(false)
 </script>
 
@@ -131,7 +135,7 @@ const showSetInstanceModal = ref(false)
     <sidebar
       :width="width"
       @show:set-instance-modal="showSetInstanceModal = !showSetInstanceModal"
-      @show:shortcuts-modal="showShortcutsModal = !showShortcutsModal"
+      @show:shortcuts-modal="toggleShortcutsModal"
     />
     <set-instance-modal
       :show="showSetInstanceModal"
@@ -146,9 +150,9 @@ const showSetInstanceModal = ref(false)
     </transition>
 
     <router-view
+      v-slot="{ Component }"
       role="main"
       :class="{hidden: store.state.ui.queueFocused}"
-      v-slot="{ Component }"
     >
       <Suspense v-if="Component">
         <component :is="Component" />
@@ -168,7 +172,6 @@ const showSetInstanceModal = ref(false)
       :show="showShortcutsModal"
       @update:show="showShortcutsModal = $event"
     />
-    <GlobalEvents @keydown.h.exact="showShortcutsModal = !showShortcutsModal" />
   </div>
 </template>
 
