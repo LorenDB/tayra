@@ -331,7 +331,7 @@ import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import updateQueryString from '~/composables/updateQueryString'
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
 import { useThrottleFn, useTimeoutFn, useToggle } from '@vueuse/core'
-import { computed, watch, defineEmits } from 'vue'
+import { computed, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 export default {
@@ -340,8 +340,9 @@ export default {
     TrackFavoriteIcon,
     TrackPlaylistIcon
   },
-  setup () {
-    const emit = defineEmits(['next', 'previous'])
+  setup (props, { emit }) {
+    // TODO (wvffle): When migrating to <script setup> use  defineEmits
+    // const emit = defineEmits(['next', 'previous'])
 
     const store = useStore()
     const { $pgettext } = useGettext()
