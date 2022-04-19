@@ -150,17 +150,17 @@ export default {
         dispatch('radios/populateQueue', null, { root: true })
       }
     },
-    clean ({ dispatch, commit }) {
+    clean ({ dispatch, commit, state }) {
       dispatch('radios/stop', null, { root: true })
       dispatch('player/stop', null, { root: true })
-      commit('tracks', [])
+      state.tracks.length = 0
       dispatch('currentIndex', -1)
       // so we replay automatically on next track append
       commit('ended', true)
     },
-    async shuffle ({ dispatch, commit, state }, callback) {
+    async shuffle ({ dispatch, state }, callback) {
       const shuffled = shuffle(state.tracks)
-      commit('tracks', [])
+      state.tracks.length = 0
       const params = { tracks: shuffled }
       if (callback) {
         params.callback = callback

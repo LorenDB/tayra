@@ -522,7 +522,7 @@ export default {
       languageSelection: this.$language.current
     }
   },
-  destroy () {
+  unmount () {
     if (this.fetchInterval) {
       clearInterval(this.fetchInterval)
     }

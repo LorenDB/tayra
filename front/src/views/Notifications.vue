@@ -263,7 +263,7 @@ export default {
       handler: this.handleNewNotification
     })
   },
-  destroyed () {
+  unmounted () {
     this.$store.commit('ui/removeWebsocketEventHandler', {
       eventName: 'inbox.item_added',
       id: 'notificationPage'

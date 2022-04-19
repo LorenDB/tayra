@@ -500,7 +500,7 @@ export default {
     })
     window.onbeforeunload = e => this.onBeforeUnload(e)
   },
-  destroyed () {
+  unmounted () {
     this.$store.commit('ui/removeWebsocketEventHandler', {
       eventName: 'import.status_updated',
       id: 'fileUpload'

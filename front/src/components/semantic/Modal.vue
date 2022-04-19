@@ -54,7 +54,7 @@ export default {
   mounted () {
     this.focusTrap = createFocusTrap(this.$el)
   },
-  beforeDestroy () {
+  beforeUnmount () {
     if (this.control) {
       $(this.$el).modal('hide')
     }

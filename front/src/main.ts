@@ -1,6 +1,6 @@
 import router from '~/router'
 import store from '~/store'
-import { createApp } from 'vue'
+import { createApp, defineAsyncComponent } from 'vue'
 import useLogger from '~/composables/useLogger'
 import useTheme from '~/composables/useTheme'
 useTheme()
@@ -11,7 +11,7 @@ logger.debug('Environment variables:', import.meta.env)
 
 const app = createApp({
   components: {
-    App: () => import('~/App.vue')
+    App: defineAsyncComponent(() => import('~/App.vue'))
   },
   data: () => ({ isMounted: false }),
   async mounted () {

@@ -232,7 +232,7 @@ export default {
       })
     }
   },
-  destroyed () {
+  unmounted () {
     this.$store.commit('ui/removeWebsocketEventHandler', {
       eventName: 'import.status_updated',
       id: 'fileUploadChannel'
