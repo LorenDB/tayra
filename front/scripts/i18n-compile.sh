@@ -3,7 +3,7 @@
 cd "$(dirname $0)/.." # change into base directory
 source scripts/utils.sh
 
-locales=$(tail -n +3 src/locales.ts | sed -E 's/^[^[]+\[] =//' | jq -r '.[].code' | grep -v 'en_US')
+locales=$(jq -r '.[].code' src/locales.json | grep -v 'en_US')
 mkdir -p src/translations
 
 for locale in $locales; do

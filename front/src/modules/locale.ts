@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import GetText from 'vue-gettext'
-import { locales } from '@/locales'
+import locales from '@/locales.json'
 import { usePreferredLanguages } from '@vueuse/core'
 import { watch } from '@vue/composition-api'
 import { AppModule } from '@/types'

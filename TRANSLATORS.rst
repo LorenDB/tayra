@@ -28,7 +28,7 @@ Submitting a new language
 
 1. Pull the latest version of ``develop``
 2. Create a new branch, e.g ``git checkout -b translations-new-fr-ca``
-3. Add your new language code and name in ``front/src/locales.ts``. Use the native language name, as it is what appears in the UI selector.
+3. Add your new language code and name in ``front/src/locales.json``. Use the native language name, as it is what appears in the UI selector.
 4. Create the ``po`` file from template:
 
 .. code-block:: shell

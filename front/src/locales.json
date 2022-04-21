@@ -1,7 +1,4 @@
-import type { Locale } from '@/types'
-
-/* eslint-disable */
-export const locales: Locale[] = [
+[
   {
     "code": "ar",
     "label": "العربية"

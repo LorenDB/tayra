@@ -27,12 +27,6 @@ export interface ThemeEntry {
   key: Theme
 }
 
-// Locale stuff
-export interface Locale {
-  label: string
-  code: string
-}
-
 // Track stuff
 export interface Artist {
   name: string
