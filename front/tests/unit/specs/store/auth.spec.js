@@ -133,7 +133,6 @@ describe('store/auth', () => {
           { type: 'permission', payload: {key: 'admin', status: true} }
         ],
         expectedActions: [
-          { type: 'ui/initSettings', payload: { root: true } },
           { type: 'updateProfile', payload: profile },
           { type: 'ui/fetchUnreadNotifications', payload: null },
           { type: 'favorites/fetch', payload: null, options: {root: true} },

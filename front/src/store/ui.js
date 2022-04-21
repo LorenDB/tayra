@@ -346,12 +346,6 @@ export default {
       }
     },
 
-    async initSettings ({ commit }, settings) {
-      settings = settings || {}
-      if (settings.language) {
-        commit('currentLanguage', settings.language)
-      }
-    },
     websocketEvent ({ state }, event) {
       const handlers = state.websocketEventsHandlers[event.type]
       console.log('Dispatching websocket event', event, handlers)
