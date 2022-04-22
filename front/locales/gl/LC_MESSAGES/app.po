@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2022-02-19 14:17+0000\n"
+"PO-Revision-Date: 2022-04-23 13:59+0000\n"
 "Last-Translator: ghose <xosem@disroot.org>\n"
 "Language-Team: none\n"
 "Language: gl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6.2\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: front/src/components/playlists/PlaylistModal.vue:8
 #: front/src/components/playlists/PlaylistModal.vue:5
@@ -940,7 +940,7 @@ msgstr "Aprobada e aplicada"
 #: front/src/components/auth/Logout.vue:5
 msgctxt "Content/Login/Title"
 msgid "Are you sure you want to log out?"
-msgstr "Tes certeza de querer saír?"
+msgstr "Tes certeza de querer pechar sesión?"
 
 #: front/src/components/AboutPod.vue:230 src/components/AboutPod.vue:18
 msgctxt "Content/About/*"
@@ -1141,7 +1141,7 @@ msgstr "tremendonomedacanle"
 #: front/src/views/auth/PasswordResetConfirm.vue:6
 msgctxt "Content/Signup/Link"
 msgid "Back to login"
-msgstr "Volve a entrar"
+msgstr "Volve ao acceso"
 
 #: front/src/components/auth/ApplicationEdit.vue:9
 #: front/src/components/auth/ApplicationEdit.vue:2
@@ -3768,23 +3768,23 @@ msgstr "Acceder"
 #: front/src/components/auth/SignupForm.vue:15 src/views/auth/Login.vue:5
 msgctxt "Content/Login/Title/Verb"
 msgid "Log in to your Funkwhale account"
-msgstr "Conecte coa súa conta Funkwhale"
+msgstr "Accede coa túa conta Funkwhale"
 
 #: front/src/components/auth/Logout.vue:25
 msgctxt "Content/Login/Button.Label"
 msgid "Log in!"
-msgstr "Entra!"
+msgstr "Accede!"
 
 #: front/src/components/common/UserMenu.vue:164
 #: front/src/components/common/UserModal.vue:193
 msgctxt "Sidebar/Login/List item.Link/Verb"
 msgid "Log out"
-msgstr "Saír"
+msgstr "Pechar sesión"
 
 #: front/src/components/auth/Logout.vue:58
 msgctxt "Head/Login/Title"
 msgid "Log Out"
-msgstr "Saír"
+msgstr "Pechar sesión"
 
 #: front/src/views/auth/Callback.vue:8
 msgctxt "*/Login/*"
@@ -4890,7 +4890,9 @@ msgstr "Por favor, contacta coa administración e pídelle que actualicen o axus
 #: front/src/components/auth/LoginForm.vue:15
 msgctxt "Content/Login/Error message.List item/Call to action"
 msgid "Please double-check that your username and password combination is correct and make sure you verified your e-mail address."
-msgstr "Comproba que o par usuaria/contrasinal é correcto e asegúrate de ter verificado o email."
+msgstr ""
+"Comproba que as credenciais son correctas e asegúrate de ter verificado o "
+"email."
 
 #: front/src/components/auth/Settings.vue:100
 msgctxt "Content/Settings/Error message.List item/Call to action"
@@ -5576,7 +5578,7 @@ msgstr "Restablecer ao valor inicial"
 #: front/src/views/auth/PasswordReset.vue:5 src/views/auth/PasswordReset.vue:87
 msgctxt "*/Login/*/Verb"
 msgid "Reset your password"
-msgstr "Restablecer o contrasinal"
+msgstr "Restablece o contrasinal"
 
 #: front/src/components/manage/moderation/ReportCard.vue:97
 #: front/src/components/manage/moderation/UserRequestCard.vue:87
@@ -5666,7 +5668,7 @@ msgstr "Voltar a intentar as subidas"
 #: front/src/views/auth/EmailConfirm.vue:23
 msgctxt "Content/Signup/Link/Verb"
 msgid "Return to login"
-msgstr "Volver a entrar"
+msgstr "Volver ao acceso"
 
 #: front/src/components/library/ArtistDetail.vue:11
 msgctxt "Content/Moderation/Link"
@@ -6644,7 +6646,9 @@ msgstr ""
 #: front/src/components/Footer.vue:91
 msgctxt "Footer/*/List item.Link"
 msgid "The Funkwhale logo was kindly designed and provided by Francis Gading."
-msgstr "O logo de funckwhale foi amablemente deseñado e proporcionado por Francis Gading."
+msgstr ""
+"O logo de funkwhale foi amablemente deseñado e proporcionado por Francis "
+"Gading."
 
 #: front/src/components/SetInstanceModal.vue:21
 msgctxt "Popup/Instance/Error message.List item"
@@ -6867,7 +6871,7 @@ msgctxt "Popup/Settings/Paragraph"
 msgid "This is irreversible and will permanently remove your data from our servers. You will we immediatly logged out."
 msgstr ""
 "Esto non ten volta e eliminará permanentemente os teus datos dos nosos "
-"servidorese. Sairás inmediatamente."
+"servidores. Pecharás sesión inmediatamente."
 
 #: front/src/components/auth/Settings.vue:228
 msgctxt "Content/Settings/Paragraph"
@@ -7930,7 +7934,7 @@ msgstr "Si"
 #: front/src/components/auth/Logout.vue:13
 msgctxt "Content/Login/Button.Label"
 msgid "Yes, log me out!"
-msgstr "Si, desconectádeme!"
+msgstr "Si, pechade a sesión!"
 
 #: front/src/views/content/libraries/Form.vue:30
 msgctxt "Content/Library/Paragraph"
@@ -8225,7 +8229,9 @@ msgstr "O teu contrasinal API Subsonic"
 #: front/src/components/auth/Settings.vue:136
 msgctxt "Popup/Settings/List item"
 msgid "Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password"
-msgstr "O teu contrasinal Subsonic será cambiado por un novo, aleatorio, desconectándote de todos os dispositivos que utilicen o contrasinal antigo"
+msgstr ""
+"O teu contrasinal Subsonic será cambiado por un novo, aleatorio, "
+"desconectando todos os dispositivos que utilicen o contrasinal antigo"
 
 #: front/src/views/channels/DetailOverview.vue:42
 #: front/src/views/channels/DetailOverview.vue:8
