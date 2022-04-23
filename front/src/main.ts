@@ -21,8 +21,6 @@ const app = createApp({
   components: {
     App: () => import('~/App.vue')
   },
-  setup () {
-  },
   data: () => ({ isMounted: false }),
   async mounted () {
     this.isMounted = true
