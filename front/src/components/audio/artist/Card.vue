@@ -1,17 +1,21 @@
 <template>
   <div class="app-card card">
-    <div
-      v-lazy:background-image="imageUrl"
-      :class="['ui', 'head-image', 'circular', 'image', {'default-cover': !cover || !cover.urls.original}]"
-      @click="$router.push({name: 'library.artists.detail', params: {id: artist.id}})"
+    <router-link
+      class="discrete link"
+      :to="{name: 'library.artists.detail', params: {id: artist.id}}"
     >
-      <play-button
-        :icon-only="true"
-        :is-playable="artist.is_playable"
-        :button-classes="['ui', 'circular', 'large', 'vibrant', 'icon', 'button']"
-        :artist="artist"
-      />
-    </div>
+      <div
+        v-lazy:background-image="imageUrl"
+        :class="['ui', 'head-image', 'circular', 'image', {'default-cover': !cover || !cover.urls.original}]"
+      >
+        <play-button
+          :icon-only="true"
+          :is-playable="artist.is_playable"
+          :button-classes="['ui', 'circular', 'large', 'vibrant', 'icon', 'button']"
+          :artist="artist"
+        />
+      </div>
+    </router-link>
     <div class="content">
       <strong>
         <router-link

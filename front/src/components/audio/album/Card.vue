@@ -1,17 +1,21 @@
 <template>
   <div class="card app-card component-album-card">
-    <div
-      v-lazy:background-image="imageUrl"
-      :class="['ui', 'head-image', 'image', {'default-cover': !album.cover || !album.cover.urls.original}]"
-      @click="$router.push({name: 'library.albums.detail', params: {id: album.id}})"
+    <router-link
+      class="discrete link"
+      :to="{name: 'library.albums.detail', params: {id: album.id}}"
     >
-      <play-button
-        :icon-only="true"
-        :is-playable="album.is_playable"
-        :button-classes="['ui', 'circular', 'large', 'vibrant', 'icon', 'button']"
-        :album="album"
-      />
-    </div>
+      <div
+        v-lazy:background-image="imageUrl"
+        :class="['ui', 'head-image', 'image', {'default-cover': !album.cover || !album.cover.urls.original}]"
+      >
+        <play-button
+          :icon-only="true"
+          :is-playable="album.is_playable"
+          :button-classes="['ui', 'circular', 'large', 'vibrant', 'icon', 'button']"
+          :album="album"
+        />
+      </div>
+    </router-link>
     <div class="content">
       <strong>
         <router-link

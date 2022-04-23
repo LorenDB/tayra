@@ -335,9 +335,9 @@ SMTP configuration for sending e-mails. Possible values:
 
 On a production instance, you'll usually want to use an external SMTP server:
 
-- ``EMAIL_CONFIG=smtp://user@:password@youremail.host:25``
-- ``EMAIL_CONFIG=smtp+ssl://user@:password@youremail.host:465``
-- ``EMAIL_CONFIG=smtp+tls://user@:password@youremail.host:587``
+- ``EMAIL_CONFIG=smtp://user:password@youremail.host:25``
+- ``EMAIL_CONFIG=smtp+ssl://user:password@youremail.host:465``
+- ``EMAIL_CONFIG=smtp+tls://user:password@youremail.host:587``
 
 .. note::
 
