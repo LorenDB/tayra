@@ -66,9 +66,9 @@
 
 <script>
 import axios from 'axios'
-import InstancePolicyForm from '@/components/manage/moderation/InstancePolicyForm.vue'
-import InstancePolicyCard from '@/components/manage/moderation/InstancePolicyCard.vue'
-import Modal from '@/components/semantic/Modal.vue'
+import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
+import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
+import Modal from '~/components/semantic/Modal.vue'
 
 export default {
   components: {

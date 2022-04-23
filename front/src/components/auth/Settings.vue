@@ -698,11 +698,11 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
-import logger from '@/logging'
-import PasswordInput from '@/components/forms/PasswordInput.vue'
-import SubsonicTokenForm from '@/components/auth/SubsonicTokenForm.vue'
-import TranslationsMixin from '@/components/mixins/Translations.vue'
-import AttachmentInput from '@/components/common/AttachmentInput.vue'
+import logger from '~/logging'
+import PasswordInput from '~/components/forms/PasswordInput.vue'
+import SubsonicTokenForm from '~/components/auth/SubsonicTokenForm.vue'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
+import AttachmentInput from '~/components/common/AttachmentInput.vue'
 
 export default {
   components: {

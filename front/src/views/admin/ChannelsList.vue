@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import ChannelsTable from '@/components/manage/ChannelsTable.vue'
+import ChannelsTable from '~/components/manage/ChannelsTable.vue'
 
 export default {
   components: {

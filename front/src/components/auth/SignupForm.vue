@@ -154,10 +154,10 @@
 
 <script>
 import axios from 'axios'
-import logger from '@/logging'
+import logger from '~/logging'
 
-import LoginForm from '@/components/auth/LoginForm.vue'
-import PasswordInput from '@/components/forms/PasswordInput.vue'
+import LoginForm from '~/components/auth/LoginForm.vue'
+import PasswordInput from '~/components/forms/PasswordInput.vue'
 
 export default {
   components: {

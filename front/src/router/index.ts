@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from '@/store'
+import store from '~/store'
 
 Vue.use(Router)
 
@@ -55,7 +55,7 @@ export default new Router({
       path: '/',
       name: 'index',
       component: () =>
-        import('@/components/Home.vue')
+        import('~/components/Home.vue')
     },
     {
       path: '/front',
@@ -69,32 +69,32 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: () =>
-        import('@/components/About.vue')
+        import('~/components/About.vue')
     },
     {
       path: '/about/pod',
       name: 'about-pod',
       component: () =>
-        import('@/components/AboutPod.vue')
+        import('~/components/AboutPod.vue')
     },
     {
       path: '/login',
       name: 'login',
       component: () =>
-        import('@/views/auth/Login.vue'),
+        import('~/views/auth/Login.vue'),
       props: route => ({ next: route.query.next || '/library' })
     },
     {
       path: '/notifications',
       name: 'notifications',
       component: () =>
-        import('@/views/Notifications.vue')
+        import('~/views/Notifications.vue')
     },
     {
       path: '/auth/password/reset',
       name: 'auth.password-reset',
       component: () =>
-        import('@/views/auth/PasswordReset.vue'),
+        import('~/views/auth/PasswordReset.vue'),
       props: route => ({
         defaultEmail: route.query.email
       })
@@ -103,7 +103,7 @@ export default new Router({
       path: '/auth/callback',
       name: 'auth.callback',
       component: () =>
-        import('@/views/auth/Callback.vue'),
+        import('~/views/auth/Callback.vue'),
       props: route => ({
         code: route.query.code,
         state: route.query.state
@@ -113,7 +113,7 @@ export default new Router({
       path: '/auth/email/confirm',
       name: 'auth.email-confirm',
       component: () =>
-        import('@/views/auth/EmailConfirm.vue'),
+        import('~/views/auth/EmailConfirm.vue'),
       props: route => ({
         defaultKey: route.query.key
       })
@@ -122,7 +122,7 @@ export default new Router({
       path: '/search',
       name: 'search',
       component: () =>
-        import('@/views/Search.vue'),
+        import('~/views/Search.vue'),
       props: route => ({
         initialId: route.query.id,
         initialType: route.query.type || 'artists',
@@ -135,7 +135,7 @@ export default new Router({
       name: 'auth.password-reset-confirm',
       component: () =>
         import(
-          '@/views/auth/PasswordResetConfirm.vue'
+          '~/views/auth/PasswordResetConfirm.vue'
         ),
       props: route => ({
         defaultUid: route.query.uid,
@@ -146,7 +146,7 @@ export default new Router({
       path: '/authorize',
       name: 'authorize',
       component: () =>
-        import('@/components/auth/Authorize.vue'),
+        import('~/components/auth/Authorize.vue'),
       props: route => ({
         clientId: route.query.client_id,
         redirectUri: route.query.redirect_uri,
@@ -160,7 +160,7 @@ export default new Router({
       path: '/signup',
       name: 'signup',
       component: () =>
-        import('@/views/auth/Signup.vue'),
+        import('~/views/auth/Signup.vue'),
       props: route => ({
         defaultInvitation: route.query.invitation
       })
@@ -169,13 +169,13 @@ export default new Router({
       path: '/logout',
       name: 'logout',
       component: () =>
-        import('@/components/auth/Logout.vue')
+        import('~/components/auth/Logout.vue')
     },
     {
       path: '/settings',
       name: 'settings',
       component: () =>
-        import('@/components/auth/Settings.vue')
+        import('~/components/auth/Settings.vue')
     },
     {
       path: '/settings/applications/new',
@@ -187,7 +187,7 @@ export default new Router({
       }),
       component: () =>
         import(
-          '@/components/auth/ApplicationNew.vue'
+          '~/components/auth/ApplicationNew.vue'
         )
     },
     {
@@ -195,7 +195,7 @@ export default new Router({
       name: 'settings.plugins',
       component: () =>
         import(
-          '@/views/auth/Plugins.vue'
+          '~/views/auth/Plugins.vue'
         )
     },
     {
@@ -203,7 +203,7 @@ export default new Router({
       name: 'settings.applications.edit',
       component: () =>
         import(
-          '@/components/auth/ApplicationEdit.vue'
+          '~/components/auth/ApplicationEdit.vue'
         ),
       props: true
     },
@@ -212,7 +212,7 @@ export default new Router({
         path: route.path,
         name: `profile${route.suffix}`,
         component: () =>
-          import('@/views/auth/ProfileBase.vue'),
+          import('~/views/auth/ProfileBase.vue'),
         props: true,
         children: [
           {
@@ -220,7 +220,7 @@ export default new Router({
             name: `profile${route.suffix}.overview`,
             component: () =>
               import(
-                '@/views/auth/ProfileOverview.vue'
+                '~/views/auth/ProfileOverview.vue'
               )
           },
           {
@@ -228,7 +228,7 @@ export default new Router({
             name: `profile${route.suffix}.activity`,
             component: () =>
               import(
-                '@/views/auth/ProfileActivity.vue'
+                '~/views/auth/ProfileActivity.vue'
               )
           }
         ]
@@ -238,7 +238,7 @@ export default new Router({
       path: '/favorites',
       name: 'favorites',
       component: () =>
-        import('@/components/favorites/List.vue'),
+        import('~/components/favorites/List.vue'),
       props: route => ({
         defaultOrdering: route.query.ordering,
         defaultPage: route.query.page,
@@ -248,27 +248,27 @@ export default new Router({
     {
       path: '/content',
       component: () =>
-        import('@/views/content/Base.vue'),
+        import('~/views/content/Base.vue'),
       children: [
         {
           path: '',
           name: 'content.index',
           component: () =>
-            import('@/views/content/Home.vue')
+            import('~/views/content/Home.vue')
         }
       ]
     },
     {
       path: '/content/libraries/tracks',
       component: () =>
-        import('@/views/content/Base.vue'),
+        import('~/views/content/Base.vue'),
       children: [
         {
           path: '',
           name: 'content.libraries.files',
           component: () =>
             import(
-              '@/views/content/libraries/Files.vue'
+              '~/views/content/libraries/Files.vue'
             ),
           props: route => ({
             query: route.query.q
@@ -279,14 +279,14 @@ export default new Router({
     {
       path: '/content/libraries',
       component: () =>
-        import('@/views/content/Base.vue'),
+        import('~/views/content/Base.vue'),
       children: [
         {
           path: '',
           name: 'content.libraries.index',
           component: () =>
             import(
-              '@/views/content/libraries/Home.vue'
+              '~/views/content/libraries/Home.vue'
             )
         }
       ]
@@ -294,13 +294,13 @@ export default new Router({
     {
       path: '/content/remote',
       component: () =>
-        import('@/views/content/Base.vue'),
+        import('~/views/content/Base.vue'),
       children: [
         {
           path: '',
           name: 'content.remote.index',
           component: () =>
-            import('@/views/content/remote/Home.vue')
+            import('~/views/content/remote/Home.vue')
         }
       ]
     },
@@ -309,20 +309,20 @@ export default new Router({
       name: 'manage.settings',
       beforeEnter: adminPermissions,
       component: () =>
-        import('@/views/admin/Settings.vue')
+        import('~/views/admin/Settings.vue')
     },
     {
       path: '/manage/library',
       beforeEnter: libraryPermissions,
       component: () =>
-        import('@/views/admin/library/Base.vue'),
+        import('~/views/admin/library/Base.vue'),
       children: [
         {
           path: 'edits',
           name: 'manage.library.edits',
           component: () =>
             import(
-              '@/views/admin/library/EditsList.vue'
+              '~/views/admin/library/EditsList.vue'
             ),
           props: route => {
             return {
@@ -335,7 +335,7 @@ export default new Router({
           name: 'manage.library.artists',
           component: () =>
             import(
-              '@/views/admin/library/ArtistsList.vue'
+              '~/views/admin/library/ArtistsList.vue'
             ),
           props: route => {
             return {
@@ -348,7 +348,7 @@ export default new Router({
           name: 'manage.library.artists.detail',
           component: () =>
             import(
-              '@/views/admin/library/ArtistDetail.vue'
+              '~/views/admin/library/ArtistDetail.vue'
             ),
           props: true
         },
@@ -357,7 +357,7 @@ export default new Router({
           name: 'manage.channels',
           component: () =>
             import(
-              '@/views/admin/ChannelsList.vue'
+              '~/views/admin/ChannelsList.vue'
             ),
           props: route => {
             return {
@@ -370,7 +370,7 @@ export default new Router({
           name: 'manage.channels.detail',
           component: () =>
             import(
-              '@/views/admin/ChannelDetail.vue'
+              '~/views/admin/ChannelDetail.vue'
             ),
           props: true
         },
@@ -379,7 +379,7 @@ export default new Router({
           name: 'manage.library.albums',
           component: () =>
             import(
-              '@/views/admin/library/AlbumsList.vue'
+              '~/views/admin/library/AlbumsList.vue'
             ),
           props: route => {
             return {
@@ -392,7 +392,7 @@ export default new Router({
           name: 'manage.library.albums.detail',
           component: () =>
             import(
-              '@/views/admin/library/AlbumDetail.vue'
+              '~/views/admin/library/AlbumDetail.vue'
             ),
           props: true
         },
@@ -401,7 +401,7 @@ export default new Router({
           name: 'manage.library.tracks',
           component: () =>
             import(
-              '@/views/admin/library/TracksList.vue'
+              '~/views/admin/library/TracksList.vue'
             ),
           props: route => {
             return {
@@ -414,7 +414,7 @@ export default new Router({
           name: 'manage.library.tracks.detail',
           component: () =>
             import(
-              '@/views/admin/library/TrackDetail.vue'
+              '~/views/admin/library/TrackDetail.vue'
             ),
           props: true
         },
@@ -423,7 +423,7 @@ export default new Router({
           name: 'manage.library.libraries',
           component: () =>
             import(
-              '@/views/admin/library/LibrariesList.vue'
+              '~/views/admin/library/LibrariesList.vue'
             ),
           props: route => {
             return {
@@ -436,7 +436,7 @@ export default new Router({
           name: 'manage.library.libraries.detail',
           component: () =>
             import(
-              '@/views/admin/library/LibraryDetail.vue'
+              '~/views/admin/library/LibraryDetail.vue'
             ),
           props: true
         },
@@ -445,7 +445,7 @@ export default new Router({
           name: 'manage.library.uploads',
           component: () =>
             import(
-              '@/views/admin/library/UploadsList.vue'
+              '~/views/admin/library/UploadsList.vue'
             ),
           props: route => {
             return {
@@ -458,7 +458,7 @@ export default new Router({
           name: 'manage.library.uploads.detail',
           component: () =>
             import(
-              '@/views/admin/library/UploadDetail.vue'
+              '~/views/admin/library/UploadDetail.vue'
             ),
           props: true
         },
@@ -467,7 +467,7 @@ export default new Router({
           name: 'manage.library.tags',
           component: () =>
             import(
-              '@/views/admin/library/TagsList.vue'
+              '~/views/admin/library/TagsList.vue'
             ),
           props: route => {
             return {
@@ -480,7 +480,7 @@ export default new Router({
           name: 'manage.library.tags.detail',
           component: () =>
             import(
-              '@/views/admin/library/TagDetail.vue'
+              '~/views/admin/library/TagDetail.vue'
             ),
           props: true
         }
@@ -490,14 +490,14 @@ export default new Router({
       path: '/manage/users',
       beforeEnter: adminPermissions,
       component: () =>
-        import('@/views/admin/users/Base.vue'),
+        import('~/views/admin/users/Base.vue'),
       children: [
         {
           path: 'users',
           name: 'manage.users.users.list',
           component: () =>
             import(
-              '@/views/admin/users/UsersList.vue'
+              '~/views/admin/users/UsersList.vue'
             )
         },
         {
@@ -505,7 +505,7 @@ export default new Router({
           name: 'manage.users.invitations.list',
           component: () =>
             import(
-              '@/views/admin/users/InvitationsList.vue'
+              '~/views/admin/users/InvitationsList.vue'
             )
         }
       ]
@@ -514,14 +514,14 @@ export default new Router({
       path: '/manage/moderation',
       beforeEnter: moderatorPermissions,
       component: () =>
-        import('@/views/admin/moderation/Base.vue'),
+        import('~/views/admin/moderation/Base.vue'),
       children: [
         {
           path: 'domains',
           name: 'manage.moderation.domains.list',
           component: () =>
             import(
-              '@/views/admin/moderation/DomainsList.vue'
+              '~/views/admin/moderation/DomainsList.vue'
             )
         },
         {
@@ -529,7 +529,7 @@ export default new Router({
           name: 'manage.moderation.domains.detail',
           component: () =>
             import(
-              '@/views/admin/moderation/DomainsDetail.vue'
+              '~/views/admin/moderation/DomainsDetail.vue'
             ),
           props: true
         },
@@ -538,7 +538,7 @@ export default new Router({
           name: 'manage.moderation.accounts.list',
           component: () =>
             import(
-              '@/views/admin/moderation/AccountsList.vue'
+              '~/views/admin/moderation/AccountsList.vue'
             ),
           props: route => {
             return {
@@ -551,7 +551,7 @@ export default new Router({
           name: 'manage.moderation.accounts.detail',
           component: () =>
             import(
-              '@/views/admin/moderation/AccountsDetail.vue'
+              '~/views/admin/moderation/AccountsDetail.vue'
             ),
           props: true
         },
@@ -560,7 +560,7 @@ export default new Router({
           name: 'manage.moderation.reports.list',
           component: () =>
             import(
-              '@/views/admin/moderation/ReportsList.vue'
+              '~/views/admin/moderation/ReportsList.vue'
             ),
           props: route => {
             return {
@@ -574,7 +574,7 @@ export default new Router({
           name: 'manage.moderation.reports.detail',
           component: () =>
             import(
-              '@/views/admin/moderation/ReportDetail.vue'
+              '~/views/admin/moderation/ReportDetail.vue'
             ),
           props: true
         },
@@ -583,7 +583,7 @@ export default new Router({
           name: 'manage.moderation.requests.list',
           component: () =>
             import(
-              '@/views/admin/moderation/RequestsList.vue'
+              '~/views/admin/moderation/RequestsList.vue'
             ),
           props: route => {
             return {
@@ -597,7 +597,7 @@ export default new Router({
           name: 'manage.moderation.requests.detail',
           component: () =>
             import(
-              '@/views/admin/moderation/RequestDetail.vue'
+              '~/views/admin/moderation/RequestDetail.vue'
             ),
           props: true
         }
@@ -606,18 +606,18 @@ export default new Router({
     {
       path: '/library',
       component: () =>
-        import('@/components/library/Library.vue'),
+        import('~/components/library/Library.vue'),
       children: [
         {
           path: '',
           component: () =>
-            import('@/components/library/Home.vue'),
+            import('~/components/library/Home.vue'),
           name: 'library.index'
         },
         {
           path: 'me',
           component: () =>
-            import('@/components/library/Home.vue'),
+            import('~/components/library/Home.vue'),
           name: 'library.me',
           props: route => ({
             scope: 'me'
@@ -628,7 +628,7 @@ export default new Router({
           name: 'library.artists.browse',
           component: () =>
             import(
-              '@/components/library/Artists.vue'
+              '~/components/library/Artists.vue'
             ),
           props: route => ({
             defaultOrdering: route.query.ordering,
@@ -645,7 +645,7 @@ export default new Router({
           name: 'library.artists.me',
           component: () =>
             import(
-              '@/components/library/Artists.vue'
+              '~/components/library/Artists.vue'
             ),
           props: route => ({
             scope: 'me',
@@ -663,7 +663,7 @@ export default new Router({
           name: 'library.albums.browse',
           component: () =>
             import(
-              '@/components/library/Albums.vue'
+              '~/components/library/Albums.vue'
             ),
           props: route => ({
             defaultOrdering: route.query.ordering,
@@ -680,7 +680,7 @@ export default new Router({
           name: 'library.podcasts.browse',
           component: () =>
             import(
-              '@/components/library/Podcasts.vue'
+              '~/components/library/Podcasts.vue'
             ),
           props: route => ({
             defaultOrdering: route.query.ordering,
@@ -697,7 +697,7 @@ export default new Router({
           name: 'library.albums.me',
           component: () =>
             import(
-              '@/components/library/Albums.vue'
+              '~/components/library/Albums.vue'
             ),
           props: route => ({
             scope: 'me',
@@ -715,7 +715,7 @@ export default new Router({
           name: 'library.radios.browse',
           component: () =>
             import(
-              '@/components/library/Radios.vue'
+              '~/components/library/Radios.vue'
             ),
           props: route => ({
             defaultOrdering: route.query.ordering,
@@ -729,7 +729,7 @@ export default new Router({
           name: 'library.radios.me',
           component: () =>
             import(
-              '@/components/library/Radios.vue'
+              '~/components/library/Radios.vue'
             ),
           props: route => ({
             scope: 'me',
@@ -744,7 +744,7 @@ export default new Router({
           name: 'library.radios.build',
           component: () =>
             import(
-              '@/components/library/radios/Builder.vue'
+              '~/components/library/radios/Builder.vue'
             ),
           props: true
         },
@@ -753,7 +753,7 @@ export default new Router({
           name: 'library.radios.edit',
           component: () =>
             import(
-              '@/components/library/radios/Builder.vue'
+              '~/components/library/radios/Builder.vue'
             ),
           props: true
         },
@@ -761,14 +761,14 @@ export default new Router({
           path: 'radios/:id',
           name: 'library.radios.detail',
           component: () =>
-            import('@/views/radios/Detail.vue'),
+            import('~/views/radios/Detail.vue'),
           props: true
         },
         {
           path: 'playlists/',
           name: 'library.playlists.browse',
           component: () =>
-            import('@/views/playlists/List.vue'),
+            import('~/views/playlists/List.vue'),
           props: route => ({
             defaultOrdering: route.query.ordering,
             defaultQuery: route.query.query,
@@ -780,7 +780,7 @@ export default new Router({
           path: 'me/playlists/',
           name: 'library.playlists.me',
           component: () =>
-            import('@/views/playlists/List.vue'),
+            import('~/views/playlists/List.vue'),
           props: route => ({
             scope: 'me',
             defaultOrdering: route.query.ordering,
@@ -793,7 +793,7 @@ export default new Router({
           path: 'playlists/:id',
           name: 'library.playlists.detail',
           component: () =>
-            import('@/views/playlists/Detail.vue'),
+            import('~/views/playlists/Detail.vue'),
           props: route => ({
             id: route.params.id,
             defaultEdit: route.query.mode === 'edit'
@@ -804,7 +804,7 @@ export default new Router({
           name: 'library.tags.detail',
           component: () =>
             import(
-              '@/components/library/TagDetail.vue'
+              '~/components/library/TagDetail.vue'
             ),
           props: true
         },
@@ -812,7 +812,7 @@ export default new Router({
           path: 'artists/:id',
           component: () =>
             import(
-              '@/components/library/ArtistBase.vue'
+              '~/components/library/ArtistBase.vue'
             ),
           props: true,
           children: [
@@ -821,7 +821,7 @@ export default new Router({
               name: 'library.artists.detail',
               component: () =>
                 import(
-                  '@/components/library/ArtistDetail.vue'
+                  '~/components/library/ArtistDetail.vue'
                 )
             },
             {
@@ -829,7 +829,7 @@ export default new Router({
               name: 'library.artists.edit',
               component: () =>
                 import(
-                  '@/components/library/ArtistEdit.vue'
+                  '~/components/library/ArtistEdit.vue'
                 )
             },
             {
@@ -837,7 +837,7 @@ export default new Router({
               name: 'library.artists.edit.detail',
               component: () =>
                 import(
-                  '@/components/library/EditDetail.vue'
+                  '~/components/library/EditDetail.vue'
                 ),
               props: true
             }
@@ -847,7 +847,7 @@ export default new Router({
           path: 'albums/:id',
           component: () =>
             import(
-              '@/components/library/AlbumBase.vue'
+              '~/components/library/AlbumBase.vue'
             ),
           props: true,
           children: [
@@ -856,7 +856,7 @@ export default new Router({
               name: 'library.albums.detail',
               component: () =>
                 import(
-                  '@/components/library/AlbumDetail.vue'
+                  '~/components/library/AlbumDetail.vue'
                 )
             },
             {
@@ -864,7 +864,7 @@ export default new Router({
               name: 'library.albums.edit',
               component: () =>
                 import(
-                  '@/components/library/AlbumEdit.vue'
+                  '~/components/library/AlbumEdit.vue'
                 )
             },
             {
@@ -872,7 +872,7 @@ export default new Router({
               name: 'library.albums.edit.detail',
               component: () =>
                 import(
-                  '@/components/library/EditDetail.vue'
+                  '~/components/library/EditDetail.vue'
                 ),
               props: true
             }
@@ -882,7 +882,7 @@ export default new Router({
           path: 'tracks/:id',
           component: () =>
             import(
-              '@/components/library/TrackBase.vue'
+              '~/components/library/TrackBase.vue'
             ),
           props: true,
           children: [
@@ -891,7 +891,7 @@ export default new Router({
               name: 'library.tracks.detail',
               component: () =>
                 import(
-                  '@/components/library/TrackDetail.vue'
+                  '~/components/library/TrackDetail.vue'
                 )
             },
             {
@@ -899,7 +899,7 @@ export default new Router({
               name: 'library.tracks.edit',
               component: () =>
                 import(
-                  '@/components/library/TrackEdit.vue'
+                  '~/components/library/TrackEdit.vue'
                 )
             },
             {
@@ -907,7 +907,7 @@ export default new Router({
               name: 'library.tracks.edit.detail',
               component: () =>
                 import(
-                  '@/components/library/EditDetail.vue'
+                  '~/components/library/EditDetail.vue'
                 ),
               props: true
             }
@@ -919,7 +919,7 @@ export default new Router({
           props: true,
           component: () =>
             import(
-              '@/components/library/UploadDetail.vue'
+              '~/components/library/UploadDetail.vue'
             )
         },
         {
@@ -928,7 +928,7 @@ export default new Router({
           props: true,
           component: () =>
             import(
-              '@/views/library/DetailBase.vue'
+              '~/views/library/DetailBase.vue'
             ),
           children: [
             {
@@ -936,7 +936,7 @@ export default new Router({
               name: 'library.detail',
               component: () =>
                 import(
-                  '@/views/library/DetailOverview.vue'
+                  '~/views/library/DetailOverview.vue'
                 )
             },
             {
@@ -944,7 +944,7 @@ export default new Router({
               name: 'library.detail.albums',
               component: () =>
                 import(
-                  '@/views/library/DetailAlbums.vue'
+                  '~/views/library/DetailAlbums.vue'
                 )
             },
             {
@@ -952,7 +952,7 @@ export default new Router({
               name: 'library.detail.tracks',
               component: () =>
                 import(
-                  '@/views/library/DetailTracks.vue'
+                  '~/views/library/DetailTracks.vue'
                 )
             },
             {
@@ -960,7 +960,7 @@ export default new Router({
               name: 'library.detail.edit',
               component: () =>
                 import(
-                  '@/views/library/Edit.vue'
+                  '~/views/library/Edit.vue'
                 )
             },
             {
@@ -968,7 +968,7 @@ export default new Router({
               name: 'library.detail.upload',
               component: () =>
                 import(
-                  '@/views/library/Upload.vue'
+                  '~/views/library/Upload.vue'
                 ),
               props: route => ({
                 defaultImportReference: route.query.import
@@ -983,7 +983,7 @@ export default new Router({
       props: true,
       component: () =>
         import(
-          '@/views/channels/DetailBase.vue'
+          '~/views/channels/DetailBase.vue'
         ),
       children: [
         {
@@ -991,7 +991,7 @@ export default new Router({
           name: 'channels.detail',
           component: () =>
             import(
-              '@/views/channels/DetailOverview.vue'
+              '~/views/channels/DetailOverview.vue'
             )
         },
         {
@@ -999,7 +999,7 @@ export default new Router({
           name: 'channels.detail.episodes',
           component: () =>
             import(
-              '@/views/channels/DetailEpisodes.vue'
+              '~/views/channels/DetailEpisodes.vue'
             )
         }
       ]
@@ -1014,7 +1014,7 @@ export default new Router({
       },
       component: () =>
         import(
-          '@/views/channels/SubscriptionsList.vue'
+          '~/views/channels/SubscriptionsList.vue'
         )
     },
     {
@@ -1025,7 +1025,7 @@ export default new Router({
       path: '*',
       name: '404',
       component: () =>
-        import('@/components/PageNotFound.vue')
+        import('~/components/PageNotFound.vue')
     }
   ]
 })

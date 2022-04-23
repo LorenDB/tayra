@@ -65,8 +65,8 @@
 </template>
 
 <script>
-import PlayButton from '@/components/audio/PlayButton.vue'
-import TagsList from '@/components/tags/List.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import TagsList from '~/components/tags/List.vue'
 
 export default {
   components: {

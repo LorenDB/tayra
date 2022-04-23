@@ -1,6 +1,6 @@
 import {expect} from 'chai'
 
-import {parseAPIErrors} from '@/utils'
+import {parseAPIErrors} from '~/utils'
 
 describe('utils', () => {
   describe('parseAPIErrors', () => {

@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import InvitationForm from '@/components/manage/users/InvitationForm.vue'
-import InvitationsTable from '@/components/manage/users/InvitationsTable.vue'
+import InvitationForm from '~/components/manage/users/InvitationForm.vue'
+import InvitationsTable from '~/components/manage/users/InvitationsTable.vue'
 
 export default {
   components: {

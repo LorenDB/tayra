@@ -115,7 +115,7 @@
 
 <script>
 import axios from 'axios'
-import MixinsTranslation from '@/components/mixins/Translations.vue'
+import MixinsTranslation from '~/components/mixins/Translations.vue'
 
 export default {
   mixins: [MixinsTranslation],

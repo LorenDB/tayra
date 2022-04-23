@@ -109,8 +109,8 @@ import axios from 'axios'
 import $ from 'jquery'
 import { clone } from 'lodash-es'
 
-import Modal from '@/components/semantic/Modal.vue'
-import TrackTable from '@/components/audio/track/Table.vue'
+import Modal from '~/components/semantic/Modal.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
 
 export default {
   components: {

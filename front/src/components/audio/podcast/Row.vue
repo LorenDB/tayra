@@ -83,8 +83,8 @@
 <script>
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
-import PlayButton from '@/components/audio/PlayButton.vue'
-import PlayOptions from '@/components/mixins/PlayOptions.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import PlayOptions from '~/components/mixins/PlayOptions.vue'
 
 export default {
 

@@ -416,8 +416,8 @@
 <script>
 import axios from 'axios'
 
-import TagsList from '@/components/tags/List.vue'
-import FetchButton from '@/components/federation/FetchButton.vue'
+import TagsList from '~/components/tags/List.vue'
+import FetchButton from '~/components/federation/FetchButton.vue'
 
 export default {
   components: {

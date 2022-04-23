@@ -174,10 +174,10 @@
 </template>
 
 <script>
-import Modal from '@/components/semantic/Modal.vue'
+import Modal from '~/components/semantic/Modal.vue'
 import { mapGetters } from 'vuex'
-import useThemeList from '@/composables/useThemeList'
-import useTheme from '@/composables/useTheme'
+import useThemeList from '~/composables/useThemeList'
+import useTheme from '~/composables/useTheme'
 
 export default {
   components: {

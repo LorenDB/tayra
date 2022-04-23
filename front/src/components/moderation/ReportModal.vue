@@ -156,8 +156,8 @@
 <script>
 import axios from 'axios'
 import { mapState } from 'vuex'
-import ReportCategoryDropdown from '@/components/moderation/ReportCategoryDropdown.vue'
-import Modal from '@/components/semantic/Modal.vue'
+import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
+import Modal from '~/components/semantic/Modal.vue'
 
 function urlDomain (data) {
   const a = document.createElement('a')

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import ApplicationForm from '@/components/auth/ApplicationForm.vue'
+import ApplicationForm from '~/components/auth/ApplicationForm.vue'
 
 export default {
   components: {

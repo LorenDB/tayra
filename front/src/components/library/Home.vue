@@ -72,11 +72,11 @@
 
 <script>
 import axios from 'axios'
-import logger from '@/logging'
-import ChannelsWidget from '@/components/audio/ChannelsWidget.vue'
-import TrackWidget from '@/components/audio/track/Widget.vue'
-import AlbumWidget from '@/components/audio/album/Widget.vue'
-import PlaylistWidget from '@/components/playlists/Widget.vue'
+import logger from '~/logging'
+import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import TrackWidget from '~/components/audio/track/Widget.vue'
+import AlbumWidget from '~/components/audio/album/Widget.vue'
+import PlaylistWidget from '~/components/playlists/Widget.vue'
 
 const ARTISTS_URL = 'artists/'
 

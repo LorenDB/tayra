@@ -377,9 +377,9 @@
 
 <script>
 import axios from 'axios'
-import TranslationsMixin from '@/components/mixins/Translations.vue'
-import ImportStatusModal from '@/components/library/ImportStatusModal.vue'
-import time from '@/utils/time'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
+import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
+import time from '~/utils/time'
 
 export default {
   components: {

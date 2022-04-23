@@ -249,8 +249,8 @@
 <script>
 import axios from 'axios'
 
-import AttachmentInput from '@/components/common/AttachmentInput.vue'
-import TagsSelector from '@/components/library/TagsSelector.vue'
+import AttachmentInput from '~/components/common/AttachmentInput.vue'
+import TagsSelector from '~/components/library/TagsSelector.vue'
 
 function slugify (text) {
   return text.toString().toLowerCase()

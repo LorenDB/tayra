@@ -22,9 +22,9 @@
 
 <script>
 import jQuery from 'jquery'
-import router from '@/router'
+import router from '~/router'
 import { trim } from 'lodash-es'
-import GlobalEvents from '@/components/utils/global-events.vue'
+import GlobalEvents from '~/components/utils/global-events.vue'
 
 export default {
   components: {

@@ -346,10 +346,10 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import $ from 'jquery'
 import moment from 'moment'
 import { sum } from 'lodash-es'
-import time from '@/utils/time'
+import time from '~/utils/time'
 import { createFocusTrap } from 'focus-trap'
-import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
-import TrackPlaylistIcon from '@/components/playlists/TrackPlaylistIcon.vue'
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import draggable from 'vuedraggable'
 
 export default {

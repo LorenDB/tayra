@@ -58,8 +58,8 @@
 </template>
 
 <script>
-import TagsSelector from '@/components/library/TagsSelector.vue'
-import AttachmentInput from '@/components/common/AttachmentInput.vue'
+import TagsSelector from '~/components/library/TagsSelector.vue'
+import AttachmentInput from '~/components/common/AttachmentInput.vue'
 
 export default {
   components: {

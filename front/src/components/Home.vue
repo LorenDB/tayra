@@ -328,11 +328,11 @@
 import { get } from 'lodash-es'
 import { mapState } from 'vuex'
 import showdown from 'showdown'
-import AlbumWidget from '@/components/audio/album/Widget.vue'
-import ChannelsWidget from '@/components/audio/ChannelsWidget.vue'
-import LoginForm from '@/components/auth/LoginForm.vue'
-import SignupForm from '@/components/auth/SignupForm.vue'
-import { humanSize } from '@/modules/filters'
+import AlbumWidget from '~/components/audio/album/Widget.vue'
+import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import LoginForm from '~/components/auth/LoginForm.vue'
+import SignupForm from '~/components/auth/SignupForm.vue'
+import { humanSize } from '~/modules/filters'
 
 export default {
   components: {

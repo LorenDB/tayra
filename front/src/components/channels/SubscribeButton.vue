@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import LoginModal from '@/components/common/LoginModal.vue'
+import LoginModal from '~/components/common/LoginModal.vue'
 
 export default {
   components: {

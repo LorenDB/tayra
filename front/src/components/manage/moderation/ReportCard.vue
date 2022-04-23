@@ -390,12 +390,12 @@
 
 <script>
 import axios from 'axios'
-import NoteForm from '@/components/manage/moderation/NoteForm.vue'
-import NotesThread from '@/components/manage/moderation/NotesThread.vue'
-import ReportCategoryDropdown from '@/components/moderation/ReportCategoryDropdown.vue'
-import InstancePolicyModal from '@/components/manage/moderation/InstancePolicyModal.vue'
-import entities from '@/entities'
-import { setUpdate } from '@/utils'
+import NoteForm from '~/components/manage/moderation/NoteForm.vue'
+import NotesThread from '~/components/manage/moderation/NotesThread.vue'
+import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
+import InstancePolicyModal from '~/components/manage/moderation/InstancePolicyModal.vue'
+import entities from '~/entities'
+import { setUpdate } from '~/utils'
 import showdown from 'showdown'
 
 function castValue (value) {

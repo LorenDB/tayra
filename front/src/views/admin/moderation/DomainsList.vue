@@ -73,7 +73,7 @@
 <script>
 import axios from 'axios'
 
-import DomainsTable from '@/components/manage/moderation/DomainsTable.vue'
+import DomainsTable from '~/components/manage/moderation/DomainsTable.vue'
 export default {
   components: {
     DomainsTable

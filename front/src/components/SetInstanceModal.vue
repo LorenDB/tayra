@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import Modal from '@/components/semantic/Modal.vue'
+import Modal from '~/components/semantic/Modal.vue'
 import axios from 'axios'
 import { uniq } from 'lodash-es'
 

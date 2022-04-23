@@ -29,7 +29,7 @@ const app = createApp({
   },
   render (h: CreateElement) {
     if (this.isMounted) {
-      // return h('app')
+      return h('app')
     }
 
     return h()

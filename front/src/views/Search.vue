@@ -149,15 +149,14 @@
 </template>
 
 <script>
-import RemoteSearchForm from '@/components/RemoteSearchForm.vue'
-import ArtistCard from '@/components/audio/artist/Card.vue'
-import AlbumCard from '@/components/audio/album/Card.vue'
-import TrackTable from '@/components/audio/track/Table.vue'
-import Pagination from '@/components/Pagination.vue'
-import PlaylistCardList from '@/components/playlists/CardList.vue'
-import RadioButton from '@/components/radios/Button.vue'
-import RadioCard from '@/components/radios/Card.vue'
-import TagsList from '@/components/tags/List.vue'
+import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
+import ArtistCard from '~/components/audio/artist/Card.vue'
+import AlbumCard from '~/components/audio/album/Card.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
+import Pagination from '~/components/Pagination.vue'
+import PlaylistCardList from '~/components/playlists/CardList.vue'
+import RadioCard from '~/components/radios/Card.vue'
+import TagsList from '~/components/tags/List.vue'
 
 import axios from 'axios'
 

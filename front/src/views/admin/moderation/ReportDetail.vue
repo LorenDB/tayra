@@ -17,7 +17,7 @@
 <script>
 import axios from 'axios'
 
-import ReportCard from '@/components/manage/moderation/ReportCard.vue'
+import ReportCard from '~/components/manage/moderation/ReportCard.vue'
 
 export default {
   components: {

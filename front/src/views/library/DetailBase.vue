@@ -227,9 +227,9 @@
 
 <script>
 import axios from 'axios'
-import LibraryFollowButton from '@/components/audio/LibraryFollowButton.vue'
-import ReportMixin from '@/components/mixins/Report.vue'
-import RadioButton from '@/components/radios/Button.vue'
+import LibraryFollowButton from '~/components/audio/LibraryFollowButton.vue'
+import ReportMixin from '~/components/mixins/Report.vue'
+import RadioButton from '~/components/radios/Button.vue'
 
 export default {
   components: {

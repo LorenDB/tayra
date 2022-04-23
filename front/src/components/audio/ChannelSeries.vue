@@ -55,8 +55,8 @@
 <script>
 import { clone } from 'lodash-es'
 import axios from 'axios'
-import ChannelSerieCard from '@/components/audio/ChannelSerieCard.vue'
-import AlbumCard from '@/components/audio/album/Card.vue'
+import ChannelSerieCard from '~/components/audio/ChannelSerieCard.vue'
+import AlbumCard from '~/components/audio/album/Card.vue'
 
 export default {
   components: {

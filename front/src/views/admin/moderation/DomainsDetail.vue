@@ -460,8 +460,8 @@
 import axios from 'axios'
 import { get } from 'lodash-es'
 
-import InstancePolicyForm from '@/components/manage/moderation/InstancePolicyForm.vue'
-import InstancePolicyCard from '@/components/manage/moderation/InstancePolicyCard.vue'
+import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
+import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
 
 export default {
   components: {

@@ -132,15 +132,15 @@
 <script>
 import axios from 'axios'
 import { uniq, merge } from 'lodash-es'
-import time from '@/utils/time'
-import Pagination from '@/components/Pagination.vue'
-import OrderingMixin from '@/components/mixins/Ordering.vue'
-import TranslationsMixin from '@/components/mixins/Translations.vue'
-import EditCard from '@/components/library/EditCard.vue'
-import { normalizeQuery, parseTokens } from '@/search'
-import SmartSearchMixin from '@/components/mixins/SmartSearch.vue'
+import time from '~/utils/time'
+import Pagination from '~/components/Pagination.vue'
+import OrderingMixin from '~/components/mixins/Ordering.vue'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
+import EditCard from '~/components/library/EditCard.vue'
+import { normalizeQuery, parseTokens } from '~/search'
+import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
 
-import edits from '@/edits'
+import edits from '~/edits'
 
 export default {
   components: {

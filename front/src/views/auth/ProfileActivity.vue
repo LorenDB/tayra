@@ -50,9 +50,9 @@
 </template>
 
 <script>
-import TrackWidget from '@/components/audio/track/Widget.vue'
-import PlaylistWidget from '@/components/playlists/Widget.vue'
-import RadioButton from '@/components/radios/Button.vue'
+import TrackWidget from '~/components/audio/track/Widget.vue'
+import PlaylistWidget from '~/components/playlists/Widget.vue'
+import RadioButton from '~/components/radios/Button.vue'
 
 export default {
   components: { TrackWidget, PlaylistWidget, RadioButton },

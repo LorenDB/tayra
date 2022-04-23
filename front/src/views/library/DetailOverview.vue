@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import ArtistWidget from '@/components/audio/artist/Widget.vue'
+import ArtistWidget from '~/components/audio/artist/Widget.vue'
 
 export default {
   components: {

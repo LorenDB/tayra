@@ -1,6 +1,6 @@
 import {expect} from 'chai'
 
-import Username from '@/components/common/Username.vue'
+import Username from '~/components/common/Username.vue'
 
 import { render } from '../../utils'
 

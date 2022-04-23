@@ -1,4 +1,4 @@
-import { AppModule } from '@/types'
+import { AppModule } from '~/types'
 import { watch } from '@vue/composition-api'
 import axios from 'axios'
 

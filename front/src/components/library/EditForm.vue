@@ -242,11 +242,11 @@
 import $ from 'jquery'
 import { isEqual, clone } from 'lodash-es'
 import axios from 'axios'
-import AttachmentInput from '@/components/common/AttachmentInput.vue'
-import EditList from '@/components/library/EditList.vue'
-import EditCard from '@/components/library/EditCard.vue'
-import TagsSelector from '@/components/library/TagsSelector.vue'
-import edits from '@/edits.js'
+import AttachmentInput from '~/components/common/AttachmentInput.vue'
+import EditList from '~/components/library/EditList.vue'
+import EditCard from '~/components/library/EditCard.vue'
+import TagsSelector from '~/components/library/TagsSelector.vue'
+import edits from '~/edits.js'
 
 export default {
   components: {

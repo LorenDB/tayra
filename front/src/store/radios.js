@@ -1,7 +1,7 @@
 import axios from 'axios'
-import logger from '@/logging'
+import logger from '~/logging'
 
-import { getClientOnlyRadio } from '@/radios'
+import { getClientOnlyRadio } from '~/radios'
 
 export default {
   namespaced: true,

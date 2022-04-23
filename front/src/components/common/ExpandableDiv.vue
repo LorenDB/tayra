@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-// import sanitize from "@/sanitize"
+// import sanitize from "~/sanitize"
 
 export default {
   props: {

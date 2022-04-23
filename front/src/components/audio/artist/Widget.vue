@@ -52,7 +52,7 @@
 
 <script>
 import axios from 'axios'
-import ArtistCard from '@/components/audio/artist/Card.vue'
+import ArtistCard from '~/components/audio/artist/Card.vue'
 
 export default {
   components: {

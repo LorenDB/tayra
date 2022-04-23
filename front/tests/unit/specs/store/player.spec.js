@@ -1,6 +1,6 @@
 import {expect} from 'chai'
 
-import store from '@/store/player'
+import store from '~/store/player'
 
 import { testAction } from '../../utils'
 

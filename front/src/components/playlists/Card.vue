@@ -55,8 +55,8 @@
 </template>
 
 <script>
-import PlayButton from '@/components/audio/PlayButton.vue'
-import defaultCover from '@/assets/audio/default-cover.png'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import defaultCover from '~/assets/audio/default-cover.png'
 
 export default {
   components: {

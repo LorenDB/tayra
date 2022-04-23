@@ -87,7 +87,7 @@
 
 <script>
 import axios from 'axios'
-import PasswordInput from '@/components/forms/PasswordInput.vue'
+import PasswordInput from '~/components/forms/PasswordInput.vue'
 
 export default {
   components: {

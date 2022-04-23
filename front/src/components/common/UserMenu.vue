@@ -154,8 +154,8 @@
 <script>
 
 import { mapGetters } from 'vuex'
-import useThemeList from '@/composables/useThemeList'
-import useTheme from '@/composables/useTheme'
+import useThemeList from '~/composables/useThemeList'
+import useTheme from '~/composables/useTheme'
 
 export default {
   setup () {

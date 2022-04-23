@@ -158,7 +158,7 @@
 <script>
 import axios from 'axios'
 import { cloneDeep } from 'lodash-es'
-import SignupFormBuilder from '@/components/admin/SignupFormBuilder.vue'
+import SignupFormBuilder from '~/components/admin/SignupFormBuilder.vue'
 
 export default {
   components: {

@@ -142,9 +142,9 @@
 </template>
 
 <script>
-import Modal from '@/components/semantic/Modal.vue'
-import ChannelUploadForm from '@/components/channels/UploadForm.vue'
-import { humanSize } from '@/modules/filters'
+import Modal from '~/components/semantic/Modal.vue'
+import ChannelUploadForm from '~/components/channels/UploadForm.vue'
+import { humanSize } from '~/modules/filters'
 
 export default {
   components: {

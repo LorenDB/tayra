@@ -1,6 +1,6 @@
 import {expect} from 'chai'
 
-import {normalizeQuery, parseTokens, compileTokens} from '@/search'
+import {normalizeQuery, parseTokens, compileTokens} from '~/search'
 
 describe('search', () => {
   it('normalizeQuery returns correct tokens', () => {

@@ -1,4 +1,4 @@
-import { AppModule } from '@/types'
+import { AppModule } from '~/types'
 import { useWindowSize } from '@vueuse/core'
 import { watchEffect } from '@vue/composition-api'
 

@@ -45,7 +45,7 @@
 import axios from 'axios'
 import $ from 'jquery'
 
-import SettingsGroup from '@/components/admin/SettingsGroup.vue'
+import SettingsGroup from '~/components/admin/SettingsGroup.vue'
 
 export default {
   components: {

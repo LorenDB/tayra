@@ -1,7 +1,7 @@
 import { startCase } from 'lodash-es'
 import { Store } from 'vuex'
 import VueRouter from 'vue-router'
-import { APIErrorResponse } from '@/types'
+import { APIErrorResponse } from '~/types'
 
 export function setUpdate (obj: object, statuses: { [key: string]: unknown }, value: unknown) {
   for (const key of Object.keys(obj)) {

@@ -1,4 +1,4 @@
-import logger from '@/logging'
+import logger from '~/logging'
 import { shuffle } from 'lodash-es'
 
 export default {

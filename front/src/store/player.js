@@ -1,6 +1,6 @@
 import axios from 'axios'
-import logger from '@/logging'
-import time from '@/utils/time'
+import logger from '~/logging'
+import time from '~/utils/time'
 
 export default {
   namespaced: true,

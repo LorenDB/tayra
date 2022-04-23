@@ -139,10 +139,10 @@
 </template>
 
 <script>
-import Modal from '@/components/semantic/Modal.vue'
-import LibraryWidget from '@/components/federation/LibraryWidget.vue'
-import ChannelsWidget from '@/components/audio/ChannelsWidget.vue'
-import ChannelForm from '@/components/audio/ChannelForm.vue'
+import Modal from '~/components/semantic/Modal.vue'
+import LibraryWidget from '~/components/federation/LibraryWidget.vue'
+import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import ChannelForm from '~/components/audio/ChannelForm.vue'
 
 export default {
   components: { ChannelsWidget, LibraryWidget, ChannelForm, Modal },

@@ -178,7 +178,7 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
-import PlaylistForm from '@/components/playlists/Form.vue'
+import PlaylistForm from '~/components/playlists/Form.vue'
 
 import draggable from 'vuedraggable'
 

@@ -1,4 +1,4 @@
-import { AppModule } from '@/types'
+import { AppModule } from '~/types'
 
 // slight hack to allow use to have internal links in <translate> tags
 // while preserving router behaviour

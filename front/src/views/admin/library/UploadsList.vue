@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import UploadsTable from '@/components/manage/library/UploadsTable.vue'
+import UploadsTable from '~/components/manage/library/UploadsTable.vue'
 
 export default {
   components: {

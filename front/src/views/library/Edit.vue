@@ -114,8 +114,8 @@
 </template>
 
 <script>
-import LibraryFilesTable from '@/views/content/libraries/FilesTable.vue'
-import LibraryForm from '@/views/content/libraries/Form.vue'
+import LibraryFilesTable from '~/views/content/libraries/FilesTable.vue'
+import LibraryForm from '~/views/content/libraries/Form.vue'
 import axios from 'axios'
 
 export default {

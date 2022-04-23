@@ -167,14 +167,14 @@ import qs from 'qs'
 import axios from 'axios'
 import $ from 'jquery'
 
-import logger from '@/logging'
+import logger from '~/logging'
 
-import OrderingMixin from '@/components/mixins/Ordering.vue'
-import PaginationMixin from '@/components/mixins/Pagination.vue'
-import TranslationsMixin from '@/components/mixins/Translations.vue'
-import ArtistCard from '@/components/audio/artist/Card.vue'
-import Pagination from '@/components/Pagination.vue'
-import TagsSelector from '@/components/library/TagsSelector.vue'
+import OrderingMixin from '~/components/mixins/Ordering.vue'
+import PaginationMixin from '~/components/mixins/Pagination.vue'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
+import ArtistCard from '~/components/audio/artist/Card.vue'
+import Pagination from '~/components/Pagination.vue'
+import TagsSelector from '~/components/library/TagsSelector.vue'
 
 const FETCH_URL = 'artists/'
 

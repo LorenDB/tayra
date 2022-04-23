@@ -1,4 +1,4 @@
-import type { ThemeEntry } from '@/types'
+import type { ThemeEntry } from '~/types'
 import Vue from 'vue'
 
 const { $pgettext } = Vue.prototype

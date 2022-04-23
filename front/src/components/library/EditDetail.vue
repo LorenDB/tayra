@@ -12,8 +12,8 @@
 
 <script>
 import axios from 'axios'
-import edits from '@/edits.js'
-import EditCard from '@/components/library/EditCard.vue'
+import edits from '~/edits.js'
+import EditCard from '~/components/library/EditCard.vue'
 export default {
   components: {
     EditCard

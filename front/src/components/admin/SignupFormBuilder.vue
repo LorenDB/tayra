@@ -163,7 +163,7 @@
 <script>
 import { cloneDeep, tap, set } from 'lodash-es'
 
-import SignupForm from '@/components/auth/SignupForm.vue'
+import SignupForm from '~/components/auth/SignupForm.vue'
 
 function arrayMove (arr, oldIndex, newIndex) {
   if (newIndex >= arr.length) {

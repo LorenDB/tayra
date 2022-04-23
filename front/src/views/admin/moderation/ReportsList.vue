@@ -128,14 +128,14 @@
 
 import axios from 'axios'
 import { merge } from 'lodash-es'
-import time from '@/utils/time'
-import Pagination from '@/components/Pagination.vue'
-import OrderingMixin from '@/components/mixins/Ordering.vue'
-import TranslationsMixin from '@/components/mixins/Translations.vue'
-import ReportCard from '@/components/manage/moderation/ReportCard.vue'
-import ReportCategoryDropdown from '@/components/moderation/ReportCategoryDropdown.vue'
-import { normalizeQuery, parseTokens } from '@/search'
-import SmartSearchMixin from '@/components/mixins/SmartSearch.vue'
+import time from '~/utils/time'
+import Pagination from '~/components/Pagination.vue'
+import OrderingMixin from '~/components/mixins/Ordering.vue'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
+import ReportCard from '~/components/manage/moderation/ReportCard.vue'
+import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
+import { normalizeQuery, parseTokens } from '~/search'
+import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
 
 export default {
   components: {

@@ -358,8 +358,8 @@
 
 <script>
 import axios from 'axios'
-import logger from '@/logging'
-import TranslationsMixin from '@/components/mixins/Translations.vue'
+import logger from '~/logging'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
 
 export default {
   mixins: [

@@ -105,9 +105,9 @@
 
 <script>
 import axios from 'axios'
-import AlbumCard from '@/components/audio/album/Card.vue'
-import TrackTable from '@/components/audio/track/Table.vue'
-import LibraryWidget from '@/components/federation/LibraryWidget.vue'
+import AlbumCard from '~/components/audio/album/Card.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
+import LibraryWidget from '~/components/federation/LibraryWidget.vue'
 
 export default {
   components: {

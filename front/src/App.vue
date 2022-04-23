@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import AudioPlayer from '@/components/audio/Player.vue'
-import Queue from '@/components/Queue.vue'
-import PlaylistModal from '@/components/playlists/PlaylistModal.vue'
-import ChannelUploadModal from '@/components/channels/UploadModal.vue'
-import Sidebar from '@/components/Sidebar.vue'
-import ServiceMessages from '@/components/ServiceMessages.vue'
-import SetInstanceModal from '@/components/SetInstanceModal.vue'
-import ShortcutsModal from '@/components/ShortcutsModal.vue'
-import FilterModal from '@/components/moderation/FilterModal.vue'
-import ReportModal from '@/components/moderation/ReportModal.vue'
+import AudioPlayer from '~/components/audio/Player.vue'
+import Queue from '~/components/Queue.vue'
+import PlaylistModal from '~/components/playlists/PlaylistModal.vue'
+import ChannelUploadModal from '~/components/channels/UploadModal.vue'
+import Sidebar from '~/components/Sidebar.vue'
+import ServiceMessages from '~/components/ServiceMessages.vue'
+import SetInstanceModal from '~/components/SetInstanceModal.vue'
+import ShortcutsModal from '~/components/ShortcutsModal.vue'
+import FilterModal from '~/components/moderation/FilterModal.vue'
+import ReportModal from '~/components/moderation/ReportModal.vue'
 import { useIntervalFn, useWindowSize } from '@vueuse/core'
-import GlobalEvents from '@/components/utils/global-events.vue'
+import GlobalEvents from '~/components/utils/global-events.vue'
 
 import { computed, nextTick, onMounted, ref, watchEffect } from '@vue/composition-api'
-import store from '@/store'
+import store from '~/store'
 import {
   ListenWSEvent,
   PendingReviewEditsWSEvent,
   PendingReviewReportsWSEvent,
   PendingReviewRequestsWSEvent,
   Track
-} from '@/types'
+} from '~/types'
 import useWebSocketHandler from '~/composables/useWebSocketHandler'
-import { getClientOnlyRadio } from '@/radios'
+import { getClientOnlyRadio } from '~/radios'
 
 // Tracks
 const currentTrack = computed(() => store.getters['queue/currentTrack'])

@@ -339,15 +339,15 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import GlobalEvents from '@/components/utils/global-events.vue'
-import { toLinearVolumeScale } from '@/audio/volume.js'
+import GlobalEvents from '~/components/utils/global-events.vue'
+import { toLinearVolumeScale } from '~/audio/volume.js'
 import { Howl, Howler } from 'howler'
 import { throttle, reverse } from 'lodash-es'
 import axios from 'axios'
 import VolumeControl from './VolumeControl.vue'
-import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
-import TrackPlaylistIcon from '@/components/playlists/TrackPlaylistIcon.vue'
-import updateQueryString from '@/composables/updateQueryString'
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
+import updateQueryString from '~/composables/updateQueryString'
 
 export default {
   components: {

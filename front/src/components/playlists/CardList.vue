@@ -12,7 +12,7 @@
 
 <script>
 
-import PlaylistCard from '@/components/playlists/Card.vue'
+import PlaylistCard from '~/components/playlists/Card.vue'
 
 export default {
   components: {

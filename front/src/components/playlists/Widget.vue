@@ -61,7 +61,7 @@
 <script>
 import { clone } from 'lodash-es'
 import axios from 'axios'
-import PlaylistCard from '@/components/playlists/Card.vue'
+import PlaylistCard from '~/components/playlists/Card.vue'
 
 export default {
   components: {

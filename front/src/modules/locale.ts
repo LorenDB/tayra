@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import GetText from 'vue-gettext'
-import locales from '@/locales.json'
+import locales from '~/locales.json'
 import { usePreferredLanguages } from '@vueuse/core'
 import { watch } from '@vue/composition-api'
-import { AppModule } from '@/types'
+import { AppModule } from '~/types'
 
 export const install: AppModule = ({ store, app }) => {
   const defaultLanguage = store.state.ui.currentLanguage ?? 'en_US'

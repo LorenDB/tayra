@@ -111,9 +111,9 @@
 
 <script>
 import axios from 'axios'
-import TrackTable from '@/components/audio/track/Table.vue'
-import RadioButton from '@/components/radios/Button.vue'
-import Pagination from '@/components/Pagination.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
+import RadioButton from '~/components/radios/Button.vue'
+import Pagination from '~/components/Pagination.vue'
 
 export default {
   components: {

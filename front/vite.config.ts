@@ -41,10 +41,7 @@ export default defineConfig(() => ({
   server: { port, hmr },
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, './src'),
-
-      // TODO (wvffle): Remove @/dependency from all files as `@` is used as an organization prefix
-      '@': path.resolve(__dirname, './src')
+      '~': path.resolve(__dirname, './src')
     }
   },
   build: {

@@ -78,7 +78,7 @@
 <script>
 import axios from 'axios'
 
-import ApplicationForm from '@/components/auth/ApplicationForm.vue'
+import ApplicationForm from '~/components/auth/ApplicationForm.vue'
 
 export default {
   components: {

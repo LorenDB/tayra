@@ -188,8 +188,8 @@ import axios from 'axios'
 import $ from 'jquery'
 import { clone } from 'lodash-es'
 import BuilderFilter from './Filter.vue'
-import TrackTable from '@/components/audio/track/Table.vue'
-import RadioButton from '@/components/radios/Button.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
+import RadioButton from '~/components/radios/Button.vue'
 
 export default {
   components: {

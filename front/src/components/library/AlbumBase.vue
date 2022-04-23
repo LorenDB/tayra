@@ -250,9 +250,9 @@
 <script>
 import axios from 'axios'
 import { sum } from 'lodash-es'
-import PlayButton from '@/components/audio/PlayButton.vue'
-import TagsList from '@/components/tags/List.vue'
-import ArtistLabel from '@/components/audio/ArtistLabel.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import TagsList from '~/components/tags/List.vue'
+import ArtistLabel from '~/components/audio/ArtistLabel.vue'
 import AlbumDropdown from './AlbumDropdown.vue'
 
 function groupByDisc (initial) {

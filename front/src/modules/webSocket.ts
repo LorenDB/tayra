@@ -1,4 +1,4 @@
-import { AppModule } from '@/types'
+import { AppModule } from '~/types'
 import { watchEffect, watch } from '@vue/composition-api'
 import { useWebSocket, whenever } from '@vueuse/core'
 

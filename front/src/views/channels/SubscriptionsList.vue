@@ -71,10 +71,10 @@
 
 <script>
 import axios from 'axios'
-import Modal from '@/components/semantic/Modal.vue'
+import Modal from '~/components/semantic/Modal.vue'
 
-import ChannelsWidget from '@/components/audio/ChannelsWidget.vue'
-import RemoteSearchForm from '@/components/RemoteSearchForm.vue'
+import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
 
 export default {
   components: {

@@ -225,8 +225,8 @@
 
 <script>
 import axios from 'axios'
-import NoteForm from '@/components/manage/moderation/NoteForm.vue'
-import NotesThread from '@/components/manage/moderation/NotesThread.vue'
+import NoteForm from '~/components/manage/moderation/NoteForm.vue'
+import NotesThread from '~/components/manage/moderation/NotesThread.vue'
 import showdown from 'showdown'
 
 export default {

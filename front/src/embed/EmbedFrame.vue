@@ -248,7 +248,7 @@
 import axios from 'axios'
 import Logo from '@/components/Logo.vue'
 import updateQueryString from './composables/updateQueryString'
-import time from '@/utils/time'
+import time from '~/utils/time'
 
 function getURLParams () {
   let match

@@ -77,9 +77,9 @@
 </template>
 
 <script>
-import PodcastRow from '@/components/audio/podcast/Row.vue'
-import TrackMobileRow from '@/components/audio/track/MobileRow.vue'
-import Pagination from '@/components/Pagination.vue'
+import PodcastRow from '~/components/audio/podcast/Row.vue'
+import TrackMobileRow from '~/components/audio/track/MobileRow.vue'
+import Pagination from '~/components/Pagination.vue'
 
 export default {
   components: {

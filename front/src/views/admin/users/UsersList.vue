@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import UsersTable from '@/components/manage/users/UsersTable.vue'
+import UsersTable from '~/components/manage/users/UsersTable.vue'
 
 export default {
   components: {

@@ -1,11 +1,11 @@
 const sinon = require('sinon')
 import { expect } from 'chai'
 import { shallowMount, createLocalVue, RouterLinkStub } from '@vue/test-utils'
-import AlbumDetail from '@/views/admin/library/AlbumDetail.vue'
+import AlbumDetail from '~/views/admin/library/AlbumDetail.vue'
 import GetTextPlugin from 'vue-gettext'
 
-import HumanDate from '@/components/common/HumanDate.vue'
-import DangerousButton from '@/components/common/DangerousButton.vue'
+import HumanDate from '~/components/common/HumanDate.vue'
+import DangerousButton from '~/components/common/DangerousButton.vue'
 
 describe('views/admin/library', () => {
 

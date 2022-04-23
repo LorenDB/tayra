@@ -239,10 +239,10 @@
 import axios from 'axios'
 import $ from 'jquery'
 
-import LicenseSelect from '@/components/channels/LicenseSelect.vue'
-import AlbumSelect from '@/components/channels/AlbumSelect.vue'
-import FileUploadWidget from '@/components/library/FileUploadWidget.vue'
-import UploadMetadataForm from '@/components/channels/UploadMetadataForm.vue'
+import LicenseSelect from '~/components/channels/LicenseSelect.vue'
+import AlbumSelect from '~/components/channels/AlbumSelect.vue'
+import FileUploadWidget from '~/components/library/FileUploadWidget.vue'
+import UploadMetadataForm from '~/components/channels/UploadMetadataForm.vue'
 
 function setIfEmpty (obj, k, v) {
   if (obj[k] !== undefined) {

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import TranslationsMixin from '@/components/mixins/Translations.vue'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
 export default {
   mixins: [TranslationsMixin],
   props: {

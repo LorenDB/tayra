@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { toLinearVolumeScale, toLogarithmicVolumeScale } from '@/audio/volume'
+import { toLinearVolumeScale, toLogarithmicVolumeScale } from '~/audio/volume'
 
 describe('store/auth', () => {
     describe('toLinearVolumeScale', () => {

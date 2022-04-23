@@ -140,11 +140,11 @@
 import axios from 'axios'
 import $ from 'jquery'
 
-import OrderingMixin from '@/components/mixins/Ordering.vue'
-import PaginationMixin from '@/components/mixins/Pagination.vue'
-import TranslationsMixin from '@/components/mixins/Translations.vue'
-import PlaylistCardList from '@/components/playlists/CardList.vue'
-import Pagination from '@/components/Pagination.vue'
+import OrderingMixin from '~/components/mixins/Ordering.vue'
+import PaginationMixin from '~/components/mixins/Pagination.vue'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
+import PlaylistCardList from '~/components/playlists/CardList.vue'
+import Pagination from '~/components/Pagination.vue'
 
 const FETCH_URL = 'playlists/'
 

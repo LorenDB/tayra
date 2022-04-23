@@ -180,11 +180,11 @@
 </template>
 
 <script>
-import PlayIndicator from '@/components/audio/track/PlayIndicator.vue'
+import PlayIndicator from '~/components/audio/track/PlayIndicator.vue'
 import { mapActions, mapGetters } from 'vuex'
-import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
-import PlayButton from '@/components/audio/PlayButton.vue'
-import PlayOptions from '@/components/mixins/PlayOptions.vue'
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import PlayOptions from '~/components/mixins/PlayOptions.vue'
 
 export default {
 

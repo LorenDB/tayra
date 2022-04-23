@@ -1,10 +1,10 @@
-import { AppModule } from '@/types'
+import { AppModule } from '~/types'
 
 import createAuthRefreshInterceptor from 'axios-auth-refresh'
 import axios, { AxiosError } from 'axios'
 import moment from 'moment'
-import logger from '@/logging'
-import { parseAPIErrors } from '@/utils'
+import logger from '~/logging'
+import { parseAPIErrors } from '~/utils'
 import Vue from 'vue'
 
 export const install: AppModule = ({ app, store, router }) => {

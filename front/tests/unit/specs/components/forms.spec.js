@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import PasswordInput from '@/components/forms/PasswordInput.vue'
+import PasswordInput from '~/components/forms/PasswordInput.vue'
 import { shallowMount } from '@vue/test-utils'
 const sinon = require('sinon')
 

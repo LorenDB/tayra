@@ -2,7 +2,7 @@ import {expect} from 'chai'
 var sinon = require('sinon')
 import axios from 'axios'
 import moxios from 'moxios'
-import store from '@/store/instance'
+import store from '~/store/instance'
 import { testAction } from '../../utils'
 
 describe('store/instance', () => {

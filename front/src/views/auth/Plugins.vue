@@ -29,7 +29,7 @@
 
 <script>
 import axios from 'axios'
-import PluginForm from '@/components/auth/Plugin.vue'
+import PluginForm from '~/components/auth/Plugin.vue'
 
 export default {
   components: {

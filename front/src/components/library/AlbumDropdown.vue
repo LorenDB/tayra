@@ -127,11 +127,11 @@
   </span>
 </template>
 <script>
-import EmbedWizard from '@/components/audio/EmbedWizard.vue'
-import Modal from '@/components/semantic/Modal.vue'
-import ReportMixin from '@/components/mixins/Report.vue'
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import Modal from '~/components/semantic/Modal.vue'
+import ReportMixin from '~/components/mixins/Report.vue'
 
-import { getDomain } from '@/utils'
+import { getDomain } from '~/utils'
 
 export default {
   components: {

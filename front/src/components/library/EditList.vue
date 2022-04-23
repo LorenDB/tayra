@@ -45,7 +45,7 @@
 import { clone } from 'lodash-es'
 import axios from 'axios'
 
-import EditCard from '@/components/library/EditCard.vue'
+import EditCard from '~/components/library/EditCard.vue'
 
 export default {
   components: {

@@ -135,14 +135,14 @@
 <script>
 import axios from 'axios'
 import $ from 'jquery'
-import logger from '@/logging'
-import RadioButton from '@/components/radios/Button.vue'
-import Pagination from '@/components/Pagination.vue'
-import OrderingMixin from '@/components/mixins/Ordering.vue'
-import PaginationMixin from '@/components/mixins/Pagination.vue'
-import TranslationsMixin from '@/components/mixins/Translations.vue'
-import { checkRedirectToLogin } from '@/utils'
-import TrackTable from '@/components/audio/track/Table.vue'
+import logger from '~/logging'
+import RadioButton from '~/components/radios/Button.vue'
+import Pagination from '~/components/Pagination.vue'
+import OrderingMixin from '~/components/mixins/Ordering.vue'
+import PaginationMixin from '~/components/mixins/Pagination.vue'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
+import { checkRedirectToLogin } from '~/utils'
+import TrackTable from '~/components/audio/track/Table.vue'
 const FAVORITES_URL = 'tracks/'
 
 export default {

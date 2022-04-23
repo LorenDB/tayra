@@ -159,10 +159,10 @@
 import axios from 'axios'
 import moment from 'moment'
 import { merge } from 'lodash-es'
-import Pagination from '@/components/Pagination.vue'
-import ActionTable from '@/components/common/ActionTable.vue'
-import OrderingMixin from '@/components/mixins/Ordering.vue'
-import TranslationsMixin from '@/components/mixins/Translations.vue'
+import Pagination from '~/components/Pagination.vue'
+import ActionTable from '~/components/common/ActionTable.vue'
+import OrderingMixin from '~/components/mixins/Ordering.vue'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
 
 export default {
   components: {

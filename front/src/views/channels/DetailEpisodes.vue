@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import ChannelEntries from '@/components/audio/ChannelEntries.vue'
+import ChannelEntries from '~/components/audio/ChannelEntries.vue'
 
 export default {
   components: {

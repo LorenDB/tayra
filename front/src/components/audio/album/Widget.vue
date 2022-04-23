@@ -56,7 +56,7 @@
 
 <script>
 import axios from 'axios'
-import AlbumCard from '@/components/audio/album/Card.vue'
+import AlbumCard from '~/components/audio/album/Card.vue'
 
 export default {
   components: {

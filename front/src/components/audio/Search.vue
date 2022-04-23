@@ -71,9 +71,9 @@
 <script>
 import { debounce } from 'lodash-es'
 import axios from 'axios'
-import logger from '@/logging'
-import AlbumCard from '@/components/audio/album/Card.vue'
-import ArtistCard from '@/components/audio/artist/Card.vue'
+import logger from '~/logging'
+import AlbumCard from '~/components/audio/album/Card.vue'
+import ArtistCard from '~/components/audio/artist/Card.vue'
 
 export default {
   components: {

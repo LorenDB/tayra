@@ -1,7 +1,7 @@
 import {expect} from 'chai'
 var sinon = require('sinon')
 import moxios from 'moxios'
-import store from '@/store/playlists'
+import store from '~/store/playlists'
 
 import { testAction } from '../../utils'
 

@@ -226,9 +226,9 @@
 </template>
 
 <script>
-import Modal from '@/components/semantic/Modal.vue'
-import ReportMixin from '@/components/mixins/Report.vue'
-import PlayOptionsMixin from '@/components/mixins/PlayOptions.vue'
+import Modal from '~/components/semantic/Modal.vue'
+import ReportMixin from '~/components/mixins/Report.vue'
+import PlayOptionsMixin from '~/components/mixins/PlayOptions.vue'
 
 export default {
   components: {

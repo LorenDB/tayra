@@ -174,11 +174,11 @@
 </template>
 <script>
 import axios from 'axios'
-import TrackTable from '@/components/audio/track/Table.vue'
-import PlayButton from '@/components/audio/PlayButton.vue'
-import PlaylistEditor from '@/components/playlists/Editor.vue'
-import EmbedWizard from '@/components/audio/EmbedWizard.vue'
-import Modal from '@/components/semantic/Modal.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import PlaylistEditor from '~/components/playlists/Editor.vue'
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import Modal from '~/components/semantic/Modal.vue'
 
 export default {
   components: {

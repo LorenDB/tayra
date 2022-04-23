@@ -11,7 +11,7 @@
 
 <script>
 
-import FileUpload from '@/components/library/FileUpload.vue'
+import FileUpload from '~/components/library/FileUpload.vue'
 
 export default {
   components: {

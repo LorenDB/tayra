@@ -1,5 +1,5 @@
-import { AppModule } from '@/types'
-import jQuery from '@/jquery'
+import { AppModule } from '~/types'
+import jQuery from '~/jquery'
 
 export const install: AppModule = ({ app, store }) => {
   app.directive('title', function (el, binding) {

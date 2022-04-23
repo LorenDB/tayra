@@ -472,15 +472,15 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import UserModal from '@/components/common/UserModal.vue'
-import Logo from '@/components/Logo.vue'
-import SearchBar from '@/components/audio/SearchBar.vue'
-import UserMenu from '@/components/common/UserMenu.vue'
-import Modal from '@/components/semantic/Modal.vue'
+import UserModal from '~/components/common/UserModal.vue'
+import Logo from '~/components/Logo.vue'
+import SearchBar from '~/components/audio/SearchBar.vue'
+import UserMenu from '~/components/common/UserMenu.vue'
+import Modal from '~/components/semantic/Modal.vue'
 
 import $ from 'jquery'
-import useThemeList from '@/composables/useThemeList'
-import useTheme from '@/composables/useTheme'
+import useThemeList from '~/composables/useThemeList'
+import useTheme from '~/composables/useTheme'
 
 export default {
   name: 'Sidebar',

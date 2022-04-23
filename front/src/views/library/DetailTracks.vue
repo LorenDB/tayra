@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import TrackTable from '@/components/audio/track/Table.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
 
 export default {
   components: {

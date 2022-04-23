@@ -55,7 +55,7 @@
 <script>
 import { clone } from 'lodash-es'
 import axios from 'axios'
-import LibraryCard from '@/views/content/remote/Card.vue'
+import LibraryCard from '~/views/content/remote/Card.vue'
 
 export default {
   components: {

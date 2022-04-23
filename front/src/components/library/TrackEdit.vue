@@ -45,7 +45,7 @@
 <script>
 import axios from 'axios'
 
-import EditForm from '@/components/library/EditForm.vue'
+import EditForm from '~/components/library/EditForm.vue'
 export default {
   components: {
     EditForm

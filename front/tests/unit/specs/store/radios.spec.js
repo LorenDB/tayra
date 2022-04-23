@@ -2,7 +2,7 @@ var sinon = require('sinon')
 import {expect} from 'chai'
 
 import moxios from 'moxios'
-import store from '@/store/radios'
+import store from '~/store/radios'
 import { testAction } from '../../utils'
 
 describe('store/radios', () => {

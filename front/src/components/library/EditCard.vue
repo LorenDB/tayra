@@ -215,7 +215,7 @@
 import axios from 'axios'
 import { diffWordsWithSpace } from 'diff'
 
-import edits from '@/edits.js'
+import edits from '~/edits.js'
 
 function castValue (value) {
   if (value === null || value === undefined) {

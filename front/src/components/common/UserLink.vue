@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { hashCode, intToRGB } from '@/utils/color'
+import { hashCode, intToRGB } from '~/utils/color'
 
 export default {
   props: {

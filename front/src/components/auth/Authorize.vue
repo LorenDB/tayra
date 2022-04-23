@@ -142,11 +142,11 @@
 </template>
 
 <script>
-import TranslationsMixin from '@/components/mixins/Translations.vue'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
 
 import axios from 'axios'
 
-import { checkRedirectToLogin } from '@/utils'
+import { checkRedirectToLogin } from '~/utils'
 export default {
   mixins: [TranslationsMixin],
   props: {

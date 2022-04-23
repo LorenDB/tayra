@@ -268,15 +268,15 @@
 <script>
 import axios from 'axios'
 import { merge } from 'lodash-es'
-import time from '@/utils/time'
-import { normalizeQuery, parseTokens } from '@/search'
+import time from '~/utils/time'
+import { normalizeQuery, parseTokens } from '~/search'
 
-import Pagination from '@/components/Pagination.vue'
-import ActionTable from '@/components/common/ActionTable.vue'
-import OrderingMixin from '@/components/mixins/Ordering.vue'
-import TranslationsMixin from '@/components/mixins/Translations.vue'
-import SmartSearchMixin from '@/components/mixins/SmartSearch.vue'
-import ImportStatusModal from '@/components/library/ImportStatusModal.vue'
+import Pagination from '~/components/Pagination.vue'
+import ActionTable from '~/components/common/ActionTable.vue'
+import OrderingMixin from '~/components/mixins/Ordering.vue'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
+import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
+import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
 
 export default {
   components: {

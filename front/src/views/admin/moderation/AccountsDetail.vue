@@ -567,11 +567,11 @@
 
 <script>
 import axios from 'axios'
-import logger from '@/logging'
+import logger from '~/logging'
 import $ from 'jquery'
 
-import InstancePolicyForm from '@/components/manage/moderation/InstancePolicyForm.vue'
-import InstancePolicyCard from '@/components/manage/moderation/InstancePolicyCard.vue'
+import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
+import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
 
 export default {
   components: {

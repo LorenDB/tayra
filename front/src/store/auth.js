@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
-import logger from '@/logging'
+import logger from '~/logging'
 
 function getDefaultScopedTokens () {
   return {
@@ -133,7 +133,7 @@ export default {
         logger.default.info('Successfully logged in as', credentials.username)
         dispatch('fetchProfile').then(() => {
           // Redirect to a specified route
-          import('@/router').then((router) => {
+          import('~/router').then((router) => {
             return router.default.push(next)
           })
         })

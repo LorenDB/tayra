@@ -23,8 +23,7 @@
       "vue-gettext/types"
     ],
     "paths": {
-      "~/*": ["src/*"],
-      "@/*": ["src/*"]
+      "~/*": ["src/*"]
     }
   },
   "vueCompilerOptions": {

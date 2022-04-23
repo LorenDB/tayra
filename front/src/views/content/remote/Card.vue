@@ -224,8 +224,8 @@
 </template>
 <script>
 import axios from 'axios'
-import ReportMixin from '@/components/mixins/Report.vue'
-import RadioButton from '@/components/radios/Button.vue'
+import ReportMixin from '~/components/mixins/Report.vue'
+import RadioButton from '~/components/radios/Button.vue'
 
 export default {
   components: {

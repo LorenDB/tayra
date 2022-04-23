@@ -1,4 +1,4 @@
-import { AppModule } from '@/types'
+import { AppModule } from '~/types'
 import { register } from 'register-service-worker'
 
 export const install: AppModule = ({ store }) => {

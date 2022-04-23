@@ -121,7 +121,7 @@
 <script>
 import { uniq } from 'lodash-es'
 import axios from 'axios'
-import TranslationsMixin from '@/components/mixins/Translations.vue'
+import TranslationsMixin from '~/components/mixins/Translations.vue'
 
 export default {
   mixins: [TranslationsMixin],

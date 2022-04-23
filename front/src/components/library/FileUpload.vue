@@ -316,7 +316,7 @@ import axios from 'axios'
 import FileUploadWidget from './FileUploadWidget.vue'
 import FsBrowser from './FsBrowser.vue'
 import FsLogs from './FsLogs.vue'
-import LibraryFilesTable from '@/views/content/libraries/FilesTable.vue'
+import LibraryFilesTable from '~/views/content/libraries/FilesTable.vue'
 import moment from 'moment'
 
 export default {

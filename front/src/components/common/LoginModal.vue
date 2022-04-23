@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import Modal from '@/components/semantic/Modal.vue'
+import Modal from '~/components/semantic/Modal.vue'
 
 export default {
   components: {

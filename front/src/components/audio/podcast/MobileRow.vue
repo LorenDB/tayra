@@ -139,9 +139,9 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import TrackFavoriteIcon from '@/components/favorites/TrackFavoriteIcon.vue'
-import TrackModal from '@/components/audio/track/Modal.vue'
-import PlayOptionsMixin from '@/components/mixins/PlayOptions.vue'
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import TrackModal from '~/components/audio/track/Modal.vue'
+import PlayOptionsMixin from '~/components/mixins/PlayOptions.vue'
 
 export default {
 
