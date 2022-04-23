@@ -10,13 +10,13 @@ declare global {
 }
 
 // App structure stuff
-export interface AppModuleContext {
+export interface InitModuleContext {
   app: App
   router: VueRouter
   store: Store<any>
 }
 
-export type AppModule = (ctx: AppModuleContext) => void
+export type InitModule = (ctx: InitModuleContext) => void
 
 // Theme stuff
 export type Theme = 'auto' | 'light' | 'dark'
