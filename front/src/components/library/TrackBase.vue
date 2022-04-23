@@ -310,25 +310,19 @@ export default {
       return null
     },
     downloadUrl () {
-      let u = this.$store.getters['instance/absoluteUrl'](
+      const url = this.$store.getters['instance/absoluteUrl'](
         this.upload.listen_url
       )
+
       if (this.$store.state.auth.authenticated) {
-        let param = 'jwt'
-        let value = this.$store.state.auth.token
-        if (this.$store.state.auth.scopedTokens && this.$store.state.auth.scopedTokens.listen) {
-          // used scoped tokens instead of JWT to reduce the attack surface if the token
-          // is leaked
-          param = 'token'
-          value = this.$store.state.auth.scopedTokens.listen
-        }
-        u = updateQueryString(
-          u,
-          param,
-          encodeURI(value)
+        return updateQueryString(
+          url,
+          'token',
+          encodeURI(this.$store.state.auth.scopedTokens.listen)
         )
       }
-      return u
+
+      return url
     },
     attributedToUrl () {
       const route = this.$router.resolve({
