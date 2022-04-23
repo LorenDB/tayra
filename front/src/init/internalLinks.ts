@@ -1,8 +1,8 @@
-import { AppModule } from '~/types'
+import { InitModule } from '~/types'
 
 // slight hack to allow use to have internal links in <translate> tags
 // while preserving router behaviour
-export const install: AppModule = ({ router }) => {
+export const install: InitModule = ({ router }) => {
   document.documentElement.addEventListener('click', async (event) => {
     const target = <HTMLAnchorElement> event.target
     if (!target.matches('a.internal')) return

@@ -1,4 +1,4 @@
-import { AppModule } from '~/types'
+import { InitModule } from '~/types'
 
 import Vue from 'vue'
 import time from '~/utils/time'
@@ -123,7 +123,7 @@ export function unique (list: { [key: string]: unknown }[], property: string) {
   return unique
 }
 
-export const install: AppModule = () => {
+export const install: InitModule = () => {
   Vue.filter('humanSize', humanSize)
   Vue.filter('unique', unique)
   Vue.filter('capitalize', capitalize)

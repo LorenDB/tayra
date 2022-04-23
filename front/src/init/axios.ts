@@ -1,4 +1,4 @@
-import { AppModule } from '~/types'
+import { InitModule } from '~/types'
 
 import createAuthRefreshInterceptor from 'axios-auth-refresh'
 import axios, { AxiosError } from 'axios'
@@ -7,7 +7,7 @@ import logger from '~/logging'
 import { parseAPIErrors } from '~/utils'
 import Vue from 'vue'
 
-export const install: AppModule = ({ app, store, router }) => {
+export const install: InitModule = ({ app, store, router }) => {
   axios.defaults.xsrfCookieName = 'csrftoken'
   axios.defaults.xsrfHeaderName = 'X-CSRFToken'
   axios.interceptors.request.use(function (config) {

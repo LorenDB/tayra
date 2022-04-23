@@ -3,9 +3,9 @@ import GetText from 'vue-gettext'
 import locales from '~/locales.json'
 import { usePreferredLanguages } from '@vueuse/core'
 import { watch } from '@vue/composition-api'
-import { AppModule } from '~/types'
+import { InitModule } from '~/types'
 
-export const install: AppModule = ({ store, app }) => {
+export const install: InitModule = ({ store, app }) => {
   const defaultLanguage = store.state.ui.currentLanguage ?? 'en_US'
   const availableLanguages = locales.reduce((map: { [key: string]: string }, locale) => {
     map[locale.code] = locale.label

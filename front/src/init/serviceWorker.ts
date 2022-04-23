@@ -1,7 +1,7 @@
-import { AppModule } from '~/types'
+import { InitModule } from '~/types'
 import { register } from 'register-service-worker'
 
-export const install: AppModule = ({ store }) => {
+export const install: InitModule = ({ store }) => {
   if (import.meta.env.PROD) {
     register(`${import.meta.env.BASE_URL}service-worker.js`, {
       registrationOptions: { scope: '/' },

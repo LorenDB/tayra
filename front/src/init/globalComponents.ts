@@ -1,4 +1,4 @@
-import { AppModule } from '~/types'
+import { InitModule } from '~/types'
 
 import HumanDate from '~/components/common/HumanDate.vue'
 import HumanDuration from '~/components/common/HumanDuration.vue'
@@ -20,7 +20,7 @@ import RenderedDescription from '~/components/common/RenderedDescription.vue'
 import ContentForm from '~/components/common/ContentForm.vue'
 import InlineSearchBar from '~/components/common/InlineSearchBar.vue'
 
-export const install: AppModule = ({ app }) => {
+export const install: InitModule = ({ app }) => {
   app.component('HumanDate', HumanDate)
   app.component('HumanDuration', HumanDuration)
   app.component('Username', Username)

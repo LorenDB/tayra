@@ -1,8 +1,8 @@
-import { AppModule } from '~/types'
+import { InitModule } from '~/types'
 import { watchEffect, watch } from '@vue/composition-api'
 import { useWebSocket, whenever } from '@vueuse/core'
 
-export const install: AppModule = ({ store }) => {
+export const install: InitModule = ({ store }) => {
   watch(() => store.state.instance.instanceUrl, () => {
     const url = store.getters['instance/absoluteUrl']('api/v1/activity')
       .replace(/^http/, 'ws')
