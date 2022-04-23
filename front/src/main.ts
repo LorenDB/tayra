@@ -5,6 +5,8 @@ import store from '~/store'
 import { sync } from 'vuex-router-sync'
 import VueCompositionAPI, { createApp } from '@vue/composition-api'
 import Vue, { CreateElement } from 'vue'
+import useTheme from '~/composables/useTheme'
+useTheme()
 
 Vue.config.devtools = true
 
@@ -19,16 +21,17 @@ const app = createApp({
   components: {
     App: () => import('~/App.vue')
   },
+  setup () {
+  },
   data: () => ({ isMounted: false }),
   async mounted () {
     this.isMounted = true
   },
   render (h: CreateElement) {
     if (this.isMounted) {
-      return h('app')
+      // return h('app')
     }
 
-    // TODO (wvffle): Import fake app component
     return h()
   }
 })
