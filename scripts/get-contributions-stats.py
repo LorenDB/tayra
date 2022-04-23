@@ -96,7 +96,7 @@ def main():
 
     issue_participants = clear_list(issue_participants)
     for contributor in issue_participants:
-        print(contributor)
+        print("- " + contributor)
 
     print("\nContributors to our Merge Requests:\n")
     mr_participants = []
@@ -107,7 +107,7 @@ def main():
 
     mr_participants = clear_list(mr_participants)
     for contributor in mr_participants:
-        print(contributor)
+        print("- " + contributor)
 
     return
 

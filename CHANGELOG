@@ -10,6 +10,52 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.2.4 (2022-04-23)
+------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Enhancements:
+
+- Hand cursor now displayed over artist and album cards
+
+
+Bugfixes:
+
+- Fixes docs' SMTP URI configuration (#1749) (1749)
+
+
+Documentation:
+
+- The documentation is now available in two versions: Develop and Stable
+
+Contributors to our Issues:
+
+- Beto Dealmeida
+- Cam Sweeney
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Marcos Peña
+- Mathieu Jourdan
+- Micha Gläß-Stöcker
+- petitminion
+
+Contributors to our Merge Requests:
+
+- Georg Krause
+- JuniorJPDJ
+- Marcos Peña
+- petitminion
+
+Committers:
+
+- Georg Krause
+- Marcos Peña
+- MattDHarding
+
+
 1.2.3 (2022-03-18)
 ------------------
 

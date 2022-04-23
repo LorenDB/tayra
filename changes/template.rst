@@ -1,5 +1,5 @@
-
-------------------
+{{ versiondata.version }} ({{ versiondata.date }})
+{{ top_underline * ((versiondata.version + versiondata.date)|length + 3)}}
 
 Upgrade instructions are available at
 https://docs.funkwhale.audio/admin/upgrading.html
