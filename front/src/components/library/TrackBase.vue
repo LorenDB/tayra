@@ -229,7 +229,7 @@ import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import Modal from '~/components/semantic/Modal.vue'
 import EmbedWizard from '~/components/audio/EmbedWizard.vue'
 import ReportMixin from '~/components/mixins/Report.vue'
-import { momentFormat } from '~/modules/filters'
+import { momentFormat } from '~/init/filters'
 import updateQueryString from '~/composables/updateQueryString'
 
 const FETCH_URL = 'tracks/'

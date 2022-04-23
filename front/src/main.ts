@@ -38,7 +38,7 @@ app.use(VueCompositionAPI)
 app.use(VueLazyload)
 
 const modules: Promise<unknown>[] = []
-for (const module of Object.values(import.meta.globEager('./modules/*.ts'))) {
+for (const module of Object.values(import.meta.globEager('./init/*.ts'))) {
   modules.push(module.install?.({
     app,
     router,

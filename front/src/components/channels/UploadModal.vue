@@ -144,7 +144,7 @@
 <script>
 import Modal from '~/components/semantic/Modal.vue'
 import ChannelUploadForm from '~/components/channels/UploadForm.vue'
-import { humanSize } from '~/modules/filters'
+import { humanSize } from '~/init/filters'
 
 export default {
   components: {

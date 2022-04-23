@@ -332,7 +332,7 @@ import AlbumWidget from '~/components/audio/album/Widget.vue'
 import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
 import LoginForm from '~/components/auth/LoginForm.vue'
 import SignupForm from '~/components/auth/SignupForm.vue'
-import { humanSize } from '~/modules/filters'
+import { humanSize } from '~/init/filters'
 
 export default {
   components: {
