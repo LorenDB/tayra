@@ -1,0 +1,150 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../admin/commands.rst:2
+msgid "Management commands"
+msgstr ""
+
+#: ../../admin/commands.rst:5
+msgid "User management"
+msgstr ""
+
+#: ../../admin/commands.rst:7
+msgid "It's possible to create, remove and update users directly from the command line."
+msgstr ""
+
+#: ../../admin/commands.rst:9
+msgid "This feature is useful if you want to experiment, automate or perform batch actions that would be too repetitive through the web UI."
+msgstr ""
+
+#: ../../admin/commands.rst:12
+msgid "All users-related commands are available under the ``python manage.py fw users`` namespace:"
+msgstr ""
+
+#: ../../admin/commands.rst:21
+msgid "Creation"
+msgstr ""
+
+#: ../../admin/commands.rst:38
+msgid "Additional options are available to further configure the user during creation, such as setting permissions or user quota. Please refer to the command help."
+msgstr ""
+
+#: ../../admin/commands.rst:43
+msgid "Update"
+msgstr ""
+
+#: ../../admin/commands.rst:73
+msgid "Deletion"
+msgstr ""
+
+#: ../../admin/commands.rst:93
+msgid "Pruning library"
+msgstr ""
+
+#: ../../admin/commands.rst:95
+msgid "Because Funkwhale is a multi-user and federated audio server, we don't delete any artist, album and track objects in the database when you delete the corresponding files."
+msgstr ""
+
+#: ../../admin/commands.rst:98
+msgid "This is on purpose, because those objects may be referenced in user playlists, favorites, listening history or on other instances, or other users could have upload files matching linked to those entities in their own private libraries."
+msgstr ""
+
+#: ../../admin/commands.rst:102
+msgid "Therefore, Funkwhale has a really conservative approach and doesn't delete metadata when audio files are deleted."
+msgstr ""
+
+#: ../../admin/commands.rst:105
+msgid "This behaviour can be problematic in some situations though, e.g. if you imported a lot of wrongly tagged files, then deleted the files to reimport them later."
+msgstr ""
+
+#: ../../admin/commands.rst:108
+msgid "To help with that, we provide a management you can run on the server and that will effectively prune you library from track, album and artist metadata that is not tied to any file:"
+msgstr ""
+
+#: ../../admin/commands.rst:128
+msgid "The ``prune_library`` command will not delete anything by default, and only gives you an estimate of how many database objects would be affected by the pruning."
+msgstr ""
+
+#: ../../admin/commands.rst:131
+msgid "Once you have reviewed the output and are comfortable with the changes, you should rerun the command with the ``--no-dry-run`` flag to disable dry run mode and actually apply the changes on the database."
+msgstr ""
+
+#: ../../admin/commands.rst:137
+#: ../../admin/commands.rst:169
+msgid "Running this command with ``--no-dry-run`` is irreversible. Unless you have a backup, there will be no way to retrieve the deleted data."
+msgstr ""
+
+#: ../../admin/commands.rst:142
+msgid "The command will exclude tracks that are favorited, included in playlists or listening history by default. If you want to include those in the pruning process as well, add the corresponding ``--ignore-favorites``, ``--ignore-playlists`` and ``--ignore-listenings`` flags."
+msgstr ""
+
+#: ../../admin/commands.rst:148
+msgid "Remove obsolete files from database"
+msgstr ""
+
+#: ../../admin/commands.rst:150
+msgid "When importing using the :ref:`in-place method <in-place-import>`, if you move or remove in-place imported files on disk, Funkwhale will still have a reference to those files and won't be able to serve them properly."
+msgstr ""
+
+#: ../../admin/commands.rst:154
+msgid "To help with that, whenever you remove or move files that were previously imported with the ``--in-place`` flag, you can run the following command::"
+msgstr ""
+
+#: ../../admin/commands.rst:159
+msgid "This command will loop through all the database objects that reference an in-place imported file, check that the file is accessible on disk, or delete the database object if it's not."
+msgstr ""
+
+#: ../../admin/commands.rst:163
+msgid "Once you have reviewed the output and are comfortable with the changes, you should rerun the command with the ``--no-dry-run`` flag to disable dry run mode and actually delete the database objects."
+msgstr ""
+
+#: ../../admin/commands.rst:173
+msgid "Adding tags from tracks"
+msgstr ""
+
+#: ../../admin/commands.rst:175
+msgid "By default, genre tags found imported files are associated with the corresponding track."
+msgstr ""
+
+#: ../../admin/commands.rst:177
+msgid "While you can always associate genre information with an artist or album through the web UI, it may be tedious to do so by hand for a large number of objects."
+msgstr ""
+
+#: ../../admin/commands.rst:180
+msgid "We offer a command you can run after an import to do this for you. It will:"
+msgstr ""
+
+#: ../../admin/commands.rst:182
+msgid "Find all local artists or albums with no tags"
+msgstr ""
+
+#: ../../admin/commands.rst:183
+msgid "Get all the tags associated with the corresponding tracks"
+msgstr ""
+
+#: ../../admin/commands.rst:184
+msgid "Associate tags that are found on all tracks to the corresponding artist or album"
+msgstr ""
+
+#: ../../admin/commands.rst:186
+msgid "..note::"
+msgstr ""
+
+#: ../../admin/commands.rst:190
+msgid "Usage:"
+msgstr ""

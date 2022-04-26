@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../admin/migration.rst:2
+msgid "Migrating to a New Server"
+msgstr ""
+
+#: ../../admin/migration.rst:4
+msgid "Sometimes, it may be necessary or desirable to migrate your existing Funkwhale setup to a new server. This can be helpful if you need to boost resources or if you wish to use a different hosting platform."
+msgstr ""
+
+#: ../../admin/migration.rst:9
+msgid "In this guide, the existing Funkwhale setup is called the origin server, and the new setup the destination server."
+msgstr ""
+
+#: ../../admin/migration.rst:12
+msgid "Requirements"
+msgstr ""
+
+#: ../../admin/migration.rst:14
+msgid "To get started with your new setup, you will need to have the following:"
+msgstr ""
+
+#: ../../admin/migration.rst:17
+msgid "`rsync <https://linux.die.net/man/1/rsync>`_ installed on the **destination** server"
+msgstr ""
+
+#: ../../admin/migration.rst:18
+msgid "SSH access set up between the two servers"
+msgstr ""
+
+#: ../../admin/migration.rst:21
+msgid "Non-Docker"
+msgstr ""
+
+#: ../../admin/migration.rst:23
+msgid "On the destination server, run through the :doc:`installation steps<../installation/debian>` with the exception of the following points:"
+msgstr ""
+
+#: ../../admin/migration.rst:25
+msgid "Do not enable the extensions ``unaccent`` and ``citext`` when setting up the database;"
+msgstr ""
+
+#: ../../admin/migration.rst:26
+msgid "Do not initialize the database by applying the migrate command;"
+msgstr ""
+
+#: ../../admin/migration.rst:27
+msgid "Do not create an admin account."
+msgstr ""
+
+#: ../../admin/migration.rst:29
+msgid "Stop all funkwhale related services on the destination server:"
+msgstr ""
+
+#: ../../admin/migration.rst:35
+#: ../../admin/migration.rst:75
+msgid "On the origin server, create a database backup:"
+msgstr ""
+
+#: ../../admin/migration.rst:41
+msgid "On the destination server, use rsync to fetch the contents of ``/srv/funwkhale/data/media/music/`` and ``/srv/funkwhale/data/media/`` from the origin server, as well as the database dump and the ``.env`` file:"
+msgstr ""
+
+#: ../../admin/migration.rst:54
+msgid "On the destination server, restore the database dump:"
+msgstr ""
+
+#: ../../admin/migration.rst:60
+msgid "Once the database has been restored, follow the database migration steps from the non-docker installation guide to complete the installation on the destination server."
+msgstr ""
+
+#: ../../admin/migration.rst:62
+msgid "Ensure that all DNS changes have been made and start the services:"
+msgstr ""
+
+#: ../../admin/migration.rst:69
+msgid "Docker"
+msgstr ""
+
+#: ../../admin/migration.rst:71
+msgid "On the destination server, run through the :doc:`installation steps<../installation/docker>` but skip the ``docker-compose run --rm api python manage.py migrate`` step."
+msgstr ""
+
+#: ../../admin/migration.rst:73
+msgid "Stop all funkwhale related containers on the destination server."
+msgstr ""
+
+#: ../../admin/migration.rst:81
+msgid "On the destination server, use rsync to fetch the contents of ``/srv/funwkhale/data/media/music`` and ``/srv/funkwhale/data/media`` from the origin server, as well as the database dump nd the ``.env`` file:"
+msgstr ""
+
+#: ../../admin/migration.rst:94
+msgid "Initialize the Postgres container with the funkwhale database and its user. For easier, we create a db init dump file than we import in the postgres container:"
+msgstr ""
+
+#: ../../admin/migration.rst:105
+msgid "After that, we can restore the database dump:"
+msgstr ""
+
+#: ../../admin/migration.rst:111
+msgid "Once the database has been restored, run the migrations following the docker installation guide."
+msgstr ""
+
+#: ../../admin/migration.rst:113
+msgid "Ensure that all DNS changes have been made and start the services."
+msgstr ""

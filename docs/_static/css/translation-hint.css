@@ -1,0 +1,16 @@
+#translation-closer {
+  float: right;
+}
+
+.translation-hint {
+  position: fixed;
+  z-index: 999;
+  bottom: 20px;
+  right: 20px;
+  background-color: #c9c9c9;
+  padding: 20px;
+}
+
+.translation-hint h1 {
+  font-size: 20px;
+}

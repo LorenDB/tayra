@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../admin/url.rst:2
+msgid "Changing Your Instance URL"
+msgstr ""
+
+#: ../../admin/url.rst:6
+msgid "We highly recommend not to change your instance URL. Members of the community tried to do this and documented their steps here. This guide might be incomplete or fail for your instance. There is no support for this procedure and likely no way back."
+msgstr ""
+
+#: ../../admin/url.rst:9
+msgid "At some point, you may wish to change your instance URL. In order to do this, you will need to change the following:"
+msgstr ""
+
+#: ../../admin/url.rst:12
+msgid "The instance URL in your .env file"
+msgstr ""
+
+#: ../../admin/url.rst:13
+msgid "The instance URL in your ``/etc/nginx/sites-enabled/funkwhale.conf`` or ``/etc/apache2/sites-enabled/funkwhale.conf`` depending on your web server setup"
+msgstr ""
+
+#: ../../admin/url.rst:14
+msgid "Any references to the old URL in your database"
+msgstr ""
+
+#: ../../admin/url.rst:16
+msgid "The changes to the database can be achieved with the ``fix_federation_ids`` script in the ``manage.py`` file."
+msgstr ""
+
+#: ../../admin/url.rst:19
+msgid "Example output:"
+msgstr ""
+
+#: ../../admin/url.rst:53
+msgid "On Docker Installations"
+msgstr ""
+
+#: ../../admin/url.rst:55
+msgid "If you have followed the :doc:`Docker installation instructions <../installation/docker>`, you will need to do the following:"
+msgstr ""
+
+#: ../../admin/url.rst:58
+#: ../../admin/url.rst:81
+msgid "Edit your .env file to change the ``FUNKWHALE_HOSTNAME``  and ``DJANGO_ALLOWED_HOSTS`` value to your new URL"
+msgstr ""
+
+#: ../../admin/url.rst:59
+#: ../../admin/url.rst:82
+msgid "Edit your ``/etc/nginx/sites-enabled/funkwhale.conf`` file to change the ``server_name`` values to your new URL"
+msgstr ""
+
+#: ../../admin/url.rst:60
+#: ../../admin/url.rst:83
+msgid "Run the following command to change all mentions of your old instance URL in the database:"
+msgstr ""
+
+#: ../../admin/url.rst:66
+#: ../../admin/url.rst:89
+msgid "Restart Nginx or Apache to pick up the new changes"
+msgstr ""
+
+#: ../../admin/url.rst:77
+msgid "On Non-Docker Installations"
+msgstr ""
+
+#: ../../admin/url.rst:79
+msgid "If you have followed the :doc:`non-docker setup <../installation/debian>`, you will need to do the following:"
+msgstr ""

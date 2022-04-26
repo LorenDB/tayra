@@ -1,0 +1,33 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../administrator_documentation/index.md:1
+msgid "Get started"
+msgstr ""
+
+#: ../../administrator_documentation/index.md:3
+msgid "Follow the guides in this section to set up and administrate your pod."
+msgstr ""
+
+#: ../../administrator_documentation/index.md:9
+msgid "Install Funkwhale on your server"
+msgstr ""
+
+#: ../../administrator_documentation/index.md:11
+msgid "Funkwhale is self-hosted, meaning you run it on your own server. To set up your own Funkwhale pod, check out [our installation guides](installation_docs/index.md). Choose the installation method that works for you!"
+msgstr ""

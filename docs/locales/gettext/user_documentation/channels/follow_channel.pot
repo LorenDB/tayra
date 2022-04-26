@@ -1,0 +1,131 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user_documentation/channels/follow_channel.md:1
+msgid "Follow a channel"
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:3
+msgid "Get access to a channel's content by following it. Following a channel makes its content visible to all users on your {term}`pod`."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:5
+msgid "You can follow channels in a few different ways:"
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:11
+msgid "Follow a channel on your pod"
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:13
+msgid "If a user on your pod follows a channel or has published a channel, you can follow it from your pod. To do this:"
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:15
+#: ../../user_documentation/channels/follow_channel.md:53
+msgid "Select the channel you want to follow. The channel details page opens."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:16
+msgid "Select the {guilabel}`Subscribe` button. The label changes to {guilabel}`Subscribed`."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:18
+msgid "That's it! You've subscribed to the channel. You can see the channel in the {guilabel}`Channels` page."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:20
+msgid "Follow a remote channel"
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:22
+msgid "To follow a channel located on another pod, you need its __Federation handle__. A __Federation handle__ uses the following format: ``@{username}@{domain}``. Once you have the channel's __Federation handle__, you can follow it from the {guilabel}`Channels` page. To do this:"
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:26
+msgid "Select {guilabel}`Channels` in the sidebar. The {guilabel}`Channels` page opens."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:27
+#: ../../user_documentation/channels/follow_channel.md:39
+msgid "Select {guilabel}`+ Add new` at the top of the page. The {guilabel}`Subscriptions` screen appears."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:28
+#: ../../user_documentation/channels/follow_channel.md:40
+msgid "Select {guilabel}`Fediverse`."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:29
+#: ../../user_documentation/channels/follow_channel.md:41
+msgid "Enter the channel's __Federation handle__ in the {guilabel}`Fediverse object` input."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:30
+#: ../../user_documentation/channels/follow_channel.md:42
+msgid "Select {guilabel}`Subscribe`. The channel details page appears."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:31
+#: ../../user_documentation/channels/follow_channel.md:43
+msgid "Select the {guilabel}`Subscribe}` button. The label changes to {guilabel}`Subscribed`."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:37
+msgid "Select the hamburger menu ({fa}`bars`) to open the menu bar."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:38
+msgid "Select {guilabel}`Channels`. The {guilabel}`Channels` page opens."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:47
+msgid "That's it! You can now see the channel's content on your pod. Other users of your pod can also see this channel."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:49
+msgid "Follow a Funkwhale podcast with a podcatcher"
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:51
+msgid "You can follow podcasts published in channels using a standard podcatcher. To do this:"
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:54
+msgid "Select the feed button ({fa}`feed`). The {guilabel}`Subscribe to this channel` window appears."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:55
+msgid "Select {guilabel}`Copy` under the {guilabel}`Subscribe via RSS` to copy the channel's {abbr}`RSS (Really Simple Syndication)` feed URL."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:56
+msgid "Paste the URL in your podcatcher."
+msgstr ""
+
+#: ../../user_documentation/channels/follow_channel.md:58
+msgid "That's it! Your podcatcher fetches the podcast details from Funkwhale."
+msgstr ""

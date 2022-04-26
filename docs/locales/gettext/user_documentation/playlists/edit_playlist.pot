@@ -1,0 +1,84 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user_documentation/playlists/edit_playlist.md:1
+msgid "Edit a playlist"
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:3
+msgid "You can edit the details of your playlists at any time. To do this:"
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:7
+#: ../../user_documentation/playlists/edit_playlist.md:20
+msgid "Log in to your account."
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:8
+msgid "Select {guilabel}`Playlists` under the {guilabel}`My Library` section of the sidebar. The {guilabel}`Browsing playlists` screen opens."
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:9
+#: ../../user_documentation/playlists/edit_playlist.md:23
+msgid "Select {guilabel}`Manage your playlists`. The {guilabel}`Manage playlists` screen appears."
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:10
+#: ../../user_documentation/playlists/edit_playlist.md:24
+msgid "Select the edit icon ({fa}`edit`) next to the playlist you want to edit. The playlist edit screen appears."
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:11
+#: ../../user_documentation/playlists/edit_playlist.md:25
+msgid "Update the following fields:"
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:12
+#: ../../user_documentation/playlists/edit_playlist.md:26
+msgid "{guilabel}`Playlist name`."
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:13
+#: ../../user_documentation/playlists/edit_playlist.md:27
+msgid "{guilabel}`Playlist visibility`."
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:14
+#: ../../user_documentation/playlists/edit_playlist.md:28
+msgid "Select {guilabel}`Update playlist` to save your changes. A message displays {guilabel}`Playlist updated`."
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:21
+msgid "Select the hamburger menu ({fa}`bars`) to open the menu bar."
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:22
+msgid "Select {menuselection}`My Library --> Playlists`. The {guilabel}`Browsing playlists` screen opens."
+msgstr ""
+
+#: ../../user_documentation/playlists/edit_playlist.md:32
+msgid "That's it! You've edited your playlist."
+msgstr ""

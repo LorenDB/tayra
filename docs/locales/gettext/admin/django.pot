@@ -1,0 +1,165 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../admin/django.rst:2
+msgid "Using the Django Administration Backend"
+msgstr ""
+
+#: ../../admin/django.rst:4
+msgid "Funkwhale is being actively developed, and new features are being added to the frontend all the time. However, there are some administrative tasks that can only be undertaken in the Django Administration backend."
+msgstr ""
+
+#: ../../admin/django.rst:7
+msgid "Deleting items on the backend is **not** recommended. Deletions performed on the backend are permanent. If you remove something in the backend, you will need to re-add it from scratch."
+msgstr ""
+
+#: ../../admin/django.rst:10
+msgid "Accessing the Django Backend"
+msgstr ""
+
+#: ../../admin/django.rst:12
+msgid "To access your instance's backend, navigate to ``https://yourdomain/api/admin``. You will be prompted to log in. By default, the login details will be those of the priviliged user created during the setup process."
+msgstr ""
+
+#: ../../admin/django.rst:15
+msgid "Deleting Items"
+msgstr ""
+
+#: ../../admin/django.rst:17
+msgid "By default, deleting items in the front end removes the file from the server but **does not** delete associated entities such as artists, albums, and track data, meaning that they will still be viewable but no longer playable. Items deleted in this way will also still count on the instance statistics. To remove them completely, it is necessary to remove them from the database entirely using the Django Administration backend."
+msgstr ""
+
+#: ../../admin/django.rst:20
+msgid "Deleting tracks, albums, or artists will also remove them completely from any associated playlists, radios, or favorites lists. Before continuing, make sure other users on the instance are aware of the deletion(s)."
+msgstr ""
+
+#: ../../admin/django.rst:23
+msgid "Deleting a Track"
+msgstr ""
+
+#: ../../admin/django.rst:25
+msgid "Navigate to ``https://yourdomain/api/admin/music/track``"
+msgstr ""
+
+#: ../../admin/django.rst:26
+msgid "Select the track(s) you wish to delete"
+msgstr ""
+
+#: ../../admin/django.rst:27
+#: ../../admin/django.rst:35
+#: ../../admin/django.rst:47
+#: ../../admin/django.rst:61
+msgid "In the ``Action`` dropdown menu, select \"Delete Selected Items\""
+msgstr ""
+
+#: ../../admin/django.rst:28
+msgid "Click on \"Go\". You will be prompted to confirm the track's deletion"
+msgstr ""
+
+#: ../../admin/django.rst:31
+msgid "Deleting an Album"
+msgstr ""
+
+#: ../../admin/django.rst:33
+#: ../../admin/django.rst:69
+msgid "Navigate to ``https://yourdomain/api/admin/music/album``"
+msgstr ""
+
+#: ../../admin/django.rst:34
+msgid "Select the album(s) you wish to delete"
+msgstr ""
+
+#: ../../admin/django.rst:36
+msgid "Click on \"Go\". You will be prompted to confirm the album's deletion"
+msgstr ""
+
+#: ../../admin/django.rst:40
+msgid "Deleting an album will remove all tracks associated with the album"
+msgstr ""
+
+#: ../../admin/django.rst:43
+msgid "Deleting an Artist"
+msgstr ""
+
+#: ../../admin/django.rst:45
+msgid "Navigate to ``https://yourdomain/api/admin/music/artist``"
+msgstr ""
+
+#: ../../admin/django.rst:46
+msgid "Select the artist(s) you wish to delete"
+msgstr ""
+
+#: ../../admin/django.rst:48
+msgid "Click on \"Go\". You will be prompted to confirm the artist's deletion"
+msgstr ""
+
+#: ../../admin/django.rst:52
+msgid "Deleting an artist will remove all tracks and albums associated with the artist"
+msgstr ""
+
+#: ../../admin/django.rst:55
+msgid "Removing a Followed Library"
+msgstr ""
+
+#: ../../admin/django.rst:57
+msgid "In Funkwhale, unfollowing a library will leave the items in place but inaccessible. To completely remove them:"
+msgstr ""
+
+#: ../../admin/django.rst:59
+msgid "Navigate to ``https://yourdomain/api/admin/music/library/``"
+msgstr ""
+
+#: ../../admin/django.rst:60
+msgid "Tick the box next to the library you wish to remove"
+msgstr ""
+
+#: ../../admin/django.rst:62
+msgid "Click on \"Go\". You will be prompted to confirm the library's deletion"
+msgstr ""
+
+#: ../../admin/django.rst:65
+msgid "Adding Missing Album Art"
+msgstr ""
+
+#: ../../admin/django.rst:67
+msgid "Sometimes album art can fail to appear despite music being properly tagged. When this happens, it is possible to replace the missing art."
+msgstr ""
+
+#: ../../admin/django.rst:70
+msgid "Search for and select the album in question"
+msgstr ""
+
+#: ../../admin/django.rst:71
+msgid "Find the item marked \"Cover\""
+msgstr ""
+
+#: ../../admin/django.rst:72
+msgid "Click \"Browse\" and select the file from your computer"
+msgstr ""
+
+#: ../../admin/django.rst:73
+msgid "Click \"Save\" to confirm the changes"
+msgstr ""
+
+#: ../../admin/django.rst:75
+msgid "The album art will now be present on the frontend."
+msgstr ""
+
+#: ../../admin/django.rst:79
+msgid "You can also clear currently loaded album art by checking the checkbox next to the current item and selecting \"Clear\""
+msgstr ""

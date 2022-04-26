@@ -1,0 +1,75 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user_documentation/accounts/change_email.md:1
+msgid "Change your email address"
+msgstr ""
+
+#: ../../user_documentation/accounts/change_email.md:3
+msgid "You can update your email address whenever you need to. To do this:"
+msgstr ""
+
+#: ../../user_documentation/accounts/change_email.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user_documentation/accounts/change_email.md:7
+#: ../../user_documentation/accounts/change_email.md:19
+msgid "Log in to your account."
+msgstr ""
+
+#: ../../user_documentation/accounts/change_email.md:8
+msgid "Select the cog icon ({fa}`cog`) or your avatar to expand the user menu."
+msgstr ""
+
+#: ../../user_documentation/accounts/change_email.md:9
+#: ../../user_documentation/accounts/change_email.md:21
+msgid "Select {guilabel}`Settings`."
+msgstr ""
+
+#: ../../user_documentation/accounts/change_email.md:10
+#: ../../user_documentation/accounts/change_email.md:22
+msgid "Scroll to the {guilabel}`Change my e-mail address` section."
+msgstr ""
+
+#: ../../user_documentation/accounts/change_email.md:11
+#: ../../user_documentation/accounts/change_email.md:23
+msgid "Enter your {guilabel}`New e-mail address`."
+msgstr ""
+
+#: ../../user_documentation/accounts/change_email.md:12
+#: ../../user_documentation/accounts/change_email.md:24
+msgid "Enter your {guilabel}`Password`."
+msgstr ""
+
+#: ../../user_documentation/accounts/change_email.md:13
+#: ../../user_documentation/accounts/change_email.md:25
+msgid "Select {guilabel}`Update`."
+msgstr ""
+
+#: ../../user_documentation/accounts/change_email.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user_documentation/accounts/change_email.md:20
+msgid "Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}`Options` menu."
+msgstr ""
+
+#: ../../user_documentation/accounts/change_email.md:29
+msgid "That's it! If your pod admin has email verification enabled, you'll receive a confirmation email. Follow the instructions in this email to finish changing your email address."
+msgstr ""

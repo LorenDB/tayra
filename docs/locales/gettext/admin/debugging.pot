@@ -1,0 +1,81 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../admin/debugging.rst:2
+msgid "Debugging Funkwhale"
+msgstr ""
+
+#: ../../admin/debugging.rst:4
+msgid "In order to track down errors its useful to provide as many information as possible. Usually pasting the logs should be sufficient, but there are some tools for some deeper debugging."
+msgstr ""
+
+#: ../../admin/debugging.rst:8
+msgid "Frontend Logs"
+msgstr ""
+
+#: ../../admin/debugging.rst:10
+msgid "Logs and errors written by the Frontend can be accessed with Firefox. When opening the website of your Funkwhale instance, simply hit ``Ctlr + Shift + J``. Alternatively open the Firefox Menu and open the Browser Console in the developers menu."
+msgstr ""
+
+#: ../../admin/debugging.rst:14
+msgid "In the opening window you can see all the output. You can copy what you want to share or repeat the failing operation to see what error occurs."
+msgstr ""
+
+#: ../../admin/debugging.rst:18
+msgid "Backend Logs"
+msgstr ""
+
+#: ../../admin/debugging.rst:20
+msgid "Depending on your setup you can see the logs from our API server in different ways."
+msgstr ""
+
+#: ../../admin/debugging.rst:23
+msgid "Docker"
+msgstr ""
+
+#: ../../admin/debugging.rst:25
+msgid "Simply run ``docker-compose logs --tail=100 api`` If you want continuous logs, add the ``f`` flag."
+msgstr ""
+
+#: ../../admin/debugging.rst:28
+msgid "Quick install"
+msgstr ""
+
+#: ../../admin/debugging.rst:30
+msgid "To get the logs, run ``journalctl -xn -u funkwhale-server``"
+msgstr ""
+
+#: ../../admin/debugging.rst:33
+msgid "Profiling"
+msgstr ""
+
+#: ../../admin/debugging.rst:35
+msgid "In order to find performance issues, its possible to run API requests with activated profiling. In order to do this,  add ``funkwhale_api.common.middleware.ProfilerMiddleware`` to the environment variable ``ADDITIONAL_MIDDLEWARES_BEFORE``"
+msgstr ""
+
+#: ../../admin/debugging.rst:39
+msgid "If enabled, simply add ``?prof`` to the request URL you want to profile. You should get an HTML-Report of the running request."
+msgstr ""
+
+#: ../../admin/debugging.rst:43
+msgid "Memory Tracing"
+msgstr ""
+
+#: ../../admin/debugging.rst:45
+msgid "Its possible to print memory traces for each API request to the API logs. In order to do this, add ``funkwhale_api.common.middleware.PymallocMiddleware`` to the environment variable ``ADDITIONAL_MODDLEWARES_BEFORE`` This adds a middleware which should not do anything by default. Tracing can be activated by setting ``PYTHONTRACEMALLOC=1`` This might has some inpact on the performance, please report how it goes. The Middleware now prints the top 25 memory allocations to the API logs."
+msgstr ""

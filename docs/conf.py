@@ -20,7 +20,6 @@
 import os
 import sys
 import datetime
-import subprocess
 
 sys.path.insert(0, os.path.abspath("../api"))
 sys.path.insert(0, os.path.abspath("../api/config"))
@@ -131,7 +130,13 @@ html_favicon = "../front/public/favicon.png"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ["_static"]
+html_static_path = ["_static"]
+html_css_files = [
+    "css/translation-hint.css",
+]
+html_js_files = [
+    "js/translation-hint.js",
+]
 
 # -- Options for HTMLHelp output ------------------------------------------
 
@@ -284,3 +289,7 @@ def setup(app):
 
 smv_tag_whitelist = None
 smv_branch_whitelist = r"(stable|develop)$"
+
+# Internationalization settings
+locale_dirs = ["locales/"]
+gettext_compact = False

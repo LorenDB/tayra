@@ -1,0 +1,39 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../moderator_documentation/internal_users/index.md:7
+#: ../../moderator_documentation/internal_users/index.md:7
+msgid "Moderate users"
+msgstr ""
+
+#: ../../moderator_documentation/internal_users/index.md:17
+#: ../../moderator_documentation/internal_users/index.md:17
+msgid "Handle user registrations"
+msgstr ""
+
+#: ../../moderator_documentation/internal_users/index.md:1
+msgid "Moderate your pod's users"
+msgstr ""
+
+#: ../../moderator_documentation/internal_users/index.md:3
+msgid "Funkwhale provides you the tools you need to moderate users on your pod. Use these tools to tackle harassment and problematic content."
+msgstr ""
+
+#: ../../moderator_documentation/internal_users/index.md:5
+msgid "{term}`Pod` admins can also enable manual sign-up validation. With this setting enabled, moderators need to approve or reject any user who signs up."
+msgstr ""

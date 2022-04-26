@@ -1,0 +1,79 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:1
+msgid "Reset your Subsonic password"
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:4
+msgid "Changing your Subsonic password logs you out of any Subsonic apps you are using. You need to log back in using your new password."
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:7
+msgid "You can reset your Subsonic password at any time. To do this:"
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:11
+#: ../../user_documentation/subsonic/reset_subsonic.md:23
+msgid "Log in to your account."
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:12
+msgid "Select the cog icon ({fa}`cog`) or your avatar to expand the user menu."
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:13
+#: ../../user_documentation/subsonic/reset_subsonic.md:25
+msgid "Select {guilabel}`Settings`."
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:14
+#: ../../user_documentation/subsonic/reset_subsonic.md:26
+msgid "Scroll to the {guilabel}`Subsonic API password` section."
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:15
+#: ../../user_documentation/subsonic/reset_subsonic.md:27
+msgid "Select {guilabel}`Request a new password`."
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:16
+#: ../../user_documentation/subsonic/reset_subsonic.md:28
+msgid "Select {guilabel}`Request a new password` in the warning message that appears. The server generates a new password for you."
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:17
+#: ../../user_documentation/subsonic/reset_subsonic.md:29
+msgid "Select the {guilabel}`copy` icon next to the password field to copy your password."
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:24
+msgid "Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}`Options` menu."
+msgstr ""
+
+#: ../../user_documentation/subsonic/reset_subsonic.md:33
+msgid "That's it! Your new password is ready to use."
+msgstr ""

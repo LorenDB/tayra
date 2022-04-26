@@ -1,0 +1,135 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../admin/upgrading.rst:2
+msgid "Upgrading your Funkwhale instance to a newer version"
+msgstr ""
+
+#: ../../admin/upgrading.rst:6
+msgid "Before upgrading your instance, we strongly advise you to make at least a database backup. Ideally, you should make a full backup, including the database and the media files."
+msgstr ""
+
+#: ../../admin/upgrading.rst:9
+msgid "We're commited to make upgrade as easy and straightforward as possible, however, Funkwhale is still in development and you'll be safer with a backup."
+msgstr ""
+
+#: ../../admin/upgrading.rst:14
+msgid "Reading the release notes"
+msgstr ""
+
+#: ../../admin/upgrading.rst:16
+msgid "Please take a few minutes to read the :doc:`../changelog`: updates should work similarly from version to version, but some of them may require additional steps. Those steps would be described in the version release notes."
+msgstr ""
+
+#: ../../admin/upgrading.rst:22
+msgid "Insights about new versions"
+msgstr ""
+
+#: ../../admin/upgrading.rst:24
+msgid "Some versions may be bigger than usual, and we'll try to detail the changes when possible."
+msgstr ""
+
+#: ../../admin/upgrading.rst:34
+msgid "Docker setup"
+msgstr ""
+
+#: ../../admin/upgrading.rst:36
+msgid "If you've followed the setup instructions in :doc:`../installation/docker`, upgrade path is easy:"
+msgstr ""
+
+#: ../../admin/upgrading.rst:40
+msgid "Mono-container installation"
+msgstr ""
+
+#: ../../admin/upgrading.rst:42
+msgid "Basically, you need to pull the new container image, stop and delete your existing container, and relaunch a new one:"
+msgstr ""
+
+#: ../../admin/upgrading.rst:45
+msgid "To upgrade your service, change the version number of the image in ``docker-compose.yml`` with the latest release (i.e. |version|)."
+msgstr ""
+
+#: ../../admin/upgrading.rst:47
+msgid "Pull the new images:"
+msgstr ""
+
+#: ../../admin/upgrading.rst:53
+msgid "Restart the service:"
+msgstr ""
+
+#: ../../admin/upgrading.rst:60
+msgid "Multi-container installation"
+msgstr ""
+
+#: ../../admin/upgrading.rst:86
+#: ../../admin/upgrading.rst:194
+msgid "You may sometimes get the following warning while applying migrations::"
+msgstr ""
+
+#: ../../admin/upgrading.rst:90
+#: ../../admin/upgrading.rst:198
+msgid "This is a warning, not an error, and it can be safely ignored. Never run the ``makemigrations`` command yourself."
+msgstr ""
+
+#: ../../admin/upgrading.rst:94
+msgid "Upgrading the Postgres container"
+msgstr ""
+
+#: ../../admin/upgrading.rst:96
+msgid "With some Funkwhale releases, it is recommended to upgrade the version of the Postgres database server container. For example, Funkwhale 0.17 recommended Postgres 9.4, but Funkwhale 0.18 recommends Postgres 11. When upgrading Postgres, it is not sufficient to change the container referenced in ``docker-compose.yml``. New major versions of Postgres cannot read the databases created by older major versions. The data has to be exported from a running instance of the old version and imported by the new version."
+msgstr ""
+
+#: ../../admin/upgrading.rst:104
+msgid "Thankfully, there is a Docker container available to automate this process. You can use the following snippet to upgrade your database in ``./postgres``, keeping a backup of the old version in ``./postgres-old``:"
+msgstr ""
+
+#: ../../admin/upgrading.rst:126
+msgid "Non-docker setup"
+msgstr ""
+
+#: ../../admin/upgrading.rst:128
+msgid "If you installed Funkwhale using the install script, upgrading is done using ``sh -c \"$(curl -sSL https://get.funkwhale.audio/upgrade.sh)\"``. Make sure to run this command with root permissions."
+msgstr ""
+
+#: ../../admin/upgrading.rst:130
+msgid "If you manually installed Funkwhale, please use the following instructions."
+msgstr ""
+
+#: ../../admin/upgrading.rst:133
+msgid "Upgrade the static files"
+msgstr ""
+
+#: ../../admin/upgrading.rst:135
+msgid "On non-docker setups, the front-end app is updated separately from the API. This is as simple as downloading the zip with the static files and extracting it in the correct place."
+msgstr ""
+
+#: ../../admin/upgrading.rst:139
+msgid "The following example assume your setup match :ref:`frontend-setup`."
+msgstr ""
+
+#: ../../admin/upgrading.rst:151
+msgid "Upgrading the API"
+msgstr ""
+
+#: ../../admin/upgrading.rst:153
+msgid "On non-docker, upgrade involves a few more commands. We assume your setup match what is described in :doc:`/installation/debian`:"
+msgstr ""
+
+#: ../../admin/upgrading.rst:187
+msgid "If you see a PermissionError when running the ``migrate`` command, try running the following commands by hand, and relaunch the migrations::"
+msgstr ""

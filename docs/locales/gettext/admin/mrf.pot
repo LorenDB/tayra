@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../admin/mrf.rst:2
+msgid "Message Rewrite Facility (MRF)"
+msgstr ""
+
+#: ../../admin/mrf.rst:4
+msgid "Funkwhale includes a feature that mimics `Pleroma's Message Rewrite Facility <https://docs-develop.pleroma.social/backend/configuration/mrf/>`_. Using the MRF, instance admins can write and configure custom and automated moderation rules that couldn't be implemented otherwise using :doc:`our other built-in moderation tools <../moderator/index>`."
+msgstr ""
+
+#: ../../admin/mrf.rst:9
+msgid "Architecture"
+msgstr ""
+
+#: ../../admin/mrf.rst:11
+msgid "The MRF is a pluggable system that will process messages and forward those to the list of registered policies, in turn. Each policy can mutate the message, leave it as is, or discard it entirely."
+msgstr ""
+
+#: ../../admin/mrf.rst:14
+msgid "Some of our built-in moderation tools are actually implemented as a MRF policy, e.g:"
+msgstr ""
+
+#: ../../admin/mrf.rst:16
+msgid "Allow-list, when checking incoming messages (`code <https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/api/funkwhale_api/moderation/mrf_policies.py>`__)"
+msgstr ""
+
+#: ../../admin/mrf.rst:17
+msgid "Domain and user blocking, when checking incoming messages (`code <https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/api/funkwhale_api/federation/mrf_policies.py>`__)"
+msgstr ""
+
+#: ../../admin/mrf.rst:21
+msgid "While Pleroma MRF policies can also affect outgoing messages, this is not supported yet in Funkwhale."
+msgstr ""
+
+#: ../../admin/mrf.rst:25
+msgid "Disclaimer"
+msgstr ""
+
+#: ../../admin/mrf.rst:27
+msgid "Writing custom MRF can impact negatively the performance and stability of your pod, as well as message delivery. Your policy will be called everytime a message is delivered, so ensure you don't execute any slow operation here."
+msgstr ""
+
+#: ../../admin/mrf.rst:31
+msgid "Please note that the Funkwhale developers consider custom MRF policy modules to fall under the purview of the AGPL. As such, you are obligated to release the sources to your custom MRF policy modules upon request."
+msgstr ""
+
+#: ../../admin/mrf.rst:34
+msgid "Writing your first MRF policy"
+msgstr ""
+
+#: ../../admin/mrf.rst:36
+msgid "MRF Policies are written as Python 3 functions that take at least one ``payload`` parameter. This payload is the raw ActivityPub message, received via HTTP, after the HTTP signature check."
+msgstr ""
+
+#: ../../admin/mrf.rst:39
+msgid "In the example below we write a policy that discards all Follow requests from listed domains:"
+msgstr ""
+
+#: ../../admin/mrf.rst:66
+msgid "This code must be stored in a Funkwhale plugin. To create one, just execute the following:"
+msgstr ""
+
+#: ../../admin/mrf.rst:89
+msgid "Once you have a Funkwhale plugin, simply put your MRF policy code inside a ``mrf_policies.py`` file whithin the plugin directory. Then enable the plugin in your ``.env`` by adding its name to the coma-separated list of ``FUNKWHALE_PLUGINS`` (add the variable if it's not there)."
+msgstr ""
+
+#: ../../admin/mrf.rst:95
+msgid "Testing a MRF policy"
+msgstr ""
+
+#: ../../admin/mrf.rst:97
+msgid "To make the job of writing and debugging MRF policies easier, we provide a management command:"
+msgstr ""

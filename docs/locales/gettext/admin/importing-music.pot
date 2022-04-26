@@ -1,0 +1,273 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../admin/importing-music.rst:2
+msgid "Importing music from the server"
+msgstr ""
+
+#: ../../admin/importing-music.rst:4
+msgid "Funkwhale can import music files saved on the server assuming they are readable by the Funkwhale application. Your music files should contain at least ``artist``, ``album`` and ``title`` tags, but we recommend you tag extensively using a proper tool, such as Beets or Musicbrainz Picard."
+msgstr ""
+
+#: ../../admin/importing-music.rst:11
+msgid "Funkwhale supports two different import modes:"
+msgstr ""
+
+#: ../../admin/importing-music.rst:13
+msgid "copy(default): files are copied into Funkwhale's internal storage. This means importing a 1GB library will result in the same amount of space being used by Funkwhale."
+msgstr ""
+
+#: ../../admin/importing-music.rst:14
+msgid ":ref:`in-place <in-place-import>` (with ``--in-place`` flag): files are referenced in Funkwhale's DB but not copied or touched in anyway. This is useful if you have a huge library, or one that is updated by an external tool such as Beets."
+msgstr ""
+
+#: ../../admin/importing-music.rst:16
+msgid "Regardless of the mode you choose, follow the below steps to import music, assuming your files are located in ``/srv/funkwhale/data/music``:"
+msgstr ""
+
+#: ../../admin/importing-music.rst:27
+msgid "You have to create a library in the Web UI to get your library ID. Simply visit https://yourdomain/content/libraries/ to create one."
+msgstr ""
+
+#: ../../admin/importing-music.rst:30
+msgid "Library IDs are part of the library url or sharing link. For example, the library ID of https://funkwhale.instance/content/libraries/769a2ae3-eb3d-4aff-9f94-2c4d80d5c2d1, is 769a2bc3-eb1d-4aff-9f84-2c4d80d5c2d1"
+msgstr ""
+
+#: ../../admin/importing-music.rst:35
+msgid "You can use only the first characters of the ID when calling the command, like that: ``export LIBRARY_ID=\"769a2bc3\"``"
+msgstr ""
+
+#: ../../admin/importing-music.rst:38
+msgid "When you use docker, ``/srv/funkwhale/data/music`` is mounted from the host to the ``/music`` directory on the container:"
+msgstr ""
+
+#: ../../admin/importing-music.rst:46
+msgid "When you installed Funkwhale via ansible, you need to call a script instead of Python, and the folder path must be adapted accordingly:"
+msgstr ""
+
+#: ../../admin/importing-music.rst:54
+msgid "The import command supports several options, check the help for details::"
+msgstr ""
+
+#: ../../admin/importing-music.rst:61
+msgid "We recommend tagging your music collection using `Picard <http://picard.musicbrainz.org/>`_ to have the best quality metadata."
+msgstr ""
+
+#: ../../admin/importing-music.rst:65
+msgid "This command is idempotent, meaning you can run it multiple times on the same files and already imported files are simply skipped."
+msgstr ""
+
+#: ../../admin/importing-music.rst:71
+msgid "At the moment, only Flac, OGG/Vorbis and MP3 or AIFF files with ID3 tags are supported."
+msgstr ""
+
+#: ../../admin/importing-music.rst:77
+msgid "In-place import"
+msgstr ""
+
+#: ../../admin/importing-music.rst:79
+msgid "By default, the CLI-importer will copy imported files to Funkwhale's internal storage. This means importing a 1GB library will result in the same amount of space being used by Funkwhale."
+msgstr ""
+
+#: ../../admin/importing-music.rst:83
+msgid "While this behaviour has some benefits (easier backups and configuration), it is not always the best choice, especially if you have a huge library to import and don't want to double your disk usage."
+msgstr ""
+
+#: ../../admin/importing-music.rst:88
+msgid "The CLI importer supports an additional ``--in-place`` option through which Funkwhale will store file paths rather than file content."
+msgstr ""
+
+#: ../../admin/importing-music.rst:92
+msgid "Structure"
+msgstr ""
+
+#: ../../admin/importing-music.rst:94
+msgid "Because imported files are not managed by Funkwhale, we offer additional configuration options to ensure the webserver can serve them properly:"
+msgstr ""
+
+#: ../../admin/importing-music.rst:98
+msgid ":data:`MUSIC_DIRECTORY_PATH <config.settings.common.MUSIC_DIRECTORY_PATH>`"
+msgstr ""
+
+#: ../../admin/importing-music.rst:99
+msgid ":data:`MUSIC_DIRECTORY_SERVING_PATH <config.settings.common.MUSIC_DIRECTORY_SERVE_PATH>`"
+msgstr ""
+
+#: ../../admin/importing-music.rst:101
+msgid "We recommend you symlink all your music directories into ``/srv/funkwhale/data/music`` and run the `import_files` command from that directory. This will make it possible to use multiple music directories without any additional configuration on the webserver side."
+msgstr ""
+
+#: ../../admin/importing-music.rst:106
+msgid "For instance, if you have an NFS share with your music mounted at ``/media/mynfsshare``, you can create a symlink like this::"
+msgstr ""
+
+#: ../../admin/importing-music.rst:112
+msgid "And import music from the share::"
+msgstr ""
+
+#: ../../admin/importing-music.rst:118
+msgid "Docker"
+msgstr ""
+
+#: ../../admin/importing-music.rst:120
+msgid "Docker setups require a bit more work, because while the ``/srv/funkwhale/data/music`` is mounted in containers, symlinked directories are not."
+msgstr ""
+
+#: ../../admin/importing-music.rst:124
+msgid "To fix that, you can use bind mounts instead of symbolic links, as they replicate the source directory tree. With the previous NFS share, use this command::"
+msgstr ""
+
+#: ../../admin/importing-music.rst:130
+msgid "If you want to go with symlinks, ensure each symlinked directory is mounted as a volume as well as in your ``docker-compose.yml`` file::"
+msgstr ""
+
+#: ../../admin/importing-music.rst:149
+msgid "Metadata updates"
+msgstr ""
+
+#: ../../admin/importing-music.rst:151
+msgid "When doing an import with in ``in-place`` mode, the importer will also check and update existing entries found in the database. For instance, if the ID3 Title tag of an existing song was updated since the last scan, Funkwhale picks up the new title. The following fields can be updated this way:"
+msgstr ""
+
+#: ../../admin/importing-music.rst:156
+msgid "Track mbid"
+msgstr ""
+
+#: ../../admin/importing-music.rst:157
+msgid "Track title"
+msgstr ""
+
+#: ../../admin/importing-music.rst:158
+msgid "Track position and disc number"
+msgstr ""
+
+#: ../../admin/importing-music.rst:159
+msgid "Track license and copyright"
+msgstr ""
+
+#: ../../admin/importing-music.rst:160
+msgid "Track genre (`from version 1.2 <https://dev.funkwhale.audio/funkwhale/funkwhale/-/merge_requests/1225>`_)"
+msgstr ""
+
+#: ../../admin/importing-music.rst:161
+msgid "Album cover"
+msgstr ""
+
+#: ../../admin/importing-music.rst:162
+msgid "Album title"
+msgstr ""
+
+#: ../../admin/importing-music.rst:163
+msgid "Album mbid"
+msgstr ""
+
+#: ../../admin/importing-music.rst:164
+msgid "Album release date"
+msgstr ""
+
+#: ../../admin/importing-music.rst:165
+msgid "Artist name"
+msgstr ""
+
+#: ../../admin/importing-music.rst:166
+msgid "Artist mbid"
+msgstr ""
+
+#: ../../admin/importing-music.rst:167
+msgid "Album artist name"
+msgstr ""
+
+#: ../../admin/importing-music.rst:168
+msgid "Album artist mbid"
+msgstr ""
+
+#: ../../admin/importing-music.rst:170
+msgid "Changes in artist name can lead to multiple artists with the same name in the database, `this is a known issue <https://dev.funkwhale.audio/funkwhale/funkwhale/-/issues/1318>`_ and can be remedied by adding mbids."
+msgstr ""
+
+#: ../../admin/importing-music.rst:175
+msgid "React to filesystem events with ``--watch``"
+msgstr ""
+
+#: ../../admin/importing-music.rst:177
+msgid "If you have a really big library or update it regularly, running the ``import_files`` command by hand may not be practical. For this use case, the ``import_files`` command supports a ``--watch`` flag through which it observes filesystem events instead of performing a full import."
+msgstr ""
+
+#: ../../admin/importing-music.rst:183
+msgid "File creation, move, update and removal are handled when ``--watch`` is provided:"
+msgstr ""
+
+#: ../../admin/importing-music.rst:186
+msgid "Files created in the watched directory are imported immediately"
+msgstr ""
+
+#: ../../admin/importing-music.rst:187
+msgid "If using ``in-place`` mode, files updates trigger a metadata update on the corresponding entries"
+msgstr ""
+
+#: ../../admin/importing-music.rst:188
+msgid "If using ``in-place`` mode, files that are moved and known by Funkwhale will see their path updated in Funkwhale's DB"
+msgstr ""
+
+#: ../../admin/importing-music.rst:189
+msgid "If using ``in-place`` mode, files that are removed and known by Funkwhale will be removed from Funkwhale's DB"
+msgstr ""
+
+#: ../../admin/importing-music.rst:192
+msgid "Pruning dangling metadata with ``--prune``"
+msgstr ""
+
+#: ../../admin/importing-music.rst:194
+msgid "Funkwhale is, by design, conservative with music metadata in its database. If you remove a file from Funkwhale's DB, the corresponding artist, album and track object won't be deleted by default."
+msgstr ""
+
+#: ../../admin/importing-music.rst:198
+msgid "If you want to prune dangling metadata from the database once the ``import_files`` command is over, simply add the ``--prune`` flag. This also works in with ``--watch``."
+msgstr ""
+
+#: ../../admin/importing-music.rst:202
+msgid "Album covers"
+msgstr ""
+
+#: ../../admin/importing-music.rst:204
+msgid "Whenever possible, Funkwhale obtains album covers for tracks, with the following precedence:"
+msgstr ""
+
+#: ../../admin/importing-music.rst:207
+msgid "The cover embedded in the audio files themeselves, if any (Flac/MP3 only)"
+msgstr ""
+
+#: ../../admin/importing-music.rst:208
+msgid "Use a cover.jpg or a cover.png file from the imported track directory, if any"
+msgstr ""
+
+#: ../../admin/importing-music.rst:209
+msgid "Fetch cover art from musicbrainz, assuming the file is tagged correctly"
+msgstr ""
+
+#: ../../admin/importing-music.rst:212
+msgid "Getting demo tracks"
+msgstr ""
+
+#: ../../admin/importing-music.rst:214
+msgid "If you do not have any music on your server but want to test the import process, you can call the following methods to download a few albums licenced under creative commons (courtesy of Jamendo):"
+msgstr ""
+
+#: ../../admin/importing-music.rst:226
+msgid "This will download a bunch of zip archives (one per album) under the ``data/music`` directory and unzip their content."
+msgstr ""

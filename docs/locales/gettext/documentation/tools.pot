@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../documentation/tools.rst:2
+msgid "Documentation Requirements"
+msgstr ""
+
+#: ../../documentation/tools.rst:4
+msgid "Funkwhale's documentation is written using :doc:`reStructuredText <restructured>` and is built using `Sphinx <http://www.sphinx-doc.org/>`_."
+msgstr ""
+
+#: ../../documentation/tools.rst:8
+msgid "Text Editor"
+msgstr ""
+
+#: ../../documentation/tools.rst:10
+msgid "As reStructuredText is a writing standard, any text editor can be used to modify documents depending on preference. User-friendly programs such as `Retext <https://github.com/retext-project/retext>`_ are good options for those just getting started with writing reStructuredText. Many other editors such as `Vim <https://www.vim.org/>`_, `Emacs <https://www.gnu.org/software/emacs/>`_, `VS Code <https://code.visualstudio.com/>`_, and `Atom <https://atom.io/>`_ have addons which can help with syntax highlighting and live previewing."
+msgstr ""
+
+#: ../../documentation/tools.rst:17
+msgid "Sphinx"
+msgstr ""
+
+#: ../../documentation/tools.rst:19
+msgid "Sphinx is used to generate a static site based on the ``.rst`` files in the ``docs`` directory. When writing documents, it can be useful to build the site to see how your changes will look in production. To do this:"
+msgstr ""
+
+#: ../../documentation/tools.rst:22
+msgid "Install Sphinx using `pip <https://pypi.org/project/pip/>`_"
+msgstr ""
+
+#: ../../documentation/tools.rst:28
+msgid "Navigate to your local ``funkwhale/docs`` directory"
+msgstr ""
+
+#: ../../documentation/tools.rst:34
+msgid "Use the make file to build the site"
+msgstr ""
+
+#: ../../documentation/tools.rst:40
+msgid "Sphinx will generate the site in your ``funkwhale/docs/_build`` directory unless otherwise stated"
+msgstr ""
+
+#: ../../documentation/tools.rst:42
+msgid "Once you have generated a local copy of the site, you can open it up by opening the index.html file in ``funkwhale/docs/_build``."
+msgstr ""
+
+#: ../../documentation/tools.rst:47
+msgid "If you are familiar with `Docker <https://www.docker.com/>`_ and `docker-compose <https://docs.docker.com/compose/>`_, you can also hack on the documentation via a single command: ``docker-compose -f dev.yml up docs``."
+msgstr ""
+
+#: ../../documentation/tools.rst:50
+msgid "This will make the documentation available at http://0.0.0.0:8001, with live-reloading enabled, so any change made in the ``.rst`` files will be reflected immediately in your browser."
+msgstr ""
+
+#: ../../documentation/tools.rst:55
+msgid "Git"
+msgstr ""
+
+#: ../../documentation/tools.rst:57
+msgid "In order to work on files on your computer, you will need to install `git <https://git-scm.com/>`_ for your operating system. Git is used to push and pull files to and from the Funkwhale repository and track changes made to documents/code alike."
+msgstr ""
+
+#: ../../documentation/tools.rst:62
+msgid "Gitlab"
+msgstr ""
+
+#: ../../documentation/tools.rst:64
+msgid "If you are only making minor changes to a document or don't wish to install anything, you can use `Gitlab's <https://dev.funkwhale.audio>`_ built-in IDE. Once you have made an account and :doc:`created a pull request <creating>`, you can click on the \"Open in Web IDE\" button to open up a fully-fledged editor in your web browser."
+msgstr ""

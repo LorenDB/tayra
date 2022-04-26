@@ -1,0 +1,390 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../admin/0.17.rst:2
+msgid "About Funkwhale 0.17"
+msgstr ""
+
+#: ../../admin/0.17.rst:4
+msgid "Funkwhale 0.17 is a special version, which contains a lot of breaking changes."
+msgstr ""
+
+#: ../../admin/0.17.rst:6
+msgid "Before doing the upgrade, please read this document carefully."
+msgstr ""
+
+#: ../../admin/0.17.rst:10
+msgid "Overview of the changes"
+msgstr ""
+
+#: ../../admin/0.17.rst:15
+msgid "The what and why are described more thoroughly in this page: https://dev.funkwhale.audio/funkwhale/funkwhale/merge_requests/368"
+msgstr ""
+
+#: ../../admin/0.17.rst:17
+msgid "To sum it up, this release big completely changes the way audio content is managed in Funkwhale. As you may guess, this has a huge impact on the whole project, because audio is at the core of Funkwhale."
+msgstr ""
+
+#: ../../admin/0.17.rst:21
+msgid "Here is a side by side comparison of earlier versions and this release to help you understand the scale of the changes:"
+msgstr ""
+
+#: ../../admin/0.17.rst:25
+msgid "Before"
+msgstr ""
+
+#: ../../admin/0.17.rst:25
+msgid "After"
+msgstr ""
+
+#: ../../admin/0.17.rst:25
+msgid "Reason"
+msgstr ""
+
+#: ../../admin/0.17.rst:27
+msgid "There is one big audio library, managed at the instance level"
+msgstr ""
+
+#: ../../admin/0.17.rst:27
+msgid "Each user can have their own libraries (either public, private or shared at the instance level)"
+msgstr ""
+
+#: ../../admin/0.17.rst:27
+msgid "Managing the library at instance was cumbersome and dangerous: sharing  an instance library over federation would quickly pose copyright issues,  as well as opening public instances. It also made it impossible to only  share a subset of the music."
+msgstr ""
+
+#: ../../admin/0.17.rst:29
+msgid "Users needed a specific permissions from instance owners to upload audio content"
+msgstr ""
+
+#: ../../admin/0.17.rst:29
+msgid "Users can upload music to their own libraries without any specific permissions"
+msgstr ""
+
+#: ../../admin/0.17.rst:29
+msgid "This change makes it easier for new users to start using Funkwhale, and for creators to share their content on the network."
+msgstr ""
+
+#: ../../admin/0.17.rst:31
+msgid "Users with permissions can upload as much content as they want in the instance library"
+msgstr ""
+
+#: ../../admin/0.17.rst:31
+msgid "Users have a storage quota and cannot exceed that storage"
+msgstr ""
+
+#: ../../admin/0.17.rst:31
+msgid "This change gives visibiliy to instance owners about their resource usage. If you host 100 users with a 1Gb quota, you know that your Funkwhale instance will not store more than 100Gb of music files."
+msgstr ""
+
+#: ../../admin/0.17.rst:33
+msgid "N/A"
+msgstr ""
+
+#: ../../admin/0.17.rst:33
+msgid "Users can upload private content or share content with only specific users"
+msgstr ""
+
+#: ../../admin/0.17.rst:33
+msgid "This is a new feature, and we think it will enable users to upload their own music libraries to their instance, without breaking the law or putting their admins in trouble, since their media will remain private."
+msgstr ""
+
+#: ../../admin/0.17.rst:35
+msgid "Youtube Import"
+msgstr ""
+
+#: ../../admin/0.17.rst:35
+#: ../../admin/0.17.rst:37
+msgid "This feature is removed"
+msgstr ""
+
+#: ../../admin/0.17.rst:35
+msgid "This feature posed copyright issues and impacted the credibility of the project, so we removed it."
+msgstr ""
+
+#: ../../admin/0.17.rst:37
+msgid "Music requests"
+msgstr ""
+
+#: ../../admin/0.17.rst:37
+msgid "Since all users can now upload content without specific permissions, we think this feature is less-likely to be useful in its current state."
+msgstr ""
+
+#: ../../admin/0.17.rst:41
+msgid "From a shared, instance-wide library to users libraries"
+msgstr ""
+
+#: ../../admin/0.17.rst:43
+msgid "As you can see, there is a big switch: in earlier versions, each instance had one big library, that was available to all its users. This model don't scale well (especially if you put federation on top of that), because it's an all-or-nothing choice if you want to share it."
+msgstr ""
+
+#: ../../admin/0.17.rst:47
+msgid "Starting from version 0.17, each user will be able to create personal libraries and upload content in those, up to a configurable quota."
+msgstr ""
+
+#: ../../admin/0.17.rst:50
+msgid "Those libraries can have one of the following visibility level:"
+msgstr ""
+
+#: ../../admin/0.17.rst:52
+msgid "**Private**: only the owner of the library can access its content"
+msgstr ""
+
+#: ../../admin/0.17.rst:53
+msgid "**Instance**: users from the same instance can access the library content"
+msgstr ""
+
+#: ../../admin/0.17.rst:54
+msgid "**Public**: everyone (including other instances) can access the library content"
+msgstr ""
+
+#: ../../admin/0.17.rst:56
+msgid "Regardless of this visibility level, library owners can also share them manually with other users, both from the same instance or from the federation."
+msgstr ""
+
+#: ../../admin/0.17.rst:59
+msgid "We think this change will have a really positive impact:"
+msgstr ""
+
+#: ../../admin/0.17.rst:61
+msgid "Admins should be more inclined to open their instance to strangers, because copyrighted media can be upload and shared privately"
+msgstr ""
+
+#: ../../admin/0.17.rst:63
+msgid "Creators should have a better experience when joining the network, because they can now upload their own content and share it over the federation without any admin intervention"
+msgstr ""
+
+#: ../../admin/0.17.rst:65
+msgid "The federation should grow faster, because user libraries can contain copyrighted content and be shared, without putting the admins at risk"
+msgstr ""
+
+#: ../../admin/0.17.rst:69
+msgid "Accessing music"
+msgstr ""
+
+#: ../../admin/0.17.rst:71
+msgid "From an end-user perspective, you will be able to browse any artist or album or track that is known by your instance, but you'll only be able to listen to content that match one of those criteria:"
+msgstr ""
+
+#: ../../admin/0.17.rst:75
+msgid "The content is available is one of your libraries"
+msgstr ""
+
+#: ../../admin/0.17.rst:76
+msgid "The content is available in a public library"
+msgstr ""
+
+#: ../../admin/0.17.rst:77
+msgid "The content is available in one library from your instance that has a visibility level set to \"instance\""
+msgstr ""
+
+#: ../../admin/0.17.rst:78
+msgid "The content is available in one of the libraries you follow"
+msgstr ""
+
+#: ../../admin/0.17.rst:80
+msgid "Following someone else's library is a four step process:"
+msgstr ""
+
+#: ../../admin/0.17.rst:82
+msgid "Get the library link from its owner"
+msgstr ""
+
+#: ../../admin/0.17.rst:83
+msgid "Use this link on your instance to follow the library"
+msgstr ""
+
+#: ../../admin/0.17.rst:84
+msgid "Wait until your follow request is approved by the library owner"
+msgstr ""
+
+#: ../../admin/0.17.rst:85
+msgid "If this library is unknown on your instance, it will be scanned to import its content, which may take a few minutes"
+msgstr ""
+
+#: ../../admin/0.17.rst:87
+msgid "Libraries owner can revoke follows at any time, which will effectively prevent the ancient follower from accessing the library content."
+msgstr ""
+
+#: ../../admin/0.17.rst:91
+msgid "A brand new federation"
+msgstr ""
+
+#: ../../admin/0.17.rst:93
+msgid "This is more \"under the hood\" work, but the whole federation/ActivityPub logic was rewritten for this release. This new implementation is more spec compliant and should scale better."
+msgstr ""
+
+#: ../../admin/0.17.rst:97
+msgid "The following activities are propagated over federation:"
+msgstr ""
+
+#: ../../admin/0.17.rst:99
+msgid "Library follow creation, accept and reject"
+msgstr ""
+
+#: ../../admin/0.17.rst:100
+msgid "Audio creation and deletion"
+msgstr ""
+
+#: ../../admin/0.17.rst:101
+msgid "Library deletion"
+msgstr ""
+
+#: ../../admin/0.17.rst:104
+msgid "A better import UI"
+msgstr ""
+
+#: ../../admin/0.17.rst:106
+msgid "This version includes a completely new import UI which should make file uploading less annoying. In particular, the UI updates in real-time and has a better error reporting."
+msgstr ""
+
+#: ../../admin/0.17.rst:111
+msgid "A better import engine"
+msgstr ""
+
+#: ../../admin/0.17.rst:113
+msgid "Funkwhale is known for its quircks during music import. Missing covers, split albums, bad management of tracks with multiple artists, missing data for files imported over federation, bad performance, discrepancies between the user-provided tags and what is actually stored in the database..."
+msgstr ""
+
+#: ../../admin/0.17.rst:118
+msgid "This should be greatly improved now, as the whole import logic was rewritten from scratch."
+msgstr ""
+
+#: ../../admin/0.17.rst:121
+msgid "Import is done completely offline and no longer calls the MusicBrainz API, except to retrieve covers if those are not embedded in the imported files. MusicBrainz references are still stored in the database, but we rely solely on the tags from the audio file now."
+msgstr ""
+
+#: ../../admin/0.17.rst:126
+msgid "This has two positive consequences:"
+msgstr ""
+
+#: ../../admin/0.17.rst:128
+msgid "Improved performance for both small and big imports (possibly by a factor of 10)"
+msgstr ""
+
+#: ../../admin/0.17.rst:129
+msgid "More reliable import result: if your file is tagged in a specific way, we will only use tags for the import."
+msgstr ""
+
+#: ../../admin/0.17.rst:132
+msgid "Imports from federation, command-line and UI/API all use the same code, which should greatly reduce the bugs/discrepencies."
+msgstr ""
+
+#: ../../admin/0.17.rst:135
+msgid "Finally, the import engine now understands the difference between a track artist and an album artist, which should put an end to the album splitting issues for tracks that had a different artist than the album artist."
+msgstr ""
+
+#: ../../admin/0.17.rst:140
+msgid "What will break"
+msgstr ""
+
+#: ../../admin/0.17.rst:142
+msgid "If you've read until here, you can probably understand that all of these changes comes at a cost: version 0.17 contains breaking changes, removed features and other changes."
+msgstr ""
+
+#: ../../admin/0.17.rst:146
+msgid "The following features were removed:"
+msgstr ""
+
+#: ../../admin/0.17.rst:148
+msgid "YouTube imports: for copyright reasons, keeping this in the core was not possible"
+msgstr ""
+
+#: ../../admin/0.17.rst:149
+msgid "Music requests: those are now less useful since anyone can upload content"
+msgstr ""
+
+#: ../../admin/0.17.rst:151
+msgid "Also, the current federation will break, as it's absolutely not compatible with what we've built in version 0.17, and maintaining compatibility was simply not possible."
+msgstr ""
+
+#: ../../admin/0.17.rst:154
+msgid "Apart from that, other features should work the same way as they did before."
+msgstr ""
+
+#: ../../admin/0.17.rst:157
+msgid "Migration path"
+msgstr ""
+
+#: ../../admin/0.17.rst:161
+msgid "This migration is huge. Do a backup. Please. The database, and the music files. Please."
+msgstr ""
+
+#: ../../admin/0.17.rst:164
+msgid "I'm not kidding."
+msgstr ""
+
+#: ../../admin/0.17.rst:167
+msgid "Migration will be similar to previous ones, with an additional script to run that will take care of updating existing rows in the database. Especially, this script will be responsible to create a library for each registered user, and to bind content imported by each one to this library."
+msgstr ""
+
+#: ../../admin/0.17.rst:172
+msgid "Libraries created this way will have a different visibility level depending of your instance configuration:"
+msgstr ""
+
+#: ../../admin/0.17.rst:174
+msgid "If your instance requires authentication to access the API / listen to music, libraries will be marked with \"instance\"  visibility. As a result, all users from the instance will still be able to listen to all the music of the instance after the migration"
+msgstr ""
+
+#: ../../admin/0.17.rst:177
+msgid "If your instance does not require authentication to access the API / listen to music, libraries will be completely public, allowing anyone to access the content (including federation)"
+msgstr ""
+
+#: ../../admin/0.17.rst:180
+msgid "This script will also contain other database-related operations, but the impact will remain invisible."
+msgstr ""
+
+#: ../../admin/0.17.rst:185
+msgid "Upgrade instructions"
+msgstr ""
+
+#: ../../admin/0.17.rst:187
+msgid "Follow instructions from https://docs.funkwhale.audio/upgrading/index.html, then run the migrations script."
+msgstr ""
+
+#: ../../admin/0.17.rst:190
+msgid "On docker-setups::"
+msgstr ""
+
+#: ../../admin/0.17.rst:196
+msgid "On non docker-setups::"
+msgstr ""
+
+#: ../../admin/0.17.rst:202
+msgid "If the scripts complete without errors, your instance should be updated and ready to use :)"
+msgstr ""
+
+#: ../../admin/0.17.rst:206
+msgid "If you use nginx, ensure your funkwhale_proxy.conf file does not contain this:"
+msgstr ""
+
+#: ../../admin/0.17.rst:208
+msgid "proxy_set_header X-Forwarded-Host $host:$server_port;"
+msgstr ""
+
+#: ../../admin/0.17.rst:210
+msgid "If you have this line present, replace it with:"
+msgstr ""
+
+#: ../../admin/0.17.rst:212
+msgid "proxy_set_header X-Forwarded-Host $host;"
+msgstr ""
+
+#: ../../admin/0.17.rst:214
+msgid "And reload your nginx server."
+msgstr ""

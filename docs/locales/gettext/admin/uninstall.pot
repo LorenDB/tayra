@@ -1,0 +1,98 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../admin/uninstall.rst:2
+msgid "Uninstall Funkwhale"
+msgstr ""
+
+#: ../../admin/uninstall.rst:4
+msgid "The following instructions helps you remove Funkwhale from your server, for instance after migrating to another server, or if you do not want to use Funkwhale anymore."
+msgstr ""
+
+#: ../../admin/uninstall.rst:8
+msgid "The following instructions cannot be undone and might result in loss of data. If necessary, please make a backup of your server following the :doc:`backup instructions<backup>`."
+msgstr ""
+
+#: ../../admin/uninstall.rst:10
+msgid "Especially, it must be noted that:"
+msgstr ""
+
+#: ../../admin/uninstall.rst:12
+#: ../../admin/uninstall.rst:81
+msgid "Remote content hosted on an S3 or S3-compatible server will not be removed."
+msgstr ""
+
+#: ../../admin/uninstall.rst:13
+msgid "In place imports will not be removed, provided they are located outside ``/srv/funkwhale/``"
+msgstr ""
+
+#: ../../admin/uninstall.rst:17
+msgid "These instructions apply only for the manual installation on Debian or Arch Linux. It matches the default setup."
+msgstr ""
+
+#: ../../admin/uninstall.rst:19
+msgid "First, stop the all funkwhale related services:"
+msgstr ""
+
+#: ../../admin/uninstall.rst:25
+msgid "Remove the reverse proxy configuration data and reload the reverse proxy."
+msgstr ""
+
+#: ../../admin/uninstall.rst:27
+msgid "If you are using nginx:"
+msgstr ""
+
+#: ../../admin/uninstall.rst:37
+msgid "If you are using Apache2:"
+msgstr ""
+
+#: ../../admin/uninstall.rst:46
+msgid "Remove the systemd services:"
+msgstr ""
+
+#: ../../admin/uninstall.rst:62
+msgid "Then, remove the database:"
+msgstr ""
+
+#: ../../admin/uninstall.rst:69
+msgid "Finally, remove the user ``funkwhale`` and all funkwhale related data, including the server and the data:"
+msgstr ""
+
+#: ../../admin/uninstall.rst:77
+msgid "The last command will remove ``/srv/funkwhale/``. On the default setup, this directory contains all user data. Please proceed cautiously!"
+msgstr ""
+
+#: ../../admin/uninstall.rst:79
+msgid "However, it must be noted that:"
+msgstr ""
+
+#: ../../admin/uninstall.rst:82
+msgid "In place imports will not be removed, provided they are not located in the directory ``/srv/funkwhale/``"
+msgstr ""
+
+#: ../../admin/uninstall.rst:86
+msgid "If relevant, you might also want to:"
+msgstr ""
+
+#: ../../admin/uninstall.rst:88
+msgid "remove the SSL certificates;"
+msgstr ""
+
+#: ../../admin/uninstall.rst:89
+msgid "remove the corresponding DNS entries."
+msgstr ""

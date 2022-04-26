@@ -1,0 +1,61 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../admin/optimization.rst:2
+msgid "Optimizing your Funkwhale instance"
+msgstr ""
+
+#: ../../admin/optimization.rst:4
+msgid "Depending on your requirements, you may want to reduce as much as possible Funkwhale's memory footprint."
+msgstr ""
+
+#: ../../admin/optimization.rst:8
+msgid "Reduce workers concurrency"
+msgstr ""
+
+#: ../../admin/optimization.rst:10
+msgid "Asynchronous tasks are handled by a celery worker, which will by default spawn a worker process per CPU available. This can lead to a higher memory usage."
+msgstr ""
+
+#: ../../admin/optimization.rst:14
+msgid "You can control this behavior using the ``--concurrency`` flag. For instance, setting ``--concurrency=1`` will spawn only one worker."
+msgstr ""
+
+#: ../../admin/optimization.rst:17
+msgid "This flag should be appended after the ``celery -A funkwhale_api.taskapp worker`` command in your :file:`docker-compose.yml` file if your using Docker, or in your :file:`/etc/systemd/system/funkwhale-worker.service` otherwise."
+msgstr ""
+
+#: ../../admin/optimization.rst:23
+msgid "Reducing concurrency comes at a cost: asynchronous tasks will be processed more slowly. However, on small instances, this should not be an issue."
+msgstr ""
+
+#: ../../admin/optimization.rst:28
+msgid "Switch from prefork to solo pool"
+msgstr ""
+
+#: ../../admin/optimization.rst:30
+msgid "Using a different pool implementation for Celery tasks may also help."
+msgstr ""
+
+#: ../../admin/optimization.rst:32
+msgid "Using the ``solo`` pool type should reduce your memory consumption. You can control this behavior using the ``--pool=solo`` flag."
+msgstr ""
+
+#: ../../admin/optimization.rst:35
+msgid "This flag should be appended after the ``celery -A funkwhale_api.taskapp worker`` command in your :file:`docker-compose.yml` file if you're using Docker, or in your :file:`/etc/systemd/system/funkwhale-worker.service` otherwise."
+msgstr ""

@@ -1,0 +1,158 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../developers/architecture.rst:2
+msgid "Architecture"
+msgstr ""
+
+#: ../../developers/architecture.rst:4
+msgid "Funkwhale is made of several components, each of them fulfilling a specific mission:"
+msgstr ""
+
+#: ../../developers/architecture.rst:33
+msgid "This graph may looks a bit scary, so we'll detail the role of each component below."
+msgstr ""
+
+#: ../../developers/architecture.rst:36
+msgid "The user"
+msgstr ""
+
+#: ../../developers/architecture.rst:38
+msgid "Funkwhale users can interact with your instance using:"
+msgstr ""
+
+#: ../../developers/architecture.rst:40
+msgid "The official web interface"
+msgstr ""
+
+#: ../../developers/architecture.rst:41
+#: ../../developers/architecture.rst:51
+msgid "Third-party apps"
+msgstr ""
+
+#: ../../developers/architecture.rst:44
+msgid "The web interface"
+msgstr ""
+
+#: ../../developers/architecture.rst:46
+msgid "This refers to Funkwhale's built-in web interface, which is a Single Page application written in Vue JS. This application will interact with Funkwhale's API to retrieve or persist data."
+msgstr ""
+
+#: ../../developers/architecture.rst:53
+msgid "Since Funkwhale implements a subset of the Subsonic API, it's compatible with existing :doc:`apps <../users/apps>` such as DSub, Ultrasonic or Clementine that support this API. Those apps can be used as a replacement or in conjunction of the web interface, but the underlying data is the same."
+msgstr ""
+
+#: ../../developers/architecture.rst:58
+msgid "The reverse proxy"
+msgstr ""
+
+#: ../../developers/architecture.rst:60
+msgid "Funkwhale's API server should never be exposed directly to the internet, as we require a reverse proxy (Apache or Nginx) for performance and security reasons. The reverse proxy will receive client HTTP or HTTPS requests, and:"
+msgstr ""
+
+#: ../../developers/architecture.rst:64
+msgid "Proxy them to the API server"
+msgstr ""
+
+#: ../../developers/architecture.rst:65
+msgid "Serve requested static files (audio files, stylesheets, javascript, fonts...)"
+msgstr ""
+
+#: ../../developers/architecture.rst:68
+msgid "The API server"
+msgstr ""
+
+#: ../../developers/architecture.rst:70
+msgid "Funkwhale's API server is the central piece of the project. This component is responsible for answering and processing user requests, manipulate data from the database, send long-running tasks to workers, etc."
+msgstr ""
+
+#: ../../developers/architecture.rst:74
+msgid "It's a Python/Django application."
+msgstr ""
+
+#: ../../developers/architecture.rst:77
+msgid "The database"
+msgstr ""
+
+#: ../../developers/architecture.rst:79
+msgid "Most of the data such as user accounts, favorites, music metadata or playlist is stored in a PostgreSQL database."
+msgstr ""
+
+#: ../../developers/architecture.rst:83
+msgid "The cache/message queue"
+msgstr ""
+
+#: ../../developers/architecture.rst:85
+msgid "Fetching data from the database is sometimes slow or resource hungry. To reduce the load, Redis act as a cache for data that is considerably faster than a database."
+msgstr ""
+
+#: ../../developers/architecture.rst:88
+msgid "It is also a message queue that will deliver tasks to the worker."
+msgstr ""
+
+#: ../../developers/architecture.rst:91
+msgid "The worker"
+msgstr ""
+
+#: ../../developers/architecture.rst:93
+msgid "Some operations are too long to live in the HTTP request/response cycle. Typically, importing a bunch of uploaded tracks could take a minute or two."
+msgstr ""
+
+#: ../../developers/architecture.rst:96
+msgid "To keep the API response time as fast as possible, we offload long-running tasks to a background process, also known as the Celery worker."
+msgstr ""
+
+#: ../../developers/architecture.rst:99
+msgid "Typical tasks include:"
+msgstr ""
+
+#: ../../developers/architecture.rst:101
+msgid "Handling music imports"
+msgstr ""
+
+#: ../../developers/architecture.rst:102
+msgid "Handling federation/ActivityPub messages"
+msgstr ""
+
+#: ../../developers/architecture.rst:103
+msgid "Scanning other instances libraries"
+msgstr ""
+
+#: ../../developers/architecture.rst:105
+msgid "This worker is also able to retry failed tasks, or spawn automatically more process when the number of received tasks increase."
+msgstr ""
+
+#: ../../developers/architecture.rst:109
+msgid "The scheduler"
+msgstr ""
+
+#: ../../developers/architecture.rst:111
+msgid "Some long-running tasks are not triggered by user or external input, but on a recurring basis instead. The scheduler is responsible for triggering those tasks and put the corresponding messages in the message queue so the worker can process them."
+msgstr ""
+
+#: ../../developers/architecture.rst:115
+msgid "Recurring tasks include:"
+msgstr ""
+
+#: ../../developers/architecture.rst:117
+msgid "Cache cleaning"
+msgstr ""
+
+#: ../../developers/architecture.rst:118
+msgid "Music metadata refreshing"
+msgstr ""

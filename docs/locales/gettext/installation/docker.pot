@@ -1,0 +1,204 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../installation/docker.rst:2
+msgid "Docker installation"
+msgstr ""
+
+#: ../../installation/docker.rst:4
+msgid "Docker is the easiest way to get a Funkwhale instance up and running."
+msgstr ""
+
+#: ../../installation/docker.rst:6
+msgid "We support two types of Docker deployments:"
+msgstr ""
+
+#: ../../installation/docker.rst:8
+msgid ":ref:`Mono-container <docker-mono-container>`: all processes live in the same container (database, nginx, redis, etc.). It's easier to deploy and to integrate with container management systems like Portainer. However, it's not possible to scale this type of deployment on multiple servers."
+msgstr ""
+
+#: ../../installation/docker.rst:9
+msgid ":ref:`Multi-container <docker-multi-container>`: each process lives in a dedicated container. This setup is more involved but also more flexible and scalable."
+msgstr ""
+
+#: ../../installation/docker.rst:13
+#: ../../installation/docker.rst:23
+msgid "The All-In-One-Container or Mono-Container installation is deprecated, don't use it for new installations. For more information, visit our blog: https://blog.funkwhale.audio/deprecation-all-in-one-container.html"
+msgstr ""
+
+#: ../../installation/docker.rst:19
+msgid "Mono-container installation"
+msgstr ""
+
+#: ../../installation/docker.rst:28
+msgid "This installation method was originally contributed by `@thetarkus <https://github.com/thetarkus>`_"
+msgstr ""
+
+#: ../../installation/docker.rst:30
+msgid "These are the installation steps:"
+msgstr ""
+
+#: ../../installation/docker.rst:32
+#: ../../installation/docker.rst:39
+msgid "Install docker"
+msgstr ""
+
+#: ../../installation/docker.rst:33
+#: ../../installation/docker.rst:44
+msgid "Create ``funkwhale`` user"
+msgstr ""
+
+#: ../../installation/docker.rst:34
+#: ../../installation/docker.rst:60
+msgid "Create ``.env`` file"
+msgstr ""
+
+#: ../../installation/docker.rst:35
+#: ../../installation/docker.rst:86
+msgid "Create ``docker-compose.yml`` file"
+msgstr ""
+
+#: ../../installation/docker.rst:36
+#: ../../installation/docker.rst:117
+msgid "Start Funkwhale service"
+msgstr ""
+
+#: ../../installation/docker.rst:41
+msgid "Ensure you have `Docker <https://docs.docker.com/engine/installation/>`_ and `docker-compose <https://docs.docker.com/compose/install/>`_ installed."
+msgstr ""
+
+#: ../../installation/docker.rst:46
+msgid "Create the user and the directory:"
+msgstr ""
+
+#: ../../installation/docker.rst:53
+msgid "Log in as the newly created user from now on:"
+msgstr ""
+
+#: ../../installation/docker.rst:62
+msgid "Create a ``.env`` file to store a few important configuration options:"
+msgstr ""
+
+#: ../../installation/docker.rst:88
+msgid "Create a ``docker-compose.yml`` file to set up the containers:"
+msgstr ""
+
+#: ../../installation/docker.rst:112
+msgid "The version can be changed (after ``funkwhale/all-in-one:``), `select the version <https://hub.docker.com/r/funkwhale/all-in-one/tags>`_ you want to deploy."
+msgstr ""
+
+#: ../../installation/docker.rst:113
+msgid "``PUID`` and ``PGID`` are optional but useful to prevent permission issues with docker volumes"
+msgstr ""
+
+#: ../../installation/docker.rst:114
+msgid "``/path/to/your/music/dir`` should point to a path on your host where music you would like to import is located. You can safely remove the volume if you don't want to import music that way."
+msgstr ""
+
+#: ../../installation/docker.rst:119
+msgid "Start the container:"
+msgstr ""
+
+#: ../../installation/docker.rst:125
+msgid "Your container should start in the background, and your instance be available at ``yourip:5000`` shortly."
+msgstr ""
+
+#: ../../installation/docker.rst:127
+msgid "You will need an admin account to login and manage your account, create one using the following command: ``docker exec -it funkwhale manage createsuperuser``"
+msgstr ""
+
+#: ../../installation/docker.rst:129
+msgid "Useful commands:"
+msgstr ""
+
+#: ../../installation/docker.rst:131
+msgid "You can start and stop your instance using ``docker-compose start`` and ``docker-compose stop``, respectively"
+msgstr ""
+
+#: ../../installation/docker.rst:132
+msgid "You can examine the logs by running ``docker logs -f --tail=50 funkwhale``"
+msgstr ""
+
+#: ../../installation/docker.rst:133
+msgid "To have a better idea of the resource usage of your instance (CPU, memory), run ``docker stats funkwhale``"
+msgstr ""
+
+#: ../../installation/docker.rst:135
+#: ../../installation/docker.rst:218
+msgid "Now, you just need to configure your :ref:`reverse-proxy <reverse-proxy-setup>`. Don't worry, it's quite easy."
+msgstr ""
+
+#: ../../installation/docker.rst:140
+msgid "Multi-container installation"
+msgstr ""
+
+#: ../../installation/docker.rst:142
+msgid "First, ensure you have `Docker <https://docs.docker.com/engine/installation/>`_ and `docker-compose <https://docs.docker.com/compose/install/>`_ installed."
+msgstr ""
+
+#: ../../installation/docker.rst:144
+msgid "Export the `version you want <https://hub.docker.com/r/funkwhale/all-in-one/tags>`_ to deploy (e.g., ``0.21``):"
+msgstr ""
+
+#: ../../installation/docker.rst:150
+msgid "Download the sample docker-compose file:"
+msgstr ""
+
+#: ../../installation/docker.rst:161
+msgid "At this point, the architecture of ``/srv/funkwhale``  should look like that:"
+msgstr ""
+
+#: ../../installation/docker.rst:171
+msgid "Create your env file:"
+msgstr ""
+
+#: ../../installation/docker.rst:181
+msgid "Ensure to edit it to match your needs (this file is heavily commented), in particular ``DJANGO_SECRET_KEY`` and ``FUNKWHALE_HOSTNAME``. You should take a look at the `configuration reference <https://docs.funkwhale.audio/configuration.html#configuration-reference>`_ for more detailed information regarding each setting."
+msgstr ""
+
+#: ../../installation/docker.rst:184
+msgid "Then, you should be able to pull the required images:"
+msgstr ""
+
+#: ../../installation/docker.rst:190
+msgid "Run the database container and the initial migrations:"
+msgstr ""
+
+#: ../../installation/docker.rst:199
+msgid "You may sometimes get the following warning while applying migrations::"
+msgstr ""
+
+#: ../../installation/docker.rst:203
+msgid "This is a warning, not an error, and it can be safely ignored. Never run the ``makemigrations`` command yourself."
+msgstr ""
+
+#: ../../installation/docker.rst:206
+msgid "Create your admin user:"
+msgstr ""
+
+#: ../../installation/docker.rst:212
+msgid "Then launch the whole thing:"
+msgstr ""
+
+#: ../../installation/docker.rst:221
+msgid "About music acquisition"
+msgstr ""
+
+#: ../../installation/docker.rst:223
+msgid "If you want to :doc:`import music located on the server <../admin/importing-music>`, you can put it in the ``data/music`` directory and it will become readable by the importer."
+msgstr ""

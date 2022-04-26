@@ -1,0 +1,149 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../moderator_documentation/reports/handle_content.md:1
+msgid "Handle reported content"
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:4
+msgid "Deleting reported objects is irreversible. This action deletes the associated files from the pod."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:7
+msgid "You can handle content reports from the {guilabel}`Reports` page or from the reported object's moderation page. You only need to open the moderation page to edit objects."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:10
+msgid "{guilabel}`Moderation` – provides access to the administration and moderation menus."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:11
+msgid "{guilabel}`Library` – enables the moderator to delete objects."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:18
+msgid "Handle reports from the Reports page"
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:20
+msgid "To handle a content report from the {guilabel}`Reports` page:"
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:0
+#: ../../moderator_documentation/reports/handle_content.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:24
+#: ../../moderator_documentation/reports/handle_content.md:36
+#: ../../moderator_documentation/reports/handle_content.md:54
+#: ../../moderator_documentation/reports/handle_content.md:70
+msgid "Log in to your {term}`pod`."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:25
+#: ../../moderator_documentation/reports/handle_content.md:55
+msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:26
+#: ../../moderator_documentation/reports/handle_content.md:38
+#: ../../moderator_documentation/reports/handle_content.md:56
+#: ../../moderator_documentation/reports/handle_content.md:72
+msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:27
+#: ../../moderator_documentation/reports/handle_content.md:39
+#: ../../moderator_documentation/reports/handle_content.md:57
+#: ../../moderator_documentation/reports/handle_content.md:73
+msgid "[Search for the report](search_reports.md)."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:28
+#: ../../moderator_documentation/reports/handle_content.md:40
+msgid "Select an action from the {guilabel}`Actions` section:"
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:29
+#: ../../moderator_documentation/reports/handle_content.md:41
+msgid "{guilabel}`Resolve` – resolve the report with no further action."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:30
+#: ../../moderator_documentation/reports/handle_content.md:42
+msgid "{guilabel}`Delete reported object` – delete the object associated with the report. If you delete an artist or album, this deletes all files associated with the object."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:0
+#: ../../moderator_documentation/reports/handle_content.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:37
+#: ../../moderator_documentation/reports/handle_content.md:71
+msgid "Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:46
+#: ../../moderator_documentation/reports/handle_content.md:84
+msgid "Resolving the report assigns it to you so other moderators know who handled the report. Add [internal notes](internal_notes.md) to keep a record of your changes."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:48
+msgid "Edit content in the moderation page"
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:50
+msgid "If you want to edit an object to change its metadata:"
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:58
+#: ../../moderator_documentation/reports/handle_content.md:74
+msgid "Select {guilabel}`Open in moderation interface` in the {guilabel}`Reported object` section. The object's moderation page opens."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:59
+#: ../../moderator_documentation/reports/handle_content.md:75
+msgid "Select {guilabel}`Edit`. The {guilabel}`Edit` page opens."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:60
+#: ../../moderator_documentation/reports/handle_content.md:76
+msgid "Edit the details on this page. Leave a {guilabel}`Summary` of your changes for reference."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:61
+#: ../../moderator_documentation/reports/handle_content.md:77
+msgid "Select {guilabel}`Submit and apply edit`."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:62
+#: ../../moderator_documentation/reports/handle_content.md:78
+msgid "Return to the {guilabel}`Reports` page."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:63
+#: ../../moderator_documentation/reports/handle_content.md:79
+msgid "Search for the report."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:64
+#: ../../moderator_documentation/reports/handle_content.md:80
+msgid "Select {guilabel}`Resolve` in the {guilabel}`Actions` section."
+msgstr ""

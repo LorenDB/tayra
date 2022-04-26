@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../installation/non_amd64_architectures.rst:2
+msgid "Running Funkwhale on non amd64 architectures"
+msgstr ""
+
+#: ../../installation/non_amd64_architectures.rst:4
+msgid "Funkwhale should be runnable on any architecture assuming Funkwhale installation dependencies are satisfied."
+msgstr ""
+
+#: ../../installation/non_amd64_architectures.rst:6
+msgid "On non-docker deployments (e.g. when deploying on debian), this should be completely transparent."
+msgstr ""
+
+#: ../../installation/non_amd64_architectures.rst:8
+msgid "On docker deployments, you will need to build Funkwhale's image yourself, because we don't provide pre-built multi-arch images on the Docker Hub yet. The build process itself only requires git, Docker and is described below."
+msgstr ""
+
+#: ../../installation/non_amd64_architectures.rst:13
+msgid "Building the mono-process Docker image (funkwhale/funkwhale)"
+msgstr ""
+
+#: ../../installation/non_amd64_architectures.rst:15
+msgid "This image is intended to be used in conjunction with our :ref:`Multi-container installation guide <docker-multi-container>`."
+msgstr ""
+
+#: ../../installation/non_amd64_architectures.rst:23
+#: ../../installation/non_amd64_architectures.rst:61
+msgid "Replace by develop for building a development branch image."
+msgstr ""
+
+#: ../../installation/non_amd64_architectures.rst:44
+msgid "Building the mono-container Docker image (funkwhale/all-in-one)"
+msgstr ""
+
+#: ../../installation/non_amd64_architectures.rst:48
+msgid "The All-In-One-Container or Mono-Container installation is deprecated, don't use it for new installations. For more information, visit our blog: https://blog.funkwhale.audio/deprecation-all-in-one-container.html"
+msgstr ""
+
+#: ../../installation/non_amd64_architectures.rst:51
+msgid "This image is intended to be used in conjunction with our :ref:`Mono-container installation guide <docker-mono-container>`. guide."
+msgstr ""

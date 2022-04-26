@@ -1,0 +1,125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../TRANSLATORS.rst:2
+msgid "Translating Funkwhale"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:4
+msgid "A step-by-step, beginner friendly guide is available at https://contribute.funkwhale.audio/guides/translate/"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:6
+msgid "Thank you for reading this! If you want to help translate Funkwhale, you found the proper place :)"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:9
+msgid "Translation is done via our own Weblate instance at https://translate.funkwhale.audio/projects/funkwhale/front/."
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:11
+msgid "You can signup/login using your Gitlab account (from https://dev.funkwhale.audio)."
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:14
+msgid "Translation workflow"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:16
+msgid "Once you're logged-in on the Weblate instance, you can suggest translations. Your suggestions will then be reviewer by the project maintainer or other translators to ensure consistency."
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:20
+msgid "Guidelines"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:22
+msgid "Respecting those guidelines is mandatory if you want your translation to be included:"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:24
+msgid "Use gender-neutral language and wording"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:27
+msgid "Submitting a new language"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:29
+msgid "Pull the latest version of ``develop``"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:30
+msgid "Create a new branch, e.g ``git checkout -b translations-new-fr-ca``"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:31
+msgid "Add your new language code and name in ``front/src/locales.js``. Use the native language name, as it is what appears in the UI selector."
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:32
+msgid "Create the ``po`` file from template:"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:40
+msgid "Then commit your changes, push, and submit a pull request on the ``develop`` branch"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:43
+msgid "Requesting a new language"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:45
+msgid "If you cannot submit a new language yourself, you can request it by opening an issue here: https://dev.funkwhale.audio/funkwhale/funkwhale/issues"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:49
+msgid "Extracting messages from source"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:51
+msgid "We offer a script to update existing ``po`` and ``pot`` files with new translations from the source code. This action should be run regularly, and in particular before lots of translation work is expected (e.g a few weeks before a new release), or when the UI code changes a lot. Otherwise, translators end up translating some obsolete messages, or not translationg new messages."
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:57
+msgid "`Lock the translations on weblate <https://translate.funkwhale.audio/projects/funkwhale/front/#repository>`_ (``Lock`` button in the sidebar). This will prevent translators from working, and help prevent potential conflicts in the source code"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:58
+msgid "`Commit and push changes from weblate <https://translate.funkwhale.audio/projects/funkwhale/front/#repository>`_ (``Commit`` and ``Push`` buttons in the sidebar)"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:59
+msgid "Pull ``develop`` in your local git repository to ensure you have the latest version of the translations"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:60
+msgid "Create a dedicated branch with ``git checkout -b translations-integration``"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:61
+msgid "Extract the translations with ``cd front && ./scripts/i18n-extract.sh``. This will update all ``po`` files as necessary"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:62
+msgid "Review, commit and push the changes, then open a merge request on the ``develop`` branch"
+msgstr ""
+
+#: ../../../TRANSLATORS.rst:63
+msgid "When the MR is merged, `Unlock the translations on weblate <https://translate.funkwhale.audio/projects/funkwhale/front/#repository>`_ (``Unlock`` button in the sidebar)."
+msgstr ""

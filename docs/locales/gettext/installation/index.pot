@@ -1,0 +1,397 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../installation/index.rst:2
+msgid "Installation"
+msgstr ""
+
+#: ../../installation/index.rst:5
+msgid "Requirements"
+msgstr ""
+
+#: ../../installation/index.rst:7
+msgid "Regardless of your chosen installation method, the following is required to successfully deploy Funkwhale:"
+msgstr ""
+
+#: ../../installation/index.rst:10
+msgid "**A dedicated domain or subdomain**: it is not possible to deploy Funkwhale on a subdirectory of an existing domain."
+msgstr ""
+
+#: ../../installation/index.rst:11
+msgid "**Access to ports 80 and/or 443**: if you cannot serve the Funkwhale web app and API on these ports, federation will not work"
+msgstr ""
+
+#: ../../installation/index.rst:15
+msgid "Because of the federated nature of Funkwhale, **it is strongly recommended not to change the Funkwhale domain after initial deployment**, as it is likely to break your installation."
+msgstr ""
+
+#: ../../installation/index.rst:20
+msgid "Project architecture"
+msgstr ""
+
+#: ../../installation/index.rst:22
+msgid "The project relies on the following components and services to work:"
+msgstr ""
+
+#: ../../installation/index.rst:24
+msgid "A web application server (Python/Django/Gunicorn)"
+msgstr ""
+
+#: ../../installation/index.rst:25
+msgid "A PostgreSQL database to store application data"
+msgstr ""
+
+#: ../../installation/index.rst:26
+msgid "A redis server to store cache and tasks data"
+msgstr ""
+
+#: ../../installation/index.rst:27
+msgid "A celery worker to run asynchronous tasks (such as music import)"
+msgstr ""
+
+#: ../../installation/index.rst:28
+msgid "A celery scheduler to run recurrent tasks"
+msgstr ""
+
+#: ../../installation/index.rst:29
+msgid "A `ntp-synced clock <https://wiki.debian.org/NTP>`_ to ensure federation is working seamlessly"
+msgstr ""
+
+#: ../../installation/index.rst:33
+msgid "The synced clock is needed for federation purpose, to assess the validity of incoming requests."
+msgstr ""
+
+#: ../../installation/index.rst:37
+msgid "Hardware requirements"
+msgstr ""
+
+#: ../../installation/index.rst:39
+msgid "Funkwhale is not especially CPU hungry. On a dockerized instance with 2 CPUs and a few active users, the memory footprint is around 500Mb::"
+msgstr ""
+
+#: ../../installation/index.rst:50
+msgid "Some users have reported running Funkwhale on Raspberry Pis with a memory consumption of less than 350 MiB."
+msgstr ""
+
+#: ../../installation/index.rst:53
+msgid "Thus, Funkwhale should run fine on commodity hardware, small hosting boxes and Raspberry Pi. We lack real-world examples of such deployments, so don't hesitate do give us your feedback (either positive or negative)."
+msgstr ""
+
+#: ../../installation/index.rst:57
+msgid "Check out :doc:`../admin/optimization` for advice on how to tune your instance on small configurations."
+msgstr ""
+
+#: ../../installation/index.rst:61
+msgid "Software requirements"
+msgstr ""
+
+#: ../../installation/index.rst:63
+msgid "Software requirements will vary depending of your installation method. For Docker-based installations, the only requirement will be an Nginx reverse-proxy that will expose your instance to the outside world."
+msgstr ""
+
+#: ../../installation/index.rst:67
+msgid "If you plan to install your Funkwhale instance without Docker, most of the dependencies should be available in your distribution's repositories."
+msgstr ""
+
+#: ../../installation/index.rst:72
+msgid "Funkwhale works only with Python >= 3.5, as we need support for async/await. Older versions of Python are not supported."
+msgstr ""
+
+#: ../../installation/index.rst:76
+msgid "Available installation methods"
+msgstr ""
+
+#: ../../installation/index.rst:78
+msgid "Funkwhale can be installed using one of the following method:"
+msgstr ""
+
+#: ../../installation/index.rst:82
+msgid "The All-In-One-Container or Mono-Container installation is deprecated, don't use it for new installations. For more information, visit our blog: https://blog.funkwhale.audio/deprecation-all-in-one-container.html"
+msgstr ""
+
+#: ../../installation/index.rst:85
+msgid "Quick install, the most straight forward way to get Funkwhale;"
+msgstr ""
+
+#: ../../installation/index.rst:86
+msgid "Mono-container Docker installation;"
+msgstr ""
+
+#: ../../installation/index.rst:87
+msgid "Multi-container Docker installation;"
+msgstr ""
+
+#: ../../installation/index.rst:88
+msgid "Manual Debian and Arch Linux installation;"
+msgstr ""
+
+#: ../../installation/index.rst:89
+msgid "`Ansible role <https://dev.funkwhale.audio/funkwhale/ansible/>`_."
+msgstr ""
+
+#: ../../installation/index.rst:91
+msgid "Further, Funkwhale packages are available for the following platforms:"
+msgstr ""
+
+#: ../../installation/index.rst:93
+msgid "`YunoHost 3 <https://yunohost.org/>`_: https://github.com/YunoHost-Apps/funkwhale_ynh (kindly maintained by `@Jibec <https://github.com/Jibec>`_)"
+msgstr ""
+
+#: ../../installation/index.rst:94
+msgid "ArchLinux (as an AUR package): if you'd rather use a package, check out this alternative installation method on ArchLinux: https://wiki.archlinux.org/index.php/Funkwhale (package and wiki kindly maintained by getzee)"
+msgstr ""
+
+#: ../../installation/index.rst:95
+msgid "`NixOS <https://github.com/mmai/funkwhale-nixos>`_ (kindly maintained by @mmai)"
+msgstr ""
+
+#: ../../installation/index.rst:96
+msgid "`Helm chart <https://gitlab.com/ananace/charts/>`_ to install Funkwhale on Kubernetes (kindly maintained by `@ananace <https://gitlab.com/ananace>`_)"
+msgstr ""
+
+#: ../../installation/index.rst:97
+msgid "`HomelabOS <https://homelabos.com/docs/software/funkwhale/>`_"
+msgstr ""
+
+#: ../../installation/index.rst:100
+msgid "Quick install"
+msgstr ""
+
+#: ../../installation/index.rst:102
+msgid "To install the latest version of Funkwhale on a recent Debian or Ubuntu server, run::"
+msgstr ""
+
+#: ../../installation/index.rst:108
+msgid "This installation script will ask you a few questions, install the required dependencies and set up your instance."
+msgstr ""
+
+#: ../../installation/index.rst:111
+msgid "Additional info:"
+msgstr ""
+
+#: ../../installation/index.rst:113
+msgid "This script is based on our `Ansible role <https://dev.funkwhale.audio/funkwhale/ansible/>`_."
+msgstr ""
+
+#: ../../installation/index.rst:114
+msgid "By default, the script installs Nginx, PostgreSQL, Redis and Funkwhale itself but you can customize the installation procedure if you already have some of these services available on your machine"
+msgstr ""
+
+#: ../../installation/index.rst:115
+msgid "Edit your pod configuration in ``/srv/funkwhale/ansible/playbook.yml`` and apply new configuration with ``sudo /srv/funkwhale/ansible/reconfigure``"
+msgstr ""
+
+#: ../../installation/index.rst:116
+msgid "Upgrade is done using ``sh -c \"$(curl -sSL https://get.funkwhale.audio/upgrade.sh)\"``."
+msgstr ""
+
+#: ../../installation/index.rst:120
+msgid "Alternative installation methods"
+msgstr ""
+
+#: ../../installation/index.rst:130
+msgid "Running Funkwhale on the develop branch"
+msgstr ""
+
+#: ../../installation/index.rst:132
+msgid "Traditional deployments are done using tagged releases. However, you may want to benefit from the latest changes available, or to help detect bugs before they are included in actual releases."
+msgstr ""
+
+#: ../../installation/index.rst:136
+msgid "To do that, you'll need to run your instance on the develop branch, which contains all the unreleased changes and features of the next version."
+msgstr ""
+
+#: ../../installation/index.rst:139
+msgid "Please take into account that the develop branch may be unstable and will contain bugs that may affect the well-being of your instance. If you are comfortable with that, you need to backup at least your database before pulling the latest changes from the develop branch."
+msgstr ""
+
+#: ../../installation/index.rst:144
+msgid "Otherwise, the deployment process is similar to deploying with releases. You simply need to use ``export FUNKWHALE_VERSION=develop`` in the installation and upgrade process instead of a real version number, as we build artifacts on the development branch the same way we do for releases."
+msgstr ""
+
+#: ../../installation/index.rst:149
+msgid "It's also recommended to check out the `develop release notes <https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/changes/notes.rst>`_ before upgrading, since you may have to apply manual actions for your instance to continue to work. Such actions are labelled with ``[manual action required]`` in the releases notes."
+msgstr ""
+
+#: ../../installation/index.rst:155
+msgid "Serving only the frontend"
+msgstr ""
+
+#: ../../installation/index.rst:159
+msgid "You do not need to do this if you are deploying using Docker, as frontend files are already included in the docker image."
+msgstr ""
+
+#: ../../installation/index.rst:162
+msgid "You also do not need to do this if you are deploying manually on Debian or Arch, as this is covered by the corresponding documentation already."
+msgstr ""
+
+#: ../../installation/index.rst:166
+msgid "Files for the web frontend are purely static and can simply be downloaded, unzipped and served from any webserver:"
+msgstr ""
+
+#: ../../installation/index.rst:177
+msgid "Reverse proxy configuration"
+msgstr ""
+
+#: ../../installation/index.rst:179
+msgid "In order to make Funkwhale accessible from outside your server and to play nicely with other applications on your machine, you should configure a reverse proxy."
+msgstr ""
+
+#: ../../installation/index.rst:183
+msgid "We offer sample configurations for Nginx, Apache2 and Caddy."
+msgstr ""
+
+#: ../../installation/index.rst:187
+msgid "You can freely adapt the proposed configuration to your own needs, as we cannot cover every use case with a single template, especially when it's related to SSL configuration."
+msgstr ""
+
+#: ../../installation/index.rst:192
+msgid "Nginx"
+msgstr ""
+
+#: ../../installation/index.rst:194
+msgid "Ensure you have a recent version of nginx on your server. On a Debian-based system use apt:"
+msgstr ""
+
+#: ../../installation/index.rst:202
+msgid "On Arch Linux and its derivatives:"
+msgstr ""
+
+#: ../../installation/index.rst:208
+msgid "To avoid configuration errors at this level, we will generate an nginx configuration using your .env file. This will ensure your reverse-proxy configuration always matches the application configuration and makes upgrade/maintenance easier."
+msgstr ""
+
+#: ../../installation/index.rst:215
+msgid "The following commands need to be run as superuser."
+msgstr ""
+
+#: ../../installation/index.rst:217
+msgid "On docker deployments, run the following commands:"
+msgstr ""
+
+#: ../../installation/index.rst:237
+msgid "On non-docker deployments, run the following commands:"
+msgstr ""
+
+#: ../../installation/index.rst:259
+msgid "The resulting file should not contain any variables such as ``${FUNKWHALE_HOSTNAME}``. You can check that using this command::"
+msgstr ""
+
+#: ../../installation/index.rst:264
+msgid "Finally, enable the resulting configuration:"
+msgstr ""
+
+#: ../../installation/index.rst:272
+msgid "If you plan to use in-place import, ensure the alias value in the ``_protected/music`` location matches your MUSIC_DIRECTORY_SERVE_PATH env var."
+msgstr ""
+
+#: ../../installation/index.rst:276
+msgid "Finally, check that the configuration is valid with ``nginx -t`` then reload your nginx server with ``sudo systemctl reload nginx``."
+msgstr ""
+
+#: ../../installation/index.rst:279
+msgid "Music (and other static) files are never served by the app itself, but by the reverse proxy. This is needed because a webserver is way more efficient at serving files than a Python process."
+msgstr ""
+
+#: ../../installation/index.rst:283
+msgid "However, we do want to ensure users have the right to access music files, and it can't be done at the proxy's level. To tackle this issue, `we use nginx's internal directive <http://nginx.org/en/docs/http/ngx_http_core_module.html#internal>`_."
+msgstr ""
+
+#: ../../installation/index.rst:287
+msgid "When the API receives a request on its music serving endpoint, it will check that the user making the request can access the file. Then, it will return an empty response with a ``X-Accel-Redirect`` header. This header will contain the path to the file to serve to the user, and will be picked by nginx, but never sent back to the client."
+msgstr ""
+
+#: ../../installation/index.rst:293
+msgid "Using this technique, we can ensure music files are covered by the authentication and permission policy of your instance, while remaining as performant as possible."
+msgstr ""
+
+#: ../../installation/index.rst:298
+msgid "Apache2"
+msgstr ""
+
+#: ../../installation/index.rst:302
+msgid "These instructions are for Debian only. For Arch Linux please refer to the `Arch Linux wiki <https://wiki.archlinux.org/index.php/Apache>`_."
+msgstr ""
+
+#: ../../installation/index.rst:305
+msgid "Ensure you have a recent version of Apache2 installed on your server. You'll also need the following dependencies::"
+msgstr ""
+
+#: ../../installation/index.rst:310
+msgid "Add the following to your ``.env`` file::"
+msgstr ""
+
+#: ../../installation/index.rst:314
+msgid "Then restart Funkwhale. This is needed to ensure Funkwhale provides proper headers for media file serving."
+msgstr ""
+
+#: ../../installation/index.rst:317
+msgid "Then, download our sample virtualhost file:"
+msgstr ""
+
+#: ../../installation/index.rst:324
+msgid "Tweak the configuration file according to your setup, especially the TLS configuration. Otherwise, defaults should work if you followed the installation guide."
+msgstr ""
+
+#: ../../installation/index.rst:328
+msgid "Check the configuration with ``apache2ctl configtest`` and once you're done, load the new configuration with ``service apache2 restart``."
+msgstr ""
+
+#: ../../installation/index.rst:333
+msgid "Caddy"
+msgstr ""
+
+#: ../../installation/index.rst:335
+msgid "We currently do not support a Caddy-only setup, but you can `help develop it <https://dev.funkwhale.audio/funkwhale/funkwhale/-/merge_requests/1384>`_!"
+msgstr ""
+
+#: ../../installation/index.rst:338
+msgid "To employ Caddy as a reverse proxy in front of your docker containers (either mono- or multi-container setup), use the following Caddyfile configuration:"
+msgstr ""
+
+#: ../../installation/index.rst:342
+msgid "Caddy v2::"
+msgstr ""
+
+#: ../../installation/index.rst:348
+msgid "Caddy v1::"
+msgstr ""
+
+#: ../../installation/index.rst:359
+msgid "HTTPS configuration"
+msgstr ""
+
+#: ../../installation/index.rst:361
+msgid "After configuring the reverse proxy, you need a SSL certificate to enable HTTPS on your server (unless you use Caddy, which handles them automatically)."
+msgstr ""
+
+#: ../../installation/index.rst:365
+msgid "The default reverse proxy configuration assumes you have those available at ``/etc/letsencrypt/live/${FUNKWHALE_HOSTNAME}/``, which is the path used by `certbot <https://certbot.eff.org/docs/>`_ when generating certificates with Let's Encrypt."
+msgstr ""
+
+#: ../../installation/index.rst:368
+msgid "If you already have a certificate you would like to use, simply update the reverse proxy configuration and replace the following values with the proper paths: - For nginx: ``ssl_certificate`` and ``ssl_certificate_key``; - For Apache2: ``SSLCertificateFile`` and ``SSLCertificateKeyFile``."
+msgstr ""
+
+#: ../../installation/index.rst:373
+msgid "If you don't have one, comment or remove the lines starting with ``ssl_certificate`` and ``ssl_certificate_key`` for nginx, and ``SSLCertificateFile`` and ``SSLCertificateKeyFile`` for Apache2. You can then proceed to generate a certificate, as shown below. These instructions are provided by `certbot <https://certbot.eff.org/instructions>`:"
+msgstr ""
+
+#: ../../installation/index.rst:389
+msgid "This creates a valid certificate and edit the nginx or Apache2 configuration to use the new certificate. The certificate will be automatically renewed when they expire."
+msgstr ""

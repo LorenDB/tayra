@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:1
+msgid "ListenBrainz plugin"
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:3
+msgid "The __ListenBrainz__ plugin enables you to submit ({term}`scrobble<Scrobbling>`) listens to your [ListenBrainz](https://listenbrainz.org) account. Scrobbling listens helps you build up a profile of your music tastes. It also enables you to keep a record of your listens. To set up the __ListenBrainz plugin__:"
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:7
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:21
+msgid "Log in to your account."
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:8
+msgid "Select the cog icon ({fa}`cog`) or your avatar to expand the user menu."
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:9
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:23
+msgid "Select {guilabel}`Settings`."
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:10
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:24
+msgid "Scroll down to the {guilabel}`Plugins` section."
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:11
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:25
+msgid "Select {guilabel}`Manage plugins`."
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:12
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:26
+msgid "Find the {guilabel}`ListenBrainz` plugin."
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:13
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:27
+msgid "Toggle the {guilabel}`Enabled` switch."
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:14
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:28
+msgid "Enter {guilabel}`Your ListenBrainz user token`. You can find this on your ListenBrainz profile."
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:15
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:29
+msgid "Select {guilabel}`Save`."
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:22
+msgid "Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}`Options` menu."
+msgstr ""
+
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:33
+msgid "That's it! You've set up the __ListenBrainz__ plugin. When you listen to tracks, the plugin sends the information to ListenBrainz."
+msgstr ""

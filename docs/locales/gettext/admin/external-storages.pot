@@ -1,0 +1,161 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../admin/external-storages.rst:2
+msgid "Using external storages to store Funkwhale content"
+msgstr ""
+
+#: ../../admin/external-storages.rst:4
+msgid "By default, Funkwhale will store user-uploaded and related media such as audio files, transcoded files, avatars and album covers on a server directory."
+msgstr ""
+
+#: ../../admin/external-storages.rst:7
+msgid "However, for bigger instances or more complex deployment scenarios, you may want to use distributed or external storages."
+msgstr ""
+
+#: ../../admin/external-storages.rst:11
+msgid "S3 and S3-compatible servers"
+msgstr ""
+
+#: ../../admin/external-storages.rst:15
+msgid "This feature was released in Funkwhale 0.19 and is still considered experimental. Please let us know if you see anything unusual while using it."
+msgstr ""
+
+#: ../../admin/external-storages.rst:18
+msgid "Funkwhale supports storing media files Amazon S3 and compatible implementations such as Minio or Wasabi."
+msgstr ""
+
+#: ../../admin/external-storages.rst:20
+msgid "In this scenario, the content itself is stored in the S3 bucket. Non-sensitive media such as album covers or user avatars are served directly from the bucket. However, audio files are still served by the reverse proxy, to enforce proper authentication."
+msgstr ""
+
+#: ../../admin/external-storages.rst:24
+msgid "To enable S3 on Funkwhale, add the following environment variables::"
+msgstr ""
+
+#: ../../admin/external-storages.rst:38
+msgid "Then, edit your nginx configuration. On docker setups, the file is located at ``/srv/funkwhale/nginx/funkwhale.template``, and at ``/etc/nginx/sites-available/funkwhale.template`` on non-docker setups."
+msgstr ""
+
+#: ../../admin/external-storages.rst:41
+msgid "Replace the ``location /_protected/media`` block with the following::"
+msgstr ""
+
+#: ../../admin/external-storages.rst:50
+msgid "Add your S3 store URL to the ``img-src`` and ``media-src`` headers"
+msgstr ""
+
+#: ../../admin/external-storages.rst:56
+msgid "Then restart Funkwhale and nginx."
+msgstr ""
+
+#: ../../admin/external-storages.rst:58
+msgid "From now on, media files will be stored on the S3 bucket you configured. If you already had media files before configuring the S3 bucket, you also have to move those on the bucket by hand (which is outside the scope of this guide)."
+msgstr ""
+
+#: ../../admin/external-storages.rst:64
+msgid "At the moment, we do not support S3 when using Apache as a reverse proxy."
+msgstr ""
+
+#: ../../admin/external-storages.rst:68
+msgid "If you are attempting to integrate your docker deployment with an existing nginx webserver, such as the one provided by `linuxserver/swag <https://docs.linuxserver.io/images/docker-swag>`_ (formerly `linuxserver/letsencrypt <https://docs.linuxserver.io/images/docker-swag#migrating-from-the-old-linuxserver-letsencrypt-image>`_), you may run into an issue where an additional ``Content-Security-Policy`` header appears in responses from the server, without the newly included S3 URL values."
+msgstr ""
+
+#: ../../admin/external-storages.rst:74
+msgid "In this case, you can suppress the extraneous ``Content-Security-Policy`` header by specifying it in a ``proxy_hide_header`` `directive <http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_hide_header>`_ in the ``location /`` block."
+msgstr ""
+
+#: ../../admin/external-storages.rst:89
+msgid "Serving audio files directly from the bucket"
+msgstr ""
+
+#: ../../admin/external-storages.rst:91
+msgid "Depending on your setup, you may want to serve audio files directly from the S3 bucket instead of proxying them through Funkwhale, e.g to reduce the bandwidth consumption on your server, or get better performance."
+msgstr ""
+
+#: ../../admin/external-storages.rst:95
+msgid "You can achieve that by adding ``PROXY_MEDIA=false`` to your ``.env`` file."
+msgstr ""
+
+#: ../../admin/external-storages.rst:97
+msgid "When receiving a request on the stream endpoint, Funkwhale will check for authentication and permissions, then issue a 302 redirect to the file URL in the bucket."
+msgstr ""
+
+#: ../../admin/external-storages.rst:100
+msgid "This URL is actually be visible by the client, but contains a signature valid only for one hour, to ensure no one can reuse this URL or share it publicly to distribute unauthorized content."
+msgstr ""
+
+#: ../../admin/external-storages.rst:105
+msgid "If you are using Amazon S3, you will need to set your ``AWS_S3_REGION_NAME`` in the ``.env`` file to use this feature."
+msgstr ""
+
+#: ../../admin/external-storages.rst:110
+msgid "Since some Subsonic clients don't support 302 redirections, Funkwhale will ignore the ``PROXY_MEDIA`` setting and always proxy file when accessed through the Subsonic API."
+msgstr ""
+
+#: ../../admin/external-storages.rst:115
+msgid "Securing your S3 bucket"
+msgstr ""
+
+#: ../../admin/external-storages.rst:117
+msgid "It's important to ensure your the root of your bucket doesn't list its content, which is the default on many S3 servers. Otherwise, anyone could find out the true URLs of your audio files and bypass authentication."
+msgstr ""
+
+#: ../../admin/external-storages.rst:121
+msgid "To avoid that, you can set the following policy on your bucket::"
+msgstr ""
+
+#: ../../admin/external-storages.rst:144
+msgid "If you are using ``awscli``, you can store this policy in a ``/tmp/policy`` file, and apply it using the following command::"
+msgstr ""
+
+#: ../../admin/external-storages.rst:150
+msgid "Troubleshooting"
+msgstr ""
+
+#: ../../admin/external-storages.rst:153
+msgid "No Resolver Found"
+msgstr ""
+
+#: ../../admin/external-storages.rst:155
+msgid "Depending on your setup, you may experience the following issue when trying to stream music directly from your S3-compatible store."
+msgstr ""
+
+#: ../../admin/external-storages.rst:162
+msgid "This happpens when the nginx config is unable to use your server's DNS resolver. This issue is still under investigation, but in the meantime can be worked around by specifying a resolver in your ``funkwhale.template`` under the ``location ~/_protected/media/(.+)`` section."
+msgstr ""
+
+#: ../../admin/external-storages.rst:176
+msgid "No Images or Media Loading"
+msgstr ""
+
+#: ../../admin/external-storages.rst:178
+msgid "If you are serving media from an S3-compatible store, you may experience an issue where nothing loads in the front end. The error logs in your browser may show something like the following:"
+msgstr ""
+
+#: ../../admin/external-storages.rst:187
+msgid "This happens when your S3 store isn't defined in the ``Content-Security-Policy`` headers in your Nginx files. To resolve the issue, add the base URL of your S3 store to the ``img-src`` and ``media-src`` headers and reload nginx."
+msgstr ""
+
+#: ../../admin/external-storages.rst:196
+msgid "Broken Images in Audio Player On Page Reload"
+msgstr ""
+
+#: ../../admin/external-storages.rst:198
+msgid "If you are serving media directly from an S3-compatible store, you may find that images in the queue and the player won't load after the page is refreshed. This happens if the generated URL has expired and the authorization is no longer valid. You can extend the expiry time using the following setting in your ``.env`` file:"
+msgstr ""

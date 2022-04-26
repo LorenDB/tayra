@@ -1,0 +1,355 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../installation/debian.rst:2
+msgid "Debian and Arch Linux installation"
+msgstr ""
+
+#: ../../installation/debian.rst:6
+msgid "This guide targets Debian 10 (Buster), which is the latest version available, as well as Arch Linux."
+msgstr ""
+
+#: ../../installation/debian.rst:9
+msgid "Cache setup (Redis)"
+msgstr ""
+
+#: ../../installation/debian.rst:11
+msgid "Funkwhale requires a cache server:"
+msgstr ""
+
+#: ../../installation/debian.rst:13
+msgid "to make the whole system faster, by caching network requests or database queries;"
+msgstr ""
+
+#: ../../installation/debian.rst:14
+msgid "to handle asynchronous tasks such as music import."
+msgstr ""
+
+#: ../../installation/debian.rst:16
+msgid "On Debian-like distributions, a redis package is available, and you can install it:"
+msgstr ""
+
+#: ../../installation/debian.rst:23
+#: ../../installation/debian.rst:45
+#: ../../installation/debian.rst:244
+msgid "On Arch Linux and its derivatives:"
+msgstr ""
+
+#: ../../installation/debian.rst:29
+msgid "This should be enough to have your redis server set up."
+msgstr ""
+
+#: ../../installation/debian.rst:32
+msgid "Install system dependencies"
+msgstr ""
+
+#: ../../installation/debian.rst:34
+msgid "On Debian-like systems, you can install them using:"
+msgstr ""
+
+#: ../../installation/debian.rst:56
+msgid "External Authentication (LDAP)"
+msgstr ""
+
+#: ../../installation/debian.rst:58
+msgid "LDAP support requires some additional dependencies to enable. On the OS level both ``libldap2-dev`` and ``libsasl2-dev`` are required, and the Python modules ``python-ldap`` and ``python-django-auth-ldap`` must be installed. These dependencies are all included in the ``requirements.*`` files so deploying with those will install these dependencies by default. However, they are not required unless LDAP support is explicitly enabled. See :doc:`../admin/ldap` for more details."
+msgstr ""
+
+#: ../../installation/debian.rst:61
+msgid "Installation structure"
+msgstr ""
+
+#: ../../installation/debian.rst:63
+msgid "All Funkwhale-related files will be located under ``/srv/funkwhale`` apart from database files and a few configuration files. We will also have a dedicated ``funkwhale`` user to launch the processes we need and own those files."
+msgstr ""
+
+#: ../../installation/debian.rst:67
+msgid "You are free to use different values here, just remember to adapt those in the next steps."
+msgstr ""
+
+#: ../../installation/debian.rst:72
+msgid "Create the user and the directory:"
+msgstr ""
+
+#: ../../installation/debian.rst:79
+msgid "Log in as the newly created user from now on:"
+msgstr ""
+
+#: ../../installation/debian.rst:85
+msgid "Now let's setup our directory layout. Here is how it will look like::"
+msgstr ""
+
+#: ../../installation/debian.rst:94
+msgid "Create the aforementioned directories:"
+msgstr ""
+
+#: ../../installation/debian.rst:100
+msgid "The ``virtualenv`` directory is a bit special and will be created separately."
+msgstr ""
+
+#: ../../installation/debian.rst:103
+msgid "Download the latest Funkwhale release"
+msgstr ""
+
+#: ../../installation/debian.rst:105
+msgid "Funkwhale is splitted in two components:"
+msgstr ""
+
+#: ../../installation/debian.rst:107
+msgid "The API, which will handle music storage and user accounts;"
+msgstr ""
+
+#: ../../installation/debian.rst:108
+msgid "The frontend, that will simply connect to the API to interact with its data."
+msgstr ""
+
+#: ../../installation/debian.rst:110
+msgid "Those components are packaged in subsequent releases, such as 0.1, 0.2, etc. You can browse the :doc:`changelog </changelog>` for a list of available releases and pick the one you want to install, usually the latest one should be okay."
+msgstr ""
+
+#: ../../installation/debian.rst:114
+msgid "In this guide, we will assume you want to install the latest version of Funkwhale, which is |version|:"
+msgstr ""
+
+#: ../../installation/debian.rst:116
+msgid "First, we will download the latest api release:"
+msgstr ""
+
+#: ../../installation/debian.rst:126
+msgid "Then we will download the frontend files:"
+msgstr ""
+
+#: ../../installation/debian.rst:137
+msgid "You can also choose to get the code directly from the git repo. In this case, run::"
+msgstr ""
+
+#: ../../installation/debian.rst:146
+msgid "The above clone command uses the stable branch instead of the default develop branch, as stable is stable and more suited for production setups."
+msgstr ""
+
+#: ../../installation/debian.rst:148
+msgid "You'll also need to re-create the folders we make earlier::"
+msgstr ""
+
+#: ../../installation/debian.rst:152
+msgid "You will still need to get the frontend files as specified before, because we're not going to build them."
+msgstr ""
+
+#: ../../installation/debian.rst:156
+msgid "You can leave the ZIP archives in the directory, this will help you know which version you've installed next time you want to upgrade your installation."
+msgstr ""
+
+#: ../../installation/debian.rst:160
+msgid "Install Python dependencies"
+msgstr ""
+
+#: ../../installation/debian.rst:162
+msgid "We use `poetry <https://python-poetry.org/>`_ to manage Python dependencies. Poetry installs packages in a `virtualenv <https://docs.python.org/3/library/venv.html>`_. This prevents collisions with other Python packages on your system. To install poetry, check out `their documentation <https://python-poetry.org/docs/#installation>`_."
+msgstr ""
+
+#: ../../installation/debian.rst:167
+msgid "By default, poetry creates a virtualenv in `{cache-dir}/virtualenvs`. We recommend creating your virtualenv inside your Funkwhale `api` directory. To do this, navigate to the directory and run the :command:`poetry config virtualenvs.in-project` command."
+msgstr ""
+
+#: ../../installation/debian.rst:177
+msgid "Poetry creates a virtualenv in `/srv/funkwhale/api/.venv`."
+msgstr ""
+
+#: ../../installation/debian.rst:180
+msgid "To run Funkwhale commands, you need to activate the virtualenv using poetry. To make copying and pasting from this guide easier, we prefix all commands with :command:`poetry run`. If you use :command:`poetry shell` to enter your virtualenv, make sure you remove :command:`poetry run` from each command."
+msgstr ""
+
+#: ../../installation/debian.rst:186
+msgid "Once you have set up your virtualenv, install the dependencies using :command:`poetry install`."
+msgstr ""
+
+#: ../../installation/debian.rst:195
+msgid "Environment file"
+msgstr ""
+
+#: ../../installation/debian.rst:197
+msgid "You can now start to configure Funkwhale. The main way to achieve that is by adding an environment file that will host settings that are relevant to your installation."
+msgstr ""
+
+#: ../../installation/debian.rst:201
+msgid "Download the sample environment file:"
+msgstr ""
+
+#: ../../installation/debian.rst:209
+msgid "if you used git to get the latest version of the code earlier, you can instead do::"
+msgstr ""
+
+#: ../../installation/debian.rst:214
+msgid "Generate a secret key for Django::"
+msgstr ""
+
+#: ../../installation/debian.rst:218
+msgid "You can then edit the file: the file is heavily commented, and the most relevant configuration options are mentioned at the top of the file."
+msgstr ""
+
+#: ../../installation/debian.rst:226
+msgid "Paste the secret key you generated earlier at the entry ``DJANGO_SECRET_KEY`` and populate the ``DATABASE_URL`` and ``CACHE_URL`` values based on how you configured your PostgreSQL and Redis servers in."
+msgstr ""
+
+#: ../../installation/debian.rst:232
+msgid "Database setup"
+msgstr ""
+
+#: ../../installation/debian.rst:234
+msgid "Funkwhale requires a PostgreSQL database to work properly. Please refer to the `PostgreSQL documentation <https://www.postgresql.org/download/>`_ for installation instructions specific to your os."
+msgstr ""
+
+#: ../../installation/debian.rst:238
+msgid "On Debian-like systems, you would install the database server like this:"
+msgstr ""
+
+#: ../../installation/debian.rst:250
+msgid "On Arch Linux, you'll also need to initialize the database. See `the Arch Linux wiki <https://wiki.archlinux.org/index.php/Postgresql#Initial_configuration>`_."
+msgstr ""
+
+#: ../../installation/debian.rst:252
+msgid "The remaining steps are heavily inspired from `this Digital Ocean guide <https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-16-04>`_."
+msgstr ""
+
+#: ../../installation/debian.rst:254
+msgid "Open a database shell:"
+msgstr ""
+
+#: ../../installation/debian.rst:260
+msgid "Create the project database and user:"
+msgstr ""
+
+#: ../../installation/debian.rst:270
+msgid "It's important that you use utf-8 encoding for your database, otherwise you'll end up with errors and crashes later on when dealing with music metadata that contains non-ascii chars."
+msgstr ""
+
+#: ../../installation/debian.rst:274
+msgid "Assuming you already have :ref:`created your funkwhale user <create-funkwhale-user>`, you should now be able to open a postgresql shell:"
+msgstr ""
+
+#: ../../installation/debian.rst:281
+msgid "Unless you give a superuser access to the database user, you should also enable some extensions on your database server, as those are required for Funkwhale to work properly:"
+msgstr ""
+
+#: ../../installation/debian.rst:290
+msgid "Now that the database has been created, import the initial database structure using the virtualenv created before:"
+msgstr ""
+
+#: ../../installation/debian.rst:296
+msgid "This creates the required tables and rows."
+msgstr ""
+
+#: ../../installation/debian.rst:300
+msgid "You can safely execute this command any time you want, this will only run unapplied migrations."
+msgstr ""
+
+#: ../../installation/debian.rst:305
+msgid "You may sometimes get the following warning while applying migrations::"
+msgstr ""
+
+#: ../../installation/debian.rst:309
+msgid "This is a warning, not an error, and it can be safely ignored. Never run the ``makemigrations`` command yourself."
+msgstr ""
+
+#: ../../installation/debian.rst:313
+msgid "Create an admin account"
+msgstr ""
+
+#: ../../installation/debian.rst:315
+msgid "Using the virtualenv created before, create your first user account:"
+msgstr ""
+
+#: ../../installation/debian.rst:321
+msgid "If you ever want to change a user's password from the command line, just run:"
+msgstr ""
+
+#: ../../installation/debian.rst:328
+msgid "Collect static files"
+msgstr ""
+
+#: ../../installation/debian.rst:330
+msgid "Static files are the static assets used by the API server (icon PNGs, CSS, etc.). We need to collect them explicitly, so they can be served by the webserver:"
+msgstr ""
+
+#: ../../installation/debian.rst:337
+msgid "This should populate the directory you choose for the ``STATIC_ROOT`` variable in your ``.env`` file."
+msgstr ""
+
+#: ../../installation/debian.rst:341
+msgid "Systemd unit file"
+msgstr ""
+
+#: ../../installation/debian.rst:345
+msgid "All the command lines below should be executed as root."
+msgstr ""
+
+#: ../../installation/debian.rst:347
+msgid "Systemd offers a convenient way to manage your Funkwhale instance if you're not using docker. We'll see how to setup systemd to properly start a Funkwhale instance."
+msgstr ""
+
+#: ../../installation/debian.rst:350
+msgid "First, download the sample unitfiles:"
+msgstr ""
+
+#: ../../installation/debian.rst:359
+msgid "This will download three unitfiles:"
+msgstr ""
+
+#: ../../installation/debian.rst:361
+msgid "``funkwhale-server.service`` to launch the Funkwhale web server;"
+msgstr ""
+
+#: ../../installation/debian.rst:362
+msgid "``funkwhale-worker.service`` to launch the Funkwhale task worker;"
+msgstr ""
+
+#: ../../installation/debian.rst:363
+msgid "``funkwhale-beat.service`` to launch the Funkwhale task beat (this is for recurring tasks);"
+msgstr ""
+
+#: ../../installation/debian.rst:364
+msgid "``funkwhale.target`` to easily stop and start all of the services at once."
+msgstr ""
+
+#: ../../installation/debian.rst:366
+msgid "You can of course review and edit them to suit your deployment scenario if needed, but the defaults should be fine."
+msgstr ""
+
+#: ../../installation/debian.rst:369
+msgid "Once the files are downloaded, reload systemd:"
+msgstr ""
+
+#: ../../installation/debian.rst:375
+msgid "And start the services:"
+msgstr ""
+
+#: ../../installation/debian.rst:381
+msgid "To ensure all Funkwhale processes are started automatically after a reboot, run:"
+msgstr ""
+
+#: ../../installation/debian.rst:389
+msgid "You can check the statuses of all processes like this:"
+msgstr ""
+
+#: ../../installation/debian.rst:396
+msgid "Reverse proxy setup"
+msgstr ""
+
+#: ../../installation/debian.rst:398
+msgid "See :ref:`Reverse proxy <reverse-proxy-setup>`."
+msgstr ""

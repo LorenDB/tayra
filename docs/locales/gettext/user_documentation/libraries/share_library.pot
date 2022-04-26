@@ -1,0 +1,105 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../user_documentation/libraries/share_library.md:1
+msgid "Share a library"
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:3
+msgid "Sharing a library gives another user access to the library's content. When a user follows your library, they'll be able to play and download any content it contains from their {term}`pod`. Share private libraries with friends and family or share public libraries with everyone!"
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:5
+msgid "To share a library you own:"
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:0
+#: ../../user_documentation/libraries/share_library.md:0
+msgid "Desktop"
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:9
+#: ../../user_documentation/libraries/share_library.md:21
+#: ../../user_documentation/libraries/share_library.md:35
+#: ../../user_documentation/libraries/share_library.md:44
+msgid "Log in to your pod."
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:10
+msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:11
+#: ../../user_documentation/libraries/share_library.md:23
+msgid "Select {guilabel}`Get started` under {guilabel}`Upload third-party content in a library`."
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:12
+#: ../../user_documentation/libraries/share_library.md:24
+msgid "A screen appears showing your upload quota and your libraries."
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:13
+#: ../../user_documentation/libraries/share_library.md:25
+msgid "Select {guilabel}`Library Details` under the library you want to share."
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:14
+#: ../../user_documentation/libraries/share_library.md:26
+msgid "The {guilabel}`Sharing link` appears on the library details page. Select {guilabel}`Copy` to copy the sharing link to your clipboard. A label appears letting you know you've copied the link."
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:15
+#: ../../user_documentation/libraries/share_library.md:27
+msgid "Send the link to whomever you want to share the library with."
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:0
+#: ../../user_documentation/libraries/share_library.md:0
+msgid "Mobile"
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:22
+msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:31
+msgid "If you have set the library's privacy level to {guilabel}`Nobody except me`, you need to approve followers. You receive a notification when a user follows your library. To approve a follow request:"
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:36
+msgid "Select the cog icon ({fa}`cog`) or your avatar to expand the user menu."
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:37
+#: ../../user_documentation/libraries/share_library.md:46
+msgid "Select {guilabel}`Notifications`. The notifications screen opens."
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:38
+#: ../../user_documentation/libraries/share_library.md:47
+msgid "Notifications show the username of the user who wants to follow the library as well as the library name. Select {guilabel}`Accept` to approve the follow request or {guilabel}`Reject` to reject the request."
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:45
+msgid "Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}`Options` menu."
+msgstr ""
+
+#: ../../user_documentation/libraries/share_library.md:51
+msgid "That's it! You've shared your library. The invited users can now listen to its content."
+msgstr ""
