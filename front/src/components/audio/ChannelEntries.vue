@@ -36,6 +36,7 @@
       :total="count"
       :page="page"
       :paginate-by="limit"
+      :filters="filters"
       @page-changed="updatePage"
     />
     <template v-if="!isLoading && objects.length === 0">
