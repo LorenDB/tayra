@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import store from '~/store'
 
 function adminPermissions (to, from, next) {
@@ -34,14 +34,16 @@ export default createRouter({
   linkActiveClass: 'active',
   scrollBehavior (to, from, savedPosition) {
     if (to.meta.preserveScrollPosition) {
-      return savedPosition
+      return savedPosition ?? { left: 0, top: 0 }
     }
+
     return new Promise(resolve => {
       setTimeout(() => {
         if (to.hash) {
-          resolve({ selector: to.hash })
+          resolve({ el: to.hash, behavior: 'smooth' })
         }
-        const pos = savedPosition || { x: 0, y: 0 }
+
+        const pos = savedPosition ?? { left: 0, top: 0 }
         resolve(pos)
       }, 100)
     })
