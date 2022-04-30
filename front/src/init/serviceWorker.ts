@@ -1,45 +1,40 @@
-import { InitModule } from '~/types'
-import { register } from 'register-service-worker'
+import { AppModule } from '~/types'
+import { registerSW } from 'virtual:pwa-register'
+import logger from '~/logging'
+import Vue from 'vue'
 
-export const install: InitModule = ({ store }) => {
-  if (import.meta.env.PROD) {
-    register(`${import.meta.env.BASE_URL}service-worker.js`, {
-      registrationOptions: { scope: '/' },
-      ready () {
-        console.log(
-          'App is being served from cache by a service worker.'
-        )
-      },
-      registered (registration) {
-        console.log('Service worker has been registered.')
-        // check for updates every 2 hours
-        const checkInterval = 1000 * 60 * 60 * 2
-        // var checkInterval = 1000 * 5
-        setInterval(() => {
-          console.log('Checking for service worker update…')
-          registration.update()
-        }, checkInterval)
-        store.commit('ui/serviceWorker', { registration: registration })
-        if (registration.active) {
-          registration.active.postMessage({ command: 'serverChosen', serverUrl: store.state.instance.instanceUrl })
-        }
-      },
-      cached () {
-        console.log('Content has been cached for offline use.')
-      },
-      updatefound () {
-        console.log('New content is downloading.')
-      },
-      updated (registration) {
-        console.log('New content is available; please refresh!')
-        store.commit('ui/serviceWorker', { updateAvailable: true, registration: registration })
-      },
-      offline () {
-        console.log('No internet connection found. App is running in offline mode.')
-      },
-      error (error) {
-        console.error('Error during service worker registration:', error)
-      }
-    })
-  }
+const { $pgettext } = Vue.prototype
+
+export const install: AppModule = ({ store }) => {
+  const updateSW = registerSW({
+    onRegisterError () {
+      logger.default.error('SW install error')
+    },
+    onOfflineReady () {
+      logger.default.info('Funkwhale is being served from cache by a service worker.')
+    },
+    onRegistered () {
+      logger.default.info('Service worker has been registered.')
+    },
+    onNeedRefresh () {
+      store.commit('ui/addMessage', {
+        content: $pgettext('App/Message/Paragraph', 'A new version of the app is available.'),
+        date: new Date(),
+        key: 'refreshApp',
+        displayTime: 0,
+        classActions: 'bottom attached opaque',
+        actions: [
+          {
+            text: $pgettext('App/Message/Paragraph', 'Update'),
+            class: 'primary',
+            click: () => updateSW()
+          },
+          {
+            text: $pgettext('App/Message/Paragraph', 'Later'),
+            class: 'basic'
+          }
+        ]
+      })
+    }
+  })
 }

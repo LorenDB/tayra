@@ -19,7 +19,7 @@ export default {
 
     return hours >= 1
       ? `${hours}:${pad(min)}:${pad(sec)}`
-      : `${pad(min)}:${pad(sec)}`
+      : `${min}:${pad(sec)}`
   },
   durationFormatted (v: string) {
     const duration = parseInt(v)

@@ -174,11 +174,6 @@ export default {
         orderingDirection: '-',
         ordering: 'creation_date'
       }
-    },
-    serviceWorker: {
-      refreshing: false,
-      registration: null,
-      updateAvailable: false
     }
   },
   getters: {
@@ -310,9 +305,6 @@ export default {
       state.routePreferences[route].orderingDirection = value
     },
 
-    serviceWorker: (state, value) => {
-      state.serviceWorker = { ...state.serviceWorker, ...value }
-    },
     window: (state, value) => {
       state.window = value
     }

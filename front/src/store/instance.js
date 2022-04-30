@@ -9,12 +9,6 @@ function getDefaultUrl () {
   )
 }
 
-function notifyServiceWorker (registration, message) {
-  if (registration && registration.active) {
-    registration.active.postMessage(message)
-  }
-}
-
 export default {
   namespaced: true,
   state: {
@@ -87,7 +81,7 @@ export default {
         value = value + '/'
       }
       state.instanceUrl = value
-      notifyServiceWorker(state.registration, { command: 'serverChosen', serverUrl: state.instanceUrl })
+
       // append the URL to the list (and remove existing one if needed)
       if (value) {
         const index = state.knownInstances.indexOf(value)

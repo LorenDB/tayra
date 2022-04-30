@@ -1,6 +1,6 @@
 import {expect} from 'chai'
 import moment from 'moment'
-import {truncate, ago, capitalize, year, unique} from '~/filters'
+import {truncate, ago, capitalize, year, unique} from '~/init/filters'
 
 describe('filters', () => {
   describe('truncate', () => {

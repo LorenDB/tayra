@@ -1,9 +1,8 @@
 import { defineConfig, HmrOptions } from 'vite'
 import { createVuePlugin as Vue2 } from 'vite-plugin-vue2'
 import ScriptSetup from 'unplugin-vue2-script-setup/vite'
-
-// @ts-ignore
-import path from 'path'
+import { VitePWA } from 'vite-plugin-pwa'
+import { resolve } from 'path'
 
 const port = +(process.env.VUE_PORT ?? 8080)
 
@@ -29,6 +28,18 @@ export default defineConfig(() => ({
     // https://github.com/antfu/unplugin-vue2-script-setup
     ScriptSetup(),
 
+    // https://github.com/antfu/vite-plugin-pwa
+    VitePWA({
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'serviceWorker.ts',
+      devOptions: {
+        enabled: true,
+        type: 'module',
+        navigateFallback: 'index.html'
+      }
+    }),
+
     {
       name: 'fix-fomantic-ui-css',
       transform (src, id) {
@@ -41,7 +52,7 @@ export default defineConfig(() => ({
   server: { port, hmr },
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, './src')
+      '~': resolve(__dirname, './src')
     }
   },
   build: {

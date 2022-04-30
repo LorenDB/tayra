@@ -111,64 +111,6 @@ const { width } = useWindowSize()
 const player = ref()
 const showShortcutsModal = ref(false)
 const showSetInstanceModal = ref(false)
-// export default {
-//   computed: {
-//     ...mapState({
-//       serviceWorker: state => state.ui.serviceWorker
-//     }),
-//   },
-//   watch: {
-//     'serviceWorker.updateAvailable': {
-//       handler (v) {
-//         if (!v) {
-//           return
-//         }
-//         const self = this
-//         this.$store.commit('ui/addMessage', {
-//           content: this.$pgettext('App/Message/Paragraph', 'A new version of the app is available.'),
-//           date: new Date(),
-//           key: 'refreshApp',
-//           displayTime: 0,
-//           classActions: 'bottom attached opaque',
-//           actions: [
-//             {
-//               text: this.$pgettext('App/Message/Paragraph', 'Update'),
-//               class: 'primary',
-//               click: function () {
-//                 self.updateApp()
-//               }
-//             },
-//             {
-//               text: this.$pgettext('App/Message/Paragraph', 'Later'),
-//               class: 'basic'
-//             }
-//           ]
-//         })
-//       },
-//       immediate: true
-//     }
-//   },
-//   async created () {
-//     if (navigator.serviceWorker) {
-//       navigator.serviceWorker.addEventListener(
-//         'controllerchange', () => {
-//           if (this.serviceWorker.refreshing) return
-//           this.$store.commit('ui/serviceWorker', {
-//             refreshing: true
-//           })
-//           window.location.reload()
-//         }
-//       )
-//     }
-//   },
-//   methods: {
-//     updateApp () {
-//       this.$store.commit('ui/serviceWorker', { updateAvailable: false })
-//       if (!this.serviceWorker.registration || !this.serviceWorker.registration.waiting) { return }
-//       this.serviceWorker.registration.waiting.postMessage({ command: 'skipWaiting' })
-//     },
-//   }
-// }
 </script>
 
 <template>

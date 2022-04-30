@@ -19,8 +19,9 @@ export function parseAPIErrors (responseData: APIErrorResponse, parentField?: st
       }
 
       const value = responseData[field]
-      if (value as string[]) {
-        errors.push(...(value as string[]).map(err => {
+      if (Array.isArray(value)) {
+        const values = value as string[]
+        errors.push(...values.map(err => {
           return err.toLocaleLowerCase().includes('this field ')
             ? `${fieldName}: ${err}`
             : err
