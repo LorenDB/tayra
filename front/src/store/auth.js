@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import axios from 'axios'
-import logger from '~/logging'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 function getDefaultScopedTokens () {
   return {
@@ -130,7 +132,7 @@ export default {
         form.set(k, credentials[k])
       })
       return axios.post('users/login', form).then(response => {
-        logger.default.info('Successfully logged in as', credentials.username)
+        logger.info('Successfully logged in as', credentials.username)
         dispatch('fetchProfile').then(() => {
           // Redirect to a specified route
           import('~/router').then((router) => {
@@ -138,7 +140,7 @@ export default {
           })
         })
       }, response => {
-        logger.default.error('Error while logging in', response.data)
+        logger.error('Error while logging in', response.data)
         onError(response)
       })
     },
@@ -159,12 +161,12 @@ export default {
       modules.forEach(m => {
         commit(`${m}/reset`, null, { root: true })
       })
-      logger.default.info('Log out, goodbye!')
+      logger.info('Log out, goodbye!')
     },
     fetchProfile ({ commit, dispatch, state }) {
       return new Promise((resolve, reject) => {
         axios.get('users/me/').then((response) => {
-          logger.default.info('Successfully fetched user profile')
+          logger.info('Successfully fetched user profile')
           dispatch('updateProfile', response.data)
           dispatch('ui/fetchUnreadNotifications', null, { root: true })
           if (response.data.permissions.library) {
@@ -181,7 +183,7 @@ export default {
           dispatch('playlists/fetchOwn', null, { root: true })
           resolve(response.data)
         }, (response) => {
-          logger.default.info('Error while fetching user profile')
+          logger.info('Error while fetching user profile')
           reject(new Error('Error while fetching user profile'))
         })
       })

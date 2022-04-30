@@ -1,5 +1,7 @@
 import axios from 'axios'
-import logger from '~/logging'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   namespaced: true,
@@ -57,16 +59,16 @@ export default {
       commit('subscriptions', { uuid, value })
       if (value) {
         return axios.post(`channels/${uuid}/subscribe/`).then((response) => {
-          logger.default.info('Successfully subscribed to channel')
+          logger.info('Successfully subscribed to channel')
         }, (response) => {
-          logger.default.info('Error while subscribing to channel')
+          logger.info('Error while subscribing to channel')
           commit('subscriptions', { uuid, value: !value })
         })
       } else {
         return axios.post(`channels/${uuid}/unsubscribe/`).then((response) => {
-          logger.default.info('Successfully unsubscribed from channel')
+          logger.info('Successfully unsubscribed from channel')
         }, (response) => {
-          logger.default.info('Error while unsubscribing from channel')
+          logger.info('Error while unsubscribing from channel')
           commit('subscriptions', { uuid, value: !value })
         })
       }

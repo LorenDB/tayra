@@ -1,6 +1,8 @@
 import axios from 'axios'
-import logger from '~/logging'
 import { sortBy } from 'lodash-es'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   namespaced: true,
@@ -98,7 +100,7 @@ export default {
         promise = axios.get('moderation/content-filters/', { params: params })
       }
       return promise.then((response) => {
-        logger.default.info('Fetched a batch of ' + response.data.results.length + ' filters')
+        logger.info('Fetched a batch of ' + response.data.results.length + ' filters')
         if (response.data.next) {
           dispatch('fetchContentFilters', response.data.next)
         }

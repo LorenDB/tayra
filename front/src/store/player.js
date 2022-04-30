@@ -1,6 +1,8 @@
 import axios from 'axios'
-import logger from '~/logging'
 import time from '~/utils/time'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   namespaced: true,
@@ -135,7 +137,7 @@ export default {
         return
       }
       return axios.post('history/listenings/', { track: track.id }).then((response) => {}, (response) => {
-        logger.default.error('Could not record track in history')
+        logger.error('Could not record track in history')
       })
     },
     trackEnded ({ commit, dispatch, rootState }, track) {

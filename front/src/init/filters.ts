@@ -115,7 +115,7 @@ export function humanSize (bytes: number) {
   return bytes.toFixed(1) + ' ' + units[u]
 }
 
-// Removes duplicates from a list
+// Remove duplicates from a list
 export function unique (list: Record<string, unknown>[], property: string) {
   property = property || 'id'
   const unique: Record<string, unknown>[] = []
@@ -123,6 +123,8 @@ export function unique (list: Record<string, unknown>[], property: string) {
   return unique
 }
 
+// TODO (wvffle): Migrate to Vue 3
+//                Replace filters with computed values
 export const install: InitModule = () => {
   Vue.filter('humanSize', humanSize)
   Vue.filter('unique', unique)

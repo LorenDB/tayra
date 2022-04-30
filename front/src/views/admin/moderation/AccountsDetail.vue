@@ -567,11 +567,13 @@
 
 <script>
 import axios from 'axios'
-import logger from '~/logging'
 import $ from 'jquery'
 
 import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
 import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   components: {
@@ -690,13 +692,13 @@ export default {
       }
       axios.patch(`manage/users/users/${this.object.user.id}/`, params).then(
         response => {
-          logger.default.info(
+          logger.info(
             `${attr} was updated succcessfully to ${newValue}`
           )
           self.updating[attr] = false
         },
         error => {
-          logger.default.error(
+          logger.error(
             `Error while setting ${attr} to ${newValue}`,
             error
           )

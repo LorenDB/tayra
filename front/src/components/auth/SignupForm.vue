@@ -154,10 +154,12 @@
 
 <script>
 import axios from 'axios'
-import logger from '~/logging'
 
 import LoginForm from '~/components/auth/LoginForm.vue'
 import PasswordInput from '~/components/forms/PasswordInput.vue'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   components: {
@@ -232,7 +234,7 @@ export default {
       }
       return axios.post('auth/registration/', payload).then(
         response => {
-          logger.default.info('Successfully created account')
+          logger.info('Successfully created account')
           self.submitted = true
           self.isLoading = false
         },

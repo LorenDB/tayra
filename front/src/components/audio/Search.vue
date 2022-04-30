@@ -71,9 +71,11 @@
 <script>
 import { debounce } from 'lodash-es'
 import axios from 'axios'
-import logger from '~/logging'
 import AlbumCard from '~/components/audio/album/Card.vue'
 import ArtistCard from '~/components/audio/artist/Card.vue'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   components: {
@@ -118,7 +120,7 @@ export default {
       }
       const self = this
       self.isLoading = true
-      logger.default.debug('Searching track matching "' + this.query + '"')
+      logger.debug('Searching track matching "' + this.query + '"')
       const params = {
         query: this.query
       }

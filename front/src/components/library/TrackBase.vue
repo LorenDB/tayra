@@ -222,7 +222,6 @@
 import time from '~/utils/time'
 import axios from 'axios'
 import { getDomain } from '~/utils'
-import logger from '~/logging'
 import PlayButton from '~/components/audio/PlayButton.vue'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
@@ -231,6 +230,9 @@ import EmbedWizard from '~/components/audio/EmbedWizard.vue'
 import ReportMixin from '~/components/mixins/Report.vue'
 import { momentFormat } from '~/init/filters'
 import updateQueryString from '~/composables/updateQueryString'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 const FETCH_URL = 'tracks/'
 
@@ -384,7 +386,7 @@ export default {
       const self = this
       this.isLoading = true
       const url = FETCH_URL + this.id + '/'
-      logger.default.debug('Fetching track "' + this.id + '"')
+      logger.debug('Fetching track "' + this.id + '"')
       axios.get(url, { params: { refresh: 'true' } }).then(response => {
         self.track = response.data
         axios.get(`artists/${response.data.artist.id}/`).then(response => {

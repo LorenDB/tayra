@@ -1,5 +1,7 @@
-import logger from '~/logging'
 import { shuffle } from 'lodash-es'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   namespaced: true,
@@ -72,7 +74,7 @@ export default {
     },
 
     appendMany ({ state, commit, dispatch }, { tracks, index, callback }) {
-      logger.default.info('Appending many tracks to the queue', tracks.map(e => { return e.title }))
+      logger.info('Appending many tracks to the queue', tracks.map(e => { return e.title }))
       let shouldPlay = false
       if (state.tracks.length === 0) {
         index = 0
@@ -128,11 +130,11 @@ export default {
     },
     next ({ state, dispatch, commit, rootState }) {
       if (rootState.player.looping === 2 && state.currentIndex >= state.tracks.length - 1) {
-        logger.default.info('Going back to the beginning of the queue')
+        logger.info('Going back to the beginning of the queue')
         return dispatch('currentIndex', 0)
       } else {
         if (state.currentIndex < state.tracks.length - 1) {
-          logger.default.debug('Playing next track')
+          logger.debug('Playing next track')
           return dispatch('currentIndex', state.currentIndex + 1)
         } else {
           commit('ended', true)

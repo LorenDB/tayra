@@ -1,5 +1,7 @@
 import axios from 'axios'
-import logger from '~/logging'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   namespaced: true,
@@ -41,19 +43,19 @@ export default {
     set ({ commit, state }, { uuid, value }) {
       if (value) {
         return axios.post('federation/follows/library/', { target: uuid }).then((response) => {
-          logger.default.info('Successfully subscribed to library')
+          logger.info('Successfully subscribed to library')
           commit('follows', { library: uuid, follow: response.data })
         }, (response) => {
-          logger.default.info('Error while subscribing to library')
+          logger.info('Error while subscribing to library')
           commit('follows', { library: uuid, follow: null })
         })
       } else {
         const follow = state.followsByLibrary[uuid]
         return axios.delete(`federation/follows/library/${follow.uuid}/`).then((response) => {
-          logger.default.info('Successfully unsubscribed from library')
+          logger.info('Successfully unsubscribed from library')
           commit('follows', { library: uuid, follow: null })
         }, (response) => {
-          logger.default.info('Error while unsubscribing from library')
+          logger.info('Error while unsubscribing from library')
           commit('follows', { library: uuid, follow: follow })
         })
       }

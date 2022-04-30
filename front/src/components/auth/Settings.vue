@@ -698,11 +698,13 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
-import logger from '~/logging'
 import PasswordInput from '~/components/forms/PasswordInput.vue'
 import SubsonicTokenForm from '~/components/auth/SubsonicTokenForm.vue'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
 import AttachmentInput from '~/components/common/AttachmentInput.vue'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   components: {
@@ -796,14 +798,14 @@ export default {
       const url = `users/${this.$store.state.auth.username}/`
       return axios.patch(url, payload).then(
         response => {
-          logger.default.info('Updated settings successfully')
+          logger.info('Updated settings successfully')
           self.settings.success = true
           return axios.get('users/me/').then(response => {
             self.$store.dispatch('auth/updateProfile', response.data)
           })
         },
         error => {
-          logger.default.error('Error while updating settings')
+          logger.error('Error while updating settings')
           self.isLoading = false
           self.settings.errors = error.backendErrors
         }
@@ -818,7 +820,7 @@ export default {
           self.apps = response.data
         },
         error => {
-          logger.default.error('Error while fetching Apps')
+          logger.error('Error while fetching Apps')
           self.isLoading = false
           self.settings.errors = error.backendErrors
         }
@@ -833,7 +835,7 @@ export default {
           self.ownedApps = response.data.results
         },
         error => {
-          logger.default.error('Error while fetching owned Apps')
+          logger.error('Error while fetching owned Apps')
           self.isLoading = false
           self.settings.errors = error.backendErrors
         }
@@ -849,7 +851,7 @@ export default {
           })
         },
         error => {
-          logger.default.error('Error while revoking App')
+          logger.error('Error while revoking App')
           self.isLoading = false
           self.settings.errors = error.backendErrors
         }
@@ -865,7 +867,7 @@ export default {
           })
         },
         error => {
-          logger.default.error('Error while deleting App')
+          logger.error('Error while deleting App')
           self.isLoading = false
           self.settings.errors = error.backendErrors
         }
@@ -901,7 +903,7 @@ export default {
       const url = 'auth/registration/change-password/'
       return axios.post(url, credentials).then(
         response => {
-          logger.default.info('Password successfully changed')
+          logger.info('Password successfully changed')
           self.$router.push({
             name: 'profile.overview',
             params: {

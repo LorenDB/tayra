@@ -92,8 +92,10 @@
 import axios from 'axios'
 import { mapState } from 'vuex'
 
-import logger from '~/logging'
 import Modal from '~/components/semantic/Modal.vue'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   components: {
@@ -127,7 +129,7 @@ export default {
         }
       }
       return axios.post('moderation/content-filters/', payload).then(response => {
-        logger.default.info('Successfully added track to playlist')
+        logger.info('Successfully added track to playlist')
         self.update(false)
         self.$store.commit('moderation/lastUpdate', new Date())
         self.isLoading = false
@@ -138,7 +140,7 @@ export default {
           date: new Date()
         })
       }, error => {
-        logger.default.error(`Error while hiding ${self.type} ${self.target.id}`)
+        logger.error(`Error while hiding ${self.type} ${self.target.id}`)
         self.errors = error.backendErrors
         self.isLoading = false
       })

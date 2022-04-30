@@ -215,7 +215,6 @@
 
 <script>
 import axios from 'axios'
-import logger from '~/logging'
 import PlayButton from '~/components/audio/PlayButton.vue'
 import EmbedWizard from '~/components/audio/EmbedWizard.vue'
 import Modal from '~/components/semantic/Modal.vue'
@@ -224,6 +223,9 @@ import TagsList from '~/components/tags/List.vue'
 import ReportMixin from '~/components/mixins/Report.vue'
 
 import { getDomain } from '~/utils'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   components: {
@@ -333,7 +335,7 @@ export default {
     async fetchData () {
       const self = this
       this.isLoading = true
-      logger.default.debug('Fetching artist "' + this.id + '"')
+      logger.debug('Fetching artist "' + this.id + '"')
 
       const artistPromise = axios.get('artists/' + this.id + '/', { params: { refresh: 'true' } }).then(response => {
         if (response.data.channel) {

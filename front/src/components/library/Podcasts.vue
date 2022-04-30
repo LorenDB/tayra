@@ -199,8 +199,6 @@ import qs from 'qs'
 import axios from 'axios'
 import $ from 'jquery'
 
-import logger from '~/logging'
-
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import PaginationMixin from '~/components/mixins/Pagination.vue'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
@@ -209,6 +207,9 @@ import Pagination from '~/components/Pagination.vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
 import Modal from '~/components/semantic/Modal.vue'
 import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 const FETCH_URL = 'artists/'
 
@@ -298,7 +299,7 @@ export default {
         include_channels: 'true',
         content_category: 'podcast'
       }
-      logger.default.debug('Fetching artists')
+      logger.debug('Fetching artists')
       axios.get(
         url,
         {

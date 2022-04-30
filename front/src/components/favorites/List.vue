@@ -135,7 +135,6 @@
 <script>
 import axios from 'axios'
 import $ from 'jquery'
-import logger from '~/logging'
 import RadioButton from '~/components/radios/Button.vue'
 import Pagination from '~/components/Pagination.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
@@ -143,6 +142,10 @@ import PaginationMixin from '~/components/mixins/Pagination.vue'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
 import { checkRedirectToLogin } from '~/utils'
 import TrackTable from '~/components/audio/track/Table.vue'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
+
 const FAVORITES_URL = 'tracks/'
 
 export default {
@@ -218,7 +221,7 @@ export default {
         page_size: this.paginateBy,
         ordering: this.getOrderingAsString()
       }
-      logger.default.time('Loading user favorites')
+      logger.time('Loading user favorites')
       axios.get(url, { params: params }).then(response => {
         self.results = response.data
         self.nextLink = response.data.next
@@ -226,7 +229,7 @@ export default {
         self.results.results.forEach(track => {
           self.$store.commit('favorites/track', { id: track.id, value: true })
         })
-        logger.default.timeEnd('Loading user favorites')
+        logger.timeEnd('Loading user favorites')
         self.isLoading = false
       })
     },

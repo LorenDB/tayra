@@ -1,5 +1,7 @@
 import axios from 'axios'
-import logger from '~/logging'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 // import axios from 'axios'
 
@@ -13,7 +15,7 @@ const RADIOS = {
       axios.get('history/listenings', { params }).then((response) => {
         const latest = response.data.results[0]
         if (!latest) {
-          logger.default.error('No more tracks')
+          logger.error('No more tracks')
           dispatch('stop')
         }
         this.offset += 1
@@ -24,7 +26,7 @@ const RADIOS = {
           })
         }
       }, (error) => {
-        logger.default.error('Error while fetching listenings', error)
+        logger.error('Error while fetching listenings', error)
         dispatch('stop')
       })
     },
@@ -40,7 +42,7 @@ const RADIOS = {
             this.offset += 1
           }
         }, (error) => {
-          logger.default.error('Cannot retrieve track info', error)
+          logger.error('Cannot retrieve track info', error)
         })
       }
     }

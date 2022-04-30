@@ -358,8 +358,10 @@
 
 <script>
 import axios from 'axios'
-import logger from '~/logging'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   mixins: [
@@ -424,12 +426,12 @@ export default {
       params[attr] = newValue
       axios.patch(`manage/library/libraries/${this.id}/`, params).then(
         response => {
-          logger.default.info(
+          logger.info(
             `${attr} was updated succcessfully to ${newValue}`
           )
         },
         error => {
-          logger.default.error(
+          logger.error(
             `Error while setting ${attr} to ${newValue}`,
             error
           )

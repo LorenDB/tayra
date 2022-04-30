@@ -3,11 +3,14 @@ import { InitModule } from '~/types'
 import createAuthRefreshInterceptor from 'axios-auth-refresh'
 import axios, { AxiosError } from 'axios'
 import moment from 'moment'
-import logger from '~/logging'
 import { parseAPIErrors } from '~/utils'
-import Vue from 'vue'
+import useLogger from '~/composables/useLogger'
+import { gettext } from '~/init/locale'
 
-export const install: InitModule = ({ app, store, router }) => {
+const { $pgettext, $gettext } = gettext
+const logger = useLogger()
+
+export const install: InitModule = ({ store, router }) => {
   axios.defaults.xsrfCookieName = 'csrftoken'
   axios.defaults.xsrfHeaderName = 'X-CSRFToken'
   axios.interceptors.request.use(function (config) {
@@ -29,7 +32,7 @@ export const install: InitModule = ({ app, store, router }) => {
     error.backendErrors = []
     if (store.state.auth.authenticated && !store.state.auth.oauth.accessToken && error.response.status === 401) {
       store.commit('auth/authenticated', false)
-      logger.default.warn('Received 401 response from API, redirecting to login form', router.currentRoute.value.fullPath)
+      logger.warn('Received 401 response from API, redirecting to login form', router.currentRoute.value.fullPath)
       await router.push({ name: 'login', query: { next: router.currentRoute.value.fullPath } })
     }
 
@@ -56,10 +59,10 @@ export const install: InitModule = ({ app, store, router }) => {
       if (rateLimitStatus.availableSeconds) {
         rateLimitStatus.availableSeconds = parseInt(rateLimitStatus.availableSeconds)
         const tryAgain = moment().add(rateLimitStatus.availableSeconds, 's').toNow(true)
-        message = Vue.prototype.$pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again in %{ delay }')
-        message = Vue.prototype.$gettextInterpolate(message, { delay: tryAgain })
+        message = $pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again in %{ delay }')
+        message = $gettext(message, { delay: tryAgain })
       } else {
-        message = Vue.prototype.$pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again later')
+        message = $pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again later')
       }
       error.backendErrors.push(message)
       store.commit('ui/addMessage', {
@@ -67,9 +70,9 @@ export const install: InitModule = ({ app, store, router }) => {
         date: new Date(),
         class: 'error'
       })
-      logger.default.error('This client is rate-limited!', rateLimitStatus)
+      logger.error('This client is rate-limited!', rateLimitStatus)
     } else if (error.response.status === 500) {
-      error.backendErrors.push('A server error occured')
+      error.backendErrors.push('A server error occurred')
     } else if (error.response.data) {
       if (error.response.data.detail) {
         error.backendErrors.push(error.response.data.detail)
@@ -81,7 +84,7 @@ export const install: InitModule = ({ app, store, router }) => {
     }
 
     if (error.backendErrors.length === 0) {
-      error.backendErrors.push('An unknown error occured, ensure your are connected to the internet and your funkwhale instance is up and running')
+      error.backendErrors.push('An unknown error occurred, ensure your are connected to the internet and your funkwhale instance is up and running')
     }
 
     // Do something with response error

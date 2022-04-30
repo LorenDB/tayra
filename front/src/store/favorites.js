@@ -1,5 +1,7 @@
 import axios from 'axios'
-import logger from '~/logging'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   namespaced: true,
@@ -36,16 +38,16 @@ export default {
       commit('track', { id, value })
       if (value) {
         return axios.post('favorites/tracks/', { track: id }).then((response) => {
-          logger.default.info('Successfully added track to favorites')
+          logger.info('Successfully added track to favorites')
         }, (response) => {
-          logger.default.info('Error while adding track to favorites')
+          logger.info('Error while adding track to favorites')
           commit('track', { id, value: !value })
         })
       } else {
         return axios.post('favorites/tracks/remove/', { track: id }).then((response) => {
-          logger.default.info('Successfully removed track from favorites')
+          logger.info('Successfully removed track from favorites')
         }, (response) => {
-          logger.default.info('Error while removing track from favorites')
+          logger.info('Error while removing track from favorites')
           commit('track', { id, value: !value })
         })
       }
@@ -62,7 +64,7 @@ export default {
       }
       const promise = axios.get('favorites/tracks/all/', { params: params })
       return promise.then((response) => {
-        logger.default.info('Fetched a batch of ' + response.data.results.length + ' favorites')
+        logger.info('Fetched a batch of ' + response.data.results.length + ' favorites')
         response.data.results.forEach(result => {
           commit('track', { id: result.track, value: true })
         })

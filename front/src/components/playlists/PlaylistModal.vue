@@ -197,10 +197,12 @@ import { filter, sortBy, flow } from 'lodash-es'
 import axios from 'axios'
 import { mapState } from 'vuex'
 
-import logger from '~/logging'
 import Modal from '~/components/semantic/Modal.vue'
 import PlaylistForm from '~/components/playlists/Form.vue'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   components: {
@@ -267,7 +269,7 @@ export default {
       self.lastSelectedPlaylist = playlistId
 
       return axios.post(`playlists/${playlistId}/add`, payload).then(response => {
-        logger.default.info('Successfully added track to playlist')
+        logger.info('Successfully added track to playlist')
         self.update(false)
         self.$store.dispatch('playlists/fetchOwn')
       }, error => {

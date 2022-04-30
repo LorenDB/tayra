@@ -102,7 +102,9 @@ import $ from 'jquery'
 import axios from 'axios'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
 
-import logger from '~/logging'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   mixins: [TranslationsMixin],
@@ -180,7 +182,7 @@ export default {
         self.$emit('updated', response.data)
         self.$store.dispatch('playlists/fetchOwn')
       }, error => {
-        logger.default.error('Error while creating playlist')
+        logger.error('Error while creating playlist')
         self.isLoading = false
         self.errors = error.backendErrors
       })

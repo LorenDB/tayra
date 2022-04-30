@@ -1,7 +1,8 @@
 import axios from 'axios'
-import logger from '~/logging'
-
 import { getClientOnlyRadio } from '~/radios'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 export default {
   namespaced: true,
@@ -62,12 +63,12 @@ export default {
         return
       }
       return axios.post('radios/sessions/', params).then((response) => {
-        logger.default.info('Successfully started radio ', type)
+        logger.info('Successfully started radio ', type)
         commit('current', { type, objectId, session: response.data.id, customRadioId })
         commit('running', true)
         dispatch('populateQueue', true)
       }, (response) => {
-        logger.default.error('Error while starting radio', type)
+        logger.error('Error while starting radio', type)
       })
     },
     stop ({ commit, state }) {
@@ -91,7 +92,7 @@ export default {
         return getClientOnlyRadio(state.current).populateQueue({ current: state.current, dispatch, state, rootState, playNow })
       }
       return axios.post('radios/tracks/', params).then((response) => {
-        logger.default.info('Adding track to queue from radio')
+        logger.info('Adding track to queue from radio')
         const append = dispatch('queue/append', { track: response.data.track }, { root: true })
         if (playNow) {
           append.then(() => {
@@ -99,7 +100,7 @@ export default {
           })
         }
       }, () => {
-        logger.default.error('Error while adding track to queue from radio')
+        logger.error('Error while adding track to queue from radio')
         commit('reset')
       })
     }

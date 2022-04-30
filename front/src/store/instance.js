@@ -1,6 +1,8 @@
 import axios from 'axios'
-import logger from '~/logging'
 import { merge } from 'lodash-es'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 function getDefaultUrl () {
   return (
@@ -142,7 +144,7 @@ export default {
     // Send a request to the login URL and save the returned JWT
     fetchSettings ({ commit }, payload) {
       return axios.get('instance/settings/').then(response => {
-        logger.default.info('Successfully fetched instance settings')
+        logger.info('Successfully fetched instance settings')
 
         const sections = response.data.reduce((map, entry) => {
           map[entry.section] ??= {}
@@ -153,14 +155,14 @@ export default {
         commit('settings', sections)
         payload?.callback?.()
       }, response => {
-        logger.default.error('Error while fetching settings', response.data)
+        logger.error('Error while fetching settings', response.data)
       })
     },
     fetchFrontSettings ({ commit }) {
       return axios.get('/settings.json').then(response => {
         commit('frontSettings', response.data)
       }, response => {
-        logger.default.error('Error when fetching front-end configuration (or no customization available)')
+        logger.error('Error when fetching front-end configuration (or no customization available)')
       })
     }
   }

@@ -72,11 +72,13 @@
 
 <script>
 import axios from 'axios'
-import logger from '~/logging'
 import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
 import TrackWidget from '~/components/audio/track/Widget.vue'
 import AlbumWidget from '~/components/audio/album/Widget.vue'
 import PlaylistWidget from '~/components/playlists/Widget.vue'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 const ARTISTS_URL = 'artists/'
 
@@ -116,10 +118,10 @@ export default {
         playable: true
       }
       const url = ARTISTS_URL
-      logger.default.time('Loading latest artists')
+      logger.time('Loading latest artists')
       axios.get(url, { params: params }).then(response => {
         self.artists = response.data.results
-        logger.default.timeEnd('Loading latest artists')
+        logger.timeEnd('Loading latest artists')
         self.isLoadingArtists = false
       })
     }

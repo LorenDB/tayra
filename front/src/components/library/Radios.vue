@@ -178,13 +178,14 @@
 import axios from 'axios'
 import $ from 'jquery'
 
-import logger from '~/logging'
-
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import PaginationMixin from '~/components/mixins/Pagination.vue'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
 import RadioCard from '~/components/radios/Card.vue'
 import Pagination from '~/components/Pagination.vue'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 const FETCH_URL = 'radios/radios/'
 
@@ -260,7 +261,7 @@ export default {
         name__icontains: this.query,
         ordering: this.getOrderingAsString()
       }
-      logger.default.debug('Fetching radios')
+      logger.debug('Fetching radios')
       axios.get(url, { params: params }).then(response => {
         self.result = response.data
         self.isLoading = false

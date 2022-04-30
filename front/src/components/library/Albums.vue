@@ -151,14 +151,15 @@ import qs from 'qs'
 import axios from 'axios'
 import $ from 'jquery'
 
-import logger from '~/logging'
-
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import PaginationMixin from '~/components/mixins/Pagination.vue'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
 import AlbumCard from '~/components/audio/album/Card.vue'
 import Pagination from '~/components/Pagination.vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
+import useLogger from '~/composables/useLogger'
+
+const logger = useLogger()
 
 const FETCH_URL = 'albums/'
 
@@ -239,7 +240,7 @@ export default {
         include_channels: 'true',
         content_category: 'music'
       }
-      logger.default.debug('Fetching albums')
+      logger.debug('Fetching albums')
       axios.get(
         url,
         {
