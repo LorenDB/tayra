@@ -22,7 +22,7 @@
           class="discrete link"
           :to="{name: 'library.artists.detail', params: {id: artist.id}}"
         >
-          {{ artist.name|truncate(30) }}
+          {{ truncate(artist.name, 30) }}
         </router-link>
       </strong>
 
@@ -67,6 +67,7 @@
 <script>
 import PlayButton from '~/components/audio/PlayButton.vue'
 import TagsList from '~/components/tags/List.vue'
+import { truncate } from '~/utils/filters'
 
 export default {
   components: {
@@ -74,6 +75,9 @@ export default {
     TagsList
   },
   props: { artist: { type: Object, required: true } },
+  setup () {
+    return { truncate }
+  },
   data () {
     return {
       initialAlbums: 30,

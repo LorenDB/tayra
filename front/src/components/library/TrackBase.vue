@@ -228,7 +228,7 @@ import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import Modal from '~/components/semantic/Modal.vue'
 import EmbedWizard from '~/components/audio/EmbedWizard.vue'
 import ReportMixin from '~/components/mixins/Report.vue'
-import { momentFormat } from '~/init/filters'
+import { momentFormat } from '~/utils/filters'
 import updateQueryString from '~/composables/updateQueryString'
 import useLogger from '~/composables/useLogger'
 

@@ -278,7 +278,7 @@ We render some markdown to html here, the content is set by the admin so we shou
                           class="right aligned"
                         >
                           <span class="features-status ui text">
-                            {{ defaultUploadQuota * 1000 * 1000 | humanSize }}
+                            {{ humanSize(defaultUploadQuota * 1000 * 1000) }}
                           </span>
                         </td>
                         <td
@@ -436,10 +436,15 @@ We render some markdown to html here, the content is set by the admin so we shou
 import { mapState } from 'vuex'
 import { get } from 'lodash-es'
 import showdown from 'showdown'
+import { humanSize } from '~/utils/filters'
 
 export default {
+  setup () {
+    return { humanSize }
+  },
   data () {
     return {
+      // TODO (wvffle): Remove v-html
       markdown: new showdown.Converter(),
       showAllowedDomains: false
     }

@@ -4,7 +4,7 @@ import {expect} from 'chai'
 import moxios from 'moxios'
 import store from '~/store/auth'
 
-import { testAction } from '../../utils'
+import { testAction } from '~/utils'
 
 describe('store/auth', () => {
   var sandbox

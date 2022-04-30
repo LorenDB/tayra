@@ -3,7 +3,7 @@ var sinon = require('sinon')
 import moxios from 'moxios'
 import store from '~/store/playlists'
 
-import { testAction } from '../../utils'
+import { testAction } from '~/utils'
 
 describe('store/playlists', () => {
   var sandbox

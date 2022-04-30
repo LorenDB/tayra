@@ -17,7 +17,7 @@
               <h2 class="ui header">
                 <i class="circular inverted book icon" />
                 <div class="content">
-                  {{ object.name | truncate(100) }}
+                  {{ truncate(object.name) }}
                   <div class="sub header">
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
@@ -285,7 +285,7 @@
                       </translate>
                     </td>
                     <td>
-                      {{ stats.media_downloaded_size | humanSize }}
+                      {{ humanSize(stats.media_downloaded_size) }}
                     </td>
                   </tr>
                   <tr>
@@ -295,7 +295,7 @@
                       </translate>
                     </td>
                     <td>
-                      {{ stats.media_total_size | humanSize }}
+                      {{ humanSize(stats.media_total_size) }}
                     </td>
                   </tr>
                   <tr>
@@ -360,6 +360,7 @@
 import axios from 'axios'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
 import useLogger from '~/composables/useLogger'
+import { humanSize, truncate} from '~/utils/filters'
 
 const logger = useLogger()
 
@@ -368,6 +369,9 @@ export default {
     TranslationsMixin
   ],
   props: { id: { type: String, required: true } },
+  setup () {
+    return { humanSize, truncate }
+  },
   data () {
     return {
       isLoading: true,

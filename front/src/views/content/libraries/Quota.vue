@@ -194,7 +194,7 @@
 </template>
 <script>
 import axios from 'axios'
-import { humanSize } from '~/init/filters'
+import { humanSize } from '~/utils/filters'
 import { compileTokens } from '~/search'
 
 export default {

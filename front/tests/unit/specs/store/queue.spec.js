@@ -3,7 +3,7 @@ import {expect} from 'chai'
 import * as _ from 'lodash-es'
 
 import store from '~/store/queue'
-import { testAction } from '../../utils'
+import { testAction } from '~/utils'
 
 describe('store/queue', () => {
   var sandbox

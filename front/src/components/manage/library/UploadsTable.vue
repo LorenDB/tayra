@@ -196,7 +196,7 @@
               :title="scope.obj.library.name"
               @click.prevent="addSearchToken('library_id', scope.obj.library.id)"
             >
-              {{ scope.obj.library.name | truncate(20) }}
+              {{ truncate(scope.obj.library.name, 20) }}
             </a>
           </td>
           <td>
@@ -258,7 +258,7 @@
             </button>
           </td>
           <td>
-            <span v-if="scope.obj.size">{{ scope.obj.size | humanSize }}</span>
+            <span v-if="scope.obj.size">{{ humanSize(scope.obj.size) }}</span>
             <translate
               v-else
               translate-context="*/*/*"
@@ -317,6 +317,7 @@ import OrderingMixin from '~/components/mixins/Ordering.vue'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
 import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
 import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
+import { humanSize, truncate } from '~/utils/filters'
 
 export default {
   components: {
@@ -327,6 +328,9 @@ export default {
   mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
   props: {
     filters: { type: Object, required: false, default: function () { return {} } }
+  },
+  setup () {
+    return { humanSize, truncate }
   },
   data () {
     return {

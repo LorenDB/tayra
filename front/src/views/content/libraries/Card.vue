@@ -42,7 +42,7 @@
           :data-tooltip="size_label"
         >
           <i class="database icon" />
-          {{ library.size | humanSize }}
+          {{ humanSize(library.size) }}
         </span>
         <i class="music icon" />
         <translate
@@ -79,10 +79,14 @@
 
 <script>
 import TranslationsMixin from '~/components/mixins/Translations.vue'
+import { humanSize} from '~/utils/filters'
 
 export default {
   mixins: [TranslationsMixin],
   props: { library: { type: Object, required: true } },
+  setup () {
+    return { humanSize }
+  },
   computed: {
     size_label () {
       return this.$pgettext('Content/Library/Card.Help text', 'Total size of the files in this library')

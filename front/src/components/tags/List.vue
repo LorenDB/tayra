@@ -1,23 +1,59 @@
+<script setup lang="ts">
+import { truncate } from '~/utils/filters'
+import { computed, ref } from 'vue'
+
+interface Props {
+  tags: string[]
+  showMore?: boolean
+  truncateSize?: number
+  limit?: number
+  labelClasses?: string
+  detailRoute?: string
+}
+
+const props = withDefaults(
+  defineProps<Props>(),
+  {
+    showMore: true,
+    truncateSize: 25,
+    limit: 5,
+    labelClasses: '',
+    detailRoute: 'library.tags.detail'
+  }
+)
+
+const honorLimit = ref(true)
+
+const tags = computed(() => {
+  if (!honorLimit.value) {
+    return props.tags
+  }
+
+  return props.tags.slice(0, props.limit)
+})
+
+</script>
+
 <template>
   <div class="component-tags-list">
     <router-link
-      v-for="tag in toDisplay"
+      v-for="tag in tags"
       :key="tag"
-      :to="{name: detailRoute, params: {id: tag}}"
-      :class="['ui', 'circular', 'hashtag', 'label', labelClasses]"
+      :to="{name: props.detailRoute, params: { id: tag } }"
+      :class="['ui', 'circular', 'hashtag', 'label', props.labelClasses]"
     >
-      #{{ tag|truncate(truncateSize) }}
+      #{{ truncate(tag, props.truncateSize) }}
     </router-link>
     <div
-      v-if="showMore && toDisplay.length < tags.length"
+      v-if="props.showMore && tags.length < props.tags.length"
       role="button"
       class="ui circular inverted accent label"
       @click.prevent="honorLimit = false"
     >
       <translate
         translate-context="Content/*/Button/Label/Verb"
-        :translate-params="{count: tags.length - toDisplay.length}"
-        :translate-n="tags.length - toDisplay.length"
+        :translate-params="{ count: props.tags.length - tags.length }"
+        :translate-n="props.tags.length - tags.length"
         translate-plural="Show %{ count } more tags"
       >
         Show 1 more tag
@@ -25,28 +61,3 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    tags: { type: Array, required: true },
-    showMore: { type: Boolean, default: true },
-    truncateSize: { type: Number, default: 25 },
-    limit: { type: Number, default: 5 },
-    labelClasses: { type: String, default: '' },
-    detailRoute: { type: String, default: 'library.tags.detail' }
-  },
-  data () {
-    return {
-      honorLimit: true
-    }
-  },
-  computed: {
-    toDisplay () {
-      if (!this.honorLimit) {
-        return this.tags
-      }
-      return (this.tags || []).slice(0, this.limit)
-    }
-  }
-}
-</script>

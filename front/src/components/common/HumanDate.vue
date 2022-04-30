@@ -1,32 +1,32 @@
+<script setup lang="ts">
+import { momentFormat } from '~/utils/filters'
+import { useTimeAgo } from '@vueuse/core'
+import { computed } from 'vue'
+
+interface Props {
+  date: string,
+  icon?: boolean
+}
+
+const props = withDefaults(
+  defineProps<Props>(),
+  { icon: false }
+)
+
+const date = computed(() => new Date(props.date))
+// TODO (wvffle): Translate useTimeAgo
+const realDate = useTimeAgo(date)
+</script>
+
 <template>
   <time
     :datetime="date"
-    :title="date | moment"
+    :title="momentFormat(date)"
   >
     <i
-      v-if="icon"
+      v-if="props.icon"
       class="outline clock icon"
     />
-    {{ realDate | ago($store.state.ui.momentLocale) }}
+    {{ realDate }}
   </time>
 </template>
-<script>
-import { mapState } from 'vuex'
-export default {
-  props: {
-    date: { type: String, required: true },
-    icon: { type: Boolean, required: false, default: false }
-  },
-  computed: {
-    ...mapState({
-      lastDate: state => state.ui.lastDate
-    }),
-    realDate () {
-      if (this.lastDate) {
-        // dummy code to trigger a recompute to update the ago render
-      }
-      return this.date
-    }
-  }
-}
-</script>

@@ -2,7 +2,7 @@ import {expect} from 'chai'
 
 import store from '~/store/player'
 
-import { testAction } from '../../utils'
+import { testAction } from '~/utils'
 
 describe('store/player', () => {
   describe('mutations', () => {

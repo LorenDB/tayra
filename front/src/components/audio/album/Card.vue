@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="extra content">
-      <span v-if="album.release_date">{{ album.release_date | moment('Y') }} · </span>
+      <span v-if="album.release_date">{{ momentFormat(album.release_date, 'Y') }} · </span>
       <translate
         translate-context="*/*/*"
         :translate-params="{count: album.tracks_count}"
@@ -59,6 +59,7 @@
 
 <script>
 import PlayButton from '~/components/audio/PlayButton.vue'
+import { momentFormat} from '~/utils/filters'
 
 export default {
   components: {
@@ -66,6 +67,9 @@ export default {
   },
   props: {
     album: { type: Object, required: true }
+  },
+  setup () {
+    return { momentFormat }
   },
   computed: {
     imageUrl () {

@@ -3,7 +3,7 @@ import {expect} from 'chai'
 
 import moxios from 'moxios'
 import store from '~/store/radios'
-import { testAction } from '../../utils'
+import { testAction } from '~/utils'
 
 describe('store/radios', () => {
   var sandbox

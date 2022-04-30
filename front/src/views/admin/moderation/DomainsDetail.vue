@@ -361,7 +361,7 @@
                       </translate>
                     </td>
                     <td>
-                      {{ stats.media_downloaded_size | humanSize }}
+                      {{ humanSize(stats.media_downloaded_size) }}
                     </td>
                   </tr>
                   <tr>
@@ -371,7 +371,7 @@
                       </translate>
                     </td>
                     <td>
-                      {{ stats.media_total_size | humanSize }}
+                      {{ humanSize(stats.media_total_size) }}
                     </td>
                   </tr>
                   <tr>
@@ -462,6 +462,7 @@ import { get } from 'lodash-es'
 
 import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
 import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
+import { humanSize} from '~/utils/filters'
 
 export default {
   components: {
@@ -469,6 +470,9 @@ export default {
     InstancePolicyCard
   },
   props: { id: { type: String, required: true }, allowListEnabled: { type: Boolean, required: true } },
+  setup () {
+    return { humanSize }
+  },
   data () {
     return {
       get,

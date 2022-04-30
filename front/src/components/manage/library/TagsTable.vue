@@ -105,7 +105,7 @@
         >
           <td>
             <router-link :to="{name: 'manage.library.tags.detail', params: {id: scope.obj.name }}">
-              {{ scope.obj.name|truncate(30, "…", true) }}
+              {{ truncate(scope.obj.name, 30, undefined, true) }}
             </router-link>
           </td>
           <td>
@@ -156,6 +156,7 @@ import OrderingMixin from '~/components/mixins/Ordering.vue'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
 import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
 import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
+import { truncate } from '~/utils/filters'
 
 export default {
   components: {
@@ -166,6 +167,9 @@ export default {
   mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
   props: {
     filters: { type: Object, required: false, default: () => { return {} } }
+  },
+  setup () {
+    return { truncate }
   },
   data () {
     return {

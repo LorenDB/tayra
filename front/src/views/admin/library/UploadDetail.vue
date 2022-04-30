@@ -21,7 +21,7 @@
               <h2 class="ui header">
                 <i class="circular inverted file icon" />
                 <div class="content">
-                  {{ displayName(object) | truncate(100) }}
+                  {{ truncate(displayName(object)) }}
                   <div class="sub header">
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
@@ -289,7 +289,7 @@
                     </td>
                     <td>
                       <template v-if="object.audio_file">
-                        {{ object.size | humanSize }}
+                        {{ humanSize(object.size) }}
                       </template>
                       <translate
                         v-else
@@ -306,7 +306,7 @@
                       </translate>
                     </td>
                     <td>
-                      {{ object.size | humanSize }}
+                      {{ humanSize(object.size) }}
                     </td>
                   </tr>
                   <tr>
@@ -317,7 +317,7 @@
                     </td>
                     <td>
                       <template v-if="object.bitrate">
-                        {{ object.bitrate | humanSize }}/s
+                        {{ humanSize(object.bitrate) }}/s
                       </template>
                       <translate
                         v-else
@@ -335,7 +335,7 @@
                     </td>
                     <td>
                       <template v-if="object.duration">
-                        {{ object.duration | duration }}
+                        {{ time.parse(object.duration) }}
                       </template>
                       <translate
                         v-else
@@ -380,6 +380,7 @@ import axios from 'axios'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
 import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
 import time from '~/utils/time'
+import { humanSize, truncate } from '~/utils/filters'
 
 export default {
   components: {
@@ -389,9 +390,11 @@ export default {
     TranslationsMixin
   ],
   props: { id: { type: Number, required: true } },
+  setup () {
+    return { humanSize, time, truncate }
+  },
   data () {
     return {
-      time,
       detailedUpload: {},
       showUploadDetailModal: false,
       isLoading: true,

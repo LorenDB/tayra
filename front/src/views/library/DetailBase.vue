@@ -111,7 +111,7 @@
             </translate>
             <span v-if="object.size">
               · <i class="database icon" />
-              {{ object.size | humanSize }}
+              {{ humanSize(object.size) }}
             </span>
           </p>
 
@@ -230,6 +230,7 @@ import axios from 'axios'
 import LibraryFollowButton from '~/components/audio/LibraryFollowButton.vue'
 import ReportMixin from '~/components/mixins/Report.vue'
 import RadioButton from '~/components/radios/Button.vue'
+import { humanSize } from '~/utils/filters'
 
 export default {
   components: {
@@ -242,6 +243,9 @@ export default {
     next()
   },
   props: { id: { type: String, required: true } },
+  setup () {
+    return { humanSize }
+  },
   data () {
     return {
       isLoading: true,

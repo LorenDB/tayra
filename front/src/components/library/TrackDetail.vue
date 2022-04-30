@@ -48,7 +48,7 @@
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.duration">
-                      {{ upload.duration | duration }}
+                      {{ time.parse(upload.duration) }}
                     </template>
                     <translate
                       v-else
@@ -66,7 +66,7 @@
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.size">
-                      {{ upload.size | humanSize }}
+                      {{ humanSize(upload.size) }}
                     </template>
                     <translate
                       v-else
@@ -102,7 +102,7 @@
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.bitrate">
-                      {{ upload.bitrate | humanSize }}/s
+                      {{ humanSize(upload.bitrate) }}/s
                     </template>
                     <translate
                       v-else
@@ -186,7 +186,7 @@
                 </td>
                 <td class="right aligned">
                   <template v-if="track.album && track.album.release_date">
-                    {{ track.album.release_date | moment('Y') }}
+                    {{ momentFormat(track.album.release_date, 'Y') }}
                   </template>
                   <template v-else>
                     <translate translate-context="*/*/*">
@@ -205,7 +205,7 @@
                   <span
                     v-if="track.copyright"
                     :title="track.copyright"
-                  >{{ track.copyright|truncate(50) }}</span>
+                  >{{ truncate(track.copyright, 50) }}</span>
                   <template v-else>
                     <translate translate-context="*/*/*">
                       N/A
@@ -246,7 +246,7 @@
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {{ track.fid|truncate(65) }}
+                    {{ truncate(track.fid, 65) }}
                   </a>
                 </td>
               </tr>
@@ -298,6 +298,8 @@ import axios from 'axios'
 import LibraryWidget from '~/components/federation/LibraryWidget.vue'
 import TagsList from '~/components/tags/List.vue'
 import PlaylistWidget from '~/components/playlists/Widget.vue'
+import { humanSize, momentFormat, truncate } from '~/utils/filters'
+import time from '~/utils/time'
 
 export default {
   components: {
@@ -308,6 +310,9 @@ export default {
   props: {
     track: { type: Object, required: true },
     libraries: { type: Array, default: null }
+  },
+  setup () {
+    return { humanSize, momentFormat, time, truncate }
   },
   data () {
     return {

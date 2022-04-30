@@ -61,13 +61,13 @@
             </translate>
           </div>
           <div class="value">
-            {{ remainingSpace * 1000 * 1000 | humanSize }}
+            {{ humanSize(remainingSpace * 1000 * 1000) }}
           </div>
         </div>
         <div class="ui divider" />
         <h2 class="ui header">
           <translate translate-context="Content/Library/Title/Verb">
-            Upload music from your local storage
+            Upload music from '~/your local storage
           </translate>
         </h2>
         <div class="ui message">
@@ -174,9 +174,9 @@
               :key="file.id"
             >
               <td :title="file.name">
-                {{ file.name | truncate(60) }}
+                {{ truncate(file.name, 60) }}
               </td>
-              <td>{{ file.size | humanSize }}</td>
+              <td>{{ humanSize(file.size) }}</td>
               <td>
                 <span
                   v-if="file.error"
@@ -318,6 +318,7 @@ import FsBrowser from './FsBrowser.vue'
 import FsLogs from './FsLogs.vue'
 import LibraryFilesTable from '~/views/content/libraries/FilesTable.vue'
 import moment from 'moment'
+import { humanSize, truncate } from '~/utils/filters'
 
 export default {
   components: {
@@ -329,6 +330,9 @@ export default {
   props: {
     library: { type: Object, required: true },
     defaultImportReference: { type: String, required: false, default: '' }
+  },
+  setup () {
+    return { humanSize, truncate }
   },
   data () {
     const importReference = this.defaultImportReference || moment().format()

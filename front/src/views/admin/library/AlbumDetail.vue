@@ -26,7 +26,7 @@
                   src="../../../assets/audio/default-cover.png"
                 >
                 <div class="content">
-                  {{ object.title | truncate(100) }}
+                  {{ truncate(object.title) }}
                   <div class="sub header">
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
@@ -337,7 +337,7 @@
                       </translate>
                     </td>
                     <td>
-                      {{ stats.media_downloaded_size | humanSize }}
+                      {{ humanSize(stats.media_downloaded_size) }}
                     </td>
                   </tr>
                   <tr>
@@ -347,7 +347,7 @@
                       </translate>
                     </td>
                     <td>
-                      {{ stats.media_total_size | humanSize }}
+                      {{ humanSize(stats.media_total_size) }}
                     </td>
                   </tr>
 
@@ -401,6 +401,7 @@
 import axios from 'axios'
 import FetchButton from '~/components/federation/FetchButton.vue'
 import TagsList from '~/components/tags/List.vue'
+import { humanSize, truncate} from '~/utils/filters'
 
 export default {
   components: {
@@ -408,6 +409,9 @@ export default {
     TagsList
   },
   props: { id: { type: Number, required: true } },
+  setup () {
+    return { humanSize, truncate }
+  },
   data () {
     return {
       isLoading: true,

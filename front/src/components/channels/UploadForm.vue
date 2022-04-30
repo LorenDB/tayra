@@ -137,7 +137,7 @@
               </template>
               <div class="sub header">
                 <template v-if="file.response.uuid">
-                  {{ file.size | humanSize }}
+                  {{ humanSize(file.size) }}
                   <template v-if="file.response.duration">
                     · <human-duration :duration="file.response.duration" />
                   </template>
@@ -164,7 +164,7 @@
                   >
                     Pending
                   </translate>
-                  · {{ file.size | humanSize }}
+                  · {{ humanSize(file.size) }}
                   · {{ parseInt(file.progress) }}%
                 </template>
                 · <a @click.stop.prevent="remove(file)">
@@ -243,6 +243,7 @@ import LicenseSelect from '~/components/channels/LicenseSelect.vue'
 import AlbumSelect from '~/components/channels/AlbumSelect.vue'
 import FileUploadWidget from '~/components/library/FileUploadWidget.vue'
 import UploadMetadataForm from '~/components/channels/UploadMetadataForm.vue'
+import { humanSize } from '~/utils/filters'
 
 function setIfEmpty (obj, k, v) {
   if (obj[k] !== undefined) {
@@ -260,6 +261,9 @@ export default {
   },
   props: {
     channel: { type: Object, default: null, required: false }
+  },
+  setup () {
+    return { humanSize }
   },
   data () {
     return {

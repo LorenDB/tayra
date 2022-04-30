@@ -55,7 +55,7 @@
           <translate translate-context="Content/Library/Paragraph">
             Remaining storage space:
           </translate>
-          {{ (statusData.quotaStatus.remaining * 1000 * 1000) - statusData.uploadedSize | humanSize }}
+          {{ (statusData.quotaStatus.remaining * 1000 * 1000) - humanSize(statusData.uploadedSize) }}
         </template>
       </div>
       <div class="ui hidden clearing divider mobile-only" />
@@ -144,7 +144,7 @@
 <script>
 import Modal from '~/components/semantic/Modal.vue'
 import ChannelUploadForm from '~/components/channels/UploadForm.vue'
-import { humanSize } from '~/init/filters'
+import { humanSize } from '~/utils/filters'
 import {onBeforeRouteLeave, onBeforeRouteUpdate} from 'vue-router'
 
 export default {
@@ -159,6 +159,8 @@ export default {
 
     onBeforeRouteUpdate(guard)
     onBeforeRouteLeave(guard)
+
+    return { humanSize }
   },
   data () {
     return {

@@ -447,7 +447,7 @@
                       </translate>
                     </td>
                     <td>
-                      {{ stats.media_downloaded_size | humanSize }}
+                      {{ humanSize(stats.media_downloaded_size) }}
                     </td>
                   </tr>
                   <tr v-if="object.user">
@@ -486,7 +486,7 @@
                       </translate>
                     </td>
                     <td>
-                      {{ stats.media_total_size | humanSize }}
+                      {{ humanSize(stats.media_total_size) }}
                     </td>
                   </tr>
                   <tr>
@@ -572,6 +572,7 @@ import $ from 'jquery'
 import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
 import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
 import useLogger from '~/composables/useLogger'
+import { humanSize} from '~/utils/filters'
 
 const logger = useLogger()
 
@@ -581,6 +582,9 @@ export default {
     InstancePolicyCard
   },
   props: { id: { type: Number, required: true } },
+  setup () {
+    return { humanSize }
+  },
   data () {
     return {
       isLoading: true,

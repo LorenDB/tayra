@@ -17,7 +17,7 @@
               <h2 class="ui header">
                 <i class="circular inverted hashtag icon" />
                 <div class="content">
-                  {{ object.name | truncate(100) }}
+                  {{ truncate(object.name) }}
                 </div>
               </h2>
               <div class="header-buttons">
@@ -210,9 +210,13 @@
 
 <script>
 import axios from 'axios'
+import { truncate} from '~/utils/filters'
 
 export default {
   props: { id: { type: Number, required: true } },
+  setup () {
+    return { truncate }
+  },
   data () {
     return {
       isLoading: true,

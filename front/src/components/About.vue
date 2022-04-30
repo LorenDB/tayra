@@ -252,7 +252,7 @@
 import { mapState } from 'vuex'
 import { get } from 'lodash-es'
 import showdown from 'showdown'
-import { humanSize } from '~/init/filters'
+import { humanSize } from '~/utils/filters'
 
 import SignupForm from '~/components/auth/SignupForm.vue'
 import LogoText from '~/components/LogoText.vue'

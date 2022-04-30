@@ -181,7 +181,7 @@
           <template v-if="scope.obj.track">
             <td>
               <router-link :to="{name: 'library.tracks.detail', params: {id: scope.obj.track.id }}">
-                {{ scope.obj.track.title|truncate(25) }}
+                {{ truncate(scope.obj.track.title, 25) }}
               </router-link>
             </td>
             <td>
@@ -189,7 +189,7 @@
                 href=""
                 class="discrete link"
                 @click.prevent="addSearchToken('artist', scope.obj.track.artist.name)"
-              >{{ scope.obj.track.artist.name|truncate(20) }}</a>
+              >{{ truncate(scope.obj.track.artist.name, 20) }}</a>
             </td>
             <td>
               <a
@@ -197,12 +197,12 @@
                 href=""
                 class="discrete link"
                 @click.prevent="addSearchToken('album', scope.obj.track.album.title)"
-              >{{ scope.obj.track.album.title|truncate(20) }}</a>
+              >{{ truncate(scope.obj.track.album.title, 20) }}</a>
             </td>
           </template>
           <template v-else>
             <td :title="scope.obj.source">
-              {{ scope.obj.source | truncate(25) }}
+              {{ truncate(scope.obj.source, 25) }}
             </td>
             <td />
             <td />
@@ -227,7 +227,7 @@
             </button>
           </td>
           <td v-if="scope.obj.duration">
-            {{ scope.obj.duration | duration }}
+            {{ time.parse(scope.obj.duration) }}
           </td>
           <td v-else>
             <translate translate-context="*/*/*">
@@ -235,7 +235,7 @@
             </translate>
           </td>
           <td v-if="scope.obj.size">
-            {{ scope.obj.size | humanSize }}
+            {{ humanSize(scope.obj.size) }}
           </td>
           <td v-else>
             <translate translate-context="*/*/*">
@@ -277,6 +277,7 @@ import OrderingMixin from '~/components/mixins/Ordering.vue'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
 import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
 import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
+import { humanSize, truncate } from '~/utils/filters'
 
 export default {
   components: {
@@ -296,9 +297,11 @@ export default {
       }
     }
   },
+  setup () {
+    return { humanSize, time, truncate }
+  },
   data () {
     return {
-      time,
       detailedUpload: {},
       showUploadDetailModal: false,
       isLoading: false,

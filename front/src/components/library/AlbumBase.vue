@@ -141,7 +141,7 @@
                 v-if="object.release_date || (totalTracks > 0)"
                 class="ui small hidden divider"
               />
-              <span v-if="object.release_date">{{ object.release_date | moment('Y') }} · </span>
+              <span v-if="object.release_date">{{ momentFormat(object.release_date, 'Y') }} · </span>
               <template v-if="totalTracks > 0">
                 <translate
                   v-if="isSerie"
@@ -254,6 +254,7 @@ import PlayButton from '~/components/audio/PlayButton.vue'
 import TagsList from '~/components/tags/List.vue'
 import ArtistLabel from '~/components/audio/ArtistLabel.vue'
 import AlbumDropdown from './AlbumDropdown.vue'
+import { momentFormat} from '~/utils/filters'
 
 function groupByDisc (initial) {
   function inner (acc, track) {
@@ -276,6 +277,9 @@ export default {
     AlbumDropdown
   },
   props: { id: { type: [String, Number], required: true } },
+  setup () {
+    return { momentFormat }
+  },
   data () {
     return {
       isLoading: true,

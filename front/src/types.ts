@@ -70,3 +70,11 @@ export interface ListenWSEvent {
 }
 
 export type WebSocketEvent = PendingReviewEditsWSEvent | PendingReviewReportsWSEvent | PendingReviewRequestsWSEvent | ListenWSEvent
+
+// Yet uncategorized stuff
+export interface Actor {
+  preferred_username: string
+  full_username: string
+  is_local: boolean
+  domain: string
+}

@@ -78,7 +78,7 @@
 import PlayButton from '~/components/audio/PlayButton.vue'
 import TagsList from '~/components/tags/List.vue'
 
-import { momentFormat } from '~/init/filters'
+import { momentFormat } from '~/utils/filters'
 import moment from 'moment'
 
 export default {
