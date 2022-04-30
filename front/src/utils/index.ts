@@ -1,6 +1,6 @@
 import { startCase } from 'lodash-es'
 import { Store } from 'vuex'
-import VueRouter from 'vue-router'
+import { Router } from 'vue-router'
 import { APIErrorResponse } from '~/types'
 
 export function setUpdate (obj: object, statuses: { [key: string]: unknown }, value: unknown) {
@@ -51,9 +51,10 @@ export function setCsrf (xhr: XMLHttpRequest) {
   }
 }
 
-export async function checkRedirectToLogin (store: Store<any>, router: VueRouter) {
+// TODO (wvffle): Use navigation guards
+export async function checkRedirectToLogin (store: Store<any>, router: Router) {
   if (!store.state.auth.authenticated) {
-    return router.push({ name: 'login', query: { next: router.currentRoute.fullPath } })
+    return router.push({ name: 'login', query: { next: router.currentRoute.value.fullPath } })
   }
 }
 

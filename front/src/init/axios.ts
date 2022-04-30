@@ -29,8 +29,8 @@ export const install: InitModule = ({ app, store, router }) => {
     error.backendErrors = []
     if (store.state.auth.authenticated && !store.state.auth.oauth.accessToken && error.response.status === 401) {
       store.commit('auth/authenticated', false)
-      logger.default.warn('Received 401 response from API, redirecting to login form', router.currentRoute.fullPath)
-      await router.push({ name: 'login', query: { next: router.currentRoute.fullPath } })
+      logger.default.warn('Received 401 response from API, redirecting to login form', router.currentRoute.value.fullPath)
+      await router.push({ name: 'login', query: { next: router.currentRoute.value.fullPath } })
     }
 
     if (error.response.status === 404) {

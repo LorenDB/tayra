@@ -1,6 +1,6 @@
 import type { App } from 'vue'
 import type { Store } from 'vuex'
-import type VueRouter from 'vue-router'
+import { Router } from 'vue-router'
 
 declare global {
   interface Window {
@@ -12,7 +12,7 @@ declare global {
 // App structure stuff
 export interface InitModuleContext {
   app: App
-  router: VueRouter
+  router: Router
   store: Store<any>
 }
 

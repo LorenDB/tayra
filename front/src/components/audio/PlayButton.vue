@@ -193,7 +193,7 @@ export default {
       return null
     },
     onTrackPage () {
-      return this.$router.currentRoute.name === 'library.tracks.detail'
+      return this.$router.currentRoute.value.name === 'library.tracks.detail'
     }
   },
   watch: {

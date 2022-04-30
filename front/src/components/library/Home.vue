@@ -1,6 +1,6 @@
 <template>
   <main
-    :key="$router.currentRoute.name"
+    :key="$router.currentRoute.value.name"
     v-title="labels.title"
   >
     <section class="ui vertical stripe segment">
