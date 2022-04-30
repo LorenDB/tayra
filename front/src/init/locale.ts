@@ -1,12 +1,12 @@
 import { watch } from 'vue'
-import { locales } from '~/locales'
+import locales from '~/locales.json'
 import { usePreferredLanguages } from '@vueuse/core'
 import { createGettext } from 'vue3-gettext'
 import { InitModule } from '~/types'
 import store from '~/store'
 
 const defaultLanguage = store.state.ui.currentLanguage ?? 'en_US'
-const availableLanguages = locales.reduce((map: { [key: string]: string }, locale) => {
+const availableLanguages = locales.reduce((map: Record<string, string>, locale) => {
   map[locale.code] = locale.label
   return map
 }, {})
