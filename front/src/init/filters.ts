@@ -116,9 +116,9 @@ export function humanSize (bytes: number) {
 }
 
 // Removes duplicates from a list
-export function unique (list: { [key: string]: unknown }[], property: string) {
+export function unique (list: Record<string, unknown>[], property: string) {
   property = property || 'id'
-  const unique: { [key: string]: unknown }[] = []
+  const unique: Record<string, unknown>[] = []
   list.map(x => unique.filter(a => a[property] === x[property]).length > 0 ? null : unique.push(x))
   return unique
 }

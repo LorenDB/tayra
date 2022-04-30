@@ -3,7 +3,7 @@ import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { APIErrorResponse } from '~/types'
 
-export function setUpdate (obj: object, statuses: { [key: string]: unknown }, value: unknown) {
+export function setUpdate (obj: object, statuses: Record<string, unknown>, value: unknown) {
   for (const key of Object.keys(obj)) {
     statuses[key] = value
   }
