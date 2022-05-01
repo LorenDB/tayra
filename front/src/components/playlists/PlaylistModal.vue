@@ -137,7 +137,7 @@
               <td>
                 <router-link
                   :to="{name: 'library.playlists.detail', params: {id: playlist.id }}"
-                  @click.native="$store.state.playlists.showModal = false"
+                  @click="$store.state.playlists.showModal = false"
                 >
                   {{ playlist.name }}
                 </router-link>
