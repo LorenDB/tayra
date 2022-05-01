@@ -72,75 +72,74 @@
         </translate>
       </div>
     </div>
-    <template
-      v-for="(field, key) in plugin.conf"
-      v-if="plugin.conf && plugin.conf.length > 0"
-    >
-      <div
-        v-if="field.type === 'text'"
-        :key="key"
-        class="field"
-      >
-        <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
-        <input
-          :id="`plugin-${field.name}`"
-          v-model="values[field.name]"
-          type="text"
+    <template v-if="plugin.conf?.length > 0">
+      <template v-for="(field, key) in plugin.conf">
+        <div
+          v-if="field.type === 'text'"
+          :key="key"
+          class="field"
         >
+          <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
+          <input
+            :id="`plugin-${field.name}`"
+            v-model="values[field.name]"
+            type="text"
+          >
+          <div
+            v-if="field.help"
+            v-html="markdown.makeHtml(field.help)"
+          />
+        </div>
         <div
-          v-if="field.help"
-          v-html="markdown.makeHtml(field.help)"
-        />
-      </div>
-      <div
-        v-if="field.type === 'long_text'"
-        :key="key"
-        class="field"
-      >
-        <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
-        <textarea
-          :id="`plugin-${field.name}`"
-          v-model="values[field.name]"
-          type="text"
-          rows="5"
-        />
-        <div
-          v-if="field.help"
-          v-html="markdown.makeHtml(field.help)"
-        />
-      </div>
-      <div
-        v-if="field.type === 'url'"
-        :key="key"
-        class="field"
-      >
-        <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
-        <input
-          :id="`plugin-${field.name}`"
-          v-model="values[field.name]"
-          type="url"
+          v-if="field.type === 'long_text'"
+          :key="key"
+          class="field"
         >
+          <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
+          <textarea
+            :id="`plugin-${field.name}`"
+            v-model="values[field.name]"
+            type="text"
+            rows="5"
+          />
+          <div
+            v-if="field.help"
+            v-html="markdown.makeHtml(field.help)"
+          />
+        </div>
         <div
-          v-if="field.help"
-          v-html="markdown.makeHtml(field.help)"
-        />
-      </div>
-      <div
-        v-if="field.type === 'password'"
-        :key="key"
-        class="field"
-      >
-        <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
-        <input
-          :id="`plugin-${field.name}`"
-          v-model="values[field.name]"
-          type="password"
+          v-if="field.type === 'url'"
+          :key="key"
+          class="field"
         >
+          <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
+          <input
+            :id="`plugin-${field.name}`"
+            v-model="values[field.name]"
+            type="url"
+          >
+          <div
+            v-if="field.help"
+            v-html="markdown.makeHtml(field.help)"
+          />
+        </div>
         <div
-          v-if="field.help"
-          v-html="markdown.makeHtml(field.help)"
-        />
-      </div>
+          v-if="field.type === 'password'"
+          :key="key"
+          class="field"
+        >
+          <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
+          <input
+            :id="`plugin-${field.name}`"
+            v-model="values[field.name]"
+            type="password"
+          >
+          <div
+            v-if="field.help"
+            v-html="markdown.makeHtml(field.help)"
+          />
+        </div>
+      </template>
     </template>
     <button
       type="submit"

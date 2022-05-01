@@ -24,7 +24,6 @@ module.exports = {
   ],
   rules: {
     'vue/no-v-html': 'off', // TODO: tackle this properly
-    'vue/no-use-v-if-with-v-for': 'off',
 
     // NOTE: Handled by typescript
     'no-undef': 'off',
@@ -42,6 +41,9 @@ module.exports = {
 
     // TODO (wvffle): Migration to pinia
     //                Vuex 3 store does not have types defined, hence we use `any`
-    '@typescript-eslint/no-explicit-any': 'off'
+    '@typescript-eslint/no-explicit-any': 'off',
+
+    // TODO (wvffle): Migrate to <script setup>
+    'vue/require-explicit-emits': 'off'
   }
 }

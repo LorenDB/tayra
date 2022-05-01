@@ -95,108 +95,109 @@
           You don't have the permission to edit this object, but you can suggest changes. Once submitted, suggestions will be reviewed before approval.
         </translate>
       </div>
-      <div
-        v-for="fieldConfig in config.fields"
-        v-if="values"
-        :key="fieldConfig.id"
-        class="ui field"
-      >
-        <template v-if="fieldConfig.type === 'text'">
-          <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
-          <input
-            :id="fieldConfig.id"
-            v-model="values[fieldConfig.id]"
-            :type="fieldConfig.inputType || 'text'"
-            :required="fieldConfig.required"
-            :name="fieldConfig.id"
-          >
-        </template>
-        <template v-else-if="fieldConfig.type === 'license'">
-          <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
-
-          <select
-            :id="fieldConfig.id"
-            ref="license"
-            v-model="values[fieldConfig.id]"
-            :required="fieldConfig.required"
-            class="ui fluid search dropdown"
-          >
-            <option :value="null">
-              <translate translate-context="*/*/*">
-                N/A
-              </translate>
-            </option>
-            <option
-              v-for="license in licenses"
-              :key="license.code"
-              :value="license.code"
+      <template v-if="values">
+        <div
+          v-for="fieldConfig in config.fields"
+          :key="fieldConfig.id"
+          class="ui field"
+        >
+          <template v-if="fieldConfig.type === 'text'">
+            <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
+            <input
+              :id="fieldConfig.id"
+              v-model="values[fieldConfig.id]"
+              :type="fieldConfig.inputType || 'text'"
+              :required="fieldConfig.required"
+              :name="fieldConfig.id"
             >
-              {{ license.name }}
-            </option>
-          </select>
-          <button
-            class="ui tiny basic left floated button"
-            form="noop"
-            @click.prevent="values[fieldConfig.id] = null"
-          >
-            <i class="x icon" />
-            <translate translate-context="Content/Library/Button.Label">
-              Clear
-            </translate>
-          </button>
-        </template>
-        <template v-else-if="fieldConfig.type === 'content'">
-          <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
-          <content-form
-            v-model="values[fieldConfig.id].text"
-            :field-id="fieldConfig.id"
-            :rows="3"
-          />
-        </template>
-        <template v-else-if="fieldConfig.type === 'attachment'">
-          <attachment-input
-            :id="fieldConfig.id"
-            v-model="values[fieldConfig.id]"
-            :initial-value="initialValues[fieldConfig.id]"
-            :required="fieldConfig.required"
-            :name="fieldConfig.id"
-            @delete="values[fieldConfig.id] = initialValues[fieldConfig.id]"
-          >
-            <span>{{ fieldConfig.label }}</span>
-          </attachment-input>
-        </template>
-        <template v-else-if="fieldConfig.type === 'tags'">
-          <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
-          <tags-selector
-            :id="fieldConfig.id"
-            ref="tags"
-            v-model="values[fieldConfig.id]"
-            required="fieldConfig.required"
-          />
-          <button
-            class="ui tiny basic left floated button"
-            form="noop"
-            @click.prevent="values[fieldConfig.id] = []"
-          >
-            <i class="x icon" />
-            <translate translate-context="Content/Library/Button.Label">
-              Clear
-            </translate>
-          </button>
-        </template>
-        <div v-if="fieldValuesChanged(fieldConfig.id)">
-          <button
-            class="ui tiny basic right floated reset button"
-            form="noop"
-            @click.prevent="resetField(fieldConfig.id)"
-          >
-            <i class="undo icon" />
-            <translate translate-context="Content/Library/Button.Label">
-              Reset to initial value
-            </translate>
-          </button>
+          </template>
+          <template v-else-if="fieldConfig.type === 'license'">
+            <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
+
+            <select
+              :id="fieldConfig.id"
+              ref="license"
+              v-model="values[fieldConfig.id]"
+              :required="fieldConfig.required"
+              class="ui fluid search dropdown"
+            >
+              <option :value="null">
+                <translate translate-context="*/*/*">
+                  N/A
+                </translate>
+              </option>
+              <option
+                v-for="license in licenses"
+                :key="license.code"
+                :value="license.code"
+              >
+                {{ license.name }}
+              </option>
+            </select>
+            <button
+              class="ui tiny basic left floated button"
+              form="noop"
+              @click.prevent="values[fieldConfig.id] = null"
+            >
+              <i class="x icon" />
+              <translate translate-context="Content/Library/Button.Label">
+                Clear
+              </translate>
+            </button>
+          </template>
+          <template v-else-if="fieldConfig.type === 'content'">
+            <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
+            <content-form
+              v-model="values[fieldConfig.id].text"
+              :field-id="fieldConfig.id"
+              :rows="3"
+            />
+          </template>
+          <template v-else-if="fieldConfig.type === 'attachment'">
+            <attachment-input
+              :id="fieldConfig.id"
+              v-model="values[fieldConfig.id]"
+              :initial-value="initialValues[fieldConfig.id]"
+              :required="fieldConfig.required"
+              :name="fieldConfig.id"
+              @delete="values[fieldConfig.id] = initialValues[fieldConfig.id]"
+            >
+              <span>{{ fieldConfig.label }}</span>
+            </attachment-input>
+          </template>
+          <template v-else-if="fieldConfig.type === 'tags'">
+            <label :for="fieldConfig.id">{{ fieldConfig.label }}</label>
+            <tags-selector
+              :id="fieldConfig.id"
+              ref="tags"
+              v-model="values[fieldConfig.id]"
+              required="fieldConfig.required"
+            />
+            <button
+              class="ui tiny basic left floated button"
+              form="noop"
+              @click.prevent="values[fieldConfig.id] = []"
+            >
+              <i class="x icon" />
+              <translate translate-context="Content/Library/Button.Label">
+                Clear
+              </translate>
+            </button>
+          </template>
+          <div v-if="fieldValuesChanged(fieldConfig.id)">
+            <button
+              class="ui tiny basic right floated reset button"
+              form="noop"
+              @click.prevent="resetField(fieldConfig.id)"
+            >
+              <i class="undo icon" />
+              <translate translate-context="Content/Library/Button.Label">
+                Reset to initial value
+              </translate>
+            </button>
+          </div>
         </div>
-      </div>
+      </template>
       <div class="field">
         <label for="summary"><translate translate-context="*/*/*">Summary (optional)</translate></label>
         <textarea

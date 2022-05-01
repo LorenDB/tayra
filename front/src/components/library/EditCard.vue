@@ -97,8 +97,7 @@
               </template>
               <template v-else>
                 <span
-                  v-for="(part, key) in field.diff"
-                  v-if="!part.added"
+                  v-for="(part, key) in field.diff.filter(p => !p.added)"
                   :key="key"
                   :class="['diff', {removed: part.removed}]"
                 >
@@ -125,8 +124,7 @@
               </template>
               <template v-else>
                 <span
-                  v-for="(part, key) in field.diff"
-                  v-if="!part.removed"
+                  v-for="(part, key) in field.diff.filter(p => !p.removed)"
                   :key="key"
                   :class="['diff', {added: part.added}]"
                 >

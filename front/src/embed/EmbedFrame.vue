@@ -189,8 +189,7 @@
       <table class="queue">
         <tbody>
           <tr
-            v-for="(track, index) in tracks"
-            v-if="track.sources.length > 0"
+            v-for="(track, index) in filteredTracks"
             :id="'queue-item-' + index"
             :key="index"
             role="button"
@@ -249,6 +248,7 @@ import axios from 'axios'
 import Logo from '~/components/Logo.vue'
 import updateQueryString from '~/composables/updateQueryString'
 import time from '~/utils/time'
+import { reactive, computed } from 'vue'
 
 function getURLParams () {
   let match
@@ -265,6 +265,12 @@ function getURLParams () {
 export default {
   name: 'App',
   components: { Logo },
+  setup () {
+    const tracks = reactive([])
+    const filteredTracks = computed(() => tracks.filter(track => track.sources.length > 0))
+
+    return { tracks, filteredTracks }
+  },
   data () {
     return {
       time,
@@ -273,7 +279,6 @@ export default {
       error: null,
       type: null,
       id: null,
-      tracks: [],
       autoplay: false,
       url: null,
       isLoading: true,
@@ -404,26 +409,25 @@ export default {
       })
     },
     fetchTrack (id) {
-      const self = this
       const url = `${this.baseUrl}/api/v1/tracks/${id}/`
-      axios.get(url).then(response => {
-        self.tracks = self.parseTracks([response.data])
-        self.isLoading = false
+      axios.get(url).then(() => {
+        this.tracks = this.parseTracks([response.data])
+        this.isLoading = false
       }).catch(error => {
         if (error.response) {
           if (error.response.status === 404) {
-            self.error = 'server_not_found'
+            this.error = 'server_not_found'
           } else if (error.response.status === 403) {
-            self.error = 'server_requires_auth'
+            this.error = 'server_requires_auth'
           } else if (error.response.status === 500) {
-            self.error = 'server_error'
+            this.error = 'server_error'
           } else {
-            self.error = 'server_unknown_error'
+            this.error = 'server_unknown_error'
           }
         } else {
-          self.error = 'server_unknown_error'
+          this.error = 'server_unknown_error'
         }
-        self.isLoading = false
+        this.isLoading = false
       })
     },
     fetchTracks (filters, path) {
