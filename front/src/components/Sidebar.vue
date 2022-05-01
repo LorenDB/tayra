@@ -305,8 +305,8 @@
               </router-link>
               <router-link
                 class="item"
-                :exact="true"
                 :to="{name: 'library.index'}"
+                active-class="_active"
               >
                 <i class="music icon" /><translate translate-context="Sidebar/Navigation/List item.Link/Verb">
                   Browse
@@ -376,7 +376,6 @@
             <div class="menu">
               <router-link
                 class="item"
-                :exact="true"
                 :to="{name: 'library.me'}"
               >
                 <i class="music icon" /><translate translate-context="Sidebar/Navigation/List item.Link/Verb">
@@ -444,6 +443,7 @@
               <router-link
                 class="item"
                 to="/about"
+                active-class="router-link-exact-active active"
               >
                 <i class="info icon" /><translate translate-context="Sidebar/*/List item.Link">
                   About this pod

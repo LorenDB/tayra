@@ -84,7 +84,7 @@
                 margin: 0 0.5em 0 0;
             }
         }
-        .item.active {
+        .item.router-link-exact-active {
             border-right: 5px solid var(--vibrant-color);
             border-radius: 0 !important;
             background: var(--sidebar-active-item-background) !important;

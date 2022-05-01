@@ -32,7 +32,6 @@
           <router-link
             class="ui icon labeled button"
             :to="{name: 'library.radios.edit', params: {id: radio.id}}"
-            exact
           >
             <i class="pencil icon" />
             Edit…
@@ -100,7 +99,6 @@
         v-if="$store.state.auth.username === radio.user.username"
         class="ui success icon labeled button"
         :to="{name: 'library.radios.edit', params: {id: radio.id}}"
-        exact
       >
         <i class="pencil icon" />
         Edit…

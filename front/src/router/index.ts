@@ -70,6 +70,7 @@ export default createRouter({
         import('~/components/About.vue')
     },
     {
+      // TODO (wvffle): Make it a child of /about to have the active style on the sidebar link
       path: '/about/pod',
       name: 'about-pod',
       component: () =>

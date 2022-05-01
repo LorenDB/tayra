@@ -395,7 +395,7 @@
             <div class="ui secondary pointing center aligned menu">
               <router-link
                 class="item"
-                :exact="true"
+
                 :to="{name: 'channels.detail', params: {id: id}}"
               >
                 <translate translate-context="Content/Channels/Link">
@@ -404,7 +404,7 @@
               </router-link>
               <router-link
                 class="item"
-                :exact="true"
+
                 :to="{name: 'channels.detail.episodes', params: {id: id}}"
               >
                 <translate

@@ -162,7 +162,7 @@
               <div class="ui secondary pointing center aligned menu">
                 <router-link
                   class="item"
-                  :exact="true"
+
                   :to="{name: 'library.detail'}"
                 >
                   <translate translate-context="*/*/*">
@@ -171,7 +171,7 @@
                 </router-link>
                 <router-link
                   class="item"
-                  :exact="true"
+
                   :to="{name: 'library.detail.albums'}"
                 >
                   <translate translate-context="*/*/*">
@@ -180,7 +180,7 @@
                 </router-link>
                 <router-link
                   class="item"
-                  :exact="true"
+
                   :to="{name: 'library.detail.tracks'}"
                 >
                   <translate translate-context="*/*/*">
@@ -190,7 +190,7 @@
                 <router-link
                   v-if="isOwner"
                   class="item"
-                  :exact="true"
+
                   :to="{name: 'library.detail.upload'}"
                 >
                   <i class="upload icon" />
@@ -201,7 +201,7 @@
                 <router-link
                   v-if="isOwner"
                   class="item"
-                  :exact="true"
+
                   :to="{name: 'library.detail.edit'}"
                 >
                   <i class="pencil icon" />

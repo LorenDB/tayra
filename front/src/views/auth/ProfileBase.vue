@@ -106,7 +106,6 @@
               <div class="ui secondary pointing center aligned menu">
                 <router-link
                   class="item"
-                  :exact="true"
                   :to="{name: 'profile.overview', params: routerParams}"
                 >
                   <translate translate-context="Content/Profile/Link">
@@ -115,7 +114,6 @@
                 </router-link>
                 <router-link
                   class="item"
-                  :exact="true"
                   :to="{name: 'profile.activity', params: routerParams}"
                 >
                   <translate translate-context="Content/Profile/*">

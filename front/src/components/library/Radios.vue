@@ -42,7 +42,6 @@
         v-if="isAuthenticated"
         class="ui success button"
         to="/library/radios/build"
-        exact
       >
         <translate translate-context="Content/Radio/Button.Label/Verb">
           Create your own radio
