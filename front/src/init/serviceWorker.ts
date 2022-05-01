@@ -1,20 +1,22 @@
-import { AppModule } from '~/types'
+import { InitModule } from '~/types'
 import { registerSW } from 'virtual:pwa-register'
-import logger from '~/logging'
+import useLogger from '~/composables/useLogger'
 import Vue from 'vue'
+
+const logger = useLogger()
 
 const { $pgettext } = Vue.prototype
 
-export const install: AppModule = ({ store }) => {
+export const install: InitModule = ({ store }) => {
   const updateSW = registerSW({
     onRegisterError () {
-      logger.default.error('SW install error')
+      logger.error('SW install error')
     },
     onOfflineReady () {
-      logger.default.info('Funkwhale is being served from cache by a service worker.')
+      logger.info('Funkwhale is being served from cache by a service worker.')
     },
     onRegistered () {
-      logger.default.info('Service worker has been registered.')
+      logger.info('Service worker has been registered.')
     },
     onNeedRefresh () {
       store.commit('ui/addMessage', {
