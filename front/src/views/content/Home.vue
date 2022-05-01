@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import { humanSize } from '~/utils/filters'
+import { useGettext } from 'vue3-gettext'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+
+const { $pgettext } = useGettext()
+
+const labels = computed(() => ({
+  title: $pgettext('Content/Library/Title/Verb', 'Add and manage content')
+}))
+
+const store = useStore()
+const quota = computed(() => store.state.instance.settings.users.upload_quota.value)
+const defaultQuota = computed(() => humanSize(quota.value * 1e6))
+</script>
+
 <template>
   <section
     v-title="labels.title"
@@ -27,7 +44,7 @@
           </translate>
         </p>
         <router-link
-          :to="{name: 'profile.overview', params: {username: $store.state.auth.username}, hash: '#channels'}"
+          :to="{name: 'profile.overview', params: {username: store.state.auth.username}, hash: '#channels'}"
           class="ui primary button"
         >
           <translate translate-context="Content/Library/Button.Label/Verb">
@@ -80,24 +97,3 @@
     </div>
   </section>
 </template>
-
-<script>
-import { humanSize } from '~/utils/filters'
-
-export default {
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Content/Library/Title/Verb', 'Add and manage content')
-      }
-    },
-    defaultQuota () {
-      const quota =
-        this.$store.state.instance.settings.users.upload_quota.value *
-        1000 *
-        1000
-      return humanSize(quota)
-    }
-  }
-}
-</script>

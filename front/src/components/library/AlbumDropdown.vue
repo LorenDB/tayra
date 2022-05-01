@@ -3,7 +3,7 @@
 
     <modal
       v-if="isEmbedable"
-      :show.sync="showEmbedModal"
+      v-model:show="showEmbedModal"
     >
       <h4 class="header">
         <translate translate-context="Popup/Album/Title/Verb">Embed this album on your website</translate>

@@ -55,7 +55,7 @@
       </library-widget>
     </div>
 
-    <modal :show.sync="showCreateModal">
+    <modal v-model:show="showCreateModal">
       <h4 class="header">
         <translate
           v-if="step === 1"

@@ -1,7 +1,7 @@
 <template>
   <modal
-    :show="show"
-    @update:show="$emit('update:show', $event); isError = false"
+    v-model:show="showRef"
+    @update:show="isError = false"
   >
     <h3 class="header">
       <translate translate-context="Popup/Instance/Title">
@@ -108,12 +108,18 @@
 import Modal from '~/components/semantic/Modal.vue'
 import axios from 'axios'
 import { uniq } from 'lodash-es'
+import { useVModel } from '@vueuse/core'
 
 export default {
   components: {
     Modal
   },
   props: { show: { type: Boolean, required: true } },
+  setup (props) {
+    // TODO (wvffle): Add defineEmits when rewriting to <script setup>
+    const showRef = useVModel(props, 'show'/*, emit*/)
+    return { showRef }
+  },
   data () {
     return {
       instanceUrl: null,

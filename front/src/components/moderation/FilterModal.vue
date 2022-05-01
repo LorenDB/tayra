@@ -1,6 +1,6 @@
 <template>
   <modal
-    :show="$store.state.moderation.showFilterModal"
+    v-model:show="showRef"
     @update:show="update"
   >
     <h4 class="header">
@@ -90,7 +90,8 @@
 
 <script>
 import axios from 'axios'
-import { mapState } from 'vuex'
+import { mapState, useStore } from 'vuex'
+import { computed } from 'vue'
 
 import Modal from '~/components/semantic/Modal.vue'
 import useLogger from '~/composables/useLogger'
@@ -100,6 +101,11 @@ const logger = useLogger()
 export default {
   components: {
     Modal
+  },
+  setup () {
+    const store = useStore()
+    const showRef = computed(() => store.state.moderation.showFilterModal)
+    return { showRef }
   },
   data () {
     return {
@@ -117,7 +123,7 @@ export default {
   methods: {
     update (v) {
       this.$store.commit('moderation/showFilterModal', v)
-      this.errors = []
+      this.errors.length = 0
     },
     hide () {
       const self = this

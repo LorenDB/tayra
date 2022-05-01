@@ -1,7 +1,7 @@
 <template>
   <modal
+    v-model:show="show"
     class="small"
-    :show.sync="show"
   >
     <h4 class="header">
       <translate

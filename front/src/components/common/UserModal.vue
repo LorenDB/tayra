@@ -1,10 +1,9 @@
 <template>
   <!-- TODO make generic and move to semantic/modal? -->
   <modal
-    :show="show"
+    v-model:show="showRef"
     :scrolling="true"
     :fullscreen="false"
-    @update:show="$emit('update:show', $event)"
   >
     <div
       v-if="$store.state.auth.authenticated"
@@ -208,6 +207,7 @@ import Modal from '~/components/semantic/Modal.vue'
 import { mapGetters } from 'vuex'
 import useThemeList from '~/composables/useThemeList'
 import useTheme from '~/composables/useTheme'
+import { useVModel } from '@vueuse/core/index'
 
 export default {
   components: {
@@ -216,8 +216,11 @@ export default {
   props: {
     show: { type: Boolean, required: true }
   },
-  setup () {
+  setup (props) {
+    // TODO (wvffle): Add defineEmits when rewriting to <script setup>
+    const showRef = useVModel(props, 'show'/*, emit*/)
     return {
+      showRef,
       theme: useTheme(),
       themes: useThemeList()
     }

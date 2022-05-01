@@ -1,6 +1,6 @@
 <template>
   <modal
-    :show="$store.state.moderation.showReportModal"
+    v-model:show="showRef"
     @update:show="update"
   >
     <h2
@@ -155,7 +155,8 @@
 
 <script>
 import axios from 'axios'
-import { mapState } from 'vuex'
+import { mapState, useStore } from 'vuex'
+import { computed } from 'vue'
 import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
 import Modal from '~/components/semantic/Modal.vue'
 
@@ -169,6 +170,11 @@ export default {
   components: {
     ReportCategoryDropdown,
     Modal
+  },
+  setup () {
+    const store = useStore()
+    const showRef = computed(() => store.state.moderation.showReportModal)
+    return { showRef }
   },
   data () {
     return {

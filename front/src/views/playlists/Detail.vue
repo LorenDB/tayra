@@ -104,7 +104,7 @@
         </div>
         <modal
           v-if="playlist.privacy_level === 'everyone' && playlist.is_playable"
-          :show.sync="showEmbedModal"
+          v-model:show="showEmbedModal"
         >
           <h4 class="header">
             <translate translate-context="Popup/Album/Title/Verb">

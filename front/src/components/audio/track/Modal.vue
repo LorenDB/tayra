@@ -1,10 +1,9 @@
 <template>
   <modal
     ref="modal"
-    :show="show"
+    v-model:show="showRef"
     :scrolling="true"
     :additional-classes="['scrolling-track-options']"
-    @update:show="$emit('update:show', $event)"
   >
     <div class="header">
       <div class="ui large centered rounded image">
@@ -229,6 +228,7 @@
 import Modal from '~/components/semantic/Modal.vue'
 import ReportMixin from '~/components/mixins/Report.vue'
 import PlayOptionsMixin from '~/components/mixins/PlayOptions.vue'
+import { useVModel } from '@vueuse/core/index'
 
 export default {
   components: {
@@ -241,6 +241,11 @@ export default {
     index: { type: Number, required: true },
     isArtist: { type: Boolean, required: false, default: false },
     isAlbum: { type: Boolean, required: false, default: false }
+  },
+  setup (props) {
+    // TODO (wvffle): Add defineEmits when rewriting to <script setup>
+    const showRef = useVModel(props, 'show'/*, emit*/)
+    return { showRef }
   },
   data () {
     return {

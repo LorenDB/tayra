@@ -15,7 +15,7 @@
       </h1>
       <modal
         class="tiny"
-        :show.sync="showSubscribeModal"
+        v-model:show="showSubscribeModal"
         :fullscreen="false"
       >
         <h2 class="header">

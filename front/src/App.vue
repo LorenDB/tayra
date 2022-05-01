@@ -132,15 +132,13 @@ const showSetInstanceModal = ref(false)
       property="stylesheet"
       :href="url"
     >
+
     <sidebar
       :width="width"
       @show:set-instance-modal="showSetInstanceModal = !showSetInstanceModal"
       @show:shortcuts-modal="toggleShortcutsModal"
     />
-    <set-instance-modal
-      :show="showSetInstanceModal"
-      @update:show="showSetInstanceModal = $event"
-    />
+    <set-instance-modal v-model:show="showSetInstanceModal" />
     <service-messages />
     <transition name="queue">
       <queue
@@ -150,17 +148,18 @@ const showSetInstanceModal = ref(false)
     </transition>
 
     <router-view
-      v-show="!store.state.ui.queueFocused"
       v-slot="{ Component }"
       role="main"
     >
-      <Suspense v-if="Component">
-        <component :is="Component" />
-        <template #fallback>
-          <!-- TODO (wvffle): Add loader -->
-          Loading...
-        </template>
-      </Suspense>
+      <template v-if="Component">
+        <Suspense>
+          <component :is="Component" />
+          <template #fallback>
+            <!-- TODO (wvffle): Add loader -->
+            Loading...
+          </template>
+        </Suspense>
+      </template>
     </router-view>
 
     <audio-player ref="player" />
@@ -168,10 +167,7 @@ const showSetInstanceModal = ref(false)
     <channel-upload-modal v-if="store.state.auth.authenticated" />
     <filter-modal v-if="store.state.auth.authenticated" />
     <report-modal />
-    <shortcuts-modal
-      :show="showShortcutsModal"
-      @update:show="showShortcutsModal = $event"
-    />
+    <shortcuts-modal v-model:show="showShortcutsModal" />
   </div>
 </template>
 

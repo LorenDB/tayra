@@ -59,7 +59,7 @@
 
             <modal
               v-if="publicLibraries.length > 0"
-              :show.sync="showEmbedModal"
+              v-model:show="showEmbedModal"
             >
               <h4 class="header">
                 <translate translate-context="Popup/Artist/Title/Verb">

@@ -152,8 +152,8 @@
       </div>
     </section>
     <modal
+      v-model:show="showSubscribeModal"
       class="tiny"
-      :show.sync="showSubscribeModal"
       :fullscreen="false"
     >
       <h2 class="header">

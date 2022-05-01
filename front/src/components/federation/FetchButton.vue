@@ -7,8 +7,8 @@
       <slot />
     </div>
     <modal
+      v-model:show="showModal"
       class="small"
-      :show.sync="showModal"
     >
       <h3 class="header">
         <translate translate-context="Popup/*/Title">

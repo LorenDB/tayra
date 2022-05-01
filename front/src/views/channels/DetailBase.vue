@@ -89,8 +89,8 @@
                   <i class="feed icon" />
                 </a>
                 <modal
+                  v-model:show="showSubscribeModal"
                   class="tiny"
-                  :show.sync="showSubscribeModal"
                 >
                   <h4 class="header">
                     <translate translate-context="Popup/Channel/Title/Verb">
@@ -311,7 +311,7 @@
 
               <modal
                 v-if="totalTracks > 0"
-                :show.sync="showEmbedModal"
+                v-model:show="showEmbedModal"
               >
                 <h4 class="header">
                   <translate translate-context="Popup/Artist/Title/Verb">
@@ -336,7 +336,7 @@
               </modal>
               <modal
                 v-if="isOwner"
-                :show.sync="showEditModal"
+                v-model:show="showEditModal"
               >
                 <h4 class="header">
                   <translate

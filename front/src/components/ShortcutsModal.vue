@@ -1,8 +1,109 @@
+<script setup lang="ts">
+import Modal from '~/components/semantic/Modal.vue'
+import { useVModel } from '@vueuse/core'
+import { computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+interface Props {
+  show: boolean
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits(['update:show'])
+const showRef = useVModel(props, 'show', emit)
+
+const { $pgettext } = useGettext()
+const general = computed(() => [
+  {
+    title: $pgettext('Popup/Keyboard shortcuts/Title', 'General shortcuts'),
+    shortcuts: [
+      {
+        key: 'h',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Show available keyboard shortcuts')
+      },
+      {
+        key: 'shift + f',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Focus searchbar')
+      },
+      {
+        key: 'esc',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Unfocus searchbar')
+      }
+    ]
+  }
+])
+
+const player = computed(() => [
+  {
+    title: $pgettext('Popup/Keyboard shortcuts/Title', 'Audio player shortcuts'),
+    shortcuts: [
+      {
+        key: 'p',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Pause/play the current track')
+      },
+      {
+        key: 'left',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Seek backwards 5s')
+      },
+      {
+        key: 'right',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Seek forwards 5s')
+      },
+      {
+        key: 'shift + left',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Seek backwards 30s')
+      },
+      {
+        key: 'shift + right',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Seek forwards 30s')
+      },
+      {
+        key: 'ctrl + shift + left',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Play previous track')
+      },
+      {
+        key: 'ctrl + shift + right',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Play next track')
+      },
+      {
+        key: 'shift + up',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Increase volume')
+      },
+      {
+        key: 'shift + down',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Decrease volume')
+      },
+      {
+        key: 'm',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Toggle mute')
+      },
+      {
+        key: 'e',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Expand queue/player view')
+      },
+      {
+        key: 'l',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Toggle queue looping')
+      },
+      {
+        key: 's',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Shuffle queue')
+      },
+      {
+        key: 'q',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Clear queue')
+      },
+      {
+        key: 'f',
+        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Toggle favorite')
+      }
+    ]
+  }
+])
+</script>
+
 <template>
-  <modal
-    :show="show"
-    @update:show="$emit('update:show', $event)"
-  >
+  <modal v-model:show="showRef">
     <header class="header">
       <translate translate-context="*/*/*/Noun">
         Keyboard shortcuts
@@ -57,108 +158,3 @@
     </footer>
   </modal>
 </template>
-
-<script>
-
-import Modal from '~/components/semantic/Modal.vue'
-
-export default {
-  components: {
-    Modal
-  },
-  props: { show: { type: Boolean, required: true } },
-  computed: {
-    general () {
-      return [
-        {
-          title: this.$pgettext('Popup/Keyboard shortcuts/Title', 'General shortcuts'),
-          shortcuts: [
-            {
-              key: 'h',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Show available keyboard shortcuts')
-            },
-            {
-              key: 'shift + f',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Focus searchbar')
-            },
-            {
-              key: 'esc',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Unfocus searchbar')
-            }
-          ]
-        }
-      ]
-    },
-
-    player () {
-      return [
-        {
-          title: this.$pgettext('Popup/Keyboard shortcuts/Title', 'Audio player shortcuts'),
-          shortcuts: [
-            {
-              key: 'p',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Pause/play the current track')
-            },
-            {
-              key: 'left',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Seek backwards 5s')
-            },
-            {
-              key: 'right',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Seek forwards 5s')
-            },
-            {
-              key: 'shift + left',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Seek backwards 30s')
-            },
-            {
-              key: 'shift + right',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Seek forwards 30s')
-            },
-            {
-              key: 'ctrl + shift + left',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Play previous track')
-            },
-            {
-              key: 'ctrl + shift + right',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Play next track')
-            },
-            {
-              key: 'shift + up',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Increase volume')
-            },
-            {
-              key: 'shift + down',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Decrease volume')
-            },
-            {
-              key: 'm',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Toggle mute')
-            },
-            {
-              key: 'e',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Expand queue/player view')
-            },
-            {
-              key: 'l',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Toggle queue looping')
-            },
-            {
-              key: 's',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Shuffle queue')
-            },
-            {
-              key: 'q',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Clear queue')
-            },
-            {
-              key: 'f',
-              summary: this.$pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Toggle favorite')
-            }
-          ]
-        }
-      ]
-    }
-  }
-}
-</script>

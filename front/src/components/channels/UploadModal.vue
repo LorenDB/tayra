@@ -1,8 +1,7 @@
 <template>
   <modal
+    v-model:show="$store.state.channels.showUploadModal"
     class="small"
-    :show="$store.state.channels.showUploadModal"
-    @update:show="update"
   >
     <h4 class="header">
       <translate
@@ -145,7 +144,7 @@
 import Modal from '~/components/semantic/Modal.vue'
 import ChannelUploadForm from '~/components/channels/UploadForm.vue'
 import { humanSize } from '~/utils/filters'
-import {onBeforeRouteLeave, onBeforeRouteUpdate} from 'vue-router'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
 export default {
   components: {

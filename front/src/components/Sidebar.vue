@@ -161,8 +161,7 @@
         <modal
           ref="languageModal"
           :fullscreen="false"
-          :show="showLanguageModal"
-          @update:show="showLanguageModal = $event"
+          v-model:show="showLanguageModal"
         >
           <i
             role="button"
@@ -193,8 +192,7 @@
         <modal
           ref="themeModal"
           :fullscreen="false"
-          :show="showThemeModal"
-          @update:show="showThemeModal = $event"
+          v-model:show="showThemeModal"
         >
           <i
             role="button"

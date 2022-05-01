@@ -1,5 +1,5 @@
 <template>
-  <modal :show.sync="showModal">
+  <modal v-model:show="showModal">
     <h4 class="header">
       <translate translate-context="Popup/Import/Title">
         Import detail

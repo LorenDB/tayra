@@ -57,7 +57,7 @@
               </a>
               <modal
                 v-if="isEmbedable"
-                :show.sync="showEmbedModal"
+                v-model:show="showEmbedModal"
               >
                 <h4 class="header">
                   <translate translate-context="Popup/Track/Title">

@@ -1,5 +1,5 @@
 <template>
-  <modal :show.sync="show">
+  <modal v-model:show="show">
     <h4 class="header">
       {{ labels.header }}
     </h4>

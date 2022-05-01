@@ -7,8 +7,8 @@
     <slot />
 
     <modal
+      v-model:show="showModal"
       class="small"
-      :show.sync="showModal"
     >
       <h4 class="header">
         <slot name="modal-header">

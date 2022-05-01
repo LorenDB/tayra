@@ -1,7 +1,6 @@
 <template>
   <modal
-    :show="$store.state.playlists.showModal"
-    @update:show="update"
+    v-model:show="$store.state.playlists.showModal"
   >
     <h4 class="header">
       <template v-if="track">
@@ -138,7 +137,7 @@
               <td>
                 <router-link
                   :to="{name: 'library.playlists.detail', params: {id: playlist.id }}"
-                  @click.native="update(false)"
+                  @click.native="$store.state.playlists.showModal = false"
                 >
                   {{ playlist.name }}
                 </router-link>
@@ -256,9 +255,6 @@ export default {
     }
   },
   methods: {
-    update (v) {
-      this.$store.commit('playlists/showModal', v)
-    },
     addToPlaylist (playlistId, allowDuplicate) {
       const self = this
       const payload = {
@@ -270,7 +266,7 @@ export default {
 
       return axios.post(`playlists/${playlistId}/add`, payload).then(response => {
         logger.info('Successfully added track to playlist')
-        self.update(false)
+        self.$store.state.playlists.showModal = false
         self.$store.dispatch('playlists/fetchOwn')
       }, error => {
         if (error.backendErrors.length === 1 && error.backendErrors[0].code === 'tracks_already_exist_in_playlist') {

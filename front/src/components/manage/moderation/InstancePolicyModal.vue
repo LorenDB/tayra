@@ -10,7 +10,7 @@
       </translate>
     </slot>
     <modal
-      :show.sync="show"
+      v-model:show="show"
       @show="fetchData"
     >
       <h4 class="header">

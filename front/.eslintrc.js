@@ -4,7 +4,7 @@ module.exports = {
     es6: true
   },
   extends: [
-    'plugin:vue/recommended',
+    'plugin:vue/vue3-recommended',
     '@vue/typescript/recommended',
     '@vue/standard'
 
@@ -13,7 +13,9 @@ module.exports = {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly'
   },
+  parser: 'vue-eslint-parser',
   parserOptions: {
+    parser: '@typescript-eslint/parser',
     ecmaVersion: 2020,
     sourceType: 'module'
   },
