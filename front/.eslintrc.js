@@ -39,7 +39,7 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
 
-    // TODO (wvffle): Migration to pinia
+    // TODO (wvffle): Migrate to pinia
     //                Vuex 3 store does not have types defined, hence we use `any`
     '@typescript-eslint/no-explicit-any': 'off',
 
