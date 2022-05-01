@@ -119,7 +119,6 @@ const showSetInstanceModal = ref(false)
 
 <template>
   <div
-    id="app"
     :key="String(store.state.instance.instanceUrl)"
     :class="[store.state.ui.queueFocused ? 'queue-focused' : '',
              {'has-bottom-player': store.state.queue.tracks.length > 0}]"

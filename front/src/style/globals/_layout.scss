@@ -28,7 +28,7 @@
     justify-content: space-between !important;
   }
 }
-#app:not(.queue-focused) {
+#app > :not(.queue-focused) {
   .when-queue-focused {
     @include media("<desktop") {
       display: none;
@@ -36,7 +36,7 @@
   }
 }
 
-#app {
+#app > div {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
@@ -54,12 +54,12 @@
   border-bottom: none;
   border-top: 1px solid rgba(34, 36, 38, 0.15);
 }
-#app > main, #app > .main {
+#app > div > main, #app > .main {
   flex: 1;
 }
 
 
-#app {
+#app > div {
   > .main.pusher,
   > .footer {
     position: relative;
@@ -144,7 +144,7 @@
     }
   }
 }
-#app.queue-focused {
+#app > .queue-focused {
   .queue-not-focused {
     @include media("<desktop") {
       display: none;
