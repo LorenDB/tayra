@@ -52,7 +52,7 @@
             :all="true"
             :label="true"
             :model-value="getTokenValue('category', '')"
-            @update:modelValue="addSearchToken('category', $event)"
+            @update:model-value="addSearchToken('category', $event)"
           />
           <div class="field">
             <label for="reports-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>

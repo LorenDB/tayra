@@ -1,26 +1,30 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "module": "ESNext",
-    "target": "ESNext",
-    "lib": ["DOM", "ESNext", "WebWorker"],
-    "strict": true,
-    "esModuleInterop": true,
-    "jsx": "preserve",
-    "skipLibCheck": true,
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    "module": "esnext",
     "moduleResolution": "node",
+    "strict": true,
+    "jsx": "preserve",
+    "sourceMap": true,
     "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "lib": ["dom", "esnext", "webworker"],
+
+    "allowJs": true,
+
     "noUnusedLocals": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "typeRoots": ["node_modules/@types"],
     "types": [
       "vite/client",
       "vue/ref-macros",
-      "unplugin-vue2-script-setup/types",
-      "vue-gettext/types"
+      "vue-gettext/types",
+      "vite-plugin-pwa/client"
     ],
     "paths": {
       "~/*": ["src/*"]
@@ -29,5 +33,6 @@
   "vueCompilerOptions": {
     "experimentalCompatMode": 2
   },
-  "include": ["src/*.d.ts", "src/**/*.ts", "src/**/*.vue"]
+  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.vue"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { useClipboard, useVModel } from '@vueuse/core'
+
+interface Props {
+  modelValue: string
+  buttonClasses?: string
+  id?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  buttonClasses: 'accent',
+  id: 'copy-input'
+})
+
+const emit = defineEmits(['update:modelValue'])
+const value = useVModel(props, 'modelValue', emit)
+
+const { copy, isSupported: canCopy, copied } = useClipboard({ source: value, copiedDuring: 5000 })
+</script>
+
 <template>
   <div class="ui fluid action input component-copy-input">
     <p
@@ -10,15 +30,15 @@
     </p>
     <input
       :id="id"
-      ref="input"
+      v-model="value"
       :name="id"
-      :value="value"
       type="text"
       readonly
     >
     <button
       :class="['ui', buttonClasses, 'right', 'labeled', 'icon', 'button']"
-      @click="copy"
+      :disabled="!canCopy || undefined"
+      @click="copy()"
     >
       <i class="copy icon" />
       <translate translate-context="*/*/Button.Label/Short, Verb">
@@ -27,32 +47,3 @@
     </button>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    value: { type: String, required: true },
-    buttonClasses: { type: String, default: 'accent' },
-    id: { type: String, default: 'copy-input' }
-  },
-  data () {
-    return {
-      copied: false,
-      timeout: null
-    }
-  },
-  methods: {
-    copy () {
-      if (this.timeout) {
-        clearTimeout(this.timeout)
-      }
-      this.$refs.input.select()
-      document.execCommand('Copy')
-      const self = this
-      self.copied = true
-      this.timeout = setTimeout(() => {
-        self.copied = false
-      }, 5000)
-    }
-  }
-}
-</script>

@@ -170,7 +170,7 @@ export default {
     defaultInvitation: { type: String, required: false, default: null },
     next: { type: String, default: '/' },
     buttonClasses: { type: String, default: 'success' },
-    customization: { type: Object, default: null },
+    customization: { type: Object, default: null }, // ts type: Form
     fetchDescriptionHtml: { type: Boolean, default: false },
     signupApprovalEnabled: { type: Boolean, default: null, required: false }
   },

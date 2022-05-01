@@ -124,9 +124,8 @@ export default {
         await this.loadPreview()
       }
       if (!v) {
-        this.$nextTick(() => {
-          this.$refs.textarea.focus()
-        })
+        await this.$nextTick()
+        this.$refs.textarea.focus()
       }
     }
   },

@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 import store from '~/store'
 
-function adminPermissions (to, from, next) {
-  if (store.state.auth.authenticated === true && store.state.auth.availablePermissions.settings === true) {
+function adminPermissions (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
+  if (store.state.auth.authenticated && store.state.auth.availablePermissions.settings) {
     next()
   } else {
     console.log('Not authenticated. Redirecting to library.')
@@ -10,8 +10,8 @@ function adminPermissions (to, from, next) {
   }
 }
 
-function moderatorPermissions (to, from, next) {
-  if (store.state.auth.authenticated === true && store.state.auth.availablePermissions.moderation === true) {
+function moderatorPermissions (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
+  if (store.state.auth.authenticated && store.state.auth.availablePermissions.moderation) {
     next()
   } else {
     console.log('Not authenticated. Redirecting to library.')
@@ -19,8 +19,8 @@ function moderatorPermissions (to, from, next) {
   }
 }
 
-function libraryPermissions (to, from, next) {
-  if (store.state.auth.authenticated === true && store.state.auth.availablePermissions.library === true) {
+function libraryPermissions (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
+  if (store.state.auth.authenticated && store.state.auth.availablePermissions.library) {
     next()
   } else {
     console.log('Not authenticated. Redirecting to library.')
@@ -126,7 +126,7 @@ export default createRouter({
         initialId: route.query.id,
         initialType: route.query.type || 'artists',
         initialQuery: route.query.q,
-        initialPage: parseInt(route.query.page) || 1
+        initialPage: parseInt(route.query.page as string) || 1
       })
     },
     {

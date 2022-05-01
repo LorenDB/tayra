@@ -38,7 +38,7 @@ if (store.state.auth.authenticated) {
             Log in to your Funkwhale account
           </translate>
         </h2>
-        <login-form :next="redirectTo" />
+        <login-form :next="next" />
       </div>
     </section>
   </main>

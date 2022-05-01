@@ -20,7 +20,7 @@
           v-html="notificationData.message"
         />
       </router-link>
-      <template
+      <div
         v-else
         v-html="notificationData.message"
       />

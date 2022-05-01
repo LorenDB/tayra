@@ -154,8 +154,8 @@
         </template>
         <user-modal
           v-model:show="showUserModal"
-          @showThemeModalEvent="showThemeModal=true"
-          @showLanguageModalEvent="showLanguageModal=true"
+          @show-theme-modal-event="showThemeModal=true"
+          @show-language-modal-event="showLanguageModal=true"
         />
         <modal
           ref="languageModal"

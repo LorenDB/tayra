@@ -23,7 +23,7 @@ onMounted(() => {
     ...props.message
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   $('body').toast(params)
   $('.ui.toast.visible').last().attr('role', 'alert')
 })

@@ -7,7 +7,7 @@ export const install: InitModule = ({ app, store }) => {
   })
 
   app.directive('dropdown', function (el, binding) {
-    // @ts-ignore
+    // @ts-expect-error
     jQuery(el).dropdown({
       selectOnKeydown: false,
       action (text: string, value: string, $el: JQuery<HTMLElement>) {
@@ -15,7 +15,7 @@ export const install: InitModule = ({ app, store }) => {
         // works as expected
         const button = $el[0]
         button.click()
-        // @ts-ignore
+        // @ts-expect-error
         jQuery(el).find('.ui.dropdown').dropdown('hide')
       },
       ...(binding.value || {})

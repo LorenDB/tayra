@@ -82,6 +82,23 @@ export interface FileSystem {
   content: FSEntry[]
 }
 
+// Form stuff
+export interface FormHelpText {
+  content_type: string
+  text?: string
+}
+
+export interface FormField {
+  label: string
+  input_type: 'short_text' | 'long_text'
+  required: boolean
+}
+
+export interface Form {
+  fields: FormField[]
+  help_text: FormHelpText
+}
+
 // Yet uncategorized stuff
 export interface Actor {
   preferred_username: string

@@ -68,7 +68,7 @@
       </a>
       <modal
         v-if="checkResult"
-        v-model::show="showCandidadesModal"
+        v-model:show="showCandidadesModal"
       >
         <h4 class="header">
           <translate translate-context="Popup/Radio/Title/Noun">

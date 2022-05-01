@@ -20,15 +20,15 @@ export function parseAPIErrors (responseData: APIErrorResponse, parentField?: st
 
       const value = responseData[field]
       if (Array.isArray(value)) {
-        const values = value as string[]
+        const values = value
         errors.push(...values.map(err => {
           return err.toLocaleLowerCase().includes('this field ')
             ? `${fieldName}: ${err}`
             : err
         }))
-      } else if (value as APIErrorResponse) {
+      } else if (value) {
         // nested errors
-        const nestedErrors = parseAPIErrors(value as APIErrorResponse, fieldName)
+        const nestedErrors = parseAPIErrors(value, fieldName)
         errors.push(...nestedErrors)
       }
     }
@@ -62,4 +62,13 @@ export function getDomain (url: string) {
   const parser = document.createElement('a')
   parser.href = url
   return parser.hostname
+}
+
+export function arrayMove (arr: unknown[], oldIndex: number, newIndex: number) {
+  if (newIndex >= arr.length) {
+    arr.push(...Array(newIndex - arr.length + 1))
+  }
+
+  arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0])
+  return arr
 }

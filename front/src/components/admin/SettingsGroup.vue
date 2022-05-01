@@ -56,9 +56,8 @@
       />
       <signup-form-builder
         v-else-if="setting.fieldType === 'formBuilder'"
-        :value="values[setting.identifier]"
+        v-model="values[setting.identifier]"
         :signup-approval-enabled="values.moderation__signup_approval_enabled"
-        @input="set(setting.identifier, $event)"
       />
       <input
         v-else-if="setting.field.widget.class === 'PasswordInput'"
@@ -238,12 +237,6 @@ export default {
         self.isLoading = false
         self.errors = error.backendErrors
       })
-    },
-    set (key, value) {
-      // otherwise reactivity doesn't trigger :/
-      this.values = cloneDeep(this.values)
-      // TODO (wvffle): Replace $set and $delete with reactive()
-      this.$set(this.values, key, value)
     }
   }
 }

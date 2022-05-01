@@ -27,6 +27,7 @@ const show = useVModel(props, 'show', emit)
 
 const control = ref()
 const initModal = () => {
+  // @ts-expect-error
   control.value = $(modal.value).modal({
     duration: 100,
     onApprove: () => emit('approved'),

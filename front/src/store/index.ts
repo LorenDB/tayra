@@ -1,4 +1,4 @@
-import { createStore, Store } from 'vuex'
+import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 
 import favorites from './favorites'
@@ -13,7 +13,7 @@ import player from './player'
 import playlists from './playlists'
 import ui from './ui'
 
-export default <Store<any>> createStore({
+export default createStore({
   modules: {
     ui,
     auth,
@@ -69,7 +69,7 @@ export default <Store<any>> createStore({
         return {
           queue: {
             currentIndex: state.queue.currentIndex,
-            tracks: state.queue.tracks.map(track => {
+            tracks: state.queue.tracks.map((track: any) => {
               // we keep only valuable fields to make the cache lighter and avoid
               // cyclic value serialization errors
               const artist = {
@@ -83,7 +83,8 @@ export default <Store<any>> createStore({
                 mbid: track.mbid,
                 uploads: track.uploads,
                 listen_url: track.listen_url,
-                artist: artist
+                artist: artist,
+                album: {}
               }
               if (track.album) {
                 data.album = {

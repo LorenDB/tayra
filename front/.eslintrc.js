@@ -34,7 +34,8 @@ module.exports = {
     //                and gettext for vue 2
     '@typescript-eslint/ban-ts-comment': 'off',
 
-    // TODO (wvffle): Enable typescript rules later
+    // TODO (wvffle): Enable these rules later
+    'vue/multi-word-component-names': 'off',
     '@typescript-eslint/no-this-alias': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-unused-vars': 'off',

@@ -3,10 +3,12 @@ import store from '~/store'
 import { configureCompat, createApp, defineAsyncComponent, h } from 'vue'
 import useLogger from '~/composables/useLogger'
 import useTheme from '~/composables/useTheme'
+
+// NOTE: Set the theme as fast as possible
 useTheme()
 
 configureCompat({
-  RENDER_FUNCTION: false,
+  RENDER_FUNCTION: false
   // COMPONENT_V_MODEL: false
 })
 
@@ -32,7 +34,7 @@ const app = createApp({
 app.use(router)
 app.use(store)
 
-const modules: Promise<unknown>[] = []
+const modules: Array<Promise<unknown>> = []
 for (const module of Object.values(import.meta.globEager('./init/*.ts'))) {
   modules.push(module.install?.({
     app,
@@ -50,8 +52,10 @@ Promise.all(modules).finally(() => {
 // TODO (wvffle): Migrate to pinia
 // TODO (wvffle): Remove global Vue (Only vuex files affected)
 // TODO (wvffle): Remove shims-vue2.d.ts
+// TODO (wvffle): Replace $set and $delete with reactive()
 // TODO (wvffle): Check for mixin merging: https://v3-migration.vuejs.org/breaking-changes/data-option.html#mixin-merge-behavior-change=
 // TODO (wvffle): Use emits options: https://v3-migration.vuejs.org/breaking-changes/emits-option.html
 // TODO (wvffle): Migrate to new v-model: https://v3-migration.vuejs.org/breaking-changes/v-model.html
 // TODO (wvffle): Migrate to <script setup>
 // TODO (wvffle): Replace `from '(../)+` with `from '~/`
+// TODO (wvffle): Remove `allowJs` from tsconfig.json
