@@ -127,46 +127,46 @@
         <div class="table-wrapper">
           <table class="ui compact very basic unstackable table">
             <draggable
-              v-model="plts"
+              v-model:list="plts"
               tag="tbody"
               @update="reorder"
+              item-key="_id"
             >
-              <tr
-                v-for="(plt, index) in plts"
-                :key="`${index}-${plt.track.id}`"
-              >
-                <td class="left aligned">
-                  {{ plt.index + 1 }}
-                </td>
-                <td class="center aligned">
-                  <img
-                    v-if="plt.track.album && plt.track.album.cover && plt.track.album.cover.urls.original"
-                    v-lazy="$store.getters['instance/absoluteUrl'](plt.track.album.cover.urls.medium_square_crop)"
-                    alt=""
-                    class="ui mini image"
-                  >
-                  <img
-                    v-else
-                    alt=""
-                    class="ui mini image"
-                    src="../../assets/audio/default-cover.png"
-                  >
-                </td>
-                <td colspan="4">
-                  <strong>{{ plt.track.title }}</strong><br>
-                  {{ plt.track.artist.name }}
-                </td>
-                <td class="right aligned">
-                  <button
-                    class="ui circular danger basic icon button"
-                    @click.stop="removePlt(index)"
-                  >
-                    <i
-                      class="trash icon"
-                    />
-                  </button>
-                </td>
-              </tr>
+              <template #item="{ element: plt, index }">
+                <tr>
+                  <td class="left aligned">
+                    {{ plt.index + 1 }}
+                  </td>
+                  <td class="center aligned">
+                    <img
+                      v-if="plt.track.album && plt.track.album.cover && plt.track.album.cover.urls.original"
+                      v-lazy="$store.getters['instance/absoluteUrl'](plt.track.album.cover.urls.medium_square_crop)"
+                      alt=""
+                      class="ui mini image"
+                    >
+                    <img
+                      v-else
+                      alt=""
+                      class="ui mini image"
+                      src="../../assets/audio/default-cover.png"
+                    >
+                  </td>
+                  <td colspan="4">
+                    <strong>{{ plt.track.title }}</strong><br>
+                    {{ plt.track.artist.name }}
+                  </td>
+                  <td class="right aligned">
+                    <button
+                      class="ui circular danger basic icon button"
+                      @click.stop="removePlt(index)"
+                    >
+                      <i
+                        class="trash icon"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              </template>
             </draggable>
           </table>
         </div>
@@ -177,6 +177,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { computed } from 'vue'
 import axios from 'axios'
 import PlaylistForm from '~/components/playlists/Form.vue'
 
@@ -191,9 +192,15 @@ export default {
     playlist: { type: Object, required: true },
     playlistTracks: { type: Array, required: true }
   },
+  setup (props) {
+    const plts = computed(() => {
+      return props.playlistTracks.map((plt, index) => ({ ...plt, _id: `${index}-${plt.track.id}` }))
+    })
+
+    return { plts }
+  },
   data () {
     return {
-      plts: this.playlistTracks,
       isLoading: false,
       errors: [],
       duplicateTrackAddInfo: {},

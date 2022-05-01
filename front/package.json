@@ -43,7 +43,7 @@
     "vue-upload-component": "2.8.22",
     "vue3-gettext": "2.2.0-alpha.1",
     "vue3-lazyload": "0.2.5-beta",
-    "vuedraggable": "2.24.3",
+    "vuedraggable": "4.1.0",
     "vuex": "4.0.2",
     "vuex-persistedstate": "4.1.0",
     "vuex-router-sync": "5.0.0"

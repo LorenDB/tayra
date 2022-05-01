@@ -156,7 +156,7 @@
                     :title="labels.previousTrack"
                     :aria-label="labels.previousTrack"
                     class="control"
-                    :disabled="emptyQueue"
+                    :disabled="emptyQueue ? true : null"
                     @click.prevent.stop="$store.dispatch('queue/previous')"
                   >
                     <i :class="['ui', 'backward step', {'disabled': emptyQueue}, 'icon']" />
@@ -187,7 +187,7 @@
                     :title="labels.next"
                     :aria-label="labels.next"
                     class="control"
-                    :disabled="!hasNext"
+                    :disabled="hasNext ? true : null"
                     @click.prevent.stop="$store.dispatch('queue/next')"
                   >
                     <i :class="['ui', {'disabled': !hasNext}, 'forward step', 'icon']" />
@@ -237,76 +237,78 @@
             </div>
             <table class="ui compact very basic fixed single line selectable unstackable table">
               <draggable
-                v-model="tracks"
+                v-model:list="tracks"
                 tag="tbody"
                 handle=".handle"
                 @update="reorder"
+                item-key="id"
               >
-                <tr
-                  v-for="(track, index) in tracks"
-                  :key="index"
-                  :class="['queue-item', {'active': index === queue.currentIndex}]"
-                >
-                  <td class="handle">
-                    <i class="grip lines icon" />
-                  </td>
-                  <td
-                    class="image-cell"
-                    @click="$store.dispatch('queue/currentIndex', index)"
+                <template #item="{ element: track, index }">
+                  <tr
+                    :key="track.id"
+                    :class="['queue-item', {'active': index === queue.currentIndex}]"
                   >
-                    <img
-                      v-if="track.cover && track.cover.urls.original"
-                      class="ui mini image"
-                      alt=""
-                      :src="$store.getters['instance/absoluteUrl'](track.cover.urls.medium_square_crop)"
+                    <td class="handle">
+                      <i class="grip lines icon" />
+                    </td>
+                    <td
+                      class="image-cell"
+                      @click="$store.dispatch('queue/currentIndex', index)"
                     >
-                    <img
-                      v-else-if="track.album && track.album.cover && track.album.cover.urls.original"
-                      class="ui mini image"
-                      alt=""
-                      :src="$store.getters['instance/absoluteUrl'](track.album.cover.urls.medium_square_crop)"
+                      <img
+                        v-if="track.cover && track.cover.urls.original"
+                        class="ui mini image"
+                        alt=""
+                        :src="$store.getters['instance/absoluteUrl'](track.cover.urls.medium_square_crop)"
+                      >
+                      <img
+                        v-else-if="track.album && track.album.cover && track.album.cover.urls.original"
+                        class="ui mini image"
+                        alt=""
+                        :src="$store.getters['instance/absoluteUrl'](track.album.cover.urls.medium_square_crop)"
+                      >
+                      <img
+                        v-else
+                        class="ui mini image"
+                        alt=""
+                        src="../assets/audio/default-cover.png"
+                      >
+                    </td>
+                    <td
+                      colspan="3"
+                      @click="$store.dispatch('queue/currentIndex', index)"
                     >
-                    <img
-                      v-else
-                      class="ui mini image"
-                      alt=""
-                      src="../assets/audio/default-cover.png"
-                    >
-                  </td>
-                  <td
-                    colspan="3"
-                    @click="$store.dispatch('queue/currentIndex', index)"
-                  >
-                    <button
-                      class="title reset ellipsis"
-                      :title="track.title"
-                      :aria-label="labels.selectTrack"
-                    >
-                      <strong>{{ track.title }}</strong><br>
-                      <span>
+                      <button
+                        class="title reset ellipsis"
+                        :title="track.title"
+                        :aria-label="labels.selectTrack"
+                      >
+                        <strong>{{ track.title }}</strong><br>
+                        <span>
                         {{ track.artist.name }}
                       </span>
-                    </button>
-                  </td>
-                  <td class="duration-cell">
-                    <template v-if="track.uploads.length > 0">
-                      {{ time.durationFormatted(track.uploads[0].duration) }}
-                    </template>
-                  </td>
-                  <td class="controls">
-                    <template v-if="$store.getters['favorites/isFavorite'](track.id)">
-                      <i class="pink heart icon" />
-                    </template>
-                    <button
-                      :aria-label="labels.removeFromQueue"
-                      :title="labels.removeFromQueue"
-                      :class="['ui', 'really', 'tiny', 'basic', 'circular', 'icon', 'button']"
-                      @click.stop="cleanTrack(index)"
-                    >
-                      <i class="x icon" />
-                    </button>
-                  </td>
-                </tr>
+                      </button>
+                    </td>
+                    <td class="duration-cell">
+                      <template v-if="track.uploads.length > 0">
+                        {{ time.durationFormatted(track.uploads[0].duration) }}
+                      </template>
+                    </td>
+                    <td class="controls">
+                      <template v-if="$store.getters['favorites/isFavorite'](track.id)">
+                        <i class="pink heart icon" />
+                      </template>
+                      <button
+                        :aria-label="labels.removeFromQueue"
+                        :title="labels.removeFromQueue"
+                        :class="['ui', 'really', 'tiny', 'basic', 'circular', 'icon', 'button']"
+                        @click.stop="cleanTrack(index)"
+                      >
+                        <i class="x icon" />
+                      </button>
+                    </td>
+                  </tr>
+                </template>
               </draggable>
             </table>
 
@@ -450,7 +452,8 @@ export default {
           this.$store.commit('ui/queueFocused', null)
         }
       },
-      immediate: true
+      immediate: true,
+      deep: true
     },
     '$route.fullPath' () {
       this.$store.commit('ui/queueFocused', null)

@@ -163,7 +163,6 @@ import axios from 'axios'
 import TrackRow from '~/components/audio/track/Row.vue'
 import TrackMobileRow from '~/components/audio/track/MobileRow.vue'
 import Pagination from '~/components/Pagination.vue'
-import { unique } from '~/utils/filters'
 
 export default {
   components: {
