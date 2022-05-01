@@ -72,7 +72,7 @@
         :track-only="true"
         :tracks="tracks.slice(0,5)"
       >
-        <template slot="header">
+        <template #header>
           <h2>
             <translate translate-context="Content/Artist/Title">
               New tracks by this artist

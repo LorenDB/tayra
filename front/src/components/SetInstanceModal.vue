@@ -117,7 +117,7 @@ export default {
   props: { show: { type: Boolean, required: true } },
   setup (props) {
     // TODO (wvffle): Add defineEmits when rewriting to <script setup>
-    const showRef = useVModel(props, 'show'/*, emit*/)
+    const showRef = useVModel(props, 'show'/*, emit */)
     return { showRef }
   },
   data () {

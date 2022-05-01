@@ -66,7 +66,7 @@
         :filters="actionFilters"
         @action-launched="fetchData"
       >
-        <template slot="header-cells">
+        <template #header-cells>
           <th>
             <translate translate-context="*/*/*/Noun">
               Title
@@ -99,8 +99,7 @@
           </th>
         </template>
         <template
-          slot="row-cells"
-          slot-scope="scope"
+          #row-cells="scope"
         >
           <td>
             <router-link :to="{name: 'manage.library.albums.detail', params: {id: scope.obj.id }}">

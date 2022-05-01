@@ -10,7 +10,7 @@
             :url="'history/listenings/'"
             :filters="{scope: scope, ordering: '-creation_date'}"
           >
-            <template slot="title">
+            <template #title>
               <translate translate-context="Content/Home/Title">
                 Recently listened
               </translate>
@@ -22,7 +22,7 @@
             :url="'favorites/tracks/'"
             :filters="{scope: scope, ordering: '-creation_date'}"
           >
-            <template slot="title">
+            <template #title>
               <translate translate-context="Content/Home/Title">
                 Recently favorited
               </translate>
@@ -34,7 +34,7 @@
             :url="'playlists/'"
             :filters="{scope: scope, playable: true, ordering: '-modification_date'}"
           >
-            <template slot="title">
+            <template #title>
               <translate translate-context="*/*/*">
                 Playlists
               </translate>
@@ -46,7 +46,7 @@
       <div class="ui stackable one column grid">
         <div class="column">
           <album-widget :filters="{scope: scope, playable: true, ordering: '-creation_date'}">
-            <template slot="title">
+            <template #title>
               <translate translate-context="Content/Home/Title">
                 Recently added
               </translate>

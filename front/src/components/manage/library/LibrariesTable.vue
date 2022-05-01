@@ -91,7 +91,7 @@
         :filters="actionFilters"
         @action-launched="fetchData"
       >
-        <template slot="header-cells">
+        <template #header-cells>
           <th>
             <translate translate-context="*/*/*/Noun">
               Name
@@ -129,8 +129,7 @@
           </th>
         </template>
         <template
-          slot="row-cells"
-          slot-scope="scope"
+          #row-cells="scope"
         >
           <td>
             <router-link :to="{name: 'manage.library.libraries.detail', params: {id: scope.obj.uuid }}">

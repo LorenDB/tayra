@@ -101,8 +101,8 @@
       </div>
     </div>
     <import-status-modal
+      v-model:show="showUploadDetailModal"
       :upload="detailedUpload"
-      :show.sync="showUploadDetailModal"
     />
     <div class="dimmable">
       <div
@@ -137,7 +137,7 @@
         @action-launched="fetchData"
         @refresh="fetchData"
       >
-        <template slot="header-cells">
+        <template #header-cells>
           <th>
             <translate translate-context="*/*/*/Noun">
               Title
@@ -175,8 +175,7 @@
           </th>
         </template>
         <template
-          slot="row-cells"
-          slot-scope="scope"
+          #row-cells="scope"
         >
           <template v-if="scope.obj.track">
             <td>

@@ -129,8 +129,8 @@
             <draggable
               v-model:list="plts"
               tag="tbody"
-              @update="reorder"
               item-key="_id"
+              @update="reorder"
             >
               <template #item="{ element: plt, index }">
                 <tr>

@@ -572,7 +572,7 @@ import $ from 'jquery'
 import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
 import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
 import useLogger from '~/composables/useLogger'
-import { humanSize} from '~/utils/filters'
+import { humanSize } from '~/utils/filters'
 
 const logger = useLogger()
 

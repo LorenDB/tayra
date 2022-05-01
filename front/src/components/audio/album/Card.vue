@@ -59,7 +59,7 @@
 
 <script>
 import PlayButton from '~/components/audio/PlayButton.vue'
-import { momentFormat} from '~/utils/filters'
+import { momentFormat } from '~/utils/filters'
 
 export default {
   components: {

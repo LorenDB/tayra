@@ -78,7 +78,7 @@
 
 <script>
 import TranslationsMixin from '~/components/mixins/Translations.vue'
-import { humanSize} from '~/utils/filters'
+import { humanSize } from '~/utils/filters'
 
 export default {
   mixins: [TranslationsMixin],

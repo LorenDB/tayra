@@ -401,7 +401,7 @@
 import axios from 'axios'
 import FetchButton from '~/components/federation/FetchButton.vue'
 import TagsList from '~/components/tags/List.vue'
-import { humanSize, truncate} from '~/utils/filters'
+import { humanSize, truncate } from '~/utils/filters'
 
 export default {
   components: {

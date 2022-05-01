@@ -360,7 +360,7 @@
 import axios from 'axios'
 import TranslationsMixin from '~/components/mixins/Translations.vue'
 import useLogger from '~/composables/useLogger'
-import { humanSize, truncate} from '~/utils/filters'
+import { humanSize, truncate } from '~/utils/filters'
 
 const logger = useLogger()
 

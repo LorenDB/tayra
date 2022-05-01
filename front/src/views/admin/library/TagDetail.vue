@@ -210,7 +210,7 @@
 
 <script>
 import axios from 'axios'
-import { truncate} from '~/utils/filters'
+import { truncate } from '~/utils/filters'
 
 export default {
   props: { id: { type: Number, required: true } },

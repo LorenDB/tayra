@@ -64,7 +64,7 @@
         :filters="actionFilters"
         @action-launched="fetchData"
       >
-        <template slot="header-cells">
+        <template #header-cells>
           <th>
             <translate translate-context="Content/*/*">
               Username
@@ -102,8 +102,7 @@
           </th>
         </template>
         <template
-          slot="row-cells"
-          slot-scope="scope"
+          #row-cells="scope"
         >
           <td>
             <router-link

@@ -297,7 +297,7 @@
         :filters="{playable: true, ordering: '-creation_date'}"
         :limit="10"
       >
-        <template slot="title">
+        <template #title>
           <translate translate-context="Content/Home/Title">
             Recently added albums
           </translate>

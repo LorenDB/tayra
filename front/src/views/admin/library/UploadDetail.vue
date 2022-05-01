@@ -8,8 +8,8 @@
     </div>
     <template v-if="object">
       <import-status-modal
+        v-model:show="showUploadDetailModal"
         :upload="object"
-        :show.sync="showUploadDetailModal"
       />
       <section
         v-title="displayName(object)"

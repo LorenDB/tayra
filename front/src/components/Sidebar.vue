@@ -159,8 +159,8 @@
         />
         <modal
           ref="languageModal"
-          :fullscreen="false"
           v-model:show="showLanguageModal"
+          :fullscreen="false"
         >
           <i
             role="button"
@@ -190,8 +190,8 @@
         </modal>
         <modal
           ref="themeModal"
-          :fullscreen="false"
           v-model:show="showThemeModal"
+          :fullscreen="false"
         >
           <i
             role="button"
@@ -526,7 +526,7 @@ export default {
   },
   computed: {
     ...mapState({
-      queue: state => state.queue,
+      queue: state => state.queue
     }),
     ...mapGetters({
       additionalNotifications: 'ui/additionalNotifications'

@@ -254,7 +254,7 @@ import PlayButton from '~/components/audio/PlayButton.vue'
 import TagsList from '~/components/tags/List.vue'
 import ArtistLabel from '~/components/audio/ArtistLabel.vue'
 import AlbumDropdown from './AlbumDropdown.vue'
-import { momentFormat} from '~/utils/filters'
+import { momentFormat } from '~/utils/filters'
 
 function groupByDisc (initial) {
   function inner (acc, track) {

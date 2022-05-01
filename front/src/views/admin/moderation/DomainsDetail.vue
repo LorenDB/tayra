@@ -462,7 +462,7 @@ import { get } from 'lodash-es'
 
 import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
 import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
-import { humanSize} from '~/utils/filters'
+import { humanSize } from '~/utils/filters'
 
 export default {
   components: {

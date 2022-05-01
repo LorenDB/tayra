@@ -28,7 +28,7 @@
           :controls="false"
           :filters="{playable: true, ordering: '-creation_date', tag: id, include_channels: 'false'}"
         >
-          <template slot="title">
+          <template #title>
             <router-link :to="{name: 'library.artists.browse', query: {tag: id}}">
               <translate translate-context="*/*/*/Noun">
                 Artists
@@ -57,7 +57,7 @@
           :controls="false"
           :filters="{playable: true, ordering: '-creation_date', tag: id}"
         >
-          <template slot="title">
+          <template #title>
             <router-link :to="{name: 'library.albums.browse', query: {tag: id}}">
               <translate translate-context="*/*/*">
                 Albums
@@ -76,7 +76,7 @@
           :is-activity="false"
           :filters="{playable: true, ordering: '-creation_date', tag: id}"
         >
-          <template slot="title">
+          <template #title>
             <translate translate-context="*/*/*">
               Tracks
             </translate>

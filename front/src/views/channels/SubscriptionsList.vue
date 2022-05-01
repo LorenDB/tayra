@@ -14,8 +14,8 @@
         </div>
       </h1>
       <modal
-        class="tiny"
         v-model:show="showSubscribeModal"
+        class="tiny"
         :fullscreen="false"
       >
         <h2 class="header">
