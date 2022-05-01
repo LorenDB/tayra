@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { truncate } from '~/filters'
+import { truncate } from '~/utils/filters'
 
 describe('filters', () => {
   describe('truncate', () => {
