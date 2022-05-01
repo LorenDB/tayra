@@ -107,7 +107,7 @@
               :id="fieldConfig.id"
               v-model="values[fieldConfig.id]"
               :type="fieldConfig.inputType || 'text'"
-              :required="fieldConfig.required"
+              :required="fieldConfig.required || null"
               :name="fieldConfig.id"
             >
           </template>
@@ -118,7 +118,7 @@
               :id="fieldConfig.id"
               ref="license"
               v-model="values[fieldConfig.id]"
-              :required="fieldConfig.required"
+              :required="fieldConfig.required || null"
               class="ui fluid search dropdown"
             >
               <option :value="null">
@@ -158,7 +158,7 @@
               :id="fieldConfig.id"
               v-model="values[fieldConfig.id]"
               :initial-value="initialValues[fieldConfig.id]"
-              :required="fieldConfig.required"
+              :required="fieldConfig.required || null"
               :name="fieldConfig.id"
               @delete="values[fieldConfig.id] = initialValues[fieldConfig.id]"
             >
@@ -220,7 +220,7 @@
       <button
         :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
         type="submit"
-        :disabled="isLoading || !mutationPayload"
+        :disabled="isLoading || !mutationPayload || null"
       >
         <translate
           v-if="canEdit"

@@ -127,7 +127,7 @@
           v-if="field.input_type === 'long_text'"
           :id="`custom-field-${idx}`"
           :value="customFields[field.label]"
-          :required="field.required"
+          :required="field.required || null"
           rows="5"
           @input="$set(customFields, field.label, $event.target.value)"
         />
@@ -136,7 +136,7 @@
           :id="`custom-field-${idx}`"
           type="text"
           :value="customFields[field.label]"
-          :required="field.required"
+          :required="field.required || null"
           @input="$set(customFields, field.label, $event.target.value)"
         >
       </div>

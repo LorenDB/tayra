@@ -100,7 +100,7 @@
         <button
           :class="['ui', 'primary button', {loading: isLoading}]"
           type="submit"
-          :disabled="!statusData || !statusData.canSubmit"
+          :disabled="!statusData || !statusData.canSubmit || null"
           @click.prevent.stop="$refs.uploadForm.publish"
         >
           <translate translate-context="*/Channels/Button.Label">
@@ -111,7 +111,7 @@
           ref="dropdown"
           v-dropdown
           class="ui floating dropdown icon button"
-          :disabled="!statusData || !statusData.canSubmit"
+          :disabled="!statusData || !statusData.canSubmit || null"
         >
           <i class="dropdown icon" />
           <div class="menu">

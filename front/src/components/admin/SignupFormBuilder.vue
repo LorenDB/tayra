@@ -121,14 +121,14 @@
               </td>
               <td>
                 <i
-                  :disabled="idx === 0"
+                  :disabled="idx === 0 || null"
                   role="button"
                   :title="labels.up"
                   :class="['up', 'arrow', {disabled: idx === 0}, 'icon']"
                   @click="move(idx, -1)"
                 />
                 <i
-                  :disabled="idx >= local.fields.length - 1"
+                  :disabled="idx >= local.fields.length - 1 || null"
                   role="button"
                   :title="labels.down"
                   :class="['down', 'arrow', {disabled: idx >= local.fields.length - 1}, 'icon']"

@@ -36,7 +36,7 @@
       </button>
       <button
         :class="['ui', 'primary', {loading: isLoading}, 'button']"
-        :disabled="!submittable"
+        :disabled="!submittable || null"
         @click.stop.prevent="$refs.albumForm.submit()"
       >
         <translate translate-context="*/*/Button.Label">

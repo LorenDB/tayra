@@ -7,7 +7,7 @@
   >
     <a
       href
-      :disabled="current - 1 < 1"
+      :disabled="current - 1 < 1 || null"
       role="button"
       :aria-label="labels.previousPage"
       :class="[{'disabled': current - 1 < 1}, 'item']"
@@ -27,7 +27,7 @@
     </template>
     <a
       href
-      :disabled="current + 1 > maxPage"
+      :disabled="current + 1 > maxPage || null"
       role="button"
       :aria-label="labels.nextPage"
       :class="[{'disabled': current + 1 > maxPage}, 'item']"

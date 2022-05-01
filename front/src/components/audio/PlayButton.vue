@@ -5,7 +5,7 @@
   >
     <button
       v-if="!dropdownOnly"
-      :disabled="!playable"
+      :disabled="!playable || null"
       :aria-label="labels.replacePlay"
       :class="buttonClasses.concat(['ui', {loading: isLoading}, {'mini': discrete}, {disabled: !playable}])"
       @click.stop.prevent="replacePlay"
@@ -37,7 +37,7 @@
           ref="add"
           class="item basic"
           data-ref="add"
-          :disabled="!playable"
+          :disabled="!playable || null"
           :title="labels.addToQueue"
           @click.stop.prevent="add"
         >
@@ -47,7 +47,7 @@
           ref="addNext"
           class="item basic"
           data-ref="addNext"
-          :disabled="!playable"
+          :disabled="!playable || null"
           :title="labels.playNext"
           @click.stop.prevent="addNext()"
         >
@@ -57,7 +57,7 @@
           ref="playNow"
           class="item basic"
           data-ref="playNow"
-          :disabled="!playable"
+          :disabled="!playable || null"
           :title="labels.playNow"
           @click.stop.prevent="addNext(true)"
         >
@@ -66,7 +66,7 @@
         <button
           v-if="track"
           class="item basic"
-          :disabled="!playable"
+          :disabled="!playable || null"
           :title="labels.startRadio"
           @click.stop.prevent="$store.dispatch('radios/start', {type: 'similar', objectId: track.id})"
         >
@@ -75,7 +75,7 @@
         <button
           v-if="track"
           class="item basic"
-          :disabled="!playable"
+          :disabled="!playable || null"
           @click.stop="$store.commit('playlists/chooseTrack', track)"
         >
           <i class="list icon" />
@@ -102,7 +102,7 @@
           ref="filterArtist"
           data-ref="filterArtist"
           class="item basic"
-          :disabled="!filterableArtist"
+          :disabled="!filterableArtist || null"
           :title="labels.hideArtist"
           @click.stop.prevent="filterArtist"
         >

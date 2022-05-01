@@ -37,7 +37,7 @@
         <div class="ui field">
           <button
             :class="['ui', {loading: isLoading}, 'button']"
-            :disabled="isLoading"
+            :disabled="isLoading || null"
             type="submit"
           >
             <translate translate-context="Content/Admin/Button.Label/Verb">

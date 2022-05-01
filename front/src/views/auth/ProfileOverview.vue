@@ -125,7 +125,7 @@
           v-if="step === 2"
           :class="['ui', 'primary button', {loading: isLoading}]"
           type="submit"
-          :disabled="!submittable && !isLoading"
+          :disabled="!submittable && !isLoading || null"
           @click.prevent.stop="$refs.createForm.submit"
         >
           <translate translate-context="*/Channels/Button.Label">

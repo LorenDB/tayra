@@ -9,7 +9,7 @@
     />
     <button
       v-if="nextPage || previousPage"
-      :disabled="!previousPage"
+      :disabled="!previousPage || null"
       :class="['ui', {disabled: !previousPage}, 'circular', 'icon', 'basic', 'button']"
       @click="fetchData(previousPage)"
     >
@@ -17,7 +17,7 @@
     </button>
     <button
       v-if="nextPage || previousPage"
-      :disabled="!nextPage"
+      :disabled="!nextPage || null"
       :class="['ui', {disabled: !nextPage}, 'circular', 'icon', 'basic', 'button']"
       @click="fetchData(nextPage)"
     >

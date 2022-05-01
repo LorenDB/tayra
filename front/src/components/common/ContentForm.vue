@@ -49,7 +49,7 @@
             v-model="newValue"
             :name="fieldId"
             :rows="rows"
-            :required="required"
+            :required="required || null"
             :placeholder="placeholder || labels.placeholder"
           />
         </div>

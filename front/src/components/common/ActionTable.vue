@@ -89,7 +89,7 @@
                   </dangerous-button>
                   <button
                     v-else
-                    :disabled="checked.length === 0"
+                    :disabled="checked.length === 0 || null"
                     :aria-label="labels.performAction"
                     :class="['ui', {disabled: checked.length === 0}, {'loading': actionLoading}, 'button']"
                     @click="launchAction"
@@ -199,7 +199,7 @@
               <input
                 type="checkbox"
                 :aria-label="labels.selectAllItems"
-                :disabled="checkable.length === 0"
+                :disabled="checkable.length === 0 || null"
                 :checked="checkable.length > 0 && checked.length === checkable.length"
                 @change="toggleCheckAll"
               >
@@ -220,7 +220,7 @@
             <input
               type="checkbox"
               :aria-label="labels.selectItem"
-              :disabled="checkable.indexOf(getId(obj)) === -1"
+              :disabled="checkable.indexOf(getId(obj)) === -1 || null"
               :checked="checked.indexOf(getId(obj)) > -1"
               @click="toggleCheck($event, getId(obj), index)"
             >

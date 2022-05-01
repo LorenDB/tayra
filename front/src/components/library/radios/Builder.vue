@@ -64,7 +64,7 @@
             </div>
             <div class="ui hidden divider" />
             <button
-              :disabled="!canSave"
+              :disabled="!canSave || null"
               :class="['ui', 'success', {loading: isLoading}, 'button']"
               @click="save"
             >
@@ -105,7 +105,7 @@
             </select>
             <button
               id="addFilter"
-              :disabled="!currentFilterType"
+              :disabled="!currentFilterType || null"
               class="ui button"
               @click="add"
             >

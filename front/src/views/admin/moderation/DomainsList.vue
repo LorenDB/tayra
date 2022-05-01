@@ -55,7 +55,7 @@
             <button
               :class="['ui', {'loading': isCreating}, 'success', 'button']"
               type="submit"
-              :disabled="isCreating"
+              :disabled="isCreating || null"
             >
               <translate translate-context="Content/Moderation/Button/Verb">
                 Add

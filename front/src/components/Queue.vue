@@ -157,7 +157,7 @@
                     :title="labels.previousTrack"
                     :aria-label="labels.previousTrack"
                     class="control"
-                    :disabled="emptyQueue ? true : null"
+                    :disabled="emptyQueue || null"
                     @click.prevent.stop="$store.dispatch('queue/previous')"
                   >
                     <i :class="['ui', 'backward step', {'disabled': emptyQueue}, 'icon']" />
@@ -188,7 +188,7 @@
                     :title="labels.next"
                     :aria-label="labels.next"
                     class="control"
-                    :disabled="hasNext ? true : null"
+                    :disabled="hasNext || null"
                     @click.prevent.stop="$store.dispatch('queue/next')"
                   >
                     <i :class="['ui', {'disabled': !hasNext}, 'forward step', 'icon']" />

@@ -123,7 +123,7 @@
     </button>
     <button
       :class="['ui', 'right', 'floated', 'success', {'disabled loading': isLoading}, 'button']"
-      :disabled="isLoading"
+      :disabled="isLoading || null"
     >
       <translate
         v-if="object"

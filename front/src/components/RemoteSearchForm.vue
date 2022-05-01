@@ -75,7 +75,7 @@
         v-if="showSubmit"
         type="submit"
         :class="['ui', 'primary', {loading: isLoading}, 'button']"
-        :disabled="isLoading || !id || id.length === 0"
+        :disabled="isLoading || !id || id.length === 0 || null"
       >
         <translate translate-context="Content/Search/Input.Label/Noun">
           Search

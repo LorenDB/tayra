@@ -72,7 +72,7 @@
       <button
         :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
         type="submit"
-        :disabled="isLoading"
+        :disabled="isLoading || null"
       >
         <translate translate-context="Content/Channels/Button.Label/Verb">
           Update description

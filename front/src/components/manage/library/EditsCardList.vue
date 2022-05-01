@@ -90,7 +90,7 @@
       >
         <div class="ui loader" />
       </div>
-      <div v-else-if="result && result.count > 0">
+      <div v-else-if="result?.count > 0">
         <edit-card
           v-for="obj in result.results"
           :key="obj.uuid"

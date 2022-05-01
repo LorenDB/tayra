@@ -1,7 +1,7 @@
 <template>
   <button
     :class="[{disabled: disabled}]"
-    :disabled="disabled"
+    :disabled="disabled || null"
     @click.prevent.stop="showModal = true"
   >
     <slot />

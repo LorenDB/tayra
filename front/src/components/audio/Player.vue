@@ -146,7 +146,7 @@
             :title="labels.previous"
             :aria-label="labels.previous"
             class="circular button control tablet-and-up"
-            :disabled="!hasPrevious"
+            :disabled="!hasPrevious || null"
             @click.prevent.stop="$store.dispatch('queue/previous')"
           >
             <i :class="['ui', 'large', {'disabled': !hasPrevious}, 'backward step', 'icon']" />
@@ -173,7 +173,7 @@
             :title="labels.next"
             :aria-label="labels.next"
             class="circular button control"
-            :disabled="!hasNext"
+            :disabled="!hasNext || null"
             @click.prevent.stop="$store.dispatch('queue/next')"
           >
             <i :class="['ui', 'large', {'disabled': !hasNext}, 'forward step', 'icon']" />
@@ -199,7 +199,7 @@
               class="circular control button"
               :title="labels.loopingDisabled"
               :aria-label="labels.loopingDisabled"
-              :disabled="!currentTrack"
+              :disabled="!currentTrack || null"
               @click.prevent.stop="$store.commit('player/looping', 1)"
             >
               <i :class="['ui', {'disabled': !currentTrack}, 'step', 'repeat', 'icon']" />
@@ -209,7 +209,7 @@
               class="looping circular control button"
               :title="labels.loopingSingle"
               :aria-label="labels.loopingSingle"
-              :disabled="!currentTrack"
+              :disabled="!currentTrack || null"
               @click.prevent.stop="$store.commit('player/looping', 2)"
             >
               <i
@@ -223,7 +223,7 @@
               class="looping circular control button"
               :title="labels.loopingWhole"
               :aria-label="labels.loopingWhole"
-              :disabled="!currentTrack"
+              :disabled="!currentTrack || null"
               @click.prevent.stop="$store.commit('player/looping', 0)"
             >
               <i
@@ -234,7 +234,7 @@
             </button>
             <button
               class="circular control button"
-              :disabled="queueIsEmpty"
+              :disabled="queueIsEmpty || null"
               :title="labels.shuffle"
               :aria-label="labels.shuffle"
               @click.prevent.stop="shuffle()"

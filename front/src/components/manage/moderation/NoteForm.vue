@@ -34,7 +34,7 @@
     <button
       :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
       type="submit"
-      :disabled="isLoading"
+      :disabled="isLoading || null"
     >
       <translate translate-context="Content/Moderation/Button.Label/Verb">
         Add note

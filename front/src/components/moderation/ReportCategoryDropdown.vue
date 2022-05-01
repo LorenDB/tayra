@@ -4,7 +4,7 @@
     <select
       class="ui dropdown"
       :value="value"
-      :required="required"
+      :required="required || null"
       @change="$emit('input', $event.target.value)"
     >
       <option

@@ -118,7 +118,7 @@
           <div class="header-buttons">
             <div class="ui small buttons">
               <radio-button
-                :disabled="!isPlayable"
+                :disabled="!isPlayable || null"
                 type="library"
                 :object-id="object.uuid"
               />

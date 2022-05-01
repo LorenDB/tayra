@@ -74,7 +74,7 @@
     </div>
     <div class="ui bottom attached segment">
       <button
-        :disabled="queueTracks.length === 0"
+        :disabled="queueTracks.length === 0 || null"
         :class="['ui', {disabled: queueTracks.length === 0}, 'labeled', 'icon', 'button']"
         :title="labels.copyTitle"
         @click="insertMany(queueTracks, false)"
@@ -91,7 +91,7 @@
       </button>
 
       <dangerous-button
-        :disabled="plts.length === 0"
+        :disabled="plts.length === 0 || null"
         class="ui labeled right floated danger icon button"
         :action="clearPlaylist"
       >

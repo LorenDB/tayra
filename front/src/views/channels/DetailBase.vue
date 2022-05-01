@@ -378,7 +378,7 @@
                   </button>
                   <button
                     :class="['ui', 'primary', 'confirm', {loading: edit.isLoading}, 'button']"
-                    :disabled="!edit.submittable"
+                    :disabled="!edit.submittable || null"
                     @click.stop="$refs.editForm.submit"
                   >
                     <translate translate-context="*/Channels/Button.Label">

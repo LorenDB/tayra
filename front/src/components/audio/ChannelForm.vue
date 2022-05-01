@@ -78,8 +78,8 @@
             <input
               v-model="newValues.username"
               type="text"
-              :required="creating"
-              :disabled="!creating"
+              :required="creating || null"
+              :disabled="!creating || null"
               :placeholder="labels.usernamePlaceholder"
             >
           </div>
@@ -183,7 +183,7 @@
               id="itunes-category"
               v-model="newValues.metadata.itunes_subcategory"
               name="itunes-category"
-              :disabled="!newValues.metadata.itunes_category"
+              :disabled="!newValues.metadata.itunes_category || null"
               class="ui dropdown"
             >
               <option
