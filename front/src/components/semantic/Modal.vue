@@ -12,14 +12,11 @@ interface Props {
   additionalClasses?: string[]
 }
 
-const props = withDefaults(
-  defineProps<Props>(),
-  {
-    fullscreen: true,
-    scrolling: false,
-    additionalClasses: () => []
-  }
-)
+const props = withDefaults(defineProps<Props>(), {
+  fullscreen: true,
+  scrolling: false,
+  additionalClasses: () => []
+})
 
 const emit = defineEmits(['approved', 'deny', 'update:show', 'show', 'hide'])
 

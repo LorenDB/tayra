@@ -11,16 +11,13 @@ interface Props {
   detailRoute?: string
 }
 
-const props = withDefaults(
-  defineProps<Props>(),
-  {
-    showMore: true,
-    truncateSize: 25,
-    limit: 5,
-    labelClasses: '',
-    detailRoute: 'library.tags.detail'
-  }
-)
+const props = withDefaults(defineProps<Props>(), {
+  showMore: true,
+  truncateSize: 25,
+  limit: 5,
+  labelClasses: '',
+  detailRoute: 'library.tags.detail'
+})
 
 const honorLimit = ref(true)
 

@@ -5,15 +5,18 @@ import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from 'vuex'
 
+interface Props {
+  next?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  next: '/library'
+})
+
 const { $pgettext } = useGettext()
 const labels = computed(() => ({
   title: $pgettext('Head/Login/Title', 'Log In')
 }))
-
-const props = withDefaults(
-  defineProps<{ next?: string }>(),
-  { next: '/library' }
-)
 
 const store = useStore()
 if (store.state.auth.authenticated) {

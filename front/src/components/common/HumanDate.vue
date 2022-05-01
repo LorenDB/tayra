@@ -8,10 +8,9 @@ interface Props {
   icon?: boolean
 }
 
-const props = withDefaults(
-  defineProps<Props>(),
-  { icon: false }
-)
+const props = withDefaults(defineProps<Props>(), {
+  icon: false
+})
 
 const date = computed(() => new Date(props.date))
 // TODO (wvffle): Translate useTimeAgo

@@ -7,10 +7,9 @@ interface Props {
   size?: string
 }
 
-const { isLoading, size } = toRefs(withDefaults(
-  defineProps<Props>(),
-  { size: 'small' }
-))
+const { isLoading, size } = toRefs(withDefaults(defineProps<Props>(), {
+  size: 'small'
+}))
 
 const isDone = refAutoReset(false, 2000)
 watch(isLoading, loading => {

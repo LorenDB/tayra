@@ -12,15 +12,12 @@ interface Props {
   truncateLength?: number
 }
 
-const { displayName, actor, truncateLength, admin, avatar } = toRefs(withDefaults(
-  defineProps<Props>(),
-  {
-    avatar: true,
-    admin: false,
-    displayName: false,
-    truncateLength: 30
-  }
-))
+const { displayName, actor, truncateLength, admin, avatar } = toRefs(withDefaults(defineProps<Props>(), {
+  avatar: true,
+  admin: false,
+  displayName: false,
+  truncateLength: 30
+}))
 
 const repr = computed(() => {
   const name = displayName.value || actor.value.is_local
