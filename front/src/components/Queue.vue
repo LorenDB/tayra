@@ -1,5 +1,6 @@
 <template>
   <section
+    ref="queueModal"
     class="main with-background component-queue"
     :aria-label="labels.queue"
   >
@@ -221,7 +222,7 @@
                     <div>
                       <translate
                         translate-context="Sidebar/Queue/Text"
-                        :translate-params="{index: queue.currentIndex + 1, length: queue.tracks.length}"
+                        :translate-params="{index: currentIndex + 1, length: queue.tracks.length}"
                       >
                         Track %{ index } of %{ length }
                       </translate><template v-if="!$store.state.radios.running">
@@ -240,13 +241,13 @@
                 v-model:list="tracks"
                 tag="tbody"
                 handle=".handle"
-                @update="reorder"
                 item-key="id"
+                @update="reorder"
               >
                 <template #item="{ element: track, index }">
                   <tr
                     :key="track.id"
-                    :class="['queue-item', {'active': index === queue.currentIndex}]"
+                    :class="['queue-item', {'active': index === currentIndex}]"
                   >
                     <td class="handle">
                       <i class="grip lines icon" />
@@ -285,8 +286,8 @@
                       >
                         <strong>{{ track.title }}</strong><br>
                         <span>
-                        {{ track.artist.name }}
-                      </span>
+                          {{ track.artist.name }}
+                        </span>
                       </button>
                     </td>
                     <td class="duration-cell">
@@ -344,15 +345,16 @@
   </section>
 </template>
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
-import $ from 'jquery'
+import { mapState, mapGetters, mapActions, useStore } from 'vuex'
+import { nextTick, onMounted, ref, computed } from 'vue'
 import moment from 'moment'
 import { sum } from 'lodash-es'
 import time from '~/utils/time'
-import { createFocusTrap } from 'focus-trap'
+import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import draggable from 'vuedraggable'
+import { useTimeoutFn, useWindowScroll, useWindowSize } from '@vueuse/core'
 
 export default {
   components: {
@@ -360,18 +362,48 @@ export default {
     TrackPlaylistIcon,
     draggable
   },
+  setup () {
+    const queueModal = ref()
+
+    const { activate } = useFocusTrap(queueModal, { allowOutsideClick: true })
+    activate()
+
+    const store = useStore()
+    const queue = store.state.queue
+    const currentIndex = computed(() => store.state.queue.currentIndex)
+
+    const { y: pageYOffset } = useWindowScroll()
+    const { height: windowHeight } = useWindowSize()
+    const scrollToCurrent = async () => {
+      await nextTick()
+      const item = queueModal.value?.querySelector('.queue-item.active')
+      const { top } = item?.getBoundingClientRect() ?? { top: 0 }
+      window.scrollTo({
+        top: top + pageYOffset.value - windowHeight.value / 2,
+        behavior: 'smooth'
+      })
+    }
+
+    onMounted(async () => {
+      await nextTick()
+      // delay is to let transition work
+      useTimeoutFn(scrollToCurrent, 400)
+    })
+
+    // TODO (wvffle): Add useVirtualList to speed up the queue rendering and potentially resolve #1471
+    //                Each item has 49px height on desktop and 50.666px on tablet(?) and down
+    return { queueModal, scrollToCurrent, queue, currentIndex }
+  },
   data () {
     return {
       showVolume: false,
       isShuffling: false,
       tracksChangeBuffer: null,
-      focusTrap: null,
       time
     }
   },
   computed: {
     ...mapState({
-      currentIndex: state => state.queue.currentIndex,
       playing: state => state.player.playing,
       isLoadingAudio: state => state.player.isLoadingAudio,
       volume: state => state.player.volume,
@@ -379,8 +411,7 @@ export default {
       duration: state => state.player.duration,
       bufferProgress: state => state.player.bufferProgress,
       errored: state => state.player.errored,
-      currentTime: state => state.player.currentTime,
-      queue: state => state.queue
+      currentTime: state => state.player.currentTime
     }),
     ...mapGetters({
       currentTrack: 'queue/currentTrack',
@@ -459,16 +490,6 @@ export default {
       this.$store.commit('ui/queueFocused', null)
     }
   },
-  mounted () {
-    this.focusTrap = createFocusTrap(this.$el, { allowOutsideClick: () => { return true } })
-    this.focusTrap.activate()
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.scrollToCurrent()
-        // delay is to let transition work
-      }, 400)
-    })
-  },
   methods: {
     ...mapActions({
       cleanTrack: 'queue/cleanTrack',
@@ -485,16 +506,6 @@ export default {
         oldIndex: event.oldIndex,
         newIndex: event.newIndex
       })
-    },
-    scrollToCurrent () {
-      const current = $(this.$el).find('.queue-item.active')[0]
-      if (!current) {
-        return
-      }
-      const elementRect = current.getBoundingClientRect()
-      const absoluteElementTop = elementRect.top + window.pageYOffset
-      const middle = absoluteElementTop - (window.innerHeight / 2)
-      window.scrollTo({ top: middle, behaviour: 'smooth' })
     },
     touchProgress (e) {
       const target = this.$refs.progress

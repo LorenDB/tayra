@@ -1,5 +1,85 @@
+<script setup lang="ts">
+import $ from 'jquery'
+import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
+import { computed, onBeforeUnmount, ref, watchEffect } from 'vue'
+import { useVModel } from '@vueuse/core'
+import { useStore } from 'vuex'
+
+interface Props {
+  show: boolean
+  fullscreen?: boolean
+  scrolling?: boolean
+  additionalClasses?: string[]
+}
+
+const props = withDefaults(
+  defineProps<Props>(),
+  {
+    fullscreen: true,
+    scrolling: false,
+    additionalClasses: () => []
+  }
+)
+
+const emit = defineEmits(['approved', 'deny', 'update:show', 'show', 'hide'])
+
+const modal = ref()
+const { activate, deactivate, pause, unpause } = useFocusTrap(modal)
+
+const show = useVModel(props, 'show', emit)
+
+const control = ref()
+const initModal = () => {
+  control.value = $(modal.value).modal({
+    duration: 100,
+    onApprove: () => emit('approved'),
+    onDeny: () => emit('deny'),
+    onHidden: () => (show.value = false)
+  })
+}
+
+watchEffect(() => {
+  if (show.value) {
+    initModal()
+    emit('show')
+    control.value?.modal('show')
+    activate()
+    unpause()
+    document.body.classList.add('scrolling')
+    return
+  }
+
+  if (control.value) {
+    emit('hide')
+    control.value.modal('hide')
+    control.value.remove()
+    deactivate()
+    pause()
+    document.body.classList.remove('scrolling')
+  }
+})
+
+onBeforeUnmount(() => {
+  control.value?.modal('hide')
+})
+
+const store = useStore()
+const classes = computed(() => [
+  ...props.additionalClasses,
+  'ui', 'modal',
+  {
+    active: show.value,
+    scrolling: props.scrolling,
+    'overlay fullscreen': props.fullscreen && ['phone', 'tablet'].includes(store.getters['ui/windowSize'])
+  }
+])
+</script>
+
 <template>
-  <div :class="additionalClasses.concat(['ui', {'active': show}, {'scrolling': scrolling} ,{'overlay fullscreen': fullscreen && ['phone', 'tablet'].indexOf($store.getters['ui/windowSize']) > -1},'modal'])">
+  <div
+    ref="modal"
+    :class="classes"
+  >
     <i
       tabindex="0"
       class="close inside icon"
@@ -7,83 +87,3 @@
     <slot v-if="show" />
   </div>
 </template>
-
-<script>
-import $ from 'jquery'
-import { createFocusTrap } from 'focus-trap'
-
-export default {
-  props: {
-    show: { type: Boolean, required: true },
-    fullscreen: { type: Boolean, default: true },
-    scrolling: { type: Boolean, required: false, default: false },
-    additionalClasses: { type: Array, required: false, default: () => [] }
-  },
-  data () {
-    return {
-      control: null,
-      focusTrap: null
-    }
-  },
-  watch: {
-    show: {
-      handler (newValue) {
-        if (newValue) {
-          this.initModal()
-          this.$emit('show')
-          this.control.modal('show')
-          this.focusTrap.activate()
-          this.focusTrap.unpause()
-          document.body.classList.add('scrolling')
-        } else {
-          if (this.control) {
-            this.$emit('hide')
-            this.control.modal('hide')
-            this.control.remove()
-            this.focusTrap.deactivate()
-            this.focusTrap.pause()
-            document.body.classList.remove('scrolling')
-          }
-        }
-      }
-    },
-    $route (to, from) {
-      this.closeModal()
-    }
-  },
-  mounted () {
-    this.focusTrap = createFocusTrap(this.$el)
-  },
-  beforeUnmount () {
-    if (this.control) {
-      $(this.$el).modal('hide')
-    }
-    this.focusTrap.deactivate()
-    $(this.$el).remove()
-  },
-  methods: {
-    initModal () {
-      this.control = $(this.$el).modal({
-        duration: 100,
-        onApprove: function () {
-          this.$emit('approved')
-        }.bind(this),
-        onDeny: function () {
-          this.$emit('deny')
-        }.bind(this),
-        onHidden: function () {
-          this.$emit('update:show', false)
-        }.bind(this),
-        onVisible: function () {
-          this.focusTrap.activate()
-          this.focusTrap.unpause()
-        }.bind(this)
-      })
-    },
-    closeModal () {
-      this.$emit('update:show', false)
-    }
-  }
-
-}
-</script>
