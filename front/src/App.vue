@@ -146,18 +146,17 @@ const showSetInstanceModal = ref(false)
       />
     </transition>
 
-    <router-view
-      v-slot="{ Component }"
-      role="main"
-    >
+    <router-view v-slot="{ Component }">
       <template v-if="Component">
-        <Suspense>
-          <component :is="Component" />
-          <template #fallback>
-            <!-- TODO (wvffle): Add loader -->
-            Loading...
-          </template>
-        </Suspense>
+        <keep-alive :max="1">
+          <Suspense v-if="!store.state.ui.queueFocused">
+            <component :is="Component" />
+            <template #fallback>
+              <!-- TODO (wvffle): Add loader -->
+              Loading...
+            </template>
+          </Suspense>
+        </keep-alive>
       </template>
     </router-view>
 
