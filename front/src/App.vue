@@ -150,9 +150,9 @@ const showSetInstanceModal = ref(false)
     </transition>
 
     <router-view
+      v-show="!store.state.ui.queueFocused"
       v-slot="{ Component }"
       role="main"
-      :class="{hidden: store.state.ui.queueFocused}"
     >
       <Suspense v-if="Component">
         <component :is="Component" />
