@@ -152,10 +152,10 @@ import { normalizeQuery, parseTokens } from '~/search'
 import Pagination from '~/components/Pagination.vue'
 import ActionTable from '~/components/common/ActionTable.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
 import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
 import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
 import { truncate } from '~/utils/filters'
+import useSharedLabels from '../../../composables/useSharedLabels'
 
 export default {
   components: {
@@ -163,12 +163,13 @@ export default {
     ActionTable,
     ImportStatusModal
   },
-  mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
+  mixins: [OrderingMixin, SmartSearchMixin],
   props: {
     filters: { type: Object, required: false, default: () => { return {} } }
   },
   setup () {
-    return { truncate }
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels, truncate }
   },
   data () {
     return {

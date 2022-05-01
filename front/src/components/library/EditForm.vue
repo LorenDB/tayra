@@ -340,11 +340,10 @@ export default {
 
   methods: {
     setValues () {
-      const self = this
-      this.config.fields.forEach(f => {
-        self.$set(self.values, f.id, clone(f.getValue(self.object)))
-        self.$set(self.initialValues, f.id, clone(self.values[f.id]))
-      })
+      for (const { id, getValue } of this.config.fields) {
+        this.values[id] = clone(getValue(this.object))
+        this.initialValues[id] = clone(this.values[id])
+      }
     },
     submit () {
       const self = this

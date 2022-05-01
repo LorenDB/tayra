@@ -207,7 +207,7 @@ import Modal from '~/components/semantic/Modal.vue'
 import { mapGetters } from 'vuex'
 import useThemeList from '~/composables/useThemeList'
 import useTheme from '~/composables/useTheme'
-import { useVModel } from '@vueuse/core/index'
+import { useVModel } from '@vueuse/core'
 
 export default {
   components: {

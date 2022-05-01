@@ -47,8 +47,8 @@
                   </td>
                   <td>
                     <report-category-dropdown
-                      :value="obj.type"
-                      @input="update({type: $event})"
+                      :model-value="obj.type"
+                      @update:modelValue="update({type: $event})"
                     >
                       &#32;
                       <action-feedback :is-loading="updating.type" />

@@ -1,14 +1,40 @@
+<script setup lang="ts">
+import { useVModel } from '@vueuse/core'
+import { FileSystem, FSEntry } from '~/types'
+
+interface Props {
+  data: FileSystem
+  loading: boolean
+  modelValue: string[]
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits(['update:modelValue', 'import'])
+
+const value = useVModel(props, 'modelValue', emit)
+const handleClick = (entry: FSEntry) => {
+  if (!entry.dir) return
+
+  if (entry.name === '..') {
+    value.value.pop()
+    return
+  }
+
+  value.value.push(entry.name)
+}
+</script>
+
 <template>
-  <div :class="['ui', {loading}, 'segment']">
+  <div :class="['ui', { loading }, 'segment']">
     <div class="ui fluid action input">
       <input
         class="ui disabled"
         disabled
-        :value="data.root + '/' + value.join('/')"
+        :value="props.data.root + '/' + value.join('/')"
       >
       <button
         class="ui button"
-        @click.prevent="$emit('import')"
+        @click.prevent="emit('import')"
       >
         <translate translate-context="Content/Library/Button/Verb">
           Import
@@ -20,7 +46,7 @@
         v-if="value.length > 0"
         class="item"
         href=""
-        @click.prevent="handleClick({name: '..', dir: true})"
+        @click.prevent="handleClick({ name: '..', dir: true })"
       >
         <i class="folder icon" />
         <div class="content">
@@ -49,26 +75,3 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    data: { type: Object, required: true },
-    loading: { type: Boolean, required: true },
-    value: { type: Array, required: true }
-  },
-  methods: {
-    handleClick (element) {
-      if (!element.dir) {
-        return
-      }
-      if (element.name === '..') {
-        const newValue = [...this.value]
-        newValue.pop()
-        this.$emit('input', newValue)
-      } else {
-        this.$emit('input', [...this.value, element.name])
-      }
-    }
-  }
-}
-</script>

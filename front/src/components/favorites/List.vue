@@ -139,10 +139,10 @@ import RadioButton from '~/components/radios/Button.vue'
 import Pagination from '~/components/Pagination.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import PaginationMixin from '~/components/mixins/Pagination.vue'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
 import { checkRedirectToLogin } from '~/utils'
 import TrackTable from '~/components/audio/track/Table.vue'
 import useLogger from '~/composables/useLogger'
+import useSharedLabels from '../../composables/useSharedLabels'
 
 const logger = useLogger()
 
@@ -154,7 +154,11 @@ export default {
     Pagination,
     TrackTable
   },
-  mixins: [OrderingMixin, PaginationMixin, TranslationsMixin],
+  mixins: [OrderingMixin, PaginationMixin],
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
+  },
   data () {
     return {
       results: null,

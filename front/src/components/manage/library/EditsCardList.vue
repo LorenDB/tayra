@@ -135,21 +135,25 @@ import { uniq, merge } from 'lodash-es'
 import time from '~/utils/time'
 import Pagination from '~/components/Pagination.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
 import EditCard from '~/components/library/EditCard.vue'
 import { normalizeQuery, parseTokens } from '~/search'
 import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
 
 import edits from '~/edits'
+import useSharedLabels from '../../../composables/useSharedLabels'
 
 export default {
   components: {
     Pagination,
     EditCard
   },
-  mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
+  mixins: [OrderingMixin, SmartSearchMixin],
   props: {
     filters: { type: Object, required: false, default: () => { return {} } }
+  },
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
   },
   data () {
     return {

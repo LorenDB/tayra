@@ -228,7 +228,7 @@
 import Modal from '~/components/semantic/Modal.vue'
 import ReportMixin from '~/components/mixins/Report.vue'
 import PlayOptionsMixin from '~/components/mixins/PlayOptions.vue'
-import { useVModel } from '@vueuse/core/index'
+import { useVModel } from '@vueuse/core'
 
 export default {
   components: {

@@ -364,19 +364,17 @@
 
 <script>
 import axios from 'axios'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
-import useLogger from '~/composables/useLogger'
 import { humanSize, truncate } from '~/utils/filters'
+import useLogger from '~/composables/useLogger'
+import useSharedLabels from '../../../composables/useSharedLabels'
 
 const logger = useLogger()
 
 export default {
-  mixins: [
-    TranslationsMixin
-  ],
   props: { id: { type: String, required: true } },
   setup () {
-    return { humanSize, truncate }
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels, humanSize, truncate }
   },
   data () {
     return {

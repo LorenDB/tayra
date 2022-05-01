@@ -142,9 +142,9 @@ import $ from 'jquery'
 
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import PaginationMixin from '~/components/mixins/Pagination.vue'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
 import PlaylistCardList from '~/components/playlists/CardList.vue'
 import Pagination from '~/components/Pagination.vue'
+import useSharedLabels from '../../composables/useSharedLabels'
 
 const FETCH_URL = 'playlists/'
 
@@ -153,10 +153,14 @@ export default {
     PlaylistCardList,
     Pagination
   },
-  mixins: [OrderingMixin, PaginationMixin, TranslationsMixin],
+  mixins: [OrderingMixin, PaginationMixin],
   props: {
     defaultQuery: { type: String, required: false, default: '' },
     scope: { type: String, required: false, default: 'all' }
+  },
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
   },
   data () {
     return {

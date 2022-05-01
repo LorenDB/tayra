@@ -717,9 +717,9 @@ import $ from 'jquery'
 import axios from 'axios'
 import PasswordInput from '~/components/forms/PasswordInput.vue'
 import SubsonicTokenForm from '~/components/auth/SubsonicTokenForm.vue'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
 import AttachmentInput from '~/components/common/AttachmentInput.vue'
 import useLogger from '~/composables/useLogger'
+import useSharedLabels from '../../composables/useSharedLabels'
 
 const logger = useLogger()
 
@@ -729,7 +729,10 @@ export default {
     SubsonicTokenForm,
     AttachmentInput
   },
-  mixins: [TranslationsMixin],
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
+  },
   data () {
     const d = {
       // We need to initialize the component with any

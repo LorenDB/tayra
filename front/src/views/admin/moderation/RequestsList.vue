@@ -129,17 +129,21 @@ import { merge } from 'lodash-es'
 import time from '~/utils/time'
 import Pagination from '~/components/Pagination.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
 import UserRequestCard from '~/components/manage/moderation/UserRequestCard.vue'
 import { normalizeQuery, parseTokens } from '~/search'
 import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
+import useSharedLabels from '../../../composables/useSharedLabels'
 
 export default {
   components: {
     Pagination,
     UserRequestCard
   },
-  mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
+  mixins: [OrderingMixin, SmartSearchMixin],
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
+  },
   data () {
     return {
       time,

@@ -153,11 +153,11 @@ import $ from 'jquery'
 
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import PaginationMixin from '~/components/mixins/Pagination.vue'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
 import AlbumCard from '~/components/audio/album/Card.vue'
 import Pagination from '~/components/Pagination.vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
 import useLogger from '~/composables/useLogger'
+import useSharedLabels from '../../composables/useSharedLabels'
 
 const logger = useLogger()
 
@@ -169,11 +169,15 @@ export default {
     Pagination,
     TagsSelector
   },
-  mixins: [OrderingMixin, PaginationMixin, TranslationsMixin],
+  mixins: [OrderingMixin, PaginationMixin],
   props: {
     defaultQuery: { type: String, required: false, default: '' },
     defaultTags: { type: Array, required: false, default: () => { return [] } },
     scope: { type: String, required: false, default: 'all' }
+  },
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
   },
   data () {
     return {

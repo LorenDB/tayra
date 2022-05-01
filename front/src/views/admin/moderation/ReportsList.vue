@@ -51,8 +51,8 @@
             class="field"
             :all="true"
             :label="true"
-            :value="getTokenValue('category', '')"
-            @input="addSearchToken('category', $event)"
+            :model-value="getTokenValue('category', '')"
+            @update:modelValue="addSearchToken('category', $event)"
           />
           <div class="field">
             <label for="reports-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
@@ -131,11 +131,11 @@ import { merge } from 'lodash-es'
 import time from '~/utils/time'
 import Pagination from '~/components/Pagination.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
 import ReportCard from '~/components/manage/moderation/ReportCard.vue'
 import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
 import { normalizeQuery, parseTokens } from '~/search'
 import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
+import useSharedLabels from '../../../composables/useSharedLabels'
 
 export default {
   components: {
@@ -143,9 +143,13 @@ export default {
     ReportCard,
     ReportCategoryDropdown
   },
-  mixins: [OrderingMixin, TranslationsMixin, SmartSearchMixin],
+  mixins: [OrderingMixin, SmartSearchMixin],
   props: {
     mode: { type: String, default: 'card' }
+  },
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
   },
   data () {
     return {

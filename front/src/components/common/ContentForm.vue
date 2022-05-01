@@ -77,7 +77,7 @@ import axios from 'axios'
 
 export default {
   props: {
-    value: { type: String, default: '' },
+    modelValue: { type: String, default: '' },
     fieldId: { type: String, default: 'change-content' },
     placeholder: { type: String, default: null },
     autofocus: { type: Boolean, default: false },
@@ -90,7 +90,7 @@ export default {
     return {
       isPreviewing: false,
       preview: null,
-      newValue: this.value,
+      newValue: this.modelValue,
       isLoadingPreview: false
     }
   },
@@ -101,15 +101,15 @@ export default {
       }
     },
     remainingChars () {
-      return this.charLimit - (this.value || '').length
+      return this.charLimit - (this.modelValue || '').length
     }
   },
   watch: {
     newValue (v) {
       this.preview = null
-      this.$emit('input', v)
+      this.$emit('update:modelValue', v)
     },
-    value: {
+    modelValue: {
       async handler (v) {
         this.preview = null
         this.newValue = v
@@ -120,7 +120,7 @@ export default {
       immediate: true
     },
     async isPreviewing (v) {
-      if (v && !!this.value && this.preview === null && !this.isLoadingPreview) {
+      if (v && !!this.modelValue && this.preview === null && !this.isLoadingPreview) {
         await this.loadPreview()
       }
       if (!v) {

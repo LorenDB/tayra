@@ -201,13 +201,13 @@ import $ from 'jquery'
 
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import PaginationMixin from '~/components/mixins/Pagination.vue'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
 import ArtistCard from '~/components/audio/artist/Card.vue'
 import Pagination from '~/components/Pagination.vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
 import Modal from '~/components/semantic/Modal.vue'
 import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
 import useLogger from '~/composables/useLogger'
+import useSharedLabels from '../../composables/useSharedLabels'
 
 const logger = useLogger()
 
@@ -221,11 +221,15 @@ export default {
     RemoteSearchForm,
     Modal
   },
-  mixins: [OrderingMixin, PaginationMixin, TranslationsMixin],
+  mixins: [OrderingMixin, PaginationMixin],
   props: {
     defaultQuery: { type: String, required: false, default: '' },
     defaultTags: { type: Array, required: false, default: () => { return [] } },
     scope: { type: String, required: false, default: 'all' }
+  },
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
   },
   data () {
     return {

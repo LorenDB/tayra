@@ -121,13 +121,16 @@
 <script>
 import { uniq } from 'lodash-es'
 import axios from 'axios'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
+import useSharedLabels from '../../composables/useSharedLabels'
 
 export default {
-  mixins: [TranslationsMixin],
   props: {
     app: { type: Object, required: false, default: () => { return null } },
     defaults: { type: Object, required: false, default: () => { return {} } }
+  },
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
   },
   data () {
     const defaults = this.defaults || {}

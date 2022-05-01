@@ -383,21 +383,19 @@
 
 <script>
 import axios from 'axios'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
 import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
 import time from '~/utils/time'
 import { humanSize, truncate } from '~/utils/filters'
+import useSharedLabels from '../../../composables/useSharedLabels'
 
 export default {
   components: {
     ImportStatusModal
   },
-  mixins: [
-    TranslationsMixin
-  ],
   props: { id: { type: Number, required: true } },
   setup () {
-    return { humanSize, time, truncate }
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels, humanSize, time, truncate }
   },
   data () {
     return {

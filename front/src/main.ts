@@ -6,7 +6,8 @@ import useTheme from '~/composables/useTheme'
 useTheme()
 
 configureCompat({
-  RENDER_FUNCTION: false
+  RENDER_FUNCTION: false,
+  // COMPONENT_V_MODEL: false
 })
 
 const logger = useLogger()
@@ -53,3 +54,4 @@ Promise.all(modules).finally(() => {
 // TODO (wvffle): Use emits options: https://v3-migration.vuejs.org/breaking-changes/emits-option.html
 // TODO (wvffle): Migrate to new v-model: https://v3-migration.vuejs.org/breaking-changes/v-model.html
 // TODO (wvffle): Migrate to <script setup>
+// TODO (wvffle): Replace `from '(../)+` with `from '~/`

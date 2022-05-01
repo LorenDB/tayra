@@ -22,9 +22,9 @@ import $ from 'jquery'
 
 import { isEqual } from 'lodash-es'
 export default {
-  props: { value: { type: Array, required: true } },
+  props: { modelValue: { type: Array, required: true } },
   watch: {
-    value: {
+    modelValue: {
       handler (v) {
         const current = $(this.$refs.dropdown).dropdown('get value').split(',').sort()
         if (!isEqual([...v].sort(), current)) {
@@ -44,7 +44,7 @@ export default {
       const self = this
       const handleUpdate = () => {
         const value = $(self.$refs.dropdown).dropdown('get value').split(',')
-        self.$emit('input', value)
+        self.$emit('update:modelValue', value)
         return value
       }
       const settings = {
@@ -95,7 +95,7 @@ export default {
         onChange: handleUpdate
       }
       $(this.$refs.dropdown).dropdown(settings)
-      $(this.$refs.dropdown).dropdown('set exactly', this.value)
+      $(this.$refs.dropdown).dropdown('set exactly', this.modelValue)
     }
   }
 }

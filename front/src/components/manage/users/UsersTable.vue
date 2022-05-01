@@ -204,16 +204,20 @@ import time from '~/utils/time'
 import Pagination from '~/components/Pagination.vue'
 import ActionTable from '~/components/common/ActionTable.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
+import useSharedLabels from '../../../composables/useSharedLabels'
 
 export default {
   components: {
     Pagination,
     ActionTable
   },
-  mixins: [OrderingMixin, TranslationsMixin],
+  mixins: [OrderingMixin],
   props: {
     filters: { type: Object, required: false, default: function () { return {} } }
+  },
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
   },
   data () {
     return {

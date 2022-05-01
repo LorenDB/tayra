@@ -71,6 +71,17 @@ export interface ListenWSEvent {
 
 export type WebSocketEvent = PendingReviewEditsWSEvent | PendingReviewReportsWSEvent | PendingReviewRequestsWSEvent | ListenWSEvent
 
+// FS Browser
+export interface FSEntry {
+  dir: boolean
+  name: string
+}
+
+export interface FileSystem {
+  root: boolean
+  content: FSEntry[]
+}
+
 // Yet uncategorized stuff
 export interface Actor {
   preferred_username: string

@@ -77,14 +77,14 @@
 </template>
 
 <script>
-import TranslationsMixin from '~/components/mixins/Translations.vue'
 import { humanSize } from '~/utils/filters'
+import useSharedLabels from '../../../composables/useSharedLabels'
 
 export default {
-  mixins: [TranslationsMixin],
   props: { library: { type: Object, required: true } },
   setup () {
-    return { humanSize }
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels, humanSize }
   },
   computed: {
     size_label () {

@@ -100,17 +100,20 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
-import TranslationsMixin from '~/components/mixins/Translations.vue'
 
 import useLogger from '~/composables/useLogger'
+import useSharedLabels from '~/composables/useSharedLabels'
 
 const logger = useLogger()
 
 export default {
-  mixins: [TranslationsMixin],
   props: {
     title: { type: Boolean, default: true },
     playlist: { type: Object, default: null }
+  },
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
   },
   data () {
     const d = {

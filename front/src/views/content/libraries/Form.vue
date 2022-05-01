@@ -121,11 +121,14 @@
 
 <script>
 import axios from 'axios'
-import MixinsTranslation from '~/components/mixins/Translations.vue'
+import useSharedLabels from '../../../composables/useSharedLabels'
 
 export default {
-  mixins: [MixinsTranslation],
   props: { library: { type: Object, default: null } },
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
+  },
   data () {
     const d = {
       isLoading: false,

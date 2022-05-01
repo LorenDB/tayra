@@ -142,13 +142,11 @@
 </template>
 
 <script>
-import TranslationsMixin from '~/components/mixins/Translations.vue'
-
 import axios from 'axios'
 
 import { checkRedirectToLogin } from '~/utils'
+import useSharedLabels from '../../composables/useSharedLabels'
 export default {
-  mixins: [TranslationsMixin],
   props: {
     clientId: { type: String, required: true },
     redirectUri: { type: String, required: true },
@@ -156,6 +154,10 @@ export default {
     responseType: { type: String, required: true },
     nonce: { type: String, required: true },
     state: { type: String, required: true }
+  },
+  setup () {
+    const sharedLabels = useSharedLabels()
+    return { sharedLabels }
   },
   data () {
     return {
