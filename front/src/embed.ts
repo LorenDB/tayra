@@ -1,15 +1,7 @@
-import Vue from 'vue'
 import EmbedFrame from './EmbedFrame.vue'
 import VuePlyr from 'vue-plyr'
+import { createApp } from 'vue'
 
-Vue.use(VuePlyr)
-
-Vue.config.productionTip = false
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  components: { EmbedFrame },
-  render (h) {
-    return h('EmbedFrame')
-  }
-})
+const app = createApp(EmbedFrame)
+app.use(VuePlyr)
+app.mount('#app')

@@ -242,6 +242,7 @@ export default {
     set (key, value) {
       // otherwise reactivity doesn't trigger :/
       this.values = cloneDeep(this.values)
+      // TODO (wvffle): Replace $set and $delete with reactive()
       this.$set(this.values, key, value)
     }
   }

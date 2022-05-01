@@ -1,11 +1,11 @@
 import { InitModule } from '~/types'
 import { registerSW } from 'virtual:pwa-register'
 import useLogger from '~/composables/useLogger'
-import Vue from 'vue'
+import { gettext } from '~/init/locale'
 
 const logger = useLogger()
 
-const { $pgettext } = Vue.prototype
+const { $pgettext } = gettext
 
 export const install: InitModule = ({ store }) => {
   const updateSW = registerSW({
