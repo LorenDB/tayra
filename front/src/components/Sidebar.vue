@@ -153,10 +153,9 @@
           </a>
         </template>
         <user-modal
-          :show="showUserModal"
+          v-model:show="showUserModal"
           @showThemeModalEvent="showThemeModal=true"
           @showLanguageModalEvent="showLanguageModal=true"
-          @update:show="showUserModal = $event"
         />
         <modal
           ref="languageModal"

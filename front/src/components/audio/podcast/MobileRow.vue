@@ -127,12 +127,11 @@
       <i class="ellipsis large vertical icon" />
     </div>
     <track-modal
-      :show="showTrackModal"
+      v-model:show="showTrackModal"
       :track="track"
       :index="index"
       :is-artist="isArtist"
       :is-album="isAlbum"
-      @update:show="showTrackModal = $event;"
     />
   </div>
 </template>
