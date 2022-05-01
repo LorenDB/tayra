@@ -92,10 +92,7 @@
         :url="'artists/' + object.id + '/libraries/'"
         @loaded="$emit('libraries-loaded', $event)"
       >
-        <translate
-          slot="subtitle"
-          translate-context="Content/Artist/Paragraph"
-        >
+        <translate translate-context="Content/Artist/Paragraph">
           This artist is present in the following libraries:
         </translate>
       </library-widget>

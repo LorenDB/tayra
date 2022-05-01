@@ -117,10 +117,7 @@
             @input="submitAvatar($event)"
             @delete="avatar = {uuid: null}"
           >
-            <translate
-              slot="label"
-              translate-context="Content/Channel/*"
-            >
+            <translate translate-context="Content/Channel/*">
               Avatar
             </translate>
           </attachment-input>
@@ -186,35 +183,41 @@
             <translate translate-context="Content/Settings/Button.Label">
               Change password
             </translate>
-            <p slot="modal-header">
-              <translate translate-context="Popup/Settings/Title">
-                Change your password?
-              </translate>
-            </p>
-            <div slot="modal-content">
+            <template #modal-header>
               <p>
-                <translate translate-context="Popup/Settings/Paragraph">
-                  Changing your password will have the following consequences:
+                <translate translate-context="Popup/Settings/Title">
+                  Change your password?
                 </translate>
               </p>
-              <ul>
-                <li>
-                  <translate translate-context="Popup/Settings/List item">
-                    You will be logged out from this session and have to log in with the new one
+            </template>
+            <template #modal-content>
+              <div>
+                <p>
+                  <translate translate-context="Popup/Settings/Paragraph">
+                    Changing your password will have the following consequences:
                   </translate>
-                </li>
-                <li>
-                  <translate translate-context="Popup/Settings/List item">
-                    Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password
-                  </translate>
-                </li>
-              </ul>
-            </div>
-            <div slot="modal-confirm">
-              <translate translate-context="Popup/Settings/Button.Label">
-                Disable access
-              </translate>
-            </div>
+                </p>
+                <ul>
+                  <li>
+                    <translate translate-context="Popup/Settings/List item">
+                      You will be logged out from this session and have to log in with the new one
+                    </translate>
+                  </li>
+                  <li>
+                    <translate translate-context="Popup/Settings/List item">
+                      Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password
+                    </translate>
+                  </li>
+                </ul>
+              </div>
+            </template>
+            <template #modal-confirm>
+              <div>
+                <translate translate-context="Popup/Settings/Button.Label">
+                  Disable access
+                </translate>
+              </div>
+            </template>
           </dangerous-button>
         </form>
         <div class="ui hidden divider" />
@@ -362,35 +365,39 @@
                   <translate translate-context="*/*/*/Verb">
                     Revoke
                   </translate>
-                  <p
-                    slot="modal-header"
-                    v-translate="{application: app.name}"
-                    translate-context="Popup/Settings/Title"
-                  >
-                    Revoke access for application "%{ application }"?
-                  </p>
-                  <p slot="modal-content">
-                    <translate translate-context="Popup/Settings/Paragraph">
-                      This will prevent this application from accessing the service on your behalf.
-                    </translate>
-                  </p>
-                  <div slot="modal-confirm">
-                    <translate translate-context="*/Settings/Button.Label/Verb">
-                      Revoke access
-                    </translate>
-                  </div>
+                  <template #modal-header>
+                    <p
+                      v-translate="{application: app.name}"
+                      translate-context="Popup/Settings/Title"
+                    >
+                      Revoke access for application "%{ application }"?
+                    </p>
+                  </template>
+                  <template #modal-content>
+                    <p>
+                      <translate translate-context="Popup/Settings/Paragraph">
+                        This will prevent this application from accessing the service on your behalf.
+                      </translate>
+                    </p>
+                  </template>
+                  <template #modal-confirm>
+                    <div>
+                      <translate translate-context="*/Settings/Button.Label/Verb">
+                        Revoke access
+                      </translate>
+                    </div>
+                  </template>
                 </dangerous-button>
               </td>
             </tr>
           </tbody>
         </table>
         <empty-state v-else>
-          <translate
-            slot="title"
-            translate-context="Content/Applications/Paragraph"
-          >
-            You don't have any application connected with your account.
-          </translate>
+          <template #title>
+            <translate translate-context="Content/Applications/Paragraph">
+              You don't have any application connected with your account.
+            </translate>
+          </template>
           <translate translate-context="Content/Applications/Paragraph">
             If you authorize third-party applications to access your data, those applications will be listed here.
           </translate>
@@ -478,35 +485,39 @@
                   <translate translate-context="*/*/*/Verb">
                     Remove
                   </translate>
-                  <p
-                    slot="modal-header"
-                    v-translate="{application: app.name}"
-                    translate-context="Popup/Settings/Title"
-                  >
-                    Remove application "%{ application }"?
-                  </p>
-                  <p slot="modal-content">
-                    <translate translate-context="Popup/Settings/Paragraph">
-                      This will permanently remove the application and all the associated tokens.
-                    </translate>
-                  </p>
-                  <div slot="modal-confirm">
-                    <translate translate-context="*/Settings/Button.Label/Verb">
-                      Remove application
-                    </translate>
-                  </div>
+                  <template #modal-header>
+                    <p
+                      v-translate="{application: app.name}"
+                      translate-context="Popup/Settings/Title"
+                    >
+                      Remove application "%{ application }"?
+                    </p>
+                  </template>
+                  <template #modal-content>
+                    <p>
+                      <translate translate-context="Popup/Settings/Paragraph">
+                        This will permanently remove the application and all the associated tokens.
+                      </translate>
+                    </p>
+                  </template>
+                  <template #modal-confirm>
+                    <div>
+                      <translate translate-context="*/Settings/Button.Label/Verb">
+                        Remove application
+                      </translate>
+                    </div>
+                  </template>
                 </dangerous-button>
               </td>
             </tr>
           </tbody>
         </table>
         <empty-state v-else>
-          <translate
-            slot="title"
-            translate-context="Content/Applications/Paragraph"
-          >
-            You don't have registered any application yet.
-          </translate>
+          <template #title>
+            <translate translate-context="Content/Applications/Paragraph">
+              You don't have registered any application yet.
+            </translate>
+          </template>
           <translate translate-context="Content/Applications/Paragraph">
             Register one to integrate Funkwhale with third-party applications.
           </translate>
@@ -671,23 +682,29 @@
             <translate translate-context="*/*/Button.Label">
               Delete my account…
             </translate>
-            <p slot="modal-header">
-              <translate translate-context="Popup/Settings/Title">
-                Do you want to delete your account?
-              </translate>
-            </p>
-            <div slot="modal-content">
+            <template #modal-header>
               <p>
-                <translate translate-context="Popup/Settings/Paragraph">
-                  This is irreversible and will permanently remove your data from our servers. You will we immediatly logged out.
+                <translate translate-context="Popup/Settings/Title">
+                  Do you want to delete your account?
                 </translate>
               </p>
-            </div>
-            <div slot="modal-confirm">
-              <translate translate-context="*/*/Button.Label">
-                Delete my account
-              </translate>
-            </div>
+            </template>
+            <template #modal-content>
+              <div>
+                <p>
+                  <translate translate-context="Popup/Settings/Paragraph">
+                    This is irreversible and will permanently remove your data from our servers. You will we immediatly logged out.
+                  </translate>
+                </p>
+              </div>
+            </template>
+            <template #modal-confirm>
+              <div>
+                <translate translate-context="*/*/Button.Label">
+                  Delete my account
+                </translate>
+              </div>
+            </template>
           </dangerous-button>
         </div>
       </section>

@@ -89,21 +89,27 @@
         <translate translate-context="*/Settings/Button.Label/Verb">
           Request a new password
         </translate>
-        <p slot="modal-header">
-          <translate translate-context="Popup/Settings/Title">
-            Request a new Subsonic API password?
-          </translate>
-        </p>
-        <p slot="modal-content">
-          <translate translate-context="Popup/Settings/Paragraph">
-            This will log you out from existing devices that use the current password.
-          </translate>
-        </p>
-        <div slot="modal-confirm">
-          <translate translate-context="*/Settings/Button.Label/Verb">
-            Request a new password
-          </translate>
-        </div>
+        <template #modal-header>
+          <p>
+            <translate translate-context="Popup/Settings/Title">
+              Request a new Subsonic API password?
+            </translate>
+          </p>
+        </template>
+        <template #modal-content>
+          <p>
+            <translate translate-context="Popup/Settings/Paragraph">
+              This will log you out from existing devices that use the current password.
+            </translate>
+          </p>
+        </template>
+        <template #modal-confirm>
+          <div>
+            <translate translate-context="*/Settings/Button.Label/Verb">
+              Request a new password
+            </translate>
+          </div>
+        </template>
       </dangerous-button>
       <button
         v-else
@@ -123,21 +129,27 @@
         <translate translate-context="Content/Settings/Button.Label/Verb">
           Disable Subsonic access
         </translate>
-        <p slot="modal-header">
-          <translate translate-context="Popup/Settings/Title">
-            Disable Subsonic API access?
-          </translate>
-        </p>
-        <p slot="modal-content">
-          <translate translate-context="Popup/Settings/Paragraph">
-            This will completely disable access to the Subsonic API using from account.
-          </translate>
-        </p>
-        <div slot="modal-confirm">
-          <translate translate-context="Popup/Settings/Button.Label">
-            Disable access
-          </translate>
-        </div>
+        <template #modal-header>
+          <p>
+            <translate translate-context="Popup/Settings/Title">
+              Disable Subsonic API access?
+            </translate>
+          </p>
+        </template>
+        <template #modal-content>
+          <p>
+            <translate translate-context="Popup/Settings/Paragraph">
+              This will completely disable access to the Subsonic API using from account.
+            </translate>
+          </p>
+        </template>
+        <template #modal-confirm>
+          <div>
+            <translate translate-context="Popup/Settings/Button.Label">
+              Disable access
+            </translate>
+          </div>
+        </template>
       </dangerous-button>
     </template>
   </form>

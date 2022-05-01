@@ -81,24 +81,29 @@
               <i class="trash icon" /> <translate translate-context="*/*/*/Verb">
                 Delete
               </translate>
-              <p
-                slot="modal-header"
-                v-translate="{playlist: playlist.name}"
-                translate-context="Popup/Playlist/Title/Call to action"
-                :translate-params="{playlist: playlist.name}"
-              >
-                Do you want to delete the playlist "%{ playlist }"?
-              </p>
-              <p slot="modal-content">
-                <translate translate-context="Popup/Playlist/Paragraph">
-                  This will completely delete this playlist and cannot be undone.
-                </translate>
-              </p>
-              <div slot="modal-confirm">
-                <translate translate-context="Popup/Playlist/Button.Label/Verb">
-                  Delete playlist
-                </translate>
-              </div>
+              <template #modal-header>
+                <p
+                  v-translate="{playlist: playlist.name}"
+                  translate-context="Popup/Playlist/Title/Call to action"
+                  :translate-params="{playlist: playlist.name}"
+                >
+                  Do you want to delete the playlist "%{ playlist }"?
+                </p>
+              </template>
+              <template #modal-content>
+                <p>
+                  <translate translate-context="Popup/Playlist/Paragraph">
+                    This will completely delete this playlist and cannot be undone.
+                  </translate>
+                </p>
+              </template>
+              <template #modal-confirm>
+                <div>
+                  <translate translate-context="Popup/Playlist/Button.Label/Verb">
+                    Delete playlist
+                  </translate>
+                </div>
+              </template>
             </dangerous-button>
           </div>
         </div>

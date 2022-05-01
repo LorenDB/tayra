@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <h3 class="ui header">
-      <slot name="title" />
+      <slot />
     </h3>
     <slot
       v-if="!isLoading && objects.length === 0"

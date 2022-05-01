@@ -370,15 +370,17 @@
               >
                 <i :class="[action.iconColor, action.icon, 'icon']" />&nbsp;
                 {{ action.label }}
-                <p slot="modal-header">
-                  {{ action.modalHeader }}
-                </p>
-                <div slot="modal-content">
-                  <p>{{ action.modalContent }}</p>
-                </div>
-                <p slot="modal-confirm">
-                  {{ action.modalConfirmLabel }}
-                </p>
+                <template #modal-header>
+                  <p>{{ action.modalHeader }}</p>
+                </template>
+                <template #modal-content>
+                  <div>
+                    <p>{{ action.modalContent }}</p>
+                  </div>
+                </template>
+                <template #modal-confirm>
+                  <p>{{ action.modalConfirmLabel }}</p>
+                </template>
               </dangerous-button>
             </template>
           </div>

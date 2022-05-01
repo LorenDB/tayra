@@ -128,23 +128,29 @@
                     <translate translate-context="*/*/*/Verb">
                       Delete
                     </translate>
-                    <p slot="modal-header">
-                      <translate translate-context="Popup/Library/Title">
-                        Delete this track?
-                      </translate>
-                    </p>
-                    <div slot="modal-content">
+                    <template #modal-header>
                       <p>
-                        <translate translate-context="Content/Moderation/Paragraph">
-                          The track will be removed, as well as associated uploads, favorites and listening history. This action is irreversible.
+                        <translate translate-context="Popup/Library/Title">
+                          Delete this track?
                         </translate>
                       </p>
-                    </div>
-                    <p slot="modal-confirm">
-                      <translate translate-context="*/*/*/Verb">
-                        Delete
-                      </translate>
-                    </p>
+                    </template>
+                    <template #modal-content>
+                      <div>
+                        <p>
+                          <translate translate-context="Content/Moderation/Paragraph">
+                            The track will be removed, as well as associated uploads, favorites and listening history. This action is irreversible.
+                          </translate>
+                        </p>
+                      </div>
+                    </template>
+                    <template #modal-confirm>
+                      <p>
+                        <translate translate-context="*/*/*/Verb">
+                          Delete
+                        </translate>
+                      </p>
+                    </template>
                   </dangerous-button>
                 </div>
               </div>

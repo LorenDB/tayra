@@ -36,7 +36,6 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
 
     // TODO (wvffle): Enable typescript rules later
-    'vue/require-explicit-emits': 'off',
     '@typescript-eslint/no-this-alias': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-unused-vars': 'off',

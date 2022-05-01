@@ -75,21 +75,27 @@
             <translate translate-context="*/*/*/Verb">
               Purge
             </translate>
-            <p slot="modal-header">
-              <translate translate-context="Popup/Library/Title">
-                Purge pending files?
-              </translate>
-            </p>
-            <p slot="modal-content">
-              <translate translate-context="Popup/Library/Paragraph">
-                Removes uploaded but yet to be processed tracks completely, adding the corresponding data to your quota.
-              </translate>
-            </p>
-            <div slot="modal-confirm">
-              <translate translate-context="*/*/*/Verb">
-                Purge
-              </translate>
-            </div>
+            <template #modal-header>
+              <p>
+                <translate translate-context="Popup/Library/Title">
+                  Purge pending files?
+                </translate>
+              </p>
+            </template>
+            <template #modal-content>
+              <p>
+                <translate translate-context="Popup/Library/Paragraph">
+                  Removes uploaded but yet to be processed tracks completely, adding the corresponding data to your quota.
+                </translate>
+              </p>
+            </template>
+            <template #modal-confirm>
+              <div>
+                <translate translate-context="*/*/*/Verb">
+                  Purge
+                </translate>
+              </div>
+            </template>
           </dangerous-button>
         </div>
       </div>
@@ -123,21 +129,27 @@
             <translate translate-context="*/*/*/Verb">
               Purge
             </translate>
-            <p slot="modal-header">
-              <translate translate-context="Popup/Library/Title">
-                Purge skipped files?
-              </translate>
-            </p>
-            <p slot="modal-content">
-              <translate translate-context="Popup/Library/Paragraph">
-                Removes uploaded tracks skipped during the import processes completely, adding the corresponding data to your quota.
-              </translate>
-            </p>
-            <div slot="modal-confirm">
-              <translate translate-context="*/*/*/Verb">
-                Purge
-              </translate>
-            </div>
+            <template #modal-header>
+              <p>
+                <translate translate-context="Popup/Library/Title">
+                  Purge skipped files?
+                </translate>
+              </p>
+            </template>
+            <template #modal-content>
+              <p>
+                <translate translate-context="Popup/Library/Paragraph">
+                  Removes uploaded tracks skipped during the import processes completely, adding the corresponding data to your quota.
+                </translate>
+              </p>
+            </template>
+            <template #modal-confirm>
+              <div>
+                <translate translate-context="*/*/*/Verb">
+                  Purge
+                </translate>
+              </div>
+            </template>
           </dangerous-button>
         </div>
       </div>
@@ -171,21 +183,27 @@
             <translate translate-context="*/*/*/Verb">
               Purge
             </translate>
-            <p slot="modal-header">
-              <translate translate-context="Popup/Library/Title">
-                Purge errored files?
-              </translate>
-            </p>
-            <p slot="modal-content">
-              <translate translate-context="Popup/Library/Paragraph">
-                Removes uploaded tracks that could not be processed by the server completely, adding the corresponding data to your quota.
-              </translate>
-            </p>
-            <div slot="modal-confirm">
-              <translate translate-context="*/*/*/Verb">
-                Purge
-              </translate>
-            </div>
+            <template #modal-header>
+              <p>
+                <translate translate-context="Popup/Library/Title">
+                  Purge errored files?
+                </translate>
+              </p>
+            </template>
+            <template #modal-content>
+              <p>
+                <translate translate-context="Popup/Library/Paragraph">
+                  Removes uploaded tracks that could not be processed by the server completely, adding the corresponding data to your quota.
+                </translate>
+              </p>
+            </template>
+            <template #modal-confirm>
+              <div>
+                <translate translate-context="*/*/*/Verb">
+                  Purge
+                </translate>
+              </div>
+            </template>
           </dangerous-button>
         </div>
       </div>

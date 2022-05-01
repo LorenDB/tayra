@@ -41,24 +41,29 @@
             :action="deleteRadio"
           >
             <i class="trash icon" /> Delete
-            <p
-              slot="modal-header"
-              v-translate="{radio: radio.name}"
-              translate-context="Popup/Radio/Title"
-              :translate-params="{radio: radio.name}"
-            >
-              Do you want to delete the radio "%{ radio }"?
-            </p>
-            <p slot="modal-content">
-              <translate translate-context="Popup/Radio/Paragraph">
-                This will completely delete this radio and cannot be undone.
-              </translate>
-            </p>
-            <p slot="modal-confirm">
-              <translate translate-context="Popup/Radio/Button.Label/Verb">
-                Delete radio
-              </translate>
-            </p>
+            <template #modal-header>
+              <p
+                v-translate="{radio: radio.name}"
+                translate-context="Popup/Radio/Title"
+                :translate-params="{radio: radio.name}"
+              >
+                Do you want to delete the radio "%{ radio }"?
+              </p>
+            </template>
+            <template #modal-content>
+              <p>
+                <translate translate-context="Popup/Radio/Paragraph">
+                  This will completely delete this radio and cannot be undone.
+                </translate>
+              </p>
+            </template>
+            <template #modal-confirm>
+              <p>
+                <translate translate-context="Popup/Radio/Button.Label/Verb">
+                  Delete radio
+                </translate>
+              </p>
+            </template>
           </dangerous-button>
         </template>
       </div>

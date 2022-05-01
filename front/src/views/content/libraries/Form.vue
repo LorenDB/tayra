@@ -94,21 +94,27 @@
       <translate translate-context="*/*/*/Verb">
         Delete
       </translate>
-      <p slot="modal-header">
-        <translate translate-context="Popup/Library/Title">
-          Delete this library?
-        </translate>
-      </p>
-      <p slot="modal-content">
-        <translate translate-context="Popup/Library/Paragraph">
-          The library and all its tracks will be deleted. This can not be undone.
-        </translate>
-      </p>
-      <div slot="modal-confirm">
-        <translate translate-context="Popup/Library/Button.Label/Verb">
-          Delete library
-        </translate>
-      </div>
+      <template #modal-header>
+        <p>
+          <translate translate-context="Popup/Library/Title">
+            Delete this library?
+          </translate>
+        </p>
+      </template>
+      <template #modal-content>
+        <p>
+          <translate translate-context="Popup/Library/Paragraph">
+            The library and all its tracks will be deleted. This can not be undone.
+          </translate>
+        </p>
+      </template>
+      <template #modal-confirm>
+        <div>
+          <translate translate-context="Popup/Library/Button.Label/Verb">
+            Delete library
+          </translate>
+        </div>
+      </template>
     </dangerous-button>
   </form>
 </template>

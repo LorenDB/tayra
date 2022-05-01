@@ -148,21 +148,27 @@
       <translate translate-context="*/*/*/Verb">
         Delete
       </translate>
-      <p slot="modal-header">
-        <translate translate-context="Popup/Moderation/Title">
-          Delete this moderation rule?
-        </translate>
-      </p>
-      <p slot="modal-content">
-        <translate translate-context="Popup/Moderation/Paragraph">
-          This action is irreversible.
-        </translate>
-      </p>
-      <div slot="modal-confirm">
-        <translate translate-context="Popup/Moderation/Button.Label/Verb">
-          Delete moderation rule
-        </translate>
-      </div>
+      <template #modal-header>
+        <p>
+          <translate translate-context="Popup/Moderation/Title">
+            Delete this moderation rule?
+          </translate>
+        </p>
+      </template>
+      <template #modal-content>
+        <p>
+          <translate translate-context="Popup/Moderation/Paragraph">
+            This action is irreversible.
+          </translate>
+        </p>
+      </template>
+      <template #modal-confirm>
+        <div>
+          <translate translate-context="Popup/Moderation/Button.Label/Verb">
+            Delete moderation rule
+          </translate>
+        </div>
+      </template>
     </dangerous-button>
   </form>
 </template>

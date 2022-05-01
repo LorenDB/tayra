@@ -98,24 +98,29 @@
         <i class="eraser icon" /> <translate translate-context="*/Playlist/Button.Label/Verb">
           Clear playlist
         </translate>
-        <p
-          slot="modal-header"
-          v-translate="{playlist: playlist.name}"
-          translate-context="Popup/Playlist/Title"
-          :translate-params="{playlist: playlist.name}"
-        >
-          Do you want to clear the playlist "%{ playlist }"?
-        </p>
-        <p slot="modal-content">
-          <translate translate-context="Popup/Playlist/Paragraph">
-            This will remove all tracks from this playlist and cannot be undone.
-          </translate>
-        </p>
-        <div slot="modal-confirm">
-          <translate translate-context="*/Playlist/Button.Label/Verb">
-            Clear playlist
-          </translate>
-        </div>
+        <template #modal-header>
+          <p
+            v-translate="{playlist: playlist.name}"
+            translate-context="Popup/Playlist/Title"
+            :translate-params="{playlist: playlist.name}"
+          >
+            Do you want to clear the playlist "%{ playlist }"?
+          </p>
+        </template>
+        <template #modal-content>
+          <p>
+            <translate translate-context="Popup/Playlist/Paragraph">
+              This will remove all tracks from this playlist and cannot be undone.
+            </translate>
+          </p>
+        </template>
+        <template #modal-confirm>
+          <div>
+            <translate translate-context="*/Playlist/Button.Label/Verb">
+              Clear playlist
+            </translate>
+          </div>
+        </template>
       </dangerous-button>
       <div class="ui hidden divider" />
       <template v-if="plts.length > 0">

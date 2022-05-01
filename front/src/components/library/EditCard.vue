@@ -189,23 +189,29 @@
         <translate translate-context="*/*/*/Verb">
           Delete
         </translate>
-        <p slot="modal-header">
-          <translate translate-context="Popup/Library/Title">
-            Delete this suggestion?
-          </translate>
-        </p>
-        <div slot="modal-content">
+        <template #modal-header>
           <p>
-            <translate translate-context="Popup/Library/Paragraph">
-              The suggestion will be completely removed, this action is irreversible.
+            <translate translate-context="Popup/Library/Title">
+              Delete this suggestion?
             </translate>
           </p>
-        </div>
-        <p slot="modal-confirm">
-          <translate translate-context="*/*/*/Verb">
-            Delete
-          </translate>
-        </p>
+        </template>
+        <template #modal-content>
+          <div>
+            <p>
+              <translate translate-context="Popup/Library/Paragraph">
+                The suggestion will be completely removed, this action is irreversible.
+              </translate>
+            </p>
+          </div>
+        </template>
+        <template #modal-confirm>
+          <p>
+            <translate translate-context="*/*/*/Verb">
+              Delete
+            </translate>
+          </p>
+        </template>
       </dangerous-button>
     </div>
   </div>

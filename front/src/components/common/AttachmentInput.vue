@@ -21,7 +21,7 @@
     </div>
     <div class="ui field">
       <span id="avatarLabel">
-        <slot name="label" />
+        <slot />
       </span>
       <div class="ui stackable grid row">
         <div class="three wide column">

@@ -27,7 +27,7 @@
       :obj="object"
       :current-state="currentState"
     >
-      <div slot="title">
+      <div>
         <template v-if="showPendingReview">
           <translate translate-context="Content/Library/Paragraph">
             Recent edits awaiting review
@@ -55,11 +55,13 @@
           </button>
         </template>
       </div>
-      <empty-state slot="empty-state">
-        <translate translate-context="Content/Library/Paragraph">
-          Suggest a change using the form below.
-        </translate>
-      </empty-state>
+      <template #empty-state>
+        <empty-state>
+          <translate translate-context="Content/Library/Paragraph">
+            Suggest a change using the form below.
+          </translate>
+        </empty-state>
+      </template>
     </edit-list>
     <form
       class="ui form"
@@ -160,7 +162,7 @@
             :name="fieldConfig.id"
             @delete="values[fieldConfig.id] = initialValues[fieldConfig.id]"
           >
-            <span slot="label">{{ fieldConfig.label }}</span>
+            <span>{{ fieldConfig.label }}</span>
           </attachment-input>
         </template>
         <template v-else-if="fieldConfig.type === 'tags'">

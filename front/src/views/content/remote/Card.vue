@@ -199,23 +199,29 @@
             <translate translate-context="*/Library/Button.Label/Verb">
               Unfollow
             </translate>
-            <p slot="modal-header">
-              <translate translate-context="Popup/Library/Title">
-                Unfollow this library?
-              </translate>
-            </p>
-            <div slot="modal-content">
+            <template #modal-header>
               <p>
-                <translate translate-context="Popup/Library/Paragraph">
-                  By unfollowing this library, you loose access to its content.
+                <translate translate-context="Popup/Library/Title">
+                  Unfollow this library?
                 </translate>
               </p>
-            </div>
-            <div slot="modal-confirm">
-              <translate translate-context="*/Library/Button.Label/Verb">
-                Unfollow
-              </translate>
-            </div>
+            </template>
+            <template #modal-content>
+              <div>
+                <p>
+                  <translate translate-context="Popup/Library/Paragraph">
+                    By unfollowing this library, you loose access to its content.
+                  </translate>
+                </p>
+              </div>
+            </template>
+            <template #modal-confirm>
+              <div>
+                <translate translate-context="*/Library/Button.Label/Verb">
+                  Unfollow
+                </translate>
+              </div>
+            </template>
           </dangerous-button>
         </template>
       </template>

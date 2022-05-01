@@ -280,10 +280,7 @@
             :url="'tracks/' + id + '/libraries/'"
             @loaded="$emit('libraries-loaded', $event)"
           >
-            <translate
-              slot="subtitle"
-              translate-context="Content/Track/Paragraph"
-            >
+            <translate translate-context="Content/Track/Paragraph">
               This track is present in the following libraries:
             </translate>
           </library-widget>

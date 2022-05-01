@@ -105,23 +105,29 @@
                     <translate translate-context="*/*/*/Verb">
                       Delete
                     </translate>
-                    <p slot="modal-header">
-                      <translate translate-context="Popup/Library/Title">
-                        Delete this channel?
-                      </translate>
-                    </p>
-                    <div slot="modal-content">
+                    <template #modal-header>
                       <p>
-                        <translate translate-context="Content/Moderation/Paragraph">
-                          The channel will be removed, as well as associated uploads, tracks, and albums. This action is irreversible.
+                        <translate translate-context="Popup/Library/Title">
+                          Delete this channel?
                         </translate>
                       </p>
-                    </div>
-                    <p slot="modal-confirm">
-                      <translate translate-context="*/*/*/Verb">
-                        Delete
-                      </translate>
-                    </p>
+                    </template>
+                    <template #modal-content>
+                      <div>
+                        <p>
+                          <translate translate-context="Content/Moderation/Paragraph">
+                            The channel will be removed, as well as associated uploads, tracks, and albums. This action is irreversible.
+                          </translate>
+                        </p>
+                      </div>
+                    </template>
+                    <template #modal-confirm>
+                      <p>
+                        <translate translate-context="*/*/*/Verb">
+                          Delete
+                        </translate>
+                      </p>
+                    </template>
                   </dangerous-button>
                 </div>
               </div>

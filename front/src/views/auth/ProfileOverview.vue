@@ -46,12 +46,11 @@
         </div>
       </h2>
       <library-widget :url="`federation/actors/${object.full_username}/libraries/`">
-        <translate
-          slot="title"
-          translate-context="Content/Profile/Paragraph"
-        >
-          This user shared the following libraries
-        </translate>
+        <template #title>
+          <translate translate-context="Content/Profile/Paragraph">
+            This user shared the following libraries
+          </translate>
+        </template>
       </library-widget>
     </div>
 

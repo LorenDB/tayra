@@ -53,36 +53,39 @@
                     <translate translate-context="Content/*/Button.Label/Short, Verb">
                       Go
                     </translate>
-                    <p slot="modal-header">
-                      <translate
-                        key="1"
-                        translate-context="Modal/*/Title"
-                        :translate-n="affectedObjectsCount"
-                        :translate-params="{count: affectedObjectsCount, action: currentActionName}"
-                        translate-plural="Do you want to launch %{ action } on %{ count } elements?"
-                      >
-                        Do you want to launch %{ action } on %{ count } element?
-                      </translate>
-                    </p>
-                    <p slot="modal-content">
-                      <template v-if="currentAction.confirmationMessage">
-                        {{ currentAction.confirmationMessage }}
-                      </template>
-                      <translate
-                        v-else
-                        translate-context="Modal/*/Paragraph"
-                      >
-                        This may affect a lot of elements or have irreversible consequences, please double check this is really what you want.
-                      </translate>
-                    </p>
-                    <div
-                      slot="modal-confirm"
-                      :aria-label="labels.performAction"
-                    >
-                      <translate translate-context="Modal/*/Button.Label/Short, Verb">
-                        Launch
-                      </translate>
-                    </div>
+                    <template #modal-header>
+                      <p>
+                        <translate
+                          key="1"
+                          translate-context="Modal/*/Title"
+                          :translate-n="affectedObjectsCount"
+                          :translate-params="{count: affectedObjectsCount, action: currentActionName}"
+                          translate-plural="Do you want to launch %{ action } on %{ count } elements?"
+                        >
+                          Do you want to launch %{ action } on %{ count } element?
+                        </translate>
+                      </p>
+                    </template>
+                    <template #modal-content>
+                      <p>
+                        <template v-if="currentAction.confirmationMessage">
+                          {{ currentAction.confirmationMessage }}
+                        </template>
+                        <translate
+                          v-else
+                          translate-context="Modal/*/Paragraph"
+                        >
+                          This may affect a lot of elements or have irreversible consequences, please double check this is really what you want.
+                        </translate>
+                      </p>
+                    </template>
+                    <template #modal-confirm>
+                      <div :aria-label="labels.performAction">
+                        <translate translate-context="Modal/*/Button.Label/Short, Verb">
+                          Launch
+                        </translate>
+                      </div>
+                    </template>
                   </dangerous-button>
                   <button
                     v-else

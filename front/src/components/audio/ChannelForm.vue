@@ -99,10 +99,7 @@
             :image-class="newValues.content_category === 'podcast' ? '' : 'circular'"
             @delete="newValues.cover = null"
           >
-            <translate
-              slot="label"
-              translate-context="Content/Channel/*"
-            >
+            <translate translate-context="Content/Channel/*">
               Channel Picture
             </translate>
           </attachment-input>

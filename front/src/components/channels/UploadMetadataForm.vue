@@ -14,10 +14,7 @@
       :required="false"
       @delete="newValues.cover = null"
     >
-      <translate
-        slot="label"
-        translate-context="Content/Channel/*"
-      >
+      <translate translate-context="Content/Channel/*">
         Track Picture
       </translate>
     </attachment-input>

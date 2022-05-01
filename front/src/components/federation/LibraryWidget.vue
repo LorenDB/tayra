@@ -10,7 +10,7 @@
       v-if="!isLoading && libraries.length > 0"
       class="ui subtitle"
     >
-      <slot name="subtitle" />
+      <slot />
     </p>
     <p
       v-if="!isLoading && libraries.length === 0"

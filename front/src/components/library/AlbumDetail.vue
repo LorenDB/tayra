@@ -79,10 +79,7 @@
         :url="'albums/' + object.id + '/libraries/'"
         @loaded="$emit('libraries-loaded', $event)"
       >
-        <translate
-          slot="subtitle"
-          translate-context="Content/Album/Paragraph"
-        >
+        <translate translate-context="Content/Album/Paragraph">
           This album is present in the following libraries:
         </translate>
       </library-widget>

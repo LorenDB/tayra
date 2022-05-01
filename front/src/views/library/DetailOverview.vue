@@ -16,24 +16,26 @@
       :controls="false"
       :filters="{playable: true, ordering: '-creation_date', library: object.uuid}"
     >
-      <empty-state slot="empty-state">
-        <p>
-          <translate
-            v-if="isOwner"
-            key="1"
-            translate-context="*/*/*"
-          >
-            This library is empty, you should upload something in it!
-          </translate>
-          <translate
-            v-else
-            key="2"
-            translate-context="*/*/*"
-          >
-            You may need to follow this library to see its content.
-          </translate>
-        </p>
-      </empty-state>
+      <template #empty-state>
+        <empty-state>
+          <p>
+            <translate
+              v-if="isOwner"
+              key="1"
+              translate-context="*/*/*"
+            >
+              This library is empty, you should upload something in it!
+            </translate>
+            <translate
+              v-else
+              key="2"
+              translate-context="*/*/*"
+            >
+              You may need to follow this library to see its content.
+            </translate>
+          </p>
+        </empty-state>
+      </template>
     </artist-widget>
   </section>
 </template>
