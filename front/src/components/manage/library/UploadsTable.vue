@@ -182,7 +182,7 @@
         >
           <td>
             <router-link :to="{name: 'manage.library.uploads.detail', params: {id: scope.obj.uuid }}">
-              {{ displayName(scope.obj)|truncate(30, "…", true) }}
+              {{ truncate(displayName(scope.obj), 30, undefined, true) }}
             </router-link>
           </td>
           <td>

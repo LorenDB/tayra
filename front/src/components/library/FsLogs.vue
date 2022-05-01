@@ -13,8 +13,9 @@
     <template
       v-for="(row, idx) in data.logs"
       v-else
+      :key="idx"
     >
-      <p :key="idx">
+      <p>
         {{ row }}
       </p>
     </template>
