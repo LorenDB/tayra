@@ -161,6 +161,7 @@ eslint:
     - yarn install
   script:
     - yarn lint --max-warnings 0
+    - yarn lint:tsc
   cache:
     key: "$CI_PROJECT_ID__eslint_npm_cache"
     paths:
