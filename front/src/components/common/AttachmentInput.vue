@@ -6,7 +6,7 @@ import { BackendError } from '~/types'
 import { useStore } from 'vuex'
 
 interface Props {
-  modelValue: string
+  modelValue: string | null
   imageClass?: string
   required?: boolean
   name?: string | undefined

@@ -13,8 +13,7 @@ export const install: InitModule = ({ app, store }) => {
       action (text: string, value: string, $el: JQuery<HTMLElement>) {
         // used to ensure focusing the dropdown and clicking via keyboard
         // works as expected
-        const button = $el[0]
-        button.click()
+        $el[0]?.click()
         // @ts-expect-error
         jQuery(el).find('.ui.dropdown').dropdown('hide')
       },

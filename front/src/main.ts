@@ -8,8 +8,8 @@ import useTheme from '~/composables/useTheme'
 useTheme()
 
 configureCompat({
-  RENDER_FUNCTION: false
-  // COMPONENT_V_MODEL: false
+  RENDER_FUNCTION: false,
+  COMPONENT_V_MODEL: false
 })
 
 const logger = useLogger()
