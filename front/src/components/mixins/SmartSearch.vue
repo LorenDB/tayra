@@ -1,6 +1,6 @@
 <script>
 
-import { normalizeQuery, parseTokens, compileTokens } from '~/search'
+import { normalizeQuery, parseTokens, compileTokens } from '~/utils/search'
 
 export default {
   props: {

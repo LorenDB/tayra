@@ -1,5 +1,6 @@
 import router from '~/router'
 import store from '~/store'
+// @ts-expect-error typescript does not know about configureCompat
 import { configureCompat, createApp, defineAsyncComponent, h } from 'vue'
 import useLogger from '~/composables/useLogger'
 import useTheme from '~/composables/useTheme'
@@ -49,10 +50,8 @@ Promise.all(modules).finally(() => {
   logger.info('Everything loaded!')
 })
 
-// TODO (wvffle): Migrate to pinia
 // TODO (wvffle): Check for mixin merging: https://v3-migration.vuejs.org/breaking-changes/data-option.html#mixin-merge-behavior-change=
 // TODO (wvffle): Use emits options: https://v3-migration.vuejs.org/breaking-changes/emits-option.html
 // TODO (wvffle): Find all array watchers and make them deep
 // TODO (wvffle): Migrate to <script setup>
 // TODO (wvffle): Replace `from '(../)+` with `from '~/`
-// TODO (wvffle): Remove `allowJs` from tsconfig.json

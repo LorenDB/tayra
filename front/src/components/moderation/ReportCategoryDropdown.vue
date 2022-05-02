@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import useSharedLabels from '~/composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 import { useVModel } from '@vueuse/core'
 
 interface Props {

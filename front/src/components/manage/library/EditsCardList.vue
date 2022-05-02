@@ -136,11 +136,11 @@ import time from '~/utils/time'
 import Pagination from '~/components/Pagination.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import EditCard from '~/components/library/EditCard.vue'
-import { normalizeQuery, parseTokens } from '~/search'
+import { normalizeQuery, parseTokens } from '~/utils/search'
 import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
 
-import edits from '~/edits'
-import useSharedLabels from '../../../composables/useSharedLabels'
+import useEditConfigs from '~/composables/useEditConfigs'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 export default {
   components: {
@@ -153,7 +153,8 @@ export default {
   },
   setup () {
     const sharedLabels = useSharedLabels()
-    return { sharedLabels }
+    const configs = useEditConfigs()
+    return { sharedLabels, configs }
   },
   data () {
     return {
@@ -244,7 +245,10 @@ export default {
           response.data.results.forEach((e) => {
             self.targets[k][e.id] = {
               payload: e,
-              currentState: edits.getCurrentStateForObj(e, edits.getConfigs.bind(self)()[k])
+              currentState: configs[k].fields.reduce((state/*: Record<string, unknown> */, field) => {
+                state[field.id] = { value: field.getValue(e) }
+                return state
+              }, {})
             }
           })
         }, error => {

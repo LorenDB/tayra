@@ -1,4 +1,4 @@
-import { createStore } from 'vuex'
+import { createStore, Store } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 
 import favorites from './favorites'
@@ -12,8 +12,14 @@ import radios from './radios'
 import player from './player'
 import playlists from './playlists'
 import ui from './ui'
+import { InjectionKey } from 'vue'
 
-export default createStore({
+export interface RootState {
+
+}
+
+export const key: InjectionKey<Store<RootState>> = Symbol('vuex state injection key')
+export default createStore<RootState>({
   modules: {
     ui,
     auth,

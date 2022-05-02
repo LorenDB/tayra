@@ -121,7 +121,7 @@
 <script>
 import { uniq } from 'lodash-es'
 import axios from 'axios'
-import useSharedLabels from '../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 export default {
   props: {

@@ -77,7 +77,7 @@ const remove = async (uuid: string, sendEvent = true) => {
 const initialValue = ref(props.initialValue ?? props.modelValue)
 watch(value, (to, from) => {
   // NOTE: Remove old attachment if it's not the original one
-  if (from !== initialValue.value) {
+  if (from !== initialValue.value && typeof from === 'string') {
     remove(from, false)
   }
 

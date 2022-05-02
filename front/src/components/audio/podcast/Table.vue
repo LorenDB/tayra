@@ -27,17 +27,15 @@
         class="ui center aligned basic segment desktop-and-up"
       >
         <pagination
+          v-bind="$attrs"
           :total="total"
           :current="page"
           :paginate-by="paginateBy"
-          v-bind="$attrs"
         />
       </div>
     </div>
 
-    <div
-      :class="['track-table', 'ui', 'unstackable', 'grid', 'tablet-and-below']"
-    >
+    <div :class="['track-table', 'ui', 'unstackable', 'grid', 'tablet-and-below']">
       <div
         v-if="isLoading"
         class="ui inverted active dimmer"
@@ -66,10 +64,10 @@
       >
         <pagination
           v-if="paginateResults"
+          v-bind="$attrs"
           :total="total"
           :current="page"
           :compact="true"
-          v-bind="$attrs"
         />
       </div>
     </div>

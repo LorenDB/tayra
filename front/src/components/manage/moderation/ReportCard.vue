@@ -396,7 +396,7 @@ import NoteForm from '~/components/manage/moderation/NoteForm.vue'
 import NotesThread from '~/components/manage/moderation/NotesThread.vue'
 import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
 import InstancePolicyModal from '~/components/manage/moderation/InstancePolicyModal.vue'
-import entities from '~/entities'
+import useReportConfigs from '~/composables/moderation/useReportConfigs.ts'
 import { setUpdate } from '~/utils'
 import showdown from 'showdown'
 
@@ -418,6 +418,9 @@ export default {
     initObj: { type: Object, required: true },
     currentState: { type: String, required: false, default: '' }
   },
+  setup () {
+    return { configs: useReportConfigs() }
+  },
   data () {
     return {
       obj: this.initObj,
@@ -430,7 +433,6 @@ export default {
     }
   },
   computed: {
-    configs: entities.getConfigs,
     previousState () {
       if (this.obj.is_applied) {
         // mutation was applied, we use the previous state that is stored
@@ -466,15 +468,13 @@ export default {
       const payload = this.obj.target_state
       const fields = this.configs[this.target.type].moderatedFields
       return fields.map((fieldConfig) => {
-        const dummyRepr = (v) => { return v }
-        const getValueRepr = fieldConfig.getValueRepr || dummyRepr
-        const d = {
+        const getValueRepr = fieldConfig.getValueRepr ?? (i => i)
+        return {
           id: fieldConfig.id,
           label: fieldConfig.label,
           value: payload[fieldConfig.id],
           repr: castValue(getValueRepr(payload[fieldConfig.id]))
         }
-        return d
       })
     },
     target () {

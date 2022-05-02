@@ -321,7 +321,7 @@
 
 <script>
 import { useStore, mapState, mapGetters, mapActions } from 'vuex'
-import { toLinearVolumeScale } from '~/audio/volume.js'
+import toLinearVolumeScale from '~/composables/audio/toLinearVolumeScale'
 import { Howl, Howler } from 'howler'
 import { throttle, reverse } from 'lodash-es'
 import axios from 'axios'

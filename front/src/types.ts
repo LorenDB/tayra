@@ -33,20 +33,41 @@ export type ContentCategory = 'podcast'
 
 export interface Artist {
   id: string
+
   name: string
+  description: Content
+  cover?: Cover
+  tags: string[]
+
   content_category: ContentCategory
+  albums: Album[]
 }
 
 export interface Album {
   id: string
+
+  title: string
+  description: Content
+  release_date?: string
+  cover?: Cover
+  tags: string[]
+
   artist: Artist
   tracks_count: number
-  title: string
+  tracks: Track[]
 }
 
 export interface Track {
   id: string
+
   title: string
+  description: Content
+  cover?: Cover
+  position?: number
+  copyright?: string
+  license?: License
+  tags: string[]
+
   album?: Album
   artist?: Artist
 }
@@ -54,6 +75,16 @@ export interface Track {
 export interface Channel {
   id: string
   artist?: Artist
+}
+
+export interface Cover {
+  uuid: string
+}
+
+export interface License {
+  code: string
+  name: string
+  url: string
 }
 
 // API stuff
@@ -111,12 +142,13 @@ export interface FileSystem {
   content: FSEntry[]
 }
 
-// Form stuff
-export interface FormHelpText {
-  content_type: string
-  text?: string
+// Content stuff
+export interface Content {
+  content_type: 'text/plain' | 'text/markdown'
+  text: string // TODO (wvffle): Ensure it's not nullable from backend side
 }
 
+// Form stuff
 export interface FormField {
   label: string
   input_type: 'short_text' | 'long_text'
@@ -125,7 +157,7 @@ export interface FormField {
 
 export interface Form {
   fields: FormField[]
-  help_text: FormHelpText
+  help_text: Content
 }
 
 // Yet uncategorized stuff
@@ -134,10 +166,4 @@ export interface Actor {
   full_username: string
   is_local: boolean
   domain: string
-}
-
-export interface License {
-  code: string
-  name: string
-  url: string
 }

@@ -386,7 +386,7 @@ import axios from 'axios'
 import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
 import time from '~/utils/time'
 import { humanSize, truncate } from '~/utils/filters'
-import useSharedLabels from '../../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 export default {
   components: {

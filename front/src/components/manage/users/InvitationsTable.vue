@@ -161,7 +161,7 @@ import { merge } from 'lodash-es'
 import Pagination from '~/components/Pagination.vue'
 import ActionTable from '~/components/common/ActionTable.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
-import useSharedLabels from '../../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 export default {
   components: {

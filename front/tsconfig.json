@@ -14,8 +14,6 @@
     "skipLibCheck": true,
     "lib": ["dom", "esnext", "webworker"],
 
-    "allowJs": true,
-
     "noUnusedLocals": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
@@ -33,6 +31,5 @@
   "vueCompilerOptions": {
     "experimentalCompatMode": 2
   },
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.vue"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.vue", "vite.config.ts"]
 }

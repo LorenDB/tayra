@@ -717,7 +717,7 @@ import PasswordInput from '~/components/forms/PasswordInput.vue'
 import SubsonicTokenForm from '~/components/auth/SubsonicTokenForm.vue'
 import AttachmentInput from '~/components/common/AttachmentInput.vue'
 import useLogger from '~/composables/useLogger'
-import useSharedLabels from '../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 const logger = useLogger()
 

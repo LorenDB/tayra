@@ -213,7 +213,7 @@
 <script>
 import axios from 'axios'
 import { humanSize } from '~/utils/filters'
-import { compileTokens } from '~/search'
+import { compileTokens } from '~/utils/search'
 
 export default {
   data () {

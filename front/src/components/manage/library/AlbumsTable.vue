@@ -187,12 +187,12 @@
 import axios from 'axios'
 import { merge } from 'lodash-es'
 import time from '~/utils/time'
-import { normalizeQuery, parseTokens } from '~/search'
+import { normalizeQuery, parseTokens } from '~/utils/search'
 import Pagination from '~/components/Pagination.vue'
 import ActionTable from '~/components/common/ActionTable.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
-import useSharedLabels from '../../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 export default {
   components: {

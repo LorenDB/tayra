@@ -249,7 +249,8 @@ import AttachmentInput from '~/components/common/AttachmentInput.vue'
 import EditList from '~/components/library/EditList.vue'
 import EditCard from '~/components/library/EditCard.vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
-import edits from '~/edits.js'
+import useEditConfigs from '~/composables/useEditConfigs'
+import { computed } from 'vue/dist/vue'
 
 export default {
   components: {
@@ -263,6 +264,16 @@ export default {
     object: { type: Object, required: true },
     licenses: { type: Array, required: true }
   },
+  setup (props) {
+    const configs = useEditConfigs()
+    const config = computed(() => configs[props.objectType])
+    const currentState = computed(() => config.value.fields.reduce((state/*: Record<string, unknown> */, field) => {
+      state[field.id] = { value: field.getValue(props.object) }
+      return state
+    }, {}))
+
+    return { config, currentState, configs }
+  },
   data () {
     return {
       isLoading: false,
@@ -275,10 +286,15 @@ export default {
     }
   },
   computed: {
-    configs: edits.getConfigs,
-    config: edits.getConfig,
-    currentState: edits.getCurrentState,
-    canEdit: edits.getCanEdit,
+    canEdit () {
+      if (!this.$store.state.auth.authenticated) return false
+
+      const isOwner = this.object.attributed_to &&
+        // TODO (wvffle): Is it better to compare ids? Is full_username unique?
+        this.$store.state.auth.fullUsername === this.object.attributed_to.full_username
+
+      return isOwner || this.$store.state.auth.availablePermissions.library
+    },
     labels () {
       return {
         summaryPlaceholder: this.$pgettext('*/*/Placeholder', 'A short summary describing your changes.')

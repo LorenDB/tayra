@@ -28,11 +28,7 @@ module.exports = {
     // NOTE: Handled by typescript
     'no-undef': 'off',
     'no-unused-vars': 'off',
-
-    // TODO (wvffle): Migrate to VUI
-    //                We're using `// @ts-ignore` in jQuery extensions
-    //                and gettext for vue 2
-    '@typescript-eslint/ban-ts-comment': 'off',
+    'no-use-before-define': 'off',
 
     // TODO (wvffle): Enable these rules later
     'vue/multi-word-component-names': 'off',

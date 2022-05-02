@@ -366,7 +366,7 @@
 import axios from 'axios'
 import { humanSize, truncate } from '~/utils/filters'
 import useLogger from '~/composables/useLogger'
-import useSharedLabels from '../../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 const logger = useLogger()
 

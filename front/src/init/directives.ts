@@ -7,14 +7,14 @@ export const install: InitModule = ({ app, store }) => {
   })
 
   app.directive('dropdown', function (el, binding) {
-    // @ts-expect-error
+    // @ts-expect-error dropdown is from semantic ui
     jQuery(el).dropdown({
       selectOnKeydown: false,
       action (text: string, value: string, $el: JQuery<HTMLElement>) {
         // used to ensure focusing the dropdown and clicking via keyboard
         // works as expected
         $el[0]?.click()
-        // @ts-expect-error
+        // @ts-expect-error dropdown is from semantic ui
         jQuery(el).find('.ui.dropdown').dropdown('hide')
       },
       ...(binding.value || {})

@@ -142,7 +142,7 @@ import PaginationMixin from '~/components/mixins/Pagination.vue'
 import { checkRedirectToLogin } from '~/utils'
 import TrackTable from '~/components/audio/track/Table.vue'
 import useLogger from '~/composables/useLogger'
-import useSharedLabels from '../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 const logger = useLogger()
 

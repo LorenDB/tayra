@@ -1,16 +1,33 @@
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { useToggle } from '@vueuse/core'
+
+interface Props {
+  content: string
+  length?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  length: 150
+})
+
+const [expanded, toggleExpanded] = useToggle(false)
+const truncated = computed(() => props.content.slice(0, props.length))
+</script>
+
 <template>
   <div class="expandable-wrapper">
-    <div :class="['expandable-content', {expandable: truncated.length < content.length}, {expanded: isExpanded}]">
+    <div :class="['expandable-content', { expandable: truncated.length < content.length, expanded }]">
       <slot>{{ content }}</slot>
     </div>
     <a
       v-if="truncated.length < content.length"
       role="button"
-      @click.prevent="isExpanded = !isExpanded"
+      @click.prevent="toggleExpanded()"
     >
       <br>
       <translate
-        v-if="isExpanded"
+        v-if="expanded"
         key="1"
         translate-context="*/*/Button,Label"
       >Show less</translate>
@@ -22,23 +39,3 @@
     </a>
   </div>
 </template>
-<script>
-// import sanitize from "~/sanitize"
-
-export default {
-  props: {
-    content: { type: String, required: true },
-    length: { type: Number, default: 150, required: false }
-  },
-  data () {
-    return {
-      isExpanded: false
-    }
-  },
-  computed: {
-    truncated () {
-      return this.content.substring(0, this.length)
-    }
-  }
-}
-</script>

@@ -207,7 +207,7 @@ import TagsSelector from '~/components/library/TagsSelector.vue'
 import Modal from '~/components/semantic/Modal.vue'
 import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
 import useLogger from '~/composables/useLogger'
-import useSharedLabels from '../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 const logger = useLogger()
 

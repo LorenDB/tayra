@@ -145,7 +145,7 @@
 import axios from 'axios'
 
 import { checkRedirectToLogin } from '~/utils'
-import useSharedLabels from '../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 export default {
   props: {
     clientId: { type: String, required: true },

@@ -219,7 +219,7 @@
 import axios from 'axios'
 import { diffWordsWithSpace } from 'diff'
 
-import edits from '~/edits.js'
+import useEditConfigs from '~/composables/moderation/useEditConfigs'
 
 function castValue (value) {
   if (value === null || value === undefined) {
@@ -233,15 +233,28 @@ export default {
     obj: { type: Object, required: true },
     currentState: { type: Object, required: false, default: function () { return { } } }
   },
+  setup () {
+    return { configs: useEditConfigs() }
+  },
   data () {
     return {
       isLoading: false
     }
   },
   computed: {
-    configs: edits.getConfigs,
-    canApprove: edits.getCanApprove,
-    canDelete: edits.getCanDelete,
+    canApprove () {
+      if (this.obj.is_applied) return false
+      if (!this.$store.state.auth.authenticated) return false
+      return this.$store.state.auth.availablePermissions.library
+    },
+    canDelete () {
+      if (this.obj.is_applied || this.obj.is_approved) return false
+      if (!this.$store.state.auth.authenticated) return false
+
+      // TODO (wvffle): Is it better to compare ids? Is full_username unique?
+      return this.obj.created_by.full_username === this.$store.state.auth.fullUsername ||
+        this.$store.state.auth.availablePermissions.library
+    },
     previousState () {
       if (this.obj.is_applied) {
         // mutation was applied, we use the previous state that is stored
@@ -279,7 +292,7 @@ export default {
       const fields = Object.keys(payload)
       const self = this
       return fields.map((f) => {
-        const fieldConfig = edits.getFieldConfig(self.configs, this.obj.target.type, f)
+        const fieldConfig = configs[this.obj.target.type].fields.find(({ id }) => id === f)
         const dummyRepr = (v) => { return v }
         const getValueRepr = fieldConfig.getValueRepr || dummyRepr
         const d = {

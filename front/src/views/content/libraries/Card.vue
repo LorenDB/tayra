@@ -78,7 +78,7 @@
 
 <script>
 import { humanSize } from '~/utils/filters'
-import useSharedLabels from '../../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 export default {
   props: { library: { type: Object, required: true } },

@@ -133,9 +133,9 @@ import Pagination from '~/components/Pagination.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import ReportCard from '~/components/manage/moderation/ReportCard.vue'
 import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
-import { normalizeQuery, parseTokens } from '~/search'
+import { normalizeQuery, parseTokens } from '~/utils/search'
 import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
-import useSharedLabels from '../../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 export default {
   components: {

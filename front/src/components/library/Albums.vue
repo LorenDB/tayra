@@ -157,7 +157,7 @@ import AlbumCard from '~/components/audio/album/Card.vue'
 import Pagination from '~/components/Pagination.vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
 import useLogger from '~/composables/useLogger'
-import useSharedLabels from '../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 const logger = useLogger()
 

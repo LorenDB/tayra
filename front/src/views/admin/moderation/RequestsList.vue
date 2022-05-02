@@ -130,9 +130,9 @@ import time from '~/utils/time'
 import Pagination from '~/components/Pagination.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import UserRequestCard from '~/components/manage/moderation/UserRequestCard.vue'
-import { normalizeQuery, parseTokens } from '~/search'
+import { normalizeQuery, parseTokens } from '~/utils/search'
 import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
-import useSharedLabels from '../../../composables/useSharedLabels'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 export default {
   components: {

@@ -7,7 +7,8 @@ interface Props {
   duration: number
 }
 
-const { duration } = toRefs(defineProps<Props>())
+const props = defineProps<Props>()
+const { duration } = toRefs(props)
 const parsedDuration = computed(() => time.parse(duration.value))
 </script>
 
