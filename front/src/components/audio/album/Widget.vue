@@ -14,7 +14,7 @@
     <inline-search-bar
       v-if="search"
       v-model="query"
-      @search="albums = []; fetchData()"
+      @search="performSearch"
     />
     <div class="ui hidden divider" />
     <div class="ui app-cards cards">
@@ -68,6 +68,14 @@ export default {
     showCount: { type: Boolean, default: false },
     search: { type: Boolean, default: false },
     limit: { type: Number, default: 12 }
+  },
+  setup () {
+    const performSearch = () => {
+      this.albums.length = 0
+      this.fetchData()
+    }
+
+    return { performSearch }
   },
   data () {
     return {

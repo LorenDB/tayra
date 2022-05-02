@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { useVModel } from '@vueuse/core'
-import {reactive, ref, watch, watchEffect} from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { BackendError } from '~/types'
+import { useStore } from 'vuex'
 
 interface Props {
   modelValue: string
@@ -86,6 +87,10 @@ watch(value, (to, from) => {
   }
 })
 
+const store = useStore()
+const getAttachmentUrl = (uuid: string) => {
+  return store.getters['instance/absoluteUrl'](`api/v1/attachments/${uuid}/proxy?next=medium_square_crop`)
+}
 </script>
 
 <template>
@@ -119,13 +124,13 @@ watch(value, (to, from) => {
             v-if="value && value === initialValue"
             alt=""
             :class="['ui', imageClass, 'image']"
-            :src="$store.getters['instance/absoluteUrl'](`api/v1/attachments/${value}/proxy?next=medium_square_crop`)"
+            :src="getAttachmentUrl(value)"
           >
           <img
             v-else-if="attachment"
             alt=""
             :class="['ui', imageClass, 'image']"
-            :src="$store.getters['instance/absoluteUrl'](`api/v1/attachments/${attachment.uuid}/proxy?next=medium_square_crop`)"
+            :src="getAttachmentUrl(attachment.uuid)"
           >
           <div
             v-else
@@ -141,7 +146,7 @@ watch(value, (to, from) => {
               :id="attachmentId"
               ref="input"
               :name="name"
-              :required="required || null"
+              :required="required || undefined"
               class="ui input"
               type="file"
               accept="image/png,image/jpeg"

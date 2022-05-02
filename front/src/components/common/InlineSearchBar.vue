@@ -1,9 +1,38 @@
+<script setup lang="ts">
+import { useVModel } from '@vueuse/core'
+import { computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+interface Props {
+  modelValue: string
+  placeholder?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: ''
+})
+
+const emit = defineEmits(['update:modelValue', 'search'])
+const value = useVModel(props, 'modelValue', emit)
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search…'),
+  clear: $pgettext('Content/Library/Button.Label', 'Clear')
+}))
+
+const search = () => {
+  value.value = ''
+  emit('search', value.value)
+}
+</script>
+
 <template>
   <form
     class="ui inline form"
-    @submit.stop.prevent="$emit('search', value)"
+    @submit.stop.prevent="emit('search', value)"
   >
-    <div :class="['ui', 'action', {icon: isClearable}, 'input']">
+    <div :class="['ui', 'action', {icon: value}, 'input']">
       <label
         for="search-query"
         class="hidden"
@@ -12,17 +41,16 @@
       </label>
       <input
         id="search-query"
+        v-model="value"
         name="search-query"
         type="text"
         :placeholder="placeholder || labels.searchPlaceholder"
-        :value="value"
-        @input="$emit('input', $event.target.value)"
       >
       <i
-        v-if="isClearable"
+        v-if="value"
         class="x link icon"
         :title="labels.clear"
-        @click.stop.prevent="$emit('input', ''); $emit('search', value)"
+        @click.stop.prevent="search"
       />
       <button
         type="submit"
@@ -33,22 +61,3 @@
     </div>
   </form>
 </template>
-<script>
-export default {
-  props: {
-    value: { type: String, required: true },
-    placeholder: { type: String, required: false, default: '' }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search…'),
-        clear: this.$pgettext('Content/Library/Button.Label', 'Clear')
-      }
-    },
-    isClearable () {
-      return !!this.value
-    }
-  }
-}
-</script>

@@ -55,7 +55,7 @@ Promise.all(modules).finally(() => {
 // TODO (wvffle): Replace $set and $delete with reactive()
 // TODO (wvffle): Check for mixin merging: https://v3-migration.vuejs.org/breaking-changes/data-option.html#mixin-merge-behavior-change=
 // TODO (wvffle): Use emits options: https://v3-migration.vuejs.org/breaking-changes/emits-option.html
-// TODO (wvffle): Migrate to new v-model: https://v3-migration.vuejs.org/breaking-changes/v-model.html
+// TODO (wvffle): Find all array watchers and make them deep
 // TODO (wvffle): Migrate to <script setup>
 // TODO (wvffle): Replace `from '(../)+` with `from '~/`
 // TODO (wvffle): Remove `allowJs` from tsconfig.json

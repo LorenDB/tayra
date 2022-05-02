@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useClipboard, useVModel } from '@vueuse/core'
+import { toRefs, useClipboard } from '@vueuse/core'
 
 interface Props {
-  modelValue: string
+  value: string
   buttonClasses?: string
   id?: string
 }
@@ -12,9 +12,7 @@ const props = withDefaults(defineProps<Props>(), {
   id: 'copy-input'
 })
 
-const emit = defineEmits(['update:modelValue'])
-const value = useVModel(props, 'modelValue', emit)
-
+const { value } = toRefs(props)
 const { copy, isSupported: canCopy, copied } = useClipboard({ source: value, copiedDuring: 5000 })
 </script>
 
@@ -30,7 +28,7 @@ const { copy, isSupported: canCopy, copied } = useClipboard({ source: value, cop
     </p>
     <input
       :id="id"
-      v-model="value"
+      :value="value"
       :name="id"
       type="text"
       readonly

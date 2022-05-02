@@ -59,7 +59,7 @@ const allCategories = computed(() => {
     <select
       v-model="value"
       class="ui dropdown"
-      :required="required || null"
+      :required="required || undefined"
     >
       <option
         v-if="empty"

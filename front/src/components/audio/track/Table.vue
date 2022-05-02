@@ -4,11 +4,7 @@
     <inline-search-bar
       v-if="search"
       v-model="query"
-      @search="
-        currentPage = 1;
-        additionalTracks = [];
-        fetchData('tracks/');
-      "
+      @search="performSearch"
     />
 
     <!-- Add a header if needed -->
@@ -189,6 +185,16 @@ export default {
     total: { type: Number, required: false, default: 0 },
     page: { type: Number, required: false, default: 1 },
     paginateBy: { type: Number, required: false, default: 25 }
+  },
+
+  setup () {
+    const performSearch = () => {
+      this.currentPage = 1
+      this.additionalTracks.length = 0
+      this.fetchData('tracks/')
+    }
+
+    return { performSearch }
   },
 
   data () {

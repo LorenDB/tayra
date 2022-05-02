@@ -1,7 +1,7 @@
 import type { App } from 'vue'
 import type { Store } from 'vuex'
 import { Router } from 'vue-router'
-import {AxiosError} from "axios";
+import { AxiosError } from 'axios'
 
 declare global {
   interface Window {
@@ -29,17 +29,30 @@ export interface ThemeEntry {
 }
 
 // Track stuff
+export type ContentCategory = 'podcast'
+
 export interface Artist {
+  id: string
   name: string
+  content_category: ContentCategory
 }
 
 export interface Album {
+  id: string
   artist: Artist
+  tracks_count: number
+  title: string
 }
 
 export interface Track {
+  id: string
   title: string
   album?: Album
+  artist?: Artist
+}
+
+export interface Channel {
+  id: string
   artist?: Artist
 }
 
@@ -121,4 +134,10 @@ export interface Actor {
   full_username: string
   is_local: boolean
   domain: string
+}
+
+export interface License {
+  code: string
+  name: string
+  url: string
 }

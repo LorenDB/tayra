@@ -138,7 +138,10 @@
                             If you're using Mastodon or other fediverse applications, you can subscribe to this account:
                           </translate>
                         </p>
-                        <copy-input :value="`@${object.actor.full_username}`" />
+                        <copy-input
+                          id="copy-tag"
+                          :value="`@${object.actor.full_username}`"
+                        />
                       </template>
                     </div>
                   </div>

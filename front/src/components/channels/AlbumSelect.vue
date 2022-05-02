@@ -1,3 +1,44 @@
+<script setup lang="ts">
+import axios from 'axios'
+import { useVModel } from '@vueuse/core'
+import { reactive, ref, watch } from 'vue'
+import { Album, Channel } from '~/types'
+
+interface Props {
+  modelValue: number
+  channel?: Channel
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  channel: () => ({ id: '' })
+})
+
+const emit = defineEmits(['update:modelValue'])
+const value = useVModel(props, 'modelValue', emit)
+
+const albums = reactive<Album[]>([])
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  albums.length = 0
+  if (!props.channel?.artist) return
+
+  isLoading.value = true
+  const response = await axios.get('albums/', {
+    params: {
+      artist: props.channel?.artist.id,
+      include_channels: 'true'
+    }
+  })
+
+  albums.push(...response.data.results)
+  isLoading.value = false
+}
+
+watch(() => props.channel, fetchData)
+fetchData()
+</script>
+
 <template>
   <div>
     <label for="album-dropdown">
@@ -14,9 +55,8 @@
     </label>
     <select
       id="album-dropdown"
-      :value="value"
+      v-model="value"
       class="ui search normal dropdown"
-      @input="$emit('input', $event.target.value)"
     >
       <option value="">
         <translate translate-context="*/*/*">
@@ -40,39 +80,3 @@
     </select>
   </div>
 </template>
-<script>
-import axios from 'axios'
-
-export default {
-  props: {
-    value: { type: Number, default: null },
-    channel: { type: Object, default: () => ({}) }
-  },
-  data () {
-    return {
-      albums: [],
-      isLoading: false
-    }
-  },
-  watch: {
-    async channel () {
-      await this.fetchData()
-    }
-  },
-  async created () {
-    await this.fetchData()
-  },
-  methods: {
-    async fetchData () {
-      this.albums = []
-      if (!this.channel || !this.channel.artist) {
-        return
-      }
-      this.isLoading = true
-      const response = await axios.get('albums/', { params: { artist: this.channel.artist.id, include_channels: 'true' } })
-      this.albums = response.data.results
-      this.isLoading = false
-    }
-  }
-}
-</script>

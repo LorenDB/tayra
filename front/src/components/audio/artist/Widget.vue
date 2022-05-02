@@ -10,7 +10,7 @@
     <inline-search-bar
       v-if="search"
       v-model="query"
-      @search="objects = []; fetchData()"
+      @search="performSearch"
     />
     <div class="ui hidden divider" />
     <div class="ui five app-cards cards">
@@ -63,6 +63,14 @@ export default {
     controls: { type: Boolean, default: true },
     header: { type: Boolean, default: true },
     search: { type: Boolean, default: false }
+  },
+  setup () {
+    const performSearch = () => {
+      this.objects.length = 0
+      this.fetchData()
+    }
+
+    return { performSearch }
   },
   data () {
     return {

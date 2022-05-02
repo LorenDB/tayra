@@ -1,3 +1,49 @@
+<script setup lang="ts">
+import axios from 'axios'
+import { useVModel } from '@vueuse/core'
+import { computed, reactive, ref } from 'vue'
+import { License } from '~/types'
+
+interface Props {
+  modelValue: string
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits(['update:modelValue'])
+const value = useVModel(props, 'modelValue', emit)
+
+const availableLicenses = reactive<License[]>([])
+const featuredLicensesIds = [
+  'cc0-1.0',
+  'cc-by-4.0',
+  'cc-by-sa-4.0',
+  'cc-by-nc-4.0',
+  'cc-by-nc-sa-4.0',
+  'cc-by-nc-nd-4.0',
+  'cc-by-nd-4.0'
+]
+
+const featuredLicenses = computed(() => {
+  return availableLicenses.filter(({ code }) => featuredLicensesIds.includes(code))
+})
+
+const currentLicense = computed(() => {
+  if (!value.value) return null
+  return availableLicenses.find(({ code }) => code === value.value) ?? null
+})
+
+const isLoading = ref(false)
+const fetchLicenses = async () => {
+  isLoading.value = true
+  const response = await axios.get('licenses/')
+  availableLicenses.length = 0
+  availableLicenses.push(...response.data.results)
+  isLoading.value = false
+}
+
+fetchLicenses()
+</script>
+
 <template>
   <div>
     <label for="license-dropdown">
@@ -5,9 +51,8 @@
     </label>
     <select
       id="license-dropdown"
-      :value="value"
+      v-model="value"
       class="ui search normal dropdown"
-      @input="$emit('input', $event.target.value)"
     >
       <option value="">
         <translate translate-context="*/*/*">
@@ -38,53 +83,3 @@
     </p>
   </div>
 </template>
-<script>
-import axios from 'axios'
-
-export default {
-  props: { value: { type: String, default: null } },
-  data () {
-    return {
-      availableLicenses: [],
-      featuredLicensesIds: [
-        'cc0-1.0',
-        'cc-by-4.0',
-        'cc-by-sa-4.0',
-        'cc-by-nc-4.0',
-        'cc-by-nc-sa-4.0',
-        'cc-by-nc-nd-4.0',
-        'cc-by-nd-4.0'
-      ],
-      isLoading: false
-    }
-  },
-  computed: {
-    featuredLicenses () {
-      const self = this
-      return this.availableLicenses.filter((l) => {
-        return self.featuredLicensesIds.indexOf(l.code) > -1
-      })
-    },
-    currentLicense () {
-      const self = this
-      if (this.value) {
-        return this.availableLicenses.filter((l) => {
-          return l.code === self.value
-        })[0]
-      }
-      return null
-    }
-  },
-  async created () {
-    await this.fetchLicenses()
-  },
-  methods: {
-    async fetchLicenses () {
-      this.isLoading = true
-      const response = await axios.get('licenses/')
-      this.availableLicenses = response.data.results
-      this.isLoading = false
-    }
-  }
-}
-</script>
