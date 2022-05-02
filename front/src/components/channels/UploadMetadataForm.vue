@@ -11,7 +11,6 @@
     </div>
     <attachment-input
       v-model="newValues.cover"
-      :required="false"
       @delete="newValues.cover = null"
     >
       <translate translate-context="Content/Channel/*">

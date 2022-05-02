@@ -1,6 +1,7 @@
 import type { App } from 'vue'
 import type { Store } from 'vuex'
 import { Router } from 'vue-router'
+import {AxiosError} from "axios";
 
 declare global {
   interface Window {
@@ -45,6 +46,21 @@ export interface Track {
 // API stuff
 export interface APIErrorResponse {
   [key: string]: APIErrorResponse | string[]
+}
+
+export interface BackendError extends AxiosError {
+  backendErrors: string[]
+  rawPayload?: object
+}
+
+export interface RateLimitStatus {
+  limit: string
+  scope: string
+  remaining: string
+  duration: string
+  availableSeconds: number
+  reset: string
+  resetSeconds: string
 }
 
 // WebSocket stuff

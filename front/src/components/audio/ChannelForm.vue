@@ -95,7 +95,6 @@
         <div class="six wide column">
           <attachment-input
             v-model="newValues.cover"
-            :required="false"
             :image-class="newValues.content_category === 'podcast' ? '' : 'circular'"
             @delete="newValues.cover = null"
           >

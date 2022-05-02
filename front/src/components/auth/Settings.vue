@@ -109,12 +109,10 @@
               </li>
             </ul>
           </div>
-          {{ }}
           <attachment-input
-            :value="avatar.uuid"
+            v-model="avatar.uuid"
             :initial-value="initialAvatar"
-            :required="false"
-            @input="submitAvatar($event)"
+            @update:model-value="submitAvatar($event)"
             @delete="avatar = {uuid: null}"
           >
             <translate translate-context="Content/Channel/*">
@@ -739,7 +737,7 @@ export default {
       // properties that will be used in it
       old_password: '',
       new_password: '',
-      avatar: { ...(this.$store.state.auth.profile.avatar || { uuid: null }) },
+      avatar: { ...(this.$store.state.auth.profile?.avatar ?? { uuid: null }) },
       passwordError: '',
       password: '',
       isLoading: false,
