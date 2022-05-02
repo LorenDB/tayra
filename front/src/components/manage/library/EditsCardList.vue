@@ -242,10 +242,10 @@ export default {
         }
         axios.get(config.url, { params: { id: uniq(config.ids), hidden: 'null' } }).then((response) => {
           response.data.results.forEach((e) => {
-            self.$set(self.targets[k], e.id, {
+            self.targets[k][e.id] = {
               payload: e,
               currentState: edits.getCurrentStateForObj(e, edits.getConfigs.bind(self)()[k])
-            })
+            }
           })
         }, error => {
           self.errors = error.backendErrors

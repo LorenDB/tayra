@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import axios from 'axios'
 import useLogger from '~/composables/useLogger'
 
@@ -12,8 +11,8 @@ function getDefaultScopedTokens () {
 
 function asForm (obj) {
   const data = new FormData()
-  Object.entries(obj).forEach((e) => {
-    data.set(e[0], e[1])
+  Object.entries(obj).forEach(([key, value]) => {
+    data.set(key, value)
   })
   return data
 }
@@ -112,7 +111,7 @@ export default {
     },
     profilePartialUpdate: (state, payload) => {
       Object.keys(payload).forEach((k) => {
-        Vue.set(state.profile, k, payload[k])
+        state.profile[k] = payload[k]
       })
     },
     oauthApp: (state, payload) => {

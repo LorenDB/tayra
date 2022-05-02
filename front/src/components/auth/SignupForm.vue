@@ -126,18 +126,16 @@
         <textarea
           v-if="field.input_type === 'long_text'"
           :id="`custom-field-${idx}`"
-          :value="customFields[field.label]"
+          v-model="customFields[field.label]"
           :required="field.required || null"
           rows="5"
-          @input="$set(customFields, field.label, $event.target.value)"
         />
         <input
           v-else
           :id="`custom-field-${idx}`"
+          v-model="customFields[field.label]"
           type="text"
-          :value="customFields[field.label]"
           :required="field.required || null"
-          @input="$set(customFields, field.label, $event.target.value)"
         >
       </div>
     </template>

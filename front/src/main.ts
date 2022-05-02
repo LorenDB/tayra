@@ -50,9 +50,6 @@ Promise.all(modules).finally(() => {
 })
 
 // TODO (wvffle): Migrate to pinia
-// TODO (wvffle): Remove global Vue (Only vuex files affected)
-// TODO (wvffle): Remove shims-vue2.d.ts
-// TODO (wvffle): Replace $set and $delete with reactive()
 // TODO (wvffle): Check for mixin merging: https://v3-migration.vuejs.org/breaking-changes/data-option.html#mixin-merge-behavior-change=
 // TODO (wvffle): Use emits options: https://v3-migration.vuejs.org/breaking-changes/emits-option.html
 // TODO (wvffle): Find all array watchers and make them deep

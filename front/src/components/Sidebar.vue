@@ -118,8 +118,8 @@
                 {{ $store.state.ui.notifications.inbox + additionalNotifications }}
               </div>
               <user-menu
-                :width="width"
                 v-bind="$attrs"
+                :width="width"
               />
             </div>
           </div>
