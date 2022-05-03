@@ -13,6 +13,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "lib": ["dom", "esnext", "webworker"],
+    "allowJs": true,
 
     "noUnusedLocals": true,
     "strictNullChecks": true,

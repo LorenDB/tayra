@@ -146,6 +146,8 @@ import axios from 'axios'
 
 import { checkRedirectToLogin } from '~/utils'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useFormData from '~/composables/useFormData'
+
 export default {
   props: {
     clientId: { type: String, required: true },
@@ -252,14 +254,16 @@ export default {
     submit () {
       this.isLoading = true
       const self = this
-      const data = new FormData()
-      data.set('redirect_uri', this.redirectUri)
-      data.set('scope', this.scope)
-      data.set('allow', true)
-      data.set('client_id', this.clientId)
-      data.set('response_type', this.responseType)
-      data.set('state', this.state)
-      data.set('nonce', this.nonce)
+      const data = useFormData({
+        redirect_uri: this.redirectUri,
+        scope: this.scope,
+        allow: true,
+        client_id: this.clientId,
+        response_type: this.responseType,
+        state: this.state,
+        nonce: this.nonce
+      })
+
       axios.post('oauth/authorize/', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' } }).then((response) => {
         if (self.redirectUri === 'urn:ietf:wg:oauth:2.0:oob') {
           self.isLoading = false

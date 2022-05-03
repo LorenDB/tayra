@@ -1,9 +1,36 @@
 import axios from 'axios'
 import useLogger from '~/composables/useLogger'
+import { Module } from 'vuex'
+import { RootState } from '~/store/index'
+
+export interface State {
+  subscriptions: string[]
+  count: number
+  showUploadModal: boolean
+  latestPublication: null | Publication
+  uploadModalConfig: {
+    channel: null | Channel
+  }
+}
+
+interface Channel {
+  uuid: string
+}
+
+interface Publication {
+  date: Date
+  uploads: Upload[]
+  channel: Channel
+}
+
+interface Upload {
+  uuid: string
+  import_status: 'pending' | 'skipped' | 'errored' | 'finished'
+}
 
 const logger = useLogger()
 
-export default {
+const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     subscriptions: [],
@@ -17,19 +44,20 @@ export default {
   mutations: {
     subscriptions: (state, { uuid, value }) => {
       if (value) {
-        if (state.subscriptions.indexOf(uuid) === -1) {
+        if (!state.subscriptions.includes(uuid)) {
           state.subscriptions.push(uuid)
         }
       } else {
-        const i = state.subscriptions.indexOf(uuid)
-        if (i > -1) {
-          state.subscriptions.splice(i, 1)
+        const index = state.subscriptions.indexOf(uuid)
+        if (index > -1) {
+          state.subscriptions.splice(index, 1)
         }
       }
+
       state.count = state.subscriptions.length
     },
     reset (state) {
-      state.subscriptions = []
+      state.subscriptions.length = 0
       state.count = 0
     },
     showUploadModal (state, value) {
@@ -50,24 +78,22 @@ export default {
     }
   },
   getters: {
-    isSubscribed: (state) => (uuid) => {
-      return state.subscriptions.indexOf(uuid) > -1
-    }
+    isSubscribed: (state) => (uuid: string) => state.subscriptions.includes(uuid)
   },
   actions: {
-    set ({ commit, state }, { uuid, value }) {
+    set ({ commit }, { uuid, value }) {
       commit('subscriptions', { uuid, value })
       if (value) {
-        return axios.post(`channels/${uuid}/subscribe/`).then((response) => {
+        return axios.post(`channels/${uuid}/subscribe/`).then(() => {
           logger.info('Successfully subscribed to channel')
-        }, (response) => {
+        }, () => {
           logger.info('Error while subscribing to channel')
           commit('subscriptions', { uuid, value: !value })
         })
       } else {
-        return axios.post(`channels/${uuid}/unsubscribe/`).then((response) => {
+        return axios.post(`channels/${uuid}/unsubscribe/`).then(() => {
           logger.info('Successfully unsubscribed from channel')
-        }, (response) => {
+        }, () => {
           logger.info('Error while unsubscribing from channel')
           commit('subscriptions', { uuid, value: !value })
         })
@@ -76,13 +102,15 @@ export default {
     toggle ({ getters, dispatch }, uuid) {
       dispatch('set', { uuid, value: !getters.isSubscribed(uuid) })
     },
-    fetchSubscriptions ({ dispatch, state, commit, rootState }, url) {
+    fetchSubscriptions ({ commit }) {
       const promise = axios.get('subscriptions/all/')
       return promise.then((response) => {
-        response.data.results.forEach(result => {
+        response.data.results.forEach((result: { channel: unknown }) => {
           commit('subscriptions', { uuid: result.channel, value: true })
         })
       })
     }
   }
 }
+
+export default store

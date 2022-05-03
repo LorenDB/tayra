@@ -6,7 +6,7 @@ import { InitModule } from '~/types'
 import store from '~/store'
 
 const defaultLanguage = store.state.ui.currentLanguage ?? 'en_US'
-const availableLanguages = locales.reduce((map: Record<string, string>, locale) => {
+export const availableLanguages = locales.reduce((map: Record<string, string>, locale) => {
   map[locale.code] = locale.label
   return map
 }, {})

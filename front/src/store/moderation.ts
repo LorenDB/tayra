@@ -1,10 +1,35 @@
 import axios from 'axios'
 import { sortBy } from 'lodash-es'
 import useLogger from '~/composables/useLogger'
+import { Module } from 'vuex'
+import { RootState } from '~/store/index'
+
+export interface State {
+  filters: ContentFilter[],
+  showFilterModal: boolean,
+  showReportModal: boolean,
+  lastUpdate: Date,
+  filterModalTarget: {
+    type: null,
+    target: null
+  },
+  reportModalTarget: {
+    type: null,
+    target: null
+  }
+}
+
+interface ContentFilter {
+  uuid: string
+  creation_date: Date
+  target: {
+    type: 'artist'
+  }
+}
 
 const logger = useLogger()
 
-export default {
+const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     filters: [],
@@ -56,10 +81,16 @@ export default {
     },
     reset (state) {
       state.filters = []
-      state.filterModalTarget = null
+      state.filterModalTarget = {
+        type: null,
+        target: null
+      }
       state.showFilterModal = false
       state.showReportModal = false
-      state.reportModalTarget = {}
+      state.reportModalTarget = {
+        type: null,
+        target: null
+      }
     },
     deleteContentFilter (state, uuid) {
       state.filters = state.filters.filter((e) => {
@@ -86,7 +117,7 @@ export default {
       commit('reportModalTarget', payload)
       commit('showReportModal', true)
     },
-    fetchContentFilters ({ dispatch, state, commit, rootState }, url) {
+    fetchContentFilters ({ dispatch, commit }, url) {
       let params = {}
       let promise
       if (url) {
@@ -104,15 +135,17 @@ export default {
         if (response.data.next) {
           dispatch('fetchContentFilters', response.data.next)
         }
-        response.data.results.forEach(result => {
+        response.data.results.forEach((result: ContentFilter) => {
           commit('contentFilter', result)
         })
       })
     },
     deleteContentFilter ({ commit }, uuid) {
-      return axios.delete(`moderation/content-filters/${uuid}/`).then((response) => {
+      return axios.delete(`moderation/content-filters/${uuid}/`).then(() => {
         commit('deleteContentFilter', uuid)
       })
     }
   }
 }
+
+export default store

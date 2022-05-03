@@ -236,9 +236,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      events: state => state.instance.events
-    }),
     ...mapGetters({
       additionalNotifications: 'ui/additionalNotifications',
       showInstanceSupportMessage: 'ui/showInstanceSupportMessage',
@@ -283,21 +280,18 @@ export default {
         newDisplayDate = null
       }
       payload[field] = newDisplayDate
-      const self = this
       axios.patch(`users/${this.$store.state.auth.username}/`, payload).then((response) => {
-        self.$store.commit('auth/profilePartialUpdate', response.data)
+        this.$store.commit('auth/profilePartialUpdate', response.data)
       })
     },
     fetch (params) {
       this.isLoading = true
-      const self = this
       axios.get('federation/inbox/', { params: params }).then(response => {
-        self.isLoading = false
-        self.notifications = response.data
+        this.isLoading = false
+        this.notifications = response.data
       })
     },
     markAllAsRead () {
-      const self = this
       const before = this.notifications.results[0].id
       const payload = {
         action: 'read',
@@ -308,8 +302,8 @@ export default {
         }
       }
       axios.post('federation/inbox/action/', payload).then(response => {
-        self.$store.commit('ui/notifications', { type: 'inbox', count: 0 })
-        self.notifications.results.forEach(n => {
+        this.$store.commit('ui/notifications', { type: 'inbox', count: 0 })
+        this.notifications.results.forEach(n => {
           n.is_read = true
         })
       })

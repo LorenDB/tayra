@@ -1,27 +1,51 @@
 import axios from 'axios'
 import useLogger from '~/composables/useLogger'
+import { Module } from 'vuex'
+import { RootState } from '~/store/index'
+import useFormData from '~/composables/useFormData'
+
+export type Permission = 'settings' | 'library' | 'moderation'
+export interface State {
+  authenticated: boolean
+  username: string
+  fullUsername: string
+  availablePermissions: Record<Permission, boolean>,
+  profile: null | Profile
+  oauth: OAuthTokens
+  scopedTokens: ScopedTokens
+}
+
+interface Profile {
+  id: string
+  avatar?: string
+  username: string
+  full_username: string
+  instance_support_message_display_date: string
+  funkwhale_support_message_display_date: string
+}
+
+interface ScopedTokens {
+  listen: null | string
+}
+
+interface OAuthTokens {
+  clientId: null | string
+  clientSecret: null | string
+  accessToken: null | string
+  refreshToken: null | string
+}
+
+const NEEDED_SCOPES = 'read write'
 
 const logger = useLogger()
 
-function getDefaultScopedTokens () {
+function getDefaultScopedTokens (): ScopedTokens {
   return {
     listen: null
   }
 }
 
-function asForm (obj) {
-  const data = new FormData()
-  Object.entries(obj).forEach(([key, value]) => {
-    data.set(key, value)
-  })
-  return data
-}
-
-let baseUrl = `${window.location.protocol}//${window.location.hostname}`
-if (window.location.port) {
-  baseUrl = `${baseUrl}:${window.location.port}`
-}
-function getDefaultOauth () {
+function getDefaultOauth (): OAuthTokens {
   return {
     clientId: null,
     clientSecret: null,
@@ -29,20 +53,18 @@ function getDefaultOauth () {
     refreshToken: null
   }
 }
-const NEEDED_SCOPES = [
-  'read',
-  'write'
-].join(' ')
-async function createOauthApp (domain) {
+
+async function createOauthApp () {
   const payload = {
     name: `Funkwhale web client at ${window.location.hostname}`,
-    website: baseUrl,
+    website: location.origin,
     scopes: NEEDED_SCOPES,
-    redirect_uris: `${baseUrl}/auth/callback`
+    redirect_uris: `${location.origin}/auth/callback`
   }
   return (await axios.post('oauth/apps/', payload)).data
 }
-export default {
+
+const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     authenticated: false,
@@ -73,10 +95,9 @@ export default {
       state.scopedTokens = getDefaultScopedTokens()
       state.oauth = getDefaultOauth()
       state.availablePermissions = {
-        federation: false,
         settings: false,
         library: false,
-        upload: false
+        moderation: false
       }
     },
     profile: (state, value) => {
@@ -85,11 +106,15 @@ export default {
     authenticated: (state, value) => {
       state.authenticated = value
       if (value === false) {
-        state.username = null
-        state.fullUsername = null
+        state.username = ''
+        state.fullUsername = ''
         state.profile = null
         state.scopedTokens = getDefaultScopedTokens()
-        state.availablePermissions = {}
+        state.availablePermissions = {
+          settings: false,
+          library: false,
+          moderation: false
+        }
       }
     },
     username: (state, value) => {
@@ -106,13 +131,17 @@ export default {
     scopedTokens: (state, value) => {
       state.scopedTokens = { ...value }
     },
-    permission: (state, { key, status }) => {
+    permission: (state, { key, status }: { key: Permission, status: boolean }) => {
       state.availablePermissions[key] = status
     },
-    profilePartialUpdate: (state, payload) => {
-      Object.keys(payload).forEach((k) => {
-        state.profile[k] = payload[k]
-      })
+    profilePartialUpdate: (state, payload: Profile) => {
+      if (!state.profile) {
+        state.profile = {} as Profile
+      }
+
+      for (const [key, value] of Object.entries(payload)) {
+        state.profile[key as keyof Profile] = value
+      }
     },
     oauthApp: (state, payload) => {
       state.oauth.clientId = payload.client_id
@@ -125,12 +154,9 @@ export default {
   },
   actions: {
     // Send a request to the login URL and save the returned JWT
-    login ({ commit, dispatch }, { next, credentials, onError }) {
-      const form = new FormData()
-      Object.keys(credentials).forEach((k) => {
-        form.set(k, credentials[k])
-      })
-      return axios.post('users/login', form).then(response => {
+    login ({ dispatch }, { next, credentials, onError }) {
+      const form = useFormData(credentials)
+      return axios.post('users/login', form).then(() => {
         logger.info('Successfully logged in as', credentials.username)
         dispatch('fetchProfile').then(() => {
           // Redirect to a specified route
@@ -143,7 +169,7 @@ export default {
         onError(response)
       })
     },
-    async logout ({ state, commit }) {
+    async logout ({ commit }) {
       try {
         await axios.post('users/logout')
       } catch (error) {
@@ -162,7 +188,7 @@ export default {
       })
       logger.info('Log out, goodbye!')
     },
-    fetchProfile ({ commit, dispatch, state }) {
+    fetchProfile ({ dispatch }) {
       return new Promise((resolve, reject) => {
         axios.get('users/me/').then((response) => {
           logger.info('Successfully fetched user profile')
@@ -181,39 +207,34 @@ export default {
           dispatch('moderation/fetchContentFilters', null, { root: true })
           dispatch('playlists/fetchOwn', null, { root: true })
           resolve(response.data)
-        }, (response) => {
+        }, () => {
           logger.info('Error while fetching user profile')
           reject(new Error('Error while fetching user profile'))
         })
       })
     },
     updateProfile ({ commit }, data) {
-      return new Promise((resolve, reject) => {
-        commit('authenticated', true)
-        commit('profile', data)
-        commit('username', data.username)
-        commit('fullUsername', data.full_username)
-        if (data.tokens) {
-          commit('scopedTokens', data.tokens)
-        }
-        Object.keys(data.permissions).forEach(function (key) {
-          // this makes it easier to check for permissions in templates
-          commit('permission', {
-            key,
-            status: data.permissions[String(key)]
-          })
-        })
-        resolve()
-      })
+      commit('authenticated', true)
+      commit('profile', data)
+      commit('username', data.username)
+      commit('fullUsername', data.full_username)
+      if (data.tokens) {
+        commit('scopedTokens', data.tokens)
+      }
+
+      for (const [permission, hasPermission] of Object.entries(data.permissions)) {
+        // this makes it easier to check for permissions in templates
+        commit('permission', { key: permission, status: hasPermission })
+      }
     },
-    async oauthLogin ({ state, rootState, commit, getters }, next) {
-      const app = await createOauthApp(getters.appDomain)
+    async oauthLogin ({ state, rootState, commit }, next) {
+      const app = await createOauthApp()
       commit('oauthApp', app)
-      const redirectUri = encodeURIComponent(`${baseUrl}/auth/callback`)
+      const redirectUri = encodeURIComponent(`${location.origin}/auth/callback`)
       const params = `response_type=code&scope=${encodeURIComponent(NEEDED_SCOPES)}&redirect_uri=${redirectUri}&state=${next}&client_id=${state.oauth.clientId}`
       const authorizeUrl = `${rootState.instance.instanceUrl}authorize?${params}`
       console.log('Redirecting user...', authorizeUrl)
-      window.location = authorizeUrl
+      window.location.href = authorizeUrl
     },
     async handleOauthCallback ({ state, commit, dispatch }, authorizationCode) {
       console.log('Fetching token...')
@@ -222,17 +243,17 @@ export default {
         client_secret: state.oauth.clientSecret,
         grant_type: 'authorization_code',
         code: authorizationCode,
-        redirect_uri: `${baseUrl}/auth/callback`
+        redirect_uri: `${location.origin}/auth/callback`
       }
       const response = await axios.post(
         'oauth/token/',
-        asForm(payload),
+        useFormData(payload),
         { headers: { 'Content-Type': 'multipart/form-data' } }
       )
       commit('oauthToken', response.data)
       await dispatch('fetchProfile')
     },
-    async refreshOauthToken ({ state, commit }, authorizationCode) {
+    async refreshOauthToken ({ state, commit }) {
       const payload = {
         client_id: state.oauth.clientId,
         client_secret: state.oauth.clientSecret,
@@ -241,10 +262,12 @@ export default {
       }
       const response = await axios.post(
         'oauth/token/',
-        asForm(payload),
+        useFormData(payload),
         { headers: { 'Content-Type': 'multipart/form-data' } }
       )
       commit('oauthToken', response.data)
     }
   }
 }
+
+export default store

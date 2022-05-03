@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useClipboard, useVModel } from '@vueuse/core'
-import { useStore } from 'vuex'
+import { useStore } from '~/store'
 
 interface Props {
   modelValue: string

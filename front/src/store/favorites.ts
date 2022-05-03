@@ -1,9 +1,16 @@
 import axios from 'axios'
 import useLogger from '~/composables/useLogger'
+import { Module } from 'vuex'
+import { RootState } from '~/store/index'
+
+export interface State {
+  tracks: string[]
+  count: number
+}
 
 const logger = useLogger()
 
-export default {
+const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     tracks: [],
@@ -12,41 +19,42 @@ export default {
   mutations: {
     track: (state, { id, value }) => {
       if (value) {
-        if (state.tracks.indexOf(id) === -1) {
+        if (!state.tracks.includes(id)) {
           state.tracks.push(id)
         }
       } else {
-        const i = state.tracks.indexOf(id)
-        if (i > -1) {
-          state.tracks.splice(i, 1)
+        const index = state.tracks.indexOf(id)
+        if (index > -1) {
+          state.tracks.splice(index, 1)
         }
       }
+
       state.count = state.tracks.length
     },
     reset (state) {
-      state.tracks = []
+      state.tracks.length = 0
       state.count = 0
     }
   },
   getters: {
-    isFavorite: (state) => (id) => {
-      return state.tracks.indexOf(id) > -1
+    isFavorite: (state) => (id: string) => {
+      return state.tracks.includes(id)
     }
   },
   actions: {
-    set ({ commit, state }, { id, value }) {
+    set ({ commit }, { id, value }) {
       commit('track', { id, value })
       if (value) {
-        return axios.post('favorites/tracks/', { track: id }).then((response) => {
+        return axios.post('favorites/tracks/', { track: id }).then(() => {
           logger.info('Successfully added track to favorites')
-        }, (response) => {
+        }, () => {
           logger.info('Error while adding track to favorites')
           commit('track', { id, value: !value })
         })
       } else {
-        return axios.post('favorites/tracks/remove/', { track: id }).then((response) => {
+        return axios.post('favorites/tracks/remove/', { track: id }).then(() => {
           logger.info('Successfully removed track from favorites')
-        }, (response) => {
+        }, () => {
           logger.info('Error while removing track from favorites')
           commit('track', { id, value: !value })
         })
@@ -55,20 +63,22 @@ export default {
     toggle ({ getters, dispatch }, id) {
       dispatch('set', { id, value: !getters.isFavorite(id) })
     },
-    fetch ({ dispatch, state, commit, rootState }, url) {
+    fetch ({ commit, rootState }) {
       // will fetch favorites by batches from API to have them locally
       const params = {
-        user: rootState.auth.profile.id,
+        user: rootState.auth.profile?.id,
         page_size: 50,
         ordering: '-creation_date'
       }
       const promise = axios.get('favorites/tracks/all/', { params: params })
       return promise.then((response) => {
         logger.info('Fetched a batch of ' + response.data.results.length + ' favorites')
-        response.data.results.forEach(result => {
+        response.data.results.forEach((result: { track: string }) => {
           commit('track', { id: result.track, value: true })
         })
       })
     }
   }
 }
+
+export default store

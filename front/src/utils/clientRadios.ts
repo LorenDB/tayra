@@ -1,44 +1,45 @@
 import axios from 'axios'
 import useLogger from '~/composables/useLogger'
+import { ListenWSEvent } from '~/types'
+import { RootState } from '~/store'
+import { Store } from 'vuex'
+import { CurrentRadio, PopulateQueuePayload } from '~/store/radios'
 
 const logger = useLogger()
 
-// import axios from 'axios'
-
-const RADIOS = {
+export const CLIENT_RADIOS = {
   // some radios are client side only, so we have to implement the populateQueue
   // method by hand
   account: {
     offset: 1,
-    populateQueue ({ current, dispatch, playNow }) {
+    populateQueue ({ current, dispatch, playNow }: PopulateQueuePayload) {
       const params = { scope: `actor:${current.objectId.fullUsername}`, ordering: '-creation_date', page_size: 1, page: this.offset }
-      axios.get('history/listenings', { params }).then((response) => {
+      axios.get('history/listenings', { params }).then(async (response) => {
         const latest = response.data.results[0]
         if (!latest) {
           logger.error('No more tracks')
-          dispatch('stop')
+          await dispatch('stop')
         }
+
         this.offset += 1
         const append = dispatch('queue/append', { track: latest.track }, { root: true })
         if (playNow) {
-          append.then(() => {
-            dispatch('queue/last', null, { root: true })
-          })
+          append.then(() => dispatch('queue/last', null, { root: true }))
         }
-      }, (error) => {
+      }, async (error) => {
         logger.error('Error while fetching listenings', error)
-        dispatch('stop')
+        await dispatch('stop')
       })
     },
     stop () {
       this.offset = 1
     },
-    handleListen (current, event, store) {
-      // XXX: handle actors from other pods
+    handleListen (current: CurrentRadio, event: ListenWSEvent, store: Store<RootState>) {
+      // TODO: handle actors from other pods
       if (event.actor.local_id === current.objectId.username) {
-        axios.get(`tracks/${event.object.local_id}`).then((response) => {
+        axios.get(`tracks/${event.object.local_id}`).then(async (response) => {
           if (response.data.uploads.length > 0) {
-            store.dispatch('queue/append', { track: response.data })
+            await store.dispatch('queue/append', { track: response.data })
             this.offset += 1
           }
         }, (error) => {
@@ -47,7 +48,4 @@ const RADIOS = {
       }
     }
   }
-}
-export function getClientOnlyRadio ({ type }) {
-  return RADIOS[type]
 }

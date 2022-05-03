@@ -31,7 +31,7 @@ export const install: InitModule = async ({ store, router }) => {
     // 3. use the current url
     const defaultInstanceUrl = store.state.instance.frontSettings.defaultServerUrl ||
       import.meta.env.VUE_APP_INSTANCE_URL ||
-      store.getters['instance/defaultUrl']()
+      location.origin
 
     store.commit('instance/instanceUrl', defaultInstanceUrl)
   } else {

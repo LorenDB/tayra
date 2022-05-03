@@ -2,7 +2,7 @@
 import { humanSize } from '~/utils/filters'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
-import { useStore } from 'vuex'
+import { useStore } from '~/store'
 
 const { $pgettext } = useGettext()
 

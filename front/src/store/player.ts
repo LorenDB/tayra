@@ -1,10 +1,26 @@
 import axios from 'axios'
 import time from '~/utils/time'
 import useLogger from '~/composables/useLogger'
+import { Module } from 'vuex'
+import { RootState } from '~/store/index'
+
+export interface State {
+  maxConsecutiveErrors: number
+  errorCount: number
+  playing: boolean
+  isLoadingAudio: boolean
+  volume: number
+  tempVolume: number
+  duration: number
+  currentTime: number
+  errored: boolean
+  bufferProgress: number
+  looping: 0 | 1 | 2
+}
 
 const logger = useLogger()
 
-export default {
+const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     maxConsecutiveErrors: 5,
@@ -79,12 +95,11 @@ export default {
   },
   getters: {
     durationFormatted: state => {
-      let duration = parseInt(state.duration)
-      if (duration % 1 !== 0) {
+      if (state.duration % 1 !== 0) {
         return time.parse(0)
       }
-      duration = Math.round(state.duration)
-      return time.parse(duration)
+
+      return time.parse(Math.round(state.duration))
     },
     currentTimeFormatted: state => {
       return time.parse(Math.round(state.currentTime))
@@ -132,15 +147,15 @@ export default {
         commit('volume', state.tempVolume)
       }
     },
-    trackListened ({ commit, rootState }, track) {
+    trackListened ({ rootState }, track) {
       if (!rootState.auth.authenticated) {
         return
       }
-      return axios.post('history/listenings/', { track: track.id }).then((response) => {}, (response) => {
+      return axios.post('history/listenings/', { track: track.id }).then(() => {}, () => {
         logger.error('Could not record track in history')
       })
     },
-    trackEnded ({ commit, dispatch, rootState }, track) {
+    trackEnded ({ commit, dispatch, rootState }) {
       const queueState = rootState.queue
       if (queueState.currentIndex === queueState.tracks.length - 1) {
         // we've reached last track of queue, trigger a reload
@@ -177,3 +192,5 @@ export default {
     }
   }
 }
+
+export default store

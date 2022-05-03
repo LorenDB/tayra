@@ -1,23 +1,59 @@
 import axios from 'axios'
 import { merge } from 'lodash-es'
 import useLogger from '~/composables/useLogger'
+import { Module } from 'vuex'
+import { RootState } from '~/store/index'
+
+export interface State {
+  frontSettings: {
+    defaultServerUrl: string
+    additionalStylesheets: string[] // TODO (wvffle): Ensure it's not nullable
+  }
+  instanceUrl: string
+  knownInstances: string[]
+  nodeinfo: unknown | null // TODO (wvffle): Get nodeinfo type from swagger automatically
+  settings: Settings
+}
+
+interface InstanceSettings {
+  name: { value: string }
+  short_description: { value: string }
+  long_description: { value: string }
+  funkwhale_support_message_enabled: { value: boolean }
+  support_message: { value: string }
+}
+
+interface UsersSettings {
+  registration_enabled: { value: boolean }
+  upload_quota: { value: number }
+}
+
+interface ModerationSettings {
+  signup_approval_enabled: { value: boolean }
+  signup_form_customization: { value: null }
+}
+
+interface SubsonicSettings {
+  enabled: { value: boolean }
+}
+
+interface Settings {
+  instance: InstanceSettings
+  users: UsersSettings
+  moderation: ModerationSettings
+  subsonic: SubsonicSettings
+}
 
 const logger = useLogger()
 
-function getDefaultUrl () {
-  return (
-    window.location.protocol + '//' + window.location.hostname +
-    (window.location.port ? ':' + window.location.port : '') + '/'
-  )
-}
-
-export default {
+const store: Module<State, RootState> = {
   namespaced: true,
   state: {
-    maxEvents: 200,
-    frontSettings: {},
-    instanceUrl: import.meta.env.VUE_APP_INSTANCE_URL,
-    events: [],
+    frontSettings: {
+      defaultServerUrl: location.origin,
+      additionalStylesheets: []
+    },
+    instanceUrl: import.meta.env.VUE_APP_INSTANCE_URL as string,
     knownInstances: [],
     nodeinfo: null,
     settings: {
@@ -63,15 +99,6 @@ export default {
     settings: (state, value) => {
       merge(state.settings, value)
     },
-    event: (state, value) => {
-      state.events.unshift(value)
-      if (state.events.length > state.maxEvents) {
-        state.events = state.events.slice(0, state.maxEvents)
-      }
-    },
-    events: (state, value) => {
-      state.events = value
-    },
     nodeinfo: (state, value) => {
       state.nodeinfo = value
     },
@@ -82,6 +109,7 @@ export default {
       if (value && !value.endsWith('/')) {
         value = value + '/'
       }
+
       state.instanceUrl = value
 
       // append the URL to the list (and remove existing one if needed)
@@ -92,8 +120,9 @@ export default {
         }
         state.knownInstances.splice(0, 0, value)
       }
+
       if (!value) {
-        axios.defaults.baseURL = null
+        axios.defaults.baseURL = undefined
         return
       }
       const suffix = 'api/v1/'
@@ -101,18 +130,13 @@ export default {
     }
   },
   getters: {
-    defaultUrl: (state) => () => {
-      return getDefaultUrl()
-    },
-    absoluteUrl: (state) => (relativeUrl) => {
-      if (relativeUrl.startsWith('http')) {
-        return relativeUrl
-      }
-      if (state.instanceUrl?.endsWith('/') && relativeUrl.startsWith('/')) {
+    absoluteUrl: (state) => (relativeUrl: string) => {
+      if (relativeUrl.startsWith('http')) return relativeUrl
+      if (state.instanceUrl.endsWith('/') && relativeUrl.startsWith('/')) {
         relativeUrl = relativeUrl.slice(1)
       }
 
-      const instanceUrl = state.instanceUrl ?? getDefaultUrl()
+      const instanceUrl = state.instanceUrl ?? location.origin
       return instanceUrl + relativeUrl
     },
     domain: (state) => {
@@ -121,12 +145,10 @@ export default {
       parser.href = url
       return parser.hostname
     },
-    appDomain: (state) => {
-      return location.hostname
-    }
+    appDomain: () => location.hostname
   },
   actions: {
-    setUrl ({ commit, dispatch }, url) {
+    setUrl ({ commit }, url) {
       commit('instanceUrl', url)
       const modules = [
         'auth',
@@ -146,7 +168,8 @@ export default {
       return axios.get('instance/settings/').then(response => {
         logger.info('Successfully fetched instance settings')
 
-        const sections = response.data.reduce((map, entry) => {
+        type SettingsSection = { section: string, name: string }
+        const sections = response.data.reduce((map: Record<string, Record<string, SettingsSection>>, entry: SettingsSection) => {
           map[entry.section] ??= {}
           map[entry.section][entry.name] = entry
           return map
@@ -161,9 +184,11 @@ export default {
     fetchFrontSettings ({ commit }) {
       return axios.get('/settings.json').then(response => {
         commit('frontSettings', response.data)
-      }, response => {
+      }, () => {
         logger.error('Error when fetching front-end configuration (or no customization available)')
       })
     }
   }
 }
+
+export default store

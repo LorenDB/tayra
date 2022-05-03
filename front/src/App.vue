@@ -12,7 +12,6 @@ import ReportModal from '~/components/moderation/ReportModal.vue'
 import { useIntervalFn, useToggle, useWindowSize } from '@vueuse/core'
 
 import { computed, nextTick, onMounted, ref, watchEffect } from 'vue'
-import store from '~/store'
 import {
   ListenWSEvent,
   PendingReviewEditsWSEvent,
@@ -21,8 +20,11 @@ import {
   Track
 } from '~/types'
 import useWebSocketHandler from '~/composables/useWebSocketHandler'
-import { getClientOnlyRadio } from '~/radios'
+import { CLIENT_RADIOS } from '~/utils/clientRadios'
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
+import { useStore } from '~/store'
+
+const store = useStore()
 
 // Tracks
 const currentTrack = computed(() => store.getters['queue/currentTrack'])
@@ -49,7 +51,7 @@ watchEffect(() => {
 
 // Styles
 const customStylesheets = computed(() => {
-  return store.state.instance?.frontSettings?.additionalStylesheets ?? []
+  return store.state.instance.frontSettings.additionalStylesheets ?? []
 })
 
 // Fake content
@@ -93,10 +95,10 @@ useWebSocketHandler('user_request.created', (event) => {
 
 useWebSocketHandler('Listen', (event) => {
   if (store.state.radios.current && store.state.radios.running) {
-    const { current } = store.state.radios
+    const current = store.state.radios.current
 
-    if (current.clientOnly && current.type === 'account') {
-      getClientOnlyRadio(current).handleListen(current, event as ListenWSEvent, store)
+    if (current?.clientOnly) {
+      CLIENT_RADIOS[current.type].handleListen(current, event as ListenWSEvent, store)
     }
   }
 })

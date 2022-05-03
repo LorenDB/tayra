@@ -29,7 +29,7 @@
         </li>
       </ul>
     </div>
-    <template v-if="$store.getters['instance/appDomain'] === $store.getters['instance/domain']">
+    <template v-if="document.domain === $store.getters['instance/domain']">
       <div class="field">
         <label for="username-field">
           <translate translate-context="Content/Login/Input.Label/Noun">Username or e-mail address</translate>
@@ -133,7 +133,7 @@ export default {
   },
   methods: {
     async submit () {
-      if (this.$store.getters['instance/appDomain'] === this.$store.getters['instance/domain']) {
+      if (document.domain === this.$store.getters['instance/domain']) {
         return await this.submitSession()
       } else {
         this.isLoading = true
@@ -141,8 +141,7 @@ export default {
       }
     },
     async submitSession () {
-      const self = this
-      self.isLoading = true
+      this.isLoading = true
       this.error = ''
       const credentials = {
         username: this.credentials.username,
@@ -160,7 +159,7 @@ export default {
             }
           }
         })
-        .then(e => {
+        .then(() => {
           self.isLoading = false
         })
     }

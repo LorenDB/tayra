@@ -8,7 +8,7 @@
         <i
           role="button"
           class="close icon"
-          @click="pendingUploads = []"
+          @click="pendingUploads.length = 0"
         />
         <h3 class="ui header">
           <translate translate-context="Content/Channel/Header">

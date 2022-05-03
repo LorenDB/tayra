@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import $ from 'jquery'
 import { onMounted } from 'vue'
-import store from '~/store'
+import { useStore } from '~/store'
 
 interface Message {
   content: string
@@ -10,6 +10,7 @@ interface Message {
 
 const props = defineProps<{ message: Message }>()
 
+const store = useStore()
 onMounted(() => {
   const params = {
     context: '#app',

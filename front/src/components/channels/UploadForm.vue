@@ -205,16 +205,15 @@
         </div>
         <file-upload-widget
           ref="upload"
+          v-model="filesModel"
           :class="['ui', 'icon', 'basic', 'button', 'channels', {hidden: step === 3}]"
           :post-action="uploadUrl"
           :multiple="true"
           :data="baseImportMetadata"
           :drop="true"
           :extensions="$store.state.ui.supportedExtensions"
-          :value="files"
           name="audio_file"
           :thread="1"
-          @input="updateFiles"
           @input-file="inputFile"
         >
           <div>
@@ -292,6 +291,15 @@ export default {
     }
   },
   computed: {
+    filesModel: {
+      get () {
+        return this.files
+      },
+
+      set (value) {
+        this.updateFiles(value)
+      }
+    },
     labels () {
       return {
         editTitle: this.$pgettext('Content/*/Button.Label/Verb', 'Edit')
@@ -419,9 +427,7 @@ export default {
       return uploaded
     },
     activeFile () {
-      return this.files.filter((f) => {
-        return f.active
-      })[0]
+      return this.files.find((file) => file.active)
     }
   },
   watch: {
@@ -585,15 +591,14 @@ export default {
       this[objName] = Object.assign({}, this[objName], newData)
     },
     updateFiles (value) {
-      const self = this
       this.files = value
       this.files.forEach((f) => {
-        if (f.response && f.response.uuid && self.audioMetadata[f.response.uuid] === undefined) {
-          self.uploadData[f.response.uuid] = f.response
-          self.setDynamic('uploadImportData', f.response.uuid, {
+        if (f.response?.uuid && this.audioMetadata[f.response.uuid] === undefined) {
+          this.uploadData[f.response.uuid] = f.response
+          this.setDynamic('uploadImportData', f.response.uuid, {
             ...f.response.import_metadata
           })
-          self.fetchAudioMetadata(f.response.uuid)
+          this.fetchAudioMetadata(f.response.uuid)
         }
       })
     },

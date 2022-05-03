@@ -3,7 +3,7 @@ import LoginForm from '~/components/auth/LoginForm.vue'
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useStore } from 'vuex'
+import { useStore } from '~/store'
 
 interface Props {
   next?: string

@@ -618,7 +618,7 @@ export default createRouter({
           component: () =>
             import('~/components/library/Home.vue'),
           name: 'library.me',
-          props: route => ({
+          props: () => ({
             scope: 'me'
           })
         },

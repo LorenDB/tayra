@@ -1,21 +1,31 @@
-import { createStore, Store } from 'vuex'
+import { createStore, Store, useStore as baseUseStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 
-import favorites from './favorites'
-import channels from './channels'
-import libraries from './libraries'
-import auth from './auth'
-import instance from './instance'
-import moderation from './moderation'
-import queue from './queue'
-import radios from './radios'
-import player from './player'
-import playlists from './playlists'
-import ui from './ui'
+import favorites, { State as FavoritesState } from './favorites'
+import channels, { State as ChannelsState } from './channels'
+import libraries, { State as LibrariesState } from './libraries'
+import auth, { State as AuthState } from './auth'
+import instance, { State as InstanceState } from './instance'
+import moderation, { State as ModerationState } from './moderation'
+import queue, { State as QueueState } from './queue'
+import radios, { State as RadiosState } from './radios'
+import player, { State as PlayerState } from './player'
+import playlists, { State as PlaylistsState } from './playlists'
+import ui, { State as UiState } from './ui'
 import { InjectionKey } from 'vue'
 
 export interface RootState {
-
+  ui: UiState
+  auth: AuthState
+  channels: ChannelsState
+  libraries: LibrariesState
+  favorites: FavoritesState
+  instance: InstanceState
+  moderation: ModerationState
+  queue: QueueState
+  radios: RadiosState
+  playlists: PlaylistsState
+  player: PlayerState
 }
 
 export const key: InjectionKey<Store<RootState>> = Symbol('vuex state injection key')
@@ -43,7 +53,7 @@ export default createStore<RootState>({
     }),
     createPersistedState({
       key: 'instance',
-      paths: ['instance.events', 'instance.instanceUrl', 'instance.knownInstances']
+      paths: ['instance.instanceUrl', 'instance.knownInstances']
     }),
     createPersistedState({
       key: 'ui',
@@ -109,3 +119,7 @@ export default createStore<RootState>({
     })
   ]
 })
+
+export const useStore = () => {
+  return baseUseStore(key)
+}

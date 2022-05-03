@@ -3,7 +3,8 @@ import axios from 'axios'
 import { useVModel } from '@vueuse/core'
 import { reactive, ref, watch } from 'vue'
 import { BackendError } from '~/types'
-import { useStore } from 'vuex'
+import { useStore } from '~/store'
+import useFormData from '~/composables/useFormData'
 
 interface Props {
   modelValue: string | null
@@ -35,8 +36,7 @@ const submit = async () => {
   errors.length = 0
   file.value = input.value.files[0]
 
-  const formData = new FormData()
-  formData.append('file', file.value)
+  const formData = useFormData({ file: file.value })
 
   try {
     const { data } = await axios.post('attachments/', formData, {

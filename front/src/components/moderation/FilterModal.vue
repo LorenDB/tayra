@@ -90,11 +90,12 @@
 
 <script>
 import axios from 'axios'
-import { mapState, useStore } from 'vuex'
+import { mapState } from 'vuex'
 import { computed } from 'vue'
 
 import Modal from '~/components/semantic/Modal.vue'
 import useLogger from '~/composables/useLogger'
+import { useStore } from '~/store'
 
 const logger = useLogger()
 

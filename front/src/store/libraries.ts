@@ -1,41 +1,44 @@
 import axios from 'axios'
 import useLogger from '~/composables/useLogger'
+import { Module } from 'vuex'
+import { RootState } from '~/store/index'
+
+export interface State {
+  followsByLibrary: {
+    [key: string]: Library
+  }
+  count: number
+}
+
+interface Library {
+  uuid: string
+}
 
 const logger = useLogger()
 
-export default {
+const store: Module<State, RootState> = {
   namespaced: true,
   state: {
-    followedLibraries: [],
     followsByLibrary: {},
     count: 0
   },
   mutations: {
     follows: (state, { library, follow }) => {
-      const replacement = { ...state.followsByLibrary }
       if (follow) {
-        if (state.followedLibraries.indexOf(library) === -1) {
-          state.followedLibraries.push(library)
-          replacement[library] = follow
-        }
+        state.followsByLibrary[library] = follow
       } else {
-        const i = state.followedLibraries.indexOf(library)
-        if (i > -1) {
-          state.followedLibraries.splice(i, 1)
-          replacement[library] = null
-        }
+        delete state.followsByLibrary[library]
       }
-      state.followsByLibrary = replacement
-      state.count = state.followedLibraries.length
+
+      state.count = Object.keys(state.followsByLibrary).length
     },
     reset (state) {
-      state.followedLibraries = []
       state.followsByLibrary = {}
       state.count = 0
     }
   },
   getters: {
-    follow: (state) => (library) => {
+    follow: (state) => (library: string) => {
       return state.followsByLibrary[library]
     }
   },
@@ -45,16 +48,16 @@ export default {
         return axios.post('federation/follows/library/', { target: uuid }).then((response) => {
           logger.info('Successfully subscribed to library')
           commit('follows', { library: uuid, follow: response.data })
-        }, (response) => {
+        }, () => {
           logger.info('Error while subscribing to library')
           commit('follows', { library: uuid, follow: null })
         })
       } else {
         const follow = state.followsByLibrary[uuid]
-        return axios.delete(`federation/follows/library/${follow.uuid}/`).then((response) => {
+        return axios.delete(`federation/follows/library/${follow.uuid}/`).then(() => {
           logger.info('Successfully unsubscribed from library')
           commit('follows', { library: uuid, follow: null })
-        }, (response) => {
+        }, () => {
           logger.info('Error while unsubscribing from library')
           commit('follows', { library: uuid, follow: follow })
         })
@@ -66,10 +69,12 @@ export default {
     fetchFollows ({ dispatch, state, commit, rootState }, url) {
       const promise = axios.get('federation/follows/library/all/')
       return promise.then((response) => {
-        response.data.results.forEach(result => {
+        response.data.results.forEach((result: { library: string }) => {
           commit('follows', { library: result.library, follow: result })
         })
       })
     }
   }
 }
+
+export default store

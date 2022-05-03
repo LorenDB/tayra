@@ -345,7 +345,8 @@
   </section>
 </template>
 <script>
-import { mapState, mapGetters, mapActions, useStore } from 'vuex'
+import { useStore } from '~/store'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { nextTick, onMounted, ref, computed } from 'vue'
 import moment from 'moment'
 import { sum } from 'lodash-es'

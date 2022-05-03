@@ -320,7 +320,8 @@
 </template>
 
 <script>
-import { useStore, mapState, mapGetters, mapActions } from 'vuex'
+import { useStore } from '~/store'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import toLinearVolumeScale from '~/composables/audio/toLinearVolumeScale'
 import { Howl, Howler } from 'howler'
 import { throttle, reverse } from 'lodash-es'

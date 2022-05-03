@@ -44,13 +44,6 @@ export function getCookie (name: string) {
     ?.split('=')[1]
 }
 
-export function setCsrf (xhr: XMLHttpRequest) {
-  const token = getCookie('csrftoken')
-  if (token) {
-    xhr.setRequestHeader('X-CSRFToken', token)
-  }
-}
-
 // TODO (wvffle): Use navigation guards
 export async function checkRedirectToLogin (store: Store<any>, router: Router) {
   if (!store.state.auth.authenticated) {

@@ -51,8 +51,8 @@
       </template>
       <content-form
         v-if="setting.fieldType === 'markdown'"
-        v-bind="setting.fieldParams"
         v-model="values[setting.identifier]"
+        v-bind="setting.fieldParams"
       />
       <signup-form-builder
         v-else-if="setting.fieldType === 'formBuilder'"
@@ -158,6 +158,7 @@
 import axios from 'axios'
 import { cloneDeep } from 'lodash-es'
 import SignupFormBuilder from '~/components/admin/SignupFormBuilder.vue'
+import useFormData from '~/composables/useFormData'
 
 export default {
   components: {
@@ -207,20 +208,27 @@ export default {
       let contentType = 'application/json'
       const fileSettingsIDs = this.fileSettings.map((s) => { return s.identifier })
       if (fileSettingsIDs.length > 0) {
-        contentType = 'multipart/form-data'
-        postData = new FormData()
-        this.settings.forEach((s) => {
-          if (fileSettingsIDs.indexOf(s.identifier) > -1) {
-            const input = self.$refs[s.identifier][0]
-            const files = input.files
-            console.log('ref', input, files)
-            if (files && files.length > 0) {
-              postData.append(s.identifier, files[0])
+        const data = this.settings.reduce((data, setting) => {
+          if (fileSettingsIDs.includes(setting.identifier)) {
+            const [input] = this.$refs[setting.identifier]
+            const { files } = input
+
+            // TODO (wvffle): Move to the top of setup
+            const logger = useLogger()
+            logger.debug('ref', input, files)
+
+            if (files?.length > 0) {
+              data[s.identifier] = files[0]
             }
           } else {
-            postData.append(s.identifier, self.values[s.identifier])
+            postData.append(s.identifier, this.values[s.identifier])
           }
-        })
+
+          return data
+        }, {})
+
+        contentType = 'multipart/form-data'
+        postData = useFormData(data)
       }
       axios.post('instance/admin/settings/bulk/', postData, {
         headers: {

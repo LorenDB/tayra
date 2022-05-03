@@ -3,7 +3,7 @@ import $ from 'jquery'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { computed, onBeforeUnmount, ref, watchEffect } from 'vue'
 import { useVModel } from '@vueuse/core'
-import { useStore } from 'vuex'
+import { useStore } from '~/store'
 
 interface Props {
   show: boolean

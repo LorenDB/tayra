@@ -1,17 +1,40 @@
 import axios from 'axios'
-import { getClientOnlyRadio } from '~/radios'
+import { CLIENT_RADIOS } from '~/utils/clientRadios'
 import useLogger from '~/composables/useLogger'
+import { Dispatch, Module } from 'vuex'
+import { RootState } from '~/store/index'
+
+export interface State {
+  current: null | CurrentRadio
+  running: boolean
+}
+
+export interface CurrentRadio {
+  clientOnly: boolean
+  session: null
+  type: 'account'
+  objectId: {
+    username: string
+    fullUsername: string
+  }
+}
+
+export interface PopulateQueuePayload {
+  current: CurrentRadio
+  playNow: boolean
+  dispatch: Dispatch
+}
 
 const logger = useLogger()
 
-export default {
+const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     current: null,
     running: false
   },
   getters: {
-    types: state => {
+    types: () => {
       return {
         'actor-content': {
           name: 'Your content',
@@ -39,7 +62,7 @@ export default {
   mutations: {
     reset (state) {
       state.running = false
-      state.current = false
+      state.current = null
     },
     current: (state, value) => {
       state.current = value
@@ -67,13 +90,13 @@ export default {
         commit('current', { type, objectId, session: response.data.id, customRadioId })
         commit('running', true)
         dispatch('populateQueue', true)
-      }, (response) => {
+      }, () => {
         logger.error('Error while starting radio', type)
       })
     },
     stop ({ commit, state }) {
-      if (state.current && state.current.clientOnly) {
-        getClientOnlyRadio(state.current).stop()
+      if (state.current?.clientOnly) {
+        CLIENT_RADIOS[state.current.type].stop()
       }
       commit('current', null)
       commit('running', false)
@@ -82,15 +105,17 @@ export default {
       if (!state.running) {
         return
       }
+
       if (rootState.player.errorCount >= rootState.player.maxConsecutiveErrors - 1) {
         return
       }
-      const params = {
-        session: state.current.session
+
+      const params = { session: state.current?.session }
+
+      if (state.current?.clientOnly) {
+        return CLIENT_RADIOS[state.current.type].populateQueue({ current: state.current, dispatch, playNow })
       }
-      if (state.current.clientOnly) {
-        return getClientOnlyRadio(state.current).populateQueue({ current: state.current, dispatch, state, rootState, playNow })
-      }
+
       return axios.post('radios/tracks/', params).then((response) => {
         logger.info('Adding track to queue from radio')
         const append = dispatch('queue/append', { track: response.data.track }, { root: true })
@@ -107,3 +132,5 @@ export default {
   }
 
 }
+
+export default store

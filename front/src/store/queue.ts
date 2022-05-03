@@ -1,9 +1,18 @@
 import { shuffle } from 'lodash-es'
 import useLogger from '~/composables/useLogger'
+import { Module } from 'vuex'
+import { RootState } from '~/store/index'
+import { Track } from '~/types'
+
+export interface State {
+  tracks: Track[]
+  currentIndex: number
+  ended: boolean
+}
 
 const logger = useLogger()
 
-export default {
+const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     tracks: [],
@@ -12,7 +21,7 @@ export default {
   },
   mutations: {
     reset (state) {
-      state.tracks = []
+      state.tracks.length = 0
       state.currentIndex = -1
       state.ended = true
     },
@@ -62,7 +71,7 @@ export default {
     isEmpty: state => state.tracks.length === 0
   },
   actions: {
-    append ({ commit, state, dispatch }, { track, index }) {
+    append ({ commit, state }, { track, index }) {
       index = index || state.tracks.length
       if (index > state.tracks.length - 1) {
         // we simply push to the end
@@ -73,26 +82,28 @@ export default {
       }
     },
 
-    appendMany ({ state, commit, dispatch }, { tracks, index, callback }) {
-      logger.info('Appending many tracks to the queue', tracks.map(e => { return e.title }))
+    appendMany ({ state, dispatch }, { tracks, index, callback }) {
+      logger.info('Appending many tracks to the queue', tracks.map((track: Track) => track.title))
       let shouldPlay = false
+
       if (state.tracks.length === 0) {
         index = 0
         shouldPlay = true
       } else {
-        index = index || state.tracks.length
+        index = index ?? state.tracks.length
       }
+
       const total = tracks.length
-      tracks.forEach((t, i) => {
-        const p = dispatch('append', { track: t, index: index })
+      tracks.forEach((track: Track, i: number) => {
+        const promise = dispatch('append', { track: track, index: index })
         index += 1
+
         if (callback && i + 1 === total) {
-          p.then(callback)
+          promise.then(callback)
         }
-        if (shouldPlay && p && i + 1 === total) {
-          p.then(() => {
-            dispatch('next')
-          })
+
+        if (shouldPlay && promise && i + 1 === total) {
+          promise.then(() => dispatch('next'))
         }
       })
     },
@@ -163,7 +174,7 @@ export default {
     async shuffle ({ dispatch, state }, callback) {
       const shuffled = shuffle(state.tracks)
       state.tracks.length = 0
-      const params = { tracks: shuffled }
+      const params: { tracks: Track[], callback?: () => unknown } = { tracks: shuffled }
       if (callback) {
         params.callback = callback
       }
@@ -172,3 +183,5 @@ export default {
     }
   }
 }
+
+export default store

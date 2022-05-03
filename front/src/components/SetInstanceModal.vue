@@ -140,7 +140,7 @@ export default {
         instances.push(serverUrl)
       }
       const self = this
-      instances.push(this.$store.getters['instance/defaultUrl'](), 'https://demo.funkwhale.audio/')
+      instances.push(location.origin, 'https://demo.funkwhale.audio/')
       return uniq(instances.filter((e) => { return e !== self.$store.state.instance.instanceUrl }))
     },
     instanceHostname () {

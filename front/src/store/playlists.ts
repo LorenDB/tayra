@@ -1,6 +1,14 @@
 import axios from 'axios'
+import { Module } from 'vuex'
+import { RootState } from '~/store/index'
 
-export default {
+export interface State {
+  playlists: any[]
+  showModal: boolean
+  modalTrack: null
+}
+
+const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     playlists: [],
@@ -26,18 +34,20 @@ export default {
   },
   actions: {
     async fetchOwn ({ commit, rootState }) {
-      const userId = rootState.auth.profile.id
-      if (!userId) {
-        return
-      }
-      let playlists = []
+      const userId = rootState.auth.profile?.id
+      if (!userId) return
+
+      const playlists = []
       let url = 'playlists/'
       while (url != null) {
         const response = await axios.get(url, { params: { scope: 'me' } })
-        playlists = [...playlists, ...response.data.results]
+        playlists.push(...response.data.results)
         url = response.data.next
       }
+
       commit('playlists', playlists)
     }
   }
 }
+
+export default store

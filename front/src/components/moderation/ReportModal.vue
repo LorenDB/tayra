@@ -155,10 +155,11 @@
 
 <script>
 import axios from 'axios'
-import { mapState, useStore } from 'vuex'
+import { mapState } from 'vuex'
 import { computed } from 'vue'
 import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
 import Modal from '~/components/semantic/Modal.vue'
+import { useStore } from '~/store'
 
 function urlDomain (data) {
   const a = document.createElement('a')

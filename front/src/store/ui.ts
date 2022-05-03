@@ -1,7 +1,66 @@
 import axios from 'axios'
 import moment from 'moment'
+import { Module } from 'vuex'
+import { RootState } from '~/store/index'
+import { availableLanguages } from '~/init/locale'
 
-export default {
+type SupportedExtension = 'flac' | 'ogg' | 'mp3' | 'opus' | 'aac' | 'm4a' | 'aiff' | 'aif'
+
+type RouteWithPreferences = 'library.artists.browse' | 'library.podcasts.browse' | 'library.radios.browse'
+  | 'library.playlists.browse' | 'library.albums.me' | 'library.artists.me' | 'library.radios.me'
+  | 'library.playlists.me' | 'content.libraries.files' | 'library.detail.upload' | 'library.detail.edit'
+  | 'library.detail' | 'favorites' | 'manage.channels' | 'manage.library.tags' | 'manage.library.uploads'
+  | 'manage.library.libraries' | 'manage.library.tracks' | 'manage.library.albums' | 'manage.library.artists'
+  | 'manage.library.edits' | 'manage.users.users.list' | 'manage.users.invitations.list'
+  | 'manage.moderation.accounts.list' | 'manage.moderation.domains.list' | 'manage.moderation.requests.list'
+  | 'manage.moderation.reports.list' | 'library.albums.browse'
+
+export type WebSocketEventName = 'inbox.item_added' | 'import.status_updated' | 'mutation.created' | 'mutation.updated'
+  | 'report.created' | 'user_request.created' | 'Listen'
+
+type Ordering = 'creation_date'
+type OrderingDirection = '-'
+interface RoutePreferences {
+  paginateBy: number
+  orderingDirection: OrderingDirection
+  ordering: Ordering
+}
+
+interface WebSocketEvent {
+  type: WebSocketEventName
+}
+
+type WebSocketHandlers = Record<string, (event: WebSocketEvent) => void>
+
+interface Message {
+  displayTime: number
+  key: string
+}
+
+type NotificationsKey = 'inbox' | 'pendingReviewEdits' | 'pendingReviewReports' | 'pendingReviewRequests'
+
+export interface State {
+  currentLanguage: 'en_US' | keyof typeof availableLanguages
+  selectedLanguage: boolean
+  queueFocused: null
+  momentLocale: 'en'
+  lastDate: Date
+  maxMessages: number
+  messageDisplayDuration: number
+  supportedExtensions: SupportedExtension[]
+  messages: Message[]
+  window: {
+    height: number
+    width: number
+  }
+  pageTitle: null
+
+  notifications: Record<NotificationsKey, number>
+  websocketEventsHandlers: Record<WebSocketEventName, WebSocketHandlers>
+  routePreferences: Record<RouteWithPreferences, RoutePreferences>
+}
+
+const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     currentLanguage: 'en_US',
@@ -214,7 +273,7 @@ export default {
       return count
     },
 
-    windowSize: (state, getters) => {
+    windowSize: (state) => {
       // IMPORTANT: if you modify these breakpoints, also modify the values in
       // style/vendor/_media.scss
       const width = state.window.width
@@ -241,10 +300,10 @@ export default {
     }
   },
   mutations: {
-    addWebsocketEventHandler: (state, { eventName, id, handler }) => {
+    addWebsocketEventHandler: (state, { eventName, id, handler }: { eventName: WebSocketEventName, id: string, handler: () => void}) => {
       state.websocketEventsHandlers[eventName][id] = handler
     },
-    removeWebsocketEventHandler: (state, { eventName, id }) => {
+    removeWebsocketEventHandler: (state, { eventName, id }: { eventName: WebSocketEventName, id: string }) => {
       delete state.websocketEventsHandlers[eventName][id]
     },
     currentLanguage: (state, value) => {
@@ -279,10 +338,10 @@ export default {
     removeMessage (state, key) {
       state.messages.splice(state.messages.findIndex(message => message.key === key), 1)
     },
-    notifications (state, { type, count }) {
+    notifications (state, { type, count }: { type: NotificationsKey, count: number }) {
       state.notifications[type] = count
     },
-    incrementNotifications (state, { type, count, value }) {
+    incrementNotifications (state, { type, count, value }: { type: NotificationsKey, count: number, value: number }) {
       if (value !== undefined) {
         state.notifications[type] = Math.max(0, value)
       } else {
@@ -292,13 +351,13 @@ export default {
     pageTitle: (state, value) => {
       state.pageTitle = value
     },
-    paginateBy: (state, { route, value }) => {
+    paginateBy: (state, { route, value }: { route: RouteWithPreferences, value: number }) => {
       state.routePreferences[route].paginateBy = value
     },
-    ordering: (state, { route, value }) => {
+    ordering: (state, { route, value }: { route: RouteWithPreferences, value: Ordering }) => {
       state.routePreferences[route].ordering = value
     },
-    orderingDirection: (state, { route, value }) => {
+    orderingDirection: (state, { route, value }: { route: RouteWithPreferences, value: OrderingDirection }) => {
       state.routePreferences[route].orderingDirection = value
     },
 
@@ -307,40 +366,41 @@ export default {
     }
   },
   actions: {
-    fetchUnreadNotifications ({ commit }, payload) {
+    fetchUnreadNotifications ({ commit }) {
       axios.get('federation/inbox/', { params: { is_read: false, page_size: 1 } }).then((response) => {
         commit('notifications', { type: 'inbox', count: response.data.count })
       })
     },
-    fetchPendingReviewEdits ({ commit, rootState }, payload) {
+    fetchPendingReviewEdits ({ commit }) {
       axios.get('mutations/', { params: { is_approved: 'null', page_size: 1 } }).then((response) => {
         commit('notifications', { type: 'pendingReviewEdits', count: response.data.count })
       })
     },
-    fetchPendingReviewReports ({ commit, rootState }, payload) {
+    fetchPendingReviewReports ({ commit }) {
       axios.get('manage/moderation/reports/', { params: { is_handled: 'false', page_size: 1 } }).then((response) => {
         commit('notifications', { type: 'pendingReviewReports', count: response.data.count })
       })
     },
-    fetchPendingReviewRequests ({ commit, rootState }, payload) {
+    fetchPendingReviewRequests ({ commit }) {
       axios.get('manage/moderation/requests/', { params: { status: 'pending', page_size: 1 } }).then((response) => {
         commit('notifications', { type: 'pendingReviewRequests', count: response.data.count })
       })
     },
 
-    async currentLanguage ({ state, commit, rootState }, value) {
+    async currentLanguage ({ commit, rootState }, value) {
       commit('currentLanguage', value)
       if (rootState.auth.authenticated) {
         await axios.post('users/settings', { language: value })
       }
     },
 
-    websocketEvent ({ state }, event) {
+    websocketEvent ({ state }, event: WebSocketEvent) {
       const handlers = state.websocketEventsHandlers[event.type]
       console.log('Dispatching websocket event', event, handlers)
       if (!handlers) {
         return
       }
+
       const names = Object.keys(handlers)
       names.forEach((k) => {
         const handler = handlers[k]
@@ -349,3 +409,5 @@ export default {
     }
   }
 }
+
+export default store
