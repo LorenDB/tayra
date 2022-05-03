@@ -13,7 +13,6 @@ export const install: InitModule = ({ store }) => {
     })
 
     watch(() => store.state.auth.authenticated, (authenticated) => {
-      console.log(Math.random())
       if (authenticated) return open()
       close()
     }, { immediate: true })

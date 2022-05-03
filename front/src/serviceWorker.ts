@@ -30,6 +30,7 @@ registerRoute(({ url }) => {
   if (url.pathname.startsWith('/api/v1/listen')) return false
   return url.pathname.startsWith('/api/v1')
 }, new NetworkFirst({
+  cacheName: 'API Routes',
   plugins: [
     // Expire after a week
     new ExpirationPlugin({ maxAgeSeconds: 7 * 24 * 3600 })
