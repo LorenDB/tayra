@@ -8,7 +8,7 @@ export const install: InitModule = ({ store }) => {
       .replace(/^http/, 'ws')
 
     const { data, status, open, close } = useWebSocket(url, {
-      autoReconnect: true,
+      autoReconnect: import.meta.env.DEV ? { retries: 3 } : true,
       immediate: false
     })
 
