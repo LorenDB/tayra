@@ -41,7 +41,7 @@ uvicorn[standard]~=0.14.0
 gunicorn~=20.1.0
 
 cryptography>=3.3.2
-requests-http-message-signature==0.3.1
+requests-http-message-signatures==0.3.1
 django-cleanup~=5.2.0
 requests~=2.26.0
 pyOpenSSL~=20.0.1
