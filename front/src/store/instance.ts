@@ -9,7 +9,7 @@ export interface State {
     defaultServerUrl: string
     additionalStylesheets: string[] // TODO (wvffle): Ensure it's not nullable
   }
-  instanceUrl: string
+  instanceUrl?: string
   knownInstances: string[]
   nodeinfo: unknown | null // TODO (wvffle): Get nodeinfo type from swagger automatically
   settings: Settings
@@ -132,7 +132,7 @@ const store: Module<State, RootState> = {
   getters: {
     absoluteUrl: (state) => (relativeUrl: string) => {
       if (relativeUrl.startsWith('http')) return relativeUrl
-      if (state.instanceUrl.endsWith('/') && relativeUrl.startsWith('/')) {
+      if (state.instanceUrl?.endsWith('/') && relativeUrl.startsWith('/')) {
         relativeUrl = relativeUrl.slice(1)
       }
 
@@ -140,6 +140,8 @@ const store: Module<State, RootState> = {
       return instanceUrl + relativeUrl
     },
     domain: (state) => {
+      if (!state.instanceUrl) return null
+
       const url = state.instanceUrl
       const parser = document.createElement('a')
       parser.href = url
