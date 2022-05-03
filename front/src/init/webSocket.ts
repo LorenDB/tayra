@@ -13,9 +13,10 @@ export const install: InitModule = ({ store }) => {
     })
 
     watch(() => store.state.auth.authenticated, (authenticated) => {
+      console.log(Math.random())
       if (authenticated) return open()
       close()
-    })
+    }, { immediate: true })
 
     whenever(data, () => {
       return store.dispatch('ui/websocketEvent', JSON.parse(data.value))
@@ -24,5 +25,5 @@ export const install: InitModule = ({ store }) => {
     watchEffect(() => {
       console.log('Websocket status:', status.value)
     })
-  })
+  }, { immediate: true })
 }

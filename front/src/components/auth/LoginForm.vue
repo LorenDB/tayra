@@ -29,7 +29,7 @@
         </li>
       </ul>
     </div>
-    <template v-if="document.domain === $store.getters['instance/domain']">
+    <template v-if="domain === $store.getters['instance/domain']">
       <div class="field">
         <label for="username-field">
           <translate translate-context="Content/Login/Input.Label/Noun">Username or e-mail address</translate>
@@ -110,7 +110,8 @@ export default {
         password: ''
       },
       error: '',
-      isLoading: false
+      isLoading: false,
+      domain: document.domain
     }
   },
   computed: {

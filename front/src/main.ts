@@ -55,4 +55,5 @@ Promise.all(modules).finally(() => {
 // TODO (wvffle): Find all array watchers and make them deep
 // TODO (wvffle): Migrate to <script setup lang="ts"> and remove allowJs from tsconfig.json
 // TODO (wvffle): Replace `from '(../)+` with `from '~/`
+// TODO (wvffle): Fix props not being available in template in IntelliJ Idea
 // TODO (wvffle): Use navigation guards
