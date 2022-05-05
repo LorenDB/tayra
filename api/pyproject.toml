@@ -50,7 +50,7 @@ Markdown = "==3.3.6"
 bleach = "==4.1.0"
 feedparser = "==6.0.8"
 watchdog = "==2.1.7"
-asgiref = "==3.5.0" #1516
+asgiref = "==3.5.1" #1516
 ipython = "==7.32.0"
 python-ldap = "==3.4.0"
 django-auth-ldap = "==4.0.0"
