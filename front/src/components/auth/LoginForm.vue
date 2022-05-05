@@ -111,7 +111,7 @@ export default {
       },
       error: '',
       isLoading: false,
-      domain: document.domain
+      domain: location.hostname
     }
   },
   computed: {
@@ -134,7 +134,7 @@ export default {
   },
   methods: {
     async submit () {
-      if (document.domain === this.$store.getters['instance/domain']) {
+      if (location.hostname === this.$store.getters['instance/domain']) {
         return await this.submitSession()
       } else {
         this.isLoading = true

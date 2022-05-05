@@ -139,14 +139,7 @@ const store: Module<State, RootState> = {
       const instanceUrl = state.instanceUrl ?? location.origin
       return instanceUrl + relativeUrl
     },
-    domain: (state) => {
-      if (!state.instanceUrl) return null
-
-      const url = state.instanceUrl
-      const parser = document.createElement('a')
-      parser.href = url
-      return parser.hostname
-    },
+    domain: (state) => new URL(state.instanceUrl ?? location.origin).hostname,
     appDomain: () => location.hostname
   },
   actions: {
