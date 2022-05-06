@@ -139,8 +139,7 @@ const store: Module<State, RootState> = {
       const instanceUrl = state.instanceUrl ?? location.origin
       return instanceUrl + relativeUrl
     },
-    domain: (state) => new URL(state.instanceUrl ?? location.origin).hostname,
-    appDomain: () => location.hostname
+    domain: (state) => new URL(state.instanceUrl ?? location.origin).hostname
   },
   actions: {
     setUrl ({ commit }, url) {
