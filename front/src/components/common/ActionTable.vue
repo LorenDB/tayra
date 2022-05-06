@@ -196,6 +196,7 @@
         <tr>
           <th v-if="actions.length > 0">
             <div class="ui checkbox">
+              <!-- TODO (wvffle): Check if we don't have to migrate to v-model -->
               <input
                 type="checkbox"
                 :aria-label="labels.selectAllItems"
@@ -217,6 +218,7 @@
             v-if="actions.length > 0"
             class="collapsing"
           >
+            <!-- TODO (wvffle): Check if we don't have to migrate to v-model -->
             <input
               type="checkbox"
               :aria-label="labels.selectItem"

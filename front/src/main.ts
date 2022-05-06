@@ -50,6 +50,7 @@ Promise.all(modules).finally(() => {
   logger.info('Everything loaded!')
 })
 
+// TODO (wvffle): Rename filters from useSharedLabels to filters from backend
 // TODO (wvffle): Check for mixin merging: https://v3-migration.vuejs.org/breaking-changes/data-option.html#mixin-merge-behavior-change=
 // TODO (wvffle): Use emits options: https://v3-migration.vuejs.org/breaking-changes/emits-option.html
 // TODO (wvffle): Find all array watchers and make them deep

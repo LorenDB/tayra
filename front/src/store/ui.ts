@@ -6,7 +6,7 @@ import { availableLanguages } from '~/init/locale'
 
 type SupportedExtension = 'flac' | 'ogg' | 'mp3' | 'opus' | 'aac' | 'm4a' | 'aiff' | 'aif'
 
-type RouteWithPreferences = 'library.artists.browse' | 'library.podcasts.browse' | 'library.radios.browse'
+export type RouteWithPreferences = 'library.artists.browse' | 'library.podcasts.browse' | 'library.radios.browse'
   | 'library.playlists.browse' | 'library.albums.me' | 'library.artists.me' | 'library.radios.me'
   | 'library.playlists.me' | 'content.libraries.files' | 'library.detail.upload' | 'library.detail.edit'
   | 'library.detail' | 'favorites' | 'manage.channels' | 'manage.library.tags' | 'manage.library.uploads'
@@ -18,12 +18,12 @@ type RouteWithPreferences = 'library.artists.browse' | 'library.podcasts.browse'
 export type WebSocketEventName = 'inbox.item_added' | 'import.status_updated' | 'mutation.created' | 'mutation.updated'
   | 'report.created' | 'user_request.created' | 'Listen'
 
-type Ordering = 'creation_date'
-type OrderingDirection = '-'
+export type OrderingField = 'creation_date' | 'title' | 'album__title' | 'artist__name'
+export type OrderingDirection = '-' | '+'
 interface RoutePreferences {
   paginateBy: number
   orderingDirection: OrderingDirection
-  ordering: Ordering
+  ordering: OrderingField
 }
 
 interface WebSocketEvent {
@@ -351,16 +351,6 @@ const store: Module<State, RootState> = {
     pageTitle: (state, value) => {
       state.pageTitle = value
     },
-    paginateBy: (state, { route, value }: { route: RouteWithPreferences, value: number }) => {
-      state.routePreferences[route].paginateBy = value
-    },
-    ordering: (state, { route, value }: { route: RouteWithPreferences, value: Ordering }) => {
-      state.routePreferences[route].ordering = value
-    },
-    orderingDirection: (state, { route, value }: { route: RouteWithPreferences, value: OrderingDirection }) => {
-      state.routePreferences[route].orderingDirection = value
-    },
-
     window: (state, value) => {
       state.window = value
     }
