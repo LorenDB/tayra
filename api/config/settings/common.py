@@ -470,11 +470,11 @@ it's safe to disable it.
 """
 AWS_DEFAULT_ACL = env("AWS_DEFAULT_ACL", default=None)
 """
-The default ACL to use when uploading files to an S3-compatible object storage 
-bucket.  
+The default ACL to use when uploading files to an S3-compatible object storage
+bucket.
 
-ACLs and bucket policies are distinct concepts, and some storage 
-providers (ie Linode, Scaleway) will always apply the most restrictive between 
+ACLs and bucket policies are distinct concepts, and some storage
+providers (ie Linode, Scaleway) will always apply the most restrictive between
 a bucket's ACL and policy, meaning a default private ACL will supercede
 a relaxed bucket policy.
 
