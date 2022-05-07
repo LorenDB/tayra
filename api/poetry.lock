@@ -649,7 +649,7 @@ Django = ">=2.2"
 
 [[package]]
 name = "django-coverage-plugin"
-version = "2.0.2"
+version = "2.0.3"
 description = "Django template coverage.py plugin"
 category = "dev"
 optional = false
@@ -2114,7 +2114,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "23bcb3113a208e5838ea6c5c26896988b2c4c7e82ad53ac1c09a0f29b604c998"
+content-hash = "28f9c98a6fc596f0ca3c38f8cc8e801c06f8dd5b94f9c0e3724d4e45bcac193e"
 
 [metadata.files]
 aiohttp = [
@@ -2504,8 +2504,8 @@ django-cors-headers = [
     {file = "django_cors_headers-3.11.0-py3-none-any.whl", hash = "sha256:a22be2befd4069c4fc174f11cf067351df5c061a3a5f94a01650b4e928b0372b"},
 ]
 django-coverage-plugin = [
-    {file = "django_coverage_plugin-2.0.2-py3-none-any.whl", hash = "sha256:4206c85ffba0301f83aecc38e5b01b1b9a4b45a545d9456a827e3fabea18d952"},
-    {file = "django_coverage_plugin-2.0.2.tar.gz", hash = "sha256:e91e3a0c8de2b3766a144cdd30dbbf7a79e5c532a5dcc1373ce7eaad83b358b3"},
+    {file = "django_coverage_plugin-2.0.3-py3-none-any.whl", hash = "sha256:fd888f2ff41e3410a004d799b198cf8b19694d692a2d2264e8c944b9321bedc3"},
+    {file = "django_coverage_plugin-2.0.3.tar.gz", hash = "sha256:e73231e3bfddb2ac836fd43cb0e6ec2ab3a97457b1d9ca2468085e506beb7935"},
 ]
 django-debug-toolbar = [
     {file = "django-debug-toolbar-3.2.4.tar.gz", hash = "sha256:644bbd5c428d3283aa9115722471769cac1bec189edf3a0c855fd8ff870375a9"},
