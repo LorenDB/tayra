@@ -468,7 +468,19 @@ It's recommended to keep this on, as a way to enforce access control, however,
 if you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH`,
 it's safe to disable it.
 """
-AWS_DEFAULT_ACL = None
+AWS_DEFAULT_ACL = env("AWS_DEFAULT_ACL", default=None)
+"""
+The default ACL to use when uploading files to an S3-compatible object storage 
+bucket.  
+
+ACLs and bucket policies are distinct concepts, and some storage 
+providers (ie Linode, Scaleway) will always apply the most restrictive between 
+a bucket's ACL and policy, meaning a default private ACL will supercede
+a relaxed bucket policy.
+
+If present, the value should be a valid canned ACL.
+See: https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl
+"""
 AWS_QUERYSTRING_AUTH = env.bool("AWS_QUERYSTRING_AUTH", default=not PROXY_MEDIA)
 """
 Whether to include signatures in S3 urls, as a way to enforce access-control.
