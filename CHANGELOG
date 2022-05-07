@@ -10,6 +10,58 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.2.5 (2022-05-07)
+------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Enhancements:
+
+- Parameterize the default S3 ACL when uploading objects. (#1319)
+
+
+Bugfixes:
+
+- Fix stopped player to not show 00:00 when loading a track (#1432)
+- Fixes channel page (#1729) (1729)
+
+Committers:
+
+- Georg Krause
+- Marcos
+- MattDHarding
+- Stuart Begley-Miller
+
+Contributors to our Issues:
+
+- Agate
+- Beto Dealmeida
+- Cam Sweeney
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Marcos Peña
+- Mathieu Jourdan
+- MattDHarding
+- Micha Gläß-Stöcker
+- Stuart Begley-Miller
+- Tony Wasserka
+- jovuit
+- petitminion
+- pullopen
+
+Contributors to our Merge Requests:
+
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Marcos Peña
+- MattDHarding
+- PhieF
+- Stuart Begley-Miller
+- petitminion
+
 1.2.4 (2022-04-23)
 ------------------
 
