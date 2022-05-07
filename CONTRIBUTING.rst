@@ -764,13 +764,13 @@ To make a new 3.4 release::
     git pull
 
     # compile changelog
-    towncrier --version $NEXT_RELEASE --yes
+    towncrier build --version $NEXT_RELEASE
 
     # polish changelog
     # - update the date
     # - look for typos
     # - add list of contributors via `python3 scripts/get-contributions-stats.py $NEXT_RELEASE`
-    git log $PREVIOUS_RELEASE.. --format="%aN" --reverse | sort | uniq  # Get all commit authors since last release
+    git log $PREVIOUS_RELEASE.. --format="- %aN" --reverse | sort | uniq  # Get all commit authors since last release
     nano CHANGELOG
 
     # Set the `__version__` variable to $NEXT_RELEASE

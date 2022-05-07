@@ -126,7 +126,7 @@ export default {
       return parser.hostname
     },
     appDomain: (state) => {
-      return document.domain
+      return location.hostname
     }
   },
   actions: {

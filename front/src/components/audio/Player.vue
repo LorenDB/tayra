@@ -189,9 +189,6 @@
               >{{ currentTimeFormatted }}</span>
               | <span class="total">{{ durationFormatted }}</span>
             </template>
-            <template v-else>
-              00:00 | 00:00
-            </template>
           </div>
         </div>
         <div class="controls queue-controls when-queue-focused align-right">
