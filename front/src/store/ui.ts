@@ -18,7 +18,7 @@ export type RouteWithPreferences = 'library.artists.browse' | 'library.podcasts.
 export type WebSocketEventName = 'inbox.item_added' | 'import.status_updated' | 'mutation.created' | 'mutation.updated'
   | 'report.created' | 'user_request.created' | 'Listen'
 
-export type OrderingField = 'creation_date' | 'title' | 'album__title' | 'artist__name'
+export type OrderingField = 'creation_date' | 'title' | 'album__title' | 'artist__name' | 'release_date'
 export type OrderingDirection = '-' | '+'
 interface RoutePreferences {
   paginateBy: number

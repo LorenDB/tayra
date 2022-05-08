@@ -55,9 +55,6 @@ const store: Module<State, RootState> = {
     empty (state) {
       state.filters = []
     },
-    lastUpdate (state, value) {
-      state.lastUpdate = value
-    },
     contentFilter (state, value) {
       state.filters.push(value)
     },

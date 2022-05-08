@@ -143,7 +143,7 @@ import $ from 'jquery'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import PaginationMixin from '~/components/mixins/Pagination.vue'
 import PlaylistCardList from '~/components/playlists/CardList.vue'
-import Pagination from '~/components/Pagination.vue'
+import Pagination from '~/components/vui/Pagination.vue'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 const FETCH_URL = 'playlists/'

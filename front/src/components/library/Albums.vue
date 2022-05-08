@@ -1,3 +1,124 @@
+<script setup lang="ts">
+import qs from 'qs'
+import axios from 'axios'
+import $ from 'jquery'
+import { onBeforeRouteUpdate, useRouter } from 'vue-router'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { OrderingField, RouteWithPreferences } from '~/store/ui'
+
+import AlbumCard from '~/components/audio/album/Card.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+import TagsSelector from '~/components/library/TagsSelector.vue'
+import useLogger from '~/composables/useLogger'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering from '~/composables/useOrdering'
+import { useStore } from '~/store'
+
+interface Props {
+  orderingConfigName: RouteWithPreferences | null
+  defaultPage?: number
+  defaultPaginateBy?: number
+  defaultQuery?: string
+  defaultTags?: string[]
+  scope?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultPage: 1,
+  defaultPaginateBy: 1,
+  defaultQuery: '',
+  defaultTags: () => [],
+  scope: 'all'
+})
+
+// TODO (wvffle): Make sure everything is it's own type
+const page = ref(+props.defaultPage)
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+const query = ref('')
+const tags = reactive(props.defaultTags.slice())
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['title', 'album_title'],
+  ['release_date', 'release_date']
+]
+
+const logger = useLogger()
+
+const sharedLabels = useSharedLabels()
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+
+const router = useRouter()
+const updateQueryString = () => router.replace({
+  query: {
+    query: query.value,
+    page: page.value,
+    tag: tags,
+    paginateBy: paginateBy.value,
+    ordering: orderingString.value
+  }
+})
+
+const search = () => {
+  page.value = 1
+  updateQueryString()
+}
+
+watch(page, updateQueryString)
+onOrderingUpdate(updateQueryString)
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    scope: props.scope,
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    playable: 'true',
+    tag: tags,
+    include_channels: 'true',
+    content_category: 'music'
+  }
+
+  logger.time('Fetching albums')
+  try {
+    const response = await axios.get('albums/', {
+      params,
+      paramsSerializer: function (params) {
+        return qs.stringify(params, { indices: false })
+      }
+    })
+
+    result.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+    result.value = null
+  } finally {
+    logger.timeEnd('Fetching albums')
+    isLoading.value = false
+  }
+}
+
+const store = useStore()
+watch(store.state.moderation.lastUpdate, fetchData)
+onBeforeRouteUpdate(fetchData)
+fetchData()
+
+// @ts-expect-error semantic ui
+onMounted(() => $('.ui.dropdown').dropdown())
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Enter album title…'),
+  title: $pgettext('*/*/*', 'Albums')
+}))
+</script>
+
 <template>
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
@@ -8,7 +129,7 @@
       </h2>
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
-        @submit.prevent="updatePage();updateQueryString();fetchData()"
+        @submit.prevent="search"
       >
         <div class="fields">
           <div class="field">
@@ -78,13 +199,13 @@
               v-model="paginateBy"
               class="ui dropdown"
             >
-              <option :value="parseInt(12)">
+              <option :value="12">
                 12
               </option>
-              <option :value="parseInt(25)">
+              <option :value="25">
                 25
               </option>
-              <option :value="parseInt(50)">
+              <option :value="50">
                 50
               </option>
             </select>
@@ -136,137 +257,11 @@
       <div class="ui center aligned basic segment">
         <pagination
           v-if="result && result.count > paginateBy"
-          :current="page"
+          v-model:current="page"
           :paginate-by="paginateBy"
           :total="result.count"
-          @page-changed="selectPage"
         />
       </div>
     </section>
   </main>
 </template>
-
-<script>
-import qs from 'qs'
-import axios from 'axios'
-import $ from 'jquery'
-
-import OrderingMixin from '~/components/mixins/Ordering.vue'
-import PaginationMixin from '~/components/mixins/Pagination.vue'
-import AlbumCard from '~/components/audio/album/Card.vue'
-import Pagination from '~/components/Pagination.vue'
-import TagsSelector from '~/components/library/TagsSelector.vue'
-import useLogger from '~/composables/useLogger'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-const logger = useLogger()
-
-const FETCH_URL = 'albums/'
-
-export default {
-  components: {
-    AlbumCard,
-    Pagination,
-    TagsSelector
-  },
-  mixins: [OrderingMixin, PaginationMixin],
-  props: {
-    defaultQuery: { type: String, required: false, default: '' },
-    defaultTags: { type: Array, required: false, default: () => { return [] } },
-    scope: { type: String, required: false, default: 'all' }
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels }
-  },
-  data () {
-    return {
-      isLoading: true,
-      result: null,
-      page: parseInt(this.defaultPage),
-      query: this.defaultQuery,
-      tags: (this.defaultTags || []).filter((t) => { return t.length > 0 }),
-      orderingOptions: [['creation_date', 'creation_date'], ['title', 'album_title'], ['release_date', 'release_date']]
-    }
-  },
-  computed: {
-    labels () {
-      const searchPlaceholder = this.$pgettext('Content/Search/Input.Placeholder', 'Enter album title…')
-      const title = this.$pgettext('*/*/*', 'Albums')
-      return {
-        searchPlaceholder,
-        title
-      }
-    }
-  },
-  watch: {
-    page () {
-      this.updateQueryString()
-      this.fetchData()
-    },
-    '$store.state.moderation.lastUpdate': function () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  mounted () {
-    $('.ui.dropdown').dropdown()
-  },
-  methods: {
-    updateQueryString: function () {
-      history.pushState(
-        {},
-        null,
-        this.$route.path + '?' + new URLSearchParams(
-          {
-            query: this.query,
-            page: this.page,
-            tag: this.tags,
-            paginateBy: this.paginateBy,
-            ordering: this.getOrderingAsString()
-          }).toString()
-      )
-    },
-    fetchData: function () {
-      const self = this
-      this.isLoading = true
-      const url = FETCH_URL
-      const params = {
-        scope: this.scope,
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.query,
-        ordering: this.getOrderingAsString(),
-        playable: 'true',
-        tag: this.tags,
-        include_channels: 'true',
-        content_category: 'music'
-      }
-      logger.debug('Fetching albums')
-      axios.get(
-        url,
-        {
-          params: params,
-          paramsSerializer: function (params) {
-            return qs.stringify(params, { indices: false })
-          }
-        }
-      ).then(response => {
-        self.result = response.data
-        self.isLoading = false
-      }, () => {
-        self.result = null
-        self.isLoading = false
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    },
-    updatePage () {
-      this.page = this.defaultPage
-    }
-  }
-}
-</script>

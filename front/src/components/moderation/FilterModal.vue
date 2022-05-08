@@ -138,7 +138,7 @@ export default {
       return axios.post('moderation/content-filters/', payload).then(response => {
         logger.info('Successfully added track to playlist')
         self.update(false)
-        self.$store.commit('moderation/lastUpdate', new Date())
+        self.$store.moderation.state.lastUpdate = new Date()
         self.isLoading = false
         const msg = this.$pgettext('*/Moderation/Message', 'Content filter successfully added')
         self.$store.commit('moderation/contentFilter', response.data)

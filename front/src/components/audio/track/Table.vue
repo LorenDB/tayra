@@ -158,7 +158,7 @@ import { clone, uniqBy } from 'lodash-es'
 import axios from 'axios'
 import TrackRow from '~/components/audio/track/Row.vue'
 import TrackMobileRow from '~/components/audio/track/MobileRow.vue'
-import Pagination from '~/components/Pagination.vue'
+import Pagination from '~/components/vui/Pagination.vue'
 
 export default {
   components: {

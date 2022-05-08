@@ -133,7 +133,7 @@
 import axios from 'axios'
 import { uniq, merge } from 'lodash-es'
 import time from '~/utils/time'
-import Pagination from '~/components/Pagination.vue'
+import Pagination from '~/components/vui/Pagination.vue'
 import OrderingMixin from '~/components/mixins/Ordering.vue'
 import EditCard from '~/components/library/EditCard.vue'
 import { normalizeQuery, parseTokens } from '~/utils/search'

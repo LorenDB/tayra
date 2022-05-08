@@ -23,13 +23,11 @@ const current = useVModel(props, 'current', emit)
 const RANGE = 2
 const pages = computed(() => {
   const start = range(1, 1 + RANGE)
-  const end = range(maxPage.value - RANGE, maxPage.value)
+  const end = range(maxPage.value - RANGE + 1, maxPage.value + 1)
   const middle = range(
     clamp(props.current - RANGE + 1, 1, maxPage.value),
     clamp(props.current + RANGE, 1, maxPage.value)
   ).filter(i => !start.includes(i) && !end.includes(i))
-
-  console.log(middle, end)
 
   return [
     ...start,
@@ -80,16 +78,26 @@ const labels = computed(() => ({
     </a>
 
     <template v-if="!compact">
-      <a
+      <template
         v-for="page in pages"
         :key="page"
-        href="#"
-        :class="[{ active: page === current, disabled: page === 'skip' }, 'item']"
-        @click.prevent.stop="page !== 'skip' && setPage(page)"
       >
-        <span v-if="page !== 'skip'">{{ page }}</span>
-        <span v-else>…</span>
-      </a>
+        <a
+          v-if="page === 'skip'"
+          href="#"
+          class="item disabled"
+        >
+          <span>…</span>
+        </a>
+        <a
+          v-else
+          href="#"
+          :class="[{ active: page === current }, 'item']"
+          @click.prevent.stop="setPage(page as number)"
+        >
+          <span>{{ page }}</span>
+        </a>
+      </template>
     </template>
 
     <a

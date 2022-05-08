@@ -162,7 +162,7 @@ const getAttachmentUrl = (uuid: string) => {
           <button
             v-if="value"
             class="ui basic tiny button"
-            @click.stop.prevent="remove(value)"
+            @click.stop.prevent="remove(value as string)"
           >
             <translate translate-context="Content/Radio/Button.Label/Verb">
               Remove
