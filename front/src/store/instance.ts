@@ -248,12 +248,12 @@ const store: Module<State, RootState> = {
       const response = await axios.get('instance/settings/')
         .catch(err => logger.error('Error while fetching settings', err.response.data))
 
-      if (!response) return
+      if (!Array.isArray(response?.data)) return
 
       logger.info('Successfully fetched instance settings')
 
       type SettingsSection = { section: string, name: string }
-      const sections = response.data.reduce((map: Record<string, Record<string, SettingsSection>>, entry: SettingsSection) => {
+      const sections = response?.data.reduce((map: Record<string, Record<string, SettingsSection>>, entry: SettingsSection) => {
         map[entry.section] ??= {}
         map[entry.section][entry.name] = entry
         return map

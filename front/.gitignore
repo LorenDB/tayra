@@ -22,3 +22,6 @@ yarn-error.log*
 
 # Bundle anayzer
 stats.html
+
+cypress/screenshots
+cypress/videos

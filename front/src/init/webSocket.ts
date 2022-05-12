@@ -7,7 +7,7 @@ import { CLIENT_RADIOS } from '~/utils/clientRadios'
 
 export const install: InitModule = ({ store }) => {
   watch(() => store.state.instance.instanceUrl, () => {
-    const url = store.getters['instance/absoluteUrl']('api/v1/activity')
+    const url = store.getters['instance/absoluteUrl']('/api/v1/activity')
       .replace(/^http/, 'ws')
 
     const { data, status, open, close } = useWebSocket(url, {
