@@ -836,6 +836,11 @@ CELERY_BEAT_SCHEDULE = {
         ),
         "options": {"expires": 60 * 60},
     },
+    "music.library.schedule_remote_scan": {
+        "task": "music.library.schedule_scan",
+        "schedule": crontab(day_of_week="1", minute="0", hour="2"),
+        "options": {"expires": 60 * 60 * 24},
+    },
 }
 
 if env.bool("ADD_ALBUM_TAGS_FROM_TRACKS", default=True):

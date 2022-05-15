@@ -79,6 +79,19 @@ def get_cover_from_fs(dir_path):
                     return {"mimetype": m, "content": c.read()}
 
 
+@celery.app.task(name="music.library.schedule_remote_scan")
+def schedule_scan_for_all_remote_libraries():
+    from funkwhale_api.federation import actors
+
+    libraries = models.Library.objects.all().prefetch_related()
+    actor = actors.get_service_actor()
+
+    for library in libraries:
+        if library.actor.is_local:
+            continue
+        library.schedule_scan(actor)
+
+
 @celery.app.task(name="music.start_library_scan")
 @celery.require_instance(
     models.LibraryScan.objects.select_related().filter(status="pending"), "library_scan"
@@ -90,6 +103,10 @@ def start_library_scan(library_scan):
         library_scan.status = "errored"
         library_scan.save(update_fields=["status", "modification_date"])
         raise
+    if "errors" in data.keys():
+        library_scan.status = "errored"
+        library_scan.save(update_fields=["status", "modification_date"])
+        raise Exception("Error from remote server : " + str(data))
     library_scan.modification_date = timezone.now()
     library_scan.status = "scanning"
     library_scan.total_files = data["totalItems"]
