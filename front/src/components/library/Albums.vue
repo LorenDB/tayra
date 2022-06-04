@@ -36,7 +36,7 @@ const props = withDefaults(defineProps<Props>(), {
 const page = ref(+props.defaultPage)
 type ResponseType = { count: number, results: any[] }
 const result = ref<null | ResponseType>(null)
-const query = ref('')
+const query = ref(props.defaultQuery)
 const tags = reactive(props.defaultTags.slice())
 
 const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
@@ -46,7 +46,6 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 ]
 
 const logger = useLogger()
-
 const sharedLabels = useSharedLabels()
 
 const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
@@ -63,7 +62,7 @@ const updateQueryString = () => router.replace({
 })
 
 const search = () => {
-  page.value = 1
+  page.value = props.defaultPage
   updateQueryString()
 }
 

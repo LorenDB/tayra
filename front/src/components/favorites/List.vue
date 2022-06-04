@@ -40,7 +40,6 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 ]
 
 const logger = useLogger()
-
 const sharedLabels = useSharedLabels()
 
 const router = useRouter()
