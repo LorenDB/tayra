@@ -184,7 +184,9 @@ test_api:
     when: always
     reports:
       junit: api/report.xml
-      cobertura: api/coverage.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: api/coverage.xml
 
 test_front:
   interruptible: true
