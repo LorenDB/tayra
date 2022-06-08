@@ -188,7 +188,9 @@ test_api:
     when: always
     reports:
       junit: api/report.xml
-      cobertura: api/coverage.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: api/coverage.xml
   parallel:
     matrix:
       - PY_VER: ["3.7", "3.8", "3.9", "3.10"]
