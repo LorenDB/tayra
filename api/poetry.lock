@@ -1642,7 +1642,7 @@ pyasn1_modules = ">=0.1.5"
 
 [[package]]
 name = "python-magic"
-version = "0.4.25"
+version = "0.4.27"
 description = "File type identification using libmagic"
 category = "main"
 optional = false
@@ -2114,7 +2114,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "5ee9252b58c1d99c6e5cf827e808bc4e3e833fda39a9170d927370b70bc7901c"
+content-hash = "1062d92827201dc0c358faf696edfca19fed35332d77fed0aa5991ac9e8d572b"
 
 [metadata.files]
 aiohttp = [
@@ -3203,8 +3203,8 @@ python-ldap = [
     {file = "python-ldap-3.4.0.tar.gz", hash = "sha256:60464c8fc25e71e0fd40449a24eae482dcd0fb7fcf823e7de627a6525b3e0d12"},
 ]
 python-magic = [
-    {file = "python-magic-0.4.25.tar.gz", hash = "sha256:21f5f542aa0330f5c8a64442528542f6215c8e18d2466b399b0d9d39356d83fc"},
-    {file = "python_magic-0.4.25-py2.py3-none-any.whl", hash = "sha256:1a2c81e8f395c744536369790bd75094665e9644110a6623bcc3bbea30f03973"},
+    {file = "python-magic-0.4.27.tar.gz", hash = "sha256:c1ba14b08e4a5f5c31a302b7721239695b2f0f058d125bd5ce1ee36b9d9d3c3b"},
+    {file = "python_magic-0.4.27-py2.py3-none-any.whl", hash = "sha256:c212960ad306f700aa0d01e5d7a325d20548ff97eb9920dcd29513174f0294d3"},
 ]
 python3-openid = [
     {file = "python3-openid-3.2.0.tar.gz", hash = "sha256:33fbf6928f401e0b790151ed2b5290b02545e8775f982485205a066f874aaeaf"},
