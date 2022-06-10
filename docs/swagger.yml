@@ -16,20 +16,20 @@ info:
 
     OAuth Authentication
     --------------------
-      
+
     You can register your own OAuth app using the `/api/v1/oauth/apps/` endpoint. Proceed to the standard OAuth flow afterwards:
-      
+
     - Our authorize URL is at `/authorize`
     - Our token acquisition and refresh URL is at `/api/v1/oauth/token`
     - The list of supported scopes is available by clicking the `Authorize` button in the Swagger UI documentation
     - Use `urn:ietf:wg:oauth:2.0:oob` as your redirect URI if you want the user to get a copy-pastable authorization code
     - At the moment, endpoints that deal with admin or moderator-level content are not accessible via OAuth, only through the Web UI
-    
+
     You can use our demo server at `https://demo.funkwhale.audio` for testing purposes.
-        
+
     Application token authentication
     --------------------------------
-    
+
     If using OAuth isn't practical and you have an account on the Funkwhale pod, you can create an application by visiting `/settings`.
 
     Once the application is created, you can authenticate using its access token in the `Authorization` header, like this: `Authorization: Bearer <token>`. 
@@ -134,6 +134,15 @@ servers:
         default: 'https'
 
 components:
+  responses:
+    200:
+      description: Success
+    201:
+      description: Successfully created
+    204:
+      description: Successfully deleted
+    400:
+      description: Bad request
   securitySchemes:
     oauth2:
       type: oauth2
@@ -210,6 +219,7 @@ paths:
       security: []
       responses:
         201:
+          description: ""
           content:
             application/json:
               schema:
@@ -226,14 +236,14 @@ paths:
                 name:
                   type: "string"
                   example: "My Awesome Funkwhale Client"
-                  summary: "A human readable name for your app"
+                  description: "A human readable name for your app"
                 redirect_uris:
                   type: "string"
                   example: "https://myapp/oauth2/funkwhale"
-                  summary: "A list of redirect uris, separated by spaces"
+                  description: "A list of redirect uris, separated by spaces"
                 scopes:
                   type: "string"
-                  summary: "A list of scopes requested by your app, separated by spaces"
+                  description: "A list of scopes requested by your app, separated by spaces"
                   example: "read write:playlists write:favorites"
   /api/v1/oauth/token/:
     post:
@@ -244,6 +254,7 @@ paths:
       security: []
       responses:
         200:
+          $ref: "#/components/responses/200"
 
   /api/v1/auth/registration/:
     post:
@@ -259,6 +270,11 @@ paths:
           application/json:
             schema:
               type: "object"
+              required:
+                - username
+                - email
+                - password1
+                - password2
               properties:
                 username:
                   type: "string"
@@ -269,7 +285,6 @@ paths:
                 invitation:
                   type: "string"
                   example: "INVITECODE"
-                  required: false
                   description: An invitation code, required if signups are closed on the instance.
                 password1:
                   type: "string"
@@ -280,7 +295,7 @@ paths:
                   example: "passw0rd"
       responses:
         201:
-          $ref: "#/responses/201"
+          $ref: "#/components/responses/201"
   /api/v1/auth/password/reset/:
     post:
       summary: Request a password reset
@@ -301,7 +316,7 @@ paths:
                   format: "email"
       responses:
         200:
-          $ref: "#/responses/200"
+          $ref: "#/components/responses/200"
   /api/v1/users/me/:
     get:
       summary: Retrive profile information
@@ -312,6 +327,7 @@ paths:
 
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -335,6 +351,7 @@ paths:
                   description: "The current password of the account"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -359,6 +376,7 @@ paths:
                   description: "The current password of the account"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -372,6 +390,7 @@ paths:
 
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -384,22 +403,11 @@ paths:
         - "Library and metadata"
       security:
         - oauth2:
-          - "read:libraries"
+            - "read:libraries"
       parameters:
 
         - $ref: "./api/parameters.yml#/Search"
-        - allOf:
-            - $ref: "./api/parameters.yml#/Ordering"
-            - default: "-creation_date"
-              schema:
-                required: false
-                type: "string"
-                example: "creation_date"
-                enum:
-                  - creation_date
-                  - id
-                  - name
-                  - random
+        - $ref: "./api/parameters.yml#/ArtistOrdering"
         - $ref: "./api/parameters.yml#/Playable"
         - $ref: "./api/parameters.yml#/HasAlbums"
         - $ref: "./api/parameters.yml#/Library"
@@ -410,6 +418,7 @@ paths:
         - $ref: "./api/parameters.yml#/ContentCategory"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -429,16 +438,18 @@ paths:
         - $ref: "./api/parameters.yml#/Refresh"
       security:
         - oauth2:
-          - "read:libraries"
+            - "read:libraries"
       tags:
         - "Library and metadata"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
                 $ref: "./api/definitions.yml#/Artist"
         404:
+          description: "Not Found"
           content:
             application/json:
               schema:
@@ -448,7 +459,7 @@ paths:
       summary: List available user libraries containing work from this artist
       security:
         - oauth2:
-          - "read:libraries"
+            - "read:libraries"
       parameters:
         - $ref: "./api/parameters.yml#/ObjectId"
         - $ref: "./api/parameters.yml#/PageNumber"
@@ -458,11 +469,13 @@ paths:
         - "Library and metadata"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
                 $ref: "./api/definitions.yml#/LibraryPage"
         404:
+          description: "Not Found"
           content:
             application/json:
               schema:
@@ -476,30 +489,18 @@ paths:
 
       security:
         - oauth2:
-          - "read:libraries"
+            - "read:libraries"
       parameters:
-
         - $ref: "./api/parameters.yml#/Search"
         - name: "artist"
           in: "query"
-          default: null
+          required: false
           description: "Only include albums by the requested artist"
           schema:
-            required: false
+            nullable: true
             type: "integer"
             format: "int64"
-        - allOf:
-            - $ref: "./api/parameters.yml#/Ordering"
-            - default: "-creation_date"
-              schema:
-                required: false
-                type: "string"
-                example: "creation_date"
-                enum:
-                  - creation_date
-                  - release_date
-                  - title
-                  - random
+        - $ref: "./api/parameters.yml#/AlbumOrdering"
         - $ref: "./api/parameters.yml#/Library"
         - $ref: "./api/parameters.yml#/Playable"
         - $ref: "./api/parameters.yml#/PageNumber"
@@ -510,6 +511,7 @@ paths:
 
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -530,16 +532,18 @@ paths:
 
       security:
         - oauth2:
-          - "read:libraries"
+            - "read:libraries"
       tags:
         - "Library and metadata"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
                 $ref: "./api/definitions.yml#/Album"
         404:
+          description: "Not Found"
           content:
             application/json:
               schema:
@@ -555,16 +559,18 @@ paths:
 
       security:
         - oauth2:
-          - "read:libraries"
+            - "read:libraries"
       tags:
         - "Library and metadata"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
                 $ref: "./api/definitions.yml#/LibraryPage"
         404:
+          description: "Not Found"
           content:
             application/json:
               schema:
@@ -578,53 +584,42 @@ paths:
 
       security:
         - oauth2:
-          - "read:libraries"
+            - "read:libraries"
       parameters:
 
         - $ref: "./api/parameters.yml#/Search"
         - name: "artist"
           in: "query"
-          default: null
+          required: false
           description: "Only include tracks by the requested artist"
           schema:
-            required: false
+            nullable: true
             type: "integer"
             format: "int64"
         - name: "favorites"
           in: "query"
-          default: null
+          required: false
           description: "filter/exclude tracks favorited by the current user"
           schema:
-            required: false
+            nullable: true
             type: "boolean"
         - name: "album"
           in: "query"
-          default: null
+          required: false
           description: "Only include tracks from the requested album"
           schema:
-            required: false
+            nullable: true
             type: "integer"
             format: "int64"
         - name: "license"
           in: "query"
           description: "Only include tracks with the given license"
-          default: null
+          required: false
           schema:
             example: "cc-by-sa-4.0"
-            required: false
+            nullable: true
             type: "string"
-        - allOf:
-            - $ref: "./api/parameters.yml#/Ordering"
-            - default: "-creation_date"
-              schema:
-                required: false
-                type: "string"
-                example: "creation_date"
-                enum:
-                  - creation_date
-                  - release_date
-                  - title
-                  - random
+        - $ref: "./api/parameters.yml#/TrackOrdering"
         - $ref: "./api/parameters.yml#/Library"
         - $ref: "./api/parameters.yml#/Playable"
         - $ref: "./api/parameters.yml#/PageNumber"
@@ -634,6 +629,7 @@ paths:
 
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -654,16 +650,18 @@ paths:
 
       security:
         - oauth2:
-          - "read:libraries"
+            - "read:libraries"
       tags:
         - "Library and metadata"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
                 $ref: "./api/definitions.yml#/Track"
         404:
+          description: "Not Found"
           content:
             application/json:
               schema:
@@ -678,16 +676,18 @@ paths:
         - $ref: "./api/parameters.yml#/PageSize"
       security:
         - oauth2:
-          - "read:libraries"
+            - "read:libraries"
       tags:
         - "Library and metadata"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
                 $ref: "./api/definitions.yml#/LibraryPage"
         404:
+          description: "Not Found"
           content:
             application/json:
               schema:
@@ -727,8 +727,9 @@ paths:
         - name: upload
           in: query
           required: false
-          summary: An upload uuid
           description: |
+            An upload uuid
+
             If specified, will return the audio for the given upload uuid.
 
             This is useful for tracks that have multiple uploads available.
@@ -751,13 +752,15 @@ paths:
         - "Library and metadata"
       responses:
         200:
+          description: ""
           content:
             '*/*':
-              description: "Audio file, as binary data"
               schema:
+                description: "Audio file, as binary data"
                 type: string
                 format: binary
         404:
+          description: "Not Found"
           content:
             application/json:
               schema:
@@ -768,7 +771,7 @@ paths:
       summary: List licenses
       security:
         - oauth2:
-          - "read:libraries"
+            - "read:libraries"
       tags:
         - "Library and metadata"
       parameters:
@@ -776,6 +779,7 @@ paths:
         - $ref: "./api/parameters.yml#/PageSize"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -793,7 +797,7 @@ paths:
       summary: Retrieve a single license
       security:
         - oauth2:
-          - "read:libraries"
+            - "read:libraries"
       parameters:
         - name: code
           in: path
@@ -807,11 +811,13 @@ paths:
         - "Library and metadata"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
                 $ref: "./api/definitions.yml#/License"
         404:
+          description: "Not Found"
           content:
             application/json:
               schema:
@@ -829,6 +835,7 @@ paths:
         - $ref: "./api/parameters.yml#/Scope"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -847,9 +854,9 @@ paths:
         Create a new library
       responses:
         201:
-          $ref: "#/responses/201"
+          $ref: "#/components/responses/201"
         400:
-          $ref: "#/responses/400"
+          $ref: "#/components/responses/400"
       requestBody:
         required: true
         content:
@@ -871,6 +878,7 @@ paths:
         - "Uploads and audio content"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -887,6 +895,7 @@ paths:
               $ref: "./api/definitions.yml#/OwnedLibraryCreate"
       responses:
         201:
+          description: ""
           content:
             application/json:
               schema:
@@ -900,7 +909,7 @@ paths:
         - "Uploads and audio content"
       responses:
         204:
-          $ref: "#/responses/204"
+          $ref: "#/components/responses/204"
 
   /api/v1/channels/:
     get:
@@ -908,17 +917,6 @@ paths:
       tags:
         - "Channels and subscriptions"
       parameters:
-        - allOf:
-            - $ref: "./api/parameters.yml#/Ordering"
-            - default: "-creation_date"
-              schema:
-                required: false
-                type: "string"
-                example: "creation_date"
-                enum:
-                  - creation_date
-                  - modification_date
-                  - random
         - $ref: "./api/parameters.yml#/PageNumber"
         - $ref: "./api/parameters.yml#/PageSize"
         - $ref: "./api/parameters.yml#/Scope"
@@ -930,6 +928,7 @@ paths:
 
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -947,9 +946,9 @@ paths:
         - "Channels and subscriptions"
       responses:
         201:
-          $ref: "#/responses/201"
+          $ref: "#/components/responses/201"
         400:
-          $ref: "#/responses/400"
+          $ref: "#/components/responses/400"
       requestBody:
         required: true
         content:
@@ -959,14 +958,14 @@ paths:
 
   /api/v1/channels/metadata-choices:
     summary: List metadata (locales, itunes categories) for creating and editing channels.
-    tags:
-      - "Channels and subscriptions"
+    description: "Channels and subscriptions"
     get:
       summary: List channels metadata options
       tags:
         - "Channels and subscriptions"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1018,6 +1017,7 @@ paths:
         - "Channels and subscriptions"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1034,6 +1034,7 @@ paths:
               $ref: "./api/definitions.yml#/ChannelUpdate"
       responses:
         201:
+          description: ""
           content:
             application/json:
               schema:
@@ -1047,7 +1048,7 @@ paths:
         - "Channels and subscriptions"
       responses:
         204:
-          $ref: "#/responses/204"
+          $ref: "#/components/responses/204"
 
   /api/v1/channels/rss-suscribe/:
     post:
@@ -1068,6 +1069,7 @@ paths:
         - "Channels and subscriptions"
       responses:
         201:
+          description: ""
           content:
             application/json:
               schema:
@@ -1087,8 +1089,9 @@ paths:
         - "Channels and subscriptions"
       responses:
         200:
+          description: ""
           content:
-            application/rss+xml:
+             application/rss+xml: {}
 
   /api/v1/channels/{uuid}/subscribe/:
     parameters:
@@ -1104,6 +1107,7 @@ paths:
         - "Channels and subscriptions"
       responses:
         201:
+          description: ""
           content:
             application/json:
               schema:
@@ -1123,6 +1127,7 @@ paths:
         - "Channels and subscriptions"
       responses:
         204:
+          $ref: "#/components/responses/204"
 
   /api/v1/uploads/:
     get:
@@ -1137,6 +1142,7 @@ paths:
         - $ref: "./api/parameters.yml#/Scope"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1156,15 +1162,21 @@ paths:
         according to the library visibility and followers.
       responses:
         201:
-          $ref: "#/responses/201"
+          $ref: "#/components/responses/201"
         400:
-          $ref: "#/responses/400"
+          $ref: "#/components/responses/400"
       requestBody:
         required: true
         content:
           multipart/form-data:
             schema:
               type: object
+              required:
+                - library
+                - import_reference
+                - source
+                - audio_file
+                - import_status
               properties:
                 library:
                   type: string
@@ -1184,12 +1196,10 @@ paths:
                   description: "Setting import_status to draft will prevent processing, but allow further modifications to audio and metadata. Once ready, use the PATCH method to set import_status to pending. Default to `pending` if unspecified."
                   default: "pending"
                   enum:
-                  - "draft"
-                  - "pending"
+                    - "draft"
+                    - "pending"
                 import_metadata:
-                  required: false
                   $ref: "./api/definitions.yml#/ImportMetadata"
-
 
   /api/v1/subscriptions/{uuid}/:
     parameters:
@@ -1205,6 +1215,7 @@ paths:
         - "Channels and subscriptions"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1217,6 +1228,7 @@ paths:
         - "Channels and subscriptions"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1236,6 +1248,7 @@ paths:
         - "Channels and subscriptions"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1260,6 +1273,7 @@ paths:
         - "Uploads and audio content"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1278,6 +1292,7 @@ paths:
         - "Uploads and audio content"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1291,7 +1306,7 @@ paths:
         - "Uploads and audio content"
       responses:
         204:
-          $ref: "#/responses/204"
+          $ref: "#/components/responses/204"
 
   /api/v1/uploads/{uuid}/audio-file-metadata:
     parameters:
@@ -1307,11 +1322,12 @@ paths:
         - "Uploads and audio content"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
                 type: "object"
-                properties: []
+                properties: {}
 
   /api/v1/favorites/tracks/:
     get:
@@ -1325,6 +1341,7 @@ paths:
 
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1353,6 +1370,7 @@ paths:
                   example: 98
       responses:
         201:
+          description: ""
           content:
             application/json:
               schema:
@@ -1386,9 +1404,9 @@ paths:
                   example: 98
       responses:
         204:
-          $ref: "#/responses/204"
-          
-      
+          $ref: "#/components/responses/204"
+
+
   #################
   # User activity #
   #################
@@ -1405,6 +1423,7 @@ paths:
 
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1433,11 +1452,12 @@ paths:
                   example: 98
       responses:
         201:
+          description: ""
           content:
             application/json:
               schema:
                 $ref: "./api/definitions.yml#/ListeningCreate"
-                
+
   ##########
   # Others #
   ##########
@@ -1452,10 +1472,10 @@ paths:
         - $ref: "./api/parameters.yml#/Search"
       responses:
         200:
-          $ref: "#/responses/200"
+          $ref: "#/components/responses/200"
         400:
-          $ref: "#/responses/400"
-      
+          $ref: "#/components/responses/400"
+
   /api/v1/instance/settings:
     get:
       tags:
@@ -1464,6 +1484,7 @@ paths:
         Retrieve pod-level configuration such as description or max playlist size
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1500,7 +1521,7 @@ paths:
                         input_type:
                           type: string
                           description: "Input type of the setting"
-                    
+
 
   /api/v1/attachments/:
     post:
@@ -1510,9 +1531,9 @@ paths:
         Upload a new file as an attachment that can be later associated with other objects.
       responses:
         201:
-          $ref: "#/responses/201"
+          $ref: "#/components/responses/201"
         400:
-          $ref: "#/responses/400"
+          $ref: "#/components/responses/400"
       requestBody:
         required: true
         content:
@@ -1538,6 +1559,7 @@ paths:
         - "Other"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1548,7 +1570,7 @@ paths:
         - "Other"
       responses:
         204:
-          $ref: "#/responses/204"
+          $ref: "#/components/responses/204"
 
   /api/v1/playlists/:
     get:
@@ -1557,18 +1579,7 @@ paths:
         - "Content curation"
       parameters:
         - $ref: "./api/parameters.yml#/Search"
-        - allOf:
-            - $ref: "./api/parameters.yml#/Ordering"
-            - default: "-creation_date"
-              schema:
-                required: false
-                type: "string"
-                example: "creation_date"
-                enum:
-                  - creation_date
-                  - modification_date
-                  - id
-                  - name
+        - $ref: "./api/parameters.yml#/PlaylistOrdering"
         - in: query
           name: artist
           description: Restrict to playlists containing tracks from the given artist
@@ -1592,6 +1603,7 @@ paths:
         - $ref: "./api/parameters.yml#/PageSize"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1609,9 +1621,9 @@ paths:
       description: Create a new playlist
       responses:
         201:
-          $ref: "#/responses/201"
+          $ref: "#/components/responses/201"
         400:
-          $ref: "#/responses/400"
+          $ref: "#/components/responses/400"
       requestBody:
         required: true
         content:
@@ -1632,6 +1644,7 @@ paths:
         - "Content curation"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1648,6 +1661,7 @@ paths:
               $ref: "./api/definitions.yml#/PlaylistCreate"
       responses:
         201:
+          description: ""
           content:
             application/json:
               schema:
@@ -1658,7 +1672,7 @@ paths:
         - "Content curation"
       responses:
         204:
-          $ref: "#/responses/204"
+          $ref: "#/components/responses/204"
   /api/v1/playlists/{id}/tracks:
     parameters:
       - name: id
@@ -1673,6 +1687,7 @@ paths:
         - "Content curation"
       responses:
         200:
+          description: ""
           content:
             application/json:
               schema:
@@ -1718,6 +1733,7 @@ paths:
                     multiple time in the playlist
       responses:
         201:
+          description: ""
           content:
             application/json:
               schema:
@@ -1756,9 +1772,10 @@ paths:
                   type: "integer"
                   format: "int64"
                   description: New index of the track
-               
+
       responses:
         204:
+          $ref: "#/components/responses/204"
   /api/v1/playlists/{id}/remove:
     parameters:
       - name: id
@@ -1782,10 +1799,10 @@ paths:
                   type: "integer"
                   format: "int64"
                   description: Index of the track to remove
-               
+
       responses:
         204:
-          
+          $ref: "#/components/responses/204"
   /api/v1/playlists/{id}/clear:
     parameters:
       - name: id
@@ -1800,6 +1817,7 @@ paths:
         - "Content curation"
       responses:
         204:
+          $ref: "#/components/responses/204"
   /api/v1/radios/sessions:
     post:
       tags:
@@ -1807,9 +1825,9 @@ paths:
       description: Start a new radio session
       responses:
         201:
-          $ref: "#/responses/201"
+          $ref: "#/components/responses/201"
         400:
-          $ref: "#/responses/400"
+          $ref: "#/components/responses/400"
       requestBody:
         required: true
         content:
@@ -1823,21 +1841,12 @@ paths:
       description: Get a new track for a radio session
       responses:
         201:
-          $ref: "#/responses/201"
+          $ref: "#/components/responses/201"
         400:
-          $ref: "#/responses/400"
+          $ref: "#/components/responses/400"
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: "./api/definitions.yml#/Track"
-responses:
-  200:
-    description: Success
-  201:
-    description: Successfully created
-  204:
-    description: Successfully deleted
-  400:
-    description: Bad request

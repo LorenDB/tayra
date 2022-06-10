@@ -1,21 +1,73 @@
 ChannelOrdering:
-  - $ref: "#/Ordering"
-  - default: "-creation_date"
-    schema:
-      required: false
-      type: "string"
-      example: "-creation_date"
-      enum:
-        - creation_date
-        - artist__modification_date
+  $ref: "#/Ordering"
+  required: false
+  schema:
+    type: "string"
+    default: "creation_date"
+    example: "creation_date"
+    enum:
+      - creation_date
+      - artist__modification_date
+
+PlaylistOrdering:
+  $ref: "#/Ordering"
+  required: false
+  schema:
+    type: "string"
+    default: "creation_date"
+    example: "creation_date"
+    enum:
+      - creation_date
+      - modification_date
+      - id
+      - name
+
+ArtistOrdering:
+  $ref: "#/Ordering"
+  required: false
+  schema:
+    type: "string"
+    default: "creation_date"
+    example: "creation_date"
+    enum:
+      - creation_date
+      - id
+      - name
+      - random
+
+AlbumOrdering:
+  $ref: "#/Ordering"
+  required: false
+  schema:
+    type: "string"
+    default: "creation_date"
+    example: "creation_date"
+    enum:
+      - creation_date
+      - release_date
+      - title
+      - random
+
+TrackOrdering:
+  $ref: "#/Ordering"
+  required: false
+  schema:
+    type: "string"
+    default: "creation_date"
+    example: "creation_date"
+    enum:
+      - creation_date
+      - release_date
+      - title
+      - random
 
 External:
   name: "external"
   in: "query"
-  default: null
+  required: false
   description: "Filter/exclude channels created from a third-party, non-Funkwhale RSS feed"
   schema:
-    required: false
+    default: null
     type: "boolean"
 
 
@@ -62,26 +114,26 @@ PageSize:
 Playable:
   name: "playable"
   in: "query"
-  default: null
+  required: false
   description: "Filter/exclude resources with playable tracks"
   schema:
-    required: false
+    default: null
     type: "boolean"
 HasAlbums:
   name: "has_albums"
   in: "query"
-  default: null
+  required: false
   description: "Filter/exclude artists with no associated albums"
   schema:
-    required: false
+    default: null
     type: "boolean"
 Refresh:
   name: "refresh"
   in: "query"
-  default: false
+  required: false
   description: "Trigger an ActivityPub fetch to refresh local data"
   schema:
-    required: false
+    default: false
     type: "boolean"
 
 
@@ -97,7 +149,7 @@ Related:
 Scope:
   name: "scope"
   in: "query"
-  default: "all"
+  required: false
   description: |
     Limit the results to a given user or pod:
       - Use `all` (or do not specify the property to disable scope filtering)
@@ -109,7 +161,7 @@ Scope:
     You can specify multiple coma separated scopes, e.g `scope=me,subscribed` to retrieve content matching either scopes.
 
   schema:
-    required: false
+    default: "all"
     type: "string"
     enum:
     - "me"
@@ -124,8 +176,8 @@ ContentCategory:
   description: |
     Limits the results to those whose artist content type matches the query.
   
+  required: false
   schema:
-    required: false
     type: "string"
     enum:
     - "podcast"
@@ -134,10 +186,10 @@ ContentCategory:
 Search:
   name: "q"
   in: "query"
-  default: "all"
+  required: false
   description: "Limit the results to the corresponding search query"
   schema:
-    required: false
+    default: "all"
     type: "string"
     example: "Bonobo"
 
@@ -145,18 +197,19 @@ Subscribed:
   name: "subscribed"
   in: "query"
   description: "Limit or exclude results with a matching subsription from the current user"
+  required: false
   schema:
-    required: false
     type: boolean
 
 Tags:
   name: "tag"
   in: "query"
   description: "Limit the results to the corresponding tags. May be used multiple times, to retrieve objects matching al provided tags"
+  required: false
   schema:
-    required: false
     type: array
-    collectionFormat: csv
+    items:
+      type: string
     example:
       - rock
       - metal

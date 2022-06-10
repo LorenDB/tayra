@@ -118,9 +118,14 @@ Actor:
 
 BaseArtist:
   type: "object"
+  required:
+    - id
+    - fid
+    - name
+    - creation_date
+    - is_local
   properties:
     mbid:
-      required: false
       $ref: "./properties.yml#/mbid"
     id:
       type: "integer"
@@ -157,9 +162,16 @@ Artist:
 
 BaseAlbum:
   type: "object"
+  required:
+    - id
+    - fid
+    - artist
+    - title
+    - creation_date
+    - is_playable
+    - is_local
   properties:
     mbid:
-      required: false
       $ref: "./properties.yml#/mbid"
     id:
       type: "integer"
@@ -181,7 +193,6 @@ BaseAlbum:
       format: "date-time"
     release_date:
       type: "string"
-      required: false
       format: "date"
       example: "2001-01-01"
     is_playable:
@@ -258,7 +269,7 @@ ChannelCreate:
       type: string
       format: uuid
     metadata:
-      $ref: "#ChannelMetadata"
+      $ref: "#/ChannelMetadata"
 ChannelUpdate:
   type: "object"
   properties:
@@ -399,9 +410,18 @@ License:
 
 BaseTrack:
   type: "object"
+  required:
+    - id
+    - fid
+    - artist
+    - album
+    - title
+    - listen_url
+    - copyright
+    - license
+    - is_local
   properties:
     mbid:
-      required: false
       $ref: "./properties.yml#/mbid"
     id:
       type: "integer"
@@ -423,13 +443,11 @@ BaseTrack:
       type: "string"
       example: "Chop Suey!"
     position:
-      required: false
       description: "Position of the track in the album"
       type: "number"
       minimum: 1
       example: 1
     disc_number:
-      required: false
       type: "number"
       minimum: 1
       example: 1
@@ -547,12 +565,14 @@ Upload:
 
 OwnedLibraryCreate:
   type: "object"
+  required:
+    - name
+    - privacy_level
   properties:
     name:
       type: "string"
       example: "My new library"
     description:
-      required: false
       type: "string"
       example: "Lots of interesting content"
     privacy_level:
@@ -668,28 +688,26 @@ PlaylistTrack:
 
 ImportMetadata:
   type: "object"
+  required:
+    - title
+    - position
   description: "Import metadata to override values from ID3/embedded audio tags"
   properties:
     title:
       type: "string"
       example: "My Track"
-      required: true
     mbid:
       $ref: "./properties.yml#/mbid"
-      required: false
     copyright:
       type: "string"
       example: "Alice, 2018"
       description: "Copyright information"
-      required: false
     license:
       type: "string"
       example: "cc-by-sa-4.0"
-      required: false
       description: A license code, as returned by /api/v1/licenses
     tags:
       $ref: "./properties.yml#/tags"
-      required: false
     position:
       description: "Position of the track in the album or channel"
       type: "number"
