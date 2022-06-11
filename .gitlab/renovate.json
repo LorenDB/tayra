@@ -9,6 +9,11 @@
   "semanticCommits": "disabled",
   "packageRules": [
     {
+      "matchDatasources": ["npm"],
+      "matchBaseBranches": ["develop"],
+      "enabled": false
+    },
+    {
       "matchUpdateTypes": ["major", "minor"],
       "matchBaseBranches": ["stable"],
       "enabled": false
