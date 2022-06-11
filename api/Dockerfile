@@ -1,4 +1,4 @@
-FROM alpine:3.14 as pre-build
+FROM alpine:3.16 as pre-build
 
 # We need this additional step to avoid having poetrys deps interacting with our
 # dependencies. This is only required until alpine 3.16 is released, since this
@@ -10,7 +10,7 @@ COPY pyproject.toml poetry.lock /
 RUN poetry export --without-hashes > requirements.txt
 RUN poetry export --dev --without-hashes > dev-requirements.txt
 
-FROM alpine:3.14 as builder
+FROM alpine:3.16 as builder
 
 RUN \
     echo 'installing dependencies' && \
@@ -66,7 +66,7 @@ RUN \
     ; fi
 
 
-FROM alpine:3.14 as build-image
+FROM alpine:3.16 as build-image
 
 COPY --from=builder /venv /venv
 # emulate activation by prefixing PATH
