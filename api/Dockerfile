@@ -4,8 +4,7 @@ FROM alpine:3.16 as pre-build
 # dependencies. This is only required until alpine 3.16 is released, since this
 # allows us to install poetry as package.
 
-RUN apk add --no-cache python3 py3-cryptography py3-pip && \
-		pip3 install poetry
+RUN apk add --no-cache python3 py3-cryptography py3-pip poetry
 COPY pyproject.toml poetry.lock /
 RUN poetry export --without-hashes > requirements.txt
 RUN poetry export --dev --without-hashes > dev-requirements.txt
