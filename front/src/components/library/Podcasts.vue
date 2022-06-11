@@ -1,3 +1,122 @@
+<script setup lang="ts">
+import qs from 'qs'
+import axios from 'axios'
+import $ from 'jquery'
+
+import ArtistCard from '~/components/audio/artist/Card.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+import TagsSelector from '~/components/library/TagsSelector.vue'
+import Modal from '~/components/semantic/Modal.vue'
+import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
+import useLogger from '~/composables/useLogger'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import { OrderingField } from '~/store/ui'
+import { computed, reactive, ref, watch } from 'vue'
+import useOrdering, { OrderingProps } from '~/composables/useOrdering'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+import { onBeforeRouteUpdate, useRouter } from 'vue-router'
+
+interface Props extends OrderingProps {
+  defaultPage?: number
+  defaultPaginateBy?: number
+
+  defaultQuery?: string
+  defaultTags?: string[]
+  scope?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultPage: 1,
+  defaultPaginateBy: 1,
+  defaultQuery: '',
+  defaultTags: () => [],
+  scope: 'all'
+})
+
+// TODO (wvffle): Make sure everything is it's own type
+const page = ref(+props.defaultPage)
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+const query = ref(props.defaultQuery)
+const tags = reactive(props.defaultTags.slice())
+const showSubscribeModal = ref(false)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['name', 'name']
+]
+
+const logger = useLogger()
+const sharedLabels = useSharedLabels()
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+
+const router = useRouter()
+const updateQueryString = () => router.replace({
+  query: {
+    query: query.value,
+    page: page.value,
+    tag: tags,
+    paginateBy: paginateBy.value,
+    ordering: orderingString.value,
+    content_category: 'podcast',
+    include_channels: 'true'
+  }
+})
+
+watch(page, updateQueryString)
+onOrderingUpdate(updateQueryString)
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    scope: props.scope,
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    playable: 'true',
+    tag: tags,
+    include_channels: 'true',
+    content_category: 'podcast'
+  }
+
+  logger.time('Fetching podcasts')
+  try {
+    const response = await axios.get('artists/', {
+      params,
+      paramsSerializer: function (params) {
+        return qs.stringify(params, { indices: false })
+      }
+    })
+
+    result.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+    result.value = null
+  } finally {
+    logger.timeEnd('Fetching podcasts')
+    isLoading.value = false
+  }
+}
+
+const store = useStore()
+watch(store.state.moderation.lastUpdate, fetchData)
+onBeforeRouteUpdate(fetchData)
+fetchData()
+
+// @ts-expect-error semantic ui
+onMounted(() => $('.ui.dropdown').dropdown())
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search…'),
+  title: $pgettext('*/*/*/Noun', 'Podcasts')
+}))
+</script>
+
 <template>
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
@@ -8,7 +127,7 @@
       </h2>
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
-        @submit.prevent="updatePage();updateQueryString();fetchData()"
+        @submit.prevent="page = props.defaultPage"
       >
         <div class="fields">
           <div class="field">
@@ -78,13 +197,13 @@
               v-model="paginateBy"
               class="ui dropdown"
             >
-              <option :value="parseInt(12)">
+              <option :value="12">
                 12
               </option>
-              <option :value="parseInt(30)">
+              <option :value="30">
                 30
               </option>
-              <option :value="parseInt(50)">
+              <option :value="50">
                 50
               </option>
             </select>
@@ -144,10 +263,9 @@
       <div class="ui center aligned basic segment">
         <pagination
           v-if="result && result.count > paginateBy"
-          :current="page"
+          v-model:current="page"
           :paginate-by="paginateBy"
           :total="result.count"
-          @page-changed="selectPage"
         />
       </div>
     </section>
@@ -193,139 +311,3 @@
     </modal>
   </main>
 </template>
-
-<script>
-import qs from 'qs'
-import axios from 'axios'
-import $ from 'jquery'
-
-import OrderingMixin from '~/components/mixins/Ordering.vue'
-import PaginationMixin from '~/components/mixins/Pagination.vue'
-import ArtistCard from '~/components/audio/artist/Card.vue'
-import Pagination from '~/components/vui/Pagination.vue'
-import TagsSelector from '~/components/library/TagsSelector.vue'
-import Modal from '~/components/semantic/Modal.vue'
-import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
-import useLogger from '~/composables/useLogger'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-const logger = useLogger()
-
-const FETCH_URL = 'artists/'
-
-export default {
-  components: {
-    ArtistCard,
-    Pagination,
-    TagsSelector,
-    RemoteSearchForm,
-    Modal
-  },
-  mixins: [OrderingMixin, PaginationMixin],
-  props: {
-    defaultQuery: { type: String, required: false, default: '' },
-    defaultTags: { type: Array, required: false, default: () => { return [] } },
-    scope: { type: String, required: false, default: 'all' }
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels }
-  },
-  data () {
-    return {
-      isLoading: true,
-      result: null,
-      page: parseInt(this.defaultPage),
-      query: this.defaultQuery,
-      tags: (this.defaultTags || []).filter((t) => { return t.length > 0 }),
-      orderingOptions: [['creation_date', 'creation_date'], ['name', 'name']],
-      showSubscribeModal: false
-    }
-  },
-  computed: {
-    labels () {
-      const searchPlaceholder = this.$pgettext('Content/Search/Input.Placeholder', 'Search…')
-      const title = this.$pgettext('*/*/*/Noun', 'Podcasts')
-      return {
-        searchPlaceholder,
-        title
-      }
-    }
-  },
-  watch: {
-    page () {
-      this.updateQueryString()
-      this.fetchData()
-    },
-    '$store.state.moderation.lastUpdate': function () {
-      this.fetchData()
-    },
-    excludeCompilation () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  mounted () {
-    $('.ui.dropdown').dropdown()
-  },
-  methods: {
-    updateQueryString: function () {
-      history.pushState(
-        {},
-        null,
-        this.$route.path + '?' + new URLSearchParams(
-          {
-            query: this.query,
-            page: this.page,
-            tag: this.tags,
-            paginateBy: this.paginateBy,
-            ordering: this.getOrderingAsString(),
-            include_channels: true,
-            content_category: 'podcast'
-          }).toString()
-      )
-    },
-    fetchData: function () {
-      const self = this
-      this.isLoading = true
-      const url = FETCH_URL
-      const params = {
-        scope: this.scope,
-        page: this.page,
-        page_size: this.paginateBy,
-        has_albums: this.excludeCompilation,
-        q: this.query,
-        ordering: this.getOrderingAsString(),
-        playable: 'true',
-        tag: this.tags,
-        include_channels: 'true',
-        content_category: 'podcast'
-      }
-      logger.debug('Fetching artists')
-      axios.get(
-        url,
-        {
-          params: params,
-          paramsSerializer: function (params) {
-            return qs.stringify(params, { indices: false })
-          }
-        }
-      ).then(response => {
-        self.result = response.data
-        self.isLoading = false
-      }, () => {
-        self.result = null
-        self.isLoading = false
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    },
-    updatePage () {
-      this.page = this.defaultPage
-    }
-  }
-}
-</script>

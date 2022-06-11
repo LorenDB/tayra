@@ -1,3 +1,158 @@
+<script setup lang="ts">
+import axios from 'axios'
+import { uniq, merge } from 'lodash-es'
+import Pagination from '~/components/vui/Pagination.vue'
+import EditCard from '~/components/library/EditCard.vue'
+import { normalizeQuery, parseTokens } from '~/utils/search'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import { ref, reactive, watch } from 'vue'
+import useOrdering, { OrderingProps } from '~/composables/useOrdering'
+import useSmartSearch, { SmartSearchProps } from '~/composables/useSmartSearch'
+import { OrderingField } from '~/store/ui'
+import useEditConfigs from '~/composables/moderation/useEditConfigs'
+
+interface Props extends SmartSearchProps, OrderingProps {
+  // TODO (wvffle): find object type
+  filters?: object
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: '',
+  updateUrl: false,
+  filters: () => ({})
+})
+
+const configs = useEditConfigs()
+
+// TODO (wvffle): Make sure everything is it's own type
+const page = ref(1)
+type ResponseType = { count: number, results: { target?: { type: string, id: number } }[] }
+const result = ref<null | ResponseType>(null)
+
+const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props.defaultQuery, props.updateUrl)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['applied_date', 'applied_date']
+]
+
+const targets = reactive({
+  track: {}
+})
+
+const fetchTargets = async () => {
+  // we request target data via the API so we can display previous state
+  // additionnal data next to the edit card
+  const typesAndIds = {
+    track: { url: 'tracks/', ids: [] as number[] }
+  }
+
+  for (const res of result.value?.results ?? []) {
+    const typeAndId = typesAndIds[result.target?.type as keyof typeof typesAndIds]
+    typeAndId?.ids.push(result.target.id)
+  }
+
+  for (const [key, config] of Object.entries(typesAndIds)) {
+    if (config.ids.length === 0) {
+      continue
+    }
+
+    const response = await axios.get(config.url, {
+      params: {
+        id: uniq(config.ids),
+        hidden: 'null'
+      }
+    }).catch(() => {
+      // TODO (wvffle): Handle error
+    })
+
+    for (const payload of response.data.results) {
+      targets[key][payload.id] = { 
+        payload,
+        currentState: configs[key].fields.reduce((state, field) => {
+          state[field.id] = { value: field.getValue(payload) }
+          return state
+        })
+      }
+    }
+  }
+}
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    ...props.filters
+  }
+
+  try {
+    const response = await axios.get('mutations/', {
+      params
+      // TODO (wvffle): Check if params should be serialized. In other similar components (Podcasts, Artists) they are
+      // paramsSerializer: function (params) {
+      //   return qs.stringify(params, { indices: false })
+      // }
+    })
+
+    result.value = response.data
+    fetchTargets()
+  } catch (error) {
+    // TODO (wvffle): Handle error
+    result.value = null
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onSearch(() => {
+  page.value = 1
+  fetchData()
+})
+
+watch(page, fetchData)
+onOrderingUpdate(fetchData)
+fetchData()
+
+const sharedLabels = useSharedLabels()
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by account, summary, domain…')
+}))
+export default {
+  methods: {
+    selectPage: function (page) {
+      this.page = page
+    },
+    handle (type, id, value) {
+      if (type === 'delete') {
+        this.exclude.push(id)
+      }
+
+      this.result.results.forEach((e) => {
+        if (e.uuid === id) {
+          e.is_approved = value
+        }
+      })
+    },
+    getCurrentState (target) {
+      if (!target) {
+        return {}
+      }
+      if (this.targets[target.type] && this.targets[target.type][String(target.id)]) {
+        return this.targets[target.type][String(target.id)].currentState
+      }
+      return {}
+    }
+  }
+}
+</script>
+
 <template>
   <div class="ui text container">
     <slot />
@@ -128,157 +283,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import { uniq, merge } from 'lodash-es'
-import time from '~/utils/time'
-import Pagination from '~/components/vui/Pagination.vue'
-import OrderingMixin from '~/components/mixins/Ordering.vue'
-import EditCard from '~/components/library/EditCard.vue'
-import { normalizeQuery, parseTokens } from '~/utils/search'
-import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
-
-import useEditConfigs from '~/composables/useEditConfigs'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-export default {
-  components: {
-    Pagination,
-    EditCard
-  },
-  mixins: [OrderingMixin, SmartSearchMixin],
-  props: {
-    filters: { type: Object, required: false, default: () => { return {} } }
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    const configs = useEditConfigs()
-    return { sharedLabels, configs }
-  },
-  data () {
-    return {
-      time,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: {
-        query: this.defaultQuery,
-        tokens: parseTokens(normalizeQuery(this.defaultQuery))
-      },
-      orderingOptions: [
-        ['creation_date', 'creation_date'],
-        ['applied_date', 'applied_date']
-      ],
-      targets: {
-        track: {}
-      }
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by account, summary, domain…')
-      }
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    ordering () {
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const params = merge({
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search.query,
-        ordering: this.getOrderingAsString()
-      }, this.filters)
-      const self = this
-      self.isLoading = true
-      this.result = null
-      axios.get('mutations/', { params: params }).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-        self.fetchTargets()
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    fetchTargets () {
-      // we request target data via the API so we can display previous state
-      // additionnal data next to the edit card
-      const self = this
-      const typesAndIds = {
-        track: {
-          url: 'tracks/',
-          ids: []
-        }
-      }
-      this.result.results.forEach((m) => {
-        if (!m.target || !typesAndIds[m.target.type]) {
-          return
-        }
-        typesAndIds[m.target.type].ids.push(m.target.id)
-      })
-      Object.keys(typesAndIds).forEach((k) => {
-        const config = typesAndIds[k]
-        if (config.ids.length === 0) {
-          return
-        }
-        axios.get(config.url, { params: { id: uniq(config.ids), hidden: 'null' } }).then((response) => {
-          response.data.results.forEach((e) => {
-            self.targets[k][e.id] = {
-              payload: e,
-              currentState: configs[k].fields.reduce((state/*: Record<string, unknown> */, field) => {
-                state[field.id] = { value: field.getValue(e) }
-                return state
-              }, {})
-            }
-          })
-        }, error => {
-          self.errors = error.backendErrors
-        })
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    },
-    handle (type, id, value) {
-      if (type === 'delete') {
-        this.exclude.push(id)
-      }
-
-      this.result.results.forEach((e) => {
-        if (e.uuid === id) {
-          e.is_approved = value
-        }
-      })
-    },
-    getCurrentState (target) {
-      if (!target) {
-        return {}
-      }
-      if (this.targets[target.type] && this.targets[target.type][String(target.id)]) {
-        return this.targets[target.type][String(target.id)].currentState
-      }
-      return {}
-    }
-  }
-}
-</script>

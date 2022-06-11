@@ -8,15 +8,14 @@ import Pagination from '~/components/vui/Pagination.vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
 import useLogger from '~/composables/useLogger'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
-import { RouteWithPreferences } from '~/store/ui'
+import { OrderingField } from '~/store/ui'
 import { computed, reactive, ref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
-import useOrdering from '~/composables/useOrdering'
+import useOrdering, { OrderingProps } from '~/composables/useOrdering'
 import { onBeforeRouteUpdate, useRouter } from 'vue-router'
 
-interface Props {
-  orderingConfigName: RouteWithPreferences | null
+interface Props extends OrderingProps {
   defaultPage?: number
   defaultPaginateBy?: number
   defaultQuery?: string
@@ -40,6 +39,11 @@ const query = ref(props.defaultQuery)
 const tags = reactive(props.defaultTags.slice())
 const excludeCompilation = ref(true)
 
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['name', 'name']
+]
+
 const logger = useLogger()
 const sharedLabels = useSharedLabels()
 
@@ -57,11 +61,6 @@ const updateQueryString = () => router.replace({
     include_channels: 'true'
   }
 })
-
-const search = () => { 
-  page.value = props.defaultPage
-  updateQueryString()
-}
 
 watch(page, updateQueryString)
 onOrderingUpdate(updateQueryString)
@@ -126,7 +125,7 @@ const labels = computed(() => ({
       </h2>
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
-        @submit.prevent="search"
+        @submit.prevent="page = props.defaultPage"
       >
         <div class="fields">
           <div class="field">
@@ -196,13 +195,13 @@ const labels = computed(() => ({
               v-model="paginateBy"
               class="ui dropdown"
             >
-              <option :value="parseInt(12)">
+              <option :value="12">
                 12
               </option>
-              <option :value="parseInt(30)">
+              <option :value="30">
                 30
               </option>
-              <option :value="parseInt(50)">
+              <option :value="50">
                 50
               </option>
             </select>

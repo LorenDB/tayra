@@ -1,4 +1,4 @@
-interface Token {
+export interface Token {
   field: string | null
   value: string
 }

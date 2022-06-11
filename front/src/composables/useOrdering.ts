@@ -4,6 +4,10 @@ import { useRoute } from 'vue-router'
 import { useStore } from '~/store'
 import { OrderingDirection, OrderingField, RouteWithPreferences } from '~/store/ui'
 
+export interface OrderingProps {
+  orderingConfigName: RouteWithPreferences | null
+}
+
 export default (orderingConfigName: MaybeRef<RouteWithPreferences | null>) => {
   const store = useStore()
   const route = useRoute()

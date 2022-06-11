@@ -1,16 +1,114 @@
+<script setup lang="ts">
+import axios from 'axios'
+import Pagination from '~/components/vui/Pagination.vue'
+import ActionTable from '~/components/common/ActionTable.vue'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useSmartSearch, { SmartSearchProps } from '~/composables/useSmartSearch'
+import useOrdering, { OrderingProps } from '~/composables/useOrdering'
+import { OrderingField } from '~/store/ui'
+import { computed, ref, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+interface Props extends SmartSearchProps, OrderingProps {
+  // TODO (wvffle): find object type
+  filters?: object
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: '',
+  updateUrl: false,
+  filters: () => ({})
+})
+
+// TODO (wvffle): Make sure everything is it's own type
+const page = ref(1)
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+
+const { onSearch, query, addSearchToken } = useSmartSearch(props.defaultQuery, props.updateUrl)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['release_date', 'release_date'],
+  ['name', 'name']
+]
+
+const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
+const actions = () => {
+  const deleteLabel = $pgettext('*/*/*/Verb', 'Delete')
+  const confirmationMessage = $pgettext('Popup/*/Paragraph', 'The selected albums will be removed, as well as associated tracks, uploads, favorites and listening history. This action is irreversible.')
+  return [
+    {
+      name: 'delete',
+      label: deleteLabel,
+      confirmationMessage: confirmationMessage,
+      isDangerous: true,
+      allowAll: false,
+      confirmColor: 'danger'
+    }
+  ]
+}
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    ...props.filters
+  }
+
+  try {
+    const response = await axios.get('/manage/library/albums/', {
+      params
+      // TODO (wvffle): Check if params should be serialized. In other similar components (Podcasts, Artists) they are
+      // paramsSerializer: function (params) {
+      //   return qs.stringify(params, { indices: false })
+      // }
+    })
+
+    result.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+    result.value = null
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onSearch(() => {
+  page.value = 1
+  fetchData()
+})
+
+watch(page, fetchData)
+onOrderingUpdate(fetchData)
+fetchData()
+
+const sharedLabels = useSharedLabels()
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by domain, title, artist, MusicBrainz ID…'),
+  openModeration: $pgettext('Content/Moderation/Verb', 'Open in moderation interface')
+}))
+</script>
+
 <template>
   <div>
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
           <label for="albums-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-          <form @submit.prevent="search.query = $refs.search.value">
+          <form @submit.prevent="query = $refs.search.value">
             <input
               id="albums-search"
               ref="search"
               name="search"
               type="text"
-              :value="search.query"
+              :value="query"
               :placeholder="labels.searchPlaceholder"
             >
           </form>
@@ -164,11 +262,10 @@
     <div>
       <pagination
         v-if="result && result.count > paginateBy"
+        v-model:current="page"
         :compact="true"
-        :current="page"
         :paginate-by="paginateBy"
         :total="result.count"
-        @page-changed="selectPage"
       />
 
       <span v-if="result && result.results.length > 0">
@@ -182,120 +279,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import { merge } from 'lodash-es'
-import time from '~/utils/time'
-import { normalizeQuery, parseTokens } from '~/utils/search'
-import Pagination from '~/components/vui/Pagination.vue'
-import ActionTable from '~/components/common/ActionTable.vue'
-import OrderingMixin from '~/components/mixins/Ordering.vue'
-import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-export default {
-  components: {
-    Pagination,
-    ActionTable
-  },
-  mixins: [OrderingMixin, SmartSearchMixin],
-  props: {
-    filters: { type: Object, required: false, default: () => { return {} } }
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels }
-  },
-  data () {
-    return {
-      time,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: {
-        query: this.defaultQuery,
-        tokens: parseTokens(normalizeQuery(this.defaultQuery))
-      },
-      orderingOptions: [
-        ['creation_date', 'creation_date'],
-        ['release_date', 'release_date'],
-        ['name', 'name']
-      ]
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by domain, title, artist, MusicBrainz ID…'),
-        openModeration: this.$pgettext('Content/Moderation/Verb', 'Open in moderation interface')
-      }
-    },
-    actionFilters () {
-      const currentFilters = {
-        q: this.search.query
-      }
-      if (this.filters) {
-        return merge(currentFilters, this.filters)
-      } else {
-        return currentFilters
-      }
-    },
-    actions () {
-      const deleteLabel = this.$pgettext('*/*/*/Verb', 'Delete')
-      const confirmationMessage = this.$pgettext('Popup/*/Paragraph', 'The selected albums will be removed, as well as associated tracks, uploads, favorites and listening history. This action is irreversible.')
-      return [
-        {
-          name: 'delete',
-          label: deleteLabel,
-          confirmationMessage: confirmationMessage,
-          isDangerous: true,
-          allowAll: false,
-          confirmColor: 'danger'
-        }
-      ]
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    ordering () {
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const params = merge({
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search.query,
-        ordering: this.getOrderingAsString()
-      }, this.filters)
-      const self = this
-      self.isLoading = true
-      self.checked = []
-      axios.get('/manage/library/albums/', { params: params }).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  }
-}
-</script>

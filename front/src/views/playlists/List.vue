@@ -83,13 +83,13 @@
               v-model="paginateBy"
               class="ui dropdown"
             >
-              <option :value="parseInt(12)">
+              <option :value="12">
                 12
               </option>
-              <option :value="parseInt(25)">
+              <option :value="25">
                 25
               </option>
-              <option :value="parseInt(50)">
+              <option :value="50">
                 50
               </option>
             </select>

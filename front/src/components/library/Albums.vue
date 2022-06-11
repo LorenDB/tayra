@@ -5,18 +5,17 @@ import $ from 'jquery'
 import { onBeforeRouteUpdate, useRouter } from 'vue-router'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { OrderingField, RouteWithPreferences } from '~/store/ui'
+import { OrderingField } from '~/store/ui'
 
 import AlbumCard from '~/components/audio/album/Card.vue'
 import Pagination from '~/components/vui/Pagination.vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
 import useLogger from '~/composables/useLogger'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
-import useOrdering from '~/composables/useOrdering'
+import useOrdering, { OrderingProps } from '~/composables/useOrdering'
 import { useStore } from '~/store'
 
-interface Props {
-  orderingConfigName: RouteWithPreferences | null
+interface Props extends OrderingProps {
   defaultPage?: number
   defaultPaginateBy?: number
   defaultQuery?: string
@@ -60,11 +59,6 @@ const updateQueryString = () => router.replace({
     ordering: orderingString.value
   }
 })
-
-const search = () => {
-  page.value = props.defaultPage
-  updateQueryString()
-}
 
 watch(page, updateQueryString)
 onOrderingUpdate(updateQueryString)
@@ -128,7 +122,7 @@ const labels = computed(() => ({
       </h2>
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
-        @submit.prevent="search"
+        @submit.prevent="page = props.defaultPage"
       >
         <div class="fields">
           <div class="field">
