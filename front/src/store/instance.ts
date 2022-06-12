@@ -188,7 +188,11 @@ const store: Module<State, RootState> = {
       if (!response) return
 
       for (const [key, value] of Object.entries(response.data as FrontendSettings)) {
-        if (key === 'defaultServerUrl' && !value) continue
+        if (key === 'defaultServerUrl' && !value) {
+          state.frontSettings.defaultServerUrl = instanceUrl
+          continue
+        }
+
         state.frontSettings[key as keyof FrontendSettings] = value
       }
     }
