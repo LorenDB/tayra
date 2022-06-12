@@ -25,14 +25,7 @@ export const install: InitModule = async ({ store, router }) => {
   }
 
   if (!store.state.instance.instanceUrl) {
-    // We have several way to guess the API server url. By order of precedence:
-    // 1. use the url provided in settings.json, if any
-    // 2. use the url specified when building via VUE_APP_INSTANCE_URL
-    // 3. use the current url
-    const defaultInstanceUrl = store.state.instance.frontSettings.defaultServerUrl ||
-      import.meta.env.VUE_APP_INSTANCE_URL ||
-      location.origin
-
+    const defaultInstanceUrl = store.state.instance.frontSettings.defaultServerUrl
     store.commit('instance/instanceUrl', defaultInstanceUrl)
   } else {
     // needed to trigger initialization of axios / service worker / web socket

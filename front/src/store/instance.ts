@@ -5,14 +5,16 @@ import { Module } from 'vuex'
 import { RootState } from '~/store/index'
 
 export interface State {
-  frontSettings: {
-    defaultServerUrl: string
-    additionalStylesheets: string[] // TODO (wvffle): Ensure it's not nullable
-  }
+  frontSettings: FrontendSettings
   instanceUrl?: string
   knownInstances: string[]
   nodeinfo: unknown | null // TODO (wvffle): Get nodeinfo type from swagger automatically
   settings: Settings
+}
+
+interface FrontendSettings {
+  defaultServerUrl: string
+  additionalStylesheets: string[] // TODO (wvffle): Ensure it's not nullable
 }
 
 interface InstanceSettings {
@@ -46,14 +48,20 @@ interface Settings {
 
 const logger = useLogger()
 
+// We have several way to guess the API server url. By order of precedence:
+// 1. use the url provided in settings.json, if any
+// 2. use the url specified when building via VUE_APP_INSTANCE_URL
+// 3. use the current url
+const instanceUrl = import.meta.env.VUE_APP_INSTANCE_URL as string || location.origin
+
 const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     frontSettings: {
-      defaultServerUrl: location.origin,
+      defaultServerUrl: instanceUrl,
       additionalStylesheets: []
     },
-    instanceUrl: import.meta.env.VUE_APP_INSTANCE_URL as string,
+    instanceUrl,
     knownInstances: [],
     nodeinfo: null,
     settings: {
@@ -101,9 +109,6 @@ const store: Module<State, RootState> = {
     },
     nodeinfo: (state, value) => {
       state.nodeinfo = value
-    },
-    frontSettings: (state, value) => {
-      state.frontSettings = value
     },
     instanceUrl: (state, value) => {
       if (value && !value.endsWith('/')) {
@@ -158,29 +163,34 @@ const store: Module<State, RootState> = {
       })
     },
     // Send a request to the login URL and save the returned JWT
-    fetchSettings ({ commit }, payload) {
-      return axios.get('instance/settings/').then(response => {
-        logger.info('Successfully fetched instance settings')
+    async fetchSettings ({ commit }, payload) {
+      const response = await axios.get('instance/settings/')
+        .catch(err => logger.error('Error while fetching settings', err.response.data))
 
-        type SettingsSection = { section: string, name: string }
-        const sections = response.data.reduce((map: Record<string, Record<string, SettingsSection>>, entry: SettingsSection) => {
-          map[entry.section] ??= {}
-          map[entry.section][entry.name] = entry
-          return map
-        }, {})
+      if (!response) return
 
-        commit('settings', sections)
-        payload?.callback?.()
-      }, response => {
-        logger.error('Error while fetching settings', response.data)
-      })
+      logger.info('Successfully fetched instance settings')
+
+      type SettingsSection = { section: string, name: string }
+      const sections = response.data.reduce((map: Record<string, Record<string, SettingsSection>>, entry: SettingsSection) => {
+        map[entry.section] ??= {}
+        map[entry.section][entry.name] = entry
+        return map
+      }, {})
+
+      commit('settings', sections)
+      payload?.callback?.()
     },
-    fetchFrontSettings ({ commit }) {
-      return axios.get('/settings.json').then(response => {
-        commit('frontSettings', response.data)
-      }, () => {
-        logger.error('Error when fetching front-end configuration (or no customization available)')
-      })
+    async fetchFrontSettings ({ state }) {
+      const response = await axios.get('/front/settings.json')
+        .catch(() => logger.error('Error when fetching front-end configuration (or no customization available)'))
+
+      if (!response) return
+
+      for (const [key, value] of Object.entries(response.data as FrontendSettings)) {
+        if (key === 'defaultServerUrl' && !value) continue
+        state.frontSettings[key as keyof FrontendSettings] = value
+      }
     }
   }
 }

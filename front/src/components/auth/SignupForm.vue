@@ -211,6 +211,7 @@ export default {
   },
   created () {
     const self = this
+    // TODO (wvffle): Await action result and remove callback from the instance store
     this.$store.dispatch('instance/fetchSettings', {
       callback: function () {
         self.isLoadingInstanceSetting = false
