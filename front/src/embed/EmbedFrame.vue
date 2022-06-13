@@ -43,7 +43,7 @@
         <img
           v-else
           height="120"
-          src="./assets/embed/default-cover.jpeg"
+          src="@/assets/embed/default-cover.jpeg"
           alt="Cover"
         >
       </aside>
@@ -246,7 +246,7 @@
 
 <script>
 import axios from 'axios'
-import Logo from '@/components/Logo'
+import Logo from '@/components/Logo.vue'
 import url from '@/utils/url'
 import time from '@/utils/time'
 
@@ -259,6 +259,7 @@ function getURLParams () {
   const query = window.location.search.substring(1)
 
   while ((match = search.exec(query)) !== null) { urlParams[decode(match[1])] = decode(match[2]) }
+
   return urlParams
 }
 export default {
@@ -529,7 +530,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~plyr/src/sass/plyr.scss";
+@import "plyr/src/sass/plyr.scss";
 
 html,
 body,
