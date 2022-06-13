@@ -593,11 +593,11 @@ requests-oauthlib = ">=0.3.0"
 
 [[package]]
 name = "django-auth-ldap"
-version = "4.0.0"
+version = "4.1.0"
 description = "Django LDAP authentication backend."
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 Django = ">=2.2"
@@ -2114,7 +2114,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "ef1d846def2317086f3b41730368e3c9fc22296d57fd0d4d74634e7aebf646b9"
+content-hash = "bbe6f220b90273b148c73270872df2285459b7d16559ddfb86f7caa0cd6c140c"
 
 [metadata.files]
 aiohttp = [
@@ -2484,8 +2484,8 @@ django-allauth = [
     {file = "django-allauth-0.42.0.tar.gz", hash = "sha256:f17209410b7f87da0a84639fd79d3771b596a6d3fc1a8e48ce50dabc7f441d30"},
 ]
 django-auth-ldap = [
-    {file = "django-auth-ldap-4.0.0.tar.gz", hash = "sha256:276f79e624ce083ce13f161387f65ff1c0efe83ef8a42f2b9830d43317b15239"},
-    {file = "django_auth_ldap-4.0.0-py3-none-any.whl", hash = "sha256:94119c94981809124d3dc4bed974f71c7a980666896df626f556a88a5fe0b59c"},
+    {file = "django-auth-ldap-4.1.0.tar.gz", hash = "sha256:77f749d3b17807ce8eb56a9c9c8e5746ff316567f81d5ba613495d9c7495a949"},
+    {file = "django_auth_ldap-4.1.0-py3-none-any.whl", hash = "sha256:68870e7921e84b1a9867e268a9c8a3e573e8a0d95ea08bcf31be178f5826ff36"},
 ]
 django-cache-memoize = [
     {file = "django-cache-memoize-0.1.10.tar.gz", hash = "sha256:63e8faa245a41c0dbad843807e9f21a6e59eba8e6e50df310fdf6485a6749843"},
