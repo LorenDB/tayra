@@ -616,7 +616,7 @@ dev = ["flake8", "tox", "twine", "therapist", "black"]
 
 [[package]]
 name = "django-cacheops"
-version = "6.0"
+version = "6.1"
 description = "A slick ORM cache with automatic granular event-driven invalidation for Django."
 category = "main"
 optional = false
@@ -2114,7 +2114,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "bbe6f220b90273b148c73270872df2285459b7d16559ddfb86f7caa0cd6c140c"
+content-hash = "4dbeef0c0403b1db22724734eaaf9de9e1419cf355d4140c8c7833577f80ff73"
 
 [metadata.files]
 aiohttp = [
@@ -2492,8 +2492,7 @@ django-cache-memoize = [
     {file = "django_cache_memoize-0.1.10-py3-none-any.whl", hash = "sha256:676299313079cde9242ae84db0160e80b1d44e8dd6bc9b1f4f1247e11b30c9e0"},
 ]
 django-cacheops = [
-    {file = "django-cacheops-6.0.tar.gz", hash = "sha256:78e161ebd96a32e28e19ec7da31f2afed9e62a79726b8b5f0ed12dd16c2e5841"},
-    {file = "django_cacheops-6.0-py2.py3-none-any.whl", hash = "sha256:ee38b969c9fc68f7c88e769b6c811e19563cca1ae08210d9f553ff758b6c3e17"},
+    {file = "django-cacheops-6.1.tar.gz", hash = "sha256:b684ef39fd434189d3cbb7d85417cd972af635289a032447982473b4a89f727d"},
 ]
 django-cleanup = [
     {file = "django-cleanup-6.0.0.tar.gz", hash = "sha256:922e06ef8839c92bd3ab37a84db6058b8764f3fe44dbb4487bbca941d288280a"},
