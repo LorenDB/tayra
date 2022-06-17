@@ -670,17 +670,31 @@ class SubsonicViewSet(viewsets.GenericViewSet):
     def create_playlist(self, request, *args, **kwargs):
         data = request.GET or request.POST
         name = data.get("name", "")
-        if not name:
+        createPlaylist = True
+        playListId = data.get("playlistId", "")
+        if name and playListId:
             return response.Response(
                 {
                     "error": {
                         "code": 10,
-                        "message": "Playlist ID or name must be specified.",
+                        "message": "You can only supply either a playlistId or name, not both.",
                     }
                 }
             )
-
-        playlist = request.user.playlists.create(name=name)
+        if playListId:
+            playlist = request.user.playlists.get(pk=playListId)
+            createPlaylist = False
+        if not name and not playlist:
+            return response.Response(
+                {
+                    "error": {
+                        "code": 10,
+                        "message": "A valid playlist ID or name must be specified.",
+                    }
+                }
+            )
+        if createPlaylist:
+            playlist = request.user.playlists.create(name=name)
         ids = []
         for i in data.getlist("songId"):
             try:

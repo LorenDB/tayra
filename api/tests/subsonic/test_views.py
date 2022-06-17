@@ -709,6 +709,26 @@ def test_create_playlist(f, db, logged_in_api_client, factories):
 
 
 @pytest.mark.parametrize("f", ["json"])
+def test_create_playlist_with_update(f, db, logged_in_api_client, factories):
+    url = reverse("api:subsonic-create_playlist")
+    assert url.endswith("createPlaylist") is True
+    playlist = factories["playlists.Playlist"](user=logged_in_api_client.user)
+    factories["playlists.PlaylistTrack"](index=0, playlist=playlist)
+    track1 = factories["music.Track"]()
+    track2 = factories["music.Track"]()
+    response = logged_in_api_client.get(
+        url, {"f": f, "playlistId": playlist.pk, "songId": [track1.pk, track2.pk]}
+    )
+    playlist.refresh_from_db()
+    assert response.status_code == 200
+    assert playlist.playlist_tracks.count() == 3
+    qs = playlist.__class__.objects.with_tracks_count()
+    assert response.data == {
+        "playlist": serializers.get_playlist_detail_data(qs.first())
+    }
+
+
+@pytest.mark.parametrize("f", ["json"])
 def test_get_music_folders(f, db, logged_in_api_client, factories):
     url = reverse("api:subsonic-get_music_folders")
     assert url.endswith("getMusicFolders") is True
