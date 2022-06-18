@@ -66,9 +66,23 @@ To get the help of a specific namespace and list all its available commands, sim
 Authentication
 --------------
 
-The CLI uses JWT tokens to interact with the API. You can either:
+The CLI uses Oauth tokens to interact with the API. 
 
-1. Run ``funkwhale login``, which will ask you your Funkwhale username and password and store a JWT token in your local keyring. This token will be used automatically afterwards.
+To get started, you need to create an application for the CLI. To do this:
+
+1. Log in to your Funkwhale pod.
+2. Select the cog icon (:fa:`cog`) or your avatar to expand the user menu.
+3. Select :guilabel:`Settings`.
+4. Scroll down to the :guilabel:`Your applications` section.
+5. Select :guilabel:`Register a new application` to create a new application.
+6. Give your application an appropriate name (e.g. "Funkwhale CLI").
+7. Give your application the permissions you require. 
+8. Select :guilabel:`Create application`. A screen appears showing :guilabel:`Application details`.
+9. Copy the app's :guilabel:`Access token`.
+
+Once you have your app's Access Token, you can either:
+
+1. Run ``funkwhale login`. The CLI asks you for your token and stores it in your machine's keyring. The CLI uses this token to authenticate.
 2. Explicitly pass a token to the command via the ``-t`` flag or the ``FUNKWHALE_TOKEN`` environment variable
 
 If you use ``funkwhale login``, you can delete the local token with ``funkwhale logout``.
