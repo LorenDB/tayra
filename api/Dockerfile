@@ -82,6 +82,7 @@ RUN apk add --no-cache \
     libxml2 \
     libxslt \
     py3-cryptography \
+		libldap \
     && \
     ln -s /usr/bin/python3 /usr/bin/python
 
