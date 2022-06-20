@@ -52,7 +52,7 @@ feedparser = "==6.0.10"
 watchdog = "==2.1.9"
 asgiref = "==3.5.2" #1516
 ipython = "==7.32.0"
-python-ldap = "==3.4.0"
+python-ldap = { git = "https://github.com/python-ldap/python-ldap.git" }
 django-auth-ldap = "==4.1.0"
 uvicorn = {version = "==0.17.6", extras = ["standard"]}
 django-cache-memoize = "0.1.10"
