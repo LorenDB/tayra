@@ -1,0 +1,52 @@
+tasks:
+  - name: Funkwhale
+    env:
+      COMPOSE_FILE: dev.yml
+    init: |
+      cd front
+      yarn install
+      cd ..
+      echo "# Gitpod Environment Variables" > .env
+      echo "MEDIA_URL=http://localhost:8000/media/" >> .env
+      echo "STATIC_URL=http://localhost:8000/staticfiles/" >> .env
+      echo "GITPOD_WORKSPACE_URL=$GITPOD_WORKSPACE_URL" >> .env
+      echo "HMR_PORT=8000" >> .env
+      docker network create federation
+      docker-compose pull
+      docker-compose build
+      docker-compose up -d postgres redis
+      sleep 10 # allow postgres and redis to initialize
+      docker-compose run --rm api python manage.py migrate
+      docker-compose run --rm api python manage.py createsuperuser --no-input --username gitpod --email gitpod@example.com
+      echo "from django.contrib.auth import get_user_model;u=get_user_model().objects.get(username='gitpod');u.set_password('gitpod');u.save()" | docker-compose run --rm -T api python manage.py shell -i python
+      echo "from funkwhale_api.music import fake_data; fake_data.create_data(25)" | docker-compose run --rm -T api python manage.py shell -i python
+      docker-compose run --rm front yarn run i18n-compile
+    command: docker-compose up nginx
+
+  - name: Welcome to Funkwhale development!
+    command: |
+      clear
+      echo "You can now start developing Funkwhale with gitpod!"
+      echo ""
+      echo "To sign in to the superuser account, please this credentials:"
+      echo "gitpod:gitpod"
+
+ports:
+  - port: 8000
+    visibility: public
+    onOpen: notify
+
+  - port: 4000
+    visibility: public
+    onOpen: open-preview
+
+vscode:
+  extensions:
+    - antfu.vite
+    - lukashass.volar
+    - lextudio.restructuredtext
+    - trond-snekvik.simple-rst
+    - ms-python.python
+    - ms-toolsai.jupyter
+    - ms-toolsai.jupyter-keymap
+    - ms-toolsai.jupyter-renderers

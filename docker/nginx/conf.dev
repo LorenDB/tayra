@@ -88,12 +88,6 @@ http {
             add_header X-Frame-Options "" always;
             proxy_pass   http://funkwhale-front/front/embed.html;
         }
-        location /front-server/ {
-            proxy_pass   http://funkwhale-front/;
-        }
-        location /sockjs-node/ {
-            proxy_pass   http://funkwhale-front/sockjs-node/;
-        }
 
         location / {
             include /etc/nginx/funkwhale_proxy.conf;

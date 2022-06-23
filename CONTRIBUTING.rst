@@ -12,6 +12,64 @@ This document will guide you through common operations such as:
 - Writing unit tests to validate your work
 - Submit your work
 
+The quickest way to contribute to the project is through Gitpod!
+----------------------------------------------------------------
+
+.. image:: https://gitpod.io/button/open-in-gitpod.svg
+  :alt: Open in Gitpod
+  :target: https://gitpod.io/#https://dev.funkwhale.audio/funkwhale/funkwhale
+
+When you click the button above, you will be redirected to the gitpod.io site. Here you
+can sign in with your Gitlab or GitHub account and a new workspace will be automatically 
+created for you. 
+
+The workspace will checkout current ``development`` branch and run a Funkwhale instance 
+with both frontend and backend started so you can jump straight into development. 
+
+The provided backend instance has a default admin user ``gitpod`` authenticated with 
+password ``gitpod``.
+
+In case you want to develop only frontend, you can go to ``File > Open Folder`` and navigate to 
+``/workspace/funkwhale/front``. This will start a new vite server on port 4000. This server 
+integrates well with the extension provided by Gitpod but is disconnected from any instance by default.
+
+Usage with Gitlab
+^^^^^^^^^^^^^^^^^
+
+We understand that having to go to the contribution guide and clicking the ``Open in Gitpod`` 
+is not an optimal way to create new branches or test existing ones. That's why we've enabled the 
+Gitpod integration on our Gitlab server. 
+
+You can now simply choose to use Gitpod instead of Gitlab Web IDE on any of branch, commit or merge request:
+
+.. image:: ./docs/_static/images/select-gitpod-in-gitlab.png
+  :alt: Select Gitpod as the default Web IDE.
+
+Gitlab Workflow extension
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Gitpod offers a `Gitlab Workflow` extension that can help with managing Gitlab issues, 
+merge requests and pipelines. To use it you need to create a personal access token with 
+``api`` and ``read_user`` scopes. You can create it by visiting `your Gitlab profile settings <https://dev.funkwhale.audio/-/profile/personal_access_tokens>`_.
+
+Setting the token through the extension is not an optimal approach as you'd need to do this
+every single time you start a new workspace. However you can work around this by creating 
+user environment variables in `your Gitpod settings <https://gitpod.io/variables>`_.
+
+When you configure your environment variables as follows, you will be signed in to the extension
+automatically in old and new workspaces.
+
++----------------------------------+---------------------------------+-----------------+
+| Name                             | Value                           | Scope           |
++==================================+=================================+=================+
+| ``GITLAB_WORKFLOW_INSTANCE_URL`` | ``https://dev.funkwhale.audio`` | ``funkwhale/*`` |
++----------------------------------+---------------------------------+-----------------+
+| ``GITLAB_WORKFLOW_TOKEN``        | ``TOKEN``                       | ``funkwhale/*`` |
++----------------------------------+---------------------------------+-----------------+
+
+The scope ``funkwhale/*`` will ensure that you will be signed into our instance on every
+project that we're hosting, not only Funkwhale itself.
+
 A quick path to contribute on the front-end
 -------------------------------------------
 
@@ -185,7 +243,7 @@ Injecting fake data is done by running the following script::
 
     artists=25
     command="from funkwhale_api.music import fake_data; fake_data.create_data($artists)"
-    echo $command | docker-compose -f dev.yml run --rm api python manage.py shell -i python
+    echo $command | docker-compose -f dev.yml run --rm -T api python manage.py shell -i python
 
 The previous command will create 25 artists with random albums, tracks
 and metadata.
