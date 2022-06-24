@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import axios from 'axios'
-import { uniq, merge } from 'lodash-es'
+import { uniq } from 'lodash-es'
 import Pagination from '~/components/vui/Pagination.vue'
 import EditCard from '~/components/library/EditCard.vue'
-import { normalizeQuery, parseTokens } from '~/utils/search'
-
 import useSharedLabels from '~/composables/locale/useSharedLabels'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
 import useOrdering, { OrderingProps } from '~/composables/useOrdering'
 import useSmartSearch, { SmartSearchProps } from '~/composables/useSmartSearch'
 import { OrderingField } from '~/store/ui'
-import useEditConfigs from '~/composables/moderation/useEditConfigs'
+import useEditConfigs, { EditObjectType } from '~/composables/moderation/useEditConfigs'
+import { useGettext } from 'vue3-gettext'
 
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO (wvffle): find object type
@@ -27,7 +26,10 @@ const configs = useEditConfigs()
 
 // TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
-type ResponseType = { count: number, results: { target?: { type: string, id: number } }[] }
+
+type StateTarget = { id: number, type: keyof typeof targets }
+type ResponseResult = { uuid: string, is_approved: boolean, target?: StateTarget }
+type ResponseType = { count: number, results: ResponseResult[] }
 const result = ref<null | ResponseType>(null)
 
 const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props.defaultQuery, props.updateUrl)
@@ -38,20 +40,27 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['applied_date', 'applied_date']
 ]
 
+interface TargetType {
+  payload: ResponseResult
+  currentState: Record<EditObjectType, { value: unknown }>
+}
+
 const targets = reactive({
-  track: {}
+  track: {} as Record<string, TargetType>
 })
 
 const fetchTargets = async () => {
   // we request target data via the API so we can display previous state
   // additionnal data next to the edit card
-  const typesAndIds = {
-    track: { url: 'tracks/', ids: [] as number[] }
+  type Config = { url: string, ids: number[] }
+  const typesAndIds: Record<keyof typeof targets, Config> = {
+    track: { url: 'tracks/', ids: [] }
   }
 
   for (const res of result.value?.results ?? []) {
-    const typeAndId = typesAndIds[result.target?.type as keyof typeof typesAndIds]
-    typeAndId?.ids.push(result.target.id)
+    if (!res.target) continue
+    const typeAndId = typesAndIds[res.target.type as keyof typeof typesAndIds]
+    typeAndId?.ids.push(res.target.id)
   }
 
   for (const [key, config] of Object.entries(typesAndIds)) {
@@ -68,13 +77,13 @@ const fetchTargets = async () => {
       // TODO (wvffle): Handle error
     })
 
-    for (const payload of response.data.results) {
-      targets[key][payload.id] = { 
+    for (const payload of response?.data?.results ?? []) {
+      targets[key as keyof typeof targets][payload.id] = {
         payload,
-        currentState: configs[key].fields.reduce((state, field) => {
+        currentState: configs[key as keyof typeof targets].fields.reduce((state, field) => {
           state[field.id] = { value: field.getValue(payload) }
           return state
-        })
+        }, {} as Record<EditObjectType, { value: unknown }>)
       }
     }
   }
@@ -124,32 +133,18 @@ const { $pgettext } = useGettext()
 const labels = computed(() => ({
   searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by account, summary, domain…')
 }))
-export default {
-  methods: {
-    selectPage: function (page) {
-      this.page = page
-    },
-    handle (type, id, value) {
-      if (type === 'delete') {
-        this.exclude.push(id)
-      }
 
-      this.result.results.forEach((e) => {
-        if (e.uuid === id) {
-          e.is_approved = value
-        }
-      })
-    },
-    getCurrentState (target) {
-      if (!target) {
-        return {}
-      }
-      if (this.targets[target.type] && this.targets[target.type][String(target.id)]) {
-        return this.targets[target.type][String(target.id)].currentState
-      }
-      return {}
+const handle = (type: 'delete' | 'approved', id: string, value: boolean) => {
+  for (const entry of result.value?.results ?? []) {
+    if (entry.uuid === id) {
+      entry.is_approved = value
     }
   }
+}
+
+const getCurrentState = (target?: StateTarget): object => {
+  if (!target) return {}
+  return targets[target.type]?.[target.id]?.currentState ?? {}
 }
 </script>
 
@@ -160,13 +155,13 @@ export default {
       <div class="fields">
         <div class="ui field">
           <label for="search-edits"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-          <form @submit.prevent="search.query = $refs.search.value">
+          <form @submit.prevent="query = $refs.search.value">
             <input
               id="search-edits"
               ref="search"
               name="search"
               type="text"
-              :value="search.query"
+              :value="query"
               :placeholder="labels.searchPlaceholder"
             >
           </form>
@@ -177,7 +172,7 @@ export default {
             id="edit-status"
             class="ui dropdown"
             :value="getTokenValue('is_approved', '')"
-            @change="addSearchToken('is_approved', $event.target.value)"
+            @change="addSearchToken('is_approved', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
               <translate translate-context="Content/*/Dropdown">
@@ -247,11 +242,11 @@ export default {
       </div>
       <div v-else-if="result?.count > 0">
         <edit-card
-          v-for="obj in result.results"
+          v-for="obj in result?.results ?? []"
           :key="obj.uuid"
           :obj="obj"
           :current-state="getCurrentState(obj.target)"
-          @deleted="handle('delete', obj.uuid, null)"
+          @deleted="handle('delete', obj.uuid, false)"
           @approved="handle('approved', obj.uuid, $event)"
         />
       </div>
@@ -265,11 +260,10 @@ export default {
     <div>
       <pagination
         v-if="result && result.count > paginateBy"
+        v-model:current="page"
         :compact="true"
-        :current="page"
         :paginate-by="paginateBy"
         :total="result.count"
-        @page-changed="selectPage"
       />
 
       <span v-if="result && result.results.length > 0">

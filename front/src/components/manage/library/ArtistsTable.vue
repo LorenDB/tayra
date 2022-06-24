@@ -34,20 +34,16 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 ]
 
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
-const actions = () => {
-  const deleteLabel = $pgettext('*/*/*/Verb', 'Delete')
-  const confirmationMessage = $pgettext('Popup/*/Paragraph', 'The selected artist will be removed, as well as associated uploads, tracks, albums, favorites and listening history. This action is irreversible.')
-  return [
-    {
-      name: 'delete',
-      label: deleteLabel,
-      confirmationMessage: confirmationMessage,
-      isDangerous: true,
-      allowAll: false,
-      confirmColor: 'danger'
-    }
-  ]
-}
+const actions = () => [
+  {
+    name: 'delete',
+    label: $pgettext('*/*/*/Verb', 'Delete'),
+    confirmationMessage: $pgettext('Popup/*/Paragraph', 'The selected artist will be removed, as well as associated uploads, tracks, albums, favorites and listening history. This action is irreversible.'),
+    isDangerous: true,
+    allowAll: false,
+    confirmColor: 'danger'
+  }
+]
 
 const isLoading = ref(false)
 const fetchData = async () => {

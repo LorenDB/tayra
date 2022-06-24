@@ -34,21 +34,18 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['name', 'name']
 ]
 
+const { $pgettext } = useGettext()
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
-const actions = () => {
-  const deleteLabel = $pgettext('*/*/*/Verb', 'Delete')
-  const confirmationMessage = $pgettext('Popup/*/Paragraph', 'The selected albums will be removed, as well as associated tracks, uploads, favorites and listening history. This action is irreversible.')
-  return [
-    {
-      name: 'delete',
-      label: deleteLabel,
-      confirmationMessage: confirmationMessage,
-      isDangerous: true,
-      allowAll: false,
-      confirmColor: 'danger'
-    }
-  ]
-}
+const actions = [
+  {
+    name: 'delete',
+    label: $pgettext('*/*/*/Verb', 'Delete'),
+    confirmationMessage: $pgettext('Popup/*/Paragraph', 'The selected albums will be removed, as well as associated tracks, uploads, favorites and listening history. This action is irreversible.'),
+    isDangerous: true,
+    allowAll: false,
+    confirmColor: 'danger'
+  }
+]
 
 const isLoading = ref(false)
 const fetchData = async () => {
@@ -89,7 +86,6 @@ onOrderingUpdate(fetchData)
 fetchData()
 
 const sharedLabels = useSharedLabels()
-const { $pgettext } = useGettext()
 const labels = computed(() => ({
   searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by domain, title, artist, MusicBrainz ID…'),
   openModeration: $pgettext('Content/Moderation/Verb', 'Open in moderation interface')

@@ -34,7 +34,7 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 ]
 
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
-const actions = () => []
+const actions = []
 
 const isLoading = ref(false)
 const fetchData = async () => {
