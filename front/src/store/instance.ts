@@ -58,6 +58,7 @@ const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     frontSettings: {
+      // TODO (wvffle): Remove all checks if the variable exists
       defaultServerUrl: instanceUrl,
       additionalStylesheets: []
     },

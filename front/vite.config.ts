@@ -43,7 +43,6 @@ export default defineConfig(() => ({
         navigateFallback: 'index.html'
       }
     }),
-
     {
       name: 'fix-fomantic-ui-css',
       transform (src, id) {

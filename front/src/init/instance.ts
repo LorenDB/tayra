@@ -28,7 +28,8 @@ export const install: InitModule = async ({ store, router }) => {
     const defaultInstanceUrl = store.state.instance.frontSettings.defaultServerUrl
     store.commit('instance/instanceUrl', defaultInstanceUrl)
   } else {
-    // needed to trigger initialization of axios / service worker / web socket
+    // NOTE: Needed to trigger initialization of axios / service worker / web socket
+    // TODO (wvffle): Check if it is really needed
     store.commit('instance/instanceUrl', store.state.instance.instanceUrl)
   }
 }
