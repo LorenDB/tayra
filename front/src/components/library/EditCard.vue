@@ -291,25 +291,27 @@ export default {
       const previousState = this.previousState
       const fields = Object.keys(payload)
       const self = this
-      return fields.map((f) => {
-        const fieldConfig = configs[this.obj.target.type].fields.find(({ id }) => id === f)
-        const dummyRepr = (v) => { return v }
-        const getValueRepr = fieldConfig.getValueRepr || dummyRepr
-        const d = {
-          id: f,
+
+      return fields.map((field) => {
+        const fieldConfig = this.configs[this.obj.target.type].fields.find(({ id }) => id === field)
+        const getValueRepr = fieldConfig.getValueRepr || (v => v)
+        const result = {
+          id: field,
           config: fieldConfig
         }
-        if (previousState && previousState[f]) {
-          d.old = previousState[f]
-          d.oldRepr = castValue(getValueRepr(d.old.value))
+        if (previousState?.[field]) {
+          result.old = previousState[field]
+          // TODO (wvffle): Originally it was using just result.old.value though for some reason it returns me the object as result.old now
+          result.oldRepr = castValue(getValueRepr(result.old.value ?? result.old))
         }
-        d.new = payload[f]
-        d.newRepr = castValue(getValueRepr(d.new))
-        if (d.old) {
+        result.new = payload[field]
+        result.newRepr = castValue(getValueRepr(result.new))
+        if (result.old) {
           // we compute the diffs between the old and new values
-          d.diff = diffWordsWithSpace(d.oldRepr, d.newRepr)
+          result.diff = diffWordsWithSpace(result.oldRepr, result.newRepr)
         }
-        return d
+
+        return result
       })
     }
   },
