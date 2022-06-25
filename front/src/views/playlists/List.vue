@@ -2,7 +2,7 @@
 import axios from 'axios'
 import $ from 'jquery'
 import qs from 'qs'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
@@ -15,14 +15,12 @@ import { OrderingField } from '~/store/ui'
 
 interface Props extends OrderingProps {
   defaultPage?: number
-  defaultPaginateBy?: number
   defaultQuery?: string
   scope?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   defaultPage: 1,
-  defaultPaginateBy: 1,
   defaultQuery: '',
   scope: 'all'
 })
@@ -42,7 +40,7 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 const logger = useLogger()
 const sharedLabels = useSharedLabels()
 
-const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName, props.defaultPaginateBy)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
 
 const router = useRouter()
 const updateQueryString = () => router.replace({

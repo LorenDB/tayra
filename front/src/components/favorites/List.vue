@@ -17,12 +17,10 @@ import { OrderingField } from '~/store/ui'
 
 interface Props extends OrderingProps {
   defaultPage?: number
-  defaultPaginateBy?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  defaultPage: 1,
-  defaultPaginateBy: 1
+  defaultPage: 1
 })
 
 const store = useStore()
@@ -42,7 +40,7 @@ const logger = useLogger()
 const sharedLabels = useSharedLabels()
 
 const router = useRouter()
-const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName, props.defaultPaginateBy)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
 
 const updateQueryString = () => router.replace({
   query: {

@@ -240,8 +240,7 @@ export default createRouter({
         import('~/components/favorites/List.vue'),
       props: route => ({
         defaultOrdering: route.query.ordering,
-        defaultPage: route.query.page,
-        defaultPaginateBy: route.query.paginateBy
+        defaultPage: route.query.page
       })
     },
     {
@@ -635,7 +634,6 @@ export default createRouter({
             defaultTags: Array.isArray(route.query.tag || [])
               ? route.query.tag
               : [route.query.tag],
-            defaultPaginateBy: route.query.paginateBy,
             defaultPage: route.query.page
           })
         },
@@ -653,7 +651,6 @@ export default createRouter({
             defaultTags: Array.isArray(route.query.tag || [])
               ? route.query.tag
               : [route.query.tag],
-            defaultPaginateBy: route.query.paginateBy,
             defaultPage: route.query.page
           })
         },
@@ -670,7 +667,6 @@ export default createRouter({
             defaultTags: Array.isArray(route.query.tag || [])
               ? route.query.tag
               : [route.query.tag],
-            defaultPaginateBy: route.query.paginateBy,
             defaultPage: route.query.page
           })
         },
@@ -687,7 +683,6 @@ export default createRouter({
             defaultTags: Array.isArray(route.query.tag || [])
               ? route.query.tag
               : [route.query.tag],
-            defaultPaginateBy: route.query.paginateBy,
             defaultPage: route.query.page
           })
         },
@@ -705,7 +700,6 @@ export default createRouter({
             defaultTags: Array.isArray(route.query.tag || [])
               ? route.query.tag
               : [route.query.tag],
-            defaultPaginateBy: route.query.paginateBy,
             defaultPage: route.query.page
           })
         },
@@ -719,7 +713,6 @@ export default createRouter({
           props: route => ({
             defaultOrdering: route.query.ordering,
             defaultQuery: route.query.query,
-            defaultPaginateBy: route.query.paginateBy,
             defaultPage: route.query.page
           })
         },
@@ -734,7 +727,6 @@ export default createRouter({
             scope: 'me',
             defaultOrdering: route.query.ordering,
             defaultQuery: route.query.query,
-            defaultPaginateBy: route.query.paginateBy,
             defaultPage: route.query.page
           })
         },
@@ -771,7 +763,6 @@ export default createRouter({
           props: route => ({
             defaultOrdering: route.query.ordering,
             defaultQuery: route.query.query,
-            defaultPaginateBy: route.query.paginateBy,
             defaultPage: route.query.page
           })
         },
@@ -784,7 +775,6 @@ export default createRouter({
             scope: 'me',
             defaultOrdering: route.query.ordering,
             defaultQuery: route.query.query,
-            defaultPaginateBy: route.query.paginateBy,
             defaultPage: route.query.page
           })
         },

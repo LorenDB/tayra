@@ -17,7 +17,6 @@ import { useStore } from '~/store'
 
 interface Props extends OrderingProps {
   defaultPage?: number
-  defaultPaginateBy?: number
   defaultQuery?: string
   defaultTags?: string[]
   scope?: string
@@ -25,7 +24,6 @@ interface Props extends OrderingProps {
 
 const props = withDefaults(defineProps<Props>(), {
   defaultPage: 1,
-  defaultPaginateBy: 1,
   defaultQuery: '',
   defaultTags: () => [],
   scope: 'all'
@@ -47,7 +45,7 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 const logger = useLogger()
 const sharedLabels = useSharedLabels()
 
-const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName, props.defaultPaginateBy)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
 
 const router = useRouter()
 const updateQueryString = () => router.replace({

@@ -7,7 +7,7 @@ import Pagination from '~/components/vui/Pagination.vue'
 import useLogger from '~/composables/useLogger'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
 import { OrderingField } from '~/store/ui'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
 import { onBeforeRouteUpdate, useRouter } from 'vue-router'
@@ -15,7 +15,6 @@ import useOrdering, { OrderingProps } from '~/composables/useOrdering'
 
 interface Props extends OrderingProps {
   defaultPage?: number
-  defaultPaginateBy?: number
 
   defaultQuery?: string
   scope?: string
@@ -23,7 +22,6 @@ interface Props extends OrderingProps {
 
 const props = withDefaults(defineProps<Props>(), {
   defaultPage: 1,
-  defaultPaginateBy: 1,
   defaultQuery: '',
   scope: 'all'
 })
@@ -42,7 +40,7 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 const logger = useLogger()
 const sharedLabels = useSharedLabels()
 
-const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName, props.defaultPaginateBy)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
 
 const router = useRouter()
 const updateQueryString = () => router.replace({

@@ -11,7 +11,7 @@ import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
 import useLogger from '~/composables/useLogger'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
 import { OrderingField } from '~/store/ui'
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch, onMounted } from 'vue'
 import useOrdering, { OrderingProps } from '~/composables/useOrdering'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
@@ -19,7 +19,6 @@ import { onBeforeRouteUpdate, useRouter } from 'vue-router'
 
 interface Props extends OrderingProps {
   defaultPage?: number
-  defaultPaginateBy?: number
 
   defaultQuery?: string
   defaultTags?: string[]
@@ -28,7 +27,6 @@ interface Props extends OrderingProps {
 
 const props = withDefaults(defineProps<Props>(), {
   defaultPage: 1,
-  defaultPaginateBy: 1,
   defaultQuery: '',
   defaultTags: () => [],
   scope: 'all'
@@ -50,7 +48,7 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 const logger = useLogger()
 const sharedLabels = useSharedLabels()
 
-const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName, props.defaultPaginateBy)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
 
 const router = useRouter()
 const updateQueryString = () => router.replace({
