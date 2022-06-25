@@ -42,7 +42,7 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 const logger = useLogger()
 const sharedLabels = useSharedLabels()
 
-const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName, props.defaultPaginateBy)
 
 const router = useRouter()
 const updateQueryString = () => router.replace({

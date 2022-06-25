@@ -160,6 +160,13 @@ export interface Form {
   help_text: Content
 }
 
+// Upload stuff
+export interface Upload {
+  filename?: string
+  source?: string
+  uuid: string
+}
+
 // Yet uncategorized stuff
 export interface Actor {
   preferred_username: string

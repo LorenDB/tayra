@@ -19,7 +19,10 @@ export type WebSocketEventName = 'inbox.item_added' | 'import.status_updated' | 
   | 'report.created' | 'user_request.created' | 'Listen'
 
 export type OrderingField = 'creation_date' | 'title' | 'album__title' | 'artist__name' | 'release_date' | 'name'
-  | 'applied_date' | 'followers_count' | 'uploads_count'
+  | 'applied_date' | 'followers_count' | 'uploads_count' | 'length' | 'items_count' | 'modification_date' | 'size'
+  | 'accessed_date' | 'bitrate' | 'duration' | 'last_fetch_date' | 'preferred_username' | 'domain' | 'handled_date'
+  | 'album_title' | 'artist_name' | 'actors_count' | 'outbox_activities_count' | 'expiration_date' | 'date_joined'
+  | 'last_activity' | 'username'
 
 export type OrderingDirection = '-' | '+'
 interface RoutePreferences {

@@ -42,7 +42,7 @@ const logger = useLogger()
 const sharedLabels = useSharedLabels()
 
 const router = useRouter()
-const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName, props.defaultPaginateBy)
 
 const updateQueryString = () => router.replace({
   query: {

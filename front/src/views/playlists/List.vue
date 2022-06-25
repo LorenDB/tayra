@@ -1,3 +1,105 @@
+<script setup lang="ts">
+import axios from 'axios'
+import $ from 'jquery'
+import qs from 'qs'
+import { computed, ref, watch } from 'vue'
+import { useRouter, onBeforeRouteUpdate } from 'vue-router'
+import { useGettext } from 'vue3-gettext'
+
+import PlaylistCardList from '~/components/playlists/CardList.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useLogger from '~/composables/useLogger'
+import useOrdering, { OrderingProps } from '~/composables/useOrdering'
+import { OrderingField } from '~/store/ui'
+
+interface Props extends OrderingProps {
+  defaultPage?: number
+  defaultPaginateBy?: number
+  defaultQuery?: string
+  scope?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultPage: 1,
+  defaultPaginateBy: 1,
+  defaultQuery: '',
+  scope: 'all'
+})
+
+// TODO (wvffle): Make sure everything is it's own type
+const page = ref(+props.defaultPage)
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+const query = ref(props.defaultQuery)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['modification_date', 'modification_date'],
+  ['name', 'name']
+]
+
+const logger = useLogger()
+const sharedLabels = useSharedLabels()
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName, props.defaultPaginateBy)
+
+const router = useRouter()
+const updateQueryString = () => router.replace({
+  query: {
+    query: query.value,
+    page: page.value,
+    paginateBy: paginateBy.value,
+    ordering: orderingString.value
+  }
+})
+
+watch(page, updateQueryString)
+onOrderingUpdate(updateQueryString)
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    scope: props.scope,
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    playable: true
+  }
+
+  logger.time('Fetching albums')
+  try {
+    const response = await axios.get('playlists/', {
+      params,
+      paramsSerializer: function (params) {
+        return qs.stringify(params, { indices: false })
+      }
+    })
+
+    result.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+    result.value = null
+  } finally {
+    logger.timeEnd('Fetching albums')
+    isLoading.value = false
+  }
+}
+onBeforeRouteUpdate(fetchData)
+fetchData()
+
+// @ts-expect-error semantic ui
+onMounted(() => $('.ui.dropdown').dropdown())
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  playlists: $pgettext('*/*/*', 'Playlists'),
+  searchPlaceholder: $pgettext('Content/Playlist/Placeholder/Call to action', 'Enter playlist name…')
+}))
+</script>
+
 <template>
   <main v-title="labels.playlists">
     <section class="ui vertical stripe segment">
@@ -126,111 +228,11 @@
       <div class="ui center aligned basic segment">
         <pagination
           v-if="result && result.results.length > 0"
-          :current="page"
+          v-model:current="page"
           :paginate-by="paginateBy"
           :total="result.count"
-          @page-changed="selectPage"
         />
       </div>
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import $ from 'jquery'
-
-import OrderingMixin from '~/components/mixins/Ordering.vue'
-import PaginationMixin from '~/components/mixins/Pagination.vue'
-import PlaylistCardList from '~/components/playlists/CardList.vue'
-import Pagination from '~/components/vui/Pagination.vue'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-const FETCH_URL = 'playlists/'
-
-export default {
-  components: {
-    PlaylistCardList,
-    Pagination
-  },
-  mixins: [OrderingMixin, PaginationMixin],
-  props: {
-    defaultQuery: { type: String, required: false, default: '' },
-    scope: { type: String, required: false, default: 'all' }
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels }
-  },
-  data () {
-    return {
-      isLoading: true,
-      result: null,
-      page: parseInt(this.defaultPage),
-      query: this.defaultQuery,
-      orderingOptions: [
-        ['creation_date', 'creation_date'],
-        ['modification_date', 'modification_date'],
-        ['name', 'name']
-      ]
-    }
-  },
-  computed: {
-    labels () {
-      const playlists = this.$pgettext('*/*/*', 'Playlists')
-      const searchPlaceholder = this.$pgettext('Content/Playlist/Placeholder/Call to action', 'Enter playlist name…')
-      return {
-        playlists,
-        searchPlaceholder
-      }
-    }
-  },
-  watch: {
-    page () {
-      this.updateQueryString()
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  mounted () {
-    $('.ui.dropdown').dropdown()
-  },
-  methods: {
-    updateQueryString: function () {
-      history.pushState(
-        {},
-        null,
-        this.$route.path + '?' + new URLSearchParams(
-          {
-            query: this.query,
-            page: this.page,
-            paginateBy: this.paginateBy,
-            ordering: this.getOrderingAsString()
-          }).toString()
-      )
-    },
-    fetchData: function () {
-      const self = this
-      this.isLoading = true
-      const url = FETCH_URL
-      const params = {
-        scope: this.scope,
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.query,
-        ordering: this.getOrderingAsString(),
-        playable: true
-      }
-      axios.get(url, { params: params }).then(response => {
-        self.result = response.data
-        self.isLoading = false
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  }
-}
-</script>

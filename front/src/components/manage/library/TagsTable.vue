@@ -1,16 +1,112 @@
+<script setup lang="ts">
+import axios from 'axios'
+import Pagination from '~/components/vui/Pagination.vue'
+import ActionTable from '~/components/common/ActionTable.vue'
+import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
+import { truncate } from '~/utils/filters'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useSmartSearch, { SmartSearchProps } from '~/composables/useSmartSearch'
+import useOrdering, { OrderingProps } from '~/composables/useOrdering'
+import { OrderingField } from '~/store/ui'
+import { computed, ref, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+interface Props extends SmartSearchProps, OrderingProps {
+  // TODO (wvffle): find object type
+  filters?: object
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: '',
+  updateUrl: false,
+  filters: () => ({})
+})
+
+// TODO (wvffle): Make sure everything is it's own type
+const page = ref(1)
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+
+const { onSearch, query } = useSmartSearch(props.defaultQuery, props.updateUrl)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['name', 'name'],
+  ['length', 'length'],
+  ['items_count', 'items_count']
+]
+
+const { $pgettext } = useGettext()
+const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
+const actions = [
+  {
+    name: 'delete',
+    label: $pgettext('*/*/*/Verb', 'Delete'),
+    confirmationMessage: $pgettext('Popup/*/Paragraph', 'The selected tag will be removed and unlinked with existing content, if any. This action is irreversible.'),
+    isDangerous: true,
+    allowAll: false,
+    confirmColor: 'danger'
+  }
+]
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    ...props.filters
+  }
+
+  try {
+    const response = await axios.get('/manage/tags/', {
+      params
+      // TODO (wvffle): Check if params should be serialized. In other similar components (Podcasts, Artists) they are
+      // paramsSerializer: function (params) {
+      //   return qs.stringify(params, { indices: false })
+      // }
+    })
+
+    result.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+    result.value = null
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onSearch(() => (page.value = 1))
+watch(page, fetchData)
+onOrderingUpdate(fetchData)
+fetchData()
+
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by name')
+}))
+
+// TODO (wvffle): Check if we can remove the prop
+const detailedUpload = ref({})
+const showUploadDetailModal = ref(false)
+</script>
+
 <template>
   <div>
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
           <label for="tags-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-          <form @submit.prevent="search.query = $refs.search.value">
+          <form @submit.prevent="query = $refs.search.value">
             <input
               id="tags-search"
               ref="search"
               name="search"
               type="text"
-              :value="search.query"
+              :value="query"
               :placeholder="labels.searchPlaceholder"
             >
           </form>
@@ -125,11 +221,10 @@
     <div>
       <pagination
         v-if="result && result.count > paginateBy"
+        v-model:current="page"
         :compact="true"
-        :current="page"
         :paginate-by="paginateBy"
         :total="result.count"
-        @page-changed="selectPage"
       />
 
       <span v-if="result && result.results.length > 0">
@@ -143,125 +238,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import { merge } from 'lodash-es'
-import time from '~/utils/time'
-import { normalizeQuery, parseTokens } from '~/utils/search'
-import Pagination from '~/components/vui/Pagination.vue'
-import ActionTable from '~/components/common/ActionTable.vue'
-import OrderingMixin from '~/components/mixins/Ordering.vue'
-import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
-import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
-import { truncate } from '~/utils/filters'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-export default {
-  components: {
-    Pagination,
-    ActionTable,
-    ImportStatusModal
-  },
-  mixins: [OrderingMixin, SmartSearchMixin],
-  props: {
-    filters: { type: Object, required: false, default: () => { return {} } }
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels, truncate }
-  },
-  data () {
-    return {
-      detailedUpload: {},
-      showUploadDetailModal: false,
-      time,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: {
-        query: this.defaultQuery,
-        tokens: parseTokens(normalizeQuery(this.defaultQuery))
-      },
-      orderingOptions: [
-        ['creation_date', 'creation_date'],
-        ['name', 'name'],
-        ['length', 'length'],
-        ['items_count', 'items_count']
-      ]
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by name')
-      }
-    },
-    actionFilters () {
-      const currentFilters = {
-        q: this.search.query
-      }
-      if (this.filters) {
-        return merge(currentFilters, this.filters)
-      } else {
-        return currentFilters
-      }
-    },
-    actions () {
-      const deleteLabel = this.$pgettext('*/*/*/Verb', 'Delete')
-      const confirmationMessage = this.$pgettext('Popup/*/Paragraph', 'The selected tag will be removed and unlinked with existing content, if any. This action is irreversible.')
-      return [
-        {
-          name: 'delete',
-          label: deleteLabel,
-          confirmationMessage: confirmationMessage,
-          isDangerous: true,
-          allowAll: false,
-          confirmColor: 'danger'
-        }
-      ]
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    ordering () {
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const params = merge({
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search.query,
-        ordering: this.getOrderingAsString()
-      }, this.filters)
-      const self = this
-      self.isLoading = true
-      self.checked = []
-      axios.get('/manage/tags/', { params: params }).then((response) => {
-        self.isLoading = false
-        self.result = response.data
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  }
-}
-</script>

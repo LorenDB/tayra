@@ -70,6 +70,7 @@ export default () => ({
     release_date: $pgettext('Content/*/*/Noun', 'Release date'),
     accessed_date: $pgettext('Content/*/*/Noun', 'Accessed date'),
     applied_date: $pgettext('Content/*/*/Noun', 'Applied date'),
+    handled_date: $pgettext('Content/*/*/Noun', 'Handled date'),
     first_seen: $pgettext('Content/Moderation/Dropdown/Noun', 'First seen date'),
     last_seen: $pgettext('Content/Moderation/Dropdown/Noun', 'Last seen date'),
     modification_date: $pgettext('Content/Playlist/Dropdown/Noun', 'Modification date'),

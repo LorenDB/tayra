@@ -1,3 +1,92 @@
+<script setup lang="ts">
+import axios from 'axios'
+import moment from 'moment'
+import Pagination from '~/components/vui/Pagination.vue'
+import ActionTable from '~/components/common/ActionTable.vue'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import { computed, ref, watch } from 'vue'
+import { watchDebounced } from '@vueuse/core'
+import { useGettext } from 'vue3-gettext'
+import useOrdering, { OrderingProps } from '~/composables/useOrdering'
+import { OrderingField } from '~/store/ui'
+
+interface Props extends OrderingProps {
+  // TODO (wvffle): find object type
+  filters?: object
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  filters: () => ({})
+})
+
+// TODO (wvffle): Make sure everything is it's own type
+const page = ref(1)
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering } = useOrdering(props.orderingConfigName)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['expiration_date', 'expiration_date'],
+  ['creation_date', 'creation_date']
+]
+
+const query = ref('')
+const isOpen = ref(false)
+const { $pgettext } = useGettext()
+const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
+const actions = [
+  {
+    name: 'delete',
+    label: $pgettext('*/*/*/Verb', 'Delete'),
+    filterCheckable: (obj: { users: unknown[], expiration_date: Date }) => {
+      return obj.users.length === 0 && moment().isBefore(obj.expiration_date)
+    }
+  }
+]
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    is_open: isOpen.value,
+    ...props.filters
+  }
+
+  try {
+    const response = await axios.get('/manage/users/invitations/', {
+      params
+      // TODO (wvffle): Check if params should be serialized. In other similar components (Podcasts, Artists) they are
+      // paramsSerializer: function (params) {
+      //   return qs.stringify(params, { indices: false })
+      // }
+    })
+
+    result.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+    result.value = null
+  } finally {
+    isLoading.value = false
+  }
+}
+
+watchDebounced(query, () => (page.value = 1), { debounce: 300 })
+watch(isOpen, () => (page.value = 1))
+watch(page, fetchData)
+onOrderingUpdate(fetchData)
+fetchData()
+
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: $pgettext('Content/Admin/Input.Placeholder/Verb', 'Search by username, e-mail address, code…')
+}))
+</script>
+
 <template>
   <div>
     <div class="ui inline form">
@@ -6,7 +95,7 @@
           <label for="invitations-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
           <input
             id="invitations-search"
-            v-model="search"
+            v-model="query"
             name="search"
             type="text"
             :placeholder="labels.searchPlaceholder"
@@ -133,11 +222,10 @@
     <div>
       <pagination
         v-if="result && result.count > paginateBy"
+        v-model:current="page"
         :compact="true"
-        :current="page"
         :paginate-by="paginateBy"
         :total="result.count"
-        @page-changed="selectPage"
       />
 
       <span v-if="result && result.results.length > 0">
@@ -153,120 +241,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import moment from 'moment'
-import { merge } from 'lodash-es'
-import Pagination from '~/components/vui/Pagination.vue'
-import ActionTable from '~/components/common/ActionTable.vue'
-import OrderingMixin from '~/components/mixins/Ordering.vue'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-export default {
-  components: {
-    Pagination,
-    ActionTable
-  },
-  mixins: [OrderingMixin],
-  props: {
-    filters: { type: Object, required: false, default: function () { return {} } }
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels }
-  },
-  data () {
-    return {
-      moment,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: '',
-      isOpen: null,
-      orderingOptions: [
-        ['expiration_date', 'expiration_date'],
-        ['creation_date', 'creation_date']
-      ]
-
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Admin/Input.Placeholder/Verb', 'Search by username, e-mail address, code…')
-      }
-    },
-    actionFilters () {
-      const currentFilters = {
-        q: this.search
-      }
-      if (this.filters) {
-        return merge(currentFilters, this.filters)
-      } else {
-        return currentFilters
-      }
-    },
-    actions () {
-      const deleteLabel = this.$pgettext('*/*/*/Verb', 'Delete')
-      return [
-        {
-          name: 'delete',
-          label: deleteLabel,
-          filterCheckable: (obj) => {
-            return obj.users.length === 0 && moment().isBefore(obj.expiration_date)
-          }
-        }
-      ]
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    ordering () {
-      this.page = 1
-      this.fetchData()
-    },
-    isOpen () {
-      this.page = 1
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.page = 1
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const params = merge({
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search,
-        is_open: this.isOpen,
-        ordering: this.getOrderingAsString()
-      }, this.filters)
-      const self = this
-      self.isLoading = true
-      self.checked = []
-      axios.get('/manage/users/invitations/', { params: params }).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  }
-}
-</script>

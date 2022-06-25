@@ -11,13 +11,13 @@ interface ConfigField {
   getValueRepr?: (obj: any) => string
 }
 
-interface EditableConfigField extends ConfigField {
+export interface EditableConfigField extends ConfigField {
   id: EditObjectType
 }
 
 export type EditObject = Artist | Album | Track
 export type EditObjectType = 'artist' | 'album' | 'track'
-type Configs = Record<EditObjectType, { fields: EditableConfigField[] }>
+type Configs = Record<EditObjectType, { fields: (EditableConfigField|ConfigField)[] }>
 
 const { $pgettext } = gettext
 const getContentValueRepr = (val: Content) => val.text

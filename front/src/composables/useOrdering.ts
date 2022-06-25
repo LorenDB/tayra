@@ -8,7 +8,7 @@ export interface OrderingProps {
   orderingConfigName: RouteWithPreferences | null
 }
 
-export default (orderingConfigName: MaybeRef<RouteWithPreferences | null>) => {
+export default (orderingConfigName: MaybeRef<RouteWithPreferences | null>, defaultPaginateBy?: MaybeRef<number>) => {
   const store = useStore()
   const route = useRoute()
 
@@ -18,6 +18,9 @@ export default (orderingConfigName: MaybeRef<RouteWithPreferences | null>) => {
   })
 
   const { paginateBy, ordering, orderingDirection } = toRefs(config)
+  if (defaultPaginateBy !== undefined) {
+    paginateBy.value = unref(defaultPaginateBy)
+  }
 
   const orderingString = computed(() => {
     if (orderingDirection.value === '-') return `-${ordering.value}`

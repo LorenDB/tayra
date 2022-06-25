@@ -81,7 +81,8 @@ const fetchTargets = async () => {
       targets[key as keyof typeof targets][payload.id] = {
         payload,
         currentState: configs[key as keyof typeof targets].fields.reduce((state, field) => {
-          state[field.id] = { value: field.getValue(payload) }
+          // TODO (wvffle): This cast may result in an `undefined` key added, make sure to test that.
+          state[field.id as EditObjectType] = { value: field.getValue(payload) }
           return state
         }, {} as Record<EditObjectType, { value: unknown }>)
       }
@@ -119,17 +120,13 @@ const fetchData = async () => {
   }
 }
 
-onSearch(() => {
-  page.value = 1
-  fetchData()
-})
-
+onSearch(() => (page.value = 1))
 watch(page, fetchData)
 onOrderingUpdate(fetchData)
 fetchData()
 
-const sharedLabels = useSharedLabels()
 const { $pgettext } = useGettext()
+const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
   searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by account, summary, domain…')
 }))

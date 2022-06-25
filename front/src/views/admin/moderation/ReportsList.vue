@@ -1,3 +1,89 @@
+<script setup lang="ts">
+import axios from 'axios'
+import Pagination from '~/components/vui/Pagination.vue'
+import ReportCard from '~/components/manage/moderation/ReportCard.vue'
+import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import { useStore } from '~/store'
+import { computed, ref, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import useOrdering, { OrderingProps } from '~/composables/useOrdering'
+import useSmartSearch, { SmartSearchProps } from '~/composables/useSmartSearch'
+import { OrderingField } from '~/store/ui'
+
+interface Props extends SmartSearchProps, OrderingProps {
+  // TODO (wvffle): find more types
+  mode?: 'card'
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: '',
+  updateUrl: false,
+  mode: 'card'
+})
+
+// TODO (wvffle): Make sure everything is it's own type
+const page = ref(1)
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+
+const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props.defaultQuery, props.updateUrl)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['applied_date', 'applied_date']
+]
+
+const store = useStore()
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value
+  }
+
+  try {
+    const response = await axios.get('manage/moderation/reports/', {
+      params
+      // TODO (wvffle): Check if params should be serialized. In other similar components (Podcasts, Artists) they are
+      // paramsSerializer: function (params) {
+      //   return qs.stringify(params, { indices: false })
+      // }
+    })
+
+    result.value = response.data
+    if (query.value === 'resolved:no') {
+      console.log('Refreshing sidebar notifications')
+      store.commit('ui/incrementNotifications', {
+        type: 'pendingReviewReports',
+        value: response.data.count
+      })
+    }
+  } catch (error) {
+    // TODO (wvffle): Handle error
+    result.value = null
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onSearch(() => (page.value = 1))
+watch(page, fetchData)
+onOrderingUpdate(fetchData)
+fetchData()
+
+const { $pgettext } = useGettext()
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by account, summary, domain…'),
+  reports: $pgettext('*/Moderation/*/Noun', 'Reports')
+}))
+</script>
+
 <template>
   <main v-title="labels.reports">
     <section class="ui vertical stripe segment">
@@ -11,13 +97,13 @@
         <div class="fields">
           <div class="ui field">
             <label for="reports-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-            <form @submit.prevent="search.query = $refs.search.value">
+            <form @submit.prevent="query = $refs.search.value">
               <input
                 id="reports-search"
                 ref="search"
                 name="search"
                 type="text"
-                :value="search.query"
+                :value="query"
                 :placeholder="labels.searchPlaceholder"
               >
             </form>
@@ -28,7 +114,7 @@
               id="reports-status"
               class="ui dropdown"
               :value="getTokenValue('resolved', '')"
-              @change="addSearchToken('resolved', $event.target.value)"
+              @change="addSearchToken('resolved', ($event.target as HTMLSelectElement).value)"
             >
               <option value="">
                 <translate translate-context="Content/*/Dropdown">
@@ -114,135 +200,11 @@
       <div class="ui center aligned basic segment">
         <pagination
           v-if="result && result.count > paginateBy"
-          :current="page"
+          v-model:current="page"
           :paginate-by="paginateBy"
           :total="result.count"
-          @page-changed="selectPage"
         />
       </div>
     </section>
   </main>
 </template>
-
-<script>
-
-import axios from 'axios'
-import { merge } from 'lodash-es'
-import time from '~/utils/time'
-import Pagination from '~/components/vui/Pagination.vue'
-import OrderingMixin from '~/components/mixins/Ordering.vue'
-import ReportCard from '~/components/manage/moderation/ReportCard.vue'
-import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
-import { normalizeQuery, parseTokens } from '~/utils/search'
-import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-export default {
-  components: {
-    Pagination,
-    ReportCard,
-    ReportCategoryDropdown
-  },
-  mixins: [OrderingMixin, SmartSearchMixin],
-  props: {
-    mode: { type: String, default: 'card' }
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels }
-  },
-  data () {
-    return {
-      time,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: {
-        query: this.defaultQuery,
-        tokens: parseTokens(normalizeQuery(this.defaultQuery))
-      },
-      orderingOptions: [
-        ['creation_date', 'creation_date'],
-        ['applied_date', 'applied_date']
-      ],
-      targets: {
-        track: {}
-      }
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by account, summary, domain…'),
-        reports: this.$pgettext('*/Moderation/*/Noun', 'Reports')
-      }
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    ordering () {
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const params = merge({
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search.query,
-        ordering: this.getOrderingAsString()
-      }, this.filters)
-      const self = this
-      self.isLoading = true
-      this.result = null
-      axios.get('manage/moderation/reports/', { params: params }).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-        if (self.search.query === 'resolved:no') {
-          console.log('Refreshing sidebar notifications')
-          self.$store.commit('ui/incrementNotifications', { type: 'pendingReviewReports', value: response.data.count })
-        }
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    },
-    handle (type, id, value) {
-      if (type === 'delete') {
-        this.exclude.push(id)
-      }
-
-      this.result.results.forEach((e) => {
-        if (e.uuid === id) {
-          e.is_approved = value
-        }
-      })
-    },
-    getCurrentState (target) {
-      if (!target) {
-        return {}
-      }
-      if (this.targets[target.type] && this.targets[target.type][String(target.id)]) {
-        return this.targets[target.type][String(target.id)].currentState
-      }
-      return {}
-    }
-  }
-}
-
-</script>

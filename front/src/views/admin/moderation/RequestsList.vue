@@ -1,3 +1,84 @@
+<script setup lang="ts">
+import axios from 'axios'
+import Pagination from '~/components/vui/Pagination.vue'
+import UserRequestCard from '~/components/manage/moderation/UserRequestCard.vue'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering, { OrderingProps } from '~/composables/useOrdering'
+import useSmartSearch, { SmartSearchProps } from '~/composables/useSmartSearch'
+import { ref, computed, watch } from 'vue'
+import { OrderingField } from '~/store/ui'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+
+interface Props extends SmartSearchProps, OrderingProps {}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: '',
+  updateUrl: false
+})
+
+// TODO (wvffle): Make sure everything is it's own type
+const page = ref(1)
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+
+const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props.defaultQuery, props.updateUrl)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['handled_date', 'handled_date']
+]
+
+const store = useStore()
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value
+  }
+
+  try {
+    const response = await axios.get('manage/moderation/requests/', {
+      params
+      // TODO (wvffle): Check if params should be serialized. In other similar components (Podcasts, Artists) they are
+      // paramsSerializer: function (params) {
+      //   return qs.stringify(params, { indices: false })
+      // }
+    })
+
+    result.value = response.data
+
+    if (query.value === 'status:pending') {
+      store.commit('ui/incrementNotifications', {
+        type: 'pendingReviewRequests',
+        value: response.data.count
+      })
+    }
+  } catch (error) {
+    // TODO (wvffle): Handle error
+    result.value = null
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onSearch(() => (page.value = 1))
+watch(page, fetchData)
+onOrderingUpdate(fetchData)
+fetchData()
+
+const { $pgettext } = useGettext()
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by username…'),
+  reports: $pgettext('*/Moderation/*/Noun', 'User Requests')
+}))
+</script>
+
 <template>
   <main v-title="labels.reports">
     <section class="ui vertical stripe segment">
@@ -11,13 +92,13 @@
         <div class="fields">
           <div class="ui field">
             <label for="requests-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-            <form @submit.prevent="search.query = $refs.search.value">
+            <form @submit.prevent="query = $refs.search.value">
               <input
                 id="requests-search"
                 ref="search"
                 name="search"
                 type="text"
-                :value="search.query"
+                :value="query"
                 :placeholder="labels.searchPlaceholder"
               >
             </form>
@@ -28,7 +109,7 @@
               id="requests-status"
               class="ui dropdown"
               :value="getTokenValue('status', '')"
-              @change="addSearchToken('status', $event.target.value)"
+              @change="addSearchToken('status', ($event.target as HTMLSelectElement).value)"
             >
               <option value="">
                 <translate translate-context="Content/*/Dropdown">
@@ -111,110 +192,12 @@
         <div class="ui center aligned basic segment">
           <pagination
             v-if="result.count > paginateBy"
-            :current="page"
+            v-model:current="page"
             :paginate-by="paginateBy"
             :total="result.count"
-            @page-changed="selectPage"
           />
         </div>
       </template>
     </section>
   </main>
 </template>
-
-<script>
-
-import axios from 'axios'
-import { merge } from 'lodash-es'
-import time from '~/utils/time'
-import Pagination from '~/components/vui/Pagination.vue'
-import OrderingMixin from '~/components/mixins/Ordering.vue'
-import UserRequestCard from '~/components/manage/moderation/UserRequestCard.vue'
-import { normalizeQuery, parseTokens } from '~/utils/search'
-import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-export default {
-  components: {
-    Pagination,
-    UserRequestCard
-  },
-  mixins: [OrderingMixin, SmartSearchMixin],
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels }
-  },
-  data () {
-    return {
-      time,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: {
-        query: this.defaultQuery,
-        tokens: parseTokens(normalizeQuery(this.defaultQuery))
-      },
-      orderingOptions: [
-        ['creation_date', 'creation_date'],
-        ['handled_date', 'handled_date']
-      ],
-      targets: {
-        track: {}
-      }
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by username…'),
-        reports: this.$pgettext('*/Moderation/*/Noun', 'User Requests')
-      }
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    ordering () {
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const params = merge({
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search.query,
-        ordering: this.getOrderingAsString()
-      }, this.filters)
-      const self = this
-      self.isLoading = true
-      this.result = null
-      axios.get('manage/moderation/requests/', { params: params }).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-        if (self.search.query === 'status:pending') {
-          self.$store.commit('ui/incrementNotifications', { type: 'pendingReviewRequests', value: response.data.count })
-        }
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  }
-}
-
-</script>

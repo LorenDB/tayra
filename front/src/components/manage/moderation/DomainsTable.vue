@@ -1,3 +1,112 @@
+<script setup lang="ts">
+import axios from 'axios'
+import Pagination from '~/components/vui/Pagination.vue'
+import ActionTable from '~/components/common/ActionTable.vue'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering, { OrderingProps } from '~/composables/useOrdering'
+import { computed, ref, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { OrderingField } from '~/store/ui'
+import { watchDebounced } from '@vueuse/core'
+
+interface Props extends OrderingProps {
+  // TODO (wvffle): find object type
+  filters?: object
+  allowListEnabled?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  filters: () => ({}),
+  allowListEnabled: false
+})
+
+// TODO (wvffle): Make sure everything is it's own type
+const page = ref(1)
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['name', 'name'],
+  ['creation_date', 'first_seen'],
+  ['actors_count', 'users'],
+  ['outbox_activities_count', 'received_messages']
+]
+
+const { $pgettext } = useGettext()
+const query = ref('')
+const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
+const actions = [
+  {
+    name: 'purge',
+    label: $pgettext('*/*/*/Verb', 'Purge'),
+    isDangerous: true
+  },
+  {
+    name: 'allow_list_add',
+    label: $pgettext('Content/Moderation/Action/Verb', 'Add to allow-list'),
+    filterCheckable: (obj: { allowed: boolean }) => {
+      return !obj.allowed
+    }
+  },
+  {
+    name: 'allow_list_remove',
+    label: $pgettext('Content/Moderation/Action/Verb', 'Remove from allow-list'),
+    filterCheckable: (obj: { allowed: boolean }) => {
+      return obj.allowed
+    }
+  }
+]
+
+const allowed = ref(null)
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    allowed: allowed.value,
+    ...props.filters
+  }
+
+  if (params.allowed === null) {
+    delete params.allowed
+  }
+
+  try {
+    const response = await axios.get('/manage/federation/domains/', {
+      params
+      // TODO (wvffle): Check if params should be serialized. In other similar components (Podcasts, Artists) they are
+      // paramsSerializer: function (params) {
+      //   return qs.stringify(params, { indices: false })
+      // }
+    })
+
+    result.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+    result.value = null
+  } finally {
+    isLoading.value = false
+  }
+}
+
+watchDebounced(query, () => (page.value = 1), { debounce: 300 })
+watch(page, fetchData)
+watch(allowed, fetchData)
+onOrderingUpdate(fetchData)
+fetchData()
+
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by name…'),
+  allowListTitle: $pgettext('Content/Moderation/Popup', 'This domain is present in your allow-list')
+}))
+</script>
+
 <template>
   <div>
     <div class="ui inline form">
@@ -6,7 +115,7 @@
           <label for="domains-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
           <input
             id="domains-search"
-            v-model="search"
+            v-model="query"
             name="search"
             type="text"
             :placeholder="labels.searchPlaceholder"
@@ -161,11 +270,10 @@
     <div>
       <pagination
         v-if="result && result.count > paginateBy"
+        v-model:current="page"
         :compact="true"
-        :current="page"
         :paginate-by="paginateBy"
         :total="result.count"
-        @page-changed="selectPage"
       />
 
       <span v-if="result && result.results.length > 0">
@@ -179,135 +287,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import { merge } from 'lodash-es'
-import time from '~/utils/time'
-import Pagination from '~/components/vui/Pagination.vue'
-import ActionTable from '~/components/common/ActionTable.vue'
-import OrderingMixin from '~/components/mixins/Ordering.vue'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-export default {
-  components: {
-    Pagination,
-    ActionTable
-  },
-  mixins: [OrderingMixin],
-  props: {
-    filters: { type: Object, required: false, default: function () { return {} } },
-    allowListEnabled: { type: Boolean, default: false }
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels }
-  },
-  data () {
-    return {
-      time,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: '',
-      allowed: null,
-      orderingOptions: [
-        ['name', 'name'],
-        ['creation_date', 'first_seen'],
-        ['actors_count', 'users'],
-        ['outbox_activities_count', 'received_messages']
-      ]
-
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('Content/Search/Input.Placeholder', 'Search by name…'),
-        allowListTitle: this.$pgettext('Content/Moderation/Popup', 'This domain is present in your allow-list')
-      }
-    },
-    actionFilters () {
-      const currentFilters = {
-        q: this.search
-      }
-      if (this.filters) {
-        return merge(currentFilters, this.filters)
-      } else {
-        return currentFilters
-      }
-    },
-    actions () {
-      return [
-        {
-          name: 'purge',
-          label: this.$pgettext('*/*/*/Verb', 'Purge'),
-          isDangerous: true
-        },
-        {
-          name: 'allow_list_add',
-          label: this.$pgettext('Content/Moderation/Action/Verb', 'Add to allow-list'),
-          filterCheckable: (obj) => {
-            return !obj.allowed
-          }
-        },
-        {
-          name: 'allow_list_remove',
-          label: this.$pgettext('Content/Moderation/Action/Verb', 'Remove from allow-list'),
-          filterCheckable: (obj) => {
-            return obj.allowed
-          }
-        }
-      ]
-    }
-  },
-  watch: {
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    },
-    allowed () {
-      this.fetchData()
-    },
-    ordering () {
-      this.fetchData()
-    },
-    orderingDirection () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const baseFilters = {
-        page: this.page,
-        page_size: this.paginateBy,
-        q: this.search,
-        ordering: this.getOrderingAsString()
-      }
-      if (this.allowed !== null) {
-        baseFilters.allowed = this.allowed
-      }
-      const params = merge(baseFilters, this.filters)
-      const self = this
-      self.isLoading = true
-      self.checked = []
-      axios.get('/manage/federation/domains/', { params: params }).then((response) => {
-        self.result = response.data
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    selectPage: function (page) {
-      this.page = page
-    }
-  }
-}
-</script>

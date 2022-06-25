@@ -74,11 +74,7 @@ const fetchData = async () => {
   }
 }
 
-onSearch(() => {
-  page.value = 1
-  fetchData()
-})
-
+onSearch(() => (page.value = 1))
 watch(page, fetchData)
 onOrderingUpdate(fetchData)
 fetchData()

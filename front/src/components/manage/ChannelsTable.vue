@@ -34,7 +34,8 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 ]
 
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
-const actions = []
+// TODO (wvffle): Find correct type
+const actions: unknown[] = []
 
 const isLoading = ref(false)
 const fetchData = async () => {
@@ -65,11 +66,7 @@ const fetchData = async () => {
   }
 }
 
-onSearch(() => {
-  page.value = 1
-  fetchData()
-})
-
+onSearch(() => (page.value = 1))
 watch(page, fetchData)
 onOrderingUpdate(fetchData)
 fetchData()

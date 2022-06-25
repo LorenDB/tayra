@@ -1,3 +1,121 @@
+<script setup lang="ts">
+import axios from 'axios'
+import time from '~/utils/time'
+import Pagination from '~/components/vui/Pagination.vue'
+import ActionTable from '~/components/common/ActionTable.vue'
+import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
+import { humanSize, truncate } from '~/utils/filters'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import { computed, ref, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import useOrdering, { OrderingProps } from '~/composables/useOrdering'
+import useSmartSearch, { SmartSearchProps } from '~/composables/useSmartSearch'
+import { OrderingField } from '~/store/ui'
+
+interface Props extends SmartSearchProps, OrderingProps {
+  // TODO (wvffle): find object type
+  filters?: object
+  needsRefresh?: boolean
+  // TODO (wvffle): find object type
+  customObjects?: any[]
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: '',
+  updateUrl: false,
+  filters: () => ({}),
+  needsRefresh: false,
+  customObjects: () => []
+})
+
+// TODO (wvffle): Make sure everything is it's own type
+const page = ref(1)
+type ResponseType = { count: number, results: any[] }
+const result = ref<null | ResponseType>(null)
+
+const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props.defaultQuery, props.updateUrl)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+
+const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
+  ['creation_date', 'creation_date'],
+  ['title', 'track_title'],
+  ['size', 'size'],
+  ['duration', 'duration'],
+  ['bitrate', 'bitrate'],
+  ['album_title', 'album_title'],
+  ['artist_name', 'artist_name']
+]
+
+const { $pgettext } = useGettext()
+const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
+const actions = [
+  {
+    name: 'delete',
+    label: $pgettext('*/*/*/Verb', 'Delete'),
+    isDangerous: true,
+    allowAll: true,
+    confirmColor: 'danger'
+  },
+  {
+    name: 'relaunch_import',
+    label: $pgettext('Content/Library/Dropdown/Verb', 'Restart import'),
+    isDangerous: true,
+    allowAll: true,
+    // TODO (wvffle): Find correct type
+    filterCheckable: (filter: { import_status: string }) => {
+      return filter.import_status !== 'finished'
+    }
+  }
+]
+
+const emit = defineEmits(['fetch-start'])
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  emit('fetch-start')
+  isLoading.value = true
+  const params = {
+    page: page.value,
+    page_size: paginateBy.value,
+    q: query.value,
+    ordering: orderingString.value,
+    include_channels: 'true',
+    ...props.filters
+  }
+
+  try {
+    const response = await axios.get('/uploads/', {
+      params
+      // TODO (wvffle): Check if params should be serialized. In other similar components (Podcasts, Artists) they are
+      // paramsSerializer: function (params) {
+      //   return qs.stringify(params, { indices: false })
+      // }
+    })
+
+    result.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+    result.value = null
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onSearch(() => (page.value = 1))
+onOrderingUpdate(() => (page.value = 1))
+watch(page, fetchData)
+fetchData()
+
+const sharedLabels = useSharedLabels()
+const labels = computed(() => ({
+  searchPlaceholder: $pgettext('Content/Library/Input.Placeholder', 'Search by title, artist, album…'),
+  showStatus: $pgettext('Content/Library/Button.Label/Verb', 'Show information about the upload status for this track')
+}))
+
+const detailedUpload = ref({})
+const showUploadDetailModal = ref(false)
+</script>
+
 <template>
   <div>
     <div class="ui inline form">
@@ -6,13 +124,13 @@
           <label for="files-search">
             <translate translate-context="Content/Search/Input.Label/Noun">Search</translate>
           </label>
-          <form @submit.prevent="search.query = $refs.search.value">
+          <form @submit.prevent="query = $refs.search.value">
             <input
               id="files-search"
               ref="search"
               name="search"
               type="text"
-              :value="search.query"
+              :value="query"
               :placeholder="labels.searchPlaceholder"
             >
           </form>
@@ -25,7 +143,7 @@
             id="import-status"
             class="ui dropdown"
             :value="getTokenValue('status', '')"
-            @change="addSearchToken('status', $event.target.value)"
+            @change="addSearchToken('status', ($event.target as HTMLSelectElement).value)"
           >
             <option value>
               <translate translate-context="Content/*/Dropdown">
@@ -112,7 +230,7 @@
         <div class="ui loader" />
       </div>
       <div
-        v-else-if="!result && result.results.length === 0 && !needsRefresh"
+        v-else-if="!result || result?.results.length === 0 && !needsRefresh"
         class="ui placeholder segment"
       >
         <div class="ui icon header">
@@ -247,11 +365,10 @@
     <div>
       <pagination
         v-if="result && result.count > paginateBy"
+        v-model:current="page"
         :compact="true"
-        :current="page"
         :paginate-by="paginateBy"
         :total="result.count"
-        @page-changed="page = $event; fetchData()"
       />
 
       <span v-if="result && result.results.length > 0">
@@ -263,158 +380,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import { merge } from 'lodash-es'
-import time from '~/utils/time'
-import { normalizeQuery, parseTokens } from '~/utils/search'
-
-import Pagination from '~/components/vui/Pagination.vue'
-import ActionTable from '~/components/common/ActionTable.vue'
-import OrderingMixin from '~/components/mixins/Ordering.vue'
-import SmartSearchMixin from '~/components/mixins/SmartSearch.vue'
-import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
-import { humanSize, truncate } from '~/utils/filters'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-export default {
-  components: {
-    Pagination,
-    ActionTable,
-    ImportStatusModal
-  },
-  mixins: [OrderingMixin, SmartSearchMixin],
-  props: {
-    filters: { type: Object, required: false, default: function () { return {} } },
-    needsRefresh: { type: Boolean, required: false, default: false },
-    customObjects: {
-      type: Array,
-      required: false,
-      default: () => {
-        return []
-      }
-    }
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels, humanSize, time, truncate }
-  },
-  data () {
-    return {
-      detailedUpload: {},
-      showUploadDetailModal: false,
-      isLoading: false,
-      result: null,
-      page: 1,
-      search: {
-        query: this.defaultQuery,
-        tokens: parseTokens(normalizeQuery(this.defaultQuery))
-      },
-      orderingOptions: [
-        ['creation_date', 'creation_date'],
-        ['title', 'track_title'],
-        ['size', 'size'],
-        ['duration', 'duration'],
-        ['bitrate', 'bitrate'],
-        ['album_title', 'album_title'],
-        ['artist_name', 'artist_name']
-      ]
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext(
-          'Content/Library/Input.Placeholder',
-          'Search by title, artist, album…'
-        ),
-        showStatus: this.$pgettext('Content/Library/Button.Label/Verb', 'Show information about the upload status for this track')
-      }
-    },
-    actionFilters () {
-      const currentFilters = {
-        q: this.search.query,
-        include_channels: 'true'
-      }
-      if (this.filters) {
-        return merge(currentFilters, this.filters)
-      } else {
-        return currentFilters
-      }
-    },
-    actions () {
-      const deleteMsg = this.$pgettext('*/*/*/Verb', 'Delete')
-      const relaunchMsg = this.$pgettext(
-        'Content/Library/Dropdown/Verb',
-        'Restart import'
-      )
-      return [
-        {
-          name: 'delete',
-          label: deleteMsg,
-          isDangerous: true,
-          allowAll: true
-        },
-        {
-          name: 'relaunch_import',
-          label: relaunchMsg,
-          isDangerous: true,
-          allowAll: true,
-          filterCheckable: f => {
-            return f.import_status !== 'finished'
-          }
-        }
-      ]
-    }
-  },
-  watch: {
-    orderingDirection: function () {
-      this.page = 1
-      this.fetchData()
-    },
-    page: function () {
-      this.fetchData()
-    },
-    ordering: function () {
-      this.page = 1
-      this.fetchData()
-    },
-    search (newValue) {
-      this.page = 1
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      this.$emit('fetch-start')
-      const params = merge(
-        {
-          page: this.page,
-          page_size: this.paginateBy,
-          ordering: this.getOrderingAsString(),
-          q: this.search.query,
-          include_channels: 'true'
-        },
-        this.filters || {}
-      )
-      const self = this
-      self.isLoading = true
-      self.checked = []
-      axios.get('/uploads/', { params: params }).then(
-        response => {
-          self.result = response.data
-          self.isLoading = false
-        },
-        error => {
-          self.isLoading = false
-          self.errors = error.backendErrors
-        }
-      )
-    }
-  }
-}
-</script>
