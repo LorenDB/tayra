@@ -672,15 +672,15 @@ sqlparse = ">=0.2.0"
 
 [[package]]
 name = "django-dynamic-preferences"
-version = "1.12.0"
+version = "1.13.0"
 description = "Dynamic global and instance settings for your django project"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-django = ">=1.11"
-persisting-theory = ">=0.2.1"
+django = ">=2.2"
+persisting-theory = "1.0"
 six = "*"
 
 [[package]]
@@ -2120,7 +2120,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "7fca1f13e4a95870b0a0ae6b0e12b8b6fc292c619d669596e1864c2692bd3ee3"
+content-hash = "8c790f43006f58988382b29159437b6df9a30a62630712feb5e9102c3c32ce9d"
 
 [metadata.files]
 aiohttp = [
@@ -2517,8 +2517,8 @@ django-debug-toolbar = [
     {file = "django_debug_toolbar-3.5.0-py3-none-any.whl", hash = "sha256:89a52128309eb4da12738801ff0c202d2ff8730d1c3225fac6acf630c303e661"},
 ]
 django-dynamic-preferences = [
-    {file = "django-dynamic-preferences-1.12.0.tar.gz", hash = "sha256:cd8987cf8e4dd36e019ad3e8a25c589bc4b410ca4a66cdfcbe5c25a517a7c0ad"},
-    {file = "django_dynamic_preferences-1.12.0-py2.py3-none-any.whl", hash = "sha256:06cc20998429e008fe0e9a06f50bedd09bf42eeb9afcbc9df440127ff524bc1b"},
+    {file = "django-dynamic-preferences-1.13.0.tar.gz", hash = "sha256:b7b13c913b5b6f6e05c880afeae1a91b147a5bc11fb95079151d9cc88b606a50"},
+    {file = "django_dynamic_preferences-1.13.0-py2.py3-none-any.whl", hash = "sha256:0f13d3c05df70366dcf7199fa285c36fdd11c88c99af750b270285ad149ec6d5"},
 ]
 django-environ = [
     {file = "django-environ-0.8.1.tar.gz", hash = "sha256:6f0bc902b43891656b20486938cba0861dc62892784a44919170719572a534cb"},
