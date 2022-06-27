@@ -8,143 +8,190 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-06-28 11:34+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/admin-troubleshooting/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.13\n"
 
 #: ../../admin/troubleshooting.rst:2
 msgid "Troubleshooting"
-msgstr ""
+msgstr "Dépannage"
 
 #: ../../admin/troubleshooting.rst:4
 msgid "Various errors and issues can arise on your Funkwhale instance, caused by configuration errors, deployment/environment specific issues, or bugs in the software itself."
 msgstr ""
+"Diverses erreurs et problèmes peuvent survenir sur votre instance Funkwhale, "
+"causés par des erreurs de configuration, des problèmes spécifiques au dé"
+"ploiement/environnement, ou des bogues dans le logiciel lui-même."
 
 #: ../../admin/troubleshooting.rst:7
 msgid "On this document, you'll find:"
-msgstr ""
+msgstr "Dans ce document, vous trouverez :"
 
 #: ../../admin/troubleshooting.rst:9
 msgid "Tools and commands you can use to better understand the issues"
 msgstr ""
+"Outils et commandes que vous pouvez utiliser pour mieux comprendre les "
+"problèmes"
 
 #: ../../admin/troubleshooting.rst:10
 msgid "A list of common pitfalls and errors and how to solve them"
 msgstr ""
+"Liste des pièges et des erreurs les plus courants et la manière de les "
+"résoudre"
 
 #: ../../admin/troubleshooting.rst:11
 msgid "A collection of links and advice to get help from the community and report new issues"
 msgstr ""
+"Une collection de liens et de conseils pour obtenir de l’aide de la "
+"communauté et signaler les nouveaux problèmes"
 
 #: ../../admin/troubleshooting.rst:14
 msgid "Diagnose problems"
-msgstr ""
+msgstr "Diagnostiquer les problèmes"
 
 #: ../../admin/troubleshooting.rst:16
 msgid "Funkwhale is made of several components, each one being a potential cause for failure. Having an even basic overview of Funkwhale's technical architecture can help you understand what is going on. You can refer to :doc:`the technical architecture <../developers/architecture>` for that."
 msgstr ""
+"Funkwhale est constitué de plusieurs composants, chacun étant une cause "
+"potentielle de défaillance. Avoir un aperçu même basique de l'architecture "
+"technique de Funkwhale peut vous aider à comprendre ce qui se passe. Vous "
+"pouvez vous référer à :doc:`l'architecture technique <../developers/"
+"architecture>` pour cela."
 
 #: ../../admin/troubleshooting.rst:19
 msgid "Problems usually fall into one of those categories:"
-msgstr ""
+msgstr "Les problèmes tombent généralement dans une de ces catégories :"
 
 #: ../../admin/troubleshooting.rst:21
 msgid "**Frontend**: Funkwhale's interface is not loading, not behaving as expected, music is not playing"
 msgstr ""
+"**Frontend** : L'interface de Funkwhale ne se charge pas, ne se comporte pas "
+"comme prévu, la musique ne joue pas"
 
 #: ../../admin/troubleshooting.rst:22
 msgid "**API**: the interface do not display any data or show errors"
 msgstr ""
+"**API** : l’interface n’affiche aucune donnée et ne montre pas d’erreurs"
 
 #: ../../admin/troubleshooting.rst:23
 msgid "**Import**: uploaded/imported tracks are not imported correctly or at all"
 msgstr ""
+"**Importation** : les pistes téléchargées/importées ne sont pas importées, "
+"ou pas correctement"
 
 #: ../../admin/troubleshooting.rst:24
 msgid "**Federation**: you cannot contact other Funkwhale servers, access their library, play federated tracks"
 msgstr ""
+"**Fédération** : vous ne savez pas contacter d’autres serveurs Funkwhale, "
+"accéder à leur bibliothèque, jouer des pistes fédérées"
 
 #: ../../admin/troubleshooting.rst:25
 msgid "**Everything else**"
-msgstr ""
+msgstr "**Tout le reste**"
 
 #: ../../admin/troubleshooting.rst:27
 msgid "Each category comes with its own set of diagnose tools and/or commands we will detail below. We'll also give you simple steps for each type of problem. Please try those to see if it fix your issues. If none of those works, please report your issue on our issue tracker."
 msgstr ""
+"Chaque catégorie s'accompagne de son propre ensemble d'outils de diagnostic "
+"et/ou de commandes que nous détaillerons ci-dessous. Nous vous donnerons "
+"également des étapes simples pour chaque type de problème. Veuillez les "
+"essayer pour voir si cela résout votre problème. Si aucune de ces étapes ne "
+"fonctionne, veuillez signaler votre problème sur notre traqueur de problèmes."
 
 #: ../../admin/troubleshooting.rst:33
 msgid "To get detailed log messages, set the environment variable ``LOGLEVEL=debug``. If you are using the docker setup you can configure this in the ``.env`` file."
 msgstr ""
+"Pour obtenir des messages journaux détaillés, définissez la variable d’"
+"environnement ``LOGLEVEL=debug``. Si vous utilisez une installation Docker, "
+"vous pouvez configurer cela dans le fichier ``.env``."
 
 #: ../../admin/troubleshooting.rst:37
+#, fuzzy
 msgid "Backend issues"
-msgstr ""
+msgstr "Problèmes de backend"
 
 #: ../../admin/troubleshooting.rst:39
 #: ../../admin/troubleshooting.rst:98
 #: ../../admin/troubleshooting.rst:109
 msgid "Diagnostic tools:"
-msgstr ""
+msgstr "Outils de diagnostique :"
 
 #: ../../admin/troubleshooting.rst:42
 msgid "Reverse proxy logs:"
-msgstr ""
+msgstr "Journaux de proxy inverse :"
 
 #: ../../admin/troubleshooting.rst:42
 msgid "Apache logs should be available at :file:`/var/log/apache/access.log` and :file:`/var/log/apache/error.log`"
 msgstr ""
+"Les journaux Apache doivent être disponibles dans :file:`/var/log/apache/"
+"access.log` et :file:`/var/log/apache/error.log`"
 
 #: ../../admin/troubleshooting.rst:43
 msgid "Nginx logs should be available at :file:`/var/log/nginx/access.log` and :file:`/var/log/nginx/error.log`"
 msgstr ""
+"Les journaux Nginx doivent être disponibles dans :file:`/var/log/nginx/access"
+".log` et :file:`/var/log/nginx/error.log`"
 
 #: ../../admin/troubleshooting.rst:46
 #: ../../admin/troubleshooting.rst:112
 msgid "API logs:"
-msgstr ""
+msgstr "Journaux de l’API :"
 
 #: ../../admin/troubleshooting.rst:45
 #: ../../admin/troubleshooting.rst:112
 msgid "Docker setup: ``docker-compose logs -f --tail=50 api`` (remove the ``--tail`` flag to get the full logs)"
 msgstr ""
+"Installation Docker : ``docker-compose logs -f --tail=50 api`` (supprimez le "
+"paramètre ``--tail`` pour obtenir les journaux entiers)"
 
 #: ../../admin/troubleshooting.rst:46
 #: ../../admin/troubleshooting.rst:113
 msgid "Non-docker setup: ``journalctl -xn -u funkwhale-server``"
-msgstr ""
+msgstr "Installation non-Docker : ``journalctl -xn -u funkwhale-server``"
 
 #: ../../admin/troubleshooting.rst:50
 msgid "If you edit your .env file to test a new configuration, you have to restart your services to pick up the changes:"
 msgstr ""
+"Si vous éditez votre fichier .env pour tester une nouvelle configuration, "
+"vous devez redémarrer vos services pour intégrer les changements :"
 
 #: ../../admin/troubleshooting.rst:52
 msgid "Docker setup: ``docker-compose up -d``"
-msgstr ""
+msgstr "Installation Docker : ``docker-compose up -d``"
 
 #: ../../admin/troubleshooting.rst:53
 msgid "Non-docker setup: ``systemctl restart funkwhale.target``"
-msgstr ""
+msgstr "Installation non-Docker : ``systemctl restart funkwhale.target``"
 
 #: ../../admin/troubleshooting.rst:56
 #: ../../admin/troubleshooting.rst:119
 msgid "Common problems"
-msgstr ""
+msgstr "Problèmes courants"
 
 #: ../../admin/troubleshooting.rst:59
 msgid "Instance works properly, but audio files are not served (404 error)"
 msgstr ""
+"L’instance fonctionne correctement, mais les fichiers audios ne sont pas "
+"servis (erreur 404)"
 
 #: ../../admin/troubleshooting.rst:61
 msgid "If you're using docker, ensure the ``MEDIA_ROOT`` variable is commented in your env file"
 msgstr ""
+"Si vous utilisez Docker, assurez-vous que la variable ``MEDIA_ROOT`` est "
+"commentée dans votre fichier .env"
 
 #: ../../admin/troubleshooting.rst:62
 msgid "Ensure the ``_protected/media`` block points toward the path where media files are stored (``/srv/funkwhale/data/media``, by default)"
 msgstr ""
+"Assurez-vous que le bloc ``_protected/media`` pointe vers le chemin où les "
+"fichiers médias sont stockés (par défaut ``/srv/funkwhale/data/media``)"
 
 #: ../../admin/troubleshooting.rst:63
 msgid "If you're using in-place import, ensure :data:`MUSIC_DIRECTORY_PATH <config.settings.common.MUSIC_DIRECTORY_PATH>`, :data:`MUSIC_DIRECTORY_SERVE_PATH <config.settings.common.MUSIC_DIRECTORY_SERVE_PATH>` and :data:`REVERSE_PROXY_TYPE <config.settings.common.REVERSE_PROXY_TYPE>` are configured properly, and that the files are readable by the webserver"
@@ -176,7 +223,7 @@ msgstr ""
 
 #: ../../admin/troubleshooting.rst:94
 msgid "File import issues"
-msgstr ""
+msgstr "Problèmes d’importation de fichiers"
 
 #: ../../admin/troubleshooting.rst:96
 msgid "Unless you are using the CLI to import files, imports are send as tasks in a queue to a celery worker that will process them."
@@ -199,7 +246,7 @@ msgstr ""
 
 #: ../../admin/troubleshooting.rst:105
 msgid "Federation issues"
-msgstr ""
+msgstr "Problèmes de fédération"
 
 #: ../../admin/troubleshooting.rst:107
 msgid "Received federations messages are sent to a dedicated task queue and processed asynchronously by a celery worker."
@@ -207,15 +254,19 @@ msgstr ""
 
 #: ../../admin/troubleshooting.rst:122
 msgid "I have no access to another instance library"
-msgstr ""
+msgstr "Je n’ai pas accès à la bibliothèque d’une autre instance"
 
 #: ../../admin/troubleshooting.rst:124
 msgid "Check if it works with the demo library (library@demo.funkwhale.audio)"
 msgstr ""
+"Vérifiez que ça fonctionne avec la bibliothèque de démonstration "
+"(library@demo.funkwhale.audio)"
 
 #: ../../admin/troubleshooting.rst:125
 msgid "Check if the remote library received your follow request and approved it"
 msgstr ""
+"Vérifiez que la bibliothèque distante a reçu votre demande de suivi et qu’"
+"elle l’a approuvée"
 
 #: ../../admin/troubleshooting.rst:126
 msgid "Trigger a scan via the interface"
