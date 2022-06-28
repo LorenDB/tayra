@@ -8,34 +8,41 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-06-28 19:40+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/user_documentation-libraries-edit_library/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.13\n"
 
 #: ../../user_documentation/libraries/edit_library.md:1
 msgid "Edit a library"
-msgstr ""
+msgstr "Éditer une bibliothèque"
 
 #: ../../user_documentation/libraries/edit_library.md:3
 msgid "You can update the details of your libraries at any time. To do this:"
 msgstr ""
+"Vous pouvez mettre à jour les détails de vos bibliothèques à n’importe quel "
+"moment. Pour ce faire :"
 
 #: ../../user_documentation/libraries/edit_library.md:0
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
 #: ../../user_documentation/libraries/edit_library.md:7
 #: ../../user_documentation/libraries/edit_library.md:23
 msgid "Log in to your {term}`pod`."
-msgstr ""
+msgstr "Connectez-vous à votre {term}`pod`."
 
 #: ../../user_documentation/libraries/edit_library.md:8
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
+"Sélectionnez l’icône de téléchargement ({fa}`upload`) en haut de la barre "
+"latérale."
 
 #: ../../user_documentation/libraries/edit_library.md:9
 #: ../../user_documentation/libraries/edit_library.md:25
