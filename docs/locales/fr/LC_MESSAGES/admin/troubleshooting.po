@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: 2022-06-28 19:25+0000\n"
+"PO-Revision-Date: 2022-06-28 19:40+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/admin-troubleshooting/fr/>\n"
@@ -370,25 +370,46 @@ msgstr ""
 "et erreurs pertinents, etc.)"
 
 #: ../../admin/troubleshooting.rst:152
+#, fuzzy
 msgid "Including screenshots or small gifs or videos can help us considerably when debugging front-end issues"
 msgstr ""
+"Inclure des captures d'écran, des petits gifs ou des vidéos peut nous aider "
+"considérablement lors du débogage des problèmes liés au front-end"
 
 #: ../../admin/troubleshooting.rst:154
 msgid "You can also open issues on our `issue tracker <https://dev.funkwhale.audio/funkwhale/funkwhale/issues>`_. Please have a quick look for similar issues before doing that, and use the issue tracker only to report bugs, suggest enhancements (both in the software and the documentation) or new features."
 msgstr ""
+"Vous pouvez également ouvrir des problèmes sur notre `traqueur de problèmes "
+"<https://dev.funkwhale.audio/funkwhale/funkwhale/issues>`_. Merci de "
+"rechercher rapidement les problèmes similaires avant de faire cela, et "
+"d'utiliser le traqueur de porblèmes uniquement pour signaler des bogues, "
+"suggérer des améliorations (à la fois dans le logiciel et la documentation) "
+"ou de nouvelles fonctionnalités."
 
 #: ../../admin/troubleshooting.rst:159
 msgid "If you ever need to share screenshots or urls with someone else, ensure those do not include your personal token. This token is binded to your account and can be used to connect and use your account."
 msgstr ""
+"Si vous devez partager des captures d'écran ou des URL avec quelqu'un "
+"d'autre, assurez-vous qu'elles ne contiennent pas votre jeton personnel. Ce "
+"jeton est lié à votre compte et peut être utilisé pour se connecter et "
+"utiliser votre compte."
 
 #: ../../admin/troubleshooting.rst:162
 msgid "Urls that includes your token looks like: ``https://your.instance/api/v1/uploads/42/serve/?jwt=yoursecrettoken``"
 msgstr ""
+"Les URL qui incluent votre jeton ressemblent à : ``https://your.instance/api/"
+"v1/uploads/42/serve/?jwt=yoursecrettoken``"
 
 #: ../../admin/troubleshooting.rst:165
 msgid "Improving this documentation"
-msgstr ""
+msgstr "Améliorer cette documentation"
 
 #: ../../admin/troubleshooting.rst:167
 msgid "If you feel like something should be improved in this document (and in the documentation in general), feel free to :doc:`contribute to the documentation <../documentation/creating>`. If you're not comfortable contributing or would like to ask somebody else to do it, feel free to :doc:`request a change in documentation <../documentation/identifying>`."
 msgstr ""
+"Si vous avez l'impression que quelque chose doit être amélioré dans ce "
+"document (et dans la documentation en général), n'hésitez pas à :doc:`"
+"contribuer à la documentation <../documentation/creating>`. Si vous n'êtes "
+"pas à l'aise pour contribuer ou si vous souhaitez demander à quelqu'un "
+"d'autre de le faire, n'hésitez pas à :doc:`demander un changement dans la "
+"documentation <../documentation/identifying>`."
