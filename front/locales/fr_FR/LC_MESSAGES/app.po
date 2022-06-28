@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: French (Funkwhale)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2021-12-11 20:27+0000\n"
-"Last-Translator: Manuel Viens <manu@fedi.quebec>\n"
+"PO-Revision-Date: 2022-06-29 21:34+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/funkwhale/"
 "front/fr/>\n"
 "Language: fr_FR\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.6.2\n"
+"X-Generator: Weblate 4.13\n"
 
 #: front/src/components/playlists/PlaylistModal.vue:8
 #: front/src/components/playlists/PlaylistModal.vue:5
@@ -163,7 +163,7 @@ msgstr "%{ current } utilisé·s sur %{ max } autorisé·s"
 #: front/src/components/common/Duration.vue:2
 msgctxt "Content/*/Paragraph"
 msgid "%{ hours } h %{ minutes } min"
-msgstr "%{ hours } h %{ minutes } min"
+msgstr "%{ hours} h %{ minutes } min"
 
 #: front/src/components/audio/Player.vue:113
 #: src/components/audio/Player.vue:119
@@ -183,17 +183,17 @@ msgstr "%{ updatedAgo }"
 #: front/src/components/notifications/NotificationRow.vue:86
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } accepted your follow on library \"%{ library }\""
-msgstr "%{ username } a accepté votre suivi de la bibliothèque « %{ library } »"
+msgstr "%{ username } a accepté votre suivi de l’audiothèque « %{ library } »"
 
 #: front/src/components/notifications/NotificationRow.vue:85
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } followed your library \"%{ library }\""
-msgstr "%{ username } suit votre bibliothèque « %{ library } »"
+msgstr "%{ username } suit votre audiothèque « %{ library } »"
 
 #: front/src/components/notifications/NotificationRow.vue:88
 msgctxt "Content/Notifications/Paragraph"
 msgid "%{ username } wants to follow your library \"%{ library }\""
-msgstr "%{ username } veut suivre votre bibliothèque « %{ library } »"
+msgstr "%{ username } veut suivre votre audiothèque « %{ library } »"
 
 #: front/src/views/auth/ProfileBase.vue:162
 msgctxt "Head/Profile/Title"
@@ -317,7 +317,7 @@ msgstr "Accès désactivé"
 #: front/src/components/mixins/Translations.vue:101
 msgctxt "Content/OAuth Scopes/Paragraph"
 msgid "Access to audio files, libraries, artists, albums and tracks"
-msgstr "Accès aux fichiers audio, bibliothèques, artistes, albums et pistes"
+msgstr "Accès aux fichiers audio, audiothèques, artistes, albums et pistes"
 
 #: front/src/components/mixins/Translations.vue:124
 #: front/src/components/mixins/Translations.vue:125
@@ -792,7 +792,7 @@ msgstr "Albums"
 #: front/src/components/library/ArtistDetail.vue:39
 msgctxt "Content/Artist/Title"
 msgid "Albums by this artist"
-msgstr "Albums de cet·te artiste"
+msgstr "Albums de cet artiste"
 
 #: front/src/components/manage/ChannelsTable.vue:14
 #: front/src/components/manage/library/ArtistsTable.vue:14
@@ -1234,7 +1234,8 @@ msgstr "Éditeur"
 #: front/src/views/content/remote/Card.vue:12
 msgctxt "Popup/Library/Paragraph"
 msgid "By unfollowing this library, you loose access to its content."
-msgstr "En cessant de suivre cette bibliothèque, vous perdez l’accès à son contenu."
+msgstr ""
+"En cessant de suivre cette audiothèque, vous perdez l’accès à son contenu."
 
 #: front/src/views/admin/ChannelDetail.vue:288
 #: src/views/admin/ChannelDetail.vue:283
@@ -1633,7 +1634,7 @@ msgstr "Nous n'avons pas pu confirmer votre adresse de courriel"
 #: front/src/views/content/remote/ScanForm.vue:4
 msgctxt "Content/Library/Error message.Title"
 msgid "Could not fetch remote library"
-msgstr "Impossible de récupérer la bibliothèque distante"
+msgstr "Impossible de récupérer l’audiothèque distante"
 
 #: front/src/components/channels/AlbumModal.vue:20
 msgctxt "*/*/Button.Label"
@@ -1664,7 +1665,7 @@ msgstr "Créer une nouvelle application"
 #: front/src/views/content/libraries/Home.vue:24
 msgctxt "Content/Library/Link/Verb"
 msgid "Create a new library"
-msgstr "Créer une nouvelle bibliothèque"
+msgstr "Créer une nouvelle audiothèque"
 
 #: front/src/components/playlists/Form.vue:3
 msgctxt "Popup/Playlist/Title/Verb"
@@ -1706,7 +1707,7 @@ msgstr "Créer une chaîne"
 #: front/src/views/content/libraries/Form.vue:44
 msgctxt "Content/Library/Button.Label/Verb"
 msgid "Create library"
-msgstr "Créer la bibliothèque"
+msgstr "Créer l’audiothèque"
 
 #: front/src/components/auth/SignupForm.vue:72
 msgctxt "Content/Signup/Button.Label"
@@ -1873,7 +1874,7 @@ msgstr "Supprimer"
 #: front/src/views/content/libraries/Form.vue:63
 msgctxt "Popup/Library/Button.Label/Verb"
 msgid "Delete library"
-msgstr "Supprimer la bibliothèque"
+msgstr "Supprimer l’audiothèque"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:93
 msgctxt "Popup/Moderation/Button.Label/Verb"
@@ -1946,7 +1947,7 @@ msgstr "Supprimer cette chaîne ?"
 #: front/src/views/content/libraries/Form.vue:53
 msgctxt "Popup/Library/Title"
 msgid "Delete this library?"
-msgstr "Supprimer cette bibliothèque ?"
+msgstr "Supprimer cette audiothèque ?"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:83
 msgctxt "Popup/Moderation/Title"
@@ -2369,7 +2370,7 @@ msgstr "Modifier cet album"
 #: front/src/components/library/ArtistEdit.vue:4
 msgctxt "Content/*/Title"
 msgid "Edit this artist"
-msgstr "Modifier cet·te artiste"
+msgstr "Modifier cet artiste"
 
 #: front/src/components/library/TrackEdit.vue:4
 msgctxt "Content/*/Title"
@@ -2439,7 +2440,7 @@ msgstr "Insérez cet album dans votre site web"
 #: src/views/channels/DetailBase.vue:182
 msgctxt "Popup/Artist/Title/Verb"
 msgid "Embed this artist work on your website"
-msgstr "Insérez cet·te artiste dans votre site web"
+msgstr "Insérez cet artiste dans votre site web"
 
 #: front/src/views/playlists/Detail.vue:72
 msgctxt "Popup/Album/Title/Verb"
@@ -2458,7 +2459,7 @@ msgstr "Insérez cette piste dans votre site web"
 #: front/src/views/admin/moderation/DomainsDetail.vue:247
 msgctxt "Content/Moderation/Table.Label/Noun"
 msgid "Emitted library follows"
-msgstr "Suivi de la bibliothèque émise"
+msgstr "Suivi de l’audiothèque émise"
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:268
 #: front/src/views/admin/moderation/AccountsDetail.vue:263
@@ -2489,7 +2490,7 @@ msgstr "Activé"
 #: front/src/views/content/remote/ScanForm.vue:60
 msgctxt "Content/Library/Input.Placeholder"
 msgid "Enter a library URL"
-msgstr "Saisissez une URL de bibliothèque"
+msgstr "Saisissez l’URL d’une audiothèque"
 
 #: front/src/components/library/Radios.vue:211
 msgctxt "Content/Search/Input.Placeholder"
@@ -2969,12 +2970,16 @@ msgstr "Suivre"
 #: front/src/views/content/Home.vue:54
 msgctxt "Content/Library/Paragraph"
 msgid "Follow libraries from other users to get access to new music. Public libraries can be followed immediately, while following a private library requires approval from its owner."
-msgstr "Vous pouvez suivre les audiothèques d'autres utilisateurs pour accèder à de la nouvelle musique. Les audiothèques publiques peuvent être suivies immédiatement, tandis que le suivi d'une bibliothèque privée nécessite l'approbation de son propriétaire."
+msgstr ""
+"Vous pouvez suivre les audiothèques d'autres utilisateurs pour accéder à de "
+"la nouvelle musique. Les audiothèques publiques peuvent être suivies "
+"immédiatement, tandis que le suivi d'une audiothèque privée nécessite "
+"l'approbation de son propriétaire."
 
 #: front/src/views/content/Home.vue:49
 msgctxt "Content/Library/Title/Verb"
 msgid "Follow remote libraries"
-msgstr "Suivre des bibliothèques distantes"
+msgstr "Suivre des audiothèques distantes"
 
 #: front/src/views/content/remote/Card.vue:113
 #: src/views/content/remote/Card.vue:9
@@ -3107,7 +3112,7 @@ msgstr "Texte d'aide"
 #: front/src/components/auth/Settings.vue:176
 msgctxt "Content/Settings/Title"
 msgid "Hidden artists"
-msgstr "Artistes caché·es"
+msgstr "Artistes cachés"
 
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:208
 msgctxt "Content/Moderation/Help text"
@@ -3122,12 +3127,12 @@ msgstr "Cacher le contenu"
 #: front/src/components/audio/PlayButton.vue:33
 msgctxt "*/Queue/Dropdown/Button/Label/Short"
 msgid "Hide content from this artist"
-msgstr "Cacher le contenu de cet·te artiste"
+msgstr "Cacher le contenu de cet artiste"
 
 #: front/src/components/Queue.vue:400 src/components/audio/Player.vue:424
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
 msgid "Hide content from this artist…"
-msgstr "Cacher le contenu de cet·te artiste…"
+msgstr "Cacher le contenu de cet artiste…"
 
 #: front/src/components/Home.vue:357
 msgctxt "Head/Home/Title"
@@ -3176,7 +3181,8 @@ msgstr ""
 #: front/src/views/content/Home.vue:15
 msgctxt "Content/Library/Paragraph"
 msgid "If you are a musician or a podcaster, channels are designed for you!"
-msgstr "Si vous êtes artiste ou animateur.trice, les chaînes sont faites pour vous !"
+msgstr ""
+"Si vous êtes artiste ou podcasteur·euse, les chaînes sont faites pour vous !"
 
 #: front/src/components/auth/Settings.vue:289
 msgctxt "Content/Applications/Paragraph"
@@ -3422,7 +3428,7 @@ msgstr "Comptes connus"
 #: src/views/content/remote/Home.vue:2
 msgctxt "Content/Library/Title"
 msgid "Known libraries"
-msgstr "Bibliothèques connues"
+msgstr "Audiothèques connues"
 
 #: front/src/components/audio/ChannelForm.vue:80
 #: front/src/components/audio/ChannelForm.vue:66
@@ -3533,18 +3539,21 @@ msgstr "Laisser vide pour un widget adaptatif"
 #: front/src/views/content/Base.vue:4
 msgctxt "*/*/*/Noun"
 msgid "Libraries"
-msgstr "Bibliothèques"
+msgstr "Audiothèques"
 
 #: front/src/components/mixins/Translations.vue:99
 #: front/src/components/mixins/Translations.vue:100
 msgctxt "Content/OAuth Scopes/Label"
 msgid "Libraries and uploads"
-msgstr "Bibliothèques et téléversements"
+msgstr "Audiothèques et téléversements"
 
 #: front/src/views/content/libraries/Form.vue:3
 msgctxt "Content/Library/Paragraph"
 msgid "Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family."
-msgstr "Les bibliothèques vous aident à organiser et à partager votre collection de musique. Vous pouvez téléverser votre bibliothèque musicale sur Funkwhale et la partager avec vos amis et votre famille."
+msgstr ""
+"Les audiothèques vous aident à organiser et à partager votre collection de "
+"musique. Vous pouvez téléverser votre propre collection musicale sur "
+"Funkwhale et la partager avec vos amis et votre famille."
 
 #: front/src/views/library/DetailBase.vue:258
 msgctxt "*/*/*"
@@ -3562,7 +3571,7 @@ msgstr "Audiothèque"
 #: front/src/components/mixins/Report.vue:96 src/entities.js:132
 msgctxt "*/*/*/Noun"
 msgid "Library"
-msgstr "Bibliothèque"
+msgstr "Audiothèque"
 
 #: front/src/components/library/Home.vue:103
 msgctxt "Head/Home/Title"
@@ -3577,18 +3586,18 @@ msgstr "Contenu de l'audiothèque"
 #: front/src/views/content/libraries/Form.vue:173
 msgctxt "Content/Library/Message"
 msgid "Library created"
-msgstr "Bibliothèque créée"
+msgstr "Audiothèque créée"
 
 #: front/src/views/admin/library/LibraryDetail.vue:81
 #: front/src/views/admin/library/LibraryDetail.vue:76
 msgctxt "Content/Moderation/Title"
 msgid "Library data"
-msgstr "Données de la bibliothèque"
+msgstr "Données de l’audiothèque"
 
 #: front/src/views/content/libraries/Form.vue:193
 msgctxt "Content/Library/Message"
 msgid "Library deleted"
-msgstr "Bibliothèque supprimée"
+msgstr "Audiothèque supprimée"
 
 #: front/src/views/content/libraries/Card.vue:43
 msgctxt "Content/Library/Card.Button.Label/Noun"
@@ -3598,12 +3607,12 @@ msgstr "Détails de l'audiothèque"
 #: front/src/views/admin/library/EditsList.vue:5
 msgctxt "Content/Admin/Title/Noun"
 msgid "Library edits"
-msgstr "Modifications de la bibliothèque"
+msgstr "Modifications de l’audiothèque"
 
 #: front/src/views/content/libraries/Form.vue:170
 msgctxt "Content/Library/Message"
 msgid "Library updated"
-msgstr "Bibliothèque mise à jour"
+msgstr "Audiothèque mise à jour"
 
 #: front/src/components/auth/Plugin.vue:39
 msgctxt "*/*/Paragraph/Noun"
@@ -3699,7 +3708,7 @@ msgstr "Chargement des abonnés…"
 #: front/src/views/content/libraries/Home.vue:4
 msgctxt "Content/Library/Paragraph"
 msgid "Loading Libraries…"
-msgstr "Chargement des bibliothèques…"
+msgstr "Chargement des audiothèques…"
 
 #: front/src/views/Notifications.vue:134
 msgctxt "Content/Notifications/Paragraph"
@@ -3709,7 +3718,7 @@ msgstr "Chargement des notifications…"
 #: front/src/views/content/remote/Home.vue:4
 msgctxt "Content/Library/Paragraph"
 msgid "Loading remote libraries…"
-msgstr "Chargement des bibliothèques distantes…"
+msgstr "Chargement des audiothèques distantes…"
 
 #: front/src/views/content/libraries/Quota.vue:9
 msgctxt "Content/Library/Paragraph"
@@ -3822,7 +3831,9 @@ msgstr "Texte long"
 #: front/src/views/content/libraries/Home.vue:17
 msgctxt "Content/Library/Paragraph"
 msgid "Looks like you don't have a library, it's time to create one."
-msgstr "On dirait que vous n'avez pas encore de bibliothèque, il est temps d'en créer une."
+msgstr ""
+"On dirait que vous n'avez pas encore d’audiothèque, il est temps d'en créer "
+"une."
 
 #: front/src/components/audio/Player.vue:413
 #: src/components/audio/Player.vue:414
@@ -3855,7 +3866,7 @@ msgstr "Navigation"
 #: front/src/views/admin/library/Base.vue:84
 msgctxt "Head/Admin/Title"
 msgid "Manage library"
-msgstr "Gérer la bibliothèque"
+msgstr "Gérer l’audiothèque"
 
 #: front/src/components/manage/moderation/InstancePolicyModal.vue:10
 msgctxt "Popup/Moderation/Title/Verb"
@@ -4042,12 +4053,12 @@ msgstr "Ma description géniale"
 #: front/src/views/content/libraries/Form.vue:142
 msgctxt "Content/Library/Input.Placeholder"
 msgid "My awesome library"
-msgstr "Ma bibliothèque d'enfer"
+msgstr "Mon audiothèque d’enfer"
 
 #: front/src/components/playlists/Form.vue:131
 msgctxt "Content/Playlist/Input.Placeholder"
 msgid "My awesome playlist"
-msgstr "Ma liste de lecture d'enfer"
+msgstr "Ma liste de lecture géniale"
 
 #: front/src/components/library/radios/Builder.vue:220
 msgctxt "Content/Radio/Input.Placeholder"
@@ -4057,7 +4068,7 @@ msgstr "Ma super radio"
 #: front/src/views/content/libraries/Home.vue:11
 msgctxt "Content/Library/Title"
 msgid "My libraries"
-msgstr "Mes bibliothèques"
+msgstr "Mes audiothèques"
 
 #: front/src/components/Sidebar.vue:189
 msgctxt "*/*/*/Noun"
@@ -4250,7 +4261,7 @@ msgstr "Aucun album ne correspond à votre recherche"
 #: front/src/components/audio/Search.vue:25 src/components/audio/Search.vue:12
 msgctxt "Content/Search/Paragraph"
 msgid "No artist matched your query"
-msgstr "Aucun·e artiste ne correspond à votre recherche"
+msgstr "Aucun artiste ne correspond à votre recherche"
 
 #: front/src/components/common/RenderedDescription.vue:15
 msgctxt "*/*/Placeholder"
@@ -4275,7 +4286,7 @@ msgstr "Aucun résultat"
 #: front/src/components/federation/LibraryWidget.vue:9
 msgctxt "Content/Federation/Paragraph"
 msgid "No matching library."
-msgstr "Aucune bibliothèque correspondante."
+msgstr "Aucune audiothèque correspondante."
 
 #: front/src/views/Notifications.vue:146
 msgctxt "Content/Notifications/Paragraph"
@@ -4360,13 +4371,13 @@ msgstr "Personne à part moi"
 #: front/src/views/library/Edit.vue:78
 msgctxt "Content/Library/Paragraph"
 msgid "Nobody is following this library"
-msgstr "Personne ne suit cette bibliothèque"
+msgstr "Personne ne suit cette audiothèque"
 
 #: front/src/components/channels/AlbumSelect.vue:8
 #: front/src/components/channels/LicenseSelect.vue:7
 msgctxt "*/*/*"
 msgid "None"
-msgstr "Aucun.e"
+msgstr "Néant"
 
 #: front/src/components/manage/users/InvitationsTable.vue:79
 #: front/src/components/manage/users/InvitationsTable.vue:9
@@ -5185,7 +5196,7 @@ msgstr "Raison"
 #: front/src/views/admin/moderation/DomainsDetail.vue:237
 msgctxt "Content/Moderation/Table.Label/Noun"
 msgid "Received library follows"
-msgstr "Suivis de bibliothèque reçus"
+msgstr "Suivis d’audiothèque reçus"
 
 #: front/src/components/manage/moderation/DomainsTable.vue:70
 #: front/src/components/manage/moderation/DomainsTable.vue:12
@@ -5403,12 +5414,15 @@ msgstr "Me le rappeler dans :"
 #: front/src/views/content/remote/Home.vue:11
 msgctxt "Content/Library/Title/Noun"
 msgid "Remote libraries"
-msgstr "Bibliothèques distantes"
+msgstr "Audiothèques distantes"
 
 #: front/src/views/content/remote/Home.vue:16
 msgctxt "Content/Library/Paragraph"
 msgid "Remote libraries are owned by other users on the network. You can access them as long as they are public or you are granted access."
-msgstr "Les bibliothèques distantes appartiennent à d'autres utilisateurs du réseau. Vous pouvez y accéder tant qu'elles sont publiques ou qu'on vous en donne l'accès."
+msgstr ""
+"Les audiothèques distantes appartiennent à d'autres utilisateurs du réseau. "
+"Vous pouvez y accéder tant qu'elles sont publiques ou qu'on vous en donne "
+"l'accès."
 
 #: front/src/components/auth/Settings.vue:355
 msgctxt "*/*/*/Verb"
@@ -5495,7 +5509,7 @@ msgstr "Signaler cet album…"
 #: src/components/mixins/Report.vue:66
 msgctxt "*/Moderation/*/Verb"
 msgid "Report this artist…"
-msgstr "Signaler cet·te artiste…"
+msgstr "Signaler cet artiste…"
 
 #: front/src/components/mixins/Report.vue:54
 #: src/components/mixins/Report.vue:55
@@ -5507,7 +5521,7 @@ msgstr "Signaler cette chaîne…"
 #: src/components/mixins/Report.vue:90
 msgctxt "*/Moderation/*/Verb"
 msgid "Report this library…"
-msgstr "Signaler cette bibliothèque…"
+msgstr "Signaler cette audiothèque…"
 
 #: front/src/components/mixins/Report.vue:77
 #: src/components/mixins/Report.vue:78
@@ -5822,7 +5836,7 @@ msgstr "Rechercher"
 #: front/src/views/content/remote/ScanForm.vue:15
 msgctxt "Content/Library/Input.Label/Verb"
 msgid "Search a remote library"
-msgstr "Rechercher une bibliothèque distante"
+msgstr "Rechercher une audiothèque distante"
 
 #: front/src/views/Search.vue:192
 msgctxt "Head/Fetch/Title"
@@ -6576,7 +6590,7 @@ msgstr "Étiquette"
 #: front/src/views/admin/library/TagDetail.vue:65
 msgctxt "Content/Moderation/Title"
 msgid "Tag data"
-msgstr "Données  du tag"
+msgstr "Données du tag"
 
 #: front/src/components/audio/ChannelForm.vue:72
 #: front/src/components/audio/ChannelForm.vue:58
@@ -6664,13 +6678,17 @@ msgstr "L'adresse fournie n'est pas un serveur Funkwhale"
 #: front/src/views/content/libraries/Form.vue:58
 msgctxt "Popup/Library/Paragraph"
 msgid "The library and all its tracks will be deleted. This can not be undone."
-msgstr "La bibliothèque et toutes ses pistes seront supprimées. Cette action est irréversible."
+msgstr ""
+"L’audiothèque et toutes ses pistes seront supprimées. Cette action est "
+"irréversible."
 
 #: front/src/views/admin/library/LibraryDetail.vue:57
 #: front/src/views/admin/library/LibraryDetail.vue:52
 msgctxt "Content/Moderation/Paragraph"
 msgid "The library will be removed, as well as associated uploads, and follows. This action is irreversible."
-msgstr "La bibliothèque sera supprimée, ainsi que les téléversements et abonnements associés. Cette action est irréversible."
+msgstr ""
+"L’audiothèque sera supprimée, ainsi que les téléversements et abonnements "
+"associés. Cette action est irréversible."
 
 #: front/src/components/library/ImportStatusModal.vue:199
 msgctxt "Popup/Import/Error.Label"
@@ -6751,7 +6769,9 @@ msgstr "L’artiste sélectionné sera supprimé, ainsi que les téléversements
 #: front/src/components/manage/library/LibrariesTable.vue:276
 msgctxt "Popup/*/Paragraph"
 msgid "The selected library will be removed, as well as associated uploads and follows. This action is irreversible."
-msgstr "La bibliothèque sélectionnée sera supprimée, ainsi que les téléversements et abonnements associés. Cette action est irréversible."
+msgstr ""
+"L’audiothèque sélectionnée sera supprimée, ainsi que les téléversements et "
+"abonnements associés. Cette action est irréversible."
 
 #: front/src/components/manage/library/TagsTable.vue:212
 msgctxt "Popup/*/Paragraph"
@@ -6837,12 +6857,12 @@ msgstr "Cette action est irréversible."
 #: front/src/components/library/AlbumDetail.vue:7
 msgctxt "Content/Album/Paragraph"
 msgid "This album is present in the following libraries:"
-msgstr "Cet album est présent dans les bibliothèques suivantes :"
+msgstr "Cet album est présent dans les audiothèques suivantes :"
 
 #: front/src/components/library/ArtistDetail.vue:60
 msgctxt "Content/Artist/Paragraph"
 msgid "This artist is present in the following libraries:"
-msgstr "Cet⋅te artiste est présent⋅e dans les bibliothèques suivantes :"
+msgstr "Cet artiste est présent dans les audiothèques suivantes :"
 
 #: front/src/components/manage/moderation/DomainsTable.vue:228
 msgctxt "Content/Moderation/Popup"
@@ -6895,7 +6915,9 @@ msgstr "Ce type d'objet n'est pas encore pris en charge"
 #: front/src/views/content/libraries/Form.vue:143
 msgctxt "Content/Library/Input.Placeholder"
 msgid "This library contains my personal music, I hope you like it."
-msgstr "Cette bibliothèque contient ma musique personnelle, j'espère que vous l'aimerez."
+msgstr ""
+"Cette audiothèque contient ma musique personnelle, j'espère que vous "
+"l'aimerez."
 
 #: front/src/views/library/DetailAlbums.vue:5
 #: src/views/library/DetailOverview.vue:9
@@ -6908,13 +6930,16 @@ msgstr "Cette audiothèque est vide. Vous devriez y créer quelque chose !"
 #: src/views/library/DetailBase.vue:265
 msgctxt "Content/Library/Card.Help text"
 msgid "This library is private and your approval from its owner is needed to access its content"
-msgstr "Cette bibliothèque est privée et son propriétaire doit vous approuver pour accéder à son contenu"
+msgstr ""
+"Cette audiothèque est privée et son propriétaire doit vous approuver pour "
+"accéder à son contenu"
 
 #: front/src/views/content/remote/Card.vue:253
 #: src/views/library/DetailBase.vue:267
 msgctxt "Content/Library/Card.Help text"
 msgid "This library is public and you can access its content freely"
-msgstr "Cette bibliothèque est publique et vous pouvez accéder à son contenu librement"
+msgstr ""
+"Cette audiothèque est publique et vous pouvez accéder à son contenu librement"
 
 #: front/src/views/library/DetailBase.vue:266
 msgctxt "Content/Library/Card.Help text"
@@ -6965,17 +6990,19 @@ msgstr "La piste est importée mais n'a pas encore été traitée par le serveur
 #: front/src/components/mixins/Translations.vue:26
 msgctxt "Content/Library/Help text"
 msgid "This track is already present in one of your libraries"
-msgstr "La piste est déjà présente dans l'une de vos bibliothèques"
+msgstr "La piste est déjà présente dans l'une de vos audiothèques"
 
 #: front/src/components/audio/PlayButton.vue:190
 msgctxt "*/Queue/Button/Title"
 msgid "This track is not available in any library you have access to"
-msgstr "Cette piste n'est pas accessible dans les bibliothèques auxquelles vous avez accès"
+msgstr ""
+"Cette piste n'est pas accessible dans les audiothèques auxquelles vous avez "
+"accès"
 
 #: front/src/components/library/TrackDetail.vue:209
 msgctxt "Content/Track/Paragraph"
 msgid "This track is present in the following libraries:"
-msgstr "Cette piste est présente dans les bibliothèques suivantes :"
+msgstr "Cette piste est présente dans les audiothèques suivantes :"
 
 #: front/src/views/auth/ProfileOverview.vue:33
 msgctxt "Content/Profile/Paragraph"
@@ -7090,7 +7117,7 @@ msgstr "Taille totale"
 #: front/src/views/content/libraries/Card.vue:88
 msgctxt "Content/Library/Card.Help text"
 msgid "Total size of the files in this library"
-msgstr "Taille totale des fichiers de cette bibliothèque"
+msgstr "Taille totale des fichiers de cette audiothèque"
 
 #: front/src/views/admin/moderation/DomainsDetail.vue:155
 #: front/src/views/admin/moderation/DomainsDetail.vue:150
@@ -7245,7 +7272,7 @@ msgstr "Se désabonner"
 #: front/src/views/content/remote/Card.vue:6
 msgctxt "Popup/Library/Title"
 msgid "Unfollow this library?"
-msgstr "Se désabonner de cette bibliothèque ?"
+msgstr "Se désabonner de cette audiothèque ?"
 
 #: front/src/components/federation/FetchButton.vue:85
 #: front/src/components/federation/FetchButton.vue:88
@@ -7322,7 +7349,7 @@ msgstr "Mettre à jour la description"
 #: front/src/views/content/libraries/Form.vue:41
 msgctxt "Content/Library/Button.Label/Verb"
 msgid "Update library"
-msgstr "Mettre à jour la bibliothèque"
+msgstr "Mettre à jour l’audiothèque"
 
 #: front/src/components/playlists/Form.vue:50
 #: src/components/playlists/Form.vue:1
@@ -7416,7 +7443,9 @@ msgstr "Dépassement du délai d'envoi, veuillez réessayer"
 #: front/src/components/library/ImportStatusModal.vue:20
 msgctxt "Popup/Import/Message"
 msgid "Upload was skipped because a similar one is already available in one of your libraries."
-msgstr "L’import a été ignoré car un fichier similaire est déjà disponible dans une de vos bibliothèques."
+msgstr ""
+"L’import a été ignoré car un fichier similaire est déjà disponible dans une "
+"de vos audiothèques."
 
 #: front/src/components/library/ImportStatusModal.vue:15
 msgctxt "Popup/Import/Message"
@@ -7629,7 +7658,7 @@ msgstr "Interface utilisateur·ice"
 #: front/src/components/library/ArtistDetail.vue:55
 msgctxt "Content/*/Title/Noun"
 msgid "User libraries"
-msgstr "Bibliothèques utilisateur"
+msgstr "Audiothèques de l’utilisateur"
 
 #: front/src/views/auth/ProfileOverview.vue:20
 msgctxt "Content/Profile/Header"
@@ -7944,12 +7973,16 @@ msgstr "Oui, déconnectez-moi !"
 #: front/src/views/content/libraries/Form.vue:30
 msgctxt "Content/Library/Paragraph"
 msgid "You are able to share your library with other people, regardless of its visibility."
-msgstr "Vous pouvez partager votre bibliothèque avec d'autres personnes, quelle que soit sa visibilité."
+msgstr ""
+"Vous pouvez partager votre audiothèque avec d'autres personnes, quelle que "
+"soit sa visibilité."
 
 #: front/src/components/library/FileUpload.vue:48
 msgctxt "Content/Library/Paragraph"
 msgid "You are about to upload music to your library. Before proceeding, please ensure that:"
-msgstr "Vous êtes sur le point de transférer de la musique dans votre bibliothèque. Avant de procéder, veuillez vous assurer que :"
+msgstr ""
+"Vous êtes sur le point de transférer de la musique dans votre audiothèque. "
+"Avant de procéder, veuillez vous assurer que :"
 
 #: front/src/components/SetInstanceModal.vue:28
 msgctxt "Popup/Login/Paragraph"
@@ -7959,7 +7992,7 @@ msgstr "Vous êtes actuellement connecté·e a <a href=\"%{ url }\" target=\"_bl
 #: front/src/components/library/ArtistDetail.vue:6
 msgctxt "Content/Artist/Paragraph"
 msgid "You are currently hiding content related to this artist."
-msgstr "Vous masquez actuellement le contenu associé à cet·te artiste."
+msgstr "Vous masquez actuellement le contenu associé à cet artiste."
 
 #: front/src/components/auth/Logout.vue:9
 msgctxt "Content/Login/Paragraph"
@@ -7969,7 +8002,9 @@ msgstr "Vous êtes actuellement connecté·e en tant que %{ username }"
 #: front/src/components/library/FileUpload.vue:54
 msgctxt "Content/Library/List item"
 msgid "You are not uploading copyrighted content in a public library, otherwise you may be infringing the law"
-msgstr "Vous n'envoyez pas de contenu sous copyright dans une bibliothèque publique, car dans le cas contraire, vous être probablement en infraction"
+msgstr ""
+"Vous n'envoyez pas de contenu sous copyright dans une audiothèque publique "
+"car, dans le cas contraire, vous être probablement en infraction"
 
 #: front/src/components/SetInstanceModal.vue:189
 msgctxt "*/Instance/Message"
