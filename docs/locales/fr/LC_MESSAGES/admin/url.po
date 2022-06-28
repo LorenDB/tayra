@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: 2022-06-28 21:33+0000\n"
+"PO-Revision-Date: 2022-06-28 21:35+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/admin-url/fr/>\n"
@@ -45,10 +45,13 @@ msgstr "L’URL de l’instance dans votre fichier .env"
 #: ../../admin/url.rst:13
 msgid "The instance URL in your ``/etc/nginx/sites-enabled/funkwhale.conf`` or ``/etc/apache2/sites-enabled/funkwhale.conf`` depending on your web server setup"
 msgstr ""
+"L’URL de l’instance dans votre ``/etc/nginx/sites-enabled/funkwhale.conf`` "
+"ou ``/etc/apache2/sites-enabled/funkwhale.conf`` en fonction de la "
+"configuration de votre serveur web"
 
 #: ../../admin/url.rst:14
 msgid "Any references to the old URL in your database"
-msgstr ""
+msgstr "Toute référence à l’ancienne URL dans votre base de données"
 
 #: ../../admin/url.rst:16
 msgid "The changes to the database can be achieved with the ``fix_federation_ids`` script in the ``manage.py`` file."
