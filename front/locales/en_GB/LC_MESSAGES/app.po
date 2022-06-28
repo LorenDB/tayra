@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2021-12-11 20:27+0000\n"
-"Last-Translator: Ciarán Ainsworth <ciaranainsworth@outlook.com>\n"
+"PO-Revision-Date: 2022-06-28 18:50+0000\n"
+"Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6.2\n"
+"X-Generator: Weblate 4.13\n"
 
 #: front/src/components/playlists/PlaylistModal.vue:8
 #: front/src/components/playlists/PlaylistModal.vue:5
@@ -99,8 +99,8 @@ msgstr[1] "%{ count } listenings"
 msgctxt "Content/*/Paragraph"
 msgid "%{ count } on %{ total } selected"
 msgid_plural "%{ count } on %{ total } selected"
-msgstr[0] "%{ count } on %{ total } selected"
-msgstr[1] "%{ count } on %{ total } selected"
+msgstr[0] "%{ count } of %{ total } selected"
+msgstr[1] "%{ count } of %{ total } selected"
 
 #: front/src/views/channels/DetailBase.vue:27
 #: src/views/channels/DetailBase.vue:22
@@ -161,7 +161,7 @@ msgstr[1] "%{ count } tracks were added to your queue"
 #: front/src/views/content/libraries/Quota.vue:21
 msgctxt "Content/Library/Paragraph"
 msgid "%{ current } used on %{ max } allowed"
-msgstr "%{ current } used on %{ max } allowed"
+msgstr "%{ current } used of %{ max } allowed"
 
 #: front/src/components/common/Duration.vue:2
 msgctxt "Content/*/Paragraph"
@@ -206,7 +206,8 @@ msgstr "%{ username }'s profile"
 #: front/src/components/playlists/PlaylistModal.vue:22
 msgctxt "Popup/Playlist/Paragraph"
 msgid "<strong>%{ track }</strong> is already in <strong>%{ playlist }</strong>."
-msgstr "<strong>%{ track }</strong> is already in <strong>%{ playlist }</strong>."
+msgstr ""
+"<strong>%{ track }</strong> is already in <strong>%{ playlist }</strong>."
 
 #: front/src/views/Notifications.vue:28 src/views/Notifications.vue:84
 msgctxt "*/*/*"
@@ -283,7 +284,7 @@ msgstr "About this Funkwhale pod"
 #: front/src/components/channels/LicenseSelect.vue:18
 msgctxt "Content/*/*"
 msgid "About this license"
-msgstr "About this license"
+msgstr "About this licence"
 
 #: front/src/components/About.vue:89 src/components/AboutPod.vue:18
 #: front/src/components/AboutPod.vue:47
@@ -556,7 +557,7 @@ msgstr "Add a domain"
 #: front/src/components/channels/UploadForm.vue:29
 msgctxt "Content/Channels/Popup.Paragraph"
 msgid "Add a license to your upload to ensure some freedoms to your public."
-msgstr "Add a license to your upload to ensure some freedoms to your public."
+msgstr "Add a licence to your upload to ensure some freedoms to your public."
 
 #: front/src/views/admin/moderation/AccountsDetail.vue:78
 #: front/src/views/admin/moderation/AccountsDetail.vue:73
@@ -695,7 +696,9 @@ msgstr "Additional fields"
 #: front/src/components/admin/SignupFormBuilder.vue:35
 msgctxt "*/*/Help"
 msgid "Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled."
-msgstr "Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled."
+msgstr ""
+"Additional form fields to be displayed in the form. Only shown if manual "
+"sign-up validation is enabled."
 
 #: front/src/components/audio/VolumeControl.vue:76
 msgctxt "Sidebar/Player/Icon.Tooltip/Verb"
@@ -839,7 +842,9 @@ msgstr "Allow-list"
 #: front/src/components/library/ImportStatusModal.vue:25
 msgctxt "Popup/Import/Message"
 msgid "An error occurred during upload processing. You will find more information below."
-msgstr "An error occurred during upload processing. You will find more information below."
+msgstr ""
+"An error occurred during upload processing. You will find more information "
+"below."
 
 #: front/src/components/playlists/Editor.vue:17
 #: src/components/playlists/Editor.vue:2
@@ -877,7 +882,7 @@ msgstr "Anonymous access"
 #: front/src/components/moderation/ReportModal.vue:74
 msgctxt "Popup/Moderation/Error message"
 msgid "Anonymous reports are disabled, please sign-in to submit a report."
-msgstr "Anonymous reports are disabled, please sign-in to submit a report."
+msgstr "Anonymous reports are disabled, please sign in to submit a report."
 
 #: front/src/components/auth/Settings.vue:242
 #: src/components/auth/Settings.vue:318
@@ -906,7 +911,9 @@ msgstr "Application ID"
 #: front/src/components/auth/ApplicationEdit.vue:13
 msgctxt "Content/Application/Paragraph/"
 msgid "Application ID and secret are really sensitive values and must be treated like passwords. Do not share those with anyone else."
-msgstr "Application ID and secret are really sensitive values and must be treated like passwords. Do not share those with anyone else."
+msgstr ""
+"Application ID and secret are really sensitive values and must be treated "
+"like passwords. Do not share those with anyone else."
 
 #: front/src/components/auth/ApplicationEdit.vue:29
 #: front/src/components/auth/ApplicationEdit.vue:22
@@ -1173,7 +1180,10 @@ msgstr "Block everything"
 #: front/src/components/manage/moderation/InstancePolicyForm.vue:206
 msgctxt "Content/Moderation/Help text"
 msgid "Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.)"
-msgstr "Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.)"
+msgstr ""
+"Block everything from this account or domain. This will prevent any "
+"interaction with the entity, and purge related content (uploads, libraries, "
+"follows, etc.)"
 
 #: front/src/components/Sidebar.vue:156 src/components/Sidebar.vue:196
 msgctxt "Sidebar/Navigation/List item.Link/Verb"
@@ -1355,7 +1365,9 @@ msgstr "Change password"
 #: front/src/components/auth/Settings.vue:418
 msgctxt "Content/Settings/Paragraph'"
 msgid "Change the e-mail address associated with your account. We will send a confirmation to the new address."
-msgstr "Change the e-mail address associated with your account. We will send a confirmation to the new address."
+msgstr ""
+"Change the e-mail address associated with your account. We will send a "
+"confirmation to the new address."
 
 #: front/src/components/Footer.vue:61 src/components/common/UserMenu.vue:171
 msgctxt "Footer/Settings/Dropdown.Label/Short, Verb"
@@ -1381,7 +1393,9 @@ msgstr "Changes synced with server"
 #: front/src/components/auth/Settings.vue:85
 msgctxt "Content/Settings/Paragraph'"
 msgid "Changing your password will also change your Subsonic API password if you have requested one."
-msgstr "Changing your password will also change your Subsonic API password if you have requested one."
+msgstr ""
+"Changing your password will also change your Subsonic API password if you "
+"have requested one."
 
 #: front/src/components/auth/Settings.vue:125
 msgctxt "Popup/Settings/Paragraph"
@@ -1435,7 +1449,9 @@ msgstr "Chat room"
 #: front/src/components/auth/ApplicationForm.vue:30
 msgctxt "Content/Applications/Paragraph/"
 msgid "Checking the parent \"Read\" or \"Write\" scopes implies access to all the corresponding children scopes."
-msgstr "Checking the parent \"Read\" or \"Write\" scopes implies access to all the corresponding children scopes."
+msgstr ""
+"Checking the parent \"Read\" or \"Write\" scopes implies access to all the "
+"corresponding children scopes."
 
 #: front/src/components/SetInstanceModal.vue:3
 msgctxt "Popup/Instance/Title"
@@ -1477,7 +1493,8 @@ msgstr "Clear your queue"
 #: front/src/components/mixins/Translations.vue:22
 msgctxt "Content/Library/Link.Title"
 msgid "Click to display more information about the import process for this upload"
-msgstr "Click to display more information about the import process for this upload"
+msgstr ""
+"Click to display more information about the import process for this upload"
 
 #: front/src/components/library/FileUpload.vue:73
 msgctxt "Content/Library/Paragraph/Call to action"
