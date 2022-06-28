@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: 2022-06-28 19:15+0000\n"
+"PO-Revision-Date: 2022-06-28 19:25+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/admin-troubleshooting/fr/>\n"
@@ -319,34 +319,55 @@ msgstr ""
 #: ../../admin/troubleshooting.rst:134
 msgid "Try to identify the scope of the issue and reproduce it reliably"
 msgstr ""
+"Essayer d’identifier l’étendue du problème et de le reproduire de manière "
+"fiable"
 
 #: ../../admin/troubleshooting.rst:135
 msgid "Ensure your instance is configured as detailed in the installation documentation, and if you did not use the default values, to check what you changed"
 msgstr ""
+"Vous assurer que votre instance est configurée comme indiqué dans la "
+"documentation d’installation et, si vous n’avez pas utilisé les valeurs par "
+"défaut, vérifier ce que vous avez changé"
 
 #: ../../admin/troubleshooting.rst:137
 msgid "To read the .env file carefully, as most of the options are described in the comments"
 msgstr ""
+"Lire le fichier .env attentivement, car la plupart des options sont décrites "
+"dans les commentaires"
 
 #: ../../admin/troubleshooting.rst:141
 msgid "Report an issue or get help"
-msgstr ""
+msgstr "Signaler un problème ou obtenir de l’aide"
 
 #: ../../admin/troubleshooting.rst:143
 msgid "Well be more than happy to help you to debug installation and configuration issues. The main channel for receiving support about your Funkwhale installation is the `#funkwhale-troubleshooting:matrix.org <https://matrix.to/#/#funkwhale-troubleshooting:matrix.org>`_ Matrix channel."
 msgstr ""
+"Nous serons plus qu'heureux de vous aider à déboguer les problèmes "
+"d'installation et de configuration. Le principal canal pour recevoir de "
+"l'aide à propos de votre installation Funkwhale est la chaîne Matrix "
+"`#funkwhale-troubleshooting:matrix.org <https://matrix.to/#/#funkwhale-"
+"troubleshooting:matrix.org>`."
 
 #: ../../admin/troubleshooting.rst:146
 msgid "Before asking for help, we'd really appreciate if you took the time to go through this document and try to diagnose the problem yourself. But if you don't find anything relevant or don't have the time, we'll be there for you!"
 msgstr ""
+"Avant de demander de l'aide, nous apprécierions vraiment que vous preniez le "
+"temps de parcourir ce document et d'essayer de diagnostiquer le problème "
+"vous-même. Mais si vous ne trouvez rien de pertinent ou si vous n'avez pas "
+"le temps, nous serons là pour vous aider !"
 
 #: ../../admin/troubleshooting.rst:149
 msgid "Here are a few recommendations on how to structure and what to include in your help requests:"
 msgstr ""
+"Voici quelques recommandations sur la manière de structurer vos demandes d’"
+"aides et ce qu’il faut y inclure :"
 
 #: ../../admin/troubleshooting.rst:151
 msgid "Give us as much context as possible about your installation (OS, version, Docker/non-docker, reverse-proxy type, relevant logs and errors, etc.)"
 msgstr ""
+"Donnez-nous autant de détails que possible sur votre installation (système "
+"d'exploitation, version, Docker/non-Docker, type de proxy inverse, journaux "
+"et erreurs pertinents, etc.)"
 
 #: ../../admin/troubleshooting.rst:152
 msgid "Including screenshots or small gifs or videos can help us considerably when debugging front-end issues"
