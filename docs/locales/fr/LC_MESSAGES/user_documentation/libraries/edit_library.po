@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: 2022-06-28 19:50+0000\n"
+"PO-Revision-Date: 2022-06-28 19:55+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/user_documentation-libraries-edit_library/fr/>\n"
@@ -21,12 +21,12 @@ msgstr ""
 
 #: ../../user_documentation/libraries/edit_library.md:1
 msgid "Edit a library"
-msgstr "Éditer une bibliothèque"
+msgstr "Éditer une audiothèque"
 
 #: ../../user_documentation/libraries/edit_library.md:3
 msgid "You can update the details of your libraries at any time. To do this:"
 msgstr ""
-"Vous pouvez mettre à jour les détails de vos bibliothèques à n’importe quel "
+"Vous pouvez mettre à jour les détails de vos audiothèques à n’importe quel "
 "moment. Pour ce faire :"
 
 #: ../../user_documentation/libraries/edit_library.md:0
@@ -56,14 +56,14 @@ msgstr ""
 msgid "A screen appears showing your upload quota and your libraries."
 msgstr ""
 "Un écran apparaît, indiquant votre quota de téléchargement et vos "
-"bibliothèques."
+"audiothèques."
 
 #: ../../user_documentation/libraries/edit_library.md:11
 #: ../../user_documentation/libraries/edit_library.md:27
 msgid "Select {guilabel}`Library Details` under the library you want to edit."
 msgstr ""
-"Sélectionnez {guilabel}`Détails de l’audiothèque`sous la bibliothèque que "
-"vous désirez éditer."
+"Sélectionnez {guilabel}`Détails de l’audiothèque`sous l’audiothèque que vous "
+"désirez éditer."
 
 #: ../../user_documentation/libraries/edit_library.md:12
 #: ../../user_documentation/libraries/edit_library.md:28
@@ -94,15 +94,19 @@ msgstr "{guilabel}`Visibilité`."
 #: ../../user_documentation/libraries/edit_library.md:33
 msgid "Select {guilabel}`Update Library` to save your changes. A toast notification appears at the bottom of the screen to confirm your changes."
 msgstr ""
+"Sélectionnez {guilabel}`Mettre à jour l’audiothèque` pour sauvegarder vos "
+"modifications. Une notification toast apparaît au bas de l’écran pour "
+"confirmer vos changements."
 
 #: ../../user_documentation/libraries/edit_library.md:0
 msgid "Mobile"
-msgstr ""
+msgstr "Mobile"
 
 #: ../../user_documentation/libraries/edit_library.md:24
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
 msgstr ""
+"Sélectionnez l’icône de téléchargement ({fa}`upload`) en haut de l’écran."
 
 #: ../../user_documentation/libraries/edit_library.md:37
 msgid "That's it! You've updated your library's details."
-msgstr ""
+msgstr "C'est fait ! Vous avez mis à jour les données de votre audiothèque."
