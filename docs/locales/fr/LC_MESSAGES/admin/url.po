@@ -8,29 +8,39 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-06-28 21:33+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/admin-url/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.13\n"
 
 #: ../../admin/url.rst:2
 msgid "Changing Your Instance URL"
-msgstr ""
+msgstr "Changer l’URL de votre instance"
 
 #: ../../admin/url.rst:6
 msgid "We highly recommend not to change your instance URL. Members of the community tried to do this and documented their steps here. This guide might be incomplete or fail for your instance. There is no support for this procedure and likely no way back."
 msgstr ""
+"Nous vous recommandons vivement de ne pas modifier l'URL de votre instance. "
+"Des membres de la communauté ont essayé de le faire et ont documenté leurs "
+"étapes ici. Ce guide peut être incomplet ou échouer pour votre instance. Il "
+"n'y a pas de support pour cette procédure et probablement aucun moyen de "
+"revenir en arrière."
 
 #: ../../admin/url.rst:9
 msgid "At some point, you may wish to change your instance URL. In order to do this, you will need to change the following:"
 msgstr ""
+"À un moment donné, vous souhaiterez peut-être modifier l'URL de votre "
+"instance. Pour ce faire, vous devrez modifier les éléments suivants :"
 
 #: ../../admin/url.rst:12
 msgid "The instance URL in your .env file"
-msgstr ""
+msgstr "L’URL de l’instance dans votre fichier .env"
 
 #: ../../admin/url.rst:13
 msgid "The instance URL in your ``/etc/nginx/sites-enabled/funkwhale.conf`` or ``/etc/apache2/sites-enabled/funkwhale.conf`` depending on your web server setup"
