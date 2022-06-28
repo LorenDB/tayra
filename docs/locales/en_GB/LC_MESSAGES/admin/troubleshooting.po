@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: 2022-06-28 11:34+0000\n"
+"PO-Revision-Date: 2022-06-28 11:42+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/admin-troubleshooting/en_GB/>\n"
@@ -265,84 +265,119 @@ msgstr ""
 
 #: ../../admin/troubleshooting.rst:122
 msgid "I have no access to another instance library"
-msgstr ""
+msgstr "I have no access to another instance library"
 
 #: ../../admin/troubleshooting.rst:124
 msgid "Check if it works with the demo library (library@demo.funkwhale.audio)"
-msgstr ""
+msgstr "Check if it works with the demo library (library@demo.funkwhale.audio)"
 
 #: ../../admin/troubleshooting.rst:125
 msgid "Check if the remote library received your follow request and approved it"
 msgstr ""
+"Check if the remote library received your follow request and approved it"
 
 #: ../../admin/troubleshooting.rst:126
 msgid "Trigger a scan via the interface"
-msgstr ""
+msgstr "Trigger a scan via the interface"
 
 #: ../../admin/troubleshooting.rst:127
 msgid "Have a look in the celery logs for potential errors during the scan"
-msgstr ""
+msgstr "Have a look in the celery logs for potential errors during the scan"
 
 #: ../../admin/troubleshooting.rst:130
 msgid "Other problems"
-msgstr ""
+msgstr "Other problems"
 
 #: ../../admin/troubleshooting.rst:132
 msgid "It's a bit hard to give targeted advice about problems that do not fit in the previous categories. However, we can recommend to:"
 msgstr ""
+"It's a bit hard to give targeted advice about problems that do not fit in "
+"the previous categories. However, we can recommend to:"
 
 #: ../../admin/troubleshooting.rst:134
 msgid "Try to identify the scope of the issue and reproduce it reliably"
-msgstr ""
+msgstr "Try to identify the scope of the issue and reproduce it reliably"
 
 #: ../../admin/troubleshooting.rst:135
 msgid "Ensure your instance is configured as detailed in the installation documentation, and if you did not use the default values, to check what you changed"
 msgstr ""
+"Ensure your instance is configured as detailed in the installation "
+"documentation, and if you did not use the default values, to check what you "
+"changed"
 
 #: ../../admin/troubleshooting.rst:137
 msgid "To read the .env file carefully, as most of the options are described in the comments"
 msgstr ""
+"To read the .env file carefully, as most of the options are described in the "
+"comments"
 
 #: ../../admin/troubleshooting.rst:141
 msgid "Report an issue or get help"
-msgstr ""
+msgstr "Report an issue or get help"
 
 #: ../../admin/troubleshooting.rst:143
 msgid "Well be more than happy to help you to debug installation and configuration issues. The main channel for receiving support about your Funkwhale installation is the `#funkwhale-troubleshooting:matrix.org <https://matrix.to/#/#funkwhale-troubleshooting:matrix.org>`_ Matrix channel."
 msgstr ""
+"We'll be more than happy to help you to debug installation and configuration "
+"issues. The main channel for receiving support about your Funkwhale "
+"installation is the `#funkwhale-troubleshooting:matrix.org <https://matrix."
+"to/#/#funkwhale-troubleshooting:matrix.org>`_ Matrix channel."
 
 #: ../../admin/troubleshooting.rst:146
 msgid "Before asking for help, we'd really appreciate if you took the time to go through this document and try to diagnose the problem yourself. But if you don't find anything relevant or don't have the time, we'll be there for you!"
 msgstr ""
+"Before asking for help, we'd really appreciate if you took the time to go "
+"through this document and try to diagnose the problem yourself. But if you "
+"don't find anything relevant or don't have the time, we'll be there for you!"
 
 #: ../../admin/troubleshooting.rst:149
 msgid "Here are a few recommendations on how to structure and what to include in your help requests:"
 msgstr ""
+"Here are a few recommendations on how to structure and what to include in "
+"your help requests:"
 
 #: ../../admin/troubleshooting.rst:151
 msgid "Give us as much context as possible about your installation (OS, version, Docker/non-docker, reverse-proxy type, relevant logs and errors, etc.)"
 msgstr ""
+"Give us as much context as possible about your installation (OS, version, "
+"Docker/non-docker, reverse-proxy type, relevant logs and errors, etc.)"
 
 #: ../../admin/troubleshooting.rst:152
 msgid "Including screenshots or small gifs or videos can help us considerably when debugging front-end issues"
 msgstr ""
+"Including screenshots or small gifs or videos can help us considerably when "
+"debugging front-end issues"
 
 #: ../../admin/troubleshooting.rst:154
 msgid "You can also open issues on our `issue tracker <https://dev.funkwhale.audio/funkwhale/funkwhale/issues>`_. Please have a quick look for similar issues before doing that, and use the issue tracker only to report bugs, suggest enhancements (both in the software and the documentation) or new features."
 msgstr ""
+"You can also open issues on our `issue tracker <https://dev.funkwhale.audio/"
+"funkwhale/funkwhale/issues>`_. Please have a quick look for similar issues "
+"before doing that, and use the issue tracker only to report bugs, suggest "
+"enhancements (both in the software and the documentation) or new features."
 
 #: ../../admin/troubleshooting.rst:159
 msgid "If you ever need to share screenshots or urls with someone else, ensure those do not include your personal token. This token is binded to your account and can be used to connect and use your account."
 msgstr ""
+"If you ever need to share screenshots or urls with someone else, ensure "
+"those do not include your personal token. This token is binded to your "
+"account and can be used to connect and use your account."
 
 #: ../../admin/troubleshooting.rst:162
 msgid "Urls that includes your token looks like: ``https://your.instance/api/v1/uploads/42/serve/?jwt=yoursecrettoken``"
 msgstr ""
+"Urls that includes your token looks like: ``https://your.instance/api/v1/"
+"uploads/42/serve/?jwt=yoursecrettoken``"
 
 #: ../../admin/troubleshooting.rst:165
 msgid "Improving this documentation"
-msgstr ""
+msgstr "Improving this documentation"
 
 #: ../../admin/troubleshooting.rst:167
 msgid "If you feel like something should be improved in this document (and in the documentation in general), feel free to :doc:`contribute to the documentation <../documentation/creating>`. If you're not comfortable contributing or would like to ask somebody else to do it, feel free to :doc:`request a change in documentation <../documentation/identifying>`."
 msgstr ""
+"If you feel like something should be improved in this document (and in the "
+"documentation in general), feel free to :doc:`contribute to the "
+"documentation <../documentation/creating>`. If you're not comfortable "
+"contributing or would like to ask somebody else to do it, feel free to :doc:`"
+"request a change in documentation <../documentation/identifying>`."
