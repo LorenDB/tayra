@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: 2022-06-28 19:46+0000\n"
+"PO-Revision-Date: 2022-06-28 19:50+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/user_documentation-libraries-edit_library/fr/>\n"
@@ -68,27 +68,27 @@ msgstr ""
 #: ../../user_documentation/libraries/edit_library.md:12
 #: ../../user_documentation/libraries/edit_library.md:28
 msgid "Select the {guilabel}`✎ Edit` button at the top of the screen."
-msgstr ""
+msgstr "Sélectionnez le bouton {guilabel}`✎ Éditer` en haut de l’écran."
 
 #: ../../user_documentation/libraries/edit_library.md:13
 #: ../../user_documentation/libraries/edit_library.md:29
 msgid "Change any of the following:"
-msgstr ""
+msgstr "Modifiez l’un des éléments suivants :"
 
 #: ../../user_documentation/libraries/edit_library.md:14
 #: ../../user_documentation/libraries/edit_library.md:30
 msgid "{guilabel}`Name`."
-msgstr ""
+msgstr "{guilabel}`Nom`."
 
 #: ../../user_documentation/libraries/edit_library.md:15
 #: ../../user_documentation/libraries/edit_library.md:31
 msgid "{guilabel}`Description`."
-msgstr ""
+msgstr "{guilabel}`Description`."
 
 #: ../../user_documentation/libraries/edit_library.md:16
 #: ../../user_documentation/libraries/edit_library.md:32
 msgid "{guilabel}`Visibility`."
-msgstr ""
+msgstr "{guilabel}`Visibilité`."
 
 #: ../../user_documentation/libraries/edit_library.md:17
 #: ../../user_documentation/libraries/edit_library.md:33
