@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: 2022-06-28 21:35+0000\n"
+"PO-Revision-Date: 2022-06-28 21:53+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/admin-url/fr/>\n"
@@ -56,43 +56,55 @@ msgstr "Toute référence à l’ancienne URL dans votre base de données"
 #: ../../admin/url.rst:16
 msgid "The changes to the database can be achieved with the ``fix_federation_ids`` script in the ``manage.py`` file."
 msgstr ""
+"Les modifications de la base de données peuvent être effectuées à l’aide du "
+"script ``fix_federation_ids`` dans le fichier ``manage.py``."
 
 #: ../../admin/url.rst:19
 msgid "Example output:"
-msgstr ""
+msgstr "Exemple de résultat :"
 
 #: ../../admin/url.rst:53
 msgid "On Docker Installations"
-msgstr ""
+msgstr "Dans les installations Docker"
 
 #: ../../admin/url.rst:55
 msgid "If you have followed the :doc:`Docker installation instructions <../installation/docker>`, you will need to do the following:"
 msgstr ""
+"Si vous avez suivi les :doc:`Instructions d’installation Docker <../"
+"installation/docker>`, vous devrez faire ce qui suit :"
 
 #: ../../admin/url.rst:58
 #: ../../admin/url.rst:81
 msgid "Edit your .env file to change the ``FUNKWHALE_HOSTNAME``  and ``DJANGO_ALLOWED_HOSTS`` value to your new URL"
 msgstr ""
+"Éditez votre fichier .env pour changer la valeur de ``FUNKWHALE_HOSTNAME`` "
+"et ``DJANGO_ALLOWED_HOSTS`` par votre nouvelle URL"
 
 #: ../../admin/url.rst:59
 #: ../../admin/url.rst:82
 msgid "Edit your ``/etc/nginx/sites-enabled/funkwhale.conf`` file to change the ``server_name`` values to your new URL"
 msgstr ""
+"Éditez votre fichier ``/etc/nginx/sites-enabled/funkwhale.conf`` pour "
+"changer les valeurs de ``server_name`` par votre nouvelle URL"
 
 #: ../../admin/url.rst:60
 #: ../../admin/url.rst:83
 msgid "Run the following command to change all mentions of your old instance URL in the database:"
 msgstr ""
+"Exécutez la commande suivante pour changer toutes les mentions de l’ancienne "
+"URL de votre instance dans la base de données :"
 
 #: ../../admin/url.rst:66
 #: ../../admin/url.rst:89
 msgid "Restart Nginx or Apache to pick up the new changes"
-msgstr ""
+msgstr "Redémarrez Nginx ou Apache pour adopter les nouveaux changements"
 
 #: ../../admin/url.rst:77
 msgid "On Non-Docker Installations"
-msgstr ""
+msgstr "Dans les installations non-Docker"
 
 #: ../../admin/url.rst:79
 msgid "If you have followed the :doc:`non-docker setup <../installation/debian>`, you will need to do the following:"
 msgstr ""
+"Si vous avez suivi la :doc:`configuration non-Docker <../installation/"
+"debian>`, vous devrez faire ce qui suit :"
