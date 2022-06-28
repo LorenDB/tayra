@@ -6,7 +6,7 @@
   "author": "Funkwhale Collective <contact@funkwhale.audio>",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --mode development",
     "build:deployment": "vite build --base /front/",
     "serve": "vite preview",
     "test:unit": "jest",

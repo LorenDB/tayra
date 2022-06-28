@@ -58,7 +58,7 @@ services:
 
   api:
     restart: unless-stopped
-    image: funkwhale/funkwhale:${FUNKWHALE_VERSION:-latest}
+    image: funkwhale/api:${FUNKWHALE_VERSION:-latest}
     networks:
       - default
     depends_on:
@@ -69,13 +69,12 @@ services:
       - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_PATH-/music}:ro"
       - "${MEDIA_ROOT}:${MEDIA_ROOT}"
       - "${STATIC_ROOT}:${STATIC_ROOT}"
-      - "${FUNKWHALE_FRONTEND_PATH}:/frontend"
     ports:
       - "5000"
 
-  nginx:
+  front:
     restart: unless-stopped
-    image: nginx
+    image: funkwhale/front:${FUNKWHALE_VERSION:-latest}
     networks:
       - default
     depends_on:
@@ -86,12 +85,15 @@ services:
       # Override those variables in your .env file if needed
       - "NGINX_MAX_BODY_SIZE=${NGINX_MAX_BODY_SIZE-100M}"
     volumes:
-      - "./nginx/funkwhale.template:/etc/nginx/conf.d/funkwhale.template:ro"
-      - "./nginx/funkwhale_proxy.conf:/etc/nginx/funkwhale_proxy.conf:ro"
+      # Uncomment if you want to use your previous nginx config, please let us
+      # know what special configuration you need, so we can support it with out
+      # upstream nginx configuration!
+      #- "./nginx/funkwhale.template:/etc/nginx/conf.d/funkwhale.template:ro"
+      #- "./nginx/funkwhale_proxy.conf:/etc/nginx/funkwhale_proxy.conf:ro"
+
       - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_PATH-/music}:ro"
       - "${MEDIA_ROOT}:${MEDIA_ROOT}:ro"
       - "${STATIC_ROOT}:${STATIC_ROOT}:ro"
-      - "${FUNKWHALE_FRONTEND_PATH}:/frontend:ro"
     ports:
       # override those variables in your .env file if needed
       - "${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT}:80"

@@ -1,14 +1,15 @@
-FROM node:16-buster
+FROM node:16 as builder
+WORKDIR /app
+COPY package.json yarn.lock /app/
+COPY src /app/src/
+COPY scripts /app/scripts
+COPY public /app/public
+COPY vite.config.js index.html embed.html /app/
 
-# needed to compile translations
-RUN apt-get update && apt-get install -y jq
-
-EXPOSE 8080
-WORKDIR /app/
-COPY scripts/ ./scripts/
-ADD package.json yarn.lock  ./
 RUN yarn install
+RUN yarn build:deployment
 
-COPY . .
-
-CMD ["yarn", "serve"]
+FROM nginx:1.21.6-alpine as final
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY docker/funkwhale.template /etc/nginx/conf.d/funkwhale.template
+COPY docker/funkwhale_proxy.conf /etc/nginx/funkwhale_proxy.conf

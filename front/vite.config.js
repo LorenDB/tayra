@@ -21,6 +21,7 @@ if (process.env.GITPOD_WORKSPACE_URL) {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  envPrefix: "VUE_",
   plugins: [
     vue(),
     {
