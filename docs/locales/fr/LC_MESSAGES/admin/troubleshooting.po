@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: 2022-06-28 11:34+0000\n"
+"PO-Revision-Date: 2022-06-28 19:15+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/admin-troubleshooting/fr/>\n"
@@ -196,53 +196,79 @@ msgstr ""
 #: ../../admin/troubleshooting.rst:63
 msgid "If you're using in-place import, ensure :data:`MUSIC_DIRECTORY_PATH <config.settings.common.MUSIC_DIRECTORY_PATH>`, :data:`MUSIC_DIRECTORY_SERVE_PATH <config.settings.common.MUSIC_DIRECTORY_SERVE_PATH>` and :data:`REVERSE_PROXY_TYPE <config.settings.common.REVERSE_PROXY_TYPE>` are configured properly, and that the files are readable by the webserver"
 msgstr ""
+"Si vous utilisez l’importation en place, assurez-vous que :data:`"
+"MUSIC_DIRECTORY_PATH <config.settings.common.MUSIC_DIRECTORY_PATH>`, :data:`"
+"MUSIC_DIRECTORY_SERVE_PATH <config.settings.common."
+"MUSIC_DIRECTORY_SERVE_PATH>` et :data:`REVERSE_PROXY_TYPE <config.settings."
+"common.REVERSE_PROXY_TYPE>` sont correctement configurés, et que les "
+"fichiers sont lisibles par le serveur web"
 
 #: ../../admin/troubleshooting.rst:66
+#, fuzzy
 msgid "Weakref error when running ``python manage.py <command>``"
 msgstr ""
+"Erreur de référence faible lors de l’exécution de ``python manage.py "
+"<command>``"
 
 #: ../../admin/troubleshooting.rst:68
 msgid "On Python <3.6, you may see this kind of errors when running commands like ``python manage.py migrate``::"
 msgstr ""
+"Avec Python <3.6, vous pourriez voir ce genre d’erreurs en exécutant des "
+"commandes comme ``python manage.py migrate`` ::"
 
 #: ../../admin/troubleshooting.rst:75
 msgid "This is caused by a bug in Python (cf https://github.com/celery/celery/issues/3818), and is not affecting in any way the command you execute. You can safely ignore this error."
 msgstr ""
+"Ceci est causé par un bug dans Python (cf. https://github.com/celery/celery/"
+"issues/3818), et n’affecte aucunement la commande que vous exécutez. Vous "
+"pouvez ignorer cette erreur en toute sécurité."
 
 #: ../../admin/troubleshooting.rst:79
 msgid "``Your models have changes that are not yet reflected in a migration`` warning"
 msgstr ""
+"``Vos modèles ont subi des modifications qui n'ont pas encore été prises en "
+"compte dans une migration`` avertissement"
 
 #: ../../admin/troubleshooting.rst:81
 msgid "When running ``python manage.py migrate`` (both in docker or non-docker), you may end-up with this::"
 msgstr ""
+"En exécutant ``python manage.py migrate`` (tant sur Docker que sur non-"
+"Docker), vous pourriez vous retrouver avec ceci : :"
 
 #: ../../admin/troubleshooting.rst:91
 msgid "This warning can be safely ignored. You should not run the suggested ``manage.py makemigrations`` command."
 msgstr ""
+"Cet avertissement peut être ignoré sans risque. Vous ne devriez pas exécuter "
+"la commande suggérée ``manage.py makemigrations``."
 
 #: ../../admin/troubleshooting.rst:94
 msgid "File import issues"
 msgstr "Problèmes d’importation de fichiers"
 
 #: ../../admin/troubleshooting.rst:96
+#, fuzzy
 msgid "Unless you are using the CLI to import files, imports are send as tasks in a queue to a celery worker that will process them."
 msgstr ""
+"À moins que vous utilisiez la ligne de commande pour importer les fichiers, "
+"les importations sont envoyées comme tâches dans une file d’attente vers un "
+"opérateur celery qui les traitera."
 
 #: ../../admin/troubleshooting.rst:102
 #: ../../admin/troubleshooting.rst:116
 msgid "Celery worker logs:"
-msgstr ""
+msgstr "Journaux de l’opérateur celery :"
 
 #: ../../admin/troubleshooting.rst:101
 #: ../../admin/troubleshooting.rst:115
 msgid "Docker setup: ``docker-compose logs -f --tail=50 celeryworker`` (remove the ``--tail`` flag to get the full logs)"
 msgstr ""
+"Installation Docker : ``docker-compose logs -f --tail=50 celeryworker`` ("
+"supprimez le drapeau ``--tail`` pour obtenir les journaux complets)"
 
 #: ../../admin/troubleshooting.rst:102
 #: ../../admin/troubleshooting.rst:116
 msgid "Non-docker setup: ``journalctl -xn -u funkwhale-worker``"
-msgstr ""
+msgstr "Installation non-Docker : ``journalctl -xn -u funkwhale-worker``"
 
 #: ../../admin/troubleshooting.rst:105
 msgid "Federation issues"
@@ -251,6 +277,8 @@ msgstr "Problèmes de fédération"
 #: ../../admin/troubleshooting.rst:107
 msgid "Received federations messages are sent to a dedicated task queue and processed asynchronously by a celery worker."
 msgstr ""
+"Les messages de fédérations reçus sont envoyés dans une file d’attente de "
+"tâches dédiée et traitées de manière asynchrone par un opérateur celery."
 
 #: ../../admin/troubleshooting.rst:122
 msgid "I have no access to another instance library"
@@ -270,19 +298,23 @@ msgstr ""
 
 #: ../../admin/troubleshooting.rst:126
 msgid "Trigger a scan via the interface"
-msgstr ""
+msgstr "Déclencher un scan via l’interface"
 
 #: ../../admin/troubleshooting.rst:127
 msgid "Have a look in the celery logs for potential errors during the scan"
 msgstr ""
+"Regardez dans les journaux de celery les erreurs potentielles pendant le scan"
 
 #: ../../admin/troubleshooting.rst:130
 msgid "Other problems"
-msgstr ""
+msgstr "Autres problèmes"
 
 #: ../../admin/troubleshooting.rst:132
 msgid "It's a bit hard to give targeted advice about problems that do not fit in the previous categories. However, we can recommend to:"
 msgstr ""
+"Il est un peu difficile de donner des conseils ciblés sur les problèmes qui "
+"n'entrent pas dans les catégories précédentes. Cependant, nous pouvons "
+"recommander de :"
 
 #: ../../admin/troubleshooting.rst:134
 msgid "Try to identify the scope of the issue and reproduce it reliably"
