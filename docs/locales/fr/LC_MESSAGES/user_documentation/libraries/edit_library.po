@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: 2022-06-28 19:40+0000\n"
+"PO-Revision-Date: 2022-06-28 19:46+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/user_documentation-libraries-edit_library/fr/>\n"
@@ -48,16 +48,22 @@ msgstr ""
 #: ../../user_documentation/libraries/edit_library.md:25
 msgid "Select {guilabel}`Get started` under {guilabel}`Upload third-party content in a library`."
 msgstr ""
+"Sélectionné {guilabel}`Commencer` sous {guilabel}`Envoyer un contenu tiers "
+"dans une audiothèque`."
 
 #: ../../user_documentation/libraries/edit_library.md:10
 #: ../../user_documentation/libraries/edit_library.md:26
 msgid "A screen appears showing your upload quota and your libraries."
 msgstr ""
+"Un écran apparaît, indiquant votre quota de téléchargement et vos "
+"bibliothèques."
 
 #: ../../user_documentation/libraries/edit_library.md:11
 #: ../../user_documentation/libraries/edit_library.md:27
 msgid "Select {guilabel}`Library Details` under the library you want to edit."
 msgstr ""
+"Sélectionnez {guilabel}`Détails de l’audiothèque`sous la bibliothèque que "
+"vous désirez éditer."
 
 #: ../../user_documentation/libraries/edit_library.md:12
 #: ../../user_documentation/libraries/edit_library.md:28
