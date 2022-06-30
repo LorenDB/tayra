@@ -32,22 +32,22 @@ console.log('PROCESS', import.meta.env)
 export default createRouter({
   history: createWebHistory(import.meta.env.VUE_APP_ROUTER_BASE_URL as string ?? '/'),
   linkActiveClass: 'active',
-  scrollBehavior (to, from, savedPosition) {
-    if (to.meta.preserveScrollPosition) {
-      return savedPosition ?? { left: 0, top: 0 }
-    }
+  // TODO (wvffle): uncomment
+  // scrollBehavior (to, from, savedPosition) {
+    // if (to.meta.preserveScrollPosition) {
+    //   return savedPosition ?? { left: 0, top: 0 }
+    // }
 
-    return new Promise(resolve => {
-      setTimeout(() => {
-        if (to.hash) {
-          resolve({ el: to.hash, behavior: 'smooth' })
-        }
+    // return new Promise(resolve => {
+    //   setTimeout(() => {
+    //     if (to.hash) {
+    //       resolve({ el: to.hash, behavior: 'smooth' })
+    //     }
 
-        const pos = savedPosition ?? { left: 0, top: 0 }
-        resolve(pos)
-      }, 100)
-    })
-  },
+    //     resolve(savedPosition ?? { left: 0, top: 0 })
+    //   }, 100)
+    // })
+  // },
   routes: [
     {
       path: '/',
@@ -120,13 +120,12 @@ export default createRouter({
     {
       path: '/search',
       name: 'search',
-      component: () =>
-        import('~/views/Search.vue'),
+      component: () => import('~/views/Search.vue'),
       props: route => ({
         initialId: route.query.id,
         initialType: route.query.type || 'artists',
         initialQuery: route.query.q,
-        initialPage: parseInt(route.query.page as string) || 1
+        initialPage: route.query.page ? +route.query.page : undefined
       })
     },
     {
@@ -240,7 +239,7 @@ export default createRouter({
         import('~/components/favorites/List.vue'),
       props: route => ({
         defaultOrdering: route.query.ordering,
-        defaultPage: route.query.page
+        defaultPage: route.query.page ? +route.query.page : undefined
       })
     },
     {
@@ -634,7 +633,7 @@ export default createRouter({
             defaultTags: Array.isArray(route.query.tag || [])
               ? route.query.tag
               : [route.query.tag],
-            defaultPage: route.query.page
+            defaultPage: route.query.page ? +route.query.page : undefined
           })
         },
         {
@@ -651,7 +650,7 @@ export default createRouter({
             defaultTags: Array.isArray(route.query.tag || [])
               ? route.query.tag
               : [route.query.tag],
-            defaultPage: route.query.page
+            defaultPage: route.query.page ? +route.query.page : undefined
           })
         },
         {
@@ -667,7 +666,7 @@ export default createRouter({
             defaultTags: Array.isArray(route.query.tag || [])
               ? route.query.tag
               : [route.query.tag],
-            defaultPage: route.query.page
+            defaultPage: route.query.page ? +route.query.page : undefined
           })
         },
         {
@@ -683,7 +682,7 @@ export default createRouter({
             defaultTags: Array.isArray(route.query.tag || [])
               ? route.query.tag
               : [route.query.tag],
-            defaultPage: route.query.page
+            defaultPage: route.query.page ? +route.query.page : undefined
           })
         },
         {
@@ -700,7 +699,7 @@ export default createRouter({
             defaultTags: Array.isArray(route.query.tag || [])
               ? route.query.tag
               : [route.query.tag],
-            defaultPage: route.query.page
+            defaultPage: route.query.page ? +route.query.page : undefined
           })
         },
         {
@@ -713,7 +712,7 @@ export default createRouter({
           props: route => ({
             defaultOrdering: route.query.ordering,
             defaultQuery: route.query.query,
-            defaultPage: route.query.page
+            defaultPage: route.query.page ? +route.query.page : undefined
           })
         },
         {
@@ -727,7 +726,7 @@ export default createRouter({
             scope: 'me',
             defaultOrdering: route.query.ordering,
             defaultQuery: route.query.query,
-            defaultPage: route.query.page
+            defaultPage: route.query.page ? +route.query.page : undefined
           })
         },
         {
@@ -763,7 +762,7 @@ export default createRouter({
           props: route => ({
             defaultOrdering: route.query.ordering,
             defaultQuery: route.query.query,
-            defaultPage: route.query.page
+            defaultPage: route.query.page ? +route.query.page : undefined
           })
         },
         {
@@ -775,7 +774,7 @@ export default createRouter({
             scope: 'me',
             defaultOrdering: route.query.ordering,
             defaultQuery: route.query.query,
-            defaultPage: route.query.page
+            defaultPage: route.query.page ? +route.query.page : undefined
           })
         },
         {

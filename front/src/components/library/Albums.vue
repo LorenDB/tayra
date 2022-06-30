@@ -96,7 +96,7 @@ const fetchData = async () => {
 }
 
 const store = useStore()
-watch(store.state.moderation.lastUpdate, fetchData)
+watch(() => store.state.moderation.lastUpdate, fetchData)
 onBeforeRouteUpdate(fetchData)
 fetchData()
 
