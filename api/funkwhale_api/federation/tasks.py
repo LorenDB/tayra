@@ -206,7 +206,7 @@ def update_domain_nodeinfo(domain):
         domain.service_actor = (
             utils.retrieve_ap_object(
                 service_actor_id,
-                actor=actors.get_service_actor(),
+                actor=None,
                 queryset=models.Actor,
                 serializer_class=serializers.ActorSerializer,
             )
