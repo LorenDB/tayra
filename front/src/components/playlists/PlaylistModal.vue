@@ -1,3 +1,82 @@
+<script setup lang="ts">
+import { filter, sortBy, flow } from 'lodash-es'
+
+import axios, { AxiosError } from 'axios'
+import { useGettext } from 'vue3-gettext'
+
+import Modal from '~/components/semantic/Modal.vue'
+import PlaylistForm from '~/components/playlists/Form.vue'
+import useLogger from '~/composables/useLogger'
+import { useStore } from '~/store'
+import { ref, computed, watch } from 'vue'
+import { BackendError, Playlist } from '~/types'
+import { useRouter } from 'vue-router'
+
+const logger = useLogger()
+const store = useStore()
+
+const showDuplicateTrackAddConfirmation = ref(false)
+
+const router = useRouter()
+router.beforeEach(() => {
+  store.commit('playlists/showModal', false)
+  showDuplicateTrackAddConfirmation.value = false
+})
+
+const playlists = computed(() => store.state.playlists.playlists)
+const track = computed(() => store.state.playlists.modalTrack)
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({ 
+  addToPlaylist: $pgettext('Popup/Playlist/Table.Button.Tooltip/Verb', 'Add to this playlist'),
+  filterPlaylistField: $pgettext('Popup/Playlist/Form/Placeholder', 'Enter playlist name')
+}))
+
+const playlistNameFilter = ref('')
+
+const sortedPlaylists = computed(() => flow(
+  filter((playlist: Playlist) => playlist.name.match(new RegExp(playlistNameFilter.value, 'i')) !== null),
+  sortBy((playlist: Playlist) => { return playlist.modification_date })
+)(playlists.value).reverse())
+
+const formKey = ref(new Date().toString())
+watch(() => store.state.playlists.showModal, () => {
+      formKey.value = new Date().toString()
+      showDuplicateTrackAddConfirmation.value = false
+})
+
+const lastSelectedPlaylist = ref(-1)
+const errors = ref([] as AxiosError[])
+const duplicateTrackAddInfo = ref({} as { playlist_name?: string })
+
+const addToPlaylist = async (playlistId: number, allowDuplicates: boolean) => {
+  lastSelectedPlaylist.value = playlistId
+
+  try { 
+    await axios.post(`playlists/${playlistId}/add`, {
+      tracks: [track.value?.id].filter(i => i),
+      allow_duplicates: allowDuplicates
+    })
+
+    logger.info('Successfully added track to playlist')
+    store.state.playlists.showModal = false
+    store.dispatch('playlists/fetchOwn')
+  } catch (error) {
+    if (error as BackendError) {
+      const { backendErrors } = error as BackendError
+
+      if (backendErrors.length === 1 && backendErrors[0].code === 'tracks_already_exist_in_playlist') {
+        duplicateTrackAddInfo.value = backendErrors[0] as unknown as { playlist_name: string } 
+        showDuplicateTrackAddConfirmation.value = true
+      } else {
+        errors.value = backendErrors
+        showDuplicateTrackAddConfirmation.value = false
+      }
+    }
+  }
+}
+</script>
+
 <template>
   <modal
     v-model:show="$store.state.playlists.showModal"
@@ -35,15 +114,15 @@
           class="ui warning message"
         >
           <p
-            v-translate="{track: track.title, playlist: duplicateTrackAddInfo.playlist_name}"
+            v-translate="{track: track?.title, playlist: duplicateTrackAddInfo.playlist_name}"
             translate-context="Popup/Playlist/Paragraph"
-            :translate-params="{track: track.title, playlist: duplicateTrackAddInfo.playlist_name}"
+            :translate-params="{track: track?.title, playlist: duplicateTrackAddInfo.playlist_name}"
           >
             <strong>%{ track }</strong> is already in <strong>%{ playlist }</strong>.
           </p>
           <button
             class="ui small basic cancel button"
-            @click="duplicateTrackAddConfirm(false)"
+            @click="showDuplicateTrackAddConfirmation = false"
           >
             <translate translate-context="*/*/Button.Label/Verb">
               Cancel
@@ -189,98 +268,3 @@
     </div>
   </modal>
 </template>
-
-<script>
-import { filter, sortBy, flow } from 'lodash-es'
-
-import axios from 'axios'
-import { mapState } from 'vuex'
-
-import Modal from '~/components/semantic/Modal.vue'
-import PlaylistForm from '~/components/playlists/Form.vue'
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
-import useLogger from '~/composables/useLogger'
-
-const logger = useLogger()
-
-export default {
-  components: {
-    Modal,
-    PlaylistForm
-  },
-  setup () {
-    const guard = () => {
-      this.$store.commit('playlists/showModal', false)
-      this.showDuplicateTrackAddConfirmation = false
-    }
-
-    onBeforeRouteUpdate(guard)
-    onBeforeRouteLeave(guard)
-  },
-  data () {
-    return {
-      formKey: String(new Date()),
-      errors: [],
-      playlistNameFilter: '',
-      duplicateTrackAddInfo: {},
-      showDuplicateTrackAddConfirmation: false,
-      lastSelectedPlaylist: -1
-    }
-  },
-  computed: {
-    ...mapState({
-      playlists: state => state.playlists.playlists,
-      track: state => state.playlists.modalTrack
-    }),
-    labels () {
-      return {
-        addToPlaylist: this.$pgettext('Popup/Playlist/Table.Button.Tooltip/Verb', 'Add to this playlist'),
-        filterPlaylistField: this.$pgettext('Popup/Playlist/Form/Placeholder', 'Enter playlist name')
-      }
-    },
-    sortedPlaylists () {
-      const regexp = new RegExp(this.playlistNameFilter, 'i')
-      const p = flow(
-        filter((e) => e.name.match(regexp) !== null),
-        sortBy((e) => { return e.modification_date })
-      )(this.playlists)
-      p.reverse()
-      return p
-    }
-  },
-  watch: {
-    '$store.state.playlists.showModal' () {
-      this.formKey = String(new Date())
-      this.showDuplicateTrackAddConfirmation = false
-    }
-  },
-  methods: {
-    addToPlaylist (playlistId, allowDuplicate) {
-      const self = this
-      const payload = {
-        tracks: [this.track.id],
-        allow_duplicates: allowDuplicate
-      }
-
-      self.lastSelectedPlaylist = playlistId
-
-      return axios.post(`playlists/${playlistId}/add`, payload).then(response => {
-        logger.info('Successfully added track to playlist')
-        self.$store.state.playlists.showModal = false
-        self.$store.dispatch('playlists/fetchOwn')
-      }, error => {
-        if (error.backendErrors.length === 1 && error.backendErrors[0].code === 'tracks_already_exist_in_playlist') {
-          self.duplicateTrackAddInfo = error.backendErrors[0]
-          self.showDuplicateTrackAddConfirmation = true
-        } else {
-          self.errors = error.backendErrors
-          self.showDuplicateTrackAddConfirmation = false
-        }
-      })
-    },
-    duplicateTrackAddConfirm (v) {
-      this.showDuplicateTrackAddConfirmation = v
-    }
-  }
-}
-</script>

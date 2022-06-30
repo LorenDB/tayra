@@ -1,11 +1,12 @@
 import axios from 'axios'
 import { Module } from 'vuex'
 import { RootState } from '~/store/index'
+import { Playlist, Track } from '~/types'
 
 export interface State {
-  playlists: any[]
+  playlists: Playlist[]
   showModal: boolean
-  modalTrack: null
+  modalTrack: null | Track
 }
 
 const store: Module<State, RootState> = {

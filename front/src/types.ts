@@ -87,13 +87,19 @@ export interface License {
   url: string
 }
 
+export interface Playlist {
+  id: string
+  name: string
+  modification_date: Date // TODO (wvffle): Find correct type
+}
+
 // API stuff
 export interface APIErrorResponse {
   [key: string]: APIErrorResponse | string[]
 }
 
-export interface BackendError extends AxiosError {
-  backendErrors: string[]
+export interface BackendError {
+  backendErrors: AxiosError[]
   rawPayload?: object
 }
 

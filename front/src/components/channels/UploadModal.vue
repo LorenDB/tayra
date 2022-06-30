@@ -1,3 +1,51 @@
+<script setup lang="ts">
+import Modal from '~/components/semantic/Modal.vue'
+import ChannelUploadForm from '~/components/channels/UploadForm.vue'
+import { humanSize } from '~/utils/filters'
+import { useRouter } from 'vue-router'
+import { useStore } from '~/store'
+import { ref, computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+const store = useStore()
+const router = useRouter()
+router.beforeEach(() => store.commit('channels/showUploadModal', { show: false }))
+
+const update = (value: boolean) => store.commit('channels/showUploadModal', { show: value })
+
+const { $npgettext, $gettext } = useGettext()
+
+const statusData = ref()
+const statusInfo = computed(() => {
+  if (!statusData.value) {
+    return []
+  }
+
+  const info = []
+  if (statusData.value.totalSize) {
+    info.push(humanSize(statusData.value.totalSize))
+  }
+
+  if (statusData.value.totalFiles) {
+    const msg = $npgettext('*/*/*', '%{ count } file', '%{ count } files', statusData.value.totalFiles)
+    info.push($gettext(msg, { count: statusData.value.totalFiles }))
+  }
+
+  if (statusData.value.progress) {
+    info.push(`${statusData.value.progress}%`)
+  }
+
+  if (statusData.value.speed) {
+    info.push(`${humanSize(statusData.value.speed)}/s`)
+  }
+
+  return info
+})
+
+const step = ref(1)
+const isLoading = ref(false)
+</script>
+
 <template>
   <modal
     v-model:show="$store.state.channels.showUploadModal"
@@ -37,7 +85,6 @@
         @loading="isLoading = $event"
         @published="$store.commit('channels/publish', $event)"
         @status="statusData = $event"
-        @submittable="submittable = $event"
       />
     </div>
     <div class="actions">
@@ -96,7 +143,7 @@
         <button
           :class="['ui', 'primary button', {loading: isLoading}]"
           type="submit"
-          :disabled="!statusData || !statusData.canSubmit || null"
+          :disabled="!statusData?.canSubmit || undefined"
           @click.prevent.stop="$refs.uploadForm.publish"
         >
           <translate translate-context="*/Channels/Button.Label">
@@ -107,7 +154,7 @@
           ref="dropdown"
           v-dropdown
           class="ui floating dropdown icon button"
-          :disabled="!statusData || !statusData.canSubmit || null"
+          :disabled="!statusData?.canSubmit || undefined"
         >
           <i class="dropdown icon" />
           <div class="menu">
@@ -135,67 +182,3 @@
     </div>
   </modal>
 </template>
-
-<script>
-import Modal from '~/components/semantic/Modal.vue'
-import ChannelUploadForm from '~/components/channels/UploadForm.vue'
-import { humanSize } from '~/utils/filters'
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
-
-export default {
-  components: {
-    Modal,
-    ChannelUploadForm
-  },
-  setup () {
-    const guard = () => {
-      this.$store.commit('channels/showUploadModal', { show: false })
-    }
-
-    onBeforeRouteUpdate(guard)
-    onBeforeRouteLeave(guard)
-
-    return { humanSize }
-  },
-  data () {
-    return {
-      step: 1,
-      isLoading: false,
-      submittable: true,
-      statusData: null
-    }
-  },
-  computed: {
-    labels () {
-      return {}
-    },
-    statusInfo () {
-      if (!this.statusData) {
-        return []
-      }
-      const info = []
-      if (this.statusData.totalSize) {
-        info.push(humanSize(this.statusData.totalSize))
-      }
-      if (this.statusData.totalFiles) {
-        const msg = this.$npgettext('*/*/*', '%{ count } file', '%{ count } files', this.statusData.totalFiles)
-        info.push(
-          this.$gettextInterpolate(msg, { count: this.statusData.totalFiles })
-        )
-      }
-      if (this.statusData.progress) {
-        info.push(`${this.statusData.progress}%`)
-      }
-      if (this.statusData.speed) {
-        info.push(`${humanSize(this.statusData.speed)}/s`)
-      }
-      return info
-    }
-  },
-  methods: {
-    update (v) {
-      this.$store.commit('channels/showUploadModal', { show: v })
-    }
-  }
-}
-</script>

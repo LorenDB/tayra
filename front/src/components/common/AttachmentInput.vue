@@ -26,7 +26,7 @@ const value = useVModel(props, 'modelValue', emit)
 
 const attachment = ref()
 const isLoading = ref(false)
-const errors = reactive<string[]>([])
+const errors = reactive([] as Error[])
 const attachmentId = Math.random().toString(36).substring(7)
 
 const input = ref()
