@@ -14,7 +14,7 @@ export default (orderingConfigName: MaybeRef<RouteWithPreferences | null>) => {
 
   const config = reactiveComputed(() => {
     const name = unref(orderingConfigName) ?? route.name as RouteWithPreferences
-    return store.state.ui.routePreferences[name]
+    return { ...store.state.ui.routePreferences[name] }
   })
 
   const { paginateBy, ordering, orderingDirection } = toRefs(config)
@@ -29,7 +29,10 @@ export default (orderingConfigName: MaybeRef<RouteWithPreferences | null>) => {
     field: (str[0] === '-' || str[0] === '+' ? str.slice(1) : str) as OrderingField
   })
 
-  const onOrderingUpdate = (fn: () => void) => watch(config, fn)
+  const onOrderingUpdate = (fn: () => void) => {
+    const stop = watch(config, fn)
+    return stop
+  }
 
   return {
     paginateBy,

@@ -673,9 +673,7 @@ export default createRouter({
           path: 'podcasts/',
           name: 'library.podcasts.browse',
           component: () =>
-            import(
-              '~/components/library/Podcasts.vue'
-            ),
+            import('~/components/library/Podcasts.vue'),
           props: route => ({
             defaultOrdering: route.query.ordering,
             defaultQuery: route.query.query,
