@@ -101,8 +101,8 @@
           :class="[{hidden: step === 3}]"
         >
           <div
-            v-for="(file, idx) in uploadedFiles"
-            :key="idx"
+            v-for="file in uploadedFiles"
+            :key="file.id"
             class="channel-file"
           >
             <div class="content">
@@ -145,21 +145,18 @@
                 <template v-else>
                   <translate
                     v-if="file.active"
-                    key="1"
                     translate-context="Channels/*/*"
                   >
                     Uploading
                   </translate>
                   <translate
                     v-else-if="file.error"
-                    key="2"
                     translate-context="Channels/*/*"
                   >
                     Errored
                   </translate>
                   <translate
                     v-else
-                    key="3"
                     translate-context="Channels/*/*"
                   >
                     Pending
@@ -182,7 +179,6 @@
         </div>
         <upload-metadata-form
           v-if="selectedUpload"
-          :key="selectedUploadId"
           :upload="selectedUpload"
           :values="uploadImportData[selectedUploadId]"
           @values="setDynamic('uploadImportData', selectedUploadId, $event)"

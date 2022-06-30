@@ -58,21 +58,18 @@
       <h4 class="header">
         <translate
           v-if="step === 1"
-          key="1"
           translate-context="Content/Channel/*/Verb"
         >
           Create channel
         </translate>
         <translate
           v-else-if="category === 'podcast'"
-          key="2"
           translate-context="Content/Channel/*"
         >
           Podcast channel
         </translate>
         <translate
           v-else
-          key="3"
           translate-context="Content/Channel/*"
         >
           Artist channel

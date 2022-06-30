@@ -44,7 +44,6 @@
                   <div class="ui hidden very small divider" />
                   <translate
                     v-if="object.artist.content_category === 'podcast'"
-                    key="1"
                     translate-context="Content/Channel/Paragraph"
                     translate-plural="%{ count } episodes"
                     :translate-n="totalTracks"
@@ -54,7 +53,6 @@
                   </translate>
                   <translate
                     v-else
-                    key="2"
                     translate-context="*/*/*"
                     :translate-params="{count: totalTracks}"
                     :translate-n="totalTracks"
@@ -350,14 +348,12 @@
                 <h4 class="header">
                   <translate
                     v-if="object.artist.content_category === 'podcast'"
-                    key="1"
                     translate-context="Content/Channel/*"
                   >
                     Podcast channel
                   </translate>
                   <translate
                     v-else
-                    key="2"
                     translate-context="Content/Channel/*"
                   >
                     Artist channel
@@ -418,14 +414,12 @@
               >
                 <translate
                   v-if="isPodcast"
-                  key="1"
                   translate-context="Content/Channels/*"
                 >
                   All Episodes
                 </translate>
                 <translate
                   v-else
-                  key="2"
                   translate-context="*/*/*"
                 >
                   Tracks

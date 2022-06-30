@@ -25,14 +25,12 @@
             <h3 class="ui header">
               <translate
                 v-if="track.artist.content_category === 'music'"
-                key="1"
                 translate-context="Content/*/*"
               >
                 Track Details
               </translate>
               <translate
                 v-else
-                key="2"
                 translate-context="Content/*/*"
               >
                 Episode Details
@@ -159,14 +157,12 @@
                 <td>
                   <translate
                     v-if="track.album.artist.content_category === 'music'"
-                    key="1"
                     translate-context="*/*/*/Noun"
                   >
                     Album
                   </translate>
                   <translate
                     v-else
-                    key="2"
                     translate-context="*/*/*"
                   >
                     Serie

@@ -84,14 +84,12 @@
       <h2 class="ui header">
         <translate
           v-if="isPodcast"
-          key="1"
           translate-context="Content/Channel/Paragraph"
         >
           Latest episodes
         </translate>
         <translate
           v-else
-          key="2"
           translate-context="Content/Channel/Paragraph"
         >
           Latest tracks
@@ -107,14 +105,12 @@
       <h2 class="ui with-actions header">
         <translate
           v-if="isPodcast"
-          key="1"
           translate-context="Content/Channel/Paragraph"
         >
           Series
         </translate>
         <translate
           v-else
-          key="2"
           translate-context="*/*/*"
         >
           Albums

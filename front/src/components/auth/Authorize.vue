@@ -116,7 +116,6 @@
           </button>
           <p
             v-if="redirectUri === 'urn:ietf:wg:oauth:2.0:oob'"
-            key="1"
             v-translate
             translate-context="Content/Auth/Paragraph"
           >
@@ -124,7 +123,6 @@
           </p>
           <p
             v-else
-            key="2"
             v-translate="{url: redirectUri}"
             translate-context="Content/Auth/Paragraph"
             :translate-params="{url: redirectUri}"

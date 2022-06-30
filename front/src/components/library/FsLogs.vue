@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import { FSLogs } from '~/types'
+
+interface Props {
+  data: FSLogs
+}
+
+defineProps<Props>()
+</script>
+
 <template>
   <div class="ui segment component-fs-logs">
     <div
@@ -10,19 +20,10 @@
         </translate>
       </div>
     </div>
-    <template
-      v-for="(row, idx) in data.logs"
-      v-else
-      :key="idx"
-    >
-      <p>
+    <template v-else>
+      <p v-for="row in data.logs">
         {{ row }}
       </p>
     </template>
   </div>
 </template>
-<script>
-export default {
-  props: { data: { type: Object, required: true } }
-}
-</script>

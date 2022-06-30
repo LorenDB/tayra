@@ -6,14 +6,12 @@
     <h4 class="header">
       <translate
         v-if="channel.content_category === 'podcasts'"
-        key="1"
         translate-context="Popup/Channels/Title/Verb"
       >
         New series
       </translate>
       <translate
         v-else
-        key="2"
         translate-context="Popup/Channels/Title"
       >
         New album

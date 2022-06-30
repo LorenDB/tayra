@@ -102,14 +102,12 @@
     >
       <translate
         v-if="updating"
-        key="2"
         translate-context="Content/Applications/Button.Label/Verb"
       >
         Update application
       </translate>
       <translate
         v-else
-        key="3"
         translate-context="Content/Applications/Button.Label/Verb"
       >
         Create application

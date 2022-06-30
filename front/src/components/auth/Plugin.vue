@@ -73,10 +73,9 @@
       </div>
     </div>
     <template v-if="plugin.conf?.length > 0">
-      <template v-for="(field, key) in plugin.conf">
+      <template v-for="(field, key) in plugin.conf" :key="key">
         <div
           v-if="field.type === 'text'"
-          :key="key"
           class="field"
         >
           <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
@@ -92,7 +91,6 @@
         </div>
         <div
           v-if="field.type === 'long_text'"
-          :key="key"
           class="field"
         >
           <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
@@ -109,7 +107,6 @@
         </div>
         <div
           v-if="field.type === 'url'"
-          :key="key"
           class="field"
         >
           <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>
@@ -125,7 +122,6 @@
         </div>
         <div
           v-if="field.type === 'password'"
-          :key="key"
           class="field"
         >
           <label :for="`plugin-${field.name}`">{{ field.label || field.name }}</label>

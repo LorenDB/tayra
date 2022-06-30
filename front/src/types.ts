@@ -167,6 +167,13 @@ export interface Upload {
   uuid: string
 }
 
+// FileSystem Logs
+export interface FSLogs {
+  status: 'pending' | 'started'
+  reference: unknown // TODO (wvffle): Find correct type
+  logs: string[]
+}
+
 // Yet uncategorized stuff
 export interface Actor {
   preferred_username: string

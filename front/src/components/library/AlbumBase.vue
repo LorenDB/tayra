@@ -61,7 +61,6 @@
                     <div class="ui hidden very small divider" />
                     <translate
                       v-if="isSerie"
-                      key="1"
                       translate-context="Content/Channel/Paragraph"
                       translate-plural="%{ count } episodes"
                       :translate-n="totalTracks"
@@ -145,7 +144,6 @@
               <template v-if="totalTracks > 0">
                 <translate
                   v-if="isSerie"
-                  key="1"
                   translate-context="Content/Channel/Paragraph"
                   translate-plural="%{ count } episodes"
                   :translate-n="totalTracks"

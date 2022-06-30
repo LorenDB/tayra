@@ -6,28 +6,24 @@
     <h4 class="header">
       <translate
         v-if="step === 1"
-        key="1"
         translate-context="Popup/Channels/Title/Verb"
       >
         Publish audio
       </translate>
       <translate
         v-else-if="step === 2"
-        key="2"
         translate-context="Popup/Channels/Title"
       >
         Files to upload
       </translate>
       <translate
         v-else-if="step === 3"
-        key="3"
         translate-context="Popup/Channels/Title"
       >
         Upload details
       </translate>
       <translate
         v-else-if="step === 4"
-        key="4"
         translate-context="Popup/Channels/Title"
       >
         Processing uploads

@@ -3,14 +3,12 @@
     <h2 class="ui header">
       <translate
         v-if="isSerie"
-        key="1"
         translate-context="Content/Channels/*"
       >
         Episodes
       </translate>
       <translate
         v-else
-        key="2"
         translate-context="*/*/*"
       >
         Tracks

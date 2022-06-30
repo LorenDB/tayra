@@ -12,14 +12,12 @@
           <p>
             <translate
               v-if="isOwner"
-              key="1"
               translate-context="*/*/*"
             >
               This library is empty, you should upload something in it!
             </translate>
             <translate
               v-else
-              key="2"
               translate-context="*/*/*"
             >
               You may need to follow this library to see its content.

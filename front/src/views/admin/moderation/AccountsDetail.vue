@@ -219,26 +219,22 @@
                         <label for="is-active">
                           <translate
                             v-if="object.user.is_active"
-                            key="1"
                             translate-context="*/*/*/State of feature"
                           >Enabled</translate>
                           <translate
                             v-else
-                            key="2"
                             translate-context="*/*/*/State of feature"
                           >Disabled</translate>
                         </label>
                       </div>
                       <translate
                         v-else-if="object.user.is_active"
-                        key="1"
                         translate-context="*/*/*/State of feature"
                       >
                         Enabled
                       </translate>
                       <translate
                         v-else
-                        key="2"
                         translate-context="*/*/*/State of feature"
                       >
                         Disabled

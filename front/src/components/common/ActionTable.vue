@@ -102,7 +102,6 @@
                 <div class="count field">
                   <translate
                     v-if="selectAll"
-                    key="1"
                     translate-context="Content/*/Paragraph"
                     tag="span"
                     :translate-n="objectsData.count"
@@ -113,7 +112,6 @@
                   </translate>
                   <translate
                     v-else
-                    key="2"
                     translate-context="Content/*/Paragraph"
                     tag="span"
                     :translate-n="checked.length"

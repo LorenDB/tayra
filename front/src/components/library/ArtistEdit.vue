@@ -4,14 +4,12 @@
       <h2>
         <translate
           v-if="canEdit"
-          key="1"
           translate-context="Content/*/Title"
         >
           Edit this artist
         </translate>
         <translate
           v-else
-          key="2"
           translate-context="Content/*/Title"
         >
           Suggest an edit on this artist

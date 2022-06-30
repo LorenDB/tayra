@@ -6,7 +6,6 @@
     <h4 class="header">
       <translate
         v-if="type === 'artist'"
-        key="1"
         translate-context="Popup/Moderation/Title/Verb"
         :translate-params="{name: target.name}"
       >

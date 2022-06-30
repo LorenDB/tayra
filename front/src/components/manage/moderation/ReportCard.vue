@@ -360,11 +360,11 @@
               </translate>
             </button>
             <template
-              v-for="(action, key) in actions"
+              v-for="action in actions"
+              :key="action.label"
             >
               <dangerous-button
                 v-if="action.dangerous && action.show(obj)"
-                :key="key"
                 :class="['ui', {loading: isLoading}, 'button']"
                 :action="action.handler"
               >

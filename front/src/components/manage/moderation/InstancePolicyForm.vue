@@ -6,14 +6,12 @@
     <h3 class="ui header">
       <translate
         v-if="object"
-        key="1"
         translate-context="Content/Moderation/Card.Title/Verb"
       >
         Edit moderation rule
       </translate>
       <translate
         v-else
-        key="2"
         translate-context="Content/Moderation/Card.Button.Label/Verb"
       >
         Add a new moderation rule
@@ -52,12 +50,10 @@
         <label for="policy-is-active">
           <translate
             v-if="current.isActive"
-            key="1"
             translate-context="*/*/*/State of feature"
           >Enabled</translate>
           <translate
             v-else
-            key="2"
             translate-context="*/*/*/State of feature"
           >Disabled</translate>
           <tooltip :content="labels.isActiveHelp" />
@@ -127,14 +123,12 @@
     >
       <translate
         v-if="object"
-        key="1"
         translate-context="Content/Moderation/Card.Button.Label/Verb"
       >
         Update
       </translate>
       <translate
         v-else
-        key="2"
         translate-context="Content/Moderation/Card.Button.Label/Verb"
       >
         Create

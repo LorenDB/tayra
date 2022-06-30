@@ -24,7 +24,6 @@
       <div class="description">
         <translate
           v-if="object.artist.content_category === 'podcast'"
-          key="1"
           class="meta ellipsis"
           translate-context="Content/Channel/Paragraph"
           translate-plural="%{ count } episodes"
@@ -35,7 +34,6 @@
         </translate>
         <translate
           v-else
-          key="2"
           translate-context="*/*/*"
           :translate-params="{count: object.artist.tracks_count}"
           :translate-n="object.artist.tracks_count"

@@ -241,11 +241,11 @@ const labels = computed(() => ({
           </td>
           <td>
             <template
-              v-for="(p, key) in permissions"
+              v-for="p in permissions"
+              :key="p.code"
             >
               <span
                 v-if="scope.obj.permissions[p.code]"
-                :key="key"
                 class="ui basic tiny label"
               >{{ p.label }}</span>
             </template>

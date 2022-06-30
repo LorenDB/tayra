@@ -44,12 +44,10 @@ fetchData()
     <label for="album-dropdown">
       <translate
         v-if="channel && channel.artist && channel.artist.content_category === 'podcast'"
-        key="1"
         translate-context="*/*/*"
       >Series</translate>
       <translate
         v-else
-        key="2"
         translate-context="*/*/*"
       >Album</translate>
     </label>
