@@ -29,10 +29,7 @@ export default (orderingConfigName: MaybeRef<RouteWithPreferences | null>) => {
     field: (str[0] === '-' || str[0] === '+' ? str.slice(1) : str) as OrderingField
   })
 
-  const onOrderingUpdate = (fn: () => void) => {
-    const stop = watch(config, fn)
-    return stop
-  }
+  const onOrderingUpdate = (fn: () => void) => watch(config, fn)
 
   return {
     paginateBy,
