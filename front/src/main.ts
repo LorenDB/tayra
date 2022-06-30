@@ -10,7 +10,24 @@ useTheme()
 
 configureCompat({
   RENDER_FUNCTION: false,
-  COMPONENT_V_MODEL: false
+  COMPONENT_V_MODEL: false,
+  // TODO (wvffle): Make sure it works
+  //                Search pattern: v-for([^>]|\n)+?[^h]ref
+  V_FOR_REF: false,
+  OPTIONS_BEFORE_DESTROY: false,
+  OPTIONS_DESTROYED: false,
+  CUSTOM_DIR: false,
+  INSTANCE_EVENT_HOOKS: false,
+  INSTANCE_LISTENERS: false,
+  INSTANCE_EVENT_EMITTER: false,
+  INSTANCE_CHILDREN: false,
+  GLOBAL_SET: false,
+  GLOBAL_DELETE: false,
+  INSTANCE_SET: false,
+  INSTANCE_DELETE: false,
+  COMPILER_V_BIND_SYNC: false,
+  COMPILER_V_ON_NATIVE: false,
+  FILTERS: false
 })
 
 const logger = useLogger()
