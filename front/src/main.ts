@@ -1,35 +1,14 @@
 import router from '~/router'
 import store, { key } from '~/store'
-// @ts-expect-error typescript does not know about configureCompat
-import { configureCompat, createApp, defineAsyncComponent, h } from 'vue'
+import { createApp, defineAsyncComponent, h } from 'vue'
 import useLogger from '~/composables/useLogger'
 import useTheme from '~/composables/useTheme'
 
 // NOTE: Set the theme as fast as possible
 useTheme()
 
-configureCompat({
-  RENDER_FUNCTION: false,
-  COMPONENT_V_MODEL: false,
-  // TODO (wvffle): Make sure it works
-  //                Search pattern: v-for([^>]|\n)+?[^h]ref
-  V_FOR_REF: false,
-  OPTIONS_BEFORE_DESTROY: false,
-  OPTIONS_DESTROYED: false,
-  CUSTOM_DIR: false,
-  INSTANCE_EVENT_HOOKS: false,
-  INSTANCE_LISTENERS: false,
-  INSTANCE_EVENT_EMITTER: false,
-  INSTANCE_CHILDREN: false,
-  GLOBAL_SET: false,
-  GLOBAL_DELETE: false,
-  INSTANCE_SET: false,
-  INSTANCE_DELETE: false,
-  COMPILER_V_BIND_SYNC: false,
-  COMPILER_V_ON_NATIVE: false,
-  FILTERS: false
-})
-
+// TODO (wvffle): Make sure V_FOR_REF works
+//                Search pattern: v-for([^>]|\n)+?[^h]ref
 const logger = useLogger()
 logger.info('Loading environment:', import.meta.env.MODE)
 logger.debug('Environment variables:', import.meta.env)

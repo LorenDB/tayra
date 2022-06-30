@@ -55,7 +55,6 @@ export default defineConfig(() => ({
   server: { port, hmr },
   resolve: {
     alias: {
-      vue: '@vue/compat',
       '~': resolve(__dirname, './src')
     }
   },
