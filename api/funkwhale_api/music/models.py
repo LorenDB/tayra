@@ -1184,12 +1184,15 @@ class LibraryQuerySet(models.QuerySet):
             )
             .values_list("target__channel__library", flat=True)
         )
+        domains_reachable = federation_models.Domain.objects.filter(reachable=True)
+
         return self.filter(
             me_query
             | instance_query
             | models.Q(privacy_level="everyone")
             | models.Q(pk__in=followed_libraries)
             | models.Q(pk__in=followed_channels_libraries)
+            & models.Q(actor__domain__in=domains_reachable)
         )
 
 

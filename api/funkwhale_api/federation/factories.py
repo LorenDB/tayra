@@ -70,6 +70,8 @@ class DomainFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
     name = factory.Faker("domain_name")
     nodeinfo_fetch_date = factory.LazyFunction(lambda: timezone.now())
     allowed = None
+    reachable = True
+    last_successful_contact = None
 
     class Meta:
         model = "federation.Domain"

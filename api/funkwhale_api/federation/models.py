@@ -123,7 +123,8 @@ class Domain(models.Model):
     )
     # are interactions with this domain allowed (only applies when allow-listing is on)
     allowed = models.BooleanField(default=None, null=True)
-
+    reachable = models.BooleanField(default=True)
+    last_successful_contact = models.DateTimeField(default=None, null=True)
     objects = DomainQuerySet.as_manager()
 
     def __str__(self):

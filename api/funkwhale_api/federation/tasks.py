@@ -625,3 +625,35 @@ def fetch_collection(url, max_pages, channel, is_page=False):
         results["errored"],
     )
     return results
+
+
+@celery.app.task(name="federation.check_all_remote_instance_availability")
+def check_all_remote_instance_availability():
+    domains = models.Domain.objects.all().prefetch_related()
+    for domain in domains:
+        check_single_remote_instance_availability(domain)
+
+
+@celery.app.task(name="federation.check_single_remote_instance_availability")
+def check_single_remote_instance_availability(domain):
+    try:
+        response = requests.get(f"https://{domain.name}/api/v1/instance/nodeinfo/2.0/")
+        nodeinfo = response.json()
+    except Exception as e:
+        logger.info(
+            f"Domain {domain.name} could not be reached because of the following error : {e}. \
+            Setting domain as unreacheable."
+        )
+        domain.reachable = False
+        domain.save()
+
+    if "version" in nodeinfo.keys():
+        domain.reachable = True
+        domain.last_successful_contact = datetime.datetime.now()
+        domain.save()
+    else:
+        logger.info(
+            f"Domain {domain.name} is not reacheable at the moment. Setting domain as unreacheable."
+        )
+        domain.reachable = False
+        domain.save()
