@@ -32,22 +32,21 @@ console.log('PROCESS', import.meta.env)
 export default createRouter({
   history: createWebHistory(import.meta.env.VUE_APP_ROUTER_BASE_URL as string ?? '/'),
   linkActiveClass: 'active',
-  // TODO (wvffle): uncomment
-  // scrollBehavior (to, from, savedPosition) {
-    // if (to.meta.preserveScrollPosition) {
-    //   return savedPosition ?? { left: 0, top: 0 }
-    // }
+  scrollBehavior (to, from, savedPosition) {
+    if (to.meta.preserveScrollPosition) {
+      return savedPosition ?? { left: 0, top: 0 }
+    }
 
-    // return new Promise(resolve => {
-    //   setTimeout(() => {
-    //     if (to.hash) {
-    //       resolve({ el: to.hash, behavior: 'smooth' })
-    //     }
+    return new Promise(resolve => {
+      setTimeout(() => {
+        if (to.hash) {
+          resolve({ el: to.hash, behavior: 'smooth' })
+        }
 
-    //     resolve(savedPosition ?? { left: 0, top: 0 })
-    //   }, 100)
-    // })
-  // },
+        resolve(savedPosition ?? { left: 0, top: 0 })
+      }, 100)
+    })
+  },
   routes: [
     {
       path: '/',
