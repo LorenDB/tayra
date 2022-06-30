@@ -38,13 +38,13 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 
 const { $pgettext } = useGettext()
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
-const actions = [
+const actions = computed(() => [
   {
     name: 'purge',
     label: $pgettext('*/*/*/Verb', 'Purge'),
     isDangerous: true
   }
-]
+])
 
 const isLoading = ref(false)
 const fetchData = async () => {

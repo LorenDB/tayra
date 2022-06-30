@@ -48,7 +48,7 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 
 const { $pgettext } = useGettext()
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
-const actions = [
+const actions = computed(() => [
   {
     name: 'delete',
     label: $pgettext('*/*/*/Verb', 'Delete'),
@@ -66,7 +66,7 @@ const actions = [
       return filter.import_status !== 'finished'
     }
   }
-]
+])
 
 const emit = defineEmits(['fetch-start'])
 

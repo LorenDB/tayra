@@ -35,7 +35,7 @@ const query = ref('')
 const isOpen = ref(false)
 const { $pgettext } = useGettext()
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
-const actions = [
+const actions = computed(() => [
   {
     name: 'delete',
     label: $pgettext('*/*/*/Verb', 'Delete'),
@@ -43,7 +43,7 @@ const actions = [
       return obj.users.length === 0 && moment().isBefore(obj.expiration_date)
     }
   }
-]
+])
 
 const isLoading = ref(false)
 const fetchData = async () => {

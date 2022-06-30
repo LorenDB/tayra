@@ -34,7 +34,7 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 ]
 
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
-const actions = () => [
+const actions = computed(() => [
   {
     name: 'delete',
     label: $pgettext('*/*/*/Verb', 'Delete'),
@@ -43,7 +43,7 @@ const actions = () => [
     allowAll: false,
     confirmColor: 'danger'
   }
-]
+])
 
 const isLoading = ref(false)
 const fetchData = async () => {

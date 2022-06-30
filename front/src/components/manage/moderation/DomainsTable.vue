@@ -37,7 +37,7 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 const { $pgettext } = useGettext()
 const query = ref('')
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
-const actions = [
+const actions = computed(() => [
   {
     name: 'purge',
     label: $pgettext('*/*/*/Verb', 'Purge'),
@@ -57,7 +57,7 @@ const actions = [
       return obj.allowed
     }
   }
-]
+])
 
 const allowed = ref(null)
 const isLoading = ref(false)
@@ -70,7 +70,7 @@ const fetchData = async () => {
     ordering: orderingString.value,
     allowed: allowed.value,
     ...props.filters
-  }
+  } as Record<string, unknown>
 
   if (params.allowed === null) {
     delete params.allowed
