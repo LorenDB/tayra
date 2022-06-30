@@ -767,7 +767,7 @@ export default {
       }
     },
     setCurrentTime (t) {
-      if (t < 0 | t > this.duration) {
+      if (t < 0 || t > this.duration) {
         return
       }
       if (!this.currentSound || !this.currentSound._sounds[0]) {
