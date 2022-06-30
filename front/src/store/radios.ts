@@ -9,15 +9,23 @@ export interface State {
   running: boolean
 }
 
+export interface ObjectId {
+    username: string
+    fullUsername: string
+  }
+
 export interface CurrentRadio {
   clientOnly: boolean
   session: null
   type: 'account'
-  objectId: {
-    username: string
-    fullUsername: string
-  }
+  // TODO (wvffle): Find correct type
+  customRadioId: unknown
+  config: RadioConfig
+  objectId: ObjectId
 }
+
+// TODO (wvffle): Find correct type
+export type RadioConfig = { type: 'tag', names: string[] } | { type: 'artist', ids: string[] }
 
 export interface PopulateQueuePayload {
   current: CurrentRadio
@@ -79,12 +87,14 @@ const store: Module<State, RootState> = {
         custom_radio: customRadioId,
         config: config
       }
+
       if (clientOnly) {
         commit('current', { type, objectId, customRadioId, clientOnly, config })
         commit('running', true)
         dispatch('populateQueue', true)
         return
       }
+
       return axios.post('radios/sessions/', params).then((response) => {
         logger.info('Successfully started radio ', type)
         commit('current', { type, objectId, session: response.data.id, customRadioId })
