@@ -9,7 +9,7 @@ COPY vite.config.js index.html embed.html /app/
 RUN yarn install
 RUN yarn build:deployment
 
-FROM nginx:1.21.6-alpine as final
+FROM nginx:1.23.0-alpine as final
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY docker/funkwhale.template /etc/nginx/conf.d/funkwhale.template
 COPY docker/funkwhale_proxy.conf /etc/nginx/funkwhale_proxy.conf
