@@ -13,16 +13,17 @@
         custom
         :to="notificationData.detailUrl"
       >
-        <span
+        <sanitized-html
+          tag="span"
           class="link"
           @click="navigate"
           @keypress.enter="navigate"
-          v-html="notificationData.message"
+          :html="notificationData.message"
         />
       </router-link>
-      <div
+      <sanitized-html
         v-else
-        v-html="notificationData.message"
+        :html="notificationData.message"
       />
       <template v-if="notificationData.acceptFollow">
 &nbsp;

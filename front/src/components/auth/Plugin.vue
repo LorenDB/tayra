@@ -4,9 +4,9 @@
     @submit.prevent="submit"
   >
     <h3>{{ plugin.label }}</h3>
-    <div
+    <sanitized-html
       v-if="plugin.description"
-      v-html="markdown.makeHtml(plugin.description)"
+      :html="markdown.makeHtml(plugin.description)"
     />
     <template v-if="plugin.homepage">
       <div class="ui small hidden divider" />
@@ -84,9 +84,9 @@
             v-model="values[field.name]"
             type="text"
           >
-          <div
+          <sanitized-html
             v-if="field.help"
-            v-html="markdown.makeHtml(field.help)"
+            :html="markdown.makeHtml(field.help)"
           />
         </div>
         <div
@@ -100,9 +100,9 @@
             type="text"
             rows="5"
           />
-          <div
+          <sanitized-html
             v-if="field.help"
-            v-html="markdown.makeHtml(field.help)"
+            :html="markdown.makeHtml(field.help)"
           />
         </div>
         <div
@@ -115,9 +115,9 @@
             v-model="values[field.name]"
             type="url"
           >
-          <div
+          <sanitized-html
             v-if="field.help"
-            v-html="markdown.makeHtml(field.help)"
+            :html="markdown.makeHtml(field.help)"
           />
         </div>
         <div
@@ -130,9 +130,9 @@
             v-model="values[field.name]"
             type="password"
           >
-          <div
+          <sanitized-html
             v-if="field.help"
-            v-html="markdown.makeHtml(field.help)"
+            :html="markdown.makeHtml(field.help)"
           />
         </div>
       </template>

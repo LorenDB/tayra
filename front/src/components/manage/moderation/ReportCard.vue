@@ -167,7 +167,7 @@
             class="summary"
             :content="obj.summary"
           >
-            <div v-html="markdown.makeHtml(obj.summary)" />
+            <sanitized-html :html="markdown.makeHtml(obj.summary)" />
           </expandable-div>
         </div>
         <aside class="column">

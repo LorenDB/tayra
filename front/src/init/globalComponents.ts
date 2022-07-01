@@ -19,6 +19,7 @@ import ActionFeedback from '~/components/common/ActionFeedback.vue'
 import RenderedDescription from '~/components/common/RenderedDescription.vue'
 import ContentForm from '~/components/common/ContentForm.vue'
 import InlineSearchBar from '~/components/common/InlineSearchBar.vue'
+import SanitizedHtml from '~/components/SanitizedHtml.vue'
 
 export const install: InitModule = ({ app }) => {
   app.component('HumanDate', HumanDate)
@@ -40,4 +41,5 @@ export const install: InitModule = ({ app }) => {
   app.component('RenderedDescription', RenderedDescription)
   app.component('ContentForm', ContentForm)
   app.component('InlineSearchBar', InlineSearchBar)
+  app.component('SanitizedHtml', SanitizedHtml)
 }

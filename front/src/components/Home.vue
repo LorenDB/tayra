@@ -45,10 +45,10 @@
                   </translate>
                 </p>
                 <template v-if="renderedDescription || rules">
-                  <div
+                  <sanitized-html
                     v-if="renderedDescription"
                     id="renderedDescription"
-                    v-html="renderedDescription"
+                    :html="renderedDescription"
                   />
                   <div
                     v-if="renderedDescription"

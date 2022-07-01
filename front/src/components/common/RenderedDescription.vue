@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-if="content && !isUpdating">
-      <div v-html="html" />
+      <sanitized-html :html="html" />
       <template v-if="isTruncated">
         <div class="ui small hidden divider" />
         <a

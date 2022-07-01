@@ -1,6 +1,3 @@
-<!-- eslint-disable vue/no-v-html
-We render some markdown to html here, the content is set by the admin so we should be save
--->
 <template>
   <main
     v-title="labels.title"
@@ -80,9 +77,9 @@ We render some markdown to html here, the content is set by the admin so we shou
                   About this pod
                 </translate>
               </h2>
-              <div
+              <sanitized-html 
                 v-if="longDescription"
-                v-html="markdown.makeHtml(longDescription)"
+                :html="markdown.makeHtml(longDescription)"
               />
               <p v-else>
                 <translate translate-context="Content/About/Paragraph">
@@ -98,9 +95,9 @@ We render some markdown to html here, the content is set by the admin so we shou
                   Rules
                 </translate>
               </h3>
-              <div
+              <sanitized-html
                 v-if="rules"
-                v-html="markdown.makeHtml(rules)"
+                :html="markdown.makeHtml(rules)"
               />
               <p v-else>
                 <translate translate-context="Content/About/Paragraph">
@@ -116,9 +113,9 @@ We render some markdown to html here, the content is set by the admin so we shou
                   Terms and privacy policy
                 </translate>
               </h3>
-              <div
+              <sanitized-html
                 v-if="terms"
-                v-html="markdown.makeHtml(terms)"
+                :html="markdown.makeHtml(terms)"
               />
               <p v-else>
                 <translate translate-context="Content/About/Paragraph">
@@ -444,7 +441,6 @@ export default {
   },
   data () {
     return {
-      // TODO (wvffle): Remove v-html
       markdown: new showdown.Converter(),
       showAllowedDomains: false
     }

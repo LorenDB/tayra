@@ -67,7 +67,7 @@
     <div v-if="markdown && object.summary">
       <div class="ui hidden divider" />
       <p><strong><translate translate-context="Content/Moderation/*/Noun">Reason</translate></strong></p>
-      <div v-html="markdown.makeHtml(object.summary)" />
+      <sanitized-html :html="markdown.makeHtml(object.summary)" />
     </div>
     <div class="ui hidden divider" />
     <button

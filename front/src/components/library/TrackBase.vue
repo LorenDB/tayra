@@ -17,9 +17,9 @@
             <div class="eight wide left aligned column">
               <h1 class="ui header">
                 {{ track.title }}
-                <div
+                <sanitized-html
                   class="sub header"
-                  v-html="subtitle"
+                  :html="subtitle"
                 />
               </h1>
             </div>

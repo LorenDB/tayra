@@ -277,7 +277,10 @@
                         Description
                       </translate>
                     </td>
-                    <td v-html="object.description.html" />
+                    <sanitized-html 
+                      tag="td"
+                      :html="object.description.html" 
+                    />
                   </tr>
                 </tbody>
               </table>

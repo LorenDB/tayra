@@ -25,7 +25,7 @@
                     Support this Funkwhale pod
                   </translate>
                 </h4>
-                <div v-html="markdown.makeHtml($store.state.instance.settings.instance.support_message.value)" />
+                <sanitized-html :html="markdown.makeHtml($store.state.instance.settings.instance.support_message.value)" />
               </div>
               <div class="ui bottom attached segment">
                 <form

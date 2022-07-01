@@ -201,7 +201,10 @@
                         Description
                       </translate>
                     </td>
-                    <td v-html="object.artist.description.html" />
+                    <sanitized-html 
+                      tag="td"
+                      :html="object.artist.description.html" 
+                    />
                   </tr>
                   <tr v-if="object.actor.url">
                     <td>

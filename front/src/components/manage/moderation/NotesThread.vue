@@ -20,7 +20,7 @@
         </div>
         <div class="extra text">
           <expandable-div :content="note.summary">
-            <div v-html="markdown.makeHtml(note.summary)" />
+            <sanitized-html :html="markdown.makeHtml(note.summary)" />
           </expandable-div>
         </div>
         <div class="meta">

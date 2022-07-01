@@ -36,9 +36,9 @@
             Nothing to preview.
           </translate>
         </p>
-        <div
+        <sanitized-html
           v-else
-          v-html="preview"
+          :html="preview"
         />
       </template>
       <template v-else>
