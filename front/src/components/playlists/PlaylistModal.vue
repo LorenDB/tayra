@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { filter, sortBy, flow } from 'lodash-es'
 
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import { useGettext } from 'vue3-gettext'
 
 import Modal from '~/components/semantic/Modal.vue'
@@ -9,7 +9,7 @@ import PlaylistForm from '~/components/playlists/Form.vue'
 import useLogger from '~/composables/useLogger'
 import { useStore } from '~/store'
 import { ref, computed, watch } from 'vue'
-import { BackendError, Playlist } from '~/types'
+import { BackendError, Playlist, APIErrorResponse } from '~/types'
 import { useRouter } from 'vue-router'
 
 const logger = useLogger()
@@ -46,7 +46,7 @@ watch(() => store.state.playlists.showModal, () => {
 })
 
 const lastSelectedPlaylist = ref(-1)
-const errors = ref([] as AxiosError[])
+const errors = ref([] as string[])
 const duplicateTrackAddInfo = ref({} as { playlist_name?: string })
 
 const addToPlaylist = async (playlistId: number, allowDuplicates: boolean) => {
@@ -63,10 +63,12 @@ const addToPlaylist = async (playlistId: number, allowDuplicates: boolean) => {
     store.dispatch('playlists/fetchOwn')
   } catch (error) {
     if (error as BackendError) {
-      const { backendErrors } = error as BackendError
+      const { backendErrors, rawPayload = {} } = error as BackendError
 
-      if (backendErrors.length === 1 && backendErrors[0].code === 'tracks_already_exist_in_playlist') {
-        duplicateTrackAddInfo.value = backendErrors[0] as unknown as { playlist_name: string } 
+      // TODO (wvffle): Test if it works
+      // if (backendErrors.length === 1 && backendErrors[0].code === 'tracks_already_exist_in_playlist') {
+      if (backendErrors.length === 1 && backendErrors[0] === 'Tracks already exist in playlist') {
+        duplicateTrackAddInfo.value = ((rawPayload.playlist as APIErrorResponse).non_field_errors as APIErrorResponse)[0] as object
         showDuplicateTrackAddConfirmation.value = true
       } else {
         errors.value = backendErrors

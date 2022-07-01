@@ -11,27 +11,28 @@ export function setUpdate (obj: object, statuses: Record<string, unknown>, value
 
 export function parseAPIErrors (responseData: APIErrorResponse, parentField?: string): string[] {
   const errors = []
-  for (const field in responseData) {
-    if (Object.prototype.hasOwnProperty.call(responseData, field)) {
-      let fieldName = startCase(field.replace('_', ' '))
-      if (parentField) {
-        fieldName = `${parentField} - ${fieldName}`
-      }
+  for (const [field, value] of Object.entries(responseData)) {
+    let fieldName = startCase(field.replace(/_/g, ' '))
+    if (parentField) {
+      fieldName = `${parentField} - ${fieldName}`
+    }
 
-      const value = responseData[field]
-      if (Array.isArray(value)) {
-        const values = value
-        errors.push(...values.map(err => {
+    if (Array.isArray(value)) {
+      errors.push(...value.map(err => {
+        if (typeof err === 'string') {
           return err.toLocaleLowerCase().includes('this field ')
             ? `${fieldName}: ${err}`
             : err
-        }))
-      } else if (value) {
-        // nested errors
-        const nestedErrors = parseAPIErrors(value, fieldName)
-        errors.push(...nestedErrors)
-      }
-    }
+        }
+
+        return startCase(err.code.replace(/_/g, ' '))
+      }))
+
+      continue
+    } 
+
+    // Handle nested errors
+    errors.push(...parseAPIErrors(value, fieldName))
   }
 
   return errors

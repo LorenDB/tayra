@@ -1,4 +1,4 @@
-import { BackendError, InitModule, RateLimitStatus } from '~/types'
+import { APIErrorResponse, BackendError, InitModule, RateLimitStatus } from '~/types'
 
 import createAuthRefreshInterceptor from 'axios-auth-refresh'
 import axios, { AxiosError } from 'axios'
@@ -30,56 +30,71 @@ export const install: InitModule = ({ store, router }) => {
     return response
   }, async (error: BackendError) => {
     error.backendErrors = []
+
     if (store.state.auth.authenticated && !store.state.auth.oauth.accessToken && error.response?.status === 401) {
       store.commit('auth/authenticated', false)
       logger.warn('Received 401 response from API, redirecting to login form', router.currentRoute.value.fullPath)
       await router.push({ name: 'login', query: { next: router.currentRoute.value.fullPath } })
     }
 
-    if (error.response?.status === 404) {
-      error.backendErrors.push('Resource not found')
-      const message = error.response?.data
-      store.commit('ui/addMessage', {
-        content: message,
-        class: 'error'
-      })
-    } else if (error.response?.status === 403) {
-      error.backendErrors.push('Permission denied')
-    } else if (error.response?.status === 429) {
-      let message
-      const rateLimitStatus: RateLimitStatus = {
-        limit: error.response?.headers['x-ratelimit-limit'],
-        scope: error.response?.headers['x-ratelimit-scope'],
-        remaining: error.response?.headers['x-ratelimit-remaining'],
-        duration: error.response?.headers['x-ratelimit-duration'],
-        availableSeconds: parseInt(error.response?.headers['retry-after'] ?? 60),
-        reset: error.response?.headers['x-ratelimit-reset'],
-        resetSeconds: error.response?.headers['x-ratelimit-resetseconds']
+    switch (error.response?.status) {
+      case 404:
+        error.backendErrors.push('Resource not found')
+        store.commit('ui/addMessage', {
+          content: error.response?.data,
+          class: 'error'
+        })
+
+      case 403:
+        error.backendErrors.push('Permission denied')
+        break
+
+      case 429: {
+        let message
+        const rateLimitStatus: RateLimitStatus = {
+          limit: error.response?.headers['x-ratelimit-limit'],
+          scope: error.response?.headers['x-ratelimit-scope'],
+          remaining: error.response?.headers['x-ratelimit-remaining'],
+          duration: error.response?.headers['x-ratelimit-duration'],
+          availableSeconds: parseInt(error.response?.headers['retry-after'] ?? 60),
+          reset: error.response?.headers['x-ratelimit-reset'],
+          resetSeconds: error.response?.headers['x-ratelimit-resetseconds']
+        }
+
+        if (rateLimitStatus.availableSeconds) {
+          const tryAgain = moment().add(rateLimitStatus.availableSeconds, 's').toNow(true)
+          message = $pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again in %{ delay }')
+          message = $gettext(message, { delay: tryAgain })
+        } else {
+          message = $pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again later')
+        }
+
+        error.backendErrors.push(message)
+        store.commit('ui/addMessage', {
+          content: message,
+          date: new Date(),
+          class: 'error'
+        })
+
+        logger.error('This client is rate-limited!', rateLimitStatus)
+        break
       }
-      if (rateLimitStatus.availableSeconds) {
-        const tryAgain = moment().add(rateLimitStatus.availableSeconds, 's').toNow(true)
-        message = $pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again in %{ delay }')
-        message = $gettext(message, { delay: tryAgain })
-      } else {
-        message = $pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again later')
-      }
-      error.backendErrors.push(message)
-      store.commit('ui/addMessage', {
-        content: message,
-        date: new Date(),
-        class: 'error'
-      })
-      logger.error('This client is rate-limited!', rateLimitStatus)
-    } else if (error.response?.status === 500) {
-      error.backendErrors.push('A server error occurred')
-    } else if (error.response?.data) {
-      if (error.response?.data.detail) {
-        error.backendErrors.push(error.response.data.detail)
-      } else {
-        error.rawPayload = error.response.data
-        const parsedErrors = parseAPIErrors(error.response.data)
-        error.backendErrors = [...error.backendErrors, ...parsedErrors]
-      }
+
+      case 500:
+        error.backendErrors.push('A server error occurred')
+        break
+      
+      default:
+        if (error.response?.data as object) {
+          const data = error.response?.data as Record<string, unknown>
+          if (data?.detail) {
+            error.backendErrors.push(data.detail as string)
+          } else {
+            error.rawPayload = data as APIErrorResponse
+            const parsedErrors = parseAPIErrors(data as APIErrorResponse)
+            error.backendErrors = [...error.backendErrors, ...parsedErrors]
+          }
+        }
     }
 
     if (error.backendErrors.length === 0) {

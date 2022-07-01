@@ -94,13 +94,11 @@ export interface Playlist {
 }
 
 // API stuff
-export interface APIErrorResponse {
-  [key: string]: APIErrorResponse | string[]
-}
+export interface APIErrorResponse extends Record<string, APIErrorResponse | string[] | { code: string }[]> {}
 
-export interface BackendError {
-  backendErrors: AxiosError[]
-  rawPayload?: object
+export interface BackendError extends AxiosError {
+  backendErrors: string[]
+  rawPayload?: APIErrorResponse
 }
 
 export interface RateLimitStatus {
