@@ -1,3 +1,48 @@
+<script setup lang="ts">
+import { useStore } from '~/store'
+import { useGettext } from 'vue3-gettext'
+import { get } from 'lodash-es'
+import { humanSize } from '~/utils/filters'
+import { computed } from 'vue'
+
+import SignupForm from '~/components/auth/SignupForm.vue'
+import LogoText from '~/components/LogoText.vue'
+
+const store = useStore()
+const nodeinfo = computed(() => store.state.instance.nodeinfo)
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('Head/About/Title', 'About')
+}))
+
+const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') ?? 'Funkwhale')
+const banner = computed(() => get(nodeinfo.value, 'metadata.banner'))
+const shortDescription = computed(() => get(nodeinfo.value, 'metadata.shortDescription'))
+
+const stats = computed(() => {
+  const users = get(nodeinfo.value, 'usage.users.activeMonth', null)
+  const hours = get(nodeinfo.value, 'metadata.library.music.hours', 0)
+  
+  if (users === null) {
+    return null
+  }
+
+  return { users, hours }
+})
+
+const openRegistrations = computed(() => get(nodeinfo.value, 'openRegistrations'))
+const defaultUploadQuota = computed(() => humanSize(get(nodeinfo.value, 'metadata.defaultUploadQuota') * 1000 * 1000))
+
+const headerStyle = computed(() => {
+  if (!banner.value) {
+    return ''
+  }
+
+  return (`background-image: url(${store.getters['instance/absoluteUrl'](banner.value)})`)
+})
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -247,103 +292,3 @@
     </div>
   </main>
 </template>
-
-<script>
-import { mapState } from 'vuex'
-import { get } from 'lodash-es'
-import showdown from 'showdown'
-import { humanSize } from '~/utils/filters'
-
-import SignupForm from '~/components/auth/SignupForm.vue'
-import LogoText from '~/components/LogoText.vue'
-
-export default {
-  components: {
-    SignupForm,
-    LogoText
-  },
-  data () {
-    return {
-      markdown: new showdown.Converter(),
-      showAllowedDomains: false
-    }
-  },
-  computed: {
-
-    ...mapState({
-      nodeinfo: state => state.instance.nodeinfo
-    }),
-    labels () {
-      return {
-        title: this.$pgettext('Head/About/Title', 'About')
-      }
-    },
-    podName () {
-      return get(this.nodeinfo, 'metadata.nodeName') || 'Funkwhale'
-    },
-    banner () {
-      return get(this.nodeinfo, 'metadata.banner')
-    },
-    shortDescription () {
-      return get(this.nodeinfo, 'metadata.shortDescription')
-    },
-    longDescription () {
-      return get(this.nodeinfo, 'metadata.longDescription')
-    },
-    rules () {
-      return get(this.nodeinfo, 'metadata.rules')
-    },
-    terms () {
-      return get(this.nodeinfo, 'metadata.terms')
-    },
-    stats () {
-      const data = {
-        users: get(this.nodeinfo, 'usage.users.activeMonth', null),
-        hours: get(this.nodeinfo, 'metadata.library.music.hours', null),
-        artists: get(this.nodeinfo, 'metadata.library.artists.total', null),
-        albums: get(this.nodeinfo, 'metadata.library.albums.total', null),
-        tracks: get(this.nodeinfo, 'metadata.library.tracks.total', null),
-        listenings: get(this.nodeinfo, 'metadata.usage.listenings.total', null)
-      }
-      if (data.users === null || data.artists === null) {
-        return
-      }
-      return data
-    },
-    contactEmail () {
-      return get(this.nodeinfo, 'metadata.contactEmail')
-    },
-    anonymousCanListen () {
-      return get(this.nodeinfo, 'metadata.library.anonymousCanListen')
-    },
-    allowListEnabled () {
-      return get(this.nodeinfo, 'metadata.allowList.enabled')
-    },
-    allowListDomains () {
-      return get(this.nodeinfo, 'metadata.allowList.domains')
-    },
-    version () {
-      return get(this.nodeinfo, 'software.version')
-    },
-    openRegistrations () {
-      return get(this.nodeinfo, 'openRegistrations')
-    },
-    defaultUploadQuota () {
-      return humanSize(get(this.nodeinfo, 'metadata.defaultUploadQuota') * 1000 * 1000)
-    },
-    federationEnabled () {
-      return get(this.nodeinfo, 'metadata.library.federationEnabled')
-    },
-    headerStyle () {
-      if (!this.banner) {
-        return ''
-      }
-      return (
-        'background-image: url(' +
-        this.$store.getters['instance/absoluteUrl'](this.banner) +
-        ')'
-      )
-    }
-  }
-}
-</script>
