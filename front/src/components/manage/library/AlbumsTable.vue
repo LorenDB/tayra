@@ -10,6 +10,7 @@ import { computed, ref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 interface Props extends SmartSearchProps, OrderingProps {
+  // TODO (wvffle): Remove from EVERY SINGLE component that does not use it at all
   // TODO (wvffle): find object type
   filters?: object
 }
@@ -61,10 +62,6 @@ const fetchData = async () => {
   try {
     const response = await axios.get('/manage/library/albums/', {
       params
-      // TODO (wvffle): Check if params should be serialized. In other similar components (Podcasts, Artists) they are
-      // paramsSerializer: function (params) {
-      //   return qs.stringify(params, { indices: false })
-      // }
     })
 
     result.value = response.data

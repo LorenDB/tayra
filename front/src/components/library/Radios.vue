@@ -70,10 +70,6 @@ const fetchData = async () => {
   try {
     const response = await axios.get('radios/radios/', {
       params
-      // TODO (wvffle): Check if params should be serialized. In other similar components (Podcasts, Artists) they are
-      // paramsSerializer: function (params) {
-      //   return qs.stringify(params, { indices: false })
-      // }
     })
 
     result.value = response.data
@@ -234,7 +230,7 @@ const labels = computed(() => ({
       </form>
       <div class="ui hidden divider" />
       <div
-        v-if="result && !result.results.length > 0"
+        v-if="result && result.results.length === 0"
         class="ui placeholder segment"
       >
         <div class="ui icon header">

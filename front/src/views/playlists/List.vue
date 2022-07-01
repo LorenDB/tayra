@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios'
 import $ from 'jquery'
-import qs from 'qs'
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
@@ -70,10 +69,7 @@ const fetchData = async () => {
   logger.time('Fetching albums')
   try {
     const response = await axios.get('playlists/', {
-      params,
-      paramsSerializer: function (params) {
-        return qs.stringify(params, { indices: false })
-      }
+      params
     })
 
     result.value = response.data

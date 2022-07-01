@@ -49,10 +49,6 @@ const fetchData = async () => {
   try {
     const response = await axios.get('manage/moderation/reports/', {
       params
-      // TODO (wvffle): Check if params should be serialized. In other similar components (Podcasts, Artists) they are
-      // paramsSerializer: function (params) {
-      //   return qs.stringify(params, { indices: false })
-      // }
     })
 
     result.value = response.data
