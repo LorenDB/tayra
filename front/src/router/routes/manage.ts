@@ -32,8 +32,8 @@ export default [
       {
         path: 'artists',
         name: 'manage.library.artists',
-        component: () => import('~/views/admin/library/ArtistsList.vue'),
-        props: route => ({ defaultQuery: route.query.q })
+        component: () => import('~/views/admin/CommonList.vue'),
+        props: route => ({ defaultQuery: route.query.q, type: 'artists' })
       },
       {
         path: 'artists/:id',
@@ -44,8 +44,8 @@ export default [
       {
         path: 'channels',
         name: 'manage.channels',
-        component: () => import('~/views/admin/ChannelsList.vue'),
-        props: route => ({ defaultQuery: route.query.q })
+        component: () => import('~/views/admin/CommonList.vue'),
+        props: route => ({ defaultQuery: route.query.q, type: 'channels' })
       },
       {
         path: 'channels/:id',
@@ -56,8 +56,8 @@ export default [
       {
         path: 'albums',
         name: 'manage.library.albums',
-        component: () => import('~/views/admin/library/AlbumsList.vue'),
-        props: route => ({ defaultQuery: route.query.q })
+        component: () => import('~/views/admin/CommonList.vue'),
+        props: route => ({ defaultQuery: route.query.q, type: 'albums' })
       },
       {
         path: 'albums/:id',
@@ -68,8 +68,8 @@ export default [
       {
         path: 'tracks',
         name: 'manage.library.tracks',
-        component: () => import('~/views/admin/library/TracksList.vue'),
-        props: route => ({ defaultQuery: route.query.q })
+        component: () => import('~/views/admin/CommonList.vue'),
+        props: route => ({ defaultQuery: route.query.q, type: 'tracks' })
       },
       {
         path: 'tracks/:id',
@@ -80,8 +80,8 @@ export default [
       {
         path: 'libraries',
         name: 'manage.library.libraries',
-        component: () => import('~/views/admin/library/LibrariesList.vue'),
-        props: route => ({ defaultQuery: route.query.q })
+        component: () => import('~/views/admin/CommonList.vue'),
+        props: route => ({ defaultQuery: route.query.q, type: 'libraries' })
       },
       {
         path: 'libraries/:id',
@@ -92,8 +92,8 @@ export default [
       {
         path: 'uploads',
         name: 'manage.library.uploads',
-        component: () => import('~/views/admin/library/UploadsList.vue'),
-        props: route => ({ defaultQuery: route.query.q })
+        component: () => import('~/views/admin/CommonList.vue'),
+        props: route => ({ defaultQuery: route.query.q, type: 'uploads' })
       },
       {
         path: 'uploads/:id',
@@ -104,8 +104,8 @@ export default [
       {
         path: 'tags',
         name: 'manage.library.tags',
-        component: () => import('~/views/admin/library/TagsList.vue'),
-        props: route => ({ defaultQuery: route.query.q })
+        component: () => import('~/views/admin/CommonList.vue'),
+        props: route => ({ defaultQuery: route.query.q, type: 'tags' })
       },
       {
         path: 'tags/:id',
@@ -123,12 +123,14 @@ export default [
       {
         path: 'users',
         name: 'manage.users.users.list',
-        component: () => import('~/views/admin/users/UsersList.vue')
+        component: () => import('~/views/admin/CommonList.vue'),
+        props: route => ({ type: 'users' })
       },
       {
         path: 'invitations',
         name: 'manage.users.invitations.list',
-        component: () => import('~/views/admin/users/InvitationsList.vue')
+        component: () => import('~/views/admin/CommonList.vue'),
+        props: route => ({ type: 'invitations' })
       }
     ]
   },
@@ -151,8 +153,8 @@ export default [
       {
         path: 'accounts',
         name: 'manage.moderation.accounts.list',
-        component: () => import('~/views/admin/moderation/AccountsList.vue'),
-        props: route => ({ defaultQuery: route.query.q })
+        component: () => import('~/views/admin/CommonList.vue'),
+        props: route => ({ defaultQuery: route.query.q, type: 'accounts' })
       },
       {
         path: 'accounts/:id',
