@@ -366,7 +366,7 @@ export default {
       maxPreloaded: 3,
       preloadDelay: 15,
       listenDelay: 15,
-      listeningRecorded: null,
+      listeningIsSubmitted: false,
       soundsCache: [],
       soundId: null,
       playTimeout: null,
@@ -617,6 +617,11 @@ export default {
             this.stop()
             return
           }
+          const t = self.currentSound.seek()
+          const d = self.currentSound.duration()
+          if (t <= (d / 2)) {
+            self.listeningIsSubmitted = false
+          }
           self.$store.commit('player/isLoadingAudio', false)
           self.$store.commit('player/resetErrorCount')
           self.$store.commit('player/errored', false)
@@ -723,9 +728,9 @@ export default {
           this.nextTrackPreloaded = true
         }
         if (t > (d / 2)) {
-          if (this.listeningRecorded !== this.currentTrack) {
-            this.listeningRecorded = this.currentTrack
+          if (!this.listeningIsSubmitted) {
             this.$store.dispatch('player/trackListened', this.currentTrack)
+            this.listeningIsSubmitted = true
           }
         }
       }
