@@ -39,7 +39,9 @@ const headerStyle = computed(() => {
     return ''
   }
 
-  return (`background-image: url(${store.getters['instance/absoluteUrl'](banner.value)})`)
+  return { 
+    backgroundImage: `url(${store.getters['instance/absoluteUrl'](banner.value)})` 
+  }
 })
 </script>
 

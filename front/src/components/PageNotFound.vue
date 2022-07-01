@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+const path = window.location.href
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({ 
+  title: $pgettext('Head/*/Title', 'Page Not Found')
+}))
+</script>
+
 <template>
   <main
     class="main pusher"
@@ -33,20 +45,3 @@
     </section>
   </main>
 </template>
-
-<script>
-export default {
-  data: function () {
-    return {
-      path: window.location.href
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Head/*/Title', 'Page Not Found')
-      }
-    }
-  }
-}
-</script>

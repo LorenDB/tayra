@@ -4,7 +4,7 @@ import { Module } from 'vuex'
 import { RootState } from '~/store/index'
 import useFormData from '~/composables/useFormData'
 
-export type Permission = 'settings' | 'library' | 'moderation' | 'admin'
+export type Permission = 'settings' | 'library' | 'moderation'
 export interface State {
   authenticated: boolean
   username: string
@@ -73,8 +73,7 @@ const store: Module<State, RootState> = {
     availablePermissions: {
       settings: false,
       library: false,
-      moderation: false,
-      admin: false
+      moderation: false
     },
     profile: null,
     oauth: getDefaultOauth(),
@@ -98,8 +97,7 @@ const store: Module<State, RootState> = {
       state.availablePermissions = {
         settings: false,
         library: false,
-        moderation: false,
-        admin: false
+        moderation: false
       }
     },
     profile: (state, value) => {
@@ -115,8 +113,7 @@ const store: Module<State, RootState> = {
         state.availablePermissions = {
           settings: false,
           library: false,
-          moderation: false,
-          admin: false
+          moderation: false
         }
       }
     },

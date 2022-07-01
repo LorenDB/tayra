@@ -1,3 +1,64 @@
+<script setup lang="ts">
+import { useStore } from '~/store'
+import { get } from 'lodash-es'
+import showdown from 'showdown'
+import { humanSize } from '~/utils/filters'
+import { computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+const markdown = new showdown.Converter()
+
+const store = useStore()
+const nodeinfo = computed(() => store.state.instance.nodeinfo)
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('Head/About/Title', 'About')
+}))
+
+const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') || 'Funkwhale')
+const banner = computed(() => get(nodeinfo.value, 'metadata.banner'))
+const longDescription = computed(() => get(nodeinfo.value, 'metadata.longDescription'))
+const rules = computed(() => get(nodeinfo.value, 'metadata.rules'))
+const terms = computed(() => get(nodeinfo.value, 'metadata.terms'))
+const contactEmail = computed(() => get(nodeinfo.value, 'metadata.contactEmail'))
+const anonymousCanListen = computed(() => get(nodeinfo.value, 'metadata.library.anonymousCanListen'))
+const allowListEnabled = computed(() => get(nodeinfo.value, 'metadata.allowList.enabled'))
+const version = computed(() => get(nodeinfo.value, 'software.version'))
+const openRegistrations = computed(() => get(nodeinfo.value, 'openRegistrations'))
+const defaultUploadQuota = computed(() => get(nodeinfo.value, 'metadata.defaultUploadQuota'))
+const federationEnabled = computed(() => get(nodeinfo.value, 'metadata.library.federationEnabled'))
+
+const onDesktop = computed(() => window.innerWidth > 800)
+
+const stats = computed(() => {
+  const data = {
+    users: get(nodeinfo.value, 'usage.users.activeMonth', null),
+    hours: get(nodeinfo.value, 'metadata.library.music.hours', null),
+    artists: get(nodeinfo.value, 'metadata.library.artists.total', null),
+    albums: get(nodeinfo.value, 'metadata.library.albums.total', null),
+    tracks: get(nodeinfo.value, 'metadata.library.tracks.total', null),
+    listenings: get(nodeinfo.value, 'metadata.usage.listenings.total', null)
+  }
+
+  if (data.users === null || data.artists === null) {
+    return
+  }
+
+  return data
+})
+
+const headerStyle = computed(() => {
+  if (!banner.value) {
+    return ''
+  }
+
+  return { 
+    backgroundImage: `url(${store.getters['instance/absoluteUrl'](banner.value)})` 
+  }
+})
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -428,103 +489,3 @@
     </div>
   </main>
 </template>
-
-<script>
-import { mapState } from 'vuex'
-import { get } from 'lodash-es'
-import showdown from 'showdown'
-import { humanSize } from '~/utils/filters'
-
-export default {
-  setup () {
-    return { humanSize }
-  },
-  data () {
-    return {
-      markdown: new showdown.Converter(),
-      showAllowedDomains: false
-    }
-  },
-  computed: {
-
-    ...mapState({
-      nodeinfo: state => state.instance.nodeinfo
-    }),
-    labels () {
-      return {
-        title: this.$pgettext('Head/About/Title', 'About')
-      }
-    },
-    podName () {
-      return get(this.nodeinfo, 'metadata.nodeName') || 'Funkwhale'
-    },
-    banner () {
-      return get(this.nodeinfo, 'metadata.banner')
-    },
-    shortDescription () {
-      return get(this.nodeinfo, 'metadata.shortDescription')
-    },
-    longDescription () {
-      return get(this.nodeinfo, 'metadata.longDescription')
-    },
-    rules () {
-      return get(this.nodeinfo, 'metadata.rules')
-    },
-    terms () {
-      return get(this.nodeinfo, 'metadata.terms')
-    },
-    stats () {
-      const data = {
-        users: get(this.nodeinfo, 'usage.users.activeMonth', null),
-        hours: get(this.nodeinfo, 'metadata.library.music.hours', null),
-        artists: get(this.nodeinfo, 'metadata.library.artists.total', null),
-        albums: get(this.nodeinfo, 'metadata.library.albums.total', null),
-        tracks: get(this.nodeinfo, 'metadata.library.tracks.total', null),
-        listenings: get(this.nodeinfo, 'metadata.usage.listenings.total', null)
-      }
-      if (data.users === null || data.artists === null) {
-        return
-      }
-      return data
-    },
-    contactEmail () {
-      return get(this.nodeinfo, 'metadata.contactEmail')
-    },
-    anonymousCanListen () {
-      return get(this.nodeinfo, 'metadata.library.anonymousCanListen')
-    },
-    allowListEnabled () {
-      return get(this.nodeinfo, 'metadata.allowList.enabled')
-    },
-    allowListDomains () {
-      return get(this.nodeinfo, 'metadata.allowList.domains')
-    },
-    version () {
-      return get(this.nodeinfo, 'software.version')
-    },
-    openRegistrations () {
-      return get(this.nodeinfo, 'openRegistrations')
-    },
-    defaultUploadQuota () {
-      return get(this.nodeinfo, 'metadata.defaultUploadQuota')
-    },
-    federationEnabled () {
-      return get(this.nodeinfo, 'metadata.library.federationEnabled')
-    },
-    headerStyle () {
-      if (!this.banner) {
-        return ''
-      }
-      return (
-        'background-image: url(' +
-        this.$store.getters['instance/absoluteUrl'](this.banner) +
-        ')'
-      )
-    },
-    onDesktop () {
-      if (window.innerWidth > 800) return true
-      return false
-    }
-  }
-}
-</script>

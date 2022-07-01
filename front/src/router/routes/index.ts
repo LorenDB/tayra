@@ -3,6 +3,7 @@ import settings from './settings'
 import library from './library'
 import content from './content'
 import manage from './manage'
+import store from '~/store'
 import auth from './auth'
 import user from './user'
 
@@ -10,7 +11,11 @@ export default [
   {
     path: '/',
     name: 'index',
-    component: () => import('~/components/Home.vue')
+    component: () => import('~/components/Home.vue'),
+    beforeEnter (to, from, next) {
+      if (store.state.auth.authenticated) return next('/library')
+      return next()
+    }
   },
   {
     path: '/index.html',

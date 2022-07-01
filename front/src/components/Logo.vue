@@ -1,3 +1,13 @@
+<script setup lang="ts">
+interface Props {
+  fill?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  fill: '#222222'
+})
+</script>
+
 <template>
   <svg
     id="layer_1"
@@ -39,12 +49,3 @@
     </g>
   </svg>
 </template>
-
-<script>
-
-export default {
-  props: {
-    fill: { type: String, default: '#222222' }
-  }
-}
-</script>

@@ -1,3 +1,66 @@
+<script setup lang="ts">
+import { get } from 'lodash-es'
+import showdown from 'showdown'
+import AlbumWidget from '~/components/audio/album/Widget.vue'
+import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import LoginForm from '~/components/auth/LoginForm.vue'
+import SignupForm from '~/components/auth/SignupForm.vue'
+import { humanSize } from '~/utils/filters'
+import { useStore } from '~/store'
+import { computed } from 'vue'
+import { whenever } from '@vueuse/core'
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+
+const markdown = new showdown.Converter()
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('Head/Home/Title', 'Home')
+}))
+
+const store = useStore()
+const nodeinfo = computed(() => store.state.instance.nodeinfo)
+
+const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') || 'Funkwhale')
+const banner = computed(() => get(nodeinfo.value, 'metadata.banner'))
+const shortDescription = computed(() => get(nodeinfo.value, 'metadata.shortDescription'))
+const longDescription = computed(() => get(nodeinfo.value, 'metadata.longDescription'))
+const rules = computed(() => get(nodeinfo.value, 'metadata.rules'))
+const contactEmail = computed(() => get(nodeinfo.value, 'metadata.contactEmail'))
+const anonymousCanListen = computed(() => get(nodeinfo.value, 'metadata.library.anonymousCanListen'))
+const openRegistrations = computed(() => get(nodeinfo.value, 'openRegistrations'))
+const defaultUploadQuota = computed(() => get(nodeinfo.value, 'metadata.defaultUploadQuota'))
+
+const stats = computed(() => {
+  const users = get(nodeinfo.value, 'usage.users.activeMonth', null)
+  const hours = get(nodeinfo.value, 'metadata.library.music.hours', 0)
+  
+  if (users === null) {
+    return null
+  }
+
+  return { users, hours }
+})
+
+const headerStyle = computed(() => {
+  if (!banner.value) {
+    return ''
+  }
+
+  return { 
+    backgroundImage: `url(${store.getters['instance/absoluteUrl'](banner.value)})` 
+  }
+})
+
+// TODO (wvffle): Check if needed
+const router = useRouter()
+whenever(() => store.state.auth.authenticated, () => {
+  console.log('Authenticated, redirecting to /library…')
+  router.push('/library')
+})
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -39,24 +102,24 @@
           >
             <div class="ui stackable grid">
               <div class="eight wide column">
-                <p v-if="!renderedDescription">
+                <p v-if="!longDescription">
                   <translate translate-context="Content/Home/Paragraph">
                     No description available.
                   </translate>
                 </p>
-                <template v-if="renderedDescription || rules">
+                <template v-if="longDescription || rules">
                   <sanitized-html
-                    v-if="renderedDescription"
+                    v-if="longDescription"
                     id="renderedDescription"
-                    :html="renderedDescription"
+                    :html="markdown.makeHtml(longDescription)"
                   />
                   <div
-                    v-if="renderedDescription"
+                    v-if="longDescription"
                     class="ui hidden divider"
                   />
                   <div class="ui relaxed list">
                     <div
-                      v-if="renderedDescription"
+                      v-if="longDescription"
                       class="item"
                     >
                       <i class="arrow right icon" />
@@ -323,106 +386,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import { get } from 'lodash-es'
-import { mapState } from 'vuex'
-import showdown from 'showdown'
-import AlbumWidget from '~/components/audio/album/Widget.vue'
-import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
-import LoginForm from '~/components/auth/LoginForm.vue'
-import SignupForm from '~/components/auth/SignupForm.vue'
-import { humanSize } from '~/utils/filters'
-
-export default {
-  components: {
-    AlbumWidget,
-    ChannelsWidget,
-    LoginForm,
-    SignupForm
-  },
-  data () {
-    return {
-      markdown: new showdown.Converter(),
-      excerptLength: 2, // html nodes,
-      humanSize
-    }
-  },
-  computed: {
-    ...mapState({
-      nodeinfo: state => state.instance.nodeinfo
-    }),
-    labels () {
-      return {
-        title: this.$pgettext('Head/Home/Title', 'Home')
-      }
-    },
-    podName () {
-      return get(this.nodeinfo, 'metadata.nodeName') || 'Funkwhale'
-    },
-    banner () {
-      return get(this.nodeinfo, 'metadata.banner')
-    },
-    shortDescription () {
-      return get(this.nodeinfo, 'metadata.shortDescription')
-    },
-    longDescription () {
-      return get(this.nodeinfo, 'metadata.longDescription')
-    },
-    rules () {
-      return get(this.nodeinfo, 'metadata.rules')
-    },
-    renderedDescription () {
-      if (!this.longDescription) {
-        return
-      }
-      const doc = this.markdown.makeHtml(this.longDescription)
-      return doc
-    },
-    stats () {
-      const data = {
-        users: get(this.nodeinfo, 'usage.users.activeMonth', null),
-        hours: get(this.nodeinfo, 'metadata.library.music.hours', null)
-      }
-      if (data.users === null || data.artists === null) {
-        return
-      }
-      return data
-    },
-    contactEmail () {
-      return get(this.nodeinfo, 'metadata.contactEmail')
-    },
-    defaultUploadQuota () {
-      return get(this.nodeinfo, 'metadata.defaultUploadQuota')
-    },
-    anonymousCanListen () {
-      return get(this.nodeinfo, 'metadata.library.anonymousCanListen')
-    },
-    openRegistrations () {
-      return get(this.nodeinfo, 'openRegistrations')
-    },
-    headerStyle () {
-      if (!this.banner) {
-        return ''
-      }
-      return (
-        'background-image: url(' +
-        this.$store.getters['instance/absoluteUrl'](this.banner) +
-        ')'
-      )
-    }
-  },
-  watch: {
-    '$store.state.auth.authenticated': {
-      handler (v) {
-        if (v) {
-          console.log('Authenticated, redirecting to /library…')
-          this.$router.push('/library')
-        }
-      },
-      immediate: true
-    }
-  }
-
-}
-</script>
