@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.3\n"
+"Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"POT-Creation-Date: 2022-07-01 10:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,23 +24,23 @@ msgstr ""
 msgid "Admin documentation"
 msgstr ""
 
-#: ../../index.md:41
+#: ../../index.md:49
 msgid "Moderator documentation"
 msgstr ""
 
-#: ../../index.md:58
+#: ../../index.md:66
 msgid "Developer documentation"
 msgstr ""
 
-#: ../../index.md:70
+#: ../../index.md:78
 msgid "Contributor documentation"
 msgstr ""
 
-#: ../../index.md:82
+#: ../../index.md:90
 msgid "Reference"
 msgstr ""
 
-#: ../../index.md:93
+#: ../../index.md:101
 msgid "Changes"
 msgstr ""
 
@@ -56,42 +56,42 @@ msgstr ""
 msgid "Funkwhale uses the [ActivityPub protocol](https://www.w3.org/TR/activitypub/) to talk to other apps across the {term}`Fediverse`. Users can share content between {term}`Funkwhale pods <Pod>` or with other Fediverse software."
 msgstr ""
 
-#: ../../index.md:109
+#: ../../index.md:117
 msgid "{fa}`user` Users"
 msgstr ""
 
-#: ../../index.md:112
+#: ../../index.md:120
 msgid "Looking to use Funkwhale for your content? Read through our guides to master the app!"
 msgstr ""
 
-#: ../../index.md:124
+#: ../../index.md:132
 msgid "{fa}`wrench` Admins"
 msgstr ""
 
-#: ../../index.md:127
+#: ../../index.md:135
 msgid "Want to host your own Funkwhale pod? Our admin documentation guides you through the process."
 msgstr ""
 
-#: ../../index.md:138
+#: ../../index.md:146
 msgid "{fa}`shield` Moderators"
 msgstr ""
 
-#: ../../index.md:141
+#: ../../index.md:149
 msgid "Keeping your users safe from harassment and spam or clearing illegal content? Check out our moderator docs."
 msgstr ""
 
-#: ../../index.md:152
+#: ../../index.md:160
 msgid "{fa}`code` Developers"
 msgstr ""
 
-#: ../../index.md:155
+#: ../../index.md:163
 msgid "Want to use Funkwhale's API or help with the project? Our developer docs give you what you need to get started."
 msgstr ""
 
-#: ../../index.md:167
+#: ../../index.md:175
 msgid "{fa}`users` Contributors"
 msgstr ""
 
-#: ../../index.md:170
+#: ../../index.md:178
 msgid "Want to help make Funkwhale even better? Check out these guides for some ideas."
 msgstr ""

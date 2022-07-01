@@ -72,6 +72,10 @@ source_suffix = ".rst"
 # The root toctree document.
 root_doc = "index"
 
+# Autogenerate anchors
+
+myst_heading_anchors = 3
+
 # General information about the project.
 year = datetime.datetime.now().year
 project = "funkwhale"
@@ -203,58 +207,9 @@ texinfo_documents = [
 
 # Define list of redirect files to be build in the Sphinx build process
 
-redirect_files = [
-    ("importing-music.html", "admin/importing-music.html"),
-    ("architecture.html", "developers/architecture.html"),
-    ("troubleshooting.html", "admin/troubleshooting.html"),
-    ("configuration.html", "admin/configuration.html"),
-    ("upgrading/index.html", "../admin/upgrading.html"),
-    ("upgrading/0.17.html", "../admin/0.17.html"),
-    ("users/django.html", "../admin/django.html"),
-    ("cli/index.html", "../user_documentation/info/cli.html"),
-    ("cli/examples.html", "../user_documentation/info/cli.html#examples"),
-    ("installation/ldap.html", "../admin/ldap.html"),
-    ("installation/optimization.html", "../admin/optimization.html"),
-    ("installation/external_dependencies.html", "debian.html"),
-    ("installation/systemd.html", "debian.html#systemd-unit-file"),
-    ("backup.html", "../admin/backup.html"),
-    ("users/create.html", "../user_documentation/accounts/create_account.html"),
-    ("users/tagging.html", "../user_documentation/libraries/tag_music.html"),
-    ("users/upload.html", "../user_documentation/libraries/upload_content.html"),
-    ("users/editing.html", "../user_documentation/libraries/edit_content.html"),
-    ("users/account.html", "../user_documentation/accounts/index.html"),
-    ("users/queue.html", "../user_documentation/queue/index.html"),
-    ("users/managing.html", "../user_documentation/libraries/index.html"),
-    ("users/channels.html", "../user_documentation/channels/index.html"),
-    ("users/playlists.html", "../user_documentation/radios/index.html"),
-    ("users/favorites.html", "../user_documentation/favorites/index.html"),
-    ("users/radios.html", "../user_documentation/radios/index.html"),
-    ("users/followchannel.html", "../user_documentation/channels/follow_channel.html"),
-    ("users/follow.html", "../user_documentation/libraries/follow_library.html"),
-    ("users/reports.html", "../user_documentation/reports/index.html"),
-    ("users/builtinplugins.html", "../user_documentation/plugins/index.html"),
-    ("moderator/index.html", "../moderator_documentation/index.html"),
-    ("moderator/reports.html", "../moderator_documentation/reports/index.html"),
-    ("moderator/domains.html", "../moderator_documentation/domains/index.html"),
-    ("moderator/users.html", "../moderator_documentation/users/index.html"),
-    ("moderator/listing.html", "../moderator_documentation/allow_listing/index.html"),
-    (
-        "installation/index.html",
-        "../administrator_documentation/installation_docs/index.html",
-    ),
-    (
-        "installation/index.html#quick-install",
-        "../administrator_documentation/installation_docs/quick_install.html",
-    ),
-    (
-        "installation/docker.html",
-        "../administrator_documentation/installation_docs/docker.html",
-    ),
-    (
-        "installation/debian.html",
-        "../administrator_documentation/installation_docs/debian.html",
-    ),
-]
+redirect_list = []
+with open("redirects.txt", "r") as fp:
+    data_list = [tuple(line.strip().split(",")) for line in fp]
 
 # Generate redirect template
 
@@ -274,7 +229,7 @@ redirect_template = """\
 
 def copy_legacy_redirects(app, docname):
     if app.builder.name == "html":
-        for html_src_path, new in redirect_files:
+        for html_src_path, new in data_list:
             page = redirect_template.format(new=new)
             target_path = app.outdir + "/" + html_src_path
             if not os.path.exists(os.path.dirname(target_path)):

@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.3\n"
+"Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"POT-Creation-Date: 2022-07-01 10:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,5 +30,5 @@ msgid "{term}`Pod` admins can choose to disable access to the Subsonic API. If t
 msgstr ""
 
 #: ../../user_documentation/subsonic/index.md:7
-msgid "Funkwhale supports a subset of the [Subsonic API](http://www.subsonic.org/pages/index.jsp). This enables you to use Subsonic  apps to stream your Funkwhale content. Check out the guides in this section to manage your Subsonic access."
+msgid "Funkwhale supports a subset of the [Subsonic API](http://www.subsonic.org/pages/index.jsp). This enables you to use Subsonic apps to stream your Funkwhale content. Check out the guides in this section to manage your Subsonic access."
 msgstr ""

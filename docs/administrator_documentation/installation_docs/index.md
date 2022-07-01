@@ -19,3 +19,13 @@ debian
 third_party
 
 ```
+
+```{toctree}
+---
+caption: Migrate your installation
+maxdepth: 1
+---
+
+migrate
+
+```

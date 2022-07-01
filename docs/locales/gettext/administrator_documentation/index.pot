@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.3\n"
+"Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"POT-Creation-Date: 2022-07-01 10:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,4 +30,28 @@ msgstr ""
 
 #: ../../administrator_documentation/index.md:11
 msgid "Funkwhale is self-hosted, meaning you run it on your own server. To set up your own Funkwhale pod, check out [our installation guides](installation_docs/index.md). Choose the installation method that works for you!"
+msgstr ""
+
+#: ../../administrator_documentation/index.md:13
+msgid "Configure your Funkwhale pod"
+msgstr ""
+
+#: ../../administrator_documentation/index.md:15
+msgid "Once you've installed Funkwhale, you can use [the guides in this section](configuration_docs/index.md) to configure it."
+msgstr ""
+
+#: ../../administrator_documentation/index.md:17
+msgid "Upgrade your Funkwhale pod"
+msgstr ""
+
+#: ../../administrator_documentation/index.md:19
+msgid "Funkwhale releases new updates regularly. To keep up-to-date with these changes, check out our [upgrade guides](upgrade_docs/index.md). If you're moving from our deprecated mono-container Docker setup, check out our [migration guide](migration_guide/index.md)."
+msgstr ""
+
+#: ../../administrator_documentation/index.md:21
+msgid "Manage your Funkwhale pod"
+msgstr ""
+
+#: ../../administrator_documentation/index.md:23
+msgid "Funkwhale provides tools for managing content and users on your Funkwhale pod. In addition to the [frontend moderation tools](../moderator_documentation/index.md), pod admins can use some extra tools for more powerful administration. Check out our [guide to the Django dashboard](django/index.md) and our [management script](manage_script/index.md) to get started."
 msgstr ""

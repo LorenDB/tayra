@@ -125,7 +125,7 @@ else:
     try:
         FUNKWHALE_HOSTNAME = env("FUNKWHALE_HOSTNAME")
         """
-        Hostname of your Funkwhale pod, e.g. ``mypod.audio``
+        Hostname of your Funkwhale pod, e.g. ``mypod.audio``.
         """
 
         FUNKWHALE_PROTOCOL = env("FUNKWHALE_PROTOCOL", default="https")
@@ -309,7 +309,7 @@ DEFAULT_FROM_EMAIL = env(
     "DEFAULT_FROM_EMAIL", default="Funkwhale <noreply@{}>".format(FUNKWHALE_HOSTNAME)
 )
 """
-Name and e-mail address used to send system e-mails.
+Name and email address used to send system emails.
 
 Default: ``Funkwhale <noreply@yourdomain>``
 
@@ -321,32 +321,23 @@ Default: ``Funkwhale <noreply@yourdomain>``
 """
 EMAIL_SUBJECT_PREFIX = env("EMAIL_SUBJECT_PREFIX", default="[Funkwhale] ")
 """
-Subject prefix for system e-mails.
+Subject prefix for system emails.
 """
 SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 
 
 EMAIL_CONFIG = env.email_url("EMAIL_CONFIG", default="consolemail://")
 """
-SMTP configuration for sending e-mails. Possible values:
+SMTP configuration for sending emails. Possible values:
 
-- ``EMAIL_CONFIG=consolemail://``: output e-mails to console (the default)
-- ``EMAIL_CONFIG=dummymail://``: disable e-mail sending completely
+- ``EMAIL_CONFIG=consolemail://``: output emails to console (the default)
+- ``EMAIL_CONFIG=dummymail://``: disable email sending completely
 
 On a production instance, you'll usually want to use an external SMTP server:
 
 - ``EMAIL_CONFIG=smtp://user:password@youremail.host:25``
 - ``EMAIL_CONFIG=smtp+ssl://user:password@youremail.host:465``
 - ``EMAIL_CONFIG=smtp+tls://user:password@youremail.host:587``
-
-.. note::
-
-    If ``user`` or ``password`` contain special characters (eg.
-    ``noreply@youremail.host`` as ``user``), be sure to urlencode them, using
-    for example the command:
-    ``python3 -c 'import urllib.parse; print(urllib.parse.quote_plus
-    ("noreply@youremail.host"))'``
-    (returns ``noreply%40youremail.host``)
 
 """
 vars().update(EMAIL_CONFIG)
@@ -356,7 +347,7 @@ vars().update(EMAIL_CONFIG)
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASE_URL = env.db("DATABASE_URL")
 """
-URL to connect to the PostgreSQL database. Examples:
+The URL used to connect to the PostgreSQL database. Examples:
 
 - ``postgresql://funkwhale@:5432/funkwhale``
 - ``postgresql://<user>:<password>@<host>:<port>/<database>``
@@ -371,7 +362,7 @@ DB_CONN_MAX_AGE = DATABASES["default"]["CONN_MAX_AGE"] = env(
     "DB_CONN_MAX_AGE", default=60 * 5
 )
 """
-Max time, in seconds, before database connections are closed.
+The maximum time in seconds before database connections close.
 """
 MIGRATION_MODULES = {
     # see https://github.com/jazzband/django-oauth-toolkit/issues/634
@@ -463,10 +454,11 @@ DEFAULT_FILE_STORAGE = "funkwhale_api.common.storage.ASCIIFileSystemStorage"
 
 PROXY_MEDIA = env.bool("PROXY_MEDIA", default=True)
 """
-Wether to proxy audio files through your reverse proxy.
-It's recommended to keep this on, as a way to enforce access control, however,
-if you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH`,
-it's safe to disable it.
+Whether to proxy audio files through your reverse proxy.
+We recommend you leave this enabled to enforce access control.
+
+If you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH`
+enabled, it's safe to disable this setting.
 """
 AWS_DEFAULT_ACL = env("AWS_DEFAULT_ACL", default=None)
 """
@@ -483,9 +475,10 @@ See: https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#can
 """
 AWS_QUERYSTRING_AUTH = env.bool("AWS_QUERYSTRING_AUTH", default=not PROXY_MEDIA)
 """
-Whether to include signatures in S3 urls, as a way to enforce access-control.
+Whether to include signatures in S3 URLs. Signatures
+are used to enforce access control.
 
-Defaults to the inverse of :attr:`PROXY_MEDIA`.
+Defaults to the opposite of :attr:`PROXY_MEDIA`.
 """
 
 AWS_S3_MAX_MEMORY_SIZE = env.int(
@@ -494,8 +487,8 @@ AWS_S3_MAX_MEMORY_SIZE = env.int(
 
 AWS_QUERYSTRING_EXPIRE = env.int("AWS_QUERYSTRING_EXPIRE", default=3600)
 """
-Expiration delay, in seconds, of signatures generated when
-:attr:`AWS_QUERYSTRING_AUTH` is enabled.
+The time in seconds before AWS signatures expire.
+Only takes effect you enable :attr:`AWS_QUERYSTRING_AUTH`
 """
 
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default=None)
@@ -511,7 +504,7 @@ if AWS_ACCESS_KEY_ID:
     """
     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
     """
-    Bucket name of your S3 storage.
+    Your S3 bucket name.
     """
     AWS_S3_CUSTOM_DOMAIN = env("AWS_S3_CUSTOM_DOMAIN", default=None)
     """
@@ -520,14 +513,17 @@ if AWS_ACCESS_KEY_ID:
     AWS_S3_ENDPOINT_URL = env("AWS_S3_ENDPOINT_URL", default=None)
     """
     If you use a S3-compatible storage such as minio,
-    set the following variable to the full URL to the storage server. Example:
+    set the following variable to the full URL to the storage server.
+
+    Examples:
 
     - ``https://minio.mydomain.com``
     - ``https://s3.wasabisys.com``
     """
     AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME", default=None)
-    """If you are using Amazon S3 to serve media directly,
-    you will need to specify your region name in order to access files.
+    """
+    If you're using Amazon S3 to serve media without a proxy,
+    you need to specify your region name to access files.
 
     Example:
 
@@ -537,9 +533,8 @@ if AWS_ACCESS_KEY_ID:
     AWS_S3_SIGNATURE_VERSION = "s3v4"
     AWS_LOCATION = env("AWS_LOCATION", default="")
     """
-    An optional bucket subdirectory were you want to store the files.
-    This is especially useful if you plan to use share the bucket with other
-    services.
+    A directory in your S3 bucket where you store files.
+    Use this if you plan to share the bucket between services.
     """
     DEFAULT_FILE_STORAGE = "funkwhale_api.common.storage.ASCIIS3Boto3Storage"
 
@@ -560,14 +555,13 @@ STATICFILES_FINDERS = (
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
 MEDIA_ROOT = env("MEDIA_ROOT", default=str(APPS_DIR("media")))
 """
-Path where media files (such as album covers or audio tracks) are stored
-on your system. Ensure this directory actually exists.
+The path where you store media files (such as album covers or audio tracks)
+on your system. Make sure this directory actually exists.
 """
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = env("MEDIA_URL", default=FUNKWHALE_URL + "/media/")
 """
-URL where media files are served. The default value should work fine on most
-configurations, but could can tweak this if you are hosting media
+The URL from which your pod serves media files. Change this if you're hosting media
 files on a separate domain, or if you host Funkwhale on a non-standard port.
 """
 FILE_UPLOAD_PERMISSIONS = 0o644
@@ -576,7 +570,7 @@ ATTACHMENTS_UNATTACHED_PRUNE_DELAY = env.int(
     "ATTACHMENTS_UNATTACHED_PRUNE_DELAY", default=3600 * 24
 )
 """
-Delay in seconds before uploaded but unattached attachements are pruned
+The delay in seconds before Funkwhale prunes uploaded but detached attachments
 from the system.
 """
 
@@ -607,14 +601,12 @@ ACCOUNT_EMAIL_VERIFICATION_ENFORCE = env.bool(
     "ACCOUNT_EMAIL_VERIFICATION_ENFORCE", default=False
 )
 """
-Determine wether users need to verify their e-mail address before using the service. Enabling this can be useful
-to reduce spam or bots accounts, however, you'll need to configure a mail server so that your users can receive the
-verification e-mails, using :attr:`EMAIL_CONFIG`.
+Set whether users need to verify their email address before using your pod. Enabling this setting
+is useful for reducing spam and bot accounts. To use this setting you need to configure a mail server
+to send verification emails. See :attr:`EMAIL_CONFIG`.
 
-Note that regardless of the setting value, superusers created through the command line will never require verification.
-
-Note that regardless of the setting value, superusers created through the
-command line will never require verification.
+.. note::
+    Superusers created through the command line never need to verify their email address.
 """
 ACCOUNT_EMAIL_VERIFICATION = (
     "mandatory" if ACCOUNT_EMAIL_VERIFICATION_ENFORCE else "optional"
@@ -653,9 +645,9 @@ SCOPED_TOKENS_MAX_AGE = 60 * 60 * 24 * 3
 # ------------------------------------------------------------------------------
 AUTH_LDAP_ENABLED = env.bool("LDAP_ENABLED", default=False)
 """
-Wether to enable LDAP authentication.
+Whether to enable LDAP authentication.
 
-See :doc:`/installation/ldap` for more information.
+See :doc:`/administrator_documentation/configuration_docs/ldap` for more information.
 """
 
 if AUTH_LDAP_ENABLED:
@@ -730,17 +722,18 @@ AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
 CACHE_DEFAULT = "redis://127.0.0.1:6379/0"
 CACHE_URL = env.cache_url("CACHE_URL", default=CACHE_DEFAULT)
 """
-URL to your redis server. Examples:
+The URL of your redis server. For example:
 
 - ``redis://<host>:<port>/<database>``
 - ``redis://127.0.0.1:6379/0``
 - ``redis://:password@localhost:6379/0``
-for password auth (the extra semicolon is important)
+
+If you're using password auth (the extra slash is important)
 - ``redis:///run/redis/redis.sock?db=0`` over unix sockets
 
 .. note::
 
-    If you want to use Redis over unix sockets, you'll also need to update
+    If you want to use Redis over unix sockets, you also need to update
     :attr:`CELERY_BROKER_URL`
 
 """
@@ -785,11 +778,11 @@ CELERY_BROKER_URL = env(
     "CELERY_BROKER_URL", default=env("CACHE_URL", default=CACHE_DEFAULT)
 )
 """
-URL to celery's task broker. Defaults to :attr:`CACHE_URL`,
-so you shouldn't have to tweak this, unless you want
-to use a different one, or use Redis sockets to connect.
+The celery task broker URL. Defaults to :attr:`CACHE_URL`.
+You don't need to tweak this unless you want
+to use a different server or use Redis sockets to connect.
 
-Exemple:
+Example:
 
 - ``redis://127.0.0.1:6379/0``
 - ``redis+socket:///run/redis/redis.sock?virtual_host=0``
@@ -885,8 +878,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 DISABLE_PASSWORD_VALIDATORS = env.bool("DISABLE_PASSWORD_VALIDATORS", default=False)
 """
-Wether to disable password validators (length, common words,
-similarity with username…) used during regitration.
+Whether to disable password validation rules during registration.
+Validators include password length, common words, similarity with username.
 """
 if DISABLE_PASSWORD_VALIDATORS:
     AUTH_PASSWORD_VALIDATORS = []
@@ -925,9 +918,9 @@ REST_FRAMEWORK = {
 }
 THROTTLING_ENABLED = env.bool("THROTTLING_ENABLED", default=True)
 """
-Wether to enable throttling (also known as rate-limiting).
-Leaving this enabled is recommended
-especially on public pods, to improve the quality of service.
+Whether to enable throttling (also known as rate-limiting).
+We recommend you leave this enabled to improve the quality
+of the service, especially on public pods .
 """
 
 if THROTTLING_ENABLED:
@@ -1076,9 +1069,10 @@ THROTTLING_RATES = {
 }
 THROTTLING_RATES = THROTTLING_RATES
 """
-Throttling rates for specific endpoints and features of the app.
-You can tweak this if you are encountering to severe rate limiting issues or,
-on the contrary, if you want to reduce the consumption on some endpoints.
+Throttling rates for specific endpoints and app features.
+Tweak this if you're hitting rate limit issues or if you want
+to reduce the consumption of specific endpoints. Takes
+the format ``<endpoint name>=<number>/<interval>``.
 
 Example:
 
@@ -1100,35 +1094,39 @@ ATOMIC_REQUESTS = False
 USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True
 
-# Wether we should use Apache, Nginx (or other) headers
+# Whether we should use Apache, Nginx (or other) headers
 # when serving audio files. Defaults to Nginx.
 REVERSE_PROXY_TYPE = env("REVERSE_PROXY_TYPE", default="nginx")
 """
-Depending on the reverse proxy used in front of your funkwhale instance,
-the API will use different kind of headers to serve audio files
+Set your reverse proxy type. This changes the headers the
+API uses to serve audio files. Allowed values:
 
-Allowed values: ``nginx``, ``apache2``
+- ``nginx``
+- ``apache2``
 """
 assert REVERSE_PROXY_TYPE in ["apache2", "nginx"], "Unsupported REVERSE_PROXY_TYPE"
 
 PROTECT_FILES_PATH = env("PROTECT_FILES_PATH", default="/_protected")
 """
-Which path will be used to process the internal redirection
-to the reverse proxy **DO NOT** put a slash at the end.
+The path used to process internal redirection
+to the reverse proxy.
 
-You shouldn't have to tweak this.
+.. important::
+
+    Don't insert a slash at the end of this path.
 """
 
 MUSICBRAINZ_CACHE_DURATION = env.int("MUSICBRAINZ_CACHE_DURATION", default=300)
 """
-How long to cache MusicBrainz results, in seconds.
+Length of time in seconds to cache MusicBrainz results.
 """
 MUSICBRAINZ_HOSTNAME = env("MUSICBRAINZ_HOSTNAME", default="musicbrainz.org")
 """
-Use this setting to change the MusicBrainz hostname, for instance to
-use a mirror. The hostname can also contain a port number.
+The hostname of your MusicBrainz instance. Change
+this setting if you run your own server or use a mirror.
+You can include a port number in the hostname.
 
-Example:
+Examples:
 
 - ``mymusicbrainz.mirror``
 - ``localhost:5000``
@@ -1137,7 +1135,7 @@ Example:
 # Custom Admin URL, use {% url 'admin:index' %}
 ADMIN_URL = env("DJANGO_ADMIN_URL", default="^api/admin/")
 """
-Path to the Django admin area.
+Path to the Django admin dashboard.
 
 Examples:
 
@@ -1173,14 +1171,14 @@ ACCOUNT_USERNAME_BLACKLIST = [
     "actor",
 ] + env.list("ACCOUNT_USERNAME_BLACKLIST", default=[])
 """
-List of usernames that will be unavailable during registration,
-given as a list of strings.
+List of usernames that can't be used for registration. Given as a list of strings.
 """
 EXTERNAL_REQUESTS_VERIFY_SSL = env.bool("EXTERNAL_REQUESTS_VERIFY_SSL", default=True)
 """
-Wether to enforce HTTPS certificates verification when doing outgoing HTTP
-requests (typically with federation).
-Disabling this is not recommended.
+Whether to enforce TLS certificate verification
+when performing outgoing HTTP requests.
+
+Disabling this feature is not recommended.
 """
 EXTERNAL_REQUESTS_TIMEOUT = env.int("EXTERNAL_REQUESTS_TIMEOUT", default=10)
 """
@@ -1189,43 +1187,43 @@ Default timeout for external requests.
 
 MUSIC_DIRECTORY_PATH = env("MUSIC_DIRECTORY_PATH", default=None)
 """
-The path on your server where Funkwhale can import files using
-:ref:`in-place import <in-place-import>`. It must be readable by the webserver
-and Funkwhale api and worker processes.
+The path on your server where Funkwhale places
+files from in-place imports. This path needs to be
+readable by the webserver and ``api`` and ``worker``
+processes.
 
-On docker installations, we recommend you use the default of ``/music``
-for this value. For non-docker installation, you can use any absolute path.
-``/srv/funkwhale/data/music`` is a safe choice if you don't know what to use.
+.. important::
 
-.. note:: This path should not include any trailing slash.
+    Don’t insert a slash at the end of this path.
 
-.. warning::
+On Docker installations, we recommend you use the default ``/music`` path.
+On Debian installations you can use any absolute path. Defaults to
+``/srv/funkwhale/data/music``.
 
-   You need to adapt your :ref:`reverse proxy configuration
-   <reverse-proxy-setup>` to serve the directory pointed by
-   ``MUSIC_DIRECTORY_PATH`` on ``/_protected/music`` URL.
+.. note::
+
+    You need to add this path to your reverse proxy configuration.
+    Add the directory to your ``/_protected/music`` server block.
 
 """
 MUSIC_DIRECTORY_SERVE_PATH = env(
     "MUSIC_DIRECTORY_SERVE_PATH", default=MUSIC_DIRECTORY_PATH
 )
 """
-Default: :attr:`MUSIC_DIRECTORY_PATH`
-
-When using Docker, the value of :attr:`MUSIC_DIRECTORY_PATH` in your containers
-may differ from the real path on your host.
-Assuming you have the following directive
-in your :file:`docker-compose.yml` file::
+On Docker setups the value of :attr:`MUSIC_DIRECTORY_PATH`
+may be different from the actual path on your server.
+You can specify this path in your :file:`docker-compose.yml` file::
 
     volumes:
-      - /srv/funkwhale/data/music:/music:ro
+        - /srv/funkwhale/data/music:/music:ro
 
-Then, the value of :attr:`MUSIC_DIRECTORY_SERVE_PATH` should be
-``/srv/funkwhale/data/music``. This must be readable by the webserver.
+In this case, you need to set :attr:`MUSIC_DIRECTORY_SERVE_PATH`
+to ``/srv/funkwhale/data/music``. The webserver needs to be
+able to read this directory.
 
-On non-docker setup, you don't need to configure this setting.
+.. important::
 
-.. note:: This path should not include any trailing slash.
+    Don’t insert a slash at the end of this path.
 
 """
 # When this is set to default=True, we need to reenable migration music/0042
@@ -1236,7 +1234,7 @@ USERS_INVITATION_EXPIRATION_DAYS = env.int(
     "USERS_INVITATION_EXPIRATION_DAYS", default=14
 )
 """
-Expiration delay, in days, for user invitations.
+The number of days before a user invite expires.
 """
 
 VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
@@ -1266,26 +1264,27 @@ SUBSONIC_DEFAULT_TRANSCODING_FORMAT = (
     env("SUBSONIC_DEFAULT_TRANSCODING_FORMAT", default="mp3") or None
 )
 """
-Default format for transcoding when using Subsonic API.
+The default format files are transcoded into when using the Subsonic
+API.
 """
 # extra tags will be ignored
 TAGS_MAX_BY_OBJ = env.int("TAGS_MAX_BY_OBJ", default=30)
 """
 Maximum number of tags that can be associated with an object.
-Extra tags will be ignored.
+Extra tags are ignored.
 """
 FEDERATION_OBJECT_FETCH_DELAY = env.int(
     "FEDERATION_OBJECT_FETCH_DELAY", default=60 * 24 * 3
 )
 """
-Delay, in minutes, before a remote object will be automatically
+The delay in minutes before a remote object is automatically
 refetched when accessed in the UI.
 """
 MODERATION_EMAIL_NOTIFICATIONS_ENABLED = env.bool(
     "MODERATION_EMAIL_NOTIFICATIONS_ENABLED", default=True
 )
 """
-Whether to enable e-mail notifications to moderators and pods admins.
+Whether to enable email notifications to moderators and pod admins.
 """
 FEDERATION_AUTHENTIFY_FETCHES = True
 FEDERATION_SYNCHRONOUS_FETCH = env.bool("FEDERATION_SYNCHRONOUS_FETCH", default=True)
@@ -1293,27 +1292,27 @@ FEDERATION_DUPLICATE_FETCH_DELAY = env.int(
     "FEDERATION_DUPLICATE_FETCH_DELAY", default=60 * 50
 )
 """
-Delay, in seconds, between two manual fetch of the same remote object.
+The delay in seconds between two manual fetches of the same remote object.
 """
 INSTANCE_SUPPORT_MESSAGE_DELAY = env.int("INSTANCE_SUPPORT_MESSAGE_DELAY", default=15)
 """
-Delay after signup, in days, before the "support your pod" message is shown.
+The number of days after signup before the "support your pod" message is shown.
 """
 FUNKWHALE_SUPPORT_MESSAGE_DELAY = env.int("FUNKWHALE_SUPPORT_MESSAGE_DELAY", default=15)
 """
-Delay after signup, in days, before the "support Funkwhale" message is shown.
+The number of days after signup before the "support Funkwhale" message is shown.
 """
 
 MIN_DELAY_BETWEEN_DOWNLOADS_COUNT = env.int(
     "MIN_DELAY_BETWEEN_DOWNLOADS_COUNT", default=60 * 60 * 6
 )
 """
-Minimum required period, in seconds, for two downloads of the same track
-by the same IP or user to be recorded in statistics.
+The required number of seconds between downloads of a track
+by the same IP or user to be counted separately in listen statistics.
 """
 MARKDOWN_EXTENSIONS = env.list("MARKDOWN_EXTENSIONS", default=["nl2br", "extra"])
 """
-List of markdown extensions to enable.
+A list of markdown extensions to enable.
 
 See `<https://python-markdown.github.io/extensions/>`_.
 """
@@ -1323,27 +1322,28 @@ Additional TLDs to support with our markdown linkifier.
 """
 EXTERNAL_MEDIA_PROXY_ENABLED = env.bool("EXTERNAL_MEDIA_PROXY_ENABLED", default=True)
 """
-Wether to proxy attachment files hosted on third party pods and and servers.
-Keeping this to true is recommended, to reduce leaking browsing information
-of your users, and reduce the bandwidth used on remote pods.
+Whether to proxy attachment files hosted on third party pods and and servers.
+Leaving this set to ``true`` is recommended. This reduces the risk of leaking
+user browsing information and reduces the bandwidth used on remote pods.
 """
 PODCASTS_THIRD_PARTY_VISIBILITY = env("PODCASTS_THIRD_PARTY_VISIBILITY", default="me")
 """
-By default, only people who subscribe to a podcast RSS will have access
-to their episodes.
+By default, only people who subscribe to a podcast RSS have access
+to its episodes. Switch to "instance" or "everyone" to change the default
+visibility.
 
-Switch to "instance" or "everyone" to change that.
+.. note::
 
-Changing it only affect new podcasts.
+    Changing this value only affect new podcasts.
 """
 PODCASTS_RSS_FEED_REFRESH_DELAY = env.int(
     "PODCASTS_RSS_FEED_REFRESH_DELAY", default=60 * 60 * 24
 )
 """
-Delay, in seconds, between two fetch of RSS feeds.
+The delay in seconds between two fetch of RSS feeds.
 
-Reducing this mean you'll receive new episodes faster,
-but will require more resources.
+A lower rate means new episodes are fetched sooner,
+but requires more resources.
 """
 # maximum items loaded through XML feed
 PODCASTS_RSS_FEED_MAX_ITEMS = env.int("PODCASTS_RSS_FEED_MAX_ITEMS", default=250)

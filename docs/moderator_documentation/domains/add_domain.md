@@ -1,6 +1,6 @@
 # Add a domain to your pod's domain list
 
-Funkwhale records the domains of other {term}`Fediverse` servers when users interact with them. Once a domain is in your domains list, you can [add moderation rules](add_rules.md) to it.
+Funkwhale records the domains of other {term}`Fediverse` servers when users interact with them. Once a domain is in your domains list, you can [add moderation rules](add_rule.md) to it.
 
 ```{dropdown} Required permissions
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.

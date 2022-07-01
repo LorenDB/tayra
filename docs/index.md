@@ -35,7 +35,14 @@ hidden: true
 
 administrator_documentation/index
 administrator_documentation/installation_docs/index
+administrator_documentation/configuration_docs/index
+administrator_documentation/import_docs/index
+administrator_documentation/upgrade_docs/index
 administrator_documentation/migration_guide/index
+administrator_documentation/django/index
+administrator_documentation/manage_script/index
+administrator_documentation/uninstall_docs/index
+administrator_documentation/troubleshooting/index
 
 ```
 

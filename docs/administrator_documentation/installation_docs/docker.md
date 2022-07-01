@@ -46,22 +46,7 @@ This guide assumes you are using a [Debian](https://debian.org)-based system.
    curl -L -o /srv/funkwhale/docker-compose.yml "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker-compose.yml"
    ```
 
-4. Download the nginx templates. You need these to set up your reverse proxy.
-
-   ```{code} bash
-   curl -L -o /srv/funkwhale/nginx/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker.nginx.template"
-   curl -L -o /srv/funkwhale/nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker.funkwhale_proxy.conf"
-   ```
-
-That's it! You've set up your project files. The directory structure looks like this:
-
-```{code}
-.
-├── docker-compose.yml
-└── nginx
-    ├── funkwhale_proxy.conf
-    └── funkwhale.template
-```
+That's it! You've set up your project files.
 
 ## 2. Set up your environment file
 
@@ -236,4 +221,4 @@ To enable your users to connect to your pod securely, you need to set up {abbr}`
    --reloadcmd     "service nginx force-reload"
    ```
 
-That's it! acme.sh renews your certificate every 60 days, so you don't need to about renewing it.
+That's it! acme.sh renews your certificate every 60 days, so you don't need to worry about renewing it.

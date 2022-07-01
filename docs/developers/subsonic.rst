@@ -2,7 +2,7 @@ Subsonic API
 ============
 
 Funkwhale implements a subset of the `Subsonic API <http://www.subsonic.org/pages/api.jsp>`_ that makes it compatible
-with various apps in the Subsonic ecosystem (See :doc:`../users/apps`).
+with various apps in the Subsonic ecosystem (See `our list of supported apps <https://funkwhale.audio/en_US/apps>`_).
 
 Supported endpoints
 -------------------

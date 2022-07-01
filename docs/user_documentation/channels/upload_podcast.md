@@ -65,7 +65,7 @@ To add content to your channel:
 5. Select {guilabel}`⇧ Upload`. The {guilabel}`Publish audio` screen appears.
 6. Select the {guilabel}`Channel` you want to publish your audio in. This populates with the channel you selected by default.
 7. __Optional__ – choose which [{guilabel}`Series`](#create-a-series-optional) you want to publish the content in.
-8. __Optional__ – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
+8. __Optional__ – choose a {guilabel}`License` to apply to your content. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
 9. Select {guilabel}`Next step`. The {guilabel}`Files to upload` screen appears.
 10. Click on the section marked {guilabel}`Browse…` to open a file picker, or drag and drop your files on to it.
     - If you opened the file picker, select the files you want to upload and confirm.
@@ -82,7 +82,7 @@ To add content to your channel:
 5. Select {guilabel}`⇧ Upload`. The {guilabel}`Publish audio` screen appears.
 6. Select the {guilabel}`Channel` you want to publish your audio in. This populates with the channel you selected by default.
 7. __Optional__ – choose which [{guilabel}`Series`](#create-a-series-optional) you want to publish the content in.
-8. __Optional__ – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
+8. __Optional__ – choose a {guilabel}`License` to apply to your content. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
 9. Select {guilabel}`Next step`. The {guilabel}`Files to upload` screen appears.
 10. Click on the section marked {guilabel}`Browse…` to open a file picker. Select the files you want to upload and confirm.
 11. The files appear at the top when you upload them. Select {guilabel}`Remove` to remove them.
@@ -119,11 +119,11 @@ If you selected {guilabel}`Finish later`, Funkwhale saves your files and edits. 
 5. Select {guilabel}`⇧ Upload`. The {guilabel}`Publish audio` screen appears.
 6. Select the {guilabel}`Channel` you want to publish your audio in. This populates with the channel you selected by default.
 7. __Optional__ – choose which [{guilabel}`Series`](#create-a-series-optional) you want to publish the content in.
-8. __Optional__ – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
+8. __Optional__ – choose a {guilabel}`License` to apply to your content. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
 9. Select {guilabel}`Next step`. The {guilabel}`Files to upload` screen appears.
 10. If there are pending uploads, a {guilabel}`You have some draft uploads pending publication` note shows. Select {guilabel}`Resume` to resume your upload.
 11. [Add new files](#add-your-content) or [edit the pending files](#edit-your-uploads).
-12. Once you're finished, select {guilabel}`Publish` to publish your music.
+12. Once you're finished, select {guilabel}`Publish` to publish your content.
 
 ```
 
@@ -136,11 +136,11 @@ If you selected {guilabel}`Finish later`, Funkwhale saves your files and edits. 
 5. Select {guilabel}`⇧ Upload`. The {guilabel}`Publish audio` screen appears.
 6. Select the {guilabel}`Channel` you want to publish your audio in. This populates with the channel you selected by default.
 7. __Optional__ – choose which [{guilabel}`Series`](#create-a-series-optional) you want to publish the content in.
-8. __Optional__ – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
+8. __Optional__ – choose a {guilabel}`License` to apply to your content. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
 9. Select {guilabel}`Next step`. The {guilabel}`Files to upload` screen appears.
 10. If there are pending uploads, a {guilabel}`You have some draft uploads pending publication` note shows. Select {guilabel}`Resume` to resume your upload.
 11. [Add new files](#add-your-content) or [edit the pending files](#edit-your-uploads).
-12. Once you're finished, select {guilabel}`Publish` to publish your music.
+12. Once you're finished, select {guilabel}`Publish` to publish your content.
 
 ```
 

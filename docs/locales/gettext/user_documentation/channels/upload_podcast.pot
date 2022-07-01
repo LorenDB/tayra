@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.3\n"
+"Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"POT-Creation-Date: 2022-07-01 10:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -191,7 +191,7 @@ msgstr ""
 #: ../../user_documentation/channels/upload_podcast.md:85
 #: ../../user_documentation/channels/upload_podcast.md:122
 #: ../../user_documentation/channels/upload_podcast.md:139
-msgid "__Optional__ – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses."
+msgid "__Optional__ – choose a {guilabel}`License` to apply to your content. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses."
 msgstr ""
 
 #: ../../user_documentation/channels/upload_podcast.md:69
@@ -286,7 +286,7 @@ msgstr ""
 
 #: ../../user_documentation/channels/upload_podcast.md:126
 #: ../../user_documentation/channels/upload_podcast.md:143
-msgid "Once you're finished, select {guilabel}`Publish` to publish your music."
+msgid "Once you're finished, select {guilabel}`Publish` to publish your content."
 msgstr ""
 
 #: ../../user_documentation/channels/upload_podcast.md:147

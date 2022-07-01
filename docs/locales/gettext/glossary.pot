@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.3\n"
+"Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"POT-Creation-Date: 2022-07-01 10:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,7 +32,79 @@ msgstr ""
 msgid "A pod is an instance of Funkwhale running on a server. Pods can communicate with one another across the {term}`Fediverse`."
 msgstr ""
 
-#: ../../glossary.md:12
+#: ../../glossary.md:3
+msgid "Authenticated"
+msgstr ""
+
+#: ../../glossary.md:10
+msgid "Users who have an account on a Funkwhale pod. These users provide their authentication information when accessing content."
+msgstr ""
+
+#: ../../glossary.md:6
+msgid "Anonymous"
+msgstr ""
+
+#: ../../glossary.md:13
+msgid "Users who do not have an account on a Funkwhale pod. These users don't provide any authentication when accessing content."
+msgstr ""
+
+#: ../../glossary.md:9
+msgid "Permissions"
+msgstr ""
+
+#: ../../glossary.md:16
+msgid "Additional rights that an administrator/moderator can grant to a user. Permissions grant access to menus and actions in Funkwhale."
+msgstr ""
+
+#: ../../glossary.md:18
+msgid "Available permissions:"
+msgstr ""
+
+#: ../../glossary.md:20
+msgid "{guilabel}`Moderation` – Grants access to the {guilabel}`Moderation` menu. Enables the user to moderate users, domains, and the allow-list."
+msgstr ""
+
+#: ../../glossary.md:21
+msgid "{guilabel}`Manage library` – Grants access to the {guilabel}`Library` menu. Enables the user to make changes to library content. This includes deleting local objects and handling edit suggestions."
+msgstr ""
+
+#: ../../glossary.md:22
+msgid "{guilabel}`Manage instance-level settings` – Grants access to the {guilabel}`Settings` menu. Enables the user to make changes to pod-level settings such as security settings and API behavior."
+msgstr ""
+
+#: ../../glossary.md:18
+msgid "Report categories"
+msgstr ""
+
+#: ../../glossary.md:25
+msgid "The different types of report a person can submit to your pod."
+msgstr ""
+
+#: ../../glossary.md:27
+msgid "Available categories:"
+msgstr ""
+
+#: ../../glossary.md:29
+msgid "{guilabel}`Takedown request` – allow users to request content be removed from your pod."
+msgstr ""
+
+#: ../../glossary.md:30
+msgid "{guilabel}`Invalid metadata` – allow users to inform moderators about incorrect metadata on content."
+msgstr ""
+
+#: ../../glossary.md:31
+msgid "{guilabel}`Illegal content` – allow users to flag content as illegal."
+msgstr ""
+
+#: ../../glossary.md:32
+msgid "{guilabel}`Offensive content` – allow users to flag offensive or hurtful content to moderators."
+msgstr ""
+
+#: ../../glossary.md:33
+msgid "{guilabel}`Other` – allow users to submit reports that don't fit into the above categories."
+msgstr ""
+
+#: ../../glossary.md:38
 msgid "Channel glossary"
 msgstr ""
 
@@ -40,7 +112,7 @@ msgstr ""
 msgid "Fediverse"
 msgstr ""
 
-#: ../../glossary.md:16
+#: ../../glossary.md:42
 msgid "A term used to refer to a collection of federated (interconnected) servers. These servers run software that enables users to publish and host their own content."
 msgstr ""
 
@@ -48,11 +120,11 @@ msgstr ""
 msgid "Podcatcher"
 msgstr ""
 
-#: ../../glossary.md:19
+#: ../../glossary.md:45
 msgid "A podcatcher is a piece of software that can read podcast feeds. Podcatchers enable listeners to follow and listen to podcast content."
 msgstr ""
 
-#: ../../glossary.md:24
+#: ../../glossary.md:50
 msgid "Plugin glossary"
 msgstr ""
 
@@ -60,7 +132,7 @@ msgstr ""
 msgid "Plugin"
 msgstr ""
 
-#: ../../glossary.md:28
+#: ../../glossary.md:54
 msgid "A plugin is a piece of software that extends the functionality of another piece of software."
 msgstr ""
 
@@ -68,6 +140,6 @@ msgstr ""
 msgid "Scrobbling"
 msgstr ""
 
-#: ../../glossary.md:31
+#: ../../glossary.md:57
 msgid "Scrobbling is the act of recording listen data. Services use this information to keep track of listening preferences and recommend music."
 msgstr ""

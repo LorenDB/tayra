@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.3\n"
+"Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-04 09:00+0200\n"
+"POT-Creation-Date: 2022-07-01 10:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,337 +109,381 @@ msgid "Authentication"
 msgstr ""
 
 #: ../../user_documentation/info/cli.rst:69
-msgid "The CLI uses JWT tokens to interact with the API. You can either:"
+msgid "The CLI uses Oauth tokens to interact with the API."
 msgstr ""
 
 #: ../../user_documentation/info/cli.rst:71
-msgid "Run ``funkwhale login``, which will ask you your Funkwhale username and password and store a JWT token in your local keyring. This token will be used automatically afterwards."
+msgid "To get started, you need to create an application for the CLI. To do this:"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:72
-msgid "Explicitly pass a token to the command via the ``-t`` flag or the ``FUNKWHALE_TOKEN`` environment variable"
+#: ../../user_documentation/info/cli.rst:73
+msgid "Log in to your Funkwhale pod."
 msgstr ""
 
 #: ../../user_documentation/info/cli.rst:74
-msgid "If you use ``funkwhale login``, you can delete the local token with ``funkwhale logout``."
+msgid "Select the cog icon (:fa:`cog`) or your avatar to expand the user menu."
+msgstr ""
+
+#: ../../user_documentation/info/cli.rst:75
+msgid "Select :guilabel:`Settings`."
 msgstr ""
 
 #: ../../user_documentation/info/cli.rst:76
-msgid "You can check that you are fully authenticated by running ``funkwhale users me``. It will display information relating to your user profile."
+msgid "Scroll down to the :guilabel:`Your applications` section."
+msgstr ""
+
+#: ../../user_documentation/info/cli.rst:77
+msgid "Select :guilabel:`Register a new application` to create a new application."
+msgstr ""
+
+#: ../../user_documentation/info/cli.rst:78
+msgid "Give your application an appropriate name (e.g. \"Funkwhale CLI\")."
 msgstr ""
 
 #: ../../user_documentation/info/cli.rst:79
-msgid "Configuration"
+msgid "Give your application the permissions you require."
+msgstr ""
+
+#: ../../user_documentation/info/cli.rst:80
+msgid "Select :guilabel:`Create application`. A screen appears showing :guilabel:`Application details`."
 msgstr ""
 
 #: ../../user_documentation/info/cli.rst:81
-msgid "To work, the CLI needs to be pointed to a Funkwhale server. This can be done in various ways:"
+msgid "Copy the app's :guilabel:`Access token`."
 msgstr ""
 
 #: ../../user_documentation/info/cli.rst:83
-msgid "Via the ``-H https://funkwhale.domain`` flag when calling the CLI"
-msgstr ""
-
-#: ../../user_documentation/info/cli.rst:84
-msgid "Via the ``FUNKWHALE_SERVER_URL`` environment variable"
+msgid "Once you have your app's Access Token, you can either:"
 msgstr ""
 
 #: ../../user_documentation/info/cli.rst:85
-msgid "Via an env file (see below)"
+msgid "Run ``funkwhale login`. The CLI asks you for your token and stores it in your machine's keyring. The CLI uses this token to authenticate."
+msgstr ""
+
+#: ../../user_documentation/info/cli.rst:86
+msgid "Explicitly pass a token to the command via the ``-t`` flag or the ``FUNKWHALE_TOKEN`` environment variable"
 msgstr ""
 
 #: ../../user_documentation/info/cli.rst:88
-msgid "Env file"
+msgid "If you use ``funkwhale login``, you can delete the local token with ``funkwhale logout``."
 msgstr ""
 
 #: ../../user_documentation/info/cli.rst:90
+msgid "You can check that you are fully authenticated by running ``funkwhale users me``. It will display information relating to your user profile."
+msgstr ""
+
+#: ../../user_documentation/info/cli.rst:93
+msgid "Configuration"
+msgstr ""
+
+#: ../../user_documentation/info/cli.rst:95
+msgid "To work, the CLI needs to be pointed to a Funkwhale server. This can be done in various ways:"
+msgstr ""
+
+#: ../../user_documentation/info/cli.rst:97
+msgid "Via the ``-H https://funkwhale.domain`` flag when calling the CLI"
+msgstr ""
+
+#: ../../user_documentation/info/cli.rst:98
+msgid "Via the ``FUNKWHALE_SERVER_URL`` environment variable"
+msgstr ""
+
+#: ../../user_documentation/info/cli.rst:99
+msgid "Via an env file (see below)"
+msgstr ""
+
+#: ../../user_documentation/info/cli.rst:102
+msgid "Env file"
+msgstr ""
+
+#: ../../user_documentation/info/cli.rst:104
 msgid "The CLI will try to read configuration options from a ``.env`` file in the current directory. If this file is not present, it will read the configuration options from ``~/.config/funkwhale/env`` on Linux or ``~/Library/Application Support/funkwhale/env`` on macOS."
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:92
+#: ../../user_documentation/info/cli.rst:106
 msgid "You can also give it a path to another env file via the ``-e /path/to/.envfile`` flag or the ``ENV_FILE`` environment variable."
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:94
+#: ../../user_documentation/info/cli.rst:108
 msgid "An env file simply contains a list of variables, using the same syntax as environment variables (comments starting with # are allowed). Example::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:101
+#: ../../user_documentation/info/cli.rst:115
 msgid "List of configuration options"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:104
+#: ../../user_documentation/info/cli.rst:118
 msgid "CLI Flag"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:104
+#: ../../user_documentation/info/cli.rst:118
 msgid "Environment variable"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:104
+#: ../../user_documentation/info/cli.rst:118
 msgid "Example value"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:104
+#: ../../user_documentation/info/cli.rst:118
 msgid "Description"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:106
+#: ../../user_documentation/info/cli.rst:120
 msgid "``-e``, ``--env-file``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:106
+#: ../../user_documentation/info/cli.rst:120
 msgid "``ENV_FILE``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:106
+#: ../../user_documentation/info/cli.rst:120
 msgid "``~/Music/.env``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:106
+#: ../../user_documentation/info/cli.rst:120
 msgid "Path to a local env file to use for configuration"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:108
+#: ../../user_documentation/info/cli.rst:122
 msgid "``-H``, ``--url``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:108
+#: ../../user_documentation/info/cli.rst:122
 msgid "``FUNKWHALE_SERVER_URL``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:108
+#: ../../user_documentation/info/cli.rst:122
 msgid "``https://demo.funkwhale.audio``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:108
+#: ../../user_documentation/info/cli.rst:122
 msgid "The URL of the Funkwhale server the CLI should contact"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:110
+#: ../../user_documentation/info/cli.rst:124
 msgid "``-t``, ``--token``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:110
+#: ../../user_documentation/info/cli.rst:124
 msgid "``FUNKWHALE_TOKEN``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:110
+#: ../../user_documentation/info/cli.rst:124
 msgid "``eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:110
+#: ../../user_documentation/info/cli.rst:124
 msgid "A JWT token to use for authentication"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:112
+#: ../../user_documentation/info/cli.rst:126
 msgid "``--no-login``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:112
+#: ../../user_documentation/info/cli.rst:126
 msgid "``FUNKWHALE_NO_LOGIN``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:112
-#: ../../user_documentation/info/cli.rst:117
+#: ../../user_documentation/info/cli.rst:126
+#: ../../user_documentation/info/cli.rst:131
 msgid "``true``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:112
+#: ../../user_documentation/info/cli.rst:126
 msgid "Completely disable authentication and keyring"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:114
+#: ../../user_documentation/info/cli.rst:128
 msgid "``-v``, ``--verbosity``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:114
+#: ../../user_documentation/info/cli.rst:128
 msgid "One of ``CRITICAL``, ``ERROR``, ``WARNING``, ``INFO`` or ``DEBUG``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:114
+#: ../../user_documentation/info/cli.rst:128
 msgid "Control the verbosity (default is INFO)"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:117
+#: ../../user_documentation/info/cli.rst:131
 msgid "``-q``, ``--quiet``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:117
+#: ../../user_documentation/info/cli.rst:131
 msgid "``FUNKWHALE_QUIET``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:117
+#: ../../user_documentation/info/cli.rst:131
 msgid "Completely disable logging"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:121
+#: ../../user_documentation/info/cli.rst:135
 msgid "Read commands"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:123
+#: ../../user_documentation/info/cli.rst:137
 msgid "All commands that list results - such as ``funkwhale albums ls`` or ``funkwhale tracks ls`` - share similar behaviors and sets of arguments."
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:126
+#: ../../user_documentation/info/cli.rst:140
 msgid "Filtering"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:128
+#: ../../user_documentation/info/cli.rst:142
 msgid "Results can be filtered using the ``-f`` or ``--filter`` flag. Provided values are transmitted directly in the querystring when the requests to the API is made::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:133
+#: ../../user_documentation/info/cli.rst:147
 msgid "The flag can be provided multiple times, to add multiple filter conditions::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:140
+#: ../../user_documentation/info/cli.rst:154
 msgid "The list of supported fields for filtering depends on the resource being queried, and can be found in our `API documentation`_."
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:144
+#: ../../user_documentation/info/cli.rst:158
 msgid "Searching"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:146
+#: ../../user_documentation/info/cli.rst:160
 msgid "Any text provided after the ``ls`` command will be considered a search query and transmitted to the API::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:153
+#: ../../user_documentation/info/cli.rst:167
 msgid "This is technically equivalent to filtering with a ``q`` parameter as described above::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:159
+#: ../../user_documentation/info/cli.rst:173
 msgid "Ordering"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:161
+#: ../../user_documentation/info/cli.rst:175
 msgid "You can control the ordering of the results with the `-o` or ``--ordering`` flag::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:168
+#: ../../user_documentation/info/cli.rst:182
 msgid "Ordering in descending order is supported by prefixing the field name with ``-``, e.g: ``-o -creation_date``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:172
+#: ../../user_documentation/info/cli.rst:186
 msgid "The list of supported fields for ordering depends on the resource being queried, and can be found in our `API documentation`_."
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:176
+#: ../../user_documentation/info/cli.rst:190
 msgid "Pagination"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:178
+#: ../../user_documentation/info/cli.rst:192
 msgid "You can retrieve a specific result page using the ``-p`` or ``--page`` flag::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:183
+#: ../../user_documentation/info/cli.rst:197
 msgid "You can also alter the size of the pages using the ``-s`` or ``--page-size`` flag::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:188
+#: ../../user_documentation/info/cli.rst:202
 msgid "Sometimes, you may want to retrieve multiple pages of results at once. This is supported using the ``-l`` or ``--limit`` flag::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:193
+#: ../../user_documentation/info/cli.rst:207
 msgid "You can, of course, combine these flags::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:199
+#: ../../user_documentation/info/cli.rst:213
 msgid "Output"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:201
+#: ../../user_documentation/info/cli.rst:215
 msgid "While the default output displays a human-readable table, you can customize it."
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:203
+#: ../../user_documentation/info/cli.rst:217
 msgid "The ``--raw`` flag will simply output the raw JSON payload returned by the API server::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:207
+#: ../../user_documentation/info/cli.rst:221
 msgid "The ``-h`` or ``--no-headers`` flag simply removes the table column headers."
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:209
+#: ../../user_documentation/info/cli.rst:223
 msgid "The ``-t`` or ``--format`` flag alters the rendering of result, depending on the provided value::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:216
+#: ../../user_documentation/info/cli.rst:230
 msgid "Available formats are: ``fancy_grid``, ``github``, ``grid``, ``html``, ``jira``, ``latex``, ``latex_booktabs``, ``latex_raw``, ``mediawiki``, ``moinmoin``, ``orgtbl``, ``pipe``, ``plain``, ``presto``, ``psql``, ``rst``, ``simple``, ``textile``, ``tsv``, ``youtrack``"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:218
+#: ../../user_documentation/info/cli.rst:232
 msgid "The ``-c`` or ``--column`` flag gives you control on the displayed columns::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:223
+#: ../../user_documentation/info/cli.rst:237
 msgid "For a given resource, the list of available columns can be found by running ``funkwhale <resource> ls --help``."
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:225
+#: ../../user_documentation/info/cli.rst:239
 msgid "The ``-i`` or ``--ids`` flag displays only the IDs of results, one per line::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:229
+#: ../../user_documentation/info/cli.rst:243
 msgid "This is especially useful in conjunction with other commands (like deletion commands) and piping. Note that this is also technically equivalent to applying the ``--no-headers``, ``--format plain`` and ``--column ID`` flags."
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:233
+#: ../../user_documentation/info/cli.rst:247
 msgid "Write commands"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:236
+#: ../../user_documentation/info/cli.rst:250
 msgid "Deleting objects"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:238
+#: ../../user_documentation/info/cli.rst:252
 msgid "Some resources support deletion, via commands such as ``funkwhale libraries rm`` or ``funkwhale playlists rm``, followed by one or more IDs::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:243
+#: ../../user_documentation/info/cli.rst:257
 msgid "By default, the ``rm`` command will ask for confirmation, but you can disable this behavior by providing the ``--no-input`` flag."
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:249
+#: ../../user_documentation/info/cli.rst:263
 msgid "Examples"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:252
+#: ../../user_documentation/info/cli.rst:266
 msgid "Uploading local files"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:254
+#: ../../user_documentation/info/cli.rst:268
 msgid "**Goal**: create a library and upload all MP3 files from ``~/Music`` to it"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:256
-#: ../../user_documentation/info/cli.rst:268
-#: ../../user_documentation/info/cli.rst:284
-#: ../../user_documentation/info/cli.rst:301
+#: ../../user_documentation/info/cli.rst:270
+#: ../../user_documentation/info/cli.rst:282
+#: ../../user_documentation/info/cli.rst:298
+#: ../../user_documentation/info/cli.rst:315
 msgid "**Commands**::"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:264
+#: ../../user_documentation/info/cli.rst:278
 msgid "Favorite an entire album"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:266
+#: ../../user_documentation/info/cli.rst:280
 msgid "**Goal**: retrieve all the tracks from an album and add these to your favorites"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:280
+#: ../../user_documentation/info/cli.rst:294
 msgid "Mirror an artist discography locally"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:282
+#: ../../user_documentation/info/cli.rst:296
 msgid "**Goal**: Download the discography of an artist locally, in the ``~/Music`` directory, in an ``Artist/Album/Track`` folder hierarchy"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:297
+#: ../../user_documentation/info/cli.rst:311
 msgid "Open a remote album in VLC"
 msgstr ""
 
-#: ../../user_documentation/info/cli.rst:299
+#: ../../user_documentation/info/cli.rst:313
 msgid "**Goal**: Variation of the previous example, but instead of downloading an artist discography, we listen to an album in VLC"
 msgstr ""
