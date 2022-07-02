@@ -1,3 +1,115 @@
+<script setup lang="ts">
+import { useStore } from '~/store'
+import { nextTick, onMounted, ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import time from '~/utils/time'
+import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
+import Draggable, {  } from 'vuedraggable'
+import { whenever, useTimeoutFn, useWindowScroll, useWindowSize } from '@vueuse/core'
+import { useGettext } from "vue3-gettext"
+import useQueue from '~/composables/useQueue'
+import usePlayer from '~/composables/usePlayer'
+
+const queueModal = ref()
+
+const { activate } = useFocusTrap(queueModal, { allowOutsideClick: true })
+activate()
+
+const store = useStore()
+const queue = computed(() => store.state.queue)
+const currentIndex = computed(() => store.state.queue.currentIndex)
+
+const { y: pageYOffset } = useWindowScroll()
+const { height: windowHeight } = useWindowSize()
+const scrollToCurrent = async () => {
+  await nextTick()
+
+  const item = queueModal.value?.querySelector('.queue-item.active')
+  const { top } = item?.getBoundingClientRect() ?? { top: 0 }
+
+  window.scrollTo({
+    top: top + pageYOffset.value - windowHeight.value / 2,
+    behavior: 'smooth'
+  })
+}
+
+// TODO (wvffle): Add useVirtualList to speed up the queue rendering and potentially resolve #1471
+//                Each item has 49px height on desktop and 50.666px on tablet(?) and down
+onMounted(async () => {
+  await nextTick()
+  // NOTE: delay is to let transition work
+  useTimeoutFn(scrollToCurrent, 400)
+})
+
+const { $pgettext } = useGettext()
+
+const { 
+  playing, 
+  loading: isLoadingAudio,
+  errored,
+  focused: playerFocused,
+  duration,
+  durationFormatted,
+  currentTimeFormatted,
+  progress,
+  bufferProgress,
+  pause,
+  resume,
+} = usePlayer()
+
+const { 
+  focused: queueFocused,
+  currentTrack,
+  hasNext,
+  isEmpty: emptyQueue,
+  tracks,
+  reorder: reorderTracks,
+  endsIn: timeLeft,
+  removeTrack,
+  clear,
+  next,
+  previous
+} = useQueue()
+
+const reorder = (event: { oldIndex: number, newIndex: number }) => reorderTracks(event.oldIndex, event.newIndex)
+
+const labels = computed(() => ({
+  queue: $pgettext('*/*/*', 'Queue'),
+  duration: $pgettext('*/*/*', 'Duration'),
+  addArtistContentFilter: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…'),
+  restart: $pgettext('*/*/*', 'Restart track'),
+  previous: $pgettext('*/*/*', 'Previous track'),
+  next: $pgettext('*/*/*', 'Next track'),
+  pause: $pgettext('*/*/*', 'Pause'),
+  play: $pgettext('*/*/*', 'Play'),
+  remove: $pgettext('*/*/*', 'Remove'),
+  selectTrack: $pgettext('*/*/*', 'Select track')
+}))
+
+whenever(queueFocused, scrollToCurrent, { immediate: true })
+whenever(currentTrack, scrollToCurrent, { immediate: true })
+
+whenever(
+  () => tracks.value.length === 0,
+  () => store.commit('ui/queueFocused', null),
+  { immediate: true }
+)
+
+const router = useRouter()
+router.beforeEach(() => store.commit('ui/queueFocused', null))
+
+// TODO (wvffle): move setCurrentTime to usePlayer
+const emit = defineEmits(['touch-progress'])
+
+const progressBar = ref()
+const touchProgress = (event: MouseEvent) => {
+  const time = (event.clientX / progressBar.value.offsetWidth) * duration.value
+  emit('touch-progress', time)
+}
+</script>
+
 <template>
   <section
     ref="queueModal"
@@ -107,7 +219,7 @@
                     class="progress-area"
                   >
                     <div
-                      ref="progress"
+                      ref="progressBar"
                       :class="['ui', 'small', 'vibrant', {'indicating': isLoadingAudio}, 'progress']"
                       @click="touchProgress"
                     >
@@ -141,7 +253,7 @@
                         href=""
                         :aria-label="labels.restart"
                         class="left floated timer discrete start"
-                        @click.prevent="setCurrentTime(0)"
+                        @click.prevent="emit('touch-progress', 0)"
                       >{{ currentTimeFormatted }}</a>
                       <span class="right floated timer total">{{ durationFormatted }}</span>
                     </template>
@@ -154,11 +266,11 @@
                 <div class="player-controls tablet-and-below">
                   <span
                     role="button"
-                    :title="labels.previousTrack"
-                    :aria-label="labels.previousTrack"
+                    :title="labels.previous"
+                    :aria-label="labels.previous"
                     class="control"
                     :disabled="emptyQueue || null"
-                    @click.prevent.stop="$store.dispatch('queue/previous')"
+                    @click.prevent.stop="previous"
                   >
                     <i :class="['ui', 'backward step', {'disabled': emptyQueue}, 'icon']" />
                   </span>
@@ -169,7 +281,7 @@
                     :title="labels.play"
                     :aria-label="labels.play"
                     class="control"
-                    @click.prevent.stop="resumePlayback"
+                    @click.prevent.stop="resume"
                   >
                     <i :class="['ui', 'play', {'disabled': !currentTrack}, 'icon']" />
                   </span>
@@ -179,7 +291,7 @@
                     :title="labels.pause"
                     :aria-label="labels.pause"
                     class="control"
-                    @click.prevent.stop="pausePlayback"
+                    @click.prevent.stop="pause"
                   >
                     <i :class="['ui', 'pause', {'disabled': !currentTrack}, 'icon']" />
                   </span>
@@ -189,7 +301,7 @@
                     :aria-label="labels.next"
                     class="control"
                     :disabled="hasNext || null"
-                    @click.prevent.stop="$store.dispatch('queue/next')"
+                    @click.prevent.stop="next"
                   >
                     <i :class="['ui', {'disabled': !hasNext}, 'forward step', 'icon']" />
                   </span>
@@ -211,7 +323,7 @@
                   </button>
                   <button
                     class="ui right floated basic button danger"
-                    @click="$store.dispatch('queue/clean')"
+                    @click="clear"
                   >
                     <translate translate-context="*/Queue/*/Verb">
                       Clear
@@ -225,7 +337,8 @@
                         :translate-params="{index: currentIndex + 1, length: queue.tracks.length}"
                       >
                         Track %{ index } of %{ length }
-                      </translate><template v-if="!$store.state.radios.running">
+                      </translate>
+                      <template v-if="!$store.state.radios.running">
                         -
                         <span :title="labels.duration">
                           {{ timeLeft }}
@@ -300,10 +413,10 @@
                         <i class="pink heart icon" />
                       </template>
                       <button
-                        :aria-label="labels.removeFromQueue"
-                        :title="labels.removeFromQueue"
+                        :aria-label="labels.remove"
+                        :title="labels.remove"
                         :class="['ui', 'really', 'tiny', 'basic', 'circular', 'icon', 'button']"
-                        @click.stop="cleanTrack(index)"
+                        @click.stop="removeTrack(index)"
                       >
                         <i class="x icon" />
                       </button>
@@ -344,193 +457,3 @@
     </div>
   </section>
 </template>
-<script>
-import { useStore } from '~/store'
-import { mapState, mapGetters, mapActions } from 'vuex'
-import { nextTick, onMounted, ref, computed } from 'vue'
-import moment from 'moment'
-import { sum } from 'lodash-es'
-import time from '~/utils/time'
-import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
-import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
-import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
-import draggable from 'vuedraggable'
-import { useTimeoutFn, useWindowScroll, useWindowSize } from '@vueuse/core'
-
-export default {
-  components: {
-    TrackFavoriteIcon,
-    TrackPlaylistIcon,
-    draggable
-  },
-  setup () {
-    const queueModal = ref()
-
-    const { activate } = useFocusTrap(queueModal, { allowOutsideClick: true })
-    activate()
-
-    const store = useStore()
-    const queue = store.state.queue
-    const currentIndex = computed(() => store.state.queue.currentIndex)
-
-    const { y: pageYOffset } = useWindowScroll()
-    const { height: windowHeight } = useWindowSize()
-    const scrollToCurrent = async () => {
-      await nextTick()
-      const item = queueModal.value?.querySelector('.queue-item.active')
-      const { top } = item?.getBoundingClientRect() ?? { top: 0 }
-      window.scrollTo({
-        top: top + pageYOffset.value - windowHeight.value / 2,
-        behavior: 'smooth'
-      })
-    }
-
-    onMounted(async () => {
-      await nextTick()
-      // delay is to let transition work
-      useTimeoutFn(scrollToCurrent, 400)
-    })
-
-    // TODO (wvffle): Add useVirtualList to speed up the queue rendering and potentially resolve #1471
-    //                Each item has 49px height on desktop and 50.666px on tablet(?) and down
-    return { queueModal, scrollToCurrent, queue, currentIndex }
-  },
-  data () {
-    return {
-      showVolume: false,
-      isShuffling: false,
-      tracksChangeBuffer: null,
-      time
-    }
-  },
-  computed: {
-    ...mapState({
-      playing: state => state.player.playing,
-      isLoadingAudio: state => state.player.isLoadingAudio,
-      volume: state => state.player.volume,
-      looping: state => state.player.looping,
-      duration: state => state.player.duration,
-      bufferProgress: state => state.player.bufferProgress,
-      errored: state => state.player.errored,
-      currentTime: state => state.player.currentTime
-    }),
-    ...mapGetters({
-      currentTrack: 'queue/currentTrack',
-      hasNext: 'queue/hasNext',
-      emptyQueue: 'queue/isEmpty',
-      durationFormatted: 'player/durationFormatted',
-      currentTimeFormatted: 'player/currentTimeFormatted',
-      progress: 'player/progress'
-    }),
-    tracks: {
-      get () {
-        return this.$store.state.queue.tracks
-      },
-      set (value) {
-        this.tracksChangeBuffer = value
-      }
-    },
-    labels () {
-      return {
-        queue: this.$pgettext('*/*/*', 'Queue'),
-        duration: this.$pgettext('*/*/*', 'Duration'),
-        addArtistContentFilter: this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…'),
-        restart: this.$pgettext('*/*/*', 'Restart track')
-      }
-    },
-    timeLeft () {
-      const seconds = sum(
-        this.queue.tracks.slice(this.queue.currentIndex).map((t) => {
-          return (t.uploads || []).map((u) => {
-            return u.duration || 0
-          })[0] || 0
-        })
-      )
-      return moment(this.$store.state.ui.lastDate).add(seconds, 'seconds').fromNow(true)
-    },
-    sliderVolume: {
-      get () {
-        return this.volume
-      },
-      set (v) {
-        this.$store.commit('player/volume', v)
-      }
-    },
-    playerFocused () {
-      return this.$store.state.ui.queueFocused === 'player'
-    }
-  },
-  watch: {
-    '$store.state.ui.queueFocused': {
-      handler (v) {
-        if (v === 'queue') {
-          this.$nextTick(() => {
-            this.scrollToCurrent()
-          })
-        }
-      },
-      immediate: true
-    },
-    '$store.state.queue.currentIndex': {
-      handler () {
-        this.$nextTick(() => {
-          this.scrollToCurrent()
-        })
-      }
-    },
-    '$store.state.queue.tracks': {
-      handler (v) {
-        if (!v || v.length === 0) {
-          this.$store.commit('ui/queueFocused', null)
-        }
-      },
-      immediate: true,
-      deep: true
-    },
-    '$route.fullPath' () {
-      this.$store.commit('ui/queueFocused', null)
-    }
-  },
-  methods: {
-    ...mapActions({
-      cleanTrack: 'queue/cleanTrack',
-      mute: 'player/mute',
-      unmute: 'player/unmute',
-      clean: 'queue/clean',
-      toggleMute: 'player/toggleMute',
-      resumePlayback: 'player/resumePlayback',
-      pausePlayback: 'player/pausePlayback'
-    }),
-    reorder: function (event) {
-      this.$store.commit('queue/reorder', {
-        tracks: this.tracksChangeBuffer,
-        oldIndex: event.oldIndex,
-        newIndex: event.newIndex
-      })
-    },
-    touchProgress (e) {
-      const target = this.$refs.progress
-      const time = (e.layerX / target.offsetWidth) * this.duration
-      this.$emit('touch-progress', time)
-    },
-    shuffle () {
-      const disabled = this.queue.tracks.length === 0
-      if (this.isShuffling || disabled) {
-        return
-      }
-      const self = this
-      const msg = this.$pgettext('Content/Queue/Message', 'Queue shuffled!')
-      this.isShuffling = true
-      setTimeout(() => {
-        self.$store.dispatch('queue/shuffle', () => {
-          self.isShuffling = false
-          self.$store.commit('ui/addMessage', {
-            content: msg,
-            date: new Date()
-          })
-        })
-      }, 100)
-    }
-  }
-}
-</script>

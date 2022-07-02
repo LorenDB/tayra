@@ -334,6 +334,7 @@ import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
 import { useThrottleFn, useTimeoutFn, useToggle } from '@vueuse/core'
 import { computed, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import useQueue from '~/composables/useQueue'
 
 export default {
   components: {
@@ -357,17 +358,7 @@ export default {
       store.commit('ui/queueFocused', ['queue', 'player'].indexOf(store.state.ui.queueFocused) > -1 ? null : 'player')
     }
 
-    const shuffledMessage = $pgettext('Content/Queue/Message', 'Queue shuffled!')
-    const shuffle = useThrottleFn(() => {
-      if (queueIsEmpty.value) return
-      useTimeoutFn(async () => {
-        await store.dispatch('queue/shuffle')
-        store.commit('ui/addMessage', {
-          content: shuffledMessage,
-          date: new Date()
-        })
-      }, 100)
-    }, 101, false)
+    const { shuffle } = useQueue()
 
     const seek = (step) => {
       if (step > 0) {

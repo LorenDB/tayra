@@ -67,6 +67,7 @@ export interface Track {
   copyright?: string
   license?: License
   tags: string[]
+  uploads: Upload[]
 
   album?: Album
   artist?: Artist
@@ -169,6 +170,7 @@ export interface Upload {
   filename?: string
   source?: string
   uuid: string
+  duration?: number
 }
 
 // FileSystem Logs

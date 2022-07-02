@@ -111,9 +111,11 @@ const store: Module<State, RootState> = {
     cleanTrack ({ state, dispatch, commit }, index) {
       // are we removing current playin track
       const current = index === state.currentIndex
+
       if (current) {
         dispatch('player/stop', null, { root: true })
       }
+
       commit('splice', { start: index, size: 1 })
       if (index < state.currentIndex) {
         commit('currentIndex', state.currentIndex - 1)
@@ -127,6 +129,7 @@ const store: Module<State, RootState> = {
         // we play next track, which now have the same index
         commit('currentIndex', index)
       }
+
       if (state.currentIndex + 1 === state.tracks.length) {
         dispatch('radios/populateQueue', null, { root: true })
       }
@@ -171,14 +174,11 @@ const store: Module<State, RootState> = {
       // so we replay automatically on next track append
       commit('ended', true)
     },
-    async shuffle ({ dispatch, state }, callback) {
+    async shuffle ({ dispatch, state }) {
       const shuffled = shuffle(state.tracks)
       state.tracks.length = 0
-      const params: { tracks: Track[], callback?: () => unknown } = { tracks: shuffled }
-      if (callback) {
-        params.callback = callback
-      }
-      await dispatch('appendMany', params)
+
+      await dispatch('appendMany', { tracks: shuffled })
       await dispatch('currentIndex', 0)
     }
   }
