@@ -42,7 +42,7 @@ Gitpod integration on our Gitlab server.
 
 You can now simply choose to use Gitpod instead of Gitlab Web IDE on any of branch, commit or merge request:
 
-.. image:: ./docs/_static/images/select-gitpod-in-gitlab.png
+.. image:: ./_static/images/select-gitpod-in-gitlab.png
   :alt: Select Gitpod as the default Web IDE.
 
 Gitlab Workflow extension
