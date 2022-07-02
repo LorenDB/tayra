@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-02 21:07+0000\n"
+"PO-Revision-Date: 2022-07-03 14:19+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/"
@@ -72,82 +72,96 @@ msgid ""
 "Whether to include signatures in S3 URLs. Signatures are used to enforce "
 "access control."
 msgstr ""
+"Whether to include signatures in S3 URLs. Signatures are used to enforce "
+"access control."
 
 #: ../../docstring config.settings.common.AWS_QUERYSTRING_AUTH:4 of
 msgid "Defaults to the opposite of :attr:`PROXY_MEDIA`."
-msgstr ""
+msgstr "Defaults to the opposite of :attr:`PROXY_MEDIA`."
 
 #: ../../docstring config.settings.common.AWS_QUERYSTRING_EXPIRE:1 of
 msgid ""
 "The time in seconds before AWS signatures expire. Only takes effect you "
 "enable :attr:`AWS_QUERYSTRING_AUTH`"
 msgstr ""
+"The time in seconds before AWS signatures expire. Only takes effect you "
+"enable :attr:`AWS_QUERYSTRING_AUTH`"
 
 #: ../../docstring config.settings.common.AWS_ACCESS_KEY_ID:1 of
 msgid "Access-key ID for your S3 storage."
-msgstr ""
+msgstr "Access-key ID for your S3 storage."
 
 #: ../../docstring config.settings.common.AWS_SECRET_ACCESS_KEY:1 of
 msgid "Secret access key for your S3 storage."
-msgstr ""
+msgstr "Secret access key for your S3 storage."
 
 #: ../../docstring config.settings.common.AWS_STORAGE_BUCKET_NAME:1 of
 msgid "Your S3 bucket name."
-msgstr ""
+msgstr "Your S3 bucket name."
 
 #: ../../docstring config.settings.common.AWS_S3_CUSTOM_DOMAIN:1 of
 msgid "Custom domain to use for your S3 storage."
-msgstr ""
+msgstr "Custom domain to use for your S3 storage."
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:1 of
 msgid ""
 "If you use a S3-compatible storage such as minio, set the following "
 "variable to the full URL to the storage server."
 msgstr ""
+"If you use a S3-compatible storage such as minio, set the following variable "
+"to the full URL to the storage server."
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:4 of
 msgid "Examples:"
-msgstr ""
+msgstr "Examples:"
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:6 of
 msgid "``https://minio.mydomain.com``"
-msgstr ""
+msgstr "``https://minio.mydomain.com``"
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:7 of
 msgid "``https://s3.wasabisys.com``"
-msgstr ""
+msgstr "``https://s3.wasabisys.com``"
 
 #: ../../docstring config.settings.common.AWS_S3_REGION_NAME:1 of
 msgid ""
 "If you're using Amazon S3 to serve media without a proxy, you need to "
 "specify your region name to access files."
 msgstr ""
+"If you're using Amazon S3 to serve media without a proxy, you need to "
+"specify your region name to access files."
 
 #: ../../docstring config.settings.common.AWS_S3_REGION_NAME:4 of
 msgid "Example:"
-msgstr ""
+msgstr "Example:"
 
 #: ../../docstring config.settings.common.AWS_S3_REGION_NAME:6 of
 msgid "``eu-west-2``"
-msgstr ""
+msgstr "``eu-west-2``"
 
 #: ../../docstring config.settings.common.AWS_LOCATION:1 of
 msgid ""
 "A directory in your S3 bucket where you store files. Use this if you plan"
 " to share the bucket between services."
 msgstr ""
+"A directory in your S3 bucket where you store files. Use this if you plan to "
+"share the bucket between services."
 
 #: ../../docstring config.settings.common.PROXY_MEDIA:1 of
 msgid ""
 "Whether to proxy audio files through your reverse proxy. We recommend you"
 " leave this enabled to enforce access control."
 msgstr ""
+"Whether to proxy audio files through your reverse proxy. We recommend you "
+"leave this enabled to enforce access control."
 
 #: ../../docstring config.settings.common.PROXY_MEDIA:4 of
 msgid ""
 "If you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH` enabled, "
 "it's safe to disable this setting."
 msgstr ""
+"If you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH` enabled, it's "
+"safe to disable this setting."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:71
 msgid "Set up your reverse proxy"
