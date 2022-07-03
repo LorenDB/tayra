@@ -65,7 +65,6 @@ const [showShortcutsModal, toggleShortcutsModal] = useToggle(false)
 onKeyboardShortcut('h', () => toggleShortcutsModal())
 
 const { width } = useWindowSize()
-const player = ref()
 const showSetInstanceModal = ref(false)
 </script>
 
@@ -92,10 +91,7 @@ const showSetInstanceModal = ref(false)
     <set-instance-modal v-model:show="showSetInstanceModal" />
     <service-messages />
     <transition name="queue">
-      <queue
-        v-if="store.state.ui.queueFocused"
-        @touch-progress="player.setCurrentTime($event)"
-      />
+      <queue v-if="store.state.ui.queueFocused" />
     </transition>
 
     <router-view v-slot="{ Component }">
@@ -112,7 +108,7 @@ const showSetInstanceModal = ref(false)
       </template>
     </router-view>
 
-    <audio-player ref="player" />
+    <audio-player />
     <playlist-modal v-if="store.state.auth.authenticated" />
     <channel-upload-modal v-if="store.state.auth.authenticated" />
     <filter-modal v-if="store.state.auth.authenticated" />

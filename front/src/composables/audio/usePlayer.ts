@@ -102,10 +102,8 @@ const currentTime = computed({
 
     currentSound.value.seek(time)
 
-    // If player is paused update progress immediately to ensure updated UI
-    if (!playing.value) {
-      progress.value = time
-    }
+    // Update progress immediately to ensure updated UI
+    progress.value = time
   }
 })
 

@@ -6,7 +6,7 @@ import time from '~/utils/time'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
-import Draggable, {  } from 'vuedraggable'
+import Draggable from 'vuedraggable'
 import { whenever, useTimeoutFn, useWindowScroll, useWindowSize } from '@vueuse/core'
 import { useGettext } from "vue3-gettext"
 import useQueue from '~/composables/audio/useQueue'
@@ -18,7 +18,6 @@ const { activate } = useFocusTrap(queueModal, { allowOutsideClick: true })
 activate()
 
 const store = useStore()
-const queue = computed(() => store.state.queue)
 const currentIndex = computed(() => store.state.queue.currentIndex)
 
 const { y: pageYOffset } = useWindowScroll()
@@ -55,6 +54,7 @@ const {
   currentTimeFormatted,
   progress,
   bufferProgress,
+  currentTime,
   pause,
   resume,
 } = usePlayer()
@@ -100,13 +100,10 @@ whenever(
 const router = useRouter()
 router.beforeEach(() => store.commit('ui/queueFocused', null))
 
-// TODO (wvffle): move setCurrentTime to usePlayer
-const emit = defineEmits(['touch-progress'])
-
 const progressBar = ref()
 const touchProgress = (event: MouseEvent) => {
-  const time = (event.clientX / progressBar.value.offsetWidth) * duration.value
-  emit('touch-progress', time)
+  const time = ((event.clientX - (event.target as Element).getBoundingClientRect().left) / progressBar.value.offsetWidth) * duration.value
+  currentTime.value = time
 }
 </script>
 
@@ -253,7 +250,7 @@ const touchProgress = (event: MouseEvent) => {
                         href=""
                         :aria-label="labels.restart"
                         class="left floated timer discrete start"
-                        @click.prevent="emit('touch-progress', 0)"
+                        @click.prevent="currentTime = 0"
                       >{{ currentTimeFormatted }}</a>
                       <span class="right floated timer total">{{ durationFormatted }}</span>
                     </template>
@@ -334,7 +331,7 @@ const touchProgress = (event: MouseEvent) => {
                     <div>
                       <translate
                         translate-context="Sidebar/Queue/Text"
-                        :translate-params="{index: currentIndex + 1, length: queue.tracks.length}"
+                        :translate-params="{index: currentIndex + 1, length: tracks.length}"
                       >
                         Track %{ index } of %{ length }
                       </translate>
@@ -351,7 +348,7 @@ const touchProgress = (event: MouseEvent) => {
             </div>
             <table class="ui compact very basic fixed single line selectable unstackable table">
               <draggable
-                v-model:list="tracks"
+                v-model="tracks"
                 tag="tbody"
                 handle=".handle"
                 item-key="id"

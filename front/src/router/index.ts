@@ -1,8 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
 
-console.log('PROCESS', import.meta.env)
-
 export default createRouter({
   history: createWebHistory(import.meta.env.VUE_APP_ROUTER_BASE_URL as string ?? '/'),
   linkActiveClass: 'active',

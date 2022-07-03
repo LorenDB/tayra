@@ -1,12 +1,11 @@
 <script setup lang="ts">
 // TODO (wvffle): Move most of this stufff to usePlayer
 import { useStore } from '~/store'
-import { Howler } from 'howler'
 import VolumeControl from './VolumeControl.vue'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import useQueue from '~/composables/audio/useQueue'
 import usePlayer from '~/composables/audio/usePlayer'
@@ -88,11 +87,6 @@ const labels = computed(() => ({
 const setCurrentTime = (time: number) => {
   currentTime.value = time
 }
-
-onMounted(() => {
-  // TODO (wvffle): Check if it is needed
-  Howler.unload() // clear existing cache, if any
-})
 
 const switchTab = () => {
   store.commit('ui/queueFocused', store.state.ui.queueFocused === 'player' ? 'queue' : 'player')
