@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 22:11+0000\n"
+"PO-Revision-Date: 2022-07-03 23:09+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/"
@@ -31,30 +31,36 @@ msgid ""
 "settings control high level pod configuration. You don't need to restart "
 "the pod after changing these settings."
 msgstr ""
+"You can find instance settings on your pod's web interface. These settings "
+"control high level pod configuration. You don't need to restart the pod "
+"after changing these settings."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:5
 msgid "To find your instance settings:"
-msgstr ""
+msgstr "To find your instance settings:"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Desktop"
-msgstr ""
+msgstr "Desktop"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:9
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:16
 msgid "Log in to your {term}`pod`."
-msgstr ""
+msgstr "Log in to your {term}`pod`."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:10
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
 "the {guilabel}`Administration` menu."
 msgstr ""
+"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the "
+"{guilabel}`Administration` menu."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:11
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:18
 msgid "Select {guilabel}`Settings`. The {guilabel}`Instance settings` page opens."
 msgstr ""
+"Select {guilabel}`Settings`. The {guilabel}`Instance settings` page opens."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Mobile"
@@ -65,68 +71,79 @@ msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the page to open the "
 "{guilabel}`Administration` menu."
 msgstr ""
+"Select the wrench icon ({fa}`wrench`) at the top of the page to open the "
+"{guilabel}`Administration` menu."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:22
 msgid "Available settings"
-msgstr ""
+msgstr "Available settings"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:24
 msgid "Instance information"
-msgstr ""
+msgstr "Instance information"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Pod name"
-msgstr ""
+msgstr "Pod name"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:28
 msgid ""
 "The public name of your Funkwhale pod. This is displayed on the \"Home\" "
 "and \"About\" pages."
 msgstr ""
+"The public name of your Funkwhale pod. This is displayed on the \"Home\" and "
+"\"About\" pages."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:3
 msgid "Short description"
-msgstr ""
+msgstr "Short description"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:31
 msgid ""
 "A short description of your pod. Users see this on the pod's \"Home\" "
 "page."
 msgstr ""
+"A short description of your pod. Users see this on the pod's \"Home\" page."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:6
 msgid "Long description"
-msgstr ""
+msgstr "Long description"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:34
 msgid ""
 "A longer description of your pod. Users see this on the pod's \"About\" "
 "page. Supports markdown formatting."
 msgstr ""
+"A longer description of your pod. Users see this on the pod's \"About\" "
+"page. Supports markdown formatting."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:9
 msgid "Contact email"
-msgstr ""
+msgstr "Contact email"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:37
 msgid ""
 "A contact email address that users and visitors can use to contact the "
 "pod administrator."
 msgstr ""
+"A contact email address that users and visitors can use to contact the pod "
+"administrator."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:12
 msgid "Rules"
-msgstr ""
+msgstr "Rules"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:40
 msgid ""
 "A free text field for you to add your pod's rules and code of conduct. "
 "This is seen on the pod's \"About\" page. Supports markdown formatting"
 msgstr ""
+"A free text field for you to add your pod's rules and code of conduct. This "
+"is seen on the pod's \"About\" page. Supports markdown formatting"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:15
 msgid "Terms of service"
-msgstr ""
+msgstr "Terms of service"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:43
 msgid ""
@@ -134,48 +151,58 @@ msgid ""
 "policy. This is seen on the pod's \"About\" page. Supports markdown "
 "formatting."
 msgstr ""
+"A free text field for you to add your pod's terms of service and privacy "
+"policy. This is seen on the pod's \"About\" page. Supports markdown "
+"formatting."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:18
 msgid "Banner image"
-msgstr ""
+msgstr "Banner image"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:46
 msgid ""
 "A large image seen on the pod's \"Home\" and \"About\" pages. The image "
 "should be at least 600x100px."
 msgstr ""
+"A large image seen on the pod's \"Home\" and \"About\" pages. The image "
+"should be at least 600x100px."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:21
 msgid "Support message"
-msgstr ""
+msgstr "Support message"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:49
 msgid ""
 "A short message you can display to your pod's users to ask for support or"
 " just send a periodic message. Supports markdown."
 msgstr ""
+"A short message you can display to your pod's users to ask for support or "
+"just send a periodic message. Supports markdown."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:56
 msgid "Sign-ups"
-msgstr ""
+msgstr "Sign-ups"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Open registration to new users"
-msgstr ""
+msgstr "Open registration to new users"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:60
 msgid "Enable this setting to allow new users to create an account on your pod."
 msgstr ""
+"Enable this setting to allow new users to create an account on your pod."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:3
 msgid "Enable manual sign-up validation"
-msgstr ""
+msgstr "Enable manual sign-up validation"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:63
 msgid ""
 "Enable this setting to require all new registrations to be validated by a"
 " moderator."
 msgstr ""
+"Enable this setting to require all new registrations to be validated by a "
+"moderator."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:6
 msgid "Sign-up form customization"
@@ -186,10 +213,12 @@ msgid ""
 "Use this tool to create a custom sign-up form. New users see this form "
 "when creating a new account. Supports markdown"
 msgstr ""
+"Use this tool to create a custom sign-up form. New users see this form when "
+"creating a new account. Supports markdown"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:73
 msgid "Security"
-msgstr ""
+msgstr "Security"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "API Requires authentication"
@@ -202,6 +231,10 @@ msgid ""
 "your pod to access content. If __disabled__, users without an account can"
 " listen to content stored in public libraries."
 msgstr ""
+"Controls whether {term}`unauthenticated users <Anonymous>` can access "
+"content on your pod. If __enabled__, users need to have an account on your "
+"pod to access content. If __disabled__, users without an account can listen "
+"to content stored in public libraries."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:80
 msgid "{doc}`../../moderator_documentation/content/library_visibility`."
@@ -216,6 +249,8 @@ msgid ""
 "A list of {term}`permissions` that are added to users by default. If your"
 " pod is publicly accessible, you should leave this empty."
 msgstr ""
+"A list of {term}`permissions` that are added to users by default. If your "
+"pod is publicly accessible, you should leave this empty."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:10
 msgid "Upload quota"
@@ -226,6 +261,8 @@ msgid ""
 "The default upload quota for users in MB. You can override this on a per-"
 "user basis."
 msgstr ""
+"The default upload quota for users in MB. You can override this on a per-"
+"user basis."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:90
 msgid "{doc}`../../moderator_documentation/reports/handle_users`"
@@ -233,7 +270,7 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:98
 msgid "Music"
-msgstr ""
+msgstr "Music"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Transcoding enabled"
@@ -245,6 +282,9 @@ msgid ""
 "format if the client requests it. This is useful if a device doesn't "
 "support formats like Ogg or FLAC."
 msgstr ""
+"Enable this setting to let your server transcode files into a different "
+"format if the client requests it. This is useful if a device doesn't support "
+"formats like Ogg or FLAC."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:3
 msgid "Transcoding cache duration"
@@ -256,6 +296,9 @@ msgid ""
 "Funkwhale removes transcoded tracks that haven't been downloaded within "
 "this duration to save space."
 msgstr ""
+"The number of minutes you want to store transcoded files on your server. "
+"Funkwhale removes transcoded tracks that haven't been downloaded within this "
+"duration to save space."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:110
 msgid "Channels"
@@ -267,7 +310,7 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:114
 msgid "Whether user channels can be created and followed on your pod."
-msgstr ""
+msgstr "Whether user channels can be created and followed on your pod."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:3
 msgid "Max channels allowed per user"
@@ -275,7 +318,7 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:117
 msgid "The maximum number of channels each user can create."
-msgstr ""
+msgstr "The maximum number of channels each user can create."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:124
 msgid "Playlists"
@@ -287,11 +330,11 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:128
 msgid "The maximum number of tracks a user can add to a playlist."
-msgstr ""
+msgstr "The maximum number of tracks a user can add to a playlist."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:135
 msgid "Moderation"
-msgstr ""
+msgstr "Moderation"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Enable allow-listing"
@@ -303,6 +346,9 @@ msgid ""
 "have added to your allow list. When this setting is disabled, your pod "
 "will communicate with all other servers not included in your deny list."
 msgstr ""
+"Enable this setting to ensure your pod only communicates with pods you have "
+"added to your allow list. When this setting is disabled, your pod will "
+"communicate with all other servers not included in your deny list."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:3
 msgid "Publish your allowed-domains list"
@@ -313,6 +359,8 @@ msgid ""
 "Whether to make your list of allowed domains public. Enable this if you "
 "want users to check who you are federating with."
 msgstr ""
+"Whether to make your list of allowed domains public. Enable this if you want "
+"users to check who you are federating with."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:6
 msgid "Accountless report categories"
@@ -323,10 +371,12 @@ msgid ""
 "A list of {term}`categories <Report categories>` that {term}`anonymous` "
 "users can submit."
 msgstr ""
+"A list of {term}`categories <Report categories>` that {term}`anonymous` "
+"users can submit."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:152
 msgid "Federation"
-msgstr ""
+msgstr "Federation"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Federation enabled"
@@ -334,7 +384,7 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:156
 msgid "Whether to enable federation features on your pod."
-msgstr ""
+msgstr "Whether to enable federation features on your pod."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:3
 msgid "Enable public index"
@@ -343,6 +393,7 @@ msgstr ""
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:159
 msgid "Whether to allow other pods and bots to index public content on your pod."
 msgstr ""
+"Whether to allow other pods and bots to index public content on your pod."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:6
 msgid "Federation collection page size"
@@ -350,7 +401,7 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:162
 msgid "The number of items to display in ActivityPub collections."
-msgstr ""
+msgstr "The number of items to display in ActivityPub collections."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:9
 msgid "Music cache duration"
@@ -362,6 +413,9 @@ msgid ""
 "on your server. Funkwhale removes federated tracks that haven't been "
 "downloaded within this duration to save space."
 msgstr ""
+"The number of minutes you want to store local copies of federated tracks on "
+"your server. Funkwhale removes federated tracks that haven't been downloaded "
+"within this duration to save space."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:12
 msgid "Federation actor fetch delay"
@@ -372,10 +426,12 @@ msgid ""
 "The number of minutes the server waits before refetching actors on "
 "request authentication."
 msgstr ""
+"The number of minutes the server waits before refetching actors on request "
+"authentication."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:175
 msgid "Subsonic"
-msgstr ""
+msgstr "Subsonic"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Enabled Subsonic API"
@@ -386,10 +442,12 @@ msgid ""
 "Whether to enable the Subsonic API. This controls whether users are able "
 "to connect to your pod using Subsonic apps."
 msgstr ""
+"Whether to enable the Subsonic API. This controls whether users are able to "
+"connect to your pod using Subsonic apps."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:186
 msgid "User Interface"
-msgstr ""
+msgstr "User Interface"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Custom CSS code"
@@ -400,6 +458,8 @@ msgid ""
 "Add CSS rules to control the look and feel of your pod. These rules are "
 "added to a `<style>` tag on each page."
 msgstr ""
+"Add CSS rules to control the look and feel of your pod. These rules are "
+"added to a `<style>` tag on each page."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:3
 msgid "Funkwhale Support message"
@@ -410,10 +470,12 @@ msgid ""
 "Whether to show a notification to your pod's users to support the "
 "Funkwhale project."
 msgstr ""
+"Whether to show a notification to your pod's users to support the Funkwhale "
+"project."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:200
 msgid "Statistics"
-msgstr ""
+msgstr "Statistics"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Enable usage and library stats in nodeinfo endpoint"
@@ -424,6 +486,8 @@ msgid ""
 "Whether to share anonymized usage and library statistics in your pod's "
 "nodeinfo endpoint."
 msgstr ""
+"Whether to share anonymised usage and library statistics in your pod's "
+"nodeinfo endpoint."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:3
 msgid "Private mode in nodeinfo"
@@ -434,3 +498,5 @@ msgid ""
 "Enable this setting to indicate you don't want your instance to be "
 "tracked by third-party services."
 msgstr ""
+"Enable this setting to indicate you don't want your instance to be tracked "
+"by third-party services."
