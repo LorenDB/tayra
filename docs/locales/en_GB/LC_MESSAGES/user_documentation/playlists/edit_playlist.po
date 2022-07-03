@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 21:18+0000\n"
+"PO-Revision-Date: 2022-07-03 21:21+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/user_documentation-playlists-edit_playlist/en_GB/>\n"
@@ -35,7 +35,7 @@ msgstr ""
 #: ../../user_documentation/playlists/edit_playlist.md:7
 #: ../../user_documentation/playlists/edit_playlist.md:20
 msgid "Log in to your account."
-msgstr ""
+msgstr "Log in to your account."
 
 #: ../../user_documentation/playlists/edit_playlist.md:8
 msgid ""
