@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 21:18+0000\n"
+"PO-Revision-Date: 2022-07-03 23:09+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/moderator_documentation-domains-add_domain/en_GB/>\n"
@@ -47,18 +47,20 @@ msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md
 msgid "Desktop"
-msgstr ""
+msgstr "Desktop"
 
 #: ../../moderator_documentation/domains/add_domain.md:13
 #: ../../moderator_documentation/domains/add_domain.md:24
 msgid "Log in to your {term}`pod`."
-msgstr ""
+msgstr "Log in to your {term}`pod`."
 
 #: ../../moderator_documentation/domains/add_domain.md:14
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
 "the {guilabel}`Administration` menu."
 msgstr ""
+"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the "
+"{guilabel}`Administration` menu."
 
 #: ../../moderator_documentation/domains/add_domain.md:15
 #: ../../moderator_documentation/domains/add_domain.md:26
@@ -96,6 +98,8 @@ msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the page to open the "
 "{guilabel}`Administration` menu."
 msgstr ""
+"Select the wrench icon ({fa}`wrench`) at the top of the page to open the "
+"{guilabel}`Administration` menu."
 
 #: ../../moderator_documentation/domains/add_domain.md:33
 msgid ""
