@@ -7,18 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-03 01:39+0200\n"
 "PO-Revision-Date: 2022-07-02 21:07+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
-"Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
-"projects/documentation/"
-"administrator_documentation-configuration_docs-env_file/en_GB/>\n"
 "Language: en_GB\n"
+"Language-Team: English (United Kingdom) "
+"<https://translate.funkwhale.audio/projects/documentation"
+"/administrator_documentation-configuration_docs-env_file/en_GB/>\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13\n"
 "Generated-By: Babel 2.10.1\n"
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:1
@@ -226,7 +225,7 @@ msgstr ""
 #: ../../docstring config.settings.common.EXTERNAL_MEDIA_PROXY_ENABLED:1 of
 msgid ""
 "Whether to proxy attachment files hosted on third party pods and and "
-"servers. Leaving this set to ``true`` is recommended. This reduces the "
+"servers. We recommend you leave this set to ``true``. This reduces the "
 "risk of leaking user browsing information and reduces the bandwidth used "
 "on remote pods."
 msgstr ""
@@ -398,6 +397,12 @@ msgstr ""
 msgid "``signup=5/d,password-reset=2/d,anonymous-reports=5/d``"
 msgstr ""
 
+#: ../../administrator_documentation/configuration_docs/env_file.md:146
+msgid ""
+"See [Rate limit API endpoints](rate-limiting.md) for a list of available "
+"endpoints and their default limits."
+msgstr ""
+
 #: ../../docstring config.settings.common.ADMIN_URL:1 of
 msgid "Path to the Django admin dashboard."
 msgstr ""
@@ -417,14 +422,14 @@ msgid ""
 msgstr ""
 
 #: ../../docstring config.settings.common.EXTERNAL_REQUESTS_VERIFY_SSL:4 of
-msgid "Disabling this feature is not recommended."
+msgid "We recommend you leave this setting enabled."
 msgstr ""
 
 #: ../../docstring config.settings.common.EXTERNAL_REQUESTS_TIMEOUT:1 of
 msgid "Default timeout for external requests."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:202
+#: ../../administrator_documentation/configuration_docs/env_file.md:156
 msgid "Federation configuration"
 msgstr ""
 
@@ -438,7 +443,7 @@ msgstr ""
 msgid "The delay in seconds between two manual fetches of the same remote object."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:211
+#: ../../administrator_documentation/configuration_docs/env_file.md:165
 msgid "Metadata configuration"
 msgstr ""
 
@@ -467,7 +472,7 @@ msgstr ""
 msgid "Length of time in seconds to cache MusicBrainz results."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:221
+#: ../../administrator_documentation/configuration_docs/env_file.md:175
 msgid "Channels and podcast configuration"
 msgstr ""
 
@@ -488,7 +493,7 @@ msgstr ""
 #: ../../docstring config.settings.common.PODCASTS_THIRD_PARTY_VISIBILITY:1 of
 msgid ""
 "By default, only people who subscribe to a podcast RSS have access to its"
-" episodes. Switch to \"instance\" or \"everyone\" to change the default "
+" episodes. Change to ``instance`` or ``everyone`` to change the default "
 "visibility."
 msgstr ""
 
@@ -496,7 +501,7 @@ msgstr ""
 msgid "Changing this value only affect new podcasts."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:231
+#: ../../administrator_documentation/configuration_docs/env_file.md:185
 msgid "Subsonic configuration"
 msgstr ""
 
@@ -505,7 +510,7 @@ msgstr ""
 msgid "The default format files are transcoded into when using the Subsonic API."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:239
+#: ../../administrator_documentation/configuration_docs/env_file.md:193
 msgid "Email configuration"
 msgstr ""
 
@@ -540,51 +545,55 @@ msgid "``EMAIL_CONFIG=smtp+tls://user:password@youremail.host:587``"
 msgstr ""
 
 #: ../../docstring config.settings.common.DEFAULT_FROM_EMAIL:1 of
-msgid "Name and email address used to send system emails."
+msgid ""
+"The name and email address used to send system emails. Defaults to "
+"``Funkwhale <noreply@yourdomain>``."
 msgstr ""
 
-#: ../../docstring config.settings.common.DEFAULT_FROM_EMAIL:3 of
-msgid "Default: ``Funkwhale <noreply@yourdomain>``"
+#: ../../docstring config.settings.common.DEFAULT_FROM_EMAIL:4 of
+msgid "Available formats:"
+msgstr ""
+
+#: ../../docstring config.settings.common.DEFAULT_FROM_EMAIL:6 of
+msgid "``Name <email address>``"
 msgstr ""
 
 #: ../../docstring config.settings.common.DEFAULT_FROM_EMAIL:7 of
-msgid ""
-"Both the forms ``Funkwhale <noreply@yourdomain>`` and "
-"``noreply@yourdomain`` work."
+msgid "``<Email address>``"
 msgstr ""
 
 #: ../../docstring config.settings.common.EMAIL_SUBJECT_PREFIX:1 of
 msgid "Subject prefix for system emails."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:251
+#: ../../administrator_documentation/configuration_docs/env_file.md:205
 msgid "Plugin configuration"
 msgstr ""
 
 #: ../../docstring config.settings.common.FUNKWHALE_PLUGINS_PATH:1 of
 msgid ""
-"Path to a directory containing Funkwhale plugins. These will be imported "
-"at runtime."
+"Path to a directory containing Funkwhale plugins. These are imported at "
+"runtime."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:264
+#: ../../administrator_documentation/configuration_docs/env_file.md:218
 msgid "List of Funkwhale plugins to load."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:267
+#: ../../administrator_documentation/configuration_docs/env_file.md:221
 msgid "Other settings"
 msgstr ""
 
 #: ../../docstring config.settings.common.INSTANCE_SUPPORT_MESSAGE_DELAY:1 of
 msgid ""
-"The number of days after signup before the \"support your pod\" message "
-"is shown."
+"The number of days before your pod shows the \"support your pod\" "
+"message. The timer starts after the user signs up."
 msgstr ""
 
 #: ../../docstring config.settings.common.FUNKWHALE_SUPPORT_MESSAGE_DELAY:1 of
 msgid ""
-"The number of days after signup before the \"support Funkwhale\" message "
-"is shown."
+"The number of days before your pod shows the \"support Funkwhale\" "
+"message. The timer starts after the user signs up."
 msgstr ""
 
 #: ../../docstring config.settings.common.MIN_DELAY_BETWEEN_DOWNLOADS_COUNT:1
@@ -605,3 +614,64 @@ msgstr ""
 #: ../../docstring config.settings.common.LINKIFIER_SUPPORTED_TLDS:1 of
 msgid "Additional TLDs to support with our markdown linkifier."
 msgstr ""
+
+#~ msgid ""
+#~ "Whether to proxy attachment files hosted"
+#~ " on third party pods and and "
+#~ "servers. Leaving this set to ``true``"
+#~ " is recommended. This reduces the "
+#~ "risk of leaking user browsing "
+#~ "information and reduces the bandwidth "
+#~ "used on remote pods."
+#~ msgstr ""
+
+#~ msgid "Disabling this feature is not recommended."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "By default, only people who subscribe"
+#~ " to a podcast RSS have access "
+#~ "to its episodes. Switch to \"instance\""
+#~ " or \"everyone\" to change the "
+#~ "default visibility."
+#~ msgstr ""
+
+#~ msgid "Name and email address used to send system emails."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Both the forms ``Funkwhale "
+#~ "<noreply@yourdomain>`` and ``noreply@yourdomain`` "
+#~ "work."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Path to a directory containing Funkwhale"
+#~ " plugins. These will be imported at"
+#~ " runtime."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The number of days after signup "
+#~ "before the \"support your pod\" message"
+#~ " is shown."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The number of days after signup "
+#~ "before the \"support Funkwhale\" message "
+#~ "is shown."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Name and email address used to "
+#~ "send system emails. Format is ``Name "
+#~ "<email address>`` or ``email address``."
+#~ msgstr ""
+
+#~ msgid "Default: ``Funkwhale <noreply@yourdomain>``"
+#~ msgstr ""
+
+#~ msgid "``<Email address>``."
+#~ msgstr ""
+

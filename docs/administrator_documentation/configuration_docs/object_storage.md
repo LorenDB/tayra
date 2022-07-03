@@ -51,18 +51,28 @@ To set up S3-compatible storage, fill out the relevant details in the `.env` fil
    ```{eval-rst}
 
    .. autodata:: config.settings.common.AWS_QUERYSTRING_AUTH
+      :noindex:
    .. autodata:: config.settings.common.AWS_QUERYSTRING_EXPIRE
+      :noindex:
    .. autodata:: config.settings.common.AWS_ACCESS_KEY_ID
+      :noindex:
    .. autodata:: config.settings.common.AWS_SECRET_ACCESS_KEY
+      :noindex:
    .. autodata:: config.settings.common.AWS_STORAGE_BUCKET_NAME
+      :noindex:
    .. autodata:: config.settings.common.AWS_S3_CUSTOM_DOMAIN
+      :noindex:
    .. autodata:: config.settings.common.AWS_S3_ENDPOINT_URL
+      :noindex:
       :annotation: = https://minio.mydomain.com
    .. autodata:: config.settings.common.AWS_S3_REGION_NAME
+      :noindex:
       :annotation: = eu-west-2
    .. autodata:: config.settings.common.AWS_LOCATION
+      :noindex:
       :annotation: = funkwhale_music
    .. autodata:: config.settings.common.PROXY_MEDIA
+      :noindex:
 
    ```
 

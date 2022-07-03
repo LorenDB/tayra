@@ -7,7 +7,7 @@ We recommend you don't change your instance URL. Changing it __will__ cause inst
 Your instance URL is your pod's unique identifier in the {term}`fediverse`. If you want to change it, you need to update a lot of information
 
 - The instance URL in your {file}`.env` file.
-- The instance URL in your vhost.
+- The instance URL in your webserver config.
 - Any references to the old URL in your database.
 
 To clean the database, the {file}`manage.py` script contains a `fix_federation_ids` command.
@@ -18,7 +18,7 @@ Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make 
 
 ## Update your instance URL
 
-1. Change the `FUNKWHALE_HOSTNAME`  and `DJANGO_ALLOWED_HOSTS` value in your {file}`.env` file.
+1. Change the `FUNKWHALE_HOSTNAME` and `DJANGO_ALLOWED_HOSTS` value in your {file}`.env` file.
 2. Change the `server_name` values in your {file}`/etc/nginx/sites-enabled/funkwhale.conf` file.
 3. Run the `fix_federation_ids` command to clean up your database.
 

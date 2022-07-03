@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-03 01:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,7 +75,7 @@ msgid "Apache"
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/frontend.md:62
-msgid "Add the following snippet to your vhost configuration:"
+msgid "Add the following snippet to your webserver configuration:"
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/frontend.md:70
@@ -103,7 +103,7 @@ msgid "Add the location of your CSS file to the `additionalStylesheets` paramete
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/frontend.md:107
-msgid "Add the whole {file}`custom` dir to your vhost configuration."
+msgid "Add the whole {file}`custom` dir to your webserver configuration."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/frontend.md:111
@@ -111,7 +111,7 @@ msgid "Add the following to your {file}`/etc/nginx/sites-available/funkwhale.con
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/frontend.md:122
-msgid "Add the following to your vhost file."
+msgid "Add the following to your webserver configuration file."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/frontend.md:135

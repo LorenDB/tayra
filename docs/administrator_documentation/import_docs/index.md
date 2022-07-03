@@ -145,8 +145,20 @@ To use the in-place import method, follow these steps:
 
 ````{tabbed} Debian
 
-1. Add your storage location to your `.env` file if you don't want to link it to the Funkwhale store. See the [in-place import configuration variables](../configuration_docs/env_file.md#in-place-import-configuration) for more information.
-2. Run your import command against your music storage directory:
+1. Log in to your server and navigate to your Funkwhale directory.
+
+   ```{code} bash
+   cd /srv/funkwhale
+   ```
+
+2. Add your storage location to your `.env` file if you don't want to link it to the Funkwhale store. See the [in-place import configuration variables](../configuration_docs/env_file.md#in-place-import-configuration) for more information.
+3. Export your library ID to reference it later. In this example, the library ID is "769a2bc3". Replace this with your library ID.
+
+   ```{code} bash
+   export LIBRARY_ID="769a2bc3"
+   ```
+
+4. Run your import command against your music storage directory. In this example, the storage directory is `/srv/funkwhale/data/music/nfsshare`. Replace this with your storage directory.
 
 ```{code} bash
 poetry run python manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place

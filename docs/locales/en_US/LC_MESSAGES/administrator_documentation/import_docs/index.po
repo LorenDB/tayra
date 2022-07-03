@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-03 12:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,10 +146,12 @@ msgid ""
 msgstr ""
 
 #: ../../administrator_documentation/import_docs/index.md:74
+#: ../../administrator_documentation/import_docs/index.md:148
 msgid "Log in to your server and navigate to your Funkwhale directory."
 msgstr ""
 
 #: ../../administrator_documentation/import_docs/index.md:80
+#: ../../administrator_documentation/import_docs/index.md:155
 msgid ""
 "Export your library ID to reference it later. In this example, the "
 "library ID is \"769a2bc3\". Replace this with your library ID."
@@ -218,7 +220,7 @@ msgstr ""
 msgid "To use the in-place import method, follow these steps:"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:148
+#: ../../administrator_documentation/import_docs/index.md:154
 msgid ""
 "Add your storage location to your `.env` file if you don't want to link "
 "it to the Funkwhale store. See the [in-place import configuration "
@@ -226,19 +228,21 @@ msgid ""
 "configuration) for more information."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:149
-#: ../../administrator_documentation/import_docs/index.md:162
-msgid "Run your import command against your music storage directory:"
+#: ../../administrator_documentation/import_docs/index.md:161
+msgid ""
+"Run your import command against your music storage directory. In this "
+"example, the storage directory is `/srv/funkwhale/data/music/nfsshare`. "
+"Replace this with your storage directory."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:155
-#: ../../administrator_documentation/import_docs/index.md:168
+#: ../../administrator_documentation/import_docs/index.md:167
+#: ../../administrator_documentation/import_docs/index.md:180
 msgid ""
 "Funkwhale imports the music in your storage directory into the specified "
 "library."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:161
+#: ../../administrator_documentation/import_docs/index.md:173
 msgid ""
 "Add your storage location to your `.env` file if you don't want to bind "
 "it to the Funkwhale store. See the [in-place import configuration "
@@ -246,35 +250,39 @@ msgid ""
 "configuration) for more information."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:172
+#: ../../administrator_documentation/import_docs/index.md:174
+msgid "Run your import command against your music storage directory:"
+msgstr ""
+
+#: ../../administrator_documentation/import_docs/index.md:184
 msgid "Album art"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:174
+#: ../../administrator_documentation/import_docs/index.md:186
 msgid ""
 "Funkwhale attempts to import album art for your music library. The import"
 " process checks for the following."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:176
+#: ../../administrator_documentation/import_docs/index.md:188
 msgid "The cover embedded in the audio files (works with FLAC and MP3 files)."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:177
+#: ../../administrator_documentation/import_docs/index.md:189
 msgid "A `cover.jpg` or `cover.png` in the the track's directory."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:178
+#: ../../administrator_documentation/import_docs/index.md:190
 msgid ""
 "An `mbid` in the file's tags. If there is an `mbid`, the import process "
 "tries to fetch cover art from Musicbrainz."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:180
+#: ../../administrator_documentation/import_docs/index.md:192
 msgid "Watch for filesystem changes"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:182
+#: ../../administrator_documentation/import_docs/index.md:194
 msgid ""
 "You can run the `import_files` command any time you add new files or "
 "update files. For larger collections, this may not be practical. To watch"
@@ -283,105 +291,105 @@ msgid ""
 "and update your database when something changes."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:184
+#: ../../administrator_documentation/import_docs/index.md:196
 msgid ""
 "The `--watch` flag performs the following actions when it detects a "
 "change:"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:186
+#: ../../administrator_documentation/import_docs/index.md:198
 msgid "File created – imports the track."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:187
+#: ../../administrator_documentation/import_docs/index.md:199
 msgid "File moved – updates the location of the track in the database."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:188
+#: ../../administrator_documentation/import_docs/index.md:200
 msgid "File metadata updated – updates the track metadata in the database."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:189
+#: ../../administrator_documentation/import_docs/index.md:201
 msgid "File deleted – removes the file from the database."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:193
+#: ../../administrator_documentation/import_docs/index.md:205
 msgid ""
 "The `import_files --watch` command watches for changes to the following "
 "metadata fields:"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:195
+#: ../../administrator_documentation/import_docs/index.md:207
 msgid "Track mbid"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:196
+#: ../../administrator_documentation/import_docs/index.md:208
 msgid "Track title"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:197
+#: ../../administrator_documentation/import_docs/index.md:209
 msgid "Track position and disc number"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:198
+#: ../../administrator_documentation/import_docs/index.md:210
 msgid "Track license and copyright"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:199
+#: ../../administrator_documentation/import_docs/index.md:211
 msgid "Track genre"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:200
+#: ../../administrator_documentation/import_docs/index.md:212
 msgid "Album cover"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:201
+#: ../../administrator_documentation/import_docs/index.md:213
 msgid "Album title"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:202
+#: ../../administrator_documentation/import_docs/index.md:214
 msgid "Album mbid"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:203
+#: ../../administrator_documentation/import_docs/index.md:215
 msgid "Album release date"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:204
+#: ../../administrator_documentation/import_docs/index.md:216
 msgid "Artist name"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:205
+#: ../../administrator_documentation/import_docs/index.md:217
 msgid "Artist mbid"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:206
+#: ../../administrator_documentation/import_docs/index.md:218
 msgid "Album artist name"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:207
+#: ../../administrator_documentation/import_docs/index.md:219
 msgid "Album artist mbid"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:227
+#: ../../administrator_documentation/import_docs/index.md:239
 msgid "Prune dangling metadata"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:229
+#: ../../administrator_documentation/import_docs/index.md:241
 msgid ""
 "Funkwhale doesn't delete track metadata when you delete a track. This is "
 "useful if you want to delete a file but keep a record of a track for "
 "created playlists or favorites."
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:231
+#: ../../administrator_documentation/import_docs/index.md:243
 msgid ""
 "If you want to remove the file's metadata when you delete the file, run "
 "`import_files` with the `--prune` flag. This flag removes the metadata of"
 " any"
 msgstr ""
 
-#: ../../administrator_documentation/import_docs/index.md:234
+#: ../../administrator_documentation/import_docs/index.md:246
 msgid ""
 "You can use the `--prune` flag with the `--watch` flag. This means "
 "Funkwhale removes the metadata of referenced files you delete from your "

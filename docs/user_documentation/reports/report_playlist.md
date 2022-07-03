@@ -10,7 +10,7 @@ If a playlist's content violates a {term}`pod's <Pod>` rules or the law, you can
 4. Select {guilabel}`Report this playlist`. A {guilabel}`Do you want to report this object?` menu appears.
 5. Select a {guilabel}`Category`. Choose one of the following:
    - __Takedown request__ – request removal of copyrighted material.
-   - __Illegal content__ –  report a playlist that features illegal content.
+   - __Illegal content__ – report a playlist that features illegal content.
    - __Offensive content__ – report a playlist that features offensive or abusive content.
    - __Invalid metadata__ – report that a playlist's content features invalid metadata.
    - __Other__ – submit details of your report in the {guilabel}`Message` field.
@@ -29,7 +29,7 @@ If a playlist's content violates a {term}`pod's <Pod>` rules or the law, you can
 5. Select {guilabel}`Report this playlist`. A {guilabel}`Do you want to report this object?` menu appears.
 6. Select a {guilabel}`Category`. Choose one of the following:
    - __Takedown request__ – request removal of copyrighted material.
-   - __Illegal content__ –  report a playlist that features illegal content.
+   - __Illegal content__ – report a playlist that features illegal content.
    - __Offensive content__ – report a playlist that features offensive or abusive content.
    - __Invalid metadata__ – report that a playlist's content features invalid metadata.
    - __Other__ – submit details of your report in the {guilabel}`Message` field.

@@ -16,5 +16,6 @@ optimize
 ldap
 change_url
 mrf
+rate-limiting
 
 ```

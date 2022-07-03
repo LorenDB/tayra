@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-03 01:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -176,7 +176,7 @@ msgid "If you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH` enabled, it'
 msgstr ""
 
 #: ../../docstring of config.settings.common.EXTERNAL_MEDIA_PROXY_ENABLED:1
-msgid "Whether to proxy attachment files hosted on third party pods and and servers. Leaving this set to ``true`` is recommended. This reduces the risk of leaking user browsing information and reduces the bandwidth used on remote pods."
+msgid "Whether to proxy attachment files hosted on third party pods and and servers. We recommend you leave this set to ``true``. This reduces the risk of leaking user browsing information and reduces the bandwidth used on remote pods."
 msgstr ""
 
 #: ../../docstring of config.settings.common.ATTACHMENTS_UNATTACHED_PRUNE_DELAY:1
@@ -310,6 +310,10 @@ msgstr ""
 msgid "``signup=5/d,password-reset=2/d,anonymous-reports=5/d``"
 msgstr ""
 
+#: ../../administrator_documentation/configuration_docs/env_file.md:146
+msgid "See [Rate limit API endpoints](rate-limiting.md) for a list of available endpoints and their default limits."
+msgstr ""
+
 #: ../../docstring of config.settings.common.ADMIN_URL:1
 msgid "Path to the Django admin dashboard."
 msgstr ""
@@ -327,14 +331,14 @@ msgid "Whether to enforce TLS certificate verification when performing outgoing 
 msgstr ""
 
 #: ../../docstring of config.settings.common.EXTERNAL_REQUESTS_VERIFY_SSL:4
-msgid "Disabling this feature is not recommended."
+msgid "We recommend you leave this setting enabled."
 msgstr ""
 
 #: ../../docstring of config.settings.common.EXTERNAL_REQUESTS_TIMEOUT:1
 msgid "Default timeout for external requests."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:202
+#: ../../administrator_documentation/configuration_docs/env_file.md:156
 msgid "Federation configuration"
 msgstr ""
 
@@ -346,7 +350,7 @@ msgstr ""
 msgid "The delay in seconds between two manual fetches of the same remote object."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:211
+#: ../../administrator_documentation/configuration_docs/env_file.md:165
 msgid "Metadata configuration"
 msgstr ""
 
@@ -370,7 +374,7 @@ msgstr ""
 msgid "Length of time in seconds to cache MusicBrainz results."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:221
+#: ../../administrator_documentation/configuration_docs/env_file.md:175
 msgid "Channels and podcast configuration"
 msgstr ""
 
@@ -387,14 +391,14 @@ msgid "Maximum number of RSS items to load in each podcast feed."
 msgstr ""
 
 #: ../../docstring of config.settings.common.PODCASTS_THIRD_PARTY_VISIBILITY:1
-msgid "By default, only people who subscribe to a podcast RSS have access to its episodes. Switch to \"instance\" or \"everyone\" to change the default visibility."
+msgid "By default, only people who subscribe to a podcast RSS have access to its episodes. Change to ``instance`` or ``everyone`` to change the default visibility."
 msgstr ""
 
 #: ../../docstring of config.settings.common.PODCASTS_THIRD_PARTY_VISIBILITY:7
 msgid "Changing this value only affect new podcasts."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:231
+#: ../../administrator_documentation/configuration_docs/env_file.md:185
 msgid "Subsonic configuration"
 msgstr ""
 
@@ -402,7 +406,7 @@ msgstr ""
 msgid "The default format files are transcoded into when using the Subsonic API."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:239
+#: ../../administrator_documentation/configuration_docs/env_file.md:193
 msgid "Email configuration"
 msgstr ""
 
@@ -435,43 +439,47 @@ msgid "``EMAIL_CONFIG=smtp+tls://user:password@youremail.host:587``"
 msgstr ""
 
 #: ../../docstring of config.settings.common.DEFAULT_FROM_EMAIL:1
-msgid "Name and email address used to send system emails."
+msgid "The name and email address used to send system emails. Defaults to ``Funkwhale <noreply@yourdomain>``."
 msgstr ""
 
-#: ../../docstring of config.settings.common.DEFAULT_FROM_EMAIL:3
-msgid "Default: ``Funkwhale <noreply@yourdomain>``"
+#: ../../docstring of config.settings.common.DEFAULT_FROM_EMAIL:4
+msgid "Available formats:"
+msgstr ""
+
+#: ../../docstring of config.settings.common.DEFAULT_FROM_EMAIL:6
+msgid "``Name <email address>``"
 msgstr ""
 
 #: ../../docstring of config.settings.common.DEFAULT_FROM_EMAIL:7
-msgid "Both the forms ``Funkwhale <noreply@yourdomain>`` and ``noreply@yourdomain`` work."
+msgid "``<Email address>``"
 msgstr ""
 
 #: ../../docstring of config.settings.common.EMAIL_SUBJECT_PREFIX:1
 msgid "Subject prefix for system emails."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:251
+#: ../../administrator_documentation/configuration_docs/env_file.md:205
 msgid "Plugin configuration"
 msgstr ""
 
 #: ../../docstring of config.settings.common.FUNKWHALE_PLUGINS_PATH:1
-msgid "Path to a directory containing Funkwhale plugins. These will be imported at runtime."
+msgid "Path to a directory containing Funkwhale plugins. These are imported at runtime."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:264
+#: ../../administrator_documentation/configuration_docs/env_file.md:218
 msgid "List of Funkwhale plugins to load."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:267
+#: ../../administrator_documentation/configuration_docs/env_file.md:221
 msgid "Other settings"
 msgstr ""
 
 #: ../../docstring of config.settings.common.INSTANCE_SUPPORT_MESSAGE_DELAY:1
-msgid "The number of days after signup before the \"support your pod\" message is shown."
+msgid "The number of days before your pod shows the \"support your pod\" message. The timer starts after the user signs up."
 msgstr ""
 
 #: ../../docstring of config.settings.common.FUNKWHALE_SUPPORT_MESSAGE_DELAY:1
-msgid "The number of days after signup before the \"support Funkwhale\" message is shown."
+msgid "The number of days before your pod shows the \"support Funkwhale\" message. The timer starts after the user signs up."
 msgstr ""
 
 #: ../../docstring of config.settings.common.MIN_DELAY_BETWEEN_DOWNLOADS_COUNT:1

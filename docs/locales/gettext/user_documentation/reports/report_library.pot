@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-03 01:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgid "__Takedown request__ – request removal of copyrighted material."
 msgstr ""
 
 #: ../../user_documentation/reports/report_library.md:10
-msgid "__Illegal content__ –  report a library that features illegal content."
+msgid "__Illegal content__ – report a library that features illegal content."
 msgstr ""
 
 #: ../../user_documentation/reports/report_library.md:11

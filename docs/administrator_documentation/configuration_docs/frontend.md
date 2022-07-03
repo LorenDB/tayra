@@ -59,7 +59,7 @@ location /settings.json {
 
 ````{tabbed} Apache
 
-Add the following snippet to your vhost configuration:
+Add the following snippet to your webserver configuration:
 
 ```
 Alias /settings.json /srv/funkwhale/custom/settings.json
@@ -104,7 +104,7 @@ You can use a custom stylesheet to theme your Funkwhale pod. To do this:
    # }
    ```
 
-4. Add the whole {file}`custom` dir to your vhost configuration.
+4. Add the whole {file}`custom` dir to your webserver configuration.
 
    ````{tabbed} Nginx
 
@@ -119,7 +119,7 @@ You can use a custom stylesheet to theme your Funkwhale pod. To do this:
 
    ````{tabbed} Apache
 
-   Add the following to your vhost file.
+   Add the following to your webserver configuration file.
 
    ```
    Alias /custom /srv/funkwhale/custom

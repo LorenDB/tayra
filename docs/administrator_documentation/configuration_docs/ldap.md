@@ -34,6 +34,7 @@ You can configure LDAP authentication using environment variables in your `.env`
 ---
 value: True
 type: Boolean
+noindex: True
 ---
 
 Set this to `True` to enable LDAP support

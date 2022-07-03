@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-03 00:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,66 +64,66 @@ msgstr ""
 msgid "Basic features"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:39
+#: ../../administrator_documentation/configuration_docs/ldap.md:40
 msgid "Set this to `True` to enable LDAP support"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:48
+#: ../../administrator_documentation/configuration_docs/ldap.md:49
 msgid "The LDAP {abbr}`URI (Uniform Resource Identifier)` of your authentication server."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:57
+#: ../../administrator_documentation/configuration_docs/ldap.md:58
 msgid "LDAP user {abbr}`DN (Distinguised Name)` to bind on so you can perform searches."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:66
+#: ../../administrator_documentation/configuration_docs/ldap.md:67
 msgid "LDAP user password for bind {abbr}`DN (Distinguised Name)`."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:75
+#: ../../administrator_documentation/configuration_docs/ldap.md:76
 msgid "The LDAP user filter, using `{0}` as the username placeholder. Uses standard [LDAP search syntax](https://social.technet.microsoft.com/wiki/contents/articles/5392.active-directory-ldap-syntax-filters.aspx)."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:84
+#: ../../administrator_documentation/configuration_docs/ldap.md:85
 msgid "Set to `True` to enable LDAP StartTLS support."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:93
+#: ../../administrator_documentation/configuration_docs/ldap.md:94
 msgid "The LDAP search root {abbr}`DN (Distinguised Name)`. Supports several entries in a comma-delimited list."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:102
+#: ../../administrator_documentation/configuration_docs/ldap.md:103
 msgid "A mapping of Django user attributes to LDAP values."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:111
+#: ../../administrator_documentation/configuration_docs/ldap.md:112
 msgid "Controls whether to use direct binding."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:114
+#: ../../administrator_documentation/configuration_docs/ldap.md:115
 msgid "Group features"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:116
+#: ../../administrator_documentation/configuration_docs/ldap.md:117
 msgid "LDAP provides extra features for working with groups. Group configuration is an advanced feature. Most users don't need to configure these settings."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:119
+#: ../../administrator_documentation/configuration_docs/ldap.md:120
 msgid "[Django's LDAP documentation](https://django-auth-ldap.readthedocs.io/en/latest/groups.html) for groups."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:128
+#: ../../administrator_documentation/configuration_docs/ldap.md:129
 msgid "The LDAP group search root {abbr}`DN (Distinguised Name)`. This needs to be set to `True` to enable group features."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:137
+#: ../../administrator_documentation/configuration_docs/ldap.md:138
 msgid "The LDAP group filter."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:146
+#: ../../administrator_documentation/configuration_docs/ldap.md:147
 msgid "The group that users need to be a member of to authenticate."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/ldap.md:155
+#: ../../administrator_documentation/configuration_docs/ldap.md:156
 msgid "A group whose members can't authenticate."
 msgstr ""

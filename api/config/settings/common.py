@@ -82,7 +82,7 @@ FUNKWHALE_PLUGINS_PATH = env(
 )
 """
 Path to a directory containing Funkwhale plugins.
-These will be imported at runtime.
+These are imported at runtime.
 """
 sys.path.append(FUNKWHALE_PLUGINS_PATH)
 CORE_PLUGINS = [
@@ -309,14 +309,13 @@ DEFAULT_FROM_EMAIL = env(
     "DEFAULT_FROM_EMAIL", default="Funkwhale <noreply@{}>".format(FUNKWHALE_HOSTNAME)
 )
 """
-Name and email address used to send system emails.
+The name and email address used to send system emails.
+Defaults to ``Funkwhale <noreply@yourdomain>``.
 
-Default: ``Funkwhale <noreply@yourdomain>``
+Available formats:
 
-.. note::
-
-    Both the forms ``Funkwhale <noreply@yourdomain>`` and
-    ``noreply@yourdomain`` work.
+- ``Name <email address>``
+- ``<Email address>``
 
 """
 EMAIL_SUBJECT_PREFIX = env("EMAIL_SUBJECT_PREFIX", default="[Funkwhale] ")
@@ -446,7 +445,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap3"
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = env("STATIC_ROOT", default=str(ROOT_DIR("staticfiles")))
 """
-Path were static files should be collected.
+The path where static files are collected.
 """
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = env("STATIC_URL", default=FUNKWHALE_URL + "/staticfiles/")
@@ -471,7 +470,7 @@ a bucket's ACL and policy, meaning a default private ACL will supercede
 a relaxed bucket policy.
 
 If present, the value should be a valid canned ACL.
-See: https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl
+See `<https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl>`_
 """
 AWS_QUERYSTRING_AUTH = env.bool("AWS_QUERYSTRING_AUTH", default=not PROXY_MEDIA)
 """
@@ -1178,7 +1177,7 @@ EXTERNAL_REQUESTS_VERIFY_SSL = env.bool("EXTERNAL_REQUESTS_VERIFY_SSL", default=
 Whether to enforce TLS certificate verification
 when performing outgoing HTTP requests.
 
-Disabling this feature is not recommended.
+We recommend you leave this setting enabled.
 """
 EXTERNAL_REQUESTS_TIMEOUT = env.int("EXTERNAL_REQUESTS_TIMEOUT", default=10)
 """
@@ -1296,11 +1295,13 @@ The delay in seconds between two manual fetches of the same remote object.
 """
 INSTANCE_SUPPORT_MESSAGE_DELAY = env.int("INSTANCE_SUPPORT_MESSAGE_DELAY", default=15)
 """
-The number of days after signup before the "support your pod" message is shown.
+The number of days before your pod shows the "support your pod" message.
+The timer starts after the user signs up.
 """
 FUNKWHALE_SUPPORT_MESSAGE_DELAY = env.int("FUNKWHALE_SUPPORT_MESSAGE_DELAY", default=15)
 """
-The number of days after signup before the "support Funkwhale" message is shown.
+The number of days before your pod shows the "support Funkwhale" message.
+The timer starts after the user signs up.
 """
 
 MIN_DELAY_BETWEEN_DOWNLOADS_COUNT = env.int(
@@ -1323,14 +1324,14 @@ Additional TLDs to support with our markdown linkifier.
 EXTERNAL_MEDIA_PROXY_ENABLED = env.bool("EXTERNAL_MEDIA_PROXY_ENABLED", default=True)
 """
 Whether to proxy attachment files hosted on third party pods and and servers.
-Leaving this set to ``true`` is recommended. This reduces the risk of leaking
+We recommend you leave this set to ``true``. This reduces the risk of leaking
 user browsing information and reduces the bandwidth used on remote pods.
 """
 PODCASTS_THIRD_PARTY_VISIBILITY = env("PODCASTS_THIRD_PARTY_VISIBILITY", default="me")
 """
 By default, only people who subscribe to a podcast RSS have access
-to its episodes. Switch to "instance" or "everyone" to change the default
-visibility.
+to its episodes. Change to ``instance`` or ``everyone`` to change the
+default visibility.
 
 .. note::
 
