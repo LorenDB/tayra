@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 21:26+0000\n"
+"PO-Revision-Date: 2022-07-03 21:29+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/user_documentation-channels-upload_artist/en_GB/>\n"
@@ -125,7 +125,7 @@ msgstr ""
 
 #: ../../user_documentation/channels/upload_artist.md:42
 msgid "Select the kebab menu ({fa}`ellipsis-v`) to show the album options."
-msgstr ""
+msgstr "Select the kebab menu ({fa}`ellipsis-v`) to show the album options."
 
 #: ../../user_documentation/channels/upload_artist.md:43
 msgid "Select {guilabel}`Edit`. The {guilabel}`Edit this album` screen opens."
@@ -134,11 +134,11 @@ msgstr ""
 #: ../../user_documentation/channels/upload_artist.md:44
 #: ../../user_documentation/channels/upload_artist.md:97
 msgid "Change the details in any of these fields:"
-msgstr ""
+msgstr "Change the details in any of these fields:"
 
 #: ../../user_documentation/channels/upload_artist.md:45
 msgid "{guilabel}`Title` – the title of the album."
-msgstr ""
+msgstr "{guilabel}`Title` – the title of the album."
 
 #: ../../user_documentation/channels/upload_artist.md:46
 msgid "{guilabel}`Description` – a description of the album."
@@ -146,7 +146,7 @@ msgstr ""
 
 #: ../../user_documentation/channels/upload_artist.md:47
 msgid "{guilabel}`Release date` – the release date of the album."
-msgstr ""
+msgstr "{guilabel}`Release date` – the release date of the album."
 
 #: ../../user_documentation/channels/upload_artist.md:48
 msgid "{guilabel}`Cover` – the cover art of the album."
@@ -162,7 +162,7 @@ msgstr ""
 
 #: ../../user_documentation/channels/upload_artist.md:51
 msgid "Select {guilabel}`Submit and apply edit` to save your changes."
-msgstr ""
+msgstr "Select {guilabel}`Submit and apply edit` to save your changes."
 
 #: ../../user_documentation/channels/upload_artist.md:53
 msgid "That's it! You can now add content to your album."
