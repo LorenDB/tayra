@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 21:23+0000\n"
+"PO-Revision-Date: 2022-07-03 23:09+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/moderator_documentation-content-delete_content/en_GB/>"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md
 msgid "Desktop"
-msgstr ""
+msgstr "Desktop"
 
 #: ../../moderator_documentation/content/delete_content.md:26
 #: ../../moderator_documentation/content/delete_content.md:46
@@ -75,6 +75,8 @@ msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
 "the {guilabel}`Administration` menu."
 msgstr ""
+"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the "
+"{guilabel}`Administration` menu."
 
 #: ../../moderator_documentation/content/delete_content.md:28
 #: ../../moderator_documentation/content/delete_content.md:48
