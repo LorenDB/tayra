@@ -3,18 +3,21 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-03 22:14+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2022-07-03 23:23+0000\n"
+"Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
+"Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
+"projects/documentation/contributing/en_GB/>\n"
+"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.13\n"
 "Generated-By: Babel 2.10.1\n"
 
 #: ../../../CONTRIBUTING.rst:2
@@ -134,7 +137,7 @@ msgstr ""
 
 #: ../../../CONTRIBUTING.rst:62
 msgid "Environment variables"
-msgstr ""
+msgstr "Environment variables"
 
 #: ../../../CONTRIBUTING.rst:65 ../../../CONTRIBUTING.rst:88
 msgid "Name"
@@ -1395,4 +1398,3 @@ msgid ""
 "paste the changelog on the corresponding tag, and announce the good news "
 ";)"
 msgstr ""
-
