@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 21:27+0000\n"
+"PO-Revision-Date: 2022-07-03 21:29+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/user_documentation-radios-edit_radio/en_GB/>\n"
@@ -60,7 +60,7 @@ msgstr ""
 #: ../../user_documentation/radios/edit_radio.md:11
 #: ../../user_documentation/radios/edit_radio.md:25
 msgid "{guilabel}`Description`."
-msgstr ""
+msgstr "{guilabel}`Description`."
 
 #: ../../user_documentation/radios/edit_radio.md:12
 #: ../../user_documentation/radios/edit_radio.md:26
