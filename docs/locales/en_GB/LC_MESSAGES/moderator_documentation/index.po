@@ -100,7 +100,7 @@ msgstr ""
 
 #: ../../moderator_documentation/index.md:30
 msgid "Moderate external users"
-msgstr ""
+msgstr "Moderate external users"
 
 #: ../../moderator_documentation/index.md:32
 msgid ""
