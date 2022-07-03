@@ -1,48 +1,85 @@
 tasks:
-  - name: Funkwhale
+  - name: Docker
     env:
       COMPOSE_FILE: dev.yml
     init: |
+      # Install frontend depencencies locally
       cd front
       yarn install
       cd ..
+
+      # Prepare prebuild .env
       echo "# Gitpod Environment Variables" > .env
-      echo "MEDIA_URL=http://localhost:8000/media/" >> .env
-      echo "STATIC_URL=http://localhost:8000/staticfiles/" >> .env
-      echo "GITPOD_WORKSPACE_URL=$GITPOD_WORKSPACE_URL" >> .env
-      echo "HMR_PORT=8000" >> .env
+
+      # Prepare docker
       docker network create federation
       docker-compose pull
       docker-compose build
       docker-compose up -d postgres redis
       sleep 10 # allow postgres and redis to initialize
+
+      # Prepare backend
       docker-compose run --rm api python manage.py migrate
       docker-compose run --rm api python manage.py createsuperuser --no-input --username gitpod --email gitpod@example.com
-      echo "from django.contrib.auth import get_user_model;u=get_user_model().objects.get(username='gitpod');u.set_password('gitpod');u.save()" | docker-compose run --rm -T api python manage.py shell -i python
-      echo "from funkwhale_api.music import fake_data; fake_data.create_data(25)" | docker-compose run --rm -T api python manage.py shell -i python
+      docker-compose run --rm api python manage.py fw users set --password "gitpod" gitpod --no-input
+
+      # Compile frontend locales
       docker-compose run --rm front yarn run i18n-compile
-    command: docker-compose up nginx
+
+      # Start API to let script create an actor
+      docker-compose up -d nginx
+      gp ports await 8000
+
+      # Clone music repo
+      git clone https://dev.funkwhale.audio/funkwhale/catalog.git
+      sudo mv catalog/music data
+      sudo chown -R root:root data/music
+      rm -rf catalog
+
+      # Login with cURL to create actor
+      python .gitpod/init_actor.py
+
+      # Import music
+      docker-compose down
+      LIBRARY_ID=`cat .gitpod/create_library.py | docker-compose run --rm -T api python manage.py shell -i python`
+      docker-compose run --rm api python manage.py import_files $LIBRARY_ID "/music/" --recursive --noinput --in-place
+
+      # Stop docker
+      docker-compose stop
+    command: |
+      # Prepare workspace .env
+      echo "MEDIA_URL=`gp url 8000`/media/" >> .env
+      echo "STATIC_URL=`gp url 8000`/staticfiles/" >> .env
+      echo "FUNKWHALE_HOSTNAME=`gp url 8000 | sed 's#https://##'`" >> .env
+      echo "FUNKWHALE_PROTOCOL=https" >> .env
+      echo "GITPOD_WORKSPACE_URL=$GITPOD_WORKSPACE_URL" >> .env
+      echo "HMR_PORT=8000" >> .env
+      echo "VUE_APP_INSTANCE_URL=$VUE_APP_INSTANCE_URL" >> .env
+
+      # Start app
+      docker-compose up front api nginx
 
   - name: Welcome to Funkwhale development!
+    env:
+      COMPOSE_FILE: dev.yml
     command: |
       clear
-      echo "You can now start developing Funkwhale with gitpod!"
       echo ""
-      echo "To sign in to the superuser account, please this credentials:"
-      echo "gitpod:gitpod"
+      echo -e "    ⠀⠀⠸⣿⣷⣦⣄⣠⣶⣾⣿⠇⠀⠀    You can now start developing Funkwhale with gitpod!"
+      echo -e "    ⠀⠀⠀⠈⠉⠻⣿⣿⠟⠉⠁⠀⠀⠀"
+      echo -e "    \u1b[34m⣀⠀⢀⡀⢀⣀\u1b[0m⠹⠇\u1b[34m⣀⡀⢀⡀⠀⣀    \u1b[0mTo sign in to the superuser account,"
+      echo -e "    \u1b[34m⢻⣇⠘⣧⡈⠻⠶⠶⠟⢁⣾⠃⣸⡟    \u1b[0mplease use these credentials:"
+      echo -e "    \u1b[34m⠀⠻⣦⡈⠻⠶⣶⣶⠶⠟⢁⣴⠟⠀"
+      echo -e "    \u1b[34m⠀⠀⠈⠻⠷⣦⣤⣤⣴⠾⠟⠁⠀⠀    gitpod\u1b[0m:\u1b[34mgitpod"
+      echo ""
 
 ports:
   - port: 8000
     visibility: public
     onOpen: notify
 
-  - port: 4000
-    visibility: public
-    onOpen: open-preview
-
 vscode:
   extensions:
-    - antfu.vite
     - lukashass.volar
     - lextudio.restructuredtext
     - trond-snekvik.simple-rst
