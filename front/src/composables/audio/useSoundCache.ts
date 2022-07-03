@@ -1,36 +1,38 @@
-import { MaybeRef } from "@vueuse/core"
 import { Howl } from "howler"
 import { sortBy } from "lodash-es"
-import { reactive, watchEffect, ref, unref } from "vue"
+import { reactive, watchEffect, ref } from "vue"
+
+const MAX_PRELOADED = 3
 
 export interface CachedSound {
   id: string
   date: Date
-  sound: Howl
+  howl: Howl
 }
 
-export default (maxPreloaded: MaybeRef<number>) => {
-  const soundCache = reactive(new Map<string, CachedSound>())
-  const cleaningCache = ref(false)
+const soundCache = reactive(new Map<string, CachedSound>())
+const cleaningCache = ref(false)
 
-  watchEffect(() => {
-    let toRemove = soundCache.size - unref(maxPreloaded)
+watchEffect(() => {
+  let toRemove = soundCache.size - MAX_PRELOADED
 
-    if (toRemove > 0 && !cleaningCache.value) {
-      cleaningCache.value = true
+  if (toRemove > 0 && !cleaningCache.value) {
+    cleaningCache.value = true
 
-      const excess = sortBy([...soundCache.values()], [(cached: CachedSound) => cached.date])
-        .slice(0, toRemove)
+    const excess = sortBy([...soundCache.values()], [(cached: CachedSound) => cached.date])
+      .slice(0, toRemove)
 
-      for (const cached of excess) {
-        console.log('Removing cached element:', cached)
-        soundCache.delete(cached.id)
-        cached.sound.unload()
-      }
-
-      cleaningCache.value = false
+    for (const cached of excess) {
+      console.log('Removing cached element:', cached)
+      soundCache.delete(cached.id)
+      cached.howl.unload()
     }
-  })
 
+    cleaningCache.value = false
+  }
+})
+
+
+export default () => {
   return soundCache
 }

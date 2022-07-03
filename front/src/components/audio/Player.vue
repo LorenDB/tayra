@@ -1,20 +1,15 @@
 <script setup lang="ts">
 // TODO (wvffle): Move most of this stufff to usePlayer
-import { Track } from '~/types'
 import { useStore } from '~/store'
-import { Howl, Howler } from 'howler'
-import axios from 'axios'
+import { Howler } from 'howler'
 import VolumeControl from './VolumeControl.vue'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
-import { ref, computed, watch, onMounted, onBeforeUnmount, watchEffect } from 'vue'
-import { useTimeoutFn, useIntervalFn } from '@vueuse/core'
+import { computed, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import useQueue from '~/composables/audio/useQueue'
 import usePlayer from '~/composables/audio/usePlayer'
-import useTrackSources, { TrackSource } from '~/composables/audio/useTrackSources'
-import useSoundCache from '~/composables/audio/useSoundCache'
 
 const store = useStore()
 const { $pgettext } = useGettext()
@@ -40,12 +35,12 @@ const {
   playing,
   loading: isLoadingAudio,
   looping,
-  duration,
+  currentTime,
   progress,
   durationFormatted,
   currentTimeFormatted,
   bufferProgress,
-  currentTime,
+  toggleMute,
   seek,
   togglePlayback,
   resume,
@@ -57,7 +52,7 @@ onKeyboardShortcut('e', toggleMobilePlayer)
 onKeyboardShortcut('p', togglePlayback)
 onKeyboardShortcut('s', shuffle)
 onKeyboardShortcut('q', () => store.dispatch('queue/clean'))
-onKeyboardShortcut('m', () => store.dispatch('player/toggleMute'))
+onKeyboardShortcut('m', () => toggleMute)
 onKeyboardShortcut('l', () => store.commit('player/toggleLooping'))
 onKeyboardShortcut('f', () => store.dispatch('favorites/toggle', currentTrack.value?.id))
 onKeyboardShortcut('escape', () => store.commit('ui/queueFocused', null))
@@ -72,43 +67,6 @@ onKeyboardShortcut(['shift', 'left'], () => seek(-30), true)
 
 onKeyboardShortcut(['ctrl', 'shift', 'left'], previous, true)
 onKeyboardShortcut(['ctrl', 'shift', 'right'], next, true)
-
-const currentSound = ref()
-const isUpdatingTime = ref(false)
-const preloadDelay = ref(15)
-const isListeningSubmitted = ref()
-const soundId = ref()
-const nextTrackPreloaded = ref(false)
-
-const maxPreloaded = ref(3)
-const soundCache = useSoundCache(maxPreloaded)
-
-const updateProgress = () => {
-  isUpdatingTime.value = true
-
-  if (currentSound.value?.state() === 'loaded') {
-    const time = currentSound.value.seek()
-    const duration = currentSound.value.duration()
-
-    store.dispatch('player/updateProgress', time)
-    updateBuffer(currentSound.value._sounds[0]._node)
-
-    const toPreload = store.state.queue.tracks[currentIndex.value + 1]
-    if (!nextTrackPreloaded.value && toPreload && !soundCache.has(toPreload.id) && (time > preloadDelay.value || duration - time < 30)) {
-      getSound(toPreload)
-      nextTrackPreloaded.value = true
-    }
-
-    if (time > duration / 2) {
-      if (!isListeningSubmitted.value) {
-        store.dispatch('player/trackListened', currentTrack.value)
-        isListeningSubmitted.value = true
-      }
-    }
-  }
-}
-
-// const updateProgressThrottled = useThrottleFn(updateProgress, 50)
 
 const labels = computed(() => ({
   audioPlayer: $pgettext('Sidebar/Player/Hidden text', 'Media player'),
@@ -127,265 +85,14 @@ const labels = computed(() => ({
   addArtistContentFilter: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…')
 }))
 
-// Preloading
-const { start: loadCurrentTrack, stop: cancelLoadingCurrentTrack } = useTimeoutFn(
-  (track, oldValue) => loadSound(track as Track, oldValue as Track),
-  100,
-  { immediate: false }
-) as { start: (a: Track, b: Track) => unknown, stop: () => void }
-
-watch(currentTrack, (track, oldValue) => {
-  nextTrackPreloaded.value = false
-
-  cancelLoadingCurrentTrack()
-
-  currentSound.value?.pause()
-  store.commit('player/isLoadingAudio', true)
-
-  loadCurrentTrack(track, oldValue)
-})
-
-const observeProgress = ref(false)
-useIntervalFn(() => observeProgress.value && updateProgress(), 1000)
-
-watch(playing, async (isPlaying) => {
-  if (currentSound.value) {
-    if (isPlaying) {
-      soundId.value = currentSound.value.play(soundId.value)
-    } else {
-      currentSound.value.pause(soundId.value)
-    }
-  } else {
-    await loadSound(currentTrack.value)
-  }
-
-  observeProgress.value = isPlaying
-})
-
 const setCurrentTime = (time: number) => {
-  if (time < 0 || time > duration.value) {
-    return
-  }
-
-  if (!currentSound.value?._sounds[0] || time === currentSound.value.seek()) {
-    return
-  }
-
-  // if (time === 0) {
-  //   this.updateProgressThrottled.cancel()
-  // }
-
-  currentSound.value.seek(time)
-  // If player is paused update progress immediately to ensure updated UI
-  if (!playing.value) {
-    updateProgress()
-  }
+  currentTime.value = time
 }
-
-watchEffect(() => {
-  if (!isUpdatingTime.value) {
-    setCurrentTime(currentTime.value)
-    isUpdatingTime.value = false
-  }
-})
 
 onMounted(() => {
   // TODO (wvffle): Check if it is needed
-  store.dispatch('player/updateProgress', 0)
-  // TODO (wvffle): Check if it is needed
-  store.commit('player/playing', false)
-  // TODO (wvffle): Check if it is needed
-  store.commit('player/isLoadingAudio', false)
-
-  // TODO (wvffle): Check if it is needed
   Howler.unload() // clear existing cache, if any
-
-  // TODO (wvffle): Check if it is needed
-  nextTrackPreloaded.value = false
-
-  // Cache sound if we have currentTrack available
-  if (currentTrack.value) {
-    getSound(currentTrack.value)
-  }
 })
-
-onBeforeUnmount(() => {
-  observeProgress.value = false
-})
-
-const getSound = (trackData: Track) => {
-  const cached = soundCache.get(trackData.id)
-  if (cached) {
-    return cached.sound
-  }
-
-  const srcs: TrackSource[] = useTrackSources(trackData)
-  const sound: Howl = new Howl({
-    src: srcs.map((source) => source.url),
-    format: srcs.map((source) => source.type),
-    autoplay: false,
-    loop: false,
-    html5: true,
-    preload: true,
-
-    onend () {
-      const onlyTrack = store.state.queue.tracks.length === 1
-      if (looping.value === 1 || (onlyTrack && looping.value === 2)) {
-        currentSound.value.seek(0)
-        store.dispatch('player/updateProgress', 0)
-        soundId.value = currentSound.value.play(soundId.value)
-      } else {
-        store.dispatch('player/trackEnded', currentTrack.value)
-      }
-    },
-
-    onunlock () {
-      if (store.state.player.playing && currentSound.value) {
-        soundId.value = currentSound.value.play(soundId.value)
-      }
-    },
-
-    onload () {
-      const node = (sound as any)._sounds[0]._node as HTMLAudioElement
-
-      node.addEventListener('progress', () => {
-        if (sound !== currentSound.value) {
-          return
-        }
-
-        updateBuffer(node)
-      })
-    },
-
-    onplay () {
-      if (this !== currentSound.value) {
-        return (this as any).stop()
-      }
-
-      const time = currentSound.value.seek()
-      const duration = currentSound.value.duration()
-      if (time <= duration / 2) {
-        isListeningSubmitted.value = false
-      }
-
-      store.commit('player/isLoadingAudio', false)
-      store.commit('player/resetErrorCount')
-      store.commit('player/errored', false)
-      store.commit('player/duration', sound.duration())
-    },
-
-    onplayerror (soundId, error) {
-      console.log('play error', soundId, error)
-    },
-
-    onloaderror (soundId, error) {
-      console.log('load error', soundId, error)
-      soundCache.delete(trackData.id)
-      sound.unload()
-
-      if (this !== currentSound.value) {
-        return
-      }
-
-      console.error('Error while playing:', soundId, error)
-      handleError()
-    }
-  })
-
-  soundCache.set(trackData.id, {
-    id: trackData.id,
-    date: new Date(),
-    sound
-  })
-
-  return sound
-}
-
-const getTrack = async (trackData: Track) => {
-  // use previously fetched trackData
-  if (trackData.uploads.length) {
-    return trackData
-  }
-
-  // we don't have any information for this track, we need to fetch it
-  return axios.get(`tracks/${trackData.id}/`)
-    .then(response => response.data, () => null)
-}
-
-const handleError = () => {
-  store.commit('player/isLoadingAudio', false)
-  store.dispatch('player/trackErrored')
-}
-
-const updateBuffer = (node: HTMLAudioElement) => {
-  // from https://github.com/goldfire/howler.js/issues/752#issuecomment-372083163
-
-  const { buffered, currentTime: time } = node
-
-  let range = 0
-  try {
-    while (buffered.start(range) >= time || time >= buffered.end(range)) {
-      range += 1
-    }
-  } catch (IndexSizeError) {
-    return
-  }
-
-  let loadPercentage
-
-  const start = buffered.start(range)
-  const end = buffered.end(range)
-
-  if (range === 0) {
-    // easy case, no user-seek
-    const loadStartPercentage = start / node.duration
-    const loadEndPercentage = end / node.duration
-    loadPercentage = loadEndPercentage - loadStartPercentage
-  } else {
-    const loaded = end - start
-    const remainingToLoad = node.duration - start
-    // user seeked a specific position in the audio, our progress must be
-    // computed based on the remaining portion of the track
-    loadPercentage = loaded / remainingToLoad
-  }
-
-  if (loadPercentage * 100 === bufferProgress.value) {
-    return
-  }
-
-  store.commit('player/bufferProgress', loadPercentage * 100)
-}
-
-const loadSound = async (trackData: Track, oldValue?: Track) => {
-  const oldSound = currentSound.value
-
-  if (oldSound && trackData !== oldValue) {
-    oldSound.stop(soundId.value)
-    soundId.value = null
-  }
-
-  if (!trackData) {
-    return
-  }
-
-  if (!isShuffling.value && trackData !== oldValue) {
-    trackData = await getTrack(trackData)
-
-    if (trackData == null) {
-      handleError()
-    }
-
-    currentSound.value = getSound(trackData)
-
-    // TODO (wvffle): #1777
-    soundId.value = currentSound.value.play()
-    store.commit('player/isLoadingAudio', true)
-    store.commit('player/errored', false)
-    store.commit('player/playing', true)
-    store.dispatch('player/updateProgress', 0)
-    observeProgress.value = true
-  }
-}
 
 const switchTab = () => {
   store.commit('ui/queueFocused', store.state.ui.queueFocused === 'player' ? 'queue' : 'player')
