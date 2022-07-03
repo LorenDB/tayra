@@ -75,6 +75,8 @@ msgid ""
 "Select the {guilabel}`copy` icon next to the password field to copy your "
 "password."
 msgstr ""
+"Select the {guilabel}`copy` icon next to the password field to copy your "
+"password."
 
 #: ../../user_documentation/subsonic/reset_subsonic.md
 msgid "Mobile"
