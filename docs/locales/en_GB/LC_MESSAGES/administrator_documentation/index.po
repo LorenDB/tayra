@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 21:28+0000\n"
+"PO-Revision-Date: 2022-07-03 22:11+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/administrator_documentation-index/en_GB/>\n"
@@ -46,7 +46,7 @@ msgstr ""
 
 #: ../../administrator_documentation/index.md:13
 msgid "Configure your Funkwhale pod"
-msgstr ""
+msgstr "Configure your Funkwhale pod"
 
 #: ../../administrator_documentation/index.md:15
 msgid ""
