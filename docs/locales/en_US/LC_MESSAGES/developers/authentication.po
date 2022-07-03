@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-03 22:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,31 +174,35 @@ msgid ""
 "request:"
 msgstr ""
 
-#: ../../developers/authentication.rst:69
+#: ../../developers/authentication.rst:67
+msgid "Oauth scopes"
+msgstr ""
+
+#: ../../developers/authentication.rst:70
 msgid "Scope"
 msgstr ""
 
-#: ../../developers/authentication.rst:69
+#: ../../developers/authentication.rst:71
 msgid "Description"
 msgstr ""
 
-#: ../../developers/authentication.rst:71
+#: ../../developers/authentication.rst:72
 msgid "``read``"
 msgstr ""
 
-#: ../../developers/authentication.rst:71
-msgid "Read-only access to all data (equivalent to all ``read:*`` scopes)"
+#: ../../developers/authentication.rst:73
+msgid "Read-only access to all data (equivalent to all ``read:*`` scopes)."
 msgstr ""
 
 #: ../../developers/authentication.rst:74
 msgid "``write``"
 msgstr ""
 
-#: ../../developers/authentication.rst:74
-msgid "Write-only access to all data (equivalent to all ``write:*`` scopes)"
+#: ../../developers/authentication.rst:75
+msgid "Read-only access to all data (equivalent to all ``write:*`` scopes)."
 msgstr ""
 
-#: ../../developers/authentication.rst:77
+#: ../../developers/authentication.rst:76
 msgid "``<read/write>:profile``"
 msgstr ""
 
@@ -206,75 +210,84 @@ msgstr ""
 msgid "Access to profile data (e-mail address, username, etc.)"
 msgstr ""
 
-#: ../../developers/authentication.rst:79
+#: ../../developers/authentication.rst:78
 msgid "``<read/write>:libraries``"
 msgstr ""
 
 #: ../../developers/authentication.rst:79
-msgid "Access to library data (uploads, libraries tracks, albums, artists...)"
+msgid "Access to library data (uploads, libraries, tracks, albums, artists…)"
 msgstr ""
 
-#: ../../developers/authentication.rst:82
+#: ../../developers/authentication.rst:80
 msgid "``<read/write>:favorites``"
 msgstr ""
 
-#: ../../developers/authentication.rst:82
+#: ../../developers/authentication.rst:81
 msgid "Access to favorites"
 msgstr ""
 
-#: ../../developers/authentication.rst:84
+#: ../../developers/authentication.rst:82
 msgid "``<read/write>:listenings``"
 msgstr ""
 
-#: ../../developers/authentication.rst:84
+#: ../../developers/authentication.rst:83
 msgid "Access to history"
 msgstr ""
 
-#: ../../developers/authentication.rst:86
+#: ../../developers/authentication.rst:84
 msgid "``<read/write>:follows``"
 msgstr ""
 
-#: ../../developers/authentication.rst:86
+#: ../../developers/authentication.rst:85
 msgid "Access to followers"
 msgstr ""
 
-#: ../../developers/authentication.rst:88
+#: ../../developers/authentication.rst:86
 msgid "``<read/write>:playlists``"
 msgstr ""
 
-#: ../../developers/authentication.rst:88
+#: ../../developers/authentication.rst:87
 msgid "Access to playlists"
 msgstr ""
 
-#: ../../developers/authentication.rst:90
+#: ../../developers/authentication.rst:88
 msgid "``<read/write>:radios``"
 msgstr ""
 
-#: ../../developers/authentication.rst:90
+#: ../../developers/authentication.rst:89
 msgid "Access to radios"
 msgstr ""
 
-#: ../../developers/authentication.rst:92
+#: ../../developers/authentication.rst:90
 msgid "``<read/write>:filters``"
 msgstr ""
 
-#: ../../developers/authentication.rst:92
+#: ../../developers/authentication.rst:91
 msgid "Access to content filters"
 msgstr ""
 
-#: ../../developers/authentication.rst:94
+#: ../../developers/authentication.rst:92
 msgid "``<read/write>:notifications``"
 msgstr ""
 
-#: ../../developers/authentication.rst:94
+#: ../../developers/authentication.rst:93
 msgid "Access to notifications"
 msgstr ""
 
-#: ../../developers/authentication.rst:96
+#: ../../developers/authentication.rst:94
 msgid "``<read/write>:edits``"
 msgstr ""
 
-#: ../../developers/authentication.rst:96
+#: ../../developers/authentication.rst:95
 msgid "Access to metadata edits"
 msgstr ""
+
+#~ msgid "Read-only access to all data (equivalent to all ``read:*`` scopes)"
+#~ msgstr ""
+
+#~ msgid "Write-only access to all data (equivalent to all ``write:*`` scopes)"
+#~ msgstr ""
+
+#~ msgid "Access to library data (uploads, libraries tracks, albums, artists...)"
+#~ msgstr ""
 

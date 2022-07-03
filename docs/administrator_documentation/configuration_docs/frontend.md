@@ -32,14 +32,29 @@ To customize your Funkwhale pod, you need to serve a {file}`settings.json` file 
    EOF
    ```
 
-```{dropdown} Supported parameters
+   ````{dropdown} Supported parameters
 
-| Parameter               | Data type  | Description                                                                                   | Example                        |
-|-------------------------|------------|-----------------------------------------------------------------------------------------------|--------------------------------|
-| `additionalStylesheets` | Array<URL> | A list of URLs (relative or absolute) pointing to stylesheets.                                | `["https://test/theme.css"]`   |
-| `defaultServerUrl`      | URL        | The URL of the API server you want to connect the frontend to. Defaults to the current domain | `"https://api.yourdomain.com"` |
+   ```{list-table}
+   :header-rows: 1
 
-```
+   * - Parameter
+      - Data type
+      - Description
+      - Example
+
+   * - `additionalStylesheets`
+      - Array<URL>
+      - A list of URLs (relative or absolute) pointing to stylesheets.
+      - `["https://test/theme.css"]`
+
+   * - `defaultServerUrl`
+      - URL
+      - The URL of the API server you want to connect the frontend to. Defaults to the current domain.
+      - `"https://api.yourdomain.com"`
+
+   ```
+
+   ````
 
 ### Configure your reverse proxy
 

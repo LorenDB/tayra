@@ -10,26 +10,66 @@ This guide shows you how to tag your content with MusicBrainz Picard.
 :local:
 ```
 
-```{dropdown} Supported tags
+````{dropdown} Supported tags
 
-| Name                          | Example value                                               | Description                                                                                                                                                          |
-|-------------------------------|-------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Title`*                      | `Letting you`                                               | The track title.                                                                                                                                                     |
-| `Artist`*                     | `Nine Inch Nails`                                           | The artist name.                                                                                                                                                     |
-| `Album`                       | `The Slip`                                                  | The album title. If none is provided, an `[Unknown Album]` entry is created.                                                                                         |
-| `Album artist`                | `Trent Reznor`                                              | The album artist name (can be different than the track artist).                                                                                                      |
-| `Genre`                       | `Industrial, Metal`                                         | A comma separated list of tags to associate with the track.<br><br>Other supported separators: `;` and `/`                                                           |
-| `Track number`                | `4`                                                         | The position of the track in the album/release.                                                                                                                      |
-| `Disc number`                 | `1`                                                         | The disc number (in case of multi-disc albums).                                                                                                                      |
-| `Date`                        | `2019`                                                      | The release date of the track or album.                                                                                                                              |
-| `License`                     | `CC-BY 3.0: http://creativecommons.org/licenses/cc-by/3.0/` | The license associated with this work. The first URL found is checked against our list of supported licenses.                                                        |
-| `Copyright`                   | `CC-BY 3.0: http://creativecommons.org/licenses/cc-by/3.0/` | The license associated with this work. The first URL found is checked against our list of supported licenses. <br><br>Used if no license found in the `License` tag. |
-| `Pictures`                    |                                                             | The first embeded picture found is used as the album cover.                                                                                                          |
-| `MusicBrainz Recording ID`    | `99244237-850b-4a93-904d-57305bcadb4e`                      | The MusicBrainz ID for the recording.                                                                                                                                |
-| `MusicBrainz Album ID`        | `bca982fd-ab73-3c9f-ad07-9104a4f53a32`                      | The MusicBrainz ID for the album                                                                                                                                     |
-| `MusicBrainz Artist ID`       | `b7ffd2af-418f-4be2-bdd1-22f8b48613da`                      | The MusicBrainz ID for the artist                                                                                                                                    |
-| `MusicBrainz Album Artist ID` | `b7ffd2af-418f-4be2-bdd1-22f8b48613da`                      | The MusicBrainz ID for the album artist                                                                                                                              |
+```{list-table}
+:header-rows: 1
+
+* - Name
+   - Description
+   - Example value
+* - `Title`*
+   - The track title.
+   - `Letting you`
+* - `Artist`*
+   - The artist name.
+   - `Nine Inch Nails`
+* - `Album`
+   - The album title. If none is provided, an `[Unknown Album]` entry is created.
+   - `The Slip`
+* - `Album artist`
+   - The album artist name (can be different than the track artist).
+   - `Trent Reznor`
+* - `Genre`
+   - A comma separated list of tags to associate with the track.  
+   Other supported separators: `;` and `/`.
+   - `Industrial, Metal`
+* - `Track number`
+   - The position of the track in the album/release.
+   - `4`
+* - `Disc number`
+   - The disc number (in case of multi-disc albums).
+   - `1`
+* - `Date`
+   - The release date of the track or album.
+   - `2019`
+* - `License`
+   - The license associated with this work.  
+   The first URL found is checked against our list of supported licenses.
+   - `CC-BY 3.0: http://creativecommons.org/licenses/cc-by/3.0/`
+* - `Copyright`
+   - The license associated with this work. The first URL found is checked against our list of supported licenses.  
+   Used if no license found in the `License` tag.
+   - `CC-BY 3.0: http://creativecommons.org/licenses/cc-by/3.0/`
+* - `Pictures`
+   - The first embeded picture found is used as the album cover.
+   - 
+* - `MusicBrainz Recording ID`
+   - The MusicBrainz ID for the recording.
+   - `99244237-850b-4a93-904d-57305bcadb4e`
+* - `MusicBrainz Album ID`
+   - The MusicBrainz ID for the album.
+   - `bca982fd-ab73-3c9f-ad07-9104a4f53a32`
+* - `MusicBrainz Artist ID`
+   -  The MusicBrainz ID for the artist.
+   - `b7ffd2af-418f-4be2-bdd1-22f8b48613da`
+* - `MusicBrainz Album Artist ID`
+   - The MusicBrainz ID for the album artist.
+   - `b7ffd2af-418f-4be2-bdd1-22f8b48613da`
+
 ```
+
+````
 
 ## Tag content
 

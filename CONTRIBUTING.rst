@@ -59,13 +59,18 @@ user environment variables in `your Gitpod settings <https://gitpod.io/variables
 When you configure your environment variables as follows, you will be signed in to the extension
 automatically in old and new workspaces.
 
-+----------------------------------+---------------------------------+-----------------+
-| Name                             | Value                           | Scope           |
-+==================================+=================================+=================+
-| ``GITLAB_WORKFLOW_INSTANCE_URL`` | ``https://dev.funkwhale.audio`` | ``funkwhale/*`` |
-+----------------------------------+---------------------------------+-----------------+
-| ``GITLAB_WORKFLOW_TOKEN``        | ``TOKEN``                       | ``funkwhale/*`` |
-+----------------------------------+---------------------------------+-----------------+
+.. list-table:: Environment variables
+   :header-rows: 1
+
+   * - Name
+     - Value
+     - Scope
+   * - ``GITLAB_WORKFLOW_INSTANCE_URL``
+     - ``https://dev.funkwhale.audio``
+     - ``funkwhale/*``
+   * - ``GITLAB_WORKFLOW_TOKEN``
+     - ``TOKEN``
+     - ``funkwhale/*``
 
 The scope ``funkwhale/*`` will ensure that you will be signed into our instance on every
 project that we're hosting, not only Funkwhale itself.
@@ -77,11 +82,15 @@ If you want to preview changes on your own Funkwhale server, you can add your do
 This allows you to test your frontend changes against your domain without setting this value each time.
 To add your domain, set a user environment variable in `your Gitpod settings <https://gitpod.io/variables>`_.
 
-+--------- ----------------+-----------------------------------+-------------------------+
-| Name                     | Value                             | Scope                   |
-+==========================+===================================+=========================+
-| ``VUE_APP_INSTANCE_URL`` | ``https://funkwhale.example.com`` | ``funkwhale/funkwhale`` |
-+--------------------------+-----------------------------------+-------------------------+
+.. list-table:: Environment variable
+   :header-rows: 1
+
+   * - Name
+     - Value
+     - Scope
+   * - ``VUE_APP_INSTANCE_URL``
+     - ``https://funkwhale.example.com``
+     - ``funkwhale/funkwhale``
 
 The scope ``funkwhale/funkwhale`` ensures that this variable only works on Funkwhale.
 

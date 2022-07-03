@@ -6,14 +6,25 @@ The Funkwhale frontend is a {abbr}`SPA (Single Page Application)` written in [Vu
 
 The most useful tools for troubleshooting issues with the Funkwhale frontend are your web browser's developer tools. The `Console` and `Network` tabs are particularly useful for tracking down issues in the Javascript code and API responses respectively. Use the following shortcut to open the developer tools for your browser:
 
-| Browser | Shortcut |
-| -------- | --------- |
-| Google Chrome/Chromium | {kbd}`F12` |
-| Microsoft Edge | {kbd}`F12` |
-| Opera | {kbd}`F12` |
-| Vivaldi | {kbd}`F12` |
-| Firefox | {kbd}`F12` |
-| Safari | {kbd}`Command+Option+U` |
+```{list-table}
+:header-rows: 1
+
+* - Browser
+   - Shortcut
+* - Google Chrome/Chromium
+   - {kbd}`F12`
+* - Microsoft Edge
+   - {kbd}`F12`
+* - Opera
+   - {kbd}`F12`
+* - Vivaldi
+   - {kbd}`F12`
+* - Firefox
+   - {kbd}`F12`
+* - Safari
+   - {kbd}`Command+Option+U`
+
+```
 
 ## Troubleshoot the issue
 

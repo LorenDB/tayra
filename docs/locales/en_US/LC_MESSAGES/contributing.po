@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-03 22:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "This document will guide you through common operations such as:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:10 ../../../CONTRIBUTING.rst:117
+#: ../../../CONTRIBUTING.rst:10 ../../../CONTRIBUTING.rst:141
 msgid "Setup your development environment"
 msgstr ""
 
@@ -132,49 +132,88 @@ msgid ""
 "signed in to the extension automatically in old and new workspaces."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:63
+#: ../../../CONTRIBUTING.rst:62
+msgid "Environment variables"
+msgstr ""
+
+#: ../../../CONTRIBUTING.rst:65 ../../../CONTRIBUTING.rst:88
 msgid "Name"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:63
+#: ../../../CONTRIBUTING.rst:66 ../../../CONTRIBUTING.rst:89
 msgid "Value"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:63
+#: ../../../CONTRIBUTING.rst:67 ../../../CONTRIBUTING.rst:90
 msgid "Scope"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:65
+#: ../../../CONTRIBUTING.rst:68
 msgid "``GITLAB_WORKFLOW_INSTANCE_URL``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:65
+#: ../../../CONTRIBUTING.rst:69
 msgid "``https://dev.funkwhale.audio``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:65 ../../../CONTRIBUTING.rst:67
+#: ../../../CONTRIBUTING.rst:70 ../../../CONTRIBUTING.rst:73
 msgid "``funkwhale/*``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:67
+#: ../../../CONTRIBUTING.rst:71
 msgid "``GITLAB_WORKFLOW_TOKEN``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:67
+#: ../../../CONTRIBUTING.rst:72
 msgid "``TOKEN``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:70
+#: ../../../CONTRIBUTING.rst:75
 msgid ""
 "The scope ``funkwhale/*`` will ensure that you will be signed into our "
 "instance on every project that we're hosting, not only Funkwhale itself."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:74
+#: ../../../CONTRIBUTING.rst:79
+msgid "Custom instance url"
+msgstr ""
+
+#: ../../../CONTRIBUTING.rst:81
+msgid ""
+"If you want to preview changes on your own Funkwhale server, you can add "
+"your domain as an environment variable. This allows you to test your "
+"frontend changes against your domain without setting this value each "
+"time. To add your domain, set a user environment variable in `your Gitpod"
+" settings <https://gitpod.io/variables>`_."
+msgstr ""
+
+#: ../../../CONTRIBUTING.rst:85
+msgid "Environment variable"
+msgstr ""
+
+#: ../../../CONTRIBUTING.rst:91
+msgid "``VUE_APP_INSTANCE_URL``"
+msgstr ""
+
+#: ../../../CONTRIBUTING.rst:92
+msgid "``https://funkwhale.example.com``"
+msgstr ""
+
+#: ../../../CONTRIBUTING.rst:93
+msgid "``funkwhale/funkwhale``"
+msgstr ""
+
+#: ../../../CONTRIBUTING.rst:95
+msgid ""
+"The scope ``funkwhale/funkwhale`` ensures that this variable only works "
+"on Funkwhale."
+msgstr ""
+
+#: ../../../CONTRIBUTING.rst:98
 msgid "A quick path to contribute on the front-end"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:76
+#: ../../../CONTRIBUTING.rst:100
 msgid ""
 "The next sections of this document include a full installation guide to "
 "help you setup a local, development version of Funkwhale. If you only "
@@ -182,14 +221,14 @@ msgid ""
 "full development environment, there is another way."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:80
+#: ../../../CONTRIBUTING.rst:104
 msgid ""
 "As the front-end can work with any Funkwhale server, you can work with "
 "the front-end only, and make it talk with an existing instance (like the "
 "demo one, or you own instance, if you have one)."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:83
+#: ../../../CONTRIBUTING.rst:107
 msgid ""
 "If even that is too much for you, you can also make your changes without "
 "any development environment, and open a merge request. We will be able to"
@@ -197,133 +236,133 @@ msgid ""
 " changes, thanks to Gitlab Review apps."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:88
+#: ../../../CONTRIBUTING.rst:112
 msgid "Setup front-end only development environment"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:90
+#: ../../../CONTRIBUTING.rst:114
 msgid "Clone the repository::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:96
+#: ../../../CONTRIBUTING.rst:120
 msgid ""
 "Install `nodejs <https://nodejs.org/en/download/package-manager/>`_ and "
 "`yarn <https://yarnpkg.com/lang/en/docs/install/#debian-stable>`_"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:98
+#: ../../../CONTRIBUTING.rst:122
 msgid "Install the dependencies::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:102
+#: ../../../CONTRIBUTING.rst:126
 msgid "Compile the translations::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:106
+#: ../../../CONTRIBUTING.rst:130
 msgid "Launch the development server::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:111
+#: ../../../CONTRIBUTING.rst:135
 msgid ""
 "Make the front-end talk with an existing server (like "
 "https://demo.funkwhale.audio or https://open.audio), by clicking on the "
 "corresponding link in the footer"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:114
+#: ../../../CONTRIBUTING.rst:138
 msgid "Start hacking!"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:119
+#: ../../../CONTRIBUTING.rst:143
 msgid ""
 "If you want to fix a bug or implement a feature, you'll need to run a "
 "local, development copy of funkwhale."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:122
+#: ../../../CONTRIBUTING.rst:146
 msgid ""
 "We provide a docker based development environment, which should be both "
 "easy to setup and work similarly regardless of your development machine "
 "setup."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:126
+#: ../../../CONTRIBUTING.rst:150
 msgid ""
 "Instructions for bare-metal setup will come in the future (Merge requests"
 " are welcome)."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:130
+#: ../../../CONTRIBUTING.rst:154
 msgid "Installing docker and docker-compose"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:132
+#: ../../../CONTRIBUTING.rst:156
 msgid "This is already cover in the relevant documentations:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:134
+#: ../../../CONTRIBUTING.rst:158
 msgid "https://docs.docker.com/install/"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:135
+#: ../../../CONTRIBUTING.rst:159
 msgid "https://docs.docker.com/compose/install/"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:139
+#: ../../../CONTRIBUTING.rst:163
 msgid ""
 "If you are on Fedora, know that you can't use `podman` or `moby-engine` "
 "to set up the development environment. Stick to `docker-ce` and you'll be"
 " fine."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:143
+#: ../../../CONTRIBUTING.rst:167
 msgid "Cloning the project"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:145
+#: ../../../CONTRIBUTING.rst:169
 msgid ""
 "Visit https://dev.funkwhale.audio/funkwhale/funkwhale and clone the "
 "repository using SSH or HTTPS. Example using SSH::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:152
+#: ../../../CONTRIBUTING.rst:176
 msgid ""
 "As of January 2020, the SSH fingerprints of our Gitlab server are the "
 "following::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:164
+#: ../../../CONTRIBUTING.rst:188
 msgid "A note about branches"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:166
+#: ../../../CONTRIBUTING.rst:190
 msgid ""
 "Next release development occurs on the \"develop\" branch, and releases "
 "are made on the \"stable\" branch. Therefore, when submitting Merge "
 "Requests, ensure you are merging on the develop branch."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:170
+#: ../../../CONTRIBUTING.rst:194
 msgid "Working with docker"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:172
+#: ../../../CONTRIBUTING.rst:196
 msgid ""
 "In development, we use the docker-compose file named ``dev.yml``, and "
 "this is why all our docker-compose commands will look like this::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:176
+#: ../../../CONTRIBUTING.rst:200
 msgid ""
 "If you do not want to add the ``-f dev.yml`` snippet every time, you can "
 "run this command before starting your work::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:182
+#: ../../../CONTRIBUTING.rst:206
 msgid "Creating your env file"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:184
+#: ../../../CONTRIBUTING.rst:208
 msgid ""
 "We provide a working .env.dev configuration file that is suitable for "
 "development. However, to enable customization on your machine, you should"
@@ -331,93 +370,93 @@ msgid ""
 "variables (those will not be commited to the project)."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:189
+#: ../../../CONTRIBUTING.rst:213
 msgid "Create it like this::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:193
+#: ../../../CONTRIBUTING.rst:217
 msgid ""
 "These two environment variables must be included for the images to load "
 "in front-end and django admin pages::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:200
+#: ../../../CONTRIBUTING.rst:224
 msgid "Create docker network"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:202
+#: ../../../CONTRIBUTING.rst:226
 msgid "Create the federation network::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:208
+#: ../../../CONTRIBUTING.rst:232
 msgid "Building the containers"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:210
+#: ../../../CONTRIBUTING.rst:234
 msgid ""
 "On your initial clone, or if there have been some changes in the app "
 "dependencies, you will have to rebuild your containers. This is done via "
 "the following command::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:218
+#: ../../../CONTRIBUTING.rst:242
 msgid "Database management"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:220
+#: ../../../CONTRIBUTING.rst:244
 msgid "To setup funkwhale's database schema, run this::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:224
+#: ../../../CONTRIBUTING.rst:248
 msgid ""
 "This will create all the tables needed for the API to run properly. You "
 "will also need to run this whenever changes are made on the database "
 "schema."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:228
+#: ../../../CONTRIBUTING.rst:252
 msgid ""
 "It is safe to run this command multiple times, so you can run it whenever"
 " you fetch develop."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:233
+#: ../../../CONTRIBUTING.rst:257
 msgid "Development data"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:235
+#: ../../../CONTRIBUTING.rst:259
 msgid ""
 "You'll need at least an admin user and some artists/tracks/albums to work"
 " locally."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:238
+#: ../../../CONTRIBUTING.rst:262
 msgid "Create an admin user with the following command::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:242
+#: ../../../CONTRIBUTING.rst:266
 msgid "Injecting fake data is done by running the following script::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:248
+#: ../../../CONTRIBUTING.rst:272
 msgid ""
 "The previous command will create 25 artists with random albums, tracks "
 "and metadata."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:253
+#: ../../../CONTRIBUTING.rst:277
 msgid "Launch all services"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:255
+#: ../../../CONTRIBUTING.rst:279
 msgid "Before the first Funkwhale launch, it is required to run this::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:259
+#: ../../../CONTRIBUTING.rst:283
 msgid "Then you can run everything with::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:263
+#: ../../../CONTRIBUTING.rst:287
 msgid ""
 "This will launch all services, and output the logs in your current "
 "terminal window. If you prefer to launch them in the background instead, "
@@ -425,209 +464,209 @@ msgid ""
 "compose -f dev.yml logs --tail=50 --follow``."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:266
+#: ../../../CONTRIBUTING.rst:290
 msgid "Once everything is up, you can access the various funkwhale's components:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:268
+#: ../../../CONTRIBUTING.rst:292
 msgid "The Vue webapp, on http://localhost:8000"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:269
+#: ../../../CONTRIBUTING.rst:293
 msgid "The API, on http://localhost:8000/api/v1/"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:270
+#: ../../../CONTRIBUTING.rst:294
 msgid "The django admin, on http://localhost:8000/api/admin/"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:273
+#: ../../../CONTRIBUTING.rst:297
 msgid "Stopping everything"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:275
+#: ../../../CONTRIBUTING.rst:299
 msgid ""
 "Once you're down with your work, you can stop running containers, if any,"
 " with::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:281
+#: ../../../CONTRIBUTING.rst:305
 msgid "Removing everything"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:283
+#: ../../../CONTRIBUTING.rst:307
 msgid ""
 "If you want to wipe your development environment completely (e.g. if you "
 "want to start over from scratch), just run::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:287
+#: ../../../CONTRIBUTING.rst:311
 msgid ""
 "This will wipe your containers and data, so please be careful before "
 "running it."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:289
+#: ../../../CONTRIBUTING.rst:313
 msgid "You can keep your data by removing the ``-v`` flag."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:293
+#: ../../../CONTRIBUTING.rst:317
 msgid "Working with federation locally"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:295
+#: ../../../CONTRIBUTING.rst:319
 msgid "This is not needed unless you need to work on federation-related features."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:297
+#: ../../../CONTRIBUTING.rst:321
 msgid "To achieve that, you'll need:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:299
+#: ../../../CONTRIBUTING.rst:323
 msgid "to update your dns resolver to resolve all your .dev hostnames locally"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:300
+#: ../../../CONTRIBUTING.rst:324
 msgid ""
 "a reverse proxy (such as traefik) to catch those .dev requests and and "
 "with https certificate"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:302
+#: ../../../CONTRIBUTING.rst:326
 msgid "two instances (or more) running locally, following the regular dev setup"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:305
+#: ../../../CONTRIBUTING.rst:329
 msgid "Resolve .dev names locally"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:307
+#: ../../../CONTRIBUTING.rst:331
 msgid "If you use dnsmasq, this is as simple as doing::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:312
+#: ../../../CONTRIBUTING.rst:336
 msgid "If you use NetworkManager with dnsmasq integration, use this instead::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:318
+#: ../../../CONTRIBUTING.rst:342
 msgid "Add wildcard certificate to the trusted certificates"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:320
+#: ../../../CONTRIBUTING.rst:344
 msgid "Simply copy bundled certificates::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:325
+#: ../../../CONTRIBUTING.rst:349
 msgid "This certificate is a wildcard for ``*.funkwhale.test``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:328
+#: ../../../CONTRIBUTING.rst:352
 msgid "Run a reverse proxy for your instances"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:332
+#: ../../../CONTRIBUTING.rst:356
 msgid "Launch everything"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:334
+#: ../../../CONTRIBUTING.rst:358
 msgid "Launch the traefik proxy::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:338
+#: ../../../CONTRIBUTING.rst:362
 msgid ""
 "Then, in separate terminals, you can setup as many different instances as"
 " you need::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:347
+#: ../../../CONTRIBUTING.rst:371
 msgid ""
 "Note that by default, if you don't export the COMPOSE_PROJECT_NAME, we "
 "will default to node1 as the name of your instance."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:350
+#: ../../../CONTRIBUTING.rst:374
 msgid ""
 "Assuming your project name is ``node1``, your server will be reachable at"
 " ``https://node1.funkwhale.test/``. Not that you'll have to trust the SSL"
 " Certificate as it's self signed."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:354
+#: ../../../CONTRIBUTING.rst:378
 msgid ""
 "When working on federation with traefik, ensure you have this in your "
 "``env``::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:367
+#: ../../../CONTRIBUTING.rst:391
 msgid "Typical workflow for a contribution"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:369
+#: ../../../CONTRIBUTING.rst:393
 msgid ""
 "Fork the project if you did not already or if you do not have access to "
 "the main repository"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:370
+#: ../../../CONTRIBUTING.rst:394
 msgid ""
 "Checkout the development branch and pull most recent changes: ``git "
 "checkout develop && git pull``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:371
+#: ../../../CONTRIBUTING.rst:395
 msgid ""
 "If working on an issue, assign yourself to the issue. Otherwise, consider"
 " open an issue before starting to work on something, especially for new "
 "features."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:372
+#: ../../../CONTRIBUTING.rst:396
 msgid ""
 "Create a dedicated branch for your work ``42-awesome-fix``. It is good "
 "practice to prefix your branch name with the ID of the issue you are "
 "solving."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:373
+#: ../../../CONTRIBUTING.rst:397
 msgid "Work on your stuff"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:374
+#: ../../../CONTRIBUTING.rst:398
 msgid ""
 "[Optional] Consider running ``yarn lint`` in ``front`` if you changed "
 "something there. Consider fixing some linting errors in the files you "
 "touched."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:376
+#: ../../../CONTRIBUTING.rst:400
 msgid "Commit small, atomic changes to make it easier to review your contribution"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:377
+#: ../../../CONTRIBUTING.rst:401
 msgid ""
 "Add a changelog fragment to summarize your changes: ``echo \"Implemented "
 "awesome stuff (#42)\" > changes/changelog.d/42.feature``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:378
+#: ../../../CONTRIBUTING.rst:402
 msgid "Push your branch"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:379
+#: ../../../CONTRIBUTING.rst:403
 msgid "Create your merge request"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:380
+#: ../../../CONTRIBUTING.rst:404
 msgid ""
 "Take a step back and enjoy, we're really grateful you did all of this and"
 " took the time to contribute!"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:383
+#: ../../../CONTRIBUTING.rst:407
 msgid "Changelog management"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:385
+#: ../../../CONTRIBUTING.rst:409
 msgid ""
 "To ensure we have extensive and well-structured changelog, any "
 "significant work such as closing an issue must include a changelog "
@@ -637,47 +676,47 @@ msgid ""
 "review ;)"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:391
+#: ../../../CONTRIBUTING.rst:415
 msgid ""
 "Changelog fragments are text files that can contain one or multiple lines"
 " that describe the changes occurring in a bunch of commits. Those files "
 "reside in ``changes/changelog.d``."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:396
+#: ../../../CONTRIBUTING.rst:420
 msgid "Content"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:398
+#: ../../../CONTRIBUTING.rst:422
 msgid "A typical fragment looks like that:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:400
+#: ../../../CONTRIBUTING.rst:424
 msgid "Fixed broken audio player on Chrome 42 for ogg files (#567)"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:402
+#: ../../../CONTRIBUTING.rst:426
 msgid ""
 "If the work fixes one or more issues, the issue number should be included"
 " at the end of the fragment (``(#567)`` is the issue number in the "
 "previous example)."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:405
+#: ../../../CONTRIBUTING.rst:429
 msgid ""
 "If your work is not related to a specific issue, use the merge request "
 "identifier instead, like this:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:408
+#: ../../../CONTRIBUTING.rst:432
 msgid "Fixed a typo in landing page copy (!342)"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:411
+#: ../../../CONTRIBUTING.rst:435
 msgid "Naming"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:413
+#: ../../../CONTRIBUTING.rst:437
 msgid ""
 "Fragment files should respect the following naming pattern: "
 "``changes/changelog.d/<name>.<category>``. Name can be anything "
@@ -685,71 +724,71 @@ msgid ""
 "are fixing. Category can be one of:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:417
+#: ../../../CONTRIBUTING.rst:441
 msgid "``feature``: for new features"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:418
+#: ../../../CONTRIBUTING.rst:442
 msgid "``enhancement``: for enhancements on existing features"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:419
+#: ../../../CONTRIBUTING.rst:443
 msgid "``bugfix``: for bugfixes"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:420
+#: ../../../CONTRIBUTING.rst:444
 msgid "``doc``: for documentation"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:421
+#: ../../../CONTRIBUTING.rst:445
 msgid "``i18n``: for internationalization-related work"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:422
+#: ../../../CONTRIBUTING.rst:446
 msgid "``misc``: for anything else"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:425
+#: ../../../CONTRIBUTING.rst:449
 msgid "Shortcuts"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:427
+#: ../../../CONTRIBUTING.rst:451
 msgid ""
 "Here is a shortcut you can use/adapt to easily create new fragments from "
 "command-line:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:436
+#: ../../../CONTRIBUTING.rst:460
 msgid ""
 "You can of course create fragments by hand in your text editor, or from "
 "Gitlab's interface as well."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:440
+#: ../../../CONTRIBUTING.rst:464
 msgid "Internationalization"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:442
+#: ../../../CONTRIBUTING.rst:466
 msgid ""
 "We're using https://github.com/Polyconseil/vue-gettext to manage i18n in "
 "the project."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:444
+#: ../../../CONTRIBUTING.rst:468
 msgid ""
 "When working on the front-end, any end-user string should be marked as a "
 "translatable string, with the proper context, as described below."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:448
+#: ../../../CONTRIBUTING.rst:472
 msgid "Translations in HTML"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:450
+#: ../../../CONTRIBUTING.rst:474
 msgid "Translations in HTML use the ``<translate>`` tag::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:474
+#: ../../../CONTRIBUTING.rst:498
 msgid ""
 "Anything between the `<translate>` and `</translate>` delimiters will be "
 "considered as a translatable string. You can use variables in the "
@@ -757,55 +796,55 @@ msgid ""
 "directive, and reference them like this: ``val value is %{ value }``."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:478
+#: ../../../CONTRIBUTING.rst:502
 msgid ""
 "For pluralization, you need to use ``translate-params`` in conjunction "
 "with ``translate-plural`` and ``translate-n``:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:480
+#: ../../../CONTRIBUTING.rst:504
 msgid ""
 "``translate-params`` should contain the variable you're using for "
 "pluralization (which is usually shown to the user)"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:481
+#: ../../../CONTRIBUTING.rst:505
 msgid "``translate-n`` should match the same variable"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:482
+#: ../../../CONTRIBUTING.rst:506
 msgid ""
 "The ``<translate>`` delimiters contain the non-pluralized version of your"
 " string"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:483
+#: ../../../CONTRIBUTING.rst:507
 msgid ""
 "The ``translate-plural`` directive contains the pluralized version of "
 "your string"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:487
+#: ../../../CONTRIBUTING.rst:511
 msgid "Translations in javascript"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:489
+#: ../../../CONTRIBUTING.rst:513
 msgid ""
 "Translations in javascript work by calling the ``this.$*gettext`` "
 "functions::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:504
+#: ../../../CONTRIBUTING.rst:528
 msgid ""
 "The first argument of the ``$pgettext`` and ``$npgettext`` functions is "
 "the string context."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:507
+#: ../../../CONTRIBUTING.rst:531
 msgid "Contextualization"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:509
+#: ../../../CONTRIBUTING.rst:533
 msgid ""
 "Translation contexts provided via the ``translate-context`` directive and"
 " the ``$pgettext`` and ``$npgettext`` are never shown to end users but "
@@ -814,7 +853,7 @@ msgid ""
 "``May``, which can refer a month or a verb."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:513
+#: ../../../CONTRIBUTING.rst:537
 msgid ""
 "While we could in theory use free form context, like ``This string is "
 "inside a button, in the main page, and is a call to action``, Funkwhale "
@@ -823,472 +862,472 @@ msgid ""
 "would be: ``Content/Home/Button/Call to action``."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:517
+#: ../../../CONTRIBUTING.rst:541
 msgid "This hierarchical structure is made of several parts:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:526
+#: ../../../CONTRIBUTING.rst:550
 msgid ""
 "The location part, which is required and refers to the big blocks found "
 "in Funkwhale UI where the translated string is displayed:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:520
+#: ../../../CONTRIBUTING.rst:544
 msgid "``Content``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:521
+#: ../../../CONTRIBUTING.rst:545
 msgid "``Footer``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:522
+#: ../../../CONTRIBUTING.rst:546
 msgid "``Head``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:523 ../../../CONTRIBUTING.rst:567
+#: ../../../CONTRIBUTING.rst:547 ../../../CONTRIBUTING.rst:591
 msgid "``Menu``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:524
+#: ../../../CONTRIBUTING.rst:548
 msgid "``Popup``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:525
+#: ../../../CONTRIBUTING.rst:549
 msgid "``Sidebar``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:526
+#: ../../../CONTRIBUTING.rst:550
 msgid "``*`` for strings that are not tied to a specific location"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:549
+#: ../../../CONTRIBUTING.rst:573
 msgid ""
 "The feature part, which is required, and refers to the feature associated"
 " with the translated string:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:529
+#: ../../../CONTRIBUTING.rst:553
 msgid "``About``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:530
+#: ../../../CONTRIBUTING.rst:554
 msgid "``Admin``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:531
+#: ../../../CONTRIBUTING.rst:555
 msgid "``Album``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:532
+#: ../../../CONTRIBUTING.rst:556
 msgid "``Artist``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:533
+#: ../../../CONTRIBUTING.rst:557
 msgid "``Embed``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:534
+#: ../../../CONTRIBUTING.rst:558
 msgid "``Home``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:535
+#: ../../../CONTRIBUTING.rst:559
 msgid "``Login``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:536
+#: ../../../CONTRIBUTING.rst:560
 msgid "``Library``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:537
+#: ../../../CONTRIBUTING.rst:561
 msgid "``Moderation``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:538
+#: ../../../CONTRIBUTING.rst:562
 msgid "``Player``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:539
+#: ../../../CONTRIBUTING.rst:563
 msgid "``Playlist``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:540
+#: ../../../CONTRIBUTING.rst:564
 msgid "``Profile``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:541
+#: ../../../CONTRIBUTING.rst:565
 msgid "``Favorites``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:542
+#: ../../../CONTRIBUTING.rst:566
 msgid "``Notifications``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:543
+#: ../../../CONTRIBUTING.rst:567
 msgid "``Radio``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:544
+#: ../../../CONTRIBUTING.rst:568
 msgid "``Search``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:545
+#: ../../../CONTRIBUTING.rst:569
 msgid "``Settings``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:546
+#: ../../../CONTRIBUTING.rst:570
 msgid "``Signup``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:547
+#: ../../../CONTRIBUTING.rst:571
 msgid "``Track``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:548
+#: ../../../CONTRIBUTING.rst:572
 msgid "``Queue``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:549
+#: ../../../CONTRIBUTING.rst:573
 msgid "``*`` for strings that are not tied to a specific feature"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:575
+#: ../../../CONTRIBUTING.rst:599
 msgid ""
 "The component part, which is required and refers to the type of element "
 "that contain the string:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:552
+#: ../../../CONTRIBUTING.rst:576
 msgid "``Button``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:553
+#: ../../../CONTRIBUTING.rst:577
 msgid "``Card``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:554
+#: ../../../CONTRIBUTING.rst:578
 msgid "``Checkbox``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:555
+#: ../../../CONTRIBUTING.rst:579
 msgid "``Dropdown``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:556
+#: ../../../CONTRIBUTING.rst:580
 msgid "``Error message``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:557
+#: ../../../CONTRIBUTING.rst:581
 msgid "``Form``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:558
+#: ../../../CONTRIBUTING.rst:582
 msgid "``Header``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:559
+#: ../../../CONTRIBUTING.rst:583
 msgid "``Help text``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:560
+#: ../../../CONTRIBUTING.rst:584
 msgid "``Hidden text``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:561
+#: ../../../CONTRIBUTING.rst:585
 msgid "``Icon``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:562
+#: ../../../CONTRIBUTING.rst:586
 msgid "``Input``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:563
+#: ../../../CONTRIBUTING.rst:587
 msgid "``Image``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:564
+#: ../../../CONTRIBUTING.rst:588
 msgid "``Label``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:565
+#: ../../../CONTRIBUTING.rst:589
 msgid "``Link``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:566
+#: ../../../CONTRIBUTING.rst:590
 msgid "``List item``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:568
+#: ../../../CONTRIBUTING.rst:592
 msgid "``Message``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:569
+#: ../../../CONTRIBUTING.rst:593
 msgid "``Paragraph``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:570
+#: ../../../CONTRIBUTING.rst:594
 msgid "``Placeholder``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:571
+#: ../../../CONTRIBUTING.rst:595
 msgid "``Tab``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:572
+#: ../../../CONTRIBUTING.rst:596
 msgid "``Table``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:573
+#: ../../../CONTRIBUTING.rst:597
 msgid "``Title``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:574
+#: ../../../CONTRIBUTING.rst:598
 msgid "``Tooltip``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:575
+#: ../../../CONTRIBUTING.rst:599
 msgid "``*`` for strings that are not tied to a specific component"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:583
+#: ../../../CONTRIBUTING.rst:607
 msgid ""
 "The detail part, which is optional and refers to the contents of the "
 "string itself, such as:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:578
+#: ../../../CONTRIBUTING.rst:602
 msgid "``Adjective``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:579
+#: ../../../CONTRIBUTING.rst:603
 msgid "``Call to action``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:580
+#: ../../../CONTRIBUTING.rst:604
 msgid "``Noun``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:581
+#: ../../../CONTRIBUTING.rst:605
 msgid "``Short``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:582
+#: ../../../CONTRIBUTING.rst:606
 msgid "``Unit``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:583
+#: ../../../CONTRIBUTING.rst:607
 msgid "``Verb``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:585
+#: ../../../CONTRIBUTING.rst:609
 msgid "Here are a few examples of valid context hierarchies:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:587
+#: ../../../CONTRIBUTING.rst:611
 msgid "``Sidebar/Player/Button``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:588
+#: ../../../CONTRIBUTING.rst:612
 msgid "``Content/Home/Button/Call to action``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:589
+#: ../../../CONTRIBUTING.rst:613
 msgid "``Footer/*/Help text``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:590
+#: ../../../CONTRIBUTING.rst:614
 msgid "``*/*/*/Verb, Short``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:591
+#: ../../../CONTRIBUTING.rst:615
 msgid "``Popup/Playlist/Button``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:592
+#: ../../../CONTRIBUTING.rst:616
 msgid "``Content/Admin/Table.Label/Short, Noun (Value is a date)``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:594
+#: ../../../CONTRIBUTING.rst:618
 msgid ""
 "It's possible to nest multiple component parts to reach a higher level of"
 " detail. The component parts are then separated by a dot:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:596
+#: ../../../CONTRIBUTING.rst:620
 msgid "``Sidebar/Queue/Tab.Title``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:597
+#: ../../../CONTRIBUTING.rst:621
 msgid "``Content/*/Button.Title``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:598
+#: ../../../CONTRIBUTING.rst:622
 msgid "``Content/*/Table.Header``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:599
+#: ../../../CONTRIBUTING.rst:623
 msgid "``Footer/*/List item.Link``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:600
+#: ../../../CONTRIBUTING.rst:624
 msgid "``Content/*/Form.Help text``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:603
+#: ../../../CONTRIBUTING.rst:627
 msgid "Collecting translatable strings"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:605
+#: ../../../CONTRIBUTING.rst:629
 msgid ""
 "If you want to ensure your translatable strings are correctly marked for "
 "translation, you can try to extract them."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:608
+#: ../../../CONTRIBUTING.rst:632
 msgid ""
 "Extraction is done by calling ``yarn run i18n-extract``, which will pull "
 "all the strings from source files and put them in a PO files."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:611
+#: ../../../CONTRIBUTING.rst:635
 msgid ""
 "You can then inspect the PO files to ensure everything is fine (but don't"
 " commit them, it's not needed)."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:614
+#: ../../../CONTRIBUTING.rst:638
 msgid "Contributing to the API"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:617
+#: ../../../CONTRIBUTING.rst:641
 msgid "Project structure"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:631
+#: ../../../CONTRIBUTING.rst:655
 msgid ""
 "Unless trivial, API contributions must include unittests to ensure your "
 "fix or feature is working as expected and won't break in the future"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:635 ../../../CONTRIBUTING.rst:793
+#: ../../../CONTRIBUTING.rst:659 ../../../CONTRIBUTING.rst:817
 msgid "Running tests"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:637
+#: ../../../CONTRIBUTING.rst:661
 msgid "To run the pytest test suite, use the following command::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:641
+#: ../../../CONTRIBUTING.rst:665
 msgid ""
 "This is regular pytest, so you can use any arguments/options that pytest "
 "usually accept::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:651
+#: ../../../CONTRIBUTING.rst:675
 msgid "Writing tests"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:653
+#: ../../../CONTRIBUTING.rst:677
 msgid ""
 "Although teaching you how to write unit tests is outside of the scope of "
 "this document, you'll find below a collection of tips, snippets and "
 "resources you can use if you want to learn on that subject."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:657
+#: ../../../CONTRIBUTING.rst:681
 msgid "Useful links:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:659
+#: ../../../CONTRIBUTING.rst:683
 msgid ""
 "`A quick introduction to unit test writing with pytest "
 "<https://semaphoreci.com/community/tutorials/testing-python-applications-"
 "with-pytest>`_"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:660
+#: ../../../CONTRIBUTING.rst:684
 msgid ""
 "`A complete guide to Test-Driven Development (although not using Pytest) "
 "<https://www.obeythetestinggoat.com/>`_"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:661
+#: ../../../CONTRIBUTING.rst:685
 msgid ""
 "`pytest <https://docs.pytest.org/en/latest/>`_: documentation of our "
 "testing engine and runner"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:662
+#: ../../../CONTRIBUTING.rst:686
 msgid ""
 "`pytest-mock <https://pypi.org/project/pytest-mock/>`_: project page of "
 "our mocking engine"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:663
+#: ../../../CONTRIBUTING.rst:687
 msgid ""
 "`factory-boy <http://factoryboy.readthedocs.io/>`_: documentation of "
 "factory-boy, which we use to easily generate fake objects and data"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:665
+#: ../../../CONTRIBUTING.rst:689
 msgid "Recommendations:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:667
+#: ../../../CONTRIBUTING.rst:691
 msgid ""
 "Test files must target a module and mimic ``funkwhale_api`` directory "
 "structure: if you're writing tests for ``funkwhale_api/myapp/views.py``, "
 "you should put thoses tests in ``tests/myapp/test_views.py``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:668
+#: ../../../CONTRIBUTING.rst:692
 msgid ""
 "Tests should be small and test one thing. If you need to test multiple "
 "things, write multiple tests."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:670
+#: ../../../CONTRIBUTING.rst:694
 msgid ""
 "We provide a lot of utils and fixtures to make the process of writing "
 "tests as painless as possible. You'll find some usage examples below."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:673
+#: ../../../CONTRIBUTING.rst:697
 msgid "Use factories to create arbitrary objects:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:708
+#: ../../../CONTRIBUTING.rst:732
 msgid ""
 "We offer factories for almost if not all models. Factories are located in"
 " a ``factories.py`` file inside each app."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:711
+#: ../../../CONTRIBUTING.rst:735
 msgid ""
 "Mocking: mocking is the process of faking some logic in our code. This is"
 " useful when testing components that depend on each other:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:766
+#: ../../../CONTRIBUTING.rst:790
 msgid ""
 "Views: you can find some readable views tests in file: "
 "``api/tests/users/test_views.py``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:770
+#: ../../../CONTRIBUTING.rst:794
 msgid ""
 "A complete list of available-fixtures is available by running ``docker-"
 "compose -f dev.yml run --rm api pytest --fixtures``"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:775
+#: ../../../CONTRIBUTING.rst:799
 msgid "Contributing to the front-end"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:778
+#: ../../../CONTRIBUTING.rst:802
 msgid "Styles and themes"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:780
+#: ../../../CONTRIBUTING.rst:804
 msgid ""
 "Our UI framework is Fomantic UI (https://fomantic-ui.com/), and "
 "Funkwhale's custom styles are written in SCSS. All the styles are "
@@ -1296,26 +1335,26 @@ msgid ""
 "Fomantic UI styles and components."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:783
+#: ../../../CONTRIBUTING.rst:807
 msgid ""
 "We're applying several changes on top of the Fomantic CSS files, before "
 "they are imported:"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:785
+#: ../../../CONTRIBUTING.rst:809
 msgid ""
 "Many hardcoded color values are replaced by CSS vars: e.g ``color: "
 "orange`` is replaced by ``color: var(--vibrant-color)``. This makes "
 "theming way easier."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:786
+#: ../../../CONTRIBUTING.rst:810
 msgid ""
 "Unused components variations and icons are stripped from the source "
 "files, in order to reduce the final size of our CSS files"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:788
+#: ../../../CONTRIBUTING.rst:812
 msgid ""
 "This changes are applied automatically when running ``yarn install``, "
 "through a ``postinstall`` hook. Internally, ``front/scripts/fix-fomantic-"
@@ -1324,33 +1363,33 @@ msgid ""
 " components variations that were stripped in order to use them."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:795
+#: ../../../CONTRIBUTING.rst:819
 msgid "To run the front-end test suite, use the following command::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:799
+#: ../../../CONTRIBUTING.rst:823
 msgid ""
 "We also support a \"watch and test\" mode were we continually relaunch "
 "tests when changes are recorded on the file system::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:804
+#: ../../../CONTRIBUTING.rst:828
 msgid "The latter is especially useful when you are debugging failing tests."
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:808
+#: ../../../CONTRIBUTING.rst:832
 msgid "The front-end test suite coverage is still pretty low"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:812
+#: ../../../CONTRIBUTING.rst:836
 msgid "Making a release"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:814
+#: ../../../CONTRIBUTING.rst:838
 msgid "To make a new 3.4 release::"
 msgstr ""
 
-#: ../../../CONTRIBUTING.rst:853
+#: ../../../CONTRIBUTING.rst:877
 msgid ""
 "Then, visit https://dev.funkwhale.audio/funkwhale/funkwhale/-/tags, copy-"
 "paste the changelog on the corresponding tag, and announce the good news "

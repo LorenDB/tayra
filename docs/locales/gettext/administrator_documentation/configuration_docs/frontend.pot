@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-03 01:32+0200\n"
+"POT-Creation-Date: 2022-07-03 22:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,11 +52,59 @@ msgstr ""
 msgid "Create a new config file and populate it with placeholder settings."
 msgstr ""
 
+#: ../../administrator_documentation/configuration_docs/frontend.md:41
+msgid "Parameter"
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/frontend.md:42
+msgid "Data type"
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/frontend.md:43
+msgid "Description"
+msgstr ""
+
 #: ../../administrator_documentation/configuration_docs/frontend.md:44
-msgid "Configure your reverse proxy"
+msgid "Example"
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/frontend.md:46
+msgid "`additionalStylesheets`"
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/frontend.md:47
+msgid "Array<URL>"
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/frontend.md:48
+msgid "A list of URLs (relative or absolute) pointing to stylesheets."
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/frontend.md:49
+msgid "`[\"https://test/theme.css\"]`"
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/frontend.md:51
+msgid "`defaultServerUrl`"
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/frontend.md:52
+msgid "URL"
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/frontend.md:53
+msgid "The URL of the API server you want to connect the frontend to. Defaults to the current domain."
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/frontend.md:54
+msgid "`\"https://api.yourdomain.com\"`"
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/frontend.md:59
+msgid "Configure your reverse proxy"
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/frontend.md:61
 msgid "Once you've created your {file}`settings.json` file you need to configure your reverse proxy to serve it."
 msgstr ""
 
@@ -65,7 +113,7 @@ msgstr ""
 msgid "Nginx"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:50
+#: ../../administrator_documentation/configuration_docs/frontend.md:65
 msgid "Add the following snippet to your {file}`/etc/nginx/sites-available/funkwhale.conf` config file:"
 msgstr ""
 
@@ -74,50 +122,50 @@ msgstr ""
 msgid "Apache"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:62
+#: ../../administrator_documentation/configuration_docs/frontend.md:77
 msgid "Add the following snippet to your webserver configuration:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:70
+#: ../../administrator_documentation/configuration_docs/frontend.md:85
 msgid "Reload your webserver. You should be able to see the contents of your configuration file at `https://yourinstanceurl/settings.json`."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:72
+#: ../../administrator_documentation/configuration_docs/frontend.md:87
 msgid "Add a custom theme"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:74
+#: ../../administrator_documentation/configuration_docs/frontend.md:89
 msgid "You can use a custom stylesheet to theme your Funkwhale pod. To do this:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:76
+#: ../../administrator_documentation/configuration_docs/frontend.md:91
 msgid "Navigate to your {file}`/srv/funkwhale/custom` directory."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:82
+#: ../../administrator_documentation/configuration_docs/frontend.md:97
 msgid "Copy your CSS file to this directory, or create a new one."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:94
+#: ../../administrator_documentation/configuration_docs/frontend.md:109
 msgid "Add the location of your CSS file to the `additionalStylesheets` parameter in your {file}`settings.json` file."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:107
+#: ../../administrator_documentation/configuration_docs/frontend.md:122
 msgid "Add the whole {file}`custom` dir to your webserver configuration."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:111
+#: ../../administrator_documentation/configuration_docs/frontend.md:126
 msgid "Add the following to your {file}`/etc/nginx/sites-available/funkwhale.conf` file:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:122
+#: ../../administrator_documentation/configuration_docs/frontend.md:137
 msgid "Add the following to your webserver configuration file."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:135
+#: ../../administrator_documentation/configuration_docs/frontend.md:150
 msgid "Restart your webserver."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:137
+#: ../../administrator_documentation/configuration_docs/frontend.md:152
 msgid "Refresh your Funkwhale app. The background should now be red."
 msgstr ""
