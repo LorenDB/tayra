@@ -1,19 +1,21 @@
-import { useTimeoutFn, useThrottleFn } from "@vueuse/core"
-import { useTimeAgo, useNow } from '@vueuse/core'
-import { useGettext } from "vue3-gettext"
-import { useStore } from "~/store"
+import { useTimeoutFn, useThrottleFn, useTimeAgo, useNow, whenever } from '@vueuse/core'
+import { Howler } from 'howler'
+import { gettext } from '~/init/locale'
 import { ref, computed } from "vue"
 import { Track } from "~/types"
 import { sum } from 'lodash-es'
+import store from "~/store"
+
+const { $pgettext } = gettext
 
 export default () => {
-  const store = useStore()
-  const { $pgettext } = useGettext()
-
   const currentTrack = computed(() => store.getters['queue/currentTrack'])
   const currentIndex = computed(() => store.state.queue.currentIndex)
   const hasNext = computed(() => store.getters['queue/hasNext'])
+  const hasPrevious = computed(() => store.getters['queue/hasPrevious'])
+
   const isEmpty = computed(() => store.getters['queue/isEmpty'])
+  whenever(isEmpty, () => Howler.unload())
 
   const removeTrack = (index: number) => store.dispatch('queue/cleanTrack', index)
   const clear = () => store.dispatch('queue/clean')
@@ -87,8 +89,11 @@ export default () => {
 
   return { 
     currentTrack,
+    currentIndex,
     hasNext,
-    isEmpty,
+    hasPrevious,
+    isEmpty, 
+    isShuffling,
 
     removeTrack,
     clear,

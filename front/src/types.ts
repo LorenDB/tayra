@@ -2,6 +2,7 @@ import type { App } from 'vue'
 import type { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { AxiosError } from 'axios'
+import { RootState } from '~/store'
 
 declare global {
   interface Window {
@@ -14,7 +15,7 @@ declare global {
 export interface InitModuleContext {
   app: App
   router: Router
-  store: Store<any>
+  store: Store<RootState>
 }
 
 export type InitModule = (ctx: InitModuleContext) => void
@@ -71,7 +72,11 @@ export interface Track {
 
   album?: Album
   artist?: Artist
+
+  // TODO (wvffle): Make sure it really has listen_url
+  listen_url: string
 }
+
 
 export interface Channel {
   id: string
@@ -171,6 +176,9 @@ export interface Upload {
   source?: string
   uuid: string
   duration?: number
+  mimetype: string
+  extension: string
+  listen_url: string
 }
 
 // FileSystem Logs

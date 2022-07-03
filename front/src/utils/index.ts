@@ -2,6 +2,7 @@ import { startCase } from 'lodash-es'
 import { Store } from 'vuex'
 import { Router } from 'vue-router'
 import { APIErrorResponse } from '~/types'
+import { RootState } from '~/store'
 
 export function setUpdate (obj: object, statuses: Record<string, unknown>, value: unknown) {
   for (const key of Object.keys(obj)) {
@@ -46,7 +47,7 @@ export function getCookie (name: string) {
 }
 
 // TODO (wvffle): Use navigation guards
-export async function checkRedirectToLogin (store: Store<any>, router: Router) {
+export async function checkRedirectToLogin (store: Store<RootState>, router: Router) {
   if (!store.state.auth.authenticated) {
     return router.push({ name: 'login', query: { next: router.currentRoute.value.fullPath } })
   }

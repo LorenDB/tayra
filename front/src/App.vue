@@ -12,22 +12,15 @@ import ReportModal from '~/components/moderation/ReportModal.vue'
 import { useIntervalFn, useToggle, useWindowSize } from '@vueuse/core'
 
 import { computed, nextTick, onMounted, ref, watchEffect } from 'vue'
-import {
-  ListenWSEvent,
-  PendingReviewEditsWSEvent,
-  PendingReviewReportsWSEvent,
-  PendingReviewRequestsWSEvent,
-  Track
-} from '~/types'
-import useWebSocketHandler from '~/composables/useWebSocketHandler'
-import { CLIENT_RADIOS } from '~/utils/clientRadios'
+import { Track } from '~/types'
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
+import useQueue from '~/composables/useQueue'
 import { useStore } from '~/store'
 
 const store = useStore()
 
 // Tracks
-const currentTrack = computed(() => store.getters['queue/currentTrack'])
+const { currentTrack } = useQueue()
 const getTrackInformationText = (track: Track | undefined) => {
   if (!track) {
     return null
@@ -58,49 +51,6 @@ const customStylesheets = computed(() => {
 onMounted(async () => {
   await nextTick()
   document.getElementById('fake-content')?.classList.add('loaded')
-})
-
-// WebSocket handlers
-useWebSocketHandler('inbox.item_added', () => {
-  store.commit('ui/incrementNotifications', { type: 'inbox', count: 1 })
-})
-
-useWebSocketHandler('mutation.created', (event) => {
-  store.commit('ui/incrementNotifications', {
-    type: 'pendingReviewEdits',
-    value: (event as PendingReviewEditsWSEvent).pending_review_count
-  })
-})
-
-useWebSocketHandler('mutation.updated', (event) => {
-  store.commit('ui/incrementNotifications', {
-    type: 'pendingReviewEdits',
-    value: (event as PendingReviewEditsWSEvent).pending_review_count
-  })
-})
-
-useWebSocketHandler('report.created', (event) => {
-  store.commit('ui/incrementNotifications', {
-    type: 'pendingReviewReports',
-    value: (event as PendingReviewReportsWSEvent).unresolved_count
-  })
-})
-
-useWebSocketHandler('user_request.created', (event) => {
-  store.commit('ui/incrementNotifications', {
-    type: 'pendingReviewRequests',
-    value: (event as PendingReviewRequestsWSEvent).pending_count
-  })
-})
-
-useWebSocketHandler('Listen', (event) => {
-  if (store.state.radios.current && store.state.radios.running) {
-    const current = store.state.radios.current
-
-    if (current?.clientOnly) {
-      CLIENT_RADIOS[current.type].handleListen(current, event as ListenWSEvent, store)
-    }
-  }
 })
 
 // Time ago

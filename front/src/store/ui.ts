@@ -47,7 +47,7 @@ type NotificationsKey = 'inbox' | 'pendingReviewEdits' | 'pendingReviewReports' 
 export interface State {
   currentLanguage: 'en_US' | keyof typeof availableLanguages
   selectedLanguage: boolean
-  queueFocused: null
+  queueFocused: null | 'queue' | 'player'
   momentLocale: 'en'
   lastDate: Date
   maxMessages: number
