@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 23:09+0000\n"
+"PO-Revision-Date: 2022-07-03 23:29+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/user_documentation-radios-create_radio/en_GB/>\n"
@@ -49,6 +49,8 @@ msgid ""
 "Select {guilabel}`Radios` in the sidebar. The {guilabel}`Browsing radios`"
 " screen opens."
 msgstr ""
+"Select {guilabel}`Radios` in the sidebar. The {guilabel}`Browsing radios` "
+"screen opens."
 
 #: ../../user_documentation/radios/create_radio.md:14
 #: ../../user_documentation/radios/create_radio.md:33
@@ -140,6 +142,8 @@ msgid ""
 "Select {menuselection}`Explore --> Radios` or {menuselection}`My Library "
 "--> Radios`. The {guilabel}`Browsing radios` screen opens."
 msgstr ""
+"Select {menuselection}`Explore --> Radios` or {menuselection}`My Library --> "
+"Radios`. The {guilabel}`Browsing radios` screen opens."
 
 #: ../../user_documentation/radios/create_radio.md:48
 msgid "You're done! You can now play your radio."
