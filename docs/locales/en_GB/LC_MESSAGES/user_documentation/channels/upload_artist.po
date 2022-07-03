@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 21:23+0000\n"
+"PO-Revision-Date: 2022-07-03 21:26+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/user_documentation-channels-upload_artist/en_GB/>\n"
@@ -74,6 +74,8 @@ msgid ""
 "Select {guilabel}`Get started` under {guilabel}`Publish your work in a "
 "channel`. Your user profile opens."
 msgstr ""
+"Select {guilabel}`Get started` under {guilabel}`Publish your work in a "
+"channel`. Your user profile opens."
 
 #: ../../user_documentation/channels/upload_artist.md:20
 #: ../../user_documentation/channels/upload_artist.md:32
@@ -109,7 +111,7 @@ msgstr "Mobile"
 #: ../../user_documentation/channels/upload_artist.md:79
 #: ../../user_documentation/channels/upload_artist.md:133
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
-msgstr ""
+msgstr "Select the upload icon ({fa}`upload`) at the top of the screen."
 
 #: ../../user_documentation/channels/upload_artist.md:39
 msgid ""
