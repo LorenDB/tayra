@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 21:26+0000\n"
+"PO-Revision-Date: 2022-07-03 21:29+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/user_documentation-libraries-delete_library/en_GB/>\n"
@@ -55,17 +55,17 @@ msgstr ""
 #: ../../user_documentation/libraries/delete_library.md:14
 #: ../../user_documentation/libraries/delete_library.md:27
 msgid "A screen appears showing your upload quota and your libraries."
-msgstr ""
+msgstr "A screen appears showing your upload quota and your libraries."
 
 #: ../../user_documentation/libraries/delete_library.md:15
 #: ../../user_documentation/libraries/delete_library.md:28
 msgid "Select {guilabel}`Library Details` under the library you want to edit."
-msgstr ""
+msgstr "Select {guilabel}`Library Details` under the library you want to edit."
 
 #: ../../user_documentation/libraries/delete_library.md:16
 #: ../../user_documentation/libraries/delete_library.md:29
 msgid "Select the {guilabel}`✎ Edit` button at the top of the screen."
-msgstr ""
+msgstr "Select the {guilabel}`✎ Edit` button at the top of the screen."
 
 #: ../../user_documentation/libraries/delete_library.md:17
 #: ../../user_documentation/libraries/delete_library.md:30
