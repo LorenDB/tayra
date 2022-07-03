@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 21:38+0000\n"
+"PO-Revision-Date: 2022-07-03 23:09+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/user_documentation-favorites-remove_favorites/en_GB/>"
@@ -44,7 +44,7 @@ msgstr ""
 
 #: ../../user_documentation/favorites/remove_favorites.md
 msgid "Desktop"
-msgstr ""
+msgstr "Desktop"
 
 #: ../../user_documentation/favorites/remove_favorites.md:15
 msgid ""
