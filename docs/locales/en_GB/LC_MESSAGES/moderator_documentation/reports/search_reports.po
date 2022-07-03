@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 21:18+0000\n"
+"PO-Revision-Date: 2022-07-03 23:09+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/moderator_documentation-reports-search_reports/en_GB/>"
@@ -42,18 +42,20 @@ msgstr ""
 
 #: ../../moderator_documentation/reports/search_reports.md
 msgid "Desktop"
-msgstr ""
+msgstr "Desktop"
 
 #: ../../moderator_documentation/reports/search_reports.md:11
 #: ../../moderator_documentation/reports/search_reports.md:25
 msgid "Log in to your {term}`pod`."
-msgstr ""
+msgstr "Log in to your {term}`pod`."
 
 #: ../../moderator_documentation/reports/search_reports.md:12
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
 "the {guilabel}`Administration` menu."
 msgstr ""
+"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the "
+"{guilabel}`Administration` menu."
 
 #: ../../moderator_documentation/reports/search_reports.md:13
 #: ../../moderator_documentation/reports/search_reports.md:27
