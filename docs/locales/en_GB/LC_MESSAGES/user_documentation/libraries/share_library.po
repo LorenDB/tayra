@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 21:18+0000\n"
+"PO-Revision-Date: 2022-07-03 21:21+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/user_documentation-libraries-share_library/en_GB/>\n"
@@ -98,7 +98,7 @@ msgstr ""
 
 #: ../../user_documentation/libraries/share_library.md:36
 msgid "Select the cog icon ({fa}`cog`) or your avatar to expand the user menu."
-msgstr ""
+msgstr "Select the cog icon ({fa}`cog`) or your avatar to expand the user menu."
 
 #: ../../user_documentation/libraries/share_library.md:37
 #: ../../user_documentation/libraries/share_library.md:46
@@ -118,6 +118,8 @@ msgid ""
 "Select the cog icon ({fa}`cog`) or your avatar to open the "
 "{guilabel}`Options` menu."
 msgstr ""
+"Select the cog icon ({fa}`cog`) or your avatar to open the "
+"{guilabel}`Options` menu."
 
 #: ../../user_documentation/libraries/share_library.md:51
 msgid ""
