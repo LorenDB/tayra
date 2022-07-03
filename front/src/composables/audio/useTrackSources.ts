@@ -1,5 +1,5 @@
 import { Track } from "~/types"
-import { useStore } from '~/store'
+import store from '~/store'
 import updateQueryString from '~/composables/updateQueryString'
 
 export interface TrackSource {
@@ -8,7 +8,6 @@ export interface TrackSource {
 }
 
 export default (trackData: Track): TrackSource[] => {
-  const store = useStore()
   const audio = document.createElement('audio')
 
   const allowed = ['probably', 'maybe']

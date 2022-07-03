@@ -11,8 +11,8 @@ import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
 import { ref, computed, watch, onMounted, onBeforeUnmount, watchEffect } from 'vue'
 import { useTimeoutFn, useIntervalFn } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
-import useQueue from '~/composables/useQueue'
-import usePlayer from '~/composables/usePlayer'
+import useQueue from '~/composables/audio/useQueue'
+import usePlayer from '~/composables/audio/usePlayer'
 import useTrackSources, { TrackSource } from '~/composables/audio/useTrackSources'
 import useSoundCache from '~/composables/audio/useSoundCache'
 
@@ -146,11 +146,7 @@ watch(currentTrack, (track, oldValue) => {
 })
 
 const observeProgress = ref(false)
-useIntervalFn(() => {
-  if (observeProgress.value) {
-    updateProgress()
-  }
-}, 1000)
+useIntervalFn(() => observeProgress.value && updateProgress(), 1000)
 
 watch(playing, async (isPlaying) => {
   if (currentSound.value) {
@@ -207,6 +203,7 @@ onMounted(() => {
   // TODO (wvffle): Check if it is needed
   nextTrackPreloaded.value = false
 
+  // Cache sound if we have currentTrack available
   if (currentTrack.value) {
     getSound(currentTrack.value)
   }
@@ -249,7 +246,7 @@ const getSound = (trackData: Track) => {
     },
 
     onload () {
-      const node = (sound as any)._sounds[0].node as HTMLAudioElement
+      const node = (sound as any)._sounds[0]._node as HTMLAudioElement
 
       node.addEventListener('progress', () => {
         if (sound !== currentSound.value) {
@@ -261,8 +258,8 @@ const getSound = (trackData: Track) => {
     },
 
     onplay () {
-      if (sound !== currentSound.value) {
-        return sound.stop()
+      if (this !== currentSound.value) {
+        return (this as any).stop()
       }
 
       const time = currentSound.value.seek()
@@ -277,11 +274,16 @@ const getSound = (trackData: Track) => {
       store.commit('player/duration', sound.duration())
     },
 
+    onplayerror (soundId, error) {
+      console.log('play error', soundId, error)
+    },
+
     onloaderror (soundId, error) {
+      console.log('load error', soundId, error)
       soundCache.delete(trackData.id)
       sound.unload()
 
-      if (sound !== currentSound.value) {
+      if (this !== currentSound.value) {
         return
       }
 
@@ -298,6 +300,7 @@ const getSound = (trackData: Track) => {
 
   return sound
 }
+
 const getTrack = async (trackData: Track) => {
   // use previously fetched trackData
   if (trackData.uploads.length) {
@@ -372,7 +375,8 @@ const loadSound = async (trackData: Track, oldValue?: Track) => {
       handleError()
     }
 
-    currentSound.value = getSound(trackData as Track)
+    currentSound.value = getSound(trackData)
+
     // TODO (wvffle): #1777
     soundId.value = currentSound.value.play()
     store.commit('player/isLoadingAudio', true)
@@ -576,8 +580,11 @@ const switchTab = () => {
               <span
                 class="start"
                 @click.stop.prevent="setCurrentTime(0)"
-              >{{ currentTimeFormatted }}</span>
-              | <span class="total">{{ durationFormatted }}</span>
+              >
+                {{ currentTimeFormatted }}
+              </span>
+              | 
+              <span class="total">{{ durationFormatted }}</span>
             </template>
           </div>
         </div>

@@ -9,8 +9,8 @@ import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import Draggable, {  } from 'vuedraggable'
 import { whenever, useTimeoutFn, useWindowScroll, useWindowSize } from '@vueuse/core'
 import { useGettext } from "vue3-gettext"
-import useQueue from '~/composables/useQueue'
-import usePlayer from '~/composables/usePlayer'
+import useQueue from '~/composables/audio/useQueue'
+import usePlayer from '~/composables/audio/usePlayer'
 
 const queueModal = ref()
 

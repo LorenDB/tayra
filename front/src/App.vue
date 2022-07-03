@@ -14,7 +14,7 @@ import { useIntervalFn, useToggle, useWindowSize } from '@vueuse/core'
 import { computed, nextTick, onMounted, ref, watchEffect } from 'vue'
 import { Track } from '~/types'
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
-import useQueue from '~/composables/useQueue'
+import useQueue from '~/composables/audio/useQueue'
 import { useStore } from '~/store'
 
 const store = useStore()

@@ -1,3 +1,41 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useStore } from '~/store'
+import { useGettext } from 'vue3-gettext'
+import { useTimeoutFn } from '@vueuse/core'
+import usePlayer from '~/composables/audio/usePlayer'
+
+const store = useStore()
+const { volume, mute, unmute } = usePlayer()
+
+const expanded = ref(false)
+const volumeSteps = 100
+
+const sliderVolume = computed({
+  get: () => volume.value * volumeSteps,
+  set: (value) => store.commit('player/volume', value / volumeSteps)
+})
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({ 
+  unmute: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Unmute'),
+  mute: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Mute'),
+  slider: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Adjust volume')
+}))
+
+const { start, stop } = useTimeoutFn(() => (expanded.value = false), 500, { immediate: false })
+
+const handleOver = () => {
+  stop()
+  expanded.value = true
+}
+
+const handleLeave = () => {
+  stop()
+  start()
+}
+</script>
+
 <template>
   <button
     class="circular control button"
@@ -49,52 +87,3 @@
     </div>
   </button>
 </template>
-<script>
-import { mapActions } from 'vuex'
-
-export default {
-  data () {
-    return {
-      expanded: false,
-      timeout: null,
-      volumeSteps: 100
-    }
-  },
-  computed: {
-    sliderVolume: {
-      get () {
-        return this.$store.state.player.volume * this.volumeSteps
-      },
-      set (v) {
-        this.$store.commit('player/volume', v / this.volumeSteps)
-      }
-    },
-    labels () {
-      return {
-        unmute: this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Unmute'),
-        mute: this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Mute'),
-        slider: this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Adjust volume')
-      }
-    }
-  },
-  methods: {
-    ...mapActions({
-      mute: 'player/mute',
-      unmute: 'player/unmute',
-      toggleMute: 'player/toggleMute'
-    }),
-    handleOver () {
-      if (this.timeout) {
-        clearTimeout(this.timeout)
-      }
-      this.expanded = true
-    },
-    handleLeave () {
-      if (this.timeout) {
-        clearTimeout(this.timeout)
-      }
-      this.timeout = setTimeout(() => { this.expanded = false }, 500)
-    }
-  }
-}
-</script>

@@ -19,11 +19,11 @@ export default (maxPreloaded: MaybeRef<number>) => {
     if (toRemove > 0 && !cleaningCache.value) {
       cleaningCache.value = true
 
-      const excess = sortBy(soundCache.values(), [(cached: CachedSound) => cached.date])
-        // TODO (wvffle): Check if works
-        .slice(0, toRemove) as unknown as CachedSound[]
+      const excess = sortBy([...soundCache.values()], [(cached: CachedSound) => cached.date])
+        .slice(0, toRemove)
 
       for (const cached of excess) {
+        console.log('Removing cached element:', cached)
         soundCache.delete(cached.id)
         cached.sound.unload()
       }

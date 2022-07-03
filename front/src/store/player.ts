@@ -95,10 +95,6 @@ const store: Module<State, RootState> = {
   },
   getters: {
     durationFormatted: state => {
-      if (state.duration % 1 !== 0) {
-        return time.parse(0)
-      }
-
       return time.parse(Math.round(state.duration))
     },
     currentTimeFormatted: state => {

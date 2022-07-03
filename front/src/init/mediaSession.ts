@@ -1,7 +1,7 @@
 import { InitModule } from '~/types'
 import { whenever } from '@vueuse/core'
-import useQueue from '~/composables/useQueue'
-import usePlayer from '~/composables/usePlayer'
+import useQueue from '~/composables/audio/useQueue'
+import usePlayer from '~/composables/audio/usePlayer'
 
 export const install: InitModule = ({ app }) => {
   const { currentTrack, next, previous } = useQueue()

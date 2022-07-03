@@ -1,6 +1,6 @@
 import { computed, watchEffect } from "vue"
 import { Howler } from 'howler'
-import useQueue from '~/composables/useQueue'
+import useQueue from '~/composables/audio/useQueue'
 import toLinearVolumeScale from '~/composables/audio/toLinearVolumeScale'
 import store from "~/store"
 
@@ -18,6 +18,10 @@ export default () => {
   })
 
   watchEffect(() => Howler.volume(toLinearVolumeScale(volume.value)))
+
+  const mute = () => store.dispatch('player/mute')
+  const unmute = () => store.dispatch('player/unmute')
+  const toggleMute = () => store.dispatch('player/toggleMute')
 
   // Time and duration
   const duration = computed(() => store.state.player.duration)
@@ -65,6 +69,9 @@ export default () => {
     focused,
 
     volume,
+    mute,
+    unmute,
+    toggleMute,
 
     duration,
     currentTime,
