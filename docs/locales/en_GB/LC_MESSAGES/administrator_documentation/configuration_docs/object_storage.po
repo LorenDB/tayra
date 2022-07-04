@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 14:19+0000\n"
+"PO-Revision-Date: 2022-07-05 19:34+0000\n"
 "Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
 "Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
 "projects/documentation/"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:1
 msgid "Store media in an object store"
-msgstr ""
+msgstr "Store media in an object store"
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:3
 msgid ""
@@ -31,10 +31,13 @@ msgid ""
 "`/srv/funkwhale/data/media` directory. If you prefer to use an "
 "S3-compatible object store, follow the instructions in this guide."
 msgstr ""
+"By default, Funkwhale stores all media data in the `/srv/funkwhale/data/"
+"media` directory. If you prefer to use an S3-compatible object store, follow "
+"the instructions in this guide."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:10
 msgid "Secure your object store"
-msgstr ""
+msgstr "Secure your object store"
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:12
 msgid ""
@@ -43,22 +46,29 @@ msgid ""
 "the URLs of your audio files and means that users can bypass "
 "authentication."
 msgstr ""
+"Before you begin, you need to secure your object store. Many S3-compatible "
+"stores list contents in the root by default. This exposes the URLs of your "
+"audio files and means that users can bypass authentication."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:14
 msgid ""
 "To prevent listing content, add the following policy to your "
 "S3-compatible object store."
 msgstr ""
+"To prevent listing content, add the following policy to your S3-compatible "
+"object store."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:39
 msgid ""
 "If you're using `awscli`, you can store this policy in a `/tmp/policy` "
 "file and apply it using the following command:"
 msgstr ""
+"If you're using `awscli`, you can store this policy in a `/tmp/policy` file "
+"and apply it using the following command:"
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:45
 msgid "Update your environment file"
-msgstr ""
+msgstr "Update your environment file"
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:47
 msgid ""
@@ -66,6 +76,9 @@ msgid ""
 "`.env` file. If you want to serve audio files from the bucket, set "
 "`PROXY_MEDIA` to `false`."
 msgstr ""
+"To set up S3-compatible storage, fill out the relevant details in the `.env` "
+"file. If you want to serve audio files from the bucket, set `PROXY_MEDIA` to "
+"`false`."
 
 #: ../../docstring config.settings.common.AWS_QUERYSTRING_AUTH:1 of
 msgid ""
@@ -165,23 +178,27 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:71
 msgid "Set up your reverse proxy"
-msgstr ""
+msgstr "Set up your reverse proxy"
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:74
 msgid ""
 "Serving files from object storage is not currently supported on Apache "
 "deployments."
 msgstr ""
+"Serving files from object storage is not currently supported on Apache "
+"deployments."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:77
 msgid ""
 "Serving files from an object store requires some changes to the reverse "
 "proxy."
 msgstr ""
+"Serving files from an object store requires some changes to the reverse "
+"proxy."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:79
 msgid "Open your Nginx configuration file in an editor."
-msgstr ""
+msgstr "Open your Nginx configuration file in an editor."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md
 msgid "Debian"
@@ -196,28 +213,32 @@ msgid ""
 "Comment out the `location /_protected/media/` block by adding a `#` to "
 "the start of each line."
 msgstr ""
+"Comment out the `location /_protected/media/` block by adding a `#` to the "
+"start of each line."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:106
 msgid ""
 "Uncomment the `location ~ /_protected/media/(.+)` block by removing the "
 "`#` from the start of each line."
 msgstr ""
+"Uncomment the `location ~ /_protected/media/(.+)` block by removing the `#` "
+"from the start of each line."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:116
 msgid "Add your S3 store URL to the `img-src` and `media-src` headers."
-msgstr ""
+msgstr "Add your S3 store URL to the `img-src` and `media-src` headers."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:122
 msgid "Test your Nginx configuration."
-msgstr ""
+msgstr "Test your Nginx configuration."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:128
 msgid "Restart Funkwhale and Nginx to pick up the changes."
-msgstr ""
+msgstr "Restart Funkwhale and Nginx to pick up the changes."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:148
 msgid "That's it! Files are now uploaded to and stored from your S3 bucket."
-msgstr ""
+msgstr "That's it! Files are now uploaded to and stored from your S3 bucket."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:150
 msgid "Troubleshooting"
@@ -228,6 +249,8 @@ msgid ""
 "You may see the following error when streaming music from your "
 "S3-compatible store:"
 msgstr ""
+"You may see the following error when streaming music from your S3-compatible "
+"store:"
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:160
 msgid ""
@@ -235,3 +258,6 @@ msgid ""
 "resolver. We're still looking into this issue. You can work around this "
 "by adding a resolver to the `location ~/_protected/media/(.+)` block."
 msgstr ""
+"This happens when the Nginx config is unable to use your server’s DNS "
+"resolver. We're still looking into this issue. You can work around this by "
+"adding a resolver to the `location ~/_protected/media/(.+)` block."
