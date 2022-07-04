@@ -77,7 +77,7 @@
           {{ labels.forum }}
         </a>
         <a
-          href="https://matrix.to/#/#funkwhale-troubleshooting:matrix.org"
+          href="https://matrix.to/#/#funkwhale-support:matrix.org"
           class="item"
           target="_blank"
         >

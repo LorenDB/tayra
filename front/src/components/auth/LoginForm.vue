@@ -54,7 +54,10 @@
       <div class="field">
         <label for="password-field">
           <translate translate-context="*/*/*">Password</translate> |
-          <router-link :to="{name: 'auth.password-reset', query: {email: credentials.username}}">
+          <router-link
+            tabindex="1"
+            :to="{name: 'auth.password-reset', query: {email: credentials.username}}"
+          >
             <translate translate-context="*/Login/*/Verb">Reset your password</translate>
           </router-link>
         </label>

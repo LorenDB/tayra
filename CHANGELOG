@@ -10,6 +10,58 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.2.6 (2022-07-04)
+------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Bugfixes:
+
+- Channel overview was displaying foreign tracks (#1773)
+- Fixed login form focusing reset password link instead of next input (#1373)
+- Fixed missing album contextual menu (#1791)
+- Fixed single listening submission when repeating a song (#1312)
+- Fixed subsonic createPlaylist's endpoint doesn't update playlist (#1263)
+- Resolve timeouts if nodeinfo and service actor is not known (#1714)
+
+
+Other:
+
+- Replaced references to #funkwhale-troubleshooting with #funkwhale-support
+
+Committers:
+
+- Georg Krause
+- Marcos Peña
+- Petitminion
+- wvffle
+
+Contributors to our Issues:
+
+- jeweet
+- wvffle
+- Georg Krause
+- Marcos Peña
+- AMoonRabbit
+- Micha Gläß-Stöcker
+- Ciarán Ainsworth
+- heyarne
+- Agate
+- JuniorJPDJ
+- MichaelBechHansen
+- ooZberg
+- Esras .
+- PhieF
+- Petitminion
+
+Contributors to our Merge Requests:
+
+- wvffle
+- Georg Krause
+- Marcos Peña
+- Petitminion
+
 1.2.5 (2022-05-07)
 ------------------
 
