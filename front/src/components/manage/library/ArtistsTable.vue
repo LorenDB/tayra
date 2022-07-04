@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouteWithPreferences } from '~/store/ui'
 import axios from 'axios'
 import Pagination from '~/components/vui/Pagination.vue'
 import ActionTable from '~/components/common/ActionTable.vue'
@@ -12,6 +13,11 @@ import { OrderingField } from '~/store/ui'
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO (wvffle): find object type
   filters?: object
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName: RouteWithPreferences | null
+  defaultQuery?: string
+  updateUrl?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -19,6 +25,8 @@ const props = withDefaults(defineProps<Props>(), {
   updateUrl: false,
   filters: () => ({})
 })
+
+const search = ref()
 
 // TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
@@ -94,7 +102,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
       <div class="fields">
         <div class="ui six wide field">
           <label for="artists-serarch"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-          <form @submit.prevent="query = $refs.search.value">
+          <form @submit.prevent="query = search.value">
             <input
               id="artists-search"
               ref="search"

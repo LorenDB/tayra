@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouteWithPreferences } from '~/store/ui'
 import axios from 'axios'
 import { uniq } from 'lodash-es'
 import Pagination from '~/components/vui/Pagination.vue'
@@ -14,6 +15,11 @@ import { useGettext } from 'vue3-gettext'
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO (wvffle): find object type
   filters?: object
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName: RouteWithPreferences | null
+  defaultQuery?: string
+  updateUrl?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -23,6 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const configs = useEditConfigs()
+const search = ref()
 
 // TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
@@ -148,7 +155,7 @@ const getCurrentState = (target?: StateTarget): object => {
       <div class="fields">
         <div class="ui field">
           <label for="search-edits"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-          <form @submit.prevent="query = $refs.search.value">
+          <form @submit.prevent="query = search.value">
             <input
               id="search-edits"
               ref="search"
@@ -233,7 +240,7 @@ const getCurrentState = (target?: StateTarget): object => {
       >
         <div class="ui loader" />
       </div>
-      <div v-else-if="result?.count > 0">
+      <div v-else-if="(result?.count ?? 0) > 0">
         <edit-card
           v-for="obj in result?.results ?? []"
           :key="obj.uuid"

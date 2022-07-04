@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouteWithPreferences } from '~/store/ui'
 import axios from 'axios'
 import Pagination from '~/components/vui/Pagination.vue'
 import ActionTable from '~/components/common/ActionTable.vue'
@@ -12,6 +13,11 @@ import useOrdering, { OrderingProps } from '~/composables/useOrdering'
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO (wvffle): find object type
   filters?: object
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName: RouteWithPreferences | null
+  defaultQuery?: string
+  updateUrl?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {

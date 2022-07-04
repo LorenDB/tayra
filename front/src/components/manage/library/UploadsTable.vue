@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ImportStatus, PrivacyLevel } from '~/types'
+import { RouteWithPreferences } from '~/store/ui'
 import axios from 'axios'
 import Pagination from '~/components/vui/Pagination.vue'
 import ActionTable from '~/components/common/ActionTable.vue'
@@ -15,6 +17,11 @@ import { Upload } from '~/types'
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO (wvffle): find object type
   filters?: object
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName: RouteWithPreferences | null
+  defaultQuery?: string
+  updateUrl?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -22,6 +29,8 @@ const props = withDefaults(defineProps<Props>(), {
   updateUrl: false,
   filters: () => ({})
 })
+
+const search = ref()
 
 // TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
@@ -94,6 +103,14 @@ const displayName = (upload: Upload): string => {
 
 const detailedUpload = ref({})
 const showUploadDetailModal = ref(false)
+
+const getImportStatusChoice = (importStatus: ImportStatus) => {
+  return sharedLabels.fields.import_status.choices[importStatus]
+}
+
+const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
+  return sharedLabels.fields.privacy_level.shortChoices[privacyLevel]
+}
 </script>
 
 <template>
@@ -102,7 +119,7 @@ const showUploadDetailModal = ref(false)
       <div class="fields">
         <div class="ui six wide field">
           <label for="uploads-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-          <form @submit.prevent="query = $refs.search.value">
+          <form @submit.prevent="query = search.value">
             <input
               id="uploads-search"
               ref="search"
@@ -332,20 +349,20 @@ const showUploadDetailModal = ref(false)
             <a
               href=""
               class="discrete link"
-              :title="sharedLabels.fields.privacy_level.shortChoices[scope.obj.library.privacy_level]"
+              :title="getPrivacyLevelChoice(scope.obj.library.privacy_level)"
               @click.prevent="addSearchToken('privacy_level', scope.obj.library.privacy_level)"
             >
-              {{ sharedLabels.fields.privacy_level.shortChoices[scope.obj.library.privacy_level] }}
+              {{ getPrivacyLevelChoice(scope.obj.library.privacy_level) }}
             </a>
           </td>
           <td>
             <a
               href=""
               class="discrete link"
-              :title="sharedLabels.fields.import_status.choices[scope.obj.import_status].help"
+              :title="getImportStatusChoice(scope.obj.import_status).help"
               @click.prevent="addSearchToken('status', scope.obj.import_status)"
             >
-              {{ sharedLabels.fields.import_status.choices[scope.obj.import_status].label }}
+              {{ getImportStatusChoice(scope.obj.import_status).label }}
             </a>
             <button
               class="ui tiny basic icon button"

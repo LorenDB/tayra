@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouteWithPreferences } from '~/store/ui'
 import axios from 'axios'
 import $ from 'jquery'
 import { computed, ref, watch, onMounted } from 'vue'
@@ -16,6 +17,9 @@ interface Props extends OrderingProps {
   defaultPage?: number
   defaultQuery?: string
   scope?: string
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName: RouteWithPreferences | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -198,7 +202,7 @@ const labels = computed(() => ({
         :playlists="result.results"
       />
       <div
-        v-else-if="result && !result.results.length > 0"
+        v-else-if="result && result.results.length === 0"
         class="ui placeholder segment sixteen wide column"
         style="text-align: center; display: flex; align-items: center"
       >

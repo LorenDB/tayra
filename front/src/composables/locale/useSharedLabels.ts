@@ -1,4 +1,5 @@
 import { gettext } from '~/init/locale'
+import { PrivacyLevel, ImportStatus } from '~/types'
 
 const { $pgettext } = gettext
 
@@ -11,12 +12,12 @@ export default () => ({
         me: $pgettext('Content/Settings/Dropdown', 'Nobody except me'),
         instance: $pgettext('Content/Settings/Dropdown', 'Everyone on this instance'),
         everyone: $pgettext('Content/Settings/Dropdown', 'Everyone, across all instances')
-      },
+      } as Record<PrivacyLevel, string>,
       shortChoices: {
         me: $pgettext('Content/Settings/Dropdown/Short', 'Private'),
         instance: $pgettext('Content/Settings/Dropdown/Short', 'Instance'),
         everyone: $pgettext('Content/Settings/Dropdown/Short', 'Everyone')
-      }
+      } as Record<PrivacyLevel, string>
     },
     import_status: {
       detailTitle: $pgettext('Content/Library/Link.Title', 'Click to display more information about the import process for this upload'),
@@ -41,7 +42,7 @@ export default () => ({
           label: $pgettext('Content/Library/*', 'Finished'),
           help: $pgettext('Content/Library/Help text', 'Imported')
         }
-      }
+      } as Record<ImportStatus, { label: string, help: string }>
     },
     report_type: {
       label: $pgettext('*/*/*', 'Category'),

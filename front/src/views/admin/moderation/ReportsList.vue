@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouteWithPreferences } from '~/store/ui'
 import axios from 'axios'
 import Pagination from '~/components/vui/Pagination.vue'
 import ReportCard from '~/components/manage/moderation/ReportCard.vue'
@@ -14,6 +15,11 @@ import { OrderingField } from '~/store/ui'
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO (wvffle): find more types
   mode?: 'card'
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName: RouteWithPreferences | null
+  defaultQuery?: string
+  updateUrl?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -21,6 +27,8 @@ const props = withDefaults(defineProps<Props>(), {
   updateUrl: false,
   mode: 'card'
 })
+
+const search = ref()
 
 // TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
@@ -93,7 +101,7 @@ const labels = computed(() => ({
         <div class="fields">
           <div class="ui field">
             <label for="reports-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-            <form @submit.prevent="query = $refs.search.value">
+            <form @submit.prevent="query = search.value">
               <input
                 id="reports-search"
                 ref="search"

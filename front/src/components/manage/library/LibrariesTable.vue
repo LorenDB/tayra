@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { PrivacyLevel } from '~/types'
+import { RouteWithPreferences } from '~/store/ui'
 import axios from 'axios'
 import Pagination from '~/components/vui/Pagination.vue'
 import ActionTable from '~/components/common/ActionTable.vue'
@@ -12,6 +14,11 @@ import { useGettext } from 'vue3-gettext'
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO (wvffle): find object type
   filters?: object
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName: RouteWithPreferences | null
+  defaultQuery?: string
+  updateUrl?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -19,6 +26,8 @@ const props = withDefaults(defineProps<Props>(), {
   updateUrl: false,
   filters: () => ({})
 })
+
+const search = ref()
 
 // TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
@@ -81,6 +90,10 @@ const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
   searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by domain, actor, name, description…')
 }))
+
+const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
+  return sharedLabels.fields.privacy_level.shortChoices[privacyLevel]
+}
 </script>
 
 <template>
@@ -89,7 +102,7 @@ const labels = computed(() => ({
       <div class="fields">
         <div class="ui six wide field">
           <label for="libraries-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-          <form @submit.prevent="query = $refs.search.value">
+          <form @submit.prevent="query = search.value">
             <input
               id="libraries-search"
               ref="search"
@@ -213,9 +226,7 @@ const labels = computed(() => ({
             </translate>
           </th>
         </template>
-        <template
-          #row-cells="scope"
-        >
+        <template #row-cells="scope">
           <td>
             <router-link :to="{name: 'manage.library.libraries.detail', params: {id: scope.obj.uuid }}">
               {{ scope.obj.name }}
@@ -258,10 +269,10 @@ const labels = computed(() => ({
             <a
               href=""
               class="discrete link"
-              :title="sharedLabels.fields.privacy_level.shortChoices[scope.obj.privacy_level]"
+              :title="getPrivacyLevelChoice(scope.obj.privacy_level)"
               @click.prevent="addSearchToken('privacy_level', scope.obj.privacy_level)"
             >
-              {{ sharedLabels.fields.privacy_level.shortChoices[scope.obj.privacy_level] }}
+              {{ getPrivacyLevelChoice(scope.obj.privacy_level) }}
             </a>
           </td>
           <td>

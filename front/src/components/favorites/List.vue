@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouteWithPreferences } from '~/store/ui'
 import axios from 'axios'
 import $ from 'jquery'
 import RadioButton from '~/components/radios/Button.vue'
@@ -17,6 +18,9 @@ import { OrderingField } from '~/store/ui'
 
 interface Props extends OrderingProps {
   defaultPage?: number
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName: RouteWithPreferences | null
 }
 
 const props = withDefaults(defineProps<Props>(), {

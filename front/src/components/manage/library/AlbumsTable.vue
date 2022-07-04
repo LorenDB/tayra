@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouteWithPreferences } from '~/store/ui'
 import axios from 'axios'
 import Pagination from '~/components/vui/Pagination.vue'
 import ActionTable from '~/components/common/ActionTable.vue'
@@ -13,6 +14,11 @@ interface Props extends SmartSearchProps, OrderingProps {
   // TODO (wvffle): Remove from EVERY SINGLE component that does not use it at all
   // TODO (wvffle): find object type
   filters?: object
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName: RouteWithPreferences | null
+  defaultQuery?: string
+  updateUrl?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -20,6 +26,8 @@ const props = withDefaults(defineProps<Props>(), {
   updateUrl: false,
   filters: () => ({})
 })
+
+const search = ref()
 
 // TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
@@ -91,7 +99,7 @@ const labels = computed(() => ({
       <div class="fields">
         <div class="ui six wide field">
           <label for="albums-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-          <form @submit.prevent="query = $refs.search.value">
+          <form @submit.prevent="query = search.value">
             <input
               id="albums-search"
               ref="search"

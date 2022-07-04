@@ -108,6 +108,8 @@ export interface Channel {
   downloads_count: number
 }
 
+export type PrivacyLevel = 'everyone' | 'instance' | 'me'
+
 export interface Library {
   id: string
   uuid: string
@@ -117,16 +119,17 @@ export interface Library {
   uploads_count: number
   size: number
   description: string
-  privacy_level: 'everyone' | 'instance' | 'me'
+  privacy_level: PrivacyLevel
   creation_date: string
   follow?: LibraryFollow
   latest_scan: LibraryScan
 }
 
+export type ImportStatus = 'scanning' | 'pending' | 'finished' | 'errored' | 'draft' | 'skipped'
 export interface LibraryScan {
   processed_files: number
   total_files: number
-  status: 'scanning' | 'pending' | 'finished' | 'errored'
+  status: ImportStatus
   errored_files: number
   modification_date: string
 }

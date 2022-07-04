@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ImportStatus } from '~/types'
+import { RouteWithPreferences } from '~/store/ui'
 import axios from 'axios'
 import time from '~/utils/time'
 import Pagination from '~/components/vui/Pagination.vue'
@@ -18,7 +20,14 @@ interface Props extends SmartSearchProps, OrderingProps {
   needsRefresh?: boolean
   // TODO (wvffle): find object type
   customObjects?: any[]
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName: RouteWithPreferences | null
+  defaultQuery?: string
+  updateUrl?: boolean
 }
+
+const search = ref()
 
 const props = withDefaults(defineProps<Props>(), {
   defaultQuery: '',
@@ -110,6 +119,10 @@ const labels = computed(() => ({
 
 const detailedUpload = ref({})
 const showUploadDetailModal = ref(false)
+
+const getImportStatusChoice = (importStatus: ImportStatus) => {
+  return sharedLabels.fields.import_status.choices[importStatus]
+}
 </script>
 
 <template>
@@ -120,7 +133,7 @@ const showUploadDetailModal = ref(false)
           <label for="files-search">
             <translate translate-context="Content/Search/Input.Label/Noun">Search</translate>
           </label>
-          <form @submit.prevent="query = $refs.search.value">
+          <form @submit.prevent="query = search.value">
             <input
               id="files-search"
               ref="search"
@@ -327,9 +340,9 @@ const showUploadDetailModal = ref(false)
             <a
               href=""
               class="discrete link"
-              :title="sharedLabels.fields.import_status.choices[scope.obj.import_status].help"
+              :title="getImportStatusChoice(scope.obj.import_status).help"
               @click.prevent="addSearchToken('status', scope.obj.import_status)"
-            >{{ sharedLabels.fields.import_status.choices[scope.obj.import_status].label }}</a>
+            >{{ getImportStatusChoice(scope.obj.import_status).label }}</a>
             <button
               class="ui tiny basic icon button"
               :title="sharedLabels.fields.import_status.detailTitle"

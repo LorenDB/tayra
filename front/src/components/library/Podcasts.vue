@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouteWithPreferences } from '~/store/ui'
 import qs from 'qs'
 import axios from 'axios'
 import $ from 'jquery'
@@ -23,6 +24,9 @@ interface Props extends OrderingProps {
   defaultQuery?: string
   defaultTags?: string[]
   scope?: string
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName: RouteWithPreferences | null
 }
 
 const props = withDefaults(defineProps<Props>(), {

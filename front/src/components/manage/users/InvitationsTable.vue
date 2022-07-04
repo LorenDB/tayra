@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouteWithPreferences } from '~/store/ui'
 import axios from 'axios'
 import moment from 'moment'
 import Pagination from '~/components/vui/Pagination.vue'
@@ -13,6 +14,9 @@ import { OrderingField } from '~/store/ui'
 interface Props extends OrderingProps {
   // TODO (wvffle): find object type
   filters?: object
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  orderingConfigName: RouteWithPreferences | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
