@@ -34,8 +34,6 @@ const scrollToCurrent = async () => {
   })
 }
 
-// TODO (wvffle): Add useVirtualList to speed up the queue rendering and potentially resolve #1471
-//                Each item has 49px height on desktop and 50.666px on tablet(?) and down
 onMounted(async () => {
   await nextTick()
   // NOTE: delay is to let transition work
