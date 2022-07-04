@@ -1,3 +1,139 @@
+<script setup lang="ts">
+import { Library } from '~/types'
+import axios from 'axios'
+import RadioButton from '~/components/radios/Button.vue'
+import useReport from '~/composables/moderation/useReport'
+import { useTimeoutFn } from '@vueuse/core'
+import { useStore } from '~/store'
+import { useGettext } from 'vue3-gettext'
+import { computed, ref, watch } from 'vue'
+
+interface Props {
+  initialLibrary: Library
+  displayFollow?: boolean
+  displayScan?: boolean
+  displayCopyFid?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  displayFollow: true,
+  displayScan: true,
+  displayCopyFid: true
+})
+
+const { report, getReportableObjects } = useReport()
+const store = useStore()
+
+const library = ref(props.initialLibrary)
+const isLoadingFollow = ref(false)
+const showScan = ref(false)
+const latestScan = ref(props.initialLibrary.latest_scan)
+
+const scanProgress = computed(() => Math.min(latestScan.value.processed_files * 100 / latestScan.value.total_files, 100))
+const scanStatus = computed(() => latestScan.value?.status ?? 'unknown')
+const canLaunchScan = computed(() => scanStatus.value !== 'pending' && scanStatus.value !== 'scanning')
+const radioPlayable = computed(() => (
+  (library.value.actor.is_local || scanStatus.value === 'finished')
+  && (library.value.privacy_level === 'everyone' || library.value.follow?.approved)
+))
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  tooltips: { 
+    me: $pgettext('Content/Library/Card.Help text', 'This library is private and your approval from its owner is needed to access its content'),
+    everyone: $pgettext('Content/Library/Card.Help text', 'This library is public and you can access its content freely')
+  }
+}))
+
+const launchScan = async () => {
+  try {
+    const response = await axios.post(`federation/libraries/${library.value.uuid}/scan/`)
+    if (response.data.status !== 'skipped') {
+      latestScan.value = response.data.scan
+    }
+
+    store.commit('ui/addMessage', {
+      date: new Date(),
+      content: response.data.status === 'skipped'
+        ? $pgettext('Content/Library/Message', 'Scan skipped (previous scan is too recent)')
+        : $pgettext('Content/Library/Message', 'Scan launched')
+    })
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+}
+
+const emit = defineEmits(['followed', 'deleted'])
+const follow = async () => {
+  isLoadingFollow.value = true
+  try {
+    const response = await axios.post('federation/follows/library/', { target: library.value.uuid })
+    library.value.follow = response.data
+    emit('followed')
+  } catch (error) {
+    // TODO (wvffle): ==> CORRECTLY HANDLED ERROR HERE <==
+    store.commit('ui/addMessage', {
+      // TODO (wvffle): Translate
+      content: 'Cannot follow remote library: ' + error,
+      date: new Date()
+    })
+  }
+
+  isLoadingFollow.value = false
+}
+
+const unfollow = async () => {
+  isLoadingFollow.value = true
+  try {
+    if (library.value.follow) {
+      await axios.delete(`federation/follows/library/${library.value.follow.uuid}/`)
+      library.value.follow = undefined
+    }
+  } catch (error) {
+    store.commit('ui/addMessage', {
+      // TODO (wvffle): Translate
+      content: 'Cannot unfollow remote library: ' + error,
+      date: new Date()
+    })
+  }
+
+  isLoadingFollow.value = false
+}
+
+const fetchScanStatus = async () => {
+  try {
+    if (!library.value.follow) {
+      return
+    }
+
+    const response = await axios.get(`federation/follows/library/${library.value.follow.uuid}/`)
+    latestScan.value = response.data.target.latest_scan
+
+    if (scanStatus.value === 'pending' || scanStatus.value === 'scanning') {
+      startFetching()
+    } else {
+      stopFetching()
+    }
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+}
+
+const { start: startFetching, stop: stopFetching } = useTimeoutFn(fetchScanStatus, 5000, { immediate: false })
+
+watch(showScan, (shouldShow) => {
+  if (shouldShow) {
+    if (scanStatus.value === 'pending' || scanStatus.value === 'scanning') {
+      fetchScanStatus()
+    }
+
+    return
+  }
+
+  stopFetching()
+})
+</script>
+
 <template>
   <div class="ui card">
     <div class="content">
@@ -12,10 +148,10 @@
           <i class="ellipsis vertical large icon nomargin" />
           <div class="menu">
             <button
-              v-for="obj in getReportableObjs({library, account: library.actor})"
+              v-for="obj in getReportableObjects({library, account: library.actor})"
               :key="obj.target.type + obj.target.id"
               class="item basic"
-              @click.stop.prevent="$store.dispatch('moderation/report', obj.target)"
+              @click.stop.prevent="report(obj)"
             >
               <i class="share icon" /> {{ obj.label }}
             </button>
@@ -228,143 +364,3 @@
     </div>
   </div>
 </template>
-<script>
-import axios from 'axios'
-import ReportMixin from '~/components/mixins/Report.vue'
-import RadioButton from '~/components/radios/Button.vue'
-
-export default {
-  components: {
-    RadioButton
-  },
-  mixins: [ReportMixin],
-  props: {
-    initialLibrary: { type: Object, required: true },
-    displayFollow: { type: Boolean, default: true },
-    displayScan: { type: Boolean, default: true },
-    displayCopyFid: { type: Boolean, default: true }
-  },
-  data () {
-    return {
-      library: this.initialLibrary,
-      isLoadingFollow: false,
-      showScan: false,
-      scanTimeout: null,
-      latestScan: this.initialLibrary.latest_scan
-    }
-  },
-  computed: {
-    labels () {
-      const me = this.$pgettext('Content/Library/Card.Help text', 'This library is private and your approval from its owner is needed to access its content')
-      const everyone = this.$pgettext('Content/Library/Card.Help text', 'This library is public and you can access its content freely')
-
-      return {
-        tooltips: {
-          me,
-          everyone
-        }
-      }
-    },
-    scanProgress () {
-      const scan = this.latestScan
-      const progress = scan.processed_files * 100 / scan.total_files
-      return Math.min(parseInt(progress), 100)
-    },
-    scanStatus () {
-      if (this.latestScan) {
-        return this.latestScan.status
-      }
-      return 'unknown'
-    },
-    canLaunchScan () {
-      if (this.scanStatus === 'pending') {
-        return false
-      }
-      if (this.scanStatus === 'scanning') {
-        return false
-      }
-      return true
-    },
-    radioPlayable () {
-      return (
-        (this.library.actor.is_local || this.scanStatus === 'finished') &&
-        (this.library.privacy_level === 'everyone' || (this.library.follow && this.library.follow.is_approved))
-      )
-    }
-  },
-  watch: {
-    showScan (newValue, oldValue) {
-      if (newValue) {
-        if (this.scanStatus === 'pending' || this.scanStatus === 'scanning') {
-          this.fetchScanStatus()
-        }
-      } else {
-        if (this.scanTimeout) {
-          clearTimeout(this.scanTimeout)
-        }
-      }
-    }
-  },
-  methods: {
-    launchScan () {
-      const self = this
-      const successMsg = this.$pgettext('Content/Library/Message', 'Scan launched')
-      const skippedMsg = this.$pgettext('Content/Library/Message', 'Scan skipped (previous scan is too recent)')
-      axios.post(`federation/libraries/${this.library.uuid}/scan/`).then((response) => {
-        let msg
-        if (response.data.status === 'skipped') {
-          msg = skippedMsg
-        } else {
-          self.latestScan = response.data.scan
-          msg = successMsg
-        }
-        self.$store.commit('ui/addMessage', {
-          content: msg,
-          date: new Date()
-        })
-      })
-    },
-    follow () {
-      const self = this
-      this.isLoadingFollow = true
-      axios.post('federation/follows/library/', { target: this.library.uuid }).then((response) => {
-        self.library.follow = response.data
-        self.isLoadingFollow = false
-        self.$emit('followed')
-      }, error => {
-        self.isLoadingFollow = false
-        self.$store.commit('ui/addMessage', {
-          content: 'Cannot follow remote library: ' + error,
-          date: new Date()
-        })
-      })
-    },
-    unfollow () {
-      const self = this
-      this.isLoadingFollow = true
-      axios.delete(`federation/follows/library/${this.library.follow.uuid}/`).then((response) => {
-        self.$emit('deleted')
-        self.library.follow = null
-        self.isLoadingFollow = false
-      }, error => {
-        self.isLoadingFollow = false
-        self.$store.commit('ui/addMessage', {
-          content: 'Cannot unfollow remote library: ' + error,
-          date: new Date()
-        })
-      })
-    },
-    fetchScanStatus () {
-      const self = this
-      axios.get(`federation/follows/library/${this.library.follow.uuid}/`).then((response) => {
-        self.latestScan = response.data.target.latest_scan
-        if (self.scanStatus === 'pending' || self.scanStatus === 'scanning') {
-          self.scanTimeout = setTimeout(self.fetchScanStatus(), 5000)
-        } else {
-          clearTimeout(self.scanTimeout)
-        }
-      })
-    }
-  }
-}
-</script>

@@ -1,3 +1,43 @@
+<script setup lang="ts">
+import { Album, Artist, Library } from '~/types'
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import Modal from '~/components/semantic/Modal.vue'
+import useReport from '~/composables/moderation/useReport'
+import { computed, ref } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+import { getDomain } from '~/utils'
+
+interface Props {
+  isLoading: boolean
+  artist: Artist | null
+  object: Album
+  publicLibraries: Library[]
+  isAlbum: boolean
+  isChannel: boolean
+  isSerie: boolean
+}
+
+const props = defineProps<Props>()
+const { report, getReportableObjects } = useReport()
+
+const showEmbedModal = ref(false)
+
+const domain = computed(() => getDomain(props.object.fid))
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  more: $pgettext('*/*/Button.Label/Noun', 'More…')
+}))
+
+const isEmbedable = computed(() => (props.isChannel && props.artist?.channel?.actor) || props.publicLibraries.length)
+const musicbrainzUrl = computed(() => props.object?.mbid ? `https://musicbrainz.org/release/${props.object.mbid}` : null)
+const discogsUrl = computed(() => `https://discogs.com/search/?type=release&title=${encodeURI(props.object?.title)}&artist=${encodeURI(props.object?.artist.name)}`)
+
+const emit = defineEmits(['remove'])
+const remove = () => emit('remove')
+</script>
+
 <template>
   <span>
 
@@ -109,11 +149,11 @@
         </dangerous-button>
         <div class="divider" />
         <div
-          v-for="obj in getReportableObjs({album: object, channel: artist.channel})"
+          v-for="obj in getReportableObjects({album: object, channel: artist?.channel})"
           :key="obj.target.type + obj.target.id"
           role="button"
           class="basic item"
-          @click.stop.prevent="$store.dispatch('moderation/report', obj.target)"
+          @click.stop.prevent="report(obj)"
         >
           <i class="share icon" /> {{ obj.label }}
         </div>
@@ -127,7 +167,7 @@
           <translate translate-context="Content/Moderation/Link">Open in moderation interface</translate>
         </router-link>
         <a
-          v-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
+          v-if="$store.state.auth.profile && $store.state.auth.profile?.is_superuser"
           class="basic item"
           :href="$store.getters['instance/absoluteUrl'](`/api/admin/music/album/${object.id}`)"
           target="_blank"
@@ -140,62 +180,3 @@
     </button>
   </span>
 </template>
-<script>
-import EmbedWizard from '~/components/audio/EmbedWizard.vue'
-import Modal from '~/components/semantic/Modal.vue'
-import ReportMixin from '~/components/mixins/Report.vue'
-
-import { getDomain } from '~/utils'
-
-export default {
-  components: {
-    EmbedWizard,
-    Modal
-  },
-  mixins: [ReportMixin],
-  props: {
-    isLoading: Boolean,
-    artist: { type: Object, required: true },
-    object: { type: Object, required: true },
-    publicLibraries: { type: Array, required: true },
-    isAlbum: Boolean,
-    isChannel: Boolean,
-    isSerie: Boolean
-  },
-  data () {
-    return {
-      showEmbedModal: false
-    }
-  },
-  computed: {
-    domain () {
-      if (this.object) {
-        return getDomain(this.object.fid)
-      }
-      return null
-    },
-    labels () {
-      return {
-        more: this.$pgettext('*/*/Button.Label/Noun', 'More…')
-      }
-    },
-    isEmbedable () {
-      return (this.isChannel && this.artist.channel.actor) || this.publicLibraries.length > 0
-    },
-
-    musicbrainzUrl () {
-      if (this.object.mbid) {
-        return 'https://musicbrainz.org/release/' + this.object.mbid
-      }
-      return null
-    },
-    discogsUrl () {
-      return (
-        'https://discogs.com/search/?type=release&title=' +
-        encodeURI(this.object.title) + '&artist=' +
-        encodeURI(this.object.artist.name)
-      )
-    }
-  }
-}
-</script>

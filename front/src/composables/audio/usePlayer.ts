@@ -44,7 +44,7 @@ const playTrack = async (track: Track, oldTrack?: Track) => {
         .then(response => response.data, () => null)
     }
 
-    if (track == null) {
+    if (track === null) {
       store.commit('player/isLoadingAudio', false)
       store.dispatch('player/trackErrored')
       return

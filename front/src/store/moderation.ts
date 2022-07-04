@@ -19,11 +19,12 @@ export interface State {
   }
 }
 
-interface ContentFilter {
+export interface ContentFilter {
   uuid: string
   creation_date: Date
   target: {
     type: 'artist'
+    id: string
   }
 }
 

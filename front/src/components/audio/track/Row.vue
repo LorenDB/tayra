@@ -1,3 +1,53 @@
+<script setup lang="ts">
+import { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
+// import { Track } from '~/types'
+import PlayIndicator from '~/components/audio/track/PlayIndicator.vue'
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import usePlayOptions, { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
+import useQueue from '~/composables/audio/useQueue'
+import usePlayer from '~/composables/audio/usePlayer'
+import { ref } from 'vue'
+
+interface Props extends PlayOptionsProps {
+  tracks: Track[]
+  track: Track
+  index: number
+
+  showAlbum?: boolean
+  showArt?: boolean
+  showArtist?: boolean
+  showDuration?: boolean
+  showPosition?: boolean
+  displayActions?: boolean
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  isPlayable?: boolean
+  artist?: Artist | null
+  album?: Album | null
+  playlist?: Playlist | null
+  library?: Library | null
+  channel?: Channel | null
+  account?: Actor | null
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  showAlbum: true,
+  showArt: true,
+  showArtist: true,
+  showDuration: true,
+  showPosition: false,
+  displayActions: true
+})
+
+const hover = ref<string | null>(null)
+
+const { playing } = usePlayer()
+const { currentTrack } = useQueue()
+const { activateTrack } = usePlayOptions(props)
+
+</script>
+
 <template>
   <div
     :class="[
@@ -17,7 +67,7 @@
         v-if="
           !$store.state.player.isLoadingAudio &&
             currentTrack &&
-            isPlaying &&
+            playing &&
             track.id === currentTrack.id &&
             !(track.id == hover)
         "
@@ -25,9 +75,9 @@
       <button
         v-else-if="
           currentTrack &&
-            !isPlaying &&
+            !playing &&
             track.id === currentTrack.id &&
-            !track.id == hover
+            track.id !== hover
         "
         class="ui really tiny basic icon button play-button paused"
       >
@@ -36,7 +86,7 @@
       <button
         v-else-if="
           currentTrack &&
-            isPlaying &&
+            playing &&
             track.id === currentTrack.id &&
             track.id == hover
         "
@@ -54,7 +104,7 @@
         v-else-if="showPosition"
         class="track-position"
       >
-        {{ prettyPosition(track.position) }}
+        {{ (track.position as unknown as string).padStart(2, '0') }}
       </span>
     </div>
     <div
@@ -64,38 +114,20 @@
       @click.prevent.exact="activateTrack(track, index)"
     >
       <img
-        v-if="
-          track.album && track.album.cover && track.album.cover.urls.original
-        "
-        v-lazy="
-          $store.getters['instance/absoluteUrl'](
-            track.album.cover.urls.medium_square_crop
-          )
-        "
+        v-if="track.album?.cover?.urls.original"
+        v-lazy="$store.getters['instance/absoluteUrl'](track.album.cover.urls.medium_square_crop)"
         alt=""
         class="ui artist-track mini image"
       >
       <img
-        v-else-if="
-          track.cover && track.cover.urls.original
-        "
-        v-lazy="
-          $store.getters['instance/absoluteUrl'](
-            track.cover.urls.medium_square_crop
-          )
-        "
+        v-else-if="track.cover?.urls.original"
+        v-lazy="$store.getters['instance/absoluteUrl'](track.cover.urls.medium_square_crop)"
         alt=""
         class="ui artist-track mini image"
       >
       <img
-        v-else-if="
-          track.artist && track.artist.cover && track.album.cover.urls.original
-        "
-        v-lazy="
-          $store.getters['instance/absoluteUrl'](
-            track.cover.urls.medium_square_crop
-          )
-        "
+        v-else-if="track.artist?.cover?.urls.original"
+        v-lazy="$store.getters['instance/absoluteUrl'](track.artist.cover.urls.medium_square_crop) "
         alt=""
         class="ui artist-track mini image"
       >
@@ -121,9 +153,9 @@
       class="content ellipsis left floated column"
     >
       <router-link
-        :to="{ name: 'library.albums.detail', params: { id: track.album.id } }"
+        :to="{ name: 'library.albums.detail', params: { id: track.album?.id } }"
       >
-        {{ track.album.title }}
+        {{ track.album?.title }}
       </router-link>
     </div>
     <div
@@ -134,10 +166,10 @@
         class="artist link"
         :to="{
           name: 'library.artists.detail',
-          params: { id: track.artist.id },
+          params: { id: track.artist?.id },
         }"
       >
-        {{ track.artist.name }}
+        {{ track.artist?.name }}
       </router-link>
     </div>
     <div
@@ -178,67 +210,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import PlayIndicator from '~/components/audio/track/PlayIndicator.vue'
-import { mapActions, mapGetters } from 'vuex'
-import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
-import PlayButton from '~/components/audio/PlayButton.vue'
-import PlayOptions from '~/components/mixins/PlayOptions.vue'
-
-export default {
-
-  components: {
-    PlayIndicator,
-    TrackFavoriteIcon,
-    PlayButton
-  },
-  mixins: [PlayOptions],
-  props: {
-    tracks: { type: Array, required: true },
-    showAlbum: { type: Boolean, required: false, default: true },
-    showArtist: { type: Boolean, required: false, default: true },
-    showPosition: { type: Boolean, required: false, default: false },
-    showArt: { type: Boolean, required: false, default: true },
-    search: { type: Boolean, required: false, default: false },
-    filters: { type: Object, required: false, default: null },
-    nextUrl: { type: String, required: false, default: null },
-    displayActions: { type: Boolean, required: false, default: true },
-    showDuration: { type: Boolean, required: false, default: true },
-    index: { type: Number, required: true },
-    track: { type: Object, required: true }
-  },
-
-  data () {
-    return {
-      hover: null
-    }
-  },
-
-  computed: {
-    ...mapGetters({
-      currentTrack: 'queue/currentTrack'
-    }),
-
-    isPlaying () {
-      return this.$store.state.player.playing
-    }
-  },
-
-  methods: {
-
-    prettyPosition (position, size) {
-      let s = String(position)
-      while (s.length < (size || 2)) {
-        s = '0' + s
-      }
-      return s
-    },
-
-    ...mapActions({
-      resumePlayback: 'player/resumePlayback',
-      pausePlayback: 'player/pausePlayback'
-    })
-  }
-}
-</script>

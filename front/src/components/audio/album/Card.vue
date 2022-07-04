@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { Album } from '~/types'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import { momentFormat } from '~/utils/filters'
+import { computed } from 'vue'
+import { useStore } from '~/store'
+
+interface Props {
+  album: Album
+}
+
+const props = defineProps<Props>()
+const store = useStore()
+
+const imageUrl = computed(() => props.album.cover?.urls.original
+  ? store.getters['instance/absoluteUrl'](props.album.cover.urls.medium_square_crop)
+  : null
+)
+</script>
+
 <template>
   <div class="card app-card component-album-card">
     <router-link
@@ -37,7 +57,7 @@
       </div>
     </div>
     <div class="extra content">
-      <span v-if="album.release_date">{{ momentFormat(album.release_date, 'Y') }} · </span>
+      <span v-if="album.release_date">{{ momentFormat(new Date(album.release_date), 'Y') }} · </span>
       <translate
         translate-context="*/*/*"
         :translate-params="{count: album.tracks_count}"
@@ -56,28 +76,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import PlayButton from '~/components/audio/PlayButton.vue'
-import { momentFormat } from '~/utils/filters'
-
-export default {
-  components: {
-    PlayButton
-  },
-  props: {
-    album: { type: Object, required: true }
-  },
-  setup () {
-    return { momentFormat }
-  },
-  computed: {
-    imageUrl () {
-      if (this.album.cover && this.album.cover.urls.original) {
-        return this.$store.getters['instance/absoluteUrl'](this.album.cover.urls.medium_square_crop)
-      }
-      return null
-    }
-  }
-}
-</script>

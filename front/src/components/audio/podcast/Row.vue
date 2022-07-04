@@ -1,11 +1,61 @@
+<script setup lang="ts">
+import { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
+import { /* Track, */ Cover } from '~/types'
+import axios from 'axios'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import usePlayOptions, { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
+import { ref } from 'vue'
+import useQueue from '~/composables/audio/useQueue'
+
+interface Props extends PlayOptionsProps {
+  tracks: Track[]
+  track: Track
+  index: number
+
+  showArt?: boolean
+  displayActions?: boolean
+  defaultCover?: Cover | null
+
+  // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  isPlayable?: boolean
+  artist?: Artist | null
+  album?: Album | null
+  playlist?: Playlist | null
+  library?: Library | null
+  channel?: Channel | null
+  account?: Actor | null
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  showArt: true,
+  displayActions: true,
+  defaultCover: () => null
+})
+
+const description = ref('')
+
+const { currentTrack } = useQueue()
+const { activateTrack } = usePlayOptions(props)
+
+const fetchData = async () => {
+  try {
+    const response = await axios.get(`tracks/${props.track.id}/`)
+    description.value = response.data.description.text
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+}
+
+// NOTE: Let the <Suspense> take care of showing the loader
+await fetchData()
+</script>
+
 <template>
   <div
     :class="[
       { active: currentTrack && track.id === currentTrack.id },
       'track-row podcast row',
     ]"
-    @mouseover="hover = track.id"
-    @mouseleave="hover = null"
     @dblclick="activateTrack(track, index)"
   >
     <div
@@ -15,26 +65,14 @@
       @click.prevent.exact="activateTrack(track, index)"
     >
       <img
-        v-if="
-          track.cover && track.cover.urls.original
-        "
-        v-lazy="
-          $store.getters['instance/absoluteUrl'](
-            track.cover.urls.medium_square_crop
-          )
-        "
+        v-if="track.cover?.urls.original "
+        v-lazy="$store.getters['instance/absoluteUrl'](track.cover.urls.medium_square_crop)"
         alt=""
         class="ui artist-track mini image"
       >
       <img
-        v-else-if="
-          defaultCover
-        "
-        v-lazy="
-          $store.getters['instance/absoluteUrl'](
-            defaultCover.cover.urls.medium_square_crop
-          )
-        "
+        v-else-if="defaultCover"
+        v-lazy="$store.getters['instance/absoluteUrl'](defaultCover.urls.medium_square_crop)"
         alt=""
         class="ui artist-track mini image"
       >
@@ -57,7 +95,7 @@
         v-if="description"
         class="podcast-episode-meta"
       >
-        {{ description.text }}
+        {{ description }}
       </p>
     </div>
     <div
@@ -79,86 +117,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import { mapActions, mapGetters } from 'vuex'
-import PlayButton from '~/components/audio/PlayButton.vue'
-import PlayOptions from '~/components/mixins/PlayOptions.vue'
-
-export default {
-
-  components: {
-    PlayButton
-  },
-  mixins: [PlayOptions],
-  props: {
-    tracks: { type: Array, required: true },
-    showAlbum: { type: Boolean, required: false, default: true },
-    showArtist: { type: Boolean, required: false, default: true },
-    showPosition: { type: Boolean, required: false, default: false },
-    showArt: { type: Boolean, required: false, default: true },
-    search: { type: Boolean, required: false, default: false },
-    filters: { type: Object, required: false, default: null },
-    nextUrl: { type: String, required: false, default: null },
-    displayActions: { type: Boolean, required: false, default: true },
-    showDuration: { type: Boolean, required: false, default: true },
-    index: { type: Number, required: true },
-    track: { type: Object, required: true },
-    defaultCover: { type: Object, required: false, default: null }
-  },
-
-  data () {
-    return {
-      hover: null,
-      errors: null,
-      description: null
-    }
-  },
-
-  computed: {
-    ...mapGetters({
-      currentTrack: 'queue/currentTrack'
-    }),
-
-    isPlaying () {
-      return this.$store.state.player.playing
-    }
-  },
-
-  created () {
-    this.fetchData('tracks/' + this.track.id + '/')
-  },
-
-  methods: {
-    async fetchData (url) {
-      if (!url) {
-        return
-      }
-      this.isLoading = true
-      const self = this
-      try {
-        const channelsPromise = await axios.get(url)
-        self.description = channelsPromise.data.description
-        self.isLoading = false
-      } catch (e) {
-        self.isLoading = false
-        self.errors = e.backendErrors
-      }
-    },
-
-    prettyPosition (position, size) {
-      let s = String(position)
-      while (s.length < (size || 2)) {
-        s = '0' + s
-      }
-      return s
-    },
-
-    ...mapActions({
-      resumePlayback: 'player/resumePlayback',
-      pausePlayback: 'player/pausePlayback'
-    })
-  }
-}
-</script>

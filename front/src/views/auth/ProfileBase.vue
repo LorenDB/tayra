@@ -1,3 +1,64 @@
+<script setup lang="ts">
+import { Actor } from '~/types'
+import axios from 'axios'
+import useReport from '~/composables/moderation/useReport'
+import { onBeforeRouteUpdate } from 'vue-router'
+import { useStore } from '~/store'
+import { useGettext } from 'vue3-gettext'
+import { computed, ref, watch } from 'vue'
+
+interface Props {
+  username: string
+  domain?: string | null
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  domain: null
+})
+
+const { report, getReportableObjects } = useReport()
+const store = useStore()
+
+const object = ref<Actor | null>(null)
+
+const displayName = computed(() => object.value?.name ?? object.value?.preferred_username)
+const fullUsername = computed(() => props.domain
+  ? `${props.username}@${props.domain}`
+  : `${props.username}@${store.getters['instance/domain']}`
+)
+
+const routerParams = computed(() => props.domain
+  ? { username: props.username, domain: props.domain }
+  : { username: props.username }
+)
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  usernameProfile: $pgettext('Head/Profile/Title', "%{ username }'s profile", { username: props.username })
+}))
+
+onBeforeRouteUpdate((to) => {
+  to.meta.preserveScrollPosition = true
+})
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  object.value = null
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`federation/actors/${fullUsername.value}/`)
+    object.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+watch(props, fetchData, { immediate: true })
+</script>
+
 <template>
   <main
     v-title="labels.usernameProfile"
@@ -36,11 +97,11 @@
                 >View on %{ domain }</translate>
               </a>
               <div
-                v-for="obj in getReportableObjs({account: object})"
+                v-for="obj in getReportableObjects({account: object})"
                 :key="obj.target.type + obj.target.id"
                 role="button"
                 class="basic item"
-                @click.stop.prevent="$store.dispatch('moderation/report', obj.target)"
+                @click.stop.prevent="report(obj)"
               >
                 <i class="share icon" /> {{ obj.label }}
               </div>
@@ -124,7 +185,7 @@
               <div class="ui hidden divider" />
               <router-view
                 :object="object"
-                @updated="fetch"
+                @updated="fetchData"
               />
             </div>
           </div>
@@ -133,82 +194,3 @@
     </div>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-import ReportMixin from '~/components/mixins/Report.vue'
-
-export default {
-  mixins: [ReportMixin],
-  beforeRouteUpdate (to, from, next) {
-    to.meta.preserveScrollPosition = true
-    next()
-  },
-  props: {
-    username: { type: String, required: true },
-    domain: { type: String, required: false, default: null }
-  },
-  data () {
-    return {
-      object: null,
-      isLoading: false
-    }
-  },
-  computed: {
-    labels () {
-      const msg = this.$pgettext('Head/Profile/Title', "%{ username }'s profile")
-      const usernameProfile = this.$gettextInterpolate(msg, {
-        username: this.username
-      })
-      return {
-        usernameProfile
-      }
-    },
-    fullUsername () {
-      if (this.username && this.domain) {
-        return `${this.username}@${this.domain}`
-      } else {
-        return `${this.username}@${this.$store.getters['instance/domain']}`
-      }
-    },
-    routerParams () {
-      if (this.domain) {
-        return { username: this.username, domain: this.domain }
-      } else {
-        return { username: this.username }
-      }
-    },
-    displayName () {
-      return this.object.name || this.object.preferred_username
-    }
-  },
-  watch: {
-    domain () {
-      this.fetch()
-    },
-    username () {
-      this.fetch()
-    }
-  },
-  created () {
-    const authenticated = this.$store.state.auth.authenticated
-    if (!authenticated && this.domain && this.$store.getters['instance/domain'] !== this.domain) {
-      this.$router.push({ name: 'login', query: { next: this.$route.fullPath } })
-    } else {
-      this.fetch()
-    }
-  },
-  methods: {
-    fetch () {
-      const self = this
-      self.object = null
-      self.isLoading = true
-      axios.get(`federation/actors/${this.fullUsername}/`).then((response) => {
-        self.object = response.data
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>

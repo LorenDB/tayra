@@ -24,6 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
 const page = ref(1)
 type ResponseType = { count: number, results: any[] }
 const result = ref<null | ResponseType>(null)
+const search = ref()
 
 const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props.defaultQuery, props.updateUrl)
 const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
@@ -81,7 +82,7 @@ const labels = computed(() => ({
       <div class="fields">
         <div class="ui six wide field">
           <label for="channel-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
-          <form @submit.prevent="query = $refs.search.value">
+          <form @submit.prevent="query = search.value">
             <input
               id="channel-search"
               ref="search"

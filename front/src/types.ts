@@ -30,22 +30,30 @@ export interface ThemeEntry {
 }
 
 // Track stuff
-export type ContentCategory = 'podcast'
+export type ContentCategory = 'podcast' | 'music'
 
 export interface Artist {
   id: string
+  fid: string
+  mbid?: string
 
   name: string
   description: Content
   cover?: Cover
+  channel?: Channel
   tags: string[]
 
   content_category: ContentCategory
   albums: Album[]
+  tracks_count: number
+  attributed_to: Actor
+  is_local: boolean
 }
 
 export interface Album {
   id: string
+  fid: string
+  mbid?: string
 
   title: string
   description: Content
@@ -56,10 +64,15 @@ export interface Album {
   artist: Artist
   tracks_count: number
   tracks: Track[]
+
+  is_playable: boolean
+  is_local: boolean
 }
 
 export interface Track {
   id: string
+  fid: string
+  mbid?: string
 
   title: string
   description: Content
@@ -72,19 +85,63 @@ export interface Track {
 
   album?: Album
   artist?: Artist
+  disc_number: number
 
-  // TODO (wvffle): Make sure it really has listen_url
   listen_url: string
+  creation_date: string
+  attributed_to: Actor
+
+  is_playable: boolean
+  is_local: boolean
 }
 
 
 export interface Channel {
   id: string
+  uuid: string
   artist?: Artist
+  actor: Actor
+  attributed_to: Actor
+  url?: string
+  rss_url: string
+  subscriptions_count: number
+  downloads_count: number
+}
+
+export interface Library {
+  id: string
+  uuid: string
+  fid?: string
+  name: string
+  actor: Actor
+  uploads_count: number
+  size: number
+  description: string
+  privacy_level: 'everyone' | 'instance' | 'me'
+  creation_date: string
+  follow?: LibraryFollow
+  latest_scan: LibraryScan
+}
+
+export interface LibraryScan {
+  processed_files: number
+  total_files: number
+  status: 'scanning' | 'pending' | 'finished' | 'errored'
+  errored_files: number
+  modification_date: string
+}
+
+export interface LibraryFollow {
+  uuid: string
+  approved: boolean
 }
 
 export interface Cover {
   uuid: string
+  urls: {
+    original: string
+    medium_square_crop: string
+  }
 }
 
 export interface License {
@@ -188,8 +245,12 @@ export interface FSLogs {
   logs: string[]
 }
 
-// Yet uncategorized stuff
+// Profile stuff
 export interface Actor {
+  fid?: string
+  name?: string
+  icon?: Cover
+  summary: string
   preferred_username: string
   full_username: string
   is_local: boolean

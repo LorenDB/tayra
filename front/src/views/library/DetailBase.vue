@@ -1,3 +1,84 @@
+<script setup lang="ts">
+// TODO (wvffle): Rename to LibraryBase
+import { Library } from '~/types'
+import axios from 'axios'
+import LibraryFollowButton from '~/components/audio/LibraryFollowButton.vue'
+import RadioButton from '~/components/radios/Button.vue'
+import useReport from '~/composables/moderation/useReport'
+import { humanSize } from '~/utils/filters'
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
+import { useStore } from '~/store'
+import { useGettext } from 'vue3-gettext'
+import { computed, ref, watch, watchEffect } from 'vue'
+
+interface Props {
+  id: string
+}
+
+const props = defineProps<Props>()
+
+const { report, getReportableObjects } = useReport()
+const store = useStore()
+
+const object = ref<Library | null>(null)
+
+const isOwner = computed(() => store.state.auth.authenticated && object.value?.actor.full_username === store.state.auth.fullUsername)
+const isPlayable = computed(() => (object.value?.uploads_count ?? 0) > 0 && (
+  isOwner.value 
+    || object.value?.privacy_level === 'everyone' 
+    || (object.value?.privacy_level === 'instance' && store.state.auth.authenticated && object.value.actor.domain === store.getters['instance/domain']) 
+    || (store.getters['libraries/follow'](object.value?.uuid) || {}).approved === true
+))
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('*/*/*', 'Library'),
+  visibility: {
+    me: $pgettext('Content/Library/Card.Help text', 'Private'),
+    instance: $pgettext('Content/Library/Card.Help text', 'Restricted'),
+    everyone: $pgettext('Content/Library/Card.Help text', 'Public')
+  },
+  tooltips: {
+    me: $pgettext('Content/Library/Card.Help text', 'This library is private and your approval from its owner is needed to access its content'),
+    instance: $pgettext('Content/Library/Card.Help text', 'This library is restricted to users on this pod only'),
+    everyone: $pgettext('Content/Library/Card.Help text', 'This library is public and you can access its content freely')
+  }
+}))
+
+onBeforeRouteUpdate((to) => {
+  to.meta.preserveScrollPosition = true
+})
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  try {
+    const response = await axios.get(`libraries/${props.id}`)
+    object.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+watch(() => props.id, fetchData, { immediate: true })
+
+const route = useRoute()
+const router = useRouter()
+watchEffect(() => {
+  if (!store.state.auth.authenticated && object.value && store.getters['instance/domain'] !== object.value.actor.domain) {
+    router.push({ name: 'login', query: { next: route.fullPath } })
+  }
+})
+
+const updateUploads = (count: number) => {
+  if (object.value) {
+    object.value.uploads_count += count
+  }
+}
+</script>
+
 <template>
   <main v-title="labels.title">
     <div class="ui vertical stripe segment container">
@@ -31,11 +112,11 @@
                 >View on %{ domain }</translate>
               </a>
               <div
-                v-for="obj in getReportableObjs({library: object})"
+                v-for="obj in getReportableObjects({library: object})"
                 :key="obj.target.type + obj.target.id"
                 role="button"
                 class="basic item"
-                @click.stop.prevent="$store.dispatch('moderation/report', obj.target)"
+                @click.stop.prevent="report(obj)"
               >
                 <i class="share icon" /> {{ obj.label }}
               </div>
@@ -61,7 +142,7 @@
               <div class="ui very small hidden divider" />
               <div
                 class="sub header ellipsis"
-                :title="object.full_username"
+                :title="object.actor.full_username"
               >
                 <actor-link
                   :avatar="false"
@@ -215,7 +296,7 @@
                 :is-owner="isOwner"
                 :object="object"
                 @updated="fetchData"
-                @uploads-finished="object.uploads_count += $event"
+                @uploads-finished="updateUploads"
               />
             </div>
           </div>
@@ -224,85 +305,3 @@
     </div>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import LibraryFollowButton from '~/components/audio/LibraryFollowButton.vue'
-import ReportMixin from '~/components/mixins/Report.vue'
-import RadioButton from '~/components/radios/Button.vue'
-import { humanSize } from '~/utils/filters'
-
-export default {
-  components: {
-    RadioButton,
-    LibraryFollowButton
-  },
-  mixins: [ReportMixin],
-  beforeRouteUpdate (to, from, next) {
-    to.meta.preserveScrollPosition = true
-    next()
-  },
-  props: { id: { type: String, required: true } },
-  setup () {
-    return { humanSize }
-  },
-  data () {
-    return {
-      isLoading: true,
-      object: null,
-      latestTracks: null
-    }
-  },
-  computed: {
-    isOwner () {
-      return this.$store.state.auth.authenticated && this.object.actor.full_username === this.$store.state.auth.fullUsername
-    },
-    labels () {
-      return {
-        title: this.$pgettext('*/*/*', 'Library'),
-        visibility: {
-          me: this.$pgettext('Content/Library/Card.Help text', 'Private'),
-          instance: this.$pgettext('Content/Library/Card.Help text', 'Restricted'),
-          everyone: this.$pgettext('Content/Library/Card.Help text', 'Public')
-        },
-        tooltips: {
-          me: this.$pgettext('Content/Library/Card.Help text', 'This library is private and your approval from its owner is needed to access its content'),
-          instance: this.$pgettext('Content/Library/Card.Help text', 'This library is restricted to users on this pod only'),
-          everyone: this.$pgettext('Content/Library/Card.Help text', 'This library is public and you can access its content freely')
-        }
-      }
-    },
-    isPlayable () {
-      return this.object.uploads_count > 0 && (
-        this.isOwner ||
-        this.object.privacy_level === 'everyone' ||
-        (this.object.privacy_level === 'instance' && this.$store.state.auth.authenticated && this.object.actor.domain === this.$store.getters['instance/domain']) ||
-        (this.$store.getters['libraries/follow'](this.object.uuid) || {}).approved === true
-      )
-    }
-  },
-  watch: {
-    id () {
-      this.fetchData()
-    }
-  },
-  async created () {
-    await this.fetchData()
-    const authenticated = this.$store.state.auth.authenticated
-    if (!authenticated && this.$store.getters['instance/domain'] !== this.object.actor.domain) {
-      this.$router.push({ name: 'login', query: { next: this.$route.fullPath } })
-    }
-  },
-  methods: {
-    async fetchData () {
-      const self = this
-      this.isLoading = true
-      const libraryPromise = axios.get(`libraries/${this.id}`).then(response => {
-        self.object = response.data
-      })
-      await libraryPromise
-      self.isLoading = false
-    }
-  }
-}
-</script>

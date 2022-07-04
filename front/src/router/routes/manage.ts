@@ -1,21 +1,11 @@
-import { NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
-import { Permission } from '~/store/auth'
-import store from '~/store'
-
-const hasPermissions = (permission: Permission) => (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-  if (store.state.auth.authenticated && store.state.auth.availablePermissions[permission]) {
-    return next()
-  }
-
-  console.log('Not authenticated. Redirecting to library.')
-  next({ name: 'library.index' })
-}
+import { RouteRecordRaw } from 'vue-router'
+import { hasPermissions } from '~/router/guards'
 
 export default [
   {
     path: '/manage/settings',
     name: 'manage.settings',
-    beforeEnter: hasPermissions('admin'),
+    beforeEnter: hasPermissions('settings'),
     component: () => import('~/views/admin/Settings.vue')
   },
   {
@@ -117,7 +107,7 @@ export default [
   },
   {
     path: '/manage/users',
-    beforeEnter: hasPermissions('admin'),
+    beforeEnter: hasPermissions('settings'),
     component: () => import('~/views/admin/users/Base.vue'),
     children: [
       {

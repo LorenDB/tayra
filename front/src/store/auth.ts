@@ -22,6 +22,7 @@ interface Profile {
   full_username: string
   instance_support_message_display_date: string
   funkwhale_support_message_display_date: string
+  is_superuser: boolean
 }
 
 interface ScopedTokens {
@@ -140,7 +141,7 @@ const store: Module<State, RootState> = {
       }
 
       for (const [key, value] of Object.entries(payload)) {
-        state.profile[key as keyof Profile] = value
+        state.profile[key as keyof Profile] = value as never
       }
     },
     oauthApp: (state, payload) => {

@@ -1,3 +1,96 @@
+<script setup lang="ts">
+import { Track, Album, Artist, Library } from '~/types'
+import { useGettext } from 'vue3-gettext'
+import axios from 'axios'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import Modal from '~/components/semantic/Modal.vue'
+import RadioButton from '~/components/radios/Button.vue'
+import TagsList from '~/components/tags/List.vue'
+import useReport from '~/composables/moderation/useReport'
+import useLogger from '~/composables/useLogger'
+import { getDomain } from '~/utils'
+import { useStore } from '~/store'
+import { useRouter } from 'vue-router'
+import { computed, ref, watch } from 'vue'
+
+interface Props {
+  id: string
+}
+
+const props = defineProps<Props>()
+const { report, getReportableObjects } = useReport()
+
+const object = ref<Artist | null>(null)
+const libraries = ref([] as Library[])
+const albums = ref([] as Album[])
+const tracks = ref([] as Track[])
+const showEmbedModal = ref(false)
+
+const nextAlbumsUrl = ref(null)
+const nextTracksUrl = ref(null)
+const totalAlbums = ref(0)
+const totalTracks = ref(0)
+
+const dropdown = ref()
+
+const logger = useLogger()
+const store = useStore()
+const router = useRouter()
+
+const domain = computed(() => getDomain(object.value?.fid ?? ''))
+const isPlayable = computed(() => !!object.value?.albums.some(album => album.is_playable))
+const wikipediaUrl = computed(() => `https://en.wikipedia.org/w/index.php?search=${encodeURI(object.value?.name ?? '')}`)
+const musicbrainzUrl = computed(() => object.value?.mbid ? `https://musicbrainz.org/artist/${object.value.mbid}` : null)
+const discogsUrl = computed(() => `https://discogs.com/search/?type=artist&title=${encodeURI(object.value?.name ?? '')}`)
+const publicLibraries = computed(() => libraries.value?.filter(library => library.privacy_level === 'everyone') ?? [])
+const cover = computed(() => object.value?.cover?.urls.original
+  ? object.value.cover
+  : object.value?.albums.find(album => album.cover?.urls.original)?.cover
+)
+const headerStyle = computed(() => cover.value?.urls.original
+  ? { backgroundImage: `url(${store.getters['instance/absoluteUrl'](cover.value.urls.original)})` }
+  : ''
+)
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('*/*/*', 'Artist')
+}))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  logger.debug(`Fetching artist "${props.id}"`)
+
+  const artistsResponse = await axios.get(`artists/${props.id}/`, { params: { refresh: 'true' } })
+  if (artistsResponse.data.channel) {
+    return router.replace({ name: 'channels.detail', params: { id: artistsResponse.data.channel.uuid } })
+  }
+
+  object.value = artistsResponse.data
+
+  const [tracksResponse, albumsResponse] = await Promise.all([
+    axios.get('tracks/', { params: { artist: props.id, hidden: '', ordering: '-creation_date' } }),
+    axios.get('albums/', { params: { artist: props.id, hidden: '', ordering: '-release_date' } })
+  ])
+
+  tracks.value = tracksResponse.data.results
+  nextTracksUrl.value = tracksResponse.data.next
+  totalTracks.value = tracksResponse.data.count
+
+
+  nextAlbumsUrl.value = albumsResponse.data.next
+  totalAlbums.value = albumsResponse.data.count
+
+  albums.value = albumsResponse.data.results
+
+  isLoading.value = false
+}
+
+watch(() => props.id, fetchData, { immediate: true })
+</script>
+
 <template>
   <main v-title="labels.title">
     <div
@@ -85,7 +178,7 @@
             <div class="ui buttons">
               <button
                 class="ui button"
-                @click="$refs.dropdown.click()"
+                @click="dropdown.click()"
               >
                 <translate translate-context="*/*/Button.Label/Noun">
                   More…
@@ -162,11 +255,11 @@
                   </router-link>
                   <div class="divider" />
                   <div
-                    v-for="obj in getReportableObjs({artist: object})"
+                    v-for="obj in getReportableObjects({artist: object})"
                     :key="obj.target.type + obj.target.id"
                     role="button"
                     class="basic item"
-                    @click.stop.prevent="$store.dispatch('moderation/report', obj.target)"
+                    @click.stop.prevent="report(obj)"
                   >
                     <i class="share icon" /> {{ obj.label }}
                   </div>
@@ -204,7 +297,7 @@
         :next-tracks-url="nextTracksUrl"
         :next-albums-url="nextAlbumsUrl"
         :albums="albums"
-        :is-loading-albums="isLoadingAlbums"
+        :is-loading-albums="isLoading"
         :object="object"
         object-type="artist"
         @libraries-loaded="libraries = $event"
@@ -212,160 +305,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import PlayButton from '~/components/audio/PlayButton.vue'
-import EmbedWizard from '~/components/audio/EmbedWizard.vue'
-import Modal from '~/components/semantic/Modal.vue'
-import RadioButton from '~/components/radios/Button.vue'
-import TagsList from '~/components/tags/List.vue'
-import ReportMixin from '~/components/mixins/Report.vue'
-
-import { getDomain } from '~/utils'
-import useLogger from '~/composables/useLogger'
-
-const logger = useLogger()
-
-export default {
-  components: {
-    PlayButton,
-    EmbedWizard,
-    Modal,
-    RadioButton,
-    TagsList
-  },
-  mixins: [ReportMixin],
-  props: { id: { type: [String, Number], required: true } },
-  data () {
-    return {
-      isLoading: true,
-      isLoadingAlbums: true,
-      object: null,
-      albums: null,
-      libraries: [],
-      showEmbedModal: false,
-      tracks: [],
-      nextAlbumsUrl: null,
-      nextTracksUrl: null,
-      totalAlbums: null,
-      totalTracks: null
-    }
-  },
-  computed: {
-    domain () {
-      if (this.object) {
-        return getDomain(this.object.fid)
-      }
-      return null
-    },
-    isPlayable () {
-      return (
-        this.object.albums.filter(a => {
-          return a.is_playable
-        }).length > 0
-      )
-    },
-    labels () {
-      return {
-        title: this.$pgettext('*/*/*', 'Album')
-      }
-    },
-    wikipediaUrl () {
-      return (
-        'https://en.wikipedia.org/w/index.php?search=' +
-        encodeURI(this.object.name)
-      )
-    },
-    musicbrainzUrl () {
-      if (this.object.mbid) {
-        return 'https://musicbrainz.org/artist/' + this.object.mbid
-      }
-      return null
-    },
-    discogsUrl () {
-      return (
-        'https://discogs.com/search/?type=artist&title=' +
-        encodeURI(this.object.name)
-      )
-    },
-    cover () {
-      if (this.object.cover && this.object.cover.urls.original) {
-        return this.object.cover
-      }
-      return this.object.albums
-        .filter(album => {
-          return album.cover && album.cover.urls.original
-        })
-        .map(album => {
-          return album.cover
-        })[0]
-    },
-
-    publicLibraries () {
-      return this.libraries.filter(l => {
-        return l.privacy_level === 'everyone'
-      })
-    },
-    headerStyle () {
-      if (!this.cover || !this.cover.urls.original) {
-        return ''
-      }
-      return (
-        'background-image: url(' +
-        this.$store.getters['instance/absoluteUrl'](this.cover.urls.original) +
-        ')'
-      )
-    },
-    contentFilter () {
-      return this.$store.getters['moderation/artistFilters']().filter((e) => {
-        return e.target.id === this.object.id
-      })[0]
-    }
-  },
-  watch: {
-    id () {
-      this.fetchData()
-    }
-  },
-  async created () {
-    await this.fetchData()
-  },
-  methods: {
-    async fetchData () {
-      const self = this
-      this.isLoading = true
-      logger.debug('Fetching artist "' + this.id + '"')
-
-      const artistPromise = axios.get('artists/' + this.id + '/', { params: { refresh: 'true' } }).then(response => {
-        if (response.data.channel) {
-          self.$router.replace({ name: 'channels.detail', params: { id: response.data.channel.uuid } })
-        } else {
-          self.object = response.data
-        }
-      })
-      await artistPromise
-      if (!self.object) {
-        return
-      }
-      const trackPromise = axios.get('tracks/', { params: { artist: this.id, hidden: '', ordering: '-creation_date' } }).then(response => {
-        self.tracks = response.data.results
-        self.nextTracksUrl = response.data.next
-        self.totalTracks = response.data.count
-      })
-      const albumPromise = axios.get('albums/', {
-        params: { artist: self.id, ordering: '-release_date', hidden: '' }
-      }).then(response => {
-        self.nextAlbumsUrl = response.data.next
-        self.totalAlbums = response.data.count
-        const parsed = JSON.parse(JSON.stringify(response.data.results))
-        self.albums = parsed
-      })
-      await trackPromise
-      await albumPromise
-      self.isLoadingAlbums = false
-      self.isLoading = false
-    }
-  }
-}
-</script>

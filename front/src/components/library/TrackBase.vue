@@ -1,3 +1,123 @@
+<script setup lang="ts">
+import { Track, Artist, Library } from '~/types'
+import { useGettext } from 'vue3-gettext'
+import axios from 'axios'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
+import Modal from '~/components/semantic/Modal.vue'
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import { momentFormat } from '~/utils/filters'
+import updateQueryString from '~/composables/updateQueryString'
+import useReport from '~/composables/moderation/useReport'
+import useLogger from '~/composables/useLogger'
+import { getDomain } from '~/utils'
+import { useStore } from '~/store'
+import { useRouter } from 'vue-router'
+import { computed, ref, watch } from 'vue'
+
+interface Props {
+  id: string
+}
+
+const props = defineProps<Props>()
+const { report, getReportableObjects } = useReport()
+
+const track = ref<Track | null>(null)
+const artist = ref<Artist | null>(null)
+const showEmbedModal = ref(false)
+const libraries = ref([] as Library[])
+
+const logger = useLogger()
+const router = useRouter()
+const store = useStore()
+
+const domain = computed(() => getDomain(track.value?.fid ?? ''))
+const publicLibraries = computed(() => libraries.value?.filter(library => library.privacy_level === 'everyone') ?? [])
+const isEmbedable = computed(() => artist.value?.channel?.actor || publicLibraries.value.length)
+const upload = computed(() => track.value?.uploads?.[0] ?? null)
+const wikipediaUrl = computed(() => `https://en.wikipedia.org/w/index.php?search=${encodeURI(`${track.value?.title ?? ''} ${track.value?.artist?.name ?? ''}`)}`)
+const discogsUrl = computed(() => `https://discogs.com/search/?type=release&title=${encodeURI(track.value?.album?.title ?? '')}&artist=${encodeURI(track.value?.artist?.name ?? '')}&title=${encodeURI(track.value?.title ?? '')}`)
+const downloadUrl = computed(() => {
+  const url = store.getters['instance/absoluteUrl'](upload.value?.listen_url ?? '')
+  return store.state.auth.authenticated
+    ? updateQueryString(url, 'token', encodeURI(store.state.auth.scopedTokens.listen ?? ''))
+    : url
+})
+
+const attributedToUrl = computed(() => router.resolve({
+  name: 'profile.full.overview',
+  params: {
+    username: track.value?.attributed_to.preferred_username,
+    domain: track.value?.attributed_to.domain
+  }
+})?.href)
+
+const escapeHtml = (unsafe: string) => document.createTextNode(unsafe).textContent ?? ''
+const subtitle = computed(() => {
+  if (track.value?.attributed_to) {
+    return $pgettext(
+      'Content/Track/Paragraph', 
+      'Uploaded by <a class="internal" href="%{ uploaderUrl }">%{ uploader }</a> on <time title="%{ date }" datetime="%{ date }">%{ prettyDate }</time>',
+      { 
+        uploaderUrl: attributedToUrl.value,
+        uploader: escapeHtml(`@${track.value.attributed_to.full_username}`),
+        date: escapeHtml(track.value.creation_date),
+        prettyDate: escapeHtml(momentFormat(new Date(track.value.creation_date), 'LL'))
+      }
+    )
+  }
+
+  return $pgettext(
+    'Content/Track/Paragraph', 
+    'Uploaded on <time title="%{ date }" datetime="%{ date }">%{ prettyDate }</time>',
+    {
+      date: escapeHtml(track.value?.creation_date ?? ''),
+      prettyDate: escapeHtml(momentFormat(new Date(track.value?.creation_date ?? '1970-01-01'), 'LL'))
+    }
+  )
+})
+
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('*/*/*/Noun', 'Track'),
+  download: $pgettext('Content/Track/Link/Verb', 'Download'),
+  more: $pgettext('*/*/Button.Label/Noun', 'More…')
+}))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  logger.debug(`Fetching track "${props.id}"`)
+  try {
+    const trackResponse = await axios.get(`tracks/${props.id}/`, { params: { refresh: 'true' } })
+    track.value = trackResponse.data
+    const artistResponse = await axios.get(`artists/${trackResponse.data.artist.id}/`)
+    artist.value = artistResponse.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+  isLoading.value = false
+}
+
+watch(() => props.id, fetchData, { immediate: true })
+
+const emit = defineEmits(['deleted'])
+const remove = async () => {
+  isLoading.value = true
+  try {
+    await axios.delete(`tracks/${track.value?.id}`)
+    emit('deleted')
+    router.push({ name: 'library.artists.detail', params: { id: artist.value?.id } })
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <main>
     <div
@@ -177,11 +297,11 @@
                   </dangerous-button>
                   <div class="divider" />
                   <div
-                    v-for="obj in getReportableObjs({track})"
+                    v-for="obj in getReportableObjects({track})"
                     :key="obj.target.type + obj.target.id"
                     role="button"
                     class="basic item"
-                    @click.stop.prevent="$store.dispatch('moderation/report', obj.target)"
+                    @click.stop.prevent="report(obj)"
                   >
                     <i class="share icon" /> {{ obj.label }}
                   </div>
@@ -223,196 +343,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import time from '~/utils/time'
-import axios from 'axios'
-import { getDomain } from '~/utils'
-import PlayButton from '~/components/audio/PlayButton.vue'
-import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
-import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
-import Modal from '~/components/semantic/Modal.vue'
-import EmbedWizard from '~/components/audio/EmbedWizard.vue'
-import ReportMixin from '~/components/mixins/Report.vue'
-import { momentFormat } from '~/utils/filters'
-import updateQueryString from '~/composables/updateQueryString'
-import useLogger from '~/composables/useLogger'
-
-const logger = useLogger()
-
-const FETCH_URL = 'tracks/'
-
-function escapeHtml (unsafe) {
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
-}
-
-export default {
-  components: {
-    PlayButton,
-    TrackPlaylistIcon,
-    TrackFavoriteIcon,
-    Modal,
-    EmbedWizard
-  },
-  mixins: [ReportMixin],
-  props: { id: { type: [String, Number], required: true } },
-  data () {
-    return {
-      time,
-      isLoading: true,
-      track: null,
-      artist: null,
-      showEmbedModal: false,
-      libraries: []
-    }
-  },
-  computed: {
-    domain () {
-      if (this.track) {
-        return getDomain(this.track.fid)
-      }
-      return null
-    },
-    publicLibraries () {
-      return this.libraries.filter(l => {
-        return l.privacy_level === 'everyone'
-      })
-    },
-    isEmbedable () {
-      const self = this
-      return (self.artist && self.artist.channel && self.artist.channel.actor) || this.publicLibraries.length > 0
-    },
-    upload () {
-      if (this.track.uploads) {
-        return this.track.uploads[0]
-      }
-      return null
-    },
-    labels () {
-      return {
-        title: this.$pgettext('*/*/*/Noun', 'Track'),
-        download: this.$pgettext('Content/Track/Link/Verb', 'Download'),
-        more: this.$pgettext('*/*/Button.Label/Noun', 'More…')
-      }
-    },
-    wikipediaUrl () {
-      return (
-        'https://en.wikipedia.org/w/index.php?search=' +
-        encodeURI(this.track.title + ' ' + this.track.artist.name)
-      )
-    },
-    discogsUrl () {
-      if (this.track.album) {
-        return (
-          'https://discogs.com/search/?type=release&title=' +
-    encodeURI(this.track.album.title) + '&artist=' +
-    encodeURI(this.track.artist.name) + '&track=' +
-    encodeURI(this.track.title)
-        )
-      }
-      return null
-    },
-    downloadUrl () {
-      const url = this.$store.getters['instance/absoluteUrl'](
-        this.upload.listen_url
-      )
-
-      if (this.$store.state.auth.authenticated) {
-        return updateQueryString(
-          url,
-          'token',
-          encodeURI(this.$store.state.auth.scopedTokens.listen)
-        )
-      }
-
-      return url
-    },
-    attributedToUrl () {
-      const route = this.$router.resolve({
-        name: 'profile.full.overview',
-        params: {
-          username: this.track.attributed_to.preferred_username,
-          domain: this.track.attributed_to.domain
-        }
-      })
-      return route.href
-    },
-    albumUrl () {
-      const route = this.$router.resolve({ name: 'library.albums.detail', params: { id: this.track.album.id } })
-      return route.href
-    },
-    artistUrl () {
-      const route = this.$router.resolve({ name: 'library.artists.detail', params: { id: this.track.artist.id } })
-      return route.href
-    },
-    headerStyle () {
-      if (!this.cover || !this.cover.urls.original) {
-        return ''
-      }
-      return (
-        'background-image: url(' +
-        this.$store.getters['instance/absoluteUrl'](this.cover.urls.original) +
-        ')'
-      )
-    },
-    subtitle () {
-      let msg
-      if (this.track.attributed_to) {
-        msg = this.$pgettext('Content/Track/Paragraph', 'Uploaded by <a class="internal" href="%{ uploaderUrl }">%{ uploader }</a> on <time title="%{ date }" datetime="%{ date }">%{ prettyDate }</time>')
-        return this.$gettextInterpolate(msg, {
-          uploaderUrl: this.attributedToUrl,
-          uploader: escapeHtml(`@${this.track.attributed_to.full_username}`),
-          date: escapeHtml(this.track.creation_date),
-          prettyDate: escapeHtml(momentFormat(this.track.creation_date, 'LL'))
-        })
-      } else {
-        msg = this.$pgettext('Content/Track/Paragraph', 'Uploaded on <time title="%{ date }" datetime="%{ date }">%{ prettyDate }</time>')
-        return this.$gettextInterpolate(msg, {
-          date: escapeHtml(this.track.creation_date),
-          prettyDate: escapeHtml(momentFormat(this.track.creation_date, 'LL'))
-        })
-      }
-    }
-  },
-  watch: {
-    id () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = FETCH_URL + this.id + '/'
-      logger.debug('Fetching track "' + this.id + '"')
-      axios.get(url, { params: { refresh: 'true' } }).then(response => {
-        self.track = response.data
-        axios.get(`artists/${response.data.artist.id}/`).then(response => {
-          self.artist = response.data
-        })
-        self.isLoading = false
-      })
-    },
-    remove () {
-      const self = this
-      self.isLoading = true
-      axios.delete(`tracks/${this.track.id}`).then((response) => {
-        self.isLoading = false
-        self.$emit('deleted')
-        self.$router.push({ name: 'library.artists.detail', params: { id: this.artist.id } })
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

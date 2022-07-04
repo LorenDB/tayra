@@ -1,3 +1,98 @@
+<script setup lang="ts">
+import { Track, Album, Artist, Library } from '~/types'
+import axios from 'axios'
+import { sum } from 'lodash-es'
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import TagsList from '~/components/tags/List.vue'
+import ArtistLabel from '~/components/audio/ArtistLabel.vue'
+import AlbumDropdown from './AlbumDropdown.vue'
+import { momentFormat } from '~/utils/filters'
+import { computed, ref, watch } from 'vue'
+
+interface Props {
+  id: string
+}
+
+const props = defineProps<Props>()
+
+const object = ref<Album | null>(null)
+const artist = ref<Artist | null>(null)
+const discs = ref([] as Track[][])
+const libraries = ref([] as Library[])
+const page = ref(1)
+const paginateBy = ref(50)
+
+const totalTracks = computed(() => object.value?.tracks_count ?? 0)
+const isChannel = computed(() => !!object.value?.artist.channel)
+const isAlbum = computed(() => object.value?.artist.content_category === 'music')
+const isSerie = computed(() => object.value?.artist.content_category === 'podcast')
+const totalDuration = computed(() => sum((object.value?.tracks ?? []).map(track => track.uploads[0]?.duration ?? 0)))
+const publicLibraries = computed(() => libraries.value?.filter(library => library.privacy_level === 'everyone') ?? [])
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('*/*/*', 'Album')
+}))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  const albumResponse = await axios.get(`albums/${props.id}/`, { params: { refresh: 'true' } })
+  const [artistResponse, tracksResponse] = await Promise.all([
+    axios.get(`artists/${albumResponse.data.artist.id}/`),
+    axios.get('tracks/', { 
+      params: { 
+        ordering: 'disc_number,position', 
+        album: props.id, 
+        page_size: paginateBy.value, 
+        page: page.value, 
+        include_channels: true 
+      } 
+    })
+  ])
+
+  artist.value = artistResponse.data
+  if (artist.value?.channel) {
+    artist.value.channel.artist = artist.value
+  }
+
+
+  object.value = albumResponse.data
+  if (object.value) {
+    object.value.tracks = tracksResponse.data.results
+    discs.value = object.value.tracks.reduce((acc: Track[][], track: Track) => {
+      const discNumber = track.disc_number - (object.value?.tracks[0]?.disc_number ?? 1)
+      acc[discNumber] ??= []
+      acc[discNumber].push(track)
+      return acc
+    }, [])
+  }
+
+  isLoading.value = false
+}
+
+watch(() => props.id, fetchData, { immediate: true })
+watch(page, fetchData)
+
+const emit = defineEmits(['deleted'])
+const router = useRouter()
+const remove = async () => {
+  isLoading.value = true
+  try {
+    await axios.delete(`albums/${object.value?.id}`)
+    isLoading.value = false
+    emit('deleted')
+    router.push({ name: 'library.artists.detail', params: { id: artist.value?.id } })
+  } catch (error) {
+    isLoading.value = false
+    // TODO (wvffle): Handle error
+  }
+}
+</script>
+
 <template>
   <main>
     <div
@@ -93,6 +188,7 @@
                     :is-serie="isSerie"
                     :is-channel="isChannel"
                     :artist="artist"
+                    @remove="remove"
                   />
                 </div>
               </div>
@@ -140,7 +236,7 @@
                 v-if="object.release_date || (totalTracks > 0)"
                 class="ui small hidden divider"
               />
-              <span v-if="object.release_date">{{ momentFormat(object.release_date, 'Y') }} · </span>
+              <span v-if="object.release_date">{{ momentFormat(new Date(object.release_date ?? '1970-01-01'), 'Y') }} · </span>
               <template v-if="totalTracks > 0">
                 <translate
                   v-if="isSerie"
@@ -180,6 +276,7 @@
                 :is-serie="isSerie"
                 :is-channel="isChannel"
                 :artist="artist"
+                @remove="remove"
               />
               <div v-if="(object.tags && object.tags.length > 0) || object.description || $store.state.auth.authenticated && object.is_local">
                 <div class="ui small hidden divider" />
@@ -244,123 +341,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import { sum } from 'lodash-es'
-import PlayButton from '~/components/audio/PlayButton.vue'
-import TagsList from '~/components/tags/List.vue'
-import ArtistLabel from '~/components/audio/ArtistLabel.vue'
-import AlbumDropdown from './AlbumDropdown.vue'
-import { momentFormat } from '~/utils/filters'
-
-function groupByDisc (initial) {
-  function inner (acc, track) {
-    const dn = track.disc_number - initial
-    if (acc[dn] === undefined) {
-      acc.push([track])
-    } else {
-      acc[dn].push(track)
-    }
-    return acc
-  }
-  return inner
-}
-
-export default {
-  components: {
-    PlayButton,
-    TagsList,
-    ArtistLabel,
-    AlbumDropdown
-  },
-  props: { id: { type: [String, Number], required: true } },
-  setup () {
-    return { momentFormat }
-  },
-  data () {
-    return {
-      isLoading: true,
-      object: null,
-      artist: null,
-      discs: [],
-      libraries: [],
-      page: 1,
-      paginateBy: 50
-    }
-  },
-  computed: {
-    totalTracks () {
-      return this.object.tracks_count
-    },
-    isChannel () {
-      return !!this.object.artist.channel
-    },
-    isSerie () {
-      return this.object.artist.content_category === 'podcast'
-    },
-    isAlbum () {
-      return this.object.artist.content_category === 'music'
-    },
-    totalDuration () {
-      const durations = [0]
-      this.object.tracks.forEach((t) => {
-        if (t.uploads[0] && t.uploads[0].duration) {
-          durations.push(t.uploads[0].duration)
-        }
-      })
-      return sum(durations)
-    },
-    labels () {
-      return {
-        title: this.$pgettext('*/*/*', 'Album')
-      }
-    },
-    publicLibraries () {
-      return this.libraries.filter(l => {
-        return l.privacy_level === 'everyone'
-      })
-    }
-  },
-  watch: {
-    id () {
-      this.fetchData()
-    },
-    page () {
-      this.fetchData()
-    }
-  },
-  async created () {
-    await this.fetchData()
-  },
-  methods: {
-    async fetchData () {
-      this.isLoading = true
-      let tracksResponse = axios.get('tracks/', { params: { ordering: 'disc_number,position', album: this.id, page_size: this.paginateBy, page: this.page, include_channels: 'true' } })
-      const albumResponse = await axios.get(`albums/${this.id}/`, { params: { refresh: 'true' } })
-      const artistResponse = await axios.get(`artists/${albumResponse.data.artist.id}/`)
-      this.artist = artistResponse.data
-      if (this.artist.channel) {
-        this.artist.channel.artist = this.artist
-      }
-      tracksResponse = await tracksResponse
-      this.object = albumResponse.data
-      this.object.tracks = tracksResponse.data.results
-      this.discs = this.object.tracks.reduce(groupByDisc(this.object.tracks[0].disc_number), [])
-      this.isLoading = false
-    },
-    remove () {
-      const self = this
-      self.isLoading = true
-      axios.delete(`albums/${this.object.id}`).then((response) => {
-        self.isLoading = false
-        self.$emit('deleted')
-        self.$router.push({ name: 'library.artists.detail', params: { id: this.artist.id } })
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

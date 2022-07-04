@@ -1,4 +1,5 @@
 import { RouteRecordRaw } from 'vue-router'
+import store from '~/store'
 
 export default [
   { suffix: '.full', path: '/@:username@:domain' }, 
@@ -8,6 +9,13 @@ export default [
     path: route.path,
     name: `profile${route.suffix}`,
     component: () => import('~/views/auth/ProfileBase.vue'),
+    beforeEnter (to, from, next) {
+      if (!store.state.auth.authenticated && to.query.domain && store.getters['instance/domain'] !== to.query.domain) {
+        return next({ name: 'login', query: { next: to.fullPath } })
+      }
+
+      next()
+    },
     props: true,
     children: [
       {
