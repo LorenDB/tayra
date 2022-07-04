@@ -52,11 +52,14 @@ const playTrack = async (track: Track, oldTrack?: Track) => {
 
     currentSound.value = loadSound(track)
 
-    // TODO (wvffle): #1777
-    currentSound.value.play()
-    store.commit('player/isLoadingAudio', true)
+    if (playing.value) {
+      currentSound.value.play()
+      store.commit('player/playing', true)
+    } else {
+      store.commit('player/isLoadingAudio', false)
+    }
+
     store.commit('player/errored', false)
-    store.commit('player/playing', true)
     store.dispatch('player/updateProgress', 0)
   }
 }
