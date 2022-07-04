@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
+import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
+import type { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
+
 import { ref, computed, watch, nextTick } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import usePlayOptions, { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
+import usePlayOptions from '~/composables/audio/usePlayOptions'
 import useReport from '~/composables/moderation/useReport'
 import { useCurrentElement } from '@vueuse/core'
 import jQuery from 'jquery'

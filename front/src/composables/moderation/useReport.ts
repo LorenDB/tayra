@@ -1,4 +1,5 @@
-import { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
+import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
+
 import { gettext } from '~/init/locale'
 import store from '~/store'
 const { $pgettext } = gettext

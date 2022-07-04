@@ -1,4 +1,5 @@
-import { Track } from "~/types"
+import type { Track } from "~/types"
+
 import store from '~/store'
 import updateQueryString from '~/composables/updateQueryString'
 

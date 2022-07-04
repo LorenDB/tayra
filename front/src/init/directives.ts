@@ -1,4 +1,5 @@
-import { InitModule } from '~/types'
+import type { InitModule } from '~/types'
+
 import jQuery from '~/jquery'
 
 export const install: InitModule = ({ app, store }) => {

@@ -1,9 +1,10 @@
-import { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
+import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
+import type { ContentFilter } from '~/store/moderation'
+
 import { useStore } from '~/store'
 import { useGettext } from 'vue3-gettext'
 import { computed, ref } from "vue"
 import axios from 'axios'
-import { ContentFilter } from '~/store/moderation'
 import usePlayer from '~/composables/audio/usePlayer'
 import useQueue from '~/composables/audio/useQueue'
 import { useCurrentElement } from '@vueuse/core'

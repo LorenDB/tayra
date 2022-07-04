@@ -1,8 +1,9 @@
+import type { Module } from 'vuex'
+import type { RootState } from '~/store/index'
+import type { availableLanguages } from '~/init/locale'
+
 import axios from 'axios'
 import moment from 'moment'
-import { Module } from 'vuex'
-import { RootState } from '~/store/index'
-import { availableLanguages } from '~/init/locale'
 
 type SupportedExtension = 'flac' | 'ogg' | 'mp3' | 'opus' | 'aac' | 'm4a' | 'aiff' | 'aif'
 

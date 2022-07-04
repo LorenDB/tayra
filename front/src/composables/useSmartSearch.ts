@@ -1,7 +1,10 @@
-import { MaybeRef, refWithControl } from '@vueuse/core'
+import type { MaybeRef } from '@vueuse/core'
+import type { Token } from '~/utils/search'
+
+import { refWithControl } from '@vueuse/core'
 import { computed, ref, unref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { compileTokens, normalizeQuery, parseTokens, Token } from '~/utils/search'
+import { compileTokens, normalizeQuery, parseTokens } from '~/utils/search'
 
 export interface SmartSearchProps {
   defaultQuery?: string

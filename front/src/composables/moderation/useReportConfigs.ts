@@ -1,5 +1,6 @@
+import type { RouteLocationRaw } from 'vue-router'
+
 import { gettext } from '~/init/locale'
-import { RouteLocationRaw } from 'vue-router'
 
 interface ModeratedField {
   id: string

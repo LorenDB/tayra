@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // TODO (wvffle): Rename to LibraryBase
-import { Library } from '~/types'
+import type { Library } from '~/types'
+
 import axios from 'axios'
 import LibraryFollowButton from '~/components/audio/LibraryFollowButton.vue'
 import RadioButton from '~/components/radios/Button.vue'

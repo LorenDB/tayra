@@ -15,6 +15,8 @@ const update = (value: boolean) => store.commit('channels/showUploadModal', { sh
 
 const { $npgettext, $gettext } = useGettext()
 
+const uploadForm = ref()
+
 const statusData = ref()
 const statusInfo = computed(() => {
   if (!statusData.value) {
@@ -112,7 +114,7 @@ const isLoading = ref(false)
       <button
         v-else-if="step < 3"
         class="ui basic button"
-        @click.stop.prevent="$refs.uploadForm.step -= 1"
+        @click.stop.prevent="uploadForm.step -= 1"
       >
         <translate translate-context="*/*/Button.Label/Verb">
           Previous step
@@ -121,7 +123,7 @@ const isLoading = ref(false)
       <button
         v-else-if="step === 3"
         class="ui basic button"
-        @click.stop.prevent="$refs.uploadForm.step -= 1"
+        @click.stop.prevent="uploadForm.step -= 1"
       >
         <translate translate-context="*/*/Button.Label/Verb">
           Update
@@ -130,7 +132,7 @@ const isLoading = ref(false)
       <button
         v-if="step === 1"
         class="ui primary button"
-        @click.stop.prevent="$refs.uploadForm.step += 1"
+        @click.stop.prevent="uploadForm.step += 1"
       >
         <translate translate-context="*/*/Button.Label">
           Next step
@@ -144,7 +146,7 @@ const isLoading = ref(false)
           :class="['ui', 'primary button', {loading: isLoading}]"
           type="submit"
           :disabled="!statusData?.canSubmit || undefined"
-          @click.prevent.stop="$refs.uploadForm.publish"
+          @click.prevent.stop="uploadForm.publish"
         >
           <translate translate-context="*/Channels/Button.Label">
             Publish

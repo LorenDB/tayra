@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FSLogs } from '~/types'
+import type { FSLogs } from '~/types'
 
 interface Props {
   data: FSLogs

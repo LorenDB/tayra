@@ -1,5 +1,6 @@
+import type { Track } from '~/types'
+
 import { ref, computed } from "vue"
-import { Track } from '~/types'
 import { Howl } from 'howler'
 import useTrackSources from '~/composables/audio/useTrackSources'
 import useSoundCache from '~/composables/audio/useSoundCache'

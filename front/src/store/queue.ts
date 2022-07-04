@@ -1,8 +1,9 @@
+import type { Module } from 'vuex'
+import type { RootState } from '~/store/index'
+import type { Track } from '~/types'
+
 import { shuffle } from 'lodash-es'
 import useLogger from '~/composables/useLogger'
-import { Module } from 'vuex'
-import { RootState } from '~/store/index'
-import { Track } from '~/types'
 
 export interface State {
   tracks: Track[]

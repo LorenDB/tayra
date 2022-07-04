@@ -1,4 +1,5 @@
-import { InitModule } from '~/types'
+import type { InitModule } from '~/types'
+
 import { useWindowSize } from '@vueuse/core'
 import { watchEffect } from 'vue'
 

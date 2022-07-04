@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Track } from '~/types'
+
 import AudioPlayer from '~/components/audio/Player.vue'
 import Queue from '~/components/Queue.vue'
 import PlaylistModal from '~/components/playlists/PlaylistModal.vue'
@@ -12,7 +14,6 @@ import ReportModal from '~/components/moderation/ReportModal.vue'
 import { useIntervalFn, useToggle, useWindowSize } from '@vueuse/core'
 
 import { computed, nextTick, onMounted, ref, watchEffect } from 'vue'
-import { Track } from '~/types'
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
 import useQueue from '~/composables/audio/useQueue'
 import { useStore } from '~/store'

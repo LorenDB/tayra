@@ -1,7 +1,8 @@
+import type { Module } from 'vuex'
+import type { RootState } from '~/store/index'
+import type { Playlist, Track } from '~/types'
+
 import axios from 'axios'
-import { Module } from 'vuex'
-import { RootState } from '~/store/index'
-import { Playlist, Track } from '~/types'
 
 export interface State {
   playlists: Playlist[]

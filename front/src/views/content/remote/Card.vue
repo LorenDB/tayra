@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Library } from '~/types'
+import type { Library } from '~/types'
+
 import axios from 'axios'
 import RadioButton from '~/components/radios/Button.vue'
 import useReport from '~/composables/moderation/useReport'

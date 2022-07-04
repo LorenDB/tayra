@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Track, Album, Artist, Library } from '~/types'
+import type { Track, Album, Artist, Library } from '~/types'
+
 import { useGettext } from 'vue3-gettext'
 import axios from 'axios'
 import PlayButton from '~/components/audio/PlayButton.vue'

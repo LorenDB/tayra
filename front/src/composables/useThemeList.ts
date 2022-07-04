@@ -1,4 +1,5 @@
 import type { ThemeEntry } from '~/types'
+
 import { gettext } from '~/init/locale'
 
 const { $pgettext } = gettext

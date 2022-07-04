@@ -1,4 +1,6 @@
-import { defineConfig, HmrOptions } from 'vite'
+import type { HmrOptions } from 'vite'
+
+import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'

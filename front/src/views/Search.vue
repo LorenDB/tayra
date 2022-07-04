@@ -289,7 +289,8 @@ const radioConfig = computed(() => {
               v-if="results[t.id]"
               class="ui circular mini right floated label"
             >
-              {{ results[t.id].count }}</span>
+              {{ results[t.id]?.count ?? 0 }}
+            </span>
           </a>
         </div>
         <div v-if="isLoading">

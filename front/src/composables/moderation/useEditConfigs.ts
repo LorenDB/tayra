@@ -1,5 +1,6 @@
+import type { Album, Artist, Content, Track } from '~/types'
+
 import { gettext } from '~/init/locale'
-import { Album, Artist, Content, Track } from '~/types'
 
 interface ConfigField {
   id: string

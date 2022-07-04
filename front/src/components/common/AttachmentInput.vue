@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { BackendError } from '~/types'
+
 import axios from 'axios'
 import { useVModel } from '@vueuse/core'
 import { reactive, ref, watch } from 'vue'
-import { BackendError } from '~/types'
 import { useStore } from '~/store'
 import useFormData from '~/composables/useFormData'
 
@@ -26,7 +27,7 @@ const value = useVModel(props, 'modelValue', emit)
 
 const attachment = ref()
 const isLoading = ref(false)
-const errors = reactive([] as Error[])
+const errors = reactive([] as string[])
 const attachmentId = Math.random().toString(36).substring(7)
 
 const input = ref()

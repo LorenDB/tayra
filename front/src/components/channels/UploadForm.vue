@@ -319,7 +319,7 @@ export default {
       const self = this
       return this.availableChannels.results.filter((c) => {
         return c.uuid === self.values.channel
-      })[0]
+      })[0] ?? null
     },
     selectedUpload () {
       const self = this

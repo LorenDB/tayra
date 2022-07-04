@@ -1,8 +1,8 @@
 import { startCase } from 'lodash-es'
-import { Store } from 'vuex'
-import { Router } from 'vue-router'
-import { APIErrorResponse } from '~/types'
-import { RootState } from '~/store'
+import type { Store } from 'vuex'
+import type { Router } from 'vue-router'
+import type { APIErrorResponse } from '~/types'
+import type { RootState } from '~/store'
 
 export function setUpdate (obj: object, statuses: Record<string, unknown>, value: unknown) {
   for (const key of Object.keys(obj)) {

@@ -1,10 +1,5 @@
-import {
-  InitModule,
-  ListenWSEvent,
-  PendingReviewEditsWSEvent,
-  PendingReviewReportsWSEvent,
-  PendingReviewRequestsWSEvent,
-} from '~/types'
+import type { InitModule, ListenWSEvent, PendingReviewEditsWSEvent, PendingReviewReportsWSEvent, PendingReviewRequestsWSEvent } from '~/types'
+
 import { watchEffect, watch } from 'vue'
 import { useWebSocket, whenever } from '@vueuse/core'
 import useWebSocketHandler from '~/composables/useWebSocketHandler'

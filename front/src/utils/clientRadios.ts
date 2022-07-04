@@ -1,9 +1,10 @@
+import type { ListenWSEvent } from '~/types'
+import type { RootState } from '~/store'
+import type { Store } from 'vuex'
+import type { CurrentRadio, PopulateQueuePayload } from '~/store/radios'
+
 import axios from 'axios'
 import useLogger from '~/composables/useLogger'
-import { ListenWSEvent } from '~/types'
-import { RootState } from '~/store'
-import { Store } from 'vuex'
-import { CurrentRadio, PopulateQueuePayload } from '~/store/radios'
 
 const logger = useLogger()
 

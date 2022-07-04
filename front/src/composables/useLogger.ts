@@ -1,4 +1,5 @@
 import Logger from 'js-logger'
+
 Logger.useDefaults({
   defaultLevel: import.meta.env.DEV
     ? Logger.DEBUG

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Album, Artist, Library } from '~/types'
+import type { Album, Artist, Library } from '~/types'
+
 import EmbedWizard from '~/components/audio/EmbedWizard.vue'
 import Modal from '~/components/semantic/Modal.vue'
 import useReport from '~/composables/moderation/useReport'

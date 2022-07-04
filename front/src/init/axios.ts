@@ -1,4 +1,4 @@
-import { APIErrorResponse, BackendError, InitModule, RateLimitStatus } from '~/types'
+import type { APIErrorResponse, BackendError, InitModule, RateLimitStatus } from '~/types'
 
 import createAuthRefreshInterceptor from 'axios-auth-refresh'
 import axios, { AxiosError } from 'axios'

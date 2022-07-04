@@ -1,4 +1,5 @@
-import { RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
+
 import { hasPermissions } from '~/router/guards'
 
 export default [

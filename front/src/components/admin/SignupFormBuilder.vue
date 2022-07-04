@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type { Form } from '~/types'
+
 import SignupForm from '~/components/auth/SignupForm.vue'
 import { useVModel } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Form } from '~/types'
 import { arrayMove } from '~/utils'
 
 interface Props {

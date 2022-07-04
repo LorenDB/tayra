@@ -1,4 +1,5 @@
-import { InitModule } from '~/types'
+import type { InitModule } from '~/types'
+
 import { registerSW } from 'virtual:pwa-register'
 import useLogger from '~/composables/useLogger'
 import { gettext } from '~/init/locale'

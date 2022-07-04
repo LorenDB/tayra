@@ -1,8 +1,10 @@
-import { MaybeRef, reactiveComputed, toRefs } from '@vueuse/core'
+import type { OrderingDirection, OrderingField, RouteWithPreferences } from '~/store/ui'
+import type { MaybeRef } from '@vueuse/core'
+
+import { reactiveComputed, toRefs } from '@vueuse/core'
 import { computed, unref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from '~/store'
-import { OrderingDirection, OrderingField, RouteWithPreferences } from '~/store/ui'
 
 export interface OrderingProps {
   orderingConfigName: RouteWithPreferences | null

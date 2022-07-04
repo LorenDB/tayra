@@ -1,4 +1,5 @@
-import { RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
+
 import settings from './settings'
 import library from './library'
 import content from './content'

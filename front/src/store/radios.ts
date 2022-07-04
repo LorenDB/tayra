@@ -1,8 +1,9 @@
+import type { Dispatch, Module } from 'vuex'
+import type { RootState } from '~/store/index'
+
 import axios from 'axios'
 import { CLIENT_RADIOS } from '~/utils/clientRadios'
 import useLogger from '~/composables/useLogger'
-import { Dispatch, Module } from 'vuex'
-import { RootState } from '~/store/index'
 
 export interface State {
   current: null | CurrentRadio

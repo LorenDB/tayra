@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
-// import { Track } from '~/types'
+import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
+import type { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
+// import type { Track } from '~/types'
+
 import { useStore } from '~/store'
 import { useGettext } from 'vue3-gettext'
 import SemanticModal from '~/components/semantic/Modal.vue'
 import { computed, ref } from 'vue'
-import usePlayOptions, { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
+import usePlayOptions from '~/composables/audio/usePlayOptions'
 import useReport from '~/composables/moderation/useReport'
 import { useVModel } from '@vueuse/core'
 

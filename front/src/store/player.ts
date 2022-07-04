@@ -1,8 +1,9 @@
+import type { Module } from 'vuex'
+import type { RootState } from '~/store/index'
+
 import axios from 'axios'
 import time from '~/utils/time'
 import useLogger from '~/composables/useLogger'
-import { Module } from 'vuex'
-import { RootState } from '~/store/index'
 
 export interface State {
   maxConsecutiveErrors: number

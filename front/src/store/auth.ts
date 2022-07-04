@@ -1,7 +1,8 @@
+import type { Module } from 'vuex'
+import type { RootState } from '~/store/index'
+
 import axios from 'axios'
 import useLogger from '~/composables/useLogger'
-import { Module } from 'vuex'
-import { RootState } from '~/store/index'
 import useFormData from '~/composables/useFormData'
 
 export type Permission = 'settings' | 'library' | 'moderation'

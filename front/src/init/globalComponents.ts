@@ -1,4 +1,4 @@
-import { InitModule } from '~/types'
+import type { InitModule } from '~/types'
 
 import HumanDate from '~/components/common/HumanDate.vue'
 import HumanDuration from '~/components/common/HumanDuration.vue'

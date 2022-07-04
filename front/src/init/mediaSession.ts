@@ -1,4 +1,5 @@
-import { InitModule } from '~/types'
+import type { InitModule } from '~/types'
+
 import { whenever } from '@vueuse/core'
 import useQueue from '~/composables/audio/useQueue'
 import usePlayer from '~/composables/audio/usePlayer'

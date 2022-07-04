@@ -1,8 +1,9 @@
+import type { Module } from 'vuex'
+import type { RootState } from '~/store/index'
+
 import axios from 'axios'
 import { merge } from 'lodash-es'
 import useLogger from '~/composables/useLogger'
-import { Module } from 'vuex'
-import { RootState } from '~/store/index'
 
 export interface State {
   frontSettings: FrontendSettings

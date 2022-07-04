@@ -1,4 +1,5 @@
-import { InitModule } from '~/types'
+import type { InitModule } from '~/types'
+
 import { watch } from 'vue'
 import axios from 'axios'
 

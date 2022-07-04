@@ -1,16 +1,17 @@
 <script setup lang="ts">
+import type { Album, Channel } from '~/types'
+
 import axios from 'axios'
 import { useVModel } from '@vueuse/core'
 import { reactive, ref, watch } from 'vue'
-import { Album, Channel } from '~/types'
 
 interface Props {
   modelValue: number
-  channel?: Channel
+  channel: Channel | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  channel: () => ({ id: '' })
+  channel: null
 })
 
 const emit = defineEmits(['update:modelValue'])

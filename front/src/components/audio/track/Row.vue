@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
-// import { Track } from '~/types'
+import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
+import type { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
+// import type { Track } from '~/types'
+
 import PlayIndicator from '~/components/audio/track/PlayIndicator.vue'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import PlayButton from '~/components/audio/PlayButton.vue'
-import usePlayOptions, { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
+import usePlayOptions from '~/composables/audio/usePlayOptions'
 import useQueue from '~/composables/audio/useQueue'
 import usePlayer from '~/composables/audio/usePlayer'
 import { ref } from 'vue'

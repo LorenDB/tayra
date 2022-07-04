@@ -1,5 +1,6 @@
+import type { PrivacyLevel, ImportStatus } from '~/types'
+
 import { gettext } from '~/init/locale'
-import { PrivacyLevel, ImportStatus } from '~/types'
 
 const { $pgettext } = gettext
 

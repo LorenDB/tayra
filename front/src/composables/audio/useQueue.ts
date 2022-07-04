@@ -1,8 +1,9 @@
+import type { Track } from "~/types"
+
 import { useTimeoutFn, useThrottleFn, useTimeAgo, useNow, whenever } from '@vueuse/core'
 import { Howler } from 'howler'
 import { gettext } from '~/init/locale'
 import { ref, computed } from "vue"
-import { Track } from "~/types"
 import { sum } from 'lodash-es'
 import store from "~/store"
 

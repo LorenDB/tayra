@@ -1,4 +1,5 @@
-import { Track } from '~/types'
+import type { Track } from '~/types'
+
 import { computed, watchEffect, ref, watch } from 'vue'
 import { Howler } from 'howler'
 import { useIntervalFn, useTimeoutFn } from '@vueuse/core'

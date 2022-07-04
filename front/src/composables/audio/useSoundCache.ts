@@ -1,4 +1,5 @@
-import { Howl } from "howler"
+import type { Howl } from "howler"
+
 import { sortBy } from "lodash-es"
 import { reactive, watchEffect, ref } from "vue"
 

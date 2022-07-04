@@ -1,6 +1,7 @@
 
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
-import { Permission } from '~/store/auth'
+import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
+import type { Permission } from '~/store/auth'
+
 import store from '~/store'
 
 export const hasPermissions = (permission: Permission) => (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {

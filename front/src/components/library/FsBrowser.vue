@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import type { FileSystem, FSEntry } from '~/types'
+
 import { useVModel } from '@vueuse/core'
-import { FileSystem, FSEntry } from '~/types'
 
 interface Props {
   data: FileSystem

@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { Actor } from '~/types'
+
 import { toRefs } from '@vueuse/core'
 import { computed } from 'vue'
 import { truncate } from '~/utils/filters'
-import { Actor } from '~/types'
 
 interface Props {
   actor: Actor

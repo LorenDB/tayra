@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Actor } from '~/types'
+import type { Actor } from '~/types'
+
 import axios from 'axios'
 import useReport from '~/composables/moderation/useReport'
 import { onBeforeRouteUpdate } from 'vue-router'

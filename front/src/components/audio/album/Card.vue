@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Album } from '~/types'
+import type { Album } from '~/types'
+
 import PlayButton from '~/components/audio/PlayButton.vue'
 import { momentFormat } from '~/utils/filters'
 import { computed } from 'vue'

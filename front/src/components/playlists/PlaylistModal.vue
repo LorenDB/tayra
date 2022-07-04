@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { filter, sortBy, flow } from 'lodash-es'
+import type { BackendError, Playlist, APIErrorResponse } from '~/types'
 
+import { filter, sortBy, flow } from 'lodash-es'
 import axios from 'axios'
 import { useGettext } from 'vue3-gettext'
-
 import Modal from '~/components/semantic/Modal.vue'
 import PlaylistForm from '~/components/playlists/Form.vue'
 import useLogger from '~/composables/useLogger'
 import { useStore } from '~/store'
 import { ref, computed, watch } from 'vue'
-import { BackendError, Playlist, APIErrorResponse } from '~/types'
 import { useRouter } from 'vue-router'
 
 const logger = useLogger()
@@ -90,7 +89,7 @@ const addToPlaylist = async (playlistId: number, allowDuplicates: boolean) => {
             Add to playlist
           </translate>
           <div
-            v-translate="{artist: track.artist.name, title: track.title}"
+            v-translate="{artist: track.artist?.name, title: track.title}"
             class="ui sub header"
             translate-context="Popup/Playlist/Paragraph"
             :translate-params="{artist: track.artist.name, title: track.title}"

@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import { ImportStatus, PrivacyLevel } from '~/types'
-import { RouteWithPreferences } from '~/store/ui'
+import type { ImportStatus, PrivacyLevel } from '~/types'
+import type { RouteWithPreferences } from '~/store/ui'
+import type { OrderingField } from '~/store/ui'
+import type { Upload } from '~/types'
+import type { OrderingProps } from '~/composables/useOrdering'
+import type { SmartSearchProps } from '~/composables/useSmartSearch'
+
 import axios from 'axios'
 import Pagination from '~/components/vui/Pagination.vue'
 import ActionTable from '~/components/common/ActionTable.vue'
@@ -9,10 +14,8 @@ import { humanSize, truncate } from '~/utils/filters'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
 import { ref, computed, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import useOrdering, { OrderingProps } from '~/composables/useOrdering'
-import useSmartSearch, { SmartSearchProps } from '~/composables/useSmartSearch'
-import { OrderingField } from '~/store/ui'
-import { Upload } from '~/types'
+import useOrdering from '~/composables/useOrdering'
+import useSmartSearch from '~/composables/useSmartSearch'
 
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO (wvffle): find object type

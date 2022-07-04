@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { License } from '~/types'
+
+import { computed, reactive, ref } from 'vue'
 import axios from 'axios'
 import { useVModel } from '@vueuse/core'
-import { computed, reactive, ref } from 'vue'
-import { License } from '~/types'
 
 interface Props {
   modelValue: string
@@ -74,7 +75,7 @@ fetchLicenses()
     >
       <a
         v-if="value"
-        :href="currentLicense.url"
+        :href="currentLicense?.url"
         target="_blank"
         rel="noreferrer noopener"
       >

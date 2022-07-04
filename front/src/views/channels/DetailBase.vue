@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Channel } from '~/types'
+import type { Channel } from '~/types'
+
 import axios from 'axios'
 import PlayButton from '~/components/audio/PlayButton.vue'
 import EmbedWizard from '~/components/audio/EmbedWizard.vue'
@@ -445,7 +446,7 @@ const updateSubscriptionCount = (delta: number) => {
                 <div class="scrolling content">
                   <div class="description">
                     <embed-wizard
-                      :id="object.artist?.id"
+                      :id="object.artist!.id"
                       type="artist"
                     />
                   </div>
