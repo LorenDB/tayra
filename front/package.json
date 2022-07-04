@@ -18,6 +18,7 @@
     "postinstall": "yarn run fix-fomantic-css"
   },
   "dependencies": {
+    "@vue/runtime-core": "^3.2.37",
     "@vueuse/core": "8.7.5",
     "@vueuse/integrations": "8.7.5",
     "axios": "0.27.2",

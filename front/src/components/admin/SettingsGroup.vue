@@ -1,3 +1,99 @@
+<script setup lang="ts">
+import type { BackendError, SettingsGroup, SettingsDataEntry, FunctionRef, Form } from '~/types'
+import axios from 'axios'
+import SignupFormBuilder from '~/components/admin/SignupFormBuilder.vue'
+import useFormData from '~/composables/useFormData'
+import { ref, computed, reactive } from 'vue'
+import { useStore } from '~/store'
+import useLogger from '~/composables/useLogger'
+
+interface Props {
+  group: SettingsGroup
+  settingsData: SettingsDataEntry[]
+}
+
+const props = defineProps<Props>()
+
+const values = reactive({} as Record<string, unknown | Form | string>)
+const result = ref<boolean | null>(null)
+const errors = ref([] as string[])
+
+const fileRefs = reactive({} as Record<string, HTMLInputElement>)
+const setFileRef = (identifier: string) => (el: FunctionRef) => {
+  console.log(el)
+  fileRefs[identifier] = el as HTMLInputElement
+}
+
+const logger = useLogger()
+const store = useStore()
+
+const settings = computed(() => {
+  const byIdentifier = props.settingsData.reduce((acc, entry) => {
+    acc[entry.identifier] = entry
+    return acc
+  }, {} as Record<string, SettingsDataEntry>)
+
+  return props.group.settings.map(entry => {
+    return { ...byIdentifier[entry.name], fieldType: entry.fieldType, fieldParams: entry.fieldParams || {} }
+  })
+})
+
+const fileSettings = computed(() => settings.value.filter(setting => setting.field.widget.class === 'ImageWidget'))
+
+for (const setting of settings.value) {
+  values[setting.identifier] = setting.value
+}
+
+const isLoading = ref(false)
+const save = async () => {
+  errors.value = []
+  result.value = null
+
+  let postData: unknown = values
+  let contentType = 'application/json'
+
+  if (fileSettings.value.length > 0) {
+    const fileSettingsIDs = fileSettings.value.map((setting) =>  setting.identifier)
+    const data = settings.value.reduce((data, setting) => {
+      if (fileSettingsIDs.includes(setting.identifier)) {
+        const input = fileRefs[setting.identifier]
+        const { files } = input
+
+        logger.debug('ref', input, files)
+
+        if (files && files.length > 0) {
+          data[setting.identifier] = files[0]
+        }
+      } else {
+        data[setting.identifier] = values[setting.identifier] as string
+      }
+
+      return data
+    }, {} as Record<string, string | File>) 
+
+    contentType = 'multipart/form-data'
+    postData = useFormData(data)
+  }
+
+  try {
+    const response = await axios.post('instance/admin/settings/bulk/', postData, {
+      headers: { 'Content-Type': contentType }
+    })
+
+    result.value = true
+    for (const setting of response.data) {
+      values[setting.identifier] = setting.value
+    }
+
+    store.dispatch('instance/fetchSettings')
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <form
     :id="group.id"
@@ -35,9 +131,6 @@
         Settings updated successfully.
       </translate>
     </div>
-    <p v-if="group.help">
-      {{ group.help }}
-    </p>
     <div
       v-for="(setting, key) in settings"
       :key="key"
@@ -56,8 +149,8 @@
       />
       <signup-form-builder
         v-else-if="setting.fieldType === 'formBuilder'"
-        v-model="values[setting.identifier]"
-        :signup-approval-enabled="values.moderation__signup_approval_enabled"
+        v-model="values[setting.identifier] as Form"
+        :signup-approval-enabled="!!values.moderation__signup_approval_enabled"
       />
       <input
         v-else-if="setting.field.widget.class === 'PasswordInput'"
@@ -86,7 +179,7 @@
       <textarea
         v-else-if="setting.field.widget.class === 'Textarea'"
         :id="setting.identifier"
-        v-model="values[setting.identifier]"
+        v-model="values[setting.identifier] as string"
         :name="setting.identifier"
         type="text"
         class="ui input"
@@ -97,7 +190,7 @@
       >
         <input
           :id="setting.identifier"
-          v-model="values[setting.identifier]"
+          v-model="values[setting.identifier] as boolean"
           :name="setting.identifier"
           type="checkbox"
         >
@@ -114,8 +207,8 @@
         class="ui search selection dropdown"
       >
         <option
-          v-for="(v, index) in setting.additional_data.choices"
-          :key="index"
+          v-for="v in setting.additional_data.choices"
+          :key="v[0]"
           :value="v[0]"
         >
           {{ v[1] }}
@@ -124,7 +217,7 @@
       <div v-else-if="setting.field.widget.class === 'ImageWidget'">
         <input
           :id="setting.identifier"
-          :ref="setting.identifier"
+          :ref="setFileRef(setting.identifier)"
           type="file"
         >
         <div v-if="values[setting.identifier]">
@@ -153,99 +246,3 @@
     </button>
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-import { cloneDeep } from 'lodash-es'
-import SignupFormBuilder from '~/components/admin/SignupFormBuilder.vue'
-import useFormData from '~/composables/useFormData'
-
-export default {
-  components: {
-    SignupFormBuilder
-  },
-  props: {
-    group: { type: Object, required: true },
-    settingsData: { type: Array, required: true }
-  },
-  data () {
-    return {
-      values: {},
-      result: null,
-      errors: [],
-      isLoading: false
-    }
-  },
-  computed: {
-    settings () {
-      const byIdentifier = {}
-      this.settingsData.forEach(e => {
-        byIdentifier[e.identifier] = e
-      })
-      return this.group.settings.map(e => {
-        return { ...byIdentifier[e.name], fieldType: e.fieldType, fieldParams: e.fieldParams || {} }
-      })
-    },
-    fileSettings () {
-      return this.settings.filter((s) => {
-        return s.field.widget.class === 'ImageWidget'
-      })
-    }
-  },
-  created () {
-    const self = this
-    this.settings.forEach(e => {
-      self.values[e.identifier] = e.value
-    })
-  },
-  methods: {
-    save () {
-      const self = this
-      this.isLoading = true
-      self.errors = []
-      self.result = null
-      let postData = self.values
-      let contentType = 'application/json'
-      const fileSettingsIDs = this.fileSettings.map((s) => { return s.identifier })
-      if (fileSettingsIDs.length > 0) {
-        const data = this.settings.reduce((data, setting) => {
-          if (fileSettingsIDs.includes(setting.identifier)) {
-            const [input] = this.$refs[setting.identifier]
-            const { files } = input
-
-            // TODO (wvffle): Move to the top of setup
-            const logger = useLogger()
-            logger.debug('ref', input, files)
-
-            if (files?.length > 0) {
-              data[s.identifier] = files[0]
-            }
-          } else {
-            postData.append(s.identifier, this.values[s.identifier])
-          }
-
-          return data
-        }, {})
-
-        contentType = 'multipart/form-data'
-        postData = useFormData(data)
-      }
-      axios.post('instance/admin/settings/bulk/', postData, {
-        headers: {
-          'Content-Type': contentType
-        }
-      }).then((response) => {
-        self.result = true
-        response.data.forEach((s) => {
-          self.values[s.identifier] = s.value
-        })
-        self.isLoading = false
-        self.$store.dispatch('instance/fetchSettings')
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

@@ -1,8 +1,11 @@
 import type { App } from 'vue'
 import type { Store } from 'vuex'
-import { Router } from 'vue-router'
-import { AxiosError } from 'axios'
-import { RootState } from '~/store'
+import type { Router } from 'vue-router'
+import type { AxiosError } from 'axios'
+import type { RootState } from '~/store'
+import type { ComponentPublicInstance } from '@vue/runtime-core'
+
+export type FunctionRef = Element | ComponentPublicInstance | null
 
 declare global {
   interface Window {
@@ -258,4 +261,40 @@ export interface Actor {
   full_username: string
   is_local: boolean
   domain: string
+}
+
+// Settings stuff
+export type SettingsId = 'instance'
+export interface SettingsGroup {
+  label: string
+  id: SettingsId
+  settings: SettingsField[]
+}
+
+export interface SettingsField {
+  name: string
+  fieldType?: 'markdown'
+  fieldParams?: {
+    charLimit: number | null
+    permissive: boolean
+  }
+}
+
+export interface SettingsDataEntry {
+  identifier: string
+  fieldType: string
+  fieldParams: object
+  help_text: string
+  verbose_name: string
+  value: unknown
+  field: {
+    class: string
+    widget: {
+      class: string
+    }
+  }
+
+  additional_data: {
+    choices: [string, string]
+  }
 }

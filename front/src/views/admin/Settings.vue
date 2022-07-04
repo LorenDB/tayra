@@ -1,3 +1,163 @@
+<script setup lang="ts">
+import type { SettingsGroup } from '~/types'
+import axios from 'axios'
+import $ from 'jquery'
+
+import { useCurrentElement } from '@vueuse/core'
+import { ref, nextTick, onMounted, computed, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useGettext } from 'vue3-gettext'
+
+const current = ref()
+const settingsData = ref()
+
+const { $pgettext } = useGettext()
+
+const groups = computed(() => [
+  {
+    label: $pgettext('Content/Admin/Menu', 'Instance information'),
+    id: 'instance',
+    settings: [
+      { name: 'instance__name' },
+      { name: 'instance__short_description' },
+      { name: 'instance__long_description', fieldType: 'markdown', fieldParams: { charLimit: null, permissive: true } },
+      { name: 'instance__contact_email' },
+      { name: 'instance__rules', fieldType: 'markdown', fieldParams: { charLimit: null, permissive: true } },
+      { name: 'instance__terms', fieldType: 'markdown', fieldParams: { charLimit: null, permissive: true } },
+      { name: 'instance__banner' },
+      { name: 'instance__support_message', fieldType: 'markdown', fieldParams: { charLimit: null, permissive: true } }
+    ]
+  },
+  {
+    label: $pgettext('*/*/*/Noun', 'Sign-ups'),
+    id: 'signup',
+    settings: [
+      { name: 'users__registration_enabled' },
+      { name: 'moderation__signup_approval_enabled' },
+      { name: 'moderation__signup_form_customization', fieldType: 'formBuilder' }
+    ]
+  },
+  {
+    label: $pgettext('*/*/*/Noun', 'Security'),
+    id: 'security',
+    settings: [
+      { name: 'common__api_authentication_required' },
+      { name: 'users__default_permissions' },
+      { name: 'users__upload_quota' }
+    ]
+  },
+  {
+    label: $pgettext('*/*/*/Noun', 'Music'),
+    id: 'music',
+    settings: [
+      { name: 'music__transcoding_enabled' },
+      { name: 'music__transcoding_cache_duration' }
+    ]
+  },
+  {
+    label: $pgettext('*/*/*', 'Channels'),
+    id: 'channels',
+    settings: [
+      { name: 'audio__channels_enabled' },
+      { name: 'audio__max_channels' }
+    ]
+  },
+  {
+    label: $pgettext('*/*/*', 'Playlists'),
+    id: 'playlists',
+    settings: [
+      { name: 'playlists__max_tracks' }
+    ]
+  },
+  {
+    label: $pgettext('*/Moderation/*', 'Moderation'),
+    id: 'moderation',
+    settings: [
+      { name: 'moderation__allow_list_enabled' },
+      { name: 'moderation__allow_list_public' },
+      { name: 'moderation__unauthenticated_report_types' }
+    ]
+  },
+  {
+    label: $pgettext('*/*/*', 'Federation'),
+    id: 'federation',
+    settings: [
+      { name: 'federation__enabled' },
+      { name: 'federation__public_index' },
+      { name: 'federation__collection_page_size' },
+      { name: 'federation__music_cache_duration' },
+      { name: 'federation__actor_fetch_delay' }
+    ]
+  },
+  {
+    label: $pgettext('Content/Admin/Menu', 'Subsonic'),
+    id: 'subsonic',
+    settings: [
+      { name: 'subsonic__enabled' }
+    ]
+  },
+  {
+    label: $pgettext('Content/Home/Header', 'Statistics'),
+    id: 'ui',
+    settings: [
+      { name: 'ui__custom_css' },
+      { name: 'instance__funkwhale_support_message_enabled' }
+    ]
+  },
+  {
+    label: $pgettext('Content/Admin/Menu', 'User Interface'),
+    id: 'statistics',
+    settings: [
+      { name: 'instance__nodeinfo_stats_enabled' },
+      { name: 'instance__nodeinfo_private' }
+    ]
+  }
+] as SettingsGroup[])
+
+const labels = computed(() => ({
+  settings: $pgettext('Head/Admin/Title', 'Instance settings')
+}))
+
+const scrollTo = (id: string) => {
+  current.value = id
+  document.getElementById(id)?.scrollIntoView()
+}
+
+const route = useRoute()
+if (route.hash) {
+  scrollTo(route.hash.slice(1))
+}
+
+onMounted(() => {
+  // @ts-expect-error dropdown is from semantic ui
+  $('select.dropdown').dropdown()
+})
+
+const el = useCurrentElement()
+watch(settingsData, async () => {
+  await nextTick()
+  // @ts-expect-error sticky is from semantic ui
+  $(el.value).find('.sticky').sticky({ context: '#settings-grid' })
+})
+
+const isLoading = ref(false)
+const fetchSettings = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get('instance/admin/settings/')
+    settingsData.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+await fetchSettings()
+await nextTick()
+</script>
+
 <template>
   <main
     v-title="labels.settings"
@@ -14,7 +174,7 @@
           <div class="twelve wide stretched column">
             <settings-group
               v-for="group in groups"
-              :key="group.title"
+              :key="group.id"
               :settings-data="settingsData"
               :group="group"
             />
@@ -40,181 +200,3 @@
     </div>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import $ from 'jquery'
-
-import SettingsGroup from '~/components/admin/SettingsGroup.vue'
-import { nextTick } from 'vue'
-import { useRoute } from 'vue-router'
-
-export default {
-  components: {
-    SettingsGroup
-  },
-  async setup () {
-    await this.fetchSettings()
-    await nextTick()
-
-    const route = useRoute()
-    if (route.hash) {
-      this.scrollTo(route.hash.slice(1))
-    }
-
-    $('select.dropdown').dropdown()
-  },
-  data () {
-    return {
-      isLoading: false,
-      settingsData: null,
-      current: null
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        settings: this.$pgettext('Head/Admin/Title', 'Instance settings')
-      }
-    },
-    groups () {
-      // somehow, extraction fails if in the return block directly
-      const instanceLabel = this.$pgettext('Content/Admin/Menu', 'Instance information')
-      const signupsLabel = this.$pgettext('*/*/*/Noun', 'Sign-ups')
-      const securityLabel = this.$pgettext('*/*/*/Noun', 'Security')
-      const musicLabel = this.$pgettext('*/*/*/Noun', 'Music')
-      const channelsLabel = this.$pgettext('*/*/*', 'Channels')
-      const playlistsLabel = this.$pgettext('*/*/*', 'Playlists')
-      const federationLabel = this.$pgettext('*/*/*', 'Federation')
-      const moderationLabel = this.$pgettext('*/Moderation/*', 'Moderation')
-      const subsonicLabel = this.$pgettext('Content/Admin/Menu', 'Subsonic')
-      const statisticsLabel = this.$pgettext('Content/Home/Header', 'Statistics')
-      const uiLabel = this.$pgettext('Content/Admin/Menu', 'User Interface')
-      return [
-        {
-          label: instanceLabel,
-          id: 'instance',
-          settings: [
-            { name: 'instance__name' },
-            { name: 'instance__short_description' },
-            { name: 'instance__long_description', fieldType: 'markdown', fieldParams: { charLimit: null, permissive: true } },
-            { name: 'instance__contact_email' },
-            { name: 'instance__rules', fieldType: 'markdown', fieldParams: { charLimit: null, permissive: true } },
-            { name: 'instance__terms', fieldType: 'markdown', fieldParams: { charLimit: null, permissive: true } },
-            { name: 'instance__banner' },
-            { name: 'instance__support_message', fieldType: 'markdown', fieldParams: { charLimit: null, permissive: true } }
-          ]
-        },
-        {
-          label: signupsLabel,
-          id: 'signup',
-          settings: [
-            { name: 'users__registration_enabled' },
-            { name: 'moderation__signup_approval_enabled' },
-            { name: 'moderation__signup_form_customization', fieldType: 'formBuilder' }
-          ]
-        },
-        {
-          label: securityLabel,
-          id: 'security',
-          settings: [
-            { name: 'common__api_authentication_required' },
-            { name: 'users__default_permissions' },
-            { name: 'users__upload_quota' }
-          ]
-        },
-        {
-          label: musicLabel,
-          id: 'music',
-          settings: [
-            { name: 'music__transcoding_enabled' },
-            { name: 'music__transcoding_cache_duration' }
-          ]
-        },
-        {
-          label: channelsLabel,
-          id: 'channels',
-          settings: [
-            { name: 'audio__channels_enabled' },
-            { name: 'audio__max_channels' }
-          ]
-        },
-        {
-          label: playlistsLabel,
-          id: 'playlists',
-          settings: [
-            { name: 'playlists__max_tracks' }
-          ]
-        },
-        {
-          label: moderationLabel,
-          id: 'moderation',
-          settings: [
-            { name: 'moderation__allow_list_enabled' },
-            { name: 'moderation__allow_list_public' },
-            { name: 'moderation__unauthenticated_report_types' }
-          ]
-        },
-        {
-          label: federationLabel,
-          id: 'federation',
-          settings: [
-            { name: 'federation__enabled' },
-            { name: 'federation__public_index' },
-            { name: 'federation__collection_page_size' },
-            { name: 'federation__music_cache_duration' },
-            { name: 'federation__actor_fetch_delay' }
-          ]
-        },
-        {
-          label: subsonicLabel,
-          id: 'subsonic',
-          settings: [
-            { name: 'subsonic__enabled' }
-          ]
-        },
-        {
-          label: uiLabel,
-          id: 'ui',
-          settings: [
-            { name: 'ui__custom_css' },
-            { name: 'instance__funkwhale_support_message_enabled' }
-          ]
-        },
-        {
-          label: statisticsLabel,
-          id: 'statistics',
-          settings: [
-            { name: 'instance__nodeinfo_stats_enabled' },
-            { name: 'instance__nodeinfo_private' }
-          ]
-        }
-      ]
-    }
-  },
-  watch: {
-    settingsData () {
-      const self = this
-      this.$nextTick(() => {
-        $(self.$el)
-          .find('.sticky')
-          .sticky({ context: '#settings-grid' })
-      })
-    }
-  },
-  methods: {
-    scrollTo (id) {
-      this.current = id
-      document.getElementById(id).scrollIntoView()
-    },
-    async fetchSettings () {
-      const self = this
-      self.isLoading = true
-      return axios.get('instance/admin/settings/').then(response => {
-        self.settingsData = response.data
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>
