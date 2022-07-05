@@ -210,7 +210,7 @@ def test_update_domain_nodeinfo(factories, mocker, now, service_actor):
 
     retrieve_ap_object.assert_called_once_with(
         "https://actor.id",
-        actor=service_actor,
+        actor=None,
         queryset=models.Actor,
         serializer_class=serializers.ActorSerializer,
     )
