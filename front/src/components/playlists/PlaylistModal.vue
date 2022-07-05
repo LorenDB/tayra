@@ -52,7 +52,7 @@ const addToPlaylist = async (playlistId: number, allowDuplicates: boolean) => {
   lastSelectedPlaylist.value = playlistId
 
   try { 
-    await axios.post(`playlists/${playlistId}/add`, {
+    await axios.post(`playlists/${playlistId}/add/`, {
       tracks: [track.value?.id].filter(i => i),
       allow_duplicates: allowDuplicates
     })
@@ -106,7 +106,7 @@ const addToPlaylist = async (playlistId: number, allowDuplicates: boolean) => {
       </translate>
     </h4>
     <div class="scrolling content">
-      <playlist-form :key="formKey" />
+      <playlist-form :create="true" :key="formKey" />
       <div class="ui divider" />
       <div v-if="playlists.length > 0">
         <div

@@ -1,3 +1,63 @@
+<script setup lang="ts">
+import type { Track, Radio } from "~/types"
+
+import axios from 'axios'
+import TrackTable from '~/components/audio/track/Table.vue'
+import RadioButton from '~/components/radios/Button.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+import { ref, computed, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+
+interface Props {
+  id: string
+}
+
+const props = defineProps<Props>()
+
+const radio = ref<Radio | null>(null)
+const tracks = ref([] as Track[])
+const totalTracks = ref(0)
+const page = ref(1)
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('Head/Radio/Title', 'Radio')
+}))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  const url = `radios/radios/${props.id}/`
+
+  try {
+    const radioResponse = await axios.get(url)
+    radio.value = radioResponse.data
+
+    const tracksResponse = await axios.get(url + 'tracks/', { params: { page: page.value }})
+    totalTracks.value = tracksResponse.data.count
+    tracks.value = tracksResponse.data.results
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+watch(page, fetchData, { immediate: true })
+
+const router = useRouter()
+const deleteRadio = async () => {
+  try {
+    await axios.delete(`radios/radios/${props.id}/`)
+    return router.push({ path: '/library' })
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+}
+</script>
+
 <template>
   <main>
     <div
@@ -81,10 +141,9 @@
       <div class="ui center aligned basic segment">
         <pagination
           v-if="totalTracks > 25"
-          :current="page"
+          v-model:current="page"
           :paginate-by="25"
           :total="totalTracks"
-          @page-changed="selectPage"
         />
       </div>
     </section>
@@ -101,9 +160,9 @@
         </translate>
       </div>
       <router-link
-        v-if="$store.state.auth.username === radio.user.username"
+        v-if="$store.state.auth.username === radio?.user.username"
         class="ui success icon labeled button"
-        :to="{name: 'library.radios.edit', params: {id: radio.id}}"
+        :to="{name: 'library.radios.edit', params: { id: radio?.id }}"
       >
         <i class="pencil icon" />
         Edit…
@@ -111,76 +170,3 @@
     </div>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import TrackTable from '~/components/audio/track/Table.vue'
-import RadioButton from '~/components/radios/Button.vue'
-import Pagination from '~/components/vui/Pagination.vue'
-
-export default {
-  components: {
-    TrackTable,
-    RadioButton,
-    Pagination
-  },
-  props: {
-    id: { type: Number, required: true }
-  },
-  data: function () {
-    return {
-      isLoading: false,
-      radio: null,
-      tracks: [],
-      totalTracks: 0,
-      page: 1
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Head/Radio/Title', 'Radio')
-      }
-    }
-  },
-  watch: {
-    page: function () {
-      this.fetch()
-    }
-  },
-  created: function () {
-    this.fetch()
-  },
-  methods: {
-    selectPage: function (page) {
-      this.page = page
-    },
-    fetch: function () {
-      const self = this
-      self.isLoading = true
-      const url = 'radios/radios/' + this.id + '/'
-      axios.get(url).then(response => {
-        self.radio = response.data
-        axios
-          .get(url + 'tracks/', { params: { page: this.page } })
-          .then(response => {
-            this.totalTracks = response.data.count
-            this.tracks = response.data.results
-          })
-          .then(() => {
-            self.isLoading = false
-          })
-      })
-    },
-    deleteRadio () {
-      const self = this
-      const url = 'radios/radios/' + this.id + '/'
-      axios.delete(url).then(response => {
-        self.$router.push({
-          path: '/library'
-        })
-      })
-    }
-  }
-}
-</script>

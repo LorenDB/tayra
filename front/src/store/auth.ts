@@ -1,3 +1,4 @@
+import type { User } from '~/types'
 import type { Module } from 'vuex'
 import type { RootState } from '~/store/index'
 
@@ -11,19 +12,9 @@ export interface State {
   username: string
   fullUsername: string
   availablePermissions: Record<Permission, boolean>,
-  profile: null | Profile
+  profile: null | User
   oauth: OAuthTokens
   scopedTokens: ScopedTokens
-}
-
-interface Profile {
-  id: string
-  avatar?: string
-  username: string
-  full_username: string
-  instance_support_message_display_date: string
-  funkwhale_support_message_display_date: string
-  is_superuser: boolean
 }
 
 interface ScopedTokens {
@@ -136,13 +127,13 @@ const store: Module<State, RootState> = {
     permission: (state, { key, status }: { key: Permission, status: boolean }) => {
       state.availablePermissions[key] = status
     },
-    profilePartialUpdate: (state, payload: Profile) => {
+    profilePartialUpdate: (state, payload: User) => {
       if (!state.profile) {
-        state.profile = {} as Profile
+        state.profile = {} as User
       }
 
       for (const [key, value] of Object.entries(payload)) {
-        state.profile[key as keyof Profile] = value as never
+        state.profile[key as keyof User] = value as never
       }
     },
     oauthApp: (state, payload) => {
@@ -160,7 +151,7 @@ const store: Module<State, RootState> = {
       const form = useFormData(credentials)
       return axios.post('users/login', form).then(() => {
         logger.info('Successfully logged in as', credentials.username)
-        dispatch('fetchProfile').then(() => {
+        dispatch('fetchUser').then(() => {
           // Redirect to a specified route
           import('~/router').then((router) => {
             return router.default.push(next)
@@ -190,11 +181,11 @@ const store: Module<State, RootState> = {
       })
       logger.info('Log out, goodbye!')
     },
-    fetchProfile ({ dispatch }) {
+    fetchUser ({ dispatch }) {
       return new Promise((resolve, reject) => {
         axios.get('users/me/').then((response) => {
           logger.info('Successfully fetched user profile')
-          dispatch('updateProfile', response.data)
+          dispatch('updateUser', response.data)
           dispatch('ui/fetchUnreadNotifications', null, { root: true })
           if (response.data.permissions.library) {
             dispatch('ui/fetchPendingReviewEdits', null, { root: true })
@@ -215,7 +206,7 @@ const store: Module<State, RootState> = {
         })
       })
     },
-    updateProfile ({ commit }, data) {
+    updateUser ({ commit }, data) {
       commit('authenticated', true)
       commit('profile', data)
       commit('username', data.username)
@@ -253,7 +244,7 @@ const store: Module<State, RootState> = {
         { headers: { 'Content-Type': 'multipart/form-data' } }
       )
       commit('oauthToken', response.data)
-      await dispatch('fetchProfile')
+      await dispatch('fetchUser')
     },
     async refreshOauthToken ({ state, commit }) {
       const payload = {

@@ -159,7 +159,24 @@ export interface License {
 export interface Playlist {
   id: string
   name: string
-  modification_date: Date // TODO (wvffle): Find correct type
+  modification_date: string
+  user: User
+  privacy_level: PrivacyLevel
+  tracks_count: number
+  duration: number
+
+  is_playable: boolean
+}
+
+export interface PlaylistTrack {
+  track: Track
+  position?: number
+}
+
+export interface Radio {
+  id: string
+  name: string
+  user: User
 }
 
 // API stuff
@@ -253,6 +270,7 @@ export interface FSLogs {
 
 // Profile stuff
 export interface Actor {
+  id: string
   fid?: string
   name?: string
   icon?: Cover
@@ -261,6 +279,17 @@ export interface Actor {
   full_username: string
   is_local: boolean
   domain: string
+}
+
+export interface User {
+  id: string
+  avatar?: string
+  username: string
+  full_username: string
+  instance_support_message_display_date: string
+  funkwhale_support_message_display_date: string
+  is_superuser: boolean
+  privacy_level: PrivacyLevel
 }
 
 // Settings stuff

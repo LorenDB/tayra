@@ -1,3 +1,101 @@
+<script setup lang="ts">
+import type { Playlist, PrivacyLevel, BackendError } from '~/types'
+
+import $ from 'jquery'
+import axios from 'axios'
+import { useVModels, useCurrentElement } from '@vueuse/core'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+import { ref, computed, onMounted, nextTick } from 'vue'
+import useLogger from '~/composables/useLogger'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+
+interface Props {
+  title?: boolean
+  create?: boolean
+  playlist?: Playlist | null
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  title: true,
+  create: false,
+  playlist: null
+})
+
+const emit = defineEmits(['update:playlist'])
+const { playlist } = useVModels(props, emit)
+
+const logger = useLogger()
+
+const errors = ref([] as string[])
+const success = ref(false)
+
+const store = useStore()
+const name = ref(playlist.value?.name ?? '')
+const privacyLevel = ref(playlist.value?.privacy_level ?? store.state.auth.profile?.privacy_level ?? 'me')
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  placeholder: $pgettext('Content/Playlist/Input.Placeholder', 'My awesome playlist')
+}))
+
+const sharedLabels = useSharedLabels()
+const privacyLevelChoices = computed(() => [
+  {
+    value: 'me',
+    label: sharedLabels.fields.privacy_level.choices.me
+  },
+  {
+    value: 'instance',
+    label: sharedLabels.fields.privacy_level.choices.instance
+  },
+  {
+    value: 'everyone',
+    label: sharedLabels.fields.privacy_level.choices.everyone
+  }
+] as { value: PrivacyLevel, label: string }[])
+
+const el = useCurrentElement()
+onMounted(async () => {
+  await nextTick()
+  // @ts-expect-error dropdown is from semantic ui
+  $(el.value).find('.dropdown').dropdown()
+})
+
+const isLoading = ref(false)
+const submit = async () => {
+  isLoading.value = true
+  success.value = false
+  errors.value = []
+
+  try {
+    const url = props.create ? 'playlists/' : `playlists/${playlist.value!.id}/`
+    const method = props.create ? 'post' : 'patch' 
+
+    const data = {
+      name: name.value,
+      privacy_level: privacyLevel.value
+    }
+
+    const response = await axios.request({ method, url, data })
+    success.value = true
+
+    if (props.create) {
+      name.value = ''
+    } else {
+      playlist.value = response.data
+    }
+
+    store.dispatch('playlists/fetchOwn')
+  } catch (error) {
+    logger.error('Error while creating playlist')
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <form
     class="ui form"
@@ -96,100 +194,3 @@
     </div>
   </form>
 </template>
-
-<script>
-import $ from 'jquery'
-import axios from 'axios'
-
-import useLogger from '~/composables/useLogger'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-const logger = useLogger()
-
-export default {
-  props: {
-    title: { type: Boolean, default: true },
-    playlist: { type: Object, default: null }
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels }
-  },
-  data () {
-    const d = {
-      errors: [],
-      success: false,
-      isLoading: false
-    }
-    if (this.playlist) {
-      d.name = this.playlist.name
-      d.privacyLevel = this.playlist.privacy_level
-    } else {
-      d.privacyLevel = this.$store.state.auth.profile.privacy_level
-      d.name = ''
-    }
-    return d
-  },
-  computed: {
-    labels () {
-      return {
-        placeholder: this.$pgettext('Content/Playlist/Input.Placeholder', 'My awesome playlist')
-      }
-    },
-    privacyLevelChoices: function () {
-      return [
-        {
-          value: 'me',
-          label: this.sharedLabels.fields.privacy_level.choices.me
-        },
-        {
-          value: 'instance',
-          label: this.sharedLabels.fields.privacy_level.choices.instance
-        },
-        {
-          value: 'everyone',
-          label: this.sharedLabels.fields.privacy_level.choices.everyone
-        }
-      ]
-    }
-  },
-  mounted () {
-    $(this.$el).find('.dropdown').dropdown()
-  },
-  methods: {
-    submit () {
-      this.isLoading = true
-      this.success = false
-      this.errors = []
-      const self = this
-      const payload = {
-        name: this.name,
-        privacy_level: this.privacyLevel
-      }
-
-      let promise
-      let url
-      if (this.playlist) {
-        url = `playlists/${this.playlist.id}/`
-        promise = axios.patch(url, payload)
-      } else {
-        url = 'playlists/'
-        promise = axios.post(url, payload)
-      }
-      return promise.then(response => {
-        self.success = true
-        self.isLoading = false
-        if (!self.playlist) {
-          self.name = ''
-        }
-        self.$emit('updated', response.data)
-        self.$store.dispatch('playlists/fetchOwn')
-      }, error => {
-        logger.error('Error while creating playlist')
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

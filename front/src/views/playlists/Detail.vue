@@ -1,3 +1,74 @@
+<script setup lang="ts">
+import type { PlaylistTrack, Playlist } from '~/types'
+
+import axios from 'axios'
+import TrackTable from '~/components/audio/track/Table.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import PlaylistEditor from '~/components/playlists/Editor.vue'
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import Modal from '~/components/semantic/Modal.vue'
+import { ref, computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+import { useStore } from '~/store'
+
+interface Props {
+  id: string
+  defaultEdit?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultEdit: false
+})
+
+const store = useStore()
+const router = useRouter()
+
+const edit = ref(props.defaultEdit)
+const playlist = ref<Playlist | null>(null)
+const playlistTracks = ref<PlaylistTrack[]>([])
+
+const showEmbedModal = ref(false)
+
+const tracks = computed(() => playlistTracks.value.map(({ track }, index) => ({ ...track, position: index + 1 })))
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  playlist: $pgettext('*/*/*', 'Playlist')
+}))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const [playlistResponse, tracksResponse] = await Promise.all([
+      axios.get(`playlists/${props.id}/`),
+      axios.get(`playlists/${props.id}/tracks/`),
+    ])
+
+    playlist.value = playlistResponse.data
+    playlistTracks.value = tracksResponse.data.results
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+
+const deletePlaylist = async () => {
+  try {
+    await axios.delete(`playlists/${props.id}/`)
+    store.dispatch('playlists/fetchOwn')
+    return router.push({ path: '/library' })
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+}
+</script>
+
 <template>
   <main>
     <div
@@ -45,7 +116,7 @@
           </div>
           <div class="ui buttons">
             <button
-              v-if="$store.state.auth.profile && playlist.user.id === $store.state.auth.profile.id"
+              v-if="$store.state.auth.profile && playlist.user.id === $store.state.auth.profile?.id"
               class="ui icon labeled button"
               @click="edit = !edit"
             >
@@ -137,10 +208,8 @@
     <section class="ui vertical stripe segment">
       <template v-if="edit">
         <playlist-editor
-          :playlist="playlist"
-          :playlist-tracks="playlistTracks"
-          @playlist-updated="playlist = $event"
-          @tracks-updated="updatePlts"
+          v-model:playlist="playlist"
+          v-model:playlist-tracks="playlistTracks"
         />
       </template>
       <template v-else-if="tracks.length > 0">
@@ -177,81 +246,3 @@
     </section>
   </main>
 </template>
-<script>
-import axios from 'axios'
-import TrackTable from '~/components/audio/track/Table.vue'
-import PlayButton from '~/components/audio/PlayButton.vue'
-import PlaylistEditor from '~/components/playlists/Editor.vue'
-import EmbedWizard from '~/components/audio/EmbedWizard.vue'
-import Modal from '~/components/semantic/Modal.vue'
-
-export default {
-  components: {
-    PlaylistEditor,
-    TrackTable,
-    PlayButton,
-    Modal,
-    EmbedWizard
-  },
-  props: {
-    id: { type: [Number, String], required: true },
-    defaultEdit: { type: Boolean, default: false }
-  },
-  data: function () {
-    return {
-      edit: this.defaultEdit,
-      isLoading: false,
-      playlist: null,
-      tracks: [],
-      playlistTracks: [],
-      showEmbedModal: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        playlist: this.$pgettext('*/*/*', 'Playlist')
-      }
-    }
-  },
-  created: function () {
-    this.fetch()
-  },
-  methods: {
-    updatePlts (v) {
-      this.playlistTracks = v
-      this.tracks = v.map((e, i) => {
-        const track = e.track
-        track.position = i + 1
-        return track
-      })
-    },
-    fetch: function () {
-      const self = this
-      self.isLoading = true
-      const url = 'playlists/' + this.id + '/'
-      axios.get(url).then(response => {
-        self.playlist = response.data
-        axios
-          .get(url + 'tracks/')
-          .then(response => {
-            self.updatePlts(response.data.results)
-          })
-          .then(() => {
-            self.isLoading = false
-          })
-      })
-    },
-    deletePlaylist () {
-      const self = this
-      const url = 'playlists/' + this.id + '/'
-      axios.delete(url).then(response => {
-        self.$store.dispatch('playlists/fetchOwn')
-        self.$router.push({
-          path: '/library'
-        })
-      })
-    }
-  }
-}
-</script>
