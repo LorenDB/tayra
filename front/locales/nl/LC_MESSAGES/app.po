@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2022-06-19 05:30+0000\n"
+"PO-Revision-Date: 2022-07-08 20:34+0000\n"
 "Last-Translator: Jasper Bogers <joabogers@gmail.com>\n"
 "Language-Team: none\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.13\n"
 
 #: front/src/components/playlists/PlaylistModal.vue:8
 #: front/src/components/playlists/PlaylistModal.vue:5
@@ -147,8 +147,8 @@ msgstr[1] "%{ count } nummers in %{ albumsCount } albums"
 msgctxt "Content/Radio/Table.Paragraph/Short"
 msgid "%{ count } track matching combined filters"
 msgid_plural "%{ count } tracks matching combined filters"
-msgstr[0] "% { count } nummer komt overeen met de gecombineerde filters"
-msgstr[1] "% { count } nummers komen overeen met de gecombineerde filters"
+msgstr[0] "%{ count } nummer komt overeen met de gecombineerde filters"
+msgstr[1] "%{ count } nummers komen overeen met de gecombineerde filters"
 
 #: front/src/components/mixins/PlayOptions.vue:177
 #: front/src/components/mixins/PlayOptions.vue:178
@@ -500,8 +500,8 @@ msgstr "Actief"
 msgctxt "Content/About/*"
 msgid "active user"
 msgid_plural "active users"
-msgstr[0] "%{ count } actieve gebruiker"
-msgstr[1] "%{ count } actieve gebruikers"
+msgstr[0] "actieve gebruiker"
+msgstr[1] "actieve gebruikers"
 
 #: front/src/views/admin/ChannelDetail.vue:185
 #: src/views/admin/ChannelDetail.vue:180
@@ -3162,8 +3162,8 @@ msgstr "Beheer je afleveringen en houd je gemeenschap op de hoogte."
 msgctxt "Content/About/*"
 msgid "hour of music"
 msgid_plural "hours of music"
-msgstr[0] "%{ count } uur muziek"
-msgstr[1] "%{ count } uur muziek"
+msgstr[0] "uur muziek"
+msgstr[1] "uur muziek"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:20
 msgctxt "Content/Settings/Paragraph"
@@ -5500,7 +5500,7 @@ msgstr "@%{ username } melden…"
 #: front/src/components/manage/moderation/ReportCard.vue:5
 msgctxt "Content/Moderation/Card/Short"
 msgid "Report %{ id }"
-msgstr "Melding %{id}"
+msgstr "Melding %{ id }"
 
 #: front/src/components/moderation/ReportModal.vue:262
 msgctxt "*/Moderation/Message"
@@ -5565,7 +5565,7 @@ msgstr "Meldingen"
 #: front/src/components/manage/moderation/UserRequestCard.vue:5
 msgctxt "Content/Moderation/Card/Short"
 msgid "Request %{ id }"
-msgstr "Verzoek %{id}"
+msgstr "Verzoek %{ id }"
 
 #: front/src/components/auth/SubsonicTokenForm.vue:52
 #: front/src/components/auth/SubsonicTokenForm.vue:66
@@ -5800,7 +5800,7 @@ msgstr "Afgerond, maar met foutmeldingen"
 #: src/views/content/remote/Card.vue:2
 msgctxt "Content/Library/Card.List item"
 msgid "Scanning… (%{ progress }%)"
-msgstr "Aan het scannen… (% {progress }%)"
+msgstr "Aan het scannen… (%{ progress }%)"
 
 #: front/src/components/auth/ApplicationForm.vue:28
 #: front/src/components/auth/Settings.vue:323
@@ -6925,7 +6925,7 @@ msgstr "Deze entiteit is onderhevig aan specifieke moderatieregels"
 #: front/src/views/content/Home.vue:5
 msgctxt "Content/Library/Paragraph"
 msgid "This instance offers up to %{quota} of storage space for every user."
-msgstr "Deze server biedt tot %{ quota } opslagruimte aan elke gebruiker."
+msgstr "Deze server biedt tot %{quota} opslagruimte aan elke gebruiker."
 
 #: front/src/components/auth/Settings.vue:503
 msgctxt "Popup/Settings/Paragraph"
@@ -7795,7 +7795,7 @@ msgstr "Gebruik van Funkwhale"
 #: front/src/components/Footer.vue:33
 msgctxt "Footer/*/List item"
 msgid "Version %{version}"
-msgstr "Versie (%{ version })"
+msgstr "Versie (%{version})"
 
 #: front/src/components/audio/podcast/Modal.vue:278
 #: front/src/components/audio/track/Modal.vue:278
