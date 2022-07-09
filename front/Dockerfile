@@ -30,3 +30,4 @@ CMD ["sh", "-c", "envsubst \"`env | awk -F = '{printf \" $$%s\", $$1}'`\" \
 
 ENV FUNKWHALE_API_HOST=api
 ENV FUNKWHALE_API_PORT=5000
+ENV AWS_S3_ENDPOINT_URL=
