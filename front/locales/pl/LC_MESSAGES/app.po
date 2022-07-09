@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: front 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-08 18:17+0000\n"
-"PO-Revision-Date: 2022-01-07 21:36+0000\n"
+"PO-Revision-Date: 2022-07-10 13:34+0000\n"
 "Last-Translator: JuniorJPDJ <git@juniorjpdj.pl>\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.6.2\n"
+"X-Generator: Weblate 4.13\n"
 
 #: front/src/components/playlists/PlaylistModal.vue:8
 #: front/src/components/playlists/PlaylistModal.vue:5
@@ -82,8 +82,8 @@ msgctxt "*/*/*"
 msgid "%{ count } file"
 msgid_plural "%{ count } files"
 msgstr[0] "%{ count } plik"
-msgstr[1] "%{ count} pliki"
-msgstr[2] "%{ count} plików"
+msgstr[1] "%{ count } pliki"
+msgstr[2] "%{ count } plików"
 
 #: front/src/components/Home.vue:70 src/components/Home.vue:12
 msgctxt "Content/Home/Stat"
@@ -118,8 +118,8 @@ msgctxt "Content/Channel/Paragraph"
 msgid "%{ count } subscriber"
 msgid_plural "%{ count } subscribers"
 msgstr[0] "%{ count } subskrybent"
-msgstr[1] "%{ count} subskrybentów"
-msgstr[2] "%{ count} subskrybentów"
+msgstr[1] "%{ count } subskrybentów"
+msgstr[2] "%{ count } subskrybentów"
 
 #: front/src/components/audio/ChannelCard.vue:15
 #: front/src/components/audio/album/Card.vue:21
@@ -2295,7 +2295,9 @@ msgstr "Przeciągnij i upuść aby zmienić kolejność utworów w liście odtwa
 #: front/src/components/channels/UploadForm.vue:84
 msgctxt "Content/Channels/Paragraph"
 msgid "Drag and drop your files here or open the browser to upload your files"
-msgstr "Przeciągnij i upuść pliki lub katalogi bądź po prostu kliknij, aby wybrać pliki do przesłania."
+msgstr ""
+"Przeciągnij i upuść pliki lub katalogi bądź po prostu kliknij, aby wybrać "
+"pliki do przesłania"
 
 #: front/src/components/Queue.vue:399
 msgctxt "*/*/*"
@@ -7776,7 +7778,7 @@ msgstr "Zobacz więcej…"
 #: front/src/views/library/DetailBase.vue:11
 msgctxt "Content/*/Button.Label/Verb"
 msgid "View on %{ domain }"
-msgstr "Zobacz na %{ domain}"
+msgstr "Zobacz na %{ domain }"
 
 #: front/src/components/library/AlbumDropdown.vue:33
 #: front/src/components/library/ArtistBase.vue:78
