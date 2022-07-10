@@ -1,7 +1,7 @@
-FROM node:16-buster
+FROM node:16-alpine
 
 # needed to compile translations
-RUN apt-get update && apt-get install -y jq
+RUN apk add --no-cache jq bash coreutils python3
 
 EXPOSE 8080
 WORKDIR /app/

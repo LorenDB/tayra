@@ -40,8 +40,8 @@ RUN python -m venv --system-site-packages /venv
 # emulate activation by prefixing PATH
 ENV PATH="/venv/bin:/root/.local/bin:$PATH" VIRTUAL_ENV=/venv
 
-COPY --from=0 /requirements.txt /requirements.txt
-COPY --from=0 /dev-requirements.txt /dev-requirements.txt
+COPY --from=pre-build /requirements.txt /requirements.txt
+COPY --from=pre-build /dev-requirements.txt /dev-requirements.txt
 # hack around https://github.com/pypa/pip/issues/6158#issuecomment-456619072
 ENV PIP_DOWNLOAD_CACHE=/noop/
 RUN \

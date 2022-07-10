@@ -25,7 +25,7 @@ services:
     env_file:
       - .env.dev
       - .env
-    image: postgres:${POSTGRES_VERSION-11}
+    image: postgres:${POSTGRES_VERSION-11}-alpine
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
     command: postgres ${POSTGRES_ARGS-}
@@ -38,7 +38,7 @@ services:
     env_file:
       - .env.dev
       - .env
-    image: redis:5
+    image: redis:7-alpine
     volumes:
       - "./data/${COMPOSE_PROJECT_NAME-node1}/redis:/data"
     networks:
@@ -48,11 +48,12 @@ services:
     env_file:
       - .env.dev
       - .env
-    build: &backend
+    build:
       context: ./api
       dockerfile: Dockerfile
       args:
         install_dev_deps: 1
+    image: funkwhale-api
     entrypoint: compose/django/dev-entrypoint.sh
     command: >
       bash -c "python manage.py collectstatic --no-input
@@ -91,7 +92,7 @@ services:
     env_file:
       - .env.dev
       - .env
-    build: *backend
+    image: funkwhale-api
     depends_on:
       - postgres
       # - minio

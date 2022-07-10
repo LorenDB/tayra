@@ -25,7 +25,7 @@ stages:
 review_front:
   interruptible: true
   stage: review
-  image: node:16-buster
+  image: node:16-alpine
   when: manual
   allow_failure: true
   variables:
@@ -34,8 +34,7 @@ review_front:
     VUE_APP_INSTANCE_URL: $REVIEW_INSTANCE_URL
     NODE_ENV: review
   before_script:
-    - curl -L -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-    - chmod +x /usr/local/bin/jq
+    - apk add --no-cache jq bash coreutils python3
     - rm -rf front-review
     - mkdir front-review
     - cd front
@@ -118,7 +117,7 @@ changelog_snippet:
 
 black:
   interruptible: true
-  image: python:3.6
+  image: python:3.10
   stage: lint
   variables:
     GIT_STRATEGY: fetch
@@ -129,7 +128,7 @@ black:
 
 flake8:
   interruptible: true
-  image: python:3.6
+  image: python:3.7
   stage: lint
   variables:
     GIT_STRATEGY: fetch
@@ -144,10 +143,11 @@ flake8:
 
 eslint:
   interruptible: true
-  image: node:16-buster
+  image: node:16-alpine
   stage: lint
   before_script:
     - cd front
+    - apk add --no-cache jq bash coreutils python3
     - yarn install
   script:
     - yarn lint --max-warnings 0
@@ -159,8 +159,8 @@ eslint:
 test_api:
   interruptible: true
   services:
-    - postgres:14
-    - redis:6
+    - postgres:14-alpine
+    - redis:7-alpine
   stage: test
   retry: 1
   cache:
@@ -199,9 +199,10 @@ test_api:
 test_front:
   interruptible: true
   stage: test
-  image: node:16-buster
+  image: node:16-alpine
   before_script:
     - cd front
+    - apk add --no-cache jq bash coreutils python3
   only:
     refs:
       - branches
@@ -226,8 +227,8 @@ build_docs:
   stage: build
   image: $CI_REGISTRY/funkwhale/backend-test-docker:3.10
   services:
-    - postgres:14
-    - redis:6
+    - postgres:14-alpine
+    - redis:7-alpine
   cache:
     key: "$CI_PROJECT_ID__pip_cache"
     paths:
@@ -254,10 +255,9 @@ build_docs:
 
 build_front:
   stage: build
-  image: node:16-buster
+  image: node:16-alpine
   before_script:
-    - curl -L -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-    - chmod +x /usr/local/bin/jq
+    - apk add --no-cache jq bash coreutils python3
     - cd front
   script:
     - yarn install

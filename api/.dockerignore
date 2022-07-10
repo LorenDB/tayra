@@ -67,3 +67,4 @@ mailhog
 *.sqlite3
 music
 media
+data

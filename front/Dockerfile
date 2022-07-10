@@ -1,4 +1,4 @@
-FROM node:16 as builder
+FROM node:16-alpine as builder
 
 WORKDIR /app
 COPY package.json yarn.lock /app/
@@ -7,6 +7,7 @@ COPY scripts /app/scripts
 COPY public /app/public
 COPY vite.config.js index.html embed.html /app/
 
+RUN apk add --no-cache jq bash coreutils python3
 RUN yarn install
 RUN yarn build:deployment
 
