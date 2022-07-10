@@ -86,24 +86,14 @@ const labels = computed(() => ({
     <div class="header">
       <div class="ui large centered rounded image">
         <img
-          v-if="
-            track.album && track.album.cover && track.album.cover.urls.original
-          "
-          v-lazy="
-            $store.getters['instance/absoluteUrl'](
-              track.album.cover.urls.medium_square_crop
-            )
-          "
+          v-if="track.album?.cover?.urls.original"
+          v-lazy="$store.getters['instance/absoluteUrl'](track.album.cover.urls.medium_square_crop)"
           alt=""
           class="ui centered image"
         >
         <img
           v-else-if="track.cover"
-          v-lazy="
-            $store.getters['instance/absoluteUrl'](
-              track.cover.urls.medium_square_crop
-            )
-          "
+          v-lazy="$store.getters['instance/absoluteUrl'](track.cover.urls.medium_square_crop)"
           alt=""
           class="ui centered image"
         >
@@ -141,17 +131,7 @@ const labels = computed(() => ({
             :aria-label="favoriteButton"
             @click.stop="$store.dispatch('favorites/toggle', track.id)"
           >
-            <i
-              :class="[
-                'heart',
-                'favorite-icon',
-                { favorited: isFavorite },
-                { pink: isFavorite },
-                'icon',
-                'track-modal',
-                'list-icon',
-              ]"
-            />
+            <i :class="[ 'heart', 'favorite-icon', { favorited: isFavorite, pink: isFavorite }, 'icon', 'track-modal', 'list-icon' ]" />
             <span class="track-modal list-item">{{ favoriteButton }}</span>
           </div>
         </div>
@@ -160,10 +140,7 @@ const labels = computed(() => ({
             class="column"
             role="button"
             :aria-label="labels.addToQueue"
-            @click.stop.prevent="
-              enqueue();
-              modal.closeModal();
-            "
+            @click.stop.prevent="enqueue(); modal.closeModal()"
           >
             <i class="plus icon track-modal list-icon" />
             <span class="track-modal list-item">{{ labels.addToQueue }}</span>
@@ -174,10 +151,7 @@ const labels = computed(() => ({
             class="column"
             role="button"
             :aria-label="labels.playNext"
-            @click.stop.prevent="
-              enqueueNext(true);
-              modal.closeModal();
-            "
+            @click.stop.prevent="enqueueNext(true);modal.closeModal()"
           >
             <i class="step forward icon track-modal list-icon" />
             <span class="track-modal list-item">{{ labels.playNext }}</span>
@@ -188,13 +162,7 @@ const labels = computed(() => ({
             class="column"
             role="button"
             :aria-label="labels.startRadio"
-            @click.stop.prevent="
-              $store.dispatch('radios/start', {
-                type: 'similar',
-                objectId: track.id,
-              });
-              modal.closeModal();
-            "
+            @click.stop.prevent="() => { $store.dispatch('radios/start', { type: 'similar', objectId: track.id }); modal.closeModal() }"
           >
             <i class="rss icon track-modal list-icon" />
             <span class="track-modal list-item">{{ labels.startRadio }}</span>
@@ -208,9 +176,9 @@ const labels = computed(() => ({
             @click.stop="$store.commit('playlists/chooseTrack', track)"
           >
             <i class="list icon track-modal list-icon" />
-            <span class="track-modal list-item">{{
-              labels.addToPlaylist
-            }}</span>
+            <span class="track-modal list-item">
+              {{ labels.addToPlaylist }}
+            </span>
           </div>
         </div>
         <div class="ui divider" />
@@ -222,17 +190,10 @@ const labels = computed(() => ({
             class="column"
             role="button"
             :aria-label="albumDetailsButton"
-            @click.prevent.exact="
-              $router.push({
-                name: 'library.albums.detail',
-                params: { id: track.album?.id },
-              })
-            "
+            @click.prevent.exact="$router.push({ name: 'library.albums.detail', params: { id: track.album?.id } })"
           >
             <i class="compact disc icon track-modal list-icon" />
-            <span class="track-modal list-item">{{
-              albumDetailsButton
-            }}</span>
+            <span class="track-modal list-item">{{ albumDetailsButton }}</span>
           </div>
         </div>
         <div
@@ -243,17 +204,10 @@ const labels = computed(() => ({
             class="column"
             role="button"
             :aria-label="artistDetailsButton"
-            @click.prevent.exact="
-              $router.push({
-                name: 'library.artists.detail',
-                params: { id: track.artist?.id },
-              })
-            "
+            @click.prevent.exact="$router.push({ name: 'library.artists.detail', params: { id: track.artist?.id } })"
           >
             <i class="user icon track-modal list-icon" />
-            <span class="track-modal list-item">{{
-              artistDetailsButton
-            }}</span>
+            <span class="track-modal list-item">{{ artistDetailsButton }}</span>
           </div>
         </div>
         <div class="row">
@@ -261,17 +215,10 @@ const labels = computed(() => ({
             class="column"
             role="button"
             :aria-label="trackDetailsButton"
-            @click.prevent.exact="
-              $router.push({
-                name: 'library.tracks.detail',
-                params: { id: track.id },
-              })
-            "
+            @click.prevent.exact="$router.push({ name: 'library.tracks.detail', params: { id: track.id } })"
           >
             <i class="info icon track-modal list-icon" />
-            <span class="track-modal list-item">{{
-              trackDetailsButton
-            }}</span>
+            <span class="track-modal list-item">{{ trackDetailsButton }}</span>
           </div>
         </div>
         <div class="ui divider" />
@@ -284,9 +231,8 @@ const labels = computed(() => ({
           @click.stop.prevent="report(obj)"
         >
           <div class="column">
-            <i class="share icon track-modal list-icon" /><span
-              class="track-modal list-item"
-            >{{ obj.label }}</span>
+            <i class="share icon track-modal list-icon" />
+            <span class="track-modal list-item">{{ obj.label }}</span>
           </div>
         </div>
       </div>

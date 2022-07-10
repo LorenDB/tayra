@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { RouteWithPreferences } from '~/store/ui'
+import type { RouteWithPreferences, OrderingField } from '~/store/ui'
+import type { OrderingProps } from '~/composables/useOrdering'
+
 import qs from 'qs'
 import axios from 'axios'
 import $ from 'jquery'
@@ -9,11 +11,10 @@ import Pagination from '~/components/vui/Pagination.vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
 import useLogger from '~/composables/useLogger'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
-import { OrderingField } from '~/store/ui'
 import { computed, reactive, ref, watch, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
-import useOrdering, { OrderingProps } from '~/composables/useOrdering'
+import useOrdering from '~/composables/useOrdering'
 import { onBeforeRouteUpdate, useRouter } from 'vue-router'
 
 interface Props extends OrderingProps {

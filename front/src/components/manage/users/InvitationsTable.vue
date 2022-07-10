@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { RouteWithPreferences } from '~/store/ui'
+import type { RouteWithPreferences, OrderingField } from '~/store/ui'
+import type { OrderingProps } from '~/composables/useOrdering'
+
 import axios from 'axios'
 import moment from 'moment'
 import Pagination from '~/components/vui/Pagination.vue'
@@ -8,8 +10,7 @@ import useSharedLabels from '~/composables/locale/useSharedLabels'
 import { computed, ref, watch } from 'vue'
 import { watchDebounced } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
-import useOrdering, { OrderingProps } from '~/composables/useOrdering'
-import { OrderingField } from '~/store/ui'
+import useOrdering from '~/composables/useOrdering'
 
 interface Props extends OrderingProps {
   // TODO (wvffle): find object type

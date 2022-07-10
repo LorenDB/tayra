@@ -99,7 +99,7 @@ const isLoading = ref(false)
           <translate translate-context="Content/Library/Paragraph">
             Remaining storage space:
           </translate>
-          {{ (statusData.quotaStatus.remaining * 1000 * 1000) - humanSize(statusData.uploadedSize) }}
+          {{ humanSize((statusData.quotaStatus.remaining - statusData.uploadedSize) * 1000 * 1000) }}
         </template>
       </div>
       <div class="ui hidden clearing divider mobile-only" />

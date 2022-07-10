@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import { RouteWithPreferences } from '~/store/ui'
+import type { RouteWithPreferences, OrderingField } from '~/store/ui'
+import type { OrderingProps } from '~/composables/useOrdering'
+import type { SmartSearchProps } from '~/composables/useSmartSearch'
+import type { EditObjectType } from '~/composables/moderation/useEditConfigs'
+
 import axios from 'axios'
 import { uniq } from 'lodash-es'
 import Pagination from '~/components/vui/Pagination.vue'
 import EditCard from '~/components/library/EditCard.vue'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
 import { ref, reactive, watch, computed } from 'vue'
-import useOrdering, { OrderingProps } from '~/composables/useOrdering'
-import useSmartSearch, { SmartSearchProps } from '~/composables/useSmartSearch'
-import { OrderingField } from '~/store/ui'
-import useEditConfigs, { EditObjectType } from '~/composables/moderation/useEditConfigs'
+import useOrdering from '~/composables/useOrdering'
+import useSmartSearch from '~/composables/useSmartSearch'
+import useEditConfigs from '~/composables/moderation/useEditConfigs'
 import { useGettext } from 'vue3-gettext'
 
 interface Props extends SmartSearchProps, OrderingProps {

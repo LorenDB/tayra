@@ -1,11 +1,171 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import axios from 'axios'
+import { useStore } from '~/store'
+import { ref, computed, watch, watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
+import { useGettext } from 'vue3-gettext'
+
+type Type = 'rss' | 'artists' | 'both'
+
+interface Props {
+  initialId?: string
+  initialType?: Type
+  redirect?: boolean
+  showSubmit?: boolean
+  standalone?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  initialId: '',
+  initialType: 'artists',
+  redirect: true,
+  showSubmit: true,
+  standalone: true
+})
+
+const type = ref(props.initialType)
+const id = ref(props.initialId)
+const errors = ref([] as string[])
+
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: type.value === 'rss' 
+    ? $pgettext('Head/Fetch/Title', 'Subscribe to a podcast RSS feed')
+    : $pgettext('Head/Fetch/Title', 'Subscribe to a podcast hosted on the Fediverse'),
+  fieldLabel: type.value === 'rss' 
+    ? $pgettext('*/*/*', 'RSS feed location')
+    : $pgettext('*/*/*', 'Fediverse object'),
+  fieldPlaceholder: type.value === 'rss' 
+    ? $pgettext('Head/Fetch/Field.Placeholder', 'https://website.example.com/rss.xml')
+    : $pgettext('Head/Fetch/Field.Placeholder', '@username@example.com')
+}))
+
+const obj = ref()
+const objInfo = computed(() => obj.value?.status === 'finished' ? obj.value.object : null)
+const redirectRoute = computed(() => {
+  if (!objInfo.value) {
+    return null
+  }
+
+  switch (objInfo.value.type) {
+    case 'account': {
+      const [username, domain] = objInfo.value.full_username.split('@')
+      return { name: 'profile.full', params: { username, domain } }
+    }
+
+    case 'library':
+      return { name: 'library.detail', params: { id: objInfo.value.uuid } }
+
+    case 'artist':
+      return { name: 'library.artists.detail', params: { id: objInfo.value.id } }
+
+    case 'album':
+      return { name: 'library.albums.detail', params: { id: objInfo.value.id } }
+
+    case 'track':
+      return { name: 'library.tracks.detail', params: { id: objInfo.value.id } }
+
+    case 'upload':
+      return { name: 'library.uploads.detail', params: { id: objInfo.value.uuid } }
+
+    case 'channel':
+      return { name: 'channels.detail', params: { id: objInfo.value.uuid } }
+  }
+
+  return null
+})
+
+const router = useRouter()
+watch(redirectRoute, () => {
+  if (props.redirect && redirectRoute.value) {
+    return router.push(redirectRoute.value)
+  }
+})
+
+const submit = () => {
+  if (type.value === 'rss') {
+    return rssSubscribe()
+  }
+
+  return createFetch()
+}
+
+const isLoading = ref(false)
+const createFetch = async () => {
+  if (!id.value) return
+  if (props.standalone) {
+    // TODO (wvffle): Check if this needs to be handled
+    return router.replace({ name: 'search', query: { id: id.value } })
+  }
+
+  obj.value = undefined
+  errors.value = []
+  isLoading.value = true
+
+  try {
+    const response = await axios.post('federation/fetches/', { object: id.value })
+    obj.value = response.data
+
+    if (response.data.status === 'errored' || response.data.status === 'skipped') {
+      errors.value.push($pgettext('Content/*/Error message.Title', 'This object cannot be retrieved'))
+    }
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const emit = defineEmits(['subscribed'])
+const store = useStore()
+
+const rssSubscribe = async () => {
+  if (!id.value) return
+  if (props.standalone) {
+    // TODO (wvffle): Check if this needs to be handled
+    return router.replace({ name: 'search', query: { id: id.value, type: 'rss' } })
+  }
+
+  obj.value = undefined
+  errors.value = []
+  isLoading.value = true
+
+  try {
+    const response = await axios.post('channels/rss-subscribe/', { url: id.value })
+    store.commit('channels/subscriptions', { uuid: response.data.channel.uuid, value: true })
+    emit('subscribed', response.data)
+
+    if (props.redirect) {
+      return router.push({ name: 'channels.detail', params: { id: response.data.channel.uuid } })
+    }
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+watchEffect(() => {
+  id.value = props.initialId
+  // createFetch()
+
+  if (id.value) {
+    submit()
+  }
+})
+</script>
+
 <template>
   <div
-    v-if="type === 'both' || type === undefined"
+    v-if="type === 'both'"
     class="two ui buttons"
   >
     <button
       class="ui left floated labeled icon button"
-      @click.prevent="changeType('rss')"
+      @click.prevent="type = 'rss'"
     >
       <i class="feed icon" />
       <translate translate-context="Content/Search/Input.Label/Noun">
@@ -15,7 +175,7 @@
     <div class="or" />
     <button
       class="ui right floated right labeled icon button"
-      @click.prevent="changeType('artists')"
+      @click.prevent="type = 'artists'"
     >
       <i class="globe icon" />
       <translate translate-context="Content/Search/Input.Label/Noun">
@@ -75,7 +235,7 @@
         v-if="showSubmit"
         type="submit"
         :class="['ui', 'primary', {loading: isLoading}, 'button']"
-        :disabled="isLoading || !id || id.length === 0 || null"
+        :disabled="isLoading || !id || id.length === 0"
       >
         <translate translate-context="Content/Search/Input.Label/Noun">
           Search
@@ -83,7 +243,7 @@
       </button>
     </form>
     <div
-      v-if="!isLoading && fetch && fetch.status === 'finished' && !redirectRoute"
+      v-if="!isLoading && obj?.status === 'finished' && !redirectRoute"
       role="alert"
       class="ui warning message"
     >
@@ -95,170 +255,3 @@
     </div>
   </div>
 </template>
-<script>
-import axios from 'axios'
-
-export default {
-  props: {
-    initialId: { type: String, required: false, default: '' },
-    initialType: { type: String, required: false, default: '' },
-    redirect: { type: Boolean, default: true },
-    showSubmit: { type: Boolean, default: true },
-    standalone: { type: Boolean, default: true }
-  },
-
-  data () {
-    return {
-      type: this.initialType,
-      id: this.initialId,
-      fetch: null,
-      obj: null,
-      isLoading: false,
-      errors: []
-    }
-  },
-  computed: {
-    labels () {
-      let title = ''
-      let fieldLabel = ''
-      let fieldPlaceholder = ''
-      if (this.type === 'rss') {
-        title = this.$pgettext('Head/Fetch/Title', 'Subscribe to a podcast RSS feed')
-        fieldLabel = this.$pgettext('*/*/*', 'RSS feed location')
-        fieldPlaceholder = this.$pgettext('Head/Fetch/Field.Placeholder', 'https://website.example.com/rss.xml')
-      } else if (this.type === 'artists') {
-        title = this.$pgettext('Head/Fetch/Title', 'Subscribe to a podcast hosted on the Fediverse')
-        fieldLabel = this.$pgettext('*/*/*', 'Fediverse object')
-        fieldPlaceholder = this.$pgettext('Head/Fetch/Field.Placeholder', '@username@example.com')
-      }
-      return {
-        title,
-        fieldLabel,
-        fieldPlaceholder
-      }
-    },
-    objInfo () {
-      if (this.fetch && this.fetch.status === 'finished') {
-        return this.fetch.object
-      }
-      return null
-    },
-    redirectRoute () {
-      if (!this.objInfo) {
-        return
-      }
-      switch (this.objInfo.type) {
-        case 'account': {
-          const [username, domain] = this.objInfo.full_username.split('@')
-          return { name: 'profile.full', params: { username, domain } }
-        }
-        case 'library':
-          return { name: 'library.detail', params: { id: this.objInfo.uuid } }
-        case 'artist':
-          return { name: 'library.artists.detail', params: { id: this.objInfo.id } }
-        case 'album':
-          return { name: 'library.albums.detail', params: { id: this.objInfo.id } }
-        case 'track':
-          return { name: 'library.tracks.detail', params: { id: this.objInfo.id } }
-        case 'upload':
-          return { name: 'library.uploads.detail', params: { id: this.objInfo.uuid } }
-        case 'channel':
-          return { name: 'channels.detail', params: { id: this.objInfo.uuid } }
-
-        default:
-          break
-      }
-      return null
-    }
-  },
-
-  watch: {
-    initialId (v) {
-      this.id = v
-      this.createFetch()
-    },
-    redirectRoute (v) {
-      if (v && this.redirect) {
-        this.$router.push(v)
-      }
-    }
-  },
-  created () {
-    if (this.id) {
-      if (this.type === 'rss') {
-        this.rssSubscribe()
-      } else if (this.type === 'artists') {
-        this.createFetch()
-      }
-    }
-  },
-
-  methods: {
-    changeType (newType) {
-      this.type = newType
-    },
-    submit () {
-      if (this.type === 'rss') {
-        return this.rssSubscribe()
-      } else {
-        return this.createFetch()
-      }
-    },
-    createFetch () {
-      if (!this.id) {
-        return
-      }
-      if (this.standalone) {
-        this.$router.replace({ name: 'search', query: { id: this.id } })
-      }
-      this.fetch = null
-      const self = this
-      self.errors = []
-      self.isLoading = true
-      const payload = {
-        object: this.id
-      }
-
-      axios.post('federation/fetches/', payload).then((response) => {
-        self.isLoading = false
-        self.fetch = response.data
-        if (self.fetch.status === 'errored' || self.fetch.status === 'skipped') {
-          self.errors.push(
-            self.$pgettext('Content/*/Error message.Title', 'This object cannot be retrieved')
-          )
-        }
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    rssSubscribe () {
-      if (!this.id) {
-        return
-      }
-      if (this.standalone) {
-        this.$router.replace({ name: 'search', query: { id: this.id, type: 'rss' } })
-      }
-      this.fetch = null
-      const self = this
-      self.errors = []
-      self.isLoading = true
-      const payload = {
-        url: this.id
-      }
-
-      axios.post('channels/rss-subscribe/', payload).then((response) => {
-        self.isLoading = false
-        self.$store.commit('channels/subscriptions', { uuid: response.data.channel.uuid, value: true })
-        self.$emit('subscribed', response.data)
-        if (self.redirect) {
-          self.$router.push({ name: 'channels.detail', params: { id: response.data.channel.uuid } })
-        }
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

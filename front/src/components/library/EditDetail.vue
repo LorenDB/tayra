@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { EditObject, EditObjectType } from '~/composables/moderation/useEditConfigs'
+
 import axios from 'axios'
-import useEditConfigs, { EditObject, EditObjectType } from '~/composables/moderation/useEditConfigs'
+import useEditConfigs from '~/composables/moderation/useEditConfigs'
 import EditCard from '~/components/library/EditCard.vue'
 import { computed, ref } from 'vue'
 

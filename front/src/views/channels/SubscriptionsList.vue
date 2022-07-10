@@ -1,3 +1,55 @@
+<script setup lang="ts">
+import type { Channel } from '~/types'
+import axios from 'axios'
+import SemanticModal from '~/components/semantic/Modal.vue'
+import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
+import { ref, computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+interface Props {
+  defaultQuery?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: ''
+})
+
+const query = ref(props.defaultQuery)
+const widgetKey = ref(new Date().toLocaleString())
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('Content/Subscriptions/Header', 'Subscribed Channels'),
+  searchPlaceholder: $pgettext('Content/Subscriptions/Form.Placeholder', 'Filter by name…')
+}))
+
+const previousPage = ref()
+const nextPage = ref()
+const channels = ref([] as Channel[])
+const count = ref(0)
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get('channels/', { params: { subscribed: 'true', q: query.value } })
+    previousPage.value = response.data.previous
+    nextPage.value = response.data.next
+    channels.value.push(...response.data.results)
+    count.value = response.data.count
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+fetchData()
+
+const reloadWidget = () => (widgetKey.value = new Date().toLocaleString())
+const showSubscribeModal = ref(false)
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -13,7 +65,7 @@
           </a>
         </div>
       </h1>
-      <modal
+      <semantic-modal
         v-model:show="showSubscribeModal"
         class="tiny"
         :fullscreen="false"
@@ -52,7 +104,7 @@
             </translate>
           </button>
         </div>
-      </modal>
+      </semantic-modal>
 
       <inline-search-bar
         v-model="query"
@@ -68,60 +120,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import Modal from '~/components/semantic/Modal.vue'
-
-import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
-import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
-
-export default {
-  components: {
-    ChannelsWidget,
-    RemoteSearchForm,
-    Modal
-  },
-  props: { defaultQuery: { type: String, required: false, default: '' } },
-  data () {
-    return {
-      query: this.defaultQuery || '',
-      channels: [],
-      count: 0,
-      isLoading: false,
-      errors: null,
-      previousPage: null,
-      nextPage: null,
-      widgetKey: String(new Date()),
-      showSubscribeModal: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Content/Subscriptions/Header', 'Subscribed Channels'),
-        searchPlaceholder: this.$pgettext('Content/Subscriptions/Form.Placeholder', 'Filter by name…')
-      }
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      axios.get('channels/', { params: { subscribed: 'true', q: this.query } }).then(response => {
-        self.previousPage = response.data.previous
-        self.nextPage = response.data.next
-        self.isLoading = false
-        self.channels = [...self.channels, ...response.data.results]
-        self.count = response.data.count
-      })
-    },
-    reloadWidget () {
-      this.widgetKey = String(new Date())
-    }
-  }
-}
-</script>

@@ -92,7 +92,7 @@ const addToPlaylist = async (playlistId: number, allowDuplicates: boolean) => {
             v-translate="{artist: track.artist?.name, title: track.title}"
             class="ui sub header"
             translate-context="Popup/Playlist/Paragraph"
-            :translate-params="{artist: track.artist.name, title: track.title}"
+            :translate-params="{artist: track.artist?.name, title: track.title}"
           >
             "%{ title }", by %{ artist }
           </div>

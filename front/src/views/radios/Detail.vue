@@ -148,7 +148,7 @@ const deleteRadio = async () => {
       </div>
     </section>
     <div
-      v-else-if="!isLoading && !totalTracks > 0"
+      v-else-if="!isLoading && totalTracks === 0"
       class="ui placeholder segment"
     >
       <div class="ui icon header">

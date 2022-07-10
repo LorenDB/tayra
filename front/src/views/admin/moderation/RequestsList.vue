@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { RouteWithPreferences } from '~/store/ui'
+import type { RouteWithPreferences, OrderingField } from '~/store/ui'
+import type { OrderingProps } from '~/composables/useOrdering'
+import type { SmartSearchProps } from '~/composables/useSmartSearch'
+
 import axios from 'axios'
 import Pagination from '~/components/vui/Pagination.vue'
 import UserRequestCard from '~/components/manage/moderation/UserRequestCard.vue'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
-import useOrdering, { OrderingProps } from '~/composables/useOrdering'
-import useSmartSearch, { SmartSearchProps } from '~/composables/useSmartSearch'
+import useOrdering from '~/composables/useOrdering'
+import useSmartSearch from '~/composables/useSmartSearch'
 import { ref, computed, watch } from 'vue'
-import { OrderingField } from '~/store/ui'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
 

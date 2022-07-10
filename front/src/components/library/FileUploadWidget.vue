@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import FileUpload, { VueUploadItem } from 'vue-upload-component'
+import type { VueUploadItem } from 'vue-upload-component'
+
+import FileUpload from 'vue-upload-component'
 import { getCookie } from '~/utils'
 import { computed, getCurrentInstance } from 'vue'
 import { useStore } from '~/store'
