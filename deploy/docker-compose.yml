@@ -23,7 +23,7 @@ services:
 
   celeryworker:
     restart: unless-stopped
-    image: funkwhale/funkwhale:${FUNKWHALE_VERSION:-latest}
+    image: funkwhale/api:${FUNKWHALE_VERSION:-latest}
     networks:
       - default
     depends_on:
@@ -47,7 +47,7 @@ services:
 
   celerybeat:
     restart: unless-stopped
-    image: funkwhale/funkwhale:${FUNKWHALE_VERSION:-latest}
+    image: funkwhale/api:${FUNKWHALE_VERSION:-latest}
     networks:
       - default
     depends_on:
