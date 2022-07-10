@@ -633,6 +633,10 @@ def fetch_collection(url, max_pages, channel, is_page=False):
 def refresh_actor_data():
     actors = models.Actor.objects.all().prefetch_related()
     for actor in actors:
+        if actor.is_local:
+            # skip refreshing local actors
+            continue
+
         try:
             data = actors_utils.get_actor_data(actor.fid)
         except HTTPError as e:
