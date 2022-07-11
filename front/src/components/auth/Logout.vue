@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('Head/Login/Title', 'Log Out')
+}))
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -49,15 +59,3 @@
     </section>
   </main>
 </template>
-
-<script>
-export default {
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Head/Login/Title', 'Log Out')
-      }
-    }
-  }
-}
-</script>

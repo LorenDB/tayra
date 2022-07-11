@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import type { User } from '~/types'
+
+import { hashCode, intToRGB } from '~/utils/color'
+import { computed } from 'vue'
+
+interface Props {
+  user: User
+  avatar?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  avatar: true
+})
+
+const userColor = computed(() => intToRGB(hashCode(props.user.username + props.user.id)))
+const defaultAvatarStyle = computed(() => ({ backgroundColor: `#${userColor.value}` }))
+</script>
+
 <template>
   <span class="component-user-link">
     <template v-if="avatar">
@@ -17,24 +36,3 @@
     @{{ user.username }}
   </span>
 </template>
-
-<script>
-import { hashCode, intToRGB } from '~/utils/color'
-
-export default {
-  props: {
-    user: { type: Object, required: true },
-    avatar: { type: Boolean, default: true }
-  },
-  computed: {
-    userColor () {
-      return intToRGB(hashCode(this.user.username + String(this.user.id)))
-    },
-    defaultAvatarStyle () {
-      return {
-        'background-color': `#${this.userColor}`
-      }
-    }
-  }
-}
-</script>

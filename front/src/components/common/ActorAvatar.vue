@@ -1,3 +1,19 @@
+<script setup lang="ts">
+import type { Actor } from '~/types'
+
+import { hashCode, intToRGB } from '~/utils/color'
+import { computed } from 'vue'
+
+interface Props {
+  actor: Actor
+}
+
+const props = defineProps<Props>()
+
+const actorColor = computed(() => intToRGB(hashCode(props.actor.full_username)))
+const defaultAvatarStyle = computed(() => ({ backgroundColor: `#${actorColor.value}` }))
+</script>
+
 <template>
   <img
     v-if="actor.icon && actor.icon.urls.original"
@@ -11,21 +27,3 @@
     class="ui avatar circular label"
   >{{ actor.preferred_username[0] }}</span>
 </template>
-
-<script>
-import { hashCode, intToRGB } from '~/utils/color'
-
-export default {
-  props: { actor: { type: Object, required: true } },
-  computed: {
-    actorColor () {
-      return intToRGB(hashCode(this.actor.full_username))
-    },
-    defaultAvatarStyle () {
-      return {
-        'background-color': `#${this.actorColor}`
-      }
-    }
-  }
-}
-</script>

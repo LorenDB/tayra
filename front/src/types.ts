@@ -51,6 +51,8 @@ export interface Artist {
   tracks_count: number
   attributed_to: Actor
   is_local: boolean
+  is_playable: boolean
+  modification_date?: string
 }
 
 export interface Album {
@@ -109,6 +111,7 @@ export interface Channel {
   rss_url: string
   subscriptions_count: number
   downloads_count: number
+  content_category: ContentCategory
 }
 
 export type PrivacyLevel = 'everyone' | 'instance' | 'me'
@@ -164,6 +167,7 @@ export interface Playlist {
   privacy_level: PrivacyLevel
   tracks_count: number
   duration: number
+  album_covers: string[]
 
   is_playable: boolean
 }
@@ -283,7 +287,7 @@ export interface Actor {
 
 export interface User {
   id: string
-  avatar?: string
+  avatar?: Cover
   username: string
   full_username: string
   instance_support_message_display_date: string
@@ -326,4 +330,12 @@ export interface SettingsDataEntry {
   additional_data: {
     choices: [string, string]
   }
+}
+
+// Note stuff
+export interface Note {
+  uuid: string
+  author: Actor // TODO (wvffle): Check if is valid
+  summary: string
+  creation_date: string
 }

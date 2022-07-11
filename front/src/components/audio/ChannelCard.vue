@@ -1,3 +1,44 @@
+<script setup lang="ts">
+import type { Channel } from '~/types'
+
+import PlayButton from '~/components/audio/PlayButton.vue'
+import TagsList from '~/components/tags/List.vue'
+import { momentFormat } from '~/utils/filters'
+import { useStore } from '~/store'
+import { computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import moment from 'moment'
+
+interface Props {
+  // TODO (wvffle) : Find type
+  object: Channel
+}
+
+const props = defineProps<Props>()
+const store = useStore()
+
+const imageUrl = computed(() => props.object.artist?.cover
+  ? store.getters['instance/absoluteUrl'](props.object.artist.cover.urls.medium_square_crop)
+  : null
+)
+
+const urlId = computed(() => props.object.actor?.is_local
+  ? props.object.actor.preferred_username
+  : props.object.actor
+    ? props.object.actor.full_username
+    : props.object.uuid
+)
+
+const { $pgettext } = useGettext()
+const updatedTitle = computed(() => {
+  const date = momentFormat(new Date(props.object.artist?.modification_date ?? '1970-01-01'))
+  return $pgettext('*/*/*', 'Updated on %{ date }', { date })
+})
+
+// TODO (wvffle): Use time ago
+const updatedAgo = computed(() => moment(props.object.artist?.modification_date).fromNow())
+</script>
+
 <template>
   <div class="card app-card">
     <div
@@ -52,7 +93,8 @@
     </div>
     <div class="extra content">
       <time
-        v-translate
+        v-translate="{ updatedAgo }"
+        :translate-params="{ updatedAgo }"
         class="meta ellipsis"
         :datetime="object.artist.modification_date"
         :title="updatedTitle"
@@ -71,46 +113,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import PlayButton from '~/components/audio/PlayButton.vue'
-import TagsList from '~/components/tags/List.vue'
-
-import { momentFormat } from '~/utils/filters'
-import moment from 'moment'
-
-export default {
-  components: {
-    PlayButton,
-    TagsList
-  },
-  props: {
-    object: { type: Object, required: true }
-  },
-  computed: {
-    imageUrl () {
-      if (this.object.artist.cover) {
-        return this.$store.getters['instance/absoluteUrl'](this.object.artist.cover.urls.medium_square_crop)
-      }
-      return null
-    },
-    urlId () {
-      if (this.object.actor && this.object.actor.is_local) {
-        return this.object.actor.preferred_username
-      } else if (this.object.actor) {
-        return this.object.actor.full_username
-      } else {
-        return this.object.uuid
-      }
-    },
-    updatedTitle () {
-      const d = momentFormat(this.object.artist.modification_date)
-      const message = this.$pgettext('*/*/*', 'Updated on %{ date }')
-      return this.$gettextInterpolate(message, { date: d })
-    },
-    updatedAgo () {
-      return moment(this.object.artist.modification_date).fromNow()
-    }
-  }
-}
-</script>

@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import ApplicationForm from '~/components/auth/ApplicationForm.vue'
+import { computed, reactive } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+interface Props {
+  name?: string
+  scopes?: string
+  redirectUris?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  name: '',
+  scopes: '',
+  redirectUris: ''
+})
+
+const defaults = reactive({
+  name: props.name,
+  scopes: props.scopes,
+  redirectUris: props.redirectUris,
+})
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('Content/Settings/Button.Label', 'Create a new application')
+}))
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -23,36 +52,3 @@
     </div>
   </main>
 </template>
-
-<script>
-import ApplicationForm from '~/components/auth/ApplicationForm.vue'
-
-export default {
-  components: {
-    ApplicationForm
-  },
-  props: {
-    name: { type: String, default: '' },
-    redirectUris: { type: String, default: '' },
-    scopes: { type: String, default: '' }
-  },
-  data () {
-    return {
-      application: null,
-      isLoading: false,
-      defaults: {
-        name: this.name,
-        redirectUris: this.redirectUris,
-        scopes: this.scopes
-      }
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Content/Settings/Button.Label', 'Create a new application')
-      }
-    }
-  }
-}
-</script>

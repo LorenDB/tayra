@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import type { Artist } from '~/types'
+
+import { computed } from 'vue'
+
+interface Props {
+  artist: Artist
+}
+
+const props = defineProps<Props>()
+
+const route = computed(() => props.artist.channel
+  ? { name: 'channels.detail', params: { id: props.artist.channel.uuid } }
+  : { name: 'library.artists.detail', params: { id: props.artist.id } }
+)
+</script>
+
 <template>
   <router-link
     class="artist-label ui image label"
@@ -16,20 +33,3 @@
     {{ artist.name }}
   </router-link>
 </template>
-
-<script>
-
-export default {
-  props: {
-    artist: { type: Object, required: true }
-  },
-  computed: {
-    route () {
-      if (this.artist.channel) {
-        return { name: 'channels.detail', params: { id: this.artist.channel.uuid } }
-      }
-      return { name: 'library.artists.detail', params: { id: this.artist.id } }
-    }
-  }
-}
-</script>

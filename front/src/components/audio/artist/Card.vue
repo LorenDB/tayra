@@ -1,3 +1,30 @@
+<script setup lang="ts">
+import type { Artist } from '~/types'
+
+import PlayButton from '~/components/audio/PlayButton.vue'
+import TagsList from '~/components/tags/List.vue'
+import { computed } from 'vue'
+import { useStore } from '~/store'
+import { truncate } from '~/utils/filters'
+
+interface Props {
+  artist: Artist
+}
+
+const props = defineProps<Props>()
+
+const cover = computed(() => !props.artist.cover?.urls.original
+  ? props.artist.albums.find(album => !!album.cover?.urls.original)?.cover
+  : props.artist.cover
+)
+
+const store = useStore()
+const imageUrl = computed(() => cover.value?.urls.original
+  ? store.getters['instance/absoluteUrl'](cover.value.urls.medium_square_crop)
+  : null
+)
+</script>
+
 <template>
   <div class="app-card card">
     <router-link
@@ -63,45 +90,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import PlayButton from '~/components/audio/PlayButton.vue'
-import TagsList from '~/components/tags/List.vue'
-import { truncate } from '~/utils/filters'
-
-export default {
-  components: {
-    PlayButton,
-    TagsList
-  },
-  props: { artist: { type: Object, required: true } },
-  setup () {
-    return { truncate }
-  },
-  data () {
-    return {
-      initialAlbums: 30,
-      showAllAlbums: true
-    }
-  },
-  computed: {
-    imageUrl () {
-      const cover = this.cover
-      if (cover && cover.urls.original) {
-        return this.$store.getters['instance/absoluteUrl'](cover.urls.medium_square_crop)
-      }
-      return null
-    },
-    cover () {
-      if (this.artist.cover && this.artist.cover.urls.original) {
-        return this.artist.cover
-      }
-      return this.artist.albums.map((a) => {
-        return a.cover
-      }).filter((c) => {
-        return c && c.urls.original
-      })[0]
-    }
-  }
-}
-</script>

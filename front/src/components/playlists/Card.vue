@@ -1,3 +1,30 @@
+<script setup lang="ts">
+import type { Playlist } from '~/types'
+
+import PlayButton from '~/components/audio/PlayButton.vue'
+import defaultCover from '~/assets/audio/default-cover.png'
+import { computed } from 'vue'
+import { useStore } from '~/store'
+
+interface Props {
+  playlist: Playlist
+}
+
+const props = defineProps<Props>()
+const store = useStore()
+
+const images = computed(() => {
+  // TODO (wvffle): What is slicing for? is it 'http'?
+  const urls = props.playlist.album_covers.map(url => store.getters['instance/absoluteUrl'](url).slice(0, 4))
+
+  while (urls.length < 4) { 
+    urls.push(defaultCover)
+  }
+
+  return urls
+})
+</script>
+
 <template>
   <div class="ui app-card card">
     <div
@@ -53,27 +80,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import PlayButton from '~/components/audio/PlayButton.vue'
-import defaultCover from '~/assets/audio/default-cover.png'
-
-export default {
-  components: {
-    PlayButton
-  },
-  props: { playlist: { type: Object, required: true } },
-  computed: {
-    images () {
-      const self = this
-      const urls = this.playlist.album_covers.map((url) => {
-        return self.$store.getters['instance/absoluteUrl'](url)
-      }).slice(0, 4)
-      while (urls.length < 4) {
-        urls.push(defaultCover)
-      }
-      return urls
-    }
-  }
-}
-</script>

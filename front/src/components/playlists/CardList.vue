@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import type { Playlist } from '~/types'
+
+import PlaylistCard from '~/components/playlists/Card.vue'
+
+interface Props {
+  playlists: Playlist[]
+}
+
+defineProps<Props>()
+</script>
+
 <template>
   <div v-if="playlists.length > 0">
     <div class="ui app-cards cards">
@@ -9,15 +21,3 @@
     </div>
   </div>
 </template>
-
-<script>
-
-import PlaylistCard from '~/components/playlists/Card.vue'
-
-export default {
-  components: {
-    PlaylistCard
-  },
-  props: { playlists: { type: Array, required: true } }
-}
-</script>

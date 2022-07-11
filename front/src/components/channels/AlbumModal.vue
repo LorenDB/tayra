@@ -1,5 +1,28 @@
+<script setup lang="ts">
+import type { Channel } from '~/types'
+import SemanticModal from '~/components/semantic/Modal.vue'
+import ChannelAlbumForm from '~/components/channels/AlbumForm.vue'
+import { watch, ref } from 'vue'
+
+interface Props {
+  channel: Channel
+}
+
+defineProps<Props>()
+
+const isLoading = ref(false)
+const submittable = ref(false)
+const show = ref(false)
+
+watch(show, () => {
+  isLoading.value = false
+  submittable.value = false
+})
+
+</script>
+
 <template>
-  <modal
+  <semantic-modal
     v-model:show="show"
     class="small"
   >
@@ -34,7 +57,7 @@
       </button>
       <button
         :class="['ui', 'primary', {loading: isLoading}, 'button']"
-        :disabled="!submittable || null"
+        :disabled="!submittable"
         @click.stop.prevent="$refs.albumForm.submit()"
       >
         <translate translate-context="*/*/Button.Label">
@@ -42,31 +65,5 @@
         </translate>
       </button>
     </div>
-  </modal>
+  </semantic-modal>
 </template>
-
-<script>
-import Modal from '~/components/semantic/Modal.vue'
-import ChannelAlbumForm from '~/components/channels/AlbumForm.vue'
-
-export default {
-  components: {
-    Modal,
-    ChannelAlbumForm
-  },
-  props: { channel: { type: Object, required: true } },
-  data () {
-    return {
-      isLoading: false,
-      submittable: false,
-      show: false
-    }
-  },
-  watch: {
-    show () {
-      this.isLoading = false
-      this.submittable = false
-    }
-  }
-}
-</script>

@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import type { Library } from '~/types'
+
+import { computed } from 'vue'
+import { useStore } from '~/store'
+
+interface Props {
+  library: Library
+}
+
+const props = defineProps<Props>()
+
+const store = useStore()
+const follow = computed(() => store.getters['libraries/follow'](props.library.uuid))
+const isPending = computed(() => follow.value && follow.value.approved === null)
+const isApproved = computed(() => follow.value && (follow.value?.approved === true || (isPending.value && props.library.privacy_level === 'everyone')))
+
+const emit = defineEmits(['followed', 'unfollowed'])
+const toggle = () => {
+  if (isPending.value || isApproved.value) {
+    emit('unfollowed')
+  } else {
+    emit('followed')
+  }
+
+  return store.dispatch('libraries/toggle', props.library.uuid)
+}
+</script>
+
 <template>
   <button
     :class="['ui', 'pink', {'inverted': isApproved || isPending}, {'favorited': isApproved}, 'icon', 'labeled', 'button']"
@@ -24,33 +53,3 @@
     </translate>
   </button>
 </template>
-
-<script>
-export default {
-  props: {
-    library: { type: Object, required: true }
-  },
-  computed: {
-    isPending () {
-      return this.follow && this.follow.approved === null
-    },
-    isApproved () {
-      return this.follow && (this.follow.approved === true || (this.follow.approved === null && this.library.privacy_level === 'everyone'))
-    },
-    follow () {
-      return this.$store.getters['libraries/follow'](this.library.uuid)
-    }
-  },
-  methods: {
-    toggle () {
-      if (this.isApproved || this.isPending) {
-        this.$emit('unfollowed')
-      } else {
-        this.$emit('followed')
-      }
-      this.$store.dispatch('libraries/toggle', this.library.uuid)
-    }
-  }
-
-}
-</script>

@@ -1,3 +1,34 @@
+<script setup lang="ts">
+import type { Note } from '~/types'
+
+import axios from 'axios'
+import showdown from 'showdown'
+import { ref } from 'vue'
+
+interface Props {
+  notes: Note[]
+}
+
+defineProps<Props>()
+
+const markdown = new showdown.Converter()
+
+const emit = defineEmits(['deleted'])
+const isLoading = ref(false)
+const remove = async (note: Note) => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`manage/moderation/notes/${note.uuid}/`)
+    emit('deleted', note.uuid)
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <div class="ui feed">
     <div
@@ -61,32 +92,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import showdown from 'showdown'
-
-export default {
-  props: {
-    notes: { type: Array, required: true }
-  },
-  data () {
-    return {
-      markdown: new showdown.Converter(),
-      isLoading: false
-    }
-  },
-  methods: {
-    remove (obj) {
-      const self = this
-      this.isLoading = true
-      axios.delete(`manage/moderation/notes/${obj.uuid}/`).then((response) => {
-        self.$emit('deleted', obj.uuid)
-        self.isLoading = false
-      }, () => {
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>
