@@ -17,7 +17,7 @@ def handshake_v1(session, url, username, password):
     params = {
         "hs": "true",
         "p": "1.2",
-        "c": PLUGIN["name"],
+        "c": "fw",
         "v": PLUGIN["version"],
         "u": username,
         "t": timestamp,
