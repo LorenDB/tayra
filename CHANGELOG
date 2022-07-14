@@ -10,6 +10,31 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.2.7 (2022-07-14)
+------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Bugfixes:
+
+- Fixed libre.fm plugin not submitting scrobbles (#1817)
+
+Committers:
+
+- Georg Krause
+- Marcos Peña
+
+Contributors to our Issues:
+
+- Ciarán Ainsworth
+- Marcos Peña
+
+Contributors to our Merge Requests:
+
+- Georg Krause
+- Marcos Peña
+
 1.2.6 (2022-07-04)
 ------------------
 
