@@ -27,35 +27,44 @@ msgstr ""
 
 #: ../../user_documentation/playlists/reorder_content.md
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
 #: ../../user_documentation/playlists/reorder_content.md:11
 #: ../../user_documentation/playlists/reorder_content.md:23
+#: ../../user_documentation/playlists/reorder_content.md:7
+#: ../../user_documentation/playlists/reorder_content.md:18
 msgid "Log in to your account."
 msgstr ""
 
 #: ../../user_documentation/playlists/reorder_content.md:12
+#: ../../user_documentation/playlists/reorder_content.md:8
 msgid ""
-"Select {guilabel}`Playlists` under the {guilabel}`My Library` section of "
-"the sidebar. The {guilabel}`Browsing playlists` screen opens."
+"Select {guilabel}`Playlists` under the {guilabel}`My Library` section of the "
+"sidebar. The {guilabel}`Browsing playlists` screen opens."
 msgstr ""
 
 #: ../../user_documentation/playlists/reorder_content.md:13
 #: ../../user_documentation/playlists/reorder_content.md:26
+#: ../../user_documentation/playlists/reorder_content.md:9
+#: ../../user_documentation/playlists/reorder_content.md:21
 msgid ""
-"Select {guilabel}`Manage your playlists`. The {guilabel}`Manage "
-"playlists` screen appears."
+"Select {guilabel}`Manage your playlists`. The {guilabel}`Manage playlists` "
+"screen appears."
 msgstr ""
 
 #: ../../user_documentation/playlists/reorder_content.md:14
 #: ../../user_documentation/playlists/reorder_content.md:27
+#: ../../user_documentation/playlists/reorder_content.md:10
+#: ../../user_documentation/playlists/reorder_content.md:22
 msgid ""
-"Select the edit icon ({fa}`edit`) next to the playlist you want to edit. "
-"The playlist edit screen appears."
+"Select the edit icon ({fa}`edit`) next to the playlist you want to edit. The "
+"playlist edit screen appears."
 msgstr ""
 
 #: ../../user_documentation/playlists/reorder_content.md:15
 #: ../../user_documentation/playlists/reorder_content.md:28
+#: ../../user_documentation/playlists/reorder_content.md:11
+#: ../../user_documentation/playlists/reorder_content.md:23
 msgid ""
 "Drag and drop the tracks in the playlist into the order you want. The "
 "position number of each track appears on the left side."
@@ -63,23 +72,28 @@ msgstr ""
 
 #: ../../user_documentation/playlists/reorder_content.md:16
 #: ../../user_documentation/playlists/reorder_content.md:29
+#: ../../user_documentation/playlists/reorder_content.md:12
+#: ../../user_documentation/playlists/reorder_content.md:24
 msgid "Select {guilabel}`Stop Editing` to finish editing."
 msgstr ""
 
 #: ../../user_documentation/playlists/reorder_content.md:24
+#: ../../user_documentation/playlists/reorder_content.md:19
 msgid "Select the hamburger menu ({fa}`bars`) to open the menu bar."
 msgstr ""
 
 #: ../../user_documentation/playlists/reorder_content.md:25
+#: ../../user_documentation/playlists/reorder_content.md:20
 msgid ""
-"Select {menuselection}`My Library --> Playlists`. The {guilabel}`Browsing"
-" playlists` screen opens."
+"Select {menuselection}`My Library --> Playlists`. The {guilabel}`Browsing "
+"playlists` screen opens."
 msgstr ""
 
 #: ../../user_documentation/playlists/reorder_content.md:33
+#: ../../user_documentation/playlists/reorder_content.md:29
 msgid "You're done! You've updated the order of the tracks in your playlist."
 msgstr ""
 
-#~ msgid "Mobile"
-#~ msgstr ""
-
+#: ../../user_documentation/playlists/reorder_content.md
+msgid "Mobile"
+msgstr "Mobile"
