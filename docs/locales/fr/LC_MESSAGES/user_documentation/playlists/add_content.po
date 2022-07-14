@@ -3,18 +3,21 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2022-07-18 07:48+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/user_documentation-playlists-add_content/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.13\n"
 "Generated-By: Babel 2.10.1\n"
 
 #: ../../user_documentation/playlists/add_content.md:1
@@ -37,7 +40,7 @@ msgstr ""
 
 #: ../../user_documentation/playlists/add_content.md
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
 #: ../../user_documentation/playlists/add_content.md:15
 msgid ""
@@ -56,7 +59,7 @@ msgstr ""
 
 #: ../../user_documentation/playlists/add_content.md
 msgid "Mobile"
-msgstr ""
+msgstr "Mobile"
 
 #: ../../user_documentation/playlists/add_content.md:22
 msgid "Select the player at the bottom of the screen to expand it."
@@ -180,4 +183,3 @@ msgstr ""
 #: ../../user_documentation/playlists/add_content.md:76
 msgid "Well done! You've added the track to your playlist."
 msgstr ""
-
