@@ -23,9 +23,9 @@ msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md:3
 msgid ""
-"Funkwhale records the domains of other {term}`Fediverse` servers when "
-"users interact with them. Once a domain is in your domains list, you can "
-"[add moderation rules](add_rule.md) to it."
+"Funkwhale records the domains of other {term}`Fediverse` servers when users "
+"interact with them. Once a domain is in your domains list, you can [add "
+"moderation rules](add_rule.md) to it."
 msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md
@@ -33,12 +33,14 @@ msgid "Required permissions"
 msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md:8
+#: ../../moderator_documentation/domains/add_domain.md:6
 msgid ""
 "{guilabel}`Moderation` – provides access to the administration and "
 "moderation menus."
 msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md:11
+#: ../../moderator_documentation/domains/add_domain.md:9
 msgid ""
 "You can also add domains to this list at any time to create rules before "
 "users interact with them. To do this:"
@@ -46,59 +48,69 @@ msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
-#: ../../moderator_documentation/domains/add_domain.md:19
-#: ../../moderator_documentation/domains/add_domain.md:31
+#: ../../moderator_documentation/domains/add_domain.md:13
+#: ../../moderator_documentation/domains/add_domain.md:24
 msgid "Log in to your {term}`pod`."
-msgstr ""
+msgstr "Connectez-vous à votre {term}`pod`."
 
-#: ../../moderator_documentation/domains/add_domain.md:20
+#: ../../moderator_documentation/domains/add_domain.md:14
 msgid ""
-"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
-"the {guilabel}`Administration` menu."
+"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the "
+"{guilabel}`Administration` menu."
 msgstr ""
+"Sélectionnez l'icône de la clé à molette ({fa}`wrench`) en haut de la barre "
+"latérale pour ouvrir le menu {guilabel}`Administration`."
 
 #: ../../moderator_documentation/domains/add_domain.md:21
 #: ../../moderator_documentation/domains/add_domain.md:33
+#: ../../moderator_documentation/domains/add_domain.md:15
+#: ../../moderator_documentation/domains/add_domain.md:26
 msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md:22
 #: ../../moderator_documentation/domains/add_domain.md:34
+#: ../../moderator_documentation/domains/add_domain.md:16
+#: ../../moderator_documentation/domains/add_domain.md:27
 msgid ""
-"Select {guilabel}`Domains` at the top of the page. The "
-"{guilabel}`Domains` page opens. You can see a list of known domains on "
-"this page."
+"Select {guilabel}`Domains` at the top of the page. The {guilabel}`Domains` "
+"page opens. You can see a list of known domains on this page."
 msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md:23
 #: ../../moderator_documentation/domains/add_domain.md:35
+#: ../../moderator_documentation/domains/add_domain.md:17
+#: ../../moderator_documentation/domains/add_domain.md:28
 msgid ""
-"Enter the URL of the Fediverse server you want to add in the "
-"{guilabel}`Add a domain` field."
+"Enter the URL of the Fediverse server you want to add in the {guilabel}`Add "
+"a domain` field."
 msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md:24
 #: ../../moderator_documentation/domains/add_domain.md:36
+#: ../../moderator_documentation/domains/add_domain.md:18
+#: ../../moderator_documentation/domains/add_domain.md:29
 msgid ""
-"Select {guilabel}`Add` to add the domain. The domain moderation page "
-"opens."
+"Select {guilabel}`Add` to add the domain. The domain moderation page opens."
 msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md
 msgid "Mobile"
-msgstr ""
+msgstr "Mobile"
 
-#: ../../moderator_documentation/domains/add_domain.md:32
+#: ../../moderator_documentation/domains/add_domain.md:25
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the page to open the "
 "{guilabel}`Administration` menu."
 msgstr ""
+"Sélectionnez l'icône de la clé à molette ({fa}`wrench`) en haut page pour "
+"ouvrir le menu {guilabel}`Administration`."
 
 #: ../../moderator_documentation/domains/add_domain.md:40
+#: ../../moderator_documentation/domains/add_domain.md:33
 msgid ""
 "That's it! The domain is now in your domains list. You can now add "
 "moderation rules to this domain."
 msgstr ""
-
