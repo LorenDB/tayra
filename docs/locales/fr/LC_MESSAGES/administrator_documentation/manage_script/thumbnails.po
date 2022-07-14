@@ -3,18 +3,21 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2022-07-18 07:48+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/administrator_documentation-manage_script-thumbnails/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.13\n"
 "Generated-By: Babel 2.10.1\n"
 
 #: ../../administrator_documentation/manage_script/thumbnails.md:1
@@ -42,7 +45,7 @@ msgstr ""
 
 #: ../../administrator_documentation/manage_script/thumbnails.md
 msgid "Debian"
-msgstr ""
+msgstr "Debian"
 
 #: ../../administrator_documentation/manage_script/thumbnails.md:13
 #: ../../administrator_documentation/manage_script/thumbnails.md:36
@@ -69,11 +72,10 @@ msgstr ""
 
 #: ../../administrator_documentation/manage_script/thumbnails.md
 msgid "Docker"
-msgstr ""
+msgstr "Docker"
 
 #: ../../administrator_documentation/manage_script/thumbnails.md:57
 msgid ""
 "The script generates new thumbnails for all album and artist art on your "
 "pod."
 msgstr ""
-
