@@ -33,59 +33,73 @@ msgstr ""
 
 #: ../../user_documentation/playlists/remove_content.md
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
 #: ../../user_documentation/playlists/remove_content.md:15
 #: ../../user_documentation/playlists/remove_content.md:27
+#: ../../user_documentation/playlists/remove_content.md:11
+#: ../../user_documentation/playlists/remove_content.md:22
 msgid "Log in to your account."
 msgstr ""
 
 #: ../../user_documentation/playlists/remove_content.md:16
+#: ../../user_documentation/playlists/remove_content.md:12
 msgid ""
-"Select {guilabel}`Playlists` under the {guilabel}`My Library` section of "
-"the sidebar. The {guilabel}`Browsing playlists` screen opens."
+"Select {guilabel}`Playlists` under the {guilabel}`My Library` section of the "
+"sidebar. The {guilabel}`Browsing playlists` screen opens."
 msgstr ""
 
 #: ../../user_documentation/playlists/remove_content.md:17
 #: ../../user_documentation/playlists/remove_content.md:30
+#: ../../user_documentation/playlists/remove_content.md:13
+#: ../../user_documentation/playlists/remove_content.md:25
 msgid ""
-"Select {guilabel}`Manage your playlists`. The {guilabel}`Manage "
-"playlists` screen appears."
+"Select {guilabel}`Manage your playlists`. The {guilabel}`Manage playlists` "
+"screen appears."
 msgstr ""
 
 #: ../../user_documentation/playlists/remove_content.md:18
 #: ../../user_documentation/playlists/remove_content.md:31
+#: ../../user_documentation/playlists/remove_content.md:14
+#: ../../user_documentation/playlists/remove_content.md:26
 msgid ""
-"Select the edit icon ({fa}`edit`) next to the playlist you want to edit. "
-"The playlist edit screen appears."
+"Select the edit icon ({fa}`edit`) next to the playlist you want to edit. The "
+"playlist edit screen appears."
 msgstr ""
 
 #: ../../user_documentation/playlists/remove_content.md:19
 #: ../../user_documentation/playlists/remove_content.md:32
+#: ../../user_documentation/playlists/remove_content.md:15
+#: ../../user_documentation/playlists/remove_content.md:27
 msgid ""
-"Select the delete icon ({fa}`trash`) next to the content you want to "
-"remove. Select {guilabel}`Clear playlist` to remove all content at once."
+"Select the delete icon ({fa}`trash`) next to the content you want to remove. "
+"Select {guilabel}`Clear playlist` to remove all content at once."
 msgstr ""
 
 #: ../../user_documentation/playlists/remove_content.md:20
 #: ../../user_documentation/playlists/remove_content.md:33
+#: ../../user_documentation/playlists/remove_content.md:16
+#: ../../user_documentation/playlists/remove_content.md:28
 msgid "Select {guilabel}`Stop Editing` to finish editing."
 msgstr ""
 
 #: ../../user_documentation/playlists/remove_content.md:28
+#: ../../user_documentation/playlists/remove_content.md:23
 msgid "Select the hamburger menu ({fa}`bars`) to open the menu bar."
 msgstr ""
 
 #: ../../user_documentation/playlists/remove_content.md:29
+#: ../../user_documentation/playlists/remove_content.md:24
 msgid ""
-"Select {menuselection}`My Library --> Playlists`. The {guilabel}`Browsing"
-" playlists` screen opens."
+"Select {menuselection}`My Library --> Playlists`. The {guilabel}`Browsing "
+"playlists` screen opens."
 msgstr ""
 
 #: ../../user_documentation/playlists/remove_content.md:37
+#: ../../user_documentation/playlists/remove_content.md:32
 msgid "That's it! You've removed the content from your playlist."
 msgstr ""
 
-#~ msgid "Mobile"
-#~ msgstr ""
-
+#: ../../user_documentation/playlists/remove_content.md
+msgid "Mobile"
+msgstr "Mobile"
