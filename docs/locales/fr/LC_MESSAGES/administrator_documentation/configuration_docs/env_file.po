@@ -3,23 +3,26 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-03 01:39+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2022-07-18 07:48+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/administrator_documentation-configuration_docs-env_file/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.13\n"
 "Generated-By: Babel 2.10.1\n"
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:1
 msgid "Customize your environment file"
-msgstr ""
+msgstr "Personnaliser votre fichier d'environnement"
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:3
 msgid ""
@@ -27,24 +30,29 @@ msgid ""
 "customize your pod. You can change these variables at any time to alter "
 "how your pod runs."
 msgstr ""
+"Votre fichier `.env` (environnement) contient des variables que vous pouvez "
+"changer pour personnaliser votre pod. Vous pouvez changer ces variables à n’"
+"importe quel moment pour modifier le fonctionnement de votre pod."
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:5
 msgid ""
 "You need to restart your Funkwhale services after changing your `.env` "
 "file."
 msgstr ""
+"Vous devez redémarrer vos services Funkwhale après avoir modifié votre "
+"fichier `.env`."
 
 #: ../../administrator_documentation/configuration_docs/env_file.md
 msgid "Debian"
-msgstr ""
+msgstr "Debian"
 
 #: ../../administrator_documentation/configuration_docs/env_file.md
 msgid "Docker"
-msgstr ""
+msgstr "Docker"
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:23
 msgid "Variables"
-msgstr ""
+msgstr "Variables"
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:27
 msgid ""
@@ -52,6 +60,9 @@ msgid ""
 "avoid problems with special characters, use `urllib.parse` on your URL "
 "value."
 msgstr ""
+"Certaines variables d’environnement acceptent une URL comme valeur. Pour "
+"encoder les URL et éviter les problèmes avec les caractères spéciaux, "
+"utilisez `urllib.parse` sur votre valeur URL."
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:34
 msgid ""
@@ -671,4 +682,3 @@ msgstr ""
 
 #~ msgid "``<Email address>``."
 #~ msgstr ""
-
