@@ -3,18 +3,21 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2022-07-18 07:48+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/user_documentation-channels-edit_channel/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.13\n"
 "Generated-By: Babel 2.10.1\n"
 
 #: ../../user_documentation/channels/edit_channel.md:1
@@ -48,14 +51,14 @@ msgstr ""
 
 #: ../../user_documentation/channels/edit_channel.md
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
 #: ../../user_documentation/channels/edit_channel.md:21
 #: ../../user_documentation/channels/edit_channel.md:38
 #: ../../user_documentation/channels/edit_channel.md:61
 #: ../../user_documentation/channels/edit_channel.md:83
 msgid "Log in to your {term}`pod`."
-msgstr ""
+msgstr "Connectez-vous à votre {term}`pod`."
 
 #: ../../user_documentation/channels/edit_channel.md:22
 #: ../../user_documentation/channels/edit_channel.md:62
@@ -138,7 +141,7 @@ msgstr ""
 
 #: ../../user_documentation/channels/edit_channel.md
 msgid "Mobile"
-msgstr ""
+msgstr "Mobile"
 
 #: ../../user_documentation/channels/edit_channel.md:39
 #: ../../user_documentation/channels/edit_channel.md:84
@@ -190,4 +193,3 @@ msgid ""
 " The changes also reflect on your podcast's {abbr}`RSS (Really Simple "
 "Syndication)` feed."
 msgstr ""
-
