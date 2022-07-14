@@ -32,52 +32,65 @@ msgid "Required permissions"
 msgstr ""
 
 #: ../../moderator_documentation/allow_listing/remove_domain.md:8
+#: ../../moderator_documentation/allow_listing/remove_domain.md:6
 msgid ""
 "{guilabel}`Moderation` – provides access to the administration and "
 "moderation menus."
 msgstr ""
 
 #: ../../moderator_documentation/allow_listing/remove_domain.md:11
+#: ../../moderator_documentation/allow_listing/remove_domain.md:9
 msgid "To remove a domain from your allow-list:"
 msgstr ""
 
 #: ../../moderator_documentation/allow_listing/remove_domain.md
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
 #: ../../moderator_documentation/allow_listing/remove_domain.md:19
 #: ../../moderator_documentation/allow_listing/remove_domain.md:32
+#: ../../moderator_documentation/allow_listing/remove_domain.md:13
+#: ../../moderator_documentation/allow_listing/remove_domain.md:25
 msgid "Log in to your pod."
 msgstr ""
 
-#: ../../moderator_documentation/allow_listing/remove_domain.md:20
+#: ../../moderator_documentation/allow_listing/remove_domain.md:14
 msgid ""
-"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
-"the {guilabel}`Administration` menu."
+"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the "
+"{guilabel}`Administration` menu."
 msgstr ""
+"Sélectionnez l'icône de la clé à molette ({fa}`wrench`) en haut de la barre "
+"latérale pour ouvrir le menu {guilabel}`Administration`."
 
 #: ../../moderator_documentation/allow_listing/remove_domain.md:21
 #: ../../moderator_documentation/allow_listing/remove_domain.md:34
+#: ../../moderator_documentation/allow_listing/remove_domain.md:15
+#: ../../moderator_documentation/allow_listing/remove_domain.md:27
 msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
 #: ../../moderator_documentation/allow_listing/remove_domain.md:22
 #: ../../moderator_documentation/allow_listing/remove_domain.md:35
+#: ../../moderator_documentation/allow_listing/remove_domain.md:16
+#: ../../moderator_documentation/allow_listing/remove_domain.md:28
 msgid ""
-"Select {guilabel}`Domains` at the top of the page. The "
-"{guilabel}`Domains` page opens. You can see a list of known domains on "
-"this page."
+"Select {guilabel}`Domains` at the top of the page. The {guilabel}`Domains` "
+"page opens. You can see a list of known domains on this page."
 msgstr ""
 
 #: ../../moderator_documentation/allow_listing/remove_domain.md:23
 #: ../../moderator_documentation/allow_listing/remove_domain.md:36
+#: ../../moderator_documentation/allow_listing/remove_domain.md:17
+#: ../../moderator_documentation/allow_listing/remove_domain.md:29
 msgid ""
-"Check ({fa}`check-square`) the checkbox next to the domain(s) you want to"
-" add to the allow-list."
+"Check ({fa}`check-square`) the checkbox next to the domain(s) you want to "
+"add to the allow-list."
 msgstr ""
 
 #: ../../moderator_documentation/allow_listing/remove_domain.md:24
 #: ../../moderator_documentation/allow_listing/remove_domain.md:37
+#: ../../moderator_documentation/allow_listing/remove_domain.md:18
+#: ../../moderator_documentation/allow_listing/remove_domain.md:30
 msgid ""
 "Select {guilabel}`Remove from allow-list` in the {guilabel}`Actions` "
 "dropdown."
@@ -85,20 +98,23 @@ msgstr ""
 
 #: ../../moderator_documentation/allow_listing/remove_domain.md:25
 #: ../../moderator_documentation/allow_listing/remove_domain.md:38
+#: ../../moderator_documentation/allow_listing/remove_domain.md:19
+#: ../../moderator_documentation/allow_listing/remove_domain.md:31
 msgid "Select {guilabel}`Go`."
 msgstr ""
 
 #: ../../moderator_documentation/allow_listing/remove_domain.md
 msgid "Mobile"
-msgstr ""
+msgstr "Mobile"
 
 #: ../../moderator_documentation/allow_listing/remove_domain.md:33
+#: ../../moderator_documentation/allow_listing/remove_domain.md:26
 msgid ""
-"Select the wrench icon ({fa}`wrench`) at the top of the screen to open "
-"the {guilabel}`Administration` menu."
+"Select the wrench icon ({fa}`wrench`) at the top of the screen to open the "
+"{guilabel}`Administration` menu."
 msgstr ""
 
 #: ../../moderator_documentation/allow_listing/remove_domain.md:42
+#: ../../moderator_documentation/allow_listing/remove_domain.md:35
 msgid "You're done! You've removed the domain from your pod's allow-list."
 msgstr ""
-
