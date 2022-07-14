@@ -23,75 +23,94 @@ msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:3
 msgid ""
-"The __ListenBrainz__ plugin enables you to submit "
-"({term}`scrobble<Scrobbling>`) listens to your "
-"[ListenBrainz](https://listenbrainz.org) account. Scrobbling listens "
-"helps you build up a profile of your music tastes. It also enables you to"
-" keep a record of your listens. To set up the __ListenBrainz plugin__:"
+"The __ListenBrainz__ plugin enables you to submit ({term}"
+"`scrobble<Scrobbling>`) listens to your [ListenBrainz](https://listenbrainz."
+"org) account. Scrobbling listens helps you build up a profile of your music "
+"tastes. It also enables you to keep a record of your listens. To set up the "
+"__ListenBrainz plugin__:"
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:11
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:26
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:7
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:21
 msgid "Log in to your account."
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:12
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:8
 msgid "Select the cog icon ({fa}`cog`) or your avatar to expand the user menu."
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:13
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:28
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:9
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:23
 msgid "Select {guilabel}`Settings`."
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:14
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:29
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:10
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:24
 msgid "Scroll down to the {guilabel}`Plugins` section."
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:15
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:30
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:11
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:25
 msgid "Select {guilabel}`Manage plugins`."
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:16
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:31
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:12
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:26
 msgid "Find the {guilabel}`ListenBrainz` plugin."
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:17
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:32
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:13
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:27
 msgid "Toggle the {guilabel}`Enabled` switch."
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:18
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:33
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:14
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:28
 msgid ""
-"Enter {guilabel}`Your ListenBrainz user token`. You can find this on your"
-" ListenBrainz profile."
+"Enter {guilabel}`Your ListenBrainz user token`. You can find this on your "
+"ListenBrainz profile."
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:19
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:34
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:15
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:29
 msgid "Select {guilabel}`Save`."
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:27
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:22
 msgid ""
-"Select the cog icon ({fa}`cog`) or your avatar to open the "
-"{guilabel}`Options` menu."
+"Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}"
+"`Options` menu."
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:38
+#: ../../user_documentation/plugins/listenbrainz_plugin.md:33
 msgid ""
 "That's it! You've set up the __ListenBrainz__ plugin. When you listen to "
 "tracks, the plugin sends the information to ListenBrainz."
 msgstr ""
 
-#~ msgid "Mobile"
-#~ msgstr ""
-
+#: ../../user_documentation/plugins/listenbrainz_plugin.md
+msgid "Mobile"
+msgstr "Mobile"
