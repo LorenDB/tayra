@@ -37,44 +37,54 @@ msgid "Required permissions"
 msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:12
+#: ../../moderator_documentation/external_users/edit_rule.md:10
 msgid ""
 "{guilabel}`Moderation` – provides access to the administration and "
 "moderation menus."
 msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:15
+#: ../../moderator_documentation/external_users/edit_rule.md:13
 msgid "To update an existing moderation rule:"
 msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md
 msgid "Desktop"
-msgstr ""
+msgstr "Bureau"
 
-#: ../../moderator_documentation/external_users/edit_rule.md:23
-#: ../../moderator_documentation/external_users/edit_rule.md:42
+#: ../../moderator_documentation/external_users/edit_rule.md:17
+#: ../../moderator_documentation/external_users/edit_rule.md:35
 msgid "Log in to your {term}`pod`."
-msgstr ""
+msgstr "Connectez-vous à votre {term}`pod`."
 
-#: ../../moderator_documentation/external_users/edit_rule.md:24
+#: ../../moderator_documentation/external_users/edit_rule.md:18
 msgid ""
-"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
-"the {guilabel}`Administration` menu."
+"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the "
+"{guilabel}`Administration` menu."
 msgstr ""
+"Sélectionnez l'icône de la clé à molette ({fa}`wrench`) en haut de la barre "
+"latérale pour ouvrir le menu {guilabel}`Administration`."
 
 #: ../../moderator_documentation/external_users/edit_rule.md:25
 #: ../../moderator_documentation/external_users/edit_rule.md:44
+#: ../../moderator_documentation/external_users/edit_rule.md:19
+#: ../../moderator_documentation/external_users/edit_rule.md:37
 msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:26
 #: ../../moderator_documentation/external_users/edit_rule.md:45
+#: ../../moderator_documentation/external_users/edit_rule.md:20
+#: ../../moderator_documentation/external_users/edit_rule.md:38
 msgid ""
-"Select {guilabel}`Users` at the top of the page. The {guilabel}`Users` "
-"page opens. You can see a list of known users on this page."
+"Select {guilabel}`Users` at the top of the page. The {guilabel}`Users` page "
+"opens. You can see a list of known users on this page."
 msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:27
 #: ../../moderator_documentation/external_users/edit_rule.md:46
+#: ../../moderator_documentation/external_users/edit_rule.md:21
+#: ../../moderator_documentation/external_users/edit_rule.md:39
 msgid ""
 "Select the user with the moderation rule you want to edit. The user's "
 "moderation page opens."
@@ -82,6 +92,8 @@ msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:28
 #: ../../moderator_documentation/external_users/edit_rule.md:47
+#: ../../moderator_documentation/external_users/edit_rule.md:22
+#: ../../moderator_documentation/external_users/edit_rule.md:40
 msgid ""
 "Select {guilabel}`Edit` under the {guilabel}`This user is subject to "
 "specific moderation rules` header. The moderation policy form opens."
@@ -89,11 +101,15 @@ msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:29
 #: ../../moderator_documentation/external_users/edit_rule.md:48
+#: ../../moderator_documentation/external_users/edit_rule.md:23
+#: ../../moderator_documentation/external_users/edit_rule.md:41
 msgid "__Optional__ – Edit the following settings:"
 msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:30
 #: ../../moderator_documentation/external_users/edit_rule.md:49
+#: ../../moderator_documentation/external_users/edit_rule.md:24
+#: ../../moderator_documentation/external_users/edit_rule.md:42
 msgid ""
 "{guilabel}`Enabled` – toggle this switch to enable or disable the rule "
 "without deleting it."
@@ -101,23 +117,31 @@ msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:31
 #: ../../moderator_documentation/external_users/edit_rule.md:50
+#: ../../moderator_documentation/external_users/edit_rule.md:25
+#: ../../moderator_documentation/external_users/edit_rule.md:43
 msgid "{guilabel}`Reason` – update the reason for the moderation rule."
 msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:32
 #: ../../moderator_documentation/external_users/edit_rule.md:51
+#: ../../moderator_documentation/external_users/edit_rule.md:26
+#: ../../moderator_documentation/external_users/edit_rule.md:44
 msgid "__Optional__ – Update your moderation rule:"
 msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:33
 #: ../../moderator_documentation/external_users/edit_rule.md:52
+#: ../../moderator_documentation/external_users/edit_rule.md:27
+#: ../../moderator_documentation/external_users/edit_rule.md:45
 msgid ""
-"{guilabel}`Block everything` – purge all content from this user and block"
-" all content."
+"{guilabel}`Block everything` – purge all content from this user and block "
+"all content."
 msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:34
 #: ../../moderator_documentation/external_users/edit_rule.md:53
+#: ../../moderator_documentation/external_users/edit_rule.md:28
+#: ../../moderator_documentation/external_users/edit_rule.md:46
 msgid ""
 "{guilabel}`Reject media` – only reject media files such as audio files, "
 "avatars, and album art."
@@ -125,20 +149,24 @@ msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:35
 #: ../../moderator_documentation/external_users/edit_rule.md:54
+#: ../../moderator_documentation/external_users/edit_rule.md:29
+#: ../../moderator_documentation/external_users/edit_rule.md:47
 msgid "Select {guilabel}`Update` to save your rule."
 msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md
 msgid "Mobile"
-msgstr ""
+msgstr "Mobile"
 
 #: ../../moderator_documentation/external_users/edit_rule.md:43
+#: ../../moderator_documentation/external_users/edit_rule.md:36
 msgid ""
-"Select the wrench icon ({fa}`wrench`) at the top of the screen to open "
-"the {guilabel}`Administration` menu."
+"Select the wrench icon ({fa}`wrench`) at the top of the screen to open the "
+"{guilabel}`Administration` menu."
 msgstr ""
 
 #: ../../moderator_documentation/external_users/edit_rule.md:58
-msgid "You're done! The changes to the rule take effect as soon as you update it."
+#: ../../moderator_documentation/external_users/edit_rule.md:51
+msgid ""
+"You're done! The changes to the rule take effect as soon as you update it."
 msgstr ""
-
