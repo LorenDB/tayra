@@ -67,11 +67,7 @@ def slugify_username(username):
 
 
 def retrieve_ap_object(
-    fid,
-    actor,
-    serializer_class=None,
-    queryset=None,
-    apply_instance_policies=True,
+    fid, actor, serializer_class=None, queryset=None, apply_instance_policies=True,
 ):
     # we have a duplicate check here because it's less expensive to do those checks
     # twice than to trigger a HTTP request

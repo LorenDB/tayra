@@ -124,7 +124,12 @@ black:
   before_script:
     - pip install black
   script:
-    - black --check --diff .
+    - black --check --diff api/
+  only:
+    refs:
+      - branches
+    changes:
+      - api/**/*
 
 flake8:
   interruptible: true
@@ -140,6 +145,11 @@ flake8:
     key: "$CI_PROJECT_ID__flake8_pip_cache"
     paths:
       - "$PIP_CACHE_DIR"
+  only:
+    refs:
+      - branches
+    changes:
+      - api/**/*
 
 eslint:
   interruptible: true
@@ -155,6 +165,11 @@ eslint:
     key: "$CI_PROJECT_ID__eslint_npm_cache"
     paths:
       - front/node_modules
+  only:
+    refs:
+      - branches
+    changes:
+      - front/**/*
 
 test_api:
   interruptible: true
