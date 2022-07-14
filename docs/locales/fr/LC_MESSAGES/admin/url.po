@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: 2022-06-28 21:53+0000\n"
+"PO-Revision-Date: 2022-07-18 07:48+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/admin-url/fr/>\n"
@@ -61,7 +61,7 @@ msgstr ""
 
 #: ../../admin/url.rst:19
 msgid "Example output:"
-msgstr "Exemple de résultat :"
+msgstr "Exemple de sortie :"
 
 #: ../../admin/url.rst:53
 msgid "On Docker Installations"
