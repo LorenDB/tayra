@@ -110,6 +110,8 @@ black:
   script:
     - black --check --diff api/
   only:
+    refs:
+      - branches
     changes:
       - api/**/*
 
@@ -128,6 +130,8 @@ flake8:
     paths:
       - "$PIP_CACHE_DIR"
   only:
+    refs:
+      - branches
     changes:
       - api/**/*
 
@@ -146,6 +150,8 @@ eslint:
     paths:
       - front/node_modules
   only:
+    refs:
+      - branches
     changes:
       - front/**/*
 
