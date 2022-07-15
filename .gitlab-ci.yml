@@ -124,7 +124,7 @@ black:
   before_script:
     - pip install black
   script:
-    - black --check --diff api/
+    - black --check --diff .
   only:
     refs:
       - branches
