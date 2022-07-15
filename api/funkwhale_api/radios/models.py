@@ -51,6 +51,8 @@ class RadioSession(models.Model):
     related_object = GenericForeignKey(
         "related_object_content_type", "related_object_id"
     )
+    CONFIG_VERSION = 0
+    config = JSONField(encoder=DjangoJSONEncoder, blank=True, null=True)
 
     def save(self, **kwargs):
         self.radio.clean(self)

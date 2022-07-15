@@ -48,14 +48,15 @@ export default {
     }
   },
   actions: {
-    start ({ commit, dispatch }, { type, objectId, customRadioId, clientOnly }) {
+    start ({ commit, dispatch }, { type, objectId, customRadioId, clientOnly, config }) {
       const params = {
         radio_type: type,
         related_object_id: objectId,
-        custom_radio: customRadioId
+        custom_radio: customRadioId,
+        config: config
       }
       if (clientOnly) {
-        commit('current', { type, objectId, customRadioId, clientOnly })
+        commit('current', { type, objectId, customRadioId, clientOnly, config })
         commit('running', true)
         dispatch('populateQueue', true)
         return

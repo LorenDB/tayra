@@ -1,4 +1,5 @@
 import datetime
+import logging
 import random
 
 from django.core.exceptions import ValidationError
@@ -14,6 +15,8 @@ from funkwhale_api.tags.models import Tag
 
 from . import filters, models
 from .registries import registry
+
+logger = logging.getLogger(__name__)
 
 
 class SimpleRadio(object):
@@ -146,6 +149,37 @@ class CustomRadio(SessionRadio):
         except AssertionError:
             raise serializers.ValidationError("You don't have access to this radio")
         return data
+
+
+@registry.register(name="custom_multiple")
+class CustomMultiple(SessionRadio):
+    """
+    Receive a vuejs generated config and use it to launch a radio session
+    """
+
+    config = serializers.JSONField(required=True)
+
+    def get_config(self, data):
+        return data["config"]
+
+    def get_queryset_kwargs(self):
+        kwargs = super().get_queryset_kwargs()
+        kwargs["config"] = self.session.config
+        return kwargs
+
+    def validate_session(self, data, **context):
+        data = super().validate_session(data, **context)
+        try:
+            data["config"] is not None
+        except KeyError:
+            raise serializers.ValidationError(
+                "You must provide a configuration for this radio"
+            )
+        return data
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        return filters.run(kwargs["config"], candidates=qs)
 
 
 class RelatedObjectRadio(SessionRadio):

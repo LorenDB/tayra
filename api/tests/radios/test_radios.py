@@ -413,3 +413,19 @@ def test_get_choices_for_custom_radio_exclude_tag(factories):
 
     expected = [u.track.pk for u in included_uploads]
     assert list(choices.values_list("id", flat=True)) == expected
+
+
+def test_can_start_custom_multiple_radio_from_api(api_client, factories):
+    tracks = factories["music.Track"].create_batch(5)
+    url = reverse("api:v1:radios:sessions-list")
+    map_filters_to_type = {"tags": "names", "artists": "ids"}
+    for (key, value) in map_filters_to_type.items():
+        attr = value[:-1]
+        track_filter_key = [getattr(a.artist, attr) for a in tracks]
+        config = {"filters": [{"type": key, value: track_filter_key}]}
+        response = api_client.post(
+            url,
+            {"radio_type": "custom_multiple", "config": config},
+            format="json",
+        )
+        assert response.status_code == 201

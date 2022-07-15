@@ -7,16 +7,7 @@
       class="ui feed icon"
       role="button"
     />
-    <template v-if="running">
-      <translate translate-context="*/Player/Button.Label/Short, Verb">
-        Stop radio
-      </translate>
-    </template>
-    <template v-else>
-      <translate translate-context="*/Queue/Button.Label/Short, Verb">
-        Play radio
-      </translate>
-    </template>
+    {{ buttonLabel }}
   </button>
 </template>
 
@@ -28,7 +19,8 @@ export default {
     customRadioId: { type: Number, required: false, default: null },
     type: { type: String, required: false, default: '' },
     clientOnly: { type: Boolean, default: false },
-    objectId: { type: [String, Number, Object], default: null }
+    objectId: { type: [String, Number, Object], default: null },
+    config: { type: [Array, Object], required: false, default: null }
   },
   computed: {
     running () {
@@ -38,6 +30,25 @@ export default {
         return false
       } else {
         return current.type === this.type && lodash.isEqual(current.objectId, this.objectId) && current.customRadioId === this.customRadioId
+      }
+    },
+    label () {
+      return this.config?.[0]?.type ?? null
+    },
+    buttonLabel () {
+      switch (this.label) {
+        case 'tag':
+          return this.running
+            ? this.$pgettext('*/Player/Button.Label/Short, Verb', 'Stop tags radio')
+            : this.$pgettext('*/Player/Button.Label/Short, Verb', 'Start tags radio')
+        case 'artist':
+          return this.running
+            ? this.$pgettext('*/Player/Button.Label/Short, Verb', 'Stop artists radio')
+            : this.$pgettext('*/Player/Button.Label/Short, Verb', 'Start artists radio')
+        default:
+          return this.running
+            ? this.$pgettext('*/Player/Button.Label/Short, Verb', 'Stop radio')
+            : this.$pgettext('*/Queue/Button.Label/Short, Verb', 'Play radio')
       }
     }
   },
@@ -50,7 +61,8 @@ export default {
           type: this.type,
           objectId: this.objectId,
           customRadioId: this.customRadioId,
-          clientOnly: this.clientOnly
+          clientOnly: this.clientOnly,
+          config: this.config
         })
       }
     }

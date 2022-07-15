@@ -23,29 +23,41 @@
             <translate translate-context="Content/Search/Input.Label/Noun">Search</translate>
           </label>
         </h2>
-        <form
-          class="ui form"
-          @submit.prevent="page = 1; search()"
-        >
-          <div class="ui field">
-            <div class="ui action input">
-              <input
-                id="query"
-                v-model="query"
-                class="ui input"
-                name="query"
-                type="text"
-              >
-              <button
-                :aria-label="labels.submitSearch"
-                type="submit"
-                class="ui icon button"
-              >
-                <i class="search icon" />
-              </button>
-            </div>
+        <div class="ui two column doubling stackable grid container">
+          <div class="column">
+            <form
+              class="ui form"
+              @submit.prevent="page = 1; search()"
+            >
+              <div class="ui field">
+                <div class="ui action input">
+                  <input
+                    id="query"
+                    v-model="query"
+                    class="ui input"
+                    name="query"
+                    type="text"
+                  >
+                  <button
+                    :aria-label="labels.submitSearch"
+                    type="submit"
+                    class="ui icon button"
+                  >
+                    <i class="search icon" />
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
+          <div class="column">
+            <radio-button
+              v-if="currentResults && currentConfigValidated && ( type === 'tags' || type === 'artists' ) "
+              class="ui right floated medium button"
+              type="custom_multiple"
+              :config="currentConfig"
+            />
+          </div>
+        </div>
         <div class="ui secondary pointing menu">
           <a
             v-for="t in types"
@@ -143,6 +155,7 @@ import AlbumCard from '@/components/audio/album/Card.vue'
 import TrackTable from '@/components/audio/track/Table.vue'
 import Pagination from '@/components/Pagination.vue'
 import PlaylistCardList from '@/components/playlists/CardList.vue'
+import RadioButton from '@/components/radios/Button.vue'
 import RadioCard from '@/components/radios/Card.vue'
 import TagsList from '@/components/tags/List.vue'
 
@@ -157,6 +170,7 @@ export default {
     Pagination,
     PlaylistCardList,
     RadioCard,
+    RadioButton,
     TagsList
   },
   props: {
@@ -181,7 +195,8 @@ export default {
         series: null
       },
       isLoading: false,
-      paginateBy: 25
+      paginateBy: 25,
+      config: null
     }
   },
   computed: {
@@ -262,6 +277,15 @@ export default {
     },
     currentResults () {
       return this.results[this.currentType.id]
+    },
+    currentConfig () {
+      const resultDict = this.currentResults.results
+      return this.generateConfig(this.currentType.id, resultDict)
+    },
+    currentConfigValidated () {
+      const configValidate = this.currentConfig
+      const array = configValidate[0][Object.keys(configValidate[0])[1]]
+      return array.length >= 1
     }
   },
   watch: {
@@ -325,6 +349,29 @@ export default {
             type: this.type
           }).toString()
       )
+    },
+    generateConfig: function (type, resultDict) {
+      const obj = {
+        type: type.slice(0, -1)
+      }
+      switch (type) {
+        case 'tags':
+          obj.names = this.generateTagConfig(resultDict, type)
+          break
+        case 'artists':
+          obj.ids = this.generateArtistConfig(resultDict, type)
+          break
+        default:
+          console.info('This type is not yet supported for radio')
+          obj.ids = 0
+      }
+      return [obj]
+    },
+    generateTagConfig: function (resultDict, type) {
+      return Object.values(resultDict).map(({ name }) => name)
+    },
+    generateArtistConfig: function (resultDict, type) {
+      return Object.values(resultDict).map(({ id }) => id)
     }
   }
 }

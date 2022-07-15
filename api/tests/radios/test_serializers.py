@@ -40,5 +40,6 @@ def test_tag_radio_repr(factories, to_api_date):
         "user": session.user.pk,
         "related_object_id": tag.name,
         "creation_date": to_api_date(session.creation_date),
+        "config": None,
     }
     assert serializers.RadioSessionSerializer(session).data == expected
