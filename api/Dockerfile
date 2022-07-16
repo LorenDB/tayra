@@ -91,5 +91,8 @@ WORKDIR /app
 
 RUN find . -type d -exec chmod 755 {} \+
 
+ENV CACHE_URL="redis://redis:6379/0"
+ENV CELERY_BROKER_URL="redis://redis:6379/0"
+
 ENTRYPOINT ["./compose/django/entrypoint.sh"]
 CMD ["./compose/django/server.sh"]
