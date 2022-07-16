@@ -1,6 +1,7 @@
 from drf_spectacular.contrib.django_oauth_toolkit import OpenApiAuthenticationExtension
 import os
 
+
 class CustomOAuthExt(OpenApiAuthenticationExtension):
     target_class = "funkwhale_api.common.authentication.OAuth2Authentication"
     name = "oauth2"
@@ -26,11 +27,12 @@ class CustomOAuthExt(OpenApiAuthenticationExtension):
 
         return {"type": "oauth2", "flows": flows}
 
+
 def custom_preprocessing_hook(endpoints):
     filtered = []
     # your modifications to the list of operations that are exposed in the schema
-    api_type = os.environ['API_TYPE']
+    api_type = os.environ["API_TYPE"]
     for (path, path_regex, method, callback) in endpoints:
         if path.startswith(f"/api/{api_type}"):
-                filtered.append((path, path_regex, method, callback))
+            filtered.append((path, path_regex, method, callback))
     return filtered

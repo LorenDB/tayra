@@ -131,7 +131,7 @@ SPECTACULAR_SETTINGS = {
     "OAUTH2_FLOWS": ["authorizationCode"],
     "OAUTH2_AUTHORIZATION_URL": "/authorize",
     "OAUTH2_TOKEN_URL": "/api/v1/oauth/token/",
-    'PREPROCESSING_HOOKS': ["config.schema.custom_preprocessing_hook"],
+    "PREPROCESSING_HOOKS": ["config.schema.custom_preprocessing_hook"],
 }
 
 if env.bool("WEAK_PASSWORDS", default=False):
