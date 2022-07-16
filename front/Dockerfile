@@ -7,7 +7,7 @@ COPY scripts /app/scripts
 COPY public /app/public
 COPY vite.config.js index.html embed.html /app/
 
-RUN apk add --no-cache jq bash coreutils python3
+RUN apk add --no-cache jq bash coreutils python3 build-base
 RUN yarn install
 RUN yarn build:deployment
 
