@@ -1167,11 +1167,11 @@ source = ["Cython (>=0.29.7)"]
 
 [[package]]
 name = "markdown"
-version = "3.3.7"
+version = "3.4.1"
 description = "Python implementation of Markdown."
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 importlib-metadata = {version = ">=4.4", markers = "python_version < \"3.10\""}
@@ -2128,7 +2128,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "62d568b79d38da1c7a685c20a07dd8d88f277e202b2eea3bb2305014fe9fe8dc"
+content-hash = "945ea62c8e6294cd2eefa82ddca7fcff7ac3dfbe51aa660e605b9bfeda107e7a"
 
 [metadata.files]
 aiohttp = [
@@ -2890,8 +2890,8 @@ lxml = [
     {file = "lxml-4.9.0.tar.gz", hash = "sha256:520461c36727268a989790aef08884347cd41f2d8ae855489ccf40b50321d8d7"},
 ]
 markdown = [
-    {file = "Markdown-3.3.7-py3-none-any.whl", hash = "sha256:f5da449a6e1c989a4cea2631aa8ee67caa5a2ef855d551c88f9e309f4634c621"},
-    {file = "Markdown-3.3.7.tar.gz", hash = "sha256:cbb516f16218e643d8e0a95b309f77eb118cb138d39a4f27851e6a63581db874"},
+    {file = "Markdown-3.4.1-py3-none-any.whl", hash = "sha256:08fb8465cffd03d10b9dd34a5c3fea908e20391a2a90b88d66362cb05beed186"},
+    {file = "Markdown-3.4.1.tar.gz", hash = "sha256:3b809086bb6efad416156e00a0da66fe47618a5d6918dd688f53f40c8e4cfeff"},
 ]
 matplotlib-inline = [
     {file = "matplotlib-inline-0.1.3.tar.gz", hash = "sha256:a04bfba22e0d1395479f866853ec1ee28eea1485c1d69a6faf00dc3e24ff34ee"},
