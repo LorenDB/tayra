@@ -6,10 +6,13 @@ interface Props {
   seconds?: number
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  seconds: 0
+})
+
 const duration = computed(() => {
-  const { minutes, hours } = moment.duration(props.seconds, 'seconds')
-  return { minutes: minutes(), hours: hours() }
+  const momentDuration = moment.duration(props.seconds, 'seconds')
+  return { minutes: momentDuration.minutes(), hours: momentDuration.hours() }
 })
 </script>
 

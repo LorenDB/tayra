@@ -6,7 +6,7 @@ import TrackTable from '~/components/audio/track/Table.vue'
 import PlayButton from '~/components/audio/PlayButton.vue'
 import PlaylistEditor from '~/components/playlists/Editor.vue'
 import EmbedWizard from '~/components/audio/EmbedWizard.vue'
-import Modal from '~/components/semantic/Modal.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
 import { ref, computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useRouter } from 'vue-router'
@@ -178,7 +178,7 @@ const deletePlaylist = async () => {
             </dangerous-button>
           </div>
         </div>
-        <modal
+        <semantic-modal
           v-if="playlist.privacy_level === 'everyone' && playlist.is_playable"
           v-model:show="showEmbedModal"
         >
@@ -202,7 +202,7 @@ const deletePlaylist = async () => {
               </translate>
             </button>
           </div>
-        </modal>
+        </semantic-modal>
       </div>
     </section>
     <section class="ui vertical stripe segment">
