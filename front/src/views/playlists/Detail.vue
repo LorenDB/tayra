@@ -221,6 +221,7 @@ const deletePlaylist = async () => {
         <track-table
           :display-position="true"
           :tracks="tracks"
+          :unique="false"
         />
       </template>
       <div

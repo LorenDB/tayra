@@ -9,10 +9,9 @@ import PlayButton from '~/components/audio/PlayButton.vue'
 import usePlayOptions from '~/composables/audio/usePlayOptions'
 import useQueue from '~/composables/audio/useQueue'
 import usePlayer from '~/composables/audio/usePlayer'
-import { ref } from 'vue'
+import { computed } from 'vue'
 
 interface Props extends PlayOptionsProps {
-  tracks: Track[]
   track: Track
   index: number
 
@@ -23,7 +22,10 @@ interface Props extends PlayOptionsProps {
   showPosition?: boolean
   displayActions?: boolean
 
+  hover: boolean
+
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  tracks: Track[]
   isPlayable?: boolean
   artist?: Artist | null
   album?: Album | null
@@ -42,22 +44,16 @@ const props = withDefaults(defineProps<Props>(), {
   displayActions: true
 })
 
-const hover = ref<string | null>(null)
-
-const { playing } = usePlayer()
+const { playing, loading } = usePlayer()
 const { currentTrack } = useQueue()
 const { activateTrack } = usePlayOptions(props)
 
+const active = computed(() => props.track.id === currentTrack.value?.id && props.track.position === currentTrack.value?.position)
 </script>
 
 <template>
   <div
-    :class="[
-      { active: currentTrack && track.id === currentTrack.id },
-      'track-row row',
-    ]"
-    @mouseover="hover = track.id"
-    @mouseleave="hover = null"
+    :class="[{ active }, 'track-row row']"
     @dblclick="activateTrack(track, index)"
   >
     <div
@@ -67,37 +63,34 @@ const { activateTrack } = usePlayOptions(props)
     >
       <play-indicator
         v-if="
-          !$store.state.player.isLoadingAudio &&
-            currentTrack &&
+          !loading &&
             playing &&
-            track.id === currentTrack.id &&
-            !(track.id == hover)
+            active &&
+            !hover
         "
       />
-      <button
+      <button 
         v-else-if="
-          currentTrack &&
             !playing &&
-            track.id === currentTrack.id &&
-            track.id !== hover
+            active &&
+            !hover
         "
         class="ui really tiny basic icon button play-button paused"
       >
-        <i class="pause icon" />
+        <i class="play icon" />
       </button>
-      <button
+      <button 
         v-else-if="
-          currentTrack &&
             playing &&
-            track.id === currentTrack.id &&
-            track.id == hover
+            active &&
+            hover
         "
         class="ui really tiny basic icon button play-button"
       >
         <i class="pause icon" />
       </button>
       <button
-        v-else-if="track.id == hover"
+        v-else-if="hover"
         class="ui really tiny basic icon button play-button"
       >
         <i class="play icon" />

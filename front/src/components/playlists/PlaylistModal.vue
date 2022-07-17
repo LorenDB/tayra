@@ -4,7 +4,7 @@ import type { BackendError, Playlist, APIErrorResponse } from '~/types'
 import { filter, sortBy, flow } from 'lodash-es'
 import axios from 'axios'
 import { useGettext } from 'vue3-gettext'
-import Modal from '~/components/semantic/Modal.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
 import PlaylistForm from '~/components/playlists/Form.vue'
 import useLogger from '~/composables/useLogger'
 import { useStore } from '~/store'
@@ -79,7 +79,7 @@ store.dispatch('playlists/fetchOwn')
 </script>
 
 <template>
-  <modal
+  <semantic-modal
     v-model:show="$store.state.playlists.showModal"
   >
     <h4 class="header">
@@ -268,5 +268,5 @@ store.dispatch('playlists/fetchOwn')
         </translate>
       </button>
     </div>
-  </modal>
+  </semantic-modal>
 </template>

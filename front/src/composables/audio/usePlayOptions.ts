@@ -168,7 +168,7 @@ export default (props: PlayOptionsProps) => {
 
     if (props.track && props.tracks?.length) {
       // set queue position to selected track
-      const trackIndex = props.tracks.findIndex(track => track.id === props.track?.id)
+      const trackIndex = props.tracks.findIndex(track => track.id === props.track?.id && track.position === props.track?.position)
       store.dispatch('queue/currentIndex', trackIndex)
     } else {
       store.dispatch('queue/currentIndex', 0)
@@ -179,13 +179,16 @@ export default (props: PlayOptionsProps) => {
   }
 
   const activateTrack = (track: Track, index: number) => {
-    if (playing.value && track.id === currentTrack.value?.id) {
-      pause()
-    } else if (!playing.value && track.id === currentTrack.value?.id) {
-      resume()
-    } else {
-      replacePlay()
+    // TODO (wvffle): Check if position checking did not break anything
+    if (track.id === currentTrack.value?.id && track.position === currentTrack.value?.position) {
+      if (playing.value) {
+        return pause()
+      }
+
+      return resume()
     }
+
+    replacePlay()
   }
 
   return { 
