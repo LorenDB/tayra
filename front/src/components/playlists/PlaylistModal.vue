@@ -40,8 +40,8 @@ const sortedPlaylists = computed(() => flow(
 
 const formKey = ref(new Date().toString())
 watch(() => store.state.playlists.showModal, () => {
-      formKey.value = new Date().toString()
-      showDuplicateTrackAddConfirmation.value = false
+  formKey.value = new Date().toString()
+  showDuplicateTrackAddConfirmation.value = false
 })
 
 const lastSelectedPlaylist = ref(-1)
@@ -64,9 +64,7 @@ const addToPlaylist = async (playlistId: number, allowDuplicates: boolean) => {
     if (error as BackendError) {
       const { backendErrors, rawPayload = {} } = error as BackendError
 
-      // TODO (wvffle): Test if it works
-      // if (backendErrors.length === 1 && backendErrors[0].code === 'tracks_already_exist_in_playlist') {
-      if (backendErrors.length === 1 && backendErrors[0] === 'Tracks already exist in playlist') {
+      if (backendErrors.length === 1 && backendErrors[0] === 'Tracks Already Exist In Playlist') {
         duplicateTrackAddInfo.value = ((rawPayload.playlist as APIErrorResponse).non_field_errors as APIErrorResponse)[0] as object
         showDuplicateTrackAddConfirmation.value = true
       } else {
@@ -76,6 +74,8 @@ const addToPlaylist = async (playlistId: number, allowDuplicates: boolean) => {
     }
   }
 }
+
+store.dispatch('playlists/fetchOwn')
 </script>
 
 <template>
@@ -249,16 +249,17 @@ const addToPlaylist = async (playlistId: number, allowDuplicates: boolean) => {
           </div>
         </template>
       </div>
-      <template v-else>
-        <div class="ui placeholder segment">
-          <div class="ui icon header">
-            <i class="list icon" />
-            <translate translate-context="Content/Home/Placeholder">
-              No playlists have been created yet
-            </translate>
-          </div>
+      <div 
+      v-else 
+      class="ui placeholder segment"
+      >
+        <div class="ui icon header">
+          <i class="list icon" />
+          <translate translate-context="Content/Home/Placeholder">
+            No playlists have been created yet
+          </translate>
         </div>
-      </template>
+      </div>
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
