@@ -106,7 +106,7 @@ const { activateTrack } = usePlayOptions(props)
         v-else-if="showPosition"
         class="track-position"
       >
-        {{ (track.position as unknown as string).padStart(2, '0') }}
+        {{ `${track.position}`.padStart(2, '0') }}
       </span>
     </div>
     <div
