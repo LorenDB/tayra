@@ -1,0 +1,9 @@
+FROM gitpod/workspace-full
+USER gitpod
+
+RUN sudo apt update -y \
+    && sudo apt install libsasl2-dev libldap2-dev libssl-dev ffmpeg -y
+
+RUN pip install poetry \
+    && poetry config virtualenvs.create true \
+    && poetry config virtualenvs.in-project true 

@@ -1,3 +1,11 @@
 {
-    "esbonio.sphinx.confDir": ""
+    "python.defaultInterpreterPath": "/workspace/funkwhale/api/.venv/bin/python",
+    "python.testing.cwd": "/workspace/funkwhale/api",
+    "python.envFile": "/workspace/funkwhale/.gitpod/.env",
+    "python.testing.pytestArgs": [
+        "--cov=funkwhale_api",
+        "tests/"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

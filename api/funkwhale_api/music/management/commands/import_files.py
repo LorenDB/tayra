@@ -279,7 +279,7 @@ class Command(BaseCommand):
                 if p and not import_path.startswith(p):
                     raise CommandError(
                         "Importing in-place only works if importing "
-                        "from {} (MUSIC_DIRECTORY_PATH), as this directory"
+                        "from {} (MUSIC_DIRECTORY_PATH), as this directory "
                         "needs to be accessible by the webserver."
                         "Culprit: {}".format(p, import_path)
                     )

@@ -1,67 +1,49 @@
+image:
+  file: .gitpod/Dockerfile
+
 tasks:
-  - name: Docker
+  - name: Backend
     env:
-      COMPOSE_FILE: dev.yml
+      ENV_FILE: /workspace/funkwhale/.gitpod/.env
+      COMPOSE_FILE: /workspace/funkwhale/.gitpod/docker-compose.yml
+    before: |
+      cp .gitpod/gitpod.env .gitpod/.env
+      cd api
     init: |
-      # Install frontend depencencies locally
-      cd front
-      yarn install
-      cd ..
+      mkdir -p ../data/media/attachments ../data/music ../data/staticfiles
+      docker-compose up -d
 
-      # Prepare prebuild .env
-      echo "# Gitpod Environment Variables" > .env
+      poetry env use python
+      poetry install
 
-      # Prepare docker
-      docker network create federation
-      docker-compose pull
-      docker-compose build
-      docker-compose up -d postgres redis
-      sleep 10 # allow postgres and redis to initialize
+      gp ports await 5432
 
-      # Prepare backend
-      docker-compose run --rm api python manage.py migrate
-      docker-compose run --rm api python manage.py createsuperuser --no-input --username gitpod --email gitpod@example.com
-      docker-compose run --rm api python manage.py fw users set --password "gitpod" gitpod --no-input
-
-      # Compile frontend locales
-      docker-compose run --rm front yarn run i18n-compile
-
-      # Start API to let script create an actor
-      docker-compose up -d nginx
-      gp ports await 8000
-
-      # Clone music repo
-      git clone https://dev.funkwhale.audio/funkwhale/catalog.git
-      sudo mv catalog/music data
-      sudo chown -R root:root data/music
-      rm -rf catalog
-
-      # Login with cURL to create actor
-      python .gitpod/init_actor.py
-
-      # Import music
-      docker-compose down
-      LIBRARY_ID=`cat .gitpod/create_library.py | docker-compose run --rm -T api python manage.py shell -i python`
-      docker-compose run --rm api python manage.py import_files $LIBRARY_ID "/music/" --recursive --noinput --in-place
-
-      # Stop docker
-      docker-compose stop
+      poetry run python manage.py migrate
+      poetry run python manage.py gitpod init
     command: |
-      # Prepare workspace .env
-      echo "MEDIA_URL=`gp url 8000`/media/" >> .env
-      echo "STATIC_URL=`gp url 8000`/staticfiles/" >> .env
-      echo "FUNKWHALE_HOSTNAME=`gp url 8000 | sed 's#https://##'`" >> .env
-      echo "FUNKWHALE_PROTOCOL=https" >> .env
-      echo "GITPOD_WORKSPACE_URL=$GITPOD_WORKSPACE_URL" >> .env
-      echo "HMR_PORT=8000" >> .env
-      echo "VUE_APP_INSTANCE_URL=$VUE_APP_INSTANCE_URL" >> .env
+      echo "MEDIA_URL=`gp url 8000`/media/" >> ../.gitpod/.env
+      echo "STATIC_URL=`gp url 8000`/staticfiles/" >> ../.gitpod/.env
+      echo "FUNKWHALE_HOSTNAME=`gp url 8000 | sed 's#https://##'`" >> ../.gitpod/.env
+      echo "FUNKWHALE_PROTOCOL=https" >> ../.gitpod/.env
 
-      # Start app
-      docker-compose up front api nginx
+      docker-compose up -d
+      gp ports await 5432
+      poetry run python manage.py collectstatic --no-input
+      poetry run python manage.py gitpod dev
+
+  - name: Frontend
+    env:
+      HMR_PORT: 8000
+    before: cd front
+    init: |
+      yarn install
+      yarn run i18n-compile
+    command: yarn dev --host 0.0.0.0 --base /front/
 
   - name: Welcome to Funkwhale development!
     env:
-      COMPOSE_FILE: dev.yml
+      COMPOSE_FILE: /workspace/funkwhale/.gitpod/docker-compose.yml
+      ENV_FILE: /workspace/funkwhale/.gitpod/.env
     command: |
       clear
       echo ""
@@ -78,12 +60,33 @@ ports:
     visibility: public
     onOpen: notify
 
+  - port: 5000
+    visibility: private
+    onOpen: ignore
+
+  - port: 5432
+    visibility: private
+    onOpen: ignore
+
+  - port: 5678
+    visibility: private
+    onOpen: ignore
+
+  - port: 6379
+    visibility: private
+    onOpen: ignore
+
+  - port: 8080
+    visibility: private
+    onOpen: ignore
+
 vscode:
   extensions:
     - lukashass.volar
-    - lextudio.restructuredtext
-    - trond-snekvik.simple-rst
     - ms-python.python
     - ms-toolsai.jupyter
     - ms-toolsai.jupyter-keymap
     - ms-toolsai.jupyter-renderers
+    - hbenl.vscode-test-explorer
+    - hbenl.test-adapter-converter
+    - littlefoxteam.vscode-python-test-adapter
