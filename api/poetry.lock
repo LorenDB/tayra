@@ -1695,16 +1695,18 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "redis"
-version = "4.1.4"
+version = "4.3.4"
 description = "Python client for Redis database and key-value store"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
+async-timeout = ">=4.0.2"
 deprecated = ">=1.2.3"
 importlib-metadata = {version = ">=1.0", markers = "python_version < \"3.8\""}
 packaging = ">=20.4"
+typing-extensions = {version = "*", markers = "python_version < \"3.8\""}
 
 [package.extras]
 hiredis = ["hiredis (>=1.0.0)"]
@@ -2128,7 +2130,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "b378678f0bfc5e7e99296ef2756f15f614f355ba46d57bd7b9536d56fe3f1ffe"
+content-hash = "99f943421d0a4c94411bc12d53dd4eb008f4e12a5c334ecb64ce2959f6e349d1"
 
 [metadata.files]
 aiohttp = [
@@ -3321,8 +3323,8 @@ pyyaml = [
     {file = "PyYAML-6.0.tar.gz", hash = "sha256:68fb519c14306fec9720a2a5b45bc9f0c8d1b9c72adf45c37baedfcd949c35a2"},
 ]
 redis = [
-    {file = "redis-4.1.4-py3-none-any.whl", hash = "sha256:04629f8e42be942c4f7d1812f2094568f04c612865ad19ad3ace3005da70631a"},
-    {file = "redis-4.1.4.tar.gz", hash = "sha256:1d9a0cdf89fdd93f84261733e24f55a7bbd413a9b219fdaf56e3e728ca9a2306"},
+    {file = "redis-4.3.4-py3-none-any.whl", hash = "sha256:a52d5694c9eb4292770084fa8c863f79367ca19884b329ab574d5cb2036b3e54"},
+    {file = "redis-4.3.4.tar.gz", hash = "sha256:ddf27071df4adf3821c4f2ca59d67525c3a82e5f268bed97b813cb4fabf87880"},
 ]
 requests = [
     {file = "requests-2.28.1-py3-none-any.whl", hash = "sha256:8fefa2a1a1365bf5520aac41836fbee479da67864514bdb821f31ce07ce65349"},
