@@ -14,8 +14,7 @@ const props = defineProps<Props>()
 const store = useStore()
 
 const images = computed(() => {
-  // TODO (wvffle): What is slicing for? is it 'http'?
-  const urls = props.playlist.album_covers.map(url => store.getters['instance/absoluteUrl'](url).slice(0, 4))
+  const urls = props.playlist.album_covers.slice(0, 4).map(url => store.getters['instance/absoluteUrl'](url))
 
   while (urls.length < 4) { 
     urls.push(defaultCover)
