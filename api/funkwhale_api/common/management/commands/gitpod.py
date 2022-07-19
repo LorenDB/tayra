@@ -2,6 +2,7 @@ from django.core.management.commands.migrate import Command as BaseCommand
 from django.core.management import call_command
 from funkwhale_api.music.models import Library
 from funkwhale_api.users.models import User
+from funkwhale_api.common import preferences
 import uvicorn
 import debugpy
 import os
@@ -44,6 +45,9 @@ class Command(BaseCommand):
             user.create_actor()
 
         user.save()
+
+        # Allow anonymous access
+        preferences.set("common__api_authentication_required", False)
 
         # Download music catalog
         os.system("git clone https://dev.funkwhale.audio/funkwhale/catalog.git /tmp/catalog")
