@@ -566,7 +566,7 @@ class SubsonicViewSet(viewsets.GenericViewSet):
             except (TypeError, KeyError, ValueError):
                 size = 20
 
-            size = min(size, 100)
+            size = min(size, 500)
             queryset = c["queryset"]
             if query:
                 queryset = c["queryset"].filter(

@@ -187,7 +187,7 @@ def order_for_search(qs, field):
     When searching, it's often more useful to have short results first,
     this function will order the given qs based on the length of the given field
     """
-    return qs.annotate(__size=models.functions.Length(field)).order_by("__size")
+    return qs.annotate(__size=models.functions.Length(field)).order_by("__size", "pk")
 
 
 def recursive_getattr(obj, key, permissive=False):
