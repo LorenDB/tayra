@@ -186,6 +186,14 @@ export interface Radio {
   user: User
 }
 
+export interface Listening {
+  id: string
+  track: Track
+  user: User
+  actor: Actor
+  creation_date: string
+}
+
 // API stuff
 export interface APIErrorResponse extends Record<string, APIErrorResponse | string[] | { code: string }[]> {}
 
@@ -225,6 +233,11 @@ export interface ListenWSEvent {
   actor: ListenWsEventObject
   object: ListenWsEventObject
 }
+
+// TODO (wvffle): Add reactivity to recently listened / favorited / added (#1316, #1534)
+// export interface ListenWSEvent extends Listening {
+//   type: 'Listen'
+// }
 
 export type WebSocketEvent = PendingReviewEditsWSEvent | PendingReviewReportsWSEvent | PendingReviewRequestsWSEvent | ListenWSEvent
 

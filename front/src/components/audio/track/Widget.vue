@@ -1,3 +1,78 @@
+<script setup lang="ts">
+import type { Track, Listening } from '~/types'
+import useWebSocketHandler from '~/composables/useWebSocketHandler'
+
+// TODO (wvffle): Fix websocket update (#1534)
+import { clone } from 'lodash-es'
+import axios from 'axios'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import TagsList from '~/components/tags/List.vue'
+import { ref, reactive, watch } from 'vue'
+
+interface Props {
+  filters: Record<string, string>
+  url: string
+  isActivity?: boolean
+  showCount?: boolean
+  limit?: number
+  itemClasses?: string
+  websocketHandlers?: string[]
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  isActivity: true,
+  showCount: false,
+  limit: 5,
+  itemClasses: '',
+  websocketHandlers: () => []
+})
+
+const objects = reactive([] as Listening[])
+const count = ref(0)
+const nextPage = ref<string | null>(null)
+
+const isLoading = ref(false)
+const fetchData = async (url = props.url) => {
+  isLoading.value = true
+
+  const params = {
+    ...clone(props.filters),
+    page_size: props.limit
+  }
+
+  try {
+    const response = await axios.get(url, { params })
+    nextPage.value = response.data.next
+    count.value = response.data.count
+
+    const newObjects = !props.isActivity 
+      ? response.data.results.map((track: Track) => { track })
+      : response.data.results
+
+    objects.push(...newObjects)
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+
+const emit = defineEmits(['count'])
+watch(count, (to) => emit('count', to))
+
+if (props.websocketHandlers.includes('Listen')) {
+  useWebSocketHandler('Listen', (event) => {
+    // TODO (wvffle): Add reactivity to recently listened / favorited / added (#1316, #1534)
+    // count.value += 1
+
+    // objects.unshift(event as Listening)
+    // objects.pop()
+  })
+}
+</script>
+
 <template>
   <div class="component-track-widget">
     <h3 v-if="!!$slots.title">
@@ -28,7 +103,7 @@
             alt=""
           >
           <img
-            v-else-if="object.track.artist.cover"
+            v-else-if="object.track.artist?.cover"
             v-lazy="$store.getters['instance/absoluteUrl'](object.track.artist.cover.urls.medium_square_crop)"
             alt=""
           >
@@ -52,7 +127,7 @@
                   {{ object.track.title }}
                 </router-link>
               </div>
-              <div class="meta ellipsis">
+              <div v-if="object.track.artist" class="meta ellipsis">
                 <span>
                   <router-link
                     class="discrete link"
@@ -122,9 +197,8 @@
     <template v-if="nextPage">
       <div class="ui hidden divider" />
       <button
-        v-if="nextPage"
         :class="['ui', 'basic', 'button']"
-        @click="fetchData(nextPage)"
+        @click="fetchData(nextPage as string)"
       >
         <translate translate-context="*/*/Button,Label">
           Show more
@@ -133,87 +207,3 @@
     </template>
   </div>
 </template>
-
-<script>
-import { clone } from 'lodash-es'
-import axios from 'axios'
-import PlayButton from '~/components/audio/PlayButton.vue'
-import TagsList from '~/components/tags/List.vue'
-
-export default {
-  components: {
-    PlayButton,
-    TagsList
-  },
-  props: {
-    filters: { type: Object, required: true },
-    url: { type: String, required: true },
-    isActivity: { type: Boolean, default: true },
-    showCount: { type: Boolean, default: false },
-    limit: { type: Number, default: 5 },
-    itemClasses: { type: String, default: '' }
-  },
-  data () {
-    return {
-      objects: [],
-      count: 0,
-      isLoading: false,
-      errors: null,
-      previousPage: null,
-      nextPage: null
-    }
-  },
-  watch: {
-    offset () {
-      this.fetchData()
-    },
-    '$store.state.moderation.lastUpdate': function () {
-      this.fetchData(this.url)
-    },
-    count (v) {
-      this.$emit('count', v)
-    }
-  },
-  created () {
-    this.fetchData(this.url)
-  },
-  methods: {
-    fetchData (url) {
-      if (!url) {
-        return
-      }
-      this.isLoading = true
-      const self = this
-      const params = clone(this.filters)
-      params.page_size = this.limit
-      params.offset = this.offset
-      axios.get(url, { params: params }).then((response) => {
-        self.previousPage = response.data.previous
-        self.nextPage = response.data.next
-        self.isLoading = false
-        self.count = response.data.count
-        let newObjects
-        if (self.isActivity) {
-          // we have listening/favorites objects, not directly tracks
-          newObjects = response.data.results
-        } else {
-          newObjects = response.data.results.map((r) => {
-            return { track: r }
-          })
-        }
-        self.objects = [...self.objects, ...newObjects]
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    updateOffset (increment) {
-      if (increment) {
-        this.offset += this.limit
-      } else {
-        this.offset = Math.max(this.offset - this.limit, 0)
-      }
-    }
-  }
-}
-</script>

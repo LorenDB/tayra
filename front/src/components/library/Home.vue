@@ -1,6 +1,57 @@
+<script setup lang="ts">
+import axios from 'axios'
+import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import TrackWidget from '~/components/audio/track/Widget.vue'
+import AlbumWidget from '~/components/audio/album/Widget.vue'
+import PlaylistWidget from '~/components/playlists/Widget.vue'
+import useLogger from '~/composables/useLogger'
+import { ref, computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+interface Props {
+  scope?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  scope: 'all'
+})
+
+const artists = ref([])
+
+const logger = useLogger()
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  title: $pgettext('Head/Home/Title', 'Library')
+}))
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+  logger.time('Loading latest artists')
+
+  const params = {
+    ordering: '-creation_date',
+    playable: true
+  }
+
+  try {
+    const response = await axios.get('artists/', { params: params })
+    artists.value = response.data.results
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+  logger.timeEnd('Loading latest artists')
+}
+
+fetchData()
+</script>
+
 <template>
   <main
-    :key="$route.name"
+    :key="$route?.name ?? undefined"
     v-title="labels.title"
   >
     <section class="ui vertical stripe segment">
@@ -8,7 +59,8 @@
         <div class="column">
           <track-widget
             :url="'history/listenings/'"
-            :filters="{scope: scope, ordering: '-creation_date'}"
+            :filters="{ scope, ordering: '-creation_date' }"
+            :websocket-handlers="['Listen']"
           >
             <template #title>
               <translate translate-context="Content/Home/Title">
@@ -69,62 +121,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
-import TrackWidget from '~/components/audio/track/Widget.vue'
-import AlbumWidget from '~/components/audio/album/Widget.vue'
-import PlaylistWidget from '~/components/playlists/Widget.vue'
-import useLogger from '~/composables/useLogger'
-
-const logger = useLogger()
-
-const ARTISTS_URL = 'artists/'
-
-export default {
-  name: 'Library',
-  components: {
-    TrackWidget,
-    AlbumWidget,
-    PlaylistWidget,
-    ChannelsWidget
-  },
-  props: {
-    scope: { type: String, default: 'all' }
-  },
-  data () {
-    return {
-      artists: [],
-      isLoadingArtists: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Head/Home/Title', 'Library')
-      }
-    }
-  },
-  created () {
-    this.fetchArtists()
-  },
-  methods: {
-    fetchArtists () {
-      const self = this
-      this.isLoadingArtists = true
-      const params = {
-        ordering: '-creation_date',
-        playable: true
-      }
-      const url = ARTISTS_URL
-      logger.time('Loading latest artists')
-      axios.get(url, { params: params }).then(response => {
-        self.artists = response.data.results
-        logger.timeEnd('Loading latest artists')
-        self.isLoadingArtists = false
-      })
-    }
-  }
-}
-</script>

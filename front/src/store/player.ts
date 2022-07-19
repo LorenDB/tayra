@@ -148,8 +148,9 @@ const store: Module<State, RootState> = {
       if (!rootState.auth.authenticated) {
         return
       }
-      return axios.post('history/listenings/', { track: track.id }).then(() => {}, () => {
-        logger.error('Could not record track in history')
+
+      return axios.post('history/listenings/', { track: track.id }).catch((error) => {
+        logger.error('Could not record track in history', error)
       })
     },
     trackEnded ({ commit, dispatch, rootState }) {
