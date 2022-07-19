@@ -23,8 +23,6 @@ module.exports = {
     'vue'
   ],
   rules: {
-    'vue/no-v-html': 'off', // TODO: tackle this properly
-
     // NOTE: Handled by typescript
     'no-undef': 'off',
     'no-unused-vars': 'off',
