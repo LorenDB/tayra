@@ -143,6 +143,9 @@ export interface LibraryScan {
 export interface LibraryFollow {
   uuid: string
   approved: boolean
+
+  // TODO (wvffle): Check if it's not added only on frontend side
+  isLoading?: boolean
 }
 
 export interface Cover {

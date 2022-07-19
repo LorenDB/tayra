@@ -1,3 +1,51 @@
+<script setup lang="ts">
+import type { Library, LibraryFollow } from '~/types'
+
+import LibraryFilesTable from '~/views/content/libraries/FilesTable.vue'
+import LibraryForm from '~/views/content/libraries/Form.vue'
+import { ref } from 'vue'
+import axios from 'axios'
+
+interface Props {
+  object: Library
+}
+
+const props = defineProps<Props>()
+
+type ResponseType = { count: number, results: any[] }
+const follows = ref<ResponseType | null>(null)
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`libraries/${props.object.uuid}/follows/`)
+    follows.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+
+// TODO (wvffle): Find correct type
+const updateApproved = async (follow: LibraryFollow, approved: boolean) => {
+  follow.isLoading = true
+
+  try {
+    await axios.post(`federation/follows/library/${follow.uuid}/${approved ? 'accept' : 'reject'}/`)
+    follow.approved = approved
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  follow.isLoading = false
+}
+</script>
+
 <template>
   <section>
     <library-form
@@ -11,7 +59,7 @@
         Library contents
       </translate>
     </h2>
-    <library-files-table :filters="{library: object.uuid}" />
+    <library-files-table :filters="{library: object.uuid}" :ordering-config-name="null" />
 
     <div class="ui hidden divider" />
     <h2 class="ui header">
@@ -20,8 +68,8 @@
       </translate>
     </h2>
     <div
-      v-if="isLoadingFollows"
-      :class="['ui', {'active': isLoadingFollows}, 'inverted', 'dimmer']"
+      v-if="isLoading"
+      :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
         <translate translate-context="Content/Library/Paragraph">
@@ -30,7 +78,7 @@
       </div>
     </div>
     <table
-      v-else-if="follows && follows.count > 0"
+      v-else-if="follows?.count > 0"
       class="ui table"
     >
       <thead>
@@ -58,7 +106,7 @@
         </tr>
       </thead>
       <tr
-        v-for="follow in follows.results"
+        v-for="follow in follows?.results ?? []"
         :key="follow.fid"
       >
         <td><actor-link :actor="follow.actor" /></td>
@@ -112,50 +160,3 @@
     </p>
   </section>
 </template>
-
-<script>
-import LibraryFilesTable from '~/views/content/libraries/FilesTable.vue'
-import LibraryForm from '~/views/content/libraries/Form.vue'
-import axios from 'axios'
-
-export default {
-  components: {
-    LibraryForm,
-    LibraryFilesTable
-  },
-  props: { object: { type: String, required: true } },
-  data () {
-    return {
-      isLoadingFollows: false,
-      follows: null
-    }
-  },
-  created () {
-    this.fetchFollows()
-  },
-  methods: {
-    fetchFollows () {
-      const self = this
-      self.isLoadingLibrary = true
-      axios.get(`libraries/${this.object.uuid}/follows/`).then(response => {
-        self.follows = response.data
-        self.isLoadingFollows = false
-      })
-    },
-    updateApproved (follow, value) {
-      let action
-      if (value) {
-        action = 'accept'
-      } else {
-        action = 'reject'
-      }
-      axios
-        .post(`federation/follows/library/${follow.uuid}/${action}/`)
-        .then(response => {
-          follow.isLoading = false
-          follow.approved = value
-        })
-    }
-  }
-}
-</script>

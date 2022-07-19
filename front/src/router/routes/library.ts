@@ -26,7 +26,8 @@ export default [
           defaultTags: Array.isArray(route.query.tag || [])
             ? route.query.tag
             : [route.query.tag],
-          defaultPage: route.query.page ? +route.query.page : undefined
+          defaultPage: route.query.page ? +route.query.page : undefined,
+          orderingConfigName: null
         })
       },
       {
@@ -40,7 +41,8 @@ export default [
           defaultTags: Array.isArray(route.query.tag || [])
             ? route.query.tag
             : [route.query.tag],
-          defaultPage: route.query.page ? +route.query.page : undefined
+          defaultPage: route.query.page ? +route.query.page : undefined,
+          orderingConfigName: null
         })
       },
       {
@@ -53,7 +55,8 @@ export default [
           defaultTags: Array.isArray(route.query.tag || [])
             ? route.query.tag
             : [route.query.tag],
-          defaultPage: route.query.page ? +route.query.page : undefined
+          defaultPage: route.query.page ? +route.query.page : undefined,
+          orderingConfigName: null
         })
       },
       {
@@ -66,7 +69,8 @@ export default [
           defaultTags: Array.isArray(route.query.tag || [])
             ? route.query.tag
             : [route.query.tag],
-          defaultPage: route.query.page ? +route.query.page : undefined
+          defaultPage: route.query.page ? +route.query.page : undefined,
+          orderingConfigName: null
         })
       },
       {
@@ -80,7 +84,8 @@ export default [
           defaultTags: Array.isArray(route.query.tag || [])
             ? route.query.tag
             : [route.query.tag],
-          defaultPage: route.query.page ? +route.query.page : undefined
+          defaultPage: route.query.page ? +route.query.page : undefined,
+          orderingConfigName: null
         })
       },
       {
@@ -90,7 +95,8 @@ export default [
         props: route => ({
           defaultOrdering: route.query.ordering,
           defaultQuery: route.query.query,
-          defaultPage: route.query.page ? +route.query.page : undefined
+          defaultPage: route.query.page ? +route.query.page : undefined,
+          orderingConfigName: null
         })
       },
       {
@@ -101,7 +107,8 @@ export default [
           scope: 'me',
           defaultOrdering: route.query.ordering,
           defaultQuery: route.query.query,
-          defaultPage: route.query.page ? +route.query.page : undefined
+          defaultPage: route.query.page ? +route.query.page : undefined,
+          orderingConfigName: null
         })
       },
       {
@@ -129,7 +136,8 @@ export default [
         props: route => ({
           defaultOrdering: route.query.ordering,
           defaultQuery: route.query.query,
-          defaultPage: route.query.page ? +route.query.page : undefined
+          defaultPage: route.query.page ? +route.query.page : undefined,
+          orderingConfigName: null
         })
       },
       {
@@ -140,7 +148,8 @@ export default [
           scope: 'me',
           defaultOrdering: route.query.ordering,
           defaultQuery: route.query.query,
-          defaultPage: route.query.page ? +route.query.page : undefined
+          defaultPage: route.query.page ? +route.query.page : undefined,
+          orderingConfigName: null
         })
       },
       {

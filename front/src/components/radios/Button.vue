@@ -10,14 +10,15 @@ interface Props {
   type?: string
   clientOnly?: boolean
   objectId?: ObjectId | null
-  radioConfig: RadioConfig
+  radioConfig?: RadioConfig | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   customRadioId: null,
   type: '',
   clientOnly: false,
-  objectId: null
+  objectId: null,
+  radioConfig: null
 })
 
 const store = useStore()
@@ -33,7 +34,7 @@ const running = computed(() => {
 
 const { $pgettext } = useGettext()
 const buttonLabel = computed(() => {
-  switch (props.radioConfig.type) {
+  switch (props.radioConfig?.type) {
     case 'tag':
       return running.value
         ? $pgettext('*/Player/Button.Label/Short, Verb', 'Stop tags radio')
