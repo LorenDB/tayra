@@ -103,6 +103,7 @@ const move = (idx: number, increment: number) => {
           </translate>
         </p>
         <content-form
+          v-if="value.help_text"
           v-model="value.help_text.text"
           field-id="help-text"
           :permissive="true"
@@ -117,7 +118,7 @@ const move = (idx: number, increment: number) => {
             Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled.
           </translate>
         </p>
-        <table v-if="value.fields.length > 0">
+        <table v-if="value.fields?.length > 0">
           <thead>
             <tr>
               <th>
@@ -206,7 +207,7 @@ const move = (idx: number, increment: number) => {
         </table>
         <div class="ui hidden divider" />
         <button
-          v-if="value.fields.length < maxFields"
+          v-if="value.fields?.length < maxFields"
           class="ui basic button"
           @click.stop.prevent="addField"
         >

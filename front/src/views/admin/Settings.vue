@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import type { SettingsGroup } from '~/types'
+import type { SettingsGroup as SettingsGroupType } from '~/types'
+
 import axios from 'axios'
 import $ from 'jquery'
+
+
+import SettingsGroup from '~/components/admin/SettingsGroup.vue'
 
 import { useCurrentElement } from '@vueuse/core'
 import { ref, nextTick, onMounted, computed, watch } from 'vue'
@@ -112,7 +116,7 @@ const groups = computed(() => [
       { name: 'instance__nodeinfo_private' }
     ]
   }
-] as SettingsGroup[])
+] as SettingsGroupType[])
 
 const labels = computed(() => ({
   settings: $pgettext('Head/Admin/Title', 'Instance settings')

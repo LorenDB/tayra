@@ -144,8 +144,8 @@ const save = async () => {
       </template>
       <content-form
         v-if="setting.fieldType === 'markdown'"
-        v-model="values[setting.identifier]"
         v-bind="setting.fieldParams"
+        v-model="values[setting.identifier]"
       />
       <signup-form-builder
         v-else-if="setting.fieldType === 'formBuilder'"
