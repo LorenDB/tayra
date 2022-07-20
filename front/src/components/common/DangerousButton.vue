@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import SemanticModal from '~/components/semantic/Modal.vue'
+import { ref } from 'vue'
+
+interface Props {
+  action?: () => void
+  disabled?: boolean
+  // TODO (wvffle): Find correct type
+  confirmColor?: 'danger'
+}
+
+// TODO (wvffle): MOVE ALL defineEmits ABOVE defineProps
+const emit = defineEmits()
+
+const props = withDefaults(defineProps<Props>(), {
+  action: () => {},
+  disabled: false,
+  confirmColor: 'danger'
+})
+
+const showModal = ref(false)
+
+const confirm = () => {
+  showModal.value = false
+  emit('confirm')
+  props.action?.()
+}
+</script>
+
 <template>
   <button
     :class="[{disabled: disabled}]"
@@ -6,7 +35,7 @@
   >
     <slot />
 
-    <modal
+    <semantic-modal
       v-model:show="showModal"
       class="small"
     >
@@ -29,7 +58,7 @@
           </translate>
         </button>
         <button
-          :class="['ui', 'confirm', confirmButtonColor, 'button']"
+          :class="['ui', 'confirm', confirmColor, 'button']"
           @click="confirm"
         >
           <slot name="modal-confirm">
@@ -39,42 +68,6 @@
           </slot>
         </button>
       </div>
-    </modal>
+    </semantic-modal>
   </button>
 </template>
-<script>
-import Modal from '~/components/semantic/Modal.vue'
-
-export default {
-  components: {
-    Modal
-  },
-  props: {
-    action: { type: Function, required: false, default: () => {} },
-    disabled: { type: Boolean, default: false },
-    confirmColor: { type: String, default: 'danger', required: false }
-  },
-  data () {
-    return {
-      showModal: false
-    }
-  },
-  computed: {
-    confirmButtonColor () {
-      if (this.confirmColor) {
-        return this.confirmColor
-      }
-      return this.color
-    }
-  },
-  methods: {
-    confirm () {
-      this.showModal = false
-      this.$emit('confirm')
-      if (this.action) {
-        this.action()
-      }
-    }
-  }
-}
-</script>

@@ -45,15 +45,7 @@ export default defineConfig(() => ({
         navigateFallback: 'index.html',
         webManifestUrl: '/front/manifest.json'
       }
-    }),
-    {
-      name: 'fix-fomantic-ui-css',
-      transform (src, id) {
-        if (id.includes('fomantic-ui-css') && id.endsWith('.min.js')) {
-          return `import jQuery from 'jquery';${src}`
-        }
-      }
-    }
+    })
   ],
   server: { port, hmr },
   resolve: {

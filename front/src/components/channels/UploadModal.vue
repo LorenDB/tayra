@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Modal from '~/components/semantic/Modal.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
 import ChannelUploadForm from '~/components/channels/UploadForm.vue'
 import { humanSize } from '~/utils/filters'
 import { useRouter } from 'vue-router'
@@ -49,7 +49,7 @@ const isLoading = ref(false)
 </script>
 
 <template>
-  <modal
+  <semantic-modal
     v-model:show="$store.state.channels.showUploadModal"
     class="small"
   >
@@ -182,5 +182,5 @@ const isLoading = ref(false)
         </translate>
       </button>
     </div>
-  </modal>
+  </semantic-modal>
 </template>

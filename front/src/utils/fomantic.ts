@@ -1,20 +1,16 @@
 /// <reference types="semantic-ui" />
 
 import $ from 'jquery'
-import { nextTick } from 'vue'
-import { useCurrentElement } from '@vueuse/core'
+import { tryOnMounted, useCurrentElement } from '@vueuse/core'
 
-const el = useCurrentElement()
 
 export const getDropdown = (selector = '.ui.dropdown'): JQuery => {
+  const el = useCurrentElement()
   return $(el.value).find(selector)
 }
 
-export const setupDropdown = async (selector: string | HTMLElement = '.ui.dropdown') => {
-  if (typeof selector === 'string') {
-    await nextTick()
-  }
-
+export const setupDropdown = (selector: string | HTMLElement = '.ui.dropdown') => tryOnMounted(() => {
+  const el = useCurrentElement()
   const $dropdown = typeof selector === 'string' 
     ? $(el.value).find(selector)
     : $(selector)
@@ -29,6 +25,4 @@ export const setupDropdown = async (selector: string | HTMLElement = '.ui.dropdo
       $dropdown.dropdown('hide')
     }
   })
-
-  return $dropdown
-}
+}, false)
