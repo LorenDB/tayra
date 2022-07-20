@@ -53,13 +53,12 @@ const logger = useLogger()
 // 1. use the url provided in settings.json, if any
 // 2. use the url specified when building via VUE_APP_INSTANCE_URL
 // 3. use the current url
-const instanceUrl = import.meta.env.VUE_APP_INSTANCE_URL as string || location.origin
+const instanceUrl = import.meta.env.VUE_APP_INSTANCE_URL as string ?? location.origin
 
 const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     frontSettings: {
-      // TODO (wvffle): Remove all checks if the variable exists
       defaultServerUrl: instanceUrl,
       additionalStylesheets: []
     },
@@ -143,10 +142,10 @@ const store: Module<State, RootState> = {
         relativeUrl = relativeUrl.slice(1)
       }
 
-      const instanceUrl = state.instanceUrl ?? location.origin
-      return instanceUrl + relativeUrl
+      return (state.instanceUrl ?? instanceUrl) + relativeUrl
     },
-    domain: (state) => new URL(state.instanceUrl ?? location.origin).hostname
+    domain: (state) => new URL(state.instanceUrl ?? instanceUrl).hostname,
+    defaultInstance: () => instanceUrl
   },
   actions: {
     setUrl ({ commit }, url) {

@@ -1,6 +1,67 @@
+<script setup lang="ts">
+import SemanticModal from '~/components/semantic/Modal.vue'
+import axios from 'axios'
+import { uniq } from 'lodash-es'
+import { useVModel } from '@vueuse/core'
+import { ref, computed, watch, nextTick } from 'vue'
+import { useStore } from '~/store'
+import { useGettext } from 'vue3-gettext'
+
+interface Props {
+  show: boolean
+}
+
+const props = defineProps<Props>()
+
+const emit = defineEmits(['update:show'])
+const show = useVModel(props, 'show', emit)
+
+const instanceUrl = ref('')
+
+const store = useStore()
+const suggestedInstances = computed(() => {
+  const serverUrl = store.state.instance.frontSettings.defaultServerUrl
+
+  return uniq([
+    store.state.instance.instanceUrl,
+    ...store.state.instance.knownInstances,
+    serverUrl.endsWith('/') ? serverUrl : serverUrl + '/',
+    store.getters['instance/defaultInstance']
+  ]).slice(1)
+})
+
+watch(() => store.state.instance.instanceUrl, () => store.dispatch('instance/fetchSettings'))
+
+const { $pgettext } = useGettext()
+const isError = ref(false)
+const isLoading = ref(false)
+const checkAndSwitch = async (url: string) => {
+  isError.value = false
+  isLoading.value = true
+
+  try {
+    const instanceUrl = new URL(url.startsWith('https://') || url.startsWith('http://') ? url : `https://${url}`).origin
+    await axios.get(instanceUrl + '/api/v1/instance/nodeinfo/2.0/')
+
+    show.value = false
+    store.commit('ui/addMessage', {
+      content: $pgettext('*/Instance/Message', 'You are now using the Funkwhale instance at %{ url }', { url: instanceUrl }),
+      date: new Date()
+    })
+
+    await nextTick()
+    store.dispatch('instance/setUrl', instanceUrl)
+  } catch (error) {
+    isError.value = true
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
-  <modal
-    v-model:show="showRef"
+  <semantic-modal
+    v-model:show="show"
     @update:show="isError = false"
   >
     <h3 class="header">
@@ -38,7 +99,7 @@
       >
         <p
           v-if="$store.state.instance.instanceUrl"
-          v-translate="{url: $store.state.instance.instanceUrl, hostname: instanceHostname }"
+          v-translate="{url: $store.state.instance.instanceUrl, hostname: $store.getters['instance/domain'] }"
           class="description"
           translate-context="Popup/Login/Paragraph"
         >
@@ -101,114 +162,5 @@
         </translate>
       </button>
     </div>
-  </modal>
+  </semantic-modal>
 </template>
-
-<script>
-import Modal from '~/components/semantic/Modal.vue'
-import axios from 'axios'
-import { uniq } from 'lodash-es'
-import { useVModel } from '@vueuse/core'
-
-export default {
-  components: {
-    Modal
-  },
-  props: { show: { type: Boolean, required: true } },
-  setup (props) {
-    // TODO (wvffle): Add defineEmits when rewriting to <script setup>
-    const showRef = useVModel(props, 'show'/*, emit */)
-    return { showRef }
-  },
-  data () {
-    return {
-      instanceUrl: null,
-      nodeinfo: null,
-      isError: false,
-      isLoading: false,
-      path: 'api/v1/instance/nodeinfo/2.0/'
-    }
-  },
-  computed: {
-    suggestedInstances () {
-      const instances = this.$store.state.instance.knownInstances.slice(0)
-      if (this.$store.state.instance.frontSettings.defaultServerUrl) {
-        let serverUrl = this.$store.state.instance.frontSettings.defaultServerUrl
-        if (!serverUrl.endsWith('/')) {
-          serverUrl = serverUrl + '/'
-        }
-        instances.push(serverUrl)
-      }
-      const self = this
-      instances.push(location.origin, 'https://demo.funkwhale.audio/')
-      return uniq(instances.filter((e) => { return e !== self.$store.state.instance.instanceUrl }))
-    },
-    instanceHostname () {
-      const url = this.$store.state.instance.instanceUrl
-      const parser = document.createElement('a')
-      parser.href = url
-      return parser.hostname
-    }
-  },
-  watch: {
-    '$store.state.instance.instanceUrl' () {
-      this.$store.dispatch('instance/fetchSettings')
-      this.fetchNodeInfo()
-    }
-  },
-  methods: {
-    fetchNodeInfo () {
-      const self = this
-      axios.get('instance/nodeinfo/2.0/').then(response => {
-        self.nodeinfo = response.data
-      })
-    },
-    fetchUrl (url) {
-      let urlFetch = url
-      if (!urlFetch.endsWith('/')) {
-        urlFetch = `${urlFetch}/${this.path}`
-      } else {
-        urlFetch = `${urlFetch}${this.path}`
-      }
-      if (!urlFetch.startsWith('https://') && !urlFetch.startsWith('http://')) {
-        urlFetch = `https://${urlFetch}`
-      }
-      return urlFetch
-    },
-    requestDistantNodeInfo (url) {
-      const self = this
-      axios.get(this.fetchUrl(url)).then(function (response) {
-        self.isLoading = false
-        if (!url.startsWith('https://') && !url.startsWith('http://')) {
-          url = `https://${url}`
-        }
-        self.switchInstance(url)
-      }).catch(function () {
-        self.isLoading = false
-        self.isError = true
-      })
-    },
-    switchInstance (url) {
-      // Here we disconnect from the current instance and reconnect to the new one. No check is performed…
-      this.$emit('update:show', false)
-      this.isError = false
-      const msg = this.$pgettext('*/Instance/Message', 'You are now using the Funkwhale instance at %{ url }')
-      this.$store.commit('ui/addMessage', {
-        content: this.$gettextInterpolate(msg, { url: url }),
-        date: new Date()
-      })
-      const self = this
-      this.$nextTick(() => {
-        self.$store.commit('instance/instanceUrl', null)
-        self.$store.dispatch('instance/setUrl', url)
-      })
-    },
-    checkAndSwitch (url) {
-      // First we have to check if the address is a valid FW server. If yes, we switch:
-      this.isError = false // Clear error message if any…
-      this.isLoading = true
-      this.requestDistantNodeInfo(url)
-    }
-  }
-}
-</script>
