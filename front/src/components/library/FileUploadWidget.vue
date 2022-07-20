@@ -28,7 +28,7 @@ const headers = computed(() => {
 const patchFileData = (file: VueUploadItem, data: Record<string, unknown> = {}) => {
   let metadata = data.import_metadata as Record<string, unknown>
 
-  // @ts-expect-error Taken from vue-upload-component@3.1.2
+  // @ts-expect-error Taken from 3.1.2
   const filename: string = file.file.name || file.file.filename || file.name
   data.source = `upload://${filename}`
 

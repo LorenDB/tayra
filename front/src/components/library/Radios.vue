@@ -93,7 +93,6 @@ const hasFavorites = computed(() => store.state.favorites.count > 0)
 onBeforeRouteUpdate(fetchData)
 fetchData()
 
-// @ts-expect-error semantic ui
 onMounted(() => $('.ui.dropdown').dropdown())
 
 const { $pgettext } = useGettext()

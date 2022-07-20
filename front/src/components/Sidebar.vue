@@ -1,3 +1,133 @@
+<script setup lang="ts">
+import type { RouteRecordName } from 'vue-router'
+
+import UserModal from '~/components/common/UserModal.vue'
+import Logo from '~/components/Logo.vue'
+import SearchBar from '~/components/audio/SearchBar.vue'
+import UserMenu from '~/components/common/UserMenu.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
+
+import useThemeList from '~/composables/useThemeList'
+import useTheme from '~/composables/useTheme'
+import { useRoute } from 'vue-router'
+import { computed, ref, watch, watchEffect, onMounted } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+import { setupDropdown } from '~/utils/fomantic'
+
+interface Props {
+  width: number
+}
+
+defineProps<Props>()
+
+const store = useStore()
+const theme = useTheme()
+const themes = useThemeList()
+const { $pgettext } = useGettext()
+
+const route = useRoute()
+const isCollapsed = ref(true)
+watch(() => route.path, () => (isCollapsed.value = true))
+
+const additionalNotifications = computed(() => store.getters['ui/additionalNotifications'])
+const logoUrl = computed(() => store.state.auth.authenticated ? 'library.index' : 'index')
+
+const labels = computed(() => ({
+  mainMenu: $pgettext('Sidebar/*/Hidden text', 'Main menu'),
+  selectTrack: $pgettext('Sidebar/Player/Hidden text', 'Play this track'),
+  pendingFollows: $pgettext('Sidebar/Notifications/Hidden text', 'Pending follow requests'),
+  pendingReviewEdits: $pgettext('Sidebar/Moderation/Hidden text', 'Pending review edits'),
+  pendingReviewReports:  $pgettext('Sidebar/Moderation/Hidden text', 'Pending review reports'),
+  language: $pgettext('Sidebar/Settings/Dropdown.Label/Short, Verb', 'Language'),
+  theme: $pgettext('Sidebar/Settings/Dropdown.Label/Short, Verb', 'Theme'),
+  addContent: $pgettext('*/Library/*/Verb', 'Add content'),
+  administration: $pgettext('Sidebar/Admin/Title/Noun', 'Administration')
+}))
+
+type SidebarMenuTabs = 'explore' | 'myLibrary'
+const expanded = ref<SidebarMenuTabs>('explore')
+
+const ROUTE_MAPPINGS: Record<SidebarMenuTabs, RouteRecordName[]> = {
+  explore: [
+    'search', 
+    'library.index', 
+    'library.podcasts.browse', 
+    'library.albums.browse', 
+    'library.albums.detail', 
+    'library.artists.browse',
+    'library.artists.detail',
+    'library.tracks.detail',
+    'library.playlists.browse',
+    'library.playlists.detail',
+    'library.radios.browse',
+    'library.radios.detail'
+  ],
+  myLibrary: [
+    'library.me',
+    'library.albums.me',
+    'library.artists.me',
+    'library.playlists.me',
+    'library.radios.me',
+    'favorites'
+  ]
+}
+
+watchEffect(() => {
+  if (ROUTE_MAPPINGS.explore.includes(route.name as RouteRecordName)) {
+    expanded.value = 'explore'
+    return
+  }
+
+  if (ROUTE_MAPPINGS.myLibrary.includes(route.name as RouteRecordName)) {
+    expanded.value = 'myLibrary'
+    return
+  }
+
+  expanded.value = store.state.auth.authenticated ? 'myLibrary' : 'explore'
+})
+
+const moderationNotifications = computed(() => 
+  store.state.ui.notifications.pendingReviewEdits
+    + store.state.ui.notifications.pendingReviewReports
+    + store.state.ui.notifications.pendingReviewRequests
+)
+
+const isProduction = import.meta.env.PROD
+const showUserModal = ref(false)
+const showLanguageModal = ref(false)
+const showThemeModal = ref(false)
+
+// TODO (wvffle): Use current language this.$language.current
+const languageSelection = undefined
+// export default {
+//   watch: {
+//     languageSelection: function (v) {
+//       this.$store.dispatch('ui/currentLanguage', v)
+//       this.$refs.languageModal.closeModal()
+//     }
+//   },
+// }
+
+watch(() => store.state.auth.authenticated, (authenticated) => {
+  if (authenticated) {
+    setupDropdown('.admin-dropdown')
+  }
+
+  setupDropdown('.user-dropdown')
+}, { immediate: true })
+
+watch(() => store.state.auth.availablePermissions, () => {
+  if (store.state.auth.authenticated) {
+    setupDropdown('.admin-dropdown')
+  }
+}, { immediate: true })
+
+onMounted(() => {
+  document.getElementById('fake-sidebar')?.classList.add('loaded')
+})
+</script>
+
 <template>
   <aside :class="['ui', 'vertical', 'left', 'visible', 'wide', {'collapsed': isCollapsed}, 'sidebar', 'component-sidebar']">
     <header class="ui basic segment header-wrapper">
@@ -54,7 +184,7 @@
                   :to="{name: 'manage.moderation.reports.list', query: {q: 'resolved:no'}}"
                 >
                   <div
-                    v-if="$store.state.ui.notifications.pendingReviewReports + $store.state.ui.notifications.pendingReviewRequests> 0"
+                    v-if="$store.state.ui.notifications.pendingReviewReports + $store.state.ui.notifications.pendingReviewRequests > 0"
                     :title="labels.pendingReviewReports"
                     :class="['ui', 'circular', 'mini', 'right floated', 'accent', 'label']"
                   >
@@ -131,10 +261,10 @@
             @click.prevent.exact="showUserModal = !showUserModal"
           >
             <img
-              v-if="$store.state.auth.authenticated && $store.state.auth.profile.avatar && $store.state.auth.profile.avatar.urls.medium_square_crop"
+              v-if="$store.state.auth.authenticated && $store.state.auth.profile?.avatar.urls.medium_square_crop"
               class="ui avatar image"
               alt=""
-              :src="$store.getters['instance/absoluteUrl']($store.state.auth.profile.avatar.urls.medium_square_crop)"
+              :src="$store.getters['instance/absoluteUrl']($store.state.auth.profile?.avatar.urls.medium_square_crop)"
             >
             <actor-avatar
               v-else-if="$store.state.auth.authenticated"
@@ -157,7 +287,7 @@
           @show-theme-modal-event="showThemeModal=true"
           @show-language-modal-event="showLanguageModal=true"
         />
-        <modal
+        <semantic-modal
           ref="languageModal"
           v-model:show="showLanguageModal"
           :fullscreen="false"
@@ -178,17 +308,17 @@
               :key="key"
             >
               <input
-                :id="key"
+                :id="`${key}`"
                 v-model="languageSelection"
                 type="radio"
                 name="language"
                 :value="key"
               >
-              <label :for="key">{{ language }}</label>
+              <label :for="`${key}`">{{ language }}</label>
             </fieldset>
           </div>
-        </modal>
-        <modal
+        </semantic-modal>
+        <semantic-modal
           ref="themeModal"
           v-model:show="showThemeModal"
           :fullscreen="false"
@@ -218,7 +348,7 @@
               <label :for="t.key">{{ t.name }}</label>
             </fieldset>
           </div>
-        </modal>
+        </semantic-modal>
         <div class="item collapse-button-wrapper">
           <button
             :class="['ui', 'basic', 'big', {'vibrant': !isCollapsed}, 'inverted icon', 'collapse', 'button']"
@@ -269,27 +399,27 @@
       </h1>
       <div class="ui small hidden divider" />
       <section
-        :class="['ui', 'bottom', 'attached', {active: selectedTab === 'library'}, 'tab']"
         :aria-label="labels.mainMenu"
+        class="ui bottom attached active tab"
       >
         <nav
           class="ui vertical large fluid inverted menu"
           role="navigation"
           :aria-label="labels.mainMenu"
         >
-          <div :class="[{collapsed: !exploreExpanded}, 'collapsible item']">
+          <div :class="[{ collapsed: expanded !== 'explore' }, 'collapsible item']">
             <h2
               class="header"
               role="button"
               tabindex="0"
-              @click="exploreExpanded = true"
-              @focus="exploreExpanded = true"
+              @click="expanded = 'explore'"
+              @focus="expanded = 'explore'"
             >
               <translate translate-context="*/*/*/Verb">
                 Explore
               </translate>
               <i
-                v-if="!exploreExpanded"
+                v-if="expanded !== 'explore'"
                 class="angle right icon"
               />
             </h2>
@@ -355,20 +485,20 @@
           </div>
           <div
             v-if="$store.state.auth.authenticated"
-            :class="[{collapsed: !myLibraryExpanded}, 'collapsible item']"
+            :class="[{ collapsed: expanded !== 'myLibrary' }, 'collapsible item']"
           >
             <h3
               class="header"
               role="button"
               tabindex="0"
-              @click="myLibraryExpanded = true"
-              @focus="myLibraryExpanded = true"
+              @click="expanded = 'myLibrary'"
+              @focus="expanded = 'myLibrary'"
             >
               <translate translate-context="*/*/*/Noun">
                 My Library
               </translate>
               <i
-                v-if="!myLibraryExpanded"
+                v-if="expanded !== 'myLibrary'"
                 class="angle right icon"
               />
             </h3>
@@ -451,7 +581,7 @@
             </div>
           </div>
           <div
-            v-if="!production"
+            v-if="!isProduction"
             class="item"
           >
             <a
@@ -467,251 +597,6 @@
   </aside>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
-import UserModal from '~/components/common/UserModal.vue'
-import Logo from '~/components/Logo.vue'
-import SearchBar from '~/components/audio/SearchBar.vue'
-import UserMenu from '~/components/common/UserMenu.vue'
-import Modal from '~/components/semantic/Modal.vue'
-
-import $ from 'jquery'
-import useThemeList from '~/composables/useThemeList'
-import useTheme from '~/composables/useTheme'
-import { useRoute } from 'vue-router'
-import { computed } from 'vue'
-
-export default {
-  name: 'Sidebar',
-  components: {
-    SearchBar,
-    Logo,
-    UserMenu,
-    UserModal,
-    Modal
-  },
-  props: {
-    width: { type: Number, required: true }
-  },
-  setup () {
-    const theme = useTheme()
-    const themes = useThemeList()
-
-    const route = useRoute()
-    const url = computed(() => route.path)
-
-    return {
-      theme,
-      themes,
-      url
-    }
-  },
-  data () {
-    return {
-      selectedTab: 'library',
-      isCollapsed: true,
-      fetchInterval: null,
-      exploreExpanded: false,
-      myLibraryExpanded: false,
-      showUserModal: false,
-      showLanguageModal: false,
-      showThemeModal: false,
-      languageSelection: this.$language.current
-    }
-  },
-  destroy () {
-    if (this.fetchInterval) {
-      clearInterval(this.fetchInterval)
-    }
-  },
-  computed: {
-    ...mapState({
-      queue: state => state.queue
-    }),
-    ...mapGetters({
-      additionalNotifications: 'ui/additionalNotifications'
-    }),
-    labels () {
-      const mainMenu = this.$pgettext('Sidebar/*/Hidden text', 'Main menu')
-      const selectTrack = this.$pgettext('Sidebar/Player/Hidden text', 'Play this track')
-      const pendingFollows = this.$pgettext('Sidebar/Notifications/Hidden text', 'Pending follow requests')
-      const pendingReviewEdits = this.$pgettext('Sidebar/Moderation/Hidden text', 'Pending review edits')
-      const language = this.$pgettext(
-        'Sidebar/Settings/Dropdown.Label/Short, Verb',
-        'Language')
-      const theme = this.$pgettext(
-        'Sidebar/Settings/Dropdown.Label/Short, Verb',
-        'Theme')
-      return {
-        pendingFollows,
-        mainMenu,
-        selectTrack,
-        pendingReviewEdits,
-        language,
-        theme,
-        addContent: this.$pgettext('*/Library/*/Verb', 'Add content'),
-        administration: this.$pgettext('Sidebar/Admin/Title/Noun', 'Administration')
-      }
-    },
-    logoUrl () {
-      if (this.$store.state.auth.authenticated) {
-        return 'library.index'
-      } else {
-        return 'index'
-      }
-    },
-    focusedMenu () {
-      const mapping = {
-        search: 'exploreExpanded',
-        'library.index': 'exploreExpanded',
-        'library.podcasts.browse': 'exploreExpanded',
-        'library.albums.browse': 'exploreExpanded',
-        'library.albums.detail': 'exploreExpanded',
-        'library.artists.browse': 'exploreExpanded',
-        'library.artists.detail': 'exploreExpanded',
-        'library.tracks.detail': 'exploreExpanded',
-        'library.playlists.browse': 'exploreExpanded',
-        'library.playlists.detail': 'exploreExpanded',
-        'library.radios.browse': 'exploreExpanded',
-        'library.radios.detail': 'exploreExpanded',
-        'library.me': 'myLibraryExpanded',
-        'library.albums.me': 'myLibraryExpanded',
-        'library.artists.me': 'myLibraryExpanded',
-        'library.playlists.me': 'myLibraryExpanded',
-        'library.radios.me': 'myLibraryExpanded',
-        favorites: 'myLibraryExpanded'
-      }
-      const m = mapping[this.$route.name]
-      if (m) {
-        return m
-      }
-
-      if (this.$store.state.auth.authenticated) {
-        return 'myLibraryExpanded'
-      } else {
-        return 'exploreExpanded'
-      }
-    },
-    moderationNotifications () {
-      return (
-        this.$store.state.ui.notifications.pendingReviewEdits +
-        this.$store.state.ui.notifications.pendingReviewReports +
-        this.$store.state.ui.notifications.pendingReviewRequests
-      )
-    },
-    production () {
-      return import.meta.env.PROD
-    }
-  },
-  watch: {
-    url: function () {
-      this.isCollapsed = true
-    },
-    '$store.state.moderation.lastUpdate': function () {
-      this.applyContentFilters()
-    },
-    '$store.state.auth.authenticated': {
-      immediate: true,
-      handler (v) {
-        if (v) {
-          this.$nextTick(() => {
-            this.setupDropdown('.user-dropdown')
-            this.setupDropdown('.admin-dropdown')
-          })
-        } else {
-          this.$nextTick(() => {
-            this.setupDropdown('.user-dropdown')
-          })
-        }
-      }
-    },
-    '$store.state.auth.availablePermissions': {
-      immediate: true,
-      handler (v) {
-        this.$nextTick(() => {
-          this.setupDropdown('.admin-dropdown')
-        })
-      },
-      deep: true
-    },
-    focusedMenu: {
-      immediate: true,
-      handler (n) {
-        if (n) {
-          this[n] = true
-        }
-      }
-    },
-    myLibraryExpanded (v) {
-      if (v) {
-        this.exploreExpanded = false
-      }
-    },
-    exploreExpanded (v) {
-      if (v) {
-        this.myLibraryExpanded = false
-      }
-    },
-    languageSelection: function (v) {
-      this.$store.dispatch('ui/currentLanguage', v)
-      this.$refs.languageModal.closeModal()
-    }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      document.getElementById('fake-sidebar').classList.add('loaded')
-    })
-  },
-  methods: {
-    ...mapActions({
-      cleanTrack: 'queue/cleanTrack'
-    }),
-    applyContentFilters () {
-      const artistIds = this.$store.getters['moderation/artistFilters']().map((f) => {
-        return f.target.id
-      })
-
-      if (artistIds.length === 0) {
-        return
-      }
-      const self = this
-      const tracks = this.tracks.slice().reverse()
-      tracks.forEach(async (t, i) => {
-        // we loop from the end because removing index from the start can lead to removing the wrong tracks
-        const realIndex = tracks.length - i - 1
-        const matchArtist = artistIds.indexOf(t.artist.id) > -1
-        if (matchArtist) {
-          return await self.cleanTrack(realIndex)
-        }
-        if (t.album && artistIds.indexOf(t.album.artist.id) > -1) {
-          return await self.cleanTrack(realIndex)
-        }
-      })
-    },
-    setupDropdown (selector) {
-      const self = this
-      $(self.$el).find(selector).dropdown({
-        selectOnKeydown: false,
-        action: function (text, value, $el) {
-          // used ton ensure focusing the dropdown and clicking via keyboard
-          // works as expected
-          const link = $($el).closest('a')
-          const url = link.attr('href')
-          if (url) {
-            if (url.startsWith('http')) {
-              window.open(url, '_blank').focus()
-            } else {
-              self.$router.push(url)
-            }
-          }
-
-          $(self.$el).find(selector).dropdown('hide')
-        }
-      })
-    }
-  }
-}
-</script>
 <style>
 [type="radio"] {
   position: absolute;

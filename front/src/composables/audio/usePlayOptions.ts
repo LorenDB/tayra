@@ -133,7 +133,6 @@ export default (props: PlayOptionsProps) => {
 
   const el = useCurrentElement()
   const enqueue = async () => {
-    // @ts-expect-error dropdown is from semantic ui
     jQuery(el.value).find('.ui.dropdown').dropdown('hide')
 
     const tracks = await getPlayableTracks()
@@ -141,7 +140,6 @@ export default (props: PlayOptionsProps) => {
   }
 
   const enqueueNext = async (next = false) => {
-    // @ts-expect-error dropdown is from semantic ui
     jQuery(el.value).find('.ui.dropdown').dropdown('hide')
 
     const tracks = await getPlayableTracks()
@@ -160,7 +158,6 @@ export default (props: PlayOptionsProps) => {
   const replacePlay = async () => {
     store.dispatch('queue/clean')
 
-    // @ts-expect-error dropdown is from semantic ui
     jQuery(el.value).find('.ui.dropdown').dropdown('hide')
 
     const tracks = await getPlayableTracks()

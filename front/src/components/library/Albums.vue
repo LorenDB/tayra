@@ -104,7 +104,6 @@ watch(() => store.state.moderation.lastUpdate, fetchData)
 onBeforeRouteUpdate(fetchData)
 fetchData()
 
-// @ts-expect-error semantic ui
 onMounted(() => $('.ui.dropdown').dropdown())
 
 const { $pgettext } = useGettext()

@@ -24,7 +24,6 @@ onMounted(() => {
     ...props.message
   }
 
-  // @ts-expect-error toast is from semantic ui
   $('body').toast(params)
   $('.ui.toast.visible').last().attr('role', 'alert')
 })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Modal from '~/components/semantic/Modal.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
 import { useVModel } from '@vueuse/core'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
@@ -103,7 +103,7 @@ const player = computed(() => [
 </script>
 
 <template>
-  <modal v-model:show="showRef">
+  <semantic-modal v-model:show="showRef">
     <header class="header">
       <translate translate-context="*/*/*/Noun">
         Keyboard shortcuts
@@ -156,5 +156,5 @@ const player = computed(() => [
         </translate>
       </button>
     </footer>
-  </modal>
+  </semantic-modal>
 </template>

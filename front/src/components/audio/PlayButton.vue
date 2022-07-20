@@ -7,7 +7,7 @@ import { useGettext } from 'vue3-gettext'
 import usePlayOptions from '~/composables/audio/usePlayOptions'
 import useReport from '~/composables/moderation/useReport'
 import { useCurrentElement } from '@vueuse/core'
-import jQuery from 'jquery'
+import { setupDropdown, getDropdown } from '~/utils/fomantic'
 
 interface Props extends PlayOptionsProps {
   dropdownIconClasses?: string[]
@@ -95,27 +95,13 @@ const title = computed(() => {
   }
 })
 
-const el = useCurrentElement()
 watch(clicked, async () => {
-  await nextTick()
-  // @ts-expect-error dropdown is from semantic ui
-  jQuery(el.value).find('.ui.dropdown').dropdown({
-    selectOnKeydown: false,
-    action (text: unknown, value: unknown, $el: JQuery) {
-      // used to ensure focusing the dropdown and clicking via keyboard
-      // works as expected
-      $el[0].click()
+  await setupDropdown()
 
-      // @ts-expect-error dropdown is from semantic ui
-      jQuery(el.value).find('.ui.dropdown').dropdown('hide')
-    }
-  })
-
-  // @ts-expect-error dropdown is from semantic ui
-  jQuery(el.value).find('.ui.dropdown').dropdown('show', function () {
+  getDropdown().dropdown('show', function () {
     // little magic to ensure the menu is always visible in the viewport
     // By default, try to diplay it on the right if there is enough room
-    const menu = jQuery(el.value).find('.ui.dropdown').find('.menu')
+    const menu = getDropdown().find('.menu')
     const viewportOffset = menu.get(0)?.getBoundingClientRect() ?? { right: 0, left: 0 }
     const viewportWidth = document.documentElement.clientWidth
     const rightOverflow = viewportOffset.right - viewportWidth

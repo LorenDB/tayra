@@ -100,7 +100,6 @@ const fetchFavorites = async () => {
 onBeforeRouteUpdate(fetchFavorites)
 fetchFavorites()
 
-// @ts-expect-error semantic ui
 onMounted(() => $('.ui.dropdown').dropdown())
 
 const { $pgettext } = useGettext()

@@ -58,7 +58,6 @@ const privacyLevelChoices = computed(() => [
 const el = useCurrentElement()
 onMounted(async () => {
   await nextTick()
-  // @ts-expect-error dropdown is from semantic ui
   $(el.value).find('.dropdown').dropdown()
 })
 

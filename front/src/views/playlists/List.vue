@@ -89,7 +89,6 @@ const fetchData = async () => {
 onBeforeRouteUpdate(fetchData)
 fetchData()
 
-// @ts-expect-error semantic ui
 onMounted(() => $('.ui.dropdown').dropdown())
 
 const { $pgettext } = useGettext()

@@ -132,15 +132,14 @@ if (route.hash) {
   scrollTo(route.hash.slice(1))
 }
 
-onMounted(() => {
-  // @ts-expect-error dropdown is from semantic ui
-  $('select.dropdown').dropdown()
+const el = useCurrentElement()
+onMounted(async () => {
+  await nextTick()
+  $(el.value).find('select.dropdown').dropdown()
 })
 
-const el = useCurrentElement()
 watch(settingsData, async () => {
   await nextTick()
-  // @ts-expect-error sticky is from semantic ui
   $(el.value).find('.sticky').sticky({ context: '#settings-grid' })
 })
 
