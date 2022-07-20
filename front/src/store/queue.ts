@@ -157,14 +157,15 @@ const store: Module<State, RootState> = {
       }
     },
     last ({ state, dispatch }) {
-      dispatch('currentIndex', state.tracks.length - 1)
+      return dispatch('currentIndex', state.tracks.length - 1)
     },
     currentIndex ({ commit, state, rootState, dispatch }, index) {
       commit('ended', false)
       commit('player/currentTime', 0, { root: true })
       commit('currentIndex', index)
+
       if (state.tracks.length - index <= 2 && rootState.radios.running) {
-        dispatch('radios/populateQueue', null, { root: true })
+        return dispatch('radios/populateQueue', null, { root: true })
       }
     },
     clean ({ dispatch, commit, state }) {

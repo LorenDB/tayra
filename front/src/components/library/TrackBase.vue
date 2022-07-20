@@ -6,7 +6,7 @@ import axios from 'axios'
 import PlayButton from '~/components/audio/PlayButton.vue'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
-import Modal from '~/components/semantic/Modal.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
 import EmbedWizard from '~/components/audio/EmbedWizard.vue'
 import { momentFormat } from '~/utils/filters'
 import updateQueryString from '~/composables/updateQueryString'
@@ -176,7 +176,7 @@ const remove = async () => {
               >
                 <i class="download icon" />
               </a>
-              <modal
+              <semantic-modal
                 v-if="isEmbedable"
                 v-model:show="showEmbedModal"
               >
@@ -200,7 +200,7 @@ const remove = async () => {
                     </translate>
                   </button>
                 </div>
-              </modal>
+              </semantic-modal>
               <button
                 v-dropdown="{direction: 'downward'}"
                 class="ui floating dropdown circular icon basic button"

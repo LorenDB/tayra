@@ -5,7 +5,7 @@ import { useGettext } from 'vue3-gettext'
 import axios from 'axios'
 import PlayButton from '~/components/audio/PlayButton.vue'
 import EmbedWizard from '~/components/audio/EmbedWizard.vue'
-import Modal from '~/components/semantic/Modal.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
 import RadioButton from '~/components/radios/Button.vue'
 import TagsList from '~/components/tags/List.vue'
 import useReport from '~/composables/moderation/useReport'
@@ -136,7 +136,7 @@ watch(() => props.id, fetchData, { immediate: true })
             <div class="ui buttons">
               <radio-button
                 type="artist"
-                :object-id="String(object.id)"
+                :object-id="object.id"
               />
             </div>
             <div class="ui buttons">
@@ -151,7 +151,7 @@ watch(() => props.id, fetchData, { immediate: true })
               </play-button>
             </div>
 
-            <modal
+            <semantic-modal
               v-if="publicLibraries.length > 0"
               v-model:show="showEmbedModal"
             >
@@ -175,7 +175,7 @@ watch(() => props.id, fetchData, { immediate: true })
                   </translate>
                 </button>
               </div>
-            </modal>
+            </semantic-modal>
             <div class="ui buttons">
               <button
                 class="ui button"

@@ -279,6 +279,12 @@ export interface Upload {
   mimetype: string
   extension: string
   listen_url: string
+
+  import_status: ImportStatus
+  import_details?: {
+    detail: object
+    error_code: string
+  }
 }
 
 // FileSystem Logs

@@ -2,7 +2,7 @@
 import type { Album, Artist, Library } from '~/types'
 
 import EmbedWizard from '~/components/audio/EmbedWizard.vue'
-import Modal from '~/components/semantic/Modal.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
 import useReport from '~/composables/moderation/useReport'
 import { computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
@@ -42,7 +42,7 @@ const remove = () => emit('remove')
 <template>
   <span>
 
-    <modal
+    <semantic-modal
       v-if="isEmbedable"
       v-model:show="showEmbedModal"
     >
@@ -63,7 +63,7 @@ const remove = () => emit('remove')
           <translate translate-context="*/*/Button.Label/Verb">Cancel</translate>
         </button>
       </div>
-    </modal>
+    </semantic-modal>
     <button
       v-dropdown="{direction: 'downward'}"
       class="ui floating dropdown circular icon basic button"

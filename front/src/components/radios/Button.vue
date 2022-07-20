@@ -9,7 +9,7 @@ interface Props {
   customRadioId?: number | null
   type?: string
   clientOnly?: boolean
-  objectId?: ObjectId | null
+  objectId?: ObjectId | string | null
   radioConfig?: RadioConfig | null
 }
 
@@ -29,7 +29,10 @@ const running = computed(() => {
 
   return store.state.radios.current?.type === props.type
     && store.state.radios.current?.customRadioId === props.customRadioId
-    && store.state.radios.current?.objectId.fullUsername === props.objectId?.fullUsername
+    && (
+        typeof props.objectId === 'string'
+          || store.state.radios.current?.objectId.fullUsername === props.objectId?.fullUsername
+      )
 })
 
 const { $pgettext } = useGettext()

@@ -16,7 +16,7 @@ export interface State {
   currentTime: number
   errored: boolean
   bufferProgress: number
-  looping: 0 | 1 | 2
+  looping: 0 | 1 | 2 // 0 -> no, 1 -> on  track, 2 -> on queue
 }
 
 const logger = useLogger()
@@ -34,7 +34,7 @@ const store: Module<State, RootState> = {
     currentTime: 0,
     errored: false,
     bufferProgress: 0,
-    looping: 0 // 0 -> no, 1 -> on  track, 2 -> on queue
+    looping: 0 
   },
   mutations: {
     reset (state) {
@@ -123,14 +123,13 @@ const store: Module<State, RootState> = {
         }, 3000)
       }
     },
-    resumePlayback ({ commit, state, dispatch }) {
+    async resumePlayback ({ commit, state, dispatch }) {
       commit('playing', true)
       if (state.errored && state.errorCount < state.maxConsecutiveErrors) {
-        setTimeout(() => {
-          if (state.playing) {
-            dispatch('queue/next', null, { root: true })
-          }
-        }, 3000)
+        await new Promise(resolve => setTimeout(resolve, 3000))
+        if (state.playing) {
+          return dispatch('queue/next', null, { root: true })
+        }
       }
     },
     pausePlayback ({ commit }) {

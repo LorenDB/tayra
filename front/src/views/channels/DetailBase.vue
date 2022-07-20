@@ -4,7 +4,7 @@ import type { Channel } from '~/types'
 import axios from 'axios'
 import PlayButton from '~/components/audio/PlayButton.vue'
 import EmbedWizard from '~/components/audio/EmbedWizard.vue'
-import Modal from '~/components/semantic/Modal.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
 import TagsList from '~/components/tags/List.vue'
 import SubscribeButton from '~/components/channels/SubscribeButton.vue'
 import useReport from '~/composables/moderation/useReport'
@@ -204,7 +204,7 @@ const updateSubscriptionCount = (delta: number) => {
                 >
                   <i class="feed icon" />
                 </a>
-                <modal
+                <semantic-modal
                   v-model:show="showSubscribeModal"
                   class="tiny"
                 >
@@ -268,7 +268,7 @@ const updateSubscriptionCount = (delta: number) => {
                       </translate>
                     </button>
                   </div>
-                </modal>
+                </semantic-modal>
                 <button
                   ref="dropdown"
                   v-dropdown="{direction: 'downward'}"
@@ -434,7 +434,7 @@ const updateSubscriptionCount = (delta: number) => {
                 />
               </div>
 
-              <modal
+              <semantic-modal
                 v-if="totalTracks > 0"
                 v-model:show="showEmbedModal"
               >
@@ -458,8 +458,8 @@ const updateSubscriptionCount = (delta: number) => {
                     </translate>
                   </button>
                 </div>
-              </modal>
-              <modal
+              </semantic-modal>
+              <semantic-modal
                 v-if="isOwner"
                 v-model:show="showEditModal"
               >
@@ -503,7 +503,7 @@ const updateSubscriptionCount = (delta: number) => {
                     </translate>
                   </button>
                 </div>
-              </modal>
+              </semantic-modal>
             </div>
             <div v-if="$store.getters['ui/layoutVersion'] === 'large'">
               <rendered-description

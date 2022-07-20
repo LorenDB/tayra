@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import type { Actor } from '~/types'
+
+import SemanticModal from '~/components/semantic/Modal.vue'
+import LibraryWidget from '~/components/federation/LibraryWidget.vue'
+import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import ChannelForm from '~/components/audio/ChannelForm.vue'
+import { ref } from 'vue'
+
+interface Props {
+  object: Actor
+}
+
+defineProps<Props>()
+
+const step = ref(1)
+const showCreateModal = ref(false)
+const loading = ref(false)
+const submittable = ref(false)
+const category = ref('podcast')
+</script>
+
 <template>
   <section>
     <div v-if="$store.getters['ui/layoutVersion'] === 'small'">
@@ -54,7 +76,7 @@
       </library-widget>
     </div>
 
-    <modal v-model:show="showCreateModal">
+    <semantic-modal v-model:show="showCreateModal">
       <h4 class="header">
         <translate
           v-if="step === 1"
@@ -83,7 +105,7 @@
           ref="createForm"
           :object="null"
           :step="step"
-          @loading="isLoading = $event"
+          @loading="loading = $event"
           @submittable="submittable = $event"
           @category="category = $event"
           @errored="$refs.modalContent.scrollTop = 0"
@@ -120,9 +142,9 @@
         </button>
         <button
           v-if="step === 2"
-          :class="['ui', 'primary button', {loading: isLoading}]"
+          :class="['ui', 'primary button', { loading }]"
           type="submit"
-          :disabled="!submittable && !isLoading || null"
+          :disabled="!submittable && !loading"
           @click.prevent.stop="$refs.createForm.submit"
         >
           <translate translate-context="*/Channels/Button.Label">
@@ -130,27 +152,6 @@
           </translate>
         </button>
       </div>
-    </modal>
+    </semantic-modal>
   </section>
 </template>
-
-<script>
-import Modal from '~/components/semantic/Modal.vue'
-import LibraryWidget from '~/components/federation/LibraryWidget.vue'
-import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
-import ChannelForm from '~/components/audio/ChannelForm.vue'
-
-export default {
-  components: { ChannelsWidget, LibraryWidget, ChannelForm, Modal },
-  props: { object: { type: Object, required: true } },
-  data () {
-    return {
-      showCreateModal: false,
-      isLoading: false,
-      submittable: false,
-      step: 1,
-      category: 'podcast'
-    }
-  }
-}
-</script>

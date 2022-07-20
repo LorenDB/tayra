@@ -1,12 +1,76 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import axios from 'axios'
+import SemanticModal from '~/components/semantic/Modal.vue'
+import { useTimeoutFn } from '@vueuse/core'
+import { ref } from 'vue'
+
+interface Props {
+  url: string
+}
+
+const props = defineProps<Props>()
+
+const MAX_POLLS = 15
+
+const pollsCount = ref(0)
+const showModal = ref(false)
+const data = ref()
+const errors = ref([] as string[])
+
+const isLoading = ref(false)
+const isPolling = ref(false)
+
+const fetch = async () => {
+  showModal.value = true
+  isLoading.value = true
+  isPolling.value = false
+  errors.value = []
+  pollsCount.value = 0
+  data.value = undefined
+
+  try {
+    const response = await axios.post(props.url)
+    data.value = response.data
+    startPolling()
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const poll = async () => {
+  isPolling.value = true
+  showModal.value = true
+
+  try {
+    const response = await axios.get(`federation/fetches/${data.value?.id}/`)
+    data.value = response.data
+
+    if (response.data.status === 'pending' && pollsCount.value++ < MAX_POLLS) {
+      startPolling()
+    }
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isPolling.value = false
+}
+
+const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
+</script>
+
 <template>
   <div
     role="button"
-    @click="createFetch"
+    @click="fetch"
   >
     <div>
       <slot />
     </div>
-    <modal
+    <semantic-modal
       v-model:show="showModal"
       class="small"
     >
@@ -16,9 +80,9 @@
         </translate>
       </h3>
       <div class="scrolling content">
-        <template v-if="fetch && fetch.status != 'pending'">
+        <template v-if="data && data.status != 'pending'">
           <div
-            v-if="fetch.status === 'skipped'"
+            v-if="data.status === 'skipped'"
             class="ui message"
           >
             <h4 class="header">
@@ -33,7 +97,7 @@
             </p>
           </div>
           <div
-            v-else-if="fetch.status === 'finished'"
+            v-else-if="data.status === 'finished'"
             class="ui success message"
           >
             <h4 class="header">
@@ -48,7 +112,7 @@
             </p>
           </div>
           <div
-            v-else-if="fetch.status === 'errored'"
+            v-else-if="data.status === 'errored'"
             class="ui error message"
           >
             <h4 class="header">
@@ -70,7 +134,7 @@
                     </translate>
                   </td>
                   <td>
-                    {{ fetch.detail.error_code }}
+                    {{ data.detail.error_code }}
                   </td>
                 </tr>
                 <tr>
@@ -81,44 +145,44 @@
                   </td>
                   <td>
                     <translate
-                      v-if="fetch.detail.error_code === 'http' && fetch.detail.status_code"
-                      :translate-params="{status: fetch.detail.status_code}"
+                      v-if="data.detail.error_code === 'http' && data.detail.status_code"
+                      :translate-params="{status: data.detail.status_code}"
                       translate-context="*/*/Error"
                     >
                       The remote server answered with HTTP %{ status }
                     </translate>
                     <translate
-                      v-else-if="['http', 'request'].indexOf(fetch.detail.error_code) > -1"
+                      v-else-if="['http', 'request'].indexOf(data.detail.error_code) > -1"
                       translate-context="*/*/Error"
                     >
                       An HTTP error occurred while contacting the remote server
                     </translate>
                     <translate
-                      v-else-if="fetch.detail.error_code === 'timeout'"
+                      v-else-if="data.detail.error_code === 'timeout'"
                       translate-context="*/*/Error"
                     >
                       The remote server didn't respond quickly enough
                     </translate>
                     <translate
-                      v-else-if="fetch.detail.error_code === 'connection'"
+                      v-else-if="data.detail.error_code === 'connection'"
                       translate-context="*/*/Error"
                     >
                       Impossible to connect to the remote server
                     </translate>
                     <translate
-                      v-else-if="['invalid_json', 'invalid_jsonld', 'missing_jsonld_type'].indexOf(fetch.detail.error_code) > -1"
+                      v-else-if="['invalid_json', 'invalid_jsonld', 'missing_jsonld_type'].indexOf(data.detail.error_code) > -1"
                       translate-context="*/*/Error"
                     >
                       The remote server returned invalid JSON or JSON-LD data
                     </translate>
                     <translate
-                      v-else-if="fetch.detail.error_code === 'validation'"
+                      v-else-if="data.detail.error_code === 'validation'"
                       translate-context="*/*/Error"
                     >
                       Data returned by the remote server had invalid or missing attributes
                     </translate>
                     <translate
-                      v-else-if="fetch.detail.error_code === 'unhandled'"
+                      v-else-if="data.detail.error_code === 'unhandled'"
                       translate-context="*/*/Error"
                     >
                       Unknown error
@@ -136,7 +200,7 @@
           </div>
         </template>
         <div
-          v-else-if="isCreatingFetch"
+          v-else-if="isLoading"
           class="ui active inverted dimmer"
         >
           <div class="ui text loader">
@@ -146,7 +210,7 @@
           </div>
         </div>
         <div
-          v-else-if="isWaitingFetch"
+          v-else-if="isPolling"
           class="ui active inverted dimmer"
         >
           <div class="ui text loader">
@@ -175,7 +239,7 @@
           </ul>
         </div>
         <div
-          v-else-if="fetch && fetch.status === 'pending' && pollsCount >= maxPolls"
+          v-else-if="data && data.status === 'pending' && pollsCount >= MAX_POLLS"
           role="alert"
           class="ui warning message"
         >
@@ -198,7 +262,7 @@
           </translate>
         </button>
         <button
-          v-if="fetch && fetch.status === 'finished'"
+          v-if="data && data.status === 'finished'"
           class="ui confirm success button"
           @click.prevent="showModal = false; $emit('refresh')"
         >
@@ -207,69 +271,6 @@
           </translate>
         </button>
       </div>
-    </modal>
+    </semantic-modal>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import Modal from '~/components/semantic/Modal.vue'
-
-export default {
-  components: {
-    Modal
-  },
-  props: { url: { type: String, required: true } },
-  data () {
-    return {
-      fetch: null,
-      isCreatingFetch: false,
-      errors: [],
-      showModal: false,
-      isWaitingFetch: false,
-      maxPolls: 15,
-      pollsCount: 0
-    }
-  },
-  methods: {
-    createFetch () {
-      const self = this
-      this.fetch = null
-      this.pollsCount = 0
-      this.errors = []
-      this.isCreatingFetch = true
-      this.isWaitingFetch = false
-      self.showModal = true
-      axios.post(this.url).then((response) => {
-        self.isCreatingFetch = false
-        self.fetch = response.data
-        self.pollFetch()
-      }, (error) => {
-        self.isCreatingFetch = false
-        self.errors = error.backendErrors
-      })
-    },
-    pollFetch () {
-      this.isWaitingFetch = true
-      this.pollsCount += 1
-      const url = `federation/fetches/${this.fetch.id}/`
-      const self = this
-      self.showModal = true
-      axios.get(url).then((response) => {
-        self.isCreatingFetch = false
-        self.fetch = response.data
-        if (self.fetch.status === 'pending' && self.pollsCount < self.maxPolls) {
-          setTimeout(() => {
-            self.pollFetch()
-          }, 1000)
-        } else {
-          self.isWaitingFetch = false
-        }
-      }, (error) => {
-        self.errors = error.backendErrors
-        self.isWaitingFetch = false
-      })
-    }
-  }
-}
-</script>

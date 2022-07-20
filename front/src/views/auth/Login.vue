@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { RouteLocationRaw } from 'vue-router'
+
 import LoginForm from '~/components/auth/LoginForm.vue'
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
@@ -6,7 +8,7 @@ import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
 
 interface Props {
-  next?: string
+  next?: RouteLocationRaw
 }
 
 const props = withDefaults(defineProps<Props>(), {

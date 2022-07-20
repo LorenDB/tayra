@@ -6,17 +6,23 @@ import { sortBy } from 'lodash-es'
 import useLogger from '~/composables/useLogger'
 
 export interface State {
-  filters: ContentFilter[],
-  showFilterModal: boolean,
-  showReportModal: boolean,
+  filters: ContentFilter[]
+  showFilterModal: boolean
+  showReportModal: boolean
   lastUpdate: Date,
   filterModalTarget: {
-    type: null,
-    target: null
-  },
+    type: null
+    target: null | { id: string, name: string }
+  }
   reportModalTarget: {
-    type: null,
+    type: null | 'channel'
     target: null
+    typeLabel: string
+    label: string
+    _obj?: {
+      fid?: string
+      actor?: { fid: string }
+    }
   }
 }
 
@@ -44,7 +50,9 @@ const store: Module<State, RootState> = {
     },
     reportModalTarget: {
       type: null,
-      target: null
+      target: null,
+      typeLabel: '',
+      label: ''
     }
   },
   mutations: {
@@ -74,7 +82,9 @@ const store: Module<State, RootState> = {
       if (!value) {
         state.reportModalTarget = {
           type: null,
-          target: null
+          target: null,
+          typeLabel: '',
+          label: ''
         }
       }
     },
@@ -88,7 +98,9 @@ const store: Module<State, RootState> = {
       state.showReportModal = false
       state.reportModalTarget = {
         type: null,
-        target: null
+        target: null,
+        typeLabel: '',
+        label: ''
       }
     },
     deleteContentFilter (state, uuid) {

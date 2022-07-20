@@ -1,5 +1,32 @@
+<script setup lang="ts">
+import type { RouteLocationRaw } from 'vue-router'
+import type { Cover } from '~/types'
+
+import SemanticModal from '~/components/semantic/Modal.vue'
+import { ref, computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+interface Props {
+  nextRoute: RouteLocationRaw
+  message: string
+  cover: Cover
+}
+
+defineProps<Props>()
+
+const show = ref(false)
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  header: $pgettext('Popup/Title/Noun', 'Unauthenticated'),
+  login: $pgettext('*/*/Button.Label/Verb', 'Log in'),
+  signup: $pgettext('*/*/Button.Label/Verb', 'Sign up'),
+  description: $pgettext('Popup/*/Paragraph', "You don't have access!")
+}))
+</script>
+
 <template>
-  <modal v-model:show="show">
+  <semantic-modal v-model:show="show">
     <h4 class="header">
       {{ labels.header }}
     </h4>
@@ -32,7 +59,7 @@
     </div>
     <div class="actions">
       <router-link
-        :to="{path: '/login', query: { next: nextRoute }}"
+        :to="{path: '/login', query: { next: nextRoute as string }}"
         class="ui labeled icon button"
       >
         <i class="key icon" />
@@ -47,36 +74,5 @@
         {{ labels.signup }}
       </router-link>
     </div>
-  </modal>
+  </semantic-modal>
 </template>
-
-<script>
-import Modal from '~/components/semantic/Modal.vue'
-
-export default {
-  components: {
-    Modal
-  },
-  props: {
-    nextRoute: { type: String, required: true },
-    message: { type: String, required: true },
-    cover: { type: Object, required: true }
-  },
-  data () {
-    return {
-      show: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        header: this.$pgettext('Popup/Title/Noun', 'Unauthenticated'),
-        login: this.$pgettext('*/*/Button.Label/Verb', 'Log in'),
-        signup: this.$pgettext('*/*/Button.Label/Verb', 'Sign up'),
-        description: this.$pgettext('Popup/*/Paragraph', "You don't have access!")
-      }
-    }
-  }
-}
-
-</script>

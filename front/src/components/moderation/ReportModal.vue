@@ -1,8 +1,126 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import axios from 'axios'
+import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
+import { computed, ref, watchEffect } from 'vue'
+import { useStore } from '~/store'
+import { useGettext } from 'vue3-gettext'
+
+interface ReportType {
+  anonymous: boolean
+  type: string
+}
+
+const store = useStore()
+const target = computed(() => store.state.moderation.reportModalTarget)
+
+const forward = ref(false)
+const summary = ref('')
+const category = ref('')
+const submitterEmail = ref('')
+
+const reportTypes = ref([] as ReportType[])
+const allowedCategories = computed(() => {
+  if (store.state.auth.authenticated) {
+    return []
+  }
+
+  return reportTypes.value
+    .filter((type) => type.anonymous === true)
+    .map((type) => type.type)
+})
+
+const canSubmit = computed(() => store.state.auth.authenticated || allowedCategories.value.length > 0)
+
+const targetDomain = computed(() => {
+  if (!target.value._obj) {
+    return
+  }
+
+  const fid = target.value.type === 'channel' && target.value._obj.actor
+    ? target.value._obj.actor.fid
+    : target.value._obj.fid
+
+  return !fid
+    ? store.getters['instance/domain']
+    : new URL(fid).hostname
+})
+
+const isLocal = computed(() => store.getters['instance/domain'] === targetDomain.value)
+
+const errors = ref([] as string[])
+
+const show = computed({
+  get: () => store.state.moderation.showReportModal,
+  set: (value: boolean) => {
+    store.commit('moderation/showReportModal', value)
+    errors.value = []
+  }
+})
+
+const isLoading = ref(false)
+
+// TODO (wvffle): MOVE ALL use*() METHODS SOMEWHERE TO THE TOP
+const { $pgettext } = useGettext()
+
+const submit = async () => {
+  isLoading.value = true
+
+  const payload = {
+    target: { ...target.value, _obj: undefined },
+    summary: summary.value,
+    type: category.value,
+    forward: forward.value,
+    submitter_email: !store.state.auth.authenticated
+      ? submitterEmail.value
+      : undefined
+  }
+
+  try {
+    const response = await axios.post('moderation/reports/', payload)
+    show.value = false
+
+    store.commit('moderation/contentFilter', response.data)
+    store.commit('ui/addMessage', {
+      content: $pgettext('*/Moderation/Message', 'Report successfully submitted, thank you'),
+      date: new Date()
+    })
+
+    summary.value = ''
+    category.value = ''
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = true
+}
+
+const isLoadingReportTypes = ref(false)
+watchEffect(async () => {
+  if (!store.state.moderation.showReportModal || store.state.auth.authenticated) {
+    return
+  }
+
+  isLoadingReportTypes.value = true
+
+  try {
+    const response = await axios.get('instance/nodeinfo/2.0/')
+    reportTypes.value = response.data.metadata.reportTypes ?? []
+  } catch (error) {
+    store.commit('ui/addMessage', {
+      content: $pgettext('*/Moderation/Message', 'Cannot fetch Node Info: %{ error }', { error: `${error}` }),
+      date: new Date()
+    })
+  }
+
+  isLoadingReportTypes.value = false
+})
+</script>
+
 <template>
-  <modal
-    v-model:show="showRef"
-    @update:show="update"
-  >
+  <semantic-modal v-model:show="show">
     <h2
       v-if="target"
       class="ui header"
@@ -150,137 +268,5 @@
         </translate>
       </button>
     </div>
-  </modal>
+  </semantic-modal>
 </template>
-
-<script>
-import axios from 'axios'
-import { mapState } from 'vuex'
-import { computed } from 'vue'
-import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
-import Modal from '~/components/semantic/Modal.vue'
-import { useStore } from '~/store'
-
-function urlDomain (data) {
-  const a = document.createElement('a')
-  a.href = data
-  return a.hostname
-}
-
-export default {
-  components: {
-    ReportCategoryDropdown,
-    Modal
-  },
-  setup () {
-    const store = useStore()
-    const showRef = computed(() => store.state.moderation.showReportModal)
-    return { showRef }
-  },
-  data () {
-    return {
-      formKey: String(new Date()),
-      errors: [],
-      isLoading: false,
-      isLoadingReportTypes: false,
-      summary: '',
-      submitterEmail: '',
-      category: null,
-      reportTypes: [],
-      forward: false
-    }
-  },
-  computed: {
-    ...mapState({
-      target: state => state.moderation.reportModalTarget
-    }),
-    allowedCategories () {
-      if (this.$store.state.auth.authenticated) {
-        return []
-      }
-      return this.reportTypes.filter((t) => {
-        return t.anonymous === true
-      }).map((c) => {
-        return c.type
-      })
-    },
-    canSubmit () {
-      if (this.$store.state.auth.authenticated) {
-        return true
-      }
-
-      return this.allowedCategories.length > 0
-    },
-    targetDomain () {
-      if (!this.target._obj) {
-        return
-      }
-      let fid = this.target._obj.fid
-      if (this.target.type === 'channel' && this.target._obj.actor) {
-        fid = this.target._obj.actor.fid
-      }
-      if (!fid) {
-        return this.$store.getters['instance/domain']
-      }
-      return urlDomain(fid)
-    },
-    isLocal () {
-      return this.$store.getters['instance/domain'] === this.targetDomain
-    }
-  },
-  watch: {
-    '$store.state.moderation.showReportModal': function (v) {
-      if (!v || this.$store.state.auth.authenticated) {
-        return
-      }
-
-      const self = this
-      self.isLoadingReportTypes = true
-      axios.get('instance/nodeinfo/2.0/').then(response => {
-        self.isLoadingReportTypes = false
-        self.reportTypes = response.data.metadata.reportTypes || []
-      }, error => {
-        self.isLoadingReportTypes = false
-        self.$store.commit('ui/addMessage', {
-          content: 'Cannot fetch Node Info: ' + error,
-          date: new Date()
-        })
-      })
-    }
-  },
-  methods: {
-    update (v) {
-      this.$store.commit('moderation/showReportModal', v)
-      this.errors = []
-    },
-    submit () {
-      const self = this
-      self.isLoading = true
-      const payload = {
-        target: { ...this.target, _obj: null },
-        summary: this.summary,
-        type: this.category,
-        forward: this.forward
-      }
-      if (!this.$store.state.auth.authenticated) {
-        payload.submitter_email = this.submitterEmail
-      }
-      return axios.post('moderation/reports/', payload).then(response => {
-        self.update(false)
-        self.isLoading = false
-        const msg = this.$pgettext('*/Moderation/Message', 'Report successfully submitted, thank you')
-        self.$store.commit('moderation/contentFilter', response.data)
-        self.$store.commit('ui/addMessage', {
-          content: msg,
-          date: new Date()
-        })
-        self.summary = ''
-        self.category = ''
-      }, error => {
-        self.errors = error.backendErrors
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>

@@ -1,3 +1,123 @@
+<script setup lang="ts">
+// TODO (wvffle): SORT IMPORTS LIKE SO EVERYWHERE
+import type { Track } from '~/types'
+
+import axios from 'axios'
+import $ from 'jquery'
+
+import { clone } from 'lodash-es'
+import { ref, onMounted, watch } from 'vue'
+import { useCurrentElement } from '@vueuse/core'
+import { useStore } from '~/store'
+
+import SemanticModal from '~/components/semantic/Modal.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
+
+interface Props {
+  index: number
+
+  filter: {
+    type: string
+    label: string
+    fields: { 
+      name: string
+      placeholder: string
+      type: 'list'
+      subtype: 'number'
+      autocomplete?: string 
+      autocomplete_qs: string
+      autocomplete_fields: {
+        remoteValues?: unknown
+      }
+    }[]
+  }
+
+  config: {
+    not: boolean
+    names: string[]
+  }
+}
+
+type Filter = { candidates: { count: number, sample: Track[] } }
+type ResponseType = { filters: Array<Filter> }
+
+const emit = defineEmits(['update-config', 'delete'])
+const props = defineProps<Props>()
+
+const store = useStore()
+
+const checkResult = ref<Filter | null>(null)
+const showCandidadesModal = ref(false)
+const exclude = ref(props.config.not)
+
+const el = useCurrentElement()
+onMounted(() => {
+  for (const field of props.filter.fields) {
+    const selector = ['.dropdown']
+
+    if (field.type === 'list') {
+      selector.push('.multiple')
+    }
+
+    const settings: SemanticUI.DropdownSettings = {
+      onChange (value) {
+        value = $(this).dropdown('get value').split(',')
+
+        if (field.type === 'list' && field.subtype === 'number') {
+          value = value.map((number: string) => parseInt(number))
+        }
+
+        value.value = value
+        emit('update-config', props.index, field.name, value)
+        fetchCandidates()
+      }
+    }
+
+    if (field.autocomplete) {
+      selector.push('.autocomplete')
+      // @ts-expect-error custom field?
+      settings.fields = field.autocomplete_fields
+      settings.minCharacters = 1
+      settings.apiSettings = {
+        url: store.getters['instance/absoluteUrl'](`${field.autocomplete}?${field.autocomplete_qs}`),
+        beforeXHR (xhrObject) {
+          if (store.state.auth.oauth.accessToken) {
+            xhrObject.setRequestHeader('Authorization', store.getters['auth/header'])
+          }
+
+          return xhrObject
+        },
+        onResponse (initialResponse) {
+          return !settings.fields?.remoteValues
+            ? { results: initialResponse.results }
+            : initialResponse
+        }
+      }
+    }
+
+    $(el.value).find(selector.join('')).dropdown(settings)
+  }
+})
+
+const fetchCandidates = async () => {
+  const params = {
+    filters: [{
+      ...clone(props.config),
+      type: props.filter.type,
+    }]
+  }
+
+  try {
+    const response = await axios.post('radios/radios/validate/', params)
+    checkResult.value = (response.data as ResponseType).filters[0]
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+}
+
+watch(exclude, fetchCandidates)
+</script>
+
 <template>
   <tr>
     <td>{{ filter.label }}</td>
@@ -66,7 +186,7 @@
       >
         {{ checkResult.candidates.count }} tracks matching filter
       </a>
-      <modal
+      <semantic-modal
         v-if="checkResult"
         v-model:show="showCandidadesModal"
       >
@@ -90,7 +210,7 @@
             </translate>
           </button>
         </div>
-      </modal>
+      </semantic-modal>
     </td>
     <td>
       <button
@@ -104,90 +224,3 @@
     </td>
   </tr>
 </template>
-<script>
-import axios from 'axios'
-import $ from 'jquery'
-import { clone } from 'lodash-es'
-
-import Modal from '~/components/semantic/Modal.vue'
-import TrackTable from '~/components/audio/track/Table.vue'
-
-export default {
-  components: {
-    TrackTable,
-    Modal
-  },
-  props: {
-    filter: { type: Object, required: true },
-    config: { type: Object, required: true },
-    index: { type: Number, required: true }
-  },
-  data: function () {
-    return {
-      checkResult: null,
-      showCandidadesModal: false,
-      exclude: this.config.not
-    }
-  },
-  watch: {
-    exclude: function () {
-      this.fetchCandidates()
-    }
-  },
-  mounted: function () {
-    const self = this
-    this.filter.fields.forEach(f => {
-      const selector = ['.dropdown']
-      const settings = {
-        onChange: function (value, text, $choice) {
-          value = $(this).dropdown('get value').split(',')
-          if (f.type === 'list' && f.subtype === 'number') {
-            value = value.map(e => {
-              return parseInt(e)
-            })
-          }
-          self.value = value
-          self.$emit('update-config', self.index, f.name, value)
-          self.fetchCandidates()
-        }
-      }
-      if (f.type === 'list') {
-        selector.push('.multiple')
-      }
-      if (f.autocomplete) {
-        selector.push('.autocomplete')
-        settings.fields = f.autocomplete_fields
-        settings.minCharacters = 1
-        settings.apiSettings = {
-          url: self.$store.getters['instance/absoluteUrl'](f.autocomplete + '?' + f.autocomplete_qs),
-          beforeXHR: function (xhrObject) {
-            if (self.$store.state.auth.oauth.accessToken) {
-              xhrObject.setRequestHeader('Authorization', self.$store.getters['auth/header'])
-            }
-            return xhrObject
-          },
-          onResponse: function (initialResponse) {
-            if (settings.fields.remoteValues) {
-              return initialResponse
-            }
-            return { results: initialResponse.results }
-          }
-        }
-      }
-      $(self.$el).find(selector.join('')).dropdown(settings)
-    })
-  },
-  methods: {
-    fetchCandidates: function () {
-      const self = this
-      const url = 'radios/radios/validate/'
-      let final = clone(this.config)
-      final.type = this.filter.type
-      final = { filters: [final] }
-      axios.post(url, final).then((response) => {
-        self.checkResult = response.data.filters[0]
-      })
-    }
-  }
-}
-</script>

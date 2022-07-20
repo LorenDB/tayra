@@ -1,7 +1,50 @@
+<script setup lang="ts">
+import SemanticModal from '~/components/semantic/Modal.vue'
+import useThemeList from '~/composables/useThemeList'
+import useTheme from '~/composables/useTheme'
+import { useVModel } from '@vueuse/core'
+import { computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+interface Props {
+  show: boolean
+}
+
+const emit = defineEmits(['update:show', 'showThemeModalEvent', 'showLanguageModalEvent'])
+const props = defineProps<Props>()
+
+const show = useVModel(props, 'show', emit)
+
+const theme = useTheme()
+const themes = useThemeList()
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  header: $pgettext('Popup/Title/Noun', 'Options'),
+  profile: $pgettext('*/*/*/Noun', 'Profile'),
+  settings: $pgettext('*/*/*/Noun', 'Settings'),
+  logout: $pgettext('Sidebar/Login/List item.Link/Verb', 'Log out'),
+  about: $pgettext('Sidebar/About/List item.Link', 'About'),
+  shortcuts: $pgettext('*/*/*/Noun', 'Keyboard shortcuts'),
+  support: $pgettext('Sidebar/*/Listitem.Link', 'Help'),
+  forum: $pgettext('Sidebar/*/Listitem.Link', 'Forum'),
+  docs: $pgettext('Sidebar/*/Listitem.Link', 'Documentation'),
+  help: $pgettext('Sidebar/*/Listitem.Link', 'Help'),
+  language: $pgettext('Sidebar/Settings/Dropdown.Label/Short, Verb', 'Language'),
+  theme: $pgettext('Sidebar/Settings/Dropdown.Label/Short, Verb', 'Theme'),
+  chat: $pgettext('Sidebar/*/Listitem.Link', 'Chat room'),
+  git: $pgettext('Sidebar/*/List item.Link', 'Issue tracker'),
+  login: $pgettext('*/*/Button.Label/Verb', 'Log in'),
+  signup: $pgettext('*/*/Button.Label/Verb', 'Sign up'),
+  notifications: $pgettext('*/Notifications/*', 'Notifications'),
+  useOtherInstance: $pgettext('Sidebar/*/List item.Link', 'Use another instance')
+}))
+</script>
+
 <template>
   <!-- TODO make generic and move to semantic/modal? -->
-  <modal
-    v-model:show="showRef"
+  <semantic-modal
+    v-model:show="show"
     :scrolling="true"
     :fullscreen="false"
   >
@@ -84,7 +127,7 @@
                 class="column"
                 role="button"
                 @click="navigate"
-                @keypress.enter="navigate"
+                @keypress.enter="navigate()"
               >
                 <i class="user-modal list-icon bell icon" />
                 <span class="user-modal list-item">{{ labels.notifications }}</span>
@@ -101,7 +144,7 @@
                 class="column"
                 role="button"
                 @click="navigate"
-                @keypress.enter="navigate"
+                @keypress.enter="navigate()"
               >
                 <i class="user-modal list-icon cog icon" />
                 <span class="user-modal list-item">{{ labels.settings }}</span>
@@ -140,7 +183,7 @@
               class="column"
               role="button"
               @click="navigate"
-              @keypress.enter="navigate"
+              @keypress.enter="navigate()"
             >
               <i class="user-modal list-icon question circle outline icon" />
               <span class="user-modal list-item">{{ labels.about }}</span>
@@ -159,7 +202,7 @@
             class="column"
             role="button"
             @click="navigate"
-            @keypress.enter="navigate"
+            @keypress.enter="navigate()"
           >
             <i class="user-modal list-icon sign out alternate icon" />
             <span class="user-modal list-item">{{ labels.logout }}</span>
@@ -175,7 +218,7 @@
             class="column"
             role="button"
             @click="navigate"
-            @keypress.enter="navigate"
+            @keypress.enter="navigate()"
           >
             <i class="user-modal list-icon sign in alternate icon" />
             <span class="user-modal list-item">{{ labels.login }}</span>
@@ -191,7 +234,7 @@
             class="column"
             role="button"
             @click="navigate"
-            @keypress.enter="navigate"
+            @keypress.enter="navigate()"
           >
             <i class="user-modal list-item user icon" />
             <span class="user-modal list-item">{{ labels.signup }}</span>
@@ -199,70 +242,8 @@
         </router-link>
       </div>
     </div>
-  </modal>
+  </semantic-modal>
 </template>
-
-<script>
-import Modal from '~/components/semantic/Modal.vue'
-import { mapGetters } from 'vuex'
-import useThemeList from '~/composables/useThemeList'
-import useTheme from '~/composables/useTheme'
-import { useVModel } from '@vueuse/core'
-
-export default {
-  components: {
-    Modal
-  },
-  props: {
-    show: { type: Boolean, required: true }
-  },
-  setup (props) {
-    // TODO (wvffle): Add defineEmits when rewriting to <script setup>
-    const showRef = useVModel(props, 'show'/*, emit */)
-    return {
-      showRef,
-      theme: useTheme(),
-      themes: useThemeList()
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        header: this.$pgettext('Popup/Title/Noun', 'Options'),
-        profile: this.$pgettext('*/*/*/Noun', 'Profile'),
-        settings: this.$pgettext('*/*/*/Noun', 'Settings'),
-        logout: this.$pgettext('Sidebar/Login/List item.Link/Verb', 'Log out'),
-        about: this.$pgettext('Sidebar/About/List item.Link', 'About'),
-        shortcuts: this.$pgettext('*/*/*/Noun', 'Keyboard shortcuts'),
-        support: this.$pgettext('Sidebar/*/Listitem.Link', 'Help'),
-        forum: this.$pgettext('Sidebar/*/Listitem.Link', 'Forum'),
-        docs: this.$pgettext('Sidebar/*/Listitem.Link', 'Documentation'),
-        help: this.$pgettext('Sidebar/*/Listitem.Link', 'Help'),
-        language: this.$pgettext(
-          'Sidebar/Settings/Dropdown.Label/Short, Verb',
-          'Language'
-        ),
-        theme: this.$pgettext(
-          'Sidebar/Settings/Dropdown.Label/Short, Verb',
-          'Theme'
-        ),
-        chat: this.$pgettext('Sidebar/*/Listitem.Link', 'Chat room'),
-        git: this.$pgettext('Sidebar/*/List item.Link', 'Issue tracker'),
-        login: this.$pgettext('*/*/Button.Label/Verb', 'Log in'),
-        signup: this.$pgettext('*/*/Button.Label/Verb', 'Sign up'),
-        notifications: this.$pgettext('*/Notifications/*', 'Notifications'),
-        useOtherInstance: this.$pgettext(
-          'Sidebar/*/List item.Link',
-          'Use another instance'
-        )
-      }
-    },
-    ...mapGetters({
-      additionalNotifications: 'ui/additionalNotifications'
-    })
-  }
-}
-</script>
 
 <style>
 .action-hint {

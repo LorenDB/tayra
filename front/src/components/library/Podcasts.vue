@@ -9,7 +9,7 @@ import $ from 'jquery'
 import ArtistCard from '~/components/audio/artist/Card.vue'
 import Pagination from '~/components/vui/Pagination.vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
-import Modal from '~/components/semantic/Modal.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
 import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
 import useLogger from '~/composables/useLogger'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
@@ -271,7 +271,7 @@ const labels = computed(() => ({
         />
       </div>
     </section>
-    <modal
+    <semantic-modal
       v-model:show="showSubscribeModal"
       class="tiny"
       :fullscreen="false"
@@ -310,6 +310,6 @@ const labels = computed(() => ({
           </translate>
         </button>
       </div>
-    </modal>
+    </semantic-modal>
   </main>
 </template>

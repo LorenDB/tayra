@@ -1,13 +1,70 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import axios from 'axios'
+
+import { computed, ref } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+
+import SemanticModal from '~/components/semantic/Modal.vue'
+import useLogger from '~/composables/useLogger'
+
+
+const logger = useLogger()
+const { $pgettext } = useGettext()
+
+const store = useStore()
+const show = computed({
+  get: () => store.state.moderation.showFilterModal,
+  set: (value) => {
+    store.commit('moderation/showFilterModal', value)
+    errors.value = []
+  }
+})
+
+const type = computed(() => store.state.moderation.filterModalTarget.type)
+const target = computed(() => store.state.moderation.filterModalTarget.target)
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+
+const hide = async () => {
+  isLoading.value = true
+
+  const payload = {
+    target: {
+      type: type.value,
+      id: target.value?.id
+    }
+  }
+
+  try {
+    const response = await axios.post('moderation/content-filters/', payload)
+    logger.info(`Successfully hidden ${type.value} ${target.value?.id}`)
+    show.value = false
+    store.state.moderation.lastUpdate = new Date()
+    store.commit('moderation/contentFilter', response.data)
+    store.commit('ui/addMessage', {
+      content: $pgettext('*/Moderation/Message', 'Content filter successfully added'),
+      date: new Date()
+    })
+  } catch (error) {
+    logger.error(`Error while hiding ${type.value} ${target.value?.id}`)
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
-  <modal
-    v-model:show="showRef"
-    @update:show="update"
-  >
+  <semantic-modal v-model:show="show">
     <h4 class="header">
       <translate
         v-if="type === 'artist'"
         translate-context="Popup/Moderation/Title/Verb"
-        :translate-params="{name: target.name}"
+        :translate-params="{name: target?.name}"
       >
         Do you want to hide content from artist "%{ name }"?
       </translate>
@@ -84,73 +141,5 @@
         </translate>
       </button>
     </div>
-  </modal>
+  </semantic-modal>
 </template>
-
-<script>
-import axios from 'axios'
-import { mapState } from 'vuex'
-import { computed } from 'vue'
-
-import Modal from '~/components/semantic/Modal.vue'
-import useLogger from '~/composables/useLogger'
-import { useStore } from '~/store'
-
-const logger = useLogger()
-
-export default {
-  components: {
-    Modal
-  },
-  setup () {
-    const store = useStore()
-    const showRef = computed(() => store.state.moderation.showFilterModal)
-    return { showRef }
-  },
-  data () {
-    return {
-      formKey: String(new Date()),
-      errors: [],
-      isLoading: false
-    }
-  },
-  computed: {
-    ...mapState({
-      type: state => state.moderation.filterModalTarget.type,
-      target: state => state.moderation.filterModalTarget.target
-    })
-  },
-  methods: {
-    update (v) {
-      this.$store.commit('moderation/showFilterModal', v)
-      this.errors.length = 0
-    },
-    hide () {
-      const self = this
-      self.isLoading = true
-      const payload = {
-        target: {
-          type: this.type,
-          id: this.target.id
-        }
-      }
-      return axios.post('moderation/content-filters/', payload).then(response => {
-        logger.info('Successfully added track to playlist')
-        self.update(false)
-        self.$store.moderation.state.lastUpdate = new Date()
-        self.isLoading = false
-        const msg = this.$pgettext('*/Moderation/Message', 'Content filter successfully added')
-        self.$store.commit('moderation/contentFilter', response.data)
-        self.$store.commit('ui/addMessage', {
-          content: msg,
-          date: new Date()
-        })
-      }, error => {
-        logger.error(`Error while hiding ${self.type} ${self.target.id}`)
-        self.errors = error.backendErrors
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>

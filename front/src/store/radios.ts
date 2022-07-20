@@ -11,9 +11,9 @@ export interface State {
 }
 
 export interface ObjectId {
-    username: string
-    fullUsername: string
-  }
+  username: string
+  fullUsername: string
+}
 
 export interface CurrentRadio {
   clientOnly: boolean
@@ -112,7 +112,7 @@ const store: Module<State, RootState> = {
       commit('current', null)
       commit('running', false)
     },
-    populateQueue ({ commit, rootState, state, dispatch }, playNow) {
+    async populateQueue ({ commit, rootState, state, dispatch }, playNow) {
       if (!state.running) {
         return
       }
@@ -127,21 +127,22 @@ const store: Module<State, RootState> = {
         return CLIENT_RADIOS[state.current.type].populateQueue({ current: state.current, dispatch, playNow })
       }
 
-      return axios.post('radios/tracks/', params).then((response) => {
+      try {
+        const response = await axios.post('radios/tracks/', params)
+
         logger.info('Adding track to queue from radio')
-        const append = dispatch('queue/append', { track: response.data.track }, { root: true })
+        await dispatch('queue/append', { track: response.data.track }, { root: true })
+
         if (playNow) {
-          append.then(() => {
-            dispatch('queue/last', null, { root: true })
-          })
+          await dispatch('queue/last', null, { root: true })
+          await dispatch('player/resumePlayback', null, { root: true })
         }
-      }, () => {
-        logger.error('Error while adding track to queue from radio')
+      } catch (error) {
+        logger.error('Error while adding track to queue from radio', error)
         commit('reset')
-      })
+      }
     }
   }
-
 }
 
 export default store
