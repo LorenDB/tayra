@@ -81,7 +81,7 @@ class Channel(models.Model):
             return self.actor.fid
 
     @property
-    def is_local(self):
+    def is_local(self) -> bool:
         return self.actor.is_local
 
     @property

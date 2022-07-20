@@ -216,7 +216,7 @@ def test_channel_serializer_representation(factories, to_api_date):
     channel = factories["audio.Channel"](artist__description=content)
     setattr(channel, "_downloads_count", 12)
     expected = {
-        "artist": music_serializers.serialize_artist_simple(channel.artist),
+        "artist": music_serializers.SimpleArtistSerializer(channel.artist).data,
         "uuid": str(channel.uuid),
         "creation_date": to_api_date(channel.creation_date),
         "actor": federation_serializers.APIActorSerializer(channel.actor).data,
@@ -240,7 +240,7 @@ def test_channel_serializer_external_representation(factories, to_api_date):
     channel = factories["audio.Channel"](artist__description=content, external=True)
 
     expected = {
-        "artist": music_serializers.serialize_artist_simple(channel.artist),
+        "artist": music_serializers.SimpleArtistSerializer(channel.artist).data,
         "uuid": str(channel.uuid),
         "creation_date": to_api_date(channel.creation_date),
         "actor": None,

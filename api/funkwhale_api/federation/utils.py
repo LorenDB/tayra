@@ -139,7 +139,7 @@ def local_qs(queryset, url_field="fid", include=True):
     return queryset.filter(query)
 
 
-def is_local(url):
+def is_local(url) -> bool:
     if not url:
         return True
 

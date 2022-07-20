@@ -28,10 +28,13 @@ from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.moderation import mrf
 from funkwhale_api.music import models as music_models
-from funkwhale_api.music import serializers as music_serializers
+from funkwhale_api.music.serializers import SimpleArtistSerializer, COVER_WRITE_FIELD
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.tags import serializers as tags_serializers
 from funkwhale_api.users import serializers as users_serializers
+
+from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.types import OpenApiTypes
 
 from . import categories
 from . import models
@@ -84,7 +87,7 @@ class ChannelCreateSerializer(serializers.Serializer):
         choices=music_models.ARTIST_CONTENT_CATEGORY_CHOICES
     )
     metadata = serializers.DictField(required=False)
-    cover = music_serializers.COVER_WRITE_FIELD
+    cover = COVER_WRITE_FIELD
 
     def validate(self, validated_data):
         existing_channels = self.context["actor"].owned_channels.count()
@@ -163,7 +166,7 @@ class ChannelUpdateSerializer(serializers.Serializer):
         choices=music_models.ARTIST_CONTENT_CATEGORY_CHOICES
     )
     metadata = serializers.DictField(required=False)
-    cover = music_serializers.COVER_WRITE_FIELD
+    cover = COVER_WRITE_FIELD
 
     def validate(self, validated_data):
         validated_data = super().validate(validated_data)
@@ -234,7 +237,7 @@ class ChannelUpdateSerializer(serializers.Serializer):
 
 
 class ChannelSerializer(serializers.ModelSerializer):
-    artist = serializers.SerializerMethodField()
+    artist = SimpleArtistSerializer()
     actor = serializers.SerializerMethodField()
     downloads_count = serializers.SerializerMethodField()
     attributed_to = federation_serializers.APIActorSerializer()
@@ -255,26 +258,25 @@ class ChannelSerializer(serializers.ModelSerializer):
             "downloads_count",
         ]
 
-    def get_artist(self, obj):
-        return music_serializers.serialize_artist_simple(obj.artist)
-
     def to_representation(self, obj):
         data = super().to_representation(obj)
         if self.context.get("subscriptions_count"):
             data["subscriptions_count"] = self.get_subscriptions_count(obj)
         return data
 
-    def get_subscriptions_count(self, obj):
+    def get_subscriptions_count(self, obj) -> int:
         return obj.actor.received_follows.exclude(approved=False).count()
 
-    def get_downloads_count(self, obj):
+    def get_downloads_count(self, obj) -> int:
         return getattr(obj, "_downloads_count", None) or 0
 
+    @extend_schema_field(federation_serializers.APIActorSerializer)
     def get_actor(self, obj):
         if obj.attributed_to == actors.get_service_actor():
             return None
         return federation_serializers.APIActorSerializer(obj.actor).data
 
+    @extend_schema_field(OpenApiTypes.URI)
     def get_url(self, obj):
         return obj.actor.url
 

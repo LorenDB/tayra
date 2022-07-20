@@ -21,6 +21,9 @@ from funkwhale_api.moderation import models as moderation_models
 from funkwhale_api.moderation import tasks as moderation_tasks
 from funkwhale_api.moderation import utils as moderation_utils
 
+from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.types import OpenApiTypes
+
 from . import adapters
 from . import models
 from . import authentication as users_authentication
@@ -205,6 +208,7 @@ class UserReadSerializer(serializers.ModelSerializer):
     def get_permissions(self, o):
         return o.get_permissions()
 
+    @extend_schema_field(OpenApiTypes.STR)
     def get_full_username(self, o):
         if o.actor:
             return o.actor.full_username

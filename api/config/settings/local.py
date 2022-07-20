@@ -132,6 +132,12 @@ SPECTACULAR_SETTINGS = {
     "OAUTH2_AUTHORIZATION_URL": "/authorize",
     "OAUTH2_TOKEN_URL": "/api/v1/oauth/token/",
     "PREPROCESSING_HOOKS": ["config.schema.custom_preprocessing_hook"],
+    "ENUM_NAME_OVERRIDES": {
+        "FederationChoiceEnum": "funkwhale_api.federation.models.TYPE_CHOICES",
+        "ReportTypeEnum": "funkwhale_api.moderation.models.REPORT_TYPES",
+        "PrivacyLevelEnum": "funkwhale_api.common.fields.PRIVACY_LEVEL_CHOICES",
+        "LibraryPrivacyLevelEnum": "funkwhale_api.music.models.LIBRARY_PRIVACY_LEVEL_CHOICES",
+    },
 }
 
 if env.bool("WEAK_PASSWORDS", default=False):

@@ -48,7 +48,7 @@ class FederationMixin(models.Model):
         abstract = True
 
     @property
-    def is_local(self):
+    def is_local(self) -> bool:
         return federation_utils.is_local(self.fid)
 
     @property
@@ -172,7 +172,7 @@ class Domain(models.Model):
         return data
 
     @property
-    def is_local(self):
+    def is_local(self) -> bool:
         return self.name == settings.FEDERATION_HOSTNAME
 
 
@@ -232,14 +232,14 @@ class Actor(models.Model):
         return "{}#main-key".format(self.fid)
 
     @property
-    def full_username(self):
+    def full_username(self) -> str:
         return "{}@{}".format(self.preferred_username, self.domain_id)
 
     def __str__(self):
         return "{}@{}".format(self.preferred_username, self.domain_id)
 
     @property
-    def is_local(self):
+    def is_local(self) -> bool:
         return self.domain_id == settings.FEDERATION_HOSTNAME
 
     def get_approved_followers(self):

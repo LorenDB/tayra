@@ -5,6 +5,8 @@ from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.music.serializers import TrackActivitySerializer, TrackSerializer
 from funkwhale_api.users.serializers import UserActivitySerializer, UserBasicSerializer
 
+from drf_spectacular.utils import extend_schema_field
+
 from . import models
 
 
@@ -39,6 +41,7 @@ class ListeningSerializer(serializers.ModelSerializer):
 
         return super().create(validated_data)
 
+    @extend_schema_field(federation_serializers.APIActorSerializer)
     def get_actor(self, obj):
         actor = obj.user.actor
         if actor:

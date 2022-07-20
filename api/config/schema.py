@@ -1,4 +1,5 @@
 from drf_spectacular.contrib.django_oauth_toolkit import OpenApiAuthenticationExtension
+from drf_spectacular.plumbing import build_bearer_security_scheme_object
 import os
 
 
@@ -28,11 +29,24 @@ class CustomOAuthExt(OpenApiAuthenticationExtension):
         return {"type": "oauth2", "flows": flows}
 
 
+class CustomApplicationTokenExt(OpenApiAuthenticationExtension):
+    target_class = "funkwhale_api.common.authentication.ApplicationTokenAuthentication"
+    name = "ApplicationToken"
+
+    def get_security_definition(self, auto_schema):
+        return build_bearer_security_scheme_object(
+            header_name="Authorization",
+            token_prefix="Bearer",
+        )
+
+
 def custom_preprocessing_hook(endpoints):
     filtered = []
     # your modifications to the list of operations that are exposed in the schema
-    api_type = os.environ["API_TYPE"]
+    api_type = os.environ.get("API_TYPE", "v1")
     for (path, path_regex, method, callback) in endpoints:
+        if path.startswith("/api/v1/providers"):
+            continue
         if path.startswith(f"/api/{api_type}"):
             filtered.append((path, path_regex, method, callback))
     return filtered

@@ -13,6 +13,9 @@ from funkwhale_api.common import serializers as common_serializers
 from funkwhale_api.music import models as music_models
 from funkwhale_api.users import serializers as users_serializers
 
+from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.types import OpenApiTypes
+
 from . import filters
 from . import models
 from . import serializers as federation_serializers
@@ -62,15 +65,18 @@ class LibrarySerializer(serializers.ModelSerializer):
             "latest_scan",
         ]
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_uploads_count(self, o):
         return max(getattr(o, "_uploads_count", 0), o.uploads_count)
 
+    @extend_schema_field(NestedLibraryFollowSerializer)
     def get_follow(self, o):
         try:
             return NestedLibraryFollowSerializer(o._follows[0]).data
         except (AttributeError, IndexError):
             return None
 
+    @extend_schema_field(LibraryScanSerializer)
     def get_latest_scan(self, o):
         scan = o.scans.order_by("-creation_date").first()
         if scan:
@@ -95,6 +101,7 @@ class LibraryFollowSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("You are already following this library")
         return v
 
+    @extend_schema_field(federation_serializers.APIActorSerializer)
     def get_actor(self, o):
         return federation_serializers.APIActorSerializer(o.actor).data
 
@@ -135,14 +142,17 @@ class ActivitySerializer(serializers.ModelSerializer):
             "type",
         ]
 
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_object(self, o):
         if o.object:
             return serialize_generic_relation(o, o.object)
 
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_related_object(self, o):
         if o.related_object:
             return serialize_generic_relation(o, o.related_object)
 
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_target(self, o):
         if o.target:
             return serialize_generic_relation(o, o.target)
@@ -268,6 +278,7 @@ class FullActorSerializer(serializers.Serializer):
     summary = common_serializers.ContentSerializer(source="summary_obj")
     icon = common_serializers.AttachmentSerializer(source="attachment_icon")
 
+    @extend_schema_field(OpenApiTypes.BOOL)
     def get_is_channel(self, o):
         try:
             return bool(o.channel)

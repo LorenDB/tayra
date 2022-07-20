@@ -5,6 +5,9 @@ from funkwhale_api.music.models import Track
 from funkwhale_api.music.serializers import TrackSerializer
 from funkwhale_api.users.serializers import UserBasicSerializer
 
+from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.types import OpenApiTypes
+
 from . import models
 
 
@@ -46,31 +49,34 @@ class PlaylistSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ["id", "modification_date", "creation_date"]
 
+    @extend_schema_field(federation_serializers.APIActorSerializer)
     def get_actor(self, obj):
         actor = obj.user.actor
         if actor:
             return federation_serializers.APIActorSerializer(actor).data
 
+    @extend_schema_field(OpenApiTypes.BOOL)
     def get_is_playable(self, obj):
         try:
             return bool(obj.playable_plts)
         except AttributeError:
             return None
 
-    def get_tracks_count(self, obj):
+    def get_tracks_count(self, obj) -> int:
         try:
             return obj.tracks_count
         except AttributeError:
             # no annotation?
             return obj.playlist_tracks.count()
 
-    def get_duration(self, obj):
+    def get_duration(self, obj) -> int:
         try:
             return obj.duration
         except AttributeError:
             # no annotation?
             return 0
 
+    @extend_schema_field({"type": "array", "items": {"type": "uri"}})
     def get_album_covers(self, obj):
         try:
             plts = obj.plts_for_cover

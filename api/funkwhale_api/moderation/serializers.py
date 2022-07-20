@@ -24,7 +24,7 @@ class FilteredArtistSerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
-class TargetSerializer(serializers.Serializer):
+class ModerationTargetSerializer(serializers.Serializer):
     type = serializers.ChoiceField(choices=["artist"])
     id = serializers.CharField()
 
@@ -44,7 +44,7 @@ class TargetSerializer(serializers.Serializer):
 
 
 class UserFilterSerializer(serializers.ModelSerializer):
-    target = TargetSerializer()
+    target = ModerationTargetSerializer()
 
     class Meta:
         model = models.UserFilter

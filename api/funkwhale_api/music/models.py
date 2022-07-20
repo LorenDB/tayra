@@ -137,7 +137,7 @@ class APIModelMixin(models.Model):
         return super().save(**kwargs)
 
     @property
-    def is_local(self):
+    def is_local(self) -> bool:
         return federation_utils.is_local(self.fid)
 
     @property
@@ -251,7 +251,7 @@ class Artist(APIModelMixin):
         db_index=True,
         default="music",
         choices=ARTIST_CONTENT_CATEGORY_CHOICES,
-        null=True,
+        null=False,
     )
     modification_date = models.DateTimeField(default=timezone.now, db_index=True)
     api = musicbrainz.api.artists
@@ -652,7 +652,7 @@ class Track(APIModelMixin):
         )
 
     @property
-    def listen_url(self):
+    def listen_url(self) -> str:
         # Not using reverse because this is slow
         return "/api/v1/listen/{}/".format(self.uuid)
 
@@ -782,7 +782,7 @@ class Upload(models.Model):
     objects = UploadQuerySet.as_manager()
 
     @property
-    def is_local(self):
+    def is_local(self) -> bool:
         return federation_utils.is_local(self.fid)
 
     @property
@@ -834,7 +834,7 @@ class Upload(models.Model):
         )
 
     @property
-    def filename(self):
+    def filename(self) -> str:
         return "{}.{}".format(self.track.full_name, self.extension)
 
     @property
@@ -910,10 +910,10 @@ class Upload(models.Model):
         return metadata.Metadata(audio_file)
 
     @property
-    def listen_url(self):
+    def listen_url(self) -> str:
         return self.track.listen_url + "?upload={}".format(self.uuid)
 
-    def get_listen_url(self, to=None, download=True):
+    def get_listen_url(self, to=None, download=True) -> str:
         url = self.listen_url
         if to:
             url += "&to={}".format(to)
@@ -1019,7 +1019,7 @@ class UploadVersion(models.Model):
         unique_together = ("upload", "mimetype", "bitrate")
 
     @property
-    def filename(self):
+    def filename(self) -> str:
         try:
             return (
                 self.upload.track.full_name
@@ -1211,15 +1211,15 @@ class Library(federation_models.FederationMixin):
     def __str__(self):
         return self.name
 
-    def get_moderation_url(self):
+    def get_moderation_url(self) -> str:
         return "/manage/library/libraries/{}".format(self.uuid)
 
-    def get_federation_id(self):
+    def get_federation_id(self) -> str:
         return federation_utils.full_url(
             reverse("federation:music:libraries-detail", kwargs={"uuid": self.uuid})
         )
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return "/library/{}".format(self.uuid)
 
     def save(self, **kwargs):
@@ -1229,7 +1229,7 @@ class Library(federation_models.FederationMixin):
 
         return super().save(**kwargs)
 
-    def should_autoapprove_follow(self, actor):
+    def should_autoapprove_follow(self, actor) -> bool:
         if self.privacy_level == "everyone":
             return True
         if self.privacy_level == "instance" and actor.get_user():

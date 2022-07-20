@@ -18,6 +18,9 @@ from funkwhale_api.music import serializers as music_serializers
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.users import models as users_models
 
+from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.types import OpenApiTypes
+
 from . import filters
 
 
@@ -90,6 +93,7 @@ class ManageUserSerializer(serializers.ModelSerializer):
             )
         return instance
 
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_actor(self, obj):
         if obj.actor:
             return ManageBaseActorSerializer(obj.actor).data
@@ -151,10 +155,10 @@ class ManageDomainSerializer(serializers.ModelSerializer):
             "nodeinfo_fetch_date",
         ]
 
-    def get_actors_count(self, o):
+    def get_actors_count(self, o) -> int:
         return getattr(o, "actors_count", 0)
 
-    def get_outbox_activities_count(self, o):
+    def get_outbox_activities_count(self, o) -> int:
         return getattr(o, "outbox_activities_count", 0)
 
 
@@ -211,7 +215,7 @@ class ManageBaseActorSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["creation_date", "instance_policy"]
 
-    def get_is_local(self, o):
+    def get_is_local(self, o) -> bool:
         return o.domain_id == settings.FEDERATION_HOSTNAME
 
 
@@ -228,7 +232,7 @@ class ManageActorSerializer(ManageBaseActorSerializer):
         ]
         read_only_fields = ["creation_date", "instance_policy"]
 
-    def get_uploads_count(self, o):
+    def get_uploads_count(self, o) -> int:
         return getattr(o, "uploads_count", 0)
 
 
@@ -242,7 +246,7 @@ class ManageActorActionSerializer(common_serializers.ActionSerializer):
         common_utils.on_commit(federation_tasks.purge_actors.delay, ids=list(ids))
 
 
-class TargetSerializer(serializers.Serializer):
+class ManageTargetSerializer(serializers.Serializer):
     type = serializers.ChoiceField(choices=["domain", "actor"])
     id = serializers.CharField()
 
@@ -264,7 +268,7 @@ class TargetSerializer(serializers.Serializer):
 
 
 class ManageInstancePolicySerializer(serializers.ModelSerializer):
-    target = TargetSerializer()
+    target = ManageTargetSerializer()
     actor = federation_fields.ActorRelatedField(read_only=True)
 
     class Meta:
@@ -353,6 +357,7 @@ class ManageBaseAlbumSerializer(serializers.ModelSerializer):
             "tracks_count",
         ]
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_tracks_count(self, o):
         return getattr(o, "_tracks_count", None)
 
@@ -385,6 +390,7 @@ class ManageNestedAlbumSerializer(ManageBaseAlbumSerializer):
         model = music_models.Album
         fields = ManageBaseAlbumSerializer.Meta.fields + ["tracks_count"]
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_tracks_count(self, obj):
         return getattr(obj, "tracks_count", None)
 
@@ -411,16 +417,20 @@ class ManageArtistSerializer(
             "content_category",
         ]
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_tracks_count(self, obj):
         return getattr(obj, "_tracks_count", None)
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_albums_count(self, obj):
         return getattr(obj, "_albums_count", None)
 
+    @extend_schema_field({"type": "array", "items": {"type": "string"}})
     def get_tags(self, obj):
         tagged_items = getattr(obj, "_prefetched_tagged_items", [])
         return [ti.tag.name for ti in tagged_items]
 
+    @extend_schema_field(OpenApiTypes.STR)
     def get_channel(self, obj):
         if "channel" in obj._state.fields_cache and obj.get_channel():
             return str(obj.channel.uuid)
@@ -446,9 +456,10 @@ class ManageAlbumSerializer(
             "tracks_count",
         ]
 
-    def get_tracks_count(self, o):
+    def get_tracks_count(self, o) -> int:
         return len(o.tracks.all())
 
+    @extend_schema_field({"type": "array", "items": {"type": "string"}})
     def get_tags(self, obj):
         tagged_items = getattr(obj, "_prefetched_tagged_items", [])
         return [ti.tag.name for ti in tagged_items]
@@ -483,9 +494,11 @@ class ManageTrackSerializer(
             "cover",
         ]
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_uploads_count(self, obj):
         return getattr(obj, "uploads_count", None)
 
+    @extend_schema_field({"type": "array", "items": {"type": "string"}})
     def get_tags(self, obj):
         tagged_items = getattr(obj, "_prefetched_tagged_items", [])
         return [ti.tag.name for ti in tagged_items]
@@ -570,9 +583,10 @@ class ManageLibrarySerializer(serializers.ModelSerializer):
             "creation_date",
         ]
 
-    def get_uploads_count(self, obj):
-        return getattr(obj, "_uploads_count", obj.uploads_count)
+    def get_uploads_count(self, obj) -> int:
+        return getattr(obj, "_uploads_count", int(obj.uploads_count))
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_followers_count(self, obj):
         return getattr(obj, "followers_count", None)
 
@@ -652,12 +666,15 @@ class ManageTagSerializer(ManageBaseAlbumSerializer):
             "artists_count",
         ]
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_tracks_count(self, obj):
         return getattr(obj, "_tracks_count", None)
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_albums_count(self, obj):
         return getattr(obj, "_albums_count", None)
 
+    @extend_schema_field(OpenApiTypes.INT)
     def get_artists_count(self, obj):
         return getattr(obj, "_artists_count", None)
 
@@ -728,6 +745,7 @@ class ManageReportSerializer(serializers.ModelSerializer):
             "summary",
         ]
 
+    @extend_schema_field(ManageBaseNoteSerializer)
     def get_notes(self, o):
         notes = getattr(o, "_prefetched_notes", [])
         return ManageBaseNoteSerializer(notes, many=True).data
@@ -761,6 +779,7 @@ class ManageUserRequestSerializer(serializers.ModelSerializer):
             "metadata",
         ]
 
+    @extend_schema_field(ManageBaseNoteSerializer)
     def get_notes(self, o):
         notes = getattr(o, "_prefetched_notes", [])
         return ManageBaseNoteSerializer(notes, many=True).data

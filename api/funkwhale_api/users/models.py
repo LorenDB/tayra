@@ -307,7 +307,7 @@ class User(AbstractUser):
 
         return groups
 
-    def full_username(self):
+    def full_username(self) -> str:
         return "{}@{}".format(self.username, settings.FEDERATION_HOSTNAME)
 
     def get_avatar(self):
