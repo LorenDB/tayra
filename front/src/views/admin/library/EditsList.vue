@@ -1,4 +1,4 @@
-<script setp lang="ts">
+<script setup lang="ts">
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 
@@ -12,6 +12,7 @@ withDefaults(defineProps<Props>(), {
   defaultQuery: ''
 })
 
+const { $pgettext } = useGettext()
 const labels = computed(() => ({
   title: $pgettext('*/Admin/*/Noun', 'Edits')
 }))
@@ -23,6 +24,7 @@ const labels = computed(() => ({
       <edits-card-list
         :update-url="true"
         :default-query="defaultQuery"
+        :ordering-config-name="null"
       >
         <h2 class="ui header">
           <translate translate-context="Content/Admin/Title/Noun">
