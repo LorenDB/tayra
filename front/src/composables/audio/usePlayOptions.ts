@@ -8,6 +8,7 @@ import axios from 'axios'
 import usePlayer from '~/composables/audio/usePlayer'
 import useQueue from '~/composables/audio/useQueue'
 import { useCurrentElement } from '@vueuse/core'
+import jQuery from 'jquery'
 
 export interface PlayOptionsProps {
   isPlayable?: boolean

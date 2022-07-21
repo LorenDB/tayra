@@ -5,7 +5,7 @@ COPY package.json yarn.lock /app/
 COPY src /app/src/
 COPY scripts /app/scripts
 COPY public /app/public
-COPY vite.config.js index.html embed.html /app/
+COPY vite.config.ts index.html embed.html /app/
 
 RUN apk add --no-cache jq bash coreutils python3 build-base
 RUN yarn install

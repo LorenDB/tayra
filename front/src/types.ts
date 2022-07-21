@@ -9,13 +9,6 @@ import type { ComponentPublicInstance } from '@vue/runtime-core'
 
 export type FunctionRef = Element | ComponentPublicInstance | null
 
-declare global {
-  interface Window {
-    $: JQueryStatic
-    jQuery: JQueryStatic
-  }
-}
-
 // App structure stuff
 export interface InitModuleContext {
   app: App
