@@ -37,7 +37,11 @@
   }
 
   .ui.progress .bar {
-    transition: none;
+    transition: transform .2s linear;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: top left;
+    will-change: transform;
   }
 
   .ui.progress .buffer.bar {
@@ -72,10 +76,9 @@
     animation-timing-function: linear;
     animation-iteration-count: infinite;
   }
-  .ui.progress:not([data-percent]):not(.indeterminate)
+  .ui.progress:not(.indeterminate)
     .bar.position:not(.buffer) {
     background: var(--vibrant-color);
-    min-width: 0;
   }
 
   .track-controls {

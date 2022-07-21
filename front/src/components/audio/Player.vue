@@ -117,13 +117,11 @@ const switchTab = () => {
       >
         <div
           class="buffer bar"
-          :data-percent="bufferProgress"
-          :style="{ 'width': bufferProgress + '%' }"
+          :style="{ 'transform': `scaleX(${bufferProgress / 100})` }"
         />
         <div
           class="position bar"
-          :data-percent="progress"
-          :style="{ 'width': progress + '%' }"
+          :style="{ 'transform': `scaleX(${progress / 100})` }"
         />
       </div>
       <div class="controls-row">

@@ -163,15 +163,25 @@
   .progress-area {
     overflow: hidden;
   }
+  .progress-area .progress {
+    border-radius: 0.28571429rem;
+  }
   .progress-wrapper, .warning.message {
     max-width: 25em;
     margin: 0 auto;
+  }
+  .ui.progress .bar {
+    transition: transform .2s linear;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: top left;
+    will-change: transform;
   }
   .ui.progress .buffer.bar {
     position: absolute;
     background-color: rgba(255, 255, 255, 0.15);
   }
-  .ui.progress:not([data-percent]):not(.indeterminate)
+  .ui.progress:not(.indeterminate)
     .bar.position:not(.buffer) {
     background: var(--vibrant-color);
   }
@@ -201,9 +211,6 @@
   }
   .progress {
     cursor: pointer;
-    .bar {
-      min-width: 0 !important;
-    }
   }
 
   .player-controls {

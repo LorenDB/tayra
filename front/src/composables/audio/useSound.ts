@@ -6,7 +6,7 @@ import useTrackSources from '~/composables/audio/useTrackSources'
 import useSoundCache from '~/composables/audio/useSoundCache'
 import usePlayer from '~/composables/audio/usePlayer'
 import store from '~/store'
-import { createEventHook } from '@vueuse/core'
+import { createEventHook, useThrottleFn } from '@vueuse/core'
 
 interface Sound {
   id?: number
@@ -18,7 +18,7 @@ interface Sound {
   seek: (time?: number) => number
   duration: () => number
   getSource: () => boolean
-  _triggerSoundProgress: () => void
+  triggerSoundProgress: (time: number, duration: number) => void
 }
 
 const soundCache = useSoundCache()
@@ -28,7 +28,7 @@ const looping = computed(() => store.state.player.looping)
 const currentSound = ref()
 const soundId = ref()
 
-const soundProgress = createEventHook<HTMLAudioElement>()
+const soundProgress = createEventHook<{ node: HTMLAudioElement, time: number, duration: number }>()
 
 const createSound = (howl: Howl): Sound => ({
   howl,
@@ -46,7 +46,7 @@ const createSound = (howl: Howl): Sound => ({
   seek: (time?: number) => howl.seek(time),
   duration: () => howl.duration(),
   getSource: () => (howl as any)._sounds[0],
-  _triggerSoundProgress: () => soundProgress.trigger((howl as any)._sounds[0]._node)
+  triggerSoundProgress: useThrottleFn((time: number, duration: number) => soundProgress.trigger({ node: (howl as any)._sounds[0]._node, time, duration }), 1000)
 })
 
 const loadSound = (track: Track): Sound => {

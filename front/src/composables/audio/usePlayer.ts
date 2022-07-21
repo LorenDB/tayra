@@ -2,7 +2,7 @@ import type { Track } from '~/types'
 
 import { computed, watchEffect, ref, watch } from 'vue'
 import { Howler } from 'howler'
-import { useIntervalFn, useTimeoutFn } from '@vueuse/core'
+import { useRafFn, useTimeoutFn } from '@vueuse/core'
 import useQueue from '~/composables/audio/useQueue'
 import useSound from '~/composables/audio/useSound'
 import toLinearVolumeScale from '~/composables/audio/toLinearVolumeScale'
@@ -119,36 +119,36 @@ const progress = computed({
   get: () => store.getters['player/progress'],
   set: (time) => {
     if (currentSound.value?.state() === 'loaded') {
+      store.state.player.currentTime = time
+
       const duration = currentSound.value.duration()
-
-      store.dispatch('player/updateProgress', time)
-      currentSound.value._triggerSoundProgress()
-
-      const toPreload = store.state.queue.tracks[currentIndex.value + 1]
-      if (!nextTrackPreloaded.value && toPreload && (time > PRELOAD_DELAY || duration - time < 30)) {
-        loadSound(toPreload)
-        nextTrackPreloaded.value = true
-      }
-
-      if (time > duration / 2) {
-        if (!isListeningSubmitted.value) {
-          store.dispatch('player/trackListened', currentTrack.value)
-          isListeningSubmitted.value = true
-        }
-      }
+      currentSound.value.triggerSoundProgress(time, duration)
     }
   }
 })
 
 const bufferProgress = computed(() => store.state.player.bufferProgress)
-onSoundProgress((node: HTMLAudioElement) => {
+onSoundProgress(({ node, time, duration }) => {
+  const toPreload = store.state.queue.tracks[currentIndex.value + 1]
+  if (!nextTrackPreloaded.value && toPreload && (time > PRELOAD_DELAY || duration - time < 30)) {
+    loadSound(toPreload)
+    nextTrackPreloaded.value = true
+  }
+
+  if (time > duration / 2) {
+    if (!isListeningSubmitted.value) {
+      store.dispatch('player/trackListened', currentTrack.value)
+      isListeningSubmitted.value = true
+    }
+  }
+
   // from https://github.com/goldfire/howler.js/issues/752#issuecomment-372083163
 
-  const { buffered, currentTime: time } = node
+  const { buffered, currentTime } = node
 
   let range = 0
   try {
-    while (buffered.start(range) >= time || time >= buffered.end(range)) {
+    while (buffered.start(range) >= currentTime || currentTime >= buffered.end(range)) {
       range += 1
     }
   } catch (IndexSizeError) {
@@ -181,11 +181,11 @@ onSoundProgress((node: HTMLAudioElement) => {
 })
 
 const observeProgress = ref(false)
-useIntervalFn(() => {
+useRafFn(() => {
   if (observeProgress.value && currentSound.value?.state() === 'loaded') {
     progress.value = currentSound.value.seek()
   }
-}, 1000)
+})
 
 watch(playing, async (isPlaying) => {
   if (currentSound.value) {
