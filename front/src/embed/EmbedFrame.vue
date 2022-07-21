@@ -43,7 +43,7 @@
         <img
           v-else
           height="120"
-          src="@/assets/embed/default-cover.jpeg"
+          src="../assets/embed/default-cover.jpeg"
           alt="Cover"
         >
       </aside>
