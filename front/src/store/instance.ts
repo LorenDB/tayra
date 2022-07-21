@@ -183,7 +183,7 @@ const store: Module<State, RootState> = {
       payload?.callback?.()
     },
     async fetchFrontSettings ({ state }) {
-      const response = await axios.get('/front/settings.json')
+      const response = await axios.get(`${import.meta.env.BASE_URL}settings.json`)
         .catch(() => logger.error('Error when fetching front-end configuration (or no customization available)'))
 
       if (!response) return

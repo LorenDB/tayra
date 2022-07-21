@@ -1,3 +1,73 @@
+<script setup lang="ts">
+import type { Artist, Album } from '~/types'
+
+import { useGettext } from 'vue3-gettext'
+import { ref, computed, reactive, watch, onMounted } from 'vue'
+import { refDebounced } from '@vueuse/core'
+
+import axios from 'axios'
+import AlbumCard from '~/components/audio/album/Card.vue'
+import ArtistCard from '~/components/audio/artist/Card.vue'
+import useLogger from '~/composables/useLogger'
+
+interface Props {
+  autofocus?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  autofocus: false
+})
+
+const logger = useLogger()
+const { $pgettext } = useGettext()
+
+const query = ref('')
+const queryDebounced = refDebounced(query, 500)
+
+const results = reactive({
+  artists: [] as Artist[],
+  albums: [] as Album[]
+})
+
+const isLoading = ref(false)
+const search = async () => {
+  if (queryDebounced.value.length < 1) {
+    return
+  }
+
+  isLoading.value = true
+  logger.debug(`Searching track matching "${queryDebounced.value}"`)
+
+  const params = {
+    query: queryDebounced.value
+  }
+
+  try {
+    const response = await axios.get('search/', { params })
+    results.artists = response.data.artists
+    results.albums = response.data.albums
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+watch(queryDebounced, search, { immediate: true })
+
+const searchInput = ref()
+onMounted(() => {
+  if (props.autofocus) {
+    searchInput.value.focus()
+  }
+})
+
+const labels = computed(() => ({
+  searchPlaceholder: $pgettext('*/Search/Input.Placeholder', 'Artist, album, track…')
+}))
+
+</script>
+
 <template>
   <div>
     <h2>
@@ -9,7 +79,7 @@
       <div class="ui icon big input">
         <i class="search icon" />
         <input
-          ref="search"
+          ref="searchInput"
           v-model.trim="query"
           class="prompt"
           :placeholder="labels.searchPlaceholder"
@@ -67,76 +137,3 @@
     </template>
   </div>
 </template>
-
-<script>
-import { debounce } from 'lodash-es'
-import axios from 'axios'
-import AlbumCard from '~/components/audio/album/Card.vue'
-import ArtistCard from '~/components/audio/artist/Card.vue'
-import useLogger from '~/composables/useLogger'
-
-const logger = useLogger()
-
-export default {
-  components: {
-    AlbumCard,
-    ArtistCard
-  },
-  props: {
-    autofocus: { type: Boolean, default: false }
-  },
-  data () {
-    return {
-      query: '',
-      results: {
-        albums: [],
-        artists: []
-      },
-      isLoading: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        searchPlaceholder: this.$pgettext('*/Search/Input.Placeholder', 'Artist, album, track…')
-      }
-    }
-  },
-  watch: {
-    query () {
-      this.search()
-    }
-  },
-  mounted () {
-    if (this.autofocus) {
-      this.$refs.search.focus()
-    }
-    this.search()
-  },
-  methods: {
-    search: debounce(function () {
-      if (this.query.length < 1) {
-        return
-      }
-      const self = this
-      self.isLoading = true
-      logger.debug('Searching track matching "' + this.query + '"')
-      const params = {
-        query: this.query
-      }
-      axios.get('search', {
-        params
-      }).then((response) => {
-        self.results = self.castResults(response.data)
-        self.isLoading = false
-      })
-    }, 500),
-    castResults (results) {
-      return {
-        albums: results.albums,
-        artists: results.artists
-      }
-    }
-  }
-}
-</script>
