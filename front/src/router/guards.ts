@@ -1,5 +1,5 @@
 
-import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
+import type { NavigationGuardNext, RouteLocationNamedRaw, RouteLocationNormalized } from 'vue-router'
 import type { Permission } from '~/store/auth'
 
 import store from '~/store'
@@ -11,4 +11,14 @@ export const hasPermissions = (permission: Permission) => (to: RouteLocationNorm
 
   console.log('Not authenticated. Redirecting to library.')
   next({ name: 'library.index' })
+}
+
+export const requireLoggedIn = (fallbackLocation: RouteLocationNamedRaw) => (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+  if (store.state.auth.authenticated) return next()
+  return next(fallbackLocation)
+}
+
+export const requireLoggedOut = (fallbackLocation: RouteLocationNamedRaw) => (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+  if (!store.state.auth.authenticated) return next()
+  return next(fallbackLocation)
 }

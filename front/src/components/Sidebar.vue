@@ -96,11 +96,17 @@ const moderationNotifications = computed(() =>
 
 onMounted(async () => {
   if (store.state.auth.authenticated) {
-    const [edits, reports, requests] = await Promise.all([
+    const [inbox, edits, reports, requests] = await Promise.all([
+      axios.get('federation/inbox/', { params: { is_read: false } }).catch(() => ({ data: { count: 0 } })),
       axios.get('mutations/', { params: { page_size: 1, q: 'is_approved:null' } }).catch(() => ({ data: { count: 0 } })),
       axios.get('manage/moderation/reports/', { params: { page_size: 1, q: 'resolved:no' } }).catch(() => ({ data: { count: 0 } })),
       axios.get('manage/moderation/requests/', { params: { page_size: 1, q: 'status:pending' } }).catch(() => ({ data: { count: 0 } }))
     ])
+
+    store.commit('ui/incrementNotifications', {
+      type: 'inbox',
+      value: inbox.data.count
+    })
 
     store.commit('ui/incrementNotifications', {
       type: 'pendingReviewEdits',

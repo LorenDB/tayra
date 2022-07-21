@@ -1,12 +1,15 @@
 import type { RouteRecordRaw } from 'vue-router'
 
+import { requireLoggedOut } from '../guards'
+
 export default [
   {
     path: '/login',
     name: 'login',
     component: () => import('~/views/auth/Login.vue'),
     // TODO (wvffle): Use named routes EVERYWHERE
-    props: route => ({ next: route.query.next || '/library' })
+    props: route => ({ next: route.query.next || '/library' }),
+    beforeEnter: requireLoggedOut({ name: 'library.index' })
   },
   {
     path: '/auth/password/reset',
