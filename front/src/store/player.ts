@@ -102,7 +102,7 @@ const store: Module<State, RootState> = {
       return time.parse(Math.round(state.currentTime))
     },
     progress: state => {
-      return Math.round((state.currentTime / state.duration * 100) * 10) / 10
+      return Math.min(state.currentTime / state.duration * 100, 100)
     }
   },
   actions: {

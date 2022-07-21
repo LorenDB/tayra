@@ -46,7 +46,7 @@
   }
 
   .ui.progress .bar {
-    transition: transform .1s linear;
+    transition: none;
     width: 100%;
     transform: scaleX(0);
     transform-origin: top left;
