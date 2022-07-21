@@ -3,9 +3,18 @@
   z-index: 999999;
   width: 100%;
   width: 100vw;
+
   .ui.top.attached.progress {
     top: 0;
+    height: 1rem;
+    z-index: 1;
+    padding-bottom: 0.8rem;
+
+    .bar {
+      height: 0.2rem;
+    }
   }
+
 }
 .ui.bottom-player > .segment.fixed-controls {
   color: var(--player-color);

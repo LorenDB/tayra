@@ -5,7 +5,7 @@ import VolumeControl from './VolumeControl.vue'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import useQueue from '~/composables/audio/useQueue'
 import usePlayer from '~/composables/audio/usePlayer'
@@ -39,6 +39,7 @@ const {
   durationFormatted,
   currentTimeFormatted,
   bufferProgress,
+  duration,
   toggleMute,
   seek,
   togglePlayback,
@@ -91,6 +92,12 @@ const setCurrentTime = (time: number) => {
 const switchTab = () => {
   store.commit('ui/queueFocused', store.state.ui.queueFocused === 'player' ? 'queue' : 'player')
 }
+
+const progressBar = ref()
+const touchProgress = (event: MouseEvent) => {
+  const time = ((event.clientX - (event.target as Element).getBoundingClientRect().left) / progressBar.value.offsetWidth) * duration.value
+  currentTime.value = time
+}
 </script>
 
 <template>
@@ -113,7 +120,9 @@ const switchTab = () => {
       @click.prevent.stop="toggleMobilePlayer"
     >
       <div
+        ref="progressBar"
         :class="['ui', 'top attached', 'small', 'inverted', {'indicating': isLoadingAudio}, 'progress']"
+        @click.prevent.stop="touchProgress"
       >
         <div
           class="buffer bar"
