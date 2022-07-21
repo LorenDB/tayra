@@ -111,6 +111,11 @@ const touchProgress = (event: MouseEvent) => {
   const time = ((event.clientX - (event.target as Element).getBoundingClientRect().left) / progressBar.value.offsetWidth) * duration.value
   currentTime.value = time
 }
+
+const play = (index: number) => {
+  store.dispatch('queue/currentIndex', index)
+  resume()
+}
 </script>
 
 <template>
@@ -368,7 +373,7 @@ const touchProgress = (event: MouseEvent) => {
                     </td>
                     <td
                       class="image-cell"
-                      @click="$store.dispatch('queue/currentIndex', index)"
+                      @click="play(index)"
                     >
                       <img
                         v-if="track.cover && track.cover.urls.original"
@@ -391,7 +396,7 @@ const touchProgress = (event: MouseEvent) => {
                     </td>
                     <td
                       colspan="3"
-                      @click="$store.dispatch('queue/currentIndex', index)"
+                      @click="play(index)"
                     >
                       <button
                         class="title reset ellipsis"
