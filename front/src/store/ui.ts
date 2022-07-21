@@ -347,7 +347,7 @@ const store: Module<State, RootState> = {
     notifications (state, { type, count }: { type: NotificationsKey, count: number }) {
       state.notifications[type] = count
     },
-    incrementNotifications (state, { type, count, value }: { type: NotificationsKey, count: number, value: number }) {
+    incrementNotifications (state, { type, count, value }: { type: NotificationsKey, count: number, value?: number }) {
       if (value !== undefined) {
         state.notifications[type] = Math.max(0, value)
       } else {

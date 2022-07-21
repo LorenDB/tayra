@@ -9,6 +9,7 @@ import SemanticModal from '~/components/semantic/Modal.vue'
 
 import useThemeList from '~/composables/useThemeList'
 import useTheme from '~/composables/useTheme'
+import axios from 'axios'
 import { useRoute } from 'vue-router'
 import { computed, ref, watch, watchEffect, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
@@ -92,6 +93,29 @@ const moderationNotifications = computed(() =>
     + store.state.ui.notifications.pendingReviewReports
     + store.state.ui.notifications.pendingReviewRequests
 )
+
+Promise.resolve().then(async () => {
+  const [edits, reports, requests] = await Promise.all([
+    axios.get('mutations/', { params: { page_size: 1 } }),
+    axios.get('manage/moderation/reports/', { params: { page_size: 1 } }),
+    axios.get('manage/moderation/requests/', { params: { page_size: 1 } })
+  ])
+
+  store.commit('ui/incrementNotifications', {
+    type: 'pendingReviewEdits',
+    value: edits.data.count
+  })
+
+  store.commit('ui/incrementNotifications', {
+    type: 'pendingReviewRequests',
+    value: requests.data.count
+  })
+
+  store.commit('ui/incrementNotifications', {
+    type: 'pendingReviewReports',
+    value: reports.data.count
+  })
+})
 
 const isProduction = import.meta.env.PROD
 const showUserModal = ref(false)

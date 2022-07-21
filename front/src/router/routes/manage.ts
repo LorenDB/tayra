@@ -157,7 +157,7 @@ export default [
         path: 'reports',
         name: 'manage.moderation.reports.list',
         component: () => import('~/views/admin/moderation/ReportsList.vue'),
-        props: route => ({ defaultQuery: route.query.q, updateUrl: true })
+        props: route => ({ defaultQuery: route.query.q, updateUrl: true, orderingConfigName: null })
       },
       {
         path: 'reports/:id',
@@ -169,7 +169,7 @@ export default [
         path: 'requests',
         name: 'manage.moderation.requests.list',
         component: () => import('~/views/admin/moderation/RequestsList.vue'),
-        props: route => ({ defaultQuery: route.query.q, updateUrl: true })
+        props: route => ({ defaultQuery: route.query.q, updateUrl: true, orderingConfigName: null })
       },
       {
         path: 'requests/:id',

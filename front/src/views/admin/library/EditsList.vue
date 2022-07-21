@@ -1,3 +1,22 @@
+<script setp lang="ts">
+import { useGettext } from 'vue3-gettext'
+import { computed } from 'vue'
+
+import EditsCardList from '~/components/manage/library/EditsCardList.vue'
+
+interface Props {
+  defaultQuery?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  defaultQuery: ''
+})
+
+const labels = computed(() => ({
+  title: $pgettext('*/Admin/*/Noun', 'Edits')
+}))
+</script>
+
 <template>
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
@@ -14,23 +33,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import EditsCardList from '~/components/manage/library/EditsCardList.vue'
-
-export default {
-  components: {
-    EditsCardList
-  },
-  props: {
-    defaultQuery: { type: String, required: false, default: '' }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('*/Admin/*/Noun', 'Edits')
-      }
-    }
-  }
-}
-</script>

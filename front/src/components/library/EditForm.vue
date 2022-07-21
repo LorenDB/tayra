@@ -247,7 +247,7 @@ import AttachmentInput from '~/components/common/AttachmentInput.vue'
 import EditList from '~/components/library/EditList.vue'
 import EditCard from '~/components/library/EditCard.vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
-import useEditConfigs from '~/composables/useEditConfigs'
+import useEditConfigs from '~/composables/moderation/useEditConfigs'
 import { computed } from 'vue'
 
 export default {

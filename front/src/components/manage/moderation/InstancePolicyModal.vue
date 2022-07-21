@@ -103,8 +103,8 @@ const fetchData = async () => {
             :type="type"
             :target="target"
             @cancel="showForm = false"
-            @save="showForm = false; result = {count: 1, results: [$event]}"
-            @delete="result = {count: 0, results: []}; showForm = false"
+            @save="(event: unknown) => { showForm = false; result = {count: 1, results: [event]} }"
+            @delete="() => { result = {count: 0, results: []}; showForm = false }"
           />
         </div>
         <div class="ui hidden divider" />
