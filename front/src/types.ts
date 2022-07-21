@@ -113,6 +113,14 @@ export interface Channel {
   subscriptions_count: number
   downloads_count: number
   content_category: ContentCategory
+
+  metadata?: {
+    itunes_category?: unknown
+    itunes_subcategory?: unknown
+    language?: string
+    owner_name: string
+    owner_email: string
+  }
 }
 
 export type PrivacyLevel = 'everyone' | 'instance' | 'me'

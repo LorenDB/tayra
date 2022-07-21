@@ -1,3 +1,145 @@
+<script setup lang="ts">
+import type { Channel, BackendError } from '~/types'
+
+import { slugify } from 'transliteration'
+import { reactive, computed, ref, watchEffect, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+import axios from 'axios'
+import AttachmentInput from '~/components/common/AttachmentInput.vue'
+import TagsSelector from '~/components/library/TagsSelector.vue'
+
+interface Props {
+  object?: Channel | null
+  step: number
+}
+
+const emit = defineEmits(['category', 'submittable', 'loading', 'errored', 'created', 'updated'])
+const props = withDefaults(defineProps<Props>(), {
+  object: null,
+  step: 1
+})
+
+const { $pgettext } = useGettext()
+
+const newValues = reactive({
+  name: props.object?.artist?.name ?? '',
+  username: props.object?.actor.preferred_username ?? '',
+  tags: props.object?.artist?.tags ?? [],
+  description: props.object?.artist?.description?.text ?? '',
+  cover: props.object?.artist?.cover?.uuid ?? null,
+  content_category: props.object?.artist?.content_category ?? 'podcast',
+  metadata: { ...(props.object?.metadata ?? {}) }
+})
+
+const creating = computed(() => props.object === null)
+const categoryChoices = computed(() => [
+  {
+    value: 'podcast',
+    label: $pgettext('*/*/*', 'Podcasts'),
+    helpText: $pgettext('Content/Channels/Help', 'Host your episodes and keep your community updated.')
+  },
+  {
+    value: 'music',
+    label: $pgettext('*/*/*', 'Artist discography'),
+    helpText: $pgettext('Content/Channels/Help', 'Publish music you make as a nice discography of albums and singles.')
+  }
+])
+
+interface ITunesCategory {
+  value: string
+  label: string
+  children: []
+}
+
+interface MetadataChoices {
+  itunes_category?: ITunesCategory[] | null
+  language: {
+    value: string
+    label: string
+  }[]
+}
+
+const metadataChoices = ref({ itunes_category: null } as MetadataChoices)
+const itunesSubcategories = computed(() => {
+  for (const element of metadataChoices.value.itunes_category ?? []) {
+    if (element.value === newValues.metadata.itunes_category) {
+      return element.children ?? []
+    }
+  }
+
+  return []
+})
+
+const labels = computed(() => ({
+  namePlaceholder: $pgettext('Content/Channel/Form.Field.Placeholder', 'Awesome channel name'),
+  usernamePlaceholder: $pgettext('Content/Channel/Form.Field.Placeholder', 'awesomechannelname')
+}))
+
+const submittable = computed(() =>
+  newValues.content_category === 'podcast'
+    ? newValues.name && newValues.username && newValues.metadata.itunes_category && newValues.metadata.language
+    : newValues.name && newValues.username
+)
+
+watch(() => newValues.name, (name) => {
+  if (creating.value) {
+    newValues.username = slugify(name)
+  }
+})
+
+watch(() => newValues.metadata.itunes_category, () => {
+  newValues.metadata.itunes_subcategory = null
+})
+
+const isLoading = ref(false)
+const errors = ref([] as string[])
+
+watchEffect(() => emit('category', newValues.content_category))
+watchEffect(() => emit('loading', isLoading.value))
+watchEffect(() => emit('submittable', submittable.value))
+
+// TODO (wvffle): Add loader / Use Suspense
+const fetchMetadataChoices = async () => {
+  try {
+    const response = await axios.get('channels/metadata-choices')
+    metadataChoices.value = response.data
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+}
+
+fetchMetadataChoices()
+
+const submit = async () => {
+  isLoading.value = true
+
+  const payload = {
+    ...newValues,
+    description: newValues.description
+      ? {
+          content_type: 'text/markdown',
+          text: newValues.description
+        }
+      : null
+  }
+
+  try {
+    const request = () => creating.value
+      ? axios.post('channels/', payload)
+      : axios.patch(`channels/${props.object?.uuid}`, payload)
+
+    const response = await request()
+    emit(creating.value ? 'created' : 'updated', response.data)
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+    emit('errored', errors.value)
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <form
     class="ui form"
@@ -78,8 +220,8 @@
             <input
               v-model="newValues.username"
               type="text"
-              :required="creating || null"
-              :disabled="!creating || null"
+              :required="creating"
+              :disabled="!creating"
               :placeholder="labels.usernamePlaceholder"
             >
           </div>
@@ -182,7 +324,7 @@
               id="itunes-category"
               v-model="newValues.metadata.itunes_subcategory"
               name="itunes-category"
-              :disabled="!newValues.metadata.itunes_category || null"
+              :disabled="!newValues.metadata.itunes_category"
               class="ui dropdown"
             >
               <option
@@ -241,171 +383,3 @@
     </div>
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-
-import AttachmentInput from '~/components/common/AttachmentInput.vue'
-import TagsSelector from '~/components/library/TagsSelector.vue'
-
-function slugify (text) {
-  return text.toString().toLowerCase()
-    .replace(/\s+/g, '') // Remove spaces
-    .replace(/[^\w]+/g, '') // Remove all non-word chars
-}
-
-export default {
-  components: {
-    AttachmentInput,
-    TagsSelector
-  },
-  props: {
-    object: { type: Object, required: false, default: null },
-    step: { type: Number, required: false, default: 1 }
-  },
-  data () {
-    const oldValues = {}
-    if (this.object) {
-      oldValues.metadata = { ...(this.object.metadata || {}) }
-      oldValues.name = this.object.artist.name
-      oldValues.description = this.object.artist.description
-      oldValues.cover = this.object.artist.cover
-      oldValues.tags = this.object.artist.tags
-      oldValues.content_category = this.object.artist.content_category
-      oldValues.username = this.object.actor.preferred_username
-    }
-    return {
-      isLoading: false,
-      errors: [],
-      metadataChoices: null,
-      newValues: {
-        name: oldValues.name || '',
-        username: oldValues.username || '',
-        tags: oldValues.tags || [],
-        description: (oldValues.description || {}).text || '',
-        cover: (oldValues.cover || {}).uuid || null,
-        content_category: oldValues.content_category || 'podcast',
-        metadata: oldValues.metadata || {}
-      }
-    }
-  },
-  computed: {
-    creating () {
-      return this.object === null
-    },
-    categoryChoices () {
-      return [
-        {
-          value: 'podcast',
-          label: this.$pgettext('*/*/*', 'Podcasts'),
-          helpText: this.$pgettext('Content/Channels/Help', 'Host your episodes and keep your community updated.')
-        },
-        {
-          value: 'music',
-          label: this.$pgettext('*/*/*', 'Artist discography'),
-          helpText: this.$pgettext('Content/Channels/Help', 'Publish music you make as a nice discography of albums and singles.')
-        }
-      ]
-    },
-    itunesSubcategories () {
-      for (let index = 0; index < this.metadataChoices.itunes_category.length; index++) {
-        const element = this.metadataChoices.itunes_category[index]
-        if (element.value === this.newValues.metadata.itunes_category) {
-          return element.children || []
-        }
-      }
-      return []
-    },
-    labels () {
-      return {
-        namePlaceholder: this.$pgettext('Content/Channel/Form.Field.Placeholder', 'Awesome channel name'),
-        usernamePlaceholder: this.$pgettext('Content/Channel/Form.Field.Placeholder', 'awesomechannelname')
-      }
-    },
-    submittable () {
-      let v = this.newValues.name && this.newValues.username
-      if (this.newValues.content_category === 'podcast') {
-        v = v && this.newValues.metadata.itunes_category && this.newValues.metadata.language
-      }
-      return !!v
-    }
-  },
-  watch: {
-    'newValues.name' (v) {
-      if (this.creating) {
-        this.newValues.username = slugify(v)
-      }
-    },
-    'newValues.metadata.itunes_category' (v) {
-      this.newValues.metadata.itunes_subcategory = null
-    },
-    'newValues.content_category': {
-      handler (v) {
-        this.$emit('category', v)
-      },
-      immediate: true
-    },
-    isLoading: {
-      handler (v) {
-        this.$emit('loading', v)
-      },
-      immediate: true
-    },
-    submittable: {
-      handler (v) {
-        this.$emit('submittable', v)
-      },
-      immediate: true
-    }
-  },
-
-  created () {
-    this.fetchMetadataChoices()
-  },
-  methods: {
-    fetchMetadataChoices () {
-      const self = this
-      axios.get('channels/metadata-choices').then((response) => {
-        self.metadataChoices = response.data
-      }, error => {
-        self.errors = error.backendErrors
-      })
-    },
-    submit () {
-      this.isLoading = true
-      const self = this
-      const handler = this.creating ? axios.post : axios.patch
-      const url = this.creating ? 'channels/' : `channels/${this.object.uuid}`
-      const payload = {
-        name: this.newValues.name,
-        username: this.newValues.username,
-        tags: this.newValues.tags,
-        content_category: this.newValues.content_category,
-        cover: this.newValues.cover,
-        metadata: this.newValues.metadata
-      }
-      if (this.newValues.description) {
-        payload.description = {
-          content_type: 'text/markdown',
-          text: this.newValues.description
-        }
-      } else {
-        payload.description = null
-      }
-
-      handler(url, payload).then((response) => {
-        self.isLoading = false
-        if (self.creating) {
-          self.$emit('created', response.data)
-        } else {
-          self.$emit('updated', response.data)
-        }
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-        self.$emit('errored', self.errors)
-      })
-    }
-  }
-}
-</script>

@@ -122,16 +122,11 @@ const showUserModal = ref(false)
 const showLanguageModal = ref(false)
 const showThemeModal = ref(false)
 
-// TODO (wvffle): Use current language this.$language.current
-const languageSelection = undefined
-// export default {
-//   watch: {
-//     languageSelection: function (v) {
-//       this.$store.dispatch('ui/currentLanguage', v)
-//       this.$refs.languageModal.closeModal()
-//     }
-//   },
-// }
+const gettext = useGettext()
+const languageSelection = ref(gettext.current)
+watch(languageSelection, (v) => {
+  store.dispatch('ui/currentLanguage', v)
+})
 
 watch(() => store.state.auth.authenticated, (authenticated) => {
   if (authenticated) {

@@ -38,6 +38,7 @@
     "sass": "1.53.0",
     "showdown": "2.1.0",
     "text-clipper": "2.2.0",
+    "transliteration": "^2.3.5",
     "vue": "3.2.37",
     "vue-gettext": "2.1.12",
     "vue-plyr": "7.0.0",
