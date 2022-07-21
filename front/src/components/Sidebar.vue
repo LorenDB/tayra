@@ -89,9 +89,9 @@ watchEffect(() => {
 })
 
 const moderationNotifications = computed(() =>
-  store.state.ui.notifications.pendingReviewEdits +
-    store.state.ui.notifications.pendingReviewReports +
-    store.state.ui.notifications.pendingReviewRequests
+  store.state.ui.notifications.pendingReviewEdits
+    + store.state.ui.notifications.pendingReviewReports
+    + store.state.ui.notifications.pendingReviewRequests
 )
 
 onMounted(async () => {

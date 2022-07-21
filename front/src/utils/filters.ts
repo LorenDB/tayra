@@ -6,9 +6,9 @@ export function truncate (str: string, max = 100, ellipsis = '…', middle = fal
   if (!middle) return str.slice(0, max) + ellipsis
 
   const charsToShow = max - ellipsis.length
-  return str.slice(0, Math.ceil(charsToShow / 2)) +
-    ellipsis +
-    str.slice(-Math.floor(charsToShow / 2))
+  return str.slice(0, Math.ceil(charsToShow / 2))
+    + ellipsis
+    + str.slice(-Math.floor(charsToShow / 2))
 }
 
 export function momentFormat (date: Date, format = 'lll') {

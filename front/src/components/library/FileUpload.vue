@@ -418,11 +418,11 @@ export default {
     },
     processableFiles () {
       return (
-        this.uploads.pending +
-        this.uploads.skipped +
-        this.uploads.errored +
-        this.uploads.finished +
-        this.uploadedFilesCount
+        this.uploads.pending
+        + this.uploads.skipped
+        + this.uploads.errored
+        + this.uploads.finished
+        + this.uploadedFilesCount
       )
     },
     processedFilesCount () {

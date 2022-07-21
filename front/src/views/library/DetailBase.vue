@@ -25,10 +25,10 @@ const object = ref<Library | null>(null)
 
 const isOwner = computed(() => store.state.auth.authenticated && object.value?.actor.full_username === store.state.auth.fullUsername)
 const isPlayable = computed(() => (object.value?.uploads_count ?? 0) > 0 && (
-  isOwner.value ||
-    object.value?.privacy_level === 'everyone' ||
-    (object.value?.privacy_level === 'instance' && store.state.auth.authenticated && object.value.actor.domain === store.getters['instance/domain']) ||
-    (store.getters['libraries/follow'](object.value?.uuid) || {}).approved === true
+  isOwner.value
+    || object.value?.privacy_level === 'everyone'
+    || (object.value?.privacy_level === 'instance' && store.state.auth.authenticated && object.value.actor.domain === store.getters['instance/domain'])
+    || (store.getters['libraries/follow'](object.value?.uuid) || {}).approved === true
 ))
 
 const { $pgettext } = useGettext()

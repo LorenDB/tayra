@@ -111,8 +111,8 @@ export interface Channel {
     itunes_category?: unknown
     itunes_subcategory?: unknown
     language?: string
-    owner_name: string
-    owner_email: string
+    owner_name?: string
+    owner_email?: string
   }
 }
 

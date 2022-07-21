@@ -23,6 +23,9 @@ module.exports = {
     'vue'
   ],
   rules: {
+    // NOTE: Nicer for the eye
+    'operator-linebreak': ['error', 'before'],
+
     // NOTE: Handled by typescript
     'no-undef': 'off',
     'no-unused-vars': 'off',

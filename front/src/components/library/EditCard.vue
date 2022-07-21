@@ -252,8 +252,8 @@ export default {
       if (!this.$store.state.auth.authenticated) return false
 
       // TODO (wvffle): Is it better to compare ids? Is full_username unique?
-      return this.obj.created_by.full_username === this.$store.state.auth.fullUsername ||
-        this.$store.state.auth.availablePermissions.library
+      return this.obj.created_by.full_username === this.$store.state.auth.fullUsername
+        || this.$store.state.auth.availablePermissions.library
     },
     previousState () {
       if (this.obj.is_applied) {

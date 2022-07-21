@@ -287,9 +287,9 @@ export default {
     canEdit () {
       if (!this.$store.state.auth.authenticated) return false
 
-      const isOwner = this.object.attributed_to &&
+      const isOwner = this.object.attributed_to
         // TODO (wvffle): Is it better to compare ids? Is full_username unique?
-        this.$store.state.auth.fullUsername === this.object.attributed_to.full_username
+        && this.$store.state.auth.fullUsername === this.object.attributed_to.full_username
 
       return isOwner || this.$store.state.auth.availablePermissions.library
     },

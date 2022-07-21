@@ -1,7 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
   "compilerOptions": {
-    "lib": ["webworker"],
     "baseUrl": ".",
     "sourceMap": true,
     "allowJs": true,
