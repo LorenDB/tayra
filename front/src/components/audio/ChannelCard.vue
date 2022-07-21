@@ -87,7 +87,7 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
           :truncate-size="20"
           :limit="2"
           :show-more="false"
-          :tags="object.artist.tags"
+          :tags="object.artist.tags ?? []"
         />
       </div>
     </div>

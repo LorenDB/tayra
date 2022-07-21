@@ -28,7 +28,6 @@ const tags = computed(() => {
 
   return props.tags.slice(0, props.limit)
 })
-
 </script>
 
 <template>
