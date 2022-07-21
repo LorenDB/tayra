@@ -1,4 +1,4 @@
-import type { HmrOptions } from 'vite'
+// import type { HmrOptions } from 'vite'
 
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
@@ -6,18 +6,6 @@ import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
 
 const port = +(process.env.VUE_PORT ?? 8080)
-
-const hmr = {
-  port: process.env.HMR_PORT || (process.env.FUNKWHALE_PROTOCOL === 'https' ? 443 : port),
-  protocol: process.env.HMR_PROTOCOL || (process.env.FUNKWHALE_PROTOCOL === 'https' ? 'wss' : 'ws')
-} as HmrOptions
-
-if (process.env.GITPOD_WORKSPACE_URL) {
-  hmr.host = process.env.GITPOD_WORKSPACE_URL.replace('https://', `${process.env.HMR_PORT ?? process.env.VUE_PORT ?? 4000}-`)
-  hmr.clientPort = 443
-  hmr.protocol = 'wss'
-  delete hmr.port
-}
 
 // https://vitejs.dev/config/
 export default defineConfig(() => ({
@@ -48,8 +36,7 @@ export default defineConfig(() => ({
     })
   ],
   server: {
-    port,
-    hmr: process.env.DISABLE_HMR ? false : hmr
+    port
   },
   resolve: {
     alias: {

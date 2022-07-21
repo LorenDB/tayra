@@ -1,3 +1,5 @@
+import type { InitModule } from '~/types'
+
 import router from '~/router'
 import store, { key } from '~/store'
 import { createApp, defineAsyncComponent, h } from 'vue'
@@ -31,8 +33,8 @@ const app = createApp({
 app.use(router)
 app.use(store, key)
 
-const modules: Array<Promise<unknown>> = []
-for (const module of Object.values(import.meta.globEager('./init/*.ts'))) {
+const modules: Array<void | Promise<void>> = []
+for (const module of Object.values(import.meta.glob('./init/*.ts', { eager: true })) as { install?: InitModule }[]) {
   modules.push(module.install?.({
     app,
     router,

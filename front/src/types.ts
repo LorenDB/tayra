@@ -16,7 +16,7 @@ export interface InitModuleContext {
   store: Store<RootState>
 }
 
-export type InitModule = (ctx: InitModuleContext) => void
+export type InitModule = (ctx: InitModuleContext) => void | Promise<void>
 
 // Theme stuff
 export type Theme = 'auto' | 'light' | 'dark'

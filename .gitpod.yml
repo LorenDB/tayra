@@ -32,8 +32,6 @@ tasks:
       poetry run python manage.py gitpod dev
 
   - name: Frontend
-    env:
-      HMR_PORT: 8000
     before: cd front
     init: |
       yarn install
