@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useStore } from '~/store'
-import { nextTick, onMounted, ref, computed } from 'vue'
+import { nextTick, onMounted, ref, computed, onBeforeMount, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import time from '~/utils/time'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
@@ -13,6 +13,14 @@ import useQueue from '~/composables/audio/useQueue'
 import usePlayer from '~/composables/audio/usePlayer'
 
 const queueModal = ref()
+
+let savedScroll = 0
+onBeforeMount(() => (savedScroll = window.scrollY))
+onUnmounted(() => {
+  document.body.parentElement?.setAttribute('style', 'scroll-behavior: auto')
+  window.scrollTo({ top: savedScroll, behavior: undefined })
+  document.body.parentElement?.removeAttribute('style')
+})
 
 const { activate } = useFocusTrap(queueModal, { allowOutsideClick: true })
 activate()
