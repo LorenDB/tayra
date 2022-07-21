@@ -22,7 +22,7 @@ export interface CurrentRadio {
   // TODO (wvffle): Find correct type
   customRadioId: unknown
   config: RadioConfig
-  objectId: ObjectId
+  objectId: ObjectId | null
 }
 
 // TODO (wvffle): Find correct type

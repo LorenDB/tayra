@@ -31,7 +31,7 @@ const running = computed(() => {
     store.state.radios.current?.customRadioId === props.customRadioId &&
     (
       typeof props.objectId === 'string' ||
-          store.state.radios.current?.objectId.fullUsername === props.objectId?.fullUsername
+          store.state.radios.current?.objectId?.fullUsername === props.objectId?.fullUsername
     )
 })
 
