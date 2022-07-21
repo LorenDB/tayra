@@ -1,3 +1,59 @@
+<script setup lang="ts">
+import type { Cover, Track, BackendError } from '~/types'
+
+import { clone } from 'lodash-es'
+import { ref, watch } from 'vue'
+
+import axios from 'axios'
+import PodcastTable from '~/components/audio/podcast/Table.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
+
+interface Props {
+  filters: object
+  limit?: number
+  defaultCover: Cover | null
+  isPodcast: boolean
+}
+
+const emit = defineEmits(['fetched'])
+const props = withDefaults(defineProps<Props>(), {
+  limit: 10,
+  defaultCover: null
+})
+
+const channels = ref([] as Track[])
+const nextPage = ref()
+const page = ref(1)
+const count = ref(0)
+const errors = ref([] as string[])
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  const params = {
+    ...clone(props.filters),
+    page_size: props.limit,
+    page: page.value,
+    include_channels: true
+  }
+
+  try {
+    const response = await axios.get('tracks/', { params })
+    nextPage.value = response.data.next
+    channels.value = response.data.results
+    count.value = response.data.count
+    emit('fetched', response.data)
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+watch(page, fetchData, { immediate: true })
+</script>
+
 <template>
   <div>
     <slot />
@@ -10,39 +66,37 @@
     </div>
     <podcast-table
       v-if="isPodcast"
+      v-model:page="page"
       :default-cover="defaultCover"
       :is-podcast="isPodcast"
       :show-art="true"
       :show-position="false"
-      :tracks="objects"
+      :tracks="channels"
       :show-artist="false"
       :show-album="false"
       :paginate-results="true"
       :total="count"
-      :page="page"
       :paginate-by="limit"
-      @page-changed="updatePage"
     />
     <track-table
       v-else
+      v-model:page="page"
       :default-cover="defaultCover"
       :is-podcast="isPodcast"
       :show-art="true"
       :show-position="false"
-      :tracks="objects"
+      :tracks="channels"
       :show-artist="false"
       :show-album="false"
       :paginate-results="true"
       :total="count"
-      :page="page"
       :paginate-by="limit"
       :filters="filters"
-      @page-changed="updatePage"
     />
-    <template v-if="!isLoading && objects.length === 0">
+    <template v-if="!isLoading && channels.length === 0">
       <empty-state
         :refresh="true"
-        @refresh="fetchData('tracks/')"
+        @refresh="fetchData()"
       >
         <p>
           <translate translate-context="Content/Channels/*">
@@ -53,68 +107,3 @@
     </template>
   </div>
 </template>
-
-<script>
-import { clone } from 'lodash-es'
-import axios from 'axios'
-import PodcastTable from '~/components/audio/podcast/Table.vue'
-import TrackTable from '~/components/audio/track/Table.vue'
-
-export default {
-  components: {
-    PodcastTable,
-    TrackTable
-  },
-  props: {
-    filters: { type: Object, required: true },
-    limit: { type: Number, default: 10 },
-    defaultCover: { type: Object, default: () => ({}) },
-    isPodcast: { type: Boolean, required: true }
-  },
-  data () {
-    return {
-      objects: [],
-      count: 0,
-      isLoading: false,
-      errors: [],
-      nextPage: null,
-      page: 1
-    }
-  },
-  watch: {
-    page () {
-      this.fetchData('tracks/')
-    }
-  },
-  created () {
-    this.fetchData('tracks/')
-  },
-  methods: {
-    async fetchData (url) {
-      if (!url) {
-        return
-      }
-      this.isLoading = true
-      const self = this
-      const params = clone(this.filters)
-      params.page_size = this.limit
-      params.page = this.page
-      params.include_channels = true
-      try {
-        const channelsPromise = await axios.get(url, { params: params })
-        self.nextPage = channelsPromise.data.next
-        self.objects = channelsPromise.data.results
-        self.count = channelsPromise.data.count
-        self.$emit('fetched', channelsPromise.data)
-        self.isLoading = false
-      } catch (e) {
-        self.isLoading = false
-        self.errors = e.backendErrors
-      }
-    },
-    updatePage: function (page) {
-      this.page = page
-    }
-  }
-}
-</script>

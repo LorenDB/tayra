@@ -1,3 +1,74 @@
+<script setup lang="ts">
+import { humanSize, truncate } from '~/utils/filters'
+import { ref, computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+
+import axios from 'axios'
+import FetchButton from '~/components/federation/FetchButton.vue'
+import TagsList from '~/components/tags/List.vue'
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  statsWarning: $pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
+}))
+
+const track = ref()
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/library/tracks/${props.id}/`)
+    track.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+const stats = ref()
+const isLoadingStats = ref(false)
+const fetchStats = async () => {
+  isLoadingStats.value = true
+
+  try {
+    const response = await axios.get(`manage/library/tracks/${props.id}/stats/`)
+    stats.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoadingStats.value = false
+}
+
+fetchData()
+fetchStats()
+
+const router = useRouter()
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`manage/library/tracks/${props.id}/`)
+    await router.push({ name: 'manage.library.tracks' })
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+</script>
+
 <template>
   <main>
     <div
@@ -6,9 +77,9 @@
     >
       <div :class="['ui', 'centered', 'active', 'inline', 'loader']" />
     </div>
-    <template v-if="object">
+    <template v-if="track">
       <section
-        v-title="object.title"
+        v-title="track.title"
         :class="['ui', 'head', 'vertical', 'stripe', 'segment']"
       >
         <div class="ui stackable one column grid">
@@ -16,8 +87,8 @@
             <div class="segment-content">
               <h2 class="ui header">
                 <img
-                  v-if="object.cover && object.cover.urls.medium_square_crop"
-                  v-lazy="$store.getters['instance/absoluteUrl'](object.cover.urls.medium_square_crop)"
+                  v-if="track.cover && track.cover.urls.medium_square_crop"
+                  v-lazy="$store.getters['instance/absoluteUrl'](track.cover.urls.medium_square_crop)"
                   alt=""
                 >
                 <img
@@ -26,9 +97,9 @@
                   src="../../../assets/audio/default-cover.png"
                 >
                 <div class="content">
-                  {{ truncate(object.title) }}
+                  {{ truncate(track.title) }}
                   <div class="sub header">
-                    <template v-if="object.is_local">
+                    <template v-if="track.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
                         <translate translate-context="Content/Moderation/*/Short, Noun">Local</translate>
@@ -39,11 +110,11 @@
                 </div>
               </h2>
 
-              <template v-if="object.tags && object.tags.length > 0">
+              <template v-if="track.tags && track.tags.length > 0">
                 <tags-list
                   :limit="5"
                   detail-route="manage.library.tags.detail"
-                  :tags="object.tags"
+                  :tags="track.tags"
                 />
                 <div class="ui hidden divider" />
               </template>
@@ -52,7 +123,7 @@
                 <div class="ui icon buttons">
                   <router-link
                     class="ui icon labeled button"
-                    :to="{name: 'library.tracks.detail', params: {id: object.id }}"
+                    :to="{name: 'library.tracks.detail', params: {id: track.id }}"
                   >
                     <i class="info icon" />
                     <translate translate-context="Content/Moderation/Link/Verb">
@@ -68,7 +139,7 @@
                       <a
                         v-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
                         class="basic item"
-                        :href="$store.getters['instance/absoluteUrl'](`/api/admin/music/track/${object.id}`)"
+                        :href="$store.getters['instance/absoluteUrl'](`/api/admin/music/track/${track.id}`)"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -76,9 +147,9 @@
                         <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
                       </a>
                       <a
-                        v-if="object.mbid"
+                        v-if="track.mbid"
                         class="basic item"
-                        :href="`https://musicbrainz.org/recording/${object.mbid}`"
+                        :href="`https://musicbrainz.org/recording/${track.mbid}`"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -86,9 +157,9 @@
                         <translate translate-context="Content/Moderation/Link/Verb">Open on MusicBrainz</translate>&nbsp;
                       </a>
                       <fetch-button
-                        v-if="!object.is_local"
+                        v-if="!track.is_local"
                         class="basic item"
-                        :url="`tracks/${object.id}/fetches/`"
+                        :url="`tracks/${track.id}/fetches/`"
                         @refresh="fetchData"
                       >
                         <i class="refresh icon" />&nbsp;
@@ -98,7 +169,7 @@
                       </fetch-button>
                       <a
                         class="basic item"
-                        :href="object.url || object.fid"
+                        :href="track.url || track.fid"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -110,8 +181,8 @@
                 </div>
                 <div class="ui buttons">
                   <router-link
-                    v-if="object.is_local"
-                    :to="{name: 'library.tracks.edit', params: {id: object.id }}"
+                    v-if="track.is_local"
+                    :to="{name: 'library.tracks.edit', params: {id: track.id }}"
                     class="ui labeled icon button"
                   >
                     <i class="edit icon" />
@@ -179,44 +250,44 @@
                       </translate>
                     </td>
                     <td>
-                      {{ object.title }}
+                      {{ track.title }}
                     </td>
                   </tr>
-                  <tr v-if="object.album">
+                  <tr v-if="track.album">
                     <td>
-                      <router-link :to="{name: 'manage.library.albums.detail', params: {id: object.album.id }}">
+                      <router-link :to="{name: 'manage.library.albums.detail', params: {id: track.album.id }}">
                         <translate translate-context="*/*/*">
                           Album
                         </translate>
                       </router-link>
                     </td>
                     <td>
-                      {{ object.album.title }}
+                      {{ track.album.title }}
                     </td>
                   </tr>
 
                   <tr>
                     <td>
-                      <router-link :to="{name: 'manage.library.artists.detail', params: {id: object.artist.id }}">
+                      <router-link :to="{name: 'manage.library.artists.detail', params: {id: track.artist.id }}">
                         <translate translate-context="*/*/*/Noun">
                           Artist
                         </translate>
                       </router-link>
                     </td>
                     <td>
-                      {{ object.artist.name }}
+                      {{ track.artist.name }}
                     </td>
                   </tr>
-                  <tr v-if="object.album">
+                  <tr v-if="track.album">
                     <td>
-                      <router-link :to="{name: 'manage.library.artists.detail', params: {id: object.album.artist.id }}">
+                      <router-link :to="{name: 'manage.library.artists.detail', params: {id: track.album.artist.id }}">
                         <translate translate-context="*/*/*/Noun">
                           Album artist
                         </translate>
                       </router-link>
                     </td>
                     <td>
-                      {{ object.album.artist.name }}
+                      {{ track.album.artist.name }}
                     </td>
                   </tr>
                   <tr>
@@ -226,52 +297,52 @@
                       </translate>
                     </td>
                     <td>
-                      {{ object.position }}
+                      {{ track.position }}
                     </td>
                   </tr>
-                  <tr v-if="object.disc_number">
+                  <tr v-if="track.disc_number">
                     <td>
                       <translate translate-context="*/*/*/Noun">
                         Disc number
                       </translate>
                     </td>
                     <td>
-                      {{ object.disc_number }}
+                      {{ track.disc_number }}
                     </td>
                   </tr>
-                  <tr v-if="object.copyright">
+                  <tr v-if="track.copyright">
                     <td>
                       <translate translate-context="Content/Track/*/Noun">
                         Copyright
                       </translate>
                     </td>
-                    <td>{{ object.copyright }}</td>
+                    <td>{{ track.copyright }}</td>
                   </tr>
-                  <tr v-if="object.license">
+                  <tr v-if="track.license">
                     <td>
                       <translate translate-context="Content/*/*/Noun">
                         License
                       </translate>
                     </td>
                     <td>
-                      <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('license', object.license)}}">
-                        {{ object.license }}
+                      <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('license', track.license)}}">
+                        {{ track.license }}
                       </router-link>
                     </td>
                   </tr>
-                  <tr v-if="!object.is_local">
+                  <tr v-if="!track.is_local">
                     <td>
-                      <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
+                      <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: track.domain }}">
                         <translate translate-context="Content/Moderation/*/Noun">
                           Domain
                         </translate>
                       </router-link>
                     </td>
                     <td>
-                      {{ object.domain }}
+                      {{ track.domain }}
                     </td>
                   </tr>
-                  <tr v-if="object.description">
+                  <tr v-if="track.description">
                     <td>
                       <translate translate-context="'*/*/*/Noun">
                         Description
@@ -279,7 +350,7 @@
                     </td>
                     <sanitized-html 
                       tag="td"
-                      :html="object.description.html" 
+                      :html="track.description.html" 
                     />
                   </tr>
                 </tbody>
@@ -318,7 +389,7 @@
                       </translate>
                     </td>
                     <td>
-                      <human-date :date="object.creation_date" />
+                      <human-date :date="track.creation_date" />
                     </td>
                   </tr>
                   <tr>
@@ -353,7 +424,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `track:${object.id}`) }}">
+                      <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `track:${track.id}`) }}">
                         <translate translate-context="Content/Moderation/Table.Label/Noun">
                           Linked reports
                         </translate>
@@ -365,7 +436,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <router-link :to="{name: 'manage.library.edits', query: {q: getQuery('target', 'track ' + object.id)}}">
+                      <router-link :to="{name: 'manage.library.edits', query: {q: getQuery('target', 'track ' + track.id)}}">
                         <translate translate-context="*/Admin/*/Noun">
                           Edits
                         </translate>
@@ -427,7 +498,7 @@
 
                   <tr>
                     <td>
-                      <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('track_id', object.id) }}">
+                      <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('track_id', track.id) }}">
                         <translate translate-context="*/*/*/Noun">
                           Libraries
                         </translate>
@@ -439,7 +510,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('track_id', object.id) }}">
+                      <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('track_id', track.id) }}">
                         <translate translate-context="*/*/*">
                           Uploads
                         </translate>
@@ -458,71 +529,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import FetchButton from '~/components/federation/FetchButton.vue'
-import TagsList from '~/components/tags/List.vue'
-import { humanSize, truncate } from '~/utils/filters'
-
-export default {
-  components: {
-    FetchButton,
-    TagsList
-  },
-  props: { id: { type: Number, required: true } },
-  setup () {
-    return { humanSize, truncate }
-  },
-  data () {
-    return {
-      isLoading: true,
-      isLoadingStats: false,
-      object: null,
-      stats: null
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
-      }
-    }
-  },
-  created () {
-    this.fetchData()
-    this.fetchStats()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/tracks/${this.id}/`
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-      })
-    },
-    fetchStats () {
-      const self = this
-      this.isLoadingStats = true
-      const url = `manage/library/tracks/${this.id}/stats/`
-      axios.get(url).then(response => {
-        self.stats = response.data
-        self.isLoadingStats = false
-      })
-    },
-    remove () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/tracks/${this.id}/`
-      axios.delete(url).then(response => {
-        self.$router.push({ name: 'manage.library.tracks' })
-      })
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    }
-  }
-}
-</script>

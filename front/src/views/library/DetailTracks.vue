@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import type { Library } from '~/types'
+
+import TrackTable from '~/components/audio/track/Table.vue'
+
+interface Props {
+  object: Library
+  isOwner: boolean
+}
+
+defineProps<Props>()
+</script>
+
 <template>
   <section>
     <track-table
@@ -27,17 +40,3 @@
     </track-table>
   </section>
 </template>
-
-<script>
-import TrackTable from '~/components/audio/track/Table.vue'
-
-export default {
-  components: {
-    TrackTable
-  },
-  props: {
-    object: { type: [Object, String], required: true },
-    isOwner: { type: Boolean, required: true }
-  }
-}
-</script>
