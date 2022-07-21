@@ -67,13 +67,11 @@ const store: Module<State, RootState> = {
     toggle ({ getters, dispatch }, uuid) {
       dispatch('set', { uuid, value: !getters.follow(uuid) })
     },
-    fetchFollows ({ dispatch, state, commit, rootState }, url) {
-      const promise = axios.get('federation/follows/library/all/')
-      return promise.then((response) => {
-        response.data.results.forEach((result: { library: string }) => {
-          commit('follows', { library: result.library, follow: result })
-        })
-      })
+    async fetchFollows ({ dispatch, state, commit, rootState }, url) {
+      const response = await axios.get('federation/follows/library/all/')
+      for (const result of response.data.results) {
+        commit('follows', { library: result.library, follow: result })
+      }
     }
   }
 }

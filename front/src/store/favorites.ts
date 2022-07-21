@@ -64,20 +64,20 @@ const store: Module<State, RootState> = {
     toggle ({ getters, dispatch }, id) {
       dispatch('set', { id, value: !getters.isFavorite(id) })
     },
-    fetch ({ commit, rootState }) {
+    async fetch ({ commit, rootState }) {
       // will fetch favorites by batches from API to have them locally
       const params = {
         user: rootState.auth.profile?.id,
         page_size: 50,
         ordering: '-creation_date'
       }
-      const promise = axios.get('favorites/tracks/all/', { params })
-      return promise.then((response) => {
-        logger.info('Fetched a batch of ' + response.data.results.length + ' favorites')
-        response.data.results.forEach((result: { track: string }) => {
-          commit('track', { id: result.track, value: true })
-        })
-      })
+
+      const response = await axios.get('favorites/tracks/all/', { params })
+      logger.info('Fetched a batch of ' + response.data.results.length + ' favorites')
+
+      for (const result of response.data.results) {
+        commit('track', { id: result.track, value: true })
+      }
     }
   }
 }

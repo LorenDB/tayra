@@ -128,30 +128,28 @@ const store: Module<State, RootState> = {
       commit('reportModalTarget', payload)
       commit('showReportModal', true)
     },
-    fetchContentFilters ({ dispatch, commit }, url) {
-      let params = {}
-      let promise
-      if (url) {
-        promise = axios.get(url)
-      } else {
-        commit('empty')
-        params = {
-          page_size: 100,
-          ordering: '-creation_date'
-        }
-        promise = axios.get('moderation/content-filters/', { params })
+    async fetchContentFilters ({ dispatch, commit }, url) {
+      const params = url
+        ? {}
+        : {
+            page_size: 100,
+            ordering: '-creation_date'
+          }
+
+      if (!url) commit('empty')
+      const response = await axios.get(url ?? 'moderation/content-filters/', { params })
+
+      logger.info(`Fetched a batch of ${response.data.results.length} filters`)
+
+      for (const result of response.data.results) {
+        commit('contentFilter', result)
       }
-      return promise.then((response) => {
-        logger.info('Fetched a batch of ' + response.data.results.length + ' filters')
-        if (response.data.next) {
-          dispatch('fetchContentFilters', response.data.next)
-        }
-        response.data.results.forEach((result: ContentFilter) => {
-          commit('contentFilter', result)
-        })
-      })
+
+      if (response.data.next) {
+        await dispatch('fetchContentFilters', response.data.next)
+      }
     },
-    deleteContentFilter ({ commit }, uuid) {
+    async deleteContentFilter ({ commit }, uuid) {
       return axios.delete(`moderation/content-filters/${uuid}/`).then(() => {
         commit('deleteContentFilter', uuid)
       })

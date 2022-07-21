@@ -41,7 +41,7 @@ const store: Module<State, RootState> = {
 
       const playlists = []
       let url = 'playlists/'
-      while (url != null) {
+      while (url !== null) {
         const response = await axios.get(url, { params: { scope: 'me' } })
         playlists.push(...response.data.results)
         url = response.data.next

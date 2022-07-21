@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { BackendError } from '~/types'
+import type { RouteLocationRaw } from 'vue-router'
 
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
@@ -8,7 +9,7 @@ import { useStore } from '~/store'
 import PasswordInput from '~/components/forms/PasswordInput.vue'
 
 interface Props {
-  next?: string
+  next?: RouteLocationRaw
   buttonClasses?: string
   showSignup?: boolean
 }
@@ -42,10 +43,7 @@ const submit = async () => {
 
   try {
     if (domain === store.getters['instance/domain']) {
-      await store.dispatch('auth/login', {
-        credentials,
-        next: props.next
-      })
+      await store.dispatch('auth/login', { credentials })
     } else {
       await store.dispatch('auth/oauthLogin', props.next)
     }
@@ -61,14 +59,6 @@ const submit = async () => {
 
   isLoading.value = false
 }
-
-// export default {
-//   created () {
-//     if (this.$store.state.auth.authenticated) {
-//       this.$router.push(this.next)
-//     }
-//   },
-// }
 </script>
 
 <template>

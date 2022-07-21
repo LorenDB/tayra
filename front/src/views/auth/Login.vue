@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
+import { whenever } from '@vueuse/core'
 
 interface Props {
   next?: RouteLocationRaw
@@ -21,11 +22,11 @@ const labels = computed(() => ({
 }))
 
 const store = useStore()
-if (store.state.auth.authenticated) {
-  const router = useRouter()
+const router = useRouter()
+whenever(() => store.state.auth.authenticated, () => {
   const resolved = router.resolve(props.next)
   router.push(resolved.name === '404' ? '/library' : props.next)
-}
+})
 </script>
 
 <template>

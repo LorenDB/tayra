@@ -103,13 +103,11 @@ const store: Module<State, RootState> = {
     toggle ({ getters, dispatch }, uuid) {
       dispatch('set', { uuid, value: !getters.isSubscribed(uuid) })
     },
-    fetchSubscriptions ({ commit }) {
-      const promise = axios.get('subscriptions/all/')
-      return promise.then((response) => {
-        response.data.results.forEach((result: { channel: unknown }) => {
-          commit('subscriptions', { uuid: result.channel, value: true })
-        })
-      })
+    async fetchSubscriptions ({ commit }) {
+      const response = await axios.get('subscriptions/all/')
+      for (const result of response.data.results) {
+        commit('subscriptions', { uuid: result.channel, value: true })
+      }
     }
   }
 }

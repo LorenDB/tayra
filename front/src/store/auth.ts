@@ -1,6 +1,7 @@
 import type { User } from '~/types'
 import type { Module } from 'vuex'
 import type { RootState } from '~/store/index'
+import type { RouteLocationRaw } from 'vue-router'
 
 import axios from 'axios'
 import useLogger from '~/composables/useLogger'
@@ -147,20 +148,12 @@ const store: Module<State, RootState> = {
   },
   actions: {
     // Send a request to the login URL and save the returned JWT
-    login ({ dispatch }, { next, credentials, onError }) {
+    async login ({ dispatch }, { credentials }) {
       const form = useFormData(credentials)
-      return axios.post('users/login', form).then(() => {
-        logger.info('Successfully logged in as', credentials.username)
-        dispatch('fetchUser').then(() => {
-          // Redirect to a specified route
-          import('~/router').then((router) => {
-            return router.default.push(next)
-          })
-        })
-      }, response => {
-        logger.error('Error while logging in', response.data)
-        onError(response)
-      })
+      await axios.post('users/login', form)
+
+      logger.info('Successfully logged in as', credentials.username)
+      await dispatch('fetchUser')
     },
     async logout ({ commit }) {
       try {
@@ -181,36 +174,40 @@ const store: Module<State, RootState> = {
       })
       logger.info('Log out, goodbye!')
     },
-    fetchUser ({ dispatch }) {
-      return new Promise((resolve, reject) => {
-        axios.get('users/me/').then((response) => {
-          logger.info('Successfully fetched user profile')
-          dispatch('updateUser', response.data)
-          dispatch('ui/fetchUnreadNotifications', null, { root: true })
-          if (response.data.permissions.library) {
-            dispatch('ui/fetchPendingReviewEdits', null, { root: true })
-          }
-          if (response.data.permissions.moderation) {
-            dispatch('ui/fetchPendingReviewReports', null, { root: true })
-            dispatch('ui/fetchPendingReviewRequests', null, { root: true })
-          }
-          dispatch('favorites/fetch', null, { root: true })
-          dispatch('channels/fetchSubscriptions', null, { root: true })
-          dispatch('libraries/fetchFollows', null, { root: true })
+
+    async fetchNotifications ({ dispatch, state }) {
+      return Promise.all([
+        dispatch('ui/fetchUnreadNotifications', null, { root: true }),
+        state.availablePermissions.library && dispatch('ui/fetchPendingReviewEdits', null, { root: true }),
+        state.availablePermissions.moderation && dispatch('ui/fetchPendingReviewReports', null, { root: true }),
+        state.availablePermissions.moderation && dispatch('ui/fetchPendingReviewRequests', null, { root: true })
+      ])
+    },
+    async fetchUser ({ dispatch }) {
+      try {
+        const response = await axios.get('users/me/')
+        logger.info('Successfully fetched user profile')
+
+        dispatch('updateUser', response.data)
+
+        await Promise.all([
+          dispatch('fetchNotifications'),
+          dispatch('favorites/fetch', null, { root: true }),
+          dispatch('playlists/fetchOwn', null, { root: true }),
+          dispatch('libraries/fetchFollows', null, { root: true }),
+          dispatch('channels/fetchSubscriptions', null, { root: true }),
           dispatch('moderation/fetchContentFilters', null, { root: true })
-          dispatch('playlists/fetchOwn', null, { root: true })
-          resolve(response.data)
-        }, () => {
-          logger.info('Error while fetching user profile')
-          reject(new Error('Error while fetching user profile'))
-        })
-      })
+        ])
+      } catch (error) {
+        logger.error('Error while fetching user profile', error)
+      }
     },
     updateUser ({ commit }, data) {
       commit('authenticated', true)
       commit('profile', data)
       commit('username', data.username)
       commit('fullUsername', data.full_username)
+
       if (data.tokens) {
         commit('scopedTokens', data.tokens)
       }
@@ -220,7 +217,7 @@ const store: Module<State, RootState> = {
         commit('permission', { key: permission, status: hasPermission })
       }
     },
-    async oauthLogin ({ state, rootState, commit }, next) {
+    async oauthLogin ({ state, rootState, commit }, next: RouteLocationRaw) {
       const app = await createOauthApp()
       commit('oauthApp', app)
       const redirectUri = encodeURIComponent(`${location.origin}/auth/callback`)

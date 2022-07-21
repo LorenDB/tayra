@@ -9,7 +9,6 @@ import SemanticModal from '~/components/semantic/Modal.vue'
 
 import useThemeList from '~/composables/useThemeList'
 import useTheme from '~/composables/useTheme'
-import axios from 'axios'
 import { useRoute } from 'vue-router'
 import { computed, ref, watch, watchEffect, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
@@ -93,37 +92,6 @@ const moderationNotifications = computed(() =>
     + store.state.ui.notifications.pendingReviewReports
     + store.state.ui.notifications.pendingReviewRequests
 )
-
-onMounted(async () => {
-  if (store.state.auth.authenticated) {
-    const [inbox, edits, reports, requests] = await Promise.all([
-      axios.get('federation/inbox/', { params: { is_read: false } }).catch(() => ({ data: { count: 0 } })),
-      axios.get('mutations/', { params: { page_size: 1, q: 'is_approved:null' } }).catch(() => ({ data: { count: 0 } })),
-      axios.get('manage/moderation/reports/', { params: { page_size: 1, q: 'resolved:no' } }).catch(() => ({ data: { count: 0 } })),
-      axios.get('manage/moderation/requests/', { params: { page_size: 1, q: 'status:pending' } }).catch(() => ({ data: { count: 0 } }))
-    ])
-
-    store.commit('ui/incrementNotifications', {
-      type: 'inbox',
-      value: inbox.data.count
-    })
-
-    store.commit('ui/incrementNotifications', {
-      type: 'pendingReviewEdits',
-      value: edits.data.count
-    })
-
-    store.commit('ui/incrementNotifications', {
-      type: 'pendingReviewRequests',
-      value: requests.data.count
-    })
-
-    store.commit('ui/incrementNotifications', {
-      type: 'pendingReviewReports',
-      value: reports.data.count
-    })
-  }
-})
 
 const isProduction = import.meta.env.PROD
 const showUserModal = ref(false)

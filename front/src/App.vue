@@ -67,6 +67,11 @@ onKeyboardShortcut('h', () => toggleShortcutsModal())
 
 const { width } = useWindowSize()
 const showSetInstanceModal = ref(false)
+
+// Fetch user data on startup
+if (store.state.auth.authenticated) {
+  store.dispatch('auth/fetchUser')
+}
 </script>
 
 <template>
