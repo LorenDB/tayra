@@ -97,8 +97,8 @@ const moderationNotifications = computed(() =>
 onMounted(async () => {
   const [edits, reports, requests] = await Promise.all([
     axios.get('mutations/', { params: { page_size: 1, q: 'is_approved:null' } }).catch(() => ({ data: { count: 0 } })),
-    axios.get('manage/moderation/reports/', { params: { page_size: 1 } }).catch(() => ({ data: { count: 0 } })),
-    axios.get('manage/moderation/requests/', { params: { page_size: 1 } }).catch(() => ({ data: { count: 0 } }))
+    axios.get('manage/moderation/reports/', { params: { page_size: 1, q: 'resolved:no' } }).catch(() => ({ data: { count: 0 } })),
+    axios.get('manage/moderation/requests/', { params: { page_size: 1, q: 'status:pending' } }).catch(() => ({ data: { count: 0 } }))
   ])
 
   store.commit('ui/incrementNotifications', {
