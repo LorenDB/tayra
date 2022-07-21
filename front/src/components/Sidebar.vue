@@ -95,26 +95,28 @@ const moderationNotifications = computed(() =>
 )
 
 onMounted(async () => {
-  const [edits, reports, requests] = await Promise.all([
-    axios.get('mutations/', { params: { page_size: 1, q: 'is_approved:null' } }).catch(() => ({ data: { count: 0 } })),
-    axios.get('manage/moderation/reports/', { params: { page_size: 1, q: 'resolved:no' } }).catch(() => ({ data: { count: 0 } })),
-    axios.get('manage/moderation/requests/', { params: { page_size: 1, q: 'status:pending' } }).catch(() => ({ data: { count: 0 } }))
-  ])
+  if (store.state.auth.authenticated) {
+    const [edits, reports, requests] = await Promise.all([
+      axios.get('mutations/', { params: { page_size: 1, q: 'is_approved:null' } }).catch(() => ({ data: { count: 0 } })),
+      axios.get('manage/moderation/reports/', { params: { page_size: 1, q: 'resolved:no' } }).catch(() => ({ data: { count: 0 } })),
+      axios.get('manage/moderation/requests/', { params: { page_size: 1, q: 'status:pending' } }).catch(() => ({ data: { count: 0 } }))
+    ])
 
-  store.commit('ui/incrementNotifications', {
-    type: 'pendingReviewEdits',
-    value: edits.data.count
-  })
+    store.commit('ui/incrementNotifications', {
+      type: 'pendingReviewEdits',
+      value: edits.data.count
+    })
 
-  store.commit('ui/incrementNotifications', {
-    type: 'pendingReviewRequests',
-    value: requests.data.count
-  })
+    store.commit('ui/incrementNotifications', {
+      type: 'pendingReviewRequests',
+      value: requests.data.count
+    })
 
-  store.commit('ui/incrementNotifications', {
-    type: 'pendingReviewReports',
-    value: reports.data.count
-  })
+    store.commit('ui/incrementNotifications', {
+      type: 'pendingReviewReports',
+      value: reports.data.count
+    })
+  }
 })
 
 const isProduction = import.meta.env.PROD
