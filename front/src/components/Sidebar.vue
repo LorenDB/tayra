@@ -94,11 +94,11 @@ const moderationNotifications = computed(() =>
     store.state.ui.notifications.pendingReviewRequests
 )
 
-Promise.resolve().then(async () => {
+onMounted(async () => {
   const [edits, reports, requests] = await Promise.all([
-    axios.get('mutations/', { params: { page_size: 1 } }),
-    axios.get('manage/moderation/reports/', { params: { page_size: 1 } }),
-    axios.get('manage/moderation/requests/', { params: { page_size: 1 } })
+    axios.get('mutations/', { params: { page_size: 1 } }).catch(() => ({ data: { count: 0 } })),
+    axios.get('manage/moderation/reports/', { params: { page_size: 1 } }).catch(() => ({ data: { count: 0 } })),
+    axios.get('manage/moderation/requests/', { params: { page_size: 1 } }).catch(() => ({ data: { count: 0 } }))
   ])
 
   store.commit('ui/incrementNotifications', {
