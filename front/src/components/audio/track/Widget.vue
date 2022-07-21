@@ -45,7 +45,7 @@ const fetchData = async (url = props.url) => {
     nextPage.value = response.data.next
     count.value = response.data.count
 
-    const newObjects = !props.isActivity 
+    const newObjects = !props.isActivity
       ? response.data.results.map((track: Track) => { track })
       : response.data.results
 
@@ -127,7 +127,10 @@ if (props.websocketHandlers.includes('Listen')) {
                   {{ object.track.title }}
                 </router-link>
               </div>
-              <div v-if="object.track.artist" class="meta ellipsis">
+              <div
+                v-if="object.track.artist"
+                class="meta ellipsis"
+              >
                 <span>
                   <router-link
                     class="discrete link"

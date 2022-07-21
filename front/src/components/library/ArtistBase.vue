@@ -80,7 +80,6 @@ const fetchData = async () => {
   nextTracksUrl.value = tracksResponse.data.next
   totalTracks.value = tracksResponse.data.count
 
-
   nextAlbumsUrl.value = albumsResponse.data.next
   totalAlbums.value = albumsResponse.data.count
 

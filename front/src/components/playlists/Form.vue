@@ -69,7 +69,7 @@ const submit = async () => {
 
   try {
     const url = props.create ? 'playlists/' : `playlists/${playlist.value!.id}/`
-    const method = props.create ? 'post' : 'patch' 
+    const method = props.create ? 'post' : 'patch'
 
     const data = {
       name: name.value,
@@ -93,7 +93,6 @@ const submit = async () => {
 
   isLoading.value = false
 }
-
 
 </script>
 

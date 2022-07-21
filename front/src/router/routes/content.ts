@@ -37,5 +37,5 @@ export default [
       name: 'content.remote.index',
       component: () => import('~/views/content/remote/Home.vue')
     }]
-  },
+  }
 ] as RouteRecordRaw[]

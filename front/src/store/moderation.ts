@@ -139,7 +139,7 @@ const store: Module<State, RootState> = {
           page_size: 100,
           ordering: '-creation_date'
         }
-        promise = axios.get('moderation/content-filters/', { params: params })
+        promise = axios.get('moderation/content-filters/', { params })
       }
       return promise.then((response) => {
         logger.info('Fetched a batch of ' + response.data.results.length + ' filters')

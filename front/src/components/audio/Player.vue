@@ -284,7 +284,7 @@ const switchTab = () => {
               >
                 {{ currentTimeFormatted }}
               </span>
-              | 
+              |
               <span class="total">{{ durationFormatted }}</span>
             </template>
           </div>

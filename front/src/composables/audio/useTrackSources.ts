@@ -1,10 +1,10 @@
-import type { Track } from "~/types"
+import type { Track } from '~/types'
 
 import store from '~/store'
 import updateQueryString from '~/composables/updateQueryString'
 
 export interface TrackSource {
-  url: string 
+  url: string
   type: string
 }
 
@@ -29,22 +29,22 @@ export default (trackData: Track): TrackSource[] => {
   sources.push({
     type: 'mp3',
     url: updateQueryString(
-      store.getters['instance/absoluteUrl'](trackData.listen_url), 
-      'to', 
+      store.getters['instance/absoluteUrl'](trackData.listen_url),
+      'to',
       'mp3'
     )
   })
 
   const token = store.state.auth.scopedTokens.listen
   if (store.state.auth.authenticated && token !== null) {
-      // we need to send the token directly in url
-      // so authentication can be checked by the backend
-      // because for audio files we cannot use the regular Authentication
-      // header
-      return sources.map(source => ({
-        ...source,
-        url: updateQueryString(source.url, 'token', token)
-      }))
+    // we need to send the token directly in url
+    // so authentication can be checked by the backend
+    // because for audio files we cannot use the regular Authentication
+    // header
+    return sources.map(source => ({
+      ...source,
+      url: updateQueryString(source.url, 'token', token)
+    }))
   }
 
   return sources

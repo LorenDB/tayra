@@ -61,5 +61,5 @@ export default [
     path: '/logout',
     name: 'logout',
     component: () => import('~/components/auth/Logout.vue')
-  },
+  }
 ] as RouteRecordRaw[]

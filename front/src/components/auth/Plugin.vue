@@ -73,7 +73,10 @@
       </div>
     </div>
     <template v-if="plugin.conf?.length > 0">
-      <template v-for="(field, key) in plugin.conf" :key="key">
+      <template
+        v-for="(field, key) in plugin.conf"
+        :key="key"
+      >
         <div
           v-if="field.type === 'text'"
           class="field"

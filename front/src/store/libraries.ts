@@ -60,7 +60,7 @@ const store: Module<State, RootState> = {
           commit('follows', { library: uuid, follow: null })
         }, () => {
           logger.info('Error while unsubscribing from library')
-          commit('follows', { library: uuid, follow: follow })
+          commit('follows', { library: uuid, follow })
         })
       }
     },

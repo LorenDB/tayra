@@ -3,7 +3,7 @@ import type { ContentFilter } from '~/store/moderation'
 
 import { useStore } from '~/store'
 import { useGettext } from 'vue3-gettext'
-import { computed, ref } from "vue"
+import { computed, ref } from 'vue'
 import axios from 'axios'
 import usePlayer from '~/composables/audio/usePlayer'
 import useQueue from '~/composables/audio/useQueue'
@@ -36,8 +36,8 @@ export default (props: PlayOptionsProps) => {
     if (props.track) {
       return props.track.uploads?.length > 0
     } else if (props.artist) {
-      return props.artist.tracks_count > 0 
-        || props.artist.albums.some((album) => album.is_playable === true)
+      return props.artist.tracks_count > 0 ||
+        props.artist.albums.some((album) => album.is_playable === true)
     } else if (props.tracks) {
       return props.tracks.some((track) => (track.uploads?.length ?? 0) > 0)
     }
@@ -55,7 +55,7 @@ export default (props: PlayOptionsProps) => {
     }
 
     store.commit('ui/addMessage', {
-      content: $npgettext('*/Queue/Message', '%{ count } track was added to your queue', '%{ count } tracks were added to your queue', tracks.length, { 
+      content: $npgettext('*/Queue/Message', '%{ count } track was added to your queue', '%{ count } tracks were added to your queue', tracks.length, {
         count: tracks.length.toString()
       }),
       date: new Date()
@@ -70,8 +70,8 @@ export default (props: PlayOptionsProps) => {
 
     // when fetching artists/or album tracks, sometimes, we may have to fetch
     // multiple pages
-    const response = await axios.get('tracks/', { 
-      params: { 
+    const response = await axios.get('tracks/', {
+      params: {
         ...params,
         page_size: 100,
         page,
@@ -136,7 +136,7 @@ export default (props: PlayOptionsProps) => {
     jQuery(el.value).find('.ui.dropdown').dropdown('hide')
 
     const tracks = await getPlayableTracks()
-    store.dispatch('queue/appendMany', { tracks: tracks }).then(() => addMessage(tracks))
+    store.dispatch('queue/appendMany', { tracks }).then(() => addMessage(tracks))
   }
 
   const enqueueNext = async (next = false) => {
@@ -188,7 +188,7 @@ export default (props: PlayOptionsProps) => {
     replacePlay()
   }
 
-  return { 
+  return {
     playable,
     filterableArtist,
     filterArtist,

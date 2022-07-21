@@ -96,7 +96,7 @@ const store: Module<State, RootState> = {
 
       const total = tracks.length
       tracks.forEach((track: Track, i: number) => {
-        const promise = dispatch('append', { track: track, index: index })
+        const promise = dispatch('append', { track, index })
         index += 1
 
         if (callback && i + 1 === total) {

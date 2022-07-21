@@ -1,7 +1,7 @@
-import type { Howl } from "howler"
+import type { Howl } from 'howler'
 
-import { sortBy } from "lodash-es"
-import { reactive, watchEffect, ref } from "vue"
+import { sortBy } from 'lodash-es'
+import { reactive, watchEffect, ref } from 'vue'
 
 const MAX_PRELOADED = 3
 
@@ -15,7 +15,7 @@ const soundCache = reactive(new Map<string, CachedSound>())
 const cleaningCache = ref(false)
 
 watchEffect(() => {
-  let toRemove = soundCache.size - MAX_PRELOADED
+  const toRemove = soundCache.size - MAX_PRELOADED
 
   if (toRemove > 0 && !cleaningCache.value) {
     cleaningCache.value = true
@@ -32,7 +32,6 @@ watchEffect(() => {
     cleaningCache.value = false
   }
 })
-
 
 export default () => {
   return soundCache

@@ -90,7 +90,7 @@ export default {
       const params = clone(this.filters)
       params.page_size = this.limit
       params.include_channels = true
-      axios.get(url, { params: params }).then((response) => {
+      axios.get(url, { params }).then((response) => {
         self.nextPage = response.data.next
         self.isLoading = false
         self.objects = self.objects.concat(response.data.results)

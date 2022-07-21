@@ -7,7 +7,6 @@ import useQueue from '~/composables/audio/useQueue'
 import usePlayer from '~/composables/audio/usePlayer'
 import { computed } from 'vue'
 
-
 interface Props {
   // TODO (wvffle): Is it correct type?
   entry: Track

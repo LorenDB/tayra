@@ -39,7 +39,7 @@ const fetchData = async () => {
 
     target_account_domain: props.type === 'actor'
       ? domain
-      : undefined,
+      : undefined
   }
 
   isLoading.value = true

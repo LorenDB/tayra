@@ -26,5 +26,5 @@ export default [
     name: 'settings.applications.edit',
     component: () => import('~/components/auth/ApplicationEdit.vue'),
     props: true
-  },
+  }
 ] as RouteRecordRaw[]

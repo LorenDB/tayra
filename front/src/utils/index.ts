@@ -30,7 +30,7 @@ export function parseAPIErrors (responseData: APIErrorResponse, parentField?: st
       }))
 
       continue
-    } 
+    }
 
     // Handle nested errors
     errors.push(...parseAPIErrors(value, fieldName))

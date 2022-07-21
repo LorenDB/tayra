@@ -201,9 +201,9 @@
                         Description
                       </translate>
                     </td>
-                    <sanitized-html 
+                    <sanitized-html
                       tag="td"
-                      :html="object.artist.description.html" 
+                      :html="object.artist.description.html"
                     />
                   </tr>
                   <tr v-if="object.actor.url">

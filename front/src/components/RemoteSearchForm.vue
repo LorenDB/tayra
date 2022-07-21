@@ -29,16 +29,15 @@ const type = ref(props.initialType)
 const id = ref(props.initialId)
 const errors = ref([] as string[])
 
-
 const { $pgettext } = useGettext()
 const labels = computed(() => ({
-  title: type.value === 'rss' 
+  title: type.value === 'rss'
     ? $pgettext('Head/Fetch/Title', 'Subscribe to a podcast RSS feed')
     : $pgettext('Head/Fetch/Title', 'Subscribe to a podcast hosted on the Fediverse'),
-  fieldLabel: type.value === 'rss' 
+  fieldLabel: type.value === 'rss'
     ? $pgettext('*/*/*', 'RSS feed location')
     : $pgettext('*/*/*', 'Fediverse object'),
-  fieldPlaceholder: type.value === 'rss' 
+  fieldPlaceholder: type.value === 'rss'
     ? $pgettext('Head/Fetch/Field.Placeholder', 'https://website.example.com/rss.xml')
     : $pgettext('Head/Fetch/Field.Placeholder', '@username@example.com')
 }))

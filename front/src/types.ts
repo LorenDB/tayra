@@ -3,6 +3,8 @@ import type { Store } from 'vuex'
 import type { Router } from 'vue-router'
 import type { AxiosError } from 'axios'
 import type { RootState } from '~/store'
+
+// eslint-disable-next-line
 import type { ComponentPublicInstance } from '@vue/runtime-core'
 
 export type FunctionRef = Element | ComponentPublicInstance | null
@@ -100,7 +102,6 @@ export interface Track {
   is_local: boolean
 }
 
-
 export interface Channel {
   id: string
   uuid: string
@@ -195,6 +196,7 @@ export interface Listening {
 }
 
 // API stuff
+// eslint-disable-next-line
 export interface APIErrorResponse extends Record<string, APIErrorResponse | string[] | { code: string }[]> {}
 
 export interface BackendError extends AxiosError {

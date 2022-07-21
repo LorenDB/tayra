@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import store from '~/store'
 
 export default [
-  { suffix: '.full', path: '/@:username@:domain' }, 
+  { suffix: '.full', path: '/@:username@:domain' },
   { suffix: '', path: '/@:username' }
 ].map((route) => {
   return {

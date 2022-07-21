@@ -53,8 +53,8 @@ const headerStyle = computed(() => {
     return ''
   }
 
-  return { 
-    backgroundImage: `url(${store.getters['instance/absoluteUrl'](banner.value)})` 
+  return {
+    backgroundImage: `url(${store.getters['instance/absoluteUrl'](banner.value)})`
   }
 })
 </script>
@@ -138,7 +138,7 @@ const headerStyle = computed(() => {
                   About this pod
                 </translate>
               </h2>
-              <sanitized-html 
+              <sanitized-html
                 v-if="longDescription"
                 :html="markdown.makeHtml(longDescription)"
               />

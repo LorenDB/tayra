@@ -10,7 +10,6 @@ import { useStore } from '~/store'
 import SemanticModal from '~/components/semantic/Modal.vue'
 import useLogger from '~/composables/useLogger'
 
-
 const logger = useLogger()
 const { $pgettext } = useGettext()
 

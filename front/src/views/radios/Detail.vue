@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Track, Radio } from "~/types"
+import type { Track, Radio } from '~/types'
 
 import axios from 'axios'
 import TrackTable from '~/components/audio/track/Table.vue'
@@ -35,7 +35,7 @@ const fetchData = async () => {
     const radioResponse = await axios.get(url)
     radio.value = radioResponse.data
 
-    const tracksResponse = await axios.get(url + 'tracks/', { params: { page: page.value }})
+    const tracksResponse = await axios.get(url + 'tracks/', { params: { page: page.value } })
     totalTracks.value = tracksResponse.data.count
     tracks.value = tracksResponse.data.results
   } catch (error) {

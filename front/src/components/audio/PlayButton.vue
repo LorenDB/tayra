@@ -51,10 +51,10 @@ const props = withDefaults(defineProps<Props>(), {
   paused: () => false
 })
 
-const { 
-  playable, 
-  filterableArtist, 
-  filterArtist, 
+const {
+  playable,
+  filterableArtist,
+  filterArtist,
   enqueue,
   enqueueNext,
   replacePlay,
@@ -75,14 +75,14 @@ const labels = computed(() => ({
   addToPlaylist: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Add to playlist…'),
   hideArtist: $pgettext('*/Queue/Dropdown/Button/Label/Short', 'Hide content from this artist'),
   replacePlay: props.track
-  ? $pgettext('*/Queue/Dropdown/Button/Title', 'Play track')
-  : props.album
-    ? $pgettext('*/Queue/Dropdown/Button/Title', 'Play album')
-    : props.artist
-      ? $pgettext('*/Queue/Dropdown/Button/Title', 'Play artist')
-      : props.playlist
-        ? $pgettext('*/Queue/Dropdown/Button/Title', 'Play playlist')
-        : $pgettext('*/Queue/Dropdown/Button/Title', 'Play tracks')
+    ? $pgettext('*/Queue/Dropdown/Button/Title', 'Play track')
+    : props.album
+      ? $pgettext('*/Queue/Dropdown/Button/Title', 'Play album')
+      : props.artist
+        ? $pgettext('*/Queue/Dropdown/Button/Title', 'Play artist')
+        : props.playlist
+          ? $pgettext('*/Queue/Dropdown/Button/Title', 'Play playlist')
+          : $pgettext('*/Queue/Dropdown/Button/Title', 'Play tracks')
 }))
 
 const title = computed(() => {

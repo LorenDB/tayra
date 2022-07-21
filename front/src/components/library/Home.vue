@@ -36,7 +36,7 @@ const fetchData = async () => {
   }
 
   try {
-    const response = await axios.get('artists/', { params: params })
+    const response = await axios.get('artists/', { params })
     artists.value = response.data.results
   } catch (error) {
     // TODO (wvffle): Handle error

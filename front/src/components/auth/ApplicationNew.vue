@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
 const defaults = reactive({
   name: props.name,
   scopes: props.scopes,
-  redirectUris: props.redirectUris,
+  redirectUris: props.redirectUris
 })
 
 const { $pgettext } = useGettext()

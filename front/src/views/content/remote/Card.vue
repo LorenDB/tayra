@@ -34,13 +34,13 @@ const scanProgress = computed(() => Math.min(latestScan.value.processed_files * 
 const scanStatus = computed(() => latestScan.value?.status ?? 'unknown')
 const canLaunchScan = computed(() => scanStatus.value !== 'pending' && scanStatus.value !== 'scanning')
 const radioPlayable = computed(() => (
-  (library.value.actor.is_local || scanStatus.value === 'finished')
-  && (library.value.privacy_level === 'everyone' || library.value.follow?.approved)
+  (library.value.actor.is_local || scanStatus.value === 'finished') &&
+  (library.value.privacy_level === 'everyone' || library.value.follow?.approved)
 ))
 
 const { $pgettext } = useGettext()
 const labels = computed(() => ({
-  tooltips: { 
+  tooltips: {
     me: $pgettext('Content/Library/Card.Help text', 'This library is private and your approval from its owner is needed to access its content'),
     everyone: $pgettext('Content/Library/Card.Help text', 'This library is public and you can access its content freely')
   }

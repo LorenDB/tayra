@@ -16,9 +16,9 @@
         <sanitized-html
           tag="span"
           class="link"
+          :html="notificationData.message"
           @click="navigate"
           @keypress.enter="navigate"
-          :html="notificationData.message"
         />
       </router-link>
       <sanitized-html

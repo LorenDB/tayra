@@ -74,7 +74,7 @@ const title = computed(() => labels.value[props.type])
         :default-query="defaultQuery"
         :ordering-config-name="null"
       />
-      <invitations-table 
+      <invitations-table
         v-else-if="type === 'invitations'"
         :ordering-config-name="null"
       />
@@ -102,7 +102,7 @@ const title = computed(() => labels.value[props.type])
         :default-query="defaultQuery"
         :ordering-config-name="null"
       />
-      <users-table 
+      <users-table
         v-else-if="type === 'users'"
         :ordering-config-name="null"
       />

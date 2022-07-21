@@ -86,7 +86,7 @@ const store: Module<State, RootState> = {
         radio_type: type,
         related_object_id: objectId,
         custom_radio: customRadioId,
-        config: config
+        config
       }
 
       if (clientOnly) {

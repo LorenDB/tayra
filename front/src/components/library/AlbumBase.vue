@@ -44,14 +44,14 @@ const fetchData = async () => {
   const albumResponse = await axios.get(`albums/${props.id}/`, { params: { refresh: 'true' } })
   const [artistResponse, tracksResponse] = await Promise.all([
     axios.get(`artists/${albumResponse.data.artist.id}/`),
-    axios.get('tracks/', { 
-      params: { 
-        ordering: 'disc_number,position', 
-        album: props.id, 
-        page_size: paginateBy.value, 
-        page: page.value, 
-        include_channels: true 
-      } 
+    axios.get('tracks/', {
+      params: {
+        ordering: 'disc_number,position',
+        album: props.id,
+        page_size: paginateBy.value,
+        page: page.value,
+        include_channels: true
+      }
     })
   ])
 
@@ -59,7 +59,6 @@ const fetchData = async () => {
   if (artist.value?.channel) {
     artist.value.channel.artist = artist.value
   }
-
 
   object.value = albumResponse.data
   if (object.value) {

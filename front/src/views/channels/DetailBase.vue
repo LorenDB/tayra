@@ -73,7 +73,6 @@ const fetchData = async () => {
       } else {
         await router.replace({ name: 'channels.detail', params: { id: actor.full_username } })
       }
-
     }
   } catch (error) {
     // TODO (wvffle): Handle error

@@ -34,7 +34,7 @@ const store: Module<State, RootState> = {
     currentTime: 0,
     errored: false,
     bufferProgress: 0,
-    looping: 0 
+    looping: 0
   },
   mutations: {
     reset (state) {

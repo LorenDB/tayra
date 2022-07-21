@@ -73,7 +73,6 @@ withDefaults(defineProps<Props>(), {
     </div>
 
     <div :class="['track-table', 'ui', 'unstackable', 'grid', 'tablet-and-below']">
-
       <!-- For each item, build a row -->
 
       <track-mobile-row

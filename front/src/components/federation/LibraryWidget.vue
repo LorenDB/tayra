@@ -89,7 +89,7 @@ export default {
       const params = clone({})
       params.page_size = this.limit
       params.offset = this.offset
-      axios.get(url, { params: params }).then((response) => {
+      axios.get(url, { params }).then((response) => {
         self.previousPage = response.data.previous
         self.nextPage = response.data.next
         self.isLoading = false

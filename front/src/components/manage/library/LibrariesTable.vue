@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { PrivacyLevel } from '~/types'
-import type { RouteWithPreferences } from '~/store/ui'
-import type { OrderingField } from '~/store/ui'
+import type { RouteWithPreferences, OrderingField } from '~/store/ui'
 import type { SmartSearchProps } from '~/composables/useSmartSearch'
 import type { OrderingProps } from '~/composables/useOrdering'
 

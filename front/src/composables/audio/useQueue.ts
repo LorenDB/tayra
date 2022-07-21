@@ -1,11 +1,11 @@
-import type { Track } from "~/types"
+import type { Track } from '~/types'
 
 import { useTimeoutFn, useThrottleFn, useTimeAgo, useNow, whenever } from '@vueuse/core'
 import { Howler } from 'howler'
 import { gettext } from '~/init/locale'
-import { ref, computed } from "vue"
+import { ref, computed } from 'vue'
 import { sum } from 'lodash-es'
-import store from "~/store"
+import store from '~/store'
 
 const { $pgettext } = gettext
 
@@ -25,7 +25,7 @@ const previous = () => store.dispatch('queue/previous')
 
 const focused = computed(() => store.state.ui.queueFocused === 'queue')
 
-// 
+//
 // Track list
 //
 const tracksChangeBuffer = ref<Track[] | null>(null)
@@ -44,7 +44,7 @@ const reorder = (oldIndex: number, newIndex: number) => {
   tracksChangeBuffer.value = null
 }
 
-// 
+//
 // Shuffle
 //
 const isShuffling = ref(false)
@@ -88,12 +88,12 @@ const endsIn = useTimeAgo(computed(() => {
 }))
 
 export default () => {
-  return { 
+  return {
     currentTrack,
     currentIndex,
     hasNext,
     hasPrevious,
-    isEmpty, 
+    isEmpty,
     isShuffling,
 
     removeTrack,

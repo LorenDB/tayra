@@ -601,7 +601,7 @@ export default {
     async fetchDraftUploads (channel) {
       const self = this
       this.draftUploads = null
-      const response = await axios.get('uploads', { params: { import_status: 'draft', channel: channel } })
+      const response = await axios.get('uploads', { params: { import_status: 'draft', channel } })
       this.draftUploads = response.data.results
       this.draftUploads.forEach((u) => {
         self.uploadImportData[u.uuid] = u.import_metadata

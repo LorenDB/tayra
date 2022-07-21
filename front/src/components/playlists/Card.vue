@@ -16,7 +16,7 @@ const store = useStore()
 const images = computed(() => {
   const urls = props.playlist.album_covers.slice(0, 4).map(url => store.getters['instance/absoluteUrl'](url))
 
-  while (urls.length < 4) { 
+  while (urls.length < 4) {
     urls.push(defaultCover)
   }
 

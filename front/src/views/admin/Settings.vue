@@ -4,7 +4,6 @@ import type { SettingsGroup as SettingsGroupType } from '~/types'
 import axios from 'axios'
 import $ from 'jquery'
 
-
 import SettingsGroup from '~/components/admin/SettingsGroup.vue'
 
 import { useCurrentElement } from '@vueuse/core'

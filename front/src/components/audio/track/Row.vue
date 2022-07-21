@@ -69,9 +69,9 @@ const active = computed(() => props.track.id === currentTrack.value?.id && props
             !hover
         "
       />
-      <button 
+      <button
         v-else-if="
-            !playing &&
+          !playing &&
             active &&
             !hover
         "
@@ -79,9 +79,9 @@ const active = computed(() => props.track.id === currentTrack.value?.id && props
       >
         <i class="play icon" />
       </button>
-      <button 
+      <button
         v-else-if="
-            playing &&
+          playing &&
             active &&
             hover
         "

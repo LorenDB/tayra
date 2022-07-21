@@ -110,7 +110,7 @@ export default createStore<RootState>({
                 mbid: track.mbid,
                 uploads: track.uploads,
                 listen_url: track.listen_url,
-                artist: artist,
+                artist,
                 album: {}
               }
               if (track.album) {
@@ -119,7 +119,7 @@ export default createStore<RootState>({
                   title: track.album.title,
                   mbid: track.album.mbid,
                   cover: track.album.cover,
-                  artist: artist
+                  artist
                 }
               }
               return data

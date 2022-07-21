@@ -39,7 +39,7 @@ const labels = computed(() => ({
   selectTrack: $pgettext('Sidebar/Player/Hidden text', 'Play this track'),
   pendingFollows: $pgettext('Sidebar/Notifications/Hidden text', 'Pending follow requests'),
   pendingReviewEdits: $pgettext('Sidebar/Moderation/Hidden text', 'Pending review edits'),
-  pendingReviewReports:  $pgettext('Sidebar/Moderation/Hidden text', 'Pending review reports'),
+  pendingReviewReports: $pgettext('Sidebar/Moderation/Hidden text', 'Pending review reports'),
   language: $pgettext('Sidebar/Settings/Dropdown.Label/Short, Verb', 'Language'),
   theme: $pgettext('Sidebar/Settings/Dropdown.Label/Short, Verb', 'Theme'),
   addContent: $pgettext('*/Library/*/Verb', 'Add content'),
@@ -51,11 +51,11 @@ const expanded = ref<SidebarMenuTabs>('explore')
 
 const ROUTE_MAPPINGS: Record<SidebarMenuTabs, RouteRecordName[]> = {
   explore: [
-    'search', 
-    'library.index', 
-    'library.podcasts.browse', 
-    'library.albums.browse', 
-    'library.albums.detail', 
+    'search',
+    'library.index',
+    'library.podcasts.browse',
+    'library.albums.browse',
+    'library.albums.detail',
     'library.artists.browse',
     'library.artists.detail',
     'library.tracks.detail',
@@ -88,10 +88,10 @@ watchEffect(() => {
   expanded.value = store.state.auth.authenticated ? 'myLibrary' : 'explore'
 })
 
-const moderationNotifications = computed(() => 
-  store.state.ui.notifications.pendingReviewEdits
-    + store.state.ui.notifications.pendingReviewReports
-    + store.state.ui.notifications.pendingReviewRequests
+const moderationNotifications = computed(() =>
+  store.state.ui.notifications.pendingReviewEdits +
+    store.state.ui.notifications.pendingReviewReports +
+    store.state.ui.notifications.pendingReviewRequests
 )
 
 Promise.resolve().then(async () => {

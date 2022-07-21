@@ -26,7 +26,7 @@ const playlists = computed(() => store.state.playlists.playlists)
 const track = computed(() => store.state.playlists.modalTrack)
 
 const { $pgettext } = useGettext()
-const labels = computed(() => ({ 
+const labels = computed(() => ({
   addToPlaylist: $pgettext('Popup/Playlist/Table.Button.Tooltip/Verb', 'Add to this playlist'),
   filterPlaylistField: $pgettext('Popup/Playlist/Form/Placeholder', 'Enter playlist name')
 }))
@@ -51,7 +51,7 @@ const duplicateTrackAddInfo = ref({} as { playlist_name?: string })
 const addToPlaylist = async (playlistId: number, allowDuplicates: boolean) => {
   lastSelectedPlaylist.value = playlistId
 
-  try { 
+  try {
     await axios.post(`playlists/${playlistId}/add/`, {
       tracks: [track.value?.id].filter(i => i),
       allow_duplicates: allowDuplicates
@@ -106,7 +106,10 @@ store.dispatch('playlists/fetchOwn')
       </translate>
     </h4>
     <div class="scrolling content">
-      <playlist-form :create="true" :key="formKey" />
+      <playlist-form
+        :key="formKey"
+        :create="true"
+      />
       <div class="ui divider" />
       <div v-if="playlists.length > 0">
         <div
@@ -249,9 +252,9 @@ store.dispatch('playlists/fetchOwn')
           </div>
         </template>
       </div>
-      <div 
-      v-else 
-      class="ui placeholder segment"
+      <div
+        v-else
+        class="ui placeholder segment"
       >
         <div class="ui icon header">
           <i class="list icon" />

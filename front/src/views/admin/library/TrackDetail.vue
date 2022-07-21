@@ -348,9 +348,9 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         Description
                       </translate>
                     </td>
-                    <sanitized-html 
+                    <sanitized-html
                       tag="td"
-                      :html="track.description.html" 
+                      :html="track.description.html"
                     />
                   </tr>
                 </tbody>

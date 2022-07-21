@@ -17,7 +17,7 @@ const sliderVolume = computed({
 })
 
 const { $pgettext } = useGettext()
-const labels = computed(() => ({ 
+const labels = computed(() => ({
   unmute: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Unmute'),
   mute: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Mute'),
   slider: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Adjust volume')

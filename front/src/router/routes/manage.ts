@@ -178,5 +178,5 @@ export default [
         props: true
       }
     ]
-  },
+  }
 ] as RouteRecordRaw[]

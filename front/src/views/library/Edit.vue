@@ -59,7 +59,10 @@ const updateApproved = async (follow: LibraryFollow, approved: boolean) => {
         Library contents
       </translate>
     </h2>
-    <library-files-table :filters="{library: object.uuid}" :ordering-config-name="null" />
+    <library-files-table
+      :filters="{library: object.uuid}"
+      :ordering-config-name="null"
+    />
 
     <div class="ui hidden divider" />
     <h2 class="ui header">

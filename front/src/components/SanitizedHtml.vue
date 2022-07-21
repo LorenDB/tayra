@@ -8,7 +8,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  tag: 'div' 
+  tag: 'div'
 })
 
 const html = computed(() => DOMPurify.sanitize(props.html))

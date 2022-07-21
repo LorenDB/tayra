@@ -47,22 +47,22 @@ const store = useStore()
 const isFavorite = computed(() => store.getters['favorites/isFavorite'](props.track.id))
 
 const { $pgettext } = useGettext()
-const favoriteButton = computed(() => isFavorite.value 
+const favoriteButton = computed(() => isFavorite.value
   ? $pgettext('Content/Track/Icon.Tooltip/Verb', 'Remove from favorites')
   : $pgettext('Content/Track/*/Verb', 'Add to favorites')
 )
 
-const trackDetailsButton = computed(() => props.track.artist?.content_category === 'podcast' 
+const trackDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
   ? $pgettext('*/Queue/Dropdown/Button/Label/Short', 'Episode details')
   : $pgettext('*/Queue/Dropdown/Button/Label/Short', 'Track details')
 )
 
-const albumDetailsButton = computed(() => props.track.artist?.content_category === 'podcast' 
+const albumDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
   ? $pgettext('*/Queue/Dropdown/Button/Label/Short', 'View series')
   : $pgettext('*/Queue/Dropdown/Button/Label/Short', 'View album')
 )
 
-const artistDetailsButton = computed(() => props.track.artist?.content_category === 'podcast' 
+const artistDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
   ? $pgettext('*/Queue/Dropdown/Button/Label/Short', 'View channel')
   : $pgettext('*/Queue/Dropdown/Button/Label/Short', 'View artist')
 )

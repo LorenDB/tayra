@@ -24,7 +24,7 @@ interface Props {
   isAlbum?: boolean
   isPodcast?: boolean
 
-  // TODO (wvffle): Find correct type 
+  // TODO (wvffle): Find correct type
   filters?: object
 
   nextUrl?: string | null
@@ -227,9 +227,9 @@ const updatePage = (page: number) => {
 
         <track-row
           v-for="(track, index) in allTracks"
+          :key="track.id + track.position"
           :data-track-id="track.id"
           :data-track-position="track.position"
-          :key="track.id + track.position"
           :track="track"
           :index="index"
           :tracks="allTracks"

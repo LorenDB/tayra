@@ -134,7 +134,7 @@ const report = (obj: ReportableObject) => {
   store.dispatch('moderation/report', obj.target)
 }
 
-export default () => ({ 
+export default () => ({
   getReportableObjects,
   report
 })

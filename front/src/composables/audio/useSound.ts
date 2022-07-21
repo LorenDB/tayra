@@ -1,12 +1,12 @@
 import type { Track } from '~/types'
 
-import { ref, computed } from "vue"
+import { ref, computed } from 'vue'
 import { Howl } from 'howler'
 import useTrackSources from '~/composables/audio/useTrackSources'
 import useSoundCache from '~/composables/audio/useSoundCache'
 import usePlayer from '~/composables/audio/usePlayer'
-import store from "~/store"
-import { createEventHook } from "@vueuse/core"
+import store from '~/store'
+import { createEventHook } from '@vueuse/core'
 
 interface Sound {
   id?: number

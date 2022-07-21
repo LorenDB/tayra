@@ -53,7 +53,7 @@ const save = async () => {
   let contentType = 'application/json'
 
   if (fileSettings.value.length > 0) {
-    const fileSettingsIDs = fileSettings.value.map((setting) =>  setting.identifier)
+    const fileSettingsIDs = fileSettings.value.map((setting) => setting.identifier)
     const data = settings.value.reduce((data, setting) => {
       if (fileSettingsIDs.includes(setting.identifier)) {
         const input = fileRefs[setting.identifier]
@@ -69,7 +69,7 @@ const save = async () => {
       }
 
       return data
-    }, {} as Record<string, string | File>) 
+    }, {} as Record<string, string | File>)
 
     contentType = 'multipart/form-data'
     postData = useFormData(data)

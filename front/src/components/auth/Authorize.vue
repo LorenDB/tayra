@@ -219,7 +219,7 @@ export default {
       return this.knownScopes.map(s => {
         const id = s.id
         return {
-          id: id,
+          id,
           icon: s.icon,
           label: self.sharedLabels.scopes[s.id].label,
           description: self.sharedLabels.scopes[s.id].description,

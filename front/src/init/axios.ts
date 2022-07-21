@@ -83,7 +83,7 @@ export const install: InitModule = ({ store, router }) => {
       case 500:
         error.backendErrors.push('A server error occurred')
         break
-      
+
       default:
         if (error.response?.data as object) {
           const data = error.response?.data as Record<string, unknown>

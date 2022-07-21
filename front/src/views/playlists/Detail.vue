@@ -44,7 +44,7 @@ const fetchData = async () => {
   try {
     const [playlistResponse, tracksResponse] = await Promise.all([
       axios.get(`playlists/${props.id}/`),
-      axios.get(`playlists/${props.id}/tracks/`),
+      axios.get(`playlists/${props.id}/tracks/`)
     ])
 
     playlist.value = playlistResponse.data

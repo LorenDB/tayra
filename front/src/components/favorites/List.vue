@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { RouteWithPreferences } from '~/store/ui'
+import type { RouteWithPreferences, OrderingField } from '~/store/ui'
 import type { Track } from '~/types'
-import type { OrderingField } from '~/store/ui'
 import type { OrderingProps } from '~/composables/useOrdering'
 
 import axios from 'axios'
@@ -77,7 +76,7 @@ const fetchFavorites = async () => {
 
   try {
     logger.time('Loading user favorites')
-    const response = await axios.get('tracks/', { params: params })
+    const response = await axios.get('tracks/', { params })
 
     results.length = 0
     results.push(...response.data.results)

@@ -152,8 +152,8 @@ const insertMany = async (insertedTracks: Track[], allowDuplicates: boolean) => 
 <template>
   <div class="ui text container component-playlist-editor">
     <playlist-form
-      :title="false"
       v-model:playlist="playlist"
+      :title="false"
     />
     <h3 class="ui top attached header">
       <translate translate-context="Content/Playlist/Title">

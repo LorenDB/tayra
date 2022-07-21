@@ -35,7 +35,7 @@ const defaultUploadQuota = computed(() => get(nodeinfo.value, 'metadata.defaultU
 const stats = computed(() => {
   const users = get(nodeinfo.value, 'usage.users.activeMonth', null)
   const hours = get(nodeinfo.value, 'metadata.library.music.hours', 0)
-  
+
   if (users === null) {
     return null
   }
@@ -48,8 +48,8 @@ const headerStyle = computed(() => {
     return ''
   }
 
-  return { 
-    backgroundImage: `url(${store.getters['instance/absoluteUrl'](banner.value)})` 
+  return {
+    backgroundImage: `url(${store.getters['instance/absoluteUrl'](banner.value)})`
   }
 })
 

@@ -32,7 +32,7 @@ const iframeSrc = computed(() => {
   const bParam = !window.location.href.startsWith(instanceUrl)
     ? `&b=${instanceUrl}`
     : ''
-  
+
   return `${base}embed.html?&type=${props.type}&id=${props.id}${bParam}`
 })
 

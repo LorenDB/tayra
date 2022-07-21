@@ -27,12 +27,12 @@ const running = computed(() => {
     return false
   }
 
-  return store.state.radios.current?.type === props.type
-    && store.state.radios.current?.customRadioId === props.customRadioId
-    && (
-        typeof props.objectId === 'string'
-          || store.state.radios.current?.objectId.fullUsername === props.objectId?.fullUsername
-      )
+  return store.state.radios.current?.type === props.type &&
+    store.state.radios.current?.customRadioId === props.customRadioId &&
+    (
+      typeof props.objectId === 'string' ||
+          store.state.radios.current?.objectId.fullUsername === props.objectId?.fullUsername
+    )
 })
 
 const { $pgettext } = useGettext()

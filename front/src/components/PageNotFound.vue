@@ -5,7 +5,7 @@ import { useGettext } from 'vue3-gettext'
 const path = window.location.href
 
 const { $pgettext } = useGettext()
-const labels = computed(() => ({ 
+const labels = computed(() => ({
   title: $pgettext('Head/*/Title', 'Page Not Found')
 }))
 </script>

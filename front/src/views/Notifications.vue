@@ -286,7 +286,7 @@ export default {
     },
     fetch (params) {
       this.isLoading = true
-      axios.get('federation/inbox/', { params: params }).then(response => {
+      axios.get('federation/inbox/', { params }).then(response => {
         this.isLoading = false
         this.notifications = response.data
       })

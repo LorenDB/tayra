@@ -71,7 +71,7 @@ const store: Module<State, RootState> = {
         page_size: 50,
         ordering: '-creation_date'
       }
-      const promise = axios.get('favorites/tracks/all/', { params: params })
+      const promise = axios.get('favorites/tracks/all/', { params })
       return promise.then((response) => {
         logger.info('Fetched a batch of ' + response.data.results.length + ' favorites')
         response.data.results.forEach((result: { track: string }) => {

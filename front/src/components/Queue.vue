@@ -8,7 +8,7 @@ import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import Draggable from 'vuedraggable'
 import { whenever, useTimeoutFn, useWindowScroll, useWindowSize } from '@vueuse/core'
-import { useGettext } from "vue3-gettext"
+import { useGettext } from 'vue3-gettext'
 import useQueue from '~/composables/audio/useQueue'
 import usePlayer from '~/composables/audio/usePlayer'
 
@@ -42,8 +42,8 @@ onMounted(async () => {
 
 const { $pgettext } = useGettext()
 
-const { 
-  playing, 
+const {
+  playing,
   loading: isLoadingAudio,
   errored,
   focused: playerFocused,
@@ -54,10 +54,10 @@ const {
   bufferProgress,
   currentTime,
   pause,
-  resume,
+  resume
 } = usePlayer()
 
-const { 
+const {
   focused: queueFocused,
   currentTrack,
   hasNext,

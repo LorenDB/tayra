@@ -125,7 +125,7 @@ export default {
         query: this.query
       }
       axios.get('search', {
-        params: params
+        params
       }).then((response) => {
         self.results = self.castResults(response.data)
         self.isLoading = false

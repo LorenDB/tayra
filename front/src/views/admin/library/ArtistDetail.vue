@@ -211,9 +211,9 @@
                         Description
                       </translate>
                     </td>
-                    <sanitized-html 
+                    <sanitized-html
                       tag="td"
-                      :html="object.description.html" 
+                      :html="object.description.html"
                     />
                   </tr>
                 </tbody>

@@ -58,9 +58,9 @@ const escapeHtml = (unsafe: string) => document.createTextNode(unsafe).textConte
 const subtitle = computed(() => {
   if (track.value?.attributed_to) {
     return $pgettext(
-      'Content/Track/Paragraph', 
+      'Content/Track/Paragraph',
       'Uploaded by <a class="internal" href="%{ uploaderUrl }">%{ uploader }</a> on <time title="%{ date }" datetime="%{ date }">%{ prettyDate }</time>',
-      { 
+      {
         uploaderUrl: attributedToUrl.value,
         uploader: escapeHtml(`@${track.value.attributed_to.full_username}`),
         date: escapeHtml(track.value.creation_date),
@@ -70,7 +70,7 @@ const subtitle = computed(() => {
   }
 
   return $pgettext(
-    'Content/Track/Paragraph', 
+    'Content/Track/Paragraph',
     'Uploaded on <time title="%{ date }" datetime="%{ date }">%{ prettyDate }</time>',
     {
       date: escapeHtml(track.value?.creation_date ?? ''),
@@ -78,7 +78,6 @@ const subtitle = computed(() => {
     }
   )
 })
-
 
 const { $pgettext } = useGettext()
 const labels = computed(() => ({

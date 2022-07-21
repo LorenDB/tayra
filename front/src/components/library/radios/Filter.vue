@@ -19,12 +19,12 @@ interface Props {
   filter: {
     type: string
     label: string
-    fields: { 
+    fields: {
       name: string
       placeholder: string
       type: 'list'
       subtype: 'number'
-      autocomplete?: string 
+      autocomplete?: string
       autocomplete_qs: string
       autocomplete_fields: {
         remoteValues?: unknown
@@ -103,7 +103,7 @@ const fetchCandidates = async () => {
   const params = {
     filters: [{
       ...clone(props.config),
-      type: props.filter.type,
+      type: props.filter.type
     }]
   }
 
