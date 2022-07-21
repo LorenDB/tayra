@@ -47,7 +47,10 @@ export default defineConfig(() => ({
       }
     })
   ],
-  server: { port, hmr },
+  server: {
+    port,
+    hmr: process.env.DISABLE_HMR ? false : hmr
+  },
   resolve: {
     alias: {
       '~': resolve(__dirname, './src')
