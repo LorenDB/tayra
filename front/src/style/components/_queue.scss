@@ -165,6 +165,7 @@
   }
   .progress-area .progress {
     border-radius: 0.28571429rem;
+    overflow: hidden;
   }
   .progress-wrapper, .warning.message {
     max-width: 25em;

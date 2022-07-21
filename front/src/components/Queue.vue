@@ -228,11 +228,11 @@ const touchProgress = (event: MouseEvent) => {
                     >
                       <div
                         class="buffer bar"
-                        :style="{ 'transform': `scaleX(${bufferProgress / 100})` }"
+                        :style="{ 'transform': `translateX(${bufferProgress - 100}%)` }"
                       />
                       <div
                         class="position bar"
-                        :style="{ 'transform': `scaleX(${progress / 100})` }"
+                        :style="{ 'transform': `translateX(${progress - 100}%)` }"
                       />
                     </div>
                   </div>
