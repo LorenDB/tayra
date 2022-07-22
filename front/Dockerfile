@@ -12,7 +12,7 @@ RUN yarn install
 RUN yarn build:deployment
 
 
-FROM nginx:1.23.0-alpine as final
+FROM nginx:1.23.1-alpine as final
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY docker/funkwhale.template /etc/nginx/conf.d/funkwhale.template
