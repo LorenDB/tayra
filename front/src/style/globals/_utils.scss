@@ -53,6 +53,11 @@ a {
     display: none !important;
   }
 }
+.desktop-and-below {
+  @include media(">=desktop") {
+    display: none !important;
+  }
+}
 .tablet-and-up {
   @include media("<tablet") {
     display: none !important;

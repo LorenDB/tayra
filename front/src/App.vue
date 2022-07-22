@@ -97,14 +97,14 @@ if (store.state.auth.authenticated) {
     <set-instance-modal v-model:show="showSetInstanceModal" />
     <service-messages />
     <transition name="queue">
-      <queue v-if="store.state.ui.queueFocused" />
+      <queue v-show="store.state.ui.queueFocused" />
     </transition>
 
     <router-view v-slot="{ Component }">
       <template v-if="Component">
         <keep-alive :max="1">
-          <Suspense v-if="!store.state.ui.queueFocused">
-            <component :is="Component" />
+          <Suspense>
+            <component :is="Component" v-show="!store.state.ui.queueFocused" />
             <template #fallback>
               <!-- TODO (wvffle): Add loader -->
               Loading...

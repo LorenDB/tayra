@@ -1,28 +1,26 @@
 
-.queue.segment.player-focused #queue-grid #player {
-  @include media("<desktop") {
-    padding-bottom: $bottom-player-height + 2rem;
-  }
-}
 .queue-controls {
 
   @include media("<desktop") {
     height: $bottom-player-height;
   }
 }
-.ui.fixed-header.segment {
+.ui.clearing.segment {
   background-color: var(--site-background);
   box-shadow: var(--secondary-menu-box-shadow);
+  margin: 0 !important;
 }
-.queue-enter-active, .queue-leave-active {
-  transition: all 0.2s ease-in-out;
-  .current-track, .queue-column {
-    opacity: 0;
-  }
+
+.queue-enter-active,
+.queue-leave-active {
+  transition: all 0.2s ease;
+  will-change: transform, opacity;
 }
-.queue-enter, .queue-leave-to {
-  transform: translateY(100vh);
+
+.queue-enter-from,
+.queue-leave-to {
   opacity: 0;
+  transform: translateY(5vh);
 }
 
 .component-queue {
@@ -33,11 +31,10 @@
     }
   }
   &.main {
-    position: absolute;
+    position: fixed;
     min-height: 100vh;
     width: 100vw;
     z-index: 1000;
-    padding-bottom: 3em;
   }
   &.main > .button {
     position: fixed;
@@ -48,23 +45,11 @@
       display: none;
     }
   }
-  .queue.segment:not(.player-focused) {
-    #player {
-      @include media("<desktop") {
-        height: 0;
-        display: none;
-      }
-    }
-  }
+
   .queue.segment #player {
     padding: 0em;
     > * {
       padding: 0.5em;
-    }
-  }
-  .player-focused .grid > .ui.queue-column {
-    @include media("<desktop") {
-      display: none;
     }
   }
   .queue-column {
@@ -116,7 +101,7 @@
     @include media("<desktop") {
       padding: 1em;
     }
-    @include media(">desktop") {
+    @include media(">=desktop") {
       right: 1em;
       left: 38%;
     }
@@ -168,8 +153,7 @@
     overflow: hidden;
   }
   .progress-wrapper, .warning.message {
-    max-width: 25em;
-    margin: 0 auto;
+    width: 25em;
   }
   .ui.progress .bar {
     transition: none;
@@ -242,4 +226,66 @@
     }
   }
 
+}
+
+
+// Wvffle's styles
+.component-queue {
+  #queue-grid {
+    display: grid;
+    grid-template-columns: 37.5% 62.5%;
+
+    @include media("<desktop") {
+      grid-template-columns: 1fr 0;
+    }
+
+    #player {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+
+      .cover-container {
+        width: 50vh;
+        max-width: 90%;
+
+        .cover {
+          height: 0;
+          width: 100%;
+          padding-bottom: 100%;
+          position: relative;
+
+          img {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+        }
+      }
+
+      .progress-wrapper {
+        font-size: 1.5rem;
+        width: 54vh;
+        max-width: 90%;
+      }
+    }
+
+    > div {
+      height: calc(100vh - 4rem);
+      margin: 0 !important;
+
+      &:nth-child(2) {
+        display: grid;
+        grid-template-rows: auto 1fr;
+
+        > :nth-child(2) {
+          overflow-y: auto;
+          padding-bottom: 2rem;
+        }
+      }
+    }
+  }
 }
