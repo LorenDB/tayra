@@ -14,6 +14,7 @@ import { computed, ref, watch, watchEffect, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
 import { setupDropdown } from '~/utils/fomantic'
+import { useCurrentElement } from '@vueuse/core'
 
 interface Props {
   width: number
@@ -104,19 +105,14 @@ watch(languageSelection, (v) => {
   store.dispatch('ui/currentLanguage', v)
 })
 
-watch(() => store.state.auth.authenticated, (authenticated) => {
-  if (authenticated) {
-    setupDropdown('.admin-dropdown')
-  }
-
-  setupDropdown('.user-dropdown')
-}, { immediate: true })
-
-watch(() => store.state.auth.availablePermissions, () => {
+const el = useCurrentElement()
+watchEffect(() => {
   if (store.state.auth.authenticated) {
-    setupDropdown('.admin-dropdown')
+    setupDropdown('.admin-dropdown', el.value)
   }
-}, { immediate: true })
+
+  setupDropdown('.user-dropdown', el.value)
+})
 
 onMounted(() => {
   document.getElementById('fake-sidebar')?.classList.add('loaded')

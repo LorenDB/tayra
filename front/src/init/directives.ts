@@ -7,5 +7,5 @@ export const install: InitModule = ({ app, store }) => {
     store.commit('ui/pageTitle', binding.value)
   })
 
-  app.directive('dropdown', setupDropdown)
+  app.directive('dropdown', (element) => setupDropdown(element))
 }

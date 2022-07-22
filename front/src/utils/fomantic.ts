@@ -1,17 +1,10 @@
 /// <reference types="semantic-ui" />
 
 import $ from 'jquery'
-import { tryOnMounted, useCurrentElement } from '@vueuse/core'
 
-export const getDropdown = (selector = '.ui.dropdown'): JQuery => {
-  const el = useCurrentElement()
-  return $(el.value).find(selector)
-}
-
-export const setupDropdown = (selector: string | HTMLElement = '.ui.dropdown') => tryOnMounted(() => {
-  const el = useCurrentElement()
+export const setupDropdown = (selector: string | HTMLElement = '.ui.dropdown', el: Element = document.body) => {
   const $dropdown = typeof selector === 'string'
-    ? $(el.value).find(selector)
+    ? $(el).find(selector)
     : $(selector)
 
   $dropdown.dropdown({
@@ -24,4 +17,6 @@ export const setupDropdown = (selector: string | HTMLElement = '.ui.dropdown') =
       $dropdown.dropdown('hide')
     }
   })
-}, false)
+
+  return $dropdown
+}

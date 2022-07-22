@@ -2,12 +2,12 @@
 import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
 import type { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
 
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import usePlayOptions from '~/composables/audio/usePlayOptions'
 import useReport from '~/composables/moderation/useReport'
 import { useCurrentElement } from '@vueuse/core'
-import { setupDropdown, getDropdown } from '~/utils/fomantic'
+import { setupDropdown } from '~/utils/fomantic'
 
 interface Props extends PlayOptionsProps {
   dropdownIconClasses?: string[]
@@ -63,8 +63,6 @@ const {
 
 const { report, getReportableObjects } = useReport()
 
-const clicked = ref(false)
-
 const { $pgettext } = useGettext()
 const labels = computed(() => ({
   playNow: $pgettext('*/Queue/Dropdown/Button/Title', 'Play now'),
@@ -93,29 +91,31 @@ const title = computed(() => {
   if (props.track) {
     return $pgettext('*/Queue/Button/Title', 'This track is not available in any library you have access to')
   }
+
+  return ''
 })
 
-watch(clicked, async () => {
-  await setupDropdown()
-
-  getDropdown().dropdown('show', function () {
-    // little magic to ensure the menu is always visible in the viewport
-    // By default, try to diplay it on the right if there is enough room
-    const menu = getDropdown().find('.menu')
-    const viewportOffset = menu.get(0)?.getBoundingClientRect() ?? { right: 0, left: 0 }
-    const viewportWidth = document.documentElement.clientWidth
-    const rightOverflow = viewportOffset.right - viewportWidth
-    const leftOverflow = -viewportOffset.left
-    let offset = 0
-    if (rightOverflow > 0) {
-      offset = -rightOverflow - 5
-      menu.css({ cssText: `left: ${offset}px !important;` })
-    } else if (leftOverflow > 0) {
-      offset = leftOverflow + 5
-      menu.css({ cssText: `right: -${offset}px !important;` })
-    }
-  })
+const el = useCurrentElement()
+const dropdown = ref()
+onMounted(() => {
+  dropdown.value = setupDropdown('.ui.dropdown', el.value)
 })
+
+const openMenu = () => {
+  // little magic to ensure the menu is always visible in the viewport
+  // By default, try to diplay it on the right if there is enough room
+  const menu = dropdown.value.find('.menu')
+  const viewportOffset = menu.get(0)?.getBoundingClientRect() ?? { right: 0, left: 0 }
+  const viewportWidth = document.documentElement.clientWidth
+  const rightOverflow = viewportOffset.right - viewportWidth
+  const leftOverflow = -viewportOffset.left
+
+  if (rightOverflow > 0) {
+    menu.css({ cssText: `left: ${-rightOverflow - 5}px !important;` })
+  } else if (leftOverflow > 0) {
+    menu.css({ cssText: `right: -${leftOverflow + 5}px !important;` })
+  }
+}
 </script>
 
 <template>
@@ -143,16 +143,13 @@ watch(clicked, async () => {
     <button
       v-if="!discrete && !iconOnly"
       :class="['ui', {disabled: !playable && !filterableArtist}, 'floating', 'dropdown', {'icon': !dropdownOnly}, {'button': !dropdownOnly}]"
-      @click.stop.prevent="clicked = true"
+      @click.stop.prevent="openMenu"
     >
       <i
         :class="dropdownIconClasses.concat(['icon'])"
         :title="title"
       />
-      <div
-        v-if="clicked"
-        class="menu"
-      >
+      <div class="menu">
         <button
           class="item basic"
           data-ref="enqueue"
