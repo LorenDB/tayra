@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-03 01:39+0200\n"
-"PO-Revision-Date: 2022-07-18 07:48+0000\n"
+"PO-Revision-Date: 2022-07-26 04:22+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/administrator_documentation-configuration_docs-env_file/fr/>\n"
@@ -69,10 +69,12 @@ msgid ""
 "The [django-environ documentation](https://github.com/joke2k/django-"
 "environ/blob/main/docs/tips.rst#using-unsafe-characters-in-urls)."
 msgstr ""
+"La [documentation d’environnement django](https://github.com/joke2k/"
+"django-environ/blob/main/docs/tips.rst#using-unsafe-characters-in-urls)."
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:39
 msgid "Pod configuration"
-msgstr ""
+msgstr "Configuration du pod"
 
 #: ../../docstring config.settings.common.FUNKWHALE_HOSTNAME:1 of
 msgid "Hostname of your Funkwhale pod, e.g. ``mypod.audio``."
