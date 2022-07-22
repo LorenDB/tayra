@@ -138,8 +138,10 @@
     top: 0;
     width: 32%;
     > img {
-      height: 50vh;
-      width: 50vh;
+      width: 100%;
+      height: auto;
+      max-height: 50vh;
+      max-width: 50vh;
     }
     @include media("<desktop") {
       padding: 0.5em;
