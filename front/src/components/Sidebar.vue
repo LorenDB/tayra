@@ -252,7 +252,7 @@ onMounted(() => {
             @click.prevent.exact="showUserModal = !showUserModal"
           >
             <img
-              v-if="$store.state.auth.authenticated && $store.state.auth.profile?.avatar.urls.medium_square_crop"
+              v-if="$store.state.auth.authenticated && $store.state.auth.profile?.avatar?.urls.medium_square_crop"
               class="ui avatar image"
               alt=""
               :src="$store.getters['instance/absoluteUrl']($store.state.auth.profile?.avatar.urls.medium_square_crop)"
