@@ -709,14 +709,14 @@ develop = ["sphinx-notfound-page", "sphinx (>=3.5.0)", "furo (>=2021.8.17b43,<20
 
 [[package]]
 name = "django-filter"
-version = "21.1"
+version = "22.1"
 description = "Django-filter is a reusable Django application for allowing users to filter querysets dynamically."
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
-Django = ">=2.2"
+Django = ">=3.2"
 
 [[package]]
 name = "django-oauth-toolkit"
@@ -1705,8 +1705,8 @@ packaging = ">=20.4"
 typing-extensions = {version = "*", markers = "python_version < \"3.8\""}
 
 [package.extras]
-ocsp = ["requests (>=2.26.0)", "cryptography (>=36.0.1)", "pyopenssl (==20.0.1)"]
 hiredis = ["hiredis (>=1.0.0)"]
+ocsp = ["cryptography (>=36.0.1)", "pyopenssl (==20.0.1)", "requests (>=2.26.0)"]
 
 [[package]]
 name = "requests"
@@ -2125,7 +2125,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "702645179826e7c9f0ee737fad2878ad442248036f5b7a9e157843979526d884"
+content-hash = "15bb32681b7d802fa892df7a2b5dd5a24a9a090c36d4d02dc8580503a673238e"
 
 [metadata.files]
 aiohttp = [
@@ -2565,8 +2565,8 @@ django-environ = [
     {file = "django_environ-0.9.0-py2.py3-none-any.whl", hash = "sha256:f21a5ef8cc603da1870bbf9a09b7e5577ab5f6da451b843dbcc721a7bca6b3d9"},
 ]
 django-filter = [
-    {file = "django-filter-21.1.tar.gz", hash = "sha256:632a251fa8f1aadb4b8cceff932bb52fe2f826dd7dfe7f3eac40e5c463d6836e"},
-    {file = "django_filter-21.1-py3-none-any.whl", hash = "sha256:f4a6737a30104c98d2e2a5fb93043f36dd7978e0c7ddc92f5998e85433ea5063"},
+    {file = "django-filter-22.1.tar.gz", hash = "sha256:ed473b76e84f7e83b2511bb2050c3efb36d135207d0128dfe3ae4b36e3594ba5"},
+    {file = "django_filter-22.1-py3-none-any.whl", hash = "sha256:ed429e34760127e3520a67f415bec4c905d4649fbe45d0d6da37e6ff5e0287eb"},
 ]
 django-oauth-toolkit = [
     {file = "django-oauth-toolkit-1.7.1.tar.gz", hash = "sha256:37b690fa53f340c7391bdbc0fdbb32fd9ef8a7c012e72ee8754c331a2d7b4adb"},
