@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,67 +36,67 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:13
-#: ../../user_documentation/libraries/create_library.md:31
+#: ../../user_documentation/libraries/create_library.md:17
+#: ../../user_documentation/libraries/create_library.md:36
 msgid "Log in to your pod."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:14
+#: ../../user_documentation/libraries/create_library.md:18
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:15
-#: ../../user_documentation/libraries/create_library.md:33
+#: ../../user_documentation/libraries/create_library.md:19
+#: ../../user_documentation/libraries/create_library.md:38
 msgid "Select {guilabel}`Get started` under {guilabel}`Upload third-party content in a library`."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:16
-#: ../../user_documentation/libraries/create_library.md:34
+#: ../../user_documentation/libraries/create_library.md:20
+#: ../../user_documentation/libraries/create_library.md:39
 msgid "A screen appears showing your upload quota. If you have created any libraries, these are also shown."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:17
-#: ../../user_documentation/libraries/create_library.md:35
+#: ../../user_documentation/libraries/create_library.md:21
+#: ../../user_documentation/libraries/create_library.md:40
 msgid "Select {guilabel}`Create a new library`."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:18
-#: ../../user_documentation/libraries/create_library.md:36
+#: ../../user_documentation/libraries/create_library.md:22
+#: ../../user_documentation/libraries/create_library.md:41
 msgid "Enter a {guilabel}`Name` for your library (required)."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:19
-#: ../../user_documentation/libraries/create_library.md:37
+#: ../../user_documentation/libraries/create_library.md:23
+#: ../../user_documentation/libraries/create_library.md:42
 msgid "Enter {guilabel}`Description` for your library."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:20
-#: ../../user_documentation/libraries/create_library.md:38
+#: ../../user_documentation/libraries/create_library.md:24
+#: ../../user_documentation/libraries/create_library.md:43
 msgid "Set the {guilabel}`Visibility` of your library. This determines who can access the content."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:21
-#: ../../user_documentation/libraries/create_library.md:39
+#: ../../user_documentation/libraries/create_library.md:25
+#: ../../user_documentation/libraries/create_library.md:44
 msgid "{guilabel}`Everyone, across all instances` – the library's content is available to everybody who interacts with your pod. This includes users of other pods."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:22
-#: ../../user_documentation/libraries/create_library.md:40
+#: ../../user_documentation/libraries/create_library.md:26
+#: ../../user_documentation/libraries/create_library.md:45
 msgid "{guilabel}`Everyone on this instance` – the library's content is available to all users on your pod. This does not include users of other pods."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:23
-#: ../../user_documentation/libraries/create_library.md:41
+#: ../../user_documentation/libraries/create_library.md:27
+#: ../../user_documentation/libraries/create_library.md:46
 msgid "{guilabel}`Nobody except me` – the library's content is only available to you and people you share the library with."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:24
-#: ../../user_documentation/libraries/create_library.md:42
+#: ../../user_documentation/libraries/create_library.md:28
+#: ../../user_documentation/libraries/create_library.md:47
 msgid "Select {guilabel}`Create library`."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:25
-#: ../../user_documentation/libraries/create_library.md:43
+#: ../../user_documentation/libraries/create_library.md:29
+#: ../../user_documentation/libraries/create_library.md:48
 msgid "A screen appears showing you a summary of your library."
 msgstr ""
 
@@ -104,14 +104,14 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:32
+#: ../../user_documentation/libraries/create_library.md:37
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:48
+#: ../../user_documentation/libraries/create_library.md:53
 msgid "Select {guilabel}`Nobody except me` if you don't own the copyright for the content or it isn't freely licensed."
 msgstr ""
 
-#: ../../user_documentation/libraries/create_library.md:51
+#: ../../user_documentation/libraries/create_library.md:56
 msgid "Well done! You've created your library. Now you can add some content to it."
 msgstr ""

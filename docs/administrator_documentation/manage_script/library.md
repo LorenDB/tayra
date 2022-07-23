@@ -14,93 +14,118 @@ Running `prune_library` commands with the `--no-dry-run` flag is irreversible. M
 
 ### Prune tracks with no associated uploads
 
-````{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 ```bash
 poetry run python manage.py prune_library --tracks
 ```
 
-````
+:::
 
-````{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 ```bash
 docker-compose run --rm api python manage.py prune_library --tracks
 ```
 
-````
+:::
+::::
 
 ### Prune albums with no associated tracks
 
-````{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 ```{code} bash
 poetry run python manage.py prune_library --albums
 ```
 
-````
+:::
 
-````{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 ```{code} bash
 docker-compose run --rm api python manage.py prune_library --albums
 ```
 
-````
+:::
+::::
 
 ### Prune artists with no associated tracks or albums
 
-````{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 ```{code} bash
 poetry run python manage.py prune_library --artists
 ```
 
-````
+:::
 
-````{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 ```{code} bash
 docker-compose run --rm api python manage.py prune_library --artists
 ```
 
-````
+:::
+::::
 
 ### Prune all tracks, albums, and artist without associated data
 
-````{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 ```{code} bash
 poetry run python manage.py prune_library --tracks --albums --artists
 ```
 
-````
+:::
 
-````{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 ```{code} bash
 docker-compose run --rm api python manage.py prune_library --tracks --albums --artists
 ```
 
-````
+:::
+::::
 
 There are extra options for pruning your database. Check the command help for more options.
 
-````{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 ```{code} bash
 poetry run python manage.py prune_library --help
 ```
 
-````
+:::
 
-````{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 ```{code} bash
 docker-compose run --rm api python manage.py prune_library --help
 ```
 
-````
+:::
+::::
 
 ```{note}
 The command excludes tracks that are in users' favorites, playlists, and listen history. To include these tracks, add the corresponding `ignore` flag:

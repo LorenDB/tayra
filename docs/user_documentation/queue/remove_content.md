@@ -14,20 +14,25 @@ You can remove content from your queue at any time. You can choose between the f
 
 To remove individual tracks from the queue:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Select the up arrow ({fa}`caret-up`) on the queue menu to expand the queue.
 2. Select the delete icon ({fa}`times`) next to the track you want to remove.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Select the player bar at the bottom of the screen to expand the player.
 2. Select the up arrow ({fa}`caret-up`) on the queue menu to expand the queue.
 3. Select the delete icon ({fa}`times`) next to the track you want to remove.
 
-```
+:::
+::::
 
 That's it! You've removed tracks from your queue.
 
@@ -35,18 +40,24 @@ That's it! You've removed tracks from your queue.
 
 To remove all content from your queue at once:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Select the up arrow ({fa}`caret-up`) on the queue menu to expand the queue.
 2. Select {guilabel}`Clear` to remove all content from the queue.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Select the player bar at the bottom of the screen to expand the player.
 2. Select the up arrow ({fa}`caret-up`) on the queue menu to expand the queue.
 3. Select {guilabel}`Clear` to remove all content from the queue.
-```
+
+:::
+::::
 
 That's it! You've removed all content from your queue.

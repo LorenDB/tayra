@@ -12,7 +12,10 @@ You can also create albums to organize your channel content.
 
 Albums are a good way of organizing your content. You can create as many albums as you want. To create a new album:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -22,9 +25,10 @@ Albums are a good way of organizing your content. You can create as many albums 
 6. Enter the {guilabel}`Title` of your album.
 7. Select {guilabel}`Create` to create your new album. The album appears on the screen.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -34,7 +38,8 @@ Albums are a good way of organizing your content. You can create as many albums 
 6. Enter the {guilabel}`Title` of your album.
 7. Select {guilabel}`Create` to create your new album. The album appears on the screen.
 
-```
+:::
+::::
 
 Once you've created your album, you can add some details to it. To do this:
 
@@ -56,7 +61,10 @@ That's it! You can now add content to your album.
 
 To add content to your channel:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -71,9 +79,10 @@ To add content to your channel:
     - If you opened the file picker, select the files you want to upload and confirm.
 11. The files appear at the top when you upload them. Select {guilabel}`Remove` to remove them.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -87,7 +96,8 @@ To add content to your channel:
 10. Click on the section marked {guilabel}`Browse…` to open a file picker. Select the files you want to upload and confirm.
 11. The files appear at the top when you upload them. Select {guilabel}`Remove` to remove them.
 
-```
+:::
+::::
 
 ### Edit your uploads
 
@@ -110,7 +120,10 @@ That's it! You've added content to your channel. Your followers can now listen t
 
 If you selected {guilabel}`Finish later`, Funkwhale saves your files and edits. You can continue your upload later by doing the following:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -125,9 +138,10 @@ If you selected {guilabel}`Finish later`, Funkwhale saves your files and edits. 
 11. [Add new files](#add-your-content) or [edit the pending files](#edit-your-uploads).
 12. Once you're finished, select {guilabel}`Publish` to publish your music.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -142,6 +156,7 @@ If you selected {guilabel}`Finish later`, Funkwhale saves your files and edits. 
 11. [Add new files](#add-your-content) or [edit the pending files](#edit-your-uploads).
 12. Once you're finished, select {guilabel}`Publish` to publish your music.
 
-```
+:::
+::::
 
 Congratulations! You've finished uploading the saved content. Your followers can now listen to your content from their pods.

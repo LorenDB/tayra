@@ -8,7 +8,10 @@ If you're using S3 storage, the `__sized__` folder is located in your S3 bucket.
 
 To generate new thumbnails:
 
-```{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 1. SSH into your Funkwhale server.
 2. Navigate to your Funkwhale directory.
@@ -29,9 +32,10 @@ To generate new thumbnails:
       poetry run python manage.py fw media generate-thumbnails
       ```
 
-```
+:::
 
-```{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 1. SSH into your Funkwhale server.
 2. Navigate to your Funkwhale directory.
@@ -52,6 +56,7 @@ To generate new thumbnails:
       docker-compose run --rm api python manage.py fw media generate-thumbnails
       ```
 
-```
+:::
+::::
 
 The script generates new thumbnails for all album and artist art on your pod.

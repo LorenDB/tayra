@@ -6,7 +6,10 @@ Other users on your pod can't see podcasts you import using RSS. They need to su
 
 You can use Funkwhale as a {term}`podcatcher` to listen to your favorite podcasts. Funkwhale can read {abbr}`RSS (Really Simple Syndication)` feeds to import podcasts. To add an RSS feed to Funkwhale:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Select {guilabel}`Channels` in the sidebar. The {guilabel}`Channels` page opens.
 2. Select {guilabel}`+ Add new` at the top of the page. The {guilabel}`Subscriptions` screen appears.
@@ -14,9 +17,10 @@ You can use Funkwhale as a {term}`podcatcher` to listen to your favorite podcast
 4. Enter the URL of the RSS feed in the {guilabel}`RSS feed location` input.
 5. Select {guilabel}`Subscribe`.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Select the hamburger menu ({fa}`bars`) to open the menu bar.
 2. Select {guilabel}`Channels`. The {guilabel}`Channels` page opens.
@@ -25,6 +29,7 @@ You can use Funkwhale as a {term}`podcatcher` to listen to your favorite podcast
 5. Enter the URL of the RSS feed in the {guilabel}`RSS feed location` input.
 6. Select {guilabel}`Subscribe`.
 
-```
+:::
+::::
 
 That's it! Your favorite podcast is now available in the {guilabel}`Channels` page. Funkwhale updates the feed to make sure you always have the latest episodes.

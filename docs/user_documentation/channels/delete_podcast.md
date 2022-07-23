@@ -14,7 +14,10 @@ Deleting an episode also deletes the file from the {term}`pod`. This action is i
 
 To delete a single episode from a channel:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -26,9 +29,10 @@ To delete a single episode from a channel:
 8. Select {guilabel}`Delete…`. A {guilabel}`Delete this track?` warning appears.
 9. Select {guilabel}`Delete` to delete the episode.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -40,7 +44,8 @@ To delete a single episode from a channel:
 8. Select {guilabel}`Delete…`. A {guilabel}`Delete this track?` warning appears.
 9. Select {guilabel}`Delete` to delete the episode.
 
-```
+:::
+::::
 
 That's it! You've deleted your episode. You can add it again by [uploading it to your channel](upload_podcast.md).
 
@@ -52,7 +57,10 @@ Deleting a series also deletes all episodes in the series and deletes the files 
 
 Delete a series to remove all episodes it contains. To do this:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -63,9 +71,10 @@ Delete a series to remove all episodes it contains. To do this:
 7. Select {guilabel}`Delete…`. A {guilabel}`Delete this album?` warning appears.
 8. Select {guilabel}`Delete` to delete the series.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -76,6 +85,7 @@ Delete a series to remove all episodes it contains. To do this:
 7. Select {guilabel}`Delete…`. A {guilabel}`Delete this album?` warning appears.
 8. Select {guilabel}`Delete` to delete the series.
 
-```
+:::
+::::
 
 You're done! You've deleted the series and all the episodes it contained. You can add them again by [uploading it to your channel](upload_podcast.md).

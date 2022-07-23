@@ -10,7 +10,10 @@ Follow a library to get access to its content. There are two ways to follow a li
 
 If you've received a sharing link, you can use this to follow a library. To do this:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -19,9 +22,10 @@ If you've received a sharing link, you can use this to follow a library. To do t
 5. Select the {guilabel}`Search` icon or hit {kbd}`⏎ Return` to search for the library. If the library exists, a library card appears.
 6. Select {guilabel}`Follow` on the library card. If the library's privacy level is {guilabel}`Nobody except me`, the owner needs to approve the request.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) at the top of the screen
@@ -30,7 +34,8 @@ If you've received a sharing link, you can use this to follow a library. To do t
 5. Select the {guilabel}`Search` icon or hit {kbd}`⏎ Return` to search for the library. If the library exists, a library card appears.
 6. Select {guilabel}`Follow` on the library card. If the library's privacy level is {guilabel}`Nobody except me`, the owner needs to approve the request.
 
-```
+:::
+::::
 
 That's it! The server then scans the content and you can see it on your {term}`pod`.
 

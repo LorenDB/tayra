@@ -49,7 +49,7 @@ extensions = [
     "sphinx.ext.graphviz",
     "sphinx.ext.autodoc",
     "myst_parser",
-    "sphinx_panels",
+    "sphinx_design",
     "sphinx_multiversion",
 ]
 autodoc_mock_imports = [
@@ -58,6 +58,7 @@ autodoc_mock_imports = [
     "ldap",
     "persisting_theory",
     "rest_framework",
+    "drf_spectacular",
 ]
 add_module_names = False
 # Add any paths that contain templates here, relative to this directory.
@@ -71,6 +72,9 @@ source_suffix = ".rst"
 
 # The root toctree document.
 root_doc = "index"
+
+# Enable colon fences
+myst_enable_extensions = ["colon_fence"]
 
 # Autogenerate anchors
 

@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,11 +24,15 @@ msgstr ""
 msgid "Funkwhale records the domains of other {term}`Fediverse` servers when users interact with them. Once a domain is in your domains list, you can [add moderation rules](add_rule.md) to it."
 msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:6
+#: ../../moderator_documentation/domains/add_domain.md:0
+msgid "Required permissions"
+msgstr ""
+
+#: ../../moderator_documentation/domains/add_domain.md:8
 msgid "{guilabel}`Moderation` – provides access to the administration and moderation menus."
 msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:9
+#: ../../moderator_documentation/domains/add_domain.md:11
 msgid "You can also add domains to this list at any time to create rules before users interact with them. To do this:"
 msgstr ""
 
@@ -36,32 +40,32 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:13
-#: ../../moderator_documentation/domains/add_domain.md:24
+#: ../../moderator_documentation/domains/add_domain.md:19
+#: ../../moderator_documentation/domains/add_domain.md:31
 msgid "Log in to your {term}`pod`."
 msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:14
+#: ../../moderator_documentation/domains/add_domain.md:20
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:15
-#: ../../moderator_documentation/domains/add_domain.md:26
+#: ../../moderator_documentation/domains/add_domain.md:21
+#: ../../moderator_documentation/domains/add_domain.md:33
 msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:16
-#: ../../moderator_documentation/domains/add_domain.md:27
+#: ../../moderator_documentation/domains/add_domain.md:22
+#: ../../moderator_documentation/domains/add_domain.md:34
 msgid "Select {guilabel}`Domains` at the top of the page. The {guilabel}`Domains` page opens. You can see a list of known domains on this page."
 msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:17
-#: ../../moderator_documentation/domains/add_domain.md:28
+#: ../../moderator_documentation/domains/add_domain.md:23
+#: ../../moderator_documentation/domains/add_domain.md:35
 msgid "Enter the URL of the Fediverse server you want to add in the {guilabel}`Add a domain` field."
 msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:18
-#: ../../moderator_documentation/domains/add_domain.md:29
+#: ../../moderator_documentation/domains/add_domain.md:24
+#: ../../moderator_documentation/domains/add_domain.md:36
 msgid "Select {guilabel}`Add` to add the domain. The domain moderation page opens."
 msgstr ""
 
@@ -69,10 +73,10 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:25
+#: ../../moderator_documentation/domains/add_domain.md:32
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the page to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:33
+#: ../../moderator_documentation/domains/add_domain.md:40
 msgid "That's it! The domain is now in your domains list. You can now add moderation rules to this domain."
 msgstr ""

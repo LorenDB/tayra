@@ -6,15 +6,20 @@ If you have allow-listing enabled, you need to add a domain to your allow-list t
 :local:
 ```
 
-```{dropdown} Required permissions
+:::{dropdown} Required permissions
+:icon: key
+
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
-```
+:::
 
 ## Add a new domain
 
 To add a domain that is not currently in your domains list:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -24,9 +29,10 @@ To add a domain that is not currently in your domains list:
 6. Check ({fa}`check-square`) the checkbox labeled {guilabel}`Add to allow-list`.
 7. Select {guilabel}`Add`.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
@@ -36,7 +42,8 @@ To add a domain that is not currently in your domains list:
 6. Check ({fa}`check-square`) the checkbox labeled {guilabel}`Add to allow-list`.
 7. Select {guilabel}`Add`.
 
-```
+:::
+::::
 
 That's it! You've added the domain to your pod's allow-list.
 
@@ -44,7 +51,10 @@ That's it! You've added the domain to your pod's allow-list.
 
 To add a domain that is already in your pod's domain list:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -54,9 +64,10 @@ To add a domain that is already in your pod's domain list:
 6. Select {guilabel}`Add to allow-list` in the {guilabel}`Actions` dropdown.
 7. Select {guilabel}`Go`. A green tick ({fa}`check`) appears next to the domain(s)
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
@@ -66,6 +77,7 @@ To add a domain that is already in your pod's domain list:
 6. Select {guilabel}`Add to allow-list` in the {guilabel}`Actions` dropdown.
 7. Select {guilabel}`Go`. A green tick ({fa}`check`) appears next to the domain(s)
 
-```
+:::
+::::
 
 You're done! You've added the domain to your pod's allow-list.

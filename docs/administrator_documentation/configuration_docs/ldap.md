@@ -10,19 +10,19 @@ LDAP users can't change their password in the app.
 
 LDAP support requires extra dependencies. We include these in our requirements files to make it easier to set up. If you aren't using LDAP, you can safely remove these.
 
-```{dropdown} OS dependencies
+:::{dropdown} OS dependencies
 
 - `libldap2-dev`
 - `libsasl2-dev`
 
-```
+:::
 
-```{dropdown} Python dependencies
+:::{dropdown} Python dependencies
 
 - `python-ldap`
 - `python-django-auth-ldap`
 
-```
+:::
 
 ## Environment variables
 

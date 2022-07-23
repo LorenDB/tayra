@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,18 +108,18 @@ msgstr ""
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:103
+#: ../../administrator_documentation/configuration_docs/mrf.md:108
 msgid "Check how your MRF policy handles a follow."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:123
+#: ../../administrator_documentation/configuration_docs/mrf.md:132
 msgid "Check how your MRF handles a problematic follow."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:143
+#: ../../administrator_documentation/configuration_docs/mrf.md:157
 msgid "Check a payload against activity already present in the database. You can find the UUID of an activity by visiting `/api/admin/federation/activity`."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:166
+#: ../../administrator_documentation/configuration_docs/mrf.md:185
 msgid "There are extra options for testing MRF policies. Check the command help for more options."
 msgstr ""

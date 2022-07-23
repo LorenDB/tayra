@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,37 +28,37 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/subsonic/disable_subsonic.md:7
-#: ../../user_documentation/subsonic/disable_subsonic.md:19
+#: ../../user_documentation/subsonic/disable_subsonic.md:11
+#: ../../user_documentation/subsonic/disable_subsonic.md:24
 msgid "Log in to your account."
 msgstr ""
 
-#: ../../user_documentation/subsonic/disable_subsonic.md:8
+#: ../../user_documentation/subsonic/disable_subsonic.md:12
 msgid "Select the cog icon ({fa}`cog`) or your avatar to expand the user menu."
 msgstr ""
 
-#: ../../user_documentation/subsonic/disable_subsonic.md:9
-#: ../../user_documentation/subsonic/disable_subsonic.md:21
+#: ../../user_documentation/subsonic/disable_subsonic.md:13
+#: ../../user_documentation/subsonic/disable_subsonic.md:26
 msgid "Select {guilabel}`Settings`."
 msgstr ""
 
-#: ../../user_documentation/subsonic/disable_subsonic.md:10
-#: ../../user_documentation/subsonic/disable_subsonic.md:22
+#: ../../user_documentation/subsonic/disable_subsonic.md:14
+#: ../../user_documentation/subsonic/disable_subsonic.md:27
 msgid "Scroll to the {guilabel}`Subsonic API password` section."
 msgstr ""
 
-#: ../../user_documentation/subsonic/disable_subsonic.md:11
-#: ../../user_documentation/subsonic/disable_subsonic.md:23
+#: ../../user_documentation/subsonic/disable_subsonic.md:15
+#: ../../user_documentation/subsonic/disable_subsonic.md:28
 msgid "Select {guilabel}`Disable Subsonic access`."
 msgstr ""
 
-#: ../../user_documentation/subsonic/disable_subsonic.md:12
-#: ../../user_documentation/subsonic/disable_subsonic.md:24
+#: ../../user_documentation/subsonic/disable_subsonic.md:16
+#: ../../user_documentation/subsonic/disable_subsonic.md:29
 msgid "Select {guilabel}`Disable access` in the warning message that appears."
 msgstr ""
 
-#: ../../user_documentation/subsonic/disable_subsonic.md:13
-#: ../../user_documentation/subsonic/disable_subsonic.md:25
+#: ../../user_documentation/subsonic/disable_subsonic.md:17
+#: ../../user_documentation/subsonic/disable_subsonic.md:30
 msgid "The Subsonic password field shows {guilabel}`Access disabled`."
 msgstr ""
 
@@ -66,10 +66,10 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/subsonic/disable_subsonic.md:20
+#: ../../user_documentation/subsonic/disable_subsonic.md:25
 msgid "Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}`Options` menu."
 msgstr ""
 
-#: ../../user_documentation/subsonic/disable_subsonic.md:29
+#: ../../user_documentation/subsonic/disable_subsonic.md:34
 msgid "You're done! Subsonic apps can no longer access your account. You can re-enable the API at any time by [requesting a new password](subsonic_password)."
 msgstr ""

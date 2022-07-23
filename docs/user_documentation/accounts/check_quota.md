@@ -6,7 +6,10 @@ If you run out of space, you can contact your pod admin to request more.
 
 To check your upload quota:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -14,9 +17,10 @@ To check your upload quota:
 4. The {guilabel}`My libraries` screen appears showing your upload quota and your libraries.
 5. The {guilabel}`Current usage` section shows you how much of your quota you are using.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) at the top of the screen
@@ -24,4 +28,5 @@ To check your upload quota:
 4. The {guilabel}`My libraries` screen appears showing your upload quota and your libraries.
 5. The {guilabel}`Current usage` section shows you how much of your quota you are using.
 
-```
+:::
+::::

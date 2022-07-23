@@ -6,10 +6,12 @@ Deleting content from your pod deletes the files from the server. Deleting objec
 
 Moderators can delete content from their {term}`pod` if required. Use this feature to handle content that violates your pod's rules.
 
-```{dropdown} Required permissions
+:::{dropdown} Required permissions
+:icon: key
+
 - {guilabel}`Moderation` – provides access to the administration menu.
 - {guilabel}`Library` – provides access to the library menu.
-```
+:::
 
 There are two ways to delete content:
 
@@ -21,7 +23,10 @@ There are two ways to delete content:
 
 If you want to delete a specific object:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -39,9 +44,10 @@ If you want to delete a specific object:
 7. Select {guilabel}`Delete`. A {guilabel}`Delete this {object}` warning appears.
 8. Select {guilabel}`Delete`.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
@@ -59,7 +65,8 @@ If you want to delete a specific object:
 7. Select {guilabel}`Delete`. A {guilabel}`Delete this {object}` warning appears.
 8. Select {guilabel}`Delete`.
 
-```
+:::
+::::
 
 That's it! You've deleted the object.
 
@@ -67,7 +74,10 @@ That's it! You've deleted the object.
 
 To delete several items at once:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -86,9 +96,10 @@ To delete several items at once:
 8. Select {guilabel}`Go`. A {guilabel}`Do you want to launch delete on {count} items` warning appears.
 9. Select {guilabel}`Launch`.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
@@ -107,6 +118,7 @@ To delete several items at once:
 8. Select {guilabel}`Go`. A {guilabel}`Do you want to launch delete on {count} items` warning appears.
 9. Select {guilabel}`Launch`.
 
-```
+:::
+::::
 
 You're done! You've deleted the selected objects from your pod.

@@ -2,9 +2,11 @@
 
 {term}`Pod` admins can enable manual sign-up validation. This setting requires moderators to approve or refuse account creations.
 
-```{dropdown} Required permissions
+:::{dropdown} Required permissions
+:icon: key
+
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
-```
+:::
 
 Requests appear in the {guilabel}`User Requests` list. Each request contains the following information:
 
@@ -24,7 +26,10 @@ Requests appear in the {guilabel}`User Requests` list. Each request contains the
 
 To approve a sign-up request:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -33,9 +38,10 @@ To approve a sign-up request:
 5. Read through the details of the request. 
 6. Select {guilabel}`Approve` in the {guilabel}`Actions` section.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
@@ -44,7 +50,8 @@ To approve a sign-up request:
 5. Read through the details of the request. 
 6. Select {guilabel}`Approve` in the {guilabel}`Actions` section.
 
-```
+:::
+::::
 
 That's it! You've approved the user's sign-up request. The user can now log in.
 
@@ -52,7 +59,10 @@ That's it! You've approved the user's sign-up request. The user can now log in.
 
 To refuse a sign-up request:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -61,9 +71,10 @@ To refuse a sign-up request:
 5. Read through the details of the request. 
 6. Select {guilabel}`Refuse` in the {guilabel}`Actions` section.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
@@ -72,6 +83,7 @@ To refuse a sign-up request:
 5. Read through the details of the request. 
 6. Select {guilabel}`Refuse` in the {guilabel}`Actions` section.
 
-```
+:::
+::::
 
 That's it! You've refused the user's sign-up request. The user can't log in to your pod.

@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,34 +52,34 @@ msgstr ""
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:27
+#: ../../administrator_documentation/manage_script/fix_uploads.md:32
 msgid "Fix bitrate and duration"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:29
+#: ../../administrator_documentation/manage_script/fix_uploads.md:34
 msgid "Check and fix bitrate and duration with the `--audio-data` flag. This process can take a long time as it needs to access all files."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:47
+#: ../../administrator_documentation/manage_script/fix_uploads.md:57
 msgid "Fix file size"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:49
+#: ../../administrator_documentation/manage_script/fix_uploads.md:59
 msgid "Check and fix the file size with the `--size` flag."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:67
+#: ../../administrator_documentation/manage_script/fix_uploads.md:82
 msgid "Fix file checksums"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:69
+#: ../../administrator_documentation/manage_script/fix_uploads.md:84
 msgid "Check and fix file checksums with the `--checksum` flag."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:87
+#: ../../administrator_documentation/manage_script/fix_uploads.md:107
 msgid "Change command batch size"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:89
+#: ../../administrator_documentation/manage_script/fix_uploads.md:109
 msgid "Choose the batch size you want to process with the `--batch-size` or -`s` flag. Smaller batches process faster. Defaults to `1000`."
 msgstr ""

@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-03 01:39+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,19 +36,19 @@ msgstr ""
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:23
+#: ../../administrator_documentation/configuration_docs/env_file.md:28
 msgid "Variables"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:27
+#: ../../administrator_documentation/configuration_docs/env_file.md:32
 msgid "Some environment variables accept a URL as a value. To encode URLs and avoid problems with special characters, use `urllib.parse` on your URL value."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:34
+#: ../../administrator_documentation/configuration_docs/env_file.md:39
 msgid "The [django-environ documentation](https://github.com/joke2k/django-environ/blob/main/docs/tips.rst#using-unsafe-characters-in-urls)."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:39
+#: ../../administrator_documentation/configuration_docs/env_file.md:44
 msgid "Pod configuration"
 msgstr ""
 
@@ -60,7 +60,7 @@ msgstr ""
 msgid "Protocol end users will use to access your pod, either ``http`` or ``https``."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:48
+#: ../../administrator_documentation/configuration_docs/env_file.md:53
 msgid "Database and redis configuration"
 msgstr ""
 
@@ -123,7 +123,7 @@ msgstr ""
 msgid "``redis+socket:///run/redis/redis.sock?virtual_host=0``"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:60
+#: ../../administrator_documentation/configuration_docs/env_file.md:65
 msgid "Accounts and registration"
 msgstr ""
 
@@ -147,15 +147,15 @@ msgstr ""
 msgid "List of usernames that can't be used for registration. Given as a list of strings."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:80
+#: ../../administrator_documentation/configuration_docs/env_file.md:85
 msgid "Whether to enable LDAP authentication."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:82
+#: ../../administrator_documentation/configuration_docs/env_file.md:87
 msgid "See {doc}`/administrator_documentation/configuration_docs/ldap` for more information."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:85
+#: ../../administrator_documentation/configuration_docs/env_file.md:90
 msgid "Media storage and serving configuration"
 msgstr ""
 
@@ -203,7 +203,7 @@ msgstr ""
 msgid "Don't insert a slash at the end of this path."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:106
+#: ../../administrator_documentation/configuration_docs/env_file.md:111
 msgid "S3 storage configuration"
 msgstr ""
 
@@ -265,7 +265,7 @@ msgstr ""
 msgid "A directory in your S3 bucket where you store files. Use this if you plan to share the bucket between services."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:125
+#: ../../administrator_documentation/configuration_docs/env_file.md:130
 msgid "In-place import configuration"
 msgstr ""
 
@@ -294,7 +294,7 @@ msgstr ""
 msgid "In this case, you need to set :attr:`MUSIC_DIRECTORY_SERVE_PATH` to ``/srv/funkwhale/data/music``. The webserver needs to be able to read this directory."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:136
+#: ../../administrator_documentation/configuration_docs/env_file.md:141
 msgid "API configuration"
 msgstr ""
 
@@ -310,7 +310,7 @@ msgstr ""
 msgid "``signup=5/d,password-reset=2/d,anonymous-reports=5/d``"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:146
+#: ../../administrator_documentation/configuration_docs/env_file.md:151
 msgid "See [Rate limit API endpoints](rate-limiting.md) for a list of available endpoints and their default limits."
 msgstr ""
 
@@ -338,7 +338,7 @@ msgstr ""
 msgid "Default timeout for external requests."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:156
+#: ../../administrator_documentation/configuration_docs/env_file.md:161
 msgid "Federation configuration"
 msgstr ""
 
@@ -350,7 +350,7 @@ msgstr ""
 msgid "The delay in seconds between two manual fetches of the same remote object."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:165
+#: ../../administrator_documentation/configuration_docs/env_file.md:170
 msgid "Metadata configuration"
 msgstr ""
 
@@ -374,7 +374,7 @@ msgstr ""
 msgid "Length of time in seconds to cache MusicBrainz results."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:175
+#: ../../administrator_documentation/configuration_docs/env_file.md:180
 msgid "Channels and podcast configuration"
 msgstr ""
 
@@ -398,7 +398,7 @@ msgstr ""
 msgid "Changing this value only affect new podcasts."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:185
+#: ../../administrator_documentation/configuration_docs/env_file.md:190
 msgid "Subsonic configuration"
 msgstr ""
 
@@ -406,7 +406,7 @@ msgstr ""
 msgid "The default format files are transcoded into when using the Subsonic API."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:193
+#: ../../administrator_documentation/configuration_docs/env_file.md:198
 msgid "Email configuration"
 msgstr ""
 
@@ -458,7 +458,7 @@ msgstr ""
 msgid "Subject prefix for system emails."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:205
+#: ../../administrator_documentation/configuration_docs/env_file.md:210
 msgid "Plugin configuration"
 msgstr ""
 
@@ -466,11 +466,11 @@ msgstr ""
 msgid "Path to a directory containing Funkwhale plugins. These are imported at runtime."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:218
+#: ../../administrator_documentation/configuration_docs/env_file.md:223
 msgid "List of Funkwhale plugins to load."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:221
+#: ../../administrator_documentation/configuration_docs/env_file.md:226
 msgid "Other settings"
 msgstr ""
 

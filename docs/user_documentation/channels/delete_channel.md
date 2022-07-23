@@ -6,7 +6,10 @@ Deleting a channel is irreversible. If you delete a channel you also delete the 
 
 If you want to delete your channel, follow these steps:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -16,9 +19,10 @@ If you want to delete your channel, follow these steps:
 6. Select {guilabel}`Delete…`. A {guilabel}`Delete this Channel?` warning message appears
 7. Select {guilabel}`Delete`.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -28,6 +32,7 @@ If you want to delete your channel, follow these steps:
 6. Select {guilabel}`Delete…`. A {guilabel}`Delete this Channel?` warning message appears
 7. Select {guilabel}`Delete`.
 
-```
+:::
+::::
 
 That's it! You deleted your channel.

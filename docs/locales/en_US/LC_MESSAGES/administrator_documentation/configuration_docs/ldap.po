@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-03 00:32+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.10.3\n"
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:1
 msgid "Configure LDAP"
@@ -44,12 +44,20 @@ msgid ""
 " you can safely remove these."
 msgstr ""
 
+#: ../../administrator_documentation/configuration_docs/ldap.md
+msgid "OS dependencies"
+msgstr ""
+
 #: ../../administrator_documentation/configuration_docs/ldap.md:15
 msgid "`libldap2-dev`"
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:16
 msgid "`libsasl2-dev`"
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/ldap.md
+msgid "Python dependencies"
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:22

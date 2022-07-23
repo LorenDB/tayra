@@ -2,29 +2,36 @@
 
 When a user reports an object on your {term}`pod`, the report gets sent to a moderation queue. You can check this moderation queue to handle any reports that users have submitted.
 
-```{dropdown} Required permissions
+:::{dropdown} Required permissions
+:icon: key
+
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
-```
+:::
 
 ## Check the Reports page
 
 You can see a list of unresolved reports by going to the {guilabel}`Reports` page. To do this:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens.
 
-```
+:::
+::::
 
 That's it! A list of unresolved reports appears on the screen. The summary contains the following information:
 

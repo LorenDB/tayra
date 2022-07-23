@@ -6,14 +6,19 @@ You can only change the visibility of libraries stored on your {term}`pod`.
 
 If a user has put copyrighted material in a public library, you can change the visibility of the library. This lets the user keep the content and protects your pod from legal issues.
 
-```{dropdown} Required permissions
+:::{dropdown} Required permissions
+:icon: key
+
 - {guilabel}`Moderation` – provides access to the administration menu.
 - {guilabel}`Library` – provides access to the library menu.
-```
+:::
 
 To change the visibility of a library:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -25,9 +30,10 @@ To change the visibility of a library:
    - {guilabel}`Instance` – makes the library visible only to users who have an account on your pod.
    - {guilabel}`Everyone` – makes the library visible to users across all pods.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
@@ -39,6 +45,7 @@ To change the visibility of a library:
    - {guilabel}`Instance` – makes the library visible only to users who have an account on your pod.
    - {guilabel}`Everyone` – makes the library visible to users across all pods.
 
-```
+:::
+::::
 
 That's it! You've updated the library's visibility. You should contact the user informing them of the action.

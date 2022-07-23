@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,13 +64,13 @@ msgstr ""
 msgid "Nginx"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:54
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:72
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:58
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:77
 msgid "Remove the configuration files from your web host."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:62
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:79
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:66
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:84
 msgid "Reload the web server."
 msgstr ""
 
@@ -78,62 +78,62 @@ msgstr ""
 msgid "Apache2"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:87
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:92
 msgid "Remove the Funkwhale database"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:90
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:95
 msgid "This action is __irreversible__. Make sure you have [backed up your data](../upgrade_docs/backup.md) before proceeding."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:93
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:98
 msgid "Once you have stopped the Funkwhale services, you can remove the Funkwhale database."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:95
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:100
 msgid "Navigate to your Funkwhale directory."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:101
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:106
 msgid "Delete the Funkwhale database."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:107
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:112
 msgid "Delete the Funkwhale user."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:113
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:118
 msgid "Delete  the Funkwhale account"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:116
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:121
 msgid "This action deletes the `/srv/funkwhale/` directory. Make sure you have [backed up any data](../upgrade_docs/backup.md) you want to keep."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:119
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:124
 msgid "Once you have removed the database, you can delete the `funkwhale` user and all associated data."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:125
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:130
 msgid "This deletes the `funkwhale` user and everything in their home directory (`/srv/funkwhale/`). If your content is hosted in an S3-compatible store, you need to delete this data separately."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:127
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:132
 msgid "Uninstall dependencies"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:129
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:134
 msgid "The quick install script installs the following dependencies on your server:"
 msgstr ""
 
 #: ../../administrator_documentation/uninstall_docs/quick_install.md:0
-msgid "apt"
+msgid "Apt"
 msgstr ""
 
 #: ../../administrator_documentation/uninstall_docs/quick_install.md:0
 msgid "Python"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/quick_install.md:160
+#: ../../administrator_documentation/uninstall_docs/quick_install.md:170
 msgid "Uninstall any dependencies you don't need."
 msgstr ""

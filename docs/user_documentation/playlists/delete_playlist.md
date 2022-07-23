@@ -6,7 +6,10 @@ Deleting a playlist removes the playlist for all users. This action is irreversi
 
 You can delete a playlist if you no longer want it. To do this:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your account.
 2. Select {guilabel}`Playlists` under the {guilabel}`My Library` section of the sidebar. The {guilabel}`Browsing playlists` screen opens.
@@ -15,9 +18,10 @@ You can delete a playlist if you no longer want it. To do this:
 5. Select {guilabel}`Delete`. A {guilabel}`Do you want to delete the playlist?` warning appears.
 6. Select {guilabel}`Delete playlist`.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your account.
 2. Select the hamburger menu ({fa}`bars`) to open the menu bar.
@@ -27,6 +31,7 @@ You can delete a playlist if you no longer want it. To do this:
 6. Select {guilabel}`Delete`. A {guilabel}`Do you want to delete the playlist?` warning appears.
 7. Select {guilabel}`Delete playlist`.
 
-```
+:::
+::::
 
 That's it! You've deleted your playlist.

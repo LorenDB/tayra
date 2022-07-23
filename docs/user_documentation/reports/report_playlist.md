@@ -2,7 +2,10 @@
 
 If a playlist's content violates a {term}`pod's <Pod>` rules or the law, you can report it. To do this:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Select {menuselection}`Explore --> Playlists` in the sidebar. The {guilabel}`Browsing playlists` screen opens.
 2. Use the filters to search for a playlist.
@@ -18,9 +21,10 @@ If a playlist's content violates a {term}`pod's <Pod>` rules or the law, you can
 7. Enter details of your report in the {guilabel}`Message` field. Provide as much detail as possible here to help the moderators action the report.
 8. Select {guilabel}`Submit report` to send your report to the pod moderators.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Select the hamburger menu ({fa}`bars`) to open the menu bar.
 2. Select {menuselection}`Explore --> Playlists`. The {guilabel}`Browsing playlists` screen opens.
@@ -37,6 +41,7 @@ If a playlist's content violates a {term}`pod's <Pod>` rules or the law, you can
 8. Enter details of your report in the {guilabel}`Message` field. Provide as much detail as possible here to help the moderators action the report.
 9. Select {guilabel}`Submit report` to send your report to the pod moderators.
 
-```
+:::
+::::
 
 That's it! The pod's moderators can now action the report or contact you for clarification.

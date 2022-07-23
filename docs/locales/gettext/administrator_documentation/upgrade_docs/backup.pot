@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,14 +40,14 @@ msgstr ""
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/upgrade_docs/backup.md:23
+#: ../../administrator_documentation/upgrade_docs/backup.md:28
 msgid "Back up your media files. In this example we use [rsync](https://rsync.samba.org) to back up the files."
 msgstr ""
 
-#: ../../administrator_documentation/upgrade_docs/backup.md:44
+#: ../../administrator_documentation/upgrade_docs/backup.md:54
 msgid "Back up your configuration files."
 msgstr ""
 
-#: ../../administrator_documentation/upgrade_docs/backup.md:62
+#: ../../administrator_documentation/upgrade_docs/backup.md:77
 msgid "If you are performing regular backups, you may need deduplication and compression to keep the size down. In this case, a tool like [`borg`](https://www.borgbackup.org/) is more appropriate."
 msgstr ""

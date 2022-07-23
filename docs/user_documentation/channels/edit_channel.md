@@ -16,7 +16,10 @@ You can change different details depending on what type of channel you are editi
 
 To edit an __Artist channel__:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -31,9 +34,10 @@ To edit an __Artist channel__:
    - {guilabel}`Description`
 8. Select {guilabel}`Update channel` to save your changes.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -48,7 +52,8 @@ To edit an __Artist channel__:
    - {guilabel}`Description`
 8. Select {guilabel}`Update channel` to save your changes.
 
-```
+:::
+::::
 
 That's it! You've updated your channel details. Users see the new details when they visit your channel page.
 
@@ -56,7 +61,10 @@ That's it! You've updated your channel details. Users see the new details when t
 
 To edit a __Podcast channel__:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -76,9 +84,10 @@ To edit a __Podcast channel__:
    - {guilabel}`Owner name`
 8. Select {guilabel}`Update channel` to save your changes.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -98,6 +107,7 @@ To edit a __Podcast channel__:
    - {guilabel}`Owner name`
 8. Select {guilabel}`Update channel` to save your changes.
 
-```
+:::
+::::
 
 You're done! Users see the new details when they visit your channel page. The changes also reflect on your podcast's {abbr}`RSS (Really Simple Syndication)` feed.

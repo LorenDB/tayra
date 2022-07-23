@@ -8,16 +8,20 @@ If you have access to the Funkwhale backend, you can use logs to get more inform
 
 - __Reverse proxy logs__ – check these logs if you have connectivity issues.
 
-   ````{tabbed} Nginx
+   ::::{tab-set}
+
+   :::{tab-item} Nginx
+   :sync: nginx
 
    ```{code} bash
    sudo tail -f /var/log/nginx/access.log # Follow the access log
    sudo tail -f /var/log/nginx/error.log # Follow the error log
    ```
 
-   ````
+   :::
 
-   ````{tabbed} Apache
+   :::{tab-item} Apache2
+   :sync: apache2
 
    ```{code} bash
    sudo tail -f /var/log/apache/access.log # Follow the access log
@@ -28,39 +32,49 @@ If you have access to the Funkwhale backend, you can use logs to get more inform
 
 - __API logs__ – check these if you are having issues with the Funkwhale app, federation, or imports.
 
-   ````{tabbed} Debian
+   ::::{tab-set}
+
+   :::{tab-item} Debian
+   :sync: debian
 
    ```{code} bash
    journalctl -xn -u funkwhale-server
    ```
 
-   ````
+   :::
 
-   ````{tabbed} Docker
+   :::{tab-item} Docker
+   :sync: docker
 
    ```{code} bash
    docker-compose logs -f --tail=50 api # Follow the last 50 messages
    ```
 
-   ````
+   :::
+   ::::
 
 - __Celery logs__ – check these if a federation or import task isn't working.
 
-   ````{tabbed} Debian
+   ::::{tab-set}
+
+   :::{tab-item} Debian
+   :sync: debian
 
    ```{code} bash
    journalctl -xn -u funkwhale-worker
    ```
 
-   ````
+   :::
 
-   ````{tabbed} Docker
+   :::{tab-item} Docker
+   :sync: docker
 
    ```{code} bash
    docker-compose logs -f --tail=50 celery # Follow the last 50 messages
    ```
 
-   ````
+   :::
+   ::::
 
 ## Troubleshoot issues
 
@@ -78,18 +92,18 @@ If you're having issues importing files, try the following:
 
 - Check that the file is encoded in a supported format
 
-   ```{dropdown} Supported formats
+:::{dropdown} Supported formats
 
-   - flac
-   - ogg
-   - mp3
-   - opus
-   - aac
-   - m4a
-   - aiff
-   - aif
+- flac
+- ogg
+- mp3
+- opus
+- aac
+- m4a
+- aiff
+- aif
 
-   ```
+:::
 
 - Make sure your files play in another media player.
 - Make sure your files are [tagged correctly](../../user_documentation/libraries/tag_music.md).
@@ -121,21 +135,26 @@ If your Funkwhale server uses more memory than expected, you can check the footp
 
 3. Restart your Funkwhale server.
 
-   ````{tabbed} Debian
+   ::::{tab-set}
+
+   :::{tab-item} Debian
+   :sync: debian
 
    ```{code} bash
    sudo systemctl restart funkwhale.target
    ```
 
-   ````
+   :::
 
-   ````{tabbed} Docker
+   :::{tab-item} Docker
+   :sync: docker
 
    ```{code} bash
    docker-compose restart
    ```
 
-   ````
+   :::
+   ::::
 
 The middleware prints out the top 25 memory allocations to the API logs. You can use these to see what requests use the most memory.
 
@@ -155,21 +174,26 @@ To disable memory tracing:
 
 3. Restart your Funkwhale server.
 
-   ````{tabbed} Debian
+   ::::{tab-set}
+
+   :::{tab-item} Debian
+   :sync: debian
 
    ```{code} bash
    sudo systemctl restart funkwhale.target
    ```
 
-   ````
+   :::
 
-   ````{tabbed} Docker
+   :::{tab-item} Docker
+   :sync: docker
 
    ```{code} bash
    docker-compose restart
    ```
 
-   ````
+   :::
+   ::::
 
 ## Get help
 

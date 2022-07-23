@@ -2,7 +2,10 @@
 
 You can update the details of your libraries at any time. To do this:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -16,9 +19,10 @@ You can update the details of your libraries at any time. To do this:
    - {guilabel}`Visibility`.
 8. Select {guilabel}`Update Library` to save your changes. A toast notification appears at the bottom of the screen to confirm your changes.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -32,6 +36,7 @@ You can update the details of your libraries at any time. To do this:
    - {guilabel}`Visibility`.
 8. Select {guilabel}`Update Library` to save your changes. A toast notification appears at the bottom of the screen to confirm your changes.
 
-```
+:::
+::::
 
 That's it! You've updated your library's details.

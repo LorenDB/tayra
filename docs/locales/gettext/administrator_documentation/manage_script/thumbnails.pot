@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,23 +36,23 @@ msgstr ""
 msgid "Debian"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/thumbnails.md:13
-#: ../../administrator_documentation/manage_script/thumbnails.md:36
+#: ../../administrator_documentation/manage_script/thumbnails.md:17
+#: ../../administrator_documentation/manage_script/thumbnails.md:41
 msgid "SSH into your Funkwhale server."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/thumbnails.md:14
-#: ../../administrator_documentation/manage_script/thumbnails.md:37
+#: ../../administrator_documentation/manage_script/thumbnails.md:18
+#: ../../administrator_documentation/manage_script/thumbnails.md:42
 msgid "Navigate to your Funkwhale directory."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/thumbnails.md:20
-#: ../../administrator_documentation/manage_script/thumbnails.md:43
+#: ../../administrator_documentation/manage_script/thumbnails.md:24
+#: ../../administrator_documentation/manage_script/thumbnails.md:48
 msgid "Delete the `__sized__` directory inside your `MEDIA_ROOT` directory. By default this is `/srv/funkwhale/data/media`. This directory contains the current thumbnails."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/thumbnails.md:26
-#: ../../administrator_documentation/manage_script/thumbnails.md:49
+#: ../../administrator_documentation/manage_script/thumbnails.md:30
+#: ../../administrator_documentation/manage_script/thumbnails.md:54
 msgid "Run the `manage.py` script to regenerate the thumbnails."
 msgstr ""
 
@@ -60,6 +60,6 @@ msgstr ""
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/thumbnails.md:57
+#: ../../administrator_documentation/manage_script/thumbnails.md:62
 msgid "The script generates new thumbnails for all album and artist art on your pod."
 msgstr ""

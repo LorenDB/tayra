@@ -109,78 +109,115 @@ changelog
 
 ```
 
-````{panels}
-:body: text-left
-:header: text-center
+::::{grid} 2
 
-{fa}`user` Users
-^^^^^^^^^^^^
+:::{grid-item-card}
+:text-align: center
+
+{fa}`user`  Users
+^^^
 
 Looking to use Funkwhale for your content? Read through our guides to master the app!
 
 +++
 
-```{link-button} user_documentation/index
-:type: ref
-:text: Get started
-:classes: btn-outline-primary btn-block stretched-link 
+```{button-link} user_documentation/index.html
+:ref-type: myst
+:color: primary
+:outline:
+:click-parent:
+:expand:
+
+Get started
 ```
 
----
+:::
+:::{grid-item-card}
+:text-align: center
 
 {fa}`wrench` Admins
-^^^^^^^^^^^^^^^^
+^^^
 
 Want to host your own Funkwhale pod? Our admin documentation guides you through the process.
 
 +++
 
-```{link-button} administrator_documentation/index
-:type: ref
-:text: Get started
-:classes: btn-outline-primary btn-block stretched-link
+```{button-link} administrator_documentation/index.html
+:ref-type: ref
+:color: primary
+:outline:
+:click-parent:
+:expand:
 
----
+Get started
+```
+
+:::
+:::{grid-item-card}
+:text-align: center
 
 {fa}`shield` Moderators
-^^^^^^^^^^^^^^^^^^
+^^^
 
 Keeping your users safe from harassment and spam or clearing illegal content? Check out our moderator docs.
 
 +++
 
-```{link-button} moderator_documentation/index
-:type: ref
-:text: Get started
-:classes: btn-outline-primary btn-block stretched-link
+```{button-link} moderator_documentation/index.html
+:ref-type: ref
+:color: primary
+:outline:
+:click-parent:
+:expand:
 
----
+Get started
+```
+
+:::
+:::{grid-item-card}
+:text-align: center
 
 {fa}`code` Developers
-^^^^^^^^^^^^^^^^^
+^^^
 
 Want to use Funkwhale's API or help with the project? Our developer docs give you what you need to get started.
 
 +++
 
-```{link-button} developers/index
-:type: ref
-:text: Get started
-:classes: btn-outline-primary btn-block stretched-link
+```{button-link} developers/index.html
+:ref-type: ref
+:color: primary
+:outline:
+:click-parent:
+:expand:
 
----
-:column: col-lg-12 p-2
+Get started
+```
+
+:::
+::::
+
+::::{grid} 1
+
+:::{grid-item-card}
+:text-align: center
 
 {fa}`users` Contributors
-^^^^^^^^^^^^^^^^^^
+^^^
 
 Want to help make Funkwhale even better? Check out these guides for some ideas.
 
 +++
 
-```{link-button} contributing
-:type: ref
-:text: Get started
-:classes: btn-outline-primary btn-block stretched-link
+```{button-link} contributing.html
+:ref-type: ref
+:color: primary
+:outline:
+:click-parent:
+:expand:
 
-````
+Get started
+```
+
+:::
+::::

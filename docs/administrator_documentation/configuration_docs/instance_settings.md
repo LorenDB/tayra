@@ -4,20 +4,25 @@ You can find instance settings on your pod's web interface. These settings contr
 
 To find your instance settings:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Settings`. The {guilabel}`Instance settings` page opens.
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the page to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Settings`. The {guilabel}`Instance settings` page opens.
 
-```
+:::
+::::
 
 ## Available settings
 

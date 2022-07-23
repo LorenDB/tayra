@@ -8,10 +8,13 @@ Create a new radio to create a dynamic playlist of content based on filters. You
 
 To create a new radio:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Select {guilabel}`Radios` in the sidebar. The {guilabel}`Browsing radios` screen opens.
-2. Select {guilabel}` Create your own radio` under the {guilabel}`User radios` section. The {guilabel}`Builder` screen opens.
+2. Select {guilabel}`Create your own radio` under the {guilabel}`User radios` section. The {guilabel}`Builder` screen opens.
 3. Enter a {guilabel}`Radio name`.
 4. __Optional__ – enter a {guilabel}`Description` for your radio.
 5. To make your radio available to other users on your {term}`pod`, enable the {guilabel}`Display publicly` switch. If you disable this switch, only you can see the radio.
@@ -24,13 +27,14 @@ To create a new radio:
 9. Check the tracks under the {guilabel}`{count} tracks matching combined filters` section.
 10. Select {guilabel}`Save` to save your radio.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Select the hamburger menu ({fa}`bars`) to open the menu bar.
 2. Select {menuselection}`Explore --> Radios` or {menuselection}`My Library --> Radios`. The {guilabel}`Browsing radios` screen opens.
-3. Select {guilabel}` Create your own radio` under the {guilabel}`User radios` section. The {guilabel}`Builder` screen opens.
+3. Select {guilabel}`Create your own radio` under the {guilabel}`User radios` section. The {guilabel}`Builder` screen opens.
 4. Enter a {guilabel}`Radio name`.
 5. __Optional__ – enter a {guilabel}`Description` for your radio.
 6. To make your radio available to other users on your {term}`pod`, enable the {guilabel}`Display publicly` switch. If you disable this switch, only you can see the radio.
@@ -43,6 +47,7 @@ To create a new radio:
 10. Check the tracks under the {guilabel}`{count} tracks matching combined filters` section.
 11. Select {guilabel}`Save` to save your radio.
 
-```
+:::
+::::
 
 You're done! You can now play your radio.

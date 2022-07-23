@@ -2,13 +2,18 @@
 
 Funkwhale records the domains of other {term}`Fediverse` servers when users interact with them. Once a domain is in your domains list, you can [add moderation rules](add_rule.md) to it.
 
-```{dropdown} Required permissions
+:::{dropdown} Required permissions
+:icon: key
+
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
-```
+:::
 
 You can also add domains to this list at any time to create rules before users interact with them. To do this:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -17,9 +22,10 @@ You can also add domains to this list at any time to create rules before users i
 5. Enter the URL of the Fediverse server you want to add in the {guilabel}`Add a domain` field.
 6. Select {guilabel}`Add` to add the domain. The domain moderation page opens.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the page to open the {guilabel}`Administration` menu.
@@ -28,6 +34,7 @@ You can also add domains to this list at any time to create rules before users i
 5. Enter the URL of the Fediverse server you want to add in the {guilabel}`Add a domain` field.
 6. Select {guilabel}`Add` to add the domain. The domain moderation page opens.
 
-```
+:::
+::::
 
 That's it! The domain is now in your domains list. You can now add moderation rules to this domain.

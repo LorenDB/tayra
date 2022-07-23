@@ -6,7 +6,10 @@ Changing your account password also changes your Subsonic API password. If you a
 
 You can update your account password whenever you need to. To do this:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your account.
 2. Select the cog icon ({fa}`cog`) or your avatar to expand the user menu.
@@ -16,9 +19,10 @@ You can update your account password whenever you need to. To do this:
 6. Enter your {guilabel}`New password`.
 7. Select {guilabel}`Change password`.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your account.
 2. Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}`Options` menu.
@@ -28,6 +32,7 @@ You can update your account password whenever you need to. To do this:
 6. Enter your {guilabel}`New password`.
 7. Select {guilabel}`Change password`.
 
-```
+:::
+::::
 
 That's it! Your password is reset. You need to use your new password to log in from now on.

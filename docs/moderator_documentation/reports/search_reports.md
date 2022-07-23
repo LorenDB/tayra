@@ -2,11 +2,16 @@
 
 The {guilabel}`Reports` page contains filters that enable you to search for reports. Use these filters to find reports by category, status, or key words.
 
-```{dropdown} Required permissions
-- {guilabel}`Moderation` – provides access to the administration and moderation menus.
-```
+:::{dropdown} Required permissions
+:icon: key
 
-```{tabbed} Desktop
+- {guilabel}`Moderation` – provides access to the administration and moderation menus.
+:::
+
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -18,9 +23,10 @@ The {guilabel}`Reports` page contains filters that enable you to search for repo
    - Select the criteria for {guilabel}`Ordering` of your search results.
    - Select which {guilabel}`Order` you want to see your search results in.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
@@ -32,6 +38,7 @@ The {guilabel}`Reports` page contains filters that enable you to search for repo
    - Select the criteria for {guilabel}`Ordering` of your search results.
    - Select which {guilabel}`Order` you want to see your search results in.
 
-```
+:::
+::::
 
 Once you have found the required report, you can handle the reported [user](handle_users.md) or [content](handle_content.md). You can also update the [internal notes](internal_notes.md) on the report.

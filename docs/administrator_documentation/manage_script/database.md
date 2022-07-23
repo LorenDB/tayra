@@ -10,18 +10,23 @@ Running `check_inplace_files` with the `--no-dry-run` flag is irreversible. Make
 
 To ensure you don't remove data by accident, this command runs in dry run mode by default. In dry run mode, the command lists the items it will delete. Run the command with the `--no-dry-run` flag to perform the pruning action.
 
-````{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 ```{code} bash
 poetry run python manage.py check_inplace_files
 ```
 
-````
+:::
 
-````{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 ```{code} bash
 docker-compose run --rm api python manage.py check_inplace_files
 ```
 
-````
+:::
+::::

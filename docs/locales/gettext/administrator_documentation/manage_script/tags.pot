@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,22 +53,22 @@ msgstr ""
 msgid "Debian"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/tags.md:17
-#: ../../administrator_documentation/manage_script/tags.md:34
-#: ../../administrator_documentation/manage_script/tags.md:55
-#: ../../administrator_documentation/manage_script/tags.md:72
+#: ../../administrator_documentation/manage_script/tags.md:21
+#: ../../administrator_documentation/manage_script/tags.md:39
+#: ../../administrator_documentation/manage_script/tags.md:64
+#: ../../administrator_documentation/manage_script/tags.md:82
 msgid "SSH into your Funkwhale server."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/tags.md:18
-#: ../../administrator_documentation/manage_script/tags.md:35
-#: ../../administrator_documentation/manage_script/tags.md:56
-#: ../../administrator_documentation/manage_script/tags.md:73
+#: ../../administrator_documentation/manage_script/tags.md:22
+#: ../../administrator_documentation/manage_script/tags.md:40
+#: ../../administrator_documentation/manage_script/tags.md:65
+#: ../../administrator_documentation/manage_script/tags.md:83
 msgid "Navigate to the Funkwhale directory."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/tags.md:24
-#: ../../administrator_documentation/manage_script/tags.md:41
+#: ../../administrator_documentation/manage_script/tags.md:28
+#: ../../administrator_documentation/manage_script/tags.md:46
 msgid "Run the `manage.py` script to generate tags for untagged albums."
 msgstr ""
 
@@ -77,15 +77,15 @@ msgstr ""
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/tags.md:49
+#: ../../administrator_documentation/manage_script/tags.md:54
 msgid "Add tags to artists"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/tags.md:51
+#: ../../administrator_documentation/manage_script/tags.md:56
 msgid "To add tags to untagged artists:"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/tags.md:62
-#: ../../administrator_documentation/manage_script/tags.md:79
+#: ../../administrator_documentation/manage_script/tags.md:71
+#: ../../administrator_documentation/manage_script/tags.md:89
 msgid "Run the `manage.py` script to generate tags for untagged artists."
 msgstr ""

@@ -6,7 +6,10 @@ When you delete content from a library you delete the audio files from your {ter
 
 You can delete content from a library at any time. To do this:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -20,9 +23,10 @@ You can delete content from a library at any time. To do this:
 10. Select {guilabel}`Go`.
 11. Select {guilabel}`Launch` on the warning message that appears.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -36,6 +40,7 @@ You can delete content from a library at any time. To do this:
 10. Select {guilabel}`Go`.
 11. Select {guilabel}`Launch` on the warning message that appears.
 
-```
+:::
+::::
 
 That's it! You've successfully deleted the content from your library.

@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,13 +56,13 @@ msgstr ""
 msgid "Nginx"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:36
-#: ../../administrator_documentation/uninstall_docs/docker.md:54
+#: ../../administrator_documentation/uninstall_docs/docker.md:40
+#: ../../administrator_documentation/uninstall_docs/docker.md:59
 msgid "Remove the configuration files from your web host."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:44
-#: ../../administrator_documentation/uninstall_docs/docker.md:61
+#: ../../administrator_documentation/uninstall_docs/docker.md:48
+#: ../../administrator_documentation/uninstall_docs/docker.md:66
 msgid "Reload the web server."
 msgstr ""
 
@@ -70,26 +70,26 @@ msgstr ""
 msgid "Apache2"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:69
+#: ../../administrator_documentation/uninstall_docs/docker.md:74
 msgid "Remove the containers and their volumes"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:72
+#: ../../administrator_documentation/uninstall_docs/docker.md:77
 msgid "This action is __irreversible__. Make sure you have [backed up your data](../upgrade_docs/backup.md) before proceeding."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:75
+#: ../../administrator_documentation/uninstall_docs/docker.md:80
 msgid "Once you have stopped the containers, you can delete all containers and associated volumes."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:81
+#: ../../administrator_documentation/uninstall_docs/docker.md:86
 msgid "Remove the Funkwhale directory"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:83
+#: ../../administrator_documentation/uninstall_docs/docker.md:88
 msgid "Once you have removed the containers and volumes, you can delete the Funkwhale directory."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:89
+#: ../../administrator_documentation/uninstall_docs/docker.md:94
 msgid "This deletes everything in the (`/srv/funkwhale/`) directory. If your content is hosted in an S3-compatible store, you need to delete this data separately."
 msgstr ""

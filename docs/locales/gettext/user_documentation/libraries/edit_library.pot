@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,57 +28,57 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:7
-#: ../../user_documentation/libraries/edit_library.md:23
+#: ../../user_documentation/libraries/edit_library.md:11
+#: ../../user_documentation/libraries/edit_library.md:28
 msgid "Log in to your {term}`pod`."
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:8
+#: ../../user_documentation/libraries/edit_library.md:12
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:9
-#: ../../user_documentation/libraries/edit_library.md:25
+#: ../../user_documentation/libraries/edit_library.md:13
+#: ../../user_documentation/libraries/edit_library.md:30
 msgid "Select {guilabel}`Get started` under {guilabel}`Upload third-party content in a library`."
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:10
-#: ../../user_documentation/libraries/edit_library.md:26
+#: ../../user_documentation/libraries/edit_library.md:14
+#: ../../user_documentation/libraries/edit_library.md:31
 msgid "A screen appears showing your upload quota and your libraries."
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:11
-#: ../../user_documentation/libraries/edit_library.md:27
+#: ../../user_documentation/libraries/edit_library.md:15
+#: ../../user_documentation/libraries/edit_library.md:32
 msgid "Select {guilabel}`Library Details` under the library you want to edit."
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:12
-#: ../../user_documentation/libraries/edit_library.md:28
+#: ../../user_documentation/libraries/edit_library.md:16
+#: ../../user_documentation/libraries/edit_library.md:33
 msgid "Select the {guilabel}`✎ Edit` button at the top of the screen."
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:13
-#: ../../user_documentation/libraries/edit_library.md:29
+#: ../../user_documentation/libraries/edit_library.md:17
+#: ../../user_documentation/libraries/edit_library.md:34
 msgid "Change any of the following:"
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:14
-#: ../../user_documentation/libraries/edit_library.md:30
+#: ../../user_documentation/libraries/edit_library.md:18
+#: ../../user_documentation/libraries/edit_library.md:35
 msgid "{guilabel}`Name`."
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:15
-#: ../../user_documentation/libraries/edit_library.md:31
+#: ../../user_documentation/libraries/edit_library.md:19
+#: ../../user_documentation/libraries/edit_library.md:36
 msgid "{guilabel}`Description`."
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:16
-#: ../../user_documentation/libraries/edit_library.md:32
+#: ../../user_documentation/libraries/edit_library.md:20
+#: ../../user_documentation/libraries/edit_library.md:37
 msgid "{guilabel}`Visibility`."
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:17
-#: ../../user_documentation/libraries/edit_library.md:33
+#: ../../user_documentation/libraries/edit_library.md:21
+#: ../../user_documentation/libraries/edit_library.md:38
 msgid "Select {guilabel}`Update Library` to save your changes. A toast notification appears at the bottom of the screen to confirm your changes."
 msgstr ""
 
@@ -86,10 +86,10 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:24
+#: ../../user_documentation/libraries/edit_library.md:29
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
 msgstr ""
 
-#: ../../user_documentation/libraries/edit_library.md:37
+#: ../../user_documentation/libraries/edit_library.md:42
 msgid "That's it! You've updated your library's details."
 msgstr ""

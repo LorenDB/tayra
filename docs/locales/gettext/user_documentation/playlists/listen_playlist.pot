@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,17 +41,17 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:19
+#: ../../user_documentation/playlists/listen_playlist.md:23
 msgid "Select {menuselection}`My Library --> Playlists` in the sidebar. The {guilabel}`Browsing playlists` screen opens."
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:20
-#: ../../user_documentation/playlists/listen_playlist.md:29
+#: ../../user_documentation/playlists/listen_playlist.md:24
+#: ../../user_documentation/playlists/listen_playlist.md:34
 msgid "Use the filters to search for your playlist."
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:21
-#: ../../user_documentation/playlists/listen_playlist.md:30
+#: ../../user_documentation/playlists/listen_playlist.md:25
+#: ../../user_documentation/playlists/listen_playlist.md:35
 msgid "Select the orange play icon ({fa}`play`) on your playlist to start playing the content."
 msgstr ""
 
@@ -60,45 +60,45 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:27
-#: ../../user_documentation/playlists/listen_playlist.md:50
+#: ../../user_documentation/playlists/listen_playlist.md:32
+#: ../../user_documentation/playlists/listen_playlist.md:60
 msgid "Select the hamburger menu ({fa}`bars`) to open the menu bar."
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:28
+#: ../../user_documentation/playlists/listen_playlist.md:33
 msgid "Select {menuselection}`My Library --> Playlists`. The {guilabel}`Browsing playlists` screen opens."
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:34
+#: ../../user_documentation/playlists/listen_playlist.md:39
 msgid "You're done! Your playlist's content appears in your [queue](../queue/index.md)."
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:36
+#: ../../user_documentation/playlists/listen_playlist.md:41
 msgid "Listen to public playlists from your pod"
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:38
+#: ../../user_documentation/playlists/listen_playlist.md:43
 msgid "To listen to public playlists other users created:"
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:42
+#: ../../user_documentation/playlists/listen_playlist.md:51
 msgid "Select {menuselection}`Explore --> Playlists` in the sidebar. The {guilabel}`Browsing playlists` screen opens."
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:43
 #: ../../user_documentation/playlists/listen_playlist.md:52
+#: ../../user_documentation/playlists/listen_playlist.md:62
 msgid "Use the filters to search for a playlist."
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:44
 #: ../../user_documentation/playlists/listen_playlist.md:53
+#: ../../user_documentation/playlists/listen_playlist.md:63
 msgid "Select the orange play icon ({fa}`play`) on your selected playlist to start playing the content."
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:51
+#: ../../user_documentation/playlists/listen_playlist.md:61
 msgid "Select {menuselection}`Explore --> Playlists`. The {guilabel}`Browsing playlists` screen opens."
 msgstr ""
 
-#: ../../user_documentation/playlists/listen_playlist.md:57
+#: ../../user_documentation/playlists/listen_playlist.md:67
 msgid "That's it! The playlist's content appears in your [queue](../queue/index.md)."
 msgstr ""

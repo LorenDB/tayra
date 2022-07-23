@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.10.3\n"
 
 #: ../../user_documentation/plugins/scrobbler_plugin.md:1
 msgid "Scrobbler plugin"
@@ -52,79 +52,78 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md:17
-#: ../../user_documentation/plugins/scrobbler_plugin.md:33
+#: ../../user_documentation/plugins/scrobbler_plugin.md:21
+#: ../../user_documentation/plugins/scrobbler_plugin.md:38
 msgid "Log in to your account."
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md:18
+#: ../../user_documentation/plugins/scrobbler_plugin.md:22
 msgid "Select the cog icon ({fa}`cog`) or your avatar to expand the user menu."
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md:19
-#: ../../user_documentation/plugins/scrobbler_plugin.md:35
+#: ../../user_documentation/plugins/scrobbler_plugin.md:23
+#: ../../user_documentation/plugins/scrobbler_plugin.md:40
 msgid "Select {guilabel}`Settings`."
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md:20
-#: ../../user_documentation/plugins/scrobbler_plugin.md:36
+#: ../../user_documentation/plugins/scrobbler_plugin.md:24
+#: ../../user_documentation/plugins/scrobbler_plugin.md:41
 msgid "Scroll down to the {guilabel}`Plugins` section."
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md:21
-#: ../../user_documentation/plugins/scrobbler_plugin.md:37
+#: ../../user_documentation/plugins/scrobbler_plugin.md:25
+#: ../../user_documentation/plugins/scrobbler_plugin.md:42
 msgid "Select {guilabel}`Manage plugins`."
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md:22
-#: ../../user_documentation/plugins/scrobbler_plugin.md:38
+#: ../../user_documentation/plugins/scrobbler_plugin.md:26
+#: ../../user_documentation/plugins/scrobbler_plugin.md:43
 msgid "Find the {guilabel}`Scrobbler` plugin."
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md:23
-#: ../../user_documentation/plugins/scrobbler_plugin.md:39
+#: ../../user_documentation/plugins/scrobbler_plugin.md:27
+#: ../../user_documentation/plugins/scrobbler_plugin.md:44
 msgid "Toggle the {guilabel}`Enabled` switch."
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md:24
-#: ../../user_documentation/plugins/scrobbler_plugin.md:40
+#: ../../user_documentation/plugins/scrobbler_plugin.md:28
+#: ../../user_documentation/plugins/scrobbler_plugin.md:45
 msgid ""
 "Enter the {guilabel}`URL of the scrobbler service`. If you leave this "
 "field blank, the plugin defaults to __Last.fm__."
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md:25
-#: ../../user_documentation/plugins/scrobbler_plugin.md:41
+#: ../../user_documentation/plugins/scrobbler_plugin.md:29
+#: ../../user_documentation/plugins/scrobbler_plugin.md:46
 msgid ""
 "Enter {guilabel}`Your scrobbler username`. You can set this up on your "
 "scrobbler service."
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md:26
-#: ../../user_documentation/plugins/scrobbler_plugin.md:42
+#: ../../user_documentation/plugins/scrobbler_plugin.md:30
+#: ../../user_documentation/plugins/scrobbler_plugin.md:47
 msgid ""
 "Enter {guilabel}`Your scrobbler password`. You can set this up on your "
 "scrobbler service."
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md:27
-#: ../../user_documentation/plugins/scrobbler_plugin.md:43
+#: ../../user_documentation/plugins/scrobbler_plugin.md:31
+#: ../../user_documentation/plugins/scrobbler_plugin.md:48
 msgid "Select {guilabel}`Save`."
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md
-msgid "Mobile"
-msgstr ""
-
-#: ../../user_documentation/plugins/scrobbler_plugin.md:34
+#: ../../user_documentation/plugins/scrobbler_plugin.md:39
 msgid ""
 "Select the cog icon ({fa}`cog`) or your avatar to open the "
 "{guilabel}`Options` menu."
 msgstr ""
 
-#: ../../user_documentation/plugins/scrobbler_plugin.md:47
+#: ../../user_documentation/plugins/scrobbler_plugin.md:52
 msgid ""
 "That's it! You've set up the __Scrobbler__ plugin. When you listen to "
 "tracks, the plugin sends the information to your scrobbler service."
 msgstr ""
+
+#~ msgid "Mobile"
+#~ msgstr ""
 

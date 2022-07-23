@@ -10,7 +10,8 @@ This guide shows you how to tag your content with MusicBrainz Picard.
 :local:
 ```
 
-````{dropdown} Supported tags
+:::{dropdown} Supported tags
+:icon: tag
 
 ```{list-table}
 :header-rows: 1
@@ -69,7 +70,7 @@ This guide shows you how to tag your content with MusicBrainz Picard.
 
 ```
 
-````
+:::
 
 ## Tag content
 

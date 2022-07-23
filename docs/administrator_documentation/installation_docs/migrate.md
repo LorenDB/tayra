@@ -32,7 +32,10 @@ To get started with your new setup, you need to do the following:
 
 Before you move your data, you need to install Funkwhale on your {term}`destination server`.
 
-````{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 On your {term}`destination server`, follow the [installation guide](debian.md). Skip the following steps:
 
@@ -46,9 +49,10 @@ Once you have finished the installation, stop the Funkwhale services. These shou
 sudo systemctl stop funkwhale.target
 ```
 
-````
+:::
 
-````{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 On your {term}`destination server`, follow the [installation guide](docker.md). Skip the following steps:
 
@@ -61,27 +65,33 @@ Once you have finished the installation, stop the Funkwhale services. These shou
 docker-compose stop
 ```
 
-````
+:::
+::::
 
 ## 2. Create a database backup
 
 You need to create a database backup on your {term}`original server` so that you can migrate your database. To do this, run the following command:
 
-````{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 ```{code} bash
 sudo -u postgres -H pg_dump funkwhale > /srv/funkwhale/dump.sql
 ```
 
-````
+:::
 
-````{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 ```{code} bash
 docker-compose exec postgres pg_dumpall -c -U postgres > dump.sql
 ```
 
-````
+:::
+::::
 
 ## 3. Copy files to your destination server
 
@@ -97,25 +107,28 @@ To do this:
 1. Log in to your {term}`destination server`.
 2. Export your server hostname or IP address and your user name on the server. In this example, the IP address is `123.123.123.123` and the username is `funkwhale`.
 
-```{code} bash
-export ORIGIN="123.123.123.123"
-export USERNAME="funkwhale"
-```
+   ```{code} bash
+   export ORIGIN="123.123.123.123"
+   export USERNAME="funkwhale"
+   ```
 
 3. Use `rsync` to copy the information to your {term}`destination server`.
 
-```{code} bash
-rsync -a $username@$origin:/srv/funkwhale/data/media/ /srv/funkwhale/data/media/ rsync -a #Copy the media folder
-$username@$origin:/srv/funkwhale/data/music/ /srv/funkwhale/data/music/  rsync -a  # Copy the music folder
-$username@$origin:/srv/funkwhale/config/.env /srv/funkwhale/config/ rsync -a  # Copy the .env file
-$username@$origin:/srv/funkwhale/dump.sql /srv/funkwhale/ # Copy your database backup
-```
+   ```{code} bash
+   rsync -a $username@$origin:/srv/funkwhale/data/media/ /srv/funkwhale/data/media/ rsync -a #Copy the media folder
+   $username@$origin:/srv/funkwhale/data/music/ /srv/funkwhale/data/music/  rsync -a  # Copy the music folder
+   $username@$origin:/srv/funkwhale/config/.env /srv/funkwhale/config/ rsync -a  # Copy the .env file
+   $username@$origin:/srv/funkwhale/dump.sql /srv/funkwhale/ # Copy your database backup
+   ```
 
 ## 4. Restore your database backup
 
 When you've copied everything to the {term}`destination server`, you need to import your database backup. To do this:
 
-````{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 Run the following on your {term}`destination server`:
 
@@ -130,35 +143,37 @@ cd /srv/funkwhale/api
 poetry run python manage.py migrate
 ```
 
-````
+:::
 
-````{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 You need to initialize the postgres container on your {term}`destination server`. To do this:
 
 1. Export the permissions and create an `init.sql` database dump.
 
-```{code} bash
-echo "CREATE DATABASE "funkwhale" WITH ENCODING 'utf8'; \
-CREATE USER funkwhale; \
-GRANT ALL PRIVILEGES ON DATABASE funkwhale TO funkwhale;" > init.sql # Create an init.sql file with the correct permissions
+   ```{code} bash
+   echo "CREATE DATABASE "funkwhale" WITH ENCODING 'utf8'; \
+   CREATE USER funkwhale; \
+   GRANT ALL PRIVILEGES ON DATABASE funkwhale TO funkwhale;" > init.sql # Create an init.sql file with the correct permissions
 
-docker-compose run --rm postgres psql -U postgres -d postgres < "init.sql" # Import the init.sql file 
-```
+   docker-compose run --rm postgres psql -U postgres -d postgres < "init.sql" # Import the init.sql file 
+   ```
 
 2. Import your database backup.
 
-```{code} bash
-docker-compose run --rm postgres psql -U postgres -d postgres < "dump.sql"
-```
+   ```{code} bash
+   docker-compose run --rm postgres psql -U postgres -d postgres < "dump.sql"
+   ```
 
 3. When the import finishes, run the `manage.py migrate` command to set up the database.
 
-```{code} bash
-docker-compose run --rm api python manage.py migrate
-```
+   ```{code} bash
+   docker-compose run --rm api python manage.py migrate
+   ```
 
-````
+:::
+::::
 
 ## 5. Check your DNS settings
 
@@ -168,18 +183,25 @@ Before you start Funkwhale on your {term}`destination server`, check your DNS ch
 
 Once you confirm DNS points to your {term}`destination server`, start the Funkwhale services:
 
-````{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 ```{code} bash
 sudo systemctl start funkwhale.target
 ```
 
-````
+:::
 
-````{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 ```{code} bash
 docker-compose up -d
 ```
+
+:::
+::::
 
 That's it! You've migrated your Funkwhale instance to a new server.

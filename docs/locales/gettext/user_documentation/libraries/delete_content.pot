@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,57 +32,57 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:11
-#: ../../user_documentation/libraries/delete_content.md:27
+#: ../../user_documentation/libraries/delete_content.md:15
+#: ../../user_documentation/libraries/delete_content.md:32
 msgid "Log in to your pod."
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:12
+#: ../../user_documentation/libraries/delete_content.md:16
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:13
-#: ../../user_documentation/libraries/delete_content.md:29
+#: ../../user_documentation/libraries/delete_content.md:17
+#: ../../user_documentation/libraries/delete_content.md:34
 msgid "Select {guilabel}`Get started` under {guilabel}`Upload third-party content in a library`."
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:14
-#: ../../user_documentation/libraries/delete_content.md:30
+#: ../../user_documentation/libraries/delete_content.md:18
+#: ../../user_documentation/libraries/delete_content.md:35
 msgid "A screen appears showing your upload quota and your libraries."
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:15
-#: ../../user_documentation/libraries/delete_content.md:31
+#: ../../user_documentation/libraries/delete_content.md:19
+#: ../../user_documentation/libraries/delete_content.md:36
 msgid "Select {guilabel}`Library Details` under the library you want to edit."
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:16
-#: ../../user_documentation/libraries/delete_content.md:32
+#: ../../user_documentation/libraries/delete_content.md:20
+#: ../../user_documentation/libraries/delete_content.md:37
 msgid "Select the {guilabel}`✎ Edit`  button at the top of the screen."
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:17
-#: ../../user_documentation/libraries/delete_content.md:33
+#: ../../user_documentation/libraries/delete_content.md:21
+#: ../../user_documentation/libraries/delete_content.md:38
 msgid "Scroll down to the {guilabel}`Library contents` section. A list of tracks is shown."
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:18
-#: ../../user_documentation/libraries/delete_content.md:34
+#: ../../user_documentation/libraries/delete_content.md:22
+#: ../../user_documentation/libraries/delete_content.md:39
 msgid "Select the checkbox ({fa}`square`) next to the tracks you want to delete. Selected tracks show a tick ({fa}`check-square`)."
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:19
-#: ../../user_documentation/libraries/delete_content.md:35
+#: ../../user_documentation/libraries/delete_content.md:23
+#: ../../user_documentation/libraries/delete_content.md:40
 msgid "Select {menuselection}`Actions --> Delete`."
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:20
-#: ../../user_documentation/libraries/delete_content.md:36
+#: ../../user_documentation/libraries/delete_content.md:24
+#: ../../user_documentation/libraries/delete_content.md:41
 msgid "Select {guilabel}`Go`."
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:21
-#: ../../user_documentation/libraries/delete_content.md:37
+#: ../../user_documentation/libraries/delete_content.md:25
+#: ../../user_documentation/libraries/delete_content.md:42
 msgid "Select {guilabel}`Launch` on the warning message that appears."
 msgstr ""
 
@@ -90,10 +90,10 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:28
+#: ../../user_documentation/libraries/delete_content.md:33
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
 msgstr ""
 
-#: ../../user_documentation/libraries/delete_content.md:41
+#: ../../user_documentation/libraries/delete_content.md:46
 msgid "That's it! You've successfully deleted the content from your library."
 msgstr ""

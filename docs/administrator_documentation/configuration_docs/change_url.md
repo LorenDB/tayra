@@ -22,25 +22,30 @@ Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make 
 2. Change the `server_name` values in your {file}`/etc/nginx/sites-enabled/funkwhale.conf` file.
 3. Run the `fix_federation_ids` command to clean up your database.
 
-   ````{tabbed} Debian
+   ::::{tab-set}
+
+   :::{tab-item} Debian
+   :sync: debian
 
    ```{code} bash
    poetry run python manage.py fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
    ```
 
-   ````
+   :::
 
-   ````{tabbed} Docker
+   :::{tab-item} Docker
+   :sync: docker
 
    ```{code} bash
    docker-compose run --rm api python manage.py fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
    ```
 
-   ````
+   :::
+   ::::
 
    Example output:
 
-   ```
+   ```{code-block} text
    Will replace 108 found occurrences of 'https://old-url' by 'https://new-url':
 
    - 20 music.Artist
@@ -66,23 +71,23 @@ Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make 
 
 4. Restart your webserver to pick up the changes.
 
-````{tabbed} Nginx
+   ::::{tab-set}
 
-```{code} bash
-sudo systemctl restart nginx
+   :::{tab-item} Nginx
+   :sync: nginx
 
-```
+   ```{code} bash
+   sudo systemctl restart nginx
+   ```
 
+   :::
 
-````
+   :::{tab-item} Apache
+   :sync: apache
 
-````{tabbed} Apache
+   ```{code} bash
+   sudo systemctl restart apache2
+   ```
 
-
-```{code} bash
-sudo systemctl restart apache2
-
-```
-
-
-````
+   :::
+   ::::

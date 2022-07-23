@@ -8,7 +8,10 @@ Once you have [created a library](create_library.md), you can start uploading co
 
 To upload content to a library:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -19,9 +22,10 @@ To upload content to a library:
    - If you opened the file picker, select the files you want to upload and confirm.
 7. The screen shows you the status of each upload. Once the upload queue is empty, your upload is complete.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -31,6 +35,7 @@ To upload content to a library:
 6. Click on the section marked {guilabel}`Click to select files` to open a file picker Select the files you want to upload and confirm.
 7. The screen shows you the status of each upload. Once the upload queue is empty, your upload is complete.
 
-```
+:::
+::::
 
 Congratulations! You added some content to your library. You can now listen to your tracks on your {term}`Funkwhale pod <Pod>`.

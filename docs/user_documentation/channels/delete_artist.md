@@ -14,7 +14,10 @@ Deleting a track also deletes the file from your {term}`Funkwhale pod <Pod>`. Th
 
 To delete a single track from a channel:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -26,9 +29,10 @@ To delete a single track from a channel:
 8. Select {guilabel}`Delete…`. A {guilabel}`Delete this track?` warning appears.
 9. Select {guilabel}`Delete` to delete the track.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -40,7 +44,8 @@ To delete a single track from a channel:
 8. Select {guilabel}`Delete…`. A {guilabel}`Delete this track?` warning appears.
 9. Select {guilabel}`Delete` to delete the track.
 
-```
+:::
+::::
 
 That's it! You've deleted your track. You can add it again by [uploading it to your channel](upload_artist.md).
 
@@ -52,7 +57,10 @@ Deleting an album also deletes all tracks in the album and removes the files fro
 
 Delete an album to remove all tracks it contains. To do this:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -63,9 +71,10 @@ Delete an album to remove all tracks it contains. To do this:
 7. Select {guilabel}`Delete…`. A {guilabel}`Delete this album?` warning appears.
 8. Select {guilabel}`Delete` to delete the album.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -76,6 +85,7 @@ Delete an album to remove all tracks it contains. To do this:
 7. Select {guilabel}`Delete…`. A {guilabel}`Delete this album?` warning appears.
 8. Select {guilabel}`Delete` to delete the album.
 
-```
+:::
+::::
 
 You're done! You've deleted the album and all the tracks it contained. You can add them again by [uploading it to your channel](upload_artist.md).

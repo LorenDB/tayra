@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,27 +36,27 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/accounts/check_quota.md:11
-#: ../../user_documentation/accounts/check_quota.md:21
+#: ../../user_documentation/accounts/check_quota.md:15
+#: ../../user_documentation/accounts/check_quota.md:26
 msgid "Log in to your pod."
 msgstr ""
 
-#: ../../user_documentation/accounts/check_quota.md:12
+#: ../../user_documentation/accounts/check_quota.md:16
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
 
-#: ../../user_documentation/accounts/check_quota.md:13
-#: ../../user_documentation/accounts/check_quota.md:23
+#: ../../user_documentation/accounts/check_quota.md:17
+#: ../../user_documentation/accounts/check_quota.md:28
 msgid "Select {guilabel}`Get started` under {guilabel}`Upload third-party content in a library`."
 msgstr ""
 
-#: ../../user_documentation/accounts/check_quota.md:14
-#: ../../user_documentation/accounts/check_quota.md:24
+#: ../../user_documentation/accounts/check_quota.md:18
+#: ../../user_documentation/accounts/check_quota.md:29
 msgid "The {guilabel}`My libraries` screen appears showing your upload quota and your libraries."
 msgstr ""
 
-#: ../../user_documentation/accounts/check_quota.md:15
-#: ../../user_documentation/accounts/check_quota.md:25
+#: ../../user_documentation/accounts/check_quota.md:19
+#: ../../user_documentation/accounts/check_quota.md:30
 msgid "The {guilabel}`Current usage` section shows you how much of your quota you are using."
 msgstr ""
 
@@ -64,6 +64,6 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/accounts/check_quota.md:22
+#: ../../user_documentation/accounts/check_quota.md:27
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen"
 msgstr ""

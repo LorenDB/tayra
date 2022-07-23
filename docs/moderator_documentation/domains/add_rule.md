@@ -6,13 +6,18 @@ Purging a domain's data removes all objects and caches associated to that domain
 
 Add moderation rules to domains to control how they can interact with your {term}`pod`. Moderation rules enable you to restrict content from a domain showing on your pod.
 
-```{dropdown} Required permissions
+:::{dropdown} Required permissions
+:icon: key
+
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
-```
+:::
 
 To add a moderation rule to a domain:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -26,9 +31,10 @@ To add a moderation rule to a domain:
    - {guilabel}`Reject media` – only reject media files such as audio files, avatars, and album art.
 9. Select {guilabel}`Create` to save your rule.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
@@ -42,6 +48,7 @@ To add a moderation rule to a domain:
    - {guilabel}`Reject media` – only reject media files such as audio files, avatars, and album art.
 9. Select {guilabel}`Create` to save your rule.
 
-```
+:::
+::::
 
 That's all there is to it! You've applied your moderation rule. The rule takes effect as soon as you create it.

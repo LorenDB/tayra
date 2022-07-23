@@ -2,13 +2,18 @@
 
 You can remove a domain from your {term}`pod's <Pod>` allow-list to stop communicating with it.
 
-```{dropdown} Required permissions
+:::{dropdown} Required permissions
+:icon: key
+
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
-```
+:::
 
 To remove a domain from your allow-list:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -18,9 +23,10 @@ To remove a domain from your allow-list:
 6. Select {guilabel}`Remove from allow-list` in the {guilabel}`Actions` dropdown.
 7. Select {guilabel}`Go`.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
@@ -30,6 +36,7 @@ To remove a domain from your allow-list:
 6. Select {guilabel}`Remove from allow-list` in the {guilabel}`Actions` dropdown.
 7. Select {guilabel}`Go`.
 
-```
+:::
+::::
 
 You're done! You've removed the domain from your pod's allow-list.

@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,34 +60,34 @@ msgstr ""
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:33
+#: ../../administrator_documentation/manage_script/library.md:38
 msgid "Prune albums with no associated tracks"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:51
+#: ../../administrator_documentation/manage_script/library.md:61
 msgid "Prune artists with no associated tracks or albums"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:69
+#: ../../administrator_documentation/manage_script/library.md:84
 msgid "Prune all tracks, albums, and artist without associated data"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:87
+#: ../../administrator_documentation/manage_script/library.md:107
 msgid "There are extra options for pruning your database. Check the command help for more options."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:106
+#: ../../administrator_documentation/manage_script/library.md:131
 msgid "The command excludes tracks that are in users' favorites, playlists, and listen history. To include these tracks, add the corresponding `ignore` flag:"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:108
+#: ../../administrator_documentation/manage_script/library.md:133
 msgid "`--ignore-favorites`"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:109
+#: ../../administrator_documentation/manage_script/library.md:134
 msgid "`--ignore-playlists`"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:110
+#: ../../administrator_documentation/manage_script/library.md:135
 msgid "`--ignore-listenings`"
 msgstr ""

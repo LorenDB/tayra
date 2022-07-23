@@ -12,7 +12,10 @@ Using ListenBrainz or Maloja? Check out the [ListenBrainz](listenbrainz_plugin) 
 
 The __Scrobbler__ plugin supports any scrobbling service that uses the Audioscrobbler protocol. To set up the __Scrobbler plugin__:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your account.
 2. Select the cog icon ({fa}`cog`) or your avatar to expand the user menu.
@@ -26,9 +29,10 @@ The __Scrobbler__ plugin supports any scrobbling service that uses the Audioscro
 10. Enter {guilabel}`Your scrobbler password`. You can set this up on your scrobbler service.
 11. Select {guilabel}`Save`.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your account.
 2. Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}`Options` menu.
@@ -42,6 +46,7 @@ The __Scrobbler__ plugin supports any scrobbling service that uses the Audioscro
 10. Enter {guilabel}`Your scrobbler password`. You can set this up on your scrobbler service.
 11. Select {guilabel}`Save`.
 
-```
+:::
+::::
 
 That's it! You've set up the __Scrobbler__ plugin. When you listen to tracks, the plugin sends the information to your scrobbler service.

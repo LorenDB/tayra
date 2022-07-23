@@ -18,7 +18,10 @@ Other pods should delete local copies of your data in compliance with your reque
 
 To delete your account:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your account.
 2. Select the cog icon ({fa}`cog`) or your avatar to expand the user menu.
@@ -28,9 +31,10 @@ To delete your account:
 6. Select {guilabel}`Delete my account…`.
 7. Select {guilabel}`Delete my account` on the warning notice that appears.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your account.
 2. Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}`Options` menu.
@@ -40,6 +44,7 @@ To delete your account:
 6. Select {guilabel}`Delete my account…`.
 7. Select {guilabel}`Delete my account` on the warning notice that appears.
 
-```
+:::
+::::
 
 That's it! You've deleted your account. You can [create another account](create_account.md) at any time.

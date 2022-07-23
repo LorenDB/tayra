@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.10.3\n"
 
 #: ../../index.md:7
 msgid "User documentation"
@@ -64,53 +64,67 @@ msgid ""
 "{term}`Funkwhale pods <Pod>` or with other Fediverse software."
 msgstr ""
 
-#: ../../index.md:117
-msgid "{fa}`user` Users"
+#: ../../index.md:118
+msgid "{fa}`user`  Users"
 msgstr ""
 
-#: ../../index.md:120
+#: ../../index.md:121
 msgid ""
 "Looking to use Funkwhale for your content? Read through our guides to "
 "master the app!"
 msgstr ""
 
-#: ../../index.md:132
+#: ../../index.md:125 ../../index.md:146 ../../index.md:167 ../../index.md:188
+#: ../../index.md:213
+msgid "Get started"
+msgstr ""
+
+#: ../../index.md:139
 msgid "{fa}`wrench` Admins"
 msgstr ""
 
-#: ../../index.md:135
+#: ../../index.md:142
 msgid ""
 "Want to host your own Funkwhale pod? Our admin documentation guides you "
 "through the process."
 msgstr ""
 
-#: ../../index.md:146
+#: ../../index.md:160
 msgid "{fa}`shield` Moderators"
 msgstr ""
 
-#: ../../index.md:149
+#: ../../index.md:163
 msgid ""
 "Keeping your users safe from harassment and spam or clearing illegal "
 "content? Check out our moderator docs."
 msgstr ""
 
-#: ../../index.md:160
+#: ../../index.md:181
 msgid "{fa}`code` Developers"
 msgstr ""
 
-#: ../../index.md:163
+#: ../../index.md:184
 msgid ""
 "Want to use Funkwhale's API or help with the project? Our developer docs "
 "give you what you need to get started."
 msgstr ""
 
-#: ../../index.md:175
+#: ../../index.md:206
 msgid "{fa}`users` Contributors"
 msgstr ""
 
-#: ../../index.md:178
+#: ../../index.md:209
 msgid ""
 "Want to help make Funkwhale even better? Check out these guides for some "
 "ideas."
 msgstr ""
+
+#~ msgid "{fa}`user` Users"
+#~ msgstr ""
+
+#~ msgid "{fa}`user`  Users"
+#~ msgstr ""
+
+#~ msgid "{octicon}`person`  Users"
+#~ msgstr ""
 

@@ -4,21 +4,26 @@ Your `.env` (environment) file contains variables you can change to customize yo
 
 You need to restart your Funkwhale services after changing your `.env` file.
 
-````{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
    ```{code} bash
    sudo systemctl restart funkwhale.target
    ```
 
-````
+:::
 
-````{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
    ```{code} bash
    docker-compose restart
    ```
 
-````
+:::
+::::
 
 ## Variables
 

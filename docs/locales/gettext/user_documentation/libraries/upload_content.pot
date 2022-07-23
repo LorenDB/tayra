@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,58 +33,55 @@ msgid "To upload content to a library:"
 msgstr ""
 
 #: ../../user_documentation/libraries/upload_content.md:0
+#: ../../user_documentation/libraries/upload_content.md:0
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/libraries/upload_content.md:13
-#: ../../user_documentation/libraries/upload_content.md:26
+#: ../../user_documentation/libraries/upload_content.md:17
+#: ../../user_documentation/libraries/upload_content.md:31
 msgid "Log in to your pod."
 msgstr ""
 
-#: ../../user_documentation/libraries/upload_content.md:14
+#: ../../user_documentation/libraries/upload_content.md:18
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
 
-#: ../../user_documentation/libraries/upload_content.md:15
-#: ../../user_documentation/libraries/upload_content.md:28
+#: ../../user_documentation/libraries/upload_content.md:19
+#: ../../user_documentation/libraries/upload_content.md:33
 msgid "Select {guilabel}`Get started` under {guilabel}`Upload third-party content in a library`."
 msgstr ""
 
-#: ../../user_documentation/libraries/upload_content.md:16
-#: ../../user_documentation/libraries/upload_content.md:29
+#: ../../user_documentation/libraries/upload_content.md:20
+#: ../../user_documentation/libraries/upload_content.md:34
 msgid "A screen appears showing your upload quota and your libraries."
 msgstr ""
 
-#: ../../user_documentation/libraries/upload_content.md:17
-#: ../../user_documentation/libraries/upload_content.md:30
+#: ../../user_documentation/libraries/upload_content.md:21
+#: ../../user_documentation/libraries/upload_content.md:35
 msgid "Select {guilabel}`Upload` under the library you want to add content to."
 msgstr ""
 
-#: ../../user_documentation/libraries/upload_content.md:18
+#: ../../user_documentation/libraries/upload_content.md:22
 msgid "Click on the section marked {guilabel}`Click to select files` to open a file picker, or drag and drop your files on to it."
 msgstr ""
 
-#: ../../user_documentation/libraries/upload_content.md:19
+#: ../../user_documentation/libraries/upload_content.md:23
 msgid "If you opened the file picker, select the files you want to upload and confirm."
 msgstr ""
 
-#: ../../user_documentation/libraries/upload_content.md:20
-#: ../../user_documentation/libraries/upload_content.md:32
+#: ../../user_documentation/libraries/upload_content.md:24
+#: ../../user_documentation/libraries/upload_content.md:37
 msgid "The screen shows you the status of each upload. Once the upload queue is empty, your upload is complete."
 msgstr ""
 
-#: ../../user_documentation/libraries/upload_content.md:0
-msgid "Mobile"
-msgstr ""
-
-#: ../../user_documentation/libraries/upload_content.md:27
+#: ../../user_documentation/libraries/upload_content.md:32
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
 msgstr ""
 
-#: ../../user_documentation/libraries/upload_content.md:31
+#: ../../user_documentation/libraries/upload_content.md:36
 msgid "Click on the section marked {guilabel}`Click to select files` to open a file picker Select the files you want to upload and confirm."
 msgstr ""
 
-#: ../../user_documentation/libraries/upload_content.md:36
+#: ../../user_documentation/libraries/upload_content.md:41
 msgid "Congratulations! You added some content to your library. You can now listen to your tracks on your {term}`Funkwhale pod <Pod>`."
 msgstr ""

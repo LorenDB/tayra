@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,15 +52,15 @@ msgstr ""
 msgid "Debian"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/optimize.md:21
+#: ../../administrator_documentation/configuration_docs/optimize.md:25
 msgid "Open your `funkwhale-worker` unit file in an editor."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/optimize.md:27
+#: ../../administrator_documentation/configuration_docs/optimize.md:31
 msgid "Add the `--pool=solo` flag to the `ExecStart` line of your unit file."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/optimize.md:33
+#: ../../administrator_documentation/configuration_docs/optimize.md:37
 msgid "Restart the Celery service."
 msgstr ""
 
@@ -68,10 +68,10 @@ msgstr ""
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/optimize.md:43
+#: ../../administrator_documentation/configuration_docs/optimize.md:48
 msgid "Add the `--pool=solo` flag to the `celerybeat` command in `docker-compose.yml`."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/optimize.md:51
+#: ../../administrator_documentation/configuration_docs/optimize.md:56
 msgid "Restart Celery."
 msgstr ""

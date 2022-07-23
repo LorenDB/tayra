@@ -9,7 +9,7 @@ By default, Funkwhale stores all media data in the `/srv/funkwhale/data/media` d
 
 ## Secure your object store
 
-Before you begin, you need to secure your object store. Many S3-compatible stores list contents in the root by default. This exposes the URLs of your audio files and means that users can bypass authentication. 
+Before you begin, you need to secure your object store. Many S3-compatible stores list contents in the root by default. This exposes the URLs of your audio files and means that users can bypass authentication.
 
 To prevent listing content, add the following policy to your S3-compatible object store.
 
@@ -46,37 +46,37 @@ aws s3api put-bucket-policy --bucket <yourbucketname> --policy file:///tmp/polic
 
 To set up S3-compatible storage, fill out the relevant details in the `.env` file. If you want to serve audio files from the bucket, set `PROXY_MEDIA` to `false`.
 
-````{dropdown} Environment variables
+:::{dropdown} Environment variables
 
-   ```{eval-rst}
+```{eval-rst}
 
-   .. autodata:: config.settings.common.AWS_QUERYSTRING_AUTH
-      :noindex:
-   .. autodata:: config.settings.common.AWS_QUERYSTRING_EXPIRE
-      :noindex:
-   .. autodata:: config.settings.common.AWS_ACCESS_KEY_ID
-      :noindex:
-   .. autodata:: config.settings.common.AWS_SECRET_ACCESS_KEY
-      :noindex:
-   .. autodata:: config.settings.common.AWS_STORAGE_BUCKET_NAME
-      :noindex:
-   .. autodata:: config.settings.common.AWS_S3_CUSTOM_DOMAIN
-      :noindex:
-   .. autodata:: config.settings.common.AWS_S3_ENDPOINT_URL
-      :noindex:
-      :annotation: = https://minio.mydomain.com
-   .. autodata:: config.settings.common.AWS_S3_REGION_NAME
-      :noindex:
-      :annotation: = eu-west-2
-   .. autodata:: config.settings.common.AWS_LOCATION
-      :noindex:
-      :annotation: = funkwhale_music
-   .. autodata:: config.settings.common.PROXY_MEDIA
-      :noindex:
+.. autodata:: config.settings.common.AWS_QUERYSTRING_AUTH
+   :noindex:
+.. autodata:: config.settings.common.AWS_QUERYSTRING_EXPIRE
+   :noindex:
+.. autodata:: config.settings.common.AWS_ACCESS_KEY_ID
+   :noindex:
+.. autodata:: config.settings.common.AWS_SECRET_ACCESS_KEY
+   :noindex:
+.. autodata:: config.settings.common.AWS_STORAGE_BUCKET_NAME
+   :noindex:
+.. autodata:: config.settings.common.AWS_S3_CUSTOM_DOMAIN
+   :noindex:
+.. autodata:: config.settings.common.AWS_S3_ENDPOINT_URL
+   :noindex:
+   :annotation: = https://minio.mydomain.com
+.. autodata:: config.settings.common.AWS_S3_REGION_NAME
+   :noindex:
+   :annotation: = eu-west-2
+.. autodata:: config.settings.common.AWS_LOCATION
+   :noindex:
+   :annotation: = funkwhale_music
+.. autodata:: config.settings.common.PROXY_MEDIA
+   :noindex:
 
-   ```
+```
 
-````
+:::
 
 ## Set up your reverse proxy
 
@@ -88,21 +88,26 @@ Serving files from an object store requires some changes to the reverse proxy.
 
 1. Open your Nginx configuration file in an editor.
 
-   ````{tabbed} Debian
+   ::::{tab-set}
 
-      ```{code} bash
-      sudo nano /etc/nginx/sites-available/funkwhale.template
-      ```
+   :::{tab-item} Debian
+   :sync: debian
 
-   ````
+   ```{code} bash
+   sudo nano /etc/nginx/sites-available/funkwhale.template
+   ```
 
-   ````{tabbed} Docker
+   :::
 
-      ```{code} bash
-      nano /srv/funkwhale/nginx/funkwhale.template
-      ```
+   :::{tab-item} Docker
+   :sync: docker
 
-   ````
+   ```{code} bash
+   nano /srv/funkwhale/nginx/funkwhale.template
+   ```
+
+   :::
+   ::::
 
 2. Comment out the `location /_protected/media/` block by adding a `#` to the start of each line.
 
@@ -137,29 +142,34 @@ Serving files from an object store requires some changes to the reverse proxy.
 
 6. Restart Funkwhale and Nginx to pick up the changes.
 
-   ````{tabbed} Debian
+   ::::{tab-set}
 
-      ```{code} bash
-      sudo systemctl restart funkwhale.target
-      sudo systemctl restart nginx
-      ```
+   :::{tab-item} Debian
+   :sync: debian
 
-   ````
+   ```{code} bash
+   sudo systemctl restart funkwhale.target
+   sudo systemctl restart nginx
+   ```
 
-   ````{tabbed} Docker
+   :::
 
-      ```{code} bash
-      docker-compose restart
-      sudo systemctl restart nginx
-      ```
+   :::{tab-item} Docker
+   :sync: docker
 
-   ````
+   ```{code} bash
+   docker-compose restart
+   sudo systemctl restart nginx
+   ```
+
+   :::
+   ::::
 
 That's it! Files are now uploaded to and stored from your S3 bucket.
 
 ## Troubleshooting
 
-````{dropdown} No Resolver Found
+:::{dropdown} No Resolver Found
 
 You may see the following error when streaming music from your S3-compatible store:
 
@@ -178,4 +188,4 @@ location ~ /_protected/media/(.+) {
 }
 ```
 
-````
+:::

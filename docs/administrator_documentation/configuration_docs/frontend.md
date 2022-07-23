@@ -32,7 +32,7 @@ To customize your Funkwhale pod, you need to serve a {file}`settings.json` file 
    EOF
    ```
 
-   ````{dropdown} Supported parameters
+   :::{dropdown} Supported parameters
 
    ```{list-table}
    :header-rows: 1
@@ -54,33 +54,38 @@ To customize your Funkwhale pod, you need to serve a {file}`settings.json` file 
 
    ```
 
-   ````
+   :::
 
 ### Configure your reverse proxy
 
 Once you've created your {file}`settings.json` file you need to configure your reverse proxy to serve it.
 
-````{tabbed} Nginx
+::::{tab-set}
+
+:::{tab-item} Nginx
+:sync: nginx
 
 Add the following snippet to your {file}`/etc/nginx/sites-available/funkwhale.conf` config file:
 
-```
+```{code} text
 location /settings.json {
    alias /srv/funkwhale/custom;
 }
 ```
 
-````
+:::
 
-````{tabbed} Apache
+:::{tab-item} Apache
+:sync: apache
 
 Add the following snippet to your webserver configuration:
 
-```
+```{code} text
 Alias /settings.json /srv/funkwhale/custom/settings.json
 ```
 
-````
+:::
+::::
 
 Reload your webserver. You should be able to see the contents of your configuration file at `https://yourinstanceurl/settings.json`.
 
@@ -121,22 +126,27 @@ You can use a custom stylesheet to theme your Funkwhale pod. To do this:
 
 4. Add the whole {file}`custom` dir to your webserver configuration.
 
-   ````{tabbed} Nginx
+   ::::{tab-set}
+
+   :::{tab-item} Nginx
+   :sync: nginx
 
    Add the following to your {file}`/etc/nginx/sites-available/funkwhale.conf` file:
 
-   ```
+   ```{code} text
    location /custom {
       alias /srv/funkwhale/custom;
    }
    ```
-   ````
 
-   ````{tabbed} Apache
+   :::
+
+   :::{tab-item} Apache
+   :sync: apache
 
    Add the following to your webserver configuration file.
 
-   ```
+   ```{code} text
    Alias /custom /srv/funkwhale/custom
 
    <Directory "/srv/funkwhale/custom">
@@ -145,7 +155,9 @@ You can use a custom stylesheet to theme your Funkwhale pod. To do this:
    Require all granted
    </Directory>
    ```
-   ````
+
+   :::
+   ::::
 
 5. Restart your webserver.
 

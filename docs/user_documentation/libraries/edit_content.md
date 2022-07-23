@@ -14,7 +14,10 @@ You can edit library content after you have uploaded it. This is helpful if the 
 
 To edit an artist:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Search for the artist in the sidebar or go to the {guilabel}`Artists` page in {guilabel}`My Library` and search there.
 2. Select the artist you want to edit. The artist details page opens.
@@ -28,9 +31,10 @@ To edit an artist:
 6. __Optional__ – enter a {guilabel}`Summary` of your edits.
 7. Select {guilabel}`Submit and apply edit` to save your changes.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Select the hamburger menu ({fa}`bars`) to open the menu bar.
 2. Use the search bar to search for your artist. You can also select {menuselection}`My Library --> Artists` to open the artist search page.
@@ -45,7 +49,8 @@ To edit an artist:
 7. __Optional__ – enter a {guilabel}`Summary` of your edits.
 8. Select {guilabel}`Submit and apply edit` to save your changes.
 
-```
+:::
+::::
 
 That's it! You've edited the artist's details. You can see these details by visiting the artist page.
 
@@ -53,7 +58,10 @@ That's it! You've edited the artist's details. You can see these details by visi
 
 To edit an album:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Search for the album in the sidebar or go to the {guilabel}`Albums` page in {guilabel}`My Library` and search there.
 2. Select the album you want to edit. The album details page opens.
@@ -68,9 +76,10 @@ To edit an album:
 6. __Optional__ – enter a {guilabel}`Summary` of your edits.
 7. Select {guilabel}`Submit and apply edit` to save your changes.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Select the hamburger menu ({fa}`bars`) to open the menu bar.
 2. Use the search bar to search for your album. You can also select {menuselection}`My Library --> Albums` to open the album search page.
@@ -86,7 +95,8 @@ To edit an album:
 7. __Optional__ – enter a {guilabel}`Summary` of your edits.
 8. Select {guilabel}`Submit and apply edit` to save your changes.
 
-```
+:::
+::::
 
 That's it! You've edited the album's details. You can see these details by visiting the album page.
 
@@ -94,7 +104,10 @@ That's it! You've edited the album's details. You can see these details by visit
 
 To edit a track:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Search for the track in the sidebar.
 2. Select the track you want to edit. The track details page opens.
@@ -111,9 +124,10 @@ To edit a track:
 6. __Optional__ – enter a {guilabel}`Summary` of your edits.
 7. Select {guilabel}`Submit and apply edit` to save your changes.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Select the hamburger menu ({fa}`bars`) to open the menu bar.
 2. Use the search bar to search for your track.
@@ -131,6 +145,7 @@ To edit a track:
 7. __Optional__ – enter a {guilabel}`Summary` of your edits.
 8. Select {guilabel}`Submit and apply edit` to save your changes.
 
-```
+:::
+::::
 
 That's it! You've edited the track's details. You can see these details by visiting the track details page.

@@ -49,7 +49,10 @@ Before you uninstall anything from your server, you need to stop the Funkwhale s
 
 To stop serving Funkwhale from your web server, you need to remove your reverse proxy configuration.
 
-````{tabbed} Nginx
+::::{tab-set}
+
+:::{tab-item} Nginx
+:sync: nginx
 
 1. Remove the configuration files from your web host.
 
@@ -65,9 +68,10 @@ To stop serving Funkwhale from your web server, you need to remove your reverse 
    sudo systemctl reload nginx
    ```
 
-````
+:::
 
-````{tabbed} Apache2
+:::{tab-item} Apache2
+:sync: apache2
 
 1. Remove the configuration files from your web host.
 
@@ -82,7 +86,8 @@ To stop serving Funkwhale from your web server, you need to remove your reverse 
    sudo service apache2 restart
    ```
 
-````
+:::
+::::
 
 ## Remove the Funkwhale database
 
@@ -128,7 +133,10 @@ This deletes the `funkwhale` user and everything in their home directory (`/srv/
 
 The quick install script installs the following dependencies on your server:
 
-````{tabbed} apt
+::::{tab-set}
+
+:::{tab-item} Apt
+:sync: apt
 
 ```{code} txt
 
@@ -146,15 +154,17 @@ make
 
 ```
 
-````
+:::
 
-````{tabbed} Python
+:::{tab-item} Python
+:sync: python
 
 ```{literalinclude} ../../../api/pyproject.toml
 :language: toml
 :lines: 9-59
 ```
 
-````
+:::
+::::
 
 Uninstall any dependencies you don't need.

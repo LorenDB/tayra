@@ -6,7 +6,7 @@ You can follow channels in a few different ways:
 
 ```{contents}
 :local:
-````
+```
 
 ## Follow a channel on your pod
 
@@ -21,7 +21,10 @@ That's it! You've subscribed to the channel. You can see the channel in the {gui
 
 To follow a channel located on another pod, you need its __Federation handle__. A __Federation handle__ uses the following format: ``@{username}@{domain}``. Once you have the channel's __Federation handle__, you can follow it from the {guilabel}`Channels` page. To do this:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Select {guilabel}`Channels` in the sidebar. The {guilabel}`Channels` page opens.
 2. Select {guilabel}`+ Add new` at the top of the page. The {guilabel}`Subscriptions` screen appears.
@@ -30,9 +33,10 @@ To follow a channel located on another pod, you need its __Federation handle__. 
 5. Select {guilabel}`Subscribe`. The channel details page appears.
 6. Select the {guilabel}`Subscribe}` button. The label changes to {guilabel}`Subscribed`.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Select the hamburger menu ({fa}`bars`) to open the menu bar.
 2. Select {guilabel}`Channels`. The {guilabel}`Channels` page opens.
@@ -42,7 +46,8 @@ To follow a channel located on another pod, you need its __Federation handle__. 
 6. Select {guilabel}`Subscribe`. The channel details page appears.
 7. Select the {guilabel}`Subscribe}` button. The label changes to {guilabel}`Subscribed`.
 
-```
+:::
+::::
 
 That's it! You can now see the channel's content on your pod. Other users of your pod can also see this channel.
 

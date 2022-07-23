@@ -6,13 +6,18 @@ Purging a domain's data removes all objects and caches associated to that domain
 
 When users follow content from another domain that content is visible on your {term}`pod`. If a domain hosts illegal or offensive content you can purge the content associated with it.
 
-```{dropdown} Required permissions
+:::{dropdown} Required permissions
+:icon: key
+
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
-```
+:::
 
 To purge content from a domain:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -23,9 +28,10 @@ To purge content from a domain:
 7. Select {guilabel}`Go`. A {guilabel}`Do you want to launch purge on {count} items` warning appears.
 8. Select {guilabel}`Launch`.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
@@ -36,6 +42,7 @@ To purge content from a domain:
 7. Select {guilabel}`Go`. A {guilabel}`Do you want to launch purge on {count} items` warning appears.
 8. Select {guilabel}`Launch`.
 
-```
+:::
+::::
 
 You're done! Your pod clears all the content associated with the selected domains.

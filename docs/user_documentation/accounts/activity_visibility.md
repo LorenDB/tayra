@@ -8,7 +8,10 @@ Your __activity visibility__ determines who can see your listening activity on F
 
 To change your activity visibility:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your account.
 2. Select the cog icon ({fa}`cog`) or your avatar to expand the user menu.
@@ -17,9 +20,10 @@ To change your activity visibility:
 5. Select your visibility level from the dropdown menu.
 6. Select {guilabel}`Update settings` to save your changes.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your account.
 2. Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}`Options` menu.
@@ -28,6 +32,7 @@ To change your activity visibility:
 5. Select your visibility level from the dropdown menu.
 6. Select {guilabel}`Update settings` to save your changes.
 
-```
+:::
+::::
 
 That's it! You've updated your activity visibility. This change takes effect as soon as you update your settings.

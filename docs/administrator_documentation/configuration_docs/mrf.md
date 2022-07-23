@@ -84,74 +84,92 @@ To make the job of writing and debugging MRF policies easier, we provide a manag
 
 - List registered MRF policies.
 
-   ````{tabbed} Debian
+   ::::{tab-set}
+
+   :::{tab-item} Debian
+   :sync: debian
 
    ```{code} bash
    poetry run python manage.py mrf_check --list
    ```
 
-   ````
+   :::
 
-   ````{tabbed} Docker
+   :::{tab-item} Docker
+   :sync: docker
 
    ```{code} bash
    docker-compose run --rm api python manage.py mrf_check --list
    ```
 
-   ````
+   :::
+   ::::
 
 - Check how your MRF policy handles a follow.
 
-   ````{tabbed} Debian
+   ::::{tab-set}
+
+   :::{tab-item} Debian
+   :sync: debian
 
    ```{code} bash
    export MRF_MESSAGE='{"actor": "https://normal.domain/@alice", "type": "Create", "object": {"type": "Follow"}}'
    echo $MRF_MESSAGE | poetry run python manage.py mrf_check inbox - -p blocked_follow_domains
    ```
 
-   ````
+   :::
 
-   ````{tabbed} Docker
+   :::{tab-item} Docker
+   :sync: docker
 
    ```{code} bash
    export MRF_MESSAGE='{"actor": "https://normal.domain/@alice", "type": "Create", "object": {"type": "Follow"}}'
    echo $MRF_MESSAGE | docker-compose run --rm api python manage.py mrf_check inbox - -p blocked_follow_domains
    ```
 
-   ````
+   ::::
 
 - Check how your MRF handles a problematic follow.
 
-   ````{tabbed} Debian
+   ::::{tab-set}
+
+   :::{tab-item} Debian
+   :sync: debian
 
    ```{code} bash
    export MRF_MESSAGE='{"actor": "https://botdomain.org/@bob", "type": "Create", "object": {"type": "Follow"}}'
    echo $MRF_MESSAGE | poetry run python manage.py mrf_check inbox - -p blocked_follow_domains
    ```
 
-   ````
+   :::
 
-   ````{tabbed} Docker
+   :::{tab-item} Docker
+   :sync: docker
 
    ```{code} bash
    export MRF_MESSAGE='{"actor": "https://botdomain.org/@bob", "type": "Create", "object": {"type": "Follow"}}'
    echo $MRF_MESSAGE | docker-compose run --rm api python manage.py mrf_check inbox - -p blocked_follow_domains
    ```
 
-   ````
+   :::
+   ::::
 
 - Check a payload against activity already present in the database. You can find the UUID of an activity by visiting `/api/admin/federation/activity`.
 
-   ````{tabbed} Debian
+   ::::{tab-set}
+
+   :::{tab-item} Debian
+   :sync: debian
 
    ```{code} bash
    export ACTIVITY_UUID="06208aea-c687-4e8b-aefd-22f1c3f76039"
    echo $MRF_MESSAGE | poetry run python manage.py mrf_check inbox $ACTIVITY_UUID -p blocked_follow_domains
    ```
 
-   ````
+   :::
 
-   ````{tabbed} Docker
+   :::{tab-item} Docker
+   :sync: docker
 
    ```{code} bash
 
@@ -161,22 +179,28 @@ To make the job of writing and debugging MRF policies easier, we provide a manag
 
    ```
 
-   ````
+   :::
+   ::::
 
 There are extra options for testing MRF policies. Check the command help for more options.
 
-   ````{tabbed} Debian
+   ::::{tab-set}
+
+   :::{tab-item} Debian
+   :sync: debian
 
    ```{code} bash
    poetry run python manage.py mrf_check --help
    ```
 
-   ````
+   :::
 
-   ````{tabbed} Docker
+   :::{tab-item} Docker
+   :sync: docker
 
    ```{code}
    docker-compose run --rm api python manage.py mrf_check --help
    ```
 
-   ````
+   :::
+   ::::

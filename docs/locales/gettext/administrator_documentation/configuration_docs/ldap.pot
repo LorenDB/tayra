@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-03 00:32+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,12 +36,20 @@ msgstr ""
 msgid "LDAP support requires extra dependencies. We include these in our requirements files to make it easier to set up. If you aren't using LDAP, you can safely remove these."
 msgstr ""
 
+#: ../../administrator_documentation/configuration_docs/ldap.md:0
+msgid "OS dependencies"
+msgstr ""
+
 #: ../../administrator_documentation/configuration_docs/ldap.md:15
 msgid "`libldap2-dev`"
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:16
 msgid "`libsasl2-dev`"
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/ldap.md:0
+msgid "Python dependencies"
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/ldap.md:22

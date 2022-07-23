@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-03 22:14+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,6 +50,10 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/frontend.md:24
 msgid "Create a new config file and populate it with placeholder settings."
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/frontend.md:0
+msgid "Supported parameters"
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/frontend.md:41
@@ -113,7 +117,7 @@ msgstr ""
 msgid "Nginx"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:65
+#: ../../administrator_documentation/configuration_docs/frontend.md:69
 msgid "Add the following snippet to your {file}`/etc/nginx/sites-available/funkwhale.conf` config file:"
 msgstr ""
 
@@ -122,50 +126,50 @@ msgstr ""
 msgid "Apache"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:77
+#: ../../administrator_documentation/configuration_docs/frontend.md:82
 msgid "Add the following snippet to your webserver configuration:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:85
+#: ../../administrator_documentation/configuration_docs/frontend.md:90
 msgid "Reload your webserver. You should be able to see the contents of your configuration file at `https://yourinstanceurl/settings.json`."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:87
+#: ../../administrator_documentation/configuration_docs/frontend.md:92
 msgid "Add a custom theme"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:89
+#: ../../administrator_documentation/configuration_docs/frontend.md:94
 msgid "You can use a custom stylesheet to theme your Funkwhale pod. To do this:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:91
+#: ../../administrator_documentation/configuration_docs/frontend.md:96
 msgid "Navigate to your {file}`/srv/funkwhale/custom` directory."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:97
+#: ../../administrator_documentation/configuration_docs/frontend.md:102
 msgid "Copy your CSS file to this directory, or create a new one."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:109
+#: ../../administrator_documentation/configuration_docs/frontend.md:114
 msgid "Add the location of your CSS file to the `additionalStylesheets` parameter in your {file}`settings.json` file."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:122
+#: ../../administrator_documentation/configuration_docs/frontend.md:127
 msgid "Add the whole {file}`custom` dir to your webserver configuration."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:126
+#: ../../administrator_documentation/configuration_docs/frontend.md:135
 msgid "Add the following to your {file}`/etc/nginx/sites-available/funkwhale.conf` file:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:137
+#: ../../administrator_documentation/configuration_docs/frontend.md:148
 msgid "Add the following to your webserver configuration file."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:150
+#: ../../administrator_documentation/configuration_docs/frontend.md:162
 msgid "Restart your webserver."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/frontend.md:152
+#: ../../administrator_documentation/configuration_docs/frontend.md:164
 msgid "Refresh your Funkwhale app. The background should now be red."
 msgstr ""

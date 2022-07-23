@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,27 +28,27 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/accounts/delete_avatar.md:7
-#: ../../user_documentation/accounts/delete_avatar.md:17
+#: ../../user_documentation/accounts/delete_avatar.md:11
+#: ../../user_documentation/accounts/delete_avatar.md:22
 msgid "Log in to your account."
 msgstr ""
 
-#: ../../user_documentation/accounts/delete_avatar.md:8
+#: ../../user_documentation/accounts/delete_avatar.md:12
 msgid "Select your avatar to expand the user menu."
 msgstr ""
 
-#: ../../user_documentation/accounts/delete_avatar.md:9
-#: ../../user_documentation/accounts/delete_avatar.md:19
+#: ../../user_documentation/accounts/delete_avatar.md:13
+#: ../../user_documentation/accounts/delete_avatar.md:24
 msgid "Select {guilabel}`Settings`."
 msgstr ""
 
-#: ../../user_documentation/accounts/delete_avatar.md:10
-#: ../../user_documentation/accounts/delete_avatar.md:20
+#: ../../user_documentation/accounts/delete_avatar.md:14
+#: ../../user_documentation/accounts/delete_avatar.md:25
 msgid "Scroll down to the {guilabel}`Avatar` section."
 msgstr ""
 
-#: ../../user_documentation/accounts/delete_avatar.md:11
-#: ../../user_documentation/accounts/delete_avatar.md:21
+#: ../../user_documentation/accounts/delete_avatar.md:15
+#: ../../user_documentation/accounts/delete_avatar.md:26
 msgid "Select {guilabel}`Remove`."
 msgstr ""
 
@@ -56,10 +56,10 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/accounts/delete_avatar.md:18
+#: ../../user_documentation/accounts/delete_avatar.md:23
 msgid "Select your avatar to open the {guilabel}`Options` menu."
 msgstr ""
 
-#: ../../user_documentation/accounts/delete_avatar.md:25
+#: ../../user_documentation/accounts/delete_avatar.md:30
 msgid "That's it! You've removed your avatar from your account. Other users will only see the initials of your username when they visit your profile."
 msgstr ""

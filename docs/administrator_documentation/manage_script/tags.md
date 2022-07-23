@@ -12,7 +12,10 @@ The command performs the following actions:
 
 To add tags to untagged albums:
 
-```{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 1. SSH into your Funkwhale server.
 2. Navigate to the Funkwhale directory.
@@ -27,9 +30,10 @@ To add tags to untagged albums:
       poetry run python manage.py fw albums add-tags-from-tracks
       ```
 
-```
+:::
 
-```{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 1. SSH into your Funkwhale server.
 2. Navigate to the Funkwhale directory.
@@ -44,13 +48,17 @@ To add tags to untagged albums:
       docker-compose run --rm api python manage.py fw albums add-tags-from-tracks
       ```
 
-```
+:::
+::::
 
 ## Add tags to artists
 
 To add tags to untagged artists:
 
-```{tabbed} Debian
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
 
 1. SSH into your Funkwhale server.
 2. Navigate to the Funkwhale directory.
@@ -65,9 +73,10 @@ To add tags to untagged artists:
       poetry run python manage.py fw artists add-tags-from-tracks
       ```
 
-```
+:::
 
-```{tabbed} Docker
+:::{tab-item} Docker
+:sync: docker
 
 1. SSH into your Funkwhale server.
 2. Navigate to the Funkwhale directory.
@@ -82,4 +91,5 @@ To add tags to untagged artists:
       docker-compose run --rm api python manage.py fw artists add-tags-from-tracks
       ```
 
-```
+:::
+::::

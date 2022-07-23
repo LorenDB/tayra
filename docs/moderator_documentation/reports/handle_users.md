@@ -2,29 +2,36 @@
 
 If a user has reported another user on your pod, you can make changes to the reported user's profile. Use the user's moderation page to take the appropriate steps to handle the report.
 
-```{dropdown} Required permissions
+:::{dropdown} Required permissions
+:icon: key
+
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
-```
+:::
 
 To open a user's moderation page:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens.
 4. [Search for the report](search_reports.md) and select {guilabel}`Open in moderation interface` under {guilabel}`Reported object`. The user's moderation page opens.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the page to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens.
 4. [Search for the report](search_reports.md) and select {guilabel}`Open in moderation interface` under {guilabel}`Reported object`. The user's moderation page opens.
 
-```
+:::
+::::
 
 You can change the following settings in the moderation interface:
 

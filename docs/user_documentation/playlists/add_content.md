@@ -10,20 +10,25 @@ To build a playlist, you need to add content to it. You can add content in a few
 
 If you want to add the currently playing track to a playlist:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Select the playlist icon ({fa}`list`) on the player. The {guilabel}`Manage playlists` screen appears.
 2. Select {guilabel}`+ Add track` next to the playlist you want to add the track to.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Select the player at the bottom of the screen to expand it.
 2. Select the playlist icon ({fa}`list`) under the track art. The {guilabel}`Manage playlists` screen appears.
 3. Select {guilabel}`+ Add track` next to the playlist you want to add the track to.
 
-```
+:::
+::::
 
 That's it! The currently playing track is now in your playlist.
 
@@ -31,7 +36,10 @@ That's it! The currently playing track is now in your playlist.
 
 You can add all content that is currently in your [player queue](../queue/index.md). To do this:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Select {guilabel}`Playlists` under the {guilabel}`My Library` section of the sidebar. The {guilabel}`Browsing playlists` screen opens.
 2. Select {guilabel}`Manage your playlists`. The {guilabel}`Manage playlists` screen appears.
@@ -39,9 +47,10 @@ You can add all content that is currently in your [player queue](../queue/index.
 4. Select {guilabel}`+ Insert from queue`. Your tracks appear in the playlist. The changes save to the server.
 5. Select {guilabel}`Stop editing` to stop editing.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Select the hamburger menu ({fa}`bars`) to open the menu bar.
 2. Select {menuselection}`My Library --> Playlists`. The {guilabel}`Browsing playlists` screen opens.
@@ -50,7 +59,8 @@ You can add all content that is currently in your [player queue](../queue/index.
 5. Select {guilabel}`+ Insert from queue`. Your tracks appear in the playlist. The changes save to the server.
 6. Select {guilabel}`Stop editing` to stop editing.
 
-```
+:::
+::::
 
 That's it! You've added the contents from your queue to a playlist.
 

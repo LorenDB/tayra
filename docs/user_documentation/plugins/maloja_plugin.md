@@ -4,7 +4,10 @@ The __Maloja__ plugin enables you to submit ({term}`scrobble <Scrobbling>`) list
 
 Scrobbling listens helps you build up a profile of your music tastes. It also enables you to keep a record of your listens. To set up the __Maloja plugin__:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your account.
 2. Select the cog icon ({fa}`cog`) or your avatar to expand the user menu.
@@ -17,9 +20,10 @@ Scrobbling listens helps you build up a profile of your music tastes. It also en
 9. Enter {guilabel}`Your Maloja API key`. Check out [Maloja's documentation](https://github.com/krateng/maloja#how-to-scrobble) for more information.
 10. Select {guilabel}`Save`.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your account.
 2. Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}`Options` menu.
@@ -32,6 +36,7 @@ Scrobbling listens helps you build up a profile of your music tastes. It also en
 9. Enter {guilabel}`Your Maloja API key`. Check out [Maloja's documentation](https://github.com/krateng/maloja#how-to-scrobble) for more information.
 10. Select {guilabel}`Save`.
 
-```
+:::
+::::
 
 That's it! You've set up the __Maloja__ plugin. When you listen to tracks, the plugin sends the information to your Maloja server.

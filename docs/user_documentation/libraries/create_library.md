@@ -8,7 +8,10 @@ To start uploading your collection to your pod, you need to create a library. Yo
 
 To create a library:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) in the top of the sidebar.
@@ -24,9 +27,10 @@ To create a library:
 9. Select {guilabel}`Create library`.
 10. A screen appears showing you a summary of your library.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your pod.
 2. Select the upload icon ({fa}`upload`) at the top of the screen.
@@ -42,7 +46,8 @@ To create a library:
 9. Select {guilabel}`Create library`.
 10. A screen appears showing you a summary of your library.
 
-```
+:::
+::::
 
 ```{warning}
 Select {guilabel}`Nobody except me` if you don't own the copyright for the content or it isn't freely licensed.

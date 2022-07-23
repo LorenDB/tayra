@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-03 01:32+0200\n"
+"POT-Creation-Date: 2022-07-23 12:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,11 +72,11 @@ msgstr ""
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:41
+#: ../../administrator_documentation/configuration_docs/change_url.md:46
 msgid "Example output:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:67
+#: ../../administrator_documentation/configuration_docs/change_url.md:72
 msgid "Restart your webserver to pick up the changes."
 msgstr ""
 

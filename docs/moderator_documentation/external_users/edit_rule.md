@@ -6,13 +6,18 @@ Purging a user's data removes all objects and caches associated to that user. Th
 
 You can change a moderation rule on a user at any time.
 
-```{dropdown} Required permissions
+:::{dropdown} Required permissions
+:icon: key
+
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
-```
+:::
 
 To update an existing moderation rule:
 
-```{tabbed} Desktop
+::::{tab-set}
+
+:::{tab-item} Desktop
+:sync: desktop
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
@@ -28,9 +33,10 @@ To update an existing moderation rule:
    - {guilabel}`Reject media` – only reject media files such as audio files, avatars, and album art.
 9. Select {guilabel}`Update` to save your rule.
 
-```
+:::
 
-```{tabbed} Mobile
+:::{tab-item} Mobile
+:sync: mobile
 
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
@@ -46,6 +52,7 @@ To update an existing moderation rule:
    - {guilabel}`Reject media` – only reject media files such as audio files, avatars, and album art.
 9. Select {guilabel}`Update` to save your rule.
 
-```
+:::
+::::
 
 You're done! The changes to the rule take effect as soon as you update it.
