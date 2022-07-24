@@ -321,6 +321,10 @@
     cursor: pointer;
     padding: 0 0.875rem;
 
+    .heart:not(.pink) {
+      color: rgba(0, 0, 0, 0.2)
+    }
+
     .handle > .grip {
       pointer-events: none;
     }

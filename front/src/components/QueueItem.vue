@@ -54,8 +54,8 @@ defineEmits<Emits>()
     </div>
     <div class="controls">
       <i
-        :class="$store.getters['favorites/isFavorite'](source.track.id) ? 'pink' : 'grey'"
-        class="heart icon ui favorite-icon"
+        :class="$store.getters['favorites/isFavorite'](source.track.id) ? 'pink' : ''"
+        class="heart icon"
         @click.stop="$store.dispatch('favorites/toggle', source.track.id)"
       />
       <button
