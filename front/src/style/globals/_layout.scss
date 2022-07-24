@@ -46,7 +46,16 @@
     padding-bottom: $bottom-player-height;
     .toast-container {
       bottom: $bottom-player-height + 1rem;
+      pointer-events: none;
     }
+  }
+}
+
+.toast-container {
+  pointer-events: none;
+
+  > div {
+    pointer-events: auto;
   }
 }
 

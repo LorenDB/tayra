@@ -391,21 +391,6 @@ const reorderTracks = async (from: number, to: number) => {
           @remove="removeTrack"
           @reorder="reorderTracks"
         />
-        <!-- <virtual-list
-          ref="list"
-          wrap-class="queue-sortable-container"
-          item-class="queue-sortable-item"
-          :data-key="'id'"
-          :data-sources="queueItems"
-          :data-component="QueueItem"
-          :estimate-size="50"
-          :extra-props="{
-            onPlay: play,
-            onRemove: removeTrack,
-            itemClass: (index: number) => currentIndex === index ? 'active': ''
-          }"
-          @reorder="log"
-        /> -->
         <div
           v-if="$store.state.radios.running"
           class="ui info message"
