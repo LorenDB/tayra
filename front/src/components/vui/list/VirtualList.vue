@@ -137,6 +137,7 @@ watchEffect(() => {
   scrollDirection.value = undefined
 })
 
+const keeps = ref(30)
 const el = useCurrentElement()
 useResizeObserver(el as unknown as MaybeElementRef<MaybeElement>, ([entry]) => {
   const height = entry.borderBoxSize?.[0]?.blockSize ?? 0
@@ -144,6 +145,7 @@ useResizeObserver(el as unknown as MaybeElementRef<MaybeElement>, ([entry]) => {
   if (height !== 0) {
     containerSize.top = (entry.target as HTMLElement).offsetTop
     containerSize.bottom = height + containerSize.top
+    keeps.value = (containerSize.bottom - containerSize.top) / props.size * 2 | 0
   }
 })
 
@@ -177,6 +179,7 @@ export default {
       class="virtual-list"
       wrap-class="drag-container"
       item-class="drag-item"
+      :keeps="keeps"
       :data-key="dataKey"
       :data-sources="list"
       :data-component="VirtualItem"
