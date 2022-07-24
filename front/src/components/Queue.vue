@@ -383,6 +383,7 @@ const reorderTracks = async (from: number, to: number) => {
           </h2>
         </div>
         <virtual-list
+          ref="list"
           :list="queueItems"
           :component="QueueItem"
           :size="50"

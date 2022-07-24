@@ -162,7 +162,9 @@ const { resume, pause } = useRafFn(() => {
   lastDate = now
 }, { immediate: false })
 
+const virtualList = ref()
 defineExpose({
+  scrollToIndex: (index: number) => virtualList.value?.scrollToIndex(index),
   cleanup
 })
 </script>
@@ -175,7 +177,9 @@ export default {
 
 <template>
   <div>
-    <virtual-list
+    <component
+      :is="VirtualList"
+      ref="virtualList"
       class="virtual-list"
       wrap-class="drag-container"
       item-class="drag-item"
