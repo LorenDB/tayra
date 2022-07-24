@@ -104,7 +104,7 @@ const dragClassHandler = (index: number) => draggedItem.value && hoveredIndex.va
 
 const scrollDirection = ref()
 const containerSize = reactive({ bottom: 0, top: 0 })
-const { x, y: screenY } = useMouse()
+const { x, y: screenY } = useMouse({ type: 'client' })
 const { element: hoveredElement } = useElementByPoint({ x, y: screenY })
 
 // Find current index and position on both desktop and mobile devices
