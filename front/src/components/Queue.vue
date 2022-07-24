@@ -132,7 +132,7 @@ const queueItems = computed(() => tracks.value.map((track, index) => ({
     remove: $pgettext('*/*/*', 'Remove'),
     selectTrack: $pgettext('*/*/*', 'Select track')
   },
-  duration: time.durationFormatted(track.uploads[0].duration ?? 0) ?? ''
+  duration: time.durationFormatted(track.uploads[0]?.duration ?? 0) ?? ''
 }) as QueueItemSource))
 
 const reorderTracks = async (from: number, to: number) => {
