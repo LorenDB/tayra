@@ -53,9 +53,11 @@ defineEmits<Emits>()
       </template>
     </div>
     <div class="controls">
-      <template v-if="$store.getters['favorites/isFavorite'](source.track.id)">
-        <i class="pink heart icon" />
-      </template>
+      <i
+        :class="$store.getters['favorites/isFavorite'](source.track.id) ? 'pink' : 'grey'"
+        class="heart icon ui favorite-icon"
+        @click.stop="$store.dispatch('favorites/toggle', source.track.id)"
+      />
       <button
         :aria-label="source.labels.remove"
         :title="source.labels.remove"
