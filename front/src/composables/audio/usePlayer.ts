@@ -100,7 +100,7 @@ const currentTime = computed({
       return
     }
 
-    if (!currentSound.value.getSource() || time === currentSound.value.seek()) {
+    if (!currentSound.value?.getSource() || time === currentSound.value.seek()) {
       return
     }
 

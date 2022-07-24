@@ -3,7 +3,7 @@ import type { ContentFilter } from '~/store/moderation'
 
 import { useStore } from '~/store'
 import { useGettext } from 'vue3-gettext'
-import { computed, ref } from 'vue'
+import { computed, markRaw, ref } from 'vue'
 import axios from 'axios'
 import usePlayer from '~/composables/audio/usePlayer'
 import useQueue from '~/composables/audio/useQueue'
@@ -129,7 +129,7 @@ export default (props: PlayOptionsProps) => {
     // TODO (wvffle): It was behind 250ms timeout, why?
     isLoading.value = false
 
-    return tracks.filter(track => track.uploads?.length)
+    return tracks.filter(track => track.uploads?.length).map(markRaw)
   }
 
   const el = useCurrentElement()
@@ -137,7 +137,8 @@ export default (props: PlayOptionsProps) => {
     jQuery(el.value).find('.ui.dropdown').dropdown('hide')
 
     const tracks = await getPlayableTracks()
-    store.dispatch('queue/appendMany', { tracks }).then(() => addMessage(tracks))
+    await store.dispatch('queue/appendMany', { tracks })
+    addMessage(tracks)
   }
 
   const enqueueNext = async (next = false) => {

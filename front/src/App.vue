@@ -104,7 +104,7 @@ if (store.state.auth.authenticated) {
       <template v-if="Component">
         <keep-alive :max="1">
           <Suspense>
-            <component :is="Component" v-show="!store.state.ui.queueFocused" />
+            <component :is="Component" />
             <template #fallback>
               <!-- TODO (wvffle): Add loader -->
               Loading...

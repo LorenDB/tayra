@@ -21,8 +21,8 @@ export default {
       ? `${hours}:${pad(min)}:${pad(sec)}`
       : `${min}:${pad(sec)}`
   },
-  durationFormatted (v: string) {
-    const duration = parseInt(v)
+  durationFormatted (v: string | number) {
+    const duration = typeof v === 'number' ? v : parseInt(v)
     return this.parse(duration % 1 !== 0 ? 0 : Math.round(duration))
   }
 }

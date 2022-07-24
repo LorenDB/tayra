@@ -191,7 +191,7 @@ const touchProgress = (event: MouseEvent) => {
             </div>
           </div>
         </div>
-        <div class="controls track-controls queue-not-focused tablet-and-below">
+        <div class="controls track-controls queue-not-focused desktop-and-below">
           <div class="ui tiny image">
             <img
               v-if="currentTrack.cover && currentTrack.cover.urls.original"
@@ -370,7 +370,7 @@ const touchProgress = (event: MouseEvent) => {
                 </translate>
               </button>
               <button
-                class="position circular control button tablet-and-below"
+                class="position circular control button desktop-and-below"
                 @click.stop="switchTab"
               >
                 <i class="stream icon" />
@@ -398,21 +398,21 @@ const touchProgress = (event: MouseEvent) => {
               </button>
               <button
                 v-if="$store.state.ui.queueFocused === 'player'"
-                class="circular control button close-control tablet-and-below"
+                class="circular control button close-control desktop-and-below"
                 @click.stop="switchTab"
               >
                 <i class="large up angle icon" />
               </button>
               <button
                 v-if="$store.state.ui.queueFocused === 'queue'"
-                class="circular control button tablet-and-below"
+                class="circular control button desktop-and-below"
                 @click.stop="switchTab"
               >
                 <i class="large down angle icon" />
               </button>
             </div>
             <button
-              class="circular control button close-control tablet-and-below"
+              class="circular control button close-control desktop-and-below"
               @click.stop="$store.commit('ui/queueFocused', null)"
             >
               <i class="x icon" />

@@ -1,40 +1,27 @@
 <script setup lang="ts">
+import type { Track, QueueItemSource } from '~/types'
+
 import { useStore } from '~/store'
-import { nextTick, ref, computed, onBeforeMount, onUnmounted } from 'vue'
+import { nextTick, ref, computed, watchEffect, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import time from '~/utils/time'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
-import Draggable from 'vuedraggable'
-import { whenever, watchDebounced } from '@vueuse/core'
+import { whenever, watchDebounced, useCurrentElement, useScrollLock } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import useQueue from '~/composables/audio/useQueue'
 import usePlayer from '~/composables/audio/usePlayer'
 
+import VirtualList from '~/components/vui/list/VirtualList.vue'
+import QueueItem from '~/components/QueueItem.vue'
+
 const queueModal = ref()
-
-let savedScroll = 0
-onBeforeMount(() => (savedScroll = window.scrollY))
-onUnmounted(() => {
-  document.body.parentElement?.setAttribute('style', 'scroll-behavior: auto')
-  window.scrollTo({ top: savedScroll, behavior: undefined })
-  document.body.parentElement?.removeAttribute('style')
-})
-
-const { activate } = useFocusTrap(queueModal, { allowOutsideClick: true })
-activate()
-
-const store = useStore()
-const currentIndex = computed(() => store.state.queue.currentIndex)
-
-const scrollToCurrent = async () => {
-  await nextTick()
-  const item = queueModal.value?.querySelector('.queue-item.active')
-  item?.scrollIntoView({ behavior: store.state.ui.queueFocused ? 'smooth' : 'auto' })
-}
+const { activate, deactivate } = useFocusTrap(queueModal, { allowOutsideClick: true, preventScroll: true })
 
 const { $pgettext } = useGettext()
+const scrollLock = useScrollLock(document.body)
+const store = useStore()
 
 const {
   playing,
@@ -55,15 +42,14 @@ const {
   hasNext,
   isEmpty: emptyQueue,
   tracks,
-  reorder: reorderTracks,
+  reorder,
   endsIn: timeLeft,
+  currentIndex,
   removeTrack,
   clear,
   next,
   previous
 } = useQueue()
-
-const reorder = (event: { oldIndex: number, newIndex: number }) => reorderTracks(event.oldIndex, event.newIndex)
 
 const labels = computed(() => ({
   queue: $pgettext('*/*/*', 'Queue'),
@@ -73,13 +59,42 @@ const labels = computed(() => ({
   previous: $pgettext('*/*/*', 'Previous track'),
   next: $pgettext('*/*/*', 'Next track'),
   pause: $pgettext('*/*/*', 'Pause'),
-  play: $pgettext('*/*/*', 'Play'),
-  remove: $pgettext('*/*/*', 'Remove'),
-  selectTrack: $pgettext('*/*/*', 'Select track')
+  play: $pgettext('*/*/*', 'Play')
 }))
 
-watchDebounced(() => store.state.ui.queueFocused, scrollToCurrent, { debounce: 400 })
-whenever(currentTrack, scrollToCurrent, { immediate: true })
+watchEffect(async () => {
+  scrollLock.value = !!store.state.ui.queueFocused
+  if (store.state.ui.queueFocused) {
+    await nextTick()
+    activate()
+  } else {
+    deactivate()
+  }
+})
+
+const list = ref()
+const el = useCurrentElement()
+const scrollToCurrent = (behavior: ScrollBehavior = 'smooth') => {
+  const item = el.value?.querySelector('.queue-item.active')
+  item?.scrollIntoView({
+    behavior,
+    block: 'center'
+  })
+}
+
+watchDebounced(currentTrack, () => scrollToCurrent(), { debounce: 100 })
+whenever(
+  () => store.state.ui.queueFocused,
+  () => {
+    list.value?.scrollToIndex(currentIndex.value)
+    setTimeout(() => scrollToCurrent('auto'), 1)
+  }
+)
+
+onMounted(async () => {
+  await nextTick()
+  list.value?.scrollToIndex(currentIndex.value)
+})
 
 whenever(
   () => tracks.value.length === 0,
@@ -96,19 +111,49 @@ const touchProgress = (event: MouseEvent) => {
   currentTime.value = time
 }
 
-const play = (index: number) => {
-  store.dispatch('queue/currentIndex', index)
+const play = (index: unknown) => {
+  store.dispatch('queue/currentIndex', index as number)
   resume()
+}
+
+const getCover = (track: Track) => {
+  return store.getters['instance/absoluteUrl'](
+    track.cover?.urls.medium_square_crop
+        ?? track.album?.cover?.urls.medium_square_crop
+        ?? new URL('../assets/audio/default-cover.png', import.meta.url).href
+  )
+}
+
+const queueItems = computed(() => tracks.value.map((track, index) => ({
+  id: `${index}-${track.id}`,
+  track,
+  coverUrl: getCover(track),
+  labels: {
+    remove: $pgettext('*/*/*', 'Remove'),
+    selectTrack: $pgettext('*/*/*', 'Select track')
+  },
+  duration: time.durationFormatted(track.uploads[0].duration ?? 0) ?? ''
+}) as QueueItemSource))
+
+const reorderTracks = async (from: number, to: number) => {
+  reorder(from, to)
+
+  await nextTick()
+  if (to === currentIndex.value) {
+    scrollToCurrent()
+  }
 }
 </script>
 
 <template>
   <section
-    ref="queueModal"
     class="main with-background component-queue"
     :aria-label="labels.queue"
   >
-    <div id="queue-grid">
+    <div
+      id="queue-grid"
+      :class="store.state.ui.queueFocused && `show-${store.state.ui.queueFocused}`"
+    >
       <div
         id="player"
         class="ui basic segment"
@@ -296,7 +341,7 @@ const play = (index: number) => {
           </div>
         </template>
       </div>
-      <div>
+      <div id="queue">
         <div class="ui basic clearing segment">
           <h2 class="ui header">
             <div class="content">
@@ -336,107 +381,54 @@ const play = (index: number) => {
             </div>
           </h2>
         </div>
-        <div>
-          <table class="ui compact very basic fixed single line selectable unstackable table">
-            <draggable
-              v-model="tracks"
-              handle=".handle"
-              item-key="id"
-              tag="tbody"
-              @update="reorder"
+        <virtual-list
+          :list="queueItems"
+          :component="QueueItem"
+          :size="50"
+          :item-class="(index: number) => currentIndex === index ? 'active': ''"
+          data-key="id"
+          @play="play"
+          @remove="removeTrack"
+          @reorder="reorderTracks"
+        />
+        <!-- <virtual-list
+          ref="list"
+          wrap-class="queue-sortable-container"
+          item-class="queue-sortable-item"
+          :data-key="'id'"
+          :data-sources="queueItems"
+          :data-component="QueueItem"
+          :estimate-size="50"
+          :extra-props="{
+            onPlay: play,
+            onRemove: removeTrack,
+            itemClass: (index: number) => currentIndex === index ? 'active': ''
+          }"
+          @reorder="log"
+        /> -->
+        <div
+          v-if="$store.state.radios.running"
+          class="ui info message"
+        >
+          <div class="content">
+            <h3 class="header">
+              <i class="feed icon" /> <translate translate-context="Sidebar/Player/Title">
+                You have a radio playing
+              </translate>
+            </h3>
+            <p>
+              <translate translate-context="Sidebar/Player/Paragraph">
+                New tracks will be appended here automatically.
+              </translate>
+            </p>
+            <button
+              class="ui basic primary button"
+              @click="$store.dispatch('radios/stop')"
             >
-              <template #item="{ element: track, index }">
-                <tr
-                  :key="track.id"
-                  :class="['queue-item', {'active': index === currentIndex}]"
-                >
-                  <td class="handle">
-                    <i class="grip lines icon" />
-                  </td>
-                  <td
-                    class="image-cell"
-                    @click="play(index)"
-                  >
-                    <img
-                      v-if="track.cover && track.cover.urls.original"
-                      class="ui mini image"
-                      alt=""
-                      :src="$store.getters['instance/absoluteUrl'](track.cover.urls.medium_square_crop)"
-                    >
-                    <img
-                      v-else-if="track.album && track.album.cover && track.album.cover.urls.original"
-                      class="ui mini image"
-                      alt=""
-                      :src="$store.getters['instance/absoluteUrl'](track.album.cover.urls.medium_square_crop)"
-                    >
-                    <img
-                      v-else
-                      class="ui mini image"
-                      alt=""
-                      src="../assets/audio/default-cover.png"
-                    >
-                  </td>
-                  <td
-                    colspan="3"
-                    @click="play(index)"
-                  >
-                    <button
-                      class="title reset ellipsis"
-                      :title="track.title"
-                      :aria-label="labels.selectTrack"
-                    >
-                      <strong>{{ track.title }}</strong><br>
-                      <span>
-                        {{ track.artist.name }}
-                      </span>
-                    </button>
-                  </td>
-                  <td class="duration-cell">
-                    <template v-if="track.uploads.length > 0">
-                      {{ time.durationFormatted(track.uploads[0].duration) }}
-                    </template>
-                  </td>
-                  <td class="controls">
-                    <template v-if="$store.getters['favorites/isFavorite'](track.id)">
-                      <i class="pink heart icon" />
-                    </template>
-                    <button
-                      :aria-label="labels.remove"
-                      :title="labels.remove"
-                      :class="['ui', 'really', 'tiny', 'basic', 'circular', 'icon', 'button']"
-                      @click.stop="removeTrack(index)"
-                    >
-                      <i class="x icon" />
-                    </button>
-                  </td>
-                </tr>
-              </template>
-            </draggable>
-          </table>
-          <div
-            v-if="$store.state.radios.running"
-            class="ui info message"
-          >
-            <div class="content">
-              <h3 class="header">
-                <i class="feed icon" /> <translate translate-context="Sidebar/Player/Title">
-                  You have a radio playing
-                </translate>
-              </h3>
-              <p>
-                <translate translate-context="Sidebar/Player/Paragraph">
-                  New tracks will be appended here automatically.
-                </translate>
-              </p>
-              <button
-                class="ui basic primary button"
-                @click="$store.dispatch('radios/stop')"
-              >
-                <translate translate-context="*/Player/Button.Label/Short, Verb">
-                  Stop radio
-                </translate>
-              </button>
-            </div>
+              <translate translate-context="*/Player/Button.Label/Short, Verb">
+                Stop radio
+              </translate>
+            </button>
           </div>
         </div>
       </div>

@@ -235,8 +235,23 @@
     display: grid;
     grid-template-columns: 37.5% 62.5%;
 
+    #queue {
+      position: relative;
+    }
+
     @include media("<desktop") {
       grid-template-columns: 1fr 0;
+      &.show-player {
+        #queue {
+          display: none;
+        }
+      }
+
+      &.show-queue {
+        #player {
+          display: none;
+        }
+      }
     }
 
     #player {
@@ -245,6 +260,11 @@
       align-items: center;
       justify-content: center;
       text-align: center;
+
+      .ui.header {
+        width: 100%;
+        max-width: 90%;
+      }
 
       .cover-container {
         width: 50vh;
@@ -282,10 +302,43 @@
         grid-template-rows: auto 1fr;
 
         > :nth-child(2) {
+          overflow-y: hidden;
+        }
+
+        .virtual-list {
+          height: 100%;
           overflow-y: auto;
           padding-bottom: 2rem;
         }
       }
     }
   }
+
+  .queue-item {
+    height: 50px;
+    display: grid;
+    grid-template-columns: 10% auto 1fr 10% auto;
+    cursor: pointer;
+    padding: 0 0.875rem;
+
+    .handle > .grip {
+      pointer-events: none;
+    }
+
+    > div {
+      display: flex;
+      align-items: center;
+    }
+
+    // NOTE: Taken from semantic ui
+    &.active {
+      background: #E0E0E0;
+      color: #000000de;
+    }
+  }
+}
+
+.drag-container:not(.dragging) .queue-item:hover {
+  background: rgba(0,0,0,.05);
+  color: #000000f2;
 }

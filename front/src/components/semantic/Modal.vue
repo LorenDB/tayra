@@ -21,7 +21,9 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['approved', 'deny', 'update:show', 'show', 'hide'])
 
 const modal = ref()
-const { activate, deactivate, pause, unpause } = useFocusTrap(modal)
+const { activate, deactivate, pause, unpause } = useFocusTrap(modal, {
+  allowOutsideClick: true
+})
 
 const show = useVModel(props, 'show', emit)
 

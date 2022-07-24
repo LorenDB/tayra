@@ -18,6 +18,19 @@ export interface InitModuleContext {
 
 export type InitModule = (ctx: InitModuleContext) => void | Promise<void>
 
+export interface QueueItemSource {
+  id: string
+  track: Track
+  duration: string
+  coverUrl: string
+
+  // TODO (wvffle): Maybe use <translate> component to avoid passing the labels
+  labels: {
+    remove: string
+    selectTrack: string
+  }
+}
+
 // Theme stuff
 export type Theme = 'auto' | 'light' | 'dark'
 

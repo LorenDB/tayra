@@ -28,20 +28,13 @@ const focused = computed(() => store.state.ui.queueFocused === 'queue')
 //
 // Track list
 //
-const tracksChangeBuffer = ref<Track[] | null>(null)
-const tracks = computed<Track[]>({
-  get: () => store.state.queue.tracks,
-  set: (value) => (tracksChangeBuffer.value = value)
-})
+const tracks = computed<Track[]>(() => store.state.queue.tracks)
 
 const reorder = (oldIndex: number, newIndex: number) => {
   store.commit('queue/reorder', {
-    tracks: tracksChangeBuffer.value ?? tracks.value,
     oldIndex,
     newIndex
   })
-
-  tracksChangeBuffer.value = null
 }
 
 //

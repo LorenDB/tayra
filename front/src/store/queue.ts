@@ -38,21 +38,23 @@ const store: Module<State, RootState> = {
     tracks (state, value) {
       state.tracks = value
     },
-    insert (state, { track, index }) {
-      state.tracks.splice(index, 0, track)
-    },
-    reorder (state, { tracks, oldIndex, newIndex }) {
+    reorder (state, { oldIndex, newIndex }) {
       // called when the user uses drag / drop to reorder
       // tracks in queue
-      state.tracks = tracks
+
+      const [track] = state.tracks.splice(oldIndex, 1)
+      state.tracks.splice(newIndex, 0, track)
+
       if (oldIndex === state.currentIndex) {
         state.currentIndex = newIndex
         return
       }
+
       if (oldIndex < state.currentIndex && newIndex >= state.currentIndex) {
         // item before was moved after
         state.currentIndex -= 1
       }
+
       if (oldIndex > state.currentIndex && newIndex <= state.currentIndex) {
         // item after was moved before
         state.currentIndex += 1
@@ -72,41 +74,32 @@ const store: Module<State, RootState> = {
     isEmpty: state => state.tracks.length === 0
   },
   actions: {
-    append ({ commit, state }, { track, index }) {
-      index = index || state.tracks.length
-      if (index > state.tracks.length - 1) {
-        // we simply push to the end
-        commit('insert', { track, index: state.tracks.length })
-      } else {
-        // we insert the track at given position
-        commit('insert', { track, index })
-      }
+    append ({ dispatch, state }, { track, index = state.tracks.length }) {
+      return dispatch('appendMany', { tracks: [track], index })
     },
 
-    appendMany ({ state, dispatch }, { tracks, index, callback }) {
-      logger.info('Appending many tracks to the queue', tracks.map((track: Track) => track.title))
-      let shouldPlay = false
+    appendMany ({ state, dispatch }, { tracks, index = state.tracks.length }) {
+      logger.info(
+        'Enqueueing tracks',
+        tracks.map((track: Track) => [track.artist?.name, track.title].join(' - '))
+      )
 
-      if (state.tracks.length === 0) {
+      const shouldPlay = state.tracks.length === 0
+      if (shouldPlay) {
         index = 0
-        shouldPlay = true
-      } else {
-        index = index ?? state.tracks.length
       }
 
-      const total = tracks.length
-      tracks.forEach((track: Track, i: number) => {
-        const promise = dispatch('append', { track, index })
-        index += 1
+      if (index >= state.tracks.length) {
+        // we simply push to the end
+        state.tracks.push(...tracks)
+      } else {
+        // we insert the track at given position
+        state.tracks.splice(index, 0, ...tracks)
+      }
 
-        if (callback && i + 1 === total) {
-          promise.then(callback)
-        }
-
-        if (shouldPlay && promise && i + 1 === total) {
-          promise.then(() => dispatch('next'))
-        }
-      })
+      if (shouldPlay) {
+        return dispatch('next')
+      }
     },
 
     cleanTrack ({ state, dispatch, commit }, index) {
