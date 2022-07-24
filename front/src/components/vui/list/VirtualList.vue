@@ -49,6 +49,8 @@ const onMousedown = (event: MouseEvent | TouchEvent) => {
     ghost,
     index
   }
+
+  resume()
 }
 
 // Touch and mobile devices support
@@ -85,6 +87,7 @@ document.addEventListener('mouseup', reorder)
 document.addEventListener('touchend', reorder)
 
 const cleanup = () => {
+  pause()
   document.body.classList.remove('dragging')
   draggedItem.value?.ghost?.remove()
   draggedItem.value = undefined
@@ -142,7 +145,7 @@ useResizeObserver(el as unknown as MaybeElementRef<MaybeElement>, ([entry]) => {
 })
 
 let lastDate = +new Date()
-useRafFn(() => {
+const { resume, pause } = useRafFn(() => {
   const now = +new Date()
   const delta = now - lastDate
   const direction = scrollDirection.value
@@ -152,7 +155,7 @@ useRafFn(() => {
   }
 
   lastDate = now
-})
+}, { immediate: false })
 
 defineExpose({
   cleanup
