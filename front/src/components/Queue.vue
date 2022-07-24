@@ -130,7 +130,8 @@ const queueItems = computed(() => tracks.value.map((track, index) => ({
   coverUrl: getCover(track),
   labels: {
     remove: $pgettext('*/*/*', 'Remove'),
-    selectTrack: $pgettext('*/*/*', 'Select track')
+    selectTrack: $pgettext('*/*/*', 'Select track'),
+    favorite: $pgettext('*/*/*', 'Favorite track')
   },
   duration: time.durationFormatted(track.uploads[0]?.duration ?? 0) ?? ''
 }) as QueueItemSource))

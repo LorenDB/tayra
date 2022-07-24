@@ -53,11 +53,17 @@ defineEmits<Emits>()
       </template>
     </div>
     <div class="controls">
-      <i
-        :class="$store.getters['favorites/isFavorite'](source.track.id) ? 'pink' : ''"
-        class="heart icon"
+      <button
+        :aria-label="source.labels.favorite"
+        :title="source.labels.favorite"
+        class="ui really basic circular icon button"
         @click.stop="$store.dispatch('favorites/toggle', source.track.id)"
-      />
+      >
+        <i
+          :class="$store.getters['favorites/isFavorite'](source.track.id) ? 'pink' : ''"
+          class="heart icon"
+        />
+      </button>
       <button
         :aria-label="source.labels.remove"
         :title="source.labels.remove"

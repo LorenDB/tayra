@@ -28,6 +28,7 @@ export interface QueueItemSource {
   labels: {
     remove: string
     selectTrack: string
+    favorite: string
   }
 }
 
