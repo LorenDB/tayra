@@ -220,7 +220,11 @@ const headerStyle = computed(() => {
               </div>
             </div>
           </div>
-          <div class="ui three stackable cards">
+          <!-- TODO (wvffle): Remove style when migrate away from fomantic -->
+          <div
+            class="ui three stackable cards"
+            style="z-index: 1; position: relative;"
+          >
             <router-link
               to="/"
               class="ui card"

@@ -35,7 +35,10 @@ const onMousedown = (event: MouseEvent | TouchEvent) => {
   if (!dragItem || !element.classList.contains('handle')) return
 
   // Touch devices stop emitting touch events while container is scrolled
-  isTouch.value = event instanceof TouchEvent
+  // NOTE: FF does not support TouchEvent constructor
+  isTouch.value = window.TouchEvent
+    ? event instanceof TouchEvent
+    : !(event instanceof MouseEvent)
 
   const ghost = dragItem.cloneNode(true) as HTMLElement
   ghost.classList.add('drag-ghost')
