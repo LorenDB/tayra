@@ -4,9 +4,10 @@ import type { MaybeElementRef, MaybeElement } from '@vueuse/core'
 import { useMouse, useCurrentElement, useResizeObserver, useRafFn, useElementByPoint } from '@vueuse/core'
 import { ref, watchEffect, reactive } from 'vue'
 
-import VirtualItem from './VirtualItem.vue'
 // @ts-expect-error no typings
-import VirtualList from 'vue3-virtual-scroll-list'
+// import VirtualList from 'vue3-virtual-scroll-list'
+import { RecycleScroller } from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 interface Emits {
   (e: 'reorder', from: number, to: number): void
@@ -15,7 +16,6 @@ interface Emits {
 interface Props {
   list: object[]
   size: number
-  dataKey: string
 }
 
 const emit = defineEmits<Emits>()
@@ -31,7 +31,7 @@ const getIndex = (element: HTMLElement) => +(element?.getAttribute('data-index')
 const isTouch = ref(false)
 const onMousedown = (event: MouseEvent | TouchEvent) => {
   const element = event.target as HTMLElement
-  const dragItem = element.closest('.drag-item')?.children[0] as HTMLElement
+  const dragItem = element.closest('.drag-item') as HTMLElement
   if (!dragItem || !element.classList.contains('handle')) return
 
   // Touch devices stop emitting touch events while container is scrolled
@@ -68,10 +68,7 @@ document.addEventListener('touchcancel', (event: TouchEvent) => {
 })
 
 const reorder = (event: MouseEvent | TouchEvent) => {
-  const element = event.target as HTMLElement
-  const dragItem = element.closest('.drag-item')?.children[0]
-
-  if (dragItem && draggedItem.value) {
+  if (draggedItem.value) {
     const from = draggedItem.value.index
     let to = hoveredIndex.value
 
@@ -98,10 +95,6 @@ const cleanup = () => {
   scrollDirection.value = undefined
 }
 
-const dragClassHandler = (index: number) => draggedItem.value && hoveredIndex.value === index
-  ? `drop-${position.value}`
-  : ''
-
 const scrollDirection = ref()
 const containerSize = reactive({ bottom: 0, top: 0 })
 const { x, y: screenY } = useMouse({ type: 'client' })
@@ -109,12 +102,14 @@ const { element: hoveredElement } = useElementByPoint({ x, y: screenY })
 
 // Find current index and position on both desktop and mobile devices
 watchEffect(() => {
-  const dragItem = (hoveredElement.value as HTMLElement)?.closest('.drag-item')?.children[0] as HTMLElement
-  if (!dragItem) return
+  if (draggedItem.value) {
+    const dragItem = (hoveredElement.value as HTMLElement)?.closest('.drag-item') as HTMLElement
+    if (!dragItem) return
 
-  hoveredIndex.value = getIndex(dragItem)
-  const { y } = dragItem.getBoundingClientRect()
-  position.value = screenY.value - y < props.size / 2 ? 'before' : 'after'
+    hoveredIndex.value = getIndex(dragItem)
+    const { y } = dragItem.getBoundingClientRect()
+    position.value = screenY.value - y < props.size / 2 ? 'before' : 'after'
+  }
 })
 
 // Automatically scroll when on the edge
@@ -137,7 +132,6 @@ watchEffect(() => {
   scrollDirection.value = undefined
 })
 
-const keeps = ref(30)
 const el = useCurrentElement()
 useResizeObserver(el as unknown as MaybeElementRef<MaybeElement>, ([entry]) => {
   const height = entry.borderBoxSize?.[0]?.blockSize ?? 0
@@ -145,7 +139,6 @@ useResizeObserver(el as unknown as MaybeElementRef<MaybeElement>, ([entry]) => {
   if (height !== 0) {
     containerSize.top = (entry.target as HTMLElement).offsetTop
     containerSize.bottom = height + containerSize.top
-    keeps.value = (containerSize.bottom - containerSize.top) / props.size * 2 | 0
   }
 })
 
@@ -164,38 +157,29 @@ const { resume, pause } = useRafFn(() => {
 
 const virtualList = ref()
 defineExpose({
-  scrollToIndex: (index: number) => virtualList.value?.scrollToIndex(index),
+  scrollToIndex: (index: number) => virtualList.value?.scrollToItem(index),
   cleanup
 })
 </script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false
-}
-</script>
-
 <template>
   <div>
-    <component
-      :is="VirtualList"
+    <recycle-scroller
       ref="virtualList"
-      class="virtual-list"
-      wrap-class="drag-container"
-      item-class="drag-item"
-      :keeps="keeps"
-      :data-key="dataKey"
-      :data-sources="list"
-      :data-component="VirtualItem"
-      :estimate-size="size"
-      :extra-props="{
-        dragClassHandler,
-        ...$attrs
-      }"
+      v-slot="{ item, index }"
+      class="virtual-list drag-container"
+      :items="list"
+      :item-size="size"
       @mousedown="onMousedown"
       @touchstart="onMousedown"
       @touchmove="onTouchmove"
-    />
+    >
+      <slot
+        :class-list="[draggedItem && hoveredIndex === index && `drop-${position}`, 'drag-item']"
+        :item="item"
+        :index="index"
+      />
+    </recycle-scroller>
 
     <div
       ref="ghostContainer"

@@ -4,7 +4,6 @@ import type { QueueItemSource } from '~/types'
 interface Props {
   source: QueueItemSource
   index: number
-  itemClass: (index: number) => string
 }
 
 interface Emits {
@@ -18,7 +17,6 @@ defineEmits<Emits>()
 
 <template>
   <div
-    :class="itemClass(index)"
     class="queue-item"
     tabindex="0"
   >

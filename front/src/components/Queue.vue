@@ -387,12 +387,19 @@ const reorderTracks = async (from: number, to: number) => {
           :list="queueItems"
           :component="QueueItem"
           :size="50"
-          :item-class="(index: number) => currentIndex === index ? 'active': ''"
-          data-key="id"
-          @play="play"
-          @remove="removeTrack"
           @reorder="reorderTracks"
-        />
+        >
+          <template #default="{ index, item, classList }">
+            <queue-item
+              :data-index="index"
+              :index="index"
+              :source="item"
+              :class="[...classList, currentIndex === index && 'active']"
+              @play="play"
+              @remove="removeTrack"
+            />
+          </template>
+        </virtual-list>
         <div
           v-if="$store.state.radios.running"
           class="ui info message"
