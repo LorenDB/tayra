@@ -85,9 +85,10 @@ const scrollToCurrent = (behavior: ScrollBehavior = 'smooth') => {
 watchDebounced(currentTrack, () => scrollToCurrent(), { debounce: 100 })
 whenever(
   () => store.state.ui.queueFocused,
-  () => {
+  async () => {
     list.value?.scrollToIndex(currentIndex.value)
-    setTimeout(() => scrollToCurrent('auto'), 1)
+    await nextTick()
+    requestAnimationFrame(() => scrollToCurrent('auto'))
   }
 )
 

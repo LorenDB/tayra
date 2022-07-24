@@ -156,6 +156,7 @@ const { resume, pause } = useRafFn(() => {
 }, { immediate: false })
 
 const virtualList = ref()
+window.vl = virtualList
 defineExpose({
   scrollToIndex: (index: number) => virtualList.value?.scrollToItem(index),
   cleanup
