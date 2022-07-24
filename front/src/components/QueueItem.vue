@@ -1,4 +1,4 @@
-<script setup functional lang="ts">
+<script setup lang="ts">
 import type { QueueItemSource } from '~/types'
 
 interface Props {
