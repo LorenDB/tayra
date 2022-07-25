@@ -242,6 +242,10 @@ export interface PendingReviewRequestsWSEvent {
   pending_count: number
 }
 
+export interface InboxItemAddedWSEvent {
+  item: Notification
+}
+
 export interface ListenWsEventObject {
   local_id: string
 }
@@ -256,7 +260,7 @@ export interface ListenWSEvent {
 //   type: 'Listen'
 // }
 
-export type WebSocketEvent = PendingReviewEditsWSEvent | PendingReviewReportsWSEvent | PendingReviewRequestsWSEvent | ListenWSEvent
+export type WebSocketEvent = PendingReviewEditsWSEvent | PendingReviewReportsWSEvent | PendingReviewRequestsWSEvent | ListenWSEvent | InboxItemAddedWSEvent
 
 // FS Browser
 export interface FSEntry {
@@ -374,7 +378,96 @@ export interface SettingsDataEntry {
 // Note stuff
 export interface Note {
   uuid: string
-  author: Actor // TODO (wvffle): Check if is valid
-  summary: string
+  type: 'request' | 'report'
+  author?: Actor // TODO (wvffle): Check if is valid
+  summary?: string
+  creation_date?: string
+}
+
+// Instance policy stuff
+export interface InstancePolicy {
+  id: number
+  uuid: string
   creation_date: string
+  actor: Actor
+
+  summary: string
+  is_active: boolean
+  block_all: boolean
+  silence_activity: boolean
+  silence_notifications: boolean
+  reject_media: boolean
+}
+
+// Plugin stuff
+export interface Plugin {
+  name: string
+  label: string
+  homepage?: string
+  enabled: boolean
+  description?: string
+  source?: string
+  values?: Record<string, string>
+  conf?: {
+    name: string
+    label: string
+    type: 'text' | 'long_text' | 'url' | 'password'
+    help?: string
+  }[]
+}
+
+// Report stuff
+export type EntityObjectType = 'artist' | 'album' | 'track' | 'library' | 'playlist' | 'account' | 'channel'
+
+export interface ReportTarget {
+  id: string
+  type: EntityObjectType
+}
+
+export interface Report {
+  uuid: string
+  summary?: string
+  is_applied: boolean
+  is_handled: boolean
+  previous_state: string
+  notes: Note[]
+  type: string
+
+  assigned_to?: Actor
+  submitter?: Actor
+  submitter_email?: string
+
+  target_owner?: Actor
+  target?: ReportTarget
+  target_state: {
+    _target: ReportTarget
+    domain: string
+    [k: string]: unknown
+  }
+
+  creation_date: string
+  handled_date: string
+}
+
+// User request stuff
+export type UserRequestStatus = 'approved' | 'refused' | 'pending'
+export interface UserRequest {
+  uuid: string
+  notes: Note[]
+  status: UserRequestStatus
+
+  assigned_to?: Actor
+  submitter?: Actor
+  submitter_email?: string
+
+  creation_date: string
+  handled_date: string
+
+  metadata: object
+}
+
+// Notification stuff
+export interface Notification {
+  id: number
+  is_read: boolean
 }

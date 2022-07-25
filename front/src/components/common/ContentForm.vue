@@ -1,3 +1,82 @@
+<script setup lang="ts">
+import axios from 'axios'
+import { useVModel, watchDebounced, useTextareaAutosize, syncRef } from '@vueuse/core'
+import { ref, computed, watchEffect, onMounted, nextTick } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+interface Emits {
+  (e: 'update:modelValue', value: string): void
+}
+
+interface Props {
+  modelValue: string
+  placeholder?: string
+  autofocus?: boolean
+  permissive?: boolean
+  required?: boolean
+  charLimit?: number
+}
+
+const emit = defineEmits<Emits>()
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: undefined,
+  autofocus: false,
+  charLimit: 5000,
+  permissive: false,
+  required: false
+})
+
+const { $pgettext } = useGettext()
+const { textarea, input } = useTextareaAutosize()
+const value = useVModel(props, 'modelValue', emit)
+syncRef(value, input)
+
+const isPreviewing = ref(false)
+const preview = ref()
+const isLoadingPreview = ref(false)
+
+const labels = computed(() => ({
+  placeholder: props.placeholder ?? $pgettext('*/Form/Placeholder', 'Write a few words here…')
+}))
+
+const remainingChars = computed(() => props.charLimit - props.modelValue.length)
+
+const loadPreview = async () => {
+  isLoadingPreview.value = true
+  try {
+    const response = await axios.post('text-preview/', { text: value.value, permissive: props.permissive })
+    preview.value = response.data.rendered
+  } catch (error) {
+    console.error(error)
+  }
+  isLoadingPreview.value = false
+}
+
+watchDebounced(value, async () => {
+  await loadPreview()
+}, { immediate: true, debounce: 500 })
+
+watchEffect(async () => {
+  if (isPreviewing.value) {
+    if (value.value && !preview.value && !isLoadingPreview.value) {
+      await loadPreview()
+    }
+
+    return
+  }
+
+  await nextTick()
+  textarea.value.focus()
+})
+
+onMounted(async () => {
+  if (props.autofocus) {
+    await nextTick()
+    textarea.value.focus()
+  }
+})
+</script>
+
 <template>
   <div class="content-form ui segments">
     <div class="ui segment">
@@ -31,7 +110,7 @@
             <div class="line" />
           </div>
         </div>
-        <p v-else-if="preview === null">
+        <p v-else-if="!preview">
           <translate translate-context="*/Form/Paragraph">
             Nothing to preview.
           </translate>
@@ -44,13 +123,10 @@
       <template v-else>
         <div class="ui transparent input">
           <textarea
-            :id="fieldId"
             ref="textarea"
-            v-model="newValue"
-            :name="fieldId"
-            :rows="rows"
-            :required="required || null"
-            :placeholder="placeholder || labels.placeholder"
+            v-model="value"
+            :required="required"
+            :placeholder="labels.placeholder"
           />
         </div>
         <div class="ui very small hidden divider" />
@@ -71,82 +147,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-
-export default {
-  props: {
-    modelValue: { type: String, default: '' },
-    fieldId: { type: String, default: 'change-content' },
-    placeholder: { type: String, default: null },
-    autofocus: { type: Boolean, default: false },
-    charLimit: { type: Number, default: 5000, required: false },
-    rows: { type: Number, default: 5, required: false },
-    permissive: { type: Boolean, default: false },
-    required: { type: Boolean, default: false }
-  },
-  data () {
-    return {
-      isPreviewing: false,
-      preview: null,
-      newValue: this.modelValue,
-      isLoadingPreview: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        placeholder: this.$pgettext('*/Form/Placeholder', 'Write a few words here…')
-      }
-    },
-    remainingChars () {
-      return this.charLimit - (this.modelValue || '').length
-    }
-  },
-  watch: {
-    newValue (v) {
-      this.preview = null
-      this.$emit('update:modelValue', v)
-    },
-    modelValue: {
-      async handler (v) {
-        this.preview = null
-        this.newValue = v
-        if (this.isPreviewing) {
-          await this.loadPreview()
-        }
-      },
-      immediate: true
-    },
-    async isPreviewing (v) {
-      if (v && !!this.modelValue && this.preview === null && !this.isLoadingPreview) {
-        await this.loadPreview()
-      }
-      if (!v) {
-        await this.$nextTick()
-        this.$refs.textarea.focus()
-      }
-    }
-  },
-  mounted () {
-    if (this.autofocus) {
-      this.$nextTick(() => {
-        this.$refs.textarea.focus()
-      })
-    }
-  },
-  methods: {
-    async loadPreview () {
-      this.isLoadingPreview = true
-      try {
-        const response = await axios.post('text-preview/', { text: this.newValue, permissive: this.permissive })
-        this.preview = response.data.rendered
-      } catch (error) {
-        console.error(error)
-      }
-      this.isLoadingPreview = false
-    }
-  }
-}
-</script>

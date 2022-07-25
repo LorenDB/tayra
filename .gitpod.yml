@@ -32,6 +32,8 @@ tasks:
       poetry run python manage.py gitpod dev
 
   - name: Frontend
+    env:
+      VUE_EDITOR: code
     before: cd front
     init: |
       yarn install
@@ -42,6 +44,7 @@ tasks:
     env:
       COMPOSE_FILE: /workspace/funkwhale/.gitpod/docker-compose.yml
       ENV_FILE: /workspace/funkwhale/.gitpod/.env
+      VUE_EDITOR: code
     command: |
       clear
       echo ""

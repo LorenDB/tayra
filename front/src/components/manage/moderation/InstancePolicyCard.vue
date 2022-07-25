@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import type { InstancePolicy } from '~/types'
+
+import useMarkdown from '~/composables/useMarkdown'
+
+interface Props {
+  object: InstancePolicy
+}
+
+const props = defineProps<Props>()
+
+const summary = useMarkdown(() => props.object.summary)
+</script>
+
 <template>
   <div>
     <slot />
@@ -64,10 +78,10 @@
         </div>
       </div>
     </div>
-    <div v-if="markdown && object.summary">
+    <div v-if="summary">
       <div class="ui hidden divider" />
       <p><strong><translate translate-context="Content/Moderation/*/Noun">Reason</translate></strong></p>
-      <sanitized-html :html="markdown.makeHtml(object.summary)" />
+      <sanitized-html :html="summary" />
     </div>
     <div class="ui hidden divider" />
     <button
@@ -81,21 +95,3 @@
     </button>
   </div>
 </template>
-
-<script>
-import showdown from 'showdown'
-
-export default {
-  props: {
-    object: { type: Object, default: null }
-  },
-  data () {
-    return {
-      markdown: null
-    }
-  },
-  created () {
-    this.markdown = showdown.Converter({ simplifiedAutoLink: true, openLinksInNewWindow: true })
-  }
-}
-</script>

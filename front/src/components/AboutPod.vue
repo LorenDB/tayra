@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { useStore } from '~/store'
 import { get } from 'lodash-es'
-import showdown from 'showdown'
+import useMarkdown from '~/composables/useMarkdown'
 import { humanSize } from '~/utils/filters'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-
-const markdown = new showdown.Converter()
 
 const store = useStore()
 const nodeinfo = computed(() => store.state.instance.nodeinfo)
@@ -18,9 +16,9 @@ const labels = computed(() => ({
 
 const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') || 'Funkwhale')
 const banner = computed(() => get(nodeinfo.value, 'metadata.banner'))
-const longDescription = computed(() => get(nodeinfo.value, 'metadata.longDescription'))
-const rules = computed(() => get(nodeinfo.value, 'metadata.rules'))
-const terms = computed(() => get(nodeinfo.value, 'metadata.terms'))
+const longDescription = useMarkdown(() => get(nodeinfo.value, 'metadata.longDescription'))
+const rules = useMarkdown(() => get(nodeinfo.value, 'metadata.rules'))
+const terms = useMarkdown(() => get(nodeinfo.value, 'metadata.terms'))
 const contactEmail = computed(() => get(nodeinfo.value, 'metadata.contactEmail'))
 const anonymousCanListen = computed(() => get(nodeinfo.value, 'metadata.library.anonymousCanListen'))
 const allowListEnabled = computed(() => get(nodeinfo.value, 'metadata.allowList.enabled'))
@@ -140,7 +138,7 @@ const headerStyle = computed(() => {
               </h2>
               <sanitized-html
                 v-if="longDescription"
-                :html="markdown.makeHtml(longDescription)"
+                :html="longDescription"
               />
               <p v-else>
                 <translate translate-context="Content/About/Paragraph">
@@ -158,7 +156,7 @@ const headerStyle = computed(() => {
               </h3>
               <sanitized-html
                 v-if="rules"
-                :html="markdown.makeHtml(rules)"
+                :html="rules"
               />
               <p v-else>
                 <translate translate-context="Content/About/Paragraph">
@@ -176,7 +174,7 @@ const headerStyle = computed(() => {
               </h3>
               <sanitized-html
                 v-if="terms"
-                :html="markdown.makeHtml(terms)"
+                :html="terms"
               />
               <p v-else>
                 <translate translate-context="Content/About/Paragraph">

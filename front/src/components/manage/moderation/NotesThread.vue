@@ -2,7 +2,7 @@
 import type { Note } from '~/types'
 
 import axios from 'axios'
-import showdown from 'showdown'
+import { useMarkdownRaw } from '~/composables/useMarkdown'
 import { ref } from 'vue'
 
 interface Props {
@@ -10,8 +10,6 @@ interface Props {
 }
 
 defineProps<Props>()
-
-const markdown = new showdown.Converter()
 
 const emit = defineEmits(['deleted'])
 const isLoading = ref(false)
@@ -51,7 +49,7 @@ const remove = async (note: Note) => {
         </div>
         <div class="extra text">
           <expandable-div :content="note.summary">
-            <sanitized-html :html="markdown.makeHtml(note.summary)" />
+            <sanitized-html :html="useMarkdownRaw(note.summary ?? '')" />
           </expandable-div>
         </div>
         <div class="meta">

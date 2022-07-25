@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import { get } from 'lodash-es'
-import showdown from 'showdown'
 import AlbumWidget from '~/components/audio/album/Widget.vue'
 import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
 import LoginForm from '~/components/auth/LoginForm.vue'
 import SignupForm from '~/components/auth/SignupForm.vue'
+import useMarkdown from '~/composables/useMarkdown'
 import { humanSize } from '~/utils/filters'
 import { useStore } from '~/store'
 import { computed } from 'vue'
 import { whenever } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import { useRouter } from 'vue-router'
-
-const markdown = new showdown.Converter()
 
 const { $pgettext } = useGettext()
 const labels = computed(() => ({
@@ -25,7 +23,7 @@ const nodeinfo = computed(() => store.state.instance.nodeinfo)
 const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') || 'Funkwhale')
 const banner = computed(() => get(nodeinfo.value, 'metadata.banner'))
 const shortDescription = computed(() => get(nodeinfo.value, 'metadata.shortDescription'))
-const longDescription = computed(() => get(nodeinfo.value, 'metadata.longDescription'))
+const longDescription = useMarkdown(() => get(nodeinfo.value, 'metadata.longDescription'))
 const rules = computed(() => get(nodeinfo.value, 'metadata.rules'))
 const contactEmail = computed(() => get(nodeinfo.value, 'metadata.contactEmail'))
 const anonymousCanListen = computed(() => get(nodeinfo.value, 'metadata.library.anonymousCanListen'))
@@ -111,7 +109,7 @@ whenever(() => store.state.auth.authenticated, () => {
                   <sanitized-html
                     v-if="longDescription"
                     id="renderedDescription"
-                    :html="markdown.makeHtml(longDescription)"
+                    :html="longDescription"
                   />
                   <div
                     v-if="longDescription"

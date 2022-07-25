@@ -46,7 +46,7 @@ const fetchData = async (url = props.url) => {
     count.value = response.data.count
 
     const newObjects = !props.isActivity
-      ? response.data.results.map((track: Track) => { track })
+      ? response.data.results.map((track: Track) => ({ track }))
       : response.data.results
 
     objects.push(...newObjects)
@@ -62,7 +62,7 @@ fetchData()
 const emit = defineEmits(['count'])
 watch(count, (to) => emit('count', to))
 
-if (props.websocketHandlers.includes('Listen')) {
+watch(() => props.websocketHandlers.includes('Listen'), (to) => {
   useWebSocketHandler('Listen', (event) => {
     // TODO (wvffle): Add reactivity to recently listened / favorited / added (#1316, #1534)
     // count.value += 1
@@ -70,7 +70,7 @@ if (props.websocketHandlers.includes('Listen')) {
     // objects.unshift(event as Listening)
     // objects.pop()
   })
-}
+})
 </script>
 
 <template>

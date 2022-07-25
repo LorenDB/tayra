@@ -11,6 +11,13 @@ const props = withDefaults(defineProps<Props>(), {
   tag: 'div'
 })
 
+DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+  // set all elements owning target to target=_blank
+  if ('target' in node) {
+    node.setAttribute('target', '_blank')
+  }
+})
+
 const html = computed(() => DOMPurify.sanitize(props.html))
 const root = () => h(props.tag, { innerHTML: html.value })
 </script>

@@ -4,12 +4,6 @@ import type { Router } from 'vue-router'
 import type { APIErrorResponse } from '~/types'
 import type { RootState } from '~/store'
 
-export function setUpdate (obj: object, statuses: Record<string, unknown>, value: unknown) {
-  for (const key of Object.keys(obj)) {
-    statuses[key] = value
-  }
-}
-
 export function parseAPIErrors (responseData: APIErrorResponse, parentField?: string): string[] {
   const errors = []
   for (const [field, value] of Object.entries(responseData)) {

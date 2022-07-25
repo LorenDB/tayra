@@ -1,3 +1,92 @@
+<script setup lang="ts">
+import type { Notification, InboxItemAddedWSEvent } from '~/types'
+
+import axios from 'axios'
+import moment from 'moment'
+
+import { ref, reactive, computed, watch, markRaw } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+import useMarkdown from '~/composables/useMarkdown'
+import useWebSocketHandler from '~/composables/useWebSocketHandler'
+
+import NotificationRow from '~/components/notifications/NotificationRow.vue'
+
+const store = useStore()
+const supportMessage = useMarkdown(() => store.state.instance.settings.instance.support_message.value)
+const { $pgettext } = useGettext()
+
+const additionalNotifications = computed(() => store.getters['ui/additionalNotifications'])
+const showInstanceSupportMessage = computed(() => store.getters['ui/showInstanceSupportMessage'])
+const showFunkwhaleSupportMessage = computed(() => store.getters['ui/showFunkwhaleSupportMessage'])
+
+const labels = computed(() => ({
+  title: $pgettext('*/Notifications/*', 'Notifications')
+}))
+
+const filters = reactive({
+  is_read: false
+})
+
+const isLoading = ref(false)
+const notifications = reactive({ count: 0, results: [] as Notification[] })
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get('federation/inbox/', { params: filters })
+    notifications.count = response.data.count
+    notifications.results = response.data.results.map(markRaw)
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+watch(filters, fetchData, { immediate: true })
+
+useWebSocketHandler('inbox.item_added', (event) => {
+  notifications.count += 1
+  notifications.results.unshift(markRaw((event as InboxItemAddedWSEvent).item))
+})
+
+const instanceSupportMessageDelay = ref(60)
+const funkwhaleSupportMessageDelay = ref(60)
+
+const setDisplayDate = async (field: string, days: number) => {
+  try {
+    const response = await axios.patch(`users/${store.state.auth.username}/`, {
+      [field]: days
+        ? moment().add({ days })
+        : undefined
+    })
+
+    store.commit('auth/profilePartialUpdate', response.data)
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+}
+
+const markAllAsRead = async () => {
+  try {
+    await axios.post('federation/inbox/action/', {
+      action: 'read',
+      objects: 'all',
+      filters: {
+        is_read: false,
+        before: notifications.results[0]?.id
+      }
+    })
+
+    store.commit('ui/notifications', { type: 'inbox', count: 0 })
+    notifications.results = notifications.results.map(notification => ({ ...notification, is_read: true }))
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+}
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -25,7 +114,7 @@
                     Support this Funkwhale pod
                   </translate>
                 </h4>
-                <sanitized-html :html="markdown.makeHtml($store.state.instance.settings.instance.support_message.value)" />
+                <sanitized-html :html="supportMessage" />
               </div>
               <div class="ui bottom attached segment">
                 <form
@@ -210,104 +299,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import { mapState, mapGetters } from 'vuex'
-import axios from 'axios'
-import showdown from 'showdown'
-import moment from 'moment'
-
-import NotificationRow from '~/components/notifications/NotificationRow.vue'
-
-export default {
-  components: {
-    NotificationRow
-  },
-  data () {
-    return {
-      isLoading: false,
-      markdown: new showdown.Converter(),
-      notifications: { count: 0, results: [] },
-      instanceSupportMessageDelay: 60,
-      funkwhaleSupportMessageDelay: 60,
-      filters: {
-        is_read: false
-      }
-    }
-  },
-  computed: {
-    ...mapGetters({
-      additionalNotifications: 'ui/additionalNotifications',
-      showInstanceSupportMessage: 'ui/showInstanceSupportMessage',
-      showFunkwhaleSupportMessage: 'ui/showFunkwhaleSupportMessage'
-    }),
-    labels () {
-      return {
-        title: this.$pgettext('*/Notifications/*', 'Notifications')
-      }
-    }
-  },
-  watch: {
-    'filters.is_read' () {
-      this.fetch(this.filters)
-    }
-  },
-  created () {
-    this.fetch(this.filters)
-    this.$store.commit('ui/addWebsocketEventHandler', {
-      eventName: 'inbox.item_added',
-      id: 'notificationPage',
-      handler: this.handleNewNotification
-    })
-  },
-  unmounted () {
-    this.$store.commit('ui/removeWebsocketEventHandler', {
-      eventName: 'inbox.item_added',
-      id: 'notificationPage'
-    })
-  },
-  methods: {
-    handleNewNotification (event) {
-      this.notifications.count += 1
-      this.notifications.results.unshift(event.item)
-    },
-    setDisplayDate (field, days) {
-      const payload = {}
-      let newDisplayDate
-      if (days) {
-        newDisplayDate = moment().add({ days })
-      } else {
-        newDisplayDate = null
-      }
-      payload[field] = newDisplayDate
-      axios.patch(`users/${this.$store.state.auth.username}/`, payload).then((response) => {
-        this.$store.commit('auth/profilePartialUpdate', response.data)
-      })
-    },
-    fetch (params) {
-      this.isLoading = true
-      axios.get('federation/inbox/', { params }).then(response => {
-        this.isLoading = false
-        this.notifications = response.data
-      })
-    },
-    markAllAsRead () {
-      const before = this.notifications.results[0].id
-      const payload = {
-        action: 'read',
-        objects: 'all',
-        filters: {
-          is_read: false,
-          before
-        }
-      }
-      axios.post('federation/inbox/action/', payload).then(response => {
-        this.$store.commit('ui/notifications', { type: 'inbox', count: 0 })
-        this.notifications.results.forEach(n => {
-          n.is_read = true
-        })
-      })
-    }
-  }
-}
-</script>

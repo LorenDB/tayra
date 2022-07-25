@@ -1,3 +1,66 @@
+<script setup lang="ts">
+import type { UserRequest, UserRequestStatus } from '~/types'
+
+import axios from 'axios'
+import { ref } from 'vue'
+import { useStore } from '~/store'
+
+import NoteForm from '~/components/manage/moderation/NoteForm.vue'
+import NotesThread from '~/components/manage/moderation/NotesThread.vue'
+
+interface Emits {
+  (e: 'handled', status: UserRequestStatus): void
+}
+
+interface Props {
+  initObj: UserRequest
+}
+
+const emit = defineEmits<Emits>()
+const props = defineProps<Props>()
+
+const store = useStore()
+
+const obj = ref(props.initObj)
+
+const isCollapsed = ref(false)
+const isLoading = ref(false)
+const approve = async (isApproved: boolean) => {
+  isLoading.value = true
+
+  try {
+    const status = isApproved
+      ? 'approved'
+      : 'refused'
+
+    await axios.patch(`manage/moderation/requests/${obj.value.uuid}/`, {
+      status
+    })
+
+    emit('handled', status)
+
+    if (isApproved) {
+      isCollapsed.value = true
+    }
+
+    store.commit('ui/incrementNotifications', {
+      type: 'pendingReviewRequests',
+      count: -1
+    })
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+const handleRemovedNote = (uuid: string) => {
+  obj.value.notes = obj.value.notes.filter((note) => note.uuid !== uuid)
+}
+
+const isArray = Array.isArray
+</script>
+
 <template>
   <div class="ui fluid user-request card">
     <div class="content">
@@ -157,12 +220,12 @@
           <template v-if="obj.metadata">
             <div class="ui hidden divider" />
             <div
-              v-for="k in Object.keys(obj.metadata)"
-              :key="k"
+              v-for="(value, key) in obj.metadata"
+              :key="key"
             >
-              <h4>{{ k }}</h4>
-              <p v-if="obj.metadata[k] && obj.metadata[k].length">
-                {{ obj.metadata[k] }}
+              <h4>{{ key }}</h4>
+              <p v-if="isArray(value)">
+                {{ value }}
               </p>
               <translate
                 v-else
@@ -222,52 +285,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import NoteForm from '~/components/manage/moderation/NoteForm.vue'
-import NotesThread from '~/components/manage/moderation/NotesThread.vue'
-import showdown from 'showdown'
-
-export default {
-  components: {
-    NoteForm,
-    NotesThread
-  },
-  props: {
-    initObj: { type: Object, required: true }
-  },
-  data () {
-    return {
-      markdown: new showdown.Converter(),
-      isLoading: false,
-      isCollapsed: false,
-      obj: this.initObj
-    }
-  },
-  methods: {
-    approve (v) {
-      const url = `manage/moderation/requests/${this.obj.uuid}/`
-      const self = this
-      const newStatus = v ? 'approved' : 'refused'
-      this.isLoading = true
-      axios.patch(url, { status: newStatus }).then((response) => {
-        self.$emit('handled', newStatus)
-        self.isLoading = false
-        self.obj.status = newStatus
-        if (v) {
-          self.isCollapsed = true
-        }
-        self.$store.commit('ui/incrementNotifications', { count: -1, type: 'pendingReviewRequests' })
-      }, () => {
-        self.isLoading = false
-      })
-    },
-    handleRemovedNote (uuid) {
-      this.obj.notes = this.obj.notes.filter((note) => {
-        return note.uuid !== uuid
-      })
-    }
-  }
-}
-</script>

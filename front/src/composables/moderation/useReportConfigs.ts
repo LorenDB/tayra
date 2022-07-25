@@ -1,3 +1,4 @@
+import type { EntityObjectType } from '~/types'
 import type { RouteLocationRaw } from 'vue-router'
 
 import { gettext } from '~/init/locale'
@@ -19,7 +20,6 @@ export interface Entity {
   moderatedFields: ModeratedField[]
 }
 
-export type EntityObjectType = 'artist' | 'album' | 'track' | 'library' | 'playlist' | 'account' | 'channel'
 type Configs = Record<EntityObjectType, Entity>
 
 const { $pgettext } = gettext

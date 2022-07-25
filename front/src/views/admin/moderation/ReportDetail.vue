@@ -8,7 +8,7 @@
     </div>
     <template v-if="object">
       <div class="ui vertical stripe segment">
-        <report-card :obj="object" />
+        <report-card :init-obj="object" />
       </div>
     </template>
   </main>
