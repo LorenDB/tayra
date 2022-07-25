@@ -463,7 +463,7 @@ export interface UserRequest {
   creation_date: string
   handled_date: string
 
-  metadata: object
+  metadata: Record<string, string>
 }
 
 // Notification stuff
