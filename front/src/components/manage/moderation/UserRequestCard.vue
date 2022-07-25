@@ -57,8 +57,6 @@ const approve = async (isApproved: boolean) => {
 const handleRemovedNote = (uuid: string) => {
   obj.value.notes = obj.value.notes.filter((note) => note.uuid !== uuid)
 }
-
-const isArray = Array.isArray
 </script>
 
 <template>
@@ -224,7 +222,7 @@ const isArray = Array.isArray
               :key="key"
             >
               <h4>{{ key }}</h4>
-              <p v-if="isArray(value)">
+              <p v-if="value">
                 {{ value }}
               </p>
               <translate
