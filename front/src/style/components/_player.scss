@@ -49,13 +49,20 @@
   .ui.progress .bar {
     transition: none;
     width: 100%;
-    transform: scaleX(0);
+    transform: translateX(-100%);
     transform-origin: top left;
     will-change: transform;
-  }
-
-  .ui.progress .buffer.bar {
     position: absolute;
+
+    &.seek {
+      background: var(--player-color);
+      opacity: 0;
+      transition: opacity .2s ease;
+      mix-blend-mode: overlay;
+    }
+  }
+  .ui.progress:hover .bar.seek {
+    opacity: 0.4;
   }
 
   @keyframes MOVE-BG {

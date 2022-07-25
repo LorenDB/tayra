@@ -7,6 +7,7 @@ import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
 import { computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { useMouse, useWindowSize } from '@vueuse/core'
 import useQueue from '~/composables/audio/useQueue'
 import usePlayer from '~/composables/audio/usePlayer'
 
@@ -95,9 +96,12 @@ const switchTab = () => {
 
 const progressBar = ref()
 const touchProgress = (event: MouseEvent) => {
-  const time = ((event.clientX - (event.target as Element).getBoundingClientRect().left) / progressBar.value.offsetWidth) * duration.value
+  const time = ((event.clientX - ((event.target as Element).closest('.progress')?.getBoundingClientRect().left ?? 0)) / progressBar.value.offsetWidth) * duration.value
   currentTime.value = time
 }
+
+const { x } = useMouse()
+const { width: screenWidth } = useWindowSize()
 </script>
 
 <template>
@@ -131,6 +135,10 @@ const touchProgress = (event: MouseEvent) => {
         <div
           class="position bar"
           :style="{ 'transform': `translateX(${progress - 100}%)` }"
+        />
+        <div
+          class="seek bar"
+          :style="{ 'transform': `translateX(${x / screenWidth * 100 - 100}%)` }"
         />
       </div>
       <div class="controls-row">

@@ -189,7 +189,7 @@ defineExpose({
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .drag-container {
   position: relative;
 }
@@ -202,11 +202,19 @@ defineExpose({
 .drop-before {
   box-shadow: 0 -1px 0 var(--vibrant-color),
         inset 0  1px 0 var(--vibrant-color);
+
+  &:last-child {
+    box-shadow: inset 0 2px 0 var(--vibrant-color);
+  }
 }
 
 .drop-after {
   box-shadow: 0  1px 0 var(--vibrant-color),
         inset 0 -1px 0 var(--vibrant-color);
+
+  &:last-child {
+    box-shadow: inset 0 -2px 0 var(--vibrant-color);
+  }
 }
 
 .drag-ghost {
