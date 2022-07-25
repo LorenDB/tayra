@@ -8,7 +8,7 @@
     </div>
     <template v-if="object">
       <div class="ui vertical stripe segment">
-        <user-request-card :obj="object" />
+        <user-request-card :init-obj="object" />
       </div>
     </template>
   </main>
