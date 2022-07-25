@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { MaybeElementRef, MaybeElement } from '@vueuse/core'
-
-import { useMouse, useCurrentElement, useResizeObserver, useRafFn, useElementByPoint } from '@vueuse/core'
+import { useMouse, useCurrentElement, useRafFn, useElementByPoint } from '@vueuse/core'
 import { ref, watchEffect, reactive } from 'vue'
 
 // @ts-expect-error no typings
@@ -11,6 +9,8 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 interface Emits {
   (e: 'reorder', from: number, to: number): void
+  (e: 'visible'): void
+  (e: 'hidden'): void
 }
 
 interface Props {
@@ -133,14 +133,11 @@ watchEffect(() => {
 })
 
 const el = useCurrentElement()
-useResizeObserver(el as unknown as MaybeElementRef<MaybeElement>, ([entry]) => {
-  const height = entry.borderBoxSize?.[0]?.blockSize ?? 0
-
-  if (height !== 0) {
-    containerSize.top = (entry.target as HTMLElement).offsetTop
-    containerSize.bottom = height + containerSize.top
-  }
-})
+const resize = () => {
+  const element = el.value as HTMLElement
+  containerSize.top = element.offsetTop
+  containerSize.bottom = element.offsetHeight + containerSize.top
+}
 
 let lastDate = +new Date()
 const { resume, pause } = useRafFn(() => {
@@ -156,9 +153,9 @@ const { resume, pause } = useRafFn(() => {
 }, { immediate: false })
 
 const virtualList = ref()
-window.vl = virtualList
 defineExpose({
   scrollToIndex: (index: number) => virtualList.value?.scrollToItem(index),
+  scroller: virtualList,
   cleanup
 })
 </script>
@@ -174,6 +171,9 @@ defineExpose({
       @mousedown="onMousedown"
       @touchstart="onMousedown"
       @touchmove="onTouchmove"
+      @resize="resize"
+      @visible="emit('visible')"
+      @hidden="emit('hidden')"
     >
       <slot
         :class-list="[draggedItem && hoveredIndex === index && `drop-${position}`, 'drag-item']"

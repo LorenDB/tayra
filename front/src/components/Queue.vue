@@ -83,19 +83,16 @@ const scrollToCurrent = (behavior: ScrollBehavior = 'smooth') => {
 }
 
 watchDebounced(currentTrack, () => scrollToCurrent(), { debounce: 100 })
-whenever(
-  () => store.state.ui.queueFocused,
-  async () => {
-    list.value?.scrollToIndex(currentIndex.value)
-    await nextTick()
-    requestAnimationFrame(() => scrollToCurrent('auto'))
-  }
-)
 
-onMounted(async () => {
-  await nextTick()
-  list.value?.scrollToIndex(currentIndex.value)
-})
+const scrollLoop = () => {
+  const visible = [...(list.value?.scroller.$_views.values() ?? [])].map(item => item.nr.index)
+  if (!visible.includes(currentIndex.value)) {
+    list.value?.scrollToIndex(currentIndex.value)
+    requestAnimationFrame(scrollLoop)
+  }
+}
+
+onMounted(scrollLoop)
 
 whenever(
   () => tracks.value.length === 0,
@@ -389,6 +386,8 @@ const reorderTracks = async (from: number, to: number) => {
           :component="QueueItem"
           :size="50"
           @reorder="reorderTracks"
+          @visible="scrollToCurrent('auto')"
+          @hidden="scrollLoop"
         >
           <template #default="{ index, item, classList }">
             <queue-item

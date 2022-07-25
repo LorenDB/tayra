@@ -307,7 +307,7 @@
 
         .virtual-list {
           height: 100%;
-          overflow-y: auto;
+          overflow-y: scroll;
           padding-bottom: 2rem;
         }
       }
