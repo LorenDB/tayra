@@ -87,6 +87,7 @@ const store: Module<State, RootState> = {
       const shouldPlay = state.tracks.length === 0
       if (shouldPlay) {
         index = 0
+        state.currentIndex = 0
       }
 
       if (index >= state.tracks.length) {

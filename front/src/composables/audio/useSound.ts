@@ -46,7 +46,12 @@ const createSound = (howl: Howl): Sound => ({
   seek: (time?: number) => howl.seek(time),
   duration: () => howl.duration(),
   getSource: () => (howl as any)._sounds[0],
-  triggerSoundProgress: useThrottleFn((time: number, duration: number) => soundProgress.trigger({ node: (howl as any)._sounds[0]._node, time, duration }), 1000)
+  triggerSoundProgress: useThrottleFn((time: number, duration: number) => {
+    const node = (howl as any)._sounds[0]?._node
+    if (node) {
+      soundProgress.trigger({ node, time, duration })
+    }
+  }, 1000)
 })
 
 const loadSound = (track: Track): Sound => {
