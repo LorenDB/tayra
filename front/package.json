@@ -18,11 +18,14 @@
     "postinstall": "yarn run fix-fomantic-css"
   },
   "dependencies": {
+    "@sentry/tracing": "^7.7.0",
+    "@sentry/vue": "^7.7.0",
     "@tiptap/starter-kit": "^2.0.0-beta.191",
     "@tiptap/vue-3": "^2.0.0-beta.96",
     "@vue/runtime-core": "3.2.37",
     "@vueuse/core": "8.9.4",
     "@vueuse/integrations": "8.9.4",
+    "add": "^2.0.6",
     "axios": "0.27.2",
     "axios-auth-refresh": "3.3.3",
     "diff": "5.1.0",
@@ -55,7 +58,8 @@
     "vuedraggable": "4.1.0",
     "vuex": "4.0.2",
     "vuex-persistedstate": "4.1.0",
-    "vuex-router-sync": "5.0.0"
+    "vuex-router-sync": "5.0.0",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@types/dompurify": "2.3.3",
