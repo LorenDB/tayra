@@ -75,9 +75,9 @@ server {
     # has been checked on API side.
     # Comment the "NON-S3" commented lines and uncomment "S3" commented lines
     # if you're storing media files in a S3 bucket.
-    location /_protected/media/(.+) {
+    location ~ /_protected/media/(.+) {
         internal;
-        alias   ${MEDIA_ROOT}/;                                             # NON-S3
+        alias   ${MEDIA_ROOT}/$1;                                           # NON-S3
         # Needed to ensure DSub auth isn't forwarded to S3/Minio, see #932.
 #       proxy_set_header Authorization "";                                  # S3
 #       proxy_pass $1;                                                      # S3
