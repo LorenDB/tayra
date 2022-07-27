@@ -18,7 +18,17 @@ env = environ.Env()
 ENV = env
 LOGLEVEL = env("LOGLEVEL", default="info").upper()
 """
-Default logging level for the Funkwhale processes"""  # pylint: disable=W0105
+Default logging level for the Funkwhale processes
+
+Available levels: 
+
+- ``debug``
+- ``info``
+- ``warning``
+- ``error``
+- ``critical``
+
+"""  # pylint: disable=W0105
 
 LOGGING_CONFIG = None
 logging.config.dictConfig(

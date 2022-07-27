@@ -232,5 +232,7 @@ List of Funkwhale plugins to load.
 .. autodata:: config.settings.common.MIN_DELAY_BETWEEN_DOWNLOADS_COUNT
 .. autodata:: config.settings.common.MARKDOWN_EXTENSIONS
 .. autodata:: config.settings.common.LINKIFIER_SUPPORTED_TLDS
+.. autodata:: config.settings.common.LOGLEVEL
+   :annotation: = info
 
 ```
