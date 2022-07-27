@@ -15,11 +15,11 @@ We support [Debian](https://debian.org) and Debian-based Linux distributions. Fo
    export FUNKWHALE_VERSION={sub-ref}`version`
    ```
 
-- Install `curl`.
+- Install `curl` and `unzip` - utilities used later.
 
    ```{code} bash
    sudo apt update # update apt cache
-   sudo apt install curl
+   sudo apt install curl unzip
    ```
 
 ## 1. Install Funkwhale dependencies
@@ -27,7 +27,7 @@ We support [Debian](https://debian.org) and Debian-based Linux distributions. Fo
 To install Funkwhale on your server, you first need to install its dependencies. We provide all dependencies in a single file to enable you to install everything at once. You can pass the information from this file to `apt` using the following command:
 
 ```{code} bash
-sudo apt install $(curl https://dev.funkwhale.audio/funkwhale/funkwhale/-/raw/$FUNKWHALE_VERSION/api/requirements.apt)
+sudo apt install $(curl https://dev.funkwhale.audio/funkwhale/funkwhale/-/raw/$FUNKWHALE_VERSION/deploy/requirements.apt)
 ```
 
 When prompted, hit {kbd}`y` to confirm the install.
@@ -100,7 +100,7 @@ Once you've created the directory structure you can download Funkwhale. Funkwhal
    curl -L -o "api-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_api"
    unzip "api-$FUNKWHALE_VERSION.zip" -d extracted 
    mv extracted/api/* api/ 
-   rm -rf extracted rm api-$FUNKWHALE_VERSION.zip
+   rm -rf extracted api-$FUNKWHALE_VERSION.zip
    ```
 
 2. Download the frontend
@@ -109,8 +109,7 @@ Once you've created the directory structure you can download Funkwhale. Funkwhal
    curl -L -o "front-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_front" 
    unzip "front-$FUNKWHALE_VERSION.zip" -d extracted 
    mv extracted/front . 
-   rm -rf extracted
-   rm front-$FUNKWHALE_VERSION.zip
+   rm -rf extracted front-$FUNKWHALE_VERSION.zip
    ```
 
 You're done! These commands put the software in the correct location for Funkwhale to serve them.
@@ -128,7 +127,8 @@ The Funkwhale API is written in Python. You need to install the API's dependenci
 2. Add Poetry to your `$PATH`. This allows you to use `poetry` commands.
 
    ```{code} bash
-   export "$PATH=$HOME/.local/bin:$PATH" >> ~/.bashrc
+   export "PATH=$HOME/.local/bin:$PATH" >> ~/.bashrc
+   echo 'export "PATH=$HOME/.local/bin:$PATH"' >> ~/.bashrc
    ```
 
 3. Set up poetry in your `/srv/funkwhale/api` directory.
@@ -182,7 +182,7 @@ The environment file contains options you can use to control your Funkwhale pod.
       CACHE_URL=redis://127.0.0.1:6379/0
       ```
 
-   - Populate the `FUNKWHALE_HOSTNAME` field with the URL of your server.
+   - Populate the `FUNKWHALE_HOSTNAME` field with the domain name of your server.
 
 6. Hit {kbd}`ctrl + x` then {kbd}`y` to save the file and close `nano`.
 
@@ -303,9 +303,7 @@ Funkwhale uses [systemd](https://www.freedesktop.org/wiki/Software/systemd/) to 
 4. Enable the services. Systemd can then start the services after a reboot.
 
    ```{code} bash
-   sudo systemctl enable funkwhale-server
-   sudo systemctl enable funkwhale-worker
-   sudo systemctl enable funkwhale-beat
+   sudo systemctl enable --now funkwhale.target
    ```
 
 That's it! systemd keeps these services running and starts them up in the correct order after a reboot.
@@ -324,7 +322,6 @@ Funkwhale uses a reverse proxy to serve content to users. We use [Nginx](https:/
 2. Download the Nginx templates from Funkwhale.
 
    ```{code} bash
-   export FUNKWHALE_VERSION="1.2.1"
    sudo curl -L -o /etc/nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/funkwhale_proxy.conf"
    sudo curl -L -o /etc/nginx/sites-available/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/nginx.template"
    ```
