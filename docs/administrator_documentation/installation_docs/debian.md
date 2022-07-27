@@ -15,11 +15,11 @@ We support [Debian](https://debian.org) and Debian-based Linux distributions. Fo
    export FUNKWHALE_VERSION={sub-ref}`version`
    ```
 
-- Install `curl` and `unzip` - utilities used later.
+- Install `curl`
 
    ```{code} bash
    sudo apt update # update apt cache
-   sudo apt install curl unzip
+   sudo apt install curl
    ```
 
 ## 1. Install Funkwhale dependencies

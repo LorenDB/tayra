@@ -20,7 +20,7 @@ LOGLEVEL = env("LOGLEVEL", default="info").upper()
 """
 Default logging level for the Funkwhale processes
 
-Available levels: 
+Available levels:
 
 - ``debug``
 - ``info``

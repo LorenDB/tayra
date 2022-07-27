@@ -2,6 +2,28 @@
 
 If you installed Funkwhale following the [Debian guide](../installation_docs/debian), follow these steps to upgrade.
 
+:::{dropdown} Upgrading to a new version of Python
+:icon: alert
+:color: warning
+
+If you upgrade your Python version, you need to update your virtualenv. Python is updated with each new version of Debian.
+
+To upgrade your virtualenv:
+
+1. Change to your api directory.
+
+   ```{code-block} bash
+   cd /srv/funkwhale/api
+   ```
+
+2. Rerun `poetry install` to reinstall your dependencies in a new virtualenv.
+
+   ```{code-block} bash
+   poetry install
+   ```
+
+:::
+
 ## Download the updated files
 
 1. SSH into your server.
