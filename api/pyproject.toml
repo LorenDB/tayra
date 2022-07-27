@@ -57,7 +57,7 @@ django-auth-ldap = "==4.1.0"
 uvicorn = {version = "==0.18.2", extras = ["standard"]}
 django-cache-memoize = "0.1.10"
 requests-http-message-signatures = "==0.3.1"
-drf-spectacular = "==0.22.1"
+drf-spectacular = "==0.23.1"
 
 [tool.poetry.dev-dependencies]
 flake8 = "==3.9.2"
