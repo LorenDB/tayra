@@ -10,7 +10,7 @@ Before performing big changes, we recommend you back up your database and media 
    :sync: debian
 
    ```{code} bash
-   sudo -u postgres -H pg_dump funkwhale > /path/to/your/backup/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+   sudo -u postgres -H pg_dumpall -c funkwhale > /path/to/your/backup/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
    ```
 
    :::
@@ -75,3 +75,65 @@ Before performing big changes, we recommend you back up your database and media 
    ::::
 
 If you are performing regular backups, you may need deduplication and compression to keep the size down. In this case, a tool like [`borg`](https://www.borgbackup.org/) is more appropriate.
+
+## Restore a backup
+
+### Restore your files
+
+To restart your files, do the following:
+
+1. Rename your current file directories.
+
+   ```{code} bash
+   mv /srv/funkwhale/data/media /srv/funkwhale/data/media.bak
+   mv /srv/funkwhale/data/music /srv/funkwhale/data/music.bak
+   ```
+
+2. Restore your backed-up files to the original directories.
+
+   ```{code} bash
+   mv /patht/to/your/backup/media /srv/funkwhale/data/media
+   mv /path/to/your/backup/music /srv/funkwhale/data/music
+   ```
+
+### Restore the database
+
+To restore your database, do the following:
+
+::::{tab-set}
+
+:::{tab-item} Debian
+:sync: debian
+
+1. Restore your database backup:
+
+   ```{code} bash
+   sudo -u postgres psql -f /path/to/your/backup/dump.sql funkwhale
+   ```
+
+2. Run the `manage.py migrate` command to set up the database.
+
+   ```{code} bash
+   cd /srv/funkwhale/api
+   poetry run python manage.py migrate
+   ```
+
+:::
+
+:::{tab-item} Docker
+:sync: docker
+
+1. Restore your database backup.
+
+   ```{code} bash
+    docker-compose run --rm -T postgres psql -U postgres postgres < "/path/to/your/backup/dump.sql"
+   ```
+
+2. Run the `manage.py migrate` command to set up the database.
+
+   ```{code} bash
+   docker-compose run --rm api python manage.py migrate
+   ```
+
+:::
+::::
