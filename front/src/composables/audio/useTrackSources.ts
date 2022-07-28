@@ -2,16 +2,26 @@ import type { Track } from '~/types'
 
 import store from '~/store'
 import updateQueryString from '~/composables/updateQueryString'
+import axios from 'axios'
 
 export interface TrackSource {
   url: string
   type: string
 }
 
-export default (trackData: Track): TrackSource[] => {
-  const audio = document.createElement('audio')
+const audio = document.createElement('audio')
+const allowed = ['probably', 'maybe']
 
-  const allowed = ['probably', 'maybe']
+export default async (trackData: Track, abortSignal?: AbortSignal): Promise<TrackSource[]> => {
+  if (trackData.uploads.length === 0) {
+    trackData = await axios.get(`tracks/${trackData.id}/`, { signal: abortSignal })
+      .then(response => response.data)
+      .catch(() => null)
+  }
+
+  if (!trackData) {
+    return []
+  }
 
   const sources = trackData.uploads
     .filter(upload => {
@@ -34,6 +44,8 @@ export default (trackData: Track): TrackSource[] => {
       'mp3'
     )
   })
+
+  // TODO: Quality picker - sort sources by quality
 
   const token = store.state.auth.scopedTokens.listen
   if (store.state.auth.authenticated && token !== null) {

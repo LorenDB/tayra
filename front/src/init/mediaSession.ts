@@ -2,15 +2,15 @@ import type { InitModule } from '~/types'
 
 import { whenever } from '@vueuse/core'
 import useQueue from '~/composables/audio/useQueue'
-import usePlayer from '~/composables/audio/usePlayer'
+import useWebAudioPlayer from '~/composables/audio/useWebAudioPlayer'
 
 export const install: InitModule = ({ app }) => {
-  const { currentTrack, next, previous } = useQueue()
-  const { resume, pause, seek } = usePlayer()
+  const { currentTrack } = useQueue()
+  const { play, pause, seek, next, previous } = useWebAudioPlayer()
 
   // Add controls for notification drawer
   if ('mediaSession' in navigator) {
-    navigator.mediaSession.setActionHandler('play', resume)
+    navigator.mediaSession.setActionHandler('play', play)
     navigator.mediaSession.setActionHandler('pause', pause)
     navigator.mediaSession.setActionHandler('seekforward', () => seek(5))
     navigator.mediaSession.setActionHandler('seekbackward', () => seek(-5))
@@ -25,7 +25,8 @@ export const install: InitModule = ({ app }) => {
 
       const metadata: MediaMetadataInit = {
         title,
-        artist: artist.name
+        // TODO (wvffle): translate
+        artist: artist?.name ?? 'Unknown artist'
       }
 
       if (album?.cover) {

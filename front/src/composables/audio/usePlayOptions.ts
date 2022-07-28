@@ -5,7 +5,7 @@ import { useStore } from '~/store'
 import { useGettext } from 'vue3-gettext'
 import { computed, markRaw, ref } from 'vue'
 import axios from 'axios'
-import usePlayer from '~/composables/audio/usePlayer'
+import useWebAudioPlayer from '~/composables/audio/useWebAudioPlayer'
 import useQueue from '~/composables/audio/useQueue'
 import { useCurrentElement } from '@vueuse/core'
 import jQuery from 'jquery'
@@ -26,8 +26,8 @@ export default (props: PlayOptionsProps) => {
   // TODO (wvffle): Test if we can defineProps in composable
 
   const store = useStore()
-  const { resume, pause, playing } = usePlayer()
-  const { currentTrack } = useQueue()
+  const { play, pause, next, playing } = useWebAudioPlayer()
+  const { currentTrack, clear } = useQueue()
 
   const playable = computed(() => {
     if (props.isPlayable) {
@@ -133,32 +133,25 @@ export default (props: PlayOptionsProps) => {
   }
 
   const el = useCurrentElement()
-  const enqueue = async () => {
+  const enqueue = async (skip = false, index?: number) => {
     jQuery(el.value).find('.ui.dropdown').dropdown('hide')
-
-    const tracks = await getPlayableTracks()
-    await store.dispatch('queue/appendMany', { tracks })
-    addMessage(tracks)
-  }
-
-  const enqueueNext = async (next = false) => {
-    jQuery(el.value).find('.ui.dropdown').dropdown('hide')
-
     const tracks = await getPlayableTracks()
 
     const wasEmpty = store.state.queue.tracks.length === 0
-    await store.dispatch('queue/appendMany', { tracks, index: store.state.queue.currentIndex + 1 })
 
-    if (next && !wasEmpty) {
-      await store.dispatch('queue/next')
-      resume()
+    await store.dispatch('queue/appendMany', { tracks, index })
+
+    if (skip && !wasEmpty) {
+      await next()
     }
 
     addMessage(tracks)
   }
 
+  const enqueueNext = async (skip?: boolean) => enqueue(skip, store.state.queue.currentIndex + 1)
+
   const replacePlay = async () => {
-    store.dispatch('queue/clean')
+    await clear()
 
     jQuery(el.value).find('.ui.dropdown').dropdown('hide')
 
@@ -173,7 +166,7 @@ export default (props: PlayOptionsProps) => {
       store.dispatch('queue/currentIndex', 0)
     }
 
-    resume()
+    play()
     addMessage(tracks)
   }
 
@@ -184,7 +177,7 @@ export default (props: PlayOptionsProps) => {
         return pause()
       }
 
-      return resume()
+      return play()
     }
 
     replacePlay()

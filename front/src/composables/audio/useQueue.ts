@@ -1,35 +1,19 @@
-import type { Track } from '~/types'
-
-import { useTimeoutFn, useThrottleFn, useTimeAgo, useNow, whenever } from '@vueuse/core'
-import { Howler } from 'howler'
+import { useTimeAgo, useNow } from '@vueuse/core'
 import { gettext } from '~/init/locale'
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { sum } from 'lodash-es'
 import store from '~/store'
 
-const { $pgettext } = gettext
-
-const currentTrack = computed(() => store.getters['queue/currentTrack'])
 const currentIndex = computed(() => store.state.queue.currentIndex)
+const currentTrack = computed(() => store.state.queue.tracks[currentIndex.value])
 const hasNext = computed(() => store.getters['queue/hasNext'])
 const hasPrevious = computed(() => store.getters['queue/hasPrevious'])
-
-const isEmpty = computed(() => store.getters['queue/isEmpty'])
-whenever(isEmpty, () => Howler.unload())
-
-const removeTrack = (index: number) => store.dispatch('queue/cleanTrack', index)
+const tracks = computed(() => store.state.queue.tracks)
+const isShuffling = computed(() => !!store.state.queue.shuffleAbortController)
+const isShuffled = computed(() => !!store.state.queue.unshuffled.length)
+const isEmpty = computed(() => tracks.value.length === 0)
 const clear = () => store.dispatch('queue/clean')
-
-const next = () => store.dispatch('queue/next')
-const previous = () => store.dispatch('queue/previous')
-
-const focused = computed(() => store.state.ui.queueFocused === 'queue')
-
-//
-// Track list
-//
-const tracks = computed<Track[]>(() => store.state.queue.tracks)
-
+const removeTrack = (index: number) => store.dispatch('queue/cleanTrack', index)
 const reorder = (oldIndex: number, newIndex: number) => {
   store.commit('queue/reorder', {
     oldIndex,
@@ -39,30 +23,22 @@ const reorder = (oldIndex: number, newIndex: number) => {
 
 //
 // Shuffle
-//
-const isShuffling = ref(false)
+const { $pgettext } = gettext
+const shuffle = async () => {
+  await store.dispatch('queue/shuffle')
+  store.commit('ui/addMessage', {
+    content: $pgettext('Content/Queue/Message', 'Queue shuffled!'),
+    date: new Date()
+  })
+}
 
-const forceShuffle = useThrottleFn(() => {
-  isShuffling.value = true
-
-  useTimeoutFn(async () => {
-    await store.dispatch('queue/shuffle')
-    store.commit('ui/addMessage', {
-      content: $pgettext('Content/Queue/Message', 'Queue shuffled!'),
-      date: new Date()
-    })
-
-    isShuffling.value = false
-  }, 100)
-})
-
-const shuffle = useThrottleFn(() => {
-  if (isShuffling.value || isEmpty.value) {
-    return
-  }
-
-  return forceShuffle()
-}, 101, false)
+const unshuffle = async () => {
+  await store.dispatch('queue/unshuffle')
+  store.commit('ui/addMessage', {
+    content: $pgettext('Content/Queue/Message', 'Queue order restored!'),
+    date: new Date()
+  })
+}
 
 //
 // Time left
@@ -80,27 +56,19 @@ const endsIn = useTimeAgo(computed(() => {
   return date
 }))
 
-export default () => {
-  return {
-    currentTrack,
-    currentIndex,
-    hasNext,
-    hasPrevious,
-    isEmpty,
-    isShuffling,
-
-    removeTrack,
-    clear,
-    next,
-    previous,
-
-    tracks,
-    reorder,
-
-    shuffle,
-    forceShuffle,
-
-    endsIn,
-    focused
-  }
-}
+export default () => ({
+  currentIndex,
+  currentTrack,
+  hasNext,
+  hasPrevious,
+  tracks,
+  isEmpty,
+  shuffle,
+  unshuffle,
+  isShuffling,
+  isShuffled,
+  endsIn,
+  clear,
+  removeTrack,
+  reorder
+})

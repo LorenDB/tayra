@@ -21,7 +21,6 @@
   color: var(--player-color);
   background: var(--player-background);
   width: 100%;
-  width: 100vw;
   border-radius: 0;
   padding: 0em;
   position: fixed;
@@ -204,7 +203,7 @@
       }
     }
   }
-  .shuffling.loader.inline {
+  .shuffling .loader.inline {
     margin: 0;
   }
   .control.circular.button {

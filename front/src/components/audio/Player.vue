@@ -1,5 +1,7 @@
 <script setup lang="ts">
-// TODO (wvffle): Move most of this stufff to usePlayer
+import { LoopState } from '~/store/player'
+
+import time from '~/utils/time'
 import { useStore } from '~/store'
 import VolumeControl from './VolumeControl.vue'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
@@ -7,9 +9,9 @@ import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
 import { computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useMouse, useWindowSize } from '@vueuse/core'
+import { useMouse, useElementSize } from '@vueuse/core'
 import useQueue from '~/composables/audio/useQueue'
-import usePlayer from '~/composables/audio/usePlayer'
+import useWebAudioPlayer from '~/composables/audio/useWebAudioPlayer'
 
 const store = useStore()
 const { $pgettext } = useGettext()
@@ -19,40 +21,41 @@ const toggleMobilePlayer = () => {
 }
 
 const {
-  isShuffling,
-  shuffle,
-  previous,
-  isEmpty: queueIsEmpty,
+  currentIndex,
+  currentTrack,
   hasNext,
   hasPrevious,
-  currentTrack,
-  currentIndex,
   tracks,
-  next
+  isEmpty: queueIsEmpty,
+  isShuffling,
+  isShuffled,
+  unshuffle,
+  shuffle,
+  clear
 } = useQueue()
 
 const {
-  playing,
-  loading: isLoadingAudio,
-  looping,
-  currentTime,
-  progress,
-  durationFormatted,
-  currentTimeFormatted,
-  bufferProgress,
-  duration,
   toggleMute,
+  play,
+  pause,
   seek,
-  togglePlayback,
-  resume,
-  pause
-} = usePlayer()
+  next,
+  previous,
+  playing,
+  progress,
+  duration,
+  time: currentTime,
+  loading: isLoadingAudio
+} = useWebAudioPlayer()
+
+const durationFormatted = computed(() => time.parse(Math.floor(duration.value)))
+const currentTimeFormatted = computed(() => time.parse(Math.floor(currentTime.value)))
 
 // Key binds
 onKeyboardShortcut('e', toggleMobilePlayer)
-onKeyboardShortcut('p', togglePlayback)
+onKeyboardShortcut('p', () => playing.value ? pause() : play())
 onKeyboardShortcut('s', shuffle)
-onKeyboardShortcut('q', () => store.dispatch('queue/clean'))
+onKeyboardShortcut('q', () => clear)
 onKeyboardShortcut('m', () => toggleMute)
 onKeyboardShortcut('l', () => store.commit('player/toggleLooping'))
 onKeyboardShortcut('f', () => store.dispatch('favorites/toggle', currentTrack.value?.id))
@@ -86,22 +89,19 @@ const labels = computed(() => ({
   addArtistContentFilter: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…')
 }))
 
-const setCurrentTime = (time: number) => {
-  currentTime.value = time
-}
-
 const switchTab = () => {
   store.commit('ui/queueFocused', store.state.ui.queueFocused === 'player' ? 'queue' : 'player')
 }
 
 const progressBar = ref()
 const touchProgress = (event: MouseEvent) => {
-  const time = ((event.clientX - ((event.target as Element).closest('.progress')?.getBoundingClientRect().left ?? 0)) / progressBar.value.offsetWidth) * duration.value
-  currentTime.value = time
+  const percent = (event.clientX - ((event.target as Element).closest('.progress')?.getBoundingClientRect().left ?? 0)) / progressBar.value.offsetWidth
+  progress.value = percent * 100
 }
 
+// TODO (wvffle): Use createSharedComposable
 const { x } = useMouse()
-const { width: screenWidth } = useWindowSize()
+const { width: progressWidth } = useElementSize(progressBar)
 </script>
 
 <template>
@@ -129,16 +129,12 @@ const { width: screenWidth } = useWindowSize()
         @click.prevent.stop="touchProgress"
       >
         <div
-          class="buffer bar"
-          :style="{ 'transform': `translateX(${bufferProgress - 100}%)` }"
-        />
-        <div
           class="position bar"
           :style="{ 'transform': `translateX(${progress - 100}%)` }"
         />
         <div
           class="seek bar"
-          :style="{ 'transform': `translateX(${x / screenWidth * 100 - 100}%)` }"
+          :style="{ 'transform': `translateX(${x / progressWidth * 100 - 100}%)` }"
         />
       </div>
       <div class="controls-row">
@@ -257,7 +253,7 @@ const { width: screenWidth } = useWindowSize()
             :aria-label="labels.previous"
             :disabled="!hasPrevious"
             class="circular button control tablet-and-up"
-            @click.prevent.stop="$store.dispatch('queue/previous')"
+            @click.prevent.stop="previous"
           >
             <i :class="['ui', 'large', {'disabled': !hasPrevious}, 'backward step', 'icon']" />
           </button>
@@ -266,7 +262,7 @@ const { width: screenWidth } = useWindowSize()
             :title="labels.play"
             :aria-label="labels.play"
             class="circular button control"
-            @click.prevent.stop="resume"
+            @click.prevent.stop="play"
           >
             <i :class="['ui', 'big', 'play', {'disabled': !currentTrack}, 'icon']" />
           </button>
@@ -284,7 +280,7 @@ const { width: screenWidth } = useWindowSize()
             :aria-label="labels.next"
             :disabled="!hasNext"
             class="circular button control"
-            @click.prevent.stop="$store.dispatch('queue/next')"
+            @click.prevent.stop="next"
           >
             <i :class="['ui', 'large', {'disabled': !hasNext}, 'forward step', 'icon']" />
           </button>
@@ -295,7 +291,7 @@ const { width: screenWidth } = useWindowSize()
             <template v-if="!isLoadingAudio">
               <span
                 class="start"
-                @click.stop.prevent="setCurrentTime(0)"
+                @click.stop.prevent="progress = 0"
               >
                 {{ currentTimeFormatted }}
               </span>
@@ -308,57 +304,53 @@ const { width: screenWidth } = useWindowSize()
           <div class="group">
             <volume-control class="expandable" />
             <button
-              v-if="looping === 0"
+              v-if="$store.state.player.looping === LoopState.NO_LOOP"
               class="circular control button"
               :title="labels.loopingDisabled"
               :aria-label="labels.loopingDisabled"
               :disabled="!currentTrack"
-              @click.prevent.stop="$store.commit('player/looping', 1)"
+              @click.prevent.stop="$store.commit('player/toggleLooping')"
             >
               <i :class="['ui', {'disabled': !currentTrack}, 'step', 'repeat', 'icon']" />
             </button>
             <button
-              v-if="looping === 1"
+              v-if="$store.state.player.looping === LoopState.LOOP_CURRENT"
+              class="looping circular control button"
               :title="labels.loopingSingle"
               :aria-label="labels.loopingSingle"
               :disabled="!currentTrack"
-              class="looping circular control button"
-              @click.prevent.stop="$store.commit('player/looping', 2)"
+              @click.prevent.stop="$store.commit('player/toggleLooping')"
             >
-              <i
-                class="repeat icon"
-              >
+              <i class="repeat icon">
                 <span class="ui circular tiny vibrant label">1</span>
               </i>
             </button>
             <button
-              v-if="looping === 2"
+              v-if="$store.state.player.looping === LoopState.LOOP_QUEUE"
               class="looping circular control button"
               :title="labels.loopingWhole"
               :aria-label="labels.loopingWhole"
               :disabled="!currentTrack"
-              @click.prevent.stop="$store.commit('player/looping', 0)"
+              @click.prevent.stop="$store.commit('player/toggleLooping')"
             >
-              <i
-                class="repeat icon"
-              >
+              <i class="repeat icon">
                 <span class="ui circular tiny vibrant label">&infin;</span>
               </i>
             </button>
             <button
-              class="circular control button"
-              :disabled="queueIsEmpty || null"
+              class="circular control button shuffling"
+              :disabled="queueIsEmpty"
               :title="labels.shuffle"
               :aria-label="labels.shuffle"
-              @click.prevent.stop="shuffle()"
+              @click.prevent.stop="() => isShuffled ? unshuffle() : shuffle()"
             >
               <div
                 v-if="isShuffling"
-                class="ui inline shuffling inverted tiny active loader"
+                class="ui inline inverted tiny active loader"
               />
               <i
                 v-else
-                :class="['ui', 'random', {'disabled': queueIsEmpty}, 'icon']"
+                :class="['ui', 'random', {disabled: queueIsEmpty, vibrant: isShuffled}, 'icon']"
               />
             </button>
           </div>

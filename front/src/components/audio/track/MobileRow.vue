@@ -9,7 +9,7 @@ import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackModal from '~/components/audio/track/Modal.vue'
 import usePlayOptions from '~/composables/audio/usePlayOptions'
 import useQueue from '~/composables/audio/useQueue'
-import usePlayer from '~/composables/audio/usePlayer'
+import useWebAudioPlayer from '~/composables/audio/useWebAudioPlayer'
 
 interface Props extends PlayOptionsProps {
   track: Track
@@ -39,7 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
 const showTrackModal = ref(false)
 
 const { currentTrack } = useQueue()
-const { playing } = usePlayer()
+const { playing } = useWebAudioPlayer()
 const { activateTrack } = usePlayOptions(props)
 
 const { $pgettext } = useGettext()

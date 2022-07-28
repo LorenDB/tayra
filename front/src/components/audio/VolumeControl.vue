@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useStore } from '~/store'
 import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
 import { useTimeoutFn } from '@vueuse/core'
-import usePlayer from '~/composables/audio/usePlayer'
+import useWebAudioPlayer from '~/composables/audio/useWebAudioPlayer'
 
+const { mute, unmute } = useWebAudioPlayer()
 const store = useStore()
-const { volume, mute, unmute } = usePlayer()
+
+const sliderVolume = computed({
+  get: () => store.state.player.volume * 100,
+  set: (value) => store.commit('player/volume', value / 100)
+})
 
 const expanded = ref(false)
 const volumeSteps = 100
-
-const sliderVolume = computed({
-  get: () => volume.value * volumeSteps,
-  set: (value) => store.commit('player/volume', value / volumeSteps)
-})
 
 const { $pgettext } = useGettext()
 const labels = computed(() => ({

@@ -169,6 +169,7 @@ export interface Cover {
   urls: {
     original: string
     medium_square_crop: string
+    large_square_crop: string
   }
 }
 

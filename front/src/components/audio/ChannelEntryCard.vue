@@ -4,7 +4,7 @@ import type { Cover, Track } from '~/types'
 import PlayButton from '~/components/audio/PlayButton.vue'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import useQueue from '~/composables/audio/useQueue'
-import usePlayer from '~/composables/audio/usePlayer'
+import useWebAudioPlayer from '~/composables/audio/useWebAudioPlayer'
 import { computed } from 'vue'
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const { currentTrack } = useQueue()
-const { playing } = usePlayer()
+const { playing } = useWebAudioPlayer()
 
 const cover = computed(() => props.entry.cover ?? null)
 const duration = computed(() => props.entry.uploads.find(upload => upload.duration)?.duration ?? null)

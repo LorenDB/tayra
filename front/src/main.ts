@@ -56,3 +56,4 @@ Promise.all(modules).finally(() => {
 // TODO (wvffle): Replace `from '(../)+` with `from '~/`
 // TODO (wvffle): Fix props not being available in template in IntelliJ Idea
 // TODO (wvffle): Use navigation guards
+// TODO (wvffle): Use computedEager whenever there is a cheap operation that can be executed eagerly

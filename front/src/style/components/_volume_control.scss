@@ -4,7 +4,6 @@
   align-items: center;
   position: relative;
   overflow: visible;
-  top: 3px;
   input {
     max-width: 5.5em;
     height: 4px;
@@ -14,13 +13,12 @@
       background-color: #1B1C1D;
       position: absolute;
       left: -4em;
-      top: -7em;
+      top: calc(-7em + 5px);
       transform: rotate(-90deg);
       display: flex;
       align-items: center;
       height: 2.5em;
       padding: 0 0.5em;
-      box-shadow: 1px 1px 3px rgba(125, 125, 125, 0.5);
     }
     input {
       max-width: 8.5em;
