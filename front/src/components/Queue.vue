@@ -258,7 +258,7 @@ const reorderTracks = async (from: number, to: number) => {
               >
                 <div
                   class="position bar"
-                  :style="{ 'transform': `translateX(${progress - 100}%)` }"
+                  :style="{ 'transform': `translateX(calc(${progress}% - 100%)` }"
                 />
               </div>
             </div>

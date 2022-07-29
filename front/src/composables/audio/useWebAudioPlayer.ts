@@ -1,8 +1,8 @@
-import type { IAudioBufferSourceNode, IAudioContext } from 'standardized-audio-context'
+import type { IAudioContext, IMediaElementAudioSourceNode } from 'standardized-audio-context'
 import type { Track } from '~/types'
 
-import { AudioContext, AudioBufferSourceNode } from 'standardized-audio-context'
-import { ref, reactive, computed, watchEffect, nextTick, shallowRef } from 'vue'
+import { AudioContext } from 'standardized-audio-context'
+import { ref, reactive, computed, watchEffect, nextTick, shallowRef, shallowReactive } from 'vue'
 import { useRafFn, watchDebounced, computedEager } from '@vueuse/core'
 import { uniq } from 'lodash-es'
 import LRUCache from 'lru-cache'
@@ -14,7 +14,7 @@ import { LoopState } from '~/store/player'
 import useLogger from '../useLogger'
 import toLinearVolumeScale from './toLinearVolumeScale'
 
-const TO_PRELOAD = 5
+const TO_PRELOAD = 3
 
 const context = new AudioContext()
 const logger = useLogger()
@@ -24,33 +24,42 @@ const logger = useLogger()
 //
 
 // Maximum of 20 song buffers can be cached
-const bufferCache = new LRUCache<string, AudioBuffer>({
+const audioCache = new LRUCache<string, IMediaElementAudioSourceNode<IAudioContext>>({
   max: 20,
-  disposeAfter (buffer: AudioBuffer, key: string) {
+  disposeAfter (source: IMediaElementAudioSourceNode<IAudioContext>, key: string) {
     // In case we've disposed the current buffer from cache, add it back
-    if (buffer === currentNode.value?.buffer) {
-      bufferCache.set(key, buffer)
+    if (source === currentNode.value) {
+      audioCache.set(key, source)
     }
   }
 })
 
-const loadTrackBuffer = async (track: Track, abortSignal?: AbortSignal) => {
-  if (bufferCache.has(track.id)) {
-    return bufferCache.get(track.id)
+const loadAudio = async (track: Track, abortSignal?: AbortSignal) => {
+  if (audioCache.has(track.id)) {
+    return audioCache.get(track.id)
   }
 
   const sources = await useTrackSources(track, abortSignal)
   if (!sources.length) return null
 
-  // TODO: Quality picker
-  const response = await axios.get(sources[0].url, {
-    responseType: 'arraybuffer'
-  })
+  const audio = document.createElement('audio')
+  audio.preload = 'auto'
 
-  const buffer = await context.decodeAudioData(response.data)
-  bufferCache.set(track.id, buffer)
+  // @ts-expect-error Firefox doesn't yet support NetworkInformation
+  //                  without a `dom.netinfo.enabled` flag enabled
+  const type = navigator.connection?.effectiveType
+  const index = type === '2g' || type === '3g'
+    ? sources.length - 1
+    // TODO: Quality picker - get audio quality from store
+    : 0
 
-  return buffer
+  audio.src = sources[index].url
+
+  const source = context.createMediaElementSource(audio)
+  source.addEventListener('ended', ended)
+
+  audioCache.set(track.id, source)
+  return source
 }
 
 const ended = () => {
@@ -60,30 +69,77 @@ const ended = () => {
   }
 }
 
-let globalAbortController: AbortController
-const playTrack = async (track: Track) => {
-  // Abort previous play request
-  globalAbortController?.abort()
-  const abortController = globalAbortController = new AbortController()
-
-  const buffer = await loadTrackBuffer(track, abortController.signal)
-  if (abortController.signal.aborted) return false
-  if (buffer === null) return null
-
-  const source = new AudioBufferSourceNode(context, {
-    buffer
-  })
-
+const createMediaNode = async (track: Track) => {
+  // TODO (wvffle): Sync 
+  const source = await preload(track)
+  if (!source) return null
   source.connect(gainNode)
-  source.addEventListener('ended', ended)
   return source
 }
 
-// Preload current track buffer
-const currentTrack = computed(() => store.state.queue.tracks[store.state.queue.currentIndex])
-if (currentTrack.value) {
-  loadTrackBuffer(currentTrack.value)
+const preloadControllers = shallowReactive(new Map())
+const preload = (track: Track) => {
+  if (track && audioCache.has(track.id)) {
+    return audioCache.get(track.id)
+  }
+
+  const controller = new AbortController()
+  preloadControllers.set(track.id, controller)
+
+  const msg = `Preloading ${track.artist?.name ?? 'Unknown artist'} - ${track.title}`
+  logger.time(msg)
+
+  const promise = loadAudio(track, controller.signal).then(data => {
+    preloadControllers.delete(track.id)
+    logger.timeEnd(msg)
+    return data
+  })
+
+  return promise
 }
+
+const preloads = computed<Array<Track | undefined>>(() => {
+  const index = store.state.queue.currentIndex
+  const tracks = store.state.queue.tracks
+
+  const preloads = uniq([...Array(TO_PRELOAD).keys()].map(i => {
+    const preloadIndex = (index + i) % tracks.length
+    return tracks[preloadIndex]
+  }))
+
+  return preloads.length === 0
+    ? [tracks[index - 1]]
+    : preloads
+})
+
+// Preloading handler
+watchDebounced([
+  // on index change
+  () => store.state.queue.currentIndex,
+  // on new track
+  () => store.state.queue.tracks,
+  // on shuffle/unshuffle
+  () => store.state.queue.shuffleAbortController
+], async () => {
+  const shouldPreload = preloads.value
+
+  // Abort requests we no longer need
+  for (const [id, controller] of preloadControllers.entries()) {
+    if (!shouldPreload.some(track => track?.id === id)) {
+      controller.abort()
+      logger.info(`Aborted loading track ${id}`)
+    }
+  }
+
+  // Preload new reqests synchronously
+  for (const track of shouldPreload) {
+    if (track && !preloadControllers.has(track.id)) {
+      await preload(track)
+    }
+  }
+}, { immediate: true, debounce: 1000 })
+
+const currentTrack = computedEager(() => store.state.queue.tracks[store.state.queue.currentIndex])
 
 //
 // Audio gain
@@ -103,7 +159,7 @@ const toggleMute = () => store.state.player.volume === 0
 //
 // Audio playback
 //
-const currentNode = shallowRef<IAudioBufferSourceNode<IAudioContext> | null>(null)
+const currentNode = shallowRef<IMediaElementAudioSourceNode<IAudioContext> | null>(null)
 const playerState = reactive({
   playing: false,
   startedAt: 0,
@@ -130,8 +186,8 @@ const stop = () => {
 }
 
 const seek = (addTime: number) => {
-  if (currentNode.value?.buffer) {
-    progress.value = Math.max(0, Math.min(100, progress.value + (addTime / currentNode.value?.buffer?.duration) * 100))
+  if (currentNode.value) {
+    progress.value = Math.max(0, Math.min(100, progress.value + (addTime / duration.value) * 100))
   }
 }
 
@@ -172,12 +228,11 @@ const previous = async () => {
 }
 
 // Stop node, remove handlers and disconnect from gain node
-const stopNode = (node: IAudioBufferSourceNode<IAudioContext> | null) => {
+const stopNode = (node: IMediaElementAudioSourceNode<IAudioContext> | null) => {
   pauseProgress()
   if (node === null) return
 
   node.removeEventListener('ended', ended)
-  node.stop()
   node.disconnect(gainNode)
 }
 
@@ -188,12 +243,11 @@ watchDebounced([
   () => playerState.playing,
   currentTrack
 ], async () => {
-// watchEffect(async () => {
   if (playerState.playing && currentTrack.value) {
     stopNode(currentNode.value)
     currentNode.value = null
 
-    const source = await playTrack(currentTrack.value)
+    const source = await createMediaNode(currentTrack.value)
 
     // Play request is aborted
     if (source === false) return
@@ -206,16 +260,17 @@ watchDebounced([
 
     // NOTE: We've now list reactivity tracking after the first await call
 
-    if (playerState.pausedAt !== 0) {
-      // Start from the paused moment
-      source.start(0, playerState.pausedAt - playerState.startedAt)
-      playerState.pausedAt = 0
-    } else {
-      // Start from the beginning
-      source.start()
-      playerState.startedAt = context.currentTime
-    }
+    // if (playerState.pausedAt !== 0) {
+    //   // Start from the paused moment
+    //   source.start(0, playerState.pausedAt - playerState.startedAt)
+    //   playerState.pausedAt = 0
+    // } else {
+    //   // Start from the beginning
+    //   source.start()
+    //   playerState.startedAt = context.currentTime
+    // }
 
+    source.mediaElement.play()
     currentNode.value = source
     resumeProgress()
   }
@@ -224,8 +279,7 @@ watchDebounced([
 // Pause handler
 watchEffect(() => {
   if (!playerState.playing && currentTrack.value && currentNode.value) {
-    playerState.pausedAt = context.currentTime
-    currentNode.value.stop()
+    currentNode.value.mediaElement.pause()
     pauseProgress()
   }
 })
@@ -233,61 +287,30 @@ watchEffect(() => {
 // Looping handler
 watchEffect(() => {
   if (currentNode.value) {
-    currentNode.value.loop = store.state.player.looping === LoopState.LOOP_CURRENT
+    currentNode.value.mediaElement.loop = store.state.player.looping === LoopState.LOOP_CURRENT
       || (store.state.player.looping === LoopState.LOOP_QUEUE && store.state.queue.tracks.length === 1)
   }
 })
 
-// Preloading handler
-watchDebounced([
-  // on index change
-  () => store.state.queue.currentIndex,
-  // on new track
-  () => store.state.queue.tracks,
-  // on shuffle/unshuffle
-  () => store.state.queue.shuffleAbortController
-], async () => {
-  const index = store.state.queue.currentIndex
-  const tracks = store.state.queue.tracks
-
-  // Try to preload 1 previous track and TO_PRELOAD - 1 future tracks
-  const preloads = uniq([-2, ...Array(TO_PRELOAD - 1).keys()].map(i => {
-    const preloadIndex = (index + i + 1) % tracks.length
-    return tracks[preloadIndex]
-  })).filter(track => track && !bufferCache.has(track.id))
-
-  if (!preloads.length) {
-    return
-  }
-
-  await Promise.all(preloads.map(async track => {
-    const msg = `Preloading ${track.artist?.name ?? 'Unknown artist'} - ${track.title}`
-
-    logger.time(msg)
-    await loadTrackBuffer(track)
-    logger.timeEnd(msg)
-  }))
-
-  logger.debug(`Preloaded ${preloads.length} tracks`)
-}, { immediate: true, debounce: 1000 })
-
 // Progress getter and setter
 const time = ref(0)
+const duration = computedEager(() => currentNode.value?.mediaElement.duration ?? 0)
 const progress = computed({
   // Get progress
-  get: () => currentNode.value?.buffer
-    ? Math.min(time.value / currentNode.value.buffer.duration * 100, 100)
+  get: () => currentNode.value
+    ? Math.min(time.value / duration.value * 100, 100)
     : 0,
   // Seek to percent
   set: async (percent: number) => {
     // Initialize track if we haven't already
-    if (!currentNode.value?.buffer) {
+    if (!currentNode.value) {
       await play()
+      await nextTick()
       progress.value = percent
       return
     }
 
-    const time = percent / 100 * currentNode.value.buffer.duration
+    const time = percent / 100 * duration.value
     pause()
     playerState.startedAt = context.currentTime - time
     playerState.pausedAt = context.currentTime
@@ -310,7 +333,7 @@ const { resume: resumeProgress, pause: pauseProgress } = useRafFn(() => {
 const isListened = ref(false)
 watchEffect(() => {
   // When we are done but looping, reset startedAt
-  if (progress.value === 100 && currentNode.value?.loop) {
+  if (progress.value === 100 && currentNode.value?.mediaElement.loop) {
     playerState.startedAt = context.currentTime
   }
 
@@ -333,7 +356,7 @@ watchEffect(() => {
 // Exports
 export default () => ({
   // Audio loading
-  loadTrackBuffer,
+  preload,
   // Audio gain
   toggleMute,
   unmute,
@@ -348,7 +371,7 @@ export default () => ({
   errored,
   time,
   progress,
-  duration: computed(() => currentNode.value?.buffer?.duration ?? 0),
+  duration,
   playing: computedEager(() => playerState.playing),
   loading: computedEager(() => playerState.playing && currentTrack.value && !currentNode.value)
 })

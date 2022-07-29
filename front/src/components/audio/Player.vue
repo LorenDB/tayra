@@ -130,7 +130,7 @@ const { width: progressWidth } = useElementSize(progressBar)
       >
         <div
           class="position bar"
-          :style="{ 'transform': `translateX(${progress - 100}%)` }"
+          :style="{ 'transform': `translateX(calc(${progress}% - 100%)` }"
         />
         <div
           class="seek bar"
