@@ -155,7 +155,7 @@ const openMenu = () => {
           data-ref="enqueue"
           :disabled="!playable"
           :title="labels.addToQueue"
-          @click.stop.prevent="enqueue()"
+          @click.stop.prevent="enqueue"
         >
           <i class="plus icon" /><translate translate-context="*/Queue/Dropdown/Button/Label/Short">Add to queue</translate>
         </button>

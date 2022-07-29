@@ -11,7 +11,7 @@ import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import { whenever, watchDebounced, useCurrentElement, useScrollLock } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import useQueue from '~/composables/audio/useQueue'
-import useWebAudioPlayer from '~/composables/audio/useWebAudioPlayer'
+import usePlayer from '~/composables/audio/usePlayer'
 
 import VirtualList from '~/components/vui/list/VirtualList.vue'
 import QueueItem from '~/components/QueueItem.vue'
@@ -24,32 +24,32 @@ const scrollLock = useScrollLock(document.body)
 const store = useStore()
 
 const {
+  playing,
+  loading: isLoadingAudio,
+  errored,
+  duration,
+  durationFormatted,
+  currentTimeFormatted,
+  progress,
+  bufferProgress,
+  currentTime,
+  pause,
+  resume
+} = usePlayer()
+
+const {
+  currentTrack,
+  hasNext,
   isEmpty: emptyQueue,
   tracks,
   reorder,
   endsIn: timeLeft,
+  currentIndex,
   removeTrack,
-  clear
-} = useQueue()
-
-const currentIndex = computed(() => store.state.queue.currentIndex)
-const currentTrack = computed(() => store.state.queue.tracks[currentIndex.value])
-const hasNext = computed(() => store.getters['queue/hasNext'])
-const durationFormatted = computed(() => time.parse(Math.floor(duration.value)))
-const currentTimeFormatted = computed(() => time.parse(Math.floor(currentTime.value)))
-
-const {
-  play,
-  pause,
+  clear,
   next,
-  previous,
-  playing,
-  errored,
-  progress,
-  duration,
-  time: currentTime,
-  loading: isLoadingAudio
-} = useWebAudioPlayer()
+  previous
+} = useQueue()
 
 const labels = computed(() => ({
   queue: $pgettext('*/*/*', 'Queue'),
@@ -105,12 +105,13 @@ router.beforeEach(() => store.commit('ui/queueFocused', null))
 
 const progressBar = ref()
 const touchProgress = (event: MouseEvent) => {
-  const percent = (event.clientX - ((event.target as Element).closest('.progress')?.getBoundingClientRect().left ?? 0)) / progressBar.value.offsetWidth
-  progress.value = percent * 100
+  const time = ((event.clientX - (event.target as Element).getBoundingClientRect().left) / progressBar.value.offsetWidth) * duration.value
+  currentTime.value = time
 }
 
-const playIndex = (index: number) => {
-  store.state.queue.currentIndex = index
+const play = (index: unknown) => {
+  store.dispatch('queue/currentIndex', index as number)
+  resume()
 }
 
 const getCover = (track: Track) => {
@@ -254,8 +255,12 @@ const reorderTracks = async (from: number, to: number) => {
               <div
                 ref="progressBar"
                 :class="['ui', 'small', 'vibrant', {'indicating': isLoadingAudio}, 'progress']"
-                @click.stop.prevent="touchProgress"
+                @click="touchProgress"
               >
+                <div
+                  class="buffer bar"
+                  :style="{ 'transform': `translateX(${bufferProgress - 100}%)` }"
+                />
                 <div
                   class="position bar"
                   :style="{ 'transform': `translateX(calc(${progress}% - 100%)` }"
@@ -308,7 +313,7 @@ const reorderTracks = async (from: number, to: number) => {
               :title="labels.play"
               :aria-label="labels.play"
               class="control"
-              @click.prevent.stop="play"
+              @click.prevent.stop="resume"
             >
               <i :class="['ui', 'play', {'disabled': !currentTrack}, 'icon']" />
             </span>
@@ -390,7 +395,7 @@ const reorderTracks = async (from: number, to: number) => {
               :index="index"
               :source="item"
               :class="[...classList, currentIndex === index && 'active']"
-              @play="playIndex"
+              @play="play"
               @remove="removeTrack"
             />
           </template>

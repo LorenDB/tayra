@@ -1,13 +1,9 @@
 import type { Module } from 'vuex'
 import type { RootState } from '~/store/index'
 
+import axios from 'axios'
 import time from '~/utils/time'
-
-export enum LoopState {
-  NO_LOOP,
-  LOOP_CURRENT,
-  LOOP_QUEUE
-}
+import useLogger from '~/composables/useLogger'
 
 export interface State {
   maxConsecutiveErrors: number
@@ -15,12 +11,15 @@ export interface State {
   playing: boolean
   isLoadingAudio: boolean
   volume: number
-  lastVolume: number
+  tempVolume: number
   duration: number
   currentTime: number
   errored: boolean
-  looping: LoopState
+  bufferProgress: number
+  looping: 0 | 1 | 2 // 0 -> no, 1 -> on  track, 2 -> on queue
 }
+
+const logger = useLogger()
 
 const store: Module<State, RootState> = {
   namespaced: true,
@@ -30,25 +29,35 @@ const store: Module<State, RootState> = {
     playing: false,
     isLoadingAudio: false,
     volume: 1,
-    lastVolume: 0.5,
+    tempVolume: 0.5,
     duration: 0,
     currentTime: 0,
     errored: false,
-    looping: LoopState.NO_LOOP
+    bufferProgress: 0,
+    looping: 0
   },
   mutations: {
     reset (state) {
       state.errorCount = 0
       state.playing = false
     },
-    volume (state, value: number) {
-      state.volume = Math.min(Math.max(value, 0), 1)
+    volume (state, value) {
+      value = parseFloat(value)
+      value = Math.min(value, 1)
+      value = Math.max(value, 0)
+      state.volume = value
     },
-    lastVolume (state, value: number) {
-      state.lastVolume = Math.min(Math.max(value, 0), 1)
+    tempVolume (state, value) {
+      value = parseFloat(value)
+      value = Math.min(value, 1)
+      value = Math.max(value, 0)
+      state.tempVolume = value
     },
     incrementVolume (state, value) {
-      state.volume = Math.min(Math.max(value, 0), 1)
+      value = parseFloat(state.volume + value)
+      value = Math.min(value, 1)
+      value = Math.max(value, 0)
+      state.volume = value
     },
     incrementErrorCount (state) {
       state.errorCount += 1
@@ -65,23 +74,20 @@ const store: Module<State, RootState> = {
     currentTime (state, value) {
       state.currentTime = value
     },
-    looping (state, value: LoopState) {
+    looping (state, value) {
       state.looping = value
     },
     playing (state, value) {
       state.playing = value
     },
+    bufferProgress (state, value) {
+      state.bufferProgress = value
+    },
     toggleLooping (state) {
-      switch (state.looping) {
-        case LoopState.NO_LOOP:
-          state.looping = LoopState.LOOP_CURRENT
-          break
-        case LoopState.LOOP_CURRENT:
-          state.looping = LoopState.LOOP_QUEUE
-          break
-        case LoopState.LOOP_QUEUE:
-          state.looping = LoopState.NO_LOOP
-          break
+      if (state.looping > 1) {
+        state.looping = 0
+      } else {
+        state.looping += 1
       }
     },
     isLoadingAudio (state, value) {
@@ -103,15 +109,83 @@ const store: Module<State, RootState> = {
     incrementVolume ({ commit, state }, value) {
       commit('volume', state.volume + value)
     },
+    stop ({ commit }) {
+      commit('errored', false)
+      commit('resetErrorCount')
+    },
+    togglePlayback ({ commit, state, dispatch }) {
+      commit('playing', !state.playing)
+      if (state.errored && state.errorCount < state.maxConsecutiveErrors) {
+        setTimeout(() => {
+          if (state.playing) {
+            dispatch('queue/next', null, { root: true })
+          }
+        }, 3000)
+      }
+    },
+    async resumePlayback ({ commit, state, dispatch }) {
+      commit('playing', true)
+      if (state.errored && state.errorCount < state.maxConsecutiveErrors) {
+        await new Promise(resolve => setTimeout(resolve, 3000))
+        if (state.playing) {
+          return dispatch('queue/next', null, { root: true })
+        }
+      }
+    },
+    pausePlayback ({ commit }) {
+      commit('playing', false)
+    },
+    toggleMute ({ commit, state }) {
+      if (state.volume > 0) {
+        commit('tempVolume', state.volume)
+        commit('volume', 0)
+      } else {
+        commit('volume', state.tempVolume)
+      }
+    },
+    trackListened ({ rootState }, track) {
+      if (!rootState.auth.authenticated) {
+        return
+      }
+
+      return axios.post('history/listenings/', { track: track.id }).catch((error) => {
+        logger.error('Could not record track in history', error)
+      })
+    },
+    trackEnded ({ commit, dispatch, rootState }) {
+      const queueState = rootState.queue
+      if (queueState.currentIndex === queueState.tracks.length - 1) {
+        // we've reached last track of queue, trigger a reload
+        // from radio if any
+        dispatch('radios/populateQueue', null, { root: true })
+      }
+      dispatch('queue/next', null, { root: true })
+      if (queueState.ended) {
+        // Reset playback
+        commit('playing', false)
+        dispatch('updateProgress', 0)
+      }
+    },
+    trackErrored ({ commit, dispatch, state }) {
+      commit('errored', true)
+      commit('incrementErrorCount')
+      if (state.errorCount < state.maxConsecutiveErrors) {
+        setTimeout(() => {
+          if (state.playing) {
+            dispatch('queue/next', null, { root: true })
+          }
+        }, 3000)
+      }
+    },
     updateProgress ({ commit }, t) {
       commit('currentTime', t)
     },
     mute ({ commit, state }) {
-      commit('lastVolume', state.volume)
+      commit('tempVolume', state.volume)
       commit('volume', 0)
     },
     unmute ({ commit, state }) {
-      commit('volume', state.lastVolume)
+      commit('volume', state.tempVolume)
     }
   }
 }

@@ -8,7 +8,7 @@ import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import PlayButton from '~/components/audio/PlayButton.vue'
 import usePlayOptions from '~/composables/audio/usePlayOptions'
 import useQueue from '~/composables/audio/useQueue'
-import useWebAudioPlayer from '~/composables/audio/useWebAudioPlayer'
+import usePlayer from '~/composables/audio/usePlayer'
 import { computed } from 'vue'
 
 interface Props extends PlayOptionsProps {
@@ -44,7 +44,7 @@ const props = withDefaults(defineProps<Props>(), {
   displayActions: true
 })
 
-const { playing, loading } = useWebAudioPlayer()
+const { playing, loading } = usePlayer()
 const { currentTrack } = useQueue()
 const { activateTrack } = usePlayOptions(props)
 

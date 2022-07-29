@@ -1,4 +1,3 @@
-import type { Track } from '~/types'
 import type { InjectionKey } from 'vue'
 import type { State as FavoritesState } from './favorites'
 import type { State as ChannelsState } from './channels'
@@ -40,39 +39,8 @@ export interface RootState {
   player: PlayerState
 }
 
-// we keep only valuable fields to make the cache lighter and avoid
-// cyclic value serialization errors
-const trackReducer = (track: Track) => {
-  const artist = track.artist
-    ? {
-        id: track.artist.id,
-        mbid: track.artist.mbid,
-        name: track.artist.name
-      }
-    : {}
-
-  return {
-    id: track.id,
-    title: track.title,
-    mbid: track.mbid,
-    uploads: track.uploads,
-    listen_url: track.listen_url,
-    artist,
-    album: track.album
-      ? {
-          id: track.album.id,
-          title: track.album.title,
-          mbid: track.album.mbid,
-          cover: track.album.cover,
-          artist
-        }
-      : {}
-  }
-}
-
 export const key: InjectionKey<Store<RootState>> = Symbol('vuex state injection key')
 export default createStore<RootState>({
-  // TODO (wvffle): Use strict mode
   modules: {
     ui,
     auth,
@@ -128,15 +96,35 @@ export default createStore<RootState>({
         return {
           queue: {
             currentIndex: state.queue.currentIndex,
-            shuffleAbortController: state.queue.shuffleAbortController && null,
-            tracks: state.queue.tracks.map(trackReducer),
-            unshuffled: state.queue.unshuffled.map(trackReducer)
+            tracks: state.queue.tracks.map((track: any) => {
+              // we keep only valuable fields to make the cache lighter and avoid
+              // cyclic value serialization errors
+              const artist = {
+                id: track.artist.id,
+                mbid: track.artist.mbid,
+                name: track.artist.name
+              }
+              const data = {
+                id: track.id,
+                title: track.title,
+                mbid: track.mbid,
+                uploads: track.uploads,
+                listen_url: track.listen_url,
+                artist,
+                album: {}
+              }
+              if (track.album) {
+                data.album = {
+                  id: track.album.id,
+                  title: track.album.title,
+                  mbid: track.album.mbid,
+                  cover: track.album.cover,
+                  artist
+                }
+              }
+              return data
+            })
           }
-        }
-      },
-      rehydrated: async (store) => {
-        if (store.state.queue.shuffleAbortController === null) {
-          await store.dispatch('queue/unshuffle', true)
         }
       }
     })
