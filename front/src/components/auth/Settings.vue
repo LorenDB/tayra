@@ -1,3 +1,270 @@
+<script setup lang="ts">
+import type { BackendError, Application } from '~/types'
+
+import axios from 'axios'
+import $ from 'jquery'
+
+import { computed, reactive, ref, onMounted } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+import { useStore } from '~/store'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useLogger from '~/composables/useLogger'
+
+import SubsonicTokenForm from '~/components/auth/SubsonicTokenForm.vue'
+import AttachmentInput from '~/components/common/AttachmentInput.vue'
+import PasswordInput from '~/components/forms/PasswordInput.vue'
+
+const SETTINGS_ORDER: FieldId[] = ['summary', 'privacy_level']
+
+type FieldId = 'summary' | 'privacy_level'
+type Field = { id: string, type: 'content', value: { text: string, content_type: 'text/markdown' } }
+  | { id: string, type: 'dropdown', choices: string[], value: string }
+
+interface Settings {
+  success: boolean
+  errors: string[]
+  order: FieldId[]
+  fields: Record<FieldId, Field>
+}
+
+const { $pgettext } = useGettext()
+const sharedLabels = useSharedLabels()
+const logger = useLogger()
+const router = useRouter()
+const store = useStore()
+
+const settings = reactive({
+  success: false,
+  errors: [] as string[],
+  fields: {
+    summary: {
+      id: 'summary',
+      type: 'content',
+      value: store.state.auth.profile?.summary ?? { text: '', content_type: 'text/markdown' }
+    },
+    privacy_level: {
+      id: 'privacy_level',
+      type: 'dropdown',
+      value: store.state.auth.profile?.privacy_level,
+      choices: ['me', 'instance', 'everyone']
+    }
+  }
+} as Settings)
+
+const orderedSettingsFields = SETTINGS_ORDER.map(id => settings.fields[id])
+
+const labels = computed(() => ({
+  title: $pgettext('Head/Settings/Title', 'Account Settings')
+}))
+
+const isLoading = ref(false)
+const submitSettings = async () => {
+  settings.success = false
+  settings.errors = []
+  isLoading.value = true
+
+  const payload = {} as Record<FieldId, string | null | { text: string }>
+  for (const id of SETTINGS_ORDER) {
+    const field = settings.fields[id]
+    payload[id] = field.type === 'content' && !field.value.text
+      ? null
+      : field.value
+  }
+
+  try {
+    await axios.patch(`users/${store.state.auth.username}/`, payload)
+
+    logger.info('Updated settings successfully')
+    settings.success = true
+
+    const me = await axios.get('users/me/')
+    store.dispatch('auth/updateProfile', me.data)
+  } catch (error) {
+    logger.error('Error while updating settings')
+    settings.errors.push(...(error as BackendError).backendErrors)
+  }
+
+  isLoading.value = false
+}
+
+const apps = ref([] as Application[])
+const isLoadingApps = ref(false)
+const fetchApps = async () => {
+  apps.value = []
+  isLoadingApps.value = true
+
+  try {
+    const response = await axios.get('oauth/grants/')
+    apps.value = response.data as Application[]
+  } catch (error) {
+    logger.error('Error while fetching Apps')
+    settings.errors.push(...(error as BackendError).backendErrors)
+  }
+
+  isLoadingApps.value = false
+}
+
+const ownedApps = ref([] as Application[])
+const fetchOwnedApps = async () => {
+  ownedApps.value = []
+  // TODO: Add loader
+
+  try {
+    const response = await axios.get('oauth/apps/')
+    ownedApps.value = response.data as Application[]
+  } catch (error) {
+    logger.error('Error while fetching owned Apps')
+    settings.errors.push(...(error as BackendError).backendErrors)
+  }
+}
+
+const isRevoking = reactive(new Set())
+const revokeApp = async (id: string) => {
+  isRevoking.add(id)
+
+  try {
+    await axios.delete(`oauth/grants/${id}/`)
+    apps.value = apps.value.filter(app => app.client_id !== id)
+  } catch (error) {
+    logger.error('Error while revoking App')
+    settings.errors.length = 0
+    settings.errors.push(...(error as BackendError).backendErrors)
+  }
+
+  isRevoking.delete(id)
+}
+
+const isDeleting = reactive(new Set())
+const deleteApp = async (id: string) => {
+  isDeleting.add(id)
+
+  try {
+    await axios.delete(`oauth/apps/${id}/`)
+    ownedApps.value = ownedApps.value.filter(app => app.client_id !== id)
+  } catch (error) {
+    logger.error('Error while deleting App')
+    settings.errors.length = 0
+    settings.errors.push(...(error as BackendError).backendErrors)
+  }
+
+  isDeleting.delete(id)
+}
+
+const avatar = ref({ uuid: null, ...(store.state.auth.profile?.avatar ?? {}) })
+// TODO (wvffle): Maybe should be reactive?
+const initialAvatar = avatar.value.uuid ?? undefined
+const avatarErrors = ref([] as string[])
+const isLoadingAvatar = ref(false)
+const submitAvatar = async (uuid: string) => {
+  isLoadingAvatar.value = true
+
+  try {
+    const response = await axios.patch(`users/${store.state.auth.username}/`, { avatar: uuid })
+    avatar.value = response.data.avatar
+    store.commit('auth/avatar', response.data.avatar)
+  } catch (error) {
+    avatarErrors.value = (error as BackendError).backendErrors
+  }
+
+  avatarErrors.value = []
+  isLoadingAvatar.value = false
+}
+
+const passwordError = ref('')
+const credentials = reactive({
+  oldPassword: '',
+  newPassword: ''
+})
+const isLoadingPassword = ref(false)
+const submitPassword = async () => {
+  isLoadingPassword.value = true
+  passwordError.value = ''
+
+  try {
+    await axios.post('auth/registration/change-password/', {
+      old_password: credentials.oldPassword,
+      new_password1: credentials.newPassword,
+      new_password2: credentials.newPassword
+    })
+
+    logger.info('Password successfully changed')
+    return router.push({
+      name: 'profile.overview',
+      params: { username: store.state.auth.username }
+    })
+  } catch (error) {
+    if ((error as BackendError).response?.status === 400) {
+      passwordError.value = 'invalid_credentials'
+    } else {
+      passwordError.value = 'unknown_error'
+    }
+  }
+
+  isLoadingPassword.value = false
+}
+
+const deleteAccountPassword = ref('')
+const isDeletingAccount = ref(false)
+const accountDeleteErrors = ref([] as string[])
+const deleteAccount = async () => {
+  isDeletingAccount.value = true
+  accountDeleteErrors.value = []
+
+  try {
+    const payload = {
+      confirm: true,
+      password: deleteAccountPassword.value
+    }
+
+    await axios.delete('users/me/', { data: payload })
+
+    store.commit('ui/addMessage', {
+      content: $pgettext('*/Auth/Message', 'Your deletion request was submitted, your account and content will be deleted shortly'),
+      date: new Date()
+    })
+
+    store.dispatch('auth/logout')
+  } catch (error) {
+    accountDeleteErrors.value = (error as BackendError).backendErrors
+  }
+
+  deleteAccountPassword.value = ''
+  isDeletingAccount.value = false
+}
+
+const isChangingEmail = ref(false)
+const emailPassword = ref('')
+const newEmail = ref('')
+const changeEmailErrors = ref([] as string[])
+const changeEmail = async () => {
+  isChangingEmail.value = true
+  changeEmailErrors.value = []
+
+  try {
+    await axios.post('users/users/change-email/', {
+      password: emailPassword.value,
+      email: newEmail.value
+    })
+
+    newEmail.value = ''
+  } catch (error) {
+    changeEmailErrors.value = (error as BackendError).backendErrors
+  }
+
+  emailPassword.value = ''
+  isChangingEmail.value = false
+}
+
+onMounted(() => {
+  $('select.dropdown').dropdown()
+})
+
+fetchApps()
+fetchOwnedApps()
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -49,7 +316,7 @@
             class="field"
           >
             <label :for="f.id">{{ sharedLabels.fields[f.id].label }}</label>
-            <p v-if="f.help">
+            <p v-if="sharedLabels.fields[f.id].help">
               {{ sharedLabels.fields[f.id].help }}
             </p>
             <select
@@ -73,7 +340,7 @@
             />
           </div>
           <button
-            :class="['ui', {'loading': isLoading}, 'button']"
+            :class="['ui', { loading: isLoading }, 'button']"
             type="submit"
           >
             <translate translate-context="Content/Settings/Button.Label/Verb">
@@ -161,7 +428,7 @@
           <div class="field">
             <label for="old-password-field"><translate translate-context="Content/Settings/Input.Label">Current password</translate></label>
             <password-input
-              v-model="old_password"
+              v-model="credentials.oldPassword"
               field-id="old-password-field"
               required
             />
@@ -169,13 +436,13 @@
           <div class="field">
             <label for="new-password-field"><translate translate-context="Content/Settings/Input.Label">New password</translate></label>
             <password-input
-              v-model="new_password"
+              v-model="credentials.newPassword"
               field-id="new-password-field"
               required
             />
           </div>
           <dangerous-button
-            :class="['ui', {'loading': isLoading}, {disabled: !new_password || !old_password}, 'warning', 'button']"
+            :class="['ui', {'loading': isLoadingPassword}, {disabled: !credentials.newPassword || !credentials.oldPassword}, 'warning', 'button']"
             :action="submitPassword"
           >
             <translate translate-context="Content/Settings/Button.Label">
@@ -317,7 +584,7 @@
           </translate>
         </p>
         <button
-          class="ui icon button"
+          :class="['ui', 'icon', { loading: isLoadingApps }, 'button']"
           @click="fetchApps()"
         >
           <i class="refresh icon" />&nbsp;
@@ -357,7 +624,7 @@
               </td>
               <td>
                 <dangerous-button
-                  class="ui tiny danger button"
+                  :class="['ui', 'tiny', 'danger', { loading: isRevoking.has(app.client_id) }, 'button']"
                   @confirm="revokeApp(app.client_id)"
                 >
                   <translate translate-context="*/*/*/Verb">
@@ -477,7 +744,7 @@
                   </translate>
                 </router-link>
                 <dangerous-button
-                  class="ui tiny danger button"
+                  :class="['ui', 'tiny', 'danger', { loading: isDeleting.has(app.client_id) }, 'button']"
                   @confirm="deleteApp(app.client_id)"
                 >
                   <translate translate-context="*/*/*/Verb">
@@ -668,13 +935,13 @@
           <div class="field">
             <label for="current-password-field"><translate translate-context="*/*/*">Password</translate></label>
             <password-input
-              v-model="password"
+              v-model="deleteAccountPassword"
               field-id="current-password-field"
               required
             />
           </div>
           <dangerous-button
-            :class="['ui', {'loading': isDeletingAccount}, {disabled: !password}, {danger: password}, 'button']"
+            :class="['ui', {'loading': isDeletingAccount}, {disabled: !deleteAccountPassword}, {danger: deleteAccountPassword}, 'button']"
             :action="deleteAccount"
           >
             <translate translate-context="*/*/Button.Label">
@@ -709,288 +976,3 @@
     </div>
   </main>
 </template>
-
-<script>
-import $ from 'jquery'
-import axios from 'axios'
-import PasswordInput from '~/components/forms/PasswordInput.vue'
-import SubsonicTokenForm from '~/components/auth/SubsonicTokenForm.vue'
-import AttachmentInput from '~/components/common/AttachmentInput.vue'
-import useLogger from '~/composables/useLogger'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-const logger = useLogger()
-
-export default {
-  components: {
-    PasswordInput,
-    SubsonicTokenForm,
-    AttachmentInput
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels }
-  },
-  data () {
-    const d = {
-      // We need to initialize the component with any
-      // properties that will be used in it
-      old_password: '',
-      new_password: '',
-      avatar: { ...(this.$store.state.auth.profile?.avatar ?? { uuid: null }) },
-      passwordError: '',
-      password: '',
-      isLoading: false,
-      isLoadingAvatar: false,
-      isDeletingAccount: false,
-      changeEmailErrors: [],
-      isChangingEmail: false,
-      newEmail: null,
-      emailPassword: null,
-      accountDeleteErrors: [],
-      avatarErrors: [],
-      apps: [],
-      ownedApps: [],
-      settings: {
-        success: false,
-        errors: [],
-        order: ['summary', 'privacy_level'],
-        fields: {
-          summary: {
-            type: 'content',
-            initial: this.$store.state.auth.profile.summary || { text: '', content_type: 'text/markdown' }
-          },
-          privacy_level: {
-            type: 'dropdown',
-            initial: this.$store.state.auth.profile.privacy_level,
-            choices: ['me', 'instance', 'everyone']
-          }
-        }
-      }
-    }
-    d.initialAvatar = d.avatar.uuid
-    d.settings.order.forEach(id => {
-      d.settings.fields[id].value = d.settings.fields[id].initial
-      d.settings.fields[id].id = id
-    })
-    return d
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Head/Settings/Title', 'Account Settings')
-      }
-    },
-    orderedSettingsFields () {
-      const self = this
-      return this.settings.order.map(id => {
-        return self.settings.fields[id]
-      })
-    },
-    settingsValues () {
-      const self = this
-      const s = {}
-      this.settings.order.forEach(setting => {
-        const conf = self.settings.fields[setting]
-        s[setting] = conf.value
-        if (setting === 'summary' && !conf.value.text) {
-          s[setting] = null
-        }
-      })
-      return s
-    }
-  },
-  created () {
-    this.fetchApps()
-    this.fetchOwnedApps()
-  },
-  mounted () {
-    $('select.dropdown').dropdown()
-  },
-  methods: {
-    submitSettings () {
-      this.settings.success = false
-      this.settings.errors = []
-      const self = this
-      const payload = this.settingsValues
-      const url = `users/${this.$store.state.auth.username}/`
-      return axios.patch(url, payload).then(
-        response => {
-          logger.info('Updated settings successfully')
-          self.settings.success = true
-          return axios.get('users/me/').then(response => {
-            self.$store.dispatch('auth/updateProfile', response.data)
-          })
-        },
-        error => {
-          logger.error('Error while updating settings')
-          self.isLoading = false
-          self.settings.errors = error.backendErrors
-        }
-      )
-    },
-    fetchApps () {
-      this.apps = []
-      const self = this
-      const url = 'oauth/grants/'
-      return axios.get(url).then(
-        response => {
-          self.apps = response.data
-        },
-        error => {
-          logger.error('Error while fetching Apps')
-          self.isLoading = false
-          self.settings.errors = error.backendErrors
-        }
-      )
-    },
-    fetchOwnedApps () {
-      this.ownedApps = []
-      const self = this
-      const url = 'oauth/apps/'
-      return axios.get(url).then(
-        response => {
-          self.ownedApps = response.data.results
-        },
-        error => {
-          logger.error('Error while fetching owned Apps')
-          self.isLoading = false
-          self.settings.errors = error.backendErrors
-        }
-      )
-    },
-    revokeApp (id) {
-      const self = this
-      const url = `oauth/grants/${id}/`
-      return axios.delete(url).then(
-        response => {
-          self.apps = self.apps.filter(a => {
-            return a.client_id !== id
-          })
-        },
-        error => {
-          logger.error('Error while revoking App')
-          self.isLoading = false
-          self.settings.errors = error.backendErrors
-        }
-      )
-    },
-    deleteApp (id) {
-      const self = this
-      const url = `oauth/apps/${id}/`
-      return axios.delete(url).then(
-        response => {
-          self.ownedApps = self.ownedApps.filter(a => {
-            return a.client_id !== id
-          })
-        },
-        error => {
-          logger.error('Error while deleting App')
-          self.isLoading = false
-          self.settings.errors = error.backendErrors
-        }
-      )
-    },
-    submitAvatar (uuid) {
-      this.isLoadingAvatar = true
-      this.avatarErrors = []
-      const self = this
-      axios
-        .patch(`users/${this.$store.state.auth.username}/`, { avatar: uuid })
-        .then(
-          response => {
-            this.isLoadingAvatar = false
-            self.avatar = response.data.avatar
-            self.$store.commit('auth/avatar', response.data.avatar)
-          },
-          error => {
-            self.isLoadingAvatar = false
-            self.avatarErrors = error.backendErrors
-          }
-        )
-    },
-    submitPassword () {
-      const self = this
-      self.isLoading = true
-      this.error = ''
-      const credentials = {
-        old_password: this.old_password,
-        new_password1: this.new_password,
-        new_password2: this.new_password
-      }
-      const url = 'auth/registration/change-password/'
-      return axios.post(url, credentials).then(
-        response => {
-          logger.info('Password successfully changed')
-          self.$router.push({
-            name: 'profile.overview',
-            params: {
-              username: self.$store.state.auth.username
-            }
-          })
-        },
-        error => {
-          if (error.response.status === 400) {
-            self.passwordError = 'invalid_credentials'
-          } else {
-            self.passwordError = 'unknown_error'
-          }
-          self.isLoading = false
-        }
-      )
-    },
-    deleteAccount () {
-      this.isDeletingAccount = true
-      this.accountDeleteErrors = []
-      const self = this
-      const payload = {
-        confirm: true,
-        password: this.password
-      }
-      axios.delete('users/me/', { data: payload })
-        .then(
-          response => {
-            self.isDeletingAccount = false
-            const msg = self.$pgettext('*/Auth/Message', 'Your deletion request was submitted, your account and content will be deleted shortly')
-            self.$store.commit('ui/addMessage', {
-              content: msg,
-              date: new Date()
-            })
-            self.$store.dispatch('auth/logout')
-          },
-          error => {
-            self.isDeletingAccount = false
-            self.accountDeleteErrors = error.backendErrors
-          }
-        )
-    },
-
-    changeEmail () {
-      this.isChangingEmail = true
-      this.changeEmailErrors = []
-      const self = this
-      const payload = {
-        password: this.emailPassword,
-        email: this.newEmail
-      }
-      axios.post('users/users/change-email/', payload)
-        .then(
-          response => {
-            self.isChangingEmail = false
-            self.newEmail = null
-            self.emailPassword = null
-            const msg = self.$pgettext('*/Auth/Message', 'Your e-mail address has been changed, please check your inbox for our confirmation message.')
-            self.$store.commit('ui/addMessage', {
-              content: msg,
-              date: new Date()
-            })
-          },
-          error => {
-            self.isChangingEmail = false
-            self.changeEmailErrors = error.backendErrors
-          }
-        )
-    }
-  }
-}
-</script>

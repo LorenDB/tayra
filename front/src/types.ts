@@ -332,6 +332,9 @@ export interface Actor {
 export interface User {
   id: string
   avatar?: Cover
+  email: string
+  // TODO (wvffle): Is it really a string? Or maybe it's { text: string, content_type: string }
+  summary: string
   username: string
   full_username: string
   instance_support_message_display_date: string
@@ -484,4 +487,7 @@ export interface Application {
   name: string
   redirect_uris: string
   scopes: string
+
+  // This is actually a date string
+  created: string
 }
