@@ -85,7 +85,7 @@ const save = async () => {
       values[setting.identifier] = setting.value
     }
 
-    store.dispatch('instance/fetchSettings')
+    await store.dispatch('instance/fetchSettings')
   } catch (error) {
     errors.value = (error as BackendError).backendErrors
   }

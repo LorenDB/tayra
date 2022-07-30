@@ -163,8 +163,7 @@ const store: Module<State, RootState> = {
         commit(`${m}/reset`, null, { root: true })
       })
     },
-    // Send a request to the login URL and save the returned JWT
-    async fetchSettings ({ commit }, payload) {
+    async fetchSettings ({ commit }) {
       const response = await axios.get('instance/settings/')
         .catch(err => logger.error('Error while fetching settings', err.response.data))
 
@@ -180,7 +179,6 @@ const store: Module<State, RootState> = {
       }, {})
 
       commit('settings', sections)
-      payload?.callback?.()
     },
     async fetchFrontSettings ({ state }) {
       const response = await axios.get(`${import.meta.env.BASE_URL}settings.json`)

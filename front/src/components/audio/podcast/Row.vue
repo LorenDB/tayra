@@ -30,7 +30,7 @@ interface Props extends PlayOptionsProps {
 const props = withDefaults(defineProps<Props>(), {
   showArt: true,
   displayActions: true,
-  defaultCover: () => null
+  defaultCover: null
 })
 
 const description = ref('')

@@ -22,7 +22,8 @@ export const install: InitModule = async ({ store, router }) => {
 
   const url = urlParams.get('_url')
   if (url) {
-    return router.replace(url)
+    router.replace(url)
+    return
   }
 
   if (!store.state.instance.instanceUrl) {

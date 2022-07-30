@@ -21,7 +21,7 @@ interface Props {
 
 const emit = defineEmits<Emits>()
 const props = withDefaults(defineProps<Props>(), {
-  app: () => null,
+  app: null,
   defaults: () => ({})
 })
 

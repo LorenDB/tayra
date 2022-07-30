@@ -1,3 +1,88 @@
+<script setup lang="ts">
+import type { RouteLocationRaw } from 'vue-router'
+import type { BackendError, Form } from '~/types'
+
+import { computed, reactive, ref } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import LoginForm from '~/components/auth/LoginForm.vue'
+import PasswordInput from '~/components/forms/PasswordInput.vue'
+import useLogger from '~/composables/useLogger'
+
+interface Props {
+  defaultInvitation?: string | null
+  next?: RouteLocationRaw
+  buttonClasses?: string
+  customization?: Form | null
+  fetchDescriptionHtml?: boolean
+  signupApprovalEnabled?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  defaultInvitation: null,
+  next: '/',
+  buttonClasses: 'success',
+  customization: null,
+  fetchDescriptionHtml: false,
+  signupApprovalEnabled: false
+})
+
+const { $pgettext } = useGettext()
+const logger = useLogger()
+const store = useStore()
+
+const labels = computed(() => ({
+  placeholder: $pgettext('Content/Signup/Form/Placeholder', 'Enter your invitation code (case insensitive)'),
+  usernamePlaceholder: $pgettext('Content/Signup/Form/Placeholder', 'Enter your username'),
+  emailPlaceholder: $pgettext('Content/Signup/Form/Placeholder', 'Enter your e-mail address')
+}))
+
+const signupRequiresApproval = computed(() => props.signupApprovalEnabled ?? store.state.instance.settings.moderation.signup_approval_enabled.value)
+const formCustomization = computed(() => props.customization ?? store.state.instance.settings.moderation.signup_form_customization.value)
+
+const payload = reactive({
+  username: '',
+  password1: '',
+  email: '',
+  invitation: props.defaultInvitation,
+  request_fields: {}
+})
+
+const submitted = ref(false)
+const isLoading = ref(false)
+const errors = ref([] as string[])
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    await axios.post('auth/registration/', {
+      ...payload,
+      password2: payload.password1
+    })
+
+    logger.info('Successfully created account')
+    submitted.value = true
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const isLoadingInstanceSetting = ref(false)
+const fetchInstanceSettings = async () => {
+  isLoadingInstanceSetting.value = true
+  await store.dispatch('instance/fetchSettings')
+  isLoadingInstanceSetting.value = false
+}
+
+fetchInstanceSettings()
+</script>
+
 <template>
   <div v-if="submitted">
     <div class="ui success message">
@@ -75,7 +160,7 @@
       <input
         id="username-field"
         ref="username"
-        v-model="username"
+        v-model="payload.username"
         name="username"
         required
         type="text"
@@ -88,7 +173,7 @@
       <input
         id="email-field"
         ref="email"
-        v-model="email"
+        v-model="payload.email"
         name="email"
         required
         type="email"
@@ -98,7 +183,7 @@
     <div class="required field">
       <label for="password-field"><translate translate-context="*/*/*">Password</translate></label>
       <password-input
-        v-model="password"
+        v-model="payload.password1"
         field-id="password-field"
       />
     </div>
@@ -109,7 +194,7 @@
       <label for="invitation-code"><translate translate-context="Content/*/Input.Label">Invitation code</translate></label>
       <input
         id="invitation-code"
-        v-model="invitation"
+        v-model="payload.invitation"
         required
         type="text"
         name="invitation"
@@ -126,16 +211,16 @@
         <textarea
           v-if="field.input_type === 'long_text'"
           :id="`custom-field-${idx}`"
-          v-model="customFields[field.label]"
-          :required="field.required || null"
+          v-model="payload.request_fields[field.label]"
+          :required="field.required"
           rows="5"
         />
         <input
           v-else
           :id="`custom-field-${idx}`"
-          v-model="customFields[field.label]"
+          v-model="payload.request_fields[field.label]"
           type="text"
-          :required="field.required || null"
+          :required="field.required"
         >
       </div>
     </template>
@@ -149,100 +234,3 @@
     </button>
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-
-import LoginForm from '~/components/auth/LoginForm.vue'
-import PasswordInput from '~/components/forms/PasswordInput.vue'
-import useLogger from '~/composables/useLogger'
-
-const logger = useLogger()
-
-export default {
-  components: {
-    LoginForm,
-    PasswordInput
-  },
-  props: {
-    defaultInvitation: { type: String, required: false, default: null },
-    next: { type: String, default: '/' },
-    buttonClasses: { type: String, default: 'success' },
-    customization: { type: Object, default: null }, // ts type: Form
-    fetchDescriptionHtml: { type: Boolean, default: false },
-    signupApprovalEnabled: { type: Boolean, default: null, required: false }
-  },
-  data () {
-    return {
-      username: '',
-      email: '',
-      password: '',
-      isLoadingInstanceSetting: true,
-      errors: [],
-      isLoading: false,
-      invitation: this.defaultInvitation,
-      customFields: {},
-      submitted: false
-    }
-  },
-  computed: {
-    labels () {
-      const placeholder = this.$pgettext(
-        'Content/Signup/Form/Placeholder',
-        'Enter your invitation code (case insensitive)'
-      )
-      const usernamePlaceholder = this.$pgettext('Content/Signup/Form/Placeholder', 'Enter your username')
-      const emailPlaceholder = this.$pgettext('Content/Signup/Form/Placeholder', 'Enter your e-mail address')
-      return {
-        usernamePlaceholder,
-        emailPlaceholder,
-        placeholder
-      }
-    },
-    formCustomization () {
-      return this.customization || this.$store.state.instance.settings.moderation.signup_form_customization.value
-    },
-    signupRequiresApproval () {
-      if (this.signupApprovalEnabled === null) {
-        return this.$store.state.instance.settings.moderation.signup_approval_enabled.value
-      }
-      return this.signupApprovalEnabled
-    }
-  },
-  created () {
-    const self = this
-    // TODO (wvffle): Await action result and remove callback from the instance store
-    this.$store.dispatch('instance/fetchSettings', {
-      callback: function () {
-        self.isLoadingInstanceSetting = false
-      }
-    })
-  },
-  methods: {
-    submit () {
-      const self = this
-      self.isLoading = true
-      this.errors = []
-      const payload = {
-        username: this.username,
-        password1: this.password,
-        password2: this.password,
-        email: this.email,
-        invitation: this.invitation,
-        request_fields: this.customFields
-      }
-      return axios.post('auth/registration/', payload).then(
-        response => {
-          logger.info('Successfully created account')
-          self.submitted = true
-          self.isLoading = false
-        },
-        error => {
-          self.errors = error.backendErrors
-          self.isLoading = false
-        }
-      )
-    }
-  }
-}
-</script>
