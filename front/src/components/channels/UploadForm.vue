@@ -230,6 +230,7 @@
     </template>
   </form>
 </template>
+
 <script>
 import axios from 'axios'
 import $ from 'jquery'
@@ -246,6 +247,8 @@ function setIfEmpty (obj, k, v) {
   }
   obj[k] = v
 }
+
+// TODO (wvffle): Find types in UploadMetadataForm.vue
 
 export default {
   components: {

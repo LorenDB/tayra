@@ -1,3 +1,81 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { useGettext } from 'vue3-gettext'
+import { computed, ref } from 'vue'
+import { useStore } from '~/store'
+import axios from 'axios'
+
+import PasswordInput from '~/components/forms/PasswordInput.vue'
+
+const { $pgettext } = useGettext()
+const store = useStore()
+
+const subsonicEnabled = computed(() => store.state.instance.settings.subsonic.enabled.value)
+const labels = computed(() => ({
+  subsonicField: $pgettext('Content/Password/Input.label', 'Your subsonic API password')
+}))
+
+const errors = ref([] as string[])
+const success = ref(false)
+const isLoading = ref(false)
+const token = ref()
+const fetchToken = async () => {
+  success.value = false
+  errors.value = []
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`users/${store.state.auth.username}/subsonic-token/`)
+    token.value = response.data.subsonic_api_token
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const showToken = ref(false)
+const successMessage = ref('')
+const requestNewToken = async () => {
+  successMessage.value = $pgettext('Content/Settings/Message', 'Password updated')
+  success.value = false
+  errors.value = []
+  isLoading.value = true
+
+  try {
+    const response = await axios.post(`users/${store.state.auth.username}/subsonic-token/`)
+    showToken.value = true
+    token.value = response.data.subsonic_api_token
+    success.value = true
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const disable = async () => {
+  successMessage.value = $pgettext('Content/Settings/Message', 'Access disabled')
+  success.value = false
+  errors.value = []
+  isLoading.value = true
+
+  try {
+    await axios.delete(`users/${store.state.auth.username}/subsonic-token/`)
+    token.value = null
+    success.value = true
+    showToken.value = false
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+fetchToken()
+</script>
+
 <template>
   <form
     class="ui form"
@@ -154,86 +232,3 @@
     </template>
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-import PasswordInput from '~/components/forms/PasswordInput.vue'
-
-export default {
-  components: {
-    PasswordInput
-  },
-  data () {
-    return {
-      token: null,
-      errors: [],
-      success: false,
-      isLoading: false,
-      successMessage: '',
-      showToken: false
-    }
-  },
-  computed: {
-    subsonicEnabled () {
-      return this.$store.state.instance.settings.subsonic.enabled.value
-    },
-    labels () {
-      return {
-        subsonicField: this.$pgettext('Content/Password/Input.label', 'Your subsonic API password')
-      }
-    }
-  },
-  created () {
-    this.fetchToken()
-  },
-  methods: {
-    fetchToken () {
-      this.success = false
-      this.errors = []
-      this.isLoading = true
-      const self = this
-      const url = `users/${this.$store.state.auth.username}/subsonic-token/`
-      return axios.get(url).then(response => {
-        self.token = response.data.subsonic_api_token
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    requestNewToken () {
-      this.successMessage = this.$pgettext('Content/Settings/Message', 'Password updated')
-      this.success = false
-      this.errors = []
-      this.isLoading = true
-      const self = this
-      const url = `users/${this.$store.state.auth.username}/subsonic-token/`
-      return axios.post(url, {}).then(response => {
-        self.showToken = true
-        self.token = response.data.subsonic_api_token
-        self.isLoading = false
-        self.success = true
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    disable () {
-      this.successMessage = this.$pgettext('Content/Settings/Message', 'Access disabled')
-      this.success = false
-      this.errors = []
-      this.isLoading = true
-      const self = this
-      const url = `users/${this.$store.state.auth.username}/subsonic-token/`
-      return axios.delete(url).then(response => {
-        self.isLoading = false
-        self.token = null
-        self.success = true
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

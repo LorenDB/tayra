@@ -1,3 +1,86 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { ref, computed } from 'vue'
+import { whenever } from '@vueuse/core'
+
+import axios from 'axios'
+import clip from 'text-clipper'
+
+interface Emits {
+  // TODO (wvffle): Find correct type
+  (e: 'updated', data: unknown): void
+}
+
+interface Props {
+  content?: { text?: string, html?: string } | null
+  fieldName?: string
+  updateUrl?: string
+  canUpdate?: boolean
+  fetchHtml?: boolean
+  permissive?: boolean
+  truncateLength?: number
+}
+
+const emit = defineEmits<Emits>()
+const props = withDefaults(defineProps<Props>(), {
+  content: null,
+  fieldName: 'description',
+  updateUrl: '',
+  canUpdate: true,
+  fetchHtml: false,
+  permissive: false,
+  truncateLength: 500
+})
+
+const preview = ref('')
+const fetchPreview = async () => {
+  const response = await axios.post('text-preview/', { text: props.content?.text ?? '', permissive: props.permissive })
+  preview.value = response.data.rendered
+}
+
+whenever(() => props.fetchHtml, fetchPreview)
+
+const truncatedHtml = computed(() => clip(props.content?.html ?? '', props.truncateLength, {
+  html: true,
+  maxLines: 3
+}))
+
+const showMore = ref(false)
+const html = computed(() => props.fetchHtml
+  ? preview.value
+  : props.truncateLength > 0 && !showMore.value
+    ? truncatedHtml.value
+    : props.content?.html ?? ''
+)
+
+const isTruncated = computed(() => props.truncateLength > 0 && truncatedHtml.value.length < (props.content?.html ?? '').length)
+
+const isUpdating = ref(false)
+const text = ref(props.content?.text ?? '')
+const isLoading = ref(false)
+const errors = ref([] as string[])
+const submit = async () => {
+  errors.value = []
+  isLoading.value = true
+
+  try {
+    const response = await axios.patch(props.updateUrl, {
+      [props.fieldName]: text.value
+        ? { content_type: 'text/markdown', text: text.value }
+        : null
+    })
+
+    emit('updated', response.data)
+    isUpdating.value = false
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <div>
     <template v-if="content && !isUpdating">
@@ -60,7 +143,7 @@
         </ul>
       </div>
       <content-form
-        v-model="newText"
+        v-model="text"
         :autofocus="true"
       />
       <a
@@ -72,7 +155,7 @@
       <button
         :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
         type="submit"
-        :disabled="isLoading || null"
+        :disabled="isLoading"
       >
         <translate translate-context="Content/Channels/Button.Label/Verb">
           Update description
@@ -82,80 +165,3 @@
     </form>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import clip from 'text-clipper'
-
-export default {
-  props: {
-    content: { type: Object, required: false, default: null },
-    fieldName: { type: String, required: false, default: 'description' },
-    updateUrl: { required: false, type: String, default: '' },
-    canUpdate: { required: false, default: true, type: Boolean },
-    fetchHtml: { required: false, default: false, type: Boolean },
-    permissive: { required: false, default: false, type: Boolean },
-    truncateLength: { required: false, default: 500, type: Number }
-
-  },
-  data () {
-    return {
-      isUpdating: false,
-      showMore: false,
-      newText: (this.content || { text: '' }).text,
-      isLoading: false,
-      errors: [],
-      preview: null
-    }
-  },
-  computed: {
-    html () {
-      if (this.fetchHtml) {
-        return this.preview
-      }
-      if (this.truncateLength > 0 && !this.showMore) {
-        return this.truncatedHtml
-      }
-      return this.content.html
-    },
-    truncatedHtml () {
-      return clip(this.content.html, this.truncateLength, { html: true, maxLines: 3 })
-    },
-    isTruncated () {
-      return this.truncateLength > 0 && this.truncatedHtml.length < this.content.html.length
-    }
-  },
-  async created () {
-    if (this.fetchHtml) {
-      await this.fetchPreview()
-    }
-  },
-  methods: {
-    async fetchPreview () {
-      const response = await axios.post('text-preview/', { text: this.content.text, permissive: this.permissive })
-      this.preview = response.data.rendered
-    },
-    submit () {
-      const self = this
-      this.isLoading = true
-      this.errors = []
-      const payload = {}
-      payload[this.fieldName] = null
-      if (this.newText) {
-        payload[this.fieldName] = {
-          content_type: 'text/markdown',
-          text: this.newText
-        }
-      }
-      axios.patch(this.updateUrl, payload).then((response) => {
-        self.$emit('updated', response.data)
-        self.isLoading = false
-        self.isUpdating = false
-      }, error => {
-        self.errors = error.backendErrors
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>

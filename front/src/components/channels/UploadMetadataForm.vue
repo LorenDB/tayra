@@ -1,3 +1,38 @@
+<script setup lang="ts">
+import type { Upload, Track } from '~/types'
+
+import { ref, computed, watch } from 'vue'
+
+import TagsSelector from '~/components/library/TagsSelector.vue'
+import AttachmentInput from '~/components/common/AttachmentInput.vue'
+
+interface Emits {
+  // TODO (wvffle): Find correct type
+  (e: 'values', values: any): void
+}
+
+interface Props {
+  upload: Upload
+  values?: Track | null
+}
+
+const emit = defineEmits<Emits>()
+const props = withDefaults(defineProps<Props>(), {
+  values: null
+})
+
+// TODO (wvffle): This is something like a Track, but `cover` is a plain uuid
+const newValues = ref({ ...(props.values ?? props.upload.import_metadata) } as any)
+
+// computed: {
+//   isLoading () {
+//     return !!this.metadata
+//   }
+// },
+const isLoading = computed(() => !props.upload)
+watch(newValues, (values) => emit('values', values), { immediate: true })
+</script>
+
 <template>
   <div :class="['ui', {loading: isLoading}, 'form']">
     <div class="ui required field">
@@ -52,37 +87,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import TagsSelector from '~/components/library/TagsSelector.vue'
-import AttachmentInput from '~/components/common/AttachmentInput.vue'
-
-export default {
-  components: {
-    TagsSelector,
-    AttachmentInput
-  },
-  props: {
-    upload: { type: Object, required: true },
-    values: { type: Object, required: true }
-  },
-  data () {
-    return {
-      newValues: { ...this.values } || this.upload.import_metadata
-    }
-  },
-  computed: {
-    isLoading () {
-      return !!this.metadata
-    }
-  },
-  watch: {
-    newValues: {
-      handler (v) {
-        this.$emit('values', v)
-      },
-      immediate: true
-    }
-  }
-}
-</script>

@@ -307,6 +307,8 @@ export interface Upload {
     detail: object
     error_code: string
   }
+
+  import_metadata?: Track
 }
 
 // FileSystem Logs

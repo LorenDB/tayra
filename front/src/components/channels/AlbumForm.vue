@@ -1,3 +1,53 @@
+<script setup lang="ts">
+import type { BackendError, Channel } from '~/types'
+
+import { computed, watch, ref } from 'vue'
+import axios from 'axios'
+
+interface Emits {
+  (e: 'submittable', value: boolean): void
+  (e: 'loading', value: boolean): void
+  (e: 'created'): void
+}
+
+interface Props {
+  channel: Channel
+}
+
+const emit = defineEmits<Emits>()
+const props = defineProps<Props>()
+
+const title = ref('')
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    await axios.post('albums/', {
+      title: title.value,
+      artist: props.channel.artist?.id
+    })
+
+    emit('created')
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const submittable = computed(() => title.value.length > 0)
+watch(submittable, (value) => emit('submittable', value))
+watch(isLoading, (value) => emit('loading', value))
+
+defineExpose({
+  submit
+})
+</script>
+
 <template>
   <form
     :class="['ui', {loading: isLoading}, 'form']"
@@ -27,63 +77,9 @@
         <translate translate-context="*/*/*/Noun">Title</translate>
       </label>
       <input
-        v-model="values.title"
+        v-model="title"
         type="text"
       >
     </div>
   </form>
 </template>
-<script>
-import axios from 'axios'
-
-export default {
-  components: {},
-  props: {
-    channel: { type: Object, required: true }
-  },
-  data () {
-    return {
-      errors: [],
-      isLoading: false,
-      values: {
-        title: ''
-      }
-    }
-  },
-  computed: {
-    submittable () {
-      return this.values.title.length > 0
-    }
-  },
-  watch: {
-    submittable (v) {
-      this.$emit('submittable', v)
-    },
-    isLoading (v) {
-      this.$emit('loading', v)
-    }
-  },
-  methods: {
-
-    submit () {
-      const self = this
-      self.isLoading = true
-      self.errors = []
-      const payload = {
-        ...this.values,
-        artist: this.channel.artist.id
-      }
-      return axios.post('albums/', payload).then(
-        response => {
-          self.isLoading = false
-          self.$emit('created')
-        },
-        error => {
-          self.errors = error.backendErrors
-          self.isLoading = false
-        }
-      )
-    }
-  }
-}
-</script>
