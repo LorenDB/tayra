@@ -1,3 +1,66 @@
+<script setup lang="ts">
+import type { Album } from '~/types'
+
+import axios from 'axios'
+import { reactive, ref, watch } from 'vue'
+import { useStore } from '~/store'
+
+import AlbumCard from '~/components/audio/album/Card.vue'
+
+interface Props {
+  filters: Record<string, string>
+  showCount?: boolean
+  search?: boolean
+  limit?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  showCount: false,
+  search: false,
+  limit: 12
+})
+
+const store = useStore()
+
+const query = ref('')
+const albums = reactive([] as Album[])
+const count = ref(0)
+const nextPage = ref()
+
+const isLoading = ref(false)
+const fetchData = async (url = 'albums/') => {
+  isLoading.value = true
+
+  try {
+    const params = {
+      q: query.value,
+      ...props.filters,
+      page_size: props.limit
+    }
+
+    const response = await axios.get(url, { params })
+    nextPage.value = response.data.next
+    count.value = response.data.count
+    albums.push(...response.data.results)
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+const performSearch = () => {
+  albums.length = 0
+  fetchData()
+}
+
+watch(
+  () => store.state.moderation.lastUpdate,
+  () => fetchData(),
+  { immediate: true }
+)
+</script>
+
 <template>
   <div class="wrapper">
     <h3
@@ -53,78 +116,3 @@
     </template>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import AlbumCard from '~/components/audio/album/Card.vue'
-
-export default {
-  components: {
-    AlbumCard
-  },
-  props: {
-    filters: { type: Object, required: true },
-    controls: { type: Boolean, default: true },
-    showCount: { type: Boolean, default: false },
-    search: { type: Boolean, default: false },
-    limit: { type: Number, default: 12 }
-  },
-  setup () {
-    const performSearch = () => {
-      this.albums.length = 0
-      this.fetchData()
-    }
-
-    return { performSearch }
-  },
-  data () {
-    return {
-      albums: [],
-      count: 0,
-      isLoading: false,
-      errors: null,
-      previousPage: null,
-      nextPage: null,
-      query: ''
-    }
-  },
-  watch: {
-    offset () {
-      this.fetchData()
-    },
-    '$store.state.moderation.lastUpdate': function () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData (url) {
-      url = url || 'albums/'
-      this.isLoading = true
-      const self = this
-      const params = { q: this.query, ...this.filters }
-      params.page_size = this.limit
-      params.offset = this.offset
-      axios.get(url, { params }).then((response) => {
-        self.previousPage = response.data.previous
-        self.nextPage = response.data.next
-        self.isLoading = false
-        self.albums = [...self.albums, ...response.data.results]
-        self.count = response.data.count
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    updateOffset (increment) {
-      if (increment) {
-        this.offset += this.limit
-      } else {
-        this.offset = Math.max(this.offset - this.limit, 0)
-      }
-    }
-  }
-}
-</script>

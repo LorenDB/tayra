@@ -7,6 +7,7 @@ import manage from './manage'
 import store from '~/store'
 import auth from './auth'
 import user from './user'
+import { requireLoggedIn } from '../guards'
 
 export default [
   {
@@ -71,7 +72,8 @@ export default [
     props: route => ({
       defaultOrdering: route.query.ordering,
       defaultPage: route.query.page ? +route.query.page : undefined
-    })
+    }),
+    beforeEnter: requireLoggedIn()
   },
   ...content,
   ...manage,

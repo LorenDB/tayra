@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import type { Track, Listening } from '~/types'
-import useWebSocketHandler from '~/composables/useWebSocketHandler'
 
 // TODO (wvffle): Fix websocket update (#1534)
-import { clone } from 'lodash-es'
 import axios from 'axios'
+import { ref, reactive, watch } from 'vue'
+import { useStore } from '~/store'
+import { clone } from 'lodash-es'
+
+import useWebSocketHandler from '~/composables/useWebSocketHandler'
 import PlayButton from '~/components/audio/PlayButton.vue'
 import TagsList from '~/components/tags/List.vue'
-import { ref, reactive, watch } from 'vue'
+
+interface Emits {
+  (e: 'count', count: number): void
+}
 
 interface Props {
   filters: Record<string, string>
@@ -19,6 +25,7 @@ interface Props {
   websocketHandlers?: string[]
 }
 
+const emit = defineEmits<Emits>()
 const props = withDefaults(defineProps<Props>(), {
   isActivity: true,
   showCount: false,
@@ -26,6 +33,8 @@ const props = withDefaults(defineProps<Props>(), {
   itemClasses: '',
   websocketHandlers: () => []
 })
+
+const store = useStore()
 
 const objects = reactive([] as Listening[])
 const count = ref(0)
@@ -57,9 +66,12 @@ const fetchData = async (url = props.url) => {
   isLoading.value = false
 }
 
-fetchData()
+watch(
+  () => store.state.moderation.lastUpdate,
+  () => fetchData(),
+  { immediate: true }
+)
 
-const emit = defineEmits(['count'])
 watch(count, (to) => emit('count', to))
 
 watch(() => props.websocketHandlers.includes('Listen'), (to) => {

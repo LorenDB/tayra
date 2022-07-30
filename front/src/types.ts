@@ -472,3 +472,16 @@ export interface Notification {
   id: number
   is_read: boolean
 }
+
+// Tags stuff
+export interface Tag {
+  name: string
+}
+
+// Application stuff
+export interface Application {
+  client_id: string
+  name: string
+  redirect_uris: string
+  scopes: string
+}

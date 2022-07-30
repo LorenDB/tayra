@@ -1,6 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router'
 
-import { requireLoggedOut } from '../guards'
+import { requireLoggedOut, requireLoggedIn } from '../guards'
 
 export default [
   {
@@ -52,7 +52,8 @@ export default [
       responseType: route.query.response_type,
       nonce: route.query.nonce,
       state: route.query.state
-    })
+    }),
+    beforeEnter: requireLoggedIn()
   },
   {
     path: '/signup',

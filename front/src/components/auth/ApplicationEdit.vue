@@ -1,3 +1,54 @@
+<script setup lang="ts">
+import axios from 'axios'
+import { useGettext } from 'vue3-gettext'
+import { computed, ref } from 'vue'
+
+import ApplicationForm from '~/components/auth/ApplicationForm.vue'
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const { $pgettext } = useGettext()
+
+const application = ref()
+
+const labels = computed(() => ({
+  title: $pgettext('Content/Applications/Title', 'Edit application')
+}))
+
+const isLoading = ref(false)
+const fetchApplication = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`oauth/apps/${props.id}/`)
+    application.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+const refreshToken = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.post(`oauth/apps/${props.id}/refresh-token`)
+    application.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+fetchApplication()
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -74,51 +125,3 @@
     </div>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-import ApplicationForm from '~/components/auth/ApplicationForm.vue'
-
-export default {
-  components: {
-    ApplicationForm
-  },
-  props: { id: { type: Number, required: true } },
-  data () {
-    return {
-      application: null,
-      isLoading: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('Content/Applications/Title', 'Edit application')
-      }
-    }
-  },
-  created () {
-    this.fetchApplication()
-  },
-  methods: {
-    fetchApplication () {
-      this.isLoading = true
-      const self = this
-      axios.get(`oauth/apps/${this.id}/`).then((response) => {
-        self.isLoading = false
-        self.application = response.data
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    async refreshToken () {
-      self.isLoading = true
-      const response = await axios.post(`oauth/apps/${this.id}/refresh-token`)
-      this.application = response.data
-      self.isLoading = false
-    }
-  }
-}
-</script>

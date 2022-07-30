@@ -1,4 +1,5 @@
 import type { PrivacyLevel, ImportStatus } from '~/types'
+import type { ScopeId } from '~/composables/auth/useScopes'
 
 import { gettext } from '~/init/locale'
 
@@ -144,5 +145,5 @@ export default () => ({
       label: $pgettext('*/Moderation/*/Noun', 'Reports'),
       description: $pgettext('Content/OAuth Scopes/Paragraph', 'Access to moderation reports')
     }
-  }
+  } as Record<ScopeId, { label: string, description: string }>
 })

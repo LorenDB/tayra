@@ -1,3 +1,95 @@
+<script setup lang="ts">
+import type { BackendError, Application } from '~/types'
+
+import axios from 'axios'
+import { ref, reactive, computed } from 'vue'
+import { computedEager } from '@vueuse/core'
+import { useGettext } from 'vue3-gettext'
+import { uniq } from 'lodash-es'
+
+import useScopes from '~/composables/auth/useScopes'
+
+interface Emits {
+  (e: 'updated', application: Application): void
+  (e: 'created', application: Application): void
+}
+
+interface Props {
+  app?: Application | null
+  defaults?: Partial<Application>
+}
+
+const emit = defineEmits<Emits>()
+const props = withDefaults(defineProps<Props>(), {
+  app: () => null,
+  defaults: () => ({})
+})
+
+const { $pgettext } = useGettext()
+const scopes = useScopes()
+  .filter(scope => !['reports', 'security'].includes(scope.id))
+
+const fields = reactive({
+  name: props.app?.name ?? props.defaults.name ?? '',
+  redirect_uris: props.app?.redirect_uris ?? props.defaults.redirect_uris ?? 'urn:ietf:wg:oauth:2.0:oob',
+  scopes: props.app?.scopes ?? props.defaults.scopes ?? 'read'
+})
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const submit = async () => {
+  errors.value = []
+  isLoading.value = true
+
+  try {
+    const event = props.app !== null
+      ? 'updated'
+      : 'created'
+
+    const request = props.app !== null
+      ? () => axios.patch(`oauth/apps/${props.app?.client_id}/`, fields)
+      : () => axios.post('oauth/apps/', fields)
+
+    const response = await request()
+    emit(event, response.data as Application)
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const scopeArray = computed({
+  get: () => fields.scopes.split(' '),
+  set: (scopes: string[]) => uniq(scopes).join(' ')
+})
+
+const scopeParents = computedEager(() => [
+  {
+    id: 'read',
+    label: $pgettext('Content/OAuth Scopes/Label/Verb', 'Read'),
+    description: $pgettext('Content/OAuth Scopes/Help Text', 'Read-only access to user data'),
+    value: scopeArray.value.includes('read')
+  },
+  {
+    id: 'write',
+    label: $pgettext('Content/OAuth Scopes/Label/Verb', 'Write'),
+    description: $pgettext('Content/OAuth Scopes/Help Text', 'Write-only access to user data'),
+    value: scopeArray.value.includes('write')
+  }
+])
+
+const allScopes = computed(() => {
+  return scopeParents.value.map(parent => ({
+    ...parent,
+    children: scopes.map(scope => {
+      const id = `${parent.id}:${scope.id}`
+      return { id, value: scopeArray.value.includes(id) }
+    })
+  }))
+})
+</script>
+
 <template>
   <form
     class="ui form component-form"
@@ -75,8 +167,8 @@
           </div>
 
           <div
-            v-for="(child, index) in parent.children"
-            :key="index"
+            v-for="child in parent.children"
+            :key="child.id"
           >
             <div class="ui child checkbox">
               <input
@@ -87,9 +179,6 @@
               >
               <label :for="child.id">
                 {{ child.id }}
-                <p class="help">
-                  {{ child.description }}
-                </p>
               </label>
             </div>
           </div>
@@ -101,7 +190,7 @@
       type="submit"
     >
       <translate
-        v-if="updating"
+        v-if="app !== null"
         translate-context="Content/Applications/Button.Label/Verb"
       >
         Update application
@@ -115,111 +204,3 @@
     </button>
   </form>
 </template>
-
-<script>
-import { uniq } from 'lodash-es'
-import axios from 'axios'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-export default {
-  props: {
-    app: { type: Object, required: false, default: () => { return null } },
-    defaults: { type: Object, required: false, default: () => { return {} } }
-  },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels }
-  },
-  data () {
-    const defaults = this.defaults || {}
-    const app = this.app || {}
-    return {
-      isLoading: false,
-      errors: [],
-      fields: {
-        name: app.name || defaults.name || '',
-        redirect_uris: app.redirect_uris || defaults.redirect_uris || 'urn:ietf:wg:oauth:2.0:oob',
-        scopes: app.scopes || defaults.scopes || 'read'
-      },
-      scopes: [
-        { id: 'profile', icon: 'user' },
-        { id: 'libraries', icon: 'book' },
-        { id: 'favorites', icon: 'heart' },
-        { id: 'listenings', icon: 'music' },
-        { id: 'follows', icon: 'users' },
-        { id: 'playlists', icon: 'list' },
-        { id: 'radios', icon: 'rss' },
-        { id: 'filters', icon: 'eye slash' },
-        { id: 'notifications', icon: 'bell' },
-        { id: 'edits', icon: 'pencil alternate' }
-      ]
-    }
-  },
-  computed: {
-    updating () {
-      return this.app
-    },
-    scopeArray: {
-      get () {
-        return this.fields.scopes.split(' ')
-      },
-      set (v) {
-        this.fields.scopes = uniq(v).join(' ')
-      }
-    },
-    allScopes () {
-      const self = this
-      const parents = [
-        {
-          id: 'read',
-          label: this.$pgettext('Content/OAuth Scopes/Label/Verb', 'Read'),
-          description: this.$pgettext('Content/OAuth Scopes/Help Text', 'Read-only access to user data'),
-          value: this.scopeArray.indexOf('read') > -1
-        },
-        {
-          id: 'write',
-          label: this.$pgettext('Content/OAuth Scopes/Label/Verb', 'Write'),
-          description: this.$pgettext('Content/OAuth Scopes/Help Text', 'Write-only access to user data'),
-          value: this.scopeArray.indexOf('write') > -1
-        }
-      ]
-      parents.forEach((p) => {
-        p.children = self.scopes.map(s => {
-          const id = `${p.id}:${s.id}`
-          return {
-            id,
-            value: this.scopeArray.indexOf(id) > -1
-          }
-        })
-      })
-      return parents
-    }
-  },
-  methods: {
-    submit () {
-      this.errors = []
-      const self = this
-      self.isLoading = true
-      const payload = this.fields
-      let event, promise
-      if (this.updating) {
-        event = 'updated'
-        promise = axios.patch(`oauth/apps/${this.app.client_id}/`, payload)
-      } else {
-        event = 'created'
-        promise = axios.post('oauth/apps/', payload)
-      }
-      return promise.then(
-        response => {
-          self.isLoading = false
-          self.$emit(event, response.data)
-        },
-        error => {
-          self.isLoading = false
-          self.errors = error.backendErrors
-        }
-      )
-    }
-  }
-}
-</script>

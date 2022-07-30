@@ -1,14 +1,257 @@
+<script setup lang="ts">
+import type { Artist, Track, Album, Tag } from '~/types'
+import type { RouteRecordName, RouteLocationNamedRaw } from 'vue-router'
+
+import jQuery from 'jquery'
+import { trim } from 'lodash-es'
+import { useFocus, useCurrentElement } from '@vueuse/core'
+import { ref, computed, onMounted } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+import { useStore } from '~/store'
+
+import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
+
+interface Emits {
+  (e: 'search'): void
+}
+
+type CategoryCode = 'federation' | 'podcasts' | 'artists' | 'albums' | 'tracks' | 'tags' | 'more'
+interface Category {
+  code: CategoryCode,
+  name: string,
+  route: RouteRecordName
+  getId: (obj: unknown) => string
+  getTitle: (obj: unknown) => string
+  getDescription: (obj: unknown) => string
+}
+
+type SimpleCategory = Partial<Category> & Pick<Category, 'code' | 'name'>
+const isCategoryGuard = (object: Category | SimpleCategory): object is Category => typeof object.route === 'string'
+
+interface Results {
+  name: string,
+  results: Result[]
+}
+
+interface Result {
+  title: string
+  id?: string
+  description?: string
+  routerUrl: RouteLocationNamedRaw
+}
+
+const emit = defineEmits<Emits>()
+
+const search = ref()
+const { focused } = useFocus(search)
+onKeyboardShortcut(['shift', 'f'], () => (focused.value = true), true)
+onKeyboardShortcut(['ctrl', 'k'], () => (focused.value = true), true)
+
+const { $pgettext } = useGettext()
+const labels = computed(() => ({
+  placeholder: $pgettext('Sidebar/Search/Input.Placeholder', 'Search for artists, albums, tracks…'),
+  searchContent: $pgettext('Sidebar/Search/Input.Label', 'Search for content'),
+  artist: $pgettext('*/*/*/Noun', 'Artist'),
+  album: $pgettext('*/*/*', 'Album'),
+  track: $pgettext('*/*/*/Noun', 'Track'),
+  tag: $pgettext('*/*/*/Noun', 'Tag')
+}))
+
+const router = useRouter()
+const store = useStore()
+const el = useCurrentElement()
+const query = ref()
+
+const enter = () => {
+  jQuery(el.value).search('cancel query')
+
+  // Cancel any API search request to backend…
+  return router.push(`/search?q=${query.value}&type=artists`)
+}
+
+const blur = () => {
+  search.value.blur()
+}
+
+const categories = computed(() => [
+  {
+    code: 'federation',
+    name: $pgettext('*/*/*', 'Federation')
+  },
+  {
+    code: 'podcasts',
+    name: $pgettext('*/*/*', 'Podcasts')
+  },
+  {
+    code: 'artists',
+    route: 'library.artists.detail',
+    name: labels.value.artist,
+    getId: (obj: Artist) => obj.id,
+    getTitle: (obj: Artist) => obj.name,
+    getDescription: () => ''
+  },
+  {
+    code: 'albums',
+    route: 'library.albums.detail',
+    name: labels.value.album,
+    getId: (obj: Album) => obj.id,
+    getTitle: (obj: Album) => obj.title,
+    getDescription: (obj: Album) => obj.artist.name
+  },
+  {
+    code: 'tracks',
+    route: 'library.tracks.detail',
+    name: labels.value.track,
+    getId: (obj: Track) => obj.id,
+    getTitle: (obj: Track) => obj.title,
+    getDescription: (obj: Track) => obj.album?.artist.name ?? obj.artist?.name ?? ''
+  },
+  {
+    code: 'tags',
+    route: 'library.tags.detail',
+    name: labels.value.tag,
+    getId: (obj: Tag) => obj.name,
+    getTitle: (obj: Tag) => `#${obj.name}`,
+    getDescription: (obj: Tag) => ''
+  },
+  {
+    code: 'more',
+    name: ''
+  }
+] as (Category | SimpleCategory)[])
+
+const objectId = computed(() => {
+  const trimmedQuery = trim(trim(query.value), '@')
+
+  if (trimmedQuery.startsWith('http://') || trimmedQuery.startsWith('https://') || trimmedQuery.includes('@')) {
+    return query.value
+  }
+
+  return null
+})
+
+onMounted(() => {
+  jQuery(el.value).search({
+    type: 'category',
+    minCharacters: 3,
+    showNoResults: true,
+    error: {
+      // @ts-expect-error Semantic is broken
+      noResultsHeader: $pgettext('Sidebar/Search/Error', 'No matches found'),
+      noResults: $pgettext('Sidebar/Search/Error.Label', 'Sorry, there are no results for this search')
+    },
+
+    onSelect (result, response) {
+      jQuery(el.value).search('set value', query.value)
+      router.push(result.routerUrl)
+      jQuery(el.value).search('hide results')
+      return false
+    },
+    onSearchQuery (value) {
+      // query.value = value
+      emit('search')
+    },
+    apiSettings: {
+      url: store.getters['instance/absoluteUrl']('api/v1/search?query={query}'),
+      beforeXHR: function (xhrObject) {
+        if (!store.state.auth.authenticated) {
+          return xhrObject
+        }
+
+        if (store.state.auth.oauth.accessToken) {
+          xhrObject.setRequestHeader('Authorization', store.getters['auth/header'])
+        }
+
+        return xhrObject
+      },
+      onResponse: function (initialResponse) {
+        const id = objectId.value
+        const results: Partial<Record<CategoryCode, Results>> = {}
+
+        let resultsEmpty = true
+        for (const category of categories.value) {
+          results[category.code] = {
+            name: category.name,
+            results: []
+          }
+
+          if (category.code === 'federation' && id) {
+            resultsEmpty = false
+            results[category.code]?.results.push({
+              title: $pgettext('Search/*/*', 'Search on the fediverse'),
+              routerUrl: {
+                name: 'search',
+                query: { id }
+              }
+            })
+          }
+
+          if (category.code === 'podcasts' && id) {
+            resultsEmpty = false
+            results[category.code]?.results.push({
+              title: $pgettext('Search/*/*', 'Subscribe to podcast via RSS'),
+              routerUrl: {
+                name: 'search',
+                query: { id, type: 'rss' }
+              }
+            })
+          }
+
+          if (category.code === 'more') {
+            results[category.code]?.results.push({
+              title: $pgettext('Search/*/*', 'More results 🡒'),
+              routerUrl: {
+                name: 'search',
+                query: { type: 'artists', q: query.value }
+              }
+            })
+          }
+
+          if (isCategoryGuard(category)) {
+            for (const result of initialResponse[category.code]) {
+              resultsEmpty = false
+              const id = category.getId(result)
+              results[category.code]?.results.push({
+                title: category.getTitle(result),
+                id,
+                routerUrl: {
+                  name: category.route,
+                  params: { id }
+                },
+                description: category.getDescription(result)
+              })
+            }
+          }
+        }
+
+        return {
+          results: resultsEmpty
+            ? {}
+            : results
+        }
+      }
+    }
+  })
+})
+</script>
+
 <template>
-  <div class="ui fluid category search">
-    <slot /><div class="ui icon input">
+  <div
+    class="ui fluid category search"
+    @keypress.enter="enter"
+  >
+    <slot />
+    <div class="ui icon input">
       <input
         ref="search"
+        v-model="query"
         :aria-label="labels.searchContent"
         type="search"
         class="prompt"
         name="search"
         :placeholder="labels.placeholder"
-        @keydown.esc="$event.target.blur()"
+        @keydown.esc="blur"
       >
       <i class="search icon" />
     </div>
@@ -16,252 +259,3 @@
     <slot name="after" />
   </div>
 </template>
-
-<script>
-import jQuery from 'jquery'
-import router from '~/router'
-import { trim } from 'lodash-es'
-import { useFocus } from '@vueuse/core'
-import { ref } from 'vue'
-import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
-
-export default {
-  setup () {
-    const search = ref()
-    const { focused } = useFocus(search)
-    onKeyboardShortcut(['shift', 'f'], () => (focused.value = true), true)
-
-    return {
-      search
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        placeholder: this.$pgettext('Sidebar/Search/Input.Placeholder', 'Search for artists, albums, tracks…'),
-        searchContent: this.$pgettext('Sidebar/Search/Input.Label', 'Search for content')
-      }
-    }
-  },
-  mounted () {
-    const artistLabel = this.$pgettext('*/*/*/Noun', 'Artist')
-    const albumLabel = this.$pgettext('*/*/*', 'Album')
-    const trackLabel = this.$pgettext('*/*/*/Noun', 'Track')
-    const tagLabel = this.$pgettext('*/*/*/Noun', 'Tag')
-    const self = this
-    let searchQuery
-
-    jQuery(this.$el).keypress(function (e) {
-      if (e.which === 13) {
-        // Cancel any API search request to backend…
-        jQuery(this.$el).search('cancel query')
-        // Go direct to the artist page…
-        router.push(`/search?q=${searchQuery}&type=artists`)
-      }
-    })
-
-    jQuery(this.$el).search({
-      type: 'category',
-      minCharacters: 3,
-      showNoResults: true,
-      error: {
-        noResultsHeader: this.$pgettext('Sidebar/Search/Error', 'No matches found'),
-        noResults: this.$pgettext('Sidebar/Search/Error.Label', 'Sorry, there are no results for this search')
-      },
-      onSelect (result, response) {
-        jQuery(self.$el).search('set value', searchQuery)
-        router.push(result.routerUrl)
-        jQuery(self.$el).search('hide results')
-        return false
-      },
-      onSearchQuery (query) {
-        self.$emit('search')
-        searchQuery = query
-      },
-      apiSettings: {
-        beforeXHR: function (xhrObject) {
-          if (!self.$store.state.auth.authenticated) {
-            return xhrObject
-          }
-
-          if (self.$store.state.auth.oauth.accessToken) {
-            xhrObject.setRequestHeader('Authorization', self.$store.getters['auth/header'])
-          }
-          return xhrObject
-        },
-        onResponse: function (initialResponse) {
-          const objId = self.extractObjId(searchQuery)
-          const results = {}
-          let isEmptyResults = true
-          const categories = [
-            {
-              code: 'federation',
-              name: self.$pgettext('*/*/*', 'Federation')
-            },
-            {
-              code: 'podcasts',
-              name: self.$pgettext('*/*/*', 'Podcasts')
-            },
-            {
-              code: 'artists',
-              route: 'library.artists.detail',
-              name: artistLabel,
-              getTitle (r) {
-                return r.name
-              },
-              getDescription (r) {
-                return ''
-              },
-              getId (t) {
-                return t.id
-              }
-            },
-            {
-              code: 'albums',
-              route: 'library.albums.detail',
-              name: albumLabel,
-              getTitle (r) {
-                return r.title
-              },
-              getDescription (r) {
-                return r.artist.name
-              },
-              getId (t) {
-                return t.id
-              }
-            },
-            {
-              code: 'tracks',
-              route: 'library.tracks.detail',
-              name: trackLabel,
-              getTitle (r) {
-                return r.title
-              },
-              getDescription (r) {
-                if (r.album) {
-                  return `${r.album.artist.name} - ${r.album.title}`
-                } else {
-                  return r.artist.name
-                }
-              },
-              getId (t) {
-                return t.id
-              }
-            },
-            {
-              code: 'tags',
-              route: 'library.tags.detail',
-              name: tagLabel,
-              getTitle (r) {
-                return `#${r.name}`
-              },
-              getDescription (r) {
-                return ''
-              },
-              getId (t) {
-                return t.name
-              }
-            },
-            {
-              code: 'more',
-              name: ''
-            }
-          ]
-          categories.forEach(category => {
-            results[category.code] = {
-              name: category.name,
-              results: []
-            }
-            if (category.code === 'federation') {
-              if (objId) {
-                isEmptyResults = false
-                const searchMessage = self.$pgettext('Search/*/*', 'Search on the fediverse')
-                results.federation = {
-                  name: self.$pgettext('*/*/*', 'Federation'),
-                  results: [{
-                    title: searchMessage,
-                    routerUrl: {
-                      name: 'search',
-                      query: {
-                        id: objId
-                      }
-                    }
-                  }]
-                }
-              }
-            } else if (category.code === 'podcasts') {
-              if (objId) {
-                isEmptyResults = false
-                const searchMessage = self.$pgettext('Search/*/*', 'Subscribe to podcast via RSS')
-                results.podcasts = {
-                  name: self.$pgettext('*/*/*', 'Podcasts'),
-                  results: [{
-                    title: searchMessage,
-                    routerUrl: {
-                      name: 'search',
-                      query: {
-                        id: objId,
-                        type: 'rss'
-                      }
-                    }
-                  }]
-                }
-              }
-            } else if (category.code === 'more') {
-              const searchMessage = self.$pgettext('Search/*/*', 'More results 🡒')
-              results.more = {
-                name: '',
-                results: [{
-                  title: searchMessage,
-                  routerUrl: {
-                    name: 'search',
-                    query: {
-                      type: 'artists',
-                      q: searchQuery
-                    }
-                  }
-                }]
-              }
-            } else {
-              initialResponse[category.code].forEach(result => {
-                isEmptyResults = false
-                const id = category.getId(result)
-                results[category.code].results.push({
-                  title: category.getTitle(result),
-                  id,
-                  routerUrl: {
-                    name: category.route,
-                    params: {
-                      id
-                    }
-                  },
-                  description: category.getDescription(result)
-                })
-              })
-            }
-          })
-          return {
-            results: isEmptyResults ? {} : results
-          }
-        },
-        url: this.$store.getters['instance/absoluteUrl']('api/v1/search?query={query}')
-      }
-    })
-  },
-  methods: {
-    extractObjId (query) {
-      query = trim(query)
-      query = trim(query, '@')
-      if (query.indexOf(' ') > -1) {
-        return
-      }
-      if (query.startsWith('http://') || query.startsWith('https://')) {
-        return query
-      }
-      if (query.split('@').length > 1) {
-        return query
-      }
-    }
-  }
-}
-</script>

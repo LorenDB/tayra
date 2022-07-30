@@ -7,7 +7,6 @@ import axios from 'axios'
 import $ from 'jquery'
 import RadioButton from '~/components/radios/Button.vue'
 import Pagination from '~/components/vui/Pagination.vue'
-import { checkRedirectToLogin } from '~/utils'
 import TrackTable from '~/components/audio/track/Table.vue'
 import useLogger from '~/composables/useLogger'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
@@ -29,7 +28,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const store = useStore()
-await checkRedirectToLogin(store, useRouter())
 
 // TODO (wvffle): Make sure everything is it's own type
 const page = ref(+props.defaultPage)

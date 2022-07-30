@@ -111,12 +111,9 @@ const store: Module<State, RootState> = {
   },
   getters: {
     artistFilters: (state) => () => {
-      const f = state.filters.filter((f) => {
-        return f.target.type === 'artist'
-      })
-      const p = sortBy(f, [(e) => { return e.creation_date }])
-      p.reverse()
-      return p
+      const filters = state.filters.filter((filter) => filter.target.type === 'artist')
+      const sorted = sortBy(filters, [(e) => { return e.creation_date }])
+      return sorted.reverse()
     }
   },
   actions: {
