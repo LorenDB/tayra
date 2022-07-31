@@ -5,10 +5,14 @@ import type { App } from 'vue'
 const COOKIE = 'allow-tracing'
 
 const initSentry = async (app: App, router: Router) => {
-  const [{ BrowserTracing }, Sentry] = await Promise.all([
+  const [{ default: useLogger }, { BrowserTracing }, Sentry] = await Promise.all([
+    import('~/composables/useLogger'),
     import('@sentry/tracing'),
     import('@sentry/vue')
   ])
+
+  const logger = useLogger()
+  logger.info('Initializing Sentry')
 
   Sentry.init({
     app,
