@@ -19,6 +19,7 @@ export const install: InitModule = ({ app, router }) => {
       app,
       dsn: import.meta.env.VUE_SENTRY_DSN,
       logErrors: true,
+      trackComponents: true,
       integrations: [
         new BrowserTracing({
           routingInstrumentation: Sentry.vueRouterInstrumentation(router)
