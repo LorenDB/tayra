@@ -8,7 +8,6 @@ import axios from 'axios'
 import clip from 'text-clipper'
 
 interface Emits {
-  // TODO (wvffle): Find correct type
   (e: 'updated', data: unknown): void
 }
 

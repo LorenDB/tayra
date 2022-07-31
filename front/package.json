@@ -45,6 +45,7 @@
     "text-clipper": "2.2.0",
     "tiptap-markdown": "^0.5.0",
     "transliteration": "2.3.5",
+    "universal-cookie": "^4.0.4",
     "vue": "3.2.37",
     "vue-gettext": "2.1.12",
     "vue-plyr": "7.0.0",
