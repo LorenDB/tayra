@@ -2,7 +2,7 @@ import type { InitModule } from '~/types'
 import type { Router } from 'vue-router'
 import type { App } from 'vue'
 
-const COOKIE = 'allow-tracing2'
+const COOKIE = 'allow-tracing'
 
 const initSentry = async (app: App, router: Router) => {
   const [{ BrowserTracing }, Sentry] = await Promise.all([
