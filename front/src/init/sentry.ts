@@ -2,14 +2,14 @@ import type { InitModule } from '~/types'
 import type { Router } from 'vue-router'
 import type { App } from 'vue'
 
-import * as Sentry from '@sentry/vue'
-import { BrowserTracing } from '@sentry/tracing'
-import { useCookies } from '@vueuse/integrations/useCookies'
-import { gettext } from '~/init/locale'
+const COOKIE = 'allow-tracing2'
 
-const COOKIE = 'allow-tracing'
+const initSentry = async (app: App, router: Router) => {
+  const [{ BrowserTracing }, Sentry] = await Promise.all([
+    import('@sentry/tracing'),
+    import('@sentry/vue')
+  ])
 
-const initSentry = (app: App, router: Router) => {
   Sentry.init({
     app,
     dsn: import.meta.env.VUE_SENTRY_DSN,
@@ -27,8 +27,13 @@ const initSentry = (app: App, router: Router) => {
   })
 }
 
-export const install: InitModule = ({ app, router, store }) => {
+export const install: InitModule = async ({ app, router, store }) => {
   if (import.meta.env.VUE_SENTRY_DSN) {
+    const [{ useCookies }, { gettext: { $pgettext } }] = await Promise.all([
+      import('@vueuse/integrations/useCookies'),
+      import('~/init/locale')
+    ])
+
     const { get, set } = useCookies()
 
     const allowed = get(COOKIE)
@@ -38,7 +43,6 @@ export const install: InitModule = ({ app, router, store }) => {
     }
 
     if (allowed === undefined) {
-      const { $pgettext } = gettext
       const { hostname, origin } = new URL(import.meta.env.VUE_SENTRY_DSN)
       return store.commit('ui/addMessage', {
         content: hostname === 'am.funkwhale.audio'
@@ -62,7 +66,7 @@ export const install: InitModule = ({ app, router, store }) => {
             class: 'primary',
             click: () => {
               set(COOKIE, 'yes')
-              initSentry(app, router)
+              return initSentry(app, router)
             }
           },
           {
