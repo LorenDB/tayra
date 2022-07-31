@@ -294,13 +294,14 @@ export interface Form {
 
 // Upload stuff
 export interface Upload {
+  uuid: string
   filename?: string
   source?: string
-  uuid: string
   duration?: number
   mimetype: string
   extension: string
   listen_url: string
+  size?: number
 
   import_status: ImportStatus
   import_details?: {
@@ -308,7 +309,7 @@ export interface Upload {
     error_code: string
   }
 
-  import_metadata?: Track
+  import_metadata?: Record<string, string>
 }
 
 // FileSystem Logs

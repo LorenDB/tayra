@@ -5,16 +5,21 @@ import axios from 'axios'
 import { useVModel } from '@vueuse/core'
 import { reactive, ref, watch } from 'vue'
 
+interface Emits {
+  (e: 'update:modelValue', value: string): void
+}
+
 interface Props {
-  modelValue: number
+  modelValue: string | null
   channel: Channel | null
 }
 
+const emit = defineEmits<Emits>()
 const props = withDefaults(defineProps<Props>(), {
+  modelValue: null,
   channel: null
 })
 
-const emit = defineEmits(['update:modelValue'])
 const value = useVModel(props, 'modelValue', emit)
 
 const albums = reactive<Album[]>([])
@@ -36,8 +41,7 @@ const fetchData = async () => {
   isLoading.value = false
 }
 
-watch(() => props.channel, fetchData)
-fetchData()
+watch(() => props.channel, fetchData, { immediate: true })
 </script>
 
 <template>

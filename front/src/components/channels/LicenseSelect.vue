@@ -5,12 +5,19 @@ import { computed, reactive, ref } from 'vue'
 import axios from 'axios'
 import { useVModel } from '@vueuse/core'
 
-interface Props {
-  modelValue: string
+interface Emits {
+  (e: 'update:modelValue', value: string): void
 }
 
-const props = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
+interface Props {
+  modelValue: string | null
+}
+
+const emit = defineEmits<Emits>()
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: null
+})
+
 const value = useVModel(props, 'modelValue', emit)
 
 const availableLicenses = reactive<License[]>([])

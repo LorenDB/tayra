@@ -1,6 +1,405 @@
+<script setup lang="ts">
+import type { BackendError, Channel, Upload } from '~/types'
+import type { VueUploadItem } from 'vue-upload-component'
+
+import { computed, ref, reactive, watchEffect, watch } from 'vue'
+import { whenever, useCurrentElement } from '@vueuse/core'
+import { humanSize } from '~/utils/filters'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+import $ from 'jquery'
+
+import LicenseSelect from '~/components/channels/LicenseSelect.vue'
+import AlbumSelect from '~/components/channels/AlbumSelect.vue'
+import FileUploadWidget from '~/components/library/FileUploadWidget.vue'
+import UploadMetadataForm from '~/components/channels/UploadMetadataForm.vue'
+
+interface Emits {
+  (e: 'status', status: UploadStatus): void
+  (e: 'step', step: 1 | 2 | 3): void
+}
+
+interface Props {
+  channel?: Channel | null
+}
+
+interface QuotaStatus {
+  remaining: number
+}
+
+interface UploadStatus {
+  totalSize: number
+  totalFiles: number
+  progress: number
+  speed: number
+  quotaStatus: QuotaStatus
+  uploadedSize: number
+  canSubmit: boolean
+}
+
+interface UploadedFile extends VueUploadItem {
+  _fileObj?: VueUploadItem
+  removed: boolean
+  metadata: Record<string, string>
+}
+
+const emit = defineEmits<Emits>()
+const props = withDefaults(defineProps<Props>(), {
+  channel: null
+})
+
+const { $pgettext } = useGettext()
+const store = useStore()
+
+// TODO (wvffle): Find types in UploadMetadataForm.vue
+const errors = ref([] as string[])
+
+const values = reactive({
+  channel: props.channel?.uuid ?? null,
+  license: null,
+  album: null
+})
+
+//
+// Channels
+//
+const availableChannels = reactive({
+  channels: [] as Channel[],
+  count: 0,
+  loading: false
+})
+
+const fetchChannels = async () => {
+  availableChannels.loading = true
+
+  try {
+    const response = await axios.get('channels/', { params: { scope: 'me' } })
+    availableChannels.channels = response.data.results
+    availableChannels.count = response.data.count
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  availableChannels.loading = false
+}
+
+const selectedChannel = computed(() => availableChannels.channels.find((channel) => channel.uuid === values.channel) ?? null)
+
+//
+// Quota and space
+//
+const quotaStatus = ref()
+const fetchQuota = async () => {
+  try {
+    const response = await axios.get('users/me/')
+    quotaStatus.value = response.data.quota_status as QuotaStatus
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+}
+
+const uploadedSize = computed(() => {
+  let uploaded = 0
+
+  for (const file of uploadedFiles.value) {
+    if (file._fileObj && !file.error) {
+      uploaded += (file.size ?? 0) * +(file.progress ?? 0)
+    }
+  }
+
+  return uploaded
+})
+
+const remainingSpace = computed(() => Math.max(
+  (quotaStatus.value?.remaining ?? 0) - uploadedSize.value / 1e6,
+  0
+))
+
+//
+// Draft uploads
+//
+const includeDraftUploads = ref()
+const draftUploads = ref([] as Upload[])
+whenever(() => values.channel !== null, async () => {
+  files.value = []
+  draftUploads.value = []
+
+  try {
+    const response = await axios.get('uploads', {
+      params: { import_status: 'draft', channel: values.channel }
+    })
+
+    draftUploads.value = response.data.results as Upload[]
+    for (const upload of response.data.results as Upload[]) {
+      uploadImportData[upload.uuid] = upload.import_metadata ?? {}
+    }
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+}, { immediate: true })
+
+//
+// Uploading files
+//
+const upload = ref()
+const beforeFileUpload = (newFile: VueUploadItem) => {
+  if (!newFile) return
+  if (remainingSpace.value < (newFile.size ?? Infinity) / 1e6) {
+    newFile.error = 'denied'
+  } else {
+    upload.value.active = true
+  }
+}
+
+const baseImportMetadata = computed(() => ({
+  channel: values.channel,
+  import_status: 'draft',
+  import_metadata: { license: values.license, album: values.album }
+}))
+
+//
+// Uploaded files
+//
+const files = ref([] as VueUploadItem[])
+const removed = reactive(new Set<string>())
+const uploadedFiles = computed(() => {
+  const uploadedFiles = files.value.map(file => {
+    const data = {
+      ...file,
+      _fileObj: file,
+      removed: false,
+      metadata: {}
+    } as UploadedFile
+
+    if (file.response?.uuid) {
+      const uuid = file.response.uuid as string
+      data.metadata = uploadImportData[uuid] ?? uploadData[uuid].import_metadata ?? {}
+      data.removed = removed.has(uuid)
+    }
+
+    return data
+  })
+
+  if (includeDraftUploads.value) {
+    // We have two different objects: draft uploads (so already uploaded in a previous)
+    // session, and files uploaded in the current session
+    // so we ensure we have a similar structure for both.
+    uploadedFiles.unshift(...draftUploads.value.map(upload => ({
+      id: upload.uuid,
+      response: upload,
+      __filename: null,
+      size: upload.size,
+      progress: '1.00',
+      name: upload.source?.replace('upload://', '') ?? '',
+      active: false,
+      removed: removed.has(upload.uuid),
+      metadata: uploadImportData[upload.uuid] ?? audioMetadata[upload.uuid] ?? upload.import_metadata ?? {}
+    } as UploadedFile)))
+  }
+
+  return uploadedFiles.filter(file => !file.removed) as UploadedFile[]
+})
+
+const uploadedFilesById = computed(() => uploadedFiles.value.reduce((acc: Record<string, VueUploadItem>, file) => {
+  acc[file.response?.uuid] = file
+  return acc
+}, {}))
+
+//
+// Metadata
+//
+const uploadImportData = reactive({} as Record<string, Record<string, string>>)
+const audioMetadata = reactive({} as Record<string, Record<string, string>>)
+const uploadData = reactive({} as Record<string, { import_metadata: Record<string, string> }>)
+const patchUpload = async (id: string, data: Record<string, Record<string, string>>) => {
+  const response = await axios.patch(`uploads/${id}/`, data)
+  uploadData[id] = response.data
+  uploadImportData[id] = response.data.import_metadata
+}
+
+const fetchAudioMetadata = async (uuid: string) => {
+  delete audioMetadata[uuid]
+
+  const response = await axios.get(`uploads/${uuid}/audio-file-metadata/`)
+  audioMetadata[uuid] = response.data
+
+  const uploadedFile = uploadedFilesById.value[uuid]
+  if (uploadedFile.response?.import_metadata.title === uploadedFile._fileObj?.name.replace(/\.[^/.]+$/, '') && response.data.title) {
+    // Replace existing title deduced from file by the one in audio file metadata, if any
+    uploadImportData[uuid].title = response.data.title
+  }
+
+  for (const key of ['title', 'position', 'tags']) {
+    if (uploadImportData[uuid][key] === undefined) {
+      uploadImportData[uuid][key] = response.data[key]
+    }
+  }
+
+  if (uploadImportData[uuid].description === undefined) {
+    uploadImportData[uuid].description = (response.data.description ?? {}).text
+  }
+
+  await patchUpload(uuid, { import_metadata: uploadImportData[uuid] })
+}
+
+watchEffect(async () => {
+  for (const file of files.value) {
+    if (file.response?.uuid && audioMetadata[file.response.uuid] === undefined) {
+      uploadData[file.response.uuid] = file.response as { import_metadata: Record<string, string> }
+      uploadImportData[file.response.uuid] = file.response.import_metadata
+      fetchAudioMetadata(file.response.uuid)
+    }
+  }
+})
+
+//
+// Select upload
+//
+const selectedUploadId = ref()
+const selectedUpload = computed(() => {
+  if (!selectedUploadId.value) return null
+
+  const selected = uploadedFiles.value.find(file => file.response?.uuid === selectedUploadId.value)
+  if (!selected) return null
+
+  return {
+    ...(selected.response ?? {}),
+    _fileObj: selected._fileObj
+  } as Upload & { _fileObj?: VueUploadItem }
+})
+
+//
+// Actions
+//
+const remove = async (file: VueUploadItem) => {
+  if (file.response?.uuid) {
+    removed.add(file.response.uuid)
+    try {
+      await axios.delete(`uploads/${file.response.uuid}/`)
+    } catch (error) {
+      // TODO (wvffle): Handle error
+    }
+  } else {
+    upload.value.remove(file)
+  }
+}
+
+const retry = async (file: VueUploadItem) => {
+  upload.value.update(file, { error: '', progress: '0.00' })
+  upload.value.active = true
+}
+
+//
+// Init
+//
+fetchChannels()
+fetchQuota()
+
+//
+// Dropdown
+//
+const el = useCurrentElement()
+watch(() => availableChannels.channels, () => {
+  $(el.value).find('#channel-dropdown').dropdown({
+    onChange (value) {
+      values.channel = value
+    },
+    values: availableChannels.channels.map((channel) => {
+      const value = {
+        name: channel.artist?.name ?? '',
+        value: channel.uuid,
+        selected: props.channel?.uuid === channel.uuid
+      } as {
+        name: string
+        value: string
+        selected: boolean
+        image?: string
+        imageClass?: string
+        icon?: string
+        iconClass?: string
+      }
+
+      if (channel.artist?.cover?.urls.medium_square_crop) {
+        value.image = store.getters['instance/absoluteUrl'](channel.artist.cover.urls.medium_square_crop)
+        value.imageClass = channel.artist.content_category !== 'podcast'
+          ? 'ui image avatar'
+          : 'ui image'
+      } else {
+        value.icon = 'user'
+        value.iconClass = channel.artist?.content_category !== 'podcast'
+          ? 'circular icon'
+          : 'bordered icon'
+      }
+
+      return value
+    })
+  })
+
+  $(el.value).find('#channel-dropdown').dropdown('hide')
+})
+
+//
+// Step
+//
+const step = ref<1 | 2 | 3>(1)
+watchEffect(() => {
+  emit('step', step.value)
+
+  if (step.value === 2) {
+    selectedUploadId.value = null
+  }
+})
+
+watch(selectedUploadId, async (to, from) => {
+  if (to) {
+    step.value = 3
+  }
+
+  if (!to && step.value !== 2) {
+    step.value = 2
+  }
+
+  if (from) {
+    await patchUpload(from, { import_metadata: uploadImportData[from] })
+  }
+})
+
+//
+// Status
+//
+
+watchEffect(() => {
+  const uploaded = uploadedFiles.value
+  const totalSize = uploaded.reduce(
+    (acc, uploadedFile) => !uploadedFile.error
+      ? acc + (uploadedFile.size ?? 0)
+      : acc,
+    0
+  )
+
+  const activeFile = files.value.find(file => file.active)
+
+  emit('status', {
+    totalSize,
+    totalFiles: uploaded.length,
+    progress: Math.floor(uploadedSize.value / totalSize * 100),
+    speed: activeFile?.speed ?? 0,
+    quotaStatus: quotaStatus.value,
+    uploadedSize: uploadedSize.value,
+    canSubmit: activeFile !== undefined && uploadedFiles.value.length > 0
+  })
+})
+
+const labels = computed(() => ({
+  editTitle: $pgettext('Content/*/Button.Label/Verb', 'Edit')
+}))
+</script>
+
 <template>
   <form
-    :class="['ui', {loading: isLoadingStep1}, 'form component-file-upload']"
+    :class="['ui', { loading: availableChannels.loading }, 'form component-file-upload']"
     @submit.stop.prevent
   >
     <div
@@ -53,7 +452,7 @@
         </p>
       </div>
     </div>
-    <template v-if="step >= 2 && step < 4">
+    <template v-if="step === 2 || step === 3">
       <div
         v-if="remainingSpace === 0"
         role="alert"
@@ -70,7 +469,7 @@
       </div>
       <template v-else>
         <div
-          v-if="step === 2 && draftUploads && draftUploads.length > 0 && includeDraftUploads === null"
+          v-if="step === 2 && draftUploads?.length > 0 && includeDraftUploads === undefined"
           class="ui visible info message"
         >
           <p>
@@ -107,19 +506,19 @@
           >
             <div class="content">
               <div
-                v-if="file.response.uuid"
+                v-if="file.response?.uuid"
                 role="button"
                 class="ui basic icon button"
                 :title="labels.editTitle"
-                @click.stop.prevent="selectedUploadId = file.response.uuid"
+                @click.stop.prevent="selectedUploadId = file.response?.uuid"
               >
                 <i class="pencil icon" />
               </div>
               <div
                 v-if="file.error"
                 class="ui basic danger icon label"
-                :title="file.error"
-                @click.stop.prevent="selectedUploadId = file.response.uuid"
+                :title="file.error.toString()"
+                @click.stop.prevent="selectedUploadId = file.response?.uuid"
               >
                 <i class="warning sign icon" />
               </div>
@@ -136,8 +535,8 @@
                 {{ file.name }}
               </template>
               <div class="sub header">
-                <template v-if="file.response.uuid">
-                  {{ humanSize(file.size) }}
+                <template v-if="file.response?.uuid">
+                  {{ humanSize(file.size ?? 0) }}
                   <template v-if="file.response.duration">
                     · <human-duration :duration="file.response.duration" />
                   </template>
@@ -161,8 +560,8 @@
                   >
                     Pending
                   </translate>
-                  · {{ humanSize(file.size) }}
-                  · {{ parseInt(file.progress) }}%
+                  · {{ humanSize(file.size ?? 0) }}
+                  · {{ parseFloat(file.progress ?? '0') * 100 }}%
                 </template>
                 · <a @click.stop.prevent="remove(file)">
                   <translate translate-context="Content/Radio/Button.Label/Verb">Remove</translate>
@@ -181,7 +580,7 @@
           v-if="selectedUpload"
           :upload="selectedUpload"
           :values="uploadImportData[selectedUploadId]"
-          @values="setDynamic('uploadImportData', selectedUploadId, $event)"
+          @values="uploadImportData.selectedUploadId = $event"
         />
         <div
           v-if="step === 2"
@@ -201,16 +600,16 @@
         </div>
         <file-upload-widget
           ref="upload"
-          v-model="filesModel"
+          v-model="files"
           :class="['ui', 'icon', 'basic', 'button', 'channels', {hidden: step === 3}]"
-          :post-action="uploadUrl"
+          :post-action="$store.getters['instance/absoluteUrl']('/api/v1/uploads/')"
           :multiple="true"
           :data="baseImportMetadata"
           :drop="true"
           :extensions="$store.state.ui.supportedExtensions"
           name="audio_file"
           :thread="1"
-          @input-file="inputFile"
+          @input-file="beforeFileUpload"
         >
           <div>
             <i class="upload icon" />&nbsp;
@@ -230,398 +629,3 @@
     </template>
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-import $ from 'jquery'
-
-import LicenseSelect from '~/components/channels/LicenseSelect.vue'
-import AlbumSelect from '~/components/channels/AlbumSelect.vue'
-import FileUploadWidget from '~/components/library/FileUploadWidget.vue'
-import UploadMetadataForm from '~/components/channels/UploadMetadataForm.vue'
-import { humanSize } from '~/utils/filters'
-
-function setIfEmpty (obj, k, v) {
-  if (obj[k] !== undefined) {
-    return
-  }
-  obj[k] = v
-}
-
-// TODO (wvffle): Find types in UploadMetadataForm.vue
-
-export default {
-  components: {
-    AlbumSelect,
-    LicenseSelect,
-    FileUploadWidget,
-    UploadMetadataForm
-  },
-  props: {
-    channel: { type: Object, default: null, required: false }
-  },
-  setup () {
-    return { humanSize }
-  },
-  data () {
-    return {
-      availableChannels: {
-        results: [],
-        count: 0
-      },
-      audioMetadata: {},
-      uploadData: {},
-      uploadImportData: {},
-      draftUploads: null,
-      files: [],
-      errors: [],
-      removed: [],
-      includeDraftUploads: null,
-      uploadUrl: this.$store.getters['instance/absoluteUrl']('/api/v1/uploads/'),
-      quotaStatus: null,
-      isLoadingStep1: true,
-      step: 1,
-      values: {
-        channel: (this.channel || {}).uuid,
-        license: null,
-        album: null
-      },
-      selectedUploadId: null
-    }
-  },
-  computed: {
-    filesModel: {
-      get () {
-        return this.files
-      },
-
-      set (value) {
-        this.updateFiles(value)
-      }
-    },
-    labels () {
-      return {
-        editTitle: this.$pgettext('Content/*/Button.Label/Verb', 'Edit')
-
-      }
-    },
-    baseImportMetadata () {
-      return {
-        channel: this.values.channel,
-        import_status: 'draft',
-        import_metadata: { license: this.values.license, album: this.values.album || null }
-      }
-    },
-    remainingSpace () {
-      if (!this.quotaStatus) {
-        return 0
-      }
-      return Math.max(0, this.quotaStatus.remaining - (this.uploadedSize / (1000 * 1000)))
-    },
-    selectedChannel () {
-      const self = this
-      return this.availableChannels.results.filter((c) => {
-        return c.uuid === self.values.channel
-      })[0] ?? null
-    },
-    selectedUpload () {
-      const self = this
-      if (!this.selectedUploadId) {
-        return null
-      }
-      const selected = this.uploadedFiles.filter((f) => {
-        return f.response && f.response.uuid === self.selectedUploadId
-      })[0]
-      return {
-        ...selected.response,
-        _fileObj: selected._fileObj
-      }
-    },
-    uploadedFilesById () {
-      const data = {}
-      this.uploadedFiles.forEach((u) => {
-        data[u.response.uuid] = u
-      })
-      return data
-    },
-    uploadedFiles () {
-      const self = this
-      const files = this.files.map((f) => {
-        const data = {
-          ...f,
-          _fileObj: f,
-          metadata: {}
-        }
-        if (f.response && f.response.uuid) {
-          const uploadImportMetadata = self.uploadImportData[f.response.uuid] || self.uploadData[f.response.uuid].import_metadata
-          data.metadata = {
-            ...uploadImportMetadata
-          }
-          data.removed = self.removed.indexOf(f.response.uuid) >= 0
-        }
-        return data
-      })
-      let final = []
-      if (this.includeDraftUploads) {
-        // we have two different objects: draft uploads (so already uploaded in a previous)
-        // session, and files uploaded in the current session
-        // so we ensure we have a similar structure for both.
-
-        final = [
-          ...this.draftUploads.map((u) => {
-            return {
-              response: u,
-              _fileObj: null,
-              size: u.size,
-              progress: 100,
-              name: u.source.replace('upload://', ''),
-              active: false,
-              removed: self.removed.indexOf(u.uuid) >= 0,
-              metadata: self.uploadImportData[u.uuid] || self.audioMetadata[u.uuid] || u.import_metadata
-            }
-          }),
-          ...files
-        ]
-      } else {
-        final = files
-      }
-      return final.filter((f) => {
-        return !f.removed
-      })
-    },
-    summaryData () {
-      let speed = null
-      let remaining = null
-      if (this.activeFile) {
-        speed = this.activeFile.speed
-        remaining = parseInt(this.totalSize / speed)
-      }
-      return {
-        totalFiles: this.uploadedFiles.length,
-        totalSize: this.totalSize,
-        uploadedSize: this.uploadedSize,
-        progress: parseInt(this.uploadedSize * 100 / this.totalSize),
-        canSubmit: !this.activeFile && this.uploadedFiles.length > 0,
-        speed,
-        remaining,
-        quotaStatus: this.quotaStatus
-      }
-    },
-    totalSize () {
-      let total = 0
-      this.uploadedFiles.forEach((f) => {
-        if (!f.error) {
-          total += f.size
-        }
-      })
-      return total
-    },
-    uploadedSize () {
-      let uploaded = 0
-      this.uploadedFiles.forEach((f) => {
-        if (f._fileObj && !f.error) {
-          uploaded += f.size * (f.progress / 100)
-        }
-      })
-      return uploaded
-    },
-    activeFile () {
-      return this.files.find((file) => file.active)
-    }
-  },
-  watch: {
-    'availableChannels.results' () {
-      this.setupChannelsDropdown()
-    },
-    'values.channel': {
-      async handler (v) {
-        this.files = []
-        if (v) {
-          await this.fetchDraftUploads(v)
-        }
-      },
-      immediate: true
-    },
-    step: {
-      handler (value) {
-        this.$emit('step', value)
-        if (value === 2) {
-          this.selectedUploadId = null
-        }
-      },
-      immediate: true
-    },
-    async selectedUploadId (v, o) {
-      if (v) {
-        this.step = 3
-      } else {
-        this.step = 2
-      }
-      if (o) {
-        await this.patchUpload(o, { import_metadata: this.uploadImportData[o] })
-      }
-    },
-    summaryData: {
-      handler (v) {
-        this.$emit('status', v)
-      },
-      immediate: true
-
-    }
-  },
-  async created () {
-    this.isLoadingStep1 = true
-    const p1 = this.fetchChannels()
-    await p1
-    this.isLoadingStep1 = false
-    this.fetchQuota()
-  },
-  methods: {
-    async fetchChannels () {
-      const response = await axios.get('channels/', { params: { scope: 'me' } })
-      this.availableChannels = response.data
-    },
-    async patchUpload (id, data) {
-      const response = await axios.patch(`uploads/${id}/`, data)
-      this.uploadData[id] = response.data
-      this.uploadImportData[id] = response.data.import_metadata
-    },
-    fetchQuota () {
-      const self = this
-      axios.get('users/me/').then((response) => {
-        self.quotaStatus = response.data.quota_status
-      })
-    },
-    publish () {
-      const self = this
-      self.isLoading = true
-      self.errors = []
-      const ids = this.uploadedFiles.map((f) => {
-        return f.response.uuid
-      })
-      const payload = {
-        action: 'publish',
-        objects: ids
-      }
-      return axios.post('uploads/action/', payload).then(
-        response => {
-          self.isLoading = false
-          self.$emit('published', {
-            uploads: self.uploadedFiles.map((u) => {
-              return {
-                ...u.response,
-                import_status: 'pending'
-              }
-            }),
-            channel: self.selectedChannel
-          })
-        },
-        error => {
-          self.errors = error.backendErrors
-        }
-      )
-    },
-    setupChannelsDropdown () {
-      const self = this
-      $(this.$el).find('#channel-dropdown').dropdown({
-        onChange (value, text, $choice) {
-          self.values.channel = value
-        },
-        values: this.availableChannels.results.map((c) => {
-          const d = {
-            name: c.artist.name,
-            value: c.uuid,
-            selected: self.channel && self.channel.uuid === c.uuid
-          }
-          if (c.artist.cover && c.artist.cover.urls.medium_square_crop) {
-            const coverUrl = self.$store.getters['instance/absoluteUrl'](c.artist.cover.urls.medium_square_crop)
-            d.image = coverUrl
-            if (c.artist.content_category === 'podcast') {
-              d.imageClass = 'ui image'
-            } else {
-              d.imageClass = 'ui avatar image'
-            }
-          } else {
-            d.icon = 'user'
-            if (c.artist.content_category === 'podcast') {
-              d.iconClass = 'bordered icon'
-            } else {
-              d.iconClass = 'circular icon'
-            }
-          }
-          return d
-        })
-      })
-      $(this.$el).find('#channel-dropdown').dropdown('hide')
-    },
-    inputFile (newFile, oldFile) {
-      if (!newFile) {
-        return
-      }
-      if (this.remainingSpace < newFile.size / (1000 * 1000)) {
-        newFile.error = 'denied'
-      } else {
-        this.$refs.upload.active = true
-      }
-    },
-    fetchAudioMetadata (uuid) {
-      const self = this
-      self.audioMetadata[uuid] = null
-      axios.get(`uploads/${uuid}/audio-file-metadata/`).then((response) => {
-        self.setDynamic('audioMetadata', uuid, response.data)
-        const uploadedFile = self.uploadedFilesById[uuid]
-        if (uploadedFile._fileObj && uploadedFile.response.import_metadata.title === uploadedFile._fileObj.name.replace(/\.[^/.]+$/, '') && response.data.title) {
-          // replace existing title deduced from file by the one in audio file metadat, if any
-          self.uploadImportData[uuid].title = response.data.title
-        } else {
-          setIfEmpty(self.uploadImportData[uuid], 'title', response.data.title)
-        }
-        setIfEmpty(self.uploadImportData[uuid], 'title', response.data.title)
-        setIfEmpty(self.uploadImportData[uuid], 'position', response.data.position)
-        setIfEmpty(self.uploadImportData[uuid], 'tags', response.data.tags)
-        setIfEmpty(self.uploadImportData[uuid], 'description', (response.data.description || {}).text)
-        self.patchUpload(uuid, { import_metadata: self.uploadImportData[uuid] })
-      })
-    },
-    setDynamic (objName, key, data) {
-      // cf https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats
-      const newData = {}
-      newData[key] = data
-      this[objName] = Object.assign({}, this[objName], newData)
-    },
-    updateFiles (value) {
-      this.files = value
-      this.files.forEach((f) => {
-        if (f.response?.uuid && this.audioMetadata[f.response.uuid] === undefined) {
-          this.uploadData[f.response.uuid] = f.response
-          this.setDynamic('uploadImportData', f.response.uuid, {
-            ...f.response.import_metadata
-          })
-          this.fetchAudioMetadata(f.response.uuid)
-        }
-      })
-    },
-    async fetchDraftUploads (channel) {
-      const self = this
-      this.draftUploads = null
-      const response = await axios.get('uploads', { params: { import_status: 'draft', channel } })
-      this.draftUploads = response.data.results
-      this.draftUploads.forEach((u) => {
-        self.uploadImportData[u.uuid] = u.import_metadata
-      })
-    },
-    remove (file) {
-      if (file.response && file.response.uuid) {
-        axios.delete(`uploads/${file.response.uuid}/`)
-        this.removed.push(file.response.uuid)
-      } else {
-        this.$refs.upload.remove(file)
-      }
-    },
-    retry (file) {
-      this.$refs.upload.update(file, { error: '', progress: '0.00' })
-      this.$refs.upload.active = true
-    }
-  }
-}
-</script>

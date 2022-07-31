@@ -1,5 +1,6 @@
 import type { Module } from 'vuex'
 import type { RootState } from '~/store/index'
+import type { Channel, Upload } from '~/types'
 
 import axios from 'axios'
 import useLogger from '~/composables/useLogger'
@@ -14,19 +15,10 @@ export interface State {
   }
 }
 
-interface Channel {
-  uuid: string
-}
-
 interface Publication {
   date: Date
   uploads: Upload[]
   channel: Channel
-}
-
-interface Upload {
-  uuid: string
-  import_status: 'pending' | 'skipped' | 'errored' | 'finished'
 }
 
 const logger = useLogger()

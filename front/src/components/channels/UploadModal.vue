@@ -82,10 +82,9 @@ const isLoading = ref(false)
     <div class="scrolling content">
       <channel-upload-form
         ref="uploadForm"
-        :channel="$store.state.channels.uploadModalConfig.channel"
+        :channel="$store.state.channels.uploadModalConfig.channel ?? null"
         @step="step = $event"
         @loading="isLoading = $event"
-        @published="$store.commit('channels/publish', $event)"
         @status="statusData = $event"
       />
     </div>

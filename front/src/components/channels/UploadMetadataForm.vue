@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Upload, Track } from '~/types'
+import type { Upload } from '~/types'
 
 import { ref, computed, watch } from 'vue'
 
@@ -8,12 +8,12 @@ import AttachmentInput from '~/components/common/AttachmentInput.vue'
 
 interface Emits {
   // TODO (wvffle): Find correct type
-  (e: 'values', values: any): void
+  (e: 'values', values: Record<string, string>): void
 }
 
 interface Props {
   upload: Upload
-  values?: Track | null
+  values?: Record<string, string> | null
 }
 
 const emit = defineEmits<Emits>()
