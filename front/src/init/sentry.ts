@@ -24,6 +24,8 @@ const initSentry = async (app: App, router: Router) => {
         routingInstrumentation: Sentry.vueRouterInstrumentation(router)
       })
     ],
+    debug: import.meta.env.DEV,
+    environment: import.meta.env.MODE,
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // We recommend adjusting this value in production
