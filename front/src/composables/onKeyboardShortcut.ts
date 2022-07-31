@@ -16,7 +16,7 @@ const bodyIsActive = computed(() => activeElement.value === document.body)
 
 const current = new Set()
 useEventListener(window, 'keydown', (event) => {
-  if (!bodyIsActive.value) return
+  if (!bodyIsActive.value && !event.key) return
   current.add(event.key.toLowerCase())
 
   const currentArray = [...current]
@@ -29,7 +29,9 @@ useEventListener(window, 'keydown', (event) => {
 })
 
 useEventListener(window, 'keyup', (event) => {
-  current.delete(event.key.toLowerCase())
+  if (!event.key) {
+    current.delete(event.key.toLowerCase())
+  }
 })
 
 export default (key: KeyFilter, handler: () => unknown, prevent = false) => {

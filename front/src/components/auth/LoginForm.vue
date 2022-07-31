@@ -2,7 +2,7 @@
 import type { BackendError } from '~/types'
 import type { RouteLocationRaw } from 'vue-router'
 
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
 
@@ -34,7 +34,10 @@ const labels = computed(() => ({
 }))
 
 const username = ref()
-onMounted(() => username.value.focus())
+onMounted(async () => {
+  await nextTick()
+  username.value?.focus()
+})
 
 const isLoading = ref(false)
 const errors = ref([] as string[])

@@ -38,9 +38,9 @@ export default (props: PlayOptionsProps) => {
       return props.track.uploads?.length > 0
     } else if (props.artist) {
       return props.artist.tracks_count > 0
-        || props.artist?.albums.some((album) => album.is_playable === true)
+        || props.artist?.albums?.some((album) => album.is_playable === true)
     } else if (props.tracks) {
-      return props.tracks.some((track) => (track.uploads?.length ?? 0) > 0)
+      return props.tracks?.some((track) => (track.uploads?.length ?? 0) > 0)
     }
 
     return false
