@@ -105,6 +105,13 @@ See {doc}`/administrator_documentation/configuration_docs/ldap` for more informa
    :annotation: = nginx
 .. autodata:: config.settings.common.PROTECT_FILES_PATH
    :annotation: = /_protected
+.. py:data:: NGINX_MAX_BODY_SIZE
+   :value: 100M
+
+   Controls the maximum size of file that users can upload.
+
+   .. note::
+      You can control how much total storage a user can access with the :term:`Upload Quota` setting.
 
 ```
 
