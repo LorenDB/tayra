@@ -50,7 +50,7 @@ extensions = [
     "sphinx.ext.graphviz",
     "sphinx.ext.autodoc",
     "myst_parser",
-    "sphinx_panels",
+    "sphinx_design",
     "sphinx_multiversion",
 ]
 autodoc_mock_imports = [
