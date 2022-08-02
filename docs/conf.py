@@ -59,6 +59,7 @@ autodoc_mock_imports = [
     "ldap",
     "persisting_theory",
     "rest_framework",
+    "drf_spectacular",
 ]
 add_module_names = False
 # Add any paths that contain templates here, relative to this directory.
@@ -72,6 +73,9 @@ source_suffix = ".rst"
 
 # The root toctree document.
 root_doc = "index"
+
+# Enable colon fences
+myst_enable_extensions = ["colon_fence"]
 
 # General information about the project.
 year = datetime.datetime.now().year
@@ -115,7 +119,7 @@ html_theme = "sphinx_rtd_theme"
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-#html_theme_options = {}
+# html_theme_options = {}
 html_context = {
     "display_gitlab": True,
     "gitlab_host": "dev.funkwhale.audio",
@@ -160,7 +164,13 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (root_doc, "funkwhale.tex", "funkwhale Documentation", "The Funkwhale Collective", "manual")
+    (
+        root_doc,
+        "funkwhale.tex",
+        "funkwhale Documentation",
+        "The Funkwhale Collective",
+        "manual",
+    )
 ]
 
 
