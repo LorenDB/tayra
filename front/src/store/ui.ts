@@ -362,25 +362,25 @@ const store: Module<State, RootState> = {
     }
   },
   actions: {
-    fetchUnreadNotifications ({ commit }) {
-      axios.get('federation/inbox/', { params: { is_read: false, page_size: 1 } }).then((response) => {
-        commit('notifications', { type: 'inbox', count: response.data.count })
-      })
+    async fetchUnreadNotifications ({ commit }) {
+      const response = await axios.get('federation/inbox/', { params: { is_read: false, page_size: 1 } })
+        .catch(() => ({ data: { count: 0 } }))
+      commit('notifications', { type: 'inbox', count: response.data.count })
     },
-    fetchPendingReviewEdits ({ commit }) {
-      axios.get('mutations/', { params: { is_approved: 'null', page_size: 1 } }).then((response) => {
-        commit('notifications', { type: 'pendingReviewEdits', count: response.data.count })
-      })
+    async fetchPendingReviewEdits ({ commit }) {
+      const response = await axios.get('mutations/', { params: { is_approved: 'null', page_size: 1 } })
+        .catch(() => ({ data: { count: 0 } }))
+      commit('notifications', { type: 'pendingReviewEdits', count: response.data.count })
     },
-    fetchPendingReviewReports ({ commit }) {
-      axios.get('manage/moderation/reports/', { params: { is_handled: 'false', page_size: 1 } }).then((response) => {
-        commit('notifications', { type: 'pendingReviewReports', count: response.data.count })
-      })
+    async fetchPendingReviewReports ({ commit }) {
+      const response = await axios.get('manage/moderation/reports/', { params: { is_handled: 'false', page_size: 1 } })
+        .catch(() => ({ data: { count: 0 } }))
+      commit('notifications', { type: 'pendingReviewReports', count: response.data.count })
     },
-    fetchPendingReviewRequests ({ commit }) {
-      axios.get('manage/moderation/requests/', { params: { status: 'pending', page_size: 1 } }).then((response) => {
-        commit('notifications', { type: 'pendingReviewRequests', count: response.data.count })
-      })
+    async fetchPendingReviewRequests ({ commit }) {
+      const response = await axios.get('manage/moderation/requests/', { params: { status: 'pending', page_size: 1 } })
+        .catch(() => ({ data: { count: 0 } }))
+      commit('notifications', { type: 'pendingReviewRequests', count: response.data.count })
     },
 
     async currentLanguage ({ commit, rootState }, value) {
