@@ -1,3 +1,289 @@
+<script setup lang="ts">
+import type { VueUploadItem } from 'vue-upload-component'
+import type { BackendError, Library, FileSystem } from '~/types'
+
+import { computed, ref, reactive, watch, nextTick } from 'vue'
+import { useEventListener, useIntervalFn } from '@vueuse/core'
+import { humanSize, truncate } from '~/utils/filters'
+import { useGettext } from 'vue3-gettext'
+import { sortBy } from 'lodash-es'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import LibraryFilesTable from '~/views/content/libraries/FilesTable.vue'
+import useWebSocketHandler from '~/composables/useWebSocketHandler'
+import updateQueryString from '~/composables/updateQueryString'
+import FileUploadWidget from './FileUploadWidget.vue'
+import FsBrowser from './FsBrowser.vue'
+import FsLogs from './FsLogs.vue'
+
+interface Emits {
+  (e: 'uploads-finished', delta: number):void
+}
+
+interface Props {
+  library: Library
+  defaultImportReference?: string
+}
+
+const emit = defineEmits<Emits>()
+const props = withDefaults(defineProps<Props>(), {
+  defaultImportReference: ''
+})
+
+const { $pgettext } = useGettext()
+const store = useStore()
+
+const upload = ref()
+const currentTab = ref('uploads')
+const supportedExtensions = computed(() => store.state.ui.supportedExtensions)
+
+const labels = computed(() => ({
+  tooltips: {
+    denied: $pgettext('Content/Library/Help text', 'Upload denied, ensure the file is not too big and that you have not reached your quota'),
+    server: $pgettext('Content/Library/Help text', 'Cannot upload this file, ensure it is not too big'),
+    network: $pgettext('Content/Library/Help text', 'A network error occurred while uploading this file'),
+    timeout: $pgettext('Content/Library/Help text', 'Upload timeout, please try again'),
+    retry: $pgettext('*/*/*/Verb', 'Retry'),
+    extension: $pgettext(
+      'Content/Library/Help text',
+      'Invalid file type, ensure you are uploading an audio file. Supported file extensions are %{ extensions }',
+      { extensions: supportedExtensions.value.join(', ') }
+    )
+  }
+}))
+
+const uploads = reactive({
+  pending: 0,
+  finished: 0,
+  skipped: 0,
+  errored: 0,
+  objects: {} as Record<string, any>
+})
+
+//
+// File counts
+//
+const files = ref([] as VueUploadItem[])
+const processedFilesCount = computed(() => uploads.skipped + uploads.errored + uploads.finished)
+const uploadedFilesCount = computed(() => files.value.filter(file => file.success).length)
+const retryableFiles = computed(() => files.value.filter(file => file.error))
+const erroredFilesCount = computed(() => retryableFiles.value.length)
+const processableFiles = computed(() => uploads.pending
+  + uploads.skipped
+  + uploads.errored
+  + uploads.finished
+  + uploadedFilesCount.value
+)
+
+//
+// Uploading
+//
+const importReference = ref(props.defaultImportReference || new Date().toISOString())
+history.replaceState(history.state, '', updateQueryString(location.href, 'import', importReference.value))
+const uploadData = computed(() => ({
+  library: props.library.uuid,
+  import_reference: importReference
+}))
+
+watch(() => uploads.finished, (newValue, oldValue) => {
+  if (newValue > oldValue) {
+    emit('uploads-finished', newValue - oldValue)
+  }
+})
+
+//
+// Upload status
+//
+const fetchStatus = async () => {
+  for (const status of Object.keys(uploads)) {
+    if (status === 'objects') continue
+
+    try {
+      const response = await axios.get('uploads/', {
+        params: {
+          import_reference: importReference.value,
+          import_status: status,
+          page_size: 1
+        }
+      })
+
+      uploads[status as keyof typeof uploads] = response.data.count
+    } catch (error) {
+      // TODO (wvffle): Handle error
+    }
+  }
+}
+
+fetchStatus()
+
+const needsRefresh = ref(false)
+useWebSocketHandler('import.status_updated', async (event) => {
+  if (event.upload.import_reference !== importReference.value) {
+    return
+  }
+
+  // TODO (wvffle): Why?
+  await nextTick()
+
+  uploads[event.old_status] -= 1
+  uploads[event.new_status] += 1
+  uploads.objects[event.upload.uuid] = event.upload
+  needsRefresh.value = true
+})
+
+//
+// Files
+//
+const sortedFiles = computed(() => {
+  const filesToSort = files.value
+
+  return [
+    ...sortBy(filesToSort.filter(file => file.errored), ['name']),
+    ...sortBy(filesToSort.filter(file => !file.errored && !file.success), ['name']),
+    ...sortBy(filesToSort.filter(file => file.success), ['name'])
+  ]
+})
+
+const hasActiveUploads = computed(() => files.value.some(file => file.active))
+
+//
+// Quota status
+//
+const quotaStatus = ref()
+
+const uploadedSize = computed(() => {
+  let uploaded = 0
+
+  for (const file of files.value) {
+    if (!file.error) {
+      uploaded += (file.size ?? 0) * +(file.progress ?? 0) / 100
+    }
+  }
+
+  return uploaded
+})
+
+const remainingSpace = computed(() => Math.max(
+  (quotaStatus.value?.remaining ?? 0) - uploadedSize.value / 1e6,
+  0
+))
+
+watch(remainingSpace, space => {
+  if (space <= 0) {
+    upload.value.active = false
+  }
+})
+
+const isLoadingQuota = ref(false)
+const fetchQuota = async () => {
+  isLoadingQuota.value = true
+
+  try {
+    const response = await axios.get('users/me/')
+    quotaStatus.value = response.data.quota_status
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoadingQuota.value = false
+}
+
+fetchQuota()
+
+//
+// Filesystem
+//
+const fsPath = reactive([])
+const fsStatus = ref({
+  import: {
+    status: 'pending'
+  }
+} as FileSystem)
+watch(fsPath, () => fetchFilesystem(true))
+
+const { pause, resume } = useIntervalFn(() => {
+  fetchFilesystem(false)
+}, 5000, { immediate: false })
+
+const isLoadingFs = ref(false)
+const fetchFilesystem = async (updateLoading: boolean) => {
+  if (updateLoading) isLoadingFs.value = true
+  pause()
+
+  try {
+    const response = await axios.get('libraries/fs-import', { params: { path: fsPath.join('/') } })
+    fsStatus.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  if (updateLoading) isLoadingFs.value = false
+  if (store.state.auth.availablePermissions.library) resume()
+}
+
+if (store.state.auth.availablePermissions.library) {
+  fetchFilesystem(true)
+}
+
+const fsErrors = ref([] as string[])
+const importFs = async () => {
+  isLoadingFs.value = true
+
+  try {
+    const response = await axios.post('libraries/fs-import', {
+      path: fsPath.join('/'),
+      library: props.library.uuid,
+      import_reference: importReference.value
+    })
+
+    fsStatus.value = response.data
+  } catch (error) {
+    fsErrors.value = (error as BackendError).backendErrors
+  }
+
+  isLoadingFs.value = false
+}
+
+// TODO (wvffle): Maybe use AbortController?
+const cancelFsScan = async () => {
+  try {
+    await axios.delete('libraries/fs-import')
+    fetchFilesystem(false)
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+}
+
+const inputFile = (newFile: VueUploadItem) => {
+  if (!newFile) return
+
+  if (remainingSpace.value < (newFile.size ?? Infinity) / 1e6) {
+    newFile.error = 'denied'
+  } else {
+    upload.value.active = true
+  }
+}
+
+const retry = (files: VueUploadItem[]) => {
+  for (const file of files) {
+    upload.value.update(file, { error: '', progress: '0.00' })
+  }
+
+  upload.value.active = true
+}
+
+//
+// Before unload
+//
+useEventListener(window, 'beforeunload', (event) => {
+  if (!hasActiveUploads.value) return null
+  event.preventDefault()
+  return (event.returnValue = $pgettext('*/*/*', 'This page is asking you to confirm that you want to leave - data you have entered may not be saved.'))
+})
+</script>
+
 <template>
   <div class="component-file-upload">
     <div class="ui top attached tabular menu">
@@ -102,7 +388,7 @@
           ref="upload"
           v-model="files"
           :class="['ui', 'icon', 'basic', 'button']"
-          :post-action="uploadUrl"
+          :post-action="$store.getters['instance/absoluteUrl']('/api/v1/uploads/')"
           :multiple="true"
           :data="uploadData"
           :drop="true"
@@ -117,10 +403,14 @@
           </translate>
           <br>
           <br>
-          <i><translate
-            translate-context="Content/Library/Paragraph"
-            :translate-params="{extensions: supportedExtensions.join(', ')}"
-          >Supported extensions: %{ extensions }</translate></i>
+          <i>
+            <translate
+              translate-context="Content/Library/Paragraph"
+              :translate-params="{extensions: supportedExtensions.join(', ')}"
+            >
+              Supported extensions: %{ extensions }
+            </translate>
+          </i>
         </file-upload-widget>
       </div>
       <div
@@ -174,14 +464,14 @@
               :key="file.id"
             >
               <td :title="file.name">
-                {{ truncate(file.name, 60) }}
+                {{ truncate(file.name ?? '', 60) }}
               </td>
-              <td>{{ humanSize(file.size) }}</td>
+              <td>{{ humanSize(file.size ?? 0) }}</td>
               <td>
                 <span
-                  v-if="file.error"
+                  v-if="typeof file.error === 'string' && file.error"
                   class="ui tooltip"
-                  :data-tooltip="labels.tooltips[file.error]"
+                  :data-tooltip="labels.tooltips[file.error as keyof typeof labels.tooltips]"
                 >
                   <span class="ui danger icon label">
                     <i class="question circle outline icon" /> {{ file.error }}
@@ -203,23 +493,29 @@
                   <translate
                     key="2"
                     translate-context="Content/Library/Table"
-                  >Uploading…</translate>
-                  ({{ parseInt(file.progress) }}%)
+                  >
+                    Uploading…
+                  </translate>
+                  ({{ parseFloat(file.progress ?? '0.00') }}%)
                 </span>
                 <span
                   v-else
                   class="ui label"
-                ><translate
-                  key="3"
-                  translate-context="Content/Library/*/Short"
-                >Pending</translate></span>
+                >
+                  <translate
+                    key="3"
+                    translate-context="Content/Library/*/Short"
+                  >
+                    Pending
+                  </translate>
+                </span>
               </td>
               <td>
                 <template v-if="file.error">
                   <button
-                    v-if="retryableFiles.indexOf(file) > -1"
+                    v-if="retryableFiles.includes(file)"
                     class="ui tiny basic icon right floated button"
-                    :title="labels.retry"
+                    :title="labels.tooltips.retry"
                     @click.prevent="retry([file])"
                   >
                     <i class="redo icon" />
@@ -228,7 +524,7 @@
                 <template v-else-if="!file.success">
                   <button
                     class="ui tiny basic danger icon right floated button"
-                    @click.prevent="$refs.upload.remove(file)"
+                    @click.prevent="upload.remove(file)"
                   >
                     <i class="delete icon" />
                   </button>
@@ -275,7 +571,7 @@
             Import status
           </translate>
         </h3>
-        <p v-if="fsStatus.import.reference != importReference">
+        <p v-if="fsStatus.import.reference !== importReference">
           <translate translate-context="Content/Library/Paragraph">
             Results of your previous import:
           </translate>
@@ -309,305 +605,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import { sortBy, debounce } from 'lodash-es'
-import axios from 'axios'
-import FileUploadWidget from './FileUploadWidget.vue'
-import FsBrowser from './FsBrowser.vue'
-import FsLogs from './FsLogs.vue'
-import LibraryFilesTable from '~/views/content/libraries/FilesTable.vue'
-import moment from 'moment'
-import { humanSize, truncate } from '~/utils/filters'
-
-export default {
-  components: {
-    FileUploadWidget,
-    LibraryFilesTable,
-    FsBrowser,
-    FsLogs
-  },
-  props: {
-    library: { type: Object, required: true },
-    defaultImportReference: { type: String, required: false, default: '' }
-  },
-  setup () {
-    return { humanSize, truncate }
-  },
-  data () {
-    const importReference = this.defaultImportReference || moment().format()
-    // Since $router.replace is pushing the same route, it raises NavigationDuplicated
-    this.$router.replace({ query: { import: importReference } }).catch((error) => {
-      if (error.name !== 'NavigationDuplicated') {
-        throw error
-      }
-    })
-    return {
-      files: [],
-      needsRefresh: false,
-      currentTab: 'uploads',
-      uploadUrl: this.$store.getters['instance/absoluteUrl']('/api/v1/uploads/'),
-      importReference,
-      isLoadingQuota: false,
-      quotaStatus: null,
-      uploads: {
-        pending: 0,
-        finished: 0,
-        skipped: 0,
-        errored: 0,
-        objects: {}
-      },
-      processTimestamp: new Date(),
-      fsStatus: {},
-      fsPath: [],
-      isLoadingFs: false,
-      fsInterval: null,
-      fsErrors: []
-    }
-  },
-  computed: {
-    supportedExtensions () {
-      return this.$store.state.ui.supportedExtensions
-    },
-    labels () {
-      const denied = this.$pgettext('Content/Library/Help text',
-        'Upload denied, ensure the file is not too big and that you have not reached your quota'
-      )
-      const server = this.$pgettext('Content/Library/Help text',
-        'Cannot upload this file, ensure it is not too big'
-      )
-      const network = this.$pgettext('Content/Library/Help text',
-        'A network error occurred while uploading this file'
-      )
-      const timeout = this.$pgettext('Content/Library/Help text', 'Upload timeout, please try again')
-      const extension = this.$pgettext('Content/Library/Help text',
-        'Invalid file type, ensure you are uploading an audio file. Supported file extensions are %{ extensions }'
-      )
-      return {
-        tooltips: {
-          denied,
-          server,
-          network,
-          timeout,
-          retry: this.$pgettext('*/*/*/Verb', 'Retry'),
-          extension: this.$gettextInterpolate(extension, {
-            extensions: this.supportedExtensions.join(', ')
-          })
-        }
-      }
-    },
-    uploadedFilesCount () {
-      return this.files.filter(f => {
-        return f.success
-      }).length
-    },
-    uploadingFilesCount () {
-      return this.files.filter(f => {
-        return !f.success && !f.error
-      }).length
-    },
-    erroredFilesCount () {
-      return this.files.filter(f => {
-        return f.error
-      }).length
-    },
-    retryableFiles () {
-      return this.files.filter(f => {
-        return f.error
-      })
-    },
-    processableFiles () {
-      return (
-        this.uploads.pending
-        + this.uploads.skipped
-        + this.uploads.errored
-        + this.uploads.finished
-        + this.uploadedFilesCount
-      )
-    },
-    processedFilesCount () {
-      return (
-        this.uploads.skipped + this.uploads.errored + this.uploads.finished
-      )
-    },
-    uploadData: function () {
-      return {
-        library: this.library.uuid,
-        import_reference: this.importReference
-      }
-    },
-    sortedFiles () {
-      // return errored files on top
-
-      return sortBy(this.files.map(f => {
-        let statusIndex = 0
-        if (f.errored) {
-          statusIndex = -1
-        }
-        if (f.success) {
-          statusIndex = 1
-        }
-        f.statusIndex = statusIndex
-        return f
-      }), ['statusIndex', 'name'])
-    },
-    hasActiveUploads () {
-      return this.sortedFiles.filter((f) => { return f.active }).length > 0
-    },
-    remainingSpace () {
-      if (!this.quotaStatus) {
-        return 0
-      }
-      return Math.max(0, this.quotaStatus.remaining - (this.uploadedSize / (1000 * 1000)))
-    },
-    uploadedSize () {
-      let uploaded = 0
-      this.files.forEach((f) => {
-        if (!f.error) {
-          uploaded += f.size * (f.progress / 100)
-        }
-      })
-      return uploaded
-    }
-  },
-  watch: {
-    importReference: debounce(function () {
-      this.$router.replace({ query: { import: this.importReference } })
-    }, 500),
-    remainingSpace (newValue) {
-      if (newValue <= 0) {
-        this.$refs.upload.active = false
-      }
-    },
-    'uploads.finished' (v, o) {
-      if (v > o) {
-        this.$emit('uploads-finished', v - o)
-      }
-    },
-    'fsPath' () {
-      this.fetchFs(true)
-    }
-  },
-  created () {
-    this.fetchStatus()
-    if (this.$store.state.auth.availablePermissions.library) {
-      this.fetchFs(true)
-      this.fsInterval = setInterval(() => {
-        this.fetchFs(false)
-      }, 5000)
-    }
-    this.fetchQuota()
-    this.$store.commit('ui/addWebsocketEventHandler', {
-      eventName: 'import.status_updated',
-      id: 'fileUpload',
-      handler: this.handleImportEvent
-    })
-    window.onbeforeunload = e => this.onBeforeUnload(e)
-  },
-  unmounted () {
-    this.$store.commit('ui/removeWebsocketEventHandler', {
-      eventName: 'import.status_updated',
-      id: 'fileUpload'
-    })
-    window.onbeforeunload = null
-    if (this.fsInterval) {
-      clearInterval(this.fsInterval)
-    }
-  },
-  methods: {
-    onBeforeUnload (e = {}) {
-      const returnValue = ('This page is asking you to confirm that you want to leave - data you have entered may not be saved.')
-      if (!this.hasActiveUploads) return null
-      Object.assign(e, {
-        returnValue
-      })
-      return returnValue
-    },
-    fetchQuota () {
-      const self = this
-      self.isLoadingQuota = true
-      axios.get('users/me/').then((response) => {
-        self.quotaStatus = response.data.quota_status
-        self.isLoadingQuota = false
-      })
-    },
-    fetchFs (updateLoading) {
-      const self = this
-      if (updateLoading) {
-        self.isLoadingFs = true
-      }
-      axios.get('libraries/fs-import', { params: { path: this.fsPath.join('/') } }).then((response) => {
-        self.fsStatus = response.data
-        if (updateLoading) {
-          self.isLoadingFs = false
-        }
-      })
-    },
-    importFs () {
-      const self = this
-      self.isLoadingFs = true
-      const payload = {
-        path: this.fsPath.join('/'),
-        library: this.library.uuid,
-        import_reference: this.importReference
-      }
-      axios.post('libraries/fs-import', payload).then((response) => {
-        self.fsStatus = response.data
-        self.isLoadingFs = false
-      }, error => {
-        self.isLoadingFs = false
-        self.fsErrors = error.backendErrors
-      })
-    },
-    async cancelFsScan () {
-      await axios.delete('libraries/fs-import')
-      this.fetchFs()
-    },
-    inputFile (newFile, oldFile) {
-      if (!newFile) {
-        return
-      }
-      if (this.remainingSpace < newFile.size / (1000 * 1000)) {
-        newFile.error = 'denied'
-      } else {
-        this.$refs.upload.active = true
-      }
-    },
-    fetchStatus () {
-      const self = this
-      const statuses = ['pending', 'errored', 'skipped', 'finished']
-      statuses.forEach(status => {
-        axios
-          .get('uploads/', {
-            params: {
-              import_reference: self.importReference,
-              import_status: status,
-              page_size: 1
-            }
-          })
-          .then(response => {
-            self.uploads[status] = response.data.count
-          })
-      })
-    },
-    handleImportEvent (event) {
-      const self = this
-      if (event.upload.import_reference !== self.importReference) {
-        return
-      }
-      this.$nextTick(() => {
-        self.uploads[event.old_status] -= 1
-        self.uploads[event.new_status] += 1
-        self.uploads.objects[event.upload.uuid] = event.upload
-        self.needsRefresh = true
-      })
-    },
-    retry (files) {
-      files.forEach((file) => {
-        this.$refs.upload.update(file, { error: '', progress: '0.00' })
-      })
-      this.$refs.upload.active = true
-    }
-  }
-}
-</script>

@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { VueUploadItem } from 'vue-upload-component'
 
-import FileUpload from 'vue-upload-component'
-import { getCookie } from '~/utils'
-import { computed, getCurrentInstance } from 'vue'
+import { useCookies } from '@vueuse/integrations/useCookies'
+import { computed, ref, watch, getCurrentInstance } from 'vue'
 import { useStore } from '~/store'
 
+import FileUpload from 'vue-upload-component'
+
+const { get } = useCookies()
 const instance = getCurrentInstance()
 const attrs = instance?.attrs ?? {}
 
@@ -19,7 +21,7 @@ const headers = computed(() => {
     headers.Authorization ??= store.getters['auth/header']
   }
 
-  const csrf = getCookie('csrftoken')
+  const csrf = get('csrftoken')
   if (csrf) headers['X-CSRFToken'] = csrf
 
   return headers
@@ -58,6 +60,21 @@ const uploadAction = async (file: VueUploadItem, self: any): Promise<VueUploadIt
   if (file.postAction) return self.uploadHtml4(file)
   return Promise.reject(new Error('No action configured'))
 }
+
+// NOTE: We need to expose the data and methods that we use
+const upload = ref()
+
+const active = ref(false)
+watch(active, () => (upload.value.active = active.value))
+
+const update = (file: VueUploadItem, data: Partial<VueUploadItem>) => upload.value.update(file, data)
+const remove = (file: VueUploadItem) => upload.value.remove(file)
+
+defineExpose({
+  active,
+  update,
+  remove
+})
 </script>
 
 <script lang="ts">
@@ -66,9 +83,18 @@ export default { inheritAttrs: false }
 </script>
 
 <template>
+  <!-- <component
+    ref="fileUpload"
+    :is="FileUpload"
+  >
+    <slot />
+  </component> -->
   <file-upload
+    ref="upload"
     v-bind="$attrs"
     :custom-action="uploadAction"
     :headers="headers"
-  />
+  >
+    <slot />
+  </file-upload>
 </template>

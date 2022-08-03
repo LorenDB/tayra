@@ -1,4 +1,4 @@
-import type { InitModule, ListenWSEvent, PendingReviewEditsWSEvent, PendingReviewReportsWSEvent, PendingReviewRequestsWSEvent } from '~/types'
+import type { InitModule } from '~/types'
 
 import { watchEffect, watch } from 'vue'
 import { useWebSocket, whenever } from '@vueuse/core'
@@ -37,28 +37,28 @@ export const install: InitModule = ({ store }) => {
   useWebSocketHandler('mutation.created', (event) => {
     store.commit('ui/incrementNotifications', {
       type: 'pendingReviewEdits',
-      value: (event as PendingReviewEditsWSEvent).pending_review_count
+      value: event.pending_review_count
     })
   })
 
   useWebSocketHandler('mutation.updated', (event) => {
     store.commit('ui/incrementNotifications', {
       type: 'pendingReviewEdits',
-      value: (event as PendingReviewEditsWSEvent).pending_review_count
+      value: event.pending_review_count
     })
   })
 
   useWebSocketHandler('report.created', (event) => {
     store.commit('ui/incrementNotifications', {
       type: 'pendingReviewReports',
-      value: (event as PendingReviewReportsWSEvent).unresolved_count
+      value: event.unresolved_count
     })
   })
 
   useWebSocketHandler('user_request.created', (event) => {
     store.commit('ui/incrementNotifications', {
       type: 'pendingReviewRequests',
-      value: (event as PendingReviewRequestsWSEvent).pending_count
+      value: event.pending_count
     })
   })
 
@@ -67,7 +67,7 @@ export const install: InitModule = ({ store }) => {
       const { current } = store.state.radios
 
       if (current.clientOnly) {
-        CLIENT_RADIOS[current.type].handleListen(current, event as ListenWSEvent, store)
+        CLIENT_RADIOS[current.type].handleListen(current, event, store)
       }
     }
   })

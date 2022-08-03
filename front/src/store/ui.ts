@@ -306,7 +306,7 @@ const store: Module<State, RootState> = {
     }
   },
   mutations: {
-    addWebsocketEventHandler: (state, { eventName, id, handler }: { eventName: WebSocketEventName, id: string, handler: () => void}) => {
+    addWebsocketEventHandler: (state, { eventName, id, handler }: { eventName: WebSocketEventName, id: string, handler: (event: any) => void}) => {
       state.websocketEventsHandlers[eventName][id] = handler
     },
     removeWebsocketEventHandler: (state, { eventName, id }: { eventName: WebSocketEventName, id: string }) => {

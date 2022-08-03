@@ -1,3 +1,161 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { ref, computed, reactive, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+import axios from 'axios'
+
+interface Action {
+  name: string
+  label: string
+  isDangerous?: boolean
+  allowAll?: boolean
+  confirmColor?: string
+  confirmationMessage?: string
+  filterChackable?: (item: never) => boolean
+}
+
+interface Emits {
+  (e: 'action-launched', data: any): void
+  (e: 'refresh'): void
+}
+
+interface Props {
+  objectsData: { results: [], count: number }
+  actions: [Action]
+  actionUrl: string
+  idField?: string
+  refreshable?: boolean
+  needsRefresh?: boolean
+  filters?: object
+  customObjects?: Record<string, unknown>[]
+}
+
+const emit = defineEmits<Emits>()
+const props = withDefaults(defineProps<Props>(), {
+  idField: 'id',
+  refreshable: false,
+  needsRefresh: false,
+  filters: () => ({}),
+  customObjects: () => []
+})
+
+const { $pgettext } = useGettext()
+
+const currentActionName = ref(props.actions[0]?.name ?? null)
+const currentAction = computed(() => props.actions.find(action => action.name === currentActionName.value))
+
+const checkable = computed(() => {
+  if (!currentAction.value) return []
+
+  return props.objectsData.results
+    .filter(currentAction.value.filterChackable ?? (() => true))
+    .map(item => item[props.idField] as string)
+})
+
+const objects = computed(() => props.objectsData.results.map(object => {
+  return props.customObjects.find(custom => custom[props.idField] === object[props.idField])
+    ?? object
+}))
+
+const selectAll = ref(false)
+const checked = reactive([] as string[])
+const affectedObjectsCount = computed(() => selectAll.value ? props.objectsData.count : checked.length)
+watch(() => props.objectsData, () => {
+  checked.length = 0
+  selectAll.value = false
+})
+
+// We update checked status as some actions have specific filters
+// on what is checkable or not
+watch(currentActionName, () => {
+  const ableToCheck = checkable.value
+  const replace = checked.filter(object => ableToCheck.includes(object))
+
+  checked.length = 0
+  checked.push(...replace)
+})
+
+const lastCheckedIndex = ref(-1)
+const toggleCheckAll = () => {
+  lastCheckedIndex.value = -1
+
+  if (checked.length === checkable.value.length) {
+    checked.length = 0
+    return
+  }
+
+  checked.length = 0
+  checked.push(...checkable.value)
+}
+
+const toggleCheck = (event: MouseEvent, id: string, index: number) => {
+  const affectedIds = new Set([id])
+
+  const wasChecked = checked.includes(id)
+  if (wasChecked) {
+    selectAll.value = false
+  }
+
+  // Add inbetween ids to the list of affected ids
+  if (event.shiftKey && lastCheckedIndex.value !== -1) {
+    const boundaries = [index, lastCheckedIndex.value].sort((a, b) => a - b)
+    for (const object of props.objectsData.results.slice(boundaries[0], boundaries[1] + 1)) {
+      affectedIds.add(object[props.idField])
+    }
+  }
+
+  for (const id of affectedIds) {
+    const isChecked = checked.includes(id)
+
+    if (!wasChecked && !isChecked && checkable.value.includes(id)) {
+      checked.push(id)
+      continue
+    }
+
+    if (wasChecked && isChecked) {
+      checked.splice(checked.indexOf(id), 1)
+    }
+  }
+
+  lastCheckedIndex.value = index
+}
+
+const labels = computed(() => ({
+  refresh: $pgettext('Content/*/Button.Tooltip/Verb', 'Refresh table content'),
+  selectAllItems: $pgettext('Content/*/Select/Verb', 'Select all items'),
+  performAction: $pgettext('Content/*/Button.Label', 'Perform actions'),
+  selectItem: $pgettext('Content/*/Select/Verb', 'Select')
+}))
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const result = ref()
+const launchAction = async () => {
+  isLoading.value = true
+  result.value = undefined
+  errors.value = []
+
+  try {
+    const response = await axios.post(props.actionUrl, {
+      action: currentActionName.value,
+      filters: props.filters,
+      objects: !selectAll.value
+        ? checked
+        : 'all'
+    })
+
+    result.value = response.data
+    emit('action-launched', response.data)
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <div class="table-wrapper component-action-table">
     <table class="ui compact very basic unstackable table">
@@ -34,8 +192,8 @@
                     class="ui dropdown"
                   >
                     <option
-                      v-for="(action, key) in actions"
-                      :key="key"
+                      v-for="action in actions"
+                      :key="action.name"
                       :value="action.name"
                     >
                       {{ action.label }}
@@ -44,9 +202,9 @@
                 </div>
                 <div class="field">
                   <dangerous-button
-                    v-if="selectAll || currentAction.isDangerous"
-                    :class="['ui', {disabled: checked.length === 0}, {'loading': actionLoading}, 'button']"
-                    :confirm-color="currentAction.confirmColor || 'success'"
+                    v-if="selectAll || currentAction?.isDangerous"
+                    :class="['ui', {disabled: checked.length === 0}, {'loading': isLoading}, 'button']"
+                    :confirm-color="currentAction?.confirmColor ?? 'success'"
                     :aria-label="labels.performAction"
                     @confirm="launchAction"
                   >
@@ -68,8 +226,8 @@
                     </template>
                     <template #modal-content>
                       <p>
-                        <template v-if="currentAction.confirmationMessage">
-                          {{ currentAction.confirmationMessage }}
+                        <template v-if="currentAction?.confirmationMessage">
+                          {{ currentAction?.confirmationMessage }}
                         </template>
                         <translate
                           v-else
@@ -89,9 +247,9 @@
                   </dangerous-button>
                   <button
                     v-else
-                    :disabled="checked.length === 0 || null"
+                    :disabled="checked.length === 0"
                     :aria-label="labels.performAction"
-                    :class="['ui', {disabled: checked.length === 0}, {'loading': actionLoading}, 'button']"
+                    :class="['ui', {disabled: checked.length === 0}, {'loading': isLoading}, 'button']"
                     @click="launchAction"
                   >
                     <translate translate-context="Content/*/Button.Label/Short, Verb">
@@ -120,7 +278,7 @@
                   >
                     %{ count } on %{ total } selected
                   </translate>
-                  <template v-if="currentAction.allowAll && checkable.length > 0 && checkable.length === checked.length">
+                  <template v-if="currentAction?.allowAll && checkable.length > 0 && checkable.length === checked.length">
                     <a
                       v-if="!selectAll"
                       href=""
@@ -150,7 +308,7 @@
                 </div>
               </div>
               <div
-                v-if="actionErrors.length > 0"
+                v-if="errors.length > 0"
                 role="alert"
                 class="ui negative message"
               >
@@ -161,7 +319,7 @@
                 </h4>
                 <ul class="list">
                   <li
-                    v-for="(error, key) in actionErrors"
+                    v-for="(error, key) in errors"
                     :key="key"
                   >
                     {{ error }}
@@ -169,14 +327,14 @@
                 </ul>
               </div>
               <div
-                v-if="actionResult"
+                v-if="result"
                 class="ui positive message"
               >
                 <p>
                   <translate
                     translate-context="Content/*/Paragraph"
-                    :translate-n="actionResult.updated"
-                    :translate-params="{count: actionResult.updated, action: actionResult.action}"
+                    :translate-n="result.updated"
+                    :translate-params="{count: result.updated, action: result.action}"
                     translate-plural="Action %{ action } was launched successfully on %{ count } elements"
                   >
                     Action %{ action } was launched successfully on %{ count } element
@@ -185,7 +343,7 @@
 
                 <slot
                   name="action-success-footer"
-                  :result="actionResult"
+                  :result="result"
                 />
               </div>
             </div>
@@ -198,7 +356,7 @@
               <input
                 type="checkbox"
                 :aria-label="labels.selectAllItems"
-                :disabled="checkable.length === 0 || null"
+                :disabled="checkable.length === 0"
                 :checked="checkable.length > 0 && checked.length === checkable.length"
                 @change="toggleCheckAll"
               >
@@ -220,9 +378,9 @@
             <input
               type="checkbox"
               :aria-label="labels.selectItem"
-              :disabled="checkable.indexOf(getId(obj)) === -1 || null"
-              :checked="checked.indexOf(getId(obj)) > -1"
-              @click="toggleCheck($event, getId(obj), index)"
+              :disabled="checkable.indexOf(obj[idField]) === -1"
+              :checked="checked.indexOf(obj[idField]) > -1"
+              @click="toggleCheck($event, obj[idField], index)"
             >
           </td>
           <slot
@@ -234,166 +392,3 @@
     </table>
   </div>
 </template>
-<script>
-import axios from 'axios'
-
-export default {
-  components: {},
-  props: {
-    actionUrl: { type: String, required: false, default: null },
-    idField: { type: String, required: false, default: 'id' },
-    refreshable: { type: Boolean, required: false, default: false },
-    needsRefresh: { type: Boolean, required: false, default: false },
-    objectsData: { type: Object, required: true },
-    actions: { type: Array, required: true, default: () => { return [] } },
-    filters: { type: Object, required: false, default: () => { return {} } },
-    customObjects: { type: Array, required: false, default: () => { return [] } }
-  },
-  data () {
-    const d = {
-      checked: [],
-      actionLoading: false,
-      actionResult: null,
-      actionErrors: [],
-      currentActionName: null,
-      selectAll: false,
-      lastCheckedIndex: -1
-    }
-    if (this.actions.length > 0) {
-      d.currentActionName = this.actions[0].name
-    }
-    return d
-  },
-  computed: {
-    currentAction () {
-      const self = this
-      return this.actions.filter((a) => {
-        return a.name === self.currentActionName
-      })[0]
-    },
-    checkable () {
-      const self = this
-      if (!this.currentAction) {
-        return []
-      }
-      let objs = this.objectsData.results
-      const filter = this.currentAction.filterCheckable
-      if (filter) {
-        objs = objs.filter((o) => {
-          return filter(o)
-        })
-      }
-      return objs.map((o) => { return self.getId(o) })
-    },
-    objects () {
-      const self = this
-      return this.objectsData.results.map((o) => {
-        const custom = self.customObjects.filter((co) => {
-          return self.getId(co) === self.getId(o)
-        })[0]
-        if (custom) {
-          return custom
-        }
-        return o
-      })
-    },
-    labels () {
-      return {
-        refresh: this.$pgettext('Content/*/Button.Tooltip/Verb', 'Refresh table content'),
-        selectAllItems: this.$pgettext('Content/*/Select/Verb', 'Select all items'),
-        performAction: this.$pgettext('Content/*/Button.Label', 'Perform actions'),
-        selectItem: this.$pgettext('Content/*/Select/Verb', 'Select')
-      }
-    },
-    affectedObjectsCount () {
-      if (this.selectAll) {
-        return this.objectsData.count
-      }
-      return this.checked.length
-    }
-  },
-  watch: {
-    objectsData: {
-      handler () {
-        this.checked = []
-        this.selectAll = false
-      },
-      deep: true
-    },
-    currentActionName () {
-      // we update checked status as some actions have specific filters
-      // on what is checkable or not
-      const self = this
-      this.checked = this.checked.filter(r => {
-        return self.checkable.indexOf(r) > -1
-      })
-    }
-  },
-  methods: {
-    toggleCheckAll () {
-      this.lastCheckedIndex = -1
-      if (this.checked.length === this.checkable.length) {
-        // we uncheck
-        this.checked = []
-      } else {
-        this.checked = this.checkable.map(i => { return i })
-      }
-    },
-    toggleCheck (event, id, index) {
-      const self = this
-      let affectedIds = [id]
-      let newValue = null
-      if (this.checked.indexOf(id) > -1) {
-        // we uncheck
-        this.selectAll = false
-        newValue = false
-      } else {
-        newValue = true
-      }
-      if (event.shiftKey && this.lastCheckedIndex > -1) {
-        // we also add inbetween ids to the list of affected ids
-        const idxs = [index, this.lastCheckedIndex]
-        idxs.sort((a, b) => a - b)
-        const objs = this.objectsData.results.slice(idxs[0], idxs[1] + 1)
-        affectedIds = affectedIds.concat(objs.map((o) => { return o.id }))
-      }
-      affectedIds.forEach((i) => {
-        const checked = self.checked.indexOf(i) > -1
-        if (newValue && !checked && self.checkable.indexOf(i) > -1) {
-          return self.checked.push(i)
-        }
-        if (!newValue && checked) {
-          self.checked.splice(self.checked.indexOf(i), 1)
-        }
-      })
-      this.lastCheckedIndex = index
-    },
-    launchAction () {
-      const self = this
-      self.actionLoading = true
-      self.result = null
-      self.actionErrors = []
-      const payload = {
-        action: this.currentActionName,
-        filters: this.filters
-      }
-      if (this.selectAll) {
-        payload.objects = 'all'
-      } else {
-        payload.objects = this.checked
-      }
-      axios.post(this.actionUrl, payload).then((response) => {
-        self.actionResult = response.data
-        self.actionLoading = false
-        self.$emit('action-launched', response.data)
-      }, error => {
-        self.actionLoading = false
-        self.actionErrors = error.backendErrors
-      })
-    },
-    getId (obj) {
-      return obj[this.idField]
-    }
-  }
-}
-</script>

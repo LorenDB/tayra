@@ -231,37 +231,6 @@ export interface RateLimitStatus {
 }
 
 // WebSocket stuff
-export interface PendingReviewEditsWSEvent {
-  pending_review_count: number
-}
-
-export interface PendingReviewReportsWSEvent {
-  unresolved_count: number
-}
-
-export interface PendingReviewRequestsWSEvent {
-  pending_count: number
-}
-
-export interface InboxItemAddedWSEvent {
-  item: Notification
-}
-
-export interface ListenWsEventObject {
-  local_id: string
-}
-
-export interface ListenWSEvent {
-  actor: ListenWsEventObject
-  object: ListenWsEventObject
-}
-
-// TODO (wvffle): Add reactivity to recently listened / favorited / added (#1316, #1534)
-// export interface ListenWSEvent extends Listening {
-//   type: 'Listen'
-// }
-
-export type WebSocketEvent = PendingReviewEditsWSEvent | PendingReviewReportsWSEvent | PendingReviewRequestsWSEvent | ListenWSEvent | InboxItemAddedWSEvent
 
 // FS Browser
 export interface FSEntry {
@@ -272,6 +241,13 @@ export interface FSEntry {
 export interface FileSystem {
   root: boolean
   content: FSEntry[]
+  import: FSLogs
+}
+
+export interface FSLogs {
+  status: 'pending' | 'started'
+  reference: unknown // TODO (wvffle): Find correct type
+  logs: string[]
 }
 
 // Content stuff
@@ -310,13 +286,6 @@ export interface Upload {
   }
 
   import_metadata?: Record<string, string>
-}
-
-// FileSystem Logs
-export interface FSLogs {
-  status: 'pending' | 'started'
-  reference: unknown // TODO (wvffle): Find correct type
-  logs: string[]
 }
 
 // Profile stuff

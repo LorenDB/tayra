@@ -28,6 +28,7 @@ module.exports = {
 
     // NOTE: Handled by typescript
     'no-undef': 'off',
+    'no-redeclare': 'off',
     'no-unused-vars': 'off',
     'no-use-before-define': 'off',
 

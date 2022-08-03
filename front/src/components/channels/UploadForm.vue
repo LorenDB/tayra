@@ -105,7 +105,7 @@ const uploadedSize = computed(() => {
 
   for (const file of uploadedFiles.value) {
     if (file._fileObj && !file.error) {
-      uploaded += (file.size ?? 0) * +(file.progress ?? 0)
+      uploaded += (file.size ?? 0) * +(file.progress ?? 0) / 100
     }
   }
 
@@ -191,7 +191,7 @@ const uploadedFiles = computed(() => {
       response: upload,
       __filename: null,
       size: upload.size,
-      progress: '1.00',
+      progress: '100.00',
       name: upload.source?.replace('upload://', '') ?? '',
       active: false,
       removed: removed.has(upload.uuid),
@@ -561,7 +561,7 @@ const labels = computed(() => ({
                     Pending
                   </translate>
                   · {{ humanSize(file.size ?? 0) }}
-                  · {{ parseFloat(file.progress ?? '0') * 100 }}%
+                  · {{ parseFloat(file.progress ?? '0') }}%
                 </template>
                 · <a @click.stop.prevent="remove(file)">
                   <translate translate-context="Content/Radio/Button.Label/Verb">Remove</translate>

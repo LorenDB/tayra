@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Notification, InboxItemAddedWSEvent } from '~/types'
+import type { Notification } from '~/types'
 
 import axios from 'axios'
 import moment from 'moment'
@@ -48,7 +48,7 @@ watch(filters, fetchData, { immediate: true })
 
 useWebSocketHandler('inbox.item_added', (event) => {
   notifications.count += 1
-  notifications.results.unshift(markRaw((event as InboxItemAddedWSEvent).item))
+  notifications.results.unshift(markRaw((event.item)))
 })
 
 const instanceSupportMessageDelay = ref(60)
