@@ -1,10 +1,12 @@
 import type { InitModule } from '~/types'
+import type { RootState } from '~/store'
 import type { Router } from 'vue-router'
-import type { App } from 'vue'
+import type { Store } from 'vuex'
+import { watchEffect, type App } from 'vue'
 
 const COOKIE = 'allow-tracing'
 
-const initSentry = async (app: App, router: Router) => {
+const initSentry = async (app: App, router: Router, store: Store<RootState>) => {
   const [{ default: useLogger }, { BrowserTracing }, Sentry] = await Promise.all([
     import('~/composables/useLogger'),
     import('@sentry/tracing'),
@@ -16,7 +18,7 @@ const initSentry = async (app: App, router: Router) => {
 
   Sentry.init({
     app,
-    dsn: import.meta.env.VUE_SENTRY_DSN,
+    dsn: import.meta.env.FUNKWHALE_SENTRY_DSN,
     logErrors: true,
     trackComponents: true,
     integrations: [
@@ -35,10 +37,33 @@ const initSentry = async (app: App, router: Router) => {
       'Image failed to load!'
     ]
   })
+
+  watchEffect(() => {
+    const url = store.getters['instance/domain']
+    Sentry.setTag('instance', url)
+  })
+
+  const setUser = (user: { username: string, [key: string]: any } | null) => {
+    Sentry.setUser(user)
+    Sentry.setContext('user', user)
+  }
+
+  watchEffect(() => {
+    if (store.state.auth.authenticated) {
+      return setUser({
+        username: store.state.auth.username,
+        canPublish: store.state.auth.availablePermissions.library,
+        canModerate: store.state.auth.availablePermissions.moderation,
+        isAdmin: store.state.auth.availablePermissions.settings
+      })
+    }
+
+    setUser(null)
+  })
 }
 
 export const install: InitModule = async ({ app, router, store }) => {
-  if (import.meta.env.VUE_SENTRY_DSN) {
+  if (import.meta.env.FUNKWHALE_SENTRY_DSN) {
     const [{ useCookies }, { gettext: { $pgettext } }] = await Promise.all([
       import('@vueuse/integrations/useCookies'),
       import('~/init/locale')
@@ -49,11 +74,11 @@ export const install: InitModule = async ({ app, router, store }) => {
     const allowed = get(COOKIE)
 
     if (allowed === 'yes') {
-      return initSentry(app, router)
+      return initSentry(app, router, store)
     }
 
     if (allowed === undefined) {
-      const { hostname, origin } = new URL(import.meta.env.VUE_SENTRY_DSN)
+      const { hostname, origin } = new URL(import.meta.env.FUNKWHALE_SENTRY_DSN)
       return store.commit('ui/addMessage', {
         content: hostname === 'am.funkwhale.audio'
           ? $pgettext(
@@ -76,7 +101,7 @@ export const install: InitModule = async ({ app, router, store }) => {
             class: 'primary',
             click: () => {
               set(COOKIE, 'yes')
-              return initSentry(app, router)
+              return initSentry(app, router, store)
             }
           },
           {

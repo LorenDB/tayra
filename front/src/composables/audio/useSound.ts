@@ -101,7 +101,7 @@ const loadSound = (track: Track): Sound => {
 
     onplay () {
       const [otherId] = (this as any)._getSoundIds()
-      const [currentId] = (currentSound.value?.howl as any)._getSoundIds() ?? []
+      const [currentId] = (currentSound.value?.howl as any)?._getSoundIds() ?? []
 
       if (otherId !== currentId) {
         return (this as any).stop()

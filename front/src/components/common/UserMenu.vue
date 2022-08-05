@@ -1,3 +1,39 @@
+<script setup lang="ts">
+import { useGettext } from 'vue3-gettext'
+
+import useThemeList from '~/composables/useThemeList'
+import useTheme from '~/composables/useTheme'
+import { computed } from 'vue'
+
+interface Emits {
+  (e: 'show:shortcuts-modal'): void
+}
+
+const emit = defineEmits<Emits>()
+
+const { $pgettext } = useGettext()
+const themes = useThemeList()
+const theme = useTheme()
+
+const labels = computed(() => ({
+  profile: $pgettext('*/*/*/Noun', 'Profile'),
+  settings: $pgettext('*/*/*/Noun', 'Settings'),
+  logout: $pgettext('Sidebar/Login/List item.Link/Verb', 'Log out'),
+  about: $pgettext('Sidebar/About/List item.Link', 'About'),
+  shortcuts: $pgettext('*/*/*/Noun', 'Keyboard shortcuts'),
+  support: $pgettext('Sidebar/*/Listitem.Link', 'Help'),
+  forum: $pgettext('Sidebar/*/Listitem.Link', 'Forum'),
+  docs: $pgettext('Sidebar/*/Listitem.Link', 'Documentation'),
+  language: $pgettext('Footer/Settings/Dropdown.Label/Short, Verb', 'Change language'),
+  theme: $pgettext('Footer/Settings/Dropdown.Label/Short, Verb', 'Change theme'),
+  chat: $pgettext('Sidebar/*/Listitem.Link', 'Chat room'),
+  git: $pgettext('Footer/*/List item.Link', 'Issue tracker'),
+  login: $pgettext('*/*/Button.Label/Verb', 'Log in'),
+  signup: $pgettext('*/*/Button.Label/Verb', 'Sign up'),
+  notifications: $pgettext('*/Notifications/*', 'Notifications')
+}))
+</script>
+
 <template>
   <div class="ui menu">
     <div class="ui scrolling dropdown item">
@@ -52,6 +88,13 @@
         :to="{name: 'notifications'}"
       >
         <i class="bell icon" />
+        <div
+          v-if="$store.state.ui.notifications.inbox > 0"
+          :title="labels.notifications"
+          :class="['ui', 'circular', 'mini', 'right floated', 'accent', 'label']"
+        >
+          {{ $store.state.ui.notifications.inbox }}
+        </div>
         {{ labels.notifications }}
       </router-link>
       <router-link
@@ -105,7 +148,7 @@
     <a
       href=""
       class="item"
-      @click.prevent="showShortcuts"
+      @click.prevent="emit('show:shortcuts-modal')"
     >
       <i class="keyboard icon" />
       {{ labels.shortcuts }}
@@ -150,49 +193,3 @@
     </template>
   </div>
 </template>
-
-<script>
-
-import { mapGetters } from 'vuex'
-import useThemeList from '~/composables/useThemeList'
-import useTheme from '~/composables/useTheme'
-
-export default {
-  setup () {
-    return {
-      theme: useTheme(),
-      themes: useThemeList()
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        profile: this.$pgettext('*/*/*/Noun', 'Profile'),
-        settings: this.$pgettext('*/*/*/Noun', 'Settings'),
-        logout: this.$pgettext('Sidebar/Login/List item.Link/Verb', 'Log out'),
-        about: this.$pgettext('Sidebar/About/List item.Link', 'About'),
-        shortcuts: this.$pgettext('*/*/*/Noun', 'Keyboard shortcuts'),
-        support: this.$pgettext('Sidebar/*/Listitem.Link', 'Help'),
-        forum: this.$pgettext('Sidebar/*/Listitem.Link', 'Forum'),
-        docs: this.$pgettext('Sidebar/*/Listitem.Link', 'Documentation'),
-        language: this.$pgettext('Footer/Settings/Dropdown.Label/Short, Verb', 'Change language'),
-        theme: this.$pgettext('Footer/Settings/Dropdown.Label/Short, Verb', 'Change theme'),
-        chat: this.$pgettext('Sidebar/*/Listitem.Link', 'Chat room'),
-        git: this.$pgettext('Footer/*/List item.Link', 'Issue tracker'),
-        login: this.$pgettext('*/*/Button.Label/Verb', 'Log in'),
-        signup: this.$pgettext('*/*/Button.Label/Verb', 'Sign up'),
-        notifications: this.$pgettext('*/Notifications/*', 'Notifications')
-      }
-    },
-    ...mapGetters({
-      additionalNotifications: 'ui/additionalNotifications'
-    })
-  },
-  methods: {
-    showShortcuts () {
-      this.$emit('show:shortcuts-modal')
-      console.log(this.$store.getters['ui/windowSize'])
-    }
-  }
-}
-</script>
