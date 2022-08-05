@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import type { Artist, Library } from '~/types'
+
+import { useStore } from '~/store'
+
+import EditForm from '~/components/library/EditForm.vue'
+
+interface Props {
+  objectType: string
+  object: Artist
+  libraries: Library[]
+}
+
+defineProps<Props>()
+
+const store = useStore()
+const canEdit = store.state.auth.availablePermissions.library
+</script>
+
 <template>
   <section class="ui vertical stripe segment">
     <div class="ui text container">
@@ -32,27 +51,3 @@
     </div>
   </section>
 </template>
-
-<script>
-import EditForm from '~/components/library/EditForm.vue'
-export default {
-  components: {
-    EditForm
-  },
-  props: {
-    objectType: { type: String, required: true },
-    object: { type: Object, required: true },
-    libraries: { type: Array, required: true }
-  },
-  data () {
-    return {
-      id: this.object.id
-    }
-  },
-  computed: {
-    canEdit () {
-      return true
-    }
-  }
-}
-</script>

@@ -400,6 +400,27 @@ export interface ReportTarget {
   type: EntityObjectType
 }
 
+export type ReviewStatePayload = { value: string } | string | undefined
+export interface ReviewState {
+  [id: string]: ReviewStatePayload
+}
+
+export interface Review {
+  uuid: string
+  is_applied: boolean
+  is_approved: boolean
+  created_by: Actor
+  previous_state: ReviewState
+  payload: ReviewState
+  target?: ReportTarget & {
+    type: 'artist' | 'album' | 'track'
+    repr: string
+  }
+  creation_date: string
+  summary?: string
+  type: 'update'
+}
+
 export interface Report {
   uuid: string
   summary?: string

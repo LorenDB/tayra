@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import type { Track } from '~/types'
+
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+import { computed } from 'vue'
+
+interface Props {
+  track?: Track
+  button?: boolean
+  border?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  track: () => ({} as Track),
+  button: false,
+  border: false
+})
+
+const { $pgettext } = useGettext()
+const store = useStore()
+
+const isFavorite = computed(() => store.getters['favorites/isFavorite'](props.track.id))
+const title = computed(() => isFavorite.value
+  ? $pgettext('Content/Track/Icon.Tooltip/Verb', 'Remove from favorites')
+  : $pgettext('Content/Track/*/Verb', 'Add to favorites')
+)
+</script>
+
 <template>
   <button
     v-if="button"
@@ -28,26 +57,3 @@
     <i :class="['heart', {'pink': isFavorite}, 'basic', 'icon']" />
   </button>
 </template>
-
-<script>
-export default {
-  props: {
-    track: { type: Object, default: () => { return {} } },
-    button: { type: Boolean, default: false },
-    border: { type: Boolean, default: false }
-  },
-  computed: {
-    title () {
-      if (this.isFavorite) {
-        return this.$pgettext('Content/Track/Icon.Tooltip/Verb', 'Remove from favorites')
-      } else {
-        return this.$pgettext('Content/Track/*/Verb', 'Add to favorites')
-      }
-    },
-    isFavorite () {
-      return this.$store.getters['favorites/isFavorite'](this.track.id)
-    }
-  }
-
-}
-</script>

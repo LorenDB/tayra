@@ -1,3 +1,54 @@
+<script setup lang="ts">
+import type { Artist, Track, Album } from '~/types'
+import type { ContentFilter } from '~/store/moderation'
+
+import { ref, computed, reactive } from 'vue'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import AlbumCard from '~/components/audio/album/Card.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
+import LibraryWidget from '~/components/federation/LibraryWidget.vue'
+
+interface Props {
+  object: Artist
+  tracks: Track[]
+  albums: Album[]
+  isLoadingAlbums: boolean
+  nextTracksUrl?: string | null
+  nextAlbumsUrl?: string | null
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  nextTracksUrl: null,
+  nextAlbumsUrl: null
+})
+
+const store = useStore()
+
+const additionalAlbums = reactive([] as Album[])
+const contentFilter = computed(() => store.getters['moderation/artistFilters']().find((filter: ContentFilter) => filter.target.id === props.object.id))
+const allAlbums = computed(() => [...props.albums, ...additionalAlbums])
+
+const isLoadingMoreAlbums = ref(false)
+const loadMoreAlbumsUrl = ref(props.nextAlbumsUrl)
+const loadMoreAlbums = async () => {
+  if (loadMoreAlbumsUrl.value === null) return
+  isLoadingMoreAlbums.value = true
+
+  try {
+    const response = await axios.get(loadMoreAlbumsUrl.value)
+    additionalAlbums.push(...additionalAlbums.concat(response.data.results))
+    loadMoreAlbumsUrl.value = response.data.next
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoadingMoreAlbums.value = false
+}
+</script>
+
 <template>
   <div v-if="object">
     <div
@@ -53,9 +104,9 @@
       </div>
       <div class="ui hidden divider" />
       <button
-        v-if="nextAlbumsUrl && loadMoreAlbumsUrl"
+        v-if="loadMoreAlbumsUrl !== null"
         :class="['ui', {loading: isLoadingMoreAlbums}, 'button']"
-        @click="loadMoreAlbums(loadMoreAlbumsUrl)"
+        @click="loadMoreAlbums()"
       >
         <translate translate-context="Content/*/Button.Label">
           Load more…
@@ -99,56 +150,3 @@
     </section>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import AlbumCard from '~/components/audio/album/Card.vue'
-import TrackTable from '~/components/audio/track/Table.vue'
-import LibraryWidget from '~/components/federation/LibraryWidget.vue'
-
-export default {
-  components: {
-    AlbumCard,
-    TrackTable,
-    LibraryWidget
-  },
-  props: {
-    object: { type: Object, required: true },
-    tracks: { type: Array, required: true },
-    albums: { type: Array, required: true },
-    isLoadingAlbums: { type: Boolean, required: true },
-    nextTracksUrl: { type: String, default: null },
-    nextAlbumsUrl: { type: String, default: null }
-  },
-  data () {
-    return {
-      loadMoreAlbumsUrl: this.nextAlbumsUrl,
-      additionalAlbums: [],
-      isLoadingMoreAlbums: false
-    }
-  },
-  computed: {
-    contentFilter () {
-      return this.$store.getters['moderation/artistFilters']().filter((e) => {
-        return e.target.id === this.object.id
-      })[0]
-    },
-    allAlbums () {
-      return this.albums.concat(this.additionalAlbums)
-    }
-  },
-  methods: {
-    loadMoreAlbums (url) {
-      const self = this
-      self.isLoadingMoreAlbums = true
-      axios.get(url).then((response) => {
-        self.additionalAlbums = self.additionalAlbums.concat(response.data.results)
-        self.loadMoreAlbumsUrl = response.data.next
-        self.isLoadingMoreAlbums = false
-      }, () => {
-        self.isLoadingMoreAlbums = false
-      })
-    }
-  }
-}
-</script>

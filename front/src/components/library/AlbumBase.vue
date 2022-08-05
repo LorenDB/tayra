@@ -200,7 +200,10 @@ const remove = async () => {
                 >
                   {{ object.title }}
                 </h2>
-                <artist-label :artist="artist" />
+                <artist-label
+                  v-if="artist"
+                  :artist="artist"
+                />
               </header>
             </div>
             <div
@@ -228,8 +231,9 @@ const remove = async () => {
                   {{ object.title }}
                 </h2>
                 <artist-label
-                  class="rounded"
+                  v-if="artist"
                   :artist="artist"
+                  class="rounded"
                 />
               </header>
               <div

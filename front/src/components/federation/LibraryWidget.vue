@@ -1,3 +1,48 @@
+<script setup lang="ts">
+import type { Library } from '~/types'
+
+import { ref, reactive } from 'vue'
+
+import axios from 'axios'
+import LibraryCard from '~/views/content/remote/Card.vue'
+
+interface Emits {
+  (e: 'loaded', libraries: Library[]): void
+}
+
+interface Props {
+  url: string
+}
+
+const emit = defineEmits<Emits>()
+const props = defineProps<Props>()
+
+const nextPage = ref()
+const libraries = reactive([] as Library[])
+const isLoading = ref(false)
+const fetchData = async (url = props.url) => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(url, {
+      params: {
+        page_size: 6
+      }
+    })
+
+    nextPage.value = response.data.next
+    libraries.push(...response.data.results)
+    emit('loaded', libraries)
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+</script>
+
 <template>
   <div class="wrapper">
     <h3
@@ -51,62 +96,3 @@
     </template>
   </div>
 </template>
-
-<script>
-import { clone } from 'lodash-es'
-import axios from 'axios'
-import LibraryCard from '~/views/content/remote/Card.vue'
-
-export default {
-  components: {
-    LibraryCard
-  },
-  props: {
-    url: { type: String, required: true }
-  },
-  data () {
-    return {
-      libraries: [],
-      limit: 6,
-      isLoading: false,
-      errors: null,
-      previousPage: null,
-      nextPage: null
-    }
-  },
-  watch: {
-    offset () {
-      this.fetchData()
-    }
-  },
-  created () {
-    this.fetchData(this.url)
-  },
-  methods: {
-    fetchData (url) {
-      this.isLoading = true
-      const self = this
-      const params = clone({})
-      params.page_size = this.limit
-      params.offset = this.offset
-      axios.get(url, { params }).then((response) => {
-        self.previousPage = response.data.previous
-        self.nextPage = response.data.next
-        self.isLoading = false
-        self.libraries = [...self.libraries, ...response.data.results]
-        self.$emit('loaded', self.libraries)
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    updateOffset (increment) {
-      if (increment) {
-        this.offset += this.limit
-      } else {
-        this.offset = Math.max(this.offset - this.limit, 0)
-      }
-    }
-  }
-}
-</script>

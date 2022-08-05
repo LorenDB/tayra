@@ -54,6 +54,7 @@
     "yarn": "^1.22.19"
   },
   "devDependencies": {
+    "@types/diff": "^5.0.2",
     "@types/dompurify": "2.3.3",
     "@types/howler": "2.2.7",
     "@types/jest": "28.1.6",

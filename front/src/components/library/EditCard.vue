@@ -1,3 +1,147 @@
+<script setup lang="ts">
+import type { Review, ReviewState, ReviewStatePayload } from '~/types'
+import type { Change } from 'diff'
+
+import { diffWordsWithSpace } from 'diff'
+import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import useEditConfigs from '~/composables/moderation/useEditConfigs'
+
+interface Emits {
+  (e: 'approved', isApproved: boolean): void
+  (e: 'deleted'): void
+}
+
+interface Props {
+  obj: Review
+  currentState?: ReviewState
+}
+
+const emit = defineEmits<Emits>()
+const props = withDefaults(defineProps<Props>(), {
+  currentState: () => ({})
+})
+
+const configs = useEditConfigs()
+const router = useRouter()
+const store = useStore()
+
+const canApprove = computed(() => props.obj.is_applied || store.state.auth.authenticated
+  ? false
+  : store.state.auth.availablePermissions.library
+)
+
+const canDelete = computed(() => {
+  if (props.obj.is_applied || props.obj.is_approved) return false
+  if (!store.state.auth.authenticated) return false
+
+  // TODO (wvffle): Is it better to compare ids? Is full_username unique?
+  return props.obj.created_by.full_username === store.state.auth.fullUsername
+    || store.state.auth.availablePermissions.library
+})
+
+const previousState = computed(() => props.obj.is_applied
+  // mutation was applied, we use the previous state that is stored
+  // on the mutation itself
+  ? props.obj.previous_state
+  // mutation is not applied yet, so we use the current state that was
+  // passed to the component, if any
+  : props.currentState
+)
+
+const detailUrl = computed(() => {
+  if (!props.obj.target) return ''
+
+  const name = props.obj.target.type === 'track'
+    ? 'library.tracks.edit.detail'
+    : props.obj.target.type === 'album'
+      ? 'library.albums.edit.detail'
+      : props.obj.target.type === 'artist'
+        ? 'library.artists.edit.detail'
+        : undefined
+
+  return router.resolve({
+    name,
+    params: {
+      id: props.obj.target.id,
+      editId: props.obj.uuid
+    }
+  }).href
+})
+
+const updatedFields = computed(() => {
+  if (!props.obj?.target) return []
+
+  const payload = props.obj.payload
+  const fields = Object.keys(payload)
+
+  const state = previousState.value
+
+  return fields.map((id) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const config = configs[props.obj.target!.type].fields.find((field) => id === field.id)
+    const getValueRepr = config?.getValueRepr || (v => v)
+
+    const result = {
+      id,
+      config,
+      new: payload[id],
+      newRepr: getValueRepr(payload[id]) ?? '',
+      old: undefined as ReviewStatePayload,
+      oldRepr: '',
+      diff: [] as Change[]
+    }
+
+    if (state?.[id]) {
+      const oldState = state[id]
+      result.old = oldState
+      result.oldRepr = getValueRepr(typeof oldState === 'string' ? oldState : oldState?.value) ?? ''
+
+      // we compute the diffs between the old and new values
+      result.diff = diffWordsWithSpace(result.oldRepr, result.newRepr)
+    }
+
+    return result
+  })
+})
+
+const isLoading = ref(false)
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`mutations/${props.obj.uuid}/`)
+    emit('deleted')
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+
+const approve = async (approved: boolean) => {
+  const url = approved
+    ? `mutations/${props.obj.uuid}/approve/`
+    : `mutations/${props.obj.uuid}/reject/`
+
+  isLoading.value = true
+
+  try {
+    await axios.post(url)
+    emit('approved', approved)
+    store.commit('ui/incrementNotifications', { count: -1, type: 'pendingReviewEdits' })
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <div class="ui fluid card">
     <div class="content">
@@ -88,7 +232,7 @@
             <td>{{ field.id }}</td>
 
             <td v-if="field.diff">
-              <template v-if="field.config.type === 'attachment' && field.oldRepr">
+              <template v-if="field.config?.type === 'attachment' && field.oldRepr">
                 <img
                   class="ui image"
                   alt=""
@@ -115,7 +259,7 @@
               v-if="field.diff"
               :title="field.newRepr"
             >
-              <template v-if="field.config.type === 'attachment' && field.newRepr">
+              <template v-if="field.config?.type === 'attachment' && field.newRepr">
                 <img
                   class="ui image"
                   alt=""
@@ -136,7 +280,7 @@
               v-else
               :title="field.newRepr"
             >
-              <template v-if="field.config.type === 'attachment' && field.newRepr">
+              <template v-if="field.config?.type === 'attachment' && field.newRepr">
                 <img
                   class="ui image"
                   alt=""
@@ -214,135 +358,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import { diffWordsWithSpace } from 'diff'
-
-import useEditConfigs from '~/composables/moderation/useEditConfigs'
-
-function castValue (value) {
-  if (value === null || value === undefined) {
-    return ''
-  }
-  return String(value)
-}
-
-export default {
-  props: {
-    obj: { type: Object, required: true },
-    currentState: { type: Object, required: false, default: function () { return { } } }
-  },
-  setup () {
-    return { configs: useEditConfigs() }
-  },
-  data () {
-    return {
-      isLoading: false
-    }
-  },
-  computed: {
-    canApprove () {
-      if (this.obj.is_applied) return false
-      if (!this.$store.state.auth.authenticated) return false
-      return this.$store.state.auth.availablePermissions.library
-    },
-    canDelete () {
-      if (this.obj.is_applied || this.obj.is_approved) return false
-      if (!this.$store.state.auth.authenticated) return false
-
-      // TODO (wvffle): Is it better to compare ids? Is full_username unique?
-      return this.obj.created_by.full_username === this.$store.state.auth.fullUsername
-        || this.$store.state.auth.availablePermissions.library
-    },
-    previousState () {
-      if (this.obj.is_applied) {
-        // mutation was applied, we use the previous state that is stored
-        // on the mutation itself
-        return this.obj.previous_state
-      }
-      // mutation is not applied yet, so we use the current state that was
-      // passed to the component, if any
-      return this.currentState
-    },
-    detailUrl () {
-      if (!this.obj.target) {
-        return ''
-      }
-      let namespace
-      const id = this.obj.target.id
-      if (this.obj.target.type === 'track') {
-        namespace = 'library.tracks.edit.detail'
-      }
-      if (this.obj.target.type === 'album') {
-        namespace = 'library.albums.edit.detail'
-      }
-      if (this.obj.target.type === 'artist') {
-        namespace = 'library.artists.edit.detail'
-      }
-      return this.$router.resolve({ name: namespace, params: { id, editId: this.obj.uuid } }).href
-    },
-
-    updatedFields () {
-      if (!this.obj || !this.obj.target) {
-        return []
-      }
-      const payload = this.obj.payload
-      const previousState = this.previousState
-      const fields = Object.keys(payload)
-      const self = this
-
-      return fields.map((field) => {
-        const fieldConfig = this.configs[this.obj.target.type].fields.find(({ id }) => id === field)
-        const getValueRepr = fieldConfig.getValueRepr || (v => v)
-        const result = {
-          id: field,
-          config: fieldConfig
-        }
-        if (previousState?.[field]) {
-          result.old = previousState[field]
-          // TODO (wvffle): Originally it was using just result.old.value though for some reason it returns me the object as result.old now
-          result.oldRepr = castValue(getValueRepr(result.old.value ?? result.old))
-        }
-        result.new = payload[field]
-        result.newRepr = castValue(getValueRepr(result.new))
-        if (result.old) {
-          // we compute the diffs between the old and new values
-          result.diff = diffWordsWithSpace(result.oldRepr, result.newRepr)
-        }
-
-        return result
-      })
-    }
-  },
-  methods: {
-    remove () {
-      const self = this
-      this.isLoading = true
-      axios.delete(`mutations/${this.obj.uuid}/`).then((response) => {
-        self.$emit('deleted')
-        self.isLoading = false
-      }, () => {
-        self.isLoading = false
-      })
-    },
-    approve (approved) {
-      let url
-      if (approved) {
-        url = `mutations/${this.obj.uuid}/approve/`
-      } else {
-        url = `mutations/${this.obj.uuid}/reject/`
-      }
-      const self = this
-      this.isLoading = true
-      axios.post(url).then((response) => {
-        self.$emit('approved', approved)
-        self.isLoading = false
-        self.$store.commit('ui/incrementNotifications', { count: -1, type: 'pendingReviewEdits' })
-      }, () => {
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>
