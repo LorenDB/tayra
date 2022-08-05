@@ -84,14 +84,14 @@ const updatedFields = computed(() => {
   return fields.map((id) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const config = configs[props.obj.target!.type].fields.find((field) => id === field.id)
-    const getValueRepr = config?.getValueRepr || (v => v)
+    const getValueRepr = config?.getValueRepr ?? (v => v)
 
     const result = {
       id,
       config,
       new: payload[id],
       newRepr: getValueRepr(payload[id]) ?? '',
-      old: undefined as ReviewStatePayload,
+      old: undefined,
       oldRepr: '',
       diff: [] as Change[]
     }
