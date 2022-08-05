@@ -31,17 +31,8 @@ export function parseAPIErrors (responseData: APIErrorResponse, parentField?: st
   return errors
 }
 
-export function getCookie (name: string) {
-  return document.cookie
-    .split('; ')
-    .find(row => row.startsWith(name))
-    ?.split('=')[1]
-}
-
 export function getDomain (url: string) {
-  const parser = document.createElement('a')
-  parser.href = url
-  return parser.hostname
+  return new URL(url).hostname
 }
 
 export function arrayMove (arr: unknown[], oldIndex: number, newIndex: number) {

@@ -44,6 +44,7 @@ export const install: InitModule = ({ store, router }) => {
           content: error.response?.data,
           class: 'error'
         })
+        break
 
       case 403:
         error.backendErrors.push('Permission denied')
