@@ -98,6 +98,7 @@ const updatedFields = computed(() => {
 
     if (state?.[id]) {
       const oldState = state[id]
+      console.log(oldState)
       result.old = oldState
       result.oldRepr = getValueRepr(typeof oldState === 'string' ? oldState : oldState?.value) ?? ''
 

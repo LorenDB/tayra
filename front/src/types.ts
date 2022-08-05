@@ -407,8 +407,8 @@ export interface ReviewState {
 
 export interface Review {
   uuid: string
-  is_applied: boolean
-  is_approved: boolean
+  is_applied: boolean | null
+  is_approved: boolean | null
   created_by: Actor
   previous_state: ReviewState
   payload: ReviewState
