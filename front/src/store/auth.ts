@@ -1,4 +1,4 @@
-import type { User } from '~/types'
+import type { BackendError, User } from '~/types'
 import type { Module } from 'vuex'
 import type { RootState } from '~/store/index'
 import type { RouteLocationRaw } from 'vue-router'
@@ -199,6 +199,11 @@ const store: Module<State, RootState> = {
           dispatch('moderation/fetchContentFilters', null, { root: true })
         ])
       } catch (error) {
+        if ((error as BackendError).response?.status === 401) {
+          logger.info('User is not authenticated')
+          return
+        }
+
         logger.error('Error while fetching user profile', error)
       }
     },

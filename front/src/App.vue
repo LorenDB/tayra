@@ -69,9 +69,9 @@ const { width } = useWindowSize()
 const showSetInstanceModal = ref(false)
 
 // Fetch user data on startup
-if (store.state.auth.authenticated) {
-  store.dispatch('auth/fetchUser')
-}
+// NOTE: We're not checking if we're authenticated in the store,
+//       because we want to learn if we are authenticated at all
+store.dispatch('auth/fetchUser')
 </script>
 
 <template>
