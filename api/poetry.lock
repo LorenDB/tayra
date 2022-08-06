@@ -765,14 +765,14 @@ with_social = ["django-allauth (>=0.25.0)"]
 
 [[package]]
 name = "django-storages"
-version = "1.12.3"
+version = "1.13"
 description = "Support for many storage backends in Django"
 category = "main"
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=3.7"
 
 [package.dependencies]
-Django = ">=2.2"
+Django = ">=3.2"
 
 [package.extras]
 azure = ["azure-storage-blob (>=12.0.0)"]
@@ -2125,7 +2125,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "0f4c2f967376997306c82dbc687d1280c01b53a46edfb6732c19aa48b9093914"
+content-hash = "803bd0fcf4722804cc3d04404308e8e4b9fa13aad47c6e0076b713c6946d82e2"
 
 [metadata.files]
 aiohttp = [
@@ -2580,8 +2580,8 @@ django-rest-auth = [
     {file = "django-rest-auth-0.9.5.tar.gz", hash = "sha256:f11e12175dafeed772f50d740d22caeab27e99a3caca24ec65e66a8d6de16571"},
 ]
 django-storages = [
-    {file = "django-storages-1.12.3.tar.gz", hash = "sha256:a475edb2f0f04c4f7e548919a751ecd50117270833956ed5bd585c0575d2a5e7"},
-    {file = "django_storages-1.12.3-py3-none-any.whl", hash = "sha256:204a99f218b747c46edbfeeb1310d357f83f90fa6a6024d8d0a3f422570cee84"},
+    {file = "django-storages-1.13.tar.gz", hash = "sha256:d4fed98bbfb5347096ddfac2a6665d5133c788b9ec32c156ec5f7fb02ae57335"},
+    {file = "django_storages-1.13-py3-none-any.whl", hash = "sha256:3ef9dd5a2ac7221b571aa32f72a94a542b6b03fbd393e1c18e64d2a4006bfddf"},
 ]
 django-versatileimagefield = [
     {file = "django-versatileimagefield-2.2.tar.gz", hash = "sha256:6569d5c3e13c69ab8912ba5100084aa5abcdcffb8d1f5abc085b226e7bbd65b3"},
