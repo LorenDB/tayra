@@ -86,10 +86,6 @@ const labels = computed(() => ({
   addArtistContentFilter: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…')
 }))
 
-const setCurrentTime = (time: number) => {
-  currentTime.value = time
-}
-
 const switchTab = () => {
   store.commit('ui/queueFocused', store.state.ui.queueFocused === 'player' ? 'queue' : 'player')
 }
@@ -295,7 +291,7 @@ const { width: screenWidth } = useWindowSize()
             <template v-if="!isLoadingAudio">
               <span
                 class="start"
-                @click.stop.prevent="setCurrentTime(0)"
+                @click.stop.prevent="currentTime = 0"
               >
                 {{ currentTimeFormatted }}
               </span>

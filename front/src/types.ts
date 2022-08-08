@@ -400,7 +400,7 @@ export interface ReportTarget {
   type: EntityObjectType
 }
 
-export type ReviewStatePayload = Partial<Artist> | Partial<Album> | Partial<Track>
+export type ReviewStatePayload = { value: unknown } | Partial<Artist> | Partial<Album> | Partial<Track>
 export interface ReviewState {
   [id: string]: ReviewStatePayload
 }

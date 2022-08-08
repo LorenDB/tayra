@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ConfigField } from '~/composables/moderation/useEditConfigs'
 import type { Review, ReviewState, ReviewStatePayload } from '~/types'
 import type { Change } from 'diff'
 
@@ -93,14 +94,21 @@ const updatedFields = computed(() => {
       newRepr: getValueRepr(payload[id]) ?? '',
       old: undefined,
       oldRepr: '',
-      diff: [] as Change[]
+      diff: []
+    } as {
+      id: string
+      config: ConfigField
+      old?: ReviewStatePayload
+      new: ReviewStatePayload
+      oldRepr: string
+      newRepr: string
+      diff: Change[]
     }
 
     if (state?.[id]) {
       const oldState = state[id]
-      console.log(oldState)
       result.old = oldState
-      result.oldRepr = getValueRepr(typeof oldState === 'string' ? oldState : oldState?.value) ?? ''
+      result.oldRepr = getValueRepr(('value' in oldState && oldState.value) ?? oldState) ?? ''
 
       // we compute the diffs between the old and new values
       result.diff = diffWordsWithSpace(result.oldRepr, result.newRepr)

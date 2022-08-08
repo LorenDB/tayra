@@ -2,7 +2,7 @@ import type { Album, Artist, Content, Track } from '~/types'
 
 import { gettext } from '~/init/locale'
 
-interface ConfigField {
+export interface ConfigField {
   id: string
   label: string
   type: 'content' | 'attachment' | 'tags' | 'text' | 'license'

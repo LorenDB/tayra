@@ -126,6 +126,7 @@ const store: Module<State, RootState> = {
     async resumePlayback ({ commit, state, dispatch }) {
       commit('playing', true)
       if (state.errored && state.errorCount < state.maxConsecutiveErrors) {
+        // TODO (wvffle): Cancel whenever we skip track
         await new Promise(resolve => setTimeout(resolve, 3000))
         if (state.playing) {
           return dispatch('queue/next', null, { root: true })
@@ -177,8 +178,8 @@ const store: Module<State, RootState> = {
         }, 3000)
       }
     },
-    updateProgress ({ commit }, t) {
-      commit('currentTime', t)
+    updateProgress ({ commit }, time: number) {
+      commit('currentTime', time)
     },
     mute ({ commit, state }) {
       commit('tempVolume', state.volume)
