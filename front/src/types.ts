@@ -96,6 +96,7 @@ export interface Track {
   license?: License
   tags: string[]
   uploads: Upload[]
+  downloads_count: number
 
   album?: Album
   artist?: Artist
@@ -277,6 +278,7 @@ export interface Upload {
   mimetype: string
   extension: string
   listen_url: string
+  bitrate?: number
   size?: number
 
   import_status: ImportStatus

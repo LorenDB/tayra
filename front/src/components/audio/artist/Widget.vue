@@ -8,7 +8,7 @@ import { useStore } from '~/store'
 import ArtistCard from '~/components/audio/artist/Card.vue'
 
 interface Props {
-  filters: Record<string, string>
+  filters: Record<string, string | boolean>
   search?: boolean
   header?: boolean
   limit?: number

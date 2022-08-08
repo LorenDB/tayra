@@ -1,3 +1,148 @@
+<script setup lang="ts">
+import type { EditObject, EditObjectType } from '~/composables/moderation/useEditConfigs'
+import type { BackendError, License, ReviewState } from '~/types'
+
+import { computed, onMounted, reactive, ref, watchEffect } from 'vue'
+import { isEqual, clone } from 'lodash-es'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+import $ from 'jquery'
+
+import AttachmentInput from '~/components/common/AttachmentInput.vue'
+import useEditConfigs from '~/composables/moderation/useEditConfigs'
+import TagsSelector from '~/components/library/TagsSelector.vue'
+import EditList from '~/components/library/EditList.vue'
+import EditCard from '~/components/library/EditCard.vue'
+
+interface Props {
+  objectType: EditObjectType
+  object: EditObject
+  licenses: License[]
+}
+
+const props = defineProps<Props>()
+
+const { $pgettext } = useGettext()
+const configs = useEditConfigs()
+const store = useStore()
+
+const config = computed(() => configs[props.objectType])
+const currentState = computed(() => config.value.fields.reduce((state: ReviewState, field) => {
+  state[field.id] = { value: field.getValue(props.object) }
+  return state
+}, {}))
+
+const canEdit = computed(() => {
+  if (!store.state.auth.authenticated) return false
+
+  const isOwner = props.object.attributed_to
+    // TODO (wvffle): Is it better to compare ids? Is full_username unique?
+    && store.state.auth.fullUsername === props.object.attributed_to.full_username
+
+  return isOwner || store.state.auth.availablePermissions.library
+})
+
+const labels = computed(() => ({
+  summaryPlaceholder: $pgettext('*/*/Placeholder', 'A short summary describing your changes.')
+}))
+
+const mutationsUrl = computed(() => props.objectType === 'track'
+  ? `tracks/${props.object.id}/mutations/`
+  : props.objectType === 'album'
+    ? `albums/${props.object.id}/mutations/`
+    : props.objectType === 'artist'
+      ? `artists/${props.object.id}/mutations/`
+      : ''
+)
+
+const mutationPayload = computed(() => {
+  const changedFields = config.value.fields.filter(f => {
+    return !isEqual(values[f.id], initialValues[f.id])
+  })
+
+  if (changedFields.length === 0) {
+    return {}
+  }
+
+  const data = {
+    type: 'update',
+    payload: {} as Record<string, unknown>,
+    summary: summary.value
+  }
+
+  for (const field of changedFields) {
+    data.payload[field.id] = values[field.id]
+  }
+
+  return data
+})
+
+const showPendingReview = ref(true)
+const editListFilters = computed(() => showPendingReview.value
+  ? { is_approved: 'null' }
+  : {}
+)
+
+const values = reactive({} as Record<string, any>)
+const initialValues = reactive({} as Record<string, any>)
+for (const { id, getValue } of config.value.fields) {
+  values[id] = clone(getValue(props.object))
+  initialValues[id] = clone(values[id])
+}
+
+const license = ref()
+watchEffect(() => {
+  if (values.license === null) {
+    $(license.value).dropdown('clear')
+    return
+  }
+
+  $(license.value).dropdown('set selected', values.license)
+})
+
+onMounted(() => {
+  $('.ui.dropdown').dropdown({ fullTextSearch: true })
+})
+
+const submittedMutation = ref()
+const summary = ref('')
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const submit = async () => {
+  const url = mutationsUrl.value
+  if (!url) return
+
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    const response = await axios.post(url, {
+      ...mutationPayload.value,
+      is_approved: canEdit.value
+        ? true
+        : undefined
+    })
+
+    submittedMutation.value = response.data
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const fieldValuesChanged = (fieldId: string) => {
+  return !isEqual(values[fieldId], initialValues[fieldId])
+}
+
+const resetField = (fieldId: string) => {
+  values[fieldId] = clone(initialValues[fieldId])
+}
+</script>
+
 <template>
   <div v-if="submittedMutation">
     <div class="ui positive message">
@@ -107,7 +252,7 @@
               :id="fieldConfig.id"
               v-model="values[fieldConfig.id]"
               :type="fieldConfig.inputType || 'text'"
-              :required="fieldConfig.required || null"
+              :required="fieldConfig.required"
               :name="fieldConfig.id"
             >
           </template>
@@ -118,7 +263,7 @@
               :id="fieldConfig.id"
               ref="license"
               v-model="values[fieldConfig.id]"
-              :required="fieldConfig.required || null"
+              :required="fieldConfig.required"
               class="ui fluid search dropdown"
             >
               <option :value="null">
@@ -158,7 +303,7 @@
               :id="fieldConfig.id"
               v-model="values[fieldConfig.id]"
               :initial-value="initialValues[fieldConfig.id]"
-              :required="fieldConfig.required || null"
+              :required="fieldConfig.required"
               :name="fieldConfig.id"
               @delete="values[fieldConfig.id] = initialValues[fieldConfig.id]"
             >
@@ -220,7 +365,7 @@
       <button
         :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
         type="submit"
-        :disabled="isLoading || !mutationPayload || null"
+        :disabled="isLoading || !mutationPayload"
       >
         <translate
           v-if="canEdit"
@@ -238,153 +383,3 @@
     </form>
   </div>
 </template>
-
-<script>
-import $ from 'jquery'
-import { isEqual, clone } from 'lodash-es'
-import axios from 'axios'
-import AttachmentInput from '~/components/common/AttachmentInput.vue'
-import EditList from '~/components/library/EditList.vue'
-import EditCard from '~/components/library/EditCard.vue'
-import TagsSelector from '~/components/library/TagsSelector.vue'
-import useEditConfigs from '~/composables/moderation/useEditConfigs'
-import { computed } from 'vue'
-
-export default {
-  components: {
-    EditList,
-    EditCard,
-    TagsSelector,
-    AttachmentInput
-  },
-  props: {
-    objectType: { type: String, required: true },
-    object: { type: Object, required: true },
-    licenses: { type: Array, required: true }
-  },
-  setup (props) {
-    const configs = useEditConfigs()
-    const config = computed(() => configs[props.objectType])
-    const currentState = computed(() => config.value.fields.reduce((state/*: Record<string, unknown> */, field) => {
-      state[field.id] = { value: field.getValue(props.object) }
-      return state
-    }, {}))
-
-    return { config, currentState, configs }
-  },
-  data () {
-    return {
-      isLoading: false,
-      errors: [],
-      values: {},
-      initialValues: {},
-      summary: '',
-      submittedMutation: null,
-      showPendingReview: true
-    }
-  },
-  computed: {
-    canEdit () {
-      if (!this.$store.state.auth.authenticated) return false
-
-      const isOwner = this.object.attributed_to
-        // TODO (wvffle): Is it better to compare ids? Is full_username unique?
-        && this.$store.state.auth.fullUsername === this.object.attributed_to.full_username
-
-      return isOwner || this.$store.state.auth.availablePermissions.library
-    },
-    labels () {
-      return {
-        summaryPlaceholder: this.$pgettext('*/*/Placeholder', 'A short summary describing your changes.')
-      }
-    },
-    mutationsUrl () {
-      if (this.objectType === 'track') {
-        return `tracks/${this.object.id}/mutations/`
-      }
-      if (this.objectType === 'album') {
-        return `albums/${this.object.id}/mutations/`
-      }
-      if (this.objectType === 'artist') {
-        return `artists/${this.object.id}/mutations/`
-      }
-      return null
-    },
-    mutationPayload () {
-      const self = this
-      const changedFields = this.config.fields.filter(f => {
-        return !isEqual(self.values[f.id], self.initialValues[f.id])
-      })
-      if (changedFields.length === 0) {
-        return null
-      }
-      const payload = {
-        type: 'update',
-        payload: {},
-        summary: this.summary
-      }
-      changedFields.forEach((f) => {
-        payload.payload[f.id] = self.values[f.id]
-      })
-      return payload
-    },
-    editListFilters () {
-      if (this.showPendingReview) {
-        return { is_approved: 'null' }
-      } else {
-        return {}
-      }
-    }
-  },
-  watch: {
-    'values.license' (newValue) {
-      if (newValue === null) {
-        $(this.$refs.license).dropdown('clear')
-      } else {
-        $(this.$refs.license).dropdown('set selected', newValue)
-      }
-    }
-  },
-  created () {
-    this.setValues()
-  },
-  mounted () {
-    $('.ui.dropdown').dropdown({ fullTextSearch: true })
-  },
-
-  methods: {
-    setValues () {
-      for (const { id, getValue } of this.config.fields) {
-        this.values[id] = clone(getValue(this.object))
-        this.initialValues[id] = clone(this.values[id])
-      }
-    },
-    submit () {
-      const self = this
-      self.isLoading = true
-      self.errors = []
-      const payload = clone(this.mutationPayload || {})
-      if (this.canEdit) {
-        payload.is_approved = true
-      }
-      return axios.post(this.mutationsUrl, payload).then(
-        response => {
-          self.isLoading = false
-          self.submittedMutation = response.data
-        },
-        error => {
-          self.errors = error.backendErrors
-          self.isLoading = false
-        }
-      )
-    },
-    fieldValuesChanged (fieldId) {
-      return !isEqual(this.values[fieldId], this.initialValues[fieldId])
-    },
-    resetField (fieldId) {
-      this.values[fieldId] = clone(this.initialValues[fieldId])
-    }
-  }
-
-}
-</script>

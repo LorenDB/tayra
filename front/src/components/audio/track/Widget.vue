@@ -16,7 +16,7 @@ interface Emits {
 }
 
 interface Props {
-  filters: Record<string, string>
+  filters: Record<string, string | boolean>
   url: string
   isActivity?: boolean
   showCount?: boolean

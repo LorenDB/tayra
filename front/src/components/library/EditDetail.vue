@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { EditObject, EditObjectType } from '~/composables/moderation/useEditConfigs'
+import type { ReviewState } from '~/types'
 
 import axios from 'axios'
 import useEditConfigs from '~/composables/moderation/useEditConfigs'
@@ -17,7 +18,7 @@ const props = defineProps<Props>()
 const configs = useEditConfigs()
 const config = computed(() => configs[props.objectType])
 
-const currentState = computed(() => config.value.fields.reduce((state: Record<string, unknown>, field) => {
+const currentState = computed(() => config.value.fields.reduce((state: ReviewState, field) => {
   state[field.id] = { value: field.getValue(props.object) }
   return state
 }, {}))

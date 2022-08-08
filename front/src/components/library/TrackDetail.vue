@@ -1,3 +1,49 @@
+<script setup lang="ts">
+import type { Track } from '~/types'
+
+import { humanSize, momentFormat, truncate } from '~/utils/filters'
+import { computed, ref, watchEffect } from 'vue'
+
+import time from '~/utils/time'
+import axios from 'axios'
+
+import LibraryWidget from '~/components/federation/LibraryWidget.vue'
+import PlaylistWidget from '~/components/playlists/Widget.vue'
+import TagsList from '~/components/tags/List.vue'
+
+interface Props {
+  track: Track
+}
+
+const props = defineProps<Props>()
+
+const musicbrainzUrl = computed(() => props.track.mbid
+  ? `https://musicbrainz.org/recording/${props.track.mbid}`
+  : null
+)
+
+const upload = computed(() => props.track.uploads?.[0] ?? null)
+
+const license = ref()
+const fetchLicense = async (licenseId: string) => {
+  license.value = undefined
+
+  try {
+    const response = await axios.get(`licenses/${licenseId}`)
+    license.value = response.data
+  } catch (error) {
+    // TODO (wvffle): Handle error
+  }
+}
+
+watchEffect(() => {
+  if (props.track.license) {
+    // @ts-expect-error For some reason, track.license is id instead of License here
+    fetchLicense(props.track.license)
+  }
+})
+</script>
+
 <template>
   <div v-if="track">
     <section class="ui vertical stripe segment">
@@ -24,7 +70,7 @@
             >
             <h3 class="ui header">
               <translate
-                v-if="track.artist.content_category === 'music'"
+                v-if="track.artist?.content_category === 'music'"
                 translate-context="Content/*/*"
               >
                 Track Details
@@ -148,8 +194,8 @@
                   </translate>
                 </td>
                 <td class="right aligned">
-                  <router-link :to="{name: 'library.artists.detail', params: {id: track.artist.id}}">
-                    {{ track.artist.name }}
+                  <router-link :to="{name: 'library.artists.detail', params: {id: track.artist?.id}}">
+                    {{ track.artist?.name }}
                   </router-link>
                 </td>
               </tr>
@@ -182,7 +228,7 @@
                 </td>
                 <td class="right aligned">
                   <template v-if="track.album && track.album.release_date">
-                    {{ momentFormat(track.album.release_date, 'Y') }}
+                    {{ momentFormat(new Date(track.album.release_date), 'Y') }}
                   </template>
                   <template v-else>
                     <translate translate-context="*/*/*">
@@ -273,7 +319,7 @@
             </translate>
           </h2>
           <library-widget
-            :url="'tracks/' + id + '/libraries/'"
+            :url="`tracks/${track.id}/libraries/`"
             @loaded="$emit('libraries-loaded', $event)"
           >
             <translate translate-context="Content/Track/Paragraph">
@@ -285,88 +331,3 @@
     </section>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import LibraryWidget from '~/components/federation/LibraryWidget.vue'
-import TagsList from '~/components/tags/List.vue'
-import PlaylistWidget from '~/components/playlists/Widget.vue'
-import { humanSize, momentFormat, truncate } from '~/utils/filters'
-import time from '~/utils/time'
-
-export default {
-  components: {
-    LibraryWidget,
-    TagsList,
-    PlaylistWidget
-  },
-  props: {
-    track: { type: Object, required: true },
-    libraries: { type: Array, default: null }
-  },
-  setup () {
-    return { humanSize, momentFormat, time, truncate }
-  },
-  data () {
-    return {
-      id: this.track.id,
-      licenseData: null
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        title: this.$pgettext('*/*/*/Noun', 'Track')
-      }
-    },
-    musicbrainzUrl () {
-      if (this.track.mbid) {
-        return 'https://musicbrainz.org/recording/' + this.track.mbid
-      }
-      return null
-    },
-    upload () {
-      if (this.track.uploads) {
-        return this.track.uploads[0]
-      }
-      return null
-    },
-    license () {
-      if (!this.track || !this.track.license) {
-        return null
-      }
-      return this.licenseData
-    },
-    cover () {
-      if (this.track.cover && this.track.cover.urls.original) {
-        return this.track.cover
-      }
-      if (this.track.album && this.track.album.cover) {
-        return this.track.album.cover
-      }
-      return null
-    }
-  },
-  watch: {
-    track (v) {
-      if (v && v.license) {
-        this.fetchLicenseData(v.license)
-      }
-    }
-  },
-  created () {
-    if (this.track && this.track.license) {
-      this.fetchLicenseData(this.track.license)
-    }
-  },
-  methods: {
-    fetchLicenseData (licenseId) {
-      const self = this
-      const url = `licenses/${licenseId}`
-      axios.get(url).then(response => {
-        self.licenseData = response.data
-      })
-    }
-  }
-}
-</script>

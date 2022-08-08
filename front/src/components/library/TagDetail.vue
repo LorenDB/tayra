@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import TrackWidget from '~/components/audio/track/Widget.vue'
+import AlbumWidget from '~/components/audio/album/Widget.vue'
+import ArtistWidget from '~/components/audio/artist/Widget.vue'
+import RadioButton from '~/components/radios/Button.vue'
+
+interface Props {
+  id: string
+}
+
+const props = defineProps<Props>()
+
+const labels = computed(() => ({
+  title: `#${props.id}`
+}))
+</script>
+
 <template>
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
@@ -87,38 +107,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
-import TrackWidget from '~/components/audio/track/Widget.vue'
-import AlbumWidget from '~/components/audio/album/Widget.vue'
-import ArtistWidget from '~/components/audio/artist/Widget.vue'
-import RadioButton from '~/components/radios/Button.vue'
-
-export default {
-  components: {
-    ArtistWidget,
-    AlbumWidget,
-    TrackWidget,
-    RadioButton,
-    ChannelsWidget
-  },
-  props: {
-    id: { type: String, required: true }
-  },
-  computed: {
-    labels () {
-      const title = `#${this.id}`
-      return {
-        title
-      }
-    },
-    isAuthenticated () {
-      return this.$store.state.auth.authenticated
-    },
-    hasFavorites () {
-      return this.$store.state.favorites.count > 0
-    }
-  }
-}
-</script>

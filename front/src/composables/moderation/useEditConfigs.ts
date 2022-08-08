@@ -1,4 +1,4 @@
-import type { Album, Artist, Content, Track } from '~/types'
+import type { Album, Artist, Content, Track, Actor } from '~/types'
 
 import { gettext } from '~/init/locale'
 
@@ -16,7 +16,7 @@ export interface EditableConfigField extends ConfigField {
   id: EditObjectType
 }
 
-export type EditObject = Artist | Album | Track
+export type EditObject = (Partial<Artist> | Partial<Album> | Partial<Track>) & { attributed_to: Actor }
 export type EditObjectType = 'artist' | 'album' | 'track'
 type Configs = Record<EditObjectType, { fields: (EditableConfigField|ConfigField)[] }>
 
