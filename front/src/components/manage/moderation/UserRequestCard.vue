@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import type { UserRequest, UserRequestStatus } from '~/types'
 
-import axios from 'axios'
-import { ref } from 'vue'
 import { useStore } from '~/store'
+import { ref } from 'vue'
 
-import NoteForm from '~/components/manage/moderation/NoteForm.vue'
+import axios from 'axios'
+
 import NotesThread from '~/components/manage/moderation/NotesThread.vue'
+import NoteForm from '~/components/manage/moderation/NoteForm.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Emits {
   (e: 'handled', status: UserRequestStatus): void
@@ -48,7 +51,7 @@ const approve = async (isApproved: boolean) => {
       count: -1
     })
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

@@ -1,18 +1,22 @@
 <script setup lang="ts">
 import type { Channel } from '~/types'
 
-import axios from 'axios'
-import PlayButton from '~/components/audio/PlayButton.vue'
-import EmbedWizard from '~/components/audio/EmbedWizard.vue'
-import SemanticModal from '~/components/semantic/Modal.vue'
-import TagsList from '~/components/tags/List.vue'
-import SubscribeButton from '~/components/channels/SubscribeButton.vue'
-import useReport from '~/composables/moderation/useReport'
-import ChannelForm from '~/components/audio/ChannelForm.vue'
-import { useStore } from '~/store'
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 import { computed, ref, reactive, watch, watchEffect } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import SubscribeButton from '~/components/channels/SubscribeButton.vue'
+import ChannelForm from '~/components/audio/ChannelForm.vue'
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import TagsList from '~/components/tags/List.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+import useReport from '~/composables/moderation/useReport'
 
 interface Props {
   id: string
@@ -75,7 +79,7 @@ const fetchData = async () => {
       }
     }
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false
@@ -104,7 +108,7 @@ const remove = async () => {
     emit('deleted')
     return router.push({ name: 'profile.overview', params: { username: store.state.auth.username } })
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 }
 

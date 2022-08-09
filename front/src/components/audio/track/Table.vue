@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import type { Track } from '~/types'
 
-import { ref, computed } from 'vue'
+import { useElementByPoint, useMouse } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import { clone, uniqBy } from 'lodash-es'
-import { useElementByPoint, useMouse } from '@vueuse/core'
+import { ref, computed } from 'vue'
+
 import axios from 'axios'
-import TrackRow from '~/components/audio/track/Row.vue'
+
 import TrackMobileRow from '~/components/audio/track/MobileRow.vue'
 import Pagination from '~/components/vui/Pagination.vue'
+import TrackRow from '~/components/audio/track/Row.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   tracks?: Track[]
@@ -114,7 +118,7 @@ const fetchData = async () => {
     totalTracks.value = response.data.count
     emit('fetched')
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

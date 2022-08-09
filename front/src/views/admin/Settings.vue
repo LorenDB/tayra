@@ -4,12 +4,14 @@ import type { SettingsGroup as SettingsGroupType } from '~/types'
 import axios from 'axios'
 import $ from 'jquery'
 
+import { ref, nextTick, onMounted, computed, watch } from 'vue'
+import { useCurrentElement } from '@vueuse/core'
+import { useGettext } from 'vue3-gettext'
+import { useRoute } from 'vue-router'
+
 import SettingsGroup from '~/components/admin/SettingsGroup.vue'
 
-import { useCurrentElement } from '@vueuse/core'
-import { ref, nextTick, onMounted, computed, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { useGettext } from 'vue3-gettext'
+import useErrorHandler from '~/composables/useErrorHandler'
 
 const current = ref()
 const settingsData = ref()
@@ -150,7 +152,7 @@ const fetchSettings = async () => {
     const response = await axios.get('instance/admin/settings/')
     settingsData.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

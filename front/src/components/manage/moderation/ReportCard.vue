@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import type { Report } from '~/types'
 
-import axios from 'axios'
-import useReportConfigs from '~/composables/moderation/useReportConfigs'
-import useMarkdown from '~/composables/useMarkdown'
 import { ref, computed, reactive } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
 
-import NoteForm from '~/components/manage/moderation/NoteForm.vue'
-import NotesThread from '~/components/manage/moderation/NotesThread.vue'
-import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
+import axios from 'axios'
+
 import InstancePolicyModal from '~/components/manage/moderation/InstancePolicyModal.vue'
+import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
+import NotesThread from '~/components/manage/moderation/NotesThread.vue'
+import NoteForm from '~/components/manage/moderation/NoteForm.vue'
+
+import useReportConfigs from '~/composables/moderation/useReportConfigs'
+import useErrorHandler from '~/composables/useErrorHandler'
+import useMarkdown from '~/composables/useMarkdown'
 
 interface Emits {
   (e: 'updated', updating: { type: string }): void
@@ -79,7 +82,7 @@ const actions = computed(() => {
             resolveReport(true)
           } catch (error) {
             console.log('Error while deleting target', error)
-            // TODO (wvffle): Handle error
+            useErrorHandler(error as Error)
           }
         }
       }]
@@ -96,7 +99,7 @@ const update = async (type: string) => {
     await axios.patch(`manage/moderation/reports/${obj.value.uuid}/`, { type })
     emit('updated', { type })
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   updating.type = false
@@ -122,7 +125,7 @@ const resolveReport = async (isHandled: boolean) => {
       count: isHandled ? -1 : 1
     })
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

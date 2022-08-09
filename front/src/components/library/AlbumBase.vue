@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import type { Track, Album, Artist, Library } from '~/types'
 
-import axios from 'axios'
-import { sum } from 'lodash-es'
+import { momentFormat } from '~/utils/filters'
 import { useGettext } from 'vue3-gettext'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { sum } from 'lodash-es'
+
+import axios from 'axios'
+
+import ArtistLabel from '~/components/audio/ArtistLabel.vue'
 import PlayButton from '~/components/audio/PlayButton.vue'
 import TagsList from '~/components/tags/List.vue'
-import ArtistLabel from '~/components/audio/ArtistLabel.vue'
 import AlbumDropdown from './AlbumDropdown.vue'
-import { momentFormat } from '~/utils/filters'
-import { computed, ref, watch } from 'vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   id: string
@@ -83,13 +87,13 @@ const remove = async () => {
   isLoading.value = true
   try {
     await axios.delete(`albums/${object.value?.id}`)
-    isLoading.value = false
     emit('deleted')
     router.push({ name: 'library.artists.detail', params: { id: artist.value?.id } })
   } catch (error) {
-    isLoading.value = false
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
+
+  isLoading.value = false
 }
 </script>
 

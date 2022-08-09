@@ -1,58 +1,59 @@
-import type { InjectionKey } from 'vue'
-import type { State as FavoritesState } from './favorites'
-import type { State as ChannelsState } from './channels'
-import type { State as LibrariesState } from './libraries'
-import type { State as AuthState } from './auth'
-import type { State as InstanceState } from './instance'
 import type { State as ModerationState } from './moderation'
-import type { State as QueueState } from './queue'
+import type { State as PlaylistsState } from './playlists'
+import type { State as FavoritesState } from './favorites'
+import type { State as LibrariesState } from './libraries'
+import type { State as ChannelsState } from './channels'
+import type { State as InstanceState } from './instance'
 import type { State as RadiosState } from './radios'
 import type { State as PlayerState } from './player'
-import type { State as PlaylistsState } from './playlists'
+import type { State as QueueState } from './queue'
+import type { State as AuthState } from './auth'
 import type { State as UiState } from './ui'
+import type { InjectionKey } from 'vue'
 
 import { createStore, Store, useStore as baseUseStore } from 'vuex'
+
 import createPersistedState from 'vuex-persistedstate'
-import favorites from './favorites'
-import channels from './channels'
-import libraries from './libraries'
-import auth from './auth'
-import instance from './instance'
 import moderation from './moderation'
-import queue from './queue'
+import playlists from './playlists'
+import favorites from './favorites'
+import libraries from './libraries'
+import channels from './channels'
+import instance from './instance'
 import radios from './radios'
 import player from './player'
-import playlists from './playlists'
+import queue from './queue'
+import auth from './auth'
 import ui from './ui'
 
 export interface RootState {
-  ui: UiState
-  auth: AuthState
-  channels: ChannelsState
-  libraries: LibrariesState
-  favorites: FavoritesState
-  instance: InstanceState
   moderation: ModerationState
-  queue: QueueState
-  radios: RadiosState
   playlists: PlaylistsState
+  favorites: FavoritesState
+  libraries: LibrariesState
+  channels: ChannelsState
+  instance: InstanceState
+  radios: RadiosState
   player: PlayerState
+  queue: QueueState
+  auth: AuthState
+  ui: UiState
 }
 
 export const key: InjectionKey<Store<RootState>> = Symbol('vuex state injection key')
 export default createStore<RootState>({
   modules: {
-    ui,
-    auth,
-    channels,
-    libraries,
-    favorites,
-    instance,
     moderation,
-    queue,
-    radios,
     playlists,
-    player
+    favorites,
+    libraries,
+    channels,
+    instance,
+    radios,
+    player,
+    queue,
+    auth,
+    ui
   },
   plugins: [
     createPersistedState({

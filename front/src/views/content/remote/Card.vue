@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import type { Library } from '~/types'
 
-import axios from 'axios'
-import RadioButton from '~/components/radios/Button.vue'
-import useReport from '~/composables/moderation/useReport'
 import { useTimeoutFn } from '@vueuse/core'
-import { useStore } from '~/store'
-import { useGettext } from 'vue3-gettext'
 import { computed, ref, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import RadioButton from '~/components/radios/Button.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+import useReport from '~/composables/moderation/useReport'
 
 interface Props {
   initialLibrary: Library
@@ -60,7 +64,7 @@ const launchScan = async () => {
         : $pgettext('Content/Library/Message', 'Scan launched')
     })
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 }
 
@@ -116,7 +120,7 @@ const fetchScanStatus = async () => {
       stopFetching()
     }
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 }
 

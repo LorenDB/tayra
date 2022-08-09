@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import type { PlaylistTrack, Playlist } from '~/types'
 
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
+import { useStore } from '~/store'
+
 import axios from 'axios'
-import TrackTable from '~/components/audio/track/Table.vue'
-import PlayButton from '~/components/audio/PlayButton.vue'
+
 import PlaylistEditor from '~/components/playlists/Editor.vue'
 import EmbedWizard from '~/components/audio/EmbedWizard.vue'
 import SemanticModal from '~/components/semantic/Modal.vue'
-import { ref, computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
-import { useRouter } from 'vue-router'
-import { useStore } from '~/store'
+import TrackTable from '~/components/audio/track/Table.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   id: string
@@ -50,7 +54,7 @@ const fetchData = async () => {
     playlist.value = playlistResponse.data
     playlistTracks.value = tracksResponse.data.results
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false
@@ -64,7 +68,7 @@ const deletePlaylist = async () => {
     store.dispatch('playlists/fetchOwn')
     return router.push({ path: '/library' })
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 }
 </script>

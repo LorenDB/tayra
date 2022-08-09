@@ -7,9 +7,11 @@ import { useStore } from '~/store'
 
 import axios from 'axios'
 
-import AlbumCard from '~/components/audio/album/Card.vue'
-import TrackTable from '~/components/audio/track/Table.vue'
 import LibraryWidget from '~/components/federation/LibraryWidget.vue'
+import TrackTable from '~/components/audio/track/Table.vue'
+import AlbumCard from '~/components/audio/album/Card.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   object: Artist
@@ -42,7 +44,7 @@ const loadMoreAlbums = async () => {
     additionalAlbums.push(...additionalAlbums.concat(response.data.results))
     loadMoreAlbumsUrl.value = response.data.next
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoadingMoreAlbums.value = false

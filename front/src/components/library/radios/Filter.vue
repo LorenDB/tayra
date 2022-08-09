@@ -5,13 +5,15 @@ import type { Track } from '~/types'
 import axios from 'axios'
 import $ from 'jquery'
 
-import { clone } from 'lodash-es'
-import { ref, onMounted, watch } from 'vue'
 import { useCurrentElement } from '@vueuse/core'
+import { ref, onMounted, watch } from 'vue'
 import { useStore } from '~/store'
+import { clone } from 'lodash-es'
 
 import SemanticModal from '~/components/semantic/Modal.vue'
 import TrackTable from '~/components/audio/track/Table.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   index: number
@@ -111,7 +113,7 @@ const fetchCandidates = async () => {
     const response = await axios.post('radios/radios/validate/', params)
     checkResult.value = (response.data as ResponseType).filters[0]
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 }
 

@@ -11,10 +11,12 @@ import { useStore } from '~/store'
 import axios from 'axios'
 import $ from 'jquery'
 
+import UploadMetadataForm from '~/components/channels/UploadMetadataForm.vue'
+import FileUploadWidget from '~/components/library/FileUploadWidget.vue'
 import LicenseSelect from '~/components/channels/LicenseSelect.vue'
 import AlbumSelect from '~/components/channels/AlbumSelect.vue'
-import FileUploadWidget from '~/components/library/FileUploadWidget.vue'
-import UploadMetadataForm from '~/components/channels/UploadMetadataForm.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Emits {
   (e: 'status', status: UploadStatus): void
@@ -279,7 +281,7 @@ const remove = async (file: VueUploadItem) => {
     try {
       await axios.delete(`uploads/${file.response.uuid}/`)
     } catch (error) {
-      // TODO (wvffle): Handle error
+      useErrorHandler(error as Error)
     }
   } else {
     upload.value.remove(file)

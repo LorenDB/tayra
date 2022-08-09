@@ -2,10 +2,14 @@
 import type { Track, Artist, Album, Playlist, Library, Channel, Actor, /* Track, */ Cover } from '~/types'
 import type { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
 
-import axios from 'axios'
-import PlayButton from '~/components/audio/PlayButton.vue'
-import usePlayOptions from '~/composables/audio/usePlayOptions'
 import { ref } from 'vue'
+
+import axios from 'axios'
+
+import PlayButton from '~/components/audio/PlayButton.vue'
+
+import usePlayOptions from '~/composables/audio/usePlayOptions'
+import useErrorHandler from '~/composables/useErrorHandler'
 import useQueue from '~/composables/audio/useQueue'
 
 interface Props extends PlayOptionsProps {
@@ -43,7 +47,7 @@ const fetchData = async () => {
     const response = await axios.get(`tracks/${props.track.id}/`)
     description.value = response.data.description.text
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 }
 

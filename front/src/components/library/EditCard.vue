@@ -11,6 +11,7 @@ import { useStore } from '~/store'
 import axios from 'axios'
 
 import useEditConfigs from '~/composables/moderation/useEditConfigs'
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Emits {
   (e: 'approved', isApproved: boolean): void
@@ -126,7 +127,7 @@ const remove = async () => {
     await axios.delete(`mutations/${props.obj.uuid}/`)
     emit('deleted')
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false
@@ -144,7 +145,7 @@ const approve = async (approved: boolean) => {
     emit('approved', approved)
     store.commit('ui/incrementNotifications', { count: -1, type: 'pendingReviewEdits' })
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

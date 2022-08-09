@@ -8,6 +8,8 @@ import { refDebounced } from '@vueuse/core'
 import axios from 'axios'
 import AlbumCard from '~/components/audio/album/Card.vue'
 import ArtistCard from '~/components/audio/artist/Card.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 import useLogger from '~/composables/useLogger'
 
 interface Props {
@@ -47,7 +49,7 @@ const search = async () => {
     results.artists = response.data.artists
     results.albums = response.data.albums
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

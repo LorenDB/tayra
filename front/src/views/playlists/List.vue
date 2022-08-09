@@ -4,15 +4,18 @@ import type { OrderingProps } from '~/composables/useOrdering'
 
 import axios from 'axios'
 import $ from 'jquery'
-import { computed, ref, watch, onMounted } from 'vue'
+
 import { useRouter, onBeforeRouteUpdate } from 'vue-router'
+import { computed, ref, watch, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 import PlaylistCardList from '~/components/playlists/CardList.vue'
 import Pagination from '~/components/vui/Pagination.vue'
+
 import useSharedLabels from '~/composables/locale/useSharedLabels'
-import useLogger from '~/composables/useLogger'
+import useErrorHandler from '~/composables/useErrorHandler'
 import useOrdering from '~/composables/useOrdering'
+import useLogger from '~/composables/useLogger'
 
 interface Props extends OrderingProps {
   defaultPage?: number
@@ -79,7 +82,7 @@ const fetchData = async () => {
 
     result.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
     result.value = null
   } finally {
     logger.timeEnd('Fetching albums')

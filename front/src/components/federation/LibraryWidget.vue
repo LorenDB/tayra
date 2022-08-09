@@ -4,7 +4,10 @@ import type { Library } from '~/types'
 import { ref, reactive } from 'vue'
 
 import axios from 'axios'
+
 import LibraryCard from '~/views/content/remote/Card.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Emits {
   (e: 'loaded', libraries: Library[]): void
@@ -34,7 +37,7 @@ const fetchData = async (url = props.url) => {
     libraries.push(...response.data.results)
     emit('loaded', libraries)
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

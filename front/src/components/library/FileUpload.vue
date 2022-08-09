@@ -12,11 +12,13 @@ import { useStore } from '~/store'
 import axios from 'axios'
 
 import LibraryFilesTable from '~/views/content/libraries/FilesTable.vue'
-import useWebSocketHandler from '~/composables/useWebSocketHandler'
-import updateQueryString from '~/composables/updateQueryString'
 import FileUploadWidget from './FileUploadWidget.vue'
 import FsBrowser from './FsBrowser.vue'
 import FsLogs from './FsLogs.vue'
+
+import useWebSocketHandler from '~/composables/useWebSocketHandler'
+import updateQueryString from '~/composables/updateQueryString'
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Emits {
   (e: 'uploads-finished', delta: number):void
@@ -111,7 +113,7 @@ const fetchStatus = async () => {
 
       uploads[status as keyof typeof uploads] = response.data.count
     } catch (error) {
-      // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
     }
   }
 }
@@ -184,7 +186,7 @@ const fetchQuota = async () => {
     const response = await axios.get('users/me/')
     quotaStatus.value = response.data.quota_status
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoadingQuota.value = false
@@ -216,7 +218,7 @@ const fetchFilesystem = async (updateLoading: boolean) => {
     const response = await axios.get('libraries/fs-import', { params: { path: fsPath.join('/') } })
     fsStatus.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   if (updateLoading) isLoadingFs.value = false
@@ -252,7 +254,7 @@ const cancelFsScan = async () => {
     await axios.delete('libraries/fs-import')
     fetchFilesystem(false)
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 }
 

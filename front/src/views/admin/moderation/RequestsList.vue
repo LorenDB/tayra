@@ -3,15 +3,19 @@ import type { RouteWithPreferences, OrderingField } from '~/store/ui'
 import type { OrderingProps } from '~/composables/useOrdering'
 import type { SmartSearchProps } from '~/composables/useSmartSearch'
 
-import axios from 'axios'
-import Pagination from '~/components/vui/Pagination.vue'
-import UserRequestCard from '~/components/manage/moderation/UserRequestCard.vue'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-import useOrdering from '~/composables/useOrdering'
-import useSmartSearch from '~/composables/useSmartSearch'
 import { ref, computed, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import UserRequestCard from '~/components/manage/moderation/UserRequestCard.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useErrorHandler from '~/composables/useErrorHandler'
+import useSmartSearch from '~/composables/useSmartSearch'
+import useOrdering from '~/composables/useOrdering'
 
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
@@ -65,7 +69,7 @@ const fetchData = async () => {
       })
     }
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
     result.value = null
   } finally {
     isLoading.value = false

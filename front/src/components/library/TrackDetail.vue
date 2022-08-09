@@ -11,6 +11,8 @@ import LibraryWidget from '~/components/federation/LibraryWidget.vue'
 import PlaylistWidget from '~/components/playlists/Widget.vue'
 import TagsList from '~/components/tags/List.vue'
 
+import useErrorHandler from '~/composables/useErrorHandler'
+
 interface Props {
   track: Track
 }
@@ -32,7 +34,7 @@ const fetchLicense = async (licenseId: string) => {
     const response = await axios.get(`licenses/${licenseId}`)
     license.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 }
 

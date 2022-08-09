@@ -1,12 +1,16 @@
 <script setup lang="ts">
+import { useGettext } from 'vue3-gettext'
+import { ref, computed } from 'vue'
+
 import axios from 'axios'
+
 import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
+import PlaylistWidget from '~/components/playlists/Widget.vue'
 import TrackWidget from '~/components/audio/track/Widget.vue'
 import AlbumWidget from '~/components/audio/album/Widget.vue'
-import PlaylistWidget from '~/components/playlists/Widget.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 import useLogger from '~/composables/useLogger'
-import { ref, computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
 
 interface Props {
   scope?: string
@@ -39,7 +43,7 @@ const fetchData = async () => {
     const response = await axios.get('artists/', { params })
     artists.value = response.data.results
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

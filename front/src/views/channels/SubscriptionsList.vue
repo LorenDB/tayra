@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import type { Channel } from '~/types'
+
+import { useGettext } from 'vue3-gettext'
+import { ref, computed } from 'vue'
+
 import axios from 'axios'
-import SemanticModal from '~/components/semantic/Modal.vue'
+
 import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
 import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
-import { ref, computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import SemanticModal from '~/components/semantic/Modal.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   defaultQuery?: string
@@ -39,7 +44,7 @@ const fetchData = async () => {
     channels.value.push(...response.data.results)
     count.value = response.data.count
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

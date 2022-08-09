@@ -4,7 +4,7 @@ import type { Router } from 'vue-router'
 import type { Store } from 'vuex'
 import { watchEffect, type App } from 'vue'
 
-const COOKIE = 'allow-tracing'
+export const COOKIE = 'allow-tracing'
 
 const initSentry = async (app: App, router: Router, store: Store<RootState>) => {
   const [{ default: useLogger }, { BrowserTracing }, Sentry] = await Promise.all([

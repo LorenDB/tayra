@@ -2,20 +2,23 @@
 import type { RouteWithPreferences, OrderingField } from '~/store/ui'
 import type { OrderingProps } from '~/composables/useOrdering'
 
-import qs from 'qs'
-import axios from 'axios'
-import $ from 'jquery'
-
-import ArtistCard from '~/components/audio/artist/Card.vue'
-import Pagination from '~/components/vui/Pagination.vue'
-import TagsSelector from '~/components/library/TagsSelector.vue'
-import useLogger from '~/composables/useLogger'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
 import { computed, reactive, ref, watch, onMounted } from 'vue'
+import { onBeforeRouteUpdate, useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
+
+import axios from 'axios'
+import $ from 'jquery'
+import qs from 'qs'
+
+import TagsSelector from '~/components/library/TagsSelector.vue'
+import ArtistCard from '~/components/audio/artist/Card.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useErrorHandler from '~/composables/useErrorHandler'
 import useOrdering from '~/composables/useOrdering'
-import { onBeforeRouteUpdate, useRouter } from 'vue-router'
+import useLogger from '~/composables/useLogger'
 
 interface Props extends OrderingProps {
   defaultPage?: number
@@ -95,7 +98,7 @@ const fetchData = async () => {
 
     result.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
     result.value = null
   } finally {
     logger.timeEnd('Fetching artists')

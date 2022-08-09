@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { Note } from '~/types'
 
-import axios from 'axios'
 import { useMarkdownRaw } from '~/composables/useMarkdown'
 import { ref } from 'vue'
+
+import axios from 'axios'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   notes: Note[]
@@ -20,7 +23,7 @@ const remove = async (note: Note) => {
     await axios.delete(`manage/moderation/notes/${note.uuid}/`)
     emit('deleted', note.uuid)
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

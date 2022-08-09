@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import type { Track, Radio } from '~/types'
 
-import axios from 'axios'
-import TrackTable from '~/components/audio/track/Table.vue'
-import RadioButton from '~/components/radios/Button.vue'
-import Pagination from '~/components/vui/Pagination.vue'
 import { ref, computed, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useRouter } from 'vue-router'
+
+import axios from 'axios'
+
+import TrackTable from '~/components/audio/track/Table.vue'
+import RadioButton from '~/components/radios/Button.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   id: string
@@ -39,7 +43,7 @@ const fetchData = async () => {
     totalTracks.value = tracksResponse.data.count
     tracks.value = tracksResponse.data.results
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false
@@ -53,7 +57,7 @@ const deleteRadio = async () => {
     await axios.delete(`radios/radios/${props.id}/`)
     return router.push({ path: '/library' })
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 }
 </script>

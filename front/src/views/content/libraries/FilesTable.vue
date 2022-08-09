@@ -1,20 +1,24 @@
 <script setup lang="ts">
-import type { ImportStatus } from '~/types'
 import type { RouteWithPreferences, OrderingField } from '~/store/ui'
-import type { OrderingProps } from '~/composables/useOrdering'
 import type { SmartSearchProps } from '~/composables/useSmartSearch'
+import type { OrderingProps } from '~/composables/useOrdering'
+import type { ImportStatus } from '~/types'
 
-import axios from 'axios'
-import time from '~/utils/time'
-import Pagination from '~/components/vui/Pagination.vue'
-import ActionTable from '~/components/common/ActionTable.vue'
-import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
 import { humanSize, truncate } from '~/utils/filters'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
 import { computed, ref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import useOrdering from '~/composables/useOrdering'
+
+import time from '~/utils/time'
+import axios from 'axios'
+
+import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
+import ActionTable from '~/components/common/ActionTable.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useErrorHandler from '~/composables/useErrorHandler'
 import useSmartSearch from '~/composables/useSmartSearch'
+import useOrdering from '~/composables/useOrdering'
 
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO (wvffle): find object type
@@ -101,7 +105,7 @@ const fetchData = async () => {
 
     result.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
     result.value = null
   } finally {
     isLoading.value = false

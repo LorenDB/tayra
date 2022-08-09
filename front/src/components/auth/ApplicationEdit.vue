@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import axios from 'axios'
 import { useGettext } from 'vue3-gettext'
 import { computed, ref } from 'vue'
 
+import axios from 'axios'
+
 import ApplicationForm from '~/components/auth/ApplicationForm.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   id: number
@@ -27,7 +30,7 @@ const fetchApplication = async () => {
     const response = await axios.get(`oauth/apps/${props.id}/`)
     application.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false
@@ -40,7 +43,7 @@ const refreshToken = async () => {
     const response = await axios.post(`oauth/apps/${props.id}/refresh-token`)
     application.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

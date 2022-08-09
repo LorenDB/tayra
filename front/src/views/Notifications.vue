@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import type { Notification } from '~/types'
 
-import axios from 'axios'
 import moment from 'moment'
+import axios from 'axios'
 
 import { ref, reactive, computed, watch, markRaw } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
-import useMarkdown from '~/composables/useMarkdown'
-import useWebSocketHandler from '~/composables/useWebSocketHandler'
 
 import NotificationRow from '~/components/notifications/NotificationRow.vue'
+
+import useWebSocketHandler from '~/composables/useWebSocketHandler'
+import useErrorHandler from '~/composables/useErrorHandler'
+import useMarkdown from '~/composables/useMarkdown'
 
 const store = useStore()
 const supportMessage = useMarkdown(() => store.state.instance.settings.instance.support_message.value)
@@ -38,7 +40,7 @@ const fetchData = async () => {
     notifications.count = response.data.count
     notifications.results = response.data.results.map(markRaw)
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false
@@ -64,7 +66,7 @@ const setDisplayDate = async (field: string, days: number) => {
 
     store.commit('auth/profilePartialUpdate', response.data)
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 }
 
@@ -82,7 +84,7 @@ const markAllAsRead = async () => {
     store.commit('ui/notifications', { type: 'inbox', count: 0 })
     notifications.results = notifications.results.map(notification => ({ ...notification, is_read: true }))
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 }
 </script>

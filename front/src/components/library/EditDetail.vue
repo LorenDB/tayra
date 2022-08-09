@@ -2,10 +2,14 @@
 import type { EditObject, EditObjectType } from '~/composables/moderation/useEditConfigs'
 import type { ReviewState } from '~/types'
 
-import axios from 'axios'
-import useEditConfigs from '~/composables/moderation/useEditConfigs'
-import EditCard from '~/components/library/EditCard.vue'
 import { computed, ref } from 'vue'
+
+import axios from 'axios'
+
+import EditCard from '~/components/library/EditCard.vue'
+
+import useEditConfigs from '~/composables/moderation/useEditConfigs'
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   object: EditObject
@@ -32,7 +36,7 @@ const fetchData = async () => {
     const response = await axios.get(`mutations/${props.editId}/`)
     obj.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   } finally {
     isLoading.value = false
   }

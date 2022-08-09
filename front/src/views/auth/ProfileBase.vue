@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import type { Actor } from '~/types'
 
-import axios from 'axios'
-import useReport from '~/composables/moderation/useReport'
 import { onBeforeRouteUpdate } from 'vue-router'
-import { useStore } from '~/store'
-import { useGettext } from 'vue3-gettext'
 import { computed, ref, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+import useReport from '~/composables/moderation/useReport'
 
 interface Props {
   username: string
@@ -51,7 +54,7 @@ const fetchData = async () => {
     const response = await axios.get(`federation/actors/${fullUsername.value}/`)
     object.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

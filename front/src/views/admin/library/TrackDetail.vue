@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { humanSize, truncate } from '~/utils/filters'
-import { ref, computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
 
 import axios from 'axios'
+
 import FetchButton from '~/components/federation/FetchButton.vue'
 import TagsList from '~/components/tags/List.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   id: number
@@ -28,7 +31,7 @@ const fetchData = async () => {
     const response = await axios.get(`manage/library/tracks/${props.id}/`)
     track.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false
@@ -43,7 +46,7 @@ const fetchStats = async () => {
     const response = await axios.get(`manage/library/tracks/${props.id}/stats/`)
     stats.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoadingStats.value = false
@@ -60,7 +63,7 @@ const remove = async () => {
     await axios.delete(`manage/library/tracks/${props.id}/`)
     await router.push({ name: 'manage.library.tracks' })
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

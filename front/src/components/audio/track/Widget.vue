@@ -2,14 +2,17 @@
 import type { Track, Listening } from '~/types'
 
 // TODO (wvffle): Fix websocket update (#1534)
-import axios from 'axios'
 import { ref, reactive, watch } from 'vue'
 import { useStore } from '~/store'
 import { clone } from 'lodash-es'
 
+import axios from 'axios'
+
 import useWebSocketHandler from '~/composables/useWebSocketHandler'
 import PlayButton from '~/components/audio/PlayButton.vue'
 import TagsList from '~/components/tags/List.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Emits {
   (e: 'count', count: number): void
@@ -60,7 +63,7 @@ const fetchData = async (url = props.url) => {
 
     objects.push(...newObjects)
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

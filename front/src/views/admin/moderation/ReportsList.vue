@@ -1,18 +1,22 @@
 <script setup lang="ts">
 import type { RouteWithPreferences, OrderingField } from '~/store/ui'
-import type { OrderingProps } from '~/composables/useOrdering'
 import type { SmartSearchProps } from '~/composables/useSmartSearch'
+import type { OrderingProps } from '~/composables/useOrdering'
 
-import axios from 'axios'
-import Pagination from '~/components/vui/Pagination.vue'
-import ReportCard from '~/components/manage/moderation/ReportCard.vue'
-import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-import { useStore } from '~/store'
 import { computed, ref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import useOrdering from '~/composables/useOrdering'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdown.vue'
+import ReportCard from '~/components/manage/moderation/ReportCard.vue'
+import Pagination from '~/components/vui/Pagination.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useErrorHandler from '~/composables/useErrorHandler'
 import useSmartSearch from '~/composables/useSmartSearch'
+import useOrdering from '~/composables/useOrdering'
 
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO (wvffle): find more types
@@ -70,7 +74,7 @@ const fetchData = async () => {
       })
     }
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
     result.value = null
   } finally {
     isLoading.value = false

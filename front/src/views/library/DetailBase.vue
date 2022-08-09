@@ -2,15 +2,19 @@
 // TODO (wvffle): Rename to LibraryBase
 import type { Library } from '~/types'
 
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
+import { computed, ref, watch, watchEffect } from 'vue'
+import { humanSize } from '~/utils/filters'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+
 import axios from 'axios'
+
 import LibraryFollowButton from '~/components/audio/LibraryFollowButton.vue'
 import RadioButton from '~/components/radios/Button.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 import useReport from '~/composables/moderation/useReport'
-import { humanSize } from '~/utils/filters'
-import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
-import { useStore } from '~/store'
-import { useGettext } from 'vue3-gettext'
-import { computed, ref, watch, watchEffect } from 'vue'
 
 interface Props {
   id: string
@@ -57,7 +61,7 @@ const fetchData = async () => {
     const response = await axios.get(`libraries/${props.id}`)
     object.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

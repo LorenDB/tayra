@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import SemanticModal from '~/components/semantic/Modal.vue'
-import axios from 'axios'
-import { uniq } from 'lodash-es'
-import { useVModel } from '@vueuse/core'
 import { ref, computed, watch, nextTick } from 'vue'
-import { useStore } from '~/store'
 import { useGettext } from 'vue3-gettext'
+import { useVModel } from '@vueuse/core'
+import { useStore } from '~/store'
+import { uniq } from 'lodash-es'
+
+import axios from 'axios'
+
+import SemanticModal from '~/components/semantic/Modal.vue'
 
 interface Props {
   show: boolean

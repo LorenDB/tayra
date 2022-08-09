@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import type { Library, LibraryFollow } from '~/types'
 
+import { ref } from 'vue'
+
+import axios from 'axios'
+
 import LibraryFilesTable from '~/views/content/libraries/FilesTable.vue'
 import LibraryForm from '~/views/content/libraries/Form.vue'
-import { ref } from 'vue'
-import axios from 'axios'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   object: Library
@@ -23,7 +27,7 @@ const fetchData = async () => {
     const response = await axios.get(`libraries/${props.object.uuid}/follows/`)
     follows.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false
@@ -39,7 +43,7 @@ const updateApproved = async (follow: LibraryFollow, approved: boolean) => {
     await axios.post(`federation/follows/library/${follow.uuid}/${approved ? 'accept' : 'reject'}/`)
     follow.approved = approved
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   follow.isLoading = false

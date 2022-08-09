@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import type { Album } from '~/types'
 
-import axios from 'axios'
 import { reactive, ref, watch } from 'vue'
 import { useStore } from '~/store'
 
+import axios from 'axios'
+
 import AlbumCard from '~/components/audio/album/Card.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
   filters: Record<string, string | boolean>
@@ -43,7 +46,7 @@ const fetchData = async (url = 'albums/') => {
     count.value = response.data.count
     albums.push(...response.data.results)
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false

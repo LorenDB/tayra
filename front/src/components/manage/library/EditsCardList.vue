@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import type { RouteWithPreferences, OrderingField } from '~/store/ui'
-import type { OrderingProps } from '~/composables/useOrdering'
-import type { SmartSearchProps } from '~/composables/useSmartSearch'
 import type { EditObjectType } from '~/composables/moderation/useEditConfigs'
+import type { RouteWithPreferences, OrderingField } from '~/store/ui'
+import type { SmartSearchProps } from '~/composables/useSmartSearch'
+import type { OrderingProps } from '~/composables/useOrdering'
+
+import { ref, reactive, watch, computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { uniq } from 'lodash-es'
 
 import axios from 'axios'
-import { uniq } from 'lodash-es'
+
 import Pagination from '~/components/vui/Pagination.vue'
 import EditCard from '~/components/library/EditCard.vue'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-import { ref, reactive, watch, computed } from 'vue'
-import useOrdering from '~/composables/useOrdering'
-import useSmartSearch from '~/composables/useSmartSearch'
+
 import useEditConfigs from '~/composables/moderation/useEditConfigs'
-import { useGettext } from 'vue3-gettext'
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useErrorHandler from '~/composables/useErrorHandler'
+import useSmartSearch from '~/composables/useSmartSearch'
+import useOrdering from '~/composables/useOrdering'
 
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO (wvffle): find object type
@@ -84,7 +88,7 @@ const fetchTargets = async () => {
         hidden: 'null'
       }
     }).catch(() => {
-      // TODO (wvffle): Handle error
+      useErrorHandler(error as Error)
     })
 
     for (const payload of response?.data?.results ?? []) {
@@ -119,7 +123,7 @@ const fetchData = async () => {
     result.value = response.data
     fetchTargets()
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
     result.value = null
   } finally {
     isLoading.value = false

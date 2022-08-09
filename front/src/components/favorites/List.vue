@@ -3,18 +3,22 @@ import type { RouteWithPreferences, OrderingField } from '~/store/ui'
 import type { Track } from '~/types'
 import type { OrderingProps } from '~/composables/useOrdering'
 
+import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { onBeforeRouteUpdate, useRouter } from 'vue-router'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+
 import axios from 'axios'
 import $ from 'jquery'
+
+import TrackTable from '~/components/audio/track/Table.vue'
 import RadioButton from '~/components/radios/Button.vue'
 import Pagination from '~/components/vui/Pagination.vue'
-import TrackTable from '~/components/audio/track/Table.vue'
-import useLogger from '~/composables/useLogger'
+
 import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useErrorHandler from '~/composables/useErrorHandler'
 import useOrdering from '~/composables/useOrdering'
-import { onBeforeRouteUpdate, useRouter } from 'vue-router'
-import { computed, onMounted, reactive, ref, watch } from 'vue'
-import { useStore } from '~/store'
-import { useGettext } from 'vue3-gettext'
+import useLogger from '~/composables/useLogger'
 
 interface Props extends OrderingProps {
   defaultPage?: number
@@ -87,7 +91,7 @@ const fetchFavorites = async () => {
     nextLink.value = response.data.next
     previousLink.value = response.data.previous
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   } finally {
     logger.timeEnd('Loading user favorites')
     isLoading.value = false

@@ -2,17 +2,21 @@
 import type { RouteWithPreferences, OrderingField } from '~/store/ui'
 import type { OrderingProps } from '~/composables/useOrdering'
 
-import axios from 'axios'
-import $ from 'jquery'
-import RadioCard from '~/components/radios/Card.vue'
-import Pagination from '~/components/vui/Pagination.vue'
-import useLogger from '~/composables/useLogger'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
+import { onBeforeRouteUpdate, useRouter } from 'vue-router'
 import { computed, ref, watch, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
-import { onBeforeRouteUpdate, useRouter } from 'vue-router'
+
+import axios from 'axios'
+import $ from 'jquery'
+
+import Pagination from '~/components/vui/Pagination.vue'
+import RadioCard from '~/components/radios/Card.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useErrorHandler from '~/composables/useErrorHandler'
 import useOrdering from '~/composables/useOrdering'
+import useLogger from '~/composables/useLogger'
 
 interface Props extends OrderingProps {
   defaultPage?: number
@@ -78,7 +82,7 @@ const fetchData = async () => {
 
     result.value = response.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
     result.value = null
   } finally {
     logger.timeEnd('Fetching radios')

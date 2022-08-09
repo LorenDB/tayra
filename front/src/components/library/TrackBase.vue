@@ -1,21 +1,25 @@
 <script setup lang="ts">
 import type { Track, Artist, Library } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
-import axios from 'axios'
-import PlayButton from '~/components/audio/PlayButton.vue'
-import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
-import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
-import SemanticModal from '~/components/semantic/Modal.vue'
-import EmbedWizard from '~/components/audio/EmbedWizard.vue'
 import { momentFormat } from '~/utils/filters'
-import updateQueryString from '~/composables/updateQueryString'
-import useReport from '~/composables/moderation/useReport'
-import useLogger from '~/composables/useLogger'
+import { computed, ref, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
 import { getDomain } from '~/utils'
 import { useStore } from '~/store'
-import { useRouter } from 'vue-router'
-import { computed, ref, watch } from 'vue'
+
+import axios from 'axios'
+
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+
+import updateQueryString from '~/composables/updateQueryString'
+import useErrorHandler from '~/composables/useErrorHandler'
+import useReport from '~/composables/moderation/useReport'
+import useLogger from '~/composables/useLogger'
 
 interface Props {
   id: string
@@ -96,7 +100,7 @@ const fetchData = async () => {
     const artistResponse = await axios.get(`artists/${trackResponse.data.artist.id}/`)
     artist.value = artistResponse.data
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
   isLoading.value = false
 }
@@ -111,7 +115,7 @@ const remove = async () => {
     emit('deleted')
     router.push({ name: 'library.artists.detail', params: { id: artist.value?.id } })
   } catch (error) {
-    // TODO (wvffle): Handle error
+    useErrorHandler(error as Error)
   }
 
   isLoading.value = false
