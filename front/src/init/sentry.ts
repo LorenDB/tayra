@@ -3,6 +3,7 @@ import type { RootState } from '~/store'
 import type { Router } from 'vue-router'
 import type { Store } from 'vuex'
 import { watchEffect, type App } from 'vue'
+import useErrorHandler from '~/composables/useErrorHandler'
 
 export const COOKIE = 'allow-tracing'
 
@@ -28,6 +29,13 @@ const initSentry = async (app: App, router: Router, store: Store<RootState>) => 
     ],
     debug: import.meta.env.DEV,
     environment: import.meta.env.MODE,
+    beforeSend: (event, hint) => {
+      if (event.exception?.values?.some(exception => exception.mechanism?.handled === false) && hint.originalException instanceof Error) {
+        useErrorHandler(hint.originalException, hint.event_id)
+      }
+
+      return event
+    },
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // We recommend adjusting this value in production
