@@ -29,7 +29,7 @@ if env("FUNKWHALE_SENTRY_DSN", default=None) is not None:
         traces_sample_rate=env("FUNKWHALE_SENTRY_SR", default=0.25),
         send_default_pii=False,
         environment="api",
-        debug=True
+        debug=env.bool("DEBUG", False),
     )
 
 """
