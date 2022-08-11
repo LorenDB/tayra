@@ -26,9 +26,10 @@ if env("FUNKWHALE_SENTRY_DSN", default=None) is not None:
     sentry_sdk.init(
         dsn=env("FUNKWHALE_SENTRY_DSN"),
         integrations=[DjangoIntegration()],
-        traces_sample_rate=env("FUNKWHALE_SENTRY_SR", default="1.0"),
+        traces_sample_rate=env("FUNKWHALE_SENTRY_SR", default=0.25),
         send_default_pii=False,
         environment="api",
+        debug=True
     )
 
 """
