@@ -31,6 +31,7 @@ if env("FUNKWHALE_SENTRY_DSN", default=None) is not None:
         environment="api",
         debug=env.bool("DEBUG", False),
     )
+    sentry_sdk.set_tag("instance", env("FUNKWHALE_HOSTNAME"))
 
 """
 Default logging level for the Funkwhale processes
