@@ -22,10 +22,11 @@ LOGLEVEL = env("LOGLEVEL", default="info").upper()
 if env("FUNKWHALE_SENTRY_DSN", default=None) is not None:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
+    from sentry_sdk.integrations.celery import CeleryIntegration
 
     sentry_sdk.init(
         dsn=env("FUNKWHALE_SENTRY_DSN"),
-        integrations=[DjangoIntegration()],
+        integrations=[DjangoIntegration(), CeleryIntegration()],
         traces_sample_rate=env("FUNKWHALE_SENTRY_SR", default=0.25),
         send_default_pii=False,
         environment="api",
