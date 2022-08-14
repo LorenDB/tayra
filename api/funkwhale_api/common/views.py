@@ -139,6 +139,7 @@ class MutationViewSet(
 class RateLimitView(views.APIView):
     permission_classes = []
     throttle_classes = []
+    serializer_class = serializers.RateLimitSerializer
 
     def get(self, request, *args, **kwargs):
         ident = throttling.get_ident(getattr(request, "user", None), request)
@@ -147,7 +148,7 @@ class RateLimitView(views.APIView):
             "ident": ident,
             "scopes": throttling.get_status(ident, time.time()),
         }
-        return response.Response(data, status=200)
+        return response.Response(serializers.RateLimitSerializer(data).data, status=200)
 
 
 class AttachmentViewSet(

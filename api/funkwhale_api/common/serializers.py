@@ -335,3 +335,27 @@ class NullToEmptDict(object):
         if not v:
             return v
         return super().to_representation(v)
+
+
+class ScopesSerializer(serializers.Serializer):
+    id = serializers.CharField()
+    rate = serializers.CharField()
+    description = serializers.CharField()
+    limit = serializers.IntegerField()
+    duration = serializers.IntegerField()
+    remaining = serializers.IntegerField()
+    available = serializers.IntegerField()
+    available_seconds = serializers.IntegerField()
+    reset = serializers.IntegerField()
+    reset_seconds = serializers.IntegerField()
+
+
+class IdentSerializer(serializers.Serializer):
+    type = serializers.CharField()
+    id = serializers.IntegerField()
+
+
+class RateLimitSerializer(serializers.Serializer):
+    enabled = serializers.BooleanField()
+    ident = IdentSerializer()
+    scopes = serializers.ListField(child=ScopesSerializer())
