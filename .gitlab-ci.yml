@@ -349,6 +349,10 @@ deploy_documentation:
     - docker:20-dind
   before_script:
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+  cache:
+    key: docker_public_${CI_COMMIT_REF_NAME}
+    paths:
+      - ~/.cargo
   script:
 
 docker_publish_stable_release:
