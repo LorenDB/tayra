@@ -8,6 +8,7 @@ caption: Administration tasks
 maxdepth: 1
 ---
 
+create_library
 Manage users <users>
 Prune library <library>
 Clean database <database>

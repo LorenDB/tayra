@@ -50,8 +50,13 @@ class Command(BaseCommand):
         os.system("mv -f /tmp/catalog/music /workspace/funkwhale/data")
         os.system("rm -rf /tmp/catalog/music")
 
-        # # Import music catalog into library
-        call_command("script", "migrate_to_user_libraries", no_input=False)
+        # Import music catalog into library
+        call_command(
+            "create_library",
+            "gitpod",
+            name="funkwhale/catalog",
+            privacy_level="everyone"
+        )
         call_command(
             "import_files",
             Library.objects.get(actor=user.actor).uuid,
