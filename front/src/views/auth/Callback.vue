@@ -1,3 +1,24 @@
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { useStore } from '~/store'
+import { onMounted } from 'vue'
+
+interface Props {
+  state: string
+  code: string
+}
+
+const props = defineProps<Props>()
+
+const router = useRouter()
+const store = useStore()
+
+onMounted(async () => {
+  await store.dispatch('auth/handleOauthCallback', props.code)
+  router.push(props.state ?? '/library')
+})
+</script>
+
 <template>
   <main class="main pusher">
     <section class="ui vertical stripe segment">
@@ -16,17 +37,3 @@
     </section>
   </main>
 </template>
-
-<script>
-
-export default {
-  props: {
-    state: { type: String, required: true },
-    code: { type: String, required: true }
-  },
-  async mounted () {
-    await this.$store.dispatch('auth/handleOauthCallback', this.code)
-    this.$router.push(this.state || '/library')
-  }
-}
-</script>

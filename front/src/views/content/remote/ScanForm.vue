@@ -1,3 +1,43 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { useGettext } from 'vue3-gettext'
+import { computed, ref } from 'vue'
+
+import axios from 'axios'
+
+interface Emits {
+  (e: 'scanned', data: object): void
+}
+
+const emit = defineEmits<Emits>()
+
+const { $pgettext } = useGettext()
+
+const labels = computed(() => ({
+  placeholder: $pgettext('Content/Library/Input.Placeholder', 'Enter a library URL'),
+  submitLibrarySearch: $pgettext('Content/Library/Input.Label', 'Submit search')
+}))
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const query = ref('')
+const scan = async () => {
+  if (!query.value) return
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    const response = await axios.post('federation/libraries/fetch/', { fid: query.value })
+    emit('scanned', response.data)
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <form
     class="ui form"
@@ -43,41 +83,3 @@
     </div>
   </form>
 </template>
-<script>
-import axios from 'axios'
-
-export default {
-  data () {
-    return {
-      query: '',
-      isLoading: false,
-      errors: []
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        placeholder: this.$pgettext('Content/Library/Input.Placeholder', 'Enter a library URL'),
-        submitLibrarySearch: this.$pgettext('Content/Library/Input.Label', 'Submit search')
-      }
-    }
-  },
-  methods: {
-    scan () {
-      if (!this.query) {
-        return
-      }
-      const self = this
-      self.errors = []
-      self.isLoading = true
-      axios.post('federation/libraries/fetch/', { fid: this.query }).then((response) => {
-        self.$emit('scanned', response.data)
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

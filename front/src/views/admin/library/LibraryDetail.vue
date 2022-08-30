@@ -1,3 +1,98 @@
+<script setup lang="ts">
+import type { PrivacyLevel } from '~/types'
+
+import { humanSize, truncate } from '~/utils/filters'
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+
+import axios from 'axios'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useErrorHandler from '~/composables/useErrorHandler'
+import useLogger from '~/composables/useLogger'
+
+const PRIVACY_LEVELS = ['me', 'instance', 'everyone'] as PrivacyLevel[]
+
+interface Props {
+  id: string
+}
+
+const props = defineProps<Props>()
+
+const { $pgettext } = useGettext()
+
+const sharedLabels = useSharedLabels()
+const router = useRouter()
+const logger = useLogger()
+
+const labels = computed(() => ({
+  statsWarning: $pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
+}))
+
+const isLoading = ref(false)
+const object = ref()
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/library/libraries/${props.id}/`)
+    object.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = true
+}
+
+const isLoadingStats = ref(false)
+const stats = ref()
+const fetchStats = async () => {
+  isLoadingStats.value = true
+
+  try {
+    const response = await axios.get(`manage/library/libraries/${props.id}/stats/`)
+    stats.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingStats.value = true
+}
+
+fetchStats()
+fetchData()
+
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`manage/library/libraries/${props.id}/`)
+    router.push({ name: 'manage.library.libraries' })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = true
+}
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+
+const updateObj = async (attr: string) => {
+  const params = {
+    [attr]: object.value[attr]
+  }
+
+  try {
+    await axios.patch(`manage/library/libraries/${props.id}/`, params)
+    logger.info(`${attr} was updated succcessfully to ${params[attr]}`)
+  } catch (error) {
+    logger.error(`Error while setting ${attr} to ${params[attr]}`, error)
+    // TODO (wvffle): Use error handler with custom msg
+  }
+}
+</script>
+
 <template>
   <main>
     <div
@@ -148,15 +243,15 @@
                         @change="updateObj('privacy_level')"
                       >
                         <option
-                          v-for="(p, key) in ['me', 'instance', 'everyone']"
-                          :key="key"
+                          v-for="p in PRIVACY_LEVELS"
+                          :key="p"
                           :value="p"
                         >
                           {{ sharedLabels.fields.privacy_level.shortChoices[p] }}
                         </option>
                       </select>
                       <template v-else>
-                        {{ sharedLabels.fields.privacy_level.shortChoices[object.privacy_level] }}
+                        {{ sharedLabels.fields.privacy_level.shortChoices[object.privacy_level as PrivacyLevel] }}
                       </template>
                     </td>
                   </tr>
@@ -361,91 +456,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import { humanSize, truncate } from '~/utils/filters'
-import useLogger from '~/composables/useLogger'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-const logger = useLogger()
-
-export default {
-  props: { id: { type: String, required: true } },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels, humanSize, truncate }
-  },
-  data () {
-    return {
-      isLoading: true,
-      isLoadingStats: false,
-      object: null,
-      stats: null
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
-      }
-    }
-  },
-  created () {
-    this.fetchData()
-    this.fetchStats()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/libraries/${this.id}/`
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-      })
-    },
-    fetchStats () {
-      const self = this
-      this.isLoadingStats = true
-      const url = `manage/library/libraries/${this.id}/stats/`
-      axios.get(url).then(response => {
-        self.stats = response.data
-        self.isLoadingStats = false
-      })
-    },
-    remove () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/libraries/${this.id}/`
-      axios.delete(url).then(response => {
-        self.$router.push({ name: 'manage.library.libraries' })
-      })
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    },
-    updateObj (attr, toNull) {
-      let newValue = this.object[attr]
-      if (toNull && !newValue) {
-        newValue = null
-      }
-      const params = {}
-      params[attr] = newValue
-      axios.patch(`manage/library/libraries/${this.id}/`, params).then(
-        response => {
-          logger.info(
-            `${attr} was updated succcessfully to ${newValue}`
-          )
-        },
-        error => {
-          logger.error(
-            `Error while setting ${attr} to ${newValue}`,
-            error
-          )
-        }
-      )
-    }
-  }
-}
-</script>

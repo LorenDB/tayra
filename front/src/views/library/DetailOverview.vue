@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import type { Library } from '~/types'
+
+import ArtistWidget from '~/components/audio/artist/Widget.vue'
+
+interface Props {
+  object: Library
+  isOwner: boolean
+}
+
+defineProps<Props>()
+</script>
+
 <template>
   <section>
     <template v-if="$store.getters['ui/layoutVersion'] === 'small'">
@@ -37,22 +50,3 @@
     </artist-widget>
   </section>
 </template>
-
-<script>
-import ArtistWidget from '~/components/audio/artist/Widget.vue'
-
-export default {
-  components: {
-    ArtistWidget
-  },
-  props: {
-    object: { type: Object, required: true },
-    isOwner: { type: Boolean, required: true }
-  },
-  data () {
-    return {
-      query: ''
-    }
-  }
-}
-</script>

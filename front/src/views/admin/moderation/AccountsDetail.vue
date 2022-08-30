@@ -1,3 +1,148 @@
+<script setup lang="ts">
+import type { InstancePolicy } from '~/types'
+
+import { computed, ref, reactive, nextTick, watch } from 'vue'
+import { useCurrentElement } from '@vueuse/core'
+import { humanSize } from '~/utils/filters'
+import { useGettext } from 'vue3-gettext'
+
+import axios from 'axios'
+import $ from 'jquery'
+
+import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
+import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+import useLogger from '~/composables/useLogger'
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const { $pgettext } = useGettext()
+
+const logger = useLogger()
+
+const labels = computed(() => ({
+  statsWarning: $pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object'),
+  uploadQuota: $pgettext('Content/Moderation/Help text', 'Determine how much content the user can upload. Leave empty to use the default value of the instance.')
+}))
+
+const allPermissions = computed(() => [
+  { code: 'library', label: $pgettext('*/*/*/Noun', 'Library') },
+  { code: 'moderation', label: $pgettext('*/Moderation/*', 'Moderation') },
+  { code: 'settings', label: $pgettext('*/*/*/Noun', 'Settings') }
+])
+
+const isLoadingPolicy = ref(false)
+const policy = ref()
+const fetchPolicy = async (id: string) => {
+  isLoadingPolicy.value = true
+
+  try {
+    const response = await axios.get(`manage/moderation/instance-policies/${id}/`)
+    policy.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingPolicy.value = false
+}
+
+const permissions = reactive([] as string[])
+const isLoading = ref(false)
+const object = ref()
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/accounts/${props.id}/`)
+    object.value = response.data
+
+    if (response.data.instance_policy) {
+      fetchPolicy(response.data.instance_policy)
+    }
+
+    if (response.data.user) {
+      for (const { code } of allPermissions.value) {
+        if (response.data.user.permissions[code]) {
+          permissions.push(code)
+        }
+      }
+    }
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = true
+}
+
+const isLoadingStats = ref(false)
+const stats = ref()
+const fetchStats = async () => {
+  isLoadingStats.value = true
+
+  try {
+    const response = await axios.get(`manage/accounts/${props.id}/stats/`)
+    stats.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingStats.value = true
+}
+
+fetchStats()
+fetchData()
+
+const el = useCurrentElement()
+watch(object, async () => {
+  await nextTick()
+  $(el.value).find('select.dropdown').dropdown()
+})
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+
+const updating = reactive(new Set<string>())
+const updateUser = async (attr: string, toNull = false) => {
+  let newValue = object.value.user[attr]
+  if (toNull && !newValue) {
+    newValue = null
+  }
+
+  updating.add(attr)
+
+  const params = {
+    [attr]: newValue
+  }
+
+  if (attr === 'permissions') {
+    params.permissions = allPermissions.value.reduce((acc, { code }) => {
+      acc[code] = permissions.includes(code)
+      return acc
+    }, {} as Record<string, boolean>)
+  }
+
+  try {
+    await axios.patch(`manage/users/users/${object.value.user.id}/`, params)
+    logger.info(`${attr} was updated succcessfully to ${newValue}`)
+  } catch (error) {
+    logger.error(`Error while setting ${attr} to ${newValue}`, error)
+    // TODO: Use error handler
+  }
+
+  updating.delete(attr)
+}
+
+const showPolicyForm = ref(false)
+const updatePolicy = (newPolicy: InstancePolicy) => {
+  policy.value = newPolicy
+  showPolicyForm.value = false
+}
+</script>
+
 <template>
   <main class="page-admin-account-detail">
     <div
@@ -207,7 +352,7 @@
                     </td>
                     <td>
                       <div
-                        v-if="object.user.username != $store.state.auth.profile.username"
+                        v-if="object.user.username != $store.state.auth.profile?.username"
                         class="ui toggle checkbox"
                       >
                         <input
@@ -262,7 +407,7 @@
                           {{ p.label }}
                         </option>
                       </select>
-                      <action-feedback :is-loading="updating.permissions" />
+                      <action-feedback :is-loading="updating.has('permissions')" />
                     </td>
                   </tr>
                   <tr>
@@ -470,7 +615,7 @@
                         <action-feedback
                           class="ui basic label"
                           size="tiny"
-                          :is-loading="updating.upload_quota"
+                          :is-loading="updating.has('upload_quota')"
                         />
                       </div>
                     </td>
@@ -560,155 +705,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import $ from 'jquery'
-
-import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
-import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
-import useLogger from '~/composables/useLogger'
-import { humanSize } from '~/utils/filters'
-
-const logger = useLogger()
-
-export default {
-  components: {
-    InstancePolicyForm,
-    InstancePolicyCard
-  },
-  props: { id: { type: Number, required: true } },
-  setup () {
-    return { humanSize }
-  },
-  data () {
-    return {
-      isLoading: true,
-      isLoadingStats: false,
-      isLoadingPolicy: false,
-      object: null,
-      stats: null,
-      showPolicyForm: false,
-      permissions: [],
-      updating: {
-        permissions: false,
-        upload_quota: false
-      }
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this account'),
-        uploadQuota: this.$pgettext('Content/Moderation/Help text', 'Determine how much content the user can upload. Leave empty to use the default value of the instance.')
-      }
-    },
-    allPermissions () {
-      return [
-        {
-          code: 'library',
-          label: this.$pgettext('*/*/*/Noun', 'Library')
-        },
-        {
-          code: 'moderation',
-          label: this.$pgettext('*/Moderation/*', 'Moderation')
-        },
-        {
-          code: 'settings',
-          label: this.$pgettext('*/*/*/Noun', 'Settings')
-        }
-      ]
-    }
-  },
-  watch: {
-    object () {
-      this.$nextTick(() => {
-        $(this.$el).find('select.dropdown').dropdown()
-      })
-    }
-  },
-  created () {
-    this.fetchData()
-    this.fetchStats()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = 'manage/accounts/' + this.id + '/'
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-        if (self.object.instance_policy) {
-          self.fetchPolicy(self.object.instance_policy)
-        }
-        if (response.data.user) {
-          self.allPermissions.forEach(p => {
-            if (self.object.user.permissions[p.code]) {
-              self.permissions.push(p.code)
-            }
-          })
-        }
-      })
-    },
-    fetchPolicy (id) {
-      const self = this
-      this.isLoadingPolicy = true
-      const url = `manage/moderation/instance-policies/${id}/`
-      axios.get(url).then(response => {
-        self.policy = response.data
-        self.isLoadingPolicy = false
-      })
-    },
-    fetchStats () {
-      const self = this
-      this.isLoadingStats = true
-      const url = 'manage/accounts/' + this.id + '/stats/'
-      axios.get(url).then(response => {
-        self.stats = response.data
-        self.isLoadingStats = false
-      })
-    },
-    refreshNodeInfo (data) {
-      this.object.nodeinfo = data
-      this.object.nodeinfo_fetch_date = new Date()
-    },
-
-    updateUser (attr, toNull) {
-      let newValue = this.object.user[attr]
-      if (toNull && !newValue) {
-        newValue = null
-      }
-      const self = this
-      this.updating[attr] = true
-      const params = {}
-      if (attr === 'permissions') {
-        params.permissions = {}
-        this.allPermissions.forEach(p => {
-          params.permissions[p.code] = this.permissions.indexOf(p.code) > -1
-        })
-      } else {
-        params[attr] = newValue
-      }
-      axios.patch(`manage/users/users/${this.object.user.id}/`, params).then(
-        response => {
-          logger.info(
-            `${attr} was updated succcessfully to ${newValue}`
-          )
-          self.updating[attr] = false
-        },
-        error => {
-          logger.error(
-            `Error while setting ${attr} to ${newValue}`,
-            error
-          )
-          self.updating[attr] = false
-        }
-      )
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    }
-  }
-}
-</script>

@@ -1,3 +1,46 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { computed, ref, onMounted } from 'vue'
+import { useGettext } from 'vue3-gettext'
+
+import axios from 'axios'
+
+interface Props {
+  defaultKey: string
+}
+
+const props = defineProps<Props>()
+
+const { $pgettext } = useGettext()
+
+const labels = computed(() => ({
+  confirm: $pgettext('Head/Signup/Title', 'Confirm your e-mail address')
+}))
+
+const errors = ref([] as string[])
+const key = ref(props.defaultKey)
+const isLoading = ref(false)
+const success = ref(false)
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    await axios.post('auth/registration/verify-email/', { key: key.value })
+    success.value = true
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+onMounted(() => {
+  if (key.value) submit()
+})
+</script>
+
 <template>
   <main
     v-title="labels.confirm"
@@ -76,51 +119,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-export default {
-  props: { defaultKey: { type: String, required: true } },
-  data () {
-    return {
-      isLoading: false,
-      errors: [],
-      key: this.defaultKey,
-      success: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        confirm: this.$pgettext('Head/Signup/Title', 'Confirm your e-mail address')
-      }
-    }
-  },
-  mounted () {
-    if (this.key) {
-      this.submit()
-    }
-  },
-  methods: {
-    submit () {
-      const self = this
-      self.isLoading = true
-      self.errors = []
-      const payload = {
-        key: this.key
-      }
-      return axios.post('auth/registration/verify-email/', payload).then(
-        response => {
-          self.isLoading = false
-          self.success = true
-        },
-        error => {
-          self.errors = error.backendErrors
-          self.isLoading = false
-        }
-      )
-    }
-  }
-}
-</script>

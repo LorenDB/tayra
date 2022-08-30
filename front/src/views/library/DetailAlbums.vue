@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import type { Library } from '~/types'
+
+import AlbumWidget from '~/components/audio/album/Widget.vue'
+
+interface Props {
+  object: Library
+  isOwner: boolean
+}
+
+defineProps<Props>()
+</script>
+
 <template>
   <section>
     <album-widget
@@ -28,17 +41,3 @@
     </album-widget>
   </section>
 </template>
-
-<script>
-import AlbumWidget from '~/components/audio/album/Widget.vue'
-
-export default {
-  components: {
-    AlbumWidget
-  },
-  props: {
-    object: { type: Object, required: true },
-    isOwner: { type: Boolean, required: true }
-  }
-}
-</script>

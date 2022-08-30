@@ -1,3 +1,43 @@
+<script setup lang="ts">
+import { useGettext } from 'vue3-gettext'
+import { computed, ref } from 'vue'
+
+import axios from 'axios'
+
+import PluginForm from '~/components/auth/Plugin.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+const { $pgettext } = useGettext()
+
+const labels = computed(() => ({
+  title: $pgettext('Head/Login/Title', 'Manage plugins')
+}))
+
+const isLoading = ref(false)
+const plugins = ref()
+const libraries = ref()
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const [pluginsResponse, librariesResponse] = await Promise.all([
+      axios.get('plugins'),
+      axios.get('libraries', { params: { scope: 'me', page_size: 50 } })
+    ])
+
+    plugins.value = pluginsResponse.data
+    libraries.value = librariesResponse.data.results
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -26,42 +66,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import PluginForm from '~/components/auth/Plugin.vue'
-
-export default {
-  components: {
-    PluginForm
-  },
-  data () {
-    return {
-      isLoading: true,
-      plugins: null,
-      libraries: null
-    }
-  },
-  computed: {
-    labels () {
-      const title = this.$pgettext('Head/Login/Title', 'Manage plugins')
-      return {
-        title
-      }
-    }
-  },
-  async created () {
-    await this.fetchData()
-  },
-  methods: {
-    async fetchData () {
-      this.isLoading = true
-      let response = await axios.get('plugins')
-      this.plugins = response.data
-      response = await axios.get('libraries', { paramis: { scope: 'me', page_size: 50 } })
-      this.libraries = response.data.results
-      this.isLoading = false
-    }
-  }
-}
-</script>

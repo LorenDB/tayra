@@ -1,3 +1,111 @@
+<script setup lang="ts">
+import type { InstancePolicy } from '~/types'
+
+import { humanSize } from '~/utils/filters'
+import { useGettext } from 'vue3-gettext'
+import { computed, ref } from 'vue'
+import { get } from 'lodash-es'
+
+import axios from 'axios'
+
+import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
+import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  id: number
+  allowListEnabled: boolean
+}
+
+const props = defineProps<Props>()
+
+const { $pgettext } = useGettext()
+
+const labels = computed(() => ({
+  statsWarning: $pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
+}))
+
+const isLoadingPolicy = ref(false)
+const policy = ref()
+const fetchPolicy = async (id: string) => {
+  isLoadingPolicy.value = true
+
+  try {
+    const response = await axios.get(`manage/moderation/instance-policies/${id}/`)
+    policy.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingPolicy.value = false
+}
+
+const isLoading = ref(false)
+const object = ref()
+const externalUrl = computed(() => `https://${object.value?.name}`)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/federation/domains/${props.id}/`)
+    object.value = response.data
+    if (response.data.instance_policy) {
+      fetchPolicy(response.data.instance_policy)
+    }
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = true
+}
+
+const isLoadingStats = ref(false)
+const stats = ref()
+const fetchStats = async () => {
+  isLoadingStats.value = true
+
+  try {
+    const response = await axios.get(`manage/federation/domains/${props.id}/stats/`)
+    stats.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingStats.value = true
+}
+
+fetchStats()
+fetchData()
+
+const refreshNodeInfo = (data: any) => {
+  object.value.nodeinfo = data
+  object.value.nodeinfo_fetch_date = new Date()
+}
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+
+const showPolicyForm = ref(false)
+const updatePolicy = (newPolicy: InstancePolicy) => {
+  policy.value = newPolicy
+  showPolicyForm.value = false
+}
+
+const isLoadingAllowList = ref(false)
+const setAllowList = async (value: boolean) => {
+  isLoadingAllowList.value = true
+
+  try {
+    const response = await axios.patch(`manage/federation/domains/${props.id}/`, { allowed: value })
+    object.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingAllowList.value = false
+}
+</script>
+
 <template>
   <main class="page-admin-domain-detail">
     <div
@@ -34,7 +142,7 @@
               <div class="header-buttons">
                 <div class="ui icon buttons">
                   <a
-                    v-if="$store.state.auth.profile.is_superuser"
+                    v-if="$store.state.auth.profile?.is_superuser"
                     class="ui labeled icon button"
                     :href="$store.getters['instance/absoluteUrl'](`/api/admin/federation/domain/${object.name}`)"
                     target="_blank"
@@ -455,103 +563,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import { get } from 'lodash-es'
-
-import InstancePolicyForm from '~/components/manage/moderation/InstancePolicyForm.vue'
-import InstancePolicyCard from '~/components/manage/moderation/InstancePolicyCard.vue'
-import { humanSize } from '~/utils/filters'
-
-export default {
-  components: {
-    InstancePolicyForm,
-    InstancePolicyCard
-  },
-  props: { id: { type: String, required: true }, allowListEnabled: { type: Boolean, required: true } },
-  setup () {
-    return { humanSize }
-  },
-  data () {
-    return {
-      get,
-      isLoading: true,
-      isLoadingStats: false,
-      isLoadingPolicy: false,
-      isLoadingAllowList: false,
-      policy: null,
-      object: null,
-      stats: null,
-      showPolicyForm: false,
-      permissions: []
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this domain')
-      }
-    },
-    externalUrl () {
-      return `https://${this.object.name}`
-    }
-  },
-  created () {
-    this.fetchData()
-    this.fetchStats()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = 'manage/federation/domains/' + this.id + '/'
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-        if (self.object.instance_policy) {
-          self.fetchPolicy(self.object.instance_policy)
-        }
-      })
-    },
-    fetchStats () {
-      const self = this
-      this.isLoadingStats = true
-      const url = 'manage/federation/domains/' + this.id + '/stats/'
-      axios.get(url).then(response => {
-        self.stats = response.data
-        self.isLoadingStats = false
-      })
-    },
-    fetchPolicy (id) {
-      const self = this
-      this.isLoadingPolicy = true
-      const url = `manage/moderation/instance-policies/${id}/`
-      axios.get(url).then(response => {
-        self.policy = response.data
-        self.isLoadingPolicy = false
-      })
-    },
-    setAllowList (value) {
-      const self = this
-      this.isLoadingAllowList = true
-      const url = `manage/federation/domains/${this.id}/`
-      axios.patch(url, { allowed: value }).then(response => {
-        self.object = response.data
-        self.isLoadingAllowList = false
-      })
-    },
-    refreshNodeInfo (data) {
-      this.object.nodeinfo = data
-      this.object.nodeinfo_fetch_date = new Date()
-    },
-    updatePolicy (policy) {
-      this.policy = policy
-      this.showPolicyForm = false
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    }
-  }
-}
-</script>

@@ -1,3 +1,45 @@
+<script setup lang="ts">
+import type { Library, LibraryFollow } from '~/types'
+
+import { ref } from 'vue'
+
+import axios from 'axios'
+
+import ScanForm from './ScanForm.vue'
+import LibraryCard from './Card.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+const existingFollows = ref()
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get('federation/follows/library/', { params: { page_size: 100, ordering: '-creation_date' } })
+    existingFollows.value = response.data
+
+    for (const follow of existingFollows.value.results) {
+      follow.target.follow = follow
+    }
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+
+const getLibraryFromFollow = (follow: LibraryFollow) => {
+  const { target } = follow
+  target.follow = follow
+  return target as Library
+}
+
+const scanResult = ref()
+</script>
+
 <template>
   <div class="ui vertical aligned stripe segment">
     <div
@@ -45,7 +87,7 @@
         <a
           href=""
           class="discrete link"
-          @click.prevent="fetch()"
+          @click.prevent="fetchData"
         >
           <i :class="['ui', 'circular', 'refresh', 'icon']" /> <translate translate-context="Content/*/Button.Label/Short, Verb">Refresh</translate>
         </a>
@@ -55,56 +97,11 @@
             v-for="follow in existingFollows.results"
             :key="follow.fid"
             :initial-library="getLibraryFromFollow(follow)"
-            @deleted="fetch()"
-            @followed="fetch()"
+            @deleted="fetchData"
+            @followed="fetchData"
           />
         </div>
       </template>
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import ScanForm from './ScanForm.vue'
-import LibraryCard from './Card.vue'
-
-export default {
-  components: {
-    ScanForm,
-    LibraryCard
-  },
-  data () {
-    return {
-      isLoading: false,
-      scanResult: null,
-      existingFollows: null,
-      errors: []
-    }
-  },
-  created () {
-    this.fetch()
-  },
-  methods: {
-    fetch () {
-      this.isLoading = true
-      const self = this
-      axios.get('federation/follows/library/', { params: { page_size: 100, ordering: '-creation_date' } }).then((response) => {
-        self.existingFollows = response.data
-        self.existingFollows.results.forEach(f => {
-          f.target.follow = f
-        })
-        self.isLoading = false
-      }, error => {
-        self.isLoading = false
-        self.errors.push(error)
-      })
-    },
-    getLibraryFromFollow (follow) {
-      const d = follow.target
-      d.follow = follow
-      return d
-    }
-  }
-}
-</script>

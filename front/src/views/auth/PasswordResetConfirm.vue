@@ -1,3 +1,54 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { useGettext } from 'vue3-gettext'
+import { computed, ref } from 'vue'
+
+import axios from 'axios'
+
+import PasswordInput from '~/components/forms/PasswordInput.vue'
+
+interface Props {
+  defaultToken: string
+  defaultUid: string
+}
+
+const props = defineProps<Props>()
+
+const { $pgettext } = useGettext()
+
+const labels = computed(() => ({
+  changePassword: $pgettext('*/Signup/Title', 'Change your password')
+}))
+
+const newPassword = ref('')
+const token = ref(props.defaultToken)
+const uid = ref(props.defaultUid)
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const success = ref(false)
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    await axios.post('auth/password/reset/confirm/', {
+      uid: uid.value,
+      token: token.value,
+      new_password1: newPassword.value,
+      new_password2: newPassword.value
+    })
+
+    success.value = true
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <main
     v-title="labels.changePassword"
@@ -84,58 +135,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import PasswordInput from '~/components/forms/PasswordInput.vue'
-
-export default {
-  components: {
-    PasswordInput
-  },
-  props: {
-    defaultToken: { type: String, required: true },
-    defaultUid: { type: String, required: true }
-  },
-  data () {
-    return {
-      newPassword: '',
-      isLoading: false,
-      errors: [],
-      token: this.defaultToken,
-      uid: this.defaultUid,
-      success: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        changePassword: this.$pgettext('*/Signup/Title', 'Change your password')
-      }
-    }
-  },
-  methods: {
-    submit () {
-      const self = this
-      self.isLoading = true
-      self.errors = []
-      const payload = {
-        uid: this.uid,
-        token: this.token,
-        new_password1: this.newPassword,
-        new_password2: this.newPassword
-      }
-      return axios.post('auth/password/reset/confirm/', payload).then(
-        response => {
-          self.isLoading = false
-          self.success = true
-        },
-        error => {
-          self.errors = error.backendErrors
-          self.isLoading = false
-        }
-      )
-    }
-  }
-}
-</script>

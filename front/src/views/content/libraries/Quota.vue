@@ -1,3 +1,55 @@
+<script setup lang="ts">
+import type { ImportStatus } from '~/types'
+
+import { compileTokens } from '~/utils/search'
+import { humanSize } from '~/utils/filters'
+import { computed, ref } from 'vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+import axios from 'axios'
+
+const quotaStatus = ref()
+const progress = computed(() => !quotaStatus.value
+  ? 0
+  : Math.min(quotaStatus.value.current * 100 / quotaStatus.value.max, 100)
+)
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get('users/me/')
+    quotaStatus.value = response.data.quota_status
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+
+const purge = async (status: ImportStatus) => {
+  try {
+    await axios.post('uploads/action/', {
+      action: 'delete',
+      objects: 'all',
+      filters: { import_status: status }
+    })
+
+    fetchData()
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+}
+
+const purgeSkippedFiles = () => purge('skipped')
+const purgePendingFiles = () => purge('pending')
+const purgeErroredFiles = () => purge('errored')
+</script>
+
 <template>
   <div class="ui segment">
     <h3 class="ui header">
@@ -210,62 +262,3 @@
     </div>
   </div>
 </template>
-<script>
-import axios from 'axios'
-import { humanSize } from '~/utils/filters'
-import { compileTokens } from '~/utils/search'
-
-export default {
-  data () {
-    return {
-      quotaStatus: null,
-      isLoading: false,
-      humanSize,
-      compileTokens
-    }
-  },
-  computed: {
-    progress () {
-      if (!this.quotaStatus) {
-        return 0
-      }
-      return Math.min(parseInt(this.quotaStatus.current * 100 / this.quotaStatus.max), 100)
-    }
-  },
-  created () {
-    this.fetch()
-  },
-  methods: {
-    fetch () {
-      const self = this
-      self.isLoading = true
-      axios.get('users/me/').then((response) => {
-        self.quotaStatus = response.data.quota_status
-        self.isLoading = false
-      })
-    },
-    purge (status) {
-      const self = this
-      const payload = {
-        action: 'delete',
-        objects: 'all',
-        filters: {
-          import_status: status
-        }
-      }
-      axios.post('uploads/action/', payload).then((response) => {
-        self.fetch()
-      })
-    },
-    purgeSkippedFiles () {
-      this.purge('skipped')
-    },
-    purgePendingFiles () {
-      this.purge('pending')
-    },
-    purgeErroredFiles () {
-      this.purge('errored')
-    }
-  }
-}
-</script>

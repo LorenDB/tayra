@@ -1,3 +1,53 @@
+<script setup lang="ts">
+import { truncate } from '~/utils/filters'
+import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+
+import axios from 'axios'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const router = useRouter()
+
+const isLoading = ref(false)
+const object = ref()
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/tags/${props.id}/`)
+    object.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = true
+}
+
+fetchData()
+
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`manage/tags/${props.id}/`)
+    router.push({ name: 'manage.library.tags' })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = true
+}
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+</script>
+
 <template>
   <main>
     <div
@@ -124,22 +174,9 @@
                   <translate translate-context="Content/Moderation/Title">
                     Activity
                   </translate>&nbsp;
-                  <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
-              <div
-                v-if="isLoadingStats"
-                class="ui placeholder"
-              >
-                <div class="full line" />
-                <div class="short line" />
-                <div class="medium line" />
-                <div class="long line" />
-              </div>
-              <table
-                v-else
-                class="ui very basic table"
-              >
+              <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
@@ -163,7 +200,6 @@
                   <translate translate-context="Content/Moderation/Title">
                     Audio content
                   </translate>&nbsp;
-                  <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
               <table class="ui very basic table">
@@ -213,55 +249,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import { truncate } from '~/utils/filters'
-
-export default {
-  props: { id: { type: Number, required: true } },
-  setup () {
-    return { truncate }
-  },
-  data () {
-    return {
-      isLoading: true,
-      isLoadingStats: false,
-      object: null,
-      stats: null
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
-      }
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/tags/${this.id}/`
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-      })
-    },
-    remove () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/tags/${this.id}/`
-      axios.delete(url).then(response => {
-        self.$router.push({ name: 'manage.library.tags' })
-      })
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    }
-  }
-}
-</script>

@@ -1,3 +1,66 @@
+<script setup lang="ts">
+import type { PrivacyLevel, ImportStatus } from '~/types'
+
+import { humanSize, truncate } from '~/utils/filters'
+import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+
+import time from '~/utils/time'
+import axios from 'axios'
+
+import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  id: string
+}
+
+const props = defineProps<Props>()
+
+const sharedLabels = useSharedLabels()
+const router = useRouter()
+
+const privacyLevels = computed(() => sharedLabels.fields.privacy_level.shortChoices[object.value.library.privacy_level as PrivacyLevel])
+const importStatus = computed(() => sharedLabels.fields.import_status.choices[object.value.import_status as ImportStatus].label)
+
+const isLoading = ref(false)
+const object = ref()
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/library/uploads/${props.id}/`)
+    object.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = true
+}
+
+fetchData()
+
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`manage/uploads/${props.id}/`)
+    router.push({ name: 'manage.library.uploads' })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = true
+}
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+const displayName = (object: any) => object.filename ?? object.source ?? object.uuid
+
+const showUploadDetailModal = ref(false)
+</script>
+
 <template>
   <main>
     <div
@@ -156,7 +219,7 @@
                       </router-link>
                     </td>
                     <td>
-                      {{ sharedLabels.fields.privacy_level.shortChoices[object.library.privacy_level] }}
+                      {{ privacyLevels }}
                     </td>
                   </tr>
                   <tr>
@@ -192,11 +255,11 @@
                       </router-link>
                     </td>
                     <td>
-                      {{ sharedLabels.fields.import_status.choices[object.import_status].label }}
+                      {{ importStatus }}
                       <button
                         class="ui tiny basic icon button"
                         :title="sharedLabels.fields.import_status.detailTitle"
-                        @click="detailedUpload = object; showUploadDetailModal = true"
+                        @click="showUploadDetailModal = true"
                       >
                         <i class="question circle outline icon" />
                       </button>
@@ -380,72 +443,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import ImportStatusModal from '~/components/library/ImportStatusModal.vue'
-import time from '~/utils/time'
-import { humanSize, truncate } from '~/utils/filters'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-export default {
-  components: {
-    ImportStatusModal
-  },
-  props: { id: { type: Number, required: true } },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels, humanSize, time, truncate }
-  },
-  data () {
-    return {
-      detailedUpload: {},
-      showUploadDetailModal: false,
-      isLoading: true,
-      object: null,
-      stats: null
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
-      }
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/uploads/${this.id}/`
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-      })
-    },
-    remove () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/uploads/${this.id}/`
-      axios.delete(url).then(response => {
-        self.$router.push({ name: 'manage.library.uploads' })
-      })
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    },
-    displayName (upload) {
-      if (upload.filename) {
-        return upload.filename
-      }
-      if (upload.source) {
-        return upload.source
-      }
-      return upload.uuid
-    }
-  }
-}
-</script>

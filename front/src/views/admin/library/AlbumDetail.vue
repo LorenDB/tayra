@@ -1,3 +1,78 @@
+<script setup lang="ts">
+import { humanSize, truncate } from '~/utils/filters'
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+
+import axios from 'axios'
+
+import FetchButton from '~/components/federation/FetchButton.vue'
+import TagsList from '~/components/tags/List.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const { $pgettext } = useGettext()
+const router = useRouter()
+
+const labels = computed(() => ({
+  statsWarning: $pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
+}))
+
+const isLoading = ref(false)
+const object = ref()
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/library/albums/${props.id}/`)
+    object.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = true
+}
+
+const isLoadingStats = ref(false)
+const stats = ref()
+const fetchStats = async () => {
+  isLoadingStats.value = true
+
+  try {
+    const response = await axios.get(`manage/library/albums/${props.id}/stats/`)
+    stats.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoadingStats.value = true
+}
+
+fetchStats()
+fetchData()
+
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`manage/library/albums/${props.id}/`)
+    router.push({ name: 'manage.library.albums' })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = true
+}
+
+const getQuery = (field: string, value: string) => `${field}:"${value}"`
+</script>
+
 <template>
   <main>
     <div
@@ -405,71 +480,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-import FetchButton from '~/components/federation/FetchButton.vue'
-import TagsList from '~/components/tags/List.vue'
-import { humanSize, truncate } from '~/utils/filters'
-
-export default {
-  components: {
-    FetchButton,
-    TagsList
-  },
-  props: { id: { type: Number, required: true } },
-  setup () {
-    return { humanSize, truncate }
-  },
-  data () {
-    return {
-      isLoading: true,
-      isLoadingStats: false,
-      object: null,
-      stats: null
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        statsWarning: this.$pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
-      }
-    }
-  },
-  created () {
-    this.fetchData()
-    this.fetchStats()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/albums/${this.id}/`
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-      })
-    },
-    fetchStats () {
-      const self = this
-      this.isLoadingStats = true
-      const url = `manage/library/albums/${this.id}/stats/`
-      axios.get(url).then(response => {
-        self.stats = response.data
-        self.isLoadingStats = false
-      })
-    },
-    remove () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/library/albums/${this.id}/`
-      axios.delete(url).then(response => {
-        self.$router.push({ name: 'manage.library.albums' })
-      })
-    },
-    getQuery (field, value) {
-      return `${field}:"${value}"`
-    }
-  }
-}
-</script>

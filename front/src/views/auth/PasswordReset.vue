@@ -1,3 +1,48 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { computed, ref, onMounted } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+
+import axios from 'axios'
+
+interface Props {
+  defaultEmail: string
+}
+
+const props = defineProps<Props>()
+
+const { $pgettext } = useGettext()
+
+const router = useRouter()
+
+const labels = computed(() => ({
+  placeholder: $pgettext('Content/Signup/Input.Placeholder', 'Enter the e-mail address linked to your account'),
+  reset: $pgettext('*/Login/*/Verb', 'Reset your password')
+}))
+
+const email = ref(props.defaultEmail)
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    await axios.post('auth/password/reset/', { email: email.value })
+    router.push({ name: 'auth.password-reset-confirm' })
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const emailInput = ref()
+onMounted(() => emailInput.value.focus())
+</script>
+
 <template>
   <main
     v-title="labels.reset"
@@ -42,7 +87,7 @@
             <label for="account-email"><translate translate-context="Content/Signup/Input.Label">Account's e-mail address</translate></label>
             <input
               id="account-email"
-              ref="email"
+              ref="emailInput"
               v-model="email"
               required
               type="email"
@@ -69,54 +114,3 @@
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-export default {
-  props: { defaultEmail: { type: String, required: true } },
-  data () {
-    return {
-      email: this.defaultEmail,
-      isLoading: false,
-      errors: []
-    }
-  },
-  computed: {
-    labels () {
-      const reset = this.$pgettext('*/Login/*/Verb', 'Reset your password')
-      const placeholder = this.$pgettext('Content/Signup/Input.Placeholder', 'Enter the e-mail address linked to your account'
-      )
-      return {
-        reset,
-        placeholder
-      }
-    }
-  },
-  mounted () {
-    this.$refs.email.focus()
-  },
-  methods: {
-    submit () {
-      const self = this
-      self.isLoading = true
-      self.errors = []
-      const payload = {
-        email: this.email
-      }
-      return axios.post('auth/password/reset/', payload).then(
-        response => {
-          self.isLoading = false
-          self.$router.push({
-            name: 'auth.password-reset-confirm'
-          })
-        },
-        error => {
-          self.errors = error.backendErrors
-          self.isLoading = false
-        }
-      )
-    }
-  }
-}
-</script>

@@ -1,3 +1,34 @@
+<script setup lang="ts">
+import type { Radio } from '~/types'
+
+import { ref, computed } from 'vue'
+import { useStore } from '~/store'
+
+import RadioButton from './Button.vue'
+
+interface Props {
+  type: string
+  customRadio?: Radio | null
+  objectId?: string | null
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  customRadio: null,
+  objectId: null
+})
+
+const store = useStore()
+
+const isDescriptionExpanded = ref(false)
+
+const radio = computed(() => props.customRadio
+  ? props.customRadio
+  : store.getters['radios/types'][props.type]
+)
+
+const customRadioId = computed(() => props.customRadio?.id ?? null)
+</script>
+
 <template>
   <div class="ui card">
     <div class="content">
@@ -35,7 +66,7 @@
         :object-id="objectId"
       />
       <router-link
-        v-if="$store.state.auth.authenticated && type === 'custom' && radio.user.id === $store.state.auth.profile.id"
+        v-if="$store.state.auth.authenticated && type === 'custom' && radio.user.id === $store.state.auth.profile?.id"
         class="ui success button right floated"
         :to="{name: 'library.radios.edit', params: {id: customRadioId }}"
       >
@@ -46,37 +77,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import RadioButton from './Button.vue'
-
-export default {
-  components: {
-    RadioButton
-  },
-  props: {
-    type: { type: String, required: true, default: '' },
-    customRadio: { type: Object, required: false, default: () => { return {} } },
-    objectId: { type: String, required: false, default: null }
-  },
-  data () {
-    return {
-      isDescriptionExpanded: false
-    }
-  },
-  computed: {
-    radio () {
-      if (Object.keys(this.customRadio).length > 0) {
-        return this.customRadio
-      }
-      return this.$store.getters['radios/types'][this.type]
-    },
-    customRadioId: function () {
-      if (this.customRadio) {
-        return this.customRadio.id
-      }
-      return null
-    }
-  }
-}
-</script>

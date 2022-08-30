@@ -161,6 +161,10 @@ export interface LibraryFollow {
   uuid: string
   approved: boolean
 
+  name: string
+  type?: 'music.Library' | 'federation.LibraryFollow'
+  target: Library
+
   // TODO (wvffle): Check if it's not added only on frontend side
   isLoading?: boolean
 }
@@ -199,7 +203,7 @@ export interface PlaylistTrack {
 }
 
 export interface Radio {
-  id: string
+  id: number
   name: string
   user: User
 }
@@ -466,9 +470,18 @@ export interface UserRequest {
 }
 
 // Notification stuff
+export type Activity = {
+  actor: Actor
+  creation_date: string
+  related_object: LibraryFollow
+  type: 'Follow' | 'Accept'
+  object: LibraryFollow
+}
+
 export interface Notification {
   id: number
   is_read: boolean
+  activity: Activity
 }
 
 // Tags stuff

@@ -1,3 +1,93 @@
+<script setup lang="ts">
+import type { Library, BackendError, PrivacyLevel } from '~/types'
+
+import { useGettext } from 'vue3-gettext'
+import { computed, ref } from 'vue'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import useSharedLabels from '~/composables/locale/useSharedLabels'
+
+const PRIVACY_LEVELS = ['me', 'instance', 'everyone'] as PrivacyLevel[]
+
+interface Emits {
+  (e: 'updated', data: Library): void
+  (e: 'created', data: Library): void
+  (e: 'deleted'): void
+}
+
+interface Props {
+  library?: Library
+}
+
+const emit = defineEmits<Emits>()
+const props = defineProps<Props>()
+
+const { $pgettext } = useGettext()
+
+const sharedLabels = useSharedLabels()
+const store = useStore()
+
+const labels = computed(() => ({
+  descriptionPlaceholder: $pgettext('Content/Library/Input.Placeholder', 'This library contains my personal music, I hope you like it.'),
+  namePlaceholder: $pgettext('Content/Library/Input.Placeholder', 'My awesome library')
+}))
+
+const currentVisibilityLevel = ref(props.library?.privacy_level ?? 'me')
+const currentDescription = ref(props.library?.description ?? '')
+const currentName = ref(props.library?.name ?? '')
+
+const errors = ref([] as string[])
+const isLoading = ref(false)
+const submit = async () => {
+  isLoading.value = true
+
+  try {
+    const payload = {
+      name: currentName.value,
+      description: currentDescription.value,
+      privacy_level: currentVisibilityLevel.value
+    }
+
+    const response = props.library
+      ? await axios.patch(`libraries/${props.library.uuid}/`, payload)
+      : await axios.post('libraries/', payload)
+
+    if (props.library) emit('updated', response.data)
+    else emit('created', response.data)
+
+    store.commit('ui/addMessage', {
+      content: props.library
+        ? $pgettext('Content/Library/Message', 'Library updated')
+        : $pgettext('Content/Library/Message', 'Library created'),
+      date: new Date()
+    })
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const remove = async () => {
+  isLoading.value = true
+
+  try {
+    await axios.delete(`libraries/${props.library?.uuid}/`)
+    emit('deleted')
+    store.commit('ui/addMessage', {
+      content: $pgettext('Content/Library/Message', 'Library deleted'),
+      date: new Date()
+    })
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+</script>
+
 <template>
   <form
     class="ui form"
@@ -60,8 +150,8 @@
         class="ui dropdown"
       >
         <option
-          v-for="(c, key) in ['me', 'instance', 'everyone']"
-          :key="key"
+          v-for="c in PRIVACY_LEVELS"
+          :key="c"
           :value="c"
         >
           {{ sharedLabels.fields.privacy_level.choices[c] }}
@@ -89,7 +179,7 @@
       v-if="library"
       type="button"
       class="ui right floated basic danger button"
-      @confirm="remove()"
+      @confirm="remove"
     >
       <translate translate-context="*/*/*/Verb">
         Delete
@@ -118,98 +208,3 @@
     </dangerous-button>
   </form>
 </template>
-
-<script>
-import axios from 'axios'
-import useSharedLabels from '~/composables/locale/useSharedLabels'
-
-export default {
-  props: { library: { type: Object, default: null } },
-  setup () {
-    const sharedLabels = useSharedLabels()
-    return { sharedLabels }
-  },
-  data () {
-    const d = {
-      isLoading: false,
-      over: false,
-      errors: []
-    }
-    if (this.library) {
-      d.currentVisibilityLevel = this.library.privacy_level
-      d.currentName = this.library.name
-      d.currentDescription = this.library.description
-    } else {
-      d.currentVisibilityLevel = 'me'
-      d.currentName = ''
-      d.currentDescription = ''
-    }
-    return d
-  },
-  computed: {
-    labels () {
-      const namePlaceholder = this.$pgettext('Content/Library/Input.Placeholder', 'My awesome library')
-      const descriptionPlaceholder = this.$pgettext('Content/Library/Input.Placeholder', 'This library contains my personal music, I hope you like it.')
-      return {
-        namePlaceholder,
-        descriptionPlaceholder
-      }
-    }
-  },
-  methods: {
-    submit () {
-      const self = this
-      this.isLoading = true
-      const payload = {
-        name: this.currentName,
-        description: this.currentDescription,
-        privacy_level: this.currentVisibilityLevel
-      }
-      let promise
-      if (this.library) {
-        promise = axios.patch(`libraries/${this.library.uuid}/`, payload)
-      } else {
-        promise = axios.post('libraries/', payload)
-      }
-      promise.then((response) => {
-        self.isLoading = false
-        let msg
-        if (self.library) {
-          self.$emit('updated', response.data)
-          msg = this.$pgettext('Content/Library/Message', 'Library updated')
-        } else {
-          self.$emit('created', response.data)
-          msg = this.$pgettext('Content/Library/Message', 'Library created')
-        }
-        self.$store.commit('ui/addMessage', {
-          content: msg,
-          date: new Date()
-        })
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    reset () {
-      this.currentVisibilityLevel = 'me'
-      this.currentName = ''
-      this.currentDescription = ''
-    },
-    remove () {
-      const self = this
-      axios.delete(`libraries/${this.library.uuid}/`).then((response) => {
-        self.isLoading = false
-        const msg = this.$pgettext('Content/Library/Message', 'Library deleted')
-        self.$emit('deleted', {})
-        self.$store.commit('ui/addMessage', {
-          content: msg,
-          date: new Date()
-        })
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

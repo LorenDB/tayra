@@ -1,3 +1,45 @@
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+
+import axios from 'axios'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const router = useRouter()
+
+const isLoading = ref(false)
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`uploads/${props.id}/`, {
+      params: {
+        refresh: 'true',
+        include_channels: 'true'
+      }
+    })
+
+    router.replace({
+      name: 'library.tracks.detail',
+      params: { id: response.data.track.id }
+    })
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+</script>
+
 <template>
   <main>
     <div
@@ -8,23 +50,3 @@
     </div>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-export default {
-  props: { id: { type: Number, required: true } },
-  async created () {
-    const upload = await this.fetchData()
-    this.$router.replace({ name: 'library.tracks.detail', params: { id: upload.track.id } })
-  },
-  methods: {
-    async fetchData () {
-      this.isLoading = true
-      const response = await axios.get(`uploads/${this.id}/`, { params: { refresh: 'true', include_channels: 'true' } })
-      this.isLoading = false
-      return response.data
-    }
-  }
-}
-</script>

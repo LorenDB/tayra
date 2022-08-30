@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import { useGettext } from 'vue3-gettext'
+import { computed } from 'vue'
+
+const { $pgettext } = useGettext()
+
+const labels = computed(() => ({
+  manageUsers: $pgettext('Head/Admin/Title', 'Manage users'),
+  secondaryMenu: $pgettext('Menu/*/Hidden text', 'Secondary menu')
+}))
+</script>
+
 <template>
   <div
     v-title="labels.manageUsers"
@@ -28,16 +40,3 @@
     <router-view :key="$route.fullPath" />
   </div>
 </template>
-
-<script>
-export default {
-  computed: {
-    labels () {
-      return {
-        manageUsers: this.$pgettext('Head/Admin/Title', 'Manage users'),
-        secondaryMenu: this.$pgettext('Menu/*/Hidden text', 'Secondary menu')
-      }
-    }
-  }
-}
-</script>

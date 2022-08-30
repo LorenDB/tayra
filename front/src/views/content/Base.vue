@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import { useGettext } from 'vue3-gettext'
+import { computed } from 'vue'
+
+const { $pgettext } = useGettext()
+
+const labels = computed(() => ({
+  secondaryMenu: $pgettext('Menu/*/Hidden text', 'Secondary menu'),
+  title: $pgettext('*/Library/*/Verb', 'Add content')
+}))
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -28,17 +40,3 @@
     <router-view :key="$route.fullPath" />
   </main>
 </template>
-<script>
-export default {
-  computed: {
-    labels () {
-      const title = this.$pgettext('*/Library/*/Verb', 'Add content')
-      const secondaryMenu = this.$pgettext('Menu/*/Hidden text', 'Secondary menu')
-      return {
-        title,
-        secondaryMenu
-      }
-    }
-  }
-}
-</script>

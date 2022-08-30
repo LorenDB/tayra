@@ -1,3 +1,53 @@
+<script setup lang="ts">
+import type { Playlist } from '~/types'
+
+import { ref, reactive, watch } from 'vue'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+import PlaylistCard from '~/components/playlists/Card.vue'
+
+interface Props {
+  filters: Record<string, unknown>
+  url: string
+}
+
+const props = defineProps<Props>()
+
+const store = useStore()
+
+const objects = reactive([] as Playlist[])
+const isLoading = ref(false)
+const nextPage = ref('')
+const fetchData = async (url = props.url) => {
+  isLoading.value = true
+
+  try {
+    const params = {
+      ...props.filters,
+      page_size: props.filters.limit ?? 3
+    }
+
+    const response = await axios.get(url, { params })
+    nextPage.value = response.data.next
+    objects.push(...response.data.results)
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+watch(
+  () => store.state.moderation.lastUpdate,
+  () => fetchData(),
+  { immediate: true }
+)
+</script>
+
 <template>
   <div>
     <h3
@@ -13,7 +63,7 @@
       <div class="ui loader" />
     </div>
     <div
-      v-if="playlistsExist"
+      v-if="objects.length > 0"
       class="ui cards app-cards"
     >
       <playlist-card
@@ -57,73 +107,3 @@
     </template>
   </div>
 </template>
-
-<script>
-import { clone } from 'lodash-es'
-import axios from 'axios'
-import PlaylistCard from '~/components/playlists/Card.vue'
-
-export default {
-  components: {
-    PlaylistCard
-  },
-  props: {
-    filters: { type: Object, required: true },
-    url: { type: String, required: true }
-  },
-  data () {
-    return {
-      objects: [],
-      limit: this.filters.limit || 3,
-      isLoading: false,
-      errors: null,
-      previousPage: null,
-      nextPage: null
-    }
-  },
-  computed: {
-    playlistsExist: function () {
-      return this.objects.length > 0
-    }
-  },
-  watch: {
-    offset () {
-      this.fetchData()
-    },
-    '$store.state.moderation.lastUpdate': function () {
-      this.fetchData(this.url)
-    }
-  },
-  created () {
-    this.fetchData(this.url)
-  },
-  methods: {
-    fetchData (url) {
-      if (!url) {
-        return
-      }
-      this.isLoading = true
-      const self = this
-      const params = clone(this.filters)
-      params.page_size = this.limit
-      params.offset = this.offset
-      axios.get(url, { params }).then((response) => {
-        self.previousPage = response.data.previous
-        self.nextPage = response.data.next
-        self.isLoading = false
-        self.objects = [...self.objects, ...response.data.results]
-      }, error => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    updateOffset (increment) {
-      if (increment) {
-        this.offset += this.limit
-      } else {
-        this.offset = Math.max(this.offset - this.limit, 0)
-      }
-    }
-  }
-}
-</script>

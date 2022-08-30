@@ -1,3 +1,28 @@
+<script setup lang="ts">
+import type { RouteLocationRaw } from 'vue-router'
+
+import { useGettext } from 'vue3-gettext'
+import { computed } from 'vue'
+
+import SignupForm from '~/components/auth/SignupForm.vue'
+
+interface Props {
+  defaultInvitation?: string
+  next?: RouteLocationRaw
+}
+
+withDefaults(defineProps<Props>(), {
+  defaultInvitation: undefined,
+  next: '/'
+})
+
+const { $pgettext } = useGettext()
+
+const labels = computed(() => ({
+  title: $pgettext('*/Signup/Title', 'Sign Up')
+}))
+</script>
+
 <template>
   <main
     v-title="labels.title"
@@ -18,37 +43,3 @@
     </section>
   </main>
 </template>
-
-<script>
-
-import SignupForm from '~/components/auth/SignupForm.vue'
-
-export default {
-  components: {
-    SignupForm
-  },
-  props: {
-    defaultInvitation: { type: String, required: false, default: null },
-    next: { type: String, default: '/' }
-  },
-  data () {
-    return {
-      username: '',
-      email: '',
-      password: '',
-      isLoadingInstanceSetting: true,
-      errors: [],
-      isLoading: false,
-      invitation: this.defaultInvitation
-    }
-  },
-  computed: {
-    labels () {
-      const title = this.$pgettext('*/Signup/Title', 'Sign Up')
-      return {
-        title
-      }
-    }
-  }
-}
-</script>

@@ -1,3 +1,113 @@
+<script setup lang="ts">
+import type { Notification, LibraryFollow } from '~/types'
+
+import { computed, ref, watchEffect } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+interface Props {
+  initialItem: Notification
+}
+
+const props = defineProps<Props>()
+
+const { $pgettext, $gettext } = useGettext()
+const store = useStore()
+
+const labels = computed(() => ({
+  libraryFollowMessage: $pgettext('Content/Notifications/Paragraph', '%{ username } followed your library "%{ library }"'),
+  libraryAcceptFollowMessage: $pgettext('Content/Notifications/Paragraph', '%{ username } accepted your follow on library "%{ library }"'),
+  libraryRejectMessage: $pgettext('Content/Notifications/Paragraph', 'You rejected %{ username }&#39;s request to follow "%{ library }"'),
+  libraryPendingFollowMessage: $pgettext('Content/Notifications/Paragraph', '%{ username } wants to follow your library "%{ library }"'),
+  markRead: $pgettext('Content/Notifications/Button.Tooltip/Verb', 'Mark as read'),
+  markUnread: $pgettext('Content/Notifications/Button.Tooltip/Verb', 'Mark as unread')
+}))
+
+const item = ref(props.initialItem)
+watchEffect(() => (item.value = props.initialItem))
+
+const username = computed(() => props.initialItem.activity.actor.preferred_username)
+const notificationData = computed(() => {
+  const activity = props.initialItem.activity
+
+  if (activity.type === 'Follow') {
+    if (activity.object && activity.object.type === 'music.Library') {
+      const detailUrl = { name: 'content.libraries.detail', params: { id: activity.object.uuid } }
+
+      if (activity.related_object?.approved === null) {
+        return {
+          detailUrl,
+          message: $gettext(labels.value.libraryPendingFollowMessage, { username: username.value, library: activity.object.name }),
+          acceptFollow: {
+            buttonClass: 'success',
+            icon: 'check',
+            label: $pgettext('Content/*/Button.Label/Verb', 'Approve'),
+            handler: () => approveLibraryFollow(activity.related_object)
+          },
+          rejectFollow: {
+            buttonClass: 'danger',
+            icon: 'x',
+            label: $pgettext('Content/*/Button.Label/Verb', 'Reject'),
+            handler: () => rejectLibraryFollow(activity.related_object)
+          }
+        }
+      } else if (activity.related_object?.approved) {
+        return {
+          detailUrl,
+          message: $gettext(labels.value.libraryFollowMessage, { username: username.value, library: activity.object.name })
+        }
+      }
+
+      return {
+        detailUrl,
+        message: $gettext(labels.value.libraryRejectMessage, { username: username.value, library: activity.object.name })
+      }
+    }
+  }
+
+  if (activity.type === 'Accept') {
+    if (activity.object?.type === 'federation.LibraryFollow') {
+      return {
+        detailUrl: { name: 'content.remote.index' },
+        message: $gettext(labels.value.libraryAcceptFollowMessage, { username: username.value, library: activity.related_object.name })
+      }
+    }
+  }
+
+  return {}
+})
+
+const read = ref(false)
+watchEffect(async () => {
+  await axios.patch(`federation/inbox/${item.value.id}/`, { is_read: read.value })
+
+  item.value.is_read = read.value
+  store.commit('ui/incrementNotifications', { type: 'inbox', count: read.value ? -1 : 1 })
+})
+
+const handleAction = (handler?: () => void) => {
+  // call handler then mark notification as read
+  handler?.()
+  read.value = true
+}
+
+const approveLibraryFollow = async (follow: LibraryFollow) => {
+  follow.isLoading = true
+  await axios.post(`federation/follows/library/${follow.uuid}/accept/`)
+  follow.isLoading = false
+  follow.approved = true
+}
+
+const rejectLibraryFollow = async (follow: LibraryFollow) => {
+  follow.isLoading = true
+  await axios.post(`federation/follows/library/${follow.uuid}/reject/`)
+  follow.isLoading = false
+  follow.approved = false
+}
+</script>
+
 <template>
   <tr :class="[{'disabled-row': item.is_read}]">
     <td>
@@ -29,7 +139,7 @@
 &nbsp;
         <button
           :class="['ui', 'basic', 'tiny', notificationData.acceptFollow.buttonClass || '', 'button']"
-          @click="handleAction(notificationData.acceptFollow.handler)"
+          @click="handleAction(notificationData.acceptFollow?.handler)"
         >
           <i
             v-if="notificationData.acceptFollow.icon"
@@ -39,7 +149,7 @@
         </button>
         <button
           :class="['ui', 'basic', 'tiny', notificationData.rejectFollow.buttonClass || '', 'button']"
-          @click="handleAction(notificationData.rejectFollow.handler)"
+          @click="handleAction(notificationData.rejectFollow?.handler)"
         >
           <i
             v-if="notificationData.rejectFollow.icon"
@@ -57,7 +167,7 @@
         :aria-label="labels.markUnread"
         class="discrete link"
         :title="labels.markUnread"
-        @click.prevent="markRead(false)"
+        @click.prevent="read = false"
       >
         <i class="redo icon" />
       </a>
@@ -67,128 +177,10 @@
         :aria-label="labels.markRead"
         class="discrete link"
         :title="labels.markRead"
-        @click.prevent="markRead(true)"
+        @click.prevent="read = true"
       >
         <i class="check icon" />
       </a>
     </td>
   </tr>
 </template>
-<script>
-import axios from 'axios'
-
-export default {
-  props: { initialItem: { type: Object, required: true } },
-  data: function () {
-    return {
-      item: this.initialItem
-    }
-  },
-  computed: {
-    message () {
-      return 'plop'
-    },
-    labels () {
-      const libraryFollowMessage = this.$pgettext('Content/Notifications/Paragraph', '%{ username } followed your library "%{ library }"')
-      const libraryAcceptFollowMessage = this.$pgettext('Content/Notifications/Paragraph', '%{ username } accepted your follow on library "%{ library }"')
-      const libraryRejectMessage = this.$pgettext('Content/Notifications/Paragraph', 'You rejected %{ username }&#39;s request to follow "%{ library }"')
-      const libraryPendingFollowMessage = this.$pgettext('Content/Notifications/Paragraph', '%{ username } wants to follow your library "%{ library }"')
-      return {
-        libraryFollowMessage,
-        libraryAcceptFollowMessage,
-        libraryRejectMessage,
-        libraryPendingFollowMessage,
-        markRead: this.$pgettext('Content/Notifications/Button.Tooltip/Verb', 'Mark as read'),
-        markUnread: this.$pgettext('Content/Notifications/Button.Tooltip/Verb', 'Mark as unread')
-
-      }
-    },
-    username () {
-      return this.item.activity.actor.preferred_username
-    },
-    notificationData () {
-      const self = this
-      const a = this.item.activity
-      if (a.type === 'Follow') {
-        if (a.object && a.object.type === 'music.Library') {
-          let acceptFollow = null
-          let rejectFollow = null
-          let message = null
-          if (a.related_object && a.related_object.approved === null) {
-            message = this.labels.libraryPendingFollowMessage
-            acceptFollow = {
-              buttonClass: 'success',
-              icon: 'check',
-              label: this.$pgettext('Content/*/Button.Label/Verb', 'Approve'),
-              handler: () => { self.approveLibraryFollow(a.related_object) }
-            }
-            rejectFollow = {
-              buttonClass: 'danger',
-              icon: 'x',
-              label: this.$pgettext('Content/*/Button.Label/Verb', 'Reject'),
-              handler: () => { self.rejectLibraryFollow(a.related_object) }
-            }
-          } else if (a.related_object && a.related_object.approved) {
-            message = this.labels.libraryFollowMessage
-          } else {
-            message = this.labels.libraryRejectMessage
-          }
-          return {
-            acceptFollow,
-            rejectFollow,
-            detailUrl: { name: 'content.libraries.detail', params: { id: a.object.uuid } },
-            message: this.$gettextInterpolate(
-              message,
-              { username: this.username, library: a.object.name }
-            )
-          }
-        }
-      }
-      if (a.type === 'Accept') {
-        if (a.object && a.object.type === 'federation.LibraryFollow') {
-          return {
-            detailUrl: { name: 'content.remote.index' },
-            message: this.$gettextInterpolate(
-              this.labels.libraryAcceptFollowMessage,
-              { username: this.username, library: a.related_object.name }
-            )
-          }
-        }
-      }
-      return {}
-    }
-  },
-  methods: {
-    handleAction (handler) {
-      // call handler then mark notification as read
-      handler()
-      this.markRead(true)
-    },
-    approveLibraryFollow (follow) {
-      const action = 'accept'
-      axios.post(`federation/follows/library/${follow.uuid}/${action}/`).then((response) => {
-        follow.isLoading = false
-        follow.approved = true
-      })
-    },
-    rejectLibraryFollow (follow) {
-      const action = 'reject'
-      axios.post(`federation/follows/library/${follow.uuid}/${action}/`).then((response) => {
-        follow.isLoading = false
-        follow.approved = false
-      })
-    },
-    markRead (value) {
-      const self = this
-      axios.patch(`federation/inbox/${this.item.id}/`, { is_read: value }).then((response) => {
-        self.item.is_read = value
-        if (value) {
-          self.$store.commit('ui/incrementNotifications', { type: 'inbox', count: -1 })
-        } else {
-          self.$store.commit('ui/incrementNotifications', { type: 'inbox', count: 1 })
-        }
-      })
-    }
-  }
-}
-</script>

@@ -1,3 +1,36 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+import axios from 'axios'
+
+import ReportCard from '~/components/manage/moderation/ReportCard.vue'
+
+import useErrorHandler from '~/composables/useErrorHandler'
+
+interface Props {
+  id: number
+}
+
+const props = defineProps<Props>()
+
+const isLoading = ref(false)
+const object = ref()
+const fetchData = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await axios.get(`manage/moderation/reports/${props.id}/`)
+    object.value = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
+
+  isLoading.value = false
+}
+
+fetchData()
+</script>
+
 <template>
   <main>
     <div
@@ -13,36 +46,3 @@
     </template>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-import ReportCard from '~/components/manage/moderation/ReportCard.vue'
-
-export default {
-  components: {
-    ReportCard
-  },
-  props: { id: { type: Number, required: true } },
-  data () {
-    return {
-      isLoading: true,
-      object: null
-    }
-  },
-  created () {
-    this.fetchData()
-  },
-  methods: {
-    fetchData () {
-      const self = this
-      this.isLoading = true
-      const url = `manage/moderation/reports/${this.id}/`
-      axios.get(url).then(response => {
-        self.object = response.data
-        self.isLoading = false
-      })
-    }
-  }
-}
-</script>

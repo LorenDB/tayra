@@ -1,3 +1,51 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+
+import axios from 'axios'
+
+import DomainsTable from '~/components/manage/moderation/DomainsTable.vue'
+
+interface Props {
+  allowListEnabled: boolean
+}
+
+const props = defineProps<Props>()
+
+const { $pgettext } = useGettext()
+
+const router = useRouter()
+
+const labels = computed(() => ({
+  domains: $pgettext('*/Moderation/*/Noun', 'Domains')
+}))
+
+const domainName = ref('')
+const domainAllowed = ref(props.allowListEnabled || undefined)
+
+const isCreating = ref(false)
+const errors = ref([] as string[])
+const createDomain = async () => {
+  isCreating.value = true
+  errors.value = []
+
+  try {
+    const response = await axios.post('manage/federation/domains/', { name: domainName.value, allowed: domainAllowed.value })
+    router.push({
+      name: 'manage.moderation.domains.detail',
+      params: { id: response.data.name }
+    })
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isCreating.value = false
+}
+</script>
+
 <template>
   <main v-title="labels.domains">
     <section class="ui vertical stripe segment">
@@ -55,7 +103,7 @@
             <button
               :class="['ui', {'loading': isCreating}, 'success', 'button']"
               type="submit"
-              :disabled="isCreating || null"
+              :disabled="isCreating"
             >
               <translate translate-context="Content/Moderation/Button/Verb">
                 Add
@@ -65,51 +113,10 @@
         </div>
       </form>
       <div class="ui clearing hidden divider" />
-      <domains-table :allow-list-enabled="allowListEnabled" />
+      <domains-table
+        :ordering-config-name="null"
+        :allow-list-enabled="allowListEnabled"
+      />
     </section>
   </main>
 </template>
-
-<script>
-import axios from 'axios'
-
-import DomainsTable from '~/components/manage/moderation/DomainsTable.vue'
-export default {
-  components: {
-    DomainsTable
-  },
-  props: { allowListEnabled: { type: Boolean, required: true } },
-  data () {
-    return {
-      domainName: '',
-      domainAllowed: this.allowListEnabled ? true : null,
-      isCreating: false,
-      errors: []
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        domains: this.$pgettext('*/Moderation/*/Noun', 'Domains')
-      }
-    }
-  },
-  methods: {
-    createDomain () {
-      const self = this
-      this.isCreating = true
-      this.errors = []
-      axios.post('manage/federation/domains/', { name: this.domainName, allowed: this.domainAllowed }).then((response) => {
-        this.isCreating = false
-        this.$router.push({
-          name: 'manage.moderation.domains.detail',
-          params: { id: response.data.name }
-        })
-      }, (error) => {
-        self.isCreating = false
-        self.errors = error.backendErrors
-      })
-    }
-  }
-}
-</script>

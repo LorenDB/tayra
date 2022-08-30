@@ -1,3 +1,49 @@
+<script setup lang="ts">
+import type { BackendError } from '~/types'
+
+import { computed, ref, reactive } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+interface Invitation {
+  code: string
+}
+
+const { $pgettext } = useGettext()
+const router = useRouter()
+const store = useStore()
+
+const labels = computed(() => ({
+  placeholder: $pgettext('Content/Admin/Input.Placeholder', 'Leave empty for a random code')
+}))
+
+const invitations = reactive([] as Invitation[])
+const code = ref('')
+const isLoading = ref(false)
+const errors = ref([] as string[])
+const submit = async () => {
+  isLoading.value = true
+  errors.value = []
+
+  try {
+    const response = await axios.post('manage/users/invitations/', { code: code.value })
+    invitations.unshift(response.data)
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.resolve({
+  name: 'signup',
+  query: { invitation: code.toUpperCase() }
+}).href)
+</script>
+
 <template>
   <div>
     <form
@@ -37,7 +83,7 @@
         <div class="ui field">
           <button
             :class="['ui', {loading: isLoading}, 'button']"
-            :disabled="isLoading || null"
+            :disabled="isLoading"
             type="submit"
           >
             <translate translate-context="Content/Admin/Button.Label/Verb">
@@ -90,46 +136,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-
-export default {
-  data () {
-    return {
-      isLoading: false,
-      code: null,
-      invitations: [],
-      errors: []
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        placeholder: this.$pgettext('Content/Admin/Input.Placeholder', 'Leave empty for a random code')
-      }
-    }
-  },
-  methods: {
-    submit () {
-      const self = this
-      this.isLoading = true
-      this.errors = []
-      const url = 'manage/users/invitations/'
-      const payload = {
-        code: this.code
-      }
-      axios.post(url, payload).then((response) => {
-        self.isLoading = false
-        self.invitations.unshift(response.data)
-      }, (error) => {
-        self.isLoading = false
-        self.errors = error.backendErrors
-      })
-    },
-    getUrl (code) {
-      return this.$store.getters['instance/absoluteUrl'](this.$router.resolve({ name: 'signup', query: { invitation: code.toUpperCase() } }).href)
-    }
-  }
-}
-</script>

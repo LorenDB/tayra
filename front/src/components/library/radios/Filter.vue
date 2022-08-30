@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // TODO (wvffle): SORT IMPORTS LIKE SO EVERYWHERE
 import type { Track } from '~/types'
+import type { BuilderFilter, FilterConfig } from './Builder.vue'
 
 import axios from 'axios'
 import $ from 'jquery'
@@ -18,26 +19,8 @@ import useErrorHandler from '~/composables/useErrorHandler'
 interface Props {
   index: number
 
-  filter: {
-    type: string
-    label: string
-    fields: {
-      name: string
-      placeholder: string
-      type: 'list'
-      subtype: 'number'
-      autocomplete?: string
-      autocomplete_qs: string
-      autocomplete_fields: {
-        remoteValues?: unknown
-      }
-    }[]
-  }
-
-  config: {
-    not: boolean
-    names: string[]
-  }
+  filter: BuilderFilter
+  config: FilterConfig
 }
 
 type Filter = { candidates: { count: number, sample: Track[] } }
@@ -153,18 +136,18 @@ watch(exclude, fetchCandidates)
             {{ f.placeholder }}
           </div>
           <input
-            v-if="f.type === 'list' && config[f.name]"
+            v-if="f.type === 'list' && config[f.name as keyof FilterConfig]"
             :id="f.name"
-            :value="config[f.name].join(',')"
+            :value="(config[f.name as keyof FilterConfig] as string[]).join(',')"
             type="hidden"
           >
           <div
-            v-if="config[f.name]"
+            v-if="typeof config[f.name as keyof FilterConfig] === 'object'"
             class="ui menu"
           >
             <div
-              v-for="(v, i) in config[f.name]"
-              :key="v"
+              v-for="(v, i) in config[f.name as keyof FilterConfig] as object"
+              :key="i"
               class="ui item"
               :data-value="v"
             >

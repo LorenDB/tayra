@@ -1,3 +1,26 @@
+<script setup lang="ts">
+import { useGettext } from 'vue3-gettext'
+import { computed, ref } from 'vue'
+import { get } from 'lodash-es'
+
+import axios from 'axios'
+
+const { $pgettext } = useGettext()
+
+const allowListEnabled = ref(false)
+const labels = computed(() => ({
+  moderation: $pgettext('*/Moderation/*', 'Moderation'),
+  secondaryMenu: $pgettext('Menu/*/Hidden text', 'Secondary menu')
+}))
+
+const fetchNodeInfo = async () => {
+  const response = await axios.get('instance/nodeinfo/2.0/')
+  allowListEnabled.value = get(response.data, 'metadata.allowList.enabled', false)
+}
+
+fetchNodeInfo()
+</script>
+
 <template>
   <div
     v-title="labels.moderation"
@@ -59,35 +82,3 @@
     />
   </div>
 </template>
-
-<script>
-import { get } from 'lodash-es'
-import axios from 'axios'
-
-export default {
-  data () {
-    return {
-      allowListEnabled: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        moderation: this.$pgettext('*/Moderation/*', 'Moderation'),
-        secondaryMenu: this.$pgettext('Menu/*/Hidden text', 'Secondary menu')
-      }
-    }
-  },
-  created () {
-    this.fetchNodeInfo()
-  },
-  methods: {
-    fetchNodeInfo () {
-      const self = this
-      axios.get('instance/nodeinfo/2.0/').then(response => {
-        self.allowListEnabled = get(response.data, 'metadata.allowList.enabled', false)
-      })
-    }
-  }
-}
-</script>

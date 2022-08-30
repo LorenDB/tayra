@@ -1,3 +1,28 @@
+<script setup lang="ts">
+import type { Track } from '~/types'
+
+import { useGettext } from 'vue3-gettext'
+import { computed } from 'vue'
+
+interface Props {
+  track?: Track | null
+  button?: boolean
+  border?: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+  track: null,
+  button: false,
+  border: false
+})
+
+const { $pgettext } = useGettext()
+
+const labels = computed(() => ({
+  addToPlaylist: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Add to playlist…')
+}))
+</script>
+
 <template>
   <button
     v-if="button"
@@ -19,26 +44,3 @@
     <i :class="['list', 'basic', 'icon']" />
   </button>
 </template>
-
-<script>
-
-export default {
-  props: {
-    track: { type: Object, default: function () { return {} } },
-    button: { type: Boolean, default: false },
-    border: { type: Boolean, default: false }
-  },
-  data () {
-    return {
-      showModal: false
-    }
-  },
-  computed: {
-    labels () {
-      return {
-        addToPlaylist: this.$pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Add to playlist…')
-      }
-    }
-  }
-}
-</script>
