@@ -7,7 +7,7 @@ import { whenever } from '@vueuse/core'
 import axios from 'axios'
 import clip from 'text-clipper'
 
-interface Emits {
+interface Events {
   (e: 'updated', data: unknown): void
 }
 
@@ -21,7 +21,7 @@ interface Props {
   truncateLength?: number
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   content: null,
   fieldName: 'description',

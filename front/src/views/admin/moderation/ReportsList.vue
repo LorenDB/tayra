@@ -19,7 +19,6 @@ import useSmartSearch from '~/composables/useSmartSearch'
 import useOrdering from '~/composables/useOrdering'
 
 interface Props extends SmartSearchProps, OrderingProps {
-  // TODO (wvffle): find more types
   mode?: 'card'
 
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged

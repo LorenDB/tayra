@@ -1,18 +1,23 @@
 <script setup lang="ts">
-import type { BackendError, Channel } from '~/types'
+import type { BackendError, BackendResponse, Channel } from '~/types'
 
-import { clone } from 'lodash-es'
 import { ref, reactive } from 'vue'
+import { clone } from 'lodash-es'
 
 import axios from 'axios'
+
 import ChannelCard from '~/components/audio/ChannelCard.vue'
+
+interface Events {
+  (e: 'fetched', channels: BackendResponse<Channel>): void
+}
 
 interface Props {
   filters: object
   limit?: number
 }
 
-const emit = defineEmits(['fetched'])
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   limit: 5
 })

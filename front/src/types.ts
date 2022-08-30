@@ -24,7 +24,6 @@ export interface QueueItemSource {
   duration: string
   coverUrl: string
 
-  // TODO (wvffle): Maybe use <translate> component to avoid passing the labels
   labels: {
     remove: string
     selectTrack: string
@@ -53,6 +52,7 @@ export interface Artist {
   description: Content
   cover?: Cover
   channel?: Channel
+  // TODO (wvffle): Check if it's Tag[] or string[]
   tags: string[]
 
   content_category: ContentCategory
@@ -164,9 +164,6 @@ export interface LibraryFollow {
   name: string
   type?: 'music.Library' | 'federation.LibraryFollow'
   target: Library
-
-  // TODO (wvffle): Check if it's not added only on frontend side
-  isLoading?: boolean
 }
 
 export interface Cover {
@@ -225,6 +222,11 @@ export interface BackendError extends AxiosError {
   rawPayload?: APIErrorResponse
 }
 
+export interface BackendResponse<T> {
+  count: number
+  results: T[]
+}
+
 export interface RateLimitStatus {
   limit: string
   scope: string
@@ -251,14 +253,14 @@ export interface FileSystem {
 
 export interface FSLogs {
   status: 'pending' | 'started'
-  reference: unknown // TODO (wvffle): Find correct type
+  reference: unknown
   logs: string[]
 }
 
 // Content stuff
 export interface Content {
   content_type: 'text/plain' | 'text/markdown'
-  text: string // TODO (wvffle): Ensure it's not nullable from backend side
+  text: string
 }
 
 // Form stuff
@@ -311,8 +313,7 @@ export interface User {
   id: string
   avatar?: Cover
   email: string
-  // TODO (wvffle): Is it really a string? Or maybe it's { text: string, content_type: string }
-  summary: string
+  summary: { text: string, content_type: string }
   username: string
   full_username: string
   instance_support_message_display_date: string
@@ -361,7 +362,7 @@ export interface SettingsDataEntry {
 export interface Note {
   uuid: string
   type: 'request' | 'report'
-  author?: Actor // TODO (wvffle): Check if is valid
+  author?: Actor
   summary?: string
   creation_date?: string
 }

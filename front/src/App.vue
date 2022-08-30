@@ -56,7 +56,6 @@ onMounted(async () => {
 })
 
 // Time ago
-// TODO (wvffle): Migrate to useTimeAgo
 useIntervalFn(() => {
   // used to redraw ago dates every minute
   store.commit('ui/computeLastDate')

@@ -12,7 +12,7 @@ import { useStore } from '~/store'
 
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
 
-interface Emits {
+interface Events {
   (e: 'search'): void
 }
 
@@ -41,7 +41,7 @@ interface Result {
   routerUrl: RouteLocationNamedRaw
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 
 const search = ref()
 const { focused } = useFocus(search)

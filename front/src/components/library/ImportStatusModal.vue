@@ -10,12 +10,16 @@ interface ErrorEntry {
   value: string
 }
 
+interface Events {
+  (e: 'update:show', value: boolean): void
+}
+
 interface Props {
   upload: Upload
   show: boolean
 }
 
-const emit = defineEmits(['update:show'])
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const show = useVModel(props, 'show', emit)

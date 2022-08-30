@@ -16,7 +16,7 @@ import useReportConfigs from '~/composables/moderation/useReportConfigs'
 import useErrorHandler from '~/composables/useErrorHandler'
 import useMarkdown from '~/composables/useMarkdown'
 
-interface Emits {
+interface Events {
   (e: 'updated', updating: { type: string }): void
   (e: 'handled', isHandled: boolean): void
 }
@@ -25,7 +25,7 @@ interface Props {
   initObj: Report
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const configs = useReportConfigs()

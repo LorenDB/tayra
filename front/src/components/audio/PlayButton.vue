@@ -152,7 +152,6 @@ const openMenu = () => {
       <div class="menu">
         <button
           class="item basic"
-          data-ref="enqueue"
           :disabled="!playable"
           :title="labels.addToQueue"
           @click.stop.prevent="enqueue"
@@ -161,7 +160,6 @@ const openMenu = () => {
         </button>
         <button
           class="item basic"
-          data-ref="enqueueNext"
           :disabled="!playable"
           :title="labels.playNext"
           @click.stop.prevent="enqueueNext()"
@@ -170,7 +168,6 @@ const openMenu = () => {
         </button>
         <button
           class="item basic"
-          data-ref="playNow"
           :disabled="!playable"
           :title="labels.playNow"
           @click.stop.prevent="enqueueNext(true)"
@@ -213,7 +210,6 @@ const openMenu = () => {
         <div class="divider" />
         <button
           v-if="filterableArtist"
-          data-ref="filterArtist"
           class="item basic"
           :disabled="!filterableArtist"
           :title="labels.hideArtist"
@@ -226,7 +222,6 @@ const openMenu = () => {
           v-for="obj in getReportableObjects({track, album, artist, playlist, account, channel})"
           :key="obj.target.type + obj.target.id"
           class="item basic"
-          :data-ref="`report${obj.target.type}${obj.target.id}`"
           @click.stop.prevent="report(obj)"
         >
           <i class="share icon" /> {{ obj.label }}

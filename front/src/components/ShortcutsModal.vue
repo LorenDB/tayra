@@ -4,12 +4,17 @@ import { useVModel } from '@vueuse/core'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
+interface Events {
+  (e: 'update:show', show: boolean): void
+}
+
 interface Props {
   show: boolean
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
-const emit = defineEmits(['update:show'])
+
 const showRef = useVModel(props, 'show', emit)
 
 const { $pgettext } = useGettext()

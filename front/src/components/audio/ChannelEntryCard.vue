@@ -8,7 +8,6 @@ import usePlayer from '~/composables/audio/usePlayer'
 import { computed } from 'vue'
 
 interface Props {
-  // TODO (wvffle): Is it correct type?
   entry: Track
   defaultCover: Cover
 }
@@ -42,7 +41,7 @@ const duration = computed(() => props.entry.uploads.find(upload => upload.durati
       @click="$router.push({name: 'library.tracks.detail', params: {id: entry.id}})"
     >
     <img
-      v-else-if="entry.artist.content_category === 'podcast' && defaultCover != undefined"
+      v-else-if="entry.artist?.content_category === 'podcast' && defaultCover != undefined"
       v-lazy="$store.getters['instance/absoluteUrl'](defaultCover.urls.medium_square_crop)"
       class="channel-image image"
       @click="$router.push({name: 'library.tracks.detail', params: {id: entry.id}})"

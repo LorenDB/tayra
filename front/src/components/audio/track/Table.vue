@@ -14,6 +14,11 @@ import TrackRow from '~/components/audio/track/Row.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 
+interface Events {
+  (e: 'fetched'): void
+  (e: 'page-changed', page: number): void
+}
+
 interface Props {
   tracks?: Track[]
 
@@ -28,7 +33,6 @@ interface Props {
   isAlbum?: boolean
   isPodcast?: boolean
 
-  // TODO (wvffle): Find correct type
   filters?: object
 
   nextUrl?: string | null
@@ -41,6 +45,7 @@ interface Props {
   unique?: boolean
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   tracks: () => [],
 
@@ -94,8 +99,6 @@ const labels = computed(() => ({
   album: $pgettext('*/*/*/Noun', 'Album'),
   artist: $pgettext('*/*/*/Noun', 'Artist')
 }))
-
-const emit = defineEmits(['fetched', 'page-changed'])
 
 const isLoading = ref(false)
 const fetchData = async () => {
@@ -255,7 +258,7 @@ const updatePage = (page: number) => {
           :total="totalTracks"
           :current=" tracks.length > 0 ? page : currentPage"
           :paginate-by="paginateBy"
-          @page-changed="updatePage"
+          @update:current="updatePage"
         />
       </div>
     </div>
@@ -295,7 +298,7 @@ const updatePage = (page: number) => {
           :total="totalTracks"
           :current="tracks.length > 0 ? page : currentPage"
           :compact="true"
-          @page-changed="updatePage"
+          @update:current="updatePage"
         />
       </div>
     </div>

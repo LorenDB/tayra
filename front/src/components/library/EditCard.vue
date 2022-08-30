@@ -13,7 +13,7 @@ import axios from 'axios'
 import useEditConfigs from '~/composables/moderation/useEditConfigs'
 import useErrorHandler from '~/composables/useErrorHandler'
 
-interface Emits {
+interface Events {
   (e: 'approved', isApproved: boolean): void
   (e: 'deleted'): void
 }
@@ -23,7 +23,7 @@ interface Props {
   currentState?: ReviewState
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   currentState: () => ({})
 })
@@ -41,7 +41,6 @@ const canDelete = computed(() => {
   if (props.obj.is_applied || props.obj.is_approved) return false
   if (!store.state.auth.authenticated) return false
 
-  // TODO (wvffle): Is it better to compare ids? Is full_username unique?
   return props.obj.created_by.full_username === store.state.auth.fullUsername
     || store.state.auth.availablePermissions.library
 })

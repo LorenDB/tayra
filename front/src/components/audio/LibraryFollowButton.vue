@@ -4,10 +4,16 @@ import type { Library } from '~/types'
 import { computed } from 'vue'
 import { useStore } from '~/store'
 
+interface Events {
+  (e: 'unfollowed'): void
+  (e: 'followed'): void
+}
+
 interface Props {
   library: Library
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const store = useStore()
@@ -15,7 +21,6 @@ const follow = computed(() => store.getters['libraries/follow'](props.library.uu
 const isPending = computed(() => follow.value && follow.value.approved === null)
 const isApproved = computed(() => follow.value && (follow.value?.approved === true || (isPending.value && props.library.privacy_level === 'everyone')))
 
-const emit = defineEmits(['followed', 'unfollowed'])
 const toggle = () => {
   if (isPending.value || isApproved.value) {
     emit('unfollowed')

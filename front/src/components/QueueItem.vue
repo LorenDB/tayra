@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import type { QueueItemSource } from '~/types'
 
+interface Events {
+  (e: 'play', index: number): void
+  (e: 'remove', index: number): void
+}
+
 interface Props {
   source: QueueItemSource
   index: number
 }
 
-interface Emits {
-  (e: 'play', index: number): void
-  (e: 'remove', index: number): void
-}
-
+defineEmits<Events>()
 defineProps<Props>()
-defineEmits<Emits>()
 </script>
 
 <template>

@@ -6,11 +6,11 @@ import { computed, ref } from 'vue'
 
 import axios from 'axios'
 
-interface Emits {
+interface Events {
   (e: 'scanned', data: object): void
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 
 const { $pgettext } = useGettext()
 

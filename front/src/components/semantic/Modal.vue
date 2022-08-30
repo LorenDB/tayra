@@ -5,6 +5,14 @@ import { computed, onBeforeUnmount, ref, watchEffect } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { useStore } from '~/store'
 
+interface Events {
+  (e: 'update:show', show: boolean): void
+  (e: 'approved'): void
+  (e: 'deny'): void
+  (e: 'show'): void
+  (e: 'hide'): void
+}
+
 interface Props {
   show: boolean
   fullscreen?: boolean
@@ -12,13 +20,12 @@ interface Props {
   additionalClasses?: string[]
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   fullscreen: true,
   scrolling: false,
   additionalClasses: () => []
 })
-
-const emit = defineEmits(['approved', 'deny', 'update:show', 'show', 'hide'])
 
 const modal = ref()
 const { activate, deactivate, pause, unpause } = useFocusTrap(modal, {

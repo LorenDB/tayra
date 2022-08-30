@@ -7,7 +7,7 @@ import { ref, watchEffect, reactive } from 'vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
-interface Emits {
+interface Events {
   (e: 'reorder', from: number, to: number): void
   (e: 'visible'): void
   (e: 'hidden'): void
@@ -18,7 +18,7 @@ interface Props {
   size: number
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const ghostContainer = ref()

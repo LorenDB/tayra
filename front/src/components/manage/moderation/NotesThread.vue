@@ -8,13 +8,16 @@ import axios from 'axios'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 
+interface Events {
+  (e: 'deleted', uuid: string): void
+}
 interface Props {
   notes: Note[]
 }
 
+const emit = defineEmits<Events>()
 defineProps<Props>()
 
-const emit = defineEmits(['deleted'])
 const isLoading = ref(false)
 const remove = async (note: Note) => {
   isLoading.value = true

@@ -4,7 +4,7 @@ import type { BackendError, Channel } from '~/types'
 import { computed, watch, ref } from 'vue'
 import axios from 'axios'
 
-interface Emits {
+interface Events {
   (e: 'submittable', value: boolean): void
   (e: 'loading', value: boolean): void
   (e: 'created'): void
@@ -14,7 +14,7 @@ interface Props {
   channel: Channel
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const title = ref('')

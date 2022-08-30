@@ -13,6 +13,10 @@ import RadioButton from '~/components/radios/Button.vue'
 import useErrorHandler from '~/composables/useErrorHandler'
 import useReport from '~/composables/moderation/useReport'
 
+interface Emits {
+  (e: 'followed'): void
+}
+
 interface Props {
   initialLibrary: Library
   displayFollow?: boolean
@@ -20,6 +24,7 @@ interface Props {
   displayCopyFid?: boolean
 }
 
+const emit = defineEmits<Emits>()
 const props = withDefaults(defineProps<Props>(), {
   displayFollow: true,
   displayScan: true,
@@ -68,7 +73,6 @@ const launchScan = async () => {
   }
 }
 
-const emit = defineEmits(['followed', 'deleted'])
 const follow = async () => {
   isLoadingFollow.value = true
   try {
@@ -76,7 +80,7 @@ const follow = async () => {
     library.value.follow = response.data
     emit('followed')
   } catch (error) {
-    // TODO (wvffle): ==> CORRECTLY HANDLED ERROR HERE <==
+    console.error(error)
     store.commit('ui/addMessage', {
       // TODO (wvffle): Translate
       content: 'Cannot follow remote library: ' + error,

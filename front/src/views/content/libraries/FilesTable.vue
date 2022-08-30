@@ -20,11 +20,13 @@ import useErrorHandler from '~/composables/useErrorHandler'
 import useSmartSearch from '~/composables/useSmartSearch'
 import useOrdering from '~/composables/useOrdering'
 
+interface Events {
+  (e: 'fetch-start'): void
+}
+
 interface Props extends SmartSearchProps, OrderingProps {
-  // TODO (wvffle): find object type
   filters?: object
   needsRefresh?: boolean
-  // TODO (wvffle): find object type
   customObjects?: any[]
 
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
@@ -33,8 +35,7 @@ interface Props extends SmartSearchProps, OrderingProps {
   updateUrl?: boolean
 }
 
-const search = ref()
-
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   defaultQuery: '',
   updateUrl: false,
@@ -42,6 +43,8 @@ const props = withDefaults(defineProps<Props>(), {
   needsRefresh: false,
   customObjects: () => []
 })
+
+const search = ref()
 
 // TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
@@ -82,8 +85,6 @@ const actions = computed(() => [
     }
   }
 ])
-
-const emit = defineEmits(['fetch-start'])
 
 const isLoading = ref(false)
 const fetchData = async () => {

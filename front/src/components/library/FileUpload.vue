@@ -20,7 +20,7 @@ import useWebSocketHandler from '~/composables/useWebSocketHandler'
 import updateQueryString from '~/composables/updateQueryString'
 import useErrorHandler from '~/composables/useErrorHandler'
 
-interface Emits {
+interface Events {
   (e: 'uploads-finished', delta: number):void
 }
 
@@ -29,7 +29,7 @@ interface Props {
   defaultImportReference?: string
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   defaultImportReference: ''
 })

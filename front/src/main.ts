@@ -9,8 +9,6 @@ import useTheme from '~/composables/useTheme'
 // NOTE: Set the theme as fast as possible
 useTheme()
 
-// TODO (wvffle): Make sure V_FOR_REF works
-//                Search pattern: v-for([^>]|\n)+?[^h]ref
 const logger = useLogger()
 logger.info('Loading environment:', import.meta.env.MODE)
 logger.debug('Environment variables:', import.meta.env)
@@ -49,11 +47,4 @@ Promise.all(modules).finally(() => {
 })
 
 // TODO (wvffle): Rename filters from useSharedLabels to filters from backend
-// TODO (wvffle): Check for mixin merging: https://v3-migration.vuejs.org/breaking-changes/data-option.html#mixin-merge-behavior-change=
-// TODO (wvffle): Use emits options: https://v3-migration.vuejs.org/breaking-changes/emits-option.html
-// TODO (wvffle): Find all array watchers and make them deep
-// TODO (wvffle): Migrate to <script setup lang="ts"> and remove allowJs from tsconfig.json
-// TODO (wvffle): Replace `from '(../)+` with `from '~/`
-// TODO (wvffle): Fix props not being available in template in IntelliJ Idea
-// TODO (wvffle): Use navigation guards
-// TODO (wvffle): Use computedEager whenever there is a cheap operation that can be executed eagerly
+// TODO (wvffle): Migrate EmbedFrame.vue to <script setup lang="ts"> and remove allowJs from tsconfig.json

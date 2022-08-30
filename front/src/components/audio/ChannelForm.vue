@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Channel, BackendError } from '~/types'
+import type { ContentCategory, Channel, BackendError, Tag } from '~/types'
 
 import { slugify } from 'transliteration'
 import { reactive, computed, ref, watchEffect, watch } from 'vue'
@@ -9,12 +9,21 @@ import axios from 'axios'
 import AttachmentInput from '~/components/common/AttachmentInput.vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
 
+interface Events {
+  (e: 'category', contentCategory: ContentCategory): void
+  (e: 'submittable', value: boolean): void
+  (e: 'loading', value: boolean): void
+  (e: 'errored', errors: string[]): void
+  (e: 'created', channel: Channel): void
+  (e: 'updated', channel: Channel): void
+}
+
 interface Props {
   object?: Channel | null
   step: number
 }
 
-const emit = defineEmits(['category', 'submittable', 'loading', 'errored', 'created', 'updated'])
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   object: null,
   step: 1
@@ -25,7 +34,7 @@ const { $pgettext } = useGettext()
 const newValues = reactive({
   name: props.object?.artist?.name ?? '',
   username: props.object?.actor.preferred_username ?? '',
-  tags: props.object?.artist?.tags ?? [],
+  tags: props.object?.artist?.tags?.map(name => ({ name } as Tag)) ?? [] as Tag[],
   description: props.object?.artist?.description?.text ?? '',
   cover: props.object?.artist?.cover?.uuid ?? null,
   content_category: props.object?.artist?.content_category ?? 'podcast',
@@ -76,11 +85,11 @@ const labels = computed(() => ({
   usernamePlaceholder: $pgettext('Content/Channel/Form.Field.Placeholder', 'awesomechannelname')
 }))
 
-const submittable = computed(() =>
+const submittable = computed(() => !!(
   newValues.content_category === 'podcast'
     ? newValues.name && newValues.username && newValues.metadata.itunes_category && newValues.metadata.language
     : newValues.name && newValues.username
-)
+))
 
 watch(() => newValues.name, (name) => {
   if (creating.value) {
@@ -130,7 +139,8 @@ const submit = async () => {
       : axios.patch(`channels/${props.object?.uuid}`, payload)
 
     const response = await request()
-    emit(creating.value ? 'created' : 'updated', response.data)
+    if (creating.value) emit('created', response.data)
+    else emit('updated', response.data)
   } catch (error) {
     errors.value = (error as BackendError).backendErrors
     emit('errored', errors.value)

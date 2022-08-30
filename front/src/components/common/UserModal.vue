@@ -6,11 +6,17 @@ import { useVModel } from '@vueuse/core'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
+interface Events {
+  (e: 'update:show', value: boolean): void
+  (e: 'showLanguageModalEvent'): void
+  (e: 'showThemeModalEvent'): void
+}
+
 interface Props {
   show: boolean
 }
 
-const emit = defineEmits(['update:show', 'showThemeModalEvent', 'showLanguageModalEvent'])
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const show = useVModel(props, 'show', emit)
@@ -53,8 +59,8 @@ const labels = computed(() => ({
       class="header"
     >
       <img
-        v-if="$store.state.auth.profile.avatar && $store.state.auth.profile.avatar.urls.medium_square_crop"
-        v-lazy="$store.getters['instance/absoluteUrl']($store.state.auth.profile.avatar.urls.medium_square_crop)"
+        v-if="$store.state.auth.profile?.avatar && $store.state.auth.profile?.avatar.urls.medium_square_crop"
+        v-lazy="$store.getters['instance/absoluteUrl']($store.state.auth.profile?.avatar.urls.medium_square_crop)"
         alt=""
         class="ui centered small circular image"
       >
@@ -80,7 +86,7 @@ const labels = computed(() => ({
           <div
             class="column"
             role="button"
-            @click="[$emit('update:show', false), $emit('showLanguageModalEvent')]"
+            @click="[$emit('update:show', false), emit('showLanguageModalEvent')]"
           >
             <i class="language icon user-modal list-icon" />
             <span class="user-modal list-item">{{ labels.language }}:</span>
@@ -94,12 +100,12 @@ const labels = computed(() => ({
           <div
             class="column"
             role="button"
-            @click="[$emit('update:show', false), $emit('showThemeModalEvent')]"
+            @click="[$emit('update:show', false), emit('showThemeModalEvent')]"
           >
             <i class="palette icon user-modal list-icon" />
             <span class="user-modal list-item">{{ labels.theme }}:</span>
             <div class="right floated">
-              <span class="user-modal list-item"> {{ themes.find(x => x.key === theme).name }}</span>
+              <span class="user-modal list-item"> {{ themes.find(x => x.key === theme)?.name }}</span>
               <i class="action-hint chevron right icon user-modal" />
             </div>
           </div>

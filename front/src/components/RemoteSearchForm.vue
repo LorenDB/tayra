@@ -9,6 +9,10 @@ import { useGettext } from 'vue3-gettext'
 
 type Type = 'rss' | 'artists' | 'both'
 
+interface Events {
+  (e: 'subscribed', rss: object): void
+}
+
 interface Props {
   initialId?: string
   initialType?: Type
@@ -17,6 +21,7 @@ interface Props {
   standalone?: boolean
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   initialId: '',
   initialType: 'artists',
@@ -118,7 +123,6 @@ const createFetch = async () => {
   isLoading.value = false
 }
 
-const emit = defineEmits(['subscribed'])
 const store = useStore()
 
 const rssSubscribe = async () => {

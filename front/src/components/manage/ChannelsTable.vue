@@ -17,7 +17,6 @@ import useSmartSearch from '~/composables/useSmartSearch'
 import useOrdering from '~/composables/useOrdering'
 
 interface Props extends SmartSearchProps, OrderingProps {
-  // TODO (wvffle): find object type
   filters?: object
 
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
@@ -32,7 +31,6 @@ const props = withDefaults(defineProps<Props>(), {
   filters: () => ({})
 })
 
-// TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
 type ResponseType = { count: number, results: any[] }
 const result = ref<null | ResponseType>(null)
@@ -47,8 +45,6 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 ]
 
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
-// TODO (wvffle): Find correct type
-const actions: unknown[] = []
 
 const isLoading = ref(false)
 const fetchData = async () => {
@@ -176,7 +172,7 @@ const labels = computed(() => ({
       <action-table
         v-if="result"
         :objects-data="result"
-        :actions="actions"
+        :actions="[]"
         action-url="manage/library/artists/action/"
         :filters="actionFilters"
         @action-launched="fetchData"

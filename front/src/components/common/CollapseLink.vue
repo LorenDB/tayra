@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
 
+interface Events {
+  (e: 'update:modelValue', value: boolean): void
+}
+
 interface Props {
   modelValue: boolean
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
 const value = useVModel(props, 'modelValue', emit)
 </script>
 

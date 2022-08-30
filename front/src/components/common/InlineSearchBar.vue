@@ -3,16 +3,21 @@ import { useVModel } from '@vueuse/core'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
+interface Events {
+  (e: 'update:modelValue', value: string): void
+  (e: 'search', query: string): void
+}
+
 interface Props {
   modelValue: string
   placeholder?: string
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   placeholder: ''
 })
 
-const emit = defineEmits(['update:modelValue', 'search'])
 const value = useVModel(props, 'modelValue', emit)
 
 const { $pgettext } = useGettext()

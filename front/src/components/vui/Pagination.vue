@@ -4,6 +4,10 @@ import { range, clamp } from 'lodash-es'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
+interface Events {
+  (e: 'update:current', page: number): void
+}
+
 interface Props {
   current?: number
   paginateBy?: number
@@ -11,13 +15,13 @@ interface Props {
   compact?: boolean
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   current: 1,
   paginateBy: 25,
   compact: false
 })
 
-const emit = defineEmits(['update:current', 'pageChanged'])
 const current = useVModel(props, 'current', emit)
 
 const RANGE = 2
@@ -47,8 +51,6 @@ const setPage = (page: number) => {
   }
 
   current.value = page
-  // TODO (wvffle): Compat before change to v-model
-  emit('pageChanged', page)
 }
 
 const { $pgettext } = useGettext()

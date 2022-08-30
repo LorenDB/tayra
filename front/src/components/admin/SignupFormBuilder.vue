@@ -7,16 +7,20 @@ import { computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { arrayMove } from '~/utils'
 
+interface Events {
+  (e: 'update:modelValue', value: Form): void
+}
+
 interface Props {
   modelValue: Form
   signupApprovalEnabled?: boolean
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   signupApprovalEnabled: false
 })
 
-const emit = defineEmits(['update:modelValue'])
 const value = useVModel(props, 'modelValue', emit, { deep: true })
 
 const maxFields = ref(10)
@@ -140,7 +144,6 @@ const move = (idx: number, increment: number) => {
             </tr>
           </thead>
           <tbody>
-            <!-- TODO (wvffle): Add random _id as :key -->
             <tr
               v-for="(field, idx) in value.fields"
               :key="idx"

@@ -18,10 +18,15 @@ import TagsList from '~/components/tags/List.vue'
 import useErrorHandler from '~/composables/useErrorHandler'
 import useReport from '~/composables/moderation/useReport'
 
+interface Events {
+  (e: 'deleted'): void
+}
+
 interface Props {
   id: string
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 const { report, getReportableObjects } = useReport()
 const store = useStore()
@@ -100,7 +105,6 @@ watchEffect(() => {
   }
 })
 
-const emit = defineEmits(['deleted'])
 const remove = async () => {
   isLoading.value = true
   try {

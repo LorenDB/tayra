@@ -246,7 +246,7 @@ export default [
         // browse a single library via it's uuid
         path: ':id([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})',
         props: true,
-        component: () => import('~/views/library/DetailBase.vue'),
+        component: () => import('~/views/library/LibraryBase.vue'),
         children: [
           {
             path: '',

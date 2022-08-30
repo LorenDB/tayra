@@ -11,7 +11,7 @@ import useSharedLabels from '~/composables/locale/useSharedLabels'
 
 const PRIVACY_LEVELS = ['me', 'instance', 'everyone'] as PrivacyLevel[]
 
-interface Emits {
+interface Events {
   (e: 'updated', data: Library): void
   (e: 'created', data: Library): void
   (e: 'deleted'): void
@@ -21,7 +21,7 @@ interface Props {
   library?: Library
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const { $pgettext } = useGettext()

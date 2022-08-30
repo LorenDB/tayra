@@ -16,7 +16,6 @@ export default (defaultQuery: MaybeRef<string>, updateUrl: MaybeRef<boolean>) =>
   const tokens = ref([] as Token[])
 
   watch(query, (value) => {
-    // TODO (wvffle): Move normalizeQuery and parseTokens into the composable file
     tokens.value = parseTokens(normalizeQuery(value))
   }, { immediate: true })
 

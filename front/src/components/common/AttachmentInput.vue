@@ -7,6 +7,11 @@ import { reactive, ref, watch } from 'vue'
 import { useStore } from '~/store'
 import useFormData from '~/composables/useFormData'
 
+interface Events {
+  (e: 'update:modelValue', value: string | null): void
+  (e: 'delete'): void
+}
+
 interface Props {
   modelValue: string | null
   imageClass?: string
@@ -15,6 +20,7 @@ interface Props {
   initialValue?: string | undefined
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   imageClass: '',
   required: false,
@@ -22,7 +28,6 @@ const props = withDefaults(defineProps<Props>(), {
   initialValue: undefined
 })
 
-const emit = defineEmits(['update:modelValue', 'delete'])
 const value = useVModel(props, 'modelValue', emit)
 
 const attachment = ref()

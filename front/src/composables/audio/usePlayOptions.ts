@@ -23,8 +23,6 @@ export interface PlayOptionsProps {
 }
 
 export default (props: PlayOptionsProps) => {
-  // TODO (wvffle): Test if we can defineProps in composable
-
   const store = useStore()
   const { resume, pause, playing } = usePlayer()
   const { currentTrack } = useQueue()
@@ -95,7 +93,7 @@ export default (props: PlayOptionsProps) => {
 
     const tracks: Track[] = []
 
-    // TODO (wvffle): There is no channel?
+    // TODO (wvffle): Why is there no channel?
     if (props.tracks?.length) {
       tracks.push(...props.tracks)
     } else if (props.track) {
@@ -126,7 +124,6 @@ export default (props: PlayOptionsProps) => {
       tracks.push(...await getTracksPage({ library: props.library.uuid, ordering: '-creation_date' }))
     }
 
-    // TODO (wvffle): It was behind 250ms timeout, why?
     isLoading.value = false
 
     return tracks.filter(track => track.uploads?.length).map(markRaw)

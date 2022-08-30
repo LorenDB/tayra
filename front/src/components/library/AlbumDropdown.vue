@@ -9,6 +9,10 @@ import { useGettext } from 'vue3-gettext'
 
 import { getDomain } from '~/utils'
 
+interface Events {
+  (e: 'remove'): void
+}
+
 interface Props {
   isLoading: boolean
   artist: Artist | null
@@ -19,6 +23,7 @@ interface Props {
   isSerie: boolean
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 const { report, getReportableObjects } = useReport()
 
@@ -35,7 +40,6 @@ const isEmbedable = computed(() => (props.isChannel && props.artist?.channel?.ac
 const musicbrainzUrl = computed(() => props.object?.mbid ? `https://musicbrainz.org/release/${props.object.mbid}` : null)
 const discogsUrl = computed(() => `https://discogs.com/search/?type=release&title=${encodeURI(props.object?.title)}&artist=${encodeURI(props.object?.artist.name)}`)
 
-const emit = defineEmits(['remove'])
 const remove = () => emit('remove')
 </script>
 

@@ -94,16 +94,12 @@ const handleAction = (handler?: () => void) => {
 }
 
 const approveLibraryFollow = async (follow: LibraryFollow) => {
-  follow.isLoading = true
   await axios.post(`federation/follows/library/${follow.uuid}/accept/`)
-  follow.isLoading = false
   follow.approved = true
 }
 
 const rejectLibraryFollow = async (follow: LibraryFollow) => {
-  follow.isLoading = true
   await axios.post(`federation/follows/library/${follow.uuid}/reject/`)
-  follow.isLoading = false
   follow.approved = false
 }
 </script>

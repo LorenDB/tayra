@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Cover, Track, BackendError } from '~/types'
+import type { Cover, Track, BackendResponse, BackendError } from '~/types'
 
 import { clone } from 'lodash-es'
 import { ref, watch } from 'vue'
@@ -8,6 +8,10 @@ import axios from 'axios'
 import PodcastTable from '~/components/audio/podcast/Table.vue'
 import TrackTable from '~/components/audio/track/Table.vue'
 
+interface Events {
+  (e: 'fetched', data: BackendResponse<Track[]>): void
+}
+
 interface Props {
   filters: object
   limit?: number
@@ -15,7 +19,7 @@ interface Props {
   isPodcast: boolean
 }
 
-const emit = defineEmits(['fetched'])
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   limit: 10,
   defaultCover: null

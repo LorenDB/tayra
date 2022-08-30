@@ -4,6 +4,10 @@ import { useGettext } from 'vue3-gettext'
 import { useClipboard, useVModel } from '@vueuse/core'
 import { useStore } from '~/store'
 
+interface Events {
+  (e: 'update:modelValue', value: string): void
+}
+
 interface Props {
   modelValue: string
   defaultShow?: boolean
@@ -11,12 +15,12 @@ interface Props {
   fieldId: string
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   defaultShow: false,
   copyButton: false
 })
 
-const emit = defineEmits(['update:modelValue'])
 const value = useVModel(props, 'modelValue', emit)
 
 const showPassword = ref(props.defaultShow)

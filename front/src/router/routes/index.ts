@@ -7,7 +7,7 @@ import manage from './manage'
 import store from '~/store'
 import auth from './auth'
 import user from './user'
-import { requireLoggedIn } from '../guards'
+import { requireLoggedIn } from '~/router/guards'
 
 export default [
   {

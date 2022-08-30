@@ -6,8 +6,7 @@ import { ref, computed, watch } from 'vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
 import AttachmentInput from '~/components/common/AttachmentInput.vue'
 
-interface Emits {
-  // TODO (wvffle): Find correct type
+interface Events {
   (e: 'values', values: Record<string, string>): void
 }
 
@@ -16,13 +15,12 @@ interface Props {
   values?: Record<string, string> | null
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   values: null
 })
 
-// TODO (wvffle): This is something like a Track, but `cover` is a plain uuid
-const newValues = ref({ ...(props.values ?? props.upload.import_metadata) } as any)
+const newValues = ref({ ...(props.values ?? props.upload.import_metadata) } as Record<string, string>)
 
 // computed: {
 //   isLoading () {

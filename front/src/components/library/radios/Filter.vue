@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // TODO (wvffle): SORT IMPORTS LIKE SO EVERYWHERE
-import type { Track } from '~/types'
 import type { BuilderFilter, FilterConfig } from './Builder.vue'
+import type { Track } from '~/types'
 
 import axios from 'axios'
 import $ from 'jquery'
@@ -16,6 +16,14 @@ import TrackTable from '~/components/audio/track/Table.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 
+type Filter = { candidates: { count: number, sample: Track[] } }
+type ResponseType = { filters: Array<Filter> }
+
+interface Events {
+  (e: 'update-config', index: number, name: string, value: number[]): void
+  (e: 'delete', index: number): void
+}
+
 interface Props {
   index: number
 
@@ -23,10 +31,7 @@ interface Props {
   config: FilterConfig
 }
 
-type Filter = { candidates: { count: number, sample: Track[] } }
-type ResponseType = { filters: Array<Filter> }
-
-const emit = defineEmits(['update-config', 'delete'])
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const store = useStore()
@@ -127,7 +132,6 @@ watch(exclude, fetchCandidates)
       <div
         v-for="f in filter.fields"
         :key="f.name"
-        :ref="f.name"
         class="ui field"
       >
         <div :class="['ui', 'search', 'selection', 'dropdown', {'autocomplete': f.autocomplete}, {'multiple': f.type === 'list'}]">

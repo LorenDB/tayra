@@ -38,7 +38,6 @@ const canEdit = computed(() => {
   if (!store.state.auth.authenticated) return false
 
   const isOwner = props.object.attributed_to
-    // TODO (wvffle): Is it better to compare ids? Is full_username unique?
     && store.state.auth.fullUsername === props.object.attributed_to.full_username
 
   return isOwner || store.state.auth.availablePermissions.library

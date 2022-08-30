@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// TODO (wvffle): Move most of this stufff to usePlayer
 import { useStore } from '~/store'
 import VolumeControl from './VolumeControl.vue'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'

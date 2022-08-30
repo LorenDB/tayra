@@ -5,11 +5,11 @@ import useThemeList from '~/composables/useThemeList'
 import useTheme from '~/composables/useTheme'
 import { computed } from 'vue'
 
-interface Emits {
+interface Events {
   (e: 'show:shortcuts-modal'): void
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 
 const { $pgettext } = useGettext()
 const themes = useThemeList()

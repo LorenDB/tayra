@@ -16,10 +16,15 @@ import AlbumDropdown from './AlbumDropdown.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 
+interface Events {
+  (e: 'deleted'): void
+}
+
 interface Props {
   id: string
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const object = ref<Album | null>(null)
@@ -81,7 +86,6 @@ const fetchData = async () => {
 watch(() => props.id, fetchData, { immediate: true })
 watch(page, fetchData)
 
-const emit = defineEmits(['deleted'])
 const router = useRouter()
 const remove = async () => {
   isLoading.value = true

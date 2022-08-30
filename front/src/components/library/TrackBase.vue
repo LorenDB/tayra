@@ -21,11 +21,17 @@ import useErrorHandler from '~/composables/useErrorHandler'
 import useReport from '~/composables/moderation/useReport'
 import useLogger from '~/composables/useLogger'
 
+interface Events {
+  (e: 'deleted'): void
+}
+
 interface Props {
   id: string
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
+
 const { report, getReportableObjects } = useReport()
 
 const track = ref<Track | null>(null)
@@ -107,7 +113,6 @@ const fetchData = async () => {
 
 watch(() => props.id, fetchData, { immediate: true })
 
-const emit = defineEmits(['deleted'])
 const remove = async () => {
   isLoading.value = true
   try {

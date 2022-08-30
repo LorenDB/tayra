@@ -19,13 +19,11 @@ export interface CurrentRadio {
   clientOnly: boolean
   session: null
   type: 'account'
-  // TODO (wvffle): Find correct type
-  customRadioId: unknown
+  customRadioId: number
   config: RadioConfig
   objectId: ObjectId | null
 }
 
-// TODO (wvffle): Find correct type
 export type RadioConfig = { type: 'tag', names: string[] } | { type: 'artist', ids: string[] }
 
 export interface PopulateQueuePayload {

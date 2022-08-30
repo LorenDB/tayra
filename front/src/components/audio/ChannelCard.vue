@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import type { Channel } from '~/types'
 
-import PlayButton from '~/components/audio/PlayButton.vue'
-import TagsList from '~/components/tags/List.vue'
 import { momentFormat } from '~/utils/filters'
+import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
 import { computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+
 import moment from 'moment'
 
+import PlayButton from '~/components/audio/PlayButton.vue'
+import TagsList from '~/components/tags/List.vue'
+
 interface Props {
-  // TODO (wvffle) : Find type
   object: Channel
 }
 
@@ -43,7 +44,7 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
   <div class="card app-card">
     <div
       v-lazy:background-image="imageUrl"
-      :class="['ui', 'head-image', {'circular': object.artist.content_category != 'podcast'}, {'padded': object.artist.content_category === 'podcast'}, 'image', {'default-cover': !object.artist.cover}]"
+      :class="['ui', 'head-image', {'circular': object.artist?.content_category != 'podcast'}, {'padded': object.artist?.content_category === 'podcast'}, 'image', {'default-cover': !object.artist?.cover}]"
       @click="$router.push({name: 'channels.detail', params: {id: urlId}})"
     >
       <play-button
@@ -59,12 +60,12 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
           class="discrete link"
           :to="{name: 'channels.detail', params: {id: urlId}}"
         >
-          {{ object.artist.name }}
+          {{ object.artist?.name }}
         </router-link>
       </strong>
       <div class="description">
         <translate
-          v-if="object.artist.content_category === 'podcast'"
+          v-if="object.artist?.content_category === 'podcast'"
           class="meta ellipsis"
           translate-context="Content/Channel/Paragraph"
           translate-plural="%{ count } episodes"
@@ -76,8 +77,8 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
         <translate
           v-else
           translate-context="*/*/*"
-          :translate-params="{count: object.artist.tracks_count}"
-          :translate-n="object.artist.tracks_count"
+          :translate-params="{count: object.artist?.tracks_count}"
+          :translate-n="object.artist?.tracks_count"
           translate-plural="%{ count } tracks"
         >
           %{ count } track
@@ -87,7 +88,7 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
           :truncate-size="20"
           :limit="2"
           :show-more="false"
-          :tags="object.artist.tags ?? []"
+          :tags="object.artist?.tags ?? []"
         />
       </div>
     </div>
@@ -96,7 +97,7 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
         v-translate="{ updatedAgo }"
         :translate-params="{ updatedAgo }"
         class="meta ellipsis"
-        :datetime="object.artist.modification_date"
+        :datetime="object.artist?.modification_date"
         :title="updatedTitle"
       >
         %{ updatedAgo }

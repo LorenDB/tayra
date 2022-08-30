@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useVModel } from '@vueuse/core'
 import { reactive, ref, watch } from 'vue'
 
-interface Emits {
+interface Events {
   (e: 'update:modelValue', value: string): void
 }
 
@@ -14,7 +14,7 @@ interface Props {
   channel: Channel | null
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   modelValue: null,
   channel: null

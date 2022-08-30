@@ -2,16 +2,17 @@
 import SemanticModal from '~/components/semantic/Modal.vue'
 import { ref } from 'vue'
 
+interface Events {
+  (e: 'confirm'): void
+}
+
 interface Props {
   action?: () => void
   disabled?: boolean
-  // TODO (wvffle): Find correct type
-  confirmColor?: 'danger'
+  confirmColor?: 'danger' | 'success'
 }
 
-// TODO (wvffle): MOVE ALL defineEmits ABOVE defineProps
-const emit = defineEmits()
-
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   action: () => {},
   disabled: false,
@@ -30,7 +31,7 @@ const confirm = () => {
 <template>
   <button
     :class="[{disabled: disabled}]"
-    :disabled="disabled || null"
+    :disabled="disabled"
     @click.prevent.stop="showModal = true"
   >
     <slot />

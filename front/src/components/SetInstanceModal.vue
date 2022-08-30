@@ -9,13 +9,17 @@ import axios from 'axios'
 
 import SemanticModal from '~/components/semantic/Modal.vue'
 
+interface Events {
+  (e: 'update:show', show: boolean): void
+}
+
 interface Props {
   show: boolean
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
-const emit = defineEmits(['update:show'])
 const show = useVModel(props, 'show', emit)
 
 const instanceUrl = ref('')

@@ -33,7 +33,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const store = useStore()
 
-// TODO (wvffle): Make sure everything is it's own type
 const page = ref(+props.defaultPage)
 
 const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [

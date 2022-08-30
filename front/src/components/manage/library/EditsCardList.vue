@@ -20,7 +20,6 @@ import useSmartSearch from '~/composables/useSmartSearch'
 import useOrdering from '~/composables/useOrdering'
 
 interface Props extends SmartSearchProps, OrderingProps {
-  // TODO (wvffle): find object type
   filters?: object
 
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
@@ -38,7 +37,6 @@ const props = withDefaults(defineProps<Props>(), {
 const configs = useEditConfigs()
 const search = ref()
 
-// TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
 
 type StateTarget = { id: number, type: keyof typeof targets }

@@ -3,10 +3,9 @@ import type { BackendError } from '~/types'
 
 import { ref } from 'vue'
 
-// TODO (wvffle): Remove this component
 import axios from 'axios'
 
-interface Emits {
+interface Events {
   (e: 'action-done', data: any): void
   (e: 'action-error', error: BackendError): void
 }
@@ -16,7 +15,7 @@ interface Props {
   url: string
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const isLoading = ref(false)

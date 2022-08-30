@@ -1,23 +1,31 @@
 <script setup lang="ts">
 import type { Playlist, Track, PlaylistTrack, BackendError, APIErrorResponse } from '~/types'
 
-import { useStore } from '~/store'
 import { useGettext } from 'vue3-gettext'
-import { computed, ref } from 'vue'
-import axios from 'axios'
-import PlaylistForm from '~/components/playlists/Form.vue'
-import draggable from 'vuedraggable'
 import { useVModels } from '@vueuse/core'
+import { computed, ref } from 'vue'
+import { useStore } from '~/store'
+
+import draggable from 'vuedraggable'
+import axios from 'axios'
+
+import PlaylistForm from '~/components/playlists/Form.vue'
+
 import useQueue from '~/composables/audio/useQueue'
+
+interface Events {
+  (e: 'update:playlistTracks', value: PlaylistTrack[]): void
+  (e: 'update:playlist', value: Playlist): void
+}
 
 interface Props {
   playlist: Playlist | null
   playlistTracks: PlaylistTrack[]
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
-const emit = defineEmits(['update:playlist', 'update:playlistTracks'])
 const { playlistTracks, playlist } = useVModels(props, emit)
 
 const errors = ref([] as string[])
@@ -72,8 +80,6 @@ const responseHandlers = {
       return this.errored(error)
     }
 
-    // TODO (wvffle): Test if it works
-    // if (errors.length === 1 && errors[0].code === 'tracks_already_exist_in_playlist') {
     if (backendErrors.length === 1 && backendErrors[0] === 'Tracks already exist in playlist') {
       duplicateTrackAddInfo.value = rawPayload ?? null
       showDuplicateTrackAddConfirmation.value = true

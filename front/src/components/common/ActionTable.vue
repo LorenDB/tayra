@@ -16,14 +16,14 @@ interface Action {
   filterChackable?: (item: never) => boolean
 }
 
-interface Emits {
+interface Events {
   (e: 'action-launched', data: any): void
   (e: 'refresh'): void
 }
 
 interface Props {
   objectsData: { results: [], count: number }
-  actions: [Action]
+  actions: Action[]
   actionUrl: string
   idField?: string
   refreshable?: boolean
@@ -32,7 +32,7 @@ interface Props {
   customObjects?: Record<string, unknown>[]
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   idField: 'id',
   refreshable: false,

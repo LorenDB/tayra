@@ -7,7 +7,7 @@ import { useGettext } from 'vue3-gettext'
 
 import axios from 'axios'
 
-interface Emits {
+interface Events {
   (e: 'save', data: InstancePolicy): void
   (e: 'delete'): void
   (e: 'cancel'): void
@@ -19,7 +19,7 @@ interface Props {
   object?: InstancePolicy | null
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   object: null
 })

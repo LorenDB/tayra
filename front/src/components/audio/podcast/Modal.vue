@@ -11,6 +11,10 @@ import usePlayOptions from '~/composables/audio/usePlayOptions'
 import useReport from '~/composables/moderation/useReport'
 import { useVModel } from '@vueuse/core'
 
+interface Events {
+  (e: 'update:show', value: boolean): void
+}
+
 interface Props extends PlayOptionsProps {
   track: Track
   index: number
@@ -30,6 +34,7 @@ interface Props extends PlayOptionsProps {
   account?: Actor | null
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   isArtist: false,
   isAlbum: false
@@ -37,7 +42,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const modal = ref()
 
-const emit = defineEmits(['update:show'])
 const show = useVModel(props, 'show', emit)
 
 const { report, getReportableObjects } = useReport()
@@ -280,9 +284,7 @@ const labels = computed(() => ({
         <div
           v-for="obj in getReportableObjects({ track, album: track.album, artist: track.artist })"
           :key="obj.target.type + obj.target.id"
-          :ref="`report${obj.target.type}${obj.target.id}`"
           class="row"
-          :data-ref="`report${obj.target.type}${obj.target.id}`"
           @click.stop.prevent="report(obj)"
         >
           <div class="column">

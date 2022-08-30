@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// TODO (wvffle): Rename to LibraryBase
 import type { Library } from '~/types'
 
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'

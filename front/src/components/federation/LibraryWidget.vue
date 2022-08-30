@@ -9,7 +9,7 @@ import LibraryCard from '~/views/content/remote/Card.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 
-interface Emits {
+interface Events {
   (e: 'loaded', libraries: Library[]): void
 }
 
@@ -17,7 +17,7 @@ interface Props {
   url: string
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const nextPage = ref()

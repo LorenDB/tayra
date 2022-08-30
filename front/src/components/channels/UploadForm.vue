@@ -18,7 +18,7 @@ import AlbumSelect from '~/components/channels/AlbumSelect.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 
-interface Emits {
+interface Events {
   (e: 'status', status: UploadStatus): void
   (e: 'step', step: 1 | 2 | 3): void
 }
@@ -47,7 +47,7 @@ interface UploadedFile extends VueUploadItem {
   metadata: Record<string, string>
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   channel: null
 })
@@ -55,7 +55,6 @@ const props = withDefaults(defineProps<Props>(), {
 const { $pgettext } = useGettext()
 const store = useStore()
 
-// TODO (wvffle): Find types in UploadMetadataForm.vue
 const errors = ref([] as string[])
 
 const values = reactive({

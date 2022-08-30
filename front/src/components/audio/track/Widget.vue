@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Track, Listening } from '~/types'
 
-// TODO (wvffle): Fix websocket update (#1534)
 import { ref, reactive, watch } from 'vue'
 import { useStore } from '~/store'
 import { clone } from 'lodash-es'
@@ -14,7 +13,7 @@ import TagsList from '~/components/tags/List.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 
-interface Emits {
+interface Events {
   (e: 'count', count: number): void
 }
 
@@ -28,7 +27,7 @@ interface Props {
   websocketHandlers?: string[]
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   isActivity: true,
   showCount: false,

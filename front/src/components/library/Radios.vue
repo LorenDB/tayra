@@ -34,7 +34,6 @@ const props = withDefaults(defineProps<Props>(), {
   scope: 'all'
 })
 
-// TODO (wvffle): Make sure everything is it's own type
 const page = ref(+props.defaultPage)
 type ResponseType = { count: number, results: any[] }
 const result = ref<null | ResponseType>(null)

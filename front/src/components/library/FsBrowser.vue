@@ -3,14 +3,19 @@ import type { FileSystem, FSEntry } from '~/types'
 
 import { useVModel } from '@vueuse/core'
 
+interface Events {
+  (e: 'update:modelValue', value: string[]): void
+  (e: 'import'): void
+}
+
 interface Props {
   data: FileSystem
   loading: boolean
   modelValue: string[]
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
-const emit = defineEmits(['update:modelValue', 'import'])
 
 const value = useVModel(props, 'modelValue', emit)
 const handleClick = (entry: FSEntry) => {

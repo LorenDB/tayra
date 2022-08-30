@@ -6,7 +6,7 @@ import ChannelEntries from '~/components/audio/ChannelEntries.vue'
 import TrackTable from '~/components/audio/track/Table.vue'
 import PlayButton from '~/components/audio/PlayButton.vue'
 
-interface Emits {
+interface Events {
   (e: 'page-changed', page: number): void
   (e: 'libraries-loaded', libraries: Library[]): void
 }
@@ -23,7 +23,7 @@ interface Props {
   totalTracks: number
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 defineProps<Props>()
 
 const getDiscKey = (disc: Track[]) => disc.map(track => track.id).join('|')

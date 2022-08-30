@@ -7,7 +7,7 @@ import { computed } from 'vue'
 
 import LoginModal from '~/components/common/LoginModal.vue'
 
-interface Emits {
+interface Events {
   (e: 'unsubscribed'): void
   (e: 'subscribed'): void
 }
@@ -16,7 +16,7 @@ interface Props {
   channel: Channel
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const { $pgettext } = useGettext()

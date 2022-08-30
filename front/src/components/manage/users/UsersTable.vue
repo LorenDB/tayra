@@ -16,7 +16,6 @@ import useErrorHandler from '~/composables/useErrorHandler'
 import useOrdering from '~/composables/useOrdering'
 
 interface Props extends OrderingProps {
-  // TODO (wvffle): find object type
   filters?: object
 
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
@@ -27,7 +26,6 @@ const props = withDefaults(defineProps<Props>(), {
   filters: () => ({})
 })
 
-// TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
 const query = ref('')
 type ResponseType = { count: number, results: any[] }
@@ -58,8 +56,6 @@ const permissions = computed(() => [
 
 const { $pgettext } = useGettext()
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
-// TODO (wvffle): Find correct type
-const actions: unknown[] = []
 
 const isLoading = ref(false)
 const fetchData = async () => {
@@ -158,7 +154,7 @@ const labels = computed(() => ({
       <action-table
         v-if="result"
         :objects-data="result"
-        :actions="actions"
+        :actions="[]"
         :action-url="'manage/library/uploads/action/'"
         :filters="actionFilters"
         @action-launched="fetchData"

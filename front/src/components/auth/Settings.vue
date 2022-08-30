@@ -315,9 +315,9 @@ fetchOwnedApps()
             :key="f.id"
             class="field"
           >
-            <label :for="f.id">{{ sharedLabels.fields[f.id].label }}</label>
-            <p v-if="sharedLabels.fields[f.id].help">
-              {{ sharedLabels.fields[f.id].help }}
+            <label :for="f.id">{{ sharedLabels.fields[f.id as FieldId].label }}</label>
+            <p v-if="sharedLabels.fields[f.id as FieldId].help">
+              {{ sharedLabels.fields[f.id as FieldId].help }}
             </p>
             <select
               v-if="f.type === 'dropdown'"
@@ -330,7 +330,7 @@ fetchOwnedApps()
                 :key="key"
                 :value="c"
               >
-                {{ sharedLabels.fields[f.id].choices[c] }}
+                {{ sharedLabels.fields[f.id as FieldId].choices[c] }}
               </option>
             </select>
             <content-form

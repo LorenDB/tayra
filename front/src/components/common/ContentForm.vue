@@ -4,7 +4,7 @@ import { useVModel, watchDebounced, useTextareaAutosize, syncRef } from '@vueuse
 import { ref, computed, watchEffect, onMounted, nextTick } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
-interface Emits {
+interface Events {
   (e: 'update:modelValue', value: string): void
 }
 
@@ -17,7 +17,7 @@ interface Props {
   charLimit?: number
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   placeholder: undefined,
   autofocus: false,

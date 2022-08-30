@@ -51,7 +51,6 @@ const paginateBy = ref(25)
 
 const { $pgettext } = useGettext()
 
-// TODO (wvffle): Check if can rename to Category
 interface SearchType {
   id: QueryType
   label: string
@@ -132,7 +131,6 @@ const updateQueryString = () => router.replace({
   }
 })
 
-// TODO (wvffle): Debounce all `fetchData` functions
 const isLoading = ref(false)
 const search = async () => {
   if (!query.value) {
@@ -358,10 +356,9 @@ const radioConfig = computed(() => {
 
         <pagination
           v-if="currentResults && currentResults.count > paginateBy"
-          :current="page"
+          v-model:current="page"
           :paginate-by="paginateBy"
           :total="currentResults.count"
-          @page-changed="page = $event"
         />
       </div>
     </section>

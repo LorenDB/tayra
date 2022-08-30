@@ -5,7 +5,7 @@ import axios from 'axios'
 import { ref, computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
-interface Emits {
+interface Events {
   (e: 'created', note: Note): void
 }
 
@@ -13,7 +13,7 @@ interface Props {
   target: Note
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const { $pgettext } = useGettext()

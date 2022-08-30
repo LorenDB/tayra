@@ -17,7 +17,6 @@ import useErrorHandler from '~/composables/useErrorHandler'
 import useOrdering from '~/composables/useOrdering'
 
 interface Props extends OrderingProps {
-  // TODO (wvffle): find object type
   filters?: object
 
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
@@ -28,7 +27,6 @@ const props = withDefaults(defineProps<Props>(), {
   filters: () => ({})
 })
 
-// TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
 type ResponseType = { count: number, results: any[] }
 const result = ref<null | ResponseType>(null)

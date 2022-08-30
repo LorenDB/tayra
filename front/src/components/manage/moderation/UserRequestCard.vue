@@ -11,7 +11,7 @@ import NoteForm from '~/components/manage/moderation/NoteForm.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 
-interface Emits {
+interface Events {
   (e: 'handled', status: UserRequestStatus): void
 }
 
@@ -19,7 +19,7 @@ interface Props {
   initObj: UserRequest
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const store = useStore()

@@ -9,7 +9,7 @@ import { uniq } from 'lodash-es'
 
 import useScopes from '~/composables/auth/useScopes'
 
-interface Emits {
+interface Events {
   (e: 'updated', application: Application): void
   (e: 'created', application: Application): void
 }
@@ -19,7 +19,7 @@ interface Props {
   defaults?: Partial<Application>
 }
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   app: null,
   defaults: () => ({})

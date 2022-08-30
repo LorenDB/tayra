@@ -9,13 +9,13 @@ export interface State {
   frontSettings: FrontendSettings
   instanceUrl?: string
   knownInstances: string[]
-  nodeinfo: unknown | null // TODO (wvffle): Get nodeinfo type from swagger automatically
+  nodeinfo: unknown | null
   settings: Settings
 }
 
 interface FrontendSettings {
   defaultServerUrl: string
-  additionalStylesheets: string[] // TODO (wvffle): Ensure it's not nullable
+  additionalStylesheets: string[]
 }
 
 interface InstanceSettings {

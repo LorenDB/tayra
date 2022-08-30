@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import type { Playlist, PrivacyLevel, BackendError } from '~/types'
 
-import $ from 'jquery'
-import axios from 'axios'
 import { useVModels, useCurrentElement } from '@vueuse/core'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
-import { ref, computed, onMounted, nextTick } from 'vue'
-import useLogger from '~/composables/useLogger'
+
+import axios from 'axios'
+import $ from 'jquery'
+
 import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useLogger from '~/composables/useLogger'
+
+interface Events {
+  (e: 'update:playlist', value: Playlist): void
+}
 
 interface Props {
   title?: boolean
@@ -16,13 +22,13 @@ interface Props {
   playlist?: Playlist | null
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   title: true,
   create: false,
   playlist: null
 })
 
-const emit = defineEmits(['update:playlist'])
 const { playlist } = useVModels(props, emit)
 
 const logger = useLogger()

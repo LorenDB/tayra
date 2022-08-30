@@ -16,7 +16,6 @@ import useErrorHandler from '~/composables/useErrorHandler'
 import useOrdering from '~/composables/useOrdering'
 
 interface Props extends OrderingProps {
-  // TODO (wvffle): find object type
   filters?: object
   allowListEnabled?: boolean
 
@@ -29,7 +28,6 @@ const props = withDefaults(defineProps<Props>(), {
   allowListEnabled: false
 })
 
-// TODO (wvffle): Make sure everything is it's own type
 const page = ref(1)
 type ResponseType = { count: number, results: any[] }
 const result = ref<null | ResponseType>(null)

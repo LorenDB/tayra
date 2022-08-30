@@ -35,18 +35,13 @@ const fetchData = async () => {
 
 fetchData()
 
-// TODO (wvffle): Find correct type
 const updateApproved = async (follow: LibraryFollow, approved: boolean) => {
-  follow.isLoading = true
-
   try {
     await axios.post(`federation/follows/library/${follow.uuid}/${approved ? 'accept' : 'reject'}/`)
     follow.approved = approved
   } catch (error) {
     useErrorHandler(error as Error)
   }
-
-  follow.isLoading = false
 }
 </script>
 
@@ -85,7 +80,7 @@ const updateApproved = async (follow: LibraryFollow, approved: boolean) => {
       </div>
     </div>
     <table
-      v-else-if="follows?.count > 0"
+      v-else-if="(follows ?? { count: 0 }).count > 0"
       class="ui table"
     >
       <thead>

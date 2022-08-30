@@ -4,6 +4,10 @@ import { useGettext } from 'vue3-gettext'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
 import { useVModel } from '@vueuse/core'
 
+interface Events {
+  (e: 'update:modelValue', value: string): void
+}
+
 interface Props {
   modelValue: string
   all?: boolean
@@ -13,6 +17,7 @@ interface Props {
   restrictTo?: string[] // TODO (wvffle): Make sure its string list
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   all: false,
   label: false,
@@ -21,7 +26,6 @@ const props = withDefaults(defineProps<Props>(), {
   restrictTo: () => []
 })
 
-const emit = defineEmits(['update:modelValue'])
 const value = useVModel(props, 'modelValue', emit)
 
 const { $pgettext } = useGettext()
