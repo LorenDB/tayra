@@ -94,7 +94,7 @@ const submit = async () => {
     errors.value = (error as BackendError).backendErrors
   }
 
-  isLoading.value = true
+  isLoading.value = false
 }
 
 const isLoadingReportTypes = ref(false)

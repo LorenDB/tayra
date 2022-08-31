@@ -27,7 +27,7 @@ const fetchData = async () => {
     useErrorHandler(error as Error)
   }
 
-  isLoading.value = true
+  isLoading.value = false
 }
 
 fetchData()
@@ -42,7 +42,7 @@ const remove = async () => {
     useErrorHandler(error as Error)
   }
 
-  isLoading.value = true
+  isLoading.value = false
 }
 
 const getQuery = (field: string, value: string) => `${field}:"${value}"`
