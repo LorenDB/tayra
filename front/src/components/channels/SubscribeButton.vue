@@ -24,8 +24,8 @@ const store = useStore()
 
 const isSubscribed = computed(() => store.getters['channels/isSubscribed'](props.channel.uuid))
 const title = computed(() => isSubscribed.value
-  ? $pgettext('Content/Channel/Button/Verb', 'Subscribe')
-  : $pgettext('Content/Channel/Button/Verb', 'Unsubscribe')
+  ? $pgettext('Content/Channel/Button/Verb', 'Unsubscribe')
+  : $pgettext('Content/Channel/Button/Verb', 'Subscribe')
 )
 
 const message = computed(() => ({
