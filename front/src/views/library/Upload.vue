@@ -6,11 +6,16 @@ import { ref } from 'vue'
 
 import FileUpload from '~/components/library/FileUpload.vue'
 
+interface Events {
+  (e: 'uploads-finished', data: number): void
+}
+
 interface Props {
   object: Library
   defaultImportReference?: string
 }
 
+const emit = defineEmits<Events>()
 withDefaults(defineProps<Props>(), {
   defaultImportReference: ''
 })
@@ -36,7 +41,7 @@ onBeforeRouteLeave((to, from, next) => {
       ref="fileupload"
       :default-import-reference="defaultImportReference"
       :library="object"
-      @uploads-finished="$emit('uploads-finished', $event)"
+      @uploads-finished="emit('uploads-finished', $event)"
     />
   </section>
 </template>

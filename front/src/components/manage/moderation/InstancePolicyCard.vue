@@ -3,10 +3,15 @@ import type { InstancePolicy } from '~/types'
 
 import useMarkdown from '~/composables/useMarkdown'
 
+interface Events {
+  (e: 'update'): void
+}
+
 interface Props {
   object: InstancePolicy
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const summary = useMarkdown(() => props.object.summary)
@@ -86,7 +91,7 @@ const summary = useMarkdown(() => props.object.summary)
     <div class="ui hidden divider" />
     <button
       class="ui right floated labeled icon button"
-      @click="$emit('update')"
+      @click="emit('update')"
     >
       <i class="edit icon" />
       <translate translate-context="Content/*/Button.Label/Verb">

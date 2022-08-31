@@ -34,7 +34,15 @@ interface Props extends PlayOptionsProps {
 const props = withDefaults(defineProps<Props>(), {
   showArt: true,
   displayActions: true,
-  defaultCover: null
+  defaultCover: null,
+
+  tracks: () => [],
+  artist: null,
+  album: null,
+  playlist: null,
+  library: null,
+  channel: null,
+  account: null
 })
 
 const description = ref('')

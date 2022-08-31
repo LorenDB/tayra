@@ -1,8 +1,13 @@
 <script setup lang="ts">
+interface Events {
+  (e: 'refresh'): void
+}
+
 interface Props {
   refresh?: boolean
 }
 
+const emit = defineEmits<Events>()
 withDefaults(defineProps<Props>(), {
   refresh: false
 })
@@ -25,7 +30,7 @@ withDefaults(defineProps<Props>(), {
       <button
         v-if="refresh"
         class="ui button"
-        @click="$emit('refresh')"
+        @click="emit('refresh')"
       >
         <translate translate-context="Content/*/Button.Label/Short, Verb">
           Refresh

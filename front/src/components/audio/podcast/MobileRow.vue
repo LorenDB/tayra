@@ -33,7 +33,15 @@ interface Props extends PlayOptionsProps {
 const props = withDefaults(defineProps<Props>(), {
   showArt: true,
   isArtist: false,
-  isAlbum: false
+  isAlbum: false,
+
+  tracks: () => [],
+  artist: null,
+  album: null,
+  playlist: null,
+  library: null,
+  channel: null,
+  account: null
 })
 
 const showTrackModal = ref(false)

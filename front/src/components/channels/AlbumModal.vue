@@ -4,10 +4,15 @@ import SemanticModal from '~/components/semantic/Modal.vue'
 import ChannelAlbumForm from '~/components/channels/AlbumForm.vue'
 import { watch, ref } from 'vue'
 
+interface Events {
+  (e: 'created'): void
+}
+
 interface Props {
   channel: Channel
 }
 
+const emit = defineEmits<Events>()
 defineProps<Props>()
 
 const isLoading = ref(false)
@@ -47,7 +52,7 @@ const albumForm = ref()
         :channel="channel"
         @loading="isLoading = $event"
         @submittable="submittable = $event"
-        @created="$emit('created', $event)"
+        @created="emit('created')"
       />
     </div>
     <div class="actions">

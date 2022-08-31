@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Track } from '~/types'
+import type { Track, Library } from '~/types'
 
 import { humanSize, momentFormat, truncate } from '~/utils/filters'
 import { computed, ref, watchEffect } from 'vue'
@@ -13,10 +13,15 @@ import TagsList from '~/components/tags/List.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 
+interface Events {
+  (e: 'libraries-loaded', libraries: Library[]): void
+}
+
 interface Props {
   track: Track
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const musicbrainzUrl = computed(() => props.track.mbid
@@ -322,7 +327,7 @@ watchEffect(() => {
           </h2>
           <library-widget
             :url="`tracks/${track.id}/libraries/`"
-            @loaded="$emit('libraries-loaded', $event)"
+            @loaded="emit('libraries-loaded', $event)"
           >
             <translate translate-context="Content/Track/Paragraph">
               This track is present in the following libraries:

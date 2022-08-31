@@ -10,10 +10,15 @@ import LibraryForm from '~/views/content/libraries/Form.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 
+interface Events {
+  (e: 'updated'): void
+}
+
 interface Props {
   object: Library
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 type ResponseType = { count: number, results: any[] }
@@ -49,7 +54,7 @@ const updateApproved = async (follow: LibraryFollow, approved: boolean) => {
   <section>
     <library-form
       :library="object"
-      @updated="$emit('updated')"
+      @updated="emit('updated')"
       @deleted="$router.push({name: 'profile.overview', params: {username: $store.state.auth.username}})"
     />
     <div class="ui hidden divider" />

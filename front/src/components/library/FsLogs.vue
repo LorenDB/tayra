@@ -21,7 +21,10 @@ defineProps<Props>()
       </div>
     </div>
     <template v-else>
-      <p v-for="row in data.logs">
+      <p
+        v-for="row in data.logs"
+        :key="row"
+      >
         {{ row }}
       </p>
     </template>

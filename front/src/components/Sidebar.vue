@@ -16,10 +16,15 @@ import { useStore } from '~/store'
 import { setupDropdown } from '~/utils/fomantic'
 import { useCurrentElement } from '@vueuse/core'
 
+interface Events {
+  (e: 'show:set-instance-modal'): void
+}
+
 interface Props {
   width: number
 }
 
+const emit = defineEmits<Events>()
 defineProps<Props>()
 
 const store = useStore()
@@ -579,7 +584,7 @@ onMounted(() => {
               role="button"
               href=""
               class="link item"
-              @click.prevent="$emit('show:set-instance-modal')"
+              @click.prevent="emit('show:set-instance-modal')"
             >Switch instance</a>
           </div>
         </nav>

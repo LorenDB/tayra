@@ -6,10 +6,15 @@ import SemanticModal from '~/components/semantic/Modal.vue'
 import { useTimeoutFn } from '@vueuse/core'
 import { ref } from 'vue'
 
+interface Events {
+  (e: 'refresh'): void
+}
+
 interface Props {
   url: string
 }
 
+const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
 const MAX_POLLS = 15
@@ -264,7 +269,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
         <button
           v-if="data && data.status === 'finished'"
           class="ui confirm success button"
-          @click.prevent="showModal = false; $emit('refresh')"
+          @click.prevent="showModal = false; emit('refresh')"
         >
           <translate translate-context="*/*/Button.Label/Verb">
             Close and reload page

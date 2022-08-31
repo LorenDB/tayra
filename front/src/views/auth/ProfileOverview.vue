@@ -7,10 +7,15 @@ import ChannelsWidget from '~/components/audio/ChannelsWidget.vue'
 import ChannelForm from '~/components/audio/ChannelForm.vue'
 import { ref } from 'vue'
 
+interface Events {
+  (e: 'updated', value: Actor): void
+}
+
 interface Props {
   object: Actor
 }
 
+const emit = defineEmits<Events>()
 defineProps<Props>()
 
 const step = ref(1)
@@ -31,7 +36,7 @@ const createForm = ref()
         :field-name="'summary'"
         :update-url="`users/${$store.state.auth.username}/`"
         :can-update="$store.state.auth.authenticated && object.full_username === $store.state.auth.fullUsername"
-        @updated="$emit('updated', $event)"
+        @updated="emit('updated', $event)"
       />
       <div class="ui hidden divider" />
     </div>

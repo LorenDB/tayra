@@ -32,6 +32,9 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-use-before-define': 'off',
 
+    // TODO (wvffle): VUI and #1618
+    'import/extensions': 'off',
+
     // TODO (wvffle): Enable these rules later
     'vue/multi-word-component-names': 'off',
     '@typescript-eslint/no-this-alias': 'off',
@@ -39,9 +42,6 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'off',
 
     // TODO (wvffle): Migrate to pinia
-    '@typescript-eslint/no-explicit-any': 'off',
-
-    // TODO (wvffle): Migrate to <script setup>
-    'vue/require-explicit-emits': 'off'
+    '@typescript-eslint/no-explicit-any': 'off'
   }
 }

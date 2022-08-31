@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/* eslint-disable vue/valid-v-model */
 import type { BackendError, SettingsGroup, SettingsDataEntry, FunctionRef, Form } from '~/types'
 import axios from 'axios'
 import SignupFormBuilder from '~/components/admin/SignupFormBuilder.vue'
@@ -207,7 +208,7 @@ const save = async () => {
         class="ui search selection dropdown"
       >
         <option
-          v-for="v in setting.additional_data.choices"
+          v-for="v in setting.additional_data?.choices"
           :key="v[0]"
           :value="v[0]"
         >

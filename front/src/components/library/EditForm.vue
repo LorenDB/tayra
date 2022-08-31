@@ -273,11 +273,11 @@ const resetField = (fieldId: string) => {
                 </translate>
               </option>
               <option
-                v-for="license in licenses"
-                :key="license.code"
-                :value="license.code"
+                v-for="{ code, name } in licenses"
+                :key="code"
+                :value="code"
               >
-                {{ license.name }}
+                {{ name }}
               </option>
             </select>
             <button

@@ -37,7 +37,15 @@ interface Props extends PlayOptionsProps {
 const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   isArtist: false,
-  isAlbum: false
+  isAlbum: false,
+
+  tracks: () => [],
+  artist: null,
+  album: null,
+  playlist: null,
+  library: null,
+  channel: null,
+  account: null
 })
 
 const modal = ref()

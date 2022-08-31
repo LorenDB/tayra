@@ -105,7 +105,7 @@ const types = computed(() => [
   }
 ] as SearchType[])
 
-const currentType = computed(() => types.value.find(({ id }) => id === type.value)!)
+const currentType = computed(() => types.value.find(({ id }) => id === type.value))
 
 const axiosParams = computed(() => {
   const params = new URLSearchParams({
@@ -114,13 +114,13 @@ const axiosParams = computed(() => {
     page_size: paginateBy.value as unknown as string
   })
 
-  if (currentType.value.contentCategory) params.append('content_category', currentType.value.contentCategory)
-  if (currentType.value.includeChannels) params.append('include_channels', currentType.value.includeChannels as unknown as string)
+  if (currentType.value?.contentCategory) params.append('content_category', currentType.value.contentCategory)
+  if (currentType.value?.includeChannels) params.append('include_channels', currentType.value.includeChannels as unknown as string)
 
   return params
 })
 
-const currentResults = computed(() => results[currentType.value.id ?? 'artists'])
+const currentResults = computed(() => results[currentType.value?.id ?? 'artists'])
 
 const router = useRouter()
 const updateQueryString = () => router.replace({
@@ -133,6 +133,8 @@ const updateQueryString = () => router.replace({
 
 const isLoading = ref(false)
 const search = async () => {
+  if (!currentType.value) return
+
   if (!query.value) {
     for (const type of types.value) {
       results[type.id] = null
@@ -193,14 +195,14 @@ const labels = computed(() => ({
 const radioConfig = computed(() => {
   const results = Object.values(currentResults.value?.results ?? {})
   if (results.length) {
-    if (currentType.value.id === 'tags') {
+    if (currentType.value?.id === 'tags') {
       return {
         type: 'tag',
         names: results.map(({ name }) => name)
       } as RadioConfig
     }
 
-    if (currentType.value.id === 'artists') {
+    if (currentType.value?.id === 'artists') {
       return {
         type: 'artist',
         ids: results.map(({ id }) => id)

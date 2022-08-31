@@ -41,7 +41,14 @@ const props = withDefaults(defineProps<Props>(), {
   showArtist: true,
   showDuration: true,
   showPosition: false,
-  displayActions: true
+  displayActions: true,
+
+  artist: null,
+  album: null,
+  playlist: null,
+  library: null,
+  channel: null,
+  account: null
 })
 
 const { playing, loading } = usePlayer()

@@ -95,7 +95,7 @@ const reorder = async ({ oldIndex: from, newIndex: to }: { oldIndex: number, new
   isLoading.value = true
 
   try {
-    await axios.post(`playlists/${playlist.value!.id}/move/`, { from, to })
+    await axios.post(`playlists/${playlist.value?.id}/move/`, { from, to })
     await store.dispatch('playlists/fetchOwn')
     responseHandlers.success()
   } catch (error) {
@@ -110,7 +110,7 @@ const removePlaylistTrack = async (index: number) => {
 
   try {
     tracks.value.splice(index, 1)
-    await axios.post(`playlists/${playlist.value!.id}/remove/`, { index })
+    await axios.post(`playlists/${playlist.value?.id}/remove/`, { index })
     await store.dispatch('playlists/fetchOwn')
     responseHandlers.success()
   } catch (error) {
@@ -125,7 +125,7 @@ const clearPlaylist = async () => {
 
   try {
     tracks.value = []
-    await axios.post(`playlists/${playlist.value!.id}/clear/`)
+    await axios.post(`playlists/${playlist.value?.id}/clear/`)
     await store.dispatch('playlists/fetchOwn')
     responseHandlers.success()
   } catch (error) {
@@ -139,7 +139,7 @@ const insertMany = async (insertedTracks: Track[], allowDuplicates: boolean) => 
   isLoading.value = true
 
   try {
-    const response = await axios.post(`playlists/${playlist.value!.id}/add/`, {
+    const response = await axios.post(`playlists/${playlist.value?.id}/add/`, {
       allow_duplicates: allowDuplicates,
       tracks: insertedTracks.map(track => track.id)
     })

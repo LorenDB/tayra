@@ -11,11 +11,16 @@ import axios from 'axios'
 import useErrorHandler from '~/composables/useErrorHandler'
 import useReport from '~/composables/moderation/useReport'
 
+interface Events {
+  (e: 'updated', value: Actor): void
+}
+
 interface Props {
   username: string
   domain?: string | null
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   domain: null
 })
@@ -161,7 +166,7 @@ watch(props, fetchData, { immediate: true })
               :field-name="'summary'"
               :update-url="`users/${$store.state.auth.username}/`"
               :can-update="$store.state.auth.authenticated && object.full_username === $store.state.auth.fullUsername"
-              @updated="$emit('updated', $event)"
+              @updated="emit('updated', $event)"
             />
           </div>
         </div>

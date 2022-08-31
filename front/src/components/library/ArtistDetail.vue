@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Artist, Track, Album } from '~/types'
+import type { Artist, Track, Album, Library } from '~/types'
 import type { ContentFilter } from '~/store/moderation'
 
 import { ref, computed, reactive } from 'vue'
@@ -13,6 +13,10 @@ import AlbumCard from '~/components/audio/album/Card.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 
+interface Events {
+  (e: 'libraries-loaded', libraries: Library[]): void
+}
+
 interface Props {
   object: Artist
   tracks: Track[]
@@ -22,6 +26,7 @@ interface Props {
   nextAlbumsUrl?: string | null
 }
 
+const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   nextTracksUrl: null,
   nextAlbumsUrl: null
@@ -143,7 +148,7 @@ const loadMoreAlbums = async () => {
       </h2>
       <library-widget
         :url="'artists/' + object.id + '/libraries/'"
-        @loaded="$emit('libraries-loaded', $event)"
+        @loaded="emit('libraries-loaded', $event)"
       >
         <translate translate-context="Content/Artist/Paragraph">
           This artist is present in the following libraries:
