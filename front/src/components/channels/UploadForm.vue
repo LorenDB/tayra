@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BackendError, Channel, Upload } from '~/types'
+import type { BackendError, Channel, Upload, Track } from '~/types'
 import type { VueUploadItem } from 'vue-upload-component'
 
 import { computed, ref, reactive, watchEffect, watch } from 'vue'
@@ -44,7 +44,7 @@ interface UploadStatus {
 interface UploadedFile extends VueUploadItem {
   _fileObj?: VueUploadItem
   removed: boolean
-  metadata: Record<string, string>
+  metadata: Metadata
 }
 
 const emit = defineEmits<Events>()
@@ -134,6 +134,7 @@ whenever(() => values.channel !== null, async () => {
 
     draftUploads.value = response.data.results as Upload[]
     for (const upload of response.data.results as Upload[]) {
+      // @ts-expect-error TODO (wvffle): Resolve type errors when API client is done
       uploadImportData[upload.uuid] = upload.import_metadata ?? {}
     }
   } catch (error) {
@@ -211,10 +212,11 @@ const uploadedFilesById = computed(() => uploadedFiles.value.reduce((acc: Record
 //
 // Metadata
 //
-const uploadImportData = reactive({} as Record<string, Record<string, string>>)
+type Metadata = Pick<Track, 'title' | 'description' | 'position' | 'tags'> & { cover: string }
+const uploadImportData = reactive({} as Record<string, Metadata>)
 const audioMetadata = reactive({} as Record<string, Record<string, string>>)
-const uploadData = reactive({} as Record<string, { import_metadata: Record<string, string> }>)
-const patchUpload = async (id: string, data: Record<string, Record<string, string>>) => {
+const uploadData = reactive({} as Record<string, { import_metadata: Metadata }>)
+const patchUpload = async (id: string, data: Record<string, Metadata>) => {
   const response = await axios.patch(`uploads/${id}/`, data)
   uploadData[id] = response.data
   uploadImportData[id] = response.data.import_metadata
@@ -232,9 +234,9 @@ const fetchAudioMetadata = async (uuid: string) => {
     uploadImportData[uuid].title = response.data.title
   }
 
-  for (const key of ['title', 'position', 'tags']) {
+  for (const key of ['title', 'position', 'tags'] as const) {
     if (uploadImportData[uuid][key] === undefined) {
-      uploadImportData[uuid][key] = response.data[key]
+      uploadImportData[uuid][key] = response.data[key] as never
     }
   }
 
@@ -248,7 +250,7 @@ const fetchAudioMetadata = async (uuid: string) => {
 watchEffect(async () => {
   for (const file of files.value) {
     if (file.response?.uuid && audioMetadata[file.response.uuid] === undefined) {
-      uploadData[file.response.uuid] = file.response as { import_metadata: Record<string, string> }
+      uploadData[file.response.uuid] = file.response as { import_metadata: Metadata }
       uploadImportData[file.response.uuid] = file.response.import_metadata
       fetchAudioMetadata(file.response.uuid)
     }

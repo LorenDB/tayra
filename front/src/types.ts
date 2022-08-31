@@ -294,7 +294,7 @@ export interface Upload {
     error_code: string
   }
 
-  import_metadata?: Record<string, string> & { tags?: Tag[] }
+  import_metadata?: Record<string, string> & { tags?: string[] }
 }
 
 // Profile stuff

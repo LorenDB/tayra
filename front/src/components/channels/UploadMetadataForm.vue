@@ -1,35 +1,36 @@
 <script setup lang="ts">
-import type { Upload, Tag } from '~/types'
+import type { Upload, Tag, Track } from '~/types'
 
 import { reactive, computed, watch } from 'vue'
-import { useVModel } from '@vueuse/core'
 
 import TagsSelector from '~/components/library/TagsSelector.vue'
 import AttachmentInput from '~/components/common/AttachmentInput.vue'
 
+type Values = Pick<Track, 'title' | 'description' | 'position' | 'tags'> & { cover: string }
 interface Events {
   (e: 'update:values', values: Values): void
 }
 
 interface Props {
   upload: Upload
-  values: Values
+  values: Values | null
 }
-
-type Values = (Record<string, string> & { tags?: Tag[] }) | null
 
 const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   values: null
 })
 
-const newValues = reactive<Exclude<Values, null>>({
-  ...(props.values ?? props.upload.import_metadata),
-  tags: (props.values ?? props.upload.import_metadata)?.tags ?? [] as Tag[]
+const newValues = reactive<Omit<Values, 'tags'> & { tags: Tag[] }>({
+  ...(props.values ?? props.upload.import_metadata ?? {}) as Values,
+  tags: ((props.values ?? props.upload.import_metadata)?.tags?.map(name => ({ name })) ?? []) as Tag[]
 })
 
 const isLoading = computed(() => !props.upload)
-watch(newValues, (values) => emit('update:values', values), { immediate: true })
+watch(newValues, (values) => emit('update:values', {
+  ...values,
+  tags: values.tags?.map(({ name }) => name)
+}), { immediate: true })
 </script>
 
 <template>
