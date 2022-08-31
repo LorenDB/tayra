@@ -10,14 +10,14 @@ module.exports = {
 
   ],
   globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
+    SharedArrayBuffer: 'readonly',
+    Atomics: 'readonly'
   },
   parser: 'vue-eslint-parser',
   parserOptions: {
     parser: '@typescript-eslint/parser',
-    ecmaVersion: 2020,
-    sourceType: 'module'
+    sourceType: 'module',
+    ecmaVersion: 2020
   },
   plugins: [
     'vue'
@@ -27,21 +27,20 @@ module.exports = {
     'operator-linebreak': ['error', 'before'],
 
     // NOTE: Handled by typescript
-    'no-undef': 'off',
-    'no-redeclare': 'off',
-    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
     'no-use-before-define': 'off',
+    'no-unused-vars': 'off',
+    'no-redeclare': 'off',
+    'no-undef': 'off',
 
-    // TODO (wvffle): VUI and #1618
+    // TODO (wvffle): Remove after VUI and #1618
+    'vue/multi-word-component-names': 'off',
     'import/extensions': 'off',
 
-    // TODO (wvffle): Enable these rules later
-    'vue/multi-word-component-names': 'off',
+    // TODO (wvffle): Remove after embeded player migration
     '@typescript-eslint/no-this-alias': 'off',
-    '@typescript-eslint/no-empty-function': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
 
-    // TODO (wvffle): Migrate to pinia
+    // TODO (wvffle): Remove after API Client
     '@typescript-eslint/no-explicit-any': 'off'
   }
 }

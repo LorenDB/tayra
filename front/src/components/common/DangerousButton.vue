@@ -14,7 +14,7 @@ interface Props {
 
 const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
-  action: () => {},
+  action: () => undefined,
   disabled: false,
   confirmColor: 'danger'
 })
