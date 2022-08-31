@@ -91,7 +91,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
             <div class="segment-content">
               <h2 class="ui header">
                 <img
-                  v-if="object.cover && object.cover.urls.original"
+                  v-if="object.cover?.urls.original"
                   v-lazy="$store.getters['instance/absoluteUrl'](object.cover.urls.medium_square_crop)"
                   alt=""
                 >

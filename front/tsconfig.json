@@ -7,14 +7,16 @@
     "noUnusedLocals": true,
     "typeRoots": ["node_modules/@types"],
     "types": [
+      "vitest/globals",
       "vite/client",
       "vue/ref-macros",
       "vue-gettext/types",
       "vite-plugin-pwa/client"
     ],
     "paths": {
+      "?/*": ["tests/unit/*"],
       "~/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.vue", "vite.config.ts"]
+  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.vue", "vite.config.ts", "tests/**/*.ts"]
 }

@@ -21,7 +21,7 @@ describe('PasswordInput', () => {
         commit: () => { }
       },
     },
-    propsData: {
+    props: {
       fieldId: 'password',
       value: password,
     }
@@ -33,9 +33,9 @@ describe('PasswordInput', () => {
   })
   it('copy password function called', () => {
     document.execCommand = jest.fn()
-    const spy = sandbox.spy(wrapper.vm, 'copyPassword')     
+    const spy = sandbox.spy(wrapper.vm, 'copyPassword')
     sandbox.stub(PasswordInput.methods, '_copyStringToClipboard').callsFake()
-    const copyButton = wrapper.findAll('button').at(1)
+    const copyButton = wrapper.findAll('button')[1]
     copyButton.trigger('click')
     sandbox.assert.calledOnce(spy)
   })

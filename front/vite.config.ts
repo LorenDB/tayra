@@ -36,6 +36,7 @@ export default defineConfig(({ mode }) => ({
   },
   resolve: {
     alias: {
+      '?': resolve(__dirname, './tests/unit'),
       '~': resolve(__dirname, './src')
     }
   },
@@ -46,5 +47,14 @@ export default defineConfig(({ mode }) => ({
         embed: resolve(__dirname, './embed.html')
       }
     }
+  },
+  test: {
+    include: [
+      'tests/unit/**/*.spec.ts',
+      // TODO (wvffle): Remove after migrating all tests
+      'tests/unit/**/*.spec.js'
+    ],
+    environment: 'jsdom',
+    globals: true
   }
 }))
