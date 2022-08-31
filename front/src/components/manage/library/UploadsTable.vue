@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { ImportStatus, PrivacyLevel, Upload, BackendResponse } from '~/types'
 import type { RouteWithPreferences, OrderingField } from '~/store/ui'
 import type { SmartSearchProps } from '~/composables/useSmartSearch'
-import type { ImportStatus, PrivacyLevel, Upload } from '~/types'
 import type { OrderingProps } from '~/composables/useOrdering'
 
 import { humanSize, truncate } from '~/utils/filters'
@@ -37,8 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
 const search = ref()
 
 const page = ref(1)
-type ResponseType = { count: number, results: any[] }
-const result = ref<null | ResponseType>(null)
+const result = ref<BackendResponse<Upload>>()
 
 const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props.defaultQuery, props.updateUrl)
 const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
@@ -84,7 +83,7 @@ const fetchData = async () => {
     result.value = response.data
   } catch (error) {
     useErrorHandler(error as Error)
-    result.value = null
+    result.value = undefined
   } finally {
     isLoading.value = false
   }
@@ -104,7 +103,7 @@ const displayName = (upload: Upload): string => {
   return upload.filename ?? upload.source ?? upload.uuid
 }
 
-const detailedUpload = ref({})
+const detailedUpload = ref<Upload>()
 const showUploadDetailModal = ref(false)
 
 const getImportStatusChoice = (importStatus: ImportStatus) => {
@@ -229,8 +228,9 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
         </div>
       </div>
     </div>
-    <!-- TODO (wvffle): Check if :upload shouldn't be v-modl:upload -->
+    <!-- TODO (wvffle): Check if :upload shouldn't be v-model:upload -->
     <import-status-modal
+      v-if="detailedUpload"
       v-model:show="showUploadDetailModal"
       :upload="detailedUpload"
     />
@@ -296,9 +296,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             </translate>
           </th>
         </template>
-        <template
-          #row-cells="scope"
-        >
+        <template #row-cells="scope">
           <td>
             <router-link :to="{name: 'manage.library.uploads.detail', params: {id: scope.obj.uuid }}">
               {{ truncate(displayName(scope.obj), 30, undefined, true) }}
@@ -369,7 +367,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             </a>
             <button
               class="ui tiny basic icon button"
-              :title="sharedLabels.fields.import_status.detailTitle"
+              :title="sharedLabels.fields.import_status.label"
               @click="detailedUpload = scope.obj; showUploadDetailModal = true"
             >
               <i class="question circle outline icon" />

@@ -12,7 +12,7 @@ import TagsList from '~/components/tags/List.vue'
 import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
-  id: string
+  id: number
 }
 
 const props = defineProps<Props>()

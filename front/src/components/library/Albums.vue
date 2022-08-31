@@ -41,7 +41,7 @@ const page = ref(+props.defaultPage)
 type ResponseType = { count: number, results: any[] }
 const result = ref<null | ResponseType>(null)
 const query = ref(props.defaultQuery)
-const tags = reactive(props.defaultTags.slice())
+const tags = reactive(props.defaultTags.map(name => ({ name })))
 
 const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['creation_date', 'creation_date'],
@@ -59,7 +59,7 @@ const updateQueryString = () => router.replace({
   query: {
     query: query.value,
     page: page.value,
-    tag: tags,
+    tag: tags.map(({ name }) => name),
     paginateBy: paginateBy.value,
     ordering: orderingString.value
   }

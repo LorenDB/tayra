@@ -31,7 +31,7 @@ export interface ContentFilter {
   creation_date: Date
   target: {
     type: 'artist'
-    id: string
+    id: number
   }
 }
 

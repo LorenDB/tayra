@@ -23,7 +23,7 @@ interface ReportableObject {
     _obj: Objects[keyof Objects]
 
     full_username?: string
-    id?: string
+    id?: number
     uuid?: string
   }
 }

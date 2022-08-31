@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { BackendError, Application } from '~/types'
+import type { BackendError, Application, PrivacyLevel } from '~/types'
+import type { $ElementType } from 'utility-types'
 
 import axios from 'axios'
 import $ from 'jquery'
@@ -18,9 +19,9 @@ import PasswordInput from '~/components/forms/PasswordInput.vue'
 
 const SETTINGS_ORDER: FieldId[] = ['summary', 'privacy_level']
 
-type FieldId = 'summary' | 'privacy_level'
-type Field = { id: string, type: 'content', value: { text: string, content_type: 'text/markdown' } }
-  | { id: string, type: 'dropdown', choices: string[], value: string }
+type Field = { id: 'summary', type: 'content', value: { text: string, content_type: 'text/markdown' } }
+  | { id: 'privacy_level', type: 'dropdown', choices: PrivacyLevel[], value: string }
+type FieldId = $ElementType<Field, 'id'>
 
 interface Settings {
   success: boolean
@@ -157,7 +158,9 @@ const avatar = ref({ uuid: null, ...(store.state.auth.profile?.avatar ?? {}) })
 const initialAvatar = avatar.value.uuid ?? undefined
 const avatarErrors = ref([] as string[])
 const isLoadingAvatar = ref(false)
-const submitAvatar = async (uuid: string) => {
+const submitAvatar = async (uuid: string | null) => {
+  if (!uuid) return
+
   isLoadingAvatar.value = true
 
   try {
@@ -315,9 +318,9 @@ fetchOwnedApps()
             :key="f.id"
             class="field"
           >
-            <label :for="f.id">{{ sharedLabels.fields[f.id as FieldId].label }}</label>
-            <p v-if="sharedLabels.fields[f.id as FieldId].help">
-              {{ sharedLabels.fields[f.id as FieldId].help }}
+            <label :for="f.id">{{ sharedLabels.fields[f.id].label }}</label>
+            <p v-if="sharedLabels.fields[f.id].help">
+              {{ sharedLabels.fields[f.id].help }}
             </p>
             <select
               v-if="f.type === 'dropdown'"
@@ -330,7 +333,7 @@ fetchOwnedApps()
                 :key="key"
                 :value="c"
               >
-                {{ sharedLabels.fields[f.id as FieldId].choices[c] }}
+                {{ sharedLabels.fields[f.id].choices?.[c] }}
               </option>
             </select>
             <content-form
@@ -833,7 +836,7 @@ fetchOwnedApps()
         </p>
         <p>
           <translate
-            :translate-params="{email: $store.state.auth.profile.email}"
+            :translate-params="{email: $store.state.auth.profile?.email}"
             translate-context="Content/Settings/Paragraph'"
           >
             Your current e-mail address is %{ email }.

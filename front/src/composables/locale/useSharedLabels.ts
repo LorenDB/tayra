@@ -22,7 +22,7 @@ export default () => ({
       } as Record<PrivacyLevel, string>
     },
     import_status: {
-      detailTitle: $pgettext('Content/Library/Link.Title', 'Click to display more information about the import process for this upload'),
+      label: $pgettext('Content/Library/Link.Title', 'Click to display more information about the import process for this upload'),
       choices: {
         skipped: {
           label: $pgettext('Content/Library/*', 'Skipped'),
@@ -57,7 +57,8 @@ export default () => ({
       }
     },
     summary: {
-      label: $pgettext('Content/Account/*', 'Bio')
+      label: $pgettext('Content/Account/*', 'Bio'),
+      help: undefined
     },
     content_category: {
       label: $pgettext('Content/*/Dropdown.Label/Noun', 'Content category'),

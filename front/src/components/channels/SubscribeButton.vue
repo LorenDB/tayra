@@ -2,8 +2,8 @@
 import type { Channel } from '~/types'
 
 import { useGettext } from 'vue3-gettext'
+import { computed, ref } from 'vue'
 import { useStore } from '~/store'
-import { computed } from 'vue'
 
 import LoginModal from '~/components/common/LoginModal.vue'
 
@@ -34,8 +34,12 @@ const message = computed(() => ({
 
 const toggle = async () => {
   await store.dispatch('channels/toggle', props.channel.uuid)
-  emit(isSubscribed.value ? 'unsubscribed' : 'subscribed')
+
+  if (isSubscribed.value) emit('unsubscribed')
+  else emit('subscribed')
 }
+
+const loginModal = ref()
 </script>
 
 <template>
@@ -50,7 +54,7 @@ const toggle = async () => {
   <button
     v-else
     :class="['ui', 'pink', 'icon', 'labeled', 'button']"
-    @click="$refs.loginModal.show = true"
+    @click="loginModal.show = true"
   >
     <i class="heart icon" />
     {{ title }}
@@ -59,8 +63,8 @@ const toggle = async () => {
       class="small"
       :next-route="$route.fullPath"
       :message="message.authMessage"
-      :cover="channel.artist.cover!"
-      @created="$refs.loginModal.show = false;"
+      :cover="channel.artist?.cover!"
+      @created="loginModal.show = false"
     />
   </button>
 </template>

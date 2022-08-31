@@ -23,7 +23,7 @@ interface Events {
 }
 
 interface Props {
-  id: string
+  id: number
 }
 
 const emit = defineEmits<Events>()

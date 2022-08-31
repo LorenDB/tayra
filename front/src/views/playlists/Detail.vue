@@ -17,7 +17,7 @@ import PlayButton from '~/components/audio/PlayButton.vue'
 import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
-  id: string
+  id: number
   defaultEdit?: boolean
 }
 

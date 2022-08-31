@@ -14,7 +14,7 @@ import useSharedLabels from '~/composables/locale/useSharedLabels'
 import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
-  id: string
+  id: number
 }
 
 const props = defineProps<Props>()
@@ -258,7 +258,7 @@ const showUploadDetailModal = ref(false)
                       {{ importStatus }}
                       <button
                         class="ui tiny basic icon button"
-                        :title="sharedLabels.fields.import_status.detailTitle"
+                        :title="sharedLabels.fields.import_status.label"
                         @click="showUploadDetailModal = true"
                       >
                         <i class="question circle outline icon" />

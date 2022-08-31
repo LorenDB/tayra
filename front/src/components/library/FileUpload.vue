@@ -53,7 +53,7 @@ const labels = computed(() => ({
       'Invalid file type, ensure you are uploading an audio file. Supported file extensions are %{ extensions }',
       { extensions: supportedExtensions.value.join(', ') }
     )
-  }
+  } as Record<string, string>
 }))
 
 const uploads = reactive({
@@ -113,7 +113,7 @@ const fetchStatus = async () => {
 
       uploads[status as keyof typeof uploads] = response.data.count
     } catch (error) {
-    useErrorHandler(error as Error)
+      useErrorHandler(error as Error)
     }
   }
 }
@@ -473,7 +473,7 @@ useEventListener(window, 'beforeunload', (event) => {
                 <span
                   v-if="typeof file.error === 'string' && file.error"
                   class="ui tooltip"
-                  :data-tooltip="labels.tooltips[file.error as keyof typeof labels.tooltips]"
+                  :data-tooltip="labels.tooltips[file.error]"
                 >
                   <span class="ui danger icon label">
                     <i class="question circle outline icon" /> {{ file.error }}

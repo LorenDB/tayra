@@ -3,6 +3,7 @@ import type { EditObjectType } from '~/composables/moderation/useEditConfigs'
 import type { RouteWithPreferences, OrderingField } from '~/store/ui'
 import type { SmartSearchProps } from '~/composables/useSmartSearch'
 import type { OrderingProps } from '~/composables/useOrdering'
+import type { ReviewState, Review } from '~/types'
 
 import { ref, reactive, watch, computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
@@ -39,9 +40,8 @@ const search = ref()
 
 const page = ref(1)
 
-type StateTarget = { id: number, type: keyof typeof targets }
-type ResponseResult = { uuid: string, is_approved: boolean, target?: StateTarget }
-type ResponseType = { count: number, results: ResponseResult[] }
+type StateTarget = Review['target']
+type ResponseType = { count: number, results: Review[] }
 const result = ref<null | ResponseType>(null)
 
 const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props.defaultQuery, props.updateUrl)
@@ -53,20 +53,23 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 ]
 
 interface TargetType {
-  payload: ResponseResult
+  payload: Review
   currentState: Record<EditObjectType, { value: unknown }>
 }
 
+type Targets = Exclude<StateTarget, undefined>['type']
 const targets = reactive({
-  track: {} as Record<string, TargetType>
-})
+  track: {}
+}) as Record<Targets, Record<string, TargetType>>
 
 const fetchTargets = async () => {
   // we request target data via the API so we can display previous state
   // additionnal data next to the edit card
   type Config = { url: string, ids: number[] }
-  const typesAndIds: Record<keyof typeof targets, Config> = {
-    track: { url: 'tracks/', ids: [] }
+  const typesAndIds: Record<Targets, Config> = {
+    artist: { url: 'artists/', ids: [] },
+    track: { url: 'tracks/', ids: [] },
+    album: { url: 'albums/', ids: [] }
   }
 
   for (const res of result.value?.results ?? []) {
@@ -85,7 +88,7 @@ const fetchTargets = async () => {
         id: uniq(config.ids),
         hidden: 'null'
       }
-    }).catch(() => {
+    }).catch((error) => {
       useErrorHandler(error as Error)
     })
 
@@ -147,8 +150,8 @@ const handle = (type: 'delete' | 'approved', id: string, value: boolean) => {
   }
 }
 
-const getCurrentState = (target?: StateTarget): object => {
-  if (!target) return {}
+const getCurrentState = (target?: StateTarget): ReviewState => {
+  if (!target || !(target.type in targets)) return {}
   return targets[target.type]?.[target.id]?.currentState ?? {}
 }
 </script>

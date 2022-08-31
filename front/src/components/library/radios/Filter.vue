@@ -20,7 +20,7 @@ type Filter = { candidates: { count: number, sample: Track[] } }
 type ResponseType = { filters: Array<Filter> }
 
 interface Events {
-  (e: 'update-config', index: number, name: string, value: number[]): void
+  (e: 'update-config', index: number, name: string, value: number[] | boolean): void
   (e: 'delete', index: number): void
 }
 

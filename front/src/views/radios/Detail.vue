@@ -14,7 +14,7 @@ import Pagination from '~/components/vui/Pagination.vue'
 import useErrorHandler from '~/composables/useErrorHandler'
 
 interface Props {
-  id: string
+  id: number
 }
 
 const props = defineProps<Props>()

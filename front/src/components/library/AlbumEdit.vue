@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import type { Album, Library } from '~/types'
+import type { EditObjectType } from '~/composables/moderation/useEditConfigs'
+import type { Album, Library, Actor } from '~/types'
 
 import { useStore } from '~/store'
 
 import EditForm from '~/components/library/EditForm.vue'
 
 interface Props {
-  objectType: string
-  object: Album
+  objectType: EditObjectType
+  object: Album & { attributed_to: Actor }
   libraries: Library[]
 }
 
@@ -46,7 +47,6 @@ const canEdit = store.state.auth.availablePermissions.library
         v-else
         :object-type="objectType"
         :object="object"
-        :can-edit="canEdit"
       />
     </div>
   </section>

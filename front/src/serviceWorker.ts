@@ -1,3 +1,5 @@
+/// <reference lib="webworker" />
+
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies'
 import { ExpirationPlugin } from 'workbox-expiration'

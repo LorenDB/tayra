@@ -6,12 +6,12 @@ import { reactive, watchEffect, ref } from 'vue'
 const MAX_PRELOADED = 3
 
 export interface CachedSound {
-  id: string
+  id: number
   date: Date
   howl: Howl
 }
 
-const soundCache = reactive(new Map<string, CachedSound>())
+const soundCache = reactive(new Map<number, CachedSound>())
 const cleaningCache = ref(false)
 
 watchEffect(() => {

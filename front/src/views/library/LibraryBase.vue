@@ -16,7 +16,7 @@ import useErrorHandler from '~/composables/useErrorHandler'
 import useReport from '~/composables/moderation/useReport'
 
 interface Props {
-  id: string
+  id: number
 }
 
 const props = defineProps<Props>()

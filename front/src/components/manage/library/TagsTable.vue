@@ -97,8 +97,7 @@ const labels = computed(() => ({
   searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by name')
 }))
 
-// TODO (wvffle): Check if we can remove the prop
-const detailedUpload = ref({})
+const detailedUpload = ref()
 const showUploadDetailModal = ref(false)
 </script>
 
@@ -157,6 +156,7 @@ const showUploadDetailModal = ref(false)
       </div>
     </div>
     <import-status-modal
+      v-if="detailedUpload"
       v-model:show="showUploadDetailModal"
       :upload="detailedUpload"
     />

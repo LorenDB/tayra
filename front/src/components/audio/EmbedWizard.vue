@@ -6,7 +6,7 @@ import { useClipboard } from '@vueuse/core'
 
 interface Props {
   type: string
-  id: string
+  id: number
 }
 
 const props = defineProps<Props>()

@@ -19,6 +19,7 @@ watch(show, () => {
   submittable.value = false
 })
 
+const albumForm = ref()
 </script>
 
 <template>
@@ -28,7 +29,7 @@ watch(show, () => {
   >
     <h4 class="header">
       <translate
-        v-if="channel.content_category === 'podcasts'"
+        v-if="channel.content_category === 'podcast'"
         translate-context="Popup/Channels/Title/Verb"
       >
         New series
@@ -58,7 +59,7 @@ watch(show, () => {
       <button
         :class="['ui', 'primary', {loading: isLoading}, 'button']"
         :disabled="!submittable"
-        @click.stop.prevent="$refs.albumForm.submit()"
+        @click.stop.prevent="albumForm.submit()"
       >
         <translate translate-context="*/*/Button.Label">
           Create

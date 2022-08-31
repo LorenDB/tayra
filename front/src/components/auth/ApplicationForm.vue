@@ -42,16 +42,15 @@ const submit = async () => {
   isLoading.value = true
 
   try {
-    const event = props.app !== null
-      ? 'updated'
-      : 'created'
-
-    const request = props.app !== null
+    const isUpdating = props.app !== null
+    const request = isUpdating
       ? () => axios.patch(`oauth/apps/${props.app?.client_id}/`, fields)
       : () => axios.post('oauth/apps/', fields)
 
     const response = await request()
-    emit(event, response.data as Application)
+
+    if (isUpdating) emit('updated', response.data as Application)
+    else emit('created', response.data as Application)
   } catch (error) {
     errors.value = (error as BackendError).backendErrors
   }

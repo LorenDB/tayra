@@ -234,7 +234,7 @@ const updatePage = (page: number) => {
 
         <track-row
           v-for="(track, index) in allTracks"
-          :key="track.id + track.position"
+          :key="track.id + (track.position ?? 0)"
           :data-track-id="track.id"
           :data-track-position="track.position"
           :track="track"

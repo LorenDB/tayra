@@ -41,7 +41,7 @@ defineProps<Props>()
       >
         <strong>{{ source.track.title }}</strong><br>
         <span>
-          {{ source.track.artist.name }}
+          {{ source.track.artist?.name }}
         </span>
       </button>
     </div>

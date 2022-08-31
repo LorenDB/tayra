@@ -126,7 +126,7 @@ const submitAndScan = async () => {
         </translate>
       </div>
     </div>
-    <template v-if="plugin.conf?.length > 0">
+    <template v-if="(plugin.conf?.length ?? 0) > 0">
       <template
         v-for="field in plugin.conf"
         :key="field.name"

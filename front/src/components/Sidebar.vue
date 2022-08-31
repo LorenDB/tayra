@@ -219,10 +219,10 @@ onMounted(() => {
           <div class="item">
             <div class="ui user-dropdown dropdown">
               <img
-                v-if="$store.state.auth.authenticated && $store.state.auth.profile.avatar && $store.state.auth.profile.avatar.urls.medium_square_crop"
+                v-if="$store.state.auth.authenticated && $store.state.auth.profile?.avatar && $store.state.auth.profile?.avatar.urls.medium_square_crop"
                 class="ui avatar image"
                 alt=""
-                :src="$store.getters['instance/absoluteUrl']($store.state.auth.profile.avatar.urls.medium_square_crop)"
+                :src="$store.getters['instance/absoluteUrl']($store.state.auth.profile?.avatar.urls.medium_square_crop)"
               >
               <actor-avatar
                 v-else-if="$store.state.auth.authenticated"

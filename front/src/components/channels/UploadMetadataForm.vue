@@ -1,34 +1,35 @@
 <script setup lang="ts">
-import type { Upload } from '~/types'
+import type { Upload, Tag } from '~/types'
 
-import { ref, computed, watch } from 'vue'
+import { reactive, computed, watch } from 'vue'
+import { useVModel } from '@vueuse/core'
 
 import TagsSelector from '~/components/library/TagsSelector.vue'
 import AttachmentInput from '~/components/common/AttachmentInput.vue'
 
 interface Events {
-  (e: 'values', values: Record<string, string>): void
+  (e: 'update:values', values: Values): void
 }
 
 interface Props {
   upload: Upload
-  values?: Record<string, string> | null
+  values: Values
 }
+
+type Values = (Record<string, string> & { tags?: Tag[] }) | null
 
 const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
   values: null
 })
 
-const newValues = ref({ ...(props.values ?? props.upload.import_metadata) } as Record<string, string>)
+const newValues = reactive<Exclude<Values, null>>({
+  ...(props.values ?? props.upload.import_metadata),
+  tags: (props.values ?? props.upload.import_metadata)?.tags ?? [] as Tag[]
+})
 
-// computed: {
-//   isLoading () {
-//     return !!this.metadata
-//   }
-// },
 const isLoading = computed(() => !props.upload)
-watch(newValues, (values) => emit('values', values), { immediate: true })
+watch(newValues, (values) => emit('update:values', values), { immediate: true })
 </script>
 
 <template>
@@ -44,7 +45,7 @@ watch(newValues, (values) => emit('values', values), { immediate: true })
     </div>
     <attachment-input
       v-model="newValues.cover"
-      @delete="newValues.cover = null"
+      @delete="newValues.cover = ''"
     >
       <translate translate-context="Content/Channel/*">
         Track Picture

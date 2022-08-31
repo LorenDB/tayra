@@ -326,7 +326,7 @@ const handleRemovedNote = (uuid: string) => {
           <router-link
             v-if="target && configs[target.type].urls.getDetail"
             class="ui basic button"
-            :to="configs[target.type].urls.getDetail(obj.target_state)"
+            :to="configs[target.type].urls.getDetail?.(obj.target_state) ?? '/'"
           >
             <i class="eye icon" />
             <translate translate-context="Content/Moderation/Link">
@@ -336,7 +336,7 @@ const handleRemovedNote = (uuid: string) => {
           <router-link
             v-if="target && configs[target.type].urls.getAdminDetail"
             class="ui basic button"
-            :to="configs[target.type].urls.getAdminDetail(obj.target_state)"
+            :to="configs[target.type].urls.getAdminDetail?.(obj.target_state) ?? '/'"
           >
             <i class="wrench icon" />
             <translate translate-context="Content/Moderation/Link">
@@ -391,10 +391,10 @@ const handleRemovedNote = (uuid: string) => {
                 </td>
                 <td>
                   <instance-policy-modal
-                    v-if="!obj.target_owner.is_local"
+                    v-if="!obj.target_owner?.is_local"
                     class="right floated mini basic"
                     type="actor"
-                    :target="obj.target_owner.full_username"
+                    :target="obj.target_owner?.full_username ?? ''"
                   />
                 </td>
               </tr>

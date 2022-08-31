@@ -48,7 +48,7 @@ const payload = reactive({
   password1: '',
   email: '',
   invitation: props.defaultInvitation,
-  request_fields: {}
+  request_fields: {} as Record<string, string | number | string[]>
 })
 
 const submitted = ref(false)

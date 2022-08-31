@@ -44,7 +44,7 @@ export interface ThemeEntry {
 export type ContentCategory = 'podcast' | 'music'
 
 export interface Artist {
-  id: string
+  id: number
   fid: string
   mbid?: string
 
@@ -65,7 +65,7 @@ export interface Artist {
 }
 
 export interface Album {
-  id: string
+  id: number
   fid: string
   mbid?: string
 
@@ -84,7 +84,7 @@ export interface Album {
 }
 
 export interface Track {
-  id: string
+  id: number
   fid: string
   mbid?: string
 
@@ -111,7 +111,7 @@ export interface Track {
 }
 
 export interface Channel {
-  id: string
+  id: number
   uuid: string
   artist?: Artist
   actor: Actor
@@ -134,7 +134,7 @@ export interface Channel {
 export type PrivacyLevel = 'everyone' | 'instance' | 'me'
 
 export interface Library {
-  id: string
+  id: number
   uuid: string
   fid?: string
   name: string
@@ -182,7 +182,7 @@ export interface License {
 }
 
 export interface Playlist {
-  id: string
+  id: number
   name: string
   modification_date: string
   user: User
@@ -206,7 +206,7 @@ export interface Radio {
 }
 
 export interface Listening {
-  id: string
+  id: number
   track: Track
   user: User
   actor: Actor
@@ -277,6 +277,7 @@ export interface Form {
 
 // Upload stuff
 export interface Upload {
+  id: number
   uuid: string
   filename?: string
   source?: string
@@ -293,12 +294,12 @@ export interface Upload {
     error_code: string
   }
 
-  import_metadata?: Record<string, string>
+  import_metadata?: Record<string, string> & { tags?: Tag[] }
 }
 
 // Profile stuff
 export interface Actor {
-  id: string
+  id: number
   fid?: string
   name?: string
   icon?: Cover
@@ -310,7 +311,7 @@ export interface Actor {
 }
 
 export interface User {
-  id: string
+  id: number
   avatar?: Cover
   email: string
   summary: { text: string, content_type: string }
@@ -403,7 +404,7 @@ export interface Plugin {
 export type EntityObjectType = 'artist' | 'album' | 'track' | 'library' | 'playlist' | 'account' | 'channel'
 
 export interface ReportTarget {
-  id: string
+  id: number
   type: EntityObjectType
 }
 

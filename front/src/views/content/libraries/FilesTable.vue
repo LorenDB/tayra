@@ -124,7 +124,7 @@ const labels = computed(() => ({
   showStatus: $pgettext('Content/Library/Button.Label/Verb', 'Show information about the upload status for this track')
 }))
 
-const detailedUpload = ref({})
+const detailedUpload = ref()
 const showUploadDetailModal = ref(false)
 
 const getImportStatusChoice = (importStatus: ImportStatus) => {
@@ -235,6 +235,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
       </div>
     </div>
     <import-status-modal
+      v-if="detailedUpload"
       v-model:show="showUploadDetailModal"
       :upload="detailedUpload"
     />
@@ -352,7 +353,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
             >{{ getImportStatusChoice(scope.obj.import_status).label }}</a>
             <button
               class="ui tiny basic icon button"
-              :title="sharedLabels.fields.import_status.detailTitle"
+              :title="sharedLabels.fields.import_status.label"
               :aria-label="labels.showStatus"
               @click="detailedUpload = scope.obj; showUploadDetailModal = true"
             >

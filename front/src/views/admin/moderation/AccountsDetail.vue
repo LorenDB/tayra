@@ -38,7 +38,7 @@ const allPermissions = computed(() => [
 
 const isLoadingPolicy = ref(false)
 const policy = ref()
-const fetchPolicy = async (id: string) => {
+const fetchPolicy = async (id: number) => {
   isLoadingPolicy.value = true
 
   try {

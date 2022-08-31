@@ -579,9 +579,8 @@ const labels = computed(() => ({
         </div>
         <upload-metadata-form
           v-if="selectedUpload"
+          v-model:values="uploadImportData[selectedUploadId]"
           :upload="selectedUpload"
-          :values="uploadImportData[selectedUploadId]"
-          @values="uploadImportData.selectedUploadId = $event"
         />
         <div
           v-if="step === 2"

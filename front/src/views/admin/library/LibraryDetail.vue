@@ -15,7 +15,7 @@ import useLogger from '~/composables/useLogger'
 const PRIVACY_LEVELS = ['me', 'instance', 'everyone'] as PrivacyLevel[]
 
 interface Props {
-  id: string
+  id: number
 }
 
 const props = defineProps<Props>()

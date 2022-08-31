@@ -24,6 +24,7 @@ onMounted(() => {
     ...props.message
   }
 
+  // @ts-expect-error fomantic ui
   $('body').toast(params)
   $('.ui.toast.visible').last().attr('role', 'alert')
 })

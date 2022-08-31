@@ -19,10 +19,12 @@ import EditCard from '~/components/library/EditCard.vue'
 interface Props {
   objectType: EditObjectType
   object: EditObject
-  licenses: License[]
+  licenses?: License[]
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  licenses: () => []
+})
 
 const { $pgettext } = useGettext()
 const configs = useEditConfigs()

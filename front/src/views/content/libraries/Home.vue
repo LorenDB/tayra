@@ -83,7 +83,6 @@ const libraryCreated = (library: Library) => {
       </a>
       <library-form
         v-if="!hiddenForm"
-        :library="null"
         @created="libraryCreated"
       />
       <div class="ui hidden divider" />

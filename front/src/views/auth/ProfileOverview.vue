@@ -18,6 +18,9 @@ const showCreateModal = ref(false)
 const loading = ref(false)
 const submittable = ref(false)
 const category = ref('podcast')
+
+const modalContent = ref()
+const createForm = ref()
 </script>
 
 <template>
@@ -108,7 +111,7 @@ const category = ref('podcast')
           @loading="loading = $event"
           @submittable="submittable = $event"
           @category="category = $event"
-          @errored="$refs.modalContent.scrollTop = 0"
+          @errored="modalContent.scrollTop = 0"
           @created="$router.push({name: 'channels.detail', params: {id: $event.actor.preferred_username}})"
         />
         <div class="ui hidden divider" />
@@ -145,7 +148,7 @@ const category = ref('podcast')
           :class="['ui', 'primary button', { loading }]"
           type="submit"
           :disabled="!submittable && !loading"
-          @click.prevent.stop="$refs.createForm.submit"
+          @click.prevent.stop="createForm.submit"
         >
           <translate translate-context="*/Channels/Button.Label">
             Create channel

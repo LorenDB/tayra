@@ -1,22 +1,25 @@
 <script setup lang="ts">
 import type { Track, Album, Artist, Library } from '~/types'
 
+import { computed, ref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import axios from 'axios'
-import PlayButton from '~/components/audio/PlayButton.vue'
-import EmbedWizard from '~/components/audio/EmbedWizard.vue'
-import SemanticModal from '~/components/semantic/Modal.vue'
-import RadioButton from '~/components/radios/Button.vue'
-import TagsList from '~/components/tags/List.vue'
-import useReport from '~/composables/moderation/useReport'
-import useLogger from '~/composables/useLogger'
+import { useRouter } from 'vue-router'
 import { getDomain } from '~/utils'
 import { useStore } from '~/store'
-import { useRouter } from 'vue-router'
-import { computed, ref, watch } from 'vue'
+
+import axios from 'axios'
+
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import RadioButton from '~/components/radios/Button.vue'
+import TagsList from '~/components/tags/List.vue'
+
+import useReport from '~/composables/moderation/useReport'
+import useLogger from '~/composables/useLogger'
 
 interface Props {
-  id: string
+  id: number
 }
 
 const props = defineProps<Props>()

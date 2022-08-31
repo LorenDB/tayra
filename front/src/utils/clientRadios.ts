@@ -1,9 +1,10 @@
-import type { ListenWSEvent } from '~/types'
+import type { CurrentRadio, PopulateQueuePayload } from '~/store/radios'
+import type { ListenWS } from '~/composables/useWebSocketHandler'
 import type { RootState } from '~/store'
 import type { Store } from 'vuex'
-import type { CurrentRadio, PopulateQueuePayload } from '~/store/radios'
 
 import axios from 'axios'
+
 import useLogger from '~/composables/useLogger'
 
 const logger = useLogger()
@@ -14,7 +15,7 @@ export const CLIENT_RADIOS = {
   account: {
     offset: 1,
     populateQueue ({ current, dispatch, playNow }: PopulateQueuePayload) {
-      const params = { scope: `actor:${current.objectId.fullUsername}`, ordering: '-creation_date', page_size: 1, page: this.offset }
+      const params = { scope: `actor:${current.objectId?.fullUsername}`, ordering: '-creation_date', page_size: 1, page: this.offset }
       axios.get('history/listenings', { params }).then(async (response) => {
         const latest = response.data.results[0]
         if (!latest) {
@@ -35,9 +36,9 @@ export const CLIENT_RADIOS = {
     stop () {
       this.offset = 1
     },
-    handleListen (current: CurrentRadio, event: ListenWSEvent, store: Store<RootState>) {
+    handleListen (current: CurrentRadio, event: ListenWS, store: Store<RootState>) {
       // TODO: handle actors from other pods
-      if (event.actor.local_id === current.objectId.username) {
+      if (event.actor.local_id === current.objectId?.username) {
         axios.get(`tracks/${event.object.local_id}`).then(async (response) => {
           if (response.data.uploads.length > 0) {
             await store.dispatch('queue/append', { track: response.data })

@@ -13,7 +13,7 @@ interface Action {
   allowAll?: boolean
   confirmColor?: string
   confirmationMessage?: string
-  filterChackable?: (item: never) => boolean
+  filterChackable?: (item: any) => boolean
 }
 
 interface Events {
@@ -22,7 +22,7 @@ interface Events {
 }
 
 interface Props {
-  objectsData: { results: [], count: number }
+  objectsData: { results: any[], count: number }
   actions: Action[]
   actionUrl: string
   idField?: string
