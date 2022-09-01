@@ -53,7 +53,7 @@ const { activateTrack } = usePlayOptions(props)
 const fetchData = async () => {
   try {
     const response = await axios.get(`tracks/${props.track.id}/`)
-    description.value = response.data.description.text
+    description.value = response.data.description?.text ?? ''
   } catch (error) {
     useErrorHandler(error as Error)
   }
