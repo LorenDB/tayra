@@ -9,6 +9,7 @@
     "build": "vite build --mode development",
     "build:deployment": "vite build --base /front/",
     "serve": "vite preview",
+    "test": "vitest run",
     "test:unit": "vitest run",
     "lint": "eslint --ext .ts,.js,.vue src",
     "lint:tsc": "vue-tsc --noEmit",
