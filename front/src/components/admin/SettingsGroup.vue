@@ -1,5 +1,4 @@
 <script setup lang="ts">
-/* eslint-disable vue/valid-v-model */
 import type { BackendError, SettingsGroup, SettingsDataEntry, FunctionRef, Form } from '~/types'
 import axios from 'axios'
 import SignupFormBuilder from '~/components/admin/SignupFormBuilder.vue'
@@ -148,11 +147,13 @@ const save = async () => {
         v-bind="setting.fieldParams"
         v-model="values[setting.identifier]"
       />
+      <!-- eslint-disable vue/valid-v-model -->
       <signup-form-builder
         v-else-if="setting.fieldType === 'formBuilder'"
         v-model="values[setting.identifier] as Form"
         :signup-approval-enabled="!!values.moderation__signup_approval_enabled"
       />
+      <!-- eslint-enable vue/valid-v-model -->
       <input
         v-else-if="setting.field.widget.class === 'PasswordInput'"
         :id="setting.identifier"
@@ -177,6 +178,7 @@ const save = async () => {
         type="number"
         class="ui input"
       >
+      <!-- eslint-disable vue/valid-v-model -->
       <textarea
         v-else-if="setting.field.widget.class === 'Textarea'"
         :id="setting.identifier"
@@ -185,16 +187,19 @@ const save = async () => {
         type="text"
         class="ui input"
       />
+      <!-- eslint-enable vue/valid-v-model -->
       <div
         v-else-if="setting.field.widget.class === 'CheckboxInput'"
         class="ui toggle checkbox"
       >
+        <!-- eslint-disable vue/valid-v-model -->
         <input
           :id="setting.identifier"
           v-model="values[setting.identifier] as boolean"
           :name="setting.identifier"
           type="checkbox"
         >
+        <!-- eslint-enable vue/valid-v-model -->
         <label :for="setting.identifier">{{ setting.verbose_name }}</label>
         <p v-if="setting.help_text">
           {{ setting.help_text }}
