@@ -480,8 +480,8 @@ class ArtistField(serializers.Field):
     def get_value(self, data):
         if self.for_album:
             keys = [
-                ("artists", "artists"),
-                ("names", "album_artist"),
+                ("artists", "album_artist"),
+                ("names", "artists"),
                 ("mbids", "musicbrainz_albumartistid"),
             ]
         else:
@@ -525,7 +525,14 @@ class ArtistField(serializers.Field):
                 if separator in data["artists"]:
                     names = [n.strip() for n in data["artists"].split(separator)]
                     break
-            if not names:
+            # corner case: 'album artist' field with only one artist but multiple names in 'artits' field
+            if (
+                not names
+                and data.get("names", None)
+                and any(separator in data["names"] for separator in separators)
+            ):
+                names = [n.strip() for n in data["names"].split(separators[0])]
+            elif not names:
                 names = [data["artists"]]
         elif used_separator and mbids:
             names = [n.strip() for n in data["names"].split(used_separator)]
