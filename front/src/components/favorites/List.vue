@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { RouteWithPreferences, OrderingField } from '~/store/ui'
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
 import type { Track } from '~/types'
-import type { OrderingProps } from '~/composables/useOrdering'
 
 import { computed, onMounted, reactive, ref, watch } from 'vue'
-import { onBeforeRouteUpdate, useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
+import { sortedUniq } from 'lodash-es'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -16,24 +17,24 @@ import RadioButton from '~/components/radios/Button.vue'
 import Pagination from '~/components/vui/Pagination.vue'
 
 import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering from '~/composables/navigation/useOrdering'
 import useErrorHandler from '~/composables/useErrorHandler'
-import useOrdering from '~/composables/useOrdering'
+import usePage from '~/composables/navigation/usePage'
 import useLogger from '~/composables/useLogger'
 
 interface Props extends OrderingProps {
-  defaultPage?: number
-
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
-  orderingConfigName: RouteWithPreferences | null
+  orderingConfigName?: RouteRecordName
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  defaultPage: 1
+  defaultPage: 1,
+  orderingConfigName: undefined
 })
 
 const store = useStore()
 
-const page = ref(+props.defaultPage)
+const page = usePage()
 
 const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['creation_date', 'creation_date'],
@@ -45,19 +46,7 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 const logger = useLogger()
 const sharedLabels = useSharedLabels()
 
-const router = useRouter()
-const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
-
-const updateQueryString = () => router.replace({
-  query: {
-    page: page.value,
-    paginateBy: paginateBy.value,
-    ordering: orderingString.value
-  }
-})
-
-watch(page, updateQueryString)
-onOrderingUpdate(updateQueryString)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
 
 const results = reactive<Track[]>([])
 const nextLink = ref()
@@ -97,8 +86,13 @@ const fetchFavorites = async () => {
   }
 }
 
-onBeforeRouteUpdate(fetchFavorites)
+watch(page, fetchFavorites)
 fetchFavorites()
+
+onOrderingUpdate(() => {
+  page.value = 1
+  fetchFavorites()
+})
 
 onMounted(() => $('.ui.dropdown').dropdown())
 
@@ -106,6 +100,8 @@ const { $pgettext } = useGettext()
 const labels = computed(() => ({
   title: $pgettext('Head/Favorites/Title', 'Your Favorites')
 }))
+
+const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value].sort((a, b) => a - b)))
 </script>
 
 <template>
@@ -194,14 +190,12 @@ const labels = computed(() => ({
               v-model="paginateBy"
               class="ui dropdown"
             >
-              <option :value="12">
-                12
-              </option>
-              <option :value="25">
-                25
-              </option>
-              <option :value="50">
-                50
+              <option
+                v-for="opt in paginateOptions"
+                :key="opt"
+                :value="opt"
+              >
+                {{ opt }}
               </option>
             </select>
           </div>

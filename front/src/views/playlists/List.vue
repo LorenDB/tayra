@@ -1,41 +1,46 @@
 <script setup lang="ts">
-import type { RouteWithPreferences, OrderingField } from '~/store/ui'
-import type { OrderingProps } from '~/composables/useOrdering'
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { Playlist, BackendResponse } from '~/types'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
+
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRouteQuery } from '@vueuse/router'
+import { useGettext } from 'vue3-gettext'
+import { syncRef } from '@vueuse/core'
+import { sortedUniq } from 'lodash-es'
 
 import axios from 'axios'
 import $ from 'jquery'
-
-import { useRouter, onBeforeRouteUpdate } from 'vue-router'
-import { computed, ref, watch, onMounted } from 'vue'
-import { useGettext } from 'vue3-gettext'
 
 import PlaylistCardList from '~/components/playlists/CardList.vue'
 import Pagination from '~/components/vui/Pagination.vue'
 
 import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering from '~/composables/navigation/useOrdering'
 import useErrorHandler from '~/composables/useErrorHandler'
-import useOrdering from '~/composables/useOrdering'
+import usePage from '~/composables/navigation/usePage'
 import useLogger from '~/composables/useLogger'
 
 interface Props extends OrderingProps {
-  defaultPage?: number
-  defaultQuery?: string
-  scope?: string
+  scope?: 'me' | 'all'
 
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
-  orderingConfigName: RouteWithPreferences | null
+  orderingConfigName?: RouteRecordName
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  defaultPage: 1,
-  defaultQuery: '',
-  scope: 'all'
+  scope: 'all',
+  orderingConfigName: undefined
 })
 
-const page = ref(+props.defaultPage)
-type ResponseType = { count: number, results: any[] }
-const result = ref<null | ResponseType>(null)
-const query = ref(props.defaultQuery)
+const page = usePage()
+
+const q = useRouteQuery('query', '')
+const query = ref(q.value)
+syncRef(q, query, { direction: 'ltr' })
+
+const result = ref<BackendResponse<Playlist>>()
 
 const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['creation_date', 'creation_date'],
@@ -46,20 +51,7 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 const logger = useLogger()
 const sharedLabels = useSharedLabels()
 
-const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
-
-const router = useRouter()
-const updateQueryString = () => router.replace({
-  query: {
-    query: query.value,
-    page: page.value,
-    paginateBy: paginateBy.value,
-    ordering: orderingString.value
-  }
-})
-
-watch(page, updateQueryString)
-onOrderingUpdate(updateQueryString)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
 
 const isLoading = ref(false)
 const fetchData = async () => {
@@ -82,14 +74,24 @@ const fetchData = async () => {
     result.value = response.data
   } catch (error) {
     useErrorHandler(error as Error)
-    result.value = null
+    result.value = undefined
   } finally {
     logger.timeEnd('Fetching albums')
     isLoading.value = false
   }
 }
-onBeforeRouteUpdate(fetchData)
+watch(page, fetchData)
 fetchData()
+
+const search = () => {
+  page.value = 1
+  q.value = query.value
+}
+
+onOrderingUpdate(() => {
+  page.value = 1
+  fetchData()
+})
 
 onMounted(() => $('.ui.dropdown').dropdown())
 
@@ -98,6 +100,8 @@ const labels = computed(() => ({
   playlists: $pgettext('*/*/*', 'Playlists'),
   searchPlaceholder: $pgettext('Content/Playlist/Placeholder/Call to action', 'Enter playlist name…')
 }))
+
+const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value].sort((a, b) => a - b)))
 </script>
 
 <template>
@@ -121,7 +125,7 @@ const labels = computed(() => ({
       </template>
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
-        @submit.prevent="updateQueryString();fetchData()"
+        @submit.prevent="search"
       >
         <div class="fields">
           <div class="field">
@@ -185,14 +189,12 @@ const labels = computed(() => ({
               v-model="paginateBy"
               class="ui dropdown"
             >
-              <option :value="12">
-                12
-              </option>
-              <option :value="25">
-                25
-              </option>
-              <option :value="50">
-                50
+              <option
+                v-for="opt in paginateOptions"
+                :key="opt"
+                :value="opt"
+              >
+                {{ opt }}
               </option>
             </select>
           </div>

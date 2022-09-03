@@ -1,18 +1,17 @@
-import type { MaybeRef } from '@vueuse/core'
 import type { Token } from '~/utils/search'
 
-import { refWithControl } from '@vueuse/core'
-import { computed, ref, unref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { compileTokens, normalizeQuery, parseTokens } from '~/utils/search'
+import { refWithControl } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 export interface SmartSearchProps {
   defaultQuery?: string
   updateUrl?: boolean
 }
 
-export default (defaultQuery: MaybeRef<string>, updateUrl: MaybeRef<boolean>) => {
-  const query = refWithControl(unref(defaultQuery))
+export default (props: SmartSearchProps) => {
+  const query = refWithControl(props.defaultQuery ?? '')
   const tokens = ref([] as Token[])
 
   watch(query, (value) => {
@@ -28,7 +27,7 @@ export default (defaultQuery: MaybeRef<string>, updateUrl: MaybeRef<boolean>) =>
   const router = useRouter()
   watch(tokens, (value) => {
     const newQuery = compileTokens(value)
-    if (unref(updateUrl)) {
+    if (props.updateUrl) {
       return router.replace({ query: { q: newQuery } })
     }
 
@@ -67,7 +66,6 @@ export default (defaultQuery: MaybeRef<string>, updateUrl: MaybeRef<boolean>) =>
       return
     }
 
-    // TODO (wvffle): Check if triggers reactivity
     for (const token of existing) {
       token.value = value
     }

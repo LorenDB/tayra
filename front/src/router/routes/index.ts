@@ -54,13 +54,7 @@ export default [
   {
     path: '/search',
     name: 'search',
-    component: () => import('~/views/Search.vue'),
-    props: route => ({
-      initialId: route.query.id,
-      initialType: route.query.type || 'artists',
-      initialQuery: route.query.q,
-      initialPage: route.query.page ? +route.query.page : undefined
-    })
+    component: () => import('~/views/Search.vue')
   },
   ...auth,
   ...settings,

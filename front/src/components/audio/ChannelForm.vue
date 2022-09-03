@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ContentCategory, Channel, BackendError, Tag } from '~/types'
+import type { ContentCategory, Channel, BackendError } from '~/types'
 
 import { slugify } from 'transliteration'
 import { reactive, computed, ref, watchEffect, watch } from 'vue'
@@ -34,7 +34,7 @@ const { $pgettext } = useGettext()
 const newValues = reactive({
   name: props.object?.artist?.name ?? '',
   username: props.object?.actor.preferred_username ?? '',
-  tags: props.object?.artist?.tags?.map(name => ({ name } as Tag)) ?? [] as Tag[],
+  tags: props.object?.artist?.tags ?? [] as string[],
   description: props.object?.artist?.description?.text ?? '',
   cover: props.object?.artist?.cover?.uuid ?? null,
   content_category: props.object?.artist?.content_category ?? 'podcast',

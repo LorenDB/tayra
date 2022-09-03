@@ -8,11 +8,11 @@ import { useStore } from '~/store'
 import $ from 'jquery'
 
 interface Events {
-  (e: 'update:modelValue', tags: Tag[]): void
+  (e: 'update:modelValue', tags: string[]): void
 }
 
 interface Props {
-  modelValue: Tag[]
+  modelValue: string[]
 }
 
 const emit = defineEmits<Events>()

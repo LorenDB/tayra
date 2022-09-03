@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import type { RouteWithPreferences, OrderingField } from '~/store/ui'
-import type { OrderingProps } from '~/composables/useOrdering'
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
 
 import { watchDebounced } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
@@ -13,17 +14,18 @@ import Pagination from '~/components/vui/Pagination.vue'
 
 import useSharedLabels from '~/composables/locale/useSharedLabels'
 import useErrorHandler from '~/composables/useErrorHandler'
-import useOrdering from '~/composables/useOrdering'
+import useOrdering from '~/composables/navigation/useOrdering'
 
 interface Props extends OrderingProps {
   filters?: object
 
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
-  orderingConfigName: RouteWithPreferences | null
+  orderingConfigName?: RouteRecordName
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  filters: () => ({})
+  filters: () => ({}),
+  orderingConfigName: undefined
 })
 
 const page = ref(1)
@@ -31,7 +33,7 @@ const query = ref('')
 type ResponseType = { count: number, results: any[] }
 const result = ref<null | ResponseType>(null)
 
-const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
 
 const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['date_joined', 'date_joined'],

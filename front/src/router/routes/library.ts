@@ -20,96 +20,60 @@ export default [
         path: 'artists/',
         name: 'library.artists.browse',
         component: () => import('~/components/library/Artists.vue'),
-        props: route => ({
-          defaultOrdering: route.query.ordering,
-          defaultQuery: route.query.query,
-          defaultTags: Array.isArray(route.query.tag || [])
-            ? route.query.tag
-            : [route.query.tag],
-          defaultPage: route.query.page ? +route.query.page : undefined,
-          orderingConfigName: null
-        })
+        meta: {
+          paginateBy: 30
+        }
       },
       {
         path: 'me/artists',
         name: 'library.artists.me',
         component: () => import('~/components/library/Artists.vue'),
-        props: route => ({
-          scope: 'me',
-          defaultOrdering: route.query.ordering,
-          defaultQuery: route.query.query,
-          defaultTags: Array.isArray(route.query.tag || [])
-            ? route.query.tag
-            : [route.query.tag],
-          defaultPage: route.query.page ? +route.query.page : undefined,
-          orderingConfigName: null
-        })
+        props: { scope: 'me' },
+        meta: {
+          paginateBy: 30
+        }
       },
       {
         path: 'albums/',
         name: 'library.albums.browse',
         component: () => import('~/components/library/Albums.vue'),
-        props: route => ({
-          defaultOrdering: route.query.ordering,
-          defaultQuery: route.query.query,
-          defaultTags: Array.isArray(route.query.tag || [])
-            ? route.query.tag
-            : [route.query.tag],
-          defaultPage: route.query.page ? +route.query.page : undefined,
-          orderingConfigName: null
-        })
-      },
-      {
-        path: 'podcasts/',
-        name: 'library.podcasts.browse',
-        component: () => import('~/components/library/Podcasts.vue'),
-        props: route => ({
-          defaultOrdering: route.query.ordering,
-          defaultQuery: route.query.query,
-          defaultTags: Array.isArray(route.query.tag || [])
-            ? route.query.tag
-            : [route.query.tag],
-          defaultPage: route.query.page ? +route.query.page : undefined,
-          orderingConfigName: null
-        })
+        meta: {
+          paginateBy: 25
+        }
       },
       {
         path: 'me/albums',
         name: 'library.albums.me',
         component: () => import('~/components/library/Albums.vue'),
-        props: route => ({
-          scope: 'me',
-          defaultOrdering: route.query.ordering,
-          defaultQuery: route.query.query,
-          defaultTags: Array.isArray(route.query.tag || [])
-            ? route.query.tag
-            : [route.query.tag],
-          defaultPage: route.query.page ? +route.query.page : undefined,
-          orderingConfigName: null
-        })
+        props: { scope: 'me' },
+        meta: {
+          paginateBy: 25
+        }
+      },
+      {
+        path: 'podcasts/',
+        name: 'library.podcasts.browse',
+        component: () => import('~/components/library/Podcasts.vue'),
+        meta: {
+          paginateBy: 30
+        }
       },
       {
         path: 'radios/',
         name: 'library.radios.browse',
         component: () => import('~/components/library/Radios.vue'),
-        props: route => ({
-          defaultOrdering: route.query.ordering,
-          defaultQuery: route.query.query,
-          defaultPage: route.query.page ? +route.query.page : undefined,
-          orderingConfigName: null
-        })
+        meta: {
+          paginateBy: 12
+        }
       },
       {
         path: 'me/radios/',
         name: 'library.radios.me',
         component: () => import('~/components/library/Radios.vue'),
-        props: route => ({
-          scope: 'me',
-          defaultOrdering: route.query.ordering,
-          defaultQuery: route.query.query,
-          defaultPage: route.query.page ? +route.query.page : undefined,
-          orderingConfigName: null
-        })
+        props: { scope: 'me' },
+        meta: {
+          paginateBy: 12
+        }
       },
       {
         path: 'radios/build',
@@ -133,24 +97,18 @@ export default [
         path: 'playlists/',
         name: 'library.playlists.browse',
         component: () => import('~/views/playlists/List.vue'),
-        props: route => ({
-          defaultOrdering: route.query.ordering,
-          defaultQuery: route.query.query,
-          defaultPage: route.query.page ? +route.query.page : undefined,
-          orderingConfigName: null
-        })
+        meta: {
+          paginateBy: 25
+        }
       },
       {
         path: 'me/playlists/',
         name: 'library.playlists.me',
         component: () => import('~/views/playlists/List.vue'),
-        props: route => ({
-          scope: 'me',
-          defaultOrdering: route.query.ordering,
-          defaultQuery: route.query.query,
-          defaultPage: route.query.page ? +route.query.page : undefined,
-          orderingConfigName: null
-        })
+        props: { scope: 'me' },
+        meta: {
+          paginateBy: 25
+        }
       },
       {
         path: 'playlists/:id',

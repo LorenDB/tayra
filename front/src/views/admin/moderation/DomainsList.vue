@@ -113,10 +113,7 @@ const createDomain = async () => {
         </div>
       </form>
       <div class="ui clearing hidden divider" />
-      <domains-table
-        :ordering-config-name="null"
-        :allow-list-enabled="allowListEnabled"
-      />
+      <domains-table :allow-list-enabled="allowListEnabled" />
     </section>
   </main>
 </template>

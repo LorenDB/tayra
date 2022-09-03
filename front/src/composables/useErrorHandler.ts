@@ -54,6 +54,10 @@ async function useErrorHandler (error: Error | BackendError, eventId?: string): 
     }
   }
 
+  if ('isHandled' in error && error.isHandled) {
+    return
+  }
+
   store.commit('ui/addMessage', {
     content,
     date,

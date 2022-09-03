@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { RouteWithPreferences, OrderingField } from '~/store/ui'
-import type { SmartSearchProps } from '~/composables/useSmartSearch'
-import type { OrderingProps } from '~/composables/useOrdering'
-import type { ImportStatus } from '~/types'
+import type { SmartSearchProps } from '~/composables/navigation/useSmartSearch'
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { ImportStatus, BackendResponse, Upload } from '~/types'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
 
 import { humanSize, truncate } from '~/utils/filters'
 import { computed, ref, watch } from 'vue'
@@ -16,9 +17,10 @@ import ActionTable from '~/components/common/ActionTable.vue'
 import Pagination from '~/components/vui/Pagination.vue'
 
 import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useSmartSearch from '~/composables/navigation/useSmartSearch'
+import useOrdering from '~/composables/navigation/useOrdering'
 import useErrorHandler from '~/composables/useErrorHandler'
-import useSmartSearch from '~/composables/useSmartSearch'
-import useOrdering from '~/composables/useOrdering'
+import usePage from '~/composables/navigation/usePage'
 
 interface Events {
   (e: 'fetch-start'): void
@@ -30,7 +32,7 @@ interface Props extends SmartSearchProps, OrderingProps {
   customObjects?: any[]
 
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
-  orderingConfigName: RouteWithPreferences | null
+  orderingConfigName?: RouteRecordName
   defaultQuery?: string
   updateUrl?: boolean
 }
@@ -41,18 +43,17 @@ const props = withDefaults(defineProps<Props>(), {
   updateUrl: false,
   filters: () => ({}),
   needsRefresh: false,
-  customObjects: () => []
+  customObjects: () => [],
+  orderingConfigName: undefined
 })
 
 const search = ref()
 
-// TODO (wvffle): Make sure everything is it's own type
-const page = ref(1)
-type ResponseType = { count: number, results: any[] }
-const result = ref<null | ResponseType>(null)
+const page = usePage()
+const result = ref<BackendResponse<Upload>>()
 
-const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props.defaultQuery, props.updateUrl)
-const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
 
 const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['creation_date', 'creation_date'],
@@ -79,8 +80,7 @@ const actions = computed(() => [
     label: $pgettext('Content/Library/Dropdown/Verb', 'Restart import'),
     isDangerous: true,
     allowAll: true,
-    // TODO (wvffle): Find correct type
-    filterCheckable: (filter: { import_status: string }) => {
+    filterCheckable: (filter: { import_status: ImportStatus }) => {
       return filter.import_status !== 'finished'
     }
   }
@@ -107,7 +107,7 @@ const fetchData = async () => {
     result.value = response.data
   } catch (error) {
     useErrorHandler(error as Error)
-    result.value = null
+    result.value = undefined
   } finally {
     isLoading.value = false
   }

@@ -13,7 +13,7 @@ import useFormData from '~/composables/useFormData'
 interface Props {
   clientId: string
   redirectUri: string
-  scope: string
+  scope: 'me' | 'all'
   responseType: string
   nonce: string
   state: string

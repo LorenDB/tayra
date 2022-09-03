@@ -1,39 +1,42 @@
 <script setup lang="ts">
 import type { RadioConfig } from '~/store/radios'
 
+import { ref, reactive, computed, watch } from 'vue'
+import { useRouteQuery } from '@vueuse/router'
+import { useGettext } from 'vue3-gettext'
+import { syncRef } from '@vueuse/core'
+
+import axios from 'axios'
+
+import PlaylistCardList from '~/components/playlists/CardList.vue'
 import RemoteSearchForm from '~/components/RemoteSearchForm.vue'
 import ArtistCard from '~/components/audio/artist/Card.vue'
-import AlbumCard from '~/components/audio/album/Card.vue'
 import TrackTable from '~/components/audio/track/Table.vue'
+import AlbumCard from '~/components/audio/album/Card.vue'
 import Pagination from '~/components/vui/Pagination.vue'
-import PlaylistCardList from '~/components/playlists/CardList.vue'
-import RadioCard from '~/components/radios/Card.vue'
 import RadioButton from '~/components/radios/Button.vue'
+import RadioCard from '~/components/radios/Card.vue'
 import TagsList from '~/components/tags/List.vue'
-import { ref, reactive, computed, watch } from 'vue'
-import { useRouter, onBeforeRouteUpdate } from 'vue-router'
-import { useGettext } from 'vue3-gettext'
-import axios from 'axios'
+
+import useErrorHandler from '~/composables/useErrorHandler'
 
 type QueryType = 'artists' | 'albums' | 'tracks' | 'playlists' | 'tags' | 'radios' | 'podcasts' | 'series' | 'rss'
 
-interface Props {
-  initialId?: string
-  initialType?: QueryType
-  initialQuery?: string
-  initialPage?: number
-}
+const type = useRouteQuery<QueryType>('type', 'artists')
+const id = useRouteQuery<string>('id')
 
-const props = withDefaults(defineProps<Props>(), {
-  initialId: '',
-  initialType: 'artists',
-  initialQuery: '',
-  initialPage: 1
+const pageQuery = useRouteQuery<string>('page', '1')
+const page = ref(+pageQuery.value)
+syncRef(pageQuery, page, {
+  transform: {
+    ltr: (left) => +left,
+    rtl: (right) => right.toString()
+  }
 })
 
-const query = ref(props.initialQuery)
-const type = ref(props.initialType)
-const page = ref(props.initialPage)
+const q = useRouteQuery('q', '')
+const query = ref(q.value)
+syncRef(q, query, { direction: 'ltr' })
 
 type ResponseType = { count: number, results: any[] }
 const results = reactive({
@@ -122,18 +125,11 @@ const axiosParams = computed(() => {
 
 const currentResults = computed(() => results[currentType.value?.id ?? 'artists'])
 
-const router = useRouter()
-const updateQueryString = () => router.replace({
-  query: {
-    q: query.value,
-    page: page.value,
-    type: type.value
-  }
-})
-
 const isLoading = ref(false)
 const search = async () => {
   if (!currentType.value) return
+
+  q.value = query.value
 
   if (!query.value) {
     for (const type of types.value) {
@@ -144,11 +140,16 @@ const search = async () => {
   }
 
   isLoading.value = true
-  const response = await axios.get(currentType.value.endpoint ?? currentType.value.id, {
-    params: axiosParams.value
-  })
 
-  results[currentType.value.id] = response.data
+  try {
+    const response = await axios.get(currentType.value.endpoint ?? currentType.value.id, {
+      params: axiosParams.value
+    })
+
+    results[currentType.value.id] = response.data
+  } catch (error) {
+    useErrorHandler(error as Error)
+  }
 
   isLoading.value = false
 
@@ -164,25 +165,20 @@ const search = async () => {
         }
       }).then(response => {
         results[type.id] = response.data
-      })
+      }).catch(() => undefined)
     }
   }
 }
 
-watch(type, () => (page.value = 1))
-watch(page, updateQueryString)
+watch(type, () => {
+  page.value = 1
+  search()
+})
 
-onBeforeRouteUpdate(search)
-
-// TODO: (wvffle): Check if it's needed
-// watch: {
-//   '$route.query.q': async function (v) {
-//     this.query = v
-//   }
-// },
+search()
 
 const labels = computed(() => ({
-  title: props.initialId
+  title: id.value
     ? (
         type.value === 'rss'
           ? $pgettext('Head/Fetch/Title', 'Subscribe to a podcast RSS feed')
@@ -224,13 +220,13 @@ const radioConfig = computed(() => {
   >
     <section class="ui vertical stripe segment">
       <div
-        v-if="initialId"
+        v-if="id"
         class="ui small text container"
       >
         <h2>{{ labels.title }}</h2>
         <remote-search-form
-          :initial-id="initialId"
-          :type="initialType"
+          :initial-id="id"
+          :type="type"
         />
       </div>
       <div

@@ -10,9 +10,6 @@ defineProps<Props>()
 
 <template>
   <section class="ui vertical aligned stripe segment">
-    <library-files-table
-      :ordering-config-name="null"
-      :default-query="query"
-    />
+    <library-files-table :default-query="query" />
   </section>
 </template>

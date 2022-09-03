@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import type { RouteWithPreferences, OrderingField } from '~/store/ui'
-import type { OrderingProps } from '~/composables/useOrdering'
-import type { SmartSearchProps } from '~/composables/useSmartSearch'
+import type { SmartSearchProps } from '~/composables/navigation/useSmartSearch'
+import type { OrderingProps } from '~/composables/navigation/useOrdering'
+import type { UserRequest, BackendResponse } from '~/types'
+import type { RouteRecordName } from 'vue-router'
+import type { OrderingField } from '~/store/ui'
 
 import { ref, computed, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
@@ -12,32 +14,30 @@ import axios from 'axios'
 import UserRequestCard from '~/components/manage/moderation/UserRequestCard.vue'
 import Pagination from '~/components/vui/Pagination.vue'
 
+import useSmartSearch from '~/composables/navigation/useSmartSearch'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
+import useOrdering from '~/composables/navigation/useOrdering'
 import useErrorHandler from '~/composables/useErrorHandler'
-import useSmartSearch from '~/composables/useSmartSearch'
-import useOrdering from '~/composables/useOrdering'
+import usePage from '~/composables/navigation/usePage'
 
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
-  orderingConfigName: RouteWithPreferences | null
-  defaultQuery?: string
+  orderingConfigName?: RouteRecordName
   updateUrl?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  defaultQuery: '',
-  updateUrl: false
+  updateUrl: false,
+  orderingConfigName: undefined
 })
 
 const search = ref()
 
-// TODO (wvffle): Make sure everything is it's own type
-const page = ref(1)
-type ResponseType = { count: number, results: any[] }
-const result = ref<null | ResponseType>(null)
+const page = usePage()
+const result = ref<BackendResponse<UserRequest>>()
 
-const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props.defaultQuery, props.updateUrl)
-const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props.orderingConfigName)
+const { onOrderingUpdate, orderingString, paginateBy, ordering, orderingDirection } = useOrdering(props)
+const { onSearch, query, addSearchToken, getTokenValue } = useSmartSearch(props)
 
 const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['creation_date', 'creation_date'],
@@ -70,7 +70,7 @@ const fetchData = async () => {
     }
   } catch (error) {
     useErrorHandler(error as Error)
-    result.value = null
+    result.value = undefined
   } finally {
     isLoading.value = false
   }

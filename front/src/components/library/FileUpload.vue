@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { VueUploadItem } from 'vue-upload-component'
 import type { BackendError, Library, FileSystem } from '~/types'
+import type { VueUploadItem } from 'vue-upload-component'
 
 import { computed, ref, reactive, watch, nextTick } from 'vue'
 import { useEventListener, useIntervalFn } from '@vueuse/core'
@@ -268,7 +268,8 @@ const inputFile = (newFile: VueUploadItem) => {
   }
 }
 
-const retry = (files: VueUploadItem[]) => {
+// NOTE: For some weird reason typescript thinks that xhr field is not compatible with the same type
+const retry = (files: Omit<VueUploadItem, 'xhr'>[]) => {
   for (const file of files) {
     upload.value.update(file, { error: '', progress: '0.00' })
   }

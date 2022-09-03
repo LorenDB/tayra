@@ -7,15 +7,6 @@ import moment from 'moment'
 
 type SupportedExtension = 'flac' | 'ogg' | 'mp3' | 'opus' | 'aac' | 'm4a' | 'aiff' | 'aif'
 
-export type RouteWithPreferences = 'library.artists.browse' | 'library.podcasts.browse' | 'library.radios.browse'
-  | 'library.playlists.browse' | 'library.albums.me' | 'library.artists.me' | 'library.radios.me'
-  | 'library.playlists.me' | 'content.libraries.files' | 'library.detail.upload' | 'library.detail.edit'
-  | 'library.detail' | 'favorites' | 'manage.channels' | 'manage.library.tags' | 'manage.library.uploads'
-  | 'manage.library.libraries' | 'manage.library.tracks' | 'manage.library.albums' | 'manage.library.artists'
-  | 'manage.library.edits' | 'manage.users.users.list' | 'manage.users.invitations.list'
-  | 'manage.moderation.accounts.list' | 'manage.moderation.domains.list' | 'manage.moderation.requests.list'
-  | 'manage.moderation.reports.list' | 'library.albums.browse'
-
 export type WebSocketEventName = 'inbox.item_added' | 'import.status_updated' | 'mutation.created' | 'mutation.updated'
   | 'report.created' | 'user_request.created' | 'Listen'
 
@@ -26,12 +17,6 @@ export type OrderingField = 'creation_date' | 'title' | 'album__title' | 'artist
   | 'last_activity' | 'username'
 
 export type OrderingDirection = '-' | '+'
-interface RoutePreferences {
-  paginateBy: number
-  orderingDirection: OrderingDirection
-  ordering: OrderingField
-}
-
 interface WebSocketEvent {
   type: WebSocketEventName
 }
@@ -63,7 +48,6 @@ export interface State {
 
   notifications: Record<NotificationsKey, number>
   websocketEventsHandlers: Record<WebSocketEventName, WebSocketHandlers>
-  routePreferences: Record<RouteWithPreferences, RoutePreferences>
 }
 
 const store: Module<State, RootState> = {
@@ -97,149 +81,7 @@ const store: Module<State, RootState> = {
       'user_request.created': {},
       Listen: {}
     },
-    pageTitle: null,
-    routePreferences: {
-      'library.albums.browse': {
-        paginateBy: 25,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'library.artists.browse': {
-        paginateBy: 30,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'library.podcasts.browse': {
-        paginateBy: 30,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'library.radios.browse': {
-        paginateBy: 12,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'library.playlists.browse': {
-        paginateBy: 25,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'library.albums.me': {
-        paginateBy: 25,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'library.artists.me': {
-        paginateBy: 30,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'library.radios.me': {
-        paginateBy: 12,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'library.playlists.me': {
-        paginateBy: 25,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'content.libraries.files': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'library.detail.upload': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'library.detail.edit': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'library.detail': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      favorites: {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.channels': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.library.tags': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.library.uploads': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.library.libraries': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.library.tracks': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.library.albums': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.library.artists': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.library.edits': {
-        paginateBy: 25,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.users.users.list': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.users.invitations.list': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.moderation.accounts.list': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.moderation.domains.list': {
-        paginateBy: 50,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.moderation.requests.list': {
-        paginateBy: 25,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      },
-      'manage.moderation.reports.list': {
-        paginateBy: 25,
-        orderingDirection: '-',
-        ordering: 'creation_date'
-      }
-    }
+    pageTitle: null
   },
   getters: {
     showInstanceSupportMessage: (state, getters, rootState) => {

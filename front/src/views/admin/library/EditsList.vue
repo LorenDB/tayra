@@ -24,7 +24,6 @@ const labels = computed(() => ({
       <edits-card-list
         :update-url="true"
         :default-query="defaultQuery"
-        :ordering-config-name="null"
       >
         <h2 class="ui header">
           <translate translate-context="Content/Admin/Title/Noun">

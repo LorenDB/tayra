@@ -30,6 +30,7 @@ export const install: InitModule = ({ store, router }) => {
     return response
   }, async (error: BackendError) => {
     error.backendErrors = []
+    error.isHandled = false
 
     if (store.state.auth.authenticated && !store.state.auth.oauth.accessToken && error.response?.status === 401) {
       store.commit('auth/authenticated', false)
@@ -40,8 +41,10 @@ export const install: InitModule = ({ store, router }) => {
     switch (error.response?.status) {
       case 404:
         error.backendErrors.push('Resource not found')
+        error.isHandled = true
         store.commit('ui/addMessage', {
-          content: error.response?.data,
+          // @ts-expect-error TS does not know about .data structure
+          content: error.response?.data?.detail ?? error.response?.data,
           class: 'error'
         })
         break
@@ -71,6 +74,7 @@ export const install: InitModule = ({ store, router }) => {
         }
 
         error.backendErrors.push(message)
+        error.isHandled = true
         store.commit('ui/addMessage', {
           content: message,
           date: new Date(),

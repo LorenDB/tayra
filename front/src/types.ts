@@ -218,6 +218,7 @@ export interface Listening {
 export interface APIErrorResponse extends Record<string, APIErrorResponse | string[] | { code: string }[]> {}
 
 export interface BackendError extends AxiosError {
+  isHandled: boolean
   backendErrors: string[]
   rawPayload?: APIErrorResponse
 }

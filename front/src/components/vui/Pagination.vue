@@ -4,6 +4,8 @@ import { range, clamp } from 'lodash-es'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
+const RANGE = 2
+
 interface Events {
   (e: 'update:current', page: number): void
 }
@@ -24,7 +26,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const current = useVModel(props, 'current', emit)
 
-const RANGE = 2
 const pages = computed(() => {
   const start = range(1, 1 + RANGE)
   const end = range(maxPage.value - RANGE + 1, maxPage.value + 1)
@@ -32,6 +33,13 @@ const pages = computed(() => {
     clamp(props.current - RANGE + 1, 1, maxPage.value),
     clamp(props.current + RANGE, 1, maxPage.value)
   ).filter(i => !start.includes(i) && !end.includes(i))
+
+  if (end[0] - 1 <= start[RANGE - 1]) {
+    return [
+      ...start,
+      ...end.filter(i => i > start[RANGE - 1])
+    ]
+  }
 
   return [
     ...start,

@@ -54,58 +54,44 @@ const title = computed(() => labels.value[props.type])
         v-if="type === 'accounts'"
         :update-url="true"
         :default-query="defaultQuery"
-        :ordering-config-name="null"
       />
       <albums-table
         v-else-if="type === 'albums'"
         :update-url="true"
         :default-query="defaultQuery"
-        :ordering-config-name="null"
       />
       <artists-table
         v-else-if="type === 'artists'"
         :update-url="true"
         :default-query="defaultQuery"
-        :ordering-config-name="null"
       />
       <channels-table
         v-else-if="type === 'channels'"
         :update-url="true"
         :default-query="defaultQuery"
-        :ordering-config-name="null"
       />
-      <invitations-table
-        v-else-if="type === 'invitations'"
-        :ordering-config-name="null"
-      />
+      <invitations-table v-else-if="type === 'invitations'" />
       <libraries-table
         v-else-if="type === 'libraries'"
         :update-url="true"
         :default-query="defaultQuery"
-        :ordering-config-name="null"
       />
       <tags-table
         v-else-if="type === 'tags'"
         :update-url="true"
         :default-query="defaultQuery"
-        :ordering-config-name="null"
       />
       <tracks-table
         v-else-if="type === 'tracks'"
         :update-url="true"
         :default-query="defaultQuery"
-        :ordering-config-name="null"
       />
       <uploads-table
         v-else-if="type === 'uploads'"
         :update-url="true"
         :default-query="defaultQuery"
-        :ordering-config-name="null"
       />
-      <users-table
-        v-else-if="type === 'users'"
-        :ordering-config-name="null"
-      />
+      <users-table v-else-if="type === 'users'" />
     </section>
   </main>
 </template>

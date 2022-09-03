@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Upload, Tag, Track } from '~/types'
+import type { Upload, Track } from '~/types'
 
 import { reactive, computed, watch } from 'vue'
 
@@ -21,16 +21,12 @@ const props = withDefaults(defineProps<Props>(), {
   values: null
 })
 
-const newValues = reactive<Omit<Values, 'tags'> & { tags: Tag[] }>({
-  ...(props.values ?? props.upload.import_metadata ?? {}) as Values,
-  tags: ((props.values ?? props.upload.import_metadata)?.tags?.map(name => ({ name })) ?? []) as Tag[]
+const newValues = reactive<Values>({
+  ...(props.values ?? props.upload.import_metadata ?? {}) as Values
 })
 
 const isLoading = computed(() => !props.upload)
-watch(newValues, (values) => emit('update:values', {
-  ...values,
-  tags: values.tags?.map(({ name }) => name)
-}), { immediate: true })
+watch(newValues, (values) => emit('update:values', values), { immediate: true })
 </script>
 
 <template>
