@@ -105,7 +105,7 @@ router.beforeEach(() => store.commit('ui/queueFocused', null))
 
 const progressBar = ref()
 const touchProgress = (event: MouseEvent) => {
-  const time = ((event.clientX - (event.target as Element).getBoundingClientRect().left) / progressBar.value.offsetWidth) * duration.value
+  const time = ((event.clientX - ((event.target as Element).closest('.progress')?.getBoundingClientRect().left ?? 0)) / progressBar.value.offsetWidth) * duration.value
   currentTime.value = time
 }
 
