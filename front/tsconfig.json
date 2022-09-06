@@ -14,9 +14,9 @@
       "vite-plugin-pwa/client"
     ],
     "paths": {
-      "?/*": ["tests/unit/*"],
+      "?/*": ["test/*"],
       "~/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.vue", "vite.config.ts", "tests/**/*.ts"]
+  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.vue", "vite.config.ts", "test/**/*.ts"]
 }
