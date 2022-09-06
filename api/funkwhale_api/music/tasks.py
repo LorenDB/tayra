@@ -264,7 +264,9 @@ def process_upload(upload, update_denormalization=True):
         upload.import_status = "skipped"
         upload.import_details = {
             "code": "already_imported_in_owned_libraries",
-            "duplicates": list(owned_duplicates),
+            # In order to avoid exponential growth of the database, we only
+            # reference the first known upload which gets duplicated
+            "duplicates": owned_duplicates[0],
         }
         upload.import_date = timezone.now()
         upload.save(
@@ -415,6 +417,7 @@ def get_owned_duplicates(upload, track):
         )
         .exclude(pk=upload.pk)
         .values_list("uuid", flat=True)
+        .order_by("creation_date")
     )
 
 

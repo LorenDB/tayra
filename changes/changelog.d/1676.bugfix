@@ -1,0 +1,1 @@
+Fix exponentially growing database when using in-place-imports on a regular base #1676
