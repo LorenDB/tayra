@@ -350,7 +350,7 @@ def fetch(fetch_obj):
         return error(
             "http",
             status_code=e.response.status_code if e.response else None,
-            message=response.text,
+            message=e.response.text,
         )
     except requests.exceptions.Timeout:
         return error("timeout")

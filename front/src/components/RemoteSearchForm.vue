@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import type { BackendError } from '~/types'
 
-import axios from 'axios'
-import { useStore } from '~/store'
 import { ref, computed, watch, watchEffect } from 'vue'
-import { useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
+import { useRouter } from 'vue-router'
+import { useStore } from '~/store'
+
+import axios from 'axios'
+
+import updateQueryString from '~/composables/updateQueryString'
 
 type Type = 'rss' | 'artists' | 'both'
 
@@ -99,10 +102,10 @@ const submit = () => {
 
 const isLoading = ref(false)
 const createFetch = async () => {
+  console.log(id.value, props.standalone)
   if (!id.value) return
   if (props.standalone) {
-    // TODO (wvffle): Check if this needs to be handled
-    return router.replace({ name: 'search', query: { id: id.value } })
+    history.replaceState(history.state, '', updateQueryString(location.href, 'id', id.value))
   }
 
   obj.value = undefined
@@ -128,8 +131,7 @@ const store = useStore()
 const rssSubscribe = async () => {
   if (!id.value) return
   if (props.standalone) {
-    // TODO (wvffle): Check if this needs to be handled
-    return router.replace({ name: 'search', query: { id: id.value, type: 'rss' } })
+    history.replaceState(history.state, '', updateQueryString(location.href, 'id', id.value))
   }
 
   obj.value = undefined
