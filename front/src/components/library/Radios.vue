@@ -84,7 +84,7 @@ const store = useStore()
 const isAuthenticated = computed(() => store.state.auth.authenticated)
 const hasFavorites = computed(() => store.state.favorites.count > 0)
 
-watch(page, fetchData)
+watch([page, q], fetchData)
 fetchData()
 
 const search = () => {

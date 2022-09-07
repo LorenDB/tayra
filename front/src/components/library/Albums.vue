@@ -94,7 +94,7 @@ const fetchData = async () => {
 
 const store = useStore()
 watch(() => store.state.moderation.lastUpdate, fetchData)
-watch([page, tags], fetchData)
+watch([page, tags, q], fetchData)
 fetchData()
 
 const search = () => {
