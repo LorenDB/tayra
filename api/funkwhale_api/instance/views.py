@@ -7,6 +7,7 @@ from dynamic_preferences.api import serializers
 from dynamic_preferences.api import viewsets as preferences_viewsets
 from dynamic_preferences.registries import global_preferences_registry
 from rest_framework import views
+from rest_framework import generics
 from rest_framework.response import Response
 
 from funkwhale_api.common import middleware
@@ -28,19 +29,24 @@ class AdminSettings(preferences_viewsets.GlobalPreferencesViewSet):
     required_scope = "instance:settings"
 
 
-class InstanceSettings(views.APIView):
+class InstanceSettings(generics.GenericAPIView):
     permission_classes = []
     authentication_classes = []
+    serializer_class = serializers.GlobalPreferenceSerializer
 
-    def get(self, request, *args, **kwargs):
+    def get_queryset(self):
         manager = global_preferences_registry.manager()
         manager.all()
         all_preferences = manager.model.objects.all().order_by("section", "name")
         api_preferences = [
             p for p in all_preferences if getattr(p.preference, "show_in_api", False)
         ]
-        data = serializers.GlobalPreferenceSerializer(api_preferences, many=True).data
-        return Response(data, status=200)
+        return api_preferences
+
+    def get(self, request):
+        queryset = self.get_queryset()
+        serializer = serializers.GlobalPreferenceSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class NodeInfo(views.APIView):
