@@ -6,7 +6,7 @@ import ReportCategoryDropdown from '~/components/moderation/ReportCategoryDropdo
 import SemanticModal from '~/components/semantic/Modal.vue'
 import { computed, ref, watchEffect } from 'vue'
 import { useStore } from '~/store'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 interface ReportType {
   anonymous: boolean
@@ -63,7 +63,7 @@ const show = computed({
 const isLoading = ref(false)
 
 // TODO (wvffle): MOVE ALL use*() METHODS SOMEWHERE TO THE TOP
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const submit = async () => {
   isLoading.value = true
@@ -84,7 +84,7 @@ const submit = async () => {
 
     store.commit('moderation/contentFilter', response.data)
     store.commit('ui/addMessage', {
-      content: $pgettext('*/Moderation/Message', 'Report successfully submitted, thank you'),
+      content: t('Report successfully submitted, thank you'),
       date: new Date()
     })
 
@@ -110,7 +110,7 @@ watchEffect(async () => {
     reportTypes.value = response.data.metadata.reportTypes ?? []
   } catch (error) {
     store.commit('ui/addMessage', {
-      content: $pgettext('*/Moderation/Message', 'Cannot fetch Node Info: %{ error }', { error: `${error}` }),
+      content: t('Cannot fetch Node Info: %{ error }', { error: `${error}` }),
       date: new Date()
     })
   }
@@ -125,7 +125,7 @@ watchEffect(async () => {
       v-if="target"
       class="ui header"
     >
-      <translate translate-context="Popup/Moderation/Title/Verb">
+      <translate >
         Do you want to report this object?
       </translate>
       <div class="ui sub header">
@@ -140,7 +140,7 @@ watchEffect(async () => {
           class="ui negative message"
         >
           <h4 class="header">
-            <translate translate-context="Popup/Moderation/Error message">
+            <translate >
               Error while submitting report
             </translate>
           </h4>
@@ -155,7 +155,7 @@ watchEffect(async () => {
         </div>
       </div>
       <p>
-        <translate translate-context="*/Moderation/Popup,Paragraph">
+        <translate >
           Use this form to submit a report to our moderation team.
         </translate>
       </p>
@@ -179,7 +179,7 @@ watchEffect(async () => {
             class="ui eight wide required field"
           >
             <label for="report-submitter-email">
-              <translate translate-context="Content/*/*/Noun">Email</translate>
+              <translate >Email</translate>
             </label>
             <input
               id="report-submitter-email"
@@ -189,7 +189,7 @@ watchEffect(async () => {
               required
             >
             <p>
-              <translate translate-context="*/*/Field,Help">
+              <translate >
                 We'll use this e-mail address if we need to contact you regarding this report.
               </translate>
             </p>
@@ -197,10 +197,10 @@ watchEffect(async () => {
         </div>
         <div class="ui field">
           <label for="report-summary">
-            <translate translate-context="*/*/Field.Label/Noun">Message</translate>
+            <translate >Message</translate>
           </label>
           <p>
-            <translate translate-context="*/*/Field,Help">
+            <translate >
               Use this field to provide additional context to the moderator that will handle your report.
             </translate>
           </p>
@@ -224,11 +224,11 @@ watchEffect(async () => {
               <strong>
                 <translate
                   :translate-params="{domain: targetDomain}"
-                  translate-context="*/*/Field.Label/Verb"
+
                 >Forward to %{ domain} </translate>
               </strong>
               <p>
-                <translate translate-context="*/*/Field,Help">Forward an anonymized copy of your report to the server hosting this element.</translate>
+                <translate >Forward an anonymized copy of your report to the server hosting this element.</translate>
               </p>
             </label>
           </div>
@@ -245,7 +245,7 @@ watchEffect(async () => {
         class="ui warning message"
       >
         <h4 class="header">
-          <translate translate-context="Popup/Moderation/Error message">
+          <translate >
             Anonymous reports are disabled, please sign-in to submit a report.
           </translate>
         </h4>
@@ -253,7 +253,7 @@ watchEffect(async () => {
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate translate-context="*/*/Button.Label/Verb">
+        <translate >
           Cancel
         </translate>
       </button>
@@ -263,7 +263,7 @@ watchEffect(async () => {
         type="submit"
         form="report-form"
       >
-        <translate translate-context="Popup/*/Button.Label">
+        <translate >
           Submit report
         </translate>
       </button>

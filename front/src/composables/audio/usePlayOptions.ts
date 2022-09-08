@@ -3,11 +3,11 @@ import type { ContentFilter } from '~/store/moderation'
 
 import { useCurrentElement } from '@vueuse/core'
 import { computed, markRaw, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import { usePlayer } from '~/composables/audio/player'
 import { useQueue } from '~/composables/audio/queue'
-import { gettext } from '~/init/locale'
 
 import jQuery from 'jquery'
 import axios from 'axios'
@@ -49,16 +49,14 @@ export default (props: PlayOptionsProps) => {
   const filterableArtist = computed(() => props.track?.artist ?? props.album?.artist ?? props.artist)
   const filterArtist = async () => store.dispatch('moderation/hide', { type: 'artist', target: filterableArtist.value })
 
-  const { $npgettext } = gettext
+  const { t } = useI18n()
   const addMessage = (tracks: Track[]) => {
     if (!tracks.length) {
       return
     }
 
     store.commit('ui/addMessage', {
-      content: $npgettext('*/Queue/Message', '%{ count } track was added to your queue', '%{ count } tracks were added to your queue', tracks.length, {
-        count: tracks.length.toString()
-      }),
+      content: t('%{ count } tracks were added to your queue | %{ count } track was added to your queue | %{ count } tracks were added to your queue', tracks.length),
       date: new Date()
     })
   }

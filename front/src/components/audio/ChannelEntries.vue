@@ -103,7 +103,7 @@ watch(page, fetchData, { immediate: true })
         @refresh="fetchData()"
       >
         <p>
-          <translate translate-context="Content/Channels/*">
+          <translate >
             You may need to subscribe to this channel to see its content.
           </translate>
         </p>

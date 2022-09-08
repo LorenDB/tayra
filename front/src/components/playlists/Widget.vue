@@ -78,7 +78,7 @@ watch(
     >
       <div class="ui icon header">
         <i class="list icon" />
-        <translate translate-context="Content/Home/Placeholder">
+        <translate >
           No playlists have been created yet
         </translate>
       </div>
@@ -88,7 +88,7 @@ watch(
         @click="$store.commit('playlists/chooseTrack', null)"
       >
         <i class="list icon" />
-        <translate translate-context="Content/Home/CreatePlaylist">
+        <translate >
           Create Playlist
         </translate>
       </button>
@@ -100,7 +100,7 @@ watch(
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        <translate translate-context="*/*/Button,Label">
+        <translate >
           Show more
         </translate>
       </button>

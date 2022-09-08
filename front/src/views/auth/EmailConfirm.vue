@@ -2,7 +2,7 @@
 import type { BackendError } from '~/types'
 
 import { computed, ref, onMounted } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 
@@ -12,10 +12,10 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const labels = computed(() => ({
-  confirm: $pgettext('Head/Signup/Title', 'Confirm your e-mail address')
+  confirm: t('Confirm your e-mail address')
 }))
 
 const errors = ref([] as string[])
@@ -60,7 +60,7 @@ onMounted(() => {
             class="ui negative message"
           >
             <h4 class="header">
-              <translate translate-context="Content/Signup/Paragraph">
+              <translate >
                 Could not confirm your e-mail address
               </translate>
             </h4>
@@ -74,7 +74,7 @@ onMounted(() => {
             </ul>
           </div>
           <div class="field">
-            <label for="confirmation-code"><translate translate-context="Content/Signup/Form.Label">Confirmation code</translate></label>
+            <label for="confirmation-code"><translate >Confirmation code</translate></label>
             <input
               id="confirmation-code"
               v-model="key"
@@ -84,7 +84,7 @@ onMounted(() => {
             >
           </div>
           <router-link :to="{path: '/login'}">
-            <translate translate-context="Content/Signup/Link/Verb">
+            <translate >
               Return to login
             </translate>
           </router-link>
@@ -100,17 +100,17 @@ onMounted(() => {
           class="ui positive message"
         >
           <h4 class="header">
-            <translate translate-context="Content/Signup/Message">
+            <translate >
               E-mail address confirmed
             </translate>
           </h4>
           <p>
-            <translate translate-context="Content/Signup/Paragraph">
+            <translate >
               You can now use the service without limitations.
             </translate>
           </p>
           <router-link :to="{name: 'login'}">
-            <translate translate-context="Content/Signup/Link/Verb">
+            <translate >
               Proceed to login
             </translate>
           </router-link>

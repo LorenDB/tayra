@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import type { RouteRecordName } from 'vue-router'
 
+import { computed, ref, watch, watchEffect, onMounted } from 'vue'
+import { SUPPORTED_LOCALES } from '~/init/locale'
+import { useCurrentElement } from '@vueuse/core'
+import { setupDropdown } from '~/utils/fomantic'
+import { useRoute } from 'vue-router'
+import { useStore } from '~/store'
+import { useI18n } from 'vue-i18n'
+
+import SemanticModal from '~/components/semantic/Modal.vue'
 import UserModal from '~/components/common/UserModal.vue'
-import Logo from '~/components/Logo.vue'
 import SearchBar from '~/components/audio/SearchBar.vue'
 import UserMenu from '~/components/common/UserMenu.vue'
-import SemanticModal from '~/components/semantic/Modal.vue'
+import Logo from '~/components/Logo.vue'
 
 import useThemeList from '~/composables/useThemeList'
 import useTheme from '~/composables/useTheme'
-import { useRoute } from 'vue-router'
-import { computed, ref, watch, watchEffect, onMounted } from 'vue'
-import { useGettext } from 'vue3-gettext'
-import { useStore } from '~/store'
-import { setupDropdown } from '~/utils/fomantic'
-import { useCurrentElement } from '@vueuse/core'
 
 interface Events {
   (e: 'show:set-instance-modal'): void
@@ -30,7 +32,7 @@ defineProps<Props>()
 const store = useStore()
 const { theme } = useTheme()
 const themes = useThemeList()
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const route = useRoute()
 const isCollapsed = ref(true)
@@ -40,15 +42,15 @@ const additionalNotifications = computed(() => store.getters['ui/additionalNotif
 const logoUrl = computed(() => store.state.auth.authenticated ? 'library.index' : 'index')
 
 const labels = computed(() => ({
-  mainMenu: $pgettext('Sidebar/*/Hidden text', 'Main menu'),
-  selectTrack: $pgettext('Sidebar/Player/Hidden text', 'Play this track'),
-  pendingFollows: $pgettext('Sidebar/Notifications/Hidden text', 'Pending follow requests'),
-  pendingReviewEdits: $pgettext('Sidebar/Moderation/Hidden text', 'Pending review edits'),
-  pendingReviewReports: $pgettext('Sidebar/Moderation/Hidden text', 'Pending review reports'),
-  language: $pgettext('Sidebar/Settings/Dropdown.Label/Short, Verb', 'Language'),
-  theme: $pgettext('Sidebar/Settings/Dropdown.Label/Short, Verb', 'Theme'),
-  addContent: $pgettext('*/Library/*/Verb', 'Add content'),
-  administration: $pgettext('Sidebar/Admin/Title/Noun', 'Administration')
+  mainMenu: t('Main menu'),
+  selectTrack: t('Play this track'),
+  pendingFollows: t('Pending follow requests'),
+  pendingReviewEdits: t('Pending review edits'),
+  pendingReviewReports: t('Pending review reports'),
+  language: t('Language'),
+  theme: t('Theme'),
+  addContent: t('Add content'),
+  administration: t('Administration')
 }))
 
 type SidebarMenuTabs = 'explore' | 'myLibrary'
@@ -104,12 +106,6 @@ const showUserModal = ref(false)
 const showLanguageModal = ref(false)
 const showThemeModal = ref(false)
 
-const gettext = useGettext()
-const languageSelection = ref(gettext.current)
-watch(languageSelection, (v) => {
-  store.dispatch('ui/currentLanguage', v)
-})
-
 const el = useCurrentElement()
 watchEffect(() => {
   if (store.state.auth.authenticated) {
@@ -153,7 +149,7 @@ onMounted(() => {
               </div>
               <div class="menu">
                 <h3 class="header">
-                  <translate translate-context="Sidebar/Admin/Title/Noun">
+                  <translate >
                     Administration
                   </translate>
                 </h3>
@@ -170,7 +166,7 @@ onMounted(() => {
                   >
                     {{ $store.state.ui.notifications.pendingReviewEdits }}
                   </div>
-                  <translate translate-context="*/*/*/Noun">
+                  <translate >
                     Library
                   </translate>
                 </router-link>
@@ -186,7 +182,7 @@ onMounted(() => {
                   >
                     {{ $store.state.ui.notifications.pendingReviewReports + $store.state.ui.notifications.pendingReviewRequests }}
                   </div>
-                  <translate translate-context="*/Moderation/*">
+                  <translate >
                     Moderation
                   </translate>
                 </router-link>
@@ -195,7 +191,7 @@ onMounted(() => {
                   class="item"
                   :to="{name: 'manage.users.users.list'}"
                 >
-                  <translate translate-context="*/*/*/Noun">
+                  <translate >
                     Users
                   </translate>
                 </router-link>
@@ -204,7 +200,7 @@ onMounted(() => {
                   class="item"
                   :to="{path: '/manage/settings'}"
                 >
-                  <translate translate-context="*/*/*/Noun">
+                  <translate >
                     Settings
                   </translate>
                 </router-link>
@@ -300,12 +296,12 @@ onMounted(() => {
           </div>
           <div class="content">
             <fieldset
-              v-for="(language, key) in $language.available"
+              v-for="(language, key) in SUPPORTED_LOCALES"
               :key="key"
             >
               <input
                 :id="`${key}`"
-                v-model="languageSelection"
+                v-model="$i18n.locale"
                 type="radio"
                 name="language"
                 :value="key"
@@ -366,7 +362,7 @@ onMounted(() => {
         class="ui fluid tiny primary button"
         :to="{name: 'login'}"
       >
-        <translate translate-context="*/Login/*/Verb">
+        <translate >
           Login
         </translate>
       </router-link>
@@ -375,7 +371,7 @@ onMounted(() => {
         class="ui fluid tiny button"
         :to="{path: '/signup'}"
       >
-        <translate translate-context="*/Signup/Link/Verb">
+        <translate >
           Create an account
         </translate>
       </router-link>
@@ -389,7 +385,7 @@ onMounted(() => {
         id="navigation-label"
         class="visually-hidden"
       >
-        <translate translate-context="*/*/*">
+        <translate >
           Main navigation
         </translate>
       </h1>
@@ -411,7 +407,7 @@ onMounted(() => {
               @click="expanded = 'explore'"
               @focus="expanded = 'explore'"
             >
-              <translate translate-context="*/*/*/Verb">
+              <translate >
                 Explore
               </translate>
               <i
@@ -424,7 +420,7 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'search'}"
               >
-                <i class="search icon" /><translate translate-context="Sidebar/Navigation/List item.Link/Verb">
+                <i class="search icon" /><translate >
                   Search
                 </translate>
               </router-link>
@@ -433,7 +429,7 @@ onMounted(() => {
                 :to="{name: 'library.index'}"
                 active-class="_active"
               >
-                <i class="music icon" /><translate translate-context="Sidebar/Navigation/List item.Link/Verb">
+                <i class="music icon" /><translate >
                   Browse
                 </translate>
               </router-link>
@@ -441,7 +437,7 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'library.podcasts.browse'}"
               >
-                <i class="podcast icon" /><translate translate-context="*/*/*">
+                <i class="podcast icon" /><translate >
                   Podcasts
                 </translate>
               </router-link>
@@ -449,7 +445,7 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'library.albums.browse'}"
               >
-                <i class="compact disc icon" /><translate translate-context="*/*/*">
+                <i class="compact disc icon" /><translate >
                   Albums
                 </translate>
               </router-link>
@@ -457,7 +453,7 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'library.artists.browse'}"
               >
-                <i class="user icon" /><translate translate-context="*/*/*">
+                <i class="user icon" /><translate >
                   Artists
                 </translate>
               </router-link>
@@ -465,7 +461,7 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'library.playlists.browse'}"
               >
-                <i class="list icon" /><translate translate-context="*/*/*">
+                <i class="list icon" /><translate >
                   Playlists
                 </translate>
               </router-link>
@@ -473,7 +469,7 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'library.radios.browse'}"
               >
-                <i class="feed icon" /><translate translate-context="*/*/*">
+                <i class="feed icon" /><translate >
                   Radios
                 </translate>
               </router-link>
@@ -490,7 +486,7 @@ onMounted(() => {
               @click="expanded = 'myLibrary'"
               @focus="expanded = 'myLibrary'"
             >
-              <translate translate-context="*/*/*/Noun">
+              <translate >
                 My Library
               </translate>
               <i
@@ -503,7 +499,7 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'library.me'}"
               >
-                <i class="music icon" /><translate translate-context="Sidebar/Navigation/List item.Link/Verb">
+                <i class="music icon" /><translate >
                   Browse
                 </translate>
               </router-link>
@@ -511,7 +507,7 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'library.albums.me'}"
               >
-                <i class="compact disc icon" /><translate translate-context="*/*/*">
+                <i class="compact disc icon" /><translate >
                   Albums
                 </translate>
               </router-link>
@@ -519,7 +515,7 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'library.artists.me'}"
               >
-                <i class="user icon" /><translate translate-context="*/*/*">
+                <i class="user icon" /><translate >
                   Artists
                 </translate>
               </router-link>
@@ -527,7 +523,7 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'library.playlists.me'}"
               >
-                <i class="list icon" /><translate translate-context="*/*/*">
+                <i class="list icon" /><translate >
                   Playlists
                 </translate>
               </router-link>
@@ -535,7 +531,7 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'library.radios.me'}"
               >
-                <i class="feed icon" /><translate translate-context="*/*/*">
+                <i class="feed icon" /><translate >
                   Radios
                 </translate>
               </router-link>
@@ -543,7 +539,7 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'favorites'}"
               >
-                <i class="heart icon" /><translate translate-context="Sidebar/Favorites/List item.Link/Noun">
+                <i class="heart icon" /><translate >
                   Favorites
                 </translate>
               </router-link>
@@ -554,13 +550,13 @@ onMounted(() => {
             class="header item"
             :to="{name: 'subscriptions'}"
           >
-            <translate translate-context="*/*/*">
+            <translate >
               Channels
             </translate>
           </router-link>
           <div class="item">
             <h3 class="header">
-              <translate translate-context="Footer/About/List item.Link">
+              <translate >
                 More
               </translate>
             </h3>
@@ -570,7 +566,7 @@ onMounted(() => {
                 to="/about"
                 active-class="router-link-exact-active active"
               >
-                <i class="info icon" /><translate translate-context="Sidebar/*/List item.Link">
+                <i class="info icon" /><translate >
                   About this pod
                 </translate>
               </router-link>

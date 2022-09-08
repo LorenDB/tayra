@@ -42,7 +42,7 @@ const confirm = () => {
     >
       <h4 class="header">
         <slot name="modal-header">
-          <translate translate-context="Modal/*/Title">
+          <translate >
             Do you want to confirm this action?
           </translate>
         </slot>
@@ -54,7 +54,7 @@ const confirm = () => {
       </div>
       <div class="actions">
         <button class="ui basic cancel button">
-          <translate translate-context="*/*/Button.Label/Verb">
+          <translate >
             Cancel
           </translate>
         </button>
@@ -63,7 +63,7 @@ const confirm = () => {
           @click="confirm"
         >
           <slot name="modal-confirm">
-            <translate translate-context="Modal/*/Button.Label/Short, Verb">
+            <translate >
               Confirm
             </translate>
           </slot>

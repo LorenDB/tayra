@@ -2,7 +2,7 @@
 import type { Track, Album, Artist, Library } from '~/types'
 
 import { computed, ref, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { getDomain } from '~/utils'
 import { useStore } from '~/store'
@@ -57,9 +57,9 @@ const headerStyle = computed(() => cover.value?.urls.original
   : ''
 )
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('*/*/*', 'Artist')
+  title: t('Artist')
 }))
 
 const isLoading = ref(false)
@@ -118,7 +118,7 @@ watch(() => props.id, fetchData, { immediate: true })
                 class="sub header"
               >
                 <translate
-                  translate-context="Content/Artist/Paragraph"
+
                   tag="div"
                   translate-plural="%{ count } tracks in %{ albumsCount } albums"
                   :translate-n="totalTracks"
@@ -147,7 +147,7 @@ watch(() => props.id, fetchData, { immediate: true })
                 class="vibrant"
                 :artist="object"
               >
-                <translate translate-context="Content/Artist/Button.Label/Verb">
+                <translate >
                   Play all albums
                 </translate>
               </play-button>
@@ -158,7 +158,7 @@ watch(() => props.id, fetchData, { immediate: true })
               v-model:show="showEmbedModal"
             >
               <h4 class="header">
-                <translate translate-context="Popup/Artist/Title/Verb">
+                <translate >
                   Embed this artist work on your website
                 </translate>
               </h4>
@@ -172,7 +172,7 @@ watch(() => props.id, fetchData, { immediate: true })
               </div>
               <div class="actions">
                 <button class="ui deny button">
-                  <translate translate-context="*/*/Button.Label/Verb">
+                  <translate >
                     Cancel
                   </translate>
                 </button>
@@ -183,7 +183,7 @@ watch(() => props.id, fetchData, { immediate: true })
                 class="ui button"
                 @click="dropdown.click()"
               >
-                <translate translate-context="*/*/Button.Label/Noun">
+                <translate >
                   More…
                 </translate>
               </button>
@@ -203,7 +203,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     <i class="external icon" />
                     <translate
                       :translate-params="{domain: domain}"
-                      translate-context="Content/*/Button.Label/Verb"
+
                     >View on %{ domain }</translate>
                   </a>
 
@@ -214,7 +214,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     @click.prevent="showEmbedModal = !showEmbedModal"
                   >
                     <i class="code icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">
+                    <translate >
                       Embed
                     </translate>
                   </button>
@@ -225,7 +225,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="wikipedia w icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">Search on Wikipedia</translate>
+                    <translate >Search on Wikipedia</translate>
                   </a>
                   <a
                     v-if="musicbrainzUrl"
@@ -235,7 +235,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="external icon" />
-                    <translate translate-context="Content/*/*/Clickable, Verb">View on MusicBrainz</translate>
+                    <translate >View on MusicBrainz</translate>
                   </a>
                   <a
                     :href="discogsUrl"
@@ -244,7 +244,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="external icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">Search on Discogs</translate>
+                    <translate >Search on Discogs</translate>
                   </a>
                   <router-link
                     v-if="object.is_local"
@@ -252,7 +252,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="edit icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">
+                    <translate >
                       Edit
                     </translate>
                   </router-link>
@@ -274,7 +274,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     :to="{name: 'manage.library.artists.detail', params: {id: object.id}}"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link">
+                    <translate >
                       Open in moderation interface
                     </translate>
                   </router-link>
@@ -286,7 +286,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                    <translate >View in Django's admin</translate>&nbsp;
                   </a>
                 </div>
               </button>

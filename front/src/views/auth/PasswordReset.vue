@@ -2,7 +2,7 @@
 import type { BackendError } from '~/types'
 
 import { computed, ref, onMounted } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 import axios from 'axios'
@@ -13,13 +13,13 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const router = useRouter()
 
 const labels = computed(() => ({
-  placeholder: $pgettext('Content/Signup/Input.Placeholder', 'Enter the e-mail address linked to your account'),
-  reset: $pgettext('*/Login/*/Verb', 'Reset your password')
+  placeholder: t('Enter the e-mail address linked to your account'),
+  reset: t('Reset your password')
 }))
 
 const email = ref(props.defaultEmail)
@@ -51,7 +51,7 @@ onMounted(() => emailInput.value.focus())
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          <translate translate-context="*/Login/*/Verb">
+          <translate >
             Reset your password
           </translate>
         </h2>
@@ -65,7 +65,7 @@ onMounted(() => emailInput.value.focus())
             class="ui negative message"
           >
             <h4 class="header">
-              <translate translate-context="Content/Signup/Card.Title">
+              <translate >
                 Error while asking for a password reset
               </translate>
             </h4>
@@ -79,12 +79,12 @@ onMounted(() => emailInput.value.focus())
             </ul>
           </div>
           <p>
-            <translate translate-context="Content/Signup/Paragraph">
+            <translate >
               Use this form to request a password reset. We will send an e-mail to the given address with instructions to reset your password.
             </translate>
           </p>
           <div class="field">
-            <label for="account-email"><translate translate-context="Content/Signup/Input.Label">Account's e-mail address</translate></label>
+            <label for="account-email"><translate >Account's e-mail address</translate></label>
             <input
               id="account-email"
               ref="emailInput"
@@ -97,7 +97,7 @@ onMounted(() => emailInput.value.focus())
             >
           </div>
           <router-link :to="{path: '/login'}">
-            <translate translate-context="Content/Signup/Link">
+            <translate >
               Back to login
             </translate>
           </router-link>
@@ -105,7 +105,7 @@ onMounted(() => emailInput.value.focus())
             :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
             type="submit"
           >
-            <translate translate-context="Content/Signup/Button.Label/Verb">
+            <translate >
               Ask for a password reset
             </translate>
           </button>

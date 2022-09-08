@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, reactive, watch, watchEffect, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 import $ from 'jquery'
@@ -51,14 +51,14 @@ const props = withDefaults(defineProps<Props>(), {
   id: 0
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const router = useRouter()
 
 const labels = computed(() => ({
-  title: $pgettext('Head/Radio/Title', 'Radio Builder'),
+  title: t('Radio Builder'),
   placeholder: {
-    description: $pgettext('Content/Radio/Input.Placeholder', 'My awesome description'),
-    name: $pgettext('Content/Radio/Input.Placeholder', 'My awesome radio')
+    description: t('My awesome description'),
+    name: t('My awesome radio')
   }
 }))
 
@@ -203,12 +203,12 @@ onMounted(() => {
     <div>
       <section>
         <h2 class="ui header">
-          <translate translate-context="Content/Radio/Title">
+          <translate >
             Builder
           </translate>
         </h2>
         <p>
-          <translate translate-context="Content/Radio/Paragraph">
+          <translate >
             You can use this interface to build your own custom radio, which will play tracks according to your criteria.
           </translate>
         </p>
@@ -219,12 +219,12 @@ onMounted(() => {
           >
             <h4 class="header">
               <template v-if="radioName">
-                <translate translate-context="Content/Radio/Message">
+                <translate >
                   Radio updated
                 </translate>
               </template>
               <template v-else>
-                <translate translate-context="Content/Radio/Message">
+                <translate >
                   Radio created
                 </translate>
               </template>
@@ -232,7 +232,7 @@ onMounted(() => {
           </div>
           <div class="">
             <div class="field">
-              <label for="name"><translate translate-context="Content/Radio/Input.Label/Noun">Radio name</translate></label>
+              <label for="name"><translate >Radio name</translate></label>
               <input
                 id="name"
                 v-model="radioName"
@@ -242,7 +242,7 @@ onMounted(() => {
               >
             </div>
             <div class="field">
-              <label for="description"><translate translate-context="*/*/*/Noun">Description</translate></label>
+              <label for="description"><translate >Description</translate></label>
               <textarea
                 id="description"
                 v-model="radioDesc"
@@ -257,7 +257,7 @@ onMounted(() => {
                 v-model="isPublic"
                 type="checkbox"
               >
-              <label for="public"><translate translate-context="Content/Radio/Checkbox.Label/Verb">Display publicly</translate></label>
+              <label for="public"><translate >Display publicly</translate></label>
             </div>
             <div class="ui hidden divider" />
             <button
@@ -265,7 +265,7 @@ onMounted(() => {
               :class="['ui', 'success', {loading: isLoading}, 'button']"
               @click="save"
             >
-              <translate translate-context="Content/*/Button.Label/Verb">
+              <translate >
                 Save
               </translate>
             </button>
@@ -281,14 +281,14 @@ onMounted(() => {
             <label
               id="radioFilterLabel"
               for="radio-filters"
-            ><translate translate-context="Content/Radio/Paragraph">Add filters to customize your radio</translate></label>
+            ><translate >Add filters to customize your radio</translate></label>
             <select
               id="radio-filters"
               v-model="currentFilterType"
               class="ui dropdown"
             >
               <option value="">
-                <translate translate-context="Content/Radio/Dropdown.Placeholder/Verb">
+                <translate >
                   Select a filter
                 </translate>
               </option>
@@ -306,7 +306,7 @@ onMounted(() => {
               class="ui button"
               @click="add"
             >
-              <translate translate-context="Content/Radio/Button.Label/Verb">
+              <translate >
                 Add filter
               </translate>
             </button>
@@ -319,27 +319,27 @@ onMounted(() => {
           <thead>
             <tr>
               <th class="two wide">
-                <translate translate-context="Content/Radio/Table.Label/Noun">
+                <translate >
                   Filter name
                 </translate>
               </th>
               <th class="one wide">
-                <translate translate-context="Content/Radio/Table.Label/Verb">
+                <translate >
                   Exclude
                 </translate>
               </th>
               <th class="six wide">
-                <translate translate-context="Content/Radio/Table.Label/Verb (Value is a List of Parameters)">
+                <translate >
                   Config
                 </translate>
               </th>
               <th class="five wide">
-                <translate translate-context="Content/Radio/Table.Label/Noun (Value is a number of Tracks)">
+                <translate >
                   Candidates
                 </translate>
               </th>
               <th class="two wide">
-                <translate translate-context="Content/*/*/Noun">
+                <translate >
                   Actions
                 </translate>
               </th>
@@ -363,7 +363,7 @@ onMounted(() => {
             class="ui header"
             :translate-n="checkResult.candidates.count"
             translate-plural="%{ count } tracks matching combined filters"
-            translate-context="Content/Radio/Table.Paragraph/Short"
+
           >
             %{ count } track matching combined filters
           </h3>

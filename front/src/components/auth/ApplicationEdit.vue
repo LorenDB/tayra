@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 
 import axios from 'axios'
@@ -15,12 +15,12 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const application = ref()
 
 const labels = computed(() => ({
-  title: $pgettext('Content/Applications/Title', 'Edit application')
+  title: t('Edit application')
 }))
 
 const isLoading = ref(false)
@@ -72,23 +72,23 @@ store.state.auth.applicationSecret = undefined
         </div>
         <template v-else>
           <router-link :to="{name: 'settings'}">
-            <translate translate-context="Content/Applications/Link">
+            <translate >
               Back to settings
             </translate>
           </router-link>
           <h2 class="ui header">
-            <translate translate-context="Content/Applications/Title">
+            <translate >
               Application details
             </translate>
           </h2>
           <div class="ui form">
             <p>
-              <translate translate-context="Content/Application/Paragraph/">
+              <translate >
                 Application ID and secret are really sensitive values and must be treated like passwords. Do not share those with anyone else.
               </translate>
             </p>
             <div class="field">
-              <label for="copy-id"><translate translate-context="Content/Applications/Label">Application ID</translate></label>
+              <label for="copy-id"><translate >Application ID</translate></label>
               <copy-input
                 id="copy-id"
                 :value="application.client_id"
@@ -100,18 +100,18 @@ store.state.auth.applicationSecret = undefined
             >
               <div class="ui small warning message">
                 <h3 class="header">
-                  <translate translate-context="*/*/*">
+                  <translate >
                     Keep a copy of this token in a safe place
                   </translate>
                 </h3>
                 <p>
-                  <translate translate-context="*/*/*">
+                  <translate >
                     You won't be able to see it again once you leave this screen.
                   </translate>
                 </p>
               </div>
 
-              <label for="copy-secret"><translate translate-context="Content/Applications/Label">Application secret</translate></label>
+              <label for="copy-secret"><translate >Application secret</translate></label>
               <copy-input
                 id="copy-secret"
                 :value="secret"
@@ -121,7 +121,7 @@ store.state.auth.applicationSecret = undefined
               v-if="application.token != undefined"
               class="field"
             >
-              <label for="copy-secret"><translate translate-context="Content/Applications/Label">Access token</translate></label>
+              <label for="copy-secret"><translate >Access token</translate></label>
               <copy-input
                 id="copy-secret"
                 :value="application.token"
@@ -131,12 +131,12 @@ store.state.auth.applicationSecret = undefined
                 @click.prevent="refreshToken"
               >
                 <i class="refresh icon" />
-                <translate translate-context="Content/Applications/Label">Regenerate token</translate>
+                <translate >Regenerate token</translate>
               </a>
             </div>
           </div>
           <h2 class="ui header">
-            <translate translate-context="Content/Applications/Title">
+            <translate >
               Edit application
             </translate>
           </h2>

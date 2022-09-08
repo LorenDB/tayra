@@ -99,7 +99,7 @@ onMounted(async () => {
       class="search"
     >
     <div class="default text">
-      <translate translate-context="*/Dropdown/Placeholder/Verb">
+      <translate >
         Search…
       </translate>
     </div>

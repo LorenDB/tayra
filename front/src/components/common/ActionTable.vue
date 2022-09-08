@@ -2,7 +2,7 @@
 import type { BackendError } from '~/types'
 
 import { ref, computed, reactive, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 
@@ -41,7 +41,7 @@ const props = withDefaults(defineProps<Props>(), {
   customObjects: () => []
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const currentActionName = ref(props.actions[0]?.name ?? null)
 const currentAction = computed(() => props.actions.find(action => action.name === currentActionName.value))
@@ -123,10 +123,10 @@ const toggleCheck = (event: MouseEvent, id: string, index: number) => {
 }
 
 const labels = computed(() => ({
-  refresh: $pgettext('Content/*/Button.Tooltip/Verb', 'Refresh table content'),
-  selectAllItems: $pgettext('Content/*/Select/Verb', 'Select all items'),
-  performAction: $pgettext('Content/*/Button.Label', 'Perform actions'),
-  selectItem: $pgettext('Content/*/Select/Verb', 'Select')
+  refresh: t('Refresh table content'),
+  selectAllItems: t('Select all items'),
+  performAction: t('Perform actions'),
+  selectItem: t('Select')
 }))
 
 const errors = ref([] as string[])
@@ -167,7 +167,7 @@ const launchAction = async () => {
               class="right floated"
             >
               <span v-if="needsRefresh">
-                <translate translate-context="Content/*/Button.Help text.Paragraph">Content has been updated, click refresh to see up-to-date content</translate>
+                <translate >Content has been updated, click refresh to see up-to-date content</translate>
               </span>
               <button
                 class="ui basic icon button"
@@ -185,7 +185,7 @@ const launchAction = async () => {
             >
               <div class="ui inline fields">
                 <div class="field">
-                  <label for="actions-select"><translate translate-context="Content/*/*/Noun">Actions</translate></label>
+                  <label for="actions-select"><translate >Actions</translate></label>
                   <select
                     id="actions-select"
                     v-model="currentActionName"
@@ -208,14 +208,14 @@ const launchAction = async () => {
                     :aria-label="labels.performAction"
                     @confirm="launchAction"
                   >
-                    <translate translate-context="Content/*/Button.Label/Short, Verb">
+                    <translate >
                       Go
                     </translate>
                     <template #modal-header>
                       <p>
                         <translate
                           key="1"
-                          translate-context="Modal/*/Title"
+
                           :translate-n="affectedObjectsCount"
                           :translate-params="{count: affectedObjectsCount, action: currentActionName}"
                           translate-plural="Do you want to launch %{ action } on %{ count } elements?"
@@ -231,7 +231,7 @@ const launchAction = async () => {
                         </template>
                         <translate
                           v-else
-                          translate-context="Modal/*/Paragraph"
+
                         >
                           This may affect a lot of elements or have irreversible consequences, please double check this is really what you want.
                         </translate>
@@ -239,7 +239,7 @@ const launchAction = async () => {
                     </template>
                     <template #modal-confirm>
                       <div :aria-label="labels.performAction">
-                        <translate translate-context="Modal/*/Button.Label/Short, Verb">
+                        <translate >
                           Launch
                         </translate>
                       </div>
@@ -252,7 +252,7 @@ const launchAction = async () => {
                     :class="['ui', {disabled: checked.length === 0}, {'loading': isLoading}, 'button']"
                     @click="launchAction"
                   >
-                    <translate translate-context="Content/*/Button.Label/Short, Verb">
+                    <translate >
                       Go
                     </translate>
                   </button>
@@ -260,7 +260,7 @@ const launchAction = async () => {
                 <div class="count field">
                   <translate
                     v-if="selectAll"
-                    translate-context="Content/*/Paragraph"
+
                     tag="span"
                     :translate-n="objectsData.count"
                     :translate-params="{count: objectsData.count, total: objectsData.count}"
@@ -270,7 +270,7 @@ const launchAction = async () => {
                   </translate>
                   <translate
                     v-else
-                    translate-context="Content/*/Paragraph"
+
                     tag="span"
                     :translate-n="checked.length"
                     :translate-params="{count: checked.length, total: objectsData.count}"
@@ -286,7 +286,7 @@ const launchAction = async () => {
                     >
                       <translate
                         key="3"
-                        translate-context="Content/*/Link/Verb"
+
                         :translate-n="objectsData.count"
                         :translate-params="{total: objectsData.count}"
                         translate-plural="Select all %{ total } elements"
@@ -301,7 +301,7 @@ const launchAction = async () => {
                     >
                       <translate
                         key="4"
-                        translate-context="Content/*/Link/Verb"
+
                       >Select only current page</translate>
                     </a>
                   </template>
@@ -313,7 +313,7 @@ const launchAction = async () => {
                 class="ui negative message"
               >
                 <h4 class="header">
-                  <translate translate-context="Content/*/Error message/Header">
+                  <translate >
                     Error while applying action
                   </translate>
                 </h4>
@@ -332,7 +332,7 @@ const launchAction = async () => {
               >
                 <p>
                   <translate
-                    translate-context="Content/*/Paragraph"
+
                     :translate-n="result.updated"
                     :translate-params="{count: result.updated, action: result.action}"
                     translate-plural="Action %{ action } was launched successfully on %{ count } elements"

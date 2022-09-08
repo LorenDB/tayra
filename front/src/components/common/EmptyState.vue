@@ -19,7 +19,7 @@ withDefaults(defineProps<Props>(), {
       <div class="content">
         <slot name="title">
           <i class="search icon" />
-          <translate translate-context="Content/*/Paragraph">
+          <translate >
             No results were found.
           </translate>
         </slot>
@@ -32,7 +32,7 @@ withDefaults(defineProps<Props>(), {
         class="ui button"
         @click="emit('refresh')"
       >
-        <translate translate-context="Content/*/Button.Label/Short, Verb">
+        <translate >
           Refresh
         </translate>
       </button>

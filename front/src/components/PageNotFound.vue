@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 const path = window.location.href
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Head/*/Title', 'Page Not Found')
+  title: t('Page Not Found')
 }))
 </script>
 
@@ -20,13 +20,13 @@ const labels = computed(() => ({
         <h1 class="ui huge header">
           <i class="warning icon" />
           <div class="content">
-            <translate translate-context="Content/*/Title">
+            <translate >
               Page not found!
             </translate>
           </div>
         </h1>
         <p>
-          <translate translate-context="Content/*/Paragraph">
+          <translate >
             Sorry, the page you asked for does not exist:
           </translate>
         </p>
@@ -36,7 +36,7 @@ const labels = computed(() => ({
           class="ui icon labeled right button"
           to="/"
         >
-          <translate translate-context="Content/*/Button.Label/Verb">
+          <translate >
             Go to home page
           </translate>
           <i class="right arrow icon" />

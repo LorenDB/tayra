@@ -6,7 +6,7 @@ import $ from 'jquery'
 
 import { ref, nextTick, onMounted, computed, watch } from 'vue'
 import { useCurrentElement } from '@vueuse/core'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 
 import SettingsGroup from '~/components/admin/SettingsGroup.vue'
@@ -16,11 +16,11 @@ import useErrorHandler from '~/composables/useErrorHandler'
 const current = ref()
 const settingsData = ref()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const groups = computed(() => [
   {
-    label: $pgettext('Content/Admin/Menu', 'Instance information'),
+    label: t('Instance information'),
     id: 'instance',
     settings: [
       { name: 'instance__name' },
@@ -34,7 +34,7 @@ const groups = computed(() => [
     ]
   },
   {
-    label: $pgettext('*/*/*/Noun', 'Sign-ups'),
+    label: t('Sign-ups'),
     id: 'signup',
     settings: [
       { name: 'users__registration_enabled' },
@@ -43,7 +43,7 @@ const groups = computed(() => [
     ]
   },
   {
-    label: $pgettext('*/*/*/Noun', 'Security'),
+    label: t('Security'),
     id: 'security',
     settings: [
       { name: 'common__api_authentication_required' },
@@ -52,7 +52,7 @@ const groups = computed(() => [
     ]
   },
   {
-    label: $pgettext('*/*/*/Noun', 'Music'),
+    label: t('Music'),
     id: 'music',
     settings: [
       { name: 'music__transcoding_enabled' },
@@ -60,7 +60,7 @@ const groups = computed(() => [
     ]
   },
   {
-    label: $pgettext('*/*/*', 'Channels'),
+    label: t('Channels'),
     id: 'channels',
     settings: [
       { name: 'audio__channels_enabled' },
@@ -68,14 +68,14 @@ const groups = computed(() => [
     ]
   },
   {
-    label: $pgettext('*/*/*', 'Playlists'),
+    label: t('Playlists'),
     id: 'playlists',
     settings: [
       { name: 'playlists__max_tracks' }
     ]
   },
   {
-    label: $pgettext('*/Moderation/*', 'Moderation'),
+    label: t('Moderation'),
     id: 'moderation',
     settings: [
       { name: 'moderation__allow_list_enabled' },
@@ -84,7 +84,7 @@ const groups = computed(() => [
     ]
   },
   {
-    label: $pgettext('*/*/*', 'Federation'),
+    label: t('Federation'),
     id: 'federation',
     settings: [
       { name: 'federation__enabled' },
@@ -95,14 +95,14 @@ const groups = computed(() => [
     ]
   },
   {
-    label: $pgettext('Content/Admin/Menu', 'Subsonic'),
+    label: t('Subsonic'),
     id: 'subsonic',
     settings: [
       { name: 'subsonic__enabled' }
     ]
   },
   {
-    label: $pgettext('Content/Home/Header', 'Statistics'),
+    label: t('Statistics'),
     id: 'ui',
     settings: [
       { name: 'ui__custom_css' },
@@ -110,7 +110,7 @@ const groups = computed(() => [
     ]
   },
   {
-    label: $pgettext('Content/Admin/Menu', 'User Interface'),
+    label: t('User Interface'),
     id: 'statistics',
     settings: [
       { name: 'instance__nodeinfo_stats_enabled' },
@@ -120,7 +120,7 @@ const groups = computed(() => [
 ] as SettingsGroupType[])
 
 const labels = computed(() => ({
-  settings: $pgettext('Head/Admin/Title', 'Instance settings')
+  settings: t('Instance settings')
 }))
 
 const scrollTo = (id: string) => {
@@ -186,7 +186,7 @@ await nextTick()
           <div class="four wide column">
             <div class="ui sticky vertical secondary menu">
               <div class="header item">
-                <translate translate-context="Content/Admin/Menu.Title">
+                <translate >
                   Sections
                 </translate>
               </div>

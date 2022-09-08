@@ -4,7 +4,7 @@ import type { BackendError, License, ReviewState } from '~/types'
 
 import { computed, onMounted, reactive, ref, watchEffect } from 'vue'
 import { isEqual, clone } from 'lodash-es'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
   licenses: () => []
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const configs = useEditConfigs()
 const store = useStore()
 
@@ -46,7 +46,7 @@ const canEdit = computed(() => {
 })
 
 const labels = computed(() => ({
-  summaryPlaceholder: $pgettext('*/*/Placeholder', 'A short summary describing your changes.')
+  summaryPlaceholder: t('A short summary describing your changes.')
 }))
 
 const mutationsUrl = computed(() => props.objectType === 'track'
@@ -148,7 +148,7 @@ const resetField = (fieldId: string) => {
   <div v-if="submittedMutation">
     <div class="ui positive message">
       <h4 class="header">
-        <translate translate-context="Content/Library/Paragraph">
+        <translate >
           Your edit was successfully submitted.
         </translate>
       </h4>
@@ -161,7 +161,7 @@ const resetField = (fieldId: string) => {
       class="ui button"
       @click.prevent="submittedMutation = null"
     >
-      <translate translate-context="Content/Library/Button.Label">
+      <translate >
         Submit another edit
       </translate>
     </button>
@@ -175,27 +175,27 @@ const resetField = (fieldId: string) => {
     >
       <div>
         <template v-if="showPendingReview">
-          <translate translate-context="Content/Library/Paragraph">
+          <translate >
             Recent edits awaiting review
           </translate>
           <button
             class="ui tiny basic right floated button"
             @click.prevent="showPendingReview = false"
           >
-            <translate translate-context="Content/Library/Button.Label">
+            <translate >
               Show all edits
             </translate>
           </button>
         </template>
         <template v-else>
-          <translate translate-context="Content/Library/Paragraph">
+          <translate >
             Recent edits
           </translate>
           <button
             class="ui tiny basic right floated button"
             @click.prevent="showPendingReview = true"
           >
-            <translate translate-context="Content/Library/Button.Label">
+            <translate >
               Restrict to unreviewed edits
             </translate>
           </button>
@@ -203,7 +203,7 @@ const resetField = (fieldId: string) => {
       </div>
       <template #empty-state>
         <empty-state>
-          <translate translate-context="Content/Library/Paragraph">
+          <translate >
             Suggest a change using the form below.
           </translate>
         </empty-state>
@@ -220,7 +220,7 @@ const resetField = (fieldId: string) => {
         class="ui negative message"
       >
         <h4 class="header">
-          <translate translate-context="Content/Library/Error message.Title">
+          <translate >
             Error while submitting edit
           </translate>
         </h4>
@@ -237,7 +237,7 @@ const resetField = (fieldId: string) => {
         v-if="!canEdit"
         class="ui message"
       >
-        <translate translate-context="Content/Library/Paragraph">
+        <translate >
           You don't have the permission to edit this object, but you can suggest changes. Once submitted, suggestions will be reviewed before approval.
         </translate>
       </div>
@@ -268,7 +268,7 @@ const resetField = (fieldId: string) => {
               class="ui fluid search dropdown"
             >
               <option :value="null">
-                <translate translate-context="*/*/*">
+                <translate >
                   N/A
                 </translate>
               </option>
@@ -286,7 +286,7 @@ const resetField = (fieldId: string) => {
               @click.prevent="values[fieldConfig.id] = null"
             >
               <i class="x icon" />
-              <translate translate-context="Content/Library/Button.Label">
+              <translate >
                 Clear
               </translate>
             </button>
@@ -325,7 +325,7 @@ const resetField = (fieldId: string) => {
               @click.prevent="values[fieldConfig.id] = []"
             >
               <i class="x icon" />
-              <translate translate-context="Content/Library/Button.Label">
+              <translate >
                 Clear
               </translate>
             </button>
@@ -337,7 +337,7 @@ const resetField = (fieldId: string) => {
               @click.prevent="resetField(fieldConfig.id)"
             >
               <i class="undo icon" />
-              <translate translate-context="Content/Library/Button.Label">
+              <translate >
                 Reset to initial value
               </translate>
             </button>
@@ -345,7 +345,7 @@ const resetField = (fieldId: string) => {
         </div>
       </template>
       <div class="field">
-        <label for="summary"><translate translate-context="*/*/*">Summary (optional)</translate></label>
+        <label for="summary"><translate >Summary (optional)</translate></label>
         <textarea
           id="change-summary"
           v-model="summary"
@@ -359,7 +359,7 @@ const resetField = (fieldId: string) => {
         class="ui left floated button"
         :to="{name: 'library.tracks.detail', params: {id: object.id }}"
       >
-        <translate translate-context="*/*/Button.Label/Verb">
+        <translate >
           Cancel
         </translate>
       </router-link>
@@ -370,13 +370,13 @@ const resetField = (fieldId: string) => {
       >
         <translate
           v-if="canEdit"
-          translate-context="Content/Library/Button.Label/Verb"
+
         >
           Submit and apply edit
         </translate>
         <translate
           v-else
-          translate-context="Content/Library/Button.Label/Verb"
+
         >
           Submit suggestion
         </translate>

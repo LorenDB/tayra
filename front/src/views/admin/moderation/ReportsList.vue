@@ -6,7 +6,7 @@ import type { RouteRecordName } from 'vue-router'
 import type { OrderingField } from '~/store/ui'
 
 import { computed, ref, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -87,11 +87,11 @@ watch([page, query], fetchData)
 onOrderingUpdate(fetchData)
 fetchData()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by account, summary, domain…'),
-  reports: $pgettext('*/Moderation/*/Noun', 'Reports')
+  searchPlaceholder: t('Search by account, summary, domain…'),
+  reports: t('Reports')
 }))
 </script>
 
@@ -99,7 +99,7 @@ const labels = computed(() => ({
   <main v-title="labels.reports">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate translate-context="*/Moderation/*/Noun">
+        <translate >
           Reports
         </translate>
       </h2>
@@ -107,7 +107,7 @@ const labels = computed(() => ({
       <div class="ui inline form">
         <div class="fields">
           <div class="ui field">
-            <label for="reports-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+            <label for="reports-search"><translate >Search</translate></label>
             <form @submit.prevent="query = search.value">
               <input
                 id="reports-search"
@@ -120,7 +120,7 @@ const labels = computed(() => ({
             </form>
           </div>
           <div class="field">
-            <label for="reports-status"><translate translate-context="*/*/*">Status</translate></label>
+            <label for="reports-status"><translate >Status</translate></label>
             <select
               id="reports-status"
               class="ui dropdown"
@@ -128,17 +128,17 @@ const labels = computed(() => ({
               @change="addSearchToken('resolved', ($event.target as HTMLSelectElement).value)"
             >
               <option value="">
-                <translate translate-context="Content/*/Dropdown">
+                <translate >
                   All
                 </translate>
               </option>
               <option value="yes">
-                <translate translate-context="Content/*/*/Short">
+                <translate >
                   Resolved
                 </translate>
               </option>
               <option value="no">
-                <translate translate-context="Content/*/*/Short">
+                <translate >
                   Unresolved
                 </translate>
               </option>
@@ -152,7 +152,7 @@ const labels = computed(() => ({
             @update:model-value="addSearchToken('category', $event)"
           />
           <div class="field">
-            <label for="reports-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+            <label for="reports-ordering"><translate >Ordering</translate></label>
             <select
               id="reports-ordering"
               v-model="ordering"
@@ -168,19 +168,19 @@ const labels = computed(() => ({
             </select>
           </div>
           <div class="field">
-            <label for="reports-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Order</translate></label>
+            <label for="reports-ordering-direction"><translate >Order</translate></label>
             <select
               id="reports-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate translate-context="Content/Search/Dropdown">
+                <translate >
                   Ascending
                 </translate>
               </option>
               <option value="-">
-                <translate translate-context="Content/Search/Dropdown">
+                <translate >
                   Descending
                 </translate>
               </option>

@@ -55,7 +55,7 @@ fetchLicenses()
 <template>
   <div>
     <label for="license-dropdown">
-      <translate translate-context="Content/*/*/Noun">License</translate>
+      <translate >License</translate>
     </label>
     <select
       id="license-dropdown"
@@ -63,7 +63,7 @@ fetchLicenses()
       class="ui search normal dropdown"
     >
       <option value="">
-        <translate translate-context="*/*/*">
+        <translate >
           None
         </translate>
       </option>
@@ -86,7 +86,7 @@ fetchLicenses()
         target="_blank"
         rel="noreferrer noopener"
       >
-        <translate translate-context="Content/*/*">About this license</translate>
+        <translate >About this license</translate>
       </a>
     </p>
   </div>

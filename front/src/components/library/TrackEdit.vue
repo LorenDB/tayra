@@ -46,13 +46,13 @@ fetchLicenses()
       <h2>
         <translate
           v-if="canEdit"
-          translate-context="Content/*/Title"
+
         >
           Edit this track
         </translate>
         <translate
           key="2"
-          translate-context="Content/*/Title"
+
         >
           Suggest an edit on this track
         </translate>
@@ -61,7 +61,7 @@ fetchLicenses()
         v-if="!object.is_local"
         class="ui message"
       >
-        <translate translate-context="Content/*/Message">
+        <translate >
           This object is managed by another server, you cannot edit it.
         </translate>
       </div>

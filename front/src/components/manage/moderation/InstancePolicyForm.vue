@@ -3,7 +3,7 @@ import type { BackendError, InstancePolicy } from '~/types'
 
 import { computed, ref, reactive } from 'vue'
 import { whenever } from '@vueuse/core'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 
@@ -24,23 +24,23 @@ const props = withDefaults(defineProps<Props>(), {
   object: null
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const labels = computed(() => ({
-  summaryHelp: $pgettext('Content/Moderation/Help text', "Explain why you're applying this policy: this will help you remember why you added this rule. Depending on your pod configuration, this may be displayed publicly to help users understand the moderation rules in place."),
-  isActiveHelp: $pgettext('Content/Moderation/Help text', 'Use this setting to temporarily enable/disable the policy without completely removing it.'),
-  blockAllHelp: $pgettext('Content/Moderation/Help text', 'Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.)'),
+  summaryHelp: t("Explain why you're applying this policy: this will help you remember why you added this rule. Depending on your pod configuration, this may be displayed publicly to help users understand the moderation rules in place."),
+  isActiveHelp: t('Use this setting to temporarily enable/disable the policy without completely removing it.'),
+  blockAllHelp: t('Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.)'),
   silenceActivity: {
-    help: $pgettext('Content/Moderation/Help text', 'Hide account or domain content, except from followers.'),
-    label: $pgettext('Content/Moderation/*/Verb', 'Mute activity')
+    help: t('Hide account or domain content, except from followers.'),
+    label: t('Mute activity')
   },
   silenceNotifications: {
-    help: $pgettext('Content/Moderation/Help text', 'Prevent account or domain from triggering notifications, except from followers.'),
-    label: $pgettext('Content/Moderation/*/Verb', 'Mute notifications')
+    help: t('Prevent account or domain from triggering notifications, except from followers.'),
+    label: t('Mute notifications')
   },
   rejectMedia: {
-    help: $pgettext('Content/Moderation/Help text', 'Do not download any media file (audio, album cover, account avatar…) from this account or domain. This will purge existing content as well.'),
-    label: $pgettext('Content/Moderation/*/Verb', 'Reject media')
+    help: t('Do not download any media file (audio, album cover, account avatar…) from this account or domain. This will purge existing content as well.'),
+    label: t('Reject media')
   }
 }))
 
@@ -124,13 +124,13 @@ const remove = async () => {
     <h3 class="ui header">
       <translate
         v-if="object"
-        translate-context="Content/Moderation/Card.Title/Verb"
+
       >
         Edit moderation rule
       </translate>
       <translate
         v-else
-        translate-context="Content/Moderation/Card.Button.Label/Verb"
+
       >
         Add a new moderation rule
       </translate>
@@ -141,7 +141,7 @@ const remove = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/Moderation/Error message.Title">
+        <translate >
           Error while creating rule
         </translate>
       </h4>
@@ -168,11 +168,11 @@ const remove = async () => {
         <label for="policy-is-active">
           <translate
             v-if="current.isActive"
-            translate-context="*/*/*/State of feature"
+
           >Enabled</translate>
           <translate
             v-else
-            translate-context="*/*/*/State of feature"
+
           >Disabled</translate>
           <tooltip :content="labels.isActiveHelp" />
         </label>
@@ -180,7 +180,7 @@ const remove = async () => {
     </div>
     <div class="field">
       <label for="policy-summary">
-        <translate translate-context="Content/Moderation/*/Noun">Reason</translate>
+        <translate >Reason</translate>
         <tooltip :content="labels.summaryHelp" />
       </label>
       <textarea
@@ -198,13 +198,13 @@ const remove = async () => {
           type="checkbox"
         >
         <label for="policy-is-active">
-          <translate translate-context="Content/Moderation/*/Verb">Block everything</translate>
+          <translate >Block everything</translate>
           <tooltip :content="labels.blockAllHelp" />
         </label>
       </div>
     </div>
     <div class="ui horizontal divider">
-      <translate translate-context="Content/Moderation/Card.Title">
+      <translate >
         Or customize your rule
       </translate>
     </div>
@@ -231,7 +231,7 @@ const remove = async () => {
       class="ui basic left floated button"
       @click.prevent="emit('cancel')"
     >
-      <translate translate-context="*/*/Button.Label/Verb">
+      <translate >
         Cancel
       </translate>
     </button>
@@ -241,13 +241,13 @@ const remove = async () => {
     >
       <translate
         v-if="object"
-        translate-context="Content/Moderation/Card.Button.Label/Verb"
+
       >
         Update
       </translate>
       <translate
         v-else
-        translate-context="Content/Moderation/Card.Button.Label/Verb"
+
       >
         Create
       </translate>
@@ -257,26 +257,26 @@ const remove = async () => {
       class="ui right floated basic danger button"
       @confirm="remove"
     >
-      <translate translate-context="*/*/*/Verb">
+      <translate >
         Delete
       </translate>
       <template #modal-header>
         <p>
-          <translate translate-context="Popup/Moderation/Title">
+          <translate >
             Delete this moderation rule?
           </translate>
         </p>
       </template>
       <template #modal-content>
         <p>
-          <translate translate-context="Popup/Moderation/Paragraph">
+          <translate >
             This action is irreversible.
           </translate>
         </p>
       </template>
       <template #modal-confirm>
         <div>
-          <translate translate-context="Popup/Moderation/Button.Label/Verb">
+          <translate >
             Delete moderation rule
           </translate>
         </div>

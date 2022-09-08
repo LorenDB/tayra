@@ -1,25 +1,72 @@
 import type { InitModule } from '~/types'
 
-import { watch } from 'vue'
-import locales from '~/locales.json'
 import { usePreferredLanguages } from '@vueuse/core'
-import { createGettext } from 'vue3-gettext'
+import { nextTick, watch } from 'vue'
+import { createI18n } from 'vue-i18n'
+
+import locales from '~/locales.json'
 import store from '~/store'
 
+import useLogger from '~/composables/useLogger'
+
+import { isEqual } from 'lodash-es'
+import pl from '~/translations/pl.json'
+const many = {}
+for (const [k, v] of Object.entries(pl.pl)) {
+  const m = {}
+  const w = Object.entries(v)
+  for(let i = 1; i < w.length; i++) {
+    if (!isEqual(w[i][1], w[i - 1][1])) {
+      m[w[i - 1][0]] = w[i - 1][1]
+      m[w[i][0]] = w[i][1]
+    }
+  }
+
+  if (Object.keys(m).length) {
+    many[k] = m
+  }
+}
+console.log(many)
+
+const logger = useLogger()
+
 const defaultLanguage = store.state.ui.currentLanguage ?? 'en_US'
-export const availableLanguages = locales.reduce((map: Record<string, string>, locale) => {
+export const SUPPORTED_LOCALES = locales.reduce((map: Record<string, string>, locale) => {
   map[locale.code] = locale.label
   return map
 }, {})
 
-export const gettext = createGettext({
-  availableLanguages,
-  defaultLanguage,
-  silent: true
+export const i18n = createI18n<false>({
+  formatFallbackMessages: true,
+  globalInjection: true,
+  fallbackLocale: 'en',
+  legacy: false,
+  locale: 'en'
 })
 
-export const install: InitModule = ({ store, app }) => {
-  app.use(gettext)
+export const setI18nLanguage = async (locale: string) => {
+  if (!Object.keys(SUPPORTED_LOCALES).includes(locale)) {
+    throw new Error(`Unsupported locale: ${locale}`)
+  }
+
+  // load locale messages
+  if (!i18n.global.availableLocales.includes(locale)) {
+    try {
+      const { default: messages } = await import(`./locales/${locale}.json`)
+      i18n.global.setLocaleMessage(locale, messages)
+      await nextTick()
+    } catch (error) {
+      logger.warn(`Unsupported locale: ${locale}`)
+    }
+  }
+
+  // set locale
+  i18n.global.locale.value = locale
+  document.querySelector('html')?.setAttribute('lang', locale)
+}
+
+export const install: InitModule = async ({ store, app }) => {
+  app.use(i18n)
 
   // Set default language
   if (!store.state.ui.selectedLanguage) {
@@ -28,27 +75,25 @@ export const install: InitModule = ({ store, app }) => {
       return code.replace(/-/g, '_')
     })
 
-    let language = Object.keys(availableLanguages).find(code => {
+    let language = Object.keys(SUPPORTED_LOCALES).find(code => {
       return languages.includes(code)
     })
 
     if (!language) {
-      language = Object.keys(availableLanguages).find(code => {
+      language = Object.keys(SUPPORTED_LOCALES).find(code => {
         return languages.map(lang => lang.split('_')[0]).includes(code.split('_')[0])
       })
     }
 
-    store.commit('ui/currentLanguage', language ?? defaultLanguage)
+    await store.dispatch('ui/currentLanguage', language ?? defaultLanguage)
+    await setI18nLanguage(language ?? defaultLanguage)
   }
 
   // Handle language change
-  watch(() => store.state.ui.currentLanguage, (locale) => {
-    const htmlLocale = locale.toLowerCase().replace('_', '-')
-    document.documentElement.setAttribute('lang', htmlLocale)
-
-    if (locale === 'en_US') {
-      gettext.current = locale
-      store.commit('ui/momentLocale', 'en')
-    }
+  watch(() => store.state.ui.currentLanguage, async (locale) => {
+    await store.dispatch('ui/currentLanguage', locale)
+    await setI18nLanguage(locale)
+    // TODO (wvffle): Set moment locale
+    // store.commit('ui/momentLocale', 'en')
   }, { immediate: true })
 }

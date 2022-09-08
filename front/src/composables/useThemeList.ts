@@ -1,23 +1,23 @@
 import type { ThemeEntry } from '~/types'
 
-import { gettext } from '~/init/locale'
+import { i18n } from '~/init/locale'
 
-const { $pgettext } = gettext
+const { t } = i18n.global
 
 const themeList: ThemeEntry[] = [
   {
     icon: 'palette icon',
-    name: $pgettext('*/Settings/Dropdown.Label/Theme name', 'Browser default'),
+    name: t('Browser default'),
     key: 'auto'
   },
   {
     icon: 'sun icon',
-    name: $pgettext('*/Settings/Dropdown.Label/Theme name', 'Light'),
+    name: t('Light'),
     key: 'light'
   },
   {
     icon: 'moon icon',
-    name: $pgettext('*/Settings/Dropdown.Label/Theme name', 'Dark'),
+    name: t('Dark'),
     key: 'dark'
   }
 ]

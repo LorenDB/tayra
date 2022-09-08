@@ -5,7 +5,7 @@ import type { VueUploadItem } from 'vue-upload-component'
 import { computed, ref, reactive, watchEffect, watch } from 'vue'
 import { whenever, useCurrentElement } from '@vueuse/core'
 import { humanSize } from '~/utils/filters'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -52,7 +52,7 @@ const props = withDefaults(defineProps<Props>(), {
   channel: null
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const store = useStore()
 
 const errors = ref([] as string[])
@@ -396,7 +396,7 @@ watchEffect(() => {
 })
 
 const labels = computed(() => ({
-  editTitle: $pgettext('Content/*/Button.Label/Verb', 'Edit')
+  editTitle: t('Edit')
 }))
 </script>
 
@@ -411,7 +411,7 @@ const labels = computed(() => ({
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
+        <translate >
           Error while publishing
         </translate>
       </h4>
@@ -426,7 +426,7 @@ const labels = computed(() => ({
     </div>
     <div :class="['ui', 'required', {hidden: step > 1}, 'field']">
       <label for="channel-dropdown">
-        <translate translate-context="*/*/*">Channel</translate>
+        <translate >Channel</translate>
       </label>
       <div
         id="channel-dropdown"
@@ -449,7 +449,7 @@ const labels = computed(() => ({
       <div class="content">
         <p>
           <i class="copyright icon" />
-          <translate translate-context="Content/Channels/Popup.Paragraph">
+          <translate >
             Add a license to your upload to ensure some freedoms to your public.
           </translate>
         </p>
@@ -464,7 +464,7 @@ const labels = computed(() => ({
         <div class="content">
           <p>
             <i class="warning icon" />
-            <translate translate-context="Content/Library/Paragraph">
+            <translate >
               You don't have any space left to upload your files. Please contact the moderators.
             </translate>
           </p>
@@ -477,7 +477,7 @@ const labels = computed(() => ({
         >
           <p>
             <i class="redo icon" />
-            <translate translate-context="Popup/Channels/Paragraph">
+            <translate >
               You have some draft uploads pending publication.
             </translate>
           </p>
@@ -485,7 +485,7 @@ const labels = computed(() => ({
             class="ui basic button"
             @click.stop.prevent="includeDraftUploads = false"
           >
-            <translate translate-context="*/*/*">
+            <translate >
               Ignore
             </translate>
           </button>
@@ -493,7 +493,7 @@ const labels = computed(() => ({
             class="ui basic button"
             @click.stop.prevent="includeDraftUploads = true"
           >
-            <translate translate-context="*/*/*">
+            <translate >
               Resume
             </translate>
           </button>
@@ -547,19 +547,19 @@ const labels = computed(() => ({
                 <template v-else>
                   <translate
                     v-if="file.active"
-                    translate-context="Channels/*/*"
+
                   >
                     Uploading
                   </translate>
                   <translate
                     v-else-if="file.error"
-                    translate-context="Channels/*/*"
+
                   >
                     Errored
                   </translate>
                   <translate
                     v-else
-                    translate-context="Channels/*/*"
+
                   >
                     Pending
                   </translate>
@@ -567,12 +567,12 @@ const labels = computed(() => ({
                   · {{ parseFloat(file.progress ?? '0') }}%
                 </template>
                 · <a @click.stop.prevent="remove(file)">
-                  <translate translate-context="Content/Radio/Button.Label/Verb">Remove</translate>
+                  <translate >Remove</translate>
                 </a>
                 <template v-if="file.error">
                   ·
                   <a @click.stop.prevent="retry(file)">
-                    <translate translate-context="*/*/*">Retry</translate>
+                    <translate >Retry</translate>
                   </a>
                 </template>
               </div>
@@ -592,7 +592,7 @@ const labels = computed(() => ({
             <p>
               <i class="info icon" />
               <translate
-                translate-context="Content/Library/Paragraph"
+
                 :translate-params="{extensions: $store.state.ui.supportedExtensions.join(', ')}"
               >
                 Supported extensions: %{ extensions }
@@ -615,13 +615,13 @@ const labels = computed(() => ({
         >
           <div>
             <i class="upload icon" />&nbsp;
-            <translate translate-context="Content/Channels/Paragraph">
+            <translate >
               Drag and drop your files here or open the browser to upload your files
             </translate>
           </div>
           <div class="ui very small divider" />
           <div>
-            <translate translate-context="*/*/*">
+            <translate >
               Browse…
             </translate>
           </div>

@@ -3,7 +3,7 @@ import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/
 import type { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
 
 import { ref, computed, onMounted } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import usePlayOptions from '~/composables/audio/usePlayOptions'
 import useReport from '~/composables/moderation/useReport'
 import { useCurrentElement } from '@vueuse/core'
@@ -63,33 +63,33 @@ const {
 
 const { report, getReportableObjects } = useReport()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  playNow: $pgettext('*/Queue/Dropdown/Button/Title', 'Play now'),
-  addToQueue: $pgettext('*/Queue/Dropdown/Button/Title', 'Add to current queue'),
-  playNext: $pgettext('*/Queue/Dropdown/Button/Title', 'Play next'),
-  startRadio: $pgettext('*/Queue/Dropdown/Button/Title', 'Play similar songs'),
-  report: $pgettext('*/Moderation/*/Button/Label,Verb', 'Report…'),
-  addToPlaylist: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Add to playlist…'),
-  hideArtist: $pgettext('*/Queue/Dropdown/Button/Label/Short', 'Hide content from this artist'),
+  playNow: t('Play now'),
+  addToQueue: t('Add to current queue'),
+  playNext: t('Play next'),
+  startRadio: t('Play similar songs'),
+  report: t('Report…'),
+  addToPlaylist: t('Add to playlist…'),
+  hideArtist: t('Hide content from this artist'),
   replacePlay: props.track
-    ? $pgettext('*/Queue/Dropdown/Button/Title', 'Play track')
+    ? t('Play track')
     : props.album
-      ? $pgettext('*/Queue/Dropdown/Button/Title', 'Play album')
+      ? t('Play album')
       : props.artist
-        ? $pgettext('*/Queue/Dropdown/Button/Title', 'Play artist')
+        ? t('Play artist')
         : props.playlist
-          ? $pgettext('*/Queue/Dropdown/Button/Title', 'Play playlist')
-          : $pgettext('*/Queue/Dropdown/Button/Title', 'Play tracks')
+          ? t('Play playlist')
+          : t('Play tracks')
 }))
 
 const title = computed(() => {
   if (playable.value) {
-    return $pgettext('*/*/Button.Label/Noun', 'More…')
+    return t('More…')
   }
 
   if (props.track) {
-    return $pgettext('*/Queue/Button/Title', 'This track is not available in any library you have access to')
+    return t('This track is not available in any library you have access to')
   }
 
   return ''
@@ -138,7 +138,7 @@ const openMenu = () => {
         v-else
         :class="[playIconClass, 'icon']"
       />
-      <template v-if="!discrete && !iconOnly">&nbsp;<slot><translate translate-context="*/Queue/Button.Label/Short, Verb">Play</translate></slot></template>
+      <template v-if="!discrete && !iconOnly">&nbsp;<slot><translate >Play</translate></slot></template>
     </button>
     <button
       v-if="!discrete && !iconOnly"
@@ -156,7 +156,7 @@ const openMenu = () => {
           :title="labels.addToQueue"
           @click.stop.prevent="enqueue"
         >
-          <i class="plus icon" /><translate translate-context="*/Queue/Dropdown/Button/Label/Short">Add to queue</translate>
+          <i class="plus icon" /><translate >Add to queue</translate>
         </button>
         <button
           class="item basic"
@@ -181,7 +181,7 @@ const openMenu = () => {
           :title="labels.startRadio"
           @click.stop.prevent="$store.dispatch('radios/start', {type: 'similar', objectId: track?.id})"
         >
-          <i class="feed icon" /><translate translate-context="*/Queue/Button.Label/Short, Verb">Play radio</translate>
+          <i class="feed icon" /><translate >Play radio</translate>
         </button>
         <button
           v-if="track"
@@ -190,7 +190,7 @@ const openMenu = () => {
           @click.stop="$store.commit('playlists/chooseTrack', track)"
         >
           <i class="list icon" />
-          <translate translate-context="Sidebar/Player/Icon.Tooltip/Verb">Add to playlist…</translate>
+          <translate >Add to playlist…</translate>
         </button>
         <button
           v-if="track && $route.name !== 'library.tracks.detail'"
@@ -200,11 +200,11 @@ const openMenu = () => {
           <i class="info icon" />
           <translate
             v-if="track.artist?.content_category === 'podcast'"
-            translate-context="*/Queue/Dropdown/Button/Label/Short"
+
           >Episode details</translate>
           <translate
             v-else
-            translate-context="*/Queue/Dropdown/Button/Label/Short"
+
           >Track details</translate>
         </button>
         <div class="divider" />

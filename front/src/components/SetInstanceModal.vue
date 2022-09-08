@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useVModel } from '@vueuse/core'
 import { useStore } from '~/store'
 import { uniq } from 'lodash-es'
@@ -38,7 +38,7 @@ const suggestedInstances = computed(() => {
 
 watch(() => store.state.instance.instanceUrl, () => store.dispatch('instance/fetchSettings'))
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const isError = ref(false)
 const isLoading = ref(false)
 const checkAndSwitch = async (url: string) => {
@@ -51,7 +51,7 @@ const checkAndSwitch = async (url: string) => {
 
     show.value = false
     store.commit('ui/addMessage', {
-      content: $pgettext('*/Instance/Message', 'You are now using the Funkwhale instance at %{ url }', { url: instanceUrl }),
+      content: t('You are now using the Funkwhale instance at %{ url }', { url: instanceUrl }),
       date: new Date()
     })
 
@@ -71,7 +71,7 @@ const checkAndSwitch = async (url: string) => {
     @update:show="isError = false"
   >
     <h3 class="header">
-      <translate translate-context="Popup/Instance/Title">
+      <translate >
         Choose your instance
       </translate>
     </h3>
@@ -82,18 +82,18 @@ const checkAndSwitch = async (url: string) => {
         class="ui negative message"
       >
         <h4 class="header">
-          <translate translate-context="Popup/Instance/Error message.Title">
+          <translate >
             It is not possible to connect to the given URL
           </translate>
         </h4>
         <ul class="list">
           <li>
-            <translate translate-context="Popup/Instance/Error message.List item">
+            <translate >
               The server might be down
             </translate>
           </li>
           <li>
-            <translate translate-context="Popup/Instance/Error message.List item">
+            <translate >
               The given address is not a Funkwhale server
             </translate>
           </li>
@@ -107,7 +107,7 @@ const checkAndSwitch = async (url: string) => {
           v-if="$store.state.instance.instanceUrl"
           v-translate="{url: $store.state.instance.instanceUrl, hostname: $store.getters['instance/domain'] }"
           class="description"
-          translate-context="Popup/Login/Paragraph"
+
         >
           You are currently connected to <a
             href="%{ url }"
@@ -115,12 +115,12 @@ const checkAndSwitch = async (url: string) => {
           >%{ hostname }&nbsp;<i class="external icon" /></a>. If you continue, you will be disconnected from your current instance and all your local data will be deleted.
         </p>
         <p v-else>
-          <translate translate-context="Popup/Instance/Paragraph">
+          <translate >
             To continue, please select the Funkwhale instance you want to connect to. Enter the address directly, or select one of the suggested choices.
           </translate>
         </p>
         <div class="field">
-          <label for="instance-picker"><translate translate-context="Popup/Instance/Input.Label/Noun">Instance URL</translate></label>
+          <label for="instance-picker"><translate >Instance URL</translate></label>
           <div class="ui action input">
             <input
               id="instance-picker"
@@ -132,7 +132,7 @@ const checkAndSwitch = async (url: string) => {
               type="submit"
               :class="['ui', 'icon', {loading: isLoading}, 'button']"
             >
-              <translate translate-context="*/*/Button.Label/Verb">
+              <translate >
                 Submit
               </translate>
             </button>
@@ -146,7 +146,7 @@ const checkAndSwitch = async (url: string) => {
       >
         <div class="field">
           <h4>
-            <translate translate-context="Popup/Instance/List.Label">
+            <translate >
               Suggested choices
             </translate>
           </h4>
@@ -163,7 +163,7 @@ const checkAndSwitch = async (url: string) => {
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate translate-context="*/*/Button.Label/Verb">
+        <translate >
           Cancel
         </translate>
       </button>

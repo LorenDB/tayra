@@ -65,7 +65,7 @@ const loadMoreAlbums = async () => {
       <div class="ui hidden divider" />
       <div class="ui message">
         <p>
-          <translate translate-context="Content/Artist/Paragraph">
+          <translate >
             You are currently hiding content related to this artist.
           </translate>
         </p>
@@ -73,7 +73,7 @@ const loadMoreAlbums = async () => {
           class="right floated"
           :to="{name: 'settings'}"
         >
-          <translate translate-context="Content/Moderation/Link">
+          <translate >
             Review my filters
           </translate>
         </router-link>
@@ -81,7 +81,7 @@ const loadMoreAlbums = async () => {
           class="ui basic tiny button"
           @click="$store.dispatch('moderation/deleteContentFilter', contentFilter.uuid)"
         >
-          <translate translate-context="Content/Moderation/Button.Label">
+          <translate >
             Remove filter
           </translate>
         </button>
@@ -98,7 +98,7 @@ const loadMoreAlbums = async () => {
       class="ui vertical stripe segment"
     >
       <h2>
-        <translate translate-context="Content/Artist/Title">
+        <translate >
           Albums by this artist
         </translate>
       </h2>
@@ -115,7 +115,7 @@ const loadMoreAlbums = async () => {
         :class="['ui', {loading: isLoadingMoreAlbums}, 'button']"
         @click="loadMoreAlbums()"
       >
-        <translate translate-context="Content/*/Button.Label">
+        <translate >
           Load more…
         </translate>
       </button>
@@ -132,7 +132,7 @@ const loadMoreAlbums = async () => {
       >
         <template #header>
           <h2>
-            <translate translate-context="Content/Artist/Title">
+            <translate >
               New tracks by this artist
             </translate>
           </h2>
@@ -142,7 +142,7 @@ const loadMoreAlbums = async () => {
     </section>
     <section class="ui vertical stripe segment">
       <h2>
-        <translate translate-context="Content/*/Title/Noun">
+        <translate >
           User libraries
         </translate>
       </h2>
@@ -150,7 +150,7 @@ const loadMoreAlbums = async () => {
         :url="'artists/' + object.id + '/libraries/'"
         @loaded="emit('libraries-loaded', $event)"
       >
-        <translate translate-context="Content/Artist/Paragraph">
+        <translate >
           This artist is present in the following libraries:
         </translate>
       </library-widget>

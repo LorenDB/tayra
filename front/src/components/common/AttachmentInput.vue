@@ -107,7 +107,7 @@ const getAttachmentUrl = (uuid: string) => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
+        <translate >
           Your attachment cannot be saved
         </translate>
       </h4>
@@ -146,7 +146,7 @@ const getAttachmentUrl = (uuid: string) => {
         <div class="eleven wide column">
           <div class="file-input">
             <label :for="attachmentId">
-              <translate translate-context="*/*/*">Upload New Picture…</translate>
+              <translate >Upload New Picture…</translate>
             </label>
             <input
               :id="attachmentId"
@@ -161,7 +161,7 @@ const getAttachmentUrl = (uuid: string) => {
           </div>
           <div class="ui very small hidden divider" />
           <p>
-            <translate translate-context="Content/*/Paragraph">
+            <translate >
               PNG or JPG. Dimensions should be between 1400x1400px and 3000x3000px. Maximum file size allowed is 5MB.
             </translate>
           </p>
@@ -170,7 +170,7 @@ const getAttachmentUrl = (uuid: string) => {
             class="ui basic tiny button"
             @click.stop.prevent="remove(value as string)"
           >
-            <translate translate-context="Content/Radio/Button.Label/Verb">
+            <translate >
               Remove
             </translate>
           </button>
@@ -179,7 +179,7 @@ const getAttachmentUrl = (uuid: string) => {
             class="ui active inverted dimmer"
           >
             <div class="ui indeterminate text loader">
-              <translate translate-context="Content/*/*/Noun">
+              <translate >
                 Uploading file…
               </translate>
             </div>

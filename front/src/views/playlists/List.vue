@@ -6,7 +6,7 @@ import type { OrderingField } from '~/store/ui'
 
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRouteQuery } from '@vueuse/router'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { syncRef } from '@vueuse/core'
 import { sortedUniq } from 'lodash-es'
 
@@ -95,10 +95,10 @@ onOrderingUpdate(() => {
 
 onMounted(() => $('.ui.dropdown').dropdown())
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  playlists: $pgettext('*/*/*', 'Playlists'),
-  searchPlaceholder: $pgettext('Content/Playlist/Placeholder/Call to action', 'Enter playlist name…')
+  playlists: t('Playlists'),
+  searchPlaceholder: t('Enter playlist name…')
 }))
 
 const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value].sort((a, b) => a - b)))
@@ -108,7 +108,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
   <main v-title="labels.playlists">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate translate-context="Content/Playlist/Title">
+        <translate >
           Browsing playlists
         </translate>
       </h2>
@@ -117,7 +117,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           class="ui success button"
           @click="$store.commit('playlists/showModal', true)"
         >
-          <translate translate-context="Content/Playlist/Button.Label/Verb">
+          <translate >
             Manage your playlists
           </translate>
         </button>
@@ -129,7 +129,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="fields">
           <div class="field">
-            <label for="playlists-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+            <label for="playlists-search"><translate >Search</translate></label>
             <div class="ui action input">
               <input
                 id="playlists-search"
@@ -141,14 +141,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="$pgettext('Content/Search/Input.Label/Noun', 'Search')"
+                :aria-label="t('Search')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="playlists-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+            <label for="playlists-ordering"><translate >Ordering</translate></label>
             <select
               id="playlists-ordering"
               v-model="ordering"
@@ -164,26 +164,26 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="playlists-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Order</translate></label>
+            <label for="playlists-ordering-direction"><translate >Order</translate></label>
             <select
               id="playlists-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate translate-context="Content/Search/Dropdown">
+                <translate >
                   Ascending
                 </translate>
               </option>
               <option value="-">
-                <translate translate-context="Content/Search/Dropdown">
+                <translate >
                   Descending
                 </translate>
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="playlists-results"><translate translate-context="Content/Search/Dropdown.Label/Noun">Results per page</translate></label>
+            <label for="playlists-results"><translate >Results per page</translate></label>
             <select
               id="playlists-results"
               v-model="paginateBy"
@@ -212,7 +212,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="ui icon header">
           <i class="list icon" />
-          <translate translate-context="Content/Playlists/Placeholder">
+          <translate >
             No results matching your query
           </translate>
         </div>
@@ -222,7 +222,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           @click="$store.commit('playlists/chooseTrack', null)"
         >
           <i class="list icon" />
-          <translate translate-context="Content/*/Verb">
+          <translate >
             Create a playlist
           </translate>
         </button>

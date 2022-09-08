@@ -3,7 +3,7 @@ import type { BackendError } from '~/types'
 import type { RouteLocationRaw } from 'vue-router'
 
 import { ref, reactive, computed, onMounted, nextTick } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import PasswordInput from '~/components/forms/PasswordInput.vue'
@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const domain = location.hostname
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const store = useStore()
 
 const credentials = reactive({
@@ -30,7 +30,7 @@ const credentials = reactive({
 })
 
 const labels = computed(() => ({
-  usernamePlaceholder: $pgettext('Content/Login/Input.Placeholder', 'Enter your username or e-mail address')
+  usernamePlaceholder: t('Enter your username or e-mail address')
 }))
 
 const username = ref()
@@ -75,18 +75,18 @@ const submit = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/Login/Error message.Title">
+        <translate >
           We cannot log you in
         </translate>
       </h4>
       <ul class="list">
         <li v-if="errors[0] == 'invalid_credentials' && $store.state.instance.settings.moderation.signup_approval_enabled.value">
-          <translate translate-context="Content/Login/Error message.List item/Call to action">
+          <translate >
             If you signed-up recently, you may need to wait before our moderation team review your account, or verify your e-mail address.
           </translate>
         </li>
         <li v-else-if="errors[0] == 'invalid_credentials'">
-          <translate translate-context="Content/Login/Error message.List item/Call to action">
+          <translate >
             Please double-check that your username and password combination is correct and make sure you verified your e-mail address.
           </translate>
         </li>
@@ -98,11 +98,11 @@ const submit = async () => {
     <template v-if="domain === $store.getters['instance/domain']">
       <div class="field">
         <label for="username-field">
-          <translate translate-context="Content/Login/Input.Label/Noun">Username or e-mail address</translate>
+          <translate >Username or e-mail address</translate>
           <template v-if="showSignup">
             |
             <router-link :to="{path: '/signup'}">
-              <translate translate-context="*/Signup/Link/Verb">Create an account</translate>
+              <translate >Create an account</translate>
             </router-link>
           </template>
         </label>
@@ -119,12 +119,12 @@ const submit = async () => {
       </div>
       <div class="field">
         <label for="password-field">
-          <translate translate-context="*/*/*">Password</translate> |
+          <translate >Password</translate> |
           <router-link
             tabindex="1"
             :to="{name: 'auth.password-reset', query: {email: credentials.username}}"
           >
-            <translate translate-context="*/Login/*/Verb">Reset your password</translate>
+            <translate >Reset your password</translate>
           </router-link>
         </label>
         <password-input
@@ -137,7 +137,6 @@ const submit = async () => {
     <template v-else>
       <p>
         <translate
-          translate-context="Content/Auth/Paragraph"
           :translate-params="{domain: $store.getters['instance/domain']}"
         >
           You will be redirected to %{ domain } to authenticate.
@@ -148,7 +147,7 @@ const submit = async () => {
       :class="['ui', {'loading': isLoading}, 'right', 'floated', buttonClasses, 'button']"
       type="submit"
     >
-      <translate translate-context="*/Login/*/Verb">
+      <translate >
         Login
       </translate>
     </button>

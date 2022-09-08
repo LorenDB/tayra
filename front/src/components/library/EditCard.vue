@@ -157,7 +157,7 @@ const approve = async (approved: boolean) => {
       <h4 class="header">
         <router-link :to="detailUrl">
           <translate
-            translate-context="Content/Library/Card/Short"
+
             :translate-params="{id: obj.uuid.substring(0, 8)}"
           >
             Modification %{ id }
@@ -171,7 +171,7 @@ const approve = async (approved: boolean) => {
         >
           <i class="music icon" />
           <translate
-            translate-context="Content/Library/Card/Short"
+
             :translate-params="{id: obj.target.id, name: obj.target.repr}"
           >
             Track #%{ id } - %{ name }
@@ -186,19 +186,19 @@ const approve = async (approved: boolean) => {
         <span class="right floated">
           <span v-if="obj.is_approved && obj.is_applied">
             <i class="success check icon" />
-            <translate translate-context="Content/Library/Card/Short">Approved and applied</translate>
+            <translate >Approved and applied</translate>
           </span>
           <span v-else-if="obj.is_approved">
             <i class="success check icon" />
-            <translate translate-context="Content/*/*/Short">Approved</translate>
+            <translate >Approved</translate>
           </span>
           <span v-else-if="obj.is_approved === null">
             <i class="warning hourglass icon" />
-            <translate translate-context="Content/Admin/*/Noun">Pending review</translate>
+            <translate >Pending review</translate>
           </span>
           <span v-else-if="obj.is_approved === false">
             <i class="danger x icon" />
-            <translate translate-context="Content/Library/*/Short">Rejected</translate>
+            <translate >Rejected</translate>
           </span>
         </span>
       </div>
@@ -217,17 +217,17 @@ const approve = async (approved: boolean) => {
         <thead>
           <tr>
             <th>
-              <translate translate-context="Content/Library/Card.Table.Header/Short">
+              <translate >
                 Field
               </translate>
             </th>
             <th>
-              <translate translate-context="Content/Library/Card.Table.Header/Short">
+              <translate >
                 Old value
               </translate>
             </th>
             <th>
-              <translate translate-context="Content/Library/Card.Table.Header/Short">
+              <translate >
                 New value
               </translate>
             </th>
@@ -259,7 +259,7 @@ const approve = async (approved: boolean) => {
               </template>
             </td>
             <td v-else>
-              <translate translate-context="*/*/*">
+              <translate >
                 N/A
               </translate>
             </td>
@@ -319,7 +319,7 @@ const approve = async (approved: boolean) => {
         :class="['ui', {loading: isLoading}, 'success', 'basic', 'button']"
         @click="approve(true)"
       >
-        <translate translate-context="Content/*/Button.Label/Verb">
+        <translate >
           Approve
         </translate>
       </button>
@@ -328,7 +328,7 @@ const approve = async (approved: boolean) => {
         :class="['ui', {loading: isLoading}, 'warning', 'basic', 'button']"
         @click="approve(false)"
       >
-        <translate translate-context="Content/Library/Button.Label">
+        <translate >
           Reject
         </translate>
       </button>
@@ -337,12 +337,12 @@ const approve = async (approved: boolean) => {
         :class="['ui', {loading: isLoading}, 'basic danger button']"
         :action="remove"
       >
-        <translate translate-context="*/*/*/Verb">
+        <translate >
           Delete
         </translate>
         <template #modal-header>
           <p>
-            <translate translate-context="Popup/Library/Title">
+            <translate >
               Delete this suggestion?
             </translate>
           </p>
@@ -350,7 +350,7 @@ const approve = async (approved: boolean) => {
         <template #modal-content>
           <div>
             <p>
-              <translate translate-context="Popup/Library/Paragraph">
+              <translate >
                 The suggestion will be completely removed, this action is irreversible.
               </translate>
             </p>
@@ -358,7 +358,7 @@ const approve = async (approved: boolean) => {
         </template>
         <template #modal-confirm>
           <p>
-            <translate translate-context="*/*/*/Verb">
+            <translate >
               Delete
             </translate>
           </p>

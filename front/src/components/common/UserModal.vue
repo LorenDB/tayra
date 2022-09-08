@@ -4,7 +4,7 @@ import useThemeList from '~/composables/useThemeList'
 import useTheme from '~/composables/useTheme'
 import { useVModel } from '@vueuse/core'
 import { computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 interface Events {
   (e: 'update:show', value: boolean): void
@@ -24,26 +24,26 @@ const show = useVModel(props, 'show', emit)
 const { theme } = useTheme()
 const themes = useThemeList()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  header: $pgettext('Popup/Title/Noun', 'Options'),
-  profile: $pgettext('*/*/*/Noun', 'Profile'),
-  settings: $pgettext('*/*/*/Noun', 'Settings'),
-  logout: $pgettext('Sidebar/Login/List item.Link/Verb', 'Log out'),
-  about: $pgettext('Sidebar/About/List item.Link', 'About'),
-  shortcuts: $pgettext('*/*/*/Noun', 'Keyboard shortcuts'),
-  support: $pgettext('Sidebar/*/Listitem.Link', 'Help'),
-  forum: $pgettext('Sidebar/*/Listitem.Link', 'Forum'),
-  docs: $pgettext('Sidebar/*/Listitem.Link', 'Documentation'),
-  help: $pgettext('Sidebar/*/Listitem.Link', 'Help'),
-  language: $pgettext('Sidebar/Settings/Dropdown.Label/Short, Verb', 'Language'),
-  theme: $pgettext('Sidebar/Settings/Dropdown.Label/Short, Verb', 'Theme'),
-  chat: $pgettext('Sidebar/*/Listitem.Link', 'Chat room'),
-  git: $pgettext('Sidebar/*/List item.Link', 'Issue tracker'),
-  login: $pgettext('*/*/Button.Label/Verb', 'Log in'),
-  signup: $pgettext('*/*/Button.Label/Verb', 'Sign up'),
-  notifications: $pgettext('*/Notifications/*', 'Notifications'),
-  useOtherInstance: $pgettext('Sidebar/*/List item.Link', 'Use another instance')
+  header: t('Options'),
+  profile: t('Profile'),
+  settings: t('Settings'),
+  logout: t('Log out'),
+  about: t('About'),
+  shortcuts: t('Keyboard shortcuts'),
+  support: t('Help'),
+  forum: t('Forum'),
+  docs: t('Documentation'),
+  help: t('Help'),
+  language: t('Language'),
+  theme: t('Theme'),
+  chat: t('Chat room'),
+  git: t('Issue tracker'),
+  login: t('Log in'),
+  signup: t('Sign up'),
+  notifications: t('Notifications'),
+  useOtherInstance: t('Use another instance')
 }))
 </script>
 

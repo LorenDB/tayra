@@ -5,7 +5,7 @@ import type { RouteRecordName } from 'vue-router'
 import type { OrderingField } from '~/store/ui'
 
 import { ref, computed, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 
@@ -51,12 +51,12 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['uploads_count', 'uploads']
 ]
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'purge',
-    label: $pgettext('*/*/*/Verb', 'Purge'),
+    label: t('Purge'),
     isDangerous: true
   }
 ])
@@ -93,7 +93,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by domain, username, bio…')
+  searchPlaceholder: t('Search by domain, username, bio…')
 }))
 </script>
 
@@ -102,7 +102,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="accounts-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+          <label for="accounts-search"><translate >Search</translate></label>
           <form @submit.prevent="query = search.value">
             <input
               id="accounts-search"
@@ -115,7 +115,7 @@ const labels = computed(() => ({
           </form>
         </div>
         <div class="field">
-          <label for="accounts-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+          <label for="accounts-ordering"><translate >Ordering</translate></label>
           <select
             id="accounts-ordering"
             v-model="ordering"
@@ -131,19 +131,19 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="accounts-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate></label>
+          <label for="accounts-ordering-direction"><translate >Ordering direction</translate></label>
           <select
             id="accounts-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Ascending
               </translate>
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Descending
               </translate>
             </option>
@@ -168,32 +168,32 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Name
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Moderation/*/Noun">
+            <translate >
               Domain
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*">
+            <translate >
               Uploads
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
+            <translate >
               First seen
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Moderation/Table.Label/Noun">
+            <translate >
               Last seen
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Moderation/Table.Label/Short">
+            <translate >
               Under moderation rule
             </translate>
           </th>
@@ -225,7 +225,7 @@ const labels = computed(() => ({
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              <translate translate-context="Content/Moderation/*/Short, Noun">Local account</translate>
+              <translate >Local account</translate>
             </a>
           </td>
           <td>
@@ -241,7 +241,7 @@ const labels = computed(() => ({
             />
           </td>
           <td>
-            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> <translate translate-context="*/*/*">Yes</translate></span>
+            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> <translate >Yes</translate></span>
           </td>
         </template>
       </action-table>
@@ -257,7 +257,7 @@ const labels = computed(() => ({
 
       <span v-if="result && result.results.length > 0">
         <translate
-          translate-context="Content/*/Paragraph"
+
           :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
         >
           Showing results %{ start }-%{ end } on %{ total }

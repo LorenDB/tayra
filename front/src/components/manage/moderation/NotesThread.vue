@@ -64,12 +64,12 @@ const remove = async (note: Note) => {
             @confirm="remove(note)"
           >
             <i class="trash icon" />
-            <translate translate-context="*/*/*/Verb">
+            <translate >
               Delete
             </translate>
             <template #modal-header>
               <p>
-                <translate translate-context="Popup/Moderation/Title">
+                <translate >
                   Delete this note?
                 </translate>
               </p>
@@ -77,7 +77,7 @@ const remove = async (note: Note) => {
             <template #modal-content>
               <div>
                 <p>
-                  <translate translate-context="Content/Moderation/Paragraph">
+                  <translate >
                     The note will be removed. This action is irreversible.
                   </translate>
                 </p>
@@ -85,7 +85,7 @@ const remove = async (note: Note) => {
             </template>
             <template #modal-confirm>
               <p>
-                <translate translate-context="*/*/*/Verb">
+                <translate >
                   Delete
                 </translate>
               </p>

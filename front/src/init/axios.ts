@@ -1,13 +1,16 @@
 import type { APIErrorResponse, BackendError, InitModule, RateLimitStatus } from '~/types'
+import type { AxiosError } from 'axios'
+
+import { parseAPIErrors } from '~/utils'
+import { i18n } from './locale'
 
 import createAuthRefreshInterceptor from 'axios-auth-refresh'
-import axios, { AxiosError } from 'axios'
 import moment from 'moment'
-import { parseAPIErrors } from '~/utils'
-import useLogger from '~/composables/useLogger'
-import { gettext } from '~/init/locale'
+import axios from 'axios'
 
-const { $pgettext, $gettext } = gettext
+import useLogger from '~/composables/useLogger'
+
+const { t } = i18n.global
 const logger = useLogger()
 
 export const install: InitModule = ({ store, router }) => {
@@ -72,10 +75,9 @@ export const install: InitModule = ({ store, router }) => {
 
         if (rateLimitStatus.availableSeconds) {
           const tryAgain = moment().add(rateLimitStatus.availableSeconds, 's').toNow(true)
-          message = $pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again in %{ delay }')
-          message = $gettext(message, { delay: tryAgain })
+          message = t('You sent too many requests and have been rate limited, please try again in %{ delay }', { delay: tryAgain })
         } else {
-          message = $pgettext('*/Error/Paragraph', 'You sent too many requests and have been rate limited, please try again later')
+          message = t('You sent too many requests and have been rate limited, please try again later')
         }
 
         error.backendErrors.push(message)

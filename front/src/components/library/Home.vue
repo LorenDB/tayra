@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { ref, computed } from 'vue'
 
 import axios from 'axios'
@@ -24,9 +24,9 @@ const artists = ref([])
 
 const logger = useLogger()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Head/Home/Title', 'Library')
+  title: t('Library')
 }))
 
 const isLoading = ref(false)
@@ -67,7 +67,7 @@ fetchData()
             :websocket-handlers="['Listen']"
           >
             <template #title>
-              <translate translate-context="Content/Home/Title">
+              <translate >
                 Recently listened
               </translate>
             </template>
@@ -79,7 +79,7 @@ fetchData()
             :filters="{scope: scope, ordering: '-creation_date'}"
           >
             <template #title>
-              <translate translate-context="Content/Home/Title">
+              <translate >
                 Recently favorited
               </translate>
             </template>
@@ -91,7 +91,7 @@ fetchData()
             :filters="{scope: scope, playable: true, ordering: '-modification_date'}"
           >
             <template #title>
-              <translate translate-context="*/*/*">
+              <translate >
                 Playlists
               </translate>
             </template>
@@ -103,7 +103,7 @@ fetchData()
         <div class="column">
           <album-widget :filters="{scope: scope, playable: true, ordering: '-creation_date'}">
             <template #title>
-              <translate translate-context="Content/Home/Title">
+              <translate >
                 Recently added
               </translate>
             </template>
@@ -112,7 +112,7 @@ fetchData()
       </div>
       <template v-if="scope === 'all'">
         <h3 class="ui header">
-          <translate translate-context="*/*/*">
+          <translate >
             New channels
           </translate>
         </h3>

@@ -5,7 +5,7 @@ import moment from 'moment'
 import axios from 'axios'
 
 import { ref, reactive, computed, watch, markRaw } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import NotificationRow from '~/components/notifications/NotificationRow.vue'
@@ -16,14 +16,14 @@ import useMarkdown from '~/composables/useMarkdown'
 
 const store = useStore()
 const supportMessage = useMarkdown(() => store.state.instance.settings.instance.support_message.value)
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const additionalNotifications = computed(() => store.getters['ui/additionalNotifications'])
 const showInstanceSupportMessage = computed(() => store.getters['ui/showInstanceSupportMessage'])
 const showFunkwhaleSupportMessage = computed(() => store.getters['ui/showFunkwhaleSupportMessage'])
 
 const labels = computed(() => ({
-  title: $pgettext('*/Notifications/*', 'Notifications')
+  title: t('Notifications')
 }))
 
 const filters = reactive({
@@ -101,7 +101,7 @@ const markAllAsRead = async () => {
           class="ui container"
         >
           <h1 class="ui header">
-            <translate translate-context="Content/Notifications/Title">
+            <translate >
               Your messages
             </translate>
           </h1>
@@ -112,7 +112,7 @@ const markAllAsRead = async () => {
             >
               <div class="ui attached info message">
                 <h4 class="header">
-                  <translate translate-context="Content/Notifications/Header">
+                  <translate >
                     Support this Funkwhale pod
                   </translate>
                 </h4>
@@ -125,29 +125,29 @@ const markAllAsRead = async () => {
                 >
                   <div class="inline field">
                     <label for="instance-reminder-delay">
-                      <translate translate-context="Content/Notifications/Label">Remind me in:</translate>
+                      <translate >Remind me in:</translate>
                     </label>
                     <select
                       id="instance-reminder-delay"
                       v-model="instanceSupportMessageDelay"
                     >
                       <option :value="30">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           30 days
                         </translate>
                       </option>
                       <option :value="60">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           60 days
                         </translate>
                       </option>
                       <option :value="90">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           90 days
                         </translate>
                       </option>
                       <option :value="null">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Never
                         </translate>
                       </option>
@@ -156,7 +156,7 @@ const markAllAsRead = async () => {
                       type="submit"
                       class="ui right floated basic button"
                     >
-                      <translate translate-context="Content/Notifications/Button.Label">
+                      <translate >
                         Got it!
                       </translate>
                     </button>
@@ -170,12 +170,12 @@ const markAllAsRead = async () => {
             >
               <div class="ui info attached message">
                 <h4 class="header">
-                  <translate translate-context="Content/Notifications/Header">
+                  <translate >
                     Do you like Funkwhale?
                   </translate>
                 </h4>
                 <p>
-                  <translate translate-context="Content/Notifications/Paragraph">
+                  <translate >
                     We noticed you've been here for a while. If Funkwhale is useful to you, we could use your help to make it even better!
                   </translate>
                 </p>
@@ -185,7 +185,7 @@ const markAllAsRead = async () => {
                   rel="noopener"
                   class="ui primary inverted button"
                 >
-                  <translate translate-context="Content/Notifications/Button.Label/Verb">Donate</translate>
+                  <translate >Donate</translate>
                 </a>
                 <a
                   href="https://contribute.funkwhale.audio"
@@ -193,7 +193,7 @@ const markAllAsRead = async () => {
                   rel="noopener"
                   class="ui secondary inverted button"
                 >
-                  <translate translate-context="Content/Notifications/Button.Label/Verb">Discover other ways to help</translate>
+                  <translate >Discover other ways to help</translate>
                 </a>
               </div>
               <div class="ui bottom attached segment">
@@ -203,29 +203,29 @@ const markAllAsRead = async () => {
                 >
                   <div class="inline field">
                     <label for="funkwhale-reminder-delay">
-                      <translate translate-context="Content/Notifications/Label">Remind me in:</translate>
+                      <translate >Remind me in:</translate>
                     </label>
                     <select
                       id="funkwhale-reminder-delay"
                       v-model="funkwhaleSupportMessageDelay"
                     >
                       <option :value="30">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           30 days
                         </translate>
                       </option>
                       <option :value="60">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           60 days
                         </translate>
                       </option>
                       <option :value="90">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           90 days
                         </translate>
                       </option>
                       <option :value="null">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Never
                         </translate>
                       </option>
@@ -234,7 +234,7 @@ const markAllAsRead = async () => {
                       type="submit"
                       class="ui right floated basic button"
                     >
-                      <translate translate-context="Content/Notifications/Button.Label">
+                      <translate >
                         Got it!
                       </translate>
                     </button>
@@ -245,7 +245,7 @@ const markAllAsRead = async () => {
           </div>
         </div>
         <h1 class="ui header">
-          <translate translate-context="Content/Notifications/Title">
+          <translate >
             Your notifications
           </translate>
         </h1>
@@ -255,7 +255,7 @@ const markAllAsRead = async () => {
             v-model="filters.is_read"
             type="checkbox"
           >
-          <label for="show-read-notifications"><translate translate-context="Content/Notifications/Form.Label/Verb">Show read notifications</translate></label>
+          <label for="show-read-notifications"><translate >Show read notifications</translate></label>
         </div>
         <button
           v-if="filters.is_read === false && notifications.count > 0"
@@ -263,7 +263,7 @@ const markAllAsRead = async () => {
           @click.prevent="markAllAsRead"
         >
           <i class="ui check icon" />
-          <translate translate-context="Content/Notifications/Button.Label/Verb">
+          <translate >
             Mark all as read
           </translate>
         </button>
@@ -274,7 +274,7 @@ const markAllAsRead = async () => {
           :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
         >
           <div class="ui text loader">
-            <translate translate-context="Content/Notifications/Paragraph">
+            <translate >
               Loading notifications…
             </translate>
           </div>
@@ -293,7 +293,7 @@ const markAllAsRead = async () => {
           </tbody>
         </table>
         <p v-else-if="additionalNotifications === 0">
-          <translate translate-context="Content/Notifications/Paragraph">
+          <translate >
             No notification to show.
           </translate>
         </p>

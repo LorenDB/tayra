@@ -7,7 +7,7 @@ import type { RouteRecordName } from 'vue-router'
 import type { OrderingField } from '~/store/ui'
 
 import { ref, reactive, watch, computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { uniq } from 'lodash-es'
 
 import axios from 'axios'
@@ -139,10 +139,10 @@ watch(page, fetchData)
 onOrderingUpdate(fetchData)
 fetchData()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by account, summary, domain…')
+  searchPlaceholder: t('Search by account, summary, domain…')
 }))
 
 const handle = (type: 'delete' | 'approved', id: string, value: boolean) => {
@@ -165,7 +165,7 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="search-edits"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+          <label for="search-edits"><translate >Search</translate></label>
           <form @submit.prevent="query = search.value">
             <input
               id="search-edits"
@@ -178,7 +178,7 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
           </form>
         </div>
         <div class="field">
-          <label for="edit-status"><translate translate-context="*/*/*">Status</translate></label>
+          <label for="edit-status"><translate >Status</translate></label>
           <select
             id="edit-status"
             class="ui dropdown"
@@ -186,29 +186,29 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
             @change="addSearchToken('is_approved', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              <translate translate-context="Content/*/Dropdown">
+              <translate >
                 All
               </translate>
             </option>
             <option value="null">
-              <translate translate-context="Content/Admin/*/Noun">
+              <translate >
                 Pending review
               </translate>
             </option>
             <option value="yes">
-              <translate translate-context="Content/*/*/Short">
+              <translate >
                 Approved
               </translate>
             </option>
             <option value="no">
-              <translate translate-context="Content/Library/*/Short">
+              <translate >
                 Rejected
               </translate>
             </option>
           </select>
         </div>
         <div class="field">
-          <label for="edit-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+          <label for="edit-ordering"><translate >Ordering</translate></label>
           <select
             id="edit-ordering"
             v-model="ordering"
@@ -224,19 +224,19 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
           </select>
         </div>
         <div class="field">
-          <label for="edit-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Order</translate></label>
+          <label for="edit-ordering-direction"><translate >Order</translate></label>
           <select
             id="edit-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Ascending
               </translate>
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Descending
               </translate>
             </option>
@@ -279,7 +279,7 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
 
       <span v-if="result && result.results.length > 0">
         <translate
-          translate-context="Content/*/Paragraph"
+
           :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
         >
           Showing results %{ start }-%{ end } on %{ total }

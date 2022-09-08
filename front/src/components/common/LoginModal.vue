@@ -4,7 +4,7 @@ import type { Cover } from '~/types'
 
 import SemanticModal from '~/components/semantic/Modal.vue'
 import { ref, computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 interface Props {
   nextRoute: RouteLocationRaw
@@ -16,12 +16,12 @@ defineProps<Props>()
 
 const show = ref(false)
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  header: $pgettext('Popup/Title/Noun', 'Unauthenticated'),
-  login: $pgettext('*/*/Button.Label/Verb', 'Log in'),
-  signup: $pgettext('*/*/Button.Label/Verb', 'Sign up'),
-  description: $pgettext('Popup/*/Paragraph', "You don't have access!")
+  header: t('Unauthenticated'),
+  login: t('Log in'),
+  signup: t('Sign up'),
+  description: t("You don't have access!")
 }))
 </script>
 

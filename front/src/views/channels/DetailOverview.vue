@@ -101,19 +101,19 @@ const albumModal = ref()
           @click="pendingUploads.length = 0"
         />
         <h3 class="ui header">
-          <translate translate-context="Content/Channel/Header">
+          <translate >
             Uploads published successfully
           </translate>
         </h3>
         <p>
-          <translate translate-context="Content/Channel/Paragraph">
+          <translate >
             Processed uploads:
           </translate> {{ processedUploads.length }}/{{ pendingUploads.length }}
         </p>
       </template>
       <template v-else-if="isOver">
         <h3 class="ui header">
-          <translate translate-context="Content/Channel/Header">
+          <translate >
             Some uploads couldn't be published
           </translate>
         </h3>
@@ -123,7 +123,7 @@ const albumModal = ref()
           class="ui basic button"
           :to="{name: 'content.libraries.files', query: {q: 'status:skipped'}}"
         >
-          <translate translate-context="Content/Channel/Button">
+          <translate >
             View skipped uploads
           </translate>
         </router-link>
@@ -132,7 +132,7 @@ const albumModal = ref()
           class="ui basic button"
           :to="{name: 'content.libraries.files', query: {q: 'status:errored'}}"
         >
-          <translate translate-context="Content/Channel/Button">
+          <translate >
             View errored uploads
           </translate>
         </router-link>
@@ -140,17 +140,17 @@ const albumModal = ref()
       <template v-else>
         <div class="ui inline right floated active loader" />
         <h3 class="ui header">
-          <translate translate-context="Content/Channel/Header">
+          <translate >
             Uploads are being processed
           </translate>
         </h3>
         <p>
-          <translate translate-context="Content/Channel/Paragraph">
+          <translate >
             Your uploads are being processed by Funkwhale and will be live very soon.
           </translate>
         </p>
         <p>
-          <translate translate-context="Content/Channel/Paragraph">
+          <translate >
             Processed uploads:
           </translate> {{ processedUploads.length }}/{{ pendingUploads.length }}
         </p>
@@ -174,13 +174,13 @@ const albumModal = ref()
       <h2 class="ui header">
         <translate
           v-if="isPodcast"
-          translate-context="Content/Channel/Paragraph"
+
         >
           Latest episodes
         </translate>
         <translate
           v-else
-          translate-context="Content/Channel/Paragraph"
+
         >
           Latest tracks
         </translate>
@@ -195,13 +195,13 @@ const albumModal = ref()
       <h2 class="ui with-actions header">
         <translate
           v-if="isPodcast"
-          translate-context="Content/Channel/Paragraph"
+
         >
           Series
         </translate>
         <translate
           v-else
-          translate-context="*/*/*"
+
         >
           Albums
         </translate>
@@ -211,7 +211,7 @@ const albumModal = ref()
         >
           <a @click.stop.prevent="albumModal.show = true">
             <i class="plus icon" />
-            <translate translate-context="Content/Profile/Button">Add new</translate>
+            <translate >Add new</translate>
           </a>
         </div>
       </h2>

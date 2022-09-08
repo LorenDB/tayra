@@ -6,7 +6,7 @@ import axios from 'axios'
 import $ from 'jquery'
 
 import { computed, reactive, ref, onMounted } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useStore } from '~/store'
 
@@ -30,7 +30,7 @@ interface Settings {
   fields: Record<FieldId, Field>
 }
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const sharedLabels = useSharedLabels()
 const logger = useLogger()
 const router = useRouter()
@@ -57,7 +57,7 @@ const settings = reactive({
 const orderedSettingsFields = SETTINGS_ORDER.map(id => settings.fields[id])
 
 const labels = computed(() => ({
-  title: $pgettext('Head/Settings/Title', 'Account Settings')
+  title: t('Account Settings')
 }))
 
 const isLoading = ref(false)
@@ -224,7 +224,7 @@ const deleteAccount = async () => {
     await axios.delete('users/me/', { data: payload })
 
     store.commit('ui/addMessage', {
-      content: $pgettext('*/Auth/Message', 'Your deletion request was submitted, your account and content will be deleted shortly'),
+      content: t('Your deletion request was submitted, your account and content will be deleted shortly'),
       date: new Date()
     })
 
@@ -276,7 +276,7 @@ fetchOwnedApps()
     <div class="ui vertical stripe segment">
       <section class="ui text container">
         <h2 class="ui header">
-          <translate translate-context="Content/Settings/Title">
+          <translate >
             Account settings
           </translate>
         </h2>
@@ -289,7 +289,7 @@ fetchOwnedApps()
             class="ui positive message"
           >
             <h4 class="header">
-              <translate translate-context="Content/Settings/Message">
+              <translate >
                 Settings updated
               </translate>
             </h4>
@@ -300,7 +300,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              <translate translate-context="Content/Settings/Error message.Title">
+              <translate >
                 Your settings can't be updated
               </translate>
             </h4>
@@ -346,7 +346,7 @@ fetchOwnedApps()
             :class="['ui', { loading: isLoading }, 'button']"
             type="submit"
           >
-            <translate translate-context="Content/Settings/Button.Label/Verb">
+            <translate >
               Update settings
             </translate>
           </button>
@@ -355,7 +355,7 @@ fetchOwnedApps()
       <section class="ui text container">
         <div class="ui hidden divider" />
         <h2 class="ui header">
-          <translate translate-context="Content/Settings/Title">
+          <translate >
             Avatar
           </translate>
         </h2>
@@ -366,7 +366,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              <translate translate-context="Content/Settings/Error message.Title">
+              <translate >
                 Your avatar cannot be saved
               </translate>
             </h4>
@@ -385,7 +385,7 @@ fetchOwnedApps()
             @update:model-value="submitAvatar($event)"
             @delete="avatar = {uuid: null}"
           >
-            <translate translate-context="Content/Channel/*">
+            <translate >
               Avatar
             </translate>
           </attachment-input>
@@ -395,14 +395,14 @@ fetchOwnedApps()
       <section class="ui text container">
         <div class="ui hidden divider" />
         <h2 class="ui header">
-          <translate translate-context="Content/Settings/Title/Verb">
+          <translate >
             Change my password
           </translate>
         </h2>
         <div class="ui message">
-          <translate translate-context="Content/Settings/Paragraph'">
+          <translate >
             Changing your password will also change your Subsonic API password if you have requested one.
-          </translate>&nbsp;<translate translate-context="Content/Settings/Paragraph">
+          </translate>&nbsp;<translate >
             You will have to update your password on your clients that use this password.
           </translate>
         </div>
@@ -416,20 +416,20 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              <translate translate-context="Content/Settings/Error message.Title">
+              <translate >
                 Your password cannot be changed
               </translate>
             </h4>
             <ul class="list">
               <li v-if="passwordError == 'invalid_credentials'">
-                <translate translate-context="Content/Settings/Error message.List item/Call to action">
+                <translate >
                   Please double-check your password is correct
                 </translate>
               </li>
             </ul>
           </div>
           <div class="field">
-            <label for="old-password-field"><translate translate-context="Content/Settings/Input.Label">Current password</translate></label>
+            <label for="old-password-field"><translate >Current password</translate></label>
             <password-input
               v-model="credentials.oldPassword"
               field-id="old-password-field"
@@ -437,7 +437,7 @@ fetchOwnedApps()
             />
           </div>
           <div class="field">
-            <label for="new-password-field"><translate translate-context="Content/Settings/Input.Label">New password</translate></label>
+            <label for="new-password-field"><translate >New password</translate></label>
             <password-input
               v-model="credentials.newPassword"
               field-id="new-password-field"
@@ -448,12 +448,12 @@ fetchOwnedApps()
             :class="['ui', {'loading': isLoadingPassword}, {disabled: !credentials.newPassword || !credentials.oldPassword}, 'warning', 'button']"
             :action="submitPassword"
           >
-            <translate translate-context="Content/Settings/Button.Label">
+            <translate >
               Change password
             </translate>
             <template #modal-header>
               <p>
-                <translate translate-context="Popup/Settings/Title">
+                <translate >
                   Change your password?
                 </translate>
               </p>
@@ -461,18 +461,18 @@ fetchOwnedApps()
             <template #modal-content>
               <div>
                 <p>
-                  <translate translate-context="Popup/Settings/Paragraph">
+                  <translate >
                     Changing your password will have the following consequences:
                   </translate>
                 </p>
                 <ul>
                   <li>
-                    <translate translate-context="Popup/Settings/List item">
+                    <translate >
                       You will be logged out from this session and have to log in with the new one
                     </translate>
                   </li>
                   <li>
-                    <translate translate-context="Popup/Settings/List item">
+                    <translate >
                       Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password
                     </translate>
                   </li>
@@ -481,7 +481,7 @@ fetchOwnedApps()
             </template>
             <template #modal-confirm>
               <div>
-                <translate translate-context="Popup/Settings/Button.Label">
+                <translate >
                   Disable access
                 </translate>
               </div>
@@ -500,13 +500,13 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="eye slash outline icon" />
           <div class="content">
-            <translate translate-context="Content/Settings/Title/Noun">
+            <translate >
               Content filters
             </translate>
           </div>
         </h2>
         <p>
-          <translate translate-context="Content/Settings/Paragraph">
+          <translate >
             Content filters help you hide content you don't want to see on the service.
           </translate>
         </p>
@@ -516,12 +516,12 @@ fetchOwnedApps()
           @click="$store.dispatch('moderation/fetchContentFilters')"
         >
           <i class="refresh icon" />&nbsp;
-          <translate translate-context="Content/*/Button.Label/Short, Verb">
+          <translate >
             Refresh
           </translate>
         </button>
         <h3 class="ui header">
-          <translate translate-context="Content/Settings/Title">
+          <translate >
             Hidden artists
           </translate>
         </h3>
@@ -529,12 +529,12 @@ fetchOwnedApps()
           <thead>
             <tr>
               <th>
-                <translate translate-context="*/*/*/Noun">
+                <translate >
                   Name
                 </translate>
               </th>
               <th>
-                <translate translate-context="Content/*/*/Noun">
+                <translate >
                   Creation date
                 </translate>
               </th>
@@ -559,7 +559,7 @@ fetchOwnedApps()
                   class="ui basic tiny button"
                   @click="$store.dispatch('moderation/deleteContentFilter', filter.uuid)"
                 >
-                  <translate translate-context="*/*/*/Verb">
+                  <translate >
                     Delete
                   </translate>
                 </button>
@@ -576,13 +576,13 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="open lock icon" />
           <div class="content">
-            <translate translate-context="Content/Settings/Title/Noun">
+            <translate >
               Authorized apps
             </translate>
           </div>
         </h2>
         <p>
-          <translate translate-context="Content/Settings/Paragraph">
+          <translate >
             This is the list of applications that have access to your account data.
           </translate>
         </p>
@@ -591,7 +591,7 @@ fetchOwnedApps()
           @click="fetchApps()"
         >
           <i class="refresh icon" />&nbsp;
-          <translate translate-context="Content/*/Button.Label/Short, Verb">
+          <translate >
             Refresh
           </translate>
         </button>
@@ -602,12 +602,12 @@ fetchOwnedApps()
           <thead>
             <tr>
               <th>
-                <translate translate-context="*/*/*/Noun">
+                <translate >
                   Application
                 </translate>
               </th>
               <th>
-                <translate translate-context="Content/*/*/Noun">
+                <translate >
                   Permissions
                 </translate>
               </th>
@@ -630,27 +630,27 @@ fetchOwnedApps()
                   :class="['ui', 'tiny', 'danger', { loading: isRevoking.has(app.client_id) }, 'button']"
                   @confirm="revokeApp(app.client_id)"
                 >
-                  <translate translate-context="*/*/*/Verb">
+                  <translate >
                     Revoke
                   </translate>
                   <template #modal-header>
                     <p
                       v-translate="{application: app.name}"
-                      translate-context="Popup/Settings/Title"
+
                     >
                       Revoke access for application "%{ application }"?
                     </p>
                   </template>
                   <template #modal-content>
                     <p>
-                      <translate translate-context="Popup/Settings/Paragraph">
+                      <translate >
                         This will prevent this application from accessing the service on your behalf.
                       </translate>
                     </p>
                   </template>
                   <template #modal-confirm>
                     <div>
-                      <translate translate-context="*/Settings/Button.Label/Verb">
+                      <translate >
                         Revoke access
                       </translate>
                     </div>
@@ -662,11 +662,11 @@ fetchOwnedApps()
         </table>
         <empty-state v-else>
           <template #title>
-            <translate translate-context="Content/Applications/Paragraph">
+            <translate >
               You don't have any application connected with your account.
             </translate>
           </template>
-          <translate translate-context="Content/Applications/Paragraph">
+          <translate >
             If you authorize third-party applications to access your data, those applications will be listed here.
           </translate>
         </empty-state>
@@ -679,13 +679,13 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="code icon" />
           <div class="content">
-            <translate translate-context="Content/Settings/Title/Noun">
+            <translate >
               Your applications
             </translate>
           </div>
         </h2>
         <p>
-          <translate translate-context="Content/Settings/Paragraph">
+          <translate >
             This is the list of applications that you have registered.
           </translate>
         </p>
@@ -693,7 +693,7 @@ fetchOwnedApps()
           class="ui success button"
           :to="{name: 'settings.applications.new'}"
         >
-          <translate translate-context="Content/Settings/Button.Label">
+          <translate >
             Register a new application
           </translate>
         </router-link>
@@ -704,17 +704,17 @@ fetchOwnedApps()
           <thead>
             <tr>
               <th>
-                <translate translate-context="*/*/*/Noun">
+                <translate >
                   Application
                 </translate>
               </th>
               <th>
-                <translate translate-context="Content/*/*/Noun">
+                <translate >
                   Scopes
                 </translate>
               </th>
               <th>
-                <translate translate-context="Content/*/*/Noun">
+                <translate >
                   Creation date
                 </translate>
               </th>
@@ -742,7 +742,7 @@ fetchOwnedApps()
                   class="ui tiny success button"
                   :to="{name: 'settings.applications.edit', params: {id: app.client_id}}"
                 >
-                  <translate translate-context="Content/*/Button.Label/Verb">
+                  <translate >
                     Edit
                   </translate>
                 </router-link>
@@ -750,27 +750,27 @@ fetchOwnedApps()
                   :class="['ui', 'tiny', 'danger', { loading: isDeleting.has(app.client_id) }, 'button']"
                   @confirm="deleteApp(app.client_id)"
                 >
-                  <translate translate-context="*/*/*/Verb">
+                  <translate >
                     Remove
                   </translate>
                   <template #modal-header>
                     <p
                       v-translate="{application: app.name}"
-                      translate-context="Popup/Settings/Title"
+
                     >
                       Remove application "%{ application }"?
                     </p>
                   </template>
                   <template #modal-content>
                     <p>
-                      <translate translate-context="Popup/Settings/Paragraph">
+                      <translate >
                         This will permanently remove the application and all the associated tokens.
                       </translate>
                     </p>
                   </template>
                   <template #modal-confirm>
                     <div>
-                      <translate translate-context="*/Settings/Button.Label/Verb">
+                      <translate >
                         Remove application
                       </translate>
                     </div>
@@ -782,11 +782,11 @@ fetchOwnedApps()
         </table>
         <empty-state v-else>
           <template #title>
-            <translate translate-context="Content/Applications/Paragraph">
+            <translate >
               You don't have registered any application yet.
             </translate>
           </template>
-          <translate translate-context="Content/Applications/Paragraph">
+          <translate >
             Register one to integrate Funkwhale with third-party applications.
           </translate>
         </empty-state>
@@ -800,13 +800,13 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="code icon" />
           <div class="content">
-            <translate translate-context="Content/Settings/Title/Noun">
+            <translate >
               Plugins
             </translate>
           </div>
         </h2>
         <p>
-          <translate translate-context="Content/Settings/Paragraph">
+          <translate >
             Use plugins to extend Funkwhale and get additional features.
           </translate>
         </p>
@@ -814,7 +814,7 @@ fetchOwnedApps()
           class="ui success button"
           :to="{name: 'settings.plugins'}"
         >
-          <translate translate-context="Content/Settings/Button.Label">
+          <translate >
             Manage plugins
           </translate>
         </router-link>
@@ -824,20 +824,20 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="comment icon" />
           <div class="content">
-            <translate translate-context="*/*/Button.Label">
+            <translate >
               Change my e-mail address
             </translate>
           </div>
         </h2>
         <p>
-          <translate translate-context="Content/Settings/Paragraph'">
+          <translate >
             Change the e-mail address associated with your account. We will send a confirmation to the new address.
           </translate>
         </p>
         <p>
           <translate
             :translate-params="{email: $store.state.auth.profile?.email}"
-            translate-context="Content/Settings/Paragraph'"
+
           >
             Your current e-mail address is %{ email }.
           </translate>
@@ -852,7 +852,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              <translate translate-context="Content/Settings/Error message.Title">
+              <translate >
                 We cannot change your e-mail address
               </translate>
             </h4>
@@ -866,7 +866,7 @@ fetchOwnedApps()
             </ul>
           </div>
           <div class="field">
-            <label for="new-email"><translate translate-context="*/*/*">New e-mail address</translate></label>
+            <label for="new-email"><translate >New e-mail address</translate></label>
             <input
               id="new-email"
               v-model="newEmail"
@@ -875,7 +875,7 @@ fetchOwnedApps()
             >
           </div>
           <div class="field">
-            <label for="current-password-field-email"><translate translate-context="*/*/*">Password</translate></label>
+            <label for="current-password-field-email"><translate >Password</translate></label>
             <password-input
               v-model="emailPassword"
               field-id="current-password-field-email"
@@ -886,7 +886,7 @@ fetchOwnedApps()
             type="submit"
             class="ui button"
           >
-            <translate translate-context="*/*/*">
+            <translate >
               Update
             </translate>
           </button>
@@ -897,13 +897,13 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="trash icon" />
           <div class="content">
-            <translate translate-context="*/*/Button.Label">
+            <translate >
               Delete my account
             </translate>
           </div>
         </h2>
         <p>
-          <translate translate-context="Content/Settings/Paragraph'">
+          <translate >
             You can permanently and irreversibly delete your account and all the associated data using the form below. You will be asked for confirmation.
           </translate>
         </p>
@@ -911,7 +911,7 @@ fetchOwnedApps()
           role="alert"
           class="ui warning message"
         >
-          <translate translate-context="Content/Settings/Paragraph'">
+          <translate >
             Your account will be deleted from our servers within a few minutes. We will also notify other servers who may have a copy of some of your data so they can proceed to deletion. Please note that some of these servers may be offline or unwilling to comply though.
           </translate>
         </div>
@@ -922,7 +922,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              <translate translate-context="Content/Settings/Error message.Title">
+              <translate >
                 We cannot delete your account
               </translate>
             </h4>
@@ -936,7 +936,7 @@ fetchOwnedApps()
             </ul>
           </div>
           <div class="field">
-            <label for="current-password-field"><translate translate-context="*/*/*">Password</translate></label>
+            <label for="current-password-field"><translate >Password</translate></label>
             <password-input
               v-model="deleteAccountPassword"
               field-id="current-password-field"
@@ -947,12 +947,12 @@ fetchOwnedApps()
             :class="['ui', {'loading': isDeletingAccount}, {disabled: !deleteAccountPassword}, {danger: deleteAccountPassword}, 'button']"
             :action="deleteAccount"
           >
-            <translate translate-context="*/*/Button.Label">
+            <translate >
               Delete my account…
             </translate>
             <template #modal-header>
               <p>
-                <translate translate-context="Popup/Settings/Title">
+                <translate >
                   Do you want to delete your account?
                 </translate>
               </p>
@@ -960,7 +960,7 @@ fetchOwnedApps()
             <template #modal-content>
               <div>
                 <p>
-                  <translate translate-context="Popup/Settings/Paragraph">
+                  <translate >
                     This is irreversible and will permanently remove your data from our servers. You will we immediately logged out.
                   </translate>
                 </p>
@@ -968,7 +968,7 @@ fetchOwnedApps()
             </template>
             <template #modal-confirm>
               <div>
-                <translate translate-context="*/*/Button.Label">
+                <translate >
                   Delete my account
                 </translate>
               </div>

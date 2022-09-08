@@ -47,7 +47,7 @@ const tags = computed(() => {
       @click.prevent="honorLimit = false"
     >
       <translate
-        translate-context="Content/*/Button/Label/Verb"
+
         :translate-params="{ count: props.tags.length - tags.length }"
         :translate-n="props.tags.length - tags.length"
         translate-plural="Show %{ count } more tags"

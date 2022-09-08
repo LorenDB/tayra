@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const labels = computed(() => ({
-  secondaryMenu: $pgettext('Menu/*/Hidden text', 'Secondary menu'),
-  title: $pgettext('*/Library/*/Verb', 'Add content')
+  secondaryMenu: t('Secondary menu'),
+  title: t('Add content')
 }))
 </script>
 
@@ -24,7 +24,7 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'content.libraries.index'}"
       >
-        <translate translate-context="*/*/*/Noun">
+        <translate >
           Libraries
         </translate>
       </router-link>
@@ -32,7 +32,7 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'content.libraries.files'}"
       >
-        <translate translate-context="*/*/*">
+        <translate >
           Tracks
         </translate>
       </router-link>

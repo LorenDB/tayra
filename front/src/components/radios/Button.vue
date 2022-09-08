@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ObjectId, RadioConfig } from '~/store/radios'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 import { computed } from 'vue'
 
@@ -36,25 +36,25 @@ const running = computed(() => {
     )
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const buttonLabel = computed(() => {
   switch (props.radioConfig?.type) {
     case 'tag':
       return running.value
-        ? $pgettext('*/Player/Button.Label/Short, Verb', 'Stop tags radio')
-        : $pgettext('*/Player/Button.Label/Short, Verb', 'Start tags radio')
+        ? t('Stop tags radio')
+        : t('Start tags radio')
     case 'artist':
       return running.value
-        ? $pgettext('*/Player/Button.Label/Short, Verb', 'Stop artists radio')
-        : $pgettext('*/Player/Button.Label/Short, Verb', 'Start artists radio')
+        ? t('Stop artists radio')
+        : t('Start artists radio')
     case 'playlist':
       return running.value
-        ? $pgettext('*/Player/Button.Label/Short, Verb', 'Stop playlists radio')
-        : $pgettext('*/Player/Button.Label/Short, Verb', 'Start playlists radio')
+        ? t('Stop playlists radio')
+        : t('Start playlists radio')
     default:
       return running.value
-        ? $pgettext('*/Player/Button.Label/Short, Verb', 'Stop radio')
-        : $pgettext('*/Queue/Button.Label/Short, Verb', 'Play radio')
+        ? t('Stop radio')
+        : t('Play radio')
   }
 })
 

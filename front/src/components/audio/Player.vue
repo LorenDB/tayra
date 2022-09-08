@@ -3,17 +3,17 @@ import { usePlayer } from '~/composables/audio/player'
 import { useQueue } from '~/composables/audio/queue'
 
 import { useMouse, useWindowSize } from '@vueuse/core'
-import { useGettext } from 'vue3-gettext'
 import { computed, ref } from 'vue'
 import { useStore } from '~/store'
+import { useI18n } from 'vue-i18n'
 
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
 import time from '~/utils/time'
 
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
-import VolumeControl from './VolumeControl.vue'
 import PlayerControls from './PlayerControls.vue'
+import VolumeControl from './VolumeControl.vue'
 
 const {
   LoopingMode,
@@ -44,7 +44,7 @@ const {
 } = useQueue()
 
 const store = useStore()
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const toggleMobilePlayer = () => {
   store.commit('ui/queueFocused', ['queue', 'player'].includes(store.state.ui.queueFocused as string) ? null : 'player')
@@ -72,17 +72,17 @@ onKeyboardShortcut(['ctrl', 'shift', 'left'], playPrevious, true)
 onKeyboardShortcut(['ctrl', 'shift', 'right'], playNext, true)
 
 const labels = computed(() => ({
-  audioPlayer: $pgettext('Sidebar/Player/Hidden text', 'Media player'),
-  previous: $pgettext('Sidebar/Player/Icon.Tooltip', 'Previous track'),
-  play: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Play'),
-  pause: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Pause'),
-  next: $pgettext('Sidebar/Player/Icon.Tooltip', 'Next track'),
-  unmute: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Unmute'),
-  mute: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Mute'),
-  expandQueue: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Expand queue'),
-  shuffle: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Shuffle your queue'),
-  clear: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Clear your queue'),
-  addArtistContentFilter: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…')
+  audioPlayer: t('Media player'),
+  previous: t('Previous track'),
+  play: t('Play'),
+  pause: t('Pause'),
+  next: t('Next track'),
+  unmute: t('Unmute'),
+  mute: t('Mute'),
+  expandQueue: t('Expand queue'),
+  shuffle: t('Shuffle your queue'),
+  clear: t('Clear your queue'),
+  addArtistContentFilter: t('Hide content from this artist…')
 }))
 
 const switchTab = () => {
@@ -103,10 +103,10 @@ initializeFirstTrack()
 const loopingTitle = computed(() => {
   const mode = looping.value
   return mode === LoopingMode.None
-    ? $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping disabled. Click to switch to single-track looping.')
+    ? t('Looping disabled. Click to switch to single-track looping.')
     : mode === LoopingMode.LoopTrack
-      ? $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping on a single track. Click to switch to whole queue looping.')
-      : $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping on whole queue. Click to disable looping.')
+      ? t('Looping on a single track. Click to switch to whole queue looping.')
+      : t('Looping on whole queue. Click to disable looping.')
 })
 
 const hideArtist = () => {
@@ -133,7 +133,7 @@ const hideArtist = () => {
       id="player-label"
       class="visually-hidden"
     >
-      <translate translate-context="*/*/*">
+      <translate >
         Audio player and controls
       </translate>
     </h1>
@@ -302,7 +302,6 @@ const hideArtist = () => {
               >
                 <i class="stream icon" />
                 <translate
-                  translate-context="Sidebar/Queue/Text"
                   :translate-params="{index: currentIndex + 1, length: queue.length}"
                 >
                   %{ index } of %{ length }
@@ -314,7 +313,6 @@ const hideArtist = () => {
               >
                 <i class="stream icon" />
                 <translate
-                  translate-context="Sidebar/Queue/Text"
                   :translate-params="{index: currentIndex + 1, length: queue.length}"
                 >
                   %{ index } of %{ length }

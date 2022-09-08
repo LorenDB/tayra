@@ -2,7 +2,7 @@
 import type { Album, Artist, Library } from '~/types'
 
 import { computed, ref } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import { getDomain } from '~/utils'
 
@@ -33,9 +33,9 @@ const showEmbedModal = ref(false)
 
 const domain = computed(() => getDomain(props.object.fid))
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  more: $pgettext('*/*/Button.Label/Noun', 'More…')
+  more: t('More…')
 }))
 
 const isEmbedable = computed(() => (props.isChannel && props.artist?.channel?.actor) || props.publicLibraries.length)
@@ -53,7 +53,7 @@ const remove = () => emit('remove')
       v-model:show="showEmbedModal"
     >
       <h4 class="header">
-        <translate translate-context="Popup/Album/Title/Verb">Embed this album on your website</translate>
+        <translate >Embed this album on your website</translate>
       </h4>
       <div class="scrolling content">
         <div class="description">
@@ -66,7 +66,7 @@ const remove = () => emit('remove')
       </div>
       <div class="actions">
         <button class="ui basic deny button">
-          <translate translate-context="*/*/Button.Label/Verb">Cancel</translate>
+          <translate >Cancel</translate>
         </button>
       </div>
     </semantic-modal>
@@ -86,7 +86,7 @@ const remove = () => emit('remove')
           <i class="external icon" />
           <translate
             :translate-params="{domain: domain}"
-            translate-context="Content/*/Button.Label/Verb"
+
           >View on %{ domain }</translate>
         </a>
 
@@ -97,7 +97,7 @@ const remove = () => emit('remove')
           @click="showEmbedModal = !showEmbedModal"
         >
           <i class="code icon" />
-          <translate translate-context="Content/*/Button.Label/Verb">Embed</translate>
+          <translate >Embed</translate>
         </div>
         <a
           v-if="isAlbum && musicbrainzUrl"
@@ -107,7 +107,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="external icon" />
-          <translate translate-context="Content/*/*/Clickable, Verb">View on MusicBrainz</translate>
+          <translate >View on MusicBrainz</translate>
         </a>
         <a
           v-if="!isChannel && isAlbum"
@@ -117,7 +117,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="external icon" />
-          <translate translate-context="Content/*/Button.Label/Verb">Search on Discogs</translate>
+          <translate >Search on Discogs</translate>
         </a>
         <router-link
           v-if="object.is_local"
@@ -125,7 +125,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="edit icon" />
-          <translate translate-context="Content/*/Button.Label/Verb">Edit</translate>
+          <translate >Edit</translate>
         </router-link>
         <dangerous-button
           v-if="artist && $store.state.auth.authenticated && artist.channel && artist.attributed_to.full_username === $store.state.auth.fullUsername"
@@ -133,16 +133,16 @@ const remove = () => emit('remove')
           @confirm="remove()"
         >
           <i class="ui trash icon" />
-          <translate translate-context="*/*/*/Verb">Delete…</translate>
+          <translate >Delete…</translate>
           <template #modal-header>
             <p>
-              <translate translate-context="Popup/Channel/Title">Delete this album?</translate>
+              <translate >Delete this album?</translate>
             </p>
           </template>
           <template #modal-content>
             <div>
               <p>
-                <translate translate-context="Content/Moderation/Paragraph">
+                <translate >
                   The album will be deleted, as well as any related files and data. This action is irreversible.
                 </translate>
               </p>
@@ -150,7 +150,7 @@ const remove = () => emit('remove')
           </template>
           <template #modal-confirm>
             <p>
-              <translate translate-context="*/*/*/Verb">Delete</translate>
+              <translate >Delete</translate>
             </p>
           </template>
         </dangerous-button>
@@ -171,7 +171,7 @@ const remove = () => emit('remove')
           :to="{name: 'manage.library.albums.detail', params: {id: object.id}}"
         >
           <i class="wrench icon" />
-          <translate translate-context="Content/Moderation/Link">Open in moderation interface</translate>
+          <translate >Open in moderation interface</translate>
         </router-link>
         <a
           v-if="$store.state.auth.profile && $store.state.auth.profile?.is_superuser"
@@ -181,7 +181,7 @@ const remove = () => emit('remove')
           rel="noopener noreferrer"
         >
           <i class="wrench icon" />
-          <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+          <translate >View in Django's admin</translate>&nbsp;
         </a>
       </div>
     </button>

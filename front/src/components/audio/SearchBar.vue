@@ -6,7 +6,7 @@ import jQuery from 'jquery'
 import { trim } from 'lodash-es'
 import { useFocus, useCurrentElement } from '@vueuse/core'
 import { ref, computed, onMounted } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useStore } from '~/store'
 
@@ -48,14 +48,14 @@ const { focused } = useFocus(search)
 onKeyboardShortcut(['shift', 'f'], () => (focused.value = true), true)
 onKeyboardShortcut(['ctrl', 'k'], () => (focused.value = true), true)
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  placeholder: $pgettext('Sidebar/Search/Input.Placeholder', 'Search for artists, albums, tracks…'),
-  searchContent: $pgettext('Sidebar/Search/Input.Label', 'Search for content'),
-  artist: $pgettext('*/*/*/Noun', 'Artist'),
-  album: $pgettext('*/*/*', 'Album'),
-  track: $pgettext('*/*/*/Noun', 'Track'),
-  tag: $pgettext('*/*/*/Noun', 'Tag')
+  placeholder: t('Search for artists, albums, tracks…'),
+  searchContent: t('Search for content'),
+  artist: t('Artist'),
+  album: t('Album'),
+  track: t('Track'),
+  tag: t('Tag')
 }))
 
 const router = useRouter()
@@ -77,11 +77,11 @@ const blur = () => {
 const categories = computed(() => [
   {
     code: 'federation',
-    name: $pgettext('*/*/*', 'Federation')
+    name: t('Federation')
   },
   {
     code: 'podcasts',
-    name: $pgettext('*/*/*', 'Podcasts')
+    name: t('Podcasts')
   },
   {
     code: 'artists',
@@ -138,8 +138,8 @@ onMounted(() => {
     showNoResults: true,
     error: {
       // @ts-expect-error Semantic is broken
-      noResultsHeader: $pgettext('Sidebar/Search/Error', 'No matches found'),
-      noResults: $pgettext('Sidebar/Search/Error.Label', 'Sorry, there are no results for this search')
+      noResultsHeader: t('No matches found'),
+      noResults: t('Sorry, there are no results for this search')
     },
 
     onSelect (result, response) {
@@ -179,7 +179,7 @@ onMounted(() => {
           if (category.code === 'federation' && id) {
             resultsEmpty = false
             results[category.code]?.results.push({
-              title: $pgettext('Search/*/*', 'Search on the fediverse'),
+              title: t('Search on the fediverse'),
               routerUrl: {
                 name: 'search',
                 query: { id }
@@ -190,7 +190,7 @@ onMounted(() => {
           if (category.code === 'podcasts' && id) {
             resultsEmpty = false
             results[category.code]?.results.push({
-              title: $pgettext('Search/*/*', 'Subscribe to podcast via RSS'),
+              title: t('Subscribe to podcast via RSS'),
               routerUrl: {
                 name: 'search',
                 query: { id, type: 'rss' }
@@ -200,7 +200,7 @@ onMounted(() => {
 
           if (category.code === 'more') {
             results[category.code]?.results.push({
-              title: $pgettext('Search/*/*', 'More results 🡒'),
+              title: t('More results 🡒'),
               routerUrl: {
                 name: 'search',
                 query: { type: 'artists', q: query.value }

@@ -64,7 +64,7 @@ fetchData()
       v-if="!isLoading && libraries.length === 0"
       class="ui subtitle"
     >
-      <translate translate-context="Content/Federation/Paragraph">
+      <translate >
         No matching library.
       </translate>
     </p>
@@ -92,7 +92,7 @@ fetchData()
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        <translate translate-context="*/*/Button,Label">
+        <translate >
           Show more
         </translate>
       </button>

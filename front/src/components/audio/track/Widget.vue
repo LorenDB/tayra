@@ -200,7 +200,7 @@ watch(() => props.websocketHandlers.includes('Listen'), (to) => {
     >
       <div class="ui icon header">
         <i class="music icon" />
-        <translate translate-context="Content/Home/Placeholder">
+        <translate >
           Nothing found
         </translate>
       </div>
@@ -217,7 +217,7 @@ watch(() => props.websocketHandlers.includes('Listen'), (to) => {
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage as string)"
       >
-        <translate translate-context="*/*/Button,Label">
+        <translate >
           Show more
         </translate>
       </button>

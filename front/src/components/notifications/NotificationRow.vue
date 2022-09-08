@@ -2,7 +2,7 @@
 import type { Notification, LibraryFollow } from '~/types'
 
 import { computed, ref, watchEffect } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -13,16 +13,16 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { $pgettext, $gettext } = useGettext()
+const { t } = useI18n()
 const store = useStore()
 
 const labels = computed(() => ({
-  libraryFollowMessage: $pgettext('Content/Notifications/Paragraph', '%{ username } followed your library "%{ library }"'),
-  libraryAcceptFollowMessage: $pgettext('Content/Notifications/Paragraph', '%{ username } accepted your follow on library "%{ library }"'),
-  libraryRejectMessage: $pgettext('Content/Notifications/Paragraph', 'You rejected %{ username }&#39;s request to follow "%{ library }"'),
-  libraryPendingFollowMessage: $pgettext('Content/Notifications/Paragraph', '%{ username } wants to follow your library "%{ library }"'),
-  markRead: $pgettext('Content/Notifications/Button.Tooltip/Verb', 'Mark as read'),
-  markUnread: $pgettext('Content/Notifications/Button.Tooltip/Verb', 'Mark as unread')
+  libraryFollowMessage: t('%{ username } followed your library "%{ library }"'),
+  libraryAcceptFollowMessage: t('%{ username } accepted your follow on library "%{ library }"'),
+  libraryRejectMessage: t('You rejected %{ username }&#39;s request to follow "%{ library }"'),
+  libraryPendingFollowMessage: t('%{ username } wants to follow your library "%{ library }"'),
+  markRead: t('Mark as read'),
+  markUnread: t('Mark as unread')
 }))
 
 const item = ref(props.initialItem)
@@ -39,30 +39,30 @@ const notificationData = computed(() => {
       if (activity.related_object?.approved === null) {
         return {
           detailUrl,
-          message: $gettext(labels.value.libraryPendingFollowMessage, { username: username.value, library: activity.object.name }),
+          message: t(labels.value.libraryPendingFollowMessage, { username: username.value, library: activity.object.name }),
           acceptFollow: {
             buttonClass: 'success',
             icon: 'check',
-            label: $pgettext('Content/*/Button.Label/Verb', 'Approve'),
+            label: t('Approve'),
             handler: () => approveLibraryFollow(activity.related_object)
           },
           rejectFollow: {
             buttonClass: 'danger',
             icon: 'x',
-            label: $pgettext('Content/*/Button.Label/Verb', 'Reject'),
+            label: t('Reject'),
             handler: () => rejectLibraryFollow(activity.related_object)
           }
         }
       } else if (activity.related_object?.approved) {
         return {
           detailUrl,
-          message: $gettext(labels.value.libraryFollowMessage, { username: username.value, library: activity.object.name })
+          message: t(labels.value.libraryFollowMessage, { username: username.value, library: activity.object.name })
         }
       }
 
       return {
         detailUrl,
-        message: $gettext(labels.value.libraryRejectMessage, { username: username.value, library: activity.object.name })
+        message: t(labels.value.libraryRejectMessage, { username: username.value, library: activity.object.name })
       }
     }
   }
@@ -71,7 +71,7 @@ const notificationData = computed(() => {
     if (activity.object?.type === 'federation.LibraryFollow') {
       return {
         detailUrl: { name: 'content.remote.index' },
-        message: $gettext(labels.value.libraryAcceptFollowMessage, { username: username.value, library: activity.related_object.name })
+        message: t(labels.value.libraryAcceptFollowMessage, { username: username.value, library: activity.related_object.name })
       }
     }
   }

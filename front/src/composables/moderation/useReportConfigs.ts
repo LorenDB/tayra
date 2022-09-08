@@ -1,7 +1,7 @@
 import type { EntityObjectType } from '~/types'
 import type { RouteLocationRaw } from 'vue-router'
 
-import { gettext } from '~/init/locale'
+import { useI18n } from 'vue-i18n'
 
 interface ModeratedField {
   id: string
@@ -22,37 +22,37 @@ export interface Entity {
 
 type Configs = Record<EntityObjectType, Entity>
 
-const { $pgettext } = gettext
+const { t } = useI18n()
 
 const tags: ModeratedField = {
   id: 'tags',
-  label: $pgettext('*/*/*/Noun', 'Tags'),
+  label: t('Tags'),
   getValueRepr: (tags: string[]) => tags.slice().sort().join('\n')
 }
 
 const name: ModeratedField = {
   id: 'name',
-  label: $pgettext('*/*/*/Noun', 'Name')
+  label: t('Name')
 }
 
 const creationDate: ModeratedField = {
   id: 'creation_date',
-  label: $pgettext('Content/*/*/Noun', 'Creation date')
+  label: t('Creation date')
 }
 
 const musicBrainzId: ModeratedField = {
   id: 'mbid',
-  label: $pgettext('*/*/*/Noun', 'MusicBrainz ID')
+  label: t('MusicBrainz ID')
 }
 
 const visibility: ModeratedField = {
   id: 'privacy_level',
-  label: $pgettext('*/*/*', 'Visibility')
+  label: t('Visibility')
 }
 
 export default (): Configs => ({
   artist: {
-    label: $pgettext('*/*/*/Noun', 'Artist'),
+    label: t('Artist'),
     icon: 'users',
     getDeleteUrl: (obj) => {
       return `manage/library/artists/${obj.id}/`
@@ -69,7 +69,7 @@ export default (): Configs => ({
     ]
   },
   album: {
-    label: $pgettext('*/*/*', 'Album'),
+    label: t('Album'),
     icon: 'play',
     getDeleteUrl: (obj) => {
       return `manage/library/albums/${obj.id}/`
@@ -81,19 +81,19 @@ export default (): Configs => ({
     moderatedFields: [
       {
         id: 'title',
-        label: $pgettext('*/*/*/Noun', 'Title')
+        label: t('Title')
       },
       creationDate,
       {
         id: 'release_date',
-        label: $pgettext('Content/*/*/Noun', 'Release date')
+        label: t('Release date')
       },
       tags,
       musicBrainzId
     ]
   },
   track: {
-    label: $pgettext('*/*/*/Noun', 'Track'),
+    label: t('Track'),
     icon: 'music',
     getDeleteUrl: (obj) => {
       return `manage/library/tracks/${obj.id}/`
@@ -105,26 +105,26 @@ export default (): Configs => ({
     moderatedFields: [
       {
         id: 'title',
-        label: $pgettext('*/*/*/Noun', 'Title')
+        label: t('Title')
       },
       {
         id: 'position',
-        label: $pgettext('*/*/*/Short, Noun', 'Position')
+        label: t('Position')
       },
       {
         id: 'copyright',
-        label: $pgettext('Content/Track/*/Noun', 'Copyright')
+        label: t('Copyright')
       },
       {
         id: 'license',
-        label: $pgettext('Content/*/*/Noun', 'License')
+        label: t('License')
       },
       tags,
       musicBrainzId
     ]
   },
   library: {
-    label: $pgettext('*/*/*/Noun', 'Library'),
+    label: t('Library'),
     icon: 'book',
     getDeleteUrl: (obj) => {
       return `manage/library/libraries/${obj.uuid}/`
@@ -136,13 +136,13 @@ export default (): Configs => ({
       name,
       {
         id: 'description',
-        label: $pgettext('*/*/*/Noun', 'Description')
+        label: t('Description')
       },
       visibility
     ]
   },
   playlist: {
-    label: $pgettext('*/*/*', 'Playlist'),
+    label: t('Playlist'),
     icon: 'list',
     urls: {
       getDetail: (obj) => ({ name: 'library.playlists.detail', params: { id: obj.id } })
@@ -154,7 +154,7 @@ export default (): Configs => ({
     ]
   },
   account: {
-    label: $pgettext('*/*/*/Noun', 'Account'),
+    label: t('Account'),
     icon: 'user',
     urls: {
       getDetail: (obj) => ({ name: 'profile.full.overview', params: { username: obj.preferred_username, domain: obj.domain } }),
@@ -164,12 +164,12 @@ export default (): Configs => ({
       name,
       {
         id: 'summary',
-        label: $pgettext('*/*/*/Noun', 'Bio')
+        label: t('Bio')
       }
     ]
   },
   channel: {
-    label: $pgettext('*/*/*', 'Channel'),
+    label: t('Channel'),
     icon: 'stream',
     urls: {
       getDetail: (obj) => ({ name: 'channels.detail', params: { id: obj.uuid } }),

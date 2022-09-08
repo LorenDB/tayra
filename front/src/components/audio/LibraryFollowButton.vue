@@ -40,19 +40,19 @@ const toggle = () => {
     <i class="heart icon" />
     <translate
       v-if="isApproved"
-      translate-context="Content/Library/Card.Button.Label/Verb"
+
     >
       Unfollow
     </translate>
     <translate
       v-else-if="isPending"
-      translate-context="Content/Library/Card.Button.Label/Verb"
+
     >
       Cancel follow request
     </translate>
     <translate
       v-else
-      translate-context="Content/Library/Card.Button.Label/Verb"
+
     >
       Follow
     </translate>

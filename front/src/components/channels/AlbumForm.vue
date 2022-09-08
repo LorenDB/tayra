@@ -59,7 +59,7 @@ defineExpose({
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
+        <translate >
           Error while creating
         </translate>
       </h4>
@@ -74,7 +74,7 @@ defineExpose({
     </div>
     <div class="ui required field">
       <label for="album-title">
-        <translate translate-context="*/*/*/Noun">Title</translate>
+        <translate >Title</translate>
       </label>
       <input
         v-model="title"

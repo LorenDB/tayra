@@ -47,7 +47,7 @@ const scanResult = ref()
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        <translate translate-context="Content/Library/Paragraph">
+        <translate >
           Loading remote libraries…
         </translate>
       </div>
@@ -57,12 +57,12 @@ const scanResult = ref()
       class="ui text container"
     >
       <h1 class="ui header">
-        <translate translate-context="Content/Library/Title/Noun">
+        <translate >
           Remote libraries
         </translate>
       </h1>
       <p>
-        <translate translate-context="Content/Library/Paragraph">
+        <translate >
           Remote libraries are owned by other users on the network. You can access them as long as they are public or you are granted access.
         </translate>
       </p>
@@ -80,7 +80,7 @@ const scanResult = ref()
       </div>
       <template v-if="existingFollows && existingFollows.count > 0">
         <h2>
-          <translate translate-context="Content/Library/Title">
+          <translate >
             Known libraries
           </translate>
         </h2>
@@ -89,7 +89,7 @@ const scanResult = ref()
           class="discrete link"
           @click.prevent="fetchData"
         >
-          <i :class="['ui', 'circular', 'refresh', 'icon']" /> <translate translate-context="Content/*/Button.Label/Short, Verb">Refresh</translate>
+          <i :class="['ui', 'circular', 'refresh', 'icon']" /> <translate >Refresh</translate>
         </a>
         <div class="ui hidden divider" />
         <div class="ui two cards">

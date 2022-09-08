@@ -3,7 +3,7 @@ import type { BackendError, Playlist, APIErrorResponse } from '~/types'
 
 import { filter, sortBy, flow } from 'lodash-es'
 import axios from 'axios'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import SemanticModal from '~/components/semantic/Modal.vue'
 import PlaylistForm from '~/components/playlists/Form.vue'
 import useLogger from '~/composables/useLogger'
@@ -25,10 +25,10 @@ router.beforeEach(() => {
 const playlists = computed(() => store.state.playlists.playlists)
 const track = computed(() => store.state.playlists.modalTrack)
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  addToPlaylist: $pgettext('Popup/Playlist/Table.Button.Tooltip/Verb', 'Add to this playlist'),
-  filterPlaylistField: $pgettext('Popup/Playlist/Form/Placeholder', 'Enter playlist name')
+  addToPlaylist: t('Add to this playlist'),
+  filterPlaylistField: t('Enter playlist name')
 }))
 
 const playlistNameFilter = ref('')
@@ -85,13 +85,13 @@ store.dispatch('playlists/fetchOwn')
     <h4 class="header">
       <template v-if="track">
         <h2 class="ui header">
-          <translate translate-context="Popup/Playlist/Title/Verb">
+          <translate >
             Add to playlist
           </translate>
           <div
             v-translate="{artist: track.artist?.name, title: track.title}"
             class="ui sub header"
-            translate-context="Popup/Playlist/Paragraph"
+
             :translate-params="{artist: track.artist?.name, title: track.title}"
           >
             "%{ title }", by %{ artist }
@@ -100,7 +100,7 @@ store.dispatch('playlists/fetchOwn')
       </template>
       <translate
         v-else
-        translate-context="Popup/Playlist/Title/Verb"
+
       >
         Manage playlists
       </translate>
@@ -119,7 +119,7 @@ store.dispatch('playlists/fetchOwn')
         >
           <p
             v-translate="{track: track?.title, playlist: duplicateTrackAddInfo.playlist_name}"
-            translate-context="Popup/Playlist/Paragraph"
+
             :translate-params="{track: track?.title, playlist: duplicateTrackAddInfo.playlist_name}"
           >
             <strong>%{ track }</strong> is already in <strong>%{ playlist }</strong>.
@@ -128,7 +128,7 @@ store.dispatch('playlists/fetchOwn')
             class="ui small basic cancel button"
             @click="showDuplicateTrackAddConfirmation = false"
           >
-            <translate translate-context="*/*/Button.Label/Verb">
+            <translate >
               Cancel
             </translate>
           </button>
@@ -136,7 +136,7 @@ store.dispatch('playlists/fetchOwn')
             class="ui small success button"
             @click="addToPlaylist(lastSelectedPlaylist, true)"
           >
-            <translate translate-context="*/Playlist/Button.Label/Verb">
+            <translate >
               Add anyways
             </translate>
           </button>
@@ -147,7 +147,7 @@ store.dispatch('playlists/fetchOwn')
           class="ui negative message"
         >
           <h4 class="header">
-            <translate translate-context="Popup/Playlist/Error message.Title">
+            <translate >
               The track can't be added to a playlist
             </translate>
           </h4>
@@ -161,14 +161,14 @@ store.dispatch('playlists/fetchOwn')
           </ul>
         </div>
         <h4 class="ui header">
-          <translate translate-context="Popup/Playlist/Title">
+          <translate >
             Available playlists
           </translate>
         </h4>
         <div class="ui form">
           <div class="fields">
             <div class="field">
-              <label for="playlist-name-filter"><translate translate-context="Popup/Playlist/Label">Filter</translate></label>
+              <label for="playlist-name-filter"><translate >Filter</translate></label>
               <input
                 id="playlist-name-filter"
                 v-model="playlistNameFilter"
@@ -185,19 +185,19 @@ store.dispatch('playlists/fetchOwn')
         >
           <thead>
             <tr>
-              <th><span class="visually-hidden"><translate translate-context="*/*/*/Verb">Edit</translate></span></th>
+              <th><span class="visually-hidden"><translate >Edit</translate></span></th>
               <th>
-                <translate translate-context="*/*/*/Noun">
+                <translate >
                   Name
                 </translate>
               </th>
               <th class="sorted descending">
-                <translate translate-context="Popup/Playlist/Table.Label/Short">
+                <translate >
                   Last modification
                 </translate>
               </th>
               <th>
-                <translate translate-context="*/*/*">
+                <translate >
                   Tracks
                 </translate>
               </th>
@@ -214,7 +214,7 @@ store.dispatch('playlists/fetchOwn')
                   :to="{name: 'library.playlists.detail', params: {id: playlist.id }, query: {mode: 'edit'}}"
                 >
                   <i class="ui pencil icon" />
-                  <span class="visually-hidden"><translate translate-context="*/*/*/Verb">Edit</translate></span>
+                  <span class="visually-hidden"><translate >Edit</translate></span>
                 </router-link>
               </td>
               <td>
@@ -234,7 +234,7 @@ store.dispatch('playlists/fetchOwn')
                   :title="labels.addToPlaylist"
                   @click.prevent="addToPlaylist(playlist.id, false)"
                 >
-                  <i class="plus icon" /> <translate translate-context="Popup/Playlist/Table.Button.Label/Verb">
+                  <i class="plus icon" /> <translate >
                     Add track
                   </translate>
                 </button>
@@ -245,7 +245,7 @@ store.dispatch('playlists/fetchOwn')
         <template v-else>
           <div class="ui small placeholder segment component-placeholder">
             <h4 class="ui header">
-              <translate translate-context="Popup/Playlist/EmptyState">
+              <translate >
                 No results matching your filter
               </translate>
             </h4>
@@ -258,7 +258,7 @@ store.dispatch('playlists/fetchOwn')
       >
         <div class="ui icon header">
           <i class="list icon" />
-          <translate translate-context="Content/Home/Placeholder">
+          <translate >
             No playlists have been created yet
           </translate>
         </div>
@@ -266,7 +266,7 @@ store.dispatch('playlists/fetchOwn')
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate translate-context="*/*/Button.Label/Verb">
+        <translate >
           Cancel
         </translate>
       </button>

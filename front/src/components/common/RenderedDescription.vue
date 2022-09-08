@@ -91,19 +91,19 @@ const submit = async () => {
           href=""
           @click.stop.prevent="showMore = true"
         >
-          <translate translate-context="*/*/Button,Label">Show more</translate>
+          <translate >Show more</translate>
         </a>
         <a
           v-else
           href=""
           @click.stop.prevent="showMore = false"
         >
-          <translate translate-context="*/*/Button,Label">Show less</translate>
+          <translate >Show less</translate>
         </a>
       </template>
     </template>
     <p v-else-if="!isUpdating">
-      <translate translate-context="*/*/Placeholder">
+      <translate >
         No description available
       </translate>
     </p>
@@ -114,7 +114,7 @@ const submit = async () => {
         @click="isUpdating = true"
       >
         <i class="pencil icon" />
-        <translate translate-context="Content/*/Button.Label/Verb">Edit</translate>
+        <translate >Edit</translate>
       </span>
     </template>
     <form
@@ -128,7 +128,7 @@ const submit = async () => {
         class="ui negative message"
       >
         <h4 class="header">
-          <translate translate-context="Content/Channels/Error message.Title">
+          <translate >
             Error while updating description
           </translate>
         </h4>
@@ -149,14 +149,14 @@ const submit = async () => {
         class="left floated"
         @click.prevent="isUpdating = false"
       >
-        <translate translate-context="*/*/Button.Label/Verb">Cancel</translate>
+        <translate >Cancel</translate>
       </a>
       <button
         :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
         type="submit"
         :disabled="isLoading"
       >
-        <translate translate-context="Content/Channels/Button.Label/Verb">
+        <translate >
           Update description
         </translate>
       </button>

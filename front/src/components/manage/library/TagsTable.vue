@@ -6,7 +6,7 @@ import type { OrderingField } from '~/store/ui'
 
 import { computed, ref, watch } from 'vue'
 import { truncate } from '~/utils/filters'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 
@@ -52,13 +52,13 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['items_count', 'items_count']
 ]
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: $pgettext('*/*/*/Verb', 'Delete'),
-    confirmationMessage: $pgettext('Popup/*/Paragraph', 'The selected tag will be removed and unlinked with existing content, if any. This action is irreversible.'),
+    label: t('Delete'),
+    confirmationMessage: t('The selected tag will be removed and unlinked with existing content, if any. This action is irreversible.'),
     isDangerous: true,
     allowAll: false,
     confirmColor: 'danger'
@@ -97,7 +97,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by name')
+  searchPlaceholder: t('Search by name')
 }))
 
 const detailedUpload = ref()
@@ -109,7 +109,7 @@ const showUploadDetailModal = ref(false)
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="tags-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+          <label for="tags-search"><translate >Search</translate></label>
           <form @submit.prevent="query = search.value">
             <input
               id="tags-search"
@@ -122,7 +122,7 @@ const showUploadDetailModal = ref(false)
           </form>
         </div>
         <div class="field">
-          <label for="tags-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+          <label for="tags-ordering"><translate >Ordering</translate></label>
           <select
             id="tags-ordering"
             v-model="ordering"
@@ -138,19 +138,19 @@ const showUploadDetailModal = ref(false)
           </select>
         </div>
         <div class="field">
-          <label for="tags-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate></label>
+          <label for="tags-ordering-direction"><translate >Ordering direction</translate></label>
           <select
             id="tags-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Ascending
               </translate>
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Descending
               </translate>
             </option>
@@ -181,27 +181,27 @@ const showUploadDetailModal = ref(false)
       >
         <template #header-cells>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Name
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Artists
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*">
+            <translate >
               Albums
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*">
+            <translate >
               Tracks
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
+            <translate >
               Creation date
             </translate>
           </th>
@@ -240,7 +240,7 @@ const showUploadDetailModal = ref(false)
 
       <span v-if="result && result.results.length > 0">
         <translate
-          translate-context="Content/*/Paragraph"
+
           :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
         >
           Showing results %{ start }-%{ end } on %{ total }

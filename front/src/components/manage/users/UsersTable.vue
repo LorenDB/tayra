@@ -5,7 +5,7 @@ import type { OrderingField } from '~/store/ui'
 
 import { watchDebounced } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 
@@ -44,19 +44,19 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 const permissions = computed(() => [
   {
     code: 'library',
-    label: $pgettext('*/*/*/Noun', 'Library')
+    label: t('Library')
   },
   {
     code: 'moderation',
-    label: $pgettext('*/Moderation/*', 'Moderation')
+    label: t('Moderation')
   },
   {
     code: 'settings',
-    label: $pgettext('*/*/*/Noun', 'Settings')
+    label: t('Settings')
   }
 ])
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 
 const isLoading = ref(false)
@@ -91,7 +91,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by username, e-mail address, name…')
+  searchPlaceholder: t('Search by username, e-mail address, name…')
 }))
 </script>
 
@@ -100,7 +100,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="users-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+          <label for="users-search"><translate >Search</translate></label>
           <input
             id="users-search"
             v-model="query"
@@ -110,7 +110,7 @@ const labels = computed(() => ({
           >
         </div>
         <div class="field">
-          <label for="users-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+          <label for="users-ordering"><translate >Ordering</translate></label>
           <select
             id="users-ordering"
             v-model="ordering"
@@ -126,19 +126,19 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="users-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Order</translate></label>
+          <label for="users-ordering-direction"><translate >Order</translate></label>
           <select
             id="users-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Ascending
               </translate>
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Descending
               </translate>
             </option>
@@ -163,37 +163,37 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            <translate translate-context="Content/*/*">
+            <translate >
               Username
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
+            <translate >
               Email
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Admin/Table.Label/Short, Noun">
+            <translate >
               Account status
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Admin/Table.Label/Short, Noun (Value is a date)">
+            <translate >
               Sign-up
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Profile/Table.Label/Short, Noun (Value is a date)">
+            <translate >
               Last activity
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
+            <translate >
               Permissions
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*">
+            <translate >
               Status
             </translate>
           </th>
@@ -222,11 +222,11 @@ const labels = computed(() => ({
             <span
               v-if="scope.obj.is_active"
               class="ui basic success label"
-            ><translate translate-context="Content/Admin/Table">Active</translate></span>
+            ><translate >Active</translate></span>
             <span
               v-else
               class="ui basic label"
-            ><translate translate-context="Content/Admin/Table">Inactive</translate></span>
+            ><translate >Inactive</translate></span>
           </td>
           <td>
             <human-date :date="scope.obj.date_joined" />
@@ -237,7 +237,7 @@ const labels = computed(() => ({
               :date="scope.obj.last_activity"
             />
             <template v-else>
-              <translate translate-context="*/*/*">
+              <translate >
                 N/A
               </translate>
             </template>
@@ -257,15 +257,15 @@ const labels = computed(() => ({
             <span
               v-if="scope.obj.is_superuser"
               class="ui pink label"
-            ><translate translate-context="Content/Admin/Table.User role">Admin</translate></span>
+            ><translate >Admin</translate></span>
             <span
               v-else-if="scope.obj.is_staff"
               class="ui purple label"
-            ><translate translate-context="Content/Profile/User role">Staff member</translate></span>
+            ><translate >Staff member</translate></span>
             <span
               v-else
               class="ui basic label"
-            ><translate translate-context="Content/Admin/Table, User role">Regular user</translate></span>
+            ><translate >Regular user</translate></span>
           </td>
         </template>
       </action-table>
@@ -281,7 +281,7 @@ const labels = computed(() => ({
 
       <span v-if="result && result.results.length > 0">
         <translate
-          translate-context="Content/*/Paragraph"
+
           translate-plural="Showing results %{ start } to %{ end } from %{ total }"
           :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
           :translate-n="result.count"

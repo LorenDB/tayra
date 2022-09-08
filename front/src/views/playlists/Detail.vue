@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PlaylistTrack, Playlist } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import { useStore } from '~/store'
@@ -36,9 +36,9 @@ const showEmbedModal = ref(false)
 
 const tracks = computed(() => playlistTracks.value.map(({ track }, index) => ({ ...track, position: index + 1 })))
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  playlist: $pgettext('*/*/*', 'Playlist')
+  playlist: t('Playlist')
 }))
 
 const isLoading = ref(false)
@@ -97,7 +97,7 @@ const deletePlaylist = async () => {
                 translate-plural="Playlist containing %{ count } tracks, by %{ username }"
                 :translate-n="playlist.tracks_count"
                 :translate-params="{count: playlist.tracks_count, username: playlist.user.username}"
-                translate-context="Content/Playlist/Header.Subtitle"
+
               >
                 Playlist containing %{ count } track, by %{ username }
               </translate><br>
@@ -113,7 +113,7 @@ const deletePlaylist = async () => {
               :is-playable="playlist.is_playable"
               :tracks="tracks"
             >
-              <translate translate-context="Content/Queue/Button.Label/Short, Verb">
+              <translate >
                 Play all
               </translate>
             </play-button>
@@ -126,12 +126,12 @@ const deletePlaylist = async () => {
             >
               <i class="pencil icon" />
               <template v-if="edit">
-                <translate translate-context="Content/Playlist/Button.Label/Verb">
+                <translate >
                   Stop Editing
                 </translate>
               </template>
               <template v-else>
-                <translate translate-context="Content/*/Button.Label/Verb">
+                <translate >
                   Edit
                 </translate>
               </template>
@@ -144,7 +144,7 @@ const deletePlaylist = async () => {
               @click="showEmbedModal = !showEmbedModal"
             >
               <i class="code icon" />
-              <translate translate-context="Content/*/Button.Label/Verb">
+              <translate >
                 Embed
               </translate>
             </button>
@@ -153,13 +153,13 @@ const deletePlaylist = async () => {
               class="ui labeled danger icon button"
               :action="deletePlaylist"
             >
-              <i class="trash icon" /> <translate translate-context="*/*/*/Verb">
+              <i class="trash icon" /> <translate >
                 Delete
               </translate>
               <template #modal-header>
                 <p
                   v-translate="{playlist: playlist.name}"
-                  translate-context="Popup/Playlist/Title/Call to action"
+
                   :translate-params="{playlist: playlist.name}"
                 >
                   Do you want to delete the playlist "%{ playlist }"?
@@ -167,14 +167,14 @@ const deletePlaylist = async () => {
               </template>
               <template #modal-content>
                 <p>
-                  <translate translate-context="Popup/Playlist/Paragraph">
+                  <translate >
                     This will completely delete this playlist and cannot be undone.
                   </translate>
                 </p>
               </template>
               <template #modal-confirm>
                 <div>
-                  <translate translate-context="Popup/Playlist/Button.Label/Verb">
+                  <translate >
                     Delete playlist
                   </translate>
                 </div>
@@ -187,7 +187,7 @@ const deletePlaylist = async () => {
           v-model:show="showEmbedModal"
         >
           <h4 class="header">
-            <translate translate-context="Popup/Album/Title/Verb">
+            <translate >
               Embed this playlist on your website
             </translate>
           </h4>
@@ -201,7 +201,7 @@ const deletePlaylist = async () => {
           </div>
           <div class="actions">
             <button class="ui basic deny button">
-              <translate translate-context="*/*/Button.Label/Verb">
+              <translate >
                 Cancel
               </translate>
             </button>
@@ -218,7 +218,7 @@ const deletePlaylist = async () => {
       </template>
       <template v-else-if="tracks.length > 0">
         <h2>
-          <translate translate-context="*/*/*">
+          <translate >
             Tracks
           </translate>
         </h2>
@@ -234,7 +234,7 @@ const deletePlaylist = async () => {
       >
         <div class="ui icon header">
           <i class="list icon" />
-          <translate translate-context="Content/Home/Placeholder">
+          <translate >
             There are no tracks in this playlist yet
           </translate>
         </div>
@@ -243,7 +243,7 @@ const deletePlaylist = async () => {
           @click="edit = !edit"
         >
           <i class="pencil icon" />
-          <translate translate-context="Content/Home/CreatePlaylist">
+          <translate >
             Edit
           </translate>
         </button>

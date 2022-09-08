@@ -52,11 +52,11 @@ const { copy, copied } = useClipboard({ source: textarea })
     >
       <p>
         <strong>
-          <translate translate-context="Content/Embed/Message">Sharing will not work because this pod doesn't allow anonymous users to access content.</translate>
+          <translate >Sharing will not work because this pod doesn't allow anonymous users to access content.</translate>
         </strong>
       </p>
       <p>
-        <translate translate-context="Content/Embed/Message">
+        <translate >
           Please contact your admins and ask them to update the corresponding setting.
         </translate>
       </p>
@@ -65,9 +65,9 @@ const { copy, copied } = useClipboard({ source: textarea })
       <div class="two fields">
         <div class="field">
           <div class="field">
-            <label for="embed-width"><translate translate-context="Popup/Embed/Input.Label">Widget width</translate></label>
+            <label for="embed-width"><translate >Widget width</translate></label>
             <p>
-              <translate translate-context="Popup/Embed/Paragraph">
+              <translate >
                 Leave empty for a responsive widget
               </translate>
             </p>
@@ -82,7 +82,7 @@ const { copy, copied } = useClipboard({ source: textarea })
           <template v-if="type != 'track'">
             <br>
             <div class="field">
-              <label for="embed-height"><translate translate-context="Popup/Embed/Input.Label">Widget height</translate></label>
+              <label for="embed-height"><translate >Widget height</translate></label>
               <input
                 id="embed-height"
                 v-model="height"
@@ -99,13 +99,13 @@ const { copy, copied } = useClipboard({ source: textarea })
             class="ui right accent labeled icon floated button"
             @click="copy()"
           >
-            <i class="copy icon" /><translate translate-context="*/*/Button.Label/Short, Verb">
+            <i class="copy icon" /><translate >
               Copy
             </translate>
           </button>
-          <label for="embed-width"><translate translate-context="Popup/Embed/Input.Label/Noun">Embed code</translate></label>
+          <label for="embed-width"><translate >Embed code</translate></label>
           <p>
-            <translate translate-context="Popup/Embed/Paragraph">
+            <translate >
               Copy/paste this code in your website HTML
             </translate>
           </p>
@@ -120,7 +120,7 @@ const { copy, copied } = useClipboard({ source: textarea })
               v-if="copied"
               class="message"
             >
-              <translate translate-context="Content/*/Paragraph">
+              <translate >
                 Text copied to clipboard!
               </translate>
             </p>
@@ -134,7 +134,7 @@ const { copy, copied } = useClipboard({ source: textarea })
           :href="iframeSrc"
           target="_blank"
         >
-          <translate translate-context="Popup/Embed/Title/Noun">Preview</translate>
+          <translate >Preview</translate>
         </a>
       </h3>
       <iframe

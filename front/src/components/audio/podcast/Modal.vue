@@ -4,7 +4,7 @@ import type { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
 // import type { Track } from '~/types'
 
 import { useStore } from '~/store'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import SemanticModal from '~/components/semantic/Modal.vue'
 import { computed, ref } from 'vue'
 import usePlayOptions from '~/composables/audio/usePlayOptions'
@@ -58,33 +58,33 @@ const store = useStore()
 
 const isFavorite = computed(() => store.getters['favorites/isFavorite'](props.track.id))
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const favoriteButton = computed(() => isFavorite.value
-  ? $pgettext('Content/Track/Icon.Tooltip/Verb', 'Remove from favorites')
-  : $pgettext('Content/Track/*/Verb', 'Add to favorites')
+  ? t('Remove from favorites')
+  : t('Add to favorites')
 )
 
 const trackDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
-  ? $pgettext('*/Queue/Dropdown/Button/Label/Short', 'Episode details')
-  : $pgettext('*/Queue/Dropdown/Button/Label/Short', 'Track details')
+  ? t('Episode details')
+  : t('Track details')
 )
 
 const albumDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
-  ? $pgettext('*/Queue/Dropdown/Button/Label/Short', 'View series')
-  : $pgettext('*/Queue/Dropdown/Button/Label/Short', 'View album')
+  ? t('View series')
+  : t('View album')
 )
 
 const artistDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
-  ? $pgettext('*/Queue/Dropdown/Button/Label/Short', 'View channel')
-  : $pgettext('*/Queue/Dropdown/Button/Label/Short', 'View artist')
+  ? t('View channel')
+  : t('View artist')
 )
 
 const labels = computed(() => ({
-  startRadio: $pgettext('*/Queue/Dropdown/Button/Title', 'Play radio'),
-  playNow: $pgettext('*/Queue/Dropdown/Button/Title', 'Play now'),
-  addToQueue: $pgettext('*/Queue/Dropdown/Button/Title', 'Add to queue'),
-  playNext: $pgettext('*/Queue/Dropdown/Button/Title', 'Play next'),
-  addToPlaylist: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Add to playlist…')
+  startRadio: t('Play radio'),
+  playNow: t('Play now'),
+  addToQueue: t('Add to queue'),
+  playNext: t('Play next'),
+  addToPlaylist: t('Add to playlist…')
 }))
 </script>
 

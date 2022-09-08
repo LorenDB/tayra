@@ -33,7 +33,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
   <div :class="['ui', {loading: isLoading}, 'form']">
     <div class="ui required field">
       <label for="upload-title">
-        <translate translate-context="*/*/*/Noun">Title</translate>
+        <translate >Title</translate>
       </label>
       <input
         v-model="newValues.title"
@@ -44,7 +44,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
       v-model="newValues.cover"
       @delete="newValues.cover = ''"
     >
-      <translate translate-context="Content/Channel/*">
+      <translate >
         Track Picture
       </translate>
     </attachment-input>
@@ -52,7 +52,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
     <div class="ui two fields">
       <div class="ui field">
         <label for="upload-tags">
-          <translate translate-context="*/*/*/Noun">Tags</translate>
+          <translate >Tags</translate>
         </label>
         <tags-selector
           id="upload-tags"
@@ -62,7 +62,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
       </div>
       <div class="ui field">
         <label for="upload-position">
-          <translate translate-context="*/*/*/Short, Noun">Position</translate>
+          <translate >Position</translate>
         </label>
         <input
           v-model="newValues.position"
@@ -74,7 +74,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
     </div>
     <div class="ui field">
       <label for="upload-description">
-        <translate translate-context="*/*/*">Description</translate>
+        <translate >Description</translate>
       </label>
       <content-form
         v-model="newValues.description"

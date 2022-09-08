@@ -4,7 +4,7 @@ import type { RouteLocationRaw } from 'vue-router'
 import LoginForm from '~/components/auth/LoginForm.vue'
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 import { whenever } from '@vueuse/core'
 
@@ -16,9 +16,9 @@ const props = withDefaults(defineProps<Props>(), {
   next: '/library'
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Head/Login/Title', 'Log In')
+  title: t('Log In')
 }))
 
 const store = useStore()
@@ -37,7 +37,7 @@ whenever(() => store.state.auth.authenticated, () => {
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          <translate translate-context="Content/Login/Title/Verb">
+          <translate >
             Log in to your Funkwhale account
           </translate>
         </h2>

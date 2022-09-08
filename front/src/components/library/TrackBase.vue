@@ -3,7 +3,7 @@ import type { Track, Artist, Library } from '~/types'
 
 import { momentFormat } from '~/utils/filters'
 import { computed, ref, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { getDomain } from '~/utils'
 import { useStore } from '~/store'
@@ -67,8 +67,7 @@ const attributedToUrl = computed(() => router.resolve({
 const escapeHtml = (unsafe: string) => document.createTextNode(unsafe).textContent ?? ''
 const subtitle = computed(() => {
   if (track.value?.attributed_to) {
-    return $pgettext(
-      'Content/Track/Paragraph',
+    return t(
       'Uploaded by <a class="internal" href="%{ uploaderUrl }">%{ uploader }</a> on <time title="%{ date }" datetime="%{ date }">%{ prettyDate }</time>',
       {
         uploaderUrl: attributedToUrl.value,
@@ -79,8 +78,7 @@ const subtitle = computed(() => {
     )
   }
 
-  return $pgettext(
-    'Content/Track/Paragraph',
+  return t(
     'Uploaded on <time title="%{ date }" datetime="%{ date }">%{ prettyDate }</time>',
     {
       date: escapeHtml(track.value?.creation_date ?? ''),
@@ -89,11 +87,11 @@ const subtitle = computed(() => {
   )
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('*/*/*/Noun', 'Track'),
-  download: $pgettext('Content/Track/Link/Verb', 'Download'),
-  more: $pgettext('*/*/Button.Label/Noun', 'More…')
+  title: t('Track'),
+  download: t('Download'),
+  more: t('More…')
 }))
 
 const isLoading = ref(false)
@@ -157,7 +155,7 @@ const remove = async () => {
                 class="vibrant"
                 :track="track"
               >
-                <translate translate-context="*/Queue/Button.Label/Short, Verb">
+                <translate >
                   Play
                 </translate>
               </play-button>
@@ -189,7 +187,7 @@ const remove = async () => {
                 v-model:show="showEmbedModal"
               >
                 <h4 class="header">
-                  <translate translate-context="Popup/Track/Title">
+                  <translate >
                     Embed this track on your website
                   </translate>
                 </h4>
@@ -203,7 +201,7 @@ const remove = async () => {
                 </div>
                 <div class="actions">
                   <button class="ui basic deny button">
-                    <translate translate-context="*/*/Button.Label/Verb">
+                    <translate >
                       Cancel
                     </translate>
                   </button>
@@ -228,7 +226,7 @@ const remove = async () => {
                     <i class="external icon" />
                     <translate
                       :translate-params="{domain: domain}"
-                      translate-context="Content/*/Button.Label/Verb"
+
                     >View on %{ domain }</translate>
                   </a>
                   <div
@@ -238,7 +236,7 @@ const remove = async () => {
                     @click="showEmbedModal = !showEmbedModal"
                   >
                     <i class="code icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">
+                    <translate >
                       Embed
                     </translate>
                   </div>
@@ -249,7 +247,7 @@ const remove = async () => {
                     class="basic item"
                   >
                     <i class="wikipedia w icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">Search on Wikipedia</translate>
+                    <translate >Search on Wikipedia</translate>
                   </a>
                   <a
                     v-if="discogsUrl"
@@ -259,7 +257,7 @@ const remove = async () => {
                     class="basic item"
                   >
                     <i class="external icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">Search on Discogs</translate>
+                    <translate >Search on Discogs</translate>
                   </a>
                   <router-link
                     v-if="track.is_local"
@@ -267,7 +265,7 @@ const remove = async () => {
                     class="basic item"
                   >
                     <i class="edit icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">
+                    <translate >
                       Edit
                     </translate>
                   </router-link>
@@ -277,12 +275,12 @@ const remove = async () => {
                     @confirm="remove()"
                   >
                     <i class="ui trash icon" />
-                    <translate translate-context="*/*/*/Verb">
+                    <translate >
                       Delete…
                     </translate>
                     <template #modal-header>
                       <p>
-                        <translate translate-context="Popup/Channel/Title">
+                        <translate >
                           Delete this track?
                         </translate>
                       </p>
@@ -290,7 +288,7 @@ const remove = async () => {
                     <template #modal-content>
                       <div>
                         <p>
-                          <translate translate-context="Content/Moderation/Paragraph">
+                          <translate >
                             The track will be deleted, as well as any related files and data. This action is irreversible.
                           </translate>
                         </p>
@@ -298,7 +296,7 @@ const remove = async () => {
                     </template>
                     <template #modal-confirm>
                       <p>
-                        <translate translate-context="*/*/*/Verb">
+                        <translate >
                           Delete
                         </translate>
                       </p>
@@ -321,7 +319,7 @@ const remove = async () => {
                     :to="{name: 'manage.library.tracks.detail', params: {id: track.id}}"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link">
+                    <translate >
                       Open in moderation interface
                     </translate>
                   </router-link>
@@ -333,7 +331,7 @@ const remove = async () => {
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                    <translate >View in Django's admin</translate>&nbsp;
                   </a>
                 </div>
               </button>

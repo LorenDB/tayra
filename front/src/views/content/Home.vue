@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { humanSize } from '~/utils/filters'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import { useStore } from '~/store'
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const labels = computed(() => ({
-  title: $pgettext('Content/Library/Title/Verb', 'Add and manage content')
+  title: t('Add and manage content')
 }))
 
 const store = useStore()
@@ -24,22 +24,22 @@ const defaultQuota = computed(() => humanSize(quota.value * 1e6))
       <h1>{{ labels.title }}</h1>
       <p>
         <strong><translate
-          translate-context="Content/Library/Paragraph"
+
           :translate-params="{quota: defaultQuota}"
         >This instance offers up to %{quota} of storage space for every user.</translate></strong>
       </p>
       <div class="ui segment">
         <h2>
           <i class="feed icon" />&nbsp;
-          <translate translate-context="Content/Library/Title/Verb">
+          <translate >
             Publish your work in a channel
           </translate>
         </h2>
         <p>
-          <translate translate-context="Content/Library/Paragraph">
+          <translate >
             If you are a musician or a podcaster, channels are designed for you!
           </translate>&#32;
-          <translate translate-context="Content/Library/Paragraph">
+          <translate >
             Share your work publicly and get subscribers on Funkwhale, the Fediverse or any podcasting application.
           </translate>
         </p>
@@ -47,7 +47,7 @@ const defaultQuota = computed(() => humanSize(quota.value * 1e6))
           :to="{name: 'profile.overview', params: {username: store.state.auth.username}, hash: '#channels'}"
           class="ui primary button"
         >
-          <translate translate-context="Content/Library/Button.Label/Verb">
+          <translate >
             Get started
           </translate>
         </router-link>
@@ -55,12 +55,12 @@ const defaultQuota = computed(() => humanSize(quota.value * 1e6))
       <div class="ui segment">
         <h2>
           <i class="cloud icon" />&nbsp;
-          <translate translate-context="Content/Library/Title/Verb">
+          <translate >
             Upload third-party content in a library
           </translate>
         </h2>
         <p>
-          <translate translate-context="Content/Library/Paragraph">
+          <translate >
             Upload your personal music library to Funkwhale to enjoy it from anywhere and share it with friends and family.
           </translate>
         </p>
@@ -68,7 +68,7 @@ const defaultQuota = computed(() => humanSize(quota.value * 1e6))
           :to="{name: 'content.libraries.index'}"
           class="ui primary button"
         >
-          <translate translate-context="Content/Library/Button.Label/Verb">
+          <translate >
             Get started
           </translate>
         </router-link>
@@ -76,12 +76,12 @@ const defaultQuota = computed(() => humanSize(quota.value * 1e6))
       <div class="ui segment">
         <h2>
           <i class="download icon" />&nbsp;
-          <translate translate-context="Content/Library/Title/Verb">
+          <translate >
             Follow remote libraries
           </translate>
         </h2>
         <p>
-          <translate translate-context="Content/Library/Paragraph">
+          <translate >
             Follow libraries from other users to get access to new music. Public libraries can be followed immediately, while following a private library requires approval from its owner.
           </translate>
         </p>
@@ -89,7 +89,7 @@ const defaultQuota = computed(() => humanSize(quota.value * 1e6))
           :to="{name: 'content.remote.index'}"
           class="ui primary button"
         >
-          <translate translate-context="Content/Library/Button.Label/Verb">
+          <translate >
             Get started
           </translate>
         </router-link>

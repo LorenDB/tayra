@@ -3,7 +3,7 @@ import type { Channel } from '~/types'
 
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 import { computed, ref, reactive, watch, watchEffect } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -53,9 +53,9 @@ const externalDomain = computed(() => {
   return parser.hostname
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('*/*/*', 'Channel')
+  title: t('Channel')
 }))
 
 onBeforeRouteUpdate((to) => {
@@ -169,7 +169,7 @@ const updateSubscriptionCount = (delta: number) => {
                   <div class="ui hidden very small divider" />
                   <translate
                     v-if="object.artist?.content_category === 'podcast'"
-                    translate-context="Content/Channel/Paragraph"
+
                     translate-plural="%{ count } episodes"
                     :translate-n="totalTracks"
                     :translate-params="{count: totalTracks}"
@@ -178,7 +178,7 @@ const updateSubscriptionCount = (delta: number) => {
                   </translate>
                   <translate
                     v-else
-                    translate-context="*/*/*"
+
                     :translate-params="{count: totalTracks}"
                     :translate-n="totalTracks"
                     translate-plural="%{ count } tracks"
@@ -188,7 +188,7 @@ const updateSubscriptionCount = (delta: number) => {
                 </template>
                 <template v-if="object.attributed_to.full_username === $store.state.auth.fullUsername || $store.getters['channels/isSubscribed'](object.uuid)">
                   <br><translate
-                    translate-context="Content/Channel/Paragraph"
+
                     translate-plural="%{ count } subscribers"
                     :translate-n="object?.subscriptions_count"
                     :translate-params="{count: object?.subscriptions_count}"
@@ -196,7 +196,7 @@ const updateSubscriptionCount = (delta: number) => {
                     %{ count } subscriber
                   </translate>
                   <br><translate
-                    translate-context="Content/Channel/Paragraph"
+
                     translate-plural="%{ count } listenings"
                     :translate-n="object?.downloads_count"
                     :translate-params="{count: object?.downloads_count}"
@@ -216,7 +216,7 @@ const updateSubscriptionCount = (delta: number) => {
                   class="tiny"
                 >
                   <h4 class="header">
-                    <translate translate-context="Popup/Channel/Title/Verb">
+                    <translate >
                       Subscribe to this channel
                     </translate>
                   </h4>
@@ -225,7 +225,7 @@ const updateSubscriptionCount = (delta: number) => {
                       <template v-if="$store.state.auth.authenticated">
                         <h3>
                           <i class="user icon" />
-                          <translate translate-context="Content/Channels/Header">
+                          <translate >
                             Subscribe on Funkwhale
                           </translate>
                         </h3>
@@ -238,12 +238,12 @@ const updateSubscriptionCount = (delta: number) => {
                       <template v-if="object.rss_url">
                         <h3>
                           <i class="feed icon" />
-                          <translate translate-context="Content/Channels/Header">
+                          <translate >
                             Subscribe via RSS
                           </translate>
                         </h3>
                         <p>
-                          <translate translate-context="Content/Channels/Label">
+                          <translate >
                             Copy-paste the following URL in your favorite podcatcher:
                           </translate>
                         </p>
@@ -252,12 +252,12 @@ const updateSubscriptionCount = (delta: number) => {
                       <template v-if="object.actor">
                         <h3>
                           <i class="bell icon" />
-                          <translate translate-context="Content/Channels/Header">
+                          <translate >
                             Subscribe on the Fediverse
                           </translate>
                         </h3>
                         <p>
-                          <translate translate-context="Content/Channels/Label">
+                          <translate >
                             If you're using Mastodon or other fediverse applications, you can subscribe to this account:
                           </translate>
                         </p>
@@ -270,7 +270,7 @@ const updateSubscriptionCount = (delta: number) => {
                   </div>
                   <div class="actions">
                     <button class="ui basic deny button">
-                      <translate translate-context="*/*/Button.Label/Verb">
+                      <translate >
                         Cancel
                       </translate>
                     </button>
@@ -290,7 +290,7 @@ const updateSubscriptionCount = (delta: number) => {
                       @click.prevent="showEmbedModal = !showEmbedModal"
                     >
                       <i class="code icon" />
-                      <translate translate-context="Content/*/Button.Label/Verb">Embed</translate>
+                      <translate >Embed</translate>
                     </a>
                     <a
                       v-if="object.actor && object.actor.domain != $store.getters['instance/domain']"
@@ -301,7 +301,7 @@ const updateSubscriptionCount = (delta: number) => {
                       <i class="external icon" />
                       <translate
                         :translate-params="{domain: object.actor.domain}"
-                        translate-context="Content/*/Button.Label/Verb"
+
                       >View on %{ domain }</translate>
                     </a>
                     <div class="divider" />
@@ -323,7 +323,7 @@ const updateSubscriptionCount = (delta: number) => {
                         @click.stop.prevent="showEditModal = true"
                       >
                         <i class="edit icon" />
-                        <translate translate-context="*/*/*/Verb">Edit…</translate>
+                        <translate >Edit…</translate>
                       </a>
                       <dangerous-button
                         v-if="object"
@@ -331,12 +331,12 @@ const updateSubscriptionCount = (delta: number) => {
                         @confirm="remove()"
                       >
                         <i class="ui trash icon" />
-                        <translate translate-context="*/*/*/Verb">
+                        <translate >
                           Delete…
                         </translate>
                         <template #modal-header>
                           <p>
-                            <translate translate-context="Popup/Channel/Title">
+                            <translate >
                               Delete this Channel?
                             </translate>
                           </p>
@@ -344,7 +344,7 @@ const updateSubscriptionCount = (delta: number) => {
                         <template #modal-content>
                           <div>
                             <p>
-                              <translate translate-context="Content/Moderation/Paragraph">
+                              <translate >
                                 The channel will be deleted, as well as any related files and data. This action is irreversible.
                               </translate>
                             </p>
@@ -352,7 +352,7 @@ const updateSubscriptionCount = (delta: number) => {
                         </template>
                         <template #modal-confirm>
                           <p>
-                            <translate translate-context="*/*/*/Verb">
+                            <translate >
                               Delete
                             </translate>
                           </p>
@@ -366,7 +366,7 @@ const updateSubscriptionCount = (delta: number) => {
                         :to="{name: 'manage.channels.detail', params: {id: object.uuid}}"
                       >
                         <i class="wrench icon" />
-                        <translate translate-context="Content/Moderation/Link">
+                        <translate >
                           Open in moderation interface
                         </translate>
                       </router-link>
@@ -401,7 +401,7 @@ const updateSubscriptionCount = (delta: number) => {
                     <i class="external link icon" />
                     <translate
                       :translate-params="{domain: externalDomain}"
-                      translate-context="Content/Channel/Paragraph"
+
                     >Mirrored from %{ domain }</translate>
                   </a>
                 </div>
@@ -417,7 +417,7 @@ const updateSubscriptionCount = (delta: number) => {
                   @click.prevent.stop="$store.commit('channels/showUploadModal', {show: true, config: {channel: object}})"
                 >
                   <i class="upload icon" />
-                  <translate translate-context="Content/Channels/Button.Label/Verb">
+                  <translate >
                     Upload
                   </translate>
                 </button>
@@ -428,7 +428,7 @@ const updateSubscriptionCount = (delta: number) => {
                   class="vibrant"
                   :artist="object.artist"
                 >
-                  <translate translate-context="Content/Channels/Button.Label/Verb">
+                  <translate >
                     Play
                   </translate>
                 </play-button>
@@ -446,7 +446,7 @@ const updateSubscriptionCount = (delta: number) => {
                 v-model:show="showEmbedModal"
               >
                 <h4 class="header">
-                  <translate translate-context="Popup/Artist/Title/Verb">
+                  <translate >
                     Embed this artist work on your website
                   </translate>
                 </h4>
@@ -460,7 +460,7 @@ const updateSubscriptionCount = (delta: number) => {
                 </div>
                 <div class="actions">
                   <button class="ui basic deny button">
-                    <translate translate-context="*/*/Button.Label/Verb">
+                    <translate >
                       Cancel
                     </translate>
                   </button>
@@ -473,13 +473,13 @@ const updateSubscriptionCount = (delta: number) => {
                 <h4 class="header">
                   <translate
                     v-if="object.artist?.content_category === 'podcast'"
-                    translate-context="Content/Channel/*"
+
                   >
                     Podcast channel
                   </translate>
                   <translate
                     v-else
-                    translate-context="Content/Channel/*"
+
                   >
                     Artist channel
                   </translate>
@@ -496,7 +496,7 @@ const updateSubscriptionCount = (delta: number) => {
                 </div>
                 <div class="actions">
                   <button class="ui left floated basic deny button">
-                    <translate translate-context="*/*/Button.Label/Verb">
+                    <translate >
                       Cancel
                     </translate>
                   </button>
@@ -505,7 +505,7 @@ const updateSubscriptionCount = (delta: number) => {
                     :disabled="!edit.submittable"
                     @click.stop="editForm?.submit"
                   >
-                    <translate translate-context="*/Channels/Button.Label">
+                    <translate >
                       Update channel
                     </translate>
                   </button>
@@ -528,7 +528,7 @@ const updateSubscriptionCount = (delta: number) => {
 
                 :to="{name: 'channels.detail', params: {id: id}}"
               >
-                <translate translate-context="Content/Channels/Link">
+                <translate >
                   Overview
                 </translate>
               </router-link>
@@ -539,13 +539,13 @@ const updateSubscriptionCount = (delta: number) => {
               >
                 <translate
                   v-if="isPodcast"
-                  translate-context="Content/Channels/*"
+
                 >
                   All Episodes
                 </translate>
                 <translate
                   v-else
-                  translate-context="*/*/*"
+
                 >
                   Tracks
                 </translate>

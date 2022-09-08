@@ -6,7 +6,7 @@ import type { OrderingField } from '~/store/ui'
 
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRouteQuery } from '@vueuse/router'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { syncRef } from '@vueuse/core'
 import { sortedUniq } from 'lodash-es'
 import { useStore } from '~/store'
@@ -110,10 +110,10 @@ onOrderingUpdate(() => {
 
 onMounted(() => $('.ui.dropdown').dropdown())
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search…'),
-  title: $pgettext('*/*/*/Noun', 'Podcasts')
+  searchPlaceholder: t('Search…'),
+  title: t('Podcasts')
 }))
 
 const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value].sort((a, b) => a - b)))
@@ -123,7 +123,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate translate-context="Content/Podcasts/Title">
+        <translate >
           Browsing podcasts
         </translate>
       </h2>
@@ -134,7 +134,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
         <div class="fields">
           <div class="field">
             <label for="artist-search">
-              <translate translate-context="Content/Search/Input.Label/Noun">Podcast title</translate>
+              <translate >Podcast title</translate>
             </label>
             <div class="ui action input">
               <input
@@ -147,18 +147,18 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="$pgettext('Content/Search/Input.Label/Noun', 'Search')"
+                :aria-label="t('Search')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="tags-search"><translate translate-context="*/*/*/Noun">Tags</translate></label>
+            <label for="tags-search"><translate >Tags</translate></label>
             <tags-selector v-model="tags" />
           </div>
           <div class="field">
-            <label for="artist-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+            <label for="artist-ordering"><translate >Ordering</translate></label>
             <select
               id="artist-ordering"
               v-model="ordering"
@@ -174,26 +174,26 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="artist-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate></label>
+            <label for="artist-ordering-direction"><translate >Ordering direction</translate></label>
             <select
               id="artist-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate translate-context="Content/Search/Dropdown">
+                <translate >
                   Ascending
                 </translate>
               </option>
               <option value="-">
-                <translate translate-context="Content/Search/Dropdown">
+                <translate >
                   Descending
                 </translate>
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="artist-results"><translate translate-context="Content/Search/Dropdown.Label/Noun">Results per page</translate></label>
+            <label for="artist-results"><translate >Results per page</translate></label>
             <select
               id="artist-results"
               v-model="paginateBy"
@@ -234,7 +234,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
       >
         <div class="ui icon header">
           <i class="podcast icon" />
-          <translate translate-context="Content/Artists/Placeholder">
+          <translate >
             No results matching your query
           </translate>
         </div>
@@ -244,7 +244,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
           class="ui success button labeled icon"
         >
           <i class="upload icon" />
-          <translate translate-context="Content/*/Verb">
+          <translate >
             Create a Channel
           </translate>
         </router-link>
@@ -255,7 +255,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
           <div class="actions">
             <a @click.stop.prevent="showSubscribeModal = true">
               <i class="plus icon" />
-              <translate translate-context="Content/Profile/Button">Subscribe to feed</translate>
+              <translate >Subscribe to feed</translate>
             </a>
           </div>
         </h1>
@@ -275,7 +275,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
       :fullscreen="false"
     >
       <h2 class="header">
-        <translate translate-context="*/*/*/Noun">
+        <translate >
           Subscription
         </translate>
       </h2>
@@ -293,7 +293,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
       </div>
       <div class="actions">
         <button class="ui basic deny button">
-          <translate translate-context="*/*/Button.Label/Verb">
+          <translate >
             Cancel
           </translate>
         </button>
@@ -303,7 +303,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
           class="ui primary button"
         >
           <i class="bookmark icon" />
-          <translate translate-context="*/*/*/Verb">
+          <translate >
             Subscribe
           </translate>
         </button>

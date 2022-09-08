@@ -56,7 +56,7 @@ const cover = computed(() => props.serie?.cover ?? null)
       </strong>
       <div class="description">
         <translate
-          translate-context="Content/Channel/Paragraph"
+
           translate-plural="%{ count } episodes"
           :translate-n="serie.tracks_count"
           :translate-params="{count: serie.tracks_count}"

@@ -9,12 +9,12 @@ import { humanSize } from '~/utils/filters'
 import { useStore } from '~/store'
 import { computed } from 'vue'
 import { whenever } from '@vueuse/core'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Head/Home/Title', 'Home')
+  title: t('Home')
 }))
 
 const store = useStore()
@@ -70,13 +70,12 @@ whenever(() => store.state.auth.authenticated, () => {
     >
       <div class="segment-content">
         <h1 class="ui center aligned large header">
-          <span
-            v-translate="{podName: podName}"
-            translate-context="Content/Home/Header"
+          <translate
             :translate-params="{podName: podName}"
+            tag="span"
           >
             Welcome to %{ podName }!
-          </span>
+          </translate>
           <div
             v-if="shortDescription"
             class="sub header"
@@ -90,7 +89,7 @@ whenever(() => store.state.auth.authenticated, () => {
       <div class="ui stackable grid">
         <div class="ten wide column">
           <h2 class="header">
-            <translate translate-context="Content/Home/Header">
+            <translate >
               About this Funkwhale pod
             </translate>
           </h2>
@@ -101,7 +100,7 @@ whenever(() => store.state.auth.authenticated, () => {
             <div class="ui stackable grid">
               <div class="eight wide column">
                 <p v-if="!longDescription">
-                  <translate translate-context="Content/Home/Paragraph">
+                  <translate >
                     No description available.
                   </translate>
                 </p>
@@ -126,7 +125,7 @@ whenever(() => store.state.auth.authenticated, () => {
                           class="ui link"
                           :to="{name: 'about'}"
                         >
-                          <translate translate-context="Content/Home/Link">
+                          <translate >
                             Learn more
                           </translate>
                         </router-link>
@@ -143,7 +142,7 @@ whenever(() => store.state.auth.authenticated, () => {
                           class="ui link"
                           :to="{name: 'about', hash: '#rules'}"
                         >
-                          <translate translate-context="Content/Home/Link">
+                          <translate >
                             Server rules
                           </translate>
                         </router-link>
@@ -155,13 +154,13 @@ whenever(() => store.state.auth.authenticated, () => {
               <div class="eight wide column">
                 <template v-if="stats">
                   <h3 class="sub header">
-                    <translate translate-context="Content/Home/Header">
+                    <translate >
                       Statistics
                     </translate>
                   </h3>
                   <p>
                     <i class="user icon" /><translate
-                      translate-context="Content/Home/Stat"
+
                       :translate-params="{count: stats.users.toLocaleString($store.state.ui.momentLocale) }"
                       :translate-n="stats.users"
                       translate-plural="%{ count } active users"
@@ -182,7 +181,7 @@ whenever(() => store.state.auth.authenticated, () => {
                 </template>
                 <template v-if="contactEmail">
                   <h3 class="sub header">
-                    <translate translate-context="Content/Home/Header/Name">
+                    <translate >
                       Contact
                     </translate>
                   </h3>
@@ -207,34 +206,28 @@ whenever(() => store.state.auth.authenticated, () => {
       <div class="ui stackable grid">
         <div class="four wide column">
           <h3 class="header">
-            <translate translate-context="Footer/*/Title/Short">
+            <translate >
               About Funkwhale
             </translate>
           </h3>
-          <p
-            v-translate
-            translate-context="Content/Home/Paragraph"
-          >
+          <translate tag="p">
             This pod runs Funkwhale, a community-driven project that lets you listen and share music and audio within a decentralized, open network.
-          </p>
-          <p
-            v-translate
-            translate-context="Content/Home/Paragraph"
-          >
+        </translate>
+          <translate tag="p">
             Funkwhale is free and developed by a friendly community of volunteers.
-          </p>
+          </translate>
           <a
             target="_blank"
             rel="noopener"
             href="https://funkwhale.audio"
           >
             <i class="external alternate icon" />
-            <translate translate-context="Content/Home/Link">Visit funkwhale.audio</translate>
+            <translate >Visit funkwhale.audio</translate>
           </a>
         </div>
         <div class="four wide column">
           <h3 class="header">
-            <translate translate-context="Head/Login/Title">
+            <translate >
               Log In
             </translate>
           </h3>
@@ -246,19 +239,19 @@ whenever(() => store.state.auth.authenticated, () => {
         </div>
         <div class="four wide column">
           <h3 class="header">
-            <translate translate-context="*/Signup/Title">
+            <translate >
               Sign up
             </translate>
           </h3>
           <template v-if="openRegistrations">
             <p>
-              <translate translate-context="Content/Home/Paragraph">
+              <translate >
                 Sign up now to keep track of your favorites, create playlists, discover new content and much more!
               </translate>
             </p>
             <p v-if="defaultUploadQuota">
               <translate
-                translate-context="Content/Home/Paragraph"
+
                 :translate-params="{quota: humanSize(defaultUploadQuota * 1000 * 1000)}"
               >
                 Users on this pod also get %{ quota } of free storage to upload their own content!
@@ -270,7 +263,7 @@ whenever(() => store.state.auth.authenticated, () => {
             />
           </template>
           <div v-else>
-            <p translate-context="Content/Home/Paragraph">
+            <p >
               Registrations are closed on this pod. You can signup on another pod using the link below.
             </p>
             <a
@@ -279,14 +272,14 @@ whenever(() => store.state.auth.authenticated, () => {
               href="https://funkwhale.audio/#get-started"
             >
               <i class="external alternate icon" />
-              <translate translate-context="Content/Home/Link">Find another pod</translate>
+              <translate >Find another pod</translate>
             </a>
           </div>
         </div>
 
         <div class="four wide column">
           <h3 class="header">
-            <translate translate-context="Content/Home/Header">
+            <translate >
               Useful links
             </translate>
           </h3>
@@ -299,12 +292,12 @@ whenever(() => store.state.auth.authenticated, () => {
                   class="header"
                   to="/library"
                 >
-                  <translate translate-context="Content/Home/Link">
+                  <translate >
                     Browse public content
                   </translate>
                 </router-link>
                 <div class="description">
-                  <translate translate-context="Content/Home/Link">
+                  <translate >
                     Listen to public albums and playlists shared on this pod
                   </translate>
                 </div>
@@ -319,10 +312,10 @@ whenever(() => store.state.auth.authenticated, () => {
                   target="_blank"
                   rel="noopener"
                 >
-                  <translate translate-context="Content/Home/Link">Mobile apps</translate>
+                  <translate >Mobile apps</translate>
                 </a>
                 <div class="description">
-                  <translate translate-context="Content/Home/Link">
+                  <translate >
                     Use Funkwhale on other devices with our apps
                   </translate>
                 </div>
@@ -337,10 +330,10 @@ whenever(() => store.state.auth.authenticated, () => {
                   target="_blank"
                   rel="noopener"
                 >
-                  <translate translate-context="Content/Home/Link">User guides</translate>
+                  <translate >User guides</translate>
                 </a>
                 <div class="description">
-                  <translate translate-context="Content/Home/Link">
+                  <translate >
                     Discover everything you need to know about Funkwhale and its features
                   </translate>
                 </div>
@@ -359,12 +352,12 @@ whenever(() => store.state.auth.authenticated, () => {
         :limit="10"
       >
         <template #title>
-          <translate translate-context="Content/Home/Title">
+          <translate >
             Recently added albums
           </translate>
         </template>
         <router-link to="/library">
-          <translate translate-context="Content/Home/Link">
+          <translate >
             View more…
           </translate>
           <div class="ui hidden divider" />
@@ -372,7 +365,7 @@ whenever(() => store.state.auth.authenticated, () => {
       </album-widget>
       <div class="ui hidden section divider" />
       <h3 class="ui header">
-        <translate translate-context="*/*/*">
+        <translate >
           New channels
         </translate>
       </h3>

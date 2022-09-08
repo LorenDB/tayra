@@ -5,7 +5,7 @@ import type { VueUploadItem } from 'vue-upload-component'
 import { computed, ref, reactive, watch, nextTick } from 'vue'
 import { useEventListener, useIntervalFn } from '@vueuse/core'
 import { humanSize, truncate } from '~/utils/filters'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { sortBy } from 'lodash-es'
 import { useStore } from '~/store'
 
@@ -34,7 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
   defaultImportReference: ''
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const store = useStore()
 
 const upload = ref()
@@ -43,13 +43,12 @@ const supportedExtensions = computed(() => store.state.ui.supportedExtensions)
 
 const labels = computed(() => ({
   tooltips: {
-    denied: $pgettext('Content/Library/Help text', 'Upload denied, ensure the file is not too big and that you have not reached your quota'),
-    server: $pgettext('Content/Library/Help text', 'Cannot upload this file, ensure it is not too big'),
-    network: $pgettext('Content/Library/Help text', 'A network error occurred while uploading this file'),
-    timeout: $pgettext('Content/Library/Help text', 'Upload timeout, please try again'),
-    retry: $pgettext('*/*/*/Verb', 'Retry'),
-    extension: $pgettext(
-      'Content/Library/Help text',
+    denied: t('Upload denied, ensure the file is not too big and that you have not reached your quota'),
+    server: t('Cannot upload this file, ensure it is not too big'),
+    network: t('A network error occurred while uploading this file'),
+    timeout: t('Upload timeout, please try again'),
+    retry: t('Retry'),
+    extension: t(
       'Invalid file type, ensure you are uploading an audio file. Supported file extensions are %{ extensions }',
       { extensions: supportedExtensions.value.join(', ') }
     )
@@ -283,7 +282,7 @@ const retry = (files: Omit<VueUploadItem, 'xhr'>[]) => {
 useEventListener(window, 'beforeunload', (event) => {
   if (!hasActiveUploads.value) return null
   event.preventDefault()
-  return (event.returnValue = $pgettext('*/*/*', 'This page is asking you to confirm that you want to leave - data you have entered may not be saved.'))
+  return (event.returnValue = t('This page is asking you to confirm that you want to leave - data you have entered may not be saved.'))
 })
 </script>
 
@@ -295,7 +294,7 @@ useEventListener(window, 'beforeunload', (event) => {
         :class="['item', {active: currentTab === 'uploads'}]"
         @click.prevent="currentTab = 'uploads'"
       >
-        <translate translate-context="Content/Library/Tab.Title/Short">Uploading</translate>
+        <translate >Uploading</translate>
         <div
           v-if="files.length === 0"
           class="ui label"
@@ -320,7 +319,7 @@ useEventListener(window, 'beforeunload', (event) => {
         :class="['item', {active: currentTab === 'processing'}]"
         @click.prevent="currentTab = 'processing'"
       >
-        <translate translate-context="Content/Library/Tab.Title/Short">Processing</translate>
+        <translate >Processing</translate>
         <div
           v-if="processableFiles === 0"
           class="ui label"
@@ -345,7 +344,7 @@ useEventListener(window, 'beforeunload', (event) => {
       <div :class="['ui', {loading: isLoadingQuota}, 'container']">
         <div :class="['ui', {red: remainingSpace === 0}, {warning: remainingSpace > 0 && remainingSpace <= 50}, 'small', 'statistic']">
           <div class="label">
-            <translate translate-context="Content/Library/Paragraph">
+            <translate >
               Remaining storage space
             </translate>
           </div>
@@ -355,33 +354,33 @@ useEventListener(window, 'beforeunload', (event) => {
         </div>
         <div class="ui divider" />
         <h2 class="ui header">
-          <translate translate-context="Content/Library/Title/Verb">
+          <translate >
             Upload music from '~/your local storage
           </translate>
         </h2>
         <div class="ui message">
           <p>
-            <translate translate-context="Content/Library/Paragraph">
+            <translate >
               You are about to upload music to your library. Before proceeding, please ensure that:
             </translate>
           </p>
           <ul>
             <li v-if="library.privacy_level != 'me'">
-              <translate translate-context="Content/Library/List item">
+              <translate >
                 You are not uploading copyrighted content in a public library, otherwise you may be infringing the law
               </translate>
             </li>
             <li>
-              <translate translate-context="Content/Library/List item">
+              <translate >
                 The music files you are uploading are tagged properly.
               </translate>&nbsp;
               <a
                 href="http://picard.musicbrainz.org/"
                 target="_blank"
-              ><translate translate-context="Content/Library/Link">We recommend using Picard for that purpose.</translate></a>
+              ><translate >We recommend using Picard for that purpose.</translate></a>
             </li>
             <li>
-              <translate translate-context="Content/Library/List item">
+              <translate >
                 The music files you are uploading are in OGG, Flac, MP3 or AIFF format
               </translate>
             </li>
@@ -401,14 +400,14 @@ useEventListener(window, 'beforeunload', (event) => {
           @input-file="inputFile"
         >
           <i class="upload icon" />&nbsp;
-          <translate translate-context="Content/Library/Paragraph/Call to action">
+          <translate >
             Click to select files to upload or drag and drop files or directories
           </translate>
           <br>
           <br>
           <i>
             <translate
-              translate-context="Content/Library/Paragraph"
+
               :translate-params="{extensions: supportedExtensions.join(', ')}"
             >
               Supported extensions: %{ extensions }
@@ -425,22 +424,22 @@ useEventListener(window, 'beforeunload', (event) => {
           <thead>
             <tr>
               <th class="ten wide">
-                <translate translate-context="Content/Library/Table.Label">
+                <translate >
                   Filename
                 </translate>
               </th>
               <th>
-                <translate translate-context="Content/*/*/Noun">
+                <translate >
                   Size
                 </translate>
               </th>
               <th>
-                <translate translate-context="*/*/*">
+                <translate >
                   Status
                 </translate>
               </th>
               <th>
-                <translate translate-context="*/*/*">
+                <translate >
                   Actions
                 </translate>
               </th>
@@ -454,7 +453,7 @@ useEventListener(window, 'beforeunload', (event) => {
                   class="ui right floated small basic button"
                   @click.prevent="retry(retryableFiles)"
                 >
-                  <translate translate-context="Content/Library/Table">
+                  <translate >
                     Retry failed uploads
                   </translate>
                 </button>
@@ -486,7 +485,7 @@ useEventListener(window, 'beforeunload', (event) => {
                 >
                   <translate
                     key="1"
-                    translate-context="Content/Library/Table"
+
                   >Uploaded</translate>
                 </span>
                 <span
@@ -495,7 +494,7 @@ useEventListener(window, 'beforeunload', (event) => {
                 >
                   <translate
                     key="2"
-                    translate-context="Content/Library/Table"
+
                   >
                     Uploading…
                   </translate>
@@ -507,7 +506,7 @@ useEventListener(window, 'beforeunload', (event) => {
                 >
                   <translate
                     key="3"
-                    translate-context="Content/Library/*/Short"
+
                   >
                     Pending
                   </translate>
@@ -539,7 +538,7 @@ useEventListener(window, 'beforeunload', (event) => {
       </div>
       <div class="ui divider" />
       <h2 class="ui header">
-        <translate translate-context="Content/Library/Title/Verb">
+        <translate >
           Import music from your server
         </translate>
       </h2>
@@ -549,7 +548,7 @@ useEventListener(window, 'beforeunload', (event) => {
         class="ui negative message"
       >
         <h3 class="header">
-          <translate translate-context="Content/*/Error message.Title">
+          <translate >
             Error while launching import
           </translate>
         </h3>
@@ -570,17 +569,17 @@ useEventListener(window, 'beforeunload', (event) => {
       />
       <template v-if="fsStatus && fsStatus.import">
         <h3 class="ui header">
-          <translate translate-context="Content/Library/Title/Verb">
+          <translate >
             Import status
           </translate>
         </h3>
         <p v-if="fsStatus.import.reference !== importReference">
-          <translate translate-context="Content/Library/Paragraph">
+          <translate >
             Results of your previous import:
           </translate>
         </p>
         <p v-else>
-          <translate translate-context="Content/Library/Paragraph">
+          <translate >
             Results of your import:
           </translate>
         </p>
@@ -590,7 +589,7 @@ useEventListener(window, 'beforeunload', (event) => {
           class="ui button"
           @click="cancelFsScan"
         >
-          <translate translate-context="*/*/Button.Label/Verb">
+          <translate >
             Cancel
           </translate>
         </button>

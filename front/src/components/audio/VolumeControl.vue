@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { usePlayer } from '~/composables/audio/player'
 import { useTimeoutFn } from '@vueuse/core'
-import { useGettext } from 'vue3-gettext'
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const { volume, mute } = usePlayer()
 const expanded = ref(false)
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  unmute: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Unmute'),
-  mute: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Mute'),
-  slider: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Adjust volume')
+  unmute: t('Unmute'),
+  mute: t('Mute'),
+  slider: t('Adjust volume')
 }))
 
 const { start, stop } = useTimeoutFn(() => (expanded.value = false), 500, { immediate: false })

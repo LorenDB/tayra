@@ -3,7 +3,7 @@ import type { Note, BackendError } from '~/types'
 
 import axios from 'axios'
 import { ref, computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 interface Events {
   (e: 'created', note: Note): void
@@ -16,9 +16,9 @@ interface Props {
 const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  summaryPlaceholder: $pgettext('Content/Moderation/Placeholder', 'Describe what actions have been taken, or any other related updates…')
+  summaryPlaceholder: t('Describe what actions have been taken, or any other related updates…')
 }))
 
 const summary = ref('')
@@ -56,7 +56,7 @@ const submit = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/Moderation/Error message.Title">
+        <translate >
           Error while submitting note
         </translate>
       </h4>
@@ -83,7 +83,7 @@ const submit = async () => {
       type="submit"
       :disabled="isLoading"
     >
-      <translate translate-context="Content/Moderation/Button.Label/Verb">
+      <translate >
         Add note
       </translate>
     </button>

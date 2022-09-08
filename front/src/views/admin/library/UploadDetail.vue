@@ -89,7 +89,7 @@ const showUploadDetailModal = ref(false)
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        <translate translate-context="Content/Moderation/*/Short, Noun">Local</translate>
+                        <translate >Local</translate>
                       </span>
                       &nbsp;
                     </template>
@@ -106,7 +106,7 @@ const showUploadDetailModal = ref(false)
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                    <translate >View in Django's admin</translate>&nbsp;
                   </a>
                   <button
                     v-dropdown
@@ -122,7 +122,7 @@ const showUploadDetailModal = ref(false)
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                        <translate >View in Django's admin</translate>&nbsp;
                       </a>
                       <a
                         class="basic item"
@@ -131,7 +131,7 @@ const showUploadDetailModal = ref(false)
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">Open remote profile</translate>&nbsp;
+                        <translate >Open remote profile</translate>&nbsp;
                       </a>
                     </div>
                   </button>
@@ -145,7 +145,7 @@ const showUploadDetailModal = ref(false)
                     rel="noopener noreferrer"
                   >
                     <i class="download icon" />
-                    <translate translate-context="Content/Track/Link/Verb">Download</translate>
+                    <translate >Download</translate>
                   </a>
                 </div>
                 <div class="ui buttons">
@@ -153,12 +153,12 @@ const showUploadDetailModal = ref(false)
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    <translate translate-context="*/*/*/Verb">
+                    <translate >
                       Delete
                     </translate>
                     <template #modal-header>
                       <p>
-                        <translate translate-context="Popup/Library/Title">
+                        <translate >
                           Delete this upload?
                         </translate>
                       </p>
@@ -166,7 +166,7 @@ const showUploadDetailModal = ref(false)
                     <template #modal-content>
                       <div>
                         <p>
-                          <translate translate-context="Content/Moderation/Paragraph">
+                          <translate >
                             The upload will be removed. This action is irreversible.
                           </translate>
                         </p>
@@ -174,7 +174,7 @@ const showUploadDetailModal = ref(false)
                     </template>
                     <template #modal-confirm>
                       <p>
-                        <translate translate-context="*/*/*/Verb">
+                        <translate >
                           Delete
                         </translate>
                       </p>
@@ -193,7 +193,7 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
+                  <translate >
                     Upload data
                   </translate>
                 </div>
@@ -202,7 +202,7 @@ const showUploadDetailModal = ref(false)
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">
+                      <translate >
                         Name
                       </translate>
                     </td>
@@ -213,7 +213,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('privacy_level', object.library.privacy_level) }}">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Visibility
                         </translate>
                       </router-link>
@@ -225,7 +225,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.accounts.detail', params: {id: object.library.actor.full_username }}">
-                        <translate translate-context="*/*/*/Noun">
+                        <translate >
                           Account
                         </translate>
                       </router-link>
@@ -237,7 +237,7 @@ const showUploadDetailModal = ref(false)
                   <tr v-if="!object.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        <translate translate-context="Content/Moderation/*/Noun">
+                        <translate >
                           Domain
                         </translate>
                       </router-link>
@@ -249,7 +249,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('status', object.import_status) }}">
-                        <translate translate-context="Content/*/*/Noun">
+                        <translate >
                           Import status
                         </translate>
                       </router-link>
@@ -268,7 +268,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries.detail', params: {id: object.library.uuid }}">
-                        <translate translate-context="*/*/*/Noun">
+                        <translate >
                           Library
                         </translate>
                       </router-link>
@@ -286,7 +286,7 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
+                  <translate >
                     Activity
                   </translate>&nbsp;
                 </div>
@@ -295,7 +295,7 @@ const showUploadDetailModal = ref(false)
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
+                      <translate >
                         First seen
                       </translate>
                     </td>
@@ -305,7 +305,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/*/*/Noun">
+                      <translate >
                         Accessed date
                       </translate>
                     </td>
@@ -316,7 +316,7 @@ const showUploadDetailModal = ref(false)
                       />
                       <translate
                         v-else
-                        translate-context="*/*/*"
+
                       >
                         N/A
                       </translate>
@@ -331,7 +331,7 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
+                  <translate >
                     Audio content
                   </translate>&nbsp;
                 </div>
@@ -341,7 +341,7 @@ const showUploadDetailModal = ref(false)
                   <tr v-if="object.track">
                     <td>
                       <router-link :to="{name: 'manage.library.tracks.detail', params: {id: object.track.id }}">
-                        <translate translate-context="*/*/*/Noun">
+                        <translate >
                           Track
                         </translate>
                       </router-link>
@@ -352,7 +352,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
+                      <translate >
                         Cached size
                       </translate>
                     </td>
@@ -362,7 +362,7 @@ const showUploadDetailModal = ref(false)
                       </template>
                       <translate
                         v-else
-                        translate-context="*/*/*"
+
                       >
                         N/A
                       </translate>
@@ -370,7 +370,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/*/*/Noun">
+                      <translate >
                         Size
                       </translate>
                     </td>
@@ -380,7 +380,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Track/*/Noun">
+                      <translate >
                         Bitrate
                       </translate>
                     </td>
@@ -390,7 +390,7 @@ const showUploadDetailModal = ref(false)
                       </template>
                       <translate
                         v-else
-                        translate-context="*/*/*"
+
                       >
                         N/A
                       </translate>
@@ -398,7 +398,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/*/*">
+                      <translate >
                         Duration
                       </translate>
                     </td>
@@ -408,7 +408,7 @@ const showUploadDetailModal = ref(false)
                       </template>
                       <translate
                         v-else
-                        translate-context="*/*/*"
+
                       >
                         N/A
                       </translate>
@@ -417,7 +417,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('type', object.mimetype) }}">
-                        <translate translate-context="Content/Track/Table.Label/Noun">
+                        <translate >
                           Type
                         </translate>
                       </router-link>
@@ -428,7 +428,7 @@ const showUploadDetailModal = ref(false)
                       </template>
                       <translate
                         v-else
-                        translate-context="*/*/*"
+
                       >
                         N/A
                       </translate>

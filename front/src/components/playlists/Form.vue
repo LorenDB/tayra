@@ -3,7 +3,7 @@ import type { Playlist, PrivacyLevel, BackendError } from '~/types'
 
 import { useVModels, useCurrentElement } from '@vueuse/core'
 import { ref, computed, onMounted, nextTick } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -40,9 +40,9 @@ const store = useStore()
 const name = ref(playlist.value?.name ?? '')
 const privacyLevel = ref(playlist.value?.privacy_level ?? store.state.auth.profile?.privacy_level ?? 'me')
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  placeholder: $pgettext('Content/Playlist/Input.Placeholder', 'My awesome playlist')
+  placeholder: t('My awesome playlist')
 }))
 
 const sharedLabels = useSharedLabels()
@@ -111,7 +111,7 @@ const submit = async () => {
       v-if="title"
       class="ui header"
     >
-      <translate translate-context="Popup/Playlist/Title/Verb">
+      <translate >
         Create a new playlist
       </translate>
     </h4>
@@ -121,12 +121,12 @@ const submit = async () => {
     >
       <h4 class="header">
         <template v-if="playlist">
-          <translate translate-context="Content/Playlist/Message">
+          <translate >
             Playlist updated
           </translate>
         </template>
         <template v-else>
-          <translate translate-context="Content/Playlist/Message">
+          <translate >
             Playlist created
           </translate>
         </template>
@@ -138,7 +138,7 @@ const submit = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/Playlist/Error message.Title">
+        <translate >
           The playlist could not be created
         </translate>
       </h4>
@@ -153,7 +153,7 @@ const submit = async () => {
     </div>
     <div class="three fields">
       <div class="field">
-        <label for="playlist-name"><translate translate-context="Content/Playlist/Input.Label">Playlist name</translate></label>
+        <label for="playlist-name"><translate >Playlist name</translate></label>
         <input
           id="playlist-name"
           v-model="name"
@@ -164,7 +164,7 @@ const submit = async () => {
         >
       </div>
       <div class="field">
-        <label for="playlist-visibility"><translate translate-context="Content/Playlist/Dropdown.Label">Playlist visibility</translate></label>
+        <label for="playlist-visibility"><translate >Playlist visibility</translate></label>
         <select
           id="playlist-visibility"
           v-model="privacyLevel"
@@ -186,12 +186,12 @@ const submit = async () => {
           type="submit"
         >
           <template v-if="playlist">
-            <translate translate-context="Content/Playlist/Button.Label/Verb">
+            <translate >
               Update playlist
             </translate>
           </template>
           <template v-else>
-            <translate translate-context="Content/Playlist/Button.Label/Verb">
+            <translate >
               Create playlist
             </translate>
           </template>

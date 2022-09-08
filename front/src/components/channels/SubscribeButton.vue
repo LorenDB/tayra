@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Channel } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { useStore } from '~/store'
 
@@ -19,17 +19,17 @@ interface Props {
 const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const store = useStore()
 
 const isSubscribed = computed(() => store.getters['channels/isSubscribed'](props.channel.uuid))
 const title = computed(() => isSubscribed.value
-  ? $pgettext('Content/Channel/Button/Verb', 'Unsubscribe')
-  : $pgettext('Content/Channel/Button/Verb', 'Subscribe')
+  ? t('Unsubscribe')
+  : t('Subscribe')
 )
 
 const message = computed(() => ({
-  authMessage: $pgettext('Popup/Message/Paragraph', 'You need to be logged in to subscribe to this channel')
+  authMessage: t('You need to be logged in to subscribe to this channel')
 }))
 
 const toggle = async () => {

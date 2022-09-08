@@ -3,7 +3,7 @@ import type { Library } from '~/types'
 
 import { useTimeoutFn } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -47,11 +47,11 @@ const radioPlayable = computed(() => (
   && (library.value.privacy_level === 'everyone' || library.value.follow?.approved)
 ))
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
   tooltips: {
-    me: $pgettext('Content/Library/Card.Help text', 'This library is private and your approval from its owner is needed to access its content'),
-    everyone: $pgettext('Content/Library/Card.Help text', 'This library is public and you can access its content freely')
+    me: t('This library is private and your approval from its owner is needed to access its content'),
+    everyone: t('This library is public and you can access its content freely')
   }
 }))
 
@@ -65,8 +65,8 @@ const launchScan = async () => {
     store.commit('ui/addMessage', {
       date: new Date(),
       content: response.data.status === 'skipped'
-        ? $pgettext('Content/Library/Message', 'Scan skipped (previous scan is too recent)')
-        : $pgettext('Content/Library/Message', 'Scan launched')
+        ? t('Scan skipped (previous scan is too recent)')
+        : t('Scan launched')
     })
   } catch (error) {
     useErrorHandler(error as Error)
@@ -194,7 +194,7 @@ watch(showScan, (shouldShow) => {
       <div class="meta">
         <i class="music icon" />
         <translate
-          translate-context="*/*/*"
+
           :translate-params="{count: library.uploads_count}"
           :translate-n="library.uploads_count"
           translate-plural="%{ count } tracks"
@@ -208,14 +208,14 @@ watch(showScan, (shouldShow) => {
       >
         <template v-if="latestScan.status === 'pending'">
           <i class="hourglass icon" />
-          <translate translate-context="Content/Library/Card.List item">
+          <translate >
             Scan pending
           </translate>
         </template>
         <template v-if="latestScan.status === 'scanning'">
           <i class="loading spinner icon" />
           <translate
-            translate-context="Content/Library/Card.List item"
+
             :translate-params="{progress: scanProgress}"
           >
             Scanning… (%{ progress }%)
@@ -223,19 +223,19 @@ watch(showScan, (shouldShow) => {
         </template>
         <template v-else-if="latestScan.status === 'errored'">
           <i class="dangerdownload icon" />
-          <translate translate-context="Content/Library/Card.List item">
+          <translate >
             Problem during scanning
           </translate>
         </template>
         <template v-else-if="latestScan.status === 'finished' && latestScan.errored_files === 0">
           <i class="success download icon" />
-          <translate translate-context="Content/Library/Card.List item">
+          <translate >
             Scanned
           </translate>
         </template>
         <template v-else-if="latestScan.status === 'finished' && latestScan.errored_files > 0">
           <i class="warning download icon" />
-          <translate translate-context="Content/Library/Card.List item">
+          <translate >
             Scanned with errors
           </translate>
         </template>
@@ -244,7 +244,7 @@ watch(showScan, (shouldShow) => {
           class="link right floated"
           @click.prevent="showScan = !showScan"
         >
-          <translate translate-context="Content/Library/Card.Button.Label/Noun">Details</translate>
+          <translate >Details</translate>
           <i
             v-if="showScan"
             class="angle down icon"
@@ -256,11 +256,11 @@ watch(showScan, (shouldShow) => {
         </a>
         <div v-if="showScan">
           <template v-if="latestScan.modification_date">
-            <translate translate-context="Content/Library/Card.List item/Noun">
+            <translate >
               Last update:
             </translate><human-date :date="latestScan.modification_date" /><br>
           </template>
-          <translate translate-context="Content/Library/Card.List item/Noun">
+          <translate >
             Failed tracks:
           </translate> {{ latestScan.errored_files }}
         </div>
@@ -274,7 +274,7 @@ watch(showScan, (shouldShow) => {
           class="right floated link"
           @click.prevent="launchScan"
         >
-          <translate translate-context="Content/Library/Card.Button.Label/Verb">Scan now</translate> <i class="paper plane icon" />
+          <translate >Scan now</translate> <i class="paper plane icon" />
         </a>
       </div>
     </div>
@@ -290,7 +290,7 @@ watch(showScan, (shouldShow) => {
     >
       <div class="ui form">
         <div class="field">
-          <label :for="library.fid"><translate translate-context="Content/Library/Title">Sharing link</translate></label>
+          <label :for="library.fid"><translate >Sharing link</translate></label>
           <copy-input
             :id="library.fid"
             :button-classes="'basic'"
@@ -314,7 +314,7 @@ watch(showScan, (shouldShow) => {
           :class="['ui', 'success', {'loading': isLoadingFollow}, 'button']"
           @click="follow()"
         >
-          <translate translate-context="Content/Library/Card.Button.Label/Verb">
+          <translate >
             Follow
           </translate>
         </button>
@@ -323,7 +323,7 @@ watch(showScan, (shouldShow) => {
             class="ui disabled button"
           >
             <i class="hourglass icon" />
-            <translate translate-context="Content/Library/Card.Paragraph">
+            <translate >
               Follow request pending approval
             </translate>
           </button>
@@ -331,7 +331,7 @@ watch(showScan, (shouldShow) => {
             class="ui button"
             @click="unfollow"
           >
-            <translate translate-context="Content/Library/Card.Paragraph">
+            <translate >
               Cancel follow request
             </translate>
           </button>
@@ -341,12 +341,12 @@ watch(showScan, (shouldShow) => {
             :class="['ui', 'button']"
             :action="unfollow"
           >
-            <translate translate-context="*/Library/Button.Label/Verb">
+            <translate >
               Unfollow
             </translate>
             <template #modal-header>
               <p>
-                <translate translate-context="Popup/Library/Title">
+                <translate >
                   Unfollow this library?
                 </translate>
               </p>
@@ -354,7 +354,7 @@ watch(showScan, (shouldShow) => {
             <template #modal-content>
               <div>
                 <p>
-                  <translate translate-context="Popup/Library/Paragraph">
+                  <translate >
                     By unfollowing this library, you loose access to its content.
                   </translate>
                 </p>
@@ -362,7 +362,7 @@ watch(showScan, (shouldShow) => {
             </template>
             <template #modal-confirm>
               <div>
-                <translate translate-context="*/Library/Button.Label/Verb">
+                <translate >
                   Unfollow
                 </translate>
               </div>

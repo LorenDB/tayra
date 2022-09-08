@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 
 import axios from 'axios'
@@ -8,10 +8,10 @@ import PluginForm from '~/components/auth/Plugin.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const labels = computed(() => ({
-  title: $pgettext('Head/Login/Title', 'Manage plugins')
+  title: t('Manage plugins')
 }))
 
 const isLoading = ref(false)

@@ -2,7 +2,7 @@
 import type { QueueTrack } from '~/composables/audio/queue'
 import type { Track } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 import { computed } from 'vue'
 
@@ -18,13 +18,13 @@ const props = withDefaults(defineProps<Props>(), {
   border: false
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const store = useStore()
 
 const isFavorite = computed(() => store.getters['favorites/isFavorite'](props.track.id))
 const title = computed(() => isFavorite.value
-  ? $pgettext('Content/Track/Icon.Tooltip/Verb', 'Remove from favorites')
-  : $pgettext('Content/Track/*/Verb', 'Add to favorites')
+  ? t('Remove from favorites')
+  : t('Add to favorites')
 )
 </script>
 
@@ -37,13 +37,13 @@ const title = computed(() => isFavorite.value
     <i class="heart icon" />
     <translate
       v-if="isFavorite"
-      translate-context="Content/Track/Button.Message"
+
     >
       In favorites
     </translate>
     <translate
       v-else
-      translate-context="Content/Track/*/Verb"
+
     >
       Add to favorites
     </translate>

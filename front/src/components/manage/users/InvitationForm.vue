@@ -2,7 +2,7 @@
 import type { BackendError } from '~/types'
 
 import { computed, ref, reactive } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useStore } from '~/store'
 
@@ -12,12 +12,12 @@ interface Invitation {
   code: string
 }
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const router = useRouter()
 const store = useStore()
 
 const labels = computed(() => ({
-  placeholder: $pgettext('Content/Admin/Input.Placeholder', 'Leave empty for a random code')
+  placeholder: t('Leave empty for a random code')
 }))
 
 const invitations = reactive([] as Invitation[])
@@ -56,7 +56,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
         class="ui negative message"
       >
         <h4 class="header">
-          <translate translate-context="Content/Admin/Error message.Title">
+          <translate >
             Error while creating invitation
           </translate>
         </h4>
@@ -71,7 +71,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
       </div>
       <div class="inline fields">
         <div class="ui field">
-          <label for="invitation-code"><translate translate-context="Content/*/Input.Label">Invitation code</translate></label>
+          <label for="invitation-code"><translate >Invitation code</translate></label>
           <input
             v-model="code"
             for="invitation-code"
@@ -86,7 +86,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
             :disabled="isLoading"
             type="submit"
           >
-            <translate translate-context="Content/Admin/Button.Label/Verb">
+            <translate >
               Get a new invitation
             </translate>
           </button>
@@ -99,12 +99,12 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
         <thead>
           <tr>
             <th>
-              <translate translate-context="Content/Admin/Table.Label/Noun">
+              <translate >
                 Code
               </translate>
             </th>
             <th>
-              <translate translate-context="Content/Admin/Table.Label/Noun">
+              <translate >
                 Share link
               </translate>
             </th>
@@ -129,7 +129,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
         class="ui basic button"
         @click="invitations = []"
       >
-        <translate translate-context="Content/Library/Button.Label">
+        <translate >
           Clear
         </translate>
       </button>

@@ -77,7 +77,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :to="{name: 'library.tags.detail', params: {id: object.name }}"
                   >
                     <i class="info icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">
+                    <translate >
                       Open local profile
                     </translate>&nbsp;
                   </router-link>
@@ -95,7 +95,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                        <translate >View in Django's admin</translate>&nbsp;
                       </a>
                     </div>
                   </button>
@@ -105,12 +105,12 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    <translate translate-context="*/*/*/Verb">
+                    <translate >
                       Delete
                     </translate>
                     <template #modal-header>
                       <p>
-                        <translate translate-context="Popup/Library/Title">
+                        <translate >
                           Delete this tag?
                         </translate>
                       </p>
@@ -118,7 +118,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     <template #modal-content>
                       <div>
                         <p>
-                          <translate translate-context="Content/Moderation/Paragraph">
+                          <translate >
                             The tag will be removed and unlinked from any existing entity. This action is irreversible.
                           </translate>
                         </p>
@@ -126,7 +126,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     </template>
                     <template #modal-confirm>
                       <p>
-                        <translate translate-context="*/*/*/Verb">
+                        <translate >
                           Delete
                         </translate>
                       </p>
@@ -145,7 +145,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
+                  <translate >
                     Tag data
                   </translate>
                 </div>
@@ -154,7 +154,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">
+                      <translate >
                         Name
                       </translate>
                     </td>
@@ -171,7 +171,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
+                  <translate >
                     Activity
                   </translate>&nbsp;
                 </div>
@@ -180,7 +180,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
+                      <translate >
                         First seen
                       </translate>
                     </td>
@@ -197,7 +197,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
+                  <translate >
                     Audio content
                   </translate>&nbsp;
                 </div>
@@ -207,7 +207,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('tag', object.name) }}">
-                        <translate translate-context="*/*/*/Noun">
+                        <translate >
                           Artists
                         </translate>
                       </router-link>
@@ -219,7 +219,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('tag', object.name) }}">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Albums
                         </translate>
                       </router-link>
@@ -231,7 +231,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('tag', object.name) }}">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Tracks
                         </translate>
                       </router-link>

@@ -78,13 +78,13 @@ watchEffect(() => {
             <h3 class="ui header">
               <translate
                 v-if="track.artist?.content_category === 'music'"
-                translate-context="Content/*/*"
+
               >
                 Track Details
               </translate>
               <translate
                 v-else
-                translate-context="Content/*/*"
+
               >
                 Episode Details
               </translate>
@@ -93,7 +93,7 @@ watchEffect(() => {
               <tbody>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*">
+                    <translate >
                       Duration
                     </translate>
                   </td>
@@ -103,7 +103,7 @@ watchEffect(() => {
                     </template>
                     <translate
                       v-else
-                      translate-context="*/*/*"
+
                     >
                       N/A
                     </translate>
@@ -111,7 +111,7 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">
+                    <translate >
                       Size
                     </translate>
                   </td>
@@ -121,7 +121,7 @@ watchEffect(() => {
                     </template>
                     <translate
                       v-else
-                      translate-context="*/*/*"
+
                     >
                       N/A
                     </translate>
@@ -129,7 +129,7 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">
+                    <translate >
                       Codec
                     </translate>
                   </td>
@@ -139,7 +139,7 @@ watchEffect(() => {
                     </template>
                     <translate
                       v-else
-                      translate-context="*/*/*"
+
                     >
                       N/A
                     </translate>
@@ -147,7 +147,7 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/Track/*/Noun">
+                    <translate >
                       Bitrate
                     </translate>
                   </td>
@@ -157,7 +157,7 @@ watchEffect(() => {
                     </template>
                     <translate
                       v-else
-                      translate-context="*/*/*"
+
                     >
                       N/A
                     </translate>
@@ -165,7 +165,7 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*">
+                    <translate >
                       Downloads
                     </translate>
                   </td>
@@ -188,7 +188,7 @@ watchEffect(() => {
             :can-update="false"
           />
           <h2 class="ui header">
-            <translate translate-context="Content/*/*">
+            <translate >
               Release Details
             </translate>
           </h2>
@@ -196,7 +196,7 @@ watchEffect(() => {
             <tbody>
               <tr>
                 <td>
-                  <translate translate-context="*/*/*/Noun">
+                  <translate >
                     Artist
                   </translate>
                 </td>
@@ -210,13 +210,13 @@ watchEffect(() => {
                 <td>
                   <translate
                     v-if="track.album.artist.content_category === 'music'"
-                    translate-context="*/*/*/Noun"
+
                   >
                     Album
                   </translate>
                   <translate
                     v-else
-                    translate-context="*/*/*"
+
                   >
                     Serie
                   </translate>
@@ -229,7 +229,7 @@ watchEffect(() => {
               </tr>
               <tr>
                 <td>
-                  <translate translate-context="*/*/*">
+                  <translate >
                     Year
                   </translate>
                 </td>
@@ -238,7 +238,7 @@ watchEffect(() => {
                     {{ momentFormat(new Date(track.album.release_date), 'Y') }}
                   </template>
                   <template v-else>
-                    <translate translate-context="*/*/*">
+                    <translate >
                       N/A
                     </translate>
                   </template>
@@ -246,7 +246,7 @@ watchEffect(() => {
               </tr>
               <tr>
                 <td>
-                  <translate translate-context="Content/Track/*/Noun">
+                  <translate >
                     Copyright
                   </translate>
                 </td>
@@ -256,7 +256,7 @@ watchEffect(() => {
                     :title="track.copyright"
                   >{{ truncate(track.copyright, 50) }}</span>
                   <template v-else>
-                    <translate translate-context="*/*/*">
+                    <translate >
                       N/A
                     </translate>
                   </template>
@@ -264,7 +264,7 @@ watchEffect(() => {
               </tr>
               <tr>
                 <td>
-                  <translate translate-context="Content/*/*/Noun">
+                  <translate >
                     License
                   </translate>
                 </td>
@@ -277,7 +277,7 @@ watchEffect(() => {
                   >{{ license.name }}</a>
                   <translate
                     v-else
-                    translate-context="*/*/*"
+
                   >
                     N/A
                   </translate>
@@ -285,7 +285,7 @@ watchEffect(() => {
               </tr>
               <tr v-if="!track.is_local">
                 <td>
-                  <translate translate-context="Content/*/*/Noun">
+                  <translate >
                     URL
                   </translate>
                 </td>
@@ -308,10 +308,10 @@ watchEffect(() => {
             rel="noreferrer noopener"
           >
             <i class="external icon" />
-            <translate translate-context="Content/*/*/Clickable, Verb">View on MusicBrainz</translate>
+            <translate >View on MusicBrainz</translate>
           </a>
           <h2 class="ui header">
-            <translate translate-context="Content/*/Title/Noun">
+            <translate >
               Related Playlists
             </translate>
           </h2>
@@ -321,7 +321,7 @@ watchEffect(() => {
           />
 
           <h2 class="ui header">
-            <translate translate-context="Content/*/Title/Noun">
+            <translate >
               Related Libraries
             </translate>
           </h2>
@@ -329,7 +329,7 @@ watchEffect(() => {
             :url="`tracks/${track.id}/libraries/`"
             @loaded="emit('libraries-loaded', $event)"
           >
-            <translate translate-context="Content/Track/Paragraph">
+            <translate >
               This track is present in the following libraries:
             </translate>
           </library-widget>

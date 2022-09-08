@@ -53,7 +53,7 @@ const purgeErroredFiles = () => purge('errored')
 <template>
   <div class="ui segment">
     <h3 class="ui header">
-      <translate translate-context="Content/Library/Title">
+      <translate >
         Current usage
       </translate>
     </h3>
@@ -62,7 +62,7 @@ const purgeErroredFiles = () => purge('errored')
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        <translate translate-context="Content/Library/Paragraph">
+        <translate >
           Loading usage data…
         </translate>
       </div>
@@ -84,7 +84,7 @@ const purgeErroredFiles = () => purge('errored')
         class="label"
       >
         <translate
-          translate-context="Content/Library/Paragraph"
+
           :translate-params="{max: humanSize(quotaStatus.max * 1000 * 1000), current: humanSize(quotaStatus.current * 1000 * 1000)}"
         >
           %{ current } used on %{ max } allowed
@@ -105,7 +105,7 @@ const purgeErroredFiles = () => purge('errored')
             {{ humanSize(quotaStatus.pending * 1000 * 1000) }}
           </div>
           <div class="label">
-            <translate translate-context="Content/Library/Label">
+            <translate >
               Pending files
             </translate>
           </div>
@@ -115,7 +115,7 @@ const purgeErroredFiles = () => purge('errored')
             class="ui basic primary tiny button"
             :to="{name: 'content.libraries.files', query: {q: compileTokens([{field: 'status', value: 'pending'}])}}"
           >
-            <translate translate-context="Content/Library/Link/Verb">
+            <translate >
               View files
             </translate>
           </router-link>
@@ -124,26 +124,26 @@ const purgeErroredFiles = () => purge('errored')
             class="ui basic tiny button"
             :action="purgePendingFiles"
           >
-            <translate translate-context="*/*/*/Verb">
+            <translate >
               Purge
             </translate>
             <template #modal-header>
               <p>
-                <translate translate-context="Popup/Library/Title">
+                <translate >
                   Purge pending files?
                 </translate>
               </p>
             </template>
             <template #modal-content>
               <p>
-                <translate translate-context="Popup/Library/Paragraph">
+                <translate >
                   Removes uploaded but yet to be processed tracks completely, adding the corresponding data to your quota.
                 </translate>
               </p>
             </template>
             <template #modal-confirm>
               <div>
-                <translate translate-context="*/*/*/Verb">
+                <translate >
                   Purge
                 </translate>
               </div>
@@ -160,7 +160,7 @@ const purgeErroredFiles = () => purge('errored')
             {{ humanSize(quotaStatus.skipped * 1000 * 1000) }}
           </div>
           <div class="label">
-            <translate translate-context="Content/Library/Label">
+            <translate >
               Skipped files
             </translate>
           </div>
@@ -170,7 +170,7 @@ const purgeErroredFiles = () => purge('errored')
             class="ui basic primary tiny button"
             :to="{name: 'content.libraries.files', query: {q: compileTokens([{field: 'status', value: 'skipped'}])}}"
           >
-            <translate translate-context="Content/Library/Link/Verb">
+            <translate >
               View files
             </translate>
           </router-link>
@@ -178,26 +178,26 @@ const purgeErroredFiles = () => purge('errored')
             class="ui basic tiny button"
             :action="purgeSkippedFiles"
           >
-            <translate translate-context="*/*/*/Verb">
+            <translate >
               Purge
             </translate>
             <template #modal-header>
               <p>
-                <translate translate-context="Popup/Library/Title">
+                <translate >
                   Purge skipped files?
                 </translate>
               </p>
             </template>
             <template #modal-content>
               <p>
-                <translate translate-context="Popup/Library/Paragraph">
+                <translate >
                   Removes uploaded tracks skipped during the import processes completely, adding the corresponding data to your quota.
                 </translate>
               </p>
             </template>
             <template #modal-confirm>
               <div>
-                <translate translate-context="*/*/*/Verb">
+                <translate >
                   Purge
                 </translate>
               </div>
@@ -214,7 +214,7 @@ const purgeErroredFiles = () => purge('errored')
             {{ humanSize(quotaStatus.errored * 1000 * 1000) }}
           </div>
           <div class="label">
-            <translate translate-context="Content/Library/Label">
+            <translate >
               Errored files
             </translate>
           </div>
@@ -224,7 +224,7 @@ const purgeErroredFiles = () => purge('errored')
             class="ui basic primary tiny button"
             :to="{name: 'content.libraries.files', query: {q: compileTokens([{field: 'status', value: 'errored'}])}}"
           >
-            <translate translate-context="Content/Library/Link/Verb">
+            <translate >
               View files
             </translate>
           </router-link>
@@ -232,26 +232,26 @@ const purgeErroredFiles = () => purge('errored')
             class="ui basic tiny button"
             :action="purgeErroredFiles"
           >
-            <translate translate-context="*/*/*/Verb">
+            <translate >
               Purge
             </translate>
             <template #modal-header>
               <p>
-                <translate translate-context="Popup/Library/Title">
+                <translate >
                   Purge errored files?
                 </translate>
               </p>
             </template>
             <template #modal-content>
               <p>
-                <translate translate-context="Popup/Library/Paragraph">
+                <translate >
                   Removes uploaded tracks that could not be processed by the server completely, adding the corresponding data to your quota.
                 </translate>
               </p>
             </template>
             <template #modal-confirm>
               <div>
-                <translate translate-context="*/*/*/Verb">
+                <translate >
                   Purge
                 </translate>
               </div>

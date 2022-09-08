@@ -2,7 +2,7 @@
 import SemanticModal from '~/components/semantic/Modal.vue'
 import { useVModel } from '@vueuse/core'
 import { computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 interface Events {
   (e: 'update:show', show: boolean): void
@@ -17,22 +17,22 @@ const props = defineProps<Props>()
 
 const showRef = useVModel(props, 'show', emit)
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const general = computed(() => [
   {
-    title: $pgettext('Popup/Keyboard shortcuts/Title', 'General shortcuts'),
+    title: t('General shortcuts'),
     shortcuts: [
       {
         key: 'h',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Show available keyboard shortcuts')
+        summary: t('Show available keyboard shortcuts')
       },
       {
         key: 'shift + f',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Focus searchbar')
+        summary: t('Focus searchbar')
       },
       {
         key: 'esc',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Unfocus searchbar')
+        summary: t('Unfocus searchbar')
       }
     ]
   }
@@ -40,67 +40,67 @@ const general = computed(() => [
 
 const player = computed(() => [
   {
-    title: $pgettext('Popup/Keyboard shortcuts/Title', 'Audio player shortcuts'),
+    title: t('Audio player shortcuts'),
     shortcuts: [
       {
         key: 'p',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Pause/play the current track')
+        summary: t('Pause/play the current track')
       },
       {
         key: 'left',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Seek backwards 5s')
+        summary: t('Seek backwards 5s')
       },
       {
         key: 'right',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Seek forwards 5s')
+        summary: t('Seek forwards 5s')
       },
       {
         key: 'shift + left',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Seek backwards 30s')
+        summary: t('Seek backwards 30s')
       },
       {
         key: 'shift + right',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Seek forwards 30s')
+        summary: t('Seek forwards 30s')
       },
       {
         key: 'ctrl + shift + left',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Play previous track')
+        summary: t('Play previous track')
       },
       {
         key: 'ctrl + shift + right',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Play next track')
+        summary: t('Play next track')
       },
       {
         key: 'shift + up',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Increase volume')
+        summary: t('Increase volume')
       },
       {
         key: 'shift + down',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Decrease volume')
+        summary: t('Decrease volume')
       },
       {
         key: 'm',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Toggle mute')
+        summary: t('Toggle mute')
       },
       {
         key: 'e',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Expand queue/player view')
+        summary: t('Expand queue/player view')
       },
       {
         key: 'l',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Toggle queue looping')
+        summary: t('Toggle queue looping')
       },
       {
         key: 's',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Shuffle queue')
+        summary: t('Shuffle queue')
       },
       {
         key: 'q',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Clear queue')
+        summary: t('Clear queue')
       },
       {
         key: 'f',
-        summary: $pgettext('Popup/Keyboard shortcuts/Table.Label/Verb', 'Toggle favorite')
+        summary: t('Toggle favorite')
       }
     ]
   }
@@ -110,7 +110,7 @@ const player = computed(() => [
 <template>
   <semantic-modal v-model:show="showRef">
     <header class="header">
-      <translate translate-context="*/*/*/Noun">
+      <translate >
         Keyboard shortcuts
       </translate>
     </header>
@@ -156,7 +156,7 @@ const player = computed(() => [
     </section>
     <footer class="actions">
       <button class="ui basic cancel button">
-        <translate translate-context="*/*/Button.Label/Verb">
+        <translate >
           Close
         </translate>
       </button>

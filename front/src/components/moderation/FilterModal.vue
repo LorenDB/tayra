@@ -4,14 +4,14 @@ import type { BackendError } from '~/types'
 import axios from 'axios'
 
 import { computed, ref } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import SemanticModal from '~/components/semantic/Modal.vue'
 import useLogger from '~/composables/useLogger'
 
 const logger = useLogger()
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const store = useStore()
 const show = computed({
@@ -45,7 +45,7 @@ const hide = async () => {
     store.state.moderation.lastUpdate = new Date()
     store.commit('moderation/contentFilter', response.data)
     store.commit('ui/addMessage', {
-      content: $pgettext('*/Moderation/Message', 'Content filter successfully added'),
+      content: t('Content filter successfully added'),
       date: new Date()
     })
   } catch (error) {
@@ -62,7 +62,7 @@ const hide = async () => {
     <h4 class="header">
       <translate
         v-if="type === 'artist'"
-        translate-context="Popup/Moderation/Title/Verb"
+
         :translate-params="{name: target?.name}"
       >
         Do you want to hide content from artist "%{ name }"?
@@ -76,7 +76,7 @@ const hide = async () => {
           class="ui negative message"
         >
           <h4 class="header">
-            <translate translate-context="Popup/Moderation/Error message">
+            <translate >
               Error while creating filter
             </translate>
           </h4>
@@ -91,34 +91,34 @@ const hide = async () => {
         </div>
         <template v-if="type === 'artist'">
           <p>
-            <translate translate-context="Popup/Moderation/Paragraph">
+            <translate >
               You will not see tracks, albums and user activity linked to this artist any more:
             </translate>
           </p>
           <ul>
             <li>
-              <translate translate-context="Popup/Moderation/List item">
+              <translate >
                 In other users favorites and listening history
               </translate>
             </li>
             <li>
-              <translate translate-context="Popup/Moderation/List item">
+              <translate >
                 In "Recently added" widget
               </translate>
             </li>
             <li>
-              <translate translate-context="Popup/Moderation/List item">
+              <translate >
                 In artists and album listings
               </translate>
             </li>
             <li>
-              <translate translate-context="Popup/Moderation/List item">
+              <translate >
                 In radio suggestions
               </translate>
             </li>
           </ul>
           <p>
-            <translate translate-context="Popup/Moderation/Paragraph">
+            <translate >
               You can manage and update your filters any time from your account settings.
             </translate>
           </p>
@@ -127,7 +127,7 @@ const hide = async () => {
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate translate-context="*/*/Button.Label/Verb">
+        <translate >
           Cancel
         </translate>
       </button>
@@ -135,7 +135,7 @@ const hide = async () => {
         :class="['ui', 'success', {loading: isLoading}, 'button']"
         @click="hide"
       >
-        <translate translate-context="Popup/*/Button.Label">
+        <translate >
           Hide content
         </translate>
       </button>

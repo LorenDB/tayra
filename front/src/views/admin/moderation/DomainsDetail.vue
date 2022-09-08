@@ -2,7 +2,7 @@
 import type { InstancePolicy } from '~/types'
 
 import { humanSize } from '~/utils/filters'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { get } from 'lodash-es'
 
@@ -20,10 +20,10 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const labels = computed(() => ({
-  statsWarning: $pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
+  statsWarning: t('Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
 }))
 
 const isLoadingPolicy = ref(false)
@@ -133,7 +133,7 @@ const setAllowList = async (value: boolean) => {
                       rel="noopener noreferrer"
                       class="logo-wrapper"
                     >
-                      <translate translate-context="Content/Moderation/Link/Verb">Open website</translate>&nbsp;
+                      <translate >Open website</translate>&nbsp;
                       <i class="external icon" />
                     </a>
                   </div>
@@ -149,7 +149,7 @@ const setAllowList = async (value: boolean) => {
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                    <translate >View in Django's admin</translate>&nbsp;
                   </a>
                 </div>
                 <div
@@ -162,7 +162,7 @@ const setAllowList = async (value: boolean) => {
                     @click.prevent="setAllowList(false)"
                   >
                     <i class="x icon" />
-                    <translate translate-context="Content/Moderation/Action/Verb">
+                    <translate >
                       Remove from allow-list
                     </translate>
                   </button>
@@ -172,7 +172,7 @@ const setAllowList = async (value: boolean) => {
                     @click.prevent="setAllowList(true)"
                   >
                     <i class="check icon" />
-                    <translate translate-context="Content/Moderation/Action/Verb">
+                    <translate >
                       Add to allow-list
                     </translate>
                   </button>
@@ -195,13 +195,13 @@ const setAllowList = async (value: boolean) => {
                 <header class="ui header">
                   <h3>
                     <i class="shield icon" />
-                    <translate translate-context="Content/Moderation/Card.Title">
+                    <translate >
                       You don't have any rule in place for this domain.
                     </translate>
                   </h3>
                 </header>
                 <p>
-                  <translate translate-context="Content/Moderation/Card.Paragraph">
+                  <translate >
                     Moderation policies help you control how your instance interact with a given domain or account.
                   </translate>
                 </p>
@@ -219,7 +219,7 @@ const setAllowList = async (value: boolean) => {
               >
                 <header class="ui header">
                   <h3>
-                    <translate translate-context="Content/Moderation/Card.Title">
+                    <translate >
                       This domain is subject to specific moderation rules
                     </translate>
                   </h3>
@@ -245,7 +245,7 @@ const setAllowList = async (value: boolean) => {
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
+                  <translate >
                     Instance data
                   </translate>
                 </div>
@@ -254,20 +254,20 @@ const setAllowList = async (value: boolean) => {
                 <tbody>
                   <tr v-if="allowListEnabled">
                     <td>
-                      <translate translate-context="Content/Moderation/*/Adjective">
+                      <translate >
                         Is present on allow-list
                       </translate>
                     </td>
                     <td>
                       <translate
                         v-if="object.allowed"
-                        translate-context="*/*/*"
+
                       >
                         Yes
                       </translate>
                       <translate
                         v-else
-                        translate-context="*/*/*"
+
                       >
                         No
                       </translate>
@@ -275,7 +275,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/*/Table.Label">
+                      <translate >
                         Last checked
                       </translate>
                     </td>
@@ -286,7 +286,7 @@ const setAllowList = async (value: boolean) => {
                       />
                       <translate
                         v-else
-                        translate-context="*/*/*"
+
                       >
                         N/A
                       </translate>
@@ -296,44 +296,44 @@ const setAllowList = async (value: boolean) => {
                   <template v-if="object.nodeinfo && object.nodeinfo.status === 'ok'">
                     <tr>
                       <td>
-                        <translate translate-context="Content/Moderation/Table.Label">
+                        <translate >
                           Software
                         </translate>
                       </td>
                       <td>
-                        {{ get(object, 'nodeinfo.payload.software.name', $pgettext('*/*/*', 'N/A')) }} ({{ get(object, 'nodeinfo.payload.software.version', $pgettext('*/*/*', 'N/A')) }})
+                        {{ get(object, 'nodeinfo.payload.software.name', t('N/A')) }} ({{ get(object, 'nodeinfo.payload.software.version', t('N/A')) }})
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <translate translate-context="*/*/*/Noun">
+                        <translate >
                           Name
                         </translate>
                       </td>
                       <td>
-                        {{ get(object, 'nodeinfo.payload.metadata.nodeName', $pgettext('*/*/*', 'N/A')) }}
+                        {{ get(object, 'nodeinfo.payload.metadata.nodeName', t('N/A')) }}
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <translate translate-context="Content/*/*">
+                        <translate >
                           Total users
                         </translate>
                       </td>
                       <td>
-                        {{ get(object, 'nodeinfo.payload.usage.users.total', $pgettext('*/*/*', 'N/A')) }}
+                        {{ get(object, 'nodeinfo.payload.usage.users.total', t('N/A')) }}
                       </td>
                     </tr>
                   </template>
                   <template v-if="object.nodeinfo && object.nodeinfo.status === 'error'">
                     <tr>
                       <td>
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Status
                         </translate>
                       </td>
                       <td>
-                        <translate translate-context="Content/Moderation/Table">
+                        <translate >
                           Error while fetching node info
                         </translate>&nbsp;
 
@@ -348,7 +348,7 @@ const setAllowList = async (value: boolean) => {
                 :url="'manage/federation/domains/' + object.name + '/nodeinfo/'"
                 @action-done="refreshNodeInfo"
               >
-                <translate translate-context="Content/Moderation/Button.Label/Verb">
+                <translate >
                   Refresh node info
                 </translate>
               </ajax-button>
@@ -359,7 +359,7 @@ const setAllowList = async (value: boolean) => {
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
+                  <translate >
                     Activity
                   </translate>&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
@@ -381,7 +381,7 @@ const setAllowList = async (value: boolean) => {
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
+                      <translate >
                         First seen
                       </translate>
                     </td>
@@ -394,7 +394,7 @@ const setAllowList = async (value: boolean) => {
                       <router-link
                         :to="{name: 'manage.moderation.accounts.list', query: {q: 'domain:' + object.name }}"
                       >
-                        <translate translate-context="Content/Moderation/Table.Label.Link">
+                        <translate >
                           Known accounts
                         </translate>
                       </router-link>
@@ -405,7 +405,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
+                      <translate >
                         Emitted messages
                       </translate>
                     </td>
@@ -415,7 +415,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
+                      <translate >
                         Received library follows
                       </translate>
                     </td>
@@ -425,7 +425,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
+                      <translate >
                         Emitted library follows
                       </translate>
                     </td>
@@ -442,7 +442,7 @@ const setAllowList = async (value: boolean) => {
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
+                  <translate >
                     Audio content
                   </translate>&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
@@ -464,7 +464,7 @@ const setAllowList = async (value: boolean) => {
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
+                      <translate >
                         Cached size
                       </translate>
                     </td>
@@ -474,7 +474,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label">
+                      <translate >
                         Total size
                       </translate>
                     </td>
@@ -485,7 +485,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.channels', query: {q: getQuery('domain', object.name) }}">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Channels
                         </translate>
                       </router-link>
@@ -497,7 +497,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('domain', object.name) }}">
-                        <translate translate-context="*/*/*/Noun">
+                        <translate >
                           Libraries
                         </translate>
                       </router-link>
@@ -509,7 +509,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('domain', object.name) }}">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Uploads
                         </translate>
                       </router-link>
@@ -521,7 +521,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('domain', object.name) }}">
-                        <translate translate-context="*/*/*/Noun">
+                        <translate >
                           Artists
                         </translate>
                       </router-link>
@@ -533,7 +533,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('domain', object.name) }}">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Albums
                         </translate>
                       </router-link>
@@ -545,7 +545,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('domain', object.name) }}">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Tracks
                         </translate>
                       </router-link>

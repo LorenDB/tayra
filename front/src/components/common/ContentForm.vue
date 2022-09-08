@@ -2,7 +2,7 @@
 import axios from 'axios'
 import { useVModel, watchDebounced, useTextareaAutosize, syncRef } from '@vueuse/core'
 import { ref, computed, watchEffect, onMounted, nextTick, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 interface Events {
   (e: 'update:modelValue', value: string): void
@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
   required: false
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const { textarea, input } = useTextareaAutosize()
 const value = useVModel(props, 'modelValue', emit)
 syncRef(value, input)
@@ -36,7 +36,7 @@ const preview = ref()
 const isLoadingPreview = ref(false)
 
 const labels = computed(() => ({
-  placeholder: props.placeholder ?? $pgettext('*/Form/Placeholder', 'Write a few words here…')
+  placeholder: props.placeholder ?? t('Write a few words here…')
 }))
 
 const remainingChars = computed(() => props.charLimit - props.modelValue.length)
@@ -86,7 +86,7 @@ onMounted(async () => {
           :class="[{active: !isPreviewing}, 'item']"
           @click.prevent="isPreviewing = false"
         >
-          <translate translate-context="*/Form/Menu.item">
+          <translate >
             Write
           </translate>
         </button>
@@ -94,7 +94,7 @@ onMounted(async () => {
           :class="[{active: isPreviewing}, 'item']"
           @click.prevent="isPreviewing = true"
         >
-          <translate translate-context="*/Form/Menu.item">
+          <translate >
             Preview
           </translate>
         </button>
@@ -112,7 +112,7 @@ onMounted(async () => {
           </div>
         </div>
         <p v-else-if="!preview">
-          <translate translate-context="*/Form/Paragraph">
+          <translate >
             Nothing to preview.
           </translate>
         </p>
@@ -141,7 +141,7 @@ onMounted(async () => {
         {{ remainingChars }}
       </span>
       <p>
-        <translate translate-context="*/Form/Paragraph">
+        <translate >
           Markdown syntax is supported.
         </translate>
       </p>

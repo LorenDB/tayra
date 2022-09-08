@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BackendError } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { computed, ref } from 'vue'
 
@@ -15,12 +15,12 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const router = useRouter()
 
 const labels = computed(() => ({
-  domains: $pgettext('*/Moderation/*/Noun', 'Domains')
+  domains: t('Domains')
 }))
 
 const domainName = ref('')
@@ -50,7 +50,7 @@ const createDomain = async () => {
   <main v-title="labels.domains">
     <section class="ui vertical stripe segment">
       <h2 class="ui left floated header">
-        <translate translate-context="*/Moderation/*/Noun">
+        <translate >
           Domains
         </translate>
       </h2>
@@ -64,7 +64,7 @@ const createDomain = async () => {
           class="ui negative message"
         >
           <h4 class="header">
-            <translate translate-context="Content/Moderation/Message.Title">
+            <translate >
               Error while creating domain
             </translate>
           </h4>
@@ -79,7 +79,7 @@ const createDomain = async () => {
         </div>
         <div class="inline fields">
           <div class="field">
-            <label for="add-domain"><translate translate-context="Content/Moderation/Form.Label/Verb">Add a domain</translate></label>
+            <label for="add-domain"><translate >Add a domain</translate></label>
             <input
               id="add-domain"
               v-model="domainName"
@@ -97,7 +97,7 @@ const createDomain = async () => {
               type="checkbox"
               name="allowed"
             >
-            <label for="allowed"><translate translate-context="Content/Moderation/Action/Verb">Add to allow-list</translate></label>
+            <label for="allowed"><translate >Add to allow-list</translate></label>
           </div>
           <div class="field">
             <button
@@ -105,7 +105,7 @@ const createDomain = async () => {
               type="submit"
               :disabled="isCreating"
             >
-              <translate translate-context="Content/Moderation/Button/Verb">
+              <translate >
                 Add
               </translate>
             </button>

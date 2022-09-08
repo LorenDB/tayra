@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BackendError } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 
 import axios from 'axios'
@@ -15,10 +15,10 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const labels = computed(() => ({
-  changePassword: $pgettext('*/Signup/Title', 'Change your password')
+  changePassword: t('Change your password')
 }))
 
 const newPassword = ref('')
@@ -68,7 +68,7 @@ const submit = async () => {
             class="ui negative message"
           >
             <h4 class="header">
-              <translate translate-context="Content/Signup/Card.Title">
+              <translate >
                 Error while changing your password
               </translate>
             </h4>
@@ -83,14 +83,14 @@ const submit = async () => {
           </div>
           <template v-if="token && uid">
             <div class="field">
-              <label for="password-field"><translate translate-context="Content/Settings/Input.Label">New password</translate></label>
+              <label for="password-field"><translate >New password</translate></label>
               <password-input
                 v-model="newPassword"
                 field-id="password-field"
               />
             </div>
             <router-link :to="{path: '/login'}">
-              <translate translate-context="Content/Signup/Link">
+              <translate >
                 Back to login
               </translate>
             </router-link>
@@ -98,14 +98,14 @@ const submit = async () => {
               :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
               type="submit"
             >
-              <translate translate-context="Content/Signup/Button.Label">
+              <translate >
                 Update your password
               </translate>
             </button>
           </template>
           <template v-else>
             <p>
-              <translate translate-context="Content/Signup/Paragraph">
+              <translate >
                 If the e-mail address provided in the previous step is valid and linked to a user account, you should receive an e-mail with reset instructions in the next couple of minutes.
               </translate>
             </p>
@@ -116,17 +116,17 @@ const submit = async () => {
           class="ui positive message"
         >
           <h4 class="header">
-            <translate translate-context="Content/Signup/Card.Title">
+            <translate >
               Password updated successfully
             </translate>
           </h4>
           <p>
-            <translate translate-context="Content/Signup/Card.Paragraph">
+            <translate >
               Your password has been updated successfully.
             </translate>
           </p>
           <router-link :to="{name: 'login'}">
-            <translate translate-context="Content/Signup/Link/Verb">
+            <translate >
               Proceed to login
             </translate>
           </router-link>

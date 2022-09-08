@@ -1,6 +1,6 @@
 import type { Album, Artist, Content, Track, Actor } from '~/types'
 
-import { gettext } from '~/init/locale'
+import { useI18n } from 'vue-i18n'
 
 export interface ConfigField {
   id: string
@@ -20,14 +20,14 @@ export type EditObject = (Partial<Artist> | Partial<Album> | Partial<Track>) & {
 export type EditObjectType = 'artist' | 'album' | 'track'
 type Configs = Record<EditObjectType, { fields: (EditableConfigField|ConfigField)[] }>
 
-const { $pgettext } = gettext
+const { t } = useI18n()
 const getContentValueRepr = (val: Content) => val.text
 
 const description: ConfigField = {
   id: 'description',
   type: 'content',
   required: true,
-  label: $pgettext('*/*/*/Noun', 'Description'),
+  label: t('Description'),
   getValue: (obj) => obj.description ?? { text: '', content_type: 'text/markdown' },
   getValueRepr: getContentValueRepr
 }
@@ -36,7 +36,7 @@ const cover: ConfigField = {
   id: 'cover',
   type: 'attachment',
   required: false,
-  label: $pgettext('Content/*/*/Noun', 'Cover'),
+  label: t('Cover'),
   getValue: (obj) => obj.cover?.uuid ?? null
 }
 
@@ -44,7 +44,7 @@ const tags: ConfigField = {
   id: 'tags',
   type: 'tags',
   required: true,
-  label: $pgettext('*/*/*/Noun', 'Tags'),
+  label: t('Tags'),
   getValue: (obj) => { return obj.tags },
   getValueRepr: (tags: string[]) => tags.slice().sort().join('\n')
 }
@@ -57,7 +57,7 @@ export default (): Configs => ({
         id: 'name',
         type: 'text',
         required: true,
-        label: $pgettext('*/*/*/Noun', 'Name'),
+        label: t('Name'),
         getValue: (artist) => (artist as Artist).name
       },
       description,
@@ -71,7 +71,7 @@ export default (): Configs => ({
         id: 'title',
         type: 'text',
         required: true,
-        label: $pgettext('*/*/*/Noun', 'Title'),
+        label: t('Title'),
         getValue: (album) => (album as Album).title
       },
       description,
@@ -79,7 +79,7 @@ export default (): Configs => ({
         id: 'release_date',
         type: 'text',
         required: false,
-        label: $pgettext('Content/*/*/Noun', 'Release date'),
+        label: t('Release date'),
         getValue: (album) => (album as Album).release_date
       },
       cover,
@@ -92,7 +92,7 @@ export default (): Configs => ({
         id: 'title',
         type: 'text',
         required: true,
-        label: $pgettext('*/*/*/Noun', 'Title'),
+        label: t('Title'),
         getValue: (track) => (track as Track).title
       },
       description,
@@ -102,21 +102,21 @@ export default (): Configs => ({
         type: 'text',
         inputType: 'number',
         required: false,
-        label: $pgettext('*/*/*/Short, Noun', 'Position'),
+        label: t('Position'),
         getValue: (track) => (track as Track).position
       },
       {
         id: 'copyright',
         type: 'text',
         required: false,
-        label: $pgettext('Content/Track/*/Noun', 'Copyright'),
+        label: t('Copyright'),
         getValue: (track) => (track as Track).copyright
       },
       {
         id: 'license',
         type: 'license',
         required: false,
-        label: $pgettext('Content/*/*/Noun', 'License'),
+        label: t('License'),
         getValue: (track) => (track as Track).license
       },
       tags

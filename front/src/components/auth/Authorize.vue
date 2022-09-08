@@ -2,7 +2,7 @@
 import type { BackendError, Application } from '~/types'
 
 import axios from 'axios'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { whenever } from '@vueuse/core'
 import { ref, computed } from 'vue'
 
@@ -21,7 +21,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const sharedLabels = useSharedLabels()
 const knownScopes = useScopes()
 
@@ -84,7 +84,7 @@ const submit = async () => {
 }
 
 const labels = computed(() => ({
-  title: $pgettext('Head/Authorize/Title', 'Allow application')
+  title: t('Allow application')
 }))
 
 const requestedScopes = computed(() => props.scope.split(' '))
@@ -119,7 +119,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          <i class="lock open icon" /><translate translate-context="Content/Auth/Title/Verb">
+          <i class="lock open icon" /><translate >
             Authorize third-party app
           </translate>
         </h2>
@@ -132,7 +132,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
             v-if="application"
             class="header"
           >
-            <translate translate-context="Popup/Moderation/Error message">
+            <translate >
               Error while authorizing application
             </translate>
           </h4>
@@ -140,7 +140,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
             v-else
             class="header"
           >
-            <translate translate-context="Popup/Moderation/Error message">
+            <translate >
               Error while fetching application data
             </translate>
           </h4>
@@ -166,7 +166,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
         >
           <h3>
             <translate
-              translate-context="Content/Auth/Title"
+
               :translate-params="{app: application.name}"
             >
               %{ app } wants to access your Funkwhale account
@@ -183,20 +183,20 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
               <i class="pencil icon" />
-              <translate translate-context="Content/Auth/Label/Noun">Write-only</translate>
+              <translate >Write-only</translate>
             </span>
             <span
               v-else-if="!topic.write && topic.read"
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
-              <translate translate-context="Content/Auth/Label/Noun">Read-only</translate>
+              <translate >Read-only</translate>
             </span>
             <span
               v-else-if="topic.write && topic.read"
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
               <i class="pencil icon" />
-              <translate translate-context="Content/Auth/Label/Noun">Full access</translate>
+              <translate >Full access</translate>
             </span>
             <i :class="[topic.icon, 'icon']" />
             <div class="content">
@@ -207,7 +207,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
             </div>
           </h4>
           <div v-if="unknownRequestedScopes.length > 0">
-            <p><strong><translate translate-context="Content/Auth/Paragraph">The application is also requesting the following unknown permissions:</translate></strong></p>
+            <p><strong><translate >The application is also requesting the following unknown permissions:</translate></strong></p>
             <ul
               v-for="(unknownscope, key) in unknownRequestedScopes"
               :key="key"
@@ -221,7 +221,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
           >
             <i class="lock open icon" />
             <translate
-              translate-context="Content/Signup/Button.Label/Verb"
+
               :translate-params="{app: application.name}"
             >
               Authorize %{ app }
@@ -230,21 +230,21 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
           <p
             v-if="redirectUri === 'urn:ietf:wg:oauth:2.0:oob'"
             v-translate
-            translate-context="Content/Auth/Paragraph"
+
           >
             You will be shown a code to copy-paste in the application.
           </p>
           <p
             v-else
             v-translate="{url: redirectUri}"
-            translate-context="Content/Auth/Paragraph"
+
             :translate-params="{url: redirectUri}"
           >
             You will be redirected to <strong>%{ url }</strong>
           </p>
         </form>
         <div v-else-if="code">
-          <p><strong><translate translate-context="Content/Auth/Paragraph">Copy-paste the following code in the application:</translate></strong></p>
+          <p><strong><translate >Copy-paste the following code in the application:</translate></strong></p>
           <copy-input :value="code" />
         </div>
       </div>

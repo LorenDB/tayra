@@ -60,7 +60,7 @@ const imageUrl = computed(() => props.album.cover?.urls.original
     <div class="extra content">
       <span v-if="album.release_date">{{ momentFormat(new Date(album.release_date), 'Y') }} · </span>
       <translate
-        translate-context="*/*/*"
+
         :translate-params="{count: album.tracks_count}"
         :translate-n="album.tracks_count"
         translate-plural="%{ count } tracks"

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Head/Login/Title', 'Log Out')
+  title: t('Log Out')
 }))
 </script>
 
@@ -19,13 +19,13 @@ const labels = computed(() => ({
         class="ui small text container"
       >
         <h2>
-          <translate translate-context="Content/Login/Title">
+          <translate >
             Are you sure you want to log out?
           </translate>
         </h2>
         <p
           v-translate="{username: $store.state.auth.username}"
-          translate-context="Content/Login/Paragraph"
+
         >
           You are currently logged in as %{ username }
         </p>
@@ -33,7 +33,7 @@ const labels = computed(() => ({
           class="ui button"
           @click="$store.dispatch('auth/logout')"
         >
-          <translate translate-context="Content/Login/Button.Label">
+          <translate >
             Yes, log me out!
           </translate>
         </button>
@@ -43,7 +43,7 @@ const labels = computed(() => ({
         class="ui small text container"
       >
         <h2>
-          <translate translate-context="Content/Login/Title">
+          <translate >
             You aren't currently logged in
           </translate>
         </h2>
@@ -51,7 +51,7 @@ const labels = computed(() => ({
           to="/login"
           class="ui button"
         >
-          <translate translate-context="Content/Login/Button.Label">
+          <translate >
             Log in!
           </translate>
         </router-link>

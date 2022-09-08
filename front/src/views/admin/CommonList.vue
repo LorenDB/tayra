@@ -12,7 +12,7 @@ import UploadsTable from '~/components/manage/library/UploadsTable.vue'
 import UsersTable from '~/components/manage/users/UsersTable.vue'
 
 import { computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 type ViewType = 'accounts' | 'albums' | 'artists' | 'channels' | 'invitations' | 'libraries' | 'tags' | 'tracks' | 'uploads' | 'users'
 
@@ -25,18 +25,18 @@ const props = withDefaults(defineProps<Props>(), {
   defaultQuery: ''
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  accounts: $pgettext('*/Moderation/Title', 'Accounts'),
-  albums: $pgettext('*/*/*', 'Albums'),
-  artists: $pgettext('*/*/*/Noun', 'Artists'),
-  channels: $pgettext('*/*/*', 'Channels'),
-  invitations: $pgettext('*/Admin/*/Noun', 'Invitations'),
-  libraries: $pgettext('*/*/*/Noun', 'Libraries'),
-  tags: $pgettext('*/*/*/Noun', 'Tags'),
-  tracks: $pgettext('*/*/*', 'Tracks'),
-  uploads: $pgettext('*/*/*', 'Uploads'),
-  users: $pgettext('*/*/*/Noun', 'Users')
+  accounts: t('Accounts'),
+  albums: t('Albums'),
+  artists: t('Artists'),
+  channels: t('Channels'),
+  invitations: t('Invitations'),
+  libraries: t('Libraries'),
+  tags: t('Tags'),
+  tracks: t('Tracks'),
+  uploads: t('Uploads'),
+  users: t('Users')
 }))
 
 const title = computed(() => labels.value[props.type])

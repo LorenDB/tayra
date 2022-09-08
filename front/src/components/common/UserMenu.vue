@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { useGettext } from 'vue3-gettext'
+import { SUPPORTED_LOCALES } from '~/init/locale'
+import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
 
 import useThemeList from '~/composables/useThemeList'
 import useTheme from '~/composables/useTheme'
-import { computed } from 'vue'
 
 interface Events {
   (e: 'show:shortcuts-modal'): void
@@ -11,26 +12,26 @@ interface Events {
 
 const emit = defineEmits<Events>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const themes = useThemeList()
 const { theme } = useTheme()
 
 const labels = computed(() => ({
-  profile: $pgettext('*/*/*/Noun', 'Profile'),
-  settings: $pgettext('*/*/*/Noun', 'Settings'),
-  logout: $pgettext('Sidebar/Login/List item.Link/Verb', 'Log out'),
-  about: $pgettext('Sidebar/About/List item.Link', 'About'),
-  shortcuts: $pgettext('*/*/*/Noun', 'Keyboard shortcuts'),
-  support: $pgettext('Sidebar/*/Listitem.Link', 'Help'),
-  forum: $pgettext('Sidebar/*/Listitem.Link', 'Forum'),
-  docs: $pgettext('Sidebar/*/Listitem.Link', 'Documentation'),
-  language: $pgettext('Footer/Settings/Dropdown.Label/Short, Verb', 'Change language'),
-  theme: $pgettext('Footer/Settings/Dropdown.Label/Short, Verb', 'Change theme'),
-  chat: $pgettext('Sidebar/*/Listitem.Link', 'Chat room'),
-  git: $pgettext('Footer/*/List item.Link', 'Issue tracker'),
-  login: $pgettext('*/*/Button.Label/Verb', 'Log in'),
-  signup: $pgettext('*/*/Button.Label/Verb', 'Sign up'),
-  notifications: $pgettext('*/Notifications/*', 'Notifications')
+  profile: t('Profile'),
+  settings: t('Settings'),
+  logout: t('Log out'),
+  about: t('About'),
+  shortcuts: t('Keyboard shortcuts'),
+  support: t('Help'),
+  forum: t('Forum'),
+  docs: t('Documentation'),
+  language: t('Change language'),
+  theme: t('Change theme'),
+  chat: t('Chat room'),
+  git: t('Issue tracker'),
+  login: t('Log in'),
+  signup: t('Sign up'),
+  notifications: t('Notifications')
 }))
 </script>
 
@@ -45,11 +46,11 @@ const labels = computed(() => ({
         class="menu"
       >
         <a
-          v-for="(language, key) in $language.available"
+          v-for="(language, key) in SUPPORTED_LOCALES"
           :key="key"
-          :class="[{'active': $language.current === key},'item']"
+          :class="[{'active': $i18n.locale === key},'item']"
           :value="key"
-          @click="$store.dispatch('ui/currentLanguage', key)"
+          @click="$i18n.locale = key"
         >{{ language }}</a>
       </div>
     </div>

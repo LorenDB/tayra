@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BackendError } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 
 import axios from 'axios'
@@ -12,11 +12,11 @@ interface Events {
 
 const emit = defineEmits<Events>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const labels = computed(() => ({
-  placeholder: $pgettext('Content/Library/Input.Placeholder', 'Enter a library URL'),
-  submitLibrarySearch: $pgettext('Content/Library/Input.Label', 'Submit search')
+  placeholder: t('Enter a library URL'),
+  submitLibrarySearch: t('Submit search')
 }))
 
 const errors = ref([] as string[])
@@ -49,7 +49,7 @@ const scan = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/Library/Error message.Title">
+        <translate >
           Could not fetch remote library
         </translate>
       </h4>
@@ -63,7 +63,7 @@ const scan = async () => {
       </ul>
     </div>
     <div class="ui field">
-      <label for="library-search"><translate translate-context="Content/Library/Input.Label/Verb">Search a remote library</translate></label>
+      <label for="library-search"><translate >Search a remote library</translate></label>
       <div :class="['ui', 'action', {loading: isLoading}, 'input']">
         <input
           id="library-search"

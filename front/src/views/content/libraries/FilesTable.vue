@@ -7,7 +7,7 @@ import type { OrderingField } from '~/store/ui'
 
 import { humanSize, truncate } from '~/utils/filters'
 import { computed, ref, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import time from '~/utils/time'
 import axios from 'axios'
@@ -65,19 +65,19 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['artist_name', 'artist_name']
 ]
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: $pgettext('*/*/*/Verb', 'Delete'),
+    label: t('Delete'),
     isDangerous: true,
     allowAll: true,
     confirmColor: 'danger'
   },
   {
     name: 'relaunch_import',
-    label: $pgettext('Content/Library/Dropdown/Verb', 'Restart import'),
+    label: t('Restart import'),
     isDangerous: true,
     allowAll: true,
     filterCheckable: (filter: { import_status: ImportStatus }) => {
@@ -120,8 +120,8 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Library/Input.Placeholder', 'Search by title, artist, album…'),
-  showStatus: $pgettext('Content/Library/Button.Label/Verb', 'Show information about the upload status for this track')
+  searchPlaceholder: t('Search by title, artist, album…'),
+  showStatus: t('Show information about the upload status for this track')
 }))
 
 const detailedUpload = ref()
@@ -138,7 +138,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
       <div class="fields">
         <div class="ui six wide field">
           <label for="files-search">
-            <translate translate-context="Content/Search/Input.Label/Noun">Search</translate>
+            <translate >Search</translate>
           </label>
           <form @submit.prevent="query = search.value">
             <input
@@ -153,7 +153,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
         </div>
         <div class="field">
           <label for="import-status">
-            <translate translate-context="Content/*/*/Noun">Import status</translate>
+            <translate >Import status</translate>
           </label>
           <select
             id="import-status"
@@ -162,32 +162,32 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
             @change="addSearchToken('status', ($event.target as HTMLSelectElement).value)"
           >
             <option value>
-              <translate translate-context="Content/*/Dropdown">
+              <translate >
                 All
               </translate>
             </option>
             <option value="draft">
-              <translate translate-context="Content/Library/*/Short">
+              <translate >
                 Draft
               </translate>
             </option>
             <option value="pending">
-              <translate translate-context="Content/Library/*/Short">
+              <translate >
                 Pending
               </translate>
             </option>
             <option value="skipped">
-              <translate translate-context="Content/Library/*">
+              <translate >
                 Skipped
               </translate>
             </option>
             <option value="errored">
-              <translate translate-context="Content/Library/Dropdown">
+              <translate >
                 Failed
               </translate>
             </option>
             <option value="finished">
-              <translate translate-context="Content/Library/*">
+              <translate >
                 Finished
               </translate>
             </option>
@@ -195,7 +195,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
         </div>
         <div class="field">
           <label for="ordering-select">
-            <translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate>
+            <translate >Ordering</translate>
           </label>
           <select
             id="ordering-select"
@@ -213,7 +213,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
         </div>
         <div class="field">
           <label for="ordering-direction">
-            <translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate>
+            <translate >Ordering direction</translate>
           </label>
           <select
             id="ordering-direction"
@@ -221,12 +221,12 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Ascending
               </translate>
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Descending
               </translate>
             </option>
@@ -253,7 +253,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
         <div class="ui icon header">
           <i class="upload icon" />
           <translate
-            translate-context="Content/Home/Placeholder"
+
           >
             No tracks have been added to this library yet
           </translate>
@@ -274,37 +274,37 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
       >
         <template #header-cells>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Title
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Artist
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*">
+            <translate >
               Album
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Upload date
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
+            <translate >
               Import status
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/*/*">
+            <translate >
               Duration
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
+            <translate >
               Size
             </translate>
           </th>
@@ -364,7 +364,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
             {{ time.parse(scope.obj.duration) }}
           </td>
           <td v-else>
-            <translate translate-context="*/*/*">
+            <translate >
               N/A
             </translate>
           </td>
@@ -372,7 +372,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
             {{ humanSize(scope.obj.size) }}
           </td>
           <td v-else>
-            <translate translate-context="*/*/*">
+            <translate >
               N/A
             </translate>
           </td>
@@ -390,7 +390,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
 
       <span v-if="result && result.results.length > 0">
         <translate
-          translate-context="Content/*/Paragraph"
+
           :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
         >Showing results %{ start }-%{ end } on %{ total }</translate>
       </span>

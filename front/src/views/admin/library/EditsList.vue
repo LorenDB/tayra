@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
 import EditsCardList from '~/components/manage/library/EditsCardList.vue'
@@ -12,9 +12,9 @@ withDefaults(defineProps<Props>(), {
   defaultQuery: ''
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('*/Admin/*/Noun', 'Edits')
+  title: t('Edits')
 }))
 </script>
 
@@ -26,7 +26,7 @@ const labels = computed(() => ({
         :default-query="defaultQuery"
       >
         <h2 class="ui header">
-          <translate translate-context="Content/Admin/Title/Noun">
+          <translate >
             Library edits
           </translate>
         </h2>

@@ -42,7 +42,7 @@ const createForm = ref()
     </div>
     <div>
       <h2 class="ui with-actions header">
-        <translate translate-context="*/*/*">
+        <translate >
           Channels
         </translate>
         <div
@@ -54,13 +54,13 @@ const createForm = ref()
             @click.stop.prevent="showCreateModal = true"
           >
             <i class="plus icon" />
-            <translate translate-context="Content/Profile/Button">Add new</translate>
+            <translate >Add new</translate>
           </a>
         </div>
       </h2>
       <channels-widget :filters="{scope: `actor:${object.full_username}`}" />
       <h2 class="ui with-actions header">
-        <translate translate-context="Content/Profile/Header">
+        <translate >
           User Libraries
         </translate>
         <div
@@ -69,7 +69,7 @@ const createForm = ref()
         >
           <router-link :to="{name: 'content.libraries.index'}">
             <i class="plus icon" />
-            <translate translate-context="Content/Profile/Button">
+            <translate >
               Add new
             </translate>
           </router-link>
@@ -77,7 +77,7 @@ const createForm = ref()
       </h2>
       <library-widget :url="`federation/actors/${object.full_username}/libraries/`">
         <template #title>
-          <translate translate-context="Content/Profile/Paragraph">
+          <translate >
             This user shared the following libraries
           </translate>
         </template>
@@ -88,19 +88,19 @@ const createForm = ref()
       <h4 class="header">
         <translate
           v-if="step === 1"
-          translate-context="Content/Channel/*/Verb"
+
         >
           Create channel
         </translate>
         <translate
           v-else-if="category === 'podcast'"
-          translate-context="Content/Channel/*"
+
         >
           Podcast channel
         </translate>
         <translate
           v-else
-          translate-context="Content/Channel/*"
+
         >
           Artist channel
         </translate>
@@ -126,7 +126,7 @@ const createForm = ref()
           v-if="step === 1"
           class="ui basic deny button"
         >
-          <translate translate-context="*/*/Button.Label/Verb">
+          <translate >
             Cancel
           </translate>
         </button>
@@ -135,7 +135,7 @@ const createForm = ref()
           class="ui basic button"
           @click.stop.prevent="step -= 1"
         >
-          <translate translate-context="*/*/Button.Label/Verb">
+          <translate >
             Previous step
           </translate>
         </button>
@@ -144,7 +144,7 @@ const createForm = ref()
           class="ui primary button"
           @click.stop.prevent="step += 1"
         >
-          <translate translate-context="*/*/Button.Label">
+          <translate >
             Next step
           </translate>
         </button>
@@ -155,7 +155,7 @@ const createForm = ref()
           :disabled="!submittable && !loading"
           @click.prevent.stop="createForm.submit"
         >
-          <translate translate-context="*/Channels/Button.Label">
+          <translate >
             Create channel
           </translate>
         </button>

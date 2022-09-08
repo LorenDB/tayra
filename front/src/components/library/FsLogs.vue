@@ -15,7 +15,7 @@ defineProps<Props>()
       class="ui active dimmer"
     >
       <div class="ui text loader">
-        <translate translate-context="Content/Library/Paragraph">
+        <translate >
           Import hasn't started yet
         </translate>
       </div>

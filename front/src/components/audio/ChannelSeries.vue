@@ -84,7 +84,7 @@ fetchData()
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        <translate translate-context="*/*/Button,Label">
+        <translate >
           Show more
         </translate>
       </button>
@@ -95,7 +95,7 @@ fetchData()
         @refresh="fetchData()"
       >
         <p>
-          <translate translate-context="Content/Channels/*">
+          <translate >
             You may need to subscribe to this channel to see its contents.
           </translate>
         </p>

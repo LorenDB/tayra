@@ -3,7 +3,7 @@ import type { RadioConfig } from '~/store/radios'
 
 import { ref, reactive, computed, watch } from 'vue'
 import { useRouteQuery } from '@vueuse/router'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { syncRef } from '@vueuse/core'
 
 import axios from 'axios'
@@ -52,7 +52,7 @@ const results = reactive({
 
 const paginateBy = ref(25)
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 interface SearchType {
   id: QueryType
@@ -65,43 +65,43 @@ interface SearchType {
 const types = computed(() => [
   {
     id: 'artists',
-    label: $pgettext('*/*/*/Noun', 'Artists'),
+    label: t('Artists'),
     includeChannels: true,
     contentCategory: 'music'
   },
   {
     id: 'albums',
-    label: $pgettext('*/*/*', 'Albums'),
+    label: t('Albums'),
     includeChannels: true,
     contentCategory: 'music'
   },
   {
     id: 'tracks',
-    label: $pgettext('*/*/*', 'Tracks')
+    label: t('Tracks')
   },
   {
     id: 'playlists',
-    label: $pgettext('*/*/*', 'Playlists')
+    label: t('Playlists')
   },
   {
     id: 'radios',
-    label: $pgettext('*/*/*', 'Radios'),
+    label: t('Radios'),
     endpoint: 'radios/radios'
   },
   {
     id: 'tags',
-    label: $pgettext('*/*/*', 'Tags')
+    label: t('Tags')
   },
   {
     id: 'podcasts',
-    label: $pgettext('*/*/*', 'Podcasts'),
+    label: t('Podcasts'),
     endpoint: '/artists',
     contentCategory: 'podcast',
     includeChannels: true
   },
   {
     id: 'series',
-    label: $pgettext('*/*/*', 'Series'),
+    label: t('Series'),
     endpoint: '/albums',
     includeChannels: true,
     contentCategory: 'podcast'
@@ -181,11 +181,11 @@ const labels = computed(() => ({
   title: id.value
     ? (
         type.value === 'rss'
-          ? $pgettext('Head/Fetch/Title', 'Subscribe to a podcast RSS feed')
-          : $pgettext('Head/Fetch/Title', 'Search a remote object')
+          ? t('Subscribe to a podcast RSS feed')
+          : t('Search a remote object')
       )
-    : $pgettext('Content/Search/Input.Label/Noun', 'Search'),
-  submitSearch: $pgettext('Content/Search/Button.Label/Verb', 'Submit Search Query')
+    : t('Search'),
+  submitSearch: t('Submit Search Query')
 }))
 
 const radioConfig = computed(() => {
@@ -236,7 +236,7 @@ const radioConfig = computed(() => {
       >
         <h2>
           <label for="query">
-            <translate translate-context="Content/Search/Input.Label/Noun">Search</translate>
+            <translate >Search</translate>
           </label>
         </h2>
         <div class="ui two column doubling stackable grid container">

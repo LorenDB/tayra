@@ -27,7 +27,7 @@ const recentActivity = ref(0)
         :client-only="true"
       />
       <h2 class="ui header">
-        <translate translate-context="Content/Home/Title">
+        <translate >
           Recently listened
         </translate>
       </h2>
@@ -41,7 +41,7 @@ const recentActivity = ref(0)
     <div class="ui hidden divider" />
     <div>
       <h2 class="ui header">
-        <translate translate-context="Content/Home/Title">
+        <translate >
           Recently favorited
         </translate>
       </h2>
@@ -54,7 +54,7 @@ const recentActivity = ref(0)
     <div class="ui hidden divider" />
     <div>
       <h2 class="ui header">
-        <translate translate-context="*/*/*">
+        <translate >
           Playlists
         </translate>
       </h2>

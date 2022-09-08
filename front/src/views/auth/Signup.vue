@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
 import SignupForm from '~/components/auth/SignupForm.vue'
@@ -16,10 +16,10 @@ withDefaults(defineProps<Props>(), {
   next: '/'
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const labels = computed(() => ({
-  title: $pgettext('*/Signup/Title', 'Sign Up')
+  title: t('Sign Up')
 }))
 </script>
 
@@ -31,7 +31,7 @@ const labels = computed(() => ({
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          <translate translate-context="Content/Signup/Title">
+          <translate >
             Create a Funkwhale account
           </translate>
         </h2>

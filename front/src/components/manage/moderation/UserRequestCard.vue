@@ -68,7 +68,7 @@ const handleRemovedNote = (uuid: string) => {
       <h4 class="header">
         <router-link :to="{name: 'manage.moderation.requests.detail', params: {id: obj.uuid}}">
           <translate
-            translate-context="Content/Moderation/Card/Short"
+
             :translate-params="{id: obj.uuid.substring(0, 8)}"
           >
             Request %{ id }
@@ -87,7 +87,7 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    <translate translate-context="Content/Moderation/*">
+                    <translate >
                       Submitted by
                     </translate>
                   </td>
@@ -100,7 +100,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">
+                    <translate >
                       Creation date
                     </translate>
                   </td>
@@ -119,26 +119,26 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    <translate translate-context="*/*/*">
+                    <translate >
                       Status
                     </translate>
                   </td>
                   <td>
                     <template v-if="obj.status === 'pending'">
                       <i class="warning hourglass icon" />
-                      <translate translate-context="Content/Library/*/Short">
+                      <translate >
                         Pending
                       </translate>
                     </template>
                     <template v-else-if="obj.status === 'refused'">
                       <i class="danger x icon" />
-                      <translate translate-context="Content/*/*/Short">
+                      <translate >
                         Refused
                       </translate>
                     </template>
                     <template v-else-if="obj.status === 'approved'">
                       <i class="success check icon" />
-                      <translate translate-context="Content/*/*/Short">
+                      <translate >
                         Approved
                       </translate>
                     </template>
@@ -146,7 +146,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/Moderation/*">
+                    <translate >
                       Assigned to
                     </translate>
                   </td>
@@ -159,7 +159,7 @@ const handleRemovedNote = (uuid: string) => {
                     </div>
                     <translate
                       v-else
-                      translate-context="*/*/*"
+
                     >
                       N/A
                     </translate>
@@ -167,7 +167,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">
+                    <translate >
                       Resolution date
                     </translate>
                   </td>
@@ -179,7 +179,7 @@ const handleRemovedNote = (uuid: string) => {
                     />
                     <translate
                       v-else
-                      translate-context="*/*/*"
+
                     >
                       N/A
                     </translate>
@@ -187,7 +187,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">
+                    <translate >
                       Internal notes
                     </translate>
                   </td>
@@ -209,12 +209,12 @@ const handleRemovedNote = (uuid: string) => {
       <div class="ui stackable two column grid">
         <div class="column">
           <h3>
-            <translate translate-context="*/*/Field.Label/Noun">
+            <translate >
               Message
             </translate>
           </h3>
           <p>
-            <translate translate-context="Content/Moderation/Paragraph">
+            <translate >
               This user wants to sign-up on your pod.
             </translate>
           </p>
@@ -230,7 +230,7 @@ const handleRemovedNote = (uuid: string) => {
               </p>
               <translate
                 v-else
-                translate-context="*/*/*"
+
               >
                 N/A
               </translate>
@@ -241,7 +241,7 @@ const handleRemovedNote = (uuid: string) => {
         <aside class="column">
           <div v-if="obj.status != 'approved'">
             <h3>
-              <translate translate-context="Content/*/*/Noun">
+              <translate >
                 Actions
               </translate>
             </h3>
@@ -252,7 +252,7 @@ const handleRemovedNote = (uuid: string) => {
                 @click="approve(true)"
               >
                 <i class="success check icon" />&nbsp;
-                <translate translate-context="Content/*/Button.Label/Verb">
+                <translate >
                   Approve
                 </translate>
               </button>
@@ -262,14 +262,14 @@ const handleRemovedNote = (uuid: string) => {
                 @click="approve(false)"
               >
                 <i class="danger x icon" />&nbsp;
-                <translate translate-context="Content/*/Button.Label">
+                <translate >
                   Refuse
                 </translate>
               </button>
             </div>
           </div>
           <h3>
-            <translate translate-context="Content/*/*/Noun">
+            <translate >
               Internal notes
             </translate>
           </h3>

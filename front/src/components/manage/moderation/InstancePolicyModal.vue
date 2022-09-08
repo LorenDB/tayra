@@ -62,7 +62,7 @@ const fetchData = async () => {
   >
     <i class="shield icon" />&nbsp;
     <slot>
-      <translate translate-context="Content/Moderation/Button.Label">
+      <translate >
         Moderation rules…
       </translate>
     </slot>
@@ -73,7 +73,7 @@ const fetchData = async () => {
       <h4 class="header">
         <translate
           :translate-params="{obj: target}"
-          translate-context="Popup/Moderation/Title/Verb"
+
         >
           Manage moderation rules for %{ obj }
         </translate>
@@ -91,7 +91,7 @@ const fetchData = async () => {
           >
             <header class="ui header">
               <h3>
-                <translate translate-context="Content/Moderation/Card.Title">
+                <translate >
                   This entity is subject to specific moderation rules
                 </translate>
               </h3>
@@ -112,7 +112,7 @@ const fetchData = async () => {
       </div>
       <div class="actions">
         <button class="ui deny button">
-          <translate translate-context="*/*/Button.Label/Verb">
+          <translate >
             Close
           </translate>
         </button>

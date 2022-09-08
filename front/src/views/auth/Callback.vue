@@ -27,7 +27,7 @@ onMounted(async () => {
         <div class="ui active inverted dimmer">
           <div class="ui text loader">
             <h2>
-              <translate translate-context="*/Login/*">
+              <translate >
                 Logging in…
               </translate>
             </h2>

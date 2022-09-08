@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { get } from 'lodash-es'
 
 import axios from 'axios'
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const allowListEnabled = ref(false)
 const labels = computed(() => ({
-  moderation: $pgettext('*/Moderation/*', 'Moderation'),
-  secondaryMenu: $pgettext('Menu/*/Hidden text', 'Secondary menu')
+  moderation: t('Moderation'),
+  secondaryMenu: t('Secondary menu')
 }))
 
 const fetchNodeInfo = async () => {
@@ -35,7 +35,7 @@ fetchNodeInfo()
         class="ui item"
         :to="{name: 'manage.moderation.reports.list', query: {q: 'resolved:no'}}"
       >
-        <translate translate-context="*/Moderation/*/Noun">
+        <translate >
           Reports
         </translate>
         <div
@@ -49,7 +49,7 @@ fetchNodeInfo()
         class="ui item"
         :to="{name: 'manage.moderation.requests.list', query: {q: 'status:pending'}}"
       >
-        <translate translate-context="*/Moderation/*/Noun">
+        <translate >
           User Requests
         </translate>
         <div
@@ -63,7 +63,7 @@ fetchNodeInfo()
         class="ui item"
         :to="{name: 'manage.moderation.domains.list'}"
       >
-        <translate translate-context="*/Moderation/*/Noun">
+        <translate >
           Domains
         </translate>
       </router-link>
@@ -71,7 +71,7 @@ fetchNodeInfo()
         class="ui item"
         :to="{name: 'manage.moderation.accounts.list'}"
       >
-        <translate translate-context="*/Moderation/Title">
+        <translate >
           Accounts
         </translate>
       </router-link>

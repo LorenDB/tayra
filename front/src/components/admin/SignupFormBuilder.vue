@@ -4,7 +4,7 @@ import type { Form } from '~/types'
 import SignupForm from '~/components/auth/SignupForm.vue'
 import { useVModel } from '@vueuse/core'
 import { computed, ref } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { arrayMove } from '~/utils'
 
 interface Events {
@@ -26,11 +26,11 @@ const value = useVModel(props, 'modelValue', emit, { deep: true })
 const maxFields = ref(10)
 const isPreviewing = ref(false)
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  delete: $pgettext('*/*/*', 'Delete'),
-  up: $pgettext('*/*/*', 'Move up'),
-  down: $pgettext('*/*/*', 'Move down')
+  delete: t('Delete'),
+  up: t('Move up'),
+  down: t('Move down')
 }))
 
 if (!value.value?.fields) {
@@ -45,7 +45,7 @@ if (!value.value?.fields) {
 
 const addField = () => {
   value.value.fields.push({
-    label: $pgettext('*/*/Form-builder', 'Additional field') + ' ' + (value.value.fields.length + 1),
+    label: t('Additional field') + ' ' + (value.value.fields.length + 1),
     required: true,
     input_type: 'short_text'
   })
@@ -69,7 +69,7 @@ const move = (idx: number, increment: number) => {
         :class="[{active: !isPreviewing}, 'item']"
         @click.stop.prevent="isPreviewing = false"
       >
-        <translate translate-context="Content/*/Button.Label/Verb">
+        <translate >
           Edit form
         </translate>
       </button>
@@ -77,7 +77,7 @@ const move = (idx: number, increment: number) => {
         :class="[{active: isPreviewing}, 'item']"
         @click.stop.prevent="isPreviewing = true"
       >
-        <translate translate-context="*/Form/Menu.item">
+        <translate >
           Preview form
         </translate>
       </button>
@@ -99,10 +99,10 @@ const move = (idx: number, increment: number) => {
     >
       <div class="field">
         <label for="help-text">
-          <translate translate-context="*/*/Label">Help text</translate>
+          <translate >Help text</translate>
         </label>
         <p>
-          <translate translate-context="*/*/Help">
+          <translate >
             An optional text to be displayed at the start of the sign-up form.
           </translate>
         </p>
@@ -115,10 +115,10 @@ const move = (idx: number, increment: number) => {
       </div>
       <div class="field">
         <label>
-          <translate translate-context="*/*/Label">Additional fields</translate>
+          <translate >Additional fields</translate>
         </label>
         <p>
-          <translate translate-context="*/*/Help">
+          <translate >
             Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled.
           </translate>
         </p>
@@ -126,21 +126,21 @@ const move = (idx: number, increment: number) => {
           <thead>
             <tr>
               <th>
-                <translate translate-context="*/*/Form-builder,Help">
+                <translate >
                   Field label
                 </translate>
               </th>
               <th>
-                <translate translate-context="*/*/Form-builder,Help">
+                <translate >
                   Field type
                 </translate>
               </th>
               <th>
-                <translate translate-context="*/*/Form-builder,Help">
+                <translate >
                   Required
                 </translate>
               </th>
-              <th><span class="visually-hidden"><translate translate-context="*/*/Form-builder,Help">Actions</translate></span></th>
+              <th><span class="visually-hidden"><translate >Actions</translate></span></th>
             </tr>
           </thead>
           <tbody>
@@ -158,12 +158,12 @@ const move = (idx: number, increment: number) => {
               <td>
                 <select v-model="field.input_type">
                   <option value="short_text">
-                    <translate translate-context="*/*/Form-builder">
+                    <translate >
                       Short text
                     </translate>
                   </option>
                   <option value="long_text">
-                    <translate translate-context="*/*/Form-builder">
+                    <translate >
                       Long text
                     </translate>
                   </option>
@@ -172,12 +172,12 @@ const move = (idx: number, increment: number) => {
               <td>
                 <select v-model="field.required">
                   <option :value="true">
-                    <translate translate-context="*/*/*">
+                    <translate >
                       Yes
                     </translate>
                   </option>
                   <option :value="false">
-                    <translate translate-context="*/*/*">
+                    <translate >
                       No
                     </translate>
                   </option>
@@ -214,7 +214,7 @@ const move = (idx: number, increment: number) => {
           class="ui basic button"
           @click.stop.prevent="addField"
         >
-          <translate translate-context="*/*/Form-builder">
+          <translate >
             Add a new field
           </translate>
         </button>

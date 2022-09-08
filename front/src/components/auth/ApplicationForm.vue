@@ -4,7 +4,7 @@ import type { BackendError, Application } from '~/types'
 import axios from 'axios'
 import { ref, reactive, computed } from 'vue'
 import { computedEager } from '@vueuse/core'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { uniq } from 'lodash-es'
 
 import useScopes from '~/composables/auth/useScopes'
@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
   defaults: () => ({})
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const scopes = useScopes()
   .filter(scope => !['reports', 'security'].includes(scope.id))
 
@@ -86,14 +86,14 @@ const toggleAllScopes = (parent: typeof allScopes['value'][number]) => {
 const scopeParents = computedEager(() => [
   {
     id: 'read',
-    label: $pgettext('Content/OAuth Scopes/Label/Verb', 'Read'),
-    description: $pgettext('Content/OAuth Scopes/Help Text', 'Read-only access to user data'),
+    label: t('Read'),
+    description: t('Read-only access to user data'),
     value: scopeArray.value.includes('read')
   },
   {
     id: 'write',
-    label: $pgettext('Content/OAuth Scopes/Label/Verb', 'Write'),
-    description: $pgettext('Content/OAuth Scopes/Help Text', 'Write-only access to user data'),
+    label: t('Write'),
+    description: t('Write-only access to user data'),
     value: scopeArray.value.includes('write')
   }
 ])
@@ -120,7 +120,7 @@ const allScopes = computed(() => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
+        <translate >
           We cannot save your changes
         </translate>
       </h4>
@@ -134,7 +134,7 @@ const allScopes = computed(() => {
       </ul>
     </div>
     <div class="ui field">
-      <label for="application-name"><translate translate-context="*/*/*/Noun">Name</translate></label>
+      <label for="application-name"><translate >Name</translate></label>
       <input
         id="application-name"
         v-model="fields.name"
@@ -144,7 +144,7 @@ const allScopes = computed(() => {
       >
     </div>
     <div class="ui field">
-      <label for="redirect-uris"><translate translate-context="Content/Applications/Input.Label/Noun">Redirect URI</translate></label>
+      <label for="redirect-uris"><translate >Redirect URI</translate></label>
       <input
         id="redirect-uris"
         v-model="fields.redirect_uris"
@@ -152,15 +152,15 @@ const allScopes = computed(() => {
         type="text"
       >
       <p class="help">
-        <translate translate-context="Content/Applications/Help Text">
+        <translate >
           Use "urn:ietf:wg:oauth:2.0:oob" as a redirect URI if your application is not served on the web.
         </translate>
       </p>
     </div>
     <div class="ui field">
-      <label><translate translate-context="Content/*/*/Noun">Scopes</translate></label>
+      <label><translate >Scopes</translate></label>
       <p>
-        <translate translate-context="Content/Applications/Paragraph/">
+        <translate >
           Checking the parent "Read" or "Write" scopes implies access to all the corresponding children scopes.
         </translate>
       </p>
@@ -210,13 +210,13 @@ const allScopes = computed(() => {
     >
       <translate
         v-if="app !== null"
-        translate-context="Content/Applications/Button.Label/Verb"
+
       >
         Update application
       </translate>
       <translate
         v-else
-        translate-context="Content/Applications/Button.Label/Verb"
+
       >
         Create application
       </translate>

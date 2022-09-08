@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { humanSize } from '~/utils/filters'
-import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
 import { get } from 'lodash-es'
 import { computed } from 'vue'
@@ -9,6 +8,7 @@ import axios from 'axios'
 
 import useMarkdown from '~/composables/useMarkdown'
 import type { NodeInfo } from '~/store/instance'
+import { useI18n } from 'vue-i18n'
 
 const store = useStore()
 const nodeinfo = computed(() => store.state.instance.nodeinfo)
@@ -19,9 +19,9 @@ const fetchData = async () => {
 }
 fetchData()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Head/About/Title', 'About')
+  title: t('About')
 }))
 
 const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') || 'Funkwhale')
@@ -99,7 +99,7 @@ const headerStyle = computed(() => {
                   to="/about/pod"
                   class="item"
                 >
-                  <translate translate-context="Content/About/Header">
+                  <translate >
                     About this pod
                   </translate>
                 </router-link>
@@ -107,7 +107,7 @@ const headerStyle = computed(() => {
                   to="/about/pod#rules"
                   class="item"
                 >
-                  <translate translate-context="Content/About/Header">
+                  <translate >
                     Rules
                   </translate>
                 </router-link>
@@ -115,7 +115,7 @@ const headerStyle = computed(() => {
                   to="/about/pod#terms"
                   class="item"
                 >
-                  <translate translate-context="Content/About/Header">
+                  <translate >
                     Terms and privacy policy
                   </translate>
                 </router-link>
@@ -123,7 +123,7 @@ const headerStyle = computed(() => {
                   to="/about/pod#features"
                   class="item"
                 >
-                  <translate translate-context="Content/About/Header">
+                  <translate >
                     Features
                   </translate>
                 </router-link>
@@ -132,7 +132,7 @@ const headerStyle = computed(() => {
                   to="/about/pod#statistics"
                   class="item"
                 >
-                  <translate translate-context="Content/About/Header">
+                  <translate >
                     Statistics
                   </translate>
                 </router-link>
@@ -144,7 +144,7 @@ const headerStyle = computed(() => {
                 id="description about-this-pod"
                 class="ui header"
               >
-                <translate translate-context="Content/About/Header">
+                <translate >
                   About this pod
                 </translate>
               </h2>
@@ -153,7 +153,7 @@ const headerStyle = computed(() => {
                 :html="longDescription"
               />
               <p v-else>
-                <translate translate-context="Content/About/Paragraph">
+                <translate >
                   No description available.
                 </translate>
               </p>
@@ -162,7 +162,7 @@ const headerStyle = computed(() => {
                 id="rules"
                 class="ui header"
               >
-                <translate translate-context="Content/About/Header">
+                <translate >
                   Rules
                 </translate>
               </h3>
@@ -171,7 +171,7 @@ const headerStyle = computed(() => {
                 :html="rules"
               />
               <p v-else>
-                <translate translate-context="Content/About/Paragraph">
+                <translate >
                   No rules available.
                 </translate>
               </p>
@@ -180,7 +180,7 @@ const headerStyle = computed(() => {
                 id="terms"
                 class="ui header"
               >
-                <translate translate-context="Content/About/Header">
+                <translate >
                   Terms and privacy policy
                 </translate>
               </h3>
@@ -189,7 +189,7 @@ const headerStyle = computed(() => {
                 :html="terms"
               />
               <p v-else>
-                <translate translate-context="Content/About/Paragraph">
+                <translate >
                   No terms available.
                 </translate>
               </p>
@@ -198,7 +198,7 @@ const headerStyle = computed(() => {
                 id="features"
                 class="header"
               >
-                <translate translate-context="Content/About/Header/Name">
+                <translate >
                   Features
                 </translate>
               </h3>
@@ -208,7 +208,7 @@ const headerStyle = computed(() => {
                     <tbody>
                       <tr>
                         <td>
-                          <translate translate-context="*/*/*">
+                          <translate >
                             Funkwhale version
                           </translate>
                         </td>
@@ -225,13 +225,13 @@ const headerStyle = computed(() => {
                           class="right aligned"
                         >
                           <span class="features-status ui text">
-                            <translate translate-context="*/*/*">N/A</translate>
+                            <translate >N/A</translate>
                           </span>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <translate translate-context="*/*/*">
+                          <translate >
                             Federation
                           </translate>
                         </td>
@@ -241,7 +241,7 @@ const headerStyle = computed(() => {
                         >
                           <span class="features-status ui text">
                             <i class="check icon" />
-                            <translate translate-context="*/*/*/State of feature">Enabled</translate>
+                            <translate >Enabled</translate>
                           </span>
                         </td>
                         <td
@@ -250,13 +250,13 @@ const headerStyle = computed(() => {
                         >
                           <span class="features-status ui text">
                             <i class="x icon" />
-                            <translate translate-context="*/*/*/State of feature">Disabled</translate>
+                            <translate >Disabled</translate>
                           </span>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <translate translate-context="*/*/*">
+                          <translate >
                             Allow-list
                           </translate>
                         </td>
@@ -266,7 +266,7 @@ const headerStyle = computed(() => {
                         >
                           <span class="features-status ui text">
                             <i class="check icon" />
-                            <translate translate-context="*/*/*/State of feature">Enabled</translate>
+                            <translate >Enabled</translate>
                           </span>
                         </td>
                         <td
@@ -275,7 +275,7 @@ const headerStyle = computed(() => {
                         >
                           <span class="features-status ui text">
                             <i class="x icon" />
-                            <translate translate-context="*/*/*/State of feature">Disabled</translate>
+                            <translate >Disabled</translate>
                           </span>
                         </td>
                       </tr>
@@ -287,7 +287,7 @@ const headerStyle = computed(() => {
                     <tbody>
                       <tr>
                         <td>
-                          <translate translate-context="*/*/*">
+                          <translate >
                             Anonymous access
                           </translate>
                         </td>
@@ -297,7 +297,7 @@ const headerStyle = computed(() => {
                         >
                           <span class="features-status ui text">
                             <i class="check icon" />
-                            <translate translate-context="*/*/*/State of feature">Enabled</translate>
+                            <translate >Enabled</translate>
                           </span>
                         </td>
                         <td
@@ -306,13 +306,13 @@ const headerStyle = computed(() => {
                         >
                           <span class="features-status ui text">
                             <i class="x icon" />
-                            <translate translate-context="*/*/*/State of feature">Disabled</translate>
+                            <translate >Disabled</translate>
                           </span>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <translate translate-context="*/*/*">
+                          <translate >
                             Registrations
                           </translate>
                         </td>
@@ -322,7 +322,7 @@ const headerStyle = computed(() => {
                         >
                           <span class="features-status ui text">
                             <i class="check icon" />
-                            <translate translate-context="*/*/*/State of registrations">Open</translate>
+                            <translate >Open</translate>
                           </span>
                         </td>
                         <td
@@ -331,13 +331,13 @@ const headerStyle = computed(() => {
                         >
                           <span class="features-status ui text">
                             <i class="x icon" />
-                            <translate translate-context="*/*/*/State of registrations">Closed</translate>
+                            <translate >Closed</translate>
                           </span>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <translate translate-context="*/*/*">
+                          <translate >
                             Upload quota
                           </translate>
                         </td>
@@ -354,7 +354,7 @@ const headerStyle = computed(() => {
                           class="right aligned"
                         >
                           <span class="features-status ui text">
-                            <translate translate-context="*/*/*">N/A</translate>
+                            <translate >N/A</translate>
                           </span>
                         </td>
                       </tr>
@@ -368,7 +368,7 @@ const headerStyle = computed(() => {
                   id="statistics"
                   class="header"
                 >
-                  <translate translate-context="Content/About/Header">
+                  <translate >
                     Statistics
                   </translate>
                 </h3>
@@ -395,7 +395,7 @@ const headerStyle = computed(() => {
                       <span class="ui big text"><strong>{{ stats.artists.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
                       <translate
-                        translate-context="Content/About/*"
+
                         :translate-n="stats.artists"
                         translate-plural="artists"
                       >artist</translate>
@@ -409,7 +409,7 @@ const headerStyle = computed(() => {
                       <span class="ui big text"><strong>{{ stats.albums.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
                       <translate
-                        translate-context="Content/About/*"
+
                         :translate-n="stats.albums"
                         translate-plural="albums"
                       >album</translate>
@@ -423,7 +423,7 @@ const headerStyle = computed(() => {
                       <span class="ui big text"><strong>{{ stats.tracks.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
                       <translate
-                        translate-context="Content/About/*"
+
                         :translate-n="stats.tracks"
                         translate-plural="tracks"
                       >track</translate>
@@ -437,7 +437,7 @@ const headerStyle = computed(() => {
                       <span class="ui big text"><strong>{{ stats.users.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
                       <translate
-                        translate-context="Content/About/*"
+
                         :translate-n="stats.users"
                         translate-plural="active users"
                       >active user</translate>
@@ -451,7 +451,7 @@ const headerStyle = computed(() => {
                       <span class="ui big text"><strong>{{ stats.listenings.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
                       <translate
-                        translate-context="Content/About/*"
+
                         :translate-n="stats.listenings"
                         translate-plural="listenings"
                       >listening</translate>
@@ -465,7 +465,7 @@ const headerStyle = computed(() => {
                   id="contact"
                   class="ui header"
                 >
-                  <translate translate-context="Content/About/Header">
+                  <translate >
                     Contact
                   </translate>
                 </h3>
@@ -474,7 +474,7 @@ const headerStyle = computed(() => {
                   :href="`mailto:${contactEmail}`"
                 >
                   <translate
-                    translate-context="Content/About/Email"
+
                     :translate-params="{ email: contactEmail }"
                   >Send us an email: {{ contactEmail }}</translate>
                 </a>
@@ -487,7 +487,7 @@ const headerStyle = computed(() => {
                   class="ui left floated basic secondary button"
                 >
                   <i class="icon arrow left" />
-                  <translate translate-context="Content/About/Paragraph">
+                  <translate >
                     Introduction
                   </translate>
                 </router-link>

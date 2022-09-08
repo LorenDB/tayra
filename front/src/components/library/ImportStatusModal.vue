@@ -3,7 +3,7 @@ import type { Upload } from '~/types'
 
 import SemanticModal from '~/components/semantic/Modal.vue'
 import { useVModel } from '@vueuse/core'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 interface ErrorEntry {
   key: string
@@ -44,7 +44,7 @@ const getErrors = (details: object): ErrorEntry[] => {
   return errors
 }
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const getErrorData = (upload: Upload) => {
   const payload = upload.import_details ?? { error_code: '', detail: {} }
@@ -58,11 +58,11 @@ const getErrorData = (upload: Upload) => {
     supportUrl: 'https://forum.funkwhale.audio/t/support',
     documentationUrl: `https://docs.funkwhale.audio/users/upload.html#${errorCode}`,
     label: errorCode === 'invalid_metadata'
-      ? $pgettext('Popup/Import/Error.Label', 'Invalid metadata')
-      : $pgettext('*/*/Error', 'Unknown error'),
+      ? t('Invalid metadata')
+      : t('Unknown error'),
     detail: errorCode === 'invalid_metadata'
-      ? $pgettext('Popup/Import/Error.Label', 'The metadata included in the file is invalid or some mandatory fields are missing.')
-      : $pgettext('Popup/Import/Error.Label', 'An unknown error occurred'),
+      ? t('The metadata included in the file is invalid or some mandatory fields are missing.')
+      : t('An unknown error occurred'),
     errorRows: errorCode === 'invalid_metadata'
       ? getErrors(payload.detail ?? {})
       : [],
@@ -77,7 +77,7 @@ const getErrorData = (upload: Upload) => {
 <template>
   <semantic-modal v-model:show="show">
     <h4 class="header">
-      <translate translate-context="Popup/Import/Title">
+      <translate >
         Import detail
       </translate>
     </h4>
@@ -90,7 +90,7 @@ const getErrorData = (upload: Upload) => {
           v-if="upload.import_status === 'pending'"
           class="ui message"
         >
-          <translate translate-context="Popup/Import/Message">
+          <translate >
             Upload is still pending and will soon be processed by the server.
           </translate>
         </div>
@@ -98,7 +98,7 @@ const getErrorData = (upload: Upload) => {
           v-if="upload.import_status === 'finished'"
           class="ui success message"
         >
-          <translate translate-context="Popup/Import/Message">
+          <translate >
             Upload was successfully processed by the server.
           </translate>
         </div>
@@ -107,7 +107,7 @@ const getErrorData = (upload: Upload) => {
           role="alert"
           class="ui warning message"
         >
-          <translate translate-context="Popup/Import/Message">
+          <translate >
             Upload was skipped because a similar one is already available in one of your libraries.
           </translate>
         </div>
@@ -115,7 +115,7 @@ const getErrorData = (upload: Upload) => {
           v-if="upload.import_status === 'errored'"
           class="ui error message"
         >
-          <translate translate-context="Popup/Import/Message">
+          <translate >
             An error occurred during upload processing. You will find more information below.
           </translate>
         </div>
@@ -124,7 +124,7 @@ const getErrorData = (upload: Upload) => {
             <tbody>
               <tr>
                 <td>
-                  <translate translate-context="Popup/Import/Table.Label/Noun">
+                  <translate >
                     Error type
                   </translate>
                 </td>
@@ -134,7 +134,7 @@ const getErrorData = (upload: Upload) => {
               </tr>
               <tr>
                 <td>
-                  <translate translate-context="Popup/Import/Table.Label/Noun">
+                  <translate >
                     Error detail
                   </translate>
                 </td>
@@ -152,7 +152,7 @@ const getErrorData = (upload: Upload) => {
               </tr>
               <tr>
                 <td>
-                  <translate translate-context="Footer/*/Link">
+                  <translate >
                     Getting help
                   </translate>
                 </td>
@@ -163,7 +163,7 @@ const getErrorData = (upload: Upload) => {
                         :href="getErrorData(upload).documentationUrl"
                         target="_blank"
                       >
-                        <translate translate-context="Popup/Import/Table.Label/Value">Read our documentation for this error</translate>
+                        <translate >Read our documentation for this error</translate>
                       </a>
                     </li>
                     <li>
@@ -171,7 +171,7 @@ const getErrorData = (upload: Upload) => {
                         :href="getErrorData(upload).supportUrl"
                         target="_blank"
                       >
-                        <translate translate-context="Popup/Import/Table.Label/Value">Open a support thread (include the debug information below in your message)</translate>
+                        <translate >Open a support thread (include the debug information below in your message)</translate>
                       </a>
                     </li>
                   </ul>
@@ -179,7 +179,7 @@ const getErrorData = (upload: Upload) => {
               </tr>
               <tr>
                 <td>
-                  <translate translate-context="Popup/Import/Table.Label/Noun">
+                  <translate >
                     Debug information
                   </translate>
                 </td>
@@ -200,7 +200,7 @@ const getErrorData = (upload: Upload) => {
     </div>
     <div class="actions">
       <button class="ui deny button">
-        <translate translate-context="*/*/Button.Label/Verb">
+        <translate >
           Close
         </translate>
       </button>

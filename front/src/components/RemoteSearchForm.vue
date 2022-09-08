@@ -2,7 +2,7 @@
 import type { BackendError } from '~/types'
 
 import { ref, computed, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useStore } from '~/store'
 
@@ -37,17 +37,17 @@ const type = ref(props.initialType)
 const id = ref(props.initialId)
 const errors = ref([] as string[])
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
   title: type.value === 'rss'
-    ? $pgettext('Head/Fetch/Title', 'Subscribe to a podcast RSS feed')
-    : $pgettext('Head/Fetch/Title', 'Subscribe to a podcast hosted on the Fediverse'),
+    ? t('Subscribe to a podcast RSS feed')
+    : t('Subscribe to a podcast hosted on the Fediverse'),
   fieldLabel: type.value === 'rss'
-    ? $pgettext('*/*/*', 'RSS feed location')
-    : $pgettext('*/*/*', 'Fediverse object'),
+    ? t('RSS feed location')
+    : t('Fediverse object'),
   fieldPlaceholder: type.value === 'rss'
-    ? $pgettext('Head/Fetch/Field.Placeholder', 'https://website.example.com/rss.xml')
-    : $pgettext('Head/Fetch/Field.Placeholder', '@username@example.com')
+    ? t('https://website.example.com/rss.xml')
+    : t('@username@example.com')
 }))
 
 const obj = ref()
@@ -117,7 +117,7 @@ const createFetch = async () => {
     obj.value = response.data
 
     if (response.data.status === 'errored' || response.data.status === 'skipped') {
-      errors.value.push($pgettext('Content/*/Error message.Title', 'This object cannot be retrieved'))
+      errors.value.push(t('This object cannot be retrieved'))
     }
   } catch (error) {
     errors.value = (error as BackendError).backendErrors
@@ -172,7 +172,7 @@ watch(() => props.initialId, () => {
       @click.prevent="type = 'rss'"
     >
       <i class="feed icon" />
-      <translate translate-context="Content/Search/Input.Label/Noun">
+      <translate >
         RSS
       </translate>
     </button>
@@ -182,7 +182,7 @@ watch(() => props.initialId, () => {
       @click.prevent="type = 'artists'"
     >
       <i class="globe icon" />
-      <translate translate-context="Content/Search/Input.Label/Noun">
+      <translate >
         Fediverse
       </translate>
     </button>
@@ -199,7 +199,7 @@ watch(() => props.initialId, () => {
         class="ui negative message"
       >
         <h3 class="header">
-          <translate translate-context="Content/*/Error message.Title">
+          <translate >
             Error while fetching object
           </translate>
         </h3>
@@ -217,12 +217,12 @@ watch(() => props.initialId, () => {
           {{ labels.fieldLabel }}
         </label>
         <p v-if="type === 'rss'">
-          <translate translate-context="Content/Fetch/Paragraph">
+          <translate >
             Use this form to subscribe to an RSS feed from its URL.
           </translate>
         </p>
         <p v-else-if="type === 'artists'">
-          <translate translate-context="Content/Fetch/Paragraph">
+          <translate >
             Use this form to subscribe to a channel hosted somewhere else on the Fediverse.
           </translate>
         </p>
@@ -241,7 +241,7 @@ watch(() => props.initialId, () => {
         :class="['ui', 'primary', {loading: isLoading}, 'button']"
         :disabled="isLoading || !id || id.length === 0"
       >
-        <translate translate-context="Content/Search/Input.Label/Noun">
+        <translate >
           Search
         </translate>
       </button>
@@ -252,7 +252,7 @@ watch(() => props.initialId, () => {
       class="ui warning message"
     >
       <p>
-        <translate translate-context="Content/*/Error message.Title">
+        <translate >
           This kind of object isn't supported yet
         </translate>
       </p>

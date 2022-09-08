@@ -3,7 +3,7 @@ import type { ContentCategory, Channel, BackendError } from '~/types'
 
 import { slugify } from 'transliteration'
 import { reactive, computed, ref, watchEffect, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 import AttachmentInput from '~/components/common/AttachmentInput.vue'
@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
   step: 1
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const newValues = reactive({
   name: props.object?.artist?.name ?? '',
@@ -45,13 +45,13 @@ const creating = computed(() => props.object === null)
 const categoryChoices = computed(() => [
   {
     value: 'podcast',
-    label: $pgettext('*/*/*', 'Podcasts'),
-    helpText: $pgettext('Content/Channels/Help', 'Host your episodes and keep your community updated.')
+    label: t('Podcasts'),
+    helpText: t('Host your episodes and keep your community updated.')
   },
   {
     value: 'music',
-    label: $pgettext('*/*/*', 'Artist discography'),
-    helpText: $pgettext('Content/Channels/Help', 'Publish music you make as a nice discography of albums and singles.')
+    label: t('Artist discography'),
+    helpText: t('Publish music you make as a nice discography of albums and singles.')
   }
 ])
 
@@ -81,8 +81,8 @@ const itunesSubcategories = computed(() => {
 })
 
 const labels = computed(() => ({
-  namePlaceholder: $pgettext('Content/Channel/Form.Field.Placeholder', 'Awesome channel name'),
-  usernamePlaceholder: $pgettext('Content/Channel/Form.Field.Placeholder', 'awesomechannelname')
+  namePlaceholder: t('Awesome channel name'),
+  usernamePlaceholder: t('awesomechannelname')
 }))
 
 const submittable = computed(() => !!(
@@ -165,7 +165,7 @@ defineExpose({
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
+        <translate >
           Error while saving channel
         </translate>
       </h4>
@@ -184,7 +184,7 @@ defineExpose({
         class="ui grouped channel-type required field"
       >
         <legend>
-          <translate translate-context="Content/Channel/Paragraph">
+          <translate >
             What will this channel be used for?
           </translate>
         </legend>
@@ -214,7 +214,7 @@ defineExpose({
       <template v-if="!creating || step === 2">
         <div class="ui required field">
           <label for="channel-name">
-            <translate translate-context="Content/Channel/*">Name</translate>
+            <translate >Name</translate>
           </label>
           <input
             v-model="newValues.name"
@@ -225,7 +225,7 @@ defineExpose({
         </div>
         <div class="ui required field">
           <label for="channel-username">
-            <translate translate-context="Content/Channel/*">Fediverse handle</translate>
+            <translate >Fediverse handle</translate>
           </label>
           <div class="ui left labeled input">
             <div class="ui basic label">
@@ -242,7 +242,7 @@ defineExpose({
           <template v-if="creating">
             <div class="ui small hidden divider" />
             <p>
-              <translate translate-context="Content/Channels/Paragraph">
+              <translate >
                 Used in URLs and to follow this channel in the Fediverse. It cannot be changed later.
               </translate>
             </p>
@@ -254,7 +254,7 @@ defineExpose({
             :image-class="newValues.content_category === 'podcast' ? '' : 'circular'"
             @delete="newValues.cover = null"
           >
-            <translate translate-context="Content/Channel/*">
+            <translate >
               Channel Picture
             </translate>
           </attachment-input>
@@ -264,7 +264,7 @@ defineExpose({
           <div class="ten wide column">
             <div class="ui field">
               <label for="channel-tags">
-                <translate translate-context="*/*/*">Tags</translate>
+                <translate >Tags</translate>
               </label>
               <tags-selector
                 id="channel-tags"
@@ -279,7 +279,7 @@ defineExpose({
           >
             <div class="ui required field">
               <label for="channel-language">
-                <translate translate-context="*/*/*">Language</translate>
+                <translate >Language</translate>
               </label>
               <select
                 id="channel-language"
@@ -302,7 +302,7 @@ defineExpose({
         <div class="ui small hidden divider" />
         <div class="ui field">
           <label for="channel-name">
-            <translate translate-context="*/*/*">Description</translate>
+            <translate >Description</translate>
           </label>
           <content-form v-model="newValues.description" />
         </div>
@@ -312,7 +312,7 @@ defineExpose({
         >
           <div class="ui required field">
             <label for="channel-itunes-category">
-              <translate translate-context="*/*/*">Category</translate>
+              <translate >Category</translate>
             </label>
             <select
               id="itunes-category"
@@ -332,7 +332,7 @@ defineExpose({
           </div>
           <div class="ui field">
             <label for="channel-itunes-category">
-              <translate translate-context="*/*/*">Subcategory</translate>
+              <translate >Subcategory</translate>
             </label>
             <select
               id="itunes-category"
@@ -357,7 +357,7 @@ defineExpose({
         >
           <div class="ui field">
             <label for="channel-itunes-email">
-              <translate translate-context="*/*/*">Owner e-mail address</translate>
+              <translate >Owner e-mail address</translate>
             </label>
             <input
               id="channel-itunes-email"
@@ -368,7 +368,7 @@ defineExpose({
           </div>
           <div class="ui field">
             <label for="channel-itunes-name">
-              <translate translate-context="*/*/*">Owner name</translate>
+              <translate >Owner name</translate>
             </label>
             <input
               id="channel-itunes-name"
@@ -379,7 +379,7 @@ defineExpose({
           </div>
         </div>
         <p>
-          <translate translate-context="*/*/*">
+          <translate >
             Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes.
           </translate>
         </p>
@@ -390,7 +390,7 @@ defineExpose({
       class="ui active inverted dimmer"
     >
       <div class="ui text loader">
-        <translate translate-context="*/*/*">
+        <translate >
           Loading
         </translate>
       </div>

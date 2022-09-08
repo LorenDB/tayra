@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useStore } from '~/store'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { get } from 'lodash-es'
 import { humanSize } from '~/utils/filters'
 import { computed } from 'vue'
@@ -11,9 +11,9 @@ import LogoText from '~/components/LogoText.vue'
 const store = useStore()
 const nodeinfo = computed(() => store.state.instance.nodeinfo)
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Head/About/Title', 'About')
+  title: t('About')
 }))
 
 const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') ?? 'Funkwhale')
@@ -67,12 +67,12 @@ const headerStyle = computed(() => {
                 <div class="column" />
               </div>
               <h2 class="header">
-                <translate translate-context="Content/About/Heading">
+                <translate >
                   A social platform to enjoy and share music
                 </translate>
               </h2>
               <p>
-                <translate translate-context="Content/About/Paragraph">
+                <translate >
                   Funkwhale is a community-driven project that lets you listen and share music and audio within a decentralized, open network.
                 </translate>
               </p>
@@ -88,19 +88,19 @@ const headerStyle = computed(() => {
                 class="signup-form content"
               >
                 <h3 class="header">
-                  <translate translate-context="*/Signup/Title">
+                  <translate >
                     Sign up
                   </translate>
                 </h3>
                 <template v-if="openRegistrations">
                   <p>
-                    <translate translate-context="Content/About/Paragraph">
+                    <translate >
                       Sign up now to keep a track of your favorites, create playlists, discover new content and much more!
                     </translate>
                   </p>
                   <p v-if="defaultUploadQuota">
                     <translate
-                      translate-context="Content/About/Paragraph"
+
                       :translate-params="{quota: defaultUploadQuota}"
                     >
                       Users on this pod also get %{ quota } of free storage to upload their own content!
@@ -112,7 +112,7 @@ const headerStyle = computed(() => {
                   />
                 </template>
                 <div v-else>
-                  <p translate-context="Content/About/Paragraph">
+                  <p >
                     Registrations are closed on this pod. You can signup on another pod using the link below.
                   </p>
 
@@ -121,7 +121,7 @@ const headerStyle = computed(() => {
                     rel="noopener"
                     href="https://funkwhale.audio/#get-started"
                   >
-                    <translate translate-context="Content/About/Link">Find another pod</translate>
+                    <translate >Find another pod</translate>
                     &nbsp;<i class="external alternate icon" />
                   </a>
                 </div>
@@ -131,12 +131,12 @@ const headerStyle = computed(() => {
                 class="signup-form content"
               >
                 <h3 class="header">
-                  <translate translate-context="*/Signup/Title">
+                  <translate >
                     Sign up
                   </translate>
                   <div class="ui positive message">
                     <div class="header">
-                      <translate translate-context="Content/About/Message">
+                      <translate >
                         You're already signed in!
                       </translate>
                     </div>
@@ -164,7 +164,7 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  <translate translate-context="Content/About/Header">
+                  <translate >
                     About this pod
                   </translate>
                 </h3>
@@ -175,7 +175,7 @@ const headerStyle = computed(() => {
                   {{ shortDescription }}
                 </div>
                 <p v-else>
-                  <translate translate-context="Content/About/Paragraph">
+                  <translate >
                     No description available.
                   </translate>
                 </p>
@@ -188,7 +188,7 @@ const headerStyle = computed(() => {
                           <span class="ui big text"><strong>{{ stats.users.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                           <br>
                           <translate
-                            translate-context="Content/About/*"
+
                             :translate-n="stats.users"
                             translate-plural="active users"
                           >active user</translate>
@@ -213,7 +213,7 @@ const headerStyle = computed(() => {
                   to="/about/pod"
                   class="ui fluid basic secondary button"
                 >
-                  <translate translate-context="Content/About/Paragraph">
+                  <translate >
                     Learn More
                   </translate>
                 </router-link>
@@ -234,12 +234,12 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  <translate translate-context="Content/About/Header">
+                  <translate >
                     Browse public content
                   </translate>
                 </h3>
                 <p>
-                  <translate translate-context="Content/About/Paragraph">
+                  <translate >
                     Listen to public albums and playlists shared on this pod.
                   </translate>
                 </p>
@@ -255,11 +255,11 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  <translate translate-context="Content/About/Header">Find another pod</translate>
+                  <translate >Find another pod</translate>
                   &nbsp;<i class="external alternate icon" />
                 </h3>
                 <p>
-                  <translate translate-context="Content/About/Paragraph">Listen to public albums and playlists shared on this pod.</translate>
+                  <translate >Listen to public albums and playlists shared on this pod.</translate>
                 </p>
               </div>
             </a>
@@ -273,11 +273,11 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  <translate translate-context="Content/About/Header">Find an app</translate>
+                  <translate >Find an app</translate>
                   &nbsp;<i class="external alternate icon" />
                 </h3>
                 <p>
-                  <translate translate-context="Content/About/Paragraph">Use Funkwhale on other devices with our apps.</translate>
+                  <translate >Use Funkwhale on other devices with our apps.</translate>
                 </p>
               </div>
             </a>
@@ -287,7 +287,7 @@ const headerStyle = computed(() => {
               to="/about/pod"
               class="ui right floated basic secondary button"
             >
-              <translate translate-context="Content/About/Paragraph">
+              <translate >
                 About this pod
               </translate>
               <i class="icon arrow right" />

@@ -110,7 +110,7 @@ const save = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
+        <translate >
           Error while saving settings
         </translate>
       </h4>
@@ -127,7 +127,7 @@ const save = async () => {
       v-if="result"
       class="ui positive message"
     >
-      <translate translate-context="Content/Settings/Paragraph">
+      <translate >
         Settings updated successfully.
       </translate>
     </div>
@@ -229,7 +229,7 @@ const save = async () => {
         <div v-if="values[setting.identifier]">
           <div class="ui hidden divider" />
           <h3 class="ui header">
-            <translate translate-context="Content/Settings/Title/Noun">
+            <translate >
               Current image
             </translate>
           </h3>
@@ -246,7 +246,7 @@ const save = async () => {
       type="submit"
       :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
     >
-      <translate translate-context="Content/*/Button.Label/Verb">
+      <translate >
         Save
       </translate>
     </button>

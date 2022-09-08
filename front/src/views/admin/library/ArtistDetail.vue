@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { humanSize, truncate } from '~/utils/filters'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { computed, ref } from 'vue'
 
@@ -17,11 +17,11 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const router = useRouter()
 
 const labels = computed(() => ({
-  statsWarning: $pgettext('Content/Moderation/Help text', 'Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
+  statsWarning: t('Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
 }))
 
 const isLoading = ref(false)
@@ -106,7 +106,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        <translate translate-context="Content/Moderation/*/Short, Noun">Local</translate>
+                        <translate >Local</translate>
                       </span>
                       &nbsp;
                     </template>
@@ -129,7 +129,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :to="{name: 'library.artists.detail', params: {id: object.id }}"
                   >
                     <i class="info icon" />
-                    <translate translate-context="Content/Moderation/Link/Verb">
+                    <translate >
                       Open local profile
                     </translate>&nbsp;
                   </router-link>
@@ -147,7 +147,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">View in Django's admin</translate>&nbsp;
+                        <translate >View in Django's admin</translate>&nbsp;
                       </a>
                       <a
                         v-if="object.mbid"
@@ -157,7 +157,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">Open on MusicBrainz</translate>&nbsp;
+                        <translate >Open on MusicBrainz</translate>&nbsp;
                       </a>
                       <fetch-button
                         v-if="!object.is_local"
@@ -166,7 +166,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         @refresh="fetchData"
                       >
                         <i class="refresh icon" />&nbsp;
-                        <translate translate-context="Content/Moderation/Button/Verb">
+                        <translate >
                           Refresh from remote server
                         </translate>&nbsp;
                       </fetch-button>
@@ -177,7 +177,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate translate-context="Content/Moderation/Link/Verb">Open remote profile</translate>&nbsp;
+                        <translate >Open remote profile</translate>&nbsp;
                       </a>
                     </div>
                   </button>
@@ -189,7 +189,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     class="ui labeled icon button"
                   >
                     <i class="edit icon" />
-                    <translate translate-context="Content/*/Button.Label/Verb">
+                    <translate >
                       Edit
                     </translate>
                   </router-link>
@@ -199,12 +199,12 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    <translate translate-context="*/*/*/Verb">
+                    <translate >
                       Delete
                     </translate>
                     <template #modal-header>
                       <p>
-                        <translate translate-context="Popup/Library/Title">
+                        <translate >
                           Delete this artist?
                         </translate>
                       </p>
@@ -212,7 +212,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     <template #modal-content>
                       <div>
                         <p>
-                          <translate translate-context="Content/Moderation/Paragraph">
+                          <translate >
                             The artist will be removed, as well as associated uploads, tracks, albums, favorites and listening history. This action is irreversible.
                           </translate>
                         </p>
@@ -220,7 +220,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     </template>
                     <template #modal-confirm>
                       <p>
-                        <translate translate-context="*/*/*/Verb">
+                        <translate >
                           Delete
                         </translate>
                       </p>
@@ -239,7 +239,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
+                  <translate >
                     Artist data
                   </translate>
                 </div>
@@ -248,7 +248,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">
+                      <translate >
                         Name
                       </translate>
                     </td>
@@ -259,7 +259,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('category', object.content_category) }}">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Category
                         </translate>
                       </router-link>
@@ -271,7 +271,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr v-if="!object.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        <translate translate-context="Content/Moderation/*/Noun">
+                        <translate >
                           Domain
                         </translate>
                       </router-link>
@@ -282,7 +282,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr v-if="object.description">
                     <td>
-                      <translate translate-context="'*/*/*/Noun">
+                      <translate >
                         Description
                       </translate>
                     </td>
@@ -300,7 +300,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
+                  <translate >
                     Activity
                   </translate>&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
@@ -322,7 +322,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
+                      <translate >
                         First seen
                       </translate>
                     </td>
@@ -332,7 +332,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*/Noun">
+                      <translate >
                         Listenings
                       </translate>
                     </td>
@@ -342,7 +342,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*">
+                      <translate >
                         Favorited tracks
                       </translate>
                     </td>
@@ -352,7 +352,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="*/*/*">
+                      <translate >
                         Playlists
                       </translate>
                     </td>
@@ -363,7 +363,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `artist:${object.id}`) }}">
-                        <translate translate-context="Content/Moderation/Table.Label/Noun">
+                        <translate >
                           Linked reports
                         </translate>
                       </router-link>
@@ -375,7 +375,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.edits', query: {q: getQuery('target', 'artist ' + object.id)}}">
-                        <translate translate-context="*/Admin/*/Noun">
+                        <translate >
                           Edits
                         </translate>
                       </router-link>
@@ -393,7 +393,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate translate-context="Content/Moderation/Title">
+                  <translate >
                     Audio content
                   </translate>&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
@@ -415,7 +415,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label/Noun">
+                      <translate >
                         Cached size
                       </translate>
                     </td>
@@ -425,7 +425,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      <translate translate-context="Content/Moderation/Table.Label">
+                      <translate >
                         Total size
                       </translate>
                     </td>
@@ -437,7 +437,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('artist_id', object.id) }}">
-                        <translate translate-context="*/*/*/Noun">
+                        <translate >
                           Libraries
                         </translate>
                       </router-link>
@@ -449,7 +449,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('artist_id', object.id) }}">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Uploads
                         </translate>
                       </router-link>
@@ -461,7 +461,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('artist_id', object.id) }}">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Albums
                         </translate>
                       </router-link>
@@ -473,7 +473,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('artist_id', object.id) }}">
-                        <translate translate-context="*/*/*">
+                        <translate >
                           Tracks
                         </translate>
                       </router-link>

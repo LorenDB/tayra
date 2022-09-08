@@ -80,7 +80,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
       class="small"
     >
       <h3 class="header">
-        <translate translate-context="Popup/*/Title">
+        <translate >
           Refreshing object from remote server…
         </translate>
       </h3>
@@ -91,12 +91,12 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
             class="ui message"
           >
             <h4 class="header">
-              <translate translate-context="Popup/*/Message.Title">
+              <translate >
                 Refresh was skipped
               </translate>
             </h4>
             <p>
-              <translate translate-context="Popup/*/Message.Content">
+              <translate >
                 The remote server answered, but returned data was unsupported by Funkwhale.
               </translate>
             </p>
@@ -106,12 +106,12 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
             class="ui success message"
           >
             <h4 class="header">
-              <translate translate-context="Popup/*/Message.Title">
+              <translate >
                 Refresh successful
               </translate>
             </h4>
             <p>
-              <translate translate-context="Popup/*/Message.Content">
+              <translate >
                 Data was refreshed successfully from remote server.
               </translate>
             </p>
@@ -121,12 +121,12 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
             class="ui error message"
           >
             <h4 class="header">
-              <translate translate-context="Popup/*/Message.Title">
+              <translate >
                 Refresh error
               </translate>
             </h4>
             <p>
-              <translate translate-context="Popup/*/Message.Content">
+              <translate >
                 An error occurred while trying to refresh data:
               </translate>
             </p>
@@ -134,7 +134,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
               <tbody>
                 <tr>
                   <td>
-                    <translate translate-context="Popup/Import/Table.Label/Noun">
+                    <translate >
                       Error type
                     </translate>
                   </td>
@@ -144,7 +144,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Popup/Import/Table.Label/Noun">
+                    <translate >
                       Error detail
                     </translate>
                   </td>
@@ -152,49 +152,49 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
                     <translate
                       v-if="data.detail.error_code === 'http' && data.detail.status_code"
                       :translate-params="{status: data.detail.status_code}"
-                      translate-context="*/*/Error"
+
                     >
                       The remote server answered with HTTP %{ status }
                     </translate>
                     <translate
                       v-else-if="['http', 'request'].indexOf(data.detail.error_code) > -1"
-                      translate-context="*/*/Error"
+
                     >
                       An HTTP error occurred while contacting the remote server
                     </translate>
                     <translate
                       v-else-if="data.detail.error_code === 'timeout'"
-                      translate-context="*/*/Error"
+
                     >
                       The remote server didn't respond quickly enough
                     </translate>
                     <translate
                       v-else-if="data.detail.error_code === 'connection'"
-                      translate-context="*/*/Error"
+
                     >
                       Impossible to connect to the remote server
                     </translate>
                     <translate
                       v-else-if="['invalid_json', 'invalid_jsonld', 'missing_jsonld_type'].indexOf(data.detail.error_code) > -1"
-                      translate-context="*/*/Error"
+
                     >
                       The remote server returned invalid JSON or JSON-LD data
                     </translate>
                     <translate
                       v-else-if="data.detail.error_code === 'validation'"
-                      translate-context="*/*/Error"
+
                     >
                       Data returned by the remote server had invalid or missing attributes
                     </translate>
                     <translate
                       v-else-if="data.detail.error_code === 'unhandled'"
-                      translate-context="*/*/Error"
+
                     >
                       Unknown error
                     </translate>
                     <translate
                       v-else
-                      translate-context="*/*/Error"
+
                     >
                       Unknown error
                     </translate>
@@ -209,7 +209,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui active inverted dimmer"
         >
           <div class="ui text loader">
-            <translate translate-context="Popup/*/Loading.Title">
+            <translate >
               Requesting a fetch…
             </translate>
           </div>
@@ -219,7 +219,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui active inverted dimmer"
         >
           <div class="ui text loader">
-            <translate translate-context="Popup/*/Loading.Title">
+            <translate >
               Waiting for result…
             </translate>
           </div>
@@ -230,7 +230,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui negative message"
         >
           <h4 class="header">
-            <translate translate-context="Content/*/Error message.Title">
+            <translate >
               Error while saving settings
             </translate>
           </h4>
@@ -249,12 +249,12 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui warning message"
         >
           <h4 class="header">
-            <translate translate-context="Popup/*/Message.Title">
+            <translate >
               Refresh pending
             </translate>
           </h4>
           <p>
-            <translate translate-context="Popup/*/Message.Content">
+            <translate >
               The refresh request hasn't been processed in time by our server. It will be processed later.
             </translate>
           </p>
@@ -262,7 +262,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
       </div>
       <div class="actions">
         <button class="ui basic cancel button">
-          <translate translate-context="*/*/Button.Label/Verb">
+          <translate >
             Close
           </translate>
         </button>
@@ -271,7 +271,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui confirm success button"
           @click.prevent="showModal = false; emit('refresh')"
         >
-          <translate translate-context="*/*/Button.Label/Verb">
+          <translate >
             Close and reload page
           </translate>
         </button>

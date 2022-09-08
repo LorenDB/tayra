@@ -2,7 +2,7 @@
 import { useVModel } from '@vueuse/core'
 import { range, clamp } from 'lodash-es'
 import { computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 const RANGE = 2
 
@@ -61,11 +61,11 @@ const setPage = (page: number) => {
   current.value = page
 }
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  pagination: $pgettext('Content/*/Hidden text/Noun', 'Pagination'),
-  previousPage: $pgettext('Content/*/Link', 'Previous Page'),
-  nextPage: $pgettext('Content/*/Link', 'Next Page')
+  pagination: t('Pagination'),
+  previousPage: t('Previous Page'),
+  nextPage: t('Next Page')
 }))
 </script>
 

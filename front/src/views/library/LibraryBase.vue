@@ -4,7 +4,7 @@ import type { Library } from '~/types'
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 import { computed, ref, watch, watchEffect } from 'vue'
 import { humanSize } from '~/utils/filters'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -34,18 +34,18 @@ const isPlayable = computed(() => (object.value?.uploads_count ?? 0) > 0 && (
     || (store.getters['libraries/follow'](object.value?.uuid) || {}).approved === true
 ))
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('*/*/*', 'Library'),
+  title: t('Library'),
   visibility: {
-    me: $pgettext('Content/Library/Card.Help text', 'Private'),
-    instance: $pgettext('Content/Library/Card.Help text', 'Restricted'),
-    everyone: $pgettext('Content/Library/Card.Help text', 'Public')
+    me: t('Private'),
+    instance: t('Restricted'),
+    everyone: t('Public')
   },
   tooltips: {
-    me: $pgettext('Content/Library/Card.Help text', 'This library is private and your approval from its owner is needed to access its content'),
-    instance: $pgettext('Content/Library/Card.Help text', 'This library is restricted to users on this pod only'),
-    everyone: $pgettext('Content/Library/Card.Help text', 'This library is public and you can access its content freely')
+    me: t('This library is private and your approval from its owner is needed to access its content'),
+    instance: t('This library is restricted to users on this pod only'),
+    everyone: t('This library is public and you can access its content freely')
   }
 }))
 
@@ -112,7 +112,7 @@ const updateUploads = (count: number) => {
                 <i class="external icon" />
                 <translate
                   :translate-params="{domain: object.actor.domain}"
-                  translate-context="Content/*/Button.Label/Verb"
+
                 >View on %{ domain }</translate>
               </a>
               <div
@@ -132,7 +132,7 @@ const updateUploads = (count: number) => {
                 :to="{name: 'manage.library.libraries.detail', params: {id: object.uuid}}"
               >
                 <i class="wrench icon" />
-                <translate translate-context="Content/Moderation/Link">
+                <translate >
                   Open in moderation interface
                 </translate>
               </router-link>
@@ -154,7 +154,7 @@ const updateUploads = (count: number) => {
                   :truncate-length="0"
                 >
                   <translate
-                    translate-context="*/*/*"
+
                     :translate-params="{username: object.actor.full_username}"
                   >
                     Owned by %{ username }
@@ -187,7 +187,7 @@ const updateUploads = (count: number) => {
             </span> ·
             <i class="music icon" />
             <translate
-              translate-context="*/*/*"
+
               :translate-params="{count: object.uploads_count}"
               :translate-n="object.uploads_count"
               translate-plural="%{ count } tracks"
@@ -230,10 +230,10 @@ const updateUploads = (count: number) => {
           <div class="ui form">
             <div class="field">
               <label for="copy-input">
-                <translate translate-context="Content/Library/Title">Sharing link</translate>
+                <translate >Sharing link</translate>
               </label>
               <p>
-                <translate translate-context="Content/Library/Paragraph">
+                <translate >
                   Share this link with other users so they can request access to this library by copy-pasting it in their pod search bar.
                 </translate>
               </p>
@@ -250,7 +250,7 @@ const updateUploads = (count: number) => {
 
                   :to="{name: 'library.detail'}"
                 >
-                  <translate translate-context="*/*/*">
+                  <translate >
                     Artists
                   </translate>
                 </router-link>
@@ -259,7 +259,7 @@ const updateUploads = (count: number) => {
 
                   :to="{name: 'library.detail.albums'}"
                 >
-                  <translate translate-context="*/*/*">
+                  <translate >
                     Albums
                   </translate>
                 </router-link>
@@ -268,7 +268,7 @@ const updateUploads = (count: number) => {
 
                   :to="{name: 'library.detail.tracks'}"
                 >
-                  <translate translate-context="*/*/*">
+                  <translate >
                     Tracks
                   </translate>
                 </router-link>
@@ -279,7 +279,7 @@ const updateUploads = (count: number) => {
                   :to="{name: 'library.detail.upload'}"
                 >
                   <i class="upload icon" />
-                  <translate translate-context="Content/Library/Card.Button.Label/Verb">
+                  <translate >
                     Upload
                   </translate>
                 </router-link>
@@ -290,7 +290,7 @@ const updateUploads = (count: number) => {
                   :to="{name: 'library.detail.edit'}"
                 >
                   <i class="pencil icon" />
-                  <translate translate-context="Content/*/Button.Label/Verb">
+                  <translate >
                     Edit
                   </translate>
                 </router-link>

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Head/Admin/Title', 'Manage library'),
-  secondaryMenu: $pgettext('Menu/*/Hidden text', 'Secondary menu')
+  title: t('Manage library'),
+  secondaryMenu: t('Secondary menu')
 }))
 </script>
 
@@ -23,7 +23,7 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.library.edits'}"
       >
-        <translate translate-context="*/Admin/*/Noun">
+        <translate >
           Edits
         </translate>
       </router-link>
@@ -31,7 +31,7 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.channels'}"
       >
-        <translate translate-context="*/*/*">
+        <translate >
           Channels
         </translate>
       </router-link>
@@ -39,7 +39,7 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.library.artists'}"
       >
-        <translate translate-context="*/*/*/Noun">
+        <translate >
           Artists
         </translate>
       </router-link>
@@ -47,7 +47,7 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.library.albums'}"
       >
-        <translate translate-context="*/*/*">
+        <translate >
           Albums
         </translate>
       </router-link>
@@ -55,7 +55,7 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.library.tracks'}"
       >
-        <translate translate-context="*/*/*">
+        <translate >
           Tracks
         </translate>
       </router-link>
@@ -63,7 +63,7 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.library.libraries'}"
       >
-        <translate translate-context="*/*/*/Noun">
+        <translate >
           Libraries
         </translate>
       </router-link>
@@ -71,7 +71,7 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.library.uploads'}"
       >
-        <translate translate-context="*/*/*">
+        <translate >
           Uploads
         </translate>
       </router-link>
@@ -79,7 +79,7 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.library.tags'}"
       >
-        <translate translate-context="*/*/*/Noun">
+        <translate >
           Tags
         </translate>
       </router-link>

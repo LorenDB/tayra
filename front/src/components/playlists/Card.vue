@@ -62,7 +62,7 @@ const images = computed(() => {
     </div>
     <div class="extra content">
       <translate
-        translate-context="*/*/*"
+
         :translate-params="{count: playlist.tracks_count}"
         :translate-n="playlist.tracks_count"
         translate-plural="%{ count } tracks"

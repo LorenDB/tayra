@@ -1,6 +1,6 @@
 import type { Module } from 'vuex'
 import type { RootState } from '~/store/index'
-import type { availableLanguages } from '~/init/locale'
+import type { SUPPORTED_LOCALES } from '~/init/locale'
 
 import axios from 'axios'
 import moment from 'moment'
@@ -31,7 +31,7 @@ interface Message {
 type NotificationsKey = 'inbox' | 'pendingReviewEdits' | 'pendingReviewReports' | 'pendingReviewRequests'
 
 export interface State {
-  currentLanguage: 'en_US' | keyof typeof availableLanguages
+  currentLanguage: 'en_US' | keyof typeof SUPPORTED_LOCALES
   selectedLanguage: boolean
   queueFocused: null | 'queue' | 'player'
   momentLocale: 'en'

@@ -1,12 +1,12 @@
 import type { InitModule } from '~/types'
 
 import { registerSW } from 'virtual:pwa-register'
+import { i18n } from '~/init/locale'
+
 import useLogger from '~/composables/useLogger'
-import { gettext } from '~/init/locale'
 
+const { t } = i18n.global
 const logger = useLogger()
-
-const { $pgettext } = gettext
 
 export const install: InitModule = ({ store }) => {
   const updateSW = registerSW({
@@ -21,19 +21,19 @@ export const install: InitModule = ({ store }) => {
     },
     onNeedRefresh () {
       store.commit('ui/addMessage', {
-        content: $pgettext('App/Message/Paragraph', 'A new version of the app is available.'),
+        content: t('A new version of the app is available.'),
         date: new Date(),
         key: 'refreshApp',
         displayTime: 0,
         classActions: 'bottom attached opaque',
         actions: [
           {
-            text: $pgettext('App/Message/Paragraph', 'Update'),
+            text: t('Update'),
             class: 'primary',
             click: () => updateSW()
           },
           {
-            text: $pgettext('App/Message/Paragraph', 'Later'),
+            text: t('Later'),
             class: 'basic'
           }
         ]

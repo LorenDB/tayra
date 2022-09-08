@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Playlist, PlaylistTrack, BackendError, APIErrorResponse } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useVModels } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
@@ -49,9 +49,9 @@ const tracks = computed({
   }
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  copyTitle: $pgettext('Content/Playlist/Button.Tooltip/Verb', 'Copy the current queue to this playlist')
+  copyTitle: t('Copy the current queue to this playlist')
 }))
 
 const isLoading = ref(false)
@@ -167,20 +167,20 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
       :title="undefined"
     />
     <h3 class="ui top attached header">
-      <translate translate-context="Content/Playlist/Title">
+      <translate >
         Playlist editor
       </translate>
     </h3>
     <div class="ui attached segment">
       <template v-if="status === 'loading'">
         <div class="ui active tiny inline loader" />
-        <translate translate-context="Content/Playlist/Paragraph">
+        <translate >
           Syncing changes to server…
         </translate>
       </template>
       <template v-else-if="status === 'errored'">
         <i class="dangerclose icon" />
-        <translate translate-context="Content/Playlist/Error message.Title">
+        <translate >
           An error occurred while saving your changes
         </translate>
         <div
@@ -205,7 +205,7 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
       >
         <p
           v-translate="{playlist: playlist?.name}"
-          translate-context="Content/Playlist/Paragraph"
+
         >
           Some tracks in your queue are already in this playlist:
         </p>
@@ -222,13 +222,13 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
           class="ui small success button"
           @click="insertMany(queueTracks, true)"
         >
-          <translate translate-context="*/Playlist/Button.Label/Verb">
+          <translate >
             Add anyways
           </translate>
         </button>
       </div>
       <template v-else-if="status === 'saved'">
-        <i class="success check icon" /> <translate translate-context="Content/Playlist/Paragraph">
+        <i class="success check icon" /> <translate >
           Changes synced with server
         </translate>
       </template>
@@ -242,7 +242,7 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
       >
         <i class="plus icon" />
         <translate
-          translate-context="Content/Playlist/Button.Label/Verb"
+
           translate-plural="Insert from queue (%{ count } tracks)"
           :translate-n="queueTracks.length"
           :translate-params="{count: queueTracks.length}"
@@ -256,13 +256,13 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
         class="ui labeled right floated danger icon button"
         :action="clearPlaylist"
       >
-        <i class="eraser icon" /> <translate translate-context="*/Playlist/Button.Label/Verb">
+        <i class="eraser icon" /> <translate >
           Clear playlist
         </translate>
         <template #modal-header>
           <p
             v-translate="{playlist: playlist?.name}"
-            translate-context="Popup/Playlist/Title"
+
             :translate-params="{playlist: playlist?.name}"
           >
             Do you want to clear the playlist "%{ playlist }"?
@@ -270,14 +270,14 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
         </template>
         <template #modal-content>
           <p>
-            <translate translate-context="Popup/Playlist/Paragraph">
+            <translate >
               This will remove all tracks from this playlist and cannot be undone.
             </translate>
           </p>
         </template>
         <template #modal-confirm>
           <div>
-            <translate translate-context="*/Playlist/Button.Label/Verb">
+            <translate >
               Clear playlist
             </translate>
           </div>
@@ -286,7 +286,7 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
       <div class="ui hidden divider" />
       <template v-if="tracks.length > 0">
         <p>
-          <translate translate-context="Content/Playlist/Paragraph/Call to action">
+          <translate >
             Drag and drop rows to reorder tracks in the playlist
           </translate>
         </p>

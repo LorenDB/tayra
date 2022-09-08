@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Artist, Album } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { ref, computed, reactive, watch, onMounted } from 'vue'
 import { refDebounced } from '@vueuse/core'
 
@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const logger = useLogger()
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const query = ref('')
 const queryDebounced = refDebounced(query, 500)
@@ -65,7 +65,7 @@ onMounted(() => {
 })
 
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('*/Search/Input.Placeholder', 'Artist, album, track…')
+  searchPlaceholder: t('Artist, album, track…')
 }))
 
 </script>
@@ -73,7 +73,7 @@ const labels = computed(() => ({
 <template>
   <div>
     <h2>
-      <translate translate-context="Content/Search/Title">
+      <translate >
         Search for some music
       </translate>
     </h2>
@@ -91,7 +91,7 @@ const labels = computed(() => ({
     </div>
     <template v-if="query.length > 0">
       <h3 class="ui title">
-        <translate translate-context="*/*/*/Noun">
+        <translate >
           Artists
         </translate>
       </h3>
@@ -105,14 +105,14 @@ const labels = computed(() => ({
         </div>
       </div>
       <p v-else>
-        <translate translate-context="Content/Search/Paragraph">
+        <translate >
           No artist matched your query
         </translate>
       </p>
     </template>
     <template v-if="query.length > 0">
       <h3 class="ui title">
-        <translate translate-context="*/*/*">
+        <translate >
           Albums
         </translate>
       </h3>
@@ -132,7 +132,7 @@ const labels = computed(() => ({
         </div>
       </div>
       <p v-else>
-        <translate translate-context="Content/Search/Paragraph">
+        <translate >
           No album matched your query
         </translate>
       </p>

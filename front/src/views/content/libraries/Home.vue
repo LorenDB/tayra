@@ -46,7 +46,7 @@ const libraryCreated = (library: Library) => {
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        <translate translate-context="Content/Library/Paragraph">
+        <translate >
           Loading Libraries…
         </translate>
       </div>
@@ -56,13 +56,13 @@ const libraryCreated = (library: Library) => {
       class="ui text container"
     >
       <h1 class="ui header">
-        <translate translate-context="Content/Library/Title">
+        <translate >
           My libraries
         </translate>
       </h1>
 
       <p v-if="libraries.length == 0">
-        <translate translate-context="Content/Library/Paragraph">
+        <translate >
           Looks like you don't have a library, it's time to create one.
         </translate>
       </p>
@@ -79,7 +79,7 @@ const libraryCreated = (library: Library) => {
           v-else
           class="minus icon"
         />
-        <translate translate-context="Content/Library/Link/Verb">Create a new library</translate>
+        <translate >Create a new library</translate>
       </a>
       <library-form
         v-if="!hiddenForm"

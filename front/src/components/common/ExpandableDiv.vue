@@ -28,11 +28,11 @@ const truncated = computed(() => props.content.slice(0, props.length))
       <br>
       <translate
         v-if="expanded"
-        translate-context="*/*/Button,Label"
+
       >Show less</translate>
       <translate
         v-else
-        translate-context="*/*/Button,Label"
+
       >Show more</translate>
     </a>
   </div>

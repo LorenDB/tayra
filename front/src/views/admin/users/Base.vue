@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const labels = computed(() => ({
-  manageUsers: $pgettext('Head/Admin/Title', 'Manage users'),
-  secondaryMenu: $pgettext('Menu/*/Hidden text', 'Secondary menu')
+  manageUsers: t('Manage users'),
+  secondaryMenu: t('Secondary menu')
 }))
 </script>
 
@@ -24,7 +24,7 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.users.users.list'}"
       >
-        <translate translate-context="*/*/*/Noun">
+        <translate >
           Users
         </translate>
       </router-link>
@@ -32,7 +32,7 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.users.invitations.list'}"
       >
-        <translate translate-context="*/Admin/*/Noun">
+        <translate >
           Invitations
         </translate>
       </router-link>

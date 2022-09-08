@@ -1,8 +1,10 @@
 import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
 
-import { gettext } from '~/init/locale'
+import { i18n } from '~/init/locale'
+
 import store from '~/store'
-const { $pgettext } = gettext
+
+const { t } = i18n.global
 
 interface Objects {
   track?: Track | null
@@ -33,26 +35,26 @@ const getReportableObjects = ({ track, album, artist, playlist, account, library
 
   if (account) {
     reportableObjs.push({
-      label: $pgettext('*/Moderation/*/Verb', 'Report @%{ username }…', { username: account.preferred_username }),
+      label: t('Report @%{ username }…', { username: account.preferred_username }),
       target: {
         type: 'account',
         _obj: account,
         full_username: account.full_username,
         label: account.full_username,
-        typeLabel: $pgettext('*/*/*/Noun', 'Account')
+        typeLabel: t('Account')
       }
     })
   }
 
   if (track) {
     reportableObjs.push({
-      label: $pgettext('*/Moderation/*/Verb', 'Report this track…'),
+      label: t('Report this track…'),
       target: {
         type: 'track',
         id: track.id,
         _obj: track,
         label: track.title,
-        typeLabel: $pgettext('*/*/*/Noun', 'Track')
+        typeLabel: t('Track')
       }
     })
 
@@ -62,13 +64,13 @@ const getReportableObjects = ({ track, album, artist, playlist, account, library
 
   if (album) {
     reportableObjs.push({
-      label: $pgettext('*/Moderation/*/Verb', 'Report this album…'),
+      label: t('Report this album…'),
       target: {
         type: 'album',
         id: album.id,
         label: album.title,
         _obj: album,
-        typeLabel: $pgettext('*/*/*', 'Album')
+        typeLabel: t('Album')
       }
     })
 
@@ -79,50 +81,50 @@ const getReportableObjects = ({ track, album, artist, playlist, account, library
 
   if (channel) {
     reportableObjs.push({
-      label: $pgettext('*/Moderation/*/Verb', 'Report this channel…'),
+      label: t('Report this channel…'),
       target: {
         type: 'channel',
         uuid: channel.uuid,
-        label: channel.artist?.name ?? $pgettext('*/*/*', 'Unknown artist'),
+        label: channel.artist?.name ?? t('Unknown artist'),
         _obj: channel,
-        typeLabel: $pgettext('*/*/*', 'Channel')
+        typeLabel: t('Channel')
       }
     })
   } else if (artist) {
     reportableObjs.push({
-      label: $pgettext('*/Moderation/*/Verb', 'Report this artist…'),
+      label: t('Report this artist…'),
       target: {
         type: 'artist',
         id: artist.id,
         label: artist.name,
         _obj: artist,
-        typeLabel: $pgettext('*/*/*/Noun', 'Artist')
+        typeLabel: t('Artist')
       }
     })
   }
 
   if (playlist) {
     reportableObjs.push({
-      label: $pgettext('*/Moderation/*/Verb', 'Report this playlist…'),
+      label: t('Report this playlist…'),
       target: {
         type: 'playlist',
         id: playlist.id,
         label: playlist.name,
         _obj: playlist,
-        typeLabel: $pgettext('*/*/*', 'Playlist')
+        typeLabel: t('Playlist')
       }
     })
   }
 
   if (library) {
     reportableObjs.push({
-      label: $pgettext('*/Moderation/*/Verb', 'Report this library…'),
+      label: t('Report this library…'),
       target: {
         type: 'library',
         uuid: library.uuid,
         label: library.name,
         _obj: library,
-        typeLabel: $pgettext('*/*/*/Noun', 'Library')
+        typeLabel: t('Library')
       }
     })
   }

@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import type { BackendError } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { useStore } from '~/store'
 import axios from 'axios'
 
 import PasswordInput from '~/components/forms/PasswordInput.vue'
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const store = useStore()
 
 const subsonicEnabled = computed(() => store.state.instance.settings.subsonic.enabled.value)
 const labels = computed(() => ({
-  subsonicField: $pgettext('Content/Password/Input.label', 'Your subsonic API password')
+  subsonicField: t('Your subsonic API password')
 }))
 
 const errors = ref([] as string[])
@@ -38,7 +38,7 @@ const fetchToken = async () => {
 const showToken = ref(false)
 const successMessage = ref('')
 const requestNewToken = async () => {
-  successMessage.value = $pgettext('Content/Settings/Message', 'Password updated')
+  successMessage.value = t('Password updated')
   success.value = false
   errors.value = []
   isLoading.value = true
@@ -56,7 +56,7 @@ const requestNewToken = async () => {
 }
 
 const disable = async () => {
-  successMessage.value = $pgettext('Content/Settings/Message', 'Access disabled')
+  successMessage.value = t('Access disabled')
   success.value = false
   errors.value = []
   isLoading.value = true
@@ -82,7 +82,7 @@ fetchToken()
     @submit.prevent="requestNewToken()"
   >
     <h2>
-      <translate translate-context="Content/Settings/Title">
+      <translate >
         Subsonic API password
       </translate>
     </h2>
@@ -90,19 +90,19 @@ fetchToken()
       v-if="!subsonicEnabled"
       class="ui message"
     >
-      <translate translate-context="Content/Settings/Paragraph">
+      <translate >
         The Subsonic API is not available on this Funkwhale instance.
       </translate>
     </p>
     <p>
-      <translate translate-context="Content/Settings/Paragraph'">
+      <translate >
         Funkwhale is compatible with other music players that support the Subsonic API.
-      </translate>&nbsp;<translate translate-context="Content/Settings/Paragraph">
+      </translate>&nbsp;<translate >
         You can use those to enjoy your playlist and music in offline mode, on your smartphone or tablet, for instance.
       </translate>
     </p>
     <p>
-      <translate translate-context="Content/Settings/Paragraph">
+      <translate >
         However, accessing Funkwhale from those clients requires a separate password you can set below.
       </translate>
     </p>
@@ -111,7 +111,7 @@ fetchToken()
         href="https://docs.funkwhale.audio/users/apps.html#subsonic-compatible-clients"
         target="_blank"
       >
-        <translate translate-context="Content/Settings/Link">Discover how to use Funkwhale from other apps</translate>
+        <translate >Discover how to use Funkwhale from other apps</translate>
       </a>
     </p>
     <div
@@ -128,7 +128,7 @@ fetchToken()
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
+        <translate >
           Error
         </translate>
       </h4>
@@ -164,26 +164,26 @@ fetchToken()
         :class="['ui', {'loading': isLoading}, 'button']"
         :action="requestNewToken"
       >
-        <translate translate-context="*/Settings/Button.Label/Verb">
+        <translate >
           Request a new password
         </translate>
         <template #modal-header>
           <p>
-            <translate translate-context="Popup/Settings/Title">
+            <translate >
               Request a new Subsonic API password?
             </translate>
           </p>
         </template>
         <template #modal-content>
           <p>
-            <translate translate-context="Popup/Settings/Paragraph">
+            <translate >
               This will log you out from existing devices that use the current password.
             </translate>
           </p>
         </template>
         <template #modal-confirm>
           <div>
-            <translate translate-context="*/Settings/Button.Label/Verb">
+            <translate >
               Request a new password
             </translate>
           </div>
@@ -195,7 +195,7 @@ fetchToken()
         :class="['ui', {'loading': isLoading}, 'button']"
         @click="requestNewToken"
       >
-        <translate translate-context="Content/Settings/Button.Label/Verb">
+        <translate >
           Request a password
         </translate>
       </button>
@@ -204,26 +204,26 @@ fetchToken()
         :class="['ui', {'loading': isLoading}, 'warning', 'button']"
         :action="disable"
       >
-        <translate translate-context="Content/Settings/Button.Label/Verb">
+        <translate >
           Disable Subsonic access
         </translate>
         <template #modal-header>
           <p>
-            <translate translate-context="Popup/Settings/Title">
+            <translate >
               Disable Subsonic API access?
             </translate>
           </p>
         </template>
         <template #modal-content>
           <p>
-            <translate translate-context="Popup/Settings/Paragraph">
+            <translate >
               This will completely disable access to the Subsonic API using from account.
             </translate>
           </p>
         </template>
         <template #modal-confirm>
           <div>
-            <translate translate-context="Popup/Settings/Button.Label">
+            <translate >
               Disable access
             </translate>
           </div>

@@ -42,7 +42,7 @@ const handleClick = (entry: FSEntry) => {
         class="ui button"
         @click.prevent="emit('import')"
       >
-        <translate translate-context="Content/Library/Button/Verb">
+        <translate >
           Import
         </translate>
       </button>

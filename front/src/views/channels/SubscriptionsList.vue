@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Channel } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { ref, computed } from 'vue'
 
 import axios from 'axios'
@@ -23,10 +23,10 @@ const props = withDefaults(defineProps<Props>(), {
 const query = ref(props.defaultQuery)
 const widgetKey = ref(new Date().toLocaleString())
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Content/Subscriptions/Header', 'Subscribed Channels'),
-  searchPlaceholder: $pgettext('Content/Subscriptions/Form.Placeholder', 'Filter by name…')
+  title: t('Subscribed Channels'),
+  searchPlaceholder: t('Filter by name…')
 }))
 
 const previousPage = ref()
@@ -66,7 +66,7 @@ const showSubscribeModal = ref(false)
         <div class="actions">
           <a @click.stop.prevent="showSubscribeModal = true">
             <i class="plus icon" />
-            <translate translate-context="Content/Profile/Button">Add new</translate>
+            <translate >Add new</translate>
           </a>
         </div>
       </h1>
@@ -76,7 +76,7 @@ const showSubscribeModal = ref(false)
         :fullscreen="false"
       >
         <h2 class="header">
-          <translate translate-context="*/*/*/Noun">
+          <translate >
             Subscription
           </translate>
         </h2>
@@ -94,7 +94,7 @@ const showSubscribeModal = ref(false)
         </div>
         <div class="actions">
           <button class="ui basic deny button">
-            <translate translate-context="*/*/Button.Label/Verb">
+            <translate >
               Cancel
             </translate>
           </button>
@@ -104,7 +104,7 @@ const showSubscribeModal = ref(false)
             class="ui primary button"
           >
             <i class="bookmark icon" />
-            <translate translate-context="*/*/*/Verb">
+            <translate >
               Subscribe
             </translate>
           </button>

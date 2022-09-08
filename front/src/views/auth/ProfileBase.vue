@@ -3,7 +3,7 @@ import type { Actor } from '~/types'
 
 import { onBeforeRouteUpdate } from 'vue-router'
 import { computed, ref, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -41,9 +41,9 @@ const routerParams = computed(() => props.domain
   : { username: props.username }
 )
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  usernameProfile: $pgettext('Head/Profile/Title', "%{ username }'s profile", { username: props.username })
+  usernameProfile: t("%{ username }'s profile", { username: props.username })
 }))
 
 onBeforeRouteUpdate((to) => {
@@ -102,7 +102,7 @@ watch(props, fetchData, { immediate: true })
                 <i class="external icon" />
                 <translate
                   :translate-params="{domain: object.domain}"
-                  translate-context="Content/*/Button.Label/Verb"
+
                 >View on %{ domain }</translate>
               </a>
               <div
@@ -122,7 +122,7 @@ watch(props, fetchData, { immediate: true })
                 :to="{name: 'manage.moderation.accounts.detail', params: {id: object.full_username}}"
               >
                 <i class="wrench icon" />
-                <translate translate-context="Content/Moderation/Link">
+                <translate >
                   Open in moderation interface
                 </translate>
               </router-link>
@@ -153,7 +153,7 @@ watch(props, fetchData, { immediate: true })
             <template v-if="object.full_username === $store.state.auth.fullUsername">
               <div class="ui very small hidden divider" />
               <div class="ui basic success label">
-                <translate translate-context="Content/Profile/Button.Paragraph">
+                <translate >
                   This is you!
                 </translate>
               </div>
@@ -178,7 +178,7 @@ watch(props, fetchData, { immediate: true })
                   class="item"
                   :to="{name: 'profile.overview', params: routerParams}"
                 >
-                  <translate translate-context="Content/Profile/Link">
+                  <translate >
                     Overview
                   </translate>
                 </router-link>
@@ -186,7 +186,7 @@ watch(props, fetchData, { immediate: true })
                   class="item"
                   :to="{name: 'profile.activity', params: routerParams}"
                 >
-                  <translate translate-context="Content/Profile/*">
+                  <translate >
                     Activity
                   </translate>
                 </router-link>

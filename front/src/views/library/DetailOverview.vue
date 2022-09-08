@@ -34,13 +34,13 @@ defineProps<Props>()
           <p>
             <translate
               v-if="isOwner"
-              translate-context="*/*/*"
+
             >
               This library is empty, you should upload something in it!
             </translate>
             <translate
               v-else
-              translate-context="*/*/*"
+
             >
               You may need to follow this library to see its content.
             </translate>

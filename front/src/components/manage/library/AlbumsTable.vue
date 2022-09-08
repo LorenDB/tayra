@@ -5,7 +5,7 @@ import type { RouteRecordName } from 'vue-router'
 import type { OrderingField } from '~/store/ui'
 
 import { computed, ref, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 
@@ -49,13 +49,13 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['name', 'name']
 ]
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: $pgettext('*/*/*/Verb', 'Delete'),
-    confirmationMessage: $pgettext('Popup/*/Paragraph', 'The selected albums will be removed, as well as associated tracks, uploads, favorites and listening history. This action is irreversible.'),
+    label: t('Delete'),
+    confirmationMessage: t('The selected albums will be removed, as well as associated tracks, uploads, favorites and listening history. This action is irreversible.'),
     isDangerous: true,
     allowAll: false,
     confirmColor: 'danger'
@@ -94,8 +94,8 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by domain, title, artist, MusicBrainz ID…'),
-  openModeration: $pgettext('Content/Moderation/Verb', 'Open in moderation interface')
+  searchPlaceholder: t('Search by domain, title, artist, MusicBrainz ID…'),
+  openModeration: t('Open in moderation interface')
 }))
 </script>
 
@@ -104,7 +104,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="albums-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+          <label for="albums-search"><translate >Search</translate></label>
           <form @submit.prevent="query = search.value">
             <input
               id="albums-search"
@@ -117,7 +117,7 @@ const labels = computed(() => ({
           </form>
         </div>
         <div class="field">
-          <label for="albums-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+          <label for="albums-ordering"><translate >Ordering</translate></label>
           <select
             id="albums-ordering"
             v-model="ordering"
@@ -133,18 +133,18 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="albums-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate></label>
+          <label for="albums-ordering-direction"><translate >Ordering direction</translate></label>
           <select
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Ascending
               </translate>
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Descending
               </translate>
             </option>
@@ -169,32 +169,32 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Title
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Artist
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Moderation/*/Noun">
+            <translate >
               Domain
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*">
+            <translate >
               Tracks
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
+            <translate >
               Release date
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
+            <translate >
               Creation date
             </translate>
           </th>
@@ -238,7 +238,7 @@ const labels = computed(() => ({
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              <translate translate-context="Content/Moderation/*/Short, Noun">Local</translate>
+              <translate >Local</translate>
             </a>
           </td>
           <td>
@@ -251,7 +251,7 @@ const labels = computed(() => ({
             />
             <translate
               v-else
-              translate-context="*/*/*"
+
             >
               N/A
             </translate>
@@ -273,7 +273,7 @@ const labels = computed(() => ({
 
       <span v-if="result && result.results.length > 0">
         <translate
-          translate-context="Content/*/Paragraph"
+
           :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
         >
           Showing results %{ start }-%{ end } on %{ total }

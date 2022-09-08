@@ -5,7 +5,7 @@ import type { OrderingField } from '~/store/ui'
 import type { Track } from '~/types'
 
 import { computed, onMounted, reactive, ref, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { sortedUniq } from 'lodash-es'
 import { useStore } from '~/store'
 
@@ -96,9 +96,9 @@ onOrderingUpdate(() => {
 
 onMounted(() => $('.ui.dropdown').dropdown())
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Head/Favorites/Title', 'Your Favorites')
+  title: t('Your Favorites')
 }))
 
 const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value].sort((a, b) => a - b)))
@@ -112,7 +112,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
     <section class="ui vertical center aligned stripe segment">
       <div :class="['ui', { 'active': isLoading }, 'inverted', 'dimmer']">
         <div class="ui text loader">
-          <translate translate-context="Content/Favorites/Message">
+          <translate >
             Loading your favorites…
           </translate>
         </div>
@@ -126,7 +126,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           translate-plural="%{ count } favorites"
           :translate-n="$store.state.favorites.count"
           :translate-params="{ count }"
-          translate-context="Content/Favorites/Title"
+
         >
           %{ count } favorite
         </translate>
@@ -144,7 +144,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
         <div class="fields">
           <div class="field">
             <label for="favorites-ordering">
-              <translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate>
+              <translate >Ordering</translate>
             </label>
             <select
               id="favorites-ordering"
@@ -162,7 +162,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           </div>
           <div class="field">
             <label for="favorites-ordering-direction">
-              <translate translate-context="Content/Search/Dropdown.Label/Noun">Order</translate>
+              <translate >Order</translate>
             </label>
             <select
               id="favorites-ordering-direction"
@@ -170,12 +170,12 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
               class="ui dropdown"
             >
               <option value="+">
-                <translate translate-context="Content/Search/Dropdown">
+                <translate >
                   Ascending
                 </translate>
               </option>
               <option value="-">
-                <translate translate-context="Content/Search/Dropdown">
+                <translate >
                   Descending
                 </translate>
               </option>
@@ -183,7 +183,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           </div>
           <div class="field">
             <label for="favorites-results">
-              <translate translate-context="Content/Search/Dropdown.Label/Noun">Results per page</translate>
+              <translate >Results per page</translate>
             </label>
             <select
               id="favorites-results"
@@ -223,7 +223,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       <div class="ui icon header">
         <i class="broken heart icon" />
         <translate
-          translate-context="Content/Home/Placeholder"
+
         >
           No tracks have been added to your favorites yet
         </translate>
@@ -233,7 +233,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
         class="ui success labeled icon button"
       >
         <i class="headphones icon" />
-        <translate translate-context="Content/*/Verb">
+        <translate >
           Browse the library
         </translate>
       </router-link>

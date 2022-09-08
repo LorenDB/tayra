@@ -6,7 +6,7 @@ import type { OrderingField } from '~/store/ui'
 
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRouteQuery } from '@vueuse/router'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { syncRef } from '@vueuse/core'
 import { sortedUniq } from 'lodash-es'
 import { useStore } from '~/store'
@@ -99,10 +99,10 @@ onOrderingUpdate(() => {
 
 onMounted(() => $('.ui.dropdown').dropdown())
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Enter a radio name…'),
-  title: $pgettext('*/*/*', 'Radios')
+  searchPlaceholder: t('Enter a radio name…'),
+  title: t('Radios')
 }))
 
 const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value].sort((a, b) => a - b)))
@@ -112,14 +112,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate translate-context="Content/Radio/Title">
+        <translate >
           Browsing radios
         </translate>
       </h2>
       <div class="ui hidden divider" />
       <div class="ui row">
         <h3 class="ui header">
-          <translate translate-context="Content/Radio/Title">
+          <translate >
             Instance radios
           </translate>
         </h3>
@@ -144,7 +144,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
 
       <div class="ui hidden divider" />
       <h3 class="ui header">
-        <translate translate-context="Content/Radio/Title">
+        <translate >
           User radios
         </translate>
       </h3>
@@ -153,7 +153,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
         class="ui success button"
         to="/library/radios/build"
       >
-        <translate translate-context="Content/Radio/Button.Label/Verb">
+        <translate >
           Create your own radio
         </translate>
       </router-link>
@@ -164,7 +164,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="fields">
           <div class="field">
-            <label for="radios-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+            <label for="radios-search"><translate >Search</translate></label>
             <div class="ui action input">
               <input
                 id="radios-search"
@@ -176,14 +176,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="$pgettext('Content/Search/Input.Label/Noun', 'Search')"
+                :aria-label="t('Search')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="radios-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+            <label for="radios-ordering"><translate >Ordering</translate></label>
             <select
               id="radios-ordering"
               v-model="ordering"
@@ -199,26 +199,26 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="radios-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Order</translate></label>
+            <label for="radios-ordering-direction"><translate >Order</translate></label>
             <select
               id="radios-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate translate-context="Content/Search/Dropdown">
+                <translate >
                   Ascending
                 </translate>
               </option>
               <option value="-">
-                <translate translate-context="Content/Search/Dropdown">
+                <translate >
                   Descending
                 </translate>
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="radios-results"><translate translate-context="Content/Search/Dropdown.Label/Noun">Results per page</translate></label>
+            <label for="radios-results"><translate >Results per page</translate></label>
             <select
               id="radios-results"
               v-model="paginateBy"
@@ -242,7 +242,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="ui icon header">
           <i class="feed icon" />
-          <translate translate-context="Content/Radios/Placeholder">
+          <translate >
             No results matching your query
           </translate>
         </div>
@@ -252,7 +252,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           class="ui success button labeled icon"
         >
           <i class="rss icon" />
-          <translate translate-context="Content/*/Verb">
+          <translate >
             Create a radio
           </translate>
         </router-link>

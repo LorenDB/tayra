@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import useSharedLabels from '~/composables/locale/useSharedLabels'
 import { useVModel } from '@vueuse/core'
 
@@ -28,14 +28,14 @@ const props = withDefaults(defineProps<Props>(), {
 
 const value = useVModel(props, 'modelValue', emit)
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const sharedLabels = useSharedLabels()
 const sharedChoices = sharedLabels.fields.report_type.choices
 
 const allCategories = computed(() => {
   const res = []
   if (props.all) {
-    res.push({ value: '', label: $pgettext('Content/*/Dropdown', 'All') })
+    res.push({ value: '', label: t('All') })
   }
 
   const choices = props.restrictTo.length === 0
@@ -59,7 +59,7 @@ const allCategories = computed(() => {
 
 <template>
   <div>
-    <label v-if="label"><translate translate-context="*/*/*">Category</translate></label>
+    <label v-if="label"><translate >Category</translate></label>
     <select
       v-model="value"
       class="ui dropdown"

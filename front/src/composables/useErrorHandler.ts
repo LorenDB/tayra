@@ -1,12 +1,12 @@
 import type { BackendError } from '~/types'
 
-import { gettext } from '~/init/locale'
 import { COOKIE } from '~/init/sentry'
+import { i18n } from '~/init/locale'
 
 import useLogger from '~/composables/useLogger'
 import store from '~/store'
 
-const { $pgettext } = gettext
+const { t } = i18n.global
 const logger = useLogger()
 
 async function useErrorHandler (error: Error | BackendError): Promise<void>
@@ -16,7 +16,7 @@ async function useErrorHandler (error: Error | BackendError, eventId?: string): 
     ? 'Unexpected API error'
     : 'Unexpected error'
 
-  let content = $pgettext('App/Message/Paragraph', 'An unexpected error occurred.')
+  let content = t('An unexpected error occured.')
 
   if ('backendErrors' in error) {
     logger.error(title, error, error.backendErrors)
@@ -35,7 +35,7 @@ async function useErrorHandler (error: Error | BackendError, eventId?: string): 
 
     const { get } = useCookies()
     if (get(COOKIE) === 'yes') {
-      content = $pgettext('App/Message/Paragraph', 'An unexpected error occurred. <br><sub>To help us understand why it happened, please attach a detailed description of what you did that has triggered the error.</sub>')
+      content = t('An unexpected error occurred. <br><sub>To help us understand why it happened, please attach a detailed description of what you did that has triggered the error.</sub>')
       const user = store.state.auth.authenticated
         ? {
             name: store.state.auth.username,
@@ -44,7 +44,7 @@ async function useErrorHandler (error: Error | BackendError, eventId?: string): 
         : undefined
 
       actions.push({
-        text: $pgettext('App/Message/Paragraph', 'Leave feedback'),
+        text: t('Leave feedback'),
         class: 'basic red',
         click: () => Sentry.showReportDialog({
           eventId: eventId ?? Sentry.captureException(error),

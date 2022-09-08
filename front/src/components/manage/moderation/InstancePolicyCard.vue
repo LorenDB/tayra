@@ -25,22 +25,22 @@ const summary = useMarkdown(() => props.object.summary)
       <i class="user icon" />{{ object.actor }}  &nbsp;
       <template v-if="object.is_active">
         <i class="play icon" />
-        <translate translate-context="*/*/*/State of feature">
+        <translate >
           Enabled
         </translate>
       </template>
       <template v-if="!object.is_active">
         <i class="pause icon" />
-        <translate translate-context="Content/Moderation/Card.List item">
+        <translate >
           Paused
         </translate>
       </template>
     </p>
     <div>
-      <p><strong><translate translate-context="Content/Moderation/Card.Title/Noun">Rule</translate></strong></p>
+      <p><strong><translate >Rule</translate></strong></p>
       <p v-if="object.block_all">
         <i class="ban icon" />
-        <translate translate-context="Content/Moderation/*/Verb">
+        <translate >
           Block everything
         </translate>
       </p>
@@ -54,7 +54,7 @@ const summary = useMarkdown(() => props.object.summary)
         >
           <i class="feed icon" />
           <div class="content">
-            <translate translate-context="Content/Moderation/*/Verb">
+            <translate >
               Mute activity
             </translate>
           </div>
@@ -65,7 +65,7 @@ const summary = useMarkdown(() => props.object.summary)
         >
           <i class="bell icon" />
           <div class="content">
-            <translate translate-context="Content/Moderation/*/Verb">
+            <translate >
               Mute notifications
             </translate>
           </div>
@@ -76,7 +76,7 @@ const summary = useMarkdown(() => props.object.summary)
         >
           <i class="file icon" />
           <div class="content">
-            <translate translate-context="Content/Moderation/*/Verb">
+            <translate >
               Reject media
             </translate>
           </div>
@@ -85,7 +85,7 @@ const summary = useMarkdown(() => props.object.summary)
     </div>
     <div v-if="summary">
       <div class="ui hidden divider" />
-      <p><strong><translate translate-context="Content/Moderation/*/Noun">Reason</translate></strong></p>
+      <p><strong><translate >Reason</translate></strong></p>
       <sanitized-html :html="summary" />
     </div>
     <div class="ui hidden divider" />
@@ -94,7 +94,7 @@ const summary = useMarkdown(() => props.object.summary)
       @click="emit('update')"
     >
       <i class="edit icon" />
-      <translate translate-context="Content/*/Button.Label/Verb">
+      <translate >
         Edit
       </translate>
     </button>

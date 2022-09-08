@@ -2,7 +2,7 @@
 import type { QueueTrack } from '~/composables/audio/queue'
 import type { Track } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
 interface Props {
@@ -17,10 +17,10 @@ withDefaults(defineProps<Props>(), {
   border: false
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const labels = computed(() => ({
-  addToPlaylist: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Add to playlist…')
+  addToPlaylist: t('Add to playlist…')
 }))
 </script>
 
@@ -31,7 +31,7 @@ const labels = computed(() => ({
     @click.stop="$store.commit('playlists/chooseTrack', track)"
   >
     <i class="list icon" />
-    <translate translate-context="Sidebar/Player/Icon.Tooltip/Verb">
+    <translate >
       Add to playlist…
     </translate>
   </button>

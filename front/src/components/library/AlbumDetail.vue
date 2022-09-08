@@ -62,13 +62,13 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
     <h2 class="ui header">
       <translate
         v-if="isSerie"
-        translate-context="Content/Channels/*"
+
       >
         Episodes
       </translate>
       <translate
         v-else
-        translate-context="*/*/*"
+
       >
         Tracks
       </translate>
@@ -96,7 +96,6 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
             <translate
               tag="h3"
               :translate-params="{number: tracks[0]?.disc_number ?? index + 1}"
-              translate-context="Content/Album/"
             >
               Volume %{ number }
             </translate>
@@ -138,7 +137,7 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
 
     <template v-if="!artist.channel && !isSerie">
       <h2>
-        <translate translate-context="Content/*/Title/Noun">
+        <translate >
           User libraries
         </translate>
       </h2>
@@ -146,7 +145,7 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
         :url="'albums/' + object.id + '/libraries/'"
         @loaded="emit('libraries-loaded', $event)"
       >
-        <translate translate-context="Content/Album/Paragraph">
+        <translate >
           This album is present in the following libraries:
         </translate>
       </library-widget>

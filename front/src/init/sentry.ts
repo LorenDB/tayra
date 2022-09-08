@@ -71,7 +71,8 @@ const initSentry = async (app: App, router: Router, store: Store<RootState>) => 
 
 export const install: InitModule = async ({ app, router, store }) => {
   if (import.meta.env.FUNKWHALE_SENTRY_DSN) {
-    const [{ useCookies }, { gettext: { $pgettext } }] = await Promise.all([
+    // @ts-expect-erro type unknown but it has all the required functions
+    const [{ useCookies }, { i18n: { global: { t } } }] = await Promise.all([
       import('@vueuse/integrations/useCookies'),
       import('~/init/locale')
     ])
@@ -88,13 +89,11 @@ export const install: InitModule = async ({ app, router, store }) => {
       const { hostname, origin } = new URL(import.meta.env.FUNKWHALE_SENTRY_DSN)
       return store.commit('ui/addMessage', {
         content: hostname === 'am.funkwhale.audio'
-          ? $pgettext(
-            'App/Message/Paragraph',
+          ? t(
             'To enhance the quality of our services, we would like to collect information about crashes during your session.<br><sub>The stack traces will be shared to <a href="%{origin}">Funkwhale\'s official Glitchtip instance</a> in order to help us understand how and when the errors occur.</sub>',
             { hostname, origin }
           )
-          : $pgettext(
-            'App/Message/Paragraph',
+          : t(
             'To enhance the quality of our services, we would like to collect information about crashes during your session.<br><sub>The stack traces will be shared to <a href="%{origin}">%{hostname}</a> in order to help us understand how and when the errors occur.</sub>',
             { hostname, origin }
           ),
@@ -104,7 +103,7 @@ export const install: InitModule = async ({ app, router, store }) => {
         classActions: 'bottom attached opaque',
         actions: [
           {
-            text: $pgettext('App/Message/Paragraph', 'Allow'),
+            text: t('Allow'),
             class: 'primary',
             click: () => {
               set(COOKIE, 'yes')
@@ -112,7 +111,7 @@ export const install: InitModule = async ({ app, router, store }) => {
             }
           },
           {
-            text: $pgettext('App/Message/Paragraph', 'Deny'),
+            text: t('Deny'),
             class: 'basic',
             click: () => set(COOKIE, 'no')
           }

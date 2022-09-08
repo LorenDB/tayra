@@ -2,8 +2,8 @@
 import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
 import type { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
 
-import { useGettext } from 'vue3-gettext'
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import { usePlayer } from '~/composables/audio/player'
 import { useQueue } from '~/composables/audio/queue'
@@ -52,8 +52,8 @@ const { currentTrack } = useQueue()
 const { isPlaying } = usePlayer()
 const { activateTrack } = usePlayOptions(props)
 
-const { $pgettext } = useGettext()
-const actionsButtonLabel = computed(() => $pgettext('Content/Track/Icon.Tooltip/Verb', 'Show track actions'))
+const { t } = useI18n()
+const actionsButtonLabel = computed(() => t('Show track actions'))
 </script>
 
 <template>

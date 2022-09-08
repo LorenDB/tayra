@@ -3,7 +3,7 @@ import type { RouteLocationRaw } from 'vue-router'
 import type { BackendError, Form } from '~/types'
 
 import { computed, reactive, ref, watchEffect } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -30,14 +30,14 @@ const props = withDefaults(defineProps<Props>(), {
   signupApprovalEnabled: undefined
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const logger = useLogger()
 const store = useStore()
 
 const labels = computed(() => ({
-  placeholder: $pgettext('Content/Signup/Form/Placeholder', 'Enter your invitation code (case insensitive)'),
-  usernamePlaceholder: $pgettext('Content/Signup/Form/Placeholder', 'Enter your username'),
-  emailPlaceholder: $pgettext('Content/Signup/Form/Placeholder', 'Enter your e-mail address')
+  placeholder: t('Enter your invitation code (case insensitive)'),
+  usernamePlaceholder: t('Enter your username'),
+  emailPlaceholder: t('Enter your e-mail address')
 }))
 
 const signupRequiresApproval = computed(() => props.signupApprovalEnabled ?? store.state.instance.settings.moderation.signup_approval_enabled.value)
@@ -88,18 +88,18 @@ fetchInstanceSettings()
   <div v-if="submitted">
     <div class="ui success message">
       <p v-if="signupRequiresApproval">
-        <translate translate-context="Content/Signup/Form/Paragraph">
+        <translate >
           Your account request was successfully submitted. You will be notified by e-mail when our moderation team has reviewed your request.
         </translate>
       </p>
       <p v-else>
-        <translate translate-context="Content/Signup/Form/Paragraph">
+        <translate >
           Your account was successfully created. Please verify your e-mail address before trying to login.
         </translate>
       </p>
     </div>
     <h2>
-      <translate translate-context="Content/Login/Title/Verb">
+      <translate >
         Log in to your Funkwhale account
       </translate>
     </h2>
@@ -117,7 +117,7 @@ fetchInstanceSettings()
       v-if="!$store.state.instance.settings.users.registration_enabled.value"
       class="ui message"
     >
-      <translate translate-context="Content/Signup/Form/Paragraph">
+      <translate >
         Public registrations are not possible on this instance. You will need an invitation code to sign up.
       </translate>
     </p>
@@ -125,7 +125,7 @@ fetchInstanceSettings()
       v-else-if="signupRequiresApproval"
       class="ui message"
     >
-      <translate translate-context="Content/Signup/Form/Paragraph">
+      <translate >
         Registrations on this pod are open, but reviewed by moderators before approval.
       </translate>
     </p>
@@ -143,7 +143,7 @@ fetchInstanceSettings()
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/Signup/Form/Paragraph">
+        <translate >
           Your account cannot be created.
         </translate>
       </h4>
@@ -157,7 +157,7 @@ fetchInstanceSettings()
       </ul>
     </div>
     <div class="required field">
-      <label for="username-field"><translate translate-context="Content/*/*">Username</translate></label>
+      <label for="username-field"><translate >Username</translate></label>
       <input
         id="username-field"
         ref="username"
@@ -170,7 +170,7 @@ fetchInstanceSettings()
       >
     </div>
     <div class="required field">
-      <label for="email-field"><translate translate-context="Content/*/*/Noun">E-mail address</translate></label>
+      <label for="email-field"><translate >E-mail address</translate></label>
       <input
         id="email-field"
         ref="email"
@@ -182,7 +182,7 @@ fetchInstanceSettings()
       >
     </div>
     <div class="required field">
-      <label for="password-field"><translate translate-context="*/*/*">Password</translate></label>
+      <label for="password-field"><translate >Password</translate></label>
       <password-input
         v-model="payload.password1"
         field-id="password-field"
@@ -192,7 +192,7 @@ fetchInstanceSettings()
       v-if="!$store.state.instance.settings.users.registration_enabled.value"
       class="required field"
     >
-      <label for="invitation-code"><translate translate-context="Content/*/Input.Label">Invitation code</translate></label>
+      <label for="invitation-code"><translate >Invitation code</translate></label>
       <input
         id="invitation-code"
         v-model="payload.invitation"
@@ -229,7 +229,7 @@ fetchInstanceSettings()
       :class="['ui', buttonClasses, {'loading': isLoading}, ' right floated button']"
       type="submit"
     >
-      <translate translate-context="Content/Signup/Button.Label">
+      <translate >
         Create my account
       </translate>
     </button>

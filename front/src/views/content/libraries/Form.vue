@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Library, BackendError, PrivacyLevel } from '~/types'
 
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { useStore } from '~/store'
 
@@ -24,14 +24,14 @@ interface Props {
 const emit = defineEmits<Events>()
 const props = defineProps<Props>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const sharedLabels = useSharedLabels()
 const store = useStore()
 
 const labels = computed(() => ({
-  descriptionPlaceholder: $pgettext('Content/Library/Input.Placeholder', 'This library contains my personal music, I hope you like it.'),
-  namePlaceholder: $pgettext('Content/Library/Input.Placeholder', 'My awesome library')
+  descriptionPlaceholder: t('This library contains my personal music, I hope you like it.'),
+  namePlaceholder: t('My awesome library')
 }))
 
 const currentVisibilityLevel = ref(props.library?.privacy_level ?? 'me')
@@ -59,8 +59,8 @@ const submit = async () => {
 
     store.commit('ui/addMessage', {
       content: props.library
-        ? $pgettext('Content/Library/Message', 'Library updated')
-        : $pgettext('Content/Library/Message', 'Library created'),
+        ? t('Library updated')
+        : t('Library created'),
       date: new Date()
     })
   } catch (error) {
@@ -77,7 +77,7 @@ const remove = async () => {
     await axios.delete(`libraries/${props.library?.uuid}/`)
     emit('deleted')
     store.commit('ui/addMessage', {
-      content: $pgettext('Content/Library/Message', 'Library deleted'),
+      content: t('Library deleted'),
       date: new Date()
     })
   } catch (error) {
@@ -94,7 +94,7 @@ const remove = async () => {
     @submit.prevent="submit"
   >
     <p v-if="!library">
-      <translate translate-context="Content/Library/Paragraph">
+      <translate >
         Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family.
       </translate>
     </p>
@@ -104,7 +104,7 @@ const remove = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
+        <translate >
           Error
         </translate>
       </h4>
@@ -118,7 +118,7 @@ const remove = async () => {
       </ul>
     </div>
     <div class="required field">
-      <label for="current-name"><translate translate-context="*/*/*/Noun">Name</translate></label>
+      <label for="current-name"><translate >Name</translate></label>
       <input
         id="current-name"
         v-model="currentName"
@@ -129,7 +129,7 @@ const remove = async () => {
       >
     </div>
     <div class="field">
-      <label for="current-description"><translate translate-context="*/*/*/Noun">Description</translate></label>
+      <label for="current-description"><translate >Description</translate></label>
       <textarea
         id="current-description"
         v-model="currentDescription"
@@ -138,9 +138,9 @@ const remove = async () => {
       />
     </div>
     <div class="field">
-      <label for="visibility-level"><translate translate-context="*/*/*">Visibility</translate></label>
+      <label for="visibility-level"><translate >Visibility</translate></label>
       <p>
-        <translate translate-context="Content/Library/Paragraph">
+        <translate >
           You are able to share your library with other people, regardless of its visibility.
         </translate>
       </p>
@@ -164,13 +164,13 @@ const remove = async () => {
     >
       <translate
         v-if="library"
-        translate-context="Content/Library/Button.Label/Verb"
+
       >
         Update library
       </translate>
       <translate
         v-else
-        translate-context="Content/Library/Button.Label/Verb"
+
       >
         Create library
       </translate>
@@ -181,26 +181,26 @@ const remove = async () => {
       class="ui right floated basic danger button"
       @confirm="remove"
     >
-      <translate translate-context="*/*/*/Verb">
+      <translate >
         Delete
       </translate>
       <template #modal-header>
         <p>
-          <translate translate-context="Popup/Library/Title">
+          <translate >
             Delete this library?
           </translate>
         </p>
       </template>
       <template #modal-content>
         <p>
-          <translate translate-context="Popup/Library/Paragraph">
+          <translate >
             The library and all its tracks will be deleted. This can not be undone.
           </translate>
         </p>
       </template>
       <template #modal-confirm>
         <div>
-          <translate translate-context="Popup/Library/Button.Label/Verb">
+          <translate >
             Delete library
           </translate>
         </div>

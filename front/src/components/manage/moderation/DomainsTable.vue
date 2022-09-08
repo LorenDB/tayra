@@ -5,7 +5,7 @@ import type { OrderingField } from '~/store/ui'
 
 import { watchDebounced } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 
@@ -44,25 +44,25 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['outbox_activities_count', 'received_messages']
 ]
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const query = ref('')
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'purge',
-    label: $pgettext('*/*/*/Verb', 'Purge'),
+    label: t('Purge'),
     isDangerous: true
   },
   {
     name: 'allow_list_add',
-    label: $pgettext('Content/Moderation/Action/Verb', 'Add to allow-list'),
+    label: t('Add to allow-list'),
     filterCheckable: (obj: { allowed: boolean }) => {
       return !obj.allowed
     }
   },
   {
     name: 'allow_list_remove',
-    label: $pgettext('Content/Moderation/Action/Verb', 'Remove from allow-list'),
+    label: t('Remove from allow-list'),
     filterCheckable: (obj: { allowed: boolean }) => {
       return obj.allowed
     }
@@ -108,8 +108,8 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by name…'),
-  allowListTitle: $pgettext('Content/Moderation/Popup', 'This domain is present in your allow-list')
+  searchPlaceholder: t('Search by name…'),
+  allowListTitle: t('This domain is present in your allow-list')
 }))
 </script>
 
@@ -118,7 +118,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="domains-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+          <label for="domains-search"><translate >Search</translate></label>
           <input
             id="domains-search"
             v-model="query"
@@ -131,31 +131,31 @@ const labels = computed(() => ({
           v-if="allowListEnabled"
           class="field"
         >
-          <label for="domains-allow-list"><translate translate-context="Content/Moderation/*/Adjective">Is present on allow-list</translate></label>
+          <label for="domains-allow-list"><translate >Is present on allow-list</translate></label>
           <select
             id="domains-allow-list"
             v-model="allowed"
             class="ui dropdown"
           >
             <option :value="null">
-              <translate translate-context="Content/*/Dropdown">
+              <translate >
                 All
               </translate>
             </option>
             <option :value="true">
-              <translate translate-context="*/*/*">
+              <translate >
                 Yes
               </translate>
             </option>
             <option :value="false">
-              <translate translate-context="*/*/*">
+              <translate >
                 No
               </translate>
             </option>
           </select>
         </div>
         <div class="field">
-          <label for="domains-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+          <label for="domains-ordering"><translate >Ordering</translate></label>
           <select
             id="domains-ordering"
             v-model="ordering"
@@ -171,19 +171,19 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="domains-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate></label>
+          <label for="domains-ordering-direction"><translate >Ordering direction</translate></label>
           <select
             id="domains-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Ascending
               </translate>
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Descending
               </translate>
             </option>
@@ -209,27 +209,27 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Name
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Users
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Moderation/*/Noun">
+            <translate >
               Received messages
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Moderation/Table.Label/Short (Value is a date)">
+            <translate >
               First seen
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Moderation/Table.Label/Short">
+            <translate >
               Under moderation rule
             </translate>
           </th>
@@ -257,7 +257,7 @@ const labels = computed(() => ({
             <human-date :date="scope.obj.creation_date" />
           </td>
           <td>
-            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> <translate translate-context="*/*/*">Yes</translate></span>
+            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> <translate >Yes</translate></span>
           </td>
         </template>
       </action-table>
@@ -267,7 +267,7 @@ const labels = computed(() => ({
       >
         <div class="ui icon header">
           <i class="server icon" />
-          <translate translate-context="Content/Home/Placeholder">
+          <translate >
             No other pods found
           </translate>
         </div>
@@ -284,7 +284,7 @@ const labels = computed(() => ({
 
       <span v-if="result && result.results.length > 0">
         <translate
-          translate-context="Content/*/Paragraph"
+
           :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
         >
           Showing results %{ start }-%{ end } on %{ total }

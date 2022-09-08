@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useClipboard, useVModel } from '@vueuse/core'
 import { useStore } from '~/store'
 
@@ -25,10 +25,10 @@ const value = useVModel(props, 'modelValue', emit)
 
 const showPassword = ref(props.defaultShow)
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Content/Settings/Button.Tooltip/Verb', 'Show/hide password'),
-  copy: $pgettext('*/*/Button.Label/Short, Verb', 'Copy')
+  title: t('Show/hide password'),
+  copy: t('Copy')
 }))
 
 const passwordInputType = computed(() => showPassword.value ? 'text' : 'password')
@@ -38,7 +38,7 @@ const { isSupported: canCopy, copy } = useClipboard({ source: value })
 const copyPassword = () => {
   copy()
   store.commit('ui/addMessage', {
-    content: $pgettext('Content/*/Paragraph', 'Text copied to clipboard!'),
+    content: t('Text copied to clipboard!'),
     date: new Date()
   })
 }

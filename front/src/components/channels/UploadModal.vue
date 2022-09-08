@@ -5,7 +5,7 @@ import { humanSize } from '~/utils/filters'
 import { useRouter } from 'vue-router'
 import { useStore } from '~/store'
 import { ref, computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 const store = useStore()
 const router = useRouter()
@@ -13,7 +13,7 @@ router.beforeEach(() => store.commit('channels/showUploadModal', { show: false }
 
 const update = (value: boolean) => store.commit('channels/showUploadModal', { show: value })
 
-const { $npgettext, $gettext } = useGettext()
+const { t } = useI18n()
 
 const uploadForm = ref()
 
@@ -29,8 +29,8 @@ const statusInfo = computed(() => {
   }
 
   if (statusData.value.totalFiles) {
-    const msg = $npgettext('*/*/*', '%{ count } file', '%{ count } files', statusData.value.totalFiles)
-    info.push($gettext(msg, { count: statusData.value.totalFiles }))
+    const msg = t('no files | %{ count } file | %{ count } files', statusData.value.totalFiles)
+    info.push(t(msg, { count: statusData.value.totalFiles }))
   }
 
   if (statusData.value.progress) {
@@ -56,25 +56,25 @@ const isLoading = ref(false)
     <h4 class="header">
       <translate
         v-if="step === 1"
-        translate-context="Popup/Channels/Title/Verb"
+
       >
         Publish audio
       </translate>
       <translate
         v-else-if="step === 2"
-        translate-context="Popup/Channels/Title"
+
       >
         Files to upload
       </translate>
       <translate
         v-else-if="step === 3"
-        translate-context="Popup/Channels/Title"
+
       >
         Upload details
       </translate>
       <translate
         v-else-if="step === 4"
-        translate-context="Popup/Channels/Title"
+
       >
         Processing uploads
       </translate>
@@ -95,7 +95,7 @@ const isLoading = ref(false)
         </template>
         <div class="ui very small hidden divider" />
         <template v-if="statusData && statusData.quotaStatus">
-          <translate translate-context="Content/Library/Paragraph">
+          <translate >
             Remaining storage space:
           </translate>
           {{ humanSize((statusData.quotaStatus.remaining - statusData.uploadedSize) * 1000 * 1000) }}
@@ -106,7 +106,7 @@ const isLoading = ref(false)
         v-if="step === 1"
         class="ui basic cancel button"
       >
-        <translate translate-context="*/*/Button.Label/Verb">
+        <translate >
           Cancel
         </translate>
       </button>
@@ -115,7 +115,7 @@ const isLoading = ref(false)
         class="ui basic button"
         @click.stop.prevent="uploadForm.step -= 1"
       >
-        <translate translate-context="*/*/Button.Label/Verb">
+        <translate >
           Previous step
         </translate>
       </button>
@@ -124,7 +124,7 @@ const isLoading = ref(false)
         class="ui basic button"
         @click.stop.prevent="uploadForm.step -= 1"
       >
-        <translate translate-context="*/*/Button.Label/Verb">
+        <translate >
           Update
         </translate>
       </button>
@@ -133,7 +133,7 @@ const isLoading = ref(false)
         class="ui primary button"
         @click.stop.prevent="uploadForm.step += 1"
       >
-        <translate translate-context="*/*/Button.Label">
+        <translate >
           Next step
         </translate>
       </button>
@@ -147,7 +147,7 @@ const isLoading = ref(false)
           :disabled="!statusData?.canSubmit || undefined"
           @click.prevent.stop="uploadForm.publish"
         >
-          <translate translate-context="*/Channels/Button.Label">
+          <translate >
             Publish
           </translate>
         </button>
@@ -164,7 +164,7 @@ const isLoading = ref(false)
               class="basic item"
               @click="update(false)"
             >
-              <translate translate-context="Content/*/Button.Label/Verb">
+              <translate >
                 Finish later
               </translate>
             </div>
@@ -176,7 +176,7 @@ const isLoading = ref(false)
         class="ui basic cancel button"
         @click="update(false)"
       >
-        <translate translate-context="*/*/Button.Label/Verb">
+        <translate >
           Close
         </translate>
       </button>

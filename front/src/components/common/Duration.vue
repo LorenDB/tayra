@@ -20,12 +20,12 @@ const duration = computed(() => {
   <span>
     <translate
       v-if="duration.hours > 0"
-      translate-context="Content/*/Paragraph"
+
       :translate-params="duration"
     >%{ hours } h %{ minutes } min</translate>
     <translate
       v-else
-      translate-context="Content/*/Paragraph"
+
       :translate-params="duration"
     >%{ minutes } min</translate>
   </span>

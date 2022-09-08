@@ -2,7 +2,7 @@
 import type { Track } from '~/types'
 
 import { useElementByPoint, useMouse } from '@vueuse/core'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { clone, uniqBy } from 'lodash-es'
 import { ref, computed } from 'vue'
 
@@ -93,11 +93,11 @@ const allTracks = computed(() => {
     : tracks
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('*/*/*/Noun', 'Title'),
-  album: $pgettext('*/*/*/Noun', 'Album'),
-  artist: $pgettext('*/*/*/Noun', 'Artist')
+  title: t('Title'),
+  album: t('Album'),
+  artist: t('Artist')
 }))
 
 const isLoading = ref(false)

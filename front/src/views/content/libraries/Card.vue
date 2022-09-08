@@ -2,7 +2,7 @@
 import type { Library, PrivacyLevel } from '~/types'
 
 import { humanSize } from '~/utils/filters'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
 import useSharedLabels from '~/composables/locale/useSharedLabels'
@@ -13,11 +13,11 @@ interface Props {
 
 defineProps<Props>()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 
 const sharedLabels = useSharedLabels()
 
-const sizeLabel = computed(() => $pgettext('Content/Library/Card.Help text', 'Total size of the files in this library'))
+const sizeLabel = computed(() => t('Total size of the files in this library'))
 
 const privacyTooltips = (level: PrivacyLevel) => `Visibility: ${sharedLabels.fields.privacy_level.choices[level].toLowerCase()}`
 </script>
@@ -70,7 +70,7 @@ const privacyTooltips = (level: PrivacyLevel) => `Visibility: ${sharedLabels.fie
         </span>
         <i class="music icon" />
         <translate
-          translate-context="*/*/*"
+
           :translate-params="{count: library.uploads_count}"
           :translate-n="library.uploads_count"
           translate-plural="%{ count } tracks"
@@ -84,7 +84,7 @@ const privacyTooltips = (level: PrivacyLevel) => `Visibility: ${sharedLabels.fie
         :to="{name: 'library.detail.upload', params: {id: library.uuid}}"
         class="ui button"
       >
-        <translate translate-context="Content/Library/Card.Button.Label/Verb">
+        <translate >
           Upload
         </translate>
       </router-link>
@@ -92,7 +92,7 @@ const privacyTooltips = (level: PrivacyLevel) => `Visibility: ${sharedLabels.fie
         :to="{name: 'library.detail', params: {id: library.uuid}}"
         class="ui button"
       >
-        <translate translate-context="Content/Library/Card.Button.Label/Noun">
+        <translate >
           Library Details
         </translate>
       </router-link>

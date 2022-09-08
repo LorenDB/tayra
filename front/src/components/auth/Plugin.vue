@@ -69,7 +69,7 @@ const submitAndScan = async () => {
         target="_blank"
       >
         <i class="external icon" />
-        <translate translate-context="Footer/*/List item.Link/Short, Noun">Documentation</translate>
+        <translate >Documentation</translate>
       </a>
     </template>
     <div class="ui clearing hidden divider" />
@@ -79,7 +79,7 @@ const submitAndScan = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate translate-context="Content/*/Error message.Title">
+        <translate >
           Error while saving plugin
         </translate>
       </h4>
@@ -99,7 +99,7 @@ const submitAndScan = async () => {
           v-model="enabled"
           type="checkbox"
         >
-        <label :for="`${plugin.name}-enabled`"><translate translate-context="*/*/*">Enabled</translate></label>
+        <label :for="`${plugin.name}-enabled`"><translate >Enabled</translate></label>
       </div>
     </div>
     <div class="ui clearing hidden divider" />
@@ -107,7 +107,7 @@ const submitAndScan = async () => {
       v-if="plugin.source"
       class="field"
     >
-      <label for="plugin-library"><translate translate-context="*/*/*/Noun">Library</translate></label>
+      <label for="plugin-library"><translate >Library</translate></label>
       <select
         id="plugin-library"
         v-model="values['library']"
@@ -121,7 +121,7 @@ const submitAndScan = async () => {
         </option>
       </select>
       <div>
-        <translate translate-context="*/*/Paragraph/Noun">
+        <translate >
           Library where files should be imported.
         </translate>
       </div>
@@ -198,7 +198,7 @@ const submitAndScan = async () => {
       type="submit"
       :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
     >
-      <translate translate-context="Content/*/Button.Label/Verb">
+      <translate >
         Save
       </translate>
     </button>
@@ -207,7 +207,7 @@ const submitAndScan = async () => {
       :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
       @click.prevent="submitAndScan"
     >
-      <translate translate-context="Content/*/Button.Label/Verb">
+      <translate >
         Scan
       </translate>
     </button>

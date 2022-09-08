@@ -4,7 +4,6 @@ import type { QueueItemSource } from '~/types'
 import { whenever, watchDebounced, useCurrentElement, useScrollLock, useFullscreen, useIdle, refAutoReset, useStorage } from '@vueuse/core'
 import { nextTick, ref, computed, watchEffect, onMounted } from 'vue'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
-import { useGettext } from 'vue3-gettext'
 import { useRouter } from 'vue-router'
 import { useStore } from '~/store'
 
@@ -18,6 +17,11 @@ import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import PlayerControls from '~/components/audio/PlayerControls.vue'
 import MilkDrop from '~/components/audio/visualizer/MilkDrop.vue'
+import { whenever, watchDebounced, useCurrentElement, useScrollLock } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
+import useQueue from '~/composables/audio/useQueue'
+import usePlayer from '~/composables/audio/usePlayer'
+
 import VirtualList from '~/components/vui/list/VirtualList.vue'
 import QueueItem from '~/components/QueueItem.vue'
 
@@ -49,24 +53,24 @@ const { currentSound } = useTracks()
 const queueModal = ref()
 const { activate, deactivate } = useFocusTrap(queueModal, { allowOutsideClick: true, preventScroll: true })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const scrollLock = useScrollLock(document.body)
 const store = useStore()
 
 const labels = computed(() => ({
-  queue: $pgettext('*/*/*', 'Queue'),
-  populating: $pgettext('*/*/*', 'Fetching radio track'),
-  duration: $pgettext('*/*/*', 'Duration'),
-  addArtistContentFilter: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…'),
-  restart: $pgettext('*/*/*', 'Restart track'),
-  previous: $pgettext('*/*/*', 'Previous track'),
-  next: $pgettext('*/*/*', 'Next track'),
-  pause: $pgettext('*/*/*', 'Pause'),
-  play: $pgettext('*/*/*', 'Play'),
-  fullscreen: $pgettext('*/*/*', 'Fullscreen'),
-  exitFullscreen: $pgettext('*/*/*', 'Exit fullscreen'),
-  showCoverArt: $pgettext('*/*/*', 'Show cover art'),
-  showVisualizer: $pgettext('*/*/*', 'Show visualizer')
+  queue: t('Queue'),
+  populating: t('Fetching radio track'),
+  duration: t('Duration'),
+  addArtistContentFilter: t('Hide content from this artist…'),
+  restart: t('Restart track'),
+  previous: t('Previous track'),
+  next: t('Next track'),
+  pause: t('Pause'),
+  play: t('Play'),
+  fullscreen: t('Fullscreen'),
+  exitFullscreen: t('Exit fullscreen'),
+  showCoverArt: t('Show cover art'),
+  showVisualizer: t('Show visualizer')
 }))
 
 watchEffect(async () => {
@@ -125,10 +129,11 @@ const queueItems = computed(() => queue.value.map((track, index) => ({
   ...track,
   key: `${index}-${track.id}`,
   labels: {
-    remove: $pgettext('*/*/*', 'Remove'),
-    selectTrack: $pgettext('*/*/*', 'Select track'),
-    favorite: $pgettext('*/*/*', 'Favorite track')
-  }
+    remove: t('Remove'),
+    selectTrack: t('Select track'),
+    favorite: t('Favorite track')
+  },
+  duration: time.durationFormatted(track.uploads[0]?.duration ?? 0) ?? ''
 }) as QueueItemSource))
 
 const reorderTracks = async (from: number, to: number) => {
@@ -296,18 +301,18 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
             class="ui small warning message"
           >
             <h3 class="header">
-              <translate translate-context="Sidebar/Player/Error message.Title">
+              <translate >
                 The track cannot be loaded
               </translate>
             </h3>
             <p v-if="hasNext && isPlaying">
-              <translate translate-context="Sidebar/Player/Error message.Paragraph">
+              <translate >
                 The next track will play automatically in a few seconds…
               </translate>
               <i class="loading spinner icon" />
             </p>
             <p>
-              <translate translate-context="Sidebar/Player/Error message.Paragraph">
+              <translate >
                 You may have a connectivity issue.
               </translate>
             </p>
@@ -408,7 +413,7 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                 class="ui right floated basic button"
                 @click="$store.commit('ui/queueFocused', null)"
               >
-                <translate translate-context="*/Queue/*/Verb">
+                <translate >
                   Close
                 </translate>
               </button>
@@ -416,7 +421,7 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                 class="ui right floated basic button danger"
                 @click="clear"
               >
-                <translate translate-context="*/Queue/*/Verb">
+                <translate >
                   Clear
                 </translate>
               </button>
@@ -424,7 +429,6 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
               <div class="sub header">
                 <div>
                   <translate
-                    translate-context="Sidebar/Queue/Text"
                     :translate-params="{index: currentIndex + 1, length: queue.length}"
                   >
                     Track %{ index } of %{ length }
@@ -473,12 +477,12 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
             >
               <div class="content">
                 <h3 class="header">
-                  <i class="feed icon" /> <translate translate-context="Sidebar/Player/Title">
+                  <i class="feed icon" /> <translate >
                     You have a radio playing
                   </translate>
                 </h3>
                 <p>
-                  <translate translate-context="Sidebar/Player/Paragraph">
+                  <translate >
                     New tracks will be appended here automatically.
                   </translate>
                 </p>
@@ -486,7 +490,7 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                   class="ui basic primary button"
                   @click="$store.dispatch('radios/stop')"
                 >
-                  <translate translate-context="*/Player/Button.Label/Short, Verb">
+                  <translate >
                     Stop radio
                   </translate>
                 </button>

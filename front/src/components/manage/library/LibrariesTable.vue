@@ -6,7 +6,7 @@ import type { OrderingField } from '~/store/ui'
 import type { PrivacyLevel } from '~/types'
 
 import { computed, ref, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 import ActionTable from '~/components/common/ActionTable.vue'
@@ -49,13 +49,13 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
   ['uploads_count', 'uploads']
 ]
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: $pgettext('*/*/*/Verb', 'Delete'),
-    confirmationMessage: $pgettext('Popup/*/Paragraph', 'The selected library will be removed, as well as associated uploads and follows. This action is irreversible.'),
+    label: t('Delete'),
+    confirmationMessage: t('The selected library will be removed, as well as associated uploads and follows. This action is irreversible.'),
     isDangerous: true,
     allowAll: false,
     confirmColor: 'danger'
@@ -94,7 +94,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by domain, actor, name, description…')
+  searchPlaceholder: t('Search by domain, actor, name, description…')
 }))
 
 const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
@@ -107,7 +107,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="libraries-search"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+          <label for="libraries-search"><translate >Search</translate></label>
           <form @submit.prevent="query = search.value">
             <input
               id="libraries-search"
@@ -120,7 +120,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </form>
         </div>
         <div class="field">
-          <label for="libraries-visibility"><translate translate-context="*/*/*">Visibility</translate></label>
+          <label for="libraries-visibility"><translate >Visibility</translate></label>
           <select
             id="libraries-visibility"
             class="ui dropdown"
@@ -128,7 +128,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             @change="addSearchToken('privacy_level', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              <translate translate-context="Content/*/Dropdown">
+              <translate >
                 All
               </translate>
             </option>
@@ -144,7 +144,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </select>
         </div>
         <div class="field">
-          <label for="libraries-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+          <label for="libraries-ordering"><translate >Ordering</translate></label>
           <select
             id="libraries-ordering"
             v-model="ordering"
@@ -160,19 +160,19 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </select>
         </div>
         <div class="field">
-          <label for="libraries-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate></label>
+          <label for="libraries-ordering-direction"><translate >Ordering direction</translate></label>
           <select
             id="libraries-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Ascending
               </translate>
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Descending
               </translate>
             </option>
@@ -197,37 +197,37 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
       >
         <template #header-cells>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Name
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Account
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Moderation/*/Noun">
+            <translate >
               Domain
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*">
+            <translate >
               Visibility
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*">
+            <translate >
               Uploads
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Federation/*/Noun">
+            <translate >
               Followers
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
+            <translate >
               Creation date
             </translate>
           </th>
@@ -268,7 +268,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              <translate translate-context="Content/Moderation/*/Short, Noun">Local</translate>
+              <translate >Local</translate>
             </a>
           </td>
           <td>
@@ -304,7 +304,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
 
       <span v-if="result && result.results.length > 0">
         <translate
-          translate-context="Content/*/Paragraph"
+
           :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
         >
           Showing results %{ start }-%{ end } on %{ total }

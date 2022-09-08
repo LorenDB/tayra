@@ -6,7 +6,6 @@ import HumanDate from '~/components/common/HumanDate.vue'
 import moxios from 'moxios'
 
 import { shallowMount } from '@vue/test-utils'
-import { gettext } from '~/init/locale'
 import { sleep } from '?/utils'
 
 import router from '~/router'
@@ -39,7 +38,7 @@ describe('views/admin/library', () => {
         },
         global: {
           stubs: { DangerousButton, HumanDate, SanitizedHtml },
-          plugins: [gettext, router, store]
+          plugins: [router, store]
         }
       })
 

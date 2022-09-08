@@ -64,7 +64,7 @@ const imageUrl = computed(() => cover.value?.urls.original
     <div class="extra content">
       <translate
         v-if="artist.content_category === 'music'"
-        translate-context="*/*/*"
+
         :translate-params="{count: artist.tracks_count}"
         :translate-n="artist.tracks_count"
         translate-plural="%{ count } tracks"
@@ -73,7 +73,7 @@ const imageUrl = computed(() => cover.value?.urls.original
       </translate>
       <translate
         v-else
-        translate-context="*/*/*"
+
         :translate-params="{count: artist.tracks_count}"
         :translate-n="artist.tracks_count"
         translate-plural="%{ count } episodes"

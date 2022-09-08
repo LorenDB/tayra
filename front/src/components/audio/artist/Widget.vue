@@ -108,7 +108,7 @@ watch(
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        <translate translate-context="*/*/Button,Label">
+        <translate >
           Show more
         </translate>
       </button>

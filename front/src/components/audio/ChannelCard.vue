@@ -2,7 +2,7 @@
 import type { Channel } from '~/types'
 
 import { momentFormat } from '~/utils/filters'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 import { computed } from 'vue'
 
@@ -30,10 +30,10 @@ const urlId = computed(() => props.object.actor?.is_local
     : props.object.uuid
 )
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const updatedTitle = computed(() => {
   const date = momentFormat(new Date(props.object.artist?.modification_date ?? '1970-01-01'))
-  return $pgettext('*/*/*', 'Updated on %{ date }', { date })
+  return t('Updated on %{ date }', { date })
 })
 
 // TODO (wvffle): Use time ago
@@ -67,7 +67,7 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
         <translate
           v-if="object.artist?.content_category === 'podcast'"
           class="meta ellipsis"
-          translate-context="Content/Channel/Paragraph"
+
           translate-plural="%{ count } episodes"
           :translate-n="object.artist.tracks_count"
           :translate-params="{count: object.artist.tracks_count}"
@@ -76,7 +76,7 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
         </translate>
         <translate
           v-else
-          translate-context="*/*/*"
+
           :translate-params="{count: object.artist?.tracks_count}"
           :translate-n="object.artist?.tracks_count"
           translate-plural="%{ count } tracks"

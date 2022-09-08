@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import ApplicationForm from '~/components/auth/ApplicationForm.vue'
-import { computed, reactive } from 'vue'
-import { useGettext } from 'vue3-gettext'
-import { useRouter } from 'vue-router'
 import type { Application } from '~/types'
+
+import { computed, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
 import { useStore } from '~/store'
+
+import ApplicationForm from '~/components/auth/ApplicationForm.vue'
 
 interface Props {
   name?: string
@@ -24,9 +27,9 @@ const defaults = reactive({
   redirectUris: props.redirectUris
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Content/Settings/Button.Label', 'Create a new application')
+  title: t('Create a new application')
 }))
 
 const router = useRouter()
@@ -52,12 +55,12 @@ const created = (application: Application) => {
     <div class="ui vertical stripe segment">
       <section class="ui text container">
         <router-link :to="{name: 'settings'}">
-          <translate translate-context="Content/Applications/Link">
+          <translate >
             Back to settings
           </translate>
         </router-link>
         <h2 class="ui header">
-          <translate translate-context="Content/Settings/Button.Label">
+          <translate >
             Create a new application
           </translate>
         </h2>

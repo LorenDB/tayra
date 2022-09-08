@@ -2,7 +2,7 @@
 import type { Track, Radio } from '~/types'
 
 import { ref, computed, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 import axios from 'axios'
@@ -24,9 +24,9 @@ const tracks = ref([] as Track[])
 const totalTracks = ref(0)
 const page = ref(1)
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('Head/Radio/Title', 'Radio')
+  title: t('Radio')
 }))
 
 const isLoading = ref(false)
@@ -108,7 +108,7 @@ const deleteRadio = async () => {
             <template #modal-header>
               <p
                 v-translate="{radio: radio.name}"
-                translate-context="Popup/Radio/Title"
+
                 :translate-params="{radio: radio.name}"
               >
                 Do you want to delete the radio "%{ radio }"?
@@ -116,14 +116,14 @@ const deleteRadio = async () => {
             </template>
             <template #modal-content>
               <p>
-                <translate translate-context="Popup/Radio/Paragraph">
+                <translate >
                   This will completely delete this radio and cannot be undone.
                 </translate>
               </p>
             </template>
             <template #modal-confirm>
               <p>
-                <translate translate-context="Popup/Radio/Button.Label/Verb">
+                <translate >
                   Delete radio
                 </translate>
               </p>
@@ -137,7 +137,7 @@ const deleteRadio = async () => {
       class="ui vertical stripe segment"
     >
       <h2>
-        <translate translate-context="*/*/*">
+        <translate >
           Tracks
         </translate>
       </h2>
@@ -158,7 +158,7 @@ const deleteRadio = async () => {
       <div class="ui icon header">
         <i class="rss icon" />
         <translate
-          translate-context="Content/Radios/Placeholder"
+
         >
           No tracks have been added to this radio yet
         </translate>

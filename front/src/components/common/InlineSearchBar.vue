@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
 import { computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 interface Events {
   (e: 'update:modelValue', value: string): void
@@ -20,10 +20,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const value = useVModel(props, 'modelValue', emit)
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search…'),
-  clear: $pgettext('Content/Library/Button.Label', 'Clear')
+  searchPlaceholder: t('Search…'),
+  clear: t('Clear')
 }))
 
 const search = () => {
@@ -42,7 +42,7 @@ const search = () => {
         for="search-query"
         class="hidden"
       >
-        <translate translate-context="Content/Search/Input.Label/Noun">Search</translate>
+        <translate >Search</translate>
       </label>
       <input
         id="search-query"

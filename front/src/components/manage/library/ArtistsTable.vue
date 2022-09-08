@@ -5,7 +5,7 @@ import type { RouteRecordName } from 'vue-router'
 import type { OrderingField } from '~/store/ui'
 
 import { ref, computed, watch } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 
@@ -52,8 +52,8 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: $pgettext('*/*/*/Verb', 'Delete'),
-    confirmationMessage: $pgettext('Popup/*/Paragraph', 'The selected artist will be removed, as well as associated uploads, tracks, albums, favorites and listening history. This action is irreversible.'),
+    label: t('Delete'),
+    confirmationMessage: t('The selected artist will be removed, as well as associated uploads, tracks, albums, favorites and listening history. This action is irreversible.'),
     isDangerous: true,
     allowAll: false,
     confirmColor: 'danger'
@@ -91,9 +91,9 @@ onOrderingUpdate(fetchData)
 fetchData()
 
 const sharedLabels = useSharedLabels()
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: $pgettext('Content/Search/Input.Placeholder', 'Search by domain, name, MusicBrainz ID…')
+  searchPlaceholder: t('Search by domain, name, MusicBrainz ID…')
 }))
 
 const getUrl = (artist: { channel?: number; id: number }) => {
@@ -108,7 +108,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="artists-serarch"><translate translate-context="Content/Search/Input.Label/Noun">Search</translate></label>
+          <label for="artists-serarch"><translate >Search</translate></label>
           <form @submit.prevent="query = search.value">
             <input
               id="artists-search"
@@ -121,7 +121,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
           </form>
         </div>
         <div class="field">
-          <label for="artists-category"><translate translate-context="*/*/*">Category</translate></label>
+          <label for="artists-category"><translate >Category</translate></label>
           <select
             id="artists-category"
             class="ui dropdown"
@@ -129,7 +129,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
             @change="addSearchToken('category', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              <translate translate-context="Content/*/Dropdown">
+              <translate >
                 All
               </translate>
             </option>
@@ -145,7 +145,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
           </select>
         </div>
         <div class="field">
-          <label for="artists-ordering"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering</translate></label>
+          <label for="artists-ordering"><translate >Ordering</translate></label>
           <select
             id="artists-ordering"
             v-model="ordering"
@@ -161,19 +161,19 @@ const getUrl = (artist: { channel?: number; id: number }) => {
           </select>
         </div>
         <div class="field">
-          <label for="artists-ordering-direction"><translate translate-context="Content/Search/Dropdown.Label/Noun">Ordering direction</translate></label>
+          <label for="artists-ordering-direction"><translate >Ordering direction</translate></label>
           <select
             id="artists-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Ascending
               </translate>
             </option>
             <option value="-">
-              <translate translate-context="Content/Search/Dropdown">
+              <translate >
                 Descending
               </translate>
             </option>
@@ -198,27 +198,27 @@ const getUrl = (artist: { channel?: number; id: number }) => {
       >
         <template #header-cells>
           <th>
-            <translate translate-context="*/*/*/Noun">
+            <translate >
               Name
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/Moderation/*/Noun">
+            <translate >
               Domain
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*">
+            <translate >
               Albums
             </translate>
           </th>
           <th>
-            <translate translate-context="*/*/*">
+            <translate >
               Tracks
             </translate>
           </th>
           <th>
-            <translate translate-context="Content/*/*/Noun">
+            <translate >
               Creation date
             </translate>
           </th>
@@ -250,7 +250,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              <translate translate-context="Content/Moderation/*/Short, Noun">Local</translate>
+              <translate >Local</translate>
             </a>
           </td>
           <td>
@@ -276,7 +276,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
 
       <span v-if="result && result.results.length > 0">
         <translate
-          translate-context="Content/*/Paragraph"
+
           :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
         >
           Showing results %{ start }-%{ end } on %{ total }

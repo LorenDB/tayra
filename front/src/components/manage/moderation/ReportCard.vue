@@ -2,7 +2,7 @@
 import type { Report } from '~/types'
 
 import { ref, computed, reactive } from 'vue'
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -56,7 +56,7 @@ const targetFields = computed(() => {
   })
 })
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const actions = computed(() => {
   if (!target.value) {
     return []
@@ -66,10 +66,10 @@ const actions = computed(() => {
   const deleteUrl = typeConfig.getDeleteUrl?.(target.value)
   return deleteUrl
     ? [{
-        label: $pgettext('Content/Moderation/Button/Verb', 'Delete reported object'),
-        modalHeader: $pgettext('Content/Moderation/Popup/Header', 'Delete reported object?'),
-        modalContent: $pgettext('Content/Moderation/Popup,Paragraph', 'This will delete the object associated with this report and mark the report as resolved. The deletion is irreversible.'),
-        modalConfirmLabel: $pgettext('*/*/*/Verb', 'Delete'),
+        label: t('Delete reported object'),
+        modalHeader: t('Delete reported object?'),
+        modalContent: t('This will delete the object associated with this report and mark the report as resolved. The deletion is irreversible.'),
+        modalConfirmLabel: t('Delete'),
         icon: 'x',
         iconColor: 'danger',
         show: (obj: Report) => { return !!obj.target },
@@ -142,7 +142,7 @@ const handleRemovedNote = (uuid: string) => {
       <h4 class="header">
         <router-link :to="{name: 'manage.moderation.reports.detail', params: {id: obj.uuid}}">
           <translate
-            translate-context="Content/Moderation/Card/Short"
+
             :translate-params="{id: obj.uuid.substring(0, 8)}"
           >
             Report %{ id }
@@ -161,7 +161,7 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    <translate translate-context="Content/Moderation/*">
+                    <translate >
                       Submitted by
                     </translate>
                   </td>
@@ -179,7 +179,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="*/*/*">
+                    <translate >
                       Category
                     </translate>
                   </td>
@@ -195,7 +195,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">
+                    <translate >
                       Creation date
                     </translate>
                   </td>
@@ -214,26 +214,26 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    <translate translate-context="*/*/*">
+                    <translate >
                       Status
                     </translate>
                   </td>
                   <td v-if="obj.is_handled">
                     <span v-if="obj.is_handled">
                       <i class="success check icon" />
-                      <translate translate-context="Content/*/*/Short">Resolved</translate>
+                      <translate >Resolved</translate>
                     </span>
                   </td>
                   <td v-else>
                     <i class="danger x icon" />
-                    <translate translate-context="Content/*/*/Short">
+                    <translate >
                       Unresolved
                     </translate>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/Moderation/*">
+                    <translate >
                       Assigned to
                     </translate>
                   </td>
@@ -246,7 +246,7 @@ const handleRemovedNote = (uuid: string) => {
                     </div>
                     <translate
                       v-else
-                      translate-context="*/*/*"
+
                     >
                       N/A
                     </translate>
@@ -254,7 +254,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">
+                    <translate >
                       Resolution date
                     </translate>
                   </td>
@@ -266,7 +266,7 @@ const handleRemovedNote = (uuid: string) => {
                     />
                     <translate
                       v-else
-                      translate-context="*/*/*"
+
                     >
                       N/A
                     </translate>
@@ -274,7 +274,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate translate-context="Content/*/*/Noun">
+                    <translate >
                       Internal notes
                     </translate>
                   </td>
@@ -296,7 +296,7 @@ const handleRemovedNote = (uuid: string) => {
       <div class="ui stackable two column grid">
         <div class="column">
           <h3>
-            <translate translate-context="*/*/Field.Label/Noun">
+            <translate >
               Message
             </translate>
           </h3>
@@ -310,7 +310,7 @@ const handleRemovedNote = (uuid: string) => {
         </div>
         <aside class="column">
           <h3>
-            <translate translate-context="Content/*/*/Short">
+            <translate >
               Reported object
             </translate>
           </h3>
@@ -319,7 +319,7 @@ const handleRemovedNote = (uuid: string) => {
             role="alert"
             class="ui warning message"
           >
-            <translate translate-context="Content/Moderation/Message">
+            <translate >
               The object associated with this report was deleted.
             </translate>
           </div>
@@ -329,7 +329,7 @@ const handleRemovedNote = (uuid: string) => {
             :to="configs[target.type].urls.getDetail?.(obj.target_state) ?? '/'"
           >
             <i class="eye icon" />
-            <translate translate-context="Content/Moderation/Link">
+            <translate >
               View public page
             </translate>
           </router-link>
@@ -339,7 +339,7 @@ const handleRemovedNote = (uuid: string) => {
             :to="configs[target.type].urls.getAdminDetail?.(obj.target_state) ?? '/'"
           >
             <i class="wrench icon" />
-            <translate translate-context="Content/Moderation/Link">
+            <translate >
               Open in moderation interface
             </translate>
           </router-link>
@@ -347,7 +347,7 @@ const handleRemovedNote = (uuid: string) => {
             <tbody>
               <tr v-if="target">
                 <td>
-                  <translate translate-context="Content/Track/Table.Label/Noun">
+                  <translate >
                     Type
                   </translate>
                 </td>
@@ -358,7 +358,7 @@ const handleRemovedNote = (uuid: string) => {
               </tr>
               <tr v-if="obj.target_owner && (!target || target.type !== 'account')">
                 <td>
-                  <translate translate-context="*/*/*">
+                  <translate >
                     Owner
                   </translate>
                 </td>
@@ -379,7 +379,7 @@ const handleRemovedNote = (uuid: string) => {
               </tr>
               <tr v-if="target && target.type === 'account'">
                 <td>
-                  <translate translate-context="*/*/*/Noun">
+                  <translate >
                     Account
                   </translate>
                 </td>
@@ -400,13 +400,13 @@ const handleRemovedNote = (uuid: string) => {
               </tr>
               <tr v-if="obj.target_state.is_local">
                 <td>
-                  <translate translate-context="Content/Moderation/*/Noun">
+                  <translate >
                     Domain
                   </translate>
                 </td>
                 <td colspan="2">
                   <i class="home icon" />
-                  <translate translate-context="Content/Moderation/*/Short, Noun">
+                  <translate >
                     Local
                   </translate>
                 </td>
@@ -414,7 +414,7 @@ const handleRemovedNote = (uuid: string) => {
               <tr v-else-if="obj.target_state.domain">
                 <td>
                   <router-link :to="{name: 'manage.moderation.domains.detail', params: { id: obj.target_state.domain }}">
-                    <translate translate-context="Content/Moderation/*/Noun">
+                    <translate >
                       Domain
                     </translate>
                   </router-link>
@@ -445,7 +445,7 @@ const handleRemovedNote = (uuid: string) => {
                   v-else
                   colspan="2"
                 >
-                  <translate translate-context="*/*/*">
+                  <translate >
                     N/A
                   </translate>
                 </td>
@@ -457,7 +457,7 @@ const handleRemovedNote = (uuid: string) => {
       <div class="ui stackable two column grid">
         <div class="column">
           <h3>
-            <translate translate-context="Content/*/*/Noun">
+            <translate >
               Internal notes
             </translate>
           </h3>
@@ -472,7 +472,7 @@ const handleRemovedNote = (uuid: string) => {
         </div>
         <div class="column">
           <h3>
-            <translate translate-context="Content/*/*/Noun">
+            <translate >
               Actions
             </translate>
           </h3>
@@ -483,7 +483,7 @@ const handleRemovedNote = (uuid: string) => {
               @click="resolveReport(true)"
             >
               <i class="success check icon" />&nbsp;
-              <translate translate-context="Content/*/Button.Label/Verb">
+              <translate >
                 Resolve
               </translate>
             </button>
@@ -493,7 +493,7 @@ const handleRemovedNote = (uuid: string) => {
               @click="resolveReport(false)"
             >
               <i class="warning redo icon" />&nbsp;
-              <translate translate-context="Content/*/Button.Label">
+              <translate >
                 Unresolve
               </translate>
             </button>

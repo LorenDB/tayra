@@ -2,8 +2,8 @@
 import type { Track, Album, Artist, Library } from '~/types'
 
 import { momentFormat } from '~/utils/filters'
-import { useGettext } from 'vue3-gettext'
 import { computed, reactive, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { sum } from 'lodash-es'
 
@@ -39,9 +39,9 @@ const isSerie = computed(() => object.value?.artist.content_category === 'podcas
 const totalDuration = computed(() => sum((object.value?.tracks ?? []).map(track => track.uploads[0]?.duration ?? 0)))
 const publicLibraries = computed(() => libraries.value?.filter(library => library.privacy_level === 'everyone') ?? [])
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  title: $pgettext('*/*/*', 'Album')
+  title: t('Album')
 }))
 
 const isLoading = ref(false)
@@ -179,7 +179,7 @@ const remove = async () => {
                     <div class="ui hidden very small divider" />
                     <translate
                       v-if="isSerie"
-                      translate-context="Content/Channel/Paragraph"
+
                       translate-plural="%{ count } episodes"
                       :translate-n="totalTracks"
                       :translate-params="{count: totalTracks}"
@@ -188,7 +188,7 @@ const remove = async () => {
                     </translate>
                     <translate
                       v-else
-                      translate-context="*/*/*"
+
                       :translate-params="{count: totalTracks}"
                       :translate-n="totalTracks"
                       translate-plural="%{ count } tracks"
@@ -267,7 +267,7 @@ const remove = async () => {
               <template v-if="totalTracks > 0">
                 <translate
                   v-if="isSerie"
-                  translate-context="Content/Channel/Paragraph"
+
                   translate-plural="%{ count } episodes"
                   :translate-n="totalTracks"
                   :translate-params="{count: totalTracks}"
@@ -276,7 +276,7 @@ const remove = async () => {
                 </translate>
                 <translate
                   v-else
-                  translate-context="*/*/*"
+
                   :translate-params="{count: totalTracks}"
                   :translate-n="totalTracks"
                   translate-plural="%{ count } tracks"
@@ -323,7 +323,7 @@ const remove = async () => {
                   :to="{name: 'library.albums.edit', params: {id: object.id }}"
                 >
                   <i class="pencil icon" />
-                  <translate translate-context="Content/*/Button.Label/Verb">
+                  <translate >
                     Add a description…
                   </translate>
                 </router-link>
@@ -341,7 +341,7 @@ const remove = async () => {
                 :to="{name: 'library.albums.edit', params: {id: object.id }}"
               >
                 <i class="pencil icon" />
-                <translate translate-context="Content/*/Button.Label/Verb">
+                <translate >
                   Add a description…
                 </translate>
               </router-link>

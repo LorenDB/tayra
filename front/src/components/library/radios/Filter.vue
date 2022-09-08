@@ -124,7 +124,7 @@ watch(exclude, fetchCandidates)
           for="exclude-filter"
           class="visually-hidden"
         >
-          <translate translate-context="Popup/Radio/Title/Noun">Exclude</translate>
+          <translate >Exclude</translate>
         </label>
       </div>
     </td>
@@ -180,7 +180,7 @@ watch(exclude, fetchCandidates)
         v-model:show="showCandidadesModal"
       >
         <h4 class="header">
-          <translate translate-context="Popup/Radio/Title/Noun">
+          <translate >
             Tracks matching filter
           </translate>
         </h4>
@@ -194,7 +194,7 @@ watch(exclude, fetchCandidates)
         </div>
         <div class="actions">
           <button class="ui deny button">
-            <translate translate-context="*/*/Button.Label/Verb">
+            <translate >
               Cancel
             </translate>
           </button>
@@ -206,7 +206,7 @@ watch(exclude, fetchCandidates)
         class="ui danger button"
         @click="$emit('delete', index)"
       >
-        <translate translate-context="Content/Radio/Button.Label/Verb">
+        <translate >
           Remove
         </translate>
       </button>

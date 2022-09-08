@@ -10,7 +10,6 @@
       "vitest/globals",
       "vite/client",
       "vue/ref-macros",
-      "vue-gettext/types",
       "vite-plugin-pwa/client"
     ],
     "paths": {
