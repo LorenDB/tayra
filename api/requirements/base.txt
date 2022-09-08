@@ -40,7 +40,7 @@ channels_redis~=3.3.0
 uvicorn[standard]~=0.14.0
 gunicorn~=20.1.0
 
-cryptography>=3.3.2
+cryptography>=3.3.2,<38 # Cryptography 38 is not compatible with pyopenssl 20 anymore
 requests-http-message-signatures==0.3.1
 django-cleanup~=5.2.0
 requests~=2.26.0
