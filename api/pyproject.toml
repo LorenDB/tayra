@@ -78,7 +78,7 @@ django-debug-toolbar = "==3.5.0"
 asynctest = "==0.13.0"
 aioresponses = "==0.7.3"
 prompt-toolkit = "==3.0.31"
-black = "==22.6.0"
+black = "==22.8.0"
 ipdb = "==0.13.9"
 debugpy = "==1.6.3"
 
