@@ -14,17 +14,23 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   BUILD_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
 
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
 stages:
-  - build
-  - review
+  - deploy
   - lint
   - test
-  - deploy
-  - deps
+  - build
+  - publish
 
 review_front:
   interruptible: true
-  stage: review
+  stage: deploy
   image: node:16-alpine
   when: manual
   allow_failure: true
@@ -53,8 +59,6 @@ review_front:
     paths:
       - front/node_modules
       - front/yarn.lock
-  only:
-    - branches
   tags:
     - docker
   environment:
@@ -63,7 +67,7 @@ review_front:
 
 review_docs:
   interruptible: true
-  stage: review
+  stage: deploy
   when: manual
   allow_failure: true
   image: python:3.10
@@ -90,8 +94,6 @@ review_docs:
     expire_in: 2 weeks
     paths:
       - docs-review
-  only:
-    - branches
   tags:
     - docker
   environment:
@@ -126,8 +128,6 @@ black:
   script:
     - black --check --diff .
   only:
-    refs:
-      - branches
     changes:
       - api/**/*
 
@@ -146,8 +146,6 @@ flake8:
     paths:
       - "$PIP_CACHE_DIR"
   only:
-    refs:
-      - branches
     changes:
       - api/**/*
 
@@ -167,8 +165,6 @@ eslint:
     paths:
       - front/node_modules
   only:
-    refs:
-      - branches
     changes:
       - front/**/*
 
@@ -189,9 +185,6 @@ test_api:
     DJANGO_SETTINGS_MODULE: config.settings.local
     POSTGRES_HOST_AUTH_METHOD: trust
     CACHE_URL: "redis://redis:6379/0"
-  only:
-    refs:
-      - branches
   before_script:
     - cd api
     - poetry install --no-root
@@ -218,9 +211,6 @@ test_front:
   before_script:
     - cd front
     - apk add --no-cache jq bash coreutils python3
-  only:
-    refs:
-      - branches
   script:
     - yarn install --check-files
     - yarn test:unit
@@ -322,7 +312,7 @@ build_documentation:
     - docker
 
 deploy_documentation:
-  stage: deploy
+  stage: publish
   image: alpine
   dependencies:
     - build_documentation
@@ -340,7 +330,7 @@ deploy_documentation:
 
 
 .docker_publish:
-  stage: deploy
+  stage: publish
   image: egon0/docker-with-buildx-and-git:bash
   tags:
     - multiarch
@@ -407,7 +397,7 @@ docker_publish_non-release:
       - COMPONENT: ["api", "front"]
 
 docker_all_in_one_release:
-  stage: deploy
+  stage: publish
   image: egon0/docker-with-buildx-and-git:bash
   allow_failure: true
   services:
@@ -439,7 +429,7 @@ docker_all_in_one_release:
 
 build_api:
   # Simply publish a zip containing api/ directory
-  stage: deploy
+  stage: publish
   image: bash
   artifacts:
     name: "api_${CI_COMMIT_REF_NAME}"
