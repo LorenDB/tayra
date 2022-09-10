@@ -121,9 +121,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate >
-          Browsing albums
-        </translate>
+        Browsing albums
       </h2>
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
@@ -132,7 +130,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
         <div class="fields">
           <div class="field">
             <label for="albums-search">
-              <translate >Search</translate>
+              Search
             </label>
             <div class="ui action input">
               <input
@@ -152,11 +150,11 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             </div>
           </div>
           <div class="field">
-            <label for="tags-search"><translate >Tags</translate></label>
+            <label for="tags-search">Tags</label>
             <tags-selector v-model="tags" />
           </div>
           <div class="field">
-            <label for="album-ordering"><translate >Ordering</translate></label>
+            <label for="album-ordering">Ordering</label>
             <select
               id="album-ordering"
               v-model="ordering"
@@ -172,26 +170,22 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="album-ordering-direction"><translate >Ordering direction</translate></label>
+            <label for="album-ordering-direction">Ordering direction</label>
             <select
               id="album-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate >
-                  Ascending
-                </translate>
+                Ascending
               </option>
               <option value="-">
-                <translate >
-                  Descending
-                </translate>
+                Descending
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="album-results"><translate >Results per page</translate></label>
+            <label for="album-results">Results per page</label>
             <select
               id="album-results"
               v-model="paginateBy"
@@ -234,9 +228,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
         >
           <div class="ui icon header">
             <i class="compact disc icon" />
-            <translate >
-              No results matching your query
-            </translate>
+            No results matching your query
           </div>
           <router-link
             v-if="$store.state.auth.authenticated"
@@ -244,9 +236,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             class="ui success button labeled icon"
           >
             <i class="upload icon" />
-            <translate >
-              Add some music
-            </translate>
+            Add some music
           </router-link>
         </div>
       </div>

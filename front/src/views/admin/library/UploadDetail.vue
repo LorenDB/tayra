@@ -89,7 +89,7 @@ const showUploadDetailModal = ref(false)
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        <translate >Local</translate>
+                        Local
                       </span>
                       &nbsp;
                     </template>
@@ -106,7 +106,7 @@ const showUploadDetailModal = ref(false)
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate >View in Django's admin</translate>&nbsp;
+                    View in Django's admin&nbsp;
                   </a>
                   <button
                     v-dropdown
@@ -122,7 +122,7 @@ const showUploadDetailModal = ref(false)
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        <translate >View in Django's admin</translate>&nbsp;
+                        View in Django's admin&nbsp;
                       </a>
                       <a
                         class="basic item"
@@ -131,7 +131,7 @@ const showUploadDetailModal = ref(false)
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate >Open remote profile</translate>&nbsp;
+                        Open remote profile&nbsp;
                       </a>
                     </div>
                   </button>
@@ -145,7 +145,7 @@ const showUploadDetailModal = ref(false)
                     rel="noopener noreferrer"
                   >
                     <i class="download icon" />
-                    <translate >Download</translate>
+                    Download
                   </a>
                 </div>
                 <div class="ui buttons">
@@ -153,30 +153,22 @@ const showUploadDetailModal = ref(false)
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    <translate >
-                      Delete
-                    </translate>
+                    Delete
                     <template #modal-header>
                       <p>
-                        <translate >
-                          Delete this upload?
-                        </translate>
+                        Delete this upload?
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          <translate >
-                            The upload will be removed. This action is irreversible.
-                          </translate>
+                          The upload will be removed. This action is irreversible.
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        <translate >
-                          Delete
-                        </translate>
+                        Delete
                       </p>
                     </template>
                   </dangerous-button>
@@ -193,18 +185,14 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate >
-                    Upload data
-                  </translate>
+                  Upload data
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        Name
-                      </translate>
+                      Name
                     </td>
                     <td>
                       {{ displayName(object) }}
@@ -213,9 +201,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('privacy_level', object.library.privacy_level) }}">
-                        <translate >
-                          Visibility
-                        </translate>
+                        Visibility
                       </router-link>
                     </td>
                     <td>
@@ -225,9 +211,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.accounts.detail', params: {id: object.library.actor.full_username }}">
-                        <translate >
-                          Account
-                        </translate>
+                        Account
                       </router-link>
                     </td>
                     <td>
@@ -237,9 +221,7 @@ const showUploadDetailModal = ref(false)
                   <tr v-if="!object.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        <translate >
-                          Domain
-                        </translate>
+                        Domain
                       </router-link>
                     </td>
                     <td>
@@ -249,9 +231,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('status', object.import_status) }}">
-                        <translate >
-                          Import status
-                        </translate>
+                        Import status
                       </router-link>
                     </td>
                     <td>
@@ -268,9 +248,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries.detail', params: {id: object.library.uuid }}">
-                        <translate >
-                          Library
-                        </translate>
+                        Library
                       </router-link>
                     </td>
                     <td>
@@ -286,18 +264,14 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate >
-                    Activity
-                  </translate>&nbsp;
+                  Activity&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        First seen
-                      </translate>
+                      First seen
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -305,9 +279,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Accessed date
-                      </translate>
+                      Accessed date
                     </td>
                     <td>
                       <human-date
@@ -316,7 +288,6 @@ const showUploadDetailModal = ref(false)
                       />
                       <translate
                         v-else
-
                       >
                         N/A
                       </translate>
@@ -331,9 +302,7 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate >
-                    Audio content
-                  </translate>&nbsp;
+                  Audio content&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
@@ -341,9 +310,7 @@ const showUploadDetailModal = ref(false)
                   <tr v-if="object.track">
                     <td>
                       <router-link :to="{name: 'manage.library.tracks.detail', params: {id: object.track.id }}">
-                        <translate >
-                          Track
-                        </translate>
+                        Track
                       </router-link>
                     </td>
                     <td>
@@ -352,9 +319,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Cached size
-                      </translate>
+                      Cached size
                     </td>
                     <td>
                       <template v-if="object.audio_file">
@@ -362,7 +327,6 @@ const showUploadDetailModal = ref(false)
                       </template>
                       <translate
                         v-else
-
                       >
                         N/A
                       </translate>
@@ -370,9 +334,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Size
-                      </translate>
+                      Size
                     </td>
                     <td>
                       {{ humanSize(object.size) }}
@@ -380,9 +342,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Bitrate
-                      </translate>
+                      Bitrate
                     </td>
                     <td>
                       <template v-if="object.bitrate">
@@ -390,7 +350,6 @@ const showUploadDetailModal = ref(false)
                       </template>
                       <translate
                         v-else
-
                       >
                         N/A
                       </translate>
@@ -398,9 +357,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Duration
-                      </translate>
+                      Duration
                     </td>
                     <td>
                       <template v-if="object.duration">
@@ -408,7 +365,6 @@ const showUploadDetailModal = ref(false)
                       </template>
                       <translate
                         v-else
-
                       >
                         N/A
                       </translate>
@@ -417,9 +373,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('type', object.mimetype) }}">
-                        <translate >
-                          Type
-                        </translate>
+                        Type
                       </router-link>
                     </td>
                     <td>
@@ -428,7 +382,6 @@ const showUploadDetailModal = ref(false)
                       </template>
                       <translate
                         v-else
-
                       >
                         N/A
                       </translate>

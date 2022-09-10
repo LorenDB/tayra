@@ -99,15 +99,13 @@ const labels = computed(() => ({
   <main v-title="labels.reports">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate >
-          Reports
-        </translate>
+        Reports
       </h2>
       <div class="ui hidden divider" />
       <div class="ui inline form">
         <div class="fields">
           <div class="ui field">
-            <label for="reports-search"><translate >Search</translate></label>
+            <label for="reports-search">Search</label>
             <form @submit.prevent="query = search.value">
               <input
                 id="reports-search"
@@ -120,7 +118,7 @@ const labels = computed(() => ({
             </form>
           </div>
           <div class="field">
-            <label for="reports-status"><translate >Status</translate></label>
+            <label for="reports-status">Status</label>
             <select
               id="reports-status"
               class="ui dropdown"
@@ -128,19 +126,13 @@ const labels = computed(() => ({
               @change="addSearchToken('resolved', ($event.target as HTMLSelectElement).value)"
             >
               <option value="">
-                <translate >
-                  All
-                </translate>
+                All
               </option>
               <option value="yes">
-                <translate >
-                  Resolved
-                </translate>
+                Resolved
               </option>
               <option value="no">
-                <translate >
-                  Unresolved
-                </translate>
+                Unresolved
               </option>
             </select>
           </div>
@@ -152,7 +144,7 @@ const labels = computed(() => ({
             @update:model-value="addSearchToken('category', $event)"
           />
           <div class="field">
-            <label for="reports-ordering"><translate >Ordering</translate></label>
+            <label for="reports-ordering">Ordering</label>
             <select
               id="reports-ordering"
               v-model="ordering"
@@ -168,21 +160,17 @@ const labels = computed(() => ({
             </select>
           </div>
           <div class="field">
-            <label for="reports-ordering-direction"><translate >Order</translate></label>
+            <label for="reports-ordering-direction">Order</label>
             <select
               id="reports-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate >
-                  Ascending
-                </translate>
+                Ascending
               </option>
               <option value="-">
-                <translate >
-                  Descending
-                </translate>
+                Descending
               </option>
             </select>
           </div>

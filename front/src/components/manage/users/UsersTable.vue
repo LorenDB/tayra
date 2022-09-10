@@ -100,7 +100,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="users-search"><translate >Search</translate></label>
+          <label for="users-search">Search</label>
           <input
             id="users-search"
             v-model="query"
@@ -110,7 +110,7 @@ const labels = computed(() => ({
           >
         </div>
         <div class="field">
-          <label for="users-ordering"><translate >Ordering</translate></label>
+          <label for="users-ordering">Ordering</label>
           <select
             id="users-ordering"
             v-model="ordering"
@@ -126,21 +126,17 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="users-ordering-direction"><translate >Order</translate></label>
+          <label for="users-ordering-direction">Order</label>
           <select
             id="users-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate >
-                Ascending
-              </translate>
+              Ascending
             </option>
             <option value="-">
-              <translate >
-                Descending
-              </translate>
+              Descending
             </option>
           </select>
         </div>
@@ -163,39 +159,25 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            <translate >
-              Username
-            </translate>
+            Username
           </th>
           <th>
-            <translate >
-              Email
-            </translate>
+            Email
           </th>
           <th>
-            <translate >
-              Account status
-            </translate>
+            Account status
           </th>
           <th>
-            <translate >
-              Sign-up
-            </translate>
+            Sign-up
           </th>
           <th>
-            <translate >
-              Last activity
-            </translate>
+            Last activity
           </th>
           <th>
-            <translate >
-              Permissions
-            </translate>
+            Permissions
           </th>
           <th>
-            <translate >
-              Status
-            </translate>
+            Status
           </th>
         </template>
         <template
@@ -222,11 +204,11 @@ const labels = computed(() => ({
             <span
               v-if="scope.obj.is_active"
               class="ui basic success label"
-            ><translate >Active</translate></span>
+            >Active</span>
             <span
               v-else
               class="ui basic label"
-            ><translate >Inactive</translate></span>
+            >Inactive</span>
           </td>
           <td>
             <human-date :date="scope.obj.date_joined" />
@@ -237,9 +219,7 @@ const labels = computed(() => ({
               :date="scope.obj.last_activity"
             />
             <template v-else>
-              <translate >
-                N/A
-              </translate>
+              N/A
             </template>
           </td>
           <td>
@@ -257,15 +237,15 @@ const labels = computed(() => ({
             <span
               v-if="scope.obj.is_superuser"
               class="ui pink label"
-            ><translate >Admin</translate></span>
+            >Admin</span>
             <span
               v-else-if="scope.obj.is_staff"
               class="ui purple label"
-            ><translate >Staff member</translate></span>
+            >Staff member</span>
             <span
               v-else
               class="ui basic label"
-            ><translate >Regular user</translate></span>
+            >Regular user</span>
           </td>
         </template>
       </action-table>

@@ -55,7 +55,7 @@ fetchLicenses()
 <template>
   <div>
     <label for="license-dropdown">
-      <translate >License</translate>
+      License
     </label>
     <select
       id="license-dropdown"
@@ -63,9 +63,7 @@ fetchLicenses()
       class="ui search normal dropdown"
     >
       <option value="">
-        <translate >
-          None
-        </translate>
+        None
       </option>
       <option
         v-for="l in featuredLicenses"
@@ -86,7 +84,7 @@ fetchLicenses()
         target="_blank"
         rel="noreferrer noopener"
       >
-        <translate >About this license</translate>
+        About this license
       </a>
     </p>
   </div>

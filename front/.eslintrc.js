@@ -5,6 +5,7 @@ module.exports = {
   },
   extends: [
     'plugin:vue/vue3-recommended',
+    'plugin:@intlify/vue-i18n/recommended',
     '@vue/typescript/recommended',
     '@vue/standard'
   ],
@@ -32,6 +33,11 @@ module.exports = {
     'no-redeclare': 'off',
     'no-undef': 'off',
 
+    // NOTE: i18n
+    '@intlify/vue-i18n/valid-message-syntax': 'error',
+    '@intlify/vue-i18n/no-missing-keys': 'error',
+    '@intlify/vue-i18n/no-dynamic-keys': 'error',
+
     // TODO (wvffle): Remove after VUI and #1618
     'vue/multi-word-component-names': 'off',
     'import/extensions': 'off',
@@ -51,5 +57,11 @@ module.exports = {
         'vue/comment-directive': 'off'
       }
     }
-  ]
+  ],
+  settings: {
+    'vue-i18n': {
+      localeDir: 'src/locales/*.{json,json5,yaml,yml}',
+      messageSyntaxVersion: '^9.0.0'
+    }
+  }
 }

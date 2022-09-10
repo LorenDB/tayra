@@ -101,21 +101,15 @@ const albumModal = ref()
           @click="pendingUploads.length = 0"
         />
         <h3 class="ui header">
-          <translate >
-            Uploads published successfully
-          </translate>
+          Uploads published successfully
         </h3>
         <p>
-          <translate >
-            Processed uploads:
-          </translate> {{ processedUploads.length }}/{{ pendingUploads.length }}
+          Processed uploads: {{ processedUploads.length }}/{{ pendingUploads.length }}
         </p>
       </template>
       <template v-else-if="isOver">
         <h3 class="ui header">
-          <translate >
-            Some uploads couldn't be published
-          </translate>
+          Some uploads couldn't be published
         </h3>
         <div class="ui hidden divider" />
         <router-link
@@ -123,36 +117,26 @@ const albumModal = ref()
           class="ui basic button"
           :to="{name: 'content.libraries.files', query: {q: 'status:skipped'}}"
         >
-          <translate >
-            View skipped uploads
-          </translate>
+          View skipped uploads
         </router-link>
         <router-link
           v-if="erroredUploads.length > 0"
           class="ui basic button"
           :to="{name: 'content.libraries.files', query: {q: 'status:errored'}}"
         >
-          <translate >
-            View errored uploads
-          </translate>
+          View errored uploads
         </router-link>
       </template>
       <template v-else>
         <div class="ui inline right floated active loader" />
         <h3 class="ui header">
-          <translate >
-            Uploads are being processed
-          </translate>
+          Uploads are being processed
         </h3>
         <p>
-          <translate >
-            Your uploads are being processed by Funkwhale and will be live very soon.
-          </translate>
+          Your uploads are being processed by Funkwhale and will be live very soon.
         </p>
         <p>
-          <translate >
-            Processed uploads:
-          </translate> {{ processedUploads.length }}/{{ pendingUploads.length }}
+          Processed uploads: {{ processedUploads.length }}/{{ pendingUploads.length }}
         </p>
       </template>
     </div>
@@ -174,13 +158,11 @@ const albumModal = ref()
       <h2 class="ui header">
         <translate
           v-if="isPodcast"
-
         >
           Latest episodes
         </translate>
         <translate
           v-else
-
         >
           Latest tracks
         </translate>
@@ -195,13 +177,11 @@ const albumModal = ref()
       <h2 class="ui with-actions header">
         <translate
           v-if="isPodcast"
-
         >
           Series
         </translate>
         <translate
           v-else
-
         >
           Albums
         </translate>
@@ -211,7 +191,7 @@ const albumModal = ref()
         >
           <a @click.stop.prevent="albumModal.show = true">
             <i class="plus icon" />
-            <translate >Add new</translate>
+            Add new
           </a>
         </div>
       </h2>

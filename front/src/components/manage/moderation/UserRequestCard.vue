@@ -87,9 +87,7 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    <translate >
-                      Submitted by
-                    </translate>
+                    Submitted by
                   </td>
                   <td>
                     <actor-link
@@ -100,9 +98,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Creation date
-                    </translate>
+                    Creation date
                   </td>
                   <td>
                     <human-date
@@ -119,36 +115,26 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    <translate >
-                      Status
-                    </translate>
+                    Status
                   </td>
                   <td>
                     <template v-if="obj.status === 'pending'">
                       <i class="warning hourglass icon" />
-                      <translate >
-                        Pending
-                      </translate>
+                      Pending
                     </template>
                     <template v-else-if="obj.status === 'refused'">
                       <i class="danger x icon" />
-                      <translate >
-                        Refused
-                      </translate>
+                      Refused
                     </template>
                     <template v-else-if="obj.status === 'approved'">
                       <i class="success check icon" />
-                      <translate >
-                        Approved
-                      </translate>
+                      Approved
                     </template>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Assigned to
-                    </translate>
+                    Assigned to
                   </td>
                   <td>
                     <div v-if="obj.assigned_to">
@@ -159,7 +145,6 @@ const handleRemovedNote = (uuid: string) => {
                     </div>
                     <translate
                       v-else
-
                     >
                       N/A
                     </translate>
@@ -167,9 +152,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Resolution date
-                    </translate>
+                    Resolution date
                   </td>
                   <td>
                     <human-date
@@ -179,7 +162,6 @@ const handleRemovedNote = (uuid: string) => {
                     />
                     <translate
                       v-else
-
                     >
                       N/A
                     </translate>
@@ -187,9 +169,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Internal notes
-                    </translate>
+                    Internal notes
                   </td>
                   <td>
                     <i class="comment icon" />
@@ -209,14 +189,10 @@ const handleRemovedNote = (uuid: string) => {
       <div class="ui stackable two column grid">
         <div class="column">
           <h3>
-            <translate >
-              Message
-            </translate>
+            Message
           </h3>
           <p>
-            <translate >
-              This user wants to sign-up on your pod.
-            </translate>
+            This user wants to sign-up on your pod.
           </p>
           <template v-if="obj.metadata">
             <div class="ui hidden divider" />
@@ -230,7 +206,6 @@ const handleRemovedNote = (uuid: string) => {
               </p>
               <translate
                 v-else
-
               >
                 N/A
               </translate>
@@ -241,9 +216,7 @@ const handleRemovedNote = (uuid: string) => {
         <aside class="column">
           <div v-if="obj.status != 'approved'">
             <h3>
-              <translate >
-                Actions
-              </translate>
+              Actions
             </h3>
             <div class="ui labelled icon basic buttons">
               <button
@@ -252,9 +225,7 @@ const handleRemovedNote = (uuid: string) => {
                 @click="approve(true)"
               >
                 <i class="success check icon" />&nbsp;
-                <translate >
-                  Approve
-                </translate>
+                Approve
               </button>
               <button
                 v-if="obj.status === 'pending'"
@@ -262,16 +233,12 @@ const handleRemovedNote = (uuid: string) => {
                 @click="approve(false)"
               >
                 <i class="danger x icon" />&nbsp;
-                <translate >
-                  Refuse
-                </translate>
+                Refuse
               </button>
             </div>
           </div>
           <h3>
-            <translate >
-              Internal notes
-            </translate>
+            Internal notes
           </h3>
           <notes-thread
             :notes="obj.notes"

@@ -68,9 +68,7 @@ const submit = async () => {
             class="ui negative message"
           >
             <h4 class="header">
-              <translate >
-                Error while changing your password
-              </translate>
+              Error while changing your password
             </h4>
             <ul class="list">
               <li
@@ -83,31 +81,25 @@ const submit = async () => {
           </div>
           <template v-if="token && uid">
             <div class="field">
-              <label for="password-field"><translate >New password</translate></label>
+              <label for="password-field">New password</label>
               <password-input
                 v-model="newPassword"
                 field-id="password-field"
               />
             </div>
             <router-link :to="{path: '/login'}">
-              <translate >
-                Back to login
-              </translate>
+              Back to login
             </router-link>
             <button
               :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
               type="submit"
             >
-              <translate >
-                Update your password
-              </translate>
+              Update your password
             </button>
           </template>
           <template v-else>
             <p>
-              <translate >
-                If the e-mail address provided in the previous step is valid and linked to a user account, you should receive an e-mail with reset instructions in the next couple of minutes.
-              </translate>
+              If the e-mail address provided in the previous step is valid and linked to a user account, you should receive an e-mail with reset instructions in the next couple of minutes.
             </p>
           </template>
         </form>
@@ -116,19 +108,13 @@ const submit = async () => {
           class="ui positive message"
         >
           <h4 class="header">
-            <translate >
-              Password updated successfully
-            </translate>
+            Password updated successfully
           </h4>
           <p>
-            <translate >
-              Your password has been updated successfully.
-            </translate>
+            Your password has been updated successfully.
           </p>
           <router-link :to="{name: 'login'}">
-            <translate >
-              Proceed to login
-            </translate>
+            Proceed to login
           </router-link>
         </div>
       </div>

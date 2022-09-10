@@ -107,9 +107,7 @@ const getAttachmentUrl = (uuid: string) => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          Your attachment cannot be saved
-        </translate>
+        Your attachment cannot be saved
       </h4>
       <ul class="list">
         <li
@@ -146,7 +144,7 @@ const getAttachmentUrl = (uuid: string) => {
         <div class="eleven wide column">
           <div class="file-input">
             <label :for="attachmentId">
-              <translate >Upload New Picture…</translate>
+              Upload New Picture…
             </label>
             <input
               :id="attachmentId"
@@ -161,27 +159,21 @@ const getAttachmentUrl = (uuid: string) => {
           </div>
           <div class="ui very small hidden divider" />
           <p>
-            <translate >
-              PNG or JPG. Dimensions should be between 1400x1400px and 3000x3000px. Maximum file size allowed is 5MB.
-            </translate>
+            PNG or JPG. Dimensions should be between 1400x1400px and 3000x3000px. Maximum file size allowed is 5MB.
           </p>
           <button
             v-if="value"
             class="ui basic tiny button"
             @click.stop.prevent="remove(value as string)"
           >
-            <translate >
-              Remove
-            </translate>
+            Remove
           </button>
           <div
             v-if="isLoading"
             class="ui active inverted dimmer"
           >
             <div class="ui indeterminate text loader">
-              <translate >
-                Uploading file…
-              </translate>
+              Uploading file…
             </div>
           </div>
         </div>

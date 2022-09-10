@@ -165,7 +165,7 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="search-edits"><translate >Search</translate></label>
+          <label for="search-edits">Search</label>
           <form @submit.prevent="query = search.value">
             <input
               id="search-edits"
@@ -178,7 +178,7 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
           </form>
         </div>
         <div class="field">
-          <label for="edit-status"><translate >Status</translate></label>
+          <label for="edit-status">Status</label>
           <select
             id="edit-status"
             class="ui dropdown"
@@ -186,29 +186,21 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
             @change="addSearchToken('is_approved', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              <translate >
-                All
-              </translate>
+              All
             </option>
             <option value="null">
-              <translate >
-                Pending review
-              </translate>
+              Pending review
             </option>
             <option value="yes">
-              <translate >
-                Approved
-              </translate>
+              Approved
             </option>
             <option value="no">
-              <translate >
-                Rejected
-              </translate>
+              Rejected
             </option>
           </select>
         </div>
         <div class="field">
-          <label for="edit-ordering"><translate >Ordering</translate></label>
+          <label for="edit-ordering">Ordering</label>
           <select
             id="edit-ordering"
             v-model="ordering"
@@ -224,21 +216,17 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
           </select>
         </div>
         <div class="field">
-          <label for="edit-ordering-direction"><translate >Order</translate></label>
+          <label for="edit-ordering-direction">Order</label>
           <select
             id="edit-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate >
-                Ascending
-              </translate>
+              Ascending
             </option>
             <option value="-">
-              <translate >
-                Descending
-              </translate>
+              Descending
             </option>
           </select>
         </div>

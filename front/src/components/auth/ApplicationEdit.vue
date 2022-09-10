@@ -72,23 +72,17 @@ store.state.auth.applicationSecret = undefined
         </div>
         <template v-else>
           <router-link :to="{name: 'settings'}">
-            <translate >
-              Back to settings
-            </translate>
+            Back to settings
           </router-link>
           <h2 class="ui header">
-            <translate >
-              Application details
-            </translate>
+            Application details
           </h2>
           <div class="ui form">
             <p>
-              <translate >
-                Application ID and secret are really sensitive values and must be treated like passwords. Do not share those with anyone else.
-              </translate>
+              Application ID and secret are really sensitive values and must be treated like passwords. Do not share those with anyone else.
             </p>
             <div class="field">
-              <label for="copy-id"><translate >Application ID</translate></label>
+              <label for="copy-id">Application ID</label>
               <copy-input
                 id="copy-id"
                 :value="application.client_id"
@@ -100,18 +94,14 @@ store.state.auth.applicationSecret = undefined
             >
               <div class="ui small warning message">
                 <h3 class="header">
-                  <translate >
-                    Keep a copy of this token in a safe place
-                  </translate>
+                  Keep a copy of this token in a safe place
                 </h3>
                 <p>
-                  <translate >
-                    You won't be able to see it again once you leave this screen.
-                  </translate>
+                  You won't be able to see it again once you leave this screen.
                 </p>
               </div>
 
-              <label for="copy-secret"><translate >Application secret</translate></label>
+              <label for="copy-secret">Application secret</label>
               <copy-input
                 id="copy-secret"
                 :value="secret"
@@ -121,7 +111,7 @@ store.state.auth.applicationSecret = undefined
               v-if="application.token != undefined"
               class="field"
             >
-              <label for="copy-secret"><translate >Access token</translate></label>
+              <label for="copy-secret">Access token</label>
               <copy-input
                 id="copy-secret"
                 :value="application.token"
@@ -131,14 +121,12 @@ store.state.auth.applicationSecret = undefined
                 @click.prevent="refreshToken"
               >
                 <i class="refresh icon" />
-                <translate >Regenerate token</translate>
+                Regenerate token
               </a>
             </div>
           </div>
           <h2 class="ui header">
-            <translate >
-              Edit application
-            </translate>
+            Edit application
           </h2>
           <application-form
             :app="application"

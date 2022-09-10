@@ -42,9 +42,7 @@ const createForm = ref()
     </div>
     <div>
       <h2 class="ui with-actions header">
-        <translate >
-          Channels
-        </translate>
+        Channels
         <div
           v-if="$store.state.auth.authenticated && object.full_username === $store.state.auth.fullUsername"
           class="actions"
@@ -54,32 +52,26 @@ const createForm = ref()
             @click.stop.prevent="showCreateModal = true"
           >
             <i class="plus icon" />
-            <translate >Add new</translate>
+            Add new
           </a>
         </div>
       </h2>
       <channels-widget :filters="{scope: `actor:${object.full_username}`}" />
       <h2 class="ui with-actions header">
-        <translate >
-          User Libraries
-        </translate>
+        User Libraries
         <div
           v-if="$store.state.auth.authenticated && object.full_username === $store.state.auth.fullUsername"
           class="actions"
         >
           <router-link :to="{name: 'content.libraries.index'}">
             <i class="plus icon" />
-            <translate >
-              Add new
-            </translate>
+            Add new
           </router-link>
         </div>
       </h2>
       <library-widget :url="`federation/actors/${object.full_username}/libraries/`">
         <template #title>
-          <translate >
-            This user shared the following libraries
-          </translate>
+          This user shared the following libraries
         </template>
       </library-widget>
     </div>
@@ -88,19 +80,16 @@ const createForm = ref()
       <h4 class="header">
         <translate
           v-if="step === 1"
-
         >
           Create channel
         </translate>
         <translate
           v-else-if="category === 'podcast'"
-
         >
           Podcast channel
         </translate>
         <translate
           v-else
-
         >
           Artist channel
         </translate>
@@ -126,27 +115,21 @@ const createForm = ref()
           v-if="step === 1"
           class="ui basic deny button"
         >
-          <translate >
-            Cancel
-          </translate>
+          Cancel
         </button>
         <button
           v-if="step > 1"
           class="ui basic button"
           @click.stop.prevent="step -= 1"
         >
-          <translate >
-            Previous step
-          </translate>
+          Previous step
         </button>
         <button
           v-if="step === 1"
           class="ui primary button"
           @click.stop.prevent="step += 1"
         >
-          <translate >
-            Next step
-          </translate>
+          Next step
         </button>
         <button
           v-if="step === 2"
@@ -155,9 +138,7 @@ const createForm = ref()
           :disabled="!submittable && !loading"
           @click.prevent.stop="createForm.submit"
         >
-          <translate >
-            Create channel
-          </translate>
+          Create channel
         </button>
       </div>
     </semantic-modal>

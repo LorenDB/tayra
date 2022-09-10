@@ -66,7 +66,7 @@ const showSubscribeModal = ref(false)
         <div class="actions">
           <a @click.stop.prevent="showSubscribeModal = true">
             <i class="plus icon" />
-            <translate >Add new</translate>
+            Add new
           </a>
         </div>
       </h1>
@@ -76,9 +76,7 @@ const showSubscribeModal = ref(false)
         :fullscreen="false"
       >
         <h2 class="header">
-          <translate >
-            Subscription
-          </translate>
+          Subscription
         </h2>
         <div
           ref="modalContent"
@@ -94,9 +92,7 @@ const showSubscribeModal = ref(false)
         </div>
         <div class="actions">
           <button class="ui basic deny button">
-            <translate >
-              Cancel
-            </translate>
+            Cancel
           </button>
           <button
             form="remote-search"
@@ -104,9 +100,7 @@ const showSubscribeModal = ref(false)
             class="ui primary button"
           >
             <i class="bookmark icon" />
-            <translate >
-              Subscribe
-            </translate>
+            Subscribe
           </button>
         </div>
       </semantic-modal>

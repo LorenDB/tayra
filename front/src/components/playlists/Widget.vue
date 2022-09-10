@@ -78,9 +78,7 @@ watch(
     >
       <div class="ui icon header">
         <i class="list icon" />
-        <translate >
-          No playlists have been created yet
-        </translate>
+        No playlists have been created yet
       </div>
       <button
         v-if="$store.state.auth.authenticated"
@@ -88,9 +86,7 @@ watch(
         @click="$store.commit('playlists/chooseTrack', null)"
       >
         <i class="list icon" />
-        <translate >
-          Create Playlist
-        </translate>
+        Create Playlist
       </button>
     </div>
     <template v-if="nextPage">
@@ -100,9 +96,7 @@ watch(
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        <translate >
-          Show more
-        </translate>
+        Show more
       </button>
     </template>
   </div>

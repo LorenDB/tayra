@@ -37,13 +37,11 @@ const title = computed(() => isFavorite.value
     <i class="heart icon" />
     <translate
       v-if="isFavorite"
-
     >
       In favorites
     </translate>
     <translate
       v-else
-
     >
       Add to favorites
     </translate>

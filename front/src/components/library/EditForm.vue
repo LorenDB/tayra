@@ -148,9 +148,7 @@ const resetField = (fieldId: string) => {
   <div v-if="submittedMutation">
     <div class="ui positive message">
       <h4 class="header">
-        <translate >
-          Your edit was successfully submitted.
-        </translate>
+        Your edit was successfully submitted.
       </h4>
     </div>
     <edit-card
@@ -161,9 +159,7 @@ const resetField = (fieldId: string) => {
       class="ui button"
       @click.prevent="submittedMutation = null"
     >
-      <translate >
-        Submit another edit
-      </translate>
+      Submit another edit
     </button>
   </div>
   <div v-else>
@@ -175,37 +171,27 @@ const resetField = (fieldId: string) => {
     >
       <div>
         <template v-if="showPendingReview">
-          <translate >
-            Recent edits awaiting review
-          </translate>
+          Recent edits awaiting review
           <button
             class="ui tiny basic right floated button"
             @click.prevent="showPendingReview = false"
           >
-            <translate >
-              Show all edits
-            </translate>
+            Show all edits
           </button>
         </template>
         <template v-else>
-          <translate >
-            Recent edits
-          </translate>
+          Recent edits
           <button
             class="ui tiny basic right floated button"
             @click.prevent="showPendingReview = true"
           >
-            <translate >
-              Restrict to unreviewed edits
-            </translate>
+            Restrict to unreviewed edits
           </button>
         </template>
       </div>
       <template #empty-state>
         <empty-state>
-          <translate >
-            Suggest a change using the form below.
-          </translate>
+          Suggest a change using the form below.
         </empty-state>
       </template>
     </edit-list>
@@ -220,9 +206,7 @@ const resetField = (fieldId: string) => {
         class="ui negative message"
       >
         <h4 class="header">
-          <translate >
-            Error while submitting edit
-          </translate>
+          Error while submitting edit
         </h4>
         <ul class="list">
           <li
@@ -237,9 +221,7 @@ const resetField = (fieldId: string) => {
         v-if="!canEdit"
         class="ui message"
       >
-        <translate >
-          You don't have the permission to edit this object, but you can suggest changes. Once submitted, suggestions will be reviewed before approval.
-        </translate>
+        You don't have the permission to edit this object, but you can suggest changes. Once submitted, suggestions will be reviewed before approval.
       </div>
       <template v-if="values">
         <div
@@ -268,9 +250,7 @@ const resetField = (fieldId: string) => {
               class="ui fluid search dropdown"
             >
               <option :value="null">
-                <translate >
-                  N/A
-                </translate>
+                N/A
               </option>
               <option
                 v-for="{ code, name } in licenses"
@@ -286,9 +266,7 @@ const resetField = (fieldId: string) => {
               @click.prevent="values[fieldConfig.id] = null"
             >
               <i class="x icon" />
-              <translate >
-                Clear
-              </translate>
+              Clear
             </button>
           </template>
           <template v-else-if="fieldConfig.type === 'content'">
@@ -325,9 +303,7 @@ const resetField = (fieldId: string) => {
               @click.prevent="values[fieldConfig.id] = []"
             >
               <i class="x icon" />
-              <translate >
-                Clear
-              </translate>
+              Clear
             </button>
           </template>
           <div v-if="fieldValuesChanged(fieldConfig.id)">
@@ -337,15 +313,13 @@ const resetField = (fieldId: string) => {
               @click.prevent="resetField(fieldConfig.id)"
             >
               <i class="undo icon" />
-              <translate >
-                Reset to initial value
-              </translate>
+              Reset to initial value
             </button>
           </div>
         </div>
       </template>
       <div class="field">
-        <label for="summary"><translate >Summary (optional)</translate></label>
+        <label for="summary">Summary (optional)</label>
         <textarea
           id="change-summary"
           v-model="summary"
@@ -359,9 +333,7 @@ const resetField = (fieldId: string) => {
         class="ui left floated button"
         :to="{name: 'library.tracks.detail', params: {id: object.id }}"
       >
-        <translate >
-          Cancel
-        </translate>
+        Cancel
       </router-link>
       <button
         :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
@@ -370,13 +342,11 @@ const resetField = (fieldId: string) => {
       >
         <translate
           v-if="canEdit"
-
         >
           Submit and apply edit
         </translate>
         <translate
           v-else
-
         >
           Submit suggestion
         </translate>

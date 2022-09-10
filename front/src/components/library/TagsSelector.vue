@@ -99,9 +99,7 @@ onMounted(async () => {
       class="search"
     >
     <div class="default text">
-      <translate >
-        Search…
-      </translate>
+      Search…
     </div>
   </div>
 </template>

@@ -112,9 +112,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
     <section class="ui vertical center aligned stripe segment">
       <div :class="['ui', { 'active': isLoading }, 'inverted', 'dimmer']">
         <div class="ui text loader">
-          <translate >
-            Loading your favorites…
-          </translate>
+          Loading your favorites…
         </div>
       </div>
       <h2
@@ -126,7 +124,6 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           translate-plural="%{ count } favorites"
           :translate-n="$store.state.favorites.count"
           :translate-params="{ count }"
-
         >
           %{ count } favorite
         </translate>
@@ -144,7 +141,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
         <div class="fields">
           <div class="field">
             <label for="favorites-ordering">
-              <translate >Ordering</translate>
+              Ordering
             </label>
             <select
               id="favorites-ordering"
@@ -162,7 +159,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           </div>
           <div class="field">
             <label for="favorites-ordering-direction">
-              <translate >Order</translate>
+              Order
             </label>
             <select
               id="favorites-ordering-direction"
@@ -170,20 +167,16 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
               class="ui dropdown"
             >
               <option value="+">
-                <translate >
-                  Ascending
-                </translate>
+                Ascending
               </option>
               <option value="-">
-                <translate >
-                  Descending
-                </translate>
+                Descending
               </option>
             </select>
           </div>
           <div class="field">
             <label for="favorites-results">
-              <translate >Results per page</translate>
+              Results per page
             </label>
             <select
               id="favorites-results"
@@ -222,20 +215,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
     >
       <div class="ui icon header">
         <i class="broken heart icon" />
-        <translate
-
-        >
-          No tracks have been added to your favorites yet
-        </translate>
+        No tracks have been added to your favorites yet
       </div>
       <router-link
         :to="'/library'"
         class="ui success labeled icon button"
       >
         <i class="headphones icon" />
-        <translate >
-          Browse the library
-        </translate>
+        Browse the library
       </router-link>
     </div>
   </main>

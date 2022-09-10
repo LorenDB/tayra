@@ -149,9 +149,7 @@ onMounted(() => {
               </div>
               <div class="menu">
                 <h3 class="header">
-                  <translate >
-                    Administration
-                  </translate>
+                  Administration
                 </h3>
                 <div class="divider" />
                 <router-link
@@ -166,9 +164,7 @@ onMounted(() => {
                   >
                     {{ $store.state.ui.notifications.pendingReviewEdits }}
                   </div>
-                  <translate >
-                    Library
-                  </translate>
+                  Library
                 </router-link>
                 <router-link
                   v-if="$store.state.auth.availablePermissions['moderation']"
@@ -182,27 +178,21 @@ onMounted(() => {
                   >
                     {{ $store.state.ui.notifications.pendingReviewReports + $store.state.ui.notifications.pendingReviewRequests }}
                   </div>
-                  <translate >
-                    Moderation
-                  </translate>
+                  Moderation
                 </router-link>
                 <router-link
                   v-if="$store.state.auth.availablePermissions['settings']"
                   class="item"
                   :to="{name: 'manage.users.users.list'}"
                 >
-                  <translate >
-                    Users
-                  </translate>
+                  Users
                 </router-link>
                 <router-link
                   v-if="$store.state.auth.availablePermissions['settings']"
                   class="item"
                   :to="{path: '/manage/settings'}"
                 >
-                  <translate >
-                    Settings
-                  </translate>
+                  Settings
                 </router-link>
               </div>
             </div>
@@ -327,17 +317,17 @@ onMounted(() => {
           </div>
           <div class="content">
             <fieldset
-              v-for="t in themes"
-              :key="t.key"
+              v-for="th in themes"
+              :key="th.key"
             >
               <input
-                :id="t.key"
+                :id="th.key"
                 v-model="theme"
                 type="radio"
                 name="theme"
-                :value="t.key"
+                :value="th.key"
               >
-              <label :for="t.key">{{ t.name }}</label>
+              <label :for="th.key">{{ th.name }}</label>
             </fieldset>
           </div>
         </semantic-modal>
@@ -362,18 +352,14 @@ onMounted(() => {
         class="ui fluid tiny primary button"
         :to="{name: 'login'}"
       >
-        <translate >
-          Login
-        </translate>
+        Login
       </router-link>
       <div class="ui small hidden divider" />
       <router-link
         class="ui fluid tiny button"
         :to="{path: '/signup'}"
       >
-        <translate >
-          Create an account
-        </translate>
+        Create an account
       </router-link>
     </div>
     <nav
@@ -385,9 +371,7 @@ onMounted(() => {
         id="navigation-label"
         class="visually-hidden"
       >
-        <translate >
-          Main navigation
-        </translate>
+        Main navigation
       </h1>
       <div class="ui small hidden divider" />
       <section
@@ -407,9 +391,7 @@ onMounted(() => {
               @click="expanded = 'explore'"
               @focus="expanded = 'explore'"
             >
-              <translate >
-                Explore
-              </translate>
+              Explore
               <i
                 v-if="expanded !== 'explore'"
                 class="angle right icon"
@@ -420,58 +402,44 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'search'}"
               >
-                <i class="search icon" /><translate >
-                  Search
-                </translate>
+                <i class="search icon" />                  Search
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.index'}"
                 active-class="_active"
               >
-                <i class="music icon" /><translate >
-                  Browse
-                </translate>
+                <i class="music icon" />                  Browse
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.podcasts.browse'}"
               >
-                <i class="podcast icon" /><translate >
-                  Podcasts
-                </translate>
+                <i class="podcast icon" />                  Podcasts
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.albums.browse'}"
               >
-                <i class="compact disc icon" /><translate >
-                  Albums
-                </translate>
+                <i class="compact disc icon" />                  Albums
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.artists.browse'}"
               >
-                <i class="user icon" /><translate >
-                  Artists
-                </translate>
+                <i class="user icon" />                  Artists
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.playlists.browse'}"
               >
-                <i class="list icon" /><translate >
-                  Playlists
-                </translate>
+                <i class="list icon" />                  Playlists
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.radios.browse'}"
               >
-                <i class="feed icon" /><translate >
-                  Radios
-                </translate>
+                <i class="feed icon" />                  Radios
               </router-link>
             </div>
           </div>
@@ -486,9 +454,7 @@ onMounted(() => {
               @click="expanded = 'myLibrary'"
               @focus="expanded = 'myLibrary'"
             >
-              <translate >
-                My Library
-              </translate>
+              My Library
               <i
                 v-if="expanded !== 'myLibrary'"
                 class="angle right icon"
@@ -499,49 +465,37 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'library.me'}"
               >
-                <i class="music icon" /><translate >
-                  Browse
-                </translate>
+                <i class="music icon" />                  Browse
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.albums.me'}"
               >
-                <i class="compact disc icon" /><translate >
-                  Albums
-                </translate>
+                <i class="compact disc icon" />                  Albums
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.artists.me'}"
               >
-                <i class="user icon" /><translate >
-                  Artists
-                </translate>
+                <i class="user icon" />                  Artists
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.playlists.me'}"
               >
-                <i class="list icon" /><translate >
-                  Playlists
-                </translate>
+                <i class="list icon" />                  Playlists
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.radios.me'}"
               >
-                <i class="feed icon" /><translate >
-                  Radios
-                </translate>
+                <i class="feed icon" />                  Radios
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'favorites'}"
               >
-                <i class="heart icon" /><translate >
-                  Favorites
-                </translate>
+                <i class="heart icon" />                  Favorites
               </router-link>
             </div>
           </div>
@@ -550,15 +504,11 @@ onMounted(() => {
             class="header item"
             :to="{name: 'subscriptions'}"
           >
-            <translate >
-              Channels
-            </translate>
+            Channels
           </router-link>
           <div class="item">
             <h3 class="header">
-              <translate >
-                More
-              </translate>
+              More
             </h3>
             <div class="menu">
               <router-link
@@ -566,9 +516,7 @@ onMounted(() => {
                 to="/about"
                 active-class="router-link-exact-active active"
               >
-                <i class="info icon" /><translate >
-                  About this pod
-                </translate>
+                <i class="info icon" />                  About this pod
               </router-link>
             </div>
           </div>

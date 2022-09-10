@@ -49,9 +49,7 @@ const scan = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          Could not fetch remote library
-        </translate>
+        Could not fetch remote library
       </h4>
       <ul class="list">
         <li
@@ -63,7 +61,7 @@ const scan = async () => {
       </ul>
     </div>
     <div class="ui field">
-      <label for="library-search"><translate >Search a remote library</translate></label>
+      <label for="library-search">Search a remote library</label>
       <div :class="['ui', 'action', {loading: isLoading}, 'input']">
         <input
           id="library-search"

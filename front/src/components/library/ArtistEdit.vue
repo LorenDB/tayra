@@ -24,13 +24,11 @@ const canEdit = store.state.auth.availablePermissions.library
       <h2>
         <translate
           v-if="canEdit"
-
         >
           Edit this artist
         </translate>
         <translate
           v-else
-
         >
           Suggest an edit on this artist
         </translate>
@@ -39,9 +37,7 @@ const canEdit = store.state.auth.availablePermissions.library
         v-if="!object.is_local"
         class="ui message"
       >
-        <translate >
-          This object is managed by another server, you cannot edit it.
-        </translate>
+        This object is managed by another server, you cannot edit it.
       </div>
       <edit-form
         v-else

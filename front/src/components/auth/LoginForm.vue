@@ -75,20 +75,14 @@ const submit = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          We cannot log you in
-        </translate>
+        We cannot log you in
       </h4>
       <ul class="list">
         <li v-if="errors[0] == 'invalid_credentials' && $store.state.instance.settings.moderation.signup_approval_enabled.value">
-          <translate >
-            If you signed-up recently, you may need to wait before our moderation team review your account, or verify your e-mail address.
-          </translate>
+          If you signed-up recently, you may need to wait before our moderation team review your account, or verify your e-mail address.
         </li>
         <li v-else-if="errors[0] == 'invalid_credentials'">
-          <translate >
-            Please double-check that your username and password combination is correct and make sure you verified your e-mail address.
-          </translate>
+          Please double-check that your username and password combination is correct and make sure you verified your e-mail address.
         </li>
         <li v-else>
           {{ errors[0] }}
@@ -98,11 +92,11 @@ const submit = async () => {
     <template v-if="domain === $store.getters['instance/domain']">
       <div class="field">
         <label for="username-field">
-          <translate >Username or e-mail address</translate>
+          Username or e-mail address
           <template v-if="showSignup">
             |
             <router-link :to="{path: '/signup'}">
-              <translate >Create an account</translate>
+              Create an account
             </router-link>
           </template>
         </label>
@@ -119,12 +113,12 @@ const submit = async () => {
       </div>
       <div class="field">
         <label for="password-field">
-          <translate >Password</translate> |
+          Password |
           <router-link
             tabindex="1"
             :to="{name: 'auth.password-reset', query: {email: credentials.username}}"
           >
-            <translate >Reset your password</translate>
+            Reset your password
           </router-link>
         </label>
         <password-input
@@ -147,9 +141,7 @@ const submit = async () => {
       :class="['ui', {'loading': isLoading}, 'right', 'floated', buttonClasses, 'button']"
       type="submit"
     >
-      <translate >
-        Login
-      </translate>
+      Login
     </button>
   </form>
 </template>

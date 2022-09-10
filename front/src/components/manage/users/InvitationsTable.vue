@@ -98,7 +98,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="invitations-search"><translate >Search</translate></label>
+          <label for="invitations-search">Search</label>
           <input
             id="invitations-search"
             v-model="query"
@@ -108,7 +108,7 @@ const labels = computed(() => ({
           >
         </div>
         <div class="field">
-          <label for="invitations-ordering"><translate >Ordering</translate></label>
+          <label for="invitations-ordering">Ordering</label>
           <select
             id="invitations-ordering"
             v-model="ordering"
@@ -124,26 +124,20 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="invitations-status"><translate >Status</translate></label>
+          <label for="invitations-status">Status</label>
           <select
             id="invitations-status"
             v-model="isOpen"
             class="ui dropdown"
           >
             <option :value="null">
-              <translate >
-                All
-              </translate>
+              All
             </option>
             <option :value="true">
-              <translate >
-                Open
-              </translate>
+              Open
             </option>
             <option :value="false">
-              <translate >
-                Expired/used
-              </translate>
+              Expired/used
             </option>
           </select>
         </div>
@@ -166,34 +160,22 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            <translate >
-              Owner
-            </translate>
+            Owner
           </th>
           <th>
-            <translate >
-              User
-            </translate>
+            User
           </th>
           <th>
-            <translate >
-              Status
-            </translate>
+            Status
           </th>
           <th>
-            <translate >
-              Creation date
-            </translate>
+            Creation date
           </th>
           <th>
-            <translate >
-              Expiration date
-            </translate>
+            Expiration date
           </th>
           <th>
-            <translate >
-              Code
-            </translate>
+            Code
           </th>
         </template>
         <template
@@ -213,15 +195,15 @@ const labels = computed(() => ({
             <span
               v-if="scope.obj.users.length > 0"
               class="ui success basic label"
-            ><translate >Used</translate></span>
+            >Used</span>
             <span
               v-else-if="moment().isAfter(scope.obj.expiration_date)"
               class="ui danger basic label"
-            ><translate >Expired</translate></span>
+            >Expired</span>
             <span
               v-else
               class="ui basic label"
-            ><translate >Not used</translate></span>
+            >Not used</span>
           </td>
           <td>
             <human-date :date="scope.obj.creation_date" />

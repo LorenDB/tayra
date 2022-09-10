@@ -46,13 +46,11 @@ fetchLicenses()
       <h2>
         <translate
           v-if="canEdit"
-
         >
           Edit this track
         </translate>
         <translate
           key="2"
-
         >
           Suggest an edit on this track
         </translate>
@@ -61,9 +59,7 @@ fetchLicenses()
         v-if="!object.is_local"
         class="ui message"
       >
-        <translate >
-          This object is managed by another server, you cannot edit it.
-        </translate>
+        This object is managed by another server, you cannot edit it.
       </div>
       <edit-form
         v-else-if="!isLoadingLicenses"

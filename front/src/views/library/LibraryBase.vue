@@ -112,7 +112,6 @@ const updateUploads = (count: number) => {
                 <i class="external icon" />
                 <translate
                   :translate-params="{domain: object.actor.domain}"
-
                 >View on %{ domain }</translate>
               </a>
               <div
@@ -132,9 +131,7 @@ const updateUploads = (count: number) => {
                 :to="{name: 'manage.library.libraries.detail', params: {id: object.uuid}}"
               >
                 <i class="wrench icon" />
-                <translate >
-                  Open in moderation interface
-                </translate>
+                Open in moderation interface
               </router-link>
             </div>
           </button>
@@ -230,12 +227,10 @@ const updateUploads = (count: number) => {
           <div class="ui form">
             <div class="field">
               <label for="copy-input">
-                <translate >Sharing link</translate>
+                Sharing link
               </label>
               <p>
-                <translate >
-                  Share this link with other users so they can request access to this library by copy-pasting it in their pod search bar.
-                </translate>
+                Share this link with other users so they can request access to this library by copy-pasting it in their pod search bar.
               </p>
               <copy-input :value="object.fid" />
             </div>
@@ -250,27 +245,21 @@ const updateUploads = (count: number) => {
 
                   :to="{name: 'library.detail'}"
                 >
-                  <translate >
-                    Artists
-                  </translate>
+                  Artists
                 </router-link>
                 <router-link
                   class="item"
 
                   :to="{name: 'library.detail.albums'}"
                 >
-                  <translate >
-                    Albums
-                  </translate>
+                  Albums
                 </router-link>
                 <router-link
                   class="item"
 
                   :to="{name: 'library.detail.tracks'}"
                 >
-                  <translate >
-                    Tracks
-                  </translate>
+                  Tracks
                 </router-link>
                 <router-link
                   v-if="isOwner"
@@ -279,9 +268,7 @@ const updateUploads = (count: number) => {
                   :to="{name: 'library.detail.upload'}"
                 >
                   <i class="upload icon" />
-                  <translate >
-                    Upload
-                  </translate>
+                  Upload
                 </router-link>
                 <router-link
                   v-if="isOwner"
@@ -290,9 +277,7 @@ const updateUploads = (count: number) => {
                   :to="{name: 'library.detail.edit'}"
                 >
                   <i class="pencil icon" />
-                  <translate >
-                    Edit
-                  </translate>
+                  Edit
                 </router-link>
               </div>
               <div class="ui hidden divider" />

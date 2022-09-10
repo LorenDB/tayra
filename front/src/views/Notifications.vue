@@ -101,9 +101,7 @@ const markAllAsRead = async () => {
           class="ui container"
         >
           <h1 class="ui header">
-            <translate >
-              Your messages
-            </translate>
+            Your messages
           </h1>
           <div class="ui two column stackable grid">
             <div
@@ -112,9 +110,7 @@ const markAllAsRead = async () => {
             >
               <div class="ui attached info message">
                 <h4 class="header">
-                  <translate >
-                    Support this Funkwhale pod
-                  </translate>
+                  Support this Funkwhale pod
                 </h4>
                 <sanitized-html :html="supportMessage" />
               </div>
@@ -125,40 +121,30 @@ const markAllAsRead = async () => {
                 >
                   <div class="inline field">
                     <label for="instance-reminder-delay">
-                      <translate >Remind me in:</translate>
+                      Remind me in:
                     </label>
                     <select
                       id="instance-reminder-delay"
                       v-model="instanceSupportMessageDelay"
                     >
                       <option :value="30">
-                        <translate >
-                          30 days
-                        </translate>
+                        30 days
                       </option>
                       <option :value="60">
-                        <translate >
-                          60 days
-                        </translate>
+                        60 days
                       </option>
                       <option :value="90">
-                        <translate >
-                          90 days
-                        </translate>
+                        90 days
                       </option>
                       <option :value="null">
-                        <translate >
-                          Never
-                        </translate>
+                        Never
                       </option>
                     </select>
                     <button
                       type="submit"
                       class="ui right floated basic button"
                     >
-                      <translate >
-                        Got it!
-                      </translate>
+                      Got it!
                     </button>
                   </div>
                 </form>
@@ -170,14 +156,10 @@ const markAllAsRead = async () => {
             >
               <div class="ui info attached message">
                 <h4 class="header">
-                  <translate >
-                    Do you like Funkwhale?
-                  </translate>
+                  Do you like Funkwhale?
                 </h4>
                 <p>
-                  <translate >
-                    We noticed you've been here for a while. If Funkwhale is useful to you, we could use your help to make it even better!
-                  </translate>
+                  We noticed you've been here for a while. If Funkwhale is useful to you, we could use your help to make it even better!
                 </p>
                 <a
                   href="https://funkwhale.audio/support-us"
@@ -185,7 +167,7 @@ const markAllAsRead = async () => {
                   rel="noopener"
                   class="ui primary inverted button"
                 >
-                  <translate >Donate</translate>
+                  Donate
                 </a>
                 <a
                   href="https://contribute.funkwhale.audio"
@@ -193,7 +175,7 @@ const markAllAsRead = async () => {
                   rel="noopener"
                   class="ui secondary inverted button"
                 >
-                  <translate >Discover other ways to help</translate>
+                  Discover other ways to help
                 </a>
               </div>
               <div class="ui bottom attached segment">
@@ -203,40 +185,30 @@ const markAllAsRead = async () => {
                 >
                   <div class="inline field">
                     <label for="funkwhale-reminder-delay">
-                      <translate >Remind me in:</translate>
+                      Remind me in:
                     </label>
                     <select
                       id="funkwhale-reminder-delay"
                       v-model="funkwhaleSupportMessageDelay"
                     >
                       <option :value="30">
-                        <translate >
-                          30 days
-                        </translate>
+                        30 days
                       </option>
                       <option :value="60">
-                        <translate >
-                          60 days
-                        </translate>
+                        60 days
                       </option>
                       <option :value="90">
-                        <translate >
-                          90 days
-                        </translate>
+                        90 days
                       </option>
                       <option :value="null">
-                        <translate >
-                          Never
-                        </translate>
+                        Never
                       </option>
                     </select>
                     <button
                       type="submit"
                       class="ui right floated basic button"
                     >
-                      <translate >
-                        Got it!
-                      </translate>
+                      Got it!
                     </button>
                   </div>
                 </form>
@@ -245,9 +217,7 @@ const markAllAsRead = async () => {
           </div>
         </div>
         <h1 class="ui header">
-          <translate >
-            Your notifications
-          </translate>
+          Your notifications
         </h1>
         <div class="ui toggle checkbox">
           <input
@@ -255,7 +225,7 @@ const markAllAsRead = async () => {
             v-model="filters.is_read"
             type="checkbox"
           >
-          <label for="show-read-notifications"><translate >Show read notifications</translate></label>
+          <label for="show-read-notifications">Show read notifications</label>
         </div>
         <button
           v-if="filters.is_read === false && notifications.count > 0"
@@ -263,9 +233,7 @@ const markAllAsRead = async () => {
           @click.prevent="markAllAsRead"
         >
           <i class="ui check icon" />
-          <translate >
-            Mark all as read
-          </translate>
+          Mark all as read
         </button>
         <div class="ui hidden divider" />
 
@@ -274,9 +242,7 @@ const markAllAsRead = async () => {
           :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
         >
           <div class="ui text loader">
-            <translate >
-              Loading notifications…
-            </translate>
+            Loading notifications…
           </div>
         </div>
 
@@ -293,9 +259,7 @@ const markAllAsRead = async () => {
           </tbody>
         </table>
         <p v-else-if="additionalNotifications === 0">
-          <translate >
-            No notification to show.
-          </translate>
+          No notification to show.
         </p>
       </div>
     </section>

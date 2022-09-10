@@ -109,7 +109,7 @@ const showUploadDetailModal = ref(false)
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="tags-search"><translate >Search</translate></label>
+          <label for="tags-search">Search</label>
           <form @submit.prevent="query = search.value">
             <input
               id="tags-search"
@@ -122,7 +122,7 @@ const showUploadDetailModal = ref(false)
           </form>
         </div>
         <div class="field">
-          <label for="tags-ordering"><translate >Ordering</translate></label>
+          <label for="tags-ordering">Ordering</label>
           <select
             id="tags-ordering"
             v-model="ordering"
@@ -138,21 +138,17 @@ const showUploadDetailModal = ref(false)
           </select>
         </div>
         <div class="field">
-          <label for="tags-ordering-direction"><translate >Ordering direction</translate></label>
+          <label for="tags-ordering-direction">Ordering direction</label>
           <select
             id="tags-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate >
-                Ascending
-              </translate>
+              Ascending
             </option>
             <option value="-">
-              <translate >
-                Descending
-              </translate>
+              Descending
             </option>
           </select>
         </div>
@@ -181,29 +177,19 @@ const showUploadDetailModal = ref(false)
       >
         <template #header-cells>
           <th>
-            <translate >
-              Name
-            </translate>
+            Name
           </th>
           <th>
-            <translate >
-              Artists
-            </translate>
+            Artists
           </th>
           <th>
-            <translate >
-              Albums
-            </translate>
+            Albums
           </th>
           <th>
-            <translate >
-              Tracks
-            </translate>
+            Tracks
           </th>
           <th>
-            <translate >
-              Creation date
-            </translate>
+            Creation date
           </th>
         </template>
         <template

@@ -120,9 +120,7 @@ const allScopes = computed(() => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          We cannot save your changes
-        </translate>
+        We cannot save your changes
       </h4>
       <ul class="list">
         <li
@@ -134,7 +132,7 @@ const allScopes = computed(() => {
       </ul>
     </div>
     <div class="ui field">
-      <label for="application-name"><translate >Name</translate></label>
+      <label for="application-name">Name</label>
       <input
         id="application-name"
         v-model="fields.name"
@@ -144,7 +142,7 @@ const allScopes = computed(() => {
       >
     </div>
     <div class="ui field">
-      <label for="redirect-uris"><translate >Redirect URI</translate></label>
+      <label for="redirect-uris">Redirect URI</label>
       <input
         id="redirect-uris"
         v-model="fields.redirect_uris"
@@ -152,17 +150,13 @@ const allScopes = computed(() => {
         type="text"
       >
       <p class="help">
-        <translate >
-          Use "urn:ietf:wg:oauth:2.0:oob" as a redirect URI if your application is not served on the web.
-        </translate>
+        Use "urn:ietf:wg:oauth:2.0:oob" as a redirect URI if your application is not served on the web.
       </p>
     </div>
     <div class="ui field">
-      <label><translate >Scopes</translate></label>
+      <label>Scopes</label>
       <p>
-        <translate >
-          Checking the parent "Read" or "Write" scopes implies access to all the corresponding children scopes.
-        </translate>
+        Checking the parent "Read" or "Write" scopes implies access to all the corresponding children scopes.
       </p>
       <div class="ui stackable two column grid">
         <div
@@ -210,13 +204,11 @@ const allScopes = computed(() => {
     >
       <translate
         v-if="app !== null"
-
       >
         Update application
       </translate>
       <translate
         v-else
-
       >
         Create application
       </translate>

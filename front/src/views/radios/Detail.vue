@@ -116,16 +116,12 @@ const deleteRadio = async () => {
             </template>
             <template #modal-content>
               <p>
-                <translate >
-                  This will completely delete this radio and cannot be undone.
-                </translate>
+                This will completely delete this radio and cannot be undone.
               </p>
             </template>
             <template #modal-confirm>
               <p>
-                <translate >
-                  Delete radio
-                </translate>
+                Delete radio
               </p>
             </template>
           </dangerous-button>
@@ -137,9 +133,7 @@ const deleteRadio = async () => {
       class="ui vertical stripe segment"
     >
       <h2>
-        <translate >
-          Tracks
-        </translate>
+        Tracks
       </h2>
       <track-table :tracks="tracks" />
       <div class="ui center aligned basic segment">
@@ -157,11 +151,7 @@ const deleteRadio = async () => {
     >
       <div class="ui icon header">
         <i class="rss icon" />
-        <translate
-
-        >
-          No tracks have been added to this radio yet
-        </translate>
+        No tracks have been added to this radio yet
       </div>
       <router-link
         v-if="$store.state.auth.username === radio?.user.username"

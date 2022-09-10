@@ -102,7 +102,6 @@ watch(props, fetchData, { immediate: true })
                 <i class="external icon" />
                 <translate
                   :translate-params="{domain: object.domain}"
-
                 >View on %{ domain }</translate>
               </a>
               <div
@@ -122,9 +121,7 @@ watch(props, fetchData, { immediate: true })
                 :to="{name: 'manage.moderation.accounts.detail', params: {id: object.full_username}}"
               >
                 <i class="wrench icon" />
-                <translate >
-                  Open in moderation interface
-                </translate>
+                Open in moderation interface
               </router-link>
             </div>
           </button>
@@ -153,9 +150,7 @@ watch(props, fetchData, { immediate: true })
             <template v-if="object.full_username === $store.state.auth.fullUsername">
               <div class="ui very small hidden divider" />
               <div class="ui basic success label">
-                <translate >
-                  This is you!
-                </translate>
+                This is you!
               </div>
             </template>
           </h1>
@@ -178,17 +173,13 @@ watch(props, fetchData, { immediate: true })
                   class="item"
                   :to="{name: 'profile.overview', params: routerParams}"
                 >
-                  <translate >
-                    Overview
-                  </translate>
+                  Overview
                 </router-link>
                 <router-link
                   class="item"
                   :to="{name: 'profile.activity', params: routerParams}"
                 >
-                  <translate >
-                    Activity
-                  </translate>
+                  Activity
                 </router-link>
               </div>
               <div class="ui hidden divider" />

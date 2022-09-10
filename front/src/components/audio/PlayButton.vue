@@ -138,7 +138,7 @@ const openMenu = () => {
         v-else
         :class="[playIconClass, 'icon']"
       />
-      <template v-if="!discrete && !iconOnly">&nbsp;<slot><translate >Play</translate></slot></template>
+      <template v-if="!discrete && !iconOnly">&nbsp;<slot>Play</slot></template>
     </button>
     <button
       v-if="!discrete && !iconOnly"
@@ -156,7 +156,7 @@ const openMenu = () => {
           :title="labels.addToQueue"
           @click.stop.prevent="enqueue"
         >
-          <i class="plus icon" /><translate >Add to queue</translate>
+          <i class="plus icon" />Add to queue
         </button>
         <button
           class="item basic"
@@ -181,7 +181,7 @@ const openMenu = () => {
           :title="labels.startRadio"
           @click.stop.prevent="$store.dispatch('radios/start', {type: 'similar', objectId: track?.id})"
         >
-          <i class="feed icon" /><translate >Play radio</translate>
+          <i class="feed icon" />Play radio
         </button>
         <button
           v-if="track"
@@ -190,7 +190,7 @@ const openMenu = () => {
           @click.stop="$store.commit('playlists/chooseTrack', track)"
         >
           <i class="list icon" />
-          <translate >Add to playlist…</translate>
+          Add to playlist…
         </button>
         <button
           v-if="track && $route.name !== 'library.tracks.detail'"
@@ -200,11 +200,9 @@ const openMenu = () => {
           <i class="info icon" />
           <translate
             v-if="track.artist?.content_category === 'podcast'"
-
           >Episode details</translate>
           <translate
             v-else
-
           >Track details</translate>
         </button>
         <div class="divider" />

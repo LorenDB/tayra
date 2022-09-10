@@ -22,13 +22,11 @@ const value = useVModel(props, 'modelValue', emit)
   >
     <translate
       v-if="value"
-
     >
       Expand
     </translate>
     <translate
       v-else
-
     >
       Collapse
     </translate>

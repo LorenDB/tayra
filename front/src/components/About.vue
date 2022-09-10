@@ -67,14 +67,10 @@ const headerStyle = computed(() => {
                 <div class="column" />
               </div>
               <h2 class="header">
-                <translate >
-                  A social platform to enjoy and share music
-                </translate>
+                A social platform to enjoy and share music
               </h2>
               <p>
-                <translate >
-                  Funkwhale is a community-driven project that lets you listen and share music and audio within a decentralized, open network.
-                </translate>
+                Funkwhale is a community-driven project that lets you listen and share music and audio within a decentralized, open network.
               </p>
             </div>
           </div>
@@ -88,23 +84,14 @@ const headerStyle = computed(() => {
                 class="signup-form content"
               >
                 <h3 class="header">
-                  <translate >
-                    Sign up
-                  </translate>
+                  Sign up
                 </h3>
                 <template v-if="openRegistrations">
                   <p>
-                    <translate >
-                      Sign up now to keep a track of your favorites, create playlists, discover new content and much more!
-                    </translate>
+                    Sign up now to keep a track of your favorites, create playlists, discover new content and much more!
                   </p>
                   <p v-if="defaultUploadQuota">
-                    <translate
-
-                      :translate-params="{quota: defaultUploadQuota}"
-                    >
-                      Users on this pod also get %{ quota } of free storage to upload their own content!
-                    </translate>
+                    Users on this pod also get %{ quota } of free storage to upload their own content!
                   </p>
                   <signup-form
                     button-classes="success"
@@ -112,7 +99,7 @@ const headerStyle = computed(() => {
                   />
                 </template>
                 <div v-else>
-                  <p >
+                  <p>
                     Registrations are closed on this pod. You can signup on another pod using the link below.
                   </p>
 
@@ -121,7 +108,7 @@ const headerStyle = computed(() => {
                     rel="noopener"
                     href="https://funkwhale.audio/#get-started"
                   >
-                    <translate >Find another pod</translate>
+                    Find another pod
                     &nbsp;<i class="external alternate icon" />
                   </a>
                 </div>
@@ -131,19 +118,13 @@ const headerStyle = computed(() => {
                 class="signup-form content"
               >
                 <h3 class="header">
-                  <translate >
-                    Sign up
-                  </translate>
+                  Sign up
                   <div class="ui positive message">
                     <div class="header">
-                      <translate >
-                        You're already signed in!
-                      </translate>
+                      You're already signed in!
                     </div>
                     <p>
-                      <translate translate-contect="Content/About/Hello">
-                        Hello
-                      </translate> {{ $store.state.auth.username }}
+                      Hello {{ $store.state.auth.username }}
                     </p>
                   </div>
                 </h3>
@@ -164,9 +145,7 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  <translate >
-                    About this pod
-                  </translate>
+                  About this pod
                 </h3>
                 <div
                   v-if="shortDescription"
@@ -175,9 +154,7 @@ const headerStyle = computed(() => {
                   {{ shortDescription }}
                 </div>
                 <p v-else>
-                  <translate >
-                    No description available.
-                  </translate>
+                  No description available.
                 </p>
 
                 <template v-if="stats">
@@ -187,22 +164,14 @@ const headerStyle = computed(() => {
                         <span class="statistics-figure ui text">
                           <span class="ui big text"><strong>{{ stats.users.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                           <br>
-                          <translate
-
-                            :translate-n="stats.users"
-                            translate-plural="active users"
-                          >active user</translate>
+                          {{ $t('active user | active users', stats.users) }}
                         </span>
                       </div>
                       <div class="column">
                         <span class="statistics-figure ui text">
                           <span class="ui big text"><strong>{{ stats.hours.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                           <br>
-                          <translate
-                            translate-context="Content/About/*"
-                            :translate-n="stats.hours"
-                            translate-plural="hours of music"
-                          >hour of music</translate>
+                          {{ $t('hour of music | hours of music', stats.hours) }}
                         </span>
                       </div>
                     </div>
@@ -213,9 +182,7 @@ const headerStyle = computed(() => {
                   to="/about/pod"
                   class="ui fluid basic secondary button"
                 >
-                  <translate >
-                    Learn More
-                  </translate>
+                  Learn More
                 </router-link>
               </div>
             </div>
@@ -234,14 +201,10 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  <translate >
-                    Browse public content
-                  </translate>
+                  Browse public content
                 </h3>
                 <p>
-                  <translate >
-                    Listen to public albums and playlists shared on this pod.
-                  </translate>
+                  Listen to public albums and playlists shared on this pod.
                 </p>
               </div>
             </router-link>
@@ -255,11 +218,11 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  <translate >Find another pod</translate>
+                  Find another pod
                   &nbsp;<i class="external alternate icon" />
                 </h3>
                 <p>
-                  <translate >Listen to public albums and playlists shared on this pod.</translate>
+                  Listen to public albums and playlists shared on this pod.
                 </p>
               </div>
             </a>
@@ -273,11 +236,11 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  <translate >Find an app</translate>
+                  Find an app
                   &nbsp;<i class="external alternate icon" />
                 </h3>
                 <p>
-                  <translate >Use Funkwhale on other devices with our apps.</translate>
+                  Use Funkwhale on other devices with our apps.
                 </p>
               </div>
             </a>
@@ -287,9 +250,7 @@ const headerStyle = computed(() => {
               to="/about/pod"
               class="ui right floated basic secondary button"
             >
-              <translate >
-                About this pod
-              </translate>
+              About this pod
               <i class="icon arrow right" />
             </router-link>
           </div>

@@ -276,9 +276,7 @@ fetchOwnedApps()
     <div class="ui vertical stripe segment">
       <section class="ui text container">
         <h2 class="ui header">
-          <translate >
-            Account settings
-          </translate>
+          Account settings
         </h2>
         <form
           class="ui form"
@@ -289,9 +287,7 @@ fetchOwnedApps()
             class="ui positive message"
           >
             <h4 class="header">
-              <translate >
-                Settings updated
-              </translate>
+              Settings updated
             </h4>
           </div>
           <div
@@ -300,9 +296,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              <translate >
-                Your settings can't be updated
-              </translate>
+              Your settings can't be updated
             </h4>
             <ul class="list">
               <li
@@ -346,18 +340,14 @@ fetchOwnedApps()
             :class="['ui', { loading: isLoading }, 'button']"
             type="submit"
           >
-            <translate >
-              Update settings
-            </translate>
+            Update settings
           </button>
         </form>
       </section>
       <section class="ui text container">
         <div class="ui hidden divider" />
         <h2 class="ui header">
-          <translate >
-            Avatar
-          </translate>
+          Avatar
         </h2>
         <div class="ui form">
           <div
@@ -366,9 +356,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              <translate >
-                Your avatar cannot be saved
-              </translate>
+              Your avatar cannot be saved
             </h4>
             <ul class="list">
               <li
@@ -385,9 +373,7 @@ fetchOwnedApps()
             @update:model-value="submitAvatar($event)"
             @delete="avatar = {uuid: null}"
           >
-            <translate >
-              Avatar
-            </translate>
+            Avatar
           </attachment-input>
         </div>
       </section>
@@ -395,16 +381,10 @@ fetchOwnedApps()
       <section class="ui text container">
         <div class="ui hidden divider" />
         <h2 class="ui header">
-          <translate >
-            Change my password
-          </translate>
+          Change my password
         </h2>
         <div class="ui message">
-          <translate >
-            Changing your password will also change your Subsonic API password if you have requested one.
-          </translate>&nbsp;<translate >
-            You will have to update your password on your clients that use this password.
-          </translate>
+          Changing your password will also change your Subsonic API password if you have requested one.&nbsp;            You will have to update your password on your clients that use this password.
         </div>
         <form
           class="ui form"
@@ -416,20 +396,16 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              <translate >
-                Your password cannot be changed
-              </translate>
+              Your password cannot be changed
             </h4>
             <ul class="list">
               <li v-if="passwordError == 'invalid_credentials'">
-                <translate >
-                  Please double-check your password is correct
-                </translate>
+                Please double-check your password is correct
               </li>
             </ul>
           </div>
           <div class="field">
-            <label for="old-password-field"><translate >Current password</translate></label>
+            <label for="old-password-field">Current password</label>
             <password-input
               v-model="credentials.oldPassword"
               field-id="old-password-field"
@@ -437,7 +413,7 @@ fetchOwnedApps()
             />
           </div>
           <div class="field">
-            <label for="new-password-field"><translate >New password</translate></label>
+            <label for="new-password-field">New password</label>
             <password-input
               v-model="credentials.newPassword"
               field-id="new-password-field"
@@ -448,42 +424,30 @@ fetchOwnedApps()
             :class="['ui', {'loading': isLoadingPassword}, {disabled: !credentials.newPassword || !credentials.oldPassword}, 'warning', 'button']"
             :action="submitPassword"
           >
-            <translate >
-              Change password
-            </translate>
+            Change password
             <template #modal-header>
               <p>
-                <translate >
-                  Change your password?
-                </translate>
+                Change your password?
               </p>
             </template>
             <template #modal-content>
               <div>
                 <p>
-                  <translate >
-                    Changing your password will have the following consequences:
-                  </translate>
+                  Changing your password will have the following consequences:
                 </p>
                 <ul>
                   <li>
-                    <translate >
-                      You will be logged out from this session and have to log in with the new one
-                    </translate>
+                    You will be logged out from this session and have to log in with the new one
                   </li>
                   <li>
-                    <translate >
-                      Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password
-                    </translate>
+                    Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password
                   </li>
                 </ul>
               </div>
             </template>
             <template #modal-confirm>
               <div>
-                <translate >
-                  Disable access
-                </translate>
+                Disable access
               </div>
             </template>
           </dangerous-button>
@@ -500,15 +464,11 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="eye slash outline icon" />
           <div class="content">
-            <translate >
-              Content filters
-            </translate>
+            Content filters
           </div>
         </h2>
         <p>
-          <translate >
-            Content filters help you hide content you don't want to see on the service.
-          </translate>
+          Content filters help you hide content you don't want to see on the service.
         </p>
 
         <button
@@ -516,27 +476,19 @@ fetchOwnedApps()
           @click="$store.dispatch('moderation/fetchContentFilters')"
         >
           <i class="refresh icon" />&nbsp;
-          <translate >
-            Refresh
-          </translate>
+          Refresh
         </button>
         <h3 class="ui header">
-          <translate >
-            Hidden artists
-          </translate>
+          Hidden artists
         </h3>
         <table class="ui compact very basic unstackable table">
           <thead>
             <tr>
               <th>
-                <translate >
-                  Name
-                </translate>
+                Name
               </th>
               <th>
-                <translate >
-                  Creation date
-                </translate>
+                Creation date
               </th>
               <th />
             </tr>
@@ -559,9 +511,7 @@ fetchOwnedApps()
                   class="ui basic tiny button"
                   @click="$store.dispatch('moderation/deleteContentFilter', filter.uuid)"
                 >
-                  <translate >
-                    Delete
-                  </translate>
+                  Delete
                 </button>
               </td>
             </tr>
@@ -576,24 +526,18 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="open lock icon" />
           <div class="content">
-            <translate >
-              Authorized apps
-            </translate>
+            Authorized apps
           </div>
         </h2>
         <p>
-          <translate >
-            This is the list of applications that have access to your account data.
-          </translate>
+          This is the list of applications that have access to your account data.
         </p>
         <button
           :class="['ui', 'icon', { loading: isLoadingApps }, 'button']"
           @click="fetchApps()"
         >
           <i class="refresh icon" />&nbsp;
-          <translate >
-            Refresh
-          </translate>
+          Refresh
         </button>
         <table
           v-if="apps.length > 0"
@@ -602,14 +546,10 @@ fetchOwnedApps()
           <thead>
             <tr>
               <th>
-                <translate >
-                  Application
-                </translate>
+                Application
               </th>
               <th>
-                <translate >
-                  Permissions
-                </translate>
+                Permissions
               </th>
               <th />
             </tr>
@@ -630,29 +570,22 @@ fetchOwnedApps()
                   :class="['ui', 'tiny', 'danger', { loading: isRevoking.has(app.client_id) }, 'button']"
                   @confirm="revokeApp(app.client_id)"
                 >
-                  <translate >
-                    Revoke
-                  </translate>
+                  Revoke
                   <template #modal-header>
                     <p
                       v-translate="{application: app.name}"
-
                     >
                       Revoke access for application "%{ application }"?
                     </p>
                   </template>
                   <template #modal-content>
                     <p>
-                      <translate >
-                        This will prevent this application from accessing the service on your behalf.
-                      </translate>
+                      This will prevent this application from accessing the service on your behalf.
                     </p>
                   </template>
                   <template #modal-confirm>
                     <div>
-                      <translate >
-                        Revoke access
-                      </translate>
+                      Revoke access
                     </div>
                   </template>
                 </dangerous-button>
@@ -662,13 +595,9 @@ fetchOwnedApps()
         </table>
         <empty-state v-else>
           <template #title>
-            <translate >
-              You don't have any application connected with your account.
-            </translate>
+            You don't have any application connected with your account.
           </template>
-          <translate >
-            If you authorize third-party applications to access your data, those applications will be listed here.
-          </translate>
+          If you authorize third-party applications to access your data, those applications will be listed here.
         </empty-state>
       </section>
       <section
@@ -679,23 +608,17 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="code icon" />
           <div class="content">
-            <translate >
-              Your applications
-            </translate>
+            Your applications
           </div>
         </h2>
         <p>
-          <translate >
-            This is the list of applications that you have registered.
-          </translate>
+          This is the list of applications that you have registered.
         </p>
         <router-link
           class="ui success button"
           :to="{name: 'settings.applications.new'}"
         >
-          <translate >
-            Register a new application
-          </translate>
+          Register a new application
         </router-link>
         <table
           v-if="ownedApps.length > 0"
@@ -704,19 +627,13 @@ fetchOwnedApps()
           <thead>
             <tr>
               <th>
-                <translate >
-                  Application
-                </translate>
+                Application
               </th>
               <th>
-                <translate >
-                  Scopes
-                </translate>
+                Scopes
               </th>
               <th>
-                <translate >
-                  Creation date
-                </translate>
+                Creation date
               </th>
               <th />
             </tr>
@@ -742,37 +659,28 @@ fetchOwnedApps()
                   class="ui tiny success button"
                   :to="{name: 'settings.applications.edit', params: {id: app.client_id}}"
                 >
-                  <translate >
-                    Edit
-                  </translate>
+                  Edit
                 </router-link>
                 <dangerous-button
                   :class="['ui', 'tiny', 'danger', { loading: isDeleting.has(app.client_id) }, 'button']"
                   @confirm="deleteApp(app.client_id)"
                 >
-                  <translate >
-                    Remove
-                  </translate>
+                  Remove
                   <template #modal-header>
                     <p
                       v-translate="{application: app.name}"
-
                     >
                       Remove application "%{ application }"?
                     </p>
                   </template>
                   <template #modal-content>
                     <p>
-                      <translate >
-                        This will permanently remove the application and all the associated tokens.
-                      </translate>
+                      This will permanently remove the application and all the associated tokens.
                     </p>
                   </template>
                   <template #modal-confirm>
                     <div>
-                      <translate >
-                        Remove application
-                      </translate>
+                      Remove application
                     </div>
                   </template>
                 </dangerous-button>
@@ -782,13 +690,9 @@ fetchOwnedApps()
         </table>
         <empty-state v-else>
           <template #title>
-            <translate >
-              You don't have registered any application yet.
-            </translate>
+            You don't have registered any application yet.
           </template>
-          <translate >
-            Register one to integrate Funkwhale with third-party applications.
-          </translate>
+          Register one to integrate Funkwhale with third-party applications.
         </empty-state>
       </section>
 
@@ -800,23 +704,17 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="code icon" />
           <div class="content">
-            <translate >
-              Plugins
-            </translate>
+            Plugins
           </div>
         </h2>
         <p>
-          <translate >
-            Use plugins to extend Funkwhale and get additional features.
-          </translate>
+          Use plugins to extend Funkwhale and get additional features.
         </p>
         <router-link
           class="ui success button"
           :to="{name: 'settings.plugins'}"
         >
-          <translate >
-            Manage plugins
-          </translate>
+          Manage plugins
         </router-link>
       </section>
       <section class="ui text container">
@@ -824,20 +722,15 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="comment icon" />
           <div class="content">
-            <translate >
-              Change my e-mail address
-            </translate>
+            Change my e-mail address
           </div>
         </h2>
         <p>
-          <translate >
-            Change the e-mail address associated with your account. We will send a confirmation to the new address.
-          </translate>
+          Change the e-mail address associated with your account. We will send a confirmation to the new address.
         </p>
         <p>
           <translate
             :translate-params="{email: $store.state.auth.profile?.email}"
-
           >
             Your current e-mail address is %{ email }.
           </translate>
@@ -852,9 +745,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              <translate >
-                We cannot change your e-mail address
-              </translate>
+              We cannot change your e-mail address
             </h4>
             <ul class="list">
               <li
@@ -866,7 +757,7 @@ fetchOwnedApps()
             </ul>
           </div>
           <div class="field">
-            <label for="new-email"><translate >New e-mail address</translate></label>
+            <label for="new-email">New e-mail address</label>
             <input
               id="new-email"
               v-model="newEmail"
@@ -875,7 +766,7 @@ fetchOwnedApps()
             >
           </div>
           <div class="field">
-            <label for="current-password-field-email"><translate >Password</translate></label>
+            <label for="current-password-field-email">Password</label>
             <password-input
               v-model="emailPassword"
               field-id="current-password-field-email"
@@ -886,9 +777,7 @@ fetchOwnedApps()
             type="submit"
             class="ui button"
           >
-            <translate >
-              Update
-            </translate>
+            Update
           </button>
         </form>
       </section>
@@ -897,23 +786,17 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="trash icon" />
           <div class="content">
-            <translate >
-              Delete my account
-            </translate>
+            Delete my account
           </div>
         </h2>
         <p>
-          <translate >
-            You can permanently and irreversibly delete your account and all the associated data using the form below. You will be asked for confirmation.
-          </translate>
+          You can permanently and irreversibly delete your account and all the associated data using the form below. You will be asked for confirmation.
         </p>
         <div
           role="alert"
           class="ui warning message"
         >
-          <translate >
-            Your account will be deleted from our servers within a few minutes. We will also notify other servers who may have a copy of some of your data so they can proceed to deletion. Please note that some of these servers may be offline or unwilling to comply though.
-          </translate>
+          Your account will be deleted from our servers within a few minutes. We will also notify other servers who may have a copy of some of your data so they can proceed to deletion. Please note that some of these servers may be offline or unwilling to comply though.
         </div>
         <div class="ui form">
           <div
@@ -922,9 +805,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              <translate >
-                We cannot delete your account
-              </translate>
+              We cannot delete your account
             </h4>
             <ul class="list">
               <li
@@ -936,7 +817,7 @@ fetchOwnedApps()
             </ul>
           </div>
           <div class="field">
-            <label for="current-password-field"><translate >Password</translate></label>
+            <label for="current-password-field">Password</label>
             <password-input
               v-model="deleteAccountPassword"
               field-id="current-password-field"
@@ -947,30 +828,22 @@ fetchOwnedApps()
             :class="['ui', {'loading': isDeletingAccount}, {disabled: !deleteAccountPassword}, {danger: deleteAccountPassword}, 'button']"
             :action="deleteAccount"
           >
-            <translate >
-              Delete my account…
-            </translate>
+            Delete my account…
             <template #modal-header>
               <p>
-                <translate >
-                  Do you want to delete your account?
-                </translate>
+                Do you want to delete your account?
               </p>
             </template>
             <template #modal-content>
               <div>
                 <p>
-                  <translate >
-                    This is irreversible and will permanently remove your data from our servers. You will we immediately logged out.
-                  </translate>
+                  This is irreversible and will permanently remove your data from our servers. You will we immediately logged out.
                 </p>
               </div>
             </template>
             <template #modal-confirm>
               <div>
-                <translate >
-                  Delete my account
-                </translate>
+                Delete my account
               </div>
             </template>
           </dangerous-button>

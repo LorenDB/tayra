@@ -51,9 +51,7 @@ onMounted(() => emailInput.value.focus())
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          <translate >
-            Reset your password
-          </translate>
+          Reset your password
         </h2>
         <form
           class="ui form"
@@ -65,9 +63,7 @@ onMounted(() => emailInput.value.focus())
             class="ui negative message"
           >
             <h4 class="header">
-              <translate >
-                Error while asking for a password reset
-              </translate>
+              Error while asking for a password reset
             </h4>
             <ul class="list">
               <li
@@ -79,12 +75,10 @@ onMounted(() => emailInput.value.focus())
             </ul>
           </div>
           <p>
-            <translate >
-              Use this form to request a password reset. We will send an e-mail to the given address with instructions to reset your password.
-            </translate>
+            Use this form to request a password reset. We will send an e-mail to the given address with instructions to reset your password.
           </p>
           <div class="field">
-            <label for="account-email"><translate >Account's e-mail address</translate></label>
+            <label for="account-email">Account's e-mail address</label>
             <input
               id="account-email"
               ref="emailInput"
@@ -97,17 +91,13 @@ onMounted(() => emailInput.value.focus())
             >
           </div>
           <router-link :to="{path: '/login'}">
-            <translate >
-              Back to login
-            </translate>
+            Back to login
           </router-link>
           <button
             :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
             type="submit"
           >
-            <translate >
-              Ask for a password reset
-            </translate>
+            Ask for a password reset
           </button>
         </form>
       </div>

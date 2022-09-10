@@ -65,25 +65,19 @@ const loadMoreAlbums = async () => {
       <div class="ui hidden divider" />
       <div class="ui message">
         <p>
-          <translate >
-            You are currently hiding content related to this artist.
-          </translate>
+          You are currently hiding content related to this artist.
         </p>
         <router-link
           class="right floated"
           :to="{name: 'settings'}"
         >
-          <translate >
-            Review my filters
-          </translate>
+          Review my filters
         </router-link>
         <button
           class="ui basic tiny button"
           @click="$store.dispatch('moderation/deleteContentFilter', contentFilter.uuid)"
         >
-          <translate >
-            Remove filter
-          </translate>
+          Remove filter
         </button>
       </div>
     </div>
@@ -98,9 +92,7 @@ const loadMoreAlbums = async () => {
       class="ui vertical stripe segment"
     >
       <h2>
-        <translate >
-          Albums by this artist
-        </translate>
+        Albums by this artist
       </h2>
       <div class="ui cards app-cards">
         <album-card
@@ -115,9 +107,7 @@ const loadMoreAlbums = async () => {
         :class="['ui', {loading: isLoadingMoreAlbums}, 'button']"
         @click="loadMoreAlbums()"
       >
-        <translate >
-          Load more…
-        </translate>
+        Load more…
       </button>
     </section>
     <section
@@ -132,9 +122,7 @@ const loadMoreAlbums = async () => {
       >
         <template #header>
           <h2>
-            <translate >
-              New tracks by this artist
-            </translate>
+            New tracks by this artist
           </h2>
           <div class="ui hidden divider" />
         </template>
@@ -142,17 +130,13 @@ const loadMoreAlbums = async () => {
     </section>
     <section class="ui vertical stripe segment">
       <h2>
-        <translate >
-          User libraries
-        </translate>
+        User libraries
       </h2>
       <library-widget
         :url="'artists/' + object.id + '/libraries/'"
         @loaded="emit('libraries-loaded', $event)"
       >
-        <translate >
-          This artist is present in the following libraries:
-        </translate>
+        This artist is present in the following libraries:
       </library-widget>
     </section>
   </div>

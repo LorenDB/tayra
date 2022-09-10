@@ -20,15 +20,11 @@ const labels = computed(() => ({
         <h1 class="ui huge header">
           <i class="warning icon" />
           <div class="content">
-            <translate >
-              Page not found!
-            </translate>
+            Page not found!
           </div>
         </h1>
         <p>
-          <translate >
-            Sorry, the page you asked for does not exist:
-          </translate>
+          Sorry, the page you asked for does not exist:
         </p>
         <a :href="path">{{ path }}</a>
         <div class="ui hidden divider" />
@@ -36,9 +32,7 @@ const labels = computed(() => ({
           class="ui icon labeled right button"
           to="/"
         >
-          <translate >
-            Go to home page
-          </translate>
+          Go to home page
           <i class="right arrow icon" />
         </router-link>
       </div>

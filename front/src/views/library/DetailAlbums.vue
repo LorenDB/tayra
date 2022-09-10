@@ -25,13 +25,11 @@ defineProps<Props>()
           <p>
             <translate
               v-if="isOwner"
-
             >
               This library is empty, you should upload something in it!
             </translate>
             <translate
               v-else
-
             >
               You may need to follow this library to see its content.
             </translate>

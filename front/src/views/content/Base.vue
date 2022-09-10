@@ -24,17 +24,13 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'content.libraries.index'}"
       >
-        <translate >
-          Libraries
-        </translate>
+        Libraries
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'content.libraries.files'}"
       >
-        <translate >
-          Tracks
-        </translate>
+        Tracks
       </router-link>
     </nav>
     <router-view :key="$route.fullPath" />

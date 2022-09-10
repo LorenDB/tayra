@@ -294,7 +294,7 @@ useEventListener(window, 'beforeunload', (event) => {
         :class="['item', {active: currentTab === 'uploads'}]"
         @click.prevent="currentTab = 'uploads'"
       >
-        <translate >Uploading</translate>
+        Uploading
         <div
           v-if="files.length === 0"
           class="ui label"
@@ -319,7 +319,7 @@ useEventListener(window, 'beforeunload', (event) => {
         :class="['item', {active: currentTab === 'processing'}]"
         @click.prevent="currentTab = 'processing'"
       >
-        <translate >Processing</translate>
+        Processing
         <div
           v-if="processableFiles === 0"
           class="ui label"
@@ -344,9 +344,7 @@ useEventListener(window, 'beforeunload', (event) => {
       <div :class="['ui', {loading: isLoadingQuota}, 'container']">
         <div :class="['ui', {red: remainingSpace === 0}, {warning: remainingSpace > 0 && remainingSpace <= 50}, 'small', 'statistic']">
           <div class="label">
-            <translate >
-              Remaining storage space
-            </translate>
+            Remaining storage space
           </div>
           <div class="value">
             {{ humanSize(remainingSpace * 1000 * 1000) }}
@@ -354,35 +352,25 @@ useEventListener(window, 'beforeunload', (event) => {
         </div>
         <div class="ui divider" />
         <h2 class="ui header">
-          <translate >
-            Upload music from '~/your local storage
-          </translate>
+          Upload music from '~/your local storage
         </h2>
         <div class="ui message">
           <p>
-            <translate >
-              You are about to upload music to your library. Before proceeding, please ensure that:
-            </translate>
+            You are about to upload music to your library. Before proceeding, please ensure that:
           </p>
           <ul>
             <li v-if="library.privacy_level != 'me'">
-              <translate >
-                You are not uploading copyrighted content in a public library, otherwise you may be infringing the law
-              </translate>
+              You are not uploading copyrighted content in a public library, otherwise you may be infringing the law
             </li>
             <li>
-              <translate >
-                The music files you are uploading are tagged properly.
-              </translate>&nbsp;
+              The music files you are uploading are tagged properly.&nbsp;
               <a
                 href="http://picard.musicbrainz.org/"
                 target="_blank"
-              ><translate >We recommend using Picard for that purpose.</translate></a>
+              >We recommend using Picard for that purpose.</a>
             </li>
             <li>
-              <translate >
-                The music files you are uploading are in OGG, Flac, MP3 or AIFF format
-              </translate>
+              The music files you are uploading are in OGG, Flac, MP3 or AIFF format
             </li>
           </ul>
         </div>
@@ -400,9 +388,7 @@ useEventListener(window, 'beforeunload', (event) => {
           @input-file="inputFile"
         >
           <i class="upload icon" />&nbsp;
-          <translate >
-            Click to select files to upload or drag and drop files or directories
-          </translate>
+          Click to select files to upload or drag and drop files or directories
           <br>
           <br>
           <i>
@@ -424,24 +410,16 @@ useEventListener(window, 'beforeunload', (event) => {
           <thead>
             <tr>
               <th class="ten wide">
-                <translate >
-                  Filename
-                </translate>
+                Filename
               </th>
               <th>
-                <translate >
-                  Size
-                </translate>
+                Size
               </th>
               <th>
-                <translate >
-                  Status
-                </translate>
+                Status
               </th>
               <th>
-                <translate >
-                  Actions
-                </translate>
+                Actions
               </th>
             </tr>
             <tr v-if="retryableFiles.length > 1">
@@ -453,9 +431,7 @@ useEventListener(window, 'beforeunload', (event) => {
                   class="ui right floated small basic button"
                   @click.prevent="retry(retryableFiles)"
                 >
-                  <translate >
-                    Retry failed uploads
-                  </translate>
+                  Retry failed uploads
                 </button>
               </th>
             </tr>
@@ -485,7 +461,6 @@ useEventListener(window, 'beforeunload', (event) => {
                 >
                   <translate
                     key="1"
-
                   >Uploaded</translate>
                 </span>
                 <span
@@ -494,7 +469,6 @@ useEventListener(window, 'beforeunload', (event) => {
                 >
                   <translate
                     key="2"
-
                   >
                     Uploading…
                   </translate>
@@ -506,7 +480,6 @@ useEventListener(window, 'beforeunload', (event) => {
                 >
                   <translate
                     key="3"
-
                   >
                     Pending
                   </translate>
@@ -538,9 +511,7 @@ useEventListener(window, 'beforeunload', (event) => {
       </div>
       <div class="ui divider" />
       <h2 class="ui header">
-        <translate >
-          Import music from your server
-        </translate>
+        Import music from your server
       </h2>
       <div
         v-if="fsErrors.length > 0"
@@ -548,9 +519,7 @@ useEventListener(window, 'beforeunload', (event) => {
         class="ui negative message"
       >
         <h3 class="header">
-          <translate >
-            Error while launching import
-          </translate>
+          Error while launching import
         </h3>
         <ul class="list">
           <li
@@ -569,19 +538,13 @@ useEventListener(window, 'beforeunload', (event) => {
       />
       <template v-if="fsStatus && fsStatus.import">
         <h3 class="ui header">
-          <translate >
-            Import status
-          </translate>
+          Import status
         </h3>
         <p v-if="fsStatus.import.reference !== importReference">
-          <translate >
-            Results of your previous import:
-          </translate>
+          Results of your previous import:
         </p>
         <p v-else>
-          <translate >
-            Results of your import:
-          </translate>
+          Results of your import:
         </p>
 
         <button
@@ -589,9 +552,7 @@ useEventListener(window, 'beforeunload', (event) => {
           class="ui button"
           @click="cancelFsScan"
         >
-          <translate >
-            Cancel
-          </translate>
+          Cancel
         </button>
         <fs-logs :data="fsStatus.import" />
       </template>

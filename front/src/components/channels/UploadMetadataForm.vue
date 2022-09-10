@@ -33,7 +33,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
   <div :class="['ui', {loading: isLoading}, 'form']">
     <div class="ui required field">
       <label for="upload-title">
-        <translate >Title</translate>
+        Title
       </label>
       <input
         v-model="newValues.title"
@@ -44,15 +44,13 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
       v-model="newValues.cover"
       @delete="newValues.cover = ''"
     >
-      <translate >
-        Track Picture
-      </translate>
+      Track Picture
     </attachment-input>
     <div class="ui small hidden divider" />
     <div class="ui two fields">
       <div class="ui field">
         <label for="upload-tags">
-          <translate >Tags</translate>
+          Tags
         </label>
         <tags-selector
           id="upload-tags"
@@ -62,7 +60,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
       </div>
       <div class="ui field">
         <label for="upload-position">
-          <translate >Position</translate>
+          Position
         </label>
         <input
           v-model="newValues.position"
@@ -74,7 +72,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
     </div>
     <div class="ui field">
       <label for="upload-description">
-        <translate >Description</translate>
+        Description
       </label>
       <content-form
         v-model="newValues.description"

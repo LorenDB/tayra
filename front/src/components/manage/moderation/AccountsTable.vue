@@ -102,7 +102,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="accounts-search"><translate >Search</translate></label>
+          <label for="accounts-search">Search</label>
           <form @submit.prevent="query = search.value">
             <input
               id="accounts-search"
@@ -115,7 +115,7 @@ const labels = computed(() => ({
           </form>
         </div>
         <div class="field">
-          <label for="accounts-ordering"><translate >Ordering</translate></label>
+          <label for="accounts-ordering">Ordering</label>
           <select
             id="accounts-ordering"
             v-model="ordering"
@@ -131,21 +131,17 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="accounts-ordering-direction"><translate >Ordering direction</translate></label>
+          <label for="accounts-ordering-direction">Ordering direction</label>
           <select
             id="accounts-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate >
-                Ascending
-              </translate>
+              Ascending
             </option>
             <option value="-">
-              <translate >
-                Descending
-              </translate>
+              Descending
             </option>
           </select>
         </div>
@@ -168,34 +164,22 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            <translate >
-              Name
-            </translate>
+            Name
           </th>
           <th>
-            <translate >
-              Domain
-            </translate>
+            Domain
           </th>
           <th>
-            <translate >
-              Uploads
-            </translate>
+            Uploads
           </th>
           <th>
-            <translate >
-              First seen
-            </translate>
+            First seen
           </th>
           <th>
-            <translate >
-              Last seen
-            </translate>
+            Last seen
           </th>
           <th>
-            <translate >
-              Under moderation rule
-            </translate>
+            Under moderation rule
           </th>
         </template>
         <template
@@ -225,7 +209,7 @@ const labels = computed(() => ({
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              <translate >Local account</translate>
+              Local account
             </a>
           </td>
           <td>
@@ -241,7 +225,7 @@ const labels = computed(() => ({
             />
           </td>
           <td>
-            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> <translate >Yes</translate></span>
+            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> Yes</span>
           </td>
         </template>
       </action-table>

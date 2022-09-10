@@ -84,17 +84,13 @@ const privacyTooltips = (level: PrivacyLevel) => `Visibility: ${sharedLabels.fie
         :to="{name: 'library.detail.upload', params: {id: library.uuid}}"
         class="ui button"
       >
-        <translate >
-          Upload
-        </translate>
+        Upload
       </router-link>
       <router-link
         :to="{name: 'library.detail', params: {id: library.uuid}}"
         class="ui button"
       >
-        <translate >
-          Library Details
-        </translate>
+        Library Details
       </router-link>
     </div>
   </div>

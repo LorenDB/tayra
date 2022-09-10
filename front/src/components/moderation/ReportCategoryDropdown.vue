@@ -59,7 +59,7 @@ const allCategories = computed(() => {
 
 <template>
   <div>
-    <label v-if="label"><translate >Category</translate></label>
+    <label v-if="label">Category</label>
     <select
       v-model="value"
       class="ui dropdown"

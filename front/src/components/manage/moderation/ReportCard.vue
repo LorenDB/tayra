@@ -161,9 +161,7 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    <translate >
-                      Submitted by
-                    </translate>
+                    Submitted by
                   </td>
                   <td>
                     <div v-if="obj.submitter">
@@ -179,9 +177,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Category
-                    </translate>
+                    Category
                   </td>
                   <td>
                     <report-category-dropdown
@@ -195,9 +191,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Creation date
-                    </translate>
+                    Creation date
                   </td>
                   <td>
                     <human-date
@@ -214,28 +208,22 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    <translate >
-                      Status
-                    </translate>
+                    Status
                   </td>
                   <td v-if="obj.is_handled">
                     <span v-if="obj.is_handled">
                       <i class="success check icon" />
-                      <translate >Resolved</translate>
+                      Resolved
                     </span>
                   </td>
                   <td v-else>
                     <i class="danger x icon" />
-                    <translate >
-                      Unresolved
-                    </translate>
+                    Unresolved
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Assigned to
-                    </translate>
+                    Assigned to
                   </td>
                   <td>
                     <div v-if="obj.assigned_to">
@@ -246,7 +234,6 @@ const handleRemovedNote = (uuid: string) => {
                     </div>
                     <translate
                       v-else
-
                     >
                       N/A
                     </translate>
@@ -254,9 +241,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Resolution date
-                    </translate>
+                    Resolution date
                   </td>
                   <td>
                     <human-date
@@ -266,7 +251,6 @@ const handleRemovedNote = (uuid: string) => {
                     />
                     <translate
                       v-else
-
                     >
                       N/A
                     </translate>
@@ -274,9 +258,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Internal notes
-                    </translate>
+                    Internal notes
                   </td>
                   <td>
                     <i class="comment icon" />
@@ -296,9 +278,7 @@ const handleRemovedNote = (uuid: string) => {
       <div class="ui stackable two column grid">
         <div class="column">
           <h3>
-            <translate >
-              Message
-            </translate>
+            Message
           </h3>
           <expandable-div
             v-if="summary"
@@ -310,18 +290,14 @@ const handleRemovedNote = (uuid: string) => {
         </div>
         <aside class="column">
           <h3>
-            <translate >
-              Reported object
-            </translate>
+            Reported object
           </h3>
           <div
             v-if="!obj.target"
             role="alert"
             class="ui warning message"
           >
-            <translate >
-              The object associated with this report was deleted.
-            </translate>
+            The object associated with this report was deleted.
           </div>
           <router-link
             v-if="target && configs[target.type].urls.getDetail"
@@ -329,9 +305,7 @@ const handleRemovedNote = (uuid: string) => {
             :to="configs[target.type].urls.getDetail?.(obj.target_state) ?? '/'"
           >
             <i class="eye icon" />
-            <translate >
-              View public page
-            </translate>
+            View public page
           </router-link>
           <router-link
             v-if="target && configs[target.type].urls.getAdminDetail"
@@ -339,17 +313,13 @@ const handleRemovedNote = (uuid: string) => {
             :to="configs[target.type].urls.getAdminDetail?.(obj.target_state) ?? '/'"
           >
             <i class="wrench icon" />
-            <translate >
-              Open in moderation interface
-            </translate>
+            Open in moderation interface
           </router-link>
           <table class="ui very basic unstackable table">
             <tbody>
               <tr v-if="target">
                 <td>
-                  <translate >
-                    Type
-                  </translate>
+                  Type
                 </td>
                 <td colspan="2">
                   <i :class="[configs[target.type].icon, 'icon']" />
@@ -358,9 +328,7 @@ const handleRemovedNote = (uuid: string) => {
               </tr>
               <tr v-if="obj.target_owner && (!target || target.type !== 'account')">
                 <td>
-                  <translate >
-                    Owner
-                  </translate>
+                  Owner
                 </td>
                 <td>
                   <actor-link
@@ -379,9 +347,7 @@ const handleRemovedNote = (uuid: string) => {
               </tr>
               <tr v-if="target && target.type === 'account'">
                 <td>
-                  <translate >
-                    Account
-                  </translate>
+                  Account
                 </td>
                 <td>
                   <actor-link
@@ -400,23 +366,17 @@ const handleRemovedNote = (uuid: string) => {
               </tr>
               <tr v-if="obj.target_state.is_local">
                 <td>
-                  <translate >
-                    Domain
-                  </translate>
+                  Domain
                 </td>
                 <td colspan="2">
                   <i class="home icon" />
-                  <translate >
-                    Local
-                  </translate>
+                  Local
                 </td>
               </tr>
               <tr v-else-if="obj.target_state.domain">
                 <td>
                   <router-link :to="{name: 'manage.moderation.domains.detail', params: { id: obj.target_state.domain }}">
-                    <translate >
-                      Domain
-                    </translate>
+                    Domain
                   </router-link>
                 </td>
                 <td>
@@ -445,9 +405,7 @@ const handleRemovedNote = (uuid: string) => {
                   v-else
                   colspan="2"
                 >
-                  <translate >
-                    N/A
-                  </translate>
+                  N/A
                 </td>
               </tr>
             </tbody>
@@ -457,9 +415,7 @@ const handleRemovedNote = (uuid: string) => {
       <div class="ui stackable two column grid">
         <div class="column">
           <h3>
-            <translate >
-              Internal notes
-            </translate>
+            Internal notes
           </h3>
           <notes-thread
             :notes="obj.notes"
@@ -472,9 +428,7 @@ const handleRemovedNote = (uuid: string) => {
         </div>
         <div class="column">
           <h3>
-            <translate >
-              Actions
-            </translate>
+            Actions
           </h3>
           <div class="ui labelled icon basic buttons">
             <button
@@ -483,9 +437,7 @@ const handleRemovedNote = (uuid: string) => {
               @click="resolveReport(true)"
             >
               <i class="success check icon" />&nbsp;
-              <translate >
-                Resolve
-              </translate>
+              Resolve
             </button>
             <button
               v-if="obj.is_handled === true"
@@ -493,9 +445,7 @@ const handleRemovedNote = (uuid: string) => {
               @click="resolveReport(false)"
             >
               <i class="warning redo icon" />&nbsp;
-              <translate >
-                Unresolve
-              </translate>
+              Unresolve
             </button>
             <template
               v-for="action in actions"

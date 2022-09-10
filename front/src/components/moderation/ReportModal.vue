@@ -125,9 +125,7 @@ watchEffect(async () => {
       v-if="target"
       class="ui header"
     >
-      <translate >
-        Do you want to report this object?
-      </translate>
+      Do you want to report this object?
       <div class="ui sub header">
         {{ target.typeLabel }} - {{ target.label }}
       </div>
@@ -140,9 +138,7 @@ watchEffect(async () => {
           class="ui negative message"
         >
           <h4 class="header">
-            <translate >
-              Error while submitting report
-            </translate>
+            Error while submitting report
           </h4>
           <ul class="list">
             <li
@@ -155,9 +151,7 @@ watchEffect(async () => {
         </div>
       </div>
       <p>
-        <translate >
-          Use this form to submit a report to our moderation team.
-        </translate>
+        Use this form to submit a report to our moderation team.
       </p>
       <form
         v-if="canSubmit"
@@ -179,7 +173,7 @@ watchEffect(async () => {
             class="ui eight wide required field"
           >
             <label for="report-submitter-email">
-              <translate >Email</translate>
+              Email
             </label>
             <input
               id="report-submitter-email"
@@ -189,20 +183,16 @@ watchEffect(async () => {
               required
             >
             <p>
-              <translate >
-                We'll use this e-mail address if we need to contact you regarding this report.
-              </translate>
+              We'll use this e-mail address if we need to contact you regarding this report.
             </p>
           </div>
         </div>
         <div class="ui field">
           <label for="report-summary">
-            <translate >Message</translate>
+            Message
           </label>
           <p>
-            <translate >
-              Use this field to provide additional context to the moderator that will handle your report.
-            </translate>
+            Use this field to provide additional context to the moderator that will handle your report.
           </p>
           <content-form
             v-model="summary"
@@ -224,11 +214,10 @@ watchEffect(async () => {
               <strong>
                 <translate
                   :translate-params="{domain: targetDomain}"
-
                 >Forward to %{ domain} </translate>
               </strong>
               <p>
-                <translate >Forward an anonymized copy of your report to the server hosting this element.</translate>
+                Forward an anonymized copy of your report to the server hosting this element.
               </p>
             </label>
           </div>
@@ -245,17 +234,13 @@ watchEffect(async () => {
         class="ui warning message"
       >
         <h4 class="header">
-          <translate >
-            Anonymous reports are disabled, please sign-in to submit a report.
-          </translate>
+          Anonymous reports are disabled, please sign-in to submit a report.
         </h4>
       </div>
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate >
-          Cancel
-        </translate>
+        Cancel
       </button>
       <button
         v-if="canSubmit"
@@ -263,9 +248,7 @@ watchEffect(async () => {
         type="submit"
         form="report-form"
       >
-        <translate >
-          Submit report
-        </translate>
+        Submit report
       </button>
     </div>
   </semantic-modal>

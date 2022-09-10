@@ -172,9 +172,7 @@ watch(() => props.initialId, () => {
       @click.prevent="type = 'rss'"
     >
       <i class="feed icon" />
-      <translate >
-        RSS
-      </translate>
+      RSS
     </button>
     <div class="or" />
     <button
@@ -182,9 +180,7 @@ watch(() => props.initialId, () => {
       @click.prevent="type = 'artists'"
     >
       <i class="globe icon" />
-      <translate >
-        Fediverse
-      </translate>
+      Fediverse
     </button>
   </div>
   <div v-else>
@@ -199,9 +195,7 @@ watch(() => props.initialId, () => {
         class="ui negative message"
       >
         <h3 class="header">
-          <translate >
-            Error while fetching object
-          </translate>
+          Error while fetching object
         </h3>
         <ul class="list">
           <li
@@ -217,14 +211,10 @@ watch(() => props.initialId, () => {
           {{ labels.fieldLabel }}
         </label>
         <p v-if="type === 'rss'">
-          <translate >
-            Use this form to subscribe to an RSS feed from its URL.
-          </translate>
+          Use this form to subscribe to an RSS feed from its URL.
         </p>
         <p v-else-if="type === 'artists'">
-          <translate >
-            Use this form to subscribe to a channel hosted somewhere else on the Fediverse.
-          </translate>
+          Use this form to subscribe to a channel hosted somewhere else on the Fediverse.
         </p>
         <input
           id="object-id"
@@ -241,9 +231,7 @@ watch(() => props.initialId, () => {
         :class="['ui', 'primary', {loading: isLoading}, 'button']"
         :disabled="isLoading || !id || id.length === 0"
       >
-        <translate >
-          Search
-        </translate>
+        Search
       </button>
     </form>
     <div
@@ -252,9 +240,7 @@ watch(() => props.initialId, () => {
       class="ui warning message"
     >
       <p>
-        <translate >
-          This kind of object isn't supported yet
-        </translate>
+        This kind of object isn't supported yet
       </p>
     </div>
   </div>

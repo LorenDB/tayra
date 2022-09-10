@@ -411,9 +411,7 @@ const labels = computed(() => ({
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          Error while publishing
-        </translate>
+        Error while publishing
       </h4>
       <ul class="list">
         <li
@@ -426,7 +424,7 @@ const labels = computed(() => ({
     </div>
     <div :class="['ui', 'required', {hidden: step > 1}, 'field']">
       <label for="channel-dropdown">
-        <translate >Channel</translate>
+        Channel
       </label>
       <div
         id="channel-dropdown"
@@ -449,9 +447,7 @@ const labels = computed(() => ({
       <div class="content">
         <p>
           <i class="copyright icon" />
-          <translate >
-            Add a license to your upload to ensure some freedoms to your public.
-          </translate>
+          Add a license to your upload to ensure some freedoms to your public.
         </p>
       </div>
     </div>
@@ -464,9 +460,7 @@ const labels = computed(() => ({
         <div class="content">
           <p>
             <i class="warning icon" />
-            <translate >
-              You don't have any space left to upload your files. Please contact the moderators.
-            </translate>
+            You don't have any space left to upload your files. Please contact the moderators.
           </p>
         </div>
       </div>
@@ -477,25 +471,19 @@ const labels = computed(() => ({
         >
           <p>
             <i class="redo icon" />
-            <translate >
-              You have some draft uploads pending publication.
-            </translate>
+            You have some draft uploads pending publication.
           </p>
           <button
             class="ui basic button"
             @click.stop.prevent="includeDraftUploads = false"
           >
-            <translate >
-              Ignore
-            </translate>
+            Ignore
           </button>
           <button
             class="ui basic button"
             @click.stop.prevent="includeDraftUploads = true"
           >
-            <translate >
-              Resume
-            </translate>
+            Resume
           </button>
         </div>
         <div
@@ -547,19 +535,16 @@ const labels = computed(() => ({
                 <template v-else>
                   <translate
                     v-if="file.active"
-
                   >
                     Uploading
                   </translate>
                   <translate
                     v-else-if="file.error"
-
                   >
                     Errored
                   </translate>
                   <translate
                     v-else
-
                   >
                     Pending
                   </translate>
@@ -567,12 +552,12 @@ const labels = computed(() => ({
                   · {{ parseFloat(file.progress ?? '0') }}%
                 </template>
                 · <a @click.stop.prevent="remove(file)">
-                  <translate >Remove</translate>
+                  Remove
                 </a>
                 <template v-if="file.error">
                   ·
                   <a @click.stop.prevent="retry(file)">
-                    <translate >Retry</translate>
+                    Retry
                   </a>
                 </template>
               </div>
@@ -615,15 +600,11 @@ const labels = computed(() => ({
         >
           <div>
             <i class="upload icon" />&nbsp;
-            <translate >
-              Drag and drop your files here or open the browser to upload your files
-            </translate>
+            Drag and drop your files here or open the browser to upload your files
           </div>
           <div class="ui very small divider" />
           <div>
-            <translate >
-              Browse…
-            </translate>
+            Browse…
           </div>
         </file-upload-widget>
         <div class="ui hidden divider" />

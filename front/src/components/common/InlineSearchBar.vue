@@ -42,7 +42,7 @@ const search = () => {
         for="search-query"
         class="hidden"
       >
-        <translate >Search</translate>
+        Search
       </label>
       <input
         id="search-query"

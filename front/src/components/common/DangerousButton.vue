@@ -42,9 +42,7 @@ const confirm = () => {
     >
       <h4 class="header">
         <slot name="modal-header">
-          <translate >
-            Do you want to confirm this action?
-          </translate>
+          Do you want to confirm this action?
         </slot>
       </h4>
       <div class="scrolling content">
@@ -54,18 +52,14 @@ const confirm = () => {
       </div>
       <div class="actions">
         <button class="ui basic cancel button">
-          <translate >
-            Cancel
-          </translate>
+          Cancel
         </button>
         <button
           :class="['ui', 'confirm', confirmColor, 'button']"
           @click="confirm"
         >
           <slot name="modal-confirm">
-            <translate >
-              Confirm
-            </translate>
+            Confirm
           </slot>
         </button>
       </div>

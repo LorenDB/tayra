@@ -88,20 +88,14 @@ fetchInstanceSettings()
   <div v-if="submitted">
     <div class="ui success message">
       <p v-if="signupRequiresApproval">
-        <translate >
-          Your account request was successfully submitted. You will be notified by e-mail when our moderation team has reviewed your request.
-        </translate>
+        Your account request was successfully submitted. You will be notified by e-mail when our moderation team has reviewed your request.
       </p>
       <p v-else>
-        <translate >
-          Your account was successfully created. Please verify your e-mail address before trying to login.
-        </translate>
+        Your account was successfully created. Please verify your e-mail address before trying to login.
       </p>
     </div>
     <h2>
-      <translate >
-        Log in to your Funkwhale account
-      </translate>
+      Log in to your Funkwhale account
     </h2>
     <login-form
       button-classes="basic success"
@@ -117,17 +111,13 @@ fetchInstanceSettings()
       v-if="!$store.state.instance.settings.users.registration_enabled.value"
       class="ui message"
     >
-      <translate >
-        Public registrations are not possible on this instance. You will need an invitation code to sign up.
-      </translate>
+      Public registrations are not possible on this instance. You will need an invitation code to sign up.
     </p>
     <p
       v-else-if="signupRequiresApproval"
       class="ui message"
     >
-      <translate >
-        Registrations on this pod are open, but reviewed by moderators before approval.
-      </translate>
+      Registrations on this pod are open, but reviewed by moderators before approval.
     </p>
     <template v-if="formCustomization?.help_text">
       <rendered-description
@@ -143,9 +133,7 @@ fetchInstanceSettings()
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          Your account cannot be created.
-        </translate>
+        Your account cannot be created.
       </h4>
       <ul class="list">
         <li
@@ -157,7 +145,7 @@ fetchInstanceSettings()
       </ul>
     </div>
     <div class="required field">
-      <label for="username-field"><translate >Username</translate></label>
+      <label for="username-field">Username</label>
       <input
         id="username-field"
         ref="username"
@@ -170,7 +158,7 @@ fetchInstanceSettings()
       >
     </div>
     <div class="required field">
-      <label for="email-field"><translate >E-mail address</translate></label>
+      <label for="email-field">E-mail address</label>
       <input
         id="email-field"
         ref="email"
@@ -182,7 +170,7 @@ fetchInstanceSettings()
       >
     </div>
     <div class="required field">
-      <label for="password-field"><translate >Password</translate></label>
+      <label for="password-field">Password</label>
       <password-input
         v-model="payload.password1"
         field-id="password-field"
@@ -192,7 +180,7 @@ fetchInstanceSettings()
       v-if="!$store.state.instance.settings.users.registration_enabled.value"
       class="required field"
     >
-      <label for="invitation-code"><translate >Invitation code</translate></label>
+      <label for="invitation-code">Invitation code</label>
       <input
         id="invitation-code"
         v-model="payload.invitation"
@@ -229,9 +217,7 @@ fetchInstanceSettings()
       :class="['ui', buttonClasses, {'loading': isLoading}, ' right floated button']"
       type="submit"
     >
-      <translate >
-        Create my account
-      </translate>
+      Create my account
     </button>
   </form>
 </template>

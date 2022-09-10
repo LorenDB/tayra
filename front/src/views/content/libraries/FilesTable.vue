@@ -138,7 +138,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
       <div class="fields">
         <div class="ui six wide field">
           <label for="files-search">
-            <translate >Search</translate>
+            Search
           </label>
           <form @submit.prevent="query = search.value">
             <input
@@ -153,7 +153,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
         </div>
         <div class="field">
           <label for="import-status">
-            <translate >Import status</translate>
+            Import status
           </label>
           <select
             id="import-status"
@@ -162,40 +162,28 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
             @change="addSearchToken('status', ($event.target as HTMLSelectElement).value)"
           >
             <option value>
-              <translate >
-                All
-              </translate>
+              All
             </option>
             <option value="draft">
-              <translate >
-                Draft
-              </translate>
+              Draft
             </option>
             <option value="pending">
-              <translate >
-                Pending
-              </translate>
+              Pending
             </option>
             <option value="skipped">
-              <translate >
-                Skipped
-              </translate>
+              Skipped
             </option>
             <option value="errored">
-              <translate >
-                Failed
-              </translate>
+              Failed
             </option>
             <option value="finished">
-              <translate >
-                Finished
-              </translate>
+              Finished
             </option>
           </select>
         </div>
         <div class="field">
           <label for="ordering-select">
-            <translate >Ordering</translate>
+            Ordering
           </label>
           <select
             id="ordering-select"
@@ -213,7 +201,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
         </div>
         <div class="field">
           <label for="ordering-direction">
-            <translate >Ordering direction</translate>
+            Ordering direction
           </label>
           <select
             id="ordering-direction"
@@ -221,14 +209,10 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
             class="ui dropdown"
           >
             <option value="+">
-              <translate >
-                Ascending
-              </translate>
+              Ascending
             </option>
             <option value="-">
-              <translate >
-                Descending
-              </translate>
+              Descending
             </option>
           </select>
         </div>
@@ -252,11 +236,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
       >
         <div class="ui icon header">
           <i class="upload icon" />
-          <translate
-
-          >
-            No tracks have been added to this library yet
-          </translate>
+          No tracks have been added to this library yet
         </div>
       </div>
       <action-table
@@ -274,39 +254,25 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
       >
         <template #header-cells>
           <th>
-            <translate >
-              Title
-            </translate>
+            Title
           </th>
           <th>
-            <translate >
-              Artist
-            </translate>
+            Artist
           </th>
           <th>
-            <translate >
-              Album
-            </translate>
+            Album
           </th>
           <th>
-            <translate >
-              Upload date
-            </translate>
+            Upload date
           </th>
           <th>
-            <translate >
-              Import status
-            </translate>
+            Import status
           </th>
           <th>
-            <translate >
-              Duration
-            </translate>
+            Duration
           </th>
           <th>
-            <translate >
-              Size
-            </translate>
+            Size
           </th>
         </template>
         <template
@@ -364,17 +330,13 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
             {{ time.parse(scope.obj.duration) }}
           </td>
           <td v-else>
-            <translate >
-              N/A
-            </translate>
+            N/A
           </td>
           <td v-if="scope.obj.size">
             {{ humanSize(scope.obj.size) }}
           </td>
           <td v-else>
-            <translate >
-              N/A
-            </translate>
+            N/A
           </td>
         </template>
       </action-table>

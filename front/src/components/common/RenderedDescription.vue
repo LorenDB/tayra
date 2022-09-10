@@ -91,21 +91,19 @@ const submit = async () => {
           href=""
           @click.stop.prevent="showMore = true"
         >
-          <translate >Show more</translate>
+          Show more
         </a>
         <a
           v-else
           href=""
           @click.stop.prevent="showMore = false"
         >
-          <translate >Show less</translate>
+          Show less
         </a>
       </template>
     </template>
     <p v-else-if="!isUpdating">
-      <translate >
-        No description available
-      </translate>
+      No description available
     </p>
     <template v-if="!isUpdating && canUpdate && updateUrl">
       <div class="ui hidden divider" />
@@ -114,7 +112,7 @@ const submit = async () => {
         @click="isUpdating = true"
       >
         <i class="pencil icon" />
-        <translate >Edit</translate>
+        Edit
       </span>
     </template>
     <form
@@ -128,9 +126,7 @@ const submit = async () => {
         class="ui negative message"
       >
         <h4 class="header">
-          <translate >
-            Error while updating description
-          </translate>
+          Error while updating description
         </h4>
         <ul class="list">
           <li
@@ -149,16 +145,14 @@ const submit = async () => {
         class="left floated"
         @click.prevent="isUpdating = false"
       >
-        <translate >Cancel</translate>
+        Cancel
       </a>
       <button
         :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
         type="submit"
         :disabled="isLoading"
       >
-        <translate >
-          Update description
-        </translate>
+        Update description
       </button>
       <div class="ui clearing hidden divider" />
     </form>

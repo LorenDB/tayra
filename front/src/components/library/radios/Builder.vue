@@ -203,14 +203,10 @@ onMounted(() => {
     <div>
       <section>
         <h2 class="ui header">
-          <translate >
-            Builder
-          </translate>
+          Builder
         </h2>
         <p>
-          <translate >
-            You can use this interface to build your own custom radio, which will play tracks according to your criteria.
-          </translate>
+          You can use this interface to build your own custom radio, which will play tracks according to your criteria.
         </p>
         <div class="ui form">
           <div
@@ -219,20 +215,16 @@ onMounted(() => {
           >
             <h4 class="header">
               <template v-if="radioName">
-                <translate >
-                  Radio updated
-                </translate>
+                Radio updated
               </template>
               <template v-else>
-                <translate >
-                  Radio created
-                </translate>
+                Radio created
               </template>
             </h4>
           </div>
           <div class="">
             <div class="field">
-              <label for="name"><translate >Radio name</translate></label>
+              <label for="name">Radio name</label>
               <input
                 id="name"
                 v-model="radioName"
@@ -242,7 +234,7 @@ onMounted(() => {
               >
             </div>
             <div class="field">
-              <label for="description"><translate >Description</translate></label>
+              <label for="description">Description</label>
               <textarea
                 id="description"
                 v-model="radioDesc"
@@ -257,7 +249,7 @@ onMounted(() => {
                 v-model="isPublic"
                 type="checkbox"
               >
-              <label for="public"><translate >Display publicly</translate></label>
+              <label for="public">Display publicly</label>
             </div>
             <div class="ui hidden divider" />
             <button
@@ -265,9 +257,7 @@ onMounted(() => {
               :class="['ui', 'success', {loading: isLoading}, 'button']"
               @click="save"
             >
-              <translate >
-                Save
-              </translate>
+              Save
             </button>
             <radio-button
               v-if="id"
@@ -281,16 +271,14 @@ onMounted(() => {
             <label
               id="radioFilterLabel"
               for="radio-filters"
-            ><translate >Add filters to customize your radio</translate></label>
+            >Add filters to customize your radio</label>
             <select
               id="radio-filters"
               v-model="currentFilterType"
               class="ui dropdown"
             >
               <option value="">
-                <translate >
-                  Select a filter
-                </translate>
+                Select a filter
               </option>
               <option
                 v-for="f in availableFilters"
@@ -306,9 +294,7 @@ onMounted(() => {
               class="ui button"
               @click="add"
             >
-              <translate >
-                Add filter
-              </translate>
+              Add filter
             </button>
           </div>
           <p v-if="currentFilter">
@@ -319,29 +305,19 @@ onMounted(() => {
           <thead>
             <tr>
               <th class="two wide">
-                <translate >
-                  Filter name
-                </translate>
+                Filter name
               </th>
               <th class="one wide">
-                <translate >
-                  Exclude
-                </translate>
+                Exclude
               </th>
               <th class="six wide">
-                <translate >
-                  Config
-                </translate>
+                Config
               </th>
               <th class="five wide">
-                <translate >
-                  Candidates
-                </translate>
+                Candidates
               </th>
               <th class="two wide">
-                <translate >
-                  Actions
-                </translate>
+                Actions
               </th>
             </tr>
           </thead>
@@ -363,7 +339,6 @@ onMounted(() => {
             class="ui header"
             :translate-n="checkResult.candidates.count"
             translate-plural="%{ count } tracks matching combined filters"
-
           >
             %{ count } track matching combined filters
           </h3>

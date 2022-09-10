@@ -76,9 +76,7 @@ const hide = async () => {
           class="ui negative message"
         >
           <h4 class="header">
-            <translate >
-              Error while creating filter
-            </translate>
+            Error while creating filter
           </h4>
           <ul class="list">
             <li
@@ -91,53 +89,37 @@ const hide = async () => {
         </div>
         <template v-if="type === 'artist'">
           <p>
-            <translate >
-              You will not see tracks, albums and user activity linked to this artist any more:
-            </translate>
+            You will not see tracks, albums and user activity linked to this artist any more:
           </p>
           <ul>
             <li>
-              <translate >
-                In other users favorites and listening history
-              </translate>
+              In other users favorites and listening history
             </li>
             <li>
-              <translate >
-                In "Recently added" widget
-              </translate>
+              In "Recently added" widget
             </li>
             <li>
-              <translate >
-                In artists and album listings
-              </translate>
+              In artists and album listings
             </li>
             <li>
-              <translate >
-                In radio suggestions
-              </translate>
+              In radio suggestions
             </li>
           </ul>
           <p>
-            <translate >
-              You can manage and update your filters any time from your account settings.
-            </translate>
+            You can manage and update your filters any time from your account settings.
           </p>
         </template>
       </div>
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate >
-          Cancel
-        </translate>
+        Cancel
       </button>
       <button
         :class="['ui', 'success', {loading: isLoading}, 'button']"
         @click="hide"
       >
-        <translate >
-          Hide content
-        </translate>
+        Hide content
       </button>
     </div>
   </semantic-modal>

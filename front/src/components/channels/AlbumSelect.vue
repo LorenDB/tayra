@@ -49,11 +49,9 @@ watch(() => props.channel, fetchData, { immediate: true })
     <label for="album-dropdown">
       <translate
         v-if="channel && channel.artist && channel.artist.content_category === 'podcast'"
-
       >Series</translate>
       <translate
         v-else
-
       >Album</translate>
     </label>
     <select
@@ -62,9 +60,7 @@ watch(() => props.channel, fetchData, { immediate: true })
       class="ui search normal dropdown"
     >
       <option value="">
-        <translate >
-          None
-        </translate>
+        None
       </option>
       <option
         v-for="album in albums"

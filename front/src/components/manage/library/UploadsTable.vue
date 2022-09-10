@@ -123,7 +123,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="uploads-search"><translate >Search</translate></label>
+          <label for="uploads-search">Search</label>
           <form @submit.prevent="query = search.value">
             <input
               id="uploads-search"
@@ -136,7 +136,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </form>
         </div>
         <div class="field">
-          <label for="uploads-visibility"><translate >Visibility</translate></label>
+          <label for="uploads-visibility">Visibility</label>
           <select
             id="uploads-visibility"
             class="ui dropdown"
@@ -144,9 +144,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             @change="addSearchToken('privacy_level', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              <translate >
-                All
-              </translate>
+              All
             </option>
             <option value="me">
               {{ sharedLabels.fields.privacy_level.shortChoices.me }}
@@ -160,7 +158,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </select>
         </div>
         <div class="field">
-          <label for="uploads-status"><translate >Import status</translate></label>
+          <label for="uploads-status">Import status</label>
           <select
             id="uploads-status"
             class="ui dropdown"
@@ -168,34 +166,24 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             @change="addSearchToken('status', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              <translate >
-                All
-              </translate>
+              All
             </option>
             <option value="pending">
-              <translate >
-                Pending
-              </translate>
+              Pending
             </option>
             <option value="skipped">
-              <translate >
-                Skipped
-              </translate>
+              Skipped
             </option>
             <option value="errored">
-              <translate >
-                Failed
-              </translate>
+              Failed
             </option>
             <option value="finished">
-              <translate >
-                Finished
-              </translate>
+              Finished
             </option>
           </select>
         </div>
         <div class="field">
-          <label for="uploads-ordering"><translate >Ordering</translate></label>
+          <label for="uploads-ordering">Ordering</label>
           <select
             id="uploads-ordering"
             v-model="ordering"
@@ -211,21 +199,17 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </select>
         </div>
         <div class="field">
-          <label for="uploads-ordering-direction"><translate >Ordering direction</translate></label>
+          <label for="uploads-ordering-direction">Ordering direction</label>
           <select
             id="uploads-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate >
-                Ascending
-              </translate>
+              Ascending
             </option>
             <option value="-">
-              <translate >
-                Descending
-              </translate>
+              Descending
             </option>
           </select>
         </div>
@@ -254,49 +238,31 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
       >
         <template #header-cells>
           <th>
-            <translate >
-              Name
-            </translate>
+            Name
           </th>
           <th>
-            <translate >
-              Library
-            </translate>
+            Library
           </th>
           <th>
-            <translate >
-              Account
-            </translate>
+            Account
           </th>
           <th>
-            <translate >
-              Domain
-            </translate>
+            Domain
           </th>
           <th>
-            <translate >
-              Visibility
-            </translate>
+            Visibility
           </th>
           <th>
-            <translate >
-              Import status
-            </translate>
+            Import status
           </th>
           <th>
-            <translate >
-              Size
-            </translate>
+            Size
           </th>
           <th>
-            <translate >
-              Creation date
-            </translate>
+            Creation date
           </th>
           <th>
-            <translate >
-              Accessed date
-            </translate>
+            Accessed date
           </th>
         </template>
         <template #row-cells="scope">
@@ -346,7 +312,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              <translate >Local</translate>
+              Local
             </a>
           </td>
           <td>
@@ -380,7 +346,6 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             <span v-if="scope.obj.size">{{ humanSize(scope.obj.size) }}</span>
             <translate
               v-else
-
             >
               N/A
             </translate>
@@ -395,7 +360,6 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             />
             <translate
               v-else
-
             >
               N/A
             </translate>

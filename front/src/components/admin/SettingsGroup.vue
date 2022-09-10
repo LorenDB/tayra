@@ -110,9 +110,7 @@ const save = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          Error while saving settings
-        </translate>
+        Error while saving settings
       </h4>
       <ul class="list">
         <li
@@ -127,9 +125,7 @@ const save = async () => {
       v-if="result"
       class="ui positive message"
     >
-      <translate >
-        Settings updated successfully.
-      </translate>
+      Settings updated successfully.
     </div>
     <div
       v-for="(setting, key) in settings"
@@ -229,9 +225,7 @@ const save = async () => {
         <div v-if="values[setting.identifier]">
           <div class="ui hidden divider" />
           <h3 class="ui header">
-            <translate >
-              Current image
-            </translate>
+            Current image
           </h3>
           <img
             v-if="values[setting.identifier]"
@@ -246,9 +240,7 @@ const save = async () => {
       type="submit"
       :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
     >
-      <translate >
-        Save
-      </translate>
+      Save
     </button>
   </form>
 </template>

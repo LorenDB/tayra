@@ -117,7 +117,7 @@ const updateObj = async (attr: string) => {
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        <translate >Local</translate>
+                        Local
                       </span>
                       &nbsp;
                     </template>
@@ -134,7 +134,7 @@ const updateObj = async (attr: string) => {
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate >View in Django's admin</translate>&nbsp;
+                    View in Django's admin&nbsp;
                   </a>
                   <button
                     v-dropdown
@@ -150,7 +150,7 @@ const updateObj = async (attr: string) => {
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        <translate >View in Django's admin</translate>&nbsp;
+                        View in Django's admin&nbsp;
                       </a>
                       <a
                         class="basic item"
@@ -159,7 +159,7 @@ const updateObj = async (attr: string) => {
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate >Open remote profile</translate>&nbsp;
+                        Open remote profile&nbsp;
                       </a>
                     </div>
                   </button>
@@ -169,30 +169,22 @@ const updateObj = async (attr: string) => {
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    <translate >
-                      Delete
-                    </translate>
+                    Delete
                     <template #modal-header>
                       <p>
-                        <translate >
-                          Delete this library?
-                        </translate>
+                        Delete this library?
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          <translate >
-                            The library will be removed, as well as associated uploads, and follows. This action is irreversible.
-                          </translate>
+                          The library will be removed, as well as associated uploads, and follows. This action is irreversible.
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        <translate >
-                          Delete
-                        </translate>
+                        Delete
                       </p>
                     </template>
                   </dangerous-button>
@@ -209,18 +201,14 @@ const updateObj = async (attr: string) => {
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate >
-                    Library data
-                  </translate>
+                  Library data
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        Name
-                      </translate>
+                      Name
                     </td>
                     <td>
                       {{ object.name }}
@@ -229,9 +217,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('privacy_level', object.privacy_level) }}">
-                        <translate >
-                          Visibility
-                        </translate>
+                        Visibility
                       </router-link>
                     </td>
                     <td>
@@ -258,9 +244,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.accounts.detail', params: {id: object.actor.full_username }}">
-                        <translate >
-                          Account
-                        </translate>
+                        Account
                       </router-link>
                     </td>
                     <td>
@@ -270,9 +254,7 @@ const updateObj = async (attr: string) => {
                   <tr v-if="!object.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        <translate >
-                          Domain
-                        </translate>
+                        Domain
                       </router-link>
                     </td>
                     <td>
@@ -281,9 +263,7 @@ const updateObj = async (attr: string) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Description
-                      </translate>
+                      Description
                     </td>
                     <td>
                       {{ object.description }}
@@ -298,9 +278,7 @@ const updateObj = async (attr: string) => {
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate >
-                    Activity
-                  </translate>&nbsp;
+                  Activity&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -320,9 +298,7 @@ const updateObj = async (attr: string) => {
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        First seen
-                      </translate>
+                      First seen
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -330,9 +306,7 @@ const updateObj = async (attr: string) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Followers
-                      </translate>
+                      Followers
                     </td>
                     <td>
                       {{ stats.followers }}
@@ -341,9 +315,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `library:${object.uuid}`) }}">
-                        <translate >
-                          Linked reports
-                        </translate>
+                        Linked reports
                       </router-link>
                     </td>
                     <td>
@@ -359,9 +331,7 @@ const updateObj = async (attr: string) => {
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate >
-                    Audio content
-                  </translate>&nbsp;
+                  Audio content&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -381,9 +351,7 @@ const updateObj = async (attr: string) => {
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        Cached size
-                      </translate>
+                      Cached size
                     </td>
                     <td>
                       {{ humanSize(stats.media_downloaded_size) }}
@@ -391,9 +359,7 @@ const updateObj = async (attr: string) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Total size
-                      </translate>
+                      Total size
                     </td>
                     <td>
                       {{ humanSize(stats.media_total_size) }}
@@ -402,9 +368,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('library_id', object.id) }}">
-                        <translate >
-                          Artists
-                        </translate>
+                        Artists
                       </router-link>
                     </td>
                     <td>
@@ -414,9 +378,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('library_id', object.id) }}">
-                        <translate >
-                          Albums
-                        </translate>
+                        Albums
                       </router-link>
                     </td>
                     <td>
@@ -426,9 +388,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('library_id', object.id) }}">
-                        <translate >
-                          Tracks
-                        </translate>
+                        Tracks
                       </router-link>
                     </td>
                     <td>
@@ -438,9 +398,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('library_id', object.id) }}">
-                        <translate >
-                          Uploads
-                        </translate>
+                        Uploads
                       </router-link>
                     </td>
                     <td>

@@ -118,7 +118,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="domains-search"><translate >Search</translate></label>
+          <label for="domains-search">Search</label>
           <input
             id="domains-search"
             v-model="query"
@@ -131,31 +131,25 @@ const labels = computed(() => ({
           v-if="allowListEnabled"
           class="field"
         >
-          <label for="domains-allow-list"><translate >Is present on allow-list</translate></label>
+          <label for="domains-allow-list">Is present on allow-list</label>
           <select
             id="domains-allow-list"
             v-model="allowed"
             class="ui dropdown"
           >
             <option :value="null">
-              <translate >
-                All
-              </translate>
+              All
             </option>
             <option :value="true">
-              <translate >
-                Yes
-              </translate>
+              Yes
             </option>
             <option :value="false">
-              <translate >
-                No
-              </translate>
+              No
             </option>
           </select>
         </div>
         <div class="field">
-          <label for="domains-ordering"><translate >Ordering</translate></label>
+          <label for="domains-ordering">Ordering</label>
           <select
             id="domains-ordering"
             v-model="ordering"
@@ -171,21 +165,17 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="domains-ordering-direction"><translate >Ordering direction</translate></label>
+          <label for="domains-ordering-direction">Ordering direction</label>
           <select
             id="domains-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate >
-                Ascending
-              </translate>
+              Ascending
             </option>
             <option value="-">
-              <translate >
-                Descending
-              </translate>
+              Descending
             </option>
           </select>
         </div>
@@ -209,29 +199,19 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            <translate >
-              Name
-            </translate>
+            Name
           </th>
           <th>
-            <translate >
-              Users
-            </translate>
+            Users
           </th>
           <th>
-            <translate >
-              Received messages
-            </translate>
+            Received messages
           </th>
           <th>
-            <translate >
-              First seen
-            </translate>
+            First seen
           </th>
           <th>
-            <translate >
-              Under moderation rule
-            </translate>
+            Under moderation rule
           </th>
         </template>
         <template
@@ -257,7 +237,7 @@ const labels = computed(() => ({
             <human-date :date="scope.obj.creation_date" />
           </td>
           <td>
-            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> <translate >Yes</translate></span>
+            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> Yes</span>
           </td>
         </template>
       </action-table>
@@ -267,9 +247,7 @@ const labels = computed(() => ({
       >
         <div class="ui icon header">
           <i class="server icon" />
-          <translate >
-            No other pods found
-          </translate>
+          No other pods found
         </div>
       </div>
     </div>

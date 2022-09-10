@@ -23,75 +23,51 @@ const defaultQuota = computed(() => humanSize(quota.value * 1e6))
     <div class="ui text container">
       <h1>{{ labels.title }}</h1>
       <p>
-        <strong><translate
-
-          :translate-params="{quota: defaultQuota}"
-        >This instance offers up to %{quota} of storage space for every user.</translate></strong>
+        <strong>{{ $t('This instance offers up to %{quota} of storage space for every user.', { quota: defaultQuota }) }}</strong>
       </p>
       <div class="ui segment">
         <h2>
           <i class="feed icon" />&nbsp;
-          <translate >
-            Publish your work in a channel
-          </translate>
+          Publish your work in a channel
         </h2>
         <p>
-          <translate >
-            If you are a musician or a podcaster, channels are designed for you!
-          </translate>&#32;
-          <translate >
-            Share your work publicly and get subscribers on Funkwhale, the Fediverse or any podcasting application.
-          </translate>
+          If you are a musician or a podcaster, channels are designed for you!&#32;            If you are a musician or a podcaster, channels are designed for you! work publicly and get subscribers on Funkwhale, the Fediverse or any podcasting application.
         </p>
         <router-link
           :to="{name: 'profile.overview', params: {username: store.state.auth.username}, hash: '#channels'}"
           class="ui primary button"
         >
-          <translate >
-            Get started
-          </translate>
+          Get started
         </router-link>
       </div>
       <div class="ui segment">
         <h2>
           <i class="cloud icon" />&nbsp;
-          <translate >
-            Upload third-party content in a library
-          </translate>
+          Upload third-party content in a library
         </h2>
         <p>
-          <translate >
-            Upload your personal music library to Funkwhale to enjoy it from anywhere and share it with friends and family.
-          </translate>
+          Upload your personal music library to Funkwhale to enjoy it from anywhere and share it with friends and family.
         </p>
         <router-link
           :to="{name: 'content.libraries.index'}"
           class="ui primary button"
         >
-          <translate >
-            Get started
-          </translate>
+          Get started
         </router-link>
       </div>
       <div class="ui segment">
         <h2>
           <i class="download icon" />&nbsp;
-          <translate >
-            Follow remote libraries
-          </translate>
+          Follow remote libraries
         </h2>
         <p>
-          <translate >
-            Follow libraries from other users to get access to new music. Public libraries can be followed immediately, while following a private library requires approval from its owner.
-          </translate>
+          Follow libraries from other users to get access to new music. Public libraries can be followed immediately, while following a private library requires approval from its owner.
         </p>
         <router-link
           :to="{name: 'content.remote.index'}"
           class="ui primary button"
         >
-          <translate >
-            Get started
-          </translate>
+          Get started
         </router-link>
       </div>
     </div>

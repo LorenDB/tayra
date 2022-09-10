@@ -35,13 +35,11 @@ const albumForm = ref()
     <h4 class="header">
       <translate
         v-if="channel.content_category === 'podcast'"
-
       >
         New series
       </translate>
       <translate
         v-else
-
       >
         New album
       </translate>
@@ -57,18 +55,14 @@ const albumForm = ref()
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate >
-          Cancel
-        </translate>
+        Cancel
       </button>
       <button
         :class="['ui', 'primary', {loading: isLoading}, 'button']"
         :disabled="!submittable"
         @click.stop.prevent="albumForm.submit()"
       >
-        <translate >
-          Create
-        </translate>
+        Create
       </button>
     </div>
   </semantic-modal>

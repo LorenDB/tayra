@@ -52,24 +52,20 @@ const { copy, copied } = useClipboard({ source: textarea })
     >
       <p>
         <strong>
-          <translate >Sharing will not work because this pod doesn't allow anonymous users to access content.</translate>
+          Sharing will not work because this pod doesn't allow anonymous users to access content.
         </strong>
       </p>
       <p>
-        <translate >
-          Please contact your admins and ask them to update the corresponding setting.
-        </translate>
+        Please contact your admins and ask them to update the corresponding setting.
       </p>
     </div>
     <div class="ui form">
       <div class="two fields">
         <div class="field">
           <div class="field">
-            <label for="embed-width"><translate >Widget width</translate></label>
+            <label for="embed-width">Widget width</label>
             <p>
-              <translate >
-                Leave empty for a responsive widget
-              </translate>
+              Leave empty for a responsive widget
             </p>
             <input
               id="embed-width"
@@ -82,7 +78,7 @@ const { copy, copied } = useClipboard({ source: textarea })
           <template v-if="type != 'track'">
             <br>
             <div class="field">
-              <label for="embed-height"><translate >Widget height</translate></label>
+              <label for="embed-height">Widget height</label>
               <input
                 id="embed-height"
                 v-model="height"
@@ -99,15 +95,11 @@ const { copy, copied } = useClipboard({ source: textarea })
             class="ui right accent labeled icon floated button"
             @click="copy()"
           >
-            <i class="copy icon" /><translate >
-              Copy
-            </translate>
+            <i class="copy icon" />              Copy
           </button>
-          <label for="embed-width"><translate >Embed code</translate></label>
+          <label for="embed-width">Embed code</label>
           <p>
-            <translate >
-              Copy/paste this code in your website HTML
-            </translate>
+            Copy/paste this code in your website HTML
           </p>
           <textarea
             ref="textarea"
@@ -120,9 +112,7 @@ const { copy, copied } = useClipboard({ source: textarea })
               v-if="copied"
               class="message"
             >
-              <translate >
-                Text copied to clipboard!
-              </translate>
+              Text copied to clipboard!
             </p>
           </div>
         </div>
@@ -134,7 +124,7 @@ const { copy, copied } = useClipboard({ source: textarea })
           :href="iframeSrc"
           target="_blank"
         >
-          <translate >Preview</translate>
+          Preview
         </a>
       </h3>
       <iframe

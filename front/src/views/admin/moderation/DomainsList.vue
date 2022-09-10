@@ -50,9 +50,7 @@ const createDomain = async () => {
   <main v-title="labels.domains">
     <section class="ui vertical stripe segment">
       <h2 class="ui left floated header">
-        <translate >
-          Domains
-        </translate>
+        Domains
       </h2>
       <form
         class="ui right floated form"
@@ -64,9 +62,7 @@ const createDomain = async () => {
           class="ui negative message"
         >
           <h4 class="header">
-            <translate >
-              Error while creating domain
-            </translate>
+            Error while creating domain
           </h4>
           <ul class="list">
             <li
@@ -79,7 +75,7 @@ const createDomain = async () => {
         </div>
         <div class="inline fields">
           <div class="field">
-            <label for="add-domain"><translate >Add a domain</translate></label>
+            <label for="add-domain">Add a domain</label>
             <input
               id="add-domain"
               v-model="domainName"
@@ -97,7 +93,7 @@ const createDomain = async () => {
               type="checkbox"
               name="allowed"
             >
-            <label for="allowed"><translate >Add to allow-list</translate></label>
+            <label for="allowed">Add to allow-list</label>
           </div>
           <div class="field">
             <button
@@ -105,9 +101,7 @@ const createDomain = async () => {
               type="submit"
               :disabled="isCreating"
             >
-              <translate >
-                Add
-              </translate>
+              Add
             </button>
           </div>
         </div>

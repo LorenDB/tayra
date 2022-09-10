@@ -56,25 +56,21 @@ const isLoading = ref(false)
     <h4 class="header">
       <translate
         v-if="step === 1"
-
       >
         Publish audio
       </translate>
       <translate
         v-else-if="step === 2"
-
       >
         Files to upload
       </translate>
       <translate
         v-else-if="step === 3"
-
       >
         Upload details
       </translate>
       <translate
         v-else-if="step === 4"
-
       >
         Processing uploads
       </translate>
@@ -95,9 +91,7 @@ const isLoading = ref(false)
         </template>
         <div class="ui very small hidden divider" />
         <template v-if="statusData && statusData.quotaStatus">
-          <translate >
-            Remaining storage space:
-          </translate>
+          Remaining storage space:
           {{ humanSize((statusData.quotaStatus.remaining - statusData.uploadedSize) * 1000 * 1000) }}
         </template>
       </div>
@@ -106,36 +100,28 @@ const isLoading = ref(false)
         v-if="step === 1"
         class="ui basic cancel button"
       >
-        <translate >
-          Cancel
-        </translate>
+        Cancel
       </button>
       <button
         v-else-if="step < 3"
         class="ui basic button"
         @click.stop.prevent="uploadForm.step -= 1"
       >
-        <translate >
-          Previous step
-        </translate>
+        Previous step
       </button>
       <button
         v-else-if="step === 3"
         class="ui basic button"
         @click.stop.prevent="uploadForm.step -= 1"
       >
-        <translate >
-          Update
-        </translate>
+        Update
       </button>
       <button
         v-if="step === 1"
         class="ui primary button"
         @click.stop.prevent="uploadForm.step += 1"
       >
-        <translate >
-          Next step
-        </translate>
+        Next step
       </button>
       <div
         v-if="step === 2"
@@ -147,9 +133,7 @@ const isLoading = ref(false)
           :disabled="!statusData?.canSubmit || undefined"
           @click.prevent.stop="uploadForm.publish"
         >
-          <translate >
-            Publish
-          </translate>
+          Publish
         </button>
         <button
           ref="dropdown"
@@ -164,9 +148,7 @@ const isLoading = ref(false)
               class="basic item"
               @click="update(false)"
             >
-              <translate >
-                Finish later
-              </translate>
+              Finish later
             </div>
           </div>
         </button>
@@ -176,9 +158,7 @@ const isLoading = ref(false)
         class="ui basic cancel button"
         @click="update(false)"
       >
-        <translate >
-          Close
-        </translate>
+        Close
       </button>
     </div>
   </semantic-modal>

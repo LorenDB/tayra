@@ -64,9 +64,7 @@ fetchData()
       v-if="!isLoading && libraries.length === 0"
       class="ui subtitle"
     >
-      <translate >
-        No matching library.
-      </translate>
+      No matching library.
     </p>
     <div class="ui hidden divider" />
     <div class="ui cards">
@@ -92,9 +90,7 @@ fetchData()
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        <translate >
-          Show more
-        </translate>
+        Show more
       </button>
     </template>
   </div>

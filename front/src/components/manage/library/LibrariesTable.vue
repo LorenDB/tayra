@@ -107,7 +107,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="libraries-search"><translate >Search</translate></label>
+          <label for="libraries-search">Search</label>
           <form @submit.prevent="query = search.value">
             <input
               id="libraries-search"
@@ -120,7 +120,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </form>
         </div>
         <div class="field">
-          <label for="libraries-visibility"><translate >Visibility</translate></label>
+          <label for="libraries-visibility">Visibility</label>
           <select
             id="libraries-visibility"
             class="ui dropdown"
@@ -128,9 +128,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             @change="addSearchToken('privacy_level', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              <translate >
-                All
-              </translate>
+              All
             </option>
             <option value="me">
               {{ sharedLabels.fields.privacy_level.shortChoices.me }}
@@ -144,7 +142,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </select>
         </div>
         <div class="field">
-          <label for="libraries-ordering"><translate >Ordering</translate></label>
+          <label for="libraries-ordering">Ordering</label>
           <select
             id="libraries-ordering"
             v-model="ordering"
@@ -160,21 +158,17 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </select>
         </div>
         <div class="field">
-          <label for="libraries-ordering-direction"><translate >Ordering direction</translate></label>
+          <label for="libraries-ordering-direction">Ordering direction</label>
           <select
             id="libraries-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate >
-                Ascending
-              </translate>
+              Ascending
             </option>
             <option value="-">
-              <translate >
-                Descending
-              </translate>
+              Descending
             </option>
           </select>
         </div>
@@ -197,39 +191,25 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
       >
         <template #header-cells>
           <th>
-            <translate >
-              Name
-            </translate>
+            Name
           </th>
           <th>
-            <translate >
-              Account
-            </translate>
+            Account
           </th>
           <th>
-            <translate >
-              Domain
-            </translate>
+            Domain
           </th>
           <th>
-            <translate >
-              Visibility
-            </translate>
+            Visibility
           </th>
           <th>
-            <translate >
-              Uploads
-            </translate>
+            Uploads
           </th>
           <th>
-            <translate >
-              Followers
-            </translate>
+            Followers
           </th>
           <th>
-            <translate >
-              Creation date
-            </translate>
+            Creation date
           </th>
         </template>
         <template #row-cells="scope">
@@ -268,7 +248,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              <translate >Local</translate>
+              Local
             </a>
           </td>
           <td>

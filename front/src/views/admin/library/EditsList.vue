@@ -26,9 +26,7 @@ const labels = computed(() => ({
         :default-query="defaultQuery"
       >
         <h2 class="ui header">
-          <translate >
-            Library edits
-          </translate>
+          Library edits
         </h2>
       </edits-card-list>
     </section>

@@ -62,13 +62,11 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
     <h2 class="ui header">
       <translate
         v-if="isSerie"
-
       >
         Episodes
       </translate>
       <translate
         v-else
-
       >
         Tracks
       </translate>
@@ -137,17 +135,13 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
 
     <template v-if="!artist.channel && !isSerie">
       <h2>
-        <translate >
-          User libraries
-        </translate>
+        User libraries
       </h2>
       <library-widget
         :url="'albums/' + object.id + '/libraries/'"
         @loaded="emit('libraries-loaded', $event)"
       >
-        <translate >
-          This album is present in the following libraries:
-        </translate>
+        This album is present in the following libraries:
       </library-widget>
     </template>
   </div>

@@ -216,18 +216,14 @@ const updateSubscriptionCount = (delta: number) => {
                   class="tiny"
                 >
                   <h4 class="header">
-                    <translate >
-                      Subscribe to this channel
-                    </translate>
+                    Subscribe to this channel
                   </h4>
                   <div class="scrollable content">
                     <div class="description">
                       <template v-if="$store.state.auth.authenticated">
                         <h3>
                           <i class="user icon" />
-                          <translate >
-                            Subscribe on Funkwhale
-                          </translate>
+                          Subscribe on Funkwhale
                         </h3>
                         <subscribe-button
                           :channel="object"
@@ -238,28 +234,20 @@ const updateSubscriptionCount = (delta: number) => {
                       <template v-if="object.rss_url">
                         <h3>
                           <i class="feed icon" />
-                          <translate >
-                            Subscribe via RSS
-                          </translate>
+                          Subscribe via RSS
                         </h3>
                         <p>
-                          <translate >
-                            Copy-paste the following URL in your favorite podcatcher:
-                          </translate>
+                          Copy-paste the following URL in your favorite podcatcher:
                         </p>
                         <copy-input :value="object.rss_url" />
                       </template>
                       <template v-if="object.actor">
                         <h3>
                           <i class="bell icon" />
-                          <translate >
-                            Subscribe on the Fediverse
-                          </translate>
+                          Subscribe on the Fediverse
                         </h3>
                         <p>
-                          <translate >
-                            If you're using Mastodon or other fediverse applications, you can subscribe to this account:
-                          </translate>
+                          If you're using Mastodon or other fediverse applications, you can subscribe to this account:
                         </p>
                         <copy-input
                           id="copy-tag"
@@ -270,9 +258,7 @@ const updateSubscriptionCount = (delta: number) => {
                   </div>
                   <div class="actions">
                     <button class="ui basic deny button">
-                      <translate >
-                        Cancel
-                      </translate>
+                      Cancel
                     </button>
                   </div>
                 </semantic-modal>
@@ -290,7 +276,7 @@ const updateSubscriptionCount = (delta: number) => {
                       @click.prevent="showEmbedModal = !showEmbedModal"
                     >
                       <i class="code icon" />
-                      <translate >Embed</translate>
+                      Embed
                     </a>
                     <a
                       v-if="object.actor && object.actor.domain != $store.getters['instance/domain']"
@@ -301,7 +287,6 @@ const updateSubscriptionCount = (delta: number) => {
                       <i class="external icon" />
                       <translate
                         :translate-params="{domain: object.actor.domain}"
-
                       >View on %{ domain }</translate>
                     </a>
                     <div class="divider" />
@@ -323,7 +308,7 @@ const updateSubscriptionCount = (delta: number) => {
                         @click.stop.prevent="showEditModal = true"
                       >
                         <i class="edit icon" />
-                        <translate >Edit…</translate>
+                        Edit…
                       </a>
                       <dangerous-button
                         v-if="object"
@@ -331,30 +316,22 @@ const updateSubscriptionCount = (delta: number) => {
                         @confirm="remove()"
                       >
                         <i class="ui trash icon" />
-                        <translate >
-                          Delete…
-                        </translate>
+                        Delete…
                         <template #modal-header>
                           <p>
-                            <translate >
-                              Delete this Channel?
-                            </translate>
+                            Delete this Channel?
                           </p>
                         </template>
                         <template #modal-content>
                           <div>
                             <p>
-                              <translate >
-                                The channel will be deleted, as well as any related files and data. This action is irreversible.
-                              </translate>
+                              The channel will be deleted, as well as any related files and data. This action is irreversible.
                             </p>
                           </div>
                         </template>
                         <template #modal-confirm>
                           <p>
-                            <translate >
-                              Delete
-                            </translate>
+                            Delete
                           </p>
                         </template>
                       </dangerous-button>
@@ -366,9 +343,7 @@ const updateSubscriptionCount = (delta: number) => {
                         :to="{name: 'manage.channels.detail', params: {id: object.uuid}}"
                       >
                         <i class="wrench icon" />
-                        <translate >
-                          Open in moderation interface
-                        </translate>
+                        Open in moderation interface
                       </router-link>
                     </template>
                   </div>
@@ -401,7 +376,6 @@ const updateSubscriptionCount = (delta: number) => {
                     <i class="external link icon" />
                     <translate
                       :translate-params="{domain: externalDomain}"
-
                     >Mirrored from %{ domain }</translate>
                   </a>
                 </div>
@@ -417,9 +391,7 @@ const updateSubscriptionCount = (delta: number) => {
                   @click.prevent.stop="$store.commit('channels/showUploadModal', {show: true, config: {channel: object}})"
                 >
                   <i class="upload icon" />
-                  <translate >
-                    Upload
-                  </translate>
+                  Upload
                 </button>
               </div>
               <div class="ui buttons">
@@ -428,9 +400,7 @@ const updateSubscriptionCount = (delta: number) => {
                   class="vibrant"
                   :artist="object.artist"
                 >
-                  <translate >
-                    Play
-                  </translate>
+                  Play
                 </play-button>
               </div>
               <div class="ui buttons">
@@ -446,9 +416,7 @@ const updateSubscriptionCount = (delta: number) => {
                 v-model:show="showEmbedModal"
               >
                 <h4 class="header">
-                  <translate >
-                    Embed this artist work on your website
-                  </translate>
+                  Embed this artist work on your website
                 </h4>
                 <div class="scrolling content">
                   <div class="description">
@@ -460,9 +428,7 @@ const updateSubscriptionCount = (delta: number) => {
                 </div>
                 <div class="actions">
                   <button class="ui basic deny button">
-                    <translate >
-                      Cancel
-                    </translate>
+                    Cancel
                   </button>
                 </div>
               </semantic-modal>
@@ -473,13 +439,11 @@ const updateSubscriptionCount = (delta: number) => {
                 <h4 class="header">
                   <translate
                     v-if="object.artist?.content_category === 'podcast'"
-
                   >
                     Podcast channel
                   </translate>
                   <translate
                     v-else
-
                   >
                     Artist channel
                   </translate>
@@ -496,18 +460,14 @@ const updateSubscriptionCount = (delta: number) => {
                 </div>
                 <div class="actions">
                   <button class="ui left floated basic deny button">
-                    <translate >
-                      Cancel
-                    </translate>
+                    Cancel
                   </button>
                   <button
                     :class="['ui', 'primary', 'confirm', {loading: edit.loading}, 'button']"
                     :disabled="!edit.submittable"
                     @click.stop="editForm?.submit"
                   >
-                    <translate >
-                      Update channel
-                    </translate>
+                    Update channel
                   </button>
                 </div>
               </semantic-modal>
@@ -528,9 +488,7 @@ const updateSubscriptionCount = (delta: number) => {
 
                 :to="{name: 'channels.detail', params: {id: id}}"
               >
-                <translate >
-                  Overview
-                </translate>
+                Overview
               </router-link>
               <router-link
                 class="item"
@@ -539,13 +497,11 @@ const updateSubscriptionCount = (delta: number) => {
               >
                 <translate
                   v-if="isPodcast"
-
                 >
                   All Episodes
                 </translate>
                 <translate
                   v-else
-
                 >
                   Tracks
                 </translate>

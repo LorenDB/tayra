@@ -59,9 +59,7 @@ defineExpose({
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          Error while creating
-        </translate>
+        Error while creating
       </h4>
       <ul class="list">
         <li
@@ -74,7 +72,7 @@ defineExpose({
     </div>
     <div class="ui required field">
       <label for="album-title">
-        <translate >Title</translate>
+        Title
       </label>
       <input
         v-model="title"

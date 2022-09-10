@@ -15,9 +15,7 @@ defineProps<Props>()
       class="ui active dimmer"
     >
       <div class="ui text loader">
-        <translate >
-          Import hasn't started yet
-        </translate>
+        Import hasn't started yet
       </div>
     </div>
     <template v-else>

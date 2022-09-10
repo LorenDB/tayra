@@ -67,9 +67,7 @@ fetchData()
             :websocket-handlers="['Listen']"
           >
             <template #title>
-              <translate >
-                Recently listened
-              </translate>
+              Recently listened
             </template>
           </track-widget>
         </div>
@@ -79,9 +77,7 @@ fetchData()
             :filters="{scope: scope, ordering: '-creation_date'}"
           >
             <template #title>
-              <translate >
-                Recently favorited
-              </translate>
+              Recently favorited
             </template>
           </track-widget>
         </div>
@@ -91,9 +87,7 @@ fetchData()
             :filters="{scope: scope, playable: true, ordering: '-modification_date'}"
           >
             <template #title>
-              <translate >
-                Playlists
-              </translate>
+              Playlists
             </template>
           </playlist-widget>
         </div>
@@ -103,18 +97,14 @@ fetchData()
         <div class="column">
           <album-widget :filters="{scope: scope, playable: true, ordering: '-creation_date'}">
             <template #title>
-              <translate >
-                Recently added
-              </translate>
+              Recently added
             </template>
           </album-widget>
         </div>
       </div>
       <template v-if="scope === 'all'">
         <h3 class="ui header">
-          <translate >
-            New channels
-          </translate>
+          New channels
         </h3>
         <channels-widget
           :show-modification-date="true"

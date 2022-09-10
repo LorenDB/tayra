@@ -323,9 +323,7 @@ const remove = async () => {
                   :to="{name: 'library.albums.edit', params: {id: object.id }}"
                 >
                   <i class="pencil icon" />
-                  <translate >
-                    Add a description…
-                  </translate>
+                  Add a description…
                 </router-link>
               </div>
             </div>
@@ -341,9 +339,7 @@ const remove = async () => {
                 :to="{name: 'library.albums.edit', params: {id: object.id }}"
               >
                 <i class="pencil icon" />
-                <translate >
-                  Add a description…
-                </translate>
+                Add a description…
               </router-link>
             </template>
           </div>

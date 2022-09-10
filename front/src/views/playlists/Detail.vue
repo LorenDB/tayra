@@ -97,7 +97,6 @@ const deletePlaylist = async () => {
                 translate-plural="Playlist containing %{ count } tracks, by %{ username }"
                 :translate-n="playlist.tracks_count"
                 :translate-params="{count: playlist.tracks_count, username: playlist.user.username}"
-
               >
                 Playlist containing %{ count } track, by %{ username }
               </translate><br>
@@ -113,9 +112,7 @@ const deletePlaylist = async () => {
               :is-playable="playlist.is_playable"
               :tracks="tracks"
             >
-              <translate >
-                Play all
-              </translate>
+              Play all
             </play-button>
           </div>
           <div class="ui buttons">
@@ -126,14 +123,10 @@ const deletePlaylist = async () => {
             >
               <i class="pencil icon" />
               <template v-if="edit">
-                <translate >
-                  Stop Editing
-                </translate>
+                Stop Editing
               </template>
               <template v-else>
-                <translate >
-                  Edit
-                </translate>
+                Edit
               </template>
             </button>
           </div>
@@ -144,18 +137,14 @@ const deletePlaylist = async () => {
               @click="showEmbedModal = !showEmbedModal"
             >
               <i class="code icon" />
-              <translate >
-                Embed
-              </translate>
+              Embed
             </button>
             <dangerous-button
               v-if="$store.state.auth.profile && playlist.user.id === $store.state.auth.profile.id"
               class="ui labeled danger icon button"
               :action="deletePlaylist"
             >
-              <i class="trash icon" /> <translate >
-                Delete
-              </translate>
+              <i class="trash icon" />                 Delete
               <template #modal-header>
                 <p
                   v-translate="{playlist: playlist.name}"
@@ -167,16 +156,12 @@ const deletePlaylist = async () => {
               </template>
               <template #modal-content>
                 <p>
-                  <translate >
-                    This will completely delete this playlist and cannot be undone.
-                  </translate>
+                  This will completely delete this playlist and cannot be undone.
                 </p>
               </template>
               <template #modal-confirm>
                 <div>
-                  <translate >
-                    Delete playlist
-                  </translate>
+                  Delete playlist
                 </div>
               </template>
             </dangerous-button>
@@ -187,9 +172,7 @@ const deletePlaylist = async () => {
           v-model:show="showEmbedModal"
         >
           <h4 class="header">
-            <translate >
-              Embed this playlist on your website
-            </translate>
+            Embed this playlist on your website
           </h4>
           <div class="scrolling content">
             <div class="description">
@@ -201,9 +184,7 @@ const deletePlaylist = async () => {
           </div>
           <div class="actions">
             <button class="ui basic deny button">
-              <translate >
-                Cancel
-              </translate>
+              Cancel
             </button>
           </div>
         </semantic-modal>
@@ -218,9 +199,7 @@ const deletePlaylist = async () => {
       </template>
       <template v-else-if="tracks.length > 0">
         <h2>
-          <translate >
-            Tracks
-          </translate>
+          Tracks
         </h2>
         <track-table
           :display-position="true"
@@ -234,18 +213,14 @@ const deletePlaylist = async () => {
       >
         <div class="ui icon header">
           <i class="list icon" />
-          <translate >
-            There are no tracks in this playlist yet
-          </translate>
+          There are no tracks in this playlist yet
         </div>
         <button
           class="ui success icon labeled button"
           @click="edit = !edit"
         >
           <i class="pencil icon" />
-          <translate >
-            Edit
-          </translate>
+          Edit
         </button>
       </div>
     </section>

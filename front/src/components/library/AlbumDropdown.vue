@@ -53,7 +53,7 @@ const remove = () => emit('remove')
       v-model:show="showEmbedModal"
     >
       <h4 class="header">
-        <translate >Embed this album on your website</translate>
+        Embed this album on your website
       </h4>
       <div class="scrolling content">
         <div class="description">
@@ -66,7 +66,7 @@ const remove = () => emit('remove')
       </div>
       <div class="actions">
         <button class="ui basic deny button">
-          <translate >Cancel</translate>
+          Cancel
         </button>
       </div>
     </semantic-modal>
@@ -86,7 +86,6 @@ const remove = () => emit('remove')
           <i class="external icon" />
           <translate
             :translate-params="{domain: domain}"
-
           >View on %{ domain }</translate>
         </a>
 
@@ -97,7 +96,7 @@ const remove = () => emit('remove')
           @click="showEmbedModal = !showEmbedModal"
         >
           <i class="code icon" />
-          <translate >Embed</translate>
+          Embed
         </div>
         <a
           v-if="isAlbum && musicbrainzUrl"
@@ -107,7 +106,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="external icon" />
-          <translate >View on MusicBrainz</translate>
+          View on MusicBrainz
         </a>
         <a
           v-if="!isChannel && isAlbum"
@@ -117,7 +116,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="external icon" />
-          <translate >Search on Discogs</translate>
+          Search on Discogs
         </a>
         <router-link
           v-if="object.is_local"
@@ -125,7 +124,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="edit icon" />
-          <translate >Edit</translate>
+          Edit
         </router-link>
         <dangerous-button
           v-if="artist && $store.state.auth.authenticated && artist.channel && artist.attributed_to.full_username === $store.state.auth.fullUsername"
@@ -133,24 +132,22 @@ const remove = () => emit('remove')
           @confirm="remove()"
         >
           <i class="ui trash icon" />
-          <translate >Delete…</translate>
+          Delete…
           <template #modal-header>
             <p>
-              <translate >Delete this album?</translate>
+              Delete this album?
             </p>
           </template>
           <template #modal-content>
             <div>
               <p>
-                <translate >
-                  The album will be deleted, as well as any related files and data. This action is irreversible.
-                </translate>
+                The album will be deleted, as well as any related files and data. This action is irreversible.
               </p>
             </div>
           </template>
           <template #modal-confirm>
             <p>
-              <translate >Delete</translate>
+              Delete
             </p>
           </template>
         </dangerous-button>
@@ -171,7 +168,7 @@ const remove = () => emit('remove')
           :to="{name: 'manage.library.albums.detail', params: {id: object.id}}"
         >
           <i class="wrench icon" />
-          <translate >Open in moderation interface</translate>
+          Open in moderation interface
         </router-link>
         <a
           v-if="$store.state.auth.profile && $store.state.auth.profile?.is_superuser"
@@ -181,7 +178,7 @@ const remove = () => emit('remove')
           rel="noopener noreferrer"
         >
           <i class="wrench icon" />
-          <translate >View in Django's admin</translate>&nbsp;
+          View in Django's admin&nbsp;
         </a>
       </div>
     </button>

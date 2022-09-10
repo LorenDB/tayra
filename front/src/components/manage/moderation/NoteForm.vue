@@ -56,9 +56,7 @@ const submit = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          Error while submitting note
-        </translate>
+        Error while submitting note
       </h4>
       <ul class="list">
         <li
@@ -83,9 +81,7 @@ const submit = async () => {
       type="submit"
       :disabled="isLoading"
     >
-      <translate >
-        Add note
-      </translate>
+      Add note
     </button>
   </form>
 </template>

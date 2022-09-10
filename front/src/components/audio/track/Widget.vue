@@ -200,9 +200,7 @@ watch(() => props.websocketHandlers.includes('Listen'), (to) => {
     >
       <div class="ui icon header">
         <i class="music icon" />
-        <translate >
-          Nothing found
-        </translate>
+        Nothing found
       </div>
       <div
         v-if="isLoading"
@@ -217,9 +215,7 @@ watch(() => props.websocketHandlers.includes('Listen'), (to) => {
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage as string)"
       >
-        <translate >
-          Show more
-        </translate>
+        Show more
       </button>
     </template>
   </div>

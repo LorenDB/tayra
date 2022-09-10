@@ -27,9 +27,7 @@ const recentActivity = ref(0)
         :client-only="true"
       />
       <h2 class="ui header">
-        <translate >
-          Recently listened
-        </translate>
+        Recently listened
       </h2>
       <div class="ui divider" />
       <track-widget
@@ -41,9 +39,7 @@ const recentActivity = ref(0)
     <div class="ui hidden divider" />
     <div>
       <h2 class="ui header">
-        <translate >
-          Recently favorited
-        </translate>
+        Recently favorited
       </h2>
       <div class="ui divider" />
       <track-widget
@@ -54,9 +50,7 @@ const recentActivity = ref(0)
     <div class="ui hidden divider" />
     <div>
       <h2 class="ui header">
-        <translate >
-          Playlists
-        </translate>
+        Playlists
       </h2>
       <div class="ui divider" />
       <playlist-widget

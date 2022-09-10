@@ -77,9 +77,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :to="{name: 'library.tags.detail', params: {id: object.name }}"
                   >
                     <i class="info icon" />
-                    <translate >
-                      Open local profile
-                    </translate>&nbsp;
+                    Open local profile&nbsp;
                   </router-link>
                   <button
                     v-dropdown
@@ -95,7 +93,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        <translate >View in Django's admin</translate>&nbsp;
+                        View in Django's admin&nbsp;
                       </a>
                     </div>
                   </button>
@@ -105,30 +103,22 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    <translate >
-                      Delete
-                    </translate>
+                    Delete
                     <template #modal-header>
                       <p>
-                        <translate >
-                          Delete this tag?
-                        </translate>
+                        Delete this tag?
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          <translate >
-                            The tag will be removed and unlinked from any existing entity. This action is irreversible.
-                          </translate>
+                          The tag will be removed and unlinked from any existing entity. This action is irreversible.
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        <translate >
-                          Delete
-                        </translate>
+                        Delete
                       </p>
                     </template>
                   </dangerous-button>
@@ -145,18 +135,14 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate >
-                    Tag data
-                  </translate>
+                  Tag data
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        Name
-                      </translate>
+                      Name
                     </td>
                     <td>
                       {{ object.name }}
@@ -171,18 +157,14 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate >
-                    Activity
-                  </translate>&nbsp;
+                  Activity&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        First seen
-                      </translate>
+                      First seen
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -197,9 +179,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate >
-                    Audio content
-                  </translate>&nbsp;
+                  Audio content&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
@@ -207,9 +187,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('tag', object.name) }}">
-                        <translate >
-                          Artists
-                        </translate>
+                        Artists
                       </router-link>
                     </td>
                     <td>
@@ -219,9 +197,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('tag', object.name) }}">
-                        <translate >
-                          Albums
-                        </translate>
+                        Albums
                       </router-link>
                     </td>
                     <td>
@@ -231,9 +207,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('tag', object.name) }}">
-                        <translate >
-                          Tracks
-                        </translate>
+                        Tracks
                       </router-link>
                     </td>
                     <td>

@@ -24,17 +24,13 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.users.users.list'}"
       >
-        <translate >
-          Users
-        </translate>
+        Users
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.users.invitations.list'}"
       >
-        <translate >
-          Invitations
-        </translate>
+        Invitations
       </router-link>
     </nav>
     <router-view :key="$route.fullPath" />

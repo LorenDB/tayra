@@ -86,17 +86,13 @@ onMounted(async () => {
           :class="[{active: !isPreviewing}, 'item']"
           @click.prevent="isPreviewing = false"
         >
-          <translate >
-            Write
-          </translate>
+          Write
         </button>
         <button
           :class="[{active: isPreviewing}, 'item']"
           @click.prevent="isPreviewing = true"
         >
-          <translate >
-            Preview
-          </translate>
+          Preview
         </button>
       </div>
       <template v-if="isPreviewing">
@@ -112,9 +108,7 @@ onMounted(async () => {
           </div>
         </div>
         <p v-else-if="!preview">
-          <translate >
-            Nothing to preview.
-          </translate>
+          Nothing to preview.
         </p>
         <sanitized-html
           v-else
@@ -141,9 +135,7 @@ onMounted(async () => {
         {{ remainingChars }}
       </span>
       <p>
-        <translate >
-          Markdown syntax is supported.
-        </translate>
+        Markdown syntax is supported.
       </p>
     </div>
   </div>

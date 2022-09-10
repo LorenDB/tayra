@@ -53,18 +53,14 @@ const purgeErroredFiles = () => purge('errored')
 <template>
   <div class="ui segment">
     <h3 class="ui header">
-      <translate >
-        Current usage
-      </translate>
+      Current usage
     </h3>
     <div
       v-if="isLoading"
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        <translate >
-          Loading usage data…
-        </translate>
+        Loading usage data…
       </div>
     </div>
     <div
@@ -105,9 +101,7 @@ const purgeErroredFiles = () => purge('errored')
             {{ humanSize(quotaStatus.pending * 1000 * 1000) }}
           </div>
           <div class="label">
-            <translate >
-              Pending files
-            </translate>
+            Pending files
           </div>
         </div>
         <div>
@@ -115,37 +109,27 @@ const purgeErroredFiles = () => purge('errored')
             class="ui basic primary tiny button"
             :to="{name: 'content.libraries.files', query: {q: compileTokens([{field: 'status', value: 'pending'}])}}"
           >
-            <translate >
-              View files
-            </translate>
+            View files
           </router-link>
 
           <dangerous-button
             class="ui basic tiny button"
             :action="purgePendingFiles"
           >
-            <translate >
-              Purge
-            </translate>
+            Purge
             <template #modal-header>
               <p>
-                <translate >
-                  Purge pending files?
-                </translate>
+                Purge pending files?
               </p>
             </template>
             <template #modal-content>
               <p>
-                <translate >
-                  Removes uploaded but yet to be processed tracks completely, adding the corresponding data to your quota.
-                </translate>
+                Removes uploaded but yet to be processed tracks completely, adding the corresponding data to your quota.
               </p>
             </template>
             <template #modal-confirm>
               <div>
-                <translate >
-                  Purge
-                </translate>
+                Purge
               </div>
             </template>
           </dangerous-button>
@@ -160,9 +144,7 @@ const purgeErroredFiles = () => purge('errored')
             {{ humanSize(quotaStatus.skipped * 1000 * 1000) }}
           </div>
           <div class="label">
-            <translate >
-              Skipped files
-            </translate>
+            Skipped files
           </div>
         </div>
         <div>
@@ -170,36 +152,26 @@ const purgeErroredFiles = () => purge('errored')
             class="ui basic primary tiny button"
             :to="{name: 'content.libraries.files', query: {q: compileTokens([{field: 'status', value: 'skipped'}])}}"
           >
-            <translate >
-              View files
-            </translate>
+            View files
           </router-link>
           <dangerous-button
             class="ui basic tiny button"
             :action="purgeSkippedFiles"
           >
-            <translate >
-              Purge
-            </translate>
+            Purge
             <template #modal-header>
               <p>
-                <translate >
-                  Purge skipped files?
-                </translate>
+                Purge skipped files?
               </p>
             </template>
             <template #modal-content>
               <p>
-                <translate >
-                  Removes uploaded tracks skipped during the import processes completely, adding the corresponding data to your quota.
-                </translate>
+                Removes uploaded tracks skipped during the import processes completely, adding the corresponding data to your quota.
               </p>
             </template>
             <template #modal-confirm>
               <div>
-                <translate >
-                  Purge
-                </translate>
+                Purge
               </div>
             </template>
           </dangerous-button>
@@ -214,9 +186,7 @@ const purgeErroredFiles = () => purge('errored')
             {{ humanSize(quotaStatus.errored * 1000 * 1000) }}
           </div>
           <div class="label">
-            <translate >
-              Errored files
-            </translate>
+            Errored files
           </div>
         </div>
         <div>
@@ -224,36 +194,26 @@ const purgeErroredFiles = () => purge('errored')
             class="ui basic primary tiny button"
             :to="{name: 'content.libraries.files', query: {q: compileTokens([{field: 'status', value: 'errored'}])}}"
           >
-            <translate >
-              View files
-            </translate>
+            View files
           </router-link>
           <dangerous-button
             class="ui basic tiny button"
             :action="purgeErroredFiles"
           >
-            <translate >
-              Purge
-            </translate>
+            Purge
             <template #modal-header>
               <p>
-                <translate >
-                  Purge errored files?
-                </translate>
+                Purge errored files?
               </p>
             </template>
             <template #modal-content>
               <p>
-                <translate >
-                  Removes uploaded tracks that could not be processed by the server completely, adding the corresponding data to your quota.
-                </translate>
+                Removes uploaded tracks that could not be processed by the server completely, adding the corresponding data to your quota.
               </p>
             </template>
             <template #modal-confirm>
               <div>
-                <translate >
-                  Purge
-                </translate>
+                Purge
               </div>
             </template>
           </dangerous-button>

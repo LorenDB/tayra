@@ -69,17 +69,13 @@ const move = (idx: number, increment: number) => {
         :class="[{active: !isPreviewing}, 'item']"
         @click.stop.prevent="isPreviewing = false"
       >
-        <translate >
-          Edit form
-        </translate>
+        Edit form
       </button>
       <button
         :class="[{active: isPreviewing}, 'item']"
         @click.stop.prevent="isPreviewing = true"
       >
-        <translate >
-          Preview form
-        </translate>
+        Preview form
       </button>
     </div>
     <div
@@ -99,12 +95,10 @@ const move = (idx: number, increment: number) => {
     >
       <div class="field">
         <label for="help-text">
-          <translate >Help text</translate>
+          Help text
         </label>
         <p>
-          <translate >
-            An optional text to be displayed at the start of the sign-up form.
-          </translate>
+          An optional text to be displayed at the start of the sign-up form.
         </p>
         <content-form
           v-if="value.help_text"
@@ -115,32 +109,24 @@ const move = (idx: number, increment: number) => {
       </div>
       <div class="field">
         <label>
-          <translate >Additional fields</translate>
+          Additional fields
         </label>
         <p>
-          <translate >
-            Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled.
-          </translate>
+          Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled.
         </p>
         <table v-if="value.fields?.length > 0">
           <thead>
             <tr>
               <th>
-                <translate >
-                  Field label
-                </translate>
+                Field label
               </th>
               <th>
-                <translate >
-                  Field type
-                </translate>
+                Field type
               </th>
               <th>
-                <translate >
-                  Required
-                </translate>
+                Required
               </th>
-              <th><span class="visually-hidden"><translate >Actions</translate></span></th>
+              <th><span class="visually-hidden">Actions</span></th>
             </tr>
           </thead>
           <tbody>
@@ -158,28 +144,20 @@ const move = (idx: number, increment: number) => {
               <td>
                 <select v-model="field.input_type">
                   <option value="short_text">
-                    <translate >
-                      Short text
-                    </translate>
+                    Short text
                   </option>
                   <option value="long_text">
-                    <translate >
-                      Long text
-                    </translate>
+                    Long text
                   </option>
                 </select>
               </td>
               <td>
                 <select v-model="field.required">
                   <option :value="true">
-                    <translate >
-                      Yes
-                    </translate>
+                    Yes
                   </option>
                   <option :value="false">
-                    <translate >
-                      No
-                    </translate>
+                    No
                   </option>
                 </select>
               </td>
@@ -214,9 +192,7 @@ const move = (idx: number, increment: number) => {
           class="ui basic button"
           @click.stop.prevent="addField"
         >
-          <translate >
-            Add a new field
-          </translate>
+          Add a new field
         </button>
       </div>
     </div>

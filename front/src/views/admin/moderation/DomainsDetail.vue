@@ -133,7 +133,7 @@ const setAllowList = async (value: boolean) => {
                       rel="noopener noreferrer"
                       class="logo-wrapper"
                     >
-                      <translate >Open website</translate>&nbsp;
+                      Open website&nbsp;
                       <i class="external icon" />
                     </a>
                   </div>
@@ -149,7 +149,7 @@ const setAllowList = async (value: boolean) => {
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate >View in Django's admin</translate>&nbsp;
+                    View in Django's admin&nbsp;
                   </a>
                 </div>
                 <div
@@ -162,9 +162,7 @@ const setAllowList = async (value: boolean) => {
                     @click.prevent="setAllowList(false)"
                   >
                     <i class="x icon" />
-                    <translate >
-                      Remove from allow-list
-                    </translate>
+                    Remove from allow-list
                   </button>
                   <button
                     v-else
@@ -172,9 +170,7 @@ const setAllowList = async (value: boolean) => {
                     @click.prevent="setAllowList(true)"
                   >
                     <i class="check icon" />
-                    <translate >
-                      Add to allow-list
-                    </translate>
+                    Add to allow-list
                   </button>
                 </div>
               </div>
@@ -195,15 +191,11 @@ const setAllowList = async (value: boolean) => {
                 <header class="ui header">
                   <h3>
                     <i class="shield icon" />
-                    <translate >
-                      You don't have any rule in place for this domain.
-                    </translate>
+                    You don't have any rule in place for this domain.
                   </h3>
                 </header>
                 <p>
-                  <translate >
-                    Moderation policies help you control how your instance interact with a given domain or account.
-                  </translate>
+                  Moderation policies help you control how your instance interact with a given domain or account.
                 </p>
                 <button
                   class="ui primary button"
@@ -219,9 +211,7 @@ const setAllowList = async (value: boolean) => {
               >
                 <header class="ui header">
                   <h3>
-                    <translate >
-                      This domain is subject to specific moderation rules
-                    </translate>
+                    This domain is subject to specific moderation rules
                   </h3>
                 </header>
               </instance-policy-card>
@@ -245,29 +235,23 @@ const setAllowList = async (value: boolean) => {
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate >
-                    Instance data
-                  </translate>
+                  Instance data
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr v-if="allowListEnabled">
                     <td>
-                      <translate >
-                        Is present on allow-list
-                      </translate>
+                      Is present on allow-list
                     </td>
                     <td>
                       <translate
                         v-if="object.allowed"
-
                       >
                         Yes
                       </translate>
                       <translate
                         v-else
-
                       >
                         No
                       </translate>
@@ -275,9 +259,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Last checked
-                      </translate>
+                      Last checked
                     </td>
                     <td>
                       <human-date
@@ -286,7 +268,6 @@ const setAllowList = async (value: boolean) => {
                       />
                       <translate
                         v-else
-
                       >
                         N/A
                       </translate>
@@ -296,9 +277,7 @@ const setAllowList = async (value: boolean) => {
                   <template v-if="object.nodeinfo && object.nodeinfo.status === 'ok'">
                     <tr>
                       <td>
-                        <translate >
-                          Software
-                        </translate>
+                        Software
                       </td>
                       <td>
                         {{ get(object, 'nodeinfo.payload.software.name', t('N/A')) }} ({{ get(object, 'nodeinfo.payload.software.version', t('N/A')) }})
@@ -306,9 +285,7 @@ const setAllowList = async (value: boolean) => {
                     </tr>
                     <tr>
                       <td>
-                        <translate >
-                          Name
-                        </translate>
+                        Name
                       </td>
                       <td>
                         {{ get(object, 'nodeinfo.payload.metadata.nodeName', t('N/A')) }}
@@ -316,9 +293,7 @@ const setAllowList = async (value: boolean) => {
                     </tr>
                     <tr>
                       <td>
-                        <translate >
-                          Total users
-                        </translate>
+                        Total users
                       </td>
                       <td>
                         {{ get(object, 'nodeinfo.payload.usage.users.total', t('N/A')) }}
@@ -328,14 +303,10 @@ const setAllowList = async (value: boolean) => {
                   <template v-if="object.nodeinfo && object.nodeinfo.status === 'error'">
                     <tr>
                       <td>
-                        <translate >
-                          Status
-                        </translate>
+                        Status
                       </td>
                       <td>
-                        <translate >
-                          Error while fetching node info
-                        </translate>&nbsp;
+                        Error while fetching node info&nbsp;
 
                         <span :data-tooltip="object.nodeinfo.error"><i class="question circle icon" /></span>
                       </td>
@@ -348,9 +319,7 @@ const setAllowList = async (value: boolean) => {
                 :url="'manage/federation/domains/' + object.name + '/nodeinfo/'"
                 @action-done="refreshNodeInfo"
               >
-                <translate >
-                  Refresh node info
-                </translate>
+                Refresh node info
               </ajax-button>
             </section>
           </div>
@@ -359,9 +328,7 @@ const setAllowList = async (value: boolean) => {
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate >
-                    Activity
-                  </translate>&nbsp;
+                  Activity&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -381,9 +348,7 @@ const setAllowList = async (value: boolean) => {
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        First seen
-                      </translate>
+                      First seen
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -394,9 +359,7 @@ const setAllowList = async (value: boolean) => {
                       <router-link
                         :to="{name: 'manage.moderation.accounts.list', query: {q: 'domain:' + object.name }}"
                       >
-                        <translate >
-                          Known accounts
-                        </translate>
+                        Known accounts
                       </router-link>
                     </td>
                     <td>
@@ -405,9 +368,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Emitted messages
-                      </translate>
+                      Emitted messages
                     </td>
                     <td>
                       {{ stats.outbox_activities }}
@@ -415,9 +376,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Received library follows
-                      </translate>
+                      Received library follows
                     </td>
                     <td>
                       {{ stats.received_library_follows }}
@@ -425,9 +384,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Emitted library follows
-                      </translate>
+                      Emitted library follows
                     </td>
                     <td>
                       {{ stats.emitted_library_follows }}
@@ -442,9 +399,7 @@ const setAllowList = async (value: boolean) => {
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate >
-                    Audio content
-                  </translate>&nbsp;
+                  Audio content&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -464,9 +419,7 @@ const setAllowList = async (value: boolean) => {
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        Cached size
-                      </translate>
+                      Cached size
                     </td>
                     <td>
                       {{ humanSize(stats.media_downloaded_size) }}
@@ -474,9 +427,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Total size
-                      </translate>
+                      Total size
                     </td>
                     <td>
                       {{ humanSize(stats.media_total_size) }}
@@ -485,9 +436,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.channels', query: {q: getQuery('domain', object.name) }}">
-                        <translate >
-                          Channels
-                        </translate>
+                        Channels
                       </router-link>
                     </td>
                     <td>
@@ -497,9 +446,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('domain', object.name) }}">
-                        <translate >
-                          Libraries
-                        </translate>
+                        Libraries
                       </router-link>
                     </td>
                     <td>
@@ -509,9 +456,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('domain', object.name) }}">
-                        <translate >
-                          Uploads
-                        </translate>
+                        Uploads
                       </router-link>
                     </td>
                     <td>
@@ -521,9 +466,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('domain', object.name) }}">
-                        <translate >
-                          Artists
-                        </translate>
+                        Artists
                       </router-link>
                     </td>
                     <td>
@@ -533,9 +476,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('domain', object.name) }}">
-                        <translate >
-                          Albums
-                        </translate>
+                        Albums
                       </router-link>
                     </td>
                     <td>
@@ -545,9 +486,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('domain', object.name) }}">
-                        <translate >
-                          Tracks
-                        </translate>
+                        Tracks
                       </router-link>
                     </td>
                     <td>

@@ -37,9 +37,7 @@ whenever(() => store.state.auth.authenticated, () => {
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          <translate >
-            Log in to your Funkwhale account
-          </translate>
+          Log in to your Funkwhale account
         </h2>
         <login-form :next="next" />
       </div>

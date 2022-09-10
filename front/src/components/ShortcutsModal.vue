@@ -110,9 +110,7 @@ const player = computed(() => [
 <template>
   <semantic-modal v-model:show="showRef">
     <header class="header">
-      <translate >
-        Keyboard shortcuts
-      </translate>
+      Keyboard shortcuts
     </header>
     <section class="scrolling content">
       <div class="ui stackable two column grid">
@@ -156,9 +154,7 @@ const player = computed(() => [
     </section>
     <footer class="actions">
       <button class="ui basic cancel button">
-        <translate >
-          Close
-        </translate>
+        Close
       </button>
     </footer>
   </semantic-modal>

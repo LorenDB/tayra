@@ -71,9 +71,7 @@ const checkAndSwitch = async (url: string) => {
     @update:show="isError = false"
   >
     <h3 class="header">
-      <translate >
-        Choose your instance
-      </translate>
+      Choose your instance
     </h3>
     <div class="scrolling content">
       <div
@@ -82,20 +80,14 @@ const checkAndSwitch = async (url: string) => {
         class="ui negative message"
       >
         <h4 class="header">
-          <translate >
-            It is not possible to connect to the given URL
-          </translate>
+          It is not possible to connect to the given URL
         </h4>
         <ul class="list">
           <li>
-            <translate >
-              The server might be down
-            </translate>
+            The server might be down
           </li>
           <li>
-            <translate >
-              The given address is not a Funkwhale server
-            </translate>
+            The given address is not a Funkwhale server
           </li>
         </ul>
       </div>
@@ -107,7 +99,6 @@ const checkAndSwitch = async (url: string) => {
           v-if="$store.state.instance.instanceUrl"
           v-translate="{url: $store.state.instance.instanceUrl, hostname: $store.getters['instance/domain'] }"
           class="description"
-
         >
           You are currently connected to <a
             href="%{ url }"
@@ -115,12 +106,10 @@ const checkAndSwitch = async (url: string) => {
           >%{ hostname }&nbsp;<i class="external icon" /></a>. If you continue, you will be disconnected from your current instance and all your local data will be deleted.
         </p>
         <p v-else>
-          <translate >
-            To continue, please select the Funkwhale instance you want to connect to. Enter the address directly, or select one of the suggested choices.
-          </translate>
+          To continue, please select the Funkwhale instance you want to connect to. Enter the address directly, or select one of the suggested choices.
         </p>
         <div class="field">
-          <label for="instance-picker"><translate >Instance URL</translate></label>
+          <label for="instance-picker">Instance URL</label>
           <div class="ui action input">
             <input
               id="instance-picker"
@@ -132,9 +121,7 @@ const checkAndSwitch = async (url: string) => {
               type="submit"
               :class="['ui', 'icon', {loading: isLoading}, 'button']"
             >
-              <translate >
-                Submit
-              </translate>
+              Submit
             </button>
           </div>
         </div>
@@ -146,9 +133,7 @@ const checkAndSwitch = async (url: string) => {
       >
         <div class="field">
           <h4>
-            <translate >
-              Suggested choices
-            </translate>
+            Suggested choices
           </h4>
           <button
             v-for="(url, key) in suggestedInstances"
@@ -163,9 +148,7 @@ const checkAndSwitch = async (url: string) => {
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate >
-          Cancel
-        </translate>
+        Cancel
       </button>
     </div>
   </semantic-modal>

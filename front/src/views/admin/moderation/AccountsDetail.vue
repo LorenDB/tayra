@@ -167,7 +167,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                     <template v-if="object.user">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        <translate >Local account</translate>
+                        Local account
                       </span>
                       &nbsp;
                     </template>
@@ -176,7 +176,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <translate >Open profile</translate>&nbsp;
+                      Open profile&nbsp;
                       <i class="external icon" />
                     </a>
                   </div>
@@ -192,7 +192,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate >View in Django's admin</translate>&nbsp;
+                    View in Django's admin&nbsp;
                   </a>
                   <a
                     v-else-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
@@ -202,7 +202,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate >View in Django's admin</translate>&nbsp;
+                    View in Django's admin&nbsp;
                   </a>
                   <button
                     v-dropdown
@@ -217,7 +217,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate >Open remote profile</translate>&nbsp;
+                        Open remote profile&nbsp;
                       </a>
                     </div>
                   </button>
@@ -243,23 +243,17 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                 <header class="ui header">
                   <h3>
                     <i class="shield icon" />
-                    <translate >
-                      You don't have any rule in place for this account.
-                    </translate>
+                    You don't have any rule in place for this account.
                   </h3>
                 </header>
                 <p>
-                  <translate >
-                    Moderation policies help you control how your instance interact with a given domain or account.
-                  </translate>
+                  Moderation policies help you control how your instance interact with a given domain or account.
                 </p>
                 <button
                   class="ui primary button"
                   @click="showPolicyForm = true"
                 >
-                  <translate >
-                    Add a moderation policy
-                  </translate>
+                  Add a moderation policy
                 </button>
               </template>
               <instance-policy-card
@@ -269,9 +263,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
               >
                 <header class="ui header">
                   <h3>
-                    <translate >
-                      This domain is subject to specific moderation rules
-                    </translate>
+                    This domain is subject to specific moderation rules
                   </h3>
                 </header>
               </instance-policy-card>
@@ -295,18 +287,14 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate >
-                    Account data
-                  </translate>
+                  Account data
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        Username
-                      </translate>
+                      Username
                     </td>
                     <td>
                       {{ object.preferred_username }}
@@ -315,9 +303,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   <tr v-if="!object.user">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        <translate >
-                          Domain
-                        </translate>
+                        Domain
                       </router-link>
                     </td>
                     <td>
@@ -326,9 +312,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Display name
-                      </translate>
+                      Display name
                     </td>
                     <td>
                       {{ object.name }}
@@ -336,9 +320,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      <translate >
-                        Email address
-                      </translate>
+                      Email address
                     </td>
                     <td>
                       {{ object.user.email }}
@@ -346,9 +328,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      <translate >
-                        Login status
-                      </translate>
+                      Login status
                     </td>
                     <td>
                       <div
@@ -364,23 +344,19 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                         <label for="is-active">
                           <translate
                             v-if="object.user.is_active"
-
                           >Enabled</translate>
                           <translate
                             v-else
-
                           >Disabled</translate>
                         </label>
                       </div>
                       <translate
                         v-else-if="object.user.is_active"
-
                       >
                         Enabled
                       </translate>
                       <translate
                         v-else
-
                       >
                         Disabled
                       </translate>
@@ -388,9 +364,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      <translate >
-                        Permissions
-                      </translate>
+                      Permissions
                     </td>
                     <td>
                       <select
@@ -412,9 +386,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Type
-                      </translate>
+                      Type
                     </td>
                     <td>
                       {{ object.type }}
@@ -422,9 +394,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="!object.user">
                     <td>
-                      <translate >
-                        Last checked
-                      </translate>
+                      Last checked
                     </td>
                     <td>
                       <human-date
@@ -433,7 +403,6 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                       />
                       <translate
                         v-else
-
                       >
                         N/A
                       </translate>
@@ -441,9 +410,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      <translate >
-                        Sign-up date
-                      </translate>
+                      Sign-up date
                     </td>
                     <td>
                       <human-date :date="object.user.date_joined" />
@@ -451,9 +418,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      <translate >
-                        Last activity
-                      </translate>
+                      Last activity
                     </td>
                     <td>
                       <human-date :date="object.user.last_activity" />
@@ -468,9 +433,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate >
-                    Activity
-                  </translate>&nbsp;
+                  Activity&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -490,9 +453,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                 <tbody>
                   <tr v-if="!object.user">
                     <td>
-                      <translate >
-                        First seen
-                      </translate>
+                      First seen
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -500,9 +461,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Emitted messages
-                      </translate>
+                      Emitted messages
                     </td>
                     <td>
                       {{ stats.outbox_activities }}
@@ -510,9 +469,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Received library follows
-                      </translate>
+                      Received library follows
                     </td>
                     <td>
                       {{ stats.received_library_follows }}
@@ -520,9 +477,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Emitted library follows
-                      </translate>
+                      Emitted library follows
                     </td>
                     <td>
                       {{ stats.emitted_library_follows }}
@@ -531,9 +486,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `account:${object.full_username}`) }}">
-                        <translate >
-                          Linked reports
-                        </translate>
+                        Linked reports
                       </router-link>
                     </td>
                     <td>
@@ -543,9 +496,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.requests.list', query: {q: getQuery('submitter', `${object.full_username}`) }}">
-                        <translate >
-                          Requests
-                        </translate>
+                        Requests
                       </router-link>
                     </td>
                     <td>
@@ -561,9 +512,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate >
-                    Audio content
-                  </translate>&nbsp;
+                  Audio content&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -583,9 +532,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                 <tbody>
                   <tr v-if="!object.user">
                     <td>
-                      <translate >
-                        Cached size
-                      </translate>
+                      Cached size
                     </td>
                     <td>
                       {{ humanSize(stats.media_downloaded_size) }}
@@ -593,9 +540,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      <translate >
-                        Upload quota
-                      </translate>
+                      Upload quota
                       <span :data-tooltip="labels.uploadQuota"><i class="question circle icon" /></span>
                     </td>
                     <td>
@@ -608,9 +553,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                           @change="updateUser('upload_quota', true)"
                         >
                         <div class="ui basic label">
-                          <translate >
-                            MB
-                          </translate>&#32;
+                          MB&#32;
                         </div>
                         <action-feedback
                           class="ui basic label"
@@ -622,9 +565,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Total size
-                      </translate>
+                      Total size
                     </td>
                     <td>
                       {{ humanSize(stats.media_total_size) }}
@@ -633,9 +574,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.channels', query: {q: getQuery('account', object.full_username) }}">
-                        <translate >
-                          Channels
-                        </translate>
+                        Channels
                       </router-link>
                     </td>
                     <td>
@@ -645,9 +584,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('account', object.full_username) }}">
-                        <translate >
-                          Libraries
-                        </translate>
+                        Libraries
                       </router-link>
                     </td>
                     <td>
@@ -657,9 +594,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('account', object.full_username) }}">
-                        <translate >
-                          Uploads
-                        </translate>
+                        Uploads
                       </router-link>
                     </td>
                     <td>
@@ -668,9 +603,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Artists
-                      </translate>
+                      Artists
                     </td>
                     <td>
                       {{ stats.artists }}
@@ -678,9 +611,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Albums
-                      </translate>
+                      Albums
                     </td>
                     <td>
                       {{ stats.albums }}
@@ -688,9 +619,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Tracks
-                      </translate>
+                      Tracks
                     </td>
                     <td>
                       {{ stats.tracks }}

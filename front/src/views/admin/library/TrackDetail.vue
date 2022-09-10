@@ -105,7 +105,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     <template v-if="track.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        <translate >Local</translate>
+                        Local
                       </span>
                       &nbsp;
                     </template>
@@ -129,9 +129,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :to="{name: 'library.tracks.detail', params: {id: track.id }}"
                   >
                     <i class="info icon" />
-                    <translate >
-                      Open local profile
-                    </translate>&nbsp;
+                    Open local profile&nbsp;
                   </router-link>
                   <button
                     v-dropdown
@@ -147,7 +145,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        <translate >View in Django's admin</translate>&nbsp;
+                        View in Django's admin&nbsp;
                       </a>
                       <a
                         v-if="track.mbid"
@@ -157,7 +155,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate >Open on MusicBrainz</translate>&nbsp;
+                        Open on MusicBrainz&nbsp;
                       </a>
                       <fetch-button
                         v-if="!track.is_local"
@@ -166,9 +164,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         @refresh="fetchData"
                       >
                         <i class="refresh icon" />&nbsp;
-                        <translate >
-                          Refresh from remote server
-                        </translate>&nbsp;
+                        Refresh from remote server&nbsp;
                       </fetch-button>
                       <a
                         class="basic item"
@@ -177,7 +173,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        <translate >Open remote profile</translate>&nbsp;
+                        Open remote profile&nbsp;
                       </a>
                     </div>
                   </button>
@@ -189,9 +185,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     class="ui labeled icon button"
                   >
                     <i class="edit icon" />
-                    <translate >
-                      Edit
-                    </translate>
+                    Edit
                   </router-link>
                 </div>
                 <div class="ui buttons">
@@ -199,30 +193,22 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    <translate >
-                      Delete
-                    </translate>
+                    Delete
                     <template #modal-header>
                       <p>
-                        <translate >
-                          Delete this track?
-                        </translate>
+                        Delete this track?
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          <translate >
-                            The track will be removed, as well as associated uploads, favorites and listening history. This action is irreversible.
-                          </translate>
+                          The track will be removed, as well as associated uploads, favorites and listening history. This action is irreversible.
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        <translate >
-                          Delete
-                        </translate>
+                        Delete
                       </p>
                     </template>
                   </dangerous-button>
@@ -239,18 +225,14 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  <translate >
-                    Track data
-                  </translate>
+                  Track data
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        Title
-                      </translate>
+                      Title
                     </td>
                     <td>
                       {{ track.title }}
@@ -259,9 +241,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr v-if="track.album">
                     <td>
                       <router-link :to="{name: 'manage.library.albums.detail', params: {id: track.album.id }}">
-                        <translate >
-                          Album
-                        </translate>
+                        Album
                       </router-link>
                     </td>
                     <td>
@@ -272,9 +252,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists.detail', params: {id: track.artist.id }}">
-                        <translate >
-                          Artist
-                        </translate>
+                        Artist
                       </router-link>
                     </td>
                     <td>
@@ -284,9 +262,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr v-if="track.album">
                     <td>
                       <router-link :to="{name: 'manage.library.artists.detail', params: {id: track.album.artist.id }}">
-                        <translate >
-                          Album artist
-                        </translate>
+                        Album artist
                       </router-link>
                     </td>
                     <td>
@@ -295,9 +271,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Position
-                      </translate>
+                      Position
                     </td>
                     <td>
                       {{ track.position }}
@@ -305,9 +279,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr v-if="track.disc_number">
                     <td>
-                      <translate >
-                        Disc number
-                      </translate>
+                      Disc number
                     </td>
                     <td>
                       {{ track.disc_number }}
@@ -315,17 +287,13 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr v-if="track.copyright">
                     <td>
-                      <translate >
-                        Copyright
-                      </translate>
+                      Copyright
                     </td>
                     <td>{{ track.copyright }}</td>
                   </tr>
                   <tr v-if="track.license">
                     <td>
-                      <translate >
-                        License
-                      </translate>
+                      License
                     </td>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('license', track.license)}}">
@@ -336,9 +304,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr v-if="!track.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: track.domain }}">
-                        <translate >
-                          Domain
-                        </translate>
+                        Domain
                       </router-link>
                     </td>
                     <td>
@@ -347,9 +313,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr v-if="track.description">
                     <td>
-                      <translate >
-                        Description
-                      </translate>
+                      Description
                     </td>
                     <sanitized-html
                       tag="td"
@@ -365,9 +329,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  <translate >
-                    Activity
-                  </translate>&nbsp;
+                  Activity&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -387,9 +349,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        First seen
-                      </translate>
+                      First seen
                     </td>
                     <td>
                       <human-date :date="track.creation_date" />
@@ -397,9 +357,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Listenings
-                      </translate>
+                      Listenings
                     </td>
                     <td>
                       {{ stats.listenings }}
@@ -407,9 +365,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Favorited tracks
-                      </translate>
+                      Favorited tracks
                     </td>
                     <td>
                       {{ stats.track_favorites }}
@@ -417,9 +373,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Playlists
-                      </translate>
+                      Playlists
                     </td>
                     <td>
                       {{ stats.playlists }}
@@ -428,9 +382,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `track:${track.id}`) }}">
-                        <translate >
-                          Linked reports
-                        </translate>
+                        Linked reports
                       </router-link>
                     </td>
                     <td>
@@ -440,9 +392,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.edits', query: {q: getQuery('target', 'track ' + track.id)}}">
-                        <translate >
-                          Edits
-                        </translate>
+                        Edits
                       </router-link>
                     </td>
                     <td>
@@ -458,9 +408,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  <translate >
-                    Audio content
-                  </translate>&nbsp;
+                  Audio content&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -480,9 +428,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      <translate >
-                        Cached size
-                      </translate>
+                      Cached size
                     </td>
                     <td>
                       {{ humanSize(stats.media_downloaded_size) }}
@@ -490,9 +436,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      <translate >
-                        Total size
-                      </translate>
+                      Total size
                     </td>
                     <td>
                       {{ humanSize(stats.media_total_size) }}
@@ -502,9 +446,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('track_id', track.id) }}">
-                        <translate >
-                          Libraries
-                        </translate>
+                        Libraries
                       </router-link>
                     </td>
                     <td>
@@ -514,9 +456,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('track_id', track.id) }}">
-                        <translate >
-                          Uploads
-                        </translate>
+                        Uploads
                       </router-link>
                     </td>
                     <td>

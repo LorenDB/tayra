@@ -77,9 +77,7 @@ fetchData()
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        <translate >
-          Show more
-        </translate>
+        Show more
       </button>
     </template>
     <template v-if="!isLoading && channels.length === 0">

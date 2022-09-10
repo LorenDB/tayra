@@ -80,9 +80,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
       class="small"
     >
       <h3 class="header">
-        <translate >
-          Refreshing object from remote server…
-        </translate>
+        Refreshing object from remote server…
       </h3>
       <div class="scrolling content">
         <template v-if="data && data.status != 'pending'">
@@ -91,14 +89,10 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
             class="ui message"
           >
             <h4 class="header">
-              <translate >
-                Refresh was skipped
-              </translate>
+              Refresh was skipped
             </h4>
             <p>
-              <translate >
-                The remote server answered, but returned data was unsupported by Funkwhale.
-              </translate>
+              The remote server answered, but returned data was unsupported by Funkwhale.
             </p>
           </div>
           <div
@@ -106,14 +100,10 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
             class="ui success message"
           >
             <h4 class="header">
-              <translate >
-                Refresh successful
-              </translate>
+              Refresh successful
             </h4>
             <p>
-              <translate >
-                Data was refreshed successfully from remote server.
-              </translate>
+              Data was refreshed successfully from remote server.
             </p>
           </div>
           <div
@@ -121,22 +111,16 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
             class="ui error message"
           >
             <h4 class="header">
-              <translate >
-                Refresh error
-              </translate>
+              Refresh error
             </h4>
             <p>
-              <translate >
-                An error occurred while trying to refresh data:
-              </translate>
+              An error occurred while trying to refresh data:
             </p>
             <table class="ui very basic collapsing celled table">
               <tbody>
                 <tr>
                   <td>
-                    <translate >
-                      Error type
-                    </translate>
+                    Error type
                   </td>
                   <td>
                     {{ data.detail.error_code }}
@@ -144,57 +128,47 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Error detail
-                    </translate>
+                    Error detail
                   </td>
                   <td>
                     <translate
                       v-if="data.detail.error_code === 'http' && data.detail.status_code"
                       :translate-params="{status: data.detail.status_code}"
-
                     >
                       The remote server answered with HTTP %{ status }
                     </translate>
                     <translate
                       v-else-if="['http', 'request'].indexOf(data.detail.error_code) > -1"
-
                     >
                       An HTTP error occurred while contacting the remote server
                     </translate>
                     <translate
                       v-else-if="data.detail.error_code === 'timeout'"
-
                     >
                       The remote server didn't respond quickly enough
                     </translate>
                     <translate
                       v-else-if="data.detail.error_code === 'connection'"
-
                     >
                       Impossible to connect to the remote server
                     </translate>
                     <translate
                       v-else-if="['invalid_json', 'invalid_jsonld', 'missing_jsonld_type'].indexOf(data.detail.error_code) > -1"
-
                     >
                       The remote server returned invalid JSON or JSON-LD data
                     </translate>
                     <translate
                       v-else-if="data.detail.error_code === 'validation'"
-
                     >
                       Data returned by the remote server had invalid or missing attributes
                     </translate>
                     <translate
                       v-else-if="data.detail.error_code === 'unhandled'"
-
                     >
                       Unknown error
                     </translate>
                     <translate
                       v-else
-
                     >
                       Unknown error
                     </translate>
@@ -209,9 +183,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui active inverted dimmer"
         >
           <div class="ui text loader">
-            <translate >
-              Requesting a fetch…
-            </translate>
+            Requesting a fetch…
           </div>
         </div>
         <div
@@ -219,9 +191,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui active inverted dimmer"
         >
           <div class="ui text loader">
-            <translate >
-              Waiting for result…
-            </translate>
+            Waiting for result…
           </div>
         </div>
         <div
@@ -230,9 +200,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui negative message"
         >
           <h4 class="header">
-            <translate >
-              Error while saving settings
-            </translate>
+            Error while saving settings
           </h4>
           <ul class="list">
             <li
@@ -249,31 +217,23 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui warning message"
         >
           <h4 class="header">
-            <translate >
-              Refresh pending
-            </translate>
+            Refresh pending
           </h4>
           <p>
-            <translate >
-              The refresh request hasn't been processed in time by our server. It will be processed later.
-            </translate>
+            The refresh request hasn't been processed in time by our server. It will be processed later.
           </p>
         </div>
       </div>
       <div class="actions">
         <button class="ui basic cancel button">
-          <translate >
-            Close
-          </translate>
+          Close
         </button>
         <button
           v-if="data && data.status === 'finished'"
           class="ui confirm success button"
           @click.prevent="showModal = false; emit('refresh')"
         >
-          <translate >
-            Close and reload page
-          </translate>
+          Close and reload page
         </button>
       </div>
     </semantic-modal>

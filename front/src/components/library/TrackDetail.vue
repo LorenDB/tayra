@@ -78,13 +78,11 @@ watchEffect(() => {
             <h3 class="ui header">
               <translate
                 v-if="track.artist?.content_category === 'music'"
-
               >
                 Track Details
               </translate>
               <translate
                 v-else
-
               >
                 Episode Details
               </translate>
@@ -93,9 +91,7 @@ watchEffect(() => {
               <tbody>
                 <tr>
                   <td>
-                    <translate >
-                      Duration
-                    </translate>
+                    Duration
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.duration">
@@ -103,7 +99,6 @@ watchEffect(() => {
                     </template>
                     <translate
                       v-else
-
                     >
                       N/A
                     </translate>
@@ -111,9 +106,7 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Size
-                    </translate>
+                    Size
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.size">
@@ -121,7 +114,6 @@ watchEffect(() => {
                     </template>
                     <translate
                       v-else
-
                     >
                       N/A
                     </translate>
@@ -129,9 +121,7 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Codec
-                    </translate>
+                    Codec
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.extension">
@@ -139,7 +129,6 @@ watchEffect(() => {
                     </template>
                     <translate
                       v-else
-
                     >
                       N/A
                     </translate>
@@ -147,9 +136,7 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Bitrate
-                    </translate>
+                    Bitrate
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.bitrate">
@@ -157,7 +144,6 @@ watchEffect(() => {
                     </template>
                     <translate
                       v-else
-
                     >
                       N/A
                     </translate>
@@ -165,9 +151,7 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>
-                    <translate >
-                      Downloads
-                    </translate>
+                    Downloads
                   </td>
                   <td class="right aligned">
                     {{ track.downloads_count }}
@@ -188,17 +172,13 @@ watchEffect(() => {
             :can-update="false"
           />
           <h2 class="ui header">
-            <translate >
-              Release Details
-            </translate>
+            Release Details
           </h2>
           <table class="ui basic table ellipsis-rows">
             <tbody>
               <tr>
                 <td>
-                  <translate >
-                    Artist
-                  </translate>
+                  Artist
                 </td>
                 <td class="right aligned">
                   <router-link :to="{name: 'library.artists.detail', params: {id: track.artist?.id}}">
@@ -210,13 +190,11 @@ watchEffect(() => {
                 <td>
                   <translate
                     v-if="track.album.artist.content_category === 'music'"
-
                   >
                     Album
                   </translate>
                   <translate
                     v-else
-
                   >
                     Serie
                   </translate>
@@ -229,26 +207,20 @@ watchEffect(() => {
               </tr>
               <tr>
                 <td>
-                  <translate >
-                    Year
-                  </translate>
+                  Year
                 </td>
                 <td class="right aligned">
                   <template v-if="track.album && track.album.release_date">
                     {{ momentFormat(new Date(track.album.release_date), 'Y') }}
                   </template>
                   <template v-else>
-                    <translate >
-                      N/A
-                    </translate>
+                    N/A
                   </template>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <translate >
-                    Copyright
-                  </translate>
+                  Copyright
                 </td>
                 <td class="right aligned">
                   <span
@@ -256,17 +228,13 @@ watchEffect(() => {
                     :title="track.copyright"
                   >{{ truncate(track.copyright, 50) }}</span>
                   <template v-else>
-                    <translate >
-                      N/A
-                    </translate>
+                    N/A
                   </template>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <translate >
-                    License
-                  </translate>
+                  License
                 </td>
                 <td class="right aligned">
                   <a
@@ -277,7 +245,6 @@ watchEffect(() => {
                   >{{ license.name }}</a>
                   <translate
                     v-else
-
                   >
                     N/A
                   </translate>
@@ -285,9 +252,7 @@ watchEffect(() => {
               </tr>
               <tr v-if="!track.is_local">
                 <td>
-                  <translate >
-                    URL
-                  </translate>
+                  URL
                 </td>
                 <td :title="track.fid">
                   <a
@@ -308,12 +273,10 @@ watchEffect(() => {
             rel="noreferrer noopener"
           >
             <i class="external icon" />
-            <translate >View on MusicBrainz</translate>
+            View on MusicBrainz
           </a>
           <h2 class="ui header">
-            <translate >
-              Related Playlists
-            </translate>
+            Related Playlists
           </h2>
           <playlist-widget
             :url="'playlists/'"
@@ -321,17 +284,13 @@ watchEffect(() => {
           />
 
           <h2 class="ui header">
-            <translate >
-              Related Libraries
-            </translate>
+            Related Libraries
           </h2>
           <library-widget
             :url="`tracks/${track.id}/libraries/`"
             @loaded="emit('libraries-loaded', $event)"
           >
-            <translate >
-              This track is present in the following libraries:
-            </translate>
+            This track is present in the following libraries:
           </library-widget>
         </div>
       </div>

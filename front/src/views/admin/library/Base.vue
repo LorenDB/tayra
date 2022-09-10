@@ -23,65 +23,49 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.library.edits'}"
       >
-        <translate >
-          Edits
-        </translate>
+        Edits
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.channels'}"
       >
-        <translate >
-          Channels
-        </translate>
+        Channels
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.artists'}"
       >
-        <translate >
-          Artists
-        </translate>
+        Artists
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.albums'}"
       >
-        <translate >
-          Albums
-        </translate>
+        Albums
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.tracks'}"
       >
-        <translate >
-          Tracks
-        </translate>
+        Tracks
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.libraries'}"
       >
-        <translate >
-          Libraries
-        </translate>
+        Libraries
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.uploads'}"
       >
-        <translate >
-          Uploads
-        </translate>
+        Uploads
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.tags'}"
       >
-        <translate >
-          Tags
-        </translate>
+        Tags
       </router-link>
     </nav>
     <router-view :key="$route.fullPath" />

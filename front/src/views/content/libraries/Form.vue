@@ -94,9 +94,7 @@ const remove = async () => {
     @submit.prevent="submit"
   >
     <p v-if="!library">
-      <translate >
-        Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family.
-      </translate>
+      Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family.
     </p>
     <div
       v-if="errors.length > 0"
@@ -104,9 +102,7 @@ const remove = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          Error
-        </translate>
+        Error
       </h4>
       <ul class="list">
         <li
@@ -118,7 +114,7 @@ const remove = async () => {
       </ul>
     </div>
     <div class="required field">
-      <label for="current-name"><translate >Name</translate></label>
+      <label for="current-name">Name</label>
       <input
         id="current-name"
         v-model="currentName"
@@ -129,7 +125,7 @@ const remove = async () => {
       >
     </div>
     <div class="field">
-      <label for="current-description"><translate >Description</translate></label>
+      <label for="current-description">Description</label>
       <textarea
         id="current-description"
         v-model="currentDescription"
@@ -138,11 +134,9 @@ const remove = async () => {
       />
     </div>
     <div class="field">
-      <label for="visibility-level"><translate >Visibility</translate></label>
+      <label for="visibility-level">Visibility</label>
       <p>
-        <translate >
-          You are able to share your library with other people, regardless of its visibility.
-        </translate>
+        You are able to share your library with other people, regardless of its visibility.
       </p>
       <select
         id="visibility-level"
@@ -164,13 +158,11 @@ const remove = async () => {
     >
       <translate
         v-if="library"
-
       >
         Update library
       </translate>
       <translate
         v-else
-
       >
         Create library
       </translate>
@@ -181,28 +173,20 @@ const remove = async () => {
       class="ui right floated basic danger button"
       @confirm="remove"
     >
-      <translate >
-        Delete
-      </translate>
+      Delete
       <template #modal-header>
         <p>
-          <translate >
-            Delete this library?
-          </translate>
+          Delete this library?
         </p>
       </template>
       <template #modal-content>
         <p>
-          <translate >
-            The library and all its tracks will be deleted. This can not be undone.
-          </translate>
+          The library and all its tracks will be deleted. This can not be undone.
         </p>
       </template>
       <template #modal-confirm>
         <div>
-          <translate >
-            Delete library
-          </translate>
+          Delete library
         </div>
       </template>
     </dangerous-button>

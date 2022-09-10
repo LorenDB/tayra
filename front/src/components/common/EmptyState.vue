@@ -19,9 +19,7 @@ withDefaults(defineProps<Props>(), {
       <div class="content">
         <slot name="title">
           <i class="search icon" />
-          <translate >
-            No results were found.
-          </translate>
+          No results were found.
         </slot>
       </div>
     </h4>
@@ -32,9 +30,7 @@ withDefaults(defineProps<Props>(), {
         class="ui button"
         @click="emit('refresh')"
       >
-        <translate >
-          Refresh
-        </translate>
+        Refresh
       </button>
     </div>
   </div>

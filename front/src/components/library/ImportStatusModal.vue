@@ -77,9 +77,7 @@ const getErrorData = (upload: Upload) => {
 <template>
   <semantic-modal v-model:show="show">
     <h4 class="header">
-      <translate >
-        Import detail
-      </translate>
+      Import detail
     </h4>
     <div
       v-if="Object.keys(upload).length > 0"
@@ -90,43 +88,33 @@ const getErrorData = (upload: Upload) => {
           v-if="upload.import_status === 'pending'"
           class="ui message"
         >
-          <translate >
-            Upload is still pending and will soon be processed by the server.
-          </translate>
+          Upload is still pending and will soon be processed by the server.
         </div>
         <div
           v-if="upload.import_status === 'finished'"
           class="ui success message"
         >
-          <translate >
-            Upload was successfully processed by the server.
-          </translate>
+          Upload was successfully processed by the server.
         </div>
         <div
           v-if="upload.import_status === 'skipped'"
           role="alert"
           class="ui warning message"
         >
-          <translate >
-            Upload was skipped because a similar one is already available in one of your libraries.
-          </translate>
+          Upload was skipped because a similar one is already available in one of your libraries.
         </div>
         <div
           v-if="upload.import_status === 'errored'"
           class="ui error message"
         >
-          <translate >
-            An error occurred during upload processing. You will find more information below.
-          </translate>
+          An error occurred during upload processing. You will find more information below.
         </div>
         <template v-if="upload.import_status === 'errored'">
           <table class="ui very basic collapsing celled table">
             <tbody>
               <tr>
                 <td>
-                  <translate >
-                    Error type
-                  </translate>
+                  Error type
                 </td>
                 <td>
                   {{ getErrorData(upload).label }}
@@ -134,9 +122,7 @@ const getErrorData = (upload: Upload) => {
               </tr>
               <tr>
                 <td>
-                  <translate >
-                    Error detail
-                  </translate>
+                  Error detail
                 </td>
                 <td>
                   {{ getErrorData(upload).detail }}
@@ -152,9 +138,7 @@ const getErrorData = (upload: Upload) => {
               </tr>
               <tr>
                 <td>
-                  <translate >
-                    Getting help
-                  </translate>
+                  Getting help
                 </td>
                 <td>
                   <ul>
@@ -163,7 +147,7 @@ const getErrorData = (upload: Upload) => {
                         :href="getErrorData(upload).documentationUrl"
                         target="_blank"
                       >
-                        <translate >Read our documentation for this error</translate>
+                        Read our documentation for this error
                       </a>
                     </li>
                     <li>
@@ -171,7 +155,7 @@ const getErrorData = (upload: Upload) => {
                         :href="getErrorData(upload).supportUrl"
                         target="_blank"
                       >
-                        <translate >Open a support thread (include the debug information below in your message)</translate>
+                        Open a support thread (include the debug information below in your message)
                       </a>
                     </li>
                   </ul>
@@ -179,9 +163,7 @@ const getErrorData = (upload: Upload) => {
               </tr>
               <tr>
                 <td>
-                  <translate >
-                    Debug information
-                  </translate>
+                  Debug information
                 </td>
                 <td>
                   <div class="ui form">
@@ -200,9 +182,7 @@ const getErrorData = (upload: Upload) => {
     </div>
     <div class="actions">
       <button class="ui deny button">
-        <translate >
-          Close
-        </translate>
+        Close
       </button>
     </div>
   </semantic-modal>

@@ -236,7 +236,7 @@ const radioConfig = computed(() => {
       >
         <h2>
           <label for="query">
-            <translate >Search</translate>
+            Search
           </label>
         </h2>
         <div class="ui two column doubling stackable grid container">
@@ -276,18 +276,18 @@ const radioConfig = computed(() => {
         </div>
         <div class="ui secondary pointing menu">
           <a
-            v-for="t in types"
-            :key="t.id"
-            :class="['item', {active: type === t.id}]"
+            v-for="th in types"
+            :key="th.id"
+            :class="['item', {active: type === th.id}]"
             href=""
-            @click.prevent="type = t.id"
+            @click.prevent="type = th.id"
           >
-            {{ t.label }}
+            {{ th.label }}
             <span
-              v-if="results[t.id]"
+              v-if="results[th.id]"
               class="ui circular mini right floated label"
             >
-              {{ results[t.id]?.count ?? 0 }}
+              {{ results[th.id]?.count ?? 0 }}
             </span>
           </a>
         </div>

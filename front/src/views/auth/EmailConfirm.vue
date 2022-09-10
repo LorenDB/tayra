@@ -60,9 +60,7 @@ onMounted(() => {
             class="ui negative message"
           >
             <h4 class="header">
-              <translate >
-                Could not confirm your e-mail address
-              </translate>
+              Could not confirm your e-mail address
             </h4>
             <ul class="list">
               <li
@@ -74,7 +72,7 @@ onMounted(() => {
             </ul>
           </div>
           <div class="field">
-            <label for="confirmation-code"><translate >Confirmation code</translate></label>
+            <label for="confirmation-code">Confirmation code</label>
             <input
               id="confirmation-code"
               v-model="key"
@@ -84,9 +82,7 @@ onMounted(() => {
             >
           </div>
           <router-link :to="{path: '/login'}">
-            <translate >
-              Return to login
-            </translate>
+            Return to login
           </router-link>
           <button
             :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
@@ -100,19 +96,13 @@ onMounted(() => {
           class="ui positive message"
         >
           <h4 class="header">
-            <translate >
-              E-mail address confirmed
-            </translate>
+            E-mail address confirmed
           </h4>
           <p>
-            <translate >
-              You can now use the service without limitations.
-            </translate>
+            You can now use the service without limitations.
           </p>
           <router-link :to="{name: 'login'}">
-            <translate >
-              Proceed to login
-            </translate>
+            Proceed to login
           </router-link>
         </div>
       </div>

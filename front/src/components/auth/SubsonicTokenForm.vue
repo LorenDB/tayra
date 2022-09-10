@@ -82,36 +82,26 @@ fetchToken()
     @submit.prevent="requestNewToken()"
   >
     <h2>
-      <translate >
-        Subsonic API password
-      </translate>
+      Subsonic API password
     </h2>
     <p
       v-if="!subsonicEnabled"
       class="ui message"
     >
-      <translate >
-        The Subsonic API is not available on this Funkwhale instance.
-      </translate>
+      The Subsonic API is not available on this Funkwhale instance.
     </p>
     <p>
-      <translate >
-        Funkwhale is compatible with other music players that support the Subsonic API.
-      </translate>&nbsp;<translate >
-        You can use those to enjoy your playlist and music in offline mode, on your smartphone or tablet, for instance.
-      </translate>
+      Funkwhale is compatible with other music players that support the Subsonic API.&nbsp;        You can use those to enjoy your playlist and music in offline mode, on your smartphone or tablet, for instance.
     </p>
     <p>
-      <translate >
-        However, accessing Funkwhale from those clients requires a separate password you can set below.
-      </translate>
+      However, accessing Funkwhale from those clients requires a separate password you can set below.
     </p>
     <p>
       <a
         href="https://docs.funkwhale.audio/users/apps.html#subsonic-compatible-clients"
         target="_blank"
       >
-        <translate >Discover how to use Funkwhale from other apps</translate>
+        Discover how to use Funkwhale from other apps
       </a>
     </p>
     <div
@@ -128,9 +118,7 @@ fetchToken()
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          Error
-        </translate>
+        Error
       </h4>
       <ul class="list">
         <li
@@ -164,28 +152,20 @@ fetchToken()
         :class="['ui', {'loading': isLoading}, 'button']"
         :action="requestNewToken"
       >
-        <translate >
-          Request a new password
-        </translate>
+        Request a new password
         <template #modal-header>
           <p>
-            <translate >
-              Request a new Subsonic API password?
-            </translate>
+            Request a new Subsonic API password?
           </p>
         </template>
         <template #modal-content>
           <p>
-            <translate >
-              This will log you out from existing devices that use the current password.
-            </translate>
+            This will log you out from existing devices that use the current password.
           </p>
         </template>
         <template #modal-confirm>
           <div>
-            <translate >
-              Request a new password
-            </translate>
+            Request a new password
           </div>
         </template>
       </dangerous-button>
@@ -195,37 +175,27 @@ fetchToken()
         :class="['ui', {'loading': isLoading}, 'button']"
         @click="requestNewToken"
       >
-        <translate >
-          Request a password
-        </translate>
+        Request a password
       </button>
       <dangerous-button
         v-if="token"
         :class="['ui', {'loading': isLoading}, 'warning', 'button']"
         :action="disable"
       >
-        <translate >
-          Disable Subsonic access
-        </translate>
+        Disable Subsonic access
         <template #modal-header>
           <p>
-            <translate >
-              Disable Subsonic API access?
-            </translate>
+            Disable Subsonic API access?
           </p>
         </template>
         <template #modal-content>
           <p>
-            <translate >
-              This will completely disable access to the Subsonic API using from account.
-            </translate>
+            This will completely disable access to the Subsonic API using from account.
           </p>
         </template>
         <template #modal-confirm>
           <div>
-            <translate >
-              Disable access
-            </translate>
+            Disable access
           </div>
         </template>
       </dangerous-button>

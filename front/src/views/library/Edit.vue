@@ -59,26 +59,20 @@ const updateApproved = async (follow: LibraryFollow, approved: boolean) => {
     />
     <div class="ui hidden divider" />
     <h2 class="ui header">
-      <translate >
-        Library contents
-      </translate>
+      Library contents
     </h2>
     <library-files-table :filters="{ library: object.uuid }" />
 
     <div class="ui hidden divider" />
     <h2 class="ui header">
-      <translate >
-        Followers
-      </translate>
+      Followers
     </h2>
     <div
       v-if="isLoading"
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        <translate >
-          Loading followers…
-        </translate>
+        Loading followers…
       </div>
     </div>
     <table
@@ -88,24 +82,16 @@ const updateApproved = async (follow: LibraryFollow, approved: boolean) => {
       <thead>
         <tr>
           <th>
-            <translate >
-              User
-            </translate>
+            User
           </th>
           <th>
-            <translate >
-              Date
-            </translate>
+            Date
           </th>
           <th>
-            <translate >
-              Status
-            </translate>
+            Status
           </th>
           <th>
-            <translate >
-              Action
-            </translate>
+            Action
           </th>
         </tr>
       </thead>
@@ -120,19 +106,19 @@ const updateApproved = async (follow: LibraryFollow, approved: boolean) => {
             v-if="follow.approved === null"
             :class="['ui', 'warning', 'basic', 'label']"
           >
-            <translate >Pending approval</translate>
+            Pending approval
           </span>
           <span
             v-else-if="follow.approved === true"
             :class="['ui', 'success', 'basic', 'label']"
           >
-            <translate >Accepted</translate>
+            Accepted
           </span>
           <span
             v-else-if="follow.approved === false"
             :class="['ui', 'danger', 'basic', 'label']"
           >
-            <translate >Rejected</translate>
+            Rejected
           </span>
         </td>
         <td>
@@ -141,26 +127,20 @@ const updateApproved = async (follow: LibraryFollow, approved: boolean) => {
             :class="['ui', 'mini', 'icon', 'labeled', 'success', 'button']"
             @click="updateApproved(follow, true)"
           >
-            <i class="ui check icon" /> <translate >
-              Accept
-            </translate>
+            <i class="ui check icon" />               Accept
           </button>
           <button
             v-if="follow.approved === null || follow.approved === true"
             :class="['ui', 'mini', 'icon', 'labeled', 'danger', 'button']"
             @click="updateApproved(follow, false)"
           >
-            <i class="ui x icon" /> <translate >
-              Reject
-            </translate>
+            <i class="ui x icon" />               Reject
           </button>
         </td>
       </tr>
     </table>
     <p v-else>
-      <translate >
-        Nobody is following this library
-      </translate>
+      Nobody is following this library
     </p>
   </section>
 </template>

@@ -119,9 +119,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          <i class="lock open icon" /><translate >
-            Authorize third-party app
-          </translate>
+          <i class="lock open icon" />            Authorize third-party app
         </h2>
         <div
           v-if="errors.length > 0"
@@ -132,17 +130,13 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
             v-if="application"
             class="header"
           >
-            <translate >
-              Error while authorizing application
-            </translate>
+            Error while authorizing application
           </h4>
           <h4
             v-else
             class="header"
           >
-            <translate >
-              Error while fetching application data
-            </translate>
+            Error while fetching application data
           </h4>
           <ul class="list">
             <li
@@ -183,20 +177,20 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
               <i class="pencil icon" />
-              <translate >Write-only</translate>
+              Write-only
             </span>
             <span
               v-else-if="!topic.write && topic.read"
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
-              <translate >Read-only</translate>
+              Read-only
             </span>
             <span
               v-else-if="topic.write && topic.read"
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
               <i class="pencil icon" />
-              <translate >Full access</translate>
+              Full access
             </span>
             <i :class="[topic.icon, 'icon']" />
             <div class="content">
@@ -207,7 +201,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
             </div>
           </h4>
           <div v-if="unknownRequestedScopes.length > 0">
-            <p><strong><translate >The application is also requesting the following unknown permissions:</translate></strong></p>
+            <p><strong>The application is also requesting the following unknown permissions:</strong></p>
             <ul
               v-for="(unknownscope, key) in unknownRequestedScopes"
               :key="key"
@@ -230,7 +224,6 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
           <p
             v-if="redirectUri === 'urn:ietf:wg:oauth:2.0:oob'"
             v-translate
-
           >
             You will be shown a code to copy-paste in the application.
           </p>
@@ -244,7 +237,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
           </p>
         </form>
         <div v-else-if="code">
-          <p><strong><translate >Copy-paste the following code in the application:</translate></strong></p>
+          <p><strong>Copy-paste the following code in the application:</strong></p>
           <copy-input :value="code" />
         </div>
       </div>

@@ -46,9 +46,7 @@ const libraryCreated = (library: Library) => {
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        <translate >
-          Loading Libraries…
-        </translate>
+        Loading Libraries…
       </div>
     </div>
     <div
@@ -56,15 +54,11 @@ const libraryCreated = (library: Library) => {
       class="ui text container"
     >
       <h1 class="ui header">
-        <translate >
-          My libraries
-        </translate>
+        My libraries
       </h1>
 
       <p v-if="libraries.length == 0">
-        <translate >
-          Looks like you don't have a library, it's time to create one.
-        </translate>
+        Looks like you don't have a library, it's time to create one.
       </p>
       <a
         :aria-expanded="!hiddenForm"
@@ -79,7 +73,7 @@ const libraryCreated = (library: Library) => {
           v-else
           class="minus icon"
         />
-        <translate >Create a new library</translate>
+        Create a new library
       </a>
       <library-form
         v-if="!hiddenForm"

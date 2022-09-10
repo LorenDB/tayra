@@ -112,9 +112,7 @@ watch(
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        <translate >
-          Show more
-        </translate>
+        Show more
       </button>
     </template>
   </div>

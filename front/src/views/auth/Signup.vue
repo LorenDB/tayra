@@ -31,9 +31,7 @@ const labels = computed(() => ({
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          <translate >
-            Create a Funkwhale account
-          </translate>
+          Create a Funkwhale account
         </h2>
         <signup-form
           :default-invitation="defaultInvitation"

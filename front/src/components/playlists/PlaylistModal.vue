@@ -85,9 +85,7 @@ store.dispatch('playlists/fetchOwn')
     <h4 class="header">
       <template v-if="track">
         <h2 class="ui header">
-          <translate >
-            Add to playlist
-          </translate>
+          Add to playlist
           <div
             v-translate="{artist: track.artist?.name, title: track.title}"
             class="ui sub header"
@@ -100,7 +98,6 @@ store.dispatch('playlists/fetchOwn')
       </template>
       <translate
         v-else
-
       >
         Manage playlists
       </translate>
@@ -128,17 +125,13 @@ store.dispatch('playlists/fetchOwn')
             class="ui small basic cancel button"
             @click="showDuplicateTrackAddConfirmation = false"
           >
-            <translate >
-              Cancel
-            </translate>
+            Cancel
           </button>
           <button
             class="ui small success button"
             @click="addToPlaylist(lastSelectedPlaylist, true)"
           >
-            <translate >
-              Add anyways
-            </translate>
+            Add anyways
           </button>
         </div>
         <div
@@ -147,9 +140,7 @@ store.dispatch('playlists/fetchOwn')
           class="ui negative message"
         >
           <h4 class="header">
-            <translate >
-              The track can't be added to a playlist
-            </translate>
+            The track can't be added to a playlist
           </h4>
           <ul class="list">
             <li
@@ -161,14 +152,12 @@ store.dispatch('playlists/fetchOwn')
           </ul>
         </div>
         <h4 class="ui header">
-          <translate >
-            Available playlists
-          </translate>
+          Available playlists
         </h4>
         <div class="ui form">
           <div class="fields">
             <div class="field">
-              <label for="playlist-name-filter"><translate >Filter</translate></label>
+              <label for="playlist-name-filter">Filter</label>
               <input
                 id="playlist-name-filter"
                 v-model="playlistNameFilter"
@@ -185,21 +174,15 @@ store.dispatch('playlists/fetchOwn')
         >
           <thead>
             <tr>
-              <th><span class="visually-hidden"><translate >Edit</translate></span></th>
+              <th><span class="visually-hidden">Edit</span></th>
               <th>
-                <translate >
-                  Name
-                </translate>
+                Name
               </th>
               <th class="sorted descending">
-                <translate >
-                  Last modification
-                </translate>
+                Last modification
               </th>
               <th>
-                <translate >
-                  Tracks
-                </translate>
+                Tracks
               </th>
             </tr>
           </thead>
@@ -214,7 +197,7 @@ store.dispatch('playlists/fetchOwn')
                   :to="{name: 'library.playlists.detail', params: {id: playlist.id }, query: {mode: 'edit'}}"
                 >
                   <i class="ui pencil icon" />
-                  <span class="visually-hidden"><translate >Edit</translate></span>
+                  <span class="visually-hidden">Edit</span>
                 </router-link>
               </td>
               <td>
@@ -234,9 +217,7 @@ store.dispatch('playlists/fetchOwn')
                   :title="labels.addToPlaylist"
                   @click.prevent="addToPlaylist(playlist.id, false)"
                 >
-                  <i class="plus icon" /> <translate >
-                    Add track
-                  </translate>
+                  <i class="plus icon" />                     Add track
                 </button>
               </td>
             </tr>
@@ -245,9 +226,7 @@ store.dispatch('playlists/fetchOwn')
         <template v-else>
           <div class="ui small placeholder segment component-placeholder">
             <h4 class="ui header">
-              <translate >
-                No results matching your filter
-              </translate>
+              No results matching your filter
             </h4>
           </div>
         </template>
@@ -258,17 +237,13 @@ store.dispatch('playlists/fetchOwn')
       >
         <div class="ui icon header">
           <i class="list icon" />
-          <translate >
-            No playlists have been created yet
-          </translate>
+          No playlists have been created yet
         </div>
       </div>
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        <translate >
-          Cancel
-        </translate>
+        Cancel
       </button>
     </div>
   </semantic-modal>

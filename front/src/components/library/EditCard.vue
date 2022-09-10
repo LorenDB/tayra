@@ -186,19 +186,19 @@ const approve = async (approved: boolean) => {
         <span class="right floated">
           <span v-if="obj.is_approved && obj.is_applied">
             <i class="success check icon" />
-            <translate >Approved and applied</translate>
+            Approved and applied
           </span>
           <span v-else-if="obj.is_approved">
             <i class="success check icon" />
-            <translate >Approved</translate>
+            Approved
           </span>
           <span v-else-if="obj.is_approved === null">
             <i class="warning hourglass icon" />
-            <translate >Pending review</translate>
+            Pending review
           </span>
           <span v-else-if="obj.is_approved === false">
             <i class="danger x icon" />
-            <translate >Rejected</translate>
+            Rejected
           </span>
         </span>
       </div>
@@ -217,19 +217,13 @@ const approve = async (approved: boolean) => {
         <thead>
           <tr>
             <th>
-              <translate >
-                Field
-              </translate>
+              Field
             </th>
             <th>
-              <translate >
-                Old value
-              </translate>
+              Old value
             </th>
             <th>
-              <translate >
-                New value
-              </translate>
+              New value
             </th>
           </tr>
         </thead>
@@ -259,9 +253,7 @@ const approve = async (approved: boolean) => {
               </template>
             </td>
             <td v-else>
-              <translate >
-                N/A
-              </translate>
+              N/A
             </td>
 
             <td
@@ -319,48 +311,36 @@ const approve = async (approved: boolean) => {
         :class="['ui', {loading: isLoading}, 'success', 'basic', 'button']"
         @click="approve(true)"
       >
-        <translate >
-          Approve
-        </translate>
+        Approve
       </button>
       <button
         v-if="canApprove && obj.is_approved === null"
         :class="['ui', {loading: isLoading}, 'warning', 'basic', 'button']"
         @click="approve(false)"
       >
-        <translate >
-          Reject
-        </translate>
+        Reject
       </button>
       <dangerous-button
         v-if="canDelete"
         :class="['ui', {loading: isLoading}, 'basic danger button']"
         :action="remove"
       >
-        <translate >
-          Delete
-        </translate>
+        Delete
         <template #modal-header>
           <p>
-            <translate >
-              Delete this suggestion?
-            </translate>
+            Delete this suggestion?
           </p>
         </template>
         <template #modal-content>
           <div>
             <p>
-              <translate >
-                The suggestion will be completely removed, this action is irreversible.
-              </translate>
+              The suggestion will be completely removed, this action is irreversible.
             </p>
           </div>
         </template>
         <template #modal-confirm>
           <p>
-            <translate >
-              Delete
-            </translate>
+            Delete
           </p>
         </template>
       </dangerous-button>

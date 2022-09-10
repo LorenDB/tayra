@@ -56,9 +56,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
         class="ui negative message"
       >
         <h4 class="header">
-          <translate >
-            Error while creating invitation
-          </translate>
+          Error while creating invitation
         </h4>
         <ul class="list">
           <li
@@ -71,7 +69,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
       </div>
       <div class="inline fields">
         <div class="ui field">
-          <label for="invitation-code"><translate >Invitation code</translate></label>
+          <label for="invitation-code">Invitation code</label>
           <input
             v-model="code"
             for="invitation-code"
@@ -86,9 +84,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
             :disabled="isLoading"
             type="submit"
           >
-            <translate >
-              Get a new invitation
-            </translate>
+            Get a new invitation
           </button>
         </div>
       </div>
@@ -99,14 +95,10 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
         <thead>
           <tr>
             <th>
-              <translate >
-                Code
-              </translate>
+              Code
             </th>
             <th>
-              <translate >
-                Share link
-              </translate>
+              Share link
             </th>
           </tr>
         </thead>
@@ -129,9 +121,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
         class="ui basic button"
         @click="invitations = []"
       >
-        <translate >
-          Clear
-        </translate>
+        Clear
       </button>
     </div>
   </div>

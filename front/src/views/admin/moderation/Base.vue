@@ -35,9 +35,7 @@ fetchNodeInfo()
         class="ui item"
         :to="{name: 'manage.moderation.reports.list', query: {q: 'resolved:no'}}"
       >
-        <translate >
-          Reports
-        </translate>
+        Reports
         <div
           v-if="$store.state.ui.notifications.pendingReviewReports > 0"
           :class="['ui', 'circular', 'mini', 'right floated', 'accent', 'label']"
@@ -49,9 +47,7 @@ fetchNodeInfo()
         class="ui item"
         :to="{name: 'manage.moderation.requests.list', query: {q: 'status:pending'}}"
       >
-        <translate >
-          User Requests
-        </translate>
+        User Requests
         <div
           v-if="$store.state.ui.notifications.pendingReviewRequests > 0"
           :class="['ui', 'circular', 'mini', 'right floated', 'accent', 'label']"
@@ -63,17 +59,13 @@ fetchNodeInfo()
         class="ui item"
         :to="{name: 'manage.moderation.domains.list'}"
       >
-        <translate >
-          Domains
-        </translate>
+        Domains
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.moderation.accounts.list'}"
       >
-        <translate >
-          Accounts
-        </translate>
+        Accounts
       </router-link>
     </nav>
     <router-view

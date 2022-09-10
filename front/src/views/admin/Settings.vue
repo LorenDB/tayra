@@ -186,9 +186,7 @@ await nextTick()
           <div class="four wide column">
             <div class="ui sticky vertical secondary menu">
               <div class="header item">
-                <translate >
-                  Sections
-                </translate>
+                Sections
               </div>
               <a
                 v-for="(group, key) in groups"

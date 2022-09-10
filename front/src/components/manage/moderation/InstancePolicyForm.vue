@@ -124,13 +124,11 @@ const remove = async () => {
     <h3 class="ui header">
       <translate
         v-if="object"
-
       >
         Edit moderation rule
       </translate>
       <translate
         v-else
-
       >
         Add a new moderation rule
       </translate>
@@ -141,9 +139,7 @@ const remove = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          Error while creating rule
-        </translate>
+        Error while creating rule
       </h4>
       <ul class="list">
         <li
@@ -168,11 +164,9 @@ const remove = async () => {
         <label for="policy-is-active">
           <translate
             v-if="current.isActive"
-
           >Enabled</translate>
           <translate
             v-else
-
           >Disabled</translate>
           <tooltip :content="labels.isActiveHelp" />
         </label>
@@ -180,7 +174,7 @@ const remove = async () => {
     </div>
     <div class="field">
       <label for="policy-summary">
-        <translate >Reason</translate>
+        Reason
         <tooltip :content="labels.summaryHelp" />
       </label>
       <textarea
@@ -198,15 +192,13 @@ const remove = async () => {
           type="checkbox"
         >
         <label for="policy-is-active">
-          <translate >Block everything</translate>
+          Block everything
           <tooltip :content="labels.blockAllHelp" />
         </label>
       </div>
     </div>
     <div class="ui horizontal divider">
-      <translate >
-        Or customize your rule
-      </translate>
+      Or customize your rule
     </div>
     <div
       v-for="(config, key) in fieldConfig"
@@ -231,9 +223,7 @@ const remove = async () => {
       class="ui basic left floated button"
       @click.prevent="emit('cancel')"
     >
-      <translate >
-        Cancel
-      </translate>
+      Cancel
     </button>
     <button
       :class="['ui', 'right', 'floated', 'success', {'disabled loading': isLoading}, 'button']"
@@ -241,13 +231,11 @@ const remove = async () => {
     >
       <translate
         v-if="object"
-
       >
         Update
       </translate>
       <translate
         v-else
-
       >
         Create
       </translate>
@@ -257,28 +245,20 @@ const remove = async () => {
       class="ui right floated basic danger button"
       @confirm="remove"
     >
-      <translate >
-        Delete
-      </translate>
+      Delete
       <template #modal-header>
         <p>
-          <translate >
-            Delete this moderation rule?
-          </translate>
+          Delete this moderation rule?
         </p>
       </template>
       <template #modal-content>
         <p>
-          <translate >
-            This action is irreversible.
-          </translate>
+          This action is irreversible.
         </p>
       </template>
       <template #modal-confirm>
         <div>
-          <translate >
-            Delete moderation rule
-          </translate>
+          Delete moderation rule
         </div>
       </template>
     </dangerous-button>

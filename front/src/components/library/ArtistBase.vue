@@ -147,9 +147,7 @@ watch(() => props.id, fetchData, { immediate: true })
                 class="vibrant"
                 :artist="object"
               >
-                <translate >
-                  Play all albums
-                </translate>
+                Play all albums
               </play-button>
             </div>
 
@@ -158,9 +156,7 @@ watch(() => props.id, fetchData, { immediate: true })
               v-model:show="showEmbedModal"
             >
               <h4 class="header">
-                <translate >
-                  Embed this artist work on your website
-                </translate>
+                Embed this artist work on your website
               </h4>
               <div class="scrolling content">
                 <div class="description">
@@ -172,9 +168,7 @@ watch(() => props.id, fetchData, { immediate: true })
               </div>
               <div class="actions">
                 <button class="ui deny button">
-                  <translate >
-                    Cancel
-                  </translate>
+                  Cancel
                 </button>
               </div>
             </semantic-modal>
@@ -183,9 +177,7 @@ watch(() => props.id, fetchData, { immediate: true })
                 class="ui button"
                 @click="dropdown.click()"
               >
-                <translate >
-                  More…
-                </translate>
+                More…
               </button>
               <button
                 ref="dropdown"
@@ -203,7 +195,6 @@ watch(() => props.id, fetchData, { immediate: true })
                     <i class="external icon" />
                     <translate
                       :translate-params="{domain: domain}"
-
                     >View on %{ domain }</translate>
                   </a>
 
@@ -214,9 +205,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     @click.prevent="showEmbedModal = !showEmbedModal"
                   >
                     <i class="code icon" />
-                    <translate >
-                      Embed
-                    </translate>
+                    Embed
                   </button>
                   <a
                     :href="wikipediaUrl"
@@ -225,7 +214,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="wikipedia w icon" />
-                    <translate >Search on Wikipedia</translate>
+                    Search on Wikipedia
                   </a>
                   <a
                     v-if="musicbrainzUrl"
@@ -235,7 +224,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="external icon" />
-                    <translate >View on MusicBrainz</translate>
+                    View on MusicBrainz
                   </a>
                   <a
                     :href="discogsUrl"
@@ -244,7 +233,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="external icon" />
-                    <translate >Search on Discogs</translate>
+                    Search on Discogs
                   </a>
                   <router-link
                     v-if="object.is_local"
@@ -252,9 +241,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="edit icon" />
-                    <translate >
-                      Edit
-                    </translate>
+                    Edit
                   </router-link>
                   <div class="divider" />
                   <div
@@ -274,9 +261,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     :to="{name: 'manage.library.artists.detail', params: {id: object.id}}"
                   >
                     <i class="wrench icon" />
-                    <translate >
-                      Open in moderation interface
-                    </translate>
+                    Open in moderation interface
                   </router-link>
                   <a
                     v-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
@@ -286,7 +271,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate >View in Django's admin</translate>&nbsp;
+                    View in Django's admin&nbsp;
                   </a>
                 </div>
               </button>

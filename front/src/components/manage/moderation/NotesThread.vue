@@ -64,30 +64,22 @@ const remove = async (note: Note) => {
             @confirm="remove(note)"
           >
             <i class="trash icon" />
-            <translate >
-              Delete
-            </translate>
+            Delete
             <template #modal-header>
               <p>
-                <translate >
-                  Delete this note?
-                </translate>
+                Delete this note?
               </p>
             </template>
             <template #modal-content>
               <div>
                 <p>
-                  <translate >
-                    The note will be removed. This action is irreversible.
-                  </translate>
+                  The note will be removed. This action is irreversible.
                 </p>
               </div>
             </template>
             <template #modal-confirm>
               <p>
-                <translate >
-                  Delete
-                </translate>
+                Delete
               </p>
             </template>
           </dangerous-button>

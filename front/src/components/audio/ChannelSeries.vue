@@ -84,9 +84,7 @@ fetchData()
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        <translate >
-          Show more
-        </translate>
+        Show more
       </button>
     </template>
     <template v-if="!isLoading && albums.length === 0">
@@ -95,9 +93,7 @@ fetchData()
         @refresh="fetchData()"
       >
         <p>
-          <translate >
-            You may need to subscribe to this channel to see its contents.
-          </translate>
+          You may need to subscribe to this channel to see its contents.
         </p>
       </empty-state>
     </template>

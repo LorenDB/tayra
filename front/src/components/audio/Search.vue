@@ -73,9 +73,7 @@ const labels = computed(() => ({
 <template>
   <div>
     <h2>
-      <translate >
-        Search for some music
-      </translate>
+      Search for some music
     </h2>
     <div :class="['ui', {'loading': isLoading }, 'search']">
       <div class="ui icon big input">
@@ -91,9 +89,7 @@ const labels = computed(() => ({
     </div>
     <template v-if="query.length > 0">
       <h3 class="ui title">
-        <translate >
-          Artists
-        </translate>
+        Artists
       </h3>
       <div v-if="results.artists.length > 0">
         <div class="ui cards">
@@ -105,16 +101,12 @@ const labels = computed(() => ({
         </div>
       </div>
       <p v-else>
-        <translate >
-          No artist matched your query
-        </translate>
+        No artist matched your query
       </p>
     </template>
     <template v-if="query.length > 0">
       <h3 class="ui title">
-        <translate >
-          Albums
-        </translate>
+        Albums
       </h3>
       <div
         v-if="results.albums.length > 0"
@@ -132,9 +124,7 @@ const labels = computed(() => ({
         </div>
       </div>
       <p v-else>
-        <translate >
-          No album matched your query
-        </translate>
+        No album matched your query
       </p>
     </template>
   </div>

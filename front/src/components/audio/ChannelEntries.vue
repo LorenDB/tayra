@@ -103,9 +103,7 @@ watch(page, fetchData, { immediate: true })
         @refresh="fetchData()"
       >
         <p>
-          <translate >
-            You may need to subscribe to this channel to see its content.
-          </translate>
+          You may need to subscribe to this channel to see its content.
         </p>
       </empty-state>
     </template>

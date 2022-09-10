@@ -108,18 +108,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
   <main v-title="labels.playlists">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate >
-          Browsing playlists
-        </translate>
+        Browsing playlists
       </h2>
       <template v-if="$store.state.auth.authenticated">
         <button
           class="ui success button"
           @click="$store.commit('playlists/showModal', true)"
         >
-          <translate >
-            Manage your playlists
-          </translate>
+          Manage your playlists
         </button>
         <div class="ui hidden divider" />
       </template>
@@ -129,7 +125,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="fields">
           <div class="field">
-            <label for="playlists-search"><translate >Search</translate></label>
+            <label for="playlists-search">Search</label>
             <div class="ui action input">
               <input
                 id="playlists-search"
@@ -148,7 +144,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             </div>
           </div>
           <div class="field">
-            <label for="playlists-ordering"><translate >Ordering</translate></label>
+            <label for="playlists-ordering">Ordering</label>
             <select
               id="playlists-ordering"
               v-model="ordering"
@@ -164,26 +160,22 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="playlists-ordering-direction"><translate >Order</translate></label>
+            <label for="playlists-ordering-direction">Order</label>
             <select
               id="playlists-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate >
-                  Ascending
-                </translate>
+                Ascending
               </option>
               <option value="-">
-                <translate >
-                  Descending
-                </translate>
+                Descending
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="playlists-results"><translate >Results per page</translate></label>
+            <label for="playlists-results">Results per page</label>
             <select
               id="playlists-results"
               v-model="paginateBy"
@@ -212,9 +204,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="ui icon header">
           <i class="list icon" />
-          <translate >
-            No results matching your query
-          </translate>
+          No results matching your query
         </div>
         <button
           v-if="$store.state.auth.authenticated"
@@ -222,9 +212,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           @click="$store.commit('playlists/chooseTrack', null)"
         >
           <i class="list icon" />
-          <translate >
-            Create a playlist
-          </translate>
+          Create a playlist
         </button>
       </div>
       <div class="ui center aligned basic segment">

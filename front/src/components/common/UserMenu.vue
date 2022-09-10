@@ -63,13 +63,13 @@ const labels = computed(() => ({
         class="menu"
       >
         <a
-          v-for="t in themes"
-          :key="t.key"
-          :class="[{'active': theme === t.key}, 'item']"
-          :value="t.key"
-          @click="theme = t.key"
+          v-for="th in themes"
+          :key="th.key"
+          :class="[{'active': theme === th.key}, 'item']"
+          :value="th.key"
+          @click="theme = th.key"
         >
-          <i :class="t.icon" />
+          <i :class="th.icon" />
           {{ t.name }}
         </a>
       </div>
@@ -166,7 +166,7 @@ const labels = computed(() => ({
       <div class="divider" />
       <router-link
         class="item"
-        style="color: var(--danger-color)!important;"
+        style="color: var(--danger-color) !important;"
         :to="{ name: 'logout' }"
       >
         <i class="sign out alternate icon" />

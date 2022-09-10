@@ -167,7 +167,7 @@ const launchAction = async () => {
               class="right floated"
             >
               <span v-if="needsRefresh">
-                <translate >Content has been updated, click refresh to see up-to-date content</translate>
+                Content has been updated, click refresh to see up-to-date content
               </span>
               <button
                 class="ui basic icon button"
@@ -185,7 +185,7 @@ const launchAction = async () => {
             >
               <div class="ui inline fields">
                 <div class="field">
-                  <label for="actions-select"><translate >Actions</translate></label>
+                  <label for="actions-select">Actions</label>
                   <select
                     id="actions-select"
                     v-model="currentActionName"
@@ -208,9 +208,7 @@ const launchAction = async () => {
                     :aria-label="labels.performAction"
                     @confirm="launchAction"
                   >
-                    <translate >
-                      Go
-                    </translate>
+                    Go
                     <template #modal-header>
                       <p>
                         <translate
@@ -231,7 +229,6 @@ const launchAction = async () => {
                         </template>
                         <translate
                           v-else
-
                         >
                           This may affect a lot of elements or have irreversible consequences, please double check this is really what you want.
                         </translate>
@@ -239,9 +236,7 @@ const launchAction = async () => {
                     </template>
                     <template #modal-confirm>
                       <div :aria-label="labels.performAction">
-                        <translate >
-                          Launch
-                        </translate>
+                        Launch
                       </div>
                     </template>
                   </dangerous-button>
@@ -252,9 +247,7 @@ const launchAction = async () => {
                     :class="['ui', {disabled: checked.length === 0}, {'loading': isLoading}, 'button']"
                     @click="launchAction"
                   >
-                    <translate >
-                      Go
-                    </translate>
+                    Go
                   </button>
                 </div>
                 <div class="count field">
@@ -301,7 +294,6 @@ const launchAction = async () => {
                     >
                       <translate
                         key="4"
-
                       >Select only current page</translate>
                     </a>
                   </template>
@@ -313,9 +305,7 @@ const launchAction = async () => {
                 class="ui negative message"
               >
                 <h4 class="header">
-                  <translate >
-                    Error while applying action
-                  </translate>
+                  Error while applying action
                 </h4>
                 <ul class="list">
                   <li

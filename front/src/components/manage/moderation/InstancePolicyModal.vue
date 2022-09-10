@@ -62,9 +62,7 @@ const fetchData = async () => {
   >
     <i class="shield icon" />&nbsp;
     <slot>
-      <translate >
-        Moderation rules…
-      </translate>
+      Moderation rules…
     </slot>
     <semantic-modal
       v-model:show="show"
@@ -73,7 +71,6 @@ const fetchData = async () => {
       <h4 class="header">
         <translate
           :translate-params="{obj: target}"
-
         >
           Manage moderation rules for %{ obj }
         </translate>
@@ -91,9 +88,7 @@ const fetchData = async () => {
           >
             <header class="ui header">
               <h3>
-                <translate >
-                  This entity is subject to specific moderation rules
-                </translate>
+                This entity is subject to specific moderation rules
               </h3>
             </header>
           </instance-policy-card>
@@ -112,9 +107,7 @@ const fetchData = async () => {
       </div>
       <div class="actions">
         <button class="ui deny button">
-          <translate >
-            Close
-          </translate>
+          Close
         </button>
       </div>
     </semantic-modal>

@@ -55,14 +55,10 @@ const created = (application: Application) => {
     <div class="ui vertical stripe segment">
       <section class="ui text container">
         <router-link :to="{name: 'settings'}">
-          <translate >
-            Back to settings
-          </translate>
+          Back to settings
         </router-link>
         <h2 class="ui header">
-          <translate >
-            Create a new application
-          </translate>
+          Create a new application
         </h2>
         <application-form
           :defaults="defaults"

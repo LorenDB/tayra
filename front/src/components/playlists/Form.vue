@@ -111,9 +111,7 @@ const submit = async () => {
       v-if="title"
       class="ui header"
     >
-      <translate >
-        Create a new playlist
-      </translate>
+      Create a new playlist
     </h4>
     <div
       v-if="success"
@@ -121,14 +119,10 @@ const submit = async () => {
     >
       <h4 class="header">
         <template v-if="playlist">
-          <translate >
-            Playlist updated
-          </translate>
+          Playlist updated
         </template>
         <template v-else>
-          <translate >
-            Playlist created
-          </translate>
+          Playlist created
         </template>
       </h4>
     </div>
@@ -138,9 +132,7 @@ const submit = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          The playlist could not be created
-        </translate>
+        The playlist could not be created
       </h4>
       <ul class="list">
         <li
@@ -153,7 +145,7 @@ const submit = async () => {
     </div>
     <div class="three fields">
       <div class="field">
-        <label for="playlist-name"><translate >Playlist name</translate></label>
+        <label for="playlist-name">Playlist name</label>
         <input
           id="playlist-name"
           v-model="name"
@@ -164,7 +156,7 @@ const submit = async () => {
         >
       </div>
       <div class="field">
-        <label for="playlist-visibility"><translate >Playlist visibility</translate></label>
+        <label for="playlist-visibility">Playlist visibility</label>
         <select
           id="playlist-visibility"
           v-model="privacyLevel"
@@ -186,14 +178,10 @@ const submit = async () => {
           type="submit"
         >
           <template v-if="playlist">
-            <translate >
-              Update playlist
-            </translate>
+            Update playlist
           </template>
           <template v-else>
-            <translate >
-              Create playlist
-            </translate>
+            Create playlist
           </template>
         </button>
       </div>

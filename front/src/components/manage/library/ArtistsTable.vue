@@ -108,7 +108,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="artists-serarch"><translate >Search</translate></label>
+          <label for="artists-serarch">Search</label>
           <form @submit.prevent="query = search.value">
             <input
               id="artists-search"
@@ -121,7 +121,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
           </form>
         </div>
         <div class="field">
-          <label for="artists-category"><translate >Category</translate></label>
+          <label for="artists-category">Category</label>
           <select
             id="artists-category"
             class="ui dropdown"
@@ -129,9 +129,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
             @change="addSearchToken('category', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              <translate >
-                All
-              </translate>
+              All
             </option>
             <option value="podcast">
               {{ sharedLabels.fields.content_category.choices.podcast }}
@@ -145,7 +143,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
           </select>
         </div>
         <div class="field">
-          <label for="artists-ordering"><translate >Ordering</translate></label>
+          <label for="artists-ordering">Ordering</label>
           <select
             id="artists-ordering"
             v-model="ordering"
@@ -161,21 +159,17 @@ const getUrl = (artist: { channel?: number; id: number }) => {
           </select>
         </div>
         <div class="field">
-          <label for="artists-ordering-direction"><translate >Ordering direction</translate></label>
+          <label for="artists-ordering-direction">Ordering direction</label>
           <select
             id="artists-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate >
-                Ascending
-              </translate>
+              Ascending
             </option>
             <option value="-">
-              <translate >
-                Descending
-              </translate>
+              Descending
             </option>
           </select>
         </div>
@@ -198,29 +192,19 @@ const getUrl = (artist: { channel?: number; id: number }) => {
       >
         <template #header-cells>
           <th>
-            <translate >
-              Name
-            </translate>
+            Name
           </th>
           <th>
-            <translate >
-              Domain
-            </translate>
+            Domain
           </th>
           <th>
-            <translate >
-              Albums
-            </translate>
+            Albums
           </th>
           <th>
-            <translate >
-              Tracks
-            </translate>
+            Tracks
           </th>
           <th>
-            <translate >
-              Creation date
-            </translate>
+            Creation date
           </th>
         </template>
         <template
@@ -250,7 +234,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              <translate >Local</translate>
+              Local
             </a>
           </td>
           <td>

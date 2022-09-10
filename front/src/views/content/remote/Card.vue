@@ -208,9 +208,7 @@ watch(showScan, (shouldShow) => {
       >
         <template v-if="latestScan.status === 'pending'">
           <i class="hourglass icon" />
-          <translate >
-            Scan pending
-          </translate>
+          Scan pending
         </template>
         <template v-if="latestScan.status === 'scanning'">
           <i class="loading spinner icon" />
@@ -223,28 +221,22 @@ watch(showScan, (shouldShow) => {
         </template>
         <template v-else-if="latestScan.status === 'errored'">
           <i class="dangerdownload icon" />
-          <translate >
-            Problem during scanning
-          </translate>
+          Problem during scanning
         </template>
         <template v-else-if="latestScan.status === 'finished' && latestScan.errored_files === 0">
           <i class="success download icon" />
-          <translate >
-            Scanned
-          </translate>
+          Scanned
         </template>
         <template v-else-if="latestScan.status === 'finished' && latestScan.errored_files > 0">
           <i class="warning download icon" />
-          <translate >
-            Scanned with errors
-          </translate>
+          Scanned with errors
         </template>
         <a
           href=""
           class="link right floated"
           @click.prevent="showScan = !showScan"
         >
-          <translate >Details</translate>
+          Details
           <i
             v-if="showScan"
             class="angle down icon"
@@ -256,13 +248,9 @@ watch(showScan, (shouldShow) => {
         </a>
         <div v-if="showScan">
           <template v-if="latestScan.modification_date">
-            <translate >
-              Last update:
-            </translate><human-date :date="latestScan.modification_date" /><br>
+            Last update:<human-date :date="latestScan.modification_date" /><br>
           </template>
-          <translate >
-            Failed tracks:
-          </translate> {{ latestScan.errored_files }}
+          Failed tracks: {{ latestScan.errored_files }}
         </div>
       </div>
       <div
@@ -274,7 +262,7 @@ watch(showScan, (shouldShow) => {
           class="right floated link"
           @click.prevent="launchScan"
         >
-          <translate >Scan now</translate> <i class="paper plane icon" />
+          Scan now <i class="paper plane icon" />
         </a>
       </div>
     </div>
@@ -290,7 +278,7 @@ watch(showScan, (shouldShow) => {
     >
       <div class="ui form">
         <div class="field">
-          <label :for="library.fid"><translate >Sharing link</translate></label>
+          <label :for="library.fid">Sharing link</label>
           <copy-input
             :id="library.fid"
             :button-classes="'basic'"
@@ -314,26 +302,20 @@ watch(showScan, (shouldShow) => {
           :class="['ui', 'success', {'loading': isLoadingFollow}, 'button']"
           @click="follow()"
         >
-          <translate >
-            Follow
-          </translate>
+          Follow
         </button>
         <template v-else-if="!library.follow.approved">
           <button
             class="ui disabled button"
           >
             <i class="hourglass icon" />
-            <translate >
-              Follow request pending approval
-            </translate>
+            Follow request pending approval
           </button>
           <button
             class="ui button"
             @click="unfollow"
           >
-            <translate >
-              Cancel follow request
-            </translate>
+            Cancel follow request
           </button>
         </template>
         <template v-else-if="library.follow.approved">
@@ -341,30 +323,22 @@ watch(showScan, (shouldShow) => {
             :class="['ui', 'button']"
             :action="unfollow"
           >
-            <translate >
-              Unfollow
-            </translate>
+            Unfollow
             <template #modal-header>
               <p>
-                <translate >
-                  Unfollow this library?
-                </translate>
+                Unfollow this library?
               </p>
             </template>
             <template #modal-content>
               <div>
                 <p>
-                  <translate >
-                    By unfollowing this library, you loose access to its content.
-                  </translate>
+                  By unfollowing this library, you loose access to its content.
                 </p>
               </div>
             </template>
             <template #modal-confirm>
               <div>
-                <translate >
-                  Unfollow
-                </translate>
+                Unfollow
               </div>
             </template>
           </dangerous-button>

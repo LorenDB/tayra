@@ -70,12 +70,9 @@ whenever(() => store.state.auth.authenticated, () => {
     >
       <div class="segment-content">
         <h1 class="ui center aligned large header">
-          <translate
-            :translate-params="{podName: podName}"
-            tag="span"
-          >
-            Welcome to %{ podName }!
-          </translate>
+          <span>
+            {{ $t('Welcome to %{ podName }!', { podName }) }}
+          </span>
           <div
             v-if="shortDescription"
             class="sub header"
@@ -89,9 +86,7 @@ whenever(() => store.state.auth.authenticated, () => {
       <div class="ui stackable grid">
         <div class="ten wide column">
           <h2 class="header">
-            <translate >
-              About this Funkwhale pod
-            </translate>
+            About this Funkwhale pod
           </h2>
           <div
             id="pod"
@@ -100,9 +95,7 @@ whenever(() => store.state.auth.authenticated, () => {
             <div class="ui stackable grid">
               <div class="eight wide column">
                 <p v-if="!longDescription">
-                  <translate >
-                    No description available.
-                  </translate>
+                  No description available.
                 </p>
                 <template v-if="longDescription || rules">
                   <sanitized-html
@@ -125,9 +118,7 @@ whenever(() => store.state.auth.authenticated, () => {
                           class="ui link"
                           :to="{name: 'about'}"
                         >
-                          <translate >
-                            Learn more
-                          </translate>
+                          Learn more
                         </router-link>
                       </div>
                     </div>
@@ -142,9 +133,7 @@ whenever(() => store.state.auth.authenticated, () => {
                           class="ui link"
                           :to="{name: 'about', hash: '#rules'}"
                         >
-                          <translate >
-                            Server rules
-                          </translate>
+                          Server rules
                         </router-link>
                       </div>
                     </div>
@@ -154,36 +143,20 @@ whenever(() => store.state.auth.authenticated, () => {
               <div class="eight wide column">
                 <template v-if="stats">
                   <h3 class="sub header">
-                    <translate >
-                      Statistics
-                    </translate>
+                    Statistics
                   </h3>
                   <p>
-                    <i class="user icon" /><translate
-
-                      :translate-params="{count: stats.users.toLocaleString($store.state.ui.momentLocale) }"
-                      :translate-n="stats.users"
-                      translate-plural="%{ count } active users"
-                    >
-                      %{ count } active user
-                    </translate>
+                    <i class="user icon" />
+                    {{ $t('%{ users } active user | %{ users } active users', stats, stats.users) }}
                   </p>
                   <p>
-                    <i class="music icon" /><translate
-                      translate-context="Content/Home/Stat"
-                      :translate-params="{count: stats.hours.toLocaleString($store.state.ui.momentLocale)}"
-                      :translate-n="stats.hours"
-                      translate-plural="%{ count } hours of music"
-                    >
-                      %{ count } hour of music
-                    </translate>
+                    <i class="music icon" />
+                    {{ $t('%{ hours } hour of music | %{ hours } hours of music', stats, stats.hours) }}
                   </p>
                 </template>
                 <template v-if="contactEmail">
                   <h3 class="sub header">
-                    <translate >
-                      Contact
-                    </translate>
+                    Contact
                   </h3>
                   <i class="at icon" />
                   <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
@@ -206,30 +179,26 @@ whenever(() => store.state.auth.authenticated, () => {
       <div class="ui stackable grid">
         <div class="four wide column">
           <h3 class="header">
-            <translate >
-              About Funkwhale
-            </translate>
+            About Funkwhale
           </h3>
-          <translate tag="p">
+          <p>
             This pod runs Funkwhale, a community-driven project that lets you listen and share music and audio within a decentralized, open network.
-        </translate>
-          <translate tag="p">
+          </p>
+          <p>
             Funkwhale is free and developed by a friendly community of volunteers.
-          </translate>
+          </p>
           <a
             target="_blank"
             rel="noopener"
             href="https://funkwhale.audio"
           >
             <i class="external alternate icon" />
-            <translate >Visit funkwhale.audio</translate>
+            Visit funkwhale.audio
           </a>
         </div>
         <div class="four wide column">
           <h3 class="header">
-            <translate >
-              Log In
-            </translate>
+            Log In
           </h3>
           <login-form
             button-classes="success"
@@ -239,23 +208,14 @@ whenever(() => store.state.auth.authenticated, () => {
         </div>
         <div class="four wide column">
           <h3 class="header">
-            <translate >
-              Sign up
-            </translate>
+            Sign up
           </h3>
           <template v-if="openRegistrations">
             <p>
-              <translate >
-                Sign up now to keep track of your favorites, create playlists, discover new content and much more!
-              </translate>
+              Sign up now to keep track of your favorites, create playlists, discover new content and much more!
             </p>
             <p v-if="defaultUploadQuota">
-              <translate
-
-                :translate-params="{quota: humanSize(defaultUploadQuota * 1000 * 1000)}"
-              >
-                Users on this pod also get %{ quota } of free storage to upload their own content!
-              </translate>
+              {{ $t('Users on this pod also get %{ quota } of free storage to upload their own content!', { quota: humanSize(defaultUploadQuota * 1000 * 1000) }) }}
             </p>
             <signup-form
               button-classes="success"
@@ -263,7 +223,7 @@ whenever(() => store.state.auth.authenticated, () => {
             />
           </template>
           <div v-else>
-            <p >
+            <p>
               Registrations are closed on this pod. You can signup on another pod using the link below.
             </p>
             <a
@@ -272,16 +232,14 @@ whenever(() => store.state.auth.authenticated, () => {
               href="https://funkwhale.audio/#get-started"
             >
               <i class="external alternate icon" />
-              <translate >Find another pod</translate>
+              Find another pod
             </a>
           </div>
         </div>
 
         <div class="four wide column">
           <h3 class="header">
-            <translate >
-              Useful links
-            </translate>
+            Useful links
           </h3>
           <div class="ui relaxed list">
             <div class="item">
@@ -292,14 +250,10 @@ whenever(() => store.state.auth.authenticated, () => {
                   class="header"
                   to="/library"
                 >
-                  <translate >
-                    Browse public content
-                  </translate>
+                  Browse public content
                 </router-link>
                 <div class="description">
-                  <translate >
-                    Listen to public albums and playlists shared on this pod
-                  </translate>
+                  Listen to public albums and playlists shared on this pod
                 </div>
               </div>
             </div>
@@ -312,12 +266,10 @@ whenever(() => store.state.auth.authenticated, () => {
                   target="_blank"
                   rel="noopener"
                 >
-                  <translate >Mobile apps</translate>
+                  Mobile apps
                 </a>
                 <div class="description">
-                  <translate >
-                    Use Funkwhale on other devices with our apps
-                  </translate>
+                  Use Funkwhale on other devices with our apps
                 </div>
               </div>
             </div>
@@ -330,12 +282,10 @@ whenever(() => store.state.auth.authenticated, () => {
                   target="_blank"
                   rel="noopener"
                 >
-                  <translate >User guides</translate>
+                  User guides
                 </a>
                 <div class="description">
-                  <translate >
-                    Discover everything you need to know about Funkwhale and its features
-                  </translate>
+                  Discover everything you need to know about Funkwhale and its features
                 </div>
               </div>
             </div>
@@ -352,22 +302,16 @@ whenever(() => store.state.auth.authenticated, () => {
         :limit="10"
       >
         <template #title>
-          <translate >
-            Recently added albums
-          </translate>
+          Recently added albums
         </template>
         <router-link to="/library">
-          <translate >
-            View more…
-          </translate>
+          View more…
           <div class="ui hidden divider" />
         </router-link>
       </album-widget>
       <div class="ui hidden section divider" />
       <h3 class="ui header">
-        <translate >
-          New channels
-        </translate>
+        New channels
       </h3>
       <channels-widget
         :show-modification-date="true"

@@ -155,9 +155,7 @@ const remove = async () => {
                 class="vibrant"
                 :track="track"
               >
-                <translate >
-                  Play
-                </translate>
+                Play
               </play-button>
               &nbsp;
               <track-favorite-icon
@@ -187,9 +185,7 @@ const remove = async () => {
                 v-model:show="showEmbedModal"
               >
                 <h4 class="header">
-                  <translate >
-                    Embed this track on your website
-                  </translate>
+                  Embed this track on your website
                 </h4>
                 <div class="scrolling content">
                   <div class="description">
@@ -201,9 +197,7 @@ const remove = async () => {
                 </div>
                 <div class="actions">
                   <button class="ui basic deny button">
-                    <translate >
-                      Cancel
-                    </translate>
+                    Cancel
                   </button>
                 </div>
               </semantic-modal>
@@ -226,7 +220,6 @@ const remove = async () => {
                     <i class="external icon" />
                     <translate
                       :translate-params="{domain: domain}"
-
                     >View on %{ domain }</translate>
                   </a>
                   <div
@@ -236,9 +229,7 @@ const remove = async () => {
                     @click="showEmbedModal = !showEmbedModal"
                   >
                     <i class="code icon" />
-                    <translate >
-                      Embed
-                    </translate>
+                    Embed
                   </div>
                   <a
                     :href="wikipediaUrl"
@@ -247,7 +238,7 @@ const remove = async () => {
                     class="basic item"
                   >
                     <i class="wikipedia w icon" />
-                    <translate >Search on Wikipedia</translate>
+                    Search on Wikipedia
                   </a>
                   <a
                     v-if="discogsUrl"
@@ -257,7 +248,7 @@ const remove = async () => {
                     class="basic item"
                   >
                     <i class="external icon" />
-                    <translate >Search on Discogs</translate>
+                    Search on Discogs
                   </a>
                   <router-link
                     v-if="track.is_local"
@@ -265,9 +256,7 @@ const remove = async () => {
                     class="basic item"
                   >
                     <i class="edit icon" />
-                    <translate >
-                      Edit
-                    </translate>
+                    Edit
                   </router-link>
                   <dangerous-button
                     v-if="artist && $store.state.auth.authenticated && artist.channel && artist.attributed_to.full_username === $store.state.auth.fullUsername"
@@ -275,30 +264,22 @@ const remove = async () => {
                     @confirm="remove()"
                   >
                     <i class="ui trash icon" />
-                    <translate >
-                      Delete…
-                    </translate>
+                    Delete…
                     <template #modal-header>
                       <p>
-                        <translate >
-                          Delete this track?
-                        </translate>
+                        Delete this track?
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          <translate >
-                            The track will be deleted, as well as any related files and data. This action is irreversible.
-                          </translate>
+                          The track will be deleted, as well as any related files and data. This action is irreversible.
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        <translate >
-                          Delete
-                        </translate>
+                        Delete
                       </p>
                     </template>
                   </dangerous-button>
@@ -319,9 +300,7 @@ const remove = async () => {
                     :to="{name: 'manage.library.tracks.detail', params: {id: track.id}}"
                   >
                     <i class="wrench icon" />
-                    <translate >
-                      Open in moderation interface
-                    </translate>
+                    Open in moderation interface
                   </router-link>
                   <a
                     v-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
@@ -331,7 +310,7 @@ const remove = async () => {
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    <translate >View in Django's admin</translate>&nbsp;
+                    View in Django's admin&nbsp;
                   </a>
                 </div>
               </button>

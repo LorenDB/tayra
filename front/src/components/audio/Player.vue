@@ -133,9 +133,7 @@ const hideArtist = () => {
       id="player-label"
       class="visually-hidden"
     >
-      <translate >
-        Audio player and controls
-      </translate>
+      Audio player and controls
     </h1>
     <div
       class="ui inverted segment fixed-controls"

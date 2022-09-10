@@ -112,16 +112,12 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        <translate >
-          Browsing radios
-        </translate>
+        Browsing radios
       </h2>
       <div class="ui hidden divider" />
       <div class="ui row">
         <h3 class="ui header">
-          <translate >
-            Instance radios
-          </translate>
+          Instance radios
         </h3>
         <div class="ui cards">
           <radio-card
@@ -144,18 +140,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
 
       <div class="ui hidden divider" />
       <h3 class="ui header">
-        <translate >
-          User radios
-        </translate>
+        User radios
       </h3>
       <router-link
         v-if="isAuthenticated"
         class="ui success button"
         to="/library/radios/build"
       >
-        <translate >
-          Create your own radio
-        </translate>
+        Create your own radio
       </router-link>
       <div class="ui hidden divider" />
       <form
@@ -164,7 +156,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="fields">
           <div class="field">
-            <label for="radios-search"><translate >Search</translate></label>
+            <label for="radios-search">Search</label>
             <div class="ui action input">
               <input
                 id="radios-search"
@@ -183,7 +175,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             </div>
           </div>
           <div class="field">
-            <label for="radios-ordering"><translate >Ordering</translate></label>
+            <label for="radios-ordering">Ordering</label>
             <select
               id="radios-ordering"
               v-model="ordering"
@@ -199,26 +191,22 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="radios-ordering-direction"><translate >Order</translate></label>
+            <label for="radios-ordering-direction">Order</label>
             <select
               id="radios-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                <translate >
-                  Ascending
-                </translate>
+                Ascending
               </option>
               <option value="-">
-                <translate >
-                  Descending
-                </translate>
+                Descending
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="radios-results"><translate >Results per page</translate></label>
+            <label for="radios-results">Results per page</label>
             <select
               id="radios-results"
               v-model="paginateBy"
@@ -242,9 +230,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="ui icon header">
           <i class="feed icon" />
-          <translate >
-            No results matching your query
-          </translate>
+          No results matching your query
         </div>
         <router-link
           v-if="$store.state.auth.authenticated"
@@ -252,9 +238,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           class="ui success button labeled icon"
         >
           <i class="rss icon" />
-          <translate >
-            Create a radio
-          </translate>
+          Create a radio
         </router-link>
       </div>
       <div

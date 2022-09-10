@@ -36,9 +36,7 @@ const labels = computed(() => ({
         :to="{name: 'manage.library.tags.detail', params: {id: id}}"
       >
         <i class="wrench icon" />
-        <translate >
-          Open in moderation interface
-        </translate>
+        Open in moderation interface
       </router-link>
 
       <div class="ui hidden divider" />
@@ -50,18 +48,14 @@ const labels = computed(() => ({
         >
           <template #title>
             <router-link :to="{name: 'library.artists.browse', query: {tag: id}}">
-              <translate >
-                Artists
-              </translate>
+              Artists
             </router-link>
           </template>
         </artist-widget>
         <div class="ui hidden divider" />
         <div class="ui hidden divider" />
         <h3 class="ui header">
-          <translate >
-            Channels
-          </translate>
+          Channels
         </h3>
         <channels-widget
           :key="'channels' + id"
@@ -79,9 +73,7 @@ const labels = computed(() => ({
         >
           <template #title>
             <router-link :to="{name: 'library.albums.browse', query: {tag: id}}">
-              <translate >
-                Albums
-              </translate>
+              Albums
             </router-link>
           </template>
         </album-widget>
@@ -97,9 +89,7 @@ const labels = computed(() => ({
           :filters="{playable: true, ordering: '-creation_date', tag: id}"
         >
           <template #title>
-            <translate >
-              Tracks
-            </translate>
+            Tracks
           </template>
         </track-widget>
         <div class="ui clearing hidden divider" />

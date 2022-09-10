@@ -9,25 +9,6 @@ import store from '~/store'
 
 import useLogger from '~/composables/useLogger'
 
-import { isEqual } from 'lodash-es'
-import pl from '~/translations/pl.json'
-const many = {}
-for (const [k, v] of Object.entries(pl.pl)) {
-  const m = {}
-  const w = Object.entries(v)
-  for(let i = 1; i < w.length; i++) {
-    if (!isEqual(w[i][1], w[i - 1][1])) {
-      m[w[i - 1][0]] = w[i - 1][1]
-      m[w[i][0]] = w[i][1]
-    }
-  }
-
-  if (Object.keys(m).length) {
-    many[k] = m
-  }
-}
-console.log(many)
-
 const logger = useLogger()
 
 const defaultLanguage = store.state.ui.currentLanguage ?? 'en_US'

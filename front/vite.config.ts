@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import Inspector from 'vite-plugin-vue-inspector'
+import VueI18n from '@intlify/vite-plugin-vue-i18n'
 import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
 
@@ -12,6 +13,11 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     // https://github.com/vitejs/vite/tree/main/packages/plugin-vue
     Vue(),
+
+    // https://github.com/intlify/bundle-tools/tree/main/packages/vite-plugin-vue-i18n
+    VueI18n({
+      include: resolve(__dirname, './src/locales/**')
+    }),
 
     // https://github.com/webfansplz/vite-plugin-vue-inspector
     Inspector({

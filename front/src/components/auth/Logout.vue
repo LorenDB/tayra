@@ -19,13 +19,10 @@ const labels = computed(() => ({
         class="ui small text container"
       >
         <h2>
-          <translate >
-            Are you sure you want to log out?
-          </translate>
+          Are you sure you want to log out?
         </h2>
         <p
           v-translate="{username: $store.state.auth.username}"
-
         >
           You are currently logged in as %{ username }
         </p>
@@ -33,9 +30,7 @@ const labels = computed(() => ({
           class="ui button"
           @click="$store.dispatch('auth/logout')"
         >
-          <translate >
-            Yes, log me out!
-          </translate>
+          Yes, log me out!
         </button>
       </div>
       <div
@@ -43,17 +38,13 @@ const labels = computed(() => ({
         class="ui small text container"
       >
         <h2>
-          <translate >
-            You aren't currently logged in
-          </translate>
+          You aren't currently logged in
         </h2>
         <router-link
           to="/login"
           class="ui button"
         >
-          <translate >
-            Log in!
-          </translate>
+          Log in!
         </router-link>
       </div>
     </section>

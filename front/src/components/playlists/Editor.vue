@@ -167,22 +167,16 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
       :title="undefined"
     />
     <h3 class="ui top attached header">
-      <translate >
-        Playlist editor
-      </translate>
+      Playlist editor
     </h3>
     <div class="ui attached segment">
       <template v-if="status === 'loading'">
         <div class="ui active tiny inline loader" />
-        <translate >
-          Syncing changes to server…
-        </translate>
+        Syncing changes to server…
       </template>
       <template v-else-if="status === 'errored'">
         <i class="dangerclose icon" />
-        <translate >
-          An error occurred while saving your changes
-        </translate>
+        An error occurred while saving your changes
         <div
           v-if="errors.length > 0"
           role="alert"
@@ -205,7 +199,6 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
       >
         <p
           v-translate="{playlist: playlist?.name}"
-
         >
           Some tracks in your queue are already in this playlist:
         </p>
@@ -222,15 +215,11 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
           class="ui small success button"
           @click="insertMany(queueTracks, true)"
         >
-          <translate >
-            Add anyways
-          </translate>
+          Add anyways
         </button>
       </div>
       <template v-else-if="status === 'saved'">
-        <i class="success check icon" /> <translate >
-          Changes synced with server
-        </translate>
+        <i class="success check icon" />           Changes synced with server
       </template>
     </div>
     <div class="ui bottom attached segment">
@@ -256,9 +245,7 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
         class="ui labeled right floated danger icon button"
         :action="clearPlaylist"
       >
-        <i class="eraser icon" /> <translate >
-          Clear playlist
-        </translate>
+        <i class="eraser icon" />           Clear playlist
         <template #modal-header>
           <p
             v-translate="{playlist: playlist?.name}"
@@ -270,25 +257,19 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
         </template>
         <template #modal-content>
           <p>
-            <translate >
-              This will remove all tracks from this playlist and cannot be undone.
-            </translate>
+            This will remove all tracks from this playlist and cannot be undone.
           </p>
         </template>
         <template #modal-confirm>
           <div>
-            <translate >
-              Clear playlist
-            </translate>
+            Clear playlist
           </div>
         </template>
       </dangerous-button>
       <div class="ui hidden divider" />
       <template v-if="tracks.length > 0">
         <p>
-          <translate >
-            Drag and drop rows to reorder tracks in the playlist
-          </translate>
+          Drag and drop rows to reorder tracks in the playlist
         </p>
         <div class="table-wrapper">
           <table class="ui compact very basic unstackable table">

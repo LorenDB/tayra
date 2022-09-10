@@ -165,9 +165,7 @@ defineExpose({
       class="ui negative message"
     >
       <h4 class="header">
-        <translate >
-          Error while saving channel
-        </translate>
+        Error while saving channel
       </h4>
       <ul class="list">
         <li
@@ -184,9 +182,7 @@ defineExpose({
         class="ui grouped channel-type required field"
       >
         <legend>
-          <translate >
-            What will this channel be used for?
-          </translate>
+          What will this channel be used for?
         </legend>
         <div class="ui hidden divider" />
         <div class="field">
@@ -214,7 +210,7 @@ defineExpose({
       <template v-if="!creating || step === 2">
         <div class="ui required field">
           <label for="channel-name">
-            <translate >Name</translate>
+            Name
           </label>
           <input
             v-model="newValues.name"
@@ -225,7 +221,7 @@ defineExpose({
         </div>
         <div class="ui required field">
           <label for="channel-username">
-            <translate >Fediverse handle</translate>
+            Fediverse handle
           </label>
           <div class="ui left labeled input">
             <div class="ui basic label">
@@ -242,9 +238,7 @@ defineExpose({
           <template v-if="creating">
             <div class="ui small hidden divider" />
             <p>
-              <translate >
-                Used in URLs and to follow this channel in the Fediverse. It cannot be changed later.
-              </translate>
+              Used in URLs and to follow this channel in the Fediverse. It cannot be changed later.
             </p>
           </template>
         </div>
@@ -254,9 +248,7 @@ defineExpose({
             :image-class="newValues.content_category === 'podcast' ? '' : 'circular'"
             @delete="newValues.cover = null"
           >
-            <translate >
-              Channel Picture
-            </translate>
+            Channel Picture
           </attachment-input>
         </div>
         <div class="ui small hidden divider" />
@@ -264,7 +256,7 @@ defineExpose({
           <div class="ten wide column">
             <div class="ui field">
               <label for="channel-tags">
-                <translate >Tags</translate>
+                Tags
               </label>
               <tags-selector
                 id="channel-tags"
@@ -279,7 +271,7 @@ defineExpose({
           >
             <div class="ui required field">
               <label for="channel-language">
-                <translate >Language</translate>
+                Language
               </label>
               <select
                 id="channel-language"
@@ -302,7 +294,7 @@ defineExpose({
         <div class="ui small hidden divider" />
         <div class="ui field">
           <label for="channel-name">
-            <translate >Description</translate>
+            Description
           </label>
           <content-form v-model="newValues.description" />
         </div>
@@ -312,7 +304,7 @@ defineExpose({
         >
           <div class="ui required field">
             <label for="channel-itunes-category">
-              <translate >Category</translate>
+              Category
             </label>
             <select
               id="itunes-category"
@@ -332,7 +324,7 @@ defineExpose({
           </div>
           <div class="ui field">
             <label for="channel-itunes-category">
-              <translate >Subcategory</translate>
+              Subcategory
             </label>
             <select
               id="itunes-category"
@@ -357,7 +349,7 @@ defineExpose({
         >
           <div class="ui field">
             <label for="channel-itunes-email">
-              <translate >Owner e-mail address</translate>
+              Owner e-mail address
             </label>
             <input
               id="channel-itunes-email"
@@ -368,7 +360,7 @@ defineExpose({
           </div>
           <div class="ui field">
             <label for="channel-itunes-name">
-              <translate >Owner name</translate>
+              Owner name
             </label>
             <input
               id="channel-itunes-name"
@@ -379,9 +371,7 @@ defineExpose({
           </div>
         </div>
         <p>
-          <translate >
-            Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes.
-          </translate>
+          Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes.
         </p>
       </template>
     </template>
@@ -390,9 +380,7 @@ defineExpose({
       class="ui active inverted dimmer"
     >
       <div class="ui text loader">
-        <translate >
-          Loading
-        </translate>
+        Loading
       </div>
     </div>
   </form>

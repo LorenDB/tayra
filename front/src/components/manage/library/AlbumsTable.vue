@@ -104,7 +104,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="albums-search"><translate >Search</translate></label>
+          <label for="albums-search">Search</label>
           <form @submit.prevent="query = search.value">
             <input
               id="albums-search"
@@ -117,7 +117,7 @@ const labels = computed(() => ({
           </form>
         </div>
         <div class="field">
-          <label for="albums-ordering"><translate >Ordering</translate></label>
+          <label for="albums-ordering">Ordering</label>
           <select
             id="albums-ordering"
             v-model="ordering"
@@ -133,20 +133,16 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="albums-ordering-direction"><translate >Ordering direction</translate></label>
+          <label for="albums-ordering-direction">Ordering direction</label>
           <select
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate >
-                Ascending
-              </translate>
+              Ascending
             </option>
             <option value="-">
-              <translate >
-                Descending
-              </translate>
+              Descending
             </option>
           </select>
         </div>
@@ -169,34 +165,22 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            <translate >
-              Title
-            </translate>
+            Title
           </th>
           <th>
-            <translate >
-              Artist
-            </translate>
+            Artist
           </th>
           <th>
-            <translate >
-              Domain
-            </translate>
+            Domain
           </th>
           <th>
-            <translate >
-              Tracks
-            </translate>
+            Tracks
           </th>
           <th>
-            <translate >
-              Release date
-            </translate>
+            Release date
           </th>
           <th>
-            <translate >
-              Creation date
-            </translate>
+            Creation date
           </th>
         </template>
         <template
@@ -238,7 +222,7 @@ const labels = computed(() => ({
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              <translate >Local</translate>
+              Local
             </a>
           </td>
           <td>
@@ -251,7 +235,6 @@ const labels = computed(() => ({
             />
             <translate
               v-else
-
             >
               N/A
             </translate>

@@ -22,9 +22,7 @@ const { copy, isSupported: canCopy, copied } = useClipboard({ source: value, cop
       v-if="copied"
       class="message"
     >
-      <translate >
-        Text copied to clipboard!
-      </translate>
+      Text copied to clipboard!
     </p>
     <input
       :id="id"
@@ -39,9 +37,7 @@ const { copy, isSupported: canCopy, copied } = useClipboard({ source: value, cop
       @click="copy()"
     >
       <i class="copy icon" />
-      <translate >
-        Copy
-      </translate>
+      Copy
     </button>
   </div>
 </template>

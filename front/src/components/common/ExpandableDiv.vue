@@ -28,11 +28,9 @@ const truncated = computed(() => props.content.slice(0, props.length))
       <br>
       <translate
         v-if="expanded"
-
       >Show less</translate>
       <translate
         v-else
-
       >Show more</translate>
     </a>
   </div>

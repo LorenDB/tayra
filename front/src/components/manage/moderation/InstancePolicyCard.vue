@@ -25,24 +25,18 @@ const summary = useMarkdown(() => props.object.summary)
       <i class="user icon" />{{ object.actor }}  &nbsp;
       <template v-if="object.is_active">
         <i class="play icon" />
-        <translate >
-          Enabled
-        </translate>
+        Enabled
       </template>
       <template v-if="!object.is_active">
         <i class="pause icon" />
-        <translate >
-          Paused
-        </translate>
+        Paused
       </template>
     </p>
     <div>
-      <p><strong><translate >Rule</translate></strong></p>
+      <p><strong>Rule</strong></p>
       <p v-if="object.block_all">
         <i class="ban icon" />
-        <translate >
-          Block everything
-        </translate>
+        Block everything
       </p>
       <div
         v-else
@@ -54,9 +48,7 @@ const summary = useMarkdown(() => props.object.summary)
         >
           <i class="feed icon" />
           <div class="content">
-            <translate >
-              Mute activity
-            </translate>
+            Mute activity
           </div>
         </div>
         <div
@@ -65,9 +57,7 @@ const summary = useMarkdown(() => props.object.summary)
         >
           <i class="bell icon" />
           <div class="content">
-            <translate >
-              Mute notifications
-            </translate>
+            Mute notifications
           </div>
         </div>
         <div
@@ -76,16 +66,14 @@ const summary = useMarkdown(() => props.object.summary)
         >
           <i class="file icon" />
           <div class="content">
-            <translate >
-              Reject media
-            </translate>
+            Reject media
           </div>
         </div>
       </div>
     </div>
     <div v-if="summary">
       <div class="ui hidden divider" />
-      <p><strong><translate >Reason</translate></strong></p>
+      <p><strong>Reason</strong></p>
       <sanitized-html :html="summary" />
     </div>
     <div class="ui hidden divider" />
@@ -94,9 +82,7 @@ const summary = useMarkdown(() => props.object.summary)
       @click="emit('update')"
     >
       <i class="edit icon" />
-      <translate >
-        Edit
-      </translate>
+      Edit
     </button>
   </div>
 </template>

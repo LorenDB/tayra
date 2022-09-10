@@ -5,6 +5,7 @@ import { whenever, watchDebounced, useCurrentElement, useScrollLock, useFullscre
 import { nextTick, ref, computed, watchEffect, onMounted } from 'vue'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import { usePlayer } from '~/composables/audio/player'
@@ -17,10 +18,6 @@ import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import PlayerControls from '~/components/audio/PlayerControls.vue'
 import MilkDrop from '~/components/audio/visualizer/MilkDrop.vue'
-import { whenever, watchDebounced, useCurrentElement, useScrollLock } from '@vueuse/core'
-import { useI18n } from 'vue-i18n'
-import useQueue from '~/composables/audio/useQueue'
-import usePlayer from '~/composables/audio/usePlayer'
 
 import VirtualList from '~/components/vui/list/VirtualList.vue'
 import QueueItem from '~/components/QueueItem.vue'
@@ -301,20 +298,14 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
             class="ui small warning message"
           >
             <h3 class="header">
-              <translate >
-                The track cannot be loaded
-              </translate>
+              The track cannot be loaded
             </h3>
             <p v-if="hasNext && isPlaying">
-              <translate >
-                The next track will play automatically in a few seconds…
-              </translate>
+              The next track will play automatically in a few seconds…
               <i class="loading spinner icon" />
             </p>
             <p>
-              <translate >
-                You may have a connectivity issue.
-              </translate>
+              You may have a connectivity issue.
             </p>
           </div>
           <div
@@ -413,17 +404,13 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                 class="ui right floated basic button"
                 @click="$store.commit('ui/queueFocused', null)"
               >
-                <translate >
-                  Close
-                </translate>
+                Close
               </button>
               <button
                 class="ui right floated basic button danger"
                 @click="clear"
               >
-                <translate >
-                  Clear
-                </translate>
+                Clear
               </button>
               {{ labels.queue }}
               <div class="sub header">
@@ -477,22 +464,17 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
             >
               <div class="content">
                 <h3 class="header">
-                  <i class="feed icon" /> <translate >
-                    You have a radio playing
-                  </translate>
+                  <i class="feed icon" />
+                  You have a radio playing
                 </h3>
                 <p>
-                  <translate >
-                    New tracks will be appended here automatically.
-                  </translate>
+                  New tracks will be appended here automatically.
                 </p>
                 <button
                   class="ui basic primary button"
                   @click="$store.dispatch('radios/stop')"
                 >
-                  <translate >
-                    Stop radio
-                  </translate>
+                  Stop radio
                 </button>
               </div>
             </div>

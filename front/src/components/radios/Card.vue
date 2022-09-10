@@ -70,9 +70,7 @@ const customRadioId = computed(() => props.customRadio?.id ?? null)
         class="ui success button right floated"
         :to="{name: 'library.radios.edit', params: {id: customRadioId }}"
       >
-        <translate >
-          Edit
-        </translate>
+        Edit
       </router-link>
     </div>
   </div>

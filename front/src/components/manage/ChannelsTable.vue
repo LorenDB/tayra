@@ -92,7 +92,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="channel-search"><translate >Search</translate></label>
+          <label for="channel-search">Search</label>
           <form @submit.prevent="query = search.value">
             <input
               id="channel-search"
@@ -105,7 +105,7 @@ const labels = computed(() => ({
           </form>
         </div>
         <div class="field">
-          <label for="channel-category"><translate >Category</translate></label>
+          <label for="channel-category">Category</label>
           <select
             id="channel-category"
             class="ui dropdown"
@@ -113,9 +113,7 @@ const labels = computed(() => ({
             @change="addSearchToken('category', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              <translate >
-                All
-              </translate>
+              All
             </option>
             <option value="podcast">
               {{ sharedLabels.fields.content_category.choices.podcast }}
@@ -129,7 +127,7 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="channel-ordering"><translate >Ordering</translate></label>
+          <label for="channel-ordering">Ordering</label>
           <select
             id="channel-ordering"
             v-model="ordering"
@@ -145,21 +143,17 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="channel-ordering-direction"><translate >Ordering direction</translate></label>
+          <label for="channel-ordering-direction">Ordering direction</label>
           <select
             id="channel-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              <translate >
-                Ascending
-              </translate>
+              Ascending
             </option>
             <option value="-">
-              <translate >
-                Descending
-              </translate>
+              Descending
             </option>
           </select>
         </div>
@@ -182,34 +176,22 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            <translate >
-              Name
-            </translate>
+            Name
           </th>
           <th>
-            <translate >
-              Account
-            </translate>
+            Account
           </th>
           <th>
-            <translate >
-              Domain
-            </translate>
+            Domain
           </th>
           <th>
-            <translate >
-              Albums
-            </translate>
+            Albums
           </th>
           <th>
-            <translate >
-              Tracks
-            </translate>
+            Tracks
           </th>
           <th>
-            <translate >
-              Creation date
-            </translate>
+            Creation date
           </th>
         </template>
         <template
@@ -250,7 +232,7 @@ const labels = computed(() => ({
               @click.prevent="addSearchToken('domain', scope.obj.attributed_to.domain)"
             >
               <i class="home icon" />
-              <translate >Local</translate>
+              Local
             </a>
           </td>
           <td>
