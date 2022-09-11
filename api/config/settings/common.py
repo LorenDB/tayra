@@ -17,6 +17,25 @@ APPS_DIR = ROOT_DIR.path("funkwhale_api")
 env = environ.Env()
 ENV = env
 LOGLEVEL = env("LOGLEVEL", default="info").upper()
+
+
+if env("FUNKWHALE_SENTRY_DSN", default=None) is not None:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+    from sentry_sdk.integrations.celery import CeleryIntegration
+    from funkwhale_api import __version__ as version
+
+    sentry_sdk.init(
+        dsn=env("FUNKWHALE_SENTRY_DSN"),
+        integrations=[DjangoIntegration(), CeleryIntegration()],
+        traces_sample_rate=env("FUNKWHALE_SENTRY_SR", default=0.25),
+        send_default_pii=False,
+        environment="api",
+        debug=env.bool("DEBUG", False),
+        release=version,
+    )
+    sentry_sdk.set_tag("instance", env("FUNKWHALE_HOSTNAME"))
+
 """
 Default logging level for the Funkwhale processes"""  # pylint: disable=W0105
 
