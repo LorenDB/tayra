@@ -452,7 +452,7 @@ def test_upload_import_skip_existing_track_in_own_library(factories, temp_signal
     assert duplicate.import_status == "skipped"
     assert duplicate.import_details == {
         "code": "already_imported_in_owned_libraries",
-        "duplicates": [str(existing.uuid)],
+        "duplicates": str(existing.uuid),
     }
 
     handler.assert_called_once_with(

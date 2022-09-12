@@ -10,6 +10,65 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.2.8 (2022-09-12)
+------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Features:
+
+- Add Sentry SDK to collect errors at the backend
+
+
+Bugfixes:
+
+- Fix exponentially growing database when using in-place-imports on a regular base #1676
+- Fix navigating to registration request not showing anything (#1836)
+- Fix player cover image overlapping queue list
+- Fixed metadata handling for Various Artists albums (#1201)
+- Fixed search behaviour in radio builder's filters (#733)
+- Fixed unpredictable subsonic search3 results (#1782)
+
+Committers:
+
+- Ciarán Ainsworth
+- Georg Krause
+- Marcos Peña
+- Mathias Koehler
+- wvffle
+
+Contributors to our Issues:
+
+- AMoonRabbit
+- Agate
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Kasper Seweryn
+- Kelvin Hammond
+- Marcos Peña
+- Meliurwen
+- Micha Gläß-Stöcker
+- Miv2nir
+- Sam Birch
+- Tolriq
+- Tony Wasserka
+- f1reflyyyylmao
+- heyarne
+- petitminion
+- troll
+
+Contributors to our Merge Requests:
+
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Kasper Seweryn
+- Marcos Peña
+- interru
+
+
 1.2.7 (2022-07-14)
 ------------------
 

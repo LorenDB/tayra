@@ -2,7 +2,7 @@ import collections
 
 import persisting_theory
 from django.core.exceptions import ValidationError
-from django.db.models import Q
+from django.db.models import Q, functions
 from django.urls import reverse_lazy
 
 from funkwhale_api.music import models
@@ -132,9 +132,13 @@ class ArtistFilter(RadioFilter):
             "name": "ids",
             "type": "list",
             "subtype": "number",
-            "autocomplete": reverse_lazy("api:v1:artists-list"),
+            "autocomplete": reverse_lazy("api:v1:search"),
             "autocomplete_qs": "q={query}",
-            "autocomplete_fields": {"name": "name", "value": "id"},
+            "autocomplete_fields": {
+                "remoteValues": "artists",
+                "name": "name",
+                "value": "id",
+            },
             "label": "Artist",
             "placeholder": "Select artists",
         }
@@ -145,7 +149,8 @@ class ArtistFilter(RadioFilter):
         filter_config["ids"] = sorted(filter_config["ids"])
         names = (
             models.Artist.objects.filter(pk__in=filter_config["ids"])
-            .order_by("id")
+            .annotate(__size=functions.Length("name"))
+            .order_by("__size", "id")
             .values_list("name", flat=True)
         )
         filter_config["names"] = list(names)
@@ -176,13 +181,13 @@ class TagFilter(RadioFilter):
             "name": "names",
             "type": "list",
             "subtype": "string",
-            "autocomplete": reverse_lazy("api:v1:tags-list"),
+            "autocomplete": reverse_lazy("api:v1:search"),
             "autocomplete_fields": {
-                "remoteValues": "results",
+                "remoteValues": "tags",
                 "name": "name",
                 "value": "name",
             },
-            "autocomplete_qs": "q={query}&ordering=length",
+            "autocomplete_qs": "q={query}",
             "label": "Tags",
             "placeholder": "Select tags",
         }
@@ -196,3 +201,28 @@ class TagFilter(RadioFilter):
             | Q(artist__tagged_items__tag__name__in=names)
             | Q(album__tagged_items__tag__name__in=names)
         )
+
+    def clean_config(self, filter_config):
+        filter_config = super().clean_config(filter_config)
+        filter_config["names"] = sorted(filter_config["names"])
+        names = (
+            models.tags_models.Tag.objects.filter(name__in=filter_config["names"])
+            .annotate(__size=functions.Length("name"))
+            .order_by("__size", "pk")
+            .values_list("name", flat=True)
+        )
+        filter_config["names"] = list(names)
+        return filter_config
+
+    def validate(self, config):
+        super().validate(config)
+        try:
+            names = models.tags_models.Tag.objects.filter(
+                name__in=config["names"]
+            ).values_list("name", flat=True)
+            diff = set(config["names"]) - set(names)
+            assert len(diff) == 0
+        except KeyError:
+            raise ValidationError("You must provide a name")
+        except AssertionError:
+            raise ValidationError('No tag matching names "{}"'.format(diff))
