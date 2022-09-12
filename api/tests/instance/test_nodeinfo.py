@@ -1,4 +1,6 @@
 from django.urls import reverse
+from funkwhale_api import __version__ as api_version
+from funkwhale_api.music.utils import SUPPORTED_EXTENSIONS
 
 from collections import OrderedDict
 
@@ -9,7 +11,7 @@ def test_nodeinfo_default(api_client):
 
     expected = {
         "version": "2.0",
-        "software": OrderedDict([("name", "funkwhale"), ("version", "1.2.7")]),
+        "software": OrderedDict([("name", "funkwhale"), ("version", api_version)]),
         "protocols": ["activitypub"],
         "services": OrderedDict([("inbound", []), ("outbound", [])]),
         "openRegistrations": False,
@@ -37,16 +39,7 @@ def test_nodeinfo_default(api_client):
                 "albums": OrderedDict([("total", 0)]),
                 "music": OrderedDict([("hours", 0)]),
             },
-            "supportedUploadExtensions": [
-                "aac",
-                "aif",
-                "aiff",
-                "flac",
-                "m4a",
-                "mp3",
-                "ogg",
-                "opus",
-            ],
+            "supportedUploadExtensions": SUPPORTED_EXTENSIONS,
             "allowList": {"enabled": False, "domains": None},
             "reportTypes": [
                 OrderedDict(
