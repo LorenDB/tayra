@@ -31,8 +31,9 @@ def verify_date(raw_date):
     delta = datetime.timedelta(seconds=DATE_HEADER_VALID_FOR)
     now = timezone.now()
     if dt < now - delta or dt > now + delta:
+        logger.error(f"Request Date {raw_date} is too too far in the future or in the past")
         raise forms.ValidationError(
-            "Request Date {} is too far in the future or in the past".format(raw_date)
+            "Request Date is too far in the future or in the past"
         )
 
     return dt
