@@ -1,13 +1,22 @@
 <script setup lang="ts">
+import { humanSize } from '~/utils/filters'
+import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
 import { get } from 'lodash-es'
-import useMarkdown from '~/composables/useMarkdown'
-import { humanSize } from '~/utils/filters'
 import { computed } from 'vue'
-import { useGettext } from 'vue3-gettext'
+
+import axios from 'axios'
+
+import useMarkdown from '~/composables/useMarkdown'
 
 const store = useStore()
 const nodeinfo = computed(() => store.state.instance.nodeinfo)
+
+const fetchData = async () => {
+  const response = await axios.get('instance/nodeinfo/2.0/')
+  store.commit('instance/nodeinfo', response.data)
+}
+fetchData()
 
 const { $pgettext } = useGettext()
 const labels = computed(() => ({
