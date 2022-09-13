@@ -29,7 +29,7 @@ const props = defineProps<Props>()
 const { playlistTracks, playlist } = useVModels(props, emit)
 
 const errors = ref([] as string[])
-const duplicateTrackAddInfo = ref<APIErrorResponse | null>(null)
+const duplicateTrackAddInfo = ref<{ tracks: string[] }>()
 const showDuplicateTrackAddConfirmation = ref(false)
 
 const { tracks: queueTracks } = useQueue()
@@ -57,10 +57,10 @@ const labels = computed(() => ({
 const isLoading = ref(false)
 const status = computed(() => isLoading.value
   ? 'loading'
-  : errors.value.length
-    ? 'errored'
-    : showDuplicateTrackAddConfirmation.value
-      ? 'confirmDuplicateAdd'
+  : showDuplicateTrackAddConfirmation.value
+    ? 'confirmDuplicateAdd'
+    : errors.value.length > 0
+      ? 'errored'
       : 'saved'
 )
 
@@ -70,24 +70,23 @@ const responseHandlers = {
     showDuplicateTrackAddConfirmation.value = false
   },
   errored (error: BackendError): void {
-    const { backendErrors, rawPayload } = error
-    // if backendErrors isn't populated (e.g. duplicate track exceptions raised by
-    // the playlist model), read directly from the response
-    // TODO (wvffle): Check if such case exists after rewrite
-    if (error.rawPayload?.playlist) {
-      error.backendErrors = error.rawPayload.playlist as string[]
-      error.rawPayload = undefined
-      return this.errored(error)
-    }
+    showDuplicateTrackAddConfirmation.value = false
 
-    if (backendErrors.length === 1 && backendErrors[0] === 'Tracks already exist in playlist') {
-      duplicateTrackAddInfo.value = rawPayload ?? null
+    const { backendErrors, rawPayload = {} } = error
+    if (backendErrors.length === 1 && backendErrors[0] === 'Tracks Already Exist In Playlist') {
+      duplicateTrackAddInfo.value = ((rawPayload.playlist as APIErrorResponse).non_field_errors as APIErrorResponse)[0] as { tracks: string[] }
       showDuplicateTrackAddConfirmation.value = true
       return
     }
 
     errors.value = backendErrors
   }
+}
+
+const fetchTracks = async () => {
+  // NOTE: This is handled by other functions and never used directly
+  const response = await axios.get(`playlists/${playlist.value?.id}/tracks/`)
+  playlistTracks.value = response.data.results
 }
 
 const store = useStore()
@@ -111,7 +110,10 @@ const removePlaylistTrack = async (index: number) => {
   try {
     tracks.value.splice(index, 1)
     await axios.post(`playlists/${playlist.value?.id}/remove/`, { index })
-    await store.dispatch('playlists/fetchOwn')
+    await Promise.all([
+      store.dispatch('playlists/fetchOwn'),
+      fetchTracks()
+    ])
     responseHandlers.success()
   } catch (error) {
     responseHandlers.errored(error as BackendError)
@@ -125,7 +127,7 @@ const clearPlaylist = async () => {
 
   try {
     tracks.value = []
-    await axios.post(`playlists/${playlist.value?.id}/clear/`)
+    await axios.delete(`playlists/${playlist.value?.id}/clear/`)
     await store.dispatch('playlists/fetchOwn')
     responseHandlers.success()
   } catch (error) {
@@ -145,7 +147,10 @@ const insertMany = async (insertedTracks: Track[], allowDuplicates: boolean) => 
     })
 
     tracks.value.push(...response.data.results)
-    await store.dispatch('playlists/fetchOwn')
+    await Promise.all([
+      store.dispatch('playlists/fetchOwn'),
+      fetchTracks()
+    ])
     responseHandlers.success()
   } catch (error) {
     responseHandlers.errored(error as BackendError)
@@ -185,8 +190,8 @@ const insertMany = async (insertedTracks: Track[], allowDuplicates: boolean) => 
         >
           <ul class="list">
             <li
-              v-for="(error, key) in errors"
-              :key="key"
+              v-for="error in errors"
+              :key="error"
             >
               {{ error }}
             </li>
@@ -206,8 +211,8 @@ const insertMany = async (insertedTracks: Track[], allowDuplicates: boolean) => 
         </p>
         <ul class="ui relaxed divided list duplicate-tracks-list">
           <li
-            v-for="(track, key) in duplicateTrackAddInfo?.tracks ?? []"
-            :key="key"
+            v-for="track in duplicateTrackAddInfo?.tracks ?? []"
+            :key="track"
             class="ui item"
           >
             {{ track }}
