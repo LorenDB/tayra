@@ -57,7 +57,7 @@ const settings = reactive({
 const orderedSettingsFields = SETTINGS_ORDER.map(id => settings.fields[id])
 
 const labels = computed(() => ({
-  title: t('Account Settings')
+  title: t('components.auth.Settings.title')
 }))
 
 const isLoading = ref(false)
@@ -224,7 +224,7 @@ const deleteAccount = async () => {
     await axios.delete('users/me/', { data: payload })
 
     store.commit('ui/addMessage', {
-      content: t('Your deletion request was submitted, your account and content will be deleted shortly'),
+      content: t('components.auth.Settings.deletionRequest'),
       date: new Date()
     })
 
@@ -276,7 +276,7 @@ fetchOwnedApps()
     <div class="ui vertical stripe segment">
       <section class="ui text container">
         <h2 class="ui header">
-          Account settings
+          {{ $t('components.auth.Settings.accountSettingsHeader') }}
         </h2>
         <form
           class="ui form"
@@ -287,7 +287,7 @@ fetchOwnedApps()
             class="ui positive message"
           >
             <h4 class="header">
-              Settings updated
+              {{ $t('components.auth.Settings.settingsUpdatedHeader') }}
             </h4>
           </div>
           <div
@@ -296,7 +296,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              Your settings can't be updated
+              {{ $t('components.auth.Settings.settingsUpdateFailureHeader') }}
             </h4>
             <ul class="list">
               <li
@@ -340,14 +340,14 @@ fetchOwnedApps()
             :class="['ui', { loading: isLoading }, 'button']"
             type="submit"
           >
-            Update settings
+            {{ $t('components.auth.Settings.updateSettingsButton') }}
           </button>
         </form>
       </section>
       <section class="ui text container">
         <div class="ui hidden divider" />
         <h2 class="ui header">
-          Avatar
+          {{ $t('components.auth.Settings.avatarHeader') }}
         </h2>
         <div class="ui form">
           <div
@@ -356,7 +356,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              Your avatar cannot be saved
+              {{ $t('components.auth.Settings.avatarSaveFailureHeader') }}
             </h4>
             <ul class="list">
               <li
@@ -373,7 +373,7 @@ fetchOwnedApps()
             @update:model-value="submitAvatar($event)"
             @delete="avatar = {uuid: null}"
           >
-            Avatar
+            {{ $t('components.auth.Settings.avatarInputLabel') }}
           </attachment-input>
         </div>
       </section>
@@ -381,10 +381,10 @@ fetchOwnedApps()
       <section class="ui text container">
         <div class="ui hidden divider" />
         <h2 class="ui header">
-          Change my password
+          {{ $t('components.auth.Settings.changePasswordHeader') }}
         </h2>
         <div class="ui message">
-          Changing your password will also change your Subsonic API password if you have requested one.&nbsp;            You will have to update your password on your clients that use this password.
+          {{ $t('components.auth.Settings.changePasswordMessage') }}
         </div>
         <form
           class="ui form"
@@ -396,16 +396,16 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              Your password cannot be changed
+              {{ $t('components.auth.Settings.changePasswordFailureMessage') }}
             </h4>
             <ul class="list">
               <li v-if="passwordError == 'invalid_credentials'">
-                Please double-check your password is correct
+                {{ $t('components.auth.Settings.changePasswordHelp') }}
               </li>
             </ul>
           </div>
           <div class="field">
-            <label for="old-password-field">Current password</label>
+            <label for="old-password-field">{{ $t('components.auth.Settings.currentPasswordLabel') }}</label>
             <password-input
               v-model="credentials.oldPassword"
               field-id="old-password-field"
@@ -413,7 +413,7 @@ fetchOwnedApps()
             />
           </div>
           <div class="field">
-            <label for="new-password-field">New password</label>
+            <label for="new-password-field">{{ $t('components.auth.Settings.newPasswordLabel') }}</label>
             <password-input
               v-model="credentials.newPassword"
               field-id="new-password-field"
@@ -424,30 +424,30 @@ fetchOwnedApps()
             :class="['ui', {'loading': isLoadingPassword}, {disabled: !credentials.newPassword || !credentials.oldPassword}, 'warning', 'button']"
             :action="submitPassword"
           >
-            Change password
+            {{ $t('components.auth.Settings.changePasswordButton') }}
             <template #modal-header>
               <p>
-                Change your password?
+                {{ $t('components.auth.Settings.changePasswordModalHeader') }}
               </p>
             </template>
             <template #modal-content>
               <div>
                 <p>
-                  Changing your password will have the following consequences:
+                  {{ $t('components.auth.Settings.changePasswordWarning') }}
                 </p>
                 <ul>
                   <li>
-                    You will be logged out from this session and have to log in with the new one
+                    {{ $t('components.auth.Settings.changePasswordLogout') }}
                   </li>
                   <li>
-                    Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password
+                    {{ $t('components.auth.Settings.changePasswordSubsonic') }}
                   </li>
                 </ul>
               </div>
             </template>
             <template #modal-confirm>
               <div>
-                Disable access
+                {{ $t('components.auth.Settings.disableSubsonicMessage') }}
               </div>
             </template>
           </dangerous-button>
@@ -464,11 +464,11 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="eye slash outline icon" />
           <div class="content">
-            Content filters
+            {{ $t('components.auth.Settings.contentFiltersHeader') }}
           </div>
         </h2>
         <p>
-          Content filters help you hide content you don't want to see on the service.
+          {{ $t('components.auth.Settings.contentFiltersDescription') }}
         </p>
 
         <button
@@ -476,19 +476,19 @@ fetchOwnedApps()
           @click="$store.dispatch('moderation/fetchContentFilters')"
         >
           <i class="refresh icon" />&nbsp;
-          Refresh
+          {{ $t('components.auth.Settings.refreshButton') }}
         </button>
         <h3 class="ui header">
-          Hidden artists
+          {{ $t('components.auth.Settings.hiddenArtistsHeader') }}
         </h3>
         <table class="ui compact very basic unstackable table">
           <thead>
             <tr>
               <th>
-                Name
+                {{ $t('components.auth.Settings.artistNameTableHeader') }}
               </th>
               <th>
-                Creation date
+                {{ $t('components.auth.Settings.filterCreationDateTableHeader') }}
               </th>
               <th />
             </tr>
@@ -511,7 +511,7 @@ fetchOwnedApps()
                   class="ui basic tiny button"
                   @click="$store.dispatch('moderation/deleteContentFilter', filter.uuid)"
                 >
-                  Delete
+                  {{ $t('components.auth.Settings.filterDeleteButton') }}
                 </button>
               </td>
             </tr>
@@ -526,18 +526,18 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="open lock icon" />
           <div class="content">
-            Authorized apps
+            {{ $t('components.auth.Settings.authorizedAppsHeader') }}
           </div>
         </h2>
         <p>
-          This is the list of applications that have access to your account data.
+          {{ $t('components.auth.Settings.authorizedAppsDescription') }}
         </p>
         <button
           :class="['ui', 'icon', { loading: isLoadingApps }, 'button']"
           @click="fetchApps()"
         >
           <i class="refresh icon" />&nbsp;
-          Refresh
+          {{ $t('components.auth.Settings.refreshButton') }}
         </button>
         <table
           v-if="apps.length > 0"
@@ -546,10 +546,10 @@ fetchOwnedApps()
           <thead>
             <tr>
               <th>
-                Application
+                {{ $t('components.auth.Settings.appNameTableHeader') }}
               </th>
               <th>
-                Permissions
+                {{ $t('components.auth.Settings.appPermissionsTableHeader') }}
               </th>
               <th />
             </tr>
@@ -570,22 +570,20 @@ fetchOwnedApps()
                   :class="['ui', 'tiny', 'danger', { loading: isRevoking.has(app.client_id) }, 'button']"
                   @confirm="revokeApp(app.client_id)"
                 >
-                  Revoke
+                  {{ $t('components.auth.Settings.permissionDeleteButton') }}
                   <template #modal-header>
-                    <p
-                      v-translate="{application: app.name}"
-                    >
-                      Revoke access for application "%{ application }"?
+                    <p>
+                      {{ $t('components.auth.Settings.revokePermissionModalMessage', app: app.name) }}
                     </p>
                   </template>
                   <template #modal-content>
                     <p>
-                      This will prevent this application from accessing the service on your behalf.
+                      {{ $t('components.auth.Settings.revokePermissionModalWarning') }}
                     </p>
                   </template>
                   <template #modal-confirm>
                     <div>
-                      Revoke access
+                      {{ $t('components.auth.Settings.revokeAccessButton') }}
                     </div>
                   </template>
                 </dangerous-button>
@@ -595,9 +593,9 @@ fetchOwnedApps()
         </table>
         <empty-state v-else>
           <template #title>
-            You don't have any application connected with your account.
+            {{ $t('components.auth.Settings.emptyAppMessage') }}
           </template>
-          If you authorize third-party applications to access your data, those applications will be listed here.
+          {{ $t('components.auth.Settings.emptyAppHelp') }}
         </empty-state>
       </section>
       <section
@@ -608,17 +606,17 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="code icon" />
           <div class="content">
-            Your applications
+            {{ $t('components.auth.Settings.personalAppsHeader') }}
           </div>
         </h2>
         <p>
-          This is the list of applications that you have registered.
+          {{ $t('components.auth.Settings.personalAppsDescription') }}
         </p>
         <router-link
           class="ui success button"
           :to="{name: 'settings.applications.new'}"
         >
-          Register a new application
+          {{ $t('components.auth.Settings.newAppLink') }}
         </router-link>
         <table
           v-if="ownedApps.length > 0"
@@ -627,13 +625,13 @@ fetchOwnedApps()
           <thead>
             <tr>
               <th>
-                Application
+                {{ $t('components.auth.Settings.personalAppNameTableHeader') }}
               </th>
               <th>
-                Scopes
+                {{ $t('components.auth.Settings.personalAppScopesTableHeader') }}
               </th>
               <th>
-                Creation date
+                {{ $t('components.auth.Settings.personalAppCreationDateTableHeader') }}
               </th>
               <th />
             </tr>
@@ -659,28 +657,26 @@ fetchOwnedApps()
                   class="ui tiny success button"
                   :to="{name: 'settings.applications.edit', params: {id: app.client_id}}"
                 >
-                  Edit
+                  {{ $t('components.auth.Settings.personalAppEditLink') }}
                 </router-link>
                 <dangerous-button
                   :class="['ui', 'tiny', 'danger', { loading: isDeleting.has(app.client_id) }, 'button']"
                   @confirm="deleteApp(app.client_id)"
                 >
-                  Remove
+                  {{ $t('components.auth.Settings.personalAppDeleteLink') }}
                   <template #modal-header>
-                    <p
-                      v-translate="{application: app.name}"
-                    >
-                      Remove application "%{ application }"?
+                    <p>
+                      {{ $t('components.auth.Settings.deletePersonalAppModalMessage', app: app.name) }}
                     </p>
                   </template>
                   <template #modal-content>
                     <p>
-                      This will permanently remove the application and all the associated tokens.
+                      {{ $t('components.auth.Settings.deletePersonalAppModalWarning') }}
                     </p>
                   </template>
                   <template #modal-confirm>
                     <div>
-                      Remove application
+                      {{ $t('components.auth.Settings.deletePersonalAppButton') }}
                     </div>
                   </template>
                 </dangerous-button>
@@ -690,9 +686,9 @@ fetchOwnedApps()
         </table>
         <empty-state v-else>
           <template #title>
-            You don't have registered any application yet.
+            {{ $t('components.auth.Settings.emptyPersonalAppMessage') }}
           </template>
-          Register one to integrate Funkwhale with third-party applications.
+            {{ $t('components.auth.Settings.emptyPersonalAppHelp') }}
         </empty-state>
       </section>
 
@@ -704,17 +700,17 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="code icon" />
           <div class="content">
-            Plugins
+            {{ $t('components.auth.Settings.pluginsHeader') }}
           </div>
         </h2>
         <p>
-          Use plugins to extend Funkwhale and get additional features.
+          {{ $t('components.auth.Settings.pluginsDescription') }}
         </p>
         <router-link
           class="ui success button"
           :to="{name: 'settings.plugins'}"
         >
-          Manage plugins
+          {{ $t('components.auth.Settings.managePluginsLink') }}
         </router-link>
       </section>
       <section class="ui text container">
@@ -722,18 +718,14 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="comment icon" />
           <div class="content">
-            Change my e-mail address
+            {{ $t('components.auth.Settings.changeEmailHeader') }}
           </div>
         </h2>
         <p>
-          Change the e-mail address associated with your account. We will send a confirmation to the new address.
+          {{ $t('components.auth.Settings.changeEmailDescription') }}
         </p>
         <p>
-          <translate
-            :translate-params="{email: $store.state.auth.profile?.email}"
-          >
-            Your current e-mail address is %{ email }.
-          </translate>
+          {{ $t('components.auth.Settings.currentEmailLabel', { email: email }) }}
         </p>
         <form
           class="ui form"
@@ -745,7 +737,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              We cannot change your e-mail address
+              {{ $t('components.auth.Settings.changeEmailFailureMessage') }}
             </h4>
             <ul class="list">
               <li
@@ -757,7 +749,7 @@ fetchOwnedApps()
             </ul>
           </div>
           <div class="field">
-            <label for="new-email">New e-mail address</label>
+            <label for="new-email">{{ $t('components.auth.Settings.newEmailLabel') }}</label>
             <input
               id="new-email"
               v-model="newEmail"
@@ -766,7 +758,7 @@ fetchOwnedApps()
             >
           </div>
           <div class="field">
-            <label for="current-password-field-email">Password</label>
+            <label for="current-password-field-email">{{ $t('components.auth.Settings.currentPasswordLabel')} }}</label>
             <password-input
               v-model="emailPassword"
               field-id="current-password-field-email"
@@ -777,7 +769,7 @@ fetchOwnedApps()
             type="submit"
             class="ui button"
           >
-            Update
+            {{ $t('components.auth.Settings.updateEmailButton') }}
           </button>
         </form>
       </section>
@@ -786,17 +778,17 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="trash icon" />
           <div class="content">
-            Delete my account
+            {{ $t('components.auth.Settings.deleteAccountHeader') }}
           </div>
         </h2>
         <p>
-          You can permanently and irreversibly delete your account and all the associated data using the form below. You will be asked for confirmation.
+          {{ $t('components.auth.Settings.deleteAccountDescription') }}
         </p>
         <div
           role="alert"
           class="ui warning message"
         >
-          Your account will be deleted from our servers within a few minutes. We will also notify other servers who may have a copy of some of your data so they can proceed to deletion. Please note that some of these servers may be offline or unwilling to comply though.
+          {{ $t('components.auth.Settings.deleteAccountWarning') }}
         </div>
         <div class="ui form">
           <div
@@ -805,7 +797,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              We cannot delete your account
+              {{ $t('components.auth.Settings.deleteAccountFailureMessage') }}
             </h4>
             <ul class="list">
               <li
@@ -817,7 +809,7 @@ fetchOwnedApps()
             </ul>
           </div>
           <div class="field">
-            <label for="current-password-field">Password</label>
+            <label for="current-password-field">{{ $t('components.auth.Settings.currentPasswordLabel') }}</label>
             <password-input
               v-model="deleteAccountPassword"
               field-id="current-password-field"
@@ -828,22 +820,22 @@ fetchOwnedApps()
             :class="['ui', {'loading': isDeletingAccount}, {disabled: !deleteAccountPassword}, {danger: deleteAccountPassword}, 'button']"
             :action="deleteAccount"
           >
-            Delete my account…
+            {{ $t('components.auth.Settings.deleteAccountButton') }}
             <template #modal-header>
               <p>
-                Do you want to delete your account?
+                {{ $t('components.auth.Settings.deleteAccountConfirmationMessage') }}
               </p>
             </template>
             <template #modal-content>
               <div>
                 <p>
-                  This is irreversible and will permanently remove your data from our servers. You will we immediately logged out.
+                  {{ $t('components.auth.Settings.deleteAccountConfirmationWarning') }}
                 </p>
               </div>
             </template>
             <template #modal-confirm>
               <div>
-                Delete my account
+                {{ $t('components.auth.Settings.deleteAccountConfirmButton') }}
               </div>
             </template>
           </dangerous-button>

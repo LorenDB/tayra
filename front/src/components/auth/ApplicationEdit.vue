@@ -20,7 +20,7 @@ const { t } = useI18n()
 const application = ref()
 
 const labels = computed(() => ({
-  title: t('Edit application')
+  title: t('components.auth.ApplicationEdit.editApplicationLabel')
 }))
 
 const isLoading = ref(false)
@@ -72,17 +72,17 @@ store.state.auth.applicationSecret = undefined
         </div>
         <template v-else>
           <router-link :to="{name: 'settings'}">
-            Back to settings
+            {{ $t('components.auth.ApplicationEdit.backToSettingsLink') }}
           </router-link>
           <h2 class="ui header">
-            Application details
+            {{ $t('components.auth.ApplicationEdit.appDetailsHeader') }}
           </h2>
           <div class="ui form">
             <p>
-              Application ID and secret are really sensitive values and must be treated like passwords. Do not share those with anyone else.
+              {{ $t('components.auth.ApplicationEdit.appDetailsDescription') }}
             </p>
             <div class="field">
-              <label for="copy-id">Application ID</label>
+              <label for="copy-id">{{ $t('components.auth.ApplicationEdit.appIdLabel') }}</label>
               <copy-input
                 id="copy-id"
                 :value="application.client_id"
@@ -94,14 +94,14 @@ store.state.auth.applicationSecret = undefined
             >
               <div class="ui small warning message">
                 <h3 class="header">
-                  Keep a copy of this token in a safe place
+                  {{ $t('components.auth.ApplicationEdit.appSecretWarningTitle') }}
                 </h3>
                 <p>
-                  You won't be able to see it again once you leave this screen.
+                  {{ $t('components.auth.ApplicationEdit.appSecretWarningMessage') }}
                 </p>
               </div>
 
-              <label for="copy-secret">Application secret</label>
+              <label for="copy-secret">{{ $t('components.auth.ApplicationEdit.appSecretLabel') }}</label>
               <copy-input
                 id="copy-secret"
                 :value="secret"
@@ -111,7 +111,7 @@ store.state.auth.applicationSecret = undefined
               v-if="application.token != undefined"
               class="field"
             >
-              <label for="copy-secret">Access token</label>
+              <label for="copy-secret">{{ $t('components.auth.ApplicationEdit.accessTokenLabel') }}</label>
               <copy-input
                 id="copy-secret"
                 :value="application.token"
@@ -121,12 +121,12 @@ store.state.auth.applicationSecret = undefined
                 @click.prevent="refreshToken"
               >
                 <i class="refresh icon" />
-                Regenerate token
+                {{ $t('components.auth.ApplicationEdit.regenerateTokenLink') }}
               </a>
             </div>
           </div>
           <h2 class="ui header">
-            Edit application
+            {{ $t('components.auth.ApplicationEdit.editAppHeader') }}
           </h2>
           <application-form
             :app="application"

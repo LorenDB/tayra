@@ -22,8 +22,8 @@ const value = useVModel(props, 'modelValue', emit)
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: t('Search…'),
-  clear: t('Clear')
+  searchPlaceholder: t('components.common.InlineSearchBar.searchPlaceholder'),
+  clear: t('components.common.InlineSearchBar.clearLabel')
 }))
 
 const search = () => {
@@ -42,7 +42,7 @@ const search = () => {
         for="search-query"
         class="hidden"
       >
-        Search
+        {{ $t('components.common.InlineSearchBar.searchLabel') }}
       </label>
       <input
         id="search-query"

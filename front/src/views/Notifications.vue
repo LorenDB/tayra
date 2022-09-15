@@ -23,7 +23,7 @@ const showInstanceSupportMessage = computed(() => store.getters['ui/showInstance
 const showFunkwhaleSupportMessage = computed(() => store.getters['ui/showFunkwhaleSupportMessage'])
 
 const labels = computed(() => ({
-  title: t('Notifications')
+  title: t('views.Notifications.title')
 }))
 
 const filters = reactive({
@@ -101,7 +101,7 @@ const markAllAsRead = async () => {
           class="ui container"
         >
           <h1 class="ui header">
-            Your messages
+            {{ $t('views.Notifications.messagesHeader') }}
           </h1>
           <div class="ui two column stackable grid">
             <div
@@ -110,7 +110,7 @@ const markAllAsRead = async () => {
             >
               <div class="ui attached info message">
                 <h4 class="header">
-                  Support this Funkwhale pod
+                  {{ $t('views.Notifications.instanceSupportHeader') }}
                 </h4>
                 <sanitized-html :html="supportMessage" />
               </div>
@@ -121,30 +121,30 @@ const markAllAsRead = async () => {
                 >
                   <div class="inline field">
                     <label for="instance-reminder-delay">
-                      Remind me in:
+                      {{ $t('views.Notifications.instanceReminderDelay') }}
                     </label>
                     <select
                       id="instance-reminder-delay"
                       v-model="instanceSupportMessageDelay"
                     >
                       <option :value="30">
-                        30 days
+                        {{ $t('views.Notifications.instanceReminder30') }}
                       </option>
                       <option :value="60">
-                        60 days
+                        {{ $t('views.Notifications.instanceReminder60') }}
                       </option>
                       <option :value="90">
-                        90 days
+                        {{ $t('views.Notifications.instanceReminder90') }}
                       </option>
                       <option :value="null">
-                        Never
+                        {{ $t('views.Notifications.instanceReminderNever') }}
                       </option>
                     </select>
                     <button
                       type="submit"
                       class="ui right floated basic button"
                     >
-                      Got it!
+                      {{ $t('views.Notifications.instanceReminderSubmitButton') }}
                     </button>
                   </div>
                 </form>
@@ -156,10 +156,10 @@ const markAllAsRead = async () => {
             >
               <div class="ui info attached message">
                 <h4 class="header">
-                  Do you like Funkwhale?
+                  {{ $t('views.Notifications.funkwhaleSupportHeader') }}
                 </h4>
                 <p>
-                  We noticed you've been here for a while. If Funkwhale is useful to you, we could use your help to make it even better!
+                  {{ $t('views.Notifications.funkwhaleSupportMessage') }}
                 </p>
                 <a
                   href="https://funkwhale.audio/support-us"
@@ -167,7 +167,7 @@ const markAllAsRead = async () => {
                   rel="noopener"
                   class="ui primary inverted button"
                 >
-                  Donate
+                  {{ $t('views.Notifications.funkwhaleSupportDonateLink') }}
                 </a>
                 <a
                   href="https://contribute.funkwhale.audio"
@@ -175,7 +175,7 @@ const markAllAsRead = async () => {
                   rel="noopener"
                   class="ui secondary inverted button"
                 >
-                  Discover other ways to help
+                  {{ $t('views.Notifications.funkwhaleSupportHelpLink') }}
                 </a>
               </div>
               <div class="ui bottom attached segment">
@@ -185,30 +185,30 @@ const markAllAsRead = async () => {
                 >
                   <div class="inline field">
                     <label for="funkwhale-reminder-delay">
-                      Remind me in:
+                      {{ $t('views.Notifications.funkwhaleReminderDelay') }}
                     </label>
                     <select
                       id="funkwhale-reminder-delay"
                       v-model="funkwhaleSupportMessageDelay"
                     >
                       <option :value="30">
-                        30 days
+                        {{ $t('views.Notifications.funkwhaleReminder30') }}
                       </option>
                       <option :value="60">
-                        60 days
+                        {{ $t('views.Notifications.funkwhaleReminder60') }}
                       </option>
                       <option :value="90">
-                        90 days
+                        {{ $t('views.Notifications.funkwhaleReminder90') }}
                       </option>
                       <option :value="null">
-                        Never
+                        {{ $t('views.Notifications.funkwhaleReminderNever') }}
                       </option>
                     </select>
                     <button
                       type="submit"
                       class="ui right floated basic button"
                     >
-                      Got it!
+                      {{ $t('views.Notifications.funkwhaleReminderSubmitButton') }}
                     </button>
                   </div>
                 </form>
@@ -217,7 +217,7 @@ const markAllAsRead = async () => {
           </div>
         </div>
         <h1 class="ui header">
-          Your notifications
+          {{ $t('views.Notifications.notificationsHeader') }}
         </h1>
         <div class="ui toggle checkbox">
           <input
@@ -225,7 +225,7 @@ const markAllAsRead = async () => {
             v-model="filters.is_read"
             type="checkbox"
           >
-          <label for="show-read-notifications">Show read notifications</label>
+          <label for="show-read-notifications">{{ $t('views.Notifications.showReadNotificationsCheckbox') }}</label>
         </div>
         <button
           v-if="filters.is_read === false && notifications.count > 0"
@@ -233,7 +233,7 @@ const markAllAsRead = async () => {
           @click.prevent="markAllAsRead"
         >
           <i class="ui check icon" />
-          Mark all as read
+          {{ $t('views.Notifications.markAllReadButton') }}
         </button>
         <div class="ui hidden divider" />
 
@@ -242,7 +242,7 @@ const markAllAsRead = async () => {
           :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
         >
           <div class="ui text loader">
-            Loading notifications…
+            {{ $t('views.Notifications.loadingNotifications') }}
           </div>
         </div>
 
@@ -259,7 +259,7 @@ const markAllAsRead = async () => {
           </tbody>
         </table>
         <p v-else-if="additionalNotifications === 0">
-          No notification to show.
+          {{ $t('views.Notifications.noNotifications') }}
         </p>
       </div>
     </section>

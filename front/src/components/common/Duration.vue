@@ -18,15 +18,11 @@ const duration = computed(() => {
 
 <template>
   <span>
-    <translate
+    <span
       v-if="duration.hours > 0"
-
-      :translate-params="duration"
-    >%{ hours } h %{ minutes } min</translate>
-    <translate
+    >{{ $t('components.common.Duration.hoursFormat', {hours: duration.hours}, {minutes: duration.minutes}) }}</span>
+    <span
       v-else
-
-      :translate-params="duration"
-    >%{ minutes } min</translate>
+    >{{ $t('components.common.Duration.minutesFormat', {minutes: duration.minutes}) }}</span>
   </span>
 </template>

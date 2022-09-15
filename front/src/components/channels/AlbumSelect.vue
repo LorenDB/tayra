@@ -47,12 +47,12 @@ watch(() => props.channel, fetchData, { immediate: true })
 <template>
   <div>
     <label for="album-dropdown">
-      <translate
+      <span
         v-if="channel && channel.artist && channel.artist.content_category === 'podcast'"
-      >Series</translate>
-      <translate
+      >{{ $t('components.channels.AlbumSelect.seriesLabel') }}</span>
+      <span
         v-else
-      >Album</translate>
+      >{{ $t('components.channels.AlbumSelect.albumLabel') }}</span>
     </label>
     <select
       id="album-dropdown"
@@ -67,14 +67,10 @@ watch(() => props.channel, fetchData, { immediate: true })
         :key="album.id"
         :value="album.id"
       >
-        {{ album.title }} (<translate
-
-          :translate-params="{count: album.tracks_count}"
-          :translate-n="album.tracks_count"
-          translate-plural="%{ count } tracks"
-        >
-          %{ count } track
-        </translate>)
+        {{ album.title }}
+        <span>
+          {{ $t('components.channels.AlbumSelect.trackCount', { tracks_count: album.tracks_count }) }}
+        </span>
       </option>
     </select>
   </div>

@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Log Out')
+  title: t('components.auth.Logout.title')
 }))
 </script>
 
@@ -19,18 +19,16 @@ const labels = computed(() => ({
         class="ui small text container"
       >
         <h2>
-          Are you sure you want to log out?
+          {{ $t('components.auth.Logout.confirmHeader') }}
         </h2>
-        <p
-          v-translate="{username: $store.state.auth.username}"
-        >
-          You are currently logged in as %{ username }
+        <p>
+          {{ $t('components.auth.Logout.loggedInUsername', { username: $store.state.auth.username }) }}
         </p>
         <button
           class="ui button"
           @click="$store.dispatch('auth/logout')"
         >
-          Yes, log me out!
+          {{ $t('components.auth.Logout.confirmLogoutButton') }}
         </button>
       </div>
       <div
@@ -38,13 +36,13 @@ const labels = computed(() => ({
         class="ui small text container"
       >
         <h2>
-          You aren't currently logged in
+          {{ $t('components.auth.Logout.loggedOutHeader') }}
         </h2>
         <router-link
           to="/login"
           class="ui button"
         >
-          Log in!
+          {{ $t('components.auth.Logout.logInLink') }}
         </router-link>
       </div>
     </section>

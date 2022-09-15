@@ -62,24 +62,16 @@ const imageUrl = computed(() => cover.value?.urls.original
       />
     </div>
     <div class="extra content">
-      <translate
+      <span
         v-if="artist.content_category === 'music'"
-
-        :translate-params="{count: artist.tracks_count}"
-        :translate-n="artist.tracks_count"
-        translate-plural="%{ count } tracks"
       >
-        %{ count } track
-      </translate>
-      <translate
+        {{ $t('components.audio.artist.Card.trackCount', artist.tracks_count) }}
+      </span>
+      <span
         v-else
-
-        :translate-params="{count: artist.tracks_count}"
-        :translate-n="artist.tracks_count"
-        translate-plural="%{ count } episodes"
       >
-        %{ count } episode
-      </translate>
+        {{ $t('components.audio.artist.Card.episodeCount', artist.tracks_count) }}
+      </span>
       <play-button
         class="right floated basic icon"
         :dropdown-only="true"

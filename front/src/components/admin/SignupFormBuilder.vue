@@ -28,9 +28,9 @@ const isPreviewing = ref(false)
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  delete: t('Delete'),
-  up: t('Move up'),
-  down: t('Move down')
+  delete: t('components.admin.SignupFormBuilder.deleteLabel'),
+  up: t('components.admin.SignupFormBuilder.moveUpLabel'),
+  down: t('components.admin.SignupFormBuilder.moveDownLabel')
 }))
 
 if (!value.value?.fields) {
@@ -45,7 +45,7 @@ if (!value.value?.fields) {
 
 const addField = () => {
   value.value.fields.push({
-    label: t('Additional field') + ' ' + (value.value.fields.length + 1),
+    label: t('components.admin.SignupFormBuilder.additionalFieldInput') + ' ' + (value.value.fields.length + 1),
     required: true,
     input_type: 'short_text'
   })
@@ -69,13 +69,13 @@ const move = (idx: number, increment: number) => {
         :class="[{active: !isPreviewing}, 'item']"
         @click.stop.prevent="isPreviewing = false"
       >
-        Edit form
+        {{ $t('components.admin.SignupFormBuilder.editForm') }}
       </button>
       <button
         :class="[{active: isPreviewing}, 'item']"
         @click.stop.prevent="isPreviewing = true"
       >
-        Preview form
+      {{ $t('components.admin.SignupFormBuilder.previewForm') }}
       </button>
     </div>
     <div
@@ -95,10 +95,10 @@ const move = (idx: number, increment: number) => {
     >
       <div class="field">
         <label for="help-text">
-          Help text
+          {{ $t('components.admin.SignupFormBuilder.helpTextLabel') }}
         </label>
         <p>
-          An optional text to be displayed at the start of the sign-up form.
+          {{ $t('components.admin.SignupFormBuilder.helpTextMessage') }}
         </p>
         <content-form
           v-if="value.help_text"
@@ -109,22 +109,22 @@ const move = (idx: number, increment: number) => {
       </div>
       <div class="field">
         <label>
-          Additional fields
+          {{ $t('components.admin.SignupFormBuilder.additionalFieldsLabel') }}
         </label>
         <p>
-          Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled.
+          {{ $t('components.admin.SignupFormBuilder.additionalFieldsMessage') }}
         </p>
         <table v-if="value.fields?.length > 0">
           <thead>
             <tr>
               <th>
-                Field label
+                {{ $t('components.admin.SignupFormBuilder.fieldLabelTableHeader') }}
               </th>
               <th>
-                Field type
+                {{ $t('components.admin.SignupFormBuilder.fieldTypeTableHeader') }}
               </th>
               <th>
-                Required
+                {{ $t('components.admin.SignupFormBuilder.requiredTableHeader') }}
               </th>
               <th><span class="visually-hidden">Actions</span></th>
             </tr>
@@ -144,20 +144,20 @@ const move = (idx: number, increment: number) => {
               <td>
                 <select v-model="field.input_type">
                   <option value="short_text">
-                    Short text
+                    {{ $t('components.admin.SignupFormBuilder.shortTextInput') }}
                   </option>
                   <option value="long_text">
-                    Long text
+                    {{ $t('components.admin.SignupFormBuilder.longTextInput') }}
                   </option>
                 </select>
               </td>
               <td>
                 <select v-model="field.required">
                   <option :value="true">
-                    Yes
+                    {{ $t('components.admin.SignupFormBuilder.requiredTrue') }}
                   </option>
                   <option :value="false">
-                    No
+                    {{ $t('components.admin.SignupFormBuilder.requiredFalse') }}
                   </option>
                 </select>
               </td>
@@ -192,7 +192,7 @@ const move = (idx: number, increment: number) => {
           class="ui basic button"
           @click.stop.prevent="addField"
         >
-          Add a new field
+          {{ $t('components.admin.SignupFormBuilder.addFieldButton') }}
         </button>
       </div>
     </div>

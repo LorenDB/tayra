@@ -69,7 +69,7 @@ const submitAndScan = async () => {
         target="_blank"
       >
         <i class="external icon" />
-        Documentation
+        {{ $t('components.auth.Plugin.documentationLink')  }}
       </a>
     </template>
     <div class="ui clearing hidden divider" />
@@ -79,7 +79,7 @@ const submitAndScan = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        Error while saving plugin
+        {{ $t('components.auth.Plugin.saveFailureHeader') }}
       </h4>
       <ul class="list">
         <li
@@ -97,7 +97,7 @@ const submitAndScan = async () => {
           v-model="enabled"
           type="checkbox"
         >
-        <label :for="`${plugin.name}-enabled`">Enabled</label>
+        <label :for="`${plugin.name}-enabled`">{{ $t('components.auth.Plugin.pluginEnabledLabel') }}</label>
       </div>
     </div>
     <div class="ui clearing hidden divider" />
@@ -105,7 +105,7 @@ const submitAndScan = async () => {
       v-if="plugin.source"
       class="field"
     >
-      <label for="plugin-library">Library</label>
+      <label for="plugin-library">{{ $t('components.auth.Plugin.libraryLabel') }}</label>
       <select
         id="plugin-library"
         v-model="values['library']"
@@ -119,7 +119,7 @@ const submitAndScan = async () => {
         </option>
       </select>
       <div>
-        Library where files should be imported.
+        {{ $t('components.auth.Plugin.libraryDescription') }}
       </div>
     </div>
     <template v-if="(plugin.conf?.length ?? 0) > 0">
@@ -194,14 +194,14 @@ const submitAndScan = async () => {
       type="submit"
       :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
     >
-      Save
+      {{ $t('components.auth.Plugin.saveButton') }}
     </button>
     <button
       v-if="plugin.source"
       :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
       @click.prevent="submitAndScan"
     >
-      Scan
+      {{ $t('components.auth.Plugin.scanButton') }}
     </button>
     <div class="ui clearing hidden divider" />
   </form>

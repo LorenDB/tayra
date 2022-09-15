@@ -53,7 +53,7 @@ const { isPlaying } = usePlayer()
 const { activateTrack } = usePlayOptions(props)
 
 const { t } = useI18n()
-const actionsButtonLabel = computed(() => t('Show track actions'))
+const actionsButtonLabel = computed(() => t('components.audio.podcast.MobileRow.actionsButtonlabel'))
 </script>
 
 <template>

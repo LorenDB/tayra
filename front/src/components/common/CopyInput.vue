@@ -22,7 +22,7 @@ const { copy, isSupported: canCopy, copied } = useClipboard({ source: value, cop
       v-if="copied"
       class="message"
     >
-      Text copied to clipboard!
+      {{ $t('components.common.CopyInput.copySuccessMessage') }}
     </p>
     <input
       :id="id"
@@ -37,7 +37,7 @@ const { copy, isSupported: canCopy, copied } = useClipboard({ source: value, cop
       @click="copy()"
     >
       <i class="copy icon" />
-      Copy
+      {{ $t('components.common.CopyInput.copyButton') }}
     </button>
   </div>
 </template>

@@ -50,12 +50,12 @@ onKeyboardShortcut(['ctrl', 'k'], () => (focused.value = true), true)
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  placeholder: t('Search for artists, albums, tracks…'),
-  searchContent: t('Search for content'),
-  artist: t('Artist'),
-  album: t('Album'),
-  track: t('Track'),
-  tag: t('Tag')
+  placeholder: t('components.audio.SearchBar.placeHolderLabel'),
+  searchContent: t('components.audio.SearchBar.searchContentLabel'),
+  artist: t('components.audio.SearchBar.artistLabel'),
+  album: t('components.audio.SearchBar.albumLabel'),
+  track: t('components.audio.SearchBar.trackLabel'),
+  tag: t('components.audio.SearchBar.tagLabel')
 }))
 
 const router = useRouter()
@@ -77,11 +77,11 @@ const blur = () => {
 const categories = computed(() => [
   {
     code: 'federation',
-    name: t('Federation')
+    name: t('components.audio.SearchBar.federationCategory')
   },
   {
     code: 'podcasts',
-    name: t('Podcasts')
+    name: t('components.audio.SearchBar.podcastsCategory')
   },
   {
     code: 'artists',
@@ -138,8 +138,8 @@ onMounted(() => {
     showNoResults: true,
     error: {
       // @ts-expect-error Semantic is broken
-      noResultsHeader: t('No matches found'),
-      noResults: t('Sorry, there are no results for this search')
+      noResultsHeader: t('components.audio.SearchBar.noResultsHeader'),
+      noResults: t('components.audio.SearchBar.noResultsMessage')
     },
 
     onSelect (result, response) {
@@ -179,7 +179,7 @@ onMounted(() => {
           if (category.code === 'federation' && id) {
             resultsEmpty = false
             results[category.code]?.results.push({
-              title: t('Search on the fediverse'),
+              title: t('components.audio.SearchBar.fediverseSearchLabel'),
               routerUrl: {
                 name: 'search',
                 query: { id }
@@ -190,7 +190,7 @@ onMounted(() => {
           if (category.code === 'podcasts' && id) {
             resultsEmpty = false
             results[category.code]?.results.push({
-              title: t('Subscribe to podcast via RSS'),
+              title: t('components.audio.SearchBar.rssSearchLabel'),
               routerUrl: {
                 name: 'search',
                 query: { id, type: 'rss' }
@@ -200,7 +200,7 @@ onMounted(() => {
 
           if (category.code === 'more') {
             results[category.code]?.results.push({
-              title: t('More results 🡒'),
+              title: t('components.audio.SearchBar.moreResultsLabel'),
               routerUrl: {
                 name: 'search',
                 query: { type: 'artists', q: query.value }

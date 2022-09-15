@@ -29,7 +29,7 @@ const defaults = reactive({
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Create a new application')
+  title: t('components.auth.ApplicationNew.title')
 }))
 
 const router = useRouter()
@@ -55,10 +55,10 @@ const created = (application: Application) => {
     <div class="ui vertical stripe segment">
       <section class="ui text container">
         <router-link :to="{name: 'settings'}">
-          Back to settings
+          {{ $t('components.auth.ApplicationNew.backToSettingsLink') }}
         </router-link>
         <h2 class="ui header">
-          Create a new application
+          {{ title }}
         </h2>
         <application-form
           :defaults="defaults"

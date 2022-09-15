@@ -29,7 +29,7 @@ const statusInfo = computed(() => {
   }
 
   if (statusData.value.totalFiles) {
-    const msg = t('no files | %{ count } file | %{ count } files', statusData.value.totalFiles)
+    const msg = t('components.channels.UploadModal.fileCount', statusData.value.totalFiles)
     info.push(t(msg, { count: statusData.value.totalFiles }))
   }
 
@@ -54,26 +54,26 @@ const isLoading = ref(false)
     class="small"
   >
     <h4 class="header">
-      <translate
+      <span
         v-if="step === 1"
       >
-        Publish audio
-      </translate>
-      <translate
+        {{ $t('components.channels.UploadModal.publishStep') }}
+      </span>
+      <span
         v-else-if="step === 2"
       >
-        Files to upload
-      </translate>
-      <translate
+        {{ $t('components.channels.UploadModal.uploadStep') }}
+      </span>
+      <span
         v-else-if="step === 3"
       >
-        Upload details
-      </translate>
-      <translate
+        {{ $t('components.channels.UploadModal.uploadDetails') }}
+      </span>
+      <span
         v-else-if="step === 4"
       >
-        Processing uploads
-      </translate>
+        {{ $t('components.channels.UploadModal.processingUploads') }}
+      </span>
     </h4>
     <div class="scrolling content">
       <channel-upload-form
@@ -91,8 +91,7 @@ const isLoading = ref(false)
         </template>
         <div class="ui very small hidden divider" />
         <template v-if="statusData && statusData.quotaStatus">
-          Remaining storage space:
-          {{ humanSize((statusData.quotaStatus.remaining - statusData.uploadedSize) * 1000 * 1000) }}
+          {{ $t('components.channels.UploadModal.remainingSpace', humanSize((statusData.quotaStatus.remaining - statusData.uploadedSize) * 1000 * 1000)) }}
         </template>
       </div>
       <div class="ui hidden clearing divider mobile-only" />
@@ -100,28 +99,28 @@ const isLoading = ref(false)
         v-if="step === 1"
         class="ui basic cancel button"
       >
-        Cancel
+        {{ $t('components.channels.UploadModal.cancelButton') }}
       </button>
       <button
         v-else-if="step < 3"
         class="ui basic button"
         @click.stop.prevent="uploadForm.step -= 1"
       >
-        Previous step
+        {{ $t('components.channels.UploadModal.previousButton') }}
       </button>
       <button
         v-else-if="step === 3"
         class="ui basic button"
         @click.stop.prevent="uploadForm.step -= 1"
       >
-        Update
+        {{ $t('components.channels.UploadModal.updateButton') }}
       </button>
       <button
         v-if="step === 1"
         class="ui primary button"
         @click.stop.prevent="uploadForm.step += 1"
       >
-        Next step
+        {{ $t('components.channels.UploadModal.nextButton') }}
       </button>
       <div
         v-if="step === 2"
@@ -133,7 +132,7 @@ const isLoading = ref(false)
           :disabled="!statusData?.canSubmit || undefined"
           @click.prevent.stop="uploadForm.publish"
         >
-          Publish
+          {{ $t('components.channels.UploadModal.publishButton') }}
         </button>
         <button
           ref="dropdown"
@@ -148,7 +147,7 @@ const isLoading = ref(false)
               class="basic item"
               @click="update(false)"
             >
-              Finish later
+              {{ $t('components.channels.UploadModal.finishLaterButton') }}
             </div>
           </div>
         </button>
@@ -158,7 +157,7 @@ const isLoading = ref(false)
         class="ui basic cancel button"
         @click="update(false)"
       >
-        Close
+        {{ $t('components.channels.UploadModal.closeButton') }}
       </button>
     </div>
   </semantic-modal>

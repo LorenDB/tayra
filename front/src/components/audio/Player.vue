@@ -72,17 +72,17 @@ onKeyboardShortcut(['ctrl', 'shift', 'left'], playPrevious, true)
 onKeyboardShortcut(['ctrl', 'shift', 'right'], playNext, true)
 
 const labels = computed(() => ({
-  audioPlayer: t('Media player'),
-  previous: t('Previous track'),
-  play: t('Play'),
-  pause: t('Pause'),
-  next: t('Next track'),
-  unmute: t('Unmute'),
-  mute: t('Mute'),
-  expandQueue: t('Expand queue'),
-  shuffle: t('Shuffle your queue'),
-  clear: t('Clear your queue'),
-  addArtistContentFilter: t('Hide content from this artist…')
+  audioPlayer: t('components.audio.Player.audioPlayerLabel'),
+  previous: t('components.audio.Player.previousTrackLabel'),
+  play: t('components.audio.Player.playLabel'),
+  pause: t('components.audio.Player.pauseLabel'),
+  next: t('components.audio.Player.nextTrackLabel'),
+  unmute: t('components.audio.Player.unmuteLabel'),
+  mute: t('components.audio.Player.muteLabel'),
+  expandQueue: t('components.audio.Player.expandQueueLabel'),
+  shuffle: t('components.audio.Player.shuffleQueueLabel'),
+  clear: t('components.audio.Player.clearQueueLabel'),
+  addArtistContentFilter: t('components.audio.Player.addArtistContentFilterLabel')
 }))
 
 const switchTab = () => {
@@ -103,10 +103,10 @@ initializeFirstTrack()
 const loopingTitle = computed(() => {
   const mode = looping.value
   return mode === LoopingMode.None
-    ? t('Looping disabled. Click to switch to single-track looping.')
+    ? t('components.audio.Player.loopingDisabledLabel')
     : mode === LoopingMode.LoopTrack
-      ? t('Looping on a single track. Click to switch to whole queue looping.')
-      : t('Looping on whole queue. Click to disable looping.')
+      ? t('components.audio.Player.loopingSingleLabel')
+      : t('components.audio.Player.loopingWholeQueueLabel')
 })
 
 const hideArtist = () => {
@@ -133,7 +133,7 @@ const hideArtist = () => {
       id="player-label"
       class="visually-hidden"
     >
-      Audio player and controls
+      {{ $t('components.audio.Player.playerHeader') }}
     </h1>
     <div
       class="ui inverted segment fixed-controls"
@@ -299,22 +299,16 @@ const hideArtist = () => {
                 @click.stop="toggleMobilePlayer"
               >
                 <i class="stream icon" />
-                <translate
-                  :translate-params="{index: currentIndex + 1, length: queue.length}"
-                >
-                  %{ index } of %{ length }
-                </translate>
+                <span>
+                  {{ $t('components.audio.Player.queuePosition', { index: currentIndex + 1 }, { length: queue.length }) }}
+                </span>
               </button>
               <button
                 class="position circular control button desktop-and-below"
                 @click.stop="switchTab"
               >
                 <i class="stream icon" />
-                <translate
-                  :translate-params="{index: currentIndex + 1, length: queue.length}"
-                >
-                  %{ index } of %{ length }
-                </translate>
+                {{ $t('components.audio.Player.queuePosition', { index: currentIndex + 1 }, { length: queue.length }) }}
               </button>
 
               <button

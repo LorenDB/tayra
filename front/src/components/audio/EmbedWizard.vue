@@ -52,20 +52,20 @@ const { copy, copied } = useClipboard({ source: textarea })
     >
       <p>
         <strong>
-          Sharing will not work because this pod doesn't allow anonymous users to access content.
+          {{ $t('components.audio.EmbedWizard.anonymousAccessWarning') }}
         </strong>
       </p>
       <p>
-        Please contact your admins and ask them to update the corresponding setting.
+        {{ $t('components.audio.EmbedWizard.anonymousAccessHelp') }}
       </p>
     </div>
     <div class="ui form">
       <div class="two fields">
         <div class="field">
           <div class="field">
-            <label for="embed-width">Widget width</label>
+            <label for="embed-width">{{ $t('components.audio.EmbedWizard.widgetWidthLabel') }}</label>
             <p>
-              Leave empty for a responsive widget
+              {{ $t('components.audio.EmbedWizard.widgetWidthHelp') }}
             </p>
             <input
               id="embed-width"
@@ -78,7 +78,7 @@ const { copy, copied } = useClipboard({ source: textarea })
           <template v-if="type != 'track'">
             <br>
             <div class="field">
-              <label for="embed-height">Widget height</label>
+              <label for="embed-height">{{ $t('components.audio.EmbedWizard.widgetHeightLabel') }}</label>
               <input
                 id="embed-height"
                 v-model="height"
@@ -95,11 +95,12 @@ const { copy, copied } = useClipboard({ source: textarea })
             class="ui right accent labeled icon floated button"
             @click="copy()"
           >
-            <i class="copy icon" />              Copy
+            <i class="copy icon" />
+            {{ $t('components.audio.EmbedWizard.copyButton') }}
           </button>
-          <label for="embed-width">Embed code</label>
+          <label for="embed-width">{{ $t('components.audio.EmbedWizard.embedCodeLabel') }}</label>
           <p>
-            Copy/paste this code in your website HTML
+            {{ $t('components.audio.EmbedWizard.embedCodeHelp') }}
           </p>
           <textarea
             ref="textarea"
@@ -112,7 +113,7 @@ const { copy, copied } = useClipboard({ source: textarea })
               v-if="copied"
               class="message"
             >
-              Text copied to clipboard!
+              {{ $t('components.audio.EmbedWizard.copyButtonSuccessMessage') }}
             </p>
           </div>
         </div>
@@ -124,7 +125,7 @@ const { copy, copied } = useClipboard({ source: textarea })
           :href="iframeSrc"
           target="_blank"
         >
-          Preview
+          {{ $t('components.audio.EmbedWizard.previewHeader') }}
         </a>
       </h3>
       <iframe

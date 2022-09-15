@@ -55,14 +55,9 @@ const cover = computed(() => props.serie?.cover ?? null)
         </router-link>
       </strong>
       <div class="description">
-        <translate
-
-          translate-plural="%{ count } episodes"
-          :translate-n="serie.tracks_count"
-          :translate-params="{count: serie.tracks_count}"
-        >
-          %{ count } episode
-        </translate>
+        <span>
+          {{ $t('components.audio.ChannelSerieCard.episodeCount', serie.tracks_count) }}
+        </span>
       </div>
     </div>
     <div class="controls">

@@ -65,31 +65,31 @@ const { report, getReportableObjects } = useReport()
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  playNow: t('Play now'),
-  addToQueue: t('Add to current queue'),
-  playNext: t('Play next'),
-  startRadio: t('Play similar songs'),
-  report: t('Report…'),
-  addToPlaylist: t('Add to playlist…'),
-  hideArtist: t('Hide content from this artist'),
+  playNow: t('components.audio.PlayButton.playNowLabel'),
+  addToQueue: t('components.audio.PlayButton.addToQueueLabel'),
+  playNext: t('components.audio.PlayButton.playNextLabel'),
+  startRadio: t('components.audio.PlayButton.startRadioLabel'),
+  report: t('components.audio.PlayButton.reportLabel'),
+  addToPlaylist: t('components.audio.PlayButton.addToPlaylistLabel'),
+  hideArtist: t('components.audio.PlayButton.hideArtistLabel'),
   replacePlay: props.track
-    ? t('Play track')
+    ? t('components.audio.PlayButton.playTrackLabel')
     : props.album
-      ? t('Play album')
+      ? t('components.audio.PlayButton.playAlbumLabel')
       : props.artist
-        ? t('Play artist')
+        ? t('components.audio.PlayButton.playArtistLabel')
         : props.playlist
-          ? t('Play playlist')
-          : t('Play tracks')
+          ? t('components.audio.PlayButton.playPlaylistLabel')
+          : t('components.audio.PlayButton.playTracksLabel')
 }))
 
 const title = computed(() => {
   if (playable.value) {
-    return t('More…')
+    return t('components.audio.PlayButton.moreTitle')
   }
 
   if (props.track) {
-    return t('This track is not available in any library you have access to')
+    return t('components.audio.PlayButton.notAvailableTitle')
   }
 
   return ''
@@ -138,7 +138,7 @@ const openMenu = () => {
         v-else
         :class="[playIconClass, 'icon']"
       />
-      <template v-if="!discrete && !iconOnly">&nbsp;<slot>Play</slot></template>
+      <template v-if="!discrete && !iconOnly">&nbsp;<slot>{{ $t('components.audio.PlayButton.discretePlayButton') }}</slot></template>
     </button>
     <button
       v-if="!discrete && !iconOnly"
@@ -156,7 +156,7 @@ const openMenu = () => {
           :title="labels.addToQueue"
           @click.stop.prevent="enqueue"
         >
-          <i class="plus icon" />Add to queue
+          <i class="plus icon" />{{ labels.addToQueue }}
         </button>
         <button
           class="item basic"
@@ -181,7 +181,7 @@ const openMenu = () => {
           :title="labels.startRadio"
           @click.stop.prevent="$store.dispatch('radios/start', {type: 'similar', objectId: track?.id})"
         >
-          <i class="feed icon" />Play radio
+          <i class="feed icon" />{{ labels.startRadio }}
         </button>
         <button
           v-if="track"
@@ -190,7 +190,7 @@ const openMenu = () => {
           @click.stop="$store.commit('playlists/chooseTrack', track)"
         >
           <i class="list icon" />
-          Add to playlist…
+          {{ labels.addToPlaylist }}
         </button>
         <button
           v-if="track && $route.name !== 'library.tracks.detail'"
@@ -198,12 +198,12 @@ const openMenu = () => {
           @click.stop.prevent="$router.push(`/library/tracks/${track?.id}/`)"
         >
           <i class="info icon" />
-          <translate
+          <span
             v-if="track.artist?.content_category === 'podcast'"
-          >Episode details</translate>
-          <translate
+          >{{ $t('components.audio.PlayButton.episodeDetailsButton') }}</span>
+          <span
             v-else
-          >Track details</translate>
+          >{{ $t('components.audio.PlayButton.trackDetailsButton') }}</span>
         </button>
         <div class="divider" />
         <button

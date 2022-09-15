@@ -38,20 +38,20 @@ const toggle = () => {
     @click.stop="toggle"
   >
     <i class="heart icon" />
-    <translate
+    <span
       v-if="isApproved"
     >
-      Unfollow
-    </translate>
-    <translate
+      {{ $t('components.audio.LibraryFollowButton.unfollowLabel') }}
+    </span>
+    <span
       v-else-if="isPending"
     >
-      Cancel follow request
-    </translate>
-    <translate
+      {{ $t('components.audio.LibraryFollowButton.cancelLabel') }}
+    </span>
+    <span
       v-else
     >
-      Follow
-    </translate>
+      {{ $t('components.audio.LibraryFollowButton.followLabel') }}
+    </span>
   </button>
 </template>

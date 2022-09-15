@@ -24,12 +24,12 @@ const store = useStore()
 
 const isSubscribed = computed(() => store.getters['channels/isSubscribed'](props.channel.uuid))
 const title = computed(() => isSubscribed.value
-  ? t('Unsubscribe')
-  : t('Subscribe')
+  ? t('components.channels.SubscribeButton.unsubscribeLabel')
+  : t('components.channels.SubscribeButton.subscribeLabel')
 )
 
 const message = computed(() => ({
-  authMessage: t('You need to be logged in to subscribe to this channel')
+  authMessage: t('components.channels.SubscribeButton.authMessage')
 }))
 
 const toggle = async () => {

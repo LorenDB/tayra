@@ -86,14 +86,14 @@ const toggleAllScopes = (parent: typeof allScopes['value'][number]) => {
 const scopeParents = computedEager(() => [
   {
     id: 'read',
-    label: t('Read'),
-    description: t('Read-only access to user data'),
+    label: t('components.auth.ApplicationForm.readScopeLabel'),
+    description: t('components.auth.ApplicationForm.readScopeDescription'),
     value: scopeArray.value.includes('read')
   },
   {
     id: 'write',
-    label: t('Write'),
-    description: t('Write-only access to user data'),
+    label: t('components.auth.ApplicationForm.writeScopeLabel'),
+    description: t('components.auth.ApplicationForm.writeScopeDescription'),
     value: scopeArray.value.includes('write')
   }
 ])
@@ -120,7 +120,7 @@ const allScopes = computed(() => {
       class="ui negative message"
     >
       <h4 class="header">
-        We cannot save your changes
+        {{ $t('components.auth.ApplicationForm.saveFailureMessage') }}
       </h4>
       <ul class="list">
         <li
@@ -132,7 +132,7 @@ const allScopes = computed(() => {
       </ul>
     </div>
     <div class="ui field">
-      <label for="application-name">Name</label>
+      <label for="application-name">{{ $t('components.auth.ApplicationForm.applicationNameLabel') }}</label>
       <input
         id="application-name"
         v-model="fields.name"
@@ -142,7 +142,7 @@ const allScopes = computed(() => {
       >
     </div>
     <div class="ui field">
-      <label for="redirect-uris">Redirect URI</label>
+      <label for="redirect-uris">{{ $t('components.auth.ApplicationForm.redirectUrisLabel') }}</label>
       <input
         id="redirect-uris"
         v-model="fields.redirect_uris"
@@ -150,13 +150,13 @@ const allScopes = computed(() => {
         type="text"
       >
       <p class="help">
-        Use "urn:ietf:wg:oauth:2.0:oob" as a redirect URI if your application is not served on the web.
+        {{ $t('components.auth.ApplicationForm.redirectUrisHelp') }}
       </p>
     </div>
     <div class="ui field">
-      <label>Scopes</label>
+      <label>{{ $t('components.auth.ApplicationForm.scopesLabel') }}</label>
       <p>
-        Checking the parent "Read" or "Write" scopes implies access to all the corresponding children scopes.
+        {{ $t('components.auth.ApplicationForm.scopesDescription') }}
       </p>
       <div class="ui stackable two column grid">
         <div
@@ -205,12 +205,12 @@ const allScopes = computed(() => {
       <translate
         v-if="app !== null"
       >
-        Update application
+        {{ $t('components.auth.ApplicationForm.updateButtonLabel') }}
       </translate>
       <translate
         v-else
       >
-        Create application
+        {{ $t('components.auth.ApplicationForm.createButtonLabel') }}
       </translate>
     </button>
   </form>

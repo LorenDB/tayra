@@ -36,12 +36,12 @@ const albumForm = ref()
       <translate
         v-if="channel.content_category === 'podcast'"
       >
-        New series
+        {{ $t('components.channels.AlbumModal.newSeriesHeader') }}
       </translate>
       <translate
         v-else
       >
-        New album
+        {{ $t('components.channels.AlbumModal.newAlbumHeader') }}
       </translate>
     </h4>
     <div class="scrolling content">
@@ -55,14 +55,14 @@ const albumForm = ref()
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        Cancel
+        {{ $t('components.channels.AlbumModal.cancelButton') }}
       </button>
       <button
         :class="['ui', 'primary', {loading: isLoading}, 'button']"
         :disabled="!submittable"
         @click.stop.prevent="albumForm.submit()"
       >
-        Create
+        {{ $t('components.channels.AlbumModal.createButton') }}
       </button>
     </div>
   </semantic-modal>

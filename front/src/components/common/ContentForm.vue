@@ -36,7 +36,7 @@ const preview = ref()
 const isLoadingPreview = ref(false)
 
 const labels = computed(() => ({
-  placeholder: props.placeholder ?? t('Write a few words here…')
+  placeholder: props.placeholder ?? t('components.common.ContentForm.placeHolderLabel')
 }))
 
 const remainingChars = computed(() => props.charLimit - props.modelValue.length)
@@ -86,13 +86,13 @@ onMounted(async () => {
           :class="[{active: !isPreviewing}, 'item']"
           @click.prevent="isPreviewing = false"
         >
-          Write
+          {{ $t('components.common.ContentForm.writeButton') }}
         </button>
         <button
           :class="[{active: isPreviewing}, 'item']"
           @click.prevent="isPreviewing = true"
         >
-          Preview
+          {{ $t('components.common.ContentForm.previewButton') }}
         </button>
       </div>
       <template v-if="isPreviewing">
@@ -108,7 +108,7 @@ onMounted(async () => {
           </div>
         </div>
         <p v-else-if="!preview">
-          Nothing to preview.
+          {{ $t('components.common.ContentForm.noContentMessage') }}
         </p>
         <sanitized-html
           v-else
@@ -135,7 +135,7 @@ onMounted(async () => {
         {{ remainingChars }}
       </span>
       <p>
-        Markdown syntax is supported.
+        {{ $t('components.common.ContentForm.markdownMessage') }}
       </p>
     </div>
   </div>

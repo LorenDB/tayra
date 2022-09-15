@@ -60,31 +60,31 @@ const isFavorite = computed(() => store.getters['favorites/isFavorite'](props.tr
 
 const { t } = useI18n()
 const favoriteButton = computed(() => isFavorite.value
-  ? t('Remove from favorites')
-  : t('Add to favorites')
+  ? t('components.audio.track.Modal.removeFromFavorites')
+  : t('components.audio.track.Modal.addToFavorites')
 )
 
 const trackDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
-  ? t('Episode details')
-  : t('Track details')
+  ? t('components.audio.track.Modal.episodeDetails')
+  : t('components.audio.track.Modal.trackDetails')
 )
 
 const albumDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
-  ? t('View series')
-  : t('View album')
+  ? t('components.audio.track.Modal.seriesDetails')
+  : t('components.audio.track.Modal.albumDetails')
 )
 
 const artistDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
-  ? t('View channel')
-  : t('View artist')
+  ? t('components.audio.track.Modal.channelDetails')
+  : t('components.audio.track.Modal.artistDetails')
 )
 
 const labels = computed(() => ({
-  startRadio: t('Play radio'),
-  playNow: t('Play now'),
-  addToQueue: t('Add to queue'),
-  playNext: t('Play next'),
-  addToPlaylist: t('Add to playlist…')
+  startRadio: t('components.audio.track.Modal.startRadio'),
+  playNow: t('components.audio.track.Modal.playNow'),
+  addToQueue: t('components.audio.track.Modal.addToQueue'),
+  playNext: t('components.audio.track.Modal.playNext'),
+  addToPlaylist: t('components.audio.track.Modal.addToPlaylist')
 }))
 </script>
 

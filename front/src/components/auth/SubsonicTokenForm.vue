@@ -13,7 +13,7 @@ const store = useStore()
 
 const subsonicEnabled = computed(() => store.state.instance.settings.subsonic.enabled.value)
 const labels = computed(() => ({
-  subsonicField: t('Your subsonic API password')
+  subsonicField: t('components.auth.SubsonicTokenForm.subsonicFieldLabel')
 }))
 
 const errors = ref([] as string[])
@@ -38,7 +38,7 @@ const fetchToken = async () => {
 const showToken = ref(false)
 const successMessage = ref('')
 const requestNewToken = async () => {
-  successMessage.value = t('Password updated')
+  successMessage.value = t('components.auth.SubsonicTokenForm.successMessage')
   success.value = false
   errors.value = []
   isLoading.value = true
@@ -56,7 +56,7 @@ const requestNewToken = async () => {
 }
 
 const disable = async () => {
-  successMessage.value = t('Access disabled')
+  successMessage.value = t('components.auth.SubsonicTokenForm.disabledMessage')
   success.value = false
   errors.value = []
   isLoading.value = true
@@ -82,26 +82,26 @@ fetchToken()
     @submit.prevent="requestNewToken()"
   >
     <h2>
-      Subsonic API password
+      {{ $t('components.auth.SubsonicTokenForm.subsonicHeader') }}
     </h2>
     <p
       v-if="!subsonicEnabled"
       class="ui message"
     >
-      The Subsonic API is not available on this Funkwhale instance.
+      {{ $t('components.auth.SubsonicTokenForm.unavailableMessage') }}
     </p>
     <p>
-      Funkwhale is compatible with other music players that support the Subsonic API.&nbsp;        You can use those to enjoy your playlist and music in offline mode, on your smartphone or tablet, for instance.
+      {{ $t('components.auth.SubsonicTokenForm.subsonicApiDescription') }}
     </p>
     <p>
-      However, accessing Funkwhale from those clients requires a separate password you can set below.
+      {{ $t('components.auth.SubsonicTokenForm.subsonicPasswordInfo') }}
     </p>
     <p>
       <a
         href="https://docs.funkwhale.audio/users/apps.html#subsonic-compatible-clients"
         target="_blank"
       >
-        Discover how to use Funkwhale from other apps
+        {{ $t('components.auth.SubsonicTokenForm.appsLink') }}
       </a>
     </p>
     <div
@@ -118,7 +118,7 @@ fetchToken()
       class="ui negative message"
     >
       <h4 class="header">
-        Error
+        {{ $t('components.auth.SubsonicTokenForm.errorHeader') }}
       </h4>
       <ul class="list">
         <li
@@ -152,20 +152,20 @@ fetchToken()
         :class="['ui', {'loading': isLoading}, 'button']"
         :action="requestNewToken"
       >
-        Request a new password
+        {{ $t('components.auth.SubsonicTokenForm.requestNewTokenButton') }}
         <template #modal-header>
           <p>
-            Request a new Subsonic API password?
+            {{ $t('components.auth.SubsonicTokenForm.requestNewTokenModalHeader') }}
           </p>
         </template>
         <template #modal-content>
           <p>
-            This will log you out from existing devices that use the current password.
+            {{ $t('components.auth.SubsonicTokenForm.requestNewTokenWarning') }}
           </p>
         </template>
         <template #modal-confirm>
           <div>
-            Request a new password
+            {{ $t('components.auth.SubsonicTokenForm.requestNewTokenButton') }}
           </div>
         </template>
       </dangerous-button>
@@ -175,27 +175,27 @@ fetchToken()
         :class="['ui', {'loading': isLoading}, 'button']"
         @click="requestNewToken"
       >
-        Request a password
+        {{ $t('components.auth.SubsonicTokenForm.requestTokenButton') }}
       </button>
       <dangerous-button
         v-if="token"
         :class="['ui', {'loading': isLoading}, 'warning', 'button']"
         :action="disable"
       >
-        Disable Subsonic access
+        {{ $t('components.auth.SubsonicTokenForm.disableSubsonicAccessButton') }}
         <template #modal-header>
           <p>
-            Disable Subsonic API access?
+            {{ $t('components.auth.SubsonicTokenForm.disableSubsonicAccessModalHeader') }}
           </p>
         </template>
         <template #modal-content>
           <p>
-            This will completely disable access to the Subsonic API using from account.
+            {{ $t('components.auth.SubsonicTokenForm.disableSubsonicAccessWarning') }}
           </p>
         </template>
         <template #modal-confirm>
           <div>
-            Disable access
+            {{ $t('components.auth.SubsonicTokenForm.disableSubsonicAccessConfirm')}}
           </div>
         </template>
       </dangerous-button>

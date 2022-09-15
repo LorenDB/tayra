@@ -84,7 +84,7 @@ const submit = async () => {
 }
 
 const labels = computed(() => ({
-  title: t('Allow application')
+  title: t('components.auth.Authorize.title')
 }))
 
 const requestedScopes = computed(() => props.scope.split(' '))
@@ -119,7 +119,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          <i class="lock open icon" />            Authorize third-party app
+          <i class="lock open icon" />{{ $t('components.auth.Authorize.authorizeThirdPartyAppHeader') }}
         </h2>
         <div
           v-if="errors.length > 0"
@@ -130,13 +130,13 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
             v-if="application"
             class="header"
           >
-            Error while authorizing application
+            {{ $t('components.auth.Authorize.authorizeFailureMessage') }}
           </h4>
           <h4
             v-else
             class="header"
           >
-            Error while fetching application data
+            {{ $t('components.auth.Authorize.fetchDataFailureMessage') }}
           </h4>
           <ul class="list">
             <li
@@ -159,12 +159,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
           @submit.prevent="submit"
         >
           <h3>
-            <translate
-
-              :translate-params="{app: application.name}"
-            >
-              %{ app } wants to access your Funkwhale account
-            </translate>
+            {{ $t('components.auth.Authorize.appAccessHeader', app: application.name) }}
           </h3>
 
           <h4
@@ -177,20 +172,20 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
               <i class="pencil icon" />
-              Write-only
+              {{ $t('components.auth.Authorize.writeOnlyScopeHeader') }}
             </span>
             <span
               v-else-if="!topic.write && topic.read"
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
-              Read-only
+              {{ $t('components.auth.Authorize.writeOnlyScopeHeader') }}
             </span>
             <span
               v-else-if="topic.write && topic.read"
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
               <i class="pencil icon" />
-              Full access
+              {{ $t('components.auth.Authorize.allScopesHeader') }}
             </span>
             <i :class="[topic.icon, 'icon']" />
             <div class="content">
@@ -201,7 +196,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
             </div>
           </h4>
           <div v-if="unknownRequestedScopes.length > 0">
-            <p><strong>The application is also requesting the following unknown permissions:</strong></p>
+            <p><strong>{{ $t('components.auth.Authorize.unknownPermissionsMessage') }}</strong></p>
             <ul
               v-for="(unknownscope, key) in unknownRequestedScopes"
               :key="key"
@@ -214,30 +209,21 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
             type="submit"
           >
             <i class="lock open icon" />
-            <translate
-
-              :translate-params="{app: application.name}"
-            >
-              Authorize %{ app }
-            </translate>
+            {{ $t('components.auth.Authorize.authorizeAppButton', { app: application.name }) }}
           </button>
           <p
             v-if="redirectUri === 'urn:ietf:wg:oauth:2.0:oob'"
-            v-translate
           >
-            You will be shown a code to copy-paste in the application.
+            {{ $t('components.auth.Authorize.copyCodeHelp') }}
           </p>
           <p
             v-else
-            v-translate="{url: redirectUri}"
-
-            :translate-params="{url: redirectUri}"
           >
-            You will be redirected to <strong>%{ url }</strong>
+            {{ $t('components.auth.Authorize.redirectHelp', url: redirectUri) }}
           </p>
         </form>
         <div v-else-if="code">
-          <p><strong>Copy-paste the following code in the application:</strong></p>
+          <p><strong>{{ $t('components.auth.Authorize.copyCodeDescription') }}</strong></p>
           <copy-input :value="code" />
         </div>
       </div>

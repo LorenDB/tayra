@@ -33,7 +33,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
   <div :class="['ui', {loading: isLoading}, 'form']">
     <div class="ui required field">
       <label for="upload-title">
-        Title
+        {{ $t('components.channels.UploadMetadataForm.titleLabel') }}
       </label>
       <input
         v-model="newValues.title"
@@ -44,13 +44,13 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
       v-model="newValues.cover"
       @delete="newValues.cover = ''"
     >
-      Track Picture
+      {{ $t('components.channels.UploadMetadataForm.trackImage') }}
     </attachment-input>
     <div class="ui small hidden divider" />
     <div class="ui two fields">
       <div class="ui field">
         <label for="upload-tags">
-          Tags
+          {{ $t('components.channels.UploadMetadataForm.tagsLabel') }}
         </label>
         <tags-selector
           id="upload-tags"
@@ -60,7 +60,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
       </div>
       <div class="ui field">
         <label for="upload-position">
-          Position
+          {{ $t('components.channels.UploadMetadataForm.uploadPosition') }}
         </label>
         <input
           v-model="newValues.position"
@@ -72,7 +72,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
     </div>
     <div class="ui field">
       <label for="upload-description">
-        Description
+        {{ $t('components.channels.UploadMetadataForm.descriptionLabel') }}
       </label>
       <content-form
         v-model="newValues.description"

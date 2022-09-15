@@ -65,43 +65,43 @@ interface SearchType {
 const types = computed(() => [
   {
     id: 'artists',
-    label: t('Artists'),
+    label: t('views.Search.artistsLabel'),
     includeChannels: true,
     contentCategory: 'music'
   },
   {
     id: 'albums',
-    label: t('Albums'),
+    label: t('views.Search.albumsLabel'),
     includeChannels: true,
     contentCategory: 'music'
   },
   {
     id: 'tracks',
-    label: t('Tracks')
+    label: t('views.Search.tracksLabel')
   },
   {
     id: 'playlists',
-    label: t('Playlists')
+    label: t('views.Search.playlistsLabel')
   },
   {
     id: 'radios',
-    label: t('Radios'),
+    label: t('views.Search.radiosLabel'),
     endpoint: 'radios/radios'
   },
   {
     id: 'tags',
-    label: t('Tags')
+    label: t('views.Search.tagsLabel')
   },
   {
     id: 'podcasts',
-    label: t('Podcasts'),
+    label: t('views.Search.podcastsLabel'),
     endpoint: '/artists',
     contentCategory: 'podcast',
     includeChannels: true
   },
   {
     id: 'series',
-    label: t('Series'),
+    label: t('views.Search.seriesLabel'),
     endpoint: '/albums',
     includeChannels: true,
     contentCategory: 'podcast'
@@ -181,11 +181,11 @@ const labels = computed(() => ({
   title: id.value
     ? (
         type.value === 'rss'
-          ? t('Subscribe to a podcast RSS feed')
-          : t('Search a remote object')
+          ? t('views.Search.rssTitle')
+          : t('views.Search.remoteTitle')
       )
-    : t('Search'),
-  submitSearch: t('Submit Search Query')
+    : t('views.Search.searchTitle'),
+  submitSearch: t('views.Search.submitSearchLabel')
 }))
 
 const radioConfig = computed(() => {
@@ -236,7 +236,7 @@ const radioConfig = computed(() => {
       >
         <h2>
           <label for="query">
-            Search
+            {{ $t('views.Search.searchHeader') }}
           </label>
         </h2>
         <div class="ui two column doubling stackable grid container">

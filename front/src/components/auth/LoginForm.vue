@@ -30,7 +30,7 @@ const credentials = reactive({
 })
 
 const labels = computed(() => ({
-  usernamePlaceholder: t('Enter your username or e-mail address')
+  usernamePlaceholder: t('components.auth.LoginForm.usernamePlaceholder')
 }))
 
 const username = ref()
@@ -75,14 +75,14 @@ const submit = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        We cannot log you in
+        {{ $t('components.auth.LoginForm.loginFailureHeader') }}
       </h4>
       <ul class="list">
         <li v-if="errors[0] == 'invalid_credentials' && $store.state.instance.settings.moderation.signup_approval_enabled.value">
-          If you signed-up recently, you may need to wait before our moderation team review your account, or verify your e-mail address.
+          {{ $t('components.auth.LoginForm.approvalRequiredHelp') }}
         </li>
         <li v-else-if="errors[0] == 'invalid_credentials'">
-          Please double-check that your username and password combination is correct and make sure you verified your e-mail address.
+          {{ $t('components.auth.LoginForm.invalidCredentialsHelp') }}
         </li>
         <li v-else>
           {{ errors[0] }}
@@ -92,11 +92,11 @@ const submit = async () => {
     <template v-if="domain === $store.getters['instance/domain']">
       <div class="field">
         <label for="username-field">
-          Username or e-mail address
+          {{ $t('components.auth.LoginForm.usernameFieldLabel') }}
           <template v-if="showSignup">
             |
             <router-link :to="{path: '/signup'}">
-              Create an account
+              {{ $t('components.auth.LoginForm.createAccountLink') }}
             </router-link>
           </template>
         </label>
@@ -113,12 +113,12 @@ const submit = async () => {
       </div>
       <div class="field">
         <label for="password-field">
-          Password |
+          {{ $t('components.auth.LoginForm.passwordFieldLabel') }}
           <router-link
             tabindex="1"
             :to="{name: 'auth.password-reset', query: {email: credentials.username}}"
           >
-            Reset your password
+            {{ $t('components.auth.LoginForm.resetPasswordLink') }}
           </router-link>
         </label>
         <password-input
@@ -130,18 +130,14 @@ const submit = async () => {
     </template>
     <template v-else>
       <p>
-        <translate
-          :translate-params="{domain: $store.getters['instance/domain']}"
-        >
-          You will be redirected to %{ domain } to authenticate.
-        </translate>
+        {{ $t('components.auth.LoginForm.redirectMessage', { domain: $store.getters['instance/domain'] }) }}
       </p>
     </template>
     <button
       :class="['ui', {'loading': isLoading}, 'right', 'floated', buttonClasses, 'button']"
       type="submit"
     >
-      Login
+      {{ $t('components.auth.LoginForm.loginButton') }}
     </button>
   </form>
 </template>

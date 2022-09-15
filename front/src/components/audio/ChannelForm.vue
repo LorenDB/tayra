@@ -45,13 +45,13 @@ const creating = computed(() => props.object === null)
 const categoryChoices = computed(() => [
   {
     value: 'podcast',
-    label: t('Podcasts'),
-    helpText: t('Host your episodes and keep your community updated.')
+    label: t('components.audio.ChannelForm.podcastsLabel'),
+    helpText: t('components.audio.ChannelForm.podcastsHelpText')
   },
   {
     value: 'music',
-    label: t('Artist discography'),
-    helpText: t('Publish music you make as a nice discography of albums and singles.')
+    label: t('components.audio.ChannelForm.discographyLabel'),
+    helpText: t('components.audio.ChannelForm.discographyHelpText')
   }
 ])
 
@@ -81,8 +81,8 @@ const itunesSubcategories = computed(() => {
 })
 
 const labels = computed(() => ({
-  namePlaceholder: t('Awesome channel name'),
-  usernamePlaceholder: t('awesomechannelname')
+  namePlaceholder: t('components.audio.ChannelForm.namePlaceholder'),
+  usernamePlaceholder: t('components.audio.ChannelForm.usernamePlaceholder')
 }))
 
 const submittable = computed(() => !!(
@@ -165,7 +165,7 @@ defineExpose({
       class="ui negative message"
     >
       <h4 class="header">
-        Error while saving channel
+        {{ $t('components.audio.ChannelForm.errorHeader') }}
       </h4>
       <ul class="list">
         <li
@@ -182,7 +182,7 @@ defineExpose({
         class="ui grouped channel-type required field"
       >
         <legend>
-          What will this channel be used for?
+          {{ $t('components.audio.ChannelForm.channelPurposeLegend') }}
         </legend>
         <div class="ui hidden divider" />
         <div class="field">
@@ -210,7 +210,7 @@ defineExpose({
       <template v-if="!creating || step === 2">
         <div class="ui required field">
           <label for="channel-name">
-            Name
+            {{ $t('components.audio.ChannelForm.channelNameLabel') }}
           </label>
           <input
             v-model="newValues.name"
@@ -221,7 +221,7 @@ defineExpose({
         </div>
         <div class="ui required field">
           <label for="channel-username">
-            Fediverse handle
+            {{ $t('components.audio.ChannelForm.channelUsernameLabel') }}
           </label>
           <div class="ui left labeled input">
             <div class="ui basic label">
@@ -238,7 +238,7 @@ defineExpose({
           <template v-if="creating">
             <div class="ui small hidden divider" />
             <p>
-              Used in URLs and to follow this channel in the Fediverse. It cannot be changed later.
+              {{ $t('components.audio.ChannelForm.channelUsernameDescription') }}
             </p>
           </template>
         </div>
@@ -248,7 +248,7 @@ defineExpose({
             :image-class="newValues.content_category === 'podcast' ? '' : 'circular'"
             @delete="newValues.cover = null"
           >
-            Channel Picture
+            {{ $t('components.audio.ChannelForm.channelImageLabel') }}
           </attachment-input>
         </div>
         <div class="ui small hidden divider" />
@@ -256,7 +256,7 @@ defineExpose({
           <div class="ten wide column">
             <div class="ui field">
               <label for="channel-tags">
-                Tags
+                {{ $t('components.audio.ChannelForm.channelTagsLabel') }}
               </label>
               <tags-selector
                 id="channel-tags"
@@ -271,7 +271,7 @@ defineExpose({
           >
             <div class="ui required field">
               <label for="channel-language">
-                Language
+                {{ $t('components.audio.ChannelForm.channelLanguageLabel') }}
               </label>
               <select
                 id="channel-language"
@@ -294,7 +294,7 @@ defineExpose({
         <div class="ui small hidden divider" />
         <div class="ui field">
           <label for="channel-name">
-            Description
+            {{ $t('components.audio.ChannelForm.channelDescriptionLabel') }}
           </label>
           <content-form v-model="newValues.description" />
         </div>
@@ -304,7 +304,7 @@ defineExpose({
         >
           <div class="ui required field">
             <label for="channel-itunes-category">
-              Category
+              {{ $t('components.audio.ChannelForm.channelCategoryLabel') }}
             </label>
             <select
               id="itunes-category"
@@ -324,7 +324,7 @@ defineExpose({
           </div>
           <div class="ui field">
             <label for="channel-itunes-category">
-              Subcategory
+              {{ $t('components.audio.ChannelForm.channelSubcategoryLabel') }}
             </label>
             <select
               id="itunes-category"
@@ -349,7 +349,7 @@ defineExpose({
         >
           <div class="ui field">
             <label for="channel-itunes-email">
-              Owner e-mail address
+              {{ $t('components.audio.ChannelForm.channelEmailLabel') }}
             </label>
             <input
               id="channel-itunes-email"
@@ -360,7 +360,7 @@ defineExpose({
           </div>
           <div class="ui field">
             <label for="channel-itunes-name">
-              Owner name
+              {{ $t('components.audio.ChannelForm.channelOwnerLabel') }}
             </label>
             <input
               id="channel-itunes-name"
@@ -371,7 +371,7 @@ defineExpose({
           </div>
         </div>
         <p>
-          Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes.
+          {{ $t('components.audio.ChannelForm.channelPodcastFieldsHelp') }}
         </p>
       </template>
     </template>
@@ -380,7 +380,7 @@ defineExpose({
       class="ui active inverted dimmer"
     >
       <div class="ui text loader">
-        Loading
+        {{ $t('components.audio.ChannelForm.loadingMessage') }}
       </div>
     </div>
   </form>

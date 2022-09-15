@@ -19,7 +19,7 @@ withDefaults(defineProps<Props>(), {
       <div class="content">
         <slot name="title">
           <i class="search icon" />
-          No results were found.
+          {{ $t('components.common.EmptyState.emptyState') }}
         </slot>
       </div>
     </h4>
@@ -30,7 +30,7 @@ withDefaults(defineProps<Props>(), {
         class="ui button"
         @click="emit('refresh')"
       >
-        Refresh
+        {{ $t('components.common.EmptyState.refreshButton') }}
       </button>
     </div>
   </div>

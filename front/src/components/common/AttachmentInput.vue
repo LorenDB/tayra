@@ -107,7 +107,7 @@ const getAttachmentUrl = (uuid: string) => {
       class="ui negative message"
     >
       <h4 class="header">
-        Your attachment cannot be saved
+        {{ $t('components.common.AttachmentInput.saveFailureMessage') }}
       </h4>
       <ul class="list">
         <li
@@ -144,7 +144,7 @@ const getAttachmentUrl = (uuid: string) => {
         <div class="eleven wide column">
           <div class="file-input">
             <label :for="attachmentId">
-              Upload New Picture…
+              {{ $t('components.common.AttachmentInput.uploadLabel') }}
             </label>
             <input
               :id="attachmentId"
@@ -159,21 +159,21 @@ const getAttachmentUrl = (uuid: string) => {
           </div>
           <div class="ui very small hidden divider" />
           <p>
-            PNG or JPG. Dimensions should be between 1400x1400px and 3000x3000px. Maximum file size allowed is 5MB.
+            {{ $t('components.common.AttachmentInput.uploadHelp') }}
           </p>
           <button
             v-if="value"
             class="ui basic tiny button"
             @click.stop.prevent="remove(value as string)"
           >
-            Remove
+            {{ $t('components.common.AttachmentInput.removeButton') }}
           </button>
           <div
             v-if="isLoading"
             class="ui active inverted dimmer"
           >
             <div class="ui indeterminate text loader">
-              Uploading file…
+              {{ $t('components.common.AttachmentInput.uploadingMessage') }}
             </div>
           </div>
         </div>

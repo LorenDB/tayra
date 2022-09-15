@@ -1,2 +1,594 @@
 {
+    "components": {
+        "admin": {
+            "SettingsGroup": {
+                "errorMessage": "Error while saving settings.",
+                "successMessage": "Settings updated successfully.",
+                "currentImage": "Current image",
+                "saveButton": "Save"
+            },
+            "SignupFormBuilder": {
+                "deleteLabel": "Delete",
+                "moveUpLabel": "Move up",
+                "moveDownLabel": "Move down",
+                "additionalFieldInput": "Additional field",
+                "editForm": "Edit form",
+                "previewForm": "Preview Form",
+                "helpTextLabel": "Help text",
+                "helpTextMessage": "An optional text to be displayed at the start of the sign-up form.",
+                "additionalFieldsLabel": "Additional fields",
+                "additionalFieldsMessage": "Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled.",
+                "fieldLabelTableHeader": "Field label",
+                "fieldTypeTableHeader": "Field type",
+                "requiredTableHeader": "Required",
+                "shortTextInput": "Short text",
+                "longTextInput": "Long text",
+                "requiredTrue": "Yes",
+                "requiredFalse": "No",
+                "addFieldButton": "Add a new field"
+            }
+        },
+        "audio": {
+            "ChannelCard": {
+                "updatedOn": "Updated on {date}",
+                "episodeCount": "No episodes | {episode_count} episode | {episode_count} episodes",
+                "trackCount": "No tracks | {tracks_count} track | {tracks_count} tracks"
+            },
+            "ChannelEntries": {
+                "emptyMessage": "You may need to subscribe to this channel to see its content."
+            },
+            "ChannelForm": {
+                "podcastsLabel": "Podcasts",
+                "podcastsHelpText": "Host your episodes and keep your community updated.",
+                "discographyLabel": "Artist Discography",
+                "discographyHelpText": "Publish music you make as a nice discography of albums and singles.",
+                "namePlaceholder": "Awesome channel name",
+                "usernamePlaceholder": "awesomechannelname",
+                "errorHeader": "Error while saving channel",
+                "channelPurposeLegend": "What will this channel be used for?",
+                "channelNameLabel": "Name",
+                "channelUsernameLabel": "Fediverse handle",
+                "channelUsernameDescription": "Used in URLs and to follow this channel in the Fediverse. It cannot be changed later.",
+                "channelImageLabel": "Channel Picture",
+                "channelTagsLabel": "Tags",
+                "channelLanguageLabel": "Language",
+                "channelDescriptionLabel": "Description",
+                "channelCategoryLabel": "Category",
+                "channelSubcategoryLabel": "Subcategory",
+                "channelEmailLabel": "Owner e-mail address",
+                "channelOwnerLabel": "Owner name",
+                "channelPodcastFieldsHelp": "Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes.",
+                "loadingMessage": "Loading"
+            },
+            "ChannelSerieCard": {
+                "episodeCount": "No episodes | {episode_count} episode | {episode_count} episodes"
+            },
+            "ChannelSeries": {
+                "showMore": "Show more",
+                "emptyMessage": "You may need to subscribe to this channel to see its contents."
+            },
+            "ChannelsWidget": {
+                "showMore": "Show more"
+            },
+            "EmbedWizard": {
+                "anonymousAccessWarning": "Sharing will not work because this pod doesn't allow anonymous users to access content.",
+                "anonymousAccessHelp": "Please contact your admins and ask them to update the corresponding setting.",
+                "widgetWidthLabel": "Widget width",
+                "widgetWidthHelp": "Leave empty for a responsive widget",
+                "widgetHeightLabel": "Widget height",
+                "copyButton": "Copy",
+                "embedCodeLabel": "Embed code",
+                "embedCodeHelp": "Copy/paste this code in your website HTML",
+                "copyButtonSuccessMessage": "Text copied to clipboard!",
+                "previewHeader": "Preview"
+            },
+            "LibraryFollowButton": {
+                "unfollowLabel": "Unfollow",
+                "cancelLabel": "Cancel follow request",
+                "followLabel": "Follow"
+            },
+            "PlayButton": {
+                "playNowLabel": "Play now",
+                "addToQueueLabel": "Add to current queue",
+                "playNextLabel": "Play next",
+                "startRadioLabel": "Play similar songs",
+                "reportLabel": "Report…",
+                "addToPlaylistLabel": "Add to playlist",
+                "hideArtistLabel": "Hide content from this artist",
+                "playTrackLabel": "Play track",
+                "playAlbumLabel": "Play album",
+                "playArtistLabel": "Play artist",
+                "playPlaylistLabel": "Play playlist",
+                "playTracksLabel": "Play tracks",
+                "moreTitle": "More…",
+                "notAvailableTitle": "This track is not available in any library you have access to",
+                "episodeDetailsButton": "Episode details",
+                "trackDetailsButton": "Track details",
+                "discretePlayButton": "Play"
+            },
+            "Player": {
+                "audioPlayerLabel": "Media player",
+                "previousTrackLabel": "Previous track",
+                "playLabel": "Play",
+                "pauseLabel": "Pause",
+                "nextTrackLabel": "Next track",
+                "unmuteLabel": "Unmute",
+                "muteLabel": "Mute",
+                "expandQueueLabel": "Expand queue",
+                "loopingDisabledLabel": "Looping disabled. Click to switch to single-track looping.",
+                "loopingSingleLabel": "Looping on a single track. Click to switch to whole queue looping.",
+                "loopingWholeQueueLabel": "Looping on whole queue. Click to disable looping.",
+                "shuffleQueueLabel": "Shuffle your queue",
+                "clearQueueLabel": "Clear your queue",
+                "addArtistContentFilterLabel": "Hide content from this artist…",
+                "playerHeader": "Audio player and controls",
+                "queuePosition": "{index} of {length}"
+            },
+            "Search": {
+                "searchPlaceHolderLabel": "Artist, album, track…",
+                "searchHeader": "Search for some music",
+                "artistsHeader": "Artists",
+                "albumsHeader": "Albums",
+                "noArtistsMessage": "No artist matched your query",
+                "noAlbumsMessage": "No album matched your query"
+            },
+            "SearchBar": {
+                "placeHolderLabel": "Search for artists, albums, tracks…",
+                "searchContentLabel": "Search for content",
+                "artistLabel": "Artist",
+                "albumLabel": "Album",
+                "trackLabel": "Track",
+                "tagLabel": "Tag",
+                "federationCategory": "Federation",
+                "podcastsCategory": "Podcasts",
+                "noResultsHeader": "No matches found",
+                "noResultsMessage": "Sorry, there are no results for this search",
+                "fediverseSearchLabel": "Search on the fediverse",
+                "rssSearchLabel": "Subscribe to podcast via RSS",
+                "moreResultsLabel": "More results 🡒"
+            },
+            "VolumeControl": {
+                "unmuteLabel": "Unmute",
+                "muteLabel": "Mute",
+                "sliderLabel": "Adjust volume"
+            },
+            "album": {
+                "Card": {
+                    "trackCount": "No tracks | {tracks_count} track | {tracks_count} tracks"
+                },
+                "Widget": {
+                    "showMore": "Show more"
+                }
+            },
+            "artist": {
+                "Card": {
+                    "trackCount": "No tracks | {tracks_count} track | {tracks_count} tracks",
+                    "episodeCount": "No episodes | {episode_count} episode | {episode_count} episodes"
+                },
+                "Widget": {
+                    "showMore":"Show more"
+                }
+            },
+            "podcast": {
+                "MobileRow": {
+                    "actionsButtonlabel": "Show track actions"
+                },
+                "Modal": {
+                    "addToFavorites": "Add to favorites",
+                    "removeFromFavorites": "Remove from favorites",
+                    "episodeDetails": "Episode details",
+                    "trackDetails": "Track details",
+                    "seriesDetails": "View series",
+                    "albumDetails": "View album",
+                    "channelDetails": "View channel",
+                    "artistDetails": "View artist",
+                    "startRadio": "Play radio",
+                    "playNow": "Play now",
+                    "addToQueue": "Add to queue",
+                    "playNext": "Play next",
+                    "addToPlaylist": "Add to playlist"
+                }
+            },
+            "track": {
+                "MobileRow": {
+                    "actionsButtonlabel": "Show track actions"
+                },
+                "Modal": {
+                    "addToFavorites": "Add to favorites",
+                    "removeFromFavorites": "Remove from favorites",
+                    "episodeDetails": "Episode details",
+                    "trackDetails": "Track details",
+                    "seriesDetails": "View series",
+                    "albumDetails": "View album",
+                    "channelDetails": "View channel",
+                    "artistDetails": "View artist",
+                    "startRadio": "Play radio",
+                    "playNow": "Play now",
+                    "addToQueue": "Add to queue",
+                    "playNext": "Play next",
+                    "addToPlaylist": "Add to playlist"
+                },
+                "Table": {
+                    "titleLabel": "Title",
+                    "albumLabel": "Album",
+                    "artistLabel": "Artist"
+                },
+                "Widget": {
+                    "noResultsMessage": "Nothing found",
+                    "showMore":"Show more"
+                }
+            }
+        },
+        "auth": {
+            "ApplicationEdit": {
+                "editApplicationLabel": "Edit application",
+                "backToSettingsLink": "Back to settings",
+                "appDetailsHeader": "Application Details",
+                "appDetailsDescription": "Application ID and secret are really sensitive values and must be treated like passwords. Do not share those with anyone else.",
+                "appIdLabel": "Application ID",
+                "appSecretLabel": "Application secret",
+                "accessTokenLabel": "Access token",
+                "regenerateTokenLink": "Regenerate token",
+                "editAppHeader": "Edit application"
+            },
+            "ApplicationForm": {
+                "readScopeLabel": "Read",
+                "readScopeDescription": "Read-only access to user data",
+                "writeScopeLabel": "Write",
+                "writeScopeDescription": "Write-only access to user data",
+                "saveFailureMessage": "We cannot save your changes",
+                "applicationNameLabel": "Name",
+                "redirectUrisLabel": "Redirect URI",
+                "redirectUrisHelp": "Use \"urn:ietf:wg:oauth:2.0:oob\" as a redirect URI if your application is not served on the web.",
+                "scopesLabel": "Scopes",
+                "scopesDescription": "Checking the parent \"Read\" or \"Write\" scopes implies access to all the corresponding children scopes.",
+                "updateButtonLabel": "Update application",
+                "createButtonLabel": "Create application"
+            },
+            "ApplicationNew": {
+                "title": "Create a new application",
+                "backToSettingsLink": "Back to settings"
+            },
+            "Authorize": {
+                "title": "Allow application",
+                "authorizeThirdPartyAppHeader": "Authorize third-party app",
+                "authorizeFailureMessage": "Error while authorizing application",
+                "fetchDataFailureMessage": "Error while fetching application data",
+                "appAccessHeader": "{app_name} wants to access your Funkwhale acount",
+                "writeOnlyScopeHeader": "Write-only",
+                "readOnlyScopeHeader": "Read-only",
+                "allScopesHeader": "Full access",
+                "unknownPermissionsMessage": "The application is also requesting the following unknown permissions:",
+                "authorizeAppButton": "Authorize {app}",
+                "copyCodeHelp": "You will be shown a code to copy-past in the application",
+                "redirectHelp": "You will be redirected to <strong>{url}</strong>",
+                "copyCodeDescription": "Copy-paste the following code in the application:"
+            },
+            "LoginForm": {
+                "usernamePlaceholder": "Enter your username or e-mail address",
+                "loginFailureHeader": "We cannot log you in",
+                "approvalRequiredHelp": "If you signed-up recently, you may need to wait before our moderation team review your account, or verify your e-mail address.",
+                "invalidCredentialsHelp": "Please double-check that your username and password combination is correct and make sure you verified your e-mail address.",
+                "usernameFieldLabel": "Username or e-mail address",
+                "createAccountLink": "Create an account",
+                "passwordFieldLabel": "Password |",
+                "resetPasswordLink": "Reset your password",
+                "redirectMessage": "You will be redirected to {domain} to authenticate",
+                "loginButton": "Login"
+            },
+            "Logout": {
+                "title": "Log out",
+                "confirmHeader": "Are you sure you want to log out?",
+                "loggedInUsername": "You are currently logged in as {username}",
+                "confirmLogoutButton": "Yes, log me out!",
+                "loggedOutHeader": "You aren't currently logged in",
+                "logInLink": "Log in!"
+            },
+            "Plugin": {
+                "documentationLink": "Documentation",
+                "saveFailureHeader": "Error while saving plugin",
+                "pluginEnabledLabel": "Enabled",
+                "libraryLabel": "Library",
+                "libraryDescription": "Library where files should be imported.",
+                "saveButton": "Save",
+                "scanButton": "Scan"
+            },
+            "Settings": {
+                "title": "Account Settings",
+                "deletionRequest": "Your deletion request was submitted, your account and content will be deleted shortly",
+                "accountSettingsHeader": "Account settings",
+                "settingsUpdatedHeader": "Settings updated",
+                "settingsUpdateFailureHeader": "Your settings can't be updated",
+                "updateSettingsButton": "Update settings",
+                "avatarHeader": "Avatar",
+                "avatarSaveFailureHeader": "Your avatar cannot be saved",
+                "avatarInputLabel": "Avatar",
+                "changePasswordHeader": "Change my password",
+                "changePasswordMessage": "Changing your password will also change your Subsonic API password if you have requested one \n You will have to update your password on your clients that use this password.",
+                "changePasswordFailureMessage": "Your password cannot be changed",
+                "changePasswordHelp": "Please double-check your password is correct",
+                "currentPasswordLabel": "Current password",
+                "newPasswordLabel": "New password",
+                "changePasswordButton": "Change password",
+                "changePasswordModalHeader": "Change your password?",
+                "changePasswordWarning": "Changing your password will have the following consequences",
+                "changePasswordLogout": "You will be logged out from this session and have to log in with the new one",
+                "changePasswordSubsonic": "Your Subsonic password will be changed to a new, random one, logging you out from devices that used the old Subsonic password",
+                "disableSubsonicMessage": "Disable access",
+                "contentFiltersHeader": "Content filters",
+                "contentFiltersDescription": "Content filters help you hide content you don't want to see on the service.",
+                "refreshButton": "Refresh",
+                "hiddenArtistsHeader": "Hidden artists",
+                "artistNameTableHeader": "Name",
+                "filterCreationDateTableHeader": "Creation date",
+                "filterDeleteButton": "Delete",
+                "authorizedAppsHeader": "Authorized apps",
+                "authorizedAppsDescription": "This is the list of applications that have access to your account data.",
+                "appNameTableHeader": "Application",
+                "appPermissionsTableHeader": "Permissions",
+                "permissionDeleteButton": "Revoke",
+                "revokePermissionModalMessage": "Revoke access for application {app}?",
+                "revokePermissionModalWarning": "This will prevent this application from accessing the service on your behalf.",
+                "revokeAccessButton": "Revoke access",
+                "emptyAppMessage": "You don't have any application connected with your account.",
+                "emptyAppHelp": "If you authorize third-party applications to access your data, those applications will be listed here.",
+                "personalAppsHeader": "Your applications",
+                "personalAppsDescription": "This is the list of applications that you have registered.",
+                "newAppLink": "Register a new application",
+                "personalAppNameTableHeader": "Application",
+                "personalAppScopesTableHeader": "Scopes",
+                "personalAppCreationDateTableHeader": "Creation date",
+                "personalAppEditLink": "Edit",
+                "personalAppDeleteLink": "Remove",
+                "deletePersonalAppModalMessage": "Remove application {app}?",
+                "deletePersonalAppModalWarning": "This will permanently remove the application and all the associated tokens.",
+                "deletePersonalAppButton": "Remove application",
+                "emptyPersonalAppMessage": "You don't have registered any application yet.",
+                "emptyPersonalAppHelp": "Register one to integrate Funkwhale with third-party applications.",
+                "pluginsHeader": "Plugins",
+                "pluginsDescription": "Use plugins to extend Funkwhale and get additional features.",
+                "managePluginsLink": "Manage plugins",
+                "changeEmailHeader": "Change my e-mail address",
+                "changeEmailDescription": "Change the e-mail address associated with your account. We will send a confirmation to the new address.",
+                "currentEmailLabel": "Your current e-mail address is {email}",
+                "changeEmailFailureMessage": "We cannot change your e-mail address",
+                "newEmailLabel": "New e-mail address",
+                "updateEmailButton": "Update",
+                "deleteAccountHeader": "Delete my account",
+                "deleteAccountDescription": "You can permanently and irreversibly delete your account and all the associated data using the form below. You will be asked for confirmation.",
+                "deleteAccountWarning": "Your account will be deleted from our servers within a few minutes. We will also notify other servers who may have a copy of some of your data so they can proceed to deletion. Please note that some of these servers may be offline or unwilling to comply though.",
+                "deleteAccountFailureMessage": "We cannot delete your account",
+                "deleteAccountButton": "Delete my account…",
+                "deleteAccountConfirmationMessage": "Do you want to delete your acount?",
+                "deleteAccountConfirmationWarning": "This is irreversible and will permanently remove your data from our servers. You will we immediatly logged out.",
+                "deleteAccountConfirmButton": "Delete my account"
+            },
+            "SignupForm": {
+                "invitationCodePlaceholder": "Enter your invitation code (case insensitive)",
+                "usernamePlaceholder": "Enter your username",
+                "emailPlaceholder": "Enter your e-mail address",
+                "awaitingReviewMessage": "Your account request was successfully submitted. You will be notified by e-mail when our moderation team has reviewed your request.",
+                "accountCreationSuccessMessage": "Your account was successfully created. Please verify your e-mail address before trying to login.",
+                "loginHeader": "Log in to your Funkwhale account",
+                "registrationClosedMessage": "Public registrations are not possible on this instance. You will need an invitation code to sign up.",
+                "requiresReviewMessage": "Registrations on this pod are open, but reviewed by moderators before approval.",
+                "signupFailureMessage": "Your account cannot be created.",
+                "usernameFieldLabel": "Username",
+                "emailFieldLabel": "E-mail address",
+                "passwordFieldLabel": "Password",
+                "invitationCodeFieldLabel": "Invitation code",
+                "createAccountButton": "Create my account"
+            },
+            "SubsonicTokenForm": {
+                "subsonicFieldLabel": "Your subsonic API password",
+                "successMessage": "Password updated",
+                "disabledMessage": "Access disabled",
+                "subsonicHeader": "Subsonic API password",
+                "unavailableMessage": "The Subsonic API is not available on this Funkwhale instance.",
+                "subsonicApiDescription": "Funkwhale is compatible with other music players that support the Subsonic API.\n You can use those to enjoy your playlist and music in offline mode, on your smartphone or tablet, for instance.",
+                "subsonicPasswordInfo": "However, accessing Funkwhale from those clients requires a separate password you can set below.",
+                "appsLink": "Discover how to use Funkwhale from other apps",
+                "errorHeader": "Error",
+                "requestNewTokenButton": "Request a new password",
+                "requestNewTokenModalHeader": "Request a new Subsonic API password?",
+                "requestNewTokenWarning": "This will log you out from existing devices that use the current password.",
+                "requestTokenButton": "Request a password",
+                "disableSubsonicAccessButton": "Disable Subsonic access",
+                "disableSubsonicAccessModalHeader": "Disable Subsonic API access?",
+                "disableSubsonicAccessWarning": "This will completely disable access to the Subsonic API using from account.",
+                "disableSubsonicAccessConfirm": "Disable access"
+            }
+        },
+        "channels": {
+            "AlbumForm": {
+                "errorHeader": "Error while creating",
+                "titleLabel": "Title"
+            },
+            "AlbumModal": {
+                "newSeriesHeader": "New series",
+                "newAlbumHeader": "New album",
+                "cancelButton": "Cancel",
+                "createButton": "Create"
+            },
+            "AlbumSelect": {
+                "seriesLabel": "Series",
+                "albumLabel": "Album",
+                "noneLabel": "None",
+                "trackCount":"(No tracks | {tracks_count} track | {tracks_count} tracks)"
+            },
+            "LicenseSelect": {
+                "licenseLabel": "License",
+                "noneLabel": "None",
+                "licenseInfo": "About this license"
+            },
+            "SubscribeButton": {
+                "unsubscribeLabel": "Unsubscribe",
+                "subscribeLabel": "Subscribe",
+                "authMessage": "You need to be logged in to subscribe to this channel"
+            },
+            "UploadForm": {
+                "editTitle": "Edit",
+                "failureHeader": "Error while publishing",
+                "channelLabel": "Channel",
+                "licenseTip": "Add a license to your upload to ensure some freedoms to your public.",
+                "noSpaceWarning": "You don't have any space left to upload your files. Please contact the moderators.",
+                "pendingDraftsMessage": "You have some draft uploads pending publication.",
+                "ignoreButton": "Ignore",
+                "resumeButton": "Resume",
+                "uploadingStatus": "Uploading",
+                "erroredStatus": "Errored",
+                "pendingStatus": "Pending",
+                "removeUpload": "Remove",
+                "retryUpload": "Retry",
+                "supportedExtensions": "Supported extensions {extensions}",
+                "dragAndDrop": "Drag and drop your files here or open the browser to upload your files",
+                "openFileBrowser": "Browse…"
+            },
+            "UploadMetadataForm": {
+                "titleLabel": "Title",
+                "trackImage": "Track Picture",
+                "tagsLabel": "Tags",
+                "uploadPosition": "Position",
+                "descriptionLabel": "Description"
+            },
+            "UploadModal": {
+                "fileCount": "no files | {count} file | {count} files",
+                "publishStep": "Publish audio",
+                "uploadStep": "Files to upload",
+                "uploadDetails": "Upload details",
+                "processingUploads": "Processing uploads",
+                "remainingSpace": "Remaining storage space: {space}",
+                "cancelButton": "Cancel",
+                "previousButton": "Previous step",
+                "updateButton": "Update",
+                "nextButton": "Next",
+                "publishButton": "Publish",
+                "finishLaterButton": "Finish later",
+                "closeButton": "Close"
+            }
+        },
+        "common": {
+            "ActionTable": {
+                "refreshLabel": "Refresh table content",
+                "selectAllLabel": "Select all items",
+                "performActionLabel": "Perform actions",
+                "selectItemLabel": "Select",
+                "contentUpdatedMessage": "Content has been updated, click refresh to see up-to-date content",
+                "performActionButton": "Go",
+                "performActionConfirmation": "Do you want to launch {action} on {count} element? | Do you want to launch {action} on {count} elements?",
+                "performActionWarning": "This may affect a lot of elements or have irreversible consequences, please double check this is really what you want.",
+                "launchActionButton": "Launch",
+                "allElementsSelectedMessage": "No elements selected | {count} element selected | All {count} elements selected",
+                "elementsSelectedMessage": "{count} on {total} selected",
+                "selectElementsMessage": "Select one element | Select all {total} elements",
+                "selectCurrentPage": "Select only current page",
+                "actionErrorMessage": "Error while applying action",
+                "actionSuccessMessage": "Action {action} was launched successfully on {count} element | Action {action} was launched successfully on {count} elements"
+            },
+            "AttachmentInput": {
+                "saveFailureMessage": "Your attachment cannot be saved",
+                "uploadLabel": "Upload New Picture…",
+                "uploadHelp": "PNG or JPG. Dimensions should be between 1400x1400px and 3000x3000px. Maximum file size allowed is 5MB.",
+                "removeButton": "Remove",
+                "uploadingMessage": "Uploading file…"
+            },
+            "CollapseLink": {
+                "expandLabel": "Expand",
+                "collapseLabel": "Collapse"
+            },
+            "ContentForm": {
+                "placeHolderLabel": "Write a few words here…",
+                "writeButton": "Write",
+                "previewButton": "Preview",
+                "noContentMessage": "Nothing to preview",
+                "markdownMessage": "Markdown syntax is supported."
+            },
+            "CopyInput": {
+                "copySuccessMessage": "Text copied to clipboard!",
+                "copyButton": "Copy"
+            },
+            "DangerousButton": {
+                "confirmAction": "Do you want to confirm this action?",
+                "cancelButton": "Cancel",
+                "confirmButton": "Confirm"
+            },
+            "Duration": {
+                "hoursFormat": "{hours} h {minutes} min",
+                "minutesFormat": "{minutes} min"
+            },
+            "EmptyState": {
+                "emptyState": "No results were found.",
+                "refreshButton": "Refresh"
+            },
+            "ExpandableDiv": {
+                "showLess": "Show less",
+                "showMore": "Show more"
+            },
+            "InlineSearchBar": {
+                "searchPlaceholder": "Search…",
+                "clearLabel": "Clear",
+                "searchLabel": "Search"
+            },
+            "LoginModal": {
+                "header": "Unauthenticated",
+                "loginLabel": "Log in",
+                "signupLabel": "Sign up",
+                "noAccessDescription": "You don't have access"
+            }
+        },
+        "library": {
+            "Artists": {
+                "title": "Artists",
+                "searchPlaceholder": "Search…"
+            }
+        }
+    },
+    "views": {
+        "Notifications": {
+            "title": "Notifications",
+            "messagesHeader": "Your messages",
+            "instanceSupportHeader": "Support this Funkwhale pod",
+            "instanceReminderDelay": "Remind me in:",
+            "instanceReminder30": "30 days",
+            "instanceReminder60": "60 days",
+            "instanceReminder90": "90 days",
+            "instanceReminderNever": "Never",
+            "instanceReminderSubmitButton": "Got it!",
+            "funkwhaleSupportHeader": "Do you like Funkwhale?",
+            "funkwhaleSupportMessage": "We noticed you've been here for a while. If Funkwhale is useful to you, we could use your help to make it even better!",
+            "funkwhaleSupportDonateLink": "Donate",
+            "funkwhaleSupportHelpLink": "Discover other ways to help",
+            "funkwhaleReminderDelay": "Remind me in:",
+            "funkwhaleReminder30": "30 days",
+            "funkwhaleReminder60": "60 days",
+            "funkwhaleReminder90": "90 days",
+            "funkwhaleReminderNever": "Never",
+            "funkwhaleReminderSubmitButton": "Got it!",
+            "notificationsHeader": "Your notifications",
+            "showReadNotificationsCheckbox": "Show read notifications",
+            "markAllReadButton": "Mark all as read",
+            "loadingNotifications": "Loading notifications…",
+            "noNotifications": "No notification to show"
+        },
+        "Search": {
+            "artistsLabel": "Artists",
+            "albumsLabel": "Albums",
+            "tracksLabel": "Tracks",
+            "playlistsLabel": "Playlists",
+            "radiosLabel": "Radios",
+            "tagsLabel": "Tags",
+            "podcastsLabel": "Podcasts",
+            "seriesLabel": "Series",
+            "rssTitle": "Subscribe to a podcast RSS feed",
+            "remoteTitle": "Search a remote object",
+            "searchTitle": "Search",
+            "submitSearchLabel": "Submit Search Query",
+            "searchHeader": "Search"
+        },
+        "library": {
+            "LibraryBase": {
+
+            }
+        }
+    }
 }

@@ -33,7 +33,7 @@ const urlId = computed(() => props.object.actor?.is_local
 const { t } = useI18n()
 const updatedTitle = computed(() => {
   const date = momentFormat(new Date(props.object.artist?.modification_date ?? '1970-01-01'))
-  return t('Updated on %{ date }', { date })
+  return t('components.audio.ChannelCard.updatedOn', { date })
 })
 
 // TODO (wvffle): Use time ago
@@ -64,25 +64,17 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
         </router-link>
       </strong>
       <div class="description">
-        <translate
+        <span
           v-if="object.artist?.content_category === 'podcast'"
           class="meta ellipsis"
-
-          translate-plural="%{ count } episodes"
-          :translate-n="object.artist.tracks_count"
-          :translate-params="{count: object.artist.tracks_count}"
         >
-          %{ count } episode
-        </translate>
-        <translate
+          {{ $t('components.audio.ChannelCard.episodeCount', object.artist.tracks_count) }}
+        </span>
+        <span
           v-else
-
-          :translate-params="{count: object.artist?.tracks_count}"
-          :translate-n="object.artist?.tracks_count"
-          translate-plural="%{ count } tracks"
         >
-          %{ count } track
-        </translate>
+          {{ $t('components.audio.ChannelCard.trackCount', object.artist?.tracks_count) }}
+        </span>
         <tags-list
           label-classes="tiny"
           :truncate-size="20"
@@ -100,7 +92,7 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
         :datetime="object.artist?.modification_date"
         :title="updatedTitle"
       >
-        %{ updatedAgo }
+        {{ $t('{ updatedAgo }') }}
       </time>
       <play-button
         class="right floated basic icon"

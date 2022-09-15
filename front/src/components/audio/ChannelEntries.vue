@@ -103,7 +103,7 @@ watch(page, fetchData, { immediate: true })
         @refresh="fetchData()"
       >
         <p>
-          You may need to subscribe to this channel to see its content.
+          {{ $t('components.audio.ChannelEntries.emptyMessage') }}
         </p>
       </empty-state>
     </template>

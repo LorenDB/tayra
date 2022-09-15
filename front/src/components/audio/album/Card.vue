@@ -59,14 +59,9 @@ const imageUrl = computed(() => props.album.cover?.urls.original
     </div>
     <div class="extra content">
       <span v-if="album.release_date">{{ momentFormat(new Date(album.release_date), 'Y') }} · </span>
-      <translate
-
-        :translate-params="{count: album.tracks_count}"
-        :translate-n="album.tracks_count"
-        translate-plural="%{ count } tracks"
-      >
-        %{ count } track
-      </translate>
+      <span>
+        {{ $t('components.audio.album.Card.trackCount', album.tracks_count) }}
+      </span>
       <play-button
         class="right floated basic icon"
         :dropdown-only="true"

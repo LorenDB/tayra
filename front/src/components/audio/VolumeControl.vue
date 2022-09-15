@@ -9,9 +9,9 @@ const expanded = ref(false)
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  unmute: t('Unmute'),
-  mute: t('Mute'),
-  slider: t('Adjust volume')
+  unmute: t('components.audio.VolumeControl.unmuteLabel'),
+  mute: t('components.audio.VolumeControl.muteLabel'),
+  slider: t('components.audio.VolumeControl.sliderLabel')
 }))
 
 const { start, stop } = useTimeoutFn(() => (expanded.value = false), 500, { immediate: false })

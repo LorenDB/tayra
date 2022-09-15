@@ -95,9 +95,9 @@ const allTracks = computed(() => {
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Title'),
-  album: t('Album'),
-  artist: t('Artist')
+  title: t('components.audio.track.Table.titleLabel'),
+  album: t('components.audio.track.Table.albumLabel'),
+  artist: t('components.audio.track.Table.albumLabel')
 }))
 
 const isLoading = ref(false)

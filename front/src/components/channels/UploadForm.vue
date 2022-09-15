@@ -396,7 +396,7 @@ watchEffect(() => {
 })
 
 const labels = computed(() => ({
-  editTitle: t('Edit')
+  editTitle: t('components.channels.UploadForm.editTitle')
 }))
 </script>
 
@@ -411,7 +411,7 @@ const labels = computed(() => ({
       class="ui negative message"
     >
       <h4 class="header">
-        Error while publishing
+        {{ $t('components.channels.UploadForm.failureHeader') }}
       </h4>
       <ul class="list">
         <li
@@ -424,7 +424,7 @@ const labels = computed(() => ({
     </div>
     <div :class="['ui', 'required', {hidden: step > 1}, 'field']">
       <label for="channel-dropdown">
-        Channel
+        {{ $t('components.channels.UploadForm.channelLabel') }}
       </label>
       <div
         id="channel-dropdown"
@@ -447,7 +447,7 @@ const labels = computed(() => ({
       <div class="content">
         <p>
           <i class="copyright icon" />
-          Add a license to your upload to ensure some freedoms to your public.
+          {{ $t('components.channels.UploadForm.licenseTip') }}
         </p>
       </div>
     </div>
@@ -460,7 +460,7 @@ const labels = computed(() => ({
         <div class="content">
           <p>
             <i class="warning icon" />
-            You don't have any space left to upload your files. Please contact the moderators.
+            {{ $t('components.channels.UploadForm.noSpaceWarning') }}
           </p>
         </div>
       </div>
@@ -471,19 +471,19 @@ const labels = computed(() => ({
         >
           <p>
             <i class="redo icon" />
-            You have some draft uploads pending publication.
+            {{ $t('components.channels.UploadForm.pendingDraftsMessage') }}
           </p>
           <button
             class="ui basic button"
             @click.stop.prevent="includeDraftUploads = false"
           >
-            Ignore
+            {{ $t('components.channels.UploadForm.ignoreButton') }}
           </button>
           <button
             class="ui basic button"
             @click.stop.prevent="includeDraftUploads = true"
           >
-            Resume
+            {{ $t('components.channels.UploadForm.resumeButton') }}
           </button>
         </div>
         <div
@@ -533,31 +533,31 @@ const labels = computed(() => ({
                   </template>
                 </template>
                 <template v-else>
-                  <translate
+                  <span
                     v-if="file.active"
                   >
-                    Uploading
-                  </translate>
-                  <translate
+                    {{ $t('components.channels.UploadForm.uploadingStatus') }}
+                  </span>
+                  <span
                     v-else-if="file.error"
                   >
-                    Errored
-                  </translate>
-                  <translate
+                    {{ $t('components.channels.UploadForm.erroredStatus') }}
+                  </span>
+                  <span
                     v-else
                   >
-                    Pending
-                  </translate>
+                    {{ $t('components.channels.UploadForm.pendingStatus') }}
+                  </span>
                   · {{ humanSize(file.size ?? 0) }}
                   · {{ parseFloat(file.progress ?? '0') }}%
                 </template>
                 · <a @click.stop.prevent="remove(file)">
-                  Remove
+                  {{ $t('components.channels.UploadForm.removeUpload') }}
                 </a>
                 <template v-if="file.error">
                   ·
                   <a @click.stop.prevent="retry(file)">
-                    Retry
+                    {{ $t('components.channels.UploadForm.retryUpload') }}
                   </a>
                 </template>
               </div>
@@ -576,12 +576,7 @@ const labels = computed(() => ({
           <div class="content">
             <p>
               <i class="info icon" />
-              <translate
-
-                :translate-params="{extensions: $store.state.ui.supportedExtensions.join(', ')}"
-              >
-                Supported extensions: %{ extensions }
-              </translate>
+              {{ $t('components.channels.UploadForm.supportedExtensions', {extensions: $store.state.ui.supportedExtensions.join(', ')}) }}
             </p>
           </div>
         </div>
@@ -600,11 +595,11 @@ const labels = computed(() => ({
         >
           <div>
             <i class="upload icon" />&nbsp;
-            Drag and drop your files here or open the browser to upload your files
+            {{ $t('components.channels.UploadForm.dragAndDrop') }}
           </div>
           <div class="ui very small divider" />
           <div>
-            Browse…
+            {{ $t('components.channels.UploadForm.openFileBrowser') }}
           </div>
         </file-upload-widget>
         <div class="ui hidden divider" />
