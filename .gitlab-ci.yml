@@ -227,7 +227,7 @@ test_front:
     paths:
       - front/dist/
     reports:
-      junit: front/test-results.xml
+      junit: front/coverage/cobertura-coverage.xml
   tags:
     - docker
 

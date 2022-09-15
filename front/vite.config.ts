@@ -42,6 +42,11 @@ export default defineConfig(({ mode }) => ({
   },
   test: {
     environment: 'jsdom',
-    globals: true
+    globals: true,
+    coverage: {
+      src: './src',
+      all: true,
+      reporter: ['text', 'cobertura']
+    }
   }
 }))
