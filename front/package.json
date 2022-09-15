@@ -84,7 +84,7 @@
     "jsdom": "20.0.0",
     "moxios": "0.4.0",
     "sinon": "14.0.0",
-    "typescript": "4.8.2",
+    "typescript": "4.8.3",
     "utility-types": "3.10.0",
     "vite": "3.0.9",
     "vite-plugin-pwa": "0.12.4",
