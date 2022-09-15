@@ -1,1 +1,1 @@
-Add Sentry SDK to collect errors at the backend
+Add Sentry SDK to collect #1479

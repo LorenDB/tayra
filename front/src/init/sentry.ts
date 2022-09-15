@@ -28,7 +28,7 @@ const initSentry = async (app: App, router: Router, store: Store<RootState>) => 
       })
     ],
     debug: import.meta.env.DEV,
-    environment: import.meta.env.MODE,
+    environment: 'front',
     beforeSend: (event, hint) => {
       if (event.exception?.values?.some(exception => exception.mechanism?.handled === false) && hint.originalException instanceof Error) {
         useErrorHandler(hint.originalException, hint.event_id)
@@ -36,15 +36,14 @@ const initSentry = async (app: App, router: Router, store: Store<RootState>) => 
 
       return event
     },
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
+    tracesSampleRate: import.meta.env.FUNKWHALE_SENTRY_SR,
     ignoreErrors: [
       // vue3-lazyload throws an error whenever there is a 404
       'Image failed to load!'
     ]
   })
+
+  Sentry.setTag('mode', import.meta.env.MODE)
 
   watchEffect(() => {
     const url = store.getters['instance/domain']
