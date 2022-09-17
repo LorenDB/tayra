@@ -17,21 +17,21 @@ const themes = useThemeList()
 const { theme } = useTheme()
 
 const labels = computed(() => ({
-  profile: t('Profile'),
-  settings: t('Settings'),
-  logout: t('Log out'),
-  about: t('About'),
-  shortcuts: t('Keyboard shortcuts'),
-  support: t('Help'),
-  forum: t('Forum'),
-  docs: t('Documentation'),
-  language: t('Change language'),
-  theme: t('Change theme'),
-  chat: t('Chat room'),
-  git: t('Issue tracker'),
-  login: t('Log in'),
-  signup: t('Sign up'),
-  notifications: t('Notifications')
+  profile: t('components.common.UserMenu.profileLabel'),
+  settings: t('components.common.UserMenu.settingsLabel'),
+  logout: t('components.common.UserMenu.logoutLabel'),
+  about: t('components.common.UserMenu.aboutLabel'),
+  shortcuts: t('components.common.UserMenu.shortcutsLabel'),
+  support: t('components.common.UserMenu.supportLabel'),
+  forum: t('components.common.UserMenu.forumLabel'),
+  docs: t('components.common.UserMenu.docsLabel'),
+  language: t('components.common.UserMenu.languageLabel'),
+  theme: t('components.common.UserMenu.themeLabel'),
+  chat: t('components.common.UserMenu.chatLabel'),
+  git: t('components.common.UserMenu.gitLabel'),
+  login: t('components.common.UserMenu.loginLabel'),
+  signup: t('components.common.UserMenu.signupLabel'),
+  notifications: t('components.common.UserMenu.notificationsLabel')
 }))
 </script>
 

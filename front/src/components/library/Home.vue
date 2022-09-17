@@ -26,7 +26,7 @@ const logger = useLogger()
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Library')
+  title: t('components.library.Home.title')
 }))
 
 const isLoading = ref(false)
@@ -67,7 +67,7 @@ fetchData()
             :websocket-handlers="['Listen']"
           >
             <template #title>
-              Recently listened
+              {{ $t('components.library.Home.recentlyListenedLabel') }}
             </template>
           </track-widget>
         </div>
@@ -77,7 +77,7 @@ fetchData()
             :filters="{scope: scope, ordering: '-creation_date'}"
           >
             <template #title>
-              Recently favorited
+              {{ $t('components.library.Home.recentlyFavoritedLabel') }}
             </template>
           </track-widget>
         </div>
@@ -87,7 +87,7 @@ fetchData()
             :filters="{scope: scope, playable: true, ordering: '-modification_date'}"
           >
             <template #title>
-              Playlists
+              {{ $t('components.library.Home.playlistsLabel') }}
             </template>
           </playlist-widget>
         </div>
@@ -97,14 +97,14 @@ fetchData()
         <div class="column">
           <album-widget :filters="{scope: scope, playable: true, ordering: '-creation_date'}">
             <template #title>
-              Recently added
+              {{ $t('components.library.Home.recentlyAddedLabel') }}
             </template>
           </album-widget>
         </div>
       </div>
       <template v-if="scope === 'all'">
         <h3 class="ui header">
-          New channels
+          {{ $t('components.library.Home.newChannelsLabel') }}
         </h3>
         <channels-widget
           :show-modification-date="true"

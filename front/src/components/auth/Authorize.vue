@@ -159,7 +159,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
           @submit.prevent="submit"
         >
           <h3>
-            {{ $t('components.auth.Authorize.appAccessHeader', app: application.name) }}
+            {{ $t('components.auth.Authorize.appAccessHeader', {app_name: application.name}) }}
           </h3>
 
           <h4
@@ -219,7 +219,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
           <p
             v-else
           >
-            {{ $t('components.auth.Authorize.redirectHelp', url: redirectUri) }}
+            {{ $t('components.auth.Authorize.redirectHelp', {url: redirectUri}) }}
           </p>
         </form>
         <div v-else-if="code">

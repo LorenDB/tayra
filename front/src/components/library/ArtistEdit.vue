@@ -22,22 +22,22 @@ const canEdit = store.state.auth.availablePermissions.library
   <section class="ui vertical stripe segment">
     <div class="ui text container">
       <h2>
-        <translate
+        <span
           v-if="canEdit"
         >
-          Edit this artist
-        </translate>
-        <translate
+          {{ $t('components.library.ArtistEdit.editArtistHeader') }}
+        </span>
+        <span
           v-else
         >
-          Suggest an edit on this artist
-        </translate>
+          {{ $t('components.library.ArtistEdit.suggestEditHeader') }}
+        </span>
       </h2>
       <div
         v-if="!object.is_local"
         class="ui message"
       >
-        This object is managed by another server, you cannot edit it.
+        {{ $t('components.library.ArtistEdit.remoteObjectWarning') }}
       </div>
       <edit-form
         v-else

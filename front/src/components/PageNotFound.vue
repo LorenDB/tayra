@@ -6,7 +6,7 @@ const path = window.location.href
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Page Not Found')
+  title: t('components.PageNotFound.title')
 }))
 </script>
 
@@ -20,11 +20,11 @@ const labels = computed(() => ({
         <h1 class="ui huge header">
           <i class="warning icon" />
           <div class="content">
-            Page not found!
+            {{ $t('components.PageNotFound.pageNotFound') }}
           </div>
         </h1>
         <p>
-          Sorry, the page you asked for does not exist:
+          {{ $t('components.PageNotFound.pageNotFoundMessage') }}
         </p>
         <a :href="path">{{ path }}</a>
         <div class="ui hidden divider" />
@@ -32,7 +32,7 @@ const labels = computed(() => ({
           class="ui icon labeled right button"
           to="/"
         >
-          Go to home page
+          {{ $t('components.PageNotFound.homeLink') }}
           <i class="right arrow icon" />
         </router-link>
       </div>

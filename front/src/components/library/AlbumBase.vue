@@ -41,7 +41,7 @@ const publicLibraries = computed(() => libraries.value?.filter(library => librar
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Album')
+  title: t('components.library.AlbumBase.title')
 }))
 
 const isLoading = ref(false)
@@ -177,24 +177,16 @@ const remove = async () => {
                   />
                   <template v-if="totalTracks > 0">
                     <div class="ui hidden very small divider" />
-                    <translate
+                    <span
                       v-if="isSerie"
-
-                      translate-plural="%{ count } episodes"
-                      :translate-n="totalTracks"
-                      :translate-params="{count: totalTracks}"
                     >
-                      %{ count } episode
-                    </translate>
-                    <translate
+                      {{ $t('components.library.AlbumBase.episodeCount', {episode_count: totalTracks}) }}
+                    </span>
+                    <span
                       v-else
-
-                      :translate-params="{count: totalTracks}"
-                      :translate-n="totalTracks"
-                      translate-plural="%{ count } tracks"
                     >
-                      %{ count } track
-                    </translate>
+                      {{ $t('components.library.AlbumBase.trackCount', {tracks_count: totalTracks}) }}
+                    </span>
                   </template>
                   <div class="ui small hidden divider" />
                   <play-button
@@ -263,26 +255,18 @@ const remove = async () => {
                 v-if="object.release_date || (totalTracks > 0)"
                 class="ui small hidden divider"
               />
-              <span v-if="object.release_date">{{ momentFormat(new Date(object.release_date ?? '1970-01-01'), 'Y') }} · </span>
+              <span v-if="object.release_date">{{ momentFormat(new Date(object.release_date ?? '1970-01-01'), 'Y') }} &middot; </span>
               <template v-if="totalTracks > 0">
-                <translate
+                <span
                   v-if="isSerie"
-
-                  translate-plural="%{ count } episodes"
-                  :translate-n="totalTracks"
-                  :translate-params="{count: totalTracks}"
                 >
-                  %{ count } episode
-                </translate>
-                <translate
+                  {{ $t('components.library.AlbumBase.episodeCount', {episode_count: totalTracks}) }}
+                </span>
+                <span
                   v-else
-
-                  :translate-params="{count: totalTracks}"
-                  :translate-n="totalTracks"
-                  translate-plural="%{ count } tracks"
                 >
-                  %{ count } track
-                </translate> ·
+                  {{ $t('components.library.AlbumBase.trackCount', {tracks_count: totalTracks}) }}
+                </span> ·
               </template>
               <human-duration
                 v-if="totalDuration > 0"
@@ -323,7 +307,7 @@ const remove = async () => {
                   :to="{name: 'library.albums.edit', params: {id: object.id }}"
                 >
                   <i class="pencil icon" />
-                  Add a description…
+                  {{ $t('components.library.AlbumBase.addDescription') }}
                 </router-link>
               </div>
             </div>
@@ -339,7 +323,7 @@ const remove = async () => {
                 :to="{name: 'library.albums.edit', params: {id: object.id }}"
               >
                 <i class="pencil icon" />
-                Add a description…
+                {{ $t('components.library.AlbumBase.addDescription') }}
               </router-link>
             </template>
           </div>

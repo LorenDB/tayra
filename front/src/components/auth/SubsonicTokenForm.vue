@@ -195,7 +195,7 @@ fetchToken()
         </template>
         <template #modal-confirm>
           <div>
-            {{ $t('components.auth.SubsonicTokenForm.disableSubsonicAccessConfirm')}}
+            {{ $t('components.auth.SubsonicTokenForm.disableSubsonicAccessConfirm') }}
           </div>
         </template>
       </dangerous-button>

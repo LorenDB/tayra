@@ -41,20 +41,20 @@ const buttonLabel = computed(() => {
   switch (props.radioConfig?.type) {
     case 'tag':
       return running.value
-        ? t('Stop tags radio')
-        : t('Start tags radio')
+        ? t('components.radios.Button.stopTagsRadio')
+        : t('components.radios.Button.startTagsRadio')
     case 'artist':
       return running.value
-        ? t('Stop artists radio')
-        : t('Start artists radio')
+        ? t('components.radios.Button.stopArtistsRadio')
+        : t('components.radios.Button.startArtistsRadio')
     case 'playlist':
       return running.value
-        ? t('Stop playlists radio')
-        : t('Start playlists radio')
+        ? t('components.radios.Button.stopPlaylistsRadio')
+        : t('components.radios.Button.startPlaylistsRadio')
     default:
       return running.value
-        ? t('Stop radio')
-        : t('Play radio')
+        ? t('components.radios.Button.stopRadio')
+        : t('components.radios.Button.startRadio')
   }
 })
 

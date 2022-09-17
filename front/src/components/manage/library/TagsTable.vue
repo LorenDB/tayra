@@ -57,8 +57,8 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: t('Delete'),
-    confirmationMessage: t('The selected tag will be removed and unlinked with existing content, if any. This action is irreversible.'),
+    label: t('components.manage.library.TagsTable.deleteActionLabel'),
+    confirmationMessage: t('components.manage.library.TagsTable.deleteActionConfirmation'),
     isDangerous: true,
     allowAll: false,
     confirmColor: 'danger'
@@ -97,7 +97,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('Search by name')
+  searchPlaceholder: t('components.manage.library.TagsTable.searchPlaceholder')
 }))
 
 const detailedUpload = ref()
@@ -109,7 +109,7 @@ const showUploadDetailModal = ref(false)
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="tags-search">Search</label>
+          <label for="tags-search">{{ $t('components.manage.library.TagsTable.searchLabel') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="tags-search"
@@ -122,7 +122,7 @@ const showUploadDetailModal = ref(false)
           </form>
         </div>
         <div class="field">
-          <label for="tags-ordering">Ordering</label>
+          <label for="tags-ordering">{{ $t('components.manage.library.TagsTable.orderingLabel') }}</label>
           <select
             id="tags-ordering"
             v-model="ordering"
@@ -138,17 +138,17 @@ const showUploadDetailModal = ref(false)
           </select>
         </div>
         <div class="field">
-          <label for="tags-ordering-direction">Ordering direction</label>
+          <label for="tags-ordering-direction">{{ $t('components.manage.library.TagsTable.orderingDirectionLabel') }}</label>
           <select
             id="tags-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              Ascending
+              {{ $t('components.manage.library.TagsTable.ascendingOrdering') }}
             </option>
             <option value="-">
-              Descending
+              {{ $t('components.manage.library.TagsTable.descendingOrdering') }}
             </option>
           </select>
         </div>
@@ -177,19 +177,19 @@ const showUploadDetailModal = ref(false)
       >
         <template #header-cells>
           <th>
-            Name
+            {{ $t('components.manage.library.TagsTable.nameTableHeader') }}
           </th>
           <th>
-            Artists
+            {{ $t('components.manage.library.TagsTable.artistsTableHeader') }}
           </th>
           <th>
-            Albums
+            {{ $t('components.manage.library.TagsTable.albumsTableHeader') }}
           </th>
           <th>
-            Tracks
+            {{ $t('components.manage.library.TagsTable.tracksTableHeader') }}
           </th>
           <th>
-            Creation date
+            {{ $t('components.manage.library.TagsTable.creationDateTableHeader') }}
           </th>
         </template>
         <template
@@ -225,12 +225,7 @@ const showUploadDetailModal = ref(false)
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-        >
-          Showing results %{ start }-%{ end } on %{ total }
-        </translate>
+        {{ $t('components.manage.library.TagsTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

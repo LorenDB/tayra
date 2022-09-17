@@ -51,7 +51,7 @@ const checkAndSwitch = async (url: string) => {
 
     show.value = false
     store.commit('ui/addMessage', {
-      content: t('You are now using the Funkwhale instance at %{ url }', { url: instanceUrl }),
+      content: t('components.SetInstanceModal.currentUrl', { url: instanceUrl }),
       date: new Date()
     })
 
@@ -71,7 +71,7 @@ const checkAndSwitch = async (url: string) => {
     @update:show="isError = false"
   >
     <h3 class="header">
-      Choose your instance
+      {{ $t('components.SetInstanceModal.chooseInstance') }}
     </h3>
     <div class="scrolling content">
       <div
@@ -80,14 +80,14 @@ const checkAndSwitch = async (url: string) => {
         class="ui negative message"
       >
         <h4 class="header">
-          It is not possible to connect to the given URL
+          {{ $t('components.SetInstanceModal.connectionFailure') }}
         </h4>
         <ul class="list">
           <li>
-            The server might be down
+            {{ $t('components.SetInstanceModal.serverDown') }}
           </li>
           <li>
-            The given address is not a Funkwhale server
+            {{ $t('components.SetInstanceModal.notFunkwhaleServer') }}
           </li>
         </ul>
       </div>
@@ -97,19 +97,15 @@ const checkAndSwitch = async (url: string) => {
       >
         <p
           v-if="$store.state.instance.instanceUrl"
-          v-translate="{url: $store.state.instance.instanceUrl, hostname: $store.getters['instance/domain'] }"
           class="description"
         >
-          You are currently connected to <a
-            href="%{ url }"
-            target="_blank"
-          >%{ hostname }&nbsp;<i class="external icon" /></a>. If you continue, you will be disconnected from your current instance and all your local data will be deleted.
+          {{ $t('components.SetInstanceModal.currentConnection', {url: $store.state.instance.instanceUrl, hostname: $store.getters['instance/domain']}) }}
         </p>
         <p v-else>
-          To continue, please select the Funkwhale instance you want to connect to. Enter the address directly, or select one of the suggested choices.
+          {{ $t('components.SetInstanceModal.selectFunkwhalePod') }}
         </p>
         <div class="field">
-          <label for="instance-picker">Instance URL</label>
+          <label for="instance-picker">{{ $t('components.SetInstanceModal.instanceUrl') }}</label>
           <div class="ui action input">
             <input
               id="instance-picker"
@@ -121,7 +117,7 @@ const checkAndSwitch = async (url: string) => {
               type="submit"
               :class="['ui', 'icon', {loading: isLoading}, 'button']"
             >
-              Submit
+              {{ $t('components.SetInstanceModal.submitButton') }}
             </button>
           </div>
         </div>
@@ -133,7 +129,7 @@ const checkAndSwitch = async (url: string) => {
       >
         <div class="field">
           <h4>
-            Suggested choices
+            {{ $t('components.SetInstanceModal.suggestions') }}
           </h4>
           <button
             v-for="(url, key) in suggestedInstances"
@@ -148,7 +144,7 @@ const checkAndSwitch = async (url: string) => {
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        Cancel
+        {{ $t('components.SetInstanceModal.cancelButton') }}
       </button>
     </div>
   </semantic-modal>

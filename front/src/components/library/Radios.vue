@@ -101,8 +101,8 @@ onMounted(() => $('.ui.dropdown').dropdown())
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: t('Enter a radio name…'),
-  title: t('Radios')
+  searchPlaceholder: t('components.library.Radios.searchPlaceholder'),
+  title: t('components.library.Podcasts.title')
 }))
 
 const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value].sort((a, b) => a - b)))
@@ -112,12 +112,12 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        Browsing radios
+        {{ $t('components.library.Radios.radioBrowseHeader') }}
       </h2>
       <div class="ui hidden divider" />
       <div class="ui row">
         <h3 class="ui header">
-          Instance radios
+          {{ $t('components.library.Radios.instanceRadioHeader') }}
         </h3>
         <div class="ui cards">
           <radio-card
@@ -140,14 +140,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
 
       <div class="ui hidden divider" />
       <h3 class="ui header">
-        User radios
+        {{ $t('components.library.Radios.userRadioHeader') }}
       </h3>
       <router-link
         v-if="isAuthenticated"
         class="ui success button"
         to="/library/radios/build"
       >
-        Create your own radio
+        {{ $t('components.library.Radios.createRadioLink') }}
       </router-link>
       <div class="ui hidden divider" />
       <form
@@ -156,7 +156,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="fields">
           <div class="field">
-            <label for="radios-search">Search</label>
+            <label for="radios-search">{{ $t('components.library.Radios.searchLabel') }}</label>
             <div class="ui action input">
               <input
                 id="radios-search"
@@ -168,14 +168,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="t('Search')"
+                :aria-label="t('components.library.Radios.searchButton')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="radios-ordering">Ordering</label>
+            <label for="radios-ordering">{{ $t('components.library.Radios.orderingLabel') }}</label>
             <select
               id="radios-ordering"
               v-model="ordering"
@@ -191,22 +191,22 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="radios-ordering-direction">Order</label>
+            <label for="radios-ordering-direction">{{ $t('components.library.Radios.orderingDirectionLabel') }}</label>
             <select
               id="radios-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                Ascending
+                {{ $t('components.library.Radios.ascendingOrdering') }}
               </option>
               <option value="-">
-                Descending
+                {{ $t('components.library.Radios.descendingOrdering') }}
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="radios-results">Results per page</label>
+            <label for="radios-results">{{ $t('components.library.Radios.resultsPerPageLabel') }}</label>
             <select
               id="radios-results"
               v-model="paginateBy"
@@ -230,7 +230,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="ui icon header">
           <i class="feed icon" />
-          No results matching your query
+          {{ $t('components.library.Radios.emptyStateMessage') }}
         </div>
         <router-link
           v-if="$store.state.auth.authenticated"
@@ -238,7 +238,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           class="ui success button labeled icon"
         >
           <i class="rss icon" />
-          Create a radio
+          {{ $t('components.library.Radios.addRadioLink') }}
         </router-link>
       </div>
       <div

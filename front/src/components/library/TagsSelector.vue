@@ -99,7 +99,7 @@ onMounted(async () => {
       class="search"
     >
     <div class="default text">
-      Search…
+      {{ $t('components.library.TagSelector.searchPlaceholder') }}
     </div>
   </div>
 </template>

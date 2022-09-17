@@ -13,7 +13,7 @@ const nodeinfo = computed(() => store.state.instance.nodeinfo)
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('About')
+  title: t('components.About.title')
 }))
 
 const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') ?? 'Funkwhale')
@@ -67,10 +67,10 @@ const headerStyle = computed(() => {
                 <div class="column" />
               </div>
               <h2 class="header">
-                A social platform to enjoy and share music
+                {{ $t('components.About.funkwhaleHeader') }}
               </h2>
               <p>
-                Funkwhale is a community-driven project that lets you listen and share music and audio within a decentralized, open network.
+                {{ $t('components.About.funkwhaleDescription') }}
               </p>
             </div>
           </div>
@@ -84,14 +84,14 @@ const headerStyle = computed(() => {
                 class="signup-form content"
               >
                 <h3 class="header">
-                  Sign up
+                  {{ $t('components.About.signupHeader') }}
                 </h3>
                 <template v-if="openRegistrations">
                   <p>
-                    Sign up now to keep a track of your favorites, create playlists, discover new content and much more!
+                    {{ $t('components.About.signupDescription') }}
                   </p>
                   <p v-if="defaultUploadQuota">
-                    Users on this pod also get %{ quota } of free storage to upload their own content!
+                    {{ $t('components.About.quotaDescription', {quota: defaultUploadQuota}) }}
                   </p>
                   <signup-form
                     button-classes="success"
@@ -100,7 +100,7 @@ const headerStyle = computed(() => {
                 </template>
                 <div v-else>
                   <p>
-                    Registrations are closed on this pod. You can signup on another pod using the link below.
+                    {{ $t('components.About.registrationsClosedHelp') }}
                   </p>
 
                   <a
@@ -108,7 +108,7 @@ const headerStyle = computed(() => {
                     rel="noopener"
                     href="https://funkwhale.audio/#get-started"
                   >
-                    Find another pod
+                    {{ $t('components.About.findOtherPod') }}
                     &nbsp;<i class="external alternate icon" />
                   </a>
                 </div>
@@ -118,13 +118,13 @@ const headerStyle = computed(() => {
                 class="signup-form content"
               >
                 <h3 class="header">
-                  Sign up
+                  {{ $t('components.About.signupHeader') }}
                   <div class="ui positive message">
                     <div class="header">
-                      You're already signed in!
+                      {{ $t('components.About.alreadyLoggedIn') }}
                     </div>
                     <p>
-                      Hello {{ $store.state.auth.username }}
+                      {{ $t('components.About.greetingMessage', {username: $store.state.auth.username}) }}
                     </p>
                   </div>
                 </h3>
@@ -145,7 +145,7 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  About this pod
+                  {{ $t('components.About.aboutPodHeader') }}
                 </h3>
                 <div
                   v-if="shortDescription"
@@ -154,7 +154,7 @@ const headerStyle = computed(() => {
                   {{ shortDescription }}
                 </div>
                 <p v-else>
-                  No description available.
+                  {{ $t('components.About.noDescription') }}
                 </p>
 
                 <template v-if="stats">
@@ -164,14 +164,14 @@ const headerStyle = computed(() => {
                         <span class="statistics-figure ui text">
                           <span class="ui big text"><strong>{{ stats.users.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                           <br>
-                          {{ $t('active user | active users', stats.users) }}
+                          {{ $t('components.About.activeUsers', {users: stats.users}) }}
                         </span>
                       </div>
                       <div class="column">
                         <span class="statistics-figure ui text">
                           <span class="ui big text"><strong>{{ stats.hours.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                           <br>
-                          {{ $t('hour of music | hours of music', stats.hours) }}
+                          {{ $t('components.About.hoursOfMusic', {hours: stats.hours}) }}
                         </span>
                       </div>
                     </div>
@@ -182,7 +182,7 @@ const headerStyle = computed(() => {
                   to="/about/pod"
                   class="ui fluid basic secondary button"
                 >
-                  Learn More
+                  {{ $t('components.About.learnMoreLink') }}
                 </router-link>
               </div>
             </div>
@@ -201,10 +201,10 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  Browse public content
+                  {{ $t('components.About.publicContentHeader') }}
                 </h3>
                 <p>
-                  Listen to public albums and playlists shared on this pod.
+                  {{ $t('components.About.publicContentDescription') }}
                 </p>
               </div>
             </router-link>
@@ -218,11 +218,11 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  Find another pod
+                  {{ $t('components.About.findOtherPod') }}
                   &nbsp;<i class="external alternate icon" />
                 </h3>
                 <p>
-                  Listen to public albums and playlists shared on this pod.
+                  {{ $t('components.About.publicContentDescription') }}
                 </p>
               </div>
             </a>
@@ -236,11 +236,11 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  Find an app
+                  {{ $t('components.About.findAppHeader') }}
                   &nbsp;<i class="external alternate icon" />
                 </h3>
                 <p>
-                  Use Funkwhale on other devices with our apps.
+                  {{ $t('components.About.findAppDescription') }}
                 </p>
               </div>
             </a>
@@ -250,7 +250,7 @@ const headerStyle = computed(() => {
               to="/about/pod"
               class="ui right floated basic secondary button"
             >
-              About this pod
+              {{ $t('components.About.aboutPodHeader') }}
               <i class="icon arrow right" />
             </router-link>
           </div>

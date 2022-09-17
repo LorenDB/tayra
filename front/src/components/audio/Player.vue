@@ -300,7 +300,7 @@ const hideArtist = () => {
               >
                 <i class="stream icon" />
                 <span>
-                  {{ $t('components.audio.Player.queuePosition', { index: currentIndex + 1 }, { length: queue.length }) }}
+                  {{ $t('components.audio.Player.queuePosition', { index: currentIndex + 1, length: queue.length }) }}
                 </span>
               </button>
               <button
@@ -308,7 +308,9 @@ const hideArtist = () => {
                 @click.stop="switchTab"
               >
                 <i class="stream icon" />
-                {{ $t('components.audio.Player.queuePosition', { index: currentIndex + 1 }, { length: queue.length }) }}
+                <span>
+                  {{ $t('components.audio.Player.queuePosition', { index: currentIndex + 1, length: queue.length }) }}
+                </span>
               </button>
 
               <button

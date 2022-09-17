@@ -25,18 +25,18 @@ const summary = useMarkdown(() => props.object.summary)
       <i class="user icon" />{{ object.actor }}  &nbsp;
       <template v-if="object.is_active">
         <i class="play icon" />
-        Enabled
+        {{ $t('components.manage.moderation.InstancePolicyCard.enabledStatus') }}
       </template>
       <template v-if="!object.is_active">
         <i class="pause icon" />
-        Paused
+        {{ $t('components.manage.moderation.InstancePolicyCard.pausedStatus') }}
       </template>
     </p>
     <div>
-      <p><strong>Rule</strong></p>
+      <p><strong>{{ $t('components.manage.moderation.InstancePolicyCard.ruleHeader') }}</strong></p>
       <p v-if="object.block_all">
         <i class="ban icon" />
-        Block everything
+        {{ $t('components.manage.moderation.InstancePolicyCard.blockAllRule') }}
       </p>
       <div
         v-else
@@ -48,7 +48,7 @@ const summary = useMarkdown(() => props.object.summary)
         >
           <i class="feed icon" />
           <div class="content">
-            Mute activity
+            {{ $t('components.manage.moderation.InstancePolicyCard.muteActivityRule') }}
           </div>
         </div>
         <div
@@ -57,7 +57,7 @@ const summary = useMarkdown(() => props.object.summary)
         >
           <i class="bell icon" />
           <div class="content">
-            Mute notifications
+            {{ $t('components.manage.moderation.InstancePolicyCard.muteNotificationsRule') }}
           </div>
         </div>
         <div
@@ -66,14 +66,14 @@ const summary = useMarkdown(() => props.object.summary)
         >
           <i class="file icon" />
           <div class="content">
-            Reject media
+            {{ $t('components.manage.moderation.InstancePolicyCard.rejectMediaRule') }}
           </div>
         </div>
       </div>
     </div>
     <div v-if="summary">
       <div class="ui hidden divider" />
-      <p><strong>Reason</strong></p>
+      <p><strong>{{ $t('components.manage.moderation.InstancePolicyCard.ruleReason') }}</strong></p>
       <sanitized-html :html="summary" />
     </div>
     <div class="ui hidden divider" />
@@ -82,7 +82,7 @@ const summary = useMarkdown(() => props.object.summary)
       @click="emit('update')"
     >
       <i class="edit icon" />
-      Edit
+      {{ $t('components.manage.moderation.InstancePolicyCard.editButton') }}
     </button>
   </div>
 </template>

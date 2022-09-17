@@ -46,14 +46,7 @@ const tags = computed(() => {
       class="ui circular inverted accent label"
       @click.prevent="honorLimit = false"
     >
-      <translate
-
-        :translate-params="{ count: props.tags.length - tags.length }"
-        :translate-n="props.tags.length - tags.length"
-        translate-plural="Show %{ count } more tags"
-      >
-        Show 1 more tag
-      </translate>
+      {{ $t('components.tags.List.showMoreTags', {count: props.tags.length - tags.length}) }}
     </div>
   </div>
 </template>

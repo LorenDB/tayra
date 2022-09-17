@@ -61,14 +61,7 @@ const images = computed(() => {
       </div>
     </div>
     <div class="extra content">
-      <translate
-
-        :translate-params="{count: playlist.tracks_count}"
-        :translate-n="playlist.tracks_count"
-        translate-plural="%{ count } tracks"
-      >
-        %{ count } track
-      </translate>
+      {{ $t('components.playlists.Card.trackCount', {tracks_count: playlist.tracks_count}) }}
       <play-button
         class="right floated basic icon"
         :dropdown-only="true"

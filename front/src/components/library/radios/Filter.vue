@@ -124,7 +124,7 @@ watch(exclude, fetchCandidates)
           for="exclude-filter"
           class="visually-hidden"
         >
-          Exclude
+          {{ $t('components.library.radios.Filter.excludeLabel') }}
         </label>
       </div>
     </td>
@@ -173,14 +173,14 @@ watch(exclude, fetchCandidates)
         :class="['ui', {'success': checkResult.candidates.count > 10}, 'label']"
         @click.prevent="showCandidadesModal = !showCandidadesModal"
       >
-        {{ checkResult.candidates.count }} tracks matching filter
+        {{ $t('components.library.radios.Filter.matchingTracks', {count: checkResult.candidates.count}) }}
       </a>
       <semantic-modal
         v-if="checkResult"
         v-model:show="showCandidadesModal"
       >
         <h4 class="header">
-          Tracks matching filter
+          {{ $t('components.library.radios.Filter.matchingTracksModalHeader') }}
         </h4>
         <div class="content">
           <div class="description">
@@ -192,7 +192,7 @@ watch(exclude, fetchCandidates)
         </div>
         <div class="actions">
           <button class="ui deny button">
-            Cancel
+            {{ $t('components.library.radios.Filter.cancelButton') }}
           </button>
         </div>
       </semantic-modal>
@@ -202,7 +202,7 @@ watch(exclude, fetchCandidates)
         class="ui danger button"
         @click="$emit('delete', index)"
       >
-        Remove
+        {{ $t('components.library.radios.Filter.removeButton') }}
       </button>
     </td>
   </tr>

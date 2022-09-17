@@ -14,7 +14,7 @@ import { useRouter } from 'vue-router'
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Home')
+  title: t('components.Home.title')
 }))
 
 const store = useStore()
@@ -71,7 +71,7 @@ whenever(() => store.state.auth.authenticated, () => {
       <div class="segment-content">
         <h1 class="ui center aligned large header">
           <span>
-            {{ $t('Welcome to %{ podName }!', { podName }) }}
+            {{ $t('components.Home.welcomeMessage', {podName: podName}) }}
           </span>
           <div
             v-if="shortDescription"
@@ -86,7 +86,7 @@ whenever(() => store.state.auth.authenticated, () => {
       <div class="ui stackable grid">
         <div class="ten wide column">
           <h2 class="header">
-            About this Funkwhale pod
+            {{ $t('components.Home.aboutPod') }}
           </h2>
           <div
             id="pod"
@@ -95,7 +95,7 @@ whenever(() => store.state.auth.authenticated, () => {
             <div class="ui stackable grid">
               <div class="eight wide column">
                 <p v-if="!longDescription">
-                  No description available.
+                  {{ $t('components.Home.noDescription') }}
                 </p>
                 <template v-if="longDescription || rules">
                   <sanitized-html
@@ -118,7 +118,7 @@ whenever(() => store.state.auth.authenticated, () => {
                           class="ui link"
                           :to="{name: 'about'}"
                         >
-                          Learn more
+                          {{ $t('components.Home.learnMore') }}
                         </router-link>
                       </div>
                     </div>
@@ -133,7 +133,7 @@ whenever(() => store.state.auth.authenticated, () => {
                           class="ui link"
                           :to="{name: 'about', hash: '#rules'}"
                         >
-                          Server rules
+                          {{ $t('components.Home.serverRules') }}
                         </router-link>
                       </div>
                     </div>
@@ -143,20 +143,20 @@ whenever(() => store.state.auth.authenticated, () => {
               <div class="eight wide column">
                 <template v-if="stats">
                   <h3 class="sub header">
-                    Statistics
+                    {{ $t('components.Home.statistics') }}
                   </h3>
                   <p>
                     <i class="user icon" />
-                    {{ $t('%{ users } active user | %{ users } active users', stats, stats.users) }}
+                    {{ $t('components.Home.activeUsers', {users: stats.users}) }}
                   </p>
                   <p>
                     <i class="music icon" />
-                    {{ $t('%{ hours } hour of music | %{ hours } hours of music', stats, stats.hours) }}
+                    {{ $t('components.Home.hoursOfMusic', {hours: stats.hours}) }}
                   </p>
                 </template>
                 <template v-if="contactEmail">
                   <h3 class="sub header">
-                    Contact
+                    {{ $t('components.Home.contactHeader') }}
                   </h3>
                   <i class="at icon" />
                   <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
@@ -179,13 +179,13 @@ whenever(() => store.state.auth.authenticated, () => {
       <div class="ui stackable grid">
         <div class="four wide column">
           <h3 class="header">
-            About Funkwhale
+            {{ $t('components.Home.aboutFunkwhale') }}
           </h3>
           <p>
-            This pod runs Funkwhale, a community-driven project that lets you listen and share music and audio within a decentralized, open network.
+            {{ $t('components.Home.funkwhaleDescription') }}
           </p>
           <p>
-            Funkwhale is free and developed by a friendly community of volunteers.
+            {{ $t('components.Home.funkwhaleAddendum') }}
           </p>
           <a
             target="_blank"
@@ -193,12 +193,12 @@ whenever(() => store.state.auth.authenticated, () => {
             href="https://funkwhale.audio"
           >
             <i class="external alternate icon" />
-            Visit funkwhale.audio
+            {{ $t('components.Home.websiteLink') }}
           </a>
         </div>
         <div class="four wide column">
           <h3 class="header">
-            Log In
+            {{ $t('components.Home.loginHeader') }}
           </h3>
           <login-form
             button-classes="success"
@@ -208,14 +208,14 @@ whenever(() => store.state.auth.authenticated, () => {
         </div>
         <div class="four wide column">
           <h3 class="header">
-            Sign up
+            {{ $t('components.Home.signupHeader') }}
           </h3>
           <template v-if="openRegistrations">
             <p>
-              Sign up now to keep track of your favorites, create playlists, discover new content and much more!
+              {{ $t('components.Home.signupDescription') }}
             </p>
             <p v-if="defaultUploadQuota">
-              {{ $t('Users on this pod also get %{ quota } of free storage to upload their own content!', { quota: humanSize(defaultUploadQuota * 1000 * 1000) }) }}
+              {{ $t('components.Home.uploadQuota', { quota: humanSize(defaultUploadQuota * 1000 * 1000) }) }}
             </p>
             <signup-form
               button-classes="success"
@@ -224,7 +224,7 @@ whenever(() => store.state.auth.authenticated, () => {
           </template>
           <div v-else>
             <p>
-              Registrations are closed on this pod. You can signup on another pod using the link below.
+              {{ $t('components.Home.registrationsClosed') }}
             </p>
             <a
               target="_blank"
@@ -232,14 +232,14 @@ whenever(() => store.state.auth.authenticated, () => {
               href="https://funkwhale.audio/#get-started"
             >
               <i class="external alternate icon" />
-              Find another pod
+              {{ $t('components.Home.findOtherPod') }}
             </a>
           </div>
         </div>
 
         <div class="four wide column">
           <h3 class="header">
-            Useful links
+            {{ $t('components.Home.usefulLinks') }}
           </h3>
           <div class="ui relaxed list">
             <div class="item">
@@ -250,10 +250,10 @@ whenever(() => store.state.auth.authenticated, () => {
                   class="header"
                   to="/library"
                 >
-                  Browse public content
+                  {{ $t('components.Home.browsePublicContent') }}
                 </router-link>
                 <div class="description">
-                  Listen to public albums and playlists shared on this pod
+                  {{ $t('components.Home.publicContentDescription') }}
                 </div>
               </div>
             </div>
@@ -266,10 +266,10 @@ whenever(() => store.state.auth.authenticated, () => {
                   target="_blank"
                   rel="noopener"
                 >
-                  Mobile apps
+                  {{ $t('components.Home.mobileApps') }}
                 </a>
                 <div class="description">
-                  Use Funkwhale on other devices with our apps
+                  {{ $t('components.Home.mobileAppsDescription') }}
                 </div>
               </div>
             </div>
@@ -282,10 +282,10 @@ whenever(() => store.state.auth.authenticated, () => {
                   target="_blank"
                   rel="noopener"
                 >
-                  User guides
+                  {{ $t('components.Home.userGuides') }}
                 </a>
                 <div class="description">
-                  Discover everything you need to know about Funkwhale and its features
+                  {{ $t('components.Home.userGuidesDescription') }}
                 </div>
               </div>
             </div>
@@ -302,16 +302,16 @@ whenever(() => store.state.auth.authenticated, () => {
         :limit="10"
       >
         <template #title>
-          Recently added albums
+          {{ $t('components.Home.recentlyAddedLabel') }}
         </template>
         <router-link to="/library">
-          View more…
+          {{ $t('components.Home.viewMore') }}
           <div class="ui hidden divider" />
         </router-link>
       </album-widget>
       <div class="ui hidden section divider" />
       <h3 class="ui header">
-        New channels
+        {{ $t('components.Home.newChannelsLabel') }}
       </h3>
       <channels-widget
         :show-modification-date="true"

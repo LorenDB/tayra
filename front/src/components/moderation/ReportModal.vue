@@ -84,7 +84,7 @@ const submit = async () => {
 
     store.commit('moderation/contentFilter', response.data)
     store.commit('ui/addMessage', {
-      content: t('Report successfully submitted, thank you'),
+      content: t('components.moderation.ReportModal.reportSubmitSuccessMessage'),
       date: new Date()
     })
 
@@ -110,7 +110,7 @@ watchEffect(async () => {
     reportTypes.value = response.data.metadata.reportTypes ?? []
   } catch (error) {
     store.commit('ui/addMessage', {
-      content: t('Cannot fetch Node Info: %{ error }', { error: `${error}` }),
+      content: t('components.moderation.ReportModal.nodeinfoFetchFailure', { error: `${error}` }),
       date: new Date()
     })
   }
@@ -125,7 +125,7 @@ watchEffect(async () => {
       v-if="target"
       class="ui header"
     >
-      Do you want to report this object?
+      {{ $t('components.moderation.ReportModal.reportModalHeader') }}
       <div class="ui sub header">
         {{ target.typeLabel }} - {{ target.label }}
       </div>
@@ -138,7 +138,7 @@ watchEffect(async () => {
           class="ui negative message"
         >
           <h4 class="header">
-            Error while submitting report
+            {{ $t('components.moderation.ReportModal.submissionFailureHeader') }}
           </h4>
           <ul class="list">
             <li
@@ -151,7 +151,7 @@ watchEffect(async () => {
         </div>
       </div>
       <p>
-        Use this form to submit a report to our moderation team.
+        {{ $t('components.moderation.ReportModal.reportModalDescription') }}
       </p>
       <form
         v-if="canSubmit"
@@ -173,7 +173,7 @@ watchEffect(async () => {
             class="ui eight wide required field"
           >
             <label for="report-submitter-email">
-              Email
+              {{ $t('components.moderation.ReportModal.emailLabel') }}
             </label>
             <input
               id="report-submitter-email"
@@ -183,16 +183,16 @@ watchEffect(async () => {
               required
             >
             <p>
-              We'll use this e-mail address if we need to contact you regarding this report.
+              {{ $t('components.moderation.ReportModal.emailDescription') }}
             </p>
           </div>
         </div>
         <div class="ui field">
           <label for="report-summary">
-            Message
+            {{ $t('components.moderation.ReportModal.messageLabel') }}
           </label>
           <p>
-            Use this field to provide additional context to the moderator that will handle your report.
+            {{ $t('components.moderation.ReportModal.messageDescription') }}
           </p>
           <content-form
             v-model="summary"
@@ -212,12 +212,10 @@ watchEffect(async () => {
             >
             <label for="report-forward">
               <strong>
-                <translate
-                  :translate-params="{domain: targetDomain}"
-                >Forward to %{ domain} </translate>
+                {{ $t('components.moderation.ReportModal.forwardToDomainLabel', {domain: targetDomain}) }}
               </strong>
               <p>
-                Forward an anonymized copy of your report to the server hosting this element.
+                {{ $t('components.moderation.ReportModal.forwardToDomainDescription') }}
               </p>
             </label>
           </div>
@@ -234,13 +232,13 @@ watchEffect(async () => {
         class="ui warning message"
       >
         <h4 class="header">
-          Anonymous reports are disabled, please sign-in to submit a report.
+          {{ $t('components.moderation.ReportModal.anonymousReportsDisabled') }}
         </h4>
       </div>
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        Cancel
+        {{ $t('components.moderation.ReportModal.cancelButton') }}
       </button>
       <button
         v-if="canSubmit"
@@ -248,7 +246,7 @@ watchEffect(async () => {
         type="submit"
         form="report-form"
       >
-        Submit report
+        {{ $t('components.moderation.ReportModal.submitReportButton') }}
       </button>
     </div>
   </semantic-modal>

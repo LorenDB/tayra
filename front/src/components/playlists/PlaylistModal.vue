@@ -27,8 +27,8 @@ const track = computed(() => store.state.playlists.modalTrack)
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  addToPlaylist: t('Add to this playlist'),
-  filterPlaylistField: t('Enter playlist name')
+  addToPlaylist: t('components.playlists.PlaylistModal.addToPlaylist'),
+  filterPlaylistField: t('components.playlists.PlaylistModal.filterPlaylistField')
 }))
 
 const playlistNameFilter = ref('')
@@ -85,21 +85,18 @@ store.dispatch('playlists/fetchOwn')
     <h4 class="header">
       <template v-if="track">
         <h2 class="ui header">
-          Add to playlist
+          {{ $t('components.playlists.PlaylistModal.addToPlaylistHeader') }}
           <div
-            v-translate="{artist: track.artist?.name, title: track.title}"
             class="ui sub header"
-
-            :translate-params="{artist: track.artist?.name, title: track.title}"
           >
-            "%{ title }", by %{ artist }
+            {{ $t('components.playlists.PlaylistModal.trackTitle', {artist: track.artist?.name, title: track.title}) }}
           </div>
         </h2>
       </template>
       <translate
         v-else
       >
-        Manage playlists
+        {{ $t('components.playlists.PlaylistModal.managePlaylistsHeader') }}
       </translate>
     </h4>
     <div class="scrolling content">
@@ -114,24 +111,20 @@ store.dispatch('playlists/fetchOwn')
           role="alert"
           class="ui warning message"
         >
-          <p
-            v-translate="{track: track?.title, playlist: duplicateTrackAddInfo.playlist_name}"
-
-            :translate-params="{track: track?.title, playlist: duplicateTrackAddInfo.playlist_name}"
-          >
-            <strong>%{ track }</strong> is already in <strong>%{ playlist }</strong>.
+          <p>
+            {{ $t('components.playlists.PlaylistModal.trackAlreadyInPlaylist', {track: track?.title, playlist: duplicateTrackAddInfo.playlist_name}) }}
           </p>
           <button
             class="ui small basic cancel button"
             @click="showDuplicateTrackAddConfirmation = false"
           >
-            Cancel
+            {{ $t('components.playlists.PlaylistModal.cancelButton') }}
           </button>
           <button
             class="ui small success button"
             @click="addToPlaylist(lastSelectedPlaylist, true)"
           >
-            Add anyways
+            {{ $t('components.playlists.PlaylistModal.addAnywayButton') }}
           </button>
         </div>
         <div
@@ -140,7 +133,7 @@ store.dispatch('playlists/fetchOwn')
           class="ui negative message"
         >
           <h4 class="header">
-            The track can't be added to a playlist
+            {{ $t('components.playlists.PlaylistModal.trackAddFailureHeader') }}
           </h4>
           <ul class="list">
             <li
@@ -152,12 +145,12 @@ store.dispatch('playlists/fetchOwn')
           </ul>
         </div>
         <h4 class="ui header">
-          Available playlists
+          {{ $t('components.playlists.PlaylistModal.availablePlaylistsHeader') }}
         </h4>
         <div class="ui form">
           <div class="fields">
             <div class="field">
-              <label for="playlist-name-filter">Filter</label>
+              <label for="playlist-name-filter">{{ $t('components.playlists.PlaylistModal.filterLabel') }}</label>
               <input
                 id="playlist-name-filter"
                 v-model="playlistNameFilter"
@@ -174,15 +167,15 @@ store.dispatch('playlists/fetchOwn')
         >
           <thead>
             <tr>
-              <th><span class="visually-hidden">Edit</span></th>
+              <th><span class="visually-hidden">{{ $t('components.playlists.PlaylistModal.editTableHeader') }}</span></th>
               <th>
-                Name
+                {{ $t('components.playlists.PlaylistModal.nameTableHeader') }}
               </th>
               <th class="sorted descending">
-                Last modification
+                {{ $t('components.playlists.PlaylistModal.lastModificationTableHeader') }}
               </th>
               <th>
-                Tracks
+                {{ $t('components.playlists.PlaylistModal.tracksTableHeader') }}
               </th>
             </tr>
           </thead>
@@ -197,7 +190,7 @@ store.dispatch('playlists/fetchOwn')
                   :to="{name: 'library.playlists.detail', params: {id: playlist.id }, query: {mode: 'edit'}}"
                 >
                   <i class="ui pencil icon" />
-                  <span class="visually-hidden">Edit</span>
+                  <span class="visually-hidden">{{ $t('components.playlists.PlaylistModal.editTableHeader') }}</span>
                 </router-link>
               </td>
               <td>
@@ -217,7 +210,8 @@ store.dispatch('playlists/fetchOwn')
                   :title="labels.addToPlaylist"
                   @click.prevent="addToPlaylist(playlist.id, false)"
                 >
-                  <i class="plus icon" />                     Add track
+                  <i class="plus icon" />
+                  {{ $t('components.playlists.PlaylistModal.addTrackButton') }}
                 </button>
               </td>
             </tr>
@@ -226,7 +220,7 @@ store.dispatch('playlists/fetchOwn')
         <template v-else>
           <div class="ui small placeholder segment component-placeholder">
             <h4 class="ui header">
-              No results matching your filter
+              {{ $t('components.playlists.PlaylistModal.emptyStateMessage') }}
             </h4>
           </div>
         </template>
@@ -237,13 +231,13 @@ store.dispatch('playlists/fetchOwn')
       >
         <div class="ui icon header">
           <i class="list icon" />
-          No playlists have been created yet
+          {{ $t('components.playlists.PlaylistModal.noPlaylistsMessage') }}
         </div>
       </div>
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        Cancel
+        {{ $t('components.playlists.PlaylistModal.cancelButton') }}
       </button>
     </div>
   </semantic-modal>

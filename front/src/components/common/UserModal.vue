@@ -26,24 +26,24 @@ const themes = useThemeList()
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  header: t('Options'),
-  profile: t('Profile'),
-  settings: t('Settings'),
-  logout: t('Log out'),
-  about: t('About'),
-  shortcuts: t('Keyboard shortcuts'),
-  support: t('Help'),
-  forum: t('Forum'),
-  docs: t('Documentation'),
-  help: t('Help'),
-  language: t('Language'),
-  theme: t('Theme'),
-  chat: t('Chat room'),
-  git: t('Issue tracker'),
-  login: t('Log in'),
-  signup: t('Sign up'),
-  notifications: t('Notifications'),
-  useOtherInstance: t('Use another instance')
+  header: t('components.common.UserModal.optionsLabel'),
+  profile: t('components.common.UserModal.profileLabel'),
+  settings: t('components.common.UserModal.settingsLabel'),
+  logout: t('components.common.UserModal.logoutLabel'),
+  about: t('components.common.UserModal.aboutLabel'),
+  shortcuts: t('components.common.UserModal.shortcutsLabel'),
+  support: t('components.common.UserModal.supportLabel'),
+  forum: t('components.common.UserModal.forumLabel'),
+  docs: t('components.common.UserModal.docsLabel'),
+  help: t('components.common.UserModal.supportLabel'),
+  language: t('components.common.UserModal.languageLabel'),
+  theme: t('components.common.UserModal.themeLabel'),
+  chat: t('components.common.UserModal.chatLabel'),
+  git: t('components.common.UserModal.gitLabel'),
+  login: t('components.common.UserModal.loginLabel'),
+  signup: t('components.common.UserModal.signupLabel'),
+  notifications: t('components.common.UserModal.notificationsLabel'),
+  useOtherInstance: t('components.common.UserModal.useOtherInstanceLabel')
 }))
 </script>
 

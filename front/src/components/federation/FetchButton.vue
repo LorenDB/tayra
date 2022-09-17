@@ -80,7 +80,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
       class="small"
     >
       <h3 class="header">
-        Refreshing object from remote server…
+        {{ $t('components.federation.FetchButton.remoteRefreshHeader') }}
       </h3>
       <div class="scrolling content">
         <template v-if="data && data.status != 'pending'">
@@ -89,10 +89,10 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
             class="ui message"
           >
             <h4 class="header">
-              Refresh was skipped
+              {{ $t('components.federation.FetchButton.refreshSkippedHeader') }}
             </h4>
             <p>
-              The remote server answered, but returned data was unsupported by Funkwhale.
+              {{ $t('components.federation.FetchButton.unsupportedDataMessage') }}
             </p>
           </div>
           <div
@@ -100,10 +100,10 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
             class="ui success message"
           >
             <h4 class="header">
-              Refresh successful
+              {{ $t('components.federation.FetchButton.refreshSuccessHeader') }}
             </h4>
             <p>
-              Data was refreshed successfully from remote server.
+              {{ $t('components.federation.FetchButton.refreshSuccessMessage') }}
             </p>
           </div>
           <div
@@ -111,16 +111,16 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
             class="ui error message"
           >
             <h4 class="header">
-              Refresh error
+              {{ $t('components.federation.FetchButton.refreshFailureHeader') }}
             </h4>
             <p>
-              An error occurred while trying to refresh data:
+              {{ $t('components.federation.FetchButton.refreshFailureMessage') }}
             </p>
             <table class="ui very basic collapsing celled table">
               <tbody>
                 <tr>
                   <td>
-                    Error type
+                    {{ $t('components.federation.FetchButton.errorTypeTableHeader') }}
                   </td>
                   <td>
                     {{ data.detail.error_code }}
@@ -128,50 +128,49 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
                 </tr>
                 <tr>
                   <td>
-                    Error detail
+                    {{ $t('components.federation.FetchButton.errorDetailTableRow') }}
                   </td>
                   <td>
-                    <translate
+                    <span
                       v-if="data.detail.error_code === 'http' && data.detail.status_code"
-                      :translate-params="{status: data.detail.status_code}"
                     >
-                      The remote server answered with HTTP %{ status }
-                    </translate>
-                    <translate
+                      {{ $t('components.federation.FetchButton.httpStatusMessage', {status: data.detail.status_code}) }}
+                    </span>
+                    <span
                       v-else-if="['http', 'request'].indexOf(data.detail.error_code) > -1"
                     >
-                      An HTTP error occurred while contacting the remote server
-                    </translate>
-                    <translate
+                      {{ $t('components.federation.FetchButton.httpErrorMessage') }}
+                    </span>
+                    <span
                       v-else-if="data.detail.error_code === 'timeout'"
                     >
-                      The remote server didn't respond quickly enough
-                    </translate>
-                    <translate
+                      {{ $t('components.federation.FetchButton.timeoutErrorMessage') }}
+                    </span>
+                    <span
                       v-else-if="data.detail.error_code === 'connection'"
                     >
-                      Impossible to connect to the remote server
-                    </translate>
-                    <translate
+                      {{ $t('components.federation.FetchButton.connectionErrorMessage') }}
+                    </span>
+                    <span
                       v-else-if="['invalid_json', 'invalid_jsonld', 'missing_jsonld_type'].indexOf(data.detail.error_code) > -1"
                     >
-                      The remote server returned invalid JSON or JSON-LD data
-                    </translate>
-                    <translate
+                      {{ $t('components.federation.FetchButton.invalidJsonErrorMessage') }}
+                    </span>
+                    <span
                       v-else-if="data.detail.error_code === 'validation'"
                     >
-                      Data returned by the remote server had invalid or missing attributes
-                    </translate>
-                    <translate
+                      {{ $t('components.federation.FetchButton.invalidAttributesErrorMessage') }}
+                    </span>
+                    <span
                       v-else-if="data.detail.error_code === 'unhandled'"
                     >
-                      Unknown error
-                    </translate>
-                    <translate
+                      {{ $t('components.federation.FetchButton.unknownErrorMessage') }}
+                    </span>
+                    <span
                       v-else
                     >
-                      Unknown error
-                    </translate>
+                      {{ $t('components.federation.FetchButton.unknownErrorMessage') }}
+                    </span>
                   </td>
                 </tr>
               </tbody>
@@ -183,7 +182,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui active inverted dimmer"
         >
           <div class="ui text loader">
-            Requesting a fetch…
+            {{ $t('components.federation.FetchButton.fetchRequestLoader') }}
           </div>
         </div>
         <div
@@ -191,7 +190,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui active inverted dimmer"
         >
           <div class="ui text loader">
-            Waiting for result…
+            {{ $t('components.federation.FetchButton.awaitingResultLoader') }}
           </div>
         </div>
         <div
@@ -200,7 +199,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui negative message"
         >
           <h4 class="header">
-            Error while saving settings
+            {{ $t('components.federation.FetchButton.loadingFailureMessage') }}
           </h4>
           <ul class="list">
             <li
@@ -217,23 +216,23 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui warning message"
         >
           <h4 class="header">
-            Refresh pending
+            {{ $t('components.federation.FetchButton.pendingRefreshHeader') }}
           </h4>
           <p>
-            The refresh request hasn't been processed in time by our server. It will be processed later.
+            {{ $t('components.federation.FetchButton.pendingRefreshMessage') }}
           </p>
         </div>
       </div>
       <div class="actions">
         <button class="ui basic cancel button">
-          Close
+          {{ $t('components.federation.FetchButton.closeButton') }}
         </button>
         <button
           v-if="data && data.status === 'finished'"
           class="ui confirm success button"
           @click.prevent="showModal = false; emit('refresh')"
         >
-          Close and reload page
+          {{ $t('components.federation.FetchButton.reloadButton') }}
         </button>
       </div>
     </semantic-modal>

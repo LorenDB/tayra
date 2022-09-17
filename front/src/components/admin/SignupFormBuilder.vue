@@ -75,7 +75,7 @@ const move = (idx: number, increment: number) => {
         :class="[{active: isPreviewing}, 'item']"
         @click.stop.prevent="isPreviewing = true"
       >
-      {{ $t('components.admin.SignupFormBuilder.previewForm') }}
+        {{ $t('components.admin.SignupFormBuilder.previewForm') }}
       </button>
     </div>
     <div
@@ -126,7 +126,7 @@ const move = (idx: number, increment: number) => {
               <th>
                 {{ $t('components.admin.SignupFormBuilder.requiredTableHeader') }}
               </th>
-              <th><span class="visually-hidden">Actions</span></th>
+              <th><span class="visually-hidden">{{ $t('components.admin.SignupFormBuilder.actionsTableHeader') }}</span></th>
             </tr>
           </thead>
           <tbody>

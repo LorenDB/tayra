@@ -69,7 +69,7 @@ const submitAndScan = async () => {
         target="_blank"
       >
         <i class="external icon" />
-        {{ $t('components.auth.Plugin.documentationLink')  }}
+        {{ $t('components.auth.Plugin.documentationLink') }}
       </a>
     </template>
     <div class="ui clearing hidden divider" />

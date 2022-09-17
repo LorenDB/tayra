@@ -185,7 +185,7 @@ const launchAction = async () => {
             >
               <div class="ui inline fields">
                 <div class="field">
-                  <label for="actions-select">Actions</label>
+                  <label for="actions-select">{{ $t('components.common.ActionTable.actionsLabel') }}</label>
                   <select
                     id="actions-select"
                     v-model="currentActionName"
@@ -214,7 +214,7 @@ const launchAction = async () => {
                         <span
                           key="1"
                         >
-                          {{ $t('components.common.ActionTable.performActionConfirmation', {action: currentActionName}, {count: affectedObjectsCount} ) }}
+                          {{ $t('components.common.ActionTable.performActionConfirmation', {action: currentActionName, count: affectedObjectsCount} ) }}
                         </span>
                       </p>
                     </template>
@@ -250,12 +250,12 @@ const launchAction = async () => {
                   <span
                     v-if="selectAll"
                   >
-                    {{ $t('components.common.ActionTable.allElementsSelectedMessage', {count: objectData.count}) }}
+                    {{ $t('components.common.ActionTable.allElementsSelectedMessage', {count: objectsData.count}) }}
                   </span>
                   <span
                     v-else
                   >
-                    {{ $t('components.common.ActionTable.elementsSelectedMessage', {count: checked.length }, {total: objectsData.count}) }}
+                    {{ $t('components.common.ActionTable.elementsSelectedMessage', {count: checked.length, total: objectsData.count}) }}
                   </span>
                   <template v-if="currentAction?.allowAll && checkable.length > 0 && checkable.length === checked.length">
                     <a
@@ -303,9 +303,8 @@ const launchAction = async () => {
                 class="ui positive message"
               >
                 <p>
-                  <span
-                  >
-                    {{ $t('components.common.ActionTable.actionSuccessMessage', {action: result.action}, {count: result.updated}) }}
+                  <span>
+                    {{ $t('components.common.ActionTable.actionSuccessMessage', {action: result.action, count: result.updated}) }}
                   </span>
                 </p>
 

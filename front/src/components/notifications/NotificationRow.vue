@@ -17,12 +17,8 @@ const { t } = useI18n()
 const store = useStore()
 
 const labels = computed(() => ({
-  libraryFollowMessage: t('%{ username } followed your library "%{ library }"'),
-  libraryAcceptFollowMessage: t('%{ username } accepted your follow on library "%{ library }"'),
-  libraryRejectMessage: t('You rejected %{ username }&#39;s request to follow "%{ library }"'),
-  libraryPendingFollowMessage: t('%{ username } wants to follow your library "%{ library }"'),
-  markRead: t('Mark as read'),
-  markUnread: t('Mark as unread')
+  markRead: t('components.notifications.NotificationRow.markRead'),
+  markUnread: t('components.notifications.NotificationRow.markUnread')
 }))
 
 const item = ref(props.initialItem)
@@ -39,30 +35,30 @@ const notificationData = computed(() => {
       if (activity.related_object?.approved === null) {
         return {
           detailUrl,
-          message: t(labels.value.libraryPendingFollowMessage, { username: username.value, library: activity.object.name }),
+          message: t('components.notifications.NotificationRow.libraryPendingFollowMessage', { username: username.value, library: activity.object.name }),
           acceptFollow: {
             buttonClass: 'success',
             icon: 'check',
-            label: t('Approve'),
+            label: t('components.notifications.NotificationRow.approve'),
             handler: () => approveLibraryFollow(activity.related_object)
           },
           rejectFollow: {
             buttonClass: 'danger',
             icon: 'x',
-            label: t('Reject'),
+            label: t('components.notifications.NotificationRow.reject'),
             handler: () => rejectLibraryFollow(activity.related_object)
           }
         }
       } else if (activity.related_object?.approved) {
         return {
           detailUrl,
-          message: t(labels.value.libraryFollowMessage, { username: username.value, library: activity.object.name })
+          message: t('components.notifications.NotificationRow.libraryFollowMessage', { username: username.value, library: activity.object.name })
         }
       }
 
       return {
         detailUrl,
-        message: t(labels.value.libraryRejectMessage, { username: username.value, library: activity.object.name })
+        message: t('components.notifications.NotificationRow.libraryRejectMessage', { username: username.value, library: activity.object.name })
       }
     }
   }
@@ -71,7 +67,7 @@ const notificationData = computed(() => {
     if (activity.object?.type === 'federation.LibraryFollow') {
       return {
         detailUrl: { name: 'content.remote.index' },
-        message: t(labels.value.libraryAcceptFollowMessage, { username: username.value, library: activity.related_object.name })
+        message: t('components.notifications.NotificationRow.libraryAcceptFollowMessage', { username: username.value, library: activity.related_object.name })
       }
     }
   }

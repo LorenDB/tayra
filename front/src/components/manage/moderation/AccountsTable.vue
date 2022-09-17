@@ -56,7 +56,7 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'purge',
-    label: t('Purge'),
+    label: t('components.manage.moderation.AccountsTable.purgeLabel'),
     isDangerous: true
   }
 ])
@@ -93,7 +93,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('Search by domain, username, bio…')
+  searchPlaceholder: t('components.manage.moderation.AccountsTable.searchPlaceholder')
 }))
 </script>
 
@@ -102,7 +102,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="accounts-search">Search</label>
+          <label for="accounts-search">{{ $t('components.manage.moderation.AccountsTable.searchLabel') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="accounts-search"
@@ -115,7 +115,7 @@ const labels = computed(() => ({
           </form>
         </div>
         <div class="field">
-          <label for="accounts-ordering">Ordering</label>
+          <label for="accounts-ordering">{{ $t('components.manage.moderation.AccountsTable.orderingLabel') }}</label>
           <select
             id="accounts-ordering"
             v-model="ordering"
@@ -131,17 +131,17 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="accounts-ordering-direction">Ordering direction</label>
+          <label for="accounts-ordering-direction">{{ $t('components.manage.moderation.AccountsTable.orderingDirectionLabel') }}</label>
           <select
             id="accounts-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              Ascending
+              {{ $t('components.manage.moderation.AccountsTable.ascendingOrdering') }}
             </option>
             <option value="-">
-              Descending
+              {{ $t('components.manage.moderation.AccountsTable.descendingOrdering') }}
             </option>
           </select>
         </div>
@@ -164,22 +164,22 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            Name
+            {{ $t('components.manage.moderation.AccountsTable.nameTableHeader') }}
           </th>
           <th>
-            Domain
+            {{ $t('components.manage.moderation.AccountsTable.domainTableHeader') }}
           </th>
           <th>
-            Uploads
+            {{ $t('components.manage.moderation.AccountsTable.uploadsTableHeader') }}
           </th>
           <th>
-            First seen
+            {{ $t('components.manage.moderation.AccountsTable.firstSeenTableHeader') }}
           </th>
           <th>
-            Last seen
+            {{ $t('components.manage.moderation.AccountsTable.lastSeenTableHeader') }}
           </th>
           <th>
-            Under moderation rule
+            {{ $t('components.manage.moderation.AccountsTable.moderationRuleTableHeader') }}
           </th>
         </template>
         <template
@@ -209,7 +209,7 @@ const labels = computed(() => ({
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              Local account
+              {{ $t('components.manage.moderation.AccountsTable.localLink') }}
             </a>
           </td>
           <td>
@@ -225,7 +225,7 @@ const labels = computed(() => ({
             />
           </td>
           <td>
-            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> Yes</span>
+            <span v-if="scope.obj.instance_policy"><i class="shield icon" />{{ $t('components.manage.moderation.AccountsTable.moderationRuleStatus') }}</span>
           </td>
         </template>
       </action-table>
@@ -240,12 +240,7 @@ const labels = computed(() => ({
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-        >
-          Showing results %{ start }-%{ end } on %{ total }
-        </translate>
+        {{ $t('components.manage.moderation.AccountsTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

@@ -59,8 +59,8 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: t('Delete'),
-    confirmationMessage: t('The selected upload will be removed. This action is irreversible.'),
+    label: t('components.manage.library.UploadsTable.deleteActionLabel'),
+    confirmationMessage: t('components.manage.library.UploadsTable.deleteActionConfirmation'),
     isDangerous: true,
     allowAll: false,
     confirmColor: 'danger'
@@ -99,7 +99,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('Search by domain, actor, name, reference, source…')
+  searchPlaceholder: t('components.manage.library.UploadsTable.searchPlaceholder')
 }))
 
 const displayName = (upload: Upload): string => {
@@ -123,7 +123,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="uploads-search">Search</label>
+          <label for="uploads-search">{{ $t('components.manage.library.UploadsTable.searchLabel') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="uploads-search"
@@ -136,7 +136,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </form>
         </div>
         <div class="field">
-          <label for="uploads-visibility">Visibility</label>
+          <label for="uploads-visibility">{{ $t('components.manage.library.UploadsTable.visibilityLabel') }}</label>
           <select
             id="uploads-visibility"
             class="ui dropdown"
@@ -144,7 +144,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             @change="addSearchToken('privacy_level', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              All
+              {{ $t('components.manage.library.UploadsTable.allOption') }}
             </option>
             <option value="me">
               {{ sharedLabels.fields.privacy_level.shortChoices.me }}
@@ -158,7 +158,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </select>
         </div>
         <div class="field">
-          <label for="uploads-status">Import status</label>
+          <label for="uploads-status">{{ $t('components.manage.library.UploadsTable.importStatusLabel') }}</label>
           <select
             id="uploads-status"
             class="ui dropdown"
@@ -166,24 +166,24 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             @change="addSearchToken('status', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              All
+              {{ $t('components.manage.library.UploadsTable.allOption') }}
             </option>
             <option value="pending">
-              Pending
+              {{ $t('components.manage.library.UploadsTable.pendingStatus') }}
             </option>
             <option value="skipped">
-              Skipped
+              {{ $t('components.manage.library.UploadsTable.skippedStatus') }}
             </option>
             <option value="errored">
-              Failed
+              {{ $t('components.manage.library.UploadsTable.failedStatus') }}
             </option>
             <option value="finished">
-              Finished
+              {{ $t('components.manage.library.UploadsTable.finishedStatus') }}
             </option>
           </select>
         </div>
         <div class="field">
-          <label for="uploads-ordering">Ordering</label>
+          <label for="uploads-ordering">{{ $t('components.manage.library.UploadsTable.orderingLabel') }}</label>
           <select
             id="uploads-ordering"
             v-model="ordering"
@@ -199,17 +199,17 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </select>
         </div>
         <div class="field">
-          <label for="uploads-ordering-direction">Ordering direction</label>
+          <label for="uploads-ordering-direction">{{ $t('components.manage.library.UploadsTable.orderingDirectionLabel') }}</label>
           <select
             id="uploads-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              Ascending
+              {{ $t('components.manage.library.UploadsTable.ascendingOrdering') }}
             </option>
             <option value="-">
-              Descending
+              {{ $t('components.manage.library.UploadsTable.descendingOrdering') }}
             </option>
           </select>
         </div>
@@ -238,31 +238,31 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
       >
         <template #header-cells>
           <th>
-            Name
+            {{ $t('components.manage.library.UploadsTable.nameTableHeader') }}
           </th>
           <th>
-            Library
+            {{ $t('components.manage.library.UploadsTable.libraryTableHeader') }}
           </th>
           <th>
-            Account
+            {{ $t('components.manage.library.UploadsTable.accountTableHeader') }}
           </th>
           <th>
-            Domain
+            {{ $t('components.manage.library.UploadsTable.domainTableHeader') }}
           </th>
           <th>
-            Visibility
+            {{ $t('components.manage.library.UploadsTable.visibilityTableHeader') }}
           </th>
           <th>
-            Import status
+            {{ $t('components.manage.library.UploadsTable.importStatusTableHeader') }}
           </th>
           <th>
-            Size
+            {{ $t('components.manage.library.UploadsTable.sizeTableHeader') }}
           </th>
           <th>
-            Creation date
+            {{ $t('components.manage.library.UploadsTable.creationDateTableHeader') }}
           </th>
           <th>
-            Accessed date
+            {{ $t('components.manage.library.UploadsTable.creationDateTableHeader') }}
           </th>
         </template>
         <template #row-cells="scope">
@@ -312,7 +312,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              Local
+              {{ $t('components.manage.library.UploadsTable.localLink') }}
             </a>
           </td>
           <td>
@@ -347,7 +347,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             <translate
               v-else
             >
-              N/A
+              {{ $t('components.manage.library.UploadsTable.notApplicable') }}
             </translate>
           </td>
           <td>
@@ -361,7 +361,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             <translate
               v-else
             >
-              N/A
+              {{ $t('components.manage.library.UploadsTable.notApplicable') }}
             </translate>
           </td>
         </template>
@@ -377,12 +377,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-        >
-          Showing results %{ start }-%{ end } on %{ total }
-        </translate>
+        {{ $t('components.manage.library.UploadsTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

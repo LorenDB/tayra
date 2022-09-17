@@ -573,7 +573,7 @@ fetchOwnedApps()
                   {{ $t('components.auth.Settings.permissionDeleteButton') }}
                   <template #modal-header>
                     <p>
-                      {{ $t('components.auth.Settings.revokePermissionModalMessage', app: app.name) }}
+                      {{ $t('components.auth.Settings.revokePermissionModalMessage', {app: app.name}) }}
                     </p>
                   </template>
                   <template #modal-content>
@@ -665,9 +665,8 @@ fetchOwnedApps()
                 >
                   {{ $t('components.auth.Settings.personalAppDeleteLink') }}
                   <template #modal-header>
-                    <p>
-                      {{ $t('components.auth.Settings.deletePersonalAppModalMessage', app: app.name) }}
-                    </p>
+                    <p />
+                    {{ $t('components.auth.Settings.deletePersonalAppModalMessage', {app: app.name}) }}
                   </template>
                   <template #modal-content>
                     <p>
@@ -688,7 +687,7 @@ fetchOwnedApps()
           <template #title>
             {{ $t('components.auth.Settings.emptyPersonalAppMessage') }}
           </template>
-            {{ $t('components.auth.Settings.emptyPersonalAppHelp') }}
+          {{ $t('components.auth.Settings.emptyPersonalAppHelp') }}
         </empty-state>
       </section>
 
@@ -758,7 +757,7 @@ fetchOwnedApps()
             >
           </div>
           <div class="field">
-            <label for="current-password-field-email">{{ $t('components.auth.Settings.currentPasswordLabel')} }}</label>
+            <label for="current-password-field-email">{{ $t('components.auth.Settings.currentPasswordLabel') }}</label>
             <password-input
               v-model="emailPassword"
               field-id="current-password-field-email"

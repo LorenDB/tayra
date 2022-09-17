@@ -67,12 +67,7 @@ const handleRemovedNote = (uuid: string) => {
     <div class="content">
       <h4 class="header">
         <router-link :to="{name: 'manage.moderation.requests.detail', params: {id: obj.uuid}}">
-          <translate
-
-            :translate-params="{id: obj.uuid.substring(0, 8)}"
-          >
-            Request %{ id }
-          </translate>
+          {{ $t('components.manage.moderation.UserRequestCard.requestHeader', {id: obj.uuid.substring(0, 8)}) }}
         </router-link>
         <collapse-link
           v-model="isCollapsed"
@@ -87,7 +82,7 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    Submitted by
+                    {{ $t('components.manage.moderation.UserRequestCard.submittedByLabel') }}
                   </td>
                   <td>
                     <actor-link
@@ -98,7 +93,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    Creation date
+                    {{ $t('components.manage.moderation.UserRequestCard.creationDateLabel') }}
                   </td>
                   <td>
                     <human-date
@@ -115,26 +110,26 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    Status
+                    {{ $t('components.manage.moderation.UserRequestCard.statusLabel') }}
                   </td>
                   <td>
                     <template v-if="obj.status === 'pending'">
                       <i class="warning hourglass icon" />
-                      Pending
+                      {{ $t('components.manage.moderation.UserRequestCard.pendingStatus') }}
                     </template>
                     <template v-else-if="obj.status === 'refused'">
                       <i class="danger x icon" />
-                      Refused
+                      {{ $t('components.manage.moderation.UserRequestCard.refusedStatus') }}
                     </template>
                     <template v-else-if="obj.status === 'approved'">
                       <i class="success check icon" />
-                      Approved
+                      {{ $t('components.manage.moderation.UserRequestCard.approvedStatus') }}
                     </template>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    Assigned to
+                    {{ $t('components.manage.moderation.UserRequestCard.assignedToLabel') }}
                   </td>
                   <td>
                     <div v-if="obj.assigned_to">
@@ -143,16 +138,16 @@ const handleRemovedNote = (uuid: string) => {
                         :actor="obj.assigned_to"
                       />
                     </div>
-                    <translate
+                    <span
                       v-else
                     >
-                      N/A
-                    </translate>
+                      {{ $t('components.manage.moderation.UserRequestCard.notApplicable') }}
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    Resolution date
+                    {{ $t('components.manage.moderation.UserRequestCard.resolutionDateLabel') }}
                   </td>
                   <td>
                     <human-date
@@ -160,16 +155,16 @@ const handleRemovedNote = (uuid: string) => {
                       :date="obj.handled_date"
                       :icon="true"
                     />
-                    <translate
+                    <span
                       v-else
                     >
-                      N/A
-                    </translate>
+                      {{ $t('components.manage.moderation.UserRequestCard.notApplicable') }}
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    Internal notes
+                    {{ $t('components.manage.moderation.UserRequestCard.internalNotesLabel') }}
                   </td>
                   <td>
                     <i class="comment icon" />
@@ -189,10 +184,10 @@ const handleRemovedNote = (uuid: string) => {
       <div class="ui stackable two column grid">
         <div class="column">
           <h3>
-            Message
+            {{ $t('components.manage.moderation.UserRequestCard.messageHeader') }}
           </h3>
           <p>
-            This user wants to sign-up on your pod.
+            {{ $t('components.manage.moderation.UserRequestCard.messageBody') }}
           </p>
           <template v-if="obj.metadata">
             <div class="ui hidden divider" />
@@ -204,11 +199,11 @@ const handleRemovedNote = (uuid: string) => {
               <p v-if="value">
                 {{ value }}
               </p>
-              <translate
+              <span
                 v-else
               >
-                N/A
-              </translate>
+                {{ $t('components.manage.moderation.UserRequestCard.notApplicable') }}
+              </span>
               <div class="ui hidden divider" />
             </div>
           </template>
@@ -216,7 +211,7 @@ const handleRemovedNote = (uuid: string) => {
         <aside class="column">
           <div v-if="obj.status != 'approved'">
             <h3>
-              Actions
+              {{ $t('components.manage.moderation.UserRequestCard.actionsHeader') }}
             </h3>
             <div class="ui labelled icon basic buttons">
               <button
@@ -225,7 +220,7 @@ const handleRemovedNote = (uuid: string) => {
                 @click="approve(true)"
               >
                 <i class="success check icon" />&nbsp;
-                Approve
+                {{ $t('components.manage.moderation.UserRequestCard.approveButton') }}
               </button>
               <button
                 v-if="obj.status === 'pending'"
@@ -233,12 +228,12 @@ const handleRemovedNote = (uuid: string) => {
                 @click="approve(false)"
               >
                 <i class="danger x icon" />&nbsp;
-                Refuse
+                {{ $t('components.manage.moderation.UserRequestCard.rejectButton') }}
               </button>
             </div>
           </div>
           <h3>
-            Internal notes
+            {{ $t('components.manage.moderation.UserRequestCard.internalNotesLabel') }}
           </h3>
           <notes-thread
             :notes="obj.notes"

@@ -23,8 +23,8 @@ const store = useStore()
 
 const isFavorite = computed(() => store.getters['favorites/isFavorite'](props.track.id))
 const title = computed(() => isFavorite.value
-  ? t('Remove from favorites')
-  : t('Add to favorites')
+  ? t('components.favorites.TrackFavoriteIcon.removeFromFavorites')
+  : t('components.favorites.TrackFavoriteIcon.addToFavorites')
 )
 </script>
 
@@ -35,16 +35,16 @@ const title = computed(() => isFavorite.value
     @click.stop="$store.dispatch('favorites/toggle', track.id)"
   >
     <i class="heart icon" />
-    <translate
+    <span
       v-if="isFavorite"
     >
-      In favorites
-    </translate>
-    <translate
+      {{ $t('components.favorites.TrackFavoriteIcon.isFavorited') }}
+    </span>
+    <span
       v-else
     >
-      Add to favorites
-    </translate>
+      {{ $t('components.favorites.TrackFavoriteIcon.addToFavorites') }}
+    </span>
   </button>
   <button
     v-else

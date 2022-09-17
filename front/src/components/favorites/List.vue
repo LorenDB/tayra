@@ -98,7 +98,7 @@ onMounted(() => $('.ui.dropdown').dropdown())
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Your Favorites')
+  title: t('components.favorites.List.title')
 }))
 
 const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value].sort((a, b) => a - b)))
@@ -112,7 +112,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
     <section class="ui vertical center aligned stripe segment">
       <div :class="['ui', { 'active': isLoading }, 'inverted', 'dimmer']">
         <div class="ui text loader">
-          Loading your favorites…
+          {{ $t('components.favorites.List.loadingMessage') }}
         </div>
       </div>
       <h2
@@ -120,13 +120,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
         class="ui center aligned icon header"
       >
         <i class="circular inverted heart pink icon" />
-        <translate
-          translate-plural="%{ count } favorites"
-          :translate-n="$store.state.favorites.count"
-          :translate-params="{ count }"
-        >
-          %{ count } favorite
-        </translate>
+        {{ $t('components.favorites.List.favoritesCount', {count: $store.state.favorites.count}) }}
       </h2>
       <radio-button
         v-if="$store.state.favorites.count > 0"
@@ -141,7 +135,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
         <div class="fields">
           <div class="field">
             <label for="favorites-ordering">
-              Ordering
+              {{ $t('components.favorites.List.favoritesOrderingLabel') }}
             </label>
             <select
               id="favorites-ordering"
@@ -159,7 +153,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           </div>
           <div class="field">
             <label for="favorites-ordering-direction">
-              Order
+              {{ $t('components.favorites.List.favoritesOrderingDirectionLabel') }}
             </label>
             <select
               id="favorites-ordering-direction"
@@ -167,16 +161,16 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
               class="ui dropdown"
             >
               <option value="+">
-                Ascending
+                {{ $t('components.favorites.List.orderingDirectionAscending') }}
               </option>
               <option value="-">
-                Descending
+                {{ $t('components.favorites.List.orderingDirectionDescending') }}
               </option>
             </select>
           </div>
           <div class="field">
             <label for="favorites-results">
-              Results per page
+              {{ $t('components.favorites.List.favoritesResultsPerPageLabel') }}
             </label>
             <select
               id="favorites-results"
@@ -215,14 +209,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
     >
       <div class="ui icon header">
         <i class="broken heart icon" />
-        No tracks have been added to your favorites yet
+        {{ $t('components.favorites.List.emptyState') }}
       </div>
       <router-link
         :to="'/library'"
         class="ui success labeled icon button"
       >
         <i class="headphones icon" />
-        Browse the library
+        {{ $t('components.favorites.List.libraryLink') }}
       </router-link>
     </div>
   </main>

@@ -52,8 +52,8 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: t('Delete'),
-    confirmationMessage: t('The selected artist will be removed, as well as associated uploads, tracks, albums, favorites and listening history. This action is irreversible.'),
+    label: t('components.manage.library.ArtistsTable.deleteActionLabel'),
+    confirmationMessage: t('components.manage.library.ArtistsTable.deleteActionConfirmation'),
     isDangerous: true,
     allowAll: false,
     confirmColor: 'danger'
@@ -93,7 +93,7 @@ fetchData()
 const sharedLabels = useSharedLabels()
 const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: t('Search by domain, name, MusicBrainz ID…')
+  searchPlaceholder: t('components.manage.library.ArtistsTable.searchPlaceholder')
 }))
 
 const getUrl = (artist: { channel?: number; id: number }) => {
@@ -108,7 +108,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="artists-serarch">Search</label>
+          <label for="artists-serarch">{{ $t('components.manage.library.ArtistsTable.searchLabel') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="artists-search"
@@ -121,7 +121,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
           </form>
         </div>
         <div class="field">
-          <label for="artists-category">Category</label>
+          <label for="artists-category">{{ $t('components.manage.library.ArtistsTable.categoryLabel') }}</label>
           <select
             id="artists-category"
             class="ui dropdown"
@@ -129,7 +129,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
             @change="addSearchToken('category', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              All
+              {{ $t('components.manage.library.ArtistsTable.allOption') }}
             </option>
             <option value="podcast">
               {{ sharedLabels.fields.content_category.choices.podcast }}
@@ -143,7 +143,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
           </select>
         </div>
         <div class="field">
-          <label for="artists-ordering">Ordering</label>
+          <label for="artists-ordering">{{ $t('components.manage.library.ArtistsTable.orderingLabel') }}</label>
           <select
             id="artists-ordering"
             v-model="ordering"
@@ -159,17 +159,17 @@ const getUrl = (artist: { channel?: number; id: number }) => {
           </select>
         </div>
         <div class="field">
-          <label for="artists-ordering-direction">Ordering direction</label>
+          <label for="artists-ordering-direction">{{ $t('components.manage.library.ArtistsTable.orderingDirectionLabel') }}</label>
           <select
             id="artists-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              Ascending
+              {{ $t('components.manage.library.ArtistsTable.ascendingOrdering') }}
             </option>
             <option value="-">
-              Descending
+              {{ $t('components.manage.library.ArtistsTable.descendingOrdering') }}
             </option>
           </select>
         </div>
@@ -192,19 +192,19 @@ const getUrl = (artist: { channel?: number; id: number }) => {
       >
         <template #header-cells>
           <th>
-            Name
+            {{ $t('components.manage.library.ArtistsTable.nameTableHeader') }}
           </th>
           <th>
-            Domain
+            {{ $t('components.manage.library.ArtistsTable.domainTableHeader') }}
           </th>
           <th>
-            Albums
+            {{ $t('components.manage.library.ArtistsTable.albumsTableHeader') }}
           </th>
           <th>
-            Tracks
+            {{ $t('components.manage.library.ArtistsTable.tracksTableHeader') }}
           </th>
           <th>
-            Creation date
+            {{ $t('components.manage.library.ArtistsTable.creationDateTableHeader') }}
           </th>
         </template>
         <template
@@ -234,7 +234,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              Local
+              {{ $t('components.manage.library.ArtistsTable.localLink') }}
             </a>
           </td>
           <td>
@@ -259,12 +259,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-        >
-          Showing results %{ start }-%{ end } on %{ total }
-        </translate>
+        {{ $t('components.manage.library.ArtistsTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

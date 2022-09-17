@@ -15,7 +15,7 @@ defineProps<Props>()
       class="ui active dimmer"
     >
       <div class="ui text loader">
-        Import hasn't started yet
+        {{ $t('components.library.FsLogs.emptyStateMessage') }}
       </div>
     </div>
     <template v-else>

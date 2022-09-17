@@ -27,20 +27,20 @@ const props = withDefaults(defineProps<Props>(), {
 const { t } = useI18n()
 
 const labels = computed(() => ({
-  summaryHelp: t("Explain why you're applying this policy: this will help you remember why you added this rule. Depending on your pod configuration, this may be displayed publicly to help users understand the moderation rules in place."),
-  isActiveHelp: t('Use this setting to temporarily enable/disable the policy without completely removing it.'),
-  blockAllHelp: t('Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.)'),
+  summaryHelp: t('components.manage.moderation.InstancePolicyForm.summaryHelp'),
+  isActiveHelp: t('components.manage.moderation.InstancePolicyForm.isActiveHelp'),
+  blockAllHelp: t('components.manage.moderation.InstancePolicyForm.blockAllHelp'),
   silenceActivity: {
-    help: t('Hide account or domain content, except from followers.'),
-    label: t('Mute activity')
+    help: t('components.manage.moderation.InstancePolicyForm.silenceActivityHelp'),
+    label: t('components.manage.moderation.InstancePolicyForm.silenceActivityLabel')
   },
   silenceNotifications: {
-    help: t('Prevent account or domain from triggering notifications, except from followers.'),
-    label: t('Mute notifications')
+    help: t('components.manage.moderation.InstancePolicyForm.silenceNotificationsHelp'),
+    label: t('components.manage.moderation.InstancePolicyForm.silenceNotificationsLabel')
   },
   rejectMedia: {
-    help: t('Do not download any media file (audio, album cover, account avatar…) from this account or domain. This will purge existing content as well.'),
-    label: t('Reject media')
+    help: t('components.manage.moderation.InstancePolicyForm.rejectMediaHelp'),
+    label: t('components.manage.moderation.InstancePolicyForm.rejectMediaLabel')
   }
 }))
 
@@ -122,16 +122,16 @@ const remove = async () => {
     @submit.prevent="createOrUpdate"
   >
     <h3 class="ui header">
-      <translate
+      <span
         v-if="object"
       >
-        Edit moderation rule
-      </translate>
-      <translate
+        {{ $t('components.manage.moderation.InstancePolicyForm.editRuleHeader') }}
+      </span>
+      <span
         v-else
       >
-        Add a new moderation rule
-      </translate>
+        {{ $t('components.manage.moderation.InstancePolicyForm.addRuleHeader') }}
+      </span>
     </h3>
     <div
       v-if="errors && errors.length > 0"
@@ -139,7 +139,7 @@ const remove = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        Error while creating rule
+        {{ $t('components.manage.moderation.InstancePolicyForm.createRuleFailureHeader') }}
       </h4>
       <ul class="list">
         <li
@@ -162,19 +162,19 @@ const remove = async () => {
           type="checkbox"
         >
         <label for="policy-is-active">
-          <translate
+          <span
             v-if="current.isActive"
-          >Enabled</translate>
-          <translate
+          >{{ $t('components.manage.moderation.InstancePolicyForm.policyEnabled') }}</span>
+          <span
             v-else
-          >Disabled</translate>
+          >{{ $t('components.manage.moderation.InstancePolicyForm.policyDisabled') }}</span>
           <tooltip :content="labels.isActiveHelp" />
         </label>
       </div>
     </div>
     <div class="field">
       <label for="policy-summary">
-        Reason
+        {{ $t('components.manage.moderation.InstancePolicyForm.policyReasonLabel') }}
         <tooltip :content="labels.summaryHelp" />
       </label>
       <textarea
@@ -192,13 +192,13 @@ const remove = async () => {
           type="checkbox"
         >
         <label for="policy-is-active">
-          Block everything
+          {{ $t('components.manage.moderation.InstancePolicyForm.blockAllLabel') }}
           <tooltip :content="labels.blockAllHelp" />
         </label>
       </div>
     </div>
     <div class="ui horizontal divider">
-      Or customize your rule
+      {{ $t('components.manage.moderation.InstancePolicyForm.customizeRuleMessage') }}
     </div>
     <div
       v-for="(config, key) in fieldConfig"
@@ -223,42 +223,42 @@ const remove = async () => {
       class="ui basic left floated button"
       @click.prevent="emit('cancel')"
     >
-      Cancel
+      {{ $t('components.manage.moderation.InstancePolicyForm.cancelButton') }}
     </button>
     <button
       :class="['ui', 'right', 'floated', 'success', {'disabled loading': isLoading}, 'button']"
       :disabled="isLoading"
     >
-      <translate
+      <span
         v-if="object"
       >
-        Update
-      </translate>
-      <translate
+        {{ $t('components.manage.moderation.InstancePolicyForm.updateButton') }}
+      </span>
+      <span
         v-else
       >
-        Create
-      </translate>
+        {{ $t('components.manage.moderation.InstancePolicyForm.createButton') }}
+      </span>
     </button>
     <dangerous-button
       v-if="object"
       class="ui right floated basic danger button"
       @confirm="remove"
     >
-      Delete
+      {{ $t('components.manage.moderation.InstancePolicyForm.deleteButton') }}
       <template #modal-header>
         <p>
-          Delete this moderation rule?
+          {{ $t('components.manage.moderation.InstancePolicyForm.deleteRuleModalHeader') }}
         </p>
       </template>
       <template #modal-content>
         <p>
-          This action is irreversible.
+          {{ $t('components.manage.moderation.InstancePolicyForm.deleteRuleModalMessage') }}
         </p>
       </template>
       <template #modal-confirm>
         <div>
-          Delete moderation rule
+          {{ $t('components.manage.moderation.InstancePolicyForm.deleteRuleModalConfirm') }}
         </div>
       </template>
     </dangerous-button>

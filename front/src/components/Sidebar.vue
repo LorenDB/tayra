@@ -42,15 +42,15 @@ const additionalNotifications = computed(() => store.getters['ui/additionalNotif
 const logoUrl = computed(() => store.state.auth.authenticated ? 'library.index' : 'index')
 
 const labels = computed(() => ({
-  mainMenu: t('Main menu'),
-  selectTrack: t('Play this track'),
-  pendingFollows: t('Pending follow requests'),
-  pendingReviewEdits: t('Pending review edits'),
-  pendingReviewReports: t('Pending review reports'),
-  language: t('Language'),
-  theme: t('Theme'),
-  addContent: t('Add content'),
-  administration: t('Administration')
+  mainMenu: t('components.Sidebar.mainMenu'),
+  selectTrack: t('components.Sidebar.selectTrack'),
+  pendingFollows: t('components.Sidebar.pendingFollows'),
+  pendingReviewEdits: t('components.Sidebar.pendingReviewEdits'),
+  pendingReviewReports: t('components.Sidebar.pendingReviewReports'),
+  language: t('components.Sidebar.language'),
+  theme: t('components.Sidebar.theme'),
+  addContent: t('components.Sidebar.addContent'),
+  administration: t('components.Sidebar.administration')
 }))
 
 type SidebarMenuTabs = 'explore' | 'myLibrary'
@@ -129,7 +129,7 @@ onMounted(() => {
       >
         <i class="logo bordered inverted vibrant big icon">
           <logo class="logo" />
-          <span class="visually-hidden">Home</span>
+          <span class="visually-hidden">{{ $t('components.Sidebar.home') }}</span>
         </i>
       </router-link>
       <nav class="top ui compact right aligned inverted text menu">
@@ -149,7 +149,7 @@ onMounted(() => {
               </div>
               <div class="menu">
                 <h3 class="header">
-                  Administration
+                  {{ $t('components.Sidebar.administration') }}
                 </h3>
                 <div class="divider" />
                 <router-link
@@ -164,7 +164,7 @@ onMounted(() => {
                   >
                     {{ $store.state.ui.notifications.pendingReviewEdits }}
                   </div>
-                  Library
+                  {{ $t('components.Sidebar.library') }}
                 </router-link>
                 <router-link
                   v-if="$store.state.auth.availablePermissions['moderation']"
@@ -178,21 +178,21 @@ onMounted(() => {
                   >
                     {{ $store.state.ui.notifications.pendingReviewReports + $store.state.ui.notifications.pendingReviewRequests }}
                   </div>
-                  Moderation
+                  {{ $t('components.Sidebar.moderation') }}
                 </router-link>
                 <router-link
                   v-if="$store.state.auth.availablePermissions['settings']"
                   class="item"
                   :to="{name: 'manage.users.users.list'}"
                 >
-                  Users
+                  {{ $t('components.Sidebar.users') }}
                 </router-link>
                 <router-link
                   v-if="$store.state.auth.availablePermissions['settings']"
                   class="item"
                   :to="{path: '/manage/settings'}"
                 >
-                  Settings
+                  {{ $t('components.Sidebar.settings') }}
                 </router-link>
               </div>
             </div>
@@ -352,14 +352,14 @@ onMounted(() => {
         class="ui fluid tiny primary button"
         :to="{name: 'login'}"
       >
-        Login
+        {{ $t('components.Sidebar.login') }}
       </router-link>
       <div class="ui small hidden divider" />
       <router-link
         class="ui fluid tiny button"
         :to="{path: '/signup'}"
       >
-        Create an account
+        {{ $t('components.Sidebar.createAccount') }}
       </router-link>
     </div>
     <nav
@@ -371,7 +371,7 @@ onMounted(() => {
         id="navigation-label"
         class="visually-hidden"
       >
-        Main navigation
+        {{ $t('components.Sidebar.mainNavigation') }}
       </h1>
       <div class="ui small hidden divider" />
       <section
@@ -391,7 +391,7 @@ onMounted(() => {
               @click="expanded = 'explore'"
               @focus="expanded = 'explore'"
             >
-              Explore
+              {{ $t('components.Sidebar.explore') }}
               <i
                 v-if="expanded !== 'explore'"
                 class="angle right icon"
@@ -402,44 +402,51 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'search'}"
               >
-                <i class="search icon" />                  Search
+                <i class="search icon" />
+                {{ $t('components.Sidebar.search') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.index'}"
                 active-class="_active"
               >
-                <i class="music icon" />                  Browse
+                <i class="music icon" />
+                {{ $t('components.Sidebar.browse') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.podcasts.browse'}"
               >
-                <i class="podcast icon" />                  Podcasts
+                <i class="podcast icon" />
+                {{ $t('components.Sidebar.podcasts') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.albums.browse'}"
               >
-                <i class="compact disc icon" />                  Albums
+                <i class="compact disc icon" />
+                {{ $t('components.Sidebar.albums') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.artists.browse'}"
               >
-                <i class="user icon" />                  Artists
+                <i class="user icon" />
+                {{ $t('components.Sidebar.artists') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.playlists.browse'}"
               >
-                <i class="list icon" />                  Playlists
+                <i class="list icon" />
+                {{ $t('components.Sidebar.playlists') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.radios.browse'}"
               >
-                <i class="feed icon" />                  Radios
+                <i class="feed icon" />
+                {{ $t('components.Sidebar.radios') }}
               </router-link>
             </div>
           </div>
@@ -454,7 +461,7 @@ onMounted(() => {
               @click="expanded = 'myLibrary'"
               @focus="expanded = 'myLibrary'"
             >
-              My Library
+              {{ $t('components.Sidebar.myLibrary') }}
               <i
                 v-if="expanded !== 'myLibrary'"
                 class="angle right icon"
@@ -465,37 +472,43 @@ onMounted(() => {
                 class="item"
                 :to="{name: 'library.me'}"
               >
-                <i class="music icon" />                  Browse
+                <i class="music icon" />
+                {{ $t('components.Sidebar.browse') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.albums.me'}"
               >
-                <i class="compact disc icon" />                  Albums
+                <i class="compact disc icon" />
+                {{ $t('components.Sidebar.albums') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.artists.me'}"
               >
-                <i class="user icon" />                  Artists
+                <i class="user icon" />
+                {{ $t('components.Sidebar.artists') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.playlists.me'}"
               >
-                <i class="list icon" />                  Playlists
+                <i class="list icon" />
+                {{ $t('components.Sidebar.playlists') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'library.radios.me'}"
               >
-                <i class="feed icon" />                  Radios
+                <i class="feed icon" />
+                {{ $t('components.Sidebar.radios') }}
               </router-link>
               <router-link
                 class="item"
                 :to="{name: 'favorites'}"
               >
-                <i class="heart icon" />                  Favorites
+                <i class="heart icon" />
+                {{ $t('components.Sidebar.favorites') }}
               </router-link>
             </div>
           </div>
@@ -504,11 +517,11 @@ onMounted(() => {
             class="header item"
             :to="{name: 'subscriptions'}"
           >
-            Channels
+            {{ $t('components.Sidebar.channels') }}
           </router-link>
           <div class="item">
             <h3 class="header">
-              More
+              {{ $t('components.Sidebar.more') }}
             </h3>
             <div class="menu">
               <router-link
@@ -516,7 +529,8 @@ onMounted(() => {
                 to="/about"
                 active-class="router-link-exact-active active"
               >
-                <i class="info icon" />                  About this pod
+                <i class="info icon" />
+                {{ $t('components.Sidebar.aboutPod') }}
               </router-link>
             </div>
           </div>
@@ -529,7 +543,7 @@ onMounted(() => {
               href=""
               class="link item"
               @click.prevent="emit('show:set-instance-modal')"
-            >Switch instance</a>
+            >{{ $t('components.Sidebar.switchInstance') }}</a>
           </div>
         </nav>
       </section>

@@ -54,8 +54,8 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: t('Delete'),
-    confirmationMessage: t('The selected library will be removed, as well as associated uploads and follows. This action is irreversible.'),
+    label: t('components.manage.library.LibrariesTable.deleteActionLabel'),
+    confirmationMessage: t('components.manage.library.LibrariesTable.deleteActionConfirmation'),
     isDangerous: true,
     allowAll: false,
     confirmColor: 'danger'
@@ -94,7 +94,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('Search by domain, actor, name, description…')
+  searchPlaceholder: t('components.manage.library.LibrariesTable.searchPlaceholder')
 }))
 
 const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
@@ -107,7 +107,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="libraries-search">Search</label>
+          <label for="libraries-search">{{ $t('components.manage.library.LibrariesTable.searchLabel') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="libraries-search"
@@ -120,7 +120,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </form>
         </div>
         <div class="field">
-          <label for="libraries-visibility">Visibility</label>
+          <label for="libraries-visibility">{{ $t('components.manage.library.LibrariesTable.visibilityLabel') }}</label>
           <select
             id="libraries-visibility"
             class="ui dropdown"
@@ -128,7 +128,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
             @change="addSearchToken('privacy_level', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              All
+              {{ $t('components.manage.library.LibrariesTable.allOption') }}
             </option>
             <option value="me">
               {{ sharedLabels.fields.privacy_level.shortChoices.me }}
@@ -142,7 +142,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </select>
         </div>
         <div class="field">
-          <label for="libraries-ordering">Ordering</label>
+          <label for="libraries-ordering">{{ $t('components.manage.library.LibrariesTable.orderingLabel') }}</label>
           <select
             id="libraries-ordering"
             v-model="ordering"
@@ -158,17 +158,17 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </select>
         </div>
         <div class="field">
-          <label for="libraries-ordering-direction">Ordering direction</label>
+          <label for="libraries-ordering-direction">{{ $t('components.manage.library.LibrariesTable.orderingDirectionLabel') }}</label>
           <select
             id="libraries-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              Ascending
+              {{ $t('components.manage.library.LibrariesTable.ascendingOrdering') }}
             </option>
             <option value="-">
-              Descending
+              {{ $t('components.manage.library.LibrariesTable.descendingOrdering') }}
             </option>
           </select>
         </div>
@@ -191,25 +191,25 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
       >
         <template #header-cells>
           <th>
-            Name
+            {{ $t('components.manage.library.LibrariesTable.nameTableHeader') }}
           </th>
           <th>
-            Account
+            {{ $t('components.manage.library.LibrariesTable.accountTableHeader') }}
           </th>
           <th>
-            Domain
+            {{ $t('components.manage.library.LibrariesTable.domainTableHeader') }}
           </th>
           <th>
-            Visibility
+            {{ $t('components.manage.library.LibrariesTable.visibilityTableHeader') }}
           </th>
           <th>
-            Uploads
+            {{ $t('components.manage.library.LibrariesTable.uploadsTableHeader') }}
           </th>
           <th>
-            Followers
+            {{ $t('components.manage.library.LibrariesTable.followersTableHeader') }}
           </th>
           <th>
-            Creation date
+            {{ $t('components.manage.library.LibrariesTable.creationDateTableHeader') }}
           </th>
         </template>
         <template #row-cells="scope">
@@ -248,7 +248,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              Local
+              {{ $t('components.manage.library.LibrariesTable.localLink') }}
             </a>
           </td>
           <td>
@@ -283,12 +283,7 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-        >
-          Showing results %{ start }-%{ end } on %{ total }
-        </translate>
+        {{ $t('components.manage.library.LibrariesTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

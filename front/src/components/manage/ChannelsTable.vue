@@ -82,8 +82,8 @@ fetchData()
 const sharedLabels = useSharedLabels()
 const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: t('Search by domain, name, account…'),
-  openModeration: t('Open in moderation interface')
+  searchPlaceholder: t('components.manage.ChannelsTable.searchPlaceholder'),
+  openModeration: t('components.manage.ChannelsTable.openModeration')
 }))
 </script>
 
@@ -92,7 +92,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="channel-search">Search</label>
+          <label for="channel-search">{{ $t('components.manage.ChannelsTable.searchLabel') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="channel-search"
@@ -105,7 +105,7 @@ const labels = computed(() => ({
           </form>
         </div>
         <div class="field">
-          <label for="channel-category">Category</label>
+          <label for="channel-category">{{ $t('components.manage.ChannelsTable.categoryLabel') }}</label>
           <select
             id="channel-category"
             class="ui dropdown"
@@ -113,7 +113,7 @@ const labels = computed(() => ({
             @change="addSearchToken('category', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              All
+              {{ $t('components.manage.ChannelsTable.allOption') }}
             </option>
             <option value="podcast">
               {{ sharedLabels.fields.content_category.choices.podcast }}
@@ -127,7 +127,7 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="channel-ordering">Ordering</label>
+          <label for="channel-ordering">{{ $t('components.manage.ChannelsTable.orderingLabel') }}</label>
           <select
             id="channel-ordering"
             v-model="ordering"
@@ -143,17 +143,17 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="channel-ordering-direction">Ordering direction</label>
+          <label for="channel-ordering-direction">{{ $t('components.manage.ChannelsTable.orderingDirectionLabel') }}</label>
           <select
             id="channel-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              Ascending
+              {{ $t('components.manage.ChannelsTable.ascendingOrdering') }}
             </option>
             <option value="-">
-              Descending
+              {{ $t('components.manage.ChannelsTable.descendingOrdering') }}
             </option>
           </select>
         </div>
@@ -176,22 +176,22 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            Name
+            {{ $t('components.manage.ChannelsTable.nameTableHeader') }}
           </th>
           <th>
-            Account
+            {{ $t('components.manage.ChannelsTable.accountTableHeader') }}
           </th>
           <th>
-            Domain
+            {{ $t('components.manage.ChannelsTable.domainTableHeader') }}
           </th>
           <th>
-            Albums
+            {{ $t('components.manage.ChannelsTable.albumsTableHeader') }}
           </th>
           <th>
-            Tracks
+            {{ $t('components.manage.ChannelsTable.tracksTableHeader') }}
           </th>
           <th>
-            Creation date
+            {{ $t('components.manage.ChannelsTable.creationDateTableHeader') }}
           </th>
         </template>
         <template
@@ -232,7 +232,7 @@ const labels = computed(() => ({
               @click.prevent="addSearchToken('domain', scope.obj.attributed_to.domain)"
             >
               <i class="home icon" />
-              Local
+              {{ $t('components.manage.ChannelsTable.localLink') }}
             </a>
           </td>
           <td>
@@ -257,12 +257,7 @@ const labels = computed(() => ({
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-        >
-          Showing results %{ start }-%{ end } on %{ total }
-        </translate>
+        {{ $t('components.manage.ChannelsTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

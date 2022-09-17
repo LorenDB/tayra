@@ -142,7 +142,7 @@ fetchData()
 const { t } = useI18n()
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('Search by account, summary, domain…')
+  searchPlaceholder: t('components.manage.library.EditsCardList.searchPlaceholder')
 }))
 
 const handle = (type: 'delete' | 'approved', id: string, value: boolean) => {
@@ -165,7 +165,7 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="search-edits">Search</label>
+          <label for="search-edits">{{ $t('components.manage.library.EditsCardList.searchPlaceholder') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="search-edits"
@@ -178,7 +178,7 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
           </form>
         </div>
         <div class="field">
-          <label for="edit-status">Status</label>
+          <label for="edit-status">{{ $t('components.manage.library.EditsCardList.statusLabel') }}</label>
           <select
             id="edit-status"
             class="ui dropdown"
@@ -186,21 +186,21 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
             @change="addSearchToken('is_approved', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              All
+              {{ $t('components.manage.library.EditsCardList.allOption') }}
             </option>
             <option value="null">
-              Pending review
+              {{ $t('components.manage.library.EditsCardList.pendingReviewLabel') }}
             </option>
             <option value="yes">
-              Approved
+              {{ $t('components.manage.library.EditsCardList.approvedLabel') }}
             </option>
             <option value="no">
-              Rejected
+              {{ $t('components.manage.library.EditsCardList.rejectedLabel') }}
             </option>
           </select>
         </div>
         <div class="field">
-          <label for="edit-ordering">Ordering</label>
+          <label for="edit-ordering">{{ $t('components.manage.library.EditsCardList.orderingLabel') }}</label>
           <select
             id="edit-ordering"
             v-model="ordering"
@@ -216,17 +216,17 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
           </select>
         </div>
         <div class="field">
-          <label for="edit-ordering-direction">Order</label>
+          <label for="edit-ordering-direction">{{ $t('components.manage.library.EditsCardList.orderingDirectionLabel') }}</label>
           <select
             id="edit-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              Ascending
+              {{ $t('components.manage.library.EditsCardList.ascendingOrdering') }}
             </option>
             <option value="-">
-              Descending
+              {{ $t('components.manage.library.EditsCardList.descendingOrdering') }}
             </option>
           </select>
         </div>
@@ -266,12 +266,7 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-        >
-          Showing results %{ start }-%{ end } on %{ total }
-        </translate>
+        {{ $t('components.manage.library.EditsCardList.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

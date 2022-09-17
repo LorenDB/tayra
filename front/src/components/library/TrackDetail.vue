@@ -76,82 +76,82 @@ watchEffect(() => {
               class="ui fluid image track-cover-image"
             >
             <h3 class="ui header">
-              <translate
+              <span
                 v-if="track.artist?.content_category === 'music'"
               >
-                Track Details
-              </translate>
-              <translate
+                {{ $t('components.library.TrackDetail.trackDetails') }}
+              </span>
+              <span
                 v-else
               >
-                Episode Details
-              </translate>
+                {{ $t('components.library.TrackDetail.episodeDetails') }}
+              </span>
             </h3>
             <table class="ui basic table">
               <tbody>
                 <tr>
                   <td>
-                    Duration
+                    {{ $t('components.library.TrackDetail.durationTableHeader') }}
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.duration">
                       {{ time.parse(upload.duration) }}
                     </template>
-                    <translate
+                    <span
                       v-else
                     >
-                      N/A
-                    </translate>
+                      {{ $t('components.library.TrackDetail.notApplicable') }}
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    Size
+                    {{ $t('components.library.TrackDetail.sizeTableLabel') }}
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.size">
                       {{ humanSize(upload.size) }}
                     </template>
-                    <translate
+                    <span
                       v-else
                     >
-                      N/A
-                    </translate>
+                      {{ $t('components.library.TrackDetail.notApplicable') }}
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    Codec
+                    {{ $t('components.library.TrackDetail.codecTableLabel') }}
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.extension">
                       {{ upload.extension }}
                     </template>
-                    <translate
+                    <span
                       v-else
                     >
-                      N/A
-                    </translate>
+                      {{ $t('components.library.TrackDetail.notApplicable') }}
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    Bitrate
+                    {{ $t('components.library.TrackDetail.bitrateTableLabel') }}
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.bitrate">
-                      {{ humanSize(upload.bitrate) }}/s
+                      {{ $t('components.library.TrackDetail.uploadBitrateTableLabel', {bitrate: humanSize(upload.bitrate)}) }}
                     </template>
-                    <translate
+                    <span
                       v-else
                     >
-                      N/A
-                    </translate>
+                      {{ $t('components.library.TrackDetail.notApplicable') }}
+                    </span>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    Downloads
+                    {{ $t('components.library.TrackDetail.downloadsTableLabel') }}
                   </td>
                   <td class="right aligned">
                     {{ track.downloads_count }}
@@ -172,13 +172,13 @@ watchEffect(() => {
             :can-update="false"
           />
           <h2 class="ui header">
-            Release Details
+            {{ $t('components.library.TrackDetail.releaseDetailsHeader') }}
           </h2>
           <table class="ui basic table ellipsis-rows">
             <tbody>
               <tr>
                 <td>
-                  Artist
+                  {{ $t('components.library.TrackDetail.artistTableLabel') }}
                 </td>
                 <td class="right aligned">
                   <router-link :to="{name: 'library.artists.detail', params: {id: track.artist?.id}}">
@@ -188,16 +188,16 @@ watchEffect(() => {
               </tr>
               <tr v-if="track.album">
                 <td>
-                  <translate
+                  <span
                     v-if="track.album.artist.content_category === 'music'"
                   >
-                    Album
-                  </translate>
-                  <translate
+                    {{ $t('components.library.TrackDetail.albumTableLabel') }}
+                  </span>
+                  <span
                     v-else
                   >
-                    Serie
-                  </translate>
+                    {{ $t('components.library.TrackDetail.seriesTableLabel') }}
+                  </span>
                 </td>
                 <td class="right aligned">
                   <router-link :to="{name: 'library.albums.detail', params: {id: track.album.id}}">
@@ -207,20 +207,20 @@ watchEffect(() => {
               </tr>
               <tr>
                 <td>
-                  Year
+                  {{ $t('components.library.TrackDetail.yearTableLabel') }}
                 </td>
                 <td class="right aligned">
                   <template v-if="track.album && track.album.release_date">
                     {{ momentFormat(new Date(track.album.release_date), 'Y') }}
                   </template>
                   <template v-else>
-                    N/A
+                    {{ $t('components.library.TrackDetail.notApplicable') }}
                   </template>
                 </td>
               </tr>
               <tr>
                 <td>
-                  Copyright
+                  {{ $t('components.library.TrackDetail.copyrightTableLabel') }}
                 </td>
                 <td class="right aligned">
                   <span
@@ -228,13 +228,13 @@ watchEffect(() => {
                     :title="track.copyright"
                   >{{ truncate(track.copyright, 50) }}</span>
                   <template v-else>
-                    N/A
+                    {{ $t('components.library.TrackDetail.notApplicable') }}
                   </template>
                 </td>
               </tr>
               <tr>
                 <td>
-                  License
+                  {{ $t('components.library.TrackDetail.licenseTableLabel') }}
                 </td>
                 <td class="right aligned">
                   <a
@@ -243,16 +243,16 @@ watchEffect(() => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >{{ license.name }}</a>
-                  <translate
+                  <span
                     v-else
                   >
-                    N/A
-                  </translate>
+                    {{ $t('components.library.TrackDetail.notApplicable') }}
+                  </span>
                 </td>
               </tr>
               <tr v-if="!track.is_local">
                 <td>
-                  URL
+                  {{ $t('components.library.TrackDetail.urlTableLabel') }}
                 </td>
                 <td :title="track.fid">
                   <a
@@ -273,10 +273,10 @@ watchEffect(() => {
             rel="noreferrer noopener"
           >
             <i class="external icon" />
-            View on MusicBrainz
+            {{ $t('components.library.TrackDetail.musicbrainzLink') }}
           </a>
           <h2 class="ui header">
-            Related Playlists
+            {{ $t('components.library.TrackDetail.relatedPlaylistsHeader') }}
           </h2>
           <playlist-widget
             :url="'playlists/'"
@@ -284,13 +284,13 @@ watchEffect(() => {
           />
 
           <h2 class="ui header">
-            Related Libraries
+            {{ $t('components.library.TrackDetail.userLibraryHeader') }}
           </h2>
           <library-widget
             :url="`tracks/${track.id}/libraries/`"
             @loaded="emit('libraries-loaded', $event)"
           >
-            This track is present in the following libraries:
+            {{ $t('components.library.TrackDetail.userLibraryDescription') }}
           </library-widget>
         </div>
       </div>

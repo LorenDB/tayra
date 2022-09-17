@@ -58,11 +58,11 @@ const getErrorData = (upload: Upload) => {
     supportUrl: 'https://forum.funkwhale.audio/t/support',
     documentationUrl: `https://docs.funkwhale.audio/users/upload.html#${errorCode}`,
     label: errorCode === 'invalid_metadata'
-      ? t('Invalid metadata')
-      : t('Unknown error'),
+      ? t('components.library.ImportStatusModal.invalidMetadataLabel')
+      : t('components.library.ImportStatusModal.unknownErrorLabel'),
     detail: errorCode === 'invalid_metadata'
-      ? t('The metadata included in the file is invalid or some mandatory fields are missing.')
-      : t('An unknown error occurred'),
+      ? t('components.library.ImportStatusModal.invalidMetadataMessage')
+      : t('components.library.ImportStatusModal.unknownErrorMessage'),
     errorRows: errorCode === 'invalid_metadata'
       ? getErrors(payload.detail ?? {})
       : [],
@@ -77,7 +77,7 @@ const getErrorData = (upload: Upload) => {
 <template>
   <semantic-modal v-model:show="show">
     <h4 class="header">
-      Import detail
+      {{ $t('components.library.ImportStatusModal.importDetailHeader') }}
     </h4>
     <div
       v-if="Object.keys(upload).length > 0"
@@ -88,33 +88,33 @@ const getErrorData = (upload: Upload) => {
           v-if="upload.import_status === 'pending'"
           class="ui message"
         >
-          Upload is still pending and will soon be processed by the server.
+          {{ $t('components.library.ImportStatusModal.importDetailMessage') }}
         </div>
         <div
           v-if="upload.import_status === 'finished'"
           class="ui success message"
         >
-          Upload was successfully processed by the server.
+          {{ $t('components.library.ImportStatusModal.importSuccessMessage') }}
         </div>
         <div
           v-if="upload.import_status === 'skipped'"
           role="alert"
           class="ui warning message"
         >
-          Upload was skipped because a similar one is already available in one of your libraries.
+          {{ $t('components.library.ImportStatusModal.importSkippedWarning') }}
         </div>
         <div
           v-if="upload.import_status === 'errored'"
           class="ui error message"
         >
-          An error occurred during upload processing. You will find more information below.
+          {{ $t('components.library.ImportStatusModal.importFailureMessage') }}
         </div>
         <template v-if="upload.import_status === 'errored'">
           <table class="ui very basic collapsing celled table">
             <tbody>
               <tr>
                 <td>
-                  Error type
+                  {{ $t('components.library.ImportStatusModal.errorType') }}
                 </td>
                 <td>
                   {{ getErrorData(upload).label }}
@@ -122,7 +122,7 @@ const getErrorData = (upload: Upload) => {
               </tr>
               <tr>
                 <td>
-                  Error detail
+                  {{ $t('components.library.ImportStatusModal.errorDetail') }}
                 </td>
                 <td>
                   {{ getErrorData(upload).detail }}
@@ -138,7 +138,7 @@ const getErrorData = (upload: Upload) => {
               </tr>
               <tr>
                 <td>
-                  Getting help
+                  {{ $t('components.library.ImportStatusModal.gettingHelp') }}
                 </td>
                 <td>
                   <ul>
@@ -147,7 +147,7 @@ const getErrorData = (upload: Upload) => {
                         :href="getErrorData(upload).documentationUrl"
                         target="_blank"
                       >
-                        Read our documentation for this error
+                        {{ $t('components.library.ImportStatusModal.documentationLink') }}
                       </a>
                     </li>
                     <li>
@@ -155,7 +155,7 @@ const getErrorData = (upload: Upload) => {
                         :href="getErrorData(upload).supportUrl"
                         target="_blank"
                       >
-                        Open a support thread (include the debug information below in your message)
+                        {{ $t('components.library.ImportStatusModal.supportLink') }}
                       </a>
                     </li>
                   </ul>
@@ -163,7 +163,7 @@ const getErrorData = (upload: Upload) => {
               </tr>
               <tr>
                 <td>
-                  Debug information
+                  {{ $t('components.library.ImportStatusModal.debugInformation') }}
                 </td>
                 <td>
                   <div class="ui form">
@@ -182,7 +182,7 @@ const getErrorData = (upload: Upload) => {
     </div>
     <div class="actions">
       <button class="ui deny button">
-        Close
+        {{ $t('components.library.ImportStatusModal.closeButton') }}
       </button>
     </div>
   </semantic-modal>

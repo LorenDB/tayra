@@ -20,7 +20,7 @@ const duration = computed(() => {
   <span>
     <span
       v-if="duration.hours > 0"
-    >{{ $t('components.common.Duration.hoursFormat', {hours: duration.hours}, {minutes: duration.minutes}) }}</span>
+    >{{ $t('components.common.Duration.hoursFormat', {hours: duration.hours, minutes: duration.minutes}) }}</span>
     <span
       v-else
     >{{ $t('components.common.Duration.minutesFormat', {minutes: duration.minutes}) }}</span>

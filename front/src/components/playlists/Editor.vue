@@ -51,7 +51,7 @@ const tracks = computed({
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  copyTitle: t('Copy the current queue to this playlist')
+  copyTitle: t('components.playlists.Editor.copyTitle')
 }))
 
 const isLoading = ref(false)
@@ -167,16 +167,16 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
       :title="undefined"
     />
     <h3 class="ui top attached header">
-      Playlist editor
+      {{ $t('components.playlists.Editor.editorHeader') }}
     </h3>
     <div class="ui attached segment">
       <template v-if="status === 'loading'">
         <div class="ui active tiny inline loader" />
-        Syncing changes to server…
+        {{ $t('components.playlists.Editor.syncingChangesMessage') }}
       </template>
       <template v-else-if="status === 'errored'">
         <i class="dangerclose icon" />
-        An error occurred while saving your changes
+        {{ $t('components.playlists.Editor.syncingChangesFailureMessage') }}
         <div
           v-if="errors.length > 0"
           role="alert"
@@ -197,10 +197,8 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
         role="alert"
         class="ui warning message"
       >
-        <p
-          v-translate="{playlist: playlist?.name}"
-        >
-          Some tracks in your queue are already in this playlist:
+        <p>
+          {{ $t('components.playlists.Editor.tracksExistWarning') }}
         </p>
         <ul class="ui relaxed divided list duplicate-tracks-list">
           <li
@@ -215,11 +213,12 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
           class="ui small success button"
           @click="insertMany(queueTracks, true)"
         >
-          Add anyways
+          {{ $t('components.playlists.Editor.addAnywayButton') }}
         </button>
       </div>
       <template v-else-if="status === 'saved'">
-        <i class="success check icon" />           Changes synced with server
+        <i class="success check icon" />
+        {{ $t('components.playlists.Editor.syncedStatus') }}
       </template>
     </div>
     <div class="ui bottom attached segment">
@@ -230,14 +229,7 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
         @click="insertMany(queueTracks, false)"
       >
         <i class="plus icon" />
-        <translate
-
-          translate-plural="Insert from queue (%{ count } tracks)"
-          :translate-n="queueTracks.length"
-          :translate-params="{count: queueTracks.length}"
-        >
-          Insert from queue (%{ count } track)
-        </translate>
+        {{ $t('components.playlists.Editor.insertCount', {count: queueTracks.length}) }}
       </button>
 
       <dangerous-button
@@ -245,31 +237,28 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
         class="ui labeled right floated danger icon button"
         :action="clearPlaylist"
       >
-        <i class="eraser icon" />           Clear playlist
+        <i class="eraser icon" />
+        {{ $t('components.playlists.Editor.clearPlaylistButton') }}
         <template #modal-header>
-          <p
-            v-translate="{playlist: playlist?.name}"
-
-            :translate-params="{playlist: playlist?.name}"
-          >
-            Do you want to clear the playlist "%{ playlist }"?
+          <p>
+            {{ $t('components.playlists.Editor.clearPlaylistModalHeader', {playlist: playlist?.name}) }}
           </p>
         </template>
         <template #modal-content>
           <p>
-            This will remove all tracks from this playlist and cannot be undone.
+            {{ $t('components.playlists.Editor.clearPlaylistModalContent') }}
           </p>
         </template>
         <template #modal-confirm>
           <div>
-            Clear playlist
+            {{ $t('components.playlists.Editor.clearPlaylistButton') }}
           </div>
         </template>
       </dangerous-button>
       <div class="ui hidden divider" />
       <template v-if="tracks.length > 0">
         <p>
-          Drag and drop rows to reorder tracks in the playlist
+          {{ $t('components.playlists.Editor.reorderTracks') }}
         </p>
         <div class="table-wrapper">
           <table class="ui compact very basic unstackable table">

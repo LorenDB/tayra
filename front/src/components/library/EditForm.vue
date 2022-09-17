@@ -46,7 +46,7 @@ const canEdit = computed(() => {
 })
 
 const labels = computed(() => ({
-  summaryPlaceholder: t('A short summary describing your changes.')
+  summaryPlaceholder: t('components.library.EditForm.summaryPlaceholder')
 }))
 
 const mutationsUrl = computed(() => props.objectType === 'track'
@@ -148,7 +148,7 @@ const resetField = (fieldId: string) => {
   <div v-if="submittedMutation">
     <div class="ui positive message">
       <h4 class="header">
-        Your edit was successfully submitted.
+        {{ $t('components.library.EditForm.submissionSuccessHeader') }}
       </h4>
     </div>
     <edit-card
@@ -159,7 +159,7 @@ const resetField = (fieldId: string) => {
       class="ui button"
       @click.prevent="submittedMutation = null"
     >
-      Submit another edit
+      {{ $t('components.library.EditForm.newEditButton') }}
     </button>
   </div>
   <div v-else>
@@ -171,27 +171,27 @@ const resetField = (fieldId: string) => {
     >
       <div>
         <template v-if="showPendingReview">
-          Recent edits awaiting review
+          {{ $t('components.library.EditForm.editsAwaitingReview') }}
           <button
             class="ui tiny basic right floated button"
             @click.prevent="showPendingReview = false"
           >
-            Show all edits
+            {{ $t('components.library.EditForm.showEditsButton') }}
           </button>
         </template>
         <template v-else>
-          Recent edits
+          {{ $t('components.library.EditForm.recentEdits') }}
           <button
             class="ui tiny basic right floated button"
             @click.prevent="showPendingReview = true"
           >
-            Restrict to unreviewed edits
+            {{ $t('components.library.EditForm.onlyUnreviewed') }}
           </button>
         </template>
       </div>
       <template #empty-state>
         <empty-state>
-          Suggest a change using the form below.
+          {{ $t('components.library.EditForm.emptyStateMessage') }}
         </empty-state>
       </template>
     </edit-list>
@@ -206,7 +206,7 @@ const resetField = (fieldId: string) => {
         class="ui negative message"
       >
         <h4 class="header">
-          Error while submitting edit
+          {{ $t('components.library.EditForm.submissionFailureHeader') }}
         </h4>
         <ul class="list">
           <li
@@ -221,7 +221,7 @@ const resetField = (fieldId: string) => {
         v-if="!canEdit"
         class="ui message"
       >
-        You don't have the permission to edit this object, but you can suggest changes. Once submitted, suggestions will be reviewed before approval.
+        {{ $t('components.library.EditForm.noPermissionWarning') }}
       </div>
       <template v-if="values">
         <div
@@ -250,7 +250,7 @@ const resetField = (fieldId: string) => {
               class="ui fluid search dropdown"
             >
               <option :value="null">
-                N/A
+                {{ $t('components.library.EditForm.notApplicable') }}
               </option>
               <option
                 v-for="{ code, name } in licenses"
@@ -266,7 +266,7 @@ const resetField = (fieldId: string) => {
               @click.prevent="values[fieldConfig.id] = null"
             >
               <i class="x icon" />
-              Clear
+              {{ $t('components.library.EditForm.clearButton') }}
             </button>
           </template>
           <template v-else-if="fieldConfig.type === 'content'">
@@ -303,7 +303,7 @@ const resetField = (fieldId: string) => {
               @click.prevent="values[fieldConfig.id] = []"
             >
               <i class="x icon" />
-              Clear
+              {{ $t('components.library.EditForm.clearButton') }}
             </button>
           </template>
           <div v-if="fieldValuesChanged(fieldConfig.id)">
@@ -313,13 +313,13 @@ const resetField = (fieldId: string) => {
               @click.prevent="resetField(fieldConfig.id)"
             >
               <i class="undo icon" />
-              Reset to initial value
+              {{ $t('components.library.EditForm.resetButton') }}
             </button>
           </div>
         </div>
       </template>
       <div class="field">
-        <label for="summary">Summary (optional)</label>
+        <label for="summary">{{ $t('components.library.EditForm.summaryLabel') }}</label>
         <textarea
           id="change-summary"
           v-model="summary"
@@ -333,23 +333,23 @@ const resetField = (fieldId: string) => {
         class="ui left floated button"
         :to="{name: 'library.tracks.detail', params: {id: object.id }}"
       >
-        Cancel
+        {{ $t('components.library.EditForm.cancelButton') }}
       </router-link>
       <button
         :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
         type="submit"
         :disabled="isLoading || !mutationPayload"
       >
-        <translate
+        <span
           v-if="canEdit"
         >
-          Submit and apply edit
-        </translate>
-        <translate
+          {{ $t('components.library.EditForm.submitEditButton') }}
+        </span>
+        <span
           v-else
         >
-          Submit suggestion
-        </translate>
+          {{ $t('components.library.EditForm.submitSuggestionButton') }}
+        </span>
       </button>
     </form>
   </div>

@@ -47,19 +47,19 @@ fetchLicenses()
         <translate
           v-if="canEdit"
         >
-          Edit this track
+          {{ $t('components.library.TrackEdit.editTrackHeader') }}
         </translate>
         <translate
           key="2"
         >
-          Suggest an edit on this track
+          {{ $t('components.library.TrackEdit.suggestEditHeader') }}
         </translate>
       </h2>
       <div
         v-if="!object.is_local"
         class="ui message"
       >
-        This object is managed by another server, you cannot edit it.
+        {{ $t('components.library.TrackEdit.remoteObjectWarning') }}
       </div>
       <edit-form
         v-else-if="!isLoadingLicenses"

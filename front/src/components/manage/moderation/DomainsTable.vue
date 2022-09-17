@@ -50,19 +50,19 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'purge',
-    label: t('Purge'),
+    label: t('components.manage.moderation.DomainsTable.purgeLabel'),
     isDangerous: true
   },
   {
     name: 'allow_list_add',
-    label: t('Add to allow-list'),
+    label: t('components.manage.moderation.DomainsTable.allowListAddLabel'),
     filterCheckable: (obj: { allowed: boolean }) => {
       return !obj.allowed
     }
   },
   {
     name: 'allow_list_remove',
-    label: t('Remove from allow-list'),
+    label: t('components.manage.moderation.DomainsTable.allowListRemoveLabel'),
     filterCheckable: (obj: { allowed: boolean }) => {
       return obj.allowed
     }
@@ -108,8 +108,8 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('Search by name…'),
-  allowListTitle: t('This domain is present in your allow-list')
+  searchPlaceholder: t('components.manage.moderation.DomainsTable.searchPlaceholder'),
+  allowListTitle: t('components.manage.moderation.DomainsTable.allowListTitle')
 }))
 </script>
 
@@ -118,7 +118,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="domains-search">Search</label>
+          <label for="domains-search">{{ $t('components.manage.moderation.DomainsTable.searchLabel') }}</label>
           <input
             id="domains-search"
             v-model="query"
@@ -131,25 +131,25 @@ const labels = computed(() => ({
           v-if="allowListEnabled"
           class="field"
         >
-          <label for="domains-allow-list">Is present on allow-list</label>
+          <label for="domains-allow-list">{{ $t('components.manage.moderation.DomainsTable.inAllowListLabel') }}</label>
           <select
             id="domains-allow-list"
             v-model="allowed"
             class="ui dropdown"
           >
             <option :value="null">
-              All
+              {{ $t('components.manage.moderation.DomainsTable.allOption') }}
             </option>
             <option :value="true">
-              Yes
+              {{ $t('components.manage.moderation.DomainsTable.positiveOption') }}
             </option>
             <option :value="false">
-              No
+              {{ $t('components.manage.moderation.DomainsTable.negativeOption') }}
             </option>
           </select>
         </div>
         <div class="field">
-          <label for="domains-ordering">Ordering</label>
+          <label for="domains-ordering">{{ $t('components.manage.moderation.DomainsTable.orderingLabel') }}</label>
           <select
             id="domains-ordering"
             v-model="ordering"
@@ -165,17 +165,17 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="domains-ordering-direction">Ordering direction</label>
+          <label for="domains-ordering-direction">{{ $t('components.manage.moderation.DomainsTable.orderingDirectionLabel') }}</label>
           <select
             id="domains-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              Ascending
+              {{ $t('components.manage.moderation.DomainsTable.ascendingOrdering') }}
             </option>
             <option value="-">
-              Descending
+              {{ $t('components.manage.moderation.DomainsTable.descendingOrdering') }}
             </option>
           </select>
         </div>
@@ -199,19 +199,19 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            Name
+            {{ $t('components.manage.moderation.DomainsTable.nameTableHeader') }}
           </th>
           <th>
-            Users
+            {{ $t('components.manage.moderation.DomainsTable.usersTableHeader') }}
           </th>
           <th>
-            Received messages
+            {{ $t('components.manage.moderation.DomainsTable.receivedMessagesTableHeader') }}
           </th>
           <th>
-            First seen
+            {{ $t('components.manage.moderation.DomainsTable.firstSeenTableHeader') }}
           </th>
           <th>
-            Under moderation rule
+            {{ $t('components.manage.moderation.DomainsTable.moderationRuleTableHeader') }}
           </th>
         </template>
         <template
@@ -237,7 +237,7 @@ const labels = computed(() => ({
             <human-date :date="scope.obj.creation_date" />
           </td>
           <td>
-            <span v-if="scope.obj.instance_policy"><i class="shield icon" /> Yes</span>
+            <span v-if="scope.obj.instance_policy"><i class="shield icon" />{{ $t('components.manage.moderation.DomainsTable.moderationRuleStatus') }}</span>
           </td>
         </template>
       </action-table>
@@ -247,7 +247,7 @@ const labels = computed(() => ({
       >
         <div class="ui icon header">
           <i class="server icon" />
-          No other pods found
+          {{ $t('components.manage.moderation.DomainsTable.emptyState') }}
         </div>
       </div>
     </div>
@@ -261,12 +261,7 @@ const labels = computed(() => ({
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-        >
-          Showing results %{ start }-%{ end } on %{ total }
-        </translate>
+        {{ $t('components.manage.moderation.DomainsTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

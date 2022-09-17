@@ -91,19 +91,19 @@ const submit = async () => {
           href=""
           @click.stop.prevent="showMore = true"
         >
-          Show more
+          {{ $t('components.common.RenderedDescription.showMore') }}
         </a>
         <a
           v-else
           href=""
           @click.stop.prevent="showMore = false"
         >
-          Show less
+          {{ $t('components.common.RenderedDescription.showLess') }}
         </a>
       </template>
     </template>
     <p v-else-if="!isUpdating">
-      No description available
+      {{ $t('components.common.RenderedDescription.noDescription') }}
     </p>
     <template v-if="!isUpdating && canUpdate && updateUrl">
       <div class="ui hidden divider" />
@@ -112,7 +112,7 @@ const submit = async () => {
         @click="isUpdating = true"
       >
         <i class="pencil icon" />
-        Edit
+        {{ $t('components.common.RenderedDescription.editButton') }}
       </span>
     </template>
     <form
@@ -126,7 +126,7 @@ const submit = async () => {
         class="ui negative message"
       >
         <h4 class="header">
-          Error while updating description
+          {{ $t('components.common.RenderedDescription.updateFailureHeader') }}
         </h4>
         <ul class="list">
           <li
@@ -145,14 +145,14 @@ const submit = async () => {
         class="left floated"
         @click.prevent="isUpdating = false"
       >
-        Cancel
+        {{ $t('components.common.RenderedDescription.cancelButton') }}
       </a>
       <button
         :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
         type="submit"
         :disabled="isLoading"
       >
-        Update description
+        {{ $t('components.common.RenderedDescription.updateButton') }}
       </button>
       <div class="ui clearing hidden divider" />
     </form>

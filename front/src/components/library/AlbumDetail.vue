@@ -60,16 +60,12 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
   </div>
   <div v-else-if="object">
     <h2 class="ui header">
-      <translate
-        v-if="isSerie"
-      >
-        Episodes
-      </translate>
-      <translate
-        v-else
-      >
-        Tracks
-      </translate>
+      <span v-if="isSerie">
+        {{ $t('components.library.AlbumDetail.episodesHeader') }}
+      </span>
+      <span v-else>
+        {{ $t('components.library.AlbumDetail.tracksHeader') }}
+      </span>
     </h2>
 
     <channel-entries
@@ -91,12 +87,9 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
               class="right floated mini inverted vibrant"
               :tracks="discs[index]"
             />
-            <translate
-              tag="h3"
-              :translate-params="{number: tracks[0]?.disc_number ?? index + 1}"
-            >
-              Volume %{ number }
-            </translate>
+            <h3>
+              {{ $t('components.library.AlbumDetail.volumeNumber', {number: tracks[0].disc_number}) }}
+            </h3>
             <track-table
               :is-album="true"
               :tracks="tracks"
@@ -135,13 +128,13 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
 
     <template v-if="!artist.channel && !isSerie">
       <h2>
-        User libraries
+        {{ $t('components.library.AlbumDetail.userLibraryHeader') }}
       </h2>
       <library-widget
         :url="'albums/' + object.id + '/libraries/'"
         @loaded="emit('libraries-loaded', $event)"
       >
-        This album is present in the following libraries:
+        {{ $t('components.library.AlbumDetail.userLibraryDescription') }}
       </library-widget>
     </template>
   </div>

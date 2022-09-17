@@ -55,10 +55,10 @@ const { t } = useI18n()
 const router = useRouter()
 
 const labels = computed(() => ({
-  title: t('Radio Builder'),
+  title: t('components.library.radios.Builder.title'),
   placeholder: {
-    description: t('My awesome description'),
-    name: t('My awesome radio')
+    description: t('components.library.radios.Builder.descriptionPlaceholder'),
+    name: t('components.library.radios.Builder.namePlaceholder')
   }
 }))
 
@@ -203,10 +203,10 @@ onMounted(() => {
     <div>
       <section>
         <h2 class="ui header">
-          Builder
+          {{ $t('components.library.radios.Builder.builderHeader') }}
         </h2>
         <p>
-          You can use this interface to build your own custom radio, which will play tracks according to your criteria.
+          {{ $t('components.library.radios.Builder.builderDescription') }}
         </p>
         <div class="ui form">
           <div
@@ -215,16 +215,16 @@ onMounted(() => {
           >
             <h4 class="header">
               <template v-if="radioName">
-                Radio updated
+                {{ $t('components.library.radios.Builder.radioUpdateSuccess') }}
               </template>
               <template v-else>
-                Radio created
+                {{ $t('components.library.radios.Builder.radioCreateSuccess') }}
               </template>
             </h4>
           </div>
           <div class="">
             <div class="field">
-              <label for="name">Radio name</label>
+              <label for="name">{{ $t('components.library.radios.Builder.radioNameLabel') }}</label>
               <input
                 id="name"
                 v-model="radioName"
@@ -234,7 +234,7 @@ onMounted(() => {
               >
             </div>
             <div class="field">
-              <label for="description">Description</label>
+              <label for="description">{{ $t('components.library.radios.Builder.radioDescriptionLabel') }}</label>
               <textarea
                 id="description"
                 v-model="radioDesc"
@@ -249,7 +249,7 @@ onMounted(() => {
                 v-model="isPublic"
                 type="checkbox"
               >
-              <label for="public">Display publicly</label>
+              <label for="public">{{ $t('components.library.radios.Builder.publicLabel') }}</label>
             </div>
             <div class="ui hidden divider" />
             <button
@@ -257,7 +257,7 @@ onMounted(() => {
               :class="['ui', 'success', {loading: isLoading}, 'button']"
               @click="save"
             >
-              Save
+              {{ $t('components.library.radios.Builder.saveButton') }}
             </button>
             <radio-button
               v-if="id"
@@ -271,14 +271,14 @@ onMounted(() => {
             <label
               id="radioFilterLabel"
               for="radio-filters"
-            >Add filters to customize your radio</label>
+            >{{ $t('components.library.radios.Builder.addFiltersLabel') }}</label>
             <select
               id="radio-filters"
               v-model="currentFilterType"
               class="ui dropdown"
             >
               <option value="">
-                Select a filter
+                {{ $t('components.library.radios.Builder.selectFilterLabel') }}
               </option>
               <option
                 v-for="f in availableFilters"
@@ -294,7 +294,7 @@ onMounted(() => {
               class="ui button"
               @click="add"
             >
-              Add filter
+              {{ $t('components.library.radios.Builder.addFilterButton') }}
             </button>
           </div>
           <p v-if="currentFilter">
@@ -305,19 +305,19 @@ onMounted(() => {
           <thead>
             <tr>
               <th class="two wide">
-                Filter name
+                {{ $t('components.library.radios.Builder.filterNameTableHeader') }}
               </th>
               <th class="one wide">
-                Exclude
+                {{ $t('components.library.radios.Builder.excludeTableHeader') }}
               </th>
               <th class="six wide">
-                Config
+                {{ $t('components.library.radios.Builder.configTableHeader') }}
               </th>
               <th class="five wide">
-                Candidates
+                {{ $t('components.library.radios.Builder.candidatesTableHeader') }}
               </th>
               <th class="two wide">
-                Actions
+                {{ $t('components.library.radios.Builder.actionsTableHeader') }}
               </th>
             </tr>
           </thead>
@@ -335,12 +335,9 @@ onMounted(() => {
         </table>
         <template v-if="checkResult && checkResult.candidates && checkResult.candidates.count">
           <h3
-            v-translate="{count: checkResult.candidates.count}"
             class="ui header"
-            :translate-n="checkResult.candidates.count"
-            translate-plural="%{ count } tracks matching combined filters"
           >
-            %{ count } track matching combined filters
+            {{ $t('components.library.radios.Builder.matchingTracks', {count: checkResult.candidates.count}) }}
           </h3>
           <track-table
             v-if="checkResult.candidates.sample"

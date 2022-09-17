@@ -40,14 +40,14 @@ const errors = ref([] as string[])
 const { t } = useI18n()
 const labels = computed(() => ({
   title: type.value === 'rss'
-    ? t('Subscribe to a podcast RSS feed')
-    : t('Subscribe to a podcast hosted on the Fediverse'),
+    ? t('components.RemoteSearchForm.subscribeRss')
+    : t('components.RemoteSearchForm.subscribeFediverse'),
   fieldLabel: type.value === 'rss'
-    ? t('RSS feed location')
-    : t('Fediverse object'),
+    ? t('components.RemoteSearchForm.rssLocation')
+    : t('components.RemoteSearchForm.fediverseObject'),
   fieldPlaceholder: type.value === 'rss'
-    ? t('https://website.example.com/rss.xml')
-    : t('@username@example.com')
+    ? t('components.RemoteSearchForm.rssPlaceholder')
+    : t('components.RemoteSearchForm.fediversePlaceholder')
 }))
 
 const obj = ref()
@@ -117,7 +117,7 @@ const createFetch = async () => {
     obj.value = response.data
 
     if (response.data.status === 'errored' || response.data.status === 'skipped') {
-      errors.value.push(t('This object cannot be retrieved'))
+      errors.value.push(t('components.RemoteSearchForm.fetchFailureMessage'))
     }
   } catch (error) {
     errors.value = (error as BackendError).backendErrors
@@ -172,7 +172,7 @@ watch(() => props.initialId, () => {
       @click.prevent="type = 'rss'"
     >
       <i class="feed icon" />
-      RSS
+      {{ $t('components.RemoteSearchForm.rss') }}
     </button>
     <div class="or" />
     <button
@@ -180,7 +180,7 @@ watch(() => props.initialId, () => {
       @click.prevent="type = 'artists'"
     >
       <i class="globe icon" />
-      Fediverse
+      {{ $t('components.RemoteSearchForm.fediverse') }}
     </button>
   </div>
   <div v-else>
@@ -195,7 +195,7 @@ watch(() => props.initialId, () => {
         class="ui negative message"
       >
         <h3 class="header">
-          Error while fetching object
+          {{ $t('components.RemoteSearchForm.objectFetchError') }}
         </h3>
         <ul class="list">
           <li
@@ -211,10 +211,10 @@ watch(() => props.initialId, () => {
           {{ labels.fieldLabel }}
         </label>
         <p v-if="type === 'rss'">
-          Use this form to subscribe to an RSS feed from its URL.
+          {{ $t('components.RemoteSearchForm.rssDescription') }}
         </p>
         <p v-else-if="type === 'artists'">
-          Use this form to subscribe to a channel hosted somewhere else on the Fediverse.
+          {{ $t('components.RemoteSearchForm.fediverseDescription') }}
         </p>
         <input
           id="object-id"
@@ -231,7 +231,7 @@ watch(() => props.initialId, () => {
         :class="['ui', 'primary', {loading: isLoading}, 'button']"
         :disabled="isLoading || !id || id.length === 0"
       >
-        Search
+        {{ $t('components.RemoteSearchForm.searchButton') }}
       </button>
     </form>
     <div
@@ -240,7 +240,7 @@ watch(() => props.initialId, () => {
       class="ui warning message"
     >
       <p>
-        This kind of object isn't supported yet
+        {{ $t('components.RemoteSearchForm.unsupportedObject') }}
       </p>
     </div>
   </div>

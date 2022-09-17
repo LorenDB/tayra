@@ -17,7 +17,7 @@ const router = useRouter()
 const store = useStore()
 
 const labels = computed(() => ({
-  placeholder: t('Leave empty for a random code')
+  placeholder: t('components.manage.users.InvitationForm.placeholder')
 }))
 
 const invitations = reactive([] as Invitation[])
@@ -56,7 +56,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
         class="ui negative message"
       >
         <h4 class="header">
-          Error while creating invitation
+          {{ $t('components.manage.users.InvitationForm.inviteCreateFailureHeader') }}
         </h4>
         <ul class="list">
           <li
@@ -69,7 +69,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
       </div>
       <div class="inline fields">
         <div class="ui field">
-          <label for="invitation-code">Invitation code</label>
+          <label for="invitation-code">{{ $t('components.manage.users.InvitationForm.invitationCodeLabel') }}</label>
           <input
             v-model="code"
             for="invitation-code"
@@ -84,7 +84,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
             :disabled="isLoading"
             type="submit"
           >
-            Get a new invitation
+            {{ $t('components.manage.users.InvitationForm.newInviteCodeButton') }}
           </button>
         </div>
       </div>
@@ -95,10 +95,10 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
         <thead>
           <tr>
             <th>
-              Code
+              {{ $t('components.manage.users.InvitationForm.codeLabel') }}
             </th>
             <th>
-              Share link
+              {{ $t('components.manage.users.InvitationForm.shareLinkLabel') }}
             </th>
           </tr>
         </thead>
@@ -121,7 +121,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
         class="ui basic button"
         @click="invitations = []"
       >
-        Clear
+        {{ $t('components.manage.users.InvitationForm.clearButton') }}
       </button>
     </div>
   </div>

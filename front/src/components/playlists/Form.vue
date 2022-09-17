@@ -42,7 +42,7 @@ const privacyLevel = ref(playlist.value?.privacy_level ?? store.state.auth.profi
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  placeholder: t('My awesome playlist')
+  placeholder: t('components.playlists.Form.placeholder')
 }))
 
 const sharedLabels = useSharedLabels()
@@ -111,7 +111,7 @@ const submit = async () => {
       v-if="title"
       class="ui header"
     >
-      Create a new playlist
+      {{ $t('components.playlists.Form.createPlaylistHeader') }}
     </h4>
     <div
       v-if="success"
@@ -119,10 +119,10 @@ const submit = async () => {
     >
       <h4 class="header">
         <template v-if="playlist">
-          Playlist updated
+          {{ $t('components.playlists.Form.updateSuccessHeader') }}
         </template>
         <template v-else>
-          Playlist created
+          {{ $t('components.playlists.Form.createSuccessHeader') }}
         </template>
       </h4>
     </div>
@@ -132,7 +132,7 @@ const submit = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        The playlist could not be created
+        {{ $t('components.playlists.Form.createFailureHeader') }}
       </h4>
       <ul class="list">
         <li
@@ -145,7 +145,7 @@ const submit = async () => {
     </div>
     <div class="three fields">
       <div class="field">
-        <label for="playlist-name">Playlist name</label>
+        <label for="playlist-name">{{ $t('components.playlists.Form.playlistNameLabel') }}</label>
         <input
           id="playlist-name"
           v-model="name"
@@ -156,7 +156,7 @@ const submit = async () => {
         >
       </div>
       <div class="field">
-        <label for="playlist-visibility">Playlist visibility</label>
+        <label for="playlist-visibility">{{ $t('components.playlists.Form.playlistVisibilityLabel') }}</label>
         <select
           id="playlist-visibility"
           v-model="privacyLevel"
@@ -178,10 +178,10 @@ const submit = async () => {
           type="submit"
         >
           <template v-if="playlist">
-            Update playlist
+            {{ $t('components.playlists.Form.updatePlaylistButton') }}
           </template>
           <template v-else>
-            Create playlist
+            {{ $t('components.playlists.Form.createPlaylistButton') }}
           </template>
         </button>
       </div>

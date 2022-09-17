@@ -68,12 +68,12 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
           v-if="object.artist?.content_category === 'podcast'"
           class="meta ellipsis"
         >
-          {{ $t('components.audio.ChannelCard.episodeCount', object.artist.tracks_count) }}
+          {{ $t('components.audio.ChannelCard.episodeCount', {episode_count: object.artist.tracks_count}) }}
         </span>
         <span
           v-else
         >
-          {{ $t('components.audio.ChannelCard.trackCount', object.artist?.tracks_count) }}
+          {{ $t('components.audio.ChannelCard.trackCount', {tracks_count: object.artist?.tracks_count}) }}
         </span>
         <tags-list
           label-classes="tiny"
@@ -86,13 +86,11 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
     </div>
     <div class="extra content">
       <time
-        v-translate="{ updatedAgo }"
-        :translate-params="{ updatedAgo }"
         class="meta ellipsis"
         :datetime="object.artist?.modification_date"
         :title="updatedTitle"
       >
-        {{ $t('{ updatedAgo }') }}
+        {{ updatedAgo }}
       </time>
       <play-button
         class="right floated basic icon"

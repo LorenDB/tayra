@@ -60,7 +60,7 @@ watch(() => props.channel, fetchData, { immediate: true })
       class="ui search normal dropdown"
     >
       <option value="">
-        None
+        {{ $t('components.channels.AlbumSelect.noneLabel') }}
       </option>
       <option
         v-for="album in albums"

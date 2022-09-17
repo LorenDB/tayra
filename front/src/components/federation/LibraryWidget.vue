@@ -64,7 +64,7 @@ fetchData()
       v-if="!isLoading && libraries.length === 0"
       class="ui subtitle"
     >
-      No matching library.
+      {{ $t('components.federation.LibraryWidget.noMatchMessage') }}
     </p>
     <div class="ui hidden divider" />
     <div class="ui cards">
@@ -90,7 +90,7 @@ fetchData()
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        Show more
+        {{ $t('components.federation.LibraryWidget.showMoreButton') }}
       </button>
     </template>
   </div>

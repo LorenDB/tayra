@@ -20,7 +20,7 @@ withDefaults(defineProps<Props>(), {
 const { t } = useI18n()
 
 const labels = computed(() => ({
-  addToPlaylist: t('Add to playlist…')
+  addToPlaylist: t('components.playlists.TrackPlaylistIcon.addToPlaylist')
 }))
 </script>
 
@@ -31,7 +31,7 @@ const labels = computed(() => ({
     @click.stop="$store.commit('playlists/chooseTrack', track)"
   >
     <i class="list icon" />
-    Add to playlist…
+    {{ $t('components.playlists.TrackPlaylistIcon.addToPlaylist') }}
   </button>
   <button
     v-else

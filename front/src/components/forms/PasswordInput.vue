@@ -27,8 +27,8 @@ const showPassword = ref(props.defaultShow)
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Show/hide password'),
-  copy: t('Copy')
+  title: t('components.federation.PasswordInput.title'),
+  copy: t('components.federation.PasswordInput.copyLabel')
 }))
 
 const passwordInputType = computed(() => showPassword.value ? 'text' : 'password')
@@ -38,7 +38,7 @@ const { isSupported: canCopy, copy } = useClipboard({ source: value })
 const copyPassword = () => {
   copy()
   store.commit('ui/addMessage', {
-    content: t('Text copied to clipboard!'),
+    content: t('components.federation.PasswordInput.copySuccessMessage'),
     date: new Date()
   })
 }

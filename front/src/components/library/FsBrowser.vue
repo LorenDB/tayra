@@ -42,7 +42,7 @@ const handleClick = (entry: FSEntry) => {
         class="ui button"
         @click.prevent="emit('import')"
       >
-        Import
+        {{ $t('components.library.FsBrowser.importButton') }}
       </button>
     </div>
     <div class="ui list component-fs-browser">

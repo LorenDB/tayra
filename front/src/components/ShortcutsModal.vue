@@ -20,19 +20,19 @@ const showRef = useVModel(props, 'show', emit)
 const { t } = useI18n()
 const general = computed(() => [
   {
-    title: t('General shortcuts'),
+    title: t('components.ShortcutsModal.generalShortcuts'),
     shortcuts: [
       {
         key: 'h',
-        summary: t('Show available keyboard shortcuts')
+        summary: t('components.ShortcutsModal.showShortcuts')
       },
       {
         key: 'shift + f',
-        summary: t('Focus searchbar')
+        summary: t('components.ShortcutsModal.focusSearch')
       },
       {
         key: 'esc',
-        summary: t('Unfocus searchbar')
+        summary: t('components.ShortcutsModal.unfocusSearch')
       }
     ]
   }
@@ -40,67 +40,67 @@ const general = computed(() => [
 
 const player = computed(() => [
   {
-    title: t('Audio player shortcuts'),
+    title: t('components.ShortcutsModal.audioShortcuts'),
     shortcuts: [
       {
         key: 'p',
-        summary: t('Pause/play the current track')
+        summary: t('components.ShortcutsModal.playPause')
       },
       {
         key: 'left',
-        summary: t('Seek backwards 5s')
+        summary: t('components.ShortcutsModal.seekBack5')
       },
       {
         key: 'right',
-        summary: t('Seek forwards 5s')
+        summary: t('components.ShortcutsModal.seekForward5')
       },
       {
         key: 'shift + left',
-        summary: t('Seek backwards 30s')
+        summary: t('components.ShortcutsModal.seekBack30')
       },
       {
         key: 'shift + right',
-        summary: t('Seek forwards 30s')
+        summary: t('components.ShortcutsModal.seekForward30')
       },
       {
         key: 'ctrl + shift + left',
-        summary: t('Play previous track')
+        summary: t('components.ShortcutsModal.playPrevious')
       },
       {
         key: 'ctrl + shift + right',
-        summary: t('Play next track')
+        summary: t('components.ShortcutsModal.playNext')
       },
       {
         key: 'shift + up',
-        summary: t('Increase volume')
+        summary: t('components.ShortcutsModal.increaseVolume')
       },
       {
         key: 'shift + down',
-        summary: t('Decrease volume')
+        summary: t('components.ShortcutsModal.decreaseVolume')
       },
       {
         key: 'm',
-        summary: t('Toggle mute')
+        summary: t('components.ShortcutsModal.toggleMute')
       },
       {
         key: 'e',
-        summary: t('Expand queue/player view')
+        summary: t('components.ShortcutsModal.expandQueue')
       },
       {
         key: 'l',
-        summary: t('Toggle queue looping')
+        summary: t('components.ShortcutsModal.toggleLoop')
       },
       {
         key: 's',
-        summary: t('Shuffle queue')
+        summary: t('components.ShortcutsModal.shuffleQueue')
       },
       {
         key: 'q',
-        summary: t('Clear queue')
+        summary: t('components.ShortcutsModal.clearQueue')
       },
       {
         key: 'f',
-        summary: t('Toggle favorite')
+        summary: t('components.ShortcutsModal.toggleFavorite')
       }
     ]
   }
@@ -110,7 +110,7 @@ const player = computed(() => [
 <template>
   <semantic-modal v-model:show="showRef">
     <header class="header">
-      Keyboard shortcuts
+      {{ $t('components.ShortcutsModal.modalHeader') }}
     </header>
     <section class="scrolling content">
       <div class="ui stackable two column grid">
@@ -154,7 +154,7 @@ const player = computed(() => [
     </section>
     <footer class="actions">
       <button class="ui basic cancel button">
-        Close
+        {{ $t('components.ShortcutsModal.closeButton') }}
       </button>
     </footer>
   </semantic-modal>

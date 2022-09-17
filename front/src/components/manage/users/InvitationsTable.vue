@@ -48,7 +48,7 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: t('Delete'),
+    label: t('components.manage.users.InvitationsTable.deleteLabel'),
     filterCheckable: (obj: { users: unknown[], expiration_date: Date }) => {
       return obj.users.length === 0 && moment().isBefore(obj.expiration_date)
     }
@@ -89,7 +89,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('Search by username, e-mail address, code…')
+  searchPlaceholder: t('components.manage.users.InvitationsTable.searchPlaceholder')
 }))
 </script>
 
@@ -98,7 +98,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="invitations-search">Search</label>
+          <label for="invitations-search">{{ $t('components.manage.users.InvitationsTable.searchLabel') }}</label>
           <input
             id="invitations-search"
             v-model="query"
@@ -108,7 +108,7 @@ const labels = computed(() => ({
           >
         </div>
         <div class="field">
-          <label for="invitations-ordering">Ordering</label>
+          <label for="invitations-ordering">{{ $t('components.manage.users.InvitationsTable.orderingLabel') }}</label>
           <select
             id="invitations-ordering"
             v-model="ordering"
@@ -124,20 +124,20 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="invitations-status">Status</label>
+          <label for="invitations-status">{{ $t('components.manage.users.InvitationsTable.statusLabel') }}</label>
           <select
             id="invitations-status"
             v-model="isOpen"
             class="ui dropdown"
           >
             <option :value="null">
-              All
+              {{ $t('components.manage.users.InvitationsTable.allOption') }}
             </option>
             <option :value="true">
-              Open
+              {{ $t('components.manage.users.InvitationsTable.openStatus') }}
             </option>
             <option :value="false">
-              Expired/used
+              {{ $t('components.manage.users.InvitationsTable.expiredStatus') }}
             </option>
           </select>
         </div>
@@ -160,22 +160,22 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            Owner
+            {{ $t('components.manage.users.InvitationsTable.ownerTableHeader') }}
           </th>
           <th>
-            User
+            {{ $t('components.manage.users.InvitationsTable.userTableHeader') }}
           </th>
           <th>
-            Status
+            {{ $t('components.manage.users.InvitationsTable.statusTableHeader') }}
           </th>
           <th>
-            Creation date
+            {{ $t('components.manage.users.InvitationsTable.creationDateTableHeader') }}
           </th>
           <th>
-            Expiration date
+            {{ $t('components.manage.users.InvitationsTable.expirationDateTableHeader') }}
           </th>
           <th>
-            Code
+            {{ $t('components.manage.users.InvitationsTable.codeTableHeader') }}
           </th>
         </template>
         <template
@@ -195,15 +195,15 @@ const labels = computed(() => ({
             <span
               v-if="scope.obj.users.length > 0"
               class="ui success basic label"
-            >Used</span>
+            >{{ $t('components.manage.users.InvitationsTable.usedStatusLabel') }}</span>
             <span
               v-else-if="moment().isAfter(scope.obj.expiration_date)"
               class="ui danger basic label"
-            >Expired</span>
+            >{{ $t('components.manage.users.InvitationsTable.expiredStatusLabel') }}</span>
             <span
               v-else
               class="ui basic label"
-            >Not used</span>
+            >{{ $t('components.manage.users.InvitationsTable.unusedStatusLabel') }}</span>
           </td>
           <td>
             <human-date :date="scope.obj.creation_date" />
@@ -227,14 +227,7 @@ const labels = computed(() => ({
       />
 
       <span v-if="result && result.results.length > 0">
-        <translate
-
-          translate-plural="Showing results %{ start } to %{ end } from %{ total }"
-          :translate-params="{start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}"
-          :translate-n="result.count"
-        >
-          Showing one result
-        </translate>
+        {{ $t('components.manage.users.InvitationsTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

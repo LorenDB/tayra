@@ -18,7 +18,7 @@ const props = defineProps<Props>()
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  summaryPlaceholder: t('Describe what actions have been taken, or any other related updates…')
+  summaryPlaceholder: t('components.manage.moderation.NoteForm.summaryPlaceholder')
 }))
 
 const summary = ref('')
@@ -56,7 +56,7 @@ const submit = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        Error while submitting note
+        {{ $t('components.manage.moderation.NoteForm.submissionFailureHeader') }}
       </h4>
       <ul class="list">
         <li
@@ -81,7 +81,7 @@ const submit = async () => {
       type="submit"
       :disabled="isLoading"
     >
-      Add note
+      {{ $t('components.manage.moderation.NoteForm.addNoteButton') }}
     </button>
   </form>
 </template>

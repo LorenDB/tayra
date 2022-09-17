@@ -62,18 +62,14 @@ const fetchData = async () => {
   >
     <i class="shield icon" />&nbsp;
     <slot>
-      Moderation rules…
+      {{ $t('components.manage.moderation.InstancePolicyModal.moderationRulesHeader') }}
     </slot>
     <semantic-modal
       v-model:show="show"
       @show="fetchData"
     >
       <h4 class="header">
-        <translate
-          :translate-params="{obj: target}"
-        >
-          Manage moderation rules for %{ obj }
-        </translate>
+        {{ $t('components.manage.moderation.InstancePolicyModal.manageRulesHeader', {obj: target}) }}
       </h4>
       <div class="content">
         <div class="description">
@@ -88,7 +84,7 @@ const fetchData = async () => {
           >
             <header class="ui header">
               <h3>
-                This entity is subject to specific moderation rules
+                {{ $t('components.manage.moderation.InstancePolicyModal.manageRulesHeader', {obj: target}) }}
               </h3>
             </header>
           </instance-policy-card>
@@ -107,7 +103,7 @@ const fetchData = async () => {
       </div>
       <div class="actions">
         <button class="ui deny button">
-          Close
+          {{ $t('components.manage.moderation.InstancePolicyModal.closeButton') }}
         </button>
       </div>
     </semantic-modal>

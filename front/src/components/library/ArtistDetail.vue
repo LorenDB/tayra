@@ -65,19 +65,19 @@ const loadMoreAlbums = async () => {
       <div class="ui hidden divider" />
       <div class="ui message">
         <p>
-          You are currently hiding content related to this artist.
+          {{ $t('components.library.ArtistDetail.hiddenContentMessage') }}
         </p>
         <router-link
           class="right floated"
           :to="{name: 'settings'}"
         >
-          Review my filters
+          {{ $t('components.library.ArtistDetail.reviewFiltersLink') }}
         </router-link>
         <button
           class="ui basic tiny button"
           @click="$store.dispatch('moderation/deleteContentFilter', contentFilter.uuid)"
         >
-          Remove filter
+          {{ $t('components.library.ArtistDetail.removeFilterButton') }}
         </button>
       </div>
     </div>
@@ -92,7 +92,7 @@ const loadMoreAlbums = async () => {
       class="ui vertical stripe segment"
     >
       <h2>
-        Albums by this artist
+        {{ $t('components.library.ArtistDetail.artistAlbumsHeader') }}
       </h2>
       <div class="ui cards app-cards">
         <album-card
@@ -107,7 +107,7 @@ const loadMoreAlbums = async () => {
         :class="['ui', {loading: isLoadingMoreAlbums}, 'button']"
         @click="loadMoreAlbums()"
       >
-        Load more…
+        {{ $t('components.library.ArtistDetail.loadMoreButton') }}
       </button>
     </section>
     <section
@@ -122,7 +122,7 @@ const loadMoreAlbums = async () => {
       >
         <template #header>
           <h2>
-            New tracks by this artist
+            {{ $t('components.library.ArtistDetail.newTracksHeader') }}
           </h2>
           <div class="ui hidden divider" />
         </template>
@@ -130,13 +130,13 @@ const loadMoreAlbums = async () => {
     </section>
     <section class="ui vertical stripe segment">
       <h2>
-        User libraries
+        {{ $t('components.library.ArtistDetail.userLibraryHeader') }}
       </h2>
       <library-widget
         :url="'artists/' + object.id + '/libraries/'"
         @loaded="emit('libraries-loaded', $event)"
       >
-        This artist is present in the following libraries:
+        {{ $t('components.library.ArtistDetail.userLibraryDescription') }}
       </library-widget>
     </section>
   </div>

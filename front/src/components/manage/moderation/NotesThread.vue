@@ -64,22 +64,22 @@ const remove = async (note: Note) => {
             @confirm="remove(note)"
           >
             <i class="trash icon" />
-            Delete
+            {{ $t('components.manage.moderation.NotesThread.deleteButton') }}
             <template #modal-header>
               <p>
-                Delete this note?
+                {{ $t('components.manage.moderation.NotesThread.deleteModalHeader') }}
               </p>
             </template>
             <template #modal-content>
               <div>
                 <p>
-                  The note will be removed. This action is irreversible.
+                  {{ $t('components.manage.moderation.NotesThread.deleteModalMessage') }}
                 </p>
               </div>
             </template>
             <template #modal-confirm>
               <p>
-                Delete
+                {{ $t('components.manage.moderation.NotesThread.deleteButton') }}
               </p>
             </template>
           </dangerous-button>

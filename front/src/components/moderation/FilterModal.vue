@@ -45,7 +45,7 @@ const hide = async () => {
     store.state.moderation.lastUpdate = new Date()
     store.commit('moderation/contentFilter', response.data)
     store.commit('ui/addMessage', {
-      content: t('Content filter successfully added'),
+      content: t('components.moderation.FilterModal.contentSuccessMessage'),
       date: new Date()
     })
   } catch (error) {
@@ -59,14 +59,11 @@ const hide = async () => {
 
 <template>
   <semantic-modal v-model:show="show">
-    <h4 class="header">
-      <translate
-        v-if="type === 'artist'"
-
-        :translate-params="{name: target?.name}"
-      >
-        Do you want to hide content from artist "%{ name }"?
-      </translate>
+    <h4
+      v-if="type === 'artist'"
+      class="header"
+    >
+      {{ $t('components.moderation.FilterModal.hideContentHeader', {name: target?.name}) }}
     </h4>
     <div class="scrolling content">
       <div class="description">
@@ -76,7 +73,7 @@ const hide = async () => {
           class="ui negative message"
         >
           <h4 class="header">
-            Error while creating filter
+            {{ $t('components.moderation.FilterModal.filterCreateFailureHeader') }}
           </h4>
           <ul class="list">
             <li
@@ -89,37 +86,37 @@ const hide = async () => {
         </div>
         <template v-if="type === 'artist'">
           <p>
-            You will not see tracks, albums and user activity linked to this artist any more:
+            {{ $t('components.moderation.FilterModal.filterCreateWarning') }}
           </p>
           <ul>
             <li>
-              In other users favorites and listening history
+              {{ $t('components.moderation.FilterModal.filterWarningList1') }}
             </li>
             <li>
-              In "Recently added" widget
+              {{ $t('components.moderation.FilterModal.filterWarningList2') }}
             </li>
             <li>
-              In artists and album listings
+              {{ $t('components.moderation.FilterModal.filterWarningList3') }}
             </li>
             <li>
-              In radio suggestions
+              {{ $t('components.moderation.FilterModal.filterWarningList4') }}
             </li>
           </ul>
           <p>
-            You can manage and update your filters any time from your account settings.
+            {{ $t('components.moderation.FilterModal.filterCreateHelp') }}
           </p>
         </template>
       </div>
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        Cancel
+        {{ $t('components.moderation.FilterModal.cancelButton') }}
       </button>
       <button
         :class="['ui', 'success', {loading: isLoading}, 'button']"
         @click="hide"
       >
-        Hide content
+        {{ $t('components.moderation.FilterModal.hideContentButton') }}
       </button>
     </div>
   </semantic-modal>

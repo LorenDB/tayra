@@ -35,7 +35,7 @@ const domain = computed(() => getDomain(props.object.fid))
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  more: t('More…')
+  more: t('components.library.AlbumDropdown.moreLabel')
 }))
 
 const isEmbedable = computed(() => (props.isChannel && props.artist?.channel?.actor) || props.publicLibraries.length)
@@ -53,7 +53,7 @@ const remove = () => emit('remove')
       v-model:show="showEmbedModal"
     >
       <h4 class="header">
-        Embed this album on your website
+        {{ $t('components.library.AlbumDropdown.embedModalHeader') }}
       </h4>
       <div class="scrolling content">
         <div class="description">
@@ -66,7 +66,7 @@ const remove = () => emit('remove')
       </div>
       <div class="actions">
         <button class="ui basic deny button">
-          Cancel
+          {{ $t('components.channels.AlbumModal.cancelButton') }}
         </button>
       </div>
     </semantic-modal>
@@ -84,9 +84,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="external icon" />
-          <translate
-            :translate-params="{domain: domain}"
-          >View on %{ domain }</translate>
+          {{ $t('components.library.AlbumDropdown.domainViewLink') }}
         </a>
 
         <div
@@ -96,7 +94,7 @@ const remove = () => emit('remove')
           @click="showEmbedModal = !showEmbedModal"
         >
           <i class="code icon" />
-          Embed
+          {{ $t('components.audio.EmbedWizard.copyButton') }}
         </div>
         <a
           v-if="isAlbum && musicbrainzUrl"
@@ -106,7 +104,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="external icon" />
-          View on MusicBrainz
+          {{ $t('components.library.AlbumDropdown.musicbrainzLink') }}
         </a>
         <a
           v-if="!isChannel && isAlbum"
@@ -116,7 +114,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="external icon" />
-          Search on Discogs
+          {{ $t('components.library.AlbumDropdown.discogsLink') }}
         </a>
         <router-link
           v-if="object.is_local"
@@ -124,7 +122,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="edit icon" />
-          Edit
+          {{ $t('components.library.AlbumDropdown.editButton') }}
         </router-link>
         <dangerous-button
           v-if="artist && $store.state.auth.authenticated && artist.channel && artist.attributed_to.full_username === $store.state.auth.fullUsername"
@@ -132,22 +130,22 @@ const remove = () => emit('remove')
           @confirm="remove()"
         >
           <i class="ui trash icon" />
-          Delete…
+          {{ $t('components.library.AlbumDropdown.deleteButton') }}
           <template #modal-header>
             <p>
-              Delete this album?
+              {{ $t('components.library.AlbumDropdown.deleteModalHeader') }}
             </p>
           </template>
           <template #modal-content>
             <div>
               <p>
-                The album will be deleted, as well as any related files and data. This action is irreversible.
+                {{ $t('components.library.AlbumDropdown.deleteModalMessage') }}
               </p>
             </div>
           </template>
           <template #modal-confirm>
             <p>
-              Delete
+              {{ $t('components.library.AlbumDropdown.deleteButton') }}
             </p>
           </template>
         </dangerous-button>
@@ -168,7 +166,7 @@ const remove = () => emit('remove')
           :to="{name: 'manage.library.albums.detail', params: {id: object.id}}"
         >
           <i class="wrench icon" />
-          Open in moderation interface
+          {{ $t('components.library.AlbumDropdown.moderationLink') }}
         </router-link>
         <a
           v-if="$store.state.auth.profile && $store.state.auth.profile?.is_superuser"
@@ -178,7 +176,7 @@ const remove = () => emit('remove')
           rel="noopener noreferrer"
         >
           <i class="wrench icon" />
-          View in Django's admin&nbsp;
+          {{ $t('components.library.AlbumDropdown.djangoLink') }}
         </a>
       </div>
     </button>

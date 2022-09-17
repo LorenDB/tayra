@@ -55,19 +55,19 @@ const scrollLock = useScrollLock(document.body)
 const store = useStore()
 
 const labels = computed(() => ({
-  queue: t('Queue'),
-  populating: t('Fetching radio track'),
-  duration: t('Duration'),
-  addArtistContentFilter: t('Hide content from this artist…'),
-  restart: t('Restart track'),
-  previous: t('Previous track'),
-  next: t('Next track'),
-  pause: t('Pause'),
-  play: t('Play'),
-  fullscreen: t('Fullscreen'),
-  exitFullscreen: t('Exit fullscreen'),
-  showCoverArt: t('Show cover art'),
-  showVisualizer: t('Show visualizer')
+  queue: t('components.Queue.queue'),
+  populating: t('components.Queue.queue.populatingRadio'),
+  duration: t('components.Queue.duration'),
+  addArtistContentFilter: t('components.Queue.addArtistContentFilter'),
+  restart: t('components.Queue.restart'),
+  previous: t('components.Queue.previous'),
+  next: t('components.Queue.next'),
+  pause: t('components.Queue.pause'),
+  play: t('components.Queue.play'),
+  fullscreen: t('components.Queue.enterFullscreen'),
+  exitFullscreen: t('components.Queue.exitFullscreen'),
+  showCoverArt: t('components.Queue.showCoverArt'),
+  showVisualizer: t('components.Queue.showVisualizer')
 }))
 
 watchEffect(async () => {
@@ -126,9 +126,9 @@ const queueItems = computed(() => queue.value.map((track, index) => ({
   ...track,
   key: `${index}-${track.id}`,
   labels: {
-    remove: t('Remove'),
-    selectTrack: t('Select track'),
-    favorite: t('Favorite track')
+    remove: t('components.Queue.remove'),
+    selectTrack: t('components.Queue.selectTrack'),
+    favorite: t('components.Queue.favorite')
   },
   duration: time.durationFormatted(track.uploads[0]?.duration ?? 0) ?? ''
 }) as QueueItemSource))
@@ -298,14 +298,14 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
             class="ui small warning message"
           >
             <h3 class="header">
-              The track cannot be loaded
+              {{ $t('components.Queue.trackLoadFailure') }}
             </h3>
             <p v-if="hasNext && isPlaying">
-              The next track will play automatically in a few seconds…
+              {{ $t('components.Queue.automaticPlay') }}
               <i class="loading spinner icon" />
             </p>
             <p>
-              You may have a connectivity issue.
+              {{ $t('components.Queue.connectivityWarning') }}
             </p>
           </div>
           <div
@@ -404,22 +404,18 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                 class="ui right floated basic button"
                 @click="$store.commit('ui/queueFocused', null)"
               >
-                Close
+                {{ $t('components.Queue.closeButton') }}
               </button>
               <button
                 class="ui right floated basic button danger"
                 @click="clear"
               >
-                Clear
+                {{ $t('components.Queue.clearButton') }}
               </button>
               {{ labels.queue }}
               <div class="sub header">
                 <div>
-                  <translate
-                    :translate-params="{index: currentIndex + 1, length: queue.length}"
-                  >
-                    Track %{ index } of %{ length }
-                  </translate>
+                  {{ $t('components.Queue.queuePosition', {index: currentIndex +1, length: queue.length}) }}
                   <template v-if="!$store.state.radios.running">
                     -
                     <span :title="labels.duration">
@@ -465,16 +461,16 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
               <div class="content">
                 <h3 class="header">
                   <i class="feed icon" />
-                  You have a radio playing
+                  {{ $t('components.Queue.radioPlaying') }}
                 </h3>
                 <p>
-                  New tracks will be appended here automatically.
+                  {{ $t('components.Queue.appendTracks') }}
                 </p>
                 <button
                   class="ui basic primary button"
                   @click="$store.dispatch('radios/stop')"
                 >
-                  Stop radio
+                  {{ $t('components.Queue.stopRadio') }}
                 </button>
               </div>
             </div>

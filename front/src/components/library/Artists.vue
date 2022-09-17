@@ -122,7 +122,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        Browsing artists
+        {{ $t('components.library.Artists.artistBrowseHeader') }}
       </h2>
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
@@ -131,7 +131,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
         <div class="fields">
           <div class="field">
             <label for="artist-search">
-              Artist name
+              {{ $t('components.library.Artists.searchLabel') }}
             </label>
             <div class="ui action input">
               <input
@@ -144,18 +144,18 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="t('Search')"
+                :aria-label="t('components.library.Artists.searchButton')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="tags-search">Tags</label>
+            <label for="tags-search">{{ $t('components.library.Artists.tagsLabel') }}</label>
             <tags-selector v-model="tags" />
           </div>
           <div class="field">
-            <label for="artist-ordering">Ordering</label>
+            <label for="artist-ordering">{{ $t('components.library.Artists.orderingLabel') }}</label>
             <select
               id="artist-ordering"
               v-model="ordering"
@@ -171,22 +171,22 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="artist-ordering-direction">Ordering direction</label>
+            <label for="artist-ordering-direction">{{ $t('components.library.Artists.orderingDirectionLabel') }}</label>
             <select
               id="artist-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                Ascending
+                {{ $t('components.library.Artists.ascendingOrdering') }}
               </option>
               <option value="-">
-                Descending
+                {{ $t('components.library.Artists.descendingOrdering') }}
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="artist-results">Results per page</label>
+            <label for="artist-results">{{ $t('components.library.Artists.resultsPerPageLabel') }}</label>
             <select
               id="artist-results"
               v-model="paginateBy"
@@ -202,7 +202,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <span id="excludeHeader">Exclude Compilation Artists</span>
+            <span id="excludeHeader">{{ $t('components.library.Artists.excludeCompilationArtistsLabel') }}</span>
             <div
               id="excludeCompilation"
               class="ui toggle checkbox"
@@ -217,7 +217,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
               <label
                 for="exclude-compilation"
                 class="visually-hidden"
-              >Exclude Compilation Artists</label>
+              >{{ $t('components.library.Artists.excludeCompilationArtistsLabel') }}</label>
             </div>
           </div>
         </div>
@@ -246,7 +246,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
       >
         <div class="ui icon header">
           <i class="compact disc icon" />
-          No results matching your query
+          {{ $t('components.library.Artists.emptyStateMessage') }}
         </div>
         <router-link
           v-if="$store.state.auth.authenticated"
@@ -254,7 +254,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
           class="ui success button labeled icon"
         >
           <i class="upload icon" />
-          Add some music
+          {{ $t('components.library.Artists.addMusicLink') }}
         </router-link>
       </div>
       <div class="ui center aligned basic segment">
