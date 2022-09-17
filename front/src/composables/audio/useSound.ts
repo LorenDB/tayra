@@ -25,7 +25,7 @@ const soundCache = useSoundCache()
 const currentTrack = computed(() => store.getters['queue/currentTrack'])
 const looping = computed(() => store.state.player.looping)
 
-const currentSound = ref()
+const currentSound = ref<Sound>()
 const soundId = ref()
 
 const soundProgress = createEventHook<{ node: HTMLAudioElement, time: number, duration: number }>()
@@ -72,10 +72,18 @@ const loadSound = (track: Track): Sound => {
 
     onend () {
       const onlyTrack = store.state.queue.tracks.length === 1
+
+      // NOTE: We need to send trackListened when we've finished track playback and we are not focused on the tab
+      const { isListeningSubmitted } = usePlayer()
+      if (!isListeningSubmitted.value) {
+        store.dispatch('player/trackListened', currentTrack.value)
+        isListeningSubmitted.value = true
+      }
+
       if (looping.value === 1 || (onlyTrack && looping.value === 2)) {
-        currentSound.value.seek(0)
+        currentSound.value?.seek(0)
         store.dispatch('player/updateProgress', 0)
-        soundId.value = currentSound.value.play(soundId.value)
+        soundId.value = currentSound.value?.play()
       } else {
         store.dispatch('player/trackEnded', currentTrack.value)
       }
@@ -83,20 +91,8 @@ const loadSound = (track: Track): Sound => {
 
     onunlock () {
       if (store.state.player.playing && currentSound.value) {
-        soundId.value = currentSound.value.play(soundId.value)
+        soundId.value = currentSound.value.play()
       }
-    },
-
-    onload () {
-      const node = (howl as any)._sounds[0]._node as HTMLAudioElement
-
-      node.addEventListener('progress', () => {
-        if (howl !== currentSound.value) {
-          return
-        }
-
-        currentSound.value._triggerSoundProgress()
-      })
     },
 
     onplay () {
@@ -107,8 +103,8 @@ const loadSound = (track: Track): Sound => {
         return (this as any).stop()
       }
 
-      const time = currentSound.value.seek()
-      const duration = currentSound.value.duration()
+      const time = currentSound.value?.seek() ?? 0
+      const duration = currentSound.value?.duration() ?? 0
       if (time <= duration / 2) {
         const { isListeningSubmitted } = usePlayer()
         isListeningSubmitted.value = false
