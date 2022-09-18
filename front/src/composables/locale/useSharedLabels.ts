@@ -8,143 +8,143 @@ const { t } = i18n.global
 export default () => ({
   fields: {
     privacy_level: {
-      label: t('Activity visibility'),
-      help: t('Determine the visibility level of your activity'),
+      label: t('composables.locale.useSharedLabels.fields.privacyLevel.label'),
+      help: t('composables.locale.useSharedLabels.fields.privacyLevel.help'),
       choices: {
-        me: t('Nobody except me'),
-        instance: t('Everyone on this instance'),
-        everyone: t('Everyone, across all instances')
+        me: t('composables.locale.useSharedLabels.fields.privacyLevel.choices.private'),
+        instance: t('composables.locale.useSharedLabels.fields.privacyLevel.choices.instance'),
+        everyone: t('composables.locale.useSharedLabels.fields.privacyLevel.choices.public')
       } as Record<PrivacyLevel, string>,
       shortChoices: {
-        me: t('Private'),
-        instance: t('Instance'),
-        everyone: t('Everyone')
+        me: t('composables.locale.useSharedLabels.fields.privacyLevel.shortChoices.private'),
+        instance: t('composables.locale.useSharedLabels.fields.privacyLevel.shortChoices.instance'),
+        everyone: t('composables.locale.useSharedLabels.fields.privacyLevel.shortChoices.public')
       } as Record<PrivacyLevel, string>
     },
     import_status: {
-      label: t('Click to display more information about the import process for this upload'),
+      label: t('composables.locale.useSharedLabels.fields.importStatus.label'),
       choices: {
         skipped: {
-          label: t('Skipped'),
-          help: t('This track is already present in one of your libraries')
+          label: t('composables.locale.useSharedLabels.fields.importStatus.choices.skipped.label'),
+          help: t('composables.locale.useSharedLabels.fields.importStatus.choices.skipped.help')
         },
         draft: {
-          label: t('Draft'),
-          help: t('This track has been uploaded, but hasn\'t been scheduled for processing yet')
+          label: t('composables.locale.useSharedLabels.fields.importStatus.choices.draft.label'),
+          help: t('composables.locale.useSharedLabels.fields.importStatus.choices.draft.help')
         },
         pending: {
-          label: t('Pending'),
-          help: t('This track has been uploaded, but hasn\'t been processed by the server yet')
+          label: t('composables.locale.useSharedLabels.fields.importStatus.choices.pending.label'),
+          help: t('composables.locale.useSharedLabels.fields.importStatus.choices.pending.help')
         },
         errored: {
-          label: t('Errored'),
-          help: t('This track could not be processed, please make sure it is tagged correctly')
+          label: t('composables.locale.useSharedLabels.fields.importStatus.choices.errored.label'),
+          help: t('composables.locale.useSharedLabels.fields.importStatus.choices.errored.help')
         },
         finished: {
-          label: t('Finished'),
-          help: t('Imported')
+          label: t('composables.locale.useSharedLabels.fields.importStatus.choices.finished.label'),
+          help: t('composables.locale.useSharedLabels.fields.importStatus.choices.finished.help')
         }
       } as Record<ImportStatus, { label: string, help: string }>
     },
     report_type: {
-      label: t('Category'),
+      label: t('composables.locale.useSharedLabels.fields.reportType.label'),
       choices: {
-        takedown_request: t('Takedown request'),
-        invalid_metadata: t('Invalid metadata'),
-        illegal_content: t('Illegal content'),
-        offensive_content: t('Offensive content'),
-        other: t('Other')
+        takedown_request: t('composables.locale.useSharedLabels.fields.reportType.choices.takedownRequest'),
+        invalid_metadata: t('composables.locale.useSharedLabels.fields.reportType.choices.invalidMetadata'),
+        illegal_content: t('composables.locale.useSharedLabels.fields.reportType.choices.illegalContent'),
+        offensive_content: t('composables.locale.useSharedLabels.fields.reportType.choices.offensiveContent'),
+        other: t('composables.locale.useSharedLabels.fields.reportType.choices.other')
       }
     },
     summary: {
-      label: t('Bio'),
+      label: t('composables.locale.useSharedLabels.fields.summary.label'),
       help: undefined
     },
     content_category: {
-      label: t('Content category'),
+      label: t('composables.locale.useSharedLabels.fields.contentCategory.label'),
       choices: {
-        podcast: t('Podcast'),
-        music: t('Music'),
-        other: t('Other')
+        podcast: t('composables.locale.useSharedLabels.fields.contentCategory.choices.podcast'),
+        music: t('composables.locale.useSharedLabels.fields.contentCategory.choices.music'),
+        other: t('composables.locale.useSharedLabels.fields.contentCategory.choices.other')
       }
     }
   },
   filters: {
-    creation_date: t('Creation date'),
-    release_date: t('Release date'),
-    accessed_date: t('Accessed date'),
-    applied_date: t('Applied date'),
-    handled_date: t('Handled date'),
-    first_seen: t('First seen date'),
-    last_seen: t('Last seen date'),
-    modification_date: t('Modification date'),
-    expiration_date: t('Expiration date'),
-    track_title: t('Track name'),
-    album_title: t('Album name'),
-    artist_name: t('Artist name'),
-    name: t('Name'),
-    length: t('Duration'),
-    items_count: t('Items'),
-    size: t('Size'),
-    bitrate: t('Bitrate'),
-    duration: t('Duration'),
-    date_joined: t('Sign-up date'),
-    last_activity: t('Last activity'),
-    username: t('Username'),
-    domain: t('Domain'),
-    users: t('Users'),
-    received_messages: t('Received messages'),
-    uploads: t('Uploads'),
-    followers: t('Followers')
+    creation_date: t('composables.locale.useSharedLabels.filters.creationDate'),
+    release_date: t('composables.locale.useSharedLabels.filters.releaseDate'),
+    accessed_date: t('composables.locale.useSharedLabels.filters.accessedDate'),
+    applied_date: t('composables.locale.useSharedLabels.filters.appliedDate'),
+    handled_date: t('composables.locale.useSharedLabels.filters.handledDate'),
+    first_seen: t('composables.locale.useSharedLabels.filters.firstSeen'),
+    last_seen: t('composables.locale.useSharedLabels.filters.lastSeen'),
+    modification_date: t('composables.locale.useSharedLabels.filters.modificationDate'),
+    expiration_date: t('composables.locale.useSharedLabels.filters.expirationDate'),
+    track_title: t('composables.locale.useSharedLabels.filters.trackTitle'),
+    album_title: t('composables.locale.useSharedLabels.filters.albumTitle'),
+    artist_name: t('composables.locale.useSharedLabels.filters.artistName'),
+    name: t('composables.locale.useSharedLabels.filters.name'),
+    length: t('composables.locale.useSharedLabels.filters.duration'),
+    items_count: t('composables.locale.useSharedLabels.filters.itemsCount'),
+    size: t('composables.locale.useSharedLabels.filters.size'),
+    bitrate: t('composables.locale.useSharedLabels.filters.bitrate'),
+    duration: t('composables.locale.useSharedLabels.filters.duration'),
+    date_joined: t('composables.locale.useSharedLabels.filters.dateJoined'),
+    last_activity: t('composables.locale.useSharedLabels.filters.lastActivity'),
+    username: t('composables.locale.useSharedLabels.filters.username'),
+    domain: t('composables.locale.useSharedLabels.filters.domain'),
+    users: t('composables.locale.useSharedLabels.filters.users'),
+    received_messages: t('composables.locale.useSharedLabels.filters.receivedMessages'),
+    uploads: t('composables.locale.useSharedLabels.filters.uploads'),
+    followers: t('composables.locale.useSharedLabels.filters.followers')
   },
   scopes: {
     profile: {
-      label: t('Profile'),
-      description: t('Access to e-mail, username, and profile information')
+      label: t('composables.locale.useSharedLabels.scopes.profile.label'),
+      description: t('composables.locale.useSharedLabels.scopes.profile.description')
     },
     libraries: {
-      label: t('Libraries and uploads'),
-      description: t('Access to audio files, libraries, artists, albums and tracks')
+      label: t('composables.locale.useSharedLabels.scopes.libraries.label'),
+      description: t('composables.locale.useSharedLabels.scopes.libraries.description')
     },
     favorites: {
-      label: t('Favorites'),
-      description: t('Access to favorites')
+      label: t('composables.locale.useSharedLabels.scopes.favorites.label'),
+      description: t('composables.locale.useSharedLabels.scopes.favorites.description')
     },
     listenings: {
-      label: t('Listenings'),
-      description: t('Access to listening history')
+      label: t('composables.locale.useSharedLabels.scopes.listenings.label'),
+      description: t('composables.locale.useSharedLabels.scopes.listenings.description')
     },
     follows: {
-      label: t('Follows'),
-      description: t('Access to follows')
+      label: t('composables.locale.useSharedLabels.scopes.follows.label'),
+      description: t('composables.locale.useSharedLabels.scopes.follows.description')
     },
     playlists: {
-      label: t('Playlists'),
-      description: t('Access to playlists')
+      label: t('composables.locale.useSharedLabels.scopes.playlists.label'),
+      description: t('composables.locale.useSharedLabels.scopes.playlists.description')
     },
     radios: {
-      label: t('Radios'),
-      description: t('Access to radios')
+      label: t('composables.locale.useSharedLabels.scopes.radios.label'),
+      description: t('composables.locale.useSharedLabels.scopes.radios.description')
     },
     filters: {
-      label: t('Content filters'),
-      description: t('Access to content filters')
+      label: t('composables.locale.useSharedLabels.scopes.filters.label'),
+      description: t('composables.locale.useSharedLabels.scopes.filters.description')
     },
     notifications: {
-      label: t('Notifications'),
-      description: t('Access to notifications')
+      label: t('composables.locale.useSharedLabels.scopes.notifications.label'),
+      description: t('composables.locale.useSharedLabels.scopes.notifications.description')
     },
     edits: {
-      label: t('Edits'),
-      description: t('Access to edits')
+      label: t('composables.locale.useSharedLabels.scopes.edits.label'),
+      description: t('composables.locale.useSharedLabels.scopes.edits.description')
     },
     security: {
-      label: t('Security'),
-      description: t('Access to security settings such as password and authorization')
+      label: t('composables.locale.useSharedLabels.scopes.security.label'),
+      description: t('composables.locale.useSharedLabels.scopes.security.description')
     },
     reports: {
-      label: t('Reports'),
-      description: t('Access to moderation reports')
+      label: t('composables.locale.useSharedLabels.scopes.reports.label'),
+      description: t('composables.locale.useSharedLabels.scopes.reports.description')
     }
   } as Record<ScopeId, { label: string, description: string }>
 })

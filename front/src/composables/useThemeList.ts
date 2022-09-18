@@ -7,17 +7,17 @@ const { t } = i18n.global
 const themeList: ThemeEntry[] = [
   {
     icon: 'palette icon',
-    name: t('Browser default'),
+    name: t('composables.useThemeList.browserDefault'),
     key: 'auto'
   },
   {
     icon: 'sun icon',
-    name: t('Light'),
+    name: t('composables.useThemeList.lightTheme'),
     key: 'light'
   },
   {
     icon: 'moon icon',
-    name: t('Dark'),
+    name: t('composables.useThemeList.darkTheme'),
     key: 'dark'
   }
 ]

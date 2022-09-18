@@ -97,8 +97,8 @@ onMounted(() => $('.ui.dropdown').dropdown())
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  playlists: t('Playlists'),
-  searchPlaceholder: t('Enter playlist name…')
+  playlists: t('views.playlists.List.playlistsHeader'),
+  searchPlaceholder: t('views.playlists.List.searchPlaceholder')
 }))
 
 const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value].sort((a, b) => a - b)))
@@ -108,14 +108,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
   <main v-title="labels.playlists">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        Browsing playlists
+        {{ $t('views.playlists.List.browsePlaylistsHeader') }}
       </h2>
       <template v-if="$store.state.auth.authenticated">
         <button
           class="ui success button"
           @click="$store.commit('playlists/showModal', true)"
         >
-          Manage your playlists
+          {{ $t('views.playlists.List.manageButton') }}
         </button>
         <div class="ui hidden divider" />
       </template>
@@ -125,7 +125,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="fields">
           <div class="field">
-            <label for="playlists-search">Search</label>
+            <label for="playlists-search">{{ $t('views.playlists.List.searchLabel') }}</label>
             <div class="ui action input">
               <input
                 id="playlists-search"
@@ -137,14 +137,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="t('Search')"
+                :aria-label="t('views.playlists.List.searchLabel')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="playlists-ordering">Ordering</label>
+            <label for="playlists-ordering">{{ $t('views.playlists.List.orderingLabel') }}</label>
             <select
               id="playlists-ordering"
               v-model="ordering"
@@ -160,22 +160,22 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="playlists-ordering-direction">Order</label>
+            <label for="playlists-ordering-direction">{{ $t('views.playlists.List.orderingDirectionLabel') }}</label>
             <select
               id="playlists-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                Ascending
+                {{ $t('views.playlists.List.ascendingOrdering') }}
               </option>
               <option value="-">
-                Descending
+                {{ $t('views.playlists.List.descendingOrdering') }}
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="playlists-results">Results per page</label>
+            <label for="playlists-results">{{ $t('views.playlists.List.resultsPerPage') }}</label>
             <select
               id="playlists-results"
               v-model="paginateBy"
@@ -204,7 +204,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="ui icon header">
           <i class="list icon" />
-          No results matching your query
+          {{ $t('views.playlists.List.emptyState') }}
         </div>
         <button
           v-if="$store.state.auth.authenticated"
@@ -212,7 +212,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           @click="$store.commit('playlists/chooseTrack', null)"
         >
           <i class="list icon" />
-          Create a playlist
+          {{ $t('views.playlists.List.createPlaylistButton') }}
         </button>
       </div>
       <div class="ui center aligned basic segment">

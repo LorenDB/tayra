@@ -264,7 +264,7 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.UploadDetail.activityHeader') }}
+                  {{ $t('views.admin.library.UploadDetail.activityHeader') }}&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
@@ -286,11 +286,11 @@ const showUploadDetailModal = ref(false)
                         v-if="object.accessed_date"
                         :date="object.accessed_date"
                       />
-                      <translate
+                      <span
                         v-else
                       >
                         {{ $t('views.admin.library.UploadDetail.notApplicable') }}
-                      </translate>
+                      </span>
                     </td>
                   </tr>
                 </tbody>
@@ -302,7 +302,7 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.UploadDetail.audioContentHeader') }}
+                  {{ $t('views.admin.library.UploadDetail.audioContentHeader') }}&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
@@ -325,11 +325,11 @@ const showUploadDetailModal = ref(false)
                       <template v-if="object.audio_file">
                         {{ humanSize(object.size) }}
                       </template>
-                      <translate
+                      <span
                         v-else
                       >
                         {{ $t('views.admin.library.UploadDetail.notApplicable') }}
-                      </translate>
+                      </span>
                     </td>
                   </tr>
                   <tr>
@@ -348,11 +348,11 @@ const showUploadDetailModal = ref(false)
                       <template v-if="object.bitrate">
                         {{ $t('views.admin.library.UploadDetail.bitrateValue', {bitrate: humanSize(object.bitrate)}) }}
                       </template>
-                      <translate
+                      <span
                         v-else
                       >
                         {{ $t('views.admin.library.UploadDetail.notApplicable') }}
-                      </translate>
+                      </span>
                     </td>
                   </tr>
                   <tr>
@@ -363,11 +363,11 @@ const showUploadDetailModal = ref(false)
                       <template v-if="object.duration">
                         {{ time.parse(object.duration) }}
                       </template>
-                      <translate
+                      <span
                         v-else
                       >
                         {{ $t('views.admin.library.UploadDetail.notApplicable') }}
-                      </translate>
+                      </span>
                     </td>
                   </tr>
                   <tr>
@@ -380,11 +380,11 @@ const showUploadDetailModal = ref(false)
                       <template v-if="object.mimetype">
                         {{ object.mimetype }}
                       </template>
-                      <translate
+                      <span
                         v-else
                       >
                         {{ $t('views.admin.library.UploadDetail.notApplicable') }}
-                      </translate>
+                      </span>
                     </td>
                   </tr>
                 </tbody>

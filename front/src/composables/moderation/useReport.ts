@@ -35,26 +35,26 @@ const getReportableObjects = ({ track, album, artist, playlist, account, library
 
   if (account) {
     reportableObjs.push({
-      label: t('Report @%{ username }…', { username: account.preferred_username }),
+      label: t('composables.moderation.useReport.account.label', { username: account.preferred_username }),
       target: {
         type: 'account',
         _obj: account,
         full_username: account.full_username,
         label: account.full_username,
-        typeLabel: t('Account')
+        typeLabel: t('composables.moderation.useReport.account.typeLabel')
       }
     })
   }
 
   if (track) {
     reportableObjs.push({
-      label: t('Report this track…'),
+      label: t('composables.moderation.useReport.track.label'),
       target: {
         type: 'track',
         id: track.id,
         _obj: track,
         label: track.title,
-        typeLabel: t('Track')
+        typeLabel: t('composables.moderation.useReport.track.typeLabel')
       }
     })
 
@@ -64,13 +64,13 @@ const getReportableObjects = ({ track, album, artist, playlist, account, library
 
   if (album) {
     reportableObjs.push({
-      label: t('Report this album…'),
+      label: t('composables.moderation.useReport.album.label'),
       target: {
         type: 'album',
         id: album.id,
         label: album.title,
         _obj: album,
-        typeLabel: t('Album')
+        typeLabel: t('composables.moderation.useReport.album.typeLabel')
       }
     })
 
@@ -81,50 +81,50 @@ const getReportableObjects = ({ track, album, artist, playlist, account, library
 
   if (channel) {
     reportableObjs.push({
-      label: t('Report this channel…'),
+      label: t('composables.moderation.useReport.channel.label'),
       target: {
         type: 'channel',
         uuid: channel.uuid,
-        label: channel.artist?.name ?? t('Unknown artist'),
+        label: channel.artist?.name ?? t('composables.moderation.useReport.artist.unknownLabel'),
         _obj: channel,
-        typeLabel: t('Channel')
+        typeLabel: t('composables.moderation.useReport.channel.typeLabel')
       }
     })
   } else if (artist) {
     reportableObjs.push({
-      label: t('Report this artist…'),
+      label: t('composables.moderation.useReport.artist.label'),
       target: {
         type: 'artist',
         id: artist.id,
         label: artist.name,
         _obj: artist,
-        typeLabel: t('Artist')
+        typeLabel: t('composables.moderation.useReport.artist.typeLabel')
       }
     })
   }
 
   if (playlist) {
     reportableObjs.push({
-      label: t('Report this playlist…'),
+      label: t('composables.moderation.useReport.playlist.label'),
       target: {
         type: 'playlist',
         id: playlist.id,
         label: playlist.name,
         _obj: playlist,
-        typeLabel: t('Playlist')
+        typeLabel: t('composables.moderation.useReport.playlist.typeLabel')
       }
     })
   }
 
   if (library) {
     reportableObjs.push({
-      label: t('Report this library…'),
+      label: t('composables.moderation.useReport.library.label'),
       target: {
         type: 'library',
         uuid: library.uuid,
         label: library.name,
         _obj: library,
-        typeLabel: t('Library')
+        typeLabel: t('composables.moderation.useReport.library.typeLabel')
       }
     })
   }

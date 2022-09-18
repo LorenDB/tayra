@@ -91,7 +91,7 @@ fetchToken()
       {{ $t('components.auth.SubsonicTokenForm.unavailableMessage') }}
     </p>
     <p>
-      {{ $t('components.auth.SubsonicTokenForm.subsonicApiDescription') }}
+      {{ $t('components.auth.SubsonicTokenForm.subsonicApiDescription') }}&nbsp;{{ $t('components.auth.SubsonicTokenForm.subsonicApiDescriptionContinued') }}
     </p>
     <p>
       {{ $t('components.auth.SubsonicTokenForm.subsonicPasswordInfo') }}

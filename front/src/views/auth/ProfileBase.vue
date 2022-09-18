@@ -43,7 +43,7 @@ const routerParams = computed(() => props.domain
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  usernameProfile: t("%{ username }'s profile", { username: props.username })
+  usernameProfile: t('views.auth.ProfileBase.title', { username: props.username })
 }))
 
 onBeforeRouteUpdate((to) => {
@@ -100,9 +100,7 @@ watch(props, fetchData, { immediate: true })
                 class="basic item"
               >
                 <i class="external icon" />
-                <translate
-                  :translate-params="{domain: object.domain}"
-                >View on %{ domain }</translate>
+                {{ $t('views.auth.ProfileBase.domainViewLink', {domain: object.domain}) }}
               </a>
               <div
                 v-for="obj in getReportableObjects({account: object})"
@@ -121,7 +119,7 @@ watch(props, fetchData, { immediate: true })
                 :to="{name: 'manage.moderation.accounts.detail', params: {id: object.full_username}}"
               >
                 <i class="wrench icon" />
-                Open in moderation interface
+                {{ $t('views.auth.ProfileBase.moderationLink') }}
               </router-link>
             </div>
           </button>
@@ -150,7 +148,7 @@ watch(props, fetchData, { immediate: true })
             <template v-if="object.full_username === $store.state.auth.fullUsername">
               <div class="ui very small hidden divider" />
               <div class="ui basic success label">
-                This is you!
+                {{ $t('views.auth.ProfileBase.ownUserLabel') }}
               </div>
             </template>
           </h1>
@@ -173,13 +171,13 @@ watch(props, fetchData, { immediate: true })
                   class="item"
                   :to="{name: 'profile.overview', params: routerParams}"
                 >
-                  Overview
+                  {{ $t('views.auth.ProfileBase.overviewLink') }}
                 </router-link>
                 <router-link
                   class="item"
                   :to="{name: 'profile.activity', params: routerParams}"
                 >
-                  Activity
+                  {{ $t('views.auth.ProfileBase.activityLink') }}
                 </router-link>
               </div>
               <div class="ui hidden divider" />

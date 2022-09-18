@@ -75,9 +75,9 @@ export const install: InitModule = ({ store, router }) => {
 
         if (rateLimitStatus.availableSeconds) {
           const tryAgain = moment().add(rateLimitStatus.availableSeconds, 's').toNow(true)
-          message = t('You sent too many requests and have been rate limited, please try again in %{ delay }', { delay: tryAgain })
+          message = t('init.axios.rateLimitDelay', { delay: tryAgain })
         } else {
-          message = t('You sent too many requests and have been rate limited, please try again later')
+          message = t('init.axios.rateLimitLater')
         }
 
         error.backendErrors.push(message)

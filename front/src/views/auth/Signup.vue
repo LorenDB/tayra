@@ -19,7 +19,7 @@ withDefaults(defineProps<Props>(), {
 const { t } = useI18n()
 
 const labels = computed(() => ({
-  title: t('Sign Up')
+  title: t('views.auth.Signup.title')
 }))
 </script>
 
@@ -31,7 +31,7 @@ const labels = computed(() => ({
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          Create a Funkwhale account
+          {{ $t('views.auth.Signup.createAccountHeader') }}
         </h2>
         <signup-form
           :default-invitation="defaultInvitation"

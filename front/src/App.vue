@@ -109,7 +109,7 @@ store.dispatch('auth/fetchUser')
             <component :is="Component" />
             <template #fallback>
               <!-- TODO (wvffle): Add loader -->
-              Loading...
+              {{ $t('App.loading') }}
             </template>
           </Suspense>
         </keep-alive>

@@ -20,7 +20,7 @@ const { t } = useI18n()
 const router = useRouter()
 
 const labels = computed(() => ({
-  domains: t('Domains')
+  domains: t('views.admin.moderation.DomainsList.title')
 }))
 
 const domainName = ref('')
@@ -50,7 +50,7 @@ const createDomain = async () => {
   <main v-title="labels.domains">
     <section class="ui vertical stripe segment">
       <h2 class="ui left floated header">
-        Domains
+        {{ $t('views.admin.moderation.DomainsList.title') }}
       </h2>
       <form
         class="ui right floated form"
@@ -62,7 +62,7 @@ const createDomain = async () => {
           class="ui negative message"
         >
           <h4 class="header">
-            Error while creating domain
+            {{ $t('views.admin.moderation.DomainsList.failureHeader') }}
           </h4>
           <ul class="list">
             <li
@@ -75,7 +75,7 @@ const createDomain = async () => {
         </div>
         <div class="inline fields">
           <div class="field">
-            <label for="add-domain">Add a domain</label>
+            <label for="add-domain">{{ $t('views.admin.moderation.DomainsList.addDomainLabel') }}</label>
             <input
               id="add-domain"
               v-model="domainName"
@@ -93,7 +93,7 @@ const createDomain = async () => {
               type="checkbox"
               name="allowed"
             >
-            <label for="allowed">Add to allow-list</label>
+            <label for="allowed">{{ $t('views.admin.moderation.DomainsList.addToAllowListLabel') }}</label>
           </div>
           <div class="field">
             <button
@@ -101,7 +101,7 @@ const createDomain = async () => {
               type="submit"
               :disabled="isCreating"
             >
-              Add
+              {{ $t('views.admin.moderation.DomainsList.addButton') }}
             </button>
           </div>
         </div>

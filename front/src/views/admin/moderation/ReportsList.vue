@@ -90,8 +90,8 @@ fetchData()
 const { t } = useI18n()
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('Search by account, summary, domain…'),
-  reports: t('Reports')
+  searchPlaceholder: t('views.admin.moderation.ReportsList.searchPlaceholder'),
+  reports: t('views.admin.moderation.ReportsList.title')
 }))
 </script>
 
@@ -99,13 +99,13 @@ const labels = computed(() => ({
   <main v-title="labels.reports">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        Reports
+        {{ $t('views.admin.moderation.ReportsList.title') }}
       </h2>
       <div class="ui hidden divider" />
       <div class="ui inline form">
         <div class="fields">
           <div class="ui field">
-            <label for="reports-search">Search</label>
+            <label for="reports-search">{{ $t('views.admin.moderation.ReportsList.searchLabel') }}</label>
             <form @submit.prevent="query = search.value">
               <input
                 id="reports-search"
@@ -118,7 +118,7 @@ const labels = computed(() => ({
             </form>
           </div>
           <div class="field">
-            <label for="reports-status">Status</label>
+            <label for="reports-status">{{ $t('views.admin.moderation.ReportsList.statusLabel') }}</label>
             <select
               id="reports-status"
               class="ui dropdown"
@@ -126,13 +126,13 @@ const labels = computed(() => ({
               @change="addSearchToken('resolved', ($event.target as HTMLSelectElement).value)"
             >
               <option value="">
-                All
+                {{ $t('views.admin.moderation.ReportsList.allOption') }}
               </option>
               <option value="yes">
-                Resolved
+                {{ $t('views.admin.moderation.ReportsList.resolvedStatus') }}
               </option>
               <option value="no">
-                Unresolved
+                {{ $t('views.admin.moderation.ReportsList.unresolvedStatus') }}
               </option>
             </select>
           </div>
@@ -144,7 +144,7 @@ const labels = computed(() => ({
             @update:model-value="addSearchToken('category', $event)"
           />
           <div class="field">
-            <label for="reports-ordering">Ordering</label>
+            <label for="reports-ordering">{{ $t('views.admin.moderation.ReportsList.orderingLabel') }}</label>
             <select
               id="reports-ordering"
               v-model="ordering"
@@ -160,17 +160,17 @@ const labels = computed(() => ({
             </select>
           </div>
           <div class="field">
-            <label for="reports-ordering-direction">Order</label>
+            <label for="reports-ordering-direction">{{ $t('views.admin.moderation.ReportsList.orderingDirectionLabel') }}</label>
             <select
               id="reports-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                Ascending
+                {{ $t('views.admin.moderation.ReportsList.ascendingOrdering') }}
               </option>
               <option value="-">
-                Descending
+                {{ $t('views.admin.moderation.ReportsList.descendingOrdering') }}
               </option>
             </select>
           </div>

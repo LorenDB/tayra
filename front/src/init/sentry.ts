@@ -90,11 +90,11 @@ export const install: InitModule = async ({ app, router, store }) => {
       return store.commit('ui/addMessage', {
         content: hostname === 'am.funkwhale.audio'
           ? t(
-            'To enhance the quality of our services, we would like to collect information about crashes during your session.<br><sub>The stack traces will be shared to <a href="%{origin}">Funkwhale\'s official Glitchtip instance</a> in order to help us understand how and when the errors occur.</sub>',
-            { hostname, origin }
+            'init.sentry.funkwhaleGlitchtipMessage',
+            { origin }
           )
           : t(
-            'To enhance the quality of our services, we would like to collect information about crashes during your session.<br><sub>The stack traces will be shared to <a href="%{origin}">%{hostname}</a> in order to help us understand how and when the errors occur.</sub>',
+            'init.sentry.ownGlitchtipMessage',
             { hostname, origin }
           ),
         date: new Date(),
@@ -103,7 +103,7 @@ export const install: InitModule = async ({ app, router, store }) => {
         classActions: 'bottom attached opaque',
         actions: [
           {
-            text: t('Allow'),
+            text: t('init.sentry.allow'),
             class: 'primary',
             click: () => {
               set(COOKIE, 'yes')
@@ -111,7 +111,7 @@ export const install: InitModule = async ({ app, router, store }) => {
             }
           },
           {
-            text: t('Deny'),
+            text: t('init.sentry.deny'),
             class: 'basic',
             click: () => set(COOKIE, 'no')
           }

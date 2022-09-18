@@ -55,7 +55,7 @@ const externalDomain = computed(() => {
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Channel')
+  title: t('views.channels.DetailBase.title')
 }))
 
 onBeforeRouteUpdate((to) => {
@@ -167,42 +167,22 @@ const updateSubscriptionCount = (delta: number) => {
                 />
                 <template v-if="totalTracks > 0">
                   <div class="ui hidden very small divider" />
-                  <translate
+                  <span
                     v-if="object.artist?.content_category === 'podcast'"
-
-                    translate-plural="%{ count } episodes"
-                    :translate-n="totalTracks"
-                    :translate-params="{count: totalTracks}"
                   >
-                    %{ count } episode
-                  </translate>
-                  <translate
+                    {{ $t('views.channels.DetailBase.episodeCount', {count: totalTracks}) }}
+                  </span>
+                  <span
                     v-else
-
-                    :translate-params="{count: totalTracks}"
-                    :translate-n="totalTracks"
-                    translate-plural="%{ count } tracks"
                   >
-                    %{ count } track
-                  </translate>
+                    {{ $t('views.channels.DetailBase.trackCount', {count: totalTracks}) }}
+                  </span>
                 </template>
                 <template v-if="object.attributed_to.full_username === $store.state.auth.fullUsername || $store.getters['channels/isSubscribed'](object.uuid)">
-                  <br><translate
-
-                    translate-plural="%{ count } subscribers"
-                    :translate-n="object?.subscriptions_count"
-                    :translate-params="{count: object?.subscriptions_count}"
-                  >
-                    %{ count } subscriber
-                  </translate>
-                  <br><translate
-
-                    translate-plural="%{ count } listenings"
-                    :translate-n="object?.downloads_count"
-                    :translate-params="{count: object?.downloads_count}"
-                  >
-                    %{ count } listening
-                  </translate>
+                  <br>
+                  {{ $t('views.channels.DetailBase.subscriberCount', {count: object?.subscriptions_count}) }}
+                  <br>
+                  {{ $t('views.channels.DetailBase.listeningsCount', {count: object?.downloads_count}) }}
                 </template>
                 <div class="ui hidden small divider" />
                 <a
@@ -216,14 +196,14 @@ const updateSubscriptionCount = (delta: number) => {
                   class="tiny"
                 >
                   <h4 class="header">
-                    Subscribe to this channel
+                    {{ $t('views.channels.DetailBase.subscribeModalHeader') }}
                   </h4>
                   <div class="scrollable content">
                     <div class="description">
                       <template v-if="$store.state.auth.authenticated">
                         <h3>
                           <i class="user icon" />
-                          Subscribe on Funkwhale
+                          {{ $t('views.channels.DetailBase.subscribeOnFunkwhale') }}
                         </h3>
                         <subscribe-button
                           :channel="object"
@@ -234,20 +214,20 @@ const updateSubscriptionCount = (delta: number) => {
                       <template v-if="object.rss_url">
                         <h3>
                           <i class="feed icon" />
-                          Subscribe via RSS
+                          {{ $t('views.channels.DetailBase.subscribeRss') }}
                         </h3>
                         <p>
-                          Copy-paste the following URL in your favorite podcatcher:
+                          {{ $t('views.channels.DetailBase.copyUrl') }}
                         </p>
                         <copy-input :value="object.rss_url" />
                       </template>
                       <template v-if="object.actor">
                         <h3>
                           <i class="bell icon" />
-                          Subscribe on the Fediverse
+                          {{ $t('views.channels.DetailBase.subscribeOnFediverse') }}
                         </h3>
                         <p>
-                          If you're using Mastodon or other fediverse applications, you can subscribe to this account:
+                          {{ $t('views.channels.DetailBase.subscribeOnFediverseDescription') }}
                         </p>
                         <copy-input
                           id="copy-tag"
@@ -258,7 +238,7 @@ const updateSubscriptionCount = (delta: number) => {
                   </div>
                   <div class="actions">
                     <button class="ui basic deny button">
-                      Cancel
+                      {{ $t('views.channels.DetailBase.cancelButton') }}
                     </button>
                   </div>
                 </semantic-modal>
@@ -276,7 +256,7 @@ const updateSubscriptionCount = (delta: number) => {
                       @click.prevent="showEmbedModal = !showEmbedModal"
                     >
                       <i class="code icon" />
-                      Embed
+                      {{ $t('views.channels.DetailBase.embedButton') }}
                     </a>
                     <a
                       v-if="object.actor && object.actor.domain != $store.getters['instance/domain']"
@@ -285,9 +265,7 @@ const updateSubscriptionCount = (delta: number) => {
                       class="basic item"
                     >
                       <i class="external icon" />
-                      <translate
-                        :translate-params="{domain: object.actor.domain}"
-                      >View on %{ domain }</translate>
+                      {{ $t('views.channels.DetailBase.domainViewLink', {domain: object.actor.domain}) }}
                     </a>
                     <div class="divider" />
                     <a
@@ -308,7 +286,7 @@ const updateSubscriptionCount = (delta: number) => {
                         @click.stop.prevent="showEditModal = true"
                       >
                         <i class="edit icon" />
-                        Edit…
+                        {{ $t('views.channels.DetailBase.editButton') }}
                       </a>
                       <dangerous-button
                         v-if="object"
@@ -316,22 +294,22 @@ const updateSubscriptionCount = (delta: number) => {
                         @confirm="remove()"
                       >
                         <i class="ui trash icon" />
-                        Delete…
+                        {{ $t('views.channels.DetailBase.deleteButton') }}
                         <template #modal-header>
                           <p>
-                            Delete this Channel?
+                            {{ $t('views.channels.DetailBase.deleteModalHeader') }}
                           </p>
                         </template>
                         <template #modal-content>
                           <div>
                             <p>
-                              The channel will be deleted, as well as any related files and data. This action is irreversible.
+                              {{ $t('views.channels.DetailBase.deleteModalMessage') }}
                             </p>
                           </div>
                         </template>
                         <template #modal-confirm>
                           <p>
-                            Delete
+                            {{ $t('views.channels.DetailBase.deleteModalConfirm') }}
                           </p>
                         </template>
                       </dangerous-button>
@@ -343,7 +321,7 @@ const updateSubscriptionCount = (delta: number) => {
                         :to="{name: 'manage.channels.detail', params: {id: object.uuid}}"
                       >
                         <i class="wrench icon" />
-                        Open in moderation interface
+                        {{ $t('views.channels.DetailBase.moderationLink') }}
                       </router-link>
                     </template>
                   </div>
@@ -374,9 +352,7 @@ const updateSubscriptionCount = (delta: number) => {
                     target="_blank"
                   >
                     <i class="external link icon" />
-                    <translate
-                      :translate-params="{domain: externalDomain}"
-                    >Mirrored from %{ domain }</translate>
+                    {{ $t('views.channels.DetailBase.mirroredLink', {domain: externalDomain}) }}
                   </a>
                 </div>
               </div>
@@ -391,7 +367,7 @@ const updateSubscriptionCount = (delta: number) => {
                   @click.prevent.stop="$store.commit('channels/showUploadModal', {show: true, config: {channel: object}})"
                 >
                   <i class="upload icon" />
-                  Upload
+                  {{ $t('views.channels.DetailBase.uploadButton') }}
                 </button>
               </div>
               <div class="ui buttons">
@@ -400,7 +376,7 @@ const updateSubscriptionCount = (delta: number) => {
                   class="vibrant"
                   :artist="object.artist"
                 >
-                  Play
+                  {{ $t('views.channels.DetailBase.playButton') }}
                 </play-button>
               </div>
               <div class="ui buttons">
@@ -416,7 +392,7 @@ const updateSubscriptionCount = (delta: number) => {
                 v-model:show="showEmbedModal"
               >
                 <h4 class="header">
-                  Embed this artist work on your website
+                  {{ $t('views.channels.DetailBase.embedModalHeader') }}
                 </h4>
                 <div class="scrolling content">
                   <div class="description">
@@ -428,7 +404,7 @@ const updateSubscriptionCount = (delta: number) => {
                 </div>
                 <div class="actions">
                   <button class="ui basic deny button">
-                    Cancel
+                    {{ $t('views.channels.DetailBase.cancelButton') }}
                   </button>
                 </div>
               </semantic-modal>
@@ -437,16 +413,16 @@ const updateSubscriptionCount = (delta: number) => {
                 v-model:show="showEditModal"
               >
                 <h4 class="header">
-                  <translate
+                  <span
                     v-if="object.artist?.content_category === 'podcast'"
                   >
-                    Podcast channel
-                  </translate>
-                  <translate
+                    {{ $t('views.channels.DetailBase.podcastChannelHeader') }}
+                  </span>
+                  <span
                     v-else
                   >
-                    Artist channel
-                  </translate>
+                    {{ $t('views.channels.DetailBase.artistChannelHeader') }}
+                  </span>
                 </h4>
                 <div class="scrolling content">
                   <channel-form
@@ -460,14 +436,14 @@ const updateSubscriptionCount = (delta: number) => {
                 </div>
                 <div class="actions">
                   <button class="ui left floated basic deny button">
-                    Cancel
+                    {{ $t('views.channels.DetailBase.cancelButton') }}
                   </button>
                   <button
                     :class="['ui', 'primary', 'confirm', {loading: edit.loading}, 'button']"
                     :disabled="!edit.submittable"
                     @click.stop="editForm?.submit"
                   >
-                    Update channel
+                    {{ $t('views.channels.DetailBase.updateChannelButton') }}
                   </button>
                 </div>
               </semantic-modal>
@@ -488,23 +464,23 @@ const updateSubscriptionCount = (delta: number) => {
 
                 :to="{name: 'channels.detail', params: {id: id}}"
               >
-                Overview
+                {{ $t('views.channels.DetailBase.channelOverview') }}
               </router-link>
               <router-link
                 class="item"
 
                 :to="{name: 'channels.detail.episodes', params: {id: id}}"
               >
-                <translate
+                <span
                   v-if="isPodcast"
                 >
-                  All Episodes
-                </translate>
-                <translate
+                  {{ $t('views.channels.DetailBase.channelEpisodes') }}
+                </span>
+                <span
                   v-else
                 >
-                  Tracks
-                </translate>
+                  {{ $t('views.channels.DetailBase.channelTracks') }}
+                </span>
               </router-link>
             </div>
             <div class="ui hidden divider" />

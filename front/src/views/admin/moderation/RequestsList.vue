@@ -86,8 +86,8 @@ fetchData()
 const { t } = useI18n()
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('Search by username…'),
-  reports: t('User Requests')
+  searchPlaceholder: t('views.admin.moderation.RequestsList.searchPlaceholder'),
+  reports: t('views.admin.moderation.RequestsList.title')
 }))
 </script>
 
@@ -95,13 +95,13 @@ const labels = computed(() => ({
   <main v-title="labels.reports">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        User Requests
+        {{ $t('views.admin.moderation.RequestsList.title') }}
       </h2>
       <div class="ui hidden divider" />
       <div class="ui inline form">
         <div class="fields">
           <div class="ui field">
-            <label for="requests-search">Search</label>
+            <label for="requests-search">{{ $t('views.admin.moderation.RequestsList.searchLabel') }}</label>
             <form @submit.prevent="query = search.value">
               <input
                 id="requests-search"
@@ -114,7 +114,7 @@ const labels = computed(() => ({
             </form>
           </div>
           <div class="field">
-            <label for="requests-status">Status</label>
+            <label for="requests-status">{{ $t('views.admin.moderation.RequestsList.statusLabel') }}</label>
             <select
               id="requests-status"
               class="ui dropdown"
@@ -122,21 +122,21 @@ const labels = computed(() => ({
               @change="addSearchToken('status', ($event.target as HTMLSelectElement).value)"
             >
               <option value="">
-                All
+                {{ $t('views.admin.moderation.RequestsList.allOption') }}
               </option>
               <option value="pending">
-                Pending
+                {{ $t('views.admin.moderation.RequestsList.pendingStatus') }}
               </option>
               <option value="approved">
-                Approved
+                {{ $t('views.admin.moderation.RequestsList.approvedStatus') }}
               </option>
               <option value="refused">
-                Refused
+                {{ $t('views.admin.moderation.RequestsList.refusedStatus') }}
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="requests-ordering">Ordering</label>
+            <label for="requests-ordering">{{ $t('views.admin.moderation.RequestsList.orderingLabel') }}</label>
             <select
               id="requests-ordering"
               v-model="ordering"
@@ -152,17 +152,17 @@ const labels = computed(() => ({
             </select>
           </div>
           <div class="field">
-            <label for="requests-ordering-direction">Order</label>
+            <label for="requests-ordering-direction">{{ $t('views.admin.moderation.RequestsList.orderingDirectionLabel') }}</label>
             <select
               id="requests-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                Ascending
+                {{ $t('views.admin.moderation.RequestsList.ascendingOrdering') }}
               </option>
               <option value="-">
-                Descending
+                {{ $t('views.admin.moderation.RequestsList.descendingOrdering') }}
               </option>
             </select>
           </div>

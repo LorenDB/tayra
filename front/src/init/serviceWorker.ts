@@ -21,19 +21,19 @@ export const install: InitModule = ({ store }) => {
     },
     onNeedRefresh () {
       store.commit('ui/addMessage', {
-        content: t('A new version of the app is available.'),
+        content: t('init.serviceWorker.newAppVersion'),
         date: new Date(),
         key: 'refreshApp',
         displayTime: 0,
         classActions: 'bottom attached opaque',
         actions: [
           {
-            text: t('Update'),
+            text: t('init.serviceWorker.actions.update'),
             class: 'primary',
             click: () => updateSW()
           },
           {
-            text: t('Later'),
+            text: t('init.serviceWorker.actions.later'),
             class: 'basic'
           }
         ]

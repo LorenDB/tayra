@@ -16,7 +16,7 @@ async function useErrorHandler (error: Error | BackendError, eventId?: string): 
     ? 'Unexpected API error'
     : 'Unexpected error'
 
-  let content = t('An unexpected error occured.')
+  let content = t('composables.useErrorHandler.unexpectedError')
 
   if ('backendErrors' in error) {
     logger.error(title, error, error.backendErrors)
@@ -35,7 +35,7 @@ async function useErrorHandler (error: Error | BackendError, eventId?: string): 
 
     const { get } = useCookies()
     if (get(COOKIE) === 'yes') {
-      content = t('An unexpected error occurred. <br><sub>To help us understand why it happened, please attach a detailed description of what you did that has triggered the error.</sub>')
+      content = t('composables.useErrorHandler.errorReport')
       const user = store.state.auth.authenticated
         ? {
             name: store.state.auth.username,
@@ -44,7 +44,7 @@ async function useErrorHandler (error: Error | BackendError, eventId?: string): 
         : undefined
 
       actions.push({
-        text: t('Leave feedback'),
+        text: t('composables.useErrorHandler.leaveFeedback'),
         class: 'basic red',
         click: () => Sentry.showReportDialog({
           eventId: eventId ?? Sentry.captureException(error),

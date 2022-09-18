@@ -33,16 +33,16 @@ const albumForm = ref()
     class="small"
   >
     <h4 class="header">
-      <translate
+      <span
         v-if="channel.content_category === 'podcast'"
       >
         {{ $t('components.channels.AlbumModal.newSeriesHeader') }}
-      </translate>
-      <translate
+      </span>
+      <span
         v-else
       >
         {{ $t('components.channels.AlbumModal.newAlbumHeader') }}
-      </translate>
+      </span>
     </h4>
     <div class="scrolling content">
       <channel-album-form

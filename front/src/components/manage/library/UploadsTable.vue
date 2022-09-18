@@ -344,11 +344,11 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
           </td>
           <td>
             <span v-if="scope.obj.size">{{ humanSize(scope.obj.size) }}</span>
-            <translate
+            <span
               v-else
             >
               {{ $t('components.manage.library.UploadsTable.notApplicable') }}
-            </translate>
+            </span>
           </td>
           <td>
             <human-date :date="scope.obj.creation_date" />
@@ -358,11 +358,11 @@ const getPrivacyLevelChoice = (privacyLevel: PrivacyLevel) => {
               v-if="scope.obj.accessed_date"
               :date="scope.obj.accessed_date"
             />
-            <translate
+            <span
               v-else
             >
               {{ $t('components.manage.library.UploadsTable.notApplicable') }}
-            </translate>
+            </span>
           </td>
         </template>
       </action-table>

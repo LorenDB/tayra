@@ -22,16 +22,16 @@ defineProps<Props>()
       <template #empty-state>
         <empty-state>
           <p>
-            <translate
+            <span
               v-if="isOwner"
             >
-              This library is empty, you should upload something in it!
-            </translate>
-            <translate
+              {{ $t('views.library.DetailTracks.ownerEmptyState') }}
+            </span>
+            <span
               v-else
             >
-              You may need to follow this library to see its content.
-            </translate>
+              {{ $t('views.library.DetailTracks.viewerEmptyState') }}
+            </span>
           </p>
         </empty-state>
       </template>

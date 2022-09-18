@@ -363,7 +363,7 @@ useEventListener(window, 'beforeunload', (event) => {
               {{ $t('components.library.FileUpload.localUploadCopyright') }}
             </li>
             <li>
-              {{ $t('components.library.FileUpload.localUploadTag') }}
+              {{ $t('components.library.FileUpload.localUploadTag') }}&nbsp;
               <a
                 href="http://picard.musicbrainz.org/"
                 target="_blank"

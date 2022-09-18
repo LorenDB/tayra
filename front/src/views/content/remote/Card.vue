@@ -50,8 +50,8 @@ const radioPlayable = computed(() => (
 const { t } = useI18n()
 const labels = computed(() => ({
   tooltips: {
-    me: t('This library is private and your approval from its owner is needed to access its content'),
-    everyone: t('This library is public and you can access its content freely')
+    me: t('views.content.remote.Card.privateTooltip'),
+    everyone: t('views.content.remote.Card.publicTooltip')
   }
 }))
 
@@ -65,8 +65,8 @@ const launchScan = async () => {
     store.commit('ui/addMessage', {
       date: new Date(),
       content: response.data.status === 'skipped'
-        ? t('Scan skipped (previous scan is too recent)')
-        : t('Scan launched')
+        ? t('views.content.remote.Card.scanSkipped')
+        : t('views.content.remote.Card.scanLaunched')
     })
   } catch (error) {
     useErrorHandler(error as Error)
@@ -82,8 +82,7 @@ const follow = async () => {
   } catch (error) {
     console.error(error)
     store.commit('ui/addMessage', {
-      // TODO (wvffle): Translate
-      content: 'Cannot follow remote library: ' + error,
+      content: t('views.content.remote.Card.followError', { error }),
       date: new Date()
     })
   }
@@ -100,8 +99,7 @@ const unfollow = async () => {
     }
   } catch (error) {
     store.commit('ui/addMessage', {
-      // TODO (wvffle): Translate
-      content: 'Cannot unfollow remote library: ' + error,
+      content: t('views.content.remote.Card.unfollowError', { error }),
       date: new Date()
     })
   }
@@ -193,14 +191,7 @@ watch(showScan, (shouldShow) => {
       </div>
       <div class="meta">
         <i class="music icon" />
-        <translate
-
-          :translate-params="{count: library.uploads_count}"
-          :translate-n="library.uploads_count"
-          translate-plural="%{ count } tracks"
-        >
-          %{ count } track
-        </translate>
+        {{ $t('views.content.remote.Card.trackCount', {count: library.uploads_count}) }}
       </div>
       <div
         v-if="displayScan && latestScan"
@@ -208,35 +199,30 @@ watch(showScan, (shouldShow) => {
       >
         <template v-if="latestScan.status === 'pending'">
           <i class="hourglass icon" />
-          Scan pending
+          {{ $t('views.content.remote.Card.scanPending') }}
         </template>
         <template v-if="latestScan.status === 'scanning'">
           <i class="loading spinner icon" />
-          <translate
-
-            :translate-params="{progress: scanProgress}"
-          >
-            Scanning… (%{ progress }%)
-          </translate>
+          {{ $t('views.content.remote.Card.scanProgress', {progress: scanProgress}) }}
         </template>
         <template v-else-if="latestScan.status === 'errored'">
           <i class="dangerdownload icon" />
-          Problem during scanning
+          {{ $t('views.content.remote.Card.scanFailure') }}
         </template>
         <template v-else-if="latestScan.status === 'finished' && latestScan.errored_files === 0">
           <i class="success download icon" />
-          Scanned
+          {{ $t('views.content.remote.Card.scanSuccess') }}
         </template>
         <template v-else-if="latestScan.status === 'finished' && latestScan.errored_files > 0">
           <i class="warning download icon" />
-          Scanned with errors
+          {{ $t('views.content.remote.Card.scanPartialSuccess') }}
         </template>
         <a
           href=""
           class="link right floated"
           @click.prevent="showScan = !showScan"
         >
-          Details
+          {{ $t('views.content.remote.Card.scanDetails') }}
           <i
             v-if="showScan"
             class="angle down icon"
@@ -248,9 +234,9 @@ watch(showScan, (shouldShow) => {
         </a>
         <div v-if="showScan">
           <template v-if="latestScan.modification_date">
-            Last update:<human-date :date="latestScan.modification_date" /><br>
+            {{ $t('views.content.remote.Card.lastUpdate') }}<human-date :date="latestScan.modification_date" /><br>
           </template>
-          Failed tracks: {{ latestScan.errored_files }}
+          {{ $t('views.content.remote.Card.failedTracks', {tracks: latestScan.errored_files}) }}
         </div>
       </div>
       <div
@@ -262,7 +248,7 @@ watch(showScan, (shouldShow) => {
           class="right floated link"
           @click.prevent="launchScan"
         >
-          Scan now <i class="paper plane icon" />
+          {{ $t('views.content.remote.Card.scanNowButton') }}<i class="paper plane icon" />
         </a>
       </div>
     </div>
@@ -278,7 +264,7 @@ watch(showScan, (shouldShow) => {
     >
       <div class="ui form">
         <div class="field">
-          <label :for="library.fid">Sharing link</label>
+          <label :for="library.fid">{{ $t('views.content.remote.Card.sharingLinkLabel') }}</label>
           <copy-input
             :id="library.fid"
             :button-classes="'basic'"
@@ -302,20 +288,20 @@ watch(showScan, (shouldShow) => {
           :class="['ui', 'success', {'loading': isLoadingFollow}, 'button']"
           @click="follow()"
         >
-          Follow
+          {{ $t('views.content.remote.Card.followButton') }}
         </button>
         <template v-else-if="!library.follow.approved">
           <button
             class="ui disabled button"
           >
             <i class="hourglass icon" />
-            Follow request pending approval
+            {{ $t('views.content.remote.Card.pendingApprovalButton') }}
           </button>
           <button
             class="ui button"
             @click="unfollow"
           >
-            Cancel follow request
+            {{ $t('views.content.remote.Card.cancelFollowButton') }}
           </button>
         </template>
         <template v-else-if="library.follow.approved">
@@ -323,22 +309,22 @@ watch(showScan, (shouldShow) => {
             :class="['ui', 'button']"
             :action="unfollow"
           >
-            Unfollow
+            {{ $t('views.content.remote.Card.unfollowButton') }}
             <template #modal-header>
               <p>
-                Unfollow this library?
+                {{ $t('views.content.remote.Card.unfollowModalHeader') }}
               </p>
             </template>
             <template #modal-content>
               <div>
                 <p>
-                  By unfollowing this library, you loose access to its content.
+                  {{ $t('views.content.remote.Card.unfollowModalMessage') }}
                 </p>
               </div>
             </template>
             <template #modal-confirm>
               <div>
-                Unfollow
+                {{ $t('views.content.remote.Card.unfollowButton') }}
               </div>
             </template>
           </dangerous-button>

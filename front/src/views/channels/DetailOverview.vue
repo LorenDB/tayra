@@ -101,15 +101,15 @@ const albumModal = ref()
           @click="pendingUploads.length = 0"
         />
         <h3 class="ui header">
-          Uploads published successfully
+          {{ $t('views.channels.DetailOverview.uploadsSuccessHeader') }}
         </h3>
         <p>
-          Processed uploads: {{ processedUploads.length }}/{{ pendingUploads.length }}
+          {{ $t('views.channels.DetailOverview.uploadsProgress', {finished: processedUploads.length, total: pendingUploads.length}) }}
         </p>
       </template>
       <template v-else-if="isOver">
         <h3 class="ui header">
-          Some uploads couldn't be published
+          {{ $t('views.channels.DetailOverview.uploadsFailureHeader') }}
         </h3>
         <div class="ui hidden divider" />
         <router-link
@@ -117,26 +117,26 @@ const albumModal = ref()
           class="ui basic button"
           :to="{name: 'content.libraries.files', query: {q: 'status:skipped'}}"
         >
-          View skipped uploads
+          {{ $t('views.channels.DetailOverview.skippedUploadsLink') }}
         </router-link>
         <router-link
           v-if="erroredUploads.length > 0"
           class="ui basic button"
           :to="{name: 'content.libraries.files', query: {q: 'status:errored'}}"
         >
-          View errored uploads
+          {{ $t('views.channels.DetailOverview.erroredUploadsLink') }}
         </router-link>
       </template>
       <template v-else>
         <div class="ui inline right floated active loader" />
         <h3 class="ui header">
-          Uploads are being processed
+          {{ $t('views.channels.DetailOverview.uploadsProcessingHeader') }}
         </h3>
         <p>
-          Your uploads are being processed by Funkwhale and will be live very soon.
+          {{ $t('views.channels.DetailOverview.uploadsProcessingMessage') }}
         </p>
         <p>
-          Processed uploads: {{ processedUploads.length }}/{{ pendingUploads.length }}
+          {{ $t('views.channels.DetailOverview.uploadsProgress', {finished: processedUploads.length, total: pendingUploads.length}) }}
         </p>
       </template>
     </div>
@@ -156,16 +156,16 @@ const albumModal = ref()
       :filters="{channel: object.uuid, ordering: '-creation_date', page_size: '25'}"
     >
       <h2 class="ui header">
-        <translate
+        <span
           v-if="isPodcast"
         >
-          Latest episodes
-        </translate>
-        <translate
+          {{ $t('views.channels.DetailOverview.latestEpisodes') }}
+        </span>
+        <span
           v-else
         >
-          Latest tracks
-        </translate>
+          {{ $t('views.channels.DetailOverview.latestTracks') }}
+        </span>
       </h2>
     </channel-entries>
     <div class="ui hidden divider" />
@@ -175,23 +175,23 @@ const albumModal = ref()
       :is-podcast="isPodcast"
     >
       <h2 class="ui with-actions header">
-        <translate
+        <span
           v-if="isPodcast"
         >
-          Series
-        </translate>
-        <translate
+          {{ $t('views.channels.DetailOverview.seriesHeader') }}
+        </span>
+        <span
           v-else
         >
-          Albums
-        </translate>
+          {{ $t('views.channels.DetailOverview.albumsHeader') }}
+        </span>
         <div
           v-if="isOwner"
           class="actions"
         >
           <a @click.stop.prevent="albumModal.show = true">
             <i class="plus icon" />
-            Add new
+            {{ $t('views.channels.DetailOverview.addAlbumLink') }}
           </a>
         </div>
       </h2>

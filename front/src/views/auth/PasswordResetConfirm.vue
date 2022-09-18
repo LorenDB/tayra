@@ -18,7 +18,7 @@ const props = defineProps<Props>()
 const { t } = useI18n()
 
 const labels = computed(() => ({
-  changePassword: t('Change your password')
+  changePassword: t('views.auth.PasswordResetConfirm.title')
 }))
 
 const newPassword = ref('')
@@ -68,7 +68,7 @@ const submit = async () => {
             class="ui negative message"
           >
             <h4 class="header">
-              Error while changing your password
+              {{ $t('views.auth.PasswordResetConfirm.changeFailureHeader') }}
             </h4>
             <ul class="list">
               <li
@@ -81,25 +81,25 @@ const submit = async () => {
           </div>
           <template v-if="token && uid">
             <div class="field">
-              <label for="password-field">New password</label>
+              <label for="password-field">{{ $t('views.auth.PasswordResetConfirm.newPasswordLabel') }}</label>
               <password-input
                 v-model="newPassword"
                 field-id="password-field"
               />
             </div>
             <router-link :to="{path: '/login'}">
-              Back to login
+              {{ $t('views.auth.PasswordResetConfirm.backToLoginLink') }}
             </router-link>
             <button
               :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
               type="submit"
             >
-              Update your password
+              {{ $t('views.auth.PasswordResetConfirm.updatePasswordButton') }}
             </button>
           </template>
           <template v-else>
             <p>
-              If the e-mail address provided in the previous step is valid and linked to a user account, you should receive an e-mail with reset instructions in the next couple of minutes.
+              {{ $t('views.auth.PasswordResetConfirm.requestSentMessage') }}
             </p>
           </template>
         </form>
@@ -108,13 +108,13 @@ const submit = async () => {
           class="ui positive message"
         >
           <h4 class="header">
-            Password updated successfully
+            {{ $t('views.auth.PasswordResetConfirm.changeSuccessHeader') }}
           </h4>
           <p>
-            Your password has been updated successfully.
+            {{ $t('views.auth.PasswordResetConfirm.changeSuccessMessage') }}
           </p>
           <router-link :to="{name: 'login'}">
-            Proceed to login
+            {{ $t('views.auth.PasswordResetConfirm.goToLoginLink') }}
           </router-link>
         </div>
       </div>

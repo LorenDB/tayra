@@ -157,7 +157,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.TagDetail.activityHeader') }}
+                  {{ $t('views.admin.library.TagDetail.activityHeader') }}&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
@@ -179,7 +179,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.TagDetail.audioContentHeader') }}
+                  {{ $t('views.admin.library.TagDetail.audioContentHeader') }}&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">

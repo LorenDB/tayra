@@ -26,33 +26,33 @@ const { t } = useI18n()
 
 const tags: ModeratedField = {
   id: 'tags',
-  label: t('Tags'),
+  label: t('composables.moderation.useReportConfigs.tags.label'),
   getValueRepr: (tags: string[]) => tags.slice().sort().join('\n')
 }
 
 const name: ModeratedField = {
   id: 'name',
-  label: t('Name')
+  label: t('composables.moderation.useReportConfigs.name.label')
 }
 
 const creationDate: ModeratedField = {
   id: 'creation_date',
-  label: t('Creation date')
+  label: t('composables.moderation.useReportConfigs.creationDate.label')
 }
 
 const musicBrainzId: ModeratedField = {
   id: 'mbid',
-  label: t('MusicBrainz ID')
+  label: t('composables.moderation.useReportConfigs.musicbrainzId.label')
 }
 
 const visibility: ModeratedField = {
   id: 'privacy_level',
-  label: t('Visibility')
+  label: t('composables.moderation.useReportConfigs.visibility.label')
 }
 
 export default (): Configs => ({
   artist: {
-    label: t('Artist'),
+    label: t('composables.moderation.useReportConfigs.artist.label'),
     icon: 'users',
     getDeleteUrl: (obj) => {
       return `manage/library/artists/${obj.id}/`
@@ -69,7 +69,7 @@ export default (): Configs => ({
     ]
   },
   album: {
-    label: t('Album'),
+    label: t('composables.moderation.useReportConfigs.album.label'),
     icon: 'play',
     getDeleteUrl: (obj) => {
       return `manage/library/albums/${obj.id}/`
@@ -81,19 +81,19 @@ export default (): Configs => ({
     moderatedFields: [
       {
         id: 'title',
-        label: t('Title')
+        label: t('composables.moderation.useReportConfigs.album.title')
       },
       creationDate,
       {
         id: 'release_date',
-        label: t('Release date')
+        label: t('composables.moderation.useReportConfigs.album.releaseDate')
       },
       tags,
       musicBrainzId
     ]
   },
   track: {
-    label: t('Track'),
+    label: t('composables.moderation.useReportConfigs.track.label'),
     icon: 'music',
     getDeleteUrl: (obj) => {
       return `manage/library/tracks/${obj.id}/`
@@ -105,26 +105,26 @@ export default (): Configs => ({
     moderatedFields: [
       {
         id: 'title',
-        label: t('Title')
+        label: t('composables.moderation.useReportConfigs.track.title')
       },
       {
         id: 'position',
-        label: t('Position')
+        label: t('composables.moderation.useReportConfigs.track.position')
       },
       {
         id: 'copyright',
-        label: t('Copyright')
+        label: t('composables.moderation.useReportConfigs.track.copyright')
       },
       {
         id: 'license',
-        label: t('License')
+        label: t('composables.moderation.useReportConfigs.track.license')
       },
       tags,
       musicBrainzId
     ]
   },
   library: {
-    label: t('Library'),
+    label: t('composables.moderation.useReportConfigs.library.label'),
     icon: 'book',
     getDeleteUrl: (obj) => {
       return `manage/library/libraries/${obj.uuid}/`
@@ -136,13 +136,13 @@ export default (): Configs => ({
       name,
       {
         id: 'description',
-        label: t('Description')
+        label: t('composables.moderation.useReportConfigs.library.description')
       },
       visibility
     ]
   },
   playlist: {
-    label: t('Playlist'),
+    label: t('composables.moderation.useReportConfigs.playlist.label'),
     icon: 'list',
     urls: {
       getDetail: (obj) => ({ name: 'library.playlists.detail', params: { id: obj.id } })
@@ -154,7 +154,7 @@ export default (): Configs => ({
     ]
   },
   account: {
-    label: t('Account'),
+    label: t('composables.moderation.useReportConfigs.account.label'),
     icon: 'user',
     urls: {
       getDetail: (obj) => ({ name: 'profile.full.overview', params: { username: obj.preferred_username, domain: obj.domain } }),
@@ -164,12 +164,12 @@ export default (): Configs => ({
       name,
       {
         id: 'summary',
-        label: t('Bio')
+        label: t('composables.moderation.useReportConfigs.account.summary')
       }
     ]
   },
   channel: {
-    label: t('Channel'),
+    label: t('composables.moderation.useReportConfigs.channel.label'),
     icon: 'stream',
     urls: {
       getDetail: (obj) => ({ name: 'channels.detail', params: { id: obj.uuid } }),

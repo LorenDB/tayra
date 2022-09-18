@@ -53,14 +53,14 @@ const purgeErroredFiles = () => purge('errored')
 <template>
   <div class="ui segment">
     <h3 class="ui header">
-      Current usage
+      {{ $t('views.content.libraries.Quota.currentUsageHeader') }}
     </h3>
     <div
       v-if="isLoading"
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        Loading usage data…
+        {{ $t('views.content.libraries.Quota.loadingMessage') }}
       </div>
     </div>
     <div
@@ -72,19 +72,14 @@ const purgeErroredFiles = () => purge('errored')
         :style="{width: `${progress}%`}"
       >
         <div class="progress">
-          {{ progress }}%
+          {{ $t('views.content.libraries.Quota.percentUsed', {progress: progress}) }}
         </div>
       </div>
       <div
         v-if="quotaStatus"
         class="label"
       >
-        <translate
-
-          :translate-params="{max: humanSize(quotaStatus.max * 1000 * 1000), current: humanSize(quotaStatus.current * 1000 * 1000)}"
-        >
-          %{ current } used on %{ max } allowed
-        </translate>
+        {{ $t('views.content.libraries.Quota.currentUsage', {max: humanSize(quotaStatus.max * 1000 * 1000), current: humanSize(quotaStatus.current * 1000 * 1000)}) }}
       </div>
     </div>
     <div class="ui hidden divider" />
@@ -101,7 +96,7 @@ const purgeErroredFiles = () => purge('errored')
             {{ humanSize(quotaStatus.pending * 1000 * 1000) }}
           </div>
           <div class="label">
-            Pending files
+            {{ $t('views.content.libraries.Quota.pendingLabel') }}
           </div>
         </div>
         <div>
@@ -109,27 +104,27 @@ const purgeErroredFiles = () => purge('errored')
             class="ui basic primary tiny button"
             :to="{name: 'content.libraries.files', query: {q: compileTokens([{field: 'status', value: 'pending'}])}}"
           >
-            View files
+            {{ $t('views.content.libraries.Quota.viewFilesLink') }}
           </router-link>
 
           <dangerous-button
             class="ui basic tiny button"
             :action="purgePendingFiles"
           >
-            Purge
+            {{ $t('views.content.libraries.Quota.purgeButton') }}
             <template #modal-header>
               <p>
-                Purge pending files?
+                {{ $t('views.content.libraries.Quota.purgePendingModalHeader') }}
               </p>
             </template>
             <template #modal-content>
               <p>
-                Removes uploaded but yet to be processed tracks completely, adding the corresponding data to your quota.
+                {{ $t('views.content.libraries.Quota.purgePendingModalMessage') }}
               </p>
             </template>
             <template #modal-confirm>
               <div>
-                Purge
+                {{ $t('views.content.libraries.Quota.purgeButton') }}
               </div>
             </template>
           </dangerous-button>
@@ -144,7 +139,7 @@ const purgeErroredFiles = () => purge('errored')
             {{ humanSize(quotaStatus.skipped * 1000 * 1000) }}
           </div>
           <div class="label">
-            Skipped files
+            {{ $t('views.content.libraries.Quota.skippedLabel') }}
           </div>
         </div>
         <div>
@@ -152,26 +147,26 @@ const purgeErroredFiles = () => purge('errored')
             class="ui basic primary tiny button"
             :to="{name: 'content.libraries.files', query: {q: compileTokens([{field: 'status', value: 'skipped'}])}}"
           >
-            View files
+            {{ $t('views.content.libraries.Quota.viewFilesLink') }}
           </router-link>
           <dangerous-button
             class="ui basic tiny button"
             :action="purgeSkippedFiles"
           >
-            Purge
+            {{ $t('views.content.libraries.Quota.purgeButton') }}
             <template #modal-header>
               <p>
-                Purge skipped files?
+                {{ $t('views.content.libraries.Quota.purgeSkippedModalHeader') }}
               </p>
             </template>
             <template #modal-content>
               <p>
-                Removes uploaded tracks skipped during the import processes completely, adding the corresponding data to your quota.
+                {{ $t('views.content.libraries.Quota.purgeSkippedModalMessage') }}
               </p>
             </template>
             <template #modal-confirm>
               <div>
-                Purge
+                {{ $t('views.content.libraries.Quota.purgeButton') }}
               </div>
             </template>
           </dangerous-button>
@@ -186,7 +181,7 @@ const purgeErroredFiles = () => purge('errored')
             {{ humanSize(quotaStatus.errored * 1000 * 1000) }}
           </div>
           <div class="label">
-            Errored files
+            {{ $t('views.content.libraries.Quota.erroredLabel') }}
           </div>
         </div>
         <div>
@@ -194,26 +189,26 @@ const purgeErroredFiles = () => purge('errored')
             class="ui basic primary tiny button"
             :to="{name: 'content.libraries.files', query: {q: compileTokens([{field: 'status', value: 'errored'}])}}"
           >
-            View files
+            {{ $t('views.content.libraries.Quota.viewFilesLink') }}
           </router-link>
           <dangerous-button
             class="ui basic tiny button"
             :action="purgeErroredFiles"
           >
-            Purge
+            {{ $t('views.content.libraries.Quota.purgeButton') }}
             <template #modal-header>
               <p>
-                Purge errored files?
+                {{ $t('views.content.libraries.Quota.purgeErroredModalHeader') }}
               </p>
             </template>
             <template #modal-content>
               <p>
-                Removes uploaded tracks that could not be processed by the server completely, adding the corresponding data to your quota.
+                {{ $t('views.content.libraries.Quota.purgeErroredModalMessage') }}
               </p>
             </template>
             <template #modal-confirm>
               <div>
-                Purge
+                {{ $t('views.content.libraries.Quota.purgeButton') }}
               </div>
             </template>
           </dangerous-button>

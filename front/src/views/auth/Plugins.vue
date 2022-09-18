@@ -11,7 +11,7 @@ import useErrorHandler from '~/composables/useErrorHandler'
 const { t } = useI18n()
 
 const labels = computed(() => ({
-  title: t('Manage plugins')
+  title: t('views.auth.Plugins.title')
 }))
 
 const isLoading = ref(false)

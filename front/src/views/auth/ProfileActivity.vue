@@ -27,7 +27,7 @@ const recentActivity = ref(0)
         :client-only="true"
       />
       <h2 class="ui header">
-        Recently listened
+        {{ $t('views.auth.ProfileActivity.recentlyListened') }}
       </h2>
       <div class="ui divider" />
       <track-widget
@@ -39,7 +39,7 @@ const recentActivity = ref(0)
     <div class="ui hidden divider" />
     <div>
       <h2 class="ui header">
-        Recently favorited
+        {{ $t('views.auth.ProfileActivity.recentlyFavorited') }}
       </h2>
       <div class="ui divider" />
       <track-widget
@@ -50,7 +50,7 @@ const recentActivity = ref(0)
     <div class="ui hidden divider" />
     <div>
       <h2 class="ui header">
-        Playlists
+        {{ $t('views.auth.ProfileActivity.playlistsHeader') }}
       </h2>
       <div class="ui divider" />
       <playlist-widget

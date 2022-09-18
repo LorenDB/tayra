@@ -46,7 +46,7 @@ const libraryCreated = (library: Library) => {
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        Loading Libraries…
+        {{ $t('views.content.libraries.Home.loadingLibraries') }}
       </div>
     </div>
     <div
@@ -54,11 +54,11 @@ const libraryCreated = (library: Library) => {
       class="ui text container"
     >
       <h1 class="ui header">
-        My libraries
+        {{ $t('views.content.libraries.Home.ownLibrariesHeader') }}
       </h1>
 
       <p v-if="libraries.length == 0">
-        Looks like you don't have a library, it's time to create one.
+        {{ $t('views.content.libraries.Home.emptyState') }}
       </p>
       <a
         :aria-expanded="!hiddenForm"
@@ -73,7 +73,7 @@ const libraryCreated = (library: Library) => {
           v-else
           class="minus icon"
         />
-        Create a new library
+        {{ $t('views.content.libraries.Home.createLibraryLink') }}
       </a>
       <library-form
         v-if="!hiddenForm"

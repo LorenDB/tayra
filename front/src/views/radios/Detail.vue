@@ -26,7 +26,7 @@ const page = ref(1)
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Radio')
+  title: t('views.radios.Detail.title')
 }))
 
 const isLoading = ref(false)
@@ -82,8 +82,7 @@ const deleteRadio = async () => {
           <div class="content">
             {{ radio.name }}
             <div class="sub header">
-              Radio containing {{ totalTracks }} tracks,
-              by <username :username="radio.user.username" />
+              {{ $t('views.radios.Detail.radioSubheader', {tracks: totalTracks}) }}<username :username="radio.user.username" />
             </div>
           </div>
         </h2>
@@ -98,30 +97,26 @@ const deleteRadio = async () => {
             :to="{name: 'library.radios.edit', params: {id: radio.id}}"
           >
             <i class="pencil icon" />
-            Edit…
+            {{ $t('views.radios.Detail.editButton') }}
           </router-link>
           <dangerous-button
             class="ui labeled danger icon button"
             :action="deleteRadio"
           >
-            <i class="trash icon" /> Delete
+            <i class="trash icon" /> {{ $t('views.radios.Detail.deleteButton') }}
             <template #modal-header>
-              <p
-                v-translate="{radio: radio.name}"
-
-                :translate-params="{radio: radio.name}"
-              >
-                Do you want to delete the radio "%{ radio }"?
+              <p>
+                {{ $t('views.radios.Detail.deleteModalHeader', {radio: radio.name}) }}
               </p>
             </template>
             <template #modal-content>
               <p>
-                This will completely delete this radio and cannot be undone.
+                {{ $t('views.radios.Detail.deleteModalMessage') }}
               </p>
             </template>
             <template #modal-confirm>
               <p>
-                Delete radio
+                {{ $t('views.radios.Detail.deleteModalConfirm') }}
               </p>
             </template>
           </dangerous-button>
@@ -133,7 +128,7 @@ const deleteRadio = async () => {
       class="ui vertical stripe segment"
     >
       <h2>
-        Tracks
+        {{ $t('views.radios.Detail.tracksHeader') }}
       </h2>
       <track-table :tracks="tracks" />
       <div class="ui center aligned basic segment">
@@ -151,7 +146,7 @@ const deleteRadio = async () => {
     >
       <div class="ui icon header">
         <i class="rss icon" />
-        No tracks have been added to this radio yet
+        {{ $t('views.radios.Detail.emptyState') }}
       </div>
       <router-link
         v-if="$store.state.auth.username === radio?.user.username"
@@ -159,7 +154,7 @@ const deleteRadio = async () => {
         :to="{name: 'library.radios.edit', params: { id: radio?.id }}"
       >
         <i class="pencil icon" />
-        Edit…
+        {{ $t('views.radios.Detail.editButton') }}
       </router-link>
     </div>
   </main>

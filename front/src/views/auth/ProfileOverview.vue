@@ -42,7 +42,7 @@ const createForm = ref()
     </div>
     <div>
       <h2 class="ui with-actions header">
-        Channels
+        {{ $t('views.auth.ProfileOverview.channelsHeader') }}
         <div
           v-if="$store.state.auth.authenticated && object.full_username === $store.state.auth.fullUsername"
           class="actions"
@@ -52,47 +52,47 @@ const createForm = ref()
             @click.stop.prevent="showCreateModal = true"
           >
             <i class="plus icon" />
-            Add new
+            {{ $t('views.auth.ProfileOverview.addNewLink') }}
           </a>
         </div>
       </h2>
       <channels-widget :filters="{scope: `actor:${object.full_username}`}" />
       <h2 class="ui with-actions header">
-        User Libraries
+        {{ $t('views.auth.ProfileOverview.librariesHeader') }}
         <div
           v-if="$store.state.auth.authenticated && object.full_username === $store.state.auth.fullUsername"
           class="actions"
         >
           <router-link :to="{name: 'content.libraries.index'}">
             <i class="plus icon" />
-            Add new
+            {{ $t('views.auth.ProfileOverview.addNewLink') }}
           </router-link>
         </div>
       </h2>
       <library-widget :url="`federation/actors/${object.full_username}/libraries/`">
         <template #title>
-          This user shared the following libraries
+          {{ $t('views.auth.ProfileOverview.sharedLibraries') }}
         </template>
       </library-widget>
     </div>
 
     <semantic-modal v-model:show="showCreateModal">
       <h4 class="header">
-        <translate
+        <span
           v-if="step === 1"
         >
-          Create channel
-        </translate>
-        <translate
+          {{ $t('views.auth.ProfileOverview.createChannelModalHeader') }}
+        </span>
+        <span
           v-else-if="category === 'podcast'"
         >
-          Podcast channel
-        </translate>
-        <translate
+          {{ $t('views.auth.ProfileOverview.podcastChannelHeader') }}
+        </span>
+        <span
           v-else
         >
-          Artist channel
-        </translate>
+          {{ $t('views.auth.ProfileOverview.artistChannelHeader') }}
+        </span>
       </h4>
       <div
         ref="modalContent"
@@ -115,21 +115,21 @@ const createForm = ref()
           v-if="step === 1"
           class="ui basic deny button"
         >
-          Cancel
+          {{ $t('views.auth.ProfileOverview.cancelButton') }}
         </button>
         <button
           v-if="step > 1"
           class="ui basic button"
           @click.stop.prevent="step -= 1"
         >
-          Previous step
+          {{ $t('views.auth.ProfileOverview.previousButton') }}
         </button>
         <button
           v-if="step === 1"
           class="ui primary button"
           @click.stop.prevent="step += 1"
         >
-          Next step
+          {{ $t('views.auth.ProfileOverview.nextButton') }}
         </button>
         <button
           v-if="step === 2"
@@ -138,7 +138,7 @@ const createForm = ref()
           :disabled="!submittable && !loading"
           @click.prevent.stop="createForm.submit"
         >
-          Create channel
+          {{ $t('views.auth.ProfileOverview.createChannelButton') }}
         </button>
       </div>
     </semantic-modal>

@@ -5,8 +5,8 @@ import { computed } from 'vue'
 const { t } = useI18n()
 
 const labels = computed(() => ({
-  manageUsers: t('Manage users'),
-  secondaryMenu: t('Secondary menu')
+  manageUsers: t('views.admin.users.Base.title'),
+  secondaryMenu: t('views.admin.users.Base.secondaryMenu')
 }))
 </script>
 
@@ -24,13 +24,13 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.users.users.list'}"
       >
-        Users
+        {{ $t('views.admin.users.Base.usersLink') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.users.invitations.list'}"
       >
-        Invitations
+        {{ $t('views.admin.users.Base.invitationsLink') }}
       </router-link>
     </nav>
     <router-view :key="$route.fullPath" />

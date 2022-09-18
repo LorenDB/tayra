@@ -44,16 +44,16 @@ fetchLicenses()
   <section class="ui vertical stripe segment">
     <div class="ui text container">
       <h2>
-        <translate
+        <span
           v-if="canEdit"
         >
           {{ $t('components.library.TrackEdit.editTrackHeader') }}
-        </translate>
-        <translate
+        </span>
+        <span
           key="2"
         >
           {{ $t('components.library.TrackEdit.suggestEditHeader') }}
-        </translate>
+        </span>
       </h2>
       <div
         v-if="!object.is_local"

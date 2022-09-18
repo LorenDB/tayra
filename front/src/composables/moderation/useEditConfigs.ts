@@ -27,7 +27,7 @@ const description: ConfigField = {
   id: 'description',
   type: 'content',
   required: true,
-  label: t('Description'),
+  label: t('composables.moderation.useEditConfigs.description.label'),
   getValue: (obj) => obj.description ?? { text: '', content_type: 'text/markdown' },
   getValueRepr: getContentValueRepr
 }
@@ -36,7 +36,7 @@ const cover: ConfigField = {
   id: 'cover',
   type: 'attachment',
   required: false,
-  label: t('Cover'),
+  label: t('composables.moderation.useEditConfigs.cover.label'),
   getValue: (obj) => obj.cover?.uuid ?? null
 }
 
@@ -44,7 +44,7 @@ const tags: ConfigField = {
   id: 'tags',
   type: 'tags',
   required: true,
-  label: t('Tags'),
+  label: t('composables.moderation.useEditConfigs.tags.label'),
   getValue: (obj) => { return obj.tags },
   getValueRepr: (tags: string[]) => tags.slice().sort().join('\n')
 }
@@ -57,7 +57,7 @@ export default (): Configs => ({
         id: 'name',
         type: 'text',
         required: true,
-        label: t('Name'),
+        label: t('composables.moderation.useEditConfigs.artist.name'),
         getValue: (artist) => (artist as Artist).name
       },
       description,
@@ -71,7 +71,7 @@ export default (): Configs => ({
         id: 'title',
         type: 'text',
         required: true,
-        label: t('Title'),
+        label: t('composables.moderation.useEditConfigs.album.title'),
         getValue: (album) => (album as Album).title
       },
       description,
@@ -79,7 +79,7 @@ export default (): Configs => ({
         id: 'release_date',
         type: 'text',
         required: false,
-        label: t('Release date'),
+        label: t('composables.moderation.useEditConfigs.album.releaseDate'),
         getValue: (album) => (album as Album).release_date
       },
       cover,
@@ -92,7 +92,7 @@ export default (): Configs => ({
         id: 'title',
         type: 'text',
         required: true,
-        label: t('Title'),
+        label: t('composables.moderation.useEditConfigs.track.title'),
         getValue: (track) => (track as Track).title
       },
       description,
@@ -102,21 +102,21 @@ export default (): Configs => ({
         type: 'text',
         inputType: 'number',
         required: false,
-        label: t('Position'),
+        label: t('composables.moderation.useEditConfigs.track.position'),
         getValue: (track) => (track as Track).position
       },
       {
         id: 'copyright',
         type: 'text',
         required: false,
-        label: t('Copyright'),
+        label: t('composables.moderation.useEditConfigs.track.copyright'),
         getValue: (track) => (track as Track).copyright
       },
       {
         id: 'license',
         type: 'license',
         required: false,
-        label: t('License'),
+        label: t('composables.moderation.useEditConfigs.track.license'),
         getValue: (track) => (track as Track).license
       },
       tags

@@ -18,8 +18,8 @@ const { t } = useI18n()
 const router = useRouter()
 
 const labels = computed(() => ({
-  placeholder: t('Enter the e-mail address linked to your account'),
-  reset: t('Reset your password')
+  placeholder: t('views.auth.PasswordReset.placeholder'),
+  reset: t('views.auth.PasswordReset.title')
 }))
 
 const email = ref(props.defaultEmail)
@@ -51,7 +51,7 @@ onMounted(() => emailInput.value.focus())
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          Reset your password
+          {{ $t('views.auth.PasswordReset.title') }}
         </h2>
         <form
           class="ui form"
@@ -63,7 +63,7 @@ onMounted(() => emailInput.value.focus())
             class="ui negative message"
           >
             <h4 class="header">
-              Error while asking for a password reset
+              {{ $t('views.auth.PasswordReset.resetFailureHeader') }}
             </h4>
             <ul class="list">
               <li
@@ -75,10 +75,10 @@ onMounted(() => emailInput.value.focus())
             </ul>
           </div>
           <p>
-            Use this form to request a password reset. We will send an e-mail to the given address with instructions to reset your password.
+            {{ $t('views.auth.PasswordReset.resetFormDescription') }}
           </p>
           <div class="field">
-            <label for="account-email">Account's e-mail address</label>
+            <label for="account-email">{{ $t('views.auth.PasswordReset.emailLabel') }}</label>
             <input
               id="account-email"
               ref="emailInput"
@@ -91,13 +91,13 @@ onMounted(() => emailInput.value.focus())
             >
           </div>
           <router-link :to="{path: '/login'}">
-            Back to login
+            {{ $t('views.auth.PasswordReset.backToLoginLink') }}
           </router-link>
           <button
             :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
             type="submit"
           >
-            Ask for a password reset
+            {{ $t('views.auth.PasswordReset.requestResetButton') }}
           </button>
         </form>
       </div>

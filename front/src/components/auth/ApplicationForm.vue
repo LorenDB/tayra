@@ -202,16 +202,16 @@ const allScopes = computed(() => {
       :class="['ui', {'loading': isLoading}, 'success', 'button']"
       type="submit"
     >
-      <translate
+      <span
         v-if="app !== null"
       >
         {{ $t('components.auth.ApplicationForm.updateButtonLabel') }}
-      </translate>
-      <translate
+      </span>
+      <span
         v-else
       >
         {{ $t('components.auth.ApplicationForm.createButtonLabel') }}
-      </translate>
+      </span>
     </button>
   </form>
 </template>

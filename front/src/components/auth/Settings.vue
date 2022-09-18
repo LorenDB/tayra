@@ -384,7 +384,7 @@ fetchOwnedApps()
           {{ $t('components.auth.Settings.changePasswordHeader') }}
         </h2>
         <div class="ui message">
-          {{ $t('components.auth.Settings.changePasswordMessage') }}
+          {{ $t('components.auth.Settings.changePasswordMessage') }}&nbsp;{{ $t('components.auth.Settings.changePasswordMessageContinued') }}
         </div>
         <form
           class="ui form"

@@ -47,7 +47,7 @@ const scanResult = ref()
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        Loading remote libraries…
+        {{ $t('views.content.remote.Home.loadingMessage') }}
       </div>
     </div>
     <div
@@ -55,10 +55,10 @@ const scanResult = ref()
       class="ui text container"
     >
       <h1 class="ui header">
-        Remote libraries
+        {{ $t('views.content.remote.Home.remoteLibrariesHeader') }}
       </h1>
       <p>
-        Remote libraries are owned by other users on the network. You can access them as long as they are public or you are granted access.
+        {{ $t('views.content.remote.Home.remoteLibrariesDescription') }}
       </p>
       <scan-form @scanned="scanResult = $event" />
       <div class="ui hidden divider" />
@@ -74,14 +74,15 @@ const scanResult = ref()
       </div>
       <template v-if="existingFollows && existingFollows.count > 0">
         <h2>
-          Known libraries
+          {{ $t('views.content.remote.Home.knownLibrariesHeader') }}
         </h2>
         <a
           href=""
           class="discrete link"
           @click.prevent="fetchData"
         >
-          <i :class="['ui', 'circular', 'refresh', 'icon']" /> Refresh
+          <i :class="['ui', 'circular', 'refresh', 'icon']" />
+          {{ $t('views.content.remote.Home.refreshButton') }}
         </a>
         <div class="ui hidden divider" />
         <div class="ui two cards">

@@ -93,11 +93,11 @@ store.dispatch('playlists/fetchOwn')
           </div>
         </h2>
       </template>
-      <translate
+      <span
         v-else
       >
         {{ $t('components.playlists.PlaylistModal.managePlaylistsHeader') }}
-      </translate>
+      </span>
     </h4>
     <div class="scrolling content">
       <playlist-form

@@ -36,16 +36,16 @@ const isPlayable = computed(() => (object.value?.uploads_count ?? 0) > 0 && (
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Library'),
+  title: t('views.library.LibraryBase.title'),
   visibility: {
-    me: t('Private'),
-    instance: t('Restricted'),
-    everyone: t('Public')
+    me: t('views.library.LibraryBase.privateVisibility'),
+    instance: t('views.library.LibraryBase.instanceVisibility'),
+    everyone: t('views.library.LibraryBase.publicVisibility')
   },
   tooltips: {
-    me: t('This library is private and your approval from its owner is needed to access its content'),
-    instance: t('This library is restricted to users on this pod only'),
-    everyone: t('This library is public and you can access its content freely')
+    me: t('views.library.LibraryBase.privateTooltip'),
+    instance: t('views.library.LibraryBase.instanceTooltip'),
+    everyone: t('views.library.LibraryBase.publicTooltip')
   }
 }))
 
@@ -110,9 +110,7 @@ const updateUploads = (count: number) => {
                 class="basic item"
               >
                 <i class="external icon" />
-                <translate
-                  :translate-params="{domain: object.actor.domain}"
-                >View on %{ domain }</translate>
+                {{ $t('views.library.LibraryBase.domainViewLink', {domain: object.actor.domain}) }}
               </a>
               <div
                 v-for="obj in getReportableObjects({library: object})"
@@ -131,7 +129,7 @@ const updateUploads = (count: number) => {
                 :to="{name: 'manage.library.libraries.detail', params: {id: object.uuid}}"
               >
                 <i class="wrench icon" />
-                Open in moderation interface
+                {{ $t('views.library.LibraryBase.moderationLink') }}
               </router-link>
             </div>
           </button>
@@ -150,12 +148,7 @@ const updateUploads = (count: number) => {
                   :actor="object.actor"
                   :truncate-length="0"
                 >
-                  <translate
-
-                    :translate-params="{username: object.actor.full_username}"
-                  >
-                    Owned by %{ username }
-                  </translate>
+                  {{ $t('views.library.LibraryBase.ownerLink', {username: object.actor.full_username}) }}
                 </actor-link>
               </div>
             </div>
@@ -183,14 +176,7 @@ const updateUploads = (count: number) => {
               {{ labels.visibility.everyone }}
             </span> ·
             <i class="music icon" />
-            <translate
-
-              :translate-params="{count: object.uploads_count}"
-              :translate-n="object.uploads_count"
-              translate-plural="%{ count } tracks"
-            >
-              %{ count } track
-            </translate>
+            {{ $t('views.library.LibraryBase.trackCount', {count: object.uploads_count}) }}
             <span v-if="object.size">
               · <i class="database icon" />
               {{ humanSize(object.size) }}
@@ -227,10 +213,10 @@ const updateUploads = (count: number) => {
           <div class="ui form">
             <div class="field">
               <label for="copy-input">
-                Sharing link
+                {{ $t('views.library.LibraryBase.sharingLinkLabel') }}
               </label>
               <p>
-                Share this link with other users so they can request access to this library by copy-pasting it in their pod search bar.
+                {{ $t('views.library.LibraryBase.sharingLinkDescription') }}
               </p>
               <copy-input :value="object.fid" />
             </div>
@@ -245,21 +231,21 @@ const updateUploads = (count: number) => {
 
                   :to="{name: 'library.detail'}"
                 >
-                  Artists
+                  {{ $t('views.library.LibraryBase.artistsLink') }}
                 </router-link>
                 <router-link
                   class="item"
 
                   :to="{name: 'library.detail.albums'}"
                 >
-                  Albums
+                  {{ $t('views.library.LibraryBase.albumsLink') }}
                 </router-link>
                 <router-link
                   class="item"
 
                   :to="{name: 'library.detail.tracks'}"
                 >
-                  Tracks
+                  {{ $t('views.library.LibraryBase.tracksLink') }}
                 </router-link>
                 <router-link
                   v-if="isOwner"
@@ -268,7 +254,7 @@ const updateUploads = (count: number) => {
                   :to="{name: 'library.detail.upload'}"
                 >
                   <i class="upload icon" />
-                  Upload
+                  {{ $t('views.library.LibraryBase.uploadButton') }}
                 </router-link>
                 <router-link
                   v-if="isOwner"
@@ -277,7 +263,7 @@ const updateUploads = (count: number) => {
                   :to="{name: 'library.detail.edit'}"
                 >
                   <i class="pencil icon" />
-                  Edit
+                  {{ $t('views.library.LibraryBase.editButton') }}
                 </router-link>
               </div>
               <div class="ui hidden divider" />

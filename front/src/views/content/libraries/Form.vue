@@ -30,8 +30,8 @@ const sharedLabels = useSharedLabels()
 const store = useStore()
 
 const labels = computed(() => ({
-  descriptionPlaceholder: t('This library contains my personal music, I hope you like it.'),
-  namePlaceholder: t('My awesome library')
+  descriptionPlaceholder: t('views.content.libraries.Form.descriptionPlaceholder'),
+  namePlaceholder: t('views.content.libraries.Form.namePlaceholder')
 }))
 
 const currentVisibilityLevel = ref(props.library?.privacy_level ?? 'me')
@@ -59,8 +59,8 @@ const submit = async () => {
 
     store.commit('ui/addMessage', {
       content: props.library
-        ? t('Library updated')
-        : t('Library created'),
+        ? t('views.content.libraries.Form.libraryUpdateMessage')
+        : t('views.content.libraries.Form.libraryCreateMessage'),
       date: new Date()
     })
   } catch (error) {
@@ -77,7 +77,7 @@ const remove = async () => {
     await axios.delete(`libraries/${props.library?.uuid}/`)
     emit('deleted')
     store.commit('ui/addMessage', {
-      content: t('Library deleted'),
+      content: t('views.content.libraries.Form.libraryDeleteMessage'),
       date: new Date()
     })
   } catch (error) {
@@ -94,7 +94,7 @@ const remove = async () => {
     @submit.prevent="submit"
   >
     <p v-if="!library">
-      Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family.
+      {{ $t('views.content.libraries.Form.libraryHelp') }}
     </p>
     <div
       v-if="errors.length > 0"
@@ -102,7 +102,7 @@ const remove = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        Error
+        {{ $t('views.content.libraries.Form.failureHeader') }}
       </h4>
       <ul class="list">
         <li
@@ -114,7 +114,7 @@ const remove = async () => {
       </ul>
     </div>
     <div class="required field">
-      <label for="current-name">Name</label>
+      <label for="current-name">{{ $t('views.content.libraries.Form.nameLabel') }}</label>
       <input
         id="current-name"
         v-model="currentName"
@@ -125,7 +125,7 @@ const remove = async () => {
       >
     </div>
     <div class="field">
-      <label for="current-description">Description</label>
+      <label for="current-description">{{ $t('views.content.libraries.Form.descriptionLabel') }}</label>
       <textarea
         id="current-description"
         v-model="currentDescription"
@@ -134,9 +134,9 @@ const remove = async () => {
       />
     </div>
     <div class="field">
-      <label for="visibility-level">Visibility</label>
+      <label for="visibility-level">{{ $t('views.content.libraries.Form.visibilityLabel') }}</label>
       <p>
-        You are able to share your library with other people, regardless of its visibility.
+        {{ $t('views.content.libraries.Form.visibilityDescription') }}
       </p>
       <select
         id="visibility-level"
@@ -156,16 +156,16 @@ const remove = async () => {
       class="ui submit button"
       type="submit"
     >
-      <translate
+      <span
         v-if="library"
       >
-        Update library
-      </translate>
-      <translate
+        {{ $t('views.content.libraries.Form.updateButton') }}
+      </span>
+      <span
         v-else
       >
-        Create library
-      </translate>
+        {{ $t('views.content.libraries.Form.createButton') }}
+      </span>
     </button>
     <dangerous-button
       v-if="library"
@@ -173,20 +173,20 @@ const remove = async () => {
       class="ui right floated basic danger button"
       @confirm="remove"
     >
-      Delete
+      {{ $t('views.content.libraries.Form.deleteButton') }}
       <template #modal-header>
         <p>
-          Delete this library?
+          {{ $t('views.content.libraries.Form.deleteModalHeader') }}
         </p>
       </template>
       <template #modal-content>
         <p>
-          The library and all its tracks will be deleted. This can not be undone.
+          {{ $t('views.content.libraries.Form.deleteModalMessage') }}
         </p>
       </template>
       <template #modal-confirm>
         <div>
-          Delete library
+          {{ $t('views.content.libraries.Form.deleteModalConfirm') }}
         </div>
       </template>
     </dangerous-button>

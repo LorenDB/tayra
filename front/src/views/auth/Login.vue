@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Log In')
+  title: t('views.auth.Login.title')
 }))
 
 const store = useStore()
@@ -37,7 +37,7 @@ whenever(() => store.state.auth.authenticated, () => {
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          Log in to your Funkwhale account
+          {{ $t('views.auth.Login.loginHeader') }}
         </h2>
         <login-form :next="next" />
       </div>
