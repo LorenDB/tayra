@@ -52,20 +52,20 @@ const { copy, copied } = useClipboard({ source: textarea })
     >
       <p>
         <strong>
-          {{ $t('components.audio.EmbedWizard.anonymousAccessWarning') }}
+          {{ $t('components.audio.EmbedWizard.warning.anonymous') }}
         </strong>
       </p>
       <p>
-        {{ $t('components.audio.EmbedWizard.anonymousAccessHelp') }}
+        {{ $t('components.audio.EmbedWizard.help.anonymous') }}
       </p>
     </div>
     <div class="ui form">
       <div class="two fields">
         <div class="field">
           <div class="field">
-            <label for="embed-width">{{ $t('components.audio.EmbedWizard.widgetWidthLabel') }}</label>
+            <label for="embed-width">{{ $t('components.audio.EmbedWizard.label.width') }}</label>
             <p>
-              {{ $t('components.audio.EmbedWizard.widgetWidthHelp') }}
+              {{ $t('components.audio.EmbedWizard.help.width') }}
             </p>
             <input
               id="embed-width"
@@ -78,7 +78,7 @@ const { copy, copied } = useClipboard({ source: textarea })
           <template v-if="type != 'track'">
             <br>
             <div class="field">
-              <label for="embed-height">{{ $t('components.audio.EmbedWizard.widgetHeightLabel') }}</label>
+              <label for="embed-height">{{ $t('components.audio.EmbedWizard.label.height') }}</label>
               <input
                 id="embed-height"
                 v-model="height"
@@ -96,11 +96,11 @@ const { copy, copied } = useClipboard({ source: textarea })
             @click="copy()"
           >
             <i class="copy icon" />
-            {{ $t('components.audio.EmbedWizard.copyButton') }}
+            {{ $t('components.audio.EmbedWizard.button.copy') }}
           </button>
-          <label for="embed-width">{{ $t('components.audio.EmbedWizard.embedCodeLabel') }}</label>
+          <label for="embed-width">{{ $t('components.audio.EmbedWizard.label.embed') }}</label>
           <p>
-            {{ $t('components.audio.EmbedWizard.embedCodeHelp') }}
+            {{ $t('components.audio.EmbedWizard.help.embed') }}
           </p>
           <textarea
             ref="textarea"
@@ -113,7 +113,7 @@ const { copy, copied } = useClipboard({ source: textarea })
               v-if="copied"
               class="message"
             >
-              {{ $t('components.audio.EmbedWizard.copyButtonSuccessMessage') }}
+              {{ $t('components.audio.EmbedWizard.message.copy') }}
             </p>
           </div>
         </div>
@@ -125,7 +125,7 @@ const { copy, copied } = useClipboard({ source: textarea })
           :href="iframeSrc"
           target="_blank"
         >
-          {{ $t('components.audio.EmbedWizard.previewHeader') }}
+          {{ $t('components.audio.EmbedWizard.header.preview') }}
         </a>
       </h3>
       <iframe

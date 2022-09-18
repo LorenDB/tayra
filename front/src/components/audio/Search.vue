@@ -65,7 +65,7 @@ onMounted(() => {
 })
 
 const labels = computed(() => ({
-  searchPlaceholder: t('components.audio.Search.searchPlaceHolderLabel')
+  searchPlaceholder: t('components.audio.Search.placeholder.search')
 }))
 
 </script>
@@ -73,7 +73,7 @@ const labels = computed(() => ({
 <template>
   <div>
     <h2>
-      {{ $t('components.audio.Search.searchHeader') }}
+      {{ $t('components.audio.Search.header.search') }}
     </h2>
     <div :class="['ui', {'loading': isLoading }, 'search']">
       <div class="ui icon big input">
@@ -89,7 +89,7 @@ const labels = computed(() => ({
     </div>
     <template v-if="query.length > 0">
       <h3 class="ui title">
-        {{ $t('components.audio.Search.artistsHeader') }}
+        {{ $t('components.audio.Search.header.artists') }}
       </h3>
       <div v-if="results.artists.length > 0">
         <div class="ui cards">
@@ -101,12 +101,12 @@ const labels = computed(() => ({
         </div>
       </div>
       <p v-else>
-        {{ $t('components.audio.Search.noArtistsMessage') }}
+        {{ $t('components.audio.Search.message.noArtists') }}
       </p>
     </template>
     <template v-if="query.length > 0">
       <h3 class="ui title">
-        {{ $t('components.audio.Search.albumsHeader') }}
+        {{ $t('components.audio.Search.header.albums') }}
       </h3>
       <div
         v-if="results.albums.length > 0"
@@ -124,7 +124,7 @@ const labels = computed(() => ({
         </div>
       </div>
       <p v-else>
-        {{ $t('components.audio.Search.noAlbumsMessage') }}
+        {{ $t('components.audio.Search.message.noAlbums') }}
       </p>
     </template>
   </div>

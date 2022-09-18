@@ -84,7 +84,7 @@ fetchData()
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        {{ $t('components.audio.ChannelSeries.showMore') }}
+        {{ $t('components.audio.ChannelSeries.button.showMore') }}
       </button>
     </template>
     <template v-if="!isLoading && albums.length === 0">
@@ -93,7 +93,7 @@ fetchData()
         @refresh="fetchData()"
       >
         <p>
-          {{ $t('components.audio.ChannelSeries.emptyMessage') }}
+          {{ $t('components.audio.ChannelSeries.help.subscribe') }}
         </p>
       </empty-state>
     </template>

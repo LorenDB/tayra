@@ -41,17 +41,17 @@ const toggle = () => {
     <span
       v-if="isApproved"
     >
-      {{ $t('components.audio.LibraryFollowButton.unfollowLabel') }}
+      {{ $t('components.audio.LibraryFollowButton.button.unfollow') }}
     </span>
     <span
       v-else-if="isPending"
     >
-      {{ $t('components.audio.LibraryFollowButton.cancelLabel') }}
+      {{ $t('components.audio.LibraryFollowButton.button.cancel') }}
     </span>
     <span
       v-else
     >
-      {{ $t('components.audio.LibraryFollowButton.followLabel') }}
+      {{ $t('components.audio.LibraryFollowButton.button.follow') }}
     </span>
   </button>
 </template>

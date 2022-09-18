@@ -65,31 +65,31 @@ const { report, getReportableObjects } = useReport()
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  playNow: t('components.audio.PlayButton.playNowLabel'),
-  addToQueue: t('components.audio.PlayButton.addToQueueLabel'),
-  playNext: t('components.audio.PlayButton.playNextLabel'),
-  startRadio: t('components.audio.PlayButton.startRadioLabel'),
-  report: t('components.audio.PlayButton.reportLabel'),
-  addToPlaylist: t('components.audio.PlayButton.addToPlaylistLabel'),
-  hideArtist: t('components.audio.PlayButton.hideArtistLabel'),
+  playNow: t('components.audio.PlayButton.button.playNow'),
+  addToQueue: t('components.audio.PlayButton.button.addToQueue'),
+  playNext: t('components.audio.PlayButton.button.playNext'),
+  startRadio: t('components.audio.PlayButton.button.startRadio'),
+  report: t('components.audio.PlayButton.button.report'),
+  addToPlaylist: t('components.audio.PlayButton.button.addToPlaylist'),
+  hideArtist: t('components.audio.PlayButton.button.hideArtist'),
   replacePlay: props.track
-    ? t('components.audio.PlayButton.playTrackLabel')
+    ? t('components.audio.PlayButton.button.playTrack')
     : props.album
-      ? t('components.audio.PlayButton.playAlbumLabel')
+      ? t('components.audio.PlayButton.button.playAlbum')
       : props.artist
-        ? t('components.audio.PlayButton.playArtistLabel')
+        ? t('components.audio.PlayButton.button.playArtist')
         : props.playlist
-          ? t('components.audio.PlayButton.playPlaylistLabel')
-          : t('components.audio.PlayButton.playTracksLabel')
+          ? t('components.audio.PlayButton.button.playPlaylist')
+          : t('components.audio.PlayButton.button.playTracks')
 }))
 
 const title = computed(() => {
   if (playable.value) {
-    return t('components.audio.PlayButton.moreTitle')
+    return t('components.audio.PlayButton.title.more')
   }
 
   if (props.track) {
-    return t('components.audio.PlayButton.notAvailableTitle')
+    return t('components.audio.PlayButton.title.unavailable')
   }
 
   return ''
@@ -138,7 +138,7 @@ const openMenu = () => {
         v-else
         :class="[playIconClass, 'icon']"
       />
-      <template v-if="!discrete && !iconOnly">&nbsp;<slot>{{ $t('components.audio.PlayButton.discretePlayButton') }}</slot></template>
+      <template v-if="!discrete && !iconOnly">&nbsp;<slot>{{ $t('components.audio.PlayButton.button.discretePlay') }}</slot></template>
     </button>
     <button
       v-if="!discrete && !iconOnly"
@@ -200,10 +200,10 @@ const openMenu = () => {
           <i class="info icon" />
           <span
             v-if="track.artist?.content_category === 'podcast'"
-          >{{ $t('components.audio.PlayButton.episodeDetailsButton') }}</span>
+          >{{ $t('components.audio.PlayButton.button.episodeDetails') }}</span>
           <span
             v-else
-          >{{ $t('components.audio.PlayButton.trackDetailsButton') }}</span>
+          >{{ $t('components.audio.PlayButton.button.trackDetails') }}</span>
         </button>
         <div class="divider" />
         <button

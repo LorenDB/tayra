@@ -110,7 +110,7 @@ const save = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        {{ $t('components.admin.SettingsGroup.errorMessage') }}
+        {{ $t('components.admin.SettingsGroup.header.error') }}
       </h4>
       <ul class="list">
         <li
@@ -125,7 +125,7 @@ const save = async () => {
       v-if="result"
       class="ui positive message"
     >
-      {{ $t('components.admin.SettingsGroup.successMessage') }}
+      {{ $t('components.admin.SettingsGroup.message.success') }}
     </div>
     <div
       v-for="(setting, key) in settings"
@@ -225,7 +225,7 @@ const save = async () => {
         <div v-if="values[setting.identifier]">
           <div class="ui hidden divider" />
           <h3 class="ui header">
-            {{ $t('components.admin.SettingsGroup.currentImage') }}
+            {{ $t('components.admin.SettingsGroup.header.image') }}
           </h3>
           <img
             v-if="values[setting.identifier]"
@@ -240,7 +240,7 @@ const save = async () => {
       type="submit"
       :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
     >
-      {{ $t('components.admin.SettingsGroup.saveButton') }}
+      {{ $t('components.admin.SettingsGroup.button.save') }}
     </button>
   </form>
 </template>

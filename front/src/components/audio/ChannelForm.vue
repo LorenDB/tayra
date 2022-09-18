@@ -45,13 +45,13 @@ const creating = computed(() => props.object === null)
 const categoryChoices = computed(() => [
   {
     value: 'podcast',
-    label: t('components.audio.ChannelForm.podcastsLabel'),
-    helpText: t('components.audio.ChannelForm.podcastsHelpText')
+    label: t('components.audio.ChannelForm.label.podcast'),
+    helpText: t('components.audio.ChannelForm.help.podcast')
   },
   {
     value: 'music',
-    label: t('components.audio.ChannelForm.discographyLabel'),
-    helpText: t('components.audio.ChannelForm.discographyHelpText')
+    label: t('components.audio.ChannelForm.label.discography'),
+    helpText: t('components.audio.ChannelForm.help.discography')
   }
 ])
 
@@ -81,8 +81,8 @@ const itunesSubcategories = computed(() => {
 })
 
 const labels = computed(() => ({
-  namePlaceholder: t('components.audio.ChannelForm.namePlaceholder'),
-  usernamePlaceholder: t('components.audio.ChannelForm.usernamePlaceholder')
+  namePlaceholder: t('components.audio.ChannelForm.placeholder.name'),
+  usernamePlaceholder: t('components.audio.ChannelForm.placeholder.username')
 }))
 
 const submittable = computed(() => !!(
@@ -165,7 +165,7 @@ defineExpose({
       class="ui negative message"
     >
       <h4 class="header">
-        {{ $t('components.audio.ChannelForm.errorHeader') }}
+        {{ $t('components.audio.ChannelForm.header.error') }}
       </h4>
       <ul class="list">
         <li
@@ -182,7 +182,7 @@ defineExpose({
         class="ui grouped channel-type required field"
       >
         <legend>
-          {{ $t('components.audio.ChannelForm.channelPurposeLegend') }}
+          {{ $t('components.audio.ChannelForm.legend.purpose') }}
         </legend>
         <div class="ui hidden divider" />
         <div class="field">
@@ -210,7 +210,7 @@ defineExpose({
       <template v-if="!creating || step === 2">
         <div class="ui required field">
           <label for="channel-name">
-            {{ $t('components.audio.ChannelForm.channelNameLabel') }}
+            {{ $t('components.audio.ChannelForm.label.name') }}
           </label>
           <input
             v-model="newValues.name"
@@ -221,7 +221,7 @@ defineExpose({
         </div>
         <div class="ui required field">
           <label for="channel-username">
-            {{ $t('components.audio.ChannelForm.channelUsernameLabel') }}
+            {{ $t('components.audio.ChannelForm.label.username') }}
           </label>
           <div class="ui left labeled input">
             <div class="ui basic label">
@@ -238,7 +238,7 @@ defineExpose({
           <template v-if="creating">
             <div class="ui small hidden divider" />
             <p>
-              {{ $t('components.audio.ChannelForm.channelUsernameDescription') }}
+              {{ $t('components.audio.ChannelForm.help.username') }}
             </p>
           </template>
         </div>
@@ -248,7 +248,7 @@ defineExpose({
             :image-class="newValues.content_category === 'podcast' ? '' : 'circular'"
             @delete="newValues.cover = null"
           >
-            {{ $t('components.audio.ChannelForm.channelImageLabel') }}
+            {{ $t('components.audio.ChannelForm.label.image') }}
           </attachment-input>
         </div>
         <div class="ui small hidden divider" />
@@ -256,7 +256,7 @@ defineExpose({
           <div class="ten wide column">
             <div class="ui field">
               <label for="channel-tags">
-                {{ $t('components.audio.ChannelForm.channelTagsLabel') }}
+                {{ $t('components.audio.ChannelForm.label.tags') }}
               </label>
               <tags-selector
                 id="channel-tags"
@@ -271,7 +271,7 @@ defineExpose({
           >
             <div class="ui required field">
               <label for="channel-language">
-                {{ $t('components.audio.ChannelForm.channelLanguageLabel') }}
+                {{ $t('components.audio.ChannelForm.label.language') }}
               </label>
               <select
                 id="channel-language"
@@ -294,7 +294,7 @@ defineExpose({
         <div class="ui small hidden divider" />
         <div class="ui field">
           <label for="channel-name">
-            {{ $t('components.audio.ChannelForm.channelDescriptionLabel') }}
+            {{ $t('components.audio.ChannelForm.label.description') }}
           </label>
           <content-form v-model="newValues.description" />
         </div>
@@ -304,7 +304,7 @@ defineExpose({
         >
           <div class="ui required field">
             <label for="channel-itunes-category">
-              {{ $t('components.audio.ChannelForm.channelCategoryLabel') }}
+              {{ $t('components.audio.ChannelForm.label.category') }}
             </label>
             <select
               id="itunes-category"
@@ -324,7 +324,7 @@ defineExpose({
           </div>
           <div class="ui field">
             <label for="channel-itunes-category">
-              {{ $t('components.audio.ChannelForm.channelSubcategoryLabel') }}
+              {{ $t('components.audio.ChannelForm.label.subcategory') }}
             </label>
             <select
               id="itunes-category"
@@ -349,7 +349,7 @@ defineExpose({
         >
           <div class="ui field">
             <label for="channel-itunes-email">
-              {{ $t('components.audio.ChannelForm.channelEmailLabel') }}
+              {{ $t('components.audio.ChannelForm.label.email') }}
             </label>
             <input
               id="channel-itunes-email"
@@ -360,7 +360,7 @@ defineExpose({
           </div>
           <div class="ui field">
             <label for="channel-itunes-name">
-              {{ $t('components.audio.ChannelForm.channelOwnerLabel') }}
+              {{ $t('components.audio.ChannelForm.label.owner') }}
             </label>
             <input
               id="channel-itunes-name"
@@ -371,7 +371,7 @@ defineExpose({
           </div>
         </div>
         <p>
-          {{ $t('components.audio.ChannelForm.channelPodcastFieldsHelp') }}
+          {{ $t('components.audio.ChannelForm.help.podcastFields') }}
         </p>
       </template>
     </template>
@@ -380,7 +380,7 @@ defineExpose({
       class="ui active inverted dimmer"
     >
       <div class="ui text loader">
-        {{ $t('components.audio.ChannelForm.loadingMessage') }}
+        {{ $t('components.audio.ChannelForm.message.loading') }}
       </div>
     </div>
   </form>

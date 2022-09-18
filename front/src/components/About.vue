@@ -67,10 +67,10 @@ const headerStyle = computed(() => {
                 <div class="column" />
               </div>
               <h2 class="header">
-                {{ $t('components.About.funkwhaleHeader') }}
+                {{ $t('components.About.header.funkwhale') }}
               </h2>
               <p>
-                {{ $t('components.About.funkwhaleDescription') }}
+                {{ $t('components.About.description.funkwhale') }}
               </p>
             </div>
           </div>
@@ -84,14 +84,14 @@ const headerStyle = computed(() => {
                 class="signup-form content"
               >
                 <h3 class="header">
-                  {{ $t('components.About.signupHeader') }}
+                  {{ $t('components.About.header.signup') }}
                 </h3>
                 <template v-if="openRegistrations">
                   <p>
-                    {{ $t('components.About.signupDescription') }}
+                    {{ $t('components.About.description.signup') }}
                   </p>
                   <p v-if="defaultUploadQuota">
-                    {{ $t('components.About.quotaDescription', {quota: defaultUploadQuota}) }}
+                    {{ $t('components.About.description.quota', {quota: defaultUploadQuota}) }}
                   </p>
                   <signup-form
                     button-classes="success"
@@ -100,7 +100,7 @@ const headerStyle = computed(() => {
                 </template>
                 <div v-else>
                   <p>
-                    {{ $t('components.About.registrationsClosedHelp') }}
+                    {{ $t('components.About.help.closedRegistrations') }}
                   </p>
 
                   <a
@@ -108,7 +108,7 @@ const headerStyle = computed(() => {
                     rel="noopener"
                     href="https://funkwhale.audio/#get-started"
                   >
-                    {{ $t('components.About.findOtherPod') }}
+                    {{ $t('components.About.link.findOtherPod') }}
                     &nbsp;<i class="external alternate icon" />
                   </a>
                 </div>
@@ -118,13 +118,13 @@ const headerStyle = computed(() => {
                 class="signup-form content"
               >
                 <h3 class="header">
-                  {{ $t('components.About.signupHeader') }}
+                  {{ $t('components.About.header.signup') }}
                   <div class="ui positive message">
                     <div class="header">
-                      {{ $t('components.About.alreadyLoggedIn') }}
+                      {{ $t('components.About.message.loggedIn') }}
                     </div>
                     <p>
-                      {{ $t('components.About.greetingMessage', {username: $store.state.auth.username}) }}
+                      {{ $t('components.About.message.greeting', {username: $store.state.auth.username}) }}
                     </p>
                   </div>
                 </h3>
@@ -145,7 +145,7 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  {{ $t('components.About.aboutPodHeader') }}
+                  {{ $t('components.About.header.aboutPod') }}
                 </h3>
                 <div
                   v-if="shortDescription"
@@ -154,7 +154,7 @@ const headerStyle = computed(() => {
                   {{ shortDescription }}
                 </div>
                 <p v-else>
-                  {{ $t('components.About.noDescription') }}
+                  {{ $t('components.About.placeholder.noDescription') }}
                 </p>
 
                 <template v-if="stats">
@@ -164,14 +164,14 @@ const headerStyle = computed(() => {
                         <span class="statistics-figure ui text">
                           <span class="ui big text"><strong>{{ stats.users.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                           <br>
-                          {{ $t('components.About.activeUsers', {users: stats.users}) }}
+                          {{ $t('components.About.stat.activeUsers', {users: stats.users}) }}
                         </span>
                       </div>
                       <div class="column">
                         <span class="statistics-figure ui text">
                           <span class="ui big text"><strong>{{ stats.hours.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                           <br>
-                          {{ $t('components.About.hoursOfMusic', {hours: stats.hours}) }}
+                          {{ $t('components.About.stat.hoursOfMusic', {hours: stats.hours}) }}
                         </span>
                       </div>
                     </div>
@@ -182,7 +182,7 @@ const headerStyle = computed(() => {
                   to="/about/pod"
                   class="ui fluid basic secondary button"
                 >
-                  {{ $t('components.About.learnMoreLink') }}
+                  {{ $t('components.About.link.learnMore') }}
                 </router-link>
               </div>
             </div>
@@ -201,10 +201,10 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  {{ $t('components.About.publicContentHeader') }}
+                  {{ $t('components.About.header.publicContent') }}
                 </h3>
                 <p>
-                  {{ $t('components.About.publicContentDescription') }}
+                  {{ $t('components.About.description.publicContent') }}
                 </p>
               </div>
             </router-link>
@@ -218,11 +218,11 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  {{ $t('components.About.findOtherPod') }}
+                  {{ $t('components.About.link.findOtherPod') }}
                   &nbsp;<i class="external alternate icon" />
                 </h3>
                 <p>
-                  {{ $t('components.About.publicContentDescription') }}
+                  {{ $t('components.About.description.publicContent') }}
                 </p>
               </div>
             </a>
@@ -236,11 +236,11 @@ const headerStyle = computed(() => {
                   id="description"
                   class="ui header"
                 >
-                  {{ $t('components.About.findAppHeader') }}
+                  {{ $t('components.About.header.findApp') }}
                   &nbsp;<i class="external alternate icon" />
                 </h3>
                 <p>
-                  {{ $t('components.About.findAppDescription') }}
+                  {{ $t('components.About.description.findApp') }}
                 </p>
               </div>
             </a>
@@ -250,7 +250,7 @@ const headerStyle = computed(() => {
               to="/about/pod"
               class="ui right floated basic secondary button"
             >
-              {{ $t('components.About.aboutPodHeader') }}
+              {{ $t('components.About.header.aboutPod') }}
               <i class="icon arrow right" />
             </router-link>
           </div>

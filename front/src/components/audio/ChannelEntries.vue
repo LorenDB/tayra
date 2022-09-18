@@ -103,7 +103,7 @@ watch(page, fetchData, { immediate: true })
         @refresh="fetchData()"
       >
         <p>
-          {{ $t('components.audio.ChannelEntries.emptyMessage') }}
+          {{ $t('components.audio.ChannelEntries.help.subscribe') }}
         </p>
       </empty-state>
     </template>

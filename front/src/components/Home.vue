@@ -71,7 +71,7 @@ whenever(() => store.state.auth.authenticated, () => {
       <div class="segment-content">
         <h1 class="ui center aligned large header">
           <span>
-            {{ $t('components.Home.welcomeMessage', {podName: podName}) }}
+            {{ $t('components.Home.header.welcome', {podName: podName}) }}
           </span>
           <div
             v-if="shortDescription"
@@ -86,7 +86,7 @@ whenever(() => store.state.auth.authenticated, () => {
       <div class="ui stackable grid">
         <div class="ten wide column">
           <h2 class="header">
-            {{ $t('components.Home.aboutPod') }}
+            {{ $t('components.Home.header.about') }}
           </h2>
           <div
             id="pod"
@@ -95,7 +95,7 @@ whenever(() => store.state.auth.authenticated, () => {
             <div class="ui stackable grid">
               <div class="eight wide column">
                 <p v-if="!longDescription">
-                  {{ $t('components.Home.noDescription') }}
+                  {{ $t('components.Home.placeholder.noDescription') }}
                 </p>
                 <template v-if="longDescription || rules">
                   <sanitized-html
@@ -118,7 +118,7 @@ whenever(() => store.state.auth.authenticated, () => {
                           class="ui link"
                           :to="{name: 'about'}"
                         >
-                          {{ $t('components.Home.learnMore') }}
+                          {{ $t('components.Home.link.learnMore') }}
                         </router-link>
                       </div>
                     </div>
@@ -133,7 +133,7 @@ whenever(() => store.state.auth.authenticated, () => {
                           class="ui link"
                           :to="{name: 'about', hash: '#rules'}"
                         >
-                          {{ $t('components.Home.serverRules') }}
+                          {{ $t('components.Home.link.rules') }}
                         </router-link>
                       </div>
                     </div>
@@ -143,20 +143,20 @@ whenever(() => store.state.auth.authenticated, () => {
               <div class="eight wide column">
                 <template v-if="stats">
                   <h3 class="sub header">
-                    {{ $t('components.Home.statistics') }}
+                    {{ $t('components.Home.header.statistics') }}
                   </h3>
                   <p>
                     <i class="user icon" />
-                    {{ $t('components.Home.activeUsers', {users: stats.users}) }}
+                    {{ $t('components.Home.stat.activeUsers', {users: stats.users}) }}
                   </p>
                   <p>
                     <i class="music icon" />
-                    {{ $t('components.Home.hoursOfMusic', {hours: stats.hours}) }}
+                    {{ $t('components.Home.stat.hoursOfMusic', {hours: stats.hours}) }}
                   </p>
                 </template>
                 <template v-if="contactEmail">
                   <h3 class="sub header">
-                    {{ $t('components.Home.contactHeader') }}
+                    {{ $t('components.Home.header.contact') }}
                   </h3>
                   <i class="at icon" />
                   <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
@@ -179,13 +179,13 @@ whenever(() => store.state.auth.authenticated, () => {
       <div class="ui stackable grid">
         <div class="four wide column">
           <h3 class="header">
-            {{ $t('components.Home.aboutFunkwhale') }}
+            {{ $t('components.Home.header.aboutFunkwhale') }}
           </h3>
           <p>
-            {{ $t('components.Home.funkwhaleDescription') }}
+            {{ $t('components.Home.description.funkwhale.paragraph1') }}
           </p>
           <p>
-            {{ $t('components.Home.funkwhaleAddendum') }}
+            {{ $t('components.Home.description.funkwhale.paragraph2') }}
           </p>
           <a
             target="_blank"
@@ -193,12 +193,12 @@ whenever(() => store.state.auth.authenticated, () => {
             href="https://funkwhale.audio"
           >
             <i class="external alternate icon" />
-            {{ $t('components.Home.websiteLink') }}
+            {{ $t('components.Home.link.funkwhale') }}
           </a>
         </div>
         <div class="four wide column">
           <h3 class="header">
-            {{ $t('components.Home.loginHeader') }}
+            {{ $t('components.Home.header.login') }}
           </h3>
           <login-form
             button-classes="success"
@@ -208,14 +208,14 @@ whenever(() => store.state.auth.authenticated, () => {
         </div>
         <div class="four wide column">
           <h3 class="header">
-            {{ $t('components.Home.signupHeader') }}
+            {{ $t('components.Home.header.signup') }}
           </h3>
           <template v-if="openRegistrations">
             <p>
-              {{ $t('components.Home.signupDescription') }}
+              {{ $t('components.Home.description.signup') }}
             </p>
             <p v-if="defaultUploadQuota">
-              {{ $t('components.Home.uploadQuota', { quota: humanSize(defaultUploadQuota * 1000 * 1000) }) }}
+              {{ $t('components.Home.description.quota', { quota: humanSize(defaultUploadQuota * 1000 * 1000) }) }}
             </p>
             <signup-form
               button-classes="success"
@@ -224,7 +224,7 @@ whenever(() => store.state.auth.authenticated, () => {
           </template>
           <div v-else>
             <p>
-              {{ $t('components.Home.registrationsClosed') }}
+              {{ $t('components.Home.help.registrationsClosed') }}
             </p>
             <a
               target="_blank"
@@ -232,14 +232,14 @@ whenever(() => store.state.auth.authenticated, () => {
               href="https://funkwhale.audio/#get-started"
             >
               <i class="external alternate icon" />
-              {{ $t('components.Home.findOtherPod') }}
+              {{ $t('components.Home.link.findOtherPod') }}
             </a>
           </div>
         </div>
 
         <div class="four wide column">
           <h3 class="header">
-            {{ $t('components.Home.usefulLinks') }}
+            {{ $t('components.Home.header.links') }}
           </h3>
           <div class="ui relaxed list">
             <div class="item">
@@ -250,10 +250,10 @@ whenever(() => store.state.auth.authenticated, () => {
                   class="header"
                   to="/library"
                 >
-                  {{ $t('components.Home.browsePublicContent') }}
+                  {{ $t('components.Home.link.publicContent.label') }}
                 </router-link>
                 <div class="description">
-                  {{ $t('components.Home.publicContentDescription') }}
+                  {{ $t('components.Home.link.publicContent.description') }}
                 </div>
               </div>
             </div>
@@ -266,10 +266,10 @@ whenever(() => store.state.auth.authenticated, () => {
                   target="_blank"
                   rel="noopener"
                 >
-                  {{ $t('components.Home.mobileApps') }}
+                  {{ $t('components.Home.link.mobileApps.label') }}
                 </a>
                 <div class="description">
-                  {{ $t('components.Home.mobileAppsDescription') }}
+                  {{ $t('components.Home.link.mobileApps.description') }}
                 </div>
               </div>
             </div>
@@ -282,10 +282,10 @@ whenever(() => store.state.auth.authenticated, () => {
                   target="_blank"
                   rel="noopener"
                 >
-                  {{ $t('components.Home.userGuides') }}
+                  {{ $t('components.Home.link.userGuides.label') }}
                 </a>
                 <div class="description">
-                  {{ $t('components.Home.userGuidesDescription') }}
+                  {{ $t('components.Home.link.userGuides.description') }}
                 </div>
               </div>
             </div>
@@ -302,16 +302,16 @@ whenever(() => store.state.auth.authenticated, () => {
         :limit="10"
       >
         <template #title>
-          {{ $t('components.Home.recentlyAddedLabel') }}
+          {{ $t('components.Home.header.newAlbums') }}
         </template>
         <router-link to="/library">
-          {{ $t('components.Home.viewMore') }}
+          {{ $t('components.Home.link.viewMore') }}
           <div class="ui hidden divider" />
         </router-link>
       </album-widget>
       <div class="ui hidden section divider" />
       <h3 class="ui header">
-        {{ $t('components.Home.newChannelsLabel') }}
+        {{ $t('components.Home.header.newChannels') }}
       </h3>
       <channels-widget
         :show-modification-date="true"

@@ -51,7 +51,7 @@ const checkAndSwitch = async (url: string) => {
 
     show.value = false
     store.commit('ui/addMessage', {
-      content: t('components.SetInstanceModal.currentUrl', { url: instanceUrl }),
+      content: t('components.SetInstanceModal.message.newUrl', { url: instanceUrl }),
       date: new Date()
     })
 
@@ -71,7 +71,7 @@ const checkAndSwitch = async (url: string) => {
     @update:show="isError = false"
   >
     <h3 class="header">
-      {{ $t('components.SetInstanceModal.chooseInstance') }}
+      {{ $t('components.SetInstanceModal.header.chooseInstance') }}
     </h3>
     <div class="scrolling content">
       <div
@@ -80,14 +80,14 @@ const checkAndSwitch = async (url: string) => {
         class="ui negative message"
       >
         <h4 class="header">
-          {{ $t('components.SetInstanceModal.connectionFailure') }}
+          {{ $t('components.SetInstanceModal.header.failure') }}
         </h4>
         <ul class="list">
           <li>
-            {{ $t('components.SetInstanceModal.serverDown') }}
+            {{ $t('components.SetInstanceModal.help.serverDown') }}
           </li>
           <li>
-            {{ $t('components.SetInstanceModal.notFunkwhaleServer') }}
+            {{ $t('components.SetInstanceModal.help.notFunkwhaleServer') }}
           </li>
         </ul>
       </div>
@@ -99,13 +99,13 @@ const checkAndSwitch = async (url: string) => {
           v-if="$store.state.instance.instanceUrl"
           class="description"
         >
-          {{ $t('components.SetInstanceModal.currentConnection', {url: $store.state.instance.instanceUrl, hostname: $store.getters['instance/domain']}) }}
+          {{ $t('components.SetInstanceModal.message.currentConnection', {url: $store.state.instance.instanceUrl, hostname: $store.getters['instance/domain']}) }}
         </p>
         <p v-else>
-          {{ $t('components.SetInstanceModal.selectFunkwhalePod') }}
+          {{ $t('components.SetInstanceModal.help.selectPod') }}
         </p>
         <div class="field">
-          <label for="instance-picker">{{ $t('components.SetInstanceModal.instanceUrl') }}</label>
+          <label for="instance-picker">{{ $t('components.SetInstanceModal.label.url') }}</label>
           <div class="ui action input">
             <input
               id="instance-picker"
@@ -117,7 +117,7 @@ const checkAndSwitch = async (url: string) => {
               type="submit"
               :class="['ui', 'icon', {loading: isLoading}, 'button']"
             >
-              {{ $t('components.SetInstanceModal.submitButton') }}
+              {{ $t('components.SetInstanceModal.button.submit') }}
             </button>
           </div>
         </div>
@@ -129,7 +129,7 @@ const checkAndSwitch = async (url: string) => {
       >
         <div class="field">
           <h4>
-            {{ $t('components.SetInstanceModal.suggestions') }}
+            {{ $t('components.SetInstanceModal.header.suggestions') }}
           </h4>
           <button
             v-for="(url, key) in suggestedInstances"
@@ -144,7 +144,7 @@ const checkAndSwitch = async (url: string) => {
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        {{ $t('components.SetInstanceModal.cancelButton') }}
+        {{ $t('components.SetInstanceModal.button.cancel') }}
       </button>
     </div>
   </semantic-modal>

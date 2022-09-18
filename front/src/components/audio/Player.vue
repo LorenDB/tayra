@@ -72,17 +72,17 @@ onKeyboardShortcut(['ctrl', 'shift', 'left'], playPrevious, true)
 onKeyboardShortcut(['ctrl', 'shift', 'right'], playNext, true)
 
 const labels = computed(() => ({
-  audioPlayer: t('components.audio.Player.audioPlayerLabel'),
-  previous: t('components.audio.Player.previousTrackLabel'),
-  play: t('components.audio.Player.playLabel'),
-  pause: t('components.audio.Player.pauseLabel'),
-  next: t('components.audio.Player.nextTrackLabel'),
-  unmute: t('components.audio.Player.unmuteLabel'),
-  mute: t('components.audio.Player.muteLabel'),
-  expandQueue: t('components.audio.Player.expandQueueLabel'),
-  shuffle: t('components.audio.Player.shuffleQueueLabel'),
-  clear: t('components.audio.Player.clearQueueLabel'),
-  addArtistContentFilter: t('components.audio.Player.addArtistContentFilterLabel')
+  audioPlayer: t('components.audio.Player.label.audioPlayer'),
+  previous: t('components.audio.Player.label.previousTrack'),
+  play: t('components.audio.Player.label.play'),
+  pause: t('components.audio.Player.label.pause'),
+  next: t('components.audio.Player.label.nextTrack'),
+  unmute: t('components.audio.Player.label.unmute'),
+  mute: t('components.audio.Player.label.mute'),
+  expandQueue: t('components.audio.Player.label.expandQueue'),
+  shuffle: t('components.audio.Player.label.shuffleQueue'),
+  clear: t('components.audio.Player.label.clearQueue'),
+  addArtistContentFilter: t('components.audio.Player.label.addArtistContentFilter')
 }))
 
 const switchTab = () => {
@@ -103,10 +103,10 @@ initializeFirstTrack()
 const loopingTitle = computed(() => {
   const mode = looping.value
   return mode === LoopingMode.None
-    ? t('components.audio.Player.loopingDisabledLabel')
+    ? t('components.audio.Player.label.loopingDisabledLabel')
     : mode === LoopingMode.LoopTrack
-      ? t('components.audio.Player.loopingSingleLabel')
-      : t('components.audio.Player.loopingWholeQueueLabel')
+      ? t('components.audio.Player.label.loopingSingleLabel')
+      : t('components.audio.Player.label.loopingWholeQueueLabel')
 })
 
 const hideArtist = () => {
@@ -133,7 +133,7 @@ const hideArtist = () => {
       id="player-label"
       class="visually-hidden"
     >
-      {{ $t('components.audio.Player.playerHeader') }}
+      {{ $t('components.audio.Player.header.player') }}
     </h1>
     <div
       class="ui inverted segment fixed-controls"
@@ -301,7 +301,7 @@ const hideArtist = () => {
               >
                 <i class="stream icon" />
                 <span>
-                  {{ $t('components.audio.Player.queuePosition', { index: currentIndex + 1, length: queue.length }) }}
+                  {{ $t('components.audio.Player.meta.position', { index: currentIndex + 1, length: queue.length }) }}
                 </span>
               </button>
               <button
@@ -310,7 +310,7 @@ const hideArtist = () => {
               >
                 <i class="stream icon" />
                 <span>
-                  {{ $t('components.audio.Player.queuePosition', { index: currentIndex + 1, length: queue.length }) }}
+                  {{ $t('components.audio.Player.meta.position', { index: currentIndex + 1, length: queue.length }) }}
                 </span>
               </button>
 

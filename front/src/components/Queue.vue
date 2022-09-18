@@ -55,19 +55,19 @@ const scrollLock = useScrollLock(document.body)
 const store = useStore()
 
 const labels = computed(() => ({
-  queue: t('components.Queue.queue'),
-  populating: t('components.Queue.queue.populatingRadio'),
-  duration: t('components.Queue.duration'),
-  addArtistContentFilter: t('components.Queue.addArtistContentFilter'),
-  restart: t('components.Queue.restart'),
-  previous: t('components.Queue.previous'),
-  next: t('components.Queue.next'),
-  pause: t('components.Queue.pause'),
-  play: t('components.Queue.play'),
-  fullscreen: t('components.Queue.enterFullscreen'),
-  exitFullscreen: t('components.Queue.exitFullscreen'),
-  showCoverArt: t('components.Queue.showCoverArt'),
-  showVisualizer: t('components.Queue.showVisualizer')
+  queue: t('components.Queue.label.queue'),
+  populating: t('components.Queue.queue.label.populatingRadio'),
+  duration: t('components.Queue.label.duration'),
+  addArtistContentFilter: t('components.Queue.label.addArtistContentFilter'),
+  restart: t('components.Queue.label.restart'),
+  previous: t('components.Queue.label.previous'),
+  next: t('components.Queue.label.next'),
+  pause: t('components.Queue.label.pause'),
+  play: t('components.Queue.label.play'),
+  fullscreen: t('components.Queue.label.enterFullscreen'),
+  exitFullscreen: t('components.Queue.label.exitFullscreen'),
+  showCoverArt: t('components.Queue.label.showCoverArt'),
+  showVisualizer: t('components.Queue.label.showVisualizer')
 }))
 
 watchEffect(async () => {
@@ -126,9 +126,9 @@ const queueItems = computed(() => queue.value.map((track, index) => ({
   ...track,
   key: `${index}-${track.id}`,
   labels: {
-    remove: t('components.Queue.remove'),
-    selectTrack: t('components.Queue.selectTrack'),
-    favorite: t('components.Queue.favorite')
+    remove: t('components.Queue.label.remove'),
+    selectTrack: t('components.Queue.label.selectTrack'),
+    favorite: t('components.Queue.label.favorite')
   },
   duration: time.durationFormatted(track.uploads[0]?.duration ?? 0) ?? ''
 }) as QueueItemSource))
@@ -298,14 +298,14 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
             class="ui small warning message"
           >
             <h3 class="header">
-              {{ $t('components.Queue.trackLoadFailure') }}
+              {{ $t('components.Queue.header.failure') }}
             </h3>
             <p v-if="hasNext && isPlaying">
-              {{ $t('components.Queue.automaticPlay') }}
+              {{ $t('components.Queue.message.automaticPlay') }}
               <i class="loading spinner icon" />
             </p>
             <p>
-              {{ $t('components.Queue.connectivityWarning') }}
+              {{ $t('components.Queue.warning.connectivity') }}
             </p>
           </div>
           <div
@@ -404,18 +404,18 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                 class="ui right floated basic button"
                 @click="$store.commit('ui/queueFocused', null)"
               >
-                {{ $t('components.Queue.closeButton') }}
+                {{ $t('components.Queue.button.close') }}
               </button>
               <button
                 class="ui right floated basic button danger"
                 @click="clear"
               >
-                {{ $t('components.Queue.clearButton') }}
+                {{ $t('components.Queue.button.clear') }}
               </button>
               {{ labels.queue }}
               <div class="sub header">
                 <div>
-                  {{ $t('components.Queue.queuePosition', {index: currentIndex +1, length: queue.length}) }}
+                  {{ $t('components.Queue.display.queuePosition', {index: currentIndex +1, length: queue.length}) }}
                   <template v-if="!$store.state.radios.running">
                     <span class="middle ellipses symbol" />
                     <span :title="labels.duration">
@@ -461,10 +461,10 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
               <div class="content">
                 <h3 class="header">
                   <i class="feed icon" />
-                  {{ $t('components.Queue.radioPlaying') }}
+                  {{ $t('components.Queue.header.radio') }}
                 </h3>
                 <p>
-                  {{ $t('components.Queue.appendTracks') }}
+                  {{ $t('components.Queue.message.radio') }}
                 </p>
                 <button
                   class="ui basic primary button"

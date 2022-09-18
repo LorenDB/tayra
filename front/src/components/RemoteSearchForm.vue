@@ -40,14 +40,14 @@ const errors = ref([] as string[])
 const { t } = useI18n()
 const labels = computed(() => ({
   title: type.value === 'rss'
-    ? t('components.RemoteSearchForm.subscribeRss')
-    : t('components.RemoteSearchForm.subscribeFediverse'),
+    ? t('components.RemoteSearchForm.label.rss.title')
+    : t('components.RemoteSearchForm.label.fediverse.title'),
   fieldLabel: type.value === 'rss'
-    ? t('components.RemoteSearchForm.rssLocation')
-    : t('components.RemoteSearchForm.fediverseObject'),
+    ? t('components.RemoteSearchForm.label.rss.fieldLabel')
+    : t('components.RemoteSearchForm.label.fediverse.fieldLabel'),
   fieldPlaceholder: type.value === 'rss'
-    ? t('components.RemoteSearchForm.rssPlaceholder')
-    : t('components.RemoteSearchForm.fediversePlaceholder')
+    ? t('components.RemoteSearchForm.label.rss.fieldPlaceholder')
+    : t('components.RemoteSearchForm.label.fediverse.fieldPlaceholder')
 }))
 
 const obj = ref()
@@ -117,7 +117,7 @@ const createFetch = async () => {
     obj.value = response.data
 
     if (response.data.status === 'errored' || response.data.status === 'skipped') {
-      errors.value.push(t('components.RemoteSearchForm.fetchFailureMessage'))
+      errors.value.push(t('components.RemoteSearchForm.error.fetchFailed'))
     }
   } catch (error) {
     errors.value = (error as BackendError).backendErrors
@@ -172,7 +172,7 @@ watch(() => props.initialId, () => {
       @click.prevent="type = 'rss'"
     >
       <i class="feed icon" />
-      {{ $t('components.RemoteSearchForm.rss') }}
+      {{ $t('components.RemoteSearchForm.button.rss') }}
     </button>
     <div class="or" />
     <button
@@ -180,7 +180,7 @@ watch(() => props.initialId, () => {
       @click.prevent="type = 'artists'"
     >
       <i class="globe icon" />
-      {{ $t('components.RemoteSearchForm.fediverse') }}
+      {{ $t('components.RemoteSearchForm.button.fediverse') }}
     </button>
   </div>
   <div v-else>
@@ -195,7 +195,7 @@ watch(() => props.initialId, () => {
         class="ui negative message"
       >
         <h3 class="header">
-          {{ $t('components.RemoteSearchForm.objectFetchError') }}
+          {{ $t('components.RemoteSearchForm.header.fetchFailed') }}
         </h3>
         <ul class="list">
           <li
@@ -211,10 +211,10 @@ watch(() => props.initialId, () => {
           {{ labels.fieldLabel }}
         </label>
         <p v-if="type === 'rss'">
-          {{ $t('components.RemoteSearchForm.rssDescription') }}
+          {{ $t('components.RemoteSearchForm.description.rss') }}
         </p>
         <p v-else-if="type === 'artists'">
-          {{ $t('components.RemoteSearchForm.fediverseDescription') }}
+          {{ $t('components.RemoteSearchForm.description.fediverse') }}
         </p>
         <input
           id="object-id"
@@ -231,7 +231,7 @@ watch(() => props.initialId, () => {
         :class="['ui', 'primary', {loading: isLoading}, 'button']"
         :disabled="isLoading || !id || id.length === 0"
       >
-        {{ $t('components.RemoteSearchForm.searchButton') }}
+        {{ $t('components.RemoteSearchForm.button.search') }}
       </button>
     </form>
     <div
@@ -240,7 +240,7 @@ watch(() => props.initialId, () => {
       class="ui warning message"
     >
       <p>
-        {{ $t('components.RemoteSearchForm.unsupportedObject') }}
+        {{ $t('components.RemoteSearchForm.warning.unsupported') }}
       </p>
     </div>
   </div>

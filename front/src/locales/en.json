@@ -5,334 +5,524 @@
     "components": {
         "About": {
             "title": "About",
-            "funkwhaleHeader": "A social platform to enjoy and share music",
-            "funkwhaleDescription": "Funkwhale is a community-driven project that lets you listen and share music and audio within a decentralized, open network.",
-            "signupHeader": "Sign up",
-            "signupDescription": "Sign up now to keep a track of your favorites, create playlists, discover new content and much more!",
-            "quotaDescription": "Users on this pod also get {quota} of free storage to upload their own content!",
-            "registrationsClosedHelp": "Registrations are closed on this pod. You can signup on another pod using the link below.",
-            "findOtherPod": "Find another pod",
-            "alreadyLoggedIn": "You're already signed in!",
-            "greetingMessage": "Hello {username}",
-            "aboutPodHeader": "About this pod",
-            "noDescription": "No description available",
-            "activeUsers": "{users} active user | {users} active users",
-            "hoursOfMusic": "{hours} hour of music | {hours} hours of music",
-            "learnMoreLink": "Learn More",
-            "publicContentHeader": "Browse public content",
-            "publicContentDescription": "Listen to public albums and playlists shared on this pod.",
-            "findAppHeader": "Find an app",
-            "findAppDescription": "Use Funkwhale on other devices with our apps."
+            "header": {
+                "funkwhale": "A social platform to enjoy and share music",
+                "signup": "Sign up",
+                "publicContent": "Browse public content",
+                "findApp": "Find an app",
+                "aboutPod": "About this pod"
+            },
+            "description": {
+                "funkwhale": "Funkwhale is a community-driven project that lets you listen and share music and audio within a decentralized, open network.",
+                "signup": "Sign up now to keep a track of your favorites, create playlists, discover new content and much more!",
+                "quota": "Users on this pod also get {quota} of free storage to upload their own content!",
+                "publicContent": "Listen to public albums and playlists shared on this pod.",
+                "findApp": "Use Funkwhale on other devices with our apps."
+            },
+            "placeholder": {
+                "noDescription": "No description available"
+            },
+            "message": {
+                "greeting": "Hello {username}",
+                "loggedIn": "You're already signed in!"
+            },
+            "link": {
+                "learnMore": "Learn more",
+                "findOtherPod": "Find another pod"
+            },
+            "stat": {
+                "activeUsers": "{users} active user | {users} active users",
+                "hoursOfMusic": "{hours} hour of music | {hours} hours of music"
+            },
+            "help": {
+                "closedRegistrations": "Registrations are closed on this pod. You can signup on another pod using the link below."
+            }
         },
         "AboutPod": {
             "title": "About",
-            "aboutPod": "About this pod",
-            "rules": "Rules",
-            "termsAndPrivacy": "Terms and privacy policy",
-            "features": "Features",
-            "statistics": "Statistics",
-            "noDescription": "No description available",
-            "noRules": "No rules available",
-            "noTerms": "No terms available",
-            "funkwhaleVersion": "Funkwhale version",
             "notApplicable": "N/A",
-            "federation": "Federation",
-            "enabled": "Enabled",
-            "disabled": "Disabled",
-            "allowList": "Allow-list",
-            "anonymousAccess": "Anonymous access",
-            "registrations": "Registrations",
-            "open": "Open",
-            "closed": "Closed",
-            "uploadQuota": "Upload quota",
-            "activeUsers": "{users} active user | {users} active users",
-            "hoursOfMusic": "{hours} hour of music | {hours} hours of music",
-            "artistsCount": "{artists} artist | {artists} artists",
-            "albumsCount": "{albums} album | {albums} albums",
-            "tracksCount": "{tracks} track | {tracks} tracks",
-            "listeningsCount": "{listenings} listening | {listenings} listenings",
-            "contactHeader": "Contact",
-            "contactEmail": "Send us an email: {contactEmail}",
-            "introductionLink": "Introdution"
+            "header": {
+                "about":"About this pod",
+                "rules": "Rules",
+                "terms": "Terms and privacy policy",
+                "features": "Features",
+                "contact": "Contact",
+                "statistics": "Statistics"
+            },
+            "placeholder": {
+                "noDescription": "No description available",
+                "noRules": "No rules available",
+                "noTerms": "No terms available"
+            },
+            "message": {
+                "contact": "Send us an email: {contactEmail}"
+            },
+            "link": {
+                "about": "About this pod",
+                "rules": "Rules",
+                "terms": "Terms and privacy policy",
+                "features": "Features",
+                "statistics": "Statistics",
+                "introduction": "Introduction"
+            },
+            "feature": {
+                "version": "Funkwhale version",
+                "federation": "Federation",
+                "allowList": "Allow-list",
+                "anonymousAccess": "Anonymous access",
+                "registrations": "Registrations",
+                "quota": "Upload quota",
+                "status": {
+                    "enabled": "Enabled",
+                    "disabled": "Disabled",
+                    "open": "Open",
+                    "closed": "Closed"
+                }
+            },
+            "stat": {
+                "activeUsers": "{users} active user | {users} active users",
+                "hoursOfMusic": "{hours} hour of music | {hours} hours of music",
+                "artistsCount": "{artists} artist | {artists} artists",
+                "albumsCount": "{albums} album | {albums} albums",
+                "tracksCount": "{tracks} track | {tracks} tracks",
+                "listeningsCount": "{listenings} listening | {listenings} listenings"
+            }
         },
         "Home": {
             "title": "Home",
-            "welcomeMessage": "Welcome to {podName}!",
-            "aboutPod": "About this Funkwhale pod",
-            "noDescription": "No description available",
-            "learnMore": "Learn more",
-            "serverRules": "Server rules",
-            "statistics": "Statistics",
-            "activeUsers": "{users} active user | {users} active users",
-            "hoursOfMusic": "{hours} hour of music | {hours} hours of music",
-            "contactHeader": "Contact",
-            "aboutFunkwhale": "About Funkwhale",
-            "funkwhaleDescription": "This pod runs Funkwhale, a community-driven project that lets you listen and share music and audio within a decentralized, open network.",
-            "funkwhaleAddendum": "Funkwhale is free and developed by a friendly community of volunteers.",
-            "websiteLink": "Visit funkwhale.audio",
-            "loginHeader": "Log In",
-            "signupHeader": "Sign up",
-            "signupDescription": "Sign up now to keep a track of your favorites, create playlists, discover new content and much more!",
-            "uploadQuota": "Users on this pod also get {quota} of free storage to upload their own content!",
-            "registrationsClosed": "Registrations are closed on this pod. You can signup on another pod using the link below.",
-            "findOtherPod": "Find another pod",
-            "usefulLinks": "Useful links",
-            "browsePublicContent": "Browse public content",
-            "publicContentDescription": "Listen to public albums and playlists shared on this pod.",
-            "mobileApps": "Mobile apps",
-            "mobileAppsDescription": "Use Funkwhale on other devices with our apps",
-            "userGuides": "User guides",
-            "userGuidesDescription": "Discover everything you need to know about Funkwhale and its features",
-            "recentlyAddedLabel": "Recently added albums",
-            "viewMore": "View more…",
-            "newChannelsLabel": "New channels"
+            "header": {
+                "welcome": "Welcome to {podName}!",
+                "about":"About this Funkwhale pod",
+                "statistics": "Statistics",
+                "contact": "Contact",
+                "aboutFunkwhale": "About Funkwhale",
+                "login": "Log in",
+                "signup": "Sign up",
+                "links": "Useful links",
+                "newAlbums": "Recently added albums",
+                "newChannels": "New channels"
+            },
+            "description": {
+                "signup": "Sign up now to keep a track of your favorites, create playlists, discover new content and much more!",
+                "quota": "Users on this pod also get {quota} of free storage to upload their own content!",
+                "funkwhale": {
+                    "paragraph1": "This pod runs Funkwhale, a community-driven project that lets you listen and share music and audio within a decentralized, open network.",
+                    "paragraph2": "Funkwhale is free and developed by a friendly community of volunteers."
+                }
+            },
+            "placeholder": {
+                "noDescription": "No description available"
+            },
+            "link": {
+                "learnMore": "Learn more",
+                "rules": "Server rules",
+                "funkwhale": "Visit funkwhale.audio",
+                "findOtherPod": "Find another pod",
+                "viewMore": "View more…",
+                "publicContent": {
+                    "label": "Browse public content",
+                    "description": "Listen to public albums and playlists shared on this pod."
+                },
+                "mobileApps": {
+                    "label": "Mobile apps",
+                    "description": "Use Funkwhale on other devices with our apps"
+                },
+                "userGuides": {
+                    "label": "User guides",
+                    "description": "Discover everything you need to know about Funkwhale and its features"
+                }
+            },
+            "stat": {
+                "activeUsers": "{users} active user | {users} active users",
+                "hoursOfMusic": "{hours} hour of music | {hours} hours of music"
+            },
+            "help": {
+                "registrationsClosed": "Registrations are closed on this pod. You can signup on another pod using the link below."
+            }
         },
         "PageNotFound": {
             "title": "Page not found",
-            "pageNotFound": "Page not found!",
-            "pageNotFoundMessage": "Sorry, the page you asked for does not exist:",
-            "homeLink": "Go to home page"
+            "header": {
+                "pageNotFound": "Page not found!"
+            },
+            "message": {
+                "pageNotFound": "Sorry, the page you asked for does not exist:"
+            },
+            "link": {
+                "home": "Go to home page"
+            }
         },
         "Queue": {
-            "queue": "Queue",
-            "duration": "Duration",
-            "addArtistContentFilter": "Hide content from this artist…",
-            "restart": "Restart track",
-            "previous": "Previous track",
-            "next": "Next track",
-            "pause": "Pause",
-            "play": "Play",
-            "remove": "Remove",
-            "selectTrack": "Select track",
-            "favorite": "Favorite track",
-            "trackLoadFailure": "The track cannot be loaded",
-            "automaticPlay": "The next track will play automatically in a few seconds…",
-            "connectivityWarning": "You may have a connectivity issue.",
-            "closeButton": "Close",
-            "clearButton": "Clear",
-            "queuePosition":"Track {index} of {length}",
-            "radioPlaying": "You have a radio playing",
-            "appendTracks": "New tracks will be appended here automatically.",
-            "stopRadio": "Stop radio"
+            "label": {
+                "queue": "Queue",
+                "duration": "Duration",
+                "addArtistContentFilter": "Hide content from this artist…",
+                "restart": "Restart track",
+                "previous": "Previous track",
+                "next": "Next track",
+                "pause": "Pause",
+                "play": "Play",
+                "remove": "Remove",
+                "selectTrack": "Select track",
+                "favorite": "Favorite track"
+            },
+            "header": {
+                "failure": "The track cannot be loaded",
+                "radio": "You have a radio playing"
+            },
+            "message": {
+                "automaticPlay": "The next track will play automatically in a few seconds…",
+                "radio": "New tracks will be appended here automatically."
+            },
+            "warning": {
+                "connectivity": "You may have a connectivity issue."
+            },
+            "button": {
+                "close": "Close",
+                "clear": "Clear",
+                "stopRadio": "Stop radio"
+            },
+            "display": {
+                "queuePosition":"Track {index} of {length}"
+            }
         },
         "RemoteSearchForm": {
-            "subscribeRss": "Subscribe to a podcast RSS feed",
-            "subscribeFediverse": "Subscribe to a podcast hosted on the Fediverse",
-            "rssLocation": "RSS feed location",
-            "fediverseObject": "Fediverse object",
-            "rssPlaceholder": "https://website.example.com/rss.xml",
-            "fediversePlaceholder": "@username@example.com",
-            "fetchFailureMessage": "This object cannot be retrieved",
-            "rss": "RSS",
-            "fediverse": "Fediverse",
-            "objectFetchError": "Error while fetching object",
-            "rssDescription": "Use this form to subscribe to an RSS feed from its URL.",
-            "fediverseDescription": "Use this form to subscribe to a channel hosted somewhere else on the Fediverse.",
-            "searchButton": "Search",
-            "unsupportedObject": "This kind of object isn't supported yet"
+            "label": {
+                "rss": {
+                    "title": "Subscribe to a podcast RSS feed",
+                    "fieldLabel": "RSS feed location",
+                    "fieldPlaceholder": "https://website.example.com/rss.xml"
+                },
+                "fediverse": {
+                    "title": "Fediverse object",
+                    "fieldLabel": "Fediverse object",
+                    "fieldPlaceholder": "@username@example.com"
+                }
+            },
+            "header": {
+                "fetchFailed": "Error while fetching object"
+            },
+            "description": {
+                "rss": "Use this form to subscribe to an RSS feed from its URL.",
+                "fediverse": "Use this form to subscribe to a channel hosted somewhere else on the Fediverse."
+            },
+            "button": {
+                "search": "Search",
+                "rss": "RSS",
+                "fediverse": "Fediverse"
+            },
+            "error": {
+                "fetchFailed": "This object cannot be retrieved"
+            },
+            "warning": {
+                "unsupported": "This kind of object isn't supported yet"
+            }
         },
         "SetInstanceModal": {
-            "currentUrl": "You are now using the Funkwhale instance at {url}",
-            "chooseInstance": "Choose your instance",
-            "connectionFailure": "It is not possible to connect to the given URL",
-            "serverDown": "The server might be down",
-            "notFunkwhaleServer": "The given address is not a Funkwhale server",
-            "currentConnection": "You are currently connected to <a href=\"{url}\" target=\"_blank\">{hostName}&nbsp;<i class=\"external icon\" /></a>. If you continue, you will be disconnected from your current instance and all your local data will be deleted.",
-            "selectFunkwhalePod": "To continue, please select the Funkwhale instance you want to connect to. Enter the address directly, or select one of the suggested choices.",
-            "instanceUrl": "Instance URL",
-            "submitButton": "Submit",
-            "suggestions": "Suggested choices",
-            "cancelButton": "Cancel"
+            "header": {
+                "chooseInstance": "Choose your instance",
+                "failure": "It is not possible to connect to the given URL",
+                "suggestions": "Suggested choices"
+            },
+            "message": {
+                "newUrl": "You are now using the Funkwhale instance at {url}",
+                "currentConnection": "You are currently connected to <a href=\"{url}\" target=\"_blank\">{hostName}&nbsp;<i class=\"external icon\" /></a>. If you continue, you will be disconnected from your current instance and all your local data will be deleted."
+            },
+            "help": {
+                "serverDown": "The server might be down",
+                "notFunkwhaleServer": "The given address is not a Funkwhale server",
+                "selectPod": "To continue, please select the Funkwhale instance you want to connect to. Enter the address directly, or select one of the suggested choices."
+            },
+            "button": {
+                "submit": "Submit",
+                "cancel": "Cancel"
+            },
+            "label": {
+                "url": "Instance URL"
+            }
         },
         "ShortcutsModal": {
-            "generalShortcuts": "General shortcuts",
-            "showShortcuts": "Show available keyboard shortcuts",
-            "focusSearch": "Focus searchbar",
-            "unfocusSearch": "Unfocus searchbar",
-            "audioShortcuts": "Audio player shortcuts",
-            "playPause": "Pause/play the current track",
-            "seekBack5": "Seek backwards 5s",
-            "seekForward5": "Seek forwards 5s",
-            "seekBack30": "Seek backwards 30s",
-            "seekForward30": "Seek forwards 30s",
-            "playPrevious": "Play previous track",
-            "playNext":"Play next track",
-            "increaseVolume": "Increase volume",
-            "decreaseVolume": "Decrease volume",
-            "toggleMute": "Toggle mute",
-            "expandQueue": "Expand queue/player view",
-            "toggleLoop": "Toggle queue looping",
-            "shuffleQueue": "Shuffle queue",
-            "clearQueue": "Clear queue",
-            "toggleFavorite": "Toggle favorite",
-            "modalHeader": "Keyboard shortcuts",
-            "closeButton": "Close"
+            "header": {
+                "modal": "Keyboard shortcuts"
+            },
+            "button": {
+                "close": "Close"
+            },
+            "shortcut": {
+                "general": {
+                    "label": "General shortcuts",
+                    "show": "Show available keyboard shortcuts",
+                    "focus": "Focus searchbar",
+                    "unfocus": "Unfocus searchbar"
+                },
+                "audio": {
+                    "label": "Audio player shortcuts",
+                    "playPause": "Pause/play the current track",
+                    "seekBack5": "Seek backwards 5s",
+                    "seekForward5": "Seek forwards 5s",
+                    "seekBack30": "Seek backwards 30s",
+                    "seekForward30": "Seek forwards 30s",
+                    "playPrevious": "Play previous track",
+                    "playNext":"Play next track",
+                    "increaseVolume": "Increase volume",
+                    "decreaseVolume": "Decrease volume",
+                    "toggleMute": "Toggle mute",
+                    "expandQueue": "Expand queue/player view",
+                    "toggleLoop": "Toggle queue looping",
+                    "shuffleQueue": "Shuffle queue",
+                    "clearQueue": "Clear queue",
+                    "toggleFavorite": "Toggle favorite"
+                }
+            }
         },
         "Sidebar": {
-            "mainMenu": "Main menu",
-            "selectTrack": "Play this track",
-            "pendingFollows": "Pending follow requests",
-            "pendingReviewEdits": "Pending review edits",
-            "pendingReviewReports": "Pending review reports",
-            "language": "Language",
-            "theme": "Theme",
-            "addContent": "Add content",
-            "administration": "Administration",
-            "home": "Home",
-            "library": "Library",
-            "moderation": "Moderation",
-            "users": "Users",
-            "settings": "Settings",
-            "login": "Login",
-            "createAccount": "Create an account",
-            "mainNavigation": "Main navigation",
-            "explore": "Explore",
-            "search": "Search",
-            "browse": "Browse",
-            "podcasts": "Podcasts",
-            "albums": "Albums",
-            "artists": "Artists",
-            "playlists": "Playlists",
-            "radios": "Radios",
-            "favorites": "Favorites",
-            "channels": "Channels",
-            "myLibrary": "My library",
-            "more": "More",
-            "aboutPod": "About this pod",
-            "switchInstance": "Switch instance"
+            "label": {
+                "main": "Main menu",
+                "play": "Play this track",
+                "follows": "Pending follow requests",
+                "edits": "Pending review edits",
+                "reports": "Pending review reports",
+                "language": "Language",
+                "theme": "Theme",
+                "add": "Add content",
+                "administration": "Administration"
+            },
+            "header": {
+                "main": "Main navigation",
+                "explore": "Explore",
+                "more": "More",
+                "library": "My library",
+                "administration": "Administration"
+            },
+            "link": {
+                "home": "Home",
+                "search": "Search",
+                "browse": "Browse",
+                "podcasts": "Podcasts",
+                "albums": "Albums",
+                "artists": "Artists",
+                "playlists": "Playlists",
+                "radios": "Radios",
+                "favorites": "Favorites",
+                "channels": "Channels",
+                "about": "About this pod",
+                "switchInstance": "Switch instance",
+                "moderation": "Moderation",
+                "users": "Users",
+                "library": "Library",
+                "settings": "Settings",
+                "login": "Login",
+                "createAccount": "Create account"
+            }
         },
         "admin": {
             "SettingsGroup": {
-                "errorMessage": "Error while saving settings.",
-                "successMessage": "Settings updated successfully.",
-                "currentImage": "Current image",
-                "saveButton": "Save"
+                "header": {
+                    "error": "Error while saving settings.",
+                    "image": "Current image"
+                },
+                "message": {
+                    "success": "Settings updated successfully."
+                },
+                "button": {
+                    "save": "Save"
+                }
             },
             "SignupFormBuilder": {
-                "deleteLabel": "Delete",
-                "moveUpLabel": "Move up",
-                "moveDownLabel": "Move down",
-                "additionalFieldInput": "Additional field",
-                "editForm": "Edit form",
-                "previewForm": "Preview Form",
-                "helpTextLabel": "Help text",
-                "helpTextMessage": "An optional text to be displayed at the start of the sign-up form.",
-                "additionalFieldsLabel": "Additional fields",
-                "additionalFieldsMessage": "Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled.",
-                "fieldLabelTableHeader": "Field label",
-                "fieldTypeTableHeader": "Field type",
-                "requiredTableHeader": "Required",
-                "actionsTableHeader": "Actions",
-                "shortTextInput": "Short text",
-                "longTextInput": "Long text",
-                "requiredTrue": "Yes",
-                "requiredFalse": "No",
-                "addFieldButton": "Add a new field"
+                "label": {
+                    "delete": "Delete",
+                    "moveUp": "Move up",
+                    "moveDown": "Move down",
+                    "additionalField": "Additional field",
+                    "helpText": "Help text",
+                    "additionalFields": "Additional fields"
+                },
+                "button": {
+                    "edit": "Edit form",
+                    "preview": "Preview Form",
+                    "add": "Add a new field"
+                },
+                "help": {
+                    "helpText": "An optional text to be displayed at the start of the sign-up form.",
+                    "additionalFields": "Additional form fields to be displayed in the form. Only shown if manual sign-up validation is enabled."
+                },
+                "table": {
+                    "additionalFields": {
+                        "header": {
+                            "label": "Field label",
+                            "type": "Field type",
+                            "required": "Required",
+                            "actions": "Actions"
+                        },
+                        "type": {
+                            "short": "Short text",
+                            "long": "Long text"
+                        },
+                        "required": {
+                            "true": "True",
+                            "false": "False"
+                        }
+                    }
+                }
             }
         },
         "audio": {
             "ChannelCard": {
-                "updatedOn": "Updated on {date}",
-                "episodeCount": "No episodes | {episode_count} episode | {episode_count} episodes",
-                "trackCount": "No tracks | {tracks_count} track | {tracks_count} tracks"
+                "title": "Updated on {date}",
+                "meta": {
+                    "episodes": "No episodes | {episode_count} episode | {episode_count} episodes",
+                    "tracks": "No tracks | {tracks_count} track | {tracks_count} tracks"
+                }
             },
             "ChannelEntries": {
-                "emptyMessage": "You may need to subscribe to this channel to see its content."
+                "help": {
+                    "subscribe": "You may need to subscribe to this channel to see its content."
+                }
             },
             "ChannelForm": {
-                "podcastsLabel": "Podcasts",
-                "podcastsHelpText": "Host your episodes and keep your community updated.",
-                "discographyLabel": "Artist Discography",
-                "discographyHelpText": "Publish music you make as a nice discography of albums and singles.",
-                "namePlaceholder": "Awesome channel name",
-                "usernamePlaceholder": "awesomechannelname",
-                "errorHeader": "Error while saving channel",
-                "channelPurposeLegend": "What will this channel be used for?",
-                "channelNameLabel": "Name",
-                "channelUsernameLabel": "Fediverse handle",
-                "channelUsernameDescription": "Used in URLs and to follow this channel in the Fediverse. It cannot be changed later.",
-                "channelImageLabel": "Channel Picture",
-                "channelTagsLabel": "Tags",
-                "channelLanguageLabel": "Language",
-                "channelDescriptionLabel": "Description",
-                "channelCategoryLabel": "Category",
-                "channelSubcategoryLabel": "Subcategory",
-                "channelEmailLabel": "Owner e-mail address",
-                "channelOwnerLabel": "Owner name",
-                "channelPodcastFieldsHelp": "Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes.",
-                "loadingMessage": "Loading"
+                "label": {
+                    "podcast": "Podcasts",
+                    "discography": "Artist Discography",
+                    "name": "Name",
+                    "username": "Fediverse handle",
+                    "image": "Channel Picture",
+                    "tags": "Tags",
+                    "language": "Language",
+                    "description": "Description",
+                    "category": "Category",
+                    "subcategory": "Subcategory",
+                    "email": "Owner e-mail address",
+                    "owner": "Owner name"
+                },
+                "help": {
+                    "podcast": "Host your episodes and keep your community updated.",
+                    "discography": "Publish music you make as a nice discography of albums and singles.",
+                    "username": "Used in URLs and to follow this channel in the Fediverse. It cannot be changed later.",
+                    "podcastFields": "Used for the itunes:email and itunes:name field required by certain platforms such as Spotify or iTunes."
+                },
+                "placeholder": {
+                    "name": "Awesome channel name",
+                    "username": "awesomechannelname"
+                },
+                "header": {
+                    "error": "Error while saving channel."
+                },
+                "legend": {
+                    "purpose": "What will this channel be used for?"
+                },
+                "message": {
+                    "loading": "Loading"
+                }
             },
             "ChannelSerieCard": {
-                "episodeCount": "No episodes | {episode_count} episode | {episode_count} episodes"
+                "meta": {
+                    "episodes": "No episodes | {episode_count} episode | {episode_count} episodes"
+                }
             },
             "ChannelSeries": {
-                "showMore": "Show more",
-                "emptyMessage": "You may need to subscribe to this channel to see its contents."
+                "button": {
+                    "showMore": "Show more"
+                },
+                "help": {
+                    "subscribe": "You may need to subscribe to this channel to see its contents."
+                }
             },
             "ChannelsWidget": {
-                "showMore": "Show more"
+                "button": {
+                    "showMore": "Show more"
+                }
             },
             "EmbedWizard": {
-                "anonymousAccessWarning": "Sharing will not work because this pod doesn't allow anonymous users to access content.",
-                "anonymousAccessHelp": "Please contact your admins and ask them to update the corresponding setting.",
-                "widgetWidthLabel": "Widget width",
-                "widgetWidthHelp": "Leave empty for a responsive widget",
-                "widgetHeightLabel": "Widget height",
-                "copyButton": "Copy",
-                "embedCodeLabel": "Embed code",
-                "embedCodeHelp": "Copy/paste this code in your website HTML",
-                "copyButtonSuccessMessage": "Text copied to clipboard!",
-                "previewHeader": "Preview"
+                "warning": {
+                    "anonymous": "Sharing will not work because this pod doesn't allow anonymous users to access content."
+                },
+                "help": {
+                    "anonymous": "Please contact your admins and ask them to update the corresponding setting.",
+                    "embed": "Copy/paste this code in your website HTML",
+                    "width": "Leave empty for a responsive widget"
+                },
+                "label": {
+                    "width": "Widget width",
+                    "height": "Widget height",
+                    "embed": "Embed code"
+                },
+                "button": {
+                    "copy": "Copy"
+                },
+                "header": {
+                    "preview": "Preview"
+                },
+                "message": {
+                    "copy": "Text copied to clipboard!"
+                }
             },
             "LibraryFollowButton": {
-                "unfollowLabel": "Unfollow",
-                "cancelLabel": "Cancel follow request",
-                "followLabel": "Follow"
+                "button": {       
+                    "unfollow": "Unfollow",
+                    "cancel": "Cancel follow request",
+                    "follow": "Follow"
+                }
             },
             "PlayButton": {
-                "playNowLabel": "Play now",
-                "addToQueueLabel": "Add to current queue",
-                "playNextLabel": "Play next",
-                "startRadioLabel": "Play similar songs",
-                "reportLabel": "Report…",
-                "addToPlaylistLabel": "Add to playlist",
-                "hideArtistLabel": "Hide content from this artist",
-                "playTrackLabel": "Play track",
-                "playAlbumLabel": "Play album",
-                "playArtistLabel": "Play artist",
-                "playPlaylistLabel": "Play playlist",
-                "playTracksLabel": "Play tracks",
-                "moreTitle": "More…",
-                "notAvailableTitle": "This track is not available in any library you have access to",
-                "episodeDetailsButton": "Episode details",
-                "trackDetailsButton": "Track details",
-                "discretePlayButton": "Play"
+                "button": {
+                    "playNow": "Play now",
+                    "addToQueue": "Add to current queue",
+                    "playNext": "Play next",
+                    "startRadio": "Play similar songs",
+                    "report": "Report…",
+                    "addToPlaylist": "Add to playlist",
+                    "hideArtist": "Hide content from this artist",
+                    "playTrack": "Play track",
+                    "playAlbum": "Play album",
+                    "playArtist": "Play artist",
+                    "playPlaylist": "Play playlist",
+                    "playTracks": "Play tracks",
+                    "episodeDetails": "Episode details",
+                    "trackDetails": "Track details",
+                    "discretePlay": "Play"
+                },
+                "title": {
+                    "more": "More…",
+                    "unavailable": "This track is not available in any library you have access to"
+                }
             },
             "Player": {
-                "audioPlayerLabel": "Media player",
-                "previousTrackLabel": "Previous track",
-                "playLabel": "Play",
-                "pauseLabel": "Pause",
-                "nextTrackLabel": "Next track",
-                "unmuteLabel": "Unmute",
-                "muteLabel": "Mute",
-                "expandQueueLabel": "Expand queue",
-                "loopingDisabledLabel": "Looping disabled. Click to switch to single-track looping.",
-                "loopingSingleLabel": "Looping on a single track. Click to switch to whole queue looping.",
-                "loopingWholeQueueLabel": "Looping on whole queue. Click to disable looping.",
-                "shuffleQueueLabel": "Shuffle your queue",
-                "clearQueueLabel": "Clear your queue",
-                "addArtistContentFilterLabel": "Hide content from this artist…",
-                "playerHeader": "Audio player and controls",
-                "queuePosition": "{index} of {length}"
+                "label": {
+                    "audioPlayer": "Media player",
+                    "previousTrack": "Previous track",
+                    "play": "Play",
+                    "pause": "Pause",
+                    "nextTrack": "Next track",
+                    "unmute": "Unmute",
+                    "mute": "Mute",
+                    "expandQueue": "Expand queue",
+                    "loopingDisabled": "Looping disabled. Click to switch to single-track looping.",
+                    "loopingSingle": "Looping on a single track. Click to switch to whole queue looping.",
+                    "loopingWholeQueue": "Looping on whole queue. Click to disable looping.",
+                    "shuffleQueue": "Shuffle your queue",
+                    "clearQueue": "Clear your queue",
+                    "addArtistContentFilter": "Hide content from this artist…"
+                },
+                "header": {
+                    "player": "Audio player and controls"
+                },
+                "meta": {
+                    "position": "{index} of {length}"
+                }
             },
             "Search": {
-                "searchPlaceHolderLabel": "Artist, album, track…",
-                "searchHeader": "Search for some music",
-                "artistsHeader": "Artists",
-                "albumsHeader": "Albums",
-                "noArtistsMessage": "No artist matched your query",
-                "noAlbumsMessage": "No album matched your query"
+                "header": {
+                    "search": "Search for some music",
+                    "artists": "Artists",
+                    "albums": "Albums"
+                },
+                "message": {
+                    "noArtists": "No artist matched your query",
+                    "noAlbums": "No album matched your query"
+                },
+                "placeholder": {
+                    "search": "Artist, album, track…"
+                }
             },
             "SearchBar": {
                 "placeHolderLabel": "Search for artists, albums, tracks…",

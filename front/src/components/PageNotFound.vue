@@ -20,11 +20,11 @@ const labels = computed(() => ({
         <h1 class="ui huge header">
           <i class="warning icon" />
           <div class="content">
-            {{ $t('components.PageNotFound.pageNotFound') }}
+            {{ $t('components.PageNotFound.header.pageNotFound') }}
           </div>
         </h1>
         <p>
-          {{ $t('components.PageNotFound.pageNotFoundMessage') }}
+          {{ $t('components.PageNotFound.message.pageNotFound') }}
         </p>
         <a :href="path">{{ path }}</a>
         <div class="ui hidden divider" />
@@ -32,7 +32,7 @@ const labels = computed(() => ({
           class="ui icon labeled right button"
           to="/"
         >
-          {{ $t('components.PageNotFound.homeLink') }}
+          {{ $t('components.PageNotFound.link.home') }}
           <i class="right arrow icon" />
         </router-link>
       </div>

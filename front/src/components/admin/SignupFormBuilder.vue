@@ -28,9 +28,9 @@ const isPreviewing = ref(false)
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  delete: t('components.admin.SignupFormBuilder.deleteLabel'),
-  up: t('components.admin.SignupFormBuilder.moveUpLabel'),
-  down: t('components.admin.SignupFormBuilder.moveDownLabel')
+  delete: t('components.admin.SignupFormBuilder.label.delete'),
+  up: t('components.admin.SignupFormBuilder.label.moveUp'),
+  down: t('components.admin.SignupFormBuilder.label.moveDown')
 }))
 
 if (!value.value?.fields) {
@@ -45,7 +45,7 @@ if (!value.value?.fields) {
 
 const addField = () => {
   value.value.fields.push({
-    label: t('components.admin.SignupFormBuilder.additionalFieldInput') + ' ' + (value.value.fields.length + 1),
+    label: t('components.admin.SignupFormBuilder.label.additionalField') + ' ' + (value.value.fields.length + 1),
     required: true,
     input_type: 'short_text'
   })
@@ -69,13 +69,13 @@ const move = (idx: number, increment: number) => {
         :class="[{active: !isPreviewing}, 'item']"
         @click.stop.prevent="isPreviewing = false"
       >
-        {{ $t('components.admin.SignupFormBuilder.editForm') }}
+        {{ $t('components.admin.SignupFormBuilder.button.edit') }}
       </button>
       <button
         :class="[{active: isPreviewing}, 'item']"
         @click.stop.prevent="isPreviewing = true"
       >
-        {{ $t('components.admin.SignupFormBuilder.previewForm') }}
+        {{ $t('components.admin.SignupFormBuilder.button.preview') }}
       </button>
     </div>
     <div
@@ -95,10 +95,10 @@ const move = (idx: number, increment: number) => {
     >
       <div class="field">
         <label for="help-text">
-          {{ $t('components.admin.SignupFormBuilder.helpTextLabel') }}
+          {{ $t('components.admin.SignupFormBuilder.label.helpText') }}
         </label>
         <p>
-          {{ $t('components.admin.SignupFormBuilder.helpTextMessage') }}
+          {{ $t('components.admin.SignupFormBuilder.help.helpText') }}
         </p>
         <content-form
           v-if="value.help_text"
@@ -109,24 +109,24 @@ const move = (idx: number, increment: number) => {
       </div>
       <div class="field">
         <label>
-          {{ $t('components.admin.SignupFormBuilder.additionalFieldsLabel') }}
+          {{ $t('components.admin.SignupFormBuilder.label.additionalFields') }}
         </label>
         <p>
-          {{ $t('components.admin.SignupFormBuilder.additionalFieldsMessage') }}
+          {{ $t('components.admin.SignupFormBuilder.help.additionalFields') }}
         </p>
         <table v-if="value.fields?.length > 0">
           <thead>
             <tr>
               <th>
-                {{ $t('components.admin.SignupFormBuilder.fieldLabelTableHeader') }}
+                {{ $t('components.admin.SignupFormBuilder.table.additionalFields.header.label') }}
               </th>
               <th>
-                {{ $t('components.admin.SignupFormBuilder.fieldTypeTableHeader') }}
+                {{ $t('components.admin.SignupFormBuilder.table.additionalFields.header.type') }}
               </th>
               <th>
-                {{ $t('components.admin.SignupFormBuilder.requiredTableHeader') }}
+                {{ $t('components.admin.SignupFormBuilder.table.additionalFields.header.required') }}
               </th>
-              <th><span class="visually-hidden">{{ $t('components.admin.SignupFormBuilder.actionsTableHeader') }}</span></th>
+              <th><span class="visually-hidden">{{ $t('components.admin.SignupFormBuilder.table.additionalFields.header.actions') }}</span></th>
             </tr>
           </thead>
           <tbody>
@@ -144,20 +144,20 @@ const move = (idx: number, increment: number) => {
               <td>
                 <select v-model="field.input_type">
                   <option value="short_text">
-                    {{ $t('components.admin.SignupFormBuilder.shortTextInput') }}
+                    {{ $t('components.admin.SignupFormBuilder.table.additionalFields.type.short') }}
                   </option>
                   <option value="long_text">
-                    {{ $t('components.admin.SignupFormBuilder.longTextInput') }}
+                    {{ $t('components.admin.SignupFormBuilder.table.additionalFields.type.long') }}
                   </option>
                 </select>
               </td>
               <td>
                 <select v-model="field.required">
                   <option :value="true">
-                    {{ $t('components.admin.SignupFormBuilder.requiredTrue') }}
+                    {{ $t('components.admin.SignupFormBuilder.table.additionalFields.required.true') }}
                   </option>
                   <option :value="false">
-                    {{ $t('components.admin.SignupFormBuilder.requiredFalse') }}
+                    {{ $t('components.admin.SignupFormBuilder.table.additionalFields.required.false') }}
                   </option>
                 </select>
               </td>
@@ -192,7 +192,7 @@ const move = (idx: number, increment: number) => {
           class="ui basic button"
           @click.stop.prevent="addField"
         >
-          {{ $t('components.admin.SignupFormBuilder.addFieldButton') }}
+          {{ $t('components.admin.SignupFormBuilder.button.add') }}
         </button>
       </div>
     </div>

@@ -56,7 +56,7 @@ const cover = computed(() => props.serie?.cover ?? null)
       </strong>
       <div class="description">
         <span>
-          {{ $t('components.audio.ChannelSerieCard.episodeCount', serie.tracks_count) }}
+          {{ $t('components.audio.ChannelSerieCard.meta.episodes', serie.tracks_count) }}
         </span>
       </div>
     </div>
