@@ -20,7 +20,7 @@ const { t } = useI18n()
 
 const groups = computed(() => [
   {
-    label: t('Instance information'),
+    label: t('views.admin.Settings.instanceInfoLabel'),
     id: 'instance',
     settings: [
       { name: 'instance__name' },
@@ -34,7 +34,7 @@ const groups = computed(() => [
     ]
   },
   {
-    label: t('Sign-ups'),
+    label: t('views.admin.Settings.signupsLabel'),
     id: 'signup',
     settings: [
       { name: 'users__registration_enabled' },
@@ -43,7 +43,7 @@ const groups = computed(() => [
     ]
   },
   {
-    label: t('Security'),
+    label: t('views.admin.Settings.securityLabel'),
     id: 'security',
     settings: [
       { name: 'common__api_authentication_required' },
@@ -52,7 +52,7 @@ const groups = computed(() => [
     ]
   },
   {
-    label: t('Music'),
+    label: t('views.admin.Settings.musicLabel'),
     id: 'music',
     settings: [
       { name: 'music__transcoding_enabled' },
@@ -60,7 +60,7 @@ const groups = computed(() => [
     ]
   },
   {
-    label: t('Channels'),
+    label: t('views.admin.Settings.channelsLabel'),
     id: 'channels',
     settings: [
       { name: 'audio__channels_enabled' },
@@ -68,14 +68,14 @@ const groups = computed(() => [
     ]
   },
   {
-    label: t('Playlists'),
+    label: t('views.admin.Settings.playlistsLabel'),
     id: 'playlists',
     settings: [
       { name: 'playlists__max_tracks' }
     ]
   },
   {
-    label: t('Moderation'),
+    label: t('views.admin.Settings.moderationLabel'),
     id: 'moderation',
     settings: [
       { name: 'moderation__allow_list_enabled' },
@@ -84,7 +84,7 @@ const groups = computed(() => [
     ]
   },
   {
-    label: t('Federation'),
+    label: t('views.admin.Settings.federationLabel'),
     id: 'federation',
     settings: [
       { name: 'federation__enabled' },
@@ -95,14 +95,14 @@ const groups = computed(() => [
     ]
   },
   {
-    label: t('Subsonic'),
+    label: t('views.admin.Settings.subsonicLabel'),
     id: 'subsonic',
     settings: [
       { name: 'subsonic__enabled' }
     ]
   },
   {
-    label: t('Statistics'),
+    label: t('views.admin.Settings.statsLabel'),
     id: 'ui',
     settings: [
       { name: 'ui__custom_css' },
@@ -110,7 +110,7 @@ const groups = computed(() => [
     ]
   },
   {
-    label: t('User Interface'),
+    label: t('views.admin.Settings.uiLabel'),
     id: 'statistics',
     settings: [
       { name: 'instance__nodeinfo_stats_enabled' },
@@ -120,7 +120,7 @@ const groups = computed(() => [
 ] as SettingsGroupType[])
 
 const labels = computed(() => ({
-  settings: t('Instance settings')
+  settings: t('views.admin.Settings.settingsLabel')
 }))
 
 const scrollTo = (id: string) => {
@@ -186,7 +186,7 @@ await nextTick()
           <div class="four wide column">
             <div class="ui sticky vertical secondary menu">
               <div class="header item">
-                Sections
+                {{ $t('views.admin.Settings.sectionsHeader') }}
               </div>
               <a
                 v-for="(group, key) in groups"

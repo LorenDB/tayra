@@ -27,7 +27,7 @@ const router = useRouter()
 const logger = useLogger()
 
 const labels = computed(() => ({
-  statsWarning: t('Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
+  statsWarning: t('views.admin.library.LibraryDetail.statsWarning')
 }))
 
 const isLoading = ref(false)
@@ -117,7 +117,7 @@ const updateObj = async (attr: string) => {
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        Local
+                        {{ $t('views.admin.library.LibraryDetail.localLabel') }}
                       </span>
                       &nbsp;
                     </template>
@@ -134,7 +134,7 @@ const updateObj = async (attr: string) => {
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    View in Django's admin&nbsp;
+                    {{ $t('views.admin.library.LibraryDetail.djangoLink') }}
                   </a>
                   <button
                     v-dropdown
@@ -150,7 +150,7 @@ const updateObj = async (attr: string) => {
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        View in Django's admin&nbsp;
+                        {{ $t('views.admin.library.LibraryDetail.djangoLink') }}
                       </a>
                       <a
                         class="basic item"
@@ -159,7 +159,7 @@ const updateObj = async (attr: string) => {
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        Open remote profile&nbsp;
+                        {{ $t('views.admin.library.LibraryDetail.remoteProfileLink') }}
                       </a>
                     </div>
                   </button>
@@ -169,22 +169,22 @@ const updateObj = async (attr: string) => {
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    Delete
+                    {{ $t('views.admin.library.LibraryDetail.deleteButton') }}
                     <template #modal-header>
                       <p>
-                        Delete this library?
+                        {{ $t('views.admin.library.LibraryDetail.deleteModalHeader') }}
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          The library will be removed, as well as associated uploads, and follows. This action is irreversible.
+                          {{ $t('views.admin.library.LibraryDetail.deleteModalMessage') }}
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        Delete
+                        {{ $t('views.admin.library.LibraryDetail.deleteButton') }}
                       </p>
                     </template>
                   </dangerous-button>
@@ -201,14 +201,14 @@ const updateObj = async (attr: string) => {
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  Library data
+                  {{ $t('views.admin.library.LibraryDetail.libraryDataHeader') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      Name
+                      {{ $t('views.admin.library.LibraryDetail.nameLabel') }}
                     </td>
                     <td>
                       {{ object.name }}
@@ -217,7 +217,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('privacy_level', object.privacy_level) }}">
-                        Visibility
+                        {{ $t('views.admin.library.LibraryDetail.visibilityLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -244,7 +244,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.accounts.detail', params: {id: object.actor.full_username }}">
-                        Account
+                        {{ $t('views.admin.library.LibraryDetail.accountLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -254,7 +254,7 @@ const updateObj = async (attr: string) => {
                   <tr v-if="!object.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        Domain
+                        {{ $t('views.admin.library.LibraryDetail.domainLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -263,7 +263,7 @@ const updateObj = async (attr: string) => {
                   </tr>
                   <tr>
                     <td>
-                      Description
+                      {{ $t('views.admin.library.LibraryDetail.descriptionLabel') }}
                     </td>
                     <td>
                       {{ object.description }}
@@ -278,7 +278,7 @@ const updateObj = async (attr: string) => {
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  Activity&nbsp;
+                  {{ $t('views.admin.library.LibraryDetail.activityHeader') }}
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -298,7 +298,7 @@ const updateObj = async (attr: string) => {
                 <tbody>
                   <tr>
                     <td>
-                      First seen
+                      {{ $t('views.admin.library.LibraryDetail.firstSeenLabel') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -306,7 +306,7 @@ const updateObj = async (attr: string) => {
                   </tr>
                   <tr>
                     <td>
-                      Followers
+                      {{ $t('views.admin.library.LibraryDetail.followersLabel') }}
                     </td>
                     <td>
                       {{ stats.followers }}
@@ -315,7 +315,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `library:${object.uuid}`) }}">
-                        Linked reports
+                        {{ $t('views.admin.library.LibraryDetail.linkedReportsLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -331,7 +331,7 @@ const updateObj = async (attr: string) => {
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  Audio content&nbsp;
+                  {{ $t('views.admin.library.LibraryDetail.audioContentHeader') }}
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -351,7 +351,7 @@ const updateObj = async (attr: string) => {
                 <tbody>
                   <tr>
                     <td>
-                      Cached size
+                      {{ $t('views.admin.library.LibraryDetail.cachedSizeLabel') }}
                     </td>
                     <td>
                       {{ humanSize(stats.media_downloaded_size) }}
@@ -359,7 +359,7 @@ const updateObj = async (attr: string) => {
                   </tr>
                   <tr>
                     <td>
-                      Total size
+                      {{ $t('views.admin.library.LibraryDetail.totalSizeLabel') }}
                     </td>
                     <td>
                       {{ humanSize(stats.media_total_size) }}
@@ -368,7 +368,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('library_id', object.id) }}">
-                        Artists
+                        {{ $t('views.admin.library.LibraryDetail.artistsLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -378,7 +378,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('library_id', object.id) }}">
-                        Albums
+                        {{ $t('views.admin.library.LibraryDetail.albumsLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -388,7 +388,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('library_id', object.id) }}">
-                        Tracks
+                        {{ $t('views.admin.library.LibraryDetail.tracksLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -398,7 +398,7 @@ const updateObj = async (attr: string) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('library_id', object.id) }}">
-                        Uploads
+                        {{ $t('views.admin.library.LibraryDetail.uploadsLabel') }}
                       </router-link>
                     </td>
                     <td>

@@ -21,7 +21,7 @@ const { t } = useI18n()
 const router = useRouter()
 
 const labels = computed(() => ({
-  statsWarning: t('Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
+  statsWarning: t('views.admin.ChannelDetail.statsWarning')
 }))
 
 const isLoading = ref(false)
@@ -106,7 +106,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     <template v-if="object.artist.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        Local
+                        {{ $t('views.admin.ChannelDetail.localLabel') }}
                       </span>
                       &nbsp;
                     </template>
@@ -129,7 +129,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :to="{name: 'channels.detail', params: {id: object.uuid }}"
                   >
                     <i class="info icon" />
-                    Open local profile&nbsp;
+                    {{ $t('views.admin.ChannelDetail.localProfileLink') }}
                   </router-link>
                   <button
                     v-dropdown
@@ -145,7 +145,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        View in Django's admin&nbsp;
+                        {{ $t('views.admin.ChannelDetail.djangoLink') }}
                       </a>
                       <fetch-button
                         v-if="!object.actor.is_local"
@@ -154,7 +154,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         @refresh="fetchData"
                       >
                         <i class="refresh icon" />&nbsp;
-                        Refresh from remote server&nbsp;
+                        {{ $t('views.admin.ChannelDetail.refreshButton') }}
                       </fetch-button>
                       <a
                         class="basic item"
@@ -163,7 +163,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        Open remote profile&nbsp;
+                        {{ $t('views.admin.ChannelDetail.openRemoteButton') }}
                       </a>
                     </div>
                   </button>
@@ -173,22 +173,22 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    Delete
+                    {{ $t('views.admin.ChannelDetail.deleteButton') }}
                     <template #modal-header>
                       <p>
-                        Delete this channel?
+                        {{ $t('views.admin.ChannelDetail.deleteModalHeader') }}
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          The channel will be removed, as well as associated uploads, tracks, and albums. This action is irreversible.
+                          {{ $t('views.admin.ChannelDetail.deleteModalMessage') }}
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        Delete
+                        {{ $t('views.admin.ChannelDetail.deleteButton') }}
                       </p>
                     </template>
                   </dangerous-button>
@@ -205,14 +205,14 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  Channel data
+                  {{ $t('views.admin.ChannelDetail.channelDataHeader') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      Name
+                      {{ $t('views.admin.ChannelDetail.nameLabel') }}
                     </td>
                     <td>
                       {{ object.artist.name }}
@@ -221,7 +221,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.channels', query: {q: getQuery('category', object.artist.content_category) }}">
-                        Category
+                        {{ $t('views.admin.ChannelDetail.categoryLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -231,7 +231,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.accounts.detail', params: {id: object.attributed_to.full_username }}">
-                        Account
+                        {{ $t('views.admin.ChannelDetail.accountLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -241,7 +241,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr v-if="!object.actor.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.actor.domain }}">
-                        Domain
+                        {{ $t('views.admin.ChannelDetail.domainLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -250,7 +250,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr v-if="object.artist.description">
                     <td>
-                      Description
+                      {{ $t('views.admin.ChannelDetail.descriptionLabel') }}
                     </td>
                     <sanitized-html
                       tag="td"
@@ -259,7 +259,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr v-if="object.actor.url">
                     <td>
-                      URL
+                      {{ $t('views.admin.ChannelDetail.urlLabel') }}
                     </td>
                     <td>
                       <a
@@ -271,7 +271,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr v-if="object.rss_url">
                     <td>
-                      RSS Feed
+                      {{ $t('views.admin.ChannelDetail.rssLabel') }}
                     </td>
                     <td>
                       <a
@@ -290,7 +290,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  Activity&nbsp;
+                  {{ $t('views.admin.ChannelDetail.activityHeader') }}
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -310,7 +310,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      First seen
+                      {{ $t('views.admin.ChannelDetail.firstSeenLabel') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -318,7 +318,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      Listenings
+                      {{ $t('views.admin.ChannelDetail.listeningsLabel') }}
                     </td>
                     <td>
                       {{ stats.listenings }}
@@ -326,7 +326,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      Favorited tracks
+                      {{ $t('views.admin.ChannelDetail.favoritedLabel') }}
                     </td>
                     <td>
                       {{ stats.track_favorites }}
@@ -334,7 +334,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      Playlists
+                      {{ $t('views.admin.ChannelDetail.playlistsLabel') }}
                     </td>
                     <td>
                       {{ stats.playlists }}
@@ -343,7 +343,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `channel:${object.uuid}`) }}">
-                        Linked reports
+                        {{ $t('views.admin.ChannelDetail.linkedReportsLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -353,7 +353,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.edits', query: {q: getQuery('target', 'artist ' + object.artist.id)}}">
-                        Edits
+                        {{ $t('views.admin.ChannelDetail.editsLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -369,7 +369,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  Audio content&nbsp;
+                  {{ $t('views.admin.ChannelDetail.audioContentHeader') }}
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -389,7 +389,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      Cached size
+                      {{ $t('views.admin.ChannelDetail.cachedSizeLabel') }}
                     </td>
                     <td>
                       {{ humanSize(stats.media_downloaded_size) }}
@@ -397,7 +397,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      Total size
+                      {{ $t('views.admin.ChannelDetail.totalSizeLabel') }}
                     </td>
                     <td>
                       {{ humanSize(stats.media_total_size) }}
@@ -406,7 +406,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('channel_id', object.uuid) }}">
-                        Uploads
+                        {{ $t('views.admin.ChannelDetail.uploadsLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -416,7 +416,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('channel_id', object.uuid) }}">
-                        Albums
+                        {{ $t('views.admin.ChannelDetail.albumsLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -426,7 +426,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('channel_id', object.uuid) }}">
-                        Tracks
+                        {{ $t('views.admin.ChannelDetail.tracksLabel') }}
                       </router-link>
                     </td>
                     <td>

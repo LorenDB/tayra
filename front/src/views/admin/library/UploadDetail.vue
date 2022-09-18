@@ -89,7 +89,7 @@ const showUploadDetailModal = ref(false)
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        Local
+                        {{ $t('views.admin.library.UploadDetail.localLabel') }}
                       </span>
                       &nbsp;
                     </template>
@@ -106,7 +106,7 @@ const showUploadDetailModal = ref(false)
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    View in Django's admin&nbsp;
+                    {{ $t('views.admin.library.UploadDetail.djangoLink') }}
                   </a>
                   <button
                     v-dropdown
@@ -122,7 +122,7 @@ const showUploadDetailModal = ref(false)
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        View in Django's admin&nbsp;
+                        {{ $t('views.admin.library.UploadDetail.djangoLink') }}
                       </a>
                       <a
                         class="basic item"
@@ -131,7 +131,7 @@ const showUploadDetailModal = ref(false)
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        Open remote profile&nbsp;
+                        {{ $t('views.admin.library.UploadDetail.remoteProfileLink') }}
                       </a>
                     </div>
                   </button>
@@ -145,7 +145,7 @@ const showUploadDetailModal = ref(false)
                     rel="noopener noreferrer"
                   >
                     <i class="download icon" />
-                    Download
+                    {{ $t('views.admin.library.UploadDetail.downloadButton') }}
                   </a>
                 </div>
                 <div class="ui buttons">
@@ -153,22 +153,22 @@ const showUploadDetailModal = ref(false)
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    Delete
+                    {{ $t('views.admin.library.UploadDetail.deleteButton') }}
                     <template #modal-header>
                       <p>
-                        Delete this upload?
+                        {{ $t('views.admin.library.UploadDetail.deleteModalHeader') }}
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          The upload will be removed. This action is irreversible.
+                          {{ $t('views.admin.library.UploadDetail.deleteModalMessage') }}
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        Delete
+                        {{ $t('views.admin.library.UploadDetail.deleteButton') }}
                       </p>
                     </template>
                   </dangerous-button>
@@ -185,14 +185,14 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  Upload data
+                  {{ $t('views.admin.library.UploadDetail.uploadDataHeader') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      Name
+                      {{ $t('views.admin.library.UploadDetail.nameLabel') }}
                     </td>
                     <td>
                       {{ displayName(object) }}
@@ -201,7 +201,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('privacy_level', object.library.privacy_level) }}">
-                        Visibility
+                        {{ $t('views.admin.library.UploadDetail.visibilityLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -211,7 +211,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.accounts.detail', params: {id: object.library.actor.full_username }}">
-                        Account
+                        {{ $t('views.admin.library.UploadDetail.accountLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -221,7 +221,7 @@ const showUploadDetailModal = ref(false)
                   <tr v-if="!object.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        Domain
+                        {{ $t('views.admin.library.UploadDetail.domainLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -231,7 +231,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('status', object.import_status) }}">
-                        Import status
+                        {{ $t('views.admin.library.UploadDetail.importStatusLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -248,7 +248,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries.detail', params: {id: object.library.uuid }}">
-                        Library
+                        {{ $t('views.admin.library.UploadDetail.libraryLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -264,14 +264,14 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  Activity&nbsp;
+                  {{ $t('views.admin.library.UploadDetail.activityHeader') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      First seen
+                      {{ $t('views.admin.library.UploadDetail.firstSeenLabel') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -279,7 +279,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      Accessed date
+                      {{ $t('views.admin.library.UploadDetail.accessedDateLabel') }}
                     </td>
                     <td>
                       <human-date
@@ -289,7 +289,7 @@ const showUploadDetailModal = ref(false)
                       <translate
                         v-else
                       >
-                        N/A
+                        {{ $t('views.admin.library.UploadDetail.notApplicable') }}
                       </translate>
                     </td>
                   </tr>
@@ -302,7 +302,7 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  Audio content&nbsp;
+                  {{ $t('views.admin.library.UploadDetail.audioContentHeader') }}
                 </div>
               </h3>
               <table class="ui very basic table">
@@ -310,7 +310,7 @@ const showUploadDetailModal = ref(false)
                   <tr v-if="object.track">
                     <td>
                       <router-link :to="{name: 'manage.library.tracks.detail', params: {id: object.track.id }}">
-                        Track
+                        {{ $t('views.admin.library.UploadDetail.trackLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -319,7 +319,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      Cached size
+                      {{ $t('views.admin.library.UploadDetail.cachedSizeLabel') }}
                     </td>
                     <td>
                       <template v-if="object.audio_file">
@@ -328,13 +328,13 @@ const showUploadDetailModal = ref(false)
                       <translate
                         v-else
                       >
-                        N/A
+                        {{ $t('views.admin.library.UploadDetail.notApplicable') }}
                       </translate>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      Size
+                      {{ $t('views.admin.library.UploadDetail.sizeLabel') }}
                     </td>
                     <td>
                       {{ humanSize(object.size) }}
@@ -342,22 +342,22 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      Bitrate
+                      {{ $t('views.admin.library.UploadDetail.bitrateLabel') }}
                     </td>
                     <td>
                       <template v-if="object.bitrate">
-                        {{ humanSize(object.bitrate) }}/s
+                        {{ $t('views.admin.library.UploadDetail.bitrateValue', {bitrate: humanSize(object.bitrate)}) }}
                       </template>
                       <translate
                         v-else
                       >
-                        N/A
+                        {{ $t('views.admin.library.UploadDetail.notApplicable') }}
                       </translate>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      Duration
+                      {{ $t('views.admin.library.UploadDetail.durationLabel') }}
                     </td>
                     <td>
                       <template v-if="object.duration">
@@ -366,14 +366,14 @@ const showUploadDetailModal = ref(false)
                       <translate
                         v-else
                       >
-                        N/A
+                        {{ $t('views.admin.library.UploadDetail.notApplicable') }}
                       </translate>
                     </td>
                   </tr>
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('type', object.mimetype) }}">
-                        Type
+                        {{ $t('views.admin.library.UploadDetail.typeLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -383,7 +383,7 @@ const showUploadDetailModal = ref(false)
                       <translate
                         v-else
                       >
-                        N/A
+                        {{ $t('views.admin.library.UploadDetail.notApplicable') }}
                       </translate>
                     </td>
                   </tr>

@@ -14,7 +14,7 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Edits')
+  title: t('views.admin.library.EditsList.title')
 }))
 </script>
 
@@ -26,7 +26,7 @@ const labels = computed(() => ({
         :default-query="defaultQuery"
       >
         <h2 class="ui header">
-          Library edits
+          {{ $t('views.admin.library.EditsList.libraryEditsHeader') }}
         </h2>
       </edits-card-list>
     </section>

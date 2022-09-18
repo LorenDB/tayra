@@ -19,7 +19,7 @@ const props = defineProps<Props>()
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  statsWarning: t('Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object')
+  statsWarning: t('views.admin.library.TrackDetail.statsWarning')
 }))
 
 const track = ref()
@@ -105,7 +105,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     <template v-if="track.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        Local
+                        {{ $t('views.admin.library.TrackDetail.localLabel') }}
                       </span>
                       &nbsp;
                     </template>
@@ -129,7 +129,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :to="{name: 'library.tracks.detail', params: {id: track.id }}"
                   >
                     <i class="info icon" />
-                    Open local profile&nbsp;
+                    {{ $t('views.admin.library.TrackDetail.localProfileLink') }}
                   </router-link>
                   <button
                     v-dropdown
@@ -145,7 +145,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        View in Django's admin&nbsp;
+                        {{ $t('views.admin.library.TrackDetail.djangoLink') }}
                       </a>
                       <a
                         v-if="track.mbid"
@@ -155,7 +155,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        Open on MusicBrainz&nbsp;
+                        {{ $t('views.admin.library.TrackDetail.musicbrainzLink') }}
                       </a>
                       <fetch-button
                         v-if="!track.is_local"
@@ -164,7 +164,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         @refresh="fetchData"
                       >
                         <i class="refresh icon" />&nbsp;
-                        Refresh from remote server&nbsp;
+                        {{ $t('views.admin.library.TrackDetail.remoteRefreshButton') }}
                       </fetch-button>
                       <a
                         class="basic item"
@@ -173,7 +173,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        Open remote profile&nbsp;
+                        {{ $t('views.admin.library.TrackDetail.remoteProfileLink') }}
                       </a>
                     </div>
                   </button>
@@ -185,7 +185,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     class="ui labeled icon button"
                   >
                     <i class="edit icon" />
-                    Edit
+                    {{ $t('views.admin.library.TrackDetail.editButton') }}
                   </router-link>
                 </div>
                 <div class="ui buttons">
@@ -193,22 +193,22 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    Delete
+                    {{ $t('views.admin.library.TrackDetail.deleteButton') }}
                     <template #modal-header>
                       <p>
-                        Delete this track?
+                        {{ $t('views.admin.library.TrackDetail.deleteModalHeader') }}
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          The track will be removed, as well as associated uploads, favorites and listening history. This action is irreversible.
+                          {{ $t('views.admin.library.TrackDetail.deleteModalMessage') }}
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        Delete
+                        {{ $t('views.admin.library.TrackDetail.deleteButton') }}
                       </p>
                     </template>
                   </dangerous-button>
@@ -225,14 +225,14 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  Track data
+                  {{ $t('views.admin.library.TrackDetail.trackDataHeader') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      Title
+                      {{ $t('views.admin.library.TrackDetail.titleLabel') }}
                     </td>
                     <td>
                       {{ track.title }}
@@ -241,7 +241,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr v-if="track.album">
                     <td>
                       <router-link :to="{name: 'manage.library.albums.detail', params: {id: track.album.id }}">
-                        Album
+                        {{ $t('views.admin.library.TrackDetail.albumLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -252,7 +252,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists.detail', params: {id: track.artist.id }}">
-                        Artist
+                        {{ $t('views.admin.library.TrackDetail.artistLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -262,7 +262,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr v-if="track.album">
                     <td>
                       <router-link :to="{name: 'manage.library.artists.detail', params: {id: track.album.artist.id }}">
-                        Album artist
+                        {{ $t('views.admin.library.TrackDetail.albumArtistLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -271,7 +271,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      Position
+                      {{ $t('views.admin.library.TrackDetail.positionLabel') }}
                     </td>
                     <td>
                       {{ track.position }}
@@ -279,7 +279,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr v-if="track.disc_number">
                     <td>
-                      Disc number
+                      {{ $t('views.admin.library.TrackDetail.discNumberLabel') }}
                     </td>
                     <td>
                       {{ track.disc_number }}
@@ -287,13 +287,13 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr v-if="track.copyright">
                     <td>
-                      Copyright
+                      {{ $t('views.admin.library.TrackDetail.copyrightLabel') }}
                     </td>
                     <td>{{ track.copyright }}</td>
                   </tr>
                   <tr v-if="track.license">
                     <td>
-                      License
+                      {{ $t('views.admin.library.TrackDetail.licenseLabel') }}
                     </td>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('license', track.license)}}">
@@ -304,7 +304,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr v-if="!track.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: track.domain }}">
-                        Domain
+                        {{ $t('views.admin.library.TrackDetail.domainLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -313,7 +313,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr v-if="track.description">
                     <td>
-                      Description
+                      {{ $t('views.admin.library.TrackDetail.descriptionLabel') }}
                     </td>
                     <sanitized-html
                       tag="td"
@@ -329,7 +329,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  Activity&nbsp;
+                  {{ $t('views.admin.library.TrackDetail.activityHeader') }}
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -349,7 +349,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      First seen
+                      {{ $t('views.admin.library.TrackDetail.firstSeenLabel') }}
                     </td>
                     <td>
                       <human-date :date="track.creation_date" />
@@ -357,7 +357,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      Listenings
+                      {{ $t('views.admin.library.TrackDetail.listeningsLabel') }}
                     </td>
                     <td>
                       {{ stats.listenings }}
@@ -365,7 +365,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      Favorited tracks
+                      {{ $t('views.admin.library.TrackDetail.favoritedLabel') }}
                     </td>
                     <td>
                       {{ stats.track_favorites }}
@@ -373,7 +373,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      Playlists
+                      {{ $t('views.admin.library.TrackDetail.playlistsLabel') }}
                     </td>
                     <td>
                       {{ stats.playlists }}
@@ -382,7 +382,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `track:${track.id}`) }}">
-                        Linked reports
+                        {{ $t('views.admin.library.TrackDetail.linkedReportsLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -392,7 +392,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.edits', query: {q: getQuery('target', 'track ' + track.id)}}">
-                        Edits
+                        {{ $t('views.admin.library.TrackDetail.editsLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -408,7 +408,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  Audio content&nbsp;
+                  {{ $t('views.admin.library.TrackDetail.trackDataHeader') }}
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -428,7 +428,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      Cached size
+                      {{ $t('views.admin.library.TrackDetail.cachedSizeLabel') }}
                     </td>
                     <td>
                       {{ humanSize(stats.media_downloaded_size) }}
@@ -436,7 +436,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      Total size
+                      {{ $t('views.admin.library.TrackDetail.totalSizeLabel') }}
                     </td>
                     <td>
                       {{ humanSize(stats.media_total_size) }}
@@ -446,7 +446,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('track_id', track.id) }}">
-                        Libraries
+                        {{ $t('views.admin.library.TrackDetail.librariesLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -456,7 +456,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('track_id', track.id) }}">
-                        Uploads
+                        {{ $t('views.admin.library.TrackDetail.uploadsLabel') }}
                       </router-link>
                     </td>
                     <td>

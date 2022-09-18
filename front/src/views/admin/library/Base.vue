@@ -4,8 +4,8 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  title: t('Manage library'),
-  secondaryMenu: t('Secondary menu')
+  title: t('views.admin.library.Base.title'),
+  secondaryMenu: t('views.admin.library.Base.secondaryMenu')
 }))
 </script>
 
@@ -23,49 +23,49 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.library.edits'}"
       >
-        Edits
+        {{ $t('views.admin.library.Base.editsLink') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.channels'}"
       >
-        Channels
+        {{ $t('views.admin.library.Base.channelsLink') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.artists'}"
       >
-        Artists
+        {{ $t('views.admin.library.Base.artistsLink') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.albums'}"
       >
-        Albums
+        {{ $t('views.admin.library.Base.albumsLink') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.tracks'}"
       >
-        Tracks
+        {{ $t('views.admin.library.Base.tracksLink') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.libraries'}"
       >
-        Libraries
+        {{ $t('views.admin.library.Base.librariesLink') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.uploads'}"
       >
-        Uploads
+        {{ $t('views.admin.library.Base.uploadsLink') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.tags'}"
       >
-        Tags
+        {{ $t('views.admin.library.Base.tagsLink') }}
       </router-link>
     </nav>
     <router-view :key="$route.fullPath" />

@@ -77,7 +77,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :to="{name: 'library.tags.detail', params: {id: object.name }}"
                   >
                     <i class="info icon" />
-                    Open local profile&nbsp;
+                    {{ $t('views.admin.library.TagDetail.localProfileLink') }}
                   </router-link>
                   <button
                     v-dropdown
@@ -93,7 +93,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        View in Django's admin&nbsp;
+                        {{ $t('views.admin.library.TagDetail.djangoLink') }}
                       </a>
                     </div>
                   </button>
@@ -103,22 +103,22 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    Delete
+                    {{ $t('views.admin.library.TagDetail.deleteButton') }}
                     <template #modal-header>
                       <p>
-                        Delete this tag?
+                        {{ $t('views.admin.library.TagDetail.deleteModalHeader') }}
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          The tag will be removed and unlinked from any existing entity. This action is irreversible.
+                          {{ $t('views.admin.library.TagDetail.deleteModalMessage') }}
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        Delete
+                        {{ $t('views.admin.library.TagDetail.deleteButton') }}
                       </p>
                     </template>
                   </dangerous-button>
@@ -135,14 +135,14 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  Tag data
+                  {{ $t('views.admin.library.TagDetail.tagDataHeader') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      Name
+                      {{ $t('views.admin.library.TagDetail.nameLabel') }}
                     </td>
                     <td>
                       {{ object.name }}
@@ -157,14 +157,14 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  Activity&nbsp;
+                  {{ $t('views.admin.library.TagDetail.activityHeader') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      First seen
+                      {{ $t('views.admin.library.TagDetail.firstSeenLabel') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -179,7 +179,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  Audio content&nbsp;
+                  {{ $t('views.admin.library.TagDetail.audioContentHeader') }}
                 </div>
               </h3>
               <table class="ui very basic table">
@@ -187,7 +187,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('tag', object.name) }}">
-                        Artists
+                        {{ $t('views.admin.library.TagDetail.artistsLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -197,7 +197,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('tag', object.name) }}">
-                        Albums
+                        {{ $t('views.admin.library.TagDetail.albumsLabel') }}
                       </router-link>
                     </td>
                     <td>
@@ -207,7 +207,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('tag', object.name) }}">
-                        Tracks
+                        {{ $t('views.admin.library.TagDetail.tracksLabel') }}
                       </router-link>
                     </td>
                     <td>
