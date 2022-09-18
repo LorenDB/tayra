@@ -127,7 +127,9 @@ watchEffect(async () => {
     >
       {{ $t('components.moderation.ReportModal.reportModalHeader') }}
       <div class="ui sub header">
-        {{ target.typeLabel }} - {{ target.label }}
+        {{ target.typeLabel }}
+        <span class="middle hyphen symbol" />
+        {{ target.label }}
       </div>
     </h2>
     <div class="scrolling content">

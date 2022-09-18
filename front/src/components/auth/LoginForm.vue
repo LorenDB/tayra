@@ -94,7 +94,7 @@ const submit = async () => {
         <label for="username-field">
           {{ $t('components.auth.LoginForm.usernameFieldLabel') }}
           <template v-if="showSignup">
-            |
+            <span class="middle pipe symbol" />
             <router-link :to="{path: '/signup'}">
               {{ $t('components.auth.LoginForm.createAccountLink') }}
             </router-link>

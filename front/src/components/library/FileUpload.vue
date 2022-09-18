@@ -305,13 +305,17 @@ useEventListener(window, 'beforeunload', (event) => {
           v-else-if="files.length > uploadedFilesCount + erroredFilesCount"
           class="ui warning label"
         >
-          {{ uploadedFilesCount + erroredFilesCount }}/{{ files.length }}
+          {{ uploadedFilesCount + erroredFilesCount }}
+          <span class="nospace slash symbol" />
+          {{ files.length }}
         </div>
         <div
           v-else
           :class="['ui', {'success': erroredFilesCount === 0}, {'danger': erroredFilesCount > 0}, 'label']"
         >
-          {{ uploadedFilesCount + erroredFilesCount }}/{{ files.length }}
+          {{ uploadedFilesCount + erroredFilesCount }}
+          <span class="nospace slash symbol" />
+          {{ files.length }}
         </div>
       </a>
       <a
@@ -330,13 +334,17 @@ useEventListener(window, 'beforeunload', (event) => {
           v-else-if="processableFiles > processedFilesCount"
           class="ui warning label"
         >
-          {{ processedFilesCount }}/{{ processableFiles }}
+          {{ processedFilesCount }}
+          <span class="nospace slash symbol" />
+          {{ processableFiles }}
         </div>
         <div
           v-else
           :class="['ui', {'success': uploads.errored === 0}, {'danger': uploads.errored > 0}, 'label']"
         >
-          {{ processedFilesCount }}/{{ processableFiles }}
+          {{ processedFilesCount }}
+          <span class="nospace slash symbol" />
+          {{ processableFiles }}
         </div>
       </a>
     </div>
@@ -467,7 +475,7 @@ useEventListener(window, 'beforeunload', (event) => {
                   >
                     {{ $t('components.library.FileUpload.uploadingStatusLabel') }}
                   </span>
-                  ({{ parseFloat(file.progress ?? '0.00') }}%)
+                  {{ $t('components.library.FileUpload.uploadingProgress', {percent: parseFloat(file.progress ?? '0.00')}) }}
                 </span>
                 <span
                   v-else

@@ -529,7 +529,10 @@ const labels = computed(() => ({
                 <template v-if="file.response?.uuid">
                   {{ humanSize(file.size ?? 0) }}
                   <template v-if="file.response.duration">
-                    · <human-duration :duration="file.response.duration" />
+                    <span class="middle middledot symbol" />
+                    <human-duration
+                      :duration="file.response.duration"
+                    />
                   </template>
                 </template>
                 <template v-else>
@@ -548,14 +551,18 @@ const labels = computed(() => ({
                   >
                     {{ $t('components.channels.UploadForm.pendingStatus') }}
                   </span>
-                  · {{ humanSize(file.size ?? 0) }}
-                  · {{ parseFloat(file.progress ?? '0') }}%
+                  <span class="middle middledot symbol" />
+                  {{ humanSize(file.size ?? 0) }}
+                  <span class="middle middledot symbol" />
+                  {{ parseFloat(file.progress ?? '0') }}
+                  <span class="percent symbol" />
                 </template>
-                · <a @click.stop.prevent="remove(file)">
+                <span class="middle middledot symbol" />
+                <a @click.stop.prevent="remove(file)">
                   {{ $t('components.channels.UploadForm.removeUpload') }}
                 </a>
                 <template v-if="file.error">
-                  ·
+                  <span class="middle middledot symbol" />
                   <a @click.stop.prevent="retry(file)">
                     {{ $t('components.channels.UploadForm.retryUpload') }}
                   </a>

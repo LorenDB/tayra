@@ -131,7 +131,9 @@ const getErrorData = (upload: Upload) => {
                       v-for="row in getErrorData(upload).errorRows"
                       :key="row.key"
                     >
-                      {{ row.key }}: {{ row.value }}
+                      {{ row.key }}
+                      <span class="left colon symbol" />
+                      {{ row.value }}
                     </li>
                   </ul>
                 </td>

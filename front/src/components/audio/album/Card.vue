@@ -58,7 +58,10 @@ const imageUrl = computed(() => props.album.cover?.urls.original
       </div>
     </div>
     <div class="extra content">
-      <span v-if="album.release_date">{{ momentFormat(new Date(album.release_date), 'Y') }} · </span>
+      <span v-if="album.release_date">
+        {{ momentFormat(new Date(album.release_date), 'Y') }}
+        <span class="middle middledot symbol" />
+      </span>
       <span>
         {{ $t('components.audio.album.Card.trackCount', album.tracks_count) }}
       </span>

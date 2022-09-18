@@ -749,6 +749,9 @@
                 "cancelButton": "Cancel",
                 "updateButton": "Update description"
             },
+            "UserLink": {
+                "username": "{'@'}{username}"
+            },
             "UserMenu": {
                 "profileLabel": "Profile",
                 "settingsLabel": "Settings",
@@ -999,6 +1002,7 @@
                 "retryButton": "Retry failed uploads",
                 "uploadedStatusLabel": "Uploaded",
                 "uploadingStatusLabel": "Uploading…",
+                "uploadingProgress": "{percent}%",
                 "pendingStatusLabel": "Pending",
                 "serverUploadHeader": "Import music from your server",
                 "uploadFailureHeader": "Error while launching import",

@@ -255,7 +255,10 @@ const remove = async () => {
                 v-if="object.release_date || (totalTracks > 0)"
                 class="ui small hidden divider"
               />
-              <span v-if="object.release_date">{{ momentFormat(new Date(object.release_date ?? '1970-01-01'), 'Y') }} &middot; </span>
+              <template v-if="object.release_date">
+                {{ momentFormat(new Date(object.release_date ?? '1970-01-01'), 'Y') }}
+                <span class="middle middledot symbol" />
+              </template>
               <template v-if="totalTracks > 0">
                 <span
                   v-if="isSerie"
@@ -266,7 +269,8 @@ const remove = async () => {
                   v-else
                 >
                   {{ $t('components.library.AlbumBase.trackCount', {tracks_count: totalTracks}) }}
-                </span> ·
+                </span>
+                <span class="middle middledot symbol" />
               </template>
               <human-duration
                 v-if="totalDuration > 0"

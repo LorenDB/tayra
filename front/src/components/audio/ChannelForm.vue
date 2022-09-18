@@ -225,7 +225,7 @@ defineExpose({
           </label>
           <div class="ui left labeled input">
             <div class="ui basic label">
-              @
+              <span class="at symbol" />
             </div>
             <input
               v-model="newValues.username"

@@ -54,7 +54,7 @@ const handleClick = (entry: FSEntry) => {
       >
         <i class="folder icon" />
         <div class="content">
-          <div class="header">..</div>
+          <div class="header doubledot symbol" />
         </div>
       </a>
       <a

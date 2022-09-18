@@ -33,6 +33,6 @@ const defaultAvatarStyle = computed(() => ({ backgroundColor: `#${userColor.valu
       >{{ user.username[0] }}</span>
       &nbsp;
     </template>
-    @{{ user.username }}
+    {{ $t('components.common.UserLink.username', {username: user.username}) }}
   </span>
 </template>

@@ -282,7 +282,7 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                   {{ currentTrack.artistName }}
                 </router-link>
                 <template v-if="currentTrack.albumId !== -1">
-                  /
+                  <span class="middle slash symbol" />
                   <router-link
                     class="discrete link album"
                     :to="{name: 'library.albums.detail', params: {id: currentTrack.albumId }}"
@@ -388,8 +388,8 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                 <span class="right floated timer total">{{ time.parse(Math.round(duration)) }}</span>
               </template>
               <template v-else>
-                <span class="left floated timer">00:00</span>
-                <span class="right floated timer">00:00</span>
+                <span class="left floated timer">{{ durationFormatted(0) }}</span>
+                <span class="right floated timer">{{ durationFormatted(0) }}</span>
               </template>
             </div>
           </div>
@@ -417,7 +417,7 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                 <div>
                   {{ $t('components.Queue.queuePosition', {index: currentIndex +1, length: queue.length}) }}
                   <template v-if="!$store.state.radios.running">
-                    -
+                    <span class="middle ellipses symbol" />
                     <span :title="labels.duration">
                       {{ timeLeft }}
                     </span>

@@ -38,7 +38,8 @@ const tags = computed(() => {
       :to="{name: props.detailRoute, params: { id: tag } }"
       :class="['ui', 'circular', 'hashtag', 'label', props.labelClasses]"
     >
-      #{{ truncate(tag, props.truncateSize) }}
+      <span class="hashtag symbol" />
+      {{ truncate(tag, props.truncateSize) }}
     </router-link>
     <div
       v-if="props.showMore && tags.length < props.tags.length"

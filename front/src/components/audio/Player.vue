@@ -191,7 +191,7 @@ const hideArtist = () => {
                 {{ currentTrack.artistName }}
               </router-link>
               <template v-if="currentTrack.albumId !== -1">
-                /
+                <span class="middle slash symbol" />
                 <router-link
                   class="discrete link"
                   :to="{name: 'library.albums.detail', params: {id: currentTrack.albumId }}"
@@ -218,7 +218,8 @@ const hideArtist = () => {
             <div class="meta">
               {{ currentTrack.artistName }}
               <template v-if="currentTrack.albumId !== -1">
-                / {{ currentTrack.albumTitle }}
+                <span class="middle slash symbol" />
+                {{ currentTrack.albumTitle }}
               </template>
             </div>
           </div>
@@ -254,7 +255,7 @@ const hideArtist = () => {
               >
                 {{ time.parse(Math.round(currentTime)) }}
               </span>
-              |
+              <span class="middle pipe symbol" />
               <span class="total">{{ time.parse(Math.round(duration)) }}</span>
             </template>
           </div>
@@ -276,7 +277,7 @@ const hideArtist = () => {
                   class="ui circular tiny vibrant label"
                 >
                   <template v-if="looping === LoopingMode.LoopTrack">1</template>
-                  <template v-else-if="looping === LoopingMode.LoopQueue">&infin;</template>
+                  <span v-else-if="looping === LoopingMode.LoopQueue" class="infinity symbol" />
                 </span>
               </i>
             </button>

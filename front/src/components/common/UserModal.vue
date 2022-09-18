@@ -89,7 +89,10 @@ const labels = computed(() => ({
             @click="[$emit('update:show', false), emit('showLanguageModalEvent')]"
           >
             <i class="language icon user-modal list-icon" />
-            <span class="user-modal list-item">{{ labels.language }}:</span>
+            <span class="user-modal list-item">
+              {{ labels.language }}
+              <span class="left colon symbol" />
+            </span>
             <div class="right floated">
               <span class="user-modal list-item">{{ $language.available[$language.current] }}</span>
               <i class="action-hint chevron right icon" />
@@ -103,7 +106,10 @@ const labels = computed(() => ({
             @click="[$emit('update:show', false), emit('showThemeModalEvent')]"
           >
             <i class="palette icon user-modal list-icon" />
-            <span class="user-modal list-item">{{ labels.theme }}:</span>
+            <span class="user-modal list-item">
+              {{ labels.theme }}
+              <span class="left colon symbol" />
+            </span>
             <div class="right floated">
               <span class="user-modal list-item"> {{ themes.find(x => x.key === theme)?.name }}</span>
               <i class="action-hint chevron right icon user-modal" />

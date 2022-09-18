@@ -109,7 +109,8 @@ const actionsButtonLabel = computed(() => t('components.audio.track.MobileRow.ac
         {{ track.title }}
       </p>
       <p class="track-meta mobile">
-        {{ track.artist?.name }} <span>&#183;</span>
+        {{ track.artist?.name }}
+        <span class="middle middledot symbol" />
         <human-duration
           v-if="track.uploads[0] && track.uploads[0].duration"
           :duration="track.uploads[0].duration"

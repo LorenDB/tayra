@@ -1,10 +1,11 @@
-
 .center.aligned.menu {
   justify-content: center;
 }
+
 .text.center.aligned {
   text-align: center;
 }
+
 .ellipsis:not(.icon) {
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -24,9 +25,11 @@
 a {
   cursor: pointer;
 }
+
 .segment.hidden {
   display: none;
 }
+
 .hidden:not(.divider) {
   display: none !important;
 }
@@ -53,21 +56,25 @@ a {
     display: none !important;
   }
 }
+
 .desktop-and-below {
   @include media(">=desktop") {
     display: none !important;
   }
 }
+
 .tablet-and-up {
   @include media("<tablet") {
     display: none !important;
   }
 }
+
 .tablet-and-below {
   @include media(">=tablet") {
     display: none !important;
   }
 }
+
 .mobile-only {
   @include media(">tablet") {
     display: none !important;
@@ -91,7 +98,7 @@ a {
 }
 
 span.diff.added {
-  background-color:rgba(0, 255, 0, 0.25);
+  background-color: rgba(0, 255, 0, 0.25);
 }
 
 
@@ -106,13 +113,149 @@ span.diff.removed {
 .discrete {
   color: var(--discrete-text-color);
 }
+
 .really.discrete {
   color: var(--really-discrete-text-color);
 }
 
 .ui.inverted.dimmer {
   background-color: var(--dimmer-background);
-  > .ui.dimmer {
+
+  >.ui.dimmer {
     color: var(--dimmer-color);
+  }
+}
+
+.symbol {
+  &.at::after {
+    content: "@";
+  }
+
+  &.slash {
+    &.left::after {
+      padding-right: 0.25em;
+      content: "/";
+    }
+
+    &.right::after {
+      padding-left: 0.25em;
+      content: "/";
+    }
+
+    &.middle::after {
+      padding: 0.25em;
+      content: "/";
+    }
+
+    &.nospace::after {
+      content: "/";
+    }
+  }
+
+  &.pipe {
+    &.left::after {
+      padding-right: 0.25em;
+      content: "|";
+    }
+
+    &.right::after {
+      padding-left: 0.25em;
+      content: "|";
+    }
+
+    &.middle::after {
+      padding: 0.25em;
+      content: "|";
+    }
+  }
+
+  &.middledot {
+
+    &.left::before {
+      padding-right: 0.25em;
+      content: "·";
+    }
+
+    &.right::after {
+      padding-left: 0.25em;
+      content: "·";
+    }
+
+    &.middle::after {
+      padding: 0.25em;
+      content: "·";
+    },
+
+    &.nospace::after {
+      content: "·"; 
+    }
+  }
+
+  &.infinity::after {
+    content: "∞";
+  }
+
+  &.single::after {
+    content: "1";
+  }
+
+  &.hashtag::after {
+    content: "#";
+  }
+
+  &.ellipses {
+
+    &.nospace::after {
+      content: "…";
+    }
+
+    &.middle::after {
+      padding: 0.25em;
+      content: "…";
+    }
+  }
+
+  &.doubledot::after {
+    content: "..";
+  }
+
+  &.hyphen {
+
+    &.left::before {
+      padding-right: 0.25em;
+      content: "-";
+    }
+
+    &.right {
+      padding-left: 0.25em;
+      content: "-";
+    }
+
+    &.middle::after {
+      padding: 0.25em;
+      content: "-";
+    }
+  }
+
+  &.colon {
+
+    &.left::before {
+      padding-right: 0.25em;
+      content: ":";
+    }
+
+    &.right::after {
+      padding-left: 0.25em;
+      content: ":";
+    }
+
+    &.middle::after {
+      padding: 0.25em;
+      content: ":";
+    }
+  }
+
+  &.percent::after {
+    content: "%";
   }
 }
