@@ -63,7 +63,7 @@ const imageUrl = computed(() => props.album.cover?.urls.original
         <span class="middle middledot symbol" />
       </span>
       <span>
-        {{ $t('components.audio.album.Card.trackCount', album.tracks_count) }}
+        {{ $t('components.audio.album.Card.meta.tracks', album.tracks_count) }}
       </span>
       <play-button
         class="right floated basic icon"

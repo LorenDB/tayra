@@ -91,19 +91,19 @@ const submit = async () => {
           href=""
           @click.stop.prevent="showMore = true"
         >
-          {{ $t('components.common.RenderedDescription.showMore') }}
+          {{ $t('components.common.RenderedDescription.button.more') }}
         </a>
         <a
           v-else
           href=""
           @click.stop.prevent="showMore = false"
         >
-          {{ $t('components.common.RenderedDescription.showLess') }}
+          {{ $t('components.common.RenderedDescription.button.less') }}
         </a>
       </template>
     </template>
     <p v-else-if="!isUpdating">
-      {{ $t('components.common.RenderedDescription.noDescription') }}
+      {{ $t('components.common.RenderedDescription.empty.noDescription') }}
     </p>
     <template v-if="!isUpdating && canUpdate && updateUrl">
       <div class="ui hidden divider" />
@@ -112,7 +112,7 @@ const submit = async () => {
         @click="isUpdating = true"
       >
         <i class="pencil icon" />
-        {{ $t('components.common.RenderedDescription.editButton') }}
+        {{ $t('components.common.RenderedDescription.button.edit') }}
       </span>
     </template>
     <form
@@ -126,7 +126,7 @@ const submit = async () => {
         class="ui negative message"
       >
         <h4 class="header">
-          {{ $t('components.common.RenderedDescription.updateFailureHeader') }}
+          {{ $t('components.common.RenderedDescription.header.failure') }}
         </h4>
         <ul class="list">
           <li
@@ -145,14 +145,14 @@ const submit = async () => {
         class="left floated"
         @click.prevent="isUpdating = false"
       >
-        {{ $t('components.common.RenderedDescription.cancelButton') }}
+        {{ $t('components.common.RenderedDescription.button.cancel') }}
       </a>
       <button
         :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
         type="submit"
         :disabled="isLoading"
       >
-        {{ $t('components.common.RenderedDescription.updateButton') }}
+        {{ $t('components.common.RenderedDescription.button.update') }}
       </button>
       <div class="ui clearing hidden divider" />
     </form>

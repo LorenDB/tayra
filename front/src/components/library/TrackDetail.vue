@@ -79,19 +79,19 @@ watchEffect(() => {
               <span
                 v-if="track.artist?.content_category === 'music'"
               >
-                {{ $t('components.library.TrackDetail.trackDetails') }}
+                {{ $t('components.library.TrackDetail.header.track') }}
               </span>
               <span
                 v-else
               >
-                {{ $t('components.library.TrackDetail.episodeDetails') }}
+                {{ $t('components.library.TrackDetail.header.episode') }}
               </span>
             </h3>
             <table class="ui basic table">
               <tbody>
                 <tr>
                   <td>
-                    {{ $t('components.library.TrackDetail.durationTableHeader') }}
+                    {{ $t('components.library.TrackDetail.table.track.duration') }}
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.duration">
@@ -106,7 +106,7 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.library.TrackDetail.sizeTableLabel') }}
+                    {{ $t('components.library.TrackDetail.table.track.size') }}
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.size">
@@ -121,7 +121,7 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.library.TrackDetail.codecTableLabel') }}
+                    {{ $t('components.library.TrackDetail.table.track.codec') }}
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.extension">
@@ -136,11 +136,11 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.library.TrackDetail.bitrateTableLabel') }}
+                    {{ $t('components.library.TrackDetail.table.track.bitrate.label') }}
                   </td>
                   <td class="right aligned">
                     <template v-if="upload.bitrate">
-                      {{ $t('components.library.TrackDetail.uploadBitrateTableLabel', {bitrate: humanSize(upload.bitrate)}) }}
+                      {{ $t('components.library.TrackDetail.table.track.bitrate.value', {bitrate: humanSize(upload.bitrate)}) }}
                     </template>
                     <span
                       v-else
@@ -151,7 +151,7 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.library.TrackDetail.downloadsTableLabel') }}
+                    {{ $t('components.library.TrackDetail.table.track.downloads') }}
                   </td>
                   <td class="right aligned">
                     {{ track.downloads_count }}
@@ -172,13 +172,13 @@ watchEffect(() => {
             :can-update="false"
           />
           <h2 class="ui header">
-            {{ $t('components.library.TrackDetail.releaseDetailsHeader') }}
+            {{ $t('components.library.TrackDetail.header.release') }}
           </h2>
           <table class="ui basic table ellipsis-rows">
             <tbody>
               <tr>
                 <td>
-                  {{ $t('components.library.TrackDetail.artistTableLabel') }}
+                  {{ $t('components.library.TrackDetail.table.release.artist') }}
                 </td>
                 <td class="right aligned">
                   <router-link :to="{name: 'library.artists.detail', params: {id: track.artist?.id}}">
@@ -191,12 +191,12 @@ watchEffect(() => {
                   <span
                     v-if="track.album.artist.content_category === 'music'"
                   >
-                    {{ $t('components.library.TrackDetail.albumTableLabel') }}
+                    {{ $t('components.library.TrackDetail.table.release.album') }}
                   </span>
                   <span
                     v-else
                   >
-                    {{ $t('components.library.TrackDetail.seriesTableLabel') }}
+                    {{ $t('components.library.TrackDetail.table.release.series') }}
                   </span>
                 </td>
                 <td class="right aligned">
@@ -207,7 +207,7 @@ watchEffect(() => {
               </tr>
               <tr>
                 <td>
-                  {{ $t('components.library.TrackDetail.yearTableLabel') }}
+                  {{ $t('components.library.TrackDetail.table.release.year') }}
                 </td>
                 <td class="right aligned">
                   <template v-if="track.album && track.album.release_date">
@@ -220,7 +220,7 @@ watchEffect(() => {
               </tr>
               <tr>
                 <td>
-                  {{ $t('components.library.TrackDetail.copyrightTableLabel') }}
+                  {{ $t('components.library.TrackDetail.table.release.copyright') }}
                 </td>
                 <td class="right aligned">
                   <span
@@ -234,7 +234,7 @@ watchEffect(() => {
               </tr>
               <tr>
                 <td>
-                  {{ $t('components.library.TrackDetail.licenseTableLabel') }}
+                  {{ $t('components.library.TrackDetail.table.release.license') }}
                 </td>
                 <td class="right aligned">
                   <a
@@ -252,7 +252,7 @@ watchEffect(() => {
               </tr>
               <tr v-if="!track.is_local">
                 <td>
-                  {{ $t('components.library.TrackDetail.urlTableLabel') }}
+                  {{ $t('components.library.TrackDetail.table.release.url') }}
                 </td>
                 <td :title="track.fid">
                   <a
@@ -273,10 +273,10 @@ watchEffect(() => {
             rel="noreferrer noopener"
           >
             <i class="external icon" />
-            {{ $t('components.library.TrackDetail.musicbrainzLink') }}
+            {{ $t('components.library.TrackDetail.link.musicbrainz') }}
           </a>
           <h2 class="ui header">
-            {{ $t('components.library.TrackDetail.relatedPlaylistsHeader') }}
+            {{ $t('components.library.TrackDetail.header.playlists') }}
           </h2>
           <playlist-widget
             :url="'playlists/'"
@@ -284,13 +284,13 @@ watchEffect(() => {
           />
 
           <h2 class="ui header">
-            {{ $t('components.library.TrackDetail.userLibraryHeader') }}
+            {{ $t('components.library.TrackDetail.header.library') }}
           </h2>
           <library-widget
             :url="`tracks/${track.id}/libraries/`"
             @loaded="emit('libraries-loaded', $event)"
           >
-            {{ $t('components.library.TrackDetail.userLibraryDescription') }}
+            {{ $t('components.library.TrackDetail.description.library') }}
           </library-widget>
         </div>
       </div>

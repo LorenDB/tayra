@@ -47,19 +47,19 @@ fetchLicenses()
         <span
           v-if="canEdit"
         >
-          {{ $t('components.library.TrackEdit.editTrackHeader') }}
+          {{ $t('components.library.TrackEdit.header.edit') }}
         </span>
         <span
           key="2"
         >
-          {{ $t('components.library.TrackEdit.suggestEditHeader') }}
+          {{ $t('components.library.TrackEdit.header.suggest') }}
         </span>
       </h2>
       <div
         v-if="!object.is_local"
         class="ui message"
       >
-        {{ $t('components.library.TrackEdit.remoteObjectWarning') }}
+        {{ $t('components.library.TrackEdit.message.remote') }}
       </div>
       <edit-form
         v-else-if="!isLoadingLicenses"

@@ -118,7 +118,7 @@ watch(() => props.id, fetchData, { immediate: true })
                 class="sub header"
               >
                 <div>
-                  {{ $t('components.library.ArtistBase.tracksCount', {count: totalTracks, albums: totalAlbums}) }}
+                  {{ $t('components.library.ArtistBase.meta.tracks', {count: totalTracks, albums: totalAlbums}) }}
                 </div>
               </div>
             </div>
@@ -141,7 +141,7 @@ watch(() => props.id, fetchData, { immediate: true })
                 class="vibrant"
                 :artist="object"
               >
-                {{ $t('components.library.ArtistBase.playAllButton') }}
+                {{ $t('components.library.ArtistBase.button.play') }}
               </play-button>
             </div>
 
@@ -150,7 +150,7 @@ watch(() => props.id, fetchData, { immediate: true })
               v-model:show="showEmbedModal"
             >
               <h4 class="header">
-                {{ $t('components.library.ArtistBase.embedModalHeader') }}
+                {{ $t('components.library.ArtistBase.modal.embed.header') }}
               </h4>
               <div class="scrolling content">
                 <div class="description">
@@ -162,7 +162,7 @@ watch(() => props.id, fetchData, { immediate: true })
               </div>
               <div class="actions">
                 <button class="ui deny button">
-                  {{ $t('components.library.ArtistBase.cancelButton') }}
+                  {{ $t('components.library.ArtistBase.button.cancel') }}
                 </button>
               </div>
             </semantic-modal>
@@ -171,7 +171,7 @@ watch(() => props.id, fetchData, { immediate: true })
                 class="ui button"
                 @click="dropdown.click()"
               >
-                {{ $t('components.library.ArtistBase.moreButton') }}
+                {{ $t('components.library.ArtistBase.button.more') }}
               </button>
               <button
                 ref="dropdown"
@@ -187,7 +187,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="external icon" />
-                    {{ $t('components.library.ArtistBase.domainViewLink', {domain: domain}) }}
+                    {{ $t('components.library.ArtistBase.link.domain', {domain: domain}) }}
                   </a>
 
                   <button
@@ -197,7 +197,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     @click.prevent="showEmbedModal = !showEmbedModal"
                   >
                     <i class="code icon" />
-                    {{ $t('components.library.ArtistBase.embedButton') }}
+                    {{ $t('components.library.ArtistBase.button.embed') }}
                   </button>
                   <a
                     :href="wikipediaUrl"
@@ -206,7 +206,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="wikipedia w icon" />
-                    {{ $t('components.library.ArtistBase.wikipediaLink') }}
+                    {{ $t('components.library.ArtistBase.link.wikipedia') }}
                   </a>
                   <a
                     v-if="musicbrainzUrl"
@@ -216,7 +216,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="external icon" />
-                    {{ $t('components.library.ArtistBase.musicbrainzLink') }}
+                    {{ $t('components.library.ArtistBase.link.musicbrainz') }}
                   </a>
                   <a
                     :href="discogsUrl"
@@ -225,7 +225,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="external icon" />
-                    {{ $t('components.library.ArtistBase.discogsLink') }}
+                    {{ $t('components.library.ArtistBase.link.discogs') }}
                   </a>
                   <router-link
                     v-if="object.is_local"
@@ -233,7 +233,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     class="basic item"
                   >
                     <i class="edit icon" />
-                    {{ $t('components.library.ArtistBase.editButton') }}
+                    {{ $t('components.library.ArtistBase.button.edit') }}
                   </router-link>
                   <div class="divider" />
                   <div
@@ -253,7 +253,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     :to="{name: 'manage.library.artists.detail', params: {id: object.id}}"
                   >
                     <i class="wrench icon" />
-                    {{ $t('components.library.ArtistBase.moderationLink') }}
+                    {{ $t('components.library.ArtistBase.link.moderation') }}
                   </router-link>
                   <a
                     v-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
@@ -263,7 +263,7 @@ watch(() => props.id, fetchData, { immediate: true })
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    {{ $t('components.library.ArtistBase.djangoLink') }}
+                    {{ $t('components.library.ArtistBase.link.django') }}
                   </a>
                 </div>
               </button>

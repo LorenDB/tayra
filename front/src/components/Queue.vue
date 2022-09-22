@@ -415,7 +415,7 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
               {{ labels.queue }}
               <div class="sub header">
                 <div>
-                  {{ $t('components.Queue.display.queuePosition', {index: currentIndex +1, length: queue.length}) }}
+                  {{ $t('components.Queue.meta.queuePosition', {index: currentIndex +1, length: queue.length}) }}
                   <template v-if="!$store.state.radios.running">
                     <span class="middle ellipses symbol" />
                     <span :title="labels.duration">

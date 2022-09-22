@@ -18,10 +18,10 @@ const show = ref(false)
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  header: t('components.common.LoginModal.header'),
-  login: t('components.common.LoginModal.loginLabel'),
-  signup: t('components.common.LoginModal.signupLabel'),
-  description: t('components.common.LoginModal.noAccessDescription')
+  header: t('components.common.LoginModal.header.unauthenticated'),
+  login: t('components.common.LoginModal.link.login'),
+  signup: t('components.common.LoginModal.link.signup'),
+  description: t('components.common.LoginModal.description.noAccess')
 }))
 </script>
 

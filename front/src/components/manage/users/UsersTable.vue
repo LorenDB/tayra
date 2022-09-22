@@ -44,15 +44,15 @@ const orderingOptions: [OrderingField, keyof typeof sharedLabels.filters][] = [
 const permissions = computed(() => [
   {
     code: 'library',
-    label: t('components.manage.users.UsersTable.libraryLabel')
+    label: t('components.manage.users.UsersTable.permission.library')
   },
   {
     code: 'moderation',
-    label: t('components.manage.users.UsersTable.moderationLabel')
+    label: t('components.manage.users.UsersTable.permission.moderation')
   },
   {
     code: 'settings',
-    label: t('components.manage.users.UsersTable.settingsLabel')
+    label: t('components.manage.users.UsersTable.permission.settings')
   }
 ])
 
@@ -91,7 +91,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('components.manage.users.UsersTable.searchPlaceholder')
+  searchPlaceholder: t('components.manage.users.UsersTable.placeholder.search')
 }))
 </script>
 
@@ -100,7 +100,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="users-search">{{ $t('components.manage.users.UsersTable.searchLabel') }}</label>
+          <label for="users-search">{{ $t('components.manage.users.UsersTable.label.search') }}</label>
           <input
             id="users-search"
             v-model="query"
@@ -110,7 +110,7 @@ const labels = computed(() => ({
           >
         </div>
         <div class="field">
-          <label for="users-ordering">{{ $t('components.manage.users.UsersTable.orderingLabel') }}</label>
+          <label for="users-ordering">{{ $t('components.manage.users.UsersTable.ordering.label') }}</label>
           <select
             id="users-ordering"
             v-model="ordering"
@@ -126,17 +126,17 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="users-ordering-direction">{{ $t('components.manage.users.UsersTable.orderingDirectionLabel') }}</label>
+          <label for="users-ordering-direction">{{ $t('components.manage.users.UsersTable.ordering.direction.label') }}</label>
           <select
             id="users-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              {{ $t('components.manage.users.UsersTable.ascendingOrdering') }}
+              {{ $t('components.manage.users.UsersTable.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              {{ $t('components.manage.users.UsersTable.descendingOrdering') }}
+              {{ $t('components.manage.users.UsersTable.ordering.direction.descending') }}
             </option>
           </select>
         </div>
@@ -159,25 +159,25 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            {{ $t('components.manage.users.UsersTable.usernameTableHeader') }}
+            {{ $t('components.manage.users.UsersTable.table.user.header.username') }}
           </th>
           <th>
-            {{ $t('components.manage.users.UsersTable.emailTableHeader') }}
+            {{ $t('components.manage.users.UsersTable.table.user.header.email') }}
           </th>
           <th>
-            {{ $t('components.manage.users.UsersTable.accountStatusTableHeader') }}
+            {{ $t('components.manage.users.UsersTable.table.user.header.accountStatus') }}
           </th>
           <th>
-            {{ $t('components.manage.users.UsersTable.signupTableHeader') }}
+            {{ $t('components.manage.users.UsersTable.table.user.header.signup') }}
           </th>
           <th>
-            {{ $t('components.manage.users.UsersTable.lastActivityTableHeader') }}
+            {{ $t('components.manage.users.UsersTable.table.user.header.lastActivity') }}
           </th>
           <th>
-            {{ $t('components.manage.users.UsersTable.permissionsTableHeader') }}
+            {{ $t('components.manage.users.UsersTable.table.user.header.permissions') }}
           </th>
           <th>
-            {{ $t('components.manage.users.UsersTable.statusTableHeader') }}
+            {{ $t('components.manage.users.UsersTable.table.user.header.status') }}
           </th>
         </template>
         <template
@@ -204,11 +204,11 @@ const labels = computed(() => ({
             <span
               v-if="scope.obj.is_active"
               class="ui basic success label"
-            >{{ $t('components.manage.users.UsersTable.activeStatus') }}</span>
+            >{{ $t('components.manage.users.UsersTable.table.user.accountStatus.active') }}</span>
             <span
               v-else
               class="ui basic label"
-            >{{ $t('components.manage.users.UsersTable.inactiveStatus') }}</span>
+            >{{ $t('components.manage.users.UsersTable.table.user.accountStatus.inactive') }}</span>
           </td>
           <td>
             <human-date :date="scope.obj.date_joined" />
@@ -237,15 +237,15 @@ const labels = computed(() => ({
             <span
               v-if="scope.obj.is_superuser"
               class="ui pink label"
-            >{{ $t('components.manage.users.UsersTable.adminPermission') }}</span>
+            >{{ $t('components.manage.users.UsersTable.table.user.status.admin') }}</span>
             <span
               v-else-if="scope.obj.is_staff"
               class="ui purple label"
-            >{{ $t('components.manage.users.UsersTable.staffPermission') }}</span>
+            >{{ $t('components.manage.users.UsersTable.table.user.status.staff') }}</span>
             <span
               v-else
               class="ui basic label"
-            >{{ $t('components.manage.users.UsersTable.regularPermission') }}</span>
+            >{{ $t('components.manage.users.UsersTable.table.user.status.regular') }}</span>
           </td>
         </template>
       </action-table>
@@ -260,7 +260,7 @@ const labels = computed(() => ({
       />
 
       <span v-if="result && result.results.length > 0">
-        {{ $t('components.manage.users.UsersTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
+        {{ $t('components.manage.users.UsersTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

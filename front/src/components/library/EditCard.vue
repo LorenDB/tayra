@@ -156,7 +156,7 @@ const approve = async (approved: boolean) => {
     <div class="content">
       <h4 class="header">
         <router-link :to="detailUrl">
-          {{ $t('components.library.EditCard.modificationHeader', {id: obj.uuid.substring(0, 8)}) }}
+          {{ $t('components.library.EditCard.header.modification', {id: obj.uuid.substring(0, 8)}) }}
         </router-link>
       </h4>
       <div class="meta">
@@ -165,7 +165,7 @@ const approve = async (approved: boolean) => {
           :to="{name: 'library.tracks.detail', params: {id: obj.target.id }}"
         >
           <i class="music icon" />
-          {{ $t('components.library.EditCard.trackLink', {id: obj.target.id, name: obj.target.repr}) }}
+          {{ $t('components.library.EditCard.link.track', {id: obj.target.id, name: obj.target.repr}) }}
         </router-link>
         <br>
         <human-date
@@ -176,19 +176,19 @@ const approve = async (approved: boolean) => {
         <span class="right floated">
           <span v-if="obj.is_approved && obj.is_applied">
             <i class="success check icon" />
-            {{ $t('components.library.EditCard.appliedStatus') }}
+            {{ $t('components.library.EditCard.status.applied') }}
           </span>
           <span v-else-if="obj.is_approved">
             <i class="success check icon" />
-            {{ $t('components.library.EditCard.approvedStatus') }}
+            {{ $t('components.library.EditCard.status.approved') }}
           </span>
           <span v-else-if="obj.is_approved === null">
             <i class="warning hourglass icon" />
-            {{ $t('components.library.EditCard.pendingReviewStatus') }}
+            {{ $t('components.library.EditCard.status.pending') }}
           </span>
           <span v-else-if="obj.is_approved === false">
             <i class="danger x icon" />
-            {{ $t('components.library.EditCard.rejectedStatus') }}
+            {{ $t('components.library.EditCard.status.rejected') }}
           </span>
         </span>
       </div>
@@ -207,13 +207,13 @@ const approve = async (approved: boolean) => {
         <thead>
           <tr>
             <th>
-              {{ $t('components.library.EditCard.fieldTableHeader') }}
+              {{ $t('components.library.EditCard.table.update.header.field') }}
             </th>
             <th>
-              {{ $t('components.library.EditCard.oldValueTableHeader') }}
+              {{ $t('components.library.EditCard.table.update.header.oldValue') }}
             </th>
             <th>
-              {{ $t('components.library.EditCard.newValueTableHeader') }}
+              {{ $t('components.library.EditCard.table.update.header.newValue') }}
             </th>
           </tr>
         </thead>
@@ -243,7 +243,7 @@ const approve = async (approved: boolean) => {
               </template>
             </td>
             <td v-else>
-              {{ $t('components.library.EditCard.notApplicable') }}
+              {{ $t('components.library.EditCard.table.update.notApplicable') }}
             </td>
 
             <td
@@ -301,36 +301,36 @@ const approve = async (approved: boolean) => {
         :class="['ui', {loading: isLoading}, 'success', 'basic', 'button']"
         @click="approve(true)"
       >
-        {{ $t('components.library.EditCard.approveButton') }}
+        {{ $t('components.library.EditCard.button.approve') }}
       </button>
       <button
         v-if="canApprove && obj.is_approved === null"
         :class="['ui', {loading: isLoading}, 'warning', 'basic', 'button']"
         @click="approve(false)"
       >
-        {{ $t('components.library.EditCard.rejectButton') }}
+        {{ $t('components.library.EditCard.button.reject') }}
       </button>
       <dangerous-button
         v-if="canDelete"
         :class="['ui', {loading: isLoading}, 'basic danger button']"
         :action="remove"
       >
-        {{ $t('components.library.EditCard.deleteButton') }}
+        {{ $t('components.library.EditCard.button.delete') }}
         <template #modal-header>
           <p>
-            {{ $t('components.library.EditCard.deleteSuggestionModalHeader') }}
+            {{ $t('components.library.EditCard.modal.delete.header') }}
           </p>
         </template>
         <template #modal-content>
           <div>
             <p>
-              {{ $t('components.library.EditCard.deleteSuggestionModalMessage') }}
+              {{ $t('components.library.EditCard.modal.content.warning') }}
             </p>
           </div>
         </template>
         <template #modal-confirm>
           <p>
-            {{ $t('components.library.EditCard.deleteButton') }}
+            {{ $t('components.library.EditCard.button.delete') }}
           </p>
         </template>
       </dangerous-button>

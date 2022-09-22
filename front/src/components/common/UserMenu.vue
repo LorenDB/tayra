@@ -17,21 +17,21 @@ const themes = useThemeList()
 const { theme } = useTheme()
 
 const labels = computed(() => ({
-  profile: t('components.common.UserMenu.profileLabel'),
-  settings: t('components.common.UserMenu.settingsLabel'),
-  logout: t('components.common.UserMenu.logoutLabel'),
-  about: t('components.common.UserMenu.aboutLabel'),
-  shortcuts: t('components.common.UserMenu.shortcutsLabel'),
-  support: t('components.common.UserMenu.supportLabel'),
-  forum: t('components.common.UserMenu.forumLabel'),
-  docs: t('components.common.UserMenu.docsLabel'),
-  language: t('components.common.UserMenu.languageLabel'),
-  theme: t('components.common.UserMenu.themeLabel'),
-  chat: t('components.common.UserMenu.chatLabel'),
-  git: t('components.common.UserMenu.gitLabel'),
-  login: t('components.common.UserMenu.loginLabel'),
-  signup: t('components.common.UserMenu.signupLabel'),
-  notifications: t('components.common.UserMenu.notificationsLabel')
+  profile: t('components.common.UserMenu.link.profile'),
+  settings: t('components.common.UserMenu.link.settings'),
+  logout: t('components.common.UserMenu.link.logout'),
+  about: t('components.common.UserMenu.link.about'),
+  shortcuts: t('components.common.UserMenu.label.shortcuts'),
+  support: t('components.common.UserMenu.link.support'),
+  forum: t('components.common.UserMenu.link.forum'),
+  docs: t('components.common.UserMenu.link.docs'),
+  language: t('components.common.UserMenu.label.language'),
+  theme: t('components.common.UserMenu.label.theme'),
+  chat: t('components.common.UserMenu.link.chat'),
+  git: t('components.common.UserMenu.link.git'),
+  login: t('components.common.UserMenu.link.login'),
+  signup: t('components.common.UserMenu.link.signup'),
+  notifications: t('components.common.UserMenu.link.notifications')
 }))
 </script>
 

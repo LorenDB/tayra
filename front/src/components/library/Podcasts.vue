@@ -112,7 +112,7 @@ onMounted(() => $('.ui.dropdown').dropdown())
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: t('components.library.Podcasts.searchPlaceholder'),
+  searchPlaceholder: t('components.library.Podcasts.placeholder.search'),
   title: t('components.library.Podcasts.title')
 }))
 
@@ -123,7 +123,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        {{ $t('components.library.Podcasts.podcastBrowseHeader') }}
+        {{ $t('components.library.Podcasts.header.browse') }}
       </h2>
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
@@ -132,7 +132,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
         <div class="fields">
           <div class="field">
             <label for="artist-search">
-              {{ $t('components.library.Podcasts.searchLabel') }}
+              {{ $t('components.library.Podcasts.label.search') }}
             </label>
             <div class="ui action input">
               <input
@@ -145,18 +145,18 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="t('components.library.Podcasts.searchButton')"
+                :aria-label="t('components.library.Podcasts.button.search')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="tags-search">{{ $t('components.library.Podcasts.tagsLabel') }}</label>
+            <label for="tags-search">{{ $t('components.library.Podcasts.label.tags') }}</label>
             <tags-selector v-model="tags" />
           </div>
           <div class="field">
-            <label for="artist-ordering">{{ $t('components.library.Podcasts.orderingLabel') }}</label>
+            <label for="artist-ordering">{{ $t('components.library.Podcasts.ordering.label') }}</label>
             <select
               id="artist-ordering"
               v-model="ordering"
@@ -172,22 +172,22 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="artist-ordering-direction">{{ $t('components.library.Podcasts.orderingDirectionLabel') }}</label>
+            <label for="artist-ordering-direction">{{ $t('components.library.Podcasts.ordering.direction.label') }}</label>
             <select
               id="artist-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                {{ $t('components.library.Podcasts.ascendingOrdering') }}
+                {{ $t('components.library.Podcasts.ordering.direction.ascending') }}
               </option>
               <option value="-">
-                {{ $t('components.library.Podcasts.descendingOrdering') }}
+                {{ $t('components.library.Podcasts.ordering.direction.descending') }}
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="artist-results">{{ $t('components.library.Podcasts.resultsPerPageLabel') }}</label>
+            <label for="artist-results">{{ $t('components.library.Podcasts.pagination.results') }}</label>
             <select
               id="artist-results"
               v-model="paginateBy"
@@ -228,7 +228,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
       >
         <div class="ui icon header">
           <i class="podcast icon" />
-          {{ $t('components.library.Podcasts.emptyStateMessage') }}
+          {{ $t('components.library.Podcasts.empty.noResults') }}
         </div>
         <router-link
           v-if="$store.state.auth.authenticated"
@@ -236,7 +236,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
           class="ui success button labeled icon"
         >
           <i class="upload icon" />
-          {{ $t('components.library.Podcasts.addChannelLink') }}
+          {{ $t('components.library.Podcasts.button.channel') }}
         </router-link>
         <h1
           v-if="$store.state.auth.authenticated"
@@ -245,7 +245,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
           <div class="actions">
             <a @click.stop.prevent="showSubscribeModal = true">
               <i class="plus icon" />
-              {{ $t('components.library.Podcasts.subscribeLink') }}
+              {{ $t('components.library.Podcasts.button.feed') }}
             </a>
           </div>
         </h1>
@@ -265,7 +265,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
       :fullscreen="false"
     >
       <h2 class="header">
-        {{ $t('components.library.Podcasts.subscriptionModalHeader') }}
+        {{ $t('components.library.Podcasts.modal.subscription.header') }}
       </h2>
       <div
         ref="modalContent"
@@ -281,7 +281,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
       </div>
       <div class="actions">
         <button class="ui basic deny button">
-          {{ $t('components.library.Podcasts.cancelButton') }}
+          {{ $t('components.library.Podcasts.button.cancel') }}
         </button>
         <button
           form="remote-search"
@@ -289,7 +289,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
           class="ui primary button"
         >
           <i class="bookmark icon" />
-          {{ $t('components.library.Podcasts.subscribeButton') }}
+          {{ $t('components.library.Podcasts.button.subscribe') }}
         </button>
       </div>
     </semantic-modal>

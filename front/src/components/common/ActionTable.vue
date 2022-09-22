@@ -123,10 +123,10 @@ const toggleCheck = (event: MouseEvent, id: string, index: number) => {
 }
 
 const labels = computed(() => ({
-  refresh: t('components.common.ActionTable.refreshLabel'),
-  selectAllItems: t('components.common.ActionTable.selectAllLabel'),
-  performAction: t('components.common.ActionTable.performActionLabel'),
-  selectItem: t('components.common.ActionTable.selectItemLabel')
+  refresh: t('components.common.ActionTable.button.refresh'),
+  selectAllItems: t('components.common.ActionTable.button.selectAll'),
+  performAction: t('components.common.ActionTable.label.performAction'),
+  selectItem: t('components.common.ActionTable.button.select')
 }))
 
 const errors = ref([] as string[])
@@ -167,7 +167,7 @@ const launchAction = async () => {
               class="right floated"
             >
               <span v-if="needsRefresh">
-                {{ $t('components.common.ActionTable.contentUpdatedMessage') }}
+                {{ $t('components.common.ActionTable.message.needsRefresh') }}
               </span>
               <button
                 class="ui basic icon button"
@@ -185,7 +185,7 @@ const launchAction = async () => {
             >
               <div class="ui inline fields">
                 <div class="field">
-                  <label for="actions-select">{{ $t('components.common.ActionTable.actionsLabel') }}</label>
+                  <label for="actions-select">{{ $t('components.common.ActionTable.label.actions') }}</label>
                   <select
                     id="actions-select"
                     v-model="currentActionName"
@@ -208,13 +208,13 @@ const launchAction = async () => {
                     :aria-label="labels.performAction"
                     @confirm="launchAction"
                   >
-                    {{ $t('components.common.ActionTable.performActionButton') }}
+                    {{ $t('components.common.ActionTable.button.go') }}
                     <template #modal-header>
                       <p>
                         <span
                           key="1"
                         >
-                          {{ $t('components.common.ActionTable.performActionConfirmation', {action: currentActionName, count: affectedObjectsCount} ) }}
+                          {{ $t('components.common.ActionTable.modal.performAction.header', {action: currentActionName, count: affectedObjectsCount} ) }}
                         </span>
                       </p>
                     </template>
@@ -226,13 +226,13 @@ const launchAction = async () => {
                         <span
                           v-else
                         >
-                          {{ $t('components.common.ActionTable.performActionWarning') }}
+                          {{ $t('components.common.ActionTable.modal.performAction.content.warning') }}
                         </span>
                       </p>
                     </template>
                     <template #modal-confirm>
                       <div :aria-label="labels.performAction">
-                        {{ $t('components.common.ActionTable.launchActionButton') }}
+                        {{ $t('components.common.ActionTable.button.launch') }}
                       </div>
                     </template>
                   </dangerous-button>
@@ -243,19 +243,19 @@ const launchAction = async () => {
                     :class="['ui', {disabled: checked.length === 0}, {'loading': isLoading}, 'button']"
                     @click="launchAction"
                   >
-                    {{ $t('components.common.ActionTable.performActionButton') }}
+                    {{ $t('components.common.ActionTable.button.go') }}
                   </button>
                 </div>
                 <div class="count field">
                   <span
                     v-if="selectAll"
                   >
-                    {{ $t('components.common.ActionTable.allElementsSelectedMessage', {count: objectsData.count}) }}
+                    {{ $t('components.common.ActionTable.button.allSelected', {count: objectsData.count}) }}
                   </span>
                   <span
                     v-else
                   >
-                    {{ $t('components.common.ActionTable.elementsSelectedMessage', {count: checked.length, total: objectsData.count}) }}
+                    {{ $t('components.common.ActionTable.button.selected', {count: checked.length, total: objectsData.count}) }}
                   </span>
                   <template v-if="currentAction?.allowAll && checkable.length > 0 && checkable.length === checked.length">
                     <a
@@ -266,7 +266,7 @@ const launchAction = async () => {
                       <span
                         key="3"
                       >
-                        {{ $t('components.common.ActionTable.selectElementsMessage', {total: objectsData.count}) }}
+                        {{ $t('components.common.ActionTable.button.selectElement', {total: objectsData.count}) }}
                       </span>
                     </a>
                     <a
@@ -276,7 +276,7 @@ const launchAction = async () => {
                     >
                       <span
                         key="4"
-                      >{{ $t('components.common.ActionTable.selectCurrentPage') }}</span>
+                      >{{ $t('components.common.ActionTable.button.selectCurrentPage') }}</span>
                     </a>
                   </template>
                 </div>
@@ -287,7 +287,7 @@ const launchAction = async () => {
                 class="ui negative message"
               >
                 <h4 class="header">
-                  {{ $t('components.common.ActionTable.actionErrorMessage') }}
+                  {{ $t('components.common.ActionTable.header.error') }}
                 </h4>
                 <ul class="list">
                   <li
@@ -304,7 +304,7 @@ const launchAction = async () => {
               >
                 <p>
                   <span>
-                    {{ $t('components.common.ActionTable.actionSuccessMessage', {action: result.action, count: result.updated}) }}
+                    {{ $t('components.common.ActionTable.message.success', {action: result.action, count: result.updated}) }}
                   </span>
                 </p>
 

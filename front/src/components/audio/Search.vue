@@ -101,7 +101,7 @@ const labels = computed(() => ({
         </div>
       </div>
       <p v-else>
-        {{ $t('components.audio.Search.message.noArtists') }}
+        {{ $t('components.audio.Search.empty.noArtists') }}
       </p>
     </template>
     <template v-if="query.length > 0">
@@ -124,7 +124,7 @@ const labels = computed(() => ({
         </div>
       </div>
       <p v-else>
-        {{ $t('components.audio.Search.message.noAlbums') }}
+        {{ $t('components.audio.Search.empty.noAlbums') }}
       </p>
     </template>
   </div>

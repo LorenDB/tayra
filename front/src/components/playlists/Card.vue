@@ -61,7 +61,7 @@ const images = computed(() => {
       </div>
     </div>
     <div class="extra content">
-      {{ $t('components.playlists.Card.trackCount', {tracks_count: playlist.tracks_count}) }}
+      {{ $t('components.playlists.Card.meta.tracks', {tracks_count: playlist.tracks_count}) }}
       <play-button
         class="right floated basic icon"
         :dropdown-only="true"

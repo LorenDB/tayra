@@ -61,10 +61,10 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
   <div v-else-if="object">
     <h2 class="ui header">
       <span v-if="isSerie">
-        {{ $t('components.library.AlbumDetail.episodesHeader') }}
+        {{ $t('components.library.AlbumDetail.header.episodes') }}
       </span>
       <span v-else>
-        {{ $t('components.library.AlbumDetail.tracksHeader') }}
+        {{ $t('components.library.AlbumDetail.header.tracks') }}
       </span>
     </h2>
 
@@ -88,7 +88,7 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
               :tracks="discs[index]"
             />
             <h3>
-              {{ $t('components.library.AlbumDetail.volumeNumber', {number: tracks[0].disc_number}) }}
+              {{ $t('components.library.AlbumDetail.meta.volume', {number: tracks[0].disc_number}) }}
             </h3>
             <track-table
               :is-album="true"
@@ -128,13 +128,13 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
 
     <template v-if="!artist.channel && !isSerie">
       <h2>
-        {{ $t('components.library.AlbumDetail.userLibraryHeader') }}
+        {{ $t('components.library.AlbumDetail.header.libraries') }}
       </h2>
       <library-widget
         :url="'albums/' + object.id + '/libraries/'"
         @loaded="emit('libraries-loaded', $event)"
       >
-        {{ $t('components.library.AlbumDetail.userLibraryDescription') }}
+        {{ $t('components.library.AlbumDetail.description.libraries') }}
       </library-widget>
     </template>
   </div>

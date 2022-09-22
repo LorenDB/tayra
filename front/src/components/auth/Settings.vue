@@ -224,7 +224,7 @@ const deleteAccount = async () => {
     await axios.delete('users/me/', { data: payload })
 
     store.commit('ui/addMessage', {
-      content: t('components.auth.Settings.deletionRequest'),
+      content: t('components.auth.Settings.message.confirmDelete'),
       date: new Date()
     })
 
@@ -276,7 +276,7 @@ fetchOwnedApps()
     <div class="ui vertical stripe segment">
       <section class="ui text container">
         <h2 class="ui header">
-          {{ $t('components.auth.Settings.accountSettingsHeader') }}
+          {{ $t('components.auth.Settings.header.accountSettings') }}
         </h2>
         <form
           class="ui form"
@@ -287,7 +287,7 @@ fetchOwnedApps()
             class="ui positive message"
           >
             <h4 class="header">
-              {{ $t('components.auth.Settings.settingsUpdatedHeader') }}
+              {{ $t('components.auth.Settings.header.settingsUpdated') }}
             </h4>
           </div>
           <div
@@ -296,7 +296,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              {{ $t('components.auth.Settings.settingsUpdateFailureHeader') }}
+              {{ $t('components.auth.Settings.header.updateFailure') }}
             </h4>
             <ul class="list">
               <li
@@ -340,14 +340,14 @@ fetchOwnedApps()
             :class="['ui', { loading: isLoading }, 'button']"
             type="submit"
           >
-            {{ $t('components.auth.Settings.updateSettingsButton') }}
+            {{ $t('components.auth.Settings.button.updateSettings') }}
           </button>
         </form>
       </section>
       <section class="ui text container">
         <div class="ui hidden divider" />
         <h2 class="ui header">
-          {{ $t('components.auth.Settings.avatarHeader') }}
+          {{ $t('components.auth.Settings.header.avatar') }}
         </h2>
         <div class="ui form">
           <div
@@ -356,7 +356,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              {{ $t('components.auth.Settings.avatarSaveFailureHeader') }}
+              {{ $t('components.auth.Settings.header.avatarFailure') }}
             </h4>
             <ul class="list">
               <li
@@ -373,7 +373,7 @@ fetchOwnedApps()
             @update:model-value="submitAvatar($event)"
             @delete="avatar = {uuid: null}"
           >
-            {{ $t('components.auth.Settings.avatarInputLabel') }}
+            {{ $t('components.auth.Settings.label.avatar') }}
           </attachment-input>
         </div>
       </section>
@@ -381,10 +381,10 @@ fetchOwnedApps()
       <section class="ui text container">
         <div class="ui hidden divider" />
         <h2 class="ui header">
-          {{ $t('components.auth.Settings.changePasswordHeader') }}
+          {{ $t('components.auth.Settings.header.changePassword') }}
         </h2>
         <div class="ui message">
-          {{ $t('components.auth.Settings.changePasswordMessage') }}&nbsp;{{ $t('components.auth.Settings.changePasswordMessageContinued') }}
+          {{ $t('components.auth.Settings.description.changePassword.paragraph1') }}&nbsp;{{ $t('components.auth.Settings.description.changePassword.paragraph2') }}
         </div>
         <form
           class="ui form"
@@ -396,16 +396,16 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              {{ $t('components.auth.Settings.changePasswordFailureMessage') }}
+              {{ $t('components.auth.Settings.header.passwordFailure') }}
             </h4>
             <ul class="list">
               <li v-if="passwordError == 'invalid_credentials'">
-                {{ $t('components.auth.Settings.changePasswordHelp') }}
+                {{ $t('components.auth.Settings.help.changePassword') }}
               </li>
             </ul>
           </div>
           <div class="field">
-            <label for="old-password-field">{{ $t('components.auth.Settings.currentPasswordLabel') }}</label>
+            <label for="old-password-field">{{ $t('components.auth.Settings.label.currentPassword') }}</label>
             <password-input
               v-model="credentials.oldPassword"
               field-id="old-password-field"
@@ -413,7 +413,7 @@ fetchOwnedApps()
             />
           </div>
           <div class="field">
-            <label for="new-password-field">{{ $t('components.auth.Settings.newPasswordLabel') }}</label>
+            <label for="new-password-field">{{ $t('components.auth.Settings.label.newPassword') }}</label>
             <password-input
               v-model="credentials.newPassword"
               field-id="new-password-field"
@@ -424,30 +424,30 @@ fetchOwnedApps()
             :class="['ui', {'loading': isLoadingPassword}, {disabled: !credentials.newPassword || !credentials.oldPassword}, 'warning', 'button']"
             :action="submitPassword"
           >
-            {{ $t('components.auth.Settings.changePasswordButton') }}
+            {{ $t('components.auth.Settings.button.password') }}
             <template #modal-header>
               <p>
-                {{ $t('components.auth.Settings.changePasswordModalHeader') }}
+                {{ $t('components.auth.Settings.modal.changePassword.header') }}
               </p>
             </template>
             <template #modal-content>
               <div>
                 <p>
-                  {{ $t('components.auth.Settings.changePasswordWarning') }}
+                  {{ $t('components.auth.Settings.modal.changePassword.content.warning') }}
                 </p>
                 <ul>
                   <li>
-                    {{ $t('components.auth.Settings.changePasswordLogout') }}
+                    {{ $t('components.auth.Settings.modal.changePassword.content.logout') }}
                   </li>
                   <li>
-                    {{ $t('components.auth.Settings.changePasswordSubsonic') }}
+                    {{ $t('components.auth.Settings.modal.changePassword.content.subsonic') }}
                   </li>
                 </ul>
               </div>
             </template>
             <template #modal-confirm>
               <div>
-                {{ $t('components.auth.Settings.disableSubsonicMessage') }}
+                {{ $t('components.auth.Settings.button.disableSubsonic') }}
               </div>
             </template>
           </dangerous-button>
@@ -464,11 +464,11 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="eye slash outline icon" />
           <div class="content">
-            {{ $t('components.auth.Settings.contentFiltersHeader') }}
+            {{ $t('components.auth.Settings.header.contentFilters') }}
           </div>
         </h2>
         <p>
-          {{ $t('components.auth.Settings.contentFiltersDescription') }}
+          {{ $t('components.auth.Settings.description.contentFilters') }}
         </p>
 
         <button
@@ -476,19 +476,19 @@ fetchOwnedApps()
           @click="$store.dispatch('moderation/fetchContentFilters')"
         >
           <i class="refresh icon" />&nbsp;
-          {{ $t('components.auth.Settings.refreshButton') }}
+          {{ $t('components.auth.Settings.button.refresh') }}
         </button>
         <h3 class="ui header">
-          {{ $t('components.auth.Settings.hiddenArtistsHeader') }}
+          {{ $t('components.auth.Settings.header.hiddenArtists') }}
         </h3>
         <table class="ui compact very basic unstackable table">
           <thead>
             <tr>
               <th>
-                {{ $t('components.auth.Settings.artistNameTableHeader') }}
+                {{ $t('components.auth.Settings.table.artists.header.name') }}
               </th>
               <th>
-                {{ $t('components.auth.Settings.filterCreationDateTableHeader') }}
+                {{ $t('components.auth.Settings.table.artists.header.creationDate') }}
               </th>
               <th />
             </tr>
@@ -511,7 +511,7 @@ fetchOwnedApps()
                   class="ui basic tiny button"
                   @click="$store.dispatch('moderation/deleteContentFilter', filter.uuid)"
                 >
-                  {{ $t('components.auth.Settings.filterDeleteButton') }}
+                  {{ $t('components.auth.Settings.button.delete') }}
                 </button>
               </td>
             </tr>
@@ -526,18 +526,18 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="open lock icon" />
           <div class="content">
-            {{ $t('components.auth.Settings.authorizedAppsHeader') }}
+            {{ $t('components.auth.Settings.header.authorizedApps') }}
           </div>
         </h2>
         <p>
-          {{ $t('components.auth.Settings.authorizedAppsDescription') }}
+          {{ $t('components.auth.Settings.description.authorizedApps') }}
         </p>
         <button
           :class="['ui', 'icon', { loading: isLoadingApps }, 'button']"
           @click="fetchApps()"
         >
           <i class="refresh icon" />&nbsp;
-          {{ $t('components.auth.Settings.refreshButton') }}
+          {{ $t('components.auth.Settings.button.refresh') }}
         </button>
         <table
           v-if="apps.length > 0"
@@ -546,10 +546,10 @@ fetchOwnedApps()
           <thead>
             <tr>
               <th>
-                {{ $t('components.auth.Settings.appNameTableHeader') }}
+                {{ $t('components.auth.Settings.table.authorizedApps.header.application') }}
               </th>
               <th>
-                {{ $t('components.auth.Settings.appPermissionsTableHeader') }}
+                {{ $t('components.auth.Settings.table.authorizedApps.header.permissions') }}
               </th>
               <th />
             </tr>
@@ -570,20 +570,20 @@ fetchOwnedApps()
                   :class="['ui', 'tiny', 'danger', { loading: isRevoking.has(app.client_id) }, 'button']"
                   @confirm="revokeApp(app.client_id)"
                 >
-                  {{ $t('components.auth.Settings.permissionDeleteButton') }}
+                  {{ $t('components.auth.Settings.button.revoke') }}
                   <template #modal-header>
                     <p>
-                      {{ $t('components.auth.Settings.revokePermissionModalMessage', {app: app.name}) }}
+                      {{ $t('components.auth.Settings.modal.revokeApp.header', {app: app.name}) }}
                     </p>
                   </template>
                   <template #modal-content>
                     <p>
-                      {{ $t('components.auth.Settings.revokePermissionModalWarning') }}
+                      {{ $t('components.auth.Settings.modal.revokeApp.content.warning') }}
                     </p>
                   </template>
                   <template #modal-confirm>
                     <div>
-                      {{ $t('components.auth.Settings.revokeAccessButton') }}
+                      {{ $t('components.auth.Settings.button.revokeAccess') }}
                     </div>
                   </template>
                 </dangerous-button>
@@ -593,9 +593,9 @@ fetchOwnedApps()
         </table>
         <empty-state v-else>
           <template #title>
-            {{ $t('components.auth.Settings.emptyAppMessage') }}
+            {{ $t('components.auth.Settings.header.noApps') }}
           </template>
-          {{ $t('components.auth.Settings.emptyAppHelp') }}
+          {{ $t('components.auth.Settings.help.noApps') }}
         </empty-state>
       </section>
       <section
@@ -606,17 +606,17 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="code icon" />
           <div class="content">
-            {{ $t('components.auth.Settings.personalAppsHeader') }}
+            {{ $t('components.auth.Settings.header.yourApps') }}
           </div>
         </h2>
         <p>
-          {{ $t('components.auth.Settings.personalAppsDescription') }}
+          {{ $t('components.auth.Settings.description.yourApps') }}
         </p>
         <router-link
           class="ui success button"
           :to="{name: 'settings.applications.new'}"
         >
-          {{ $t('components.auth.Settings.newAppLink') }}
+          {{ $t('components.auth.Settings.link.newApp') }}
         </router-link>
         <table
           v-if="ownedApps.length > 0"
@@ -625,13 +625,13 @@ fetchOwnedApps()
           <thead>
             <tr>
               <th>
-                {{ $t('components.auth.Settings.personalAppNameTableHeader') }}
+                {{ $t('components.auth.Settings.table.yourApps.header.application') }}
               </th>
               <th>
-                {{ $t('components.auth.Settings.personalAppScopesTableHeader') }}
+                {{ $t('components.auth.Settings.table.yourApps.header.scopes') }}
               </th>
               <th>
-                {{ $t('components.auth.Settings.personalAppCreationDateTableHeader') }}
+                {{ $t('components.auth.Settings.table.yourApps.header.creationDate') }}
               </th>
               <th />
             </tr>
@@ -657,25 +657,25 @@ fetchOwnedApps()
                   class="ui tiny success button"
                   :to="{name: 'settings.applications.edit', params: {id: app.client_id}}"
                 >
-                  {{ $t('components.auth.Settings.personalAppEditLink') }}
+                  {{ $t('components.auth.Settings.button.edit') }}
                 </router-link>
                 <dangerous-button
                   :class="['ui', 'tiny', 'danger', { loading: isDeleting.has(app.client_id) }, 'button']"
                   @confirm="deleteApp(app.client_id)"
                 >
-                  {{ $t('components.auth.Settings.personalAppDeleteLink') }}
+                  {{ $t('components.auth.Settings.button.remove') }}
                   <template #modal-header>
                     <p />
-                    {{ $t('components.auth.Settings.deletePersonalAppModalMessage', {app: app.name}) }}
+                    {{ $t('components.auth.Settings.modal.deleteApp.header', {app: app.name}) }}
                   </template>
                   <template #modal-content>
                     <p>
-                      {{ $t('components.auth.Settings.deletePersonalAppModalWarning') }}
+                      {{ $t('components.auth.Settings.modal.deleteApp.content.warning') }}
                     </p>
                   </template>
                   <template #modal-confirm>
                     <div>
-                      {{ $t('components.auth.Settings.deletePersonalAppButton') }}
+                      {{ $t('components.auth.Settings.button.removeApp') }}
                     </div>
                   </template>
                 </dangerous-button>
@@ -685,9 +685,9 @@ fetchOwnedApps()
         </table>
         <empty-state v-else>
           <template #title>
-            {{ $t('components.auth.Settings.emptyPersonalAppMessage') }}
+            {{ $t('components.auth.Settings.header.noPersonalApps') }}
           </template>
-          {{ $t('components.auth.Settings.emptyPersonalAppHelp') }}
+          {{ $t('components.auth.Settings.help.noPersonalApps') }}
         </empty-state>
       </section>
 
@@ -699,17 +699,17 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="code icon" />
           <div class="content">
-            {{ $t('components.auth.Settings.pluginsHeader') }}
+            {{ $t('components.auth.Settings.header.plugins') }}
           </div>
         </h2>
         <p>
-          {{ $t('components.auth.Settings.pluginsDescription') }}
+          {{ $t('components.auth.Settings.description.plugins') }}
         </p>
         <router-link
           class="ui success button"
           :to="{name: 'settings.plugins'}"
         >
-          {{ $t('components.auth.Settings.managePluginsLink') }}
+          {{ $t('components.auth.Settings.link.managePlugins') }}
         </router-link>
       </section>
       <section class="ui text container">
@@ -717,14 +717,14 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="comment icon" />
           <div class="content">
-            {{ $t('components.auth.Settings.changeEmailHeader') }}
+            {{ $t('components.auth.Settings.header.changeEmail') }}
           </div>
         </h2>
         <p>
-          {{ $t('components.auth.Settings.changeEmailDescription') }}
+          {{ $t('components.auth.Settings.description.changeEmail') }}
         </p>
         <p>
-          {{ $t('components.auth.Settings.currentEmailLabel', { email: email }) }}
+          {{ $t('components.auth.Settings.message.currentEmail', { email: email }) }}
         </p>
         <form
           class="ui form"
@@ -736,7 +736,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              {{ $t('components.auth.Settings.changeEmailFailureMessage') }}
+              {{ $t('components.auth.Settings.header.emailFailure') }}
             </h4>
             <ul class="list">
               <li
@@ -748,7 +748,7 @@ fetchOwnedApps()
             </ul>
           </div>
           <div class="field">
-            <label for="new-email">{{ $t('components.auth.Settings.newEmailLabel') }}</label>
+            <label for="new-email">{{ $t('components.auth.Settings.label.newEmail') }}</label>
             <input
               id="new-email"
               v-model="newEmail"
@@ -757,7 +757,7 @@ fetchOwnedApps()
             >
           </div>
           <div class="field">
-            <label for="current-password-field-email">{{ $t('components.auth.Settings.currentPasswordLabel') }}</label>
+            <label for="current-password-field-email">{{ $t('components.auth.Settings.label.password') }}</label>
             <password-input
               v-model="emailPassword"
               field-id="current-password-field-email"
@@ -768,7 +768,7 @@ fetchOwnedApps()
             type="submit"
             class="ui button"
           >
-            {{ $t('components.auth.Settings.updateEmailButton') }}
+            {{ $t('components.auth.Settings.button.update') }}
           </button>
         </form>
       </section>
@@ -777,17 +777,17 @@ fetchOwnedApps()
         <h2 class="ui header">
           <i class="trash icon" />
           <div class="content">
-            {{ $t('components.auth.Settings.deleteAccountHeader') }}
+            {{ $t('components.auth.Settings.header.deleteAccount') }}
           </div>
         </h2>
         <p>
-          {{ $t('components.auth.Settings.deleteAccountDescription') }}
+          {{ $t('components.auth.Settings.description.deleteAccount') }}
         </p>
         <div
           role="alert"
           class="ui warning message"
         >
-          {{ $t('components.auth.Settings.deleteAccountWarning') }}
+          {{ $t('components.auth.Settings.warning.deleteAccount') }}
         </div>
         <div class="ui form">
           <div
@@ -796,7 +796,7 @@ fetchOwnedApps()
             class="ui negative message"
           >
             <h4 class="header">
-              {{ $t('components.auth.Settings.deleteAccountFailureMessage') }}
+              {{ $t('components.auth.Settings.header.accountFailure') }}
             </h4>
             <ul class="list">
               <li
@@ -808,7 +808,7 @@ fetchOwnedApps()
             </ul>
           </div>
           <div class="field">
-            <label for="current-password-field">{{ $t('components.auth.Settings.currentPasswordLabel') }}</label>
+            <label for="current-password-field">{{ $t('components.auth.Settings.label.currentPassword') }}</label>
             <password-input
               v-model="deleteAccountPassword"
               field-id="current-password-field"
@@ -819,22 +819,22 @@ fetchOwnedApps()
             :class="['ui', {'loading': isDeletingAccount}, {disabled: !deleteAccountPassword}, {danger: deleteAccountPassword}, 'button']"
             :action="deleteAccount"
           >
-            {{ $t('components.auth.Settings.deleteAccountButton') }}
+            {{ $t('components.auth.Settings.button.deleteAccount') }}
             <template #modal-header>
               <p>
-                {{ $t('components.auth.Settings.deleteAccountConfirmationMessage') }}
+                {{ $t('components.auth.Settings.modal.deleteAccount.header') }}
               </p>
             </template>
             <template #modal-content>
               <div>
                 <p>
-                  {{ $t('components.auth.Settings.deleteAccountConfirmationWarning') }}
+                  {{ $t('components.auth.Settings.modal.deleteAccount.content.warning') }}
                 </p>
               </div>
             </template>
             <template #modal-confirm>
               <div>
-                {{ $t('components.auth.Settings.deleteAccountConfirmButton') }}
+                {{ $t('components.auth.Settings.button.deleteAccountConfirm') }}
               </div>
             </template>
           </dangerous-button>

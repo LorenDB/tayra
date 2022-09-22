@@ -51,7 +51,7 @@ const tracks = computed({
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  copyTitle: t('components.playlists.Editor.copyTitle')
+  copyTitle: t('components.playlists.Editor.button.copy')
 }))
 
 const isLoading = ref(false)
@@ -167,16 +167,16 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
       :title="undefined"
     />
     <h3 class="ui top attached header">
-      {{ $t('components.playlists.Editor.editorHeader') }}
+      {{ $t('components.playlists.Editor.header.editor') }}
     </h3>
     <div class="ui attached segment">
       <template v-if="status === 'loading'">
         <div class="ui active tiny inline loader" />
-        {{ $t('components.playlists.Editor.syncingChangesMessage') }}
+        {{ $t('components.playlists.Editor.loading.sync') }}
       </template>
       <template v-else-if="status === 'errored'">
         <i class="dangerclose icon" />
-        {{ $t('components.playlists.Editor.syncingChangesFailureMessage') }}
+        {{ $t('components.playlists.Editor.error.sync') }}
         <div
           v-if="errors.length > 0"
           role="alert"
@@ -198,7 +198,7 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
         class="ui warning message"
       >
         <p>
-          {{ $t('components.playlists.Editor.tracksExistWarning') }}
+          {{ $t('components.playlists.Editor.warning.duplicate') }}
         </p>
         <ul class="ui relaxed divided list duplicate-tracks-list">
           <li
@@ -213,12 +213,12 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
           class="ui small success button"
           @click="insertMany(queueTracks, true)"
         >
-          {{ $t('components.playlists.Editor.addAnywayButton') }}
+          {{ $t('components.playlists.Editor.button.addDuplicate') }}
         </button>
       </div>
       <template v-else-if="status === 'saved'">
         <i class="success check icon" />
-        {{ $t('components.playlists.Editor.syncedStatus') }}
+        {{ $t('components.playlists.Editor.message.sync') }}
       </template>
     </div>
     <div class="ui bottom attached segment">
@@ -229,7 +229,7 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
         @click="insertMany(queueTracks, false)"
       >
         <i class="plus icon" />
-        {{ $t('components.playlists.Editor.insertCount', {count: queueTracks.length}) }}
+        {{ $t('components.playlists.Editor.button.insertFromQueue', {count: queueTracks.length}) }}
       </button>
 
       <dangerous-button
@@ -238,27 +238,27 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
         :action="clearPlaylist"
       >
         <i class="eraser icon" />
-        {{ $t('components.playlists.Editor.clearPlaylistButton') }}
+        {{ $t('components.playlists.Editor.button.clear') }}
         <template #modal-header>
           <p>
-            {{ $t('components.playlists.Editor.clearPlaylistModalHeader', {playlist: playlist?.name}) }}
+            {{ $t('components.playlists.Editor.modal.clearPlaylist.header', {playlist: playlist?.name}) }}
           </p>
         </template>
         <template #modal-content>
           <p>
-            {{ $t('components.playlists.Editor.clearPlaylistModalContent') }}
+            {{ $t('components.playlists.Editor.modal.clearPlaylist.content.warning') }}
           </p>
         </template>
         <template #modal-confirm>
           <div>
-            {{ $t('components.playlists.Editor.clearPlaylistButton') }}
+            {{ $t('components.playlists.Editor.button.clear') }}
           </div>
         </template>
       </dangerous-button>
       <div class="ui hidden divider" />
       <template v-if="tracks.length > 0">
         <p>
-          {{ $t('components.playlists.Editor.reorderTracks') }}
+          {{ $t('components.playlists.Editor.help.reorder') }}
         </p>
         <div class="table-wrapper">
           <table class="ui compact very basic unstackable table">

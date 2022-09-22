@@ -25,19 +25,19 @@ const canEdit = store.state.auth.availablePermissions.library
         <span
           v-if="canEdit"
         >
-          {{ $t('components.library.ArtistEdit.editArtistHeader') }}
+          {{ $t('components.library.ArtistEdit.header.edit') }}
         </span>
         <span
           v-else
         >
-          {{ $t('components.library.ArtistEdit.suggestEditHeader') }}
+          {{ $t('components.library.ArtistEdit.header.suggest') }}
         </span>
       </h2>
       <div
         v-if="!object.is_local"
         class="ui message"
       >
-        {{ $t('components.library.ArtistEdit.remoteObjectWarning') }}
+        {{ $t('components.library.ArtistEdit.message.remote') }}
       </div>
       <edit-form
         v-else

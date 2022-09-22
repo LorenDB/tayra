@@ -396,7 +396,7 @@ watchEffect(() => {
 })
 
 const labels = computed(() => ({
-  editTitle: t('components.channels.UploadForm.editTitle')
+  editTitle: t('components.channels.UploadForm.button.edit')
 }))
 </script>
 
@@ -411,7 +411,7 @@ const labels = computed(() => ({
       class="ui negative message"
     >
       <h4 class="header">
-        {{ $t('components.channels.UploadForm.failureHeader') }}
+        {{ $t('components.channels.UploadForm.header.error') }}
       </h4>
       <ul class="list">
         <li
@@ -424,7 +424,7 @@ const labels = computed(() => ({
     </div>
     <div :class="['ui', 'required', {hidden: step > 1}, 'field']">
       <label for="channel-dropdown">
-        {{ $t('components.channels.UploadForm.channelLabel') }}
+        {{ $t('components.channels.UploadForm.label.channel') }}
       </label>
       <div
         id="channel-dropdown"
@@ -447,7 +447,7 @@ const labels = computed(() => ({
       <div class="content">
         <p>
           <i class="copyright icon" />
-          {{ $t('components.channels.UploadForm.licenseTip') }}
+          {{ $t('components.channels.UploadForm.help.license') }}
         </p>
       </div>
     </div>
@@ -460,7 +460,7 @@ const labels = computed(() => ({
         <div class="content">
           <p>
             <i class="warning icon" />
-            {{ $t('components.channels.UploadForm.noSpaceWarning') }}
+            {{ $t('components.channels.UploadForm.warning.quota') }}
           </p>
         </div>
       </div>
@@ -471,19 +471,19 @@ const labels = computed(() => ({
         >
           <p>
             <i class="redo icon" />
-            {{ $t('components.channels.UploadForm.pendingDraftsMessage') }}
+            {{ $t('components.channels.UploadForm.message.pending') }}
           </p>
           <button
             class="ui basic button"
             @click.stop.prevent="includeDraftUploads = false"
           >
-            {{ $t('components.channels.UploadForm.ignoreButton') }}
+            {{ $t('components.channels.UploadForm.button.ignore') }}
           </button>
           <button
             class="ui basic button"
             @click.stop.prevent="includeDraftUploads = true"
           >
-            {{ $t('components.channels.UploadForm.resumeButton') }}
+            {{ $t('components.channels.UploadForm.button.resume') }}
           </button>
         </div>
         <div
@@ -539,17 +539,17 @@ const labels = computed(() => ({
                   <span
                     v-if="file.active"
                   >
-                    {{ $t('components.channels.UploadForm.uploadingStatus') }}
+                    {{ $t('components.channels.UploadForm.status.uploading') }}
                   </span>
                   <span
                     v-else-if="file.error"
                   >
-                    {{ $t('components.channels.UploadForm.erroredStatus') }}
+                    {{ $t('components.channels.UploadForm.status.errored') }}
                   </span>
                   <span
                     v-else
                   >
-                    {{ $t('components.channels.UploadForm.pendingStatus') }}
+                    {{ $t('components.channels.UploadForm.status.pending') }}
                   </span>
                   <span class="middle middledot symbol" />
                   {{ humanSize(file.size ?? 0) }}
@@ -559,12 +559,12 @@ const labels = computed(() => ({
                 </template>
                 <span class="middle middledot symbol" />
                 <a @click.stop.prevent="remove(file)">
-                  {{ $t('components.channels.UploadForm.removeUpload') }}
+                  {{ $t('components.channels.UploadForm.button.remove') }}
                 </a>
                 <template v-if="file.error">
                   <span class="middle middledot symbol" />
                   <a @click.stop.prevent="retry(file)">
-                    {{ $t('components.channels.UploadForm.retryUpload') }}
+                    {{ $t('components.channels.UploadForm.button.retry') }}
                   </a>
                 </template>
               </div>
@@ -583,7 +583,7 @@ const labels = computed(() => ({
           <div class="content">
             <p>
               <i class="info icon" />
-              {{ $t('components.channels.UploadForm.supportedExtensions', {extensions: $store.state.ui.supportedExtensions.join(', ')}) }}
+              {{ $t('components.channels.UploadForm.description.extensions', {extensions: $store.state.ui.supportedExtensions.join(', ')}) }}
             </p>
           </div>
         </div>
@@ -602,11 +602,11 @@ const labels = computed(() => ({
         >
           <div>
             <i class="upload icon" />&nbsp;
-            {{ $t('components.channels.UploadForm.dragAndDrop') }}
+            {{ $t('components.channels.UploadForm.message.dragAndDrop') }}
           </div>
           <div class="ui very small divider" />
           <div>
-            {{ $t('components.channels.UploadForm.openFileBrowser') }}
+            {{ $t('components.channels.UploadForm.label.openBrowser') }}
           </div>
         </file-upload-widget>
         <div class="ui hidden divider" />

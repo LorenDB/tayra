@@ -119,7 +119,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          <i class="lock open icon" />{{ $t('components.auth.Authorize.authorizeThirdPartyAppHeader') }}
+          <i class="lock open icon" />{{ $t('components.auth.Authorize.header.authorize') }}
         </h2>
         <div
           v-if="errors.length > 0"
@@ -130,13 +130,13 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
             v-if="application"
             class="header"
           >
-            {{ $t('components.auth.Authorize.authorizeFailureMessage') }}
+            {{ $t('components.auth.Authorize.header.authorizeFailure') }}
           </h4>
           <h4
             v-else
             class="header"
           >
-            {{ $t('components.auth.Authorize.fetchDataFailureMessage') }}
+            {{ $t('components.auth.Authorize.header.fetchFailure') }}
           </h4>
           <ul class="list">
             <li
@@ -159,7 +159,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
           @submit.prevent="submit"
         >
           <h3>
-            {{ $t('components.auth.Authorize.appAccessHeader', {app_name: application.name}) }}
+            {{ $t('components.auth.Authorize.header.access', {app_name: application.name}) }}
           </h3>
 
           <h4
@@ -172,20 +172,20 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
               <i class="pencil icon" />
-              {{ $t('components.auth.Authorize.writeOnlyScopeHeader') }}
+              {{ $t('components.auth.Authorize.header.writeOnly') }}
             </span>
             <span
               v-else-if="!topic.write && topic.read"
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
-              {{ $t('components.auth.Authorize.writeOnlyScopeHeader') }}
+              {{ $t('components.auth.Authorize.header.readOnly') }}
             </span>
             <span
               v-else-if="topic.write && topic.read"
               :class="['ui', 'basic', 'right floated', 'tiny', 'vertically-spaced component-label label']"
             >
               <i class="pencil icon" />
-              {{ $t('components.auth.Authorize.allScopesHeader') }}
+              {{ $t('components.auth.Authorize.header.allScopes') }}
             </span>
             <i :class="[topic.icon, 'icon']" />
             <div class="content">
@@ -196,7 +196,7 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
             </div>
           </h4>
           <div v-if="unknownRequestedScopes.length > 0">
-            <p><strong>{{ $t('components.auth.Authorize.unknownPermissionsMessage') }}</strong></p>
+            <p><strong>{{ $t('components.auth.Authorize.message.unknownPermissions') }}</strong></p>
             <ul
               v-for="(unknownscope, key) in unknownRequestedScopes"
               :key="key"
@@ -209,21 +209,21 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
             type="submit"
           >
             <i class="lock open icon" />
-            {{ $t('components.auth.Authorize.authorizeAppButton', { app: application.name }) }}
+            {{ $t('components.auth.Authorize.button.authorize', { app: application.name }) }}
           </button>
           <p
             v-if="redirectUri === 'urn:ietf:wg:oauth:2.0:oob'"
           >
-            {{ $t('components.auth.Authorize.copyCodeHelp') }}
+            {{ $t('components.auth.Authorize.help.copyCode') }}
           </p>
           <p
             v-else
           >
-            {{ $t('components.auth.Authorize.redirectHelp', {url: redirectUri}) }}
+            {{ $t('components.auth.Authorize.help.redirect', {url: redirectUri}) }}
           </p>
         </form>
         <div v-else-if="code">
-          <p><strong>{{ $t('components.auth.Authorize.copyCodeDescription') }}</strong></p>
+          <p><strong>{{ $t('components.auth.Authorize.help.pasteCode') }}</strong></p>
           <copy-input :value="code" />
         </div>
       </div>

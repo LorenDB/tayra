@@ -80,7 +80,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
       class="small"
     >
       <h3 class="header">
-        {{ $t('components.federation.FetchButton.remoteRefreshHeader') }}
+        {{ $t('components.federation.FetchButton.header.refresh') }}
       </h3>
       <div class="scrolling content">
         <template v-if="data && data.status != 'pending'">
@@ -89,10 +89,10 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
             class="ui message"
           >
             <h4 class="header">
-              {{ $t('components.federation.FetchButton.refreshSkippedHeader') }}
+              {{ $t('components.federation.FetchButton.header.skipped') }}
             </h4>
             <p>
-              {{ $t('components.federation.FetchButton.unsupportedDataMessage') }}
+              {{ $t('components.federation.FetchButton.description.skipped') }}
             </p>
           </div>
           <div
@@ -100,10 +100,10 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
             class="ui success message"
           >
             <h4 class="header">
-              {{ $t('components.federation.FetchButton.refreshSuccessHeader') }}
+              {{ $t('components.federation.FetchButton.header.success') }}
             </h4>
             <p>
-              {{ $t('components.federation.FetchButton.refreshSuccessMessage') }}
+              {{ $t('components.federation.FetchButton.description.success') }}
             </p>
           </div>
           <div
@@ -111,16 +111,16 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
             class="ui error message"
           >
             <h4 class="header">
-              {{ $t('components.federation.FetchButton.refreshFailureHeader') }}
+              {{ $t('components.federation.FetchButton.header.failure') }}
             </h4>
             <p>
-              {{ $t('components.federation.FetchButton.refreshFailureMessage') }}
+              {{ $t('components.federation.FetchButton.description.failure') }}
             </p>
             <table class="ui very basic collapsing celled table">
               <tbody>
                 <tr>
                   <td>
-                    {{ $t('components.federation.FetchButton.errorTypeTableHeader') }}
+                    {{ $t('components.federation.FetchButton.table.error.label.type') }}
                   </td>
                   <td>
                     {{ data.detail.error_code }}
@@ -128,48 +128,48 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.federation.FetchButton.errorDetailTableRow') }}
+                    {{ $t('components.federation.FetchButton.table.error.label.detail') }}
                   </td>
                   <td>
                     <span
                       v-if="data.detail.error_code === 'http' && data.detail.status_code"
                     >
-                      {{ $t('components.federation.FetchButton.httpStatusMessage', {status: data.detail.status_code}) }}
+                      {{ $t('components.federation.FetchButton.table.error.value.httpStatus', {status: data.detail.status_code}) }}
                     </span>
                     <span
                       v-else-if="['http', 'request'].indexOf(data.detail.error_code) > -1"
                     >
-                      {{ $t('components.federation.FetchButton.httpErrorMessage') }}
+                      {{ $t('components.federation.FetchButton.table.error.value.httpError') }}
                     </span>
                     <span
                       v-else-if="data.detail.error_code === 'timeout'"
                     >
-                      {{ $t('components.federation.FetchButton.timeoutErrorMessage') }}
+                      {{ $t('components.federation.FetchButton.table.error.value.timeoutError') }}
                     </span>
                     <span
                       v-else-if="data.detail.error_code === 'connection'"
                     >
-                      {{ $t('components.federation.FetchButton.connectionErrorMessage') }}
+                      {{ $t('components.federation.FetchButton.table.error.value.connectionError') }}
                     </span>
                     <span
                       v-else-if="['invalid_json', 'invalid_jsonld', 'missing_jsonld_type'].indexOf(data.detail.error_code) > -1"
                     >
-                      {{ $t('components.federation.FetchButton.invalidJsonErrorMessage') }}
+                      {{ $t('components.federation.FetchButton.table.error.value.invalidJsonError') }}
                     </span>
                     <span
                       v-else-if="data.detail.error_code === 'validation'"
                     >
-                      {{ $t('components.federation.FetchButton.invalidAttributesErrorMessage') }}
+                      {{ $t('components.federation.FetchButton.table.error.value.invalidAttributesError') }}
                     </span>
                     <span
                       v-else-if="data.detail.error_code === 'unhandled'"
                     >
-                      {{ $t('components.federation.FetchButton.unknownErrorMessage') }}
+                      {{ $t('components.federation.FetchButton.table.error.value.unknownError') }}
                     </span>
                     <span
                       v-else
                     >
-                      {{ $t('components.federation.FetchButton.unknownErrorMessage') }}
+                      {{ $t('components.federation.FetchButton.table.error.value.unknownError') }}
                     </span>
                   </td>
                 </tr>
@@ -182,7 +182,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui active inverted dimmer"
         >
           <div class="ui text loader">
-            {{ $t('components.federation.FetchButton.fetchRequestLoader') }}
+            {{ $t('components.federation.FetchButton.loader.fetchRequest') }}
           </div>
         </div>
         <div
@@ -190,7 +190,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui active inverted dimmer"
         >
           <div class="ui text loader">
-            {{ $t('components.federation.FetchButton.awaitingResultLoader') }}
+            {{ $t('components.federation.FetchButton.loader.awaitingResult') }}
           </div>
         </div>
         <div
@@ -199,7 +199,7 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui negative message"
         >
           <h4 class="header">
-            {{ $t('components.federation.FetchButton.loadingFailureMessage') }}
+            {{ $t('components.federation.FetchButton.header.saveFailure') }}
           </h4>
           <ul class="list">
             <li
@@ -216,23 +216,23 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
           class="ui warning message"
         >
           <h4 class="header">
-            {{ $t('components.federation.FetchButton.pendingRefreshHeader') }}
+            {{ $t('components.federation.FetchButton.header.pending') }}
           </h4>
           <p>
-            {{ $t('components.federation.FetchButton.pendingRefreshMessage') }}
+            {{ $t('components.federation.FetchButton.description.pending') }}
           </p>
         </div>
       </div>
       <div class="actions">
         <button class="ui basic cancel button">
-          {{ $t('components.federation.FetchButton.closeButton') }}
+          {{ $t('components.federation.FetchButton.button.close') }}
         </button>
         <button
           v-if="data && data.status === 'finished'"
           class="ui confirm success button"
           @click.prevent="showModal = false; emit('refresh')"
         >
-          {{ $t('components.federation.FetchButton.reloadButton') }}
+          {{ $t('components.federation.FetchButton.button.reload') }}
         </button>
       </div>
     </semantic-modal>

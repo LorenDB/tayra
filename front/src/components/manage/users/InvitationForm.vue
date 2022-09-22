@@ -17,7 +17,7 @@ const router = useRouter()
 const store = useStore()
 
 const labels = computed(() => ({
-  placeholder: t('components.manage.users.InvitationForm.placeholder')
+  placeholder: t('components.manage.users.InvitationForm.placeholder.invitation')
 }))
 
 const invitations = reactive([] as Invitation[])
@@ -56,7 +56,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
         class="ui negative message"
       >
         <h4 class="header">
-          {{ $t('components.manage.users.InvitationForm.inviteCreateFailureHeader') }}
+          {{ $t('components.manage.users.InvitationForm.header.failure') }}
         </h4>
         <ul class="list">
           <li
@@ -69,7 +69,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
       </div>
       <div class="inline fields">
         <div class="ui field">
-          <label for="invitation-code">{{ $t('components.manage.users.InvitationForm.invitationCodeLabel') }}</label>
+          <label for="invitation-code">{{ $t('components.manage.users.InvitationForm.label.invite') }}</label>
           <input
             v-model="code"
             for="invitation-code"
@@ -84,7 +84,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
             :disabled="isLoading"
             type="submit"
           >
-            {{ $t('components.manage.users.InvitationForm.newInviteCodeButton') }}
+            {{ $t('components.manage.users.InvitationForm.button.new') }}
           </button>
         </div>
       </div>
@@ -95,10 +95,10 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
         <thead>
           <tr>
             <th>
-              {{ $t('components.manage.users.InvitationForm.codeLabel') }}
+              {{ $t('components.manage.users.InvitationForm.table.invitation.header.code') }}
             </th>
             <th>
-              {{ $t('components.manage.users.InvitationForm.shareLinkLabel') }}
+              {{ $t('components.manage.users.InvitationForm.table.invitation.header.link') }}
             </th>
           </tr>
         </thead>
@@ -121,7 +121,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
         class="ui basic button"
         @click="invitations = []"
       >
-        {{ $t('components.manage.users.InvitationForm.clearButton') }}
+        {{ $t('components.manage.users.InvitationForm.button.clear') }}
       </button>
     </div>
   </div>

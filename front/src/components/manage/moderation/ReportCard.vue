@@ -66,10 +66,10 @@ const actions = computed(() => {
   const deleteUrl = typeConfig.getDeleteUrl?.(target.value)
   return deleteUrl
     ? [{
-        label: t('components.manage.moderation.ReportCard.deleteLabel'),
-        modalHeader: t('components.manage.moderation.ReportCard.deleteModalHeader'),
-        modalContent: t('components.manage.moderation.ReportCard.deleteModalMessage'),
-        modalConfirmLabel: t('components.manage.moderation.ReportCard.deleteConfirmLabel'),
+        label: t('components.manage.moderation.ReportCard.button.delete'),
+        modalHeader: t('components.manage.moderation.ReportCard.modal.delete.header'),
+        modalContent: t('components.manage.moderation.ReportCard.modal.delete.content.warning'),
+        modalConfirmLabel: t('components.manage.moderation.ReportCard.button.confirmDelete'),
         icon: 'x',
         iconColor: 'danger',
         show: (obj: Report) => { return !!obj.target },
@@ -141,7 +141,7 @@ const handleRemovedNote = (uuid: string) => {
     <div class="content">
       <h4 class="header">
         <router-link :to="{name: 'manage.moderation.reports.detail', params: {id: obj.uuid}}">
-          {{ $t('components.manage.moderation.ReportCard.reportHeader', {id: obj.uuid.substring(0, 8)}) }}
+          {{ $t('components.manage.moderation.ReportCard.link.report', {id: obj.uuid.substring(0, 8)}) }}
         </router-link>
         <collapse-link
           v-model="isCollapsed"
@@ -156,7 +156,7 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.ReportCard.submittedByLabel') }}
+                    {{ $t('components.manage.moderation.ReportCard.table.report.submittedBy') }}
                   </td>
                   <td>
                     <div v-if="obj.submitter">
@@ -172,7 +172,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.ReportCard.categoryLabel') }}
+                    {{ $t('components.manage.moderation.ReportCard.table.report.category') }}
                   </td>
                   <td>
                     <report-category-dropdown
@@ -186,7 +186,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.ReportCard.creationDateLabel') }}
+                    {{ $t('components.manage.moderation.ReportCard.table.report.creationDate') }}
                   </td>
                   <td>
                     <human-date
@@ -203,22 +203,22 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.ReportCard.statusLabel') }}
+                    {{ $t('components.manage.moderation.ReportCard.table.status.status') }}
                   </td>
                   <td v-if="obj.is_handled">
                     <span v-if="obj.is_handled">
                       <i class="success check icon" />
-                      {{ $t('components.manage.moderation.ReportCard.resolvedStatus') }}
+                      {{ $t('components.manage.moderation.ReportCard.table.status.resolved') }}
                     </span>
                   </td>
                   <td v-else>
                     <i class="danger x icon" />
-                    {{ $t('components.manage.moderation.ReportCard.unresolvedStatus') }}
+                    {{ $t('components.manage.moderation.ReportCard.table.status.unresolved') }}
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.ReportCard.assignedToLabel') }}
+                    {{ $t('components.manage.moderation.ReportCard.table.status.assignedTo') }}
                   </td>
                   <td>
                     <div v-if="obj.assigned_to">
@@ -236,7 +236,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.ReportCard.resolutionDateLabel') }}
+                    {{ $t('components.manage.moderation.ReportCard.table.status.resolutionDate') }}
                   </td>
                   <td>
                     <human-date
@@ -253,7 +253,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.ReportCard.internalNotesLabel') }}
+                    {{ $t('components.manage.moderation.ReportCard.table.status.internalNotes') }}
                   </td>
                   <td>
                     <i class="comment icon" />
@@ -273,7 +273,7 @@ const handleRemovedNote = (uuid: string) => {
       <div class="ui stackable two column grid">
         <div class="column">
           <h3>
-            {{ $t('components.manage.moderation.ReportCard.messageHeader') }}
+            {{ $t('components.manage.moderation.ReportCard.header.message') }}
           </h3>
           <expandable-div
             v-if="summary"
@@ -285,14 +285,14 @@ const handleRemovedNote = (uuid: string) => {
         </div>
         <aside class="column">
           <h3>
-            {{ $t('components.manage.moderation.ReportCard.reportedObjectHeader') }}
+            {{ $t('components.manage.moderation.ReportCard.header.reportedObject') }}
           </h3>
           <div
             v-if="!obj.target"
             role="alert"
             class="ui warning message"
           >
-            {{ $t('components.manage.moderation.ReportCard.objectDeletedWarning') }}
+            {{ $t('components.manage.moderation.ReportCard.warning.objectDeleted') }}
           </div>
           <router-link
             v-if="target && configs[target.type].urls.getDetail"
@@ -300,7 +300,7 @@ const handleRemovedNote = (uuid: string) => {
             :to="configs[target.type].urls.getDetail?.(obj.target_state) ?? '/'"
           >
             <i class="eye icon" />
-            {{ $t('components.manage.moderation.ReportCard.publicPageLink') }}
+            {{ $t('components.manage.moderation.ReportCard.link.publicPage') }}
           </router-link>
           <router-link
             v-if="target && configs[target.type].urls.getAdminDetail"
@@ -308,13 +308,13 @@ const handleRemovedNote = (uuid: string) => {
             :to="configs[target.type].urls.getAdminDetail?.(obj.target_state) ?? '/'"
           >
             <i class="wrench icon" />
-            {{ $t('components.manage.moderation.ReportCard.moderationLink') }}
+            {{ $t('components.manage.moderation.ReportCard.link.moderation') }}
           </router-link>
           <table class="ui very basic unstackable table">
             <tbody>
               <tr v-if="target">
                 <td>
-                  {{ $t('components.manage.moderation.ReportCard.objectTypeLabel') }}
+                  {{ $t('components.manage.moderation.ReportCard.table.object.type') }}
                 </td>
                 <td colspan="2">
                   <i :class="[configs[target.type].icon, 'icon']" />
@@ -323,7 +323,7 @@ const handleRemovedNote = (uuid: string) => {
               </tr>
               <tr v-if="obj.target_owner && (!target || target.type !== 'account')">
                 <td>
-                  {{ $t('components.manage.moderation.ReportCard.objectOwnerLabel') }}
+                  {{ $t('components.manage.moderation.ReportCard.table.object.owner') }}
                 </td>
                 <td>
                   <actor-link
@@ -342,7 +342,7 @@ const handleRemovedNote = (uuid: string) => {
               </tr>
               <tr v-if="target && target.type === 'account'">
                 <td>
-                  {{ $t('components.manage.moderation.ReportCard.accountLabel') }}
+                  {{ $t('components.manage.moderation.ReportCard.table.object.account') }}
                 </td>
                 <td>
                   <actor-link
@@ -361,17 +361,17 @@ const handleRemovedNote = (uuid: string) => {
               </tr>
               <tr v-if="obj.target_state.is_local">
                 <td>
-                  {{ $t('components.manage.moderation.ReportCard.domainLabel') }}
+                  {{ $t('components.manage.moderation.ReportCard.table.object.domain') }}
                 </td>
                 <td colspan="2">
                   <i class="home icon" />
-                  {{ $t('components.manage.moderation.ReportCard.localLabel') }}
+                  {{ $t('components.manage.moderation.ReportCard.table.object.local') }}
                 </td>
               </tr>
               <tr v-else-if="obj.target_state.domain">
                 <td>
                   <router-link :to="{name: 'manage.moderation.domains.detail', params: { id: obj.target_state.domain }}">
-                    {{ $t('components.manage.moderation.ReportCard.domainLabel') }}
+                    {{ $t('components.manage.moderation.ReportCard.table.object.domain') }}
                   </router-link>
                 </td>
                 <td>
@@ -410,7 +410,7 @@ const handleRemovedNote = (uuid: string) => {
       <div class="ui stackable two column grid">
         <div class="column">
           <h3>
-            {{ $t('components.manage.moderation.ReportCard.internalNotesLabel') }}
+            {{ $t('components.manage.moderation.ReportCard.header.notes') }}
           </h3>
           <notes-thread
             :notes="obj.notes"
@@ -423,7 +423,7 @@ const handleRemovedNote = (uuid: string) => {
         </div>
         <div class="column">
           <h3>
-            {{ $t('components.manage.moderation.ReportCard.actionsLabel') }}
+            {{ $t('components.manage.moderation.ReportCard.header.actions') }}
           </h3>
           <div class="ui labelled icon basic buttons">
             <button
@@ -432,7 +432,7 @@ const handleRemovedNote = (uuid: string) => {
               @click="resolveReport(true)"
             >
               <i class="success check icon" />&nbsp;
-              {{ $t('components.manage.moderation.ReportCard.resolveLabel') }}
+              {{ $t('components.manage.moderation.ReportCard.button.resolve') }}
             </button>
             <button
               v-if="obj.is_handled === true"
@@ -440,7 +440,7 @@ const handleRemovedNote = (uuid: string) => {
               @click="resolveReport(false)"
             >
               <i class="warning redo icon" />&nbsp;
-              {{ $t('components.manage.moderation.ReportCard.unresolveLabel') }}
+              {{ $t('components.manage.moderation.ReportCard.button.unresolve') }}
             </button>
             <template
               v-for="action in actions"

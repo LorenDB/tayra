@@ -65,19 +65,19 @@ const loadMoreAlbums = async () => {
       <div class="ui hidden divider" />
       <div class="ui message">
         <p>
-          {{ $t('components.library.ArtistDetail.hiddenContentMessage') }}
+          {{ $t('components.library.ArtistDetail.message.filter') }}
         </p>
         <router-link
           class="right floated"
           :to="{name: 'settings'}"
         >
-          {{ $t('components.library.ArtistDetail.reviewFiltersLink') }}
+          {{ $t('components.library.ArtistDetail.link.filter') }}
         </router-link>
         <button
           class="ui basic tiny button"
           @click="$store.dispatch('moderation/deleteContentFilter', contentFilter.uuid)"
         >
-          {{ $t('components.library.ArtistDetail.removeFilterButton') }}
+          {{ $t('components.library.ArtistDetail.button.filter') }}
         </button>
       </div>
     </div>
@@ -92,7 +92,7 @@ const loadMoreAlbums = async () => {
       class="ui vertical stripe segment"
     >
       <h2>
-        {{ $t('components.library.ArtistDetail.artistAlbumsHeader') }}
+        {{ $t('components.library.ArtistDetail.header.album') }}
       </h2>
       <div class="ui cards app-cards">
         <album-card
@@ -107,7 +107,7 @@ const loadMoreAlbums = async () => {
         :class="['ui', {loading: isLoadingMoreAlbums}, 'button']"
         @click="loadMoreAlbums()"
       >
-        {{ $t('components.library.ArtistDetail.loadMoreButton') }}
+        {{ $t('components.library.ArtistDetail.button.more') }}
       </button>
     </section>
     <section
@@ -122,7 +122,7 @@ const loadMoreAlbums = async () => {
       >
         <template #header>
           <h2>
-            {{ $t('components.library.ArtistDetail.newTracksHeader') }}
+            {{ $t('components.library.ArtistDetail.header.track') }}
           </h2>
           <div class="ui hidden divider" />
         </template>
@@ -130,13 +130,13 @@ const loadMoreAlbums = async () => {
     </section>
     <section class="ui vertical stripe segment">
       <h2>
-        {{ $t('components.library.ArtistDetail.userLibraryHeader') }}
+        {{ $t('components.library.ArtistDetail.header.library') }}
       </h2>
       <library-widget
         :url="'artists/' + object.id + '/libraries/'"
         @loaded="emit('libraries-loaded', $event)"
       >
-        {{ $t('components.library.ArtistDetail.userLibraryDescription') }}
+        {{ $t('components.library.ArtistDetail.description.library') }}
       </library-widget>
     </section>
   </div>

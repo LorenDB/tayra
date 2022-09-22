@@ -111,7 +111,7 @@ onMounted(() => $('.ui.dropdown').dropdown())
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: t('components.library.Artists.searchPlaceholder'),
+  searchPlaceholder: t('components.library.Artists.placeholder.search'),
   title: t('components.library.Artists.title')
 }))
 
@@ -122,7 +122,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        {{ $t('components.library.Artists.artistBrowseHeader') }}
+        {{ $t('components.library.Artists.header.browse') }}
       </h2>
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
@@ -131,7 +131,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
         <div class="fields">
           <div class="field">
             <label for="artist-search">
-              {{ $t('components.library.Artists.searchLabel') }}
+              {{ $t('components.library.Artists.label.search') }}
             </label>
             <div class="ui action input">
               <input
@@ -144,18 +144,18 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="t('components.library.Artists.searchButton')"
+                :aria-label="t('components.library.Artists.button.search')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="tags-search">{{ $t('components.library.Artists.tagsLabel') }}</label>
+            <label for="tags-search">{{ $t('components.library.Artists.label.tags') }}</label>
             <tags-selector v-model="tags" />
           </div>
           <div class="field">
-            <label for="artist-ordering">{{ $t('components.library.Artists.orderingLabel') }}</label>
+            <label for="artist-ordering">{{ $t('components.library.Artists.ordering.label') }}</label>
             <select
               id="artist-ordering"
               v-model="ordering"
@@ -171,22 +171,22 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="artist-ordering-direction">{{ $t('components.library.Artists.orderingDirectionLabel') }}</label>
+            <label for="artist-ordering-direction">{{ $t('components.library.Artists.ordering.direction.label') }}</label>
             <select
               id="artist-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                {{ $t('components.library.Artists.ascendingOrdering') }}
+                {{ $t('components.library.Artists.ordering.direction.ascending') }}
               </option>
               <option value="-">
-                {{ $t('components.library.Artists.descendingOrdering') }}
+                {{ $t('components.library.Artists.ordering.direction.descending') }}
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="artist-results">{{ $t('components.library.Artists.resultsPerPageLabel') }}</label>
+            <label for="artist-results">{{ $t('components.library.Artists.pagination.results') }}</label>
             <select
               id="artist-results"
               v-model="paginateBy"
@@ -202,7 +202,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <span id="excludeHeader">{{ $t('components.library.Artists.excludeCompilationArtistsLabel') }}</span>
+            <span id="excludeHeader">{{ $t('components.library.Artists.label.excludeCompilation') }}</span>
             <div
               id="excludeCompilation"
               class="ui toggle checkbox"
@@ -217,7 +217,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
               <label
                 for="exclude-compilation"
                 class="visually-hidden"
-              >{{ $t('components.library.Artists.excludeCompilationArtistsLabel') }}</label>
+              >{{ $t('components.library.Artists.label.excludeCompilation') }}</label>
             </div>
           </div>
         </div>
@@ -246,7 +246,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
       >
         <div class="ui icon header">
           <i class="compact disc icon" />
-          {{ $t('components.library.Artists.emptyStateMessage') }}
+          {{ $t('components.library.Artists.empty.noResults') }}
         </div>
         <router-link
           v-if="$store.state.auth.authenticated"
@@ -254,7 +254,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
           class="ui success button labeled icon"
         >
           <i class="upload icon" />
-          {{ $t('components.library.Artists.addMusicLink') }}
+          {{ $t('components.library.Artists.button.upload') }}
         </router-link>
       </div>
       <div class="ui center aligned basic segment">

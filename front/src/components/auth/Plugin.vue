@@ -69,7 +69,7 @@ const submitAndScan = async () => {
         target="_blank"
       >
         <i class="external icon" />
-        {{ $t('components.auth.Plugin.documentationLink') }}
+        {{ $t('components.auth.Plugin.link.documentation') }}
       </a>
     </template>
     <div class="ui clearing hidden divider" />
@@ -79,7 +79,7 @@ const submitAndScan = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        {{ $t('components.auth.Plugin.saveFailureHeader') }}
+        {{ $t('components.auth.Plugin.header.failure') }}
       </h4>
       <ul class="list">
         <li
@@ -97,7 +97,7 @@ const submitAndScan = async () => {
           v-model="enabled"
           type="checkbox"
         >
-        <label :for="`${plugin.name}-enabled`">{{ $t('components.auth.Plugin.pluginEnabledLabel') }}</label>
+        <label :for="`${plugin.name}-enabled`">{{ $t('components.auth.Plugin.label.pluginEnabled') }}</label>
       </div>
     </div>
     <div class="ui clearing hidden divider" />
@@ -105,7 +105,7 @@ const submitAndScan = async () => {
       v-if="plugin.source"
       class="field"
     >
-      <label for="plugin-library">{{ $t('components.auth.Plugin.libraryLabel') }}</label>
+      <label for="plugin-library">{{ $t('components.auth.Plugin.label.library') }}</label>
       <select
         id="plugin-library"
         v-model="values['library']"
@@ -119,7 +119,7 @@ const submitAndScan = async () => {
         </option>
       </select>
       <div>
-        {{ $t('components.auth.Plugin.libraryDescription') }}
+        {{ $t('components.auth.Plugin.description.library') }}
       </div>
     </div>
     <template v-if="(plugin.conf?.length ?? 0) > 0">
@@ -194,14 +194,14 @@ const submitAndScan = async () => {
       type="submit"
       :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
     >
-      {{ $t('components.auth.Plugin.saveButton') }}
+      {{ $t('components.auth.Plugin.button.save') }}
     </button>
     <button
       v-if="plugin.source"
       :class="['ui', {'loading': isLoading}, 'right', 'floated', 'button']"
       @click.prevent="submitAndScan"
     >
-      {{ $t('components.auth.Plugin.scanButton') }}
+      {{ $t('components.auth.Plugin.button.scan') }}
     </button>
     <div class="ui clearing hidden divider" />
   </form>

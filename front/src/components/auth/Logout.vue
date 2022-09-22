@@ -19,16 +19,16 @@ const labels = computed(() => ({
         class="ui small text container"
       >
         <h2>
-          {{ $t('components.auth.Logout.confirmHeader') }}
+          {{ $t('components.auth.Logout.header.confirm') }}
         </h2>
         <p>
-          {{ $t('components.auth.Logout.loggedInUsername', { username: $store.state.auth.username }) }}
+          {{ $t('components.auth.Logout.message.loggedIn', { username: $store.state.auth.username }) }}
         </p>
         <button
           class="ui button"
           @click="$store.dispatch('auth/logout')"
         >
-          {{ $t('components.auth.Logout.confirmLogoutButton') }}
+          {{ $t('components.auth.Logout.button.logout') }}
         </button>
       </div>
       <div
@@ -36,13 +36,13 @@ const labels = computed(() => ({
         class="ui small text container"
       >
         <h2>
-          {{ $t('components.auth.Logout.loggedOutHeader') }}
+          {{ $t('components.auth.Logout.header.unauthenticated') }}
         </h2>
         <router-link
           to="/login"
           class="ui button"
         >
-          {{ $t('components.auth.Logout.logInLink') }}
+          {{ $t('components.auth.Logout.link.login') }}
         </router-link>
       </div>
     </section>

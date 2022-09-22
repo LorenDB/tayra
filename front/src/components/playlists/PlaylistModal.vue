@@ -27,8 +27,8 @@ const track = computed(() => store.state.playlists.modalTrack)
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  addToPlaylist: t('components.playlists.PlaylistModal.addToPlaylist'),
-  filterPlaylistField: t('components.playlists.PlaylistModal.filterPlaylistField')
+  addToPlaylist: t('components.playlists.PlaylistModal.button.addToPlaylist'),
+  filterPlaylistField: t('components.playlists.PlaylistModal.placeholder.filterPlaylist')
 }))
 
 const playlistNameFilter = ref('')
@@ -85,18 +85,18 @@ store.dispatch('playlists/fetchOwn')
     <h4 class="header">
       <template v-if="track">
         <h2 class="ui header">
-          {{ $t('components.playlists.PlaylistModal.addToPlaylistHeader') }}
+          {{ $t('components.playlists.PlaylistModal.header.addToPlaylist') }}
           <div
             class="ui sub header"
           >
-            {{ $t('components.playlists.PlaylistModal.trackTitle', {artist: track.artist?.name, title: track.title}) }}
+            {{ $t('components.playlists.PlaylistModal.header.track', {artist: track.artist?.name, title: track.title}) }}
           </div>
         </h2>
       </template>
       <span
         v-else
       >
-        {{ $t('components.playlists.PlaylistModal.managePlaylistsHeader') }}
+        {{ $t('components.playlists.PlaylistModal.header.manage') }}
       </span>
     </h4>
     <div class="scrolling content">
@@ -112,19 +112,19 @@ store.dispatch('playlists/fetchOwn')
           class="ui warning message"
         >
           <p>
-            {{ $t('components.playlists.PlaylistModal.trackAlreadyInPlaylist', {track: track?.title, playlist: duplicateTrackAddInfo.playlist_name}) }}
+            {{ $t('components.playlists.PlaylistModal.warning.duplicate', {track: track?.title, playlist: duplicateTrackAddInfo.playlist_name}) }}
           </p>
           <button
             class="ui small basic cancel button"
             @click="showDuplicateTrackAddConfirmation = false"
           >
-            {{ $t('components.playlists.PlaylistModal.cancelButton') }}
+            {{ $t('components.playlists.PlaylistModal.button.cancel') }}
           </button>
           <button
             class="ui small success button"
             @click="addToPlaylist(lastSelectedPlaylist, true)"
           >
-            {{ $t('components.playlists.PlaylistModal.addAnywayButton') }}
+            {{ $t('components.playlists.PlaylistModal.button.addDuplicate') }}
           </button>
         </div>
         <div
@@ -133,7 +133,7 @@ store.dispatch('playlists/fetchOwn')
           class="ui negative message"
         >
           <h4 class="header">
-            {{ $t('components.playlists.PlaylistModal.trackAddFailureHeader') }}
+            {{ $t('components.playlists.PlaylistModal.header.addFailure') }}
           </h4>
           <ul class="list">
             <li
@@ -145,12 +145,12 @@ store.dispatch('playlists/fetchOwn')
           </ul>
         </div>
         <h4 class="ui header">
-          {{ $t('components.playlists.PlaylistModal.availablePlaylistsHeader') }}
+          {{ $t('components.playlists.PlaylistModal.header.available') }}
         </h4>
         <div class="ui form">
           <div class="fields">
             <div class="field">
-              <label for="playlist-name-filter">{{ $t('components.playlists.PlaylistModal.filterLabel') }}</label>
+              <label for="playlist-name-filter">{{ $t('components.playlists.PlaylistModal.label.filter') }}</label>
               <input
                 id="playlist-name-filter"
                 v-model="playlistNameFilter"
@@ -167,15 +167,15 @@ store.dispatch('playlists/fetchOwn')
         >
           <thead>
             <tr>
-              <th><span class="visually-hidden">{{ $t('components.playlists.PlaylistModal.editTableHeader') }}</span></th>
+              <th><span class="visually-hidden">{{ $t('components.playlists.PlaylistModal.table.edit.header.edit') }}</span></th>
               <th>
-                {{ $t('components.playlists.PlaylistModal.nameTableHeader') }}
+                {{ $t('components.playlists.PlaylistModal.table.edit.header.name') }}
               </th>
               <th class="sorted descending">
-                {{ $t('components.playlists.PlaylistModal.lastModificationTableHeader') }}
+                {{ $t('components.playlists.PlaylistModal.table.edit.header.lastModification') }}
               </th>
               <th>
-                {{ $t('components.playlists.PlaylistModal.tracksTableHeader') }}
+                {{ $t('components.playlists.PlaylistModal.table.edit.header.tracks') }}
               </th>
             </tr>
           </thead>
@@ -190,7 +190,7 @@ store.dispatch('playlists/fetchOwn')
                   :to="{name: 'library.playlists.detail', params: {id: playlist.id }, query: {mode: 'edit'}}"
                 >
                   <i class="ui pencil icon" />
-                  <span class="visually-hidden">{{ $t('components.playlists.PlaylistModal.editTableHeader') }}</span>
+                  <span class="visually-hidden">{{ $t('components.playlists.PlaylistModal.button.edit') }}</span>
                 </router-link>
               </td>
               <td>
@@ -211,7 +211,7 @@ store.dispatch('playlists/fetchOwn')
                   @click.prevent="addToPlaylist(playlist.id, false)"
                 >
                   <i class="plus icon" />
-                  {{ $t('components.playlists.PlaylistModal.addTrackButton') }}
+                  {{ $t('components.playlists.PlaylistModal.button.addTrack') }}
                 </button>
               </td>
             </tr>
@@ -220,7 +220,7 @@ store.dispatch('playlists/fetchOwn')
         <template v-else>
           <div class="ui small placeholder segment component-placeholder">
             <h4 class="ui header">
-              {{ $t('components.playlists.PlaylistModal.emptyStateMessage') }}
+              {{ $t('components.playlists.PlaylistModal.header.noResults') }}
             </h4>
           </div>
         </template>
@@ -231,13 +231,13 @@ store.dispatch('playlists/fetchOwn')
       >
         <div class="ui icon header">
           <i class="list icon" />
-          {{ $t('components.playlists.PlaylistModal.noPlaylistsMessage') }}
+          {{ $t('components.playlists.PlaylistModal.empty.noPlaylists') }}
         </div>
       </div>
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        {{ $t('components.playlists.PlaylistModal.cancelButton') }}
+        {{ $t('components.playlists.PlaylistModal.button.cancel') }}
       </button>
     </div>
   </semantic-modal>

@@ -30,7 +30,7 @@ const credentials = reactive({
 })
 
 const labels = computed(() => ({
-  usernamePlaceholder: t('components.auth.LoginForm.usernamePlaceholder')
+  usernamePlaceholder: t('components.auth.LoginForm.placeholder.username')
 }))
 
 const username = ref()
@@ -75,14 +75,14 @@ const submit = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        {{ $t('components.auth.LoginForm.loginFailureHeader') }}
+        {{ $t('components.auth.LoginForm.header.loginFailure') }}
       </h4>
       <ul class="list">
         <li v-if="errors[0] == 'invalid_credentials' && $store.state.instance.settings.moderation.signup_approval_enabled.value">
-          {{ $t('components.auth.LoginForm.approvalRequiredHelp') }}
+          {{ $t('components.auth.LoginForm.help.approvalRequired') }}
         </li>
         <li v-else-if="errors[0] == 'invalid_credentials'">
-          {{ $t('components.auth.LoginForm.invalidCredentialsHelp') }}
+          {{ $t('components.auth.LoginForm.help.invalidCredentials') }}
         </li>
         <li v-else>
           {{ errors[0] }}
@@ -92,11 +92,11 @@ const submit = async () => {
     <template v-if="domain === $store.getters['instance/domain']">
       <div class="field">
         <label for="username-field">
-          {{ $t('components.auth.LoginForm.usernameFieldLabel') }}
+          {{ $t('components.auth.LoginForm.label.username') }}
           <template v-if="showSignup">
             <span class="middle pipe symbol" />
             <router-link :to="{path: '/signup'}">
-              {{ $t('components.auth.LoginForm.createAccountLink') }}
+              {{ $t('components.auth.LoginForm.link.createAccount') }}
             </router-link>
           </template>
         </label>
@@ -113,12 +113,13 @@ const submit = async () => {
       </div>
       <div class="field">
         <label for="password-field">
-          {{ $t('components.auth.LoginForm.passwordFieldLabel') }}
+          {{ $t('components.auth.LoginForm.label.password') }}
+          <span class="middle pipe symbol" />
           <router-link
             tabindex="1"
             :to="{name: 'auth.password-reset', query: {email: credentials.username}}"
           >
-            {{ $t('components.auth.LoginForm.resetPasswordLink') }}
+            {{ $t('components.auth.LoginForm.link.resetPassword') }}
           </router-link>
         </label>
         <password-input
@@ -130,14 +131,14 @@ const submit = async () => {
     </template>
     <template v-else>
       <p>
-        {{ $t('components.auth.LoginForm.redirectMessage', { domain: $store.getters['instance/domain'] }) }}
+        {{ $t('components.auth.LoginForm.message.redirect', { domain: $store.getters['instance/domain'] }) }}
       </p>
     </template>
     <button
       :class="['ui', {'loading': isLoading}, 'right', 'floated', buttonClasses, 'button']"
       type="submit"
     >
-      {{ $t('components.auth.LoginForm.loginButton') }}
+      {{ $t('components.auth.LoginForm.button.login') }}
     </button>
   </form>
 </template>

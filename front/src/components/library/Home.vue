@@ -67,7 +67,7 @@ fetchData()
             :websocket-handlers="['Listen']"
           >
             <template #title>
-              {{ $t('components.library.Home.recentlyListenedLabel') }}
+              {{ $t('components.library.Home.header.recentlyListened') }}
             </template>
           </track-widget>
         </div>
@@ -77,7 +77,7 @@ fetchData()
             :filters="{scope: scope, ordering: '-creation_date'}"
           >
             <template #title>
-              {{ $t('components.library.Home.recentlyFavoritedLabel') }}
+              {{ $t('components.library.Home.header.recentlyFavorited') }}
             </template>
           </track-widget>
         </div>
@@ -87,7 +87,7 @@ fetchData()
             :filters="{scope: scope, playable: true, ordering: '-modification_date'}"
           >
             <template #title>
-              {{ $t('components.library.Home.playlistsLabel') }}
+              {{ $t('components.library.Home.header.playlists') }}
             </template>
           </playlist-widget>
         </div>
@@ -97,14 +97,14 @@ fetchData()
         <div class="column">
           <album-widget :filters="{scope: scope, playable: true, ordering: '-creation_date'}">
             <template #title>
-              {{ $t('components.library.Home.recentlyAddedLabel') }}
+              {{ $t('components.library.Home.header.recentlyAdded') }}
             </template>
           </album-widget>
         </div>
       </div>
       <template v-if="scope === 'all'">
         <h3 class="ui header">
-          {{ $t('components.library.Home.newChannelsLabel') }}
+          {{ $t('components.library.Home.header.newChannels') }}
         </h3>
         <channels-widget
           :show-modification-date="true"

@@ -15,7 +15,7 @@ defineProps<Props>()
       class="ui active dimmer"
     >
       <div class="ui text loader">
-        {{ $t('components.library.FsLogs.emptyStateMessage') }}
+        {{ $t('components.library.FsLogs.empty.notStarted') }}
       </div>
     </div>
     <template v-else>

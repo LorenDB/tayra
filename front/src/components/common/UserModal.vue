@@ -26,24 +26,24 @@ const themes = useThemeList()
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  header: t('components.common.UserModal.optionsLabel'),
-  profile: t('components.common.UserModal.profileLabel'),
-  settings: t('components.common.UserModal.settingsLabel'),
-  logout: t('components.common.UserModal.logoutLabel'),
-  about: t('components.common.UserModal.aboutLabel'),
-  shortcuts: t('components.common.UserModal.shortcutsLabel'),
-  support: t('components.common.UserModal.supportLabel'),
-  forum: t('components.common.UserModal.forumLabel'),
-  docs: t('components.common.UserModal.docsLabel'),
-  help: t('components.common.UserModal.supportLabel'),
-  language: t('components.common.UserModal.languageLabel'),
-  theme: t('components.common.UserModal.themeLabel'),
-  chat: t('components.common.UserModal.chatLabel'),
-  git: t('components.common.UserModal.gitLabel'),
-  login: t('components.common.UserModal.loginLabel'),
-  signup: t('components.common.UserModal.signupLabel'),
-  notifications: t('components.common.UserModal.notificationsLabel'),
-  useOtherInstance: t('components.common.UserModal.useOtherInstanceLabel')
+  header: t('components.common.UserModal.header.options'),
+  profile: t('components.common.UserModal.link.profile'),
+  settings: t('components.common.UserModal.link.settings'),
+  logout: t('components.common.UserModal.link.logout'),
+  about: t('components.common.UserModal.link.about'),
+  shortcuts: t('components.common.UserModal.label.shortcuts'),
+  support: t('components.common.UserModal.link.support'),
+  forum: t('components.common.UserModal.link.forum'),
+  docs: t('components.common.UserModal.link.docs'),
+  help: t('components.common.UserModal.link.support'),
+  language: t('components.common.UserModal.label.language'),
+  theme: t('components.common.UserModal.label.theme'),
+  chat: t('components.common.UserModal.link.chat'),
+  git: t('components.common.UserModal.link.git'),
+  login: t('components.common.UserModal.link.login'),
+  signup: t('components.common.UserModal.link.signup'),
+  notifications: t('components.common.UserModal.link.notifications'),
+  useOtherInstance: t('components.common.UserModal.button.switchInstance')
 }))
 </script>
 

@@ -60,31 +60,31 @@ const isFavorite = computed(() => store.getters['favorites/isFavorite'](props.tr
 
 const { t } = useI18n()
 const favoriteButton = computed(() => isFavorite.value
-  ? t('components.audio.track.Modal.removeFromFavorites')
-  : t('components.audio.track.Modal.addToFavorites')
+  ? t('components.audio.track.Modal.button.removeFromFavorites')
+  : t('components.audio.track.Modal.button.addToFavorites')
 )
 
 const trackDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
-  ? t('components.audio.track.Modal.episodeDetails')
-  : t('components.audio.track.Modal.trackDetails')
+  ? t('components.audio.track.Modal.button.episodeDetails')
+  : t('components.audio.track.Modal.button.trackDetails')
 )
 
 const albumDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
-  ? t('components.audio.track.Modal.seriesDetails')
-  : t('components.audio.track.Modal.albumDetails')
+  ? t('components.audio.track.Modal.button.seriesDetails')
+  : t('components.audio.track.Modal.button.albumDetails')
 )
 
 const artistDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
-  ? t('components.audio.track.Modal.channelDetails')
-  : t('components.audio.track.Modal.artistDetails')
+  ? t('components.audio.track.Modal.button.channelDetails')
+  : t('components.audio.track.Modal.button.artistDetails')
 )
 
 const labels = computed(() => ({
-  startRadio: t('components.audio.track.Modal.startRadio'),
-  playNow: t('components.audio.track.Modal.playNow'),
-  addToQueue: t('components.audio.track.Modal.addToQueue'),
-  playNext: t('components.audio.track.Modal.playNext'),
-  addToPlaylist: t('components.audio.track.Modal.addToPlaylist')
+  startRadio: t('components.audio.track.Modal.button.startRadio'),
+  playNow: t('components.audio.track.Modal.button.playNow'),
+  addToQueue: t('components.audio.track.Modal.button.addToQueue'),
+  playNext: t('components.audio.track.Modal.button.playNext'),
+  addToPlaylist: t('components.audio.track.Modal.button.addToPlaylist')
 }))
 </script>
 

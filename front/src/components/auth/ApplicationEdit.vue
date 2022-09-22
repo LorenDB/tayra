@@ -20,7 +20,7 @@ const { t } = useI18n()
 const application = ref()
 
 const labels = computed(() => ({
-  title: t('components.auth.ApplicationEdit.editApplicationLabel')
+  title: t('components.auth.ApplicationEdit.title')
 }))
 
 const isLoading = ref(false)
@@ -72,17 +72,17 @@ store.state.auth.applicationSecret = undefined
         </div>
         <template v-else>
           <router-link :to="{name: 'settings'}">
-            {{ $t('components.auth.ApplicationEdit.backToSettingsLink') }}
+            {{ $t('components.auth.ApplicationEdit.link.settings') }}
           </router-link>
           <h2 class="ui header">
-            {{ $t('components.auth.ApplicationEdit.appDetailsHeader') }}
+            {{ $t('components.auth.ApplicationEdit.header.appDetails') }}
           </h2>
           <div class="ui form">
             <p>
-              {{ $t('components.auth.ApplicationEdit.appDetailsDescription') }}
+              {{ $t('components.auth.ApplicationEdit.help.appDetails') }}
             </p>
             <div class="field">
-              <label for="copy-id">{{ $t('components.auth.ApplicationEdit.appIdLabel') }}</label>
+              <label for="copy-id">{{ $t('components.auth.ApplicationEdit.label.appId') }}</label>
               <copy-input
                 id="copy-id"
                 :value="application.client_id"
@@ -94,14 +94,14 @@ store.state.auth.applicationSecret = undefined
             >
               <div class="ui small warning message">
                 <h3 class="header">
-                  {{ $t('components.auth.ApplicationEdit.appSecretWarningTitle') }}
+                  {{ $t('components.auth.ApplicationEdit.header.appSecretWarning') }}
                 </h3>
                 <p>
-                  {{ $t('components.auth.ApplicationEdit.appSecretWarningMessage') }}
+                  {{ $t('components.auth.ApplicationEdit.message.appSecretWarning') }}
                 </p>
               </div>
 
-              <label for="copy-secret">{{ $t('components.auth.ApplicationEdit.appSecretLabel') }}</label>
+              <label for="copy-secret">{{ $t('components.auth.ApplicationEdit.label.appSecret') }}</label>
               <copy-input
                 id="copy-secret"
                 :value="secret"
@@ -111,7 +111,7 @@ store.state.auth.applicationSecret = undefined
               v-if="application.token != undefined"
               class="field"
             >
-              <label for="copy-secret">{{ $t('components.auth.ApplicationEdit.accessTokenLabel') }}</label>
+              <label for="copy-secret">{{ $t('components.auth.ApplicationEdit.label.accessToken') }}</label>
               <copy-input
                 id="copy-secret"
                 :value="application.token"
@@ -121,12 +121,12 @@ store.state.auth.applicationSecret = undefined
                 @click.prevent="refreshToken"
               >
                 <i class="refresh icon" />
-                {{ $t('components.auth.ApplicationEdit.regenerateTokenLink') }}
+                {{ $t('components.auth.ApplicationEdit.button.regenerateToken') }}
               </a>
             </div>
           </div>
           <h2 class="ui header">
-            {{ $t('components.auth.ApplicationEdit.editAppHeader') }}
+            {{ $t('components.auth.ApplicationEdit.header.editApp') }}
           </h2>
           <application-form
             :app="application"

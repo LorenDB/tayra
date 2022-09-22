@@ -35,7 +35,7 @@ const sharedChoices = sharedLabels.fields.report_type.choices
 const allCategories = computed(() => {
   const res = []
   if (props.all) {
-    res.push({ value: '', label: t('components.moderation.ReportCategoryDropdown.allOption') })
+    res.push({ value: '', label: t('components.moderation.ReportCategoryDropdown.option.all') })
   }
 
   const choices = props.restrictTo.length === 0
@@ -59,7 +59,7 @@ const allCategories = computed(() => {
 
 <template>
   <div>
-    <label v-if="label">{{ $t('components.moderation.ReportCategoryDropdown.categoryLabel') }}</label>
+    <label v-if="label">{{ $t('components.moderation.ReportCategoryDropdown.label.category') }}</label>
     <select
       v-model="value"
       class="ui dropdown"

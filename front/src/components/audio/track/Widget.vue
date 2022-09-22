@@ -201,7 +201,7 @@ watch(() => props.websocketHandlers.includes('Listen'), (to) => {
     >
       <div class="ui icon header">
         <i class="music icon" />
-        {{ $t('components.audio.track.Widget.noResultsMessage') }}
+        {{ $t('components.audio.track.Widget.empty.noResults') }}
       </div>
       <div
         v-if="isLoading"
@@ -216,7 +216,7 @@ watch(() => props.websocketHandlers.includes('Listen'), (to) => {
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage as string)"
       >
-        {{ $t('components.audio.track.Widget.showMore') }}
+        {{ $t('components.audio.track.Widget.button.more') }}
       </button>
     </template>
   </div>

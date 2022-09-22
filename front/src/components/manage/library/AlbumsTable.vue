@@ -54,8 +54,8 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: t('components.manage.library.AlbumsTable.deleteActionLabel'),
-    confirmationMessage: t('components.manage.library.AlbumsTable.deleteActionConfirmation'),
+    label: t('components.manage.library.AlbumsTable.action.delete.label'),
+    confirmationMessage: t('components.manage.library.AlbumsTable.action.delete.warning'),
     isDangerous: true,
     allowAll: false,
     confirmColor: 'danger'
@@ -94,8 +94,8 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('components.manage.library.AlbumsTable.searchPlaceholder'),
-  openModeration: t('components.manage.library.AlbumsTable.openModeration')
+  searchPlaceholder: t('components.manage.library.AlbumsTable.placeholder.search'),
+  openModeration: t('components.manage.library.AlbumsTable.link.moderation')
 }))
 </script>
 
@@ -104,7 +104,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="albums-search">{{ $t('components.manage.library.AlbumsTable.searchLabel') }}</label>
+          <label for="albums-search">{{ $t('components.manage.library.AlbumsTable.label.search') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="albums-search"
@@ -117,7 +117,7 @@ const labels = computed(() => ({
           </form>
         </div>
         <div class="field">
-          <label for="albums-ordering">{{ $t('components.manage.library.AlbumsTable.orderingLabel') }}</label>
+          <label for="albums-ordering">{{ $t('components.manage.library.AlbumsTable.ordering.label') }}</label>
           <select
             id="albums-ordering"
             v-model="ordering"
@@ -133,16 +133,16 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="albums-ordering-direction">{{ $t('components.manage.library.AlbumsTable.orderingDirectionLabel') }}</label>
+          <label for="albums-ordering-direction">{{ $t('components.manage.library.AlbumsTable.ordering.direction.label') }}</label>
           <select
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              {{ $t('components.manage.library.AlbumsTable.ascendingOrdering') }}
+              {{ $t('components.manage.library.AlbumsTable.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              {{ $t('components.manage.library.AlbumsTable.descendingOrdering') }}
+              {{ $t('components.manage.library.AlbumsTable.ordering.direction.descending') }}
             </option>
           </select>
         </div>
@@ -165,22 +165,22 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            {{ $t('components.manage.library.AlbumsTable.nameTableHeader') }}
+            {{ $t('components.manage.library.AlbumsTable.table.album.header.name') }}
           </th>
           <th>
-            {{ $t('components.manage.library.AlbumsTable.artistTableHeader') }}
+            {{ $t('components.manage.library.AlbumsTable.table.album.header.artist') }}
           </th>
           <th>
-            {{ $t('components.manage.library.AlbumsTable.domainTableHeader') }}
+            {{ $t('components.manage.library.AlbumsTable.table.album.header.domain') }}
           </th>
           <th>
-            {{ $t('components.manage.library.AlbumsTable.tracksTableHeader') }}
+            {{ $t('components.manage.library.AlbumsTable.table.album.header.tracks') }}
           </th>
           <th>
-            {{ $t('components.manage.library.AlbumsTable.releaseDateTableHeader') }}
+            {{ $t('components.manage.library.AlbumsTable.table.album.header.releaseDate') }}
           </th>
           <th>
-            {{ $t('components.manage.library.AlbumsTable.creationDateTableHeader') }}
+            {{ $t('components.manage.library.AlbumsTable.table.album.header.creationDate') }}
           </th>
         </template>
         <template
@@ -222,7 +222,7 @@ const labels = computed(() => ({
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              {{ $t('components.manage.library.AlbumsTable.localLink') }}
+              {{ $t('components.manage.library.AlbumsTable.link.local') }}
             </a>
           </td>
           <td>
@@ -255,7 +255,7 @@ const labels = computed(() => ({
       />
 
       <span v-if="result && result.results.length > 0">
-        {{ $t('components.manage.library.AlbumsTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
+        {{ $t('components.manage.library.AlbumsTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

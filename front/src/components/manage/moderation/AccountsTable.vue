@@ -56,7 +56,7 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'purge',
-    label: t('components.manage.moderation.AccountsTable.purgeLabel'),
+    label: t('components.manage.moderation.AccountsTable.action.purge.label'),
     isDangerous: true
   }
 ])
@@ -93,7 +93,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('components.manage.moderation.AccountsTable.searchPlaceholder')
+  searchPlaceholder: t('components.manage.moderation.AccountsTable.placeholder.search')
 }))
 </script>
 
@@ -102,7 +102,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="accounts-search">{{ $t('components.manage.moderation.AccountsTable.searchLabel') }}</label>
+          <label for="accounts-search">{{ $t('components.manage.moderation.AccountsTable.label.search') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="accounts-search"
@@ -115,7 +115,7 @@ const labels = computed(() => ({
           </form>
         </div>
         <div class="field">
-          <label for="accounts-ordering">{{ $t('components.manage.moderation.AccountsTable.orderingLabel') }}</label>
+          <label for="accounts-ordering">{{ $t('components.manage.moderation.AccountsTable.ordering.label') }}</label>
           <select
             id="accounts-ordering"
             v-model="ordering"
@@ -131,17 +131,17 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="accounts-ordering-direction">{{ $t('components.manage.moderation.AccountsTable.orderingDirectionLabel') }}</label>
+          <label for="accounts-ordering-direction">{{ $t('components.manage.moderation.AccountsTable.ordering.direction.label') }}</label>
           <select
             id="accounts-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              {{ $t('components.manage.moderation.AccountsTable.ascendingOrdering') }}
+              {{ $t('components.manage.moderation.AccountsTable.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              {{ $t('components.manage.moderation.AccountsTable.descendingOrdering') }}
+              {{ $t('components.manage.moderation.AccountsTable.ordering.direction.descending') }}
             </option>
           </select>
         </div>
@@ -164,22 +164,22 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            {{ $t('components.manage.moderation.AccountsTable.nameTableHeader') }}
+            {{ $t('components.manage.moderation.AccountsTable.table.account.header.name') }}
           </th>
           <th>
-            {{ $t('components.manage.moderation.AccountsTable.domainTableHeader') }}
+            {{ $t('components.manage.moderation.AccountsTable.table.account.header.domain') }}
           </th>
           <th>
-            {{ $t('components.manage.moderation.AccountsTable.uploadsTableHeader') }}
+            {{ $t('components.manage.moderation.AccountsTable.table.account.header.uploads') }}
           </th>
           <th>
-            {{ $t('components.manage.moderation.AccountsTable.firstSeenTableHeader') }}
+            {{ $t('components.manage.moderation.AccountsTable.table.account.header.firstSeen') }}
           </th>
           <th>
-            {{ $t('components.manage.moderation.AccountsTable.lastSeenTableHeader') }}
+            {{ $t('components.manage.moderation.AccountsTable.table.account.header.lastSeen') }}
           </th>
           <th>
-            {{ $t('components.manage.moderation.AccountsTable.moderationRuleTableHeader') }}
+            {{ $t('components.manage.moderation.AccountsTable.table.account.header.moderationRule') }}
           </th>
         </template>
         <template
@@ -209,7 +209,7 @@ const labels = computed(() => ({
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              {{ $t('components.manage.moderation.AccountsTable.localLink') }}
+              {{ $t('components.manage.moderation.AccountsTable.link.local') }}
             </a>
           </td>
           <td>
@@ -225,7 +225,7 @@ const labels = computed(() => ({
             />
           </td>
           <td>
-            <span v-if="scope.obj.instance_policy"><i class="shield icon" />{{ $t('components.manage.moderation.AccountsTable.moderationRuleStatus') }}</span>
+            <span v-if="scope.obj.instance_policy"><i class="shield icon" />{{ $t('components.manage.moderation.AccountsTable.table.account.moderationRule') }}</span>
           </td>
         </template>
       </action-table>
@@ -240,7 +240,7 @@ const labels = computed(() => ({
       />
 
       <span v-if="result && result.results.length > 0">
-        {{ $t('components.manage.moderation.AccountsTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
+        {{ $t('components.manage.moderation.AccountsTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

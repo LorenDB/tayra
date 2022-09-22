@@ -33,7 +33,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
   <div :class="['ui', {loading: isLoading}, 'form']">
     <div class="ui required field">
       <label for="upload-title">
-        {{ $t('components.channels.UploadMetadataForm.titleLabel') }}
+        {{ $t('components.channels.UploadMetadataForm.label.title') }}
       </label>
       <input
         v-model="newValues.title"
@@ -44,13 +44,13 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
       v-model="newValues.cover"
       @delete="newValues.cover = ''"
     >
-      {{ $t('components.channels.UploadMetadataForm.trackImage') }}
+      {{ $t('components.channels.UploadMetadataForm.label.image') }}
     </attachment-input>
     <div class="ui small hidden divider" />
     <div class="ui two fields">
       <div class="ui field">
         <label for="upload-tags">
-          {{ $t('components.channels.UploadMetadataForm.tagsLabel') }}
+          {{ $t('components.channels.UploadMetadataForm.label.tags') }}
         </label>
         <tags-selector
           id="upload-tags"
@@ -60,7 +60,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
       </div>
       <div class="ui field">
         <label for="upload-position">
-          {{ $t('components.channels.UploadMetadataForm.uploadPosition') }}
+          {{ $t('components.channels.UploadMetadataForm.label.position') }}
         </label>
         <input
           v-model="newValues.position"
@@ -72,7 +72,7 @@ watch(newValues, (values) => emit('update:values', values), { immediate: true })
     </div>
     <div class="ui field">
       <label for="upload-description">
-        {{ $t('components.channels.UploadMetadataForm.descriptionLabel') }}
+        {{ $t('components.channels.UploadMetadataForm.label.description') }}
       </label>
       <content-form
         v-model="newValues.description"

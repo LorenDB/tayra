@@ -55,7 +55,7 @@ fetchLicenses()
 <template>
   <div>
     <label for="license-dropdown">
-      {{ $t('components.channels.LicenseSelect.licenseLabel') }}
+      {{ $t('components.channels.LicenseSelect.label.license') }}
     </label>
     <select
       id="license-dropdown"
@@ -63,7 +63,7 @@ fetchLicenses()
       class="ui search normal dropdown"
     >
       <option value="">
-        {{ $t('components.channels.LicenseSelect.noneLabel') }}
+        {{ $t('components.channels.LicenseSelect.option.none') }}
       </option>
       <option
         v-for="l in featuredLicenses"
@@ -84,7 +84,7 @@ fetchLicenses()
         target="_blank"
         rel="noreferrer noopener"
       >
-        {{ $t('components.channels.LicenseSelect.licenseInfo') }}
+        {{ $t('components.channels.LicenseSelect.link.license') }}
       </a>
     </p>
   </div>

@@ -63,9 +63,9 @@ const setPage = (page: number) => {
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  pagination: t('components.vui.Pagination.pagination'),
-  previousPage: t('components.vui.Pagination.previousPage'),
-  nextPage: t('components.vui.Pagination.nextPage')
+  pagination: t('components.vui.Pagination.label'),
+  previousPage: t('components.vui.Pagination.previous'),
+  nextPage: t('components.vui.Pagination.next')
 }))
 </script>
 

@@ -28,10 +28,10 @@ const truncated = computed(() => props.content.slice(0, props.length))
       <br>
       <span
         v-if="expanded"
-      >{{ $t('components.common.ExpandableDiv.showLess') }}</span>
+      >{{ $t('components.common.ExpandableDiv.button.less') }}</span>
       <span
         v-else
-      >{{ $t('components.common.ExpandableDiv.showMore') }}</span>
+      >{{ $t('components.common.ExpandableDiv.button.more') }}</span>
     </a>
   </div>
 </template>

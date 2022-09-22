@@ -55,7 +55,7 @@ const created = (application: Application) => {
     <div class="ui vertical stripe segment">
       <section class="ui text container">
         <router-link :to="{name: 'settings'}">
-          {{ $t('components.auth.ApplicationNew.backToSettingsLink') }}
+          {{ $t('components.auth.ApplicationNew.link.settings') }}
         </router-link>
         <h2 class="ui header">
           {{ title }}

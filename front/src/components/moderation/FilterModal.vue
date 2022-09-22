@@ -45,7 +45,7 @@ const hide = async () => {
     store.state.moderation.lastUpdate = new Date()
     store.commit('moderation/contentFilter', response.data)
     store.commit('ui/addMessage', {
-      content: t('components.moderation.FilterModal.contentSuccessMessage'),
+      content: t('components.moderation.FilterModal.message.success'),
       date: new Date()
     })
   } catch (error) {
@@ -63,7 +63,7 @@ const hide = async () => {
       v-if="type === 'artist'"
       class="header"
     >
-      {{ $t('components.moderation.FilterModal.hideContentHeader', {name: target?.name}) }}
+      {{ $t('components.moderation.FilterModal.header.modal', {name: target?.name}) }}
     </h4>
     <div class="scrolling content">
       <div class="description">
@@ -73,7 +73,7 @@ const hide = async () => {
           class="ui negative message"
         >
           <h4 class="header">
-            {{ $t('components.moderation.FilterModal.filterCreateFailureHeader') }}
+            {{ $t('components.moderation.FilterModal.header.failure') }}
           </h4>
           <ul class="list">
             <li
@@ -86,37 +86,37 @@ const hide = async () => {
         </div>
         <template v-if="type === 'artist'">
           <p>
-            {{ $t('components.moderation.FilterModal.filterCreateWarning') }}
+            {{ $t('components.moderation.FilterModal.warning.createFilter.listIntro') }}
           </p>
           <ul>
             <li>
-              {{ $t('components.moderation.FilterModal.filterWarningList1') }}
+              {{ $t('components.moderation.FilterModal.warning.createFilter.listItem1') }}
             </li>
             <li>
-              {{ $t('components.moderation.FilterModal.filterWarningList2') }}
+              {{ $t('components.moderation.FilterModal.warning.createFilter.listItem2') }}
             </li>
             <li>
-              {{ $t('components.moderation.FilterModal.filterWarningList3') }}
+              {{ $t('components.moderation.FilterModal.warning.createFilter.listItem3') }}
             </li>
             <li>
-              {{ $t('components.moderation.FilterModal.filterWarningList4') }}
+              {{ $t('components.moderation.FilterModal.warning.createFilter.listItem4') }}
             </li>
           </ul>
           <p>
-            {{ $t('components.moderation.FilterModal.filterCreateHelp') }}
+            {{ $t('components.moderation.FilterModal.help.createFilter') }}
           </p>
         </template>
       </div>
     </div>
     <div class="actions">
       <button class="ui basic cancel button">
-        {{ $t('components.moderation.FilterModal.cancelButton') }}
+        {{ $t('components.moderation.FilterModal.button.cancel') }}
       </button>
       <button
         :class="['ui', 'success', {loading: isLoading}, 'button']"
         @click="hide"
       >
-        {{ $t('components.moderation.FilterModal.hideContentButton') }}
+        {{ $t('components.moderation.FilterModal.button.hide') }}
       </button>
     </div>
   </semantic-modal>

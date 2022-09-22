@@ -23,12 +23,12 @@ const value = useVModel(props, 'modelValue', emit)
     <span
       v-if="value"
     >
-      {{ $t('components.common.CollapseLink.expandLabel') }}
+      {{ $t('components.common.CollapseLink.button.expand') }}
     </span>
     <span
       v-else
     >
-      {{ $t('components.common.CollapseLink.collapseLabel') }}
+      {{ $t('components.common.CollapseLink.button.collapse') }}
     </span>
     <i :class="[{ down: !value, right: value }, 'angle', 'icon']" />
   </a>

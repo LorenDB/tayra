@@ -107,7 +107,7 @@ const getAttachmentUrl = (uuid: string) => {
       class="ui negative message"
     >
       <h4 class="header">
-        {{ $t('components.common.AttachmentInput.saveFailureMessage') }}
+        {{ $t('components.common.AttachmentInput.header.failure') }}
       </h4>
       <ul class="list">
         <li
@@ -144,7 +144,7 @@ const getAttachmentUrl = (uuid: string) => {
         <div class="eleven wide column">
           <div class="file-input">
             <label :for="attachmentId">
-              {{ $t('components.common.AttachmentInput.uploadLabel') }}
+              {{ $t('components.common.AttachmentInput.label.upload') }}
             </label>
             <input
               :id="attachmentId"
@@ -159,21 +159,21 @@ const getAttachmentUrl = (uuid: string) => {
           </div>
           <div class="ui very small hidden divider" />
           <p>
-            {{ $t('components.common.AttachmentInput.uploadHelp') }}
+            {{ $t('components.common.AttachmentInput.help.upload') }}
           </p>
           <button
             v-if="value"
             class="ui basic tiny button"
             @click.stop.prevent="remove(value as string)"
           >
-            {{ $t('components.common.AttachmentInput.removeButton') }}
+            {{ $t('components.common.AttachmentInput.button.remove') }}
           </button>
           <div
             v-if="isLoading"
             class="ui active inverted dimmer"
           >
             <div class="ui indeterminate text loader">
-              {{ $t('components.common.AttachmentInput.uploadingMessage') }}
+              {{ $t('components.common.AttachmentInput.loader.uploading') }}
             </div>
           </div>
         </div>

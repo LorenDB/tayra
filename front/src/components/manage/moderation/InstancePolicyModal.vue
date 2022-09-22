@@ -62,14 +62,14 @@ const fetchData = async () => {
   >
     <i class="shield icon" />&nbsp;
     <slot>
-      {{ $t('components.manage.moderation.InstancePolicyModal.moderationRulesHeader') }}
+      {{ $t('components.manage.moderation.InstancePolicyModal.button.show') }}
     </slot>
     <semantic-modal
       v-model:show="show"
       @show="fetchData"
     >
       <h4 class="header">
-        {{ $t('components.manage.moderation.InstancePolicyModal.manageRulesHeader', {obj: target}) }}
+        {{ $t('components.manage.moderation.InstancePolicyModal.modal.manage.header', {obj: target}) }}
       </h4>
       <div class="content">
         <div class="description">
@@ -84,7 +84,7 @@ const fetchData = async () => {
           >
             <header class="ui header">
               <h3>
-                {{ $t('components.manage.moderation.InstancePolicyModal.manageRulesHeader', {obj: target}) }}
+                {{ $t('components.manage.moderation.InstancePolicyModal.modal.manage.content.warning', {obj: target}) }}
               </h3>
             </header>
           </instance-policy-card>
@@ -103,7 +103,7 @@ const fetchData = async () => {
       </div>
       <div class="actions">
         <button class="ui deny button">
-          {{ $t('components.manage.moderation.InstancePolicyModal.closeButton') }}
+          {{ $t('components.manage.moderation.InstancePolicyModal.button.close') }}
         </button>
       </div>
     </semantic-modal>

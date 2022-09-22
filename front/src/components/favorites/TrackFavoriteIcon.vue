@@ -23,8 +23,8 @@ const store = useStore()
 
 const isFavorite = computed(() => store.getters['favorites/isFavorite'](props.track.id))
 const title = computed(() => isFavorite.value
-  ? t('components.favorites.TrackFavoriteIcon.removeFromFavorites')
-  : t('components.favorites.TrackFavoriteIcon.addToFavorites')
+  ? t('components.favorites.TrackFavoriteIcon.button.remove')
+  : t('components.favorites.TrackFavoriteIcon.button.add')
 )
 </script>
 
@@ -38,12 +38,12 @@ const title = computed(() => isFavorite.value
     <span
       v-if="isFavorite"
     >
-      {{ $t('components.favorites.TrackFavoriteIcon.isFavorited') }}
+      {{ $t('components.favorites.TrackFavoriteIcon.label.inFavorites') }}
     </span>
     <span
       v-else
     >
-      {{ $t('components.favorites.TrackFavoriteIcon.addToFavorites') }}
+      {{ $t('components.favorites.TrackFavoriteIcon.button.add') }}
     </span>
   </button>
   <button

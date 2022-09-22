@@ -13,7 +13,7 @@ const store = useStore()
 
 const subsonicEnabled = computed(() => store.state.instance.settings.subsonic.enabled.value)
 const labels = computed(() => ({
-  subsonicField: t('components.auth.SubsonicTokenForm.subsonicFieldLabel')
+  subsonicField: t('components.auth.SubsonicTokenForm.label.subsonicField')
 }))
 
 const errors = ref([] as string[])
@@ -38,7 +38,7 @@ const fetchToken = async () => {
 const showToken = ref(false)
 const successMessage = ref('')
 const requestNewToken = async () => {
-  successMessage.value = t('components.auth.SubsonicTokenForm.successMessage')
+  successMessage.value = t('components.auth.SubsonicTokenForm.message.passwordUpdated')
   success.value = false
   errors.value = []
   isLoading.value = true
@@ -56,7 +56,7 @@ const requestNewToken = async () => {
 }
 
 const disable = async () => {
-  successMessage.value = t('components.auth.SubsonicTokenForm.disabledMessage')
+  successMessage.value = t('components.auth.SubsonicTokenForm.message.accessDisabled')
   success.value = false
   errors.value = []
   isLoading.value = true
@@ -82,26 +82,26 @@ fetchToken()
     @submit.prevent="requestNewToken()"
   >
     <h2>
-      {{ $t('components.auth.SubsonicTokenForm.subsonicHeader') }}
+      {{ $t('components.auth.SubsonicTokenForm.header.subsonic') }}
     </h2>
     <p
       v-if="!subsonicEnabled"
       class="ui message"
     >
-      {{ $t('components.auth.SubsonicTokenForm.unavailableMessage') }}
+      {{ $t('components.auth.SubsonicTokenForm.message.unavailable') }}
     </p>
     <p>
-      {{ $t('components.auth.SubsonicTokenForm.subsonicApiDescription') }}&nbsp;{{ $t('components.auth.SubsonicTokenForm.subsonicApiDescriptionContinued') }}
+      {{ $t('components.auth.SubsonicTokenForm.description.subsonic.paragraph1') }}&nbsp;{{ $t('components.auth.SubsonicTokenForm.description.subsonic.paragraph2') }}
     </p>
     <p>
-      {{ $t('components.auth.SubsonicTokenForm.subsonicPasswordInfo') }}
+      {{ $t('components.auth.SubsonicTokenForm.description.subsonic.paragraph3') }}
     </p>
     <p>
       <a
         href="https://docs.funkwhale.audio/users/apps.html#subsonic-compatible-clients"
         target="_blank"
       >
-        {{ $t('components.auth.SubsonicTokenForm.appsLink') }}
+        {{ $t('components.auth.SubsonicTokenForm.link.apps') }}
       </a>
     </p>
     <div
@@ -118,7 +118,7 @@ fetchToken()
       class="ui negative message"
     >
       <h4 class="header">
-        {{ $t('components.auth.SubsonicTokenForm.errorHeader') }}
+        {{ $t('components.auth.SubsonicTokenForm.header.error') }}
       </h4>
       <ul class="list">
         <li
@@ -152,20 +152,20 @@ fetchToken()
         :class="['ui', {'loading': isLoading}, 'button']"
         :action="requestNewToken"
       >
-        {{ $t('components.auth.SubsonicTokenForm.requestNewTokenButton') }}
+        {{ $t('components.auth.SubsonicTokenForm.button.newPassword') }}
         <template #modal-header>
           <p>
-            {{ $t('components.auth.SubsonicTokenForm.requestNewTokenModalHeader') }}
+            {{ $t('components.auth.SubsonicTokenForm.modal.newPassword.header') }}
           </p>
         </template>
         <template #modal-content>
           <p>
-            {{ $t('components.auth.SubsonicTokenForm.requestNewTokenWarning') }}
+            {{ $t('components.auth.SubsonicTokenForm.modal.newPassword.content.warning') }}
           </p>
         </template>
         <template #modal-confirm>
           <div>
-            {{ $t('components.auth.SubsonicTokenForm.requestNewTokenButton') }}
+            {{ $t('components.auth.SubsonicTokenForm.button.confirmNewPassword') }}
           </div>
         </template>
       </dangerous-button>
@@ -175,27 +175,27 @@ fetchToken()
         :class="['ui', {'loading': isLoading}, 'button']"
         @click="requestNewToken"
       >
-        {{ $t('components.auth.SubsonicTokenForm.requestTokenButton') }}
+        {{ $t('components.auth.SubsonicTokenForm.button.confirmNewPassword') }}
       </button>
       <dangerous-button
         v-if="token"
         :class="['ui', {'loading': isLoading}, 'warning', 'button']"
         :action="disable"
       >
-        {{ $t('components.auth.SubsonicTokenForm.disableSubsonicAccessButton') }}
+        {{ $t('components.auth.SubsonicTokenForm.button.disable') }}
         <template #modal-header>
           <p>
-            {{ $t('components.auth.SubsonicTokenForm.disableSubsonicAccessModalHeader') }}
+            {{ $t('components.auth.SubsonicTokenForm.modal.disableSubsonic.header') }}
           </p>
         </template>
         <template #modal-content>
           <p>
-            {{ $t('components.auth.SubsonicTokenForm.disableSubsonicAccessWarning') }}
+            {{ $t('components.auth.SubsonicTokenForm.modal.disableSubsonic.content.warning') }}
           </p>
         </template>
         <template #modal-confirm>
           <div>
-            {{ $t('components.auth.SubsonicTokenForm.disableSubsonicAccessConfirm') }}
+            {{ $t('components.auth.SubsonicTokenForm.button.confirmDisable') }}
           </div>
         </template>
       </dangerous-button>

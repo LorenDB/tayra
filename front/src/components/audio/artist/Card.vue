@@ -65,12 +65,12 @@ const imageUrl = computed(() => cover.value?.urls.original
       <span
         v-if="artist.content_category === 'music'"
       >
-        {{ $t('components.audio.artist.Card.trackCount', artist.tracks_count) }}
+        {{ $t('components.audio.artist.Card.meta.tracks', artist.tracks_count) }}
       </span>
       <span
         v-else
       >
-        {{ $t('components.audio.artist.Card.episodeCount', artist.tracks_count) }}
+        {{ $t('components.audio.artist.Card.meta.episodes', artist.tracks_count) }}
       </span>
       <play-button
         class="right floated basic icon"

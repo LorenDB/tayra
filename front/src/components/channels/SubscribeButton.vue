@@ -24,12 +24,12 @@ const store = useStore()
 
 const isSubscribed = computed(() => store.getters['channels/isSubscribed'](props.channel.uuid))
 const title = computed(() => isSubscribed.value
-  ? t('components.channels.SubscribeButton.unsubscribeLabel')
-  : t('components.channels.SubscribeButton.subscribeLabel')
+  ? t('components.channels.SubscribeButton.title.unsubscribe')
+  : t('components.channels.SubscribeButton.title.subscribe')
 )
 
 const message = computed(() => ({
-  authMessage: t('components.channels.SubscribeButton.authMessage')
+  authMessage: t('components.channels.SubscribeButton.help.auth')
 }))
 
 const toggle = async () => {

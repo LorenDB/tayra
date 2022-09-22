@@ -86,14 +86,14 @@ const toggleAllScopes = (parent: typeof allScopes['value'][number]) => {
 const scopeParents = computedEager(() => [
   {
     id: 'read',
-    label: t('components.auth.ApplicationForm.readScopeLabel'),
-    description: t('components.auth.ApplicationForm.readScopeDescription'),
+    label: t('components.auth.ApplicationForm.label.scopes.read.label'),
+    description: t('components.auth.ApplicationForm.label.scopes.read.description'),
     value: scopeArray.value.includes('read')
   },
   {
     id: 'write',
-    label: t('components.auth.ApplicationForm.writeScopeLabel'),
-    description: t('components.auth.ApplicationForm.writeScopeDescription'),
+    label: t('components.auth.ApplicationForm.label.scopes.write.label'),
+    description: t('components.auth.ApplicationForm.label.scopes.write.description'),
     value: scopeArray.value.includes('write')
   }
 ])
@@ -120,7 +120,7 @@ const allScopes = computed(() => {
       class="ui negative message"
     >
       <h4 class="header">
-        {{ $t('components.auth.ApplicationForm.saveFailureMessage') }}
+        {{ $t('components.auth.ApplicationForm.header.failure') }}
       </h4>
       <ul class="list">
         <li
@@ -132,7 +132,7 @@ const allScopes = computed(() => {
       </ul>
     </div>
     <div class="ui field">
-      <label for="application-name">{{ $t('components.auth.ApplicationForm.applicationNameLabel') }}</label>
+      <label for="application-name">{{ $t('components.auth.ApplicationForm.label.name') }}</label>
       <input
         id="application-name"
         v-model="fields.name"
@@ -142,7 +142,7 @@ const allScopes = computed(() => {
       >
     </div>
     <div class="ui field">
-      <label for="redirect-uris">{{ $t('components.auth.ApplicationForm.redirectUrisLabel') }}</label>
+      <label for="redirect-uris">{{ $t('components.auth.ApplicationForm.label.redirectUri') }}</label>
       <input
         id="redirect-uris"
         v-model="fields.redirect_uris"
@@ -150,13 +150,13 @@ const allScopes = computed(() => {
         type="text"
       >
       <p class="help">
-        {{ $t('components.auth.ApplicationForm.redirectUrisHelp') }}
+        {{ $t('components.auth.ApplicationForm.help.redirectUri') }}
       </p>
     </div>
     <div class="ui field">
-      <label>{{ $t('components.auth.ApplicationForm.scopesLabel') }}</label>
+      <label>{{ $t('components.auth.ApplicationForm.label.scopes.label') }}</label>
       <p>
-        {{ $t('components.auth.ApplicationForm.scopesDescription') }}
+        {{ $t('components.auth.ApplicationForm.label.scopes.description') }}
       </p>
       <div class="ui stackable two column grid">
         <div
@@ -205,12 +205,12 @@ const allScopes = computed(() => {
       <span
         v-if="app !== null"
       >
-        {{ $t('components.auth.ApplicationForm.updateButtonLabel') }}
+        {{ $t('components.auth.ApplicationForm.button.update') }}
       </span>
       <span
         v-else
       >
-        {{ $t('components.auth.ApplicationForm.createButtonLabel') }}
+        {{ $t('components.auth.ApplicationForm.button.create') }}
       </span>
     </button>
   </form>

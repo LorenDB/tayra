@@ -110,7 +110,7 @@ onMounted(() => $('.ui.dropdown').dropdown())
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: t('components.library.Albums.searchPlaceholder'),
+  searchPlaceholder: t('components.library.Albums.placeholder.search'),
   title: t('components.library.Albums.title')
 }))
 
@@ -121,7 +121,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
   <main v-title="labels.title">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        {{ $t('components.library.Albums.albumBrowseHeader') }}
+        {{ $t('components.library.Albums.header.browse') }}
       </h2>
       <form
         :class="['ui', {'loading': isLoading}, 'form']"
@@ -130,7 +130,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
         <div class="fields">
           <div class="field">
             <label for="albums-search">
-              {{ $t('components.library.Albums.searchLabel') }}
+              {{ $t('components.library.Albums.label.search') }}
             </label>
             <div class="ui action input">
               <input
@@ -143,18 +143,18 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="t('components.library.Albums.searchLabel')"
+                :aria-label="t('components.library.Albums.button.search')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="tags-search">{{ $t('components.library.Albums.tagsLabel') }}</label>
+            <label for="tags-search">{{ $t('components.library.Albums.label.tags') }}</label>
             <tags-selector v-model="tags" />
           </div>
           <div class="field">
-            <label for="album-ordering">{{ $t('components.library.Albums.orderingLabel') }}</label>
+            <label for="album-ordering">{{ $t('components.library.Albums.ordering.label') }}</label>
             <select
               id="album-ordering"
               v-model="ordering"
@@ -170,22 +170,22 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="album-ordering-direction">{{ $t('components.library.Albums.orderingDirectionLabel') }}</label>
+            <label for="album-ordering-direction">{{ $t('components.library.Albums.ordering.direction.label') }}</label>
             <select
               id="album-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                {{ $t('components.library.Albums.ascendingOrdering') }}
+                {{ $t('components.library.Albums.ordering.direction.ascending') }}
               </option>
               <option value="-">
-                {{ $t('components.library.Albums.descendingOrdering') }}
+                {{ $t('components.library.Albums.ordering.direction.descending') }}
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="album-results">{{ $t('components.library.Albums.resultsPerPageLabel') }}</label>
+            <label for="album-results">{{ $t('components.library.Albums.pagination.results') }}</label>
             <select
               id="album-results"
               v-model="paginateBy"
@@ -228,7 +228,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
         >
           <div class="ui icon header">
             <i class="compact disc icon" />
-            {{ $t('components.library.Albums.emptyStateMessage') }}
+            {{ $t('components.library.Albums.empty.noResults') }}
           </div>
           <router-link
             v-if="$store.state.auth.authenticated"
@@ -236,7 +236,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             class="ui success button labeled icon"
           >
             <i class="upload icon" />
-            {{ $t('components.library.Albums.addMusicLink') }}
+            {{ $t('components.library.Albums.link.addMusic') }}
           </router-link>
         </div>
       </div>

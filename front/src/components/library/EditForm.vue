@@ -46,7 +46,7 @@ const canEdit = computed(() => {
 })
 
 const labels = computed(() => ({
-  summaryPlaceholder: t('components.library.EditForm.summaryPlaceholder')
+  summaryPlaceholder: t('components.library.EditForm.placeholder.summary')
 }))
 
 const mutationsUrl = computed(() => props.objectType === 'track'
@@ -148,7 +148,7 @@ const resetField = (fieldId: string) => {
   <div v-if="submittedMutation">
     <div class="ui positive message">
       <h4 class="header">
-        {{ $t('components.library.EditForm.submissionSuccessHeader') }}
+        {{ $t('components.library.EditForm.header.success') }}
       </h4>
     </div>
     <edit-card
@@ -159,7 +159,7 @@ const resetField = (fieldId: string) => {
       class="ui button"
       @click.prevent="submittedMutation = null"
     >
-      {{ $t('components.library.EditForm.newEditButton') }}
+      {{ $t('components.library.EditForm.button.new') }}
     </button>
   </div>
   <div v-else>
@@ -171,27 +171,27 @@ const resetField = (fieldId: string) => {
     >
       <div>
         <template v-if="showPendingReview">
-          {{ $t('components.library.EditForm.editsAwaitingReview') }}
+          {{ $t('components.library.EditForm.header.unreviewed') }}
           <button
             class="ui tiny basic right floated button"
             @click.prevent="showPendingReview = false"
           >
-            {{ $t('components.library.EditForm.showEditsButton') }}
+            {{ $t('components.library.EditForm.button.showAll') }}
           </button>
         </template>
         <template v-else>
-          {{ $t('components.library.EditForm.recentEdits') }}
+          {{ $t('components.library.EditForm.header.recentEdits') }}
           <button
             class="ui tiny basic right floated button"
             @click.prevent="showPendingReview = true"
           >
-            {{ $t('components.library.EditForm.onlyUnreviewed') }}
+            {{ $t('components.library.EditForm.button.showUnreviewed') }}
           </button>
         </template>
       </div>
       <template #empty-state>
         <empty-state>
-          {{ $t('components.library.EditForm.emptyStateMessage') }}
+          {{ $t('components.library.EditForm.empty.suggestEdit') }}
         </empty-state>
       </template>
     </edit-list>
@@ -206,7 +206,7 @@ const resetField = (fieldId: string) => {
         class="ui negative message"
       >
         <h4 class="header">
-          {{ $t('components.library.EditForm.submissionFailureHeader') }}
+          {{ $t('components.library.EditForm.header.failure') }}
         </h4>
         <ul class="list">
           <li
@@ -221,7 +221,7 @@ const resetField = (fieldId: string) => {
         v-if="!canEdit"
         class="ui message"
       >
-        {{ $t('components.library.EditForm.noPermissionWarning') }}
+        {{ $t('components.library.EditForm.message.noPermission') }}
       </div>
       <template v-if="values">
         <div
@@ -266,7 +266,7 @@ const resetField = (fieldId: string) => {
               @click.prevent="values[fieldConfig.id] = null"
             >
               <i class="x icon" />
-              {{ $t('components.library.EditForm.clearButton') }}
+              {{ $t('components.library.EditForm.button.clear') }}
             </button>
           </template>
           <template v-else-if="fieldConfig.type === 'content'">
@@ -303,7 +303,7 @@ const resetField = (fieldId: string) => {
               @click.prevent="values[fieldConfig.id] = []"
             >
               <i class="x icon" />
-              {{ $t('components.library.EditForm.clearButton') }}
+              {{ $t('components.library.EditForm.button.clear') }}
             </button>
           </template>
           <div v-if="fieldValuesChanged(fieldConfig.id)">
@@ -313,13 +313,13 @@ const resetField = (fieldId: string) => {
               @click.prevent="resetField(fieldConfig.id)"
             >
               <i class="undo icon" />
-              {{ $t('components.library.EditForm.resetButton') }}
+              {{ $t('components.library.EditForm.button.reset') }}
             </button>
           </div>
         </div>
       </template>
       <div class="field">
-        <label for="summary">{{ $t('components.library.EditForm.summaryLabel') }}</label>
+        <label for="summary">{{ $t('components.library.EditForm.label.summary') }}</label>
         <textarea
           id="change-summary"
           v-model="summary"
@@ -333,7 +333,7 @@ const resetField = (fieldId: string) => {
         class="ui left floated button"
         :to="{name: 'library.tracks.detail', params: {id: object.id }}"
       >
-        {{ $t('components.library.EditForm.cancelButton') }}
+        {{ $t('components.library.EditForm.button.cancel') }}
       </router-link>
       <button
         :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
@@ -343,12 +343,12 @@ const resetField = (fieldId: string) => {
         <span
           v-if="canEdit"
         >
-          {{ $t('components.library.EditForm.submitEditButton') }}
+          {{ $t('components.library.EditForm.button.submit') }}
         </span>
         <span
           v-else
         >
-          {{ $t('components.library.EditForm.submitSuggestionButton') }}
+          {{ $t('components.library.EditForm.button.suggest') }}
         </span>
       </button>
     </form>

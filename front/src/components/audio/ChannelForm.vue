@@ -380,7 +380,7 @@ defineExpose({
       class="ui active inverted dimmer"
     >
       <div class="ui text loader">
-        {{ $t('components.audio.ChannelForm.message.loading') }}
+        {{ $t('components.audio.ChannelForm.loader.loading') }}
       </div>
     </div>
   </form>

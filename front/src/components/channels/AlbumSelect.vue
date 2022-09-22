@@ -49,10 +49,10 @@ watch(() => props.channel, fetchData, { immediate: true })
     <label for="album-dropdown">
       <span
         v-if="channel && channel.artist && channel.artist.content_category === 'podcast'"
-      >{{ $t('components.channels.AlbumSelect.seriesLabel') }}</span>
+      >{{ $t('components.channels.AlbumSelect.label.series') }}</span>
       <span
         v-else
-      >{{ $t('components.channels.AlbumSelect.albumLabel') }}</span>
+      >{{ $t('components.channels.AlbumSelect.label.album') }}</span>
     </label>
     <select
       id="album-dropdown"
@@ -60,7 +60,7 @@ watch(() => props.channel, fetchData, { immediate: true })
       class="ui search normal dropdown"
     >
       <option value="">
-        {{ $t('components.channels.AlbumSelect.noneLabel') }}
+        {{ $t('components.channels.AlbumSelect.option.none') }}
       </option>
       <option
         v-for="album in albums"
@@ -69,7 +69,7 @@ watch(() => props.channel, fetchData, { immediate: true })
       >
         {{ album.title }}
         <span>
-          {{ $t('components.channels.AlbumSelect.trackCount', { tracks_count: album.tracks_count }) }}
+          {{ $t('components.channels.AlbumSelect.meta.tracks', { tracks_count: album.tracks_count }) }}
         </span>
       </option>
     </select>

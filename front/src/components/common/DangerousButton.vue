@@ -42,7 +42,7 @@ const confirm = () => {
     >
       <h4 class="header">
         <slot name="modal-header">
-          {{ $t('components.common.DangerousButton.confirmAction') }}
+          {{ $t('components.common.DangerousButton.header.confirm') }}
         </slot>
       </h4>
       <div class="scrolling content">
@@ -52,14 +52,14 @@ const confirm = () => {
       </div>
       <div class="actions">
         <button class="ui basic cancel button">
-          {{ $t('components.common.DangerousButton.cancelButton') }}
+          {{ $t('components.common.DangerousButton.button.cancel') }}
         </button>
         <button
           :class="['ui', 'confirm', confirmColor, 'button']"
           @click="confirm"
         >
           <slot name="modal-confirm">
-            {{ $t('components.common.DangerousButton.confirmButton') }}
+            {{ $t('components.common.DangerousButton.button.confirm') }}
           </slot>
         </button>
       </div>

@@ -57,8 +57,8 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: t('components.manage.library.TagsTable.deleteActionLabel'),
-    confirmationMessage: t('components.manage.library.TagsTable.deleteActionConfirmation'),
+    label: t('components.manage.library.TagsTable.action.delete.label'),
+    confirmationMessage: t('components.manage.library.TagsTable.action.delete.warning'),
     isDangerous: true,
     allowAll: false,
     confirmColor: 'danger'
@@ -97,7 +97,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('components.manage.library.TagsTable.searchPlaceholder')
+  searchPlaceholder: t('components.manage.library.TagsTable.placeholder.search')
 }))
 
 const detailedUpload = ref()
@@ -109,7 +109,7 @@ const showUploadDetailModal = ref(false)
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="tags-search">{{ $t('components.manage.library.TagsTable.searchLabel') }}</label>
+          <label for="tags-search">{{ $t('components.manage.library.TagsTable.label.search') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="tags-search"
@@ -122,7 +122,7 @@ const showUploadDetailModal = ref(false)
           </form>
         </div>
         <div class="field">
-          <label for="tags-ordering">{{ $t('components.manage.library.TagsTable.orderingLabel') }}</label>
+          <label for="tags-ordering">{{ $t('components.manage.library.TagsTable.ordering.label') }}</label>
           <select
             id="tags-ordering"
             v-model="ordering"
@@ -138,17 +138,17 @@ const showUploadDetailModal = ref(false)
           </select>
         </div>
         <div class="field">
-          <label for="tags-ordering-direction">{{ $t('components.manage.library.TagsTable.orderingDirectionLabel') }}</label>
+          <label for="tags-ordering-direction">{{ $t('components.manage.library.TagsTable.ordering.direction.label') }}</label>
           <select
             id="tags-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              {{ $t('components.manage.library.TagsTable.ascendingOrdering') }}
+              {{ $t('components.manage.library.TagsTable.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              {{ $t('components.manage.library.TagsTable.descendingOrdering') }}
+              {{ $t('components.manage.library.TagsTable.ordering.direction.descending') }}
             </option>
           </select>
         </div>
@@ -177,19 +177,19 @@ const showUploadDetailModal = ref(false)
       >
         <template #header-cells>
           <th>
-            {{ $t('components.manage.library.TagsTable.nameTableHeader') }}
+            {{ $t('components.manage.library.TagsTable.table.tag.header.name') }}
           </th>
           <th>
-            {{ $t('components.manage.library.TagsTable.artistsTableHeader') }}
+            {{ $t('components.manage.library.TagsTable.table.tag.header.artists') }}
           </th>
           <th>
-            {{ $t('components.manage.library.TagsTable.albumsTableHeader') }}
+            {{ $t('components.manage.library.TagsTable.table.tag.header.albums') }}
           </th>
           <th>
-            {{ $t('components.manage.library.TagsTable.tracksTableHeader') }}
+            {{ $t('components.manage.library.TagsTable.table.tag.header.tracks') }}
           </th>
           <th>
-            {{ $t('components.manage.library.TagsTable.creationDateTableHeader') }}
+            {{ $t('components.manage.library.TagsTable.table.tag.header.creationDate') }}
           </th>
         </template>
         <template
@@ -225,7 +225,7 @@ const showUploadDetailModal = ref(false)
       />
 
       <span v-if="result && result.results.length > 0">
-        {{ $t('components.manage.library.TagsTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
+        {{ $t('components.manage.library.TagsTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

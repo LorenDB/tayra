@@ -67,7 +67,7 @@ const handleRemovedNote = (uuid: string) => {
     <div class="content">
       <h4 class="header">
         <router-link :to="{name: 'manage.moderation.requests.detail', params: {id: obj.uuid}}">
-          {{ $t('components.manage.moderation.UserRequestCard.requestHeader', {id: obj.uuid.substring(0, 8)}) }}
+          {{ $t('components.manage.moderation.UserRequestCard.link.request', {id: obj.uuid.substring(0, 8)}) }}
         </router-link>
         <collapse-link
           v-model="isCollapsed"
@@ -82,7 +82,7 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.UserRequestCard.submittedByLabel') }}
+                    {{ $t('components.manage.moderation.UserRequestCard.table.request.submittedBy') }}
                   </td>
                   <td>
                     <actor-link
@@ -93,7 +93,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.UserRequestCard.creationDateLabel') }}
+                    {{ $t('components.manage.moderation.UserRequestCard.table.request.creationDate') }}
                   </td>
                   <td>
                     <human-date
@@ -110,26 +110,26 @@ const handleRemovedNote = (uuid: string) => {
               <tbody>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.UserRequestCard.statusLabel') }}
+                    {{ $t('components.manage.moderation.UserRequestCard.table.status.status') }}
                   </td>
                   <td>
                     <template v-if="obj.status === 'pending'">
                       <i class="warning hourglass icon" />
-                      {{ $t('components.manage.moderation.UserRequestCard.pendingStatus') }}
+                      {{ $t('components.manage.moderation.UserRequestCard.table.status.pending') }}
                     </template>
                     <template v-else-if="obj.status === 'refused'">
                       <i class="danger x icon" />
-                      {{ $t('components.manage.moderation.UserRequestCard.refusedStatus') }}
+                      {{ $t('components.manage.moderation.UserRequestCard.table.status.refused') }}
                     </template>
                     <template v-else-if="obj.status === 'approved'">
                       <i class="success check icon" />
-                      {{ $t('components.manage.moderation.UserRequestCard.approvedStatus') }}
+                      {{ $t('components.manage.moderation.UserRequestCard.table.status.approved') }}
                     </template>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.UserRequestCard.assignedToLabel') }}
+                    {{ $t('components.manage.moderation.UserRequestCard.table.status.assignedTo') }}
                   </td>
                   <td>
                     <div v-if="obj.assigned_to">
@@ -147,7 +147,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.UserRequestCard.resolutionDateLabel') }}
+                    {{ $t('components.manage.moderation.UserRequestCard.table.status.resolutionDate') }}
                   </td>
                   <td>
                     <human-date
@@ -164,7 +164,7 @@ const handleRemovedNote = (uuid: string) => {
                 </tr>
                 <tr>
                   <td>
-                    {{ $t('components.manage.moderation.UserRequestCard.internalNotesLabel') }}
+                    {{ $t('components.manage.moderation.UserRequestCard.table.status.internalNotes') }}
                   </td>
                   <td>
                     <i class="comment icon" />
@@ -184,10 +184,10 @@ const handleRemovedNote = (uuid: string) => {
       <div class="ui stackable two column grid">
         <div class="column">
           <h3>
-            {{ $t('components.manage.moderation.UserRequestCard.messageHeader') }}
+            {{ $t('components.manage.moderation.UserRequestCard.header.signup') }}
           </h3>
           <p>
-            {{ $t('components.manage.moderation.UserRequestCard.messageBody') }}
+            {{ $t('components.manage.moderation.UserRequestCard.message.signup') }}
           </p>
           <template v-if="obj.metadata">
             <div class="ui hidden divider" />
@@ -211,7 +211,7 @@ const handleRemovedNote = (uuid: string) => {
         <aside class="column">
           <div v-if="obj.status != 'approved'">
             <h3>
-              {{ $t('components.manage.moderation.UserRequestCard.actionsHeader') }}
+              {{ $t('components.manage.moderation.UserRequestCard.header.actions') }}
             </h3>
             <div class="ui labelled icon basic buttons">
               <button
@@ -220,7 +220,7 @@ const handleRemovedNote = (uuid: string) => {
                 @click="approve(true)"
               >
                 <i class="success check icon" />&nbsp;
-                {{ $t('components.manage.moderation.UserRequestCard.approveButton') }}
+                {{ $t('components.manage.moderation.UserRequestCard.button.approve') }}
               </button>
               <button
                 v-if="obj.status === 'pending'"
@@ -228,12 +228,12 @@ const handleRemovedNote = (uuid: string) => {
                 @click="approve(false)"
               >
                 <i class="danger x icon" />&nbsp;
-                {{ $t('components.manage.moderation.UserRequestCard.rejectButton') }}
+                {{ $t('components.manage.moderation.UserRequestCard.button.reject') }}
               </button>
             </div>
           </div>
           <h3>
-            {{ $t('components.manage.moderation.UserRequestCard.internalNotesLabel') }}
+            {{ $t('components.manage.moderation.UserRequestCard.header.notes') }}
           </h3>
           <notes-thread
             :notes="obj.notes"

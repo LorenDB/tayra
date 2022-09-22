@@ -60,31 +60,31 @@ const isFavorite = computed(() => store.getters['favorites/isFavorite'](props.tr
 
 const { t } = useI18n()
 const favoriteButton = computed(() => isFavorite.value
-  ? t('components.audio.podcast.Modal.removeFromFavorites')
-  : t('components.audio.podcast.Modal.addToFavorites')
+  ? t('components.audio.podcast.Modal.button.removeFromFavorites')
+  : t('components.audio.podcast.Modal.button.addToFavorites')
 )
 
 const trackDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
-  ? t('components.audio.podcast.Modal.episodeDetails')
-  : t('components.audio.podcast.Modal.trackDetails')
+  ? t('components.audio.podcast.Modal.button.episodeDetails')
+  : t('components.audio.podcast.Modal.button.trackDetails')
 )
 
 const albumDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
-  ? t('components.audio.podcast.Modal.seriesDetails')
-  : t('components.audio.podcast.Modal.albumDetails')
+  ? t('components.audio.podcast.Modal.button.seriesDetails')
+  : t('components.audio.podcast.Modal.button.albumDetails')
 )
 
 const artistDetailsButton = computed(() => props.track.artist?.content_category === 'podcast'
-  ? t('components.audio.podcast.Modal.channelDetails')
-  : t('components.audio.podcast.Modal.artistDetails')
+  ? t('components.audio.podcast.Modal.button.channelDetails')
+  : t('components.audio.podcast.Modal.button.artistDetails')
 )
 
 const labels = computed(() => ({
-  startRadio: t('components.audio.podcast.Modal.startRadio'),
-  playNow: t('components.audio.podcast.Modal.playNow'),
-  addToQueue: t('components.audio.podcast.Modal.addToQueue'),
-  playNext: t('components.audio.podcast.Modal.playNext'),
-  addToPlaylist: t('components.audio.podcast.Modal.addToPlaylist')
+  startRadio: t('components.audio.podcast.Modal.button.startRadio'),
+  playNow: t('components.audio.podcast.Modal.button.playNow'),
+  addToQueue: t('components.audio.podcast.Modal.button.addToQueue'),
+  playNext: t('components.audio.podcast.Modal.button.playNext'),
+  addToPlaylist: t('components.audio.podcast.Modal.button.addToPlaylist')
 }))
 </script>
 

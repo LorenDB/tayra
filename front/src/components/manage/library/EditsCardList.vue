@@ -142,7 +142,7 @@ fetchData()
 const { t } = useI18n()
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('components.manage.library.EditsCardList.searchPlaceholder')
+  searchPlaceholder: t('components.manage.library.EditsCardList.placeholder.search')
 }))
 
 const handle = (type: 'delete' | 'approved', id: string, value: boolean) => {
@@ -165,7 +165,7 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="search-edits">{{ $t('components.manage.library.EditsCardList.searchPlaceholder') }}</label>
+          <label for="search-edits">{{ $t('components.manage.library.EditsCardList.placeholder.search') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="search-edits"
@@ -178,7 +178,7 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
           </form>
         </div>
         <div class="field">
-          <label for="edit-status">{{ $t('components.manage.library.EditsCardList.statusLabel') }}</label>
+          <label for="edit-status">{{ $t('components.manage.library.EditsCardList.label.status') }}</label>
           <select
             id="edit-status"
             class="ui dropdown"
@@ -186,21 +186,21 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
             @change="addSearchToken('is_approved', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              {{ $t('components.manage.library.EditsCardList.allOption') }}
+              {{ $t('components.manage.library.EditsCardList.option.all') }}
             </option>
             <option value="null">
-              {{ $t('components.manage.library.EditsCardList.pendingReviewLabel') }}
+              {{ $t('components.manage.library.EditsCardList.option.pending') }}
             </option>
             <option value="yes">
-              {{ $t('components.manage.library.EditsCardList.approvedLabel') }}
+              {{ $t('components.manage.library.EditsCardList.option.approved') }}
             </option>
             <option value="no">
-              {{ $t('components.manage.library.EditsCardList.rejectedLabel') }}
+              {{ $t('components.manage.library.EditsCardList.option.rejected') }}
             </option>
           </select>
         </div>
         <div class="field">
-          <label for="edit-ordering">{{ $t('components.manage.library.EditsCardList.orderingLabel') }}</label>
+          <label for="edit-ordering">{{ $t('components.manage.library.EditsCardList.ordering.label') }}</label>
           <select
             id="edit-ordering"
             v-model="ordering"
@@ -216,17 +216,17 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
           </select>
         </div>
         <div class="field">
-          <label for="edit-ordering-direction">{{ $t('components.manage.library.EditsCardList.orderingDirectionLabel') }}</label>
+          <label for="edit-ordering-direction">{{ $t('components.manage.library.EditsCardList.ordering.direction.label') }}</label>
           <select
             id="edit-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              {{ $t('components.manage.library.EditsCardList.ascendingOrdering') }}
+              {{ $t('components.manage.library.EditsCardList.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              {{ $t('components.manage.library.EditsCardList.descendingOrdering') }}
+              {{ $t('components.manage.library.EditsCardList.ordering.direction.descending') }}
             </option>
           </select>
         </div>
@@ -266,7 +266,7 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
       />
 
       <span v-if="result && result.results.length > 0">
-        {{ $t('components.manage.library.EditsCardList.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
+        {{ $t('components.manage.library.EditsCardList.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

@@ -90,8 +90,8 @@ const subtitle = computed(() => {
 const { t } = useI18n()
 const labels = computed(() => ({
   title: t('components.library.TrackBase.title'),
-  download: t('components.library.TrackBase.downloadLabel'),
-  more: t('components.library.TrackBase.moreLabel')
+  download: t('components.library.TrackBase.button.download'),
+  more: t('components.library.TrackBase.button.more')
 }))
 
 const isLoading = ref(false)
@@ -155,7 +155,7 @@ const remove = async () => {
                 class="vibrant"
                 :track="track"
               >
-                {{ $t('components.library.TrackBase.playButton') }}
+                {{ $t('components.library.TrackBase.button.play') }}
               </play-button>
               &nbsp;
               <track-favorite-icon
@@ -185,7 +185,7 @@ const remove = async () => {
                 v-model:show="showEmbedModal"
               >
                 <h4 class="header">
-                  {{ $t('components.library.TrackBase.embedModalHeader') }}
+                  {{ $t('components.library.TrackBase.modal.embed.header') }}
                 </h4>
                 <div class="scrolling content">
                   <div class="description">
@@ -197,7 +197,7 @@ const remove = async () => {
                 </div>
                 <div class="actions">
                   <button class="ui basic deny button">
-                    {{ $t('components.library.TrackBase.cancelButton') }}
+                    {{ $t('components.library.TrackBase.button.cancel') }}
                   </button>
                 </div>
               </semantic-modal>
@@ -218,7 +218,7 @@ const remove = async () => {
                     class="basic item"
                   >
                     <i class="external icon" />
-                    {{ $t('components.library.TrackBase.domainViewLink', {domain: domain}) }}
+                    {{ $t('components.library.TrackBase.link.domain', {domain: domain}) }}
                   </a>
                   <div
                     v-if="isEmbedable"
@@ -227,7 +227,7 @@ const remove = async () => {
                     @click="showEmbedModal = !showEmbedModal"
                   >
                     <i class="code icon" />
-                    {{ $t('components.library.TrackBase.embedButton') }}
+                    {{ $t('components.library.TrackBase.button.embed') }}
                   </div>
                   <a
                     :href="wikipediaUrl"
@@ -236,7 +236,7 @@ const remove = async () => {
                     class="basic item"
                   >
                     <i class="wikipedia w icon" />
-                    {{ $t('components.library.TrackBase.wikipediaLink') }}
+                    {{ $t('components.library.TrackBase.link.wikipedia') }}
                   </a>
                   <a
                     v-if="discogsUrl"
@@ -246,7 +246,7 @@ const remove = async () => {
                     class="basic item"
                   >
                     <i class="external icon" />
-                    {{ $t('components.library.TrackBase.discogsLink') }}
+                    {{ $t('components.library.TrackBase.link.discogs') }}
                   </a>
                   <router-link
                     v-if="track.is_local"
@@ -254,7 +254,7 @@ const remove = async () => {
                     class="basic item"
                   >
                     <i class="edit icon" />
-                    {{ $t('components.library.TrackBase.editButton') }}
+                    {{ $t('components.library.TrackBase.button.edit') }}
                   </router-link>
                   <dangerous-button
                     v-if="artist && $store.state.auth.authenticated && artist.channel && artist.attributed_to.full_username === $store.state.auth.fullUsername"
@@ -262,22 +262,22 @@ const remove = async () => {
                     @confirm="remove()"
                   >
                     <i class="ui trash icon" />
-                    {{ $t('components.library.TrackBase.deleteButton') }}
+                    {{ $t('components.library.TrackBase.button.delete') }}
                     <template #modal-header>
                       <p>
-                        {{ $t('components.library.TrackBase.deleteModalHeader') }}
+                        {{ $t('components.library.TrackBase.modal.delete.header') }}
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          {{ $t('components.library.TrackBase.deleteModalMessage') }}
+                          {{ $t('components.library.TrackBase.modal.delete.content.warning') }}
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        {{ $t('components.library.TrackBase.deleteButton') }}
+                        {{ $t('components.library.TrackBase.button.delete') }}
                       </p>
                     </template>
                   </dangerous-button>
@@ -298,7 +298,7 @@ const remove = async () => {
                     :to="{name: 'manage.library.tracks.detail', params: {id: track.id}}"
                   >
                     <i class="wrench icon" />
-                    {{ $t('components.library.TrackBase.moderationLink') }}
+                    {{ $t('components.library.TrackBase.link.moderation') }}
                   </router-link>
                   <a
                     v-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
@@ -308,7 +308,7 @@ const remove = async () => {
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    {{ $t('components.library.TrackBase.djangoLink') }}
+                    {{ $t('components.library.TrackBase.link.django') }}
                   </a>
                 </div>
               </button>

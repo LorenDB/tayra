@@ -36,7 +36,7 @@ const labels = computed(() => ({
         :to="{name: 'manage.library.tags.detail', params: {id: id}}"
       >
         <i class="wrench icon" />
-        {{ $t('components.library.TagDetail.moderationLink') }}
+        {{ $t('components.library.TagDetail.link.moderation') }}
       </router-link>
 
       <div class="ui hidden divider" />
@@ -48,14 +48,14 @@ const labels = computed(() => ({
         >
           <template #title>
             <router-link :to="{name: 'library.artists.browse', query: {tag: id}}">
-              {{ $t('components.library.TagDetail.artistsLabel') }}
+              {{ $t('components.library.TagDetail.link.artists') }}
             </router-link>
           </template>
         </artist-widget>
         <div class="ui hidden divider" />
         <div class="ui hidden divider" />
         <h3 class="ui header">
-          {{ $t('components.library.TagDetail.channelsLabel') }}
+          {{ $t('components.library.TagDetail.header.channels') }}
         </h3>
         <channels-widget
           :key="'channels' + id"
@@ -73,7 +73,7 @@ const labels = computed(() => ({
         >
           <template #title>
             <router-link :to="{name: 'library.albums.browse', query: {tag: id}}">
-              {{ $t('components.library.TagDetail.albumsLabel') }}
+              {{ $t('components.library.TagDetail.link.albums') }}
             </router-link>
           </template>
         </album-widget>
@@ -89,7 +89,7 @@ const labels = computed(() => ({
           :filters="{playable: true, ordering: '-creation_date', tag: id}"
         >
           <template #title>
-            {{ $t('components.library.TagDetail.tracksLabel') }}
+            {{ $t('components.library.TagDetail.header.tracks') }}
           </template>
         </track-widget>
         <div class="ui clearing hidden divider" />

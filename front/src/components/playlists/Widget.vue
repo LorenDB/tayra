@@ -78,7 +78,7 @@ watch(
     >
       <div class="ui icon header">
         <i class="list icon" />
-        {{ $t('components.playlists.Widget.noPlaylistsMessage') }}
+        {{ $t('components.playlists.Widget.placeholder.noPlaylists') }}
       </div>
       <button
         v-if="$store.state.auth.authenticated"
@@ -86,7 +86,7 @@ watch(
         @click="$store.commit('playlists/chooseTrack', null)"
       >
         <i class="list icon" />
-        {{ $t('components.playlists.Widget.createPlaylistButton') }}
+        {{ $t('components.playlists.Widget.button.create') }}
       </button>
     </div>
     <template v-if="nextPage">
@@ -96,7 +96,7 @@ watch(
         :class="['ui', 'basic', 'button']"
         @click="fetchData(nextPage)"
       >
-        {{ $t('components.playlists.Widget.showMore') }}
+        {{ $t('components.playlists.Widget.button.more') }}
       </button>
     </template>
   </div>

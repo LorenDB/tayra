@@ -82,8 +82,8 @@ fetchData()
 const sharedLabels = useSharedLabels()
 const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: t('components.manage.ChannelsTable.searchPlaceholder'),
-  openModeration: t('components.manage.ChannelsTable.openModeration')
+  searchPlaceholder: t('components.manage.ChannelsTable.placeholder.search'),
+  openModeration: t('components.manage.ChannelsTable.link.moderation')
 }))
 </script>
 
@@ -92,7 +92,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="channel-search">{{ $t('components.manage.ChannelsTable.searchLabel') }}</label>
+          <label for="channel-search">{{ $t('components.manage.ChannelsTable.label.search') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="channel-search"
@@ -105,7 +105,7 @@ const labels = computed(() => ({
           </form>
         </div>
         <div class="field">
-          <label for="channel-category">{{ $t('components.manage.ChannelsTable.categoryLabel') }}</label>
+          <label for="channel-category">{{ $t('components.manage.ChannelsTable.label.category') }}</label>
           <select
             id="channel-category"
             class="ui dropdown"
@@ -113,7 +113,7 @@ const labels = computed(() => ({
             @change="addSearchToken('category', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              {{ $t('components.manage.ChannelsTable.allOption') }}
+              {{ $t('components.manage.ChannelsTable.option.all') }}
             </option>
             <option value="podcast">
               {{ sharedLabels.fields.content_category.choices.podcast }}
@@ -127,7 +127,7 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="channel-ordering">{{ $t('components.manage.ChannelsTable.orderingLabel') }}</label>
+          <label for="channel-ordering">{{ $t('components.manage.ChannelsTable.ordering.label') }}</label>
           <select
             id="channel-ordering"
             v-model="ordering"
@@ -143,17 +143,17 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="channel-ordering-direction">{{ $t('components.manage.ChannelsTable.orderingDirectionLabel') }}</label>
+          <label for="channel-ordering-direction">{{ $t('components.manage.ChannelsTable.ordering.direction.label') }}</label>
           <select
             id="channel-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              {{ $t('components.manage.ChannelsTable.ascendingOrdering') }}
+              {{ $t('components.manage.ChannelsTable.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              {{ $t('components.manage.ChannelsTable.descendingOrdering') }}
+              {{ $t('components.manage.ChannelsTable.ordering.direction.descending') }}
             </option>
           </select>
         </div>
@@ -176,22 +176,22 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            {{ $t('components.manage.ChannelsTable.nameTableHeader') }}
+            {{ $t('components.manage.ChannelsTable.table.channel.header.name') }}
           </th>
           <th>
-            {{ $t('components.manage.ChannelsTable.accountTableHeader') }}
+            {{ $t('components.manage.ChannelsTable.table.channel.header.account') }}
           </th>
           <th>
-            {{ $t('components.manage.ChannelsTable.domainTableHeader') }}
+            {{ $t('components.manage.ChannelsTable.table.channel.header.domain') }}
           </th>
           <th>
-            {{ $t('components.manage.ChannelsTable.albumsTableHeader') }}
+            {{ $t('components.manage.ChannelsTable.table.channel.header.albums') }}
           </th>
           <th>
-            {{ $t('components.manage.ChannelsTable.tracksTableHeader') }}
+            {{ $t('components.manage.ChannelsTable.table.channel.header.tracks') }}
           </th>
           <th>
-            {{ $t('components.manage.ChannelsTable.creationDateTableHeader') }}
+            {{ $t('components.manage.ChannelsTable.table.channel.header.creationDate') }}
           </th>
         </template>
         <template
@@ -232,7 +232,7 @@ const labels = computed(() => ({
               @click.prevent="addSearchToken('domain', scope.obj.attributed_to.domain)"
             >
               <i class="home icon" />
-              {{ $t('components.manage.ChannelsTable.localLink') }}
+              {{ $t('components.manage.ChannelsTable.link.local') }}
             </a>
           </td>
           <td>
@@ -257,7 +257,7 @@ const labels = computed(() => ({
       />
 
       <span v-if="result && result.results.length > 0">
-        {{ $t('components.manage.ChannelsTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
+        {{ $t('components.manage.ChannelsTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

@@ -59,7 +59,7 @@ defineExpose({
       class="ui negative message"
     >
       <h4 class="header">
-        {{ $t('components.channels.AlbumForm.errorHeader') }}
+        {{ $t('components.channels.AlbumForm.header.error') }}
       </h4>
       <ul class="list">
         <li
@@ -72,7 +72,7 @@ defineExpose({
     </div>
     <div class="ui required field">
       <label for="album-title">
-        {{ $t('components.channels.AlbumForm.titleLabel') }}
+        {{ $t('components.channels.AlbumForm.label.albumTitle') }}
       </label>
       <input
         v-model="title"

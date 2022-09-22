@@ -35,7 +35,7 @@ const domain = computed(() => getDomain(props.object.fid))
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  more: t('components.library.AlbumDropdown.moreLabel')
+  more: t('components.library.AlbumDropdown.button.more')
 }))
 
 const isEmbedable = computed(() => (props.isChannel && props.artist?.channel?.actor) || props.publicLibraries.length)
@@ -53,7 +53,7 @@ const remove = () => emit('remove')
       v-model:show="showEmbedModal"
     >
       <h4 class="header">
-        {{ $t('components.library.AlbumDropdown.embedModalHeader') }}
+        {{ $t('components.library.AlbumDropdown.modal.embed.header') }}
       </h4>
       <div class="scrolling content">
         <div class="description">
@@ -66,7 +66,7 @@ const remove = () => emit('remove')
       </div>
       <div class="actions">
         <button class="ui basic deny button">
-          {{ $t('components.channels.AlbumModal.cancelButton') }}
+          {{ $t('components.library.AlbumDropdown.button.cancel') }}
         </button>
       </div>
     </semantic-modal>
@@ -84,7 +84,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="external icon" />
-          {{ $t('components.library.AlbumDropdown.domainViewLink') }}
+          {{ $t('components.library.AlbumDropdown.link.domain') }}
         </a>
 
         <div
@@ -94,7 +94,7 @@ const remove = () => emit('remove')
           @click="showEmbedModal = !showEmbedModal"
         >
           <i class="code icon" />
-          {{ $t('components.audio.EmbedWizard.copyButton') }}
+          {{ $t('components.library.AlbumDropdown.button.embed') }}
         </div>
         <a
           v-if="isAlbum && musicbrainzUrl"
@@ -104,7 +104,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="external icon" />
-          {{ $t('components.library.AlbumDropdown.musicbrainzLink') }}
+          {{ $t('components.library.AlbumDropdown.link.musicbrainz') }}
         </a>
         <a
           v-if="!isChannel && isAlbum"
@@ -114,7 +114,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="external icon" />
-          {{ $t('components.library.AlbumDropdown.discogsLink') }}
+          {{ $t('components.library.AlbumDropdown.link.discogs') }}
         </a>
         <router-link
           v-if="object.is_local"
@@ -122,7 +122,7 @@ const remove = () => emit('remove')
           class="basic item"
         >
           <i class="edit icon" />
-          {{ $t('components.library.AlbumDropdown.editButton') }}
+          {{ $t('components.library.AlbumDropdown.button.edit') }}
         </router-link>
         <dangerous-button
           v-if="artist && $store.state.auth.authenticated && artist.channel && artist.attributed_to.full_username === $store.state.auth.fullUsername"
@@ -130,22 +130,22 @@ const remove = () => emit('remove')
           @confirm="remove()"
         >
           <i class="ui trash icon" />
-          {{ $t('components.library.AlbumDropdown.deleteButton') }}
+          {{ $t('components.library.AlbumDropdown.button.delete') }}
           <template #modal-header>
             <p>
-              {{ $t('components.library.AlbumDropdown.deleteModalHeader') }}
+              {{ $t('components.library.AlbumDropdown.modal.delete.header') }}
             </p>
           </template>
           <template #modal-content>
             <div>
               <p>
-                {{ $t('components.library.AlbumDropdown.deleteModalMessage') }}
+                {{ $t('components.library.AlbumDropdown.modal.delete.content.warning') }}
               </p>
             </div>
           </template>
           <template #modal-confirm>
             <p>
-              {{ $t('components.library.AlbumDropdown.deleteButton') }}
+              {{ $t('components.library.AlbumDropdown.button.delete') }}
             </p>
           </template>
         </dangerous-button>
@@ -166,7 +166,7 @@ const remove = () => emit('remove')
           :to="{name: 'manage.library.albums.detail', params: {id: object.id}}"
         >
           <i class="wrench icon" />
-          {{ $t('components.library.AlbumDropdown.moderationLink') }}
+          {{ $t('components.library.AlbumDropdown.link.moderation') }}
         </router-link>
         <a
           v-if="$store.state.auth.profile && $store.state.auth.profile?.is_superuser"
@@ -176,7 +176,7 @@ const remove = () => emit('remove')
           rel="noopener noreferrer"
         >
           <i class="wrench icon" />
-          {{ $t('components.library.AlbumDropdown.djangoLink') }}
+          {{ $t('components.library.AlbumDropdown.link.django') }}
         </a>
       </div>
     </button>

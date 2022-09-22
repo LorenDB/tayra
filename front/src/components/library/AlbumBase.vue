@@ -180,12 +180,12 @@ const remove = async () => {
                     <span
                       v-if="isSerie"
                     >
-                      {{ $t('components.library.AlbumBase.episodeCount', {episode_count: totalTracks}) }}
+                      {{ $t('components.library.AlbumBase.meta.episodes', {episode_count: totalTracks}) }}
                     </span>
                     <span
                       v-else
                     >
-                      {{ $t('components.library.AlbumBase.trackCount', {tracks_count: totalTracks}) }}
+                      {{ $t('components.library.AlbumBase.meta.tracks', {tracks_count: totalTracks}) }}
                     </span>
                   </template>
                   <div class="ui small hidden divider" />
@@ -263,12 +263,12 @@ const remove = async () => {
                 <span
                   v-if="isSerie"
                 >
-                  {{ $t('components.library.AlbumBase.episodeCount', {episode_count: totalTracks}) }}
+                  {{ $t('components.library.AlbumBase.meta.episodes', {episode_count: totalTracks}) }}
                 </span>
                 <span
                   v-else
                 >
-                  {{ $t('components.library.AlbumBase.trackCount', {tracks_count: totalTracks}) }}
+                  {{ $t('components.library.AlbumBase.meta.tracks', {tracks_count: totalTracks}) }}
                 </span>
                 <span class="middle middledot symbol" />
               </template>
@@ -311,7 +311,7 @@ const remove = async () => {
                   :to="{name: 'library.albums.edit', params: {id: object.id }}"
                 >
                   <i class="pencil icon" />
-                  {{ $t('components.library.AlbumBase.addDescription') }}
+                  {{ $t('components.library.AlbumBase.link.addDescription') }}
                 </router-link>
               </div>
             </div>
@@ -327,7 +327,7 @@ const remove = async () => {
                 :to="{name: 'library.albums.edit', params: {id: object.id }}"
               >
                 <i class="pencil icon" />
-                {{ $t('components.library.AlbumBase.addDescription') }}
+                {{ $t('components.library.AlbumBase.link.addDescription') }}
               </router-link>
             </template>
           </div>

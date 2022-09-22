@@ -43,13 +43,13 @@ const supportedExtensions = computed(() => store.state.ui.supportedExtensions)
 
 const labels = computed(() => ({
   tooltips: {
-    denied: t('components.library.FileUpload.deniedTooltip'),
-    server: t('components.library.FileUpload.serverTooltip'),
-    network: t('components.library.FileUpload.networkTooltip'),
-    timeout: t('components.library.FileUpload.timeoutTooltip'),
-    retry: t('components.library.FileUpload.retryTooltip'),
+    denied: t('components.library.FileUpload.tooltip.denied'),
+    server: t('components.library.FileUpload.tooltip.size'),
+    network: t('components.library.FileUpload.tooltip.network'),
+    timeout: t('components.library.FileUpload.tooltip.timeout'),
+    retry: t('components.library.FileUpload.tooltip.retry'),
     extension: t(
-      'components.library.FileUpload.extensionTooltip',
+      'components.library.FileUpload.tooltip.extension',
       { extensions: supportedExtensions.value.join(', ') }
     )
   } as Record<string, string>
@@ -282,7 +282,7 @@ const retry = (files: Omit<VueUploadItem, 'xhr'>[]) => {
 useEventListener(window, 'beforeunload', (event) => {
   if (!hasActiveUploads.value) return null
   event.preventDefault()
-  return (event.returnValue = t('components.library.FileUpload.eventListenerMessage'))
+  return (event.returnValue = t('components.library.FileUpload.message.listener'))
 })
 </script>
 
@@ -294,12 +294,12 @@ useEventListener(window, 'beforeunload', (event) => {
         :class="['item', {active: currentTab === 'uploads'}]"
         @click.prevent="currentTab = 'uploads'"
       >
-        {{ $t('components.library.FileUpload.uploadingStatus') }}
+        {{ $t('components.library.FileUpload.link.uploading') }}
         <div
           v-if="files.length === 0"
           class="ui label"
         >
-          {{ $t('components.library.FileUpload.noActionableFiles') }}
+          {{ $t('components.library.FileUpload.empty.noFiles') }}
         </div>
         <div
           v-else-if="files.length > uploadedFilesCount + erroredFilesCount"
@@ -323,12 +323,12 @@ useEventListener(window, 'beforeunload', (event) => {
         :class="['item', {active: currentTab === 'processing'}]"
         @click.prevent="currentTab = 'processing'"
       >
-        {{ $t('components.library.FileUpload.processingStatus') }}
+        {{ $t('components.library.FileUpload.link.processing') }}
         <div
           v-if="processableFiles === 0"
           class="ui label"
         >
-          {{ $t('components.library.FileUpload.noActionableFiles') }}
+          {{ $t('components.library.FileUpload.empty.noFiles') }}
         </div>
         <div
           v-else-if="processableFiles > processedFilesCount"
@@ -352,7 +352,7 @@ useEventListener(window, 'beforeunload', (event) => {
       <div :class="['ui', {loading: isLoadingQuota}, 'container']">
         <div :class="['ui', {red: remainingSpace === 0}, {warning: remainingSpace > 0 && remainingSpace <= 50}, 'small', 'statistic']">
           <div class="label">
-            {{ $t('components.library.FileUpload.storageSpaceLabel') }}
+            {{ $t('components.library.FileUpload.label.remainingSpace') }}
           </div>
           <div class="value">
             {{ humanSize(remainingSpace * 1000 * 1000) }}
@@ -360,25 +360,25 @@ useEventListener(window, 'beforeunload', (event) => {
         </div>
         <div class="ui divider" />
         <h2 class="ui header">
-          {{ $t('components.library.FileUpload.localUploadHeader') }}
+          {{ $t('components.library.FileUpload.header.local') }}
         </h2>
         <div class="ui message">
           <p>
-            {{ $t('components.library.FileUpload.localUploadMessage') }}
+            {{ $t('components.library.FileUpload.message.local.message') }}
           </p>
           <ul>
             <li v-if="library.privacy_level != 'me'">
-              {{ $t('components.library.FileUpload.localUploadCopyright') }}
+              {{ $t('components.library.FileUpload.message.local.copyright') }}
             </li>
             <li>
-              {{ $t('components.library.FileUpload.localUploadTag') }}&nbsp;
+              {{ $t('components.library.FileUpload.message.local.tag') }}&nbsp;
               <a
                 href="http://picard.musicbrainz.org/"
                 target="_blank"
-              >{{ $t('components.library.FileUpload.localUploadPicardLink') }}</a>
+              >{{ $t('components.library.FileUpload.link.picard') }}</a>
             </li>
             <li>
-              {{ $t('components.library.FileUpload.localUploadSupportedFormats') }}
+              {{ $t('components.library.FileUpload.message.local.format') }}
             </li>
           </ul>
         </div>
@@ -396,11 +396,11 @@ useEventListener(window, 'beforeunload', (event) => {
           @input-file="inputFile"
         >
           <i class="upload icon" />&nbsp;
-          {{ $t('components.library.FileUpload.uploadWidgetLabel') }}
+          {{ $t('components.library.FileUpload.label.uploadWidget') }}
           <br>
           <br>
           <i>
-            {{ $t('components.library.FileUpload.fileUploadSupportedFormats', {extensions: supportedExtensions.join(', ')}) }}
+            {{ $t('components.library.FileUpload.label.extensions', {extensions: supportedExtensions.join(', ')}) }}
           </i>
         </file-upload-widget>
       </div>
@@ -413,16 +413,16 @@ useEventListener(window, 'beforeunload', (event) => {
           <thead>
             <tr>
               <th class="ten wide">
-                {{ $t('components.library.FileUpload.filenameTableHeader') }}
+                {{ $t('components.library.FileUpload.table.upload.header.filename') }}
               </th>
               <th>
-                {{ $t('components.library.FileUpload.sizeTableHeader') }}
+                {{ $t('components.library.FileUpload.table.upload.header.size') }}
               </th>
               <th>
-                {{ $t('components.library.FileUpload.statusTableHeader') }}
+                {{ $t('components.library.FileUpload.table.upload.header.status') }}
               </th>
               <th>
-                {{ $t('components.library.FileUpload.actionsTableHeader') }}
+                {{ $t('components.library.FileUpload.table.upload.header.actions') }}
               </th>
             </tr>
             <tr v-if="retryableFiles.length > 1">
@@ -434,7 +434,7 @@ useEventListener(window, 'beforeunload', (event) => {
                   class="ui right floated small basic button"
                   @click.prevent="retry(retryableFiles)"
                 >
-                  {{ $t('components.library.FileUpload.retryButton') }}
+                  {{ $t('components.library.FileUpload.button.retry') }}
                 </button>
               </th>
             </tr>
@@ -464,7 +464,7 @@ useEventListener(window, 'beforeunload', (event) => {
                 >
                   <span
                     key="1"
-                  >{{ $t('components.library.FileUpload.uploadedStatusLabel') }}</span>
+                  >{{ $t('components.library.FileUpload.table.upload.status.uploaded') }}</span>
                 </span>
                 <span
                   v-else-if="file.active"
@@ -473,9 +473,9 @@ useEventListener(window, 'beforeunload', (event) => {
                   <span
                     key="2"
                   >
-                    {{ $t('components.library.FileUpload.uploadingStatusLabel') }}
+                    {{ $t('components.library.FileUpload.table.upload.status.uploading') }}
                   </span>
-                  {{ $t('components.library.FileUpload.uploadingProgress', {percent: parseFloat(file.progress ?? '0.00')}) }}
+                  {{ $t('components.library.FileUpload.table.upload.progress', {percent: parseFloat(file.progress ?? '0.00')}) }}
                 </span>
                 <span
                   v-else
@@ -484,7 +484,7 @@ useEventListener(window, 'beforeunload', (event) => {
                   <span
                     key="3"
                   >
-                    {{ $t('components.library.FileUpload.pendingStatusLabel') }}
+                    {{ $t('components.library.FileUpload.table.upload.status.pending') }}
                   </span>
                 </span>
               </td>
@@ -514,7 +514,7 @@ useEventListener(window, 'beforeunload', (event) => {
       </div>
       <div class="ui divider" />
       <h2 class="ui header">
-        {{ $t('components.library.FileUpload.serverUploadHeader') }}
+        {{ $t('components.library.FileUpload.header.server') }}
       </h2>
       <div
         v-if="fsErrors.length > 0"
@@ -522,7 +522,7 @@ useEventListener(window, 'beforeunload', (event) => {
         class="ui negative message"
       >
         <h3 class="header">
-          {{ $t('components.library.FileUpload.uploadFailureHeader') }}
+          {{ $t('components.library.FileUpload.header.failure') }}
         </h3>
         <ul class="list">
           <li
@@ -541,13 +541,13 @@ useEventListener(window, 'beforeunload', (event) => {
       />
       <template v-if="fsStatus && fsStatus.import">
         <h3 class="ui header">
-          {{ $t('components.library.FileUpload.importStatusHeader') }}
+          {{ $t('components.library.FileUpload.header.status') }}
         </h3>
         <p v-if="fsStatus.import.reference !== importReference">
-          {{ $t('components.library.FileUpload.previousImportStatusMessage') }}
+          {{ $t('components.library.FileUpload.description.previousImport') }}
         </p>
         <p v-else>
-          {{ $t('components.library.FileUpload.currentImportStatusMessage') }}
+          {{ $t('components.library.FileUpload.description.import') }}
         </p>
 
         <button
@@ -555,7 +555,7 @@ useEventListener(window, 'beforeunload', (event) => {
           class="ui button"
           @click="cancelFsScan"
         >
-          {{ $t('components.library.FileUpload.cancelButton') }}
+          {{ $t('components.library.FileUpload.button.cancel') }}
         </button>
         <fs-logs :data="fsStatus.import" />
       </template>

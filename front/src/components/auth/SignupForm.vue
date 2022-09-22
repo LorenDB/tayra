@@ -35,9 +35,9 @@ const logger = useLogger()
 const store = useStore()
 
 const labels = computed(() => ({
-  placeholder: t('components.auth.SignupForm.invitationCodePlaceholder'),
-  usernamePlaceholder: t('components.auth.SignupForm.usernamePlaceholder'),
-  emailPlaceholder: t('components.auth.SignupForm.emailPlaceholder')
+  placeholder: t('components.auth.SignupForm.placeholder.invitation'),
+  usernamePlaceholder: t('components.auth.SignupForm.placeholder.username'),
+  emailPlaceholder: t('components.auth.SignupForm.placeholder.email')
 }))
 
 const signupRequiresApproval = computed(() => props.signupApprovalEnabled ?? store.state.instance.settings.moderation.signup_approval_enabled.value)
@@ -88,14 +88,14 @@ fetchInstanceSettings()
   <div v-if="submitted">
     <div class="ui success message">
       <p v-if="signupRequiresApproval">
-        {{ $t('components.auth.SignupForm.awaitingReviewMessage') }}
+        {{ $t('components.auth.SignupForm.message.awaitingReview') }}
       </p>
       <p v-else>
-        {{ $t('components.auth.SignupForm.accountCreationSuccessMessage') }}
+        {{ $t('components.auth.SignupForm.message.accountCreated') }}
       </p>
     </div>
     <h2>
-      {{ $t('components.auth.SignupForm.loginHeader') }}
+      {{ $t('components.auth.SignupForm.header.login') }}
     </h2>
     <login-form
       button-classes="basic success"
@@ -111,13 +111,13 @@ fetchInstanceSettings()
       v-if="!$store.state.instance.settings.users.registration_enabled.value"
       class="ui message"
     >
-      {{ $t('components.auth.SignupForm.registrationClosedMessage') }}
+      {{ $t('components.auth.SignupForm.message.registrationClosed') }}
     </p>
     <p
       v-else-if="signupRequiresApproval"
       class="ui message"
     >
-      {{ $t('components.auth.SignupForm.requiresReviewMessage') }}
+      {{ $t('components.auth.SignupForm.message.requiresReview') }}
     </p>
     <template v-if="formCustomization?.help_text">
       <rendered-description
@@ -133,7 +133,7 @@ fetchInstanceSettings()
       class="ui negative message"
     >
       <h4 class="header">
-        {{ $t('components.auth.SignupForm.signupFailureMessage') }}
+        {{ $t('components.auth.SignupForm.header.signupFailure') }}
       </h4>
       <ul class="list">
         <li
@@ -145,7 +145,7 @@ fetchInstanceSettings()
       </ul>
     </div>
     <div class="required field">
-      <label for="username-field">{{ $t('components.auth.SignupForm.usernameFieldLabel') }}</label>
+      <label for="username-field">{{ $t('components.auth.SignupForm.label.username') }}</label>
       <input
         id="username-field"
         ref="username"
@@ -158,7 +158,7 @@ fetchInstanceSettings()
       >
     </div>
     <div class="required field">
-      <label for="email-field">{{ $t('components.auth.SignupForm.emailFieldLabel') }}</label>
+      <label for="email-field">{{ $t('components.auth.SignupForm.label.email') }}</label>
       <input
         id="email-field"
         ref="email"
@@ -170,7 +170,7 @@ fetchInstanceSettings()
       >
     </div>
     <div class="required field">
-      <label for="password-field">{{ $t('components.auth.SignupForm.passwordFieldLabel') }}</label>
+      <label for="password-field">{{ $t('components.auth.SignupForm.label.password') }}</label>
       <password-input
         v-model="payload.password1"
         field-id="password-field"
@@ -180,7 +180,7 @@ fetchInstanceSettings()
       v-if="!$store.state.instance.settings.users.registration_enabled.value"
       class="required field"
     >
-      <label for="invitation-code">{{ $t('components.auth.SignupForm.invitationCodeFieldLabel') }}</label>
+      <label for="invitation-code">{{ $t('components.auth.SignupForm.label.invitation') }}</label>
       <input
         id="invitation-code"
         v-model="payload.invitation"
@@ -217,7 +217,7 @@ fetchInstanceSettings()
       :class="['ui', buttonClasses, {'loading': isLoading}, ' right floated button']"
       type="submit"
     >
-      {{ $t('components.auth.SignupForm.createAccountButton') }}
+      {{ $t('components.auth.SignupForm.button.create') }}
     </button>
   </form>
 </template>

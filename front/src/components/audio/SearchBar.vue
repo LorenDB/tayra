@@ -50,12 +50,12 @@ onKeyboardShortcut(['ctrl', 'k'], () => (focused.value = true), true)
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  placeholder: t('components.audio.SearchBar.placeHolderLabel'),
-  searchContent: t('components.audio.SearchBar.searchContentLabel'),
-  artist: t('components.audio.SearchBar.artistLabel'),
-  album: t('components.audio.SearchBar.albumLabel'),
-  track: t('components.audio.SearchBar.trackLabel'),
-  tag: t('components.audio.SearchBar.tagLabel')
+  placeholder: t('components.audio.SearchBar.placeholder.search'),
+  searchContent: t('components.audio.SearchBar.label.search'),
+  artist: t('components.audio.SearchBar.label.artist'),
+  album: t('components.audio.SearchBar.label.album'),
+  track: t('components.audio.SearchBar.label.track'),
+  tag: t('components.audio.SearchBar.label.tag')
 }))
 
 const router = useRouter()
@@ -77,11 +77,11 @@ const blur = () => {
 const categories = computed(() => [
   {
     code: 'federation',
-    name: t('components.audio.SearchBar.federationCategory')
+    name: t('components.audio.SearchBar.label.category.federation')
   },
   {
     code: 'podcasts',
-    name: t('components.audio.SearchBar.podcastsCategory')
+    name: t('components.audio.SearchBar.label.category.podcasts')
   },
   {
     code: 'artists',
@@ -138,8 +138,8 @@ onMounted(() => {
     showNoResults: true,
     error: {
       // @ts-expect-error Semantic is broken
-      noResultsHeader: t('components.audio.SearchBar.noResultsHeader'),
-      noResults: t('components.audio.SearchBar.noResultsMessage')
+      noResultsHeader: t('components.audio.SearchBar.header.noResults'),
+      noResults: t('components.audio.SearchBar.empty.noResults')
     },
 
     onSelect (result, response) {
@@ -179,7 +179,7 @@ onMounted(() => {
           if (category.code === 'federation' && id) {
             resultsEmpty = false
             results[category.code]?.results.push({
-              title: t('components.audio.SearchBar.fediverseSearchLabel'),
+              title: t('components.audio.SearchBar.link.fediverse'),
               routerUrl: {
                 name: 'search',
                 query: { id }
@@ -190,7 +190,7 @@ onMounted(() => {
           if (category.code === 'podcasts' && id) {
             resultsEmpty = false
             results[category.code]?.results.push({
-              title: t('components.audio.SearchBar.rssSearchLabel'),
+              title: t('components.audio.SearchBar.link.rss'),
               routerUrl: {
                 name: 'search',
                 query: { id, type: 'rss' }
@@ -200,7 +200,7 @@ onMounted(() => {
 
           if (category.code === 'more') {
             results[category.code]?.results.push({
-              title: t('components.audio.SearchBar.moreResultsLabel'),
+              title: t('components.audio.SearchBar.link.more'),
               routerUrl: {
                 name: 'search',
                 query: { type: 'artists', q: query.value }

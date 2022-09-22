@@ -52,8 +52,8 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: t('components.manage.library.ArtistsTable.deleteActionLabel'),
-    confirmationMessage: t('components.manage.library.ArtistsTable.deleteActionConfirmation'),
+    label: t('components.manage.library.ArtistsTable.action.delete.label'),
+    confirmationMessage: t('components.manage.library.ArtistsTable.action.delete.warning'),
     isDangerous: true,
     allowAll: false,
     confirmColor: 'danger'
@@ -93,7 +93,7 @@ fetchData()
 const sharedLabels = useSharedLabels()
 const { t } = useI18n()
 const labels = computed(() => ({
-  searchPlaceholder: t('components.manage.library.ArtistsTable.searchPlaceholder')
+  searchPlaceholder: t('components.manage.library.ArtistsTable.placeholder.search')
 }))
 
 const getUrl = (artist: { channel?: number; id: number }) => {
@@ -108,7 +108,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="artists-serarch">{{ $t('components.manage.library.ArtistsTable.searchLabel') }}</label>
+          <label for="artists-serarch">{{ $t('components.manage.library.ArtistsTable.label.search') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="artists-search"
@@ -121,7 +121,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
           </form>
         </div>
         <div class="field">
-          <label for="artists-category">{{ $t('components.manage.library.ArtistsTable.categoryLabel') }}</label>
+          <label for="artists-category">{{ $t('components.manage.library.ArtistsTable.label.category') }}</label>
           <select
             id="artists-category"
             class="ui dropdown"
@@ -129,7 +129,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
             @change="addSearchToken('category', ($event.target as HTMLSelectElement).value)"
           >
             <option value="">
-              {{ $t('components.manage.library.ArtistsTable.allOption') }}
+              {{ $t('components.manage.library.ArtistsTable.option.all') }}
             </option>
             <option value="podcast">
               {{ sharedLabels.fields.content_category.choices.podcast }}
@@ -143,7 +143,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
           </select>
         </div>
         <div class="field">
-          <label for="artists-ordering">{{ $t('components.manage.library.ArtistsTable.orderingLabel') }}</label>
+          <label for="artists-ordering">{{ $t('components.manage.library.ArtistsTable.ordering.label') }}</label>
           <select
             id="artists-ordering"
             v-model="ordering"
@@ -159,17 +159,17 @@ const getUrl = (artist: { channel?: number; id: number }) => {
           </select>
         </div>
         <div class="field">
-          <label for="artists-ordering-direction">{{ $t('components.manage.library.ArtistsTable.orderingDirectionLabel') }}</label>
+          <label for="artists-ordering-direction">{{ $t('components.manage.library.ArtistsTable.ordering.direction.label') }}</label>
           <select
             id="artists-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              {{ $t('components.manage.library.ArtistsTable.ascendingOrdering') }}
+              {{ $t('components.manage.library.ArtistsTable.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              {{ $t('components.manage.library.ArtistsTable.descendingOrdering') }}
+              {{ $t('components.manage.library.ArtistsTable.ordering.direction.descending') }}
             </option>
           </select>
         </div>
@@ -192,19 +192,19 @@ const getUrl = (artist: { channel?: number; id: number }) => {
       >
         <template #header-cells>
           <th>
-            {{ $t('components.manage.library.ArtistsTable.nameTableHeader') }}
+            {{ $t('components.manage.library.ArtistsTable.table.artist.header.name') }}
           </th>
           <th>
-            {{ $t('components.manage.library.ArtistsTable.domainTableHeader') }}
+            {{ $t('components.manage.library.ArtistsTable.table.artist.header.domain') }}
           </th>
           <th>
-            {{ $t('components.manage.library.ArtistsTable.albumsTableHeader') }}
+            {{ $t('components.manage.library.ArtistsTable.table.artist.header.albums') }}
           </th>
           <th>
-            {{ $t('components.manage.library.ArtistsTable.tracksTableHeader') }}
+            {{ $t('components.manage.library.ArtistsTable.table.artist.header.tracks') }}
           </th>
           <th>
-            {{ $t('components.manage.library.ArtistsTable.creationDateTableHeader') }}
+            {{ $t('components.manage.library.ArtistsTable.table.artist.header.creationDate') }}
           </th>
         </template>
         <template
@@ -234,7 +234,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              {{ $t('components.manage.library.ArtistsTable.localLink') }}
+              {{ $t('components.manage.library.ArtistsTable.link.local') }}
             </a>
           </td>
           <td>
@@ -259,7 +259,7 @@ const getUrl = (artist: { channel?: number; id: number }) => {
       />
 
       <span v-if="result && result.results.length > 0">
-        {{ $t('components.manage.library.ArtistsTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
+        {{ $t('components.manage.library.ArtistsTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

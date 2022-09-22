@@ -52,8 +52,8 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: t('components.manage.library.TracksTable.deleteActionLabel'),
-    confirmationMessage: t('components.manage.library.TracksTable.deleteActionConfirmation'),
+    label: t('components.manage.library.TracksTable.action.delete.label'),
+    confirmationMessage: t('components.manage.library.TracksTable.action.delete.warning'),
     isDangerous: true,
     allowAll: false,
     confirmColor: 'danger'
@@ -92,7 +92,7 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('components.manage.library.TracksTable.searchPlaceholder')
+  searchPlaceholder: t('components.manage.library.TracksTable.placeholder.search')
 }))
 </script>
 
@@ -101,7 +101,7 @@ const labels = computed(() => ({
     <div class="ui inline form">
       <div class="fields">
         <div class="ui six wide field">
-          <label for="tracks-search">{{ $t('components.manage.library.TracksTable.searchLabel') }}</label>
+          <label for="tracks-search">{{ $t('components.manage.library.TracksTable.label.search') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="tracks-search"
@@ -114,7 +114,7 @@ const labels = computed(() => ({
           </form>
         </div>
         <div class="field">
-          <label for="tracks-ordering">{{ $t('components.manage.library.TracksTable.orderingLabel') }}</label>
+          <label for="tracks-ordering">{{ $t('components.manage.library.TracksTable.ordering.label') }}</label>
           <select
             id="tracks-ordering"
             v-model="ordering"
@@ -130,17 +130,17 @@ const labels = computed(() => ({
           </select>
         </div>
         <div class="field">
-          <label for="tracks-ordering-direction">{{ $t('components.manage.library.TracksTable.orderingDirectionLabel') }}</label>
+          <label for="tracks-ordering-direction">{{ $t('components.manage.library.TracksTable.ordering.direction.label') }}</label>
           <select
             id="tracks-ordering-direction"
             v-model="orderingDirection"
             class="ui dropdown"
           >
             <option value="+">
-              {{ $t('components.manage.library.TracksTable.ascendingOrdering') }}
+              {{ $t('components.manage.library.TracksTable.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              {{ $t('components.manage.library.TracksTable.descendingOrdering') }}
+              {{ $t('components.manage.library.TracksTable.ordering.direction.descending') }}
             </option>
           </select>
         </div>
@@ -163,22 +163,22 @@ const labels = computed(() => ({
       >
         <template #header-cells>
           <th>
-            {{ $t('components.manage.library.TracksTable.titleTableHeader') }}
+            {{ $t('components.manage.library.TracksTable.table.track.header.title') }}
           </th>
           <th>
-            {{ $t('components.manage.library.TracksTable.albumTableHeader') }}
+            {{ $t('components.manage.library.TracksTable.table.track.header.album') }}
           </th>
           <th>
-            {{ $t('components.manage.library.TracksTable.artistTableHeader') }}
+            {{ $t('components.manage.library.TracksTable.table.track.header.artist') }}
           </th>
           <th>
-            {{ $t('components.manage.library.TracksTable.domainTableHeader') }}
+            {{ $t('components.manage.library.TracksTable.table.track.header.domain') }}
           </th>
           <th>
-            {{ $t('components.manage.library.TracksTable.licenseTableHeader') }}
+            {{ $t('components.manage.library.TracksTable.table.track.header.license') }}
           </th>
           <th>
-            {{ $t('components.manage.library.TracksTable.creationDateTableHeader') }}
+            {{ $t('components.manage.library.TracksTable.table.track.header.creationDate') }}
           </th>
         </template>
         <template
@@ -232,7 +232,7 @@ const labels = computed(() => ({
               @click.prevent="addSearchToken('domain', scope.obj.domain)"
             >
               <i class="home icon" />
-              {{ $t('components.manage.library.TracksTable.localLink') }}
+              {{ $t('components.manage.library.TracksTable.link.local') }}
             </a>
           </td>
           <td>
@@ -265,7 +265,7 @@ const labels = computed(() => ({
       />
 
       <span v-if="result && result.results.length > 0">
-        {{ $t('components.manage.library.TracksTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
+        {{ $t('components.manage.library.TracksTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>
