@@ -117,7 +117,7 @@ SPECTACULAR_SETTINGS = {
             "description": "Read server with real content",
         },
         {
-            "url": "https://{domain}",
+            "url": "{protocol}://{domain}",
             "description": "Custom server",
             "variables": {
                 "domain": {
