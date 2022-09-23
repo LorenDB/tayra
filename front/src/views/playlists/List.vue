@@ -97,8 +97,8 @@ onMounted(() => $('.ui.dropdown').dropdown())
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  playlists: t('views.playlists.List.playlistsHeader'),
-  searchPlaceholder: t('views.playlists.List.searchPlaceholder')
+  playlists: t('views.playlists.List.header.playlists'),
+  searchPlaceholder: t('views.playlists.List.placeholder.search')
 }))
 
 const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value].sort((a, b) => a - b)))
@@ -108,14 +108,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
   <main v-title="labels.playlists">
     <section class="ui vertical stripe segment">
       <h2 class="ui header">
-        {{ $t('views.playlists.List.browsePlaylistsHeader') }}
+        {{ $t('views.playlists.List.header.browse') }}
       </h2>
       <template v-if="$store.state.auth.authenticated">
         <button
           class="ui success button"
           @click="$store.commit('playlists/showModal', true)"
         >
-          {{ $t('views.playlists.List.manageButton') }}
+          {{ $t('views.playlists.List.button.manage') }}
         </button>
         <div class="ui hidden divider" />
       </template>
@@ -125,7 +125,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="fields">
           <div class="field">
-            <label for="playlists-search">{{ $t('views.playlists.List.searchLabel') }}</label>
+            <label for="playlists-search">{{ $t('views.playlists.List.label.search') }}</label>
             <div class="ui action input">
               <input
                 id="playlists-search"
@@ -137,14 +137,14 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
               <button
                 class="ui icon button"
                 type="submit"
-                :aria-label="t('views.playlists.List.searchLabel')"
+                :aria-label="t('views.playlists.List.button.search')"
               >
                 <i class="search icon" />
               </button>
             </div>
           </div>
           <div class="field">
-            <label for="playlists-ordering">{{ $t('views.playlists.List.orderingLabel') }}</label>
+            <label for="playlists-ordering">{{ $t('views.playlists.List.ordering.label') }}</label>
             <select
               id="playlists-ordering"
               v-model="ordering"
@@ -160,22 +160,22 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             </select>
           </div>
           <div class="field">
-            <label for="playlists-ordering-direction">{{ $t('views.playlists.List.orderingDirectionLabel') }}</label>
+            <label for="playlists-ordering-direction">{{ $t('views.playlists.List.ordering.direction.label') }}</label>
             <select
               id="playlists-ordering-direction"
               v-model="orderingDirection"
               class="ui dropdown"
             >
               <option value="+">
-                {{ $t('views.playlists.List.ascendingOrdering') }}
+                {{ $t('views.playlists.List.ordering.direction.ascending') }}
               </option>
               <option value="-">
-                {{ $t('views.playlists.List.descendingOrdering') }}
+                {{ $t('views.playlists.List.ordering.direction.descending') }}
               </option>
             </select>
           </div>
           <div class="field">
-            <label for="playlists-results">{{ $t('views.playlists.List.resultsPerPage') }}</label>
+            <label for="playlists-results">{{ $t('views.playlists.List.pagination.results') }}</label>
             <select
               id="playlists-results"
               v-model="paginateBy"
@@ -204,7 +204,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       >
         <div class="ui icon header">
           <i class="list icon" />
-          {{ $t('views.playlists.List.emptyState') }}
+          {{ $t('views.playlists.List.empty.noResults') }}
         </div>
         <button
           v-if="$store.state.auth.authenticated"
@@ -212,7 +212,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
           @click="$store.commit('playlists/chooseTrack', null)"
         >
           <i class="list icon" />
-          {{ $t('views.playlists.List.createPlaylistButton') }}
+          {{ $t('views.playlists.List.button.create') }}
         </button>
       </div>
       <div class="ui center aligned basic segment">

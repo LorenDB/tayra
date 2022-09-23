@@ -27,7 +27,7 @@ onMounted(async () => {
         <div class="ui active inverted dimmer">
           <div class="ui text loader">
             <h2>
-              {{ $t('views.auth.Callback.loggingInHeader') }}
+              {{ $t('views.auth.Callback.header.loggingIn') }}
             </h2>
           </div>
         </div>

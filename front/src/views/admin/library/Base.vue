@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const labels = computed(() => ({
   title: t('views.admin.library.Base.title'),
-  secondaryMenu: t('views.admin.library.Base.secondaryMenu')
+  secondaryMenu: t('views.admin.library.Base.menu.secondary')
 }))
 </script>
 
@@ -23,49 +23,49 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.library.edits'}"
       >
-        {{ $t('views.admin.library.Base.editsLink') }}
+        {{ $t('views.admin.library.Base.link.edits') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.channels'}"
       >
-        {{ $t('views.admin.library.Base.channelsLink') }}
+        {{ $t('views.admin.library.Base.link.channels') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.artists'}"
       >
-        {{ $t('views.admin.library.Base.artistsLink') }}
+        {{ $t('views.admin.library.Base.link.artists') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.albums'}"
       >
-        {{ $t('views.admin.library.Base.albumsLink') }}
+        {{ $t('views.admin.library.Base.link.albums') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.tracks'}"
       >
-        {{ $t('views.admin.library.Base.tracksLink') }}
+        {{ $t('views.admin.library.Base.link.tracks') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.libraries'}"
       >
-        {{ $t('views.admin.library.Base.librariesLink') }}
+        {{ $t('views.admin.library.Base.link.libraries') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.uploads'}"
       >
-        {{ $t('views.admin.library.Base.uploadsLink') }}
+        {{ $t('views.admin.library.Base.link.uploads') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.library.tags'}"
       >
-        {{ $t('views.admin.library.Base.tagsLink') }}
+        {{ $t('views.admin.library.Base.link.tags') }}
       </router-link>
     </nav>
     <router-view :key="$route.fullPath" />

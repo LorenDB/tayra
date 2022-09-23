@@ -6,7 +6,7 @@ const { t } = useI18n()
 
 const labels = computed(() => ({
   manageUsers: t('views.admin.users.Base.title'),
-  secondaryMenu: t('views.admin.users.Base.secondaryMenu')
+  secondaryMenu: t('views.admin.users.Base.menu.secondary')
 }))
 </script>
 
@@ -24,13 +24,13 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'manage.users.users.list'}"
       >
-        {{ $t('views.admin.users.Base.usersLink') }}
+        {{ $t('views.admin.users.Base.link.users') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.users.invitations.list'}"
       >
-        {{ $t('views.admin.users.Base.invitationsLink') }}
+        {{ $t('views.admin.users.Base.link.invitations') }}
       </router-link>
     </nav>
     <router-view :key="$route.fullPath" />

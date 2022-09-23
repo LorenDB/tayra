@@ -15,8 +15,8 @@ const emit = defineEmits<Events>()
 const { t } = useI18n()
 
 const labels = computed(() => ({
-  placeholder: t('views.content.remote.ScanForm.placeholder'),
-  submitLibrarySearch: t('views.content.remote.ScanForm.submitLibrarySearch')
+  placeholder: t('views.content.remote.ScanForm.placeholder.url'),
+  submitLibrarySearch: t('views.content.remote.ScanForm.button.submit')
 }))
 
 const errors = ref([] as string[])
@@ -49,7 +49,7 @@ const scan = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        {{ $t('views.content.remote.ScanForm.failureHeader') }}
+        {{ $t('views.content.remote.ScanForm.header.failure') }}
       </h4>
       <ul class="list">
         <li
@@ -61,7 +61,7 @@ const scan = async () => {
       </ul>
     </div>
     <div class="ui field">
-      <label for="library-search">{{ $t('views.content.remote.ScanForm.searchLabel') }}</label>
+      <label for="library-search">{{ $t('views.content.remote.ScanForm.label.search') }}</label>
       <div :class="['ui', 'action', {loading: isLoading}, 'input']">
         <input
           id="library-search"

@@ -27,16 +27,16 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n()
 const labels = computed(() => ({
-  accounts: t('views.admin.CommonList.accountsLabel'),
-  albums: t('views.admin.CommonList.albumsLabel'),
-  artists: t('views.admin.CommonList.artistsLabel'),
-  channels: t('views.admin.CommonList.channelsLabel'),
-  invitations: t('views.admin.CommonList.invitationsLabel'),
-  libraries: t('views.admin.CommonList.librariesLabel'),
-  tags: t('views.admin.CommonList.tagsLabel'),
-  tracks: t('views.admin.CommonList.tracksLabel'),
-  uploads: t('views.admin.CommonList.uploadsLabel'),
-  users: t('views.admin.CommonList.usersLabel')
+  accounts: t('views.admin.CommonList.title.accounts'),
+  albums: t('views.admin.CommonList.title.albums'),
+  artists: t('views.admin.CommonList.title.artists'),
+  channels: t('views.admin.CommonList.title.channels'),
+  invitations: t('views.admin.CommonList.title.invitations'),
+  libraries: t('views.admin.CommonList.title.libraries'),
+  tags: t('views.admin.CommonList.title.tags'),
+  tracks: t('views.admin.CommonList.title.tracks'),
+  uploads: t('views.admin.CommonList.title.uploads'),
+  users: t('views.admin.CommonList.title.users')
 }))
 
 const title = computed(() => labels.value[props.type])

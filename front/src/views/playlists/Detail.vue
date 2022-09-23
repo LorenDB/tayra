@@ -93,7 +93,7 @@ const deletePlaylist = async () => {
           <div class="content">
             {{ playlist.name }}
             <div class="sub header">
-              {{ $t('views.playlists.Detail.trackCount', {count: tracks_count, username: playlist.user.username}) }}
+              {{ $t('views.playlists.Detail.meta.tracks', {count: tracks_count, username: playlist.user.username}) }}
               <br>
               <duration :seconds="playlist.duration" />
             </div>
@@ -107,7 +107,7 @@ const deletePlaylist = async () => {
               :is-playable="playlist.is_playable"
               :tracks="tracks"
             >
-              {{ $t('views.playlists.Detail.playAllButton') }}
+              {{ $t('views.playlists.Detail.button.playAll') }}
             </play-button>
           </div>
           <div class="ui buttons">
@@ -118,10 +118,10 @@ const deletePlaylist = async () => {
             >
               <i class="pencil icon" />
               <template v-if="edit">
-                {{ $t('views.playlists.Detail.stopEditButton') }}
+                {{ $t('views.playlists.Detail.button.stopEdit') }}
               </template>
               <template v-else>
-                {{ $t('views.playlists.Detail.editButton') }}
+                {{ $t('views.playlists.Detail.button.edit') }}
               </template>
             </button>
           </div>
@@ -132,7 +132,7 @@ const deletePlaylist = async () => {
               @click="showEmbedModal = !showEmbedModal"
             >
               <i class="code icon" />
-              {{ $t('views.playlists.Detail.embedButton') }}
+              {{ $t('views.playlists.Detail.button.embed') }}
             </button>
             <dangerous-button
               v-if="$store.state.auth.profile && playlist.user.id === $store.state.auth.profile.id"
@@ -140,20 +140,20 @@ const deletePlaylist = async () => {
               :action="deletePlaylist"
             >
               <i class="trash icon" />
-              {{ $t('views.playlists.Detail.deleteButton') }}
+              {{ $t('views.playlists.Detail.button.delete') }}
               <template #modal-header>
                 <p>
-                  {{ $t('views.playlists.Detail.deleteModalHeader', {playlist: playlist.name}) }}
+                  {{ $t('views.playlists.Detail.modal.delete.header', {playlist: playlist.name}) }}
                 </p>
               </template>
               <template #modal-content>
                 <p>
-                  {{ $t('views.playlists.Detail.deleteModalMessage') }}
+                  {{ $t('views.playlists.Detail.modal.delete.content.warning') }}
                 </p>
               </template>
               <template #modal-confirm>
                 <div>
-                  {{ $t('views.playlists.Detail.deleteModalConfirm') }}
+                  {{ $t('views.playlists.Detail.button.confirm') }}
                 </div>
               </template>
             </dangerous-button>
@@ -164,7 +164,7 @@ const deletePlaylist = async () => {
           v-model:show="showEmbedModal"
         >
           <h4 class="header">
-            {{ $t('views.playlists.Detail.embedModalHeader') }}
+            {{ $t('views.playlists.Detail.modal.embed.header') }}
           </h4>
           <div class="scrolling content">
             <div class="description">
@@ -176,7 +176,7 @@ const deletePlaylist = async () => {
           </div>
           <div class="actions">
             <button class="ui basic deny button">
-              {{ $t('views.playlists.Detail.cancelButton') }}
+              {{ $t('views.playlists.Detail.button.cancel') }}
             </button>
           </div>
         </semantic-modal>
@@ -191,7 +191,7 @@ const deletePlaylist = async () => {
       </template>
       <template v-else-if="tracks.length > 0">
         <h2>
-          {{ $t('views.playlists.Detail.tracksHeader') }}
+          {{ $t('views.playlists.Detail.header.tracks') }}
         </h2>
         <track-table
           :display-position="true"
@@ -205,14 +205,14 @@ const deletePlaylist = async () => {
       >
         <div class="ui icon header">
           <i class="list icon" />
-          {{ $t('views.playlists.Detail.emptyState') }}
+          {{ $t('views.playlists.Detail.empty.noTracks') }}
         </div>
         <button
           class="ui success icon labeled button"
           @click="edit = !edit"
         >
           <i class="pencil icon" />
-          {{ $t('views.playlists.Detail.editButton') }}
+          {{ $t('views.playlists.Detail.button.edit') }}
         </button>
       </div>
     </section>

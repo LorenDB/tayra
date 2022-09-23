@@ -46,7 +46,7 @@ const libraryCreated = (library: Library) => {
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        {{ $t('views.content.libraries.Home.loadingLibraries') }}
+        {{ $t('views.content.libraries.Home.loading.libraries') }}
       </div>
     </div>
     <div
@@ -54,11 +54,11 @@ const libraryCreated = (library: Library) => {
       class="ui text container"
     >
       <h1 class="ui header">
-        {{ $t('views.content.libraries.Home.ownLibrariesHeader') }}
+        {{ $t('views.content.libraries.Home.header.libraries') }}
       </h1>
 
       <p v-if="libraries.length == 0">
-        {{ $t('views.content.libraries.Home.emptyState') }}
+        {{ $t('views.content.libraries.Home.empty.noLibrary') }}
       </p>
       <a
         :aria-expanded="!hiddenForm"
@@ -73,7 +73,7 @@ const libraryCreated = (library: Library) => {
           v-else
           class="minus icon"
         />
-        {{ $t('views.content.libraries.Home.createLibraryLink') }}
+        {{ $t('views.content.libraries.Home.link.createLibrary') }}
       </a>
       <library-form
         v-if="!hiddenForm"

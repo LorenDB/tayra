@@ -3233,787 +3233,1378 @@
     "views": {
         "Notifications": {
             "title": "Notifications",
-            "messagesHeader": "Your messages",
-            "instanceSupportHeader": "Support this Funkwhale pod",
-            "instanceReminderDelay": "Remind me in:",
-            "instanceReminder30": "30 days",
-            "instanceReminder60": "60 days",
-            "instanceReminder90": "90 days",
-            "instanceReminderNever": "Never",
-            "instanceReminderSubmitButton": "Got it!",
-            "funkwhaleSupportHeader": "Do you like Funkwhale?",
-            "funkwhaleSupportMessage": "We noticed you've been here for a while. If Funkwhale is useful to you, we could use your help to make it even better!",
-            "funkwhaleSupportDonateLink": "Donate",
-            "funkwhaleSupportHelpLink": "Discover other ways to help",
-            "funkwhaleReminderDelay": "Remind me in:",
-            "funkwhaleReminder30": "30 days",
-            "funkwhaleReminder60": "60 days",
-            "funkwhaleReminder90": "90 days",
-            "funkwhaleReminderNever": "Never",
-            "funkwhaleReminderSubmitButton": "Got it!",
-            "notificationsHeader": "Your notifications",
-            "showReadNotificationsCheckbox": "Show read notifications",
-            "markAllReadButton": "Mark all as read",
-            "loadingNotifications": "Loading notifications…",
-            "noNotifications": "No notification to show"
+            "header": {
+                "messages": "Your messages",
+                "instanceSupport": "Support this Funkwhale pod",
+                "funkwhaleSupport": "Do you like Funkwhale?",
+                "notifications": "Your notifications"
+            },
+            "label": {
+                "reminder": "Remind me in:",
+                "showRead": "Show read notifications"
+            },
+            "message": {
+                "funkwhaleSupport": "We noticed you've been here for a while. If Funkwhale is useful to you, we could use your help to make it even better!"
+            },
+            "option": {
+                "delay": {
+                    "30": "30 days",
+                    "60": "60 days",
+                    "90": "90 days",
+                    "never": "Never"
+                }
+            },
+            "button": {
+                "submit": "Got it!",
+                "read": "Mark all as read"
+            },
+            "link": {
+                "donate": "Donate",
+                "help": "Discover other ways to help"
+            },
+            "loading": {
+                "notifications": "Loading notifications…"
+            },
+            "empty": {
+                "notifications": "No notification to show"
+            }
         },
         "Search": {
-            "artistsLabel": "Artists",
-            "albumsLabel": "Albums",
-            "tracksLabel": "Tracks",
-            "playlistsLabel": "Playlists",
-            "radiosLabel": "Radios",
-            "tagsLabel": "Tags",
-            "podcastsLabel": "Podcasts",
-            "seriesLabel": "Series",
-            "rssTitle": "Subscribe to a podcast RSS feed",
-            "remoteTitle": "Search a remote object",
-            "searchTitle": "Search",
-            "submitSearchLabel": "Submit Search Query",
-            "searchHeader": "Search"
+            "header": {
+                "search": "Search",
+                "rss": "Subscribe to a podcast RSS feed",
+                "remote": "Search a remote object"
+            },
+            "label": {
+                "artists": "Artists",
+                "albums": "Albums",
+                "tracks": "Tracks",
+                "playlists": "Playlists",
+                "radios": "Radios",
+                "tags": "Tags",
+                "podcasts": "Podcasts",
+                "series": "Series"
+            },
+            "button": {
+                "submit": "Submit Search Query"
+            }
         },
         "admin": {
             "ChannelDetail": {
-                "statsWarning": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object",
-                "localLabel": "Local",
-                "localProfileLink": "Open local profile",
-                "djangoLink": "View in Django's admin",
-                "refreshButton": "Refresh from remote server",
-                "openRemoteButton": "Open remote profile",
-                "deleteButton": "Delete",
-                "deleteModalHeader": "Delete this channel?",
-                "deleteModalMessage": "The channel will be removed, as well as associated uploads, tracks, and albums. This action is irreversible.",
-                "channelDataHeader": "Channel data",
-                "nameLabel": "Name",
-                "categoryLabel": "Category",
-                "accountLabel": "Account",
-                "domainLabel": "Domain",
-                "descriptionLabel": "Description",
-                "urlLabel": "URL",
-                "rssLabel": "RSS feed",
-                "activityHeader": "Activity",
-                "firstSeenLabel": "First seen",
-                "listeningsLabel": "Listenings",
-                "favoritedLabel": "Favorited tracks",
-                "playlistsLabel": "Playlists",
-                "linkedReportsLabel": "Linked reports",
-                "editsLabel": "Edits",
-                "audioContentHeader": "Audio content;",
-                "cachedSizeLabel": "Cached size",
-                "totalSizeLabel": "Total size",
-                "uploadsLabel": "Uploads",
-                "albumsLabel": "Albums",
-                "tracksLabel": "Tracks"
+                "warning": {
+                    "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+                },
+                "label": {
+                    "local": "Local"
+                },
+                "link": {
+                    "localProfile": "Open local profile",
+                    "django": "View in Django's admin"
+                },
+                "button": {
+                    "refresh": "Refresh from remote server",
+                    "openRemote": "Open remote profile",
+                    "delete": "Delete"
+                },
+                "modal": {
+                    "delete": {
+                        "header": "Delete this channel?",
+                        "content": {
+                            "warning": "The channel will be removed, as well as associated uploads, tracks, and albums. This action is irreversible."
+                        }
+                    }
+                },
+                "header": {
+                    "channelData": "Channel data",
+                    "activity": "Activity",
+                    "audioContent": "Audio content"
+                },
+                "table": {
+                    "channelData": {
+                        "name": "Name",
+                        "category": "Category",
+                        "account": "Account",
+                        "domain": "Domain",
+                        "description": "Description",
+                        "url": "URL",
+                        "rss": "RSS feed"
+                    },
+                    "activity": {
+                        "firstSeen": "First seen",
+                        "listenings": "Listenings",
+                        "favorited": "Favorited tracks",
+                        "playlists": "Playlists",
+                        "linkedReports": "Linked reports",
+                        "edits": "Edits"
+                    },
+                    "audioContent": {
+                        "cachedSize": "Cached size",
+                        "totalSize": "Total size",
+                        "uploads": "Uploads",
+                        "albums": "Albums",
+                        "tracks": "Tracks"
+                    }
+                }
             },
             "CommonList": {
-                "accountsLabel": "Accounts",
-                "albumsLabel": "Albums",
-                "artistsLabel": "Artists",
-                "channelsLabel": "Channels",
-                "invitationsLabel": "Invitations",
-                "librariesLabel": "Libraries",
-                "tagsLabel": "Tags",
-                "tracksLabel": "Tracks",
-                "uploadsLabel": "Uploads",
-                "usersLabel": "Users"
+                "title": {
+                    "accounts": "Accounts",
+                    "albums": "Albums",
+                    "artists": "Artists",
+                    "channels": "Channels",
+                    "invitations": "Invitations",
+                    "libraries": "Libraries",
+                    "tags": "Tags",
+                    "tracks": "Tracks",
+                    "uploads": "Uploads",
+                    "users": "Users"
+                }
             },
             "Settings": {
-                "settingsLabel": "Instance Settings",
-                "instanceInfoLabel": "Instance Information",
-                "signupsLabel": "Sign-ups",
-                "securityLabel": "Security",
-                "musicLabel": "Music",
-                "channelsLabel": "Channels",
-                "playlistsLabel": "Playlists",
-                "moderationLabel": "Moderation",
-                "federationLabel": "Federation",
-                "subsonicLabel": "Subsonic",
-                "statsLabel": "Statistics",
-                "uiLabel": "User Interface",
-                "sectionsHeader": "Sections"
+                "header": {
+                    "settings": "Instance Settings",
+                    "instanceInfo": "Instance Information",
+                    "signups": "Sign-ups",
+                    "security": "Security",
+                    "music": "Music",
+                    "channels": "Channels",
+                    "playlists": "Playlists",
+                    "moderation": "Moderation",
+                    "federation": "Federation",
+                    "subsonic": "Subsonic",
+                    "stats": "Statistics",
+                    "ui": "User Interface",
+                    "sections": "Sections"
+                }
             },
             "library": {
                 "AlbumDetail": {
-                    "statsWarning": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object",
-                    "localLabel": "Local",
-                    "localProfileLink": "Open local profile",
-                    "djangoLink": "View in Django's admin",
-                    "musicbrainzLink": "Open on MusicBrainz",
-                    "remoteRefreshButton": "Refresh from remote server",
-                    "remoteProfileLink": "Open remote profile",
-                    "editButton": "Edit",
-                    "deleteButton": "Delete",
-                    "deleteModalHeader": "Delete this album?",
-                    "deleteModalMessage": "The album will be deleted, as well as associated uploads, tracks, favorites and listening history. This action is irreversible.",
-                    "albumDataHeader": "Album data",
-                    "titleLabel": "Title",
-                    "artistLabel": "Artist",
-                    "domainLabel": "Domain",
-                    "descriptionLabel": "Description",
-                    "activityHeader": "Activity;",
-                    "firstSeenLabel": "First seen",
-                    "listeningsLabel": "Listenings",
-                    "favoritedLabel": "Favorited tracks",
-                    "playlistsLabel": "Playlists",
-                    "linkedReportsLabel": "Linked reports",
-                    "editsLabel": "Edits",
-                    "audioContentHeader": "Audio content",
-                    "cachedSizeLabel": "Cached size",
-                    "totalSizeLabel": "Total size",
-                    "librariesLabel": "Libraries",
-                    "uploadsLabel": "Uploads",
-                    "tracksLabel": "Tracks"
+                    "warning": {
+                        "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+                    },
+                    "header": {
+                        "local": "Local",
+                        "albumData": "Album data",
+                        "activity": "Activity",
+                        "audioContent": "Audio content"
+                    },
+                    "link": {
+                        "localProfile": "Open local profile",
+                        "django": "View in Django's admin",
+                        "musicbrainz": "Open on MusicBrainz",
+                        "remoteProfile": "Open remote profile",
+                        "artist": "Artist",
+                        "domain": "Domain",
+                        "reports": "Linked reports",
+                        "edits": "Edits",
+                        "libraries": "Libraries",
+                        "uploads": "Uploads",
+                        "tracks": "Tracks"
+                    },
+                    "button": {
+                        "remoteRefresh": "Refresh from remote server",
+                        "edit": "Edit",
+                        "delete": "Delete"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "Delete this album?",
+                            "content": {
+                                "warning": "The album will be deleted, as well as associated uploads, tracks, favorites and listening history. This action is irreversible."
+                            }
+                        }
+                    },
+                    "table": {
+                        "album": {
+                            "title": "Title",
+                            "description": "Description"
+                        },
+                        "activity": {
+                            "firstSeen": "First seen",
+                            "listenings": "Listenings",
+                            "favorited": "Favorited tracks",
+                            "playlists": "Playlists"
+                        },
+                        "audioContent": {
+                            "cachedSize": "Cached size",
+                            "totalSize": "Total size"
+                        }
+                    }
                 },
                 "ArtistDetail": {
-                    "statsWarning":"Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object",
-                    "localLabel": "Local",
-                    "localProfileLink": "Open local profile",
-                    "djangoLink": "View in Django's admin",
-                    "musicbrainzLink": "Open on MusicBrainz",
-                    "remoteRefreshButton": "Refresh from remote server",
-                    "remoteProfileLink": "Open remote profile",
-                    "editButton": "Edit",
-                    "deleteButton": "Delete",
-                    "deleteModalHeader": "Delete this artist?",
-                    "deleteModalMessage": "The artist will be deleted, as well as associated uploads, tracks, favorites and listening history. This action is irreversible.",
-                    "artistDataHeader": "Artist data",
-                    "nameLabel": "Name",
-                    "categoryLabel": "Category",
-                    "domainLabel": "Domain",
-                    "descriptionLabel": "Description",
-                    "activityHeader": "Activity",
-                    "firstSeenLabel": "First seen",
-                    "listeningsLabel": "Listenings",
-                    "favoritedLabel": "Favorited tracks",
-                    "playlistsLabel": "Playlists",
-                    "linkedReportsLabel": "Linked reports",
-                    "editsLabel": "Edits",
-                    "audioContentHeader": "Audio content",
-                    "cachedSizeLabel": "Cached size",
-                    "totalSizeLabel": "Total size",
-                    "librariesLabel": "Libraries",
-                    "uploadsLabel": "Uploads",
-                    "albumsLabel": "Albums",
-                    "tracksLabel": "Tracks"
+                    "warning": {
+                        "stats":"Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+                    },
+                    "header": {
+                        "local": "Local",
+                        "artistData": "Artist data",
+                        "activity": "Activity",
+                        "audioContent": "Audio content"
+                    },
+                    "link": {
+                        "localProfile": "Open local profile",
+                        "django": "View in Django's admin",
+                        "musicbrainz": "Open on MusicBrainz",
+                        "remoteProfile": "Open remote profile",
+                        "category": "Category",
+                        "domain": "Domain",
+                        "reports": "Linked reports",
+                        "edits": "Edits",
+                        "libraries": "Libraries",
+                        "uploads": "Uploads",
+                        "albums": "Albums",
+                        "tracks": "Tracks"
+                    },
+                    "button": {
+                        "remoteRefresh": "Refresh from remote server",
+                        "edit": "Edit",
+                        "delete": "Delete"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "Delete this artist?",
+                            "content": {
+                                "warning": "The artist will be deleted, as well as associated uploads, tracks, favorites and listening history. This action is irreversible."
+                            }
+                        }
+                    },
+                    "table": {
+                        "artist": {
+                            "name": "Name",
+                            "description": "Description"
+                        },
+                        "activity": {
+                            "firstSeen": "First seen",
+                            "listenings": "Listenings",
+                            "favorited": "Favorited tracks",
+                            "playlists": "Playlists"
+                        },
+                        "audioContent": {
+                            "cachedSize": "Cached size",
+                            "totalSize": "Total size"
+                        }
+                    }
                 },
                 "Base": {
                     "title": "Manage Library",
-                    "secondaryMenu": "Secondary menu",
-                    "editsLink": "Edits",
-                    "channelsLink": "Channels",
-                    "artistsLink": "Artists",
-                    "albumsLink": "Albums",
-                    "tracksLink": "Tracks",
-                    "librariesLink": "Libraries",
-                    "uploadsLink": "Uploads",
-                    "tagsLink": "Tags"
+                    "menu": {
+                        "secondary": "Secondary menu"
+                    },
+                    "link": {
+                        "edits": "Edits",
+                        "channels": "Channels",
+                        "artists": "Artists",
+                        "albums": "Albums",
+                        "tracks": "Tracks",
+                        "libraries": "Libraries",
+                        "uploads": "Uploads",
+                        "tags": "Tags"
+                    }
                 },
                 "EditsList": {
                     "title": "Edits",
-                    "libraryEditsHeader": "Library edits"
+                    "header": {
+                        "edits": "Library edits"
+                    }
                 },
                 "LibraryDetail": {
-                    "statsWarning": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object",
-                    "localLabel": "Local",
-                    "djangoLink": "View in Django's admin",
-                    "remoteProfileLink": "Open remote profile",
-                    "deleteButton": "Delete",
-                    "deleteModalHeader": "Delete this library?",
-                    "deleteModalMessage": "The library will be deleted, as well as associated uploads, tracks, favorites and listening history. This action is irreversible.",
-                    "libraryDataHeader": "Library data",
-                    "nameLabel": "Name",
-                    "visibilityLabel": "Visibility",
-                    "accountLabel": "Account",
-                    "domainLabel": "Domain",
-                    "descriptionLabel": "Description",
-                    "activityHeader": "Activity",
-                    "firstSeenLabel": "First seen",
-                    "followersLabel": "Followers",
-                    "linkedReportsLabel": "Linked reports",
-                    "audioContentHeader": "Audio content",
-                    "cachedSizeLabel": "Cached size",
-                    "totalSizeLabel": "Total size",
-                    "artistsLabel": "Artists",
-                    "albumsLabel": "Albums",
-                    "tracksLabel": "Tracks",
-                    "uploadsLabel": "Uploads"
+                    "warning": {
+                        "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+                    },
+                    "header": {
+                        "local": "Local",
+                        "libraryData": "Library data",
+                        "activity": "Activity",
+                        "audioContent": "Audio content"
+                    },
+                    "link": {
+                        "django": "View in Django's admin",
+                        "remoteProfile": "Open remote profile",
+                        "visibility": "Visibility",
+                        "account": "Account",
+                        "reports": "Linked reports",
+                        "domain": "Domain",
+                        "artists": "Artists",
+                        "albums": "Albums",
+                        "tracks": "Tracks",
+                        "uploads": "Uploads"
+                    },
+                    "button": {
+                        "delete": "Delete"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "Delete this library?",
+                            "content": {
+                                "warning": "The library will be deleted, as well as associated uploads, tracks, favorites and listening history. This action is irreversible."
+                            }
+                        }
+                    },
+                    "table": {
+                        "library": {
+                            "name": "Name",
+                            "description": "Description"
+                        },
+                        "activity": {
+                            "firstSeen": "First seen",
+                            "followers": "Followers"  
+                        },
+                        "audioContent": {
+                            "cachedSize": "Cached size",
+                            "totalSize": "Total size"
+
+                        }
+                    }
                 },
                 "TagDetail": {
-                    "localProfileLink": "Open local profile",
-                    "djangoLink": "View in Django's admin",
-                    "deleteButton": "Delete",
-                    "deleteModalHeader": "Delete this tag?",
-                    "deleteModalMessage": "The tag will be removed and unlinked from any existing entity. This action is irreversible.",
-                    "tagDataHeader": "Tag data",
-                    "nameLabel": "Name",
-                    "activityHeader": "Activity",
-                    "firstSeenLabel": "First seen",
-                    "audioContentHeader": "Audio content",
-                    "artistsLabel": "Artists",
-                    "albumsLabel": "Albums",
-                    "tracksLabel": "Tracks"
+                    "header": {
+                        "tagData": "Tag data",
+                        "activity": "Activity",
+                        "audioContent": "Audio content"
+                    },
+                    "link": {
+                        "localProfile": "Open local profile",
+                        "django": "View in Django's admin",
+                        "artists": "Artists",
+                        "albums": "Albums",
+                        "tracks": "Tracks"
+                    },
+                    "button": {
+                        "delete": "Delete"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "Delete this tag?",
+                            "content": {
+                                "warning": "The tag will be removed and unlinked from any existing entity. This action is irreversible."  
+                            }
+
+                        }
+                    },
+                    "table": {
+                        "tag": {
+                            "name": "Name"
+                        },
+                        "activity": {
+                            "firstSeen": "First seen"
+                        }
+                    }
                 },
                 "TrackDetail": {
-                    "statsWarning": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object",
-                    "localLabel": "Local",
-                    "localProfileLink": "Open local profile",
-                    "djangoLink": "View in Django's admin",
-                    "musicbrainzLink": "Open on MusicBrainz",
-                    "remoteRefreshButton": "Refresh from remote server",
-                    "remoteProfileLink": "Open remote profile",
-                    "editButton": "Edit",
-                    "deleteButton": "Delete",
-                    "deleteModalHeader": "Delete this track?",
-                    "deleteModalMessage": "The track will be deleted, as well as associated uploads, favorites and listening history. This action is irreversible.",
-                    "trackDataHeader": "Track data",
-                    "titleLabel": "Title",
-                    "albumLabel": "Album",
-                    "artistLabel": "Artist",
-                    "albumArtistLabel": "Album artist",
-                    "positionLabel": "Position",
-                    "discNumberLabel": "Disc number",
-                    "copyrightLabel": "Copyright",
-                    "licenseLabel": "License",
-                    "domainLabel": "Domain",
-                    "descriptionLabel": "Description",
-                    "activityHeader": "Activity",
-                    "firstSeenLabel": "First seen",
-                    "listeningsLabel": "Listenings",
-                    "favoritedLabel": "Favorited tracks",
-                    "playlistsLabel": "Playlists",
-                    "linkedReportsLabel": "Linked reports",
-                    "editsLabel": "Edits",
-                    "cachedSizeLabel": "Cached size",
-                    "totalSizeLabel": "Total size",
-                    "librariesLabel": "Libraries",
-                    "uploadsLabel": "Uploads"
+                    "warning": {
+                        "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+                    },
+                    "header": {
+                        "local": "Local",
+                        "trackData": "Track data",
+                        "activity": "Activity"
+                    },
+                    "link": {
+                        "localProfile": "Open local profile",
+                        "django": "View in Django's admin",
+                        "musicbrainz": "Open on MusicBrainz",
+                        "remoteProfile": "Open remote profile",
+                        "album": "Album",
+                        "artist": "Artist",
+                        "domain": "Domain",
+                        "reports": "Linked reports",
+                        "edits": "Edits",
+                        "libraries": "Libraries",
+                        "uploads": "Uploads",
+                        "albumArtist": "Album artist"
+                    },
+                    "button": {
+                        "remoteRefresh": "Refresh from remote server",
+                        "edit": "Edit",
+                        "delete": "Delete"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "Delete this track?",
+                            "content": {
+                                "warning": "The track will be deleted, as well as associated uploads, favorites and listening history. This action is irreversible."
+                            }
+                        }
+                    },
+                    "table": {
+                        "track": {
+                            "title": "Title",
+                            "position": "Position",
+                            "discNumber": "Disc number",
+                            "copyright": "Copyright",
+                            "license": "License",
+                            "description": "Description"
+                        },
+                        "activity": {
+                            "firstSeen": "First seen",
+                            "listenings": "Listenings",
+                            "favorited": "Favorited tracks",
+                            "playlists": "Playlists"
+                        },
+                        "trackData": {
+                            "cachedSize": "Cached size",
+                            "totalSize": "Total size"
+                        }
+                    }
                 },
                 "UploadDetail": {
-                    "localLabel": "Local",
-                    "djangoLink": "View in Django's admin",
-                    "remoteProfileLink": "Open remote profile",
-                    "downloadButton": "Download",
-                    "deleteButton": "Delete",
-                    "deleteModalHeader": "Delete this upload?",
-                    "deleteModalMessage": "The upload will be removed. This action is irreversible.",
-                    "uploadDataHeader": "Upload data",
-                    "nameLabel": "Name",
-                    "visibilityLabel": "Visibility",
-                    "accountLabel": "Account",
-                    "domainLabel": "Domain",
-                    "importStatusLabel": "Import status",
-                    "libraryLabel": "Library",
-                    "activityHeader": "Activity",
-                    "firstSeenLabel": "First seen",
-                    "accessedDateLabel": "Accessed date",
-                    "notApplicable": "N/A",
-                    "audioContentHeader": "Audio content",
-                    "trackLabel": "Track",
-                    "cachedSizeLabel": "Cached size",
-                    "sizeLabel": "Size",
-                    "bitrateLabel": "Bitrate",
-                    "bitrateValue": "{bitrate}/s",
-                    "durationLabel": "Duration",
-                    "typeLabel": "Type"
+                    "header": {
+                        "local": "Local",
+                        "uploadData": "Upload data",
+                        "activity": "Activity",
+                        "audioContent": "Audio content"  
+                    },
+                    "button": {
+                        "download": "Download",
+                        "delete": "Delete"                        
+                    },
+                    "link": {
+                        "django": "View in Django's admin",
+                        "remoteProfile": "Open remote profile",
+                        "visibility": "Visibility",
+                        "account": "Account",
+                        "domain": "Domain",
+                        "importStatus": "Import status",
+                        "library": "Library",
+                        "type": "Type"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "Delete this upload?",
+                            "content": {
+                                "warning": "The upload will be removed. This action is irreversible."
+                            }
+                        }
+                    },
+                    "table": {
+                        "upload": {
+                            "name": "Name"
+                        },
+                        "activity": {
+                            "firstSeen": "First seen",
+                            "accessedDate": "Accessed date"
+                        },
+                        "audioContent": {
+                            "track": "Track",
+                            "cachedSize": "Cached size",
+                            "size": "Size",
+                            "bitrate": {
+                                "label": "Bitrate",
+                                "value": "{bitrate}/s"
+                            },
+                            "duration": "Duration"
+                        }
+                    },
+                    "notApplicable": "N/A"
                 }
             },
             "moderation": {
                 "AccountsDetail": {
-                    "statsWarning": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object",
-                    "uploadQuota": "Determine how much content the user can upload. Leave empty to use the default value of the instance.",
-                    "libraryPermission": "Library",
-                    "moderationPermission": "Moderation",
-                    "settingsPermission": "Settings",
-                    "localAccountLabel": "Local account",
-                    "openProfileLink": "Open profile",
-                    "djangoLink": "View in Django's admin",
-                    "remoteProfileLink": "Open remote profile",
-                    "noPolicyHeader": "You don't have any rule in place for this account.",
-                    "policyDescription": "Moderation policies help you control how your instance interact with a given domain or account",
-                    "addPolicyButton": "Add a moderation policy",
-                    "activePolicyHeader": "This domain is subject to specific moderation rules",
-                    "accountDataHeader": "Account data",
-                    "usernameLabel": "Username",
-                    "domainLabel": "Domain",
-                    "displayNameLabel": "Display name",
-                    "emailLabel": "Email address",
-                    "loginStatusLabel": "Login status",
-                    "enabledStatus": "Enabled",
-                    "disabledStatus": "Disabled",
-                    "permissionsLabel": "Permissions",
-                    "userTypeLabel": "Type",
-                    "lastCheckedLabel": "Last checked",
-                    "notApplicable": "N/A",
-                    "signupDateLabel": "Sign-up date",
-                    "lastActivityLabel": "Last activity",
-                    "activityHeader": "Activty",
-                    "firstSeenLabel": "First seen",
-                    "emittedMessagesLabel": "Emitted messages",
-                    "receivedFollowsLabel": "Received library follows",
-                    "emittedFollowsLabel": "Emitted library follows",
-                    "linkedReportsLabel": "Linked reports",
-                    "requestsLabel": "Requests",
-                    "audioContentHeader": "Audio content",
-                    "cachedSizeLabel": "Cached size",
-                    "uploadQuotaLabel": "Upload quota",
-                    "megabyteLabel": "MB",
-                    "totalSizeLabel": "Total size",
-                    "channelsLabel": "Channels",
-                    "librariesLabel": "Libraries",
-                    "uploadsLabel": "Uploads",
-                    "artistsLabel": "Artists",
-                    "albumsLabel": "Albums",
-                    "tracksLabel": "Tracks"
+                    "warning": {
+                        "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+                    },
+                    "tooltip": {
+                        "uploadQuota": "Determine how much content the user can upload. Leave empty to use the default value of the instance."
+                    },
+                    "option": {
+                        "permission": {
+                            "library": "Library",
+                            "moderation": "Moderation",
+                            "settings": "Settings"
+                        }
+                    },
+                    "header": {
+                        "localAccount": "Local account",
+                        "noPolicy": "You don't have any rule in place for this account.",
+                        "activePolicy": "This domain is subject to specific moderation rules",
+                        "accountData": "Account data",
+                        "activity": "Activty",
+                        "audioContent": "Audio content"
+                    },
+                    "link": {
+                        "openProfile": "Open profile",
+                        "django": "View in Django's admin",
+                        "remoteProfile": "Open remote profile",
+                        "domain": "Domain",
+                        "linkedReports": "Linked reports",
+                        "requests": "Requests",
+                        "channels": "Channels",
+                        "libraries": "Libraries",
+                        "uploads": "Uploads",
+                        "artists": "Artists",
+                        "albums": "Albums",
+                        "tracks": "Tracks"
+                    },
+                    "description": {
+                        "policy": "Moderation policies help you control how your instance interact with a given domain or account"
+                    },
+                    "button": {
+                        "addPolicy": "Add a moderation policy"
+                    },
+                    "table": {
+                        "accountData": {
+                            "username": "Username",
+                            "displayName": "Display name",
+                            "email": "Email address",
+                            "loginStatus": {
+                                "label": "Login status",
+                                "enabled": "Enabled",
+                                "disabled": "Disabled"
+                            },
+                            "permissions": "Permissions",
+                            "userType": "Type",
+                            "lastChecked": "Last checked",
+                            "signupDate": "Sign-up date",
+                            "lastActivity": "Last activity"
+                        },
+                        "activity": {
+                            "firstSeen": "First seen",
+                            "emittedMessages": "Emitted messages",
+                            "receivedFollows": "Received library follows",
+                            "emittedFollows": "Emitted library follows"
+                        },
+                        "audioContent": {
+                            "cachedSize": "Cached size",
+                            "uploadQuota": "Upload quota",
+                            "megabyte": "MB",
+                            "totalSize": "Total size"
+                        }
+                    },
+                    "notApplicable": "N/A"
                 },
                 "Base": {
-                    "moderation": "Moderation",
-                    "secondaryMenu": "Secondary menu",
-                    "reportsLink": "Reports",
-                    "userRequestsLink": "User Requests",
-                    "domainsLink": "Domains",
-                    "accountsLink": "Accounts"
+                    "title": "Moderation",
+                    "menu": {
+                        "secondary": "Secondary menu"
+                    },
+                    "link": {
+                        "reports": "Reports",
+                        "userRequests": "User Requests",
+                        "domains": "Domains",
+                        "accounts": "Accounts"
+                    }
                 },
                 "DomainsDetail": {
-                    "statsWarning": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object",
-                    "websiteLink": "Open website",
-                    "djangoLink": "View in Django's admin",
-                    "removeFromAllowList": "Remove from allow-list",
-                    "addToAllowList": "Add to allow-list",
-                    "noPolicyHeader": "You don't have any rule in place for this domain.",
-                    "policyDescription": "Moderation policies help you control how your instance interact with a given domain or account",
-                    "addPolicyButton": "Add a moderation policy",
-                    "activePolicyHeader": "This domain is subject to specific moderation rules",
-                    "instanceDataHeader": "Instance data",
-                    "inAllowListLabel": "Is present on allow-list",
-                    "inAllowListTrue": "Yes",
-                    "inAllowListFalse": "No",
-                    "lastCheckedLabel": "Last checked",
-                    "notApplicable": "N/A",
-                    "softwareLabel": "Software",
-                    "softwareValue": "{name} ({version})",
-                    "domainNameLabel": "Name",
-                    "totalUsersLabel": "Total users",
-                    "nodeInfoStatusLabel": "Status",
-                    "nodeInfoFailureMessage": "Error while fetching node info",
-                    "refreshNodeInfoButton": "Refresh node info",
-                    "activityHeader": "Activty",
-                    "firstSeenLabel": "First seen",
-                    "knownAccountsLink": "Known accounts",
-                    "emittedMessagesLabel": "Emitted messages",
-                    "receivedFollowsLabel": "Received library follows",
-                    "emittedFollowsLabel": "Emitted library follows",
-                    "audioContentHeader": "Audio content",
-                    "cachedSizeLabel": "Cached size",
-                    "totalSizeLabel": "Total size",
-                    "channelsLabel": "Channels",
-                    "librariesLabel": "Libraries",
-                    "uploadsLabel": "Uploads",
-                    "artistsLabel": "Artists",
-                    "albumsLabel": "Albums",
-                    "tracksLabel": "Tracks"
+                    "warning": {
+                        "stats": "Statistics are computed from known activity and content on your instance, and do not reflect general activity for this object"
+                    },
+                    "link": {
+                        "website": "Open website",
+                        "django": "View in Django's admin",
+                        "knownAccounts": "Known accounts",
+                        "channels": "Channels",
+                        "libraries": "Libraries",
+                        "uploads": "Uploads",
+                        "artists": "Artists",
+                        "albums": "Albums",
+                        "tracks": "Tracks"
+                    },
+                    "button": {
+                        "removeFromAllowList": "Remove from allow-list",
+                        "addToAllowList": "Add to allow-list",
+                        "addPolicy": "Add a moderation policy",
+                        "refreshNodeInfo": "Refresh node info"
+                    },
+                    "header": {
+                        "noPolicy": "You don't have any rule in place for this domain.",
+                        "activePolicy": "This domain is subject to specific moderation rules",
+                        "instanceData": "Instance data",
+                        "activity": "Activty",
+                        "audioContent": "Audio content"
+                    },
+                    "description": {
+                        "policy": "Moderation policies help you control how your instance interact with a given domain or account"
+                    },
+                    "table": {
+                        "instanceData": {
+                            "inAllowList": {
+                                "label": "Is present on allow-list",
+                                "true": "Yes",
+                                "false": "No"
+                            },
+                            "lastChecked": "Last checked",
+                            "software": {
+                                "label": "Software",
+                                "value": "{name} ({version})"
+                            },
+                            "domainName": "Name",
+                            "totalUsers": "Total users",
+                            "nodeInfoStatus": {
+                                "label": "Status",
+                                "value": "Error while fetching node info"
+                            }
+                        },
+                        "activity": {
+                            "firstSeen": "First seen",
+                            "emittedMessages": "Emitted messages",
+                            "receivedFollows": "Received library follows",
+                            "emittedFollows": "Emitted library follows"
+                        },
+                        "audioContent": {
+                            "cachedSize": "Cached size",
+                            "totalSize": "Total size"
+                        }
+                    },
+                    "notApplicable": "N/A"
                 },
                 "DomainsList": {
                     "title": "Domains",
-                    "failureHeader": "Error while creating domain",
-                    "addDomainLabel": "Add a domain",
-                    "addToAllowListLabel": "Add to allow-list",
-                    "addButton": "Add"
+                    "header": {
+                        "domains": "Domains",
+                        "failure": "Error while creating domain"
+                    },
+                    "label": {
+                        "addDomain": "Add a domain",
+                        "addToAllowList": "Add to allow-list"
+                    },
+                    "button": {
+                        "add": "Add"
+                    }
                 },
                 "ReportsList": {
                     "title": "Reports",
-                    "searchPlaceholder": "Search by account, summary, domain…",
-                    "searchLabel": "Search",
-                    "statusLabel": "Status",
-                    "allOption": "All",
-                    "resolvedStatus": "Resolved",
-                    "unresolvedStatus": "Unresolved",
-                    "orderingLabel": "Ordering",
-                    "orderingDirectionLabel": "Order",
-                    "ascendingOrdering": "Ascending",
-                    "descendingOrdering": "Descending"
+                    "header": {
+                        "reports": "Reports"
+                    },
+                    "placeholder": {
+                        "search": "Search by account, summary, domain…"
+                    },
+                    "label": {
+                        "search": "Search",
+                        "status": "Status"
+                    },
+                    "option": {
+                        "status": {
+                            "all": "All",
+                            "resolved": "Resolved",
+                            "unresolved": "Unresolved"
+                        }
+                    },
+                    "ordering": {
+                        "label": "Ordering",
+                        "direction": {
+                            "label": "Order",
+                            "ascending": "Ascending",
+                            "descending": "Descending"
+                        }
+                    }
                 },
                 "RequestsList": {
                     "title": "User Requests",
-                    "searchPlaceholder": "Search by username",
-                    "searchLabel": "Search",
-                    "statusLabel": "Status",
-                    "allOption": "All",
-                    "pendingStatus": "Pending",
-                    "approvedStatus": "Approved",
-                    "refusedStatus": "Refused",
-                    "orderingLabel": "Ordering",
-                    "orderingDirectionLabel": "Order",
-                    "ascendingOrdering": "Ascending",
-                    "descendingOrdering": "Descending"
+                    "placeholder": {
+                        "search": "Search by username"
+                    },
+                    "header": {
+                        "userRequests": "User Requests"
+                    },
+                    "label": {
+                        "search": "Search",
+                        "status": "Status"
+                    },
+                    "option": {
+                        "status": {
+                            "all": "All",
+                            "pending": "Pending",
+                            "approved": "Approved",
+                            "refused": "Refused"
+                        }
+                    },
+                    "ordering": {
+                        "label": "Ordering",
+                        "direction": {
+                            "label": "Order",
+                            "ascending": "Ascending",
+                            "descending": "Descending"
+                        }
+                    }
                 }
             },
             "users": {
                 "Base": {
                     "title": "Manage users",
-                    "secondaryMenu": "Secondary menu",
-                    "usersLink": "Users",
-                    "invitationsLink": "Invitations"
+                    "menu": {
+                        "secondary": "Secondary menu"
+                    },
+                    "link": {
+                        "users": "Users",
+                        "invitations": "Invitations"
+                    }
                 }
             }
         },
         "auth": {
             "Callback": {
-                "loggingInHeader": "Logging in…"
+                "header": {
+                    "loggingIn": "Logging in…"
+                }
             },
             "EmailConfirm": {
-                "confirm": "Confirm your e-mail address",
-                "confirmFailureHeader": "Could not confirm your e-mail address",
-                "confirmationCodeLabel": "Confirmation code",
-                "backToLoginLink": "Return to login",
-                "confirmSuccessHeader": "E-mail address confirmed",
-                "confirmSuccessMessage": "You can now use the service without limitations",
-                "goToLoginLink": "Proceed to login"
+                "title": "Confirm your e-mail address",
+                "header": {
+                    "failure": "Could not confirm your e-mail address",
+                    "success": "E-mail address confirmed"
+                },
+                "label": {
+                    "confirmationCode": "Confirmation code"
+                },
+                "link": {
+                    "back": "Return to login",
+                    "login": "Proceed to login"
+                },
+                "message": {
+                    "success": "You can now use the service without limitations"
+                }
             },
             "Login": {
                 "title": "Log in",
-                "loginHeader": "Log in to your Funkwhale account"
+                "header": {
+                    "login": "Log in to your Funkwhale account"
+                }
             },
             "PasswordReset": {
-                "placeholder": "Enter the e-mail address linked to your account",
                 "title": "Reset your password",
-                "resetFailureHeader": "Error while asking for a password reset",
-                "resetFormDescription": "Use this form to request a password reset. We will send an e-mail to the given address with instructions to reset your password.",
-                "emailLabel": "Account's e-mail address",
-                "backToLoginLink": "Back to login",
-                "requestResetButton": "Ask for a password reset"
+                "placeholder": {
+                    "email": "Enter the e-mail address linked to your account"
+                },
+                "header": {
+                    "reset": "Reset your password",
+                    "failure": "Error while asking for a password reset"
+                },
+                "help": {
+                    "form": "Use this form to request a password reset. We will send an e-mail to the given address with instructions to reset your password."
+                },
+                "label": {
+                    "email": "Account's e-mail address"
+                },
+                "link": {
+                    "back": "Back to login"
+                },
+                "button": {
+                    "requestReset": "Ask for a password reset"
+                }
             },
             "PasswordResetConfirm": {
                 "title": "Change your password",
-                "changeFailureHeader": "Error while changing your password",
-                "newPasswordLabel": "New password",
-                "backToLoginLink": "Back to login",
-                "updatePasswordButton": "Update your password",
-                "requestSentMessage": "If the e-mail address provided in the previous step is valid and linked to a user account, you should receive an e-mail with reset instructions in the next couple of minutes.",
-                "changeSuccessHeader": "Password updated successfully",
-                "changeSuccessMessage": "Your password has been updated successfully.",
-                "goToLoginLink": "Proceed to login"
+                "header": {
+                    "failure": "Error while changing your password",
+                    "success": "Password updated successfully"
+                },
+                "message": {
+                    "success": "Your password has been updated successfully.",
+                    "requestSent": "If the e-mail address provided in the previous step is valid and linked to a user account, you should receive an e-mail with reset instructions in the next couple of minutes."
+                },
+                "link": {
+                    "back": "Back to login",
+                    "login": "Proceed to login"
+                },
+                "label": {
+                    "newPassword": "New password"
+                },
+                "button": {
+                    "update": "Update your password"
+                }
             },
             "Plugins": {
                 "title": "Manage plugins"                
             },
             "ProfileActivity": {
-                "recentlyListened": "Recently listened",
-                "recentlyFavorited": "Recently favorited",
-                "playlistsHeader": "Playlists"
+                "header": {
+                    "recentlyListened": "Recently listened",
+                    "recentlyFavorited": "Recently favorited",
+                    "playlists": "Playlists"
+                }
             },
             "ProfileBase": {
                 "title": "{username}'s profile",
-                "domainViewLink": "View on {domain}",
-                "moderationLink": "Open in moderation interface",
-                "ownUserLabel": "This is you!",
-                "overviewLink": "Overview",
-                "activityLink": "Activity"
+                "link": {
+                    "domainView": "View on {domain}",
+                    "moderation": "Open in moderation interface",
+                    "overview": "Overview",
+                    "activity": "Activity"
+                },
+                "label": {
+                    "self": "This is you!"
+                }
             },
             "ProfileOverview": {
-                "channelsHeader": "Channels",
-                "addNewLink": "Add New",
-                "librariesHeader": "User Libraries",
-                "sharedLibraries": "This user shared the following libraries",
-                "createChannelModalHeader": "Create channel",
-                "podcastChannelHeader": "Podcast channel",
-                "artistChannelHeader": "Artist channel",
-                "cancelButton": "Cancel",
-                "previousButton": "Previous step",
-                "nextButton": "Next step",
-                "createChannelButton": "Create channel"
+                "header": {
+                    "libraries": "User Libraries",
+                    "channels": "Channels",
+                    "sharedLibraries": "This user shared the following libraries"
+                },
+                "modal": {
+                    "createChannel": {
+                        "header": "Create channel",
+                        "podcast": {
+                            "header": "Podcast channel"
+                        },
+                        "artist": {
+                            "header": "Artist channel"
+                        }
+                    }
+                },
+                "link": {
+                    "addNew": "Add New"
+                },
+                "button": {
+                    "cancel": "Cancel",
+                    "previous": "Previous step",
+                    "next": "Next step",
+                    "createChannel": "Create channel"
+                }
             },
             "Signup": {
                 "title": "Sign up",
-                "createAccountHeader": "Create a Funkwhale account"
+                "header": {
+                    "createAccount": "Create a Funkwhale account"
+                }
             }
         },
         "channels": {
             "DetailBase": {
                 "title": "Channel",
-                "episodeCount": "No episodes | {count} episode | {count} episodes",
-                "trackCount": "No tracks | {count} track | {count} tracks",
-                "subscriberCount": "No subscribers | {count} subscriber | {count} subscribers",
-                "listeningsCount": "No listenings | {count} listening | {count} listenings",
-                "subscribeModalHeader": "Subscribe to this channel",
-                "subscribeOnFunkwhale": "Subscribe on Funkwhale",
-                "subscribeRss": "Subscribe via RSS",
-                "copyUrl": "Copy paste the following URL in your favorite podcatcher:",
-                "subscribeOnFediverse": "Subscribe on the Fediverse",
-                "subscribeOnFediverseDescription": "If you're using Mastodon or other fediverse applications, you can subscribe to this account:",
-                "cancelButton": "Cancel",
-                "embedButton": "Embed",
-                "domainViewLink": "View on {domain}",
-                "editButton": "Edit…",
-                "deleteButton": "Delete…",
-                "deleteModalHeader": "Delete this Channel?",
-                "deleteModalMessage": "The channel will be deleted, as well as any related files and data. This action is irreversible.",
-                "deleteModalConfirm": "Delete",
-                "moderationLink": "Open in moderation interface",
-                "mirroredLink": "Mirrored from {domain}",
-                "uploadButton": "Upload",
-                "playButton": "Play",
-                "embedModalHeader": "Embed this artist work on your website",
-                "podcastChannelHeader": "Podcast channel",
-                "artistChannelHeader": "Artist channel",
-                "updateChannelButton": "Update channel",
-                "channelOverview": "Overview",
-                "channelEpisodes": "All episodes",
-                "channelTracks": "Tracks"
+                "meta": {
+                    "episodes": "No episodes | {count} episode | {count} episodes",
+                    "tracks": "No tracks | {count} track | {count} tracks",
+                    "subscribers": "No subscribers | {count} subscriber | {count} subscribers",
+                    "listenings": "No listenings | {count} listening | {count} listenings"
+                },
+                "header": {
+                    "podcastChannel": "Podcast channel",
+                    "artistChannel": "Artist channel"
+                },
+                "modal": {
+                    "subscribe": {
+                        "header": "Subscribe to this channel",
+                        "funkwhale": {
+                            "header": "Subscribe on Funkwhale"
+                        },
+                        "rss": {
+                            "header": "Subscribe via RSS",
+                            "content": {
+                                "help": "Copy paste the following URL in your favorite podcatcher:"
+                            }
+                        },
+                        "fediverse": {
+                            "header": "Subscribe on the Fediverse",
+                            "content": {
+                                "help": "If you're using Mastodon or other fediverse applications, you can subscribe to this account:"
+                            }
+                        }
+                    },
+                    "delete": {
+                        "header": "Delete this Channel?",
+                        "content": {
+                            "warning": "The channel will be deleted, as well as any related files and data. This action is irreversible."
+                        }
+                    },
+                    "embed": {
+                        "header": "Embed this artist work on your website"
+                    }
+                },
+                "button": {
+                    "cancel": "Cancel",
+                    "embed": "Embed",
+                    "edit": "Edit…",
+                    "delete": "Delete…",
+                    "upload": "Upload",
+                    "play": "Play",
+                    "updateChannel": "Update channel",
+                    "confirm": "Delete"
+                },
+                "link": {
+                    "domainView": "View on {domain}",
+                    "moderation": "Open in moderation interface",
+                    "mirrored": "Mirrored from {domain}",
+                    "channelOverview": "Overview",
+                    "channelEpisodes": "All episodes",
+                    "channelTracks": "Tracks"
+                }
             },
             "DetailOverview": {
-                "uploadsSuccessHeader": "Uploads published successfully",
-                "uploadsProgress": "Processed uploads: {finished}/{total}",
-                "uploadsFailureHeader": "Some uploads couldn't be published",
-                "skippedUploadsLink": "View skipped uploads",
-                "erroredUploadsLink": "View errored uploads",
-                "uploadsProcessingHeader": "Uploads are being processed",
-                "uploadsProcessingMessage": "Your uploads are being processed by Funkwhale and will be live very soon.",
-                "latestEpisodes": "Latest episodes",
-                "latestTracks": "Latest tracks",
-                "seriesHeader": "Series",
-                "albumsHeader": "Albums",
-                "addAlbumLink": "Add new"
+                "header": {
+                    "uploadsSuccess": "Uploads published successfully",
+                    "uploadsFailure": "Some uploads couldn't be published",
+                    "uploadsProcessing": "Uploads are being processed",
+                    "latestEpisodes": "Latest episodes",
+                    "latestTracks": "Latest tracks",
+                    "series": "Series",
+                    "albums": "Albums"
+                },
+                "meta": {
+                    "progress": "Processed uploads: {finished}/{total}"
+                },
+                "link": {
+                    "skippedUploads": "View skipped uploads",
+                    "erroredUploads": "View errored uploads",
+                    "addAlbum": "Add new"
+                },
+                "message": {
+                    "processing": "Your uploads are being processed by Funkwhale and will be live very soon."
+                }
             },
             "SubscriptionsList": {
                 "title": "Subscribed Channels",
-                "searchPlaceholder": "Filter by name…",
-                "addNewLink": "Add new",
-                "subscriptionModalHeader": "Subscription",
-                "cancelButton": "Cancel",
-                "subscribeButton": "Subscribe"
+                "placeholder": {
+                    "search": "Filter by name…"
+                },
+                "link": {
+                    "addNew": "Add new"
+                },
+                "modal": {
+                    "subscription": {
+                        "header": "Subscription"
+                    }
+                },
+                "button": {
+                    "cancel": "Cancel",
+                    "subscribe": "Subscribe"
+                }
             }
         },
         "content": {
             "Base": {
                 "title": "Add content",
-                "secondaryMenu": "Secondary menu",
-                "librariesLink": "Libraries",
-                "tracksLink": "Tracks"
+                "menu": {
+                    "secondary": "Secondary menu"
+                },
+                "link": {
+                    "libraries": "Libraries",
+                    "tracks": "Tracks"
+                }
             },
             "Home": {
                 "title": "Add and manage content",
-                "uploadQuota": "This instance offers up to {quota} of storage space for every user.",
-                "channelHeader": "Publish your work in a channel",
-                "channelDescription": "If you are a musician or a podcaster, channels are designed for you!",
-                "channelDescriptionContinued": "Share your work publicly and get subscribers on Funkwhale, the Fediverse or any podcasting application.",
-                "getStartedButton": "Get started",
-                "libraryUploadHeader": "Upload third-party content in a library",
-                "libraryUploadDescription": "Upload your personal music library to Funkwhale to enjoy it from anywhere and share it with friends and family.",
-                "followLibrariesHeader": "Follow remote libraries",
-                "followLibrariesDescription": "Follow libraries from other users to get access to new music. Public libraries can be followed immediately, while following a private library requires approval from its owner."
+                "help": {
+                    "uploadQuota": "This instance offers up to {quota} of storage space for every user."
+                },
+                "header": {
+                    "channel": "Publish your work in a channel",
+                    "upload": "Upload third-party content in a library",
+                    "follow": "Follow remote libraries"
+                },
+                "description": {
+                    "channel": {
+                        "1": "If you are a musician or a podcaster, channels are designed for you!",
+                        "2": "Share your work publicly and get subscribers on Funkwhale, the Fediverse or any podcasting application."
+                    },
+                    "upload": "Upload your personal music library to Funkwhale to enjoy it from anywhere and share it with friends and family.",
+                    "follow": "Follow libraries from other users to get access to new music. Public libraries can be followed immediately, while following a private library requires approval from its owner."
+                },
+                "button": {
+                    "start": "Get started"
+                }
             },
             "libraries": {
                 "Card": {
-                    "sizeLabel": "Total size of the files in this library",
-                    "trackCount":"No tracks | {count} track | {count} tracks",
-                    "uploadButton": "Upload",
-                    "detailsLink": "Library Details"
+                    "label": {
+                        "size": "Total size of the files in this library"
+                    },
+                    "meta": {
+                        "tracks":"No tracks | {count} track | {count} tracks"
+                    },
+                    "button": {
+                        "upload": "Upload"
+                    },
+                    "link": {
+                        "details": "Library Details"
+                    }
                 },
                 "FilesTable": {
-                    "deleteLabel": "Delete",
-                    "restartImportLabel": "Restart import",
-                    "searchPlaceholder": "Search by domain, title, artist, album…",
-                    "showStatus": "Show information about the upload status for this track",
-                    "searchLabel": "Search",
-                    "importStatusLabel": "Import status",
-                    "allOption": "All",
-                    "draftStatus": "Draft",
-                    "pendingStatus": "Pending",
-                    "skippedStatus": "Skipped",
-                    "failedStatus": "Failed",
-                    "finishedStatus": "Finished",
-                    "orderingLabel": "Ordering",
-                    "orderingDirectionLabel": "Ordering direction",
-                    "ascendingOrdering": "Ascending",
-                    "descendingOrdering": "Descending",
-                    "emptyState": "No tracks have been added to this libray yet",
-                    "titleTableHeader": "Title",
-                    "artistTableHeader": "Artist",
-                    "albumTableHeader": "Album",
-                    "uploadDateTableHeader": "Upload date",
-                    "importStatusTableHeader": "Import status",
-                    "durationTableHeader": "Duration",
-                    "sizeTableHeader": "Size",
-                    "notApplicable": "N/A",
-                    "resultsDisplay":"Showing results {start}-{end} on {total}"
+                    "action": {
+                        "delete": "Delete",
+                        "restartImport": "Restart import"
+                    },
+                    "placeholder": {
+                        "search": "Search by domain, title, artist, album…"
+                    },
+                    "button": {
+                        "showStatus": "Show information about the upload status for this track"
+                    },
+                    "label": {
+                        "search": "Search",
+                        "importStatus": "Import status"
+                    },
+                    "option": {
+                        "status": {
+                            "all": "All",
+                            "draft": "Draft",
+                            "pending": "Pending",
+                            "skipped": "Skipped",
+                            "failed": "Failed",
+                            "finished": "Finished"
+                        }
+                    },
+                    "ordering": {
+                        "label": "Ordering",
+                        "direction": {
+                            "label": "Ordering direction",
+                            "ascending": "Ascending",
+                            "descending": "Descending"
+                        }
+                    },
+                    "empty": {
+                        "noTracks": "No tracks have been added to this libray yet"
+                    },
+                    "table": {
+                        "file": {
+                            "header": {
+                                "title": "Title",
+                                "artist": "Artist",
+                                "album": "Album",
+                                "uploadDate": "Upload date",
+                                "importStatus": "Import status",
+                                "duration": "Duration",
+                                "size": "Size"
+                            }
+                        }
+                    },
+                    "pagination": {
+                        "results": "Showing results {start}-{end} on {total}"
+                    },
+                    "notApplicable": "N/A"
                 },
                 "Form": {
-                    "descriptionPlaceholder": "This library contains my personal music, I hope you like it.",
-                    "namePlaceholder": "My awesome library",
-                    "libraryUpdateMessage": "Library updated",
-                    "libraryCreateMessage": "Library created",
-                    "libraryDeleteMessage": "LIbrary deleted",
-                    "libraryHelp": "Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family.",
-                    "failureHeader": "Error",
-                    "nameLabel": "Name",
-                    "descriptionLabel" :"Description",
-                    "visibilityLabel": "Visibility",
-                    "visibilityDescription": "You are able to share your library with other people, regardless of its visibilty.",
-                    "updateButton": "Update library",
-                    "createButton": "Create library",
-                    "deleteButton": "Delete",
-                    "deleteModalHeader": "Delete this library?",
-                    "deleteModalMessage": "The library and all its tracks will be deleted. This can not be undone.",
-                    "deleteModalConfirm": "Delete library"
+                    "placeholder": {
+                        "description": "This library contains my personal music, I hope you like it.",
+                        "name": "My awesome library"
+                    },
+                    "message": {
+                        "libraryUpdated": "Library updated",
+                        "libraryCreated": "Library created",
+                        "libraryDeleted": "LIbrary deleted"
+                    },
+                    "description": {
+                        "library": "Libraries help you organize and share your music collections. You can upload your own music collection to Funkwhale and share it with your friends and family.",
+                        "visibility": "You are able to share your library with other people, regardless of its visibilty."
+                    },
+                    "header": {
+                        "failure": "Error"
+                    },
+                    "label": {
+                        "name": "Name",
+                        "description" :"Description",
+                        "visibility": "Visibility"
+                    },
+                    "button": {
+                        "update": "Update library",
+                        "create": "Create library",
+                        "delete": "Delete",
+                        "confirm": "Delete library"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "Delete this library?",
+                            "content": {
+                                "warning": "The library and all its tracks will be deleted. This can not be undone."
+                            }
+                        }
+                    }
                 },
                 "Home": {
-                    "loadingLibraries": "Loading libraries…",
-                    "ownLibrariesHeader": "My libraries",
-                    "emptyState": "Looks like you don't have a library, it's time to create one.",
-                    "createLibraryLink": "Create a new library"
+                    "loading": {
+                        "libraries": "Loading libraries…"
+                    },
+                    "header":{
+                        "libraries": "My libraries"
+                    },
+                    "empty": {
+                        "noLibrary": "Looks like you don't have a library, it's time to create one."
+                    },
+                    "link": {
+                        "createLibrary": "Create a new library"
+                    }
                 },
                 "Quota": {
-                    "currentUsageHeader": "Current usage",
-                    "loadingMessage": "Loading usage data…",
-                    "percentUsed": "{progress}%",
-                    "currentUsage": "{amount} used on {max} allowed",
-                    "pendingLabel": "Pending files",
-                    "viewFilesLink": "View files",
-                    "purgeButton": "Purge",
-                    "purgePendingModalHeader": "Purge pending files?",
-                    "purgePendingModalMessage": "Removes uploaded but yet to be processed tracks completely, adding the corresponding data to your quota.",
-                    "skippedLabel": "Skipped files",
-                    "purgeSkippedModalHeader": "Purge skipped files?",
-                    "purgeSkippedModalMessage": "Removes uploaded tracks skipped during the import processes completely, adding the corresponding data to your quota.",
-                    "erroredLabel": "Errored files",
-                    "purgeErroredModalHeader": "Purge errored files?",
-                    "purgeErroredModalMessage": "Removes uploaded tracks that could not be processed by the server completely, adding the corresponding data to your quota."
-
+                    "header": {
+                        "currentUsage": "Current usage"
+                    },
+                    "loading": {
+                        "currentUsage": "Loading usage data…"
+                    },
+                    "label": {
+                        "percentUsed": "{progress}%",
+                        "currentUsage": "{amount} used on {max} allowed",
+                        "skipped": "Skipped files",
+                        "errored": "Errored files",
+                        "pending": "Pending files"
+                    },
+                    "link": {
+                        "viewFiles": "View files"
+                    },
+                    "button": {
+                        "purge": "Purge"
+                    },
+                    "modal": {
+                        "purgePending": {
+                            "header": "Purge pending files?",
+                            "content": {
+                                "description": "Removes uploaded but yet to be processed tracks completely, adding the corresponding data to your quota."
+                            }
+                        },
+                        "purgeSkipped": {
+                            "header": "Purge skipped files?",
+                            "content": {
+                                "description": "Removes uploaded tracks skipped during the import processes completely, adding the corresponding data to your quota."
+                            }
+                        },
+                        "purgeErrored": {
+                            "header": "Purge errored files?",
+                            "content": {
+                                "description": "Removes uploaded tracks that could not be processed by the server completely, adding the corresponding data to your quota."
+                            }
+                        }
+                    }
                 }
             },
             "remote": {
                 "Card": {
-                    "privateTooltip": "This library is private and your approval from its owner is needed to access its content",
-                    "publicTooltip": "This library is public and you can access its content freely",
-                    "scanSkipped": "Scan skipped (previous scan is too recent)",
-                    "scanLaunched": "Scan launched",
-                    "followError": "Cannot follow remote library: {error}",
-                    "unfollowError": "Cannot unfollow remote library: {error}",
-                    "trackCount": "No tracks | {count} track | {count} tracks",
-                    "scanPending": "Scan pending",
-                    "scanProgress": "Scanning ({progress})",
-                    "scanFailure": "Problem during scanning",
-                    "scanSuccess": "Scanned",
-                    "scanPartialSuccess": "Scanned with errors",
-                    "scanDetails": "Details",
-                    "lastUpdate": "Last update: ",
-                    "failedTracks": "Failed tracks: {tracks}",
-                    "scanNowButton": "Scan now ",
-                    "sharingLinkLabel": "Sharing link",
-                    "followButton": "Follow",
-                    "pendingApprovalButton": "Follow request pending approval",
-                    "cancelFollowButton": "Cancel follow request",
-                    "unfollowButton": "Unfollow",
-                    "unfollowModalHeader": "Unfollow this libary?",
-                    "unfollowModalMessage": "By unfollowing this library, you loose access to its content."
+                    "tooltip": {
+                        "private": "This library is private and your approval from its owner is needed to access its content",
+                        "public": "This library is public and you can access its content freely"
+                    },
+                    "message": {
+                        "scanSkipped": "Scan skipped (previous scan is too recent)",
+                        "scanLaunched": "Scan launched"
+                    },
+                    "error": {
+                        "follow": "Cannot follow remote library: {error}",
+                        "unfollow": "Cannot unfollow remote library: {error}"
+                    },
+                    "meta": {
+                        "tracks": "No tracks | {count} track | {count} tracks",
+                        "lastUpdate": "Last update: ",
+                        "failedTracks": "Failed tracks: {tracks}"
+                    },
+                    "button": {
+                        "follow": "Follow",
+                        "pending": "Follow request pending approval",
+                        "cancel": "Cancel follow request",
+                        "unfollow": "Unfollow"
+                    },
+                    "link": {
+                        "scanDetails": "Details",
+                        "scan": "Scan now "
+                    },
+                    "label": {
+                        "sharingLink": "Sharing link",
+                        "scanPending": "Scan pending",
+                        "scanProgress": "Scanning ({progress})",
+                        "scanFailure": "Problem during scanning",
+                        "scanSuccess": "Scanned",
+                        "scanPartialSuccess": "Scanned with errors"
+                    },
+                    "modal": {
+                        "unfollow": {
+                            "header": "Unfollow this libary?",
+                            "content": {
+                                "warning": "By unfollowing this library, you loose access to its content."
+                            }
+                        }
+                    }
                 },
                 "Home": {
-                    "loadingMessage": "Loading remote libraries…",
-                    "remoteLibrariesHeader": "Remote libraries",
-                    "remoteLibrariesDescription": "Remote libraries are owned by other users on the network. You can access them as long as they are public or you are granted access.",
-                    "knownLibrariesHeader": "Known libraries",
-                    "refreshButton": "Refresh"
+                    "loading": {
+                        "remoteLibraries": "Loading remote libraries…"
+                    },
+                    "header": {
+                        "remoteLibraries": "Remote libraries",
+                        "knownLibraries": "Known libraries"
+                    },
+                    "description": {
+                        "remoteLibraries": "Remote libraries are owned by other users on the network. You can access them as long as they are public or you are granted access."
+                    },
+                    "button": {
+                        "refresh": "Refresh"
+                    }
                 },
                 "ScanForm": {
-                    "placeholder": "Enter a library URL",
-                    "submitLibrarySearch": "Submit search",
-                    "failureHeader": "Could not fetch remote library",
-                    "searchLabel": "Search a remote library"
+                    "placeholder": {
+                        "url": "Enter a library URL"
+                    },
+                    "button": {
+                        "submit": "Submit search"
+                    },
+                    "label": {
+                        "search": "Search a remote library"
+                    },
+                    "header": {
+                        "failure": "Could not fetch remote library"
+                    }
                 }
             }
         },
         "library": {
             "DetailAlbums": {
-                "ownerEmptyState": "This library is empty, you should upload something in it!",
-                "viewerEmptyState": "You may need to follow this library to see its content."
+                "empty": {
+                    "upload": "This library is empty, you should upload something in it!",
+                    "follow": "You may need to follow this library to see its content."
+                }
             },
             "DetailOverview": {
-                "ownerEmptyState": "This library is empty, you should upload something in it!",
-                "viewerEmptyState": "You may need to follow this library to see its content."
+                "empty": {
+                    "upload": "This library is empty, you should upload something in it!",
+                    "follow": "You may need to follow this library to see its content."
+                }
             },
             "DetailTracks": {
-                "ownerEmptyState": "This library is empty, you should upload something in it!",
-                "viewerEmptyState": "You may need to follow this library to see its content."
+                "empty": {
+                    "upload": "This library is empty, you should upload something in it!",
+                    "follow": "You may need to follow this library to see its content."
+                }
             },
             "Edit": {
-                "libraryContentsHeader": "Library contents",
-                "followersHeader": "Followers",
-                "loadingFollowers": "Loading followers…",
-                "userTableHeader": "User",
-                "dateTableHeader": "Date",
-                "statusTableHeader": "Status",
-                "actionTableHeader": "Action",
-                "pendingStatus": "Pending approval",
-                "acceptedStatus": "Accepted",
-                "rejectedStatus": "Rejected",
-                "acceptButton": "Accept",
-                "rejectButton": "Reject",
-                "noFollowers": "Nobody is following this library"
+                "header": {
+                    "libraryContents": "Library contents",
+                    "followers": "Followers"
+                },
+                "button": {
+                    "accept": "Accept",
+                    "reject": "Reject"
+                },
+                "loading": {
+                    "followers": "Loading followers…"
+                },
+                "table": {
+                    "action": {
+                        "header": {
+                            "user": "User",
+                            "date": "Date",
+                            "status": "Status",
+                            "action": "Action"
+                        },
+                        "status": {
+                            "pending": "Pending approval",
+                            "accepted": "Accepted",
+                            "rejected": "Rejected"
+                        }
+                    }
+                },
+                "empty": {
+                    "noFollowers": "Nobody is following this library"
+                }
             },
             "LibraryBase": {
                 "title": "Library",
-                "privateVisibility": "Private",
-                "instanceVisibility": "Restricted",
-                "publicVisibility": "Public",
-                "privateTooltip": "This library is private and your approval from its owner is needed to access its content",
-                "instanceTooltip": "This library is restricted to users on this pod only",
-                "publicTooltip": "This library is public and you can access its content freely",
-                "domainViewLink": "View on {domain}",
-                "moderationLink": "Open in moderation interface",
-                "ownerLink": "Owned by {username}",
-                "trackCount": "No tracks | {count} track | {count} tracks",
-                "sharingLinkLabel": "Sharing link",
-                "sharingLinkDescription": "Share this link with other users so they can request access to this library by copy-pasting it in their pod search bar.",
-                "artistsLink": "Artists",
-                "albumsLink": "Albums",
-                "tracksLink": "Tracks",
-                "uploadButton": "Upload",
-                "editButton": "Edit"
+                "label": {
+                    "private": "Private",
+                    "instance": "Restricted",
+                    "public": "Public",
+                    "sharingLink": "Sharing link"
+                },
+                "tooltip": {
+                    "private": "This library is private and your approval from its owner is needed to access its content",
+                    "instance": "This library is restricted to users on this pod only",
+                    "public": "This library is public and you can access its content freely"
+                },
+                "description": {
+                    "sharingLink": "Share this link with other users so they can request access to this library by copy-pasting it in their pod search bar."
+                },
+                "link": {
+                    "domain": "View on {domain}",
+                    "moderation": "Open in moderation interface",
+                    "owner": "Owned by {username}",
+                    "artists": "Artists",
+                    "albums": "Albums",
+                    "tracks": "Tracks"
+                },
+                "meta": {
+                    "tracks": "No tracks | {count} track | {count} tracks"
+                },
+                "button": {
+                    "upload": "Upload",
+                    "edit": "Edit"
+                }
             }
         },
         "playlists": {
             "Detail": {
                 "title": "Playlist",
-                "trackCount": "Playlist containing {count} track, by {username} | Playlist containing {count} tracks, by {username}",
-                "playAllButton": "Play all",
-                "stopEditButton": "Stop Editing",
-                "editButton": "Edit",
-                "embedButton": "Embed",
-                "deleteButton": "Delete",
-                "deleteModalHeader": "Do you want to delete the playlist {playlist}?",
-                "deleteModalMessage": "This will completely delete this playlist and cannot be undone.",
-                "deleteModalConfirm": "Delete playlist",
-                "embedModalHeader": "Embed this playlist on your website",
-                "cancelButton": "Cancel",
-                "tracksHeader": "Tracks",
-                "emptyState": "There are no tracks in this playlist yet"
+                "meta": {
+                    "tracks": "Playlist containing {count} track, by {username} | Playlist containing {count} tracks, by {username}"
+                },
+                "header": {
+                    "tracks": "Tracks"
+                },
+                "button": {
+                    "playAll": "Play all",
+                    "stopEdit": "Stop Editing",
+                    "edit": "Edit",
+                    "embed": "Embed",
+                    "delete": "Delete",
+                    "cancel": "Cancel",
+                    "confirm": "Delete playlist"
+                },
+                "modal": {
+                    "delete": {
+                        "header": "Do you want to delete the playlist {playlist}?",
+                        "content": {
+                            "warning": "This will completely delete this playlist and cannot be undone."
+                        }
+                    },
+                    "embed": {
+                        "header": "Embed this playlist on your website"
+                    }
+                },
+                "empty": {
+                    "noTracks": "There are no tracks in this playlist yet"
+                }
             },
             "List": {
-                "playlistsHeader": "Playlists",
-                "searchPlaceholder": "Enter playlist name…",
-                "browsePlaylistsHeader": "Browsing playlists",
-                "manageButton": "Manage your playlists",
-                "searchLabel": "Search",
-                "orderingLabel": "Ordering",
-                "orderingDirectionLabel": "Order",
-                "ascendingOrdering": "Ascending",
-                "descendingOrdering": "Descending",
-                "resultsPerPage": "Results per page",
-                "emptyState": "No results matching your query",
-                "createPlaylistButton": "Create a playlist"
+                "header": {
+                    "playlists": "Playlists",
+                    "browse": "Browsing playlists"
+                },
+                "placeholder": {
+                    "search": "Enter playlist name…"
+                },
+                "button": {
+                    "manage": "Manage your playlists",
+                    "create": "Create a playlist",
+                    "search": "Search"
+                },
+                "label": {
+                    "search": "Search"
+                },
+                "ordering": {
+                    "label": "Ordering",
+                    "direction": {
+                        "label": "Order",
+                        "ascending": "Ascending",
+                        "descending": "Descending"
+                    }
+                },
+                "pagination": {
+                    "results": "Results per page"
+                },
+                "empty": {
+                    "noResults": "No results matching your query"
+                }
             }
         },
         "radios": {
             "Detail": {
                 "title": "Radio",
-                "radioSubheader": "Radio containing {tracks} tracks, by ",
-                "editButton": "Edit…",
-                "deleteButton": "Delete",
-                "deleteModalHeader": "Do you want to delete the radio {radio}?",
-                "deleteModalMessage": "This will completely delete this radio and cannot be undone.",
-                "deleteModalConfirm": "Delete radio",
-                "tracksHeader": "Tracks",
-                "emptyState": "No tracks have been hadded to this radio yet"
+                "header": {
+                    "radio": "Radio containing {tracks} tracks, by ",
+                    "tracks": "Tracks"
+                },
+                "button": {
+                    "edit": "Edit…",
+                    "delete": "Delete",
+                    "confirm": "Delete radio"
+                },
+                "modal": {
+                    "delete": {
+                        "header": "Do you want to delete the radio {radio}?",
+                        "content": {
+                            "warning": "This will completely delete this radio and cannot be undone."
+                        }
+                    }
+                },
+                "empty": {
+                    "noTracks": "No tracks have been hadded to this radio yet"
+                }
             }
         }
     }

@@ -37,7 +37,7 @@ whenever(() => store.state.auth.authenticated, () => {
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          {{ $t('views.auth.Login.loginHeader') }}
+          {{ $t('views.auth.Login.header.login') }}
         </h2>
         <login-form :next="next" />
       </div>

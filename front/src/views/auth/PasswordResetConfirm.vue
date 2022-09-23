@@ -68,7 +68,7 @@ const submit = async () => {
             class="ui negative message"
           >
             <h4 class="header">
-              {{ $t('views.auth.PasswordResetConfirm.changeFailureHeader') }}
+              {{ $t('views.auth.PasswordResetConfirm.header.failure') }}
             </h4>
             <ul class="list">
               <li
@@ -81,25 +81,25 @@ const submit = async () => {
           </div>
           <template v-if="token && uid">
             <div class="field">
-              <label for="password-field">{{ $t('views.auth.PasswordResetConfirm.newPasswordLabel') }}</label>
+              <label for="password-field">{{ $t('views.auth.PasswordResetConfirm.label.newPassword') }}</label>
               <password-input
                 v-model="newPassword"
                 field-id="password-field"
               />
             </div>
             <router-link :to="{path: '/login'}">
-              {{ $t('views.auth.PasswordResetConfirm.backToLoginLink') }}
+              {{ $t('views.auth.PasswordResetConfirm.link.back') }}
             </router-link>
             <button
               :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
               type="submit"
             >
-              {{ $t('views.auth.PasswordResetConfirm.updatePasswordButton') }}
+              {{ $t('views.auth.PasswordResetConfirm.button.update') }}
             </button>
           </template>
           <template v-else>
             <p>
-              {{ $t('views.auth.PasswordResetConfirm.requestSentMessage') }}
+              {{ $t('views.auth.PasswordResetConfirm.message.requestSent') }}
             </p>
           </template>
         </form>
@@ -108,13 +108,13 @@ const submit = async () => {
           class="ui positive message"
         >
           <h4 class="header">
-            {{ $t('views.auth.PasswordResetConfirm.changeSuccessHeader') }}
+            {{ $t('views.auth.PasswordResetConfirm.header.success') }}
           </h4>
           <p>
-            {{ $t('views.auth.PasswordResetConfirm.changeSuccessMessage') }}
+            {{ $t('views.auth.PasswordResetConfirm.message.success') }}
           </p>
           <router-link :to="{name: 'login'}">
-            {{ $t('views.auth.PasswordResetConfirm.goToLoginLink') }}
+            {{ $t('views.auth.PasswordResetConfirm.link.login') }}
           </router-link>
         </div>
       </div>

@@ -15,7 +15,7 @@ const props = defineProps<Props>()
 const { t } = useI18n()
 
 const labels = computed(() => ({
-  confirm: t('views.auth.EmailConfirm.confirm')
+  confirm: t('views.auth.EmailConfirm.title')
 }))
 
 const errors = ref([] as string[])
@@ -60,7 +60,7 @@ onMounted(() => {
             class="ui negative message"
           >
             <h4 class="header">
-              {{ $t('views.auth.EmailConfirm.confirmFailureHeader') }}
+              {{ $t('views.auth.EmailConfirm.header.failure') }}
             </h4>
             <ul class="list">
               <li
@@ -72,7 +72,7 @@ onMounted(() => {
             </ul>
           </div>
           <div class="field">
-            <label for="confirmation-code">{{ $t('views.auth.EmailConfirm.confirmationCodeLabel') }}</label>
+            <label for="confirmation-code">{{ $t('views.auth.EmailConfirm.label.confirmationCode') }}</label>
             <input
               id="confirmation-code"
               v-model="key"
@@ -82,7 +82,7 @@ onMounted(() => {
             >
           </div>
           <router-link :to="{path: '/login'}">
-            {{ $t('views.auth.EmailConfirm.backToLoginLink') }}
+            {{ $t('views.auth.EmailConfirm.link.back') }}
           </router-link>
           <button
             :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
@@ -96,13 +96,13 @@ onMounted(() => {
           class="ui positive message"
         >
           <h4 class="header">
-            {{ $t('views.auth.EmailConfirm.confirmSuccessHeader') }}
+            {{ $t('views.auth.EmailConfirm.header.success') }}
           </h4>
           <p>
-            {{ $t('views.auth.EmailConfirm.confirmSuccessMessage') }}
+            {{ $t('views.auth.EmailConfirm.message.success') }}
           </p>
           <router-link :to="{name: 'login'}">
-            {{ $t('views.auth.EmailConfirm.goToLoginLink') }}
+            {{ $t('views.auth.EmailConfirm.link.login') }}
           </router-link>
         </div>
       </div>

@@ -47,7 +47,7 @@ const scanResult = ref()
       :class="['ui', {'active': isLoading}, 'inverted', 'dimmer']"
     >
       <div class="ui text loader">
-        {{ $t('views.content.remote.Home.loadingMessage') }}
+        {{ $t('views.content.remote.Home.loading.remoteLibraries') }}
       </div>
     </div>
     <div
@@ -55,10 +55,10 @@ const scanResult = ref()
       class="ui text container"
     >
       <h1 class="ui header">
-        {{ $t('views.content.remote.Home.remoteLibrariesHeader') }}
+        {{ $t('views.content.remote.Home.header.remoteLibraries') }}
       </h1>
       <p>
-        {{ $t('views.content.remote.Home.remoteLibrariesDescription') }}
+        {{ $t('views.content.remote.Home.description.remoteLibraries') }}
       </p>
       <scan-form @scanned="scanResult = $event" />
       <div class="ui hidden divider" />
@@ -74,7 +74,7 @@ const scanResult = ref()
       </div>
       <template v-if="existingFollows && existingFollows.count > 0">
         <h2>
-          {{ $t('views.content.remote.Home.knownLibrariesHeader') }}
+          {{ $t('views.content.remote.Home.header.knownLibraries') }}
         </h2>
         <a
           href=""
@@ -82,7 +82,7 @@ const scanResult = ref()
           @click.prevent="fetchData"
         >
           <i :class="['ui', 'circular', 'refresh', 'icon']" />
-          {{ $t('views.content.remote.Home.refreshButton') }}
+          {{ $t('views.content.remote.Home.button.refresh') }}
         </a>
         <div class="ui hidden divider" />
         <div class="ui two cards">

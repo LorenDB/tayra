@@ -26,7 +26,7 @@ const labels = computed(() => ({
         :default-query="defaultQuery"
       >
         <h2 class="ui header">
-          {{ $t('views.admin.library.EditsList.libraryEditsHeader') }}
+          {{ $t('views.admin.library.EditsList.header.edits') }}
         </h2>
       </edits-card-list>
     </section>

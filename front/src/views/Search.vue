@@ -65,43 +65,43 @@ interface SearchType {
 const types = computed(() => [
   {
     id: 'artists',
-    label: t('views.Search.artistsLabel'),
+    label: t('views.Search.label.artists'),
     includeChannels: true,
     contentCategory: 'music'
   },
   {
     id: 'albums',
-    label: t('views.Search.albumsLabel'),
+    label: t('views.Search.label.albums'),
     includeChannels: true,
     contentCategory: 'music'
   },
   {
     id: 'tracks',
-    label: t('views.Search.tracksLabel')
+    label: t('views.Search.label.tracks')
   },
   {
     id: 'playlists',
-    label: t('views.Search.playlistsLabel')
+    label: t('views.Search.label.playlists')
   },
   {
     id: 'radios',
-    label: t('views.Search.radiosLabel'),
+    label: t('views.Search.label.radios'),
     endpoint: 'radios/radios'
   },
   {
     id: 'tags',
-    label: t('views.Search.tagsLabel')
+    label: t('views.Search.label.tags')
   },
   {
     id: 'podcasts',
-    label: t('views.Search.podcastsLabel'),
+    label: t('views.Search.label.podcasts'),
     endpoint: '/artists',
     contentCategory: 'podcast',
     includeChannels: true
   },
   {
     id: 'series',
-    label: t('views.Search.seriesLabel'),
+    label: t('views.Search.label.series'),
     endpoint: '/albums',
     includeChannels: true,
     contentCategory: 'podcast'
@@ -181,11 +181,11 @@ const labels = computed(() => ({
   title: id.value
     ? (
         type.value === 'rss'
-          ? t('views.Search.rssTitle')
-          : t('views.Search.remoteTitle')
+          ? t('views.Search.header.rss')
+          : t('views.Search.header.remote')
       )
-    : t('views.Search.searchTitle'),
-  submitSearch: t('views.Search.submitSearchLabel')
+    : t('views.Search.header.search'),
+  submitSearch: t('views.Search.button.submit')
 }))
 
 const radioConfig = computed(() => {
@@ -236,7 +236,7 @@ const radioConfig = computed(() => {
       >
         <h2>
           <label for="query">
-            {{ $t('views.Search.searchHeader') }}
+            {{ $t('views.Search.header.search') }}
           </label>
         </h2>
         <div class="ui two column doubling stackable grid container">

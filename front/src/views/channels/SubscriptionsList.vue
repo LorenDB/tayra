@@ -26,7 +26,7 @@ const widgetKey = ref(new Date().toLocaleString())
 const { t } = useI18n()
 const labels = computed(() => ({
   title: t('views.channels.SubscriptionsList.title'),
-  searchPlaceholder: t('views.channels.SubscriptionsList.searchPlaceholder')
+  searchPlaceholder: t('views.channels.SubscriptionsList.placeholder.search')
 }))
 
 const previousPage = ref()
@@ -66,7 +66,7 @@ const showSubscribeModal = ref(false)
         <div class="actions">
           <a @click.stop.prevent="showSubscribeModal = true">
             <i class="plus icon" />
-            {{ $t('views.channels.SubscriptionsList.addNewLink') }}
+            {{ $t('views.channels.SubscriptionsList.link.addNew') }}
           </a>
         </div>
       </h1>
@@ -76,7 +76,7 @@ const showSubscribeModal = ref(false)
         :fullscreen="false"
       >
         <h2 class="header">
-          {{ $t('views.channels.SubscriptionsList.subscriptionModalHeader') }}
+          {{ $t('views.channels.SubscriptionsList.modal.subscription.header') }}
         </h2>
         <div
           ref="modalContent"
@@ -92,7 +92,7 @@ const showSubscribeModal = ref(false)
         </div>
         <div class="actions">
           <button class="ui basic deny button">
-            {{ $t('views.channels.SubscriptionsList.cancelButton') }}
+            {{ $t('views.channels.SubscriptionsList.button.cancel') }}
           </button>
           <button
             form="remote-search"
@@ -100,7 +100,7 @@ const showSubscribeModal = ref(false)
             class="ui primary button"
           >
             <i class="bookmark icon" />
-            {{ $t('views.channels.SubscriptionsList.subscribeButton') }}
+            {{ $t('views.channels.SubscriptionsList.button.subscribe') }}
           </button>
         </div>
       </semantic-modal>

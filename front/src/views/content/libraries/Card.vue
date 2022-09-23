@@ -17,7 +17,7 @@ const { t } = useI18n()
 
 const sharedLabels = useSharedLabels()
 
-const sizeLabel = computed(() => t('views.content.libraries.Card.sizeLabel'))
+const sizeLabel = computed(() => t('views.content.libraries.Card.label.size'))
 
 const privacyTooltips = (level: PrivacyLevel) => `Visibility: ${sharedLabels.fields.privacy_level.choices[level].toLowerCase()}`
 </script>
@@ -69,7 +69,7 @@ const privacyTooltips = (level: PrivacyLevel) => `Visibility: ${sharedLabels.fie
           {{ humanSize(library.size) }}
         </span>
         <i class="music icon" />
-        {{ $t('views.content.libraries.Card.trackCount') }}
+        {{ $t('views.content.libraries.Card.meta.tracks') }}
       </div>
     </div>
     <div class="ui bottom basic attached buttons">
@@ -77,13 +77,13 @@ const privacyTooltips = (level: PrivacyLevel) => `Visibility: ${sharedLabels.fie
         :to="{name: 'library.detail.upload', params: {id: library.uuid}}"
         class="ui button"
       >
-        {{ $t('views.content.libraries.Card.uploadButton') }}
+        {{ $t('views.content.libraries.Card.button.upload') }}
       </router-link>
       <router-link
         :to="{name: 'library.detail', params: {id: library.uuid}}"
         class="ui button"
       >
-        {{ $t('views.content.libraries.Card.detailsLink') }}
+        {{ $t('views.content.libraries.Card.link.details') }}
       </router-link>
     </div>
   </div>

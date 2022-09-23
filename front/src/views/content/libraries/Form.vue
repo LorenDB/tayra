@@ -30,8 +30,8 @@ const sharedLabels = useSharedLabels()
 const store = useStore()
 
 const labels = computed(() => ({
-  descriptionPlaceholder: t('views.content.libraries.Form.descriptionPlaceholder'),
-  namePlaceholder: t('views.content.libraries.Form.namePlaceholder')
+  descriptionPlaceholder: t('views.content.libraries.Form.placeholder.description'),
+  namePlaceholder: t('views.content.libraries.Form.placeholder.name')
 }))
 
 const currentVisibilityLevel = ref(props.library?.privacy_level ?? 'me')
@@ -59,8 +59,8 @@ const submit = async () => {
 
     store.commit('ui/addMessage', {
       content: props.library
-        ? t('views.content.libraries.Form.libraryUpdateMessage')
-        : t('views.content.libraries.Form.libraryCreateMessage'),
+        ? t('views.content.libraries.Form.message.libraryUpdated')
+        : t('views.content.libraries.Form.message.libraryCreated'),
       date: new Date()
     })
   } catch (error) {
@@ -77,7 +77,7 @@ const remove = async () => {
     await axios.delete(`libraries/${props.library?.uuid}/`)
     emit('deleted')
     store.commit('ui/addMessage', {
-      content: t('views.content.libraries.Form.libraryDeleteMessage'),
+      content: t('views.content.libraries.Form.message.libraryDeleted'),
       date: new Date()
     })
   } catch (error) {
@@ -94,7 +94,7 @@ const remove = async () => {
     @submit.prevent="submit"
   >
     <p v-if="!library">
-      {{ $t('views.content.libraries.Form.libraryHelp') }}
+      {{ $t('views.content.libraries.Form.description.library') }}
     </p>
     <div
       v-if="errors.length > 0"
@@ -102,7 +102,7 @@ const remove = async () => {
       class="ui negative message"
     >
       <h4 class="header">
-        {{ $t('views.content.libraries.Form.failureHeader') }}
+        {{ $t('views.content.libraries.Form.header.failure') }}
       </h4>
       <ul class="list">
         <li
@@ -114,7 +114,7 @@ const remove = async () => {
       </ul>
     </div>
     <div class="required field">
-      <label for="current-name">{{ $t('views.content.libraries.Form.nameLabel') }}</label>
+      <label for="current-name">{{ $t('views.content.libraries.Form.label.name') }}</label>
       <input
         id="current-name"
         v-model="currentName"
@@ -125,7 +125,7 @@ const remove = async () => {
       >
     </div>
     <div class="field">
-      <label for="current-description">{{ $t('views.content.libraries.Form.descriptionLabel') }}</label>
+      <label for="current-description">{{ $t('views.content.libraries.Form.label.description') }}</label>
       <textarea
         id="current-description"
         v-model="currentDescription"
@@ -134,9 +134,9 @@ const remove = async () => {
       />
     </div>
     <div class="field">
-      <label for="visibility-level">{{ $t('views.content.libraries.Form.visibilityLabel') }}</label>
+      <label for="visibility-level">{{ $t('views.content.libraries.Form.label.visibility') }}</label>
       <p>
-        {{ $t('views.content.libraries.Form.visibilityDescription') }}
+        {{ $t('views.content.libraries.Form.description.visibility') }}
       </p>
       <select
         id="visibility-level"
@@ -159,12 +159,12 @@ const remove = async () => {
       <span
         v-if="library"
       >
-        {{ $t('views.content.libraries.Form.updateButton') }}
+        {{ $t('views.content.libraries.Form.button.update') }}
       </span>
       <span
         v-else
       >
-        {{ $t('views.content.libraries.Form.createButton') }}
+        {{ $t('views.content.libraries.Form.button.create') }}
       </span>
     </button>
     <dangerous-button
@@ -173,20 +173,20 @@ const remove = async () => {
       class="ui right floated basic danger button"
       @confirm="remove"
     >
-      {{ $t('views.content.libraries.Form.deleteButton') }}
+      {{ $t('views.content.libraries.Form.button.delete') }}
       <template #modal-header>
         <p>
-          {{ $t('views.content.libraries.Form.deleteModalHeader') }}
+          {{ $t('views.content.libraries.Form.modal.delete.header') }}
         </p>
       </template>
       <template #modal-content>
         <p>
-          {{ $t('views.content.libraries.Form.deleteModalMessage') }}
+          {{ $t('views.content.libraries.Form.modal.delete.content.warning') }}
         </p>
       </template>
       <template #modal-confirm>
         <div>
-          {{ $t('views.content.libraries.Form.deleteModalConfirm') }}
+          {{ $t('views.content.libraries.Form.button.confirm') }}
         </div>
       </template>
     </dangerous-button>

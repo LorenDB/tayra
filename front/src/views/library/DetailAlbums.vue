@@ -26,12 +26,12 @@ defineProps<Props>()
             <span
               v-if="isOwner"
             >
-              {{ $t('views.library.DetailAlbums.ownerEmptyState') }}
+              {{ $t('views.library.DetailAlbums.empty.upload') }}
             </span>
             <span
               v-else
             >
-              {{ $t('views.library.DetailAlbums.viewerEmptyState') }}
+              {{ $t('views.library.DetailAlbums.empty.follow') }}
             </span>
           </p>
         </empty-state>

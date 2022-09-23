@@ -100,7 +100,7 @@ watch(props, fetchData, { immediate: true })
                 class="basic item"
               >
                 <i class="external icon" />
-                {{ $t('views.auth.ProfileBase.domainViewLink', {domain: object.domain}) }}
+                {{ $t('views.auth.ProfileBase.link.domainView', {domain: object.domain}) }}
               </a>
               <div
                 v-for="obj in getReportableObjects({account: object})"
@@ -119,7 +119,7 @@ watch(props, fetchData, { immediate: true })
                 :to="{name: 'manage.moderation.accounts.detail', params: {id: object.full_username}}"
               >
                 <i class="wrench icon" />
-                {{ $t('views.auth.ProfileBase.moderationLink') }}
+                {{ $t('views.auth.ProfileBase.link.moderation') }}
               </router-link>
             </div>
           </button>
@@ -148,7 +148,7 @@ watch(props, fetchData, { immediate: true })
             <template v-if="object.full_username === $store.state.auth.fullUsername">
               <div class="ui very small hidden divider" />
               <div class="ui basic success label">
-                {{ $t('views.auth.ProfileBase.ownUserLabel') }}
+                {{ $t('views.auth.ProfileBase.label.self') }}
               </div>
             </template>
           </h1>
@@ -171,13 +171,13 @@ watch(props, fetchData, { immediate: true })
                   class="item"
                   :to="{name: 'profile.overview', params: routerParams}"
                 >
-                  {{ $t('views.auth.ProfileBase.overviewLink') }}
+                  {{ $t('views.auth.ProfileBase.link.overview') }}
                 </router-link>
                 <router-link
                   class="item"
                   :to="{name: 'profile.activity', params: routerParams}"
                 >
-                  {{ $t('views.auth.ProfileBase.activityLink') }}
+                  {{ $t('views.auth.ProfileBase.link.activity') }}
                 </router-link>
               </div>
               <div class="ui hidden divider" />

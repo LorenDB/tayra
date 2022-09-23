@@ -5,7 +5,7 @@ import { computed } from 'vue'
 const { t } = useI18n()
 
 const labels = computed(() => ({
-  secondaryMenu: t('views.content.Base.secondaryMenu'),
+  secondaryMenu: t('views.content.Base.menu.secondary'),
   title: t('views.content.Base.title')
 }))
 </script>
@@ -24,13 +24,13 @@ const labels = computed(() => ({
         class="ui item"
         :to="{name: 'content.libraries.index'}"
       >
-        {{ $t('views.content.Base.librariesLink') }}
+        {{ $t('views.content.Base.link.libraries') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'content.libraries.files'}"
       >
-        {{ $t('views.content.Base.tracksLink') }}
+        {{ $t('views.content.Base.link.tracks') }}
       </router-link>
     </nav>
     <router-view :key="$route.fullPath" />

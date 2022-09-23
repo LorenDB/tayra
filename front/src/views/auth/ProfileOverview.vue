@@ -42,7 +42,7 @@ const createForm = ref()
     </div>
     <div>
       <h2 class="ui with-actions header">
-        {{ $t('views.auth.ProfileOverview.channelsHeader') }}
+        {{ $t('views.auth.ProfileOverview.header.channels') }}
         <div
           v-if="$store.state.auth.authenticated && object.full_username === $store.state.auth.fullUsername"
           class="actions"
@@ -52,26 +52,26 @@ const createForm = ref()
             @click.stop.prevent="showCreateModal = true"
           >
             <i class="plus icon" />
-            {{ $t('views.auth.ProfileOverview.addNewLink') }}
+            {{ $t('views.auth.ProfileOverview.link.addNew') }}
           </a>
         </div>
       </h2>
       <channels-widget :filters="{scope: `actor:${object.full_username}`}" />
       <h2 class="ui with-actions header">
-        {{ $t('views.auth.ProfileOverview.librariesHeader') }}
+        {{ $t('views.auth.ProfileOverview.header.libraries') }}
         <div
           v-if="$store.state.auth.authenticated && object.full_username === $store.state.auth.fullUsername"
           class="actions"
         >
           <router-link :to="{name: 'content.libraries.index'}">
             <i class="plus icon" />
-            {{ $t('views.auth.ProfileOverview.addNewLink') }}
+            {{ $t('views.auth.ProfileOverview.link.addNew') }}
           </router-link>
         </div>
       </h2>
       <library-widget :url="`federation/actors/${object.full_username}/libraries/`">
         <template #title>
-          {{ $t('views.auth.ProfileOverview.sharedLibraries') }}
+          {{ $t('views.auth.ProfileOverview.header.sharedLibraries') }}
         </template>
       </library-widget>
     </div>
@@ -81,17 +81,17 @@ const createForm = ref()
         <span
           v-if="step === 1"
         >
-          {{ $t('views.auth.ProfileOverview.createChannelModalHeader') }}
+          {{ $t('views.auth.ProfileOverview.modal.createChannel.header') }}
         </span>
         <span
           v-else-if="category === 'podcast'"
         >
-          {{ $t('views.auth.ProfileOverview.podcastChannelHeader') }}
+          {{ $t('views.auth.ProfileOverview.modal.createChannel.podcast.header') }}
         </span>
         <span
           v-else
         >
-          {{ $t('views.auth.ProfileOverview.artistChannelHeader') }}
+          {{ $t('views.auth.ProfileOverview.modal.createChannel.artist.header') }}
         </span>
       </h4>
       <div
@@ -115,21 +115,21 @@ const createForm = ref()
           v-if="step === 1"
           class="ui basic deny button"
         >
-          {{ $t('views.auth.ProfileOverview.cancelButton') }}
+          {{ $t('views.auth.ProfileOverview.button.cancel') }}
         </button>
         <button
           v-if="step > 1"
           class="ui basic button"
           @click.stop.prevent="step -= 1"
         >
-          {{ $t('views.auth.ProfileOverview.previousButton') }}
+          {{ $t('views.auth.ProfileOverview.button.previous') }}
         </button>
         <button
           v-if="step === 1"
           class="ui primary button"
           @click.stop.prevent="step += 1"
         >
-          {{ $t('views.auth.ProfileOverview.nextButton') }}
+          {{ $t('views.auth.ProfileOverview.button.next') }}
         </button>
         <button
           v-if="step === 2"
@@ -138,7 +138,7 @@ const createForm = ref()
           :disabled="!submittable && !loading"
           @click.prevent.stop="createForm.submit"
         >
-          {{ $t('views.auth.ProfileOverview.createChannelButton') }}
+          {{ $t('views.auth.ProfileOverview.button.createChannel') }}
         </button>
       </div>
     </semantic-modal>

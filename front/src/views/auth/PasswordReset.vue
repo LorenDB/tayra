@@ -18,7 +18,7 @@ const { t } = useI18n()
 const router = useRouter()
 
 const labels = computed(() => ({
-  placeholder: t('views.auth.PasswordReset.placeholder'),
+  placeholder: t('views.auth.PasswordReset.placeholder.email'),
   reset: t('views.auth.PasswordReset.title')
 }))
 
@@ -51,7 +51,7 @@ onMounted(() => emailInput.value.focus())
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          {{ $t('views.auth.PasswordReset.title') }}
+          {{ $t('views.auth.PasswordReset.header.reset') }}
         </h2>
         <form
           class="ui form"
@@ -63,7 +63,7 @@ onMounted(() => emailInput.value.focus())
             class="ui negative message"
           >
             <h4 class="header">
-              {{ $t('views.auth.PasswordReset.resetFailureHeader') }}
+              {{ $t('views.auth.PasswordReset.header.failure') }}
             </h4>
             <ul class="list">
               <li
@@ -75,10 +75,10 @@ onMounted(() => emailInput.value.focus())
             </ul>
           </div>
           <p>
-            {{ $t('views.auth.PasswordReset.resetFormDescription') }}
+            {{ $t('views.auth.PasswordReset.help.form') }}
           </p>
           <div class="field">
-            <label for="account-email">{{ $t('views.auth.PasswordReset.emailLabel') }}</label>
+            <label for="account-email">{{ $t('views.auth.PasswordReset.label.email') }}</label>
             <input
               id="account-email"
               ref="emailInput"
@@ -91,13 +91,13 @@ onMounted(() => emailInput.value.focus())
             >
           </div>
           <router-link :to="{path: '/login'}">
-            {{ $t('views.auth.PasswordReset.backToLoginLink') }}
+            {{ $t('views.auth.PasswordReset.link.back') }}
           </router-link>
           <button
             :class="['ui', {'loading': isLoading}, 'right', 'floated', 'success', 'button']"
             type="submit"
           >
-            {{ $t('views.auth.PasswordReset.requestResetButton') }}
+            {{ $t('views.auth.PasswordReset.button.requestReset') }}
           </button>
         </form>
       </div>

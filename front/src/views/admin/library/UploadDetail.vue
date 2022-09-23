@@ -89,7 +89,7 @@ const showUploadDetailModal = ref(false)
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        {{ $t('views.admin.library.UploadDetail.localLabel') }}
+                        {{ $t('views.admin.library.UploadDetail.header.local') }}
                       </span>
                       &nbsp;
                     </template>
@@ -106,7 +106,7 @@ const showUploadDetailModal = ref(false)
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    {{ $t('views.admin.library.UploadDetail.djangoLink') }}
+                    {{ $t('views.admin.library.UploadDetail.link.django') }}
                   </a>
                   <button
                     v-dropdown
@@ -122,7 +122,7 @@ const showUploadDetailModal = ref(false)
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        {{ $t('views.admin.library.UploadDetail.djangoLink') }}
+                        {{ $t('views.admin.library.UploadDetail.link.django') }}
                       </a>
                       <a
                         class="basic item"
@@ -131,7 +131,7 @@ const showUploadDetailModal = ref(false)
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        {{ $t('views.admin.library.UploadDetail.remoteProfileLink') }}
+                        {{ $t('views.admin.library.UploadDetail.link.remoteProfile') }}
                       </a>
                     </div>
                   </button>
@@ -145,7 +145,7 @@ const showUploadDetailModal = ref(false)
                     rel="noopener noreferrer"
                   >
                     <i class="download icon" />
-                    {{ $t('views.admin.library.UploadDetail.downloadButton') }}
+                    {{ $t('views.admin.library.UploadDetail.button.download') }}
                   </a>
                 </div>
                 <div class="ui buttons">
@@ -153,22 +153,22 @@ const showUploadDetailModal = ref(false)
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    {{ $t('views.admin.library.UploadDetail.deleteButton') }}
+                    {{ $t('views.admin.library.UploadDetail.button.delete') }}
                     <template #modal-header>
                       <p>
-                        {{ $t('views.admin.library.UploadDetail.deleteModalHeader') }}
+                        {{ $t('views.admin.library.UploadDetail.modal.delete.header') }}
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          {{ $t('views.admin.library.UploadDetail.deleteModalMessage') }}
+                          {{ $t('views.admin.library.UploadDetail.modal.delete.content.warning') }}
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        {{ $t('views.admin.library.UploadDetail.deleteButton') }}
+                        {{ $t('views.admin.library.UploadDetail.button.delete') }}
                       </p>
                     </template>
                   </dangerous-button>
@@ -185,14 +185,14 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.UploadDetail.uploadDataHeader') }}
+                  {{ $t('views.admin.library.UploadDetail.header.uploadData') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.UploadDetail.nameLabel') }}
+                      {{ $t('views.admin.library.UploadDetail.table.upload.name') }}
                     </td>
                     <td>
                       {{ displayName(object) }}
@@ -201,7 +201,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('privacy_level', object.library.privacy_level) }}">
-                        {{ $t('views.admin.library.UploadDetail.visibilityLabel') }}
+                        {{ $t('views.admin.library.UploadDetail.link.visibility') }}
                       </router-link>
                     </td>
                     <td>
@@ -211,7 +211,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.accounts.detail', params: {id: object.library.actor.full_username }}">
-                        {{ $t('views.admin.library.UploadDetail.accountLabel') }}
+                        {{ $t('views.admin.library.UploadDetail.link.account') }}
                       </router-link>
                     </td>
                     <td>
@@ -221,7 +221,7 @@ const showUploadDetailModal = ref(false)
                   <tr v-if="!object.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        {{ $t('views.admin.library.UploadDetail.domainLabel') }}
+                        {{ $t('views.admin.library.UploadDetail.link.domain') }}
                       </router-link>
                     </td>
                     <td>
@@ -231,7 +231,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('status', object.import_status) }}">
-                        {{ $t('views.admin.library.UploadDetail.importStatusLabel') }}
+                        {{ $t('views.admin.library.UploadDetail.link.importStatus') }}
                       </router-link>
                     </td>
                     <td>
@@ -248,7 +248,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries.detail', params: {id: object.library.uuid }}">
-                        {{ $t('views.admin.library.UploadDetail.libraryLabel') }}
+                        {{ $t('views.admin.library.UploadDetail.link.library') }}
                       </router-link>
                     </td>
                     <td>
@@ -264,14 +264,14 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.UploadDetail.activityHeader') }}&nbsp;
+                  {{ $t('views.admin.library.UploadDetail.header.activity') }}&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.UploadDetail.firstSeenLabel') }}
+                      {{ $t('views.admin.library.UploadDetail.table.activity.firstSeen') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -279,7 +279,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.UploadDetail.accessedDateLabel') }}
+                      {{ $t('views.admin.library.UploadDetail.table.activity.accessedDate') }}
                     </td>
                     <td>
                       <human-date
@@ -302,7 +302,7 @@ const showUploadDetailModal = ref(false)
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.UploadDetail.audioContentHeader') }}&nbsp;
+                  {{ $t('views.admin.library.UploadDetail.header.audioContent') }}&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
@@ -310,7 +310,7 @@ const showUploadDetailModal = ref(false)
                   <tr v-if="object.track">
                     <td>
                       <router-link :to="{name: 'manage.library.tracks.detail', params: {id: object.track.id }}">
-                        {{ $t('views.admin.library.UploadDetail.trackLabel') }}
+                        {{ $t('views.admin.library.UploadDetail.table.audioContent.track') }}
                       </router-link>
                     </td>
                     <td>
@@ -319,7 +319,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.UploadDetail.cachedSizeLabel') }}
+                      {{ $t('views.admin.library.UploadDetail.table.audioContent.cachedSize') }}
                     </td>
                     <td>
                       <template v-if="object.audio_file">
@@ -334,7 +334,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.UploadDetail.sizeLabel') }}
+                      {{ $t('views.admin.library.UploadDetail.table.audioContent.size') }}
                     </td>
                     <td>
                       {{ humanSize(object.size) }}
@@ -342,11 +342,11 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.UploadDetail.bitrateLabel') }}
+                      {{ $t('views.admin.library.UploadDetail.table.audioContent.bitrate.label') }}
                     </td>
                     <td>
                       <template v-if="object.bitrate">
-                        {{ $t('views.admin.library.UploadDetail.bitrateValue', {bitrate: humanSize(object.bitrate)}) }}
+                        {{ $t('views.admin.library.UploadDetail.table.audioContent.bitrate.value', {bitrate: humanSize(object.bitrate)}) }}
                       </template>
                       <span
                         v-else
@@ -357,7 +357,7 @@ const showUploadDetailModal = ref(false)
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.UploadDetail.durationLabel') }}
+                      {{ $t('views.admin.library.UploadDetail.table.audioContent.duration') }}
                     </td>
                     <td>
                       <template v-if="object.duration">
@@ -373,7 +373,7 @@ const showUploadDetailModal = ref(false)
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('type', object.mimetype) }}">
-                        {{ $t('views.admin.library.UploadDetail.typeLabel') }}
+                        {{ $t('views.admin.library.UploadDetail.link.type') }}
                       </router-link>
                     </td>
                     <td>

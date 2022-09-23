@@ -101,15 +101,15 @@ const albumModal = ref()
           @click="pendingUploads.length = 0"
         />
         <h3 class="ui header">
-          {{ $t('views.channels.DetailOverview.uploadsSuccessHeader') }}
+          {{ $t('views.channels.DetailOverview.header.uploadsSuccess') }}
         </h3>
         <p>
-          {{ $t('views.channels.DetailOverview.uploadsProgress', {finished: processedUploads.length, total: pendingUploads.length}) }}
+          {{ $t('views.channels.DetailOverview.meta.progress', {finished: processedUploads.length, total: pendingUploads.length}) }}
         </p>
       </template>
       <template v-else-if="isOver">
         <h3 class="ui header">
-          {{ $t('views.channels.DetailOverview.uploadsFailureHeader') }}
+          {{ $t('views.channels.DetailOverview.header.uploadsFailure') }}
         </h3>
         <div class="ui hidden divider" />
         <router-link
@@ -117,26 +117,26 @@ const albumModal = ref()
           class="ui basic button"
           :to="{name: 'content.libraries.files', query: {q: 'status:skipped'}}"
         >
-          {{ $t('views.channels.DetailOverview.skippedUploadsLink') }}
+          {{ $t('views.channels.DetailOverview.link.skippedUploads') }}
         </router-link>
         <router-link
           v-if="erroredUploads.length > 0"
           class="ui basic button"
           :to="{name: 'content.libraries.files', query: {q: 'status:errored'}}"
         >
-          {{ $t('views.channels.DetailOverview.erroredUploadsLink') }}
+          {{ $t('views.channels.DetailOverview.link.erroredUploads') }}
         </router-link>
       </template>
       <template v-else>
         <div class="ui inline right floated active loader" />
         <h3 class="ui header">
-          {{ $t('views.channels.DetailOverview.uploadsProcessingHeader') }}
+          {{ $t('views.channels.DetailOverview.header.uploadsProcessing') }}
         </h3>
         <p>
-          {{ $t('views.channels.DetailOverview.uploadsProcessingMessage') }}
+          {{ $t('views.channels.DetailOverview.message.processing') }}
         </p>
         <p>
-          {{ $t('views.channels.DetailOverview.uploadsProgress', {finished: processedUploads.length, total: pendingUploads.length}) }}
+          {{ $t('views.channels.DetailOverview.meta.progress', {finished: processedUploads.length, total: pendingUploads.length}) }}
         </p>
       </template>
     </div>
@@ -159,12 +159,12 @@ const albumModal = ref()
         <span
           v-if="isPodcast"
         >
-          {{ $t('views.channels.DetailOverview.latestEpisodes') }}
+          {{ $t('views.channels.DetailOverview.header.latestEpisodes') }}
         </span>
         <span
           v-else
         >
-          {{ $t('views.channels.DetailOverview.latestTracks') }}
+          {{ $t('views.channels.DetailOverview.header.latestTracks') }}
         </span>
       </h2>
     </channel-entries>
@@ -178,12 +178,12 @@ const albumModal = ref()
         <span
           v-if="isPodcast"
         >
-          {{ $t('views.channels.DetailOverview.seriesHeader') }}
+          {{ $t('views.channels.DetailOverview.header.series') }}
         </span>
         <span
           v-else
         >
-          {{ $t('views.channels.DetailOverview.albumsHeader') }}
+          {{ $t('views.channels.DetailOverview.header.albums') }}
         </span>
         <div
           v-if="isOwner"
@@ -191,7 +191,7 @@ const albumModal = ref()
         >
           <a @click.stop.prevent="albumModal.show = true">
             <i class="plus icon" />
-            {{ $t('views.channels.DetailOverview.addAlbumLink') }}
+            {{ $t('views.channels.DetailOverview.link.addAlbum') }}
           </a>
         </div>
       </h2>

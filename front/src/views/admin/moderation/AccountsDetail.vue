@@ -26,14 +26,14 @@ const { t } = useI18n()
 const logger = useLogger()
 
 const labels = computed(() => ({
-  statsWarning: t('views.admin.moderation.AccountsDetail.statsWarning'),
-  uploadQuota: t('views.admin.moderation.AccountsDetail.uploadQuota')
+  statsWarning: t('views.admin.moderation.AccountsDetail.warning.stats'),
+  uploadQuota: t('views.admin.moderation.AccountsDetail.tooltip.uploadQuota')
 }))
 
 const allPermissions = computed(() => [
-  { code: 'library', label: t('views.admin.moderation.AccountsDetail.libraryPermission') },
-  { code: 'moderation', label: t('views.admin.moderation.AccountsDetail.moderationPermission') },
-  { code: 'settings', label: t('views.admin.moderation.AccountsDetail.settingsPermission') }
+  { code: 'library', label: t('views.admin.moderation.AccountsDetail.option.permission.library') },
+  { code: 'moderation', label: t('views.admin.moderation.AccountsDetail.option.permission.moderation') },
+  { code: 'settings', label: t('views.admin.moderation.AccountsDetail.option.permission.settings') }
 ])
 
 const isLoadingPolicy = ref(false)
@@ -167,7 +167,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                     <template v-if="object.user">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        {{ $t('views.admin.moderation.AccountsDetail.localAccountLabel') }}
+                        {{ $t('views.admin.moderation.AccountsDetail.header.localAccount') }}
                       </span>
                       &nbsp;
                     </template>
@@ -176,7 +176,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {{ $t('views.admin.moderation.AccountsDetail.openProfileLink') }}&nbsp;
+                      {{ $t('views.admin.moderation.AccountsDetail.link.openProfile') }}&nbsp;
                       <i class="external icon" />
                     </a>
                   </div>
@@ -192,7 +192,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    {{ $t('views.admin.moderation.AccountsDetail.djangoLink') }}&nbsp;
+                    {{ $t('views.admin.moderation.AccountsDetail.link.django') }}&nbsp;
                   </a>
                   <a
                     v-else-if="$store.state.auth.profile && $store.state.auth.profile.is_superuser"
@@ -202,7 +202,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    {{ $t('views.admin.moderation.AccountsDetail.djangoLink') }}&nbsp;
+                    {{ $t('views.admin.moderation.AccountsDetail.link.django') }}&nbsp;
                   </a>
                   <button
                     v-dropdown
@@ -217,7 +217,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        {{ $t('views.admin.moderation.AccountsDetail.remoteProfileLink') }}&nbsp;
+                        {{ $t('views.admin.moderation.AccountsDetail.link.remoteProfile') }}&nbsp;
                       </a>
                     </div>
                   </button>
@@ -243,17 +243,17 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                 <header class="ui header">
                   <h3>
                     <i class="shield icon" />
-                    {{ $t('views.admin.moderation.AccountsDetail.noPolicyHeader') }}
+                    {{ $t('views.admin.moderation.AccountsDetail.header.noPolicy') }}
                   </h3>
                 </header>
                 <p>
-                  {{ $t('views.admin.moderation.AccountsDetail.policyDescription') }}
+                  {{ $t('views.admin.moderation.AccountsDetail.description.policy') }}
                 </p>
                 <button
                   class="ui primary button"
                   @click="showPolicyForm = true"
                 >
-                  {{ $t('views.admin.moderation.AccountsDetail.addPolicyButton') }}
+                  {{ $t('views.admin.moderation.AccountsDetail.button.addPolicy') }}
                 </button>
               </template>
               <instance-policy-card
@@ -263,7 +263,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
               >
                 <header class="ui header">
                   <h3>
-                    {{ $t('views.admin.moderation.AccountsDetail.activePolicyHeader') }}
+                    {{ $t('views.admin.moderation.AccountsDetail.header.activePolicy') }}
                   </h3>
                 </header>
               </instance-policy-card>
@@ -287,14 +287,14 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  {{ $t('views.admin.moderation.AccountsDetail.accountDataHeader') }}
+                  {{ $t('views.admin.moderation.AccountsDetail.header.accountData') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.usernameLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.username') }}
                     </td>
                     <td>
                       {{ object.preferred_username }}
@@ -303,7 +303,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   <tr v-if="!object.user">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        {{ $t('views.admin.moderation.AccountsDetail.domainLabel') }}
+                        {{ $t('views.admin.moderation.AccountsDetail.link.domain') }}
                       </router-link>
                     </td>
                     <td>
@@ -312,7 +312,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.displayNameLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.displayName') }}
                     </td>
                     <td>
                       {{ object.name }}
@@ -320,7 +320,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.emailLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.email') }}
                     </td>
                     <td>
                       {{ object.user.email }}
@@ -328,7 +328,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.loginStatusLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.loginStatus.label') }}
                     </td>
                     <td>
                       <div
@@ -344,27 +344,27 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                         <label for="is-active">
                           <span
                             v-if="object.user.is_active"
-                          >{{ $t('views.admin.moderation.AccountsDetail.enabledStatus') }}</span>
+                          >{{ $t('views.admin.moderation.AccountsDetail.table.accountData.loginStatus.enabled') }}</span>
                           <span
                             v-else
-                          >{{ $t('views.admin.moderation.AccountsDetail.disabledStatus') }}</span>
+                          >{{ $t('views.admin.moderation.AccountsDetail.table.accountData.loginStatus.disabled') }}</span>
                         </label>
                       </div>
                       <span
                         v-else-if="object.user.is_active"
                       >
-                        {{ $t('views.admin.moderation.AccountsDetail.enabledStatus') }}
+                        {{ $t('views.admin.moderation.AccountsDetail.table.accountData.loginStatus.enabled') }}
                       </span>
                       <span
                         v-else
                       >
-                        {{ $t('views.admin.moderation.AccountsDetail.disabledStatus') }}
+                        {{ $t('views.admin.moderation.AccountsDetail.table.accountData.loginStatus.disabled') }}
                       </span>
                     </td>
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.permissionsLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.permissions') }}
                     </td>
                     <td>
                       <select
@@ -386,7 +386,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.userTypeLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.userType') }}
                     </td>
                     <td>
                       {{ object.type }}
@@ -394,7 +394,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="!object.user">
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.lastCheckedLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.lastChecked') }}
                     </td>
                     <td>
                       <human-date
@@ -410,7 +410,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.signupDateLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.signupDate') }}
                     </td>
                     <td>
                       <human-date :date="object.user.date_joined" />
@@ -418,7 +418,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.lastActivityLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.accountData.lastActivity') }}
                     </td>
                     <td>
                       <human-date :date="object.user.last_activity" />
@@ -433,7 +433,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  {{ $t('views.admin.moderation.AccountsDetail.activityHeader') }}&nbsp;
+                  {{ $t('views.admin.moderation.AccountsDetail.header.activity') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -453,7 +453,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                 <tbody>
                   <tr v-if="!object.user">
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.firstSeenLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.activity.firstSeen') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -461,7 +461,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.emittedMessagesLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.activity.emittedMessages') }}
                     </td>
                     <td>
                       {{ stats.outbox_activities }}
@@ -469,7 +469,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.receivedFollowsLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.activity.receivedFollows') }}
                     </td>
                     <td>
                       {{ stats.received_library_follows }}
@@ -477,7 +477,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.emittedFollowsLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.activity.emittedFollows') }}
                     </td>
                     <td>
                       {{ stats.emitted_library_follows }}
@@ -486,7 +486,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `account:${object.full_username}`) }}">
-                        {{ $t('views.admin.moderation.AccountsDetail.linkedReportsLabel') }}
+                        {{ $t('views.admin.moderation.AccountsDetail.link.linkedReports') }}
                       </router-link>
                     </td>
                     <td>
@@ -496,7 +496,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.requests.list', query: {q: getQuery('submitter', `${object.full_username}`) }}">
-                        {{ $t('views.admin.moderation.AccountsDetail.requestsLabel') }}
+                        {{ $t('views.admin.moderation.AccountsDetail.link.requests') }}
                       </router-link>
                     </td>
                     <td>
@@ -512,7 +512,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  {{ $t('views.admin.moderation.AccountsDetail.audioContentHeader') }}&nbsp;
+                  {{ $t('views.admin.moderation.AccountsDetail.header.audioContent') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -532,7 +532,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                 <tbody>
                   <tr v-if="!object.user">
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.cachedSizeLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.audioContent.cachedSize') }}
                     </td>
                     <td>
                       {{ humanSize(stats.media_downloaded_size) }}
@@ -540,7 +540,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr v-if="object.user">
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.uploadQuotaLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.audioContent.uploadQuota') }}
                       <span :data-tooltip="labels.uploadQuota"><i class="question circle icon" /></span>
                     </td>
                     <td>
@@ -553,7 +553,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                           @change="updateUser('upload_quota', true)"
                         >
                         <div class="ui basic label">
-                          {{ $t('views.admin.moderation.AccountsDetail.megabyteLabel') }}
+                          {{ $t('views.admin.moderation.AccountsDetail.table.audioContent.megabyte') }}
                         </div>
                         <action-feedback
                           class="ui basic label"
@@ -565,7 +565,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.totalSizeLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.table.audioContent.totalSize') }}
                     </td>
                     <td>
                       {{ humanSize(stats.media_total_size) }}
@@ -574,7 +574,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.channels', query: {q: getQuery('account', object.full_username) }}">
-                        {{ $t('views.admin.moderation.AccountsDetail.channelsLabel') }}
+                        {{ $t('views.admin.moderation.AccountsDetail.link.channels') }}
                       </router-link>
                     </td>
                     <td>
@@ -584,7 +584,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('account', object.full_username) }}">
-                        {{ $t('views.admin.moderation.AccountsDetail.librariesLabel') }}
+                        {{ $t('views.admin.moderation.AccountsDetail.link.libraries') }}
                       </router-link>
                     </td>
                     <td>
@@ -594,7 +594,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('account', object.full_username) }}">
-                        {{ $t('views.admin.moderation.AccountsDetail.uploadsLabel') }}
+                        {{ $t('views.admin.moderation.AccountsDetail.link.uploads') }}
                       </router-link>
                     </td>
                     <td>
@@ -603,7 +603,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.artistsLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.link.artists') }}
                     </td>
                     <td>
                       {{ stats.artists }}
@@ -611,7 +611,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.albumsLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.link.albums') }}
                     </td>
                     <td>
                       {{ stats.albums }}
@@ -619,7 +619,7 @@ const updatePolicy = (newPolicy: InstancePolicy) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.AccountsDetail.tracksLabel') }}
+                      {{ $t('views.admin.moderation.AccountsDetail.link.tracks') }}
                     </td>
                     <td>
                       {{ stats.tracks }}

@@ -31,7 +31,7 @@ const labels = computed(() => ({
     <section class="ui vertical stripe segment">
       <div class="ui small text container">
         <h2>
-          {{ $t('views.auth.Signup.createAccountHeader') }}
+          {{ $t('views.auth.Signup.header.createAccount') }}
         </h2>
         <signup-form
           :default-invitation="defaultInvitation"

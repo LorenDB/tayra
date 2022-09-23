@@ -70,14 +70,14 @@ const actionFilters = computed(() => ({ q: query.value, ...props.filters }))
 const actions = computed(() => [
   {
     name: 'delete',
-    label: t('views.content.libraries.FilesTable.deleteLabel'),
+    label: t('views.content.libraries.FilesTable.action.delete'),
     isDangerous: true,
     allowAll: true,
     confirmColor: 'danger'
   },
   {
     name: 'relaunch_import',
-    label: t('views.content.libraries.FilesTable.restartImportLabel'),
+    label: t('views.content.libraries.FilesTable.action.restartImport'),
     isDangerous: true,
     allowAll: true,
     filterCheckable: (filter: { import_status: ImportStatus }) => {
@@ -120,8 +120,8 @@ fetchData()
 
 const sharedLabels = useSharedLabels()
 const labels = computed(() => ({
-  searchPlaceholder: t('views.content.libraries.FilesTable.searchPlaceholder'),
-  showStatus: t('views.content.libraries.FilesTable.showStatus')
+  searchPlaceholder: t('views.content.libraries.FilesTable.placeholder.search'),
+  showStatus: t('views.content.libraries.FilesTable.button.showStatus')
 }))
 
 const detailedUpload = ref()
@@ -138,7 +138,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
       <div class="fields">
         <div class="ui six wide field">
           <label for="files-search">
-            {{ $t('views.content.libraries.FilesTable.searchLabel') }}
+            {{ $t('views.content.libraries.FilesTable.label.search') }}
           </label>
           <form @submit.prevent="query = search.value">
             <input
@@ -153,7 +153,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
         </div>
         <div class="field">
           <label for="import-status">
-            {{ $t('views.content.libraries.FilesTable.importStatusLabel') }}
+            {{ $t('views.content.libraries.FilesTable.label.importStatus') }}
           </label>
           <select
             id="import-status"
@@ -162,28 +162,28 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
             @change="addSearchToken('status', ($event.target as HTMLSelectElement).value)"
           >
             <option value>
-              {{ $t('views.content.libraries.FilesTable.allOption') }}
+              {{ $t('views.content.libraries.FilesTable.option.status.all') }}
             </option>
             <option value="draft">
-              {{ $t('views.content.libraries.FilesTable.draftStatus') }}
+              {{ $t('views.content.libraries.FilesTable.option.status.draft') }}
             </option>
             <option value="pending">
-              {{ $t('views.content.libraries.FilesTable.pendingStatus') }}
+              {{ $t('views.content.libraries.FilesTable.option.status.pending') }}
             </option>
             <option value="skipped">
-              {{ $t('views.content.libraries.FilesTable.skippedStatus') }}
+              {{ $t('views.content.libraries.FilesTable.option.status.skipped') }}
             </option>
             <option value="errored">
-              {{ $t('views.content.libraries.FilesTable.failedStatus') }}
+              {{ $t('views.content.libraries.FilesTable.option.status.failed') }}
             </option>
             <option value="finished">
-              {{ $t('views.content.libraries.FilesTable.finishedStatus') }}
+              {{ $t('views.content.libraries.FilesTable.option.status.finished') }}
             </option>
           </select>
         </div>
         <div class="field">
           <label for="ordering-select">
-            {{ $t('views.content.libraries.FilesTable.orderingLabel') }}
+            {{ $t('views.content.libraries.FilesTable.ordering.label') }}
           </label>
           <select
             id="ordering-select"
@@ -201,7 +201,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
         </div>
         <div class="field">
           <label for="ordering-direction">
-            {{ $t('views.content.libraries.FilesTable.orderingDirectionLabel') }}
+            {{ $t('views.content.libraries.FilesTable.ordering.direction.label') }}
           </label>
           <select
             id="ordering-direction"
@@ -209,10 +209,10 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
             class="ui dropdown"
           >
             <option value="+">
-              {{ $t('views.content.libraries.FilesTable.ascendingOrdering') }}
+              {{ $t('views.content.libraries.FilesTable.ordering.direction.ascending') }}
             </option>
             <option value="-">
-              {{ $t('views.content.libraries.FilesTable.descendingOrdering') }}
+              {{ $t('views.content.libraries.FilesTable.ordering.direction.descending') }}
             </option>
           </select>
         </div>
@@ -236,7 +236,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
       >
         <div class="ui icon header">
           <i class="upload icon" />
-          {{ $t('views.content.libraries.FilesTable.emptyState') }}
+          {{ $t('views.content.libraries.FilesTable.empty.noTracks') }}
         </div>
       </div>
       <action-table
@@ -254,25 +254,25 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
       >
         <template #header-cells>
           <th>
-            {{ $t('views.content.libraries.FilesTable.titleTableHeader') }}
+            {{ $t('views.content.libraries.FilesTable.table.file.header.title') }}
           </th>
           <th>
-            {{ $t('views.content.libraries.FilesTable.artistTableHeader') }}
+            {{ $t('views.content.libraries.FilesTable.table.file.header.artist') }}
           </th>
           <th>
-            {{ $t('views.content.libraries.FilesTable.albumTableHeader') }}
+            {{ $t('views.content.libraries.FilesTable.table.file.header.album') }}
           </th>
           <th>
-            {{ $t('views.content.libraries.FilesTable.uploadDateTableHeader') }}
+            {{ $t('views.content.libraries.FilesTable.table.file.header.uploadDate') }}
           </th>
           <th>
-            {{ $t('views.content.libraries.FilesTable.importStatusTableHeader') }}
+            {{ $t('views.content.libraries.FilesTable.table.file.header.importStatus') }}
           </th>
           <th>
-            {{ $t('views.content.libraries.FilesTable.durationTableHeader') }}
+            {{ $t('views.content.libraries.FilesTable.table.file.header.duration') }}
           </th>
           <th>
-            {{ $t('views.content.libraries.FilesTable.sizeTableHeader') }}
+            {{ $t('views.content.libraries.FilesTable.table.file.header.size') }}
           </th>
         </template>
         <template
@@ -351,7 +351,7 @@ const getImportStatusChoice = (importStatus: ImportStatus) => {
       />
 
       <span v-if="result && result.results.length > 0">
-        {{ $t('views.content.libraries.FilesTable.resultsDisplay', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
+        {{ $t('views.content.libraries.FilesTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
       </span>
     </div>
   </div>

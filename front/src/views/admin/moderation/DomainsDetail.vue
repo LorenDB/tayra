@@ -23,7 +23,7 @@ const props = defineProps<Props>()
 const { t } = useI18n()
 
 const labels = computed(() => ({
-  statsWarning: t('views.admin.moderation.DomainsDetail.statsWarning')
+  statsWarning: t('views.admin.moderation.DomainsDetail.warning.stats')
 }))
 
 const isLoadingPolicy = ref(false)
@@ -133,7 +133,7 @@ const setAllowList = async (value: boolean) => {
                       rel="noopener noreferrer"
                       class="logo-wrapper"
                     >
-                      {{ $t('views.admin.moderation.DomainsDetail.websiteLink') }}&nbsp;
+                      {{ $t('views.admin.moderation.DomainsDetail.link.website') }}&nbsp;
                       <i class="external icon" />
                     </a>
                   </div>
@@ -149,7 +149,7 @@ const setAllowList = async (value: boolean) => {
                     rel="noopener noreferrer"
                   >
                     <i class="wrench icon" />
-                    {{ $t('views.admin.moderation.DomainsDetail.djangoLink') }}&nbsp;
+                    {{ $t('views.admin.moderation.DomainsDetail.link.django') }}&nbsp;
                   </a>
                 </div>
                 <div
@@ -162,7 +162,7 @@ const setAllowList = async (value: boolean) => {
                     @click.prevent="setAllowList(false)"
                   >
                     <i class="x icon" />
-                    {{ $t('views.admin.moderation.DomainsDetail.removeFromAllowList') }}
+                    {{ $t('views.admin.moderation.DomainsDetail.button.removeFromAllowList') }}
                   </button>
                   <button
                     v-else
@@ -170,7 +170,7 @@ const setAllowList = async (value: boolean) => {
                     @click.prevent="setAllowList(true)"
                   >
                     <i class="check icon" />
-                    {{ $t('views.admin.moderation.DomainsDetail.addToAllowList') }}
+                    {{ $t('views.admin.moderation.DomainsDetail.button.addToAllowList') }}
                   </button>
                 </div>
               </div>
@@ -191,17 +191,17 @@ const setAllowList = async (value: boolean) => {
                 <header class="ui header">
                   <h3>
                     <i class="shield icon" />
-                    {{ $t('views.admin.moderation.DomainsDetail.noPolicyHeader') }}
+                    {{ $t('views.admin.moderation.DomainsDetail.header.noPolicy') }}
                   </h3>
                 </header>
                 <p>
-                  {{ $t('views.admin.moderation.DomainsDetail.policyDescription') }}
+                  {{ $t('views.admin.moderation.DomainsDetail.description.policy') }}
                 </p>
                 <button
                   class="ui primary button"
                   @click="showPolicyForm = true"
                 >
-                  {{ $t('views.admin.moderation.DomainsDetail.addPolicyButton') }}
+                  {{ $t('views.admin.moderation.DomainsDetail.button.addPolicy') }}
                 </button>
               </template>
               <instance-policy-card
@@ -211,7 +211,7 @@ const setAllowList = async (value: boolean) => {
               >
                 <header class="ui header">
                   <h3>
-                    {{ $t('views.admin.moderation.DomainsDetail.activePolicyHeader') }}
+                    {{ $t('views.admin.moderation.DomainsDetail.header.activePolicy') }}
                   </h3>
                 </header>
               </instance-policy-card>
@@ -235,31 +235,31 @@ const setAllowList = async (value: boolean) => {
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  {{ $t('views.admin.moderation.DomainsDetail.instanceDataHeader') }}
+                  {{ $t('views.admin.moderation.DomainsDetail.header.instanceData') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr v-if="allowListEnabled">
                     <td>
-                      {{ $t('views.admin.moderation.DomainsDetail.inAllowListLabel') }}
+                      {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.inAllowList.label') }}
                     </td>
                     <td>
                       <span
                         v-if="object.allowed"
                       >
-                        {{ $t('views.admin.moderation.DomainsDetail.inAllowListTrue') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.inAllowList.true') }}
                       </span>
                       <span
                         v-else
                       >
-                        {{ $t('views.admin.moderation.DomainsDetail.inAllowListFalse') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.inAllowList.false') }}
                       </span>
                     </td>
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.DomainsDetail.lastCheckedLabel') }}
+                      {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.lastChecked') }}
                     </td>
                     <td>
                       <human-date
@@ -277,15 +277,15 @@ const setAllowList = async (value: boolean) => {
                   <template v-if="object.nodeinfo && object.nodeinfo.status === 'ok'">
                     <tr>
                       <td>
-                        {{ $t('views.admin.moderation.DomainsDetail.softwareLabel') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.software.label') }}
                       </td>
                       <td>
-                        {{ $t('views.admin.moderation.DomainsDetail.softwareValue', {name: get(object, 'nodeinfo.payload.software.name', t('views.admin.moderation.DomainsDetail.notApplicable')), version: get(object, 'nodeinfo.payload.software.version', t('views.admin.moderation.DomainsDetail.notApplicable'))}) }}
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.software.value', {name: get(object, 'nodeinfo.payload.software.name', t('views.admin.moderation.DomainsDetail.notApplicable')), version: get(object, 'nodeinfo.payload.software.version', t('views.admin.moderation.DomainsDetail.notApplicable'))}) }}
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        {{ $t('views.admin.moderation.DomainsDetail.domainNameLabel') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.domainName') }}
                       </td>
                       <td>
                         {{ get(object, 'nodeinfo.payload.metadata.nodeName', t('views.admin.moderation.DomainsDetail.notApplicable')) }}
@@ -293,7 +293,7 @@ const setAllowList = async (value: boolean) => {
                     </tr>
                     <tr>
                       <td>
-                        {{ $t('views.admin.moderation.DomainsDetail.totalUsersLabel') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.totalUsers') }}
                       </td>
                       <td>
                         {{ get(object, 'nodeinfo.payload.usage.users.total', t('views.admin.moderation.DomainsDetail.notApplicable')) }}
@@ -303,10 +303,10 @@ const setAllowList = async (value: boolean) => {
                   <template v-if="object.nodeinfo && object.nodeinfo.status === 'error'">
                     <tr>
                       <td>
-                        {{ $t('views.admin.moderation.DomainsDetail.nodeInfoStatusLabel') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.nodeInfoStatus.label') }}
                       </td>
                       <td>
-                        {{ $t('views.admin.moderation.DomainsDetail.nodeInfoFailureMessage') }}&nbsp;
+                        {{ $t('views.admin.moderation.DomainsDetail.table.instanceData.nodeInfoStatus.value') }}&nbsp;
 
                         <span :data-tooltip="object.nodeinfo.error"><i class="question circle icon" /></span>
                       </td>
@@ -319,7 +319,7 @@ const setAllowList = async (value: boolean) => {
                 :url="'manage/federation/domains/' + object.name + '/nodeinfo/'"
                 @action-done="refreshNodeInfo"
               >
-                {{ $t('views.admin.moderation.DomainsDetail.refreshNodeInfoButton') }}
+                {{ $t('views.admin.moderation.DomainsDetail.button.refreshNodeInfo') }}
               </ajax-button>
             </section>
           </div>
@@ -328,7 +328,7 @@ const setAllowList = async (value: boolean) => {
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  {{ $t('views.admin.moderation.DomainsDetail.activityHeader') }}&nbsp;
+                  {{ $t('views.admin.moderation.DomainsDetail.header.activity') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -348,7 +348,7 @@ const setAllowList = async (value: boolean) => {
                 <tbody>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.DomainsDetail.firstSeenLabel') }}
+                      {{ $t('views.admin.moderation.DomainsDetail.table.activity.firstSeen') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -359,7 +359,7 @@ const setAllowList = async (value: boolean) => {
                       <router-link
                         :to="{name: 'manage.moderation.accounts.list', query: {q: 'domain:' + object.name }}"
                       >
-                        {{ $t('views.admin.moderation.DomainsDetail.knownAccountsLink') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.link.knownAccounts') }}
                       </router-link>
                     </td>
                     <td>
@@ -368,7 +368,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.DomainsDetail.emittedMessagesLabel') }}
+                      {{ $t('views.admin.moderation.DomainsDetail.table.activity.emittedMessages') }}
                     </td>
                     <td>
                       {{ stats.outbox_activities }}
@@ -376,7 +376,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.DomainsDetail.receivedFollowsLabel') }}
+                      {{ $t('views.admin.moderation.DomainsDetail.table.activity.receivedFollows') }}
                     </td>
                     <td>
                       {{ stats.received_library_follows }}
@@ -384,7 +384,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.DomainsDetail.emittedFollowsLabel') }}
+                      {{ $t('views.admin.moderation.DomainsDetail.table.activity.emittedFollows') }}
                     </td>
                     <td>
                       {{ stats.emitted_library_follows }}
@@ -399,7 +399,7 @@ const setAllowList = async (value: boolean) => {
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  {{ $t('views.admin.moderation.DomainsDetail.audioContentHeader') }}&nbsp;
+                  {{ $t('views.admin.moderation.DomainsDetail.header.audioContent') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -419,7 +419,7 @@ const setAllowList = async (value: boolean) => {
                 <tbody>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.DomainsDetail.cachedSizeLabel') }}
+                      {{ $t('views.admin.moderation.DomainsDetail.table.audioContent.cachedSize') }}
                     </td>
                     <td>
                       {{ humanSize(stats.media_downloaded_size) }}
@@ -427,7 +427,7 @@ const setAllowList = async (value: boolean) => {
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.moderation.DomainsDetail.totalSizeLabel') }}
+                      {{ $t('views.admin.moderation.DomainsDetail.table.audioContent.totalSize') }}
                     </td>
                     <td>
                       {{ humanSize(stats.media_total_size) }}
@@ -436,7 +436,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.channels', query: {q: getQuery('domain', object.name) }}">
-                        {{ $t('views.admin.moderation.DomainsDetail.channelsLabel') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.link.channels') }}
                       </router-link>
                     </td>
                     <td>
@@ -446,7 +446,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('domain', object.name) }}">
-                        {{ $t('views.admin.moderation.DomainsDetail.librariesLabel') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.link.libraries') }}
                       </router-link>
                     </td>
                     <td>
@@ -456,7 +456,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('domain', object.name) }}">
-                        {{ $t('views.admin.moderation.DomainsDetail.uploadsLabel') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.link.uploads') }}
                       </router-link>
                     </td>
                     <td>
@@ -466,7 +466,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('domain', object.name) }}">
-                        {{ $t('views.admin.moderation.DomainsDetail.artistsLabel') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.link.artists') }}
                       </router-link>
                     </td>
                     <td>
@@ -476,7 +476,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('domain', object.name) }}">
-                        {{ $t('views.admin.moderation.DomainsDetail.albumsLabel') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.link.albums') }}
                       </router-link>
                     </td>
                     <td>
@@ -486,7 +486,7 @@ const setAllowList = async (value: boolean) => {
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('domain', object.name) }}">
-                        {{ $t('views.admin.moderation.DomainsDetail.tracksLabel') }}
+                        {{ $t('views.admin.moderation.DomainsDetail.link.tracks') }}
                       </router-link>
                     </td>
                     <td>

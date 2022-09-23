@@ -77,7 +77,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :to="{name: 'library.tags.detail', params: {id: object.name }}"
                   >
                     <i class="info icon" />
-                    {{ $t('views.admin.library.TagDetail.localProfileLink') }}
+                    {{ $t('views.admin.library.TagDetail.link.localProfile') }}
                   </router-link>
                   <button
                     v-dropdown
@@ -93,7 +93,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        {{ $t('views.admin.library.TagDetail.djangoLink') }}
+                        {{ $t('views.admin.library.TagDetail.link.django') }}
                       </a>
                     </div>
                   </button>
@@ -103,22 +103,22 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    {{ $t('views.admin.library.TagDetail.deleteButton') }}
+                    {{ $t('views.admin.library.TagDetail.button.delete') }}
                     <template #modal-header>
                       <p>
-                        {{ $t('views.admin.library.TagDetail.deleteModalHeader') }}
+                        {{ $t('views.admin.library.TagDetail.modal.delete.header') }}
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          {{ $t('views.admin.library.TagDetail.deleteModalMessage') }}
+                          {{ $t('views.admin.library.TagDetail.modal.delete.content.warning') }}
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        {{ $t('views.admin.library.TagDetail.deleteButton') }}
+                        {{ $t('views.admin.library.TagDetail.button.delete') }}
                       </p>
                     </template>
                   </dangerous-button>
@@ -135,14 +135,14 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.TagDetail.tagDataHeader') }}
+                  {{ $t('views.admin.library.TagDetail.header.tagData') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.TagDetail.nameLabel') }}
+                      {{ $t('views.admin.library.TagDetail.table.tag.name') }}
                     </td>
                     <td>
                       {{ object.name }}
@@ -157,14 +157,14 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.TagDetail.activityHeader') }}&nbsp;
+                  {{ $t('views.admin.library.TagDetail.header.activity') }}&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.TagDetail.firstSeenLabel') }}
+                      {{ $t('views.admin.library.TagDetail.table.activity.firstSeen') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -179,7 +179,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.TagDetail.audioContentHeader') }}&nbsp;
+                  {{ $t('views.admin.library.TagDetail.header.audioContent') }}&nbsp;
                 </div>
               </h3>
               <table class="ui very basic table">
@@ -187,7 +187,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('tag', object.name) }}">
-                        {{ $t('views.admin.library.TagDetail.artistsLabel') }}
+                        {{ $t('views.admin.library.TagDetail.link.artists') }}
                       </router-link>
                     </td>
                     <td>
@@ -197,7 +197,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('tag', object.name) }}">
-                        {{ $t('views.admin.library.TagDetail.albumsLabel') }}
+                        {{ $t('views.admin.library.TagDetail.link.albums') }}
                       </router-link>
                     </td>
                     <td>
@@ -207,7 +207,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('tag', object.name) }}">
-                        {{ $t('views.admin.library.TagDetail.tracksLabel') }}
+                        {{ $t('views.admin.library.TagDetail.link.tracks') }}
                       </router-link>
                     </td>
                     <td>

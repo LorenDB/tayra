@@ -9,8 +9,8 @@ const { t } = useI18n()
 
 const allowListEnabled = ref(false)
 const labels = computed(() => ({
-  moderation: t('views.admin.moderation.Base.moderation'),
-  secondaryMenu: t('views.admin.moderation.Base.secondaryMenu')
+  moderation: t('views.admin.moderation.Base.title'),
+  secondaryMenu: t('views.admin.moderation.Base.menu.secondary')
 }))
 
 const fetchNodeInfo = async () => {
@@ -35,7 +35,7 @@ fetchNodeInfo()
         class="ui item"
         :to="{name: 'manage.moderation.reports.list', query: {q: 'resolved:no'}}"
       >
-        {{ $t('views.admin.moderation.Base.reportsLink') }}
+        {{ $t('views.admin.moderation.Base.link.reports') }}
         <div
           v-if="$store.state.ui.notifications.pendingReviewReports > 0"
           :class="['ui', 'circular', 'mini', 'right floated', 'accent', 'label']"
@@ -47,7 +47,7 @@ fetchNodeInfo()
         class="ui item"
         :to="{name: 'manage.moderation.requests.list', query: {q: 'status:pending'}}"
       >
-        {{ $t('views.admin.moderation.Base.userRequestsLink') }}
+        {{ $t('views.admin.moderation.Base.link.userRequests') }}
         <div
           v-if="$store.state.ui.notifications.pendingReviewRequests > 0"
           :class="['ui', 'circular', 'mini', 'right floated', 'accent', 'label']"
@@ -59,13 +59,13 @@ fetchNodeInfo()
         class="ui item"
         :to="{name: 'manage.moderation.domains.list'}"
       >
-        {{ $t('views.admin.moderation.Base.domainsLink') }}
+        {{ $t('views.admin.moderation.Base.link.domains') }}
       </router-link>
       <router-link
         class="ui item"
         :to="{name: 'manage.moderation.accounts.list'}"
       >
-        {{ $t('views.admin.moderation.Base.accountsLink') }}
+        {{ $t('views.admin.moderation.Base.link.accounts') }}
       </router-link>
     </nav>
     <router-view

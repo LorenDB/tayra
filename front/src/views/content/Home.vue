@@ -23,51 +23,51 @@ const defaultQuota = computed(() => humanSize(quota.value * 1e6))
     <div class="ui text container">
       <h1>{{ labels.title }}</h1>
       <p>
-        <strong>{{ $t('views.content.Home.uploadQuota', { quota: defaultQuota }) }}</strong>
+        <strong>{{ $t('views.content.Home.help.uploadQuota', { quota: defaultQuota }) }}</strong>
       </p>
       <div class="ui segment">
         <h2>
           <i class="feed icon" />&nbsp;
-          {{ $t('views.content.Home.channelHeader') }}
+          {{ $t('views.content.Home.header.channel') }}
         </h2>
         <p>
-          {{ $t('views.content.Home.channelDescription') }}&#32;{{ $t('views.content.Home.channelDescriptionContinued') }}
+          {{ $t('views.content.Home.description.channel.1') }}&#32;{{ $t('views.content.Home.description.channel.2') }}
         </p>
         <router-link
           :to="{name: 'profile.overview', params: {username: store.state.auth.username}, hash: '#channels'}"
           class="ui primary button"
         >
-          {{ $t('views.content.Home.getStartedButton') }}
+          {{ $t('views.content.Home.button.start') }}
         </router-link>
       </div>
       <div class="ui segment">
         <h2>
           <i class="cloud icon" />&nbsp;
-          {{ $t('views.content.Home.libraryUploadHeader') }}
+          {{ $t('views.content.Home.header.upload') }}
         </h2>
         <p>
-          {{ $t('views.content.Home.libraryUploadDescription') }}
+          {{ $t('views.content.Home.description.upload') }}
         </p>
         <router-link
           :to="{name: 'content.libraries.index'}"
           class="ui primary button"
         >
-          {{ $t('views.content.Home.getStartedButton') }}
+          {{ $t('views.content.Home.button.start') }}
         </router-link>
       </div>
       <div class="ui segment">
         <h2>
           <i class="download icon" />&nbsp;
-          {{ $t('views.content.Home.followLibrariesHeader') }}
+          {{ $t('views.content.Home.header.follow') }}
         </h2>
         <p>
-          {{ $t('views.content.Home.followLibrariesDescription') }}
+          {{ $t('views.content.Home.description.follow') }}
         </p>
         <router-link
           :to="{name: 'content.remote.index'}"
           class="ui primary button"
         >
-          {{ $t('views.content.Home.getStartedButton') }}
+          {{ $t('views.content.Home.button.start') }}
         </router-link>
       </div>
     </div>

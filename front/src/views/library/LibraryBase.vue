@@ -38,14 +38,14 @@ const { t } = useI18n()
 const labels = computed(() => ({
   title: t('views.library.LibraryBase.title'),
   visibility: {
-    me: t('views.library.LibraryBase.privateVisibility'),
-    instance: t('views.library.LibraryBase.instanceVisibility'),
-    everyone: t('views.library.LibraryBase.publicVisibility')
+    me: t('views.library.LibraryBase.label.private'),
+    instance: t('views.library.LibraryBase.label.instance'),
+    everyone: t('views.library.LibraryBase.label.public')
   },
   tooltips: {
-    me: t('views.library.LibraryBase.privateTooltip'),
-    instance: t('views.library.LibraryBase.instanceTooltip'),
-    everyone: t('views.library.LibraryBase.publicTooltip')
+    me: t('views.library.LibraryBase.tooltip.private'),
+    instance: t('views.library.LibraryBase.tooltip.instance'),
+    everyone: t('views.library.LibraryBase.tooltip.public')
   }
 }))
 
@@ -110,7 +110,7 @@ const updateUploads = (count: number) => {
                 class="basic item"
               >
                 <i class="external icon" />
-                {{ $t('views.library.LibraryBase.domainViewLink', {domain: object.actor.domain}) }}
+                {{ $t('views.library.LibraryBase.link.domain', {domain: object.actor.domain}) }}
               </a>
               <div
                 v-for="obj in getReportableObjects({library: object})"
@@ -129,7 +129,7 @@ const updateUploads = (count: number) => {
                 :to="{name: 'manage.library.libraries.detail', params: {id: object.uuid}}"
               >
                 <i class="wrench icon" />
-                {{ $t('views.library.LibraryBase.moderationLink') }}
+                {{ $t('views.library.LibraryBase.link.moderation') }}
               </router-link>
             </div>
           </button>
@@ -148,7 +148,7 @@ const updateUploads = (count: number) => {
                   :actor="object.actor"
                   :truncate-length="0"
                 >
-                  {{ $t('views.library.LibraryBase.ownerLink', {username: object.actor.full_username}) }}
+                  {{ $t('views.library.LibraryBase.link.owner', {username: object.actor.full_username}) }}
                 </actor-link>
               </div>
             </div>
@@ -178,7 +178,7 @@ const updateUploads = (count: number) => {
             </span>
             <span class="middledot icon">
               <i class="music icon" />
-              {{ $t('views.library.LibraryBase.trackCount', {count: object.uploads_count}) }}
+              {{ $t('views.library.LibraryBase.meta.tracks', {count: object.uploads_count}) }}
             </span>
             <span v-if="object.size">
               <i class="database icon" />
@@ -216,10 +216,10 @@ const updateUploads = (count: number) => {
           <div class="ui form">
             <div class="field">
               <label for="copy-input">
-                {{ $t('views.library.LibraryBase.sharingLinkLabel') }}
+                {{ $t('views.library.LibraryBase.label.sharingLink') }}
               </label>
               <p>
-                {{ $t('views.library.LibraryBase.sharingLinkDescription') }}
+                {{ $t('views.library.LibraryBase.description.sharingLink') }}
               </p>
               <copy-input :value="object.fid" />
             </div>
@@ -234,21 +234,21 @@ const updateUploads = (count: number) => {
 
                   :to="{name: 'library.detail'}"
                 >
-                  {{ $t('views.library.LibraryBase.artistsLink') }}
+                  {{ $t('views.library.LibraryBase.link.artists') }}
                 </router-link>
                 <router-link
                   class="item"
 
                   :to="{name: 'library.detail.albums'}"
                 >
-                  {{ $t('views.library.LibraryBase.albumsLink') }}
+                  {{ $t('views.library.LibraryBase.link.albums') }}
                 </router-link>
                 <router-link
                   class="item"
 
                   :to="{name: 'library.detail.tracks'}"
                 >
-                  {{ $t('views.library.LibraryBase.tracksLink') }}
+                  {{ $t('views.library.LibraryBase.link.tracks') }}
                 </router-link>
                 <router-link
                   v-if="isOwner"
@@ -257,7 +257,7 @@ const updateUploads = (count: number) => {
                   :to="{name: 'library.detail.upload'}"
                 >
                   <i class="upload icon" />
-                  {{ $t('views.library.LibraryBase.uploadButton') }}
+                  {{ $t('views.library.LibraryBase.button.upload') }}
                 </router-link>
                 <router-link
                   v-if="isOwner"
@@ -266,7 +266,7 @@ const updateUploads = (count: number) => {
                   :to="{name: 'library.detail.edit'}"
                 >
                   <i class="pencil icon" />
-                  {{ $t('views.library.LibraryBase.editButton') }}
+                  {{ $t('views.library.LibraryBase.button.edit') }}
                 </router-link>
               </div>
               <div class="ui hidden divider" />

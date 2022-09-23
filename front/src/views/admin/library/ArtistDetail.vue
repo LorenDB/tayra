@@ -21,7 +21,7 @@ const { t } = useI18n()
 const router = useRouter()
 
 const labels = computed(() => ({
-  statsWarning: t('views.admin.library.ArtistDetail.statsWarning')
+  statsWarning: t('views.admin.library.ArtistDetail.warning.stats')
 }))
 
 const isLoading = ref(false)
@@ -106,7 +106,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     <template v-if="object.is_local">
                       <span class="ui tiny accent label">
                         <i class="home icon" />
-                        {{ $t('views.admin.library.ArtistDetail.localLabel') }}
+                        {{ $t('views.admin.library.ArtistDetail.header.local') }}
                       </span>
                       &nbsp;
                     </template>
@@ -129,7 +129,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :to="{name: 'library.artists.detail', params: {id: object.id }}"
                   >
                     <i class="info icon" />
-                    {{ $t('views.admin.library.ArtistDetail.localProfileLink') }}
+                    {{ $t('views.admin.library.ArtistDetail.link.localProfile') }}
                   </router-link>
                   <button
                     v-dropdown
@@ -145,7 +145,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="wrench icon" />
-                        {{ $t('views.admin.library.ArtistDetail.djangoLink') }}
+                        {{ $t('views.admin.library.ArtistDetail.link.django') }}
                       </a>
                       <a
                         v-if="object.mbid"
@@ -155,7 +155,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        {{ $t('views.admin.library.ArtistDetail.musicbrainzLink') }}
+                        {{ $t('views.admin.library.ArtistDetail.link.musicbrainz') }}
                       </a>
                       <fetch-button
                         v-if="!object.is_local"
@@ -164,7 +164,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         @refresh="fetchData"
                       >
                         <i class="refresh icon" />&nbsp;
-                        {{ $t('views.admin.library.ArtistDetail.remoteRefreshButton') }}
+                        {{ $t('views.admin.library.ArtistDetail.button.remoteRefresh') }}
                       </fetch-button>
                       <a
                         class="basic item"
@@ -173,7 +173,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                         rel="noopener noreferrer"
                       >
                         <i class="external icon" />
-                        {{ $t('views.admin.library.ArtistDetail.remoteProfileLink') }}
+                        {{ $t('views.admin.library.ArtistDetail.link.remoteProfile') }}
                       </a>
                     </div>
                   </button>
@@ -185,7 +185,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     class="ui labeled icon button"
                   >
                     <i class="edit icon" />
-                    {{ $t('views.admin.library.ArtistDetail.editButton') }}
+                    {{ $t('views.admin.library.ArtistDetail.button.edit') }}
                   </router-link>
                 </div>
                 <div class="ui buttons">
@@ -193,22 +193,22 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                     :class="['ui', {loading: isLoading}, 'basic danger button']"
                     :action="remove"
                   >
-                    {{ $t('views.admin.library.ArtistDetail.deleteButton') }}
+                    {{ $t('views.admin.library.ArtistDetail.button.delete') }}
                     <template #modal-header>
                       <p>
-                        {{ $t('views.admin.library.ArtistDetail.deleteModalHeader') }}
+                        {{ $t('views.admin.library.ArtistDetail.modal.delete.header') }}
                       </p>
                     </template>
                     <template #modal-content>
                       <div>
                         <p>
-                          {{ $t('views.admin.library.ArtistDetail.deleteModalMessage') }}
+                          {{ $t('views.admin.library.ArtistDetail.modal.delete.content.warning') }}
                         </p>
                       </div>
                     </template>
                     <template #modal-confirm>
                       <p>
-                        {{ $t('views.admin.library.ArtistDetail.deleteButton') }}
+                        {{ $t('views.admin.library.ArtistDetail.button.delete') }}
                       </p>
                     </template>
                   </dangerous-button>
@@ -225,14 +225,14 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="info icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.ArtistDetail.artistDataHeader') }}
+                  {{ $t('views.admin.library.ArtistDetail.header.artistData') }}
                 </div>
               </h3>
               <table class="ui very basic table">
                 <tbody>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.ArtistDetail.nameLabel') }}
+                      {{ $t('views.admin.library.ArtistDetail.table.artist.name') }}
                     </td>
                     <td>
                       {{ object.name }}
@@ -241,7 +241,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.artists', query: {q: getQuery('category', object.content_category) }}">
-                        {{ $t('views.admin.library.ArtistDetail.categoryLabel') }}
+                        {{ $t('views.admin.library.ArtistDetail.link.category') }}
                       </router-link>
                     </td>
                     <td>
@@ -251,7 +251,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr v-if="!object.is_local">
                     <td>
                       <router-link :to="{name: 'manage.moderation.domains.detail', params: {id: object.domain }}">
-                        {{ $t('views.admin.library.ArtistDetail.domainLabel') }}
+                        {{ $t('views.admin.library.ArtistDetail.link.domain') }}
                       </router-link>
                     </td>
                     <td>
@@ -260,7 +260,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr v-if="object.description">
                     <td>
-                      {{ $t('views.admin.library.ArtistDetail.descriptionLabel') }}
+                      {{ $t('views.admin.library.ArtistDetail.table.artist.description') }}
                     </td>
                     <sanitized-html
                       tag="td"
@@ -276,7 +276,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="feed icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.ArtistDetail.activityHeader') }}&nbsp;
+                  {{ $t('views.admin.library.ArtistDetail.header.activity') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -296,7 +296,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.ArtistDetail.firstSeenLabel') }}
+                      {{ $t('views.admin.library.ArtistDetail.table.activity.firstSeen') }}
                     </td>
                     <td>
                       <human-date :date="object.creation_date" />
@@ -304,7 +304,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.ArtistDetail.listeningsLabel') }}
+                      {{ $t('views.admin.library.ArtistDetail.table.activity.listenings') }}
                     </td>
                     <td>
                       {{ stats.listenings }}
@@ -312,7 +312,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.ArtistDetail.favoritedLabel') }}
+                      {{ $t('views.admin.library.ArtistDetail.table.activity.favorited') }}
                     </td>
                     <td>
                       {{ stats.track_favorites }}
@@ -320,7 +320,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.ArtistDetail.playlistsLabel') }}
+                      {{ $t('views.admin.library.ArtistDetail.table.activity.playlists') }}
                     </td>
                     <td>
                       {{ stats.playlists }}
@@ -329,7 +329,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.moderation.reports.list', query: {q: getQuery('target', `artist:${object.id}`) }}">
-                        {{ $t('views.admin.library.ArtistDetail.linkedReportsLabel') }}
+                        {{ $t('views.admin.library.ArtistDetail.link.reports') }}
                       </router-link>
                     </td>
                     <td>
@@ -339,7 +339,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.edits', query: {q: getQuery('target', 'artist ' + object.id)}}">
-                        {{ $t('views.admin.library.ArtistDetail.editsLabel') }}
+                        {{ $t('views.admin.library.ArtistDetail.link.edits') }}
                       </router-link>
                     </td>
                     <td>
@@ -355,7 +355,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
               <h3 class="ui header">
                 <i class="music icon" />
                 <div class="content">
-                  {{ $t('views.admin.library.ArtistDetail.audioContentHeader') }}&nbsp;
+                  {{ $t('views.admin.library.ArtistDetail.header.audioContent') }}&nbsp;
                   <span :data-tooltip="labels.statsWarning"><i class="question circle icon" /></span>
                 </div>
               </h3>
@@ -375,7 +375,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                 <tbody>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.ArtistDetail.cachedSizeLabel') }}
+                      {{ $t('views.admin.library.ArtistDetail.table.audioContent.cachedSize') }}
                     </td>
                     <td>
                       {{ humanSize(stats.media_downloaded_size) }}
@@ -383,7 +383,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   </tr>
                   <tr>
                     <td>
-                      {{ $t('views.admin.library.ArtistDetail.totalSizeLabel') }}
+                      {{ $t('views.admin.library.ArtistDetail.table.audioContent.totalSize') }}
                     </td>
                     <td>
                       {{ humanSize(stats.media_total_size) }}
@@ -393,7 +393,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.libraries', query: {q: getQuery('artist_id', object.id) }}">
-                        {{ $t('views.admin.library.ArtistDetail.librariesLabel') }}
+                        {{ $t('views.admin.library.ArtistDetail.link.libraries') }}
                       </router-link>
                     </td>
                     <td>
@@ -403,7 +403,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.uploads', query: {q: getQuery('artist_id', object.id) }}">
-                        {{ $t('views.admin.library.ArtistDetail.uploadsLabel') }}
+                        {{ $t('views.admin.library.ArtistDetail.link.uploads') }}
                       </router-link>
                     </td>
                     <td>
@@ -413,7 +413,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.albums', query: {q: getQuery('artist_id', object.id) }}">
-                        {{ $t('views.admin.library.ArtistDetail.albumsLabel') }}
+                        {{ $t('views.admin.library.ArtistDetail.link.albums') }}
                       </router-link>
                     </td>
                     <td>
@@ -423,7 +423,7 @@ const getQuery = (field: string, value: string) => `${field}:"${value}"`
                   <tr>
                     <td>
                       <router-link :to="{name: 'manage.library.tracks', query: {q: getQuery('artist_id', object.id) }}">
-                        {{ $t('views.admin.library.ArtistDetail.tracksLabel') }}
+                        {{ $t('views.admin.library.ArtistDetail.link.tracks') }}
                       </router-link>
                     </td>
                     <td>
