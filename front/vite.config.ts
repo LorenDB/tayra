@@ -40,14 +40,6 @@ export default defineConfig(({ mode }) => ({
       '~': resolve(__dirname, './src')
     }
   },
-  build: {
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, './index.html'),
-        embed: resolve(__dirname, './embed.html')
-      }
-    }
-  },
   test: {
     environment: 'jsdom',
     globals: true
