@@ -45,6 +45,7 @@ tasks:
       COMPOSE_FILE: /workspace/funkwhale/.gitpod/docker-compose.yml
       ENV_FILE: /workspace/funkwhale/.gitpod/.env
       VUE_EDITOR: code
+      DJANGO_SETTINGS_MODULE: config.settings.local
     command: |
       clear
       echo ""
