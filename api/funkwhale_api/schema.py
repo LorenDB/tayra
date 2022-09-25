@@ -47,16 +47,12 @@ class CustomAutoSchema(AutoSchema):
         if len(tokenized_path) > 0 and model_singular == tokenized_path[0]:
             tokenized_path.pop(0)
 
-        # rename `get_radio_radio_track` to `get_radio_track`
-        if (
-            len(tokenized_path) > 1
-            and tokenized_path[0] == "radio"
-            and tokenized_path[1] == "radio"
-        ):
+        # rename `get_radio_radio_track` to `get_radio_track`. Works with all models
+        if len(tokenized_path) > 1 and tokenized_path[0] == tokenized_path[1]:
             tokenized_path.pop(0)
 
         # rename `get_manage_channel` to `admin_get_channel`
-        elif len(tokenized_path) > 0 and tokenized_path[0] == "manage":
+        if len(tokenized_path) > 0 and tokenized_path[0] == "manage":
             tokenized_path.pop(0)
 
             # rename `get_manage_library_album` to `admin_get_album`
