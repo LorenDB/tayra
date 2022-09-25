@@ -32,6 +32,7 @@ class CustomAutoSchema(AutoSchema):
             tokenized_path.append("root")
 
         model = tokenized_path.pop()
+        model_singular = model
 
         if self.method == "GET" and self._is_list_view():
             action = "get"
@@ -42,10 +43,17 @@ class CustomAutoSchema(AutoSchema):
         if re.search(r"<drf_format_suffix\w*:\w+>", self.path_regex):
             tokenized_path.append("formatted")
 
+        # rename `create_radio_radio` to `create_radio`. Works with all models
+        if (
+            len(tokenized_path) > 0
+            and model_singular == tokenized_path[0]
+        ):
+            tokenized_path.pop(0)
+
         # rename `get_radio_radio_track` to `get_radio_track`
         if (
             len(tokenized_path) > 1
-            and tokenized_path[1] == "radio"
+            and tokenized_path[0] == "radio"
             and tokenized_path[1] == "radio"
         ):
             tokenized_path.pop(0)
