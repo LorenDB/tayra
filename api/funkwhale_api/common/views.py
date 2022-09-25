@@ -12,6 +12,8 @@ from rest_framework import response
 from rest_framework import views
 from rest_framework import viewsets
 
+from drf_spectacular.utils import extend_schema
+
 from config import plugins
 
 from funkwhale_api.users.oauth import permissions as oauth_permissions
@@ -78,6 +80,7 @@ class MutationViewSet(
 
         return super().perform_destroy(instance)
 
+    @extend_schema(operation_id='approve_mutation')
     @action(detail=True, methods=["post"])
     @transaction.atomic
     def approve(self, request, *args, **kwargs):
@@ -107,6 +110,7 @@ class MutationViewSet(
         )
         return response.Response({}, status=200)
 
+    @extend_schema(operation_id='reject_mutation')
     @action(detail=True, methods=["post"])
     @transaction.atomic
     def reject(self, request, *args, **kwargs):
@@ -201,6 +205,7 @@ class AttachmentViewSet(
 class TextPreviewView(views.APIView):
     permission_classes = []
 
+    @extend_schema(operation_id='preview_text')
     def post(self, request, *args, **kwargs):
         payload = request.data
         if "text" not in payload:
@@ -273,6 +278,7 @@ class PluginViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         user.plugins.filter(code=kwargs["pk"]).delete()
         return response.Response(status=204)
 
+    @extend_schema(operation_id='enable_plugin')
     @action(detail=True, methods=["post"])
     def enable(self, request, *args, **kwargs):
         user = request.user
@@ -281,6 +287,7 @@ class PluginViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         plugins.enable_conf(kwargs["pk"], True, user)
         return response.Response({}, status=200)
 
+    @extend_schema(operation_id='disable_plugin')
     @action(detail=True, methods=["post"])
     def disable(self, request, *args, **kwargs):
         user = request.user

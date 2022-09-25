@@ -2,6 +2,8 @@ from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from drf_spectacular.utils import extend_schema, extend_schema_view
+
 from django.db.models import Prefetch
 
 from funkwhale_api.activity import record
@@ -38,6 +40,7 @@ class TrackFavoriteViewSet(
             return serializers.UserTrackFavoriteSerializer
         return serializers.UserTrackFavoriteWriteSerializer
 
+    @extend_schema(operation_id='favorite_track')
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -67,6 +70,7 @@ class TrackFavoriteViewSet(
         favorite = models.TrackFavorite.add(track=track, user=self.request.user)
         return favorite
 
+    @extend_schema(operation_id='unfavorite_track')
     @action(methods=["delete", "post"], detail=False)
     def remove(self, request, *args, **kwargs):
         try:
@@ -77,6 +81,7 @@ class TrackFavoriteViewSet(
         favorite.delete()
         return Response([], status=status.HTTP_204_NO_CONTENT)
 
+    @extend_schema(operation_id='get_all_favorite_tracks')
     @action(methods=["get"], detail=False)
     def all(self, request, *args, **kwargs):
         """

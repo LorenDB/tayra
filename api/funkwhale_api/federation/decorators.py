@@ -5,6 +5,8 @@ from rest_framework import permissions
 from rest_framework import response
 from rest_framework import status
 
+from drf_spectacular.utils import extend_schema
+
 from funkwhale_api.common import utils as common_utils
 
 from . import api_serializers
@@ -42,8 +44,12 @@ def fetches_route():
             serializer = api_serializers.FetchSerializer(fetch)
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    return decorators.action(
-        methods=["get", "post"],
-        detail=True,
-        permission_classes=[permissions.IsAuthenticated],
-    )(fetches)
+    return extend_schema(methods=['post'], responses=api_serializers.FetchSerializer())(
+        extend_schema(methods=['get'], responses=api_serializers.FetchSerializer(many=True))(
+            decorators.action(
+                methods=["get", "post"],
+                detail=True,
+                permission_classes=[permissions.IsAuthenticated],
+            )(fetches)
+        )
+    )

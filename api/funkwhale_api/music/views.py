@@ -16,6 +16,8 @@ from rest_framework import views, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from drf_spectacular.utils import extend_schema
+
 import requests.exceptions
 
 from funkwhale_api.common import decorators as common_decorators
@@ -66,7 +68,9 @@ def get_libraries(filter_uploads):
         serializer = federation_api_serializers.LibrarySerializer(qs, many=True)
         return Response(serializer.data)
 
-    return libraries
+    return extend_schema(responses=federation_api_serializers.LibrarySerializer(many=True))(
+        action(methods=["get"], detail=True)(libraries)
+    )
 
 
 def refetch_obj(obj, queryset):
@@ -167,13 +171,9 @@ class ArtistViewSet(
             Prefetch("albums", queryset=albums), TAG_PREFETCH
         )
 
-    libraries = action(methods=["get"], detail=True)(
-        get_libraries(
-            filter_uploads=lambda o, uploads: uploads.filter(
-                Q(track__artist=o) | Q(track__album__artist=o)
-            )
-        )
-    )
+    libraries = get_libraries(lambda o, uploads: uploads.filter(
+        Q(track__artist=o) | Q(track__album__artist=o)
+    ))
 
 
 class AlbumViewSet(
@@ -231,9 +231,7 @@ class AlbumViewSet(
             Prefetch("tracks", queryset=tracks), TAG_PREFETCH
         )
 
-    libraries = action(methods=["get"], detail=True)(
-        get_libraries(filter_uploads=lambda o, uploads: uploads.filter(track__album=o))
-    )
+    libraries = get_libraries(lambda o, uploads: uploads.filter(track__album=o))
 
     def get_serializer_class(self):
         if self.action in ["create"]:
@@ -430,9 +428,7 @@ class TrackViewSet(
         )
         return queryset.prefetch_related(TAG_PREFETCH)
 
-    libraries = action(methods=["get"], detail=True)(
-        get_libraries(filter_uploads=lambda o, uploads: uploads.filter(track=o))
-    )
+    libraries = get_libraries(lambda o, uploads: uploads.filter(track=o))
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -744,6 +740,7 @@ class UploadViewSet(
             qs = qs.playable_by(actor)
         return qs
 
+    @extend_schema(operation_id='get_upload_metadata')
     @action(methods=["get"], detail=True, url_path="audio-file-metadata")
     def audio_file_metadata(self, request, *args, **kwargs):
         upload = self.get_object()
@@ -802,6 +799,7 @@ class Search(views.APIView):
     required_scope = "libraries"
     anonymous_policy = "setting"
 
+    @extend_schema(operation_id='get_search_results')
     def get(self, request, *args, **kwargs):
         query = request.GET.get("query", request.GET.get("q", "")) or ""
         query = query.strip()

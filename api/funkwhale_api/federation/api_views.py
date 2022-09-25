@@ -10,6 +10,8 @@ from rest_framework import permissions
 from rest_framework import response
 from rest_framework import viewsets
 
+from drf_spectacular.utils import extend_schema, extend_schema_view
+
 from funkwhale_api.common import preferences
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common.permissions import ConditionalAuthentication
@@ -38,6 +40,13 @@ def update_follow(follow, approved):
         routes.outbox.dispatch({"type": "Reject"}, context={"follow": follow})
 
 
+@extend_schema_view(
+    list=extend_schema(operation_id='get_federation_library_follows'),
+    create=extend_schema(operation_id='create_federation_library_follow'),
+)
+# NOTE: For some weird reason, @extend_schema_view doesn't work with `retrieve` and `destroy` methods.
+@extend_schema(operation_id='get_federation_library_follow', methods=['get'])
+@extend_schema(operation_id='delete_federation_library_follow', methods=['delete'])
 class LibraryFollowViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
@@ -77,6 +86,7 @@ class LibraryFollowViewSet(
         context["actor"] = self.request.user.actor
         return context
 
+    @extend_schema(operation_id='accept_federation_library_follow')
     @decorators.action(methods=["post"], detail=True)
     def accept(self, request, *args, **kwargs):
         try:
@@ -88,6 +98,7 @@ class LibraryFollowViewSet(
         update_follow(follow, approved=True)
         return response.Response(status=204)
 
+    @extend_schema(operation_id='reject_federation_library_follow')
     @decorators.action(methods=["post"], detail=True)
     def reject(self, request, *args, **kwargs):
         try:
@@ -100,6 +111,7 @@ class LibraryFollowViewSet(
         update_follow(follow, approved=False)
         return response.Response(status=204)
 
+    @extend_schema(operation_id='get_all_federation_library_follows')
     @decorators.action(methods=["get"], detail=False)
     def all(self, request, *args, **kwargs):
         """

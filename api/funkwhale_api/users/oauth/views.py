@@ -4,8 +4,11 @@ import urllib.parse
 from django import http
 from django.utils import timezone
 from django.db.models import Q
+
 from rest_framework import mixins, permissions, response, views, viewsets
 from rest_framework.decorators import action
+
+from drf_spectacular.utils import extend_schema
 
 from oauth2_provider import exceptions as oauth2_exceptions
 from oauth2_provider import views as oauth_views
@@ -83,6 +86,7 @@ class ApplicationViewSet(
             qs = qs.filter(user=self.request.user)
         return qs
 
+    @extend_schema(operation_id='refresh_oauth_token')
     @action(
         detail=True,
         methods=["post"],

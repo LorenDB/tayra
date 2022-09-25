@@ -1,0 +1,594 @@
+{
+  "/api/v1/activity/": {
+    "get": "get_activity"
+  },
+  "/api/v1/albums/": {
+    "get": "get_albums",
+    "post": "create_album"
+  },
+  "/api/v1/albums/{id}/": {
+    "get": "get_album",
+    "delete": "delete_album"
+  },
+  "/api/v1/albums/{id}/fetches/": {
+    "get": "get_album_fetches",
+    "post": "create_album_fetch"
+  },
+  "/api/v1/albums/{id}/libraries/": {
+    "get": "get_album_libraries"
+  },
+  "/api/v1/albums/{id}/mutations/": {
+    "get": "get_album_mutations",
+    "post": "create_album_mutation"
+  },
+  "/api/v1/artists/": {
+    "get": "get_artists"
+  },
+  "/api/v1/artists/{id}/": {
+    "get": "get_artist"
+  },
+  "/api/v1/artists/{id}/fetches/": {
+    "get": "get_artist_fetches",
+    "post": "create_artist_fetch"
+  },
+  "/api/v1/artists/{id}/libraries/": {
+    "get": "get_artist_libraries"
+  },
+  "/api/v1/artists/{id}/mutations/": {
+    "get": "get_artist_mutations",
+    "post": "create_artist_mutation"
+  },
+  "/api/v1/attachments/": {
+    "post": "create_attachment"
+  },
+  "/api/v1/attachments/{uuid}/": {
+    "get": "get_attachment",
+    "delete": "delete_attachment"
+  },
+  "/api/v1/attachments/{uuid}/proxy/": {
+    "get": "get_attachment_proxy"
+  },
+  "/api/v1/auth/password/change/": {
+    "post": "change_password"
+  },
+  "/api/v1/auth/password/reset/": {
+    "post": "reset_password"
+  },
+  "/api/v1/auth/password/reset/confirm/": {
+    "post": "confirm_password_reset"
+  },
+  "/api/v1/auth/registration/": {
+    "post": "register"
+  },
+  "/api/v1/auth/registration/change-password/": {
+    "post": "change_password_2"
+  },
+  "/api/v1/auth/registration/verify-email/": {
+    "post": "verify_email"
+  },
+  "/api/v1/auth/user/": {
+    "get": "get_auth_user",
+    "put": "update_auth_user",
+    "patch": "partial_update_auth_user"
+  },
+  "/api/v1/channels/": {
+    "get": "get_channels",
+    "post": "create_channel"
+  },
+  "/api/v1/channels/{composite}/": {
+    "get": "get_channel",
+    "put": "update_channel",
+    "patch": "partial_update_channel",
+    "delete": "delete_channel"
+  },
+  "/api/v1/channels/{composite}/rss/": {
+    "get": "get_channel_rss"
+  },
+  "/api/v1/channels/{composite}/subscribe/": {
+    "post": "subscribe_channel"
+  },
+  "/api/v1/channels/{composite}/unsubscribe/": {
+    "post": "unsubscribe_channel_2",
+    "delete": "unsubscribe_channel"
+  },
+  "/api/v1/channels/metadata-choices/": {
+    "get": "get_channel_metadata_choices"
+  },
+  "/api/v1/channels/rss-subscribe/": {
+    "post": "subscribe_channel_rss"
+  },
+  "/api/v1/favorites/tracks/": {
+    "get": "get_favorite_tracks",
+    "post": "favorite_track"
+  },
+  "/api/v1/favorites/tracks/{id}/": {
+    "delete": "delete_favorite_track"
+  },
+  "/api/v1/favorites/tracks/all/": {
+    "get": "get_all_favorite_tracks"
+  },
+  "/api/v1/favorites/tracks/remove/": {
+    "post": "unfavorite_track_2",
+    "delete": "unfavorite_track"
+  },
+  "/api/v1/federation/actors/{full_username}/": {
+    "get": "get_federation_actor"
+  },
+  "/api/v1/federation/actors/{full_username}/libraries/": {
+    "get": "get_federation_actor_library"
+  },
+  "/api/v1/federation/domains/": {
+    "get": "get_federation_domains"
+  },
+  "/api/v1/federation/domains/{name}/": {
+    "get": "get_federation_domain"
+  },
+  "/api/v1/federation/fetches/": {
+    "post": "create_federation_fetch"
+  },
+  "/api/v1/federation/fetches/{id}/": {
+    "get": "get_federation_fetch"
+  },
+  "/api/v1/federation/follows/library/": {
+    "get": "get_federation_library_follows",
+    "post": "create_federation_library_follow"
+  },
+  "/api/v1/federation/follows/library/{uuid}/": {
+    "get": "get_federation_library_follow",
+    "delete": "delete_federation_library_follow"
+  },
+  "/api/v1/federation/follows/library/{uuid}/accept/": {
+    "post": "accept_federation_library_follow"
+  },
+  "/api/v1/federation/follows/library/{uuid}/reject/": {
+    "post": "reject_federation_library_follow"
+  },
+  "/api/v1/federation/follows/library/all/": {
+    "get": "get_all_federation_library_follows"
+  },
+  "/api/v1/federation/inbox/": {
+    "get": "get_federation_inboxes"
+  },
+  "/api/v1/federation/inbox/{id}/": {
+    "get": "get_federation_inbox",
+    "put": "update_federation_inbox",
+    "patch": "partial_update_federation_inbox"
+  },
+  "/api/v1/federation/inbox/action/": {
+    "post": "create_federation_inbox_action"
+  },
+  "/api/v1/federation/libraries/{uuid}/": {
+    "get": "get_federation_library"
+  },
+  "/api/v1/federation/libraries/{uuid}/scan/": {
+    "post": "create_federation_library_scan"
+  },
+  "/api/v1/federation/libraries/fetch/": {
+    "post": "create_federation_library_fetch"
+  },
+  "/api/v1/history/listenings/": {
+    "get": "get_history_listenings",
+    "post": "create_history_listening"
+  },
+  "/api/v1/history/listenings/{id}/": {
+    "get": "get_history_listening"
+  },
+  "/api/v1/instance/admin/settings/": {
+    "get": "get_instance_admin_settings"
+  },
+  "/api/v1/instance/admin/settings/{id}/": {
+    "get": "get_instance_admin_setting",
+    "put": "update_instance_admin_setting",
+    "patch": "partial_update_instance_admin_setting"
+  },
+  "/api/v1/instance/admin/settings/bulk/": {
+    "post": "create_instance_admin_setting_bulk"
+  },
+  "/api/v1/instance/nodeinfo/2.0/": {
+    "get": "get_instance_nodeinfo_2.0"
+  },
+  "/api/v1/instance/settings/": {
+    "get": "get_instance_settings"
+  },
+  "/api/v1/instance/spa-manifest.json": {
+    "get": "get_spa_manifest"
+  },
+  "/api/v1/libraries/": {
+    "get": "get_libraries",
+    "post": "create_library"
+  },
+  "/api/v1/libraries/{uuid}/": {
+    "get": "get_library",
+    "put": "update_library",
+    "patch": "partial_update_library",
+    "delete": "delete_library"
+  },
+  "/api/v1/libraries/{uuid}/follows/": {
+    "get": "get_library_follow"
+  },
+  "/api/v1/libraries/fs-import/": {
+    "get": "get_library_fs_import",
+    "post": "create_library_fs_import",
+    "delete": "delete_library_fs_import"
+  },
+  "/api/v1/licenses/": {
+    "get": "get_licenses"
+  },
+  "/api/v1/licenses/{code}/": {
+    "get": "get_license"
+  },
+  "/api/v1/listen/{uuid}/": {
+    "get": "get_listen"
+  },
+  "/api/v1/manage/accounts/": {
+    "get": "admin_get_accounts"
+  },
+  "/api/v1/manage/accounts/{id}/": {
+    "get": "admin_get_account"
+  },
+  "/api/v1/manage/accounts/{id}/stats/": {
+    "get": "admin_get_account_stats"
+  },
+  "/api/v1/manage/accounts/action/": {
+    "post": "admin_create_account_action"
+  },
+  "/api/v1/manage/channels/": {
+    "get": "admin_get_channels"
+  },
+  "/api/v1/manage/channels/{composite}/": {
+    "get": "admin_get_channel",
+    "delete": "admin_delete_channel"
+  },
+  "/api/v1/manage/channels/{composite}/stats/": {
+    "get": "admin_get_channel_stats"
+  },
+  "/api/v1/manage/federation/domains/": {
+    "get": "admin_get_federation_domains",
+    "post": "admin_create_federation_domain"
+  },
+  "/api/v1/manage/federation/domains/{name}/": {
+    "get": "admin_get_federation_domain",
+    "put": "admin_update_federation_domain",
+    "patch": "admin_partial_update_federation_domain"
+  },
+  "/api/v1/manage/federation/domains/{name}/nodeinfo/": {
+    "get": "admin_get_federation_domain_nodeinfo"
+  },
+  "/api/v1/manage/federation/domains/{name}/stats/": {
+    "get": "admin_get_federation_domain_stats"
+  },
+  "/api/v1/manage/federation/domains/action/": {
+    "post": "admin_create_federation_domain_action"
+  },
+  "/api/v1/manage/library/albums/": {
+    "get": "admin_get_albums"
+  },
+  "/api/v1/manage/library/albums/{id}/": {
+    "get": "admin_get_album",
+    "delete": "admin_delete_album"
+  },
+  "/api/v1/manage/library/albums/{id}/stats/": {
+    "get": "admin_get_library_album_stats"
+  },
+  "/api/v1/manage/library/albums/action/": {
+    "post": "admin_create_album_action"
+  },
+  "/api/v1/manage/library/artists/": {
+    "get": "admin_get_artists"
+  },
+  "/api/v1/manage/library/artists/{id}/": {
+    "get": "admin_get_artist",
+    "delete": "admin_delete_artist"
+  },
+  "/api/v1/manage/library/artists/{id}/stats/": {
+    "get": "admin_get_library_artist_stats"
+  },
+  "/api/v1/manage/library/artists/action/": {
+    "post": "admin_create_artist_action"
+  },
+  "/api/v1/manage/library/libraries/": {
+    "get": "admin_get_libraries"
+  },
+  "/api/v1/manage/library/libraries/{uuid}/": {
+    "get": "admin_get_library",
+    "put": "admin_update_library",
+    "patch": "admin_partial_update_library",
+    "delete": "admin_delete_library"
+  },
+  "/api/v1/manage/library/libraries/{uuid}/stats/": {
+    "get": "admin_get_library_stats"
+  },
+  "/api/v1/manage/library/libraries/action/": {
+    "post": "admin_create_library_action"
+  },
+  "/api/v1/manage/library/tracks/": {
+    "get": "admin_get_tracks"
+  },
+  "/api/v1/manage/library/tracks/{id}/": {
+    "get": "admin_get_track",
+    "delete": "admin_delete_track"
+  },
+  "/api/v1/manage/library/tracks/{id}/stats/": {
+    "get": "admin_get_track_stats"
+  },
+  "/api/v1/manage/library/tracks/action/": {
+    "post": "admin_create_track_action"
+  },
+  "/api/v1/manage/library/uploads/": {
+    "get": "admin_get_uploads"
+  },
+  "/api/v1/manage/library/uploads/{uuid}/": {
+    "get": "admin_get_upload",
+    "delete": "admin_delete_upload"
+  },
+  "/api/v1/manage/library/uploads/action/": {
+    "post": "admin_create_upload_action"
+  },
+  "/api/v1/manage/moderation/instance-policies/": {
+    "get": "moderation_get_instance_policies",
+    "post": "moderation_create_instance_policy"
+  },
+  "/api/v1/manage/moderation/instance-policies/{id}/": {
+    "get": "moderation_get_instance_policy",
+    "put": "moderation_update_instance_policy",
+    "patch": "moderation_partial_update_instance_policy",
+    "delete": "moderation_delete_instance_policy"
+  },
+  "/api/v1/manage/moderation/notes/": {
+    "get": "moderation_get_notes",
+    "post": "moderation_create_note"
+  },
+  "/api/v1/manage/moderation/notes/{uuid}/": {
+    "get": "moderation_get_note",
+    "delete": "moderation_delete_note"
+  },
+  "/api/v1/manage/moderation/reports/": {
+    "get": "moderation_get_reports"
+  },
+  "/api/v1/manage/moderation/reports/{uuid}/": {
+    "get": "moderation_get_report",
+    "put": "moderation_update_report",
+    "patch": "moderation_partial_update_report"
+  },
+  "/api/v1/manage/moderation/requests/": {
+    "get": "moderation_get_requests"
+  },
+  "/api/v1/manage/moderation/requests/{uuid}/": {
+    "get": "moderation_get_request",
+    "put": "moderation_update_request",
+    "patch": "moderation_partial_update_request"
+  },
+  "/api/v1/manage/tags/": {
+    "get": "admin_get_tags",
+    "post": "admin_create_tag"
+  },
+  "/api/v1/manage/tags/{name}/": {
+    "get": "admin_get_tag",
+    "delete": "admin_delete_tag"
+  },
+  "/api/v1/manage/tags/action/": {
+    "post": "admin_create_tag_action"
+  },
+  "/api/v1/manage/users/invitations/": {
+    "get": "admin_get_invitations",
+    "post": "admin_create_invitation"
+  },
+  "/api/v1/manage/users/invitations/{id}/": {
+    "get": "admin_get_invitation",
+    "put": "admin_update_invitation",
+    "patch": "admin_partial_update_invitation"
+  },
+  "/api/v1/manage/users/invitations/action/": {
+    "post": "admin_create_invitation_action"
+  },
+  "/api/v1/manage/users/users/": {
+    "get": "admin_get_users"
+  },
+  "/api/v1/manage/users/users/{id}/": {
+    "get": "admin_get_user",
+    "put": "admin_update_user",
+    "patch": "admin_partial_update_user"
+  },
+  "/api/v1/moderation/content-filters/": {
+    "get": "get_moderation_content_filters",
+    "post": "create_moderation_content_filter"
+  },
+  "/api/v1/moderation/content-filters/{uuid}/": {
+    "get": "get_moderation_content_filter",
+    "delete": "delete_moderation_content_filter"
+  },
+  "/api/v1/moderation/reports/": {
+    "post": "create_moderation_report"
+  },
+  "/api/v1/mutations/": {
+    "get": "get_mutations"
+  },
+  "/api/v1/mutations/{uuid}/": {
+    "get": "get_mutation",
+    "delete": "delete_mutation"
+  },
+  "/api/v1/mutations/{uuid}/approve/": {
+    "post": "approve_mutation"
+  },
+  "/api/v1/mutations/{uuid}/reject/": {
+    "post": "reject_mutation"
+  },
+  "/api/v1/oauth/apps/": {
+    "get": "get_oauth_apps",
+    "post": "create_oauth_app"
+  },
+  "/api/v1/oauth/apps/{client_id}/": {
+    "get": "get_oauth_app",
+    "put": "update_oauth_app",
+    "patch": "partial_update_oauth_app",
+    "delete": "delete_oauth_app"
+  },
+  "/api/v1/oauth/apps/{client_id}/refresh-token/": {
+    "post": "refresh_oauth_token"
+  },
+  "/api/v1/oauth/authorize/": {
+    "get": "get_oauth_authorize",
+    "post": "create_oauth_authorize",
+    "put": "update_oauth_authorize"
+  },
+  "/api/v1/oauth/grants/": {
+    "get": "get_oauth_grants"
+  },
+  "/api/v1/oauth/grants/{client_id}/": {
+    "get": "get_oauth_grant",
+    "delete": "delete_oauth_grant"
+  },
+  "/api/v1/oembed/": {
+    "get": "get_oembed"
+  },
+  "/api/v1/playlists/": {
+    "get": "get_playlists",
+    "post": "create_playlist"
+  },
+  "/api/v1/playlists/{id}/": {
+    "get": "get_playlist",
+    "put": "update_playlist",
+    "patch": "partial_update_playlist",
+    "delete": "delete_playlist"
+  },
+  "/api/v1/playlists/{id}/add/": {
+    "post": "add_to_playlist"
+  },
+  "/api/v1/playlists/{id}/clear/": {
+    "delete": "clear_playlist"
+  },
+  "/api/v1/playlists/{id}/move/": {
+    "post": "reorder_track_in_playlist"
+  },
+  "/api/v1/playlists/{id}/remove/": {
+    "post": "remove_from_playlist_2",
+    "delete": "remove_from_playlist"
+  },
+  "/api/v1/playlists/{id}/tracks/": {
+    "get": "get_playlist_tracks"
+  },
+  "/api/v1/plugins/": {
+    "get": "get_plugins",
+    "post": "create_plugin"
+  },
+  "/api/v1/plugins/{id}/": {
+    "get": "get_plugin"
+  },
+  "/api/v1/plugins/{id}/disable/": {
+    "post": "disable_plugin"
+  },
+  "/api/v1/plugins/{id}/enable/": {
+    "post": "enable_plugin"
+  },
+  "/api/v1/plugins/{id}/scan/": {
+    "post": "create_plugin_scan"
+  },
+  "/api/v1/radios/radios/": {
+    "get": "get_radio_radios",
+    "post": "create_radio_radio"
+  },
+  "/api/v1/radios/radios/{id}/": {
+    "get": "get_radio_radio",
+    "put": "update_radio_radio",
+    "patch": "partial_update_radio_radio",
+    "delete": "delete_radio_radio"
+  },
+  "/api/v1/radios/radios/{id}/tracks/": {
+    "get": "get_radio_track"
+  },
+  "/api/v1/radios/radios/filters/": {
+    "get": "get_radio_filter"
+  },
+  "/api/v1/radios/radios/validate/": {
+    "post": "validate_radio"
+  },
+  "/api/v1/radios/sessions/": {
+    "post": "create_radio_session"
+  },
+  "/api/v1/radios/sessions/{id}/": {
+    "get": "get_radio_session"
+  },
+  "/api/v1/radios/tracks/": {
+    "post": "get_next_radio_track"
+  },
+  "/api/v1/rate-limit/": {
+    "get": "get_rate_limit"
+  },
+  "/api/v1/search": {
+    "get": "get_search_results"
+  },
+  "/api/v1/stream/{uuid}/": {
+    "get": "get_stream"
+  },
+  "/api/v1/subscriptions/": {
+    "get": "get_subscriptions"
+  },
+  "/api/v1/subscriptions/{uuid}/": {
+    "get": "get_subscription"
+  },
+  "/api/v1/subscriptions/all/": {
+    "get": "get_all_subscriptions"
+  },
+  "/api/v1/tags/": {
+    "get": "get_tags"
+  },
+  "/api/v1/tags/{name}/": {
+    "get": "get_tag"
+  },
+  "/api/v1/text-preview/": {
+    "post": "preview_text"
+  },
+  "/api/v1/tracks/": {
+    "get": "get_tracks"
+  },
+  "/api/v1/tracks/{id}/": {
+    "get": "get_track",
+    "delete": "delete_track"
+  },
+  "/api/v1/tracks/{id}/fetches/": {
+    "get": "get_track_fetches",
+    "post": "create_track_fetch"
+  },
+  "/api/v1/tracks/{id}/libraries/": {
+    "get": "get_track_libraries"
+  },
+  "/api/v1/tracks/{id}/mutations/": {
+    "get": "get_track_mutations",
+    "post": "create_track_mutation"
+  },
+  "/api/v1/uploads/": {
+    "get": "get_uploads",
+    "post": "create_upload"
+  },
+  "/api/v1/uploads/{uuid}/": {
+    "get": "get_upload",
+    "put": "update_upload",
+    "patch": "partial_update_upload",
+    "delete": "delete_upload"
+  },
+  "/api/v1/uploads/{uuid}/audio-file-metadata/": {
+    "get": "get_upload_metadata"
+  },
+  "/api/v1/uploads/action/": {
+    "post": "create_upload_action"
+  },
+  "/api/v1/users/{username}/": {
+    "put": "update_user",
+    "patch": "partial_update_user"
+  },
+  "/api/v1/users/{username}/subsonic-token/": {
+    "get": "get_user_subsonic_token",
+    "post": "create_user_subsonic_token",
+    "delete": "delete_user_subsonic_token"
+  },
+  "/api/v1/users/change-email/": {
+    "post": "change_email"
+  },
+  "/api/v1/users/me/": {
+    "get": "get_authenticated_user",
+    "delete": "delete_authenticated_user"
+  },
+  "/api/v1/users/settings/": {
+    "post": "update_settings"
+  }
+}

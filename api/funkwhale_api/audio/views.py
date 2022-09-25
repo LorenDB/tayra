@@ -5,6 +5,8 @@ from rest_framework import permissions as rest_permissions
 from rest_framework import response
 from rest_framework import viewsets
 
+from drf_spectacular.utils import extend_schema, extend_schema_view
+
 from django import http
 from django.db import transaction
 from django.db.models import Count, Prefetch, Q, Sum
@@ -43,6 +45,12 @@ class ChannelsMixin(object):
         return super().dispatch(request, *args, **kwargs)
 
 
+@extend_schema_view(
+    metedata_choices=extend_schema(operation_id='get_channel_metadata_choices'),
+    subscribe=extend_schema(operation_id='subscribe_channel'),
+    unsubscribe=extend_schema(operation_id='unsubscribe_channel'),
+    rss_subscribe=extend_schema(operation_id='subscribe_channel_rss'),
+)
 class ChannelViewSet(
     ChannelsMixin,
     MultipleLookupDetailMixin,
@@ -322,6 +330,7 @@ class SubscriptionsViewSet(
         qs = super().get_queryset()
         return qs.filter(actor=self.request.user.actor)
 
+    @extend_schema(operation_id='get_all_subscriptions')
     @decorators.action(methods=["get"], detail=False)
     def all(self, request, *args, **kwargs):
         """

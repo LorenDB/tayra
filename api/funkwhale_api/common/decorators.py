@@ -5,6 +5,8 @@ from rest_framework import exceptions
 from rest_framework import response
 from rest_framework import status
 
+from drf_spectacular.utils import extend_schema
+
 from . import filters
 from . import models
 from . import mutations as common_mutations
@@ -87,6 +89,10 @@ def mutations_route(types):
             )
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    return decorators.action(
-        methods=["get", "post"], detail=True, required_scope="edits"
-    )(mutations)
+    return extend_schema(methods=['post'], responses=serializers.APIMutationSerializer())(
+        extend_schema(methods=['get'], responses=serializers.APIMutationSerializer(many=True))(
+            decorators.action(
+                methods=["get", "post"], detail=True, required_scope="edits"
+            )(mutations)
+        )
+    )

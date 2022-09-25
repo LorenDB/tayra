@@ -1,6 +1,8 @@
 from rest_framework import mixins, response, viewsets
 from rest_framework import decorators as rest_decorators
 
+from drf_spectacular.utils import extend_schema
+
 from django.db import transaction
 from django.db.models import Count, Prefetch, Q, Sum, OuterRef, Subquery
 from django.db.models.functions import Coalesce, Length
@@ -93,6 +95,7 @@ class ManageArtistViewSet(
     required_scope = "instance:libraries"
     ordering_fields = ["creation_date", "name"]
 
+    @extend_schema(operation_id='admin_get_library_artist_stats')
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         artist = self.get_object()
@@ -135,6 +138,7 @@ class ManageAlbumViewSet(
     required_scope = "instance:libraries"
     ordering_fields = ["creation_date", "title", "release_date"]
 
+    @extend_schema(operation_id='admin_get_library_album_stats')
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         album = self.get_object()
@@ -196,6 +200,7 @@ class ManageTrackViewSet(
         "disc_number",
     ]
 
+    @extend_schema(operation_id='admin_get_track_stats')
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         track = self.get_object()
@@ -257,6 +262,7 @@ class ManageLibraryViewSet(
     filterset_class = filters.ManageLibraryFilterSet
     required_scope = "instance:libraries"
 
+    @extend_schema(operation_id='admin_get_library_stats')
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         library = self.get_object()
@@ -424,6 +430,7 @@ class ManageDomainViewSet(
         domain.refresh_from_db()
         return response.Response(domain.nodeinfo, status=200)
 
+    @extend_schema(operation_id='admin_get_federation_domain_stats')
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         domain = self.get_object()
@@ -468,6 +475,7 @@ class ManageActorViewSet(
 
         return obj
 
+    @extend_schema(operation_id='admin_get_account_stats')
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         obj = self.get_object()
@@ -709,6 +717,7 @@ class ManageChannelViewSet(
     required_scope = "instance:libraries"
     ordering_fields = ["creation_date", "name"]
 
+    @extend_schema(operation_id='admin_get_channel_stats')
     @rest_decorators.action(methods=["get"], detail=True)
     def stats(self, request, *args, **kwargs):
         channel = self.get_object()

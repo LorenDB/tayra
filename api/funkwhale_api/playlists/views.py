@@ -1,8 +1,11 @@
 from django.db import transaction
 from django.db.models import Count
+
 from rest_framework import exceptions, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
+from drf_spectacular.utils import extend_schema
 
 from funkwhale_api.common import fields, permissions
 from funkwhale_api.music import utils as music_utils
@@ -38,6 +41,7 @@ class PlaylistViewSet(
     filterset_class = filters.PlaylistFilter
     ordering_fields = ("id", "name", "creation_date", "modification_date")
 
+    @extend_schema(responses=serializers.PlaylistTrackSerializer(many=True))
     @action(methods=["get"], detail=True)
     def tracks(self, request, *args, **kwargs):
         playlist = self.get_object()
@@ -48,6 +52,7 @@ class PlaylistViewSet(
         data = {"count": len(plts), "results": serializer.data}
         return Response(data, status=200)
 
+    @extend_schema(operation_id="add_to_playlist", request=serializers.PlaylistAddManySerializer)
     @action(methods=["post"], detail=True)
     @transaction.atomic
     def add(self, request, *args, **kwargs):
@@ -72,6 +77,7 @@ class PlaylistViewSet(
         data = {"count": len(plts), "results": serializer.data}
         return Response(data, status=201)
 
+    @extend_schema(operation_id="clear_playlist")
     @action(methods=["delete"], detail=True)
     @transaction.atomic
     def clear(self, request, *args, **kwargs):
@@ -93,6 +99,7 @@ class PlaylistViewSet(
             ),
         )
 
+    @extend_schema(operation_id="remove_from_playlist")
     @action(methods=["post", "delete"], detail=True)
     @transaction.atomic
     def remove(self, request, *args, **kwargs):
@@ -111,6 +118,7 @@ class PlaylistViewSet(
 
         return Response(status=204)
 
+    @extend_schema(operation_id="reorder_track_in_playlist")
     @action(methods=["post"], detail=True)
     @transaction.atomic
     def move(self, request, *args, **kwargs):
