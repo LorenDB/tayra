@@ -44,10 +44,7 @@ class CustomAutoSchema(AutoSchema):
             tokenized_path.append("formatted")
 
         # rename `create_radio_radio` to `create_radio`. Works with all models
-        if (
-            len(tokenized_path) > 0
-            and model_singular == tokenized_path[0]
-        ):
+        if len(tokenized_path) > 0 and model_singular == tokenized_path[0]:
             tokenized_path.pop(0)
 
         # rename `get_radio_radio_track` to `get_radio_track`
