@@ -1,6 +1,6 @@
-import { DefaultMagicKeysAliasMap, tryOnScopeDispose, useActiveElement, useEventListener } from '@vueuse/core'
-import { computed, reactive } from 'vue'
+import { DefaultMagicKeysAliasMap, tryOnScopeDispose, useEventListener } from '@vueuse/core'
 import { isEqual, isMatch } from 'lodash-es'
+import { reactive } from 'vue'
 
 type KeyFilter = string | string[]
 
@@ -11,12 +11,14 @@ interface Entry {
 }
 
 const combinations = reactive(new Map())
-const activeElement = useActiveElement()
-const bodyIsActive = computed(() => activeElement.value === document.body)
 
 const current = new Set()
 useEventListener(window, 'keydown', (event) => {
-  if (!bodyIsActive.value && !event.key) return
+  if (!event.key) return
+
+  const target = event.target as HTMLElement
+  if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return
+
   current.add(event.key.toLowerCase())
 
   const currentArray = [...current]
@@ -29,7 +31,7 @@ useEventListener(window, 'keydown', (event) => {
 })
 
 useEventListener(window, 'keyup', (event) => {
-  if (!event.key) {
+  if (event.key) {
     current.delete(event.key.toLowerCase())
   }
 })
