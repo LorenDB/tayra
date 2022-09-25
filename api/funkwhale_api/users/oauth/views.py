@@ -86,7 +86,7 @@ class ApplicationViewSet(
             qs = qs.filter(user=self.request.user)
         return qs
 
-    @extend_schema(operation_id='refresh_oauth_token')
+    @extend_schema(operation_id="refresh_oauth_token")
     @action(
         detail=True,
         methods=["post"],

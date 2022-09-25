@@ -44,8 +44,10 @@ def fetches_route():
             serializer = api_serializers.FetchSerializer(fetch)
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    return extend_schema(methods=['post'], responses=api_serializers.FetchSerializer())(
-        extend_schema(methods=['get'], responses=api_serializers.FetchSerializer(many=True))(
+    return extend_schema(methods=["post"], responses=api_serializers.FetchSerializer())(
+        extend_schema(
+            methods=["get"], responses=api_serializers.FetchSerializer(many=True)
+        )(
             decorators.action(
                 methods=["get", "post"],
                 detail=True,

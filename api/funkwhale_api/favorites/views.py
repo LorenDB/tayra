@@ -40,7 +40,7 @@ class TrackFavoriteViewSet(
             return serializers.UserTrackFavoriteSerializer
         return serializers.UserTrackFavoriteWriteSerializer
 
-    @extend_schema(operation_id='favorite_track')
+    @extend_schema(operation_id="favorite_track")
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -70,7 +70,7 @@ class TrackFavoriteViewSet(
         favorite = models.TrackFavorite.add(track=track, user=self.request.user)
         return favorite
 
-    @extend_schema(operation_id='unfavorite_track')
+    @extend_schema(operation_id="unfavorite_track")
     @action(methods=["delete", "post"], detail=False)
     def remove(self, request, *args, **kwargs):
         try:
@@ -81,7 +81,7 @@ class TrackFavoriteViewSet(
         favorite.delete()
         return Response([], status=status.HTTP_204_NO_CONTENT)
 
-    @extend_schema(operation_id='get_all_favorite_tracks')
+    @extend_schema(operation_id="get_all_favorite_tracks")
     @action(methods=["get"], detail=False)
     def all(self, request, *args, **kwargs):
         """

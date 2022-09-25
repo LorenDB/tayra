@@ -52,7 +52,9 @@ class PlaylistViewSet(
         data = {"count": len(plts), "results": serializer.data}
         return Response(data, status=200)
 
-    @extend_schema(operation_id="add_to_playlist", request=serializers.PlaylistAddManySerializer)
+    @extend_schema(
+        operation_id="add_to_playlist", request=serializers.PlaylistAddManySerializer
+    )
     @action(methods=["post"], detail=True)
     @transaction.atomic
     def add(self, request, *args, **kwargs):

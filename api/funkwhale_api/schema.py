@@ -7,15 +7,14 @@ import re
 
 class CustomAutoSchema(AutoSchema):
     method_mapping = {
-        'get': 'get',
-        'post': 'create',
-        'put': 'update',
-        'patch': 'partial_update',
-        'delete': 'delete',
+        "get": "get",
+        "post": "create",
+        "put": "update",
+        "patch": "partial_update",
+        "delete": "delete",
     }
 
     pluralizer = Pluralizer()
-
 
     def get_operation_id(self):
         # Modified operation id getter from
@@ -24,46 +23,50 @@ class CustomAutoSchema(AutoSchema):
         tokenized_path = self._tokenize_path()
 
         # replace dashes as they can be problematic later in code generation
-        tokenized_path = [t.replace('-', '_') for t in tokenized_path]
+        tokenized_path = [t.replace("-", "_") for t in tokenized_path]
 
         # replace plural forms with singular forms
         tokenized_path = [self.pluralizer.singular(t) for t in tokenized_path]
 
         if not tokenized_path:
-            tokenized_path.append('root')
+            tokenized_path.append("root")
 
         model = tokenized_path.pop()
 
-        if self.method == 'GET' and self._is_list_view():
-            action = 'get'
+        if self.method == "GET" and self._is_list_view():
+            action = "get"
             model = self.pluralizer.plural(model)
         else:
             action = self.method_mapping[self.method.lower()]
 
-        if re.search(r'<drf_format_suffix\w*:\w+>', self.path_regex):
-            tokenized_path.append('formatted')
+        if re.search(r"<drf_format_suffix\w*:\w+>", self.path_regex):
+            tokenized_path.append("formatted")
 
         # rename `get_radio_radio_track` to `get_radio_track`
-        if len(tokenized_path) > 1 and tokenized_path[1] == 'radio' and tokenized_path[1] == 'radio':
+        if (
+            len(tokenized_path) > 1
+            and tokenized_path[1] == "radio"
+            and tokenized_path[1] == "radio"
+        ):
             tokenized_path.pop(0)
 
         # rename `get_manage_channel` to `admin_get_channel`
-        elif len(tokenized_path) > 0 and tokenized_path[0] == 'manage':
+        elif len(tokenized_path) > 0 and tokenized_path[0] == "manage":
             tokenized_path.pop(0)
 
             # rename `get_manage_library_album` to `admin_get_album`
-            if len(tokenized_path) > 0 and tokenized_path[0] == 'library':
+            if len(tokenized_path) > 0 and tokenized_path[0] == "library":
                 tokenized_path.pop(0)
 
             # rename `get_manage_user_users` to `admin_get_users`
-            elif len(tokenized_path) > 0 and tokenized_path[0] == 'user':
+            elif len(tokenized_path) > 0 and tokenized_path[0] == "user":
                 tokenized_path.pop(0)
 
             # rename `get_manage_moderation_note` to `moderation_get_note`
-            elif len(tokenized_path) > 0 and tokenized_path[0] == 'moderation':
+            elif len(tokenized_path) > 0 and tokenized_path[0] == "moderation":
                 tokenized_path.pop(0)
-                return '_'.join(['moderation', action] + tokenized_path + [model])
+                return "_".join(["moderation", action] + tokenized_path + [model])
 
-            return '_'.join(['admin', action] + tokenized_path + [model])
+            return "_".join(["admin", action] + tokenized_path + [model])
 
-        return '_'.join([action] + tokenized_path + [model])
+        return "_".join([action] + tokenized_path + [model])

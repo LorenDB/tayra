@@ -89,8 +89,12 @@ def mutations_route(types):
             )
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    return extend_schema(methods=['post'], responses=serializers.APIMutationSerializer())(
-        extend_schema(methods=['get'], responses=serializers.APIMutationSerializer(many=True))(
+    return extend_schema(
+        methods=["post"], responses=serializers.APIMutationSerializer()
+    )(
+        extend_schema(
+            methods=["get"], responses=serializers.APIMutationSerializer(many=True)
+        )(
             decorators.action(
                 methods=["get", "post"], detail=True, required_scope="edits"
             )(mutations)

@@ -46,10 +46,10 @@ class ChannelsMixin(object):
 
 
 @extend_schema_view(
-    metedata_choices=extend_schema(operation_id='get_channel_metadata_choices'),
-    subscribe=extend_schema(operation_id='subscribe_channel'),
-    unsubscribe=extend_schema(operation_id='unsubscribe_channel'),
-    rss_subscribe=extend_schema(operation_id='subscribe_channel_rss'),
+    metedata_choices=extend_schema(operation_id="get_channel_metadata_choices"),
+    subscribe=extend_schema(operation_id="subscribe_channel"),
+    unsubscribe=extend_schema(operation_id="unsubscribe_channel"),
+    rss_subscribe=extend_schema(operation_id="subscribe_channel_rss"),
 )
 class ChannelViewSet(
     ChannelsMixin,
@@ -330,7 +330,7 @@ class SubscriptionsViewSet(
         qs = super().get_queryset()
         return qs.filter(actor=self.request.user.actor)
 
-    @extend_schema(operation_id='get_all_subscriptions')
+    @extend_schema(operation_id="get_all_subscriptions")
     @decorators.action(methods=["get"], detail=False)
     def all(self, request, *args, **kwargs):
         """

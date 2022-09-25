@@ -53,7 +53,7 @@ class InstanceSettings(generics.GenericAPIView):
         ]
         return api_preferences
 
-    @extend_schema(operation_id='get_instance_settings')
+    @extend_schema(operation_id="get_instance_settings")
     def get(self, request):
         queryset = self.get_queryset()
         data = GlobalPreferenceSerializer(queryset, many=True).data
@@ -122,7 +122,7 @@ class SpaManifest(views.APIView):
     permission_classes = []
     authentication_classes = []
 
-    @extend_schema(operation_id='get_spa_manifest')
+    @extend_schema(operation_id="get_spa_manifest")
     def get(self, request, *args, **kwargs):
         existing_manifest = middleware.get_spa_file(
             settings.FUNKWHALE_SPA_HTML_ROOT, "manifest.json"

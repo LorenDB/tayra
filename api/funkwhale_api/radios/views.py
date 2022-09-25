@@ -66,7 +66,7 @@ class RadioViewSet(
         )
         return Response(serializer.data)
 
-    @extend_schema(operation_id='validate_radio')
+    @extend_schema(operation_id="validate_radio")
     @action(methods=["post"], detail=False)
     def validate(self, request, *args, **kwargs):
         try:
@@ -128,7 +128,7 @@ class RadioSessionTrackViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet)
     queryset = models.RadioSessionTrack.objects.all()
     permission_classes = []
 
-    @extend_schema(operation_id='get_next_radio_track')
+    @extend_schema(operation_id="get_next_radio_track")
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
