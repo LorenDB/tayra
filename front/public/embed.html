@@ -31,7 +31,7 @@
     }
 
     if (id === null || isNaN(+id)) {
-      error.value = `Widget improperly configured (bad resource id "${id}").`
+      error.value = `The embed widget couldn't read the provided media ID: ${id}.`
     }
 
     // Cover
