@@ -45,7 +45,7 @@
     }
 
     if (type === 'artist') {
-      fetchArtistCover(id)
+      fetchArtistCover(id).catch(() => undefined)
     }
 
     // Tracks
@@ -111,6 +111,7 @@
 
       if (response.status > 299) {
         switch (response.status) {
+          case 400:
           case 404:
             error.value = `${type} not found.`
             break
@@ -162,7 +163,10 @@
 
     // NOTE: Fetch tracks only if there is no error
     if (error.value === false) {
-      fetchTracks()
+      fetchTracks().catch(err => {
+        console.error(err)
+        error.value = `An unknown error occurred while loading ${type} data.`
+      })
     }
 
     // Duration
