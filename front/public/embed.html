@@ -20,7 +20,7 @@
 
     // Params
     const params = new URL(location.href).searchParams
-    const baseUrl = params.get('b') ?? params.get('instance') ?? ''
+    const baseUrl = params.get('instance') ?? params.get('b') ?? ''
     const type = params.get('type')
     const id = params.get('id')
 
