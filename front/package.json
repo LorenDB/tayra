@@ -11,7 +11,7 @@
     "serve": "vite preview",
     "test": "vitest run",
     "test:unit": "vitest run",
-    "lint": "eslint --ext .ts,.js,.vue src",
+    "lint": "eslint --ext .ts,.js,.vue,.html src public/embed.html",
     "lint:tsc": "vue-tsc --noEmit",
     "fix-fomantic-css": "scripts/fix-fomantic-css.sh",
     "i18n-compile": "scripts/i18n-compile.sh",
@@ -43,7 +43,6 @@
     "universal-cookie": "4.0.4",
     "vue": "3.2.38",
     "vue-gettext": "2.1.12",
-    "vue-plyr": "7.0.0",
     "vue-router": "4.1.5",
     "vue-upload-component": "3.1.2",
     "vue-virtual-scroller": "2.0.0-alpha.1",
@@ -95,8 +94,5 @@
     "workbox-precaching": "6.5.4",
     "workbox-routing": "6.5.4",
     "workbox-strategies": "6.5.4"
-  },
-  "resolutions": {
-    "vue-plyr/plyr": "3.6.12"
   }
 }

@@ -7,7 +7,6 @@ module.exports = {
     'plugin:vue/vue3-recommended',
     '@vue/typescript/recommended',
     '@vue/standard'
-
   ],
   globals: {
     SharedArrayBuffer: 'readonly',
@@ -42,5 +41,15 @@ module.exports = {
 
     // TODO (wvffle): Remove after API Client
     '@typescript-eslint/no-explicit-any': 'off'
-  }
+  },
+  overrides: [
+    {
+      files: ['public/embed.html'],
+      rules: {
+        // NOTE: It is broken for some reason. It's safe to disable in a .html file as this rule only
+        //       brings <!-- eslint-disable --> comments support for the <template> tag in SFCs
+        'vue/comment-directive': 'off'
+      }
+    }
+  ]
 }
