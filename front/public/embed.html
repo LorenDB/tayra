@@ -113,19 +113,19 @@
         switch (response.status) {
           case 400:
           case 404:
-            error.value = `${type} not found.`
+            error.value = `This ${type} wasn't found on the server.`
             break
 
           case 403:
-            error.value = `You need to login to access this ${type}.`
+            error.value = `You need to log in to access this ${type}.`
             break
 
           case 500:
-            error.value = `An unknown error occurred while loading ${type} data from server.`
+            error.value = `An unknown error occurred while loading this ${type} from the server.`
             break
 
           default:
-            error.value = `An unknown error occurred while loading ${type} data.`
+            error.value = `An unknown error occurred while loading this ${type}.`
         }
 
         // NOTE: If we already have some tracks, let's fail silently
@@ -165,7 +165,7 @@
     if (error.value === false) {
       fetchTracks().catch(err => {
         console.error(err)
-        error.value = `An unknown error occurred while loading ${type} data.`
+        error.value = `An unknown error occurred while loading this ${type}.`
       })
     }
 
@@ -381,7 +381,7 @@
 
 <body>
   <noscript>
-    <strong>We're sorry but this widget doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    <strong>You need to enable Javascript to use the embed widget.</strong>
   </noscript>
 
   <main v-scope v-cloak>
