@@ -6,6 +6,7 @@
   --fw-text: #fff;
 }
 
+audio,
 [v-cloak] {
   display: none;
 }
@@ -23,6 +24,27 @@ main {
   display: grid;
   grid-template-rows: 166px 1fr;
   height: 100vh;
+}
+
+/*
+  Error
+*/
+
+.error {
+  padding-left: 8px;
+  line-height: 50px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.error:first-letter {
+  text-transform: uppercase;
+}
+
+.error .logo-link {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 /*
@@ -93,9 +115,13 @@ button > svg {
 
 .logo-link {
   display: block;
-  aspect-ratio: 1;
+  width: 42px;
+  height: 42px;
   background-color: var(--fw-primary);
   padding: 4px;
+}
+
+.player .logo-wrapper {
   margin: 8px -8px -8px 8px;
 }
 
@@ -162,10 +188,6 @@ input[type=range] {
   --range: calc(var(--max) - var(--min));
   --ratio: calc((var(--value) - var(--min)) / var(--range));
   --sx: calc(0.5 * var(--range-size) + var(--ratio) * (100% - var(--range-size)));
-}
-
-input[type=range]:focus {
-  outline: none;
 }
 
 input[type=range]::-webkit-slider-thumb {

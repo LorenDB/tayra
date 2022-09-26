@@ -14,11 +14,148 @@
   <link rel="stylesheet" href="embed.css">
 
   <script type="module">
-    import { createApp, reactive } from 'https://unpkg.com/petite-vue@0.4.1?module'
+    import { createApp, reactive, nextTick } from 'https://unpkg.com/petite-vue@0.4.1?module'
 
+    const SUPPORTED_TYPES = ['track', 'album', 'artist', 'playlist', 'channel']
+
+    // Params
     const params = new URL(location.href).searchParams
     const type = params.get('type')
     const id = params.get('id')
+
+    // Error
+    let error = reactive({ value: false })
+    if (!SUPPORTED_TYPES.includes(type)) {
+      error.value = `Widget improperly configured (bad resource type "${type}").`
+    }
+
+    if (id === null || isNaN(+id)) {
+      error.value = `Widget improperly configured (bad resource id "${id}").`
+    }
+
+    // Cover
+    const DEFAULT_COVER = 'embed-default-cover.jpeg'
+    const cover = reactive({ value: DEFAULT_COVER })
+
+    const fetchArtistCover = async (id) => {
+      const response = await fetch(`/api/v1/artists/${id}/`)
+      const data = await response.json()
+      cover.value = data.cover?.urls.medium_square_crop ?? DEFAULT_COVER
+    }
+
+    if (type === 'artist') {
+      fetchArtistCover(id)
+    }
+
+    // Tracks
+    const tracks = reactive([])
+
+    const getTracksUrl = () => type === 'track'
+      ? `/api/v1/tracks/${id}`
+      :  type === 'playlist'
+        ? `/api/v1/playlists/${id}/tracks/`
+        : `/api/v1/tracks/`
+
+    const getAudioSources = (uploads) => {
+      const sources = uploads
+        // NOTE: Filter out repeating and unplayable media types
+        .filter(({ mimetype }, index, array) => array.findIndex((upload) => upload.mimetype === mimetype) === index)
+        .filter(({ mimetype }) => ['probably', 'maybe'].includes(audio.element?.canPlayType(mimetype)))
+
+      // NOTE: Add a transcoded MP3 src at the end for browsers
+      //       that do not support other codecs to be able to play it :)
+      if (sources.length > 0 && !sources.some(({ type }) => type === 'audio/mpeg')) {
+        sources.push({ mimetype: 'audio/mpeg', listen_url: `${sources[0].listen_url}?to=mp3` })
+      }
+
+      return sources
+    }
+
+    const fetchTracks = async (url = getTracksUrl()) => {
+      const filters = new URLSearchParams({
+        include_channels: true,
+        playable: true,
+        [type]: id
+      })
+
+      switch (type) {
+        case 'album':
+          filters.set('ordering', 'disc_number,position')
+          break
+
+        case 'artist':
+          filters.set('ordering', '-album__release_date,disc_number,position')
+          break
+
+        case 'channel':
+          filters.set('ordering', '-creation_date')
+          break
+
+        case 'playlist': break
+        case 'track': break
+
+        // NOTE: The type is undefined, let's return before we make any request
+        default: return
+      }
+
+      const response = await fetch(`${url}?${filters}`)
+      const data = await response.json()
+
+      if (response.status > 299) {
+        switch (response.status) {
+          case 404:
+            error.value = `${type} not found.`
+            break
+
+          case 403:
+            error.value = `You need to login to access this ${type}.`
+            break
+
+          case 500:
+            error.value = `An unknown error occurred while loading ${type} data from server.`
+            break
+
+          default:
+            error.value = `An unknown error occurred while loading ${type} data.`
+        }
+
+        // NOTE: If we already have some tracks, let's fail silently
+        if (tracks.length > 0) {
+          console.error(error.value)
+          error.value = false
+        }
+
+        return
+      }
+
+      if (type === 'track') {
+        data.results = [data]
+      }
+
+      if (type === 'playlist') {
+        data.results = data.results.map(({ track }) => track)
+      }
+
+      tracks.push(
+        ...data.results.map((track) => ({
+          id: track.id,
+          title: track.title,
+          artist: track.artist,
+          album: track.album,
+          cover: (track.cover ?? track.album.cover)?.urls.medium_square_crop,
+          sources: getAudioSources(track.uploads)
+        })).filter(({ sources }) => sources.length > 0)
+      )
+
+      if (data.next) {
+        return fetchTracks(data.next)
+      }
+    }
+
+    // NOTE: Fetch tracks only if there is no error
+    if (error.value === false) {
+      fetchTracks()
+    }
 
     // Duration
     const ZERO_DATE = +new Date('2022-01-01T00:00:00.000')
@@ -29,39 +166,55 @@
       hourCycle: 'h23'
     })
 
-    const tracks = [
-      {
-        id: 8,
-        title: 'Song name',
-        artist: {
-          name: 'Artist name'
-        },
-        sources: [{ duration: 6666 }]
-      },
-      {
-        id: 9,
-        title: 'Another song name',
-        artist: {
-          name: 'Another artist name'
-        },
-        album: {
-          title: 'Another album title'
-        },
-        sources: [{ duration: 666 }]
-      }
-    ]
+    const formatDuration = (duration) => {
+      if (duration === 0) return
+
+      const time = intl.format(new Date(ZERO_DATE + duration * 1e3))
+      return time.replace(/^00:/, '')
+    }
+
+    // Logo component
+    const Logo = () => ({ $template: '#logo-template' })
 
     // Player
     const player = reactive({
       playing: false,
       current: 0,
       seek: 0,
-      play (index) {
+      play (unsafeIndex) {
+        const index = Math.min(tracks.length - 1, Math.max(unsafeIndex, 0))
+        if (this.current === index) return
+
+        const wasPlaying = this.playing
+        if (wasPlaying) audio.element.pause()
+
         this.current = index
+        audio.element.currentTime = 0
+        audio.element.load()
+
+        if (wasPlaying) audio.element.play()
+      },
+
+      next () {
+        this.play(this.current + 1)
+      },
+
+      prev () {
+        this.play(this.current - 1)
+      },
+
+      seekTime (event) {
+        if (!audio.element) return
+
+        const seek = audio.element.duration * event.target.value / 100
+        audio.element.currentTime = isNaN(seek) ? 0 : seek
       },
 
       togglePlay () {
         this.playing = !this.playing
+
+        if (this.playing) audio.element.play()
+        else audio.element.pause()
       }
     })
 
@@ -85,21 +238,54 @@
       }
     })
 
+    // Audio
+    const audio = reactive({
+      element: undefined,
+      volume: -1
+    })
+
+    const watchAudio = (element, volume) => {
+      if (audio.element !== element) {
+        audio.element = element
+
+        element.addEventListener('timeupdate', (event) => {
+          const seek = element.currentTime / element.duration * 100
+          player.seek = isNaN(seek) ? 0 : seek
+        })
+
+        element.addEventListener('ended', () => {
+          // NOTE: Pause playback if it's a last track
+          if (player.current === tracks.length - 1) {
+            player.playing = false
+          }
+
+          player.next()
+        })
+      }
+
+      if (audio.volume !== volume) {
+        audio.element.volume = volume / 100
+        audio.volume = volume
+      }
+    }
+
     // Application
     const app = createApp({
-      coverUrl: '',
-      type,
-      id,
+      // Components
+      Logo,
 
+      // Errors
+      error,
+
+      // Playback
+      watchAudio,
       player,
       volume,
 
+      // Track info
+      formatDuration,
       tracks,
-
-      formatDuration (duration) {
-        const time = intl.format(new Date(ZERO_DATE + duration * 1e3))
-        return time.replace(/^00:/, '')
-      }
+      cover
     })
 
     app.directive('range', (ctx) => {
@@ -112,8 +298,17 @@
   </script>
 </head>
 
-<template id="track-entry">
-
+<template id="logo-template">
+  <a
+    title="Funkwhale"
+    href="https://funkwhale.audio"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="logo-link"
+    tabindex="-1"
+  >
+    <img src="logo-white.svg" />
+  </a>
 </template>
 
 <body>
@@ -122,99 +317,110 @@
   </noscript>
 
   <main v-scope v-cloak>
-    <div class="player">
-      <img :src="coverUrl" class="cover-image" />
-
-      <div class="player-content">
-        <h1>{{ tracks[player.current].title }}</h1>
-        <h2>{{ tracks[player.current].artist.name }}</h2>
-      </div>
-
-      <div class="player-controls">
-        <button>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-skip-start-fill" viewBox="0 0 16 16">
-            <path d="M4 4a.5.5 0 0 1 1 0v3.248l6.267-3.636c.54-.313 1.232.066 1.232.696v7.384c0 .63-.692 1.01-1.232.697L5 8.753V12a.5.5 0 0 1-1 0V4z"/>
-          </svg>
-        </button>
-        <button @click="player.togglePlay" class="play">
-          <svg v-if="!player.playing" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
-            <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
-          </svg>
-          <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pause-fill" viewBox="0 0 16 16">
-            <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
-          </svg>
-        </button>
-        <button>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-skip-end-fill" viewBox="0 0 16 16">
-            <path d="M12.5 4a.5.5 0 0 0-1 0v3.248L5.233 3.612C4.693 3.3 4 3.678 4 4.308v7.384c0 .63.692 1.01 1.233.697L11.5 8.753V12a.5.5 0 0 0 1 0V4z"/>
-          </svg>
-        </button>
-
-        <input
-          v-model.number="player.seek"
-          v-range="player.seek"
-          type="range"
-          step="0.1"
-        />
-
-        <button @click="volume.mute">
-          <svg v-if="volume.level === 0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-volume-mute-fill" viewBox="0 0 16 16">
-            <path d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06zm7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0z"/>
-          </svg>
-          <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-volume-up-fill" viewBox="0 0 16 16">
-            <path d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476 7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
-            <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483 5.483 0 0 1 11.025 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z"/>
-            <path d="M8.707 11.182A4.486 4.486 0 0 0 10.025 8a4.486 4.486 0 0 0-1.318-3.182L8 5.525A3.489 3.489 0 0 1 9.025 8 3.49 3.49 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
-          </svg>
-        </button>
-
-        <input
-          v-model.number="volume.level"
-          v-range="volume.level"
-          type="range"
-          step="0.1"
-        />
-      </div>
-
-      <a
-        title="Funkwhale"
-        href="https://funkwhale.audio"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="logo-link"
-      >
-        <img src="logo-white.svg" />
-      </a>
+    <div v-if="error.value !== false" class="error">
+      {{ error.value }}
+      <div v-scope="Logo()"></div>
     </div>
 
-    <div class="track-list">
-      <table>
-        <tr
-          v-for="(track, index) in tracks"
-          :id="'queue-item-' + index"
-          :key="track.id"
-          role="button"
-          :class="{ 'current': player.current === index }"
-          @click="player.play(index)"
+    <template v-else>
+      <div class="player">
+        <img :src="tracks[player.current]?.cover ?? cover.value" class="cover-image" />
+
+        <div class="player-content">
+          <h1>{{ tracks[player.current]?.title }}</h1>
+          <h2>{{ tracks[player.current]?.artist.name }}</h2>
+        </div>
+
+        <div class="player-controls">
+          <button @click="player.prev">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-skip-start-fill" viewBox="0 0 16 16">
+              <path d="M4 4a.5.5 0 0 1 1 0v3.248l6.267-3.636c.54-.313 1.232.066 1.232.696v7.384c0 .63-.692 1.01-1.232.697L5 8.753V12a.5.5 0 0 1-1 0V4z"/>
+            </svg>
+          </button>
+          <button @click="player.togglePlay" class="play">
+            <svg v-if="!player.playing" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+              <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+            </svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pause-fill" viewBox="0 0 16 16">
+              <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
+            </svg>
+          </button>
+          <button @click="player.next">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-skip-end-fill" viewBox="0 0 16 16">
+              <path d="M12.5 4a.5.5 0 0 0-1 0v3.248L5.233 3.612C4.693 3.3 4 3.678 4 4.308v7.384c0 .63.692 1.01 1.233.697L11.5 8.753V12a.5.5 0 0 0 1 0V4z"/>
+            </svg>
+          </button>
+
+          <input
+            v-model.number="player.seek"
+            v-range="player.seek"
+            @input="player.seekTime"
+            type="range"
+            step="0.1"
+          />
+
+          <button @click="volume.mute">
+            <svg v-if="volume.level === 0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-volume-mute-fill" viewBox="0 0 16 16">
+              <path d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06zm7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-volume-up-fill" viewBox="0 0 16 16">
+              <path d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476 7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
+              <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483 5.483 0 0 1 11.025 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z"/>
+              <path d="M8.707 11.182A4.486 4.486 0 0 0 10.025 8a4.486 4.486 0 0 0-1.318-3.182L8 5.525A3.489 3.489 0 0 1 9.025 8 3.49 3.49 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
+            </svg>
+          </button>
+
+          <input
+            v-model.number="volume.level"
+            v-range="volume.level"
+            type="range"
+            step="0.1"
+          />
+        </div>
+
+        <div v-scope="Logo()" class="logo-wrapper"></div>
+      </div>
+
+      <div class="track-list">
+        <table>
+          <tr
+            v-for="(track, index) in tracks"
+            :id="'queue-item-' + index"
+            :key="track.id"
+            role="button"
+            :class="{ 'current': player.current === index }"
+            @click="player.play(index)"
+            @keyup.enter="player.play(index)"
+            tabindex="0"
+          >
+            <td>
+              {{ index + 1 }}
+            </td>
+            <td :title="track.title">
+              {{ track.title }}
+            </td>
+            <td :title="track.artist.name">
+              {{ track.artist.name }}
+            </td>
+            <td :title="track.album?.title">
+              {{ track.album?.title }}
+            </td>
+            <td>
+              {{ formatDuration(track.sources?.[0].duration ?? 0) }}
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <audio v-effect="watchAudio($el, volume.level)">
+        <source
+          v-for="source in tracks[player.current]?.sources ?? []"
+          :key="source.mimetype + source.listen_url"
+          :type="source.mimetype"
+          :src="source.listen_url"
         >
-          <td>
-            {{ index + 1 }}
-          </td>
-          <td :title="track.title">
-            {{ track.title }}
-          </td>
-          <td :title="track.artist.name">
-            {{ track.artist.name }}
-          </td>
-          <td :title="track.album?.title">
-            {{ track.album?.title }}
-          </td>
-          <td>
-            {{ formatDuration(track.sources[0].duration) }}
-          </td>
-        </tr>
-      </table>
-    </div>
+      </audio>
+    </template>
   </main>
 </body>
 
