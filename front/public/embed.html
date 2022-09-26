@@ -27,7 +27,7 @@
     // Error
     let error = reactive({ value: false })
     if (!SUPPORTED_TYPES.includes(type)) {
-      error.value = `Widget improperly configured (bad resource type "${type}").`
+      error.value = `The embed widget doesn't support this media type: ${type}.`
     }
 
     if (id === null || isNaN(+id)) {
