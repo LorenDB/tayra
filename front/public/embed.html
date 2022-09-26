@@ -20,6 +20,7 @@
 
     // Params
     const params = new URL(location.href).searchParams
+    const baseUrl = params.get('b') ?? params.get('instance') ?? ''
     const type = params.get('type')
     const id = params.get('id')
 
@@ -38,7 +39,7 @@
     const cover = reactive({ value: DEFAULT_COVER })
 
     const fetchArtistCover = async (id) => {
-      const response = await fetch(`/api/v1/artists/${id}/`)
+      const response = await fetch(`${baseUrl}/api/v1/artists/${id}/`)
       const data = await response.json()
       cover.value = data.cover?.urls.medium_square_crop ?? DEFAULT_COVER
     }
@@ -51,16 +52,23 @@
     const tracks = reactive([])
 
     const getTracksUrl = () => type === 'track'
-      ? `/api/v1/tracks/${id}`
+      ? `${baseUrl}/api/v1/tracks/${id}`
       :  type === 'playlist'
-        ? `/api/v1/playlists/${id}/tracks/`
-        : `/api/v1/tracks/`
+        ? ${baseUrl}`/api/v1/playlists/${id}/tracks/`
+        : ${baseUrl}`/api/v1/tracks/`
 
     const getAudioSources = (uploads) => {
       const sources = uploads
         // NOTE: Filter out repeating and unplayable media types
         .filter(({ mimetype }, index, array) => array.findIndex((upload) => upload.mimetype === mimetype) === index)
         .filter(({ mimetype }) => ['probably', 'maybe'].includes(audio.element?.canPlayType(mimetype)))
+        // NOTE: For backwards compatibilty, prepend the baseUrl if listen_url starts with a slash
+        .map(source => ({
+          ...source,
+          listen_url: listen_url[0] === '/'
+            ? `${baseUrl}${listen_url}`
+            : listen_url
+        }))
 
       // NOTE: Add a transcoded MP3 src at the end for browsers
       //       that do not support other codecs to be able to play it :)
