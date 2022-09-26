@@ -163,7 +163,7 @@
 
     // NOTE: Fetch tracks only if there is no error
     if (error.value === false) {
-      fetchTracks().catch(err => {
+      fetchTracks().then(() => updateMediaSessionMetadata()).catch(err => {
         console.error(err)
         error.value = `An unknown error occurred while loading ${type} data.`
       })
@@ -188,6 +188,41 @@
     // Logo component
     const Logo = () => ({ $template: '#logo-template' })
 
+    // Media Session
+    const updateMediaSessionMetadata = () => {
+      const { current } = player
+
+      if (tracks[current] && 'mediaSession' in navigator) {
+        navigator.mediaSession.setActionHandler('play', () => {
+          player.playing = true
+          audio.element.play()
+        })
+
+        navigator.mediaSession.setActionHandler('pause', () => {
+          player.playing = false
+          audio.element.pause()
+        })
+
+        navigator.mediaSession.setActionHandler('seekbackward', () => player.seekTime({ target: { value: player.seek - 5 } }))
+        navigator.mediaSession.setActionHandler('seekforward', () => player.seekTime({ target: { value: player.seek + 5 } }))
+
+        navigator.mediaSession.setActionHandler('previoustrack', () => player.prev())
+        navigator.mediaSession.setActionHandler('nexttrack', () => player.next())
+
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: tracks[current].title,
+          album: tracks[current].album.title,
+          artist: tracks[current].artist.name,
+          artwork: [
+            { src: tracks[current]?.cover ?? cover.value, sizes: '96x96', type: 'image/png' },
+            { src: tracks[current]?.cover ?? cover.value, sizes: '128x128', type: 'image/png' },
+            { src: tracks[current]?.cover ?? cover.value, sizes: '192x192', type: 'image/png' },
+            { src: tracks[current]?.cover ?? cover.value, sizes: '256x256', type: 'image/png' },
+          ]
+        })
+      }
+    }
+
     // Player
     const player = reactive({
       playing: false,
@@ -205,6 +240,7 @@
         audio.element.load()
 
         if (wasPlaying) audio.element.play()
+        updateMediaSessionMetadata()
       },
 
       next () {
@@ -253,10 +289,11 @@
     // Audio
     const audio = reactive({
       element: undefined,
+      current: -1,
       volume: -1
     })
 
-    const watchAudio = (element, volume) => {
+    const watchAudio = (element, current, volume) => {
       if (audio.element !== element) {
         audio.element = element
 
@@ -424,7 +461,7 @@
         </table>
       </div>
 
-      <audio v-effect="watchAudio($el, volume.level)">
+      <audio v-effect="watchAudio($el, player.current, volume.level)">
         <source
           v-for="source in tracks[player.current]?.sources ?? []"
           :key="source.mimetype + source.listen_url"
