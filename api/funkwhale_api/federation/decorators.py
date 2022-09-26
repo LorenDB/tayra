@@ -5,7 +5,7 @@ from rest_framework import permissions
 from rest_framework import response
 from rest_framework import status
 
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from funkwhale_api.common import utils as common_utils
 
@@ -46,7 +46,9 @@ def fetches_route():
 
     return extend_schema(methods=["post"], responses=api_serializers.FetchSerializer())(
         extend_schema(
-            methods=["get"], responses=api_serializers.FetchSerializer(many=True)
+            methods=["get"],
+            responses=api_serializers.FetchSerializer(many=True),
+            parameters=[OpenApiParameter("id", location="query", exclude=True)],
         )(
             decorators.action(
                 methods=["get", "post"],

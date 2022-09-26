@@ -16,7 +16,7 @@ from rest_framework import views, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 import requests.exceptions
 
@@ -69,7 +69,8 @@ def get_libraries(filter_uploads):
         return Response(serializer.data)
 
     return extend_schema(
-        responses=federation_api_serializers.LibrarySerializer(many=True)
+        responses=federation_api_serializers.LibrarySerializer(many=True),
+        parameters=[OpenApiParameter("id", location="query", exclude=True)],
     )(action(methods=["get"], detail=True)(libraries))
 
 

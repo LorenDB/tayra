@@ -5,7 +5,7 @@ from rest_framework import exceptions
 from rest_framework import response
 from rest_framework import status
 
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from . import filters
 from . import models
@@ -93,7 +93,9 @@ def mutations_route(types):
         methods=["post"], responses=serializers.APIMutationSerializer()
     )(
         extend_schema(
-            methods=["get"], responses=serializers.APIMutationSerializer(many=True)
+            methods=["get"],
+            responses=serializers.APIMutationSerializer(many=True),
+            parameters=[OpenApiParameter("id", location="query", exclude=True)],
         )(
             decorators.action(
                 methods=["get", "post"], detail=True, required_scope="edits"
