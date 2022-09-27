@@ -108,7 +108,11 @@ button.play {
   font-size: 2.5em;
 }
 
-button > svg {
+button > span {
+  display: inline-flex;
+}
+
+button svg.icon {
   height: 1em;
   width: 1em;
 }
