@@ -347,5 +347,4 @@ class SubscriptionsViewSet(
         subscriptions = self.get_queryset().values("uuid", "target__channel__uuid")
 
         payload = serializers.AllSubscriptionsSerializer(subscriptions).data
-        print(vars(payload))
         return response.Response(payload, status=200)
