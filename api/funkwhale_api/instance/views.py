@@ -64,7 +64,9 @@ class NodeInfo(views.APIView):
     permission_classes = []
     authentication_classes = []
 
-    @extend_schema(responses=serializers.NodeInfo20Serializer)
+    @extend_schema(
+        responses=serializers.NodeInfo20Serializer, operation_id="getNodeInfo20"
+    )
     def get(self, request):
         pref = preferences.all()
         if (

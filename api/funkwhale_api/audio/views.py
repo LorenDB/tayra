@@ -102,7 +102,8 @@ class ChannelViewSet(
             return serializers.ChannelSerializer
         elif self.action in ["update", "partial_update"]:
             return serializers.ChannelUpdateSerializer
-        return serializers.ChannelCreateSerializer
+        elif self.action is "create":
+            return serializers.ChannelCreateSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -142,6 +143,7 @@ class ChannelViewSet(
         detail=True,
         methods=["post"],
         permission_classes=[rest_permissions.IsAuthenticated],
+        serializer_class=serializers.SubscriptionSerializer,
     )
     def subscribe(self, request, *args, **kwargs):
         object = self.get_object()
@@ -164,6 +166,7 @@ class ChannelViewSet(
         data = serializers.SubscriptionSerializer(subscription).data
         return response.Response(data, status=201)
 
+    @extend_schema(responses={204: None})
     @decorators.action(
         detail=True,
         methods=["post", "delete"],
@@ -330,7 +333,10 @@ class SubscriptionsViewSet(
         qs = super().get_queryset()
         return qs.filter(actor=self.request.user.actor)
 
-    @extend_schema(operation_id="get_all_subscriptions")
+    @extend_schema(
+        responses=serializers.AllSubscriptionsSerializer(),
+        operation_id="get_all_subscriptions",
+    )
     @decorators.action(methods=["get"], detail=False)
     def all(self, request, *args, **kwargs):
         """
@@ -338,12 +344,8 @@ class SubscriptionsViewSet(
         to have a performant endpoint and avoid lots of queries just to display
         subscription status in the UI
         """
-        subscriptions = list(
-            self.get_queryset().values_list("uuid", "target__channel__uuid")
-        )
+        subscriptions = self.get_queryset().values("uuid", "target__channel__uuid")
 
-        payload = {
-            "results": [{"uuid": str(u[0]), "channel": u[1]} for u in subscriptions],
-            "count": len(subscriptions),
-        }
+        payload = serializers.AllSubscriptionsSerializer(subscriptions).data
+        print(vars(payload))
         return response.Response(payload, status=200)

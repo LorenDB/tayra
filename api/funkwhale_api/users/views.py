@@ -121,7 +121,7 @@ class UserViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         data = {"subsonic_api_token": self.request.user.subsonic_api_token}
         return Response(data)
 
-    @extend_schema(operation_id="change_email")
+    @extend_schema(operation_id="change_email", responses={200: None, 403: None})
     @action(
         methods=["post"],
         required_scope="security",

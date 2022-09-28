@@ -47,7 +47,7 @@ class RadioViewSet(
     def perform_update(self, serializer):
         return serializer.save(user=self.request.user)
 
-    @action(methods=["get"], detail=True)
+    @action(methods=["get"], detail=True, serializer_class=TrackSerializer)
     def tracks(self, request, *args, **kwargs):
         radio = self.get_object()
         tracks = radio.get_candidates().for_nested_serialization()
@@ -59,7 +59,9 @@ class RadioViewSet(
             serializer = TrackSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-    @action(methods=["get"], detail=False)
+    @action(
+        methods=["get"], detail=False, serializer_class=serializers.FilterSerializer
+    )
     def filters(self, request, *args, **kwargs):
         serializer = serializers.FilterSerializer(
             filters.registry.exposed_filters, many=True

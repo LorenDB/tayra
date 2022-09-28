@@ -75,7 +75,7 @@ class LicenseSerializer(serializers.Serializer):
 
 class ArtistAlbumSerializer(serializers.Serializer):
     tracks_count = serializers.SerializerMethodField()
-    cover = cover_field
+    cover = CoverField(allow_null=True)
     is_playable = serializers.SerializerMethodField()
     is_local = serializers.BooleanField()
     id = serializers.IntegerField()
@@ -102,11 +102,22 @@ class ArtistAlbumSerializer(serializers.Serializer):
 DATETIME_FIELD = serializers.DateTimeField()
 
 
+class InlineActorSerializer(serializers.Serializer):
+    full_username = serializers.CharField()
+    preferred_username = serializers.CharField()
+    domain = serializers.CharField(source="domain_id")
+
+
+class ArtistWithAlbumsInlineChannelSerializer(serializers.Serializer):
+    uuid = serializers.CharField()
+    actor = InlineActorSerializer()
+
+
 class ArtistWithAlbumsSerializer(OptionalDescriptionMixin, serializers.Serializer):
     albums = ArtistAlbumSerializer(many=True)
     tags = serializers.SerializerMethodField()
-    attributed_to = APIActorSerializer()
-    channel = serializers.SerializerMethodField()
+    attributed_to = APIActorSerializer(allow_null=True)
+    channel = ArtistWithAlbumsInlineChannelSerializer(allow_null=True)
     tracks_count = serializers.SerializerMethodField()
     id = serializers.IntegerField()
     fid = serializers.URLField()
@@ -115,7 +126,7 @@ class ArtistWithAlbumsSerializer(OptionalDescriptionMixin, serializers.Serialize
     content_category = serializers.CharField()
     creation_date = serializers.DateTimeField()
     is_local = serializers.BooleanField()
-    cover = cover_field
+    cover = CoverField(allow_null=True)
 
     @extend_schema_field({"type": "array", "items": {"type": "string"}})
     def get_tags(self, obj):
@@ -126,25 +137,11 @@ class ArtistWithAlbumsSerializer(OptionalDescriptionMixin, serializers.Serialize
         tracks = getattr(o, "_prefetched_tracks", None)
         return len(tracks) if tracks else 0
 
-    @extend_schema_field(OpenApiTypes.OBJECT)
-    def get_channel(self, o):
-        channel = o.get_channel()
-        if not channel:
-            return
-
-        return {
-            "uuid": str(channel.uuid),
-            "actor": {
-                "full_username": channel.actor.full_username,
-                "preferred_username": channel.actor.preferred_username,
-                "domain": channel.actor.domain_id,
-            },
-        }
-
 
 class SimpleArtistSerializer(serializers.ModelSerializer):
-    attachment_cover = cover_field
-    description = common_serializers.ContentSerializer()
+    attachment_cover = CoverField(allow_null=True, required=False)
+    description = common_serializers.ContentSerializer(allow_null=True, required=False)
+    channel = serializers.UUIDField(allow_null=True, required=False)
 
     class Meta:
         model = models.Artist
@@ -165,7 +162,7 @@ class SimpleArtistSerializer(serializers.ModelSerializer):
 
 class AlbumSerializer(OptionalDescriptionMixin, serializers.Serializer):
     artist = SimpleArtistSerializer()
-    cover = cover_field
+    cover = CoverField(allow_null=True)
     is_playable = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
     tracks_count = serializers.SerializerMethodField()
@@ -208,7 +205,7 @@ class AlbumSerializer(OptionalDescriptionMixin, serializers.Serializer):
 
 class TrackAlbumSerializer(serializers.ModelSerializer):
     artist = SimpleArtistSerializer()
-    cover = cover_field
+    cover = CoverField(allow_null=True)
     tracks_count = serializers.SerializerMethodField()
 
     def get_tracks_count(self, o) -> int:
@@ -265,7 +262,7 @@ class TrackSerializer(OptionalDescriptionMixin, serializers.Serializer):
     uploads = serializers.SerializerMethodField()
     listen_url = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
-    attributed_to = APIActorSerializer()
+    attributed_to = APIActorSerializer(allow_null=True)
 
     id = serializers.IntegerField()
     fid = serializers.URLField()
@@ -278,7 +275,7 @@ class TrackSerializer(OptionalDescriptionMixin, serializers.Serializer):
     downloads_count = serializers.IntegerField()
     copyright = serializers.CharField()
     license = serializers.SerializerMethodField()
-    cover = cover_field
+    cover = CoverField(allow_null=True)
     is_playable = serializers.SerializerMethodField()
 
     @extend_schema_field(OpenApiTypes.URI)
@@ -293,7 +290,7 @@ class TrackSerializer(OptionalDescriptionMixin, serializers.Serializer):
         uploads = sorted(uploads, key=lambda u: u["is_local"], reverse=True)
         return list(uploads)
 
-    @extend_schema_field({"type": "array", "items": {"type": "str"}})
+    @extend_schema_field({"type": "array", "items": {"type": "string"}})
     def get_tags(self, obj):
         tagged_items = getattr(obj, "_prefetched_tagged_items", [])
         return [ti.tag.name for ti in tagged_items]
@@ -451,9 +448,10 @@ class ImportMetadataField(serializers.JSONField):
 
 class UploadForOwnerSerializer(UploadSerializer):
     import_status = serializers.ChoiceField(
-        choices=["draft", "pending"], default="pending"
+        choices=models.TRACK_FILE_IMPORT_STATUS_CHOICES, default="pending"
     )
     import_metadata = ImportMetadataField(required=False)
+    filename = serializers.CharField(required=False)
 
     class Meta(UploadSerializer.Meta):
         fields = UploadSerializer.Meta.fields + [
@@ -464,7 +462,7 @@ class UploadForOwnerSerializer(UploadSerializer):
             "source",
             "audio_file",
         ]
-        write_only_fields = ["audio_file"]
+        extra_kwargs = {"audio_file": {"write_only": True}}
         read_only_fields = UploadSerializer.Meta.read_only_fields + [
             "import_details",
             "metadata",
@@ -498,6 +496,13 @@ class UploadForOwnerSerializer(UploadSerializer):
 
         if "channel" in validated_data:
             validated_data["library"] = validated_data.pop("channel").library
+
+        if "import_status" in validated_data and validated_data[
+            "import_status"
+        ] not in ["draft", "pending"]:
+            raise serializers.ValidationError(
+                "Newly created Uploads need to have import_status of draft or pending"
+            )
         return super().validate(validated_data)
 
     def validate_upload_quota(self, f):
@@ -555,7 +560,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class SimpleAlbumSerializer(serializers.ModelSerializer):
-    cover = cover_field
+    cover = CoverField(allow_null=True)
 
     class Meta:
         model = models.Album

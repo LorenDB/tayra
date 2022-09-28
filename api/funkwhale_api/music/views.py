@@ -303,7 +303,13 @@ class LibraryViewSet(
 
     follows = action
 
-    @action(methods=["get"], detail=True)
+    @extend_schema(
+        responses=federation_api_serializers.LibraryFollowSerializer(many=True)
+    )
+    @action(
+        methods=["get"],
+        detail=True,
+    )
     @transaction.non_atomic_requests
     def follows(self, request, *args, **kwargs):
         library = self.get_object()
@@ -315,13 +321,15 @@ class LibraryViewSet(
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = federation_api_serializers.LibraryFollowSerializer(
-                page, many=True
+                page, many=True, required=False
             )
             return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = self.get_serializer(queryset, many=True, required=False)
         return Response(serializer.data)
 
+    # TODO quickfix, basically specifying the response would be None
+    @extend_schema(responses=None)
     @action(
         methods=["get", "post", "delete"],
         detail=False,
@@ -631,6 +639,7 @@ class ListenMixin(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     anonymous_policy = "setting"
     lookup_field = "uuid"
 
+    @extend_schema(responses=bytes)
     def retrieve(self, request, *args, **kwargs):
         config = {
             "explicit_file": request.GET.get("upload"),
@@ -671,8 +680,13 @@ def handle_stream(track, request, download, explicit_file, format, max_bitrate):
     )
 
 
+class AudioRenderer(renderers.JSONRenderer):
+    media_type = "audio/*"
+
+
+@extend_schema(operation_id="get_track_file")
 class ListenViewSet(ListenMixin):
-    pass
+    renderer_classes = [AudioRenderer]
 
 
 class MP3Renderer(renderers.JSONRenderer):
@@ -683,6 +697,7 @@ class MP3Renderer(renderers.JSONRenderer):
 class StreamViewSet(ListenMixin):
     renderer_classes = [MP3Renderer]
 
+    @extend_schema(operation_id="get_track_stream", responses=bytes)
     def retrieve(self, request, *args, **kwargs):
         config = {
             "explicit_file": None,
@@ -743,7 +758,10 @@ class UploadViewSet(
             qs = qs.playable_by(actor)
         return qs
 
-    @extend_schema(operation_id="get_upload_metadata")
+    @extend_schema(
+        responses=tasks.metadata.TrackMetadataSerializer(),
+        operation_id="get_upload_metadata",
+    )
     @action(methods=["get"], detail=True, url_path="audio-file-metadata")
     def audio_file_metadata(self, request, *args, **kwargs):
         upload = self.get_object()

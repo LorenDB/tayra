@@ -17,6 +17,7 @@ from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common.permissions import ConditionalAuthentication
 from funkwhale_api.music import models as music_models
 from funkwhale_api.music import views as music_views
+from funkwhale_api.music import serializers as music_serializers
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 
 from . import activity
@@ -86,7 +87,10 @@ class LibraryFollowViewSet(
         context["actor"] = self.request.user.actor
         return context
 
-    @extend_schema(operation_id="accept_federation_library_follow")
+    @extend_schema(
+        operation_id="accept_federation_library_follow",
+        responses={404: None, 204: None},
+    )
     @decorators.action(methods=["post"], detail=True)
     def accept(self, request, *args, **kwargs):
         try:
@@ -300,7 +304,11 @@ class ActorViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             qs = qs.filter(query)
         return qs
 
-    libraries = decorators.action(methods=["get"], detail=True)(
+    libraries = decorators.action(
+        methods=["get"],
+        detail=True,
+        serializer_class=music_serializers.LibraryForOwnerSerializer,
+    )(
         music_views.get_libraries(
             filter_uploads=lambda o, uploads: uploads.filter(library__actor=o)
         )

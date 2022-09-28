@@ -1,4 +1,3 @@
-import uuid
 import pytest
 
 from django.urls import reverse
@@ -282,7 +281,7 @@ def test_subscriptions_all(factories, logged_in_api_client):
 
     assert response.status_code == 200
     assert response.data == {
-        "results": [{"uuid": subscription.uuid, "channel": uuid.UUID(channel.uuid)}],
+        "results": [{"uuid": subscription.uuid, "channel": channel.uuid}],
         "count": 1,
     }
 

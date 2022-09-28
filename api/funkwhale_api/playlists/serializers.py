@@ -76,7 +76,7 @@ class PlaylistSerializer(serializers.ModelSerializer):
             # no annotation?
             return 0
 
-    @extend_schema_field({"type": "array", "items": {"type": "uri"}})
+    @extend_schema_field({"type": "array", "items": {"type": "string"}})
     def get_album_covers(self, obj):
         try:
             plts = obj.plts_for_cover

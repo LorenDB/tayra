@@ -52,7 +52,7 @@ class ManageUserSimpleSerializer(serializers.ModelSerializer):
 
 class ManageUserSerializer(serializers.ModelSerializer):
     permissions = PermissionsSerializer(source="*")
-    upload_quota = serializers.IntegerField(allow_null=True)
+    upload_quota = serializers.IntegerField(allow_null=True, required=False)
     actor = serializers.SerializerMethodField()
 
     class Meta:
@@ -221,7 +221,7 @@ class ManageBaseActorSerializer(serializers.ModelSerializer):
 
 class ManageActorSerializer(ManageBaseActorSerializer):
     uploads_count = serializers.SerializerMethodField()
-    user = ManageUserSerializer()
+    user = ManageUserSerializer(allow_null=True)
 
     class Meta:
         model = federation_models.Actor
@@ -403,7 +403,7 @@ class ManageArtistSerializer(
     tracks_count = serializers.SerializerMethodField()
     albums_count = serializers.SerializerMethodField()
     channel = serializers.SerializerMethodField()
-    cover = music_serializers.cover_field
+    cover = music_serializers.CoverField(allow_null=True)
 
     class Meta:
         model = music_models.Artist
@@ -477,8 +477,8 @@ class ManageTrackSerializer(
     music_serializers.OptionalDescriptionMixin, ManageNestedTrackSerializer
 ):
     artist = ManageNestedArtistSerializer()
-    album = ManageTrackAlbumSerializer()
-    attributed_to = ManageBaseActorSerializer()
+    album = ManageTrackAlbumSerializer(allow_null=True)
+    attributed_to = ManageBaseActorSerializer(allow_null=True)
     uploads_count = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
     cover = music_serializers.cover_field
@@ -706,11 +706,13 @@ class ManageNoteSerializer(ManageBaseNoteSerializer):
 
 
 class ManageReportSerializer(serializers.ModelSerializer):
-    assigned_to = ManageBaseActorSerializer()
-    target_owner = ManageBaseActorSerializer()
-    submitter = ManageBaseActorSerializer()
+    assigned_to = ManageBaseActorSerializer(allow_null=True, required=False)
+    target_owner = ManageBaseActorSerializer(required=False)
+    submitter = ManageBaseActorSerializer(required=False)
     target = moderation_serializers.TARGET_FIELD
-    notes = serializers.SerializerMethodField()
+    notes = ManageBaseNoteSerializer(
+        allow_null=True, source="_prefetched_notes", many=True, default=[]
+    )
 
     class Meta:
         model = moderation_models.Report
@@ -744,11 +746,6 @@ class ManageReportSerializer(serializers.ModelSerializer):
             "target_owner",
             "summary",
         ]
-
-    @extend_schema_field(ManageBaseNoteSerializer)
-    def get_notes(self, o):
-        notes = getattr(o, "_prefetched_notes", [])
-        return ManageBaseNoteSerializer(notes, many=True).data
 
 
 class ManageUserRequestSerializer(serializers.ModelSerializer):

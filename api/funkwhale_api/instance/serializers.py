@@ -105,7 +105,7 @@ class MetadataSerializer(serializers.Serializer):
     funkwhaleSupportMessageEnabled = serializers.SerializerMethodField()
     instanceSupportMessage = serializers.SerializerMethodField()
     endpoints = EndpointsSerializer()
-    usage = serializers.SerializerMethodField(source="stats")
+    usage = MetadataUsageSerializer(source="stats", required=False)
 
     def get_private(self, obj) -> bool:
         return obj["preferences"].get("instance__nodeinfo_private")

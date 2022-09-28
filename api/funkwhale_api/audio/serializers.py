@@ -281,6 +281,19 @@ class ChannelSerializer(serializers.ModelSerializer):
         return obj.actor.url
 
 
+class InlineSubscriptionSerializer(serializers.Serializer):
+    uuid = serializers.UUIDField()
+    channel = serializers.UUIDField(source="target__channel__uuid")
+
+
+class AllSubscriptionsSerializer(serializers.Serializer):
+    results = InlineSubscriptionSerializer(source="*", many=True)
+    count = serializers.SerializerMethodField()
+
+    def get_count(self, o) -> int:
+        return len(o)
+
+
 class SubscriptionSerializer(serializers.Serializer):
     approved = serializers.BooleanField(read_only=True)
     fid = serializers.URLField(read_only=True)

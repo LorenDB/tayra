@@ -138,6 +138,7 @@ SPECTACULAR_SETTINGS = {
         "PrivacyLevelEnum": "funkwhale_api.common.fields.PRIVACY_LEVEL_CHOICES",
         "LibraryPrivacyLevelEnum": "funkwhale_api.music.models.LIBRARY_PRIVACY_LEVEL_CHOICES",
     },
+    "COMPONENT_SPLIT_REQUEST": True,
 }
 
 if env.bool("WEAK_PASSWORDS", default=False):

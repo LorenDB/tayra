@@ -1261,6 +1261,9 @@ class Library(federation_models.FederationMixin):
         except ObjectDoesNotExist:
             return None
 
+    def latest_scan(self):
+        return self.scans.order_by("-creation_date").first()
+
 
 SCAN_STATUS = [
     ("pending", "pending"),

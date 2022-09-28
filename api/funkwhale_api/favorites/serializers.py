@@ -51,3 +51,16 @@ class UserTrackFavoriteWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TrackFavorite
         fields = ("id", "track", "creation_date")
+
+
+class SimpleFavoriteSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    track = serializers.IntegerField()
+
+
+class AllFavoriteSerializer(serializers.Serializer):
+    results = SimpleFavoriteSerializer(many=True, source="*")
+    count = serializers.SerializerMethodField()
+
+    def get_count(self, o) -> int:
+        return len(o)

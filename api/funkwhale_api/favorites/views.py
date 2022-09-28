@@ -81,7 +81,10 @@ class TrackFavoriteViewSet(
         favorite.delete()
         return Response([], status=status.HTTP_204_NO_CONTENT)
 
-    @extend_schema(operation_id="get_all_favorite_tracks")
+    @extend_schema(
+        responses=serializers.AllFavoriteSerializer(),
+        operation_id="get_all_favorite_tracks",
+    )
     @action(methods=["get"], detail=False)
     def all(self, request, *args, **kwargs):
         """
@@ -90,10 +93,9 @@ class TrackFavoriteViewSet(
         favorites status in the UI
         """
         if not request.user.is_authenticated:
-            return Response({"results": [], "count": 0}, status=200)
+            return Response({"results": [], "count": 0}, status=401)
 
-        favorites = list(
-            request.user.track_favorites.values("id", "track").order_by("id")
-        )
-        payload = {"results": favorites, "count": len(favorites)}
+        favorites = request.user.track_favorites.values("id", "track").order_by("id")
+        payload = serializers.AllFavoriteSerializer(favorites).data
+
         return Response(payload, status=200)

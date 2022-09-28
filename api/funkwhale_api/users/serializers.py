@@ -130,7 +130,9 @@ class UserActivitySerializer(activity_serializers.ModelSerializer):
 
 
 class UserBasicSerializer(serializers.ModelSerializer):
-    avatar = common_serializers.AttachmentSerializer(source="get_avatar")
+    avatar = common_serializers.AttachmentSerializer(
+        source="get_avatar", allow_null=True
+    )
 
     class Meta:
         model = models.User

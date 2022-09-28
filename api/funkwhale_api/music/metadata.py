@@ -760,7 +760,7 @@ class TrackMetadataSerializer(serializers.Serializer):
 
     album = AlbumField()
     artists = ArtistField()
-    cover_data = CoverDataField()
+    cover_data = CoverDataField(required=False)
 
     remove_blank_null_fields = [
         "copyright",
