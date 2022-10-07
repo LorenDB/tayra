@@ -231,7 +231,6 @@ const togglePlayback = () => {
   if (playing.value) return pause()
   return resume()
 }
-
 export default () => {
   return {
     looping,

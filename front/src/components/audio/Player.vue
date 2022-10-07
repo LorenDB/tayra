@@ -1,14 +1,17 @@
 <script setup lang="ts">
+import { initializeFirstTrack, isPlaying, _seekEnd } from '~/composables/audio/player'
+import { useMouse, useWindowSize } from '@vueuse/core'
+import { useGettext } from 'vue3-gettext'
+import { computed, ref } from 'vue'
 import { useStore } from '~/store'
-import VolumeControl from './VolumeControl.vue'
+
+import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
+import usePlayer from '~/composables/audio/usePlayer'
+import useQueue from '~/composables/audio/useQueue'
+
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
-import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
-import { computed, ref } from 'vue'
-import { useGettext } from 'vue3-gettext'
-import { useMouse, useWindowSize } from '@vueuse/core'
-import useQueue from '~/composables/audio/useQueue'
-import usePlayer from '~/composables/audio/usePlayer'
+import VolumeControl from './VolumeControl.vue'
 
 const store = useStore()
 const { $pgettext } = useGettext()
@@ -97,6 +100,10 @@ const touchProgress = (event: MouseEvent) => {
 
 const { x } = useMouse()
 const { width: screenWidth } = useWindowSize()
+
+initializeFirstTrack()
+onKeyboardShortcut('w', () => { isPlaying.value = !isPlaying.value })
+onKeyboardShortcut('9', () => { _seekEnd() })
 </script>
 
 <template>
