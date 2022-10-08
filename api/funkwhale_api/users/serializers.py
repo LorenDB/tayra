@@ -3,6 +3,7 @@ import re
 from django.core import validators
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.forms import PasswordResetForm
 
 from django.contrib import auth
 
@@ -248,6 +249,8 @@ class MeSerializer(UserReadSerializer):
 
 
 class PasswordResetSerializer(PRS):
+    password_reset_form_class = PasswordResetForm
+
     def get_email_options(self):
         return {"extra_email_context": adapters.get_email_context()}
 
