@@ -5,8 +5,8 @@ from django.contrib import auth
 from django.middleware import csrf
 
 from allauth.account.adapter import get_adapter
-from rest_auth import views as rest_auth_views
-from rest_auth.registration import views as registration_views
+from dj_rest_auth import views as rest_auth_views
+from dj_rest_auth.registration import views as registration_views
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.decorators import action

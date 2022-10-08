@@ -7,8 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib import auth
 
 from allauth.account import models as allauth_models
-from rest_auth.serializers import PasswordResetSerializer as PRS
-from rest_auth.registration.serializers import RegisterSerializer as RS, get_adapter
+from dj_rest_auth.serializers import PasswordResetSerializer as PRS
+from dj_rest_auth.registration.serializers import RegisterSerializer as RS, get_adapter
 from rest_framework import serializers
 
 from funkwhale_api.activity import serializers as activity_serializers
