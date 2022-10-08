@@ -22,6 +22,11 @@
         name = "Enhancements"
         showcontent = true
 
+		[[tool.towncrier.type]]
+				directory = "refactoring"
+				name = "Refactoring"
+				showcontent = true
+
     [[tool.towncrier.type]]
         directory = "bugfix"
         name = "Bugfixes"
