@@ -53,9 +53,6 @@ def custom_preprocessing_hook(endpoints):
         if path.startswith("/api/v1/users/users"):
             continue
 
-        if path.startswith("/api/v1/mutations"):
-            continue
-
         if path.startswith(f"/api/{api_type}"):
             filtered.append((path, path_regex, method, callback))
 

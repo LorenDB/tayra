@@ -1,6 +1,8 @@
 from django import forms
 from django.db.models import Q
 
+from drf_spectacular.utils import extend_schema_field
+
 from django_filters import widgets
 from django_filters import rest_framework as filters
 
@@ -52,6 +54,7 @@ class CoerceChoiceField(forms.ChoiceField):
             raise forms.ValidationError("Invalid value {}".format(value))
 
 
+@extend_schema_field(bool)
 class NullBooleanFilter(filters.ChoiceFilter):
     field_class = CoerceChoiceField
 
