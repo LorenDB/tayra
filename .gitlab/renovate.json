@@ -22,6 +22,14 @@
       "matchUpdateTypes": ["patch", "pin", "digest"],
       "matchBaseBranches": ["develop"],
       "automerge": true
+    },
+    {
+      "matchManagers": ["yarn"],
+      "addLabels": ["Area: Frontend"]
+    },
+    {
+      "matchManagers": ["poetry"],
+      "addLabels": ["Area: Backend"]
     }
   ]
 }
