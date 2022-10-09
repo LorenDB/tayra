@@ -24,7 +24,7 @@
       "automerge": true
     },
     {
-      "matchManagers": ["yarn"],
+      "matchManagers": ["npm"],
       "addLabels": ["Area: Frontend"]
     },
     {
