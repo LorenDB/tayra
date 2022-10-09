@@ -21,7 +21,7 @@ from funkwhale_api.common import throttling
 from . import models, serializers, tasks
 
 
-@extend_schema(operation_id="register", methods=["post"])
+@extend_schema_view(post=extend_schema(operation_id="register", methods=["post"]))
 class RegisterView(registration_views.RegisterView):
     serializer_class = serializers.RegisterSerializer
     permission_classes = []
@@ -46,7 +46,7 @@ class RegisterView(registration_views.RegisterView):
         return user
 
 
-@extend_schema(operation_id="verify_email")
+@extend_schema_view(post=extend_schema(operation_id="verify_email"))
 class VerifyEmailView(registration_views.VerifyEmailView):
     action = "verify-email"
 
@@ -56,12 +56,12 @@ class PasswordChangeView(rest_auth_views.PasswordChangeView):
     action = "password-change"
 
 
-@extend_schema(operation_id="reset_password")
+@extend_schema_view(post=extend_schema(operation_id="reset_password"))
 class PasswordResetView(rest_auth_views.PasswordResetView):
     action = "password-reset"
 
 
-@extend_schema(operation_id="confirm_password_reset")
+@extend_schema_view(post=extend_schema(operation_id="confirm_password_reset"))
 class PasswordResetConfirmView(rest_auth_views.PasswordResetConfirmView):
     action = "password-reset-confirm"
 
