@@ -70,8 +70,10 @@ caption: Developer documentation
 hidden: true
 ---
 
-contributing
-developers/index
+developer_documentation/index
+developer_documentation/setup/index
+developer_documentation/contribute/index
+developer_documentation/workflows/index
 
 ```
 
@@ -184,7 +186,7 @@ Want to use Funkwhale's API or help with the project? Our developer docs give yo
 
 +++
 
-```{button-link} developers/index.html
+```{button-link} developer_documentation/index.html
 :ref-type: ref
 :color: primary
 :outline:

@@ -51,6 +51,7 @@ extensions = [
     "myst_parser",
     "sphinx_design",
     "sphinx_multiversion",
+    "sphinxcontrib.mermaid",
 ]
 autodoc_mock_imports = [
     "celery",
