@@ -12,7 +12,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from funkwhale_api.common import authentication
 from funkwhale_api.common import preferences
@@ -51,7 +51,7 @@ class VerifyEmailView(registration_views.VerifyEmailView):
     action = "verify-email"
 
 
-@extend_schema(operation_id="change_password")
+@extend_schema_view(post=extend_schema(operation_id="change_password"))
 class PasswordChangeView(rest_auth_views.PasswordChangeView):
     action = "password-change"
 
