@@ -104,6 +104,7 @@ class ChannelViewSet(
             return serializers.ChannelUpdateSerializer
         elif self.action is "create":
             return serializers.ChannelCreateSerializer
+        return serializers.ChannelSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()
