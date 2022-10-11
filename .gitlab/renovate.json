@@ -30,6 +30,10 @@
     {
       "matchManagers": ["poetry"],
       "addLabels": ["Area: Backend"]
+    },
+    {
+      "matchPackageNames": ["@vue/runtime-core", "vue"],
+      "groupName": "Vue"
     }
   ]
 }
