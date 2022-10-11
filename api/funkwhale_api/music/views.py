@@ -16,7 +16,7 @@ from rest_framework import views, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.utils import extend_schema, OpenApiParameter, extend_schema_view
 
 import requests.exceptions
 
@@ -684,7 +684,7 @@ class AudioRenderer(renderers.JSONRenderer):
     media_type = "audio/*"
 
 
-@extend_schema(operation_id="get_track_file")
+@extend_schema_view(get=extend_schema(operation_id="get_track_file"))
 class ListenViewSet(ListenMixin):
     renderer_classes = [AudioRenderer]
 
