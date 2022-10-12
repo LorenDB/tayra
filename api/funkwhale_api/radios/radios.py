@@ -26,10 +26,11 @@ class SimpleRadio(object):
         return
 
     def pick(self, choices, previous_choices=[]):
-        return random.sample(set(choices).difference(previous_choices), 1)[0]
+        possible_choices = [x for x in choices if x not in previous_choices]
+        return random.sample(possible_choices, 1)[0]
 
     def pick_many(self, choices, quantity):
-        return random.sample(set(choices), quantity)
+        return random.sample(list(choices), quantity)
 
     def weighted_pick(self, choices, previous_choices=[]):
         total = sum(weight for c, weight in choices)
