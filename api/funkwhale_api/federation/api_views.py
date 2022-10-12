@@ -45,9 +45,6 @@ def update_follow(follow, approved):
     list=extend_schema(operation_id="get_federation_library_follows"),
     create=extend_schema(operation_id="create_federation_library_follow"),
 )
-# NOTE: For some weird reason, @extend_schema_view doesn't work with `retrieve` and `destroy` methods.
-@extend_schema(operation_id="get_federation_library_follow", methods=["get"])
-@extend_schema(operation_id="delete_federation_library_follow", methods=["delete"])
 class LibraryFollowViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
@@ -66,6 +63,14 @@ class LibraryFollowViewSet(
     required_scope = "follows"
     filterset_class = filters.LibraryFollowFilter
     ordering_fields = ("creation_date",)
+
+    @extend_schema(operation_id="get_federation_library_follow")
+    def retrieve(self, request):
+        return super().retrieve(request)
+
+    @extend_schema(operation_id="delete_federation_library_follow")
+    def destroy(self, request, uuid=None):
+        return super().destroy(request, uuid)
 
     def get_queryset(self):
         qs = super().get_queryset()
