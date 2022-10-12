@@ -932,6 +932,7 @@ class OembedView(views.APIView):
     permission_classes = [oauth_permissions.ScopePermission]
     required_scope = "libraries"
     anonymous_policy = "setting"
+    serializer_class = serializers.OembedSerializer
 
     def get(self, request, *args, **kwargs):
         serializer = serializers.OembedSerializer(data=request.GET)
