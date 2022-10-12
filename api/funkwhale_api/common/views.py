@@ -18,6 +18,11 @@ from config import plugins
 
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 
+from funkwhale_api.common.serializers import (
+    ErrorDetailSerializer,
+    TextPreviewSerializer,
+)
+
 from . import filters
 from . import models
 from . import mutations
@@ -205,18 +210,21 @@ class AttachmentViewSet(
 class TextPreviewView(views.APIView):
     permission_classes = []
 
-    @extend_schema(operation_id="preview_text")
+    @extend_schema(
+        operation_id="preview_text",
+        responses={200: TextPreviewSerializer, 400: ErrorDetailSerializer},
+    )
     def post(self, request, *args, **kwargs):
         payload = request.data
         if "text" not in payload:
-            return response.Response({"detail": "Invalid input"}, status=400)
+            return response.Response(
+                ErrorDetailSerializer("Invalid input").data, status=400
+            )
 
         permissive = payload.get("permissive", False)
-        data = {
-            "rendered": utils.render_html(
-                payload["text"], "text/markdown", permissive=permissive
-            )
-        }
+        data = TextPreviewSerializer(
+            utils.render_html(payload["text"], "text/markdown", permissive=permissive)
+        ).data
         return response.Response(data, status=200)
 
 

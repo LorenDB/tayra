@@ -359,3 +359,12 @@ class RateLimitSerializer(serializers.Serializer):
     enabled = serializers.BooleanField()
     ident = IdentSerializer()
     scopes = serializers.ListField(child=ScopesSerializer())
+
+
+class ErrorDetailSerializer(serializers.Serializer):
+    detail = serializers.CharField(source="*")
+
+
+class TextPreviewSerializer(serializers.Serializer):
+    rendered = serializers.CharField(read_only=True, source="*")
+    text = serializers.CharField(write_only=True)

@@ -273,6 +273,16 @@ def test_attachment_destroy_not_owner(factories, logged_in_api_client):
     attachment.refresh_from_db()
 
 
+def test_render_fails_for_no_text(api_client):
+    payload = {}
+    url = reverse("api:v1:text-preview")
+    response = api_client.post(url, payload)
+
+    expected = {"detail": "Invalid input"}
+    assert response.status_code == 400
+    assert response.data == expected
+
+
 def test_can_render_text_preview(api_client, db):
     payload = {"text": "Hello world"}
     url = reverse("api:v1:text-preview")
