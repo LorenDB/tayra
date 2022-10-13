@@ -553,12 +553,6 @@ class UploadActionSerializer(common_serializers.ActionSerializer):
             common_utils.on_commit(tasks.process_upload.delay, upload_id=pk)
 
 
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = tag_models.Tag
-        fields = ("name", "creation_date")
-
-
 class SimpleAlbumSerializer(serializers.ModelSerializer):
     cover = CoverField(allow_null=True)
 
@@ -856,4 +850,4 @@ class SearchResultSerializer(serializers.Serializer):
     artists = ArtistWithAlbumsSerializer(many=True)
     tracks = TrackSerializer(many=True)
     albums = AlbumSerializer(many=True)
-    tags = TagSerializer(many=True)
+    tags = tags_serializers.TagSerializer(many=True)

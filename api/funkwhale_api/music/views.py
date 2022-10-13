@@ -33,7 +33,6 @@ from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import routes
 from funkwhale_api.federation import tasks as federation_tasks
 from funkwhale_api.tags.models import Tag, TaggedItem
-from funkwhale_api.tags.serializers import TagSerializer
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 from funkwhale_api.users.authentication import ScopedTokenAuthentication
 
