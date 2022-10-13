@@ -696,6 +696,7 @@ Changelog fragments use the following naming convention: `changes/changelog.d/<n
 - `feature` – a new feature
 - `enhancement` – an extension of an existing feature
 - `bugfix` – a bugfix or patch
+- `refactoring` – refactored code
 - `doc` – new documentation
 - `i18n` – internationalization-related work
 - `misc` – any work that doesn't fit into the above categories
