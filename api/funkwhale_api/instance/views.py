@@ -120,9 +120,10 @@ class NodeInfo(views.APIView):
         )
 
 
-class SpaManifest(views.APIView):
+class SpaManifest(generics.GenericAPIView):
     permission_classes = []
     authentication_classes = []
+    serializer_class = serializers.SpaManifestSerializer
 
     @extend_schema(operation_id="get_spa_manifest")
     def get(self, request, *args, **kwargs):
@@ -139,4 +140,5 @@ class SpaManifest(views.APIView):
         instance_description = preferences.get("instance__short_description")
         if instance_description:
             parsed_manifest["description"] = instance_description
-        return Response(parsed_manifest, status=200)
+        serializer = self.get_serializer(parsed_manifest)
+        return Response(serializer.data, status=200)

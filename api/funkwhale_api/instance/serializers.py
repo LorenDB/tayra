@@ -198,3 +198,12 @@ class NodeInfo20Serializer(serializers.Serializer):
     @extend_schema_field(MetadataSerializer)
     def get_metadata(self, obj):
         return MetadataSerializer(obj).data
+
+class SpaManifestSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    short_name = serializers.CharField()
+    display = serializers.CharField(required=False)
+    background_color = serializers.CharField(required=False)
+    lang = serializers.CharField(required=False)
+    description = serializers.CharField(required=False)
+    start_url = serializers.CharField(required=False)
