@@ -820,7 +820,9 @@ class Search(views.APIView):
     required_scope = "libraries"
     anonymous_policy = "setting"
 
-    @extend_schema(operation_id="get_search_results")
+    @extend_schema(
+        operation_id="get_search_results", responses=serializers.SearchResultSerializer
+    )
     def get(self, request, *args, **kwargs):
         query = request.GET.get("query", request.GET.get("q", "")) or ""
         query = query.strip()
@@ -828,25 +830,20 @@ class Search(views.APIView):
             return Response({"detail": "empty query"}, status=400)
         try:
             results = {
-                # 'tags': serializers.TagSerializer(self.get_tags(query), many=True).data,
-                "artists": serializers.ArtistWithAlbumsSerializer(
-                    self.get_artists(query), many=True
-                ).data,
-                "tracks": serializers.TrackSerializer(
-                    self.get_tracks(query), many=True
-                ).data,
-                "albums": serializers.AlbumSerializer(
-                    self.get_albums(query), many=True
-                ).data,
-                "tags": TagSerializer(self.get_tags(query), many=True).data,
+                "artists": self.get_artists(query),
+                "tracks": self.get_tracks(query),
+                "albums": self.get_albums(query),
+                "tags": self.get_tags(query),
             }
         except django.db.utils.ProgrammingError as e:
             if "in tsquery:" in str(e):
-                return Response({"detail": "Invalid query"}, status=400)
+                return Response(
+                    {"detail": "Invalid query"}, status=400
+                )  # TODO This might be better a 500?
             else:
                 raise
 
-        return Response(results, status=200)
+        return Response(serializers.SearchResultSerializer(results).data, status=200)
 
     def get_tracks(self, query):
         query_obj = utils.get_fts_query(

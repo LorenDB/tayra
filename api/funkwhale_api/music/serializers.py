@@ -556,7 +556,7 @@ class UploadActionSerializer(common_serializers.ActionSerializer):
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = tag_models.Tag
-        fields = ("id", "name", "creation_date")
+        fields = ("name", "creation_date")
 
 
 class SimpleAlbumSerializer(serializers.ModelSerializer):
@@ -850,3 +850,10 @@ class FSImportSerializer(serializers.Serializer):
             return self.context["user"].actor.libraries.get(uuid=value)
         except models.Library.DoesNotExist:
             raise serializers.ValidationError("Invalid library")
+
+
+class SearchResultSerializer(serializers.Serializer):
+    artists = ArtistWithAlbumsSerializer(many=True)
+    tracks = TrackSerializer(many=True)
+    albums = AlbumSerializer(many=True)
+    tags = TagSerializer(many=True)
