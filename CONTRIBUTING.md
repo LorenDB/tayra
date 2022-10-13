@@ -701,13 +701,10 @@ Changelog fragments use the following naming convention: `changes/changelog.d/<n
 - `i18n` – internationalization-related work
 - `misc` – any work that doesn't fit into the above categories
 
-You can create these files manually or use the following snippet to create a fragment:
+You can create these files manually or use the following command to create a fragment:
 
 ```sh
-issue="42"
-content="Fixed an overflowing issue on small resolutions (#$issue)"
-category="bugfix"
-echo "$content ($issue)" > changes/changelog.d/$issue.$category
+towncrier new --edit $issue.$category
 ```
 
 ## Make a release
