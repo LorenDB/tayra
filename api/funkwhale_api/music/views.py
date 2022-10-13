@@ -836,9 +836,7 @@ class Search(views.APIView):
             }
         except django.db.utils.ProgrammingError as e:
             if "in tsquery:" in str(e):
-                return Response(
-                    {"detail": "Invalid query"}, status=400
-                )
+                return Response({"detail": "Invalid query"}, status=400)
             else:
                 raise
 
