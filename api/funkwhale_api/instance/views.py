@@ -126,12 +126,13 @@ class SpaManifest(generics.GenericAPIView):
     serializer_class = serializers.SpaManifestSerializer
 
     @extend_schema(operation_id="get_spa_manifest")
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         existing_manifest = middleware.get_spa_file(
             settings.FUNKWHALE_SPA_HTML_ROOT, "manifest.json"
         )
         parsed_manifest = json.loads(existing_manifest)
         parsed_manifest["short_name"] = settings.APP_NAME
+        parsed_manifest["name"] = settings.APP_NAME
         parsed_manifest["start_url"] = federation_utils.full_url("/")
         instance_name = preferences.get("instance__name")
         if instance_name:

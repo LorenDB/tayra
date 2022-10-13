@@ -199,6 +199,7 @@ class NodeInfo20Serializer(serializers.Serializer):
     def get_metadata(self, obj):
         return MetadataSerializer(obj).data
 
+
 class SpaManifestSerializer(serializers.Serializer):
     name = serializers.CharField()
     short_name = serializers.CharField()
