@@ -108,7 +108,7 @@ const topicScopes = computed(() => {
   }).filter(scope => scope.read || scope.write)
 })
 
-whenever(() => props.clientId, fetchApplication)
+whenever(() => props.clientId, fetchApplication, { immediate: true })
 </script>
 
 <template>
