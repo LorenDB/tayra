@@ -11,6 +11,7 @@ from rest_framework import permissions
 from rest_framework import response
 from rest_framework import views
 from rest_framework import viewsets
+from rest_framework import generics
 
 from drf_spectacular.utils import extend_schema
 
@@ -207,8 +208,9 @@ class AttachmentViewSet(
         instance.delete()
 
 
-class TextPreviewView(views.APIView):
+class TextPreviewView(generics.GenericAPIView):
     permission_classes = []
+    serializer_class = TextPreviewSerializer
 
     @extend_schema(
         operation_id="preview_text",
