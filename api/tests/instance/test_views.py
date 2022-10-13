@@ -44,12 +44,9 @@ def test_manifest_endpoint(api_client, mocker, preferences, tmp_path, settings):
     settings.FUNKWHALE_SPA_HTML_ROOT = str(tmp_path / "index.html")
     preferences["instance__name"] = "Test pod"
     preferences["instance__short_description"] = "Test description"
-    base_payload = {
-        "foo": "bar",
-    }
+    base_payload = {}
     manifest = tmp_path / "manifest.json"
     expected = {
-        "foo": "bar",
         "name": "Test pod",
         "short_name": "Test pod",
         "description": "Test description",
