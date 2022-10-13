@@ -652,9 +652,32 @@ Funkwhale uses GitLab's merge requests to manage changes. The workflow looks lik
 4. Create a new branch based on the checked out branch. Make sure to give your branch a meaningful name and include the issue number if required
 5. Work on your changes locally. Try to keep each commit small to make reviews easier
 6. Add a changelog fragment summarizing your changes
-7. Push your branch
-8. Create a merge request in the GitLab frontend
-9. We'll review your request and feed back
+7. Lint the codebase using the following command:
+
+    ::::{tab-set}
+
+    :::{tab-item} API code
+
+    ```sh
+    black --check --diff . # Run the black linter in the project root to highlight any new issues
+    ```
+
+    :::
+
+    :::{tab-item} Frontend code
+
+    ```sh
+    cd front
+    yarn run eslint # Run eslint in the front directory
+    ```
+
+    :::
+
+    ::::
+
+8. Push your branch
+9.  Create a merge request in the GitLab frontend
+10. We'll review your request and feed back
 
 ```{mermaid}
 %%{init: { 'gitGraph': {'mainBranchName': 'stable'} } }%%
