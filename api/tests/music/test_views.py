@@ -1346,12 +1346,14 @@ def test_search_get(logged_in_api_client, factories):
     factories["tags.Tag"]()
 
     url = reverse("api:v1:search")
-    expected = {
-        "artists": [serializers.ArtistWithAlbumsSerializer(artist).data],
-        "albums": [serializers.AlbumSerializer(album).data],
-        "tracks": [serializers.TrackSerializer(track).data],
-        "tags": [views.TagSerializer(tag).data],
-    }
+    expected = serializers.SearchResultSerializer(
+        {
+            "artists": [artist],
+            "albums": [album],
+            "tracks": [track],
+            "tags": [tag],
+        }
+    ).data
 
     response = logged_in_api_client.get(url, {"q": "foo"})
 

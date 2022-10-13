@@ -838,7 +838,7 @@ class Search(views.APIView):
             if "in tsquery:" in str(e):
                 return Response(
                     {"detail": "Invalid query"}, status=400
-                )  # TODO This might be better a 500?
+                )
             else:
                 raise
 
