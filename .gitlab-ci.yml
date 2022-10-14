@@ -206,6 +206,7 @@ test_api:
     matrix:
       - PY_VER: ["3.7", "3.8", "3.9", "3.10", "3.11-rc"]
   image: $CI_REGISTRY/funkwhale/backend-test-docker:$PY_VER
+  coverage: '/TOTAL\s*\d*\s*\d*\s*(\d*%)/'
 
 test_front:
   interruptible: true
