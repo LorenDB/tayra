@@ -31,6 +31,8 @@ export default defineConfig(({ mode }) => ({
       },
       manifest: {
         name: 'Funkwhale',
+        start_url: undefined,
+        scope: undefined,
         short_name: 'Funkwhale',
         description: 'TODO',
         icons: [

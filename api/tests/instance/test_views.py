@@ -50,7 +50,6 @@ def test_manifest_endpoint(api_client, mocker, preferences, tmp_path, settings):
         "name": "Test pod",
         "short_name": "Test pod",
         "description": "Test description",
-        "start_url": federation_utils.full_url("/"),
     }
     manifest.write_bytes(json.dumps(base_payload).encode())
 
