@@ -140,4 +140,6 @@ class SpaManifest(generics.GenericAPIView):
         if instance_description:
             parsed_manifest["description"] = instance_description
         serializer = self.get_serializer(parsed_manifest)
-        return Response(serializer.data, status=200)
+        return Response(
+            serializer.data, status=200, content_type="application/manifest+json"
+        )
