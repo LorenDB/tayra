@@ -2,8 +2,6 @@ import json
 
 from django.urls import reverse
 
-from funkwhale_api.federation import utils as federation_utils
-
 
 def test_nodeinfo_endpoint(db, api_client):
     url = reverse("api:v1:instance:nodeinfo-2.0")
