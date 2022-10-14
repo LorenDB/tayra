@@ -131,8 +131,6 @@ class SpaManifest(generics.GenericAPIView):
             settings.FUNKWHALE_SPA_HTML_ROOT, "manifest.json"
         )
         parsed_manifest = json.loads(existing_manifest)
-        parsed_manifest["short_name"] = settings.APP_NAME
-        parsed_manifest["name"] = settings.APP_NAME
         parsed_manifest["start_url"] = federation_utils.full_url("/")
         instance_name = preferences.get("instance__name")
         if instance_name:

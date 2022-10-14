@@ -201,8 +201,8 @@ class NodeInfo20Serializer(serializers.Serializer):
 
 
 class SpaManifestSerializer(serializers.Serializer):
-    name = serializers.CharField()
-    short_name = serializers.CharField()
+    name = serializers.CharField(default="Funkwhale")
+    short_name = serializers.CharField(default="Funkwhale")
     display = serializers.CharField(required=False)
     background_color = serializers.CharField(required=False)
     lang = serializers.CharField(required=False)
