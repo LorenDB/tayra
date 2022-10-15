@@ -1,5 +1,4 @@
 from django.urls import reverse
-from django import urls
 
 
 def test_can_resolve_v1():
