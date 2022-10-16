@@ -3,7 +3,6 @@ import json
 import logging
 import os
 import requests
-from requests import HTTPError
 
 from django.conf import settings
 from django.db import transaction
@@ -18,7 +17,6 @@ from funkwhale_api.common import preferences
 from funkwhale_api.common import models as common_models
 from funkwhale_api.common import session
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import actors as actors_utils
 from funkwhale_api.moderation import mrf
 from funkwhale_api.music import models as music_models
 from funkwhale_api.taskapp import celery
@@ -627,33 +625,3 @@ def fetch_collection(url, max_pages, channel, is_page=False):
         results["errored"],
     )
     return results
-
-
-@celery.app.task(name="federation.refresh_actor_data")
-def refresh_actor_data():
-    actors = models.Actor.objects.all().prefetch_related()
-    for actor in actors:
-        if actor.is_local:
-            # skip refreshing local actors
-            continue
-
-        try:
-            data = actors_utils.get_actor_data(actor.fid)
-        except HTTPError as e:
-            logger.info(
-                f"Actor couldn't be fetch because of the following exeption : {e!r}"
-            )
-            if e.response.status_code == 410:
-                logger.info("Purging actor : {actor.fid!r}")
-                purge_actors([actor.id], [actor.domain])
-                continue
-            continue
-        except Exception as e:
-            logger.info(
-                f"Actor couldn't be fetch because of the following exeption : {e!r}"
-            )
-            continue
-        serializer = serializers.ActorSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(last_fetch_date=timezone.now())
-    return

@@ -862,11 +862,6 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(day_of_week="1", minute="0", hour="2"),
         "options": {"expires": 60 * 60 * 24},
     },
-    "federation.refresh_actor_data": {
-        "task": "federation.refresh_actor_data",
-        "schedule": crontab(minute="0", hour="*/5"),
-        "options": {"expires": 60 * 60},
-    },
 }
 
 if env.bool("ADD_ALBUM_TAGS_FROM_TRACKS", default=True):
