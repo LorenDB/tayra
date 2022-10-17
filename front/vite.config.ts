@@ -46,6 +46,18 @@ export default defineConfig(({ mode }) => ({
             sizes: '512x512',
             type: 'image/png'
           }
+        ],
+        related_applications: [
+          {
+            "platform": "play",
+            "url": "https://play.google.com/store/apps/details?id=audio.funkwhale.ffa",
+            "id": "audio.funkwhale.ffa"
+          },
+          {
+            "platform": "f-droid",
+            "url": "https://f-droid.org/en/packages/audio.funkwhale.ffa/",
+            "id": "audio.funkwhale.ffa"
+          }
         ]
       }
     })
