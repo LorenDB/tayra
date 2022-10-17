@@ -42,4 +42,8 @@ def get_track(track):
     if track.artist.mbid:
         additional_info["artist_mbids"] = [str(track.artist.mbid)]
 
+    upload = track.uploads.filter(duration__gte=0).first()
+    if upload:
+        additional_info["duration"] = upload.duration
+
     return Track(artist, title, album, additional_info)

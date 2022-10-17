@@ -6,7 +6,7 @@ PLUGIN = plugins.get_plugin_config(
     label="ListenBrainz",
     description="A plugin that allows you to submit your listens to ListenBrainz.",
     homepage="https://docs.funkwhale.audio/users/builtinplugins.html#listenbrainz-plugin",  # noqa
-    version="0.2",
+    version="0.3",
     user=True,
     conf=[
         {
