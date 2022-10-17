@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => ({
       },
       manifest: {
         name: 'Funkwhale',
+        categories: ["music", "entertainment"],
         start_url: undefined,
         scope: undefined,
         short_name: 'Funkwhale',
