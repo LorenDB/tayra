@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => ({
         start_url: undefined,
         scope: undefined,
         short_name: 'Funkwhale',
-        description: 'TODO',
+        description: 'Your free and federated audio platform',
         icons: [
           {
             src: 'android-chrome-192x192.png',
