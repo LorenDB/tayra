@@ -136,14 +136,6 @@ const store: Module<State, RootState> = {
     pausePlayback ({ commit }) {
       commit('playing', false)
     },
-    toggleMute ({ commit, state }) {
-      if (state.volume > 0) {
-        commit('tempVolume', state.volume)
-        commit('volume', 0)
-      } else {
-        commit('volume', state.tempVolume)
-      }
-    },
     trackListened ({ rootState }, track) {
       if (!rootState.auth.authenticated) {
         return

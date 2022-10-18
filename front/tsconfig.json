@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "sourceMap": true,
     "noUnusedLocals": true,
+    "experimentalDecorators": true,
     "typeRoots": ["node_modules/@types"],
     "types": [
       "vitest/globals",

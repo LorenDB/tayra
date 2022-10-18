@@ -1,13 +1,29 @@
 <script setup lang="ts">
-import { initializeFirstTrack, isPlaying, _seekEnd } from '~/composables/audio/player'
+import {
+  LoopingMode,
+  initializeFirstTrack,
+  isPlaying,
+  mute,
+  volume,
+  toggleLooping,
+  looping,
+  seekBy,
+  seekTo,
+  currentTime,
+  duration,
+  progress,
+  bufferProgress,
+  loading as isLoadingAudio
+} from '~/composables/audio/player'
+
 import { useMouse, useWindowSize } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import { computed, ref } from 'vue'
 import { useStore } from '~/store'
 
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
-import usePlayer from '~/composables/audio/usePlayer'
 import useQueue from '~/composables/audio/useQueue'
+import time from '~/utils/time'
 
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
@@ -33,40 +49,23 @@ const {
   next
 } = useQueue()
 
-const {
-  playing,
-  loading: isLoadingAudio,
-  looping,
-  currentTime,
-  progress,
-  durationFormatted,
-  currentTimeFormatted,
-  bufferProgress,
-  duration,
-  toggleMute,
-  seek,
-  togglePlayback,
-  resume,
-  pause
-} = usePlayer()
-
 // Key binds
 onKeyboardShortcut('e', toggleMobilePlayer)
-onKeyboardShortcut('p', togglePlayback)
+onKeyboardShortcut('p', () => { isPlaying.value = !isPlaying.value })
 onKeyboardShortcut('s', shuffle)
 onKeyboardShortcut('q', () => store.dispatch('queue/clean'))
-onKeyboardShortcut('m', () => toggleMute)
-onKeyboardShortcut('l', () => store.commit('player/toggleLooping'))
+onKeyboardShortcut('m', mute)
+onKeyboardShortcut('l', toggleLooping)
 onKeyboardShortcut('f', () => store.dispatch('favorites/toggle', currentTrack.value?.id))
 onKeyboardShortcut('escape', () => store.commit('ui/queueFocused', null))
 
-onKeyboardShortcut(['shift', 'up'], () => store.commit('player/incrementVolume', 0.1), true)
-onKeyboardShortcut(['shift', 'down'], () => store.commit('player/incrementVolume', -0.1), true)
+onKeyboardShortcut(['shift', 'up'], () => (volume.value += 0.1), true)
+onKeyboardShortcut(['shift', 'down'], () => (volume.value -= 0.1), true)
 
-onKeyboardShortcut('right', () => seek(5), true)
-onKeyboardShortcut(['shift', 'right'], () => seek(30), true)
-onKeyboardShortcut('left', () => seek(-5), true)
-onKeyboardShortcut(['shift', 'left'], () => seek(-30), true)
+onKeyboardShortcut('right', () => seekBy(5), true)
+onKeyboardShortcut(['shift', 'right'], () => seekBy(30), true)
+onKeyboardShortcut('left', () => seekBy(-5), true)
+onKeyboardShortcut(['shift', 'left'], () => seekBy(-30), true)
 
 onKeyboardShortcut(['ctrl', 'shift', 'left'], previous, true)
 onKeyboardShortcut(['ctrl', 'shift', 'right'], next, true)
@@ -80,9 +79,6 @@ const labels = computed(() => ({
   unmute: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Unmute'),
   mute: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Mute'),
   expandQueue: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Expand queue'),
-  loopingDisabled: $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping disabled. Click to switch to single-track looping.'),
-  loopingSingle: $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping on a single track. Click to switch to whole queue looping.'),
-  loopingWhole: $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping on whole queue. Click to disable looping.'),
   shuffle: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Shuffle your queue'),
   clear: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Clear your queue'),
   addArtistContentFilter: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…')
@@ -95,15 +91,24 @@ const switchTab = () => {
 const progressBar = ref()
 const touchProgress = (event: MouseEvent) => {
   const time = ((event.clientX - ((event.target as Element).closest('.progress')?.getBoundingClientRect().left ?? 0)) / progressBar.value.offsetWidth) * duration.value
-  currentTime.value = time
+  seekTo(time)
 }
 
-const { x } = useMouse()
-const { width: screenWidth } = useWindowSize()
+const { x } = useMouse({ type: 'client' })
+const { width: screenWidth } = useWindowSize({ includeScrollbar: false })
 
 initializeFirstTrack()
-onKeyboardShortcut('w', () => { isPlaying.value = !isPlaying.value })
-onKeyboardShortcut('9', () => { _seekEnd() })
+
+const loopingTitle = computed(() => {
+  const mode = looping.value
+  return mode === LoopingMode.None
+    ? $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping disabled. Click to switch to single-track looping.')
+    : mode === LoopingMode.LoopTrack
+      ? $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping on a single track. Click to switch to whole queue looping.')
+      : $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping on whole queue. Click to disable looping.')
+})
+
+const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.value)))
 </script>
 
 <template>
@@ -136,7 +141,7 @@ onKeyboardShortcut('9', () => { _seekEnd() })
         />
         <div
           class="position bar"
-          :style="{ 'transform': `translateX(calc(${progress}% - 100%)` }"
+          :style="{ 'transform': `translateX(${progress - 100}%)` }"
         />
         <div
           class="seek bar"
@@ -264,11 +269,11 @@ onKeyboardShortcut('9', () => { _seekEnd() })
             <i :class="['ui', 'large', {'disabled': !hasPrevious}, 'backward step', 'icon']" />
           </button>
           <button
-            v-if="!playing"
+            v-if="!isPlaying"
             :title="labels.play"
             :aria-label="labels.play"
             class="circular button control"
-            @click.prevent.stop="resume"
+            @click.prevent.stop="isPlaying = true"
           >
             <i :class="['ui', 'big', 'play', {'disabled': !currentTrack}, 'icon']" />
           </button>
@@ -277,7 +282,7 @@ onKeyboardShortcut('9', () => { _seekEnd() })
             :title="labels.pause"
             :aria-label="labels.pause"
             class="circular button control"
-            @click.prevent.stop="pause"
+            @click.prevent.stop="isPlaying = false"
           >
             <i :class="['ui', 'big', 'pause', {'disabled': !currentTrack}, 'icon']" />
           </button>
@@ -297,12 +302,12 @@ onKeyboardShortcut('9', () => { _seekEnd() })
             <template v-if="!isLoadingAudio">
               <span
                 class="start"
-                @click.stop.prevent="currentTime = 0"
+                @click.stop.prevent="seekTo(0)"
               >
                 {{ currentTimeFormatted }}
               </span>
               |
-              <span class="total">{{ durationFormatted }}</span>
+              <span class="total">{{ time.parse(Math.round(duration)) }}</span>
             </template>
           </div>
         </div>
@@ -310,43 +315,24 @@ onKeyboardShortcut('9', () => { _seekEnd() })
           <div class="group">
             <volume-control class="expandable" />
             <button
-              v-if="looping === 0"
               class="circular control button"
-              :title="labels.loopingDisabled"
-              :aria-label="labels.loopingDisabled"
+              :class="{ looping: looping !== LoopingMode.None }"
+              :title="loopingTitle"
+              :aria-label="loopingTitle"
               :disabled="!currentTrack"
-              @click.prevent.stop="$store.commit('player/looping', 1)"
+              @click.prevent.stop="toggleLooping"
             >
-              <i :class="['ui', {'disabled': !currentTrack}, 'step', 'repeat', 'icon']" />
-            </button>
-            <button
-              v-if="looping === 1"
-              :title="labels.loopingSingle"
-              :aria-label="labels.loopingSingle"
-              :disabled="!currentTrack"
-              class="looping circular control button"
-              @click.prevent.stop="$store.commit('player/looping', 2)"
-            >
-              <i
-                class="repeat icon"
-              >
-                <span class="ui circular tiny vibrant label">1</span>
+              <i class="repeat icon">
+                <span
+                  v-if="looping !== LoopingMode.None"
+                  class="ui circular tiny vibrant label"
+                >
+                  <template v-if="looping === LoopingMode.LoopTrack">1</template>
+                  <template v-else-if="looping === LoopingMode.LoopQueue">&infin;</template>
+                </span>
               </i>
             </button>
-            <button
-              v-if="looping === 2"
-              class="looping circular control button"
-              :title="labels.loopingWhole"
-              :aria-label="labels.loopingWhole"
-              :disabled="!currentTrack"
-              @click.prevent.stop="$store.commit('player/looping', 0)"
-            >
-              <i
-                class="repeat icon"
-              >
-                <span class="ui circular tiny vibrant label">&infin;</span>
-              </i>
-            </button>
+
             <button
               class="circular control button"
               :disabled="queueIsEmpty || null"

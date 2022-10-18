@@ -1,26 +1,24 @@
-import type { IAudioContext, IMediaElementAudioSourceNode } from 'standardized-audio-context'
+import type { Sound, SoundSource } from '~/api/player'
 import type { Track, Upload } from '~/types'
 
-import { connectAudioSource, createAudioSource } from '~/composables/audio/audio-api'
+import { connectAudioSource } from '~/composables/audio/audio-api'
 import { isPlaying } from '~/composables/audio/player'
+import { soundImplementation } from '~/api/player'
+import { computed, shallowReactive } from 'vue'
 
 import useQueue from '~/composables/audio/useQueue'
-
-import { useEventListener } from '@vueuse/core'
 
 import store from '~/store'
 import axios from 'axios'
 
-export interface SoundSource {
-  uuid: string
-  mimetype: string
-  url: string
-}
+const createOnEndHandler = (sound: Sound) => () => {
+  console.log('TRACK ENDED, PLAYING NEXT')
+  createTrack(currentIndex.value + 1)
 
-export interface Sound {
-  audio: HTMLAudioElement
-  sources: SoundSource[]
-  sourceNode: IMediaElementAudioSourceNode<IAudioContext>
+  // NOTE: We push it to the end of the job queue
+  setTimeout(() => {
+    store.dispatch('queue/next')
+  }, 0)
 }
 
 const ALLOWED_PLAY_TYPES: (CanPlayTypeResult | undefined)[] = ['maybe', 'probably']
@@ -29,7 +27,7 @@ const AUDIO_ELEMENT = document.createElement('audio')
 const { tracks, currentIndex } = useQueue()
 
 const soundPromises = new Map<number, Promise<Sound>>()
-const soundCache = new Map<number, Sound>()
+const soundCache = shallowReactive(new Map<number, Sound>())
 
 const getUploadSources = (uploads: Upload[]): SoundSource[] => {
   const sources = uploads
@@ -78,12 +76,10 @@ export const createSound = async (track: Track): Promise<Sound> => {
   const createSoundPromise = async () => {
     const sources = await getTrackSources(track)
 
-    const audio = new Audio()
-    audio.src = sources[0].url
+    const SoundImplementation = soundImplementation.value
+    const sound = new SoundImplementation(sources)
+    sound.onSoundEnd(createOnEndHandler(sound))
 
-    const sourceNode = createAudioSource(audio)
-
-    const sound = { audio, sources, sourceNode }
     soundCache.set(track.id, sound)
     soundPromises.delete(track.id)
     return sound
@@ -101,33 +97,27 @@ export const createTrack = async (index: number) => {
 
   const track = tracks.value[index]
   if (!soundPromises.has(track.id) && !soundCache.has(track.id)) {
-    // TODO (wvffle): Resolve race condition
+    // TODO (wvffle): Resolve race condition - is it still here after adding soundPromises?
     console.log('NO TRACK IN CACHE, CREATING')
   }
 
   const sound = await createSound(track)
   console.log('CONNECTING NODE')
 
-  const stop = useEventListener(sound.audio, 'ended', () => {
-    createTrack(currentIndex.value + 1)
-    store.dispatch('queue/next')
-    stop()
-  })
-
-  sound.sourceNode.disconnect()
-  connectAudioSource(sound.sourceNode)
+  sound.audioNode.disconnect()
+  connectAudioSource(sound.audioNode)
 
   if (isPlaying.value) {
-    sound.audio.play()
+    await sound.play()
   }
 
   // NOTE: Preload next track
-  if (index + 1 < tracks.value.length) {
-    createSound(tracks.value[index + 1])
-      .then(sound => sound.audio.load())
+  if (index === currentIndex.value && index + 1 < tracks.value.length) {
+    setTimeout(async () => {
+      const sound = await createSound(tracks.value[index + 1])
+      await sound.preload()
+    }, 100)
   }
 }
 
-export const getCurrentSound = () => {
-  return soundCache.get(tracks.value[currentIndex.value]?.id ?? -1)
-}
+export const currentSound = computed(() => soundCache.get(tracks.value[currentIndex.value]?.id ?? -1))

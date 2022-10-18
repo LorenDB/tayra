@@ -1,10 +1,14 @@
 import type { InitModule } from '~/types'
 
-import router from '~/router'
 import store, { key } from '~/store'
+import router from '~/router'
+
 import { createApp, defineAsyncComponent, h } from 'vue'
+
 import useLogger from '~/composables/useLogger'
 import useTheme from '~/composables/useTheme'
+
+import '~/api'
 
 // NOTE: Set the theme as fast as possible
 useTheme()

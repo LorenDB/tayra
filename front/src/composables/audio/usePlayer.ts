@@ -89,7 +89,6 @@ watchEffect(() => Howler.volume(toLinearVolumeScale(volume.value)))
 
 const mute = () => store.dispatch('player/mute')
 const unmute = () => store.dispatch('player/unmute')
-const toggleMute = () => store.dispatch('player/toggleMute')
 
 // Time and duration
 const duration = computed(() => store.state.player.duration)
@@ -245,7 +244,6 @@ export default () => {
     volume,
     mute,
     unmute,
-    toggleMute,
 
     duration,
     currentTime,
