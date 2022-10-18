@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => ({
       },
       manifest: {
         name: 'Funkwhale',
-        categories: ["music", "entertainment"],
+        categories: ['music', 'entertainment'],
         start_url: undefined,
         scope: undefined,
         short_name: 'Funkwhale',
@@ -48,16 +48,34 @@ export default defineConfig(({ mode }) => ({
             type: 'image/png'
           }
         ],
+        prefer_related_applications: true,
         related_applications: [
           {
-            "platform": "play",
-            "url": "https://play.google.com/store/apps/details?id=audio.funkwhale.ffa",
-            "id": "audio.funkwhale.ffa"
+            platform: 'play',
+            url: 'https://play.google.com/store/apps/details?id=audio.funkwhale.ffa',
+            id: 'audio.funkwhale.ffa'
           },
           {
-            "platform": "f-droid",
-            "url": "https://f-droid.org/en/packages/audio.funkwhale.ffa/",
-            "id": "audio.funkwhale.ffa"
+            platform: 'f-droid',
+            url: 'https://f-droid.org/en/packages/audio.funkwhale.ffa/',
+            id: 'audio.funkwhale.ffa'
+          }
+        ],
+        shortcuts: [
+          {
+            name: 'Search',
+            url: '/search',
+            icons: []
+          },
+          {
+            name: 'Library',
+            url: '/library',
+            icons: []
+          },
+          {
+            name: 'Channels',
+            url: '/subscriptions',
+            icons: []
           }
         ]
       }
