@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from funkwhale_api import __version__ as funkwhale_version
 from funkwhale_api.common import middleware
 from funkwhale_api.common import preferences
+from funkwhale_api.common.renderers import ActivityStreamRenderer
 from funkwhale_api.federation.models import Domain
 from funkwhale_api.federation.actors import get_service_actor
 from funkwhale_api.users.oauth import permissions as oauth_permissions
@@ -123,6 +124,7 @@ class SpaManifest(generics.GenericAPIView):
     permission_classes = []
     authentication_classes = []
     serializer_class = serializers.SpaManifestSerializer
+    renderer_classes = [ActivityStreamRenderer]
 
     @extend_schema(operation_id="get_spa_manifest")
     def get(self, request):
