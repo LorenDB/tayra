@@ -20,6 +20,7 @@ export interface Sound {
   readonly currentTime: number
   readonly duration: number
   readonly buffered: number
+  looping: boolean
 
   play(): void | Promise<void>
   pause(): void | Promise<void>
@@ -27,6 +28,7 @@ export interface Sound {
   seekTo(seconds: number): void | Promise<void>
   seekBy(seconds: number): void | Promise<void>
 
+  onSoundLoop: EventHookOn<Sound>
   onSoundEnd: EventHookOn<Sound>
 }
 
@@ -41,11 +43,13 @@ export const registerSoundImplementation = <T extends Constructor<Sound>>(implem
 @registerSoundImplementation
 export class HTMLSound implements Sound {
   #audio = new Audio()
+  #soundLoopEventHook = createEventHook<HTMLSound>()
   #soundEndEventHook = createEventHook<HTMLSound>()
 
   readonly isLoaded = ref(false)
 
   audioNode = createAudioSource(this.#audio)
+  onSoundLoop: EventHookOn<HTMLSound>
   onSoundEnd: EventHookOn<HTMLSound>
 
   constructor (sources: SoundSource[]) {
@@ -54,11 +58,18 @@ export class HTMLSound implements Sound {
     this.#audio.preload = 'auto'
 
     useEventListener(this.#audio, 'ended', () => this.#soundEndEventHook.trigger(this))
+    useEventListener(this.#audio, 'timeupdate', () => {
+      if (this.#audio.currentTime === 0) {
+        this.#soundLoopEventHook.trigger(this)
+      }
+    })
+
     useEventListener(this.#audio, 'loadeddata', () => {
       // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
       this.isLoaded.value = this.#audio.readyState >= 2
     })
 
+    this.onSoundLoop = this.#soundLoopEventHook.on
     this.onSoundEnd = this.#soundEndEventHook.on
   }
 
@@ -107,6 +118,14 @@ export class HTMLSound implements Sound {
 
   get currentTime () {
     return this.#audio.currentTime
+  }
+
+  get looping () {
+    return this.#audio.loop
+  }
+
+  set looping (value: boolean) {
+    this.#audio.loop = value
   }
 }
 

@@ -62,11 +62,25 @@ export const toggleLooping = () => {
   looping.value %= MODE_MAX
 }
 
+watchEffect(() => {
+  const sound = currentSound.value
+  if (!sound) return
+  sound.looping = looping.value === LoopingMode.LoopTrack
+})
+
+watch(currentSound, sound => {
+  sound?.onSoundLoop(() => {
+    currentTime.value = 0
+  })
+})
+
 // Duration
 export const duration = ref(0)
 watchEffect(() => {
-  if (currentSound.value?.isLoaded.value) {
-    duration.value = currentSound.value?.duration ?? 0
+  const sound = currentSound.value
+  if (sound?.isLoaded.value === true) {
+    duration.value = sound.duration ?? 0
+    currentTime.value = sound.currentTime
     return
   }
 
