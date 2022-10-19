@@ -1,11 +1,14 @@
+import { tryOnMounted, useIntervalFn, useRafFn, useStorage, whenever } from '@vueuse/core'
 import { currentSound, createTrack } from '~/composables/audio/tracks'
-import { tryOnMounted, useIntervalFn, useRafFn, useStorage } from '@vueuse/core'
 import { computed, ref, watch, watchEffect, type Ref } from 'vue'
-
-import useQueue from '~/composables/audio/useQueue'
 import { setGain } from './audio-api'
 
-const { currentIndex } = useQueue()
+import store from '~/store'
+import axios from 'axios'
+
+import useQueue from '~/composables/audio/useQueue'
+
+const { currentIndex, currentTrack } = useQueue()
 
 export const isPlaying = ref(false)
 
@@ -98,6 +101,28 @@ useIntervalFn(() => {
 
   currentTime.value = sound.currentTime
 }, 1000)
+
+// Submit listens
+const listenSubmitted = ref(false)
+whenever(listenSubmitted, async () => {
+  console.log('Listening submitted!')
+  if (!store.state.auth.authenticated) return
+  if (!currentTrack.value) return
+
+  await axios.post('history/listenings/', { track: currentTrack.value.id })
+    .catch((error) => console.error('Could not record track in history', error))
+})
+
+watch(currentTime, (time) => {
+  const sound = currentSound.value
+  if (!sound) {
+    listenSubmitted.value = false
+    return
+  }
+
+  // https://listenbrainz.readthedocs.io/en/latest/users/api/core.html?highlight=half#post--1-submit-listens
+  listenSubmitted.value = time > Math.min(sound.duration / 2, 4 * 60)
+})
 
 // Seeking
 export const seekBy = async (seconds: number) => {
