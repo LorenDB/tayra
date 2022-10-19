@@ -1,20 +1,10 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useStore } from '~/store'
-import { useGettext } from 'vue3-gettext'
+import { volume, mute } from '~/composables/audio/player'
 import { useTimeoutFn } from '@vueuse/core'
-import usePlayer from '~/composables/audio/usePlayer'
-
-const store = useStore()
-const { volume, mute, unmute } = usePlayer()
+import { useGettext } from 'vue3-gettext'
+import { ref, computed } from 'vue'
 
 const expanded = ref(false)
-const volumeSteps = 100
-
-const sliderVolume = computed({
-  get: () => volume.value * volumeSteps,
-  set: (value) => store.commit('player/volume', value / volumeSteps)
-})
 
 const { $pgettext } = useGettext()
 const labels = computed(() => ({
@@ -45,16 +35,16 @@ const handleLeave = () => {
     @mouseleave="handleLeave"
   >
     <span
-      v-if="sliderVolume === 0"
+      v-if="volume === 0"
       role="button"
       :title="labels.unmute"
       :aria-label="labels.unmute"
-      @click.prevent.stop="unmute"
+      @click.prevent.stop="mute"
     >
       <i class="volume off icon" />
     </span>
     <span
-      v-else-if="sliderVolume < 0.5"
+      v-else-if="volume < 0.5"
       role="button"
       :title="labels.mute"
       :aria-label="labels.mute"
@@ -78,11 +68,11 @@ const handleLeave = () => {
       >{{ labels.slider }}</label>
       <input
         id="volume-slider"
-        v-model="sliderVolume"
+        v-model="volume"
         type="range"
         step="any"
         min="0"
-        :max="volumeSteps"
+        max="1"
       >
     </div>
   </button>
