@@ -605,7 +605,7 @@ from the system.
 # URL Configuration
 # ------------------------------------------------------------------------------
 ROOT_URLCONF = "config.urls"
-SPA_URLCONF = "config.spa_urls"
+SPA_URLCONF = "config.urls.spa"
 ASGI_APPLICATION = "config.routing.application"
 
 # This ensures that Django will be able to detect a secure connection
