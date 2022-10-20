@@ -86,6 +86,7 @@ export default defineConfig(({ mode }) => ({
   },
   resolve: {
     alias: {
+      '#': resolve(__dirname, './src/worker'),
       '?': resolve(__dirname, './test'),
       '~': resolve(__dirname, './src')
     }

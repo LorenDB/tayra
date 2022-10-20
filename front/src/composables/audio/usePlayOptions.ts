@@ -45,7 +45,7 @@ export default (props: PlayOptionsProps) => {
   })
 
   const filterableArtist = computed(() => props.track?.artist ?? props.album?.artist ?? props.artist)
-  const filterArtist = () => store.dispatch('moderation/hide', { type: 'artist', target: filterableArtist.value })
+  const filterArtist = async () => store.dispatch('moderation/hide', { type: 'artist', target: filterableArtist.value })
 
   const { $npgettext } = useGettext()
   const addMessage = (tracks: Track[]) => {
