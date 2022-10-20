@@ -1,117 +1,57 @@
 openapi: "3.0.3"
 info:
   description: |
-    Interactive documentation for [Funkwhale](https://funkwhale.audio) API.
+    API explorer for the [Funkwhale](https://funkwhale.audio) API.
 
     Backward compatibility between minor versions (1.X to 1.Y) is guaranteed for all the
     endpoints documented here.
 
-    Usage
-    -----
+    ## Usage
 
     Click on an endpoint name to inspect its properties, parameters and responses.
 
     Use the "Try it out" button to send a real world payload to the endpoint and inspect
     the corresponding response.
 
-    OAuth Authentication
-    --------------------
+    ## OAuth Authentication
 
-    You can register your own OAuth app using the `/api/v1/oauth/apps/` endpoint. Proceed to the standard OAuth flow afterwards:
+    Funkwhale uses the OAuth [authorization grant flow](https://tools.ietf.org/html/rfc6749#section-4.1) for external apps. This flow is
+    a secure way to authenticate apps that requires a user's explicit consent to perform actions. You can use our demo server at <https://demo.funkwhale.audio>
+    for testing purposes.
 
-    - Our authorize URL is at `/authorize`
-    - Our token acquisition and refresh URL is at `/api/v1/oauth/token`
-    - The list of supported scopes is available by clicking the `Authorize` button in the Swagger UI documentation
-    - Use `urn:ietf:wg:oauth:2.0:oob` as your redirect URI if you want the user to get a copy-pastable authorization code
-    - At the moment, endpoints that deal with admin or moderator-level content are not accessible via OAuth, only through the Web UI
+    To authenticate with the Funkwhale API:
 
-    You can use our demo server at `https://demo.funkwhale.audio` for testing purposes.
+    1. Create an application by sending a `POST` request to `api/v1/oauth/apps`. Include your scopes and redirect URI (use `urn:ietf:wg:oauth:2.0:oob`
+    to get an authorization code you can copy)
+    2. Send an [authorization request](https://www.rfc-editor.org/rfc/rfc6749#section-4.1.2)  to the `/authorize` endpoint to receive an authorization code
+    3. [Request an access token](https://www.rfc-editor.org/rfc/rfc6749#section-4.1.3) from `/api/v1/oauth/token`
+    4. Use your access token to authenticate your calls with the following format: `Authorization: Bearer <token>`
+    5. Refresh your access token by sending a refresh request to `/api/v1/oauth/token`
 
-    Application token authentication
-    --------------------------------
+    For more detailed instructions, see [our API authentication documentation](https://docs.funkwhale.audio/developer_documentation/api/authentication.html).
 
-    If using OAuth isn't practical and you have an account on the Funkwhale pod, you can create an application by visiting `/settings`.
+    ## Application token authentication
 
-    Once the application is created, you can authenticate using its access token in the `Authorization` header, like this: `Authorization: Bearer <token>`. 
+    If you have an account on your target pod, you can create an application at `/settings/applications/new`. Once you authorize the application you
+    can retrieve an access token. Use your access token to authenticate your calls with the following format: `Authorization: Bearer <token>`
 
-    Rate limiting
-    -------------
+    ## Rate limiting
 
-    Depending on server configuration, pods running Funkwhale 0.20 and higher may rate-limit incoming
-    requests to prevent abuse and improve the stability of service. Requests that are dropped because of rate-limiting
-    receive a 429 HTTP response.
+    Funkwhale supports rate-limiting as of version 0.2.0. Pod admins can choose to rate limit specific endpoints to prevent abuse and improve the stability of the service.
+    If the server drops a request due to rate-limiting, it returns a `429` status code.
 
-    The limits themselves vary depending on:
+    Each API call returns HTTP headers to pass the following information:
 
-    - The client: anonymous requests are subject to lower limits than authenticated requests
-    - The operation being performed: Write and delete operations, as performed with DELETE, POST, PUT and PATCH HTTP methods are subject to lower limits
+    - What was the scope of the request (`X-RateLimit-Scope`)
+    - What is the rate-limit associated with the request scope (`X-RateLimit-Limit`)
+    - How many more requests in the scope can be made within the rate-limit timeframe (`X-RateLimit-Remaining`)
+    - How much time does the client need to wait to send another request (`Retry-After`)
 
-    Those conditions are used to determine the scope of the request, which in turns determine the limit that is applied.
-    For instance, authenticated POST requests are bound to the `authenticated-create` scope, with a default limit of
-    1000 requests/hour, but anonymous POST requests are bound to the `anonymous-create` scope, with a lower limit of 1000 requests/day.
+    For more information, check our [rate limit documentation](https://docs.funkwhale.audio/developer_documentation/api/rate-limit.html)
 
-    A full list of scopes with their corresponding description, and the current usage data for the client performing the request
-    is available via the `/api/v1/rate-limit` endpoint.
+    ## Resources
 
-    Additionally, we include HTTP headers on all API response to ensure API clients can understand:
-
-    - what scope was bound to a given request
-    - what is the corresponding limit
-    - how much similar requests can be sent before being limited
-    - and how much time they should wait if they have been limited
-
-    <table>
-      <caption>Rate limiting headers</caption>
-      <thead>
-        <th>Header</th>
-        <th>Example value</th>
-        <th>Description value</th>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>X-RateLimit-Limit</code></td>
-          <td>50</td>
-          <td>The number of allowed requests whithin a given period</td>
-        </tr>
-        <tr>
-          <td><code>X-RateLimit-Duration</code></td>
-          <td>3600</td>
-          <td>The time window, in seconds, during which those requests are accounted for.</td>
-        </tr>
-        <tr>
-          <td><code>X-RateLimit-Scope</code></td>
-          <td>login</td>
-          <td>The name of the scope as computed for the request</td>
-        </tr>
-        <tr>
-          <td><code>X-RateLimit-Remaining</code></td>
-          <td>42</td>
-          <td>How many requests can be sent with the same scope before the limit applies</td>
-        </tr>
-        <tr>
-          <td><code>Retry-After</code> (if <code>X-RateLimit-Remaining</code> is 0)</td>
-          <td>3543</td>
-          <td>How many seconds to wait before a retry</td>
-        </tr>
-        <tr>
-          <td><code>X-RateLimit-Reset</code></td>
-          <td>1568126089</td>
-          <td>A timestamp indicating when <code>X-RateLimit-Remaining</code> will return to its higher possible value</td>
-        </tr>
-        <tr>
-          <td><code>X-RateLimit-ResetSeconds</code></td>
-          <td>3599</td>
-          <td>How many seconds to wait before <code>X-RateLimit-Remaining</code> returns to its higher possible value</td>
-        </tr>
-      </tbody>
-    </table>
-
-
-    Resources
-    ---------
-
-    For more targeted guides regarding API usage, and especially authentication, please
-    refer to [https://docs.funkwhale.audio/api.html](https://docs.funkwhale.audio/api.html)
+    For more information about API usage, refer to [our API documentation](https://docs.funkwhale.audio/developer_documentation/api/index.html).
 
   version: "1.0.0"
   title: "Funkwhale API"
