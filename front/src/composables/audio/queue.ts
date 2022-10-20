@@ -3,11 +3,37 @@ import type { Track } from '~/types'
 import { isPlaying, looping, LoopingMode } from '~/composables/audio/player'
 import { currentSound } from '~/composables/audio/tracks'
 import { toReactive, useStorage } from '@vueuse/core'
+import { shuffle as shuffleArray } from 'lodash-es'
 import { useClamp } from '@vueuse/math'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
+
+// import useWebWorker from '~/composables/useWebWorker'
+
+// const { post, onMessageReceived } = useWebWorker('queue')
 
 // Queue
 export const tracks = toReactive(useStorage('queue:tracks', [] as Track[]))
+export const queue = computed(() => {
+  if (isShuffled.value) {
+    const tracksById = tracks.reduce((acc, track) => {
+      acc[track.id] = track
+      return acc
+    }, {} as Record<number, Track>)
+
+    return shuffledIds.value.map(id => tracksById[id])
+  }
+
+  return tracks
+})
+
+export const enqueue = (...newTracks: Track[]) => {
+  tracks.push(...newTracks)
+
+  // Shuffle new tracks
+  if (isShuffled.value) {
+    shuffledIds.value.push(...shuffleIds(newTracks))
+  }
+}
 
 // Current Index
 export const currentIndex = useClamp(useStorage('queue:index', 0), 0, () => tracks.length)
@@ -54,6 +80,14 @@ export const playNext = async () => {
 }
 
 // Shuffle
-export const isShuffling = ref(false)
-// TODO: Shuffle
-export const shuffle = () => undefined
+const shuffleIds = (tracks: Track[]) => shuffleArray(tracks.map(track => track.id))
+const shuffledIds = useStorage('queue:shuffled-ids', [] as number[])
+export const isShuffled = computed(() => shuffledIds.value.length !== 0)
+export const shuffle = () => {
+  if (isShuffled.value) {
+    shuffledIds.value.length = 0
+    return
+  }
+
+  shuffledIds.value = shuffleIds(tracks)
+}

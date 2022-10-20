@@ -24,7 +24,6 @@ import {
   tracks,
   currentIndex,
   currentTrack,
-  isShuffling,
   shuffle
 } from '~/composables/audio/queue'
 
@@ -338,14 +337,7 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
               :aria-label="labels.shuffle"
               @click.prevent.stop="shuffle()"
             >
-              <div
-                v-if="isShuffling"
-                class="ui inline shuffling inverted tiny active loader"
-              />
-              <i
-                v-else
-                :class="['ui', 'random', {'disabled': tracks.length === 0}, 'icon']"
-              />
+              <i :class="['ui', 'random', {'disabled': tracks.length === 0}, 'icon']" />
             </button>
           </div>
           <div class="group">
