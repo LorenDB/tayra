@@ -7,7 +7,6 @@ how Funkwhale works and how to build apps that integrate with Funkwhale's ecosys
 .. toctree::
    :maxdepth: 2
 
-   architecture
    ../api
    ./authentication
    ./plugins

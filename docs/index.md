@@ -71,6 +71,7 @@ hidden: true
 ---
 
 developer_documentation/index
+developer_documentation/architecture
 developer_documentation/setup/index
 developer_documentation/contribute/index
 developer_documentation/workflows/index
