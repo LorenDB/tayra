@@ -16,13 +16,24 @@ import {
   loading as isLoadingAudio
 } from '~/composables/audio/player'
 
+import {
+  hasPrevious,
+  playPrevious,
+  hasNext,
+  playNext,
+  tracks,
+  currentIndex,
+  currentTrack,
+  isShuffling,
+  shuffle
+} from '~/composables/audio/queue'
+
 import { useMouse, useWindowSize } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import { computed, ref } from 'vue'
 import { useStore } from '~/store'
 
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
-import useQueue from '~/composables/audio/useQueue'
 import time from '~/utils/time'
 
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
@@ -35,19 +46,6 @@ const { $pgettext } = useGettext()
 const toggleMobilePlayer = () => {
   store.commit('ui/queueFocused', ['queue', 'player'].includes(store.state.ui.queueFocused as string) ? null : 'player')
 }
-
-const {
-  isShuffling,
-  shuffle,
-  previous,
-  isEmpty: queueIsEmpty,
-  hasNext,
-  hasPrevious,
-  currentTrack,
-  currentIndex,
-  tracks,
-  next
-} = useQueue()
 
 // Key binds
 onKeyboardShortcut('e', toggleMobilePlayer)
@@ -67,8 +65,8 @@ onKeyboardShortcut(['shift', 'right'], () => seekBy(30), true)
 onKeyboardShortcut('left', () => seekBy(-5), true)
 onKeyboardShortcut(['shift', 'left'], () => seekBy(-30), true)
 
-onKeyboardShortcut(['ctrl', 'shift', 'left'], previous, true)
-onKeyboardShortcut(['ctrl', 'shift', 'right'], next, true)
+onKeyboardShortcut(['ctrl', 'shift', 'left'], playPrevious, true)
+onKeyboardShortcut(['ctrl', 'shift', 'right'], playNext, true)
 
 const labels = computed(() => ({
   audioPlayer: $pgettext('Sidebar/Player/Hidden text', 'Media player'),
@@ -188,10 +186,10 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
             <div class="meta">
               <router-link
                 class="discrete link"
-                :to="{name: 'library.artists.detail', params: {id: currentTrack.artist.id }}"
+                :to="{name: 'library.artists.detail', params: {id: currentTrack.artist?.id }}"
                 @click.stop.prevent=""
               >
-                {{ currentTrack.artist.name }}
+                {{ currentTrack.artist?.name }}
               </router-link>
               <template v-if="currentTrack.album">
                 /
@@ -231,7 +229,7 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
               {{ currentTrack.title }}
             </strong>
             <div class="meta">
-              {{ currentTrack.artist.name }}<template v-if="currentTrack.album">
+              {{ currentTrack.artist?.name }}<template v-if="currentTrack.album">
                 / {{ currentTrack.album.title }}
               </template>
             </div>
@@ -264,7 +262,7 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
             :aria-label="labels.previous"
             :disabled="!hasPrevious"
             class="circular button control tablet-and-up"
-            @click.prevent.stop="$store.dispatch('queue/previous')"
+            @click.prevent.stop="playPrevious"
           >
             <i :class="['ui', 'large', {'disabled': !hasPrevious}, 'backward step', 'icon']" />
           </button>
@@ -291,7 +289,7 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
             :aria-label="labels.next"
             :disabled="!hasNext"
             class="circular button control"
-            @click.prevent.stop="$store.dispatch('queue/next')"
+            @click.prevent.stop="playNext"
           >
             <i :class="['ui', 'large', {'disabled': !hasNext}, 'forward step', 'icon']" />
           </button>
@@ -335,7 +333,7 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
 
             <button
               class="circular control button"
-              :disabled="queueIsEmpty || null"
+              :disabled="tracks.length === 0"
               :title="labels.shuffle"
               :aria-label="labels.shuffle"
               @click.prevent.stop="shuffle()"
@@ -346,7 +344,7 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
               />
               <i
                 v-else
-                :class="['ui', 'random', {'disabled': queueIsEmpty}, 'icon']"
+                :class="['ui', 'random', {'disabled': tracks.length === 0}, 'icon']"
               />
             </button>
           </div>

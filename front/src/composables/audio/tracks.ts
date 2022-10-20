@@ -5,26 +5,13 @@ import { connectAudioSource } from '~/composables/audio/audio-api'
 import { isPlaying } from '~/composables/audio/player'
 import { soundImplementation } from '~/api/player'
 import { computed, shallowReactive } from 'vue'
-
-import useQueue from '~/composables/audio/useQueue'
+import { playNext, tracks, currentIndex } from '~/composables/audio/queue'
 
 import store from '~/store'
 import axios from 'axios'
 
-const createOnEndHandler = (sound: Sound) => () => {
-  console.log('TRACK ENDED, PLAYING NEXT')
-  createTrack(currentIndex.value + 1)
-
-  // NOTE: We push it to the end of the job queue
-  setTimeout(() => {
-    store.dispatch('queue/next')
-  }, 0)
-}
-
 const ALLOWED_PLAY_TYPES: (CanPlayTypeResult | undefined)[] = ['maybe', 'probably']
 const AUDIO_ELEMENT = document.createElement('audio')
-
-const { tracks, currentIndex } = useQueue()
 
 const soundPromises = new Map<number, Promise<Sound>>()
 const soundCache = shallowReactive(new Map<number, Sound>())
@@ -78,7 +65,13 @@ export const createSound = async (track: Track): Promise<Sound> => {
 
     const SoundImplementation = soundImplementation.value
     const sound = new SoundImplementation(sources)
-    sound.onSoundEnd(createOnEndHandler(sound))
+    sound.onSoundEnd(() => {
+      console.log('TRACK ENDED, PLAYING NEXT')
+      createTrack(currentIndex.value + 1)
+
+      // NOTE: We push it to the end of the job queue
+      setTimeout(playNext, 0)
+    })
 
     soundCache.set(track.id, sound)
     soundPromises.delete(track.id)
@@ -92,10 +85,10 @@ export const createSound = async (track: Track): Promise<Sound> => {
 
 // Create track from queue
 export const createTrack = async (index: number) => {
-  if (tracks.value.length <= index || index === -1) return
+  if (tracks.length <= index || index === -1) return
   console.log('LOADING TRACK')
 
-  const track = tracks.value[index]
+  const track = tracks[index]
   if (!soundPromises.has(track.id) && !soundCache.has(track.id)) {
     // TODO (wvffle): Resolve race condition - is it still here after adding soundPromises?
     console.log('NO TRACK IN CACHE, CREATING')
@@ -112,12 +105,12 @@ export const createTrack = async (index: number) => {
   }
 
   // NOTE: Preload next track
-  if (index === currentIndex.value && index + 1 < tracks.value.length) {
+  if (index === currentIndex.value && index + 1 < tracks.length) {
     setTimeout(async () => {
-      const sound = await createSound(tracks.value[index + 1])
+      const sound = await createSound(tracks[index + 1])
       await sound.preload()
     }, 100)
   }
 }
 
-export const currentSound = computed(() => soundCache.get(tracks.value[currentIndex.value]?.id ?? -1))
+export const currentSound = computed(() => soundCache.get(tracks[currentIndex.value]?.id ?? -1))
