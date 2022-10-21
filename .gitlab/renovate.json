@@ -32,8 +32,16 @@
       "addLabels": ["Area: Backend"]
     },
     {
-      "matchPackageNames": ["@vue/runtime-core", "vue"],
+      "matchPackageNames": ["@vue/runtime-core", "vue", "@vue/compiler-sfc"],
       "groupName": "Vue"
+    },
+    {
+      "matchPackageNames": ["@vueuse/core", "@vueuse/integrations", "@vueuse/router"],
+      "groupName": "vueuse"
+    },
+    {
+      "matchPackageNames": ["@sentry/tracing", "@sentry/vue"],
+      "groupName": "Sentry"
     }
   ]
 }
