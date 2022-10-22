@@ -83,16 +83,17 @@ server {
         text/x-cross-domain-policy;
     # end of compression settings
 
-    location / {
+    location /api/ {
         include /etc/nginx/funkwhale_proxy.conf;
         # This is needed if you have file import via upload enabled.
         client_max_body_size ${NGINX_MAX_BODY_SIZE};
         proxy_pass   http://funkwhale-api/;
     }
 
-    location /front/ {
+    location / {
         alias ${FUNKWHALE_FRONTEND_PATH}/;
         expires 1d;
+        try_files $uri $uri/ /index.html;
     }
 
     location = /front/embed.html {
