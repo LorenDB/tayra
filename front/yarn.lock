@@ -2121,10 +2121,10 @@ at-least-node@^1.0.0:
   resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
-axios-auth-refresh@3.3.3:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/axios-auth-refresh/-/axios-auth-refresh-3.3.3.tgz#f8c2fd0ca3adf89168dfb0caff10f076499ea482"
-  integrity sha512-2IbDhJ/h6ddNBBnnzn1VFK/qx17pE9aVqiafB8rx5LVHsJ1HtFpUGkbXY7PzTG+8P9HJWcyA3fNZl9BikSuilg==
+axios-auth-refresh@3.3.4:
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/axios-auth-refresh/-/axios-auth-refresh-3.3.4.tgz#95a2b1dc89a566b67ba525fb54de2f9dd7b65d20"
+  integrity sha512-cGq3bZu+lip5j+byaQRZaZ3wpCUxs93jGV0614VYP5k2H1vbdoaw6HGazaUJxcRsFMctR3DItCAx1Dn7KerlcA==
 
 axios@0.27.2, axios@>=0.13.0:
   version "0.27.2"
