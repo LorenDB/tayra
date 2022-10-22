@@ -42,6 +42,14 @@
     {
       "matchPackageNames": ["@sentry/tracing", "@sentry/vue"],
       "groupName": "Sentry"
+    },
+    {
+      "matchFiles": ["deploy/docker-compose.yml"],
+      "matchPackageNames": ["postgres"],
+      "postUpgradeTasks": {
+        "commands": ["echo 'Upgrade Postgres to version {{ newVersion }}. Make sure to migrate!' > changes/changelog.d/postgres.update"],
+        "fileFilters": ["changes/changelog.d/postgres.update"]
+      }
     }
   ]
 }
