@@ -36,17 +36,17 @@ defineProps<Props>()
     <div @click="$emit('play', index)">
       <button
         class="title reset ellipsis"
-        :title="source.track.title"
+        :title="source.title"
         :aria-label="source.labels.selectTrack"
       >
-        <strong>{{ source.track.title }}</strong><br>
+        <strong>{{ source.title }}</strong><br>
         <span>
-          {{ source.track.artist?.name }}
+          {{ source.artistName }}
         </span>
       </button>
     </div>
     <div class="duration-cell">
-      <template v-if="source.track.uploads.length > 0">
+      <template v-if="source.sources.length > 0">
         {{ source.duration }}
       </template>
     </div>
@@ -55,10 +55,10 @@ defineProps<Props>()
         :aria-label="source.labels.favorite"
         :title="source.labels.favorite"
         class="ui really basic circular icon button"
-        @click.stop="$store.dispatch('favorites/toggle', source.track.id)"
+        @click.stop="$store.dispatch('favorites/toggle', source.id)"
       >
         <i
-          :class="$store.getters['favorites/isFavorite'](source.track.id) ? 'pink' : ''"
+          :class="$store.getters['favorites/isFavorite'](source.id) ? 'pink' : ''"
           class="heart icon"
         />
       </button>

@@ -6,6 +6,7 @@ import type { RootState } from '~/store'
 
 // eslint-disable-next-line
 import type { ComponentPublicInstance } from '@vue/runtime-core'
+import type { QueueTrack } from './composables/audio/queue'
 
 export type FunctionRef = Element | ComponentPublicInstance | null
 
@@ -18,11 +19,8 @@ export interface InitModuleContext {
 
 export type InitModule = (ctx: InitModuleContext) => void | Promise<void>
 
-export interface QueueItemSource {
+export interface QueueItemSource extends Omit<QueueTrack, 'id'> {
   id: string
-  track: Track
-  duration: string
-  coverUrl: string
 
   labels: {
     remove: string

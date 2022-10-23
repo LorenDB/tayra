@@ -33,6 +33,7 @@
     "focus-trap": "7.0.0",
     "fomantic-ui-css": "2.8.8",
     "howler": "2.2.3",
+    "idb-keyval": "^6.2.0",
     "js-logger": "1.6.1",
     "lodash-es": "4.17.21",
     "moment": "2.29.4",

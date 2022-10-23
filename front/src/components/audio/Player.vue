@@ -21,7 +21,7 @@ import {
   playPrevious,
   hasNext,
   playNext,
-  tracks,
+  queue,
   currentIndex,
   currentTrack,
   shuffle
@@ -35,8 +35,8 @@ import { useStore } from '~/store'
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
 import time from '~/utils/time'
 
-import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
-import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
+// import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+// import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import VolumeControl from './VolumeControl.vue'
 
 const store = useStore()
@@ -152,21 +152,9 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
             @click.stop.prevent="$router.push({name: 'library.tracks.detail', params: {id: currentTrack.id }})"
           >
             <img
-              v-if="currentTrack.cover && currentTrack.cover.urls.original"
               ref="cover"
               alt=""
-              :src="$store.getters['instance/absoluteUrl'](currentTrack.cover.urls.medium_square_crop)"
-            >
-            <img
-              v-else-if="currentTrack.album && currentTrack.album.cover && currentTrack.album.cover.urls && currentTrack.album.cover.urls.original"
-              ref="cover"
-              alt=""
-              :src="$store.getters['instance/absoluteUrl'](currentTrack.album.cover.urls.medium_square_crop)"
-            >
-            <img
-              v-else
-              alt=""
-              src="../../assets/audio/default-cover.png"
+              :src="$store.getters['instance/absoluteUrl'](currentTrack.coverUrl)"
             >
           </div>
           <div
@@ -185,19 +173,19 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
             <div class="meta">
               <router-link
                 class="discrete link"
-                :to="{name: 'library.artists.detail', params: {id: currentTrack.artist?.id }}"
+                :to="{name: 'library.artists.detail', params: {id: currentTrack.artistId }}"
                 @click.stop.prevent=""
               >
-                {{ currentTrack.artist?.name }}
+                {{ currentTrack.artistName }}
               </router-link>
-              <template v-if="currentTrack.album">
+              <template v-if="currentTrack.albumId !== -1">
                 /
                 <router-link
                   class="discrete link"
-                  :to="{name: 'library.albums.detail', params: {id: currentTrack.album.id }}"
+                  :to="{name: 'library.albums.detail', params: {id: currentTrack.albumId }}"
                   @click.stop.prevent=""
                 >
-                  {{ currentTrack.album.title }}
+                  {{ currentTrack.albumTitle }}
                 </router-link>
               </template>
             </div>
@@ -206,21 +194,9 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
         <div class="controls track-controls queue-not-focused desktop-and-below">
           <div class="ui tiny image">
             <img
-              v-if="currentTrack.cover && currentTrack.cover.urls.original"
               ref="cover"
               alt=""
-              :src="$store.getters['instance/absoluteUrl'](currentTrack.cover.urls.medium_square_crop)"
-            >
-            <img
-              v-else-if="currentTrack.album && currentTrack.album.cover && currentTrack.album.cover.urls.original"
-              ref="cover"
-              alt=""
-              :src="$store.getters['instance/absoluteUrl'](currentTrack.album.cover.urls.medium_square_crop)"
-            >
-            <img
-              v-else
-              alt=""
-              src="../../assets/audio/default-cover.png"
+              :src="$store.getters['instance/absoluteUrl'](currentTrack.coverUrl)"
             >
           </div>
           <div class="middle aligned content ellipsis">
@@ -228,8 +204,9 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
               {{ currentTrack.title }}
             </strong>
             <div class="meta">
-              {{ currentTrack.artist?.name }}<template v-if="currentTrack.album">
-                / {{ currentTrack.album.title }}
+              {{ currentTrack.artistName }}
+              <template v-if="currentTrack.albumId !== -1">
+                / {{ currentTrack.albumTitle }}
               </template>
             </div>
           </div>
@@ -238,7 +215,8 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
           v-if="$store.state.auth.authenticated"
           class="controls desktop-and-up fluid align-right"
         >
-          <track-favorite-icon
+          <!-- TODO (wvffle): Uncomment -->
+          <!-- <track-favorite-icon
             class="control white"
             :track="currentTrack"
           />
@@ -253,7 +231,7 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
             @click="$store.dispatch('moderation/hide', {type: 'artist', target: currentTrack.artist})"
           >
             <i :class="['eye slash outline', 'basic', 'icon']" />
-          </button>
+          </button> -->
         </div>
         <div class="player-controls controls queue-not-focused">
           <button
@@ -332,12 +310,12 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
 
             <button
               class="circular control button"
-              :disabled="tracks.length === 0"
+              :disabled="queue.length === 0"
               :title="labels.shuffle"
               :aria-label="labels.shuffle"
               @click.prevent.stop="shuffle()"
             >
-              <i :class="['ui', 'random', {'disabled': tracks.length === 0}, 'icon']" />
+              <i :class="['ui', 'random', {'disabled': queue.length === 0}, 'icon']" />
             </button>
           </div>
           <div class="group">
@@ -350,7 +328,7 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
                 <i class="stream icon" />
                 <translate
                   translate-context="Sidebar/Queue/Text"
-                  :translate-params="{index: currentIndex + 1, length: tracks.length}"
+                  :translate-params="{index: currentIndex + 1, length: queue.length}"
                 >
                   %{ index } of %{ length }
                 </translate>
@@ -362,7 +340,7 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
                 <i class="stream icon" />
                 <translate
                   translate-context="Sidebar/Queue/Text"
-                  :translate-params="{index: currentIndex + 1, length: tracks.length}"
+                  :translate-params="{index: currentIndex + 1, length: queue.length}"
                 >
                   %{ index } of %{ length }
                 </translate>

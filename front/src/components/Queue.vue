@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import type { Track, QueueItemSource } from '~/types'
+import type { QueueItemSource } from '~/types'
 
 import { useStore } from '~/store'
 import { nextTick, ref, computed, watchEffect, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import time from '~/utils/time'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
@@ -15,6 +14,8 @@ import usePlayer from '~/composables/audio/usePlayer'
 
 import VirtualList from '~/components/vui/list/VirtualList.vue'
 import QueueItem from '~/components/QueueItem.vue'
+
+import { queue } from '~/composables/audio/queue'
 
 const queueModal = ref()
 const { activate, deactivate } = useFocusTrap(queueModal, { allowOutsideClick: true, preventScroll: true })
@@ -114,24 +115,14 @@ const play = (index: unknown) => {
   resume()
 }
 
-const getCover = (track: Track) => {
-  return store.getters['instance/absoluteUrl'](
-    track.cover?.urls.medium_square_crop
-        ?? track.album?.cover?.urls.medium_square_crop
-        ?? new URL('../assets/audio/default-cover.png', import.meta.url).href
-  )
-}
-
-const queueItems = computed(() => tracks.value.map((track, index) => ({
+const queueItems = computed(() => queue.value.map((track, index) => ({
+  ...track,
   id: `${index}-${track.id}`,
-  track,
-  coverUrl: getCover(track),
   labels: {
     remove: $pgettext('*/*/*', 'Remove'),
     selectTrack: $pgettext('*/*/*', 'Select track'),
     favorite: $pgettext('*/*/*', 'Favorite track')
-  },
-  duration: time.durationFormatted(track.uploads[0]?.duration ?? 0) ?? ''
+  }
 }) as QueueItemSource))
 
 const reorderTracks = async (from: number, to: number) => {

@@ -1,14 +1,11 @@
 import { tryOnMounted, useIntervalFn, useRafFn, useStorage, whenever } from '@vueuse/core'
+import { currentTrack, currentIndex } from '~/composables/audio/queue'
 import { currentSound, createTrack } from '~/composables/audio/tracks'
 import { computed, ref, watch, watchEffect, type Ref } from 'vue'
 import { setGain } from './audio-api'
 
 import store from '~/store'
 import axios from 'axios'
-
-import useQueue from '~/composables/audio/useQueue'
-
-const { currentIndex, currentTrack } = useQueue()
 
 export const isPlaying = ref(false)
 

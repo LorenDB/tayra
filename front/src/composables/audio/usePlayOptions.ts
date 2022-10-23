@@ -1,14 +1,16 @@
 import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
 import type { ContentFilter } from '~/store/moderation'
 
-import { useStore } from '~/store'
-import { useGettext } from 'vue3-gettext'
-import { computed, markRaw, ref } from 'vue'
-import axios from 'axios'
-import usePlayer from '~/composables/audio/usePlayer'
-import useQueue from '~/composables/audio/useQueue'
 import { useCurrentElement } from '@vueuse/core'
+import { computed, markRaw, ref } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { useStore } from '~/store'
+
+import axios from 'axios'
 import jQuery from 'jquery'
+
+import { enqueue as addToQueue, currentTrack } from '~/composables/audio/queue'
+import { isPlaying } from '~/composables/audio/player'
 
 export interface PlayOptionsProps {
   isPlayable?: boolean
@@ -24,8 +26,6 @@ export interface PlayOptionsProps {
 
 export default (props: PlayOptionsProps) => {
   const store = useStore()
-  const { resume, pause, playing } = usePlayer()
-  const { currentTrack } = useQueue()
 
   const playable = computed(() => {
     if (props.isPlayable) {
@@ -134,7 +134,7 @@ export default (props: PlayOptionsProps) => {
     jQuery(el.value).find('.ui.dropdown').dropdown('hide')
 
     const tracks = await getPlayableTracks()
-    await store.dispatch('queue/appendMany', { tracks })
+    await addToQueue(...tracks)
     addMessage(tracks)
   }
 
@@ -148,40 +148,33 @@ export default (props: PlayOptionsProps) => {
 
     if (next && !wasEmpty) {
       await store.dispatch('queue/next')
-      resume()
+      isPlaying.value = true
     }
 
     addMessage(tracks)
   }
 
   const replacePlay = async () => {
-    store.dispatch('queue/clean')
+    const { tracks, playTrack } = await import('~/composables/audio/queue')
+    tracks.value.length = 0
 
     jQuery(el.value).find('.ui.dropdown').dropdown('hide')
 
-    const tracks = await getPlayableTracks()
-    await store.dispatch('queue/appendMany', { tracks })
+    const tracksToPlay = await getPlayableTracks()
+    await addToQueue(...tracksToPlay)
 
-    if (props.track && props.tracks?.length) {
-      // set queue position to selected track
-      const trackIndex = props.tracks.findIndex(track => track.id === props.track?.id && track.position === props.track?.position)
-      store.dispatch('queue/currentIndex', trackIndex)
-    } else {
-      store.dispatch('queue/currentIndex', 0)
-    }
+    const trackIndex = props.tracks?.findIndex(track => track.id === props.track?.id && track.position === props.track?.position) ?? 0
+    await playTrack(trackIndex)
 
-    resume()
-    addMessage(tracks)
+    isPlaying.value = true
+    playTrack(0, true)
+    addMessage(tracksToPlay)
   }
 
   const activateTrack = (track: Track, index: number) => {
     // TODO (wvffle): Check if position checking did not break anything
     if (track.id === currentTrack.value?.id && track.position === currentTrack.value?.position) {
-      if (playing.value) {
-        return pause()
-      }
-
-      return resume()
+      isPlaying.value = true
     }
 
     replacePlay()
