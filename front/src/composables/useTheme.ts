@@ -6,7 +6,8 @@ const theme = useColorMode({
     auto: '',
     light: 'theme-light',
     dark: 'theme-dark'
-  }
+  },
+  emitAuto: true
 })
 
 export default () => theme
