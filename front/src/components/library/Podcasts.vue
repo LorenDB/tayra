@@ -285,7 +285,7 @@ const paginateOptions = computed(() => sortedUniq([12, 30, 50, paginateBy.value]
         class="scrolling content"
       >
         <remote-search-form
-          type="both"
+          initial-type="both"
           :show-submit="false"
           :standalone="false"
           :redirect="true"

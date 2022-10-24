@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BackendError } from '~/types'
 
-import { ref, computed, watch, watchEffect } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useRouter } from 'vue-router'
 import { useStore } from '~/store'
@@ -153,14 +153,13 @@ const rssSubscribe = async () => {
   isLoading.value = false
 }
 
-watchEffect(() => {
+watch(() => props.initialId, () => {
   id.value = props.initialId
-  // createFetch()
 
   if (id.value) {
     submit()
   }
-})
+}, { immediate: true })
 </script>
 
 <template>
