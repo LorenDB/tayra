@@ -1657,7 +1657,7 @@ cli = ["click (>=5.0)"]
 
 [[package]]
 name = "python-ldap"
-version = "3.4.2"
+version = "3.4.3"
 description = "Python modules for implementing LDAP clients"
 category = "main"
 optional = false
@@ -2193,7 +2193,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "0abe449aa572cf482c1b713b9cd0f6fd896ef0d3b4413a23396f0672a65f649a"
+content-hash = "6a93cf543eb5ff4129cff249e0c566bea0d28de0463d18abec050cc35d568fdb"
 
 [metadata.files]
 aiohttp = [
@@ -3373,7 +3373,7 @@ python-dotenv = [
     {file = "python_dotenv-0.21.0-py3-none-any.whl", hash = "sha256:1684eb44636dd462b66c3ee016599815514527ad99965de77f43e0944634a7e5"},
 ]
 python-ldap = [
-    {file = "python-ldap-3.4.2.tar.gz", hash = "sha256:b16470a0983aaf09a00ffb8f40b69a2446f3d0be639a229256bce381fcb268f7"},
+    {file = "python-ldap-3.4.3.tar.gz", hash = "sha256:ab26c519a0ef2a443a2a10391fa3c5cb52d7871323399db949ebfaa9f25ee2a0"},
 ]
 python-magic = [
     {file = "python-magic-0.4.27.tar.gz", hash = "sha256:c1ba14b08e4a5f5c31a302b7721239695b2f0f058d125bd5ce1ee36b9d9d3c3b"},
