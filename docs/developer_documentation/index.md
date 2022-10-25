@@ -1,4 +1,4 @@
-# Developer documentation
+# Get started
 
 Funkwhale welcomes contributions from all developers. If this is your first time contributing to an open source project, don't be afraid to get stuck in! The Funkwhale community will guide you through the process and help you grow your confidence.
 
