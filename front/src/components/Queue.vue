@@ -1,21 +1,43 @@
 <script setup lang="ts">
 import type { QueueItemSource } from '~/types'
 
-import { useStore } from '~/store'
-import { nextTick, ref, computed, watchEffect, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
-import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
-import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import { whenever, watchDebounced, useCurrentElement, useScrollLock } from '@vueuse/core'
+import { nextTick, ref, computed, watchEffect, onMounted } from 'vue'
+import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { useGettext } from 'vue3-gettext'
-import useQueue from '~/composables/audio/useQueue'
-import usePlayer from '~/composables/audio/usePlayer'
+import { useRouter } from 'vue-router'
+import { useStore } from '~/store'
 
+import time from '~/utils/time'
+
+// import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+// import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
+import PlayerControls from '~/components/audio/PlayerControls.vue'
 import VirtualList from '~/components/vui/list/VirtualList.vue'
 import QueueItem from '~/components/QueueItem.vue'
 
-import { queue } from '~/composables/audio/queue'
+import {
+  isPlaying,
+  currentTime,
+  duration,
+  progress,
+  bufferProgress,
+  seekTo,
+  loading as isLoadingAudio,
+  errored
+} from '~/composables/audio/player'
+
+import {
+  hasNext,
+  currentTrack,
+  currentIndex,
+  queue,
+  tracks,
+  dequeue,
+  playTrack,
+  reorder,
+  endsIn as timeLeft
+} from '~/composables/audio/queue'
 
 const queueModal = ref()
 const { activate, deactivate } = useFocusTrap(queueModal, { allowOutsideClick: true, preventScroll: true })
@@ -23,34 +45,6 @@ const { activate, deactivate } = useFocusTrap(queueModal, { allowOutsideClick: t
 const { $pgettext } = useGettext()
 const scrollLock = useScrollLock(document.body)
 const store = useStore()
-
-const {
-  playing,
-  loading: isLoadingAudio,
-  errored,
-  duration,
-  durationFormatted,
-  currentTimeFormatted,
-  progress,
-  bufferProgress,
-  currentTime,
-  pause,
-  resume
-} = usePlayer()
-
-const {
-  currentTrack,
-  hasNext,
-  isEmpty: emptyQueue,
-  tracks,
-  reorder,
-  endsIn: timeLeft,
-  currentIndex,
-  removeTrack,
-  clear,
-  next,
-  previous
-} = useQueue()
 
 const labels = computed(() => ({
   queue: $pgettext('*/*/*', 'Queue'),
@@ -96,7 +90,7 @@ const scrollLoop = () => {
 onMounted(scrollLoop)
 
 whenever(
-  () => tracks.value.length === 0,
+  () => queue.value.length === 0,
   () => store.commit('ui/queueFocused', null),
   { immediate: true }
 )
@@ -107,12 +101,12 @@ router.beforeEach(() => store.commit('ui/queueFocused', null))
 const progressBar = ref()
 const touchProgress = (event: MouseEvent) => {
   const time = ((event.clientX - ((event.target as Element).closest('.progress')?.getBoundingClientRect().left ?? 0)) / progressBar.value.offsetWidth) * duration.value
-  currentTime.value = time
+  seekTo(time)
 }
 
-const play = (index: unknown) => {
-  store.dispatch('queue/currentIndex', index as number)
-  resume()
+const play = async (index: number) => {
+  isPlaying.value = true
+  return playTrack(index)
 }
 
 const queueItems = computed(() => queue.value.map((track, index) => ({
@@ -152,22 +146,9 @@ const reorderTracks = async (from: number, to: number) => {
           <div class="cover-container">
             <div class="cover">
               <img
-                v-if="currentTrack.cover && currentTrack.cover.urls.large_square_crop"
                 ref="cover"
                 alt=""
-                :src="$store.getters['instance/absoluteUrl'](currentTrack.cover.urls.large_square_crop)"
-              >
-              <img
-                v-else-if="currentTrack.album && currentTrack.album.cover && currentTrack.album.cover.urls.large_square_crop"
-                ref="cover"
-                alt=""
-                :src="$store.getters['instance/absoluteUrl'](currentTrack.album.cover.urls.large_square_crop)"
-              >
-              <img
-                v-else
-                class="ui image"
-                alt=""
-                src="../assets/audio/default-cover.png"
+                :src="$store.getters['instance/absoluteUrl'](currentTrack.coverUrl)"
               >
             </div>
           </div>
@@ -182,17 +163,17 @@ const reorderTracks = async (from: number, to: number) => {
               <div class="sub header ellipsis">
                 <router-link
                   class="discrete link artist"
-                  :to="{name: 'library.artists.detail', params: {id: currentTrack.artist.id }}"
+                  :to="{name: 'library.artists.detail', params: {id: currentTrack.artistId }}"
                 >
-                  {{ currentTrack.artist.name }}
+                  {{ currentTrack.artistName }}
                 </router-link>
-                <template v-if="currentTrack.album">
+                <template v-if="currentTrack.albumId !== -1">
                   /
                   <router-link
                     class="discrete link album"
-                    :to="{name: 'library.albums.detail', params: {id: currentTrack.album.id }}"
+                    :to="{name: 'library.albums.detail', params: {id: currentTrack.albumId }}"
                   >
-                    {{ currentTrack.album.title }}
+                    {{ currentTrack.albumTitle }}
                   </router-link>
                 </template>
               </div>
@@ -207,7 +188,7 @@ const reorderTracks = async (from: number, to: number) => {
                 The track cannot be loaded
               </translate>
             </h3>
-            <p v-if="hasNext && playing && $store.state.player.errorCount < $store.state.player.maxConsecutiveErrors">
+            <p v-if="hasNext && isPlaying && $store.state.player.errorCount < $store.state.player.maxConsecutiveErrors">
               <translate translate-context="Sidebar/Player/Error message.Paragraph">
                 The next track will play automatically in a few seconds…
               </translate>
@@ -220,7 +201,8 @@ const reorderTracks = async (from: number, to: number) => {
             </p>
           </div>
           <div class="additional-controls desktop-and-below">
-            <track-favorite-icon
+            <!-- TODO (wvffle): Update props -->
+            <!-- <track-favorite-icon
               v-if="$store.state.auth.authenticated"
               :track="currentTrack"
             />
@@ -236,7 +218,7 @@ const reorderTracks = async (from: number, to: number) => {
               @click="$store.dispatch('moderation/hide', {type: 'artist', target: currentTrack.artist})"
             >
               <i :class="['eye slash outline', 'basic', 'icon']" />
-            </button>
+            </button> -->
           </div>
           <div class="progress-wrapper">
             <div
@@ -277,8 +259,10 @@ const reorderTracks = async (from: number, to: number) => {
                   :aria-label="labels.restart"
                   class="left floated timer discrete start"
                   @click.prevent="currentTime = 0"
-                >{{ currentTimeFormatted }}</a>
-                <span class="right floated timer total">{{ durationFormatted }}</span>
+                >
+                  {{ time.parse(Math.round(currentTime)) }}
+                </a>
+                <span class="right floated timer total">{{ time.parse(Math.round(duration)) }}</span>
               </template>
               <template v-else>
                 <span class="left floated timer">00:00</span>
@@ -286,49 +270,7 @@ const reorderTracks = async (from: number, to: number) => {
               </template>
             </div>
           </div>
-          <div class="player-controls desktop-and-below">
-            <span
-              role="button"
-              :title="labels.previous"
-              :aria-label="labels.previous"
-              class="control"
-              :disabled="emptyQueue || null"
-              @click.prevent.stop="previous"
-            >
-              <i :class="['ui', 'backward step', {'disabled': emptyQueue}, 'icon']" />
-            </span>
-
-            <span
-              v-if="!playing"
-              role="button"
-              :title="labels.play"
-              :aria-label="labels.play"
-              class="control"
-              @click.prevent.stop="resume"
-            >
-              <i :class="['ui', 'play', {'disabled': !currentTrack}, 'icon']" />
-            </span>
-            <span
-              v-else
-              role="button"
-              :title="labels.pause"
-              :aria-label="labels.pause"
-              class="control"
-              @click.prevent.stop="pause"
-            >
-              <i :class="['ui', 'pause', {'disabled': !currentTrack}, 'icon']" />
-            </span>
-            <span
-              role="button"
-              :title="labels.next"
-              :aria-label="labels.next"
-              class="control"
-              :disabled="hasNext || null"
-              @click.prevent.stop="next"
-            >
-              <i :class="['ui', {'disabled': !hasNext}, 'forward step', 'icon']" />
-            </span>
-          </div>
+          <player-controls class="desktop-and-below" />
         </template>
       </div>
       <div id="queue">
@@ -345,7 +287,7 @@ const reorderTracks = async (from: number, to: number) => {
               </button>
               <button
                 class="ui right floated basic button danger"
-                @click="clear"
+                @click="tracks.length = 0"
               >
                 <translate translate-context="*/Queue/*/Verb">
                   Clear
@@ -356,7 +298,7 @@ const reorderTracks = async (from: number, to: number) => {
                 <div>
                   <translate
                     translate-context="Sidebar/Queue/Text"
-                    :translate-params="{index: currentIndex + 1, length: tracks.length}"
+                    :translate-params="{index: currentIndex + 1, length: queue.length}"
                   >
                     Track %{ index } of %{ length }
                   </translate>
@@ -387,7 +329,7 @@ const reorderTracks = async (from: number, to: number) => {
               :source="item"
               :class="[...classList, currentIndex === index && 'active']"
               @play="play"
-              @remove="removeTrack"
+              @remove="dequeue"
             />
           </template>
         </virtual-list>

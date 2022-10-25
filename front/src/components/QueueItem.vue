@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { QueueItemSource } from '~/types'
 
+import time from '~/utils/time'
+
 interface Events {
   (e: 'play', index: number): void
   (e: 'remove', index: number): void
@@ -47,7 +49,7 @@ defineProps<Props>()
     </div>
     <div class="duration-cell">
       <template v-if="source.sources.length > 0">
-        {{ source.duration }}
+        {{ time.parse(Math.round(source.sources[0].duration ?? 0)) }}
       </template>
     </div>
     <div class="controls">

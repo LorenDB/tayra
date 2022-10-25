@@ -207,6 +207,13 @@
     .icon {
       font-size: 1.1em;
     }
+
+    button {
+      padding: 0;
+      border: none;
+      background-color: transparent;
+      color: inherit;
+    }
   }
 
   .handle {

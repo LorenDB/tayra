@@ -1,7 +1,7 @@
 import type { Track, Upload } from '~/types'
 
-import { computedAsync, useStorage } from '@vueuse/core'
-import { shuffle as shuffleArray, uniq } from 'lodash-es'
+import { computedAsync, useNow, useStorage, useTimeAgo } from '@vueuse/core'
+import { shuffle as shuffleArray, sum, uniq } from 'lodash-es'
 import { getMany, setMany } from 'idb-keyval'
 import { useClamp } from '@vueuse/math'
 import { computed } from 'vue'
@@ -76,6 +76,7 @@ const createQueueTrack = async (track: Track): Promise<QueueTrack> => {
       ?? new URL('~/assets/audio/default-cover.png', import.meta.url).href,
     sources: track.uploads.map(upload => ({
       uuid: upload.uuid,
+      duration: upload.duration,
       mimetype: upload.mimetype,
       bitrate: upload.bitrate,
       url: upload.listen_url
@@ -83,6 +84,7 @@ const createQueueTrack = async (track: Track): Promise<QueueTrack> => {
   }
 }
 
+// Adding tracks
 export const enqueue = async (...newTracks: Track[]) => {
   const queueTracks = await Promise.all(newTracks.map(createQueueTrack))
   await setMany(queueTracks.map(track => [track.id, track]))
@@ -94,6 +96,21 @@ export const enqueue = async (...newTracks: Track[]) => {
   if (isShuffled.value) {
     shuffledIds.value.push(...shuffleArray(ids))
   }
+}
+
+// Removing tracks
+export const dequeue = async (index: number) => {
+  if (currentIndex.value === index) {
+    await playNext(true)
+  }
+
+  tracks.value.splice(index, 1)
+
+  if (index <= currentIndex.value) {
+    currentIndex.value -= 1
+  }
+
+  // TODO (wvffle): Check if removing last element works well
 }
 
 // Current Index
@@ -119,11 +136,11 @@ export const playTrack = async (trackIndex: number, force = false) => {
 
 // Previous track
 export const hasPrevious = computed(() => /* looping.value === LoopingMode.LoopQueue || */ currentIndex.value !== 0)
-export const playPrevious = async () => {
+export const playPrevious = async (force = false) => {
   const { looping, LoopingMode } = await import('~/composables/audio/player')
 
   // Loop entire queue / change track to the next one
-  if (looping.value === LoopingMode.LoopQueue && currentIndex.value === 0) {
+  if (looping.value === LoopingMode.LoopQueue && currentIndex.value === 0 && force !== true) {
     // Loop track programmatically if it is the only track in the queue
     if (tracks.value.length === 1) return playTrack(currentIndex.value, true)
     return playTrack(tracks.value.length - 1)
@@ -134,17 +151,39 @@ export const playPrevious = async () => {
 
 // Next track
 export const hasNext = computed(() => /* looping.value === LoopingMode.LoopQueue || */ currentIndex.value !== tracks.value.length - 1)
-export const playNext = async () => {
+export const playNext = async (force = false) => {
   const { looping, LoopingMode } = await import('~/composables/audio/player')
 
   // Loop entire queue / change track to the next one
-  if (looping.value === LoopingMode.LoopQueue && currentIndex.value === tracks.value.length - 1) {
+  if (looping.value === LoopingMode.LoopQueue && currentIndex.value === tracks.value.length - 1 && force !== true) {
     // Loop track programmatically if it is the only track in the queue
     if (tracks.value.length === 1) return playTrack(currentIndex.value, true)
     return playTrack(0)
   }
 
   return playTrack(currentIndex.value + 1)
+}
+
+// Reorder
+export const reorder = (from: number, to: number) => {
+  const [id] = tracks.value.splice(from, 1)
+  tracks.value.splice(to, 0, id)
+
+  const current = currentIndex.value
+  if (current === from) {
+    currentIndex.value = to
+    return
+  }
+
+  if (from < current && to >= current) {
+    // item before was moved after
+    currentIndex.value -= 1
+  }
+
+  if (from > current && to <= current) {
+    // item after was moved before
+    currentIndex.value += 1
+  }
 }
 
 // Shuffle
@@ -158,3 +197,17 @@ export const shuffle = () => {
 
   shuffledIds.value = shuffleArray(tracks.value)
 }
+
+// Ends in
+const now = useNow()
+export const endsIn = useTimeAgo(computed(() => {
+  const seconds = sum(
+    queue.value
+      .slice(currentIndex.value)
+      .map((track) => track.sources[0]?.duration ?? 0)
+  )
+
+  const date = new Date(now.value)
+  date.setSeconds(date.getSeconds() + seconds)
+  return date
+}))

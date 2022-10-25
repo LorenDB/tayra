@@ -1,5 +1,5 @@
-import { tryOnMounted, useIntervalFn, useRafFn, useStorage, whenever } from '@vueuse/core'
-import { currentTrack, currentIndex } from '~/composables/audio/queue'
+import { tryOnMounted, useIntervalFn, useRafFn, useStorage, useTimeoutFn, whenever } from '@vueuse/core'
+import { currentTrack, currentIndex, playNext } from '~/composables/audio/queue'
 import { currentSound, createTrack } from '~/composables/audio/tracks'
 import { computed, ref, watch, watchEffect, type Ref } from 'vue'
 import { setGain } from './audio-api'
@@ -168,3 +168,14 @@ export const loading = computed(() => {
   if (!sound) return false
   return !sound.isLoaded.value
 })
+
+// Errored
+export const errored = computed(() => {
+  const sound = currentSound.value
+  if (!sound) return false
+  return sound.isErrored.value
+})
+
+const { start, stop } = useTimeoutFn(() => playNext(), 3000, { immediate: false })
+watch(currentIndex, stop)
+whenever(errored, start)

@@ -17,9 +17,7 @@ import {
 } from '~/composables/audio/player'
 
 import {
-  hasPrevious,
   playPrevious,
-  hasNext,
   playNext,
   queue,
   currentIndex,
@@ -38,6 +36,7 @@ import time from '~/utils/time'
 // import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 // import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import VolumeControl from './VolumeControl.vue'
+import PlayerControls from './PlayerControls.vue'
 
 const store = useStore()
 const { $pgettext } = useGettext()
@@ -104,8 +103,6 @@ const loopingTitle = computed(() => {
       ? $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping on a single track. Click to switch to whole queue looping.')
       : $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping on whole queue. Click to disable looping.')
 })
-
-const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.value)))
 </script>
 
 <template>
@@ -233,45 +230,7 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
             <i :class="['eye slash outline', 'basic', 'icon']" />
           </button> -->
         </div>
-        <div class="player-controls controls queue-not-focused">
-          <button
-            :title="labels.previous"
-            :aria-label="labels.previous"
-            :disabled="!hasPrevious"
-            class="circular button control tablet-and-up"
-            @click.prevent.stop="playPrevious"
-          >
-            <i :class="['ui', 'large', {'disabled': !hasPrevious}, 'backward step', 'icon']" />
-          </button>
-          <button
-            v-if="!isPlaying"
-            :title="labels.play"
-            :aria-label="labels.play"
-            class="circular button control"
-            @click.prevent.stop="isPlaying = true"
-          >
-            <i :class="['ui', 'big', 'play', {'disabled': !currentTrack}, 'icon']" />
-          </button>
-          <button
-            v-else
-            :title="labels.pause"
-            :aria-label="labels.pause"
-            class="circular button control"
-            @click.prevent.stop="isPlaying = false"
-          >
-            <i :class="['ui', 'big', 'pause', {'disabled': !currentTrack}, 'icon']" />
-          </button>
-          <button
-            :title="labels.next"
-            :aria-label="labels.next"
-            :disabled="!hasNext"
-            class="circular button control"
-            @click.prevent.stop="playNext"
-          >
-            <i :class="['ui', 'large', {'disabled': !hasNext}, 'forward step', 'icon']" />
-          </button>
-        </div>
-
+        <player-controls class="controls queue-not-focused" />
         <div class="controls progress-controls queue-not-focused tablet-and-up small align-left">
           <div class="timer">
             <template v-if="!isLoadingAudio">
@@ -279,7 +238,7 @@ const currentTimeFormatted = computed(() => time.parse(Math.round(currentTime.va
                 class="start"
                 @click.stop.prevent="seekTo(0)"
               >
-                {{ currentTimeFormatted }}
+                {{ time.parse(Math.round(currentTime)) }}
               </span>
               |
               <span class="total">{{ time.parse(Math.round(duration)) }}</span>

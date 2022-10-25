@@ -16,14 +16,15 @@ export interface Sound {
   dispose(): void
 
   readonly audioNode: IAudioNode<IAudioContext>
+  readonly isErrored: Ref<boolean>
   readonly isLoaded: Ref<boolean>
   readonly currentTime: number
   readonly duration: number
   readonly buffered: number
   looping: boolean
 
-  play(): void | Promise<void>
   pause(): void | Promise<void>
+  play(): void | Promise<void>
 
   seekTo(seconds: number): void | Promise<void>
   seekBy(seconds: number): void | Promise<void>
@@ -46,6 +47,7 @@ export class HTMLSound implements Sound {
   #soundLoopEventHook = createEventHook<HTMLSound>()
   #soundEndEventHook = createEventHook<HTMLSound>()
 
+  readonly isErrored = ref(false)
   readonly isLoaded = ref(false)
 
   audioNode = createAudioSource(this.#audio)
@@ -67,6 +69,11 @@ export class HTMLSound implements Sound {
     useEventListener(this.#audio, 'loadeddata', () => {
       // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
       this.isLoaded.value = this.#audio.readyState >= 2
+    })
+
+    useEventListener(this.#audio, 'error', () => {
+      this.isErrored.value = true
+      this.isLoaded.value = true
     })
 
     this.onSoundLoop = this.#soundLoopEventHook.on
