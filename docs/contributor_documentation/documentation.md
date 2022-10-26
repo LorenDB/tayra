@@ -1,4 +1,4 @@
-# Contribute to Funkwhale documentation
+# Document Funkwhale
 
 ```{tip}
 If you notice something missing in our documentation but don't feel confident contributing, submit a request [in our forum](https://forum.funkwhale.audio/t/documentation).

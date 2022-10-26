@@ -42,4 +42,12 @@ admin/commands.html, ../administrator_documentation/manage_script/index.html
 admin/mrf.html, ../administrator_documentation/configuration_docs/mrf.html
 admin/url.html, ../administrator_documentation/configuration_docs/change_url.html
 admin/optimization.html, ../administrator_documentation/configuration_docs/optimize.html
-architecture.html, developers/architecture.html
+architecture.html, ../developer_documentation/architecture.html
+contributing.html, ../developer_documentation/index.html
+api.html, ../developer_documentation/api/index.html
+federation/index.html, ../developer_documentation/federation/index.html
+developers/subsonic.html, ../developer_documentation/api/subsonic.html
+developers/plugins.html, ../developer_documentation/plugins/index.html
+developers/authentication.html, ../developer_documentation/api/authentication.html
+documentation/index.html, ../contributor_documentation/documentation.html
+translators.html, ../contributor_documentation/translation.html
