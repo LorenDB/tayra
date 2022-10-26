@@ -84,7 +84,7 @@ ports:
 
 vscode:
   extensions:
-    - lukashass.volar
+    - Vue.volar
     - ms-python.python
     - ms-toolsai.jupyter
     - ms-toolsai.jupyter-keymap

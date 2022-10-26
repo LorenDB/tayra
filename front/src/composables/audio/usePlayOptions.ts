@@ -9,7 +9,7 @@ import { useStore } from '~/store'
 import axios from 'axios'
 import jQuery from 'jquery'
 
-import { enqueue as addToQueue, currentTrack } from '~/composables/audio/queue'
+import { enqueue as addToQueue, currentTrack, playNext, currentIndex, enqueueAt, queue } from '~/composables/audio/queue'
 import { isPlaying } from '~/composables/audio/player'
 
 export interface PlayOptionsProps {
@@ -143,11 +143,11 @@ export default (props: PlayOptionsProps) => {
 
     const tracks = await getPlayableTracks()
 
-    const wasEmpty = store.state.queue.tracks.length === 0
-    await store.dispatch('queue/appendMany', { tracks, index: store.state.queue.currentIndex + 1 })
+    const wasEmpty = queue.value.length === 0
+    await enqueueAt(currentIndex.value + 1, ...tracks)
 
     if (next && !wasEmpty) {
-      await store.dispatch('queue/next')
+      await playNext()
       isPlaying.value = true
     }
 

@@ -2,18 +2,20 @@ import type { QueueTrack, QueueTrackSource } from '~/composables/audio/queue'
 import type { Sound } from '~/api/player'
 
 import { soundImplementation } from '~/api/player'
-import { computed, shallowReactive } from 'vue'
+import { computed, watchEffect } from 'vue'
 
 import { playNext, queue, currentTrack, currentIndex } from '~/composables/audio/queue'
 import { connectAudioSource } from '~/composables/audio/audio-api'
 import { isPlaying } from '~/composables/audio/player'
+
+import useLRUCache from '~/composables/useLRUCache'
 import store from '~/store'
 
 const ALLOWED_PLAY_TYPES: (CanPlayTypeResult | undefined)[] = ['maybe', 'probably']
 const AUDIO_ELEMENT = document.createElement('audio')
 
 const soundPromises = new Map<number, Promise<Sound>>()
-const soundCache = shallowReactive(new Map<number, Sound>())
+const soundCache = useLRUCache<number, Sound>({ max: 10 })
 
 const getTrackSources = (track: QueueTrack): QueueTrackSource[] => {
   const sources: QueueTrackSource[] = track.sources
@@ -60,7 +62,6 @@ export const createSound = async (track: QueueTrack): Promise<Sound> => {
       // NOTE: We push it to the end of the job queue
       setTimeout(playNext, 0)
     })
-
     soundCache.set(track.id, sound)
     soundPromises.delete(track.id)
     return sound
@@ -74,7 +75,7 @@ export const createSound = async (track: QueueTrack): Promise<Sound> => {
 // Create track from queue
 export const createTrack = async (index: number) => {
   if (queue.value.length <= index || index === -1) return
-  console.log('LOADING TRACK')
+  console.log('LOADING TRACK', index)
 
   const track = queue.value[index]
   if (!soundPromises.has(track.id) && !soundCache.has(track.id)) {
@@ -88,7 +89,7 @@ export const createTrack = async (index: number) => {
   sound.audioNode.disconnect()
   connectAudioSource(sound.audioNode)
 
-  if (isPlaying.value) {
+  if (isPlaying.value && index === currentIndex.value) {
     await sound.play()
   }
 
@@ -100,5 +101,7 @@ export const createTrack = async (index: number) => {
     }, 100)
   }
 }
+
+watchEffect(async () => createTrack(currentIndex.value))
 
 export const currentSound = computed(() => soundCache.get(currentTrack.value?.id ?? -1))

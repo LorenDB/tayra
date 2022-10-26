@@ -85,17 +85,28 @@ const createQueueTrack = async (track: Track): Promise<QueueTrack> => {
 }
 
 // Adding tracks
-export const enqueue = async (...newTracks: Track[]) => {
+export const enqueueAt = async (index: number, ...newTracks: Track[]) => {
   const queueTracks = await Promise.all(newTracks.map(createQueueTrack))
   await setMany(queueTracks.map(track => [track.id, track]))
 
   const ids = queueTracks.map(track => track.id)
-  tracks.value.push(...ids)
+
+  if (index >= tracks.value.length) {
+    // we simply push to the end
+    tracks.value.push(...ids)
+  } else {
+    // we insert the track at given position
+    tracks.value.splice(index, 0, ...ids)
+  }
 
   // Shuffle new tracks
   if (isShuffled.value) {
     shuffledIds.value.push(...shuffleArray(ids))
   }
+}
+
+export const enqueue = async (...newTracks: Track[]) => {
+  return enqueueAt(tracks.value.length, ...newTracks)
 }
 
 // Removing tracks
@@ -131,7 +142,6 @@ export const playTrack = async (trackIndex: number, force = false) => {
   }
 
   currentIndex.value = trackIndex
-  if (isPlaying.value) currentSound.value?.play()
 }
 
 // Previous track
@@ -196,6 +206,15 @@ export const shuffle = () => {
   }
 
   shuffledIds.value = shuffleArray(tracks.value)
+}
+
+export const reshuffleUpcomingTracks = () => {
+  // TODO: Test if needed to add 1 to currentIndex
+  const listenedTracks = shuffledIds.value.slice(0, currentIndex.value)
+  const upcomingTracks = shuffledIds.value.slice(currentIndex.value)
+
+  listenedTracks.push(...shuffleArray(upcomingTracks))
+  shuffledIds.value = listenedTracks
 }
 
 // Ends in

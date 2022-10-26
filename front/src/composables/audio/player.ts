@@ -8,12 +8,11 @@ import store from '~/store'
 import axios from 'axios'
 
 export const isPlaying = ref(false)
-
-watch(isPlaying, (playing) => {
+watchEffect(() => {
   const sound = currentSound.value
   if (!sound) return
 
-  if (playing) {
+  if (isPlaying.value) {
     sound.play()
     return
   }
