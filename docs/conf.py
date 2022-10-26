@@ -134,7 +134,7 @@ html_context = {
     "gitlab_url": "https://dev.funkwhale.audio/funkwhale/funkwhale",
 }
 html_logo = "logo.svg"
-html_favicon = "../front/public/favicon.png"
+html_favicon = "../front/public/favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
