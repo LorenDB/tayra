@@ -14,7 +14,7 @@ To see a full list of options, run the command with the `--help` flag.
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py import_files --help
 ```
 
@@ -23,7 +23,7 @@ poetry run python manage.py import_files --help
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py import_files --help
 ```
 
@@ -52,7 +52,7 @@ If you don't have music on your server, you can download creative commons music 
 
 3. Run the shell script against the music list to download the tracks.
 
-   ```{code} bash
+   ```{code-block} sh
    ./download-tracks.sh music.txt
    ```
 
@@ -78,19 +78,19 @@ Once you have your library ID, you can copy content from your server and import 
 
 1. Log in to your server and navigate to your Funkwhale directory.
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale
    ```
 
 2. Export your library ID to reference it later. In this example, the library ID is "769a2bc3". Replace this with your library ID.
 
-   ```{code} bash
+   ```{code-block} sh
    export LIBRARY_ID="769a2bc3"
    ```
 
 3. Run the `import_files` command to copy your files. In this example, the music is stored in `data/music`. Replace this with your music directory.
 
-   ```{code} bash
+   ```{code-block} sh
    poetry run python manage.py import_files $LIBRARY_ID "data/music" --recursive --noinput
    ```
 
@@ -111,7 +111,7 @@ We recommend you symbolically link your music directories to `/srv/funkwhale/dat
 
 To link your storage directory to the Funkwhale store, use the `ln -s` command. For example, if you have an NFS share at `/media/nfsshare`, you can link it to a folder like this:
 
-```{code} bash
+```{code-block} sh
 ln -s ln -s /media/mynfsshare /srv/funkwhale/data/music/nfsshare
 ```
 
@@ -124,7 +124,7 @@ You can then run the `import_files` command against `/srv/funkwhale/data/music/n
 
 On a Docker install you can use bind mounts to reference your storage directory. To do this, you need to add the directory to the `api` and `celeryworker` blocks in your `docker-compose.yml` file. For example, if you have an NFS share at `/media/nfsshare`, you can add the following to your `docker-compose.yml` file:
 
-```{code} yaml
+```{code-block} yaml
 celeryworker:
   volumes:
    - ./data/music:/music:ro
@@ -160,20 +160,20 @@ To use the in-place import method, follow these steps:
 
 1. Log in to your server and navigate to your Funkwhale directory.
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale
    ```
 
 2. Add your storage location to your `.env` file if you don't want to link it to the Funkwhale store. See the [in-place import configuration variables](../configuration_docs/env_file.md#in-place-import-configuration) for more information.
 3. Export your library ID to reference it later. In this example, the library ID is "769a2bc3". Replace this with your library ID.
 
-   ```{code} bash
+   ```{code-block} sh
    export LIBRARY_ID="769a2bc3"
    ```
 
 4. Run your import command against your music storage directory. In this example, the storage directory is `/srv/funkwhale/data/music/nfsshare`. Replace this with your storage directory.
 
-   ```{code} bash
+   ```{code-block} sh
    poetry run python manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place
    ```
 
@@ -187,7 +187,7 @@ Funkwhale imports the music in your storage directory into the specified library
 1. Add your storage location to your `.env` file if you don't want to bind it to the Funkwhale store. See the [in-place import configuration variables](../configuration_docs/env_file.md#in-place-import-configuration) for more information.
 2. Run your import command against your music storage directory:
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose run --rm api python manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place
    ```
 
@@ -215,7 +215,7 @@ The `--watch` flag performs the following actions when it detects a change:
 - File metadata updated – updates the track metadata in the database.
 - File deleted – removes the file from the database.
 
-:::dropdown} Watched metadata
+:::{dropdown} Watched metadata
 
 The `import_files --watch` command watches for changes to the following metadata fields:
 
@@ -240,7 +240,7 @@ The `import_files --watch` command watches for changes to the following metadata
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place --watch
 ```
 
@@ -249,7 +249,7 @@ poetry run python manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place --watch
 ```
 
@@ -271,7 +271,7 @@ You can use the `--prune` flag with the `--watch` flag. This means Funkwhale rem
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place --watch --prune
 ```
 
@@ -280,7 +280,7 @@ poetry run python manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place --watch --prune
 ```
 

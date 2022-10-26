@@ -13,7 +13,7 @@ Before you begin, you need to secure your object store. Many S3-compatible store
 
 To prevent listing content, add the following policy to your S3-compatible object store.
 
-```{code} json
+```{code-block} json
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -38,7 +38,7 @@ To prevent listing content, add the following policy to your S3-compatible objec
 
 If you're using `awscli`, you can store this policy in a `/tmp/policy` file and apply it using the following command:
 
-```{code} bash
+```{code-block} sh
 aws s3api put-bucket-policy --bucket <yourbucketname> --policy file:///tmp/policy
 ```
 
@@ -93,7 +93,7 @@ Serving files from an object store requires some changes to the reverse proxy.
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    sudo nano /etc/nginx/sites-available/funkwhale.template
    ```
 
@@ -102,7 +102,7 @@ Serving files from an object store requires some changes to the reverse proxy.
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
    nano /srv/funkwhale/nginx/funkwhale.template
    ```
 
@@ -111,7 +111,7 @@ Serving files from an object store requires some changes to the reverse proxy.
 
 2. Comment out the `location /_protected/media/` block by adding a `#` to the start of each line.
 
-   ```{code}
+   ```{code-block} text
    #   location /_protected/media/ {
    #        internal;
    #        alias   ${MEDIA_ROOT};
@@ -120,7 +120,7 @@ Serving files from an object store requires some changes to the reverse proxy.
 
 3. Uncomment the `location ~ /_protected/media/(.+)` block by removing the `#` from the start of each line.
 
-   ```{code}
+   ```{code-block} text
       location ~ /_protected/media/(.+) {
             internal;
             proxy_set_header Authorization "";
@@ -130,13 +130,13 @@ Serving files from an object store requires some changes to the reverse proxy.
 
 4. Add your S3 store URL to the `img-src` and `media-src` headers.
 
-   ```{code}
+   ```{code-block} text
    add_header Content-Security-Policy "...img-src 'self' https://<your-s3-URL> data:;...media-src https://<your-s3-URL> 'self' data:"; 
    ```
 
 5. Test your Nginx configuration.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo nginx -t
    ```
 
@@ -147,7 +147,7 @@ Serving files from an object store requires some changes to the reverse proxy.
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl restart funkwhale.target
    sudo systemctl restart nginx
    ```
@@ -157,7 +157,7 @@ Serving files from an object store requires some changes to the reverse proxy.
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose restart
    sudo systemctl restart nginx
    ```
@@ -173,13 +173,13 @@ That's it! Files are now uploaded to and stored from your S3 bucket.
 
 You may see the following error when streaming music from your S3-compatible store:
 
-```{code}
+```{code-block} text
 [error] 2832#2832: *1 no resolver defined to resolve [address] client: [IP], server: [servername], request: "GET API request", host: "[your_domain]", referrer: "[your_domain/library]"
 ```
 
 This happens when the Nginx config is unable to use your server’s DNS resolver. We're still looking into this issue. You can work around this by adding a resolver to the `location ~/_protected/media/(.+)` block.
 
-```{code}
+```{code-block} text
 location ~ /_protected/media/(.+) {
     resolver 1.1.1.1;
     internal;

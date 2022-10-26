@@ -37,7 +37,7 @@ Use the following command to create a new library with a custom name and privacy
 :::{tab-item} Debian
 :sync: debian
 
-```{code-block} bash
+```{code-block} sh
 poetry run python manage.py create_library username1 --name="Library 1" --privacy-level="everyone"
 ```
 
@@ -46,7 +46,7 @@ poetry run python manage.py create_library username1 --name="Library 1" --privac
 :::{tab-item} Docker
 :sync: docker
 
-```{code-block} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py create_library username1 --name="Library 1" --privacy-level="everyone"
 ```
 
@@ -56,7 +56,7 @@ docker-compose run --rm api python manage.py create_library username1 --name="Li
 
 ### Returns
 
-```{code-block} text-output
+```{code-block} text
 Created library Library 1 for user username1 with UUID 436da05b-8cb1-4a4d-b870-4a3b235d8517
 ```
 
@@ -69,7 +69,7 @@ You can create a library using only a username. The script substitutes default v
 :::{tab-item} Debian
 :sync: debian
 
-```{code-block} bash
+```{code-block} sh
 poetry run python manage.py create_library username1
 ```
 
@@ -78,7 +78,7 @@ poetry run python manage.py create_library username1
 :::{tab-item} Docker
 :sync: docker
 
-```{code-block} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py create_library username1
 ```
 
@@ -88,7 +88,7 @@ docker-compose run --rm api python manage.py create_library username1
 
 ### Returns
 
-```{code-block} text-output
+```{code-block} text
 Created library default for user username1 with UUID 436da05b-8cb1-4a4d-b870-4a3b235d8517
 ```
 
@@ -101,7 +101,7 @@ If a library with the same name already exists for the given user, the script wi
 :::{tab-item} Debian
 :sync: debian
 
-```{code-block} bash
+```{code-block} sh
 poetry run python manage.py create_library username1 --name="Library 1" --privacy-level="everyone"
 ```
 
@@ -110,7 +110,7 @@ poetry run python manage.py create_library username1 --name="Library 1" --privac
 :::{tab-item} Docker
 :sync: docker
 
-```{code-block} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py create_library username1 --name="Library 1" --privacy-level="everyone"
 ```
 
@@ -120,6 +120,6 @@ docker-compose run --rm api python manage.py create_library username1 --name="Li
 
 ### Returns
 
-```{code-block} text-output
+```{code-block} text
 Found existing library Library 1 for user username1 with UUID 436da05b-8cb1-4a4d-b870-4a3b235d8517
 ```

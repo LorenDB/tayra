@@ -17,13 +17,13 @@ Before you remove any data, you need to stop the Funkwhale containers.
 
 1. Navigate to your Funkwhale directory.
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale
    ```
 
 2. Stop the containers
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose down
    ```
 
@@ -38,7 +38,7 @@ To stop serving Funkwhale from your web server, you need to remove your reverse 
 
 1. Remove the configuration files from your web host.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo rm /etc/nginx/sites-enabled/funkwhale.conf
    sudo rm /etc/nginx/sites-available/funkwhale.conf
    sudo rm /etc/nginx/funkwhale_proxy.conf
@@ -46,7 +46,7 @@ To stop serving Funkwhale from your web server, you need to remove your reverse 
 
 2. Reload the web server.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl reload nginx
    ```
 
@@ -57,14 +57,14 @@ To stop serving Funkwhale from your web server, you need to remove your reverse 
 
 1. Remove the configuration files from your web host.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo rm /etc/apache2/sites-enabled/funkwhale.conf
    sudo rm /etc/apache2/sites-available/funkwhale.conf
    ```
 
 2. Reload the web server.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo service apache2 restart
    ```
 
@@ -79,7 +79,7 @@ This action is __irreversible__. Make sure you have [backed up your data](../upg
 
 Once you have stopped the containers, you can delete all containers and associated volumes.
 
-```{code} bash
+```{code-block} sh
 docker-compose rm -fsv
 ```
 
@@ -87,7 +87,7 @@ docker-compose rm -fsv
 
 Once you have removed the containers and volumes, you can delete the Funkwhale directory.
 
-```{code} bash
+```{code-block} sh
 sudo rm -rf /srv/funkwhale
 ```
 

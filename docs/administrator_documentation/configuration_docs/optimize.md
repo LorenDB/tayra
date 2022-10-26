@@ -23,19 +23,19 @@ Celery uses a `prefork` pool by default. This enables the server to process many
 
 1. Open your `funkwhale-worker` unit file in an editor.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo nano /etc/systemd/system/funkwhale-worker.service
    ```
 
 2. Add the `--pool=solo` flag to the `ExecStart` line of your unit file.
 
-   ```{code} text
+   ```{code-block} text
    ExecStart=/srv/funkwhale/.local/bin/poetry run celery -A --pool=solo funkwhale_api.taskapp worker -l INFO --concurrency=${CELERYD_CONCURRENCY}
    ```
 
 3. Restart the Celery service.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl restart funkwhale-worker.service
    ```
 
@@ -46,7 +46,7 @@ Celery uses a `prefork` pool by default. This enables the server to process many
 
 1. Add the `--pool=solo` flag to the `celerybeat` command in `docker-compose.yml`.
 
-   ```{code} yaml
+   ```{code-block} yaml
    celerybeat:
    …
    command: celery -A --pool=solo funkwhale_api.taskapp beat --pidfile= -l INFO
@@ -54,7 +54,7 @@ Celery uses a `prefork` pool by default. This enables the server to process many
 
 2. Restart Celery.
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose restart celerybeat
    ```
 

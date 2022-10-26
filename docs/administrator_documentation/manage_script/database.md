@@ -15,7 +15,7 @@ To ensure you don't remove data by accident, this command runs in dry run mode b
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py check_inplace_files
 ```
 
@@ -24,7 +24,7 @@ poetry run python manage.py check_inplace_files
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py check_inplace_files
 ```
 

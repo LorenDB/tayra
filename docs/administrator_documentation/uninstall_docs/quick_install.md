@@ -17,13 +17,13 @@ Before you uninstall anything from your server, you need to stop the Funkwhale s
 
 1. Stop all systemd services listed under the `funkwhale` target
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl stop funkwhale.target
    ```
 
 2. Disable all systemd services to prevent launch at startup.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl disable funkwhale-server
    sudo systemctl disable funkwhale-worker
    sudo systemctl disable funkwhale-beat
@@ -31,7 +31,7 @@ Before you uninstall anything from your server, you need to stop the Funkwhale s
 
 3. Remove the service files.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo rm /etc/systemd/system/funkwhale-server.service
    sudo rm /etc/systemd/system/funkwhale-worker.service
    sudo rm /etc/systemd/system/funkwhale-beat.service
@@ -40,7 +40,7 @@ Before you uninstall anything from your server, you need to stop the Funkwhale s
 
 4. Reload all services to pick up the changes.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl daemon-reload
    sudo systemctl reset-failed
    ```
@@ -56,7 +56,7 @@ To stop serving Funkwhale from your web server, you need to remove your reverse 
 
 1. Remove the configuration files from your web host.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo rm /etc/nginx/sites-enabled/funkwhale.conf
    sudo rm /etc/nginx/sites-available/funkwhale.conf
    sudo rm /etc/nginx/funkwhale_proxy.conf
@@ -64,7 +64,7 @@ To stop serving Funkwhale from your web server, you need to remove your reverse 
 
 2. Reload the web server.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl reload nginx
    ```
 
@@ -75,14 +75,14 @@ To stop serving Funkwhale from your web server, you need to remove your reverse 
 
 1. Remove the configuration files from your web host.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo rm /etc/apache2/sites-enabled/funkwhale.conf
    sudo rm /etc/apache2/sites-available/funkwhale.conf
    ```
 
 2. Reload the web server.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo service apache2 restart
    ```
 
@@ -99,19 +99,19 @@ Once you have stopped the Funkwhale services, you can remove the Funkwhale datab
 
 1. Navigate to your Funkwhale directory.
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale
    ```
 
 2. Delete the Funkwhale database.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo -u postgres psql -c 'DROP DATABASE funkwhale;'
    ```
 
 3. Delete the Funkwhale user.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo -u postgres psql -c 'DROP USER funkwhale;'
    ```
 
@@ -123,7 +123,7 @@ This action deletes the `/srv/funkwhale/` directory. Make sure you have [backed 
 
 Once you have removed the database, you can delete the `funkwhale` user and all associated data.
 
-```{code} bash
+```{code-block} sh
 sudo userdel -r funkwhale
 ```
 
@@ -138,7 +138,7 @@ The quick install script installs the following dependencies on your server:
 :::{tab-item} Apt
 :sync: apt
 
-```{code} txt
+```{code-block} text
 
 build-essential
 curl

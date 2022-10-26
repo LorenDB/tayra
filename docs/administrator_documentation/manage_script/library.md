@@ -42,7 +42,7 @@ docker-compose run --rm api python manage.py prune_library --tracks
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py prune_library --albums
 ```
 
@@ -51,7 +51,7 @@ poetry run python manage.py prune_library --albums
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py prune_library --albums
 ```
 
@@ -65,7 +65,7 @@ docker-compose run --rm api python manage.py prune_library --albums
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py prune_library --artists
 ```
 
@@ -74,7 +74,7 @@ poetry run python manage.py prune_library --artists
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py prune_library --artists
 ```
 
@@ -88,7 +88,7 @@ docker-compose run --rm api python manage.py prune_library --artists
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py prune_library --tracks --albums --artists
 ```
 
@@ -97,7 +97,7 @@ poetry run python manage.py prune_library --tracks --albums --artists
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py prune_library --tracks --albums --artists
 ```
 
@@ -111,7 +111,7 @@ There are extra options for pruning your database. Check the command help for mo
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py prune_library --help
 ```
 
@@ -120,7 +120,7 @@ poetry run python manage.py prune_library --help
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py prune_library --help
 ```
 

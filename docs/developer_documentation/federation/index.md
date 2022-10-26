@@ -120,7 +120,7 @@ The `Accept` activity sends a positive response, such as confirming a [`Follow` 
 
 ::::{dropdown} Supported on
 
-- [`Activity` objects](#activity)
+- `Activity` objects
 
 ::::
 

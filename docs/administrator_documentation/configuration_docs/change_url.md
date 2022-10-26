@@ -27,7 +27,7 @@ Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make 
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    poetry run python manage.py fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
    ```
 
@@ -36,7 +36,7 @@ Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make 
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose run --rm api python manage.py fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
    ```
 
@@ -76,7 +76,7 @@ Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make 
    :::{tab-item} Nginx
    :sync: nginx
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl restart nginx
    ```
 
@@ -85,7 +85,7 @@ Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make 
    :::{tab-item} Apache
    :sync: apache
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl restart apache2
    ```
 

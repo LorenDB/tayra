@@ -20,13 +20,13 @@ To add tags to untagged albums:
 1. SSH into your Funkwhale server.
 2. Navigate to the Funkwhale directory.
 
-      ```{code} bash
+      ```{code-block} sh
       cd /srv/funkwhale
       ```
 
 3. Run the `manage.py` script to generate tags for untagged albums.
 
-      ```{code} bash
+      ```{code-block} sh
       poetry run python manage.py fw albums add-tags-from-tracks
       ```
 
@@ -38,13 +38,13 @@ To add tags to untagged albums:
 1. SSH into your Funkwhale server.
 2. Navigate to the Funkwhale directory.
 
-      ```{code} bash
+      ```{code-block} sh
       cd /srv/funkwhale
       ```
 
 3. Run the `manage.py` script to generate tags for untagged albums.
 
-      ```{code} bash
+      ```{code-block} sh
       docker-compose run --rm api python manage.py fw albums add-tags-from-tracks
       ```
 
@@ -63,13 +63,13 @@ To add tags to untagged artists:
 1. SSH into your Funkwhale server.
 2. Navigate to the Funkwhale directory.
 
-      ```{code} bash
+      ```{code-block} sh
       cd /srv/funkwhale
       ```
 
 3. Run the `manage.py` script to generate tags for untagged artists.
 
-      ```{code} bash
+      ```{code-block} sh
       poetry run python manage.py fw artists add-tags-from-tracks
       ```
 
@@ -81,13 +81,13 @@ To add tags to untagged artists:
 1. SSH into your Funkwhale server.
 2. Navigate to the Funkwhale directory.
 
-      ```{code} bash
+      ```{code-block} sh
       cd /srv/funkwhale
       ```
 
 3. Run the `manage.py` script to generate tags for untagged artists.
 
-      ```{code} bash
+      ```{code-block} sh
       docker-compose run --rm api python manage.py fw artists add-tags-from-tracks
       ```
 

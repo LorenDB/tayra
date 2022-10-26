@@ -15,7 +15,7 @@ You can create users with the {file}`manage.py` script. There are different ways
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fw users create
 ```
 
@@ -24,7 +24,7 @@ poetry run python manage.py fw users create
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fw users create
 ```
 
@@ -38,7 +38,7 @@ docker-compose run --rm api python manage.py fw users create
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fw users create --username <username> --email <user email> -p ""
 ```
 
@@ -47,7 +47,7 @@ poetry run python manage.py fw users create --username <username> --email <user 
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fw users create --username <username> --email <user email> -p ""
 ```
 
@@ -61,7 +61,7 @@ docker-compose run --rm api python manage.py fw users create --username <usernam
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 export FUNKWHALE_CLI_USER_PASSWORD=<password>
 poetry run python manage.py fw users create --username <username> --email <user email>
 ```
@@ -71,7 +71,7 @@ poetry run python manage.py fw users create --username <username> --email <user 
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 export FUNKWHALE_CLI_USER_PASSWORD=<password>
 docker-compose run --rm api python manage.py fw users create --username <username> --email <user email>
 ```
@@ -86,7 +86,7 @@ There are extra options for user configuration, such as quota and {term}`permiss
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fw users --help
 ```
 
@@ -95,7 +95,7 @@ poetry run python manage.py fw users --help
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fw users --help
 ```
 
@@ -113,7 +113,7 @@ You can update user accounts using the {file}`manage.py` script. Update commands
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fw users set --upload-quota 500 <user>
 ```
 
@@ -122,7 +122,7 @@ poetry run python manage.py fw users set --upload-quota 500 <user>
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fw users set --upload-quota 500 <user>
 ```
 
@@ -136,7 +136,7 @@ docker-compose run --rm api python manage.py fw users set --upload-quota 500 <us
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fw users set --staff --superuser <user 1> <user 2>
 ```
 
@@ -145,7 +145,7 @@ poetry run python manage.py fw users set --staff --superuser <user 1> <user 2>
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fw users set --staff --superuser <user 1> <user 2>
 ```
 
@@ -159,7 +159,7 @@ docker-compose run --rm api python manage.py fw users set --staff --superuser <u
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fw users set --no-staff --no-superuser <user>
 ```
 
@@ -168,7 +168,7 @@ poetry run python manage.py fw users set --no-staff --no-superuser <user>
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fw users set --no-staff --no-superuser <user>
 ```
 
@@ -182,7 +182,7 @@ docker-compose run --rm api python manage.py fw users set --no-staff --no-superu
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fw users set --permission-moderation <user>
 ```
 
@@ -191,7 +191,7 @@ poetry run python manage.py fw users set --permission-moderation <user>
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fw users set --permission-moderation <user>
 ```
 
@@ -205,7 +205,7 @@ docker-compose run --rm api python manage.py fw users set --permission-moderatio
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fw users set --password "<password>" <user>
 ```
 
@@ -214,7 +214,7 @@ poetry run python manage.py fw users set --password "<password>" <user>
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fw users set --password "<password>" <user>
 ```
 
@@ -228,7 +228,7 @@ docker-compose run --rm api python manage.py fw users set --password "<password>
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 export FUNKWHALE_CLI_USER_UPDATE_PASSWORD=<password>
 poetry run python manage.py fw users set <user>
 ```
@@ -238,7 +238,7 @@ poetry run python manage.py fw users set <user>
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 export FUNKWHALE_CLI_USER_UPDATE_PASSWORD=<password>
 docker-compose run --rm api python manage.py fw users set <user>
 ```
@@ -253,7 +253,7 @@ There are extra options for updating users. Check the command help for more opti
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fw users set --help
 ```
 
@@ -262,7 +262,7 @@ poetry run python manage.py fw users set --help
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fw users set --help
 ```
 
@@ -280,7 +280,7 @@ This prevents the same username being used in future.
 :::{tab-item} Debian
 :sync: debian
 
-```{code} py
+```{code-block} py
 poetry run python manage.py fw users rm <user>
 ```
 
@@ -289,7 +289,7 @@ poetry run python manage.py fw users rm <user>
 :::{tab-item} Docker
 :sync: docker
 
-```{code} py
+```{code-block} py
 docker-compose run --rm api python manage.py fw users rm <user>
 ```
 
@@ -305,7 +305,7 @@ This means the username can be reused.
 :::{tab-item} Debian
 :sync: debian
 
-```{code} py
+```{code-block} py
 poetry run python manage.py fw users rm --hard <user>
 ```
 
@@ -314,7 +314,7 @@ poetry run python manage.py fw users rm --hard <user>
 :::{tab-item} Docker
 :sync: docker
 
-```{code} py
+```{code-block} py
 docker-compose run --rm api python manage.py fw users rm --hard <user>
 ```
 
@@ -328,7 +328,7 @@ There are extra options for deleting users. Check the command help for more opti
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fw users rm --help
 ```
 
@@ -337,7 +337,7 @@ poetry run python manage.py fw users rm --help
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fw users rm --help
 ```
 

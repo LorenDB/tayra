@@ -12,13 +12,13 @@ To upgrade your virtualenv:
 
 1. Change to your api directory.
 
-   ```{code-block} bash
+   ```{code-block} sh
    cd /srv/funkwhale/api
    ```
 
 2. Rerun `poetry install` to reinstall your dependencies in a new virtualenv.
 
-   ```{code-block} bash
+   ```{code-block} sh
    poetry install
    ```
 
@@ -29,19 +29,19 @@ To upgrade your virtualenv:
 1. SSH into your server.
 2. Log in as your `funkwhale` user.
 
-   ```{code} bash
+   ```{code-block} sh
    su funkwhale
    ```
 
 3. Navigate to your Funkwhale directory.
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale
    ```
 
 4. Stop the Funkwhale services.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl stop funkwhale.target
    ```
 
@@ -53,25 +53,25 @@ To upgrade your virtualenv:
 
 6. Download the API files for your chosen Funkwhale version.
 
-   ```{code} bash
+   ```{code-block} sh
    curl -L -o "api-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_api"
    ```
 
 7. Extract the downloaded archive to a new directory.
 
-   ```{code} bash
+   ```{code-block} sh
    unzip "api-$FUNKWHALE_VERSION.zip" -o api_new
    ```
 
 8. Remove the old `api` directory and move the extracted directory to the `api` directory.
 
-   ```{code} bash
+   ```{code-block} sh
    rm -rf api/ && mv api_new api
    ```
 
 9. Remove the downloaded archive file.
 
-   ```{code} bash
+   ```{code-block} sh
    rm api-$FUNKWHALE_VERSION.zip
    ```
 
@@ -81,37 +81,37 @@ Once you have downloaded the new files, you can update your Funkwhale instance. 
 
 1. Install or upgrade all OS dependencies using the dependencies script.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo api/install_os_dependencies.sh install
    ```
 
 2. Enter the `api` directory to run the following commands.
 
-   ```{code} bash
+   ```{code-block} sh
    cd api
    ```
 
 3. Install all Python dependencies using `poetry`.
 
-   ```{code} bash
+   ```{code-block} sh
    poetry install
    ```
 
 4. Collect the new static files to serve.
 
-   ```{code} bash
+   ```{code-block} sh
    poetry run python manage.py collectstatic --no-input
    ```
 
 5. Apply new database migrations.
 
-   ```{code} bash
+   ```{code-block} sh
    poetry run python manage.py migrate
    ```
 
 6. Restart the Funkwhale services.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl start funkwhale.target
    ```
 

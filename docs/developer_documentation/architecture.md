@@ -99,7 +99,7 @@ Some common tasks the Celery worker handles are:
 
 ### Celery beat task scheduler
 
-In addition to handling tasks from the API, the Celery worker also needs to handle some recurring tasks. To manage these, we implement a [Celery beat]() scheduler. The scheduler is responsible for triggering tasks on a schedule and adding messages to the [queue](#redis-cache-and-message-queue) so the worker can work through them.
+In addition to handling tasks from the API, the Celery worker also needs to handle some recurring tasks. To manage these, we implement a [Celery beat](https://docs.celeryq.dev/en/stable/reference/celery.apps.beat.html#celery.apps.beat.Beat) scheduler. The scheduler is responsible for triggering tasks on a schedule and adding messages to the [queue](#redis-cache-and-message-queue) so the worker can work through them.
 
 Some common recurring tasks are:
 

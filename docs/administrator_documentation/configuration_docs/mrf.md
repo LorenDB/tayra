@@ -27,7 +27,7 @@ MRF policies are written as Python 3 functions that take at least one `payload` 
 
 In the example below we write a policy that discards all Follow requests from listed domains:
 
-```{code} py
+```{code-block} py
 import urllib.parse
 from funkwhale_api.moderation import mrf
 
@@ -54,7 +54,7 @@ def blocked_follow_domains_policy(payload, **kwargs):
 
 You need to store this code in a Funkwhale plugin. To create one, execute the following:
 
-```{code} bash
+```{code-block} sh
 
 # Plugin names can only contain ASCII letters, numbers and underscores.
 export PLUGIN_NAME="myplugin"
@@ -89,7 +89,7 @@ To make the job of writing and debugging MRF policies easier, we provide a manag
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    poetry run python manage.py mrf_check --list
    ```
 
@@ -98,7 +98,7 @@ To make the job of writing and debugging MRF policies easier, we provide a manag
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose run --rm api python manage.py mrf_check --list
    ```
 
@@ -112,7 +112,7 @@ To make the job of writing and debugging MRF policies easier, we provide a manag
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    export MRF_MESSAGE='{"actor": "https://normal.domain/@alice", "type": "Create", "object": {"type": "Follow"}}'
    echo $MRF_MESSAGE | poetry run python manage.py mrf_check inbox - -p blocked_follow_domains
    ```
@@ -122,7 +122,7 @@ To make the job of writing and debugging MRF policies easier, we provide a manag
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
    export MRF_MESSAGE='{"actor": "https://normal.domain/@alice", "type": "Create", "object": {"type": "Follow"}}'
    echo $MRF_MESSAGE | docker-compose run --rm api python manage.py mrf_check inbox - -p blocked_follow_domains
    ```
@@ -136,7 +136,7 @@ To make the job of writing and debugging MRF policies easier, we provide a manag
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    export MRF_MESSAGE='{"actor": "https://botdomain.org/@bob", "type": "Create", "object": {"type": "Follow"}}'
    echo $MRF_MESSAGE | poetry run python manage.py mrf_check inbox - -p blocked_follow_domains
    ```
@@ -146,7 +146,7 @@ To make the job of writing and debugging MRF policies easier, we provide a manag
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
    export MRF_MESSAGE='{"actor": "https://botdomain.org/@bob", "type": "Create", "object": {"type": "Follow"}}'
    echo $MRF_MESSAGE | docker-compose run --rm api python manage.py mrf_check inbox - -p blocked_follow_domains
    ```
@@ -161,7 +161,7 @@ To make the job of writing and debugging MRF policies easier, we provide a manag
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    export ACTIVITY_UUID="06208aea-c687-4e8b-aefd-22f1c3f76039"
    echo $MRF_MESSAGE | poetry run python manage.py mrf_check inbox $ACTIVITY_UUID -p blocked_follow_domains
    ```
@@ -171,7 +171,7 @@ To make the job of writing and debugging MRF policies easier, we provide a manag
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
 
    export ACTIVITY_UUID="06208aea-c687-4e8b-aefd-22f1c3f76039"
 
@@ -189,7 +189,7 @@ There are extra options for testing MRF policies. Check the command help for mor
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    poetry run python manage.py mrf_check --help
    ```
 
@@ -198,7 +198,7 @@ There are extra options for testing MRF policies. Check the command help for mor
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code}
+   ```{code-block} sh
    docker-compose run --rm api python manage.py mrf_check --help
    ```
 

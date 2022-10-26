@@ -11,7 +11,7 @@ The quick install script is the easiest way to install Funkwhale. Run this scrip
 
 To download the quick install script, install `curl`:
 
-```{code} bash
+```{code-block} sh
 sudo apt update # update the apt cache
 sudo apt install curl
 ```
@@ -20,7 +20,7 @@ sudo apt install curl
 
 Now that you have `curl` installed, download and run the quick install script:
 
-```{code} bash
+```{code-block} sh
 sudo sh -c "$(curl -sSL https://get.funkwhale.audio/)"
 ```
 

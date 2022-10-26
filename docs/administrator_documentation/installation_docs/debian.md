@@ -17,7 +17,7 @@ We support [Debian](https://debian.org) and Debian-based Linux distributions. Fo
 
 - Install `curl`
 
-   ```{code} bash
+   ```{code-block} sh
    sudo apt update # update apt cache
    sudo apt install curl
    ```
@@ -26,7 +26,7 @@ We support [Debian](https://debian.org) and Debian-based Linux distributions. Fo
 
 To install Funkwhale on your server, you first need to install its dependencies. We provide all dependencies in a single file to enable you to install everything at once. You can pass the information from this file to `apt` using the following command:
 
-```{code} bash
+```{code-block} sh
 sudo apt install $(curl https://dev.funkwhale.audio/funkwhale/funkwhale/-/raw/$FUNKWHALE_VERSION/deploy/requirements.apt)
 ```
 
@@ -40,19 +40,19 @@ It's good practice to create a user on your server for Funkwhale administration.
 
 1. Create the `funkwhale` user and set its shell to `bash` and its home directory to `/srv/funkwhale`.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo useradd -r -s /usr/bin/bash -d /srv/funkwhale -m funkwhale
    ```
 
 2. Create a password for the user. You need to do this so that you can use this user to perform database administration.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo passwd funkwhale
    ```
 
 3. Finally, give the user `sudo` privileges. You need to do this so that the user can run administrative tasks.
 
-   ```{code}
+   ```{code-block} sh
    usermod -aG sudo funkwhale
    ```
 
@@ -66,20 +66,20 @@ Once you've created your `funkwhale` user you can download the Funkwhale softwar
 
 1. Log in to your `funkwhale` account and go to the `/srv/funkwhale` directory.
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale
    su funkwhale
    ```
 
 2. Create the directories for Funkwhale.
 
-   ```{code} bash
+   ```{code-block} sh
    mkdir -p config api data/static data/media data/music front
    ```
 
 That's it! Your directory structure should look like this:
 
-```{code}
+```{code-block} text
 .
 ├── config      # config / environment files
 ├── api         # the Funkwhale API
@@ -96,7 +96,7 @@ Once you've created the directory structure you can download Funkwhale. Funkwhal
 
 1. Download the API.
 
-   ```{code} bash
+   ```{code-block} sh
    curl -L -o "api-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_api"
    unzip "api-$FUNKWHALE_VERSION.zip" -d extracted 
    mv extracted/api/* api/ 
@@ -105,7 +105,7 @@ Once you've created the directory structure you can download Funkwhale. Funkwhal
 
 2. Download the frontend
 
-   ```{code} bash
+   ```{code-block} sh
    curl -L -o "front-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_front" 
    unzip "front-$FUNKWHALE_VERSION.zip" -d extracted 
    mv extracted/front . 
@@ -120,20 +120,20 @@ The Funkwhale API is written in Python. You need to install the API's dependenci
 
 1. Install Poetry. Follow the steps in this wizard to set it up.
 
-   ```{code} bash
+   ```{code-block} sh
    curl -sSL https://install.python-poetry.org | python3 -
    ```
 
 2. Add Poetry to your `$PATH`. This allows you to use `poetry` commands.
 
-   ```{code} bash
+   ```{code-block} sh
    export "PATH=$HOME/.local/bin:$PATH" >> ~/.bashrc
    echo 'export "PATH=$HOME/.local/bin:$PATH"' >> ~/.bashrc
    ```
 
 3. Set up poetry in your `/srv/funkwhale/api` directory.
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale/api
    poetry install
    ```
@@ -146,25 +146,25 @@ The environment file contains options you can use to control your Funkwhale pod.
 
 1. Download the `.env` template to your `/srv/funkwhale/config` directory.
 
-   ```{code} bash
+   ```{code-block} sh
    curl -L -o /srv/funkwhale/config/.env "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/env.prod.sample"
    ```
 
 2. Generate a secret key for Django. This keeps your Funkwhale data secure. Do not share this key with anybody.
 
-   ```{code} bash
+   ```{code-block} sh
    openssl rand -base64 45
    ```
 
 3. Reduce the permissions on your `.env` file to `600`. This means that only the `funkwhale` user can read and write this file.
 
-   ```{code} bash
+   ```{code-block} sh
    chmod 600 /srv/funkwhale/config/.env
    ```
 
 4. Open the `.env` file in a text editor. For this example, we will use `nano`.
 
-   ```{code} bash
+   ```{code-block} sh
    nano /srv/funkwhale/config/.env
    ```
 
@@ -172,13 +172,13 @@ The environment file contains options you can use to control your Funkwhale pod.
    - Paste the secret key in the `DJANGO_SECRET_KEY` field.
    - Populate the `DATABASE_URL` field:
 
-      ```{code}
+      ```{code-block} text
       DATABASE_URL=postgresql://funkwhale@:5432/funkwhale
       ```
 
    - Populate the `CACHE_URL` field:
 
-      ```{code}
+      ```{code-block} text
       CACHE_URL=redis://127.0.0.1:6379/0
       ```
 
@@ -194,45 +194,45 @@ Funkwhale uses a [PostgreSQL](https://www.postgresql.org/) database to store inf
 
 1. Install PostgreSQL and the `postgresql-contrib` package. This package contains extra features that Funkwhale uses.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo apt-get install postgresql postgresql-contrib
    ```
 
 2. Once you've installed PostgreSQL, launch a `psql` shell as the `postgres` user to set up your database.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo -u postgres psql
    ```
 
 3. Create your Funkwhale database.
 
-   ```{code} psql
+   ```{code-block} psql
    CREATE DATABASE funkwhale WITH ENCODING 'utf8';
    ```
 
 4. Create a user for Funkwhale. This user needs all privileges so it can manage the database.
 
-   ```{code} psql
+   ```{code-block} psql
    CREATE USER funkwhale;
    GRANT ALL PRIVILEGES ON DATABASE funkwhale TO funkwhale;
    ```
 
 5. Once you're finished, exit the shell
 
-   ```{code} psql
+   ```{code-block} psql
    exit
    ```
 
 6. Run the following commands to create extra extensions for the `funkwhale` database.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo -u postgres psql funkwhale -c 'CREATE EXTENSION "unaccent";'
    sudo -u postgres psql funkwhale -c 'CREATE EXTENSION "citext";'
    ```
 
 7. Your database is ready to be populated! Use the `manage.py` script to create the database structure.
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale/api
    poetry run python manage.py migrate
    ```
@@ -240,7 +240,7 @@ Funkwhale uses a [PostgreSQL](https://www.postgresql.org/) database to store inf
 ````{note}
 You may see the following warning when applying migrations:
 
-```{code}
+```{code-block} text
 "Your models have changes that are not yet reflected in a migration, and so won't be applied."
 ```
 
@@ -261,7 +261,7 @@ You can create several superusers.
 
 To start using Funkwhale, you need to create a superuser for your pod. This user has all the permissions needed to administrate the pod. Follow these steps to create a superuser.
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py createsuperuser
 ```
 
@@ -271,7 +271,7 @@ That's it! You can log in as this user when you finish setting up Funkwhale.
 
 Funkwhale uses several static assets to serve its frontend. Use `manage.py` to collect these files so that the webserver can serve them.
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py collectstatic
 ```
 
@@ -281,7 +281,7 @@ Funkwhale uses [systemd](https://www.freedesktop.org/wiki/Software/systemd/) to 
 
 1. Download the sample unit files from Funkwhale.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo curl -L -o "/etc/systemd/system/funkwhale.target" "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/funkwhale.target"
    sudo curl -L -o "/etc/systemd/system/funkwhale-server.service" "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/funkwhale-server.service"
    sudo curl -L -o "/etc/systemd/system/funkwhale-worker.service" "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/funkwhale-worker.service"
@@ -290,19 +290,19 @@ Funkwhale uses [systemd](https://www.freedesktop.org/wiki/Software/systemd/) to 
 
 2. Reload systemd to register the new services.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl daemon-reload
    ```
 
 3. Start all Funkwhale services.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl start funkwhale.target
    ```
 
 4. Enable the services. Systemd can then start the services after a reboot.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl enable --now funkwhale.target
    ```
 
@@ -314,21 +314,21 @@ Funkwhale uses a reverse proxy to serve content to users. We use [Nginx](https:/
 
 1. Install Nginx.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo apt-get update
    sudo apt-get install nginx
    ```
 
 2. Download the Nginx templates from Funkwhale.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo curl -L -o /etc/nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/funkwhale_proxy.conf"
    sudo curl -L -o /etc/nginx/sites-available/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/nginx.template"
    ```
 
 3. Create an Nginx template with details from your `.env` file.
 
-   ```{code} bash
+   ```{code-block} sh
    # Log in to a root shell.
 
    sudo su
@@ -351,7 +351,7 @@ Funkwhale uses a reverse proxy to serve content to users. We use [Nginx](https:/
 
 That's it! You've created your Nginx file. Run the following command to check the `.env` details populated correctly.
 
-```{code} bash
+```{code-block} sh
 grep '${' /etc/nginx/sites-enabled/funkwhale.conf
 ```
 
@@ -361,31 +361,31 @@ To enable your users to connect to your pod securely, you need to set up {abbr}`
 
 1. Log in as the superuser account to run these commands.
 
-   ```{code} bash
+   ```{code-block} sh
    su
    ```
 
 2. Create the `/etc/certs` folder to store the certificates.
 
-   ```{code} bash
+   ```{code-block} sh
    mkdir /etc/certs
    ```
 
 3. Download and run `acme.sh`. Replace `my@example.com` with your email address.
 
-   ```{code} bash
+   ```{code-block} sh
    curl https://get.acme.sh | sh -s email=my@example.com
    ```
 
 4. Generate a certificate. Replace `example.com` with your Funkwhale pod name. Use `/srv/funkwhale/front` as your web root folder.
 
-   ```{code} bash
+   ```{code-block} sh
    acme.sh --issue -d example.com -w /srv/funkwhale/front
    ```
 
 5. Install the certificate to your Nginx config. Replace `example.com` with your Funkwhale pod name.
 
-   ```{code} bash
+   ```{code-block} sh
    acme.sh --install-cert -d example.com \
    --key-file       /etc/certs/key.pem  \
    --fullchain-file /etc/certs/cert.pem \

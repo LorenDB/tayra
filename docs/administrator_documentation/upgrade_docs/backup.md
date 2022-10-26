@@ -9,7 +9,7 @@ Before performing big changes, we recommend you back up your database and media 
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    sudo -u postgres -H pg_dumpall -c funkwhale > /path/to/your/backup/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
    ```
 
@@ -18,7 +18,7 @@ Before performing big changes, we recommend you back up your database and media 
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose exec postgres pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
    ```
 
@@ -32,7 +32,7 @@ Before performing big changes, we recommend you back up your database and media 
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    rsync -avzhP /srv/funkwhale/data/media /path/to/your/backup/media
    rsync -avzhP /srv/funkwhale/data/music /path/to/your/backup/music
    ```
@@ -42,7 +42,7 @@ Before performing big changes, we recommend you back up your database and media 
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
 
    rsync -avzhP /srv/funkwhale/data/media /path/to/your/backup/media
    rsync -avzhP /srv/funkwhale/data/music /path/to/your/backup/music
@@ -58,7 +58,7 @@ Before performing big changes, we recommend you back up your database and media 
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    rsync -avzhP /srv/funkwhale/config/.env /path/to/your/backup/.env
    ```
 
@@ -67,7 +67,7 @@ Before performing big changes, we recommend you back up your database and media 
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
    rsync -avzhP /srv/funkwhale/.env /path/to/your/backup/.env
    ```
 
@@ -84,14 +84,14 @@ To restart your files, do the following:
 
 1. Rename your current file directories.
 
-   ```{code} bash
+   ```{code-block} sh
    mv /srv/funkwhale/data/media /srv/funkwhale/data/media.bak
    mv /srv/funkwhale/data/music /srv/funkwhale/data/music.bak
    ```
 
 2. Restore your backed-up files to the original directories.
 
-   ```{code} bash
+   ```{code-block} sh
    mv /patht/to/your/backup/media /srv/funkwhale/data/media
    mv /path/to/your/backup/music /srv/funkwhale/data/music
    ```
@@ -107,13 +107,13 @@ To restore your database, do the following:
 
 1. Restore your database backup:
 
-   ```{code} bash
+   ```{code-block} sh
    sudo -u postgres psql -f /path/to/your/backup/dump.sql funkwhale
    ```
 
 2. Run the `manage.py migrate` command to set up the database.
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale/api
    poetry run python manage.py migrate
    ```
@@ -125,13 +125,13 @@ To restore your database, do the following:
 
 1. Restore your database backup.
 
-   ```{code} bash
+   ```{code-block} sh
     docker-compose run --rm -T postgres psql -U postgres postgres < "/path/to/your/backup/dump.sql"
    ```
 
 2. Run the `manage.py migrate` command to set up the database.
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose run --rm api python manage.py migrate
    ```
 

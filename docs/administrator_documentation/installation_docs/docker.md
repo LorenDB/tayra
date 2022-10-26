@@ -21,7 +21,7 @@ This guide assumes you are using a [Debian](https://debian.org)-based system.
 - Install [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
 - Install `curl`.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo apt update # update apt cache
    sudo apt install curl
    ```
@@ -30,19 +30,19 @@ This guide assumes you are using a [Debian](https://debian.org)-based system.
 
 1. Create the project directory structure.
 
-   ```{code} bash
+   ```{code-block} sh
    mkdir /srv/funkwhale /srv/funkwhale/nginx
    ```
 
 2. Navigate to the project directory
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale
    ```
 
 3. Download the `docker-compose` template. This contains information about the containers and how they work together.
 
-   ```{code} bash
+   ```{code-block} sh
    curl -L -o /srv/funkwhale/docker-compose.yml "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker-compose.yml"
    ```
 
@@ -54,31 +54,31 @@ The environment file contains options you can use to control your Funkwhale pod.
 
 1. Download the `.env` template to your `/srv/funkwhale` directory.
 
-   ```{code} bash
+   ```{code-block} sh
    curl -L -o /srv/funkwhale/.env "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/env.prod.sample"
    ```
 
 2. Update `FUNKWHALE_VERSION` in the `.env` file to the `$FUNKWHALE_VERSION` variable you set earlier.
 
-   ```{code} bash
+   ```{code-block} sh
    sed -i "s/FUNKWHALE_VERSION=latest/FUNKWHALE_VERSION=$FUNKWHALE_VERSION/" .env
    ```
 
 3. Reduce the permissions on your `.env` file to `600`. This means that only your user can read and write this file.
 
-   ```{code} bash
+   ```{code-block} sh
    chmod 600 /srv/funkwhale/.env
    ```
 
 4. Generate a secret key for Django. This keeps your Funkwhale data secure. Do not share this key with anybody.
 
-   ```{code} bash
+   ```{code-block} sh
    openssl rand -base64 45
    ```
 
 5. Open the `.env` file in a text editor. For this example, we will use `nano`.
 
-   ```{code} bash
+   ```{code-block} sh
    nano /srv/funkwhale/.env
    ```
 
@@ -96,27 +96,27 @@ Once you've filled in your environment file, you can set up Funkwhale. Follow th
 
 1. Pull the containers to download all the required services.
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale
    docker-compose pull
    ```
 
 2. Bring up the database container so you can run the database migrations.
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose up -d postgres
    ```
 
 3. Run the database migrations.
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose run --rm api python manage.py migrate
    ```
 
    ````{note}
    You may see the following warning when applying migrations:
 
-      ```{code}
+      ```{code-block} text
       "Your models have changes that are not yet reflected in a migration, and so won't be applied."
       ```
 
@@ -125,13 +125,13 @@ Once you've filled in your environment file, you can set up Funkwhale. Follow th
 
 4. Create your superuser.
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose run --rm api python manage.py createsuperuser
    ```
 
 5. Launch all the containers to bring up your pod.
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose up -d
    ```
 
@@ -143,21 +143,21 @@ Funkwhale uses a reverse proxy to serve content to users. We use [Nginx](https:/
 
 1. Install Nginx.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo apt-get update
    sudo apt-get install nginx
    ```
 
 2. Download the Nginx templates from Funkwhale.
 
-   ```{code} bash
+   ```{code-block} sh
    sudo curl -L -o /etc/nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/funkwhale_proxy.conf"
    sudo curl -L -o /etc/nginx/sites-available/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/docker.proxy.template"
    ```
 
 3. Create an Nginx template with details from your `.env` file.
 
-   ```{code} bash
+   ```{code-block} sh
    # Log in to a root shell.
 
    sudo su
@@ -180,7 +180,7 @@ Funkwhale uses a reverse proxy to serve content to users. We use [Nginx](https:/
 
 That's it! You've created your Nginx file. Run the following command to check the `.env` details populated correctly.
 
-```{code} bash
+```{code-block} sh
 grep '${' /etc/nginx/sites-enabled/funkwhale.conf
 ```
 
@@ -190,31 +190,31 @@ To enable your users to connect to your pod securely, you need to set up {abbr}`
 
 1. Log in as the superuser account to run these commands.
 
-   ```{code} bash
+   ```{code-block} sh
    su
    ```
 
 2. Create the `/etc/certs` folder to store the certificates.
 
-   ```{code} bash
+   ```{code-block} sh
    mkdir /etc/certs
    ```
 
 3. Download and run `acme.sh`. Replace `my@example.com` with your email address.
 
-   ```{code} bash
+   ```{code-block} sh
    curl https://get.acme.sh | sh -s email=my@example.com
    ```
 
 4. Generate a certificate. Replace `example.com` with your Funkwhale pod name. Use `/srv/funkwhale/front` as your web root folder.
 
-   ```{code} bash
+   ```{code-block} sh
    acme.sh --issue -d example.com -w /srv/funkwhale/front
    ```
 
 5. Install the certificate to your Nginx config. Replace `example.com` with your Funkwhale pod name.
 
-   ```{code} bash
+   ```{code-block} sh
    acme.sh --install-cert -d example.com \
    --key-file       /etc/certs/key.pem  \
    --fullchain-file /etc/certs/cert.pem \

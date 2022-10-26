@@ -11,19 +11,19 @@ To customize your Funkwhale pod, you need to serve a {file}`settings.json` file 
 1. SSH into your Funkwhale server.
 2. Navigate to your `/srv/funkwhale` folder
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale
    ```
 
 3. Create a new `custom` directory for your file.
 
-   ```{code} bash
+   ```{code-block} sh
    mkdir custom
    ```
 
 4. Create a new config file and populate it with placeholder settings.
 
-   ```{code} bash
+   ```{code-block} sh
    cat <<EOF > custom/settings.json
    {
    "additionalStylesheets": [],
@@ -67,7 +67,7 @@ Once you've created your {file}`settings.json` file you need to configure your r
 
 Add the following snippet to your {file}`/etc/nginx/sites-available/funkwhale.conf` config file:
 
-```{code} text
+```{code-block} text
 location /settings.json {
    alias /srv/funkwhale/custom;
 }
@@ -80,7 +80,7 @@ location /settings.json {
 
 Add the following snippet to your webserver configuration:
 
-```{code} text
+```{code-block} text
 Alias /settings.json /srv/funkwhale/custom/settings.json
 ```
 
@@ -95,13 +95,13 @@ You can use a custom stylesheet to theme your Funkwhale pod. To do this:
 
 1. Navigate to your {file}`/srv/funkwhale/custom` directory.
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale/custom
    ```
 
 2. Copy your CSS file to this directory, or create a new one.
 
-   ```{code} bash
+   ```{code-block} sh
    # A basic CSS file. Turns the pod's background red.
 
    cat <<EOF > custom.css
@@ -113,7 +113,7 @@ You can use a custom stylesheet to theme your Funkwhale pod. To do this:
 
 3. Add the location of your CSS file to the `additionalStylesheets` parameter in your {file}`settings.json` file.
 
-   ```{code} bash
+   ```{code-block} sh
    nano settings.json
 
    # Add ["/front/custom/custom.css"] to the additionalStylesheets parameter
@@ -133,7 +133,7 @@ You can use a custom stylesheet to theme your Funkwhale pod. To do this:
 
    Add the following to your {file}`/etc/nginx/sites-available/funkwhale.conf` file:
 
-   ```{code} text
+   ```{code-block} text
    location /custom {
       alias /srv/funkwhale/custom;
    }
@@ -146,7 +146,7 @@ You can use a custom stylesheet to theme your Funkwhale pod. To do this:
 
    Add the following to your webserver configuration file.
 
-   ```{code} text
+   ```{code-block} text
    Alias /custom /srv/funkwhale/custom
 
    <Directory "/srv/funkwhale/custom">

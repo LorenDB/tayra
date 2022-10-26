@@ -13,7 +13,7 @@ If you have access to the Funkwhale backend, you can use logs to get more inform
    :::{tab-item} Nginx
    :sync: nginx
 
-   ```{code} bash
+   ```{code-block} sh
    sudo tail -f /var/log/nginx/access.log # Follow the access log
    sudo tail -f /var/log/nginx/error.log # Follow the error log
    ```
@@ -23,7 +23,7 @@ If you have access to the Funkwhale backend, you can use logs to get more inform
    :::{tab-item} Apache2
    :sync: apache2
 
-   ```{code} bash
+   ```{code-block} sh
    sudo tail -f /var/log/apache/access.log # Follow the access log
    sudo tail -f /var/log/apache/error.log # Follow the error log
    ```
@@ -37,7 +37,7 @@ If you have access to the Funkwhale backend, you can use logs to get more inform
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    journalctl -xn -u funkwhale-server
    ```
 
@@ -46,7 +46,7 @@ If you have access to the Funkwhale backend, you can use logs to get more inform
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose logs -f --tail=50 api # Follow the last 50 messages
    ```
 
@@ -60,7 +60,7 @@ If you have access to the Funkwhale backend, you can use logs to get more inform
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    journalctl -xn -u funkwhale-worker
    ```
 
@@ -69,7 +69,7 @@ If you have access to the Funkwhale backend, you can use logs to get more inform
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose logs -f --tail=50 celery # Follow the last 50 messages
    ```
 
@@ -123,13 +123,13 @@ If your Funkwhale server uses more memory than expected, you can check the footp
 
 1. Add the middleware to your `.env` file.
 
-   ```{code}
+   ```{code-block} text
    ADDITIONAL_MIDDLEWARES_BEFORE=funkwhale_api.common.middleware.PymallocMiddleware
    ```
 
 2. Enable memory tracing in your `.env` file.
 
-   ```{code}
+   ```{code-block} text
    PYTHONTRACEMALLOC=1
    ```
 
@@ -140,7 +140,7 @@ If your Funkwhale server uses more memory than expected, you can check the footp
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl restart funkwhale.target
    ```
 
@@ -149,7 +149,7 @@ If your Funkwhale server uses more memory than expected, you can check the footp
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose restart
    ```
 
@@ -162,13 +162,13 @@ To disable memory tracing:
 
 1. Remove the middleware from your `.env` file.
 
-   ```{code}
+   ```{code-block} text
    # ADDITIONAL_MIDDLEWARES_BEFORE=funkwhale_api.common.middleware.PymallocMiddleware
    ```
 
 2. Disable memory tracing in your `.env` file.
 
-   ```{code}
+   ```{code-block} text
    PYTHONTRACEMALLOC=0
    ```
 
@@ -179,7 +179,7 @@ To disable memory tracing:
    :::{tab-item} Debian
    :sync: debian
 
-   ```{code} bash
+   ```{code-block} sh
    sudo systemctl restart funkwhale.target
    ```
 
@@ -188,7 +188,7 @@ To disable memory tracing:
    :::{tab-item} Docker
    :sync: docker
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose restart
    ```
 

@@ -13,7 +13,7 @@ Check and fix file mimetypes with the `--mimetype` flag. This helps prevent issu
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fix_uploads --mimetype
 ```
 
@@ -22,7 +22,7 @@ poetry run python manage.py fix_uploads --mimetype
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fix_uploads --mimetype
 ```
 
@@ -38,7 +38,7 @@ Check and fix bitrate and duration with the `--audio-data` flag. This process ca
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fix_uploads --audio-data
 ```
 
@@ -47,7 +47,7 @@ poetry run python manage.py fix_uploads --audio-data
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fix_uploads --audio-data
 ```
 
@@ -63,7 +63,7 @@ Check and fix the file size with the `--size` flag.
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fix_uploads --size
 ```
 
@@ -72,7 +72,7 @@ poetry run python manage.py fix_uploads --size
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fix_uploads --size
 ```
 
@@ -88,7 +88,7 @@ Check and fix file checksums with the `--checksum` flag.
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fix_uploads --checksum
 ```
 
@@ -97,7 +97,7 @@ poetry run python manage.py fix_uploads --checksum
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fix_uploads --checksum
 ```
 
@@ -113,7 +113,7 @@ Choose the batch size you want to process with the `--batch-size` or -`s` flag. 
 :::{tab-item} Debian
 :sync: debian
 
-```{code} bash
+```{code-block} sh
 poetry run python manage.py fix_uploads --batch-size 500
 ```
 
@@ -122,7 +122,7 @@ poetry run python manage.py fix_uploads --batch-size 500
 :::{tab-item} Docker
 :sync: docker
 
-```{code} bash
+```{code-block} sh
 docker-compose run --rm api python manage.py fix_uploads --batch-size 500
 ```
 

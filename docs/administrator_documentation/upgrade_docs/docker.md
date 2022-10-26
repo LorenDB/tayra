@@ -7,13 +7,13 @@ If you installed Funkwhale following the [Docker guide](../installation_docs/doc
 1. SSH into your server
 2. Log in as your `funkwhale` user.
 
-   ```{code} bash
+   ```{code-block} sh
    su funkwhale
    ```
 
 3. Navigate to your Funkwhale directory.
 
-   ```{code} bash
+   ```{code-block} sh
    cd /srv/funkwhale
    ```
 
@@ -25,31 +25,31 @@ If you installed Funkwhale following the [Docker guide](../installation_docs/doc
 
 5. Change the version number in your `.env` file. Update this to the same version number you exported in step 4.
 
-   ```{code} bash
+   ```{code-block} sh
    nano .env
    ```
 
 6. Load the configuration from your `.env` file.
 
-   ```{code} bash
+   ```{code-block} sh
    source .env
    ```
 
 7. Pull the updated containers.
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose pull
    ```
 
 8. Apply the database migrations.
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose run --rm api python manage.py migrate
    ```
 
 9. Relaunch your containers.
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose up -d
    ```
 
@@ -63,25 +63,25 @@ To upgrade postgres on Docker we use the [`postgres-upgrade`](https://hub.docker
 
 1. Export your current postgres version number. You can find this in your `docker-compose.yml` file.
 
-   ```{code} bash
+   ```{code-block} sh
    export OLD_POSTGRES=13
    ```
 
 2. Export the major version number you want to upgrade to.
 
-   ```{code} bash
+   ```{code-block} sh
    export NEW_POSTGRES=14
    ```
 
 3. Stop the postgres container. This means no data changes while you are upgrading.
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose stop postgres
    ```
 
 4. Run the migration using the `postgres-upgrade` container. This creates a new version of the database in the `/srv/funkwhale/data/postgres-new` directory.
 
-   ```{code} bash
+   ```{code-block} sh
    docker run --rm \
    -v $(pwd)/data/postgres:/var/lib/postgresql/${OLD_POSTGRES}/data \
    -v $(pwd)/data/postgres-new:/var/lib/postgresql/${NEW_POSTGRES}/data \
@@ -90,26 +90,26 @@ To upgrade postgres on Docker we use the [`postgres-upgrade`](https://hub.docker
 
 5. Re-add the access control rules required by Funkwhale.
 
-   ```{code} bash
+   ```{code-block} sh
    echo "host all all all trust" | sudo tee -a ./data/postgres-new/pg_hba.conf
    ```
 
 6. Swap your old database out with your new database.
 
-   ```{code} bash
+   ```{code-block} sh
    mv ./data/postgres ./data/postgres-old
    mv ./data/postgres-new ./data/postgres
    ```
 
 7. Pull the new postgres version.
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose pull
    ```
 
 8. Restart your containers.
 
-   ```{code} bash
+   ```{code-block} sh
    docker-compose up -d
    ```
 
