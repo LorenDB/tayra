@@ -646,14 +646,17 @@ def check_single_remote_instance_availability(domain):
         )
         domain.reachable = False
         domain.save()
+        return domain.reachable
 
     if "version" in nodeinfo.keys():
         domain.reachable = True
         domain.last_successful_contact = datetime.datetime.now()
         domain.save()
+        return domain.reachable
     else:
         logger.info(
             f"Domain {domain.name} is not reacheable at the moment. Setting domain as unreacheable."
         )
         domain.reachable = False
         domain.save()
+        return domain.reachable

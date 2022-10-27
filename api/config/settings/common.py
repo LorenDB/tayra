@@ -862,8 +862,8 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": crontab(day_of_week="1", minute="0", hour="2"),
         "options": {"expires": 60 * 60 * 24},
     },
-    "federation.check_remote_instance_availability": {
-        "task": "federation.check_remote_instance_availability",
+    "federation.check_all_remote_instance_availability": {
+        "task": "federation.check_all_remote_instance_availability",
         "schedule": crontab(
             **env.dict(
                 "SCHEDULE_FEDERATION_CHECK_INTANCES_AVAILABILITY",
