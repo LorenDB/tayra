@@ -5432,10 +5432,10 @@ vite-plugin-pwa@0.12.4:
     workbox-build "^6.5.3"
     workbox-window "^6.5.3"
 
-vite-plugin-vue-inspector@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/vite-plugin-vue-inspector/-/vite-plugin-vue-inspector-1.1.1.tgz#6b8f1d36164e7850f9e86419e66702576afdc6d1"
-  integrity sha512-M3NJwXIUHHITSy6GqmnijrfxgM4JtMtVErYAdNf2H/cf9trAe7LzPBEJK+pH5M1h+9xr2JdU1pz5o8lNrW9UDQ==
+vite-plugin-vue-inspector@1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/vite-plugin-vue-inspector/-/vite-plugin-vue-inspector-1.1.3.tgz#b57b5af3ed141bd01bf5a3abe4d17e77dd844e6e"
+  integrity sha512-4lkNJx1iMk0ZX5RVDe3KXqFZRI0Sni5IhAGxAo8qcc5i63/wrDp3/4HXXRaTSUS6002fFMWOAE86LWv1Ae7UVg==
   dependencies:
     "@babel/core" "^7.17.8"
     "@babel/plugin-syntax-import-meta" "^7.10.4"
