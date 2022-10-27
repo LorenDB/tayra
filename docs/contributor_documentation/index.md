@@ -9,3 +9,7 @@ Funkwhale is a community-led software project, so we depend on our community don
 ## Contribute to Funkwhale's documentation
 
 Got a knack for writing? Want to teach people how things work? Our [documentation guide](documentation.md) takes you through everything you need to know to contribute to the Funkwhale documentation hub.
+
+## Translate Funkwhale
+
+Are you a confident linguist? We're always looking to expand the number of languages we offer in our apps, websites, and documentation. Check out the [translation guide](translation.md) to start contributing translations in your language.
