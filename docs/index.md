@@ -90,7 +90,7 @@ hidden: true
 
 contributor_documentation/index
 contributor_documentation/documentation
-translators
+contributor_documentation/translation
 
 ```
 
