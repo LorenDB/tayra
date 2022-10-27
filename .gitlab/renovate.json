@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "prConcurrentLimit": 1,
-  "branchConcurrentLimit": 5,
+  "branchConcurrentLimit": 2,
   "ignoreDeps": ["$CI_REGISTRY/funkwhale/backend-test-docker"],
   "rangeStrategy": "pin",
   "lockFileMaintenance": { "enabled": true },
@@ -49,7 +49,7 @@
       "matchFiles": ["deploy/docker-compose.yml"],
       "matchPackageNames": ["postgres"],
       "postUpgradeTasks": {
-        "commands": ["echo 'Upgrade Postgres to version {{ newVersion }}. Make sure to migrate!' > changes/changelog.d/postgres.update"],
+        "commands": ["echo 'Upgrade Postgres to version {{ newVersion }}. [Make sure to migrate!](https://docs.funkwhale.audio/administrator_documentation/upgrade_docs/docker.html#upgrade-the-postgres-container)' > changes/changelog.d/postgres.update"],
         "fileFilters": ["changes/changelog.d/postgres.update"]
       }
     }
