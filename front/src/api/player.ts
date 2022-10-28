@@ -55,6 +55,7 @@ export class HTMLSound implements Sound {
 
   constructor (sources: SoundSource[]) {
     // TODO: Quality picker
+    this.#audio.crossOrigin = 'anonymous'
     this.#audio.src = sources[0].url
     this.#audio.preload = 'auto'
 
