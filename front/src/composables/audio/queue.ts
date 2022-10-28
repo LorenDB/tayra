@@ -31,6 +31,7 @@ export interface QueueTrack {
   title: string
   artistName: string
   albumTitle: string
+  position?: number
 
   // TODO: Add urls for those
   coverUrl: string
@@ -109,10 +110,9 @@ export const useQueue = createGlobalState(() => {
     return {
       id: track.id,
       title: track.title,
-      // TODO (wvffle): i18n
       artistName: track.artist?.name ?? $pgettext('*/*/*', 'Unknown artist'),
-      // TODO (wvffle): i18n
       albumTitle: track.album?.title ?? $pgettext('*/*/*', 'Unknown album'),
+      position: track.position,
       artistId: track.artist?.id ?? -1,
       albumId: track.album?.id ?? -1,
       coverUrl: (track.cover?.urls ?? track.album?.cover?.urls ?? track.artist?.cover?.urls)?.original
@@ -171,7 +171,7 @@ export const useQueue = createGlobalState(() => {
     if (currentIndex.value !== trackIndex) currentSound.value?.seekTo(0)
 
     const shouldRestart = forceRestartIfCurrent && currentIndex.value === trackIndex
-    const nextTrackIsTheSame = queue.value[trackIndex].id === currentTrack.value.id
+    const nextTrackIsTheSame = queue.value[trackIndex]?.id === currentTrack.value?.id
 
     if (shouldRestart || nextTrackIsTheSame) {
       currentSound.value?.seekTo(0)

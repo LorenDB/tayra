@@ -176,8 +176,7 @@ export default (props: PlayOptionsProps) => {
     addMessage(tracksToPlay)
   }
 
-  const activateTrack = async (track: Track, index: number) => {
-    // TODO (wvffle): Check if position checking did not break anything
+  const activateTrack = async (track: Track) => {
     if (track.id === currentTrack.value?.id && track.position === currentTrack.value?.position) {
       isPlaying.value = true
     }
