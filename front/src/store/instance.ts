@@ -4,6 +4,7 @@ import type { RootState } from '~/store/index'
 import axios from 'axios'
 import { merge } from 'lodash-es'
 import useLogger from '~/composables/useLogger'
+import { useQueue } from '~/composables/audio/queue'
 
 export interface State {
   frontSettings: FrontendSettings
@@ -162,6 +163,9 @@ const store: Module<State, RootState> = {
       modules.forEach(m => {
         commit(`${m}/reset`, null, { root: true })
       })
+
+      const { clear } = useQueue()
+      return clear()
     },
     async fetchSettings ({ commit }) {
       const response = await axios.get('instance/settings/')

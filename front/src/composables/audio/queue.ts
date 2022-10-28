@@ -3,7 +3,7 @@ import type { Track, Upload } from '~/types'
 import { createGlobalState, useNow, useStorage, useTimeAgo, whenever } from '@vueuse/core'
 import { shuffle as shuffleArray, sum } from 'lodash-es'
 import { computed, ref, shallowReactive, watchEffect } from 'vue'
-import { getMany, setMany } from 'idb-keyval'
+import { delMany, getMany, setMany } from 'idb-keyval'
 import { useClamp } from '@vueuse/math'
 
 import { looping, LoopingMode, isPlaying } from '~/composables/audio/player'
@@ -277,8 +277,12 @@ export const useQueue = createGlobalState(() => {
     currentSound.value?.pause()
     currentSound.value?.seekTo(0)
     currentSound.value?.dispose()
+
     clearRadio.value = true
+
+    const lastTracks = [...tracks.value]
     tracks.value.length = 0
+    await delMany(lastTracks)
   }
 
   // Radio queue populating
