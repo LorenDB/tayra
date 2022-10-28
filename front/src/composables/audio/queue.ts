@@ -159,8 +159,6 @@ export const useQueue = createGlobalState(() => {
     if (index <= currentIndex.value) {
       currentIndex.value -= 1
     }
-
-    // TODO (wvffle): Check if removing last element works well
   }
 
   // Play track
@@ -227,11 +225,19 @@ export const useQueue = createGlobalState(() => {
   // Shuffle
   const shuffle = () => {
     if (isShuffled.value) {
+      const id = shuffledIds.value[currentIndex.value]
       shuffledIds.value.length = 0
+
+      // NOTE: This this looses the correct index when there are multiple tracks with the same id in the queue
+      //       Since we shuffled the queue before, we probably do not even care for the correct index, just the order
+      currentIndex.value = tracks.value.indexOf(id)
       return
     }
 
-    shuffledIds.value = shuffleArray(tracks.value)
+    const ids = [...tracks.value]
+    const [first] = ids.splice(currentIndex.value, 1)
+    shuffledIds.value = [first, ...shuffleArray(ids)]
+    currentIndex.value = 0
   }
 
   const reshuffleUpcomingTracks = () => {

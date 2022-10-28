@@ -38,6 +38,7 @@ const {
   queue,
   currentIndex,
   currentTrack,
+  isShuffled,
   shuffle
 } = useQueue()
 
@@ -277,7 +278,7 @@ const loopingTitle = computed(() => {
               :aria-label="labels.shuffle"
               @click.prevent.stop="shuffle()"
             >
-              <i :class="['ui', 'random', {'disabled': queue.length === 0}, 'icon']" />
+              <i :class="['ui', 'random', { disabled: queue.length === 0, shuffling: isShuffled }, 'icon']" />
             </button>
           </div>
           <div class="group">
