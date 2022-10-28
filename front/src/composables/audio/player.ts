@@ -1,6 +1,6 @@
 import { createGlobalState, tryOnMounted, useIntervalFn, useRafFn, useStorage, useTimeoutFn, whenever } from '@vueuse/core'
+import { computed, nextTick, ref, watch, watchEffect, type Ref } from 'vue'
 import { useTracks } from '~/composables/audio/tracks'
-import { computed, ref, watch, watchEffect, type Ref } from 'vue'
 import { setGain } from './audio-api'
 
 import { useQueue, currentIndex, currentTrack } from './queue'
@@ -42,6 +42,12 @@ export const usePlayer = createGlobalState(() => {
 
     sound.pause()
   })
+
+  const stop = async () => {
+    isPlaying.value = false
+    seekTo(0)
+    return nextTick()
+  }
 
   // Create first track when we initalize the page
   // NOTE: We want to have it called only once, hence we're using createGlobalState
@@ -195,13 +201,14 @@ export const usePlayer = createGlobalState(() => {
     return sound.isErrored.value
   })
 
-  const { start, stop } = useTimeoutFn(() => playNext(), 3000, { immediate: false })
-  watch(currentIndex, stop)
-  whenever(errored, start)
+  const { start: startErrorTimeout, stop: stopErrorTimeout } = useTimeoutFn(() => playNext(), 3000, { immediate: false })
+  watch(currentIndex, stopErrorTimeout)
+  whenever(errored, startErrorTimeout)
 
   return {
     initializeFirstTrack,
     isPlaying,
+    stop,
     volume,
     mute,
     looping,

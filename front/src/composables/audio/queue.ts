@@ -1,12 +1,12 @@
 import type { Track, Upload } from '~/types'
 
-import { computedAsync, createGlobalState, useNow, useStorage, useTimeAgo } from '@vueuse/core'
-import { shuffle as shuffleArray, sum, uniq } from 'lodash-es'
+import { createGlobalState, useNow, useStorage, useTimeAgo, whenever } from '@vueuse/core'
+import { shuffle as shuffleArray, sum } from 'lodash-es'
+import { computed, ref, shallowReactive, watchEffect } from 'vue'
 import { getMany, setMany } from 'idb-keyval'
-import { computed, watchEffect } from 'vue'
 import { useClamp } from '@vueuse/math'
 
-import { looping, LoopingMode, isPlaying } from '~/composables/audio/player'
+import { looping, LoopingMode, isPlaying, usePlayer } from '~/composables/audio/player'
 import { useStore } from '~/store'
 
 import axios from 'axios'
@@ -44,22 +44,45 @@ const shuffledIds = useStorage('queue:tracks:shuffled', [] as number[])
 
 const isShuffled = computed(() => shuffledIds.value.length !== 0)
 
-const tracksById = computedAsync(async () => {
-  const trackObjects = await getMany(uniq(tracks.value))
-  return trackObjects.reduce((acc, track) => {
-    acc[track.id] = track
-    return acc
-  }, {}) as Record<number, QueueTrack>
-}, {})
+const tracksById = shallowReactive(new Map<number, QueueTrack>())
+const fetchingTracks = ref(false)
+watchEffect(async () => {
+  if (fetchingTracks.value) return
 
-const queue = computed(() => {
-  const indexedTracks = tracksById.value
+  const allTracks = new Set(tracks.value)
+  const addedIds = new Set(allTracks)
 
-  if (isShuffled.value) {
-    return shuffledIds.value.map(id => indexedTracks[id]).filter(i => i)
+  for (const id of tracksById.keys()) {
+    if (allTracks.has(id)) {
+      // Track in queue, so remove it from the new ids set
+      addedIds.delete(id)
+    } else {
+      // Track removed from queue, so remove it from the object
+      tracksById.delete(id)
+    }
   }
 
-  return tracks.value.map(id => indexedTracks[id]).filter(i => i)
+  if (addedIds.size > 0) {
+    fetchingTracks.value = true
+    try {
+      const trackInfos: QueueTrack[] = await getMany([...addedIds])
+      for (const track of trackInfos) {
+        tracksById.set(track.id, track)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      fetchingTracks.value = false
+    }
+  }
+})
+
+const queue = computed<QueueTrack[]>(() => {
+  const ids = isShuffled.value
+    ? shuffledIds.value
+    : tracks.value
+
+  return ids.map(id => tracksById.get(id)).filter((i): i is QueueTrack => !!i)
 })
 
 // Current Index
@@ -235,7 +258,11 @@ export const useQueue = createGlobalState(() => {
   }))
 
   // Clear
+  const clearRadio = ref(false)
   const clear = async () => {
+    const { stop } = usePlayer()
+    await stop()
+    clearRadio.value = true
     tracks.value.length = 0
   }
 
@@ -249,8 +276,9 @@ export const useQueue = createGlobalState(() => {
       }
     })
 
-    watchEffect(() => {
-      if (tracks.value.length === 0) {
+    whenever(clearRadio, () => {
+      clearRadio.value = false
+      if (store.state.radios.running) {
         return store.dispatch('radios/stop')
       }
     })

@@ -164,21 +164,25 @@ export default (props: PlayOptionsProps) => {
     const tracksToPlay = await getPlayableTracks()
     await addToQueue(...tracksToPlay)
 
-    const trackIndex = props.tracks?.findIndex(track => track.id === props.track?.id && track.position === props.track?.position) ?? 0
-    await playTrack(trackIndex)
+    if (props.track && props.tracks?.length) {
+      const trackIndex = props.tracks?.findIndex(track => track.id === props.track?.id && track.position === props.track?.position) ?? 0
+      await playTrack(trackIndex)
+      isPlaying.value = true
+    } else {
+      await playTrack(0, true)
+      isPlaying.value = true
+    }
 
-    isPlaying.value = true
-    playTrack(0, true)
     addMessage(tracksToPlay)
   }
 
-  const activateTrack = (track: Track, index: number) => {
+  const activateTrack = async (track: Track, index: number) => {
     // TODO (wvffle): Check if position checking did not break anything
     if (track.id === currentTrack.value?.id && track.position === currentTrack.value?.position) {
       isPlaying.value = true
     }
 
-    replacePlay()
+    return replacePlay()
   }
 
   return {

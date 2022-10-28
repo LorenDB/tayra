@@ -1,13 +1,13 @@
 import type { QueueTrack, QueueTrackSource } from '~/composables/audio/queue'
 import type { Sound } from '~/api/player'
 
-import { soundImplementation } from '~/api/player'
-import { createGlobalState, syncRef } from '@vueuse/core'
-import { computed, ref, watch } from 'vue'
+import { createGlobalState, syncRef, whenever } from '@vueuse/core'
+import { computed, ref } from 'vue'
 
-import { useQueue } from '~/composables/audio/queue'
 import { connectAudioSource } from '~/composables/audio/audio-api'
 import { usePlayer } from '~/composables/audio/player'
+import { useQueue } from '~/composables/audio/queue'
+import { soundImplementation } from '~/api/player'
 
 import useLRUCache from '~/composables/useLRUCache'
 import store from '~/store'
@@ -112,8 +112,9 @@ export const useTracks = createGlobalState(() => {
 
   // NOTE: We want to have it called only once, hence we're using createGlobalState
   const initialize = createGlobalState(() => {
-    const { currentTrack: track, currentIndex } = useQueue()
-    watch(currentIndex, (index) => createTrack(index))
+    const { currentIndex, currentTrack: track } = useQueue()
+
+    whenever(track, () => createTrack(currentIndex.value))
     syncRef(track, currentTrack, {
       direction: 'ltr'
     })
