@@ -2,14 +2,11 @@
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 
-import { isPlaying } from '~/composables/audio/player'
-import {
-  hasPrevious,
-  playPrevious,
-  hasNext,
-  playNext,
-  currentTrack
-} from '~/composables/audio/queue'
+import { usePlayer } from '~/composables/audio/player'
+import { useQueue } from '~/composables/audio/queue'
+
+const { hasPrevious, playPrevious, hasNext, playNext, currentTrack } = useQueue()
+const { isPlaying } = usePlayer()
 
 const { $pgettext } = useGettext()
 const labels = computed(() => ({

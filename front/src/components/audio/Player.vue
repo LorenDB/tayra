@@ -1,29 +1,6 @@
 <script setup lang="ts">
-import {
-  LoopingMode,
-  initializeFirstTrack,
-  isPlaying,
-  mute,
-  volume,
-  toggleLooping,
-  looping,
-  seekBy,
-  seekTo,
-  currentTime,
-  duration,
-  progress,
-  bufferProgress,
-  loading as isLoadingAudio
-} from '~/composables/audio/player'
-
-import {
-  playPrevious,
-  playNext,
-  queue,
-  currentIndex,
-  currentTrack,
-  shuffle
-} from '~/composables/audio/queue'
+import { usePlayer } from '~/composables/audio/player'
+import { useQueue } from '~/composables/audio/queue'
 
 import { useMouse, useWindowSize } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
@@ -37,6 +14,32 @@ import time from '~/utils/time'
 // import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import VolumeControl from './VolumeControl.vue'
 import PlayerControls from './PlayerControls.vue'
+
+const {
+  LoopingMode,
+  initializeFirstTrack,
+  isPlaying,
+  mute,
+  volume,
+  toggleLooping,
+  looping,
+  seekBy,
+  seekTo,
+  currentTime,
+  duration,
+  progress,
+  bufferProgress,
+  loading: isLoadingAudio
+} = usePlayer()
+
+const {
+  playPrevious,
+  playNext,
+  queue,
+  currentIndex,
+  currentTrack,
+  shuffle
+} = useQueue()
 
 const store = useStore()
 const { $pgettext } = useGettext()

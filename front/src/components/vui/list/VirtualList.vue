@@ -3,7 +3,6 @@ import { useMouse, useCurrentElement, useRafFn, useElementByPoint } from '@vueus
 import { ref, watchEffect, reactive } from 'vue'
 
 // @ts-expect-error no typings
-// import VirtualList from 'vue3-virtual-scroll-list'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
@@ -164,7 +163,6 @@ defineExpose({
   <div>
     <recycle-scroller
       ref="virtualList"
-      v-slot="{ item, index }"
       class="virtual-list drag-container"
       :items="list"
       :item-size="size"
@@ -175,11 +173,21 @@ defineExpose({
       @visible="emit('visible')"
       @hidden="emit('hidden')"
     >
-      <slot
-        :class-list="[draggedItem && hoveredIndex === index && `drop-${position}`, 'drag-item']"
-        :item="item"
-        :index="index"
-      />
+      <template #before>
+        <slot name="header" />
+      </template>
+
+      <template #default="{ item, index }">
+        <slot
+          :class-list="[draggedItem && hoveredIndex === index && `drop-${position}`, 'drag-item']"
+          :item="item"
+          :index="index"
+        />
+      </template>
+
+      <template #after>
+        <slot name="footer" />
+      </template>
     </recycle-scroller>
 
     <div

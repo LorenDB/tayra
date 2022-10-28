@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { volume, mute } from '~/composables/audio/player'
+import { usePlayer } from '~/composables/audio/player'
 import { useTimeoutFn } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import { ref, computed } from 'vue'
 
+const { volume, mute } = usePlayer()
 const expanded = ref(false)
 
 const { $pgettext } = useGettext()

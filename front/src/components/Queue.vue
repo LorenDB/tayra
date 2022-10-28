@@ -8,6 +8,9 @@ import { useGettext } from 'vue3-gettext'
 import { useRouter } from 'vue-router'
 import { useStore } from '~/store'
 
+import { usePlayer } from '~/composables/audio/player'
+import { useQueue } from '~/composables/audio/queue'
+
 import time from '~/utils/time'
 
 // import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
@@ -16,18 +19,18 @@ import PlayerControls from '~/components/audio/PlayerControls.vue'
 import VirtualList from '~/components/vui/list/VirtualList.vue'
 import QueueItem from '~/components/QueueItem.vue'
 
-import {
+const {
   isPlaying,
   currentTime,
   duration,
   progress,
   bufferProgress,
   seekTo,
-  loading as isLoadingAudio,
+  loading: isLoadingAudio,
   errored
-} from '~/composables/audio/player'
+} = usePlayer()
 
-import {
+const {
   hasNext,
   currentTrack,
   currentIndex,
@@ -36,8 +39,8 @@ import {
   dequeue,
   playTrack,
   reorder,
-  endsIn as timeLeft
-} from '~/composables/audio/queue'
+  endsIn: timeLeft
+} = useQueue()
 
 const queueModal = ref()
 const { activate, deactivate } = useFocusTrap(queueModal, { allowOutsideClick: true, preventScroll: true })
@@ -48,6 +51,7 @@ const store = useStore()
 
 const labels = computed(() => ({
   queue: $pgettext('*/*/*', 'Queue'),
+  populating: $pgettext('*/*/*', 'Fetching radio track'),
   duration: $pgettext('*/*/*', 'Duration'),
   addArtistContentFilter: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Hide content from this artist…'),
   restart: $pgettext('*/*/*', 'Restart track'),
@@ -332,32 +336,41 @@ const reorderTracks = async (from: number, to: number) => {
               @remove="dequeue"
             />
           </template>
-        </virtual-list>
-        <div
-          v-if="$store.state.radios.running"
-          class="ui info message"
-        >
-          <div class="content">
-            <h3 class="header">
-              <i class="feed icon" /> <translate translate-context="Sidebar/Player/Title">
-                You have a radio playing
-              </translate>
-            </h3>
-            <p>
-              <translate translate-context="Sidebar/Player/Paragraph">
-                New tracks will be appended here automatically.
-              </translate>
-            </p>
-            <button
-              class="ui basic primary button"
-              @click="$store.dispatch('radios/stop')"
+          <template #footer>
+            <div
+              v-if="$store.state.radios.populating"
+              class="radio-populating"
             >
-              <translate translate-context="*/Player/Button.Label/Short, Verb">
-                Stop radio
-              </translate>
-            </button>
-          </div>
-        </div>
+              <i class="loading spinner icon" />
+              {{ labels.populating }}
+            </div>
+            <div
+              v-if="$store.state.radios.running"
+              class="ui info message radio-message"
+            >
+              <div class="content">
+                <h3 class="header">
+                  <i class="feed icon" /> <translate translate-context="Sidebar/Player/Title">
+                    You have a radio playing
+                  </translate>
+                </h3>
+                <p>
+                  <translate translate-context="Sidebar/Player/Paragraph">
+                    New tracks will be appended here automatically.
+                  </translate>
+                </p>
+                <button
+                  class="ui basic primary button"
+                  @click="$store.dispatch('radios/stop')"
+                >
+                  <translate translate-context="*/Player/Button.Label/Short, Verb">
+                    Stop radio
+                  </translate>
+                </button>
+              </div>
+            </div>
+          </template>
+        </virtual-list>
       </div>
     </div>
   </section>

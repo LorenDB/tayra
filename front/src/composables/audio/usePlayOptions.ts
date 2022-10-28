@@ -6,11 +6,11 @@ import { computed, markRaw, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
 
+import { usePlayer } from '~/composables/audio/player'
+import { useQueue } from '~/composables/audio/queue'
+
 import axios from 'axios'
 import jQuery from 'jquery'
-
-import { enqueue as addToQueue, currentTrack, playNext, currentIndex, enqueueAt, queue } from '~/composables/audio/queue'
-import { isPlaying } from '~/composables/audio/player'
 
 export interface PlayOptionsProps {
   isPlayable?: boolean
@@ -25,6 +25,8 @@ export interface PlayOptionsProps {
 }
 
 export default (props: PlayOptionsProps) => {
+  const { enqueue: addToQueue, currentTrack, playNext, currentIndex, enqueueAt, queue, tracks, playTrack } = useQueue()
+  const { isPlaying } = usePlayer()
   const store = useStore()
 
   const playable = computed(() => {
@@ -155,7 +157,6 @@ export default (props: PlayOptionsProps) => {
   }
 
   const replacePlay = async () => {
-    const { tracks, playTrack } = await import('~/composables/audio/queue')
     tracks.value.length = 0
 
     jQuery(el.value).find('.ui.dropdown').dropdown('hide')

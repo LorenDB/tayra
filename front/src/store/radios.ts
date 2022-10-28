@@ -1,13 +1,19 @@
-import type { Dispatch, Module } from 'vuex'
 import type { RootState } from '~/store/index'
+import type { Module } from 'vuex'
+import type { Track } from '~/types'
+
+import { useQueue } from '~/composables/audio/queue'
+import { usePlayer } from '~/composables/audio/player'
+import { CLIENT_RADIOS } from '~/utils/clientRadios'
 
 import axios from 'axios'
-import { CLIENT_RADIOS } from '~/utils/clientRadios'
+
 import useLogger from '~/composables/useLogger'
 
 export interface State {
   current: null | CurrentRadio
   running: boolean
+  populating: boolean
 }
 
 export interface ObjectId {
@@ -26,19 +32,14 @@ export interface CurrentRadio {
 
 export type RadioConfig = { type: 'tag', names: string[] } | { type: 'artist', ids: string[] }
 
-export interface PopulateQueuePayload {
-  current: CurrentRadio
-  playNow: boolean
-  dispatch: Dispatch
-}
-
 const logger = useLogger()
 
 const store: Module<State, RootState> = {
   namespaced: true,
   state: {
     current: null,
-    running: false
+    running: false,
+    populating: false
   },
   getters: {
     types: () => {
@@ -70,6 +71,7 @@ const store: Module<State, RootState> = {
     reset (state) {
       state.running = false
       state.current = null
+      state.populating = false
     },
     current: (state, value) => {
       state.current = value
@@ -107,37 +109,45 @@ const store: Module<State, RootState> = {
       if (state.current?.clientOnly) {
         CLIENT_RADIOS[state.current.type].stop()
       }
+
       commit('current', null)
       commit('running', false)
     },
-    async populateQueue ({ commit, rootState, state, dispatch }, playNow) {
-      if (!state.running) {
+    async populateQueue ({ commit, state }, playNow) {
+      if (!state.running || state.populating) {
         return
       }
 
-      if (rootState.player.errorCount >= rootState.player.maxConsecutiveErrors - 1) {
-        return
-      }
+      state.populating = true
+
+      const { enqueue, playTrack, tracks } = useQueue()
+      const { isPlaying } = usePlayer()
 
       const params = { session: state.current?.session }
 
-      if (state.current?.clientOnly) {
-        return CLIENT_RADIOS[state.current.type].populateQueue({ current: state.current, dispatch, playNow })
-      }
-
       try {
-        const response = await axios.post('radios/tracks/', params)
-
         logger.info('Adding track to queue from radio')
-        await dispatch('queue/append', { track: response.data.track }, { root: true })
+
+        const track = state.current?.clientOnly
+          ? await CLIENT_RADIOS[state.current.type].fetchNextTrack(state.current)
+          : await axios.post('radios/tracks/', params).then(response => response.data.track as Track)
+
+        if (track === undefined) {
+          isPlaying.value = false
+          return
+        }
+
+        await enqueue(track)
 
         if (playNow) {
-          await dispatch('queue/last', null, { root: true })
-          await dispatch('player/resumePlayback', null, { root: true })
+          await playTrack(tracks.value.length - 1)
+          isPlaying.value = true
         }
       } catch (error) {
         logger.error('Error while adding track to queue from radio', error)
         commit('reset')
+      } finally {
+        state.populating = false
       }
     }
   }

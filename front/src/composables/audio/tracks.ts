@@ -2,11 +2,12 @@ import type { QueueTrack, QueueTrackSource } from '~/composables/audio/queue'
 import type { Sound } from '~/api/player'
 
 import { soundImplementation } from '~/api/player'
-import { computed, watchEffect } from 'vue'
+import { createGlobalState, syncRef } from '@vueuse/core'
+import { computed, ref, watchEffect } from 'vue'
 
-import { playNext, queue, currentTrack, currentIndex } from '~/composables/audio/queue'
+import { useQueue } from '~/composables/audio/queue'
 import { connectAudioSource } from '~/composables/audio/audio-api'
-import { isPlaying } from '~/composables/audio/player'
+import { usePlayer } from '~/composables/audio/player'
 
 import useLRUCache from '~/composables/useLRUCache'
 import store from '~/store'
@@ -41,67 +42,87 @@ const getTrackSources = (track: QueueTrack): QueueTrackSource[] => {
   return sources
 }
 
-export const createSound = async (track: QueueTrack): Promise<Sound> => {
-  if (soundCache.has(track.id)) {
-    return soundCache.get(track.id) as Sound
+// Use Tracks
+export const useTracks = createGlobalState(() => {
+  const createSound = async (track: QueueTrack): Promise<Sound> => {
+    if (soundCache.has(track.id)) {
+      return soundCache.get(track.id) as Sound
+    }
+
+    if (soundPromises.has(track.id)) {
+      return soundPromises.get(track.id) as Promise<Sound>
+    }
+
+    const createSoundPromise = async () => {
+      const sources = getTrackSources(track)
+      const { playNext, currentIndex } = useQueue()
+
+      const SoundImplementation = soundImplementation.value
+      const sound = new SoundImplementation(sources)
+      sound.onSoundEnd(() => {
+        console.log('TRACK ENDED, PLAYING NEXT')
+        createTrack(currentIndex.value + 1)
+
+        // NOTE: We push it to the end of the job queue
+        setTimeout(playNext, 0)
+      })
+      soundCache.set(track.id, sound)
+      soundPromises.delete(track.id)
+      return sound
+    }
+
+    const soundPromise = createSoundPromise()
+    soundPromises.set(track.id, soundPromise)
+    return soundPromise
   }
 
-  if (soundPromises.has(track.id)) {
-    return soundPromises.get(track.id) as Promise<Sound>
+  // Create track from queue
+  const createTrack = async (index: number) => {
+    const { queue, currentIndex } = useQueue()
+    if (queue.value.length <= index || index === -1) return
+    console.log('LOADING TRACK', index)
+
+    const track = queue.value[index]
+    if (!soundPromises.has(track.id) && !soundCache.has(track.id)) {
+      // TODO (wvffle): Resolve race condition - is it still here after adding soundPromises?
+      console.log('NO TRACK IN CACHE, CREATING')
+    }
+
+    const sound = await createSound(track)
+    console.log('CONNECTING NODE')
+
+    sound.audioNode.disconnect()
+    connectAudioSource(sound.audioNode)
+
+    const { isPlaying } = usePlayer()
+    if (isPlaying.value && index === currentIndex.value) {
+      await sound.play()
+    }
+
+    // NOTE: Preload next track
+    if (index === currentIndex.value && index + 1 < queue.value.length) {
+      setTimeout(async () => {
+        const sound = await createSound(queue.value[index + 1])
+        await sound.preload()
+      }, 100)
+    }
   }
 
-  const createSoundPromise = async () => {
-    const sources = getTrackSources(track)
+  const currentTrack = ref<QueueTrack>()
 
-    const SoundImplementation = soundImplementation.value
-    const sound = new SoundImplementation(sources)
-    sound.onSoundEnd(() => {
-      console.log('TRACK ENDED, PLAYING NEXT')
-      createTrack(currentIndex.value + 1)
+  // NOTE: We want to have it called only once, hence we're using createGlobalState
+  const initialize = createGlobalState(() => {
+    const { currentTrack: track, currentIndex } = useQueue()
+    watchEffect(async () => createTrack(currentIndex.value))
+    syncRef(currentTrack, track)
+  })
 
-      // NOTE: We push it to the end of the job queue
-      setTimeout(playNext, 0)
-    })
-    soundCache.set(track.id, sound)
-    soundPromises.delete(track.id)
-    return sound
+  const currentSound = computed(() => soundCache.get(currentTrack.value?.id ?? -1))
+
+  return {
+    initialize,
+    createSound,
+    createTrack,
+    currentSound
   }
-
-  const soundPromise = createSoundPromise()
-  soundPromises.set(track.id, soundPromise)
-  return soundPromise
-}
-
-// Create track from queue
-export const createTrack = async (index: number) => {
-  if (queue.value.length <= index || index === -1) return
-  console.log('LOADING TRACK', index)
-
-  const track = queue.value[index]
-  if (!soundPromises.has(track.id) && !soundCache.has(track.id)) {
-    // TODO (wvffle): Resolve race condition - is it still here after adding soundPromises?
-    console.log('NO TRACK IN CACHE, CREATING')
-  }
-
-  const sound = await createSound(track)
-  console.log('CONNECTING NODE')
-
-  sound.audioNode.disconnect()
-  connectAudioSource(sound.audioNode)
-
-  if (isPlaying.value && index === currentIndex.value) {
-    await sound.play()
-  }
-
-  // NOTE: Preload next track
-  if (index === currentIndex.value && index + 1 < queue.value.length) {
-    setTimeout(async () => {
-      const sound = await createSound(queue.value[index + 1])
-      await sound.preload()
-    }, 100)
-  }
-}
-
-watchEffect(async () => createTrack(currentIndex.value))
-
-export const currentSound = computed(() => soundCache.get(currentTrack.value?.id ?? -1))
+})

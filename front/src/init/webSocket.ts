@@ -62,12 +62,12 @@ export const install: InitModule = ({ store }) => {
     })
   })
 
-  useWebSocketHandler('Listen', (event) => {
+  useWebSocketHandler('Listen', async (event) => {
     if (store.state.radios.current && store.state.radios.running) {
       const { current } = store.state.radios
 
       if (current.clientOnly) {
-        CLIENT_RADIOS[current.type].handleListen(current, event, store)
+        await CLIENT_RADIOS[current.type].handleListen(current, event)
       }
     }
   })

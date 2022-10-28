@@ -1,9 +1,8 @@
 import type { IAudioContext, IAudioNode } from 'standardized-audio-context'
 
+import { createEventHook, refDefault, type EventHookOn, useEventListener } from '@vueuse/core'
 import { createAudioSource } from '~/composables/audio/audio-api'
 import { reactive, ref, type Ref } from 'vue'
-import { createEventHook, refDefault, type EventHookOn } from '@vueuse/shared'
-import { useEventListener } from '@vueuse/core'
 
 export interface SoundSource {
   uuid: string
