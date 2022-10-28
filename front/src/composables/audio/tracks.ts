@@ -114,7 +114,9 @@ export const useTracks = createGlobalState(() => {
   const initialize = createGlobalState(() => {
     const { currentTrack: track, currentIndex } = useQueue()
     watch(currentIndex, (index) => createTrack(index))
-    syncRef(currentTrack, track)
+    syncRef(track, currentTrack, {
+      direction: 'ltr'
+    })
   })
 
   const currentSound = computed(() => soundCache.get(currentTrack.value?.id ?? -1))

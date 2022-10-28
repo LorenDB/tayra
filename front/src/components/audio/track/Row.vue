@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
 import type { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
-// import type { Track } from '~/types'
 
-import PlayIndicator from '~/components/audio/track/PlayIndicator.vue'
-import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
-import PlayButton from '~/components/audio/PlayButton.vue'
-import usePlayOptions from '~/composables/audio/usePlayOptions'
-import useQueue from '~/composables/audio/useQueue'
-import usePlayer from '~/composables/audio/usePlayer'
 import { computed } from 'vue'
+
+import usePlayOptions from '~/composables/audio/usePlayOptions'
+
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import PlayIndicator from '~/components/audio/track/PlayIndicator.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
+import { usePlayer } from '~/composables/audio/player'
+import { useQueue } from '~/composables/audio/queue'
 
 interface Props extends PlayOptionsProps {
   track: Track
@@ -51,9 +52,9 @@ const props = withDefaults(defineProps<Props>(), {
   account: null
 })
 
-const { playing, loading } = usePlayer()
-const { currentTrack } = useQueue()
 const { activateTrack } = usePlayOptions(props)
+const { isPlaying, loading } = usePlayer()
+const { currentTrack } = useQueue()
 
 const active = computed(() => props.track.id === currentTrack.value?.id && props.track.position === currentTrack.value?.position)
 </script>
@@ -71,14 +72,14 @@ const active = computed(() => props.track.id === currentTrack.value?.id && props
       <play-indicator
         v-if="
           !loading &&
-            playing &&
+            isPlaying &&
             active &&
             !hover
         "
       />
       <button
         v-else-if="
-          !playing &&
+          !isPlaying &&
             active &&
             !hover
         "
@@ -88,7 +89,7 @@ const active = computed(() => props.track.id === currentTrack.value?.id && props
       </button>
       <button
         v-else-if="
-          playing &&
+          isPlaying &&
             active &&
             hover
         "

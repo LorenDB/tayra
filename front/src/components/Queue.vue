@@ -192,7 +192,7 @@ const reorderTracks = async (from: number, to: number) => {
                 The track cannot be loaded
               </translate>
             </h3>
-            <p v-if="hasNext && isPlaying && $store.state.player.errorCount < $store.state.player.maxConsecutiveErrors">
+            <p v-if="hasNext && isPlaying && errored">
               <translate translate-context="Sidebar/Player/Error message.Paragraph">
                 The next track will play automatically in a few seconds…
               </translate>

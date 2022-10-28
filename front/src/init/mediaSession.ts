@@ -1,42 +1,46 @@
 import type { InitModule } from '~/types'
 
 import { whenever } from '@vueuse/core'
-import useQueue from '~/composables/audio/useQueue'
-import usePlayer from '~/composables/audio/usePlayer'
+import { useQueue } from '~/composables/audio/queue'
+import { usePlayer } from '~/composables/audio/player'
 
 export const install: InitModule = ({ app }) => {
-  const { currentTrack, next, previous } = useQueue()
-  const { resume, pause, seek } = usePlayer()
+  const { currentTrack, playNext, playPrevious } = useQueue()
+  const { isPlaying, seekBy } = usePlayer()
 
   // Add controls for notification drawer
   if ('mediaSession' in navigator) {
-    navigator.mediaSession.setActionHandler('play', resume)
-    navigator.mediaSession.setActionHandler('pause', pause)
-    navigator.mediaSession.setActionHandler('seekforward', () => seek(5))
-    navigator.mediaSession.setActionHandler('seekbackward', () => seek(-5))
-    navigator.mediaSession.setActionHandler('nexttrack', next)
-    navigator.mediaSession.setActionHandler('previoustrack', previous)
+    navigator.mediaSession.setActionHandler('play', () => (isPlaying.value = true))
+    navigator.mediaSession.setActionHandler('pause', () => (isPlaying.value = false))
+    navigator.mediaSession.setActionHandler('seekforward', () => seekBy(5))
+    navigator.mediaSession.setActionHandler('seekbackward', () => seekBy(-5))
+    navigator.mediaSession.setActionHandler('nexttrack', () => playNext())
+    navigator.mediaSession.setActionHandler('previoustrack', () => playPrevious())
 
-    // TODO (wvffle): set metadata to null when we don't have currentTrack?
     // If the session is playing as a PWA, populate the notification
     // with details from the track
-    whenever(currentTrack, () => {
-      const { title, artist, album } = currentTrack.value
+    whenever(currentTrack, (track) => {
+      if (!track) {
+        navigator.mediaSession.metadata = null
+        return
+      }
+
+      const { title, artistName, albumTitle, coverUrl, albumId } = track
 
       const metadata: MediaMetadataInit = {
         title,
-        artist: artist.name
+        artist: artistName
       }
 
-      if (album?.cover) {
-        metadata.album = album.title
+      if (albumId !== -1) {
+        metadata.album = albumTitle
         metadata.artwork = [
-          { src: album.cover.urls.original, sizes: '96x96', type: 'image/png' },
-          { src: album.cover.urls.original, sizes: '128x128', type: 'image/png' },
-          { src: album.cover.urls.original, sizes: '192x192', type: 'image/png' },
-          { src: album.cover.urls.original, sizes: '256x256', type: 'image/png' },
-          { src: album.cover.urls.original, sizes: '384x384', type: 'image/png' },
-          { src: album.cover.urls.original, sizes: '512x512', type: 'image/png' }
+          { src: coverUrl, sizes: '96x96', type: 'image/png' },
+          { src: coverUrl, sizes: '128x128', type: 'image/png' },
+          { src: coverUrl, sizes: '192x192', type: 'image/png' },
+          { src: coverUrl, sizes: '256x256', type: 'image/png' },
+          { src: coverUrl, sizes: '384x384', type: 'image/png' },
+          { src: coverUrl, sizes: '512x512', type: 'image/png' }
         ]
       }
 

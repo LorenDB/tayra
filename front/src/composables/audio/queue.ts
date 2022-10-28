@@ -69,7 +69,6 @@ export const currentTrack = computed(() => queue.value[currentIndex.value])
 // Use Queue
 export const useQueue = createGlobalState(() => {
   const { currentSound } = useTracks()
-  const store = useStore()
 
   const createQueueTrack = async (track: Track): Promise<QueueTrack> => {
     if (track.uploads.length === 0) {
@@ -236,18 +235,26 @@ export const useQueue = createGlobalState(() => {
   }))
 
   // Clear
-  const clear = () => {
-    store.commit('radios/reset')
+  const clear = async () => {
     tracks.value.length = 0
   }
 
   // Radio queue populating
-  watchEffect(() => {
-    if (store.state.radios.running && currentIndex.value === tracks.value.length - 1) {
-      console.log('POPULATING QUEUE FROM RADIO')
-      return store.dispatch('radios/populateQueue')
-    }
-  })
+  const trackRadioPopulating = () => {
+    const store = useStore()
+    watchEffect(() => {
+      if (store.state.radios.running && currentIndex.value === tracks.value.length - 1) {
+        console.log('POPULATING QUEUE FROM RADIO')
+        return store.dispatch('radios/populateQueue')
+      }
+    })
+
+    watchEffect(() => {
+      if (tracks.value.length === 0) {
+        return store.dispatch('radios/stop')
+      }
+    })
+  }
 
   return {
     tracks,
@@ -267,6 +274,7 @@ export const useQueue = createGlobalState(() => {
     reshuffleUpcomingTracks,
     reorder,
     endsIn,
-    clear
+    clear,
+    trackRadioPopulating
   }
 })

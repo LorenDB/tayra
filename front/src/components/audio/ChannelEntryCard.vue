@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { Cover, Track } from '~/types'
 
-import PlayButton from '~/components/audio/PlayButton.vue'
-import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
-import useQueue from '~/composables/audio/useQueue'
-import usePlayer from '~/composables/audio/usePlayer'
 import { computed } from 'vue'
+
+import { usePlayer } from '~/composables/audio/player'
+import { useQueue } from '~/composables/audio/queue'
+
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import PlayButton from '~/components/audio/PlayButton.vue'
 
 interface Props {
   entry: Track
@@ -15,14 +17,14 @@ interface Props {
 const props = defineProps<Props>()
 
 const { currentTrack } = useQueue()
-const { playing } = usePlayer()
+const { isPlaying } = usePlayer()
 
 const cover = computed(() => props.entry.cover ?? null)
 const duration = computed(() => props.entry.uploads.find(upload => upload.duration)?.duration ?? null)
 </script>
 
 <template>
-  <div :class="[{active: currentTrack && playing && entry.id === currentTrack.id}, 'channel-entry-card']">
+  <div :class="[{active: currentTrack && isPlaying && entry.id === currentTrack.id}, 'channel-entry-card']">
     <div class="controls">
       <play-button
         class="basic circular icon"

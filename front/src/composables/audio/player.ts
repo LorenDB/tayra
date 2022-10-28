@@ -30,7 +30,6 @@ export const isPlaying = ref(false)
 export const usePlayer = createGlobalState(() => {
   const { currentSound, createTrack } = useTracks()
   const { playNext } = useQueue()
-  const store = useStore()
 
   watchEffect(() => {
     const sound = currentSound.value
@@ -50,6 +49,11 @@ export const usePlayer = createGlobalState(() => {
     const { initialize } = useTracks()
     initialize()
 
+    const { trackRadioPopulating } = useQueue()
+    trackRadioPopulating()
+
+    trackListenSubmissions()
+
     createTrack(currentIndex.value)
   }))
 
@@ -57,7 +61,7 @@ export const usePlayer = createGlobalState(() => {
   const lastVolume = useStorage('player:last-volume', 0.7)
 
   const volume: Ref<number> = useStorage('player:volume', 0.7)
-  watch(volume, (to, from) => setGain(to))
+  watch(volume, (gain) => setGain(gain))
 
   const mute = () => {
     if (volume.value > 0) {
@@ -113,14 +117,17 @@ export const usePlayer = createGlobalState(() => {
 
   // Submit listens
   const listenSubmitted = ref(false)
-  whenever(listenSubmitted, async () => {
-    console.log('Listening submitted!')
-    if (!store.state.auth.authenticated) return
-    if (!currentTrack.value) return
+  const trackListenSubmissions = () => {
+    const store = useStore()
+    whenever(listenSubmitted, async () => {
+      console.log('Listening submitted!')
+      if (!store.state.auth.authenticated) return
+      if (!currentTrack.value) return
 
-    await axios.post('history/listenings/', { track: currentTrack.value.id })
-      .catch((error) => console.error('Could not record track in history', error))
-  })
+      await axios.post('history/listenings/', { track: currentTrack.value.id })
+        .catch((error) => console.error('Could not record track in history', error))
+    })
+  }
 
   watch(currentTime, (time) => {
     const sound = currentSound.value

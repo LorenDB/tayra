@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import type { Track } from '~/types'
+import type { QueueTrack } from '~/composables/audio/queue'
 
 import { useIntervalFn, useToggle, useWindowSize } from '@vueuse/core'
 import { computed, nextTick, onMounted, ref, watchEffect } from 'vue'
+
+import { useQueue } from '~/composables/audio/queue'
 import { useStore } from '~/store'
 
 import ChannelUploadModal from '~/components/channels/UploadModal.vue'
@@ -17,19 +19,17 @@ import Sidebar from '~/components/Sidebar.vue'
 import Queue from '~/components/Queue.vue'
 
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
-import useQueue from '~/composables/audio/useQueue'
 
 const store = useStore()
 
 // Tracks
-const { currentTrack } = useQueue()
-const getTrackInformationText = (track: Track | undefined) => {
+const { currentTrack, tracks } = useQueue()
+const getTrackInformationText = (track: QueueTrack | undefined) => {
   if (!track) {
     return null
   }
 
-  const artist = track.artist ?? track.album?.artist
-  return `♫ ${track.title} – ${artist?.name} ♫`
+  return `♫ ${track.title} – ${track.artistName} ♫`
 }
 
 // Update title
@@ -76,9 +76,11 @@ store.dispatch('auth/fetchUser')
 
 <template>
   <div
-    :key="String(store.state.instance.instanceUrl)"
-    :class="[store.state.ui.queueFocused ? 'queue-focused' : '',
-             {'has-bottom-player': store.state.queue.tracks.length > 0}]"
+    :key="store.state.instance.instanceUrl"
+    :class="{
+      'has-bottom-player': tracks.length > 0,
+      'queue-focused': store.state.ui.queueFocused
+    }"
   >
     <!-- here, we display custom stylesheets, if any -->
     <link

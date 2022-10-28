@@ -9,8 +9,8 @@ import { useStore } from '~/store'
 import { usePlayer } from '~/composables/audio/player'
 import { useQueue } from '~/composables/audio/queue'
 
-import axios from 'axios'
 import jQuery from 'jquery'
+import axios from 'axios'
 
 export interface PlayOptionsProps {
   isPlayable?: boolean

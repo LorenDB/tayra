@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
 import type { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
-// import type { Track } from '~/types'
 
-import { ref, computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { ref, computed } from 'vue'
+
+import { usePlayer } from '~/composables/audio/player'
+import { useQueue } from '~/composables/audio/queue'
+
+import usePlayOptions from '~/composables/audio/usePlayOptions'
+
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackModal from '~/components/audio/track/Modal.vue'
-import usePlayOptions from '~/composables/audio/usePlayOptions'
-import useQueue from '~/composables/audio/useQueue'
-import usePlayer from '~/composables/audio/usePlayer'
 
 interface Props extends PlayOptionsProps {
   track: Track
@@ -47,7 +49,7 @@ const props = withDefaults(defineProps<Props>(), {
 const showTrackModal = ref(false)
 
 const { currentTrack } = useQueue()
-const { playing } = usePlayer()
+const { isPlaying } = usePlayer()
 const { activateTrack } = usePlayOptions(props)
 
 const { $pgettext } = useGettext()
@@ -101,7 +103,7 @@ const actionsButtonLabel = computed(() => $pgettext('Content/Track/Icon.Tooltip/
         :class="[
           'track-title',
           'mobile',
-          { 'play-indicator': playing && track.id === currentTrack?.id },
+          { 'play-indicator': isPlaying && track.id === currentTrack?.id },
         ]"
       >
         {{ track.title }}

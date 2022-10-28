@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import type { Playlist, Track, PlaylistTrack, BackendError, APIErrorResponse } from '~/types'
+import type { Playlist, PlaylistTrack, BackendError, APIErrorResponse } from '~/types'
 
 import { useGettext } from 'vue3-gettext'
 import { useVModels } from '@vueuse/core'
 import { computed, ref } from 'vue'
+
+import { useQueue } from '~/composables/audio/queue'
 import { useStore } from '~/store'
 
 import draggable from 'vuedraggable'
 import axios from 'axios'
 
 import PlaylistForm from '~/components/playlists/Form.vue'
-
-import useQueue from '~/composables/audio/useQueue'
 
 interface Events {
   (e: 'update:playlistTracks', value: PlaylistTrack[]): void
@@ -137,13 +137,13 @@ const clearPlaylist = async () => {
   isLoading.value = false
 }
 
-const insertMany = async (insertedTracks: Track[], allowDuplicates: boolean) => {
+const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) => {
   isLoading.value = true
 
   try {
     const response = await axios.post(`playlists/${playlist.value?.id}/add/`, {
       allow_duplicates: allowDuplicates,
-      tracks: insertedTracks.map(track => track.id)
+      tracks: insertedTracks
     })
 
     tracks.value.push(...response.data.results)
