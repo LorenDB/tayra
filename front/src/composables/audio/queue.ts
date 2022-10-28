@@ -3,9 +3,9 @@ import type { Track, Upload } from '~/types'
 import { createGlobalState, useNow, useStorage, useTimeAgo, whenever } from '@vueuse/core'
 import { shuffle as shuffleArray, sum } from 'lodash-es'
 import { computed, ref, shallowReactive, watchEffect } from 'vue'
-import { delMany, getMany, setMany } from 'idb-keyval'
 import { useClamp } from '@vueuse/math'
 
+import { delMany, getMany, setMany } from '~/composables/data/indexedDB'
 import { looping, LoopingMode, isPlaying } from '~/composables/audio/player'
 import { useStore } from '~/store'
 
@@ -106,6 +106,7 @@ export const useQueue = createGlobalState(() => {
 
   const createQueueTrack = async (track: Track): Promise<QueueTrack> => {
     const { $pgettext } = gettext
+    const { default: store } = await import('~/store')
 
     if (track.uploads.length === 0) {
       // we don't have any information for this track, we need to fetch it
@@ -124,13 +125,13 @@ export const useQueue = createGlobalState(() => {
       artistId: track.artist?.id ?? -1,
       albumId: track.album?.id ?? -1,
       coverUrl: (track.cover?.urls ?? track.album?.cover?.urls ?? track.artist?.cover?.urls)?.original
-        ?? new URL('~/assets/audio/default-cover.png', import.meta.url).href,
+        ?? new URL('../../assets/audio/default-cover.png', import.meta.url).href,
       sources: track.uploads.map(upload => ({
         uuid: upload.uuid,
         duration: upload.duration,
         mimetype: upload.mimetype,
         bitrate: upload.bitrate,
-        url: upload.listen_url
+        url: store.getters['instance/absoluteUrl'](upload.listen_url)
       }))
     }
   }

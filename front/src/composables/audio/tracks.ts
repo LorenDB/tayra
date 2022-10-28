@@ -9,7 +9,7 @@ import { usePlayer } from '~/composables/audio/player'
 import { useQueue } from '~/composables/audio/queue'
 import { soundImplementation } from '~/api/player'
 
-import useLRUCache from '~/composables/useLRUCache'
+import useLRUCache from '~/composables/data/useLRUCache'
 import store from '~/store'
 
 const ALLOWED_PLAY_TYPES: (CanPlayTypeResult | undefined)[] = ['maybe', 'probably']
