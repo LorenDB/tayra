@@ -9,6 +9,7 @@ import { useRouter } from 'vue-router'
 import { useStore } from '~/store'
 
 import { usePlayer } from '~/composables/audio/player'
+import { useTracks } from '~/composables/audio/tracks'
 import { useQueue } from '~/composables/audio/queue'
 
 import time from '~/utils/time'
@@ -41,6 +42,8 @@ const {
   endsIn: timeLeft,
   clear
 } = useQueue()
+
+const { currentSound } = useTracks()
 
 const queueModal = ref()
 const { activate, deactivate } = useFocusTrap(queueModal, { allowOutsideClick: true, preventScroll: true })
@@ -204,7 +207,7 @@ const hideArtist = () => {
                 The track cannot be loaded
               </translate>
             </h3>
-            <p v-if="hasNext && isPlaying && errored">
+            <p v-if="hasNext && isPlaying">
               <translate translate-context="Sidebar/Player/Error message.Paragraph">
                 The next track will play automatically in a few seconds…
               </translate>
@@ -214,6 +217,22 @@ const hideArtist = () => {
               <translate translate-context="Sidebar/Player/Error message.Paragraph">
                 You may have a connectivity issue.
               </translate>
+            </p>
+          </div>
+          <div
+            v-else-if="currentSound && !currentSound.playable"
+            class="ui small warning message"
+          >
+            <h3 class="header">
+              <translate translate-context="Sidebar/Player/No sources">
+                The track has no available sources
+              </translate>
+            </h3>
+            <p v-if="hasNext && isPlaying">
+              <translate translate-context="Sidebar/Player/Error message.Paragraph">
+                The next track will play automatically in a few seconds…
+              </translate>
+              <i class="loading spinner icon" />
             </p>
           </div>
           <div class="additional-controls desktop-and-below">

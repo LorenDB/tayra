@@ -20,9 +20,6 @@ const soundCache = useLRUCache<number, Sound>({ max: 10 })
 
 const getTrackSources = (track: QueueTrack): QueueTrackSource[] => {
   const sources: QueueTrackSource[] = track.sources
-    // NOTE: Filter out repeating and unplayable media types
-    .filter(({ mimetype, bitrate }, index, array) => array.findIndex((upload) => upload.mimetype + upload.bitrate === mimetype + bitrate) === index)
-    .filter(({ mimetype }) => ALLOWED_PLAY_TYPES.includes(AUDIO_ELEMENT.canPlayType(`${mimetype}`)))
     .map((source) => ({
       ...source,
       url: store.getters['instance/absoluteUrl'](source.url) as string
@@ -40,6 +37,9 @@ const getTrackSources = (track: QueueTrack): QueueTrackSource[] => {
   }
 
   return sources
+    // NOTE: Filter out repeating and unplayable media types
+    .filter(({ mimetype, bitrate }, index, array) => array.findIndex((upload) => upload.mimetype + upload.bitrate === mimetype + bitrate) === index)
+    .filter(({ mimetype }) => ALLOWED_PLAY_TYPES.includes(AUDIO_ELEMENT.canPlayType(`${mimetype}`)))
 }
 
 // Use Tracks
@@ -59,12 +59,14 @@ export const useTracks = createGlobalState(() => {
 
       const SoundImplementation = soundImplementation.value
       const sound = new SoundImplementation(sources)
+
       sound.onSoundEnd(() => {
         console.log('TRACK ENDED, PLAYING NEXT')
 
         // NOTE: We push it to the end of the job queue
         setTimeout(() => playNext(), 0)
       })
+
       soundCache.set(track.id, sound)
       soundPromises.delete(track.id)
       return sound
@@ -87,12 +89,25 @@ export const useTracks = createGlobalState(() => {
   const createTrack = async (index: number) => {
     stopPreloadTimeout()
 
-    const { queue, currentIndex } = useQueue()
+    const { queue, currentIndex, playNext, hasNext } = useQueue()
     if (queue.value.length <= index || index === -1) return
     console.log('LOADING TRACK', index)
 
     const track = queue.value[index]
     const sound = await createSound(track)
+
+    if (!sound.playable) {
+      setTimeout(() => {
+        if (hasNext.value && index !== queue.value.length - 1) {
+          return playNext(true)
+        }
+
+        const { isPlaying } = usePlayer()
+        isPlaying.value = false
+      }, 3000)
+      return
+    }
+
     console.log('CONNECTING NODE')
 
     sound.audioNode.disconnect()

@@ -18,6 +18,7 @@ export interface Sound {
   readonly isErrored: Ref<boolean>
   readonly isLoaded: Ref<boolean>
   readonly currentTime: number
+  readonly playable: boolean
   readonly duration: number
   readonly buffered: number
   looping: boolean
@@ -54,9 +55,18 @@ export class HTMLSound implements Sound {
   onSoundEnd: EventHookOn<HTMLSound>
 
   constructor (sources: SoundSource[]) {
+    this.onSoundLoop = this.#soundLoopEventHook.on
+    this.onSoundEnd = this.#soundEndEventHook.on
+
     // TODO: Quality picker
+    const source = sources[0]?.url
+    if (!source) {
+      this.isLoaded.value = true
+      return
+    }
+
     this.#audio.crossOrigin = 'anonymous'
-    this.#audio.src = sources[0].url
+    this.#audio.src = source
     this.#audio.preload = 'auto'
 
     useEventListener(this.#audio, 'ended', () => this.#soundEndEventHook.trigger(this))
@@ -75,9 +85,6 @@ export class HTMLSound implements Sound {
       this.isErrored.value = true
       this.isLoaded.value = true
     })
-
-    this.onSoundLoop = this.#soundLoopEventHook.on
-    this.onSoundEnd = this.#soundEndEventHook.on
   }
 
   preload () {
@@ -102,6 +109,10 @@ export class HTMLSound implements Sound {
 
   async seekBy (seconds: number) {
     this.#audio.currentTime += seconds
+  }
+
+  get playable () {
+    return this.#audio.src !== ''
   }
 
   get duration () {
