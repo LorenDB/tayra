@@ -39,7 +39,8 @@ const {
   currentIndex,
   currentTrack,
   isShuffled,
-  shuffle
+  shuffle,
+  clear
 } = useQueue()
 
 const store = useStore()
@@ -53,7 +54,7 @@ const toggleMobilePlayer = () => {
 onKeyboardShortcut('e', toggleMobilePlayer)
 onKeyboardShortcut('p', () => { isPlaying.value = !isPlaying.value })
 onKeyboardShortcut('s', shuffle)
-onKeyboardShortcut('q', () => store.dispatch('queue/clean'))
+onKeyboardShortcut('q', clear)
 onKeyboardShortcut('m', mute)
 onKeyboardShortcut('l', toggleLooping)
 onKeyboardShortcut('f', () => store.dispatch('favorites/toggle', currentTrack.value?.id))
