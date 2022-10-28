@@ -27,14 +27,12 @@ const running = computed(() => {
     return false
   }
 
-  return store.state.radios.current?.type === props.type
-    && store.state.radios.current?.customRadioId === props.customRadioId
+  const { current } = store.state.radios
+  return current?.type === props.type
+    && current?.customRadioId === props.customRadioId
     && (
-      typeof props.objectId === 'string'
-          || (
-            typeof props.objectId !== 'number'
-              && store.state.radios.current?.objectId?.fullUsername === props.objectId?.fullUsername
-          )
+      (typeof props.objectId === 'object' && current.objectId?.fullUsername === props.objectId?.fullUsername)
+        || current.objectId === props.objectId
     )
 })
 

@@ -40,11 +40,16 @@ export const install: InitModule = ({ store, router }) => {
 
     switch (error.response?.status) {
       case 404:
+        if (error.response?.data === 'Radio doesn\'t have more candidates') {
+          error.backendErrors.push(error.response.data)
+          break
+        }
+
         error.backendErrors.push('Resource not found')
         error.isHandled = true
         store.commit('ui/addMessage', {
           // @ts-expect-error TS does not know about .data structure
-          content: error.response?.data?.detail ?? error.response?.data,
+          content: error.response?.data?.detail ?? error.response?.data ?? 'Resource not found',
           class: 'error'
         })
         break

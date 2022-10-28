@@ -35,11 +35,11 @@ const {
   currentTrack,
   currentIndex,
   queue,
-  tracks,
   dequeue,
   playTrack,
   reorder,
-  endsIn: timeLeft
+  endsIn: timeLeft,
+  clear
 } = useQueue()
 
 const queueModal = ref()
@@ -291,7 +291,7 @@ const reorderTracks = async (from: number, to: number) => {
               </button>
               <button
                 class="ui right floated basic button danger"
-                @click="tracks.length = 0"
+                @click="clear"
               >
                 <translate translate-context="*/Queue/*/Verb">
                   Clear

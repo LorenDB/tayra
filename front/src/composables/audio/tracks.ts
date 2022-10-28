@@ -3,7 +3,7 @@ import type { Sound } from '~/api/player'
 
 import { soundImplementation } from '~/api/player'
 import { createGlobalState, syncRef } from '@vueuse/core'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { useQueue } from '~/composables/audio/queue'
 import { connectAudioSource } from '~/composables/audio/audio-api'
@@ -113,7 +113,7 @@ export const useTracks = createGlobalState(() => {
   // NOTE: We want to have it called only once, hence we're using createGlobalState
   const initialize = createGlobalState(() => {
     const { currentTrack: track, currentIndex } = useQueue()
-    watchEffect(async () => createTrack(currentIndex.value))
+    watch(currentIndex, (index) => createTrack(index))
     syncRef(currentTrack, track)
   })
 

@@ -1,6 +1,6 @@
+import type { BackendError, Track } from '~/types'
 import type { RootState } from '~/store/index'
 import type { Module } from 'vuex'
-import type { Track } from '~/types'
 
 import { useQueue } from '~/composables/audio/queue'
 import { usePlayer } from '~/composables/audio/player'
@@ -144,7 +144,14 @@ const store: Module<State, RootState> = {
           isPlaying.value = true
         }
       } catch (error) {
-        logger.error('Error while adding track to queue from radio', error)
+        if ((error as BackendError).backendErrors?.[0] === 'Radio doesn\'t have more candidates') {
+          commit('ui/addMessage', {
+            content: (error as BackendError).backendErrors?.[0]
+          }, { root: true })
+        } else {
+          logger.error('Error while adding track to queue from radio', error)
+        }
+
         commit('reset')
       } finally {
         state.populating = false

@@ -25,7 +25,7 @@ export interface PlayOptionsProps {
 }
 
 export default (props: PlayOptionsProps) => {
-  const { enqueue: addToQueue, currentTrack, playNext, currentIndex, enqueueAt, queue, tracks, playTrack } = useQueue()
+  const { enqueue: addToQueue, currentTrack, playNext, currentIndex, enqueueAt, queue, clear, playTrack } = useQueue()
   const { isPlaying } = usePlayer()
   const store = useStore()
 
@@ -157,7 +157,7 @@ export default (props: PlayOptionsProps) => {
   }
 
   const replacePlay = async () => {
-    tracks.value.length = 0
+    clear()
 
     jQuery(el.value).find('.ui.dropdown').dropdown('hide')
 

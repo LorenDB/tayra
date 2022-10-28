@@ -235,6 +235,12 @@ export const useQueue = createGlobalState(() => {
     return date
   }))
 
+  // Clear
+  const clear = () => {
+    store.commit('radios/reset')
+    tracks.value.length = 0
+  }
+
   // Radio queue populating
   watchEffect(() => {
     if (store.state.radios.running && currentIndex.value === tracks.value.length - 1) {
@@ -260,6 +266,7 @@ export const useQueue = createGlobalState(() => {
     shuffle,
     reshuffleUpcomingTracks,
     reorder,
-    endsIn
+    endsIn,
+    clear
   }
 })
