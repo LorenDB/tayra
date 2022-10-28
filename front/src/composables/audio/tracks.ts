@@ -1,7 +1,7 @@
 import type { QueueTrack, QueueTrackSource } from '~/composables/audio/queue'
 import type { Sound } from '~/api/player'
 
-import { createGlobalState, syncRef, whenever } from '@vueuse/core'
+import { createGlobalState, syncRef, useTimeoutFn, whenever } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
 import { connectAudioSource } from '~/composables/audio/audio-api'
@@ -55,30 +55,40 @@ export const useTracks = createGlobalState(() => {
 
     const createSoundPromise = async () => {
       const sources = getTrackSources(track)
-      const { playNext, currentIndex } = useQueue()
+      const { playTrack, currentIndex } = useQueue()
 
       const SoundImplementation = soundImplementation.value
       const sound = new SoundImplementation(sources)
       sound.onSoundEnd(() => {
         console.log('TRACK ENDED, PLAYING NEXT')
-        createTrack(currentIndex.value + 1)
 
         // NOTE: We push it to the end of the job queue
-        setTimeout(playNext, 0)
+        setTimeout(() => {
+          playTrack(currentIndex.value + 1)
+        }, 0)
       })
       soundCache.set(track.id, sound)
       soundPromises.delete(track.id)
       return sound
     }
 
-    console.log('NO TRACK IN CACHE, CREATING')
+    console.log('NO TRACK IN CACHE, CREATING', track)
     const soundPromise = createSoundPromise()
     soundPromises.set(track.id, soundPromise)
     return soundPromise
   }
 
+  // Preload next track
+  const { start: startPreloadTimeout, stop: stopPreloadTimeout } = useTimeoutFn(async (index) => {
+    const { queue } = useQueue()
+    const sound = await createSound(queue.value[index as number])
+    await sound.preload()
+  }, 100, { immediate: false })
+
   // Create track from queue
   const createTrack = async (index: number) => {
+    stopPreloadTimeout()
+
     const { queue, currentIndex } = useQueue()
     if (queue.value.length <= index || index === -1) return
     console.log('LOADING TRACK', index)
@@ -97,10 +107,8 @@ export const useTracks = createGlobalState(() => {
 
     // NOTE: Preload next track
     if (index === currentIndex.value && index + 1 < queue.value.length) {
-      setTimeout(async () => {
-        const sound = await createSound(queue.value[index + 1])
-        await sound.preload()
-      }, 100)
+      // @ts-expect-error vueuse is wrongly typed?
+      startPreloadTimeout(index + 1)
     }
   }
 
@@ -110,7 +118,9 @@ export const useTracks = createGlobalState(() => {
   const initialize = createGlobalState(() => {
     const { currentIndex, currentTrack: track } = useQueue()
 
-    whenever(track, () => createTrack(currentIndex.value))
+    whenever(track, () => {
+      createTrack(currentIndex.value)
+    }, { immediate: true })
     syncRef(track, currentTrack, {
       direction: 'ltr'
     })

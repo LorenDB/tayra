@@ -6,7 +6,7 @@ import { computed, ref, shallowReactive, watchEffect } from 'vue'
 import { getMany, setMany } from 'idb-keyval'
 import { useClamp } from '@vueuse/math'
 
-import { looping, LoopingMode, isPlaying, usePlayer } from '~/composables/audio/player'
+import { looping, LoopingMode, isPlaying } from '~/composables/audio/player'
 import { useStore } from '~/store'
 
 import { useTracks } from '~/composables/audio/tracks'
@@ -166,13 +166,17 @@ export const useQueue = createGlobalState(() => {
   }
 
   // Play track
-  const playTrack = async (trackIndex: number, force = false) => {
+  const playTrack = async (trackIndex: number, forceRestartIfCurrent = false) => {
     if (isPlaying.value) currentSound.value?.pause()
+    if (currentIndex.value !== trackIndex) currentSound.value?.seekTo(0)
 
-    if (force && currentIndex.value === trackIndex) {
+    const shouldRestart = forceRestartIfCurrent && currentIndex.value === trackIndex
+    const nextTrackIsTheSame = queue.value[trackIndex].id === currentTrack.value.id
+
+    if (shouldRestart || nextTrackIsTheSame) {
       currentSound.value?.seekTo(0)
       if (isPlaying.value) currentSound.value?.play()
-      return
+      if (shouldRestart) return
     }
 
     currentIndex.value = trackIndex
@@ -270,8 +274,9 @@ export const useQueue = createGlobalState(() => {
   // Clear
   const clearRadio = ref(false)
   const clear = async () => {
-    const { stop } = usePlayer()
-    await stop()
+    currentSound.value?.pause()
+    currentSound.value?.seekTo(0)
+    currentSound.value?.dispose()
     clearRadio.value = true
     tracks.value.length = 0
   }
