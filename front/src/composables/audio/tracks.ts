@@ -55,7 +55,7 @@ export const useTracks = createGlobalState(() => {
 
     const createSoundPromise = async () => {
       const sources = getTrackSources(track)
-      const { playTrack, currentIndex } = useQueue()
+      const { playNext } = useQueue()
 
       const SoundImplementation = soundImplementation.value
       const sound = new SoundImplementation(sources)
@@ -63,9 +63,7 @@ export const useTracks = createGlobalState(() => {
         console.log('TRACK ENDED, PLAYING NEXT')
 
         // NOTE: We push it to the end of the job queue
-        setTimeout(() => {
-          playTrack(currentIndex.value + 1)
-        }, 0)
+        setTimeout(() => playNext(), 0)
       })
       soundCache.set(track.id, sound)
       soundPromises.delete(track.id)
