@@ -21,7 +21,7 @@ interface Category {
   code: CategoryCode,
   name: string,
   route: RouteRecordName
-  getId: (obj: unknown) => string
+  getId: (obj: unknown) => number
   getTitle: (obj: unknown) => string
   getDescription: (obj: unknown) => string
 }
@@ -36,7 +36,7 @@ interface Results {
 
 interface Result {
   title: string
-  id?: string
+  id?: number
   description?: string
   routerUrl: RouteLocationNamedRaw
 }

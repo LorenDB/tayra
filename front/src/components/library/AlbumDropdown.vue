@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import type { Album, Artist, Library } from '~/types'
 
-import EmbedWizard from '~/components/audio/EmbedWizard.vue'
-import SemanticModal from '~/components/semantic/Modal.vue'
-import useReport from '~/composables/moderation/useReport'
 import { computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 import { getDomain } from '~/utils'
+
+import useReport from '~/composables/moderation/useReport'
+
+import EmbedWizard from '~/components/audio/EmbedWizard.vue'
+import SemanticModal from '~/components/semantic/Modal.vue'
 
 interface Events {
   (e: 'remove'): void

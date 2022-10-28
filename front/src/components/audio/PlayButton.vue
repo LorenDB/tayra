@@ -128,7 +128,7 @@ const openMenu = () => {
       :disabled="!playable"
       :aria-label="labels.replacePlay"
       :class="[...buttonClasses, 'ui', {loading: isLoading, 'mini': discrete, disabled: !playable}]"
-      @click.stop.prevent="replacePlay"
+      @click.stop.prevent="replacePlay()"
     >
       <i
         v-if="playing"

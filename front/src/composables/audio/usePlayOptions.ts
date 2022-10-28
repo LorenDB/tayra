@@ -156,7 +156,7 @@ export default (props: PlayOptionsProps) => {
     addMessage(tracks)
   }
 
-  const replacePlay = async () => {
+  const replacePlay = async (index?: number) => {
     clear()
 
     jQuery(el.value).find('.ui.dropdown').dropdown('hide')
@@ -165,7 +165,7 @@ export default (props: PlayOptionsProps) => {
     await addToQueue(...tracksToPlay)
 
     if (props.track && props.tracks?.length) {
-      const trackIndex = props.tracks?.findIndex(track => track.id === props.track?.id && track.position === props.track?.position) ?? 0
+      const trackIndex = index ?? props.tracks?.findIndex(track => track.id === props.track?.id && track.position === props.track?.position) ?? 0
       await playTrack(trackIndex)
       isPlaying.value = true
     } else {
@@ -176,12 +176,12 @@ export default (props: PlayOptionsProps) => {
     addMessage(tracksToPlay)
   }
 
-  const activateTrack = async (track: Track) => {
+  const activateTrack = async (track: Track, index: number) => {
     if (track.id === currentTrack.value?.id && track.position === currentTrack.value?.position) {
       isPlaying.value = true
     }
 
-    return replacePlay()
+    return replacePlay(index)
   }
 
   return {

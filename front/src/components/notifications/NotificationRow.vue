@@ -123,8 +123,8 @@ const rejectLibraryFollow = async (follow: LibraryFollow) => {
           tag="span"
           class="link"
           :html="notificationData.message"
-          @click="navigate"
-          @keypress.enter="navigate"
+          @click="navigate()"
+          @keypress.enter="navigate()"
         />
       </router-link>
       <sanitized-html
