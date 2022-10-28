@@ -69,7 +69,7 @@ watchEffect(async () => {
     fetchingTracks.value = true
     try {
       const trackInfos: QueueTrack[] = await getMany([...addedIds])
-      for (const track of trackInfos) {
+      for (const track of trackInfos.filter(i => i)) {
         tracksById.set(track.id, track)
       }
     } catch (error) {
