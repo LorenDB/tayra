@@ -53,6 +53,7 @@ watchEffect(async () => {
   if (fetchingTracks.value) return
 
   const allTracks = new Set(tracks.value)
+  const removedIds = new Set<number>()
   const addedIds = new Set(allTracks)
 
   for (const id of tracksById.keys()) {
@@ -60,8 +61,8 @@ watchEffect(async () => {
       // Track in queue, so remove it from the new ids set
       addedIds.delete(id)
     } else {
-      // Track removed from queue, so remove it from the object
-      tracksById.delete(id)
+      // Track removed from queue, so remove it from the object and db later
+      removedIds.add(id)
     }
   }
 
@@ -76,6 +77,13 @@ watchEffect(async () => {
       console.error(error)
     } finally {
       fetchingTracks.value = false
+    }
+  }
+
+  if (removedIds.size > 0) {
+    await delMany([...removedIds])
+    for (const id of removedIds) {
+      tracksById.delete(id)
     }
   }
 })
