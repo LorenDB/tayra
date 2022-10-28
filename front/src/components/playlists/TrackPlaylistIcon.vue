@@ -1,17 +1,18 @@
 <script setup lang="ts">
+import type { QueueTrack } from '~/composables/audio/queue'
 import type { Track } from '~/types'
 
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 
 interface Props {
-  track?: Track | null
+  track?: Track | QueueTrack
   button?: boolean
   border?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
-  track: null,
+  track: undefined,
   button: false,
   border: false
 })

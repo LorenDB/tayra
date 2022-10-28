@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { QueueTrack } from '~/composables/audio/queue'
 import type { Track } from '~/types'
 
 import { useGettext } from 'vue3-gettext'
@@ -6,7 +7,7 @@ import { useStore } from '~/store'
 import { computed } from 'vue'
 
 interface Props {
-  track?: Track
+  track?: QueueTrack | Track
   button?: boolean
   border?: boolean
 }

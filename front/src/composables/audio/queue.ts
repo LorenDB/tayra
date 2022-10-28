@@ -9,8 +9,10 @@ import { useClamp } from '@vueuse/math'
 import { looping, LoopingMode, isPlaying, usePlayer } from '~/composables/audio/player'
 import { useStore } from '~/store'
 
+import { useTracks } from '~/composables/audio/tracks'
+import { gettext } from '~/init/locale'
+
 import axios from 'axios'
-import { useTracks } from './tracks'
 
 // import useWebWorker from '~/composables/useWebWorker'
 
@@ -94,6 +96,8 @@ export const useQueue = createGlobalState(() => {
   const { currentSound } = useTracks()
 
   const createQueueTrack = async (track: Track): Promise<QueueTrack> => {
+    const { $pgettext } = gettext
+
     if (track.uploads.length === 0) {
       // we don't have any information for this track, we need to fetch it
       const { uploads } = await axios.get(`tracks/${track.id}/`)
@@ -106,9 +110,9 @@ export const useQueue = createGlobalState(() => {
       id: track.id,
       title: track.title,
       // TODO (wvffle): i18n
-      artistName: track.artist?.name ?? 'Unknown artist',
+      artistName: track.artist?.name ?? $pgettext('*/*/*', 'Unknown artist'),
       // TODO (wvffle): i18n
-      albumTitle: track.album?.title ?? 'Unknown album',
+      albumTitle: track.album?.title ?? $pgettext('*/*/*', 'Unknown album'),
       artistId: track.artist?.id ?? -1,
       albumId: track.album?.id ?? -1,
       coverUrl: (track.cover?.urls ?? track.album?.cover?.urls ?? track.artist?.cover?.urls)?.original

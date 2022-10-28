@@ -13,8 +13,8 @@ import { useQueue } from '~/composables/audio/queue'
 
 import time from '~/utils/time'
 
-// import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
-// import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import PlayerControls from '~/components/audio/PlayerControls.vue'
 import VirtualList from '~/components/vui/list/VirtualList.vue'
 import QueueItem from '~/components/QueueItem.vue'
@@ -131,6 +131,18 @@ const reorderTracks = async (from: number, to: number) => {
     scrollToCurrent()
   }
 }
+
+const hideArtist = () => {
+  if (currentTrack.value.artistId !== -1) {
+    return store.dispatch('moderation/hide', {
+      type: 'artist',
+      target: {
+        id: currentTrack.value.artistId,
+        name: currentTrack.value.artistName
+      }
+    })
+  }
+}
 </script>
 
 <template>
@@ -205,8 +217,7 @@ const reorderTracks = async (from: number, to: number) => {
             </p>
           </div>
           <div class="additional-controls desktop-and-below">
-            <!-- TODO (wvffle): Update props -->
-            <!-- <track-favorite-icon
+            <track-favorite-icon
               v-if="$store.state.auth.authenticated"
               :track="currentTrack"
             />
@@ -219,10 +230,10 @@ const reorderTracks = async (from: number, to: number) => {
               :class="['ui', 'really', 'basic', 'circular', 'icon', 'button']"
               :aria-label="labels.addArtistContentFilter"
               :title="labels.addArtistContentFilter"
-              @click="$store.dispatch('moderation/hide', {type: 'artist', target: currentTrack.artist})"
+              @click="hideArtist"
             >
               <i :class="['eye slash outline', 'basic', 'icon']" />
-            </button> -->
+            </button>
           </div>
           <div class="progress-wrapper">
             <div

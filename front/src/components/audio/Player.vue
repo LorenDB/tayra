@@ -10,8 +10,8 @@ import { useStore } from '~/store'
 import onKeyboardShortcut from '~/composables/onKeyboardShortcut'
 import time from '~/utils/time'
 
-// import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
-// import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
+import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
+import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import VolumeControl from './VolumeControl.vue'
 import PlayerControls from './PlayerControls.vue'
 
@@ -107,6 +107,18 @@ const loopingTitle = computed(() => {
       ? $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping on a single track. Click to switch to whole queue looping.')
       : $pgettext('Sidebar/Player/Icon.Tooltip', 'Looping on whole queue. Click to disable looping.')
 })
+
+const hideArtist = () => {
+  if (currentTrack.value.artistId !== -1) {
+    return store.dispatch('moderation/hide', {
+      type: 'artist',
+      target: {
+        id: currentTrack.value.artistId,
+        name: currentTrack.value.artistName
+      }
+    })
+  }
+}
 </script>
 
 <template>
@@ -216,8 +228,7 @@ const loopingTitle = computed(() => {
           v-if="$store.state.auth.authenticated"
           class="controls desktop-and-up fluid align-right"
         >
-          <!-- TODO (wvffle): Uncomment -->
-          <!-- <track-favorite-icon
+          <track-favorite-icon
             class="control white"
             :track="currentTrack"
           />
@@ -229,10 +240,10 @@ const loopingTitle = computed(() => {
             :class="['ui', 'really', 'basic', 'circular', 'icon', 'button', 'control']"
             :aria-label="labels.addArtistContentFilter"
             :title="labels.addArtistContentFilter"
-            @click="$store.dispatch('moderation/hide', {type: 'artist', target: currentTrack.artist})"
+            @click="hideArtist"
           >
             <i :class="['eye slash outline', 'basic', 'icon']" />
-          </button> -->
+          </button>
         </div>
         <player-controls class="controls queue-not-focused" />
         <div class="controls progress-controls queue-not-focused tablet-and-up small align-left">

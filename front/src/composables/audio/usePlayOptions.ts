@@ -3,11 +3,11 @@ import type { ContentFilter } from '~/store/moderation'
 
 import { useCurrentElement } from '@vueuse/core'
 import { computed, markRaw, ref } from 'vue'
-import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
 
 import { usePlayer } from '~/composables/audio/player'
 import { useQueue } from '~/composables/audio/queue'
+import { gettext } from '~/init/locale'
 
 import jQuery from 'jquery'
 import axios from 'axios'
@@ -49,7 +49,7 @@ export default (props: PlayOptionsProps) => {
   const filterableArtist = computed(() => props.track?.artist ?? props.album?.artist ?? props.artist)
   const filterArtist = async () => store.dispatch('moderation/hide', { type: 'artist', target: filterableArtist.value })
 
-  const { $npgettext } = useGettext()
+  const { $npgettext } = gettext
   const addMessage = (tracks: Track[]) => {
     if (!tracks.length) {
       return

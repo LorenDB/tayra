@@ -117,7 +117,7 @@ const store: Module<State, RootState> = {
     }
   },
   actions: {
-    hide ({ commit }, payload) {
+    hide ({ commit }, payload: State['filterModalTarget']) {
       commit('filterModalTarget', payload)
       commit('showFilterModal', true)
     },

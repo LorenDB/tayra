@@ -71,6 +71,7 @@ export const useTracks = createGlobalState(() => {
       return sound
     }
 
+    console.log('NO TRACK IN CACHE, CREATING')
     const soundPromise = createSoundPromise()
     soundPromises.set(track.id, soundPromise)
     return soundPromise
@@ -83,11 +84,6 @@ export const useTracks = createGlobalState(() => {
     console.log('LOADING TRACK', index)
 
     const track = queue.value[index]
-    if (!soundPromises.has(track.id) && !soundCache.has(track.id)) {
-      // TODO (wvffle): Resolve race condition - is it still here after adding soundPromises?
-      console.log('NO TRACK IN CACHE, CREATING')
-    }
-
     const sound = await createSound(track)
     console.log('CONNECTING NODE')
 
