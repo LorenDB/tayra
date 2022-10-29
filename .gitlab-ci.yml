@@ -204,7 +204,7 @@ test_api:
         path: api/coverage.xml
   parallel:
     matrix:
-      - PY_VER: ["3.7", "3.8", "3.9", "3.10", "3.11-rc"]
+      - PY_VER: ["3.7", "3.8", "3.9", "3.10", "3.11"]
   image: $CI_REGISTRY/funkwhale/backend-test-docker:$PY_VER
   coverage: '/TOTAL\s*\d*\s*\d*\s*(\d*%)/'
 
