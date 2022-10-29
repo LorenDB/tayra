@@ -19,10 +19,21 @@ const soundPromises = new Map<number, Promise<Sound>>()
 const soundCache = useLRUCache<number, Sound>({ max: 10 })
 
 const getTrackSources = (track: QueueTrack): QueueTrackSource[] => {
+  const token = store.state.auth.authenticated && store.state.auth.scopedTokens.listen
+  const appendToken = (url: string) => {
+    if (token) {
+      const newUrl = new URL(url)
+      newUrl.searchParams.set('token', token)
+      return newUrl.toString()
+    }
+
+    return url
+  }
+
   const sources: QueueTrackSource[] = track.sources
     .map((source) => ({
       ...source,
-      url: store.getters['instance/absoluteUrl'](source.url) as string
+      url: appendToken(store.getters['instance/absoluteUrl'](source.url))
     }))
 
   // NOTE: Add a transcoded MP3 src at the end for browsers
