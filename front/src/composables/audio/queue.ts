@@ -14,10 +14,6 @@ import { gettext } from '~/init/locale'
 
 import axios from 'axios'
 
-// import useWebWorker from '~/composables/useWebWorker'
-
-// const { post, onMessageReceived } = useWebWorker('queue')
-
 export interface QueueTrackSource {
   uuid: string
   mimetype: string

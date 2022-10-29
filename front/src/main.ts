@@ -51,4 +51,3 @@ Promise.all(modules).finally(() => {
 })
 
 // TODO (wvffle): Rename filters from useSharedLabels to filters from backend
-// TODO (wvffle): Migrate EmbedFrame.vue to <script setup lang="ts"> and remove allowJs from tsconfig.json
