@@ -207,6 +207,10 @@ test_api:
       - PY_VER: ["3.7", "3.8", "3.9", "3.10", "3.11"]
   image: $CI_REGISTRY/funkwhale/backend-test-docker:$PY_VER
   coverage: '/TOTAL\s*\d*\s*\d*\s*(\d*%)/'
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - api/**/*
 
 test_front:
   interruptible: true
@@ -231,6 +235,10 @@ test_front:
       junit: front/coverage/cobertura-coverage.xml
   tags:
     - docker
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - front/**/*
 
 build_docs:
   stage: build
