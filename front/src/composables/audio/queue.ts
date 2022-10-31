@@ -13,7 +13,6 @@ import { useTracks } from '~/composables/audio/tracks'
 import { gettext } from '~/init/locale'
 
 import axios from 'axios'
-import { set } from 'idb-keyval'
 import { setGain } from './audio-api'
 
 export interface QueueTrackSource {
@@ -313,19 +312,26 @@ export const useQueue = createGlobalState(() => {
     // Migrate old queue format to the new one
     if (localStorage.queue) {
       (async () => {
-        const { queue: { currentIndex: index, tracks } } = JSON.parse(localStorage.queue) as { queue: { currentIndex: number, tracks: Track[] } }
-        if (tracks.length !== 0) {
-          await enqueue(...tracks)
+        const { queue: { currentIndex: index, tracks: oldTracks } } = JSON.parse(localStorage.queue) as { queue: { currentIndex: number, tracks: Track[] } }
+        if (oldTracks.length !== 0) {
+          tracks.value.length = 0
+          await enqueue(...oldTracks)
         }
 
         currentIndex.value = index
         delete localStorage.queue
-
-        const { looping: loopingMode, volume } = JSON.parse(localStorage.player)
-        looping.value = loopingMode
-        setGain(volume)
-        delete localStorage.player
       })().catch((error) => console.error('Could not successfully migrate between queue versions', error))
+    }
+
+    if (localStorage.player) {
+      try {
+        const { player: { looping: loopingMode, volume } } = JSON.parse(localStorage.player) as { player: { looping: LoopingMode, volume: number }}
+        looping.value = loopingMode ?? 0
+        setGain(volume ?? 0.7)
+        delete localStorage.player
+      } catch (error) {
+        console.error('Could not successfully migrate between player versions', error)
+      }
     }
   }
 
