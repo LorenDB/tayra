@@ -54,6 +54,7 @@ defineProps<Props>()
     </div>
     <div class="controls">
       <button
+        v-if="$store.state.auth.authenticated"
         :aria-label="source.labels.favorite"
         :title="source.labels.favorite"
         class="ui really basic circular icon button"

@@ -19,8 +19,8 @@ export interface InitModuleContext {
 
 export type InitModule = (ctx: InitModuleContext) => void | Promise<void>
 
-export interface QueueItemSource extends Omit<QueueTrack, 'id'> {
-  id: string
+export interface QueueItemSource extends QueueTrack {
+  key: string
 
   labels: {
     remove: string

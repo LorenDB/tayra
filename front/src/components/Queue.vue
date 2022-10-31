@@ -118,7 +118,7 @@ const play = async (index: number) => {
 
 const queueItems = computed(() => queue.value.map((track, index) => ({
   ...track,
-  id: `${index}-${track.id}`,
+  key: `${index}-${track.id}`,
   labels: {
     remove: $pgettext('*/*/*', 'Remove'),
     selectTrack: $pgettext('*/*/*', 'Select track'),
@@ -362,6 +362,7 @@ const hideArtist = () => {
               :index="index"
               :source="item"
               :class="[...classList, currentIndex === index && 'active']"
+              key-field="key"
               @play="play"
               @remove="dequeue"
             />
