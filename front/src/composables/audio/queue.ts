@@ -13,6 +13,8 @@ import { useTracks } from '~/composables/audio/tracks'
 import { gettext } from '~/init/locale'
 
 import axios from 'axios'
+import { set } from 'idb-keyval'
+import { setGain } from './audio-api'
 
 export interface QueueTrackSource {
   uuid: string
@@ -306,6 +308,25 @@ export const useQueue = createGlobalState(() => {
         return store.dispatch('radios/stop')
       }
     })
+  }
+
+  // TODO: Remove at 1.5.0
+  // Migrate old queue format to the new one
+  if (localStorage.queue) {
+    (async () => {
+      const { queue: { currentIndex: index, tracks } } = JSON.parse(localStorage.queue) as { queue: { currentIndex: number, tracks: Track[] } }
+      if (tracks.length !== 0) {
+        await enqueue(...tracks)
+      }
+
+      currentIndex.value = index
+      delete localStorage.queue
+
+      const { looping: loopingMode, volume } = JSON.parse(localStorage.player)
+      looping.value = loopingMode
+      setGain(volume)
+      delete localStorage.player
+    })().catch((error) => console.error('Could not successfully migrate between queue versions', error))
   }
 
   return {
