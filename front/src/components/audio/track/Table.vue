@@ -20,7 +20,7 @@ interface Events {
 }
 
 interface Props {
-  tracks?: Track[]
+  tracks?: undefined | Track[]
 
   showAlbum?: boolean
   showArtist?: boolean
@@ -47,7 +47,7 @@ interface Props {
 
 const emit = defineEmits<Events>()
 const props = withDefaults(defineProps<Props>(), {
-  tracks: () => [],
+  tracks: undefined,
 
   showAlbum: true,
   showArtist: true,
@@ -87,7 +87,7 @@ const additionalTracks = ref([] as Track[])
 const query = ref('')
 
 const allTracks = computed(() => {
-  const tracks = [...props.tracks, ...additionalTracks.value]
+  const tracks = [...(props.tracks ?? []), ...additionalTracks.value]
   return props.unique
     ? uniqBy(tracks, 'id')
     : tracks
@@ -133,7 +133,7 @@ const performSearch = () => {
   fetchData()
 }
 
-if (props.tracks.length === 0) {
+if (props.tracks === undefined) {
   fetchData()
 }
 
@@ -251,12 +251,12 @@ const updatePage = (page: number) => {
         />
       </div>
       <div
-        v-if="paginateResults"
+        v-if="tracks && paginateResults"
         class="ui center aligned basic segment desktop-and-up"
       >
         <pagination
           :total="totalTracks"
-          :current=" tracks.length > 0 ? page : currentPage"
+          :current="tracks.length > 0 ? page : currentPage"
           :paginate-by="paginateBy"
           @update:current="updatePage"
         />
@@ -289,7 +289,7 @@ const updatePage = (page: number) => {
         :is-podcast="isPodcast"
       />
       <div
-        v-if="paginateResults && totalTracks > paginateBy"
+        v-if="tracks && paginateResults && totalTracks > paginateBy"
         class="ui center aligned basic segment tablet-and-below"
       >
         <pagination
