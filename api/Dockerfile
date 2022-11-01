@@ -48,18 +48,18 @@ RUN \
     echo 'installing pip requirements' && \
     pip3 install --upgrade pip && \
     pip3 install setuptools wheel && \
-    # Currently we are unable to relieably build cryptography on armv7. This
-    # is why we need to use the package shipped by Alpine Linux, which is currently
-    # version 3.4.8. Since poetry does not allow in-place dependency pinning, we need
+    # Currently we are unable to relieably build rust-based packages on armv7. This
+    # is why we need to use the packages shipped by Alpine Linux.
+    # Since poetry does not allow in-place dependency pinning, we need
     # to install the deps using pip.
-    cat /requirements.txt | grep -Ev 'cryptography|autobahn' | pip3 install -r /dev/stdin cryptography==3.4.8 autobahn==21.2.1 && \
+    cat /requirements.txt | grep -Ev 'cryptography|autobahn|uvicorn|watchdog|watchfiles' | pip3 install -r /dev/stdin cryptography==3.4.8 autobahn==21.2.1 uvicorn==0.17.6 watchgod==0.8.2 && \
     rm -rf $PIP_DOWNLOAD_CACHE
 
 ARG install_dev_deps=0
 RUN \
     if [ "$install_dev_deps" = "1" ] ; then \
       echo "Installing dev dependencies" && \
-    cat /dev-requirements.txt | grep -Ev 'cryptography|autobahn' | pip3 install -r /dev/stdin cryptography==3.3.2 autobahn==21.2.1 \
+    cat /dev-requirements.txt | grep -Ev 'cryptography|autobahn|uvicorn|watchdog|watchfiles' | pip3 install -r /dev/stdin cryptography==3.3.2 autobahn==21.2.1 uvicorn==0.17.6 watchgod==0.8.2 \
     ; else  \
       echo "Skipping dev deps installation" \
     ; fi
