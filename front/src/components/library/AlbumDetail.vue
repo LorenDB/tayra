@@ -5,6 +5,7 @@ import LibraryWidget from '~/components/federation/LibraryWidget.vue'
 import ChannelEntries from '~/components/audio/ChannelEntries.vue'
 import TrackTable from '~/components/audio/track/Table.vue'
 import PlayButton from '~/components/audio/PlayButton.vue'
+import Pagination from '~/components/vui/Pagination.vue'
 
 interface Events {
   (e: 'page-changed', page: number): void
@@ -75,11 +76,19 @@ const getDiscKey = (disc: Track[]) => disc.map(track => track.id).join('|')
           :show-art="false"
           :show-album="false"
           :show-artist="false"
-          :paginate-results="true"
-          :total="totalTracks"
+          :paginate-results="false"
+        />
+      </div>
+      <div
+        v-if="totalTracks > paginateBy"
+        class="ui center aligned basic segment tablet-and-below"
+      >
+        <pagination
+          :current="page"
           :paginate-by="paginateBy"
-          :page="page"
-          @page-changed="emit('page-changed', page)"
+          :total="totalTracks"
+          :compact="true"
+          @update:current="(page: number) => emit('page-changed', page)"
         />
       </div>
     </template>
@@ -95,7 +104,7 @@ const getDiscKey = (disc: Track[]) => disc.map(track => track.id).join('|')
         :total="totalTracks"
         :paginate-by="paginateBy"
         :page="page"
-        @page-changed="emit('page-changed', page)"
+        @page-changed="(page) => emit('page-changed', page)"
       />
     </template>
     <template v-if="!artist.channel && !isSerie">

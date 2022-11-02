@@ -138,7 +138,7 @@ if (props.tracks === undefined) {
 }
 
 const updatePage = (page: number) => {
-  if (props.tracks.length === 0) {
+  if (props.tracks === undefined) {
     currentPage.value = page
     fetchData()
   } else {
@@ -234,7 +234,7 @@ const updatePage = (page: number) => {
 
         <track-row
           v-for="(track, index) in allTracks"
-          :key="track.id + (track.position ?? 0)"
+          :key="`${track.id} ${track.position}`"
           :data-track-id="track.id"
           :data-track-position="track.position"
           :track="track"
@@ -256,7 +256,7 @@ const updatePage = (page: number) => {
       >
         <pagination
           :total="totalTracks"
-          :current="tracks.length > 0 ? page : currentPage"
+          :current="tracks !== undefined ? page : currentPage"
           :paginate-by="paginateBy"
           @update:current="updatePage"
         />
@@ -296,7 +296,7 @@ const updatePage = (page: number) => {
           v-if="paginateResults && totalTracks > paginateBy"
           :paginate-by="paginateBy"
           :total="totalTracks"
-          :current="tracks.length > 0 ? page : currentPage"
+          :current="tracks !== undefined ? page : currentPage"
           :compact="true"
           @update:current="updatePage"
         />
