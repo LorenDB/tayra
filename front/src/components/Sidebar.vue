@@ -28,7 +28,7 @@ const emit = defineEmits<Events>()
 defineProps<Props>()
 
 const store = useStore()
-const theme = useTheme()
+const { theme } = useTheme()
 const themes = useThemeList()
 const { $pgettext } = useGettext()
 

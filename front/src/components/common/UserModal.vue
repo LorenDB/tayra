@@ -21,7 +21,7 @@ const props = defineProps<Props>()
 
 const show = useVModel(props, 'show', emit)
 
-const theme = useTheme()
+const { theme } = useTheme()
 const themes = useThemeList()
 
 const { $pgettext } = useGettext()

@@ -13,7 +13,7 @@ const emit = defineEmits<Events>()
 
 const { $pgettext } = useGettext()
 const themes = useThemeList()
-const theme = useTheme()
+const { theme } = useTheme()
 
 const labels = computed(() => ({
   profile: $pgettext('*/*/*/Noun', 'Profile'),
