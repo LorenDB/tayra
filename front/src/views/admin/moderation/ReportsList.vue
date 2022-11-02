@@ -25,11 +25,13 @@ interface Props extends SmartSearchProps, OrderingProps {
   mode?: 'card'
 
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  defaultQuery?: string
   orderingConfigName?: RouteRecordName
   updateUrl?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: '',
   updateUrl: false,
   mode: 'card',
   orderingConfigName: undefined
@@ -81,7 +83,7 @@ const fetchData = async () => {
 }
 
 onSearch(() => (page.value = 1))
-watch(page, fetchData)
+watch([page, query], fetchData)
 onOrderingUpdate(fetchData)
 fetchData()
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import axios from 'axios'
 import { useVModel, watchDebounced, useTextareaAutosize, syncRef } from '@vueuse/core'
-import { ref, computed, watchEffect, onMounted, nextTick } from 'vue'
+import { ref, computed, watchEffect, onMounted, nextTick, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 interface Events {
@@ -61,13 +61,14 @@ watchEffect(async () => {
     if (value.value && !preview.value && !isLoadingPreview.value) {
       await loadPreview()
     }
-
-    return
   }
-
-  await nextTick()
-  textarea.value.focus()
 })
+
+watch(isPreviewing, (to, from) => {
+  if (from === true) {
+    textarea.value.focus()
+  }
+}, { flush: 'post' })
 
 onMounted(async () => {
   if (props.autofocus) {

@@ -22,11 +22,13 @@ import usePage from '~/composables/navigation/usePage'
 
 interface Props extends SmartSearchProps, OrderingProps {
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
+  defaultQuery?: string
   orderingConfigName?: RouteRecordName
   updateUrl?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  defaultQuery: '',
   updateUrl: false,
   orderingConfigName: undefined
 })
@@ -77,7 +79,7 @@ const fetchData = async () => {
 }
 
 onSearch(() => (page.value = 1))
-watch(page, fetchData)
+watch([page, query], fetchData)
 onOrderingUpdate(fetchData)
 fetchData()
 
