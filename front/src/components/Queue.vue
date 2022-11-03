@@ -17,6 +17,7 @@ import time from '~/utils/time'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import PlayerControls from '~/components/audio/PlayerControls.vue'
+import MilkDrop from '~/components/audio/visualizer/MilkDrop.vue'
 import VirtualList from '~/components/vui/list/VirtualList.vue'
 import QueueItem from '~/components/QueueItem.vue'
 
@@ -164,6 +165,7 @@ const hideArtist = () => {
         <template v-if="currentTrack">
           <div class="cover-container">
             <div class="cover">
+              <milk-drop />
               <img
                 ref="cover"
                 alt=""
