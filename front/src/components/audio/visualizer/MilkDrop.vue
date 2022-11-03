@@ -36,13 +36,16 @@ onScopeDispose(() => {
       ref="canvas"
       @click="loadRandomPreset()"
     />
-    <button
-      v-if="!fullscreen"
-      class="ui secondary button"
-      @click="enter"
-    >
-      <i class="icon expand arrows alternate" />
-    </button>
+
+    <Teleport to=".cover > .cover-buttons">
+      <button
+        v-if="!fullscreen"
+        class="ui secondary button"
+        @click="enter"
+      >
+        <i class="icon expand arrows alternate" />
+      </button>
+    </Teleport>
 
     <Transition name="slide-down">
       <div
@@ -77,27 +80,6 @@ onScopeDispose(() => {
     }
   }
 
-  button {
-    z-index: 2;
-    position: absolute;
-    right: 1em;
-    bottom: 1em;
-    padding: 0.78571429em;
-    margin-right: 0 !important;
-
-    i.icon {
-      display: inline-block;
-      margin-right: 0 !important;
-      display: contents;
-
-      &::before {
-        display: flex;
-        justify-content: center;
-        width: 1em;
-        height: 1em;
-      }
-    }
-  }
 }
 
 .track-info {

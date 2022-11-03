@@ -147,6 +147,13 @@ const hideArtist = () => {
     })
   }
 }
+
+enum CoverType {
+  COVER_ART,
+  MILK_DROP
+}
+
+const coverType = ref(CoverType.COVER_ART)
 </script>
 
 <template>
@@ -165,12 +172,19 @@ const hideArtist = () => {
         <template v-if="currentTrack">
           <div class="cover-container">
             <div class="cover">
-              <milk-drop />
               <img
+                v-if="coverType === CoverType.COVER_ART"
                 ref="cover"
                 alt=""
                 :src="$store.getters['instance/absoluteUrl'](currentTrack.coverUrl)"
               >
+              <milk-drop v-else-if="coverType === CoverType.MILK_DROP" />
+
+              <div class="cover-buttons">
+                <button class="ui secondary button">
+                  <i class="icon ellipsis vertical" />
+                </button>
+              </div>
             </div>
           </div>
           <h1 class="ui header">
