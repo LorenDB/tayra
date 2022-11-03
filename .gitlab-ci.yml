@@ -201,7 +201,7 @@ test_api:
   tags:
     - docker
   artifacts:
-    when: always
+    expire_in: 2 weeks
     reports:
       junit: api/report.xml
       coverage_report:
@@ -278,6 +278,7 @@ build_docs:
   tags:
     - docker
   artifacts:
+    expire_in: 2 weeks
     paths:
       - docs/schema.yml
 
@@ -327,6 +328,7 @@ build_documentation:
     paths:
       - "$PIP_CACHE_DIR"
   artifacts:
+    expire_in: 2 weeks
     paths:
       - public
   rules:
