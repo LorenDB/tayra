@@ -94,7 +94,7 @@ const queue = computed<QueueTrack[]>(() => {
 })
 
 // Current Index
-export const currentIndex = useClamp(useStorage('queue:index', 0), 0, () => tracks.value.length)
+export const currentIndex = useClamp(useStorage('queue:index', 0), 0, () => tracks.value.length - 1)
 export const currentTrack = computed(() => queue.value[currentIndex.value])
 
 // Use Queue
@@ -204,11 +204,15 @@ export const useQueue = createGlobalState(() => {
   // Next track
   const hasNext = computed(() => looping.value === LoopingMode.LoopQueue || currentIndex.value !== tracks.value.length - 1)
   const playNext = async (force = false) => {
-    // Loop entire queue / change track to the next one
-    if (looping.value === LoopingMode.LoopQueue && currentIndex.value === tracks.value.length - 1 && force !== true) {
-      // Loop track programmatically if it is the only track in the queue
-      if (tracks.value.length === 1) return playTrack(currentIndex.value, true)
-      return playTrack(0)
+    if (currentIndex.value === tracks.value.length - 1) {
+      // Loop entire queue / change track to the next one
+      if (looping.value === LoopingMode.LoopQueue && force !== true) {
+        // Loop track programmatically if it is the only track in the queue
+        if (tracks.value.length === 1) return playTrack(currentIndex.value, true)
+        return playTrack(0)
+      }
+
+      isPlaying.value = false
     }
 
     return playTrack(currentIndex.value + 1)
