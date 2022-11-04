@@ -181,8 +181,19 @@ const coverType = ref(CoverType.COVER_ART)
               <milk-drop v-else-if="coverType === CoverType.MILK_DROP" />
 
               <div class="cover-buttons">
-                <button class="ui secondary button">
-                  <i class="icon ellipsis vertical" />
+                <button
+                  v-if="coverType === CoverType.COVER_ART"
+                  class="ui secondary button"
+                  @click="coverType = CoverType.MILK_DROP"
+                >
+                  <i class="icon signal" />
+                </button>
+                <button
+                  v-else-if="coverType === CoverType.MILK_DROP"
+                  class="ui secondary button"
+                  @click="coverType = CoverType.COVER_ART"
+                >
+                  <i class="icon image outline" />
                 </button>
               </div>
             </div>
@@ -422,3 +433,9 @@ const coverType = ref(CoverType.COVER_ART)
     </div>
   </section>
 </template>
+
+<style scoped>
+.icon.image::before {
+  content: "\f03e";
+}
+</style>
