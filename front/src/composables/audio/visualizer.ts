@@ -29,6 +29,7 @@ export const useMilkDrop = (canvas: Ref<HTMLCanvasElement>) => {
 
     loadRandomPreset(0)
     visualizer.value.connectAudio(GAIN_NODE)
+    visualizer.value.setInternalMeshSize(128, 96)
   }
 
   useResizeObserver(canvas, ([entry]) => {
