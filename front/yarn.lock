@@ -2191,14 +2191,14 @@ buntis@0.2.1:
   resolved "https://registry.yarnpkg.com/buntis/-/buntis-0.2.1.tgz#a043aabc7d64f2243bfaa53e34e999c2dd790e82"
   integrity sha512-5wszfQlsqJmZrfxpPkO5yQcEoBAmfUYlXxXU/IM6PhPZ8DMnMMJQ9rvAHfe5WZmnB6E1IoJYylFfTaf1e2FJbQ==
 
-butterchurn-presets@^3.0.0-beta.4:
+butterchurn-presets@3.0.0-beta.4:
   version "3.0.0-beta.4"
   resolved "https://registry.yarnpkg.com/butterchurn-presets/-/butterchurn-presets-3.0.0-beta.4.tgz#393d3f7863d546bdef2c52aec90da76bdbcacd3b"
   integrity sha512-TbQLUPvGOYMZAtWKoCmBtludh9aQZ6NaMGQU4lvPeadBPy3Du3yNmwBjlTMLP5c5mRWElxQPjTL1PtR7FZK3OQ==
   dependencies:
     "@babel/runtime" "^7.12.5"
 
-butterchurn@^3.0.0-beta.4:
+butterchurn@3.0.0-beta.4:
   version "3.0.0-beta.4"
   resolved "https://registry.yarnpkg.com/butterchurn/-/butterchurn-3.0.0-beta.4.tgz#f459d8b81decd4f28f4c90b5c0fc40611ad3d86f"
   integrity sha512-hiY1ktHYHQ8MT65nnZi7GjrgZZ6sl/ipT5rBqEfaYJd90L4SvOtB6lVxtKadtzAyJo2TQJc4gJfEca4cpZo0DA==

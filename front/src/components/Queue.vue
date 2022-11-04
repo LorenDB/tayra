@@ -62,7 +62,11 @@ const labels = computed(() => ({
   previous: $pgettext('*/*/*', 'Previous track'),
   next: $pgettext('*/*/*', 'Next track'),
   pause: $pgettext('*/*/*', 'Pause'),
-  play: $pgettext('*/*/*', 'Play')
+  play: $pgettext('*/*/*', 'Play'),
+  fullscreen: $pgettext('*/*/*', 'Fullscreen'),
+  exitFullscreen: $pgettext('*/*/*', 'Exit fullscreen'),
+  showCoverArt: $pgettext('*/*/*', 'Show cover art'),
+  showVisualizer: $pgettext('*/*/*', 'Show visualizer')
 }))
 
 watchEffect(async () => {
@@ -204,41 +208,61 @@ const coverType = ref(CoverType.COVER_ART)
                 ref="milkdrop"
               />
 
-              <div class="cover-buttons">
-                <button
-                  v-if="coverType === CoverType.COVER_ART"
-                  class="ui secondary button"
-                  @click="coverType = CoverType.MILK_DROP"
+              <Transition name="queue">
+                <div
+                  v-if="!fullscreen || !idle"
+                  class="cover-buttons"
                 >
-                  <i class="icon signal" />
-                </button>
-                <button
-                  v-else-if="coverType === CoverType.MILK_DROP"
-                  class="ui secondary button"
-                  @click="coverType = CoverType.COVER_ART"
-                >
-                  <i class="icon image outline" />
-                </button>
-                <button
-                  v-if="!fullscreen"
-                  class="ui secondary button"
-                  @click="enter"
-                >
-                  <i class="icon expand arrows alternate" />
-                </button>
-              </div>
-            </div>
+                  <button
+                    v-if="coverType === CoverType.COVER_ART"
+                    class="ui secondary button"
+                    :aria-title="labels.showVisualizer"
+                    :title="labels.showVisualizer"
+                    @click="coverType = CoverType.MILK_DROP"
+                  >
+                    <i class="icon signal" />
+                  </button>
+                  <button
+                    v-else-if="coverType === CoverType.MILK_DROP"
+                    class="ui secondary button"
+                    :aria-title="labels.showCoverArt"
+                    :title="labels.showCoverArt"
+                    @click="coverType = CoverType.COVER_ART"
+                  >
+                    <i class="icon image outline" />
+                  </button>
 
-            <Transition name="queue">
-              <div
-                v-if="fullscreen && (!idle || showTrackInfo)"
-                class="track-info"
-                @click="loadRandomPreset()"
-              >
-                <h1>{{ currentTrack.title }}</h1>
-                <h2>{{ currentTrack.artistName }} &mdash; {{ currentTrack.albumTitle }}</h2>
-              </div>
-            </Transition>
+                  <button
+                    v-if="!fullscreen"
+                    class="ui secondary button"
+                    :aria-title="labels.fullscreen"
+                    :title="labels.fullscreen"
+                    @click="enter"
+                  >
+                    <i class="icon expand" />
+                  </button>
+                  <button
+                    v-else
+                    class="ui secondary button"
+                    :aria-title="labels.exitFullscreen"
+                    :title="labels.exitFullscreen"
+                    @click="exit"
+                  >
+                    <i class="icon compress" />
+                  </button>
+                </div>
+              </Transition>
+              <Transition name="queue">
+                <div
+                  v-if="fullscreen && (!idle || showTrackInfo)"
+                  class="track-info"
+                  @click="loadRandomPreset()"
+                >
+                  <h1>{{ currentTrack.title }}</h1>
+                  <h2>{{ currentTrack.artistName }} &mdash; {{ currentTrack.albumTitle }}</h2>
+                </div>
+              </Transition>
+            </div>
           </div>
           <h1 class="ui header">
             <div class="content ellipsis">
@@ -475,9 +499,3 @@ const coverType = ref(CoverType.COVER_ART)
     </div>
   </section>
 </template>
-
-<style scoped>
-.icon.image::before {
-  content: "\f03e";
-}
-</style>

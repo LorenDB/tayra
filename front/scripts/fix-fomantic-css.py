@@ -175,6 +175,9 @@ def discard_unused_icons(rule):
         ".chevron",
         ".right",
         ".left",
+        ".compress",
+        ".expand",
+        ".image",
     ]
     if ":before" not in rule["lines"][0]:
         return False
