@@ -3,7 +3,7 @@ import type { Track, Album, Artist, Library } from '~/types'
 
 import { momentFormat } from '~/utils/filters'
 import { useGettext } from 'vue3-gettext'
-import { computed, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { sum } from 'lodash-es'
 
@@ -29,9 +29,7 @@ const props = defineProps<Props>()
 
 const object = ref<Album | null>(null)
 const artist = ref<Artist | null>(null)
-const discs = ref([] as Track[][])
 const libraries = ref([] as Library[])
-const page = ref(1)
 const paginateBy = ref(50)
 
 const totalTracks = computed(() => object.value?.tracks_count ?? 0)
@@ -51,18 +49,7 @@ const fetchData = async () => {
   isLoading.value = true
 
   const albumResponse = await axios.get(`albums/${props.id}/`, { params: { refresh: 'true' } })
-  const [artistResponse, tracksResponse] = await Promise.all([
-    axios.get(`artists/${albumResponse.data.artist.id}/`),
-    axios.get('tracks/', {
-      params: {
-        ordering: 'disc_number,position',
-        album: props.id,
-        page_size: paginateBy.value,
-        page: page.value,
-        include_channels: true
-      }
-    })
-  ])
+  const artistResponse = await axios.get(`artists/${albumResponse.data.artist.id}/`)
 
   artist.value = artistResponse.data
   if (artist.value?.channel) {
@@ -71,20 +58,48 @@ const fetchData = async () => {
 
   object.value = albumResponse.data
   if (object.value) {
-    object.value.tracks = tracksResponse.data.results
-    discs.value = object.value.tracks.reduce((acc: Track[][], track: Track) => {
-      const discNumber = track.disc_number - (object.value?.tracks[0]?.disc_number ?? 1)
-      acc[discNumber] ??= []
-      acc[discNumber].push(track)
-      return acc
-    }, [])
+    object.value.tracks = []
   }
 
+  fetchTracks()
   isLoading.value = false
 }
 
+const tracks = reactive([] as Track[])
+watch(tracks, (tracks) => {
+  if (object.value) {
+    object.value.tracks = tracks
+  }
+})
+
+const isLoadingTracks = ref(false)
+const fetchTracks = async () => {
+  if (isLoadingTracks.value) return
+  isLoadingTracks.value = true
+  tracks.length = 0
+  let url = 'tracks/'
+  try {
+    while (url) {
+      const response = await axios.get(url, {
+        params: {
+          ordering: 'disc_number,position',
+          album: props.id,
+          page_size: paginateBy.value,
+          include_channels: true
+        }
+      })
+
+      url = response.data.next
+      tracks.push(...response.data.results)
+    }
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoadingTracks.value = false
+  }
+}
+
 watch(() => props.id, fetchData, { immediate: true })
-watch(page, fetchData)
 
 const router = useRouter()
 const remove = async () => {
@@ -337,15 +352,13 @@ const remove = async () => {
               v-if="object"
               :key="$route.fullPath"
               :paginate-by="paginateBy"
-              :page="page"
               :total-tracks="totalTracks"
               :is-serie="isSerie"
               :artist="artist"
-              :discs="discs"
               :object="object"
+              :is-loading-tracks="isLoadingTracks"
               object-type="album"
               @libraries-loaded="libraries = $event"
-              @page-changed="page = $event"
             />
           </div>
         </div>
