@@ -216,7 +216,7 @@ const coverType = ref(CoverType.COVER_ART)
                   <button
                     v-if="coverType === CoverType.COVER_ART"
                     class="ui secondary button"
-                    :aria-title="labels.showVisualizer"
+                    :aria-label="labels.showVisualizer"
                     :title="labels.showVisualizer"
                     @click="coverType = CoverType.MILK_DROP"
                   >
@@ -225,7 +225,7 @@ const coverType = ref(CoverType.COVER_ART)
                   <button
                     v-else-if="coverType === CoverType.MILK_DROP"
                     class="ui secondary button"
-                    :aria-title="labels.showCoverArt"
+                    :aria-label="labels.showCoverArt"
                     :title="labels.showCoverArt"
                     @click="coverType = CoverType.COVER_ART"
                   >
@@ -235,7 +235,7 @@ const coverType = ref(CoverType.COVER_ART)
                   <button
                     v-if="!fullscreen"
                     class="ui secondary button"
-                    :aria-title="labels.fullscreen"
+                    :aria-label="labels.fullscreen"
                     :title="labels.fullscreen"
                     @click="enter"
                   >
@@ -244,7 +244,7 @@ const coverType = ref(CoverType.COVER_ART)
                   <button
                     v-else
                     class="ui secondary button"
-                    :aria-title="labels.exitFullscreen"
+                    :aria-label="labels.exitFullscreen"
                     :title="labels.exitFullscreen"
                     @click="exit"
                   >
