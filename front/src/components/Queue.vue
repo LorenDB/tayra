@@ -455,7 +455,6 @@ const coverType = ref(CoverType.COVER_ART)
               :index="index"
               :source="item"
               :class="[...classList, currentIndex === index && 'active']"
-              key-field="key"
               @play="play"
               @remove="dequeue"
             />

@@ -164,6 +164,7 @@ defineExpose({
     <recycle-scroller
       ref="virtualList"
       class="virtual-list drag-container"
+      key-field="key"
       :items="list"
       :item-size="size"
       @mousedown="onMousedown"
