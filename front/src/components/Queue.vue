@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { QueueItemSource } from '~/types'
 
-import { whenever, watchDebounced, useCurrentElement, useScrollLock } from '@vueuse/core'
+import { whenever, watchDebounced, useCurrentElement, useScrollLock, useFullscreen, useIdle, refAutoReset } from '@vueuse/core'
 import { nextTick, ref, computed, watchEffect, onMounted } from 'vue'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { useGettext } from 'vue3-gettext'
@@ -148,6 +148,18 @@ const hideArtist = () => {
   }
 }
 
+const cover = ref()
+const { isFullscreen: fullscreen, enter, exit } = useFullscreen(cover)
+const { idle } = useIdle(2000)
+
+const showTrackInfo = refAutoReset(false, 5000)
+whenever(currentTrack, () => (showTrackInfo.value = true))
+
+const milkdrop = ref()
+const loadRandomPreset = () => {
+  milkdrop.value?.loadRandomPreset()
+}
+
 enum CoverType {
   COVER_ART,
   MILK_DROP
@@ -170,15 +182,27 @@ const coverType = ref(CoverType.COVER_ART)
         class="ui basic segment"
       >
         <template v-if="currentTrack">
-          <div class="cover-container">
+          <div
+            ref="cover"
+            :class="['cover-container', { idle, fullscreen }]"
+          >
             <div class="cover">
-              <img
-                v-if="coverType === CoverType.COVER_ART"
-                ref="cover"
-                alt=""
-                :src="$store.getters['instance/absoluteUrl'](currentTrack.coverUrl)"
-              >
-              <milk-drop v-else-if="coverType === CoverType.MILK_DROP" />
+              <template v-if="coverType === CoverType.COVER_ART">
+                <img
+                  v-if="fullscreen"
+                  class="cover-shadow"
+                  :src="$store.getters['instance/absoluteUrl'](currentTrack.coverUrl)"
+                >
+                <img
+                  ref="cover"
+                  alt=""
+                  :src="$store.getters['instance/absoluteUrl'](currentTrack.coverUrl)"
+                >
+              </template>
+              <milk-drop
+                v-else-if="coverType === CoverType.MILK_DROP"
+                ref="milkdrop"
+              />
 
               <div class="cover-buttons">
                 <button
@@ -195,8 +219,26 @@ const coverType = ref(CoverType.COVER_ART)
                 >
                   <i class="icon image outline" />
                 </button>
+                <button
+                  v-if="!fullscreen"
+                  class="ui secondary button"
+                  @click="enter"
+                >
+                  <i class="icon expand arrows alternate" />
+                </button>
               </div>
             </div>
+
+            <Transition name="queue">
+              <div
+                v-if="fullscreen && (!idle || showTrackInfo)"
+                class="track-info"
+                @click="loadRandomPreset()"
+              >
+                <h1>{{ currentTrack.title }}</h1>
+                <h2>{{ currentTrack.artistName }} &mdash; {{ currentTrack.albumTitle }}</h2>
+              </div>
+            </Transition>
           </div>
           <h1 class="ui header">
             <div class="content ellipsis">

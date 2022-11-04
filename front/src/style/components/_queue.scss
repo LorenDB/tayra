@@ -249,6 +249,10 @@
 
 
 // Wvffle's styles
+.theme-light .cover-container.fullscreen {
+  background: #fff;
+}
+
 .component-queue {
   #queue-grid {
     display: grid;
@@ -289,6 +293,10 @@
         width: 50vh;
         max-width: 90%;
 
+        &.idle {
+          cursor: none;
+        }
+
         .cover {
           height: 0;
           width: 100%;
@@ -302,15 +310,26 @@
             position: absolute;
             top: 0;
             left: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 1;
+            margin: 0 auto;
           }
 
-          canvas {
-            z-index: 1;
+          img {
+            max-width: 100vh;
+            max-height: 100vh;
           }
 
           &:hover .cover-buttons {
             opacity: 1;
             transform: translateY(0);
+          }
+
+          .cover-shadow {
+            transform: scale(1.2);
+            filter: blur(15vh);
+            border-radius: 22vh;
           }
 
           .cover-buttons {
@@ -346,6 +365,26 @@
               }
             }
           }
+        }
+
+        .track-info {
+          position: absolute;
+          z-index: 3;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          background: linear-gradient(to bottom, #0000, #000);
+          color: #fff;
+          text-align: left;
+          padding: 3em 1em 1em;
+
+          h1, h2 {
+            margin: 0;
+          }
+        }
+
+        &:not(.fullscreen) .track-info {
+          transition: none !important;
         }
       }
 
