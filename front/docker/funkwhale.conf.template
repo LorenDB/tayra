@@ -18,7 +18,7 @@ server {
     # If you are using S3 to host your files, remember to add your S3 URL to the
     # media-src and img-src headers (e.g. img-src 'self' https://<your-S3-URL> data:).
 
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' ${AWS_S3_ENDPOINT_URL} data:; font-src 'self' data:; object-src 'none'; media-src ${AWS_S3_ENDPOINT_URL} 'self' data:";
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' ${AWS_S3_ENDPOINT_URL} data:; font-src 'self' data:; object-src 'none'; media-src ${AWS_S3_ENDPOINT_URL} 'self' data:";
     add_header Referrer-Policy "strict-origin-when-cross-origin";
     add_header X-Frame-Options "SAMEORIGIN" always;
 
@@ -30,7 +30,7 @@ server {
     }
 
     location /front/ {
-        add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' ${AWS_S3_ENDPOINT_URL} data:; font-src 'self' data:; object-src 'none'; media-src ${AWS_S3_ENDPOINT_URL} 'self' data:";
+        add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' ${AWS_S3_ENDPOINT_URL} data:; font-src 'self' data:; object-src 'none'; media-src ${AWS_S3_ENDPOINT_URL} 'self' data:";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
         add_header Service-Worker-Allowed "/";
         alias /usr/share/nginx/html/;
@@ -40,7 +40,7 @@ server {
     }
 
     location = /front/embed.html {
-        add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' ${AWS_S3_ENDPOINT_URL} data:; font-src 'self' data:; object-src 'none'; media-src ${AWS_S3_ENDPOINT_URL} 'self' data:";
+        add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' ${AWS_S3_ENDPOINT_URL} data:; font-src 'self' data:; object-src 'none'; media-src ${AWS_S3_ENDPOINT_URL} 'self' data:";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
 
         add_header X-Frame-Options "" always;
@@ -68,6 +68,7 @@ server {
 
     location /media/ {
         alias ${MEDIA_ROOT}/;
+        add_header Access-Control-Allow-Origin '*';
     }
 
     # This is an internal location that is used to serve
@@ -81,6 +82,7 @@ server {
         # Needed to ensure DSub auth isn't forwarded to S3/Minio, see #932.
 #       proxy_set_header Authorization "";                                  # S3
 #       proxy_pass $1;                                                      # S3
+        add_header Access-Control-Allow-Origin '*';
     }
 
     location /_protected/music/ {
@@ -90,6 +92,7 @@ server {
         # Set this to the same value as your MUSIC_DIRECTORY_PATH setting.
         internal;
         alias   ${MUSIC_DIRECTORY_PATH}/;
+        add_header Access-Control-Allow-Origin '*';
     }
 
     location /staticfiles/ {
