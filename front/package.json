@@ -19,8 +19,8 @@
     "postinstall": "yarn run fix-fomantic-css"
   },
   "dependencies": {
-    "@sentry/tracing": "7.17.2",
-    "@sentry/vue": "7.17.2",
+    "@sentry/tracing": "7.17.4",
+    "@sentry/vue": "7.17.4",
     "@vue/runtime-core": "3.2.41",
     "@vueuse/core": "9.3.1",
     "@vueuse/integrations": "9.3.1",
