@@ -86,7 +86,7 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "6.0.1",
     "eslint-plugin-vue": "9.6.0",
-    "jsdom": "20.0.1",
+    "jsdom": "20.0.2",
     "moxios": "0.4.0",
     "sass": "1.55.0",
     "sinon": "14.0.1",
