@@ -69,7 +69,7 @@
     "@types/semantic-ui": "2.2.7",
     "@types/showdown": "2.0.0",
     "@types/vue-virtual-scroller": "npm:@earltp/vue-virtual-scroller",
-    "@typescript-eslint/eslint-plugin": "5.41.0",
+    "@typescript-eslint/eslint-plugin": "5.42.0",
     "@vitejs/plugin-vue": "3.2.0",
     "@vitest/coverage-c8": "0.24.5",
     "@vue/compiler-sfc": "3.2.41",
