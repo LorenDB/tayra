@@ -169,7 +169,7 @@ enum CoverType {
   MILK_DROP
 }
 
-const coverType = useStorage('cover-type', CoverType.COVER_ART)
+const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
 </script>
 
 <template>
