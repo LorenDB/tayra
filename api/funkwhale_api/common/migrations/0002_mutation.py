@@ -36,8 +36,8 @@ class Migration(migrations.Migration):
                     models.UUIDField(db_index=True, default=uuid.uuid4, unique=True),
                 ),
                 ("type", models.CharField(db_index=True, max_length=100)),
-                ("is_approved", models.NullBooleanField(default=None)),
-                ("is_applied", models.NullBooleanField(default=None)),
+                ("is_approved", models.BooleanField(default=None, null=True)),
+                ("is_applied", models.BooleanField(default=None, null=True)),
                 (
                     "creation_date",
                     models.DateTimeField(

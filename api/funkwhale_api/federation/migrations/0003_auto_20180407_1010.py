@@ -77,7 +77,7 @@ class Migration(migrations.Migration):
                     models.DateTimeField(default=django.utils.timezone.now),
                 ),
                 ("modification_date", models.DateTimeField(auto_now=True)),
-                ("approved", models.NullBooleanField(default=None)),
+                ("approved", models.BooleanField(default=None, null=True)),
                 (
                     "actor",
                     models.ForeignKey(

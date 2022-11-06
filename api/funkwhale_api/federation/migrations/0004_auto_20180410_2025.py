@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="follow",
             name="approved",
-            field=models.NullBooleanField(default=None),
+            field=models.BooleanField(default=None, null=True),
         ),
         migrations.AddField(
             model_name="library",
