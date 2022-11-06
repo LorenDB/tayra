@@ -680,7 +680,7 @@ six = ">=1.4.0"
 
 [[package]]
 name = "django-debug-toolbar"
-version = "3.6.0"
+version = "3.7.0"
 description = "A configurable set of panels that display various debug information about the current request/response."
 category = "dev"
 optional = false
@@ -2193,7 +2193,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "c20c2b7e4d1059b7c16e6265d2afbc17de74f0cd6e2cd26c9fb07cc6910493b0"
+content-hash = "c1ec08657ddf4c1994cfeca0ec1584769e1253b44589ca30ac173482c4198fad"
 
 [metadata.files]
 aiohttp = [
@@ -2643,8 +2643,8 @@ django-coverage-plugin = [
     {file = "django_coverage_plugin-2.0.4.tar.gz", hash = "sha256:f662efe592bf98baf2e540312059c918daa8d8379244a2a6b6f984c4a1dda015"},
 ]
 django-debug-toolbar = [
-    {file = "django-debug-toolbar-3.6.0.tar.gz", hash = "sha256:95fc2fd29c56cc86678aae9f6919ececefe892f2a78c4004b193a223a8380c3d"},
-    {file = "django_debug_toolbar-3.6.0-py3-none-any.whl", hash = "sha256:fe7fe3f21865218827e2162ecc06eba386dfe8cffe4f3501c49bb4359e06a0e6"},
+    {file = "django-debug-toolbar-3.7.0.tar.gz", hash = "sha256:1e3acad24e3d351ba45c6fa2072e4164820307332a776b16c9f06d1f89503465"},
+    {file = "django_debug_toolbar-3.7.0-py3-none-any.whl", hash = "sha256:80de23066b624d3970fd296cf02d61988e5d56c31aa0dc4a428970b46e2883a8"},
 ]
 django-dynamic-preferences = [
     {file = "django-dynamic-preferences-1.14.0.tar.gz", hash = "sha256:c00abcb8d524067390a66518cfcd32683b87ad3cc620d5913649fc7707b80833"},
