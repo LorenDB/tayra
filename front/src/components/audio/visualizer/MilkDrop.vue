@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { useMilkDrop } from '~/composables/audio/visualizer'
 
-import { onScopeDispose, ref } from 'vue'
+import { onScopeDispose, ref, watch } from 'vue'
 import { useRafFn } from '@vueuse/core'
 
 const milkdrop = ref()
 const canvas = ref()
 
-const { visualizer, loadRandomPreset, render } = useMilkDrop(canvas)
+const { visualizer, loadRandomPreset, render, isVisible } = useMilkDrop(canvas)
 
-const { pause } = useRafFn(render)
+const { resume, pause } = useRafFn(render)
+
+watch(isVisible, (visible) => visible
+  ? resume()
+  : pause()
+)
 
 onScopeDispose(() => {
   pause()

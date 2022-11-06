@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { QueueItemSource } from '~/types'
 
-import { whenever, watchDebounced, useCurrentElement, useScrollLock, useFullscreen, useIdle, refAutoReset } from '@vueuse/core'
+import { whenever, watchDebounced, useCurrentElement, useScrollLock, useFullscreen, useIdle, refAutoReset, useStorage } from '@vueuse/core'
 import { nextTick, ref, computed, watchEffect, onMounted } from 'vue'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { useGettext } from 'vue3-gettext'
@@ -169,7 +169,7 @@ enum CoverType {
   MILK_DROP
 }
 
-const coverType = ref(CoverType.COVER_ART)
+const coverType = useStorage('cover-type', CoverType.COVER_ART)
 </script>
 
 <template>

@@ -1,8 +1,8 @@
 import type { Ref } from 'vue'
 
 import { AUDIO_CONTEXT, GAIN_NODE } from './audio-api'
-import { useResizeObserver } from '@vueuse/core'
-import { ref, markRaw } from 'vue'
+import { useResizeObserver, useStorage } from '@vueuse/core'
+import { watchEffect, ref, markRaw } from 'vue'
 
 // @ts-expect-error butterchurn has no typings
 import butterchurnPresets from 'butterchurn-presets'
@@ -11,14 +11,26 @@ import butterchurnPresets from 'butterchurn-presets'
 import butterchurn from 'butterchurn'
 
 export const useMilkDrop = (canvas: Ref<HTMLCanvasElement>) => {
-  const presets = Object.entries(butterchurnPresets)
+  const presets = Object.keys(butterchurnPresets)
   const visualizer = ref()
 
-  const loadRandomPreset = (blendTime = 1) => {
+  const getRandomPreset = () => {
     const index = (presets.length * Math.random()) | 0
-    const [name, preset] = presets[index]
+    return presets[index]
+  }
+
+  const presetName = useStorage<string | undefined>('milk-drop:preset', undefined)
+  watchEffect(() => {
+    const name = presetName.value
+    if (name === undefined) return
+
     console.log(`Switching to preset: '${name}'`)
-    visualizer.value.loadPreset(preset, blendTime)
+    visualizer.value?.loadPreset(butterchurnPresets[name], 1)
+  })
+
+  const loadRandomPreset = () => {
+    const name = getRandomPreset()
+    presetName.value = name
   }
 
   const initialize = (canvas: HTMLCanvasElement, width: number, height: number) => {
@@ -27,17 +39,21 @@ export const useMilkDrop = (canvas: Ref<HTMLCanvasElement>) => {
       height
     }))
 
-    loadRandomPreset(0)
+    if (presetName.value === undefined) {
+      presetName.value = getRandomPreset()
+    }
+
     visualizer.value.connectAudio(GAIN_NODE)
     visualizer.value.setInternalMeshSize(128, 96)
   }
 
+  const isVisible = ref(false)
   useResizeObserver(canvas, ([entry]) => {
     const { width, height } = entry.contentRect
 
-    console.log(width, height)
     canvas.value.width = width
     canvas.value.height = height
+    isVisible.value = !!(width * height)
 
     if (visualizer.value === undefined) {
       initialize(entry.target as HTMLCanvasElement, width, height)
@@ -52,13 +68,14 @@ export const useMilkDrop = (canvas: Ref<HTMLCanvasElement>) => {
       visualizer.value?.render()
     } catch (error) {
       console.error(error)
-      loadRandomPreset(0)
+      loadRandomPreset()
     }
   }
 
   return {
     visualizer,
     loadRandomPreset,
-    render
+    render,
+    isVisible
   }
 }
