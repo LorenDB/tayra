@@ -154,7 +154,7 @@ def test_import_files_in_place(factories, mocker, settings):
         interactive=False,
     )
     upload = library.uploads.last()
-    assert bool(upload.audio_file) is False
+    assert not upload.audio_file
     mocked_process.assert_called_once_with(upload_id=upload.pk)
 
 

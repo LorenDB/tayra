@@ -187,7 +187,7 @@ class AttachmentQuerySet(models.QuerySet):
             field_query = ~models.Q(**{field: None})
             query = query | field_query if query else field_query
 
-        if include is False:
+        if not include:
             query = ~query
 
         return self.filter(query)

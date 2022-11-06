@@ -249,7 +249,7 @@ FID_MODEL_LABELS = [
 
 def get_object_by_fid(fid, local=None):
 
-    if local is True:
+    if local:
         parsed = urllib.parse.urlparse(fid)
         if parsed.netloc != settings.FEDERATION_HOSTNAME:
             raise ObjectDoesNotExist()

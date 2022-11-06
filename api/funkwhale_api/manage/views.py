@@ -537,7 +537,7 @@ class ManageReportViewSet(
 
     def perform_update(self, serializer):
         is_handled = serializer.instance.is_handled
-        if not is_handled and serializer.validated_data.get("is_handled") is True:
+        if not is_handled and serializer.validated_data.get("is_handled"):
             # report was resolved, we assign to the mod making the request
             serializer.save(assigned_to=self.request.user.actor)
         else:

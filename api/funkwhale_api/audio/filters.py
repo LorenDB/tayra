@@ -54,7 +54,7 @@ class ChannelFilter(moderation_filters.HiddenContentFilterSet):
 
         query = Q(actor__in=emitted_follows.values_list("target", flat=True))
 
-        if value is True:
+        if value:
             return queryset.filter(query)
         else:
             return queryset.exclude(query)
@@ -64,9 +64,9 @@ class ChannelFilter(moderation_filters.HiddenContentFilterSet):
             attributed_to=actors.get_service_actor(),
             actor__preferred_username__startswith="rssfeed-",
         )
-        if value is True:
+        if value:
             queryset = queryset.filter(query)
-        if value is False:
+        else:
             queryset = queryset.exclude(query)
 
         return queryset

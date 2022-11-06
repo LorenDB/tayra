@@ -135,10 +135,7 @@ class ArtistFilter(
         return queryset.playable_by(actor, value).distinct()
 
     def filter_has_albums(self, queryset, name, value):
-        if value is True:
-            return queryset.filter(albums__isnull=False)
-        else:
-            return queryset.filter(albums__isnull=True)
+        return queryset.filter(albums__isnull=not value)
 
 
 class TrackFilter(

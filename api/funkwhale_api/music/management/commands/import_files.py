@@ -355,7 +355,7 @@ class Command(BaseCommand):
         batch_duration = None
         self.stdout.write("Starting import of new files…")
         for i, entries in enumerate(batch(crawler, options["batch_size"])):
-            if options.get("update_cache", False) is True:
+            if options.get("update_cache", False):
                 # check to see if the scan was cancelled
                 if cache.get("fs-import:status") == "canceled":
                     raise CommandError("Import cancelled")

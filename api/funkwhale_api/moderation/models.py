@@ -226,7 +226,7 @@ class UserRequest(models.Model):
 
 @receiver(pre_save, sender=Report)
 def set_handled_date(sender, instance, **kwargs):
-    if instance.is_handled is True and not instance.handled_date:
+    if instance.is_handled and not instance.handled_date:
         instance.handled_date = timezone.now()
     elif not instance.is_handled:
         instance.handled_date = None

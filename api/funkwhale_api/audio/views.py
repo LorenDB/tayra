@@ -102,7 +102,7 @@ class ChannelViewSet(
             return serializers.ChannelSerializer
         elif self.action in ["update", "partial_update"]:
             return serializers.ChannelUpdateSerializer
-        elif self.action is "create":
+        elif self.action == "create":
             return serializers.ChannelCreateSerializer
         return serializers.ChannelSerializer
 

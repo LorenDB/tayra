@@ -64,7 +64,7 @@ class HiddenContentFilterSet(filters.FilterSet):
         config = self.__class__.Meta.hidden_content_fields_mapping
         final_query = get_filtered_content_query(config, user)
 
-        if value is True:
+        if value:
             return queryset.filter(final_query)
         else:
             return queryset.exclude(final_query)
