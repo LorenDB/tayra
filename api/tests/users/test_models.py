@@ -244,7 +244,7 @@ def test_get_by_natural_key_annotates_primary_email_verified_no_email(factories)
     user = factories["users.User"]()
     user = models.User.objects.get_by_natural_key(user.username)
 
-    assert user.has_verified_primary_email is None
+    assert user.has_verified_primary_email is False
 
 
 def test_get_by_natural_key_annotates_primary_email_verified_true(factories):

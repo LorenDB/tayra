@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.utils.translation import ugettext as _
 
 from django.core.cache import cache
@@ -10,14 +9,6 @@ from oauth2_provider.contrib.rest_framework.authentication import (
 from rest_framework import exceptions
 
 from funkwhale_api.users import models as users_models
-
-
-def should_verify_email(user):
-    if user.is_superuser:
-        return False
-    has_unverified_email = not user.has_verified_primary_email
-    mandatory_verification = settings.ACCOUNT_EMAIL_VERIFICATION != "optional"
-    return has_unverified_email and mandatory_verification
 
 
 class UnverifiedEmail(Exception):
@@ -68,7 +59,7 @@ class ApplicationTokenAuthentication(object):
             msg = _("User account is disabled.")
             raise exceptions.AuthenticationFailed(msg)
 
-        if should_verify_email(user):
+        if user.should_verify_email():
             raise UnverifiedEmail(user)
 
         request.scopes = application.scope.split()

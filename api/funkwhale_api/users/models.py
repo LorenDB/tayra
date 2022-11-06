@@ -105,13 +105,7 @@ class UserQuerySet(models.QuerySet):
     def for_auth(self):
         """Optimization to avoid additional queries during authentication"""
         qs = self.select_related("actor__domain")
-        verified_emails = EmailAddress.objects.filter(
-            user=models.OuterRef("id"), primary=True
-        ).values("verified")[:1]
-        subquery = models.Subquery(verified_emails)
-        return qs.annotate(has_verified_primary_email=subquery).prefetch_related(
-            "plugins"
-        )
+        return qs.prefetch_related("plugins", "emailaddress_set")
 
 
 class UserManager(BaseUserManager):
@@ -314,6 +308,17 @@ class User(AbstractUser):
         if not self.actor:
             return
         return self.actor.attachment_icon
+
+    @property
+    def has_verified_primary_email(self) -> bool:
+        return len(self.emailaddress_set.filter(primary=True, verified=True)) > 0
+
+    def should_verify_email(self):
+        if self.is_superuser:
+            return False
+        has_unverified_email = not self.has_verified_primary_email
+        mandatory_verification = settings.ACCOUNT_EMAIL_VERIFICATION != "optional"
+        return has_unverified_email and mandatory_verification
 
 
 def generate_code(length=10):

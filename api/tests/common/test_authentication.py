@@ -25,9 +25,10 @@ def test_should_verify_email(
     settings,
 ):
     settings.ACCOUNT_EMAIL_VERIFICATION = setting_value
-    user = factories["users.User"](is_superuser=is_superuser)
-    setattr(user, "has_verified_primary_email", has_verified_primary_email)
-    assert authentication.should_verify_email(user) is expected
+    user = factories["users.User"](
+        is_superuser=is_superuser, verified_email=has_verified_primary_email
+    )
+    assert user.should_verify_email() is expected
 
 
 def test_app_token_authentication(factories, api_request):
