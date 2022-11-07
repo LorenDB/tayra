@@ -660,6 +660,7 @@ OAUTH2_PROVIDER = {
         "ACCESS_TOKEN_EXPIRE_SECONDS", default=60 * 60 * 10
     ),
     "OAUTH2_SERVER_CLASS": "funkwhale_api.users.oauth.server.OAuth2Server",
+    "PKCE_REQUIRED": False,
 }
 OAUTH2_PROVIDER_APPLICATION_MODEL = "users.Application"
 OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = "users.AccessToken"

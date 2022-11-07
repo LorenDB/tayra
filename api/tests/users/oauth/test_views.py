@@ -294,12 +294,17 @@ def test_token_view_post(api_client, factories):
     app = grant.application
     url = reverse("api:v1:oauth:token")
 
+    # The Client Secret is hashed on save, so we need to set it manually to something
+    _client_secret = "random_langer_code_bla_bla"
+    app.client_secret = _client_secret
+    app.save()
+
     response = api_client.post(
         url,
         {
             "redirect_uri": app.redirect_uris,
             "client_id": app.client_id,
-            "client_secret": app.client_secret,
+            "client_secret": _client_secret,
             "grant_type": "authorization_code",
             "code": grant.code,
         },
@@ -329,12 +334,17 @@ def test_revoke_view_post(logged_in_client, factories):
     token = factories["users.AccessToken"]()
     url = reverse("api:v1:oauth:revoke")
 
+    # The Client Secret is hashed on save, so we need to set it manually to something
+    _client_secret = "random_langer_code_bla_bla"
+    token.application.client_secret = _client_secret
+    token.application.save()
+
     response = logged_in_client.post(
         url,
         {
             "token": token.token,
             "client_id": token.application.client_id,
-            "client_secret": token.application.client_secret,
+            "client_secret": _client_secret,
         },
     )
     assert response.status_code == 200
