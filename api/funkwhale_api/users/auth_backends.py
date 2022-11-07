@@ -44,7 +44,7 @@ class ModelBackend(backends.ModelBackend):
 
     def user_can_authenticate(self, user):
         can_authenticate = super().user_can_authenticate(user)
-        if authentication.should_verify_email(user):
+        if user.should_verify_email():
             raise authentication.UnverifiedEmail(user)
 
         return can_authenticate
