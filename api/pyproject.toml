@@ -52,7 +52,7 @@ asgiref = "==3.5.2" #1516
 ipython = "==7.34.0"
 python-ldap = "==3.4.3"
 django-auth-ldap = "==4.1.0"
-uvicorn = {version = "==0.18.3", extras = ["standard"]}
+uvicorn = {version = "==0.19.0", extras = ["standard"]}
 django-cache-memoize = "0.1.10"
 requests-http-message-signatures = "==0.3.1"
 drf-spectacular = "==0.24.2"
