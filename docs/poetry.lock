@@ -331,7 +331,7 @@ test = ["cython", "html5lib", "pytest (>=4.6)", "typed_ast"]
 
 [[package]]
 name = "sphinx-design"
-version = "0.2.0"
+version = "0.3.0"
 description = "A sphinx extension for designing beautiful, view size responsive web components."
 category = "main"
 optional = false
@@ -512,7 +512,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "39ba9a39b6d4c5185765316ee37dd2d83966e9c1218651cd135f0567c5cbf42e"
+content-hash = "2aa181d6ffbbd404db18693c27feac5bc4dc92eb870e0695c98acac4dcb431a7"
 
 [metadata.files]
 alabaster = [
@@ -700,8 +700,8 @@ sphinx = [
     {file = "sphinx-5.3.0-py3-none-any.whl", hash = "sha256:060ca5c9f7ba57a08a1219e547b269fadf125ae25b06b9fa7f66768efb652d6d"},
 ]
 sphinx-design = [
-    {file = "sphinx_design-0.2.0-py3-none-any.whl", hash = "sha256:5c7117cb4b566bd769dcb4314a64d72257ae89724b4917a8f2ef55459e1d861b"},
-    {file = "sphinx_design-0.2.0.tar.gz", hash = "sha256:b148a5258061a46ee826d57ea0729260f29b4e9131d2a681545e0d4f3c0f19ee"},
+    {file = "sphinx_design-0.3.0-py3-none-any.whl", hash = "sha256:823c1dd74f31efb3285ec2f1254caefed29d762a40cd676f58413a1e4ed5cc96"},
+    {file = "sphinx_design-0.3.0.tar.gz", hash = "sha256:7183fa1fae55b37ef01bda5125a21ee841f5bbcbf59a35382be598180c4cefba"},
 ]
 sphinx-intl = [
     {file = "sphinx-intl-2.0.1.tar.gz", hash = "sha256:b25a6ec169347909e8d983eefe2d8adecb3edc2f27760db79b965c69950638b4"},
