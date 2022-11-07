@@ -3,7 +3,6 @@ import hashlib
 
 from rest_framework import authentication, exceptions
 
-from funkwhale_api.common import authentication as common_authentication
 from funkwhale_api.users.models import User
 
 

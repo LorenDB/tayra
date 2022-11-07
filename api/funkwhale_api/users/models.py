@@ -16,7 +16,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from allauth.account.models import EmailAddress
 from django_auth_ldap.backend import populate_user as ldap_populate_user
 from oauth2_provider import models as oauth2_models
 from oauth2_provider import validators as oauth2_validators
