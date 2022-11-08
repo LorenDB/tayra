@@ -5555,10 +5555,10 @@ vue-tsc@1.0.9:
     "@volar/vue-language-core" "1.0.9"
     "@volar/vue-typescript" "1.0.9"
 
-vue-upload-component@3.1.5:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/vue-upload-component/-/vue-upload-component-3.1.5.tgz#ea2a879eb37978f0563fc850c7abd8ab17e07f83"
-  integrity sha512-/i7jX73aqHQ4ITiEJE1OOUzETS41ZGiHksn9hWkdcp+rfuLxsrqK4OjWrGPA8psjHeo+Xi12MRhOzqpJA+6fAA==
+vue-upload-component@3.1.6:
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/vue-upload-component/-/vue-upload-component-3.1.6.tgz#38c9c750b9177c897795a9979c45b7def6e5b374"
+  integrity sha512-MAQ0UCZ39/Y54yJc/K3JdVg2h/IcKMaJISG6CD6y3zacAbVb7YtNz2rYE/zpnyDez+9IOygEvwX8TtUgsl3YGg==
 
 vue-virtual-scroller@2.0.0-beta.3:
   version "2.0.0-beta.3"
