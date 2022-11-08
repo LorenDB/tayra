@@ -1,5 +1,6 @@
 import json
 import urllib.parse
+import secrets
 
 from django import http
 from django.utils import timezone
@@ -48,6 +49,21 @@ class ApplicationViewSet(
             "authenticated": "authenticated-oauth-app",
         }
     }
+
+    def create(self, request, *args, **kwargs):
+        request_data = request.data.copy()
+        try:
+            secret = request_data["client_secret"]
+        except KeyError:
+            secret = secrets.token_hex(64)
+            request_data["client_secret"] = secret
+        serializer = self.get_serializer(data=request_data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        data = serializer.data
+        data["client_secret"] = secret
+        return response.Response(data, status=201, headers=headers)
 
     def get_serializer_class(self):
         if self.request.method.lower() == "post":

@@ -19,6 +19,7 @@ def test_apps_post(api_client, db):
     assert response.status_code == 201
 
     app = models.Application.objects.get(name=data["name"])
+    setattr(app, "client_secret", response.data["client_secret"])
 
     assert app.client_type == models.Application.CLIENT_CONFIDENTIAL
     assert app.authorization_grant_type == models.Application.GRANT_AUTHORIZATION_CODE
@@ -40,6 +41,7 @@ def test_apps_post_logged_in_user(logged_in_api_client, db):
     assert response.status_code == 201
 
     app = models.Application.objects.get(name=data["name"])
+    setattr(app, "client_secret", response.data["client_secret"])
 
     assert app.client_type == models.Application.CLIENT_CONFIDENTIAL
     assert app.authorization_grant_type == models.Application.GRANT_AUTHORIZATION_CODE
