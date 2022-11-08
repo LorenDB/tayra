@@ -216,7 +216,7 @@ test_api:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
       changes:
         - api/**/*
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_PROTECTED == "true"
       when: always
 
 # Those tests are disabled for now since no vitest dom emulation is providing
@@ -248,7 +248,7 @@ test_api:
 #    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
 #      changes:
 #        - front/**/*
-#    - if: $CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH == "stable"
+#    - if: $CI_COMMIT_REF_PROTECTED == "true"
 #      when: always
 
 build_docs:
