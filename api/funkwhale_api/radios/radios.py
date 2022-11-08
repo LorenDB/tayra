@@ -1,6 +1,7 @@
 import datetime
 import logging
 import random
+from typing import Optional, List, Tuple
 
 from django.core.exceptions import ValidationError
 from django.db import connection
@@ -25,14 +26,21 @@ class SimpleRadio(object):
     def clean(self, instance):
         return
 
-    def pick(self, choices, previous_choices=[]):
-        possible_choices = [x for x in choices if x not in previous_choices]
-        return random.sample(possible_choices, 1)[0]
+    def pick(
+        self, choices: List[int], previous_choices: Optional[List[int]] = None
+    ) -> int:
+        if previous_choices:
+            choices = list(set(choices).difference(set(previous_choices)))
+        return random.sample(choices, 1)[0]
 
-    def pick_many(self, choices, quantity):
-        return random.sample(list(choices), quantity)
+    def pick_many(self, choices: List[int], quantity: int) -> int:
+        return random.sample(list(set(choices)), quantity)
 
-    def weighted_pick(self, choices, previous_choices=[]):
+    def weighted_pick(
+        self,
+        choices: List[Tuple[int, int]],
+        previous_choices: Optional[List[int]] = None,
+    ) -> int:
         total = sum(weight for c, weight in choices)
         r = random.uniform(0, total)
         upto = 0

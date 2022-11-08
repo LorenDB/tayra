@@ -21,7 +21,7 @@ def test_can_pick_track_from_choices():
     previous_choices = [first_pick]
     for remaining_choice in choices:
         pick = radio.pick(choices=choices, previous_choices=previous_choices)
-        assert pick in set(choices).difference(previous_choices)
+        assert pick in set(choices).difference(set(previous_choices))
 
 
 def test_can_pick_by_weight():
