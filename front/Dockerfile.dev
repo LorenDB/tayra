@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:18-alpine
 
 # needed to compile translations
 RUN apk add --no-cache jq bash coreutils python3
