@@ -46,6 +46,10 @@
       "groupName": "Sentry"
     },
     {
+      "matchPackageNames": ["channels", "channels-redis", "daphne"],
+      "groupName": "channels"
+    },
+    {
       "matchFiles": ["deploy/docker-compose.yml"],
       "matchPackageNames": ["postgres"],
       "postUpgradeTasks": {

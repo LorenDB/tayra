@@ -224,6 +224,7 @@ List of allowed hostnames for which the Funkwhale server will answer.
 # ------------------------------------------------------------------------------
 DJANGO_APPS = (
     "channels",
+    "daphne",
     # Default Django apps:
     "django.contrib.auth",
     "django.contrib.contenttypes",
