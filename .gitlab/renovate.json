@@ -50,6 +50,10 @@
       "groupName": "channels"
     },
     {
+      "matchPackageNames": ["node"],
+      "allowedVersions": "/\d+[02468]$/"
+    },
+    {
       "matchFiles": ["deploy/docker-compose.yml"],
       "matchPackageNames": ["postgres"],
       "postUpgradeTasks": {
