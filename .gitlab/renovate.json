@@ -38,7 +38,7 @@
       "groupName": "Vue"
     },
     {
-      "matchPackageNames": ["@vueuse/core", "@vueuse/integrations", "@vueuse/router"],
+      "matchPackageNames": ["@vueuse/core", "@vueuse/integrations", "@vueuse/router", "@vueuse/math"],
       "groupName": "vueuse"
     },
     {
