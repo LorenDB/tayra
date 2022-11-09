@@ -9,6 +9,7 @@ COPY pyproject.toml poetry.lock /
 RUN poetry export --without-hashes > requirements.txt
 RUN poetry export --dev --without-hashes > dev-requirements.txt
 
+
 FROM alpine:3.16 as builder
 
 RUN \
@@ -43,7 +44,7 @@ ENV PATH="/venv/bin:/root/.local/bin:$PATH" VIRTUAL_ENV=/venv
 COPY --from=pre-build /requirements.txt /requirements.txt
 COPY --from=pre-build /dev-requirements.txt /dev-requirements.txt
 # hack around https://github.com/pypa/pip/issues/6158#issuecomment-456619072
-ENV PIP_DOWNLOAD_CACHE=/noop/
+ARG PIP_DOWNLOAD_CACHE=/noop/
 RUN \
     echo 'installing pip requirements' && \
     pip3 install --upgrade pip && \
@@ -52,20 +53,21 @@ RUN \
     # is why we need to use the packages shipped by Alpine Linux.
     # Since poetry does not allow in-place dependency pinning, we need
     # to install the deps using pip.
-    cat /requirements.txt | grep -Ev 'cryptography|autobahn|uvicorn|watchgod|watchfiles' | pip3 install -r /dev/stdin cryptography==3.4.8 autobahn==21.2.1 uvicorn==0.17.6 watchgod==0.8.2 && \
-    rm -rf $PIP_DOWNLOAD_CACHE
+    grep -Ev 'cryptography|uvicorn|watchgod|watchfiles' /requirements.txt | pip3 install -r /dev/stdin cryptography==3.4.8 uvicorn==0.17.6 watchgod==0.8.2 && \
+    rm -rf "$PIP_DOWNLOAD_CACHE"
 
 ARG install_dev_deps=0
 RUN \
     if [ "$install_dev_deps" = "1" ] ; then \
       echo "Installing dev dependencies" && \
-    cat /dev-requirements.txt | grep -Ev 'cryptography|autobahn|uvicorn|watchgod|watchfiles' | pip3 install -r /dev/stdin cryptography==3.3.2 autobahn==21.2.1 uvicorn==0.17.6 watchgod==0.8.2 \
-    ; else  \
+      grep -Ev 'cryptography|uvicorn|watchgod|watchfiles' /dev-requirements.txt | pip3 install -r /dev/stdin cryptography==3.4.8 uvicorn==0.17.6 watchgod==0.8.2 && \
+      rm -rf "$PIP_DOWNLOAD_CACHE" \
+    ; else \
       echo "Skipping dev deps installation" \
     ; fi
 
 
-FROM alpine:3.16 as build-image
+FROM alpine:3.16 as image
 
 COPY --from=builder /venv /venv
 # emulate activation by prefixing PATH
