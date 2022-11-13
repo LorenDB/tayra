@@ -10,6 +10,7 @@ import axios from 'axios'
 
 import PlayButton from '~/components/audio/PlayButton.vue'
 
+import useMarkdown from '~/composables/useMarkdown'
 import usePlayOptions from '~/composables/audio/usePlayOptions'
 import useErrorHandler from '~/composables/useErrorHandler'
 
@@ -47,6 +48,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const description = ref('')
+const renderedDescription = useMarkdown(description)
 
 const { currentTrack } = useQueue()
 const { activateTrack } = usePlayOptions(props)
@@ -106,10 +108,10 @@ await fetchData()
         @click.prevent.exact="activateTrack(track, index)"
       >{{ track.title }}</a>
       <p
-        v-if="description"
+        v-if="renderedDescription"
         class="podcast-episode-meta"
       >
-        {{ description }}
+        {{ renderedDescription }}
       </p>
     </div>
     <div
