@@ -2,7 +2,7 @@
 import type { BackendError, Application } from '~/types'
 
 import axios from 'axios'
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watchEffect } from 'vue'
 import { computedEager } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import { uniq } from 'lodash-es'
@@ -59,8 +59,32 @@ const submit = async () => {
 }
 
 const scopeArray = computed({
-  get: () => fields.scopes.split(' '),
-  set: (scopes: string[]) => uniq(scopes).join(' ')
+  get: () => fields.scopes.trim().split(' '),
+  set: (scopes: string[]) => (fields.scopes = uniq(scopes).join(' '))
+})
+
+const allScopesSelected = (parent: typeof allScopes['value'][number]) => {
+  const scopes = new Set(scopeArray.value)
+  return parent.children.every(child => scopes.has(child.id))
+}
+
+const toggleAllScopes = (parent: typeof allScopes['value'][number]) => {
+  const scopes = new Set(scopeArray.value)
+
+  const allScopesSelected = parent.children.every(child => scopes.has(child.id))
+  for (const child of parent.children) {
+    const action = allScopesSelected
+      ? 'delete'
+      : 'add'
+
+    scopes[action](child.id)
+  }
+
+  scopeArray.value = [...scopes]
+}
+
+watchEffect(() => {
+  console.log(scopeArray.value)
 })
 
 const scopeParents = computedEager(() => [
@@ -153,9 +177,9 @@ const allScopes = computed(() => {
           <div class="ui parent checkbox">
             <input
               :id="parent.id"
-              v-model="scopeArray"
-              :value="parent.id"
+              :checked="allScopesSelected(parent)"
               type="checkbox"
+              @input="toggleAllScopes(parent)"
             >
             <label :for="parent.id">
               {{ parent.label }}
