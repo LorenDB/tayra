@@ -2,7 +2,7 @@
 import type { BackendError, Application } from '~/types'
 
 import axios from 'axios'
-import { ref, reactive, computed, watchEffect } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { computedEager } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import { uniq } from 'lodash-es'
@@ -82,10 +82,6 @@ const toggleAllScopes = (parent: typeof allScopes['value'][number]) => {
 
   scopeArray.value = [...scopes]
 }
-
-watchEffect(() => {
-  console.log(scopeArray.value)
-})
 
 const scopeParents = computedEager(() => [
   {
