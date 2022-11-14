@@ -16,6 +16,8 @@ export interface State {
   profile: null | User
   oauth: OAuthTokens
   scopedTokens: ScopedTokens
+
+  applicationSecret: string | undefined
 }
 
 interface ScopedTokens {
@@ -71,7 +73,9 @@ const store: Module<State, RootState> = {
     },
     profile: null,
     oauth: getDefaultOauth(),
-    scopedTokens: getDefaultScopedTokens()
+    scopedTokens: getDefaultScopedTokens(),
+
+    applicationSecret: undefined
   },
   getters: {
     header: state => {
@@ -93,6 +97,8 @@ const store: Module<State, RootState> = {
         library: false,
         moderation: false
       }
+
+      state.applicationSecret = undefined
     },
     profile: (state, value) => {
       state.profile = value

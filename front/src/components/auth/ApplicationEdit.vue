@@ -7,6 +7,7 @@ import axios from 'axios'
 import ApplicationForm from '~/components/auth/ApplicationForm.vue'
 
 import useErrorHandler from '~/composables/useErrorHandler'
+import { useStore } from '~/store'
 
 interface Props {
   id: number
@@ -50,6 +51,10 @@ const refreshToken = async () => {
 }
 
 fetchApplication()
+
+const store = useStore()
+const secret = store.state.auth.applicationSecret
+store.state.auth.applicationSecret = undefined
 </script>
 
 <template>
@@ -89,11 +94,27 @@ fetchApplication()
                 :value="application.client_id"
               />
             </div>
-            <div class="field">
+            <div
+              v-if="secret"
+              class="field"
+            >
+              <div class="ui small warning message">
+                <h3 class="header">
+                  <translate translate-context="*/*/*">
+                    Please, note this token
+                  </translate>
+                </h3>
+                <p>
+                  <translate translate-context="*/*/*">
+                    It won't be possible to view it again.
+                  </translate>
+                </p>
+              </div>
+
               <label for="copy-secret"><translate translate-context="Content/Applications/Label">Application secret</translate></label>
               <copy-input
                 id="copy-secret"
-                :value="application.client_secret"
+                :value="secret"
               />
             </div>
             <div

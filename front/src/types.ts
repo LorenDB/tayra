@@ -496,6 +496,7 @@ export interface Application {
   name: string
   redirect_uris: string
   scopes: string
+  client_secret: string
 
   // This is actually a date string
   created: string
