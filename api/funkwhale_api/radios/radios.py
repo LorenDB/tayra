@@ -188,7 +188,7 @@ class CustomMultiple(SessionRadio):
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
-        return filters.run(kwargs["config"], candidates=qs)
+        return filters.run([kwargs["config"]], candidates=qs)
 
 
 class RelatedObjectRadio(SessionRadio):
