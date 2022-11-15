@@ -114,7 +114,7 @@ const fetchOwnedApps = async () => {
 
   try {
     const response = await axios.get('oauth/apps/')
-    ownedApps.value = response.data as Application[]
+    ownedApps.value = response.data.results as Application[]
   } catch (error) {
     logger.error('Error while fetching owned Apps')
     settings.errors.push(...(error as BackendError).backendErrors)
