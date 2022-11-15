@@ -52,16 +52,14 @@ class ApplicationViewSet(
 
     def create(self, request, *args, **kwargs):
         request_data = request.data.copy()
-        try:
-            secret = request_data["client_secret"]
-        except KeyError:
-            secret = secrets.token_hex(64)
-            request_data["client_secret"] = secret
+        secret = secrets.token_hex(64)
+        request_data["client_secret"] = secret
         serializer = self.get_serializer(data=request_data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         data = serializer.data
+        # Since the serializer returns a hashed secret, we need to override it for the response.
         data["client_secret"] = secret
         return response.Response(data, status=201, headers=headers)
 
