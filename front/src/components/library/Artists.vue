@@ -95,7 +95,7 @@ const fetchData = async () => {
 
 const store = useStore()
 watch([() => store.state.moderation.lastUpdate, excludeCompilation], fetchData)
-watch([page, tags, q], fetchData)
+watch([page, tags, q, () => props.scope], fetchData)
 fetchData()
 
 const search = () => {

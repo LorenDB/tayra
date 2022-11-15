@@ -80,7 +80,7 @@ const fetchData = async () => {
     isLoading.value = false
   }
 }
-watch([page, q], fetchData)
+watch([page, q, () => props.scope], fetchData)
 fetchData()
 
 const search = () => {
