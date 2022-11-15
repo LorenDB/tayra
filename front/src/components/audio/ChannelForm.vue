@@ -148,6 +148,10 @@ const submit = async () => {
 
   isLoading.value = false
 }
+
+defineExpose({
+  submit
+})
 </script>
 
 <template>
