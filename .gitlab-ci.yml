@@ -161,7 +161,7 @@ test_api:
     - postgres:11
     - redis:5
   stage: test
-  image: $CI_REGISTRY/funkwhale/backend-test-docker:latest
+  image: $CI_REGISTRY/funkwhale/backend-test-docker:3.7
   cache:
     key: "$CI_PROJECT_ID__pip_cache"
     paths:
