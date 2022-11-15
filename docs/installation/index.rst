@@ -81,7 +81,7 @@ Funkwhale can be installed using one of the following method:
 
    The All-In-One-Container or Mono-Container installation is deprecated, don't use it for new installations.
    For more information, visit our blog: https://blog.funkwhale.audio/deprecation-all-in-one-container.html
-  
+
 - Quick install, the most straight forward way to get Funkwhale;
 - Mono-container Docker installation;
 - Multi-container Docker installation;
@@ -221,8 +221,8 @@ On docker deployments, run the following commands:
     export FUNKWHALE_VERSION="|version|"
 
     # download the needed files
-    curl -L -o /etc/nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/|version|/deploy/funkwhale_proxy.conf"
-    curl -L -o /etc/nginx/sites-available/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/|version|/deploy/docker.proxy.template"
+    curl -L -o /etc/nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/funkwhale_proxy.conf"
+    curl -L -o /etc/nginx/sites-available/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/docker.proxy.template"
 
 .. code-block:: shell
 
