@@ -101,12 +101,12 @@ store.state.auth.applicationSecret = undefined
               <div class="ui small warning message">
                 <h3 class="header">
                   <translate translate-context="*/*/*">
-                    Please, note this token
+                    Keep a copy of this token in a safe place
                   </translate>
                 </h3>
                 <p>
                   <translate translate-context="*/*/*">
-                    It won't be possible to view it again.
+                    You won't be able to see it again once you leave this screen.
                   </translate>
                 </p>
               </div>
