@@ -21,7 +21,7 @@ const banner = computed(() => get(nodeinfo.value, 'metadata.banner'))
 const shortDescription = computed(() => get(nodeinfo.value, 'metadata.shortDescription'))
 
 const stats = computed(() => {
-  const users = get(nodeinfo.value, 'usage.users.activeMonth', null)
+  const users = get(nodeinfo.value, 'usage.users.activeMonth', 0)
   const hours = get(nodeinfo.value, 'metadata.library.music.hours', 0)
 
   if (users === null) {
@@ -32,7 +32,7 @@ const stats = computed(() => {
 })
 
 const openRegistrations = computed(() => get(nodeinfo.value, 'openRegistrations'))
-const defaultUploadQuota = computed(() => humanSize(get(nodeinfo.value, 'metadata.defaultUploadQuota') * 1000 * 1000))
+const defaultUploadQuota = computed(() => humanSize(get(nodeinfo.value, 'metadata.defaultUploadQuota', 0) * 1000 * 1000))
 
 const headerStyle = computed(() => {
   if (!banner.value) {
@@ -196,11 +196,11 @@ const headerStyle = computed(() => {
                       </div>
                       <div class="column">
                         <span class="statistics-figure ui text">
-                          <span class="ui big text"><strong>{{ parseInt(stats.hours).toLocaleString($store.state.ui.momentLocale) }}</strong></span>
+                          <span class="ui big text"><strong>{{ stats.hours.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                           <br>
                           <translate
                             translate-context="Content/About/*"
-                            :translate-n="parseInt(stats.hours)"
+                            :translate-n="stats.hours"
                             translate-plural="hours of music"
                           >hour of music</translate>
                         </span>

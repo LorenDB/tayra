@@ -23,7 +23,7 @@ const nodeinfo = computed(() => store.state.instance.nodeinfo)
 const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') || 'Funkwhale')
 const banner = computed(() => get(nodeinfo.value, 'metadata.banner'))
 const shortDescription = computed(() => get(nodeinfo.value, 'metadata.shortDescription'))
-const longDescription = useMarkdown(() => get(nodeinfo.value, 'metadata.longDescription'))
+const longDescription = useMarkdown(() => get(nodeinfo.value, 'metadata.longDescription', ''))
 const rules = computed(() => get(nodeinfo.value, 'metadata.rules'))
 const contactEmail = computed(() => get(nodeinfo.value, 'metadata.contactEmail'))
 const anonymousCanListen = computed(() => get(nodeinfo.value, 'metadata.library.anonymousCanListen'))
@@ -31,7 +31,7 @@ const openRegistrations = computed(() => get(nodeinfo.value, 'openRegistrations'
 const defaultUploadQuota = computed(() => get(nodeinfo.value, 'metadata.defaultUploadQuota'))
 
 const stats = computed(() => {
-  const users = get(nodeinfo.value, 'usage.users.activeMonth', null)
+  const users = get(nodeinfo.value, 'usage.users.activeMonth', 0)
   const hours = get(nodeinfo.value, 'metadata.library.music.hours', 0)
 
   if (users === null) {
@@ -172,8 +172,8 @@ whenever(() => store.state.auth.authenticated, () => {
                   <p>
                     <i class="music icon" /><translate
                       translate-context="Content/Home/Stat"
-                      :translate-params="{count: parseInt(stats.hours).toLocaleString($store.state.ui.momentLocale)}"
-                      :translate-n="parseInt(stats.hours)"
+                      :translate-params="{count: stats.hours.toLocaleString($store.state.ui.momentLocale)}"
+                      :translate-n="stats.hours"
                       translate-plural="%{ count } hours of music"
                     >
                       %{ count } hour of music

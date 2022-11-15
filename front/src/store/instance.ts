@@ -10,8 +10,75 @@ export interface State {
   frontSettings: FrontendSettings
   instanceUrl?: string
   knownInstances: string[]
-  nodeinfo: unknown | null
+  nodeinfo: NodeInfo | null
   settings: Settings
+}
+
+type TotalCount = {
+  total: number
+}
+
+export interface NodeInfo {
+  version: string;
+  software: {
+    name: string;
+    version: string;
+  }
+  protocols: any[];
+  services?: {
+    inbound?: string[];
+    outbound?: string[];
+  }
+  openRegistrations: boolean;
+  usage: {
+    users: {
+      total: number;
+      activeHalfyear: number;
+      activeMonth: number;
+    }
+  }
+  metadata: {
+    actorId: string
+    'private': boolean
+    shortDescription: string
+    longDescription: string
+    rules: string
+    contactEmail: string
+    terms: string
+    nodeName: string
+    banner: string
+    defaultUploadQuota: number
+    library: {
+      federationEnabled: boolean
+      anonymousCanListen: boolean
+      tracks?: TotalCount
+      artists?: TotalCount
+      albums?: TotalCount
+      music?: { hours: number }
+    }
+    supportedUploadExtensions: string[]
+    allowList: {
+      enabled: boolean
+      domains: string[]
+    }
+    reportTypes: {
+      'type': string
+      label: string
+      anonymous: boolean
+    }[]
+    funkwhaleSupportMessageEnabled: boolean
+    instanceSupportMessage: string
+    endpoints: {
+      knownNodes?: string
+      channels?: string
+      libraries?: string
+    }
+    usage: {
+      favorites: { tracks: TotalCount }
+      listenings: TotalCount
+      downloads: TotalCount
+    }
+  }
 }
 
 interface FrontendSettings {

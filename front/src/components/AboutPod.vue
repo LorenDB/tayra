@@ -8,6 +8,7 @@ import { computed } from 'vue'
 import axios from 'axios'
 
 import useMarkdown from '~/composables/useMarkdown'
+import type { NodeInfo } from '~/store/instance'
 
 const store = useStore()
 const nodeinfo = computed(() => store.state.instance.nodeinfo)
@@ -25,9 +26,9 @@ const labels = computed(() => ({
 
 const podName = computed(() => get(nodeinfo.value, 'metadata.nodeName') || 'Funkwhale')
 const banner = computed(() => get(nodeinfo.value, 'metadata.banner'))
-const longDescription = useMarkdown(() => get(nodeinfo.value, 'metadata.longDescription'))
-const rules = useMarkdown(() => get(nodeinfo.value, 'metadata.rules'))
-const terms = useMarkdown(() => get(nodeinfo.value, 'metadata.terms'))
+const longDescription = useMarkdown(() => get(nodeinfo.value, 'metadata.longDescription', ''))
+const rules = useMarkdown(() => get(nodeinfo.value, 'metadata.rules', ''))
+const terms = useMarkdown(() => get(nodeinfo.value, 'metadata.terms', ''))
 const contactEmail = computed(() => get(nodeinfo.value, 'metadata.contactEmail'))
 const anonymousCanListen = computed(() => get(nodeinfo.value, 'metadata.library.anonymousCanListen'))
 const allowListEnabled = computed(() => get(nodeinfo.value, 'metadata.allowList.enabled'))
@@ -39,17 +40,19 @@ const federationEnabled = computed(() => get(nodeinfo.value, 'metadata.library.f
 const onDesktop = computed(() => window.innerWidth > 800)
 
 const stats = computed(() => {
+  const info = nodeinfo.value ?? {} as NodeInfo
+
   const data = {
-    users: get(nodeinfo.value, 'usage.users.activeMonth', null),
-    hours: get(nodeinfo.value, 'metadata.library.music.hours', null),
-    artists: get(nodeinfo.value, 'metadata.library.artists.total', null),
-    albums: get(nodeinfo.value, 'metadata.library.albums.total', null),
-    tracks: get(nodeinfo.value, 'metadata.library.tracks.total', null),
-    listenings: get(nodeinfo.value, 'metadata.usage.listenings.total', null)
+    users: get(info, 'usage.users.activeMonth', null),
+    hours: get(info, 'metadata.library.music.hours', null),
+    artists: get(info, 'metadata.library.artists.total', null),
+    albums: get(info, 'metadata.library.albums.total', null),
+    tracks: get(info, 'metadata.library.tracks.total', null),
+    listenings: get(info, 'metadata.usage.listenings.total', null)
   }
 
   if (data.users === null || data.artists === null) {
-    return
+    return data
   }
 
   return data
@@ -375,11 +378,11 @@ const headerStyle = computed(() => {
                     class="statistics-statistic"
                   >
                     <span class="statistics-figure ui text">
-                      <span class="ui big text"><strong>{{ parseInt(stats.hours).toLocaleString($store.state.ui.momentLocale) }}</strong></span>
+                      <span class="ui big text"><strong>{{ stats.hours.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
                       <translate
                         translate-context="Content/About/*"
-                        :translate-n="parseInt(stats.hours)"
+                        :translate-n="stats.hours"
                         translate-plural="hours of music"
                       >hour of music</translate>
                     </span>
