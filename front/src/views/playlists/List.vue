@@ -115,7 +115,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
       <template v-if="$store.state.auth.authenticated">
         <button
           class="ui success button"
-          @click="$store.commit('playlists/chooseTrack', null)"
+          @click="$store.commit('playlists/showModal', true)"
         >
           <translate translate-context="Content/Playlist/Button.Label/Verb">
             Manage your playlists
