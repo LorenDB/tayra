@@ -137,7 +137,8 @@ class MetadataSerializer(serializers.Serializer):
     def get_defaultUploadQuota(self, obj) -> int:
         return obj["preferences"].get("users__upload_quota")
 
-    def get_library(self, obj) -> bool:
+    @extend_schema_field(NodeInfoLibrarySerializer)
+    def get_library(self, obj):
         data = obj["stats"] or {}
         data["federationEnabled"] = obj["preferences"].get("federation__enabled")
         data["anonymousCanListen"] = not obj["preferences"].get(
