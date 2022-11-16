@@ -2,7 +2,7 @@
 import type { RouteLocationRaw } from 'vue-router'
 import type { BackendError, Form } from '~/types'
 
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watchEffect } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useStore } from '~/store'
 
@@ -27,7 +27,7 @@ const props = withDefaults(defineProps<Props>(), {
   buttonClasses: 'success',
   customization: null,
   fetchDescriptionHtml: false,
-  signupApprovalEnabled: false
+  signupApprovalEnabled: undefined
 })
 
 const { $pgettext } = useGettext()
@@ -42,6 +42,7 @@ const labels = computed(() => ({
 
 const signupRequiresApproval = computed(() => props.signupApprovalEnabled ?? store.state.instance.settings.moderation.signup_approval_enabled.value)
 const formCustomization = computed(() => props.customization ?? store.state.instance.settings.moderation.signup_form_customization.value)
+watchEffect(() => console.log(store.state.instance.settings.moderation.signup_approval_enabled.value))
 
 const payload = reactive({
   username: '',
@@ -128,7 +129,7 @@ fetchInstanceSettings()
         Registrations on this pod are open, but reviewed by moderators before approval.
       </translate>
     </p>
-    <template v-if="formCustomization && formCustomization.help_text">
+    <template v-if="formCustomization?.help_text">
       <rendered-description
         :content="formCustomization.help_text"
         :fetch-html="fetchDescriptionHtml"
@@ -201,9 +202,9 @@ fetchInstanceSettings()
         :placeholder="labels.placeholder"
       >
     </div>
-    <template v-if="signupRequiresApproval && formCustomization && formCustomization.fields && formCustomization.fields.length > 0">
+    <template v-if="signupRequiresApproval && (formCustomization?.fields.length ?? 0) > 0">
       <div
-        v-for="(field, idx) in formCustomization.fields"
+        v-for="(field, idx) in formCustomization?.fields"
         :key="idx"
         :class="[{required: field.required}, 'field']"
       >
