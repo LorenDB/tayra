@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@types/diff": "5.0.2",
-    "@types/dompurify": "2.3.4",
+    "@types/dompurify": "2.4.0",
     "@types/howler": "2.2.7",
     "@types/jquery": "3.5.14",
     "@types/lodash-es": "4.17.6",
