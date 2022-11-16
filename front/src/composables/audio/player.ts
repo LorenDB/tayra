@@ -59,7 +59,7 @@ export const usePlayer = createGlobalState(() => {
   const lastVolume = useStorage('player:last-volume', 0.7)
 
   const volume: Ref<number> = useStorage('player:volume', 0.7)
-  watch(volume, (gain) => setGain(gain))
+  watch(volume, (gain) => setGain(gain), { immediate: true })
 
   const mute = () => {
     if (volume.value > 0) {
