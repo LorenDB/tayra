@@ -71,7 +71,7 @@
     "@types/vue-virtual-scroller": "npm:@earltp/vue-virtual-scroller",
     "@typescript-eslint/eslint-plugin": "5.42.1",
     "@vitejs/plugin-vue": "3.2.0",
-    "@vitest/coverage-c8": "0.25.1",
+    "@vitest/coverage-c8": "0.25.2",
     "@vue/compiler-sfc": "3.2.45",
     "@vue/eslint-config-standard": "8.0.1",
     "@vue/eslint-config-typescript": "11.0.2",
