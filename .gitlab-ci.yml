@@ -107,7 +107,7 @@ review_docs:
 
 changelog_snippet:
   interruptible: true
-  image: alpine:3.16
+  image: alpine:3.17
   stage: lint
   before_script:
     - apk add git

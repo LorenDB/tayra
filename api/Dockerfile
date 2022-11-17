@@ -1,4 +1,4 @@
-FROM alpine:3.16 as pre-build
+FROM alpine:3.17 as pre-build
 
 # We need this additional step to avoid having poetrys deps interacting with our
 # dependencies. This is only required until alpine 3.16 is released, since this
@@ -7,10 +7,10 @@ FROM alpine:3.16 as pre-build
 RUN apk add --no-cache python3 py3-cryptography py3-pip poetry
 COPY pyproject.toml poetry.lock /
 RUN poetry export --without-hashes > requirements.txt
-RUN poetry export --dev --without-hashes > dev-requirements.txt
+RUN poetry export --with dev --without-hashes > dev-requirements.txt
 
 
-FROM alpine:3.16 as builder
+FROM alpine:3.17 as builder
 
 RUN \
     echo 'installing dependencies' && \
@@ -22,6 +22,8 @@ RUN \
     python3-dev \
     py3-psycopg2 \
     py3-cryptography \
+    py3-lxml \
+    py3-pillow \
     libldap \
     libffi-dev \
     make \
@@ -32,9 +34,7 @@ RUN \
     cargo \
     libxml2-dev \
     libxslt-dev \
-    curl \
-    && \
-    ln -s /usr/bin/python3 /usr/bin/python
+    curl
 
 # create virtual env for next stage
 RUN python -m venv --system-site-packages /venv
@@ -53,21 +53,21 @@ RUN \
     # is why we need to use the packages shipped by Alpine Linux.
     # Since poetry does not allow in-place dependency pinning, we need
     # to install the deps using pip.
-    grep -Ev 'cryptography|uvicorn|watchgod|watchfiles' /requirements.txt | pip3 install -r /dev/stdin cryptography==3.4.8 uvicorn==0.17.6 watchgod==0.8.2 && \
+    grep -Ev 'cryptography|uvicorn|watchgod|watchfiles|lxml|pillow' /requirements.txt | pip3 install -r /dev/stdin cryptography==38.0.3 uvicorn==0.17.6 watchgod==0.8.2 lxml==4.9.1 pillow==9.3.0 && \
     rm -rf "$PIP_DOWNLOAD_CACHE"
 
 ARG install_dev_deps=0
 RUN \
     if [ "$install_dev_deps" = "1" ] ; then \
       echo "Installing dev dependencies" && \
-      grep -Ev 'cryptography|uvicorn|watchgod|watchfiles' /dev-requirements.txt | pip3 install -r /dev/stdin cryptography==3.4.8 uvicorn==0.17.6 watchgod==0.8.2 && \
+      grep -Ev 'cryptography|uvicorn|watchgod|watchfiles|lxml|pillow' /dev-requirements.txt | pip3 install -r /dev/stdin cryptography==38.0.3 uvicorn==0.17.6 watchgod==0.8.2 lxml==4.9.1 pillow==9.3.0 && \
       rm -rf "$PIP_DOWNLOAD_CACHE" \
     ; else \
       echo "Skipping dev deps installation" \
     ; fi
 
 
-FROM alpine:3.16 as image
+FROM alpine:3.17 as image
 
 COPY --from=builder /venv /venv
 # emulate activation by prefixing PATH
@@ -84,9 +84,9 @@ RUN apk add --no-cache \
     libxml2 \
     libxslt \
     py3-cryptography \
-		libldap \
-    && \
-    ln -s /usr/bin/python3 /usr/bin/python
+    py3-lxml \
+    py3-pillow \
+    libldap
 
 COPY . /app
 WORKDIR /app
