@@ -9,6 +9,7 @@ showdown.extension('openExternalInNewTab', {
   regex: /<a.+?href.+">/g,
   replace (text: string) {
     const matches = text.match(/href="(.+)">/) ?? []
+
     const url = matches[1] ?? './'
 
     if ((!url.startsWith('http://') && !url.startsWith('https://')) || url.startsWith('mailto:')) {
@@ -16,7 +17,7 @@ showdown.extension('openExternalInNewTab', {
     }
 
     const { hostname } = new URL(url)
-    return hostname !== location.hostname
+    return hostname !== location.hostname && typeof matches[0] === 'string'
       ? text.replace(matches[0], `href="${url}" target="_blank" rel="noopener noreferrer">`)
       : text
   }
