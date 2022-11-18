@@ -121,6 +121,20 @@ changelog_snippet:
       when: never
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
+pre-commit:
+  stage: lint
+  image: python:3.10
+  variables:
+    PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
+    PRE_COMMIT_HOME: $CI_PROJECT_DIR/.cache/pre-commit
+  cache:
+    paths:
+      - $PIP_CACHE_DIR
+      - $PRE_COMMIT_HOME
+  before_script:
+    - pip3 install pre-commit
+  script:
+    - pre-commit run --all --color=always --show-diff-on-failure
 
 black:
   interruptible: true
@@ -356,7 +370,6 @@ deploy_documentation:
     - rsync -r -e "ssh -p 2282" $CI_PROJECT_DIR/public/ docs@docs.funkwhale.audio:/htdocs/
   only:
     - stable
-
 
 .docker_publish:
   stage: publish
