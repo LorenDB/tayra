@@ -32,7 +32,7 @@ This guide shows you how to tag your content with MusicBrainz Picard.
    - The album artist name (can be different than the track artist).
    - `Trent Reznor`
 * - `Genre`
-   - A comma separated list of tags to associate with the track.  
+   - A comma separated list of tags to associate with the track.
    Other supported separators: `;` and `/`.
    - `Industrial, Metal`
 * - `Track number`
@@ -45,16 +45,16 @@ This guide shows you how to tag your content with MusicBrainz Picard.
    - The release date of the track or album.
    - `2019`
 * - `License`
-   - The license associated with this work.  
+   - The license associated with this work.
    The first URL found is checked against our list of supported licenses.
    - `CC-BY 3.0: http://creativecommons.org/licenses/cc-by/3.0/`
 * - `Copyright`
-   - The license associated with this work. The first URL found is checked against our list of supported licenses.  
+   - The license associated with this work. The first URL found is checked against our list of supported licenses.
    Used if no license found in the `License` tag.
    - `CC-BY 3.0: http://creativecommons.org/licenses/cc-by/3.0/`
 * - `Pictures`
    - The first embeded picture found is used as the album cover.
-   - 
+   -
 * - `MusicBrainz Recording ID`
    - The MusicBrainz ID for the recording.
    - `99244237-850b-4a93-904d-57305bcadb4e`

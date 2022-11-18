@@ -86,7 +86,7 @@ That's it! Your directory structure should look like this:
 ├── data        # files served by the API
    └── static   # storage location for persistent data
    └── media    # storage location for media files
-   └── music    # storage location for audio files   
+   └── music    # storage location for audio files
 └── front       # frontend files for the user interface
 ```
 
@@ -98,17 +98,17 @@ Once you've created the directory structure you can download Funkwhale. Funkwhal
 
    ```{code-block} sh
    curl -L -o "api-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_api"
-   unzip "api-$FUNKWHALE_VERSION.zip" -d extracted 
-   mv extracted/api/* api/ 
+   unzip "api-$FUNKWHALE_VERSION.zip" -d extracted
+   mv extracted/api/* api/
    rm -rf extracted api-$FUNKWHALE_VERSION.zip
    ```
 
 2. Download the frontend
 
    ```{code-block} sh
-   curl -L -o "front-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_front" 
-   unzip "front-$FUNKWHALE_VERSION.zip" -d extracted 
-   mv extracted/front . 
+   curl -L -o "front-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_front"
+   unzip "front-$FUNKWHALE_VERSION.zip" -d extracted
+   mv extracted/front .
    rm -rf extracted front-$FUNKWHALE_VERSION.zip
    ```
 
@@ -332,7 +332,7 @@ Funkwhale uses a reverse proxy to serve content to users. We use [Nginx](https:/
    # Log in to a root shell.
 
    sudo su
-   
+
    # Create an Nginx configuration using the Funkwhale template with details from your `.env` file.
 
    set -a && source /srv/funkwhale/config/.env && set +a

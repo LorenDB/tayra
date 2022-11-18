@@ -260,7 +260,7 @@ docker-compose run --rm api python manage.py import_files $LIBRARY_ID "/srv/funk
 
 Funkwhale doesn't delete track metadata when you delete a track. This is useful if you want to delete a file but keep a record of a track for created playlists or favorites.
 
-If you want to remove the file's metadata when you delete the file, run `import_files` with the `--prune` flag. This flag removes the metadata of any 
+If you want to remove the file's metadata when you delete the file, run `import_files` with the `--prune` flag. This flag removes the metadata of any
 
 ```{note}
 You can use the `--prune` flag with the `--watch` flag. This means Funkwhale removes the metadata of referenced files you delete from your storage.

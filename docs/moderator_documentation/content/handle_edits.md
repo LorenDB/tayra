@@ -1,7 +1,7 @@
 # Handle edits
 
 ```{note}
-Users can edit content in their own libraries. Moderators don't need to approve these edits. The edits appear in the __Edits__ queue to give admins and moderators a full timeline of changes. 
+Users can edit content in their own libraries. Moderators don't need to approve these edits. The edits appear in the __Edits__ queue to give admins and moderators a full timeline of changes.
 ```
 
 Users can suggest metadata edits on objects they can access. When a user suggests an edit, it's sent to the __Edits__ queue for review. Moderators and pod admins can accept or reject these edits.

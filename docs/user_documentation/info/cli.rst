@@ -66,7 +66,7 @@ To get the help of a specific namespace and list all its available commands, sim
 Authentication
 --------------
 
-The CLI uses Oauth tokens to interact with the API. 
+The CLI uses Oauth tokens to interact with the API.
 
 To get started, you need to create an application for the CLI. To do this:
 
@@ -76,7 +76,7 @@ To get started, you need to create an application for the CLI. To do this:
 4. Scroll down to the :guilabel:`Your applications` section.
 5. Select :guilabel:`Register a new application` to create a new application.
 6. Give your application an appropriate name (e.g. "Funkwhale CLI").
-7. Give your application the permissions you require. 
+7. Give your application the permissions you require.
 8. Select :guilabel:`Create application`. A screen appears showing :guilabel:`Application details`.
 9. Copy the app's :guilabel:`Access token`.
 

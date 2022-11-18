@@ -210,7 +210,7 @@ In this example, **Alice** notifies **Bob** that she's undoing her follow.
 See [the `Audio` object reference](#audio) for details on the object's structure.
 ```
 
-When Funkwhale receives a `Create` activity with an [`Audio` object](#audio), it persists a local upload in the database. It then associates the upload to related library and track information. If no track matches the audio metadata, Funkwhale creates on using the `metadata` attribute in the object.  
+When Funkwhale receives a `Create` activity with an [`Audio` object](#audio), it persists a local upload in the database. It then associates the upload to related library and track information. If no track matches the audio metadata, Funkwhale creates on using the `metadata` attribute in the object.
 
 #### Checks
 
@@ -363,7 +363,7 @@ In this example, **Bob** deletes three audio objects in a library and notifies t
 
 ### Artist
 
-An `Artist` is a custom object used to store musical artist and podcast creator information. 
+An `Artist` is a custom object used to store musical artist and podcast creator information.
 
 #### Properties
 
@@ -404,7 +404,7 @@ An `Artist` is a custom object used to store musical artist and podcast creator 
 
 ### Album
 
-An `Album` is a custom object used to store album and podcast series information. 
+An `Album` is a custom object used to store album and podcast series information.
 
 #### Properties
 

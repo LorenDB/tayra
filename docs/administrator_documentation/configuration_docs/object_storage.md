@@ -131,7 +131,7 @@ Serving files from an object store requires some changes to the reverse proxy.
 4. Add your S3 store URL to the `img-src` and `media-src` headers.
 
    ```{code-block} text
-   add_header Content-Security-Policy "...img-src 'self' https://<your-s3-URL> data:;...media-src https://<your-s3-URL> 'self' data:"; 
+   add_header Content-Security-Policy "...img-src 'self' https://<your-s3-URL> data:;...media-src https://<your-s3-URL> 'self' data:";
    ```
 
 5. Test your Nginx configuration.

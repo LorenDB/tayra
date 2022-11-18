@@ -51,7 +51,7 @@
     },
     {
       "matchPackageNames": ["node"],
-      "allowedVersions": "/\d+[02468]$/"
+      "allowedVersions": "/\\d+[02468]$/"
     },
     {
       "matchFiles": ["deploy/docker-compose.yml"],

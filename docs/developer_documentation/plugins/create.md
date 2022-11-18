@@ -100,16 +100,16 @@ Your `plugins` should include the following information:
    * - `name`
       - String
       - The name of your plugin, used in the `.env` file
-   * - `label` 
+   * - `label`
       - String
       - The readable label that appears in the Funkwhale frontend
-   * - `description` 
+   * - `description`
       - String
       - A meaningful description of your plugin and what it does
-   * - `version` 
+   * - `version`
       - String
       - The version number of your plugin
-   * - `user` 
+   * - `user`
       - Boolean
       - Whether the plugin is a **user-level** plugin or a **pod-level** plugin. See [scopes](#scopes) for more information
    * - `conf`
@@ -197,4 +197,4 @@ Here is an example of how the above plugin works:
 1. User "Harry" enables the plugin
 2. "Harry" changes the greeting to "You're a wizard"
 3. "Harry" visits the `/greeting` endpoint in their browser
-4. The browser returns the message "You're a wizard Harry" 
+4. The browser returns the message "You're a wizard Harry"

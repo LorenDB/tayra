@@ -161,7 +161,7 @@ Funkwhale uses a reverse proxy to serve content to users. We use [Nginx](https:/
    # Log in to a root shell.
 
    sudo su
-   
+
    # Create an Nginx configuration using the Funkwhale template with details from your `.env` file.
 
    set -a && source /srv/funkwhale/.env && set +a

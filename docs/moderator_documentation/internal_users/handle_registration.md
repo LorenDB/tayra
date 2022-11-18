@@ -35,7 +35,7 @@ To approve a sign-up request:
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens.
 4. Select {guilabel}`User Requests` at the top of the screen. A list of pending requests appears.
-5. Read through the details of the request. 
+5. Read through the details of the request.
 6. Select {guilabel}`Approve` in the {guilabel}`Actions` section.
 
 :::
@@ -47,7 +47,7 @@ To approve a sign-up request:
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens.
 4. Select {guilabel}`User Requests` at the top of the screen. A list of pending requests appears.
-5. Read through the details of the request. 
+5. Read through the details of the request.
 6. Select {guilabel}`Approve` in the {guilabel}`Actions` section.
 
 :::
@@ -68,7 +68,7 @@ To refuse a sign-up request:
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens.
 4. Select {guilabel}`User Requests` at the top of the screen. A list of pending requests appears.
-5. Read through the details of the request. 
+5. Read through the details of the request.
 6. Select {guilabel}`Refuse` in the {guilabel}`Actions` section.
 
 :::
@@ -80,7 +80,7 @@ To refuse a sign-up request:
 2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens.
 4. Select {guilabel}`User Requests` at the top of the screen. A list of pending requests appears.
-5. Read through the details of the request. 
+5. Read through the details of the request.
 6. Select {guilabel}`Refuse` in the {guilabel}`Actions` section.
 
 :::

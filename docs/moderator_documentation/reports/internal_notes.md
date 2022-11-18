@@ -18,7 +18,7 @@ You can add notes to __Unresolved__ and __Resolved__ reports. To add an internal
 :sync: desktop
 
 1. Log in to your {term}`pod`.
-2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu. 
+2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens.
 4. [Search for the report](search_reports.md).
 5. {guilabel}`Write` your note in the {guilabel}`Internal notes` section. This input field supports Markdown syntax. You can {guilabel}`Preview` how the note will look to other users.
@@ -29,8 +29,8 @@ You can add notes to __Unresolved__ and __Resolved__ reports. To add an internal
 :::{tab-item} Mobile
 :sync: mobile
 
-1. Log in to your {term}`pod`. 
-2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu. 
+1. Log in to your {term}`pod`.
+2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens.
 4. [Search for the report](search_reports.md).
 5. {guilabel}`Write` your note in the {guilabel}`Internal notes` section. This input field supports Markdown syntax. You can {guilabel}`Preview` how the note will look to other users.
@@ -52,8 +52,8 @@ You can delete your own notes and the notes of other moderators. You can do this
 :::{tab-item} Desktop
 :sync: desktop
 
-1. Log in to your {term}`pod`. 
-2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu. 
+1. Log in to your {term}`pod`.
+2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens.
 4. [Search for the report](search_reports.md).
 5. Find the note you want to delete in the {guilabel}`Internal notes` section.
@@ -65,7 +65,7 @@ You can delete your own notes and the notes of other moderators. You can do this
 :sync: mobile
 
 1. Log in to your {term}`pod`.
-2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu. 
+2. Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens.
 4. [Search for the report](search_reports.md).
 5. Find the note you want to delete in the {guilabel}`Internal notes` section.

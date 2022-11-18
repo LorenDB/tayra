@@ -1,4 +1,4 @@
-### Gentoo init scripts 
+### Gentoo init scripts
 
 Copy the files to  `/etc/init.d/`
 

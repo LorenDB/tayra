@@ -148,7 +148,7 @@ Publish your allowed-domains list
    Whether to make your list of allowed domains public. Enable this if you want users to check who you are federating with.
 
 Accountless report categories
-   A list of {term}`categories <Report categories>` that {term}`anonymous` users can submit. 
+   A list of {term}`categories <Report categories>` that {term}`anonymous` users can submit.
 
 ```
 

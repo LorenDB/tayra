@@ -17,7 +17,7 @@ Permissions
   Additional rights that an administrator/moderator can grant to a user. Permissions grant access to menus and actions in Funkwhale.
 
   Available permissions:
-  
+
   - {guilabel}`Moderation` – Grants access to the {guilabel}`Moderation` menu. Enables the user to moderate users, domains, and the allow-list.
   - {guilabel}`Manage library` – Grants access to the {guilabel}`Library` menu. Enables the user to make changes to library content. This includes deleting local objects and handling edit suggestions.
   - {guilabel}`Manage instance-level settings` – Grants access to the {guilabel}`Settings` menu. Enables the user to make changes to pod-level settings such as security settings and API behavior.

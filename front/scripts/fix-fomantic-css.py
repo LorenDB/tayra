@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 This scripts handles all the heavy-lifting of parsing CSS files from ``fomantic-ui-css`` and:
 

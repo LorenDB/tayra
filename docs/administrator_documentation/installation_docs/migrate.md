@@ -157,7 +157,7 @@ You need to initialize the postgres container on your {term}`destination server`
    CREATE USER funkwhale; \
    GRANT ALL PRIVILEGES ON DATABASE funkwhale TO funkwhale;" > init.sql # Create an init.sql file with the correct permissions
 
-   docker-compose run --rm postgres psql -U postgres -d postgres < "init.sql" # Import the init.sql file 
+   docker-compose run --rm postgres psql -U postgres -d postgres < "init.sql" # Import the init.sql file
    ```
 
 2. Import your database backup.

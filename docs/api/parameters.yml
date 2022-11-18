@@ -78,7 +78,7 @@ Library:
   schema:
     type: string
     format: uuid
-  
+
 ObjectId:
   name: id
   in: path
@@ -145,7 +145,7 @@ Related:
     type: integer
     format: int64
 
-    
+
 Scope:
   name: "scope"
   in: "query"
@@ -175,7 +175,7 @@ ContentCategory:
   in: "query"
   description: |
     Limits the results to those whose artist content type matches the query.
-  
+
   required: false
   schema:
     type: "string"

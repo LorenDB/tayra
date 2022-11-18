@@ -20,5 +20,6 @@ repos:
       - id: check-vcs-permalinks
       - id: check-merge-conflict
       - id: end-of-file-fixer
+        exclude: ^(docs/locales/.*/LC_MESSAGES)
       - id: mixed-line-ending
       - id: trailing-whitespace

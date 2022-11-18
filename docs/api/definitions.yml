@@ -856,7 +856,7 @@ RadioSessionCreate:
       description: |
         The type of radio to start. Depending of the type, the `related_object_id` field
         will need to be set to a non null value:
-        
+
         - tag: tag `name`
         - artist: artist `id`
         - library: library `uuid`
@@ -870,9 +870,9 @@ RadioSessionCreate:
         - less-listened
         - actor-content
         - library
-    
+
     related_object_id:
-      type: string 
+      type: string
       default: null
       description:
         Value may be an integer depending of the `radio_type`.

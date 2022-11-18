@@ -22,7 +22,7 @@ To create a new radio:
 7. Select {guilabel}`Add filter` to add the filter to your radio.
 8. Configure your filter:
    1. Enable the {guilabel}`Exclude` switch to exclude results from your selection in the radio. Disable this switch to include results from your selection in the radio.
-   2. Choose your __Artists__ or __Tags__ in the {guilabel}`Config` dropdown menu. 
+   2. Choose your __Artists__ or __Tags__ in the {guilabel}`Config` dropdown menu.
    3. The {guilabel}`Candidates` column shows the number of tracks included. Select the {guilabel}`{count} tracks matching filter` option to view some of these tracks.
 9. Check the tracks under the {guilabel}`{count} tracks matching combined filters` section.
 10. Select {guilabel}`Save` to save your radio.
@@ -42,7 +42,7 @@ To create a new radio:
 8. Select {guilabel}`Add filter` to add the filter to your radio.
 9. Configure your filter:
    1. Enable the {guilabel}`Exclude` switch to exclude results from your selection in the radio. Disable this switch to include results from your selection in the radio.
-   2. Choose your __Artists__ or __Tags__ in the {guilabel}`Config` dropdown menu. 
+   2. Choose your __Artists__ or __Tags__ in the {guilabel}`Config` dropdown menu.
    3. The {guilabel}`Candidates` column shows the number of tracks included. Select the {guilabel}`{count} tracks matching filter` option to view some of these tracks.
 10. Check the tracks under the {guilabel}`{count} tracks matching combined filters` section.
 11. Select {guilabel}`Save` to save your radio.

@@ -19,7 +19,7 @@ Use the `create_library` command to create new libraries for a given user.
 
 * - `--privacy-level`
    - Enum (String)
-   - The [privacy level](../../user_documentation/libraries/create_library.md) of the library  
+   - The [privacy level](../../user_documentation/libraries/create_library.md) of the library
       - `"me"` (default)
       - `"instance"`
       - `"everyone"`

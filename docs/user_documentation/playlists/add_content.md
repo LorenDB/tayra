@@ -69,7 +69,7 @@ That's it! You've added the contents from your queue to a playlist.
 You can add a track to a playlist from the track details page. To do this:
 
 1. Go to the track details page of the track you want to add.
-2. Select the playlist icon ({fa}`list`) at the top of the screen. The {guilabel}`Manage playlists` screen appears. 
+2. Select the playlist icon ({fa}`list`) at the top of the screen. The {guilabel}`Manage playlists` screen appears.
 3. Select {guilabel}`+ Add track` next to the playlist you want to add the track to.
 
 That's it! The track is available in your playlist.
@@ -80,7 +80,7 @@ You can add tracks from any page with a track table. This includes artist pages,
 
 1. Find your track in a track table.
 2. Select the kebab menu ({fa}`ellipsis-v`) next to the track to open the track options menu.
-3. Select {guilabel}`Add to playlist…`. The {guilabel}`Manage playlists` screen appears. 
+3. Select {guilabel}`Add to playlist…`. The {guilabel}`Manage playlists` screen appears.
 4. Select {guilabel}`+ Add track` next to the playlist you want to add the track to.
 
 Well done! You've added the track to your playlist.
