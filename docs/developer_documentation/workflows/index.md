@@ -9,6 +9,7 @@ maxdepth: 1
 ---
 
 git
+pre-commit
 changelog
 release
 
