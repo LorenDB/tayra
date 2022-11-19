@@ -166,25 +166,6 @@ black:
       changes:
         - api/**/*
 
-flake8:
-  interruptible: true
-  image: python:3.7
-  stage: lint
-  variables:
-    GIT_STRATEGY: fetch
-  before_script:
-    - pip install 'flake8<3.7'
-  script:
-    - flake8 -v api
-  cache:
-    key: "$CI_PROJECT_ID__flake8_pip_cache"
-    paths:
-      - "$PIP_CACHE_DIR"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - api/**/*
-
 eslint:
   interruptible: true
   image: node:18-alpine

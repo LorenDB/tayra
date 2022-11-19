@@ -23,3 +23,8 @@ repos:
         exclude: ^(docs/locales/.*/LC_MESSAGES)
       - id: mixed-line-ending
       - id: trailing-whitespace
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 5.0.4
+    hooks:
+      - id: flake8
