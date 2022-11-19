@@ -299,6 +299,11 @@ build_docs:
 build_front:
   stage: build
   image: node:18-alpine
+  variables:
+    # Keep the git files attributes during job setup
+    GIT_STRATEGY: clone
+    GIT_DEPTH: "5"
+    FF_DISABLE_UMASK_FOR_DOCKER_EXECUTOR: "true"
   before_script:
     - apk add --no-cache jq bash coreutils python3
     - cd front
@@ -308,9 +313,8 @@ build_front:
     # this is to ensure we don't have any errors in the output,
     # cf https://dev.funkwhale.audio/funkwhale/funkwhale/issues/169
     - yarn run build:deployment | tee /dev/stderr | (! grep -i 'ERROR in')
-    - chmod -R 755 dist
   artifacts:
-    name: "front_${CI_COMMIT_REF_NAME}"
+    name: front_${CI_COMMIT_REF_NAME}
     paths:
       - front/dist/
   only:
@@ -472,17 +476,21 @@ build_api:
   # Simply publish a zip containing api/ directory
   stage: publish
   image: bash
-  artifacts:
-    name: "api_${CI_COMMIT_REF_NAME}"
-    paths:
-      - api
+  variables:
+    # Keep the git files attributes during job setup
+    GIT_STRATEGY: clone
+    GIT_DEPTH: "5"
+    FF_DISABLE_UMASK_FOR_DOCKER_EXECUTOR: "true"
   script:
     - rm -rf api/tests
     - >
       if [ "$CI_COMMIT_REF_NAME" == "develop" ] || [ "$CI_COMMIT_REF_NAME" == "stable" ]; then
         ./scripts/set-api-build-metadata.sh $(echo $CI_COMMIT_SHA | cut -c 1-8);
       fi
-    - chmod -R 750 api
+  artifacts:
+    name: api_${CI_COMMIT_REF_NAME}
+    paths:
+      - api
   only:
     - tags@funkwhale/funkwhale
     - stable@funkwhale/funkwhale
