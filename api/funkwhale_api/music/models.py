@@ -680,8 +680,12 @@ class UploadQuerySet(common_models.NullsLastQuerySet):
         libraries = Library.objects.viewable_by(actor)
 
         if include:
-            return self.filter(library__in=libraries, import_status="finished")
-        return self.exclude(library__in=libraries, import_status="finished")
+            return self.filter(
+                library__in=libraries, import_status__in=["finished", "skipped"]
+            )
+        return self.exclude(
+            library__in=libraries, import_status__in=["finished", "skipped"]
+        )
 
     def local(self, include=True):
         query = models.Q(library__actor__domain_id=settings.FEDERATION_HOSTNAME)

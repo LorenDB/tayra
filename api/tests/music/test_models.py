@@ -212,7 +212,8 @@ def test_library(factories):
 
 
 @pytest.mark.parametrize(
-    "status,expected", [("pending", False), ("errored", False), ("finished", True)]
+    "status,expected",
+    [("pending", False), ("errored", False), ("finished", True), ("skipped", True)],
 )
 def test_playable_by_correct_status(status, expected, factories):
     upload = factories["music.Upload"](
