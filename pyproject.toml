@@ -58,4 +58,5 @@ name = "Update instructions"
 showcontent = true
 
 [tool.black]
-exclude = "(.git|.hg|.mypy_cache|.tox|.venv|_build|buck-out|build|dist|migrations|data)"
+extend-exclude = "(api/.*/migrations/.*)"
+force-exclude = "(api/.*/migrations/.*)" # pre-commit pass files as args

@@ -151,21 +151,6 @@ pre-commit:
   script:
     - pre-commit run --all --color=always --show-diff-on-failure
 
-black:
-  interruptible: true
-  image: python:3.11
-  stage: lint
-  variables:
-    GIT_STRATEGY: fetch
-  before_script:
-    - pip install black
-  script:
-    - black --check --diff .
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - api/**/*
-
 eslint:
   interruptible: true
   image: node:18-alpine
