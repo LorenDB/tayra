@@ -478,9 +478,11 @@ build_api:
       - api
   script:
     - rm -rf api/tests
-    - (if [ "$CI_COMMIT_REF_NAME" == "develop" ] || [ "$CI_COMMIT_REF_NAME" == "stable" ]; then ./scripts/set-api-build-metadata.sh $(echo $CI_COMMIT_SHA | cut -c 1-8); fi);
+    - >
+      if [ "$CI_COMMIT_REF_NAME" == "develop" ] || [ "$CI_COMMIT_REF_NAME" == "stable" ]; then
+        ./scripts/set-api-build-metadata.sh $(echo $CI_COMMIT_SHA | cut -c 1-8);
+      fi
     - chmod -R 750 api
-    - echo Done!
   only:
     - tags@funkwhale/funkwhale
     - stable@funkwhale/funkwhale
