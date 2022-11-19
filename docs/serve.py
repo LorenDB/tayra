@@ -3,7 +3,7 @@ from subprocess import call
 
 # initial make
 call(["python", "-m", "sphinx", ".", "/tmp/_build"])
-from livereload import Server, shell
+from livereload import Server, shell  # noqa: E402
 
 server = Server()
 server.watch("..", shell("python -m sphinx . /tmp/_build"))

@@ -69,11 +69,11 @@ def clear_list(inList):
     outList = list(dict.fromkeys(inList))
     try:
         outList.remove("funkwhale-bot")
-    except:
+    except IndexError:
         pass
     try:
         outList.remove("weblate (bot)")
-    except:
+    except IndexError:
         pass
     outList.sort()
     return outList
