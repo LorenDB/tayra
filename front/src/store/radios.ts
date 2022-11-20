@@ -30,7 +30,7 @@ export interface CurrentRadio {
   objectId: ObjectId | null
 }
 
-export type RadioConfig = { type: 'tag', names: string[] } | { type: 'artist', ids: string[] }
+export type RadioConfig = { type: 'tag', names: string[] } | { type: 'artist' | 'playlist', ids: string[] }
 
 const logger = useLogger()
 

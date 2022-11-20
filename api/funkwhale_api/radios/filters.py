@@ -6,6 +6,7 @@ from django.db.models import Q, functions
 from django.urls import reverse_lazy
 
 from funkwhale_api.music import models
+from funkwhale_api.playlists import models as plt_models
 
 
 class RadioFilterRegistry(persisting_theory.Registry):
@@ -226,3 +227,20 @@ class TagFilter(RadioFilter):
             raise ValidationError("You must provide a name")
         except AssertionError:
             raise ValidationError('No tag matching names "{}"'.format(diff))
+
+
+@registry.register
+class PlaylistFilter(RadioFilter):
+    code = "playlist"
+    label = "Playlist"
+
+    def get_query(self, candidates, ids, **kwargs):
+        playlists = plt_models.Playlist.objects.filter(id__in=ids)
+        ids_plts = []
+        for playlist in playlists:
+            ids = playlist.playlist_tracks.select_related("track").values_list(
+                "track_id", flat=True
+            )
+            for id in ids:
+                ids_plts.append(id)
+        return Q(id__in=ids_plts)

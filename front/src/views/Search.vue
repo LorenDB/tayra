@@ -191,18 +191,19 @@ const labels = computed(() => ({
 const radioConfig = computed(() => {
   const results = Object.values(currentResults.value?.results ?? {})
   if (results.length) {
-    if (currentType.value?.id === 'tags') {
-      return {
-        type: 'tag',
-        names: results.map(({ name }) => name)
-      } as RadioConfig
-    }
+    switch (currentType.value?.id) {
+      case 'tags':
+        return {
+          type: 'tag',
+          names: results.map(({ name }) => name)
+        } as RadioConfig
 
-    if (currentType.value?.id === 'artists') {
-      return {
-        type: 'artist',
-        ids: results.map(({ id }) => id)
-      } as RadioConfig
+      case 'playlists':
+      case 'artists':
+        return {
+          type: currentType.value.id.slice(0, -1),
+          ids: results.map(({ id }) => id)
+        } as RadioConfig
     }
 
     // TODO (wvffle): Use logger

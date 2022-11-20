@@ -47,6 +47,10 @@ const buttonLabel = computed(() => {
       return running.value
         ? $pgettext('*/Player/Button.Label/Short, Verb', 'Stop artists radio')
         : $pgettext('*/Player/Button.Label/Short, Verb', 'Start artists radio')
+    case 'playlist':
+      return running.value
+        ? $pgettext('*/Player/Button.Label/Short, Verb', 'Stop playlists radio')
+        : $pgettext('*/Player/Button.Label/Short, Verb', 'Start playlists radio')
     default:
       return running.value
         ? $pgettext('*/Player/Button.Label/Short, Verb', 'Stop radio')
