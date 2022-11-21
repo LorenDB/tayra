@@ -30,6 +30,10 @@ TYPE_CHOICES = [
     ("Service", "Service"),
 ]
 
+MAX_LENGTHS = {
+    "ACTOR_NAME": 200,
+}
+
 
 def empty_dict():
     return {}
@@ -188,7 +192,7 @@ class Actor(models.Model):
     followers_url = models.URLField(max_length=500, null=True, blank=True)
     shared_inbox_url = models.URLField(max_length=500, null=True, blank=True)
     type = models.CharField(choices=TYPE_CHOICES, default="Person", max_length=25)
-    name = models.CharField(max_length=200, null=True, blank=True)
+    name = models.CharField(max_length=MAX_LENGTHS["ACTOR_NAME"], null=True, blank=True)
     domain = models.ForeignKey(Domain, on_delete=models.CASCADE, related_name="actors")
     summary = models.CharField(max_length=500, null=True, blank=True)
     summary_obj = models.ForeignKey(

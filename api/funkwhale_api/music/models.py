@@ -37,14 +37,6 @@ from . import importers, metadata, utils
 
 logger = logging.getLogger(__name__)
 
-MAX_LENGTHS = {
-    "ARTIST_NAME": 255,
-    "ALBUM_TITLE": 255,
-    "TRACK_TITLE": 255,
-    "COPYRIGHT": 500,
-}
-
-
 ARTIST_CONTENT_CATEGORY_CHOICES = [
     ("music", "music"),
     ("podcast", "podcast"),
@@ -213,7 +205,7 @@ class ArtistQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
 
 
 class Artist(APIModelMixin):
-    name = models.CharField(max_length=MAX_LENGTHS["ARTIST_NAME"])
+    name = models.TextField()
     federation_namespace = "artists"
     musicbrainz_model = "artist"
     musicbrainz_mapping = {
@@ -338,7 +330,7 @@ class AlbumQuerySet(common_models.LocalFromFidQuerySet, models.QuerySet):
 
 
 class Album(APIModelMixin):
-    title = models.CharField(max_length=MAX_LENGTHS["ALBUM_TITLE"])
+    title = models.TextField()
     artist = models.ForeignKey(Artist, related_name="albums", on_delete=models.CASCADE)
     release_date = models.DateField(null=True, blank=True, db_index=True)
     release_group_id = models.UUIDField(null=True, blank=True)
@@ -496,7 +488,7 @@ def get_artist(release_list):
 
 class Track(APIModelMixin):
     mbid = models.UUIDField(db_index=True, null=True, blank=True)
-    title = models.CharField(max_length=MAX_LENGTHS["TRACK_TITLE"])
+    title = models.TextField()
     artist = models.ForeignKey(Artist, related_name="tracks", on_delete=models.CASCADE)
     disc_number = models.PositiveIntegerField(null=True, blank=True)
     position = models.PositiveIntegerField(null=True, blank=True)
@@ -520,9 +512,7 @@ class Track(APIModelMixin):
         on_delete=models.SET_NULL,
         related_name="attributed_tracks",
     )
-    copyright = models.CharField(
-        max_length=MAX_LENGTHS["COPYRIGHT"], null=True, blank=True
-    )
+    copyright = models.TextField(null=True, blank=True)
     description = models.ForeignKey(
         "common.Content", null=True, blank=True, on_delete=models.SET_NULL
     )

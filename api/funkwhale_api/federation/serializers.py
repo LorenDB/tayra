@@ -1796,7 +1796,7 @@ class ChannelUploadSerializer(jsonld.JsonLdSerializer):
     id = serializers.URLField(max_length=500)
     type = serializers.ChoiceField(choices=[contexts.AS.Audio])
     url = LinkListSerializer(keep_mediatype=["audio/*"], min_length=1)
-    name = TruncatedCharField(truncate_length=music_models.MAX_LENGTHS["TRACK_TITLE"])
+    name = serializers.CharField()
     published = serializers.DateTimeField(required=False)
     duration = serializers.IntegerField(min_value=0, required=False)
     position = serializers.IntegerField(min_value=0, allow_null=True, required=False)
@@ -1804,8 +1804,7 @@ class ChannelUploadSerializer(jsonld.JsonLdSerializer):
     album = serializers.URLField(max_length=500, required=False)
     license = serializers.URLField(allow_null=True, required=False)
     attributedTo = serializers.URLField(max_length=500, required=False)
-    copyright = TruncatedCharField(
-        truncate_length=music_models.MAX_LENGTHS["COPYRIGHT"],
+    copyright = serializers.CharField(
         allow_null=True,
         required=False,
     )

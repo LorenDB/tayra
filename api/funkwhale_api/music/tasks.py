@@ -563,9 +563,7 @@ def _get_track(data, attributed_to=None, **forced_values):
         else:
             album_artists = getter(data, "album", "artists", default=artists) or artists
             album_artist_data = album_artists[0]
-            album_artist_name = truncate(
-                album_artist_data.get("name"), models.MAX_LENGTHS["ARTIST_NAME"]
-            )
+            album_artist_name = album_artist_data.get("name")
             if album_artist_name == artist_name:
                 album_artist = artist
             else:
@@ -609,9 +607,7 @@ def _get_track(data, attributed_to=None, **forced_values):
         # get / create album
         if "album" in data:
             album_data = data["album"]
-            album_title = truncate(
-                album_data["title"], models.MAX_LENGTHS["ALBUM_TITLE"]
-            )
+            album_title = album_data["title"]
             album_fid = album_data.get("fid", None)
 
             if album_mbid:
@@ -647,11 +643,7 @@ def _get_track(data, attributed_to=None, **forced_values):
         else:
             album = None
     # get / create track
-    track_title = (
-        forced_values["title"]
-        if "title" in forced_values
-        else truncate(data["title"], models.MAX_LENGTHS["TRACK_TITLE"])
-    )
+    track_title = forced_values["title"] if "title" in forced_values else data["title"]
     position = (
         forced_values["position"]
         if "position" in forced_values
@@ -670,7 +662,7 @@ def _get_track(data, attributed_to=None, **forced_values):
     copyright = (
         forced_values["copyright"]
         if "copyright" in forced_values
-        else truncate(data.get("copyright"), models.MAX_LENGTHS["COPYRIGHT"])
+        else data.get("copyright")
     )
     description = (
         {"text": forced_values["description"], "content_type": "text/markdown"}
@@ -736,7 +728,7 @@ def _get_track(data, attributed_to=None, **forced_values):
 def get_artist(artist_data, attributed_to, from_activity_id):
     artist_mbid = artist_data.get("mbid", None)
     artist_fid = artist_data.get("fid", None)
-    artist_name = truncate(artist_data["name"], models.MAX_LENGTHS["ARTIST_NAME"])
+    artist_name = artist_data["name"]
 
     if artist_mbid:
         query = Q(mbid=artist_mbid)

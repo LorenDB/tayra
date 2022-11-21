@@ -76,9 +76,9 @@ class ChannelMetadataSerializer(serializers.Serializer):
 
 
 class ChannelCreateSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=music_models.MAX_LENGTHS["ARTIST_NAME"])
+    name = serializers.CharField(max_length=federation_models.MAX_LENGTHS["ACTOR_NAME"])
     username = serializers.CharField(
-        max_length=music_models.MAX_LENGTHS["ARTIST_NAME"],
+        max_length=federation_models.MAX_LENGTHS["ACTOR_NAME"],
         validators=[users_serializers.ASCIIUsernameValidator()],
     )
     description = common_serializers.ContentSerializer(allow_null=True)
@@ -159,7 +159,7 @@ NOOP = object()
 
 
 class ChannelUpdateSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=music_models.MAX_LENGTHS["ARTIST_NAME"])
+    name = serializers.CharField(max_length=federation_models.MAX_LENGTHS["ACTOR_NAME"])
     description = common_serializers.ContentSerializer(allow_null=True)
     tags = tags_serializers.TagsListField()
     content_category = serializers.ChoiceField(
@@ -385,9 +385,7 @@ def get_channel_from_rss_url(url, raise_exception=False):
         )
     )
     if parsed_feed.feed.get("rights"):
-        track_defaults["copyright"] = parsed_feed.feed.rights[
-            : music_models.MAX_LENGTHS["COPYRIGHT"]
-        ]
+        track_defaults["copyright"] = parsed_feed.feed.rights
     for entry in entries[: settings.PODCASTS_RSS_FEED_MAX_ITEMS]:
         logger.debug("Importing feed item %s", entry.id)
         s = RssFeedItemSerializer(data=entry)
@@ -547,9 +545,7 @@ class RssFeedSerializer(serializers.Serializer):
             **artist_kwargs,
             defaults={
                 "attributed_to": service_actor,
-                "name": validated_data["title"][
-                    : music_models.MAX_LENGTHS["ARTIST_NAME"]
-                ],
+                "name": validated_data["title"],
                 "content_category": "podcast",
             },
         )
@@ -752,16 +748,12 @@ class RssFeedItemSerializer(serializers.Serializer):
             {
                 "disc_number": validated_data.get("itunes_season", 1) or 1,
                 "position": validated_data.get("itunes_episode", 1) or 1,
-                "title": validated_data["title"][
-                    : music_models.MAX_LENGTHS["TRACK_TITLE"]
-                ],
+                "title": validated_data["title"],
                 "artist": channel.artist,
             }
         )
         if "rights" in validated_data:
-            track_defaults["copyright"] = validated_data["rights"][
-                : music_models.MAX_LENGTHS["COPYRIGHT"]
-            ]
+            track_defaults["copyright"] = validated_data["rights"]
 
         if "published_parsed" in validated_data:
             track_defaults["creation_date"] = datetime.datetime.fromtimestamp(
