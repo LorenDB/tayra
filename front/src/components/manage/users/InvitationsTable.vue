@@ -76,6 +76,11 @@
             </translate>
           </th>
           <th>
+            <translate translate-context="Content/Admin/Table.Label/Noun">
+              User
+            </translate>
+          </th>
+          <th>
             <translate translate-context="*/*/*">
               Status
             </translate>
@@ -104,6 +109,11 @@
             <router-link :to="{name: 'manage.users.users.detail', params: {id: scope.obj.id }}">
               {{ scope.obj.owner.username }}
             </router-link>
+          </td>
+          <td>
+            <span v-if="scope.obj.invited_user">
+              {{ scope.obj.invited_user.username }}
+            </span>
           </td>
           <td>
             <span

@@ -98,12 +98,28 @@ class ManageUserSerializer(serializers.ModelSerializer):
 class ManageInvitationSerializer(serializers.ModelSerializer):
     users = ManageUserSimpleSerializer(many=True, required=False)
     owner = ManageUserSimpleSerializer(required=False)
+    invited_user = ManageUserSimpleSerializer(required=False)
     code = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = users_models.Invitation
-        fields = ("id", "owner", "code", "expiration_date", "creation_date", "users")
-        read_only_fields = ["id", "expiration_date", "owner", "creation_date", "users"]
+        fields = (
+            "id",
+            "owner",
+            "invited_user",
+            "code",
+            "expiration_date",
+            "creation_date",
+            "users",
+        )
+        read_only_fields = [
+            "id",
+            "expiration_date",
+            "owner",
+            "invited_user",
+            "creation_date",
+            "users",
+        ]
 
     def validate_code(self, value):
         if not value:

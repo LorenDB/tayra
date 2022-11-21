@@ -57,6 +57,9 @@ class InvitationFactory(NoUpdateOnCreate, factory.django.DjangoModelFactory):
 
     class Params:
         expired = factory.Trait(expiration_date=factory.LazyFunction(timezone.now))
+        with_invited_user = factory.Trait(
+            invited_user=factory.SubFactory("funkwhale_api.users.factories.UserFactory")
+        )
 
 
 class PasswordSetter(factory.PostGenerationMethodCall):
