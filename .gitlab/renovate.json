@@ -1,13 +1,18 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "prConcurrentLimit": 1,
-  "branchConcurrentLimit": 2,
-  "ignoreDeps": ["$CI_REGISTRY/funkwhale/backend-test-docker"],
-  "rangeStrategy": "pin",
-  "lockFileMaintenance": { "enabled": true },
-  "dependencyDashboard": true,
+  "extends": [
+    ":dependencyDashboard",
+    ":maintainLockFilesWeekly",
+    ":enablePreCommit",
+    "group:monorepos",
+    "group:recommended"
+  ],
   "baseBranches": ["stable", "develop"],
+  "branchConcurrentLimit": 2,
+  "prConcurrentLimit": 1,
   "semanticCommits": "disabled",
+  "rangeStrategy": "pin",
+  "ignoreDeps": ["$CI_REGISTRY/funkwhale/backend-test-docker"],
   "packageRules": [
     {
       "matchUpdateTypes": ["major", "minor"],
@@ -34,16 +39,8 @@
       "addLabels": ["Area: Backend"]
     },
     {
-      "matchPackageNames": ["@vue/runtime-core", "vue", "@vue/compiler-sfc"],
-      "groupName": "Vue"
-    },
-    {
-      "matchPackageNames": ["@vueuse/core", "@vueuse/integrations", "@vueuse/router", "@vueuse/math"],
+      "matchPackagePatterns": ["^@vueuse/.*"],
       "groupName": "vueuse"
-    },
-    {
-      "matchPackageNames": ["@sentry/tracing", "@sentry/vue"],
-      "groupName": "Sentry"
     },
     {
       "matchPackageNames": ["channels", "channels-redis", "daphne"],
@@ -57,7 +54,9 @@
       "matchFiles": ["deploy/docker-compose.yml"],
       "matchPackageNames": ["postgres"],
       "postUpgradeTasks": {
-        "commands": ["echo 'Upgrade Postgres to version {{ newVersion }}. [Make sure to migrate!](https://docs.funkwhale.audio/administrator_documentation/upgrade_docs/docker.html#upgrade-the-postgres-container)' > changes/changelog.d/postgres.update"],
+        "commands": [
+          "echo 'Upgrade Postgres to version {{ newVersion }}. [Make sure to migrate!](https://docs.funkwhale.audio/administrator_documentation/upgrade_docs/docker.html#upgrade-the-postgres-container)' > changes/changelog.d/postgres.update"
+        ],
         "fileFilters": ["changes/changelog.d/postgres.update"]
       }
     }
