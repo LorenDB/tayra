@@ -20,7 +20,7 @@ RUN \
     gcc \
     postgresql-dev \
     python3-dev \
-    py3-psycopg2 \
+    py3-psycopg2=2.9.5-r0 \
     py3-cryptography \
     py3-lxml \
     py3-pillow \
@@ -53,14 +53,14 @@ RUN \
     # is why we need to use the packages shipped by Alpine Linux.
     # Since poetry does not allow in-place dependency pinning, we need
     # to install the deps using pip.
-    grep -Ev 'cryptography|uvicorn|watchgod|watchfiles|lxml|pillow' /requirements.txt | pip3 install -r /dev/stdin cryptography==38.0.3 uvicorn==0.17.6 watchgod==0.8.2 lxml==4.9.1 pillow==9.3.0 && \
+    grep -Ev 'cryptography|uvicorn|watchgod|watchfiles|lxml|pillow|psycopg2' /requirements.txt | pip3 install -r /dev/stdin cryptography==38.0.3 uvicorn==0.17.6 watchgod==0.8.2 lxml==4.9.1 pillow==9.3.0 psycopg2==2.9.5 && \
     rm -rf "$PIP_DOWNLOAD_CACHE"
 
 ARG install_dev_deps=0
 RUN \
     if [ "$install_dev_deps" = "1" ] ; then \
       echo "Installing dev dependencies" && \
-      grep -Ev 'cryptography|uvicorn|watchgod|watchfiles|lxml|pillow' /dev-requirements.txt | pip3 install -r /dev/stdin cryptography==38.0.3 uvicorn==0.17.6 watchgod==0.8.2 lxml==4.9.1 pillow==9.3.0 && \
+      grep -Ev 'cryptography|uvicorn|watchgod|watchfiles|lxml|pillow|psycopg2' /dev-requirements.txt | pip3 install -r /dev/stdin cryptography==38.0.3 uvicorn==0.17.6 watchgod==0.8.2 lxml==4.9.1 pillow==9.3.0 psycopg2==2.9.5 && \
       rm -rf "$PIP_DOWNLOAD_CACHE" \
     ; else \
       echo "Skipping dev deps installation" \
@@ -83,6 +83,7 @@ RUN apk add --no-cache \
     libpq \
     libxml2 \
     libxslt \
+    py3-psycopg2=2.9.5-r0 \
     py3-cryptography \
     py3-lxml \
     py3-pillow \
