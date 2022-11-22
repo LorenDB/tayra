@@ -38,25 +38,28 @@ That's it! `apt` installs all dependencies and tells you once it has finished.
 
 It's good practice to create a user on your server for Funkwhale administration. Doing this makes it easy to make sure you're running commands from the right place. Follow these steps to set up your user.
 
-1. Create the `funkwhale` user and set its shell to `bash` and its home directory to `/srv/funkwhale`.
+Create the `funkwhale` user and set its shell to `bash` and its home directory to `/srv/funkwhale`.
 
-   ```{code-block} sh
-   sudo useradd -r -s /usr/bin/bash -d /srv/funkwhale -m funkwhale
-   ```
+```{code-block} sh
+sudo useradd --system --shell /bin/bash --create-home --home-dir /srv/funkwhale funkwhale
+```
 
-2. Create a password for the user. You need to do this so that you can use this user to perform database administration.
+````{note}
+To perform any tasks as the `funkwhale` user, prefix your commands with `sudo -u funkwhale`.
 
-   ```{code-block} sh
-   sudo passwd funkwhale
-   ```
+```{code-block} sh
+sudo -u funkwhale <command>
+```
 
-3. Finally, give the user `sudo` privileges. You need to do this so that the user can run administrative tasks.
+Or log in as `funkwhale` with `sudo su funkwhale` before running your commands.
 
-   ```{code-block} sh
-   usermod -aG sudo funkwhale
-   ```
+```{code-block} sh
+sudo su funkwhale
+<command>
+```
+````
 
-That's it! You've created your `funkwhale` user. Log in as this user when you want to perform any Funkwhale related tasks.
+That's it! You've created your `funkwhale` user.
 
 ## 3. Download Funkwhale
 
@@ -64,30 +67,35 @@ Once you've created your `funkwhale` user you can download the Funkwhale softwar
 
 ### Create the directory layout
 
-1. Log in to your `funkwhale` account and go to the `/srv/funkwhale` directory.
+1. Go to the `/srv/funkwhale` directory.
 
    ```{code-block} sh
    cd /srv/funkwhale
-   su funkwhale
    ```
 
 2. Create the directories for Funkwhale.
 
    ```{code-block} sh
-   mkdir -p config api data/static data/media data/music front
+   sudo mkdir -p config api data/static data/media data/music front
+   ```
+
+3. Allow the Funkwhale user to write to the data directories.
+
+   ```{code-block} sh
+   sudo chown -R funkwhale:funkwhale data
    ```
 
 That's it! Your directory structure should look like this:
 
 ```{code-block} text
 .
-├── config      # config / environment files
-├── api         # the Funkwhale API
-├── data        # files served by the API
-   └── static   # storage location for persistent data
-   └── media    # storage location for media files
-   └── music    # storage location for audio files
-└── front       # frontend files for the user interface
+├── api           # the Funkwhale API
+├── config        # config / environment files
+├── data          # files served by the API
+|   ├── media     # storage location for media files
+|   ├── music     # storage location for audio files
+|   └── static    # storage location for persistent data
+└── front         # frontend files for the user interface
 ```
 
 ### Download the Funkwhale release
@@ -97,19 +105,19 @@ Once you've created the directory structure you can download Funkwhale. Funkwhal
 1. Download the API.
 
    ```{code-block} sh
-   curl -L -o "api-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_api"
-   unzip "api-$FUNKWHALE_VERSION.zip" -d extracted
-   mv extracted/api/* api/
-   rm -rf extracted api-$FUNKWHALE_VERSION.zip
+   sudo curl -L -o "api-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_api"
+   sudo unzip "api-$FUNKWHALE_VERSION.zip" -d extracted
+   sudo mv extracted/api/* api/
+   sudo rm -rf extracted api-$FUNKWHALE_VERSION.zip
    ```
 
 2. Download the frontend
 
    ```{code-block} sh
-   curl -L -o "front-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_front"
-   unzip "front-$FUNKWHALE_VERSION.zip" -d extracted
-   mv extracted/front .
-   rm -rf extracted front-$FUNKWHALE_VERSION.zip
+   sudo curl -L -o "front-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_front"
+   sudo unzip "front-$FUNKWHALE_VERSION.zip" -d extracted
+   sudo mv extracted/front .
+   sudo rm -rf extracted front-$FUNKWHALE_VERSION.zip
    ```
 
 You're done! These commands put the software in the correct location for Funkwhale to serve them.
@@ -135,7 +143,7 @@ The Funkwhale API is written in Python. You need to install the API's dependenci
 
    ```{code-block} sh
    cd /srv/funkwhale/api
-   poetry install
+   sudo poetry install
    ```
 
 You're done! Poetry installs all Python dependencies.
@@ -147,7 +155,7 @@ The environment file contains options you can use to control your Funkwhale pod.
 1. Download the `.env` template to your `/srv/funkwhale/config` directory.
 
    ```{code-block} sh
-   curl -L -o /srv/funkwhale/config/.env "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/env.prod.sample"
+   sudo curl -L -o /srv/funkwhale/config/.env "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$FUNKWHALE_VERSION/deploy/env.prod.sample"
    ```
 
 2. Generate a secret key for Django. This keeps your Funkwhale data secure. Do not share this key with anybody.
@@ -159,13 +167,14 @@ The environment file contains options you can use to control your Funkwhale pod.
 3. Reduce the permissions on your `.env` file to `600`. This means that only the `funkwhale` user can read and write this file.
 
    ```{code-block} sh
-   chmod 600 /srv/funkwhale/config/.env
+   sudo chown funkwhale:funkwhale /srv/funkwhale/config/.env
+   sudo chmod 600 /srv/funkwhale/config/.env
    ```
 
 4. Open the `.env` file in a text editor. For this example, we will use `nano`.
 
    ```{code-block} sh
-   nano /srv/funkwhale/config/.env
+   sudo nano /srv/funkwhale/config/.env
    ```
 
 5. Update the following settings:
@@ -235,7 +244,7 @@ Funkwhale uses a [PostgreSQL](https://www.postgresql.org/) database to store inf
 
    ```{code-block} sh
    cd /srv/funkwhale/api
-   poetry run python manage.py migrate
+   sudo -u funkwhale poetry run python manage.py migrate
    ```
 
 ````{note}
@@ -263,7 +272,7 @@ You can create several superusers.
 To start using Funkwhale, you need to create a superuser for your pod. This user has all the permissions needed to administrate the pod. Follow these steps to create a superuser.
 
 ```{code-block} sh
-poetry run python manage.py createsuperuser
+sudo -u funkwhale poetry run python manage.py createsuperuser
 ```
 
 That's it! You can log in as this user when you finish setting up Funkwhale.
@@ -273,7 +282,7 @@ That's it! You can log in as this user when you finish setting up Funkwhale.
 Funkwhale uses several static assets to serve its frontend. Use `manage.py` to collect these files so that the webserver can serve them.
 
 ```{code-block} sh
-poetry run python manage.py collectstatic
+sudo poetry run python manage.py collectstatic
 ```
 
 ## 8. Set up systemd unit files
