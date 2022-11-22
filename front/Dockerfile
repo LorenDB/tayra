@@ -26,4 +26,3 @@ RUN mkdir -p /var/log/nginx /var/cache/nginx /var/run/nginx && \
 
 ENV FUNKWHALE_API_HOST=api
 ENV FUNKWHALE_API_PORT=5000
-ENV AWS_S3_ENDPOINT_URL=
