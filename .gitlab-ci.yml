@@ -105,6 +105,21 @@ review_docs:
     - if: $CI_PIPELINE_SOURCE != "merge_request_event" && $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
       when: manual
 
+find_broken_links:
+  stage: lint
+  needs: []
+  image:
+    name: lycheeverse/lychee
+    entrypoint: [""]
+  script:
+    - >
+      lychee
+      --exclude-all-private
+      --exclude-mail
+      --exclude 'demo\.funkwhale\.audio'
+      --exclude-path 'docs/_templates/'
+      -- .
+
 changelog_snippet:
   interruptible: true
   image: alpine:3.17

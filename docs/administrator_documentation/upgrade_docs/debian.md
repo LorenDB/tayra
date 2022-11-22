@@ -1,6 +1,6 @@
 # Upgrade your Debian Funkwhale installation
 
-If you installed Funkwhale following the [Debian guide](../installation_docs/debian), follow these steps to upgrade.
+If you installed Funkwhale following the [Debian guide](../installation_docs/debian.md), follow these steps to upgrade.
 
 :::{dropdown} Upgrading to a new version of Python
 :icon: alert

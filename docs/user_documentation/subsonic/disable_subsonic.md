@@ -31,4 +31,4 @@ If you don't want to use Subsonic any more, you can disable access. This stops a
 :::
 ::::
 
-You're done! Subsonic apps can no longer access your account. You can re-enable the API at any time by [requesting a new password](subsonic_password).
+You're done! Subsonic apps can no longer access your account. You can re-enable the API at any time by [requesting a new password](./subsonic_password.md).

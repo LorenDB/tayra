@@ -28,7 +28,7 @@ info:
     4. Use your access token to authenticate your calls with the following format: `Authorization: Bearer <token>`
     5. Refresh your access token by sending a refresh request to `/api/v1/oauth/token`
 
-    For more detailed instructions, see [our API authentication documentation](https://docs.funkwhale.audio/developer_documentation/api/authentication.html).
+    For more detailed instructions, see [our API authentication documentation](https://docs.funkwhale.audio/developers/authentication.html).
 
     ## Application token authentication
 
@@ -47,11 +47,11 @@ info:
     - How many more requests in the scope can be made within the rate-limit timeframe (`X-RateLimit-Remaining`)
     - How much time does the client need to wait to send another request (`Retry-After`)
 
-    For more information, check our [rate limit documentation](https://docs.funkwhale.audio/developer_documentation/api/rate-limit.html)
+    For more information, check our [rate limit documentation](https://docs.funkwhale.audio/admin/configuration.html#api-configuration)
 
     ## Resources
 
-    For more information about API usage, refer to [our API documentation](https://docs.funkwhale.audio/developer_documentation/api/index.html).
+    For more information about API usage, refer to [our API documentation](https://docs.funkwhale.audio/api.html).
 
   version: "1.0.0"
   title: "Funkwhale API"
@@ -69,9 +69,9 @@ servers:
         description: Your Funkwhale Domain
       protocol:
         enum:
-          - 'http'
-          - 'https'
-        default: 'https'
+          - "http"
+          - "https"
+        default: "https"
 
 components:
   responses:
@@ -154,8 +154,7 @@ paths:
     post:
       tags:
         - "Auth and security"
-      summary:
-        Register an OAuth application
+      summary: Register an OAuth application
       security: []
       responses:
         201:
@@ -189,8 +188,7 @@ paths:
     post:
       tags:
         - "Auth and security"
-      summary:
-        Request an OAuth bearer token in exchange of an authorization_code or a refresh_token
+      summary: Request an OAuth bearer token in exchange of an authorization_code or a refresh_token
       security: []
       responses:
         200:
@@ -345,7 +343,6 @@ paths:
         - oauth2:
             - "read:libraries"
       parameters:
-
         - $ref: "./api/parameters.yml#/Search"
         - $ref: "./api/parameters.yml#/ArtistOrdering"
         - $ref: "./api/parameters.yml#/Playable"
@@ -526,7 +523,6 @@ paths:
         - oauth2:
             - "read:libraries"
       parameters:
-
         - $ref: "./api/parameters.yml#/Search"
         - name: "artist"
           in: "query"
@@ -694,7 +690,7 @@ paths:
         200:
           description: ""
           content:
-            '*/*':
+            "*/*":
               schema:
                 description: "Audio file, as binary data"
                 type: string
@@ -790,8 +786,7 @@ paths:
     post:
       tags:
         - "Uploads and audio content"
-      description:
-        Create a new library
+      description: Create a new library
       responses:
         201:
           $ref: "#/components/responses/201"
@@ -1031,7 +1026,7 @@ paths:
         200:
           description: ""
           content:
-             application/rss+xml: {}
+            application/rss+xml: {}
 
   /api/v1/channels/{uuid}/subscribe/:
     parameters:
@@ -1075,7 +1070,6 @@ paths:
       tags:
         - "Uploads and audio content"
       parameters:
-
         - $ref: "./api/parameters.yml#/Search"
         - $ref: "./api/parameters.yml#/PageNumber"
         - $ref: "./api/parameters.yml#/PageSize"
@@ -1346,7 +1340,6 @@ paths:
         204:
           $ref: "#/components/responses/204"
 
-
   #################
   # User activity #
   #################
@@ -1406,8 +1399,7 @@ paths:
     get:
       tags:
         - "Other"
-      description:
-        Search artists, tracks, albums and other resources
+      description: Search artists, tracks, albums and other resources
       parameters:
         - $ref: "./api/parameters.yml#/Search"
       responses:
@@ -1420,8 +1412,7 @@ paths:
     get:
       tags:
         - "Other"
-      description:
-        Retrieve pod-level configuration such as description or max playlist size
+      description: Retrieve pod-level configuration such as description or max playlist size
       responses:
         200:
           description: ""
@@ -1462,13 +1453,11 @@ paths:
                           type: string
                           description: "Input type of the setting"
 
-
   /api/v1/attachments/:
     post:
       tags:
         - "Other"
-      description:
-        Upload a new file as an attachment that can be later associated with other objects.
+      description: Upload a new file as an attachment that can be later associated with other objects.
       responses:
         201:
           $ref: "#/components/responses/201"

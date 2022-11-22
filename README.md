@@ -10,8 +10,8 @@ Want to help make Funkwhale even better? We welcome contributions from across th
 
 You can find contribution information in our [documentation hub](https://docs.funkwhale.audio).
 
-- [Developer guides](https://docs.funkwhale.audio/developer_documentation/index.html)
-- [Contributor guides](https://docs.funkwhale.audio/contributor_documentation/index.html)
+- [Developer guides](https://docs.funkwhale.audio/developers/index.html)
+- [Contributor guides](https://docs.funkwhale.audio/contributing.html)
 
 ## Get help
 
@@ -21,6 +21,6 @@ Got a question or need help? Head over to our [forum](https://forum.funkwhale.au
 
 If you find a security issue or vulnerability, please report it on our [GitLab instance](https://dev.funkwhale.audio/funkwhale/funkwhale/-/issues). When you open your issue, select the **This issue is confidential and should only be visible to team members with at least Reporter access** option. This ensures developers can verify and patch the issue before disclosing it.
 
-##  Code of conduct
+## Code of conduct
 
 The Funkwhale collective adheres to a [code of conduct](https://funkwhale.audio/en_US/code-of-conduct) in all our community spaces. Please familiarize yourself with this code and follow it when participating in discussions in our spaces.

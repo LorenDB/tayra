@@ -4,7 +4,7 @@
 You can only edit content in libraries you own. {term}`Pod` admins can edit all content.
 ```
 
-You can edit library content after you have uploaded it. This is helpful if the content isn't [tagged](tag_music).
+You can edit library content after you have uploaded it. This is helpful if the content isn't [tagged](./tag_music.md).
 
 ```{contents}
 :local:

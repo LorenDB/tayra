@@ -1,6 +1,6 @@
 # Upgrade your Docker Funkwhale installation
 
-If you installed Funkwhale following the [Docker guide](../installation_docs/docker), follow these steps to upgrade.
+If you installed Funkwhale following the [Docker guide](../installation_docs/docker.md), follow these steps to upgrade.
 
 ## Upgrade Funkwhale
 

@@ -9,13 +9,13 @@ Funkwhale uses the OAuth [authorization grant flow](https://tools.ietf.org/html/
 To authenticate with the Funkwhale API:
 
 1. Create an application by sending a `POST` request to `api/v1/oauth/apps`. Include your scopes and redirect URI (use `urn:ietf:wg:oauth:2.0:oob`
-to get an authorization code you can copy)
-2. Send an [authorization request](https://www.rfc-editor.org/rfc/rfc6749#section-4.1.2)  to the `/authorize` endpoint to receive an authorization code
+   to get an authorization code you can copy)
+2. Send an [authorization request](https://www.rfc-editor.org/rfc/rfc6749#section-4.1.2) to the `/authorize` endpoint to receive an authorization code
 3. [Request an access token](https://www.rfc-editor.org/rfc/rfc6749#section-4.1.3) from `/api/v1/oauth/token`
 4. Use your access token to authenticate your calls with the following format: `Authorization: Bearer <token>`
 5. Refresh your access token by sending a refresh request to `/api/v1/oauth/token`
 
-For more detailed instructions, see [our API authentication documentation](https://docs.funkwhale.audio/developer_documentation/api/authentication.html).
+For more detailed instructions, see [our API authentication documentation](https://docs.funkwhale.audio/developers/authentication.html).
 
 ## Application token authentication
 
@@ -32,8 +32,8 @@ Each API call returns HTTP headers to pass the following information:
 - How many more requests in the scope can be made within the rate-limit timeframe (`X-RateLimit-Remaining`)
 - How much time does the client need to wait to send another request (`Retry-After`)
 
-For more information, check our [rate limit documentation](https://docs.funkwhale.audio/developer_documentation/api/rate-limit.html)
+For more information, check our [rate limit documentation](https://docs.funkwhale.audio/admin/configuration.html#api-configuration)
 
 ## Resources
 
-For more information about API usage, refer to [our API documentation](https://docs.funkwhale.audio/developer_documentation/api/index.html).
+For more information about API usage, refer to [our API documentation](https://docs.funkwhale.audio/api.html).

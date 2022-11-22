@@ -8,15 +8,15 @@ The Funkwhale software is the core of the community project. While we have a cor
 
 Funkwhale's backend is written in [Python](https://www.python.org/) using [Django](https://www.djangoproject.com) and [Django REST framework](https://www.django-rest-framework.org/). Our web app is written in [Vue.js](https://vuejs.org/) and [Typescript](https://typescriptlang.org).
 
-Whether you're an experienced developer or you're just learning, check out our [developer guide](https://docs.funkwhale.audio/developer_documentation/index.html) to get started.
+Whether you're an experienced developer or you're just learning, check out our [developer guide](https://docs.funkwhale.audio/developers/index.html) to get started.
 
 ## Document Funkwhale
 
-Funkwhale is a large project with a lot of moving parts. To help users and developers alike, we need to keep our documentation up-to-date and readable. If you have a knack for explaining technical concepts or you've noticed a gap, check out our [documentation guide](https://docs.funkwhale.audio/contributor_documentation/documentation.html) to see how to get involved.
+Funkwhale is a large project with a lot of moving parts. To help users and developers alike, we need to keep our documentation up-to-date and readable. If you have a knack for explaining technical concepts or you've noticed a gap, check out our [documentation guide](https://docs.funkwhale.audio/documentation/index.html) to see how to get involved.
 
 ## Translate Funkwhale
 
-All Funkwhale content is written in American English, but our community speaks languages from all over the world. If you'd like to see Funkwhale in your language, check out the [translation guide](https://docs.funkwhale.audio/contributor_documentation/translation.html) to see how you can help out.
+All Funkwhale content is written in American English, but our community speaks languages from all over the world. If you'd like to see Funkwhale in your language, check out the [translation guide](https://docs.funkwhale.audio/translators.html) to see how you can help out.
 
 ## Other contributions
 
