@@ -37,10 +37,15 @@ class Command(BaseCommand):
         try:
             user = User.objects.get(username="gitpod")
         except Exception:
-            call_command("createsuperuser", username="gitpod", email="gitpod@example.com", no_input=False)
+            call_command(
+                "createsuperuser",
+                username="gitpod",
+                email="gitpod@example.com",
+                no_input=False,
+            )
             user = User.objects.get(username="gitpod")
 
-        user.set_password('gitpod')
+        user.set_password("gitpod")
         if not user.actor:
             user.create_actor()
 
@@ -50,7 +55,9 @@ class Command(BaseCommand):
         preferences.set("common__api_authentication_required", False)
 
         # Download music catalog
-        os.system("git clone https://dev.funkwhale.audio/funkwhale/catalog.git /tmp/catalog")
+        os.system(
+            "git clone https://dev.funkwhale.audio/funkwhale/catalog.git /tmp/catalog"
+        )
         os.system("mv -f /tmp/catalog/music /workspace/funkwhale/data")
         os.system("rm -rf /tmp/catalog/music")
 
@@ -59,7 +66,7 @@ class Command(BaseCommand):
             "create_library",
             "gitpod",
             name="funkwhale/catalog",
-            privacy_level="everyone"
+            privacy_level="everyone",
         )
         call_command(
             "import_files",
@@ -77,5 +84,8 @@ class Command(BaseCommand):
             host="0.0.0.0",
             port=5000,
             reload=True,
-            reload_dirs=["/workspace/funkwhale/api/config/", "/workspace/funkwhale/api/funkwhale_api/"],
+            reload_dirs=[
+                "/workspace/funkwhale/api/config/",
+                "/workspace/funkwhale/api/funkwhale_api/",
+            ],
         )
