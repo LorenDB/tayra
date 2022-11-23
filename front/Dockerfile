@@ -1,4 +1,8 @@
-FROM node:18-alpine as builder
+ARG BUILDPLATFORM=linux/amd64
+# default to building on linux/amd64 for legacy builders
+# docker buildx overwrites this ARG
+
+FROM --platform=$BUILDPLATFORM node:18-alpine as builder
 
 WORKDIR /app
 COPY package.json yarn.lock /app/
