@@ -1,9 +1,24 @@
 [tool.poetry]
-name = "Funkwhale"
+name = "funkwhale-api"
 version = "1.2.9"
-description = ""
+description = "Funkwhale API"
+
 authors = ["Funkwhale Collective"]
-license = "GNU AGPLv3"
+homepage = "https://funkwhale.audio"
+repository = "https://dev.funkwhale.audio/funkwhale/funkwhale"
+documentation = "https://docs.funkwhale.audio"
+license = "AGPL-3.0-only"
+
+packages = [
+    { include = "funkwhale_api" },
+    { include = "config" },
+]
+include = [
+    { path = "*.txt" },
+    { path = "*.png" },
+    { path = "*.html" },
+]
+exclude = ["tests"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
