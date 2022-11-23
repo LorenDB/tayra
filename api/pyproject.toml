@@ -20,6 +20,9 @@ include = [
 ]
 exclude = ["tests"]
 
+[tool.poetry.scripts]
+funkwhale-manage = 'funkwhale_api.main:main'
+
 [tool.poetry.dependencies]
 python = "^3.7"
 Django = "==3.2.16"
