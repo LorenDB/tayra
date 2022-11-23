@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
 import datetime
 import os
 import random
@@ -33,7 +30,7 @@ def get_token(length=5):
     wordlist_path = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "wordlist.txt"
     )
-    with open(wordlist_path, "r") as f:
+    with open(wordlist_path) as f:
         words = f.readlines()
     phrase = "".join(random.choice(words) for i in range(length))
     return phrase.replace("\n", "-").rstrip("-")
@@ -201,11 +198,7 @@ class User(AbstractUser):
         defaults = defaults or preferences.get("users__default_permissions")
         perms = {}
         for p in PERMISSIONS:
-            v = (
-                self.is_superuser
-                or getattr(self, "permission_{}".format(p))
-                or p in defaults
-            )
+            v = self.is_superuser or getattr(self, f"permission_{p}") or p in defaults
             perms[p] = v
         return perms
 
@@ -226,7 +219,7 @@ class User(AbstractUser):
     def has_permissions(self, *perms, **kwargs):
         operator = kwargs.pop("operator", "and")
         if operator not in ["and", "or"]:
-            raise ValueError("Invalid operator {}".format(operator))
+            raise ValueError(f"Invalid operator {operator}")
         permissions = self.get_permissions()
         checker = all if operator == "and" else any
         return checker([permissions[p] for p in perms])
@@ -249,7 +242,7 @@ class User(AbstractUser):
             self.update_subsonic_api_token()
 
     def get_activity_url(self):
-        return settings.FUNKWHALE_URL + "/@{}".format(self.username)
+        return settings.FUNKWHALE_URL + f"/@{self.username}"
 
     def record_activity(self):
         """
@@ -292,16 +285,16 @@ class User(AbstractUser):
 
     def get_channels_groups(self):
         groups = ["imports", "inbox"]
-        groups = ["user.{}.{}".format(self.pk, g) for g in groups]
+        groups = [f"user.{self.pk}.{g}" for g in groups]
 
         for permission, value in self.all_permissions.items():
             if value:
-                groups.append("admin.{}".format(permission))
+                groups.append(f"admin.{permission}")
 
         return groups
 
     def full_username(self) -> str:
-        return "{}@{}".format(self.username, settings.FEDERATION_HOSTNAME)
+        return f"{self.username}@{settings.FEDERATION_HOSTNAME}"
 
     def get_avatar(self):
         if not self.actor:

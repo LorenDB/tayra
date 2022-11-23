@@ -390,7 +390,7 @@ def test_upload_import_in_place(factories, mocker):
     upload = factories["music.Upload"](
         track=None,
         audio_file=None,
-        source="file://{}".format(path),
+        source=f"file://{path}",
         import_metadata={"funkwhale": {"track": {"uuid": track.uuid}}},
     )
 
@@ -564,7 +564,7 @@ def test_populate_album_cover_file_cover_separate_file(
     ext, mimetype, factories, mocker
 ):
     mocker.patch("funkwhale_api.music.tasks.IMAGE_TYPES", [(ext, mimetype)])
-    image_path = os.path.join(DATA_DIR, "cover.{}".format(ext))
+    image_path = os.path.join(DATA_DIR, f"cover.{ext}")
     with open(image_path, "rb") as f:
         image_content = f.read()
     album = factories["music.Album"](attachment_cover=None, mbid=None)
@@ -775,7 +775,7 @@ def test_scan_page_fetches_page_and_creates_tracks(now, mocker, factories, r_moc
     scan = factories["music.LibraryScan"](status="scanning", total_files=5)
     uploads = [
         factories["music.Upload"](
-            fid="https://track.test/{}".format(i),
+            fid=f"https://track.test/{i}",
             size=42,
             bitrate=66,
             duration=99,
@@ -947,7 +947,7 @@ def test_update_library_entity(factories, mocker):
     ],
 )
 def test_get_cover_from_fs(name, ext, mimetype, tmpdir):
-    cover_path = os.path.join(tmpdir, "{}.{}".format(name, ext))
+    cover_path = os.path.join(tmpdir, f"{name}.{ext}")
     content = "Hello"
     with open(cover_path, "w") as f:
         f.write(content)
@@ -1064,7 +1064,7 @@ def test_process_channel_upload_forces_artist_and_attributed_to(
     get_track_from_import_metadata.assert_called_once_with(
         expected_final_metadata,
         attributed_to=channel.attributed_to,
-        **expected_forced_values
+        **expected_forced_values,
     )
 
     assert upload.track.description.content_type == "text/markdown"

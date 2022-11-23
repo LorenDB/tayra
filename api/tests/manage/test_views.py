@@ -216,9 +216,7 @@ def test_album_list(factories, superuser_api_client, settings):
     album = factories["music.Album"]()
     factories["music.Album"]()
     url = reverse("api:v1:manage:library:albums-list")
-    response = superuser_api_client.get(
-        url, {"q": 'artist:"{}"'.format(album.artist.name)}
-    )
+    response = superuser_api_client.get(url, {"q": f'artist:"{album.artist.name}"'})
 
     assert response.status_code == 200
 

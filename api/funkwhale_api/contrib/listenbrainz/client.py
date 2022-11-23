@@ -68,7 +68,7 @@ class Track:
         }
 
     def __repr__(self):
-        return "Track(%s, %s)" % (self.artist_name, self.track_name)
+        return f"Track({self.artist_name}, {self.track_name})"
 
 
 class ListenBrainzClient:
@@ -127,7 +127,7 @@ class ListenBrainzClient:
             response_data = response_text
 
         self._handle_ratelimit(response)
-        log_msg = "Response %s: %r" % (response.status, response_data)
+        log_msg = f"Response {response.status}: {response_data!r}"
         if response.status == 429 and retry < 5:  # Too Many Requests
             self.logger.warning(log_msg)
             return self._submit(listen_type, payload, retry + 1)

@@ -4,7 +4,7 @@ from funkwhale_api.common import utils
 def test_channel_detail(spa_html, no_api_auth, client, factories, settings):
     icon = factories["common.Attachment"]()
     actor = factories["federation.Actor"](local=True, attachment_icon=icon)
-    url = "/@{}".format(actor.preferred_username)
+    url = f"/@{actor.preferred_username}"
 
     response = client.get(url)
 

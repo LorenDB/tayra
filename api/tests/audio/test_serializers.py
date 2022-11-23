@@ -665,7 +665,7 @@ def test_rss_feed_item_serializer_create(factories):
 
     expected_uuid = uuid.uuid3(
         uuid.NAMESPACE_URL,
-        "rss://{}-16f66fff-41ae-4a1c-9101-2746218c4f32".format(channel.pk),
+        f"rss://{channel.pk}-16f66fff-41ae-4a1c-9101-2746218c4f32",
     )
     assert upload.library == channel.library
     assert upload.import_status == "finished"
@@ -692,7 +692,7 @@ def test_rss_feed_item_serializer_update(factories):
     channel = factories["audio.Channel"](rss_url=rss_url, external=True)
     expected_uuid = uuid.uuid3(
         uuid.NAMESPACE_URL,
-        "rss://{}-16f66fff-41ae-4a1c-9101-2746218c4f32".format(channel.pk),
+        f"rss://{channel.pk}-16f66fff-41ae-4a1c-9101-2746218c4f32",
     )
     upload = factories["music.Upload"](
         track__uuid=expected_uuid,

@@ -36,7 +36,7 @@ class NotEqual(Lookup):
         lhs, lhs_params = self.process_lhs(compiler, connection)
         rhs, rhs_params = self.process_rhs(compiler, connection)
         params = lhs_params + rhs_params
-        return "%s <> %s" % (lhs, rhs), params
+        return f"{lhs} <> {rhs}", params
 
 
 class NullsLastSQLCompiler(SQLCompiler):
@@ -77,8 +77,8 @@ class NullsLastQuerySet(models.QuerySet):
 class LocalFromFidQuerySet:
     def local(self, include=True):
         host = settings.FEDERATION_HOSTNAME
-        query = models.Q(fid__startswith="http://{}/".format(host)) | models.Q(
-            fid__startswith="https://{}/".format(host)
+        query = models.Q(fid__startswith=f"http://{host}/") | models.Q(
+            fid__startswith=f"https://{host}/"
         )
         if include:
             return self.filter(query)
@@ -362,7 +362,7 @@ CONTENT_FKS = {
 def remove_attached_content(sender, instance, **kwargs):
     fk_fields = CONTENT_FKS.get(instance._meta.label, [])
     for field in fk_fields:
-        if getattr(instance, "{}_id".format(field)):
+        if getattr(instance, f"{field}_id"):
             try:
                 getattr(instance, field).delete()
             except Content.DoesNotExist:

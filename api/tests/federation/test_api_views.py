@@ -93,7 +93,7 @@ def test_user_cannot_edit_someone_else_library_follow(
     logged_in_api_client.user.create_actor()
     follow = factories["federation.LibraryFollow"]()
     url = reverse(
-        "api:v1:federation:library-follows-{}".format(action),
+        f"api:v1:federation:library-follows-{action}",
         kwargs={"uuid": follow.uuid},
     )
     response = logged_in_api_client.post(url)
@@ -111,7 +111,7 @@ def test_user_can_accept_or_reject_own_follows(
     actor = logged_in_api_client.user.create_actor()
     follow = factories["federation.LibraryFollow"](target__actor=actor)
     url = reverse(
-        "api:v1:federation:library-follows-{}".format(action),
+        f"api:v1:federation:library-follows-{action}",
         kwargs={"uuid": follow.uuid},
     )
     response = logged_in_api_client.post(url)

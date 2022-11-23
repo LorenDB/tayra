@@ -257,7 +257,7 @@ class JsonLdSerializer(serializers.Serializer):
                     data = expand(data)
                 except ValueError as e:
                     raise serializers.ValidationError(
-                        "{} is not a valid jsonld document: {}".format(data, e)
+                        f"{data} is not a valid jsonld document: {e}"
                     )
             try:
                 config = self.Meta.jsonld_mapping

@@ -85,9 +85,7 @@ class APIModelMixin(models.Model):
                 cls.musicbrainz_model
             ]
         else:
-            raw_data = cls.api.search(**kwargs)[
-                "{0}-list".format(cls.musicbrainz_model)
-            ][0]
+            raw_data = cls.api.search(**kwargs)[f"{cls.musicbrainz_model}-list"][0]
         cleaned_data = cls.clean_musicbrainz_data(raw_data)
         return importers.load(cls, cleaned_data, raw_data, cls.import_hooks)
 
@@ -116,7 +114,7 @@ class APIModelMixin(models.Model):
 
         return federation_utils.full_url(
             reverse(
-                "federation:music:{}-detail".format(self.federation_namespace),
+                f"federation:music:{self.federation_namespace}-detail",
                 kwargs={"uuid": self.uuid},
             )
         )
@@ -252,10 +250,10 @@ class Artist(APIModelMixin):
         return self.name
 
     def get_absolute_url(self):
-        return "/library/artists/{}".format(self.pk)
+        return f"/library/artists/{self.pk}"
 
     def get_moderation_url(self):
-        return "/manage/library/artists/{}".format(self.pk)
+        return f"/manage/library/artists/{self.pk}"
 
     @classmethod
     def get_or_create_from_name(cls, name, **kwargs):
@@ -396,10 +394,10 @@ class Album(APIModelMixin):
         return self.title
 
     def get_absolute_url(self):
-        return "/library/albums/{}".format(self.pk)
+        return f"/library/albums/{self.pk}"
 
     def get_moderation_url(self):
-        return "/manage/library/albums/{}".format(self.pk)
+        return f"/manage/library/albums/{self.pk}"
 
     @classmethod
     def get_or_create_from_title(cls, title, **kwargs):
@@ -557,10 +555,10 @@ class Track(APIModelMixin):
         return self.title
 
     def get_absolute_url(self):
-        return "/library/tracks/{}".format(self.pk)
+        return f"/library/tracks/{self.pk}"
 
     def get_moderation_url(self):
-        return "/manage/library/tracks/{}".format(self.pk)
+        return f"/manage/library/tracks/{self.pk}"
 
     def save(self, **kwargs):
         try:
@@ -572,9 +570,9 @@ class Track(APIModelMixin):
     @property
     def full_name(self):
         try:
-            return "{} - {} - {}".format(self.artist.name, self.album.title, self.title)
+            return f"{self.artist.name} - {self.album.title} - {self.title}"
         except AttributeError:
-            return "{} - {}".format(self.artist.name, self.title)
+            return f"{self.artist.name} - {self.title}"
 
     @property
     def cover(self):
@@ -582,8 +580,8 @@ class Track(APIModelMixin):
 
     def get_activity_url(self):
         if self.mbid:
-            return "https://musicbrainz.org/recording/{}".format(self.mbid)
-        return settings.FUNKWHALE_URL + "/tracks/{}".format(self.pk)
+            return f"https://musicbrainz.org/recording/{self.mbid}"
+        return settings.FUNKWHALE_URL + f"/tracks/{self.pk}"
 
     @classmethod
     def get_or_create_from_title(cls, title, **kwargs):
@@ -643,7 +641,7 @@ class Track(APIModelMixin):
     @property
     def listen_url(self) -> str:
         # Not using reverse because this is slow
-        return "/api/v1/listen/{}/".format(self.uuid)
+        return f"/api/v1/listen/{self.uuid}/"
 
     @property
     def local_license(self):
@@ -807,7 +805,7 @@ class Upload(models.Model):
             title_parts.append(self.track.artist.name)
 
             title = " - ".join(title_parts)
-            filename = "{}.{}".format(title, extension)
+            filename = f"{title}.{extension}"
             tmp_file = tempfile.TemporaryFile()
             for chunk in r.iter_content(chunk_size=512):
                 tmp_file.write(chunk)
@@ -824,7 +822,7 @@ class Upload(models.Model):
 
     @property
     def filename(self) -> str:
-        return "{}.{}".format(self.track.full_name, self.extension)
+        return f"{self.track.full_name}.{self.extension}"
 
     @property
     def extension(self):
@@ -900,12 +898,12 @@ class Upload(models.Model):
 
     @property
     def listen_url(self) -> str:
-        return self.track.listen_url + "?upload={}".format(self.uuid)
+        return self.track.listen_url + f"?upload={self.uuid}"
 
     def get_listen_url(self, to=None, download=True) -> str:
         url = self.listen_url
         if to:
-            url += "&to={}".format(to)
+            url += f"&to={to}"
         if not download:
             url += "&download=false"
 
@@ -946,9 +944,9 @@ class Upload(models.Model):
         bitrate = min(bitrate or 320000, self.bitrate or 320000)
         version = self.versions.create(mimetype=mimetype, bitrate=bitrate, size=0)
         # we keep the same name, but we update the extension
-        new_name = os.path.splitext(os.path.basename(self.audio_file.name))[
-            0
-        ] + ".{}".format(format)
+        new_name = (
+            os.path.splitext(os.path.basename(self.audio_file.name))[0] + f".{format}"
+        )
         version.audio_file.save(new_name, f)
         utils.transcode_audio(
             audio=self.get_audio_segment(),
@@ -1091,9 +1089,7 @@ class ImportBatch(models.Model):
             tasks.import_batch_notify_followers.delay(import_batch_id=self.pk)
 
     def get_federation_id(self):
-        return federation_utils.full_url(
-            "/federation/music/import/batch/{}".format(self.uuid)
-        )
+        return federation_utils.full_url(f"/federation/music/import/batch/{self.uuid}")
 
 
 class ImportJob(models.Model):
@@ -1204,7 +1200,7 @@ class Library(federation_models.FederationMixin):
         return self.name
 
     def get_moderation_url(self) -> str:
-        return "/manage/library/libraries/{}".format(self.uuid)
+        return f"/manage/library/libraries/{self.uuid}"
 
     def get_federation_id(self) -> str:
         return federation_utils.full_url(
@@ -1212,7 +1208,7 @@ class Library(federation_models.FederationMixin):
         )
 
     def get_absolute_url(self) -> str:
-        return "/library/{}".format(self.uuid)
+        return f"/library/{self.uuid}"
 
     def save(self, **kwargs):
         if not self.pk and not self.fid and self.actor.is_local:

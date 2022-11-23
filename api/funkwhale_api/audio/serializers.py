@@ -62,7 +62,7 @@ class ChannelMetadataSerializer(serializers.Serializer):
 
         if child not in categories.ITUNES_CATEGORIES[parent]:
             raise serializers.ValidationError(
-                '"{}" is not a valid subcategory for "{}"'.format(child, parent)
+                f'"{child}" is not a valid subcategory for "{parent}"'
             )
 
         return child
@@ -319,7 +319,7 @@ def retrieve_feed(url):
     except requests.exceptions.HTTPError as e:
         if e.response:
             raise FeedFetchException(
-                "Error while fetching feed: HTTP {}".format(e.response.status_code)
+                f"Error while fetching feed: HTTP {e.response.status_code}"
             )
         raise FeedFetchException("Error while fetching feed: unknown error")
     except requests.exceptions.Timeout:
@@ -327,9 +327,9 @@ def retrieve_feed(url):
     except requests.exceptions.ConnectionError:
         raise FeedFetchException("Error while fetching feed: connection error")
     except requests.RequestException as e:
-        raise FeedFetchException("Error while fetching feed: {}".format(e))
+        raise FeedFetchException(f"Error while fetching feed: {e}")
     except Exception as e:
-        raise FeedFetchException("Error while fetching feed: {}".format(e))
+        raise FeedFetchException(f"Error while fetching feed: {e}")
 
     return response
 
@@ -348,7 +348,7 @@ def get_channel_from_rss_url(url, raise_exception=False):
     parsed_feed = feedparser.parse(response.text)
     serializer = RssFeedSerializer(data=parsed_feed["feed"])
     if not serializer.is_valid(raise_exception=raise_exception):
-        raise FeedFetchException("Invalid xml content: {}".format(serializer.errors))
+        raise FeedFetchException(f"Invalid xml content: {serializer.errors}")
 
     # second mrf check with validated data
     urls_to_check = set()
@@ -516,7 +516,7 @@ class RssFeedSerializer(serializers.Serializer):
         else:
             artist_kwargs = {"pk": None}
             actor_kwargs = {"pk": None}
-            preferred_username = "rssfeed-{}".format(uuid.uuid4())
+            preferred_username = f"rssfeed-{uuid.uuid4()}"
             actor_defaults = {
                 "preferred_username": preferred_username,
                 "type": "Application",
@@ -594,7 +594,7 @@ class ItunesDurationField(serializers.CharField):
             try:
                 int_parts.append(int(part))
             except (ValueError, TypeError):
-                raise serializers.ValidationError("Invalid duration {}".format(v))
+                raise serializers.ValidationError(f"Invalid duration {v}")
 
         if len(int_parts) == 2:
             hours = 0
@@ -602,7 +602,7 @@ class ItunesDurationField(serializers.CharField):
         elif len(int_parts) == 3:
             hours, minutes, seconds = int_parts
         else:
-            raise serializers.ValidationError("Invalid duration {}".format(v))
+            raise serializers.ValidationError(f"Invalid duration {v}")
 
         return (hours * 3600) + (minutes * 60) + seconds
 
@@ -782,8 +782,8 @@ class RssFeedItemSerializer(serializers.Serializer):
         # update or create, so we restore the cache by hand
         if existing_track:
             for field in ["attachment_cover", "description"]:
-                cached_id_value = getattr(existing_track, "{}_id".format(field))
-                new_id_value = getattr(track, "{}_id".format(field))
+                cached_id_value = getattr(existing_track, f"{field}_id")
+                new_id_value = getattr(track, f"{field}_id")
                 if new_id_value and cached_id_value == new_id_value:
                     setattr(track, field, getattr(existing_track, field))
 

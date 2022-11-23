@@ -60,7 +60,7 @@ def test_webfinger_get_resource(r_mock):
         ],
     }
     r_mock.get(
-        "https://test.webfinger/.well-known/webfinger?resource={}".format(resource),
+        f"https://test.webfinger/.well-known/webfinger?resource={resource}",
         json=payload,
     )
 

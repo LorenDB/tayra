@@ -327,7 +327,7 @@ def test_token_view_post(api_client, factories):
 
     # Now check we can use the token for auth
     response = api_client.get(
-        reverse("api:v1:users:users-me"), HTTP_AUTHORIZATION="Bearer {}".format(token)
+        reverse("api:v1:users:users-me"), HTTP_AUTHORIZATION=f"Bearer {token}"
     )
     assert response.status_code == 200
 
@@ -434,7 +434,7 @@ def test_token_auth(
     settings.ACCOUNT_EMAIL_VERIFICATION = setting_value
     response = api_client.get(
         reverse("api:v1:users:users-me"),
-        HTTP_AUTHORIZATION="Bearer {}".format(token.token),
+        HTTP_AUTHORIZATION=f"Bearer {token.token}",
     )
     assert response.status_code == expected_status_code
 

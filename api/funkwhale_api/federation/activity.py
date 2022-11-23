@@ -241,8 +241,8 @@ class InboxRouter(Router):
                 for k in r.keys():
                     if k in ["object", "target", "related_object"]:
                         update_fields += [
-                            "{}_id".format(k),
-                            "{}_content_type".format(k),
+                            f"{k}_id",
+                            f"{k}_content_type",
                         ]
                     else:
                         update_fields.append(k)
@@ -264,7 +264,7 @@ class InboxRouter(Router):
                 user = ii.actor.get_user()
                 if not user:
                     continue
-                group = "user.{}.inbox".format(user.pk)
+                group = f"user.{user.pk}.inbox"
                 channels.group_send(
                     group,
                     {

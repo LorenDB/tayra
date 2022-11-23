@@ -19,7 +19,7 @@ def get_filtered_content_query(config, user):
         query = None
         ids = user.content_filters.values_list(filter_field, flat=True)
         for model_field in model_fields:
-            q = Q(**{"{}__in".format(model_field): ids})
+            q = Q(**{f"{model_field}__in": ids})
             if query:
                 query |= q
             else:

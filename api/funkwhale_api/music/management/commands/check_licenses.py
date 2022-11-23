@@ -21,7 +21,7 @@ class Command(BaseCommand):
                 errored.append((data, response))
 
         if errored:
-            self.stdout.write("{} licenses were not reachable!".format(len(errored)))
+            self.stdout.write(f"{len(errored)} licenses were not reachable!")
             for row, response in errored:
                 self.stdout.write(
                     "- {}: error {} at url {}".format(

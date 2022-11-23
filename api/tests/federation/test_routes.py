@@ -42,7 +42,7 @@ def test_inbox_routes(route, handler):
     matching = [
         handler for r, handler in routes.inbox.routes if activity.match_route(r, route)
     ]
-    assert len(matching) == 1, "Inbox route {} not found".format(route)
+    assert len(matching) == 1, f"Inbox route {route} not found"
     assert matching[0] == handler
 
 
@@ -88,7 +88,7 @@ def test_outbox_routes(route, handler):
     matching = [
         handler for r, handler in routes.outbox.routes if activity.match_route(r, route)
     ]
-    assert len(matching) == 1, "Outbox route {} not found".format(route)
+    assert len(matching) == 1, f"Outbox route {route} not found"
     assert matching[0] == handler
 
 

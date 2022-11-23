@@ -22,4 +22,4 @@ class Listening(models.Model):
         ordering = ("-creation_date",)
 
     def get_activity_url(self):
-        return "{}/listenings/tracks/{}".format(self.user.get_activity_url(), self.pk)
+        return f"{self.user.get_activity_url()}/listenings/tracks/{self.pk}"

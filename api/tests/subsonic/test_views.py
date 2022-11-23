@@ -775,7 +775,7 @@ def test_get_cover_art_album(factories, logged_in_api_client):
     url = reverse("api:subsonic:subsonic-get_cover_art")
     assert url.endswith("getCoverArt") is True
     album = factories["music.Album"](with_cover=True)
-    response = logged_in_api_client.get(url, {"id": "al-{}".format(album.pk)})
+    response = logged_in_api_client.get(url, {"id": f"al-{album.pk}"})
 
     assert response.status_code == 200
     assert response["Content-Type"] == ""
@@ -788,7 +788,7 @@ def test_get_cover_art_attachment(factories, logged_in_api_client):
     attachment = factories["common.Attachment"]()
     url = reverse("api:subsonic:subsonic-get_cover_art")
     assert url.endswith("getCoverArt") is True
-    response = logged_in_api_client.get(url, {"id": "at-{}".format(attachment.uuid)})
+    response = logged_in_api_client.get(url, {"id": f"at-{attachment.uuid}"})
 
     assert response.status_code == 200
     assert response["Content-Type"] == ""

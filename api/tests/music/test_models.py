@@ -193,7 +193,7 @@ def test_track_get_file_size(factories):
 def test_track_get_file_size_in_place(factories):
     name = "test.mp3"
     path = os.path.join(DATA_DIR, name)
-    upload = factories["music.Upload"](in_place=True, source="file://{}".format(path))
+    upload = factories["music.Upload"](in_place=True, source=f"file://{path}")
 
     assert upload.get_file_size() == 297745
 
@@ -435,14 +435,14 @@ def test_artist_playable_by_anonymous(privacy_level, expected, factories):
 
 def test_upload_listen_url(factories):
     upload = factories["music.Upload"]()
-    expected = upload.track.listen_url + "?upload={}".format(upload.uuid)
+    expected = upload.track.listen_url + f"?upload={upload.uuid}"
 
     assert upload.listen_url == expected
 
 
 def test_upload_listen_url_no_download(factories):
     upload = factories["music.Upload"]()
-    expected = upload.track.listen_url + "?upload={}&download=false".format(upload.uuid)
+    expected = upload.track.listen_url + f"?upload={upload.uuid}&download=false"
 
     assert upload.listen_url_no_download == expected
 

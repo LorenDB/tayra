@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Local settings
 
@@ -102,7 +101,7 @@ CSRF_TRUSTED_ORIGINS = [o for o in ALLOWED_HOSTS]
 REST_FRAMEWORK["DEFAULT_SCHEMA_CLASS"] = "funkwhale_api.schema.CustomAutoSchema"
 SPECTACULAR_SETTINGS = {
     "TITLE": "Funkwhale API",
-    "DESCRIPTION": open("Readme.md", "r").read(),
+    "DESCRIPTION": open("Readme.md").read(),
     "VERSION": funkwhale_version,
     "SCHEMA_PATH_PREFIX": "/api/(v[0-9])?",
     "OAUTH_FLOWS": ["authorizationCode"],

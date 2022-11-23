@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
 import logging.config
 import sys
 from collections import OrderedDict
@@ -170,7 +167,7 @@ else:
 
 FUNKWHALE_PROTOCOL = FUNKWHALE_PROTOCOL.lower()
 FUNKWHALE_HOSTNAME = FUNKWHALE_HOSTNAME.lower()
-FUNKWHALE_URL = "{}://{}".format(FUNKWHALE_PROTOCOL, FUNKWHALE_HOSTNAME)
+FUNKWHALE_URL = f"{FUNKWHALE_PROTOCOL}://{FUNKWHALE_HOSTNAME}"
 FUNKWHALE_SPA_HTML_ROOT = env(
     "FUNKWHALE_SPA_HTML_ROOT", default=FUNKWHALE_URL + "/front/"
 )
@@ -336,7 +333,7 @@ FIXTURE_DIRS = (str(APPS_DIR.path("fixtures")),)
 # EMAIL
 # ------------------------------------------------------------------------------
 DEFAULT_FROM_EMAIL = env(
-    "DEFAULT_FROM_EMAIL", default="Funkwhale <noreply@{}>".format(FUNKWHALE_HOSTNAME)
+    "DEFAULT_FROM_EMAIL", default=f"Funkwhale <noreply@{FUNKWHALE_HOSTNAME}>"
 )
 """
 The name and email address used to send system emails.

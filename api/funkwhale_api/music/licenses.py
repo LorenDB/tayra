@@ -70,7 +70,7 @@ def match(*values):
             value,
         )
         if not urls:
-            logger.debug('Impossible to guess license from string "{}"'.format(value))
+            logger.debug(f'Impossible to guess license from string "{value}"')
             continue
         url = urls[0]
         if _cache:
@@ -122,7 +122,7 @@ def get_cc_license(version, perks, country=None, country_name=None):
     )
     if country:
         code_parts.append(country)
-        name += " {}".format(country_name)
+        name += f" {country_name}"
         url += country + "/"
     data = {
         "name": name,

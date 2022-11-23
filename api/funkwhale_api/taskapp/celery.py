@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import functools
 import logging
 import os
@@ -22,7 +20,7 @@ app = celery.Celery("funkwhale_api")
 
 @celery.signals.task_failure.connect
 def process_failure(sender, task_id, exception, args, kwargs, traceback, einfo, **kw):
-    print("[celery] Error during task {}: {}".format(task_id, einfo.exception))
+    print(f"[celery] Error during task {task_id}: {einfo.exception}")
     tb.print_exc()
 
 

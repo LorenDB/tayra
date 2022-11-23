@@ -170,7 +170,7 @@ def deliver_to_remote(delivery):
 
 def fetch_nodeinfo(domain_name):
     s = session.get_session()
-    wellknown_url = "https://{}/.well-known/nodeinfo".format(domain_name)
+    wellknown_url = f"https://{domain_name}/.well-known/nodeinfo"
     response = s.get(url=wellknown_url)
     response.raise_for_status()
     serializer = serializers.NodeInfoSerializer(data=response.json())

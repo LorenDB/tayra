@@ -866,8 +866,8 @@ def set_vars(component_name, rules):
             replacements = conf[m]
             for line in rule["lines"]:
                 for property, new_value in replacements:
-                    if line.strip().startswith("{}:".format(property)):
-                        new_property = "{}: {};".format(property, new_value)
+                    if line.strip().startswith(f"{property}:"):
+                        new_property = f"{property}: {new_value};"
                         indentation = " " * (len(line) - len(line.lstrip(" ")))
                         line = indentation + new_property
                         break
@@ -944,7 +944,7 @@ def iter_components(dir):
 def replace_vars(source, dest):
     components = list(sorted(iter_components(os.path.join(source, "components"))))
     for c in components:
-        with open(c, "r") as f:
+        with open(c) as f:
             text = f.read()
 
         for s, r in GLOBAL_REPLACES:
@@ -955,7 +955,7 @@ def replace_vars(source, dest):
         name = c.split("/")[-1].split(".")[0]
         updated_rules = set_vars(name, rules)
         text = serialize_rules(updated_rules)
-        with open(os.path.join(dest, "{}.css".format(name)), "w") as f:
+        with open(os.path.join(dest, f"{name}.css"), "w") as f:
             f.write(text)
 
 

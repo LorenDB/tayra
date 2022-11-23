@@ -9,7 +9,7 @@ DATA = {"playable": True}
 HEADERS = {}
 if JWT_TOKEN:
     print("Starting authenticated session")
-    HEADERS["authorization"] = "JWT {}".format(JWT_TOKEN)
+    HEADERS["authorization"] = f"JWT {JWT_TOKEN}"
 
 
 class WebsiteTasks(TaskSet):

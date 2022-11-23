@@ -5,7 +5,7 @@ class Scope:
         self.children = children or []
 
     def copy(self, prefix):
-        return Scope("{}:{}".format(prefix, self.id))
+        return Scope(f"{prefix}:{self.id}")
 
 
 BASE_SCOPES = [

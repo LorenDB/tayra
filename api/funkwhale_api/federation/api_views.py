@@ -190,12 +190,12 @@ class LibraryViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             )
         except requests.exceptions.RequestException as e:
             return response.Response(
-                {"detail": "Error while fetching the library: {}".format(str(e))},
+                {"detail": f"Error while fetching the library: {str(e)}"},
                 status=400,
             )
         except serializers.serializers.ValidationError as e:
             return response.Response(
-                {"detail": "Invalid data in remote library: {}".format(str(e))},
+                {"detail": f"Invalid data in remote library: {str(e)}"},
                 status=400,
             )
         serializer = self.serializer_class(library)

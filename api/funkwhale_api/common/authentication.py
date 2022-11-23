@@ -16,7 +16,7 @@ class UnverifiedEmail(Exception):
 
 def resend_confirmation_email(request, user):
     THROTTLE_DELAY = 500
-    cache_key = "auth:resent-email-confirmation:{}".format(user.pk)
+    cache_key = f"auth:resent-email-confirmation:{user.pk}"
     if cache.get(cache_key):
         return False
 
@@ -34,7 +34,7 @@ class OAuth2Authentication(BaseOAuth2Authentication):
             resend_confirmation_email(request, e.user)
 
 
-class ApplicationTokenAuthentication(object):
+class ApplicationTokenAuthentication:
     def authenticate(self, request):
         try:
             header = request.headers["Authorization"]

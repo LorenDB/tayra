@@ -82,14 +82,14 @@ class RelatedField(serializers.RelatedField):
         )
 
 
-class Action(object):
+class Action:
     def __init__(self, name, allow_all=False, qs_filter=None):
         self.name = name
         self.allow_all = allow_all
         self.qs_filter = qs_filter
 
     def __repr__(self):
-        return "<Action {}>".format(self.name)
+        return f"<Action {self.name}>"
 
 
 class ActionSerializer(serializers.Serializer):
@@ -113,7 +113,7 @@ class ActionSerializer(serializers.Serializer):
             )
 
         for action in self.actions_by_name.keys():
-            handler_name = "handle_{}".format(action)
+            handler_name = f"handle_{action}"
             assert hasattr(self, handler_name), "{} miss a {} method".format(
                 self.__class__.__name__, handler_name
             )
@@ -133,9 +133,9 @@ class ActionSerializer(serializers.Serializer):
         if value == "all":
             return self.queryset.all().order_by("id")
         if type(value) in [list, tuple]:
-            return self.queryset.filter(
-                **{"{}__in".format(self.pk_field): value}
-            ).order_by(self.pk_field)
+            return self.queryset.filter(**{f"{self.pk_field}__in": value}).order_by(
+                self.pk_field
+            )
 
         raise serializers.ValidationError(
             "{} is not a valid value for objects. You must provide either a "
@@ -281,7 +281,7 @@ class APIMutationSerializer(serializers.ModelSerializer):
 
     def validate_type(self, value):
         if value not in self.context["registry"]:
-            raise serializers.ValidationError("Invalid mutation type {}".format(value))
+            raise serializers.ValidationError(f"Invalid mutation type {value}")
         return value
 
 
@@ -321,7 +321,7 @@ class ContentSerializer(serializers.Serializer):
         return utils.render_html(o.text, o.content_type)
 
 
-class NullToEmptDict(object):
+class NullToEmptDict:
     def get_attribute(self, o):
         attr = super().get_attribute(o)
         if attr is None:

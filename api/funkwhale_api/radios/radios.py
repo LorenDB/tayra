@@ -20,7 +20,7 @@ from .registries import registry
 logger = logging.getLogger(__name__)
 
 
-class SimpleRadio(object):
+class SimpleRadio:
     related_object_field = None
 
     def clean(self, instance):

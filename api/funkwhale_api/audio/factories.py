@@ -15,7 +15,7 @@ def set_actor(o):
 
 
 def get_rss_channel_name():
-    return "rssfeed-{}".format(uuid.uuid4())
+    return f"rssfeed-{uuid.uuid4()}"
 
 
 @registry.register

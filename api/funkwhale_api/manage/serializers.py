@@ -85,10 +85,8 @@ class ManageUserSerializer(serializers.ModelSerializer):
         permissions = validated_data.pop("permissions", {})
         if permissions:
             for p, value in permissions.items():
-                setattr(instance, "permission_{}".format(p), value)
-            instance.save(
-                update_fields=["permission_{}".format(p) for p in permissions.keys()]
-            )
+                setattr(instance, f"permission_{p}", value)
+            instance.save(update_fields=[f"permission_{p}" for p in permissions.keys()])
         return instance
 
     @extend_schema_field(OpenApiTypes.OBJECT)

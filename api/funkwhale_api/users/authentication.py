@@ -9,7 +9,7 @@ from .oauth import scopes as available_scopes
 
 def generate_scoped_token(user_id, user_secret, scopes):
     if set(scopes) & set(available_scopes.SCOPES_BY_ID) != set(scopes):
-        raise ValueError("{} contains invalid scopes".format(scopes))
+        raise ValueError(f"{scopes} contains invalid scopes")
 
     return signing.dumps(
         {

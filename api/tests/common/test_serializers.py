@@ -155,7 +155,7 @@ def test_track_fields_for_update(mocker):
 
         on_updated_fields = mocker.stub()
 
-    class Obj(object):
+    class Obj:
         field1 = "value1"
         field2 = "value2"
 

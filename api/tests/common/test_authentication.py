@@ -34,7 +34,7 @@ def test_should_verify_email(
 def test_app_token_authentication(factories, api_request):
     user = factories["users.User"]()
     app = factories["users.Application"](user=user, scope="read write")
-    request = api_request.get("/", HTTP_AUTHORIZATION="Bearer {}".format(app.token))
+    request = api_request.get("/", HTTP_AUTHORIZATION=f"Bearer {app.token}")
 
     auth = authentication.ApplicationTokenAuthentication()
     assert auth.authenticate(request)[0] == app.user

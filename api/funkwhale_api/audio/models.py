@@ -93,7 +93,7 @@ class Channel(models.Model):
             suffix = self.actor.preferred_username
         else:
             suffix = self.actor.full_username
-        return federation_utils.full_url("/channels/{}".format(suffix))
+        return federation_utils.full_url(f"/channels/{suffix}")
 
     def get_rss_url(self):
         if not self.artist.is_local or self.is_external_rss:

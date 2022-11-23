@@ -14,7 +14,7 @@ def test_library_track(spa_html, no_api_auth, client, factories, settings):
         track__album__with_cover=True,
     )
     track = upload.track
-    url = "/library/tracks/{}".format(track.pk)
+    url = f"/library/tracks/{track.pk}"
 
     response = client.get(url)
 
@@ -100,7 +100,7 @@ def test_library_album(spa_html, no_api_auth, client, factories, settings):
         playable=True, track__disc_number=1, track__album__with_cover=True
     ).track
     album = track.album
-    url = "/library/albums/{}".format(album.pk)
+    url = f"/library/albums/{album.pk}"
 
     response = client.get(url)
 
@@ -167,7 +167,7 @@ def test_library_artist(spa_html, no_api_auth, client, factories, settings):
     album = factories["music.Album"](with_cover=True)
     factories["music.Upload"](playable=True, track__album=album)
     artist = album.artist
-    url = "/library/artists/{}".format(artist.pk)
+    url = f"/library/artists/{artist.pk}"
 
     response = client.get(url)
 
@@ -224,7 +224,7 @@ def test_library_playlist(spa_html, no_api_auth, client, factories, settings):
     ).track
     playlist.insert_many([track])
 
-    url = "/library/playlists/{}".format(playlist.pk)
+    url = f"/library/playlists/{playlist.pk}"
 
     response = client.get(url)
 
@@ -271,7 +271,7 @@ def test_library_playlist(spa_html, no_api_auth, client, factories, settings):
 def test_library_playlist_empty(spa_html, no_api_auth, client, factories, settings):
     playlist = factories["playlists.Playlist"](privacy_level="everyone")
 
-    url = "/library/playlists/{}".format(playlist.pk)
+    url = f"/library/playlists/{playlist.pk}"
 
     response = client.get(url)
 
@@ -293,7 +293,7 @@ def test_library_playlist_empty(spa_html, no_api_auth, client, factories, settin
 
 def test_library_library(spa_html, no_api_auth, client, factories, settings):
     library = factories["music.Library"]()
-    url = "/library/{}".format(library.uuid)
+    url = f"/library/{library.uuid}"
 
     response = client.get(url)
 

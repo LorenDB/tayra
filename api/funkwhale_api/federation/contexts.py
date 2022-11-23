@@ -362,14 +362,14 @@ class NS:
     def __getattr__(self, key):
         if key not in self.conf["document"]["@context"]:
             raise AttributeError(
-                "{} is not a valid property of context {}".format(key, self.baseUrl)
+                f"{key} is not a valid property of context {self.baseUrl}"
             )
         return self.baseUrl + key
 
 
 class NoopContext:
     def __getattr__(self, key):
-        return "_:{}".format(key)
+        return f"_:{key}"
 
 
 NOOP = NoopContext()

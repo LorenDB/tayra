@@ -39,9 +39,7 @@ def test_fetches_route_create(factories, api_request, mocker):
 def test_fetches_route_create_local(factories, api_request, mocker, settings):
     user = factories["users.User"]()
     user.create_actor()
-    track = factories["music.Track"](
-        fid="https://{}/test".format(settings.FEDERATION_HOSTNAME)
-    )
+    track = factories["music.Track"](fid=f"https://{settings.FEDERATION_HOSTNAME}/test")
     view = V.as_view({"post": "fetches"})
 
     request = api_request.post("/", format="json")

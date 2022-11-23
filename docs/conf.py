@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # funkwhale documentation build configuration file, created by
 # sphinx-quickstart on Sun Jun 25 18:49:23 2017.
@@ -85,7 +84,7 @@ myst_heading_anchors = 3
 # General information about the project.
 year = datetime.datetime.now().year
 project = "funkwhale"
-copyright = "{}, The Funkwhale Collective".format(year)
+copyright = f"{year}, The Funkwhale Collective"
 author = "The Funkwhale Collective"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -214,7 +213,7 @@ texinfo_documents = [
 # Define list of redirect files to be build in the Sphinx build process
 
 redirect_list = []
-with open("redirects.txt", "r") as fp:
+with open("redirects.txt") as fp:
     data_list = [tuple(line.strip().split(",")) for line in fp]
 
 # Generate redirect template

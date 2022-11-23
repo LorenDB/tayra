@@ -61,7 +61,7 @@ def channel_detail(query, redirect_to_ap):
             "rel": "alternate",
             "type": "application/rss+xml",
             "href": obj.get_rss_url(),
-            "title": "{} - RSS Podcast Feed".format(obj.artist.name),
+            "title": f"{obj.artist.name} - RSS Podcast Feed",
         },
     )
 
@@ -73,7 +73,7 @@ def channel_detail(query, redirect_to_ap):
                 "type": "application/json+oembed",
                 "href": (
                     utils.join_url(settings.FUNKWHALE_URL, reverse("api:v1:oembed"))
-                    + "?format=json&url={}".format(urllib.parse.quote_plus(obj_url))
+                    + f"?format=json&url={urllib.parse.quote_plus(obj_url)}"
                 ),
             }
         )

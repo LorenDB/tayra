@@ -61,7 +61,7 @@ class UserFilterSerializer(serializers.ModelSerializer):
 state_serializers = persisting_theory.Registry()
 
 
-class DescriptionStateMixin(object):
+class DescriptionStateMixin:
     def get_description(self, o):
         if o.description:
             return o.description.text

@@ -129,7 +129,7 @@ def test_get_spa_html_from_http(local_cache, r_mock, mocker, settings):
 
     assert middleware.get_spa_html("http://test") == "hello world"
     cache_set.assert_called_once_with(
-        "spa-file:{}:index.html".format(url),
+        f"spa-file:{url}:index.html",
         "hello world",
         settings.FUNKWHALE_SPA_HTML_CACHE_DURATION,
     )

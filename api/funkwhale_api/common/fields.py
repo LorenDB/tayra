@@ -24,9 +24,9 @@ def privacy_level_query(user, lookup_field="privacy_level", user_field="user"):
     if user.is_anonymous:
         return models.Q(**{lookup_field: "everyone"})
 
-    return models.Q(
-        **{"{}__in".format(lookup_field): ["instance", "everyone"]}
-    ) | models.Q(**{lookup_field: "me", user_field: user})
+    return models.Q(**{f"{lookup_field}__in": ["instance", "everyone"]}) | models.Q(
+        **{lookup_field: "me", user_field: user}
+    )
 
 
 class SearchFilter(django_filters.CharFilter):
@@ -97,7 +97,7 @@ def get_generic_filter_query(value, relation_name, choices):
             obj = related_queryset.get(obj_query)
         except related_queryset.model.DoesNotExist:
             raise forms.ValidationError("Invalid object")
-        filter_query &= models.Q(**{"{}_id".format(relation_name): obj.id})
+        filter_query &= models.Q(**{f"{relation_name}_id": obj.id})
 
     return filter_query
 
@@ -163,7 +163,7 @@ class GenericRelation(serializers.JSONField):
             id_value = v[id_attr]
             id_value = id_field.to_internal_value(id_value)
         except (TypeError, KeyError, serializers.ValidationError):
-            raise serializers.ValidationError("Invalid {}".format(id_attr))
+            raise serializers.ValidationError(f"Invalid {id_attr}")
 
         query_getter = conf.get(
             "get_query", lambda attr, value: models.Q(**{attr: value})

@@ -78,7 +78,7 @@ def serve_spa(request):
         # We add the style add the end of the body to ensure it has the highest
         # priority (since it will come after other stylesheets)
         body, tail = tail.split("</body>", 1)
-        css = "<style>{}</style>".format(css)
+        css = f"<style>{css}</style>"
         tail = body + "\n" + css + "\n</body>" + tail
 
     # set a csrf token so that visitor can login / query API if needed
@@ -93,13 +93,13 @@ TITLE_REGEX = re.compile(r"<title>.*</title>")
 
 
 def replace_manifest_url(head, new_url):
-    replacement = '<link rel=manifest href="{}">'.format(new_url)
+    replacement = f'<link rel=manifest href="{new_url}">'
     head = MANIFEST_LINK_REGEX.sub(replacement, head)
     return head
 
 
 def replace_title(head, new_title):
-    replacement = "<title>{}</title>".format(html.escape(new_title))
+    replacement = f"<title>{html.escape(new_title)}</title>"
     head = TITLE_REGEX.sub(replacement, head)
     return head
 
@@ -117,7 +117,7 @@ def get_spa_file(spa_url, name):
         # we try to open a local file
         with open(path, "rb") as f:
             return f.read().decode("utf-8")
-    cache_key = "spa-file:{}:{}".format(spa_url, name)
+    cache_key = f"spa-file:{spa_url}:{name}"
     cached = caches["local"].get(cache_key)
     if cached:
         return cached
@@ -170,11 +170,7 @@ def render_tags(tags):
         yield "<{tag} {attrs} />".format(
             tag=tag.pop("tag"),
             attrs=" ".join(
-                [
-                    '{}="{}"'.format(a, html.escape(str(v)))
-                    for a, v in sorted(tag.items())
-                    if v
-                ]
+                [f'{a}="{html.escape(str(v))}"' for a, v in sorted(tag.items()) if v]
             ),
         )
 

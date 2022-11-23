@@ -88,9 +88,7 @@ def test_can_approve_reject_mutation_with_perm(
     has_perm = mocker.patch(
         "funkwhale_api.common.mutations.registry.has_perm", return_value=True
     )
-    url = reverse(
-        "api:v1:mutations-{}".format(endpoint), kwargs={"uuid": mutation.uuid}
-    )
+    url = reverse(f"api:v1:mutations-{endpoint}", kwargs={"uuid": mutation.uuid})
 
     response = logged_in_api_client.post(url)
 
@@ -126,9 +124,7 @@ def test_cannot_approve_reject_applied_mutation(
         target=track, type="update", payload={}, is_applied=True
     )
     mocker.patch("funkwhale_api.common.mutations.registry.has_perm", return_value=True)
-    url = reverse(
-        "api:v1:mutations-{}".format(endpoint), kwargs={"uuid": mutation.uuid}
-    )
+    url = reverse(f"api:v1:mutations-{endpoint}", kwargs={"uuid": mutation.uuid})
 
     response = logged_in_api_client.post(url)
 
@@ -150,9 +146,7 @@ def test_cannot_approve_reject_without_perm(
     track = factories["music.Track"]()
     mutation = factories["common.Mutation"](target=track, type="update", payload={})
     mocker.patch("funkwhale_api.common.mutations.registry.has_perm", return_value=False)
-    url = reverse(
-        "api:v1:mutations-{}".format(endpoint), kwargs={"uuid": mutation.uuid}
-    )
+    url = reverse(f"api:v1:mutations-{endpoint}", kwargs={"uuid": mutation.uuid})
 
     response = logged_in_api_client.post(url)
 
@@ -218,7 +212,7 @@ def test_attachment_proxy_dont_crash_on_long_filename(
 ):
     long_filename = "a" * 400
     attachment = factories["common.Attachment"](
-        file=None, url="https://domain/{}.jpg".format(long_filename)
+        file=None, url=f"https://domain/{long_filename}.jpg"
     )
 
     avatar_content = avatar.read()

@@ -22,7 +22,7 @@ def get_actor_data(actor_url):
     try:
         return response.json()
     except Exception:
-        raise ValueError("Invalid actor payload: {}".format(response.text))
+        raise ValueError(f"Invalid actor payload: {response.text}")
 
 
 def get_actor(fid, skip_cache=False):

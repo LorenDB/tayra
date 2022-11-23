@@ -71,7 +71,7 @@ class Command(BaseCommand):
                 )
             )
             for name in registry.keys():
-                self.stdout.write("- {}".format(name))
+                self.stdout.write(f"- {name}")
             return
         raw_content = None
         content = None

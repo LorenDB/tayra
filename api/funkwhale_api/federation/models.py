@@ -80,7 +80,7 @@ class ActorQuerySet(models.QuerySet):
             )
             qs = qs.annotate(
                 **{
-                    "_usage_{}".format(s): models.Sum(
+                    f"_usage_{s}": models.Sum(
                         "libraries__uploads__size", filter=uploads_query
                     )
                 }
@@ -226,22 +226,22 @@ class Actor(models.Model):
         verbose_name = "Account"
 
     def get_moderation_url(self):
-        return "/manage/moderation/accounts/{}".format(self.full_username)
+        return f"/manage/moderation/accounts/{self.full_username}"
 
     @property
     def webfinger_subject(self):
-        return "{}@{}".format(self.preferred_username, settings.FEDERATION_HOSTNAME)
+        return f"{self.preferred_username}@{settings.FEDERATION_HOSTNAME}"
 
     @property
     def private_key_id(self):
-        return "{}#main-key".format(self.fid)
+        return f"{self.fid}#main-key"
 
     @property
     def full_username(self) -> str:
-        return "{}@{}".format(self.preferred_username, self.domain_id)
+        return f"{self.preferred_username}@{self.domain_id}"
 
     def __str__(self):
-        return "{}@{}".format(self.preferred_username, self.domain_id)
+        return f"{self.preferred_username}@{self.domain_id}"
 
     @property
     def is_local(self) -> bool:
@@ -270,14 +270,14 @@ class Actor(models.Model):
 
     def get_absolute_url(self):
         if self.is_local:
-            return federation_utils.full_url("/@{}".format(self.preferred_username))
+            return federation_utils.full_url(f"/@{self.preferred_username}")
         return self.url or self.fid
 
     def get_current_usage(self):
         actor = self.__class__.objects.filter(pk=self.pk).with_current_usage().get()
         data = {}
         for s in ["draft", "pending", "skipped", "errored", "finished"]:
-            data[s] = getattr(actor, "_usage_{}".format(s)) or 0
+            data[s] = getattr(actor, f"_usage_{s}") or 0
 
         data["total"] = sum(data.values())
         return data
@@ -341,8 +341,8 @@ class Actor(models.Model):
         # matches, we consider the actor has the permission to manage
         # the object
         domain = self.domain_id
-        return obj.fid.startswith("http://{}/".format(domain)) or obj.fid.startswith(
-            "https://{}/".format(domain)
+        return obj.fid.startswith(f"http://{domain}/") or obj.fid.startswith(
+            f"https://{domain}/"
         )
 
     @property
@@ -498,9 +498,7 @@ class AbstractFollow(models.Model):
         abstract = True
 
     def get_federation_id(self):
-        return federation_utils.full_url(
-            "{}#follows/{}".format(self.actor.fid, self.uuid)
-        )
+        return federation_utils.full_url(f"{self.actor.fid}#follows/{self.uuid}")
 
 
 class Follow(AbstractFollow):
@@ -594,7 +592,7 @@ class LibraryTrack(models.Model):
             remote_response.raise_for_status()
             extension = music_utils.get_ext_from_type(self.audio_mimetype)
             title = " - ".join([self.title, self.album_title, self.artist_name])
-            filename = "{}.{}".format(title, extension)
+            filename = f"{title}.{extension}"
             tmp_file = tempfile.TemporaryFile()
             for chunk in r.iter_content(chunk_size=512):
                 tmp_file.write(chunk)

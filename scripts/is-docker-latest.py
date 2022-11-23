@@ -10,7 +10,7 @@ def main(current, releases_json):
     try:
         version = StrictVersion(current)
     except ValueError:
-        print("Version number '{}' isn't valid".format(current))
+        print(f"Version number '{current}' isn't valid")
         sys.exit(1)
 
     releases = json.loads(releases_json)
@@ -23,7 +23,7 @@ def main(current, releases_json):
             )
         )
         sys.exit(1)
-    print("Version number '{}' is latest release!".format(current))
+    print(f"Version number '{current}' is latest release!")
 
 
 if __name__ == "__main__":

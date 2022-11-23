@@ -179,8 +179,8 @@ def test_get_channels_groups(factories):
     user = factories["users.User"](permission_library=True)
 
     assert user.get_channels_groups() == [
-        "user.{}.imports".format(user.pk),
-        "user.{}.inbox".format(user.pk),
+        f"user.{user.pk}.imports",
+        f"user.{user.pk}.inbox",
         "admin.library",
     ]
 

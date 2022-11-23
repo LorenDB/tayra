@@ -68,7 +68,7 @@ class AuthenticatedIfAllowListEnabled(permissions.BasePermission):
         return bool(request.actor)
 
 
-class FederationMixin(object):
+class FederationMixin:
     permission_classes = [AuthenticatedIfAllowListEnabled]
 
     def dispatch(self, request, *args, **kwargs):
@@ -223,9 +223,9 @@ class WellKnownViewSet(viewsets.GenericViewSet):
             return HttpResponse(status=405)
         try:
             resource_type, resource = webfinger.clean_resource(request.GET["resource"])
-            cleaner = getattr(webfinger, "clean_{}".format(resource_type))
+            cleaner = getattr(webfinger, f"clean_{resource_type}")
             result = cleaner(resource)
-            handler = getattr(self, "handler_{}".format(resource_type))
+            handler = getattr(self, f"handler_{resource_type}")
             data = handler(result)
         except forms.ValidationError as e:
             return response.Response({"errors": {"resource": e.message}}, status=400)

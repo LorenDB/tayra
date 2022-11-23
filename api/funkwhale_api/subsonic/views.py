@@ -67,7 +67,7 @@ def find_object(
                     {
                         "error": {
                             "code": 0,
-                            "message": 'For input string "{}"'.format(raw_value),
+                            "message": f'For input string "{raw_value}"',
                         }
                     }
                 )
@@ -86,7 +86,7 @@ def find_object(
                     {
                         "error": {
                             "code": 70,
-                            "message": "{} not found".format(qs.model.__name__),
+                            "message": f"{qs.model.__name__} not found",
                         }
                     }
                 )
@@ -904,7 +904,7 @@ class SubsonicViewSet(viewsets.GenericViewSet):
                     {
                         "error": {
                             "code": 0,
-                            "message": "Error while fetching url: {}".format(e),
+                            "message": f"Error while fetching url: {e}",
                         }
                     }
                 )

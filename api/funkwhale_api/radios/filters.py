@@ -66,7 +66,7 @@ def clean_config(filter_config):
     return f.clean_config(filter_config)
 
 
-class RadioFilter(object):
+class RadioFilter:
     help_text = None
     label = None
     fields = []
@@ -114,7 +114,7 @@ class GroupFilter(RadioFilter):
                 elif operator == "or":
                     final_query |= query
                 else:
-                    raise ValueError('Invalid query operator "{}"'.format(operator))
+                    raise ValueError(f'Invalid query operator "{operator}"')
         return final_query
 
     def validate(self, config):
@@ -171,7 +171,7 @@ class ArtistFilter(RadioFilter):
         except KeyError:
             raise ValidationError("You must provide an id")
         except AssertionError:
-            raise ValidationError('No artist matching ids "{}"'.format(diff))
+            raise ValidationError(f'No artist matching ids "{diff}"')
 
 
 @registry.register
@@ -226,7 +226,7 @@ class TagFilter(RadioFilter):
         except KeyError:
             raise ValidationError("You must provide a name")
         except AssertionError:
-            raise ValidationError('No tag matching names "{}"'.format(diff))
+            raise ValidationError(f'No tag matching names "{diff}"')
 
 
 @registry.register

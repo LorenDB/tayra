@@ -20,7 +20,7 @@ def handler_add_tags_from_tracks(
     if result is None:
         click.echo("  No relevant tags found")
     else:
-        click.echo("  Relevant tags added to {} objects".format(len(result)))
+        click.echo(f"  Relevant tags added to {len(result)} objects")
 
 
 @base.cli.group()

@@ -20,7 +20,7 @@ ET._original_serialize_xml = ET._serialize_xml
 
 def _serialize_xml(write, elem, qnames, namespaces, **kwargs):
     if elem.tag == "![CDATA[":
-        write("<%s%s]]>" % (elem.tag, elem.text))
+        write(f"<{elem.tag}{elem.text}]]>")
         return
     return ET._original_serialize_xml(write, elem, qnames, namespaces, **kwargs)
 

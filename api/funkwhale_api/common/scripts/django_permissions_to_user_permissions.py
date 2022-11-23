@@ -23,6 +23,6 @@ def main(command, **kwargs):
         total = users.count()
 
         command.stdout.write(
-            "Updating {} users with {} permission...".format(total, user_permission)
+            f"Updating {total} users with {user_permission} permission..."
         )
-        users.update(**{"permission_{}".format(user_permission): True})
+        users.update(**{f"permission_{user_permission}": True})

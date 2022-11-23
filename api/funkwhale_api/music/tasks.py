@@ -66,7 +66,7 @@ def get_cover_from_fs(dir_path):
     if os.path.exists(dir_path):
         for name in FOLDER_IMAGE_NAMES:
             for e, m in IMAGE_TYPES:
-                cover_path = os.path.join(dir_path, "{}.{}".format(name, e))
+                cover_path = os.path.join(dir_path, f"{name}.{e}")
                 if not os.path.exists(cover_path):
                     logger.debug("Cover %s does not exists", cover_path)
                     continue
@@ -764,7 +764,7 @@ def broadcast_import_status_update_to_owner(old_status, new_status, upload, **kw
 
     from . import serializers
 
-    group = "user.{}.imports".format(user.pk)
+    group = f"user.{user.pk}.imports"
     channels.group_send(
         group,
         {
@@ -788,7 +788,7 @@ def clean_transcoding_cache():
     limit = timezone.now() - datetime.timedelta(minutes=delay)
     candidates = (
         models.UploadVersion.objects.filter(
-            (Q(accessed_date__lt=limit) | Q(accessed_date=None))
+            Q(accessed_date__lt=limit) | Q(accessed_date=None)
         )
         .only("audio_file", "id")
         .order_by("id")

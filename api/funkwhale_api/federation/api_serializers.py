@@ -216,7 +216,7 @@ class FetchSerializer(serializers.ModelSerializer):
         except validators.ValidationError:
             return value
 
-        return "webfinger://{}".format(value)
+        return f"webfinger://{value}"
 
     def create(self, validated_data):
         check_duplicates = not validated_data.get("force", False)

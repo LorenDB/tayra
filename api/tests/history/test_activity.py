@@ -6,7 +6,7 @@ from funkwhale_api.users.serializers import UserActivitySerializer
 def test_get_listening_activity_url(settings, factories):
     listening = factories["history.Listening"]()
     user_url = listening.user.get_activity_url()
-    expected = "{}/listenings/tracks/{}".format(user_url, listening.pk)
+    expected = f"{user_url}/listenings/tracks/{listening.pk}"
     assert listening.get_activity_url() == expected
 
 

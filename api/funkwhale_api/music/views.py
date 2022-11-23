@@ -101,7 +101,7 @@ def refetch_obj(obj, queryset):
     return obj
 
 
-class HandleInvalidSearch(object):
+class HandleInvalidSearch:
     def list(self, *args, **kwargs):
         try:
             return super().list(*args, **kwargs)
@@ -532,8 +532,8 @@ def should_transcode(upload, format, max_bitrate=None):
 
 
 def get_content_disposition(filename):
-    filename = "filename*=UTF-8''{}".format(urllib.parse.quote(filename))
-    return "attachment; {}".format(filename)
+    filename = f"filename*=UTF-8''{urllib.parse.quote(filename)}"
+    return f"attachment; {filename}"
 
 
 def record_downloads(f):

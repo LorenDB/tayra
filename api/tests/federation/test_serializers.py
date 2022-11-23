@@ -1940,7 +1940,7 @@ def test_report_serializer_to_ap(factories):
         "actor": actors.get_service_actor().fid,
         "content": report.summary,
         "object": [report.target.fid],
-        "tag": [{"type": "Hashtag", "name": "#{}".format(report.type)}],
+        "tag": [{"type": "Hashtag", "name": f"#{report.type}"}],
     }
     serializer = serializers.FlagSerializer(report)
     assert serializer.data == expected

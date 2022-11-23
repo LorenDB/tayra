@@ -23,9 +23,7 @@ def test_report_created_signal_sends_email_to_mods(factories, mailoutbox, settin
 
     tasks.send_new_report_email_to_moderators(report_id=report.pk)
 
-    detail_url = federation_utils.full_url(
-        "/manage/moderation/reports/{}".format(report.uuid)
-    )
+    detail_url = federation_utils.full_url(f"/manage/moderation/reports/{report.uuid}")
     unresolved_reports_url = federation_utils.full_url(
         "/manage/moderation/reports?q=resolved:no"
     )
@@ -56,7 +54,7 @@ def test_signup_request_pending_sends_email_to_mods(factories, mailoutbox, setti
     tasks.user_request_handle(user_request_id=signup_request.pk, new_status="pending")
 
     detail_url = federation_utils.full_url(
-        "/manage/moderation/requests/{}".format(signup_request.uuid)
+        f"/manage/moderation/requests/{signup_request.uuid}"
     )
     unresolved_requests_url = federation_utils.full_url(
         "/manage/moderation/requests?q=status:pending"

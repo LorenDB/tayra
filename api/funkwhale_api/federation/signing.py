@@ -31,7 +31,7 @@ def verify_date(raw_date):
     now = timezone.now()
     if dt < now - delta or dt > now + delta:
         raise forms.ValidationError(
-            "Request Date {} is too far in the future or in the past".format(raw_date)
+            f"Request Date {raw_date} is too far in the future or in the past"
         )
 
     return dt
@@ -70,10 +70,10 @@ def verify_django(django_request, public_key):
         signature = headers["Signature"]
     except KeyError:
         raise exceptions.MissingSignature
-    url = "http://noop{}".format(django_request.path)
+    url = f"http://noop{django_request.path}"
     query = django_request.META["QUERY_STRING"]
     if query:
-        url += "?{}".format(query)
+        url += f"?{query}"
     signature_headers = signature.split('headers="')[1].split('",')[0]
     expected = signature_headers.split(" ")
     logger.debug("Signature expected headers: %s", expected)

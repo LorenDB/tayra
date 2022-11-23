@@ -164,7 +164,7 @@ def test_wellknown_webfinger_local(factories, api_client, settings, mocker):
     url = reverse("federation:well-known-webfinger")
     response = api_client.get(
         url,
-        data={"resource": "acct:{}".format(user.actor.webfinger_subject)},
+        data={"resource": f"acct:{user.actor.webfinger_subject}"},
         HTTP_ACCEPT="application/jrd+json",
     )
     serializer = serializers.ActorWebfingerSerializer(user.actor)
@@ -327,10 +327,8 @@ def test_music_library_retrieve_page_follow(
 def test_music_local_entity_detail(
     factories, api_client, factory, serializer_class, namespace, settings
 ):
-    obj = factories[factory](fid="http://{}/1".format(settings.FEDERATION_HOSTNAME))
-    url = reverse(
-        "federation:music:{}-detail".format(namespace), kwargs={"uuid": obj.uuid}
-    )
+    obj = factories[factory](fid=f"http://{settings.FEDERATION_HOSTNAME}/1")
+    url = reverse(f"federation:music:{namespace}-detail", kwargs={"uuid": obj.uuid})
     response = api_client.get(url)
 
     assert response.status_code == 200
@@ -345,9 +343,7 @@ def test_music_non_local_entity_detail(
     factories, api_client, factory, namespace, settings
 ):
     obj = factories[factory](fid="http://wrong-domain/1")
-    url = reverse(
-        "federation:music:{}-detail".format(namespace), kwargs={"uuid": obj.uuid}
-    )
+    url = reverse(f"federation:music:{namespace}-detail", kwargs={"uuid": obj.uuid})
     response = api_client.get(url)
 
     assert response.status_code == 404
@@ -539,7 +535,7 @@ def test_artist_retrieve_redirects_to_html_if_header_set(
 @pytest.mark.parametrize("index", ["channels", "libraries"])
 def test_public_index_disabled(index, api_client, preferences):
     preferences["federation__public_index"] = False
-    url = reverse("federation:index:index-{}".format(index))
+    url = reverse(f"federation:index:index-{index}")
     response = api_client.get(url)
 
     assert response.status_code == 405

@@ -31,7 +31,7 @@ ARTIST_PREFETCH_QS = (
 )
 
 
-class ChannelsMixin(object):
+class ChannelsMixin:
     def dispatch(self, request, *args, **kwargs):
         if not preferences.get("audio__channels_enabled"):
             return http.HttpResponse(status=405)

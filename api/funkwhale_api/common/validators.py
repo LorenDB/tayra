@@ -72,7 +72,7 @@ class ImageDimensionsValidator:
 
 
 @deconstructible
-class FileValidator(object):
+class FileValidator:
     """
     Taken from https://gist.github.com/jrosebr1/2140738
     Validator for files, checking the size, extension and mimetype.
@@ -163,5 +163,5 @@ class DomainValidator(validators.URLValidator):
 
         If it fails, we know the domain is not valid.
         """
-        super().__call__("http://{}".format(value))
+        super().__call__(f"http://{value}")
         return value

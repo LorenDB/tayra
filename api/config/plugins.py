@@ -28,7 +28,7 @@ _filters = {}
 _hooks = {}
 
 
-class PluginCache(object):
+class PluginCache:
     def __init__(self, prefix):
         self.prefix = prefix
 
@@ -81,7 +81,7 @@ def load_settings(name, settings):
         "text": django_settings.ENV,
     }
     values = {}
-    prefix = "FUNKWHALE_PLUGIN_{}".format(name.upper())
+    prefix = f"FUNKWHALE_PLUGIN_{name.upper()}"
     for s in settings:
         key = "_".join([prefix, s["name"].upper()])
         value = mapping[s["type"]](key, default=s.get("default", None))
@@ -262,7 +262,7 @@ def get_serializer_from_conf_template(conf, source=False, user=None):
                 self.fields["library"] = LibraryField(actor=user.actor)
 
     for vname, v in validators.items():
-        setattr(Serializer, "validate_{}".format(vname), v)
+        setattr(Serializer, f"validate_{vname}", v)
     return Serializer
 
 

@@ -67,9 +67,7 @@ class Command(BaseCommand):
         for kls, fields in MODELS:
             results[kls] = {}
             for field in fields:
-                candidates = kls.objects.filter(
-                    **{"{}__startswith".format(field): old_prefix}
-                )
+                candidates = kls.objects.filter(**{f"{field}__startswith": old_prefix})
                 results[kls][field] = candidates.count()
 
         total = sum([t for k in results.values() for t in k.values()])
@@ -92,9 +90,7 @@ class Command(BaseCommand):
                     )
 
         else:
-            self.stdout.write(
-                "No objects found with prefix {}, exiting.".format(old_prefix)
-            )
+            self.stdout.write(f"No objects found with prefix {old_prefix}, exiting.")
             return
         if options["dry_run"]:
             self.stdout.write(
@@ -112,9 +108,7 @@ class Command(BaseCommand):
 
         for kls, fields in results.items():
             for field, count in fields.items():
-                self.stdout.write(
-                    "Replacing {} on {} {}…".format(field, count, kls._meta.label)
-                )
+                self.stdout.write(f"Replacing {field} on {count} {kls._meta.label}…")
                 candidates = kls.objects.all()
                 utils.replace_prefix(candidates, field, old=old_prefix, new=new_prefix)
         self.stdout.write("")

@@ -29,13 +29,11 @@ def check_allow_list(payload, **kwargs):
         utils.recursive_getattr(payload, "object.id", permissive=True),
     ]
 
-    relevant_domains = set(
-        [
-            domain
-            for domain in [urllib.parse.urlparse(i).hostname for i in relevant_ids if i]
-            if domain
-        ]
-    )
+    relevant_domains = {
+        domain
+        for domain in [urllib.parse.urlparse(i).hostname for i in relevant_ids if i]
+        if domain
+    }
 
     if relevant_domains - allowed_domains:
 

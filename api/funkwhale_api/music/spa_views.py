@@ -109,7 +109,7 @@ def library_track(request, pk, redirect_to_ap):
                 "type": "application/json+oembed",
                 "href": (
                     utils.join_url(settings.FUNKWHALE_URL, reverse("api:v1:oembed"))
-                    + "?format=json&url={}".format(urllib.parse.quote_plus(track_url))
+                    + f"?format=json&url={urllib.parse.quote_plus(track_url)}"
                 ),
             }
         )
@@ -181,7 +181,7 @@ def library_album(request, pk, redirect_to_ap):
                 "type": "application/json+oembed",
                 "href": (
                     utils.join_url(settings.FUNKWHALE_URL, reverse("api:v1:oembed"))
-                    + "?format=json&url={}".format(urllib.parse.quote_plus(album_url))
+                    + f"?format=json&url={urllib.parse.quote_plus(album_url)}"
                 ),
             }
         )
@@ -245,7 +245,7 @@ def library_artist(request, pk, redirect_to_ap):
                 "type": "application/json+oembed",
                 "href": (
                     utils.join_url(settings.FUNKWHALE_URL, reverse("api:v1:oembed"))
-                    + "?format=json&url={}".format(urllib.parse.quote_plus(artist_url))
+                    + f"?format=json&url={urllib.parse.quote_plus(artist_url)}"
                 ),
             }
         )
@@ -297,7 +297,7 @@ def library_playlist(request, pk, redirect_to_ap):
                 "type": "application/json+oembed",
                 "href": (
                     utils.join_url(settings.FUNKWHALE_URL, reverse("api:v1:oembed"))
-                    + "?format=json&url={}".format(urllib.parse.quote_plus(obj_url))
+                    + f"?format=json&url={urllib.parse.quote_plus(obj_url)}"
                 ),
             }
         )

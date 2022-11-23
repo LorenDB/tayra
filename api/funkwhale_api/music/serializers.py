@@ -40,7 +40,7 @@ class CoverField(common_serializers.AttachmentSerializer):
 cover_field = CoverField()
 
 
-class OptionalDescriptionMixin(object):
+class OptionalDescriptionMixin:
     def to_representation(self, obj):
         repr = super().to_representation(obj)
         if self.context.get("description", False):
@@ -579,7 +579,7 @@ class TrackActivitySerializer(activity_serializers.ModelSerializer):
 
 
 def get_embed_url(type, id):
-    return settings.FUNKWHALE_EMBED_URL + "?type={}&id={}".format(type, id)
+    return settings.FUNKWHALE_EMBED_URL + f"?type={type}&id={id}"
 
 
 class OembedSerializer(serializers.Serializer):
@@ -619,7 +619,7 @@ class OembedSerializer(serializers.Serializer):
                 )
             embed_type = "track"
             embed_id = track.pk
-            data["title"] = "{} by {}".format(track.title, track.artist.name)
+            data["title"] = f"{track.title} by {track.artist.name}"
             if track.attachment_cover:
                 data[
                     "thumbnail_url"
@@ -658,8 +658,8 @@ class OembedSerializer(serializers.Serializer):
                 ] = album.attachment_cover.download_url_medium_square_crop
                 data["thumbnail_width"] = 200
                 data["thumbnail_height"] = 200
-            data["title"] = "{} by {}".format(album.title, album.artist.name)
-            data["description"] = "{} by {}".format(album.title, album.artist.name)
+            data["title"] = f"{album.title} by {album.artist.name}"
+            data["description"] = f"{album.title} by {album.artist.name}"
             data["author_name"] = album.artist.name
             data["height"] = 400
             data["author_url"] = federation_utils.full_url(

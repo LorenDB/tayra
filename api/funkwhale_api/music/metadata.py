@@ -355,15 +355,15 @@ class Metadata(Mapping):
     def __init__(self, filething, kind=mutagen.File):
         self._file = kind(filething)
         if self._file is None:
-            raise ValueError("Cannot parse metadata from {}".format(filething))
+            raise ValueError(f"Cannot parse metadata from {filething}")
         if len(self._file) == 0:
-            raise ValueError("No tags found in {}".format(filething))
+            raise ValueError(f"No tags found in {filething}")
         self.fallback = self.load_fallback(filething, self._file)
         ft = self.get_file_type(self._file)
         try:
             self._conf = CONF[ft]
         except KeyError:
-            raise ValueError("Unsupported format {}".format(ft))
+            raise ValueError(f"Unsupported format {ft}")
 
     def get_file_type(self, f):
         return f.__class__.__name__
@@ -420,7 +420,7 @@ class Metadata(Mapping):
         try:
             field_conf = self._conf["fields"][key]
         except KeyError:
-            raise UnsupportedTag("{} is not supported for this file format".format(key))
+            raise UnsupportedTag(f"{key} is not supported for this file format")
         real_key = field_conf.get("field", key)
         try:
             getter = field_conf.get("getter", self._conf["getter"])
@@ -467,8 +467,7 @@ class Metadata(Mapping):
         return 1
 
     def __iter__(self):
-        for field in self._conf["fields"]:
-            yield field
+        yield from self._conf["fields"]
 
 
 class ArtistField(serializers.Field):

@@ -101,11 +101,9 @@ class Command(BaseCommand):
             pruned_total = prunable.count()
             total = models.Track.objects.count()
             if options["dry_run"]:
-                self.stdout.write(
-                    "Would prune {}/{} tracks".format(pruned_total, total)
-                )
+                self.stdout.write(f"Would prune {pruned_total}/{total} tracks")
             else:
-                self.stdout.write("Deleting {}/{} tracks…".format(pruned_total, total))
+                self.stdout.write(f"Deleting {pruned_total}/{total} tracks…")
                 prunable.delete()
 
         if options["prune_albums"]:
@@ -113,11 +111,9 @@ class Command(BaseCommand):
             pruned_total = prunable.count()
             total = models.Album.objects.count()
             if options["dry_run"]:
-                self.stdout.write(
-                    "Would prune {}/{} albums".format(pruned_total, total)
-                )
+                self.stdout.write(f"Would prune {pruned_total}/{total} albums")
             else:
-                self.stdout.write("Deleting {}/{} albums…".format(pruned_total, total))
+                self.stdout.write(f"Deleting {pruned_total}/{total} albums…")
                 prunable.delete()
 
         if options["prune_artists"]:
@@ -125,11 +121,9 @@ class Command(BaseCommand):
             pruned_total = prunable.count()
             total = models.Artist.objects.count()
             if options["dry_run"]:
-                self.stdout.write(
-                    "Would prune {}/{} artists".format(pruned_total, total)
-                )
+                self.stdout.write(f"Would prune {pruned_total}/{total} artists")
             else:
-                self.stdout.write("Deleting {}/{} artists…".format(pruned_total, total))
+                self.stdout.write(f"Deleting {pruned_total}/{total} artists…")
                 prunable.delete()
 
         self.stdout.write("")

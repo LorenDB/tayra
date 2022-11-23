@@ -214,7 +214,7 @@ def test_update_domain_nodeinfo(factories, mocker, now, service_actor):
 
 def test_update_domain_nodeinfo_error(factories, r_mock, now):
     domain = factories["federation.Domain"](nodeinfo_fetch_date=None)
-    wellknown_url = "https://{}/.well-known/nodeinfo".format(domain.name)
+    wellknown_url = f"https://{domain.name}/.well-known/nodeinfo"
 
     r_mock.get(wellknown_url, status_code=500)
 
@@ -225,7 +225,7 @@ def test_update_domain_nodeinfo_error(factories, r_mock, now):
     assert domain.nodeinfo_fetch_date == now
     assert domain.nodeinfo == {
         "status": "error",
-        "error": "500 Server Error: None for url: {}".format(wellknown_url),
+        "error": f"500 Server Error: None for url: {wellknown_url}",
     }
 
 
@@ -406,14 +406,12 @@ def test_fetch_success(factories, r_mock, mocker):
 
 def test_fetch_webfinger(factories, r_mock, mocker):
     actor = factories["federation.Actor"]()
-    fetch = factories["federation.Fetch"](
-        url="webfinger://{}".format(actor.full_username)
-    )
+    fetch = factories["federation.Fetch"](url=f"webfinger://{actor.full_username}")
     payload = serializers.ActorSerializer(actor).data
     init = mocker.spy(serializers.ActorSerializer, "__init__")
     save = mocker.spy(serializers.ActorSerializer, "save")
     webfinger_payload = {
-        "subject": "acct:{}".format(actor.full_username),
+        "subject": f"acct:{actor.full_username}",
         "aliases": ["https://test.webfinger"],
         "links": [
             {"rel": "self", "type": "application/activity+json", "href": actor.fid}
@@ -542,7 +540,7 @@ def test_fetch_honor_instance_policy_domain(factories):
     domain = factories["moderation.InstancePolicy"](
         block_all=True, for_domain=True
     ).target_domain
-    fid = "https://{}/test".format(domain.name)
+    fid = f"https://{domain.name}/test"
 
     fetch = factories["federation.Fetch"](url=fid)
     tasks.fetch(fetch_id=fetch.pk)
@@ -588,7 +586,7 @@ def test_fetch_honor_instance_policy_different_url_and_id(r_mock, factories):
         block_all=True, for_domain=True
     ).target_domain
     fid = "https://ok/test"
-    r_mock.get(fid, json={"id": "http://{}/test".format(domain.name)})
+    r_mock.get(fid, json={"id": f"http://{domain.name}/test"})
     fetch = factories["federation.Fetch"](url=fid)
     tasks.fetch(fetch_id=fetch.pk)
     fetch.refresh_from_db()

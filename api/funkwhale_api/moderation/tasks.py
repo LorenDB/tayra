@@ -64,9 +64,7 @@ def send_new_report_email_to_moderators(report):
     subject = "[{} moderation - {}] New report from {}".format(
         settings.FUNKWHALE_HOSTNAME, report.get_type_display(), submitter_repr
     )
-    detail_url = federation_utils.full_url(
-        "/manage/moderation/reports/{}".format(report.uuid)
-    )
+    detail_url = federation_utils.full_url(f"/manage/moderation/reports/{report.uuid}")
     unresolved_reports_url = federation_utils.full_url(
         "/manage/moderation/reports?q=resolved:no"
     )
@@ -97,7 +95,7 @@ def send_new_report_email_to_moderators(report):
 
     body += [
         "",
-        "- To handle this report, please visit {}".format(detail_url),
+        f"- To handle this report, please visit {detail_url}",
         "- To view all unresolved reports (currently {}), please visit {}".format(
             unresolved_reports, unresolved_reports_url
         ),
@@ -173,9 +171,7 @@ def notify_mods_signup_request_pending(obj):
     subject = "[{} moderation] New sign-up request from {}".format(
         settings.FUNKWHALE_HOSTNAME, submitter_repr
     )
-    detail_url = federation_utils.full_url(
-        "/manage/moderation/requests/{}".format(obj.uuid)
-    )
+    detail_url = federation_utils.full_url(f"/manage/moderation/requests/{obj.uuid}")
     unresolved_requests_url = federation_utils.full_url(
         "/manage/moderation/requests?q=status:pending"
     )
@@ -185,7 +181,7 @@ def notify_mods_signup_request_pending(obj):
             submitter_repr
         ),
         "",
-        "- To handle this request, please visit {}".format(detail_url),
+        f"- To handle this request, please visit {detail_url}",
         "- To view all unresolved requests (currently {}), please visit {}".format(
             unresolved_requests, unresolved_requests_url
         ),
@@ -217,10 +213,10 @@ def notify_submitter_signup_request_approved(user_request):
     if not submitter_email:
         logger.warning("User %s has no e-mail address configured", submitter_repr)
         return
-    subject = "Welcome to {}, {}!".format(settings.FUNKWHALE_HOSTNAME, submitter_repr)
+    subject = f"Welcome to {settings.FUNKWHALE_HOSTNAME}, {submitter_repr}!"
     login_url = federation_utils.full_url("/login")
     body = [
-        "Hi {} and welcome,".format(submitter_repr),
+        f"Hi {submitter_repr} and welcome,",
         "",
         "Our moderation team has approved your account request and you can now start "
         "using the service. Please visit {} to get started.".format(login_url),
@@ -246,7 +242,7 @@ def notify_submitter_signup_request_refused(user_request):
         settings.FUNKWHALE_HOSTNAME
     )
     body = [
-        "Hi {},".format(submitter_repr),
+        f"Hi {submitter_repr},",
         "",
         "You recently submitted an account request on our service. However, our "
         "moderation team has refused it, and as a result, you won't be able to use "

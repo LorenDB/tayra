@@ -84,16 +84,16 @@ def get_scrobble_payload(track, date, suffix="[0]"):
     """
     upload = track.uploads.filter(duration__gte=0).first()
     data = {
-        "a{}".format(suffix): track.artist.name,
-        "t{}".format(suffix): track.title,
-        "l{}".format(suffix): upload.duration if upload else 0,
-        "b{}".format(suffix): (track.album.title if track.album else "") or "",
-        "n{}".format(suffix): track.position or "",
-        "m{}".format(suffix): str(track.mbid or ""),
-        "o{}".format(suffix): "P",  # Source: P = chosen by user
+        f"a{suffix}": track.artist.name,
+        f"t{suffix}": track.title,
+        f"l{suffix}": upload.duration if upload else 0,
+        f"b{suffix}": (track.album.title if track.album else "") or "",
+        f"n{suffix}": track.position or "",
+        f"m{suffix}": str(track.mbid or ""),
+        f"o{suffix}": "P",  # Source: P = chosen by user
     }
     if date:
-        data["i{}".format(suffix)] = int(date.timestamp())
+        data[f"i{suffix}"] = int(date.timestamp())
     return data
 
 

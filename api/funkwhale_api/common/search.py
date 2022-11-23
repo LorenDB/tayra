@@ -72,7 +72,7 @@ def get_fts_query(query_string, fts_fields=["body_text"], model=None):
     else:
         query_string = remove_chars(query_string, ['"', "&", "(", ")", "!", "'"])
         parts = query_string.replace(":", "").split(" ")
-        parts = ["{}:*".format(p) for p in parts if p]
+        parts = [f"{p}:*" for p in parts if p]
         if not parts:
             return Q(pk=None)
 
@@ -97,7 +97,7 @@ def get_fts_query(query_string, fts_fields=["body_text"], model=None):
                     )
                 }
             ).values_list("pk", flat=True)
-            new_query = Q(**{"{}__in".format(fk_field_name): list(subquery)})
+            new_query = Q(**{f"{fk_field_name}__in": list(subquery)})
         else:
             new_query = Q(
                 **{
@@ -180,7 +180,7 @@ class SearchConfig:
             except KeyError:
                 # no cleaning to apply
                 value = token["value"]
-            q = Q(**{"{}__icontains".format(to): value})
+            q = Q(**{f"{to}__icontains": value})
             if not specific_field_query:
                 specific_field_query = q
             else:

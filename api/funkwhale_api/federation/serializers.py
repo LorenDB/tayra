@@ -116,7 +116,7 @@ class MediaSerializer(jsonld.JsonLdSerializer):
 
         if not is_mimetype(v, self.allowed_mimetypes):
             raise serializers.ValidationError(
-                "Invalid mimetype {}. Allowed: {}".format(v, self.allowed_mimetypes)
+                f"Invalid mimetype {v}. Allowed: {self.allowed_mimetypes}"
             )
         return v
 
@@ -371,7 +371,7 @@ class ActorSerializer(jsonld.JsonLdSerializer):
             ret["publicKey"] = {
                 "owner": instance.fid,
                 "publicKeyPem": instance.public_key,
-                "id": "{}#main-key".format(instance.fid),
+                "id": f"{instance.fid}#main-key",
             }
         ret["endpoints"] = {}
 
@@ -453,7 +453,7 @@ class ActorSerializer(jsonld.JsonLdSerializer):
                 actor,
                 rss_url=rss_url,
                 attributed_to_fid=attributed_to,
-                **self.validated_data
+                **self.validated_data,
             )
         return actor
 
@@ -736,9 +736,7 @@ class FollowActionSerializer(serializers.Serializer):
                 .get()
             )
         except follow_class.DoesNotExist:
-            raise serializers.ValidationError(
-                "No follow to {}".format(self.action_type)
-            )
+            raise serializers.ValidationError(f"No follow to {self.action_type}")
         return validated_data
 
     def to_representation(self, instance):
@@ -749,7 +747,7 @@ class FollowActionSerializer(serializers.Serializer):
 
         return {
             "@context": jsonld.get_default_context(),
-            "id": instance.get_federation_id() + "/{}".format(self.action_type),
+            "id": instance.get_federation_id() + f"/{self.action_type}",
             "type": self.action_type.title(),
             "actor": actor.fid,
             "object": FollowSerializer(instance).data,
@@ -855,7 +853,7 @@ class ActorWebfingerSerializer(serializers.Serializer):
 
     def to_representation(self, instance):
         data = {}
-        data["subject"] = "acct:{}".format(instance.webfinger_subject)
+        data["subject"] = f"acct:{instance.webfinger_subject}"
         data["links"] = [
             {"rel": "self", "href": instance.fid, "type": "application/activity+json"}
         ]
@@ -881,7 +879,7 @@ class ActivitySerializer(serializers.Serializer):
         try:
             object_serializer = OBJECT_SERIALIZERS[type]
         except KeyError:
-            raise serializers.ValidationError("Unsupported type {}".format(type))
+            raise serializers.ValidationError(f"Unsupported type {type}")
 
         serializer = object_serializer(data=value)
         serializer.is_valid(raise_exception=True)
@@ -1165,7 +1163,7 @@ MUSIC_ENTITY_JSONLD_MAPPING = {
 
 
 def repr_tag(tag_name):
-    return {"type": "Hashtag", "name": "#{}".format(tag_name)}
+    return {"type": "Hashtag", "name": f"#{tag_name}"}
 
 
 def include_content(repr, content_obj):
@@ -1704,9 +1702,7 @@ class FlagSerializer(jsonld.JsonLdSerializer):
         try:
             return utils.get_object_by_fid(v, local=True)
         except ObjectDoesNotExist:
-            raise serializers.ValidationError(
-                "Unknown id {} for reported object".format(v)
-            )
+            raise serializers.ValidationError(f"Unknown id {v} for reported object")
 
     def validate_type(self, tags):
         if tags:
@@ -1918,7 +1914,7 @@ class ChannelUploadSerializer(jsonld.JsonLdSerializer):
         tags = [item.tag.name for item in upload.get_all_tagged_items()]
         if tags:
             data["tag"] = [repr_tag(name) for name in sorted(set(tags))]
-            data["summary"] = " ".join(["#{}".format(name) for name in tags])
+            data["summary"] = " ".join([f"#{name}" for name in tags])
 
         if self.context.get("include_ap_context", True):
             data["@context"] = jsonld.get_default_context()
@@ -2039,7 +2035,7 @@ class DeleteSerializer(jsonld.JsonLdSerializer):
         try:
             obj = utils.get_object_by_fid(url)
         except utils.ObjectDoesNotExist:
-            raise serializers.ValidationError("No object matching {}".format(url))
+            raise serializers.ValidationError(f"No object matching {url}")
         if isinstance(obj, music_models.Upload):
             obj = obj.track
 

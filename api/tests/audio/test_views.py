@@ -442,7 +442,7 @@ def test_can_filter_channels_through_api_scope(factories, logged_in_api_client):
     factories["audio.Channel"]()
     url = reverse("api:v1:channels-list")
     response = logged_in_api_client.get(
-        url, {"scope": "actor:{}".format(channel.attributed_to.full_username)}
+        url, {"scope": f"actor:{channel.attributed_to.full_username}"}
     )
 
     assert response.status_code == 200
