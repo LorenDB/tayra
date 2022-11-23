@@ -132,6 +132,6 @@ Check the file and remove any duplicated settings after copying.
 
 Once you have imported your database and run migrations, you can start all containers.
 
-   ```{code-block} sh
-   docker-compose up -d
-   ```
+```{code-block} sh
+docker-compose up -d
+```

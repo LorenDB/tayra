@@ -1,6 +1,6 @@
 # Check your upload quota
 
-Your {term}`pod` admin can assign users an __upload quota__. This is the amount of storage you have access to. Pod admins can assign a default quota to all users. They can also increase or decrease quotas for individual users. Your upload quota applies to content in [libraries](../libraries/index.md) and [channels](../channels/index.md).
+Your {term}`pod` admin can assign users an **upload quota**. This is the amount of storage you have access to. Pod admins can assign a default quota to all users. They can also increase or decrease quotas for individual users. Your upload quota applies to content in [libraries](../libraries/index.md) and [channels](../channels/index.md).
 
 If you run out of space, you can contact your pod admin to request more.
 

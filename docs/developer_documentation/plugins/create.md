@@ -29,7 +29,7 @@ User-level plugins can also be used to import files from a third-party service, 
 
 ### Hooks
 
-**Hooks** are entrypoints that allow your plugin to listen to changes. You can create hooks to react to different  events that occur in the Funkwhale application.
+**Hooks** are entrypoints that allow your plugin to listen to changes. You can create hooks to react to different events that occur in the Funkwhale application.
 
 An example of this can be seen in our Scrobbler plugin. We register a `LISTENING_CREATED` hook to notify any registered callback function when a listening is recorded. When a user listens to a track, the `notfy_lastfm` function fires.
 

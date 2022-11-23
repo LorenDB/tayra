@@ -11,6 +11,7 @@ You can handle content reports from the {guilabel}`Reports` page or from the rep
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
 - {guilabel}`Library` – enables the moderator to delete objects.
+
 :::
 
 ```{contents}

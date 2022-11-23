@@ -6,6 +6,7 @@ When a user reports an object on your {term}`pod`, the report gets sent to a mod
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
+
 :::
 
 ## Check the Reports page

@@ -1,6 +1,4 @@
 {
-  "additionalStylesheets": [
-    "/front/custom.css"
-  ],
+  "additionalStylesheets": ["/front/custom.css"],
   "defaultServerUrl": null
 }

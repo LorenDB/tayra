@@ -61,7 +61,6 @@ You can find the code for our routing logic here:
 - [Routing logic for activities](https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/api/funkwhale_api/federation/routes.py)
 - [Delivery logic for activities](https://dev.funkwhale.audio/funkwhale/funkwhale/blob/develop/api/funkwhale_api/federation/tasks.py)
 
-
 ## Service actor
 
 Funkwhale uses a dedicated service actor to send messages or authenticate fetches. This actor isn't associated to a user.
@@ -654,13 +653,17 @@ An `Audio` object is a custom object used to store upload information. It extend
 ::::{tab-set}
 
 :::{tab-item} Library
+
 - Public libraries can be accessed by actors without restriction
 - Restricted libraries can only be accessed if the HTTP request is signed by an actor who has an associated **approved** [`Follow` activity](#follow)
+
 :::
 
 :::{tab-item} Audio
+
 - Audio items in public libraries can be accessed by actors without restriction
 - Audio items in restricted libraries can only be accessed if the HTTP request is signed by an actor who has an associated **approved** [`Follow` activity](#follow)
+
 :::
 
 ::::

@@ -6,75 +6,75 @@ The Funkwhale backend is made up of lots of moving parts. This guide shows you h
 
 If you have access to the Funkwhale backend, you can use logs to get more information about an issue.
 
-- __Reverse proxy logs__ – check these logs if you have connectivity issues.
+- **Reverse proxy logs** – check these logs if you have connectivity issues.
 
-   ::::{tab-set}
+::::{tab-set}
 
-   :::{tab-item} Nginx
-   :sync: nginx
+:::{tab-item} Nginx
+:sync: nginx
 
-   ```{code-block} sh
-   sudo tail -f /var/log/nginx/access.log # Follow the access log
-   sudo tail -f /var/log/nginx/error.log # Follow the error log
-   ```
+```{code-block} sh
+sudo tail -f /var/log/nginx/access.log # Follow the access log
+sudo tail -f /var/log/nginx/error.log # Follow the error log
+```
 
-   :::
+:::
 
-   :::{tab-item} Apache2
-   :sync: apache2
+:::{tab-item} Apache2
+:sync: apache2
 
-   ```{code-block} sh
-   sudo tail -f /var/log/apache/access.log # Follow the access log
-   sudo tail -f /var/log/apache/error.log # Follow the error log
-   ```
+```{code-block} sh
+sudo tail -f /var/log/apache/access.log # Follow the access log
+sudo tail -f /var/log/apache/error.log # Follow the error log
+```
 
-   ````
+::::
 
-- __API logs__ – check these if you are having issues with the Funkwhale app, federation, or imports.
+- **API logs** – check these if you are having issues with the Funkwhale app, federation, or imports.
 
-   ::::{tab-set}
+::::{tab-set}
 
-   :::{tab-item} Debian
-   :sync: debian
+:::{tab-item} Debian
+:sync: debian
 
-   ```{code-block} sh
-   journalctl -xn -u funkwhale-server
-   ```
+```{code-block} sh
+journalctl -xn -u funkwhale-server
+```
 
-   :::
+:::
 
-   :::{tab-item} Docker
-   :sync: docker
+:::{tab-item} Docker
+:sync: docker
 
-   ```{code-block} sh
-   docker-compose logs -f --tail=50 api # Follow the last 50 messages
-   ```
+```{code-block} sh
+docker-compose logs -f --tail=50 api # Follow the last 50 messages
+```
 
-   :::
-   ::::
+:::
+::::
 
-- __Celery logs__ – check these if a federation or import task isn't working.
+- **Celery logs** – check these if a federation or import task isn't working.
 
-   ::::{tab-set}
+::::{tab-set}
 
-   :::{tab-item} Debian
-   :sync: debian
+:::{tab-item} Debian
+:sync: debian
 
-   ```{code-block} sh
-   journalctl -xn -u funkwhale-worker
-   ```
+```{code-block} sh
+journalctl -xn -u funkwhale-worker
+```
 
-   :::
+:::
 
-   :::{tab-item} Docker
-   :sync: docker
+:::{tab-item} Docker
+:sync: docker
 
-   ```{code-block} sh
-   docker-compose logs -f --tail=50 celery # Follow the last 50 messages
-   ```
+```{code-block} sh
+docker-compose logs -f --tail=50 celery # Follow the last 50 messages
+```
 
-   :::
-   ::::
+:::
+::::
 
 ## Troubleshoot issues
 
@@ -84,7 +84,7 @@ If the API isn't serving audio files, try the following:
 
 - If you’re using Docker, check you have commented out the `MEDIA_ROOT` variable in your `.env` file.
 - Check the `_protected/media` block in your webserver points to your media path. This is `/srv/funkwhale/data/media` by default.
-- If you’re using the in-place import, check you have configured your media paths.  Check the `MUSIC_DIRECTORY_PATH`, `MUSIC_DIRECTORY_SERVE_PATH` and `REVERSE_PROXY_TYPE` variables in your `.env` file. Make sure the webserver can read these directories.
+- If you’re using the in-place import, check you have configured your media paths. Check the `MUSIC_DIRECTORY_PATH`, `MUSIC_DIRECTORY_SERVE_PATH` and `REVERSE_PROXY_TYPE` variables in your `.env` file. Make sure the webserver can read these directories.
 
 ### Import issues
 

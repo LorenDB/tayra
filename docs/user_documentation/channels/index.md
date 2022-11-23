@@ -4,8 +4,8 @@ Use channels to publish your own audio content on Funkwhale. Channels enable you
 
 Funkwhale supports two types of channel:
 
-- __Podcasts__ – broadcast your podcast over the Fediverse. Listeners can also use their favorite {term}`podcatcher` to listen to podcasts using {abbr}`RSS (Really Simple Syndication)`.
-- __Artist Discography__ – upload your own music and create a following.
+- **Podcasts** – broadcast your podcast over the Fediverse. Listeners can also use their favorite {term}`podcatcher` to listen to podcasts using {abbr}`RSS (Really Simple Syndication)`.
+- **Artist Discography** – upload your own music and create a following.
 
 Follow the guides in this section to get started.
 

@@ -121,7 +121,7 @@ changelog
 :::{grid-item-card}
 :text-align: center
 
-{fa}`user`  Users
+{fa}`user` Users
 ^^^
 
 Looking to use Funkwhale for your content? Read through our guides to master the app!

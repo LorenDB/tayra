@@ -6,27 +6,27 @@ Funkwhale can be run in Docker containers for local development. You can work on
 2. [Install docker-compose](https://docs.docker.com/compose/install)
 3. Clone the Funkwhale repository to your system. The `develop` branch is checked out by default
 
-    ::::{tab-set}
+   ::::{tab-set}
 
-    :::{tab-item} SSH
+   :::{tab-item} SSH
 
-    ```sh
-    git clone git@dev.funkwhale.audio/funkwhale/funkwhale.git
-    cd funkwhale
-    ```
+   ```sh
+   git clone git@dev.funkwhale.audio/funkwhale/funkwhale.git
+   cd funkwhale
+   ```
 
-    :::
+   :::
 
-    :::{tab-item} HTTPS
+   :::{tab-item} HTTPS
 
-    ```sh
-    git clone https://dev.funkwhale.audio/funkwhale/funkwhale.git
-    cd funkwhale
-    ```
+   ```sh
+   git clone https://dev.funkwhale.audio/funkwhale/funkwhale.git
+   cd funkwhale
+   ```
 
-    :::
+   :::
 
-    ::::
+   ::::
 
 ## Set up your Docker environment
 
@@ -44,22 +44,22 @@ To set up your Docker environment:
 
 1. Create a `.env` file to enable customization of your setup.
 
-    ```sh
-    touch .env
-    ```
+   ```sh
+   touch .env
+   ```
 
 2. Add the following variables to load images and enable access to Django admin pages:
 
-    ```text
-    MEDIA_URL=http://localhost:8000/media/
-    STATIC_URL=http://localhost:8000/staticfiles/
-    ```
+   ```text
+   MEDIA_URL=http://localhost:8000/media/
+   STATIC_URL=http://localhost:8000/staticfiles/
+   ```
 
 3. Create a network for federation support
 
-    ```sh
-    docker network create federation
-    ```
+   ```sh
+   docker network create federation
+   ```
 
 Once you've set everything up, you need to build the containers. Run this command any time there are upstream changes or dependency changes to ensure you're up-to-date.
 
@@ -83,17 +83,17 @@ You need to create some local data to mimic a production environment.
 
 1. Create a superuser so you can log in to your local app:
 
-    ```sh
-    docker-compose -f dev.yml run --rm api pythong manage.py createsuperuser
-    ```
+   ```sh
+   docker-compose -f dev.yml run --rm api pythong manage.py createsuperuser
+   ```
 
 2. Add some fake data to populate the database. The following command creates 25 artists with random albums, tracks, and metadata.
 
-    ```sh
-    artists=25 # Adds 25 fake artists
-    command="from funkwhale_api.music import fake_data; fake_data.create_data($artists)"
-    echo $command | docker-compose -f dev.yml run --rm -T api python manage.py shell -i python
-    ```
+   ```sh
+   artists=25 # Adds 25 fake artists
+   command="from funkwhale_api.music import fake_data; fake_data.create_data($artists)"
+   echo $command | docker-compose -f dev.yml run --rm -T api python manage.py shell -i python
+   ```
 
 ## Manage services
 
@@ -101,15 +101,15 @@ Once you have set up your containers, bring them up to start working on them.
 
 1. Compile the translations:
 
-    ```sh
-    docker-compose -f dev.yml run --rm front yarn run i18n-compile
-    ```
+   ```sh
+   docker-compose -f dev.yml run --rm front yarn run i18n-compile
+   ```
 
 2. Launch all services:
 
-    ```sh
-    docker-compose -f dev.yml up front api nginx celeryworker
-    ```
+   ```sh
+   docker-compose -f dev.yml up front api nginx celeryworker
+   ```
 
 This gives you access to the following:
 
@@ -172,31 +172,31 @@ To run a reverse proxy for your app:
 
 1. Add the following configuration to your `.env` file:
 
-    ```text
-    # Remove any port binding so you can specify this per-instance
-    VUE_PORT_BINDING=
-    # Disable certificate validation
-    EXTERNAL_REQUESTS_VERIFY_SSL=false
-    # Ensure all links use https
-    FUNKWHALE_PROTOCOL=https
-    # Disable host ports binding for the nginx container so that traefik handles everything
-    NGINX_PORTS_MAPPING=80
-    ```
+   ```text
+   # Remove any port binding so you can specify this per-instance
+   VUE_PORT_BINDING=
+   # Disable certificate validation
+   EXTERNAL_REQUESTS_VERIFY_SSL=false
+   # Ensure all links use https
+   FUNKWHALE_PROTOCOL=https
+   # Disable host ports binding for the nginx container so that traefik handles everything
+   NGINX_PORTS_MAPPING=80
+   ```
 
 2. Launch traefik using the bundled configuration:
 
-    ```sh
-    docker-compose -f docker/traefik.yml up -d
-    ```
+   ```sh
+   docker-compose -f docker/traefik.yml up -d
+   ```
 
 3. Set up as many different projects as you need. Make sure the `COMPOSE_PROJECT_NAME` and `VUE_PORT` variables are unique per instance
 
-    ```sh
-    export COMPOSE_PROJECT_NAME=node2
-    export VUE_PORT=1234  # this has to be unique for each instance
-    docker-compose -f dev.yml run --rm api python manage.py migrate
-    docker-compose -f dev.yml run --rm api python manage.py createsuperuser
-    docker-compose -f dev.yml up nginx api front nginx api celeryworker
-    ```
+   ```sh
+   export COMPOSE_PROJECT_NAME=node2
+   export VUE_PORT=1234  # this has to be unique for each instance
+   docker-compose -f dev.yml run --rm api python manage.py migrate
+   docker-compose -f dev.yml run --rm api python manage.py createsuperuser
+   docker-compose -f dev.yml up nginx api front nginx api celeryworker
+   ```
 
 You can access your project at `https://{COMPOSE_PROJECT_NAME}.funkwhale.test`.

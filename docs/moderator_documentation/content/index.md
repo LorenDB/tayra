@@ -1,6 +1,6 @@
 # Moderate content on your pod
 
-If you have the __Library__ permission, you can change content on your pod. Use this permission to hide copyrighted content and remove offensive material.
+If you have the **Library** permission, you can change content on your pod. Use this permission to hide copyrighted content and remove offensive material.
 
 ```{toctree}
 ---

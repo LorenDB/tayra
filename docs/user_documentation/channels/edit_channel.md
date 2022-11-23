@@ -14,7 +14,7 @@ You can change different details depending on what type of channel you are editi
 
 ## Edit an Artist channel
 
-To edit an __Artist channel__:
+To edit an **Artist channel**:
 
 ::::{tab-set}
 
@@ -59,7 +59,7 @@ That's it! You've updated your channel details. Users see the new details when t
 
 ## Edit a Podcast channel
 
-To edit a __Podcast channel__:
+To edit a **Podcast channel**:
 
 ::::{tab-set}
 

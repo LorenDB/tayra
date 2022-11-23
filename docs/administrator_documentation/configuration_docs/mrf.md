@@ -84,123 +84,123 @@ To make the job of writing and debugging MRF policies easier, we provide a manag
 
 - List registered MRF policies.
 
-   ::::{tab-set}
+  ::::{tab-set}
 
-   :::{tab-item} Debian
-   :sync: debian
+  :::{tab-item} Debian
+  :sync: debian
 
-   ```{code-block} sh
-   poetry run python manage.py mrf_check --list
-   ```
+  ```{code-block} sh
+  poetry run python manage.py mrf_check --list
+  ```
 
-   :::
+  :::
 
-   :::{tab-item} Docker
-   :sync: docker
+  :::{tab-item} Docker
+  :sync: docker
 
-   ```{code-block} sh
-   docker-compose run --rm api python manage.py mrf_check --list
-   ```
+  ```{code-block} sh
+  docker-compose run --rm api python manage.py mrf_check --list
+  ```
 
-   :::
-   ::::
+  :::
+  ::::
 
 - Check how your MRF policy handles a follow.
 
-   ::::{tab-set}
+  ::::{tab-set}
 
-   :::{tab-item} Debian
-   :sync: debian
+  :::{tab-item} Debian
+  :sync: debian
 
-   ```{code-block} sh
-   export MRF_MESSAGE='{"actor": "https://normal.domain/@alice", "type": "Create", "object": {"type": "Follow"}}'
-   echo $MRF_MESSAGE | poetry run python manage.py mrf_check inbox - -p blocked_follow_domains
-   ```
+  ```{code-block} sh
+  export MRF_MESSAGE='{"actor": "https://normal.domain/@alice", "type": "Create", "object": {"type": "Follow"}}'
+  echo $MRF_MESSAGE | poetry run python manage.py mrf_check inbox - -p blocked_follow_domains
+  ```
 
-   :::
+  :::
 
-   :::{tab-item} Docker
-   :sync: docker
+  :::{tab-item} Docker
+  :sync: docker
 
-   ```{code-block} sh
-   export MRF_MESSAGE='{"actor": "https://normal.domain/@alice", "type": "Create", "object": {"type": "Follow"}}'
-   echo $MRF_MESSAGE | docker-compose run --rm api python manage.py mrf_check inbox - -p blocked_follow_domains
-   ```
+  ```{code-block} sh
+  export MRF_MESSAGE='{"actor": "https://normal.domain/@alice", "type": "Create", "object": {"type": "Follow"}}'
+  echo $MRF_MESSAGE | docker-compose run --rm api python manage.py mrf_check inbox - -p blocked_follow_domains
+  ```
 
-   ::::
+  ::::
 
 - Check how your MRF handles a problematic follow.
 
-   ::::{tab-set}
+  ::::{tab-set}
 
-   :::{tab-item} Debian
-   :sync: debian
+  :::{tab-item} Debian
+  :sync: debian
 
-   ```{code-block} sh
-   export MRF_MESSAGE='{"actor": "https://botdomain.org/@bob", "type": "Create", "object": {"type": "Follow"}}'
-   echo $MRF_MESSAGE | poetry run python manage.py mrf_check inbox - -p blocked_follow_domains
-   ```
+  ```{code-block} sh
+  export MRF_MESSAGE='{"actor": "https://botdomain.org/@bob", "type": "Create", "object": {"type": "Follow"}}'
+  echo $MRF_MESSAGE | poetry run python manage.py mrf_check inbox - -p blocked_follow_domains
+  ```
 
-   :::
+  :::
 
-   :::{tab-item} Docker
-   :sync: docker
+  :::{tab-item} Docker
+  :sync: docker
 
-   ```{code-block} sh
-   export MRF_MESSAGE='{"actor": "https://botdomain.org/@bob", "type": "Create", "object": {"type": "Follow"}}'
-   echo $MRF_MESSAGE | docker-compose run --rm api python manage.py mrf_check inbox - -p blocked_follow_domains
-   ```
+  ```{code-block} sh
+  export MRF_MESSAGE='{"actor": "https://botdomain.org/@bob", "type": "Create", "object": {"type": "Follow"}}'
+  echo $MRF_MESSAGE | docker-compose run --rm api python manage.py mrf_check inbox - -p blocked_follow_domains
+  ```
 
-   :::
-   ::::
+  :::
+  ::::
 
 - Check a payload against activity already present in the database. You can find the UUID of an activity by visiting `/api/admin/federation/activity`.
 
-   ::::{tab-set}
+  ::::{tab-set}
 
-   :::{tab-item} Debian
-   :sync: debian
+  :::{tab-item} Debian
+  :sync: debian
 
-   ```{code-block} sh
-   export ACTIVITY_UUID="06208aea-c687-4e8b-aefd-22f1c3f76039"
-   echo $MRF_MESSAGE | poetry run python manage.py mrf_check inbox $ACTIVITY_UUID -p blocked_follow_domains
-   ```
+  ```{code-block} sh
+  export ACTIVITY_UUID="06208aea-c687-4e8b-aefd-22f1c3f76039"
+  echo $MRF_MESSAGE | poetry run python manage.py mrf_check inbox $ACTIVITY_UUID -p blocked_follow_domains
+  ```
 
-   :::
+  :::
 
-   :::{tab-item} Docker
-   :sync: docker
+  :::{tab-item} Docker
+  :sync: docker
 
-   ```{code-block} sh
+  ```{code-block} sh
 
-   export ACTIVITY_UUID="06208aea-c687-4e8b-aefd-22f1c3f76039"
+  export ACTIVITY_UUID="06208aea-c687-4e8b-aefd-22f1c3f76039"
 
-   echo $MRF_MESSAGE | docker-compose run --rm api python manage.py mrf_check inbox $ACTIVITY_UUID -p blocked_follow_domains
+  echo $MRF_MESSAGE | docker-compose run --rm api python manage.py mrf_check inbox $ACTIVITY_UUID -p blocked_follow_domains
 
-   ```
+  ```
 
-   :::
-   ::::
+  :::
+  ::::
 
 There are extra options for testing MRF policies. Check the command help for more options.
 
-   ::::{tab-set}
+::::{tab-set}
 
-   :::{tab-item} Debian
-   :sync: debian
+:::{tab-item} Debian
+:sync: debian
 
-   ```{code-block} sh
-   poetry run python manage.py mrf_check --help
-   ```
+```{code-block} sh
+poetry run python manage.py mrf_check --help
+```
 
-   :::
+:::
 
-   :::{tab-item} Docker
-   :sync: docker
+:::{tab-item} Docker
+:sync: docker
 
-   ```{code-block} sh
-   docker-compose run --rm api python manage.py mrf_check --help
-   ```
+```{code-block} sh
+docker-compose run --rm api python manage.py mrf_check --help
+```
 
-   :::
-   ::::
+:::
+::::

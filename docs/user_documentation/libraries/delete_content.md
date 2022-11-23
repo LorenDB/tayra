@@ -16,7 +16,7 @@ You can delete content from a library at any time. To do this:
 3. Select {guilabel}`Get started` under {guilabel}`Upload third-party content in a library`.
 4. A screen appears showing your upload quota and your libraries.
 5. Select {guilabel}`Library Details` under the library you want to edit.
-6. Select the {guilabel}`✎ Edit`  button at the top of the screen.
+6. Select the {guilabel}`✎ Edit` button at the top of the screen.
 7. Scroll down to the {guilabel}`Library contents` section. A list of tracks is shown.
 8. Select the checkbox ({fa}`square`) next to the tracks you want to delete. Selected tracks show a tick ({fa}`check-square`).
 9. Select {menuselection}`Actions --> Delete`.
@@ -33,7 +33,7 @@ You can delete content from a library at any time. To do this:
 3. Select {guilabel}`Get started` under {guilabel}`Upload third-party content in a library`.
 4. A screen appears showing your upload quota and your libraries.
 5. Select {guilabel}`Library Details` under the library you want to edit.
-6. Select the {guilabel}`✎ Edit`  button at the top of the screen.
+6. Select the {guilabel}`✎ Edit` button at the top of the screen.
 7. Scroll down to the {guilabel}`Library contents` section. A list of tracks is shown.
 8. Select the checkbox ({fa}`square`) next to the tracks you want to delete. Selected tracks show a tick ({fa}`check-square`).
 9. Select {menuselection}`Actions --> Delete`.

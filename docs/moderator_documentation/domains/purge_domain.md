@@ -10,6 +10,7 @@ When users follow content from another domain that content is visible on your {t
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
+
 :::
 
 To purge content from a domain:

@@ -14,17 +14,17 @@ This guide assumes you are using a [Debian](https://debian.org)-based system.
 
 - Set a `FUNKWHALE_VERSION` variable to the version you want to install. You will use this version for all commands in this guide.
 
-   ```{parsed-literal}
-   export FUNKWHALE_VERSION={sub-ref}`version`
-   ```
+  ```{parsed-literal}
+  export FUNKWHALE_VERSION={sub-ref}`version`
+  ```
 
 - Install [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
 - Install `curl`.
 
-   ```{code-block} sh
-   sudo apt update # update apt cache
-   sudo apt install curl
-   ```
+  ```{code-block} sh
+  sudo apt update # update apt cache
+  sudo apt install curl
+  ```
 
 ## 1. Download the project files
 
@@ -83,8 +83,9 @@ The environment file contains options you can use to control your Funkwhale pod.
    ```
 
 6. Update the following settings:
-    - Paste the secret key in the `DJANGO_SECRET_KEY` field.
-    - Populate the `FUNKWHALE_HOSTNAME` field with the URL of your server.
+
+   - Paste the secret key in the `DJANGO_SECRET_KEY` field.
+   - Populate the `FUNKWHALE_HOSTNAME` field with the URL of your server.
 
 7. Hit {kbd}`ctrl + x` then {kbd}`y` to save the file and close `nano`.
 

@@ -10,6 +10,7 @@ You can change a moderation rule on a user at any time.
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
+
 :::
 
 To update an existing moderation rule:
@@ -25,10 +26,10 @@ To update an existing moderation rule:
 4. Select {guilabel}`Users` at the top of the page. The {guilabel}`Users` page opens. You can see a list of known users on this page.
 5. Select the user with the moderation rule you want to edit. The user's moderation page opens.
 6. Select {guilabel}`Edit` under the {guilabel}`This user is subject to specific moderation rules` header. The moderation policy form opens.
-7. __Optional__ – Edit the following settings:
+7. **Optional** – Edit the following settings:
    - {guilabel}`Enabled` – toggle this switch to enable or disable the rule without deleting it.
    - {guilabel}`Reason` – update the reason for the moderation rule.
-8. __Optional__ – Update your moderation rule:
+8. **Optional** – Update your moderation rule:
    - {guilabel}`Block everything` – purge all content from this user and block all content.
    - {guilabel}`Reject media` – only reject media files such as audio files, avatars, and album art.
 9. Select {guilabel}`Update` to save your rule.
@@ -44,10 +45,10 @@ To update an existing moderation rule:
 4. Select {guilabel}`Users` at the top of the page. The {guilabel}`Users` page opens. You can see a list of known users on this page.
 5. Select the user with the moderation rule you want to edit. The user's moderation page opens.
 6. Select {guilabel}`Edit` under the {guilabel}`This user is subject to specific moderation rules` header. The moderation policy form opens.
-7. __Optional__ – Edit the following settings:
+7. **Optional** – Edit the following settings:
    - {guilabel}`Enabled` – toggle this switch to enable or disable the rule without deleting it.
    - {guilabel}`Reason` – update the reason for the moderation rule.
-8. __Optional__ – Update your moderation rule:
+8. **Optional** – Update your moderation rule:
    - {guilabel}`Block everything` – purge all content from this user and block all content.
    - {guilabel}`Reject media` – only reject media files such as audio files, avatars, and album art.
 9. Select {guilabel}`Update` to save your rule.

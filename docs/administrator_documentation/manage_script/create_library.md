@@ -94,7 +94,7 @@ Created library default for user username1 with UUID 436da05b-8cb1-4a4d-b870-4a3
 
 ### Library with the same name already exists
 
-If a library with the same name already exists for the given user, the script will __not__ create a new library.
+If a library with the same name already exists for the given user, the script will **not** create a new library.
 
 ::::{tab-set}
 

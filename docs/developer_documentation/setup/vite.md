@@ -4,45 +4,45 @@ If you want to make changes to the frontend, you can use Vite to run a developme
 
 1. Clone the repository:
 
-    ::::{tab-set}
+   ::::{tab-set}
 
-    :::{tab-item} SSH
+   :::{tab-item} SSH
 
-    ```sh
-    git clone git@dev.funkwhale.audio/funkwhale/funkwhale.git
-    cd funkwhale/front
-    ```
+   ```sh
+   git clone git@dev.funkwhale.audio/funkwhale/funkwhale.git
+   cd funkwhale/front
+   ```
 
-    :::
+   :::
 
-    :::{tab-item} HTTPS
+   :::{tab-item} HTTPS
 
-    ```sh
-    git clone https://dev.funkwhale.audio/funkwhale/funkwhale.git
-    cd funkwhale/front
-    ```
+   ```sh
+   git clone https://dev.funkwhale.audio/funkwhale/funkwhale.git
+   cd funkwhale/front
+   ```
 
-    :::
+   :::
 
-    ::::
+   ::::
 
 2. Install [Node.js](https://nodejs.org/en/download/package-manager/) and [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/)
 3. Install all dependencies:
 
-    ```sh
-    yarn install
-    ```
+   ```sh
+   yarn install
+   ```
 
 4. Compile the translations:
 
-    ```sh
-    yarn i18n-compile
-    ```
+   ```sh
+   yarn i18n-compile
+   ```
 
 5. Launch the devlopment server:
 
-    ```sh
-    yarn dev
-    ```
+   ```sh
+   yarn dev
+   ```
 
 You can access the Funkwhale web app at `http://localhost:8000/front`. Connect this app to your pod by selecting {guilabel}`Switch instance` in the sidebar.

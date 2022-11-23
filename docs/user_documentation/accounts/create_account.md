@@ -12,7 +12,7 @@ To use Funkwhale, you need to create an account on a {term}`Funkwhale pod <Pod>`
 
 ## Check your pod's policies
 
-Before you sign up to a pod, you should check its __policies__. You can find these by navigating to the pod's {guilabel}`About this pod` page.
+Before you sign up to a pod, you should check its **policies**. You can find these by navigating to the pod's {guilabel}`About this pod` page.
 
 1. Navigate to the pod.
 2. Select the {guilabel}`About this pod` link in the sidebar.

@@ -14,17 +14,17 @@ UI strings can be added to both the `<script>` and `<template>` part of a Vue fi
 
 ```json
 {
-   "components": {
-      "About": {
-         "title": "About",
-         "header": {
-            "funkwhale": "A social platform to enjoy and share music"
-         },
-         "button": {
-            "cancel": "Cancel"
-         }
+  "components": {
+    "About": {
+      "title": "About",
+      "header": {
+        "funkwhale": "A social platform to enjoy and share music"
+      },
+      "button": {
+        "cancel": "Cancel"
       }
-   }
+    }
+  }
 }
 ```
 
@@ -33,13 +33,13 @@ UI strings can be added to both the `<script>` and `<template>` part of a Vue fi
 :::{tab-item} Script
 
 ```typescript
-import { useI18n } from 'vue-i18n'
+import { useI18n } from "vue-i18n";
 //...
-const { t } = useI18n()
+const { t } = useI18n();
 //...
 const labels = computed(() => ({
-  title: t('components.About.title')
-}))
+  title: t("components.About.title"),
+}));
 ```
 
 :::
@@ -47,12 +47,8 @@ const labels = computed(() => ({
 :::{tab-item} Template
 
 ```html
-<h2>
-    {{ $t('components.About.header.funkwhale') }}
-</h2>
-<button>
-    {{ $t('components.About.button.cancel') }}
-</button>
+<h2>{{ $t('components.About.header.funkwhale') }}</h2>
+<button>{{ $t('components.About.button.cancel') }}</button>
 ```
 
 :::
@@ -84,24 +80,24 @@ Some strings change depending on whether they are plural or not. You can create 
 
 ```html
 <div class="description">
-<span
+  <span
     v-if="object.artist?.content_category === 'podcast'"
     class="meta ellipsis"
->
-    {{ $t('components.audio.ChannelCard.meta.episodes', {episode_count: object.artist.tracks_count}) }}
-</span>
-<span
-    v-else
->
-    {{ $t('components.audio.ChannelCard.meta.tracks', {tracks_count: object.artist?.tracks_count}) }}
-</span>
-<tags-list
+  >
+    {{ $t('components.audio.ChannelCard.meta.episodes', {episode_count:
+    object.artist.tracks_count}) }}
+  </span>
+  <span v-else>
+    {{ $t('components.audio.ChannelCard.meta.tracks', {tracks_count:
+    object.artist?.tracks_count}) }}
+  </span>
+  <tags-list
     label-classes="tiny"
     :truncate-size="20"
     :limit="2"
     :show-more="false"
     :tags="object.artist?.tags ?? []"
-/>
+  />
 </div>
 ```
 

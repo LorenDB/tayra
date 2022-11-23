@@ -97,8 +97,8 @@ To fetch an authorization code, you need to send the user to their Funkwhale pod
 
 To do this, call the `/authorize` endpoint with the following URL encoded query parameters:
 
-- `client_id`* - Your application's client ID
-- `response_type`* - Must be set to `code`.
+- `client_id`\* - Your application's client ID
+- `response_type`\* - Must be set to `code`.
 - `redirect_uri` - Your redirect URI
 - `scope` - A list of scopes
 - `state` - Used to maintain state between the request and the callback to prevent cross-site request forgery. Typically corresponds with a location in the app (e.g. `/library`)
@@ -111,10 +111,10 @@ When the user authorizes your app, the server responds with an authorization cod
 
 Once you receive your authorization code, you need to [request an access token](https://www.rfc-editor.org/rfc/rfc6749#section-4.1.3). To request an access token, call the `/api/v1/oauth/token` endpoint with the following information:
 
-- `grant_type`* - Must be set to `authorization_code`
-- `code`* - Your application's authorization code
-- `redirect_uri`* - Your redirect URI
-- `client_id`* Your application's client ID
+- `grant_type`\* - Must be set to `authorization_code`
+- `code`\* - Your application's authorization code
+- `redirect_uri`\* - Your redirect URI
+- `client_id`\* Your application's client ID
 
 The server responds with an [`access_token`](https://www.rfc-editor.org/rfc/rfc6749#section-1.4) and a [`refresh_token`](https://www.rfc-editor.org/rfc/rfc6749#section-1.5). See [the OAuth spec](https://www.rfc-editor.org/rfc/rfc6749#section-4.1.4) for more information about this response.
 
@@ -130,8 +130,8 @@ By default, Funkwhale access tokens are valid for **10 hours**. Pod admins can c
 
 After the access token expires, you must request a new access token by calling the `/api/v1/oauth/token` endpoint with the following information:
 
-- `grant_type`* - Must be set to `refresh_token`
-- `refresh_token`* - Your current refresh token
+- `grant_type`\* - Must be set to `refresh_token`
+- `refresh_token`\* - Your current refresh token
 - `scope` - A list of scopes
 
 See [the OAuth spec](https://www.rfc-editor.org/rfc/rfc6749#section-6) for more information about this response.

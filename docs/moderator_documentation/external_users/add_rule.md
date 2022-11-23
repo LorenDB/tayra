@@ -10,6 +10,7 @@ Add moderation rules to users to control how they can interact with your {term}`
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
+
 :::
 
 To add a moderation rule to a user:

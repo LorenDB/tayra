@@ -6,6 +6,7 @@ You can remove a domain from your {term}`pod's <Pod>` allow-list to stop communi
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
+
 :::
 
 To remove a domain from your allow-list:

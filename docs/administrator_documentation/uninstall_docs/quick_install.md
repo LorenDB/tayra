@@ -115,7 +115,7 @@ Once you have stopped the Funkwhale services, you can remove the Funkwhale datab
    sudo -u postgres psql -c 'DROP USER funkwhale;'
    ```
 
-## Delete  the Funkwhale account
+## Delete the Funkwhale account
 
 ```{warning}
 This action deletes the `/srv/funkwhale/` directory. Make sure you have [backed up any data](../upgrade_docs/backup.md) you want to keep.

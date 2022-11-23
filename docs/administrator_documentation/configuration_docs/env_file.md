@@ -9,18 +9,18 @@ You need to restart your Funkwhale services after changing your `.env` file.
 :::{tab-item} Debian
 :sync: debian
 
-   ```{code-block} sh
-   sudo systemctl restart funkwhale.target
-   ```
+```{code-block} sh
+sudo systemctl restart funkwhale.target
+```
 
 :::
 
 :::{tab-item} Docker
 :sync: docker
 
-   ```{code-block} sh
-   docker-compose restart
-   ```
+```{code-block} sh
+docker-compose restart
+```
 
 :::
 ::::

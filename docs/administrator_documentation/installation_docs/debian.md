@@ -11,16 +11,16 @@ We support [Debian](https://debian.org) and Debian-based Linux distributions. Fo
 
 - Set a `FUNKWHALE_VERSION` variable to the version you want to install. You will use this version for all commands in this guide.
 
-   ```{parsed-literal}
-   export FUNKWHALE_VERSION={sub-ref}`version`
-   ```
+  ```{parsed-literal}
+  export FUNKWHALE_VERSION={sub-ref}`version`
+  ```
 
 - Install `curl`
 
-   ```{code-block} sh
-   sudo apt update # update apt cache
-   sudo apt install curl
-   ```
+  ```{code-block} sh
+  sudo apt update # update apt cache
+  sudo apt install curl
+  ```
 
 ## 1. Install Funkwhale dependencies
 
@@ -169,18 +169,19 @@ The environment file contains options you can use to control your Funkwhale pod.
    ```
 
 5. Update the following settings:
+
    - Paste the secret key in the `DJANGO_SECRET_KEY` field.
    - Populate the `DATABASE_URL` field:
 
-      ```{code-block} text
-      DATABASE_URL=postgresql://funkwhale@:5432/funkwhale
-      ```
+     ```{code-block} text
+     DATABASE_URL=postgresql://funkwhale@:5432/funkwhale
+     ```
 
    - Populate the `CACHE_URL` field:
 
-      ```{code-block} text
-      CACHE_URL=redis://127.0.0.1:6379/0
-      ```
+     ```{code-block} text
+     CACHE_URL=redis://127.0.0.1:6379/0
+     ```
 
    - Populate the `FUNKWHALE_HOSTNAME` field with the domain name of your server.
 

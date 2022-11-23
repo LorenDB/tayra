@@ -28,7 +28,7 @@ To edit an artist:
    - {guilabel}`Description` – a description of the artist. This appears on the artist details page.
    - {guilabel}`Cover` – the cover image for the artist. This appears on the artist details page.
    - {guilabel}`Tags` – the genre(s) the artist fits in.
-6. __Optional__ – enter a {guilabel}`Summary` of your edits.
+6. **Optional** – enter a {guilabel}`Summary` of your edits.
 7. Select {guilabel}`Submit and apply edit` to save your changes.
 
 :::
@@ -46,7 +46,7 @@ To edit an artist:
    - {guilabel}`Description` – a description of the artist. This appears on the artist details page.
    - {guilabel}`Cover` – the cover image for the artist. This appears on the artist details page.
    - {guilabel}`Tags` – the genre(s) the artist fits in.
-7. __Optional__ – enter a {guilabel}`Summary` of your edits.
+7. **Optional** – enter a {guilabel}`Summary` of your edits.
 8. Select {guilabel}`Submit and apply edit` to save your changes.
 
 :::
@@ -73,7 +73,7 @@ To edit an album:
    - {guilabel}`Release date` – the release date of the album.
    - {guilabel}`Cover` – the album cover art.
    - {guilabel}`Tags` – the genre(s) associated with the album.
-6. __Optional__ – enter a {guilabel}`Summary` of your edits.
+6. **Optional** – enter a {guilabel}`Summary` of your edits.
 7. Select {guilabel}`Submit and apply edit` to save your changes.
 
 :::
@@ -92,7 +92,7 @@ To edit an album:
    - {guilabel}`Release date` – the release date of the album.
    - {guilabel}`Cover` – the album cover art.
    - {guilabel}`Tags` – the genre(s) associated with the album.
-7. __Optional__ – enter a {guilabel}`Summary` of your edits.
+7. **Optional** – enter a {guilabel}`Summary` of your edits.
 8. Select {guilabel}`Submit and apply edit` to save your changes.
 
 :::
@@ -121,7 +121,7 @@ To edit a track:
    - {guilabel}`Copyright` – the name of the copyright holder.
    - {guilabel}`License` – the license of the track. Funkwhale supports [Creative Commons](https://creativecommons.org) licenses. Leave this blank if you aren't sure.
    - {guilabel}`Tags` – the genre(s) associated with the track.
-6. __Optional__ – enter a {guilabel}`Summary` of your edits.
+6. **Optional** – enter a {guilabel}`Summary` of your edits.
 7. Select {guilabel}`Submit and apply edit` to save your changes.
 
 :::
@@ -142,7 +142,7 @@ To edit a track:
    - {guilabel}`Copyright` – the name of the copyright holder.
    - {guilabel}`License` – the license of the track. Funkwhale supports [Creative Commons](https://creativecommons.org) licenses. Leave this blank if you aren't sure.
    - {guilabel}`Tags` – the genre(s) associated with the track.
-7. __Optional__ – enter a {guilabel}`Summary` of your edits.
+7. **Optional** – enter a {guilabel}`Summary` of your edits.
 8. Select {guilabel}`Submit and apply edit` to save your changes.
 
 :::

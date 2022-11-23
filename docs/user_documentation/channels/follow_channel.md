@@ -19,7 +19,7 @@ That's it! You've subscribed to the channel. You can see the channel in the {gui
 
 ## Follow a remote channel
 
-To follow a channel located on another pod, you need its __Federation handle__. A __Federation handle__ uses the following format: ``@{username}@{domain}``. Once you have the channel's __Federation handle__, you can follow it from the {guilabel}`Channels` page. To do this:
+To follow a channel located on another pod, you need its **Federation handle**. A **Federation handle** uses the following format: `@{username}@{domain}`. Once you have the channel's **Federation handle**, you can follow it from the {guilabel}`Channels` page. To do this:
 
 ::::{tab-set}
 
@@ -29,7 +29,7 @@ To follow a channel located on another pod, you need its __Federation handle__. 
 1. Select {guilabel}`Channels` in the sidebar. The {guilabel}`Channels` page opens.
 2. Select {guilabel}`+ Add new` at the top of the page. The {guilabel}`Subscriptions` screen appears.
 3. Select {guilabel}`Fediverse`.
-4. Enter the channel's __Federation handle__ in the {guilabel}`Fediverse object` input.
+4. Enter the channel's **Federation handle** in the {guilabel}`Fediverse object` input.
 5. Select {guilabel}`Subscribe`. The channel details page appears.
 6. Select the {guilabel}`Subscribe}` button. The label changes to {guilabel}`Subscribed`.
 
@@ -42,7 +42,7 @@ To follow a channel located on another pod, you need its __Federation handle__. 
 2. Select {guilabel}`Channels`. The {guilabel}`Channels` page opens.
 3. Select {guilabel}`+ Add new` at the top of the page. The {guilabel}`Subscriptions` screen appears.
 4. Select {guilabel}`Fediverse`.
-5. Enter the channel's __Federation handle__ in the {guilabel}`Fediverse object` input.
+5. Enter the channel's **Federation handle** in the {guilabel}`Fediverse object` input.
 6. Select {guilabel}`Subscribe`. The channel details page appears.
 7. Select the {guilabel}`Subscribe}` button. The label changes to {guilabel}`Subscribed`.
 

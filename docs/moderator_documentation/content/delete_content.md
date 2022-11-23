@@ -11,6 +11,7 @@ Moderators can delete content from their {term}`pod` if required. Use this featu
 
 - {guilabel}`Moderation` – provides access to the administration menu.
 - {guilabel}`Library` – provides access to the library menu.
+
 :::
 
 There are two ways to delete content:

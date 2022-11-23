@@ -10,6 +10,7 @@ If you have allow-listing enabled, you need to add a domain to your allow-list t
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
+
 :::
 
 ## Add a new domain

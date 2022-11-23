@@ -6,13 +6,14 @@
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
+
 :::
 
 Requests appear in the {guilabel}`User Requests` list. Each request contains the following information:
 
 - The user the request was {guilabel}`Submitted by`
 - The {guilabel}`Creation date` of the request.
-- __Optional__ – any responses the user left to fields in the sign-up form.
+- **Optional** – any responses the user left to fields in the sign-up form.
 - The {guilabel}`Status` of the request.
 - Which moderator the request is {guilabel}`Assigned to`.
 - The {guilabel}`Resolution date` of the request.

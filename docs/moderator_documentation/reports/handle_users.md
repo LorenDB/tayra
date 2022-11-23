@@ -6,6 +6,7 @@ If a user has reported another user on your pod, you can make changes to the rep
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
+
 :::
 
 To open a user's moderation page:

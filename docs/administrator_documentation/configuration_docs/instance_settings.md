@@ -12,6 +12,7 @@ To find your instance settings:
 1. Log in to your {term}`pod`.
 2. Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu.
 3. Select {guilabel}`Settings`. The {guilabel}`Instance settings` page opens.
+
 :::
 
 :::{tab-item} Mobile

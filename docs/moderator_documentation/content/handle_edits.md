@@ -4,13 +4,14 @@
 Users can edit content in their own libraries. Moderators don't need to approve these edits. The edits appear in the __Edits__ queue to give admins and moderators a full timeline of changes.
 ```
 
-Users can suggest metadata edits on objects they can access. When a user suggests an edit, it's sent to the __Edits__ queue for review. Moderators and pod admins can accept or reject these edits.
+Users can suggest metadata edits on objects they can access. When a user suggests an edit, it's sent to the **Edits** queue for review. Moderators and pod admins can accept or reject these edits.
 
 :::{dropdown} Required permissions
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration menu.
 - {guilabel}`Library` – provides access to the library menu.
+
 :::
 
 Each edit object contains the following information:

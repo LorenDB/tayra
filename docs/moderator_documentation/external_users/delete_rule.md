@@ -6,6 +6,7 @@ If you no longer need a moderation rule, you can delete it completely. This allo
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
+
 :::
 
 To delete an existing moderation rule:

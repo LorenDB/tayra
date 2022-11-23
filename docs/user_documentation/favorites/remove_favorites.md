@@ -8,7 +8,7 @@ If you no longer want a track in your favorites list, you can remove it. There a
 
 ## Remove tracks from your favorites page
 
-The easiest way to remove tracks from your favorites is using the __Favorites__ page. This page includes a list of all your favorites. To remove a track from this page:
+The easiest way to remove tracks from your favorites is using the **Favorites** page. This page includes a list of all your favorites. To remove a track from this page:
 
 ::::{tab-set}
 

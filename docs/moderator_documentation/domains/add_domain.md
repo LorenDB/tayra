@@ -6,6 +6,7 @@ Funkwhale records the domains of other {term}`Fediverse` servers when users inte
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
+
 :::
 
 You can also add domains to this list at any time to create rules before users interact with them. To do this:

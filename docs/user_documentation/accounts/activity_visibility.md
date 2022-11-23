@@ -1,10 +1,10 @@
 # Change your activity visibility
 
-Your __activity visibility__ determines who can see your listening activity on Funkwhale. There are three visibility options:
+Your **activity visibility** determines who can see your listening activity on Funkwhale. There are three visibility options:
 
-- __Nobody except me__ – only you can see your listening activity.
-- __Everyone on this instance__ – users who have an account on the same {term}`pod` as you can see your listening activity.
-- __Everyone, across all instances__ – anybody can see your listening activity.
+- **Nobody except me** – only you can see your listening activity.
+- **Everyone on this instance** – users who have an account on the same {term}`pod` as you can see your listening activity.
+- **Everyone, across all instances** – anybody can see your listening activity.
 
 To change your activity visibility:
 

@@ -70,7 +70,6 @@ External:
     default: null
     type: "boolean"
 
-
 Library:
   name: library
   in: query
@@ -136,7 +135,6 @@ Refresh:
     default: false
     type: "boolean"
 
-
 Related:
   name: related
   in: query
@@ -144,7 +142,6 @@ Related:
   schema:
     type: integer
     format: int64
-
 
 Scope:
   name: "scope"
@@ -164,11 +161,11 @@ Scope:
     default: "all"
     type: "string"
     enum:
-    - "me"
-    - "all"
-    - "subscribed"
-    - "actor:alice@example.com"
-    - "domain:example.com"
+      - "me"
+      - "all"
+      - "subscribed"
+      - "actor:alice@example.com"
+      - "domain:example.com"
 
 ContentCategory:
   name: "content_category"
@@ -180,8 +177,8 @@ ContentCategory:
   schema:
     type: "string"
     enum:
-    - "podcast"
-    - "music"
+      - "podcast"
+      - "music"
 
 Search:
   name: "q"

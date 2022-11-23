@@ -1,8 +1,8 @@
 # Maloja plugin
 
-The __Maloja__ plugin enables you to submit ({term}`scrobble <Scrobbling>`) listens to your Maloja server. [Maloja](https://github.com/krateng/maloja) is a self-hosted scrobbling service similar to [Last.fm](https://last.fm) and [ListenBrainz](https://listenbrainz.org). Check out [their documentation](https://github.com/krateng/maloja#how-to-install) to set up your own server.
+The **Maloja** plugin enables you to submit ({term}`scrobble <Scrobbling>`) listens to your Maloja server. [Maloja](https://github.com/krateng/maloja) is a self-hosted scrobbling service similar to [Last.fm](https://last.fm) and [ListenBrainz](https://listenbrainz.org). Check out [their documentation](https://github.com/krateng/maloja#how-to-install) to set up your own server.
 
-Scrobbling listens helps you build up a profile of your music tastes. It also enables you to keep a record of your listens. To set up the __Maloja plugin__:
+Scrobbling listens helps you build up a profile of your music tastes. It also enables you to keep a record of your listens. To set up the **Maloja plugin**:
 
 ::::{tab-set}
 
@@ -39,4 +39,4 @@ Scrobbling listens helps you build up a profile of your music tastes. It also en
 :::
 ::::
 
-That's it! You've set up the __Maloja__ plugin. When you listen to tracks, the plugin sends the information to your Maloja server.
+That's it! You've set up the **Maloja** plugin. When you listen to tracks, the plugin sends the information to your Maloja server.

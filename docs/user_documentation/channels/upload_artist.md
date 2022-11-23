@@ -52,7 +52,7 @@ Once you've created your album, you can add some details to it. To do this:
    - {guilabel}`Release date` – the release date of the album.
    - {guilabel}`Cover` – the cover art of the album.
    - {guilabel}`Tags` – the genre of the album.
-5. __Optional__ – enter a {guilabel}`Summary` of your changes.
+5. **Optional** – enter a {guilabel}`Summary` of your changes.
 6. Select {guilabel}`Submit and apply edit` to save your changes.
 
 That's it! You can now add content to your album.
@@ -72,8 +72,8 @@ To add content to your channel:
 4. Select the channel you want to add content to under the {guilabel}`Channels` header. The channel's page opens.
 5. Select {guilabel}`⇧ Upload`. The {guilabel}`Publish audio` screen appears.
 6. Select the {guilabel}`Channel` you want to publish your audio in. This populates with the channel you selected by default.
-7. __Optional__ – choose which [{guilabel}`Album`](#create-an-album-optional) you want to publish the music in.
-8. __Optional__ – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
+7. **Optional** – choose which [{guilabel}`Album`](#create-an-album-optional) you want to publish the music in.
+8. **Optional** – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
 9. Select {guilabel}`Next step`. The {guilabel}`Files to upload` screen appears.
 10. Click on the section marked {guilabel}`Browse…` to open a file picker, or drag and drop your files on to it.
     - If you opened the file picker, select the files you want to upload and confirm.
@@ -90,8 +90,8 @@ To add content to your channel:
 4. Select the channel you want to add content to under the {guilabel}`Channels` header. The channel's page opens.
 5. Select {guilabel}`⇧ Upload`. The {guilabel}`Publish audio` screen appears.
 6. Select the {guilabel}`Channel` you want to publish your audio in. This populates with the channel you selected by default.
-7. __Optional__ – choose which [{guilabel}`Album`](#create-an-album-optional) you want to publish the music in.
-8. __Optional__ – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
+7. **Optional** – choose which [{guilabel}`Album`](#create-an-album-optional) you want to publish the music in.
+8. **Optional** – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
 9. Select {guilabel}`Next step`. The {guilabel}`Files to upload` screen appears.
 10. Click on the section marked {guilabel}`Browse…` to open a file picker. Select the files you want to upload and confirm.
 11. The files appear at the top when you upload them. Select {guilabel}`Remove` to remove them.
@@ -131,8 +131,8 @@ If you selected {guilabel}`Finish later`, Funkwhale saves your files and edits. 
 4. Select the channel you want to add content to under the {guilabel}`Channels` header. The channel's page opens.
 5. Select {guilabel}`⇧ Upload`. The {guilabel}`Publish audio` screen appears.
 6. Select the {guilabel}`Channel` you want to publish your audio in. This populates with the channel you selected by default.
-7. __Optional__ – choose which [{guilabel}`Album`](#create-an-album-optional) you want to publish the music in.
-8. __Optional__ – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
+7. **Optional** – choose which [{guilabel}`Album`](#create-an-album-optional) you want to publish the music in.
+8. **Optional** – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
 9. Select {guilabel}`Next step`. The {guilabel}`Files to upload` screen appears.
 10. If there are pending uploads, a {guilabel}`You have some draft uploads pending publication` note shows. Select {guilabel}`Resume` to resume your upload.
 11. [Add new files](#add-your-content) or [edit the pending files](#edit-your-uploads).
@@ -149,8 +149,8 @@ If you selected {guilabel}`Finish later`, Funkwhale saves your files and edits. 
 4. Select the channel you want to add content to under the {guilabel}`Channels` header. The channel's page opens.
 5. Select {guilabel}`⇧ Upload`. The {guilabel}`Publish audio` screen appears.
 6. Select the {guilabel}`Channel` you want to publish your audio in. This populates with the channel you selected by default.
-7. __Optional__ – choose which [{guilabel}`Album`](#create-an-album-optional) you want to publish the music in.
-8. __Optional__ – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
+7. **Optional** – choose which [{guilabel}`Album`](#create-an-album-optional) you want to publish the music in.
+8. **Optional** – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses.
 9. Select {guilabel}`Next step`. The {guilabel}`Files to upload` screen appears.
 10. If there are pending uploads, a {guilabel}`You have some draft uploads pending publication` note shows. Select {guilabel}`Resume` to resume your upload.
 11. [Add new files](#add-your-content) or [edit the pending files](#edit-your-uploads).

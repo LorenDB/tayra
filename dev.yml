@@ -87,7 +87,6 @@ services:
       - "node2.funkwhale.test:172.17.0.1"
       - "node3.funkwhale.test:172.17.0.1"
 
-
   celeryworker:
     env_file:
       - .env.dev
@@ -117,7 +116,6 @@ services:
       - "node1.funkwhale.test:172.17.0.1"
       - "node2.funkwhale.test:172.17.0.1"
       - "node3.funkwhale.test:172.17.0.1"
-
 
   nginx:
     command: /entrypoint.sh
@@ -193,10 +191,8 @@ services:
   #     - federation
   #     - internal
 
-
-
 networks:
-  ? internal
+  internal:
   federation:
     external:
       name: federation

@@ -1,4 +1,4 @@
-version: '2.1'
+version: "2.1"
 
 services:
   traefik:
@@ -9,12 +9,11 @@ services:
       - ./ssl/test.key:/ssl/traefik.key
       - ./ssl/test.crt:/ssl/traefik.crt
     ports:
-      - '80:80'
-      - '443:443'
-      - '8040:8040'
+      - "80:80"
+      - "443:443"
+      - "8040:8040"
     networks:
       federation:
-
 
 networks:
   federation:

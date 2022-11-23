@@ -8,7 +8,7 @@ We currently use [Fomantic UI](https://fomantic-ui.com) as our UI framework. We 
 
 We apply changes to the Fomantic CSS files before we import them:
 
-1. We replace hardcoded color values with CSS variables to make themin easier. For example: ``color: orange`` is replaced by ``color: var(--vibrant-color)``
+1. We replace hardcoded color values with CSS variables to make themin easier. For example: `color: orange` is replaced by `color: var(--vibrant-color)`
 2. We remove unused values from the CSS files to keep the size down
 
 These changes are applied when you run `yarn install` through a `postinstall` hook. If you want to modify these changes, check the `front/scripts/fix-fomantic-css.py` script.

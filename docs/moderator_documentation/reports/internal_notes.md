@@ -6,11 +6,12 @@ Use internal notes to add information to a report. This can be a summary of your
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
+
 :::
 
 ## Add notes to a report
 
-You can add notes to __Unresolved__ and __Resolved__ reports. To add an internal note:
+You can add notes to **Unresolved** and **Resolved** reports. To add an internal note:
 
 ::::{tab-set}
 
@@ -45,7 +46,7 @@ You can add notes to __Unresolved__ and __Resolved__ reports. To add an internal
 Deleting an internal note is irreversible. Make sure you are not deleting anything important.
 ```
 
-You can delete your own notes and the notes of other moderators. You can do this for both __Resolved__ and __Unresolved__ reports. To delete an internal note:
+You can delete your own notes and the notes of other moderators. You can do this for both **Resolved** and **Unresolved** reports. To delete an internal note:
 
 ::::{tab-set}
 

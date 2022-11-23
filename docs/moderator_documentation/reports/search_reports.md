@@ -6,6 +6,7 @@ The {guilabel}`Reports` page contains filters that enable you to search for repo
 :icon: key
 
 - {guilabel}`Moderation` – provides access to the administration and moderation menus.
+
 :::
 
 ::::{tab-set}

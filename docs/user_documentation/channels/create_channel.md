@@ -14,7 +14,7 @@ You can create two types of channel:
 
 ## Artist discography
 
-To create an __Artist discography__ channel:
+To create an **Artist discography** channel:
 
 ::::{tab-set}
 
@@ -28,9 +28,9 @@ To create an __Artist discography__ channel:
 5. Select {guilabel}`Artist discography` and select {guilabel}`Next step`. The {guilabel}`Artist channel` form appears.
 6. Enter the {guilabel}`Name` of your channel. Users see this when they visit your channel page.
 7. Enter the {guilabel}`Fediverse handle` of your channel. This is how other Fediverse software identifies your channel.
-8. __Optional__ – upload a {guilabel}`Channel picture`. Users see this when they visit your channel page. Select {guilabel}`Browse…` to open a file picker.
-9. __Optional__ – add {guilabel}`Tags` that describe your channel. Start typing in the {guilabel}`Search…` input box to find existing tags. You can also create new tags by typing them in and selecting them or hitting {kbd}`⏎ Return`.
-10. __Optional__ – enter a {guilabel}`Description` of your channel. You can {guilabel}`Write` using [Markdown](https://www.markdownguide.org/) syntax and {guilabel}`Preview` how it will look. Users see this when they visit your channel page.
+8. **Optional** – upload a {guilabel}`Channel picture`. Users see this when they visit your channel page. Select {guilabel}`Browse…` to open a file picker.
+9. **Optional** – add {guilabel}`Tags` that describe your channel. Start typing in the {guilabel}`Search…` input box to find existing tags. You can also create new tags by typing them in and selecting them or hitting {kbd}`⏎ Return`.
+10. **Optional** – enter a {guilabel}`Description` of your channel. You can {guilabel}`Write` using [Markdown](https://www.markdownguide.org/) syntax and {guilabel}`Preview` how it will look. Users see this when they visit your channel page.
 11. Select {guilabel}`Create channel` to create your channel.
 
 :::
@@ -45,9 +45,9 @@ To create an __Artist discography__ channel:
 5. Select {guilabel}`Artist discography` and select {guilabel}`Next step`. The {guilabel}`Artist channel` form appears.
 6. Enter the {guilabel}`Name` of your channel. Users see this when they visit your channel page.
 7. Enter the {guilabel}`Fediverse handle` of your channel. This is how other Fediverse software identifies your channel.
-8. __Optional__ – upload a {guilabel}`Channel picture`. Users see this when they visit your channel page. Select {guilabel}`Browse…` to open a file picker.
-9. __Optional__ – add {guilabel}`Tags` that describe your channel. Start typing in the {guilabel}`Search…` input box to find existing tags. You can also create new tags by typing them in and selecting them or hitting {kbd}`⏎ Return`.
-10. __Optional__ – enter a {guilabel}`Description` of your channel. You can {guilabel}`Write` using [Markdown](https://www.markdownguide.org/) syntax and {guilabel}`Preview` how it will look. Users see this when they visit your channel page.
+8. **Optional** – upload a {guilabel}`Channel picture`. Users see this when they visit your channel page. Select {guilabel}`Browse…` to open a file picker.
+9. **Optional** – add {guilabel}`Tags` that describe your channel. Start typing in the {guilabel}`Search…` input box to find existing tags. You can also create new tags by typing them in and selecting them or hitting {kbd}`⏎ Return`.
+10. **Optional** – enter a {guilabel}`Description` of your channel. You can {guilabel}`Write` using [Markdown](https://www.markdownguide.org/) syntax and {guilabel}`Preview` how it will look. Users see this when they visit your channel page.
 11. Select {guilabel}`Create channel` to create your channel.
 
 :::
@@ -57,7 +57,7 @@ That's it! You've created your artist channel. You can now [add some music to it
 
 ## Podcast
 
-To create a __Podcast__ channel:
+To create a **Podcast** channel:
 
 ::::{tab-set}
 
@@ -71,14 +71,14 @@ To create a __Podcast__ channel:
 5. Select {guilabel}`Podcasts` and select {guilabel}`Next step`. The {guilabel}`Podcast channel` form appears.
 6. Enter the {guilabel}`Name` of your channel. Users see this when they visit your channel page.
 7. Enter the {guilabel}`Fediverse handle` of your channel. This is how other Fediverse software identifies your channel.
-8. __Optional__ – upload a {guilabel}`Channel picture`. Users see this when they visit your channel page. Select {guilabel}`Browse…` to open a file picker.
-9. __Optional__ – add {guilabel}`Tags` that describe your channel. Start typing in the {guilabel}`Search…` input box to find existing tags. You can also create new tags by typing them in and selecting them or hitting {kbd}`⏎ Return`.
+8. **Optional** – upload a {guilabel}`Channel picture`. Users see this when they visit your channel page. Select {guilabel}`Browse…` to open a file picker.
+9. **Optional** – add {guilabel}`Tags` that describe your channel. Start typing in the {guilabel}`Search…` input box to find existing tags. You can also create new tags by typing them in and selecting them or hitting {kbd}`⏎ Return`.
 10. Choose the {guilabel}`Language` of your podcast.
-11. __Optional__ – enter a {guilabel}`Description` of your channel. You can {guilabel}`Write` using [Markdown](https://www.markdownguide.org/) syntax and {guilabel}`Preview` how it will look. Users see this when they visit your channel page.
+11. **Optional** – enter a {guilabel}`Description` of your channel. You can {guilabel}`Write` using [Markdown](https://www.markdownguide.org/) syntax and {guilabel}`Preview` how it will look. Users see this when they visit your channel page.
 12. Select the {guilabel}`Category` of your podcast. {term}`Podcatchers<Podcatcher>` use this information to sort your podcast content.
-13. __Optional__ – select the {guilabel}`Subcategory` of your podcast.
-14. __Optional__ – enter the {guilabel}`Owner e-mail address`. This populates the ``itunes:email`` field of your podcast's {abbr}`RSS (Really Simple Syndication)` feed.
-15. __Optional__ – enter the {guilabel}`Owner name`. This populates the ``itunes:name`` field of your podcast's {abbr}`RSS (Really Simple Syndication)` feed.
+13. **Optional** – select the {guilabel}`Subcategory` of your podcast.
+14. **Optional** – enter the {guilabel}`Owner e-mail address`. This populates the `itunes:email` field of your podcast's {abbr}`RSS (Really Simple Syndication)` feed.
+15. **Optional** – enter the {guilabel}`Owner name`. This populates the `itunes:name` field of your podcast's {abbr}`RSS (Really Simple Syndication)` feed.
 16. Select {guilabel}`Create channel` to create your channel.
 
 :::
@@ -93,14 +93,14 @@ To create a __Podcast__ channel:
 5. Select {guilabel}`Podcasts` and select {guilabel}`Next step`. The {guilabel}`Podcast channel` form appears.
 6. Enter the {guilabel}`Name` of your channel. Users see this when they visit your channel page.
 7. Enter the {guilabel}`Fediverse handle` of your channel. This is how other Fediverse software identifies your channel.
-8. __Optional__ – upload a {guilabel}`Channel picture`. Users see this when they visit your channel page. Select {guilabel}`Browse…` to open a file picker.
-9. __Optional__ – add {guilabel}`Tags` that describe your channel. Start typing in the {guilabel}`Search…` input box to find existing tags. You can also create new tags by typing them in and selecting them or hitting {kbd}`⏎ Return`.
+8. **Optional** – upload a {guilabel}`Channel picture`. Users see this when they visit your channel page. Select {guilabel}`Browse…` to open a file picker.
+9. **Optional** – add {guilabel}`Tags` that describe your channel. Start typing in the {guilabel}`Search…` input box to find existing tags. You can also create new tags by typing them in and selecting them or hitting {kbd}`⏎ Return`.
 10. Choose the {guilabel}`Language` of your podcast.
-11. __Optional__ – enter a {guilabel}`Description` of your channel. You can {guilabel}`Write` using [Markdown](https://www.markdownguide.org/) syntax and {guilabel}`Preview` how it will look. Users see this when they visit your channel page.
+11. **Optional** – enter a {guilabel}`Description` of your channel. You can {guilabel}`Write` using [Markdown](https://www.markdownguide.org/) syntax and {guilabel}`Preview` how it will look. Users see this when they visit your channel page.
 12. Select the {guilabel}`Category` of your podcast. {term}`Podcatchers<Podcatcher>` use this information to sort your podcast content.
-13. __Optional__ – select the {guilabel}`Subcategory` of your podcast.
-14. __Optional__ – enter the {guilabel}`Owner e-mail address`. This populates the ``itunes:email`` field of your podcast's {abbr}`RSS (Really Simple Syndication)` feed.
-15. __Optional__ – enter the {guilabel}`Owner name`. This populates the ``itunes:name`` field of your podcast's {abbr}`RSS (Really Simple Syndication)` feed.
+13. **Optional** – select the {guilabel}`Subcategory` of your podcast.
+14. **Optional** – enter the {guilabel}`Owner e-mail address`. This populates the `itunes:email` field of your podcast's {abbr}`RSS (Really Simple Syndication)` feed.
+15. **Optional** – enter the {guilabel}`Owner name`. This populates the `itunes:name` field of your podcast's {abbr}`RSS (Really Simple Syndication)` feed.
 16. Select {guilabel}`Create channel` to create your channel.
 
 :::

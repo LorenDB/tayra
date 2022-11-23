@@ -11,6 +11,7 @@ If a user has put copyrighted material in a public library, you can change the v
 
 - {guilabel}`Moderation` – provides access to the administration menu.
 - {guilabel}`Library` – provides access to the library menu.
+
 :::
 
 To change the visibility of a library:
