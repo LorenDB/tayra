@@ -1,10 +1,10 @@
 import datetime
 import os
 import uuid
-import pytest
 
 import mutagen.oggtheora
 import mutagen.oggvorbis
+import pytest
 
 from funkwhale_api.music import metadata
 

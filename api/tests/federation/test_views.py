@@ -3,13 +3,9 @@ from django.core.paginator import Paginator
 from django.urls import reverse
 
 from funkwhale_api.common import utils
-
-from funkwhale_api.federation import (
-    actors,
-    serializers,
-    webfinger,
-    utils as federation_utils,
-)
+from funkwhale_api.federation import actors, serializers
+from funkwhale_api.federation import utils as federation_utils
+from funkwhale_api.federation import webfinger
 
 
 def test_authenticate_allows_anonymous_actor_fetch_when_allow_list_enabled(

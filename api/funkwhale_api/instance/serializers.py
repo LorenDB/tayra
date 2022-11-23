@@ -1,7 +1,7 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from funkwhale_api.federation.utils import full_url
-from drf_spectacular.utils import extend_schema_field
 
 
 class SoftwareSerializer(serializers.Serializer):

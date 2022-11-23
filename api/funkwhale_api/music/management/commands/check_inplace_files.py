@@ -2,7 +2,6 @@ import os
 from argparse import RawTextHelpFormatter
 
 from django.core.management.base import BaseCommand
-
 from django.db import transaction
 
 from funkwhale_api.music import models

@@ -1,14 +1,12 @@
 import html
 import time
+
 import pytest
 from django.http import HttpResponse
 from django.urls import reverse
 
+from funkwhale_api.common import middleware, throttling, utils
 from funkwhale_api.federation import utils as federation_utils
-
-from funkwhale_api.common import middleware
-from funkwhale_api.common import throttling
-from funkwhale_api.common import utils
 
 
 def test_spa_fallback_middleware_no_404(mocker):

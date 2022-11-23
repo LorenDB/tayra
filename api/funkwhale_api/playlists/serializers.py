@@ -1,12 +1,11 @@
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.music.models import Track
 from funkwhale_api.music.serializers import TrackSerializer
 from funkwhale_api.users.serializers import UserBasicSerializer
-
-from drf_spectacular.utils import extend_schema_field
-from drf_spectacular.types import OpenApiTypes
 
 from . import models
 

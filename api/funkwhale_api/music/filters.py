@@ -1,6 +1,5 @@
-from django.db.models import Q
-
 import django_filters
+from django.db.models import Q
 from django_filters import rest_framework as filters
 
 from funkwhale_api.audio import filters as audio_filters
@@ -11,8 +10,7 @@ from funkwhale_api.common import search
 from funkwhale_api.moderation import filters as moderation_filters
 from funkwhale_api.tags import filters as tags_filters
 
-from . import models
-from . import utils
+from . import models, utils
 
 
 def filter_tags(queryset, name, value):

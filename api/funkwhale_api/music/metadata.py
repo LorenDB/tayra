@@ -1,14 +1,13 @@
 import base64
-from collections.abc import Mapping
 import datetime
 import logging
-import arrow
+from collections.abc import Mapping
 
+import arrow
 import mutagen._util
+import mutagen.flac
 import mutagen.oggtheora
 import mutagen.oggvorbis
-import mutagen.flac
-
 from rest_framework import serializers
 
 from funkwhale_api.tags import models as tags_models

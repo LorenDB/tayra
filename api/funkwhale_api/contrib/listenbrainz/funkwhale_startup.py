@@ -1,6 +1,5 @@
 from config import plugins
 
-
 PLUGIN = plugins.get_plugin_config(
     name="listenbrainz",
     label="ListenBrainz",

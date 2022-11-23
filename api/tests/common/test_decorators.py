@@ -1,15 +1,16 @@
 import pytest
-
 from rest_framework import viewsets
 
-from funkwhale_api.common import decorators
-from funkwhale_api.common import models
-from funkwhale_api.common import mutations
-from funkwhale_api.common import serializers
-from funkwhale_api.common import signals
-from funkwhale_api.common import tasks
-from funkwhale_api.music import models as music_models
+from funkwhale_api.common import (
+    decorators,
+    models,
+    mutations,
+    serializers,
+    signals,
+    tasks,
+)
 from funkwhale_api.music import licenses
+from funkwhale_api.music import models as music_models
 
 
 class V(viewsets.ModelViewSet):

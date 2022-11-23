@@ -1,19 +1,10 @@
 from django.db import transaction
+from drf_spectacular.utils import OpenApiParameter, extend_schema
+from rest_framework import decorators, exceptions, response, status
 
-from rest_framework import decorators
-from rest_framework import exceptions
-from rest_framework import response
-from rest_framework import status
-
-from drf_spectacular.utils import extend_schema, OpenApiParameter
-
-from . import filters
-from . import models
+from . import filters, models
 from . import mutations as common_mutations
-from . import serializers
-from . import signals
-from . import tasks
-from . import utils
+from . import serializers, signals, tasks, utils
 
 
 def action_route(serializer_class):

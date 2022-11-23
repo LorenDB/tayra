@@ -9,25 +9,21 @@ from django.db import transaction
 from django.db.models import F, Q
 from django.dispatch import receiver
 from django.utils import timezone
-
 from musicbrainzngs import ResponseError
 from requests.exceptions import RequestException
 
 from funkwhale_api import musicbrainz
 from funkwhale_api.common import channels, preferences
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import routes
 from funkwhale_api.federation import library as lb
+from funkwhale_api.federation import routes
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.music.management.commands import import_files
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.tags import tasks as tags_tasks
 from funkwhale_api.taskapp import celery
 
-from . import licenses
-from . import models
-from . import metadata
-from . import signals
+from . import licenses, metadata, models, signals
 
 logger = logging.getLogger(__name__)
 

@@ -1,8 +1,9 @@
+from collections import OrderedDict
+
 from django.urls import reverse
+
 from funkwhale_api import __version__ as api_version
 from funkwhale_api.music.utils import SUPPORTED_EXTENSIONS
-
-from collections import OrderedDict
 
 
 def test_nodeinfo_default(api_client):

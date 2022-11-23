@@ -5,10 +5,7 @@ from django.db.models import Q
 
 from funkwhale_api.music import models as music_models
 
-from . import activity
-from . import actors
-from . import models
-from . import serializers
+from . import activity, actors, models, serializers
 
 logger = logging.getLogger(__name__)
 inbox = activity.InboxRouter()

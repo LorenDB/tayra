@@ -1,6 +1,6 @@
 import json
-import pytest
 
+import pytest
 from django.urls import reverse
 
 from funkwhale_api.users import models

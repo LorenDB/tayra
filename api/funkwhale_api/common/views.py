@@ -3,36 +3,26 @@ import time
 
 from django.conf import settings
 from django.db import transaction
-
-from rest_framework.decorators import action
-from rest_framework import exceptions
-from rest_framework import mixins
-from rest_framework import permissions
-from rest_framework import response
-from rest_framework import views
-from rest_framework import viewsets
-from rest_framework import generics
-
 from drf_spectacular.utils import extend_schema
+from rest_framework import (
+    exceptions,
+    generics,
+    mixins,
+    permissions,
+    response,
+    views,
+    viewsets,
+)
+from rest_framework.decorators import action
 
 from config import plugins
-
-from funkwhale_api.users.oauth import permissions as oauth_permissions
-
 from funkwhale_api.common.serializers import (
     ErrorDetailSerializer,
     TextPreviewSerializer,
 )
+from funkwhale_api.users.oauth import permissions as oauth_permissions
 
-from . import filters
-from . import models
-from . import mutations
-from . import serializers
-from . import signals
-from . import tasks
-from . import throttling
-from . import utils
-
+from . import filters, models, mutations, serializers, signals, tasks, throttling, utils
 
 logger = logging.getLogger(__name__)
 

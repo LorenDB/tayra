@@ -1,5 +1,4 @@
-from funkwhale_api.history import filters
-from funkwhale_api.history import models
+from funkwhale_api.history import filters, models
 
 
 def test_listening_filter_track_artist(factories, mocker, queryset_equal_list):

@@ -1,5 +1,4 @@
 import pytest
-
 from django.core.management import call_command
 
 from funkwhale_api.federation import models as federation_models

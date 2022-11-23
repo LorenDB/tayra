@@ -1,5 +1,4 @@
 from funkwhale_api.federation import utils as federation_utils
-
 from funkwhale_api.moderation import tasks
 
 

@@ -1,10 +1,13 @@
 import os
+
 import pytest
 
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.music.management.commands import check_inplace_files
-from funkwhale_api.music.management.commands import fix_uploads
-from funkwhale_api.music.management.commands import prune_library
+from funkwhale_api.music.management.commands import (
+    check_inplace_files,
+    fix_uploads,
+    prune_library,
+)
 
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 

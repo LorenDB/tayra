@@ -1,9 +1,7 @@
 import pytest
-
 from rest_framework import serializers
 
-from funkwhale_api.federation import contexts
-from funkwhale_api.federation import jsonld
+from funkwhale_api.federation import contexts, jsonld
 
 
 def test_expand_no_external_request():

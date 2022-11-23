@@ -1,6 +1,4 @@
-from funkwhale_api.federation import fields
-from funkwhale_api.federation import filters
-from funkwhale_api.federation import models
+from funkwhale_api.federation import fields, filters, models
 
 
 def test_inbox_item_filter_before(factories):

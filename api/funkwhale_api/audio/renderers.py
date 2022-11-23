@@ -1,7 +1,6 @@
 import xml.etree.ElementTree as ET
 
-from rest_framework import negotiation
-from rest_framework import renderers
+from rest_framework import negotiation, renderers
 
 from funkwhale_api.subsonic.renderers import dict_to_xml_tree
 

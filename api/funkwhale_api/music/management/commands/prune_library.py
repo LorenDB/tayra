@@ -1,8 +1,6 @@
 from argparse import RawTextHelpFormatter
 
-from django.core.management.base import BaseCommand
-from django.core.management.base import CommandError
-
+from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
 from funkwhale_api.music import models, tasks

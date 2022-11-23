@@ -1,7 +1,6 @@
 import hashlib
 import time
 
-
 # https://github.com/jlieth/legacy-scrobbler
 from .funkwhale_startup import PLUGIN
 

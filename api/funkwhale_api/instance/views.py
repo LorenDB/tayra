@@ -1,31 +1,26 @@
 import json
 import logging
-from cache_memoize import cache_memoize
 
+from cache_memoize import cache_memoize
 from django.conf import settings
 from django.urls import reverse
-
-from dynamic_preferences.api.serializers import GlobalPreferenceSerializer
+from drf_spectacular.utils import extend_schema
 from dynamic_preferences.api import viewsets as preferences_viewsets
+from dynamic_preferences.api.serializers import GlobalPreferenceSerializer
 from dynamic_preferences.registries import global_preferences_registry
-from rest_framework import generics
-from rest_framework import views
+from rest_framework import generics, views
 from rest_framework.response import Response
 
 from funkwhale_api import __version__ as funkwhale_version
-from funkwhale_api.common import middleware
-from funkwhale_api.common import preferences
+from funkwhale_api.common import middleware, preferences
 from funkwhale_api.common.renderers import ActivityStreamRenderer
-from funkwhale_api.federation.models import Domain
 from funkwhale_api.federation.actors import get_service_actor
-from funkwhale_api.users.oauth import permissions as oauth_permissions
-from funkwhale_api.music.utils import SUPPORTED_EXTENSIONS
+from funkwhale_api.federation.models import Domain
 from funkwhale_api.moderation.models import REPORT_TYPES
+from funkwhale_api.music.utils import SUPPORTED_EXTENSIONS
+from funkwhale_api.users.oauth import permissions as oauth_permissions
 
-from drf_spectacular.utils import extend_schema
-
-from . import serializers
-from . import stats
+from . import serializers, stats
 
 NODEINFO_2_CONTENT_TYPE = "application/json; profile=http://nodeinfo.diaspora.software/ns/schema/2.0#; charset=utf-8"  # noqa
 

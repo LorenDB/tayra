@@ -1,13 +1,9 @@
 import io
-import pytest
 
+import pytest
 from django.urls import reverse
 
-from funkwhale_api.common import serializers
-from funkwhale_api.common import signals
-from funkwhale_api.common import tasks
-from funkwhale_api.common import throttling
-from funkwhale_api.common import utils
+from funkwhale_api.common import serializers, signals, tasks, throttling, utils
 
 
 def test_can_detail_mutation(logged_in_api_client, factories):

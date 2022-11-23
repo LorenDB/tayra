@@ -1,7 +1,6 @@
-import pytest
-
 import urllib.parse
 
+import pytest
 from django.urls import reverse
 
 from funkwhale_api.common import utils

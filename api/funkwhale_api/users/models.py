@@ -8,14 +8,14 @@ import string
 import uuid
 
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser, UserManager as BaseUserManager
-from django.db.models import JSONField
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import UserManager as BaseUserManager
 from django.db import models, transaction
+from django.db.models import JSONField
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-
 from django_auth_ldap.backend import populate_user as ldap_populate_user
 from oauth2_provider import models as oauth2_models
 from oauth2_provider import validators as oauth2_validators

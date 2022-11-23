@@ -1,31 +1,29 @@
-from rest_framework import mixins, response, viewsets
-from rest_framework import decorators as rest_decorators
-
-from drf_spectacular.utils import extend_schema
-
 from django.db import transaction
-from django.db.models import Count, Prefetch, Q, Sum, OuterRef, Subquery
+from django.db.models import Count, OuterRef, Prefetch, Q, Subquery, Sum
 from django.db.models.functions import Coalesce, Length
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
+from rest_framework import decorators as rest_decorators
+from rest_framework import mixins, response, viewsets
 
 from funkwhale_api.audio import models as audio_models
-from funkwhale_api.common.mixins import MultipleLookupDetailMixin
+from funkwhale_api.common import decorators
 from funkwhale_api.common import models as common_models
-from funkwhale_api.common import preferences, decorators
+from funkwhale_api.common import preferences
 from funkwhale_api.common import utils as common_utils
+from funkwhale_api.common.mixins import MultipleLookupDetailMixin
 from funkwhale_api.favorites import models as favorites_models
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import tasks as federation_tasks
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.history import models as history_models
-from funkwhale_api.music import models as music_models
-from funkwhale_api.music import views as music_views
 from funkwhale_api.moderation import models as moderation_models
 from funkwhale_api.moderation import tasks as moderation_tasks
+from funkwhale_api.music import models as music_models
+from funkwhale_api.music import views as music_views
 from funkwhale_api.playlists import models as playlists_models
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.users import models as users_models
-
 
 from . import filters, serializers
 

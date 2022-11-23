@@ -1,7 +1,7 @@
 import os
 import shutil
-import slugify
 
+import slugify
 from django.core.files.storage import FileSystemStorage
 from storages.backends.s3boto3 import S3Boto3Storage
 

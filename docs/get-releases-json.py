@@ -3,7 +3,6 @@
 import argparse
 import json
 import subprocess
-
 from distutils.version import StrictVersion
 
 

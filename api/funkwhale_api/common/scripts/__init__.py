@@ -1,9 +1,10 @@
-from . import create_actors
-from . import django_permissions_to_user_permissions
-from . import migrate_to_user_libraries
-from . import delete_pre_017_federated_uploads
-from . import test
-
+from . import (
+    create_actors,
+    delete_pre_017_federated_uploads,
+    django_permissions_to_user_permissions,
+    migrate_to_user_libraries,
+    test,
+)
 
 __all__ = [
     "create_actors",

@@ -1,13 +1,13 @@
 from __future__ import absolute_import
 
 import functools
-import traceback as tb
-import os
 import logging
+import os
+import traceback as tb
+
 import celery.app.task
 from django.apps import AppConfig
 from django.conf import settings
-
 
 logger = logging.getLogger("celery")
 

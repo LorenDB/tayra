@@ -1,8 +1,7 @@
-from drf_spectacular.openapi import AutoSchema
-
-from pluralizer import Pluralizer
-
 import re
+
+from drf_spectacular.openapi import AutoSchema
+from pluralizer import Pluralizer
 
 
 class CustomAutoSchema(AutoSchema):

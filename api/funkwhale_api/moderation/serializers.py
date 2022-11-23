@@ -1,9 +1,9 @@
 import json
 import urllib.parse
 
+import persisting_theory
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
-import persisting_theory
 from rest_framework import serializers
 
 from funkwhale_api.audio import models as audio_models
@@ -14,8 +14,7 @@ from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.music import models as music_models
 from funkwhale_api.playlists import models as playlists_models
 
-from . import models
-from . import tasks
+from . import models, tasks
 
 
 class FilteredArtistSerializer(serializers.ModelSerializer):

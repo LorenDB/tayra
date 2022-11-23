@@ -1,8 +1,9 @@
-import pytz
 import factory
+import pytz
 from django.contrib.auth.models import Permission
 from django.utils import timezone
-from funkwhale_api.factories import ManyToManyFromList, registry, NoUpdateOnCreate
+
+from funkwhale_api.factories import ManyToManyFromList, NoUpdateOnCreate, registry
 
 from . import models
 

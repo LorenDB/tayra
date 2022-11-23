@@ -1,10 +1,11 @@
 import datetime
 
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 from django.core import validators
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from funkwhale_api.audio import models as audio_models
@@ -13,11 +14,7 @@ from funkwhale_api.common import serializers as common_serializers
 from funkwhale_api.music import models as music_models
 from funkwhale_api.users import serializers as users_serializers
 
-from drf_spectacular.utils import extend_schema_field
-from drf_spectacular.types import OpenApiTypes
-
-from . import filters
-from . import models
+from . import filters, models
 from . import serializers as federation_serializers
 
 

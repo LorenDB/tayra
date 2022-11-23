@@ -1,8 +1,9 @@
-from django.contrib.admin import register as initial_register, site, ModelAdmin  # noqa
+from django.contrib.admin import site  # noqa: F401
+from django.contrib.admin import ModelAdmin
+from django.contrib.admin import register as initial_register
 from django.db.models.fields.related import RelatedField
 
-from . import models
-from . import tasks
+from . import models, tasks
 
 
 def register(model):

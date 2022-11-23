@@ -1,10 +1,8 @@
-import pytest
 import datetime
 
-from funkwhale_api.common import models
-from funkwhale_api.common import serializers
-from funkwhale_api.common import signals
-from funkwhale_api.common import tasks
+import pytest
+
+from funkwhale_api.common import models, serializers, signals, tasks
 
 
 def test_apply_migration(factories, mocker):

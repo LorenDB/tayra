@@ -1,8 +1,6 @@
-from django.utils.translation import ugettext as _
-
-from django.core.cache import cache
-
 from allauth.account.utils import send_email_confirmation
+from django.core.cache import cache
+from django.utils.translation import ugettext as _
 from oauth2_provider.contrib.rest_framework.authentication import (
     OAuth2Authentication as BaseOAuth2Authentication,
 )

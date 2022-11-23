@@ -1,5 +1,4 @@
-from funkwhale_api.music import serializers
-from funkwhale_api.music import signals
+from funkwhale_api.music import serializers, signals
 
 
 def test_get_track_activity_url_mbid(factories):

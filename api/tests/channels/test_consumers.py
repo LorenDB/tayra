@@ -1,5 +1,6 @@
 import pytest
 from channels.testing import WebsocketCommunicator
+
 from funkwhale_api.common.consumers import JsonAuthConsumer
 
 

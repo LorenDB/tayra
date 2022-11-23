@@ -3,42 +3,35 @@ import logging
 import time
 import uuid
 
+import feedparser
+import pytz
+import requests
 from django.conf import settings
 from django.db import transaction
 from django.db.models import Q
-from django.utils import timezone
-
-import feedparser
-import requests
-import pytz
-
-from rest_framework import serializers
-
 from django.templatetags.static import static
 from django.urls import reverse
+from django.utils import timezone
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
+from rest_framework import serializers
 
+from funkwhale_api.common import locales, preferences
 from funkwhale_api.common import serializers as common_serializers
-from funkwhale_api.common import utils as common_utils
-from funkwhale_api.common import locales
-from funkwhale_api.common import preferences
 from funkwhale_api.common import session
+from funkwhale_api.common import utils as common_utils
 from funkwhale_api.federation import actors
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.moderation import mrf
 from funkwhale_api.music import models as music_models
-from funkwhale_api.music.serializers import SimpleArtistSerializer, COVER_WRITE_FIELD
+from funkwhale_api.music.serializers import COVER_WRITE_FIELD, SimpleArtistSerializer
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.tags import serializers as tags_serializers
 from funkwhale_api.users import serializers as users_serializers
 
-from drf_spectacular.utils import extend_schema_field
-from drf_spectacular.types import OpenApiTypes
-
-from . import categories
-from . import models
-
+from . import categories, models
 
 logger = logging.getLogger(__name__)
 

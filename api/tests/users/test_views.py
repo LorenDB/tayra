@@ -1,7 +1,6 @@
 import pytest
-from django.urls import reverse
-
 from django.test import Client
+from django.urls import reverse
 
 from funkwhale_api.common import serializers as common_serializers
 from funkwhale_api.common import utils as common_utils

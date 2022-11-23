@@ -10,8 +10,8 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import serializers
 
-from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common import models as common_models
+from funkwhale_api.common import utils as common_utils
 from funkwhale_api.moderation import models as moderation_models
 from funkwhale_api.moderation import serializers as moderation_serializers
 from funkwhale_api.moderation import signals as moderation_signals

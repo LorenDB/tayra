@@ -1,15 +1,11 @@
 import datetime
 import os
 import pathlib
-import pytest
 
+import pytest
 from django.utils import timezone
 
-from funkwhale_api.federation import jsonld
-from funkwhale_api.federation import models
-from funkwhale_api.federation import serializers
-from funkwhale_api.federation import tasks
-from funkwhale_api.federation import utils
+from funkwhale_api.federation import jsonld, models, serializers, tasks, utils
 
 
 def test_clean_federation_music_cache_if_no_listen(preferences, factories):

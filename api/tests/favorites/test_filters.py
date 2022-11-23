@@ -1,5 +1,4 @@
-from funkwhale_api.favorites import filters
-from funkwhale_api.favorites import models
+from funkwhale_api.favorites import filters, models
 
 
 def test_track_favorite_filter_track_artist(factories, mocker, queryset_equal_list):

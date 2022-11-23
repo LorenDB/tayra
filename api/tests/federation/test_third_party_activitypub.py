@@ -1,7 +1,6 @@
 import pytest
 
-from funkwhale_api.federation import routes
-from funkwhale_api.federation import serializers
+from funkwhale_api.federation import routes, serializers
 
 
 def test_pleroma_actor_from_ap_with_tags(factories):

@@ -1,8 +1,6 @@
 import persisting_theory
-
-from rest_framework import serializers
-
 from django.db import models, transaction
+from rest_framework import serializers
 
 
 class ConfNotFound(KeyError):

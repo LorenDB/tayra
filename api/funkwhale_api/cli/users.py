@@ -1,14 +1,10 @@
 import click
-
 from django.db import transaction
 
 from funkwhale_api.federation import models as federation_models
-from funkwhale_api.users import models
-from funkwhale_api.users import serializers
-from funkwhale_api.users import tasks
+from funkwhale_api.users import models, serializers, tasks
 
-from . import base
-from . import utils
+from . import base, utils
 
 
 class FakeRequest(object):

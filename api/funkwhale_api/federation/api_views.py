@@ -1,34 +1,29 @@
 import requests.exceptions
-
 from django.conf import settings
 from django.db import transaction
 from django.db.models import Count, Q
-
-from rest_framework import decorators
-from rest_framework import mixins
-from rest_framework import permissions
-from rest_framework import response
-from rest_framework import viewsets
-
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import decorators, mixins, permissions, response, viewsets
 
 from funkwhale_api.common import preferences
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common.permissions import ConditionalAuthentication
 from funkwhale_api.music import models as music_models
-from funkwhale_api.music import views as music_views
 from funkwhale_api.music import serializers as music_serializers
+from funkwhale_api.music import views as music_views
 from funkwhale_api.users.oauth import permissions as oauth_permissions
 
-from . import activity
-from . import api_serializers
-from . import exceptions
-from . import filters
-from . import models
-from . import routes
-from . import serializers
-from . import tasks
-from . import utils
+from . import (
+    activity,
+    api_serializers,
+    exceptions,
+    filters,
+    models,
+    routes,
+    serializers,
+    tasks,
+    utils,
+)
 
 
 @transaction.atomic

@@ -1,6 +1,7 @@
+import os
+
 from drf_spectacular.contrib.django_oauth_toolkit import OpenApiAuthenticationExtension
 from drf_spectacular.plumbing import build_bearer_security_scheme_object
-import os
 
 
 class CustomOAuthExt(OpenApiAuthenticationExtension):
@@ -8,9 +9,8 @@ class CustomOAuthExt(OpenApiAuthenticationExtension):
     name = "oauth2"
 
     def get_security_definition(self, auto_schema):
-        from oauth2_provider.scopes import get_scopes_backend
-
         from drf_spectacular.settings import spectacular_settings
+        from oauth2_provider.scopes import get_scopes_backend
 
         flows = {}
         for flow_type in spectacular_settings.OAUTH2_FLOWS:

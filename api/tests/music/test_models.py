@@ -1,13 +1,12 @@
 import os
 
 import pytest
-
-from django.utils import timezone
 from django.urls import reverse
+from django.utils import timezone
 
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.music import importers, models, tasks
 from funkwhale_api.federation import utils as federation_utils
+from funkwhale_api.music import importers, models, tasks
 
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 

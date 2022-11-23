@@ -1,6 +1,5 @@
 from funkwhale_api.moderation import mrf
 
-
 from . import activity
 
 

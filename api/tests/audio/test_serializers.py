@@ -4,7 +4,6 @@ import uuid
 import feedparser
 import pytest
 import pytz
-
 from django.templatetags.static import static
 from django.urls import reverse
 

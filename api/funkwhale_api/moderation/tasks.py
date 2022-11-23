@@ -1,18 +1,16 @@
 import logging
-from django.core import mail
+
 from django.conf import settings
+from django.core import mail
 from django.db import transaction
 from django.dispatch import receiver
 
-from funkwhale_api.common import channels
-from funkwhale_api.common import preferences
-from funkwhale_api.common import utils
-from funkwhale_api.taskapp import celery
+from funkwhale_api.common import channels, preferences, utils
 from funkwhale_api.federation import utils as federation_utils
+from funkwhale_api.taskapp import celery
 from funkwhale_api.users import models as users_models
 
-from . import models
-from . import signals
+from . import models, signals
 
 logger = logging.getLogger(__name__)
 

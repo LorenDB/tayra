@@ -1,5 +1,4 @@
 import pytest
-
 from django.core import signing
 
 from funkwhale_api.users import authentication

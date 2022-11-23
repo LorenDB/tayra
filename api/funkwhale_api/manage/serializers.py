@@ -1,14 +1,15 @@
 from django.conf import settings
 from django.db import transaction
-
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from funkwhale_api.audio import models as audio_models
 from funkwhale_api.common import fields as common_fields
 from funkwhale_api.common import serializers as common_serializers
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import fields as federation_fields
+from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import tasks as federation_tasks
 from funkwhale_api.moderation import models as moderation_models
 from funkwhale_api.moderation import serializers as moderation_serializers
@@ -17,9 +18,6 @@ from funkwhale_api.music import models as music_models
 from funkwhale_api.music import serializers as music_serializers
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.users import models as users_models
-
-from drf_spectacular.utils import extend_schema_field
-from drf_spectacular.types import OpenApiTypes
 
 from . import filters
 

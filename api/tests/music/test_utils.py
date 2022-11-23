@@ -1,7 +1,8 @@
 import os
 import pathlib
-import pytest
 import tempfile
+
+import pytest
 
 from funkwhale_api.music import utils
 

@@ -1,11 +1,10 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from funkwhale_api.activity import serializers as activity_serializers
 from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.music.serializers import TrackActivitySerializer, TrackSerializer
 from funkwhale_api.users.serializers import UserActivitySerializer, UserBasicSerializer
-
-from drf_spectacular.utils import extend_schema_field
 
 from . import models
 

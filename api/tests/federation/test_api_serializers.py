@@ -1,8 +1,7 @@
 import pytest
 
 from funkwhale_api.common import serializers as common_serializers
-from funkwhale_api.federation import api_serializers
-from funkwhale_api.federation import serializers
+from funkwhale_api.federation import api_serializers, serializers
 from funkwhale_api.users import serializers as users_serializers
 
 

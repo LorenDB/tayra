@@ -1,19 +1,21 @@
 import io
-import pytest
 import uuid
 
+import pytest
 from django.core.paginator import Paginator
 from django.urls import reverse
 from django.utils import timezone
 
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import actors
-from funkwhale_api.federation import contexts
-from funkwhale_api.federation import keys
-from funkwhale_api.federation import jsonld
-from funkwhale_api.federation import models
-from funkwhale_api.federation import serializers
-from funkwhale_api.federation import utils
+from funkwhale_api.federation import (
+    actors,
+    contexts,
+    jsonld,
+    keys,
+    models,
+    serializers,
+    utils,
+)
 from funkwhale_api.moderation import serializers as moderation_serializers
 from funkwhale_api.music import licenses
 

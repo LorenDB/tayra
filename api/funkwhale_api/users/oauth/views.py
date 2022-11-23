@@ -1,25 +1,22 @@
 import json
-import urllib.parse
 import secrets
+import urllib.parse
 
 from django import http
-from django.utils import timezone
 from django.db.models import Q
-
-from rest_framework import mixins, permissions, response, views, viewsets
-from rest_framework.decorators import action
-
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema
-
 from oauth2_provider import exceptions as oauth2_exceptions
 from oauth2_provider import views as oauth_views
 from oauth2_provider.settings import oauth2_settings
+from rest_framework import mixins, permissions, response, views, viewsets
+from rest_framework.decorators import action
 
 from funkwhale_api.common import throttling
 
 from .. import models
-from .permissions import ScopePermission
 from . import serializers
+from .permissions import ScopePermission
 
 
 class ApplicationViewSet(

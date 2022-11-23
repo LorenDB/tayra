@@ -1,14 +1,13 @@
 import uuid
 
-
 from django.contrib.contenttypes.fields import GenericRelation
-from django.db.models import JSONField
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-from django.urls import reverse
-from django.utils import timezone
+from django.db.models import JSONField
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.urls import reverse
+from django.utils import timezone
 
 from funkwhale_api.federation import keys
 from funkwhale_api.federation import models as federation_models

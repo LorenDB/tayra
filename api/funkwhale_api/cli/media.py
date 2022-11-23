@@ -1,11 +1,9 @@
 import click
-
-from django.core.cache import cache
 from django.conf import settings
+from django.core.cache import cache
 from django.core.files.storage import default_storage
-
-from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 from versatileimagefield import settings as vif_settings
+from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common.models import Attachment

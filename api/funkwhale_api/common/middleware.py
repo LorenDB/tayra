@@ -1,27 +1,23 @@
 import html
-import logging
 import io
+import logging
 import os
 import re
 import time
+import tracemalloc
 import urllib.parse
 import xml.sax.saxutils
 
-from django import http
+from django import http, urls
 from django.conf import settings
+from django.contrib import auth
 from django.core.cache import caches
 from django.middleware import csrf
-from django.contrib import auth
-from django import urls
 from rest_framework import views
-import tracemalloc
 
 from funkwhale_api.federation import utils as federation_utils
 
-from . import preferences
-from . import session
-from . import throttling
-from . import utils
+from . import preferences, session, throttling, utils
 
 EXCLUDED_PATHS = ["/api", "/federation", "/.well-known"]
 

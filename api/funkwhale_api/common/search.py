@@ -5,7 +5,6 @@ from django.db.models import Q
 
 from . import utils
 
-
 QUERY_REGEX = re.compile(r'(((?P<key>\w+):)?(?P<value>"[^"]+"|[\S]+))')
 
 

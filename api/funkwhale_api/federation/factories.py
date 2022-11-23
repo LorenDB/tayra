@@ -7,7 +7,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.http import http_date
 
-from funkwhale_api.factories import registry, NoUpdateOnCreate
+from funkwhale_api.factories import NoUpdateOnCreate, registry
 from funkwhale_api.users import factories as user_factories
 
 from . import keys, models

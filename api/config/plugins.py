@@ -7,7 +7,6 @@ import sys
 import persisting_theory
 from django.core.cache import cache
 from django.db.models import Q
-
 from rest_framework import serializers
 
 logger = logging.getLogger("plugins")

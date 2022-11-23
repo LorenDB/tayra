@@ -1,14 +1,14 @@
 import datetime
 import os
-import pytest
 import uuid
 
+import pytest
 from django.core.paginator import Paginator
 from django.utils import timezone
 
 from funkwhale_api.common import utils as common_utils
-from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.federation import jsonld
+from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.music import licenses, metadata, models, signals, tasks
 

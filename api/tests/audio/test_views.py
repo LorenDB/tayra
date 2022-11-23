@@ -1,13 +1,8 @@
 import pytest
-
 from django.urls import reverse
 
-from funkwhale_api.audio import categories
-from funkwhale_api.audio import renderers
-from funkwhale_api.audio import serializers
-from funkwhale_api.audio import views
-from funkwhale_api.common import locales
-from funkwhale_api.common import utils
+from funkwhale_api.audio import categories, renderers, serializers, views
+from funkwhale_api.common import locales, utils
 
 
 def test_channel_create(logged_in_api_client):

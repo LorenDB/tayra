@@ -1,24 +1,21 @@
 import datetime
 import hashlib
-
-from django.core.files.base import ContentFile
-from django.http import request
-from django.utils.deconstruct import deconstructible
-
-import bleach.sanitizer
 import logging
-import markdown
 import os
 import shutil
 import uuid
 import xml.etree.ElementTree as ET
-
 from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 
-from django.conf import settings
+import bleach.sanitizer
+import markdown
 from django import urls
+from django.conf import settings
+from django.core.files.base import ContentFile
 from django.db import models, transaction
+from django.http import request
 from django.utils import timezone
+from django.utils.deconstruct import deconstructible
 
 logger = logging.getLogger(__name__)
 
@@ -379,8 +376,7 @@ def attach_content(obj, field, content_data):
 
 @transaction.atomic
 def attach_file(obj, field, file_data, fetch=False):
-    from . import models
-    from . import tasks
+    from . import models, tasks
 
     existing = getattr(obj, "{}_id".format(field))
     if existing:

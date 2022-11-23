@@ -1,11 +1,11 @@
 import datetime
 import io
-import magic
 import os
 import pathlib
 import urllib.parse
 import uuid
 
+import magic
 import pytest
 from django.db.models import Prefetch
 from django.urls import reverse
@@ -13,8 +13,8 @@ from django.utils import timezone
 
 from funkwhale_api.common import utils
 from funkwhale_api.federation import api_serializers as federation_api_serializers
-from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.federation import tasks as federation_tasks
+from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.music import licenses, models, serializers, tasks, views
 from funkwhale_api.users import authentication as users_authentication
 

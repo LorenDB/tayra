@@ -1,7 +1,6 @@
 import urllib.parse
 
-from funkwhale_api.common import preferences
-from funkwhale_api.common import utils
+from funkwhale_api.common import preferences, utils
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.moderation import mrf
 

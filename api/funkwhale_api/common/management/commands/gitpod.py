@@ -1,11 +1,13 @@
-from django.core.management.commands.migrate import Command as BaseCommand
+import os
+
+import debugpy
+import uvicorn
 from django.core.management import call_command
+from django.core.management.commands.migrate import Command as BaseCommand
+
+from funkwhale_api.common import preferences
 from funkwhale_api.music.models import Library
 from funkwhale_api.users.models import User
-from funkwhale_api.common import preferences
-import uvicorn
-import debugpy
-import os
 
 
 class Command(BaseCommand):

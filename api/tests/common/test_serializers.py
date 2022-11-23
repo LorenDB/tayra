@@ -1,15 +1,13 @@
 import os
-import PIL
 
+import django_filters
+import PIL
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 
-import django_filters
-
-from funkwhale_api.common import serializers
-from funkwhale_api.common import utils
-from funkwhale_api.users import models
+from funkwhale_api.common import serializers, utils
 from funkwhale_api.federation import utils as federation_utils
+from funkwhale_api.users import models
 
 
 class TestActionFilterSet(django_filters.FilterSet):

@@ -1,12 +1,13 @@
-import aiohttp
 import asyncio
 import functools
 
+import aiohttp
+import pyld.documentloader.requests
 import pyld.jsonld
 from django.conf import settings
-import pyld.documentloader.requests
 from rest_framework import serializers
 from rest_framework.fields import empty
+
 from . import contexts
 
 

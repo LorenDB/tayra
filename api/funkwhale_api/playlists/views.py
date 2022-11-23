@@ -1,11 +1,9 @@
 from django.db import transaction
 from django.db.models import Count
-
+from drf_spectacular.utils import extend_schema
 from rest_framework import exceptions, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
-from drf_spectacular.utils import extend_schema
 
 from funkwhale_api.common import fields, permissions
 from funkwhale_api.music import utils as music_utils

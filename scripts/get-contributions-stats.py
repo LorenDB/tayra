@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
-import requests
 import os
+
+import requests
 
 GITLAB_URL = "https://dev.funkwhale.audio"
 GITLAB_PROJECT_ID = 17

@@ -1,6 +1,7 @@
+from django.core.management.base import BaseCommand
+
 from funkwhale_api.federation.models import Actor
 from funkwhale_api.music.models import Library
-from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):

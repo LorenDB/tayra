@@ -1,10 +1,10 @@
 import json
+import logging
 import sys
 import uuid
-import logging
 
-from django.core.management.base import BaseCommand, CommandError
 from django.core import validators
+from django.core.management.base import BaseCommand, CommandError
 
 from funkwhale_api.common import session
 from funkwhale_api.federation import models

@@ -1,11 +1,10 @@
+import mimetypes
 import os
 import pathlib
-import mimetypes
 
 import magic
 import mutagen
 import pydub
-
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import F

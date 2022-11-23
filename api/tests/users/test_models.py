@@ -1,10 +1,10 @@
 import datetime
-import pytest
 
+import pytest
 from django.urls import reverse
 
-from funkwhale_api.users import models
 from funkwhale_api.federation import utils as federation_utils
+from funkwhale_api.users import models
 
 
 def test__str__(factories):

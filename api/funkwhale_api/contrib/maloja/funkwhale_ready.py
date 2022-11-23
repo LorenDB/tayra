@@ -1,6 +1,7 @@
 import json
 
 from config import plugins
+
 from .funkwhale_startup import PLUGIN
 
 

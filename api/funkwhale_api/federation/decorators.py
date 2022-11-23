@@ -1,19 +1,10 @@
 from django.db import transaction
-
-from rest_framework import decorators
-from rest_framework import permissions
-from rest_framework import response
-from rest_framework import status
-
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.utils import OpenApiParameter, extend_schema
+from rest_framework import decorators, permissions, response, status
 
 from funkwhale_api.common import utils as common_utils
 
-from . import api_serializers
-from . import filters
-from . import models
-from . import tasks
-from . import utils
+from . import api_serializers, filters, models, tasks, utils
 
 
 def fetches_route():

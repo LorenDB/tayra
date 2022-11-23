@@ -2,8 +2,7 @@ import uuid
 
 from django.db import transaction
 
-from funkwhale_api.common import mutations
-from funkwhale_api.common import utils
+from funkwhale_api.common import mutations, utils
 from funkwhale_api.federation import models
 
 from . import tasks

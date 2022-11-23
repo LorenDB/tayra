@@ -2,39 +2,36 @@ import base64
 import datetime
 import logging
 import urllib.parse
+
+import django.db.utils
+import requests.exceptions
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Count, Prefetch, Sum, F, Q
-import django.db.utils
+from django.db.models import Count, F, Prefetch, Q, Sum
 from django.utils import timezone
-
-from rest_framework import mixins
-from rest_framework import renderers
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from rest_framework import mixins, renderers
 from rest_framework import settings as rest_settings
 from rest_framework import views, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
-from drf_spectacular.utils import extend_schema, OpenApiParameter, extend_schema_view
-
-import requests.exceptions
 
 from funkwhale_api.common import decorators as common_decorators
 from funkwhale_api.common import permissions as common_permissions
 from funkwhale_api.common import preferences
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common import views as common_views
-from funkwhale_api.federation.authentication import SignatureAuthentication
 from funkwhale_api.federation import actors
 from funkwhale_api.federation import api_serializers as federation_api_serializers
 from funkwhale_api.federation import decorators as federation_decorators
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import routes
 from funkwhale_api.federation import tasks as federation_tasks
+from funkwhale_api.federation.authentication import SignatureAuthentication
 from funkwhale_api.tags.models import Tag, TaggedItem
-from funkwhale_api.users.oauth import permissions as oauth_permissions
 from funkwhale_api.users.authentication import ScopedTokenAuthentication
+from funkwhale_api.users.oauth import permissions as oauth_permissions
 
 from . import filters, licenses, models, serializers, tasks, utils
 

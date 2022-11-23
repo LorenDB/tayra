@@ -1,4 +1,5 @@
 import urllib.parse
+
 import oauthlib.oauth2
 
 from funkwhale_api.common import authentication

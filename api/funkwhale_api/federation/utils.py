@@ -1,7 +1,7 @@
 import html.parser
+import re
 import unicodedata
 import urllib.parse
-import re
 
 from django.apps import apps
 from django.conf import settings
@@ -11,8 +11,7 @@ from django.db.models import CharField, Q, Value
 from funkwhale_api.common import session
 from funkwhale_api.moderation import mrf
 
-from . import exceptions
-from . import signing
+from . import exceptions, signing
 
 
 def full_url(path):

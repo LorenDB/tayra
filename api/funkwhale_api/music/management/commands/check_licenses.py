@@ -1,5 +1,5 @@
-from django.core.management.base import BaseCommand, CommandError
 import requests.exceptions
+from django.core.management.base import BaseCommand, CommandError
 
 from funkwhale_api.music import licenses
 

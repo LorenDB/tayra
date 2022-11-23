@@ -8,9 +8,9 @@ Local settings
 - Add django-extensions as app
 """
 
-from .common import *  # noqa
 from funkwhale_api import __version__ as funkwhale_version
 
+from .common import *  # noqa
 
 # DEBUG
 # ------------------------------------------------------------------------------

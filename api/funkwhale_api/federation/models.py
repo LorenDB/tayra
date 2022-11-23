@@ -3,16 +3,16 @@ import urllib.parse
 import uuid
 
 from django.conf import settings
-from django.db.models import JSONField
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-from django.db.models.signals import post_save, pre_save, post_delete
+from django.db.models import JSONField
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
-from django.utils import timezone
 from django.urls import reverse
+from django.utils import timezone
 
 from funkwhale_api.common import session
 from funkwhale_api.common import utils as common_utils
@@ -283,8 +283,8 @@ class Actor(models.Model):
         return data
 
     def get_stats(self):
-        from funkwhale_api.music import models as music_models
         from funkwhale_api.moderation import models as moderation_models
+        from funkwhale_api.music import models as music_models
 
         data = Actor.objects.filter(pk=self.pk).aggregate(
             outbox_activities=models.Count("outbox_activities", distinct=True),
@@ -389,8 +389,7 @@ class Fetch(models.Model):
 
     @property
     def serializers(self):
-        from . import contexts
-        from . import serializers
+        from . import contexts, serializers
 
         return {
             contexts.FW.Artist: [serializers.ArtistSerializer],

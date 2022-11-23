@@ -1,4 +1,5 @@
 import io
+
 import pytest
 
 from funkwhale_api.common import utils

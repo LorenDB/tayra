@@ -1,5 +1,4 @@
 import django_filters
-
 from django_filters import rest_framework as filters
 
 from funkwhale_api.common import filters as common_filters

@@ -3,12 +3,12 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.conf.urls import url
-from django.urls import include, path
 from django.conf.urls.static import static
-from funkwhale_api.common import admin
+from django.urls import include, path
 from django.views import defaults as default_views
 
 from config import plugins
+from funkwhale_api.common import admin
 
 plugins_patterns = plugins.trigger_filter(plugins.URLS, [], enabled=True)
 

@@ -2,35 +2,37 @@ import datetime
 import json
 import logging
 import os
-import requests
 
+import requests
 from django.conf import settings
 from django.db import transaction
-from django.db.models import Q, F
+from django.db.models import F, Q
 from django.db.models.deletion import Collector
 from django.utils import timezone
 from dynamic_preferences.registries import global_preferences_registry
 from requests.exceptions import RequestException
 
 from funkwhale_api.audio import models as audio_models
-from funkwhale_api.common import preferences
 from funkwhale_api.common import models as common_models
-from funkwhale_api.common import session
+from funkwhale_api.common import preferences, session
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.moderation import mrf
 from funkwhale_api.music import models as music_models
 from funkwhale_api.taskapp import celery
 
-from . import activity
-from . import actors
-from . import exceptions
-from . import jsonld
-from . import keys
-from . import models, signing
-from . import serializers
-from . import routes
-from . import utils
-from . import webfinger
+from . import (
+    activity,
+    actors,
+    exceptions,
+    jsonld,
+    keys,
+    models,
+    routes,
+    serializers,
+    signing,
+    utils,
+    webfinger,
+)
 
 logger = logging.getLogger(__name__)
 

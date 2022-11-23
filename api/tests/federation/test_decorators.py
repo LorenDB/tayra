@@ -1,11 +1,7 @@
 from rest_framework import viewsets
 
+from funkwhale_api.federation import api_serializers, decorators, models, tasks
 from funkwhale_api.music import models as music_models
-
-from funkwhale_api.federation import api_serializers
-from funkwhale_api.federation import decorators
-from funkwhale_api.federation import models
-from funkwhale_api.federation import tasks
 
 
 class V(viewsets.ModelViewSet):

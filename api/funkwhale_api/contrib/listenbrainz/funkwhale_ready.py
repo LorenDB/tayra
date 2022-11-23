@@ -1,7 +1,8 @@
-from config import plugins
 import funkwhale_api
-from .funkwhale_startup import PLUGIN
+from config import plugins
+
 from .client import ListenBrainzClient, Track
+from .funkwhale_startup import PLUGIN
 
 
 @plugins.register_hook(plugins.LISTENING_CREATED, PLUGIN)

@@ -4,7 +4,6 @@ from funkwhale_api.common import utils
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.music import models as music_models
 
-
 MODELS = [
     (music_models.Artist, ["fid"]),
     (music_models.Album, ["fid"]),

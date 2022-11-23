@@ -5,25 +5,23 @@ import tempfile
 import urllib.parse
 import uuid
 
-from django.db.models.expressions import OuterRef, Subquery
-from django.db.models.query_utils import Q
-
 import arrow
 import pydub
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
-from django.db.models import JSONField
-from django.contrib.postgres.search import SearchVectorField
 from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVectorField
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, transaction
+from django.db.models import Count, JSONField, Prefetch
+from django.db.models.expressions import OuterRef, Subquery
+from django.db.models.query_utils import Q
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
-from django.db.models import Prefetch, Count
 
 from funkwhale_api import musicbrainz
 from funkwhale_api.common import fields
@@ -33,6 +31,7 @@ from funkwhale_api.common import utils as common_utils
 from funkwhale_api.federation import models as federation_models
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.tags import models as tags_models
+
 from . import importers, metadata, utils
 
 logger = logging.getLogger(__name__)
@@ -1156,7 +1155,7 @@ class LibraryQuerySet(models.QuerySet):
         )
 
     def viewable_by(self, actor):
-        from funkwhale_api.federation.models import LibraryFollow, Follow
+        from funkwhale_api.federation.models import Follow, LibraryFollow
 
         if actor is None:
             return self.filter(privacy_level="everyone")

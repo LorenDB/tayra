@@ -1,7 +1,6 @@
 import pytest
 
-from funkwhale_api.audio import filters
-from funkwhale_api.audio import models
+from funkwhale_api.audio import filters, models
 
 
 def test_channel_filter_subscribed_true(factories, mocker, queryset_equal_list):

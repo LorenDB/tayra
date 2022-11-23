@@ -1,13 +1,10 @@
 from django.conf import settings
 from django.core import signing
-
-from rest_framework import authentication
-from rest_framework import exceptions
 from django.core.exceptions import ValidationError
-
-from .oauth import scopes as available_scopes
+from rest_framework import authentication, exceptions
 
 from . import models
+from .oauth import scopes as available_scopes
 
 
 def generate_scoped_token(user_id, user_secret, scopes):

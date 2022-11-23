@@ -1,7 +1,6 @@
 import pytest
-
-from django.db.models import Q
 from django import forms
+from django.db.models import Q
 
 from funkwhale_api.common import search
 from funkwhale_api.music import models as music_models

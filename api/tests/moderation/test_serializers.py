@@ -1,13 +1,12 @@
 import json
-import pytest
 import urllib.parse
 
+import pytest
 from django.core.serializers.json import DjangoJSONEncoder
 
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.federation import models as federation_models
-from funkwhale_api.moderation import serializers
-from funkwhale_api.moderation import signals
+from funkwhale_api.moderation import serializers, signals
 
 
 def test_user_filter_serializer_repr(factories):

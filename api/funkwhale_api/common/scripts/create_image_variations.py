@@ -6,7 +6,6 @@ from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 
 from funkwhale_api.common.models import Attachment
 
-
 MODELS = [
     (Attachment, "file", "attachment_square"),
 ]

@@ -1,13 +1,13 @@
-import pytest
 import uuid
 
+import pytest
 from django.db.models import Q
 from django.urls import reverse
 
 from funkwhale_api.federation import (
     activity,
-    models,
     api_serializers,
+    models,
     serializers,
     tasks,
 )

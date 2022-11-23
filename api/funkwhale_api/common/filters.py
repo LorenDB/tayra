@@ -1,15 +1,10 @@
 from django import forms
 from django.db.models import Q
-
+from django_filters import rest_framework as filters
+from django_filters import widgets
 from drf_spectacular.utils import extend_schema_field
 
-from django_filters import widgets
-from django_filters import rest_framework as filters
-
-from . import fields
-from . import models
-from . import search
-from . import utils
+from . import fields, models, search, utils
 
 
 class NoneObject(object):

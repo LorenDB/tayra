@@ -1,15 +1,16 @@
 import re
 
+from allauth.account import models as allauth_models
+from dj_rest_auth.registration.serializers import RegisterSerializer as RS
+from dj_rest_auth.registration.serializers import get_adapter
+from dj_rest_auth.serializers import PasswordResetSerializer as PRS
+from django.contrib import auth
+from django.contrib.auth.forms import PasswordResetForm
 from django.core import validators
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.forms import PasswordResetForm
-
-from django.contrib import auth
-
-from allauth.account import models as allauth_models
-from dj_rest_auth.serializers import PasswordResetSerializer as PRS
-from dj_rest_auth.registration.serializers import RegisterSerializer as RS, get_adapter
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from funkwhale_api.activity import serializers as activity_serializers
@@ -22,12 +23,9 @@ from funkwhale_api.moderation import models as moderation_models
 from funkwhale_api.moderation import tasks as moderation_tasks
 from funkwhale_api.moderation import utils as moderation_utils
 
-from drf_spectacular.utils import extend_schema_field
-from drf_spectacular.types import OpenApiTypes
-
 from . import adapters
-from . import models
 from . import authentication as users_authentication
+from . import models
 
 
 @deconstructible

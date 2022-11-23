@@ -1,6 +1,5 @@
-from django.db.models import Q
-
 import django_filters
+from django.db.models import Q
 
 from funkwhale_api.common import fields
 from funkwhale_api.common import filters as common_filters

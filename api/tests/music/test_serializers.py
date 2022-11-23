@@ -1,12 +1,10 @@
-import pytest
 import uuid
+
+import pytest
 
 from funkwhale_api.common import serializers as common_serializers
 from funkwhale_api.federation import serializers as federation_serializers
-from funkwhale_api.music import licenses
-from funkwhale_api.music import models
-from funkwhale_api.music import serializers
-from funkwhale_api.music import tasks
+from funkwhale_api.music import licenses, models, serializers, tasks
 
 
 def test_license_serializer():

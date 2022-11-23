@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-from collections import OrderedDict
 import logging.config
 import sys
-
+from collections import OrderedDict
 from urllib.parse import urlsplit
 
 import environ
@@ -21,8 +20,9 @@ LOGLEVEL = env("LOGLEVEL", default="info").upper()
 
 if env("FUNKWHALE_SENTRY_DSN", default=None) is not None:
     import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
     from sentry_sdk.integrations.celery import CeleryIntegration
+    from sentry_sdk.integrations.django import DjangoIntegration
+
     from funkwhale_api import __version__ as version
 
     sentry_sdk.init(
@@ -686,7 +686,7 @@ if AUTH_LDAP_ENABLED:
     # This way, we don't need the dependency unless someone
     # actually enables the LDAP support
     import ldap
-    from django_auth_ldap.config import LDAPSearch, LDAPSearchUnion, GroupOfNamesType
+    from django_auth_ldap.config import GroupOfNamesType, LDAPSearch, LDAPSearchUnion
 
     # Add LDAP to the authentication backends
     AUTHENTICATION_BACKENDS += ("django_auth_ldap.backend.LDAPBackend",)

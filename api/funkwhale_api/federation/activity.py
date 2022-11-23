@@ -1,10 +1,10 @@
-import uuid
 import logging
 import urllib.parse
+import uuid
 
-from django.core.cache import cache
 from django.conf import settings
-from django.db import transaction, IntegrityError
+from django.core.cache import cache
+from django.db import IntegrityError, transaction
 from django.db.models import Q
 
 from funkwhale_api.common import channels
@@ -119,11 +119,10 @@ def should_reject(fid, actor_id=None, payload={}):
 
 @transaction.atomic
 def receive(activity, on_behalf_of, inbox_actor=None):
-    from . import models
-    from . import serializers
-    from . import tasks
-    from .routes import inbox
     from funkwhale_api.moderation import mrf
+
+    from . import models, serializers, tasks
+    from .routes import inbox
 
     logger.debug(
         "[federation] Received activity from %s : %s", on_behalf_of.fid, activity
@@ -223,8 +222,7 @@ class InboxRouter(Router):
         call_handlers should be False when are delivering a local activity, because
         we want only want to bind activities to their recipients, not reapply the changes.
         """
-        from . import api_serializers
-        from . import models
+        from . import api_serializers, models
 
         handlers = self.get_matching_handlers(payload)
         for handler in handlers:
@@ -305,8 +303,8 @@ class OutboxRouter(Router):
         for further delivery.
         """
         from funkwhale_api.common import preferences
-        from . import models
-        from . import tasks
+
+        from . import models, tasks
 
         allow_list_enabled = preferences.get("moderation__allow_list_enabled")
         allowed_domains = None

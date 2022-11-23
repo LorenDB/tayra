@@ -1,13 +1,9 @@
 import datetime
 
 import pytest
-
 from django.urls import reverse
 
-from funkwhale_api.federation import api_serializers
-from funkwhale_api.federation import serializers
-from funkwhale_api.federation import tasks
-from funkwhale_api.federation import views
+from funkwhale_api.federation import api_serializers, serializers, tasks, views
 
 
 def test_user_can_list_their_library_follows(factories, logged_in_api_client):

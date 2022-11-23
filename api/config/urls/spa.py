@@ -4,7 +4,6 @@ from funkwhale_api.audio import spa_views as audio_spa_views
 from funkwhale_api.federation import spa_views as federation_spa_views
 from funkwhale_api.music import spa_views
 
-
 urlpatterns = [
     urls.re_path(
         r"^library/tracks/(?P<pk>\d+)/?$", spa_views.library_track, name="library_track"

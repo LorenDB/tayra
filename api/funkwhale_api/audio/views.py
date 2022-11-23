@@ -1,20 +1,13 @@
-from rest_framework import decorators
-from rest_framework import exceptions
-from rest_framework import mixins
-from rest_framework import permissions as rest_permissions
-from rest_framework import response
-from rest_framework import viewsets
-
-from drf_spectacular.utils import extend_schema, extend_schema_view
-
 from django import http
 from django.db import transaction
 from django.db.models import Count, Prefetch, Q, Sum
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import decorators, exceptions, mixins
+from rest_framework import permissions as rest_permissions
+from rest_framework import response, viewsets
 
-from funkwhale_api.common import locales
-from funkwhale_api.common import permissions
-from funkwhale_api.common import preferences
+from funkwhale_api.common import locales, permissions, preferences
 from funkwhale_api.common import utils as common_utils
 from funkwhale_api.common.mixins import MultipleLookupDetailMixin
 from funkwhale_api.federation import actors

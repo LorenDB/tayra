@@ -1,5 +1,5 @@
-from rest_framework import permissions
 from django.core.exceptions import ImproperlyConfigured
+from rest_framework import permissions
 
 from funkwhale_api.common import preferences
 

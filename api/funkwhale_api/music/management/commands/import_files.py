@@ -10,7 +10,6 @@ import urllib.parse
 
 import watchdog.events
 import watchdog.observers
-
 from django.conf import settings
 from django.core.cache import cache
 from django.core.files import File
@@ -19,7 +18,6 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Q
 from django.db.utils import IntegrityError
 from django.utils import timezone
-
 from rest_framework import serializers
 
 from funkwhale_api.common import utils as common_utils

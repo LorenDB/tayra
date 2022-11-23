@@ -1,7 +1,6 @@
-from rest_framework import serializers
 import pytest
-
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import serializers
 
 from funkwhale_api.federation import exceptions, utils
 

@@ -12,12 +12,12 @@ This command will also generate federation ids for existing resources.
 """
 
 from django.conf import settings
-from django.db.models import functions, CharField, F, Value
+from django.db.models import CharField, F, Value, functions
 
+from funkwhale_api.common import preferences
+from funkwhale_api.federation import models as federation_models
 from funkwhale_api.music import models
 from funkwhale_api.users.models import User
-from funkwhale_api.federation import models as federation_models
-from funkwhale_api.common import preferences
 
 
 def create_libraries(open_api, stdout):

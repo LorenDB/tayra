@@ -5,7 +5,6 @@ from funkwhale_api.federation import models as federation_models
 from . import models
 from . import serializers as moderation_serializers
 
-
 NOTE_TARGET_FIELDS = {
     "report": {
         "queryset": models.Report.objects.all(),

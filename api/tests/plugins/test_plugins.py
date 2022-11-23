@@ -2,13 +2,11 @@ import os
 import sys
 
 import pytest
-
 from django.urls import reverse
-
 from rest_framework import serializers
 
-from funkwhale_api.common import models
 from config import plugins
+from funkwhale_api.common import models
 
 
 @pytest.fixture(autouse=True)

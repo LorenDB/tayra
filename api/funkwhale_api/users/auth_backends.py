@@ -1,5 +1,5 @@
-from django.contrib.auth import backends, get_user_model
 from allauth.account import auth_backends
+from django.contrib.auth import backends, get_user_model
 
 from funkwhale_api.common import authentication
 

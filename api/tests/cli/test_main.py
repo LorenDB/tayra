@@ -1,10 +1,7 @@
 import pytest
-
 from click.testing import CliRunner
 
-from funkwhale_api.cli import main
-from funkwhale_api.cli import library
-from funkwhale_api.cli import users
+from funkwhale_api.cli import library, main, users
 
 
 @pytest.mark.parametrize(

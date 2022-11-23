@@ -1,22 +1,17 @@
 import json
 
-from django import http
-from django.contrib import auth
-from django.middleware import csrf
-
 from allauth.account.adapter import get_adapter
 from dj_rest_auth import views as rest_auth_views
 from dj_rest_auth.registration import views as registration_views
-from rest_framework import mixins
-from rest_framework import viewsets
+from django import http
+from django.contrib import auth
+from django.middleware import csrf
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from drf_spectacular.utils import extend_schema, extend_schema_view
-
-from funkwhale_api.common import authentication
-from funkwhale_api.common import preferences
-from funkwhale_api.common import throttling
+from funkwhale_api.common import authentication, preferences, throttling
 
 from . import models, serializers, tasks
 

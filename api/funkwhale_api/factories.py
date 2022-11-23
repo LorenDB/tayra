@@ -1,10 +1,9 @@
-import uuid
-import factory
 import random
+import uuid
+
+import factory
 import persisting_theory
-
 from django.conf import settings
-
 from faker.providers import internet as internet_provider
 
 

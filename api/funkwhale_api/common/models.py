@@ -1,28 +1,24 @@
-import uuid
-import magic
 import mimetypes
+import uuid
 
-from django.db.models import JSONField
+import magic
+from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import connections, models, transaction
-from django.db.models import Lookup
+from django.db.models import JSONField, Lookup
 from django.db.models.fields import Field
 from django.db.models.sql.compiler import SQLCompiler
 from django.dispatch import receiver
-from django.utils import timezone
 from django.urls import reverse
-
+from django.utils import timezone
 from versatileimagefield.fields import VersatileImageField
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 
 from funkwhale_api.federation import utils as federation_utils
 
-from . import utils
-from . import validators
-
+from . import utils, validators
 
 CONTENT_TEXT_MAX_LENGTH = 5000
 CONTENT_TEXT_SUPPORTED_TYPES = [

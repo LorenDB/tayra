@@ -3,12 +3,9 @@ import urllib.parse
 from django.conf import settings
 from django.db.models import Q
 from django.urls import reverse
-
 from rest_framework import serializers
 
-from funkwhale_api.common import preferences
-from funkwhale_api.common import middleware
-from funkwhale_api.common import utils
+from funkwhale_api.common import middleware, preferences, utils
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.music import spa_views
 

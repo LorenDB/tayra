@@ -1,7 +1,7 @@
 import datetime
 
-from django.db.models.aggregates import Count
 import pytest
+from django.db.models.aggregates import Count
 
 from funkwhale_api.music import models as music_models
 from funkwhale_api.subsonic import serializers

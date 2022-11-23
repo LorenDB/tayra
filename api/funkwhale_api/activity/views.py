@@ -1,7 +1,6 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.response import Response
-
-from drf_spectacular.utils import extend_schema
 
 from funkwhale_api.common.permissions import ConditionalAuthentication
 from funkwhale_api.favorites.models import TrackFavorite

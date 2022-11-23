@@ -2,7 +2,6 @@ import django_filters
 from django import forms
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-
 from rest_framework import serializers
 
 from . import search

@@ -1,16 +1,13 @@
 import urllib.parse
 
 from django.conf import settings
-from django.urls import reverse
 from django.db.models import Q
+from django.urls import reverse
 
-from funkwhale_api.common import preferences
-from funkwhale_api.common import middleware
-from funkwhale_api.common import utils
+from funkwhale_api.common import middleware, preferences, utils
 from funkwhale_api.playlists import models as playlists_models
 
-from . import models
-from . import serializers
+from . import models, serializers
 
 
 def get_twitter_card_metas(type, id):

@@ -2,7 +2,6 @@ from funkwhale_api.common import models as common_models
 from funkwhale_api.common import mutations
 from funkwhale_api.common import serializers as common_serializers
 from funkwhale_api.common import utils as common_utils
-
 from funkwhale_api.federation import routes
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.tags import serializers as tags_serializers

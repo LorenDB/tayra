@@ -1,13 +1,11 @@
 from argparse import RawTextHelpFormatter
 
-from django.core.management.base import BaseCommand
-from django.core.management.base import CommandError
-
+from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.db.models import Q
 
-from funkwhale_api.music.models import TrackActor, Library
 from funkwhale_api.federation.models import Actor
+from funkwhale_api.music.models import Library, TrackActor
 
 
 class Command(BaseCommand):

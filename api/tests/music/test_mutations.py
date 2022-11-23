@@ -1,10 +1,9 @@
 import datetime
+
 import pytest
 
 from funkwhale_api.common import serializers as common_serializers
-from funkwhale_api.music import licenses
-from funkwhale_api.music import mutations
-
+from funkwhale_api.music import licenses, mutations
 from funkwhale_api.tags import models as tags_models
 
 

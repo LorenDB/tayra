@@ -15,8 +15,8 @@ from funkwhale_api.music import models as music_models
 from funkwhale_api.music import utils as music_utils
 
 from . import (
-    actors,
     activity,
+    actors,
     authentication,
     models,
     renderers,

@@ -1,9 +1,9 @@
 import json
 import os
+
 import pytest
 
-from funkwhale_api.music import models
-from funkwhale_api.music import licenses
+from funkwhale_api.music import licenses, models
 
 
 @pytest.fixture

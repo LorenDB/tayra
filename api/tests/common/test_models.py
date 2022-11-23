@@ -1,5 +1,4 @@
 import pytest
-
 from django.urls import reverse
 
 from funkwhale_api.federation import utils as federation_utils

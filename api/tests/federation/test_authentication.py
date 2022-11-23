@@ -1,6 +1,6 @@
 import pytest
 
-from funkwhale_api.federation import authentication, exceptions, keys, jsonld
+from funkwhale_api.federation import authentication, exceptions, jsonld, keys
 
 
 def test_authenticate(factories, mocker, api_request):

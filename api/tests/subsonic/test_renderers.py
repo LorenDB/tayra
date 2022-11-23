@@ -1,9 +1,9 @@
 import json
-import pytest
 import xml.etree.ElementTree as ET
 
-import funkwhale_api
+import pytest
 
+import funkwhale_api
 from funkwhale_api.subsonic import renderers
 
 
