@@ -68,7 +68,7 @@ review_docs:
   interruptible: true
   stage: deploy
   allow_failure: true
-  image: python:3.10
+  image: python:3.11
   variables:
     BUILD_PATH: "../docs-review"
   before_script:
@@ -137,7 +137,7 @@ changelog_snippet:
 
 pre-commit:
   stage: lint
-  image: python:3.10
+  image: python:3.11
   variables:
     PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
     PRE_COMMIT_HOME: $CI_PROJECT_DIR/.cache/pre-commit
@@ -152,7 +152,7 @@ pre-commit:
 
 black:
   interruptible: true
-  image: python:3.10
+  image: python:3.11
   stage: lint
   variables:
     GIT_STRATEGY: fetch
@@ -321,7 +321,7 @@ build_front:
 
 build_documentation:
   stage: build
-  image: python:3.10
+  image: python:3.11
   variables:
     BUILD_PATH: "../public"
   before_script:
