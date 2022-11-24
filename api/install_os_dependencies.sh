@@ -20,7 +20,7 @@ function usage_message()
   echo -e "\thelp\t\tPrint this help"
   echo -e "\n\tCommands that require superuser permission:"
   echo -e "\tinstall\t\tInstall packages defined on ${OS_REQUIREMENTS_FILENAME} file. Note: This\n\t\t\t   does not upgrade the packages already installed for new\n\t\t\t   versions, even if new version is available in the repository."
-  echo -e "\tupgrade\t\tSame that install, but upgrate the already installed packages,\n\t\t\t   if new version is available."
+  echo -e "\tupgrade\t\tSame that install, but upgrade the already installed packages,\n\t\t\t   if new version is available."
 
 }
 

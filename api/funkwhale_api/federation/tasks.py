@@ -328,7 +328,7 @@ def fetch(fetch_obj):
         auth = None
     try:
         if url.startswith("webfinger://"):
-            # we first grab the correpsonding webfinger representation
+            # we first grab the corresponding webfinger representation
             # to get the ActivityPub actor ID
             webfinger_data = webfinger.get_resource(
                 "acct:" + url.replace("webfinger://", "")
@@ -552,8 +552,8 @@ def fetch_collection(url, max_pages, channel, is_page=False):
         "total": 0,
     }
     if is_page:
-        # starting immediatly from a page, no need to fetch the wrapping collection
-        logger.debug("Fetch collection page immediatly at %s", url)
+        # starting immediately from a page, no need to fetch the wrapping collection
+        logger.debug("Fetch collection page immediately at %s", url)
         results["next_page"] = url
     else:
         logger.debug("Fetching collection object at %s", url)
@@ -644,7 +644,7 @@ def check_single_remote_instance_availability(domain):
     except Exception as e:
         logger.info(
             f"Domain {domain.name} could not be reached because of the following error : {e}. \
-            Setting domain as unreacheable."
+            Setting domain as unreachable."
         )
         domain.reachable = False
         domain.save()
@@ -657,7 +657,7 @@ def check_single_remote_instance_availability(domain):
         return domain.reachable
     else:
         logger.info(
-            f"Domain {domain.name} is not reacheable at the moment. Setting domain as unreacheable."
+            f"Domain {domain.name} is not reachable at the moment. Setting domain as unreachable."
         )
         domain.reachable = False
         domain.save()

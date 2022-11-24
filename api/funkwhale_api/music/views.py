@@ -517,7 +517,7 @@ def should_transcode(upload, format, max_bitrate=None):
         # upload should have a mimetype, otherwise we cannot transcode
         format_need_transcoding = False
     elif upload.mimetype == utils.EXTENSION_TO_MIMETYPE[format]:
-        # requested format sould be different than upload mimetype, otherwise
+        # requested format should be different than upload mimetype, otherwise
         # there is no need to transcode
         format_need_transcoding = False
 

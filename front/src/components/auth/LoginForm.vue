@@ -137,7 +137,7 @@ const submit = async () => {
     <template v-else>
       <p>
         <translate
-          translate-context="Contant/Auth/Paragraph"
+          translate-context="Content/Auth/Paragraph"
           :translate-params="{domain: $store.getters['instance/domain']}"
         >
           You will be redirected to %{ domain } to authenticate.

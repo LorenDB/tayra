@@ -257,9 +257,9 @@ paths:
           $ref: "#/components/responses/200"
   /api/v1/users/me/:
     get:
-      summary: Retrive profile information
+      summary: Retrieve profile information
       description: |
-        Retrieve profile informations of the current user
+        Retrieve profile information of the current user
       tags:
         - "Auth and security"
 
@@ -322,7 +322,7 @@ paths:
 
   /api/v1/rate-limit/:
     get:
-      summary: Retrive rate-limit information and current usage status
+      summary: Retrieve rate-limit information and current usage status
       tags:
         - "Auth and security"
 
@@ -1658,7 +1658,7 @@ paths:
                   type: boolean
                   default: false
                   description: |
-                    Wether to raise an error when the same track is added
+                    Whether to raise an error when the same track is added
                     multiple time in the playlist
       responses:
         201:

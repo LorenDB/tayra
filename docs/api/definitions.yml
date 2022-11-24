@@ -77,7 +77,7 @@ Actor:
     fid:
       type: string
       format: uri
-      description: "The actor Federation ID (unique accross federation)"
+      description: "The actor Federation ID (unique across federation)"
     uuid:
       type: string
       format: uuid
@@ -131,7 +131,7 @@ BaseArtist:
     fid:
       type: string
       format: uri
-      description: "The artist Federation ID (unique accross federation)"
+      description: "The artist Federation ID (unique across federation)"
     name:
       type: "string"
       example: "System of a Down"
@@ -140,7 +140,7 @@ BaseArtist:
       format: "date-time"
     is_local:
       type: "boolean"
-      description: "Indicates if the object was initally created locally or on another server"
+      description: "Indicates if the object was initially created locally or on another server"
 
 Artist:
   type: "object"
@@ -177,7 +177,7 @@ BaseAlbum:
     fid:
       type: string
       format: uri
-      description: "The album Federation ID (unique accross federation)"
+      description: "The album Federation ID (unique across federation)"
     artist:
       type: "integer"
       format: "int64"
@@ -198,7 +198,7 @@ BaseAlbum:
       $ref: "#/Attachment"
     is_local:
       type: "boolean"
-      description: "Indicates if the object was initally created locally or on another server"
+      description: "Indicates if the object was initially created locally or on another server"
 
 Album:
   type: "object"
@@ -332,7 +332,7 @@ Library:
     fid:
       type: string
       format: uri
-      description: "The library Federation ID (unique accross federation)"
+      description: "The library Federation ID (unique across federation)"
     uuid:
       type: string
       format: uuid
@@ -427,7 +427,7 @@ BaseTrack:
     fid:
       type: string
       format: uri
-      description: "The track Federation ID (unique accross federation)"
+      description: "The track Federation ID (unique across federation)"
     artist:
       type: "integer"
       format: "int64"
@@ -462,7 +462,7 @@ BaseTrack:
       example: "cc-by-nc-nd-4.0"
     is_local:
       type: "boolean"
-      description: "Indicates if the object was initally created locally or on another server"
+      description: "Indicates if the object was initially created locally or on another server"
 
 AlbumTrack:
   type: "object"
@@ -557,7 +557,7 @@ Upload:
       description: "URL to stream the upload"
     is_local:
       type: "boolean"
-      description: "Indicates if the object was initally created locally or on another server"
+      description: "Indicates if the object was initially created locally or on another server"
 
 OwnedLibraryCreate:
   type: "object"

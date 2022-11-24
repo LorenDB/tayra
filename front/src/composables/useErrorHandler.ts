@@ -16,7 +16,7 @@ async function useErrorHandler (error: Error | BackendError, eventId?: string): 
     ? 'Unexpected API error'
     : 'Unexpected error'
 
-  let content = $pgettext('App/Message/Paragraph', 'An unexpected error occured.')
+  let content = $pgettext('App/Message/Paragraph', 'An unexpected error occurred.')
 
   if ('backendErrors' in error) {
     logger.error(title, error, error.backendErrors)
@@ -35,7 +35,7 @@ async function useErrorHandler (error: Error | BackendError, eventId?: string): 
 
     const { get } = useCookies()
     if (get(COOKIE) === 'yes') {
-      content = $pgettext('App/Message/Paragraph', 'An unexpected error occured. <br><sub>To help us understand why it happened, please attach a detailed description of what you did that has triggered the error.</sub>')
+      content = $pgettext('App/Message/Paragraph', 'An unexpected error occurred. <br><sub>To help us understand why it happened, please attach a detailed description of what you did that has triggered the error.</sub>')
       const user = store.state.auth.authenticated
         ? {
             name: store.state.auth.username,

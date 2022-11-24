@@ -85,7 +85,7 @@ const updateObj = async (attr: string) => {
 
   try {
     await axios.patch(`manage/library/libraries/${props.id}/`, params)
-    logger.info(`${attr} was updated succcessfully to ${params[attr]}`)
+    logger.info(`${attr} was updated successfully to ${params[attr]}`)
   } catch (error) {
     logger.error(`Error while setting ${attr} to ${params[attr]}`, error)
     // TODO (wvffle): Use error handler with custom msg

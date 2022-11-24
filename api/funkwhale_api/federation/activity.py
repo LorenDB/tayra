@@ -424,7 +424,7 @@ def is_allowed_url(url, allowed_domains):
 def prepare_deliveries_and_inbox_items(recipient_list, type, allowed_domains=None):
     """
     Given a list of recipients (
-        either actor instances, public adresses, a dictionnary with a "type" and "target"
+        either actor instances, public addresses, a dictionary with a "type" and "target"
         keys for followers collections)
     returns a list of deliveries, alist of inbox_items and a list
     of urls to persist in the activity in place of the initial recipient list.

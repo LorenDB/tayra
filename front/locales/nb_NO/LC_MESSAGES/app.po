@@ -8565,7 +8565,7 @@ msgstr "Du vil bli logget ut av denne økta, og må logge inn i den nye"
 
 #: front/src/components/auth/LoginForm.vue:49
 #: src/components/auth/LoginForm.vue:2
-msgctxt "Contant/Auth/Paragraph"
+msgctxt "Content/Auth/Paragraph"
 msgid "You will be redirected to %{ domain } to authenticate."
 msgstr ""
 

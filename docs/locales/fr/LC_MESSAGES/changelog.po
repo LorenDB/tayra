@@ -6225,7 +6225,7 @@ msgid ""
 "This new permission is helpful if you want to give upload/import rights "
 "to some users, but don't want them to be able to manage the library as a "
 "whole: although there are no controls yet for managing library in the "
-"fron-end, subsequent release will introduce management interfaces for "
+"front-end, subsequent release will introduce management interfaces for "
 "artists, files, etc."
 msgstr ""
 

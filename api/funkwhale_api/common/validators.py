@@ -97,7 +97,7 @@ class FileValidator:
         "MIME type '%(mimetype)s' is not valid. Allowed types are: %(allowed_mimetypes)s."
     )
     min_size_message = _(
-        "The current file %(size)s, which is too small. The minumum file size is %(allowed_size)s."
+        "The current file %(size)s, which is too small. The minimum file size is %(allowed_size)s."
     )
     max_size_message = _(
         "The current file %(size)s, which is too large. The maximum file size is %(allowed_size)s."

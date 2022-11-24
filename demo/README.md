@@ -48,7 +48,7 @@ sudo ENV_FILE=/srv/funkwhale-demo/.env ./setup.sh
 
 ## Automate
 
-You'll probaby want to reset the demo every now and then. You can do that
+You'll probably want to reset the demo every now and then. You can do that
 using a cronjob:
 
 ```

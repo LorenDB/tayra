@@ -115,7 +115,7 @@ const fetchData = async () => {
   try {
     const response = await axios.get('tracks/', { params })
 
-    // TODO (wvffle): Fetch continously?
+    // TODO (wvffle): Fetch continuously?
     fetchDataUrl.value = response.data.next
     additionalTracks.value = response.data.results
     totalTracks.value = response.data.count

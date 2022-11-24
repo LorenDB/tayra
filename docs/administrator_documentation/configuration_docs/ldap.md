@@ -55,7 +55,7 @@ type: String
 value: cn=admin,dc=domain,dc=com
 ---
 
-LDAP user {abbr}`DN (Distinguised Name)` to bind on so you can perform searches.
+LDAP user {abbr}`DN (Distinguished Name)` to bind on so you can perform searches.
 ```
 
 ```{py:data} LDAP_BIND_PASSWORD
@@ -64,7 +64,7 @@ type: String
 value: bindpassword
 ---
 
-LDAP user password for bind {abbr}`DN (Distinguised Name)`.
+LDAP user password for bind {abbr}`DN (Distinguished Name)`.
 ```
 
 ```{py:data} LDAP_SEARCH_FILTER
@@ -91,7 +91,7 @@ type: String
 value: dc=domain,dc=com
 ---
 
-The LDAP search root {abbr}`DN (Distinguised Name)`. Supports several entries in a comma-delimited list.
+The LDAP search root {abbr}`DN (Distinguished Name)`. Supports several entries in a comma-delimited list.
 ```
 
 ```{py:data} LDAP_USER_ATTR_MAP
@@ -126,7 +126,7 @@ type: String
 value: ou=groups,dc=domain,dc=com
 ---
 
-The LDAP group search root {abbr}`DN (Distinguised Name)`. This needs to be set to `True` to enable group features.
+The LDAP group search root {abbr}`DN (Distinguished Name)`. This needs to be set to `True` to enable group features.
 ```
 
 ```{py:data} LDAP_GROUP_FILTER

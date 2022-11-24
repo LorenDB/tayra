@@ -62,7 +62,7 @@
         // NOTE: Filter out repeating and unplayable media types
         .filter(({ mimetype }, index, array) => array.findIndex((upload) => upload.mimetype === mimetype) === index)
         .filter(({ mimetype }) => ['probably', 'maybe'].includes(audio.element?.canPlayType(mimetype)))
-        // NOTE: For backwards compatibilty, prepend the baseUrl if listen_url starts with a slash
+        // NOTE: For backwards compatibility, prepend the baseUrl if listen_url starts with a slash
         .map(source => ({
           ...source,
           listen_url: source.listen_url[0] === '/'

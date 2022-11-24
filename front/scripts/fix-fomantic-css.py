@@ -217,7 +217,7 @@ Given the previous config, the following style sheet:
 
 .. code-block:: css
 
-    .unsed.variation {
+    .unused.variation {
         color: yellow;
     }
 
@@ -837,7 +837,7 @@ def set_vars(component_name, rules):
 
     for rule in rules:
         if rule["lines"][0].startswith("@media"):
-            # manual handling of media queries, becaues our parser is really
+            # manual handling of media queries, because our parser is really
             # simplistic
             internal_rules = rules_from_media_query(rule)
             internal_rules = set_vars(component_name, internal_rules)

@@ -811,7 +811,7 @@ def albums_set_tags_from_tracks(ids=None, dry_run=False):
     )
     logger.info("Found automatic tags for %s albums…", len(data))
     if dry_run:
-        logger.info("Running in dry-run mode, not commiting")
+        logger.info("Running in dry-run mode, not committing")
         return
 
     tags_tasks.add_tags_batch(
@@ -836,7 +836,7 @@ def artists_set_tags_from_tracks(ids=None, dry_run=False):
     )
     logger.info("Found automatic tags for %s artists…", len(data))
     if dry_run:
-        logger.info("Running in dry-run mode, not commiting")
+        logger.info("Running in dry-run mode, not committing")
         return
 
     tags_tasks.add_tags_batch(

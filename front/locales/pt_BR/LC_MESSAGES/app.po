@@ -8213,7 +8213,7 @@ msgstr "Você sairá desta conta e precisará entrar novamente"
 #: front/src/components/auth/LoginForm.vue:49
 #: src/components/auth/LoginForm.vue:2
 #, fuzzy
-msgctxt "Contant/Auth/Paragraph"
+msgctxt "Content/Auth/Paragraph"
 msgid "You will be redirected to %{ domain } to authenticate."
 msgstr "Você será redirecionado para <strong>%{ url }</strong>"
 

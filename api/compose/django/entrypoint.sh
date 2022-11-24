@@ -5,7 +5,7 @@ set -e
 # environment variables just to support cookiecutter out of the box. That makes no sense, so this little entrypoint
 # does all this for us.
 if [ -z "$DATABASE_URL" ]; then
-  # the official postgres image uses 'postgres' as default user if not set explictly.
+  # the official postgres image uses 'postgres' as default user if not set explicitly.
   if [ -z "$POSTGRES_ENV_POSTGRES_USER" ]; then
     export POSTGRES_ENV_POSTGRES_USER=postgres
   fi

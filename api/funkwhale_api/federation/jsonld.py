@@ -96,7 +96,7 @@ async def fetch_many(*ids, references=None):
     """
     Given a list of object ids, will fetch the remote
     representations for those objects, expand them
-    and return a dictionnary with id as the key and expanded document as the values
+    and return a dictionary with id as the key and expanded document as the values
     """
     ids = set(ids)
     results = references if references is not None else {}
@@ -122,7 +122,7 @@ DEFAULT_PREPARE_CONFIG = {
 
 def dereference(value, references):
     """
-    Given a payload and a dictonary containing ids and objects, will replace
+    Given a payload and a dictionary containing ids and objects, will replace
     all the matching objects in the payload by the one in the references dictionary.
     """
 
@@ -166,10 +166,10 @@ def get_value(value, keep=None, attr=None):
 def prepare_for_serializer(payload, config, fallbacks={}):
     """
     Json-ld payloads, as returned by expand are quite complex to handle, because
-    every attr is basically a list of dictionnaries. To make code simpler,
+    every attr is basically a list of dictionaries. To make code simpler,
     we use this function to clean the payload a little bit, base on the config object.
 
-    Config is a dictionnary, with keys being serializer field names, and values
+    Config is a dictionary, with keys being serializer field names, and values
     being dictionaries describing how to handle this field.
     """
     final_payload = {}

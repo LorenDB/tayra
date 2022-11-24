@@ -8097,7 +8097,7 @@ msgstr "Вы будете отключены от этого сеанса и В�
 
 #: front/src/components/auth/LoginForm.vue:49
 #: src/components/auth/LoginForm.vue:2
-msgctxt "Contant/Auth/Paragraph"
+msgctxt "Content/Auth/Paragraph"
 msgid "You will be redirected to %{ domain } to authenticate."
 msgstr "Вы будете перенаправлены на %{ domain } для входа."
 

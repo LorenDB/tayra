@@ -8098,7 +8098,7 @@ msgstr "Pecharemos esta sesión e deberás acceder co novo"
 
 #: front/src/components/auth/LoginForm.vue:49
 #: src/components/auth/LoginForm.vue:2
-msgctxt "Contant/Auth/Paragraph"
+msgctxt "Content/Auth/Paragraph"
 msgid "You will be redirected to %{ domain } to authenticate."
 msgstr "Ímoste redirixir a %{ domain } para autenticarte."
 

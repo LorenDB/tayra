@@ -103,7 +103,7 @@ onMounted(() => {
 
 const openMenu = () => {
   // little magic to ensure the menu is always visible in the viewport
-  // By default, try to diplay it on the right if there is enough room
+  // By default, try to display it on the right if there is enough room
   const menu = dropdown.value.find('.menu')
   const viewportOffset = menu.get(0)?.getBoundingClientRect() ?? { right: 0, left: 0 }
   const viewportWidth = document.documentElement.clientWidth

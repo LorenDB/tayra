@@ -63,5 +63,5 @@ class Command(BaseCommand):
                 actor_ids=actor_ids,
                 upload_and_track_ids=[],
             )
-        print("Commiting changes…")
+        print("Committing changes…")
         TrackActor.objects.bulk_create(objs, batch_size=5000, ignore_conflicts=True)

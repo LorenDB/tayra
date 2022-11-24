@@ -67,7 +67,7 @@ const targets = reactive({
 
 const fetchTargets = async () => {
   // we request target data via the API so we can display previous state
-  // additionnal data next to the edit card
+  // additional data next to the edit card
   type Config = { url: string, ids: number[] }
   const typesAndIds: Record<Targets, Config> = {
     artist: { url: 'artists/', ids: [] },

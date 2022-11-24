@@ -140,7 +140,7 @@ def test_can_use_radio_session_to_filter_choices(factories):
     for i in range(10):
         radio.pick(filter_playable=False)
 
-    # ensure 10 differents tracks have been suggested
+    # ensure 10 different tracks have been suggested
     tracks_id = [
         session_track.track.pk for session_track in session.session_tracks.all()
     ]

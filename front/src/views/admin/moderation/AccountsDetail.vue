@@ -127,7 +127,7 @@ const updateUser = async (attr: string, toNull = false) => {
 
   try {
     await axios.patch(`manage/users/users/${object.value.user.id}/`, params)
-    logger.info(`${attr} was updated succcessfully to ${newValue}`)
+    logger.info(`${attr} was updated successfully to ${newValue}`)
   } catch (error) {
     logger.error(`Error while setting ${attr} to ${newValue}`, error)
     // TODO: Use error handler

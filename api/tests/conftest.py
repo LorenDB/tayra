@@ -100,7 +100,7 @@ def local_cache():
 @pytest.fixture
 def factories(db):
     """
-    Returns a dictionnary containing all registered factories with keys such as
+    Returns a dictionary containing all registered factories with keys such as
     users.User or music.Track
     """
     from funkwhale_api import factories
@@ -117,7 +117,7 @@ def factories(db):
 @pytest.fixture
 def nodb_factories():
     """
-    Returns a dictionnary containing all registered factories with a build strategy
+    Returns a dictionary containing all registered factories with a build strategy
     that does not require access to the database
     """
     from funkwhale_api import factories

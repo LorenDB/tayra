@@ -92,7 +92,7 @@ tags:
 
 content_category:
   type: "string"
-  description: Used to what kind of content is published in a chanel
+  description: Used to what kind of content is published in a channel
   enum:
     - music
     - podcast

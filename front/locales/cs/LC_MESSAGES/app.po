@@ -8391,7 +8391,7 @@ msgstr "Budete odhlášeni z tohoto sezení a musíte se přihlásit znovu"
 #: front/src/components/auth/LoginForm.vue:49
 #: src/components/auth/LoginForm.vue:2
 #, fuzzy
-msgctxt "Contant/Auth/Paragraph"
+msgctxt "Content/Auth/Paragraph"
 msgid "You will be redirected to %{ domain } to authenticate."
 msgstr "Budete přesměrováni na <strong>%{ url }</strong>"
 

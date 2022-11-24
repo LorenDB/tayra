@@ -15,7 +15,7 @@ class DeleteAccountMutationSerializer(mutations.MutationSerializer):
         if not obj.is_local or not obj.user:
             raise mutations.serializers.ValidationError("Cannot delete this account")
 
-        # delete oauth apps / reset all passwords immediatly
+        # delete oauth apps / reset all passwords immediately
         obj.user.set_unusable_password()
         obj.user.subsonic_api_token = None
         # force logout

@@ -177,7 +177,7 @@ You need to initialize the postgres container on your {term}`destination server`
 
 ## 5. Check your DNS settings
 
-Before you start Funkwhale on your {term}`destination server`, check your DNS changes have propogated. Once your hostname is pointing to your {term}`destination server's <destination server>` IP address, proceed to the next step.
+Before you start Funkwhale on your {term}`destination server`, check your DNS changes have propagated. Once your hostname is pointing to your {term}`destination server's <destination server>` IP address, proceed to the next step.
 
 ## 6. Start your new Funkwhale installation
 

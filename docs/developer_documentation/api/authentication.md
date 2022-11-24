@@ -38,7 +38,7 @@ When creating an application you need to define the [**scopes**](https://www.rfc
 - `read:<scope>`: grants read-only access to the resource
 - `write:<scope>`: grants write-only access to the resource
 
-`read` rights are required to fetch information using a `GET` request. All other actions (`POST`, `PATCH`, `PUT`, and `DELETE`) require `write` priviliges. You may give an application **both** `read` and `write` access to any scope.
+`read` rights are required to fetch information using a `GET` request. All other actions (`POST`, `PATCH`, `PUT`, and `DELETE`) require `write` privileges. You may give an application **both** `read` and `write` access to any scope.
 
 ```{list-table}
    :header-rows: 1

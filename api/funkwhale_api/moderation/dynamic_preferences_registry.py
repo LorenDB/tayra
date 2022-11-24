@@ -16,7 +16,7 @@ class AllowListEnabled(types.BooleanPreference):
     section = moderation
     name = "allow_list_enabled"
     verbose_name = "Enable allow-listing"
-    help_text = "If enabled, only interactions with explicitely allowed domains will be authorized."
+    help_text = "If enabled, only interactions with explicitly allowed domains will be authorized."
     default = False
 
 

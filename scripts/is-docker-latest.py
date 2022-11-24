@@ -30,7 +30,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="""
         Exit with code 0 if the given version matches the latest one
-        fron the list of releases found in releases_json. Primary use
+        from the list of releases found in releases_json. Primary use
         is to check whether the current version can be safely pushed
         as the latest one on the docker Hub.
     """

@@ -11,7 +11,7 @@ QUERY_REGEX = re.compile(r'(((?P<key>\w+):)?(?P<value>"[^"]+"|[\S]+))')
 def parse_query(query):
     """
     Given a search query such as "hello is:issue status:opened",
-    returns a list of dictionnaries discribing each query token
+    returns a list of dictionaries describing each query token
     """
     matches = [m.groupdict() for m in QUERY_REGEX.finditer(query.lower())]
     for m in matches:
@@ -25,7 +25,7 @@ def normalize_query(
     findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
     normspace=re.compile(r"\s{2,}").sub,
 ):
-    """Splits the query string in invidual keywords, getting rid of unecessary spaces
+    """Splits the query string in individual keywords, getting rid of unnecessary spaces
     and grouping quoted words together.
     Example:
 

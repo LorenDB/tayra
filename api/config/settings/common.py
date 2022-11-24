@@ -81,7 +81,7 @@ Path to a .env file to load
 """
 if env_file:
     logger.info("Loading specified env file at %s", env_file)
-    # we have an explicitely specified env file
+    # we have an explicitly specified env file
     # so we try to load and it fail loudly if it does not exist
     env.read_env(env_file)
 else:
@@ -493,7 +493,7 @@ bucket.
 
 ACLs and bucket policies are distinct concepts, and some storage
 providers (ie Linode, Scaleway) will always apply the most restrictive between
-a bucket's ACL and policy, meaning a default private ACL will supercede
+a bucket's ACL and policy, meaning a default private ACL will supersede
 a relaxed bucket policy.
 
 If present, the value should be a valid canned ACL.
@@ -1258,7 +1258,7 @@ able to read this directory.
     Don’t insert a slash at the end of this path.
 
 """
-# When this is set to default=True, we need to reenable migration music/0042
+# When this is set to default=True, we need to re-enable migration music/0042
 # to ensure data is populated correctly on existing pods
 MUSIC_USE_DENORMALIZATION = env.bool("MUSIC_USE_DENORMALIZATION", default=True)
 

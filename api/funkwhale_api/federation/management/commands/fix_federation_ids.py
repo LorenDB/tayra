@@ -30,7 +30,7 @@ MODELS = [
 
 class Command(BaseCommand):
     help = """
-    Find and replace wrong protocal/domain in local federation ids.
+    Find and replace wrong protocol/domain in local federation ids.
 
     Use with caution and only if you know what you are doing.
     """

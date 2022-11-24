@@ -39,7 +39,7 @@ If you want to make changes to the frontend, you can use Vite to run a developme
    yarn i18n-compile
    ```
 
-5. Launch the devlopment server:
+5. Launch the development server:
 
    ```sh
    yarn dev

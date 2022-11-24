@@ -16,7 +16,7 @@ curl -L -o /srv/funkwhale/docker-compose.yml "https://dev.funkwhale.audio/funkwh
    Docker's resolver <https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found>`_, you can mount your
    custom nginx configuration into the container. Uncomment the commented volumes in the `nginx` section of your `docker-compose.yml`.
 	 Additionally you need to update the paths in `nginx/funkwhale.template`.
-	 Replace all occurances of `/funkwhale` by `/usr/share/nginx/html`.
+	 Replace all occurrences of `/funkwhale` by `/usr/share/nginx/html`.
    This loads the templates from your `nginx` folder and overrides the template files in the Docker container.
 
 ```

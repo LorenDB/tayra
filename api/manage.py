@@ -13,7 +13,7 @@ if __name__ == "__main__":
     # we're doing this here since otherwise, missing environment
     # files in settings result in AttributeError being raised, generating
     # a cryptic django.core.exceptions.AppRegistryNotReady error.
-    # To prevent that, we explicitely load settings here before anything
+    # To prevent that, we explicitly load settings here before anything
     # else, so we fail fast with a relevant error. See #140 for more details.
     django.setup()
 

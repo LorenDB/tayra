@@ -742,7 +742,7 @@ class Upload(models.Model):
         default=empty_dict, max_length=50000, encoder=DjangoJSONEncoder, blank=True
     )
     import_date = models.DateTimeField(null=True, blank=True)
-    # optionnal metadata provided during import
+    # optional metadata provided during import
     import_metadata = JSONField(
         default=empty_dict, max_length=50000, encoder=DjangoJSONEncoder, blank=True
     )
@@ -754,7 +754,7 @@ class Upload(models.Model):
     # in the same import
     import_reference = models.CharField(max_length=50, default=get_import_reference)
 
-    # optionnal metadata about import results (error messages, etc.)
+    # optional metadata about import results (error messages, etc.)
     import_details = JSONField(
         default=empty_dict, max_length=50000, encoder=DjangoJSONEncoder, blank=True
     )

@@ -60,7 +60,7 @@ docker-compose run --rm api python manage.py create_library username1 --name="Li
 Created library Library 1 for user username1 with UUID 436da05b-8cb1-4a4d-b870-4a3b235d8517
 ```
 
-### Create a new library wth no name or privacy level
+### Create a new library with no name or privacy level
 
 You can create a library using only a username. The script substitutes default values for the library name and privacy level.
 

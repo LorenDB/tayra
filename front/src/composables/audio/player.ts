@@ -43,7 +43,7 @@ export const usePlayer = createGlobalState(() => {
     sound.pause()
   })
 
-  // Create first track when we initalize the page
+  // Create first track when we initialize the page
   // NOTE: We want to have it called only once, hence we're using createGlobalState
   const initializeFirstTrack = createGlobalState(() => tryOnMounted(() => {
     const { initialize } = useTracks()

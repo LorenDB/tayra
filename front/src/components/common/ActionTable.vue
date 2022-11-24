@@ -98,7 +98,7 @@ const toggleCheck = (event: MouseEvent, id: string, index: number) => {
     selectAll.value = false
   }
 
-  // Add inbetween ids to the list of affected ids
+  // Add in between ids to the list of affected ids
   if (event.shiftKey && lastCheckedIndex.value !== -1) {
     const boundaries = [index, lastCheckedIndex.value].sort((a, b) => a - b)
     for (const object of props.objectsData.results.slice(boundaries[0], boundaries[1] + 1)) {

@@ -53,7 +53,7 @@ This guide shows you how to tag your content with MusicBrainz Picard.
    Used if no license found in the `License` tag.
    - `CC-BY 3.0: http://creativecommons.org/licenses/cc-by/3.0/`
 * - `Pictures`
-   - The first embeded picture found is used as the album cover.
+   - The first embedded picture found is used as the album cover.
    -
 * - `MusicBrainz Recording ID`
    - The MusicBrainz ID for the recording.

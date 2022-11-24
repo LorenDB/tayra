@@ -59,7 +59,7 @@ def submit_scrobble_v1(session, scrobble_time, track, session_key, scrobble_url)
     else:
         raise ScrobblerException(response.text)
 
-    PLUGIN["logger"].debug("Scrobble successfull!")
+    PLUGIN["logger"].debug("Scrobble successful!")
 
 
 def submit_now_playing_v1(session, track, session_key, now_playing_url):
@@ -75,7 +75,7 @@ def submit_now_playing_v1(session, track, session_key, now_playing_url):
     else:
         raise ScrobblerException(response.text)
 
-    PLUGIN["logger"].debug("Now playing successfull!")
+    PLUGIN["logger"].debug("Now playing successful!")
 
 
 def get_scrobble_payload(track, date, suffix="[0]"):

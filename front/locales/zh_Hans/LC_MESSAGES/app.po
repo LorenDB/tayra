@@ -8040,7 +8040,7 @@ msgstr "您将立刻被登出，需要重新登录"
 
 #: front/src/components/auth/LoginForm.vue:49
 #: src/components/auth/LoginForm.vue:2
-msgctxt "Contant/Auth/Paragraph"
+msgctxt "Content/Auth/Paragraph"
 msgid "You will be redirected to %{ domain } to authenticate."
 msgstr "您将会被跳转到 %{ domain } 以授权登录。"
 

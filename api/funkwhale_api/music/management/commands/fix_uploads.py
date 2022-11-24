@@ -84,7 +84,7 @@ class Command(BaseCommand):
                 )
             )
             if not dry_run:
-                self.stdout.write("[mimetypes] commiting...")
+                self.stdout.write("[mimetypes] committing...")
                 qs.update(mimetype=mimetype)
 
     def fix_file_data(self, dry_run, **kwargs):

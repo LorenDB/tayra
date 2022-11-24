@@ -961,7 +961,7 @@ fetchOwnedApps()
               <div>
                 <p>
                   <translate translate-context="Popup/Settings/Paragraph">
-                    This is irreversible and will permanently remove your data from our servers. You will we immediatly logged out.
+                    This is irreversible and will permanently remove your data from our servers. You will we immediately logged out.
                   </translate>
                 </p>
               </div>
