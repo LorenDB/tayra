@@ -45,6 +45,9 @@ class TaggedItem(models.Model):
     class Meta:
         unique_together = ("tag", "content_type", "object_id")
 
+    def __str__(self):
+        return self.tag.name
+
 
 @transaction.atomic
 def add_tags(obj, *tags):

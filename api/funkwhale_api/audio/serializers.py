@@ -26,7 +26,7 @@ from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.federation import utils as federation_utils
 from funkwhale_api.moderation import mrf
 from funkwhale_api.music import models as music_models
-from funkwhale_api.music.serializers import COVER_WRITE_FIELD, SimpleArtistSerializer
+from funkwhale_api.music.serializers import COVER_WRITE_FIELD, CoverField
 from funkwhale_api.tags import models as tags_models
 from funkwhale_api.tags import serializers as tags_serializers
 from funkwhale_api.users import serializers as users_serializers
@@ -229,8 +229,26 @@ class ChannelUpdateSerializer(serializers.Serializer):
         return ChannelSerializer(obj, context=self.context).data
 
 
+class SimpleChannelArtistSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    fid = serializers.URLField()
+    mbid = serializers.CharField()
+    name = serializers.CharField()
+    creation_date = serializers.DateTimeField()
+    modification_date = serializers.DateTimeField()
+    is_local = serializers.BooleanField()
+    content_category = serializers.CharField()
+    description = common_serializers.ContentSerializer(allow_null=True, required=False)
+    cover = CoverField(allow_null=True, required=False)
+    channel = serializers.UUIDField(allow_null=True, required=False)
+    tracks_count = serializers.IntegerField(source="_tracks_count", required=False)
+    tags = serializers.ListField(
+        child=serializers.CharField(), source="_prefetched_tagged_items", required=False
+    )
+
+
 class ChannelSerializer(serializers.ModelSerializer):
-    artist = SimpleArtistSerializer()
+    artist = SimpleChannelArtistSerializer()
     actor = serializers.SerializerMethodField()
     downloads_count = serializers.SerializerMethodField()
     attributed_to = federation_serializers.APIActorSerializer()
