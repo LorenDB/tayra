@@ -149,6 +149,18 @@ changelog_snippet:
 pre-commit:
   extends: [.pre-commit]
 
+lint_api:
+  interruptible: true
+  allow_failure: true
+  stage: lint
+
+  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-api:3.11
+  before_script:
+    - cd api
+    - make install
+  script:
+    - make lint
+
 eslint:
   interruptible: true
   image: node:18-alpine
