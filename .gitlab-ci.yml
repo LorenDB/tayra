@@ -149,7 +149,7 @@ pre-commit:
   before_script:
     - pip3 install pre-commit
   script:
-    - pre-commit run --all --color=always --show-diff-on-failure
+    - pre-commit run --verbose --all --color=always --show-diff-on-failure
 
 eslint:
   interruptible: true
