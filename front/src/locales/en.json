@@ -196,7 +196,7 @@
                 "fediverse": {
                     "title": "Fediverse object",
                     "fieldLabel": "Fediverse object",
-                    "fieldPlaceholder": "@username@example.com"
+                    "fieldPlaceholder": "{'@'}username{'@'}example.com"
                 }
             },
             "header": {
@@ -457,7 +457,7 @@
                 }
             },
             "LibraryFollowButton": {
-                "button": {       
+                "button": {
                     "unfollow": "Unfollow",
                     "cancel": "Cancel follow request",
                     "follow": "Follow"
@@ -1125,7 +1125,7 @@
                     "performAction": "Perform actions"
                 },
                 "modal": {
-                    "performAction": { 
+                    "performAction": {
                         "header": "Do you want to launch {action} on {count} element? | Do you want to launch {action} on {count} elements?",
                         "content": {
                             "warning": "This may affect a lot of elements or have irreversible consequences, please double check this is really what you want."
@@ -1309,7 +1309,7 @@
                     "favorites": "No favorites | {count} favorite | {count} favorites"
                 },
                 "empty": {
-                    "noFavorites": "No tracks have been added to your favorites yet" 
+                    "noFavorites": "No tracks have been added to your favorites yet"
                 },
                 "ordering": {
                     "label": "Ordering",
@@ -1534,7 +1534,7 @@
                     "filter": "Remove filter"
                 },
                 "message": {
-                    "filter": "You are currently hiding content related to this artist." 
+                    "filter": "You are currently hiding content related to this artist."
                 },
                 "link": {
                     "filter": "Review my filters"
@@ -3547,7 +3547,7 @@
                         },
                         "activity": {
                             "firstSeen": "First seen",
-                            "followers": "Followers"  
+                            "followers": "Followers"
                         },
                         "audioContent": {
                             "cachedSize": "Cached size",
@@ -3576,7 +3576,7 @@
                         "delete": {
                             "header": "Delete this tag?",
                             "content": {
-                                "warning": "The tag will be removed and unlinked from any existing entity. This action is irreversible."  
+                                "warning": "The tag will be removed and unlinked from any existing entity. This action is irreversible."
                             }
 
                         }
@@ -3652,11 +3652,11 @@
                         "local": "Local",
                         "uploadData": "Upload data",
                         "activity": "Activity",
-                        "audioContent": "Audio content"  
+                        "audioContent": "Audio content"
                     },
                     "button": {
                         "download": "Download",
-                        "delete": "Delete"                        
+                        "delete": "Delete"
                     },
                     "link": {
                         "django": "View in Django's admin",
@@ -4005,7 +4005,7 @@
                 }
             },
             "Plugins": {
-                "title": "Manage plugins"                
+                "title": "Manage plugins"
             },
             "ProfileActivity": {
                 "header": {

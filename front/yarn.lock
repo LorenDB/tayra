@@ -1068,7 +1068,7 @@
   resolved "https://registry.yarnpkg.com/@intlify/shared/-/shared-9.3.0-beta.10.tgz#e1e6c99b0f0a039e8fadc319b93314056f8e992e"
   integrity sha512-h93uAanbAt/XgjDHclrVB7xix6r7Uz11wx0iGNOCdHP7aA2LCJjUT3uNbekJjjbo+Fl5jzTSJZdm2SexzoqhRA==
 
-"@intlify/vite-plugin-vue-i18n@^6.0.1":
+"@intlify/vite-plugin-vue-i18n@^6.0.3":
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@intlify/vite-plugin-vue-i18n/-/vite-plugin-vue-i18n-6.0.3.tgz#57a6900de02a9829e52b16bf072768534c7664ef"
   integrity sha512-6SgNzPAOCR90wvt368lKzi7f/5ZEWJn22UCGvhFsP3XvKqlF3cVzojahgQ6o+LTdCkExeM6wPgd+haFf28E9VQ==
@@ -1849,7 +1849,7 @@
     "@vue/compiler-dom" "3.2.45"
     "@vue/shared" "3.2.45"
 
-"@vue/devtools-api@^6.0.0-beta.11", "@vue/devtools-api@^6.4.5":
+"@vue/devtools-api@^6.0.0-beta.11", "@vue/devtools-api@^6.2.1", "@vue/devtools-api@^6.4.5":
   version "6.4.5"
   resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.4.5.tgz#d54e844c1adbb1e677c81c665ecef1a2b4bb8380"
   integrity sha512-JD5fcdIuFxU4fQyXUu3w2KpAJHzTVdN+p4iOX2lMWSHMOoQdMAcpFLZzm9Z/2nmsoZ1a96QEhZ26e50xLBsgOQ==
@@ -5222,6 +5222,16 @@ vue-gettext@2.1.12:
   version "2.1.12"
   resolved "https://registry.yarnpkg.com/vue-gettext/-/vue-gettext-2.1.12.tgz#444d3220149b17fa4c7caeded3f12d439b698f33"
   integrity sha512-7Kw36xtKvARp8ZafQGPK9WR6EM+dhFUikR5f0+etSkiHuvUM3yf1HsRDLYoLLdJ0AMaXxKwgekumzvCk6KX8rA==
+
+vue-i18n@9:
+  version "9.2.2"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-9.2.2.tgz#aeb49d9424923c77e0d6441e3f21dafcecd0e666"
+  integrity sha512-yswpwtj89rTBhegUAv9Mu37LNznyu3NpyLQmozF3i1hYOhwpG8RjcjIFIIfnu+2MDZJGSZPXaKWvnQA71Yv9TQ==
+  dependencies:
+    "@intlify/core-base" "9.2.2"
+    "@intlify/shared" "9.2.2"
+    "@intlify/vue-devtools" "9.2.2"
+    "@vue/devtools-api" "^6.2.1"
 
 vue-observe-visibility@^2.0.0-alpha.1:
   version "2.0.0-alpha.1"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SUPPORTED_LOCALES } from '~/init/locale'
+import { SUPPORTED_LOCALES, setI18nLanguage } from '~/init/locale'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
@@ -50,7 +50,7 @@ const labels = computed(() => ({
           :key="key"
           :class="[{'active': $i18n.locale === key},'item']"
           :value="key"
-          @click="$i18n.locale = key"
+          @click="setI18nLanguage(key)"
         >{{ language }}</a>
       </div>
     </div>

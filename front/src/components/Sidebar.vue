@@ -2,7 +2,7 @@
 import type { RouteRecordName } from 'vue-router'
 
 import { computed, ref, watch, watchEffect, onMounted } from 'vue'
-import { SUPPORTED_LOCALES } from '~/init/locale'
+import { setI18nLanguage, SUPPORTED_LOCALES } from '~/init/locale'
 import { useCurrentElement } from '@vueuse/core'
 import { setupDropdown } from '~/utils/fomantic'
 import { useRoute } from 'vue-router'
@@ -32,7 +32,7 @@ defineProps<Props>()
 const store = useStore()
 const { theme } = useTheme()
 const themes = useThemeList()
-const { t } = useI18n()
+const { t, locale: i18nLocale } = useI18n()
 
 const route = useRoute()
 const isCollapsed = ref(true)
@@ -101,9 +101,14 @@ const moderationNotifications = computed(() =>
     + store.state.ui.notifications.pendingReviewRequests
 )
 
+const showLanguageModal = ref(false)
+const locale = ref(i18nLocale.value)
+watch(locale, (locale) => {
+  // setI18nLanguage(locale)
+})
+
 const isProduction = import.meta.env.PROD
 const showUserModal = ref(false)
-const showLanguageModal = ref(false)
 const showThemeModal = ref(false)
 
 const el = useCurrentElement()
@@ -291,7 +296,7 @@ onMounted(() => {
             >
               <input
                 :id="`${key}`"
-                v-model="$i18n.locale"
+                v-model="locale"
                 type="radio"
                 name="language"
                 :value="key"

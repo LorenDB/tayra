@@ -9,9 +9,13 @@ import store from '~/store'
 
 import useLogger from '~/composables/useLogger'
 
+import en from '../locales/en.json'
+
+const localeFactory = import.meta.glob('../locales/*.json')
+
 const logger = useLogger()
 
-const defaultLanguage = store.state.ui.currentLanguage ?? 'en_US'
+const defaultLanguage = store.state.ui.currentLanguage ?? 'en'
 export const SUPPORTED_LOCALES = locales.reduce((map: Record<string, string>, locale) => {
   map[locale.code] = locale.label
   return map
@@ -22,22 +26,32 @@ export const i18n = createI18n<false>({
   globalInjection: true,
   fallbackLocale: 'en',
   legacy: false,
-  locale: 'en'
+  locale: 'en',
+  messages: { en }
 })
 
 export const setI18nLanguage = async (locale: string) => {
+  console.debug(0)
+  if (locale === 'en') {
+    return
+  }
+
+  console.debug(1)
   if (!Object.keys(SUPPORTED_LOCALES).includes(locale)) {
     throw new Error(`Unsupported locale: ${locale}`)
   }
 
+  console.debug(2)
   // load locale messages
   if (!i18n.global.availableLocales.includes(locale)) {
     try {
-      const { default: messages } = await import(`./locales/${locale}.json`)
+      console.debug(3)
+      const { default: messages } = await localeFactory[`../locales/${locale}.json`]()
       i18n.global.setLocaleMessage(locale, messages)
       await nextTick()
     } catch (error) {
       logger.warn(`Unsupported locale: ${locale}`)
+      logger.debug(error)
     }
   }
 
@@ -72,6 +86,7 @@ export const install: InitModule = async ({ store, app }) => {
 
   // Handle language change
   watch(() => store.state.ui.currentLanguage, async (locale) => {
+    console.debug(locale)
     await store.dispatch('ui/currentLanguage', locale)
     await setI18nLanguage(locale)
     // TODO (wvffle): Set moment locale
