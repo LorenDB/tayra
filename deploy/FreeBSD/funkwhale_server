@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck disable=SC2034
 
 # PROVIDE: funkwhale_server
 # REQUIRE: LOGIN postgresql nginx redis
@@ -10,23 +11,28 @@
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
 
+# shellcheck disable=SC1091
 . /etc/rc.subr
 
 desc="Funkwhale server"
-name=funkwhale_server
-rcvar=funkwhale_server_enable
+name="funkwhale_server"
+rcvar="funkwhale_server_enable"
 
-load_rc_config $name
+load_rc_config "$name"
 
-: ${funkwhale_server_enable:=NO}
+: "${funkwhale_server_enable:=NO}"
 
 funkwhale_server_chdir="/usr/local/www/funkwhale/api"
-funkwhale_server_user=funkwhale
-funkwhale_server_env=$(cat /usr/local/www/funkwhale/config/.env | grep -v ^# | xargs)
+funkwhale_server_user="funkwhale"
+funkwhale_server_env="$(grep -v '^#' /usr/local/www/funkwhale/config/.env | xargs)"
 command_interpreter="/usr/local/www/funkwhale/virtualenv/bin/python3"
 
 command="/usr/local/www/funkwhale/virtualenv/bin/gunicorn"
-command_args="config.asgi:application -w 4 -k uvicorn.workers.UvicornWorker -b 127.0.0.1:5000 \
+command_args="\
+config.asgi:application \
+--workers 4 \
+--worker-class uvicorn.workers.UvicornWorker \
+--bind 127.0.0.1:5000 \
 >> /var/log/funkwhale/${name##funkwhale_}.log 2>&1 &"
 
 run_rc_command "$1"

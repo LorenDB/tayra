@@ -1,38 +1,52 @@
-#!/bin/bash -eux
-version=${VERSION:-develop}
-music_path=${MUSIC_PATH:-/usr/share/music}
-demo_path=${DEMO_PATH:-/srv/funkwhale-demo/demo}
-env_file=${ENV_FILE}
+#!/usr/bin/env bash
+
+set -eux
+
+error() {
+  echo >&2 "$*"
+  exit 1
+}
+
+# $ENV_FILE is required
+[[ -f "${ENV_FILE}" ]] || error "env file $ENV_FILE is not a file!"
+
+VERSION="${VERSION:-develop}"
+MUSIC_PATH="${MUSIC_PATH:-/usr/share/music}"
+DEMO_PATH="${DEMO_PATH:-/srv/funkwhale-demo/demo}"
+
 echo 'Cleaning everything...'
-mkdir -p $demo_path
-cd $demo_path
+mkdir -p "$DEMO_PATH"
+cd "$DEMO_PATH"
 /usr/local/bin/docker-compose down -v || echo 'Nothing to stop'
-sudo rm -rf $demo_path/*
-mkdir -p $demo_path
+sudo rm -rf "$DEMO_PATH/*"
+mkdir -p "$DEMO_PATH"
+
 echo 'Downloading demo files...'
-curl -L -o docker-compose.yml "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$version/deploy/docker-compose.yml"
-curl -L -o .env "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$version/deploy/env.prod.sample"
+curl -L -o docker-compose.yml "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$VERSION/deploy/docker-compose.yml"
+curl -L -o .env "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$VERSION/deploy/env.prod.sample"
 mkdir nginx
-curl -L -o nginx/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$version/deploy/docker.nginx.template"
-curl -L -o nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$version/deploy/funkwhale_proxy.conf"
+curl -L -o nginx/funkwhale.template "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$VERSION/deploy/docker.nginx.template"
+curl -L -o nginx/funkwhale_proxy.conf "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/$VERSION/deploy/funkwhale_proxy.conf"
 
 mkdir data/
-curl -L -o front.zip "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$version/download?job=build_front"
+curl -L -o front.zip "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$VERSION/download?job=build_front"
 unzip front.zip
 
-cat $env_file >> .env
-echo "FUNKWHALE_VERSION=$version" >> .env
-echo "MUSIC_DIRECTORY_SERVE_PATH=$music_path" >> .env
-echo "MUSIC_DIRECTORY_PATH=$music_path" >> .env
-echo "MEDIA_ROOT=$demo_path/data/media/" >> .env
-echo "STATIC_ROOT=$demo_path/data/static/" >> .env
-echo "FUNKWHALE_FRONTEND_PATH=$demo_path/front/dist/" >> .env
+{
+  cat "$ENV_FILE"
+  echo "FUNKWHALE_VERSION=$VERSION"
+  echo "MUSIC_DIRECTORY_SERVE_PATH=$MUSIC_PATH"
+  echo "MUSIC_DIRECTORY_PATH=$MUSIC_PATH"
+  echo "MEDIA_ROOT=$DEMO_PATH/data/media/"
+  echo "STATIC_ROOT=$DEMO_PATH/data/static/"
+  echo "FUNKWHALE_FRONTEND_PATH=$DEMO_PATH/front/dist/"
+} >> .env
 
 # /usr/local/bin/docker-compose pull
 /usr/local/bin/docker-compose up -d postgres redis
 sleep 5
 cat .env
-cat <<EOF | /usr/local/bin/docker-compose run --rm api python manage.py shell -i python
+cat << EOF | /usr/local/bin/docker-compose run --rm api python manage.py shell -i python
 import subprocess
 subprocess.call("pip install factory-boy", shell=True)
 
@@ -57,9 +71,9 @@ manager['common__api_authentication_required'] = False
 manager['instance__name'] = "Login: demo / password: demo"
 
 paths = [
-    "$music_path/**/*.ogg",
-    "$music_path/**/*.mp3",
-    "$music_path/**/*.flac",
+    "$MUSIC_PATH/**/*.ogg",
+    "$MUSIC_PATH/**/*.mp3",
+    "$MUSIC_PATH/**/*.flac",
 ]
 print(paths)
 call_command("import_files", str(library.uuid), *paths, username="demo", recursive=True, interactive=False)

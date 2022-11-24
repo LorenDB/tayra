@@ -1,5 +1,11 @@
-#!/usr/bin/env -S bash -eux
+#!/usr/bin/env bash
 
-npm_binaries () {
-  command -v yarn > /dev/null && yarn bin || npm bin
+set -eux
+
+npm_binaries()  {
+  if command -v yarn > /dev/null; then
+    yarn bin
+  else
+    npm bin
+  fi
 }

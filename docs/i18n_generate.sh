@@ -1,5 +1,10 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
 poetry run make -e BUILDDIR=locales gettext
-for f in $(ls locales | grep -v gettext); do
-	poetry run sphinx-intl update -p locales/gettext -l $f
-done;
+
+for path in locales/*; do
+  lang="$(basename "$path")"
+  if [[ "$lang" != "gettext" ]]; then
+    poetry run sphinx-intl update -p locales/gettext -l "$lang"
+  fi
+done
