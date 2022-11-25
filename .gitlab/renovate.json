@@ -16,7 +16,8 @@
   "packageRules": [
     {
       "matchPaths": ["api/*", "front/*", "docs/*"],
-      "additionalBranchPrefix": "{{parentDir}}-"
+      "additionalBranchPrefix": "{{parentDir}}-",
+      "commitMessageSuffix": "{{parentDir}}"
     },
     {
       "matchUpdateTypes": ["major", "minor"],
