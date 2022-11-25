@@ -70,7 +70,7 @@ const labels = computed(() => ({
           @click="theme = th.key"
         >
           <i :class="th.icon" />
-          {{ t.name }}
+          {{ th.name }}
         </a>
       </div>
     </div>

@@ -1,17 +1,17 @@
 import type { InitModule } from '~/types'
 
 import { usePreferredLanguages } from '@vueuse/core'
-import { nextTick, watch } from 'vue'
 import { createI18n } from 'vue-i18n'
+import { nextTick } from 'vue'
 
 import locales from '~/locales.json'
 import store from '~/store'
 
 import useLogger from '~/composables/useLogger'
 
-import en from '../locales/en.json'
+import en from '../locales/en_US.json'
 
-const localeFactory = import.meta.glob('../locales/*.json')
+const localeFactory = import.meta.glob('../locales/*.json') as Record<string, () => Promise<{ default: typeof en }>>
 
 const logger = useLogger()
 
@@ -24,28 +24,20 @@ export const SUPPORTED_LOCALES = locales.reduce((map: Record<string, string>, lo
 export const i18n = createI18n<false>({
   formatFallbackMessages: true,
   globalInjection: true,
-  fallbackLocale: 'en',
+  fallbackLocale: 'en_US',
   legacy: false,
-  locale: 'en',
-  messages: { en }
+  locale: 'en_US',
+  messages: { en_US: en }
 })
 
 export const setI18nLanguage = async (locale: string) => {
-  console.debug(0)
-  if (locale === 'en') {
-    return
-  }
-
-  console.debug(1)
   if (!Object.keys(SUPPORTED_LOCALES).includes(locale)) {
     throw new Error(`Unsupported locale: ${locale}`)
   }
 
-  console.debug(2)
   // load locale messages
   if (!i18n.global.availableLocales.includes(locale)) {
     try {
-      console.debug(3)
       const { default: messages } = await localeFactory[`../locales/${locale}.json`]()
       i18n.global.setLocaleMessage(locale, messages)
       await nextTick()
@@ -58,6 +50,8 @@ export const setI18nLanguage = async (locale: string) => {
   // set locale
   i18n.global.locale.value = locale
   document.querySelector('html')?.setAttribute('lang', locale)
+  await store.dispatch('ui/currentLanguage', locale)
+  store.commit('ui/momentLocale', locale.replace(/_/g, '-'))
 }
 
 export const install: InitModule = async ({ store, app }) => {
@@ -84,12 +78,5 @@ export const install: InitModule = async ({ store, app }) => {
     await setI18nLanguage(language ?? defaultLanguage)
   }
 
-  // Handle language change
-  watch(() => store.state.ui.currentLanguage, async (locale) => {
-    console.debug(locale)
-    await store.dispatch('ui/currentLanguage', locale)
-    await setI18nLanguage(locale)
-    // TODO (wvffle): Set moment locale
-    // store.commit('ui/momentLocale', 'en')
-  }, { immediate: true })
+  setI18nLanguage(store.state.ui.currentLanguage)
 }
