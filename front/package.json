@@ -14,8 +14,6 @@
     "lint": "eslint --ext .ts,.js,.vue,.html src public/embed.html",
     "lint:tsc": "vue-tsc --noEmit",
     "fix-fomantic-css": "scripts/fix-fomantic-css.sh",
-    "i18n-compile": "scripts/i18n-compile.sh",
-    "i18n-extract": "scripts/i18n-extract.sh",
     "postinstall": "yarn run fix-fomantic-css"
   },
   "dependencies": {

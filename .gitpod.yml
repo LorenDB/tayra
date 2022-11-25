@@ -37,7 +37,6 @@ tasks:
     before: cd front
     init: |
       yarn install
-      yarn run i18n-compile
     command: yarn dev --host 0.0.0.0 --base /front/
 
   - name: Welcome to Funkwhale development!
