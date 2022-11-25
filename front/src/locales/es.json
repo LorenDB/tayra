@@ -2613,7 +2613,7 @@
                     "title": "Buscar en Wikipedia"
                 },
                 "rss": {
-                    "fieldPlaceholder": "@channel@pod.example o https://website.example/rss.xml",
+                    "fieldPlaceholder": "{'@'}channel{'@'}pod.example o https://website.example/rss.xml",
                     "fieldLabel": "Crear una lista de reproducción"
                 }
             },

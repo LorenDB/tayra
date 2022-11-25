@@ -114,7 +114,7 @@
         "RemoteSearchForm": {
             "label": {
                 "rss": {
-                    "fieldPlaceholder": "@channel@pod.example 或 https://website.example/rss.xml"
+                    "fieldPlaceholder": "{'@'}channel{'@'}pod.example 或 https://website.example/rss.xml"
                 }
             }
         }

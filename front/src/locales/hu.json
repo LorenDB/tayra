@@ -662,7 +662,7 @@
         "RemoteSearchForm": {
             "label": {
                 "rss": {
-                    "fieldPlaceholder": "@channel@pod.example vagy https://website.example/rss.xml"
+                    "fieldPlaceholder": "{'@'}channel{'@'}pod.example vagy https://website.example/rss.xml"
                 }
             }
         },

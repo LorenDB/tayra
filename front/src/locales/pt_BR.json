@@ -2707,7 +2707,7 @@
                     "title": "Pesquisar no fediverso"
                 },
                 "rss": {
-                    "fieldPlaceholder": "@canal@pod.exemplo ou https://linkdosite.exemplo/rss.xml",
+                    "fieldPlaceholder": "{'@'}canal{'@'}pod.exemplo ou https://linkdosite.exemplo/rss.xml",
                     "fieldLabel": "Localização do canal"
                 }
             },

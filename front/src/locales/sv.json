@@ -278,7 +278,7 @@
                 "userGuides": {
                     "label": "Användarradio"
                 },
-                "funkwhale": "library@demo.funkwhale.audio"
+                "funkwhale": "library{'@'}demo.funkwhale.audio"
             }
         },
         "audio": {

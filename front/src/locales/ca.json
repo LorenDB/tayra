@@ -2778,7 +2778,7 @@
                     "title": "Subscriu-te a la Fediverse"
                 },
                 "rss": {
-                    "fieldPlaceholder": "@channel@pod.example o https://website.example/rss.xml",
+                    "fieldPlaceholder": "{'@'}channel{'@'}pod.example o https://website.example/rss.xml",
                     "fieldLabel": "Ubicació del canal",
                     "title": "Subscriu-te al flux RSS d'un podcast"
                 }
