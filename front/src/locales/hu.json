@@ -3,328 +3,62 @@
         "auth": {
             "Authorize": {
                 "header": {
-                    "access": "{ app } hozzá akar férni a Funkwhale fiókodhoz",
-                    "authorize": "",
-                    "authorizeFailure": "",
-                    "fetchFailure": "",
-                    "allScopes": "",
-                    "readOnly": "",
-                    "writeOnly": ""
+                    "access": "{ app } hozzá akar férni a Funkwhale fiókodhoz"
                 },
-                "title": "Alkalmazás engedélyezése",
-                "button": {
-                    "authorize": ""
-                },
-                "help": {
-                    "pasteCode": "",
-                    "redirect": "",
-                    "copyCode": ""
-                },
-                "message": {
-                    "unknownPermissions": ""
-                }
+                "title": "Alkalmazás engedélyezése"
             },
             "SubsonicTokenForm": {
                 "message": {
-                    "accessDisabled": "A hozzáférés le van tiltva",
-                    "passwordUpdated": "",
-                    "unavailable": ""
-                },
-                "button": {
-                    "confirmDisable": "",
-                    "disable": "",
-                    "newPassword": "",
-                    "confirmNewPassword": ""
-                },
-                "modal": {
-                    "disableSubsonic": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "newPassword": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "link": {
-                    "apps": ""
-                },
-                "header": {
-                    "error": "",
-                    "subsonic": ""
-                },
-                "description": {
-                    "subsonic": {
-                        "paragraph1": "",
-                        "paragraph3": "",
-                        "paragraph2": ""
-                    }
-                },
-                "label": {
-                    "subsonicField": ""
+                    "accessDisabled": "A hozzáférés le van tiltva"
                 }
             },
             "ApplicationEdit": {
                 "label": {
                     "accessToken": "Hozzáférés a szerkesztésekhez",
-                    "appId": "Pályázati azonosító",
-                    "appSecret": ""
+                    "appId": "Pályázati azonosító"
                 },
                 "header": {
-                    "appDetails": "A kérelemre vonatkozó adatok",
-                    "editApp": ""
+                    "appDetails": "A kérelemre vonatkozó adatok"
                 },
                 "help": {
                     "appDetails": "Az alkalmazás azonosítója és a titka nagyon érzékeny adatok és jelszavakként kell kezelni őket. Ne ossza meg senkivel."
-                },
-                "link": {
-                    "settings": ""
-                },
-                "title": "",
-                "button": {
-                    "regenerateToken": ""
                 }
             },
             "Settings": {
                 "title": "Felhasználói fiók beállításai",
                 "header": {
-                    "accountSettings": "Felhasználói fiók beállításai",
-                    "authorizedApps": "",
-                    "avatar": "",
-                    "changeEmail": "",
-                    "changePassword": "",
-                    "contentFilters": "",
-                    "deleteAccount": "",
-                    "hiddenArtists": "",
-                    "plugins": "",
-                    "settingsUpdated": "",
-                    "emailFailure": "",
-                    "accountFailure": "",
-                    "noApps": "",
-                    "noPersonalApps": "",
-                    "yourApps": "",
-                    "avatarFailure": "",
-                    "passwordFailure": "",
-                    "updateFailure": ""
+                    "accountSettings": "Felhasználói fiók beállításai"
                 },
                 "table": {
                     "authorizedApps": {
                         "header": {
-                            "application": "Pályázat",
-                            "permissions": ""
+                            "application": "Pályázat"
                         }
                     },
                     "yourApps": {
                         "header": {
-                            "application": "Pályázat",
-                            "creationDate": "",
-                            "scopes": ""
-                        }
-                    },
-                    "artists": {
-                        "header": {
-                            "creationDate": "",
-                            "name": ""
+                            "application": "Pályázat"
                         }
                     }
                 },
                 "label": {
-                    "avatar": "",
-                    "currentPassword": "",
-                    "newEmail": "Egy album",
-                    "newPassword": "",
-                    "password": ""
-                },
-                "button": {
-                    "password": "",
-                    "delete": "",
-                    "deleteAccountConfirm": "",
-                    "deleteAccount": "",
-                    "disableSubsonic": "",
-                    "edit": "",
-                    "refresh": "",
-                    "remove": "",
-                    "removeApp": "Alkalmazás engedélyezése",
-                    "revoke": "",
-                    "revokeAccess": "",
-                    "update": "",
-                    "updateSettings": ""
-                },
-                "description": {
-                    "changeEmail": "",
-                    "changePassword": {
-                        "paragraph1": "",
-                        "paragraph2": ""
-                    },
-                    "contentFilters": "",
-                    "authorizedApps": "",
-                    "yourApps": "",
-                    "plugins": "",
-                    "deleteAccount": ""
-                },
-                "modal": {
-                    "changePassword": {
-                        "header": "",
-                        "content": {
-                            "warning": "",
-                            "logout": "",
-                            "subsonic": ""
-                        }
-                    },
-                    "deleteAccount": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "deleteApp": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "revokeApp": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "help": {
-                    "noApps": "",
-                    "changePassword": "",
-                    "noPersonalApps": ""
+                    "newEmail": "Egy album"
                 },
                 "link": {
-                    "managePlugins": "",
                     "newApp": "Alkalmazás engedélyezése"
                 },
-                "warning": {
-                    "deleteAccount": ""
-                },
-                "message": {
-                    "currentEmail": "",
-                    "confirmDelete": ""
+                "button": {
+                    "removeApp": "Alkalmazás engedélyezése"
                 }
             },
             "Logout": {
                 "header": {
-                    "confirm": "Biztos, hogy ki akar lépni?",
-                    "unauthenticated": ""
-                },
-                "link": {
-                    "login": ""
-                },
-                "title": "",
-                "button": {
-                    "logout": ""
-                },
-                "message": {
-                    "loggedIn": ""
-                }
-            },
-            "ApplicationNew": {
-                "link": {
-                    "settings": ""
-                },
-                "title": ""
-            },
-            "ApplicationForm": {
-                "label": {
-                    "scopes": {
-                        "description": "",
-                        "read": {
-                            "label": "",
-                            "description": ""
-                        },
-                        "write": {
-                            "label": "",
-                            "description": ""
-                        }
-                    },
-                    "name": "",
-                    "redirectUri": ""
-                },
-                "button": {
-                    "create": "",
-                    "update": ""
-                },
-                "help": {
-                    "redirectUri": ""
-                },
-                "header": {
-                    "failure": ""
-                }
-            },
-            "LoginForm": {
-                "link": {
-                    "createAccount": "",
-                    "resetPassword": ""
-                },
-                "placeholder": {
-                    "username": ""
-                },
-                "help": {
-                    "approvalRequired": "",
-                    "invalidCredentials": ""
-                },
-                "button": {
-                    "login": ""
-                },
-                "label": {
-                    "password": "",
-                    "username": ""
-                },
-                "header": {
-                    "loginFailure": ""
-                }
-            },
-            "SignupForm": {
-                "button": {
-                    "create": ""
-                },
-                "label": {
-                    "email": "",
-                    "password": "",
-                    "username": ""
-                },
-                "placeholder": {
-                    "email": "",
-                    "invitation": "",
-                    "username": ""
-                },
-                "header": {
-                    "login": "",
-                    "signupFailure": ""
-                },
-                "message": {
-                    "registrationClosed": "",
-                    "requiresReview": "",
-                    "awaitingReview": "",
-                    "accountCreated": ""
+                    "confirm": "Biztos, hogy ki akar lépni?"
                 }
             },
             "Plugin": {
-                "link": {
-                    "documentation": ""
-                },
-                "label": {
-                    "pluginEnabled": "",
-                    "library": ""
-                },
                 "header": {
                     "failure": "Hiba történt a módosítások mentése közben"
-                },
-                "description": {
-                    "library": ""
-                },
-                "button": {
-                    "save": "",
-                    "scan": ""
                 }
             }
         },
@@ -333,30 +67,9 @@
                 "activeUsers": "{ count } aktív felhasználó | { count } aktív felhasználó",
                 "hoursOfMusic": "{ count } óra zene | { count } óra zene"
             },
-            "header": {
-                "funkwhale": "",
-                "aboutPod": "Erről az egyedről",
-                "publicContent": "",
-                "findApp": "",
-                "signup": ""
-            },
             "title": "Rólunk",
-            "link": {
-                "findOtherPod": "",
-                "learnMore": ""
-            },
-            "description": {
-                "funkwhale": "",
-                "publicContent": "",
-                "signup": "",
-                "findApp": "",
-                "quota": ""
-            },
-            "placeholder": {
-                "noDescription": ""
-            },
-            "message": {
-                "loggedIn": ""
+            "header": {
+                "aboutPod": "Erről az egyedről"
             }
         },
         "Home": {
@@ -366,46 +79,7 @@
             },
             "header": {
                 "aboutFunkwhale": "Funkwhaleról",
-                "about": "Erről a Funkwhale egyedről",
-                "contact": "",
-                "login": "",
-                "newChannels": "",
-                "newAlbums": "",
-                "signup": "",
-                "statistics": "",
-                "links": "",
-                "welcome": ""
-            },
-            "link": {
-                "publicContent": {
-                    "label": "",
-                    "description": ""
-                },
-                "userGuides": {
-                    "description": "",
-                    "label": ""
-                },
-                "findOtherPod": "",
-                "learnMore": "",
-                "mobileApps": {
-                    "label": "",
-                    "description": ""
-                },
-                "rules": "",
-                "viewMore": "",
-                "funkwhale": ""
-            },
-            "description": {
-                "funkwhale": {
-                    "paragraph2": "",
-                    "paragraph1": ""
-                },
-                "signup": "",
-                "quota": ""
-            },
-            "title": "",
-            "placeholder": {
-                "noDescription": ""
+                "about": "Erről a Funkwhale egyedről"
             }
         },
         "audio": {
@@ -415,19 +89,13 @@
                         "episodes": "{ count } epizód | { count } epizód",
                         "tracks": "Egy szám | % {count} szám"
                     }
-                },
-                "Widget": {
-                    "button": {
-                        "more": ""
-                    }
                 }
             },
             "ChannelCard": {
                 "meta": {
                     "episodes": "{ count } epizód | { count } epizód",
                     "tracks": "Egy szám | % {count} szám"
-                },
-                "title": ""
+                }
             },
             "ChannelSerieCard": {
                 "meta": {
@@ -439,35 +107,11 @@
                     "meta": {
                         "tracks": "Egy szám | % {count} szám"
                     }
-                },
-                "Widget": {
-                    "button": {
-                        "more": ""
-                    }
                 }
             },
             "Player": {
                 "meta": {
                     "position": "({ length } hosszú {index})"
-                },
-                "header": {
-                    "player": ""
-                },
-                "label": {
-                    "clearQueue": "",
-                    "expandQueue": "",
-                    "addArtistContentFilter": "",
-                    "loopingDisabled": "",
-                    "loopingSingle": "",
-                    "loopingWholeQueue": "",
-                    "audioPlayer": "",
-                    "mute": "",
-                    "nextTrack": "",
-                    "pause": "",
-                    "play": "",
-                    "previousTrack": "",
-                    "shuffleQueue": "",
-                    "unmute": ""
                 }
             },
             "PlayButton": {
@@ -475,22 +119,10 @@
                     "addToQueue": "Hozzáadás az aktuális lejátszási listához",
                     "addToPlaylist": "Hozzáadás lejátszási listához …",
                     "episodeDetails": "A kérelemre vonatkozó adatok",
-                    "hideArtist": "",
-                    "discretePlay": "",
                     "playAlbum": "Egy album",
-                    "playArtist": "",
-                    "playNext": "",
-                    "playNow": "",
                     "playPlaylist": "Hozzáférés a lejátszási listákhoz",
-                    "startRadio": "",
                     "playTrack": "Dal hozzáadása",
-                    "playTracks": "",
-                    "report": "",
                     "trackDetails": "A kérelemre vonatkozó adatok"
-                },
-                "title": {
-                    "more": "",
-                    "unavailable": ""
                 }
             },
             "podcast": {
@@ -500,20 +132,10 @@
                         "addToPlaylist": "Hozzáadás lejátszási listához …",
                         "addToQueue": "Hozzáadás a lejátszási listához",
                         "episodeDetails": "A kérelemre vonatkozó adatok",
-                        "playNext": "",
-                        "playNow": "",
                         "startRadio": "Dal hozzáadása",
-                        "removeFromFavorites": "",
                         "trackDetails": "A kérelemre vonatkozó adatok",
                         "albumDetails": "Egy album",
-                        "artistDetails": "",
-                        "channelDetails": "",
                         "seriesDetails": "Egy album"
-                    }
-                },
-                "MobileRow": {
-                    "button": {
-                        "actions": ""
                     }
                 }
             },
@@ -524,14 +146,9 @@
                         "addToPlaylist": "Hozzáadás lejátszási listához …",
                         "addToQueue": "Hozzáadás a lejátszási listához",
                         "episodeDetails": "A kérelemre vonatkozó adatok",
-                        "playNext": "",
-                        "playNow": "",
                         "startRadio": "Dal hozzáadása",
-                        "removeFromFavorites": "",
                         "trackDetails": "A kérelemre vonatkozó adatok",
                         "albumDetails": "Egy album",
-                        "artistDetails": "",
-                        "channelDetails": "",
                         "seriesDetails": "Egy album"
                     }
                 },
@@ -539,157 +156,25 @@
                     "table": {
                         "header": {
                             "album": "Album",
-                            "artist": "Előadó",
-                            "title": ""
+                            "artist": "Előadó"
                         }
                     }
-                },
-                "Widget": {
-                    "empty": {
-                        "noResults": ""
-                    },
-                    "button": {
-                        "more": ""
-                    }
-                },
-                "MobileRow": {
-                    "button": {
-                        "actions": ""
-                    }
-                }
-            },
-            "VolumeControl": {
-                "label": {
-                    "slider": ""
-                },
-                "button": {
-                    "mute": "",
-                    "unmute": ""
                 }
             },
             "SearchBar": {
                 "label": {
                     "album": "Album",
-                    "artist": "Előadó",
-                    "category": {
-                        "federation": "",
-                        "podcasts": ""
-                    },
-                    "search": "",
-                    "tag": "",
-                    "track": ""
-                },
-                "link": {
-                    "more": "",
-                    "fediverse": "",
-                    "rss": ""
-                },
-                "header": {
-                    "noResults": ""
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "empty": {
-                    "noResults": ""
+                    "artist": "Előadó"
                 }
             },
             "Search": {
                 "header": {
-                    "albums": "Albumok",
-                    "artists": "",
-                    "search": ""
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "empty": {
-                    "noAlbums": "",
-                    "noArtists": ""
+                    "albums": "Albumok"
                 }
             },
             "ChannelForm": {
-                "label": {
-                    "discography": "",
-                    "category": "",
-                    "image": "",
-                    "description": "",
-                    "username": "",
-                    "language": "",
-                    "name": "",
-                    "email": "",
-                    "owner": "",
-                    "podcast": "",
-                    "subcategory": "",
-                    "tags": ""
-                },
-                "placeholder": {
-                    "name": "",
-                    "username": ""
-                },
                 "header": {
                     "error": "Hiba történt a módosítások mentése közben"
-                },
-                "help": {
-                    "podcast": "",
-                    "discography": "",
-                    "podcastFields": "",
-                    "username": ""
-                },
-                "loader": {
-                    "loading": ""
-                },
-                "legend": {
-                    "purpose": ""
-                }
-            },
-            "LibraryFollowButton": {
-                "button": {
-                    "cancel": "",
-                    "follow": "",
-                    "unfollow": ""
-                }
-            },
-            "EmbedWizard": {
-                "button": {
-                    "copy": ""
-                },
-                "help": {
-                    "embed": "",
-                    "width": "",
-                    "anonymous": ""
-                },
-                "label": {
-                    "embed": "",
-                    "height": "",
-                    "width": ""
-                },
-                "header": {
-                    "preview": ""
-                },
-                "warning": {
-                    "anonymous": ""
-                },
-                "message": {
-                    "copy": ""
-                }
-            },
-            "ChannelSeries": {
-                "button": {
-                    "showMore": ""
-                },
-                "help": {
-                    "subscribe": ""
-                }
-            },
-            "ChannelsWidget": {
-                "button": {
-                    "showMore": ""
-                }
-            },
-            "ChannelEntries": {
-                "help": {
-                    "subscribe": ""
                 }
             }
         },
@@ -707,562 +192,99 @@
                 "meta": {
                     "tracks": "% { count } szám{ albumsCount } albumban | % { count } szám { albumsCount } albumban"
                 },
-                "title": "Előadó",
-                "button": {
-                    "cancel": "",
-                    "edit": "",
-                    "embed": "",
-                    "more": "",
-                    "play": ""
-                },
-                "modal": {
-                    "embed": {
-                        "header": ""
-                    }
-                },
-                "link": {
-                    "moderation": "",
-                    "discogs": "",
-                    "wikipedia": "",
-                    "django": "",
-                    "domain": "",
-                    "musicbrainz": ""
-                }
+                "title": "Előadó"
             },
             "radios": {
                 "Builder": {
                     "header": {
-                        "matches": "Egy szám megfelelő a kombinált szűrőkkel | % {count} szám megfelelő a kombinált szűrőkkel",
-                        "builder": "",
-                        "created": "",
-                        "updated": ""
+                        "matches": "Egy szám megfelelő a kombinált szűrőkkel | % {count} szám megfelelő a kombinált szűrőkkel"
                     },
                     "table": {
                         "filter": {
                             "header": {
-                                "actions": "műveletek",
-                                "candidates": "",
-                                "config": "",
-                                "exclude": "",
-                                "name": ""
+                                "actions": "műveletek"
                             }
                         }
                     },
                     "button": {
-                        "filter": "Szűrő hozzáadása",
-                        "save": ""
+                        "filter": "Szűrő hozzáadása"
                     },
                     "label": {
-                        "filter": "Szűrők hozzáadása a rádió testreszabásához",
-                        "description": "",
-                        "public": "",
-                        "name": ""
-                    },
-                    "placeholder": {
-                        "description": "",
-                        "name": ""
-                    },
-                    "title": "",
-                    "option": {
-                        "filter": ""
-                    },
-                    "description": {
-                        "builder": ""
+                        "filter": "Szűrők hozzáadása a rádió testreszabásához"
                     }
-                },
-                "Filter": {
-                    "cancelButton": "",
-                    "excludeLabel": "",
-                    "removeButton": "",
-                    "matchingTracksModalHeader": ""
                 }
             },
             "FileUpload": {
                 "tooltip": {
-                    "network": "Hálózati hiba történt ennek az állománynak a feltöltése közben",
-                    "size": "",
-                    "extension": "",
-                    "retry": "",
-                    "denied": "",
-                    "timeout": ""
+                    "network": "Hálózati hiba történt ennek az állománynak a feltöltése közben"
                 },
                 "table": {
                     "upload": {
                         "header": {
-                            "actions": "Pályázat",
-                            "filename": "",
-                            "size": "",
-                            "status": ""
-                        },
-                        "status": {
-                            "pending": "",
-                            "uploaded": "",
-                            "uploading": ""
+                            "actions": "Pályázat"
                         }
                     }
                 },
-                "button": {
-                    "cancel": "",
-                    "retry": ""
-                },
-                "label": {
-                    "uploadWidget": "",
-                    "remainingSpace": "",
-                    "extensions": ""
-                },
                 "header": {
                     "failure": "Hiba történt a módosítások mentése közben",
-                    "server": "",
-                    "status": "Fiók állapota",
-                    "local": ""
-                },
-                "link": {
-                    "processing": "",
-                    "uploading": "",
-                    "picard": ""
-                },
-                "description": {
-                    "import": "",
-                    "previousImport": ""
-                },
-                "message": {
-                    "local": {
-                        "format": "",
-                        "tag": "",
-                        "message": "",
-                        "copyright": ""
-                    }
+                    "status": "Fiók állapota"
                 }
             },
             "EditForm": {
                 "placeholder": {
                     "summary": "Rövid összefoglaló a változtatásaidról."
-                },
-                "button": {
-                    "cancel": "",
-                    "clear": "",
-                    "reset": "",
-                    "showUnreviewed": "",
-                    "showAll": "",
-                    "submit": "",
-                    "new": "",
-                    "suggest": ""
-                },
-                "header": {
-                    "failure": "",
-                    "recentEdits": "",
-                    "unreviewed": "",
-                    "success": ""
-                },
-                "notApplicable": "",
-                "empty": {
-                    "suggestEdit": ""
-                },
-                "label": {
-                    "summary": ""
-                },
-                "message": {
-                    "noPermission": ""
                 }
             },
             "Albums": {
                 "link": {
                     "addMusic": "Adj hozzá zenét"
                 },
-                "title": "Albumok",
-                "ordering": {
-                    "direction": {
-                        "ascending": "",
-                        "descending": "",
-                        "label": ""
-                    },
-                    "label": ""
-                },
-                "header": {
-                    "browse": ""
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "empty": {
-                    "noResults": ""
-                },
-                "pagination": {
-                    "results": ""
-                },
-                "label": {
-                    "search": "",
-                    "tags": ""
-                },
-                "button": {
-                    "search": ""
-                }
+                "title": "Albumok"
             },
             "Artists": {
                 "button": {
-                    "upload": "Adj hozzá zenét",
-                    "search": ""
+                    "upload": "Adj hozzá zenét"
                 },
                 "label": {
-                    "search": "Előadó",
-                    "excludeCompilation": "",
-                    "tags": ""
-                },
-                "title": "",
-                "ordering": {
-                    "direction": {
-                        "ascending": "",
-                        "descending": "",
-                        "label": ""
-                    },
-                    "label": ""
-                },
-                "header": {
-                    "browse": ""
-                },
-                "empty": {
-                    "noResults": ""
-                },
-                "pagination": {
-                    "results": ""
-                },
-                "placeholder": {
-                    "search": ""
+                    "search": "Előadó"
                 }
             },
             "TrackDetail": {
                 "table": {
                     "release": {
                         "album": "Album",
-                        "artist": "Előadó",
-                        "copyright": "",
-                        "license": "",
-                        "series": "",
-                        "url": "",
-                        "year": ""
-                    },
-                    "track": {
-                        "bitrate": {
-                            "label": ""
-                        },
-                        "codec": "",
-                        "downloads": "",
-                        "duration": "",
-                        "size": ""
+                        "artist": "Előadó"
                     }
                 },
                 "header": {
-                    "episode": "",
-                    "library": "",
-                    "playlists": "Hozzáférés a lejátszási listákhoz",
-                    "release": "",
-                    "track": ""
-                },
-                "notApplicable": "",
-                "description": {
-                    "library": ""
-                },
-                "link": {
-                    "musicbrainz": ""
+                    "playlists": "Hozzáférés a lejátszási listákhoz"
                 }
             },
             "TagDetail": {
                 "link": {
-                    "albums": "Albumok",
-                    "artists": "",
-                    "moderation": ""
-                },
-                "header": {
-                    "channels": "",
-                    "tracks": ""
-                }
-            },
-            "ArtistDetail": {
-                "header": {
-                    "album": "",
-                    "track": "",
-                    "library": ""
-                },
-                "button": {
-                    "more": "",
-                    "filter": ""
-                },
-                "link": {
-                    "filter": ""
-                },
-                "description": {
-                    "library": ""
-                },
-                "message": {
-                    "filter": ""
+                    "albums": "Albumok"
                 }
             },
             "ImportStatusModal": {
                 "error": {
                     "importFailure": "Hiba történt a feltöltés feldolgozása közben. Több információ található lentebb.",
                     "unknownError": {
-                        "message": "Ismeretlen hiba lépett fel",
-                        "label": ""
-                    },
-                    "invalidMetadata": {
-                        "label": "",
-                        "message": ""
+                        "message": "Ismeretlen hiba lépett fel"
                     }
-                },
-                "button": {
-                    "close": ""
-                },
-                "table": {
-                    "error": {
-                        "debug": "",
-                        "errorDetail": "",
-                        "errorType": "",
-                        "help": ""
-                    }
-                },
-                "header": {
-                    "importDetail": ""
-                },
-                "link": {
-                    "support": "",
-                    "documentation": ""
-                },
-                "message": {
-                    "importDetail": "",
-                    "importSuccess": ""
-                },
-                "warning": {
-                    "importSkipped": ""
                 }
             },
             "EditCard": {
                 "button": {
-                    "approve": "Jóváhagyás",
-                    "delete": "",
-                    "reject": ""
+                    "approve": "Jóváhagyás"
                 },
                 "status": {
                     "approved": "Jóváhagyva",
-                    "applied": "Jóváhagyva és alkalmazva",
-                    "pending": "",
-                    "rejected": ""
-                },
-                "modal": {
-                    "delete": {
-                        "header": ""
-                    },
-                    "content": {
-                        "warning": ""
-                    }
-                },
-                "table": {
-                    "update": {
-                        "header": {
-                            "field": "",
-                            "newValue": "",
-                            "oldValue": ""
-                        },
-                        "notApplicable": ""
-                    }
-                },
-                "header": {
-                    "modification": ""
-                },
-                "link": {
-                    "track": ""
+                    "applied": "Jóváhagyva és alkalmazva"
                 }
             },
             "Podcasts": {
-                "ordering": {
-                    "direction": {
-                        "ascending": "",
-                        "descending": "",
-                        "label": ""
-                    },
-                    "label": ""
-                },
-                "header": {
-                    "browse": ""
-                },
                 "button": {
-                    "cancel": "",
-                    "channel": "Hozzáférés a lejátszási listákhoz",
-                    "search": "",
-                    "subscribe": "",
-                    "feed": ""
-                },
-                "empty": {
-                    "noResults": ""
-                },
-                "label": {
-                    "search": "",
-                    "tags": ""
-                },
-                "title": "",
-                "pagination": {
-                    "results": ""
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "modal": {
-                    "subscription": {
-                        "header": ""
-                    }
-                }
-            },
-            "Radios": {
-                "ordering": {
-                    "direction": {
-                        "ascending": "",
-                        "descending": "",
-                        "label": ""
-                    },
-                    "label": ""
-                },
-                "header": {
-                    "browse": "",
-                    "instance": "",
-                    "user": ""
-                },
-                "button": {
-                    "add": "",
-                    "create": ""
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "empty": {
-                    "noResults": ""
-                },
-                "title": "",
-                "pagination": {
-                    "results": ""
-                },
-                "label": {
-                    "search": ""
-                }
-            },
-            "AlbumDropdown": {
-                "button": {
-                    "cancel": "",
-                    "delete": "",
-                    "edit": "",
-                    "embed": "",
-                    "more": ""
-                },
-                "modal": {
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "embed": {
-                        "header": ""
-                    }
-                },
-                "link": {
-                    "moderation": "",
-                    "discogs": "",
-                    "django": "",
-                    "domain": "",
-                    "musicbrainz": ""
-                }
-            },
-            "TrackBase": {
-                "button": {
-                    "cancel": "",
-                    "delete": "",
-                    "download": "",
-                    "edit": "",
-                    "embed": "",
-                    "more": "",
-                    "play": ""
-                },
-                "modal": {
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "embed": {
-                        "header": ""
-                    }
-                },
-                "link": {
-                    "moderation": "",
-                    "discogs": "",
-                    "wikipedia": "",
-                    "django": "",
-                    "domain": ""
-                },
-                "title": ""
-            },
-            "AlbumEdit": {
-                "header": {
-                    "edit": "",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
-                }
-            },
-            "ArtistEdit": {
-                "header": {
-                    "edit": "",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
-                }
-            },
-            "TrackEdit": {
-                "header": {
-                    "edit": "",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
-                }
-            },
-            "AlbumDetail": {
-                "header": {
-                    "episodes": "",
-                    "tracks": "",
-                    "libraries": ""
-                },
-                "description": {
-                    "libraries": ""
-                },
-                "meta": {
-                    "volume": ""
-                }
-            },
-            "FsBrowser": {
-                "button": {
-                    "import": ""
-                }
-            },
-            "FsLogs": {
-                "empty": {
-                    "notStarted": ""
-                }
-            },
-            "Home": {
-                "title": "",
-                "header": {
-                    "newChannels": "",
-                    "playlists": "",
-                    "recentlyAdded": "",
-                    "recentlyFavorited": "",
-                    "recentlyListened": ""
-                }
-            },
-            "TagSelector": {
-                "placeholder": {
-                    "search": ""
+                    "channel": "Hozzáférés a lejátszási listákhoz"
                 }
             }
         },
@@ -1270,58 +292,20 @@
             "List": {
                 "header": {
                     "favorites": "Egy kedvenc | { count } kedvenc"
-                },
-                "ordering": {
-                    "direction": {
-                        "ascending": "",
-                        "descending": "",
-                        "label": ""
-                    },
-                    "label": ""
-                },
-                "link": {
-                    "library": ""
-                },
-                "loader": {
-                    "loading": ""
-                },
-                "empty": {
-                    "noFavorites": ""
-                },
-                "pagination": {
-                    "results": ""
-                },
-                "title": ""
+                }
             },
             "TrackFavoriteIcon": {
                 "button": {
-                    "add": "Hozzáadás a kedvencekhez",
-                    "remove": ""
-                },
-                "label": {
-                    "inFavorites": ""
+                    "add": "Hozzáadás a kedvencekhez"
                 }
             }
         },
         "channels": {
             "UploadModal": {
                 "meta": {
-                    "files": "Egy kedvenc | { count } kedvenc",
-                    "quota": ""
-                },
-                "button": {
-                    "cancel": "",
-                    "close": "",
-                    "finishLater": "",
-                    "next": "",
-                    "previous": "",
-                    "publish": "",
-                    "update": ""
+                    "files": "Egy kedvenc | { count } kedvenc"
                 },
                 "header": {
-                    "uploadFiles": "",
-                    "processing": "",
-                    "publish": "",
                     "uploadDetails": "A kérelemre vonatkozó adatok"
                 }
             },
@@ -1330,92 +314,28 @@
                     "tracks": "Egy szám | % {count} szám"
                 },
                 "label": {
-                    "album": "Album",
-                    "series": ""
-                },
-                "option": {
-                    "none": ""
+                    "album": "Album"
                 }
             },
             "LicenseSelect": {
                 "link": {
                     "license": "Erről a licencről"
-                },
-                "label": {
-                    "license": ""
-                },
-                "option": {
-                    "none": ""
                 }
             },
             "UploadForm": {
                 "help": {
                     "license": "Adjon hozzá licencet a feltöltéséhez, hogy bizonyos szabadságokat biztosítson a nyilvánosság számára."
-                },
-                "label": {
-                    "openBrowser": "",
-                    "channel": ""
-                },
-                "message": {
-                    "dragAndDrop": "",
-                    "pending": ""
-                },
-                "button": {
-                    "edit": "",
-                    "ignore": "",
-                    "remove": "",
-                    "resume": "",
-                    "retry": ""
-                },
-                "header": {
-                    "error": ""
-                },
-                "status": {
-                    "errored": "",
-                    "pending": "",
-                    "uploading": ""
-                },
-                "description": {
-                    "extensions": ""
-                },
-                "warning": {
-                    "quota": ""
                 }
             },
             "AlbumModal": {
-                "button": {
-                    "cancel": "",
-                    "create": ""
-                },
                 "header": {
                     "newAlbum": "Egy album",
                     "newSeries": "Egy album"
                 }
             },
-            "UploadMetadataForm": {
-                "label": {
-                    "description": "",
-                    "position": "",
-                    "tags": "",
-                    "title": "",
-                    "image": ""
-                }
-            },
-            "AlbumForm": {
-                "header": {
-                    "error": ""
-                },
-                "label": {
-                    "albumTitle": ""
-                }
-            },
             "SubscribeButton": {
                 "title": {
-                    "subscribe": "",
                     "unsubscribe": "Egy kedvenc"
-                },
-                "help": {
-                    "auth": ""
                 }
             }
         },
@@ -1430,237 +350,14 @@
             },
             "title": "Rólunk",
             "link": {
-                "about": "Erről az egyedről",
-                "features": "",
-                "introduction": "",
-                "rules": "",
-                "statistics": "",
-                "terms": ""
+                "about": "Erről az egyedről"
             },
             "header": {
-                "about": "Erről az egyedről",
-                "contact": "",
-                "features": "",
-                "rules": "",
-                "statistics": "",
-                "terms": ""
+                "about": "Erről az egyedről"
             },
             "feature": {
                 "allowList": "Engedély-lista",
-                "anonymousAccess": "név nélküli hozzáférés",
-                "status": {
-                    "closed": "",
-                    "disabled": "",
-                    "enabled": "",
-                    "open": ""
-                },
-                "federation": "",
-                "version": "",
-                "registrations": "",
-                "quota": ""
-            },
-            "notApplicable": "",
-            "placeholder": {
-                "noDescription": "",
-                "noRules": "",
-                "noTerms": ""
-            },
-            "message": {
-                "contact": ""
-            }
-        },
-        "common": {
-            "ActionTable": {
-                "button": {
-                    "selected": "",
-                    "allSelected": "Mind az egy elem ki van választva | Mind az { count } elem ki van választva",
-                    "go": "",
-                    "launch": "",
-                    "refresh": "",
-                    "select": "",
-                    "selectAll": "",
-                    "selectElement": "",
-                    "selectCurrentPage": ""
-                },
-                "message": {
-                    "success": "Egy elemen sikeresen végrehajtódott a(z) { action } művelet | { count } elemen sikeresen végrehajtódott a(z) { action } művelet",
-                    "needsRefresh": ""
-                },
-                "label": {
-                    "actions": "műveletek",
-                    "performAction": ""
-                },
-                "modal": {
-                    "performAction": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "header": {
-                    "error": ""
-                }
-            },
-            "Duration": {
-                "meta": {
-                    "hours": "{ hours } óra { minutes } perc",
-                    "minutes": "{ minutes } perc"
-                }
-            },
-            "UserMenu": {
-                "link": {
-                    "about": "Rólunk",
-                    "chat": "",
-                    "docs": "",
-                    "forum": "",
-                    "support": "",
-                    "git": "",
-                    "login": "",
-                    "logout": "",
-                    "notifications": "",
-                    "profile": "",
-                    "settings": "",
-                    "signup": ""
-                },
-                "label": {
-                    "shortcuts": "",
-                    "language": "",
-                    "theme": ""
-                }
-            },
-            "UserModal": {
-                "link": {
-                    "about": "Rólunk",
-                    "chat": "",
-                    "forum": "",
-                    "support": "",
-                    "git": "",
-                    "login": "",
-                    "logout": "",
-                    "notifications": "",
-                    "profile": "",
-                    "settings": "",
-                    "signup": ""
-                },
-                "label": {
-                    "shortcuts": "",
-                    "language": "",
-                    "theme": ""
-                },
-                "header": {
-                    "options": "Pályázat"
-                },
-                "button": {
-                    "switchInstance": ""
-                }
-            },
-            "DangerousButton": {
-                "button": {
-                    "cancel": "",
-                    "confirm": ""
-                },
-                "header": {
-                    "confirm": ""
-                }
-            },
-            "RenderedDescription": {
-                "button": {
-                    "cancel": "",
-                    "edit": "",
-                    "less": "",
-                    "more": "",
-                    "update": ""
-                },
-                "header": {
-                    "failure": ""
-                },
-                "empty": {
-                    "noDescription": ""
-                }
-            },
-            "InlineSearchBar": {
-                "button": {
-                    "clear": ""
-                },
-                "label": {
-                    "search": ""
-                },
-                "placeholder": {
-                    "search": ""
-                }
-            },
-            "CollapseLink": {
-                "button": {
-                    "collapse": "",
-                    "expand": ""
-                }
-            },
-            "CopyInput": {
-                "button": {
-                    "copy": ""
-                },
-                "message": {
-                    "success": ""
-                }
-            },
-            "LoginModal": {
-                "link": {
-                    "login": "",
-                    "signup": ""
-                },
-                "header": {
-                    "unauthenticated": ""
-                },
-                "description": {
-                    "noAccess": ""
-                }
-            },
-            "ContentForm": {
-                "help": {
-                    "markdown": ""
-                },
-                "empty": {
-                    "noContent": ""
-                },
-                "button": {
-                    "preview": "",
-                    "write": ""
-                },
-                "placeholder": {
-                    "input": ""
-                }
-            },
-            "EmptyState": {
-                "header": {
-                    "noResults": ""
-                },
-                "button": {
-                    "refresh": ""
-                }
-            },
-            "AttachmentInput": {
-                "help": {
-                    "upload": ""
-                },
-                "button": {
-                    "remove": ""
-                },
-                "label": {
-                    "upload": ""
-                },
-                "loader": {
-                    "uploading": ""
-                },
-                "header": {
-                    "failure": ""
-                }
-            },
-            "ExpandableDiv": {
-                "button": {
-                    "less": "",
-                    "more": ""
-                }
+                "anonymousAccess": "név nélküli hozzáférés"
             }
         },
         "playlists": {
@@ -1676,102 +373,58 @@
                 "button": {
                     "addDuplicate": "Mindenképp adja hozzá",
                     "addToPlaylist": "Hozzáadás ehhez a lejátszási listához",
-                    "addTrack": "Dal hozzáadása",
-                    "cancel": "",
-                    "edit": ""
+                    "addTrack": "Dal hozzáadása"
                 },
                 "header": {
-                    "addToPlaylist": "Hozzáadás a lejátszási listához",
-                    "available": "",
-                    "manage": "",
-                    "noResults": "",
-                    "addFailure": ""
-                },
-                "table": {
-                    "edit": {
-                        "header": {
-                            "edit": "",
-                            "lastModification": "",
-                            "name": "",
-                            "tracks": ""
-                        }
-                    }
-                },
-                "placeholder": {
-                    "filterPlaylist": ""
+                    "addToPlaylist": "Hozzáadás a lejátszási listához"
                 },
                 "label": {
                     "filter": "Szűrő hozzáadása"
-                },
-                "empty": {
-                    "noPlaylists": ""
                 }
             },
             "Editor": {
                 "button": {
-                    "addDuplicate": "Mindenképp adja hozzá",
-                    "clear": "",
-                    "copy": "",
-                    "insertFromQueue": ""
+                    "addDuplicate": "Mindenképp adja hozzá"
                 },
                 "error": {
                     "sync": "Hiba történt a módosítások mentése közben"
-                },
-                "message": {
-                    "sync": ""
-                },
-                "modal": {
-                    "clearPlaylist": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "help": {
-                    "reorder": ""
-                },
-                "header": {
-                    "editor": ""
-                },
-                "warning": {
-                    "duplicate": ""
-                },
-                "loading": {
-                    "sync": ""
                 }
             },
             "TrackPlaylistIcon": {
                 "button": {
                     "add": "Hozzáadás lejátszási listához …"
                 }
-            },
-            "Form": {
-                "header": {
-                    "createPlaylist": "",
-                    "createSuccess": "",
-                    "updateSuccess": "",
-                    "createFailure": ""
-                },
-                "button": {
-                    "create": "",
-                    "update": ""
-                },
-                "placeholder": {
-                    "name": ""
-                },
-                "label": {
-                    "name": "",
-                    "visibility": ""
+            }
+        },
+        "common": {
+            "Duration": {
+                "meta": {
+                    "hours": "{ hours } óra { minutes } perc",
+                    "minutes": "{ minutes } perc"
                 }
             },
-            "Widget": {
-                "button": {
-                    "create": "",
-                    "more": ""
+            "UserMenu": {
+                "link": {
+                    "about": "Rólunk"
+                }
+            },
+            "UserModal": {
+                "link": {
+                    "about": "Rólunk"
                 },
-                "placeholder": {
-                    "noPlaylists": ""
+                "header": {
+                    "options": "Pályázat"
+                }
+            },
+            "ActionTable": {
+                "message": {
+                    "success": "Egy elemen sikeresen végrehajtódott a(z) { action } művelet | { count } elemen sikeresen végrehajtódott a(z) { action } művelet"
+                },
+                "label": {
+                    "actions": "műveletek"
+                },
+                "button": {
+                    "allSelected": "Mind az egy elem ki van választva | Mind az { count } elem ki van választva"
                 }
             }
         },
@@ -1783,10 +436,7 @@
                     "libraryPendingFollow": "{ username } követni akarja \"{ library }\" könyvtáradat"
                 },
                 "button": {
-                    "approve": "Jóváhagyás",
-                    "markRead": "",
-                    "markUnread": "",
-                    "reject": ""
+                    "approve": "Jóváhagyás"
                 }
             }
         },
@@ -1794,38 +444,14 @@
             "link": {
                 "about": "Erről az egyedről",
                 "albums": "Albumok",
-                "artists": "Előadó",
-                "browse": "",
-                "channels": "",
-                "createAccount": "",
-                "favorites": "",
-                "home": "",
-                "library": "",
-                "login": "",
-                "moderation": "",
-                "playlists": "",
-                "podcasts": "",
-                "radios": "",
-                "search": "",
-                "settings": "",
-                "users": ""
+                "artists": "Előadó"
             },
             "label": {
                 "add": "Tartalom hozzáadása",
-                "administration": "Adminisztráció",
-                "language": "",
-                "main": "",
-                "follows": "",
-                "edits": "",
-                "play": "",
-                "theme": ""
+                "administration": "Adminisztráció"
             },
             "header": {
-                "administration": "Adminisztráció",
-                "explore": "",
-                "main": "",
-                "more": "",
-                "library": ""
+                "administration": "Adminisztráció"
             }
         },
         "manage": {
@@ -1835,97 +461,24 @@
                         "upload": {
                             "header": {
                                 "accessedDate": "Hozzáférés dátuma",
-                                "account": "Fiók",
-                                "creationDate": "",
-                                "domain": "",
-                                "importStatus": "",
-                                "library": "",
-                                "name": "",
-                                "size": "",
-                                "visibility": ""
+                                "account": "Fiók"
                             }
                         }
                     },
                     "option": {
-                        "all": "Összes",
-                        "failed": "",
-                        "finished": "",
-                        "pending": "",
-                        "skipped": ""
-                    },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "action": {
-                        "delete": {
-                            "label": "",
-                            "warning": ""
-                        }
-                    },
-                    "link": {
-                        "local": ""
-                    },
-                    "notApplicable": "",
-                    "label": {
-                        "search": "",
-                        "status": "",
-                        "visibility": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
+                        "all": "Összes"
                     }
                 },
                 "LibrariesTable": {
                     "table": {
                         "library": {
                             "header": {
-                                "account": "Fiók",
-                                "creationDate": "",
-                                "domain": "",
-                                "followers": "",
-                                "name": "",
-                                "uploads": "",
-                                "visibility": ""
+                                "account": "Fiók"
                             }
                         }
                     },
                     "option": {
                         "all": "Összes"
-                    },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "action": {
-                        "delete": {
-                            "label": "",
-                            "warning": ""
-                        }
-                    },
-                    "link": {
-                        "local": ""
-                    },
-                    "label": {
-                        "search": "",
-                        "visibility": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "TracksTable": {
@@ -1933,186 +486,48 @@
                         "track": {
                             "header": {
                                 "album": "Album",
-                                "artist": "Előadó",
-                                "creationDate": "",
-                                "domain": "",
-                                "license": "",
-                                "title": ""
+                                "artist": "Előadó"
                             }
                         }
-                    },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "action": {
-                        "delete": {
-                            "label": "",
-                            "warning": ""
-                        }
-                    },
-                    "link": {
-                        "local": ""
-                    },
-                    "notApplicable": "",
-                    "label": {
-                        "search": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "ArtistsTable": {
                     "table": {
                         "artist": {
                             "header": {
-                                "albums": "Albumok",
-                                "creationDate": "",
-                                "domain": "",
-                                "name": "",
-                                "tracks": ""
+                                "albums": "Albumok"
                             }
                         }
                     },
                     "option": {
                         "all": "Összes"
-                    },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "label": {
-                        "category": "",
-                        "search": ""
-                    },
-                    "action": {
-                        "delete": {
-                            "label": "",
-                            "warning": ""
-                        }
-                    },
-                    "link": {
-                        "local": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "TagsTable": {
                     "table": {
                         "tag": {
                             "header": {
-                                "albums": "Albumok",
-                                "artists": "",
-                                "creationDate": "",
-                                "name": "",
-                                "tracks": ""
+                                "albums": "Albumok"
                             }
                         }
-                    },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "action": {
-                        "delete": {
-                            "label": "",
-                            "warning": ""
-                        }
-                    },
-                    "label": {
-                        "search": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "EditsCardList": {
                     "option": {
                         "all": "Összes",
-                        "approved": "Jóváhagyva",
-                        "pending": "",
-                        "rejected": ""
-                    },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
-                    },
-                    "label": {
-                        "status": ""
+                        "approved": "Jóváhagyva"
                     }
                 },
                 "AlbumsTable": {
                     "table": {
                         "album": {
                             "header": {
-                                "artist": "Előadó",
-                                "creationDate": "",
-                                "domain": "",
-                                "name": "",
-                                "releaseDate": "",
-                                "tracks": ""
+                                "artist": "Előadó"
                             }
                         }
                     },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "action": {
-                        "delete": {
-                            "label": "",
-                            "warning": ""
-                        }
-                    },
                     "link": {
-                        "local": "",
                         "moderation": "Adjon hozzá egy új moderációs szabályt"
-                    },
-                    "notApplicable": "",
-                    "label": {
-                        "search": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 }
             },
@@ -2120,277 +535,44 @@
                 "ReportCard": {
                     "table": {
                         "object": {
-                            "account": "Fiók",
-                            "domain": "",
-                            "local": "",
-                            "owner": "",
-                            "type": ""
-                        },
-                        "status": {
-                            "assignedTo": "",
-                            "internalNotes": "",
-                            "resolutionDate": "",
-                            "resolved": "",
-                            "status": "",
-                            "unresolved": ""
-                        },
-                        "report": {
-                            "category": "",
-                            "creationDate": "",
-                            "submittedBy": ""
+                            "account": "Fiók"
                         }
                     },
                     "header": {
-                        "actions": "műveletek",
-                        "notes": "",
-                        "message": "",
-                        "reportedObject": ""
-                    },
-                    "button": {
-                        "confirmDelete": "",
-                        "delete": "",
-                        "resolve": "",
-                        "unresolve": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "notApplicable": "",
-                    "link": {
-                        "moderation": "",
-                        "report": "",
-                        "publicPage": ""
-                    },
-                    "warning": {
-                        "objectDeleted": ""
+                        "actions": "műveletek"
                     }
                 },
                 "UserRequestCard": {
                     "header": {
-                        "actions": "műveletek",
-                        "notes": "",
-                        "signup": ""
+                        "actions": "műveletek"
                     },
                     "button": {
-                        "approve": "Jóváhagyás",
-                        "reject": ""
+                        "approve": "Jóváhagyás"
                     },
                     "table": {
                         "status": {
-                            "approved": "Jóváhagyva",
-                            "assignedTo": "",
-                            "internalNotes": "",
-                            "pending": "",
-                            "refused": "",
-                            "status": ""
-                        },
-                        "request": {
-                            "creationDate": "",
-                            "submittedBy": ""
+                            "approved": "Jóváhagyva"
                         }
-                    },
-                    "notApplicable": "",
-                    "link": {
-                        "request": ""
-                    },
-                    "message": {
-                        "signup": ""
                     }
                 },
                 "InstancePolicyForm": {
                     "header": {
-                        "addRule": "Adjon hozzá egy új moderációs szabályt",
-                        "editRule": "",
-                        "failure": ""
-                    },
-                    "label": {
-                        "blockAll": "",
-                        "policyDisabled": "",
-                        "policyEnabled": "",
-                        "silenceActivity": "",
-                        "silenceNotifications": "",
-                        "customizeRule": "",
-                        "policyReason": "",
-                        "rejectMedia": ""
-                    },
-                    "tooltip": {
-                        "blockAll": "",
-                        "rejectMedia": "",
-                        "summary": "",
-                        "silenceActivity": "",
-                        "silenceNotifications": "",
-                        "isActive": ""
-                    },
-                    "button": {
-                        "cancel": "",
-                        "create": "",
-                        "delete": "",
-                        "confirm": "",
-                        "update": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
+                        "addRule": "Adjon hozzá egy új moderációs szabályt"
                     }
                 },
                 "NoteForm": {
                     "button": {
                         "add": "Jegyzet hozzáadása"
-                    },
-                    "placeholder": {
-                        "summary": ""
-                    },
-                    "header": {
-                        "failure": ""
                     }
                 },
                 "DomainsTable": {
                     "action": {
                         "add": {
                             "label": "Hozzáadás az engedélyezett listához"
-                        },
-                        "purge": {
-                            "label": ""
-                        },
-                        "remove": {
-                            "label": ""
                         }
                     },
                     "option": {
-                        "all": "Összes",
-                        "no": "",
-                        "yes": ""
-                    },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "table": {
-                        "domain": {
-                            "header": {
-                                "firstSeen": "",
-                                "name": "",
-                                "receivedMessages": "",
-                                "moderationRule": "",
-                                "users": ""
-                            },
-                            "moderationRule": ""
-                        }
-                    },
-                    "label": {
-                        "inList": "",
-                        "search": ""
-                    },
-                    "empty": {
-                        "noPods": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
-                    },
-                    "link": {
-                        "list": ""
-                    }
-                },
-                "AccountsTable": {
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "table": {
-                        "account": {
-                            "header": {
-                                "domain": "",
-                                "firstSeen": "",
-                                "lastSeen": "",
-                                "name": "",
-                                "moderationRule": "",
-                                "uploads": ""
-                            },
-                            "moderationRule": ""
-                        }
-                    },
-                    "link": {
-                        "local": ""
-                    },
-                    "action": {
-                        "purge": {
-                            "label": ""
-                        }
-                    },
-                    "label": {
-                        "search": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
-                    }
-                },
-                "InstancePolicyCard": {
-                    "label": {
-                        "blockAll": "",
-                        "muteActivity": "",
-                        "muteNotifications": "",
-                        "reason": "",
-                        "rejectMedia": ""
-                    },
-                    "button": {
-                        "edit": ""
-                    },
-                    "status": {
-                        "enabled": "",
-                        "paused": ""
-                    },
-                    "header": {
-                        "rule": ""
-                    }
-                },
-                "InstancePolicyModal": {
-                    "button": {
-                        "close": "",
-                        "show": ""
-                    },
-                    "modal": {
-                        "manage": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    }
-                },
-                "NotesThread": {
-                    "button": {
-                        "delete": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
+                        "all": "Összes"
                     }
                 }
             },
@@ -2399,38 +581,15 @@
                     "channel": {
                         "header": {
                             "account": "Fiók",
-                            "albums": "Albumok",
-                            "creationDate": "",
-                            "domain": "",
-                            "name": "",
-                            "tracks": ""
+                            "albums": "Albumok"
                         }
                     }
                 },
                 "option": {
                     "all": "Összes"
                 },
-                "ordering": {
-                    "direction": {
-                        "ascending": "",
-                        "descending": "",
-                        "label": ""
-                    },
-                    "label": ""
-                },
-                "label": {
-                    "category": "",
-                    "search": ""
-                },
                 "link": {
-                    "local": "",
                     "moderation": "Adjon hozzá egy új moderációs szabályt"
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "pagination": {
-                    "results": ""
                 }
             },
             "users": {
@@ -2438,104 +597,20 @@
                     "table": {
                         "user": {
                             "header": {
-                                "accountStatus": "Fiók állapota",
-                                "email": "",
-                                "lastActivity": "",
-                                "permissions": "",
-                                "signup": "",
-                                "status": "",
-                                "username": ""
+                                "accountStatus": "Fiók állapota"
                             },
                             "accountStatus": {
-                                "active": "Aktív",
-                                "inactive": ""
+                                "active": "Aktív"
                             },
                             "status": {
-                                "admin": "Admin",
-                                "regular": "",
-                                "staff": ""
+                                "admin": "Admin"
                             }
                         }
-                    },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "permission": {
-                        "library": "",
-                        "moderation": "",
-                        "settings": ""
-                    },
-                    "notApplicable": "",
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "InvitationsTable": {
                     "option": {
-                        "all": "Összes",
-                        "expired": "",
-                        "open": ""
-                    },
-                    "table": {
-                        "invitation": {
-                            "header": {
-                                "code": "",
-                                "creationDate": "",
-                                "expirationDate": "",
-                                "owner": "",
-                                "status": ""
-                            }
-                        }
-                    },
-                    "action": {
-                        "delete": ""
-                    },
-                    "label": {
-                        "expired": "",
-                        "unused": "",
-                        "search": "",
-                        "status": "",
-                        "used": ""
-                    },
-                    "ordering": {
-                        "label": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
-                    }
-                },
-                "InvitationForm": {
-                    "button": {
-                        "clear": "",
-                        "new": ""
-                    },
-                    "table": {
-                        "invitation": {
-                            "header": {
-                                "code": "",
-                                "link": ""
-                            }
-                        }
-                    },
-                    "header": {
-                        "failure": ""
-                    },
-                    "label": {
-                        "invite": ""
-                    },
-                    "placeholder": {
-                        "invitation": ""
+                        "all": "Összes"
                     }
                 }
             }
@@ -2545,49 +620,16 @@
                 "table": {
                     "additionalFields": {
                         "header": {
-                            "actions": "Pályázat",
-                            "label": "",
-                            "type": "",
-                            "required": ""
-                        },
-                        "type": {
-                            "long": "",
-                            "short": ""
-                        },
-                        "required": {
-                            "false": "",
-                            "true": ""
+                            "actions": "Pályázat"
                         }
                     }
                 },
                 "button": {
-                    "add": "Új mező hozzáadása",
-                    "edit": "",
-                    "preview": ""
+                    "add": "Új mező hozzáadása"
                 },
                 "label": {
                     "additionalField": "További mező",
-                    "additionalFields": "További mezők",
-                    "delete": "",
-                    "helpText": "",
-                    "moveDown": "",
-                    "moveUp": ""
-                },
-                "help": {
-                    "additionalFields": "",
-                    "helpText": ""
-                }
-            },
-            "SettingsGroup": {
-                "header": {
-                    "image": "",
-                    "error": ""
-                },
-                "button": {
-                    "save": ""
-                },
-                "message": {
-                    "success": ""
+                    "additionalFields": "További mezők"
                 }
             }
         },
@@ -2595,278 +637,43 @@
             "ReportCategoryDropdown": {
                 "option": {
                     "all": "Összes"
-                },
-                "label": {
-                    "category": ""
                 }
             },
             "ReportModal": {
                 "header": {
-                    "disabled": "Az anonim jelentések le vannak tiltva. Jelentés benyújtásához jelentkezzen be.",
-                    "modal": "",
-                    "submissionFailure": ""
-                },
-                "button": {
-                    "cancel": "",
-                    "submit": ""
-                },
-                "label": {
-                    "email": "",
-                    "forwardToDomain": "",
-                    "message": ""
-                },
-                "description": {
-                    "forwardToDomain": "",
-                    "message": "",
-                    "modal": "",
-                    "email": ""
-                },
-                "message": {
-                    "submissionSuccess": ""
-                }
-            },
-            "FilterModal": {
-                "button": {
-                    "cancel": "",
-                    "hide": ""
-                },
-                "message": {
-                    "success": ""
-                },
-                "header": {
-                    "modal": "",
-                    "failure": ""
-                },
-                "warning": {
-                    "createFilter": {
-                        "listItem2": "",
-                        "listItem3": "",
-                        "listItem1": "",
-                        "listItem4": "",
-                        "listIntro": ""
-                    }
-                },
-                "help": {
-                    "createFilter": ""
+                    "disabled": "Az anonim jelentések le vannak tiltva. Jelentés benyújtásához jelentkezzen be."
                 }
             }
         },
         "federation": {
             "FetchButton": {
                 "description": {
-                    "failure": "Hiba történt az adatok frissítésekor:",
-                    "success": "",
-                    "pending": "",
-                    "skipped": ""
+                    "failure": "Hiba történt az adatok frissítésekor:"
                 },
                 "table": {
                     "error": {
                         "value": {
-                            "httpError": "HTTP-hiba történt a távoli kiszolgálóval való kapcsolatfelvétel közben",
-                            "invalidAttributesError": "",
-                            "connectionError": "",
-                            "httpStatus": "",
-                            "timeoutError": "",
-                            "invalidJsonError": "",
-                            "unknownError": ""
-                        },
-                        "label": {
-                            "detail": "",
-                            "type": ""
+                            "httpError": "HTTP-hiba történt a távoli kiszolgálóval való kapcsolatfelvétel közben"
                         }
                     }
-                },
-                "button": {
-                    "close": "",
-                    "reload": ""
-                },
-                "header": {
-                    "saveFailure": "",
-                    "failure": "",
-                    "pending": "",
-                    "success": "",
-                    "skipped": "",
-                    "refresh": ""
-                },
-                "loader": {
-                    "fetchRequest": "",
-                    "awaitingResult": ""
-                }
-            },
-            "LibraryWidget": {
-                "empty": {
-                    "noMatch": ""
-                },
-                "button": {
-                    "showMore": ""
                 }
             }
         },
-        "ShortcutsModal": {
-            "shortcut": {
-                "audio": {
-                    "label": "",
-                    "clearQueue": "",
-                    "decreaseVolume": "",
-                    "expandQueue": "",
-                    "increaseVolume": "",
-                    "playPause": "",
-                    "playNext": "",
-                    "playPrevious": "",
-                    "seekBack30": "",
-                    "seekBack5": "",
-                    "seekForward30": "",
-                    "seekForward5": "",
-                    "shuffleQueue": "",
-                    "toggleFavorite": "",
-                    "toggleMute": "",
-                    "toggleLoop": ""
-                },
-                "general": {
-                    "focus": "",
-                    "label": "",
-                    "show": "",
-                    "unfocus": ""
-                }
-            },
-            "button": {
-                "close": ""
-            },
-            "header": {
-                "modal": ""
-            }
-        },
-        "SetInstanceModal": {
-            "button": {
-                "cancel": "",
-                "submit": ""
-            },
-            "header": {
-                "chooseInstance": "",
-                "failure": "",
-                "suggestions": ""
-            },
+        "RemoteSearchForm": {
             "label": {
-                "url": ""
-            },
-            "help": {
-                "notFunkwhaleServer": "",
-                "serverDown": "",
-                "selectPod": ""
-            },
-            "message": {
-                "newUrl": ""
-            }
-        },
-        "Queue": {
-            "button": {
-                "clear": "",
-                "close": "",
-                "stopRadio": ""
-            },
-            "label": {
-                "duration": "",
-                "addArtistContentFilter": "",
-                "next": "",
-                "pause": "",
-                "play": "",
-                "previous": "",
-                "queue": "",
-                "remove": "",
-                "restart": ""
-            },
-            "message": {
-                "radio": "",
-                "automaticPlay": ""
-            },
-            "header": {
-                "failure": "",
-                "radio": ""
-            },
-            "meta": {
-                "queuePosition": "({ length } hosszú {index})"
-            },
-            "warning": {
-                "connectivity": ""
-            }
-        },
-        "forms": {
-            "PasswordInput": {
-                "button": {
-                    "copy": ""
-                },
-                "title": "",
-                "message": {
-                    "copy": ""
+                "rss": {
+                    "fieldPlaceholder": "@channel@pod.example vagy https://website.example/rss.xml"
                 }
             }
         },
         "radios": {
-            "Card": {
-                "button": {
-                    "edit": ""
-                }
-            },
             "Button": {
-                "startRadio": "Dal hozzáadása",
-                "stopRadio": ""
+                "startRadio": "Dal hozzáadása"
             }
         },
-        "RemoteSearchForm": {
-            "header": {
-                "fetchFailed": ""
-            },
-            "button": {
-                "fediverse": "",
-                "rss": "",
-                "search": ""
-            },
-            "label": {
-                "fediverse": {
-                    "fieldLabel": "",
-                    "title": ""
-                },
-                "rss": {
-                    "fieldPlaceholder": "@channel@pod.example vagy https://website.example/rss.xml",
-                    "fieldLabel": "",
-                    "title": ""
-                }
-            },
-            "warning": {
-                "unsupported": ""
-            },
-            "error": {
-                "fetchFailed": ""
-            },
-            "description": {
-                "fediverse": "",
-                "rss": ""
-            }
-        },
-        "PageNotFound": {
-            "link": {
-                "home": ""
-            },
-            "title": "",
-            "header": {
-                "pageNotFound": ""
-            },
-            "message": {
-                "pageNotFound": ""
-            }
-        },
-        "vui": {
-            "Pagination": {
-                "next": "",
-                "label": "",
-                "previous": ""
-            }
-        },
-        "tags": {
-            "List": {
-                "button": {
-                    "more": ""
-                }
+        "Queue": {
+            "meta": {
+                "queuePosition": "({ length } hosszú {index})"
             }
         }
     },
@@ -2878,98 +685,19 @@
                     "listenings": "{ count } meghalgatás | { count } meghalgatás",
                     "subscribers": "Egy kedvenc | { count } kedvenc",
                     "tracks": "Egy szám | % {count} szám"
-                },
-                "link": {
-                    "channelEpisodes": "",
-                    "mirrored": "",
-                    "moderation": "",
-                    "channelOverview": "",
-                    "channelTracks": "",
-                    "domainView": ""
-                },
-                "header": {
-                    "artistChannel": "",
-                    "podcastChannel": ""
-                },
-                "button": {
-                    "cancel": "",
-                    "confirm": "",
-                    "delete": "",
-                    "edit": "",
-                    "embed": "",
-                    "play": "",
-                    "updateChannel": "",
-                    "upload": ""
-                },
-                "title": "",
-                "modal": {
-                    "subscribe": {
-                        "rss": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
-                        },
-                        "fediverse": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
-                        },
-                        "funkwhale": {
-                            "header": ""
-                        },
-                        "header": ""
-                    },
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "embed": {
-                        "header": ""
-                    }
                 }
             },
             "DetailOverview": {
                 "link": {
-                    "addAlbum": "Új létrehozása",
-                    "erroredUploads": "",
-                    "skippedUploads": ""
+                    "addAlbum": "Új létrehozása"
                 },
                 "header": {
-                    "albums": "Albumok",
-                    "latestEpisodes": "",
-                    "latestTracks": "",
-                    "series": "",
-                    "uploadsFailure": "",
-                    "uploadsProcessing": "",
-                    "uploadsSuccess": ""
-                },
-                "meta": {
-                    "progress": ""
-                },
-                "message": {
-                    "processing": ""
+                    "albums": "Albumok"
                 }
             },
             "SubscriptionsList": {
                 "link": {
                     "addNew": "Új létrehozása"
-                },
-                "button": {
-                    "cancel": "",
-                    "subscribe": ""
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "title": "",
-                "modal": {
-                    "subscription": {
-                        "header": ""
-                    }
                 }
             }
         },
@@ -2978,55 +706,11 @@
                 "Card": {
                     "meta": {
                         "tracks": "Egy szám | % {count} szám"
-                    },
-                    "link": {
-                        "details": ""
-                    },
-                    "label": {
-                        "size": ""
-                    },
-                    "button": {
-                        "upload": ""
                     }
                 },
                 "Quota": {
                     "label": {
-                        "currentUsage": "{ current } felhasználva a megengetett { max }-bol",
-                        "errored": "",
-                        "pending": "",
-                        "skipped": ""
-                    },
-                    "header": {
-                        "currentUsage": ""
-                    },
-                    "loading": {
-                        "currentUsage": ""
-                    },
-                    "button": {
-                        "purge": ""
-                    },
-                    "modal": {
-                        "purgeErrored": {
-                            "header": "",
-                            "content": {
-                                "description": ""
-                            }
-                        },
-                        "purgePending": {
-                            "header": "",
-                            "content": {
-                                "description": ""
-                            }
-                        },
-                        "purgeSkipped": {
-                            "header": "",
-                            "content": {
-                                "description": ""
-                            }
-                        }
-                    },
-                    "link": {
-                        "viewFiles": ""
+                        "currentUsage": "{ current } felhasználva a megengetett { max }-bol"
                     }
                 },
                 "FilesTable": {
@@ -3034,210 +718,29 @@
                         "file": {
                             "header": {
                                 "album": "Album",
-                                "artist": "Előadó",
-                                "duration": "",
-                                "importStatus": "",
-                                "size": "",
-                                "title": "",
-                                "uploadDate": ""
+                                "artist": "Előadó"
                             }
                         }
                     },
                     "option": {
                         "status": {
-                            "all": "Összes",
-                            "draft": "",
-                            "failed": "",
-                            "finished": "",
-                            "pending": "",
-                            "skipped": ""
+                            "all": "Összes"
                         }
-                    },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "action": {
-                        "delete": "",
-                        "restartImport": ""
-                    },
-                    "label": {
-                        "importStatus": "",
-                        "search": ""
-                    },
-                    "notApplicable": "",
-                    "empty": {
-                        "noTracks": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "button": {
-                        "showStatus": ""
-                    },
-                    "pagination": {
-                        "results": ""
-                    }
-                },
-                "Home": {
-                    "link": {
-                        "createLibrary": ""
-                    },
-                    "loading": {
-                        "libraries": ""
-                    },
-                    "empty": {
-                        "noLibrary": ""
-                    },
-                    "header": {
-                        "libraries": ""
-                    }
-                },
-                "Form": {
-                    "button": {
-                        "create": "",
-                        "delete": "",
-                        "confirm": "",
-                        "update": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "label": {
-                        "description": "",
-                        "name": "",
-                        "visibility": ""
-                    },
-                    "header": {
-                        "failure": ""
-                    },
-                    "description": {
-                        "library": "",
-                        "visibility": ""
-                    },
-                    "message": {
-                        "libraryCreated": "",
-                        "libraryDeleted": "",
-                        "libraryUpdated": ""
-                    },
-                    "placeholder": {
-                        "name": "",
-                        "description": ""
                     }
                 }
             },
             "remote": {
                 "Card": {
                     "meta": {
-                        "tracks": "Egy szám | % {count} szám",
-                        "failedTracks": "",
-                        "lastUpdate": ""
-                    },
-                    "modal": {
-                        "unfollow": {
-                            "content": {
-                                "warning": ""
-                            },
-                            "header": ""
-                        }
-                    },
-                    "button": {
-                        "cancel": "",
-                        "follow": "",
-                        "pending": "",
-                        "unfollow": ""
-                    },
-                    "link": {
-                        "scanDetails": "",
-                        "scan": ""
-                    },
-                    "label": {
-                        "scanFailure": "",
-                        "scanPending": "",
-                        "scanSuccess": "",
-                        "scanPartialSuccess": "",
-                        "scanProgress": "",
-                        "sharingLink": ""
-                    },
-                    "message": {
-                        "scanLaunched": "",
-                        "scanSkipped": ""
-                    },
-                    "tooltip": {
-                        "private": "",
-                        "public": ""
-                    }
-                },
-                "ScanForm": {
-                    "header": {
-                        "failure": ""
-                    },
-                    "placeholder": {
-                        "url": ""
-                    },
-                    "label": {
-                        "search": ""
-                    },
-                    "button": {
-                        "submit": ""
-                    }
-                },
-                "Home": {
-                    "header": {
-                        "knownLibraries": "",
-                        "remoteLibraries": ""
-                    },
-                    "loading": {
-                        "remoteLibraries": ""
-                    },
-                    "button": {
-                        "refresh": ""
-                    },
-                    "description": {
-                        "remoteLibraries": ""
+                        "tracks": "Egy szám | % {count} szám"
                     }
                 }
             },
             "Home": {
-                "title": "Tartalom hozzáadása és kezelése",
-                "description": {
-                    "follow": "",
-                    "channel": {
-                        "1": "",
-                        "2": ""
-                    },
-                    "upload": ""
-                },
-                "header": {
-                    "follow": "",
-                    "channel": "",
-                    "upload": ""
-                },
-                "button": {
-                    "start": ""
-                },
-                "help": {
-                    "uploadQuota": ""
-                }
+                "title": "Tartalom hozzáadása és kezelése"
             },
             "Base": {
-                "title": "Tartalom hozzáadása",
-                "link": {
-                    "libraries": "",
-                    "tracks": ""
-                },
-                "menu": {
-                    "secondary": ""
-                }
+                "title": "Tartalom hozzáadása"
             }
         },
         "library": {
@@ -3247,79 +750,19 @@
                 },
                 "link": {
                     "albums": "Albumok",
-                    "artists": "Előadó",
-                    "moderation": "",
-                    "owner": "",
-                    "tracks": "",
-                    "domain": ""
-                },
-                "button": {
-                    "edit": "",
-                    "upload": ""
-                },
-                "title": "",
-                "label": {
-                    "private": "",
-                    "public": "",
-                    "instance": "",
-                    "sharingLink": ""
-                },
-                "description": {
-                    "sharingLink": ""
-                },
-                "tooltip": {
-                    "private": "",
-                    "public": "",
-                    "instance": ""
+                    "artists": "Előadó"
                 }
             },
             "Edit": {
                 "button": {
-                    "accept": "Elfogadás",
-                    "reject": ""
+                    "accept": "Elfogadás"
                 },
                 "table": {
                     "action": {
                         "status": {
-                            "accepted": "Elfogadva",
-                            "pending": "",
-                            "rejected": ""
-                        },
-                        "header": {
-                            "action": "",
-                            "date": "",
-                            "status": "",
-                            "user": ""
+                            "accepted": "Elfogadva"
                         }
                     }
-                },
-                "header": {
-                    "followers": "",
-                    "libraryContents": ""
-                },
-                "loading": {
-                    "followers": ""
-                },
-                "empty": {
-                    "noFollowers": ""
-                }
-            },
-            "DetailAlbums": {
-                "empty": {
-                    "upload": "",
-                    "follow": ""
-                }
-            },
-            "DetailOverview": {
-                "empty": {
-                    "upload": "",
-                    "follow": ""
-                }
-            },
-            "DetailTracks": {
-                "empty": {
-                    "upload": "",
-                    "follow": ""
                 }
             }
         },
@@ -3327,127 +770,22 @@
             "ProfileBase": {
                 "title": "{ username } felhasználói fiókja",
                 "link": {
-                    "activity": "Aktivitás",
-                    "moderation": "",
-                    "overview": "",
-                    "domainView": ""
-                },
-                "label": {
-                    "self": ""
+                    "activity": "Aktivitás"
                 }
             },
             "PasswordReset": {
                 "label": {
                     "email": "Fiók e-mail címe"
-                },
-                "button": {
-                    "requestReset": ""
-                },
-                "link": {
-                    "back": ""
-                },
-                "placeholder": {
-                    "email": ""
-                },
-                "header": {
-                    "failure": "",
-                    "reset": ""
-                },
-                "title": "",
-                "help": {
-                    "form": ""
                 }
             },
             "ProfileOverview": {
                 "link": {
                     "addNew": "Új létrehozása"
-                },
-                "modal": {
-                    "createChannel": {
-                        "artist": {
-                            "header": ""
-                        },
-                        "header": "",
-                        "podcast": {
-                            "header": ""
-                        }
-                    }
-                },
-                "button": {
-                    "cancel": "",
-                    "createChannel": "",
-                    "next": "",
-                    "previous": ""
-                },
-                "header": {
-                    "channels": "",
-                    "sharedLibraries": "",
-                    "libraries": ""
-                }
-            },
-            "PasswordResetConfirm": {
-                "link": {
-                    "back": "",
-                    "login": ""
-                },
-                "title": "",
-                "header": {
-                    "failure": "",
-                    "success": ""
-                },
-                "message": {
-                    "requestSent": "",
-                    "success": ""
-                },
-                "label": {
-                    "newPassword": ""
-                },
-                "button": {
-                    "update": ""
-                }
-            },
-            "EmailConfirm": {
-                "title": "",
-                "label": {
-                    "confirmationCode": ""
-                },
-                "header": {
-                    "failure": "",
-                    "success": ""
-                },
-                "link": {
-                    "login": "",
-                    "back": ""
-                },
-                "message": {
-                    "success": ""
                 }
             },
             "Signup": {
                 "header": {
                     "createAccount": "{ app } hozzá akar férni a Funkwhale fiókodhoz"
-                },
-                "title": ""
-            },
-            "Login": {
-                "title": "",
-                "header": {
-                    "login": ""
-                }
-            },
-            "Callback": {
-                "header": {
-                    "loggingIn": ""
-                }
-            },
-            "Plugins": {
-                "title": ""
-            },
-            "ProfileActivity": {
-                "header": {
-                    "playlists": "",
-                    "recentlyFavorited": "",
-                    "recentlyListened": ""
                 }
             }
         },
@@ -3456,37 +794,8 @@
                 "delay": {
                     "30": "30 nap",
                     "60": "60 nap",
-                    "90": "90 nap",
-                    "never": ""
+                    "90": "90 nap"
                 }
-            },
-            "link": {
-                "help": "",
-                "donate": ""
-            },
-            "header": {
-                "funkwhaleSupport": "",
-                "instanceSupport": "",
-                "messages": "",
-                "notifications": ""
-            },
-            "button": {
-                "submit": "",
-                "read": ""
-            },
-            "loading": {
-                "notifications": ""
-            },
-            "empty": {
-                "notifications": ""
-            },
-            "title": "",
-            "label": {
-                "reminder": "",
-                "showRead": ""
-            },
-            "message": {
-                "funkwhaleSupport": ""
             }
         },
         "admin": {
@@ -3494,148 +803,35 @@
                 "AccountsDetail": {
                     "table": {
                         "accountData": {
-                            "username": "",
-                            "loginStatus": {
-                                "disabled": "",
-                                "enabled": "",
-                                "label": ""
-                            },
-                            "displayName": "",
-                            "email": "",
-                            "lastActivity": "",
-                            "lastChecked": "",
-                            "permissions": "",
-                            "signupDate": "",
-                            "userType": ""
-                        },
-                        "audioContent": {
-                            "cachedSize": "",
-                            "megabyte": "",
-                            "totalSize": "",
-                            "uploadQuota": ""
-                        },
-                        "activity": {
-                            "emittedFollows": "",
-                            "emittedMessages": "",
-                            "firstSeen": "",
-                            "receivedFollows": ""
+                            "username": "Hozzáférés a kedvencekhez"
                         }
                     },
                     "header": {
                         "accountData": "Fiókadatok",
-                        "activity": "Aktivitás",
-                        "audioContent": "",
-                        "localAccount": "",
-                        "activePolicy": "",
-                        "noPolicy": ""
+                        "activity": "Aktivitás"
                     },
                     "button": {
                         "addPolicy": "Adjon hozzá moderációs irányelvet"
                     },
                     "link": {
-                        "albums": "Albumok",
-                        "artists": "",
-                        "channels": "",
-                        "domain": "",
-                        "libraries": "",
-                        "linkedReports": "",
-                        "openProfile": "",
-                        "remoteProfile": "",
-                        "requests": "",
-                        "tracks": "",
-                        "uploads": "",
-                        "django": ""
-                    },
-                    "tooltip": {
-                        "uploadQuota": ""
-                    },
-                    "option": {
-                        "permission": {
-                            "library": "",
-                            "moderation": "",
-                            "settings": ""
-                        }
-                    },
-                    "description": {
-                        "policy": ""
-                    },
-                    "notApplicable": "",
-                    "warning": {
-                        "stats": ""
+                        "albums": "Albumok"
                     }
                 },
                 "Base": {
                     "link": {
-                        "accounts": "Fiókok",
-                        "domains": "",
-                        "reports": "",
-                        "userRequests": ""
-                    },
-                    "title": "",
-                    "menu": {
-                        "secondary": ""
+                        "accounts": "Fiókok"
                     }
                 },
                 "DomainsDetail": {
                     "header": {
-                        "activity": "Aktivitás",
-                        "audioContent": "",
-                        "instanceData": "",
-                        "activePolicy": "",
-                        "noPolicy": ""
+                        "activity": "Aktivitás"
                     },
                     "button": {
                         "addPolicy": "Adjon hozzá moderációs irányelvet",
-                        "addToAllowList": "Hozzáadás az engedélyezett listához",
-                        "refreshNodeInfo": "",
-                        "removeFromAllowList": ""
+                        "addToAllowList": "Hozzáadás az engedélyezett listához"
                     },
                     "link": {
-                        "albums": "Albumok",
-                        "artists": "",
-                        "channels": "",
-                        "knownAccounts": "",
-                        "libraries": "",
-                        "website": "",
-                        "tracks": "",
-                        "uploads": "",
-                        "django": ""
-                    },
-                    "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "activity": {
-                            "emittedFollows": "",
-                            "emittedMessages": "",
-                            "firstSeen": "",
-                            "receivedFollows": ""
-                        },
-                        "instanceData": {
-                            "nodeInfoStatus": {
-                                "value": "",
-                                "label": ""
-                            },
-                            "inAllowList": {
-                                "label": "",
-                                "false": "",
-                                "true": ""
-                            },
-                            "lastChecked": "",
-                            "domainName": "",
-                            "software": {
-                                "label": ""
-                            },
-                            "totalUsers": ""
-                        }
-                    },
-                    "description": {
-                        "policy": ""
-                    },
-                    "notApplicable": "",
-                    "warning": {
-                        "stats": ""
+                        "albums": "Albumok"
                     }
                 },
                 "DomainsList": {
@@ -3643,70 +839,22 @@
                         "add": "Hozzáadás"
                     },
                     "label": {
-                        "addDomain": "",
                         "addToAllowList": "Hozzáadás az engedélyezett listához"
-                    },
-                    "title": "",
-                    "header": {
-                        "domains": "",
-                        "failure": ""
                     }
                 },
                 "ReportsList": {
                     "option": {
                         "status": {
-                            "all": "Összes",
-                            "resolved": "",
-                            "unresolved": ""
+                            "all": "Összes"
                         }
-                    },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "title": "",
-                    "header": {
-                        "reports": ""
-                    },
-                    "label": {
-                        "search": "",
-                        "status": ""
-                    },
-                    "placeholder": {
-                        "search": ""
                     }
                 },
                 "RequestsList": {
                     "option": {
                         "status": {
                             "all": "Összes",
-                            "approved": "Jóváhagyva",
-                            "pending": "",
-                            "refused": ""
+                            "approved": "Jóváhagyva"
                         }
-                    },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "",
-                            "descending": "",
-                            "label": ""
-                        },
-                        "label": ""
-                    },
-                    "label": {
-                        "search": "",
-                        "status": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "title": "",
-                    "header": {
-                        "userRequests": ""
                     }
                 }
             },
@@ -3714,671 +862,145 @@
                 "UploadDetail": {
                     "table": {
                         "activity": {
-                            "accessedDate": "Hozzáférés dátuma",
-                            "firstSeen": ""
-                        },
-                        "audioContent": {
-                            "bitrate": {
-                                "label": ""
-                            },
-                            "cachedSize": "",
-                            "duration": "",
-                            "size": "",
-                            "track": ""
-                        },
-                        "upload": {
-                            "name": ""
+                            "accessedDate": "Hozzáférés dátuma"
                         }
                     },
                     "link": {
-                        "account": "Fiók",
-                        "domain": "",
-                        "importStatus": "",
-                        "library": "",
-                        "remoteProfile": "",
-                        "type": "",
-                        "django": "",
-                        "visibility": ""
+                        "account": "Fiók"
                     },
                     "header": {
-                        "activity": "Aktivitás",
-                        "audioContent": "",
-                        "local": "",
-                        "uploadData": ""
-                    },
-                    "button": {
-                        "delete": "",
-                        "download": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "notApplicable": ""
+                        "activity": "Aktivitás"
+                    }
                 },
                 "LibraryDetail": {
                     "link": {
                         "account": "Fiók",
-                        "albums": "Albumok",
-                        "artists": "",
-                        "domain": "",
-                        "reports": "",
-                        "remoteProfile": "",
-                        "tracks": "",
-                        "uploads": "",
-                        "django": "",
-                        "visibility": ""
+                        "albums": "Albumok"
                     },
                     "header": {
-                        "activity": "Aktivitás",
-                        "audioContent": "",
-                        "libraryData": "",
-                        "local": ""
-                    },
-                    "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "library": {
-                            "description": "",
-                            "name": ""
-                        },
-                        "activity": {
-                            "firstSeen": "",
-                            "followers": ""
-                        }
-                    },
-                    "button": {
-                        "delete": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
+                        "activity": "Aktivitás"
                     }
                 },
                 "AlbumDetail": {
                     "header": {
                         "activity": "Aktivitás",
-                        "albumData": "Album adatai",
-                        "audioContent": "",
-                        "local": ""
+                        "albumData": "Album adatai"
                     },
                     "link": {
-                        "artist": "Előadó",
-                        "domain": "",
-                        "edits": "",
-                        "libraries": "",
-                        "reports": "",
-                        "localProfile": "",
-                        "musicbrainz": "",
-                        "remoteProfile": "",
-                        "tracks": "",
-                        "uploads": "",
-                        "django": ""
-                    },
-                    "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "album": {
-                            "description": "",
-                            "title": ""
-                        },
-                        "activity": {
-                            "favorited": "",
-                            "firstSeen": "",
-                            "listenings": "",
-                            "playlists": ""
-                        }
-                    },
-                    "button": {
-                        "delete": "",
-                        "edit": "",
-                        "remoteRefresh": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
+                        "artist": "Előadó"
                     }
                 },
                 "ArtistDetail": {
                     "header": {
-                        "activity": "Aktivitás",
-                        "artistData": "",
-                        "audioContent": "",
-                        "local": ""
+                        "activity": "Aktivitás"
                     },
                     "link": {
-                        "albums": "Albumok",
-                        "category": "",
-                        "domain": "",
-                        "edits": "",
-                        "libraries": "",
-                        "reports": "",
-                        "localProfile": "",
-                        "musicbrainz": "",
-                        "remoteProfile": "",
-                        "tracks": "",
-                        "uploads": "",
-                        "django": ""
-                    },
-                    "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "artist": {
-                            "description": "",
-                            "name": ""
-                        },
-                        "activity": {
-                            "favorited": "",
-                            "firstSeen": "",
-                            "listenings": "",
-                            "playlists": ""
-                        }
-                    },
-                    "button": {
-                        "delete": "",
-                        "edit": "",
-                        "remoteRefresh": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
+                        "albums": "Albumok"
                     }
                 },
                 "TagDetail": {
                     "header": {
-                        "activity": "Aktivitás",
-                        "audioContent": "",
-                        "tagData": ""
+                        "activity": "Aktivitás"
                     },
                     "link": {
-                        "albums": "Albumok",
-                        "artists": "",
-                        "localProfile": "",
-                        "tracks": "",
-                        "django": ""
-                    },
-                    "button": {
-                        "delete": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "table": {
-                        "activity": {
-                            "firstSeen": ""
-                        },
-                        "tag": {
-                            "name": ""
-                        }
+                        "albums": "Albumok"
                     }
                 },
                 "TrackDetail": {
                     "header": {
-                        "activity": "Aktivitás",
-                        "local": "",
-                        "trackData": ""
+                        "activity": "Aktivitás"
                     },
                     "link": {
                         "album": "Album",
-                        "albumArtist": "",
-                        "artist": "Előadó",
-                        "domain": "",
-                        "edits": "",
-                        "libraries": "",
-                        "reports": "",
-                        "localProfile": "",
-                        "musicbrainz": "",
-                        "remoteProfile": "",
-                        "uploads": "",
-                        "django": ""
-                    },
-                    "table": {
-                        "trackData": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "track": {
-                            "copyright": "",
-                            "description": "",
-                            "discNumber": "",
-                            "license": "",
-                            "position": "",
-                            "title": ""
-                        },
-                        "activity": {
-                            "favorited": "",
-                            "firstSeen": "",
-                            "listenings": "",
-                            "playlists": ""
-                        }
-                    },
-                    "button": {
-                        "delete": "",
-                        "edit": "",
-                        "remoteRefresh": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
+                        "artist": "Előadó"
                     }
                 },
                 "Base": {
                     "link": {
-                        "albums": "Albumok",
-                        "artists": "",
-                        "channels": "",
-                        "edits": "",
-                        "libraries": "",
-                        "tags": "",
-                        "tracks": "",
-                        "uploads": ""
-                    },
-                    "title": "",
-                    "menu": {
-                        "secondary": ""
-                    }
-                },
-                "EditsList": {
-                    "title": "",
-                    "header": {
-                        "edits": ""
+                        "albums": "Albumok"
                     }
                 }
             },
             "ChannelDetail": {
                 "table": {
                     "channelData": {
-                        "account": "Fiók",
-                        "category": "",
-                        "description": "",
-                        "domain": "",
-                        "name": "",
-                        "rss": "",
-                        "url": ""
+                        "account": "Fiók"
                     },
                     "audioContent": {
-                        "albums": "Albumok",
-                        "cachedSize": "",
-                        "totalSize": "",
-                        "tracks": "",
-                        "uploads": ""
-                    },
-                    "activity": {
-                        "edits": "",
-                        "favorited": "",
-                        "firstSeen": "",
-                        "linkedReports": "",
-                        "listenings": "",
-                        "playlists": ""
+                        "albums": "Albumok"
                     }
                 },
                 "header": {
-                    "activity": "Aktivitás",
-                    "audioContent": "",
-                    "channelData": ""
-                },
-                "button": {
-                    "delete": "",
-                    "openRemote": "",
-                    "refresh": ""
-                },
-                "modal": {
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "label": {
-                    "local": ""
-                },
-                "link": {
-                    "localProfile": "",
-                    "django": ""
-                },
-                "warning": {
-                    "stats": ""
+                    "activity": "Aktivitás"
                 }
             },
             "CommonList": {
                 "title": {
                     "accounts": "Fiókok",
-                    "albums": "Albumok",
-                    "artists": "",
-                    "channels": "",
-                    "invitations": "",
-                    "libraries": "",
-                    "tags": "",
-                    "tracks": "",
-                    "uploads": "",
-                    "users": ""
-                }
-            },
-            "Settings": {
-                "header": {
-                    "channels": "",
-                    "federation": "",
-                    "instanceInfo": "",
-                    "settings": "",
-                    "moderation": "",
-                    "music": "",
-                    "playlists": "",
-                    "sections": "",
-                    "security": "",
-                    "signups": "",
-                    "stats": "",
-                    "subsonic": "",
-                    "ui": ""
-                }
-            },
-            "users": {
-                "Base": {
-                    "link": {
-                        "invitations": "",
-                        "users": ""
-                    },
-                    "title": "",
-                    "menu": {
-                        "secondary": ""
-                    }
+                    "albums": "Albumok"
                 }
             }
         },
         "Search": {
             "label": {
-                "albums": "Albumok",
-                "artists": "",
-                "playlists": "",
-                "podcasts": "",
-                "radios": "",
-                "series": "",
-                "tags": "",
-                "tracks": ""
-            },
-            "header": {
-                "search": "",
-                "remote": "",
-                "rss": ""
-            },
-            "button": {
-                "submit": ""
+                "albums": "Albumok"
             }
         },
         "playlists": {
             "List": {
-                "ordering": {
-                    "direction": {
-                        "ascending": "",
-                        "descending": "",
-                        "label": ""
-                    },
-                    "label": ""
-                },
-                "header": {
-                    "browse": "",
-                    "playlists": ""
-                },
                 "button": {
-                    "create": "Hozzáférés a lejátszási listákhoz",
-                    "manage": "",
-                    "search": ""
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "empty": {
-                    "noResults": ""
-                },
-                "pagination": {
-                    "results": ""
-                },
-                "label": {
-                    "search": ""
-                }
-            },
-            "Detail": {
-                "button": {
-                    "cancel": "",
-                    "delete": "",
-                    "confirm": "",
-                    "edit": "",
-                    "embed": "",
-                    "playAll": "",
-                    "stopEdit": ""
-                },
-                "modal": {
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "embed": {
-                        "header": ""
-                    }
-                },
-                "title": "",
-                "meta": {
-                    "tracks": ""
-                },
-                "empty": {
-                    "noTracks": ""
-                },
-                "header": {
-                    "tracks": ""
-                }
-            }
-        },
-        "radios": {
-            "Detail": {
-                "button": {
-                    "confirm": "",
-                    "edit": ""
-                },
-                "modal": {
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "empty": {
-                    "noTracks": ""
-                },
-                "title": "",
-                "header": {
-                    "tracks": ""
+                    "create": "Hozzáférés a lejátszási listákhoz"
                 }
             }
         }
     },
+    "init": {
+        "serviceWorker": {
+            "newAppVersion": "Az alkalmazás új verziója elérhető."
+        }
+    },
     "composables": {
-        "audio": {
-            "usePlayOptions": {
-                "addToQueueMessage": ""
-            }
-        },
         "locale": {
             "useSharedLabels": {
                 "scopes": {
                     "libraries": {
-                        "description": "Hozzáférés audiofájlokhoz, könyvtárakhoz, művészekhez, albumokhoz és műsorszámokhoz",
-                        "label": ""
+                        "description": "Hozzáférés audiofájlokhoz, könyvtárakhoz, művészekhez, albumokhoz és műsorszámokhoz"
                     },
                     "filters": {
-                        "description": "Hozzáférés a tartalomszűrőkhöz",
-                        "label": ""
+                        "description": "Hozzáférés a tartalomszűrőkhöz"
                     },
                     "profile": {
-                        "description": "Hozzáférés az e-mail, felhasználónév és profil információkhoz",
-                        "label": ""
+                        "description": "Hozzáférés az e-mail, felhasználónév és profil információkhoz"
                     },
                     "edits": {
-                        "description": "Hozzáférés a szerkesztésekhez",
-                        "label": ""
+                        "description": "Hozzáférés a szerkesztésekhez"
                     },
                     "follows": {
-                        "description": "Hozzáférés a következőkhöz",
-                        "label": ""
+                        "description": "Hozzáférés a következőkhöz"
                     },
                     "listenings": {
-                        "description": "Hozzáférés az előzményeidhez",
-                        "label": ""
+                        "description": "Hozzáférés az előzményeidhez"
                     },
                     "reports": {
-                        "description": "Hozzáférés a rádiókhoz",
-                        "label": ""
+                        "description": "Hozzáférés a rádiókhoz"
                     },
                     "notifications": {
-                        "description": "Hozzáférés az értesítésekhez",
-                        "label": ""
+                        "description": "Hozzáférés az értesítésekhez"
                     },
                     "playlists": {
-                        "description": "Hozzáférés a lejátszási listákhoz",
-                        "label": ""
+                        "description": "Hozzáférés a lejátszási listákhoz"
                     },
                     "radios": {
-                        "description": "Hozzáférés a rádiókhoz",
-                        "label": ""
-                    },
-                    "security": {
-                        "description": "",
-                        "label": ""
-                    },
-                    "favorites": {
-                        "label": ""
+                        "description": "Hozzáférés a rádiókhoz"
                     }
                 },
                 "filters": {
                     "accessedDate": "Hozzáférés dátuma",
-                    "albumTitle": "Album neve",
-                    "artistName": "",
-                    "bitrate": "",
-                    "creationDate": "",
-                    "domain": "",
-                    "duration": "",
-                    "expirationDate": "",
-                    "firstSeen": "",
-                    "followers": "",
-                    "itemsCount": "",
-                    "lastActivity": "",
-                    "lastSeen": "",
-                    "modificationDate": "",
-                    "name": "",
-                    "receivedMessages": "",
-                    "releaseDate": "",
-                    "dateJoined": "",
-                    "size": "",
-                    "trackTitle": "",
-                    "uploads": "",
-                    "username": "",
-                    "users": ""
+                    "albumTitle": "Album neve"
                 },
                 "fields": {
                     "privacyLevel": {
-                        "label": "A tevékenység láthatósága",
-                        "help": "",
-                        "shortChoices": {
-                            "public": "",
-                            "instance": "",
-                            "private": ""
-                        },
-                        "choices": {
-                            "instance": "",
-                            "public": "",
-                            "private": ""
-                        }
-                    },
-                    "summary": {
-                        "label": ""
-                    },
-                    "reportType": {
-                        "label": "",
-                        "choices": {
-                            "illegalContent": "",
-                            "invalidMetadata": "",
-                            "offensiveContent": "",
-                            "other": "",
-                            "takedownRequest": ""
-                        }
-                    },
-                    "importStatus": {
-                        "label": "",
-                        "choices": {
-                            "draft": {
-                                "label": "",
-                                "help": ""
-                            },
-                            "errored": {
-                                "label": "",
-                                "help": ""
-                            },
-                            "finished": {
-                                "label": "",
-                                "help": ""
-                            },
-                            "pending": {
-                                "label": "",
-                                "help": ""
-                            },
-                            "skipped": {
-                                "label": "",
-                                "help": ""
-                            }
-                        }
-                    },
-                    "contentCategory": {
-                        "label": "",
-                        "choices": {
-                            "music": "",
-                            "other": "",
-                            "podcast": ""
-                        }
+                        "label": "A tevékenység láthatósága"
                     }
                 }
             }
@@ -4389,117 +1011,23 @@
                     "typeLabel": "Fiók"
                 },
                 "album": {
-                    "typeLabel": "Album",
-                    "label": ""
+                    "typeLabel": "Album"
                 },
                 "artist": {
-                    "typeLabel": "Előadó",
-                    "label": ""
-                },
-                "channel": {
-                    "typeLabel": "",
-                    "label": ""
-                },
-                "library": {
-                    "typeLabel": "",
-                    "label": ""
-                },
-                "playlist": {
-                    "typeLabel": "",
-                    "label": ""
-                },
-                "track": {
-                    "label": "",
-                    "typeLabel": ""
+                    "typeLabel": "Előadó"
                 }
             },
             "useReportConfigs": {
                 "account": {
-                    "label": "Fiók",
-                    "summary": ""
+                    "label": "Fiók"
                 },
                 "album": {
-                    "label": "Album",
-                    "releaseDate": "",
-                    "title": ""
+                    "label": "Album"
                 },
                 "artist": {
                     "label": "Előadó"
-                },
-                "channel": {
-                    "label": ""
-                },
-                "track": {
-                    "copyright": "",
-                    "license": "",
-                    "position": "",
-                    "title": "",
-                    "label": ""
-                },
-                "creationDate": {
-                    "label": ""
-                },
-                "library": {
-                    "description": "",
-                    "label": ""
-                },
-                "musicbrainzId": {
-                    "label": ""
-                },
-                "name": {
-                    "label": ""
-                },
-                "playlist": {
-                    "label": ""
-                },
-                "tags": {
-                    "label": ""
-                },
-                "visibility": {
-                    "label": ""
-                }
-            },
-            "useEditConfigs": {
-                "track": {
-                    "copyright": "",
-                    "license": "",
-                    "position": "",
-                    "title": ""
-                },
-                "cover": {
-                    "label": ""
-                },
-                "description": {
-                    "label": ""
-                },
-                "artist": {
-                    "name": ""
-                },
-                "album": {
-                    "releaseDate": "",
-                    "title": ""
-                },
-                "tags": {
-                    "label": ""
                 }
             }
-        },
-        "useThemeList": {
-            "darkTheme": "",
-            "lightTheme": ""
-        }
-    },
-    "init": {
-        "serviceWorker": {
-            "newAppVersion": "Az alkalmazás új verziója elérhető.",
-            "actions": {
-                "later": "",
-                "update": ""
-            }
-        },
-        "axios": {
-            "rateLimitDelay": "",
-            "rateLimitLater": ""
         }
     }
 }

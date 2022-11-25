@@ -4,24 +4,9 @@
             "Authorize": {
                 "header": {
                     "access": "Ensaluti en via Funkwhale konto",
-                    "authorize": "",
                     "authorizeFailure": "Eraro kiam ruli akton",
                     "fetchFailure": "Eraro kiam krei inviton",
-                    "allScopes": "Malatingeblu",
-                    "readOnly": "",
-                    "writeOnly": ""
-                },
-                "title": "",
-                "button": {
-                    "authorize": ""
-                },
-                "help": {
-                    "pasteCode": "",
-                    "redirect": "",
-                    "copyCode": ""
-                },
-                "message": {
-                    "unknownPermissions": ""
+                    "allScopes": "Malatingeblu"
                 }
             },
             "SubsonicTokenForm": {
@@ -70,45 +55,32 @@
             },
             "ApplicationEdit": {
                 "label": {
-                    "accessToken": "Atingo malaktivigas",
-                    "appId": "",
-                    "appSecret": ""
-                },
-                "header": {
-                    "appDetails": "",
-                    "editApp": "Eraro kiam ruli akton"
-                },
-                "help": {
-                    "appDetails": ""
+                    "accessToken": "Atingo malaktivigas"
                 },
                 "link": {
                     "settings": "Ĝisdati agordojn"
                 },
                 "title": "Eraro kiam ruli akton",
-                "button": {
-                    "regenerateToken": ""
+                "header": {
+                    "editApp": "Eraro kiam ruli akton"
                 }
             },
             "Settings": {
                 "title": "Preferoj de via konto",
                 "header": {
                     "accountSettings": "Preferoj de via konto",
-                    "authorizedApps": "",
                     "avatar": "Avataro",
                     "changeEmail": "Konfirmi vian retadreson",
                     "changePassword": "Ŝanĝi mian pasvorton",
                     "contentFilters": "Elekti filtrilon",
                     "deleteAccount": "Kreu mian konton",
                     "hiddenArtists": "Folii artistojn",
-                    "plugins": "",
                     "settingsUpdated": "Agordoj ĝisdatigas",
                     "emailFailure": "Ne povis konfirmi vian retadreson",
                     "accountFailure": "Ni ne povis ensaluti vin",
                     "noApps": "Vi ne havas iu ajn regulon por tiu konto.",
                     "noPersonalApps": "Vi ne havas iu ajn regulon por tiu konto.",
                     "yourApps": "Viaj sciigoj",
-                    "avatarFailure": "",
-                    "passwordFailure": "",
                     "updateFailure": "Agordoj ĝisdatigas"
                 },
                 "table": {
@@ -121,8 +93,7 @@
                     "yourApps": {
                         "header": {
                             "application": "Ago",
-                            "creationDate": "Kreodato",
-                            "scopes": ""
+                            "creationDate": "Kreodato"
                         }
                     },
                     "artists": {
@@ -149,22 +120,8 @@
                     "refresh": "Ĝisdatigi",
                     "remove": "Forigi",
                     "removeApp": "Forigi ludliston",
-                    "revoke": "",
-                    "revokeAccess": "",
                     "update": "Ĝisdati",
                     "updateSettings": "Ĝisdati agordojn"
-                },
-                "description": {
-                    "changeEmail": "",
-                    "changePassword": {
-                        "paragraph1": "Ŝanĝi vian pasvorton ankaŭ ŝanĝos vian Subsonic API pasvorto se vi petis tiun.",
-                        "paragraph2": "Vi devos rekte ŝanĝi vian pasvorton en la aplikaĵo ke uzas ĝin."
-                    },
-                    "contentFilters": "",
-                    "authorizedApps": "",
-                    "yourApps": "",
-                    "plugins": "",
-                    "deleteAccount": ""
                 },
                 "modal": {
                     "changePassword": {
@@ -176,39 +133,29 @@
                         }
                     },
                     "deleteAccount": {
-                        "header": "Ĉu vi volas reŝargi vian antaŭan atendovicon?",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "Ĉu vi volas reŝargi vian antaŭan atendovicon?"
                     },
                     "deleteApp": {
-                        "header": "",
                         "content": {
                             "warning": "Tute forigos tiun ludliston kaj ne povus esti malfaronta."
                         }
-                    },
-                    "revokeApp": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
                     }
                 },
-                "help": {
-                    "noApps": "",
-                    "changePassword": "Bonvolu rekontroli ke via pasvorto ĝustas",
-                    "noPersonalApps": ""
+                "description": {
+                    "changePassword": {
+                        "paragraph1": "Ŝanĝi vian pasvorton ankaŭ ŝanĝos vian Subsonic API pasvorto se vi petis tiun.",
+                        "paragraph2": "Vi devos rekte ŝanĝi vian pasvorton en la aplikaĵo ke uzas ĝin."
+                    }
                 },
                 "link": {
                     "managePlugins": "Manipuli ludlistojn",
                     "newApp": "Krei novan ludliston"
                 },
-                "warning": {
-                    "deleteAccount": ""
+                "help": {
+                    "changePassword": "Bonvolu rekontroli ke via pasvorto ĝustas"
                 },
                 "message": {
-                    "currentEmail": "Vi aktuale estas ensaluta al {username}",
-                    "confirmDelete": ""
+                    "currentEmail": "Vi aktuale estas ensaluta al {username}"
                 }
             },
             "Logout": {
@@ -233,33 +180,6 @@
                 },
                 "title": "Krei novan ludliston"
             },
-            "ApplicationForm": {
-                "label": {
-                    "scopes": {
-                        "description": "",
-                        "read": {
-                            "label": "",
-                            "description": ""
-                        },
-                        "write": {
-                            "label": "",
-                            "description": ""
-                        }
-                    },
-                    "name": "Nomo",
-                    "redirectUri": ""
-                },
-                "button": {
-                    "create": "Krei ludliston",
-                    "update": "Ĝisdati ludliston"
-                },
-                "help": {
-                    "redirectUri": ""
-                },
-                "header": {
-                    "failure": "Ni ne povis krei vian konton"
-                }
-            },
             "LoginForm": {
                 "link": {
                     "createAccount": "Krei konton",
@@ -268,10 +188,6 @@
                 "placeholder": {
                     "username": "Tajpu vian uzantnomon aŭ retadreson"
                 },
-                "help": {
-                    "approvalRequired": "",
-                    "invalidCredentials": "Bonvolu rekontroli ke vian uzantnomo kaj pasvorto ĝustas"
-                },
                 "button": {
                     "login": "Ensaluti"
                 },
@@ -279,8 +195,23 @@
                     "password": "Pasvorto",
                     "username": "Uzantnomo aŭ retpoŝtadreso"
                 },
+                "help": {
+                    "invalidCredentials": "Bonvolu rekontroli ke vian uzantnomo kaj pasvorto ĝustas"
+                },
                 "header": {
                     "loginFailure": "Ni ne povis ensaluti vin"
+                }
+            },
+            "ApplicationForm": {
+                "button": {
+                    "create": "Krei ludliston",
+                    "update": "Ĝisdati ludliston"
+                },
+                "label": {
+                    "name": "Nomo"
+                },
+                "header": {
+                    "failure": "Ni ne povis krei vian konton"
                 }
             },
             "SignupForm": {
@@ -302,10 +233,7 @@
                     "signupFailure": "Ne eblas krei vian konton."
                 },
                 "message": {
-                    "registrationClosed": "Registrigadoj fermitas je tiu instanco, vi bezonos invitkodon por registrigi.",
-                    "requiresReview": "",
-                    "awaitingReview": "",
-                    "accountCreated": ""
+                    "registrationClosed": "Registrigadoj fermitas je tiu instanco, vi bezonos invitkodon por registrigi."
                 }
             },
             "Plugin": {
@@ -319,9 +247,6 @@
                 "header": {
                     "failure": "Eraro kiam konservi preferojn"
                 },
-                "description": {
-                    "library": ""
-                },
                 "button": {
                     "save": "Konservi",
                     "scan": "Skana"
@@ -333,30 +258,14 @@
                 "activeUsers": "{ count } kanto | { count } kantoj",
                 "hoursOfMusic": "{ count } kanto | { count } kantoj"
             },
+            "title": "Pripaĝo",
             "header": {
-                "funkwhale": "",
                 "aboutPod": "Pri ĉi tiu instanco",
                 "publicContent": "Aktualiĝi datumon de tabelo",
-                "findApp": "",
                 "signup": "Registriĝi"
             },
-            "title": "Pripaĝo",
             "link": {
-                "findOtherPod": "",
                 "learnMore": "Ŝargas sekvantojn…"
-            },
-            "description": {
-                "funkwhale": "",
-                "publicContent": "",
-                "signup": "",
-                "findApp": "",
-                "quota": ""
-            },
-            "placeholder": {
-                "noDescription": ""
-            },
-            "message": {
-                "loggedIn": ""
             }
         },
         "Home": {
@@ -367,46 +276,31 @@
             "header": {
                 "aboutFunkwhale": "Pri Funkwhale",
                 "about": "Pri Funkwhale",
-                "contact": "",
                 "login": "Ensaluti",
-                "newChannels": "",
                 "newAlbums": "Novaj aldonoj",
                 "signup": "Registriĝi",
-                "statistics": "Statistikoj",
-                "links": "",
-                "welcome": ""
+                "statistics": "Statistikoj"
             },
             "link": {
                 "publicContent": {
-                    "label": "Aktualiĝi datumon de tabelo",
-                    "description": ""
+                    "label": "Aktualiĝi datumon de tabelo"
                 },
-                "userGuides": {
-                    "description": "",
-                    "label": "Uzantaj muzikejoj"
-                },
-                "findOtherPod": "",
                 "learnMore": "Ŝargas sekvantojn…",
                 "mobileApps": {
-                    "label": "Poŝkomputilaj kaj komputilaj aplikaĵoj",
-                    "description": ""
+                    "label": "Poŝkomputilaj kaj komputilaj aplikaĵoj"
                 },
-                "rules": "",
+                "userGuides": {
+                    "label": "Uzantaj muzikejoj"
+                },
                 "viewMore": "Ŝargas sekvantojn…",
                 "funkwhale": "Uzi Funkwhale"
             },
             "description": {
                 "funkwhale": {
-                    "paragraph2": "Funkwhale estas senpaga kaj lasis vin estri vian muzikon.",
-                    "paragraph1": ""
-                },
-                "signup": "",
-                "quota": ""
+                    "paragraph2": "Funkwhale estas senpaga kaj lasis vin estri vian muzikon."
+                }
             },
-            "title": "Hejmo",
-            "placeholder": {
-                "noDescription": ""
-            }
+            "title": "Hejmo"
         },
         "audio": {
             "artist": {
@@ -456,7 +350,6 @@
                 "label": {
                     "clearQueue": "Purigi vian atendovico",
                     "expandQueue": "Purigi vian atendovico",
-                    "addArtistContentFilter": "",
                     "loopingDisabled": "Ripeto malaktivas. Alklaki por aktivi ripetado de la aktuala kanto.",
                     "loopingSingle": "Ripetas unu kanton. Alklaki por aktivi ripetado de la tutan atendovico.",
                     "loopingWholeQueue": "Ripetas la tutan atendovicon. Alklaki por malaktivi ripeto.",
@@ -475,21 +368,17 @@
                     "addToQueue": "Aldoni al aktuala atendovico",
                     "addToPlaylist": "Aldoni al ludlisto…",
                     "episodeDetails": "Detaloj",
-                    "hideArtist": "",
                     "discretePlay": "Ludi",
                     "playAlbum": "Ludi ĉiuj albumoj",
                     "playArtist": "Ludlisto",
                     "playNext": "Ludi baldaŭe",
                     "playNow": "Ludi tuj",
                     "playPlaylist": "Purigi ludliston",
-                    "startRadio": "",
                     "playTrack": "Ludi kanton",
                     "playTracks": "Ludi kanton",
-                    "report": "",
                     "trackDetails": "Detaloj"
                 },
                 "title": {
-                    "more": "",
                     "unavailable": "Tiu kanto ne disponeblas en iu aj muzikejo vi povas atingi"
                 }
             },
@@ -545,9 +434,6 @@
                     }
                 },
                 "Widget": {
-                    "empty": {
-                        "noResults": ""
-                    },
                     "button": {
                         "more": "Afiŝi unu alian albumon"
                     }
@@ -558,40 +444,21 @@
                     }
                 }
             },
-            "VolumeControl": {
-                "label": {
-                    "slider": ""
-                },
-                "button": {
-                    "mute": "Silentigi",
-                    "unmute": "Malmutigi"
-                }
-            },
             "SearchBar": {
                 "label": {
                     "album": "Albumo",
                     "artist": "Artisto",
                     "category": {
-                        "federation": "Federo",
-                        "podcasts": ""
+                        "federation": "Federo"
                     },
                     "search": "Serĉi muzikon",
-                    "tag": "",
                     "track": "Kanto"
-                },
-                "link": {
-                    "more": "",
-                    "fediverse": "Serĉi je Vikipedio",
-                    "rss": ""
-                },
-                "header": {
-                    "noResults": ""
                 },
                 "placeholder": {
                     "search": "Serĉu artistoj, albumoj, kantoj…"
                 },
-                "empty": {
-                    "noResults": ""
+                "link": {
+                    "fediverse": "Serĉi je Vikipedio"
                 }
             },
             "Search": {
@@ -611,36 +478,17 @@
             "ChannelForm": {
                 "label": {
                     "discography": "Nomo de artisto",
-                    "category": "",
-                    "image": "",
                     "description": "Resumo",
-                    "username": "",
                     "language": "Ŝanĝi lingvon",
                     "name": "Nomo",
                     "email": "Konfirmi vian retadreson",
-                    "owner": "Proprietulo",
-                    "podcast": "",
-                    "subcategory": "",
-                    "tags": ""
-                },
-                "placeholder": {
-                    "name": "",
-                    "username": ""
+                    "owner": "Proprietulo"
                 },
                 "header": {
                     "error": "Eraro kiam konservi preferojn"
                 },
-                "help": {
-                    "podcast": "",
-                    "discography": "",
-                    "podcastFields": "",
-                    "username": ""
-                },
                 "loader": {
                     "loading": "Elŝutanta"
-                },
-                "legend": {
-                    "purpose": ""
                 }
             },
             "LibraryFollowButton": {
@@ -656,8 +504,7 @@
                 },
                 "help": {
                     "embed": "Kopi kaj alglui tiun kodon en via retejo",
-                    "width": "Lasu malplena por adaptiĝema fenestraĵo",
-                    "anonymous": ""
+                    "width": "Lasu malplena por adaptiĝema fenestraĵo"
                 },
                 "label": {
                     "embed": "Enkorpiga kodo",
@@ -667,11 +514,14 @@
                 "header": {
                     "preview": "Antaŭvido"
                 },
-                "warning": {
-                    "anonymous": ""
-                },
                 "message": {
                     "copy": "Kopiis teksto al tondujo!"
+                }
+            },
+            "VolumeControl": {
+                "button": {
+                    "mute": "Silentigi",
+                    "unmute": "Malmutigi"
                 }
             },
             "ChannelSeries": {
@@ -712,7 +562,6 @@
                     "cancel": "Nuligi",
                     "edit": "Redakti",
                     "embed": "Enkorpigi",
-                    "more": "",
                     "play": "Ludi ĉiuj albumoj"
                 },
                 "modal": {
@@ -724,7 +573,6 @@
                     "moderation": "Ĝisdati moderecan regulon",
                     "discogs": "Serĉi muzikon",
                     "wikipedia": "Serĉi je Vikipedio",
-                    "django": "",
                     "domain": "Aligis je {date}",
                     "musicbrainz": "Vidi en MusicBrainz"
                 }
@@ -782,7 +630,6 @@
                     "network": "Reta eraro okazis dum alŝuto de tiu dosiero",
                     "size": "Ne povis alŝuti tiun dosieron, certigi ne tro grandas",
                     "extension": "Malbona dosiertipo, aserti ĝi estas aŭda dosiero. { extensions } funkcias",
-                    "retry": "",
                     "denied": "Malakcepti elŝuto, certiĝi la dosieron ne tro grandas kaj vi nur havas spaco",
                     "timeout": "Elŝuto tempolimis, bonvolu reprovi"
                 },
@@ -807,14 +654,12 @@
                 },
                 "label": {
                     "uploadWidget": "Alklaki por selekti elŝutontaj dosieroj, aŭ ŝovi kaj demeti dosierojn aŭ dosierujojn",
-                    "remainingSpace": "",
                     "extensions": "Funkcianta sufikso: {extensions}"
                 },
                 "header": {
                     "failure": "Eraro kiam konservi preferojn",
-                    "server": "Importstato",
                     "status": "Importstato",
-                    "local": ""
+                    "server": "Importstato"
                 },
                 "link": {
                     "processing": "Procedas",
@@ -822,15 +667,13 @@
                     "picard": "Ni rekomendas Picard pro fari tiun."
                 },
                 "description": {
-                    "import": "Rekomenci importadon",
-                    "previousImport": ""
+                    "import": "Rekomenci importadon"
                 },
                 "message": {
                     "local": {
                         "format": "La muzika dosiero kiun vi elŝutas estas bone etikedita.",
                         "tag": "La muzika dosiero kiun vi elŝutas estas bone etikedita.",
-                        "message": "Vi estas elŝutota muziko al via muzikejo. Antaŭ komenci, bonvolu certiĝi ke:",
-                        "copyright": ""
+                        "message": "Vi estas elŝutota muziko al via muzikejo. Antaŭ komenci, bonvolu certiĝi ke:"
                     }
                 }
             },
@@ -840,30 +683,13 @@
                 },
                 "button": {
                     "cancel": "Nuligi",
-                    "clear": "Purigi",
-                    "reset": "",
-                    "showUnreviewed": "",
-                    "showAll": "",
-                    "submit": "",
-                    "new": "",
-                    "suggest": ""
+                    "clear": "Purigi"
                 },
                 "header": {
                     "failure": "Eraro kiam konservi preferojn",
-                    "recentEdits": "Novaj aldonoj",
-                    "unreviewed": "",
-                    "success": ""
+                    "recentEdits": "Novaj aldonoj"
                 },
-                "notApplicable": "ND",
-                "empty": {
-                    "suggestEdit": ""
-                },
-                "label": {
-                    "summary": ""
-                },
-                "message": {
-                    "noPermission": ""
-                }
+                "notApplicable": "ND"
             },
             "Albums": {
                 "link": {
@@ -881,9 +707,6 @@
                 "header": {
                     "browse": "Folii radiojn"
                 },
-                "placeholder": {
-                    "search": ""
-                },
                 "empty": {
                     "noResults": "Neniom artisto kongruas kun via serĉo"
                 },
@@ -891,8 +714,7 @@
                     "results": "Rezultoj per paĝo"
                 },
                 "label": {
-                    "search": "Serĉi",
-                    "tags": ""
+                    "search": "Serĉi"
                 },
                 "button": {
                     "search": "Serĉi"
@@ -904,9 +726,7 @@
                     "search": "Serĉi"
                 },
                 "label": {
-                    "search": "Nomo de artisto",
-                    "excludeCompilation": "",
-                    "tags": ""
+                    "search": "Nomo de artisto"
                 },
                 "title": "Artistoj",
                 "ordering": {
@@ -936,10 +756,7 @@
                         "album": "Albumo",
                         "artist": "Artisto",
                         "copyright": "Kopirajto",
-                        "license": "Permesilo",
-                        "series": "",
-                        "url": "",
-                        "year": ""
+                        "license": "Permesilo"
                     },
                     "track": {
                         "bitrate": {
@@ -973,7 +790,6 @@
                     "moderation": "Ĝisdati moderecan regulon"
                 },
                 "header": {
-                    "channels": "",
                     "tracks": "Kantoj"
                 }
             },
@@ -992,47 +808,6 @@
                 },
                 "description": {
                     "library": "Tiu artisto estas en ĉi-tiuj muzikejoj:"
-                },
-                "message": {
-                    "filter": ""
-                }
-            },
-            "ImportStatusModal": {
-                "error": {
-                    "importFailure": "",
-                    "unknownError": {
-                        "message": "",
-                        "label": ""
-                    },
-                    "invalidMetadata": {
-                        "label": "",
-                        "message": ""
-                    }
-                },
-                "button": {
-                    "close": "Fermi"
-                },
-                "table": {
-                    "error": {
-                        "debug": "Kantodatumo",
-                        "errorDetail": "Eraroraportado",
-                        "errorType": "Eraris",
-                        "help": "Ricevi helpon"
-                    }
-                },
-                "header": {
-                    "importDetail": "Importstato"
-                },
-                "link": {
-                    "support": "",
-                    "documentation": ""
-                },
-                "message": {
-                    "importDetail": "",
-                    "importSuccess": ""
-                },
-                "warning": {
-                    "importSkipped": ""
                 }
             },
             "EditCard": {
@@ -1050,26 +825,15 @@
                 "modal": {
                     "delete": {
                         "header": "Forigi tiun moderecan regulon?"
-                    },
-                    "content": {
-                        "warning": ""
-                    }
-                },
-                "table": {
-                    "update": {
-                        "header": {
-                            "field": "",
-                            "newValue": "",
-                            "oldValue": ""
-                        },
-                        "notApplicable": "ND"
                     }
                 },
                 "header": {
                     "modification": "Modifdato"
                 },
-                "link": {
-                    "track": ""
+                "table": {
+                    "update": {
+                        "notApplicable": "ND"
+                    }
                 }
             },
             "Podcasts": {
@@ -1088,17 +852,11 @@
                     "cancel": "Nuligi",
                     "channel": "Krei novan muzikejon",
                     "search": "Serĉi",
-                    "subscribe": "",
                     "feed": "Uzi Funkwhale"
                 },
                 "empty": {
                     "noResults": "Neniom artisto kongruas kun via serĉo"
                 },
-                "label": {
-                    "search": "",
-                    "tags": ""
-                },
-                "title": "",
                 "pagination": {
                     "results": "Rezultoj per paĝo"
                 },
@@ -1148,8 +906,7 @@
                     "cancel": "Nuligi",
                     "delete": "Forigi",
                     "edit": "Redakti",
-                    "embed": "Enkorpigi",
-                    "more": ""
+                    "embed": "Enkorpigi"
                 },
                 "modal": {
                     "delete": {
@@ -1165,7 +922,6 @@
                 "link": {
                     "moderation": "Ĝisdati moderecan regulon",
                     "discogs": "Serĉi muzikon",
-                    "django": "",
                     "domain": "Aligis je {date}",
                     "musicbrainz": "Vidi en MusicBrainz"
                 }
@@ -1177,7 +933,6 @@
                     "download": "Elŝuti",
                     "edit": "Redakti",
                     "embed": "Enkorpigi",
-                    "more": "",
                     "play": "Ludi"
                 },
                 "modal": {
@@ -1195,49 +950,42 @@
                     "moderation": "Ĝisdati moderecan regulon",
                     "discogs": "Serĉi muzikon",
                     "wikipedia": "Serĉi je Vikipedio",
-                    "django": "",
                     "domain": "Aligis je {date}"
                 },
                 "title": "Kanto"
+            },
+            "ImportStatusModal": {
+                "button": {
+                    "close": "Fermi"
+                },
+                "table": {
+                    "error": {
+                        "debug": "Kantodatumo",
+                        "errorDetail": "Eraroraportado",
+                        "errorType": "Eraris",
+                        "help": "Ricevi helpon"
+                    }
+                },
+                "header": {
+                    "importDetail": "Importstato"
+                }
             },
             "AlbumEdit": {
                 "header": {
                     "edit": "Ludi tiun kanton",
                     "suggest": "Ni ne povis ŝargi tiun kanton"
-                },
-                "message": {
-                    "remote": ""
                 }
             },
             "ArtistEdit": {
                 "header": {
                     "edit": "Ludi tiun kanton",
                     "suggest": "Ni ne povis ŝargi tiun kanton"
-                },
-                "message": {
-                    "remote": ""
                 }
             },
             "TrackEdit": {
                 "header": {
                     "edit": "Ludi tiun kanton",
                     "suggest": "Ni ne povis ŝargi tiun kanton"
-                },
-                "message": {
-                    "remote": ""
-                }
-            },
-            "AlbumDetail": {
-                "header": {
-                    "episodes": "",
-                    "tracks": "Kantoj",
-                    "libraries": "Uzantaj muzikejoj"
-                },
-                "description": {
-                    "libraries": "Tiu albumo estas en ĉi-tiuj muzikejoj:"
-                },
-                "meta": {
-                    "volume": "Volumo {number}"
                 }
             },
             "FsBrowser": {
@@ -1245,15 +993,9 @@
                     "import": "Importinta"
                 }
             },
-            "FsLogs": {
-                "empty": {
-                    "notStarted": ""
-                }
-            },
             "Home": {
                 "title": "Muzikejo",
                 "header": {
-                    "newChannels": "",
                     "playlists": "Ludlistoj",
                     "recentlyAdded": "Novaj aldonoj",
                     "recentlyFavorited": "Novaj stelumoj",
@@ -1263,6 +1005,18 @@
             "TagSelector": {
                 "placeholder": {
                     "search": "Serĉi"
+                }
+            },
+            "AlbumDetail": {
+                "description": {
+                    "libraries": "Tiu albumo estas en ĉi-tiuj muzikejoj:"
+                },
+                "header": {
+                    "tracks": "Kantoj",
+                    "libraries": "Uzantaj muzikejoj"
+                },
+                "meta": {
+                    "volume": "Volumo {number}"
                 }
             }
         },
@@ -1306,8 +1060,7 @@
         "channels": {
             "UploadModal": {
                 "meta": {
-                    "files": "Unu stelumo | { count } stelumoj",
-                    "quota": ""
+                    "files": "Unu stelumo | { count } stelumoj"
                 },
                 "button": {
                     "cancel": "Nuligi",
@@ -1315,13 +1068,11 @@
                     "finishLater": "Finanto",
                     "next": "Baldaŭa kanto",
                     "previous": "Antaŭa kanto",
-                    "publish": "",
                     "update": "Ĝisdati"
                 },
                 "header": {
                     "uploadFiles": "Forigi tiun muzikejon?",
                     "processing": "Procedas",
-                    "publish": "",
                     "uploadDetails": "Elŝutdato"
                 }
             },
@@ -1330,11 +1081,7 @@
                     "tracks": "{ count } kanto | { count } kantoj"
                 },
                 "label": {
-                    "album": "Albumo",
-                    "series": ""
-                },
-                "option": {
-                    "none": ""
+                    "album": "Albumo"
                 }
             },
             "LicenseSelect": {
@@ -1343,29 +1090,15 @@
                 },
                 "label": {
                     "license": "Permesilo"
-                },
-                "option": {
-                    "none": ""
                 }
             },
             "UploadForm": {
-                "help": {
-                    "license": ""
-                },
                 "label": {
-                    "openBrowser": "Folii",
-                    "channel": ""
-                },
-                "message": {
-                    "dragAndDrop": "",
-                    "pending": ""
+                    "openBrowser": "Folii"
                 },
                 "button": {
                     "edit": "Redakti",
-                    "ignore": "",
-                    "remove": "Forigi",
-                    "resume": "",
-                    "retry": ""
+                    "remove": "Forigi"
                 },
                 "header": {
                     "error": "Eraro kiam konservi preferojn"
@@ -1377,9 +1110,6 @@
                 },
                 "description": {
                     "extensions": "Funkcianta sufikso: {extensions}"
-                },
-                "warning": {
-                    "quota": ""
                 }
             },
             "AlbumModal": {
@@ -1396,7 +1126,6 @@
                 "label": {
                     "description": "Resumo",
                     "position": "Paĝeco",
-                    "tags": "",
                     "title": "Titolo",
                     "image": "Nomo de kanto"
                 }
@@ -1411,7 +1140,6 @@
             },
             "SubscribeButton": {
                 "title": {
-                    "subscribe": "",
                     "unsubscribe": "Unu stelumo"
                 },
                 "help": {
@@ -1431,23 +1159,17 @@
             "title": "Pripaĝo",
             "link": {
                 "about": "Pri ĉi tiu instanco",
-                "features": "",
                 "introduction": "Invitoj",
                 "rules": "Regulo",
-                "statistics": "Statistikoj",
-                "terms": ""
+                "statistics": "Statistikoj"
             },
             "header": {
                 "about": "Pri ĉi tiu instanco",
                 "contact": "Elekti filtrilon",
-                "features": "",
                 "rules": "Regulo",
-                "statistics": "Statistikoj",
-                "terms": ""
+                "statistics": "Statistikoj"
             },
             "feature": {
-                "allowList": "",
-                "anonymousAccess": "",
                 "status": {
                     "closed": "Fermi",
                     "disabled": "Malaktiva",
@@ -1455,19 +1177,10 @@
                     "open": "Malferma"
                 },
                 "federation": "Federo",
-                "version": "",
                 "registrations": "Administrejo",
                 "quota": "Elŝutlimito"
             },
-            "notApplicable": "ND",
-            "placeholder": {
-                "noDescription": "",
-                "noRules": "",
-                "noTerms": ""
-            },
-            "message": {
-                "contact": ""
-            }
+            "notApplicable": "ND"
         },
         "common": {
             "ActionTable": {
@@ -1477,7 +1190,6 @@
                     "go": "Komenci",
                     "launch": "Lanĉi",
                     "refresh": "Aktualiĝi datumon de tabelo",
-                    "select": "",
                     "selectAll": "Elekti filtrilon",
                     "selectElement": "Elekti unu eron | Elekti ĉiun la {total} erojn",
                     "selectCurrentPage": "Elekti nur la aktualan uzon"
@@ -1513,8 +1225,6 @@
                     "about": "Pripaĝo",
                     "chat": "Babilejo",
                     "docs": "Dokumentaro",
-                    "forum": "",
-                    "support": "",
                     "git": "Cimspuradilo",
                     "login": "Ensaluti",
                     "logout": "Elsaluti",
@@ -1525,16 +1235,13 @@
                 },
                 "label": {
                     "shortcuts": "Fulmoklavo",
-                    "language": "Ŝanĝi lingvon",
-                    "theme": ""
+                    "language": "Ŝanĝi lingvon"
                 }
             },
             "UserModal": {
                 "link": {
                     "about": "Pripaĝo",
                     "chat": "Babilejo",
-                    "forum": "",
-                    "support": "",
                     "git": "Cimspuradilo",
                     "login": "Ensaluti",
                     "logout": "Elsaluti",
@@ -1545,8 +1252,7 @@
                 },
                 "label": {
                     "shortcuts": "Fulmoklavo",
-                    "language": "Ŝanĝi lingvon",
-                    "theme": ""
+                    "language": "Ŝanĝi lingvon"
                 },
                 "header": {
                     "options": "Agoj"
@@ -1568,15 +1274,11 @@
                 "button": {
                     "cancel": "Nuligi",
                     "edit": "Redakti",
-                    "less": "",
                     "more": "Afiŝi unu alian albumon",
                     "update": "Mia mojosa priskribo"
                 },
                 "header": {
                     "failure": "Eraro kiam ruli akton"
-                },
-                "empty": {
-                    "noDescription": ""
                 }
             },
             "InlineSearchBar": {
@@ -1592,8 +1294,7 @@
             },
             "CollapseLink": {
                 "button": {
-                    "collapse": "Malgrandigi",
-                    "expand": ""
+                    "collapse": "Malgrandigi"
                 }
             },
             "CopyInput": {
@@ -1608,41 +1309,22 @@
                 "link": {
                     "login": "Ensaluti",
                     "signup": "Registriĝi"
-                },
-                "header": {
-                    "unauthenticated": ""
-                },
-                "description": {
-                    "noAccess": ""
                 }
             },
             "ContentForm": {
-                "help": {
-                    "markdown": ""
-                },
                 "empty": {
                     "noContent": "Atendantaj dosieroj"
                 },
                 "button": {
-                    "preview": "Antaŭvido",
-                    "write": ""
-                },
-                "placeholder": {
-                    "input": ""
+                    "preview": "Antaŭvido"
                 }
             },
             "EmptyState": {
-                "header": {
-                    "noResults": ""
-                },
                 "button": {
                     "refresh": "Ĝisdatigi"
                 }
             },
             "AttachmentInput": {
-                "help": {
-                    "upload": ""
-                },
                 "button": {
                     "remove": "Forigi"
                 },
@@ -1658,7 +1340,6 @@
             },
             "ExpandableDiv": {
                 "button": {
-                    "less": "",
                     "more": "Afiŝi unu alian albumon"
                 }
             }
@@ -1670,22 +1351,18 @@
                 }
             },
             "PlaylistModal": {
-                "warning": {
-                    "duplicate": ""
-                },
-                "button": {
-                    "addDuplicate": "",
-                    "addToPlaylist": "Aldoni al ĉi tiu ludlisto",
-                    "addTrack": "Aldoni kanton",
-                    "cancel": "Nuligi",
-                    "edit": "Redakti"
-                },
                 "header": {
                     "addToPlaylist": "Aldoni al ludlisto…",
                     "available": "Disponeblaj ludlistoj",
                     "manage": "Manipuli ludlistojn",
                     "noResults": "Kanto kongruanta filtrilo",
                     "addFailure": "Ni ne povas aldoni kanton al ludlisto"
+                },
+                "button": {
+                    "addToPlaylist": "Aldoni al ĉi tiu ludlisto",
+                    "addTrack": "Aldoni kanton",
+                    "cancel": "Nuligi",
+                    "edit": "Redakti"
                 },
                 "table": {
                     "edit": {
@@ -1707,18 +1384,22 @@
                     "noPlaylists": "Ludlisto kreiintas"
                 }
             },
-            "Editor": {
+            "TrackPlaylistIcon": {
                 "button": {
-                    "addDuplicate": "",
-                    "clear": "Purigi ludliston",
-                    "copy": "Kopii kantojn el la aktuala atendovico en tiu ludlisto",
-                    "insertFromQueue": "Internigi el atendovico (unu kanto) | Internigi el atendovico ({count} kantoj)"
-                },
+                    "add": "Aldoni al ludlisto…"
+                }
+            },
+            "Editor": {
                 "error": {
                     "sync": "Eraro okazis dum konservo de viaj ŝanĝoj"
                 },
                 "message": {
                     "sync": "Konservis ŝanĝoj"
+                },
+                "button": {
+                    "clear": "Purigi ludliston",
+                    "copy": "Kopii kantojn el la aktuala atendovico en tiu ludlisto",
+                    "insertFromQueue": "Internigi el atendovico (unu kanto) | Internigi el atendovico ({count} kantoj)"
                 },
                 "modal": {
                     "clearPlaylist": {
@@ -1734,16 +1415,8 @@
                 "header": {
                     "editor": "Ludlista redaktilo"
                 },
-                "warning": {
-                    "duplicate": ""
-                },
                 "loading": {
                     "sync": "Sinkronigas ŝanĝojn al servilo…"
-                }
-            },
-            "TrackPlaylistIcon": {
-                "button": {
-                    "add": "Aldoni al ludlisto…"
                 }
             },
             "Form": {
@@ -1796,7 +1469,6 @@
                 "albums": "Albumoj",
                 "artists": "Artistoj",
                 "browse": "Folii",
-                "channels": "",
                 "createAccount": "Krei konton",
                 "favorites": "Stelumoj",
                 "home": "Hejmo",
@@ -1804,7 +1476,6 @@
                 "login": "Ensaluti",
                 "moderation": "Modereco",
                 "playlists": "Ludlistoj",
-                "podcasts": "",
                 "radios": "Radioj",
                 "search": "Serĉi",
                 "settings": "Agordoj",
@@ -1817,14 +1488,11 @@
                 "main": "Precipa menuo",
                 "follows": "Atendantaj petoj da sekvado",
                 "edits": "Atendantaj dosieroj",
-                "play": "Ludi tiun kanton",
-                "theme": ""
+                "play": "Ludi tiun kanton"
             },
             "header": {
                 "administration": "Administrejo",
-                "explore": "",
                 "main": "Paĝeco",
-                "more": "",
                 "library": "Muzikejo"
             }
         },
@@ -1867,9 +1535,6 @@
                             "warning": "Tiu akto ne estas malfaronta."
                         }
                     },
-                    "link": {
-                        "local": ""
-                    },
                     "notApplicable": "ND",
                     "label": {
                         "search": "Serĉi",
@@ -1910,12 +1575,8 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Forigi",
-                            "warning": ""
+                            "label": "Forigi"
                         }
-                    },
-                    "link": {
-                        "local": ""
                     },
                     "label": {
                         "search": "Serĉi",
@@ -1951,12 +1612,8 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Forigi",
-                            "warning": ""
+                            "label": "Forigi"
                         }
-                    },
-                    "link": {
-                        "local": ""
                     },
                     "notApplicable": "ND",
                     "label": {
@@ -1992,18 +1649,13 @@
                         },
                         "label": "Ordo"
                     },
-                    "label": {
-                        "category": "",
-                        "search": "Serĉi"
-                    },
                     "action": {
                         "delete": {
-                            "label": "Forigi",
-                            "warning": ""
+                            "label": "Forigi"
                         }
                     },
-                    "link": {
-                        "local": ""
+                    "label": {
+                        "search": "Serĉi"
                     },
                     "placeholder": {
                         "search": "Serĉu per domajno, uzantnomo, biografio…"
@@ -2096,15 +1748,13 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Forigi",
-                            "warning": ""
+                            "label": "Forigi"
                         }
                     },
+                    "notApplicable": "ND",
                     "link": {
-                        "local": "",
                         "moderation": "Ĝisdati moderecan regulon"
                     },
-                    "notApplicable": "ND",
                     "label": {
                         "search": "Serĉi"
                     },
@@ -2122,69 +1772,39 @@
                         "object": {
                             "account": "Kontoj",
                             "domain": "Domajno",
-                            "local": "",
                             "owner": "Proprietulo",
                             "type": "Tipo"
                         },
-                        "status": {
-                            "assignedTo": "",
-                            "internalNotes": "",
-                            "resolutionDate": "Kreodato",
-                            "resolved": "",
-                            "status": "Stato",
-                            "unresolved": ""
-                        },
                         "report": {
-                            "category": "",
                             "creationDate": "Kreodato",
                             "submittedBy": "Submeti"
+                        },
+                        "status": {
+                            "resolutionDate": "Kreodato",
+                            "status": "Stato"
                         }
                     },
                     "header": {
-                        "actions": "Agoj",
-                        "notes": "",
-                        "message": "",
-                        "reportedObject": ""
+                        "actions": "Agoj"
                     },
                     "button": {
-                        "confirmDelete": "Forigi",
-                        "delete": "",
-                        "resolve": "",
-                        "unresolve": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
+                        "confirmDelete": "Forigi"
                     },
                     "notApplicable": "ND",
                     "link": {
-                        "moderation": "Ĝisdati moderecan regulon",
-                        "report": "",
-                        "publicPage": ""
-                    },
-                    "warning": {
-                        "objectDeleted": ""
+                        "moderation": "Ĝisdati moderecan regulon"
                     }
                 },
                 "UserRequestCard": {
                     "header": {
-                        "actions": "Agoj",
-                        "notes": "",
-                        "signup": ""
+                        "actions": "Agoj"
                     },
                     "button": {
-                        "approve": "Akcepti",
-                        "reject": ""
+                        "approve": "Akcepti"
                     },
                     "table": {
                         "status": {
                             "approved": "Akceptita",
-                            "assignedTo": "",
-                            "internalNotes": "",
                             "pending": "Atendas",
                             "refused": "Paŭza",
                             "status": "Stato"
@@ -2197,9 +1817,6 @@
                     "notApplicable": "ND",
                     "link": {
                         "request": "Demandi pasvorton"
-                    },
-                    "message": {
-                        "signup": ""
                     }
                 },
                 "InstancePolicyForm": {
@@ -2246,9 +1863,6 @@
                     "button": {
                         "add": "Aldoni enhavon"
                     },
-                    "placeholder": {
-                        "summary": ""
-                    },
                     "header": {
                         "failure": "Eraro kiam konservi preferojn"
                     }
@@ -2291,11 +1905,7 @@
                         }
                     },
                     "label": {
-                        "inList": "",
                         "search": "Serĉi"
-                    },
-                    "empty": {
-                        "noPods": ""
                     },
                     "placeholder": {
                         "search": "Serĉu per nomo…"
@@ -2418,13 +2028,11 @@
                     },
                     "label": "Ordo"
                 },
-                "label": {
-                    "category": "",
-                    "search": "Serĉi"
-                },
                 "link": {
-                    "local": "",
                     "moderation": "Ĝisdati moderecan regulon"
+                },
+                "label": {
+                    "search": "Serĉi"
                 },
                 "placeholder": {
                     "search": "Serĉu per domajno, uzantnomo, biografio…"
@@ -2545,14 +2153,7 @@
                 "table": {
                     "additionalFields": {
                         "header": {
-                            "actions": "Agoj",
-                            "label": "",
-                            "type": "",
-                            "required": ""
-                        },
-                        "type": {
-                            "long": "",
-                            "short": ""
+                            "actions": "Agoj"
                         },
                         "required": {
                             "false": "Ne",
@@ -2560,22 +2161,12 @@
                         }
                     }
                 },
+                "label": {
+                    "delete": "Forigi"
+                },
                 "button": {
-                    "add": "",
                     "edit": "Redakti",
                     "preview": "Antaŭvido"
-                },
-                "label": {
-                    "additionalField": "",
-                    "additionalFields": "",
-                    "delete": "Forigi",
-                    "helpText": "",
-                    "moveDown": "",
-                    "moveUp": ""
-                },
-                "help": {
-                    "additionalFields": "",
-                    "helpText": ""
                 }
             },
             "SettingsGroup": {
@@ -2595,34 +2186,6 @@
             "ReportCategoryDropdown": {
                 "option": {
                     "all": "Ĉia"
-                },
-                "label": {
-                    "category": ""
-                }
-            },
-            "ReportModal": {
-                "header": {
-                    "disabled": "",
-                    "modal": "Ĉu vi volas konfirmi tiun akton?",
-                    "submissionFailure": "Eraro kiam konservi preferojn"
-                },
-                "button": {
-                    "cancel": "Nuligi",
-                    "submit": "Submeti"
-                },
-                "label": {
-                    "email": "Retmesaĝo",
-                    "forwardToDomain": "",
-                    "message": ""
-                },
-                "description": {
-                    "forwardToDomain": "",
-                    "message": "",
-                    "modal": "",
-                    "email": ""
-                },
-                "message": {
-                    "submissionSuccess": ""
                 }
             },
             "FilterModal": {
@@ -2630,45 +2193,39 @@
                     "cancel": "Nuligi",
                     "hide": "Aldoni muzikon"
                 },
-                "message": {
-                    "success": ""
-                },
                 "header": {
                     "modal": "Ĉu vi volas forigi la \"{radio}\" radion?",
                     "failure": "Eraro kiam krei regulon"
                 },
                 "warning": {
                     "createFilter": {
-                        "listItem2": "Novaj aldonoj",
-                        "listItem3": "",
-                        "listItem1": "",
-                        "listItem4": "",
-                        "listIntro": ""
+                        "listItem2": "Novaj aldonoj"
                     }
+                }
+            },
+            "ReportModal": {
+                "button": {
+                    "cancel": "Nuligi",
+                    "submit": "Submeti"
                 },
-                "help": {
-                    "createFilter": ""
+                "header": {
+                    "modal": "Ĉu vi volas konfirmi tiun akton?",
+                    "submissionFailure": "Eraro kiam konservi preferojn"
+                },
+                "label": {
+                    "email": "Retmesaĝo"
                 }
             }
         },
         "federation": {
             "FetchButton": {
                 "description": {
-                    "failure": "Eraro okazis dum konservo de viaj ŝanĝoj",
-                    "success": "",
-                    "pending": "",
-                    "skipped": ""
+                    "failure": "Eraro okazis dum konservo de viaj ŝanĝoj"
                 },
                 "table": {
                     "error": {
                         "value": {
-                            "httpError": "Eraro okazis dum konservo de viaj ŝanĝoj",
-                            "invalidAttributesError": "",
-                            "connectionError": "",
-                            "httpStatus": "",
-                            "timeoutError": "",
-                            "invalidJsonError": "",
-                            "unknownError": ""
+                            "httpError": "Eraro okazis dum konservo de viaj ŝanĝoj"
                         },
                         "label": {
                             "detail": "Eraroraportado",
@@ -2677,19 +2234,14 @@
                     }
                 },
                 "button": {
-                    "close": "Fermi",
-                    "reload": ""
+                    "close": "Fermi"
                 },
                 "header": {
                     "saveFailure": "Eraro kiam konservi preferojn",
                     "failure": "Ĝisdatigi",
-                    "pending": "Aktualigi instancinformon",
-                    "success": "",
-                    "skipped": "",
-                    "refresh": ""
+                    "pending": "Aktualigi instancinformon"
                 },
                 "loader": {
-                    "fetchRequest": "",
                     "awaitingResult": "Ŝarĝas viajn stelumojn…"
                 }
             },
@@ -2708,25 +2260,17 @@
                     "label": "Fulmoklavoj de muzika ludilo",
                     "clearQueue": "Purigi vian atendovico",
                     "decreaseVolume": "Malgrandigi volumo",
-                    "expandQueue": "",
                     "increaseVolume": "Pliigi volumon",
                     "playPause": "Paŭzi/ludi la aktualan kanton",
                     "playNext": "Ludi sekvan kanton",
                     "playPrevious": "Ludi antaŭa kanto",
-                    "seekBack30": "",
-                    "seekBack5": "",
-                    "seekForward30": "",
-                    "seekForward5": "",
                     "shuffleQueue": "Miksi atendocivo",
                     "toggleFavorite": "Unu stelumo",
-                    "toggleMute": "",
                     "toggleLoop": "Baskuli ripetadon de la atendovico"
                 },
                 "general": {
-                    "focus": "",
                     "label": "Generalaj fulmoklavoj",
-                    "show": "Afiŝi disponeblajn fulmoklavojn",
-                    "unfocus": ""
+                    "show": "Afiŝi disponeblajn fulmoklavojn"
                 }
             },
             "button": {
@@ -2743,19 +2287,10 @@
             },
             "header": {
                 "chooseInstance": "Elekti vian instanco",
-                "failure": "",
                 "suggestions": "Sugestaj elektoj"
             },
             "label": {
                 "url": "Instanca datumo"
-            },
-            "help": {
-                "notFunkwhaleServer": "",
-                "serverDown": "",
-                "selectPod": ""
-            },
-            "message": {
-                "newUrl": ""
             }
         },
         "Queue": {
@@ -2766,7 +2301,6 @@
             },
             "label": {
                 "duration": "Daŭro",
-                "addArtistContentFilter": "",
                 "next": "Baldaŭa kanto",
                 "pause": "Paŭza",
                 "play": "Ludi",
@@ -2779,12 +2313,11 @@
                 "radio": "Novaj kantoj estos aldonataj ĉi-tie aŭtomate.",
                 "automaticPlay": "La sekva kanto ludos aŭtomate je kelkajn sekundoj…"
             },
-            "header": {
-                "failure": "",
-                "radio": "Vi ludas radion"
-            },
             "meta": {
                 "queuePosition": "({index} da {length})"
+            },
+            "header": {
+                "radio": "Vi ludas radion"
             },
             "warning": {
                 "connectivity": "Vi havus konekta problemo."
@@ -2816,31 +2349,19 @@
             "header": {
                 "fetchFailed": "Eraro dum skano de malloka instanco"
             },
-            "button": {
-                "fediverse": "",
-                "rss": "",
-                "search": "Serĉi"
-            },
             "label": {
-                "fediverse": {
-                    "fieldLabel": "",
-                    "title": "Serĉi je Vikipedio"
-                },
                 "rss": {
-                    "fieldPlaceholder": "",
-                    "fieldLabel": "Krei ludliston",
-                    "title": ""
+                    "fieldLabel": "Krei ludliston"
+                },
+                "fediverse": {
+                    "title": "Serĉi je Vikipedio"
                 }
             },
-            "warning": {
-                "unsupported": ""
+            "button": {
+                "search": "Serĉi"
             },
             "error": {
                 "fetchFailed": "Ne eblas krei vian konton."
-            },
-            "description": {
-                "fediverse": "",
-                "rss": ""
             }
         },
         "PageNotFound": {
@@ -2879,17 +2400,8 @@
                     "subscribers": "Unu stelumo | { count } stelumoj",
                     "tracks": "{ count } kanto | { count } kantoj"
                 },
-                "link": {
-                    "channelEpisodes": "",
-                    "mirrored": "",
-                    "moderation": "Ĝisdati moderecan regulon",
-                    "channelOverview": "Antaŭvido",
-                    "channelTracks": "Kantoj",
-                    "domainView": "Aligis je {date}"
-                },
                 "header": {
-                    "artistChannel": "Nomo de artisto",
-                    "podcastChannel": ""
+                    "artistChannel": "Nomo de artisto"
                 },
                 "button": {
                     "cancel": "Nuligi",
@@ -2901,26 +2413,7 @@
                     "updateChannel": "Ĝisdati ludliston",
                     "upload": "Elŝuti"
                 },
-                "title": "",
                 "modal": {
-                    "subscribe": {
-                        "rss": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
-                        },
-                        "fediverse": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
-                        },
-                        "funkwhale": {
-                            "header": "Uzi Funkwhale"
-                        },
-                        "header": ""
-                    },
                     "delete": {
                         "header": "Forigi tiun muzikejon?",
                         "content": {
@@ -2929,29 +2422,32 @@
                     },
                     "embed": {
                         "header": "Enkorpigi tiun kanton en via retejo"
+                    },
+                    "subscribe": {
+                        "funkwhale": {
+                            "header": "Uzi Funkwhale"
+                        }
                     }
+                },
+                "link": {
+                    "moderation": "Ĝisdati moderecan regulon",
+                    "channelOverview": "Antaŭvido",
+                    "channelTracks": "Kantoj",
+                    "domainView": "Aligis je {date}"
                 }
             },
             "DetailOverview": {
                 "link": {
                     "addAlbum": "Aldoni enhavon",
-                    "erroredUploads": "Ĝisdatigas muzikejon",
-                    "skippedUploads": ""
+                    "erroredUploads": "Ĝisdatigas muzikejon"
                 },
                 "header": {
                     "albums": "Albumoj",
-                    "latestEpisodes": "",
                     "latestTracks": "Baldaŭa kanto",
-                    "series": "",
-                    "uploadsFailure": "",
-                    "uploadsProcessing": "",
                     "uploadsSuccess": "Pasvorto sukcese aktualiginta"
                 },
                 "meta": {
                     "progress": "Ĝisdatigas muzikejon"
-                },
-                "message": {
-                    "processing": ""
                 }
             },
             "SubscriptionsList": {
@@ -2959,13 +2455,11 @@
                     "addNew": "Aldoni enhavon"
                 },
                 "button": {
-                    "cancel": "Nuligi",
-                    "subscribe": ""
+                    "cancel": "Nuligi"
                 },
                 "placeholder": {
                     "search": "Filtri nomon"
                 },
-                "title": "",
                 "modal": {
                     "subscription": {
                         "header": "Resumo"
@@ -3046,7 +2540,6 @@
                     "option": {
                         "status": {
                             "all": "Ĉia",
-                            "draft": "",
                             "failed": "Eraris",
                             "finished": "Finanto",
                             "pending": "Atendas",
@@ -3075,9 +2568,6 @@
                     },
                     "placeholder": {
                         "search": "Serĉu per titolo, artisto, albumo…"
-                    },
-                    "button": {
-                        "showStatus": ""
                     },
                     "pagination": {
                         "results": "Afiŝas rezultoj de {start} al {end} de {total}"
@@ -3210,17 +2700,10 @@
             "Home": {
                 "title": "Aldoni kaj administri datumoj",
                 "description": {
-                    "follow": "Vi povas sekvi muzikejoj el aliaj uzantoj por atingi novan muzikon. Publikaj muzikejoj sekvadeblas rekte, sed sekvado de privataj muzikejoj bezonas akceptado el ĝia proprulo.",
-                    "channel": {
-                        "1": "",
-                        "2": ""
-                    },
-                    "upload": ""
+                    "follow": "Vi povas sekvi muzikejoj el aliaj uzantoj por atingi novan muzikon. Publikaj muzikejoj sekvadeblas rekte, sed sekvado de privataj muzikejoj bezonas akceptado el ĝia proprulo."
                 },
                 "header": {
-                    "follow": "Sekvi mallokajn muzikejojn",
-                    "channel": "",
-                    "upload": ""
+                    "follow": "Sekvi mallokajn muzikejojn"
                 },
                 "button": {
                     "start": "Komencu"
@@ -3259,8 +2742,6 @@
                 },
                 "title": "Muzikejo",
                 "label": {
-                    "private": "",
-                    "public": "",
                     "instance": "Malakceptinta",
                     "sharingLink": "Diskoniga ligilo"
                 },
@@ -3269,8 +2750,7 @@
                 },
                 "tooltip": {
                     "private": "Tiu muzikejo estas privata kaj vi bezonas akceptadon el ĝia proprulo por vidi ĝia enhavo",
-                    "public": "Tiu muzikejo estas publika do vi povas vidi ĝia enhavo libere",
-                    "instance": ""
+                    "public": "Tiu muzikejo estas publika do vi povas vidi ĝia enhavo libere"
                 }
             },
             "Edit": {
@@ -3306,19 +2786,16 @@
             },
             "DetailAlbums": {
                 "empty": {
-                    "upload": "",
                     "follow": "Se vi malsekvantus tiun muzikejon, vi perdus ĝian muzikon."
                 }
             },
             "DetailOverview": {
                 "empty": {
-                    "upload": "",
                     "follow": "Se vi malsekvantus tiun muzikejon, vi perdus ĝian muzikon."
                 }
             },
             "DetailTracks": {
                 "empty": {
-                    "upload": "",
                     "follow": "Se vi malsekvantus tiun muzikejon, vi perdus ĝian muzikon."
                 }
             }
@@ -3367,10 +2844,7 @@
                         "artist": {
                             "header": "Nomo de artisto"
                         },
-                        "header": "Krei novan muzikejon",
-                        "podcast": {
-                            "header": ""
-                        }
+                        "header": "Krei novan muzikejon"
                     }
                 },
                 "button": {
@@ -3380,7 +2854,6 @@
                     "previous": "Antaŭa kanto"
                 },
                 "header": {
-                    "channels": "",
                     "sharedLibraries": "Tiu albumo estas en ĉi-tiuj muzikejoj:",
                     "libraries": "Uzantaj muzikejoj"
                 }
@@ -3456,37 +2929,26 @@
                 "delay": {
                     "30": "30 tagoj",
                     "60": "60 tagoj",
-                    "90": "90 tagoj",
-                    "never": ""
+                    "90": "90 tagoj"
                 }
-            },
-            "link": {
-                "help": "",
-                "donate": ""
             },
             "header": {
                 "funkwhaleSupport": "Pri Funkwhale",
-                "instanceSupport": "",
                 "messages": "Sendintaj mesaĝoj",
                 "notifications": "Viaj sciigoj"
             },
-            "button": {
-                "submit": "",
-                "read": "Marki ĉiujn legata"
-            },
             "loading": {
                 "notifications": "Ŝarĝas sciigojn…"
+            },
+            "button": {
+                "read": "Marki ĉiujn legata"
             },
             "empty": {
                 "notifications": "Nenio sciigoj jam."
             },
             "title": "Sciigoj",
             "label": {
-                "reminder": "",
                 "showRead": "Afiŝi mallegintajn sciigojn"
-            },
-            "message": {
-                "funkwhaleSupport": ""
             }
         },
         "admin": {
@@ -3535,16 +2997,13 @@
                     "link": {
                         "albums": "Albumoj",
                         "artists": "Artistoj",
-                        "channels": "",
                         "domain": "Domajno",
                         "libraries": "Muzikejoj",
-                        "linkedReports": "",
                         "openProfile": "Malfermi profilon",
                         "remoteProfile": "Malfermi profilon",
                         "requests": "Demandi pasvorton",
                         "tracks": "Kantoj",
-                        "uploads": "Elŝutoj",
-                        "django": ""
+                        "uploads": "Elŝutoj"
                     },
                     "tooltip": {
                         "uploadQuota": "Kiom da datumo la uzanto povas elŝuti. Lasi malplene por uzi la defaŭlta valoro de la instanco."
@@ -3568,7 +3027,6 @@
                     "link": {
                         "accounts": "Kontoj",
                         "domains": "Domajnoj",
-                        "reports": "",
                         "userRequests": "Uzantaj muzikejoj"
                     },
                     "title": "Modereco",
@@ -3593,13 +3051,11 @@
                     "link": {
                         "albums": "Albumoj",
                         "artists": "Artistoj",
-                        "channels": "",
                         "knownAccounts": "Konataj kontoj",
                         "libraries": "Muzikejoj",
                         "website": "Malfermi retejon",
                         "tracks": "Kantoj",
-                        "uploads": "Elŝutoj",
-                        "django": ""
+                        "uploads": "Elŝutoj"
                     },
                     "table": {
                         "audioContent": {
@@ -3617,13 +3073,12 @@
                                 "value": "Eraro dum skano de malloka instanco",
                                 "label": "Stato"
                             },
+                            "lastChecked": "Lasta kontrolado",
+                            "domainName": "Nomo",
                             "inAllowList": {
-                                "label": "",
                                 "false": "Ne",
                                 "true": "Jes"
                             },
-                            "lastChecked": "Lasta kontrolado",
-                            "domainName": "Nomo",
                             "software": {
                                 "label": "Aplikaĵo"
                             },
@@ -3655,9 +3110,7 @@
                 "ReportsList": {
                     "option": {
                         "status": {
-                            "all": "Ĉia",
-                            "resolved": "",
-                            "unresolved": ""
+                            "all": "Ĉia"
                         }
                     },
                     "ordering": {
@@ -3667,10 +3120,6 @@
                             "label": "Ordo"
                         },
                         "label": "Ordo"
-                    },
-                    "title": "",
-                    "header": {
-                        "reports": ""
                     },
                     "label": {
                         "search": "Serĉi",
@@ -3737,13 +3186,11 @@
                         "library": "Muzikejo",
                         "remoteProfile": "Malfermi profilon",
                         "type": "Tipo",
-                        "django": "",
                         "visibility": "Videblo"
                     },
                     "header": {
                         "activity": "Aktivo",
                         "audioContent": "Muzika datumo",
-                        "local": "",
                         "uploadData": "Elŝutdato"
                     },
                     "button": {
@@ -3766,18 +3213,15 @@
                         "albums": "Albumoj",
                         "artists": "Artistoj",
                         "domain": "Domajno",
-                        "reports": "",
                         "remoteProfile": "Malfermi profilon",
                         "tracks": "Kantoj",
                         "uploads": "Elŝutoj",
-                        "django": "",
                         "visibility": "Videblo"
                     },
                     "header": {
                         "activity": "Aktivo",
                         "audioContent": "Muzika datumo",
-                        "libraryData": "Ĝisdatigas muzikejon",
-                        "local": ""
+                        "libraryData": "Ĝisdatigas muzikejon"
                     },
                     "table": {
                         "audioContent": {
@@ -3798,10 +3242,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Forigi tiun muzikejon?",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "Forigi tiun muzikejon?"
                         }
                     },
                     "warning": {
@@ -3812,21 +3253,18 @@
                     "header": {
                         "activity": "Aktivo",
                         "albumData": "Nomo de albumo",
-                        "audioContent": "Muzika datumo",
-                        "local": ""
+                        "audioContent": "Muzika datumo"
                     },
                     "link": {
                         "artist": "Artisto",
                         "domain": "Domajno",
                         "edits": "Redakti",
                         "libraries": "Muzikejoj",
-                        "reports": "",
                         "localProfile": "Malfermi profilon",
                         "musicbrainz": "Vidi en MusicBrainz",
                         "remoteProfile": "Malfermi profilon",
                         "tracks": "Kantoj",
-                        "uploads": "Elŝutoj",
-                        "django": ""
+                        "uploads": "Elŝutoj"
                     },
                     "table": {
                         "audioContent": {
@@ -3840,21 +3278,16 @@
                         "activity": {
                             "favorited": "Favoritaj kantoj:",
                             "firstSeen": "Unua vido",
-                            "listenings": "",
                             "playlists": "Ludlistoj"
                         }
                     },
                     "button": {
                         "delete": "Forigi",
-                        "edit": "Redakti",
-                        "remoteRefresh": ""
+                        "edit": "Redakti"
                     },
                     "modal": {
                         "delete": {
-                            "header": "Forigi tiun muzikejon?",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "Forigi tiun muzikejon?"
                         }
                     },
                     "warning": {
@@ -3865,22 +3298,18 @@
                     "header": {
                         "activity": "Aktivo",
                         "artistData": "Nomo de artisto",
-                        "audioContent": "Muzika datumo",
-                        "local": ""
+                        "audioContent": "Muzika datumo"
                     },
                     "link": {
                         "albums": "Albumoj",
-                        "category": "",
                         "domain": "Domajno",
                         "edits": "Redakti",
                         "libraries": "Muzikejoj",
-                        "reports": "",
                         "localProfile": "Malfermi profilon",
                         "musicbrainz": "Vidi en MusicBrainz",
                         "remoteProfile": "Malfermi profilon",
                         "tracks": "Kantoj",
-                        "uploads": "Elŝutoj",
-                        "django": ""
+                        "uploads": "Elŝutoj"
                     },
                     "table": {
                         "audioContent": {
@@ -3894,21 +3323,16 @@
                         "activity": {
                             "favorited": "Favoritaj kantoj:",
                             "firstSeen": "Unua vido",
-                            "listenings": "",
                             "playlists": "Ludlistoj"
                         }
                     },
                     "button": {
                         "delete": "Forigi",
-                        "edit": "Redakti",
-                        "remoteRefresh": ""
+                        "edit": "Redakti"
                     },
                     "modal": {
                         "delete": {
-                            "header": "Forigi tiun muzikejon?",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "Forigi tiun muzikejon?"
                         }
                     },
                     "warning": {
@@ -3925,8 +3349,7 @@
                         "albums": "Albumoj",
                         "artists": "Artistoj",
                         "localProfile": "Malfermi profilon",
-                        "tracks": "Kantoj",
-                        "django": ""
+                        "tracks": "Kantoj"
                     },
                     "button": {
                         "delete": "Forigi"
@@ -3951,7 +3374,6 @@
                 "TrackDetail": {
                     "header": {
                         "activity": "Aktivo",
-                        "local": "",
                         "trackData": "Nomo de kanto"
                     },
                     "link": {
@@ -3961,12 +3383,10 @@
                         "domain": "Domajno",
                         "edits": "Redakti",
                         "libraries": "Muzikejoj",
-                        "reports": "",
                         "localProfile": "Malfermi profilon",
                         "musicbrainz": "Vidi en MusicBrainz",
                         "remoteProfile": "Malfermi profilon",
-                        "uploads": "Elŝutoj",
-                        "django": ""
+                        "uploads": "Elŝutoj"
                     },
                     "table": {
                         "trackData": {
@@ -3976,7 +3396,6 @@
                         "track": {
                             "copyright": "Kopirajto",
                             "description": "Resumo",
-                            "discNumber": "",
                             "license": "Permesilo",
                             "position": "Paĝeco",
                             "title": "Titolo"
@@ -3984,21 +3403,16 @@
                         "activity": {
                             "favorited": "Favoritaj kantoj:",
                             "firstSeen": "Unua vido",
-                            "listenings": "",
                             "playlists": "Ludlistoj"
                         }
                     },
                     "button": {
                         "delete": "Forigi",
-                        "edit": "Redakti",
-                        "remoteRefresh": ""
+                        "edit": "Redakti"
                     },
                     "modal": {
                         "delete": {
-                            "header": "Forigi tiun muzikejon?",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "Forigi tiun muzikejon?"
                         }
                     },
                     "warning": {
@@ -4009,10 +3423,8 @@
                     "link": {
                         "albums": "Albumoj",
                         "artists": "Artistoj",
-                        "channels": "",
                         "edits": "Redakti",
                         "libraries": "Muzikejoj",
-                        "tags": "",
                         "tracks": "Kantoj",
                         "uploads": "Elŝutoj"
                     },
@@ -4032,12 +3444,9 @@
                 "table": {
                     "channelData": {
                         "account": "Kontoj",
-                        "category": "",
                         "description": "Resumo",
                         "domain": "Domajno",
-                        "name": "Nomo",
-                        "rss": "",
-                        "url": ""
+                        "name": "Nomo"
                     },
                     "audioContent": {
                         "albums": "Albumoj",
@@ -4050,8 +3459,6 @@
                         "edits": "Redakti",
                         "favorited": "Favoritaj kantoj:",
                         "firstSeen": "Unua vido",
-                        "linkedReports": "",
-                        "listenings": "",
                         "playlists": "Ludlistoj"
                     }
                 },
@@ -4062,8 +3469,7 @@
                 },
                 "button": {
                     "delete": "Forigi",
-                    "openRemote": "Malfermi profilon",
-                    "refresh": ""
+                    "openRemote": "Malfermi profilon"
                 },
                 "modal": {
                     "delete": {
@@ -4073,12 +3479,8 @@
                         }
                     }
                 },
-                "label": {
-                    "local": ""
-                },
                 "link": {
-                    "localProfile": "Malfermi profilon",
-                    "django": ""
+                    "localProfile": "Malfermi profilon"
                 },
                 "warning": {
                     "stats": "Statistikoj estas kalkula el konata aktiveco kaj datumoj de via instanco, kaj ne kongruas la generalan aktivecon de tiu konto"
@@ -4089,10 +3491,8 @@
                     "accounts": "Kontoj",
                     "albums": "Albumoj",
                     "artists": "Artistoj",
-                    "channels": "",
                     "invitations": "Invitoj",
                     "libraries": "Muzikejoj",
-                    "tags": "",
                     "tracks": "Kantoj",
                     "uploads": "Elŝutoj",
                     "users": "Uzantoj"
@@ -4100,7 +3500,6 @@
             },
             "Settings": {
                 "header": {
-                    "channels": "",
                     "federation": "Federo",
                     "instanceInfo": "Instanca informo",
                     "settings": "Instancaj preferoj",
@@ -4108,7 +3507,6 @@
                     "music": "Muziko",
                     "playlists": "Ludlistoj",
                     "sections": "Sekcioj",
-                    "security": "",
                     "signups": "Registriĝi",
                     "stats": "Statistikoj",
                     "subsonic": "Subsono",
@@ -4133,16 +3531,12 @@
                 "albums": "Albumoj",
                 "artists": "Artistoj",
                 "playlists": "Ludlistoj",
-                "podcasts": "",
                 "radios": "Radioj",
-                "series": "",
-                "tags": "",
                 "tracks": "Kantoj"
             },
             "header": {
                 "search": "Serĉi",
-                "remote": "Serĉi mallokan muzikejon",
-                "rss": ""
+                "remote": "Serĉi mallokan muzikejon"
             },
             "button": {
                 "submit": "Submeti"
@@ -4246,33 +3640,16 @@
         "locale": {
             "useSharedLabels": {
                 "scopes": {
-                    "libraries": {
-                        "description": "",
-                        "label": "Ĝisdatigas muzikejon"
-                    },
                     "filters": {
                         "description": "Elekti filtrilon",
                         "label": "Elekti filtrilon"
-                    },
-                    "profile": {
-                        "description": "",
-                        "label": "Malfermi profilon"
                     },
                     "edits": {
                         "description": "Atingo malaktivigas",
                         "label": "Redakti"
                     },
-                    "follows": {
-                        "description": "",
-                        "label": "Sekvi"
-                    },
-                    "listenings": {
-                        "description": "",
-                        "label": ""
-                    },
                     "reports": {
-                        "description": "Atingo malaktivigas",
-                        "label": ""
+                        "description": "Atingo malaktivigas"
                     },
                     "notifications": {
                         "description": "Viaj sciigoj",
@@ -4286,12 +3663,17 @@
                         "description": "Atingo malaktivigas",
                         "label": "Radioj"
                     },
-                    "security": {
-                        "description": "",
-                        "label": ""
-                    },
                     "favorites": {
                         "label": "Stelumoj"
+                    },
+                    "follows": {
+                        "label": "Sekvi"
+                    },
+                    "libraries": {
+                        "label": "Ĝisdatigas muzikejon"
+                    },
+                    "profile": {
+                        "label": "Malfermi profilon"
                     }
                 },
                 "filters": {
@@ -4305,7 +3687,6 @@
                     "expirationDate": "Fortempiĝa dato",
                     "firstSeen": "Dato de unua vido",
                     "followers": "Sekvantoj",
-                    "itemsCount": "",
                     "lastActivity": "Lasta akto",
                     "lastSeen": "Dato de lasta vido",
                     "modificationDate": "Modifdato",
@@ -4325,8 +3706,7 @@
                         "help": "Kiu estas la videblo de viaj aktoj",
                         "shortChoices": {
                             "public": "Ĉiu",
-                            "instance": "Instanca datumo",
-                            "private": ""
+                            "instance": "Instanca datumo"
                         },
                         "choices": {
                             "instance": "Ĉiu en ĉi-tiu instanco",
@@ -4334,26 +3714,14 @@
                             "private": "Neniu krom mi"
                         }
                     },
-                    "summary": {
-                        "label": ""
-                    },
-                    "reportType": {
-                        "label": "",
+                    "contentCategory": {
+                        "label": "Elekti filtrilon",
                         "choices": {
-                            "illegalContent": "Aldoni muzikon",
-                            "invalidMetadata": "",
-                            "offensiveContent": "Aldoni muzikon",
-                            "other": "",
-                            "takedownRequest": "Atendantaj petoj da sekvado"
+                            "music": "Muziko"
                         }
                     },
                     "importStatus": {
-                        "label": "",
                         "choices": {
-                            "draft": {
-                                "label": "",
-                                "help": "Kanto elŝutanta, sed la servilo ne jam procezis ĝin"
-                            },
                             "errored": {
                                 "label": "Eraris",
                                 "help": "Ne povis traktadi tiun kanton, certiĝi ĝi estas bone etikedata"
@@ -4369,15 +3737,17 @@
                             "skipped": {
                                 "label": "Preterlasinta",
                                 "help": "Kanto jam estas en unu de viaj muzikejoj"
+                            },
+                            "draft": {
+                                "help": "Kanto elŝutanta, sed la servilo ne jam procezis ĝin"
                             }
                         }
                     },
-                    "contentCategory": {
-                        "label": "Elekti filtrilon",
+                    "reportType": {
                         "choices": {
-                            "music": "Muziko",
-                            "other": "",
-                            "podcast": ""
+                            "illegalContent": "Aldoni muzikon",
+                            "offensiveContent": "Aldoni muzikon",
+                            "takedownRequest": "Atendantaj petoj da sekvado"
                         }
                     }
                 }
@@ -4396,10 +3766,6 @@
                     "typeLabel": "Artisto",
                     "label": "Ludi tiun kanton"
                 },
-                "channel": {
-                    "typeLabel": "",
-                    "label": "Ludi tiun kanton"
-                },
                 "library": {
                     "typeLabel": "Muzikejo",
                     "label": "Forigi tiun muzikejon?"
@@ -4408,6 +3774,9 @@
                     "typeLabel": "Ludlisto",
                     "label": "Aldoni al ĉi tiu ludlisto"
                 },
+                "channel": {
+                    "label": "Ludi tiun kanton"
+                },
                 "track": {
                     "label": "Ludi tiun kanton",
                     "typeLabel": "Kanto"
@@ -4415,8 +3784,7 @@
             },
             "useReportConfigs": {
                 "account": {
-                    "label": "Kontoj",
-                    "summary": ""
+                    "label": "Kontoj"
                 },
                 "album": {
                     "label": "Albumo",
@@ -4425,9 +3793,6 @@
                 },
                 "artist": {
                     "label": "Artisto"
-                },
-                "channel": {
-                    "label": ""
                 },
                 "track": {
                     "copyright": "Kopirajto",
@@ -4452,9 +3817,6 @@
                 "playlist": {
                     "label": "Ludlisto"
                 },
-                "tags": {
-                    "label": ""
-                },
                 "visibility": {
                     "label": "Videblo"
                 }
@@ -4466,9 +3828,6 @@
                     "position": "Paĝeco",
                     "title": "Titolo"
                 },
-                "cover": {
-                    "label": ""
-                },
                 "description": {
                     "label": "Resumo"
                 },
@@ -4478,28 +3837,15 @@
                 "album": {
                     "releaseDate": "Dato de lasta vido",
                     "title": "Titolo"
-                },
-                "tags": {
-                    "label": ""
                 }
             }
-        },
-        "useThemeList": {
-            "darkTheme": "",
-            "lightTheme": ""
         }
     },
     "init": {
         "serviceWorker": {
-            "newAppVersion": "",
             "actions": {
-                "later": "",
                 "update": "Ĝisdati"
             }
-        },
-        "axios": {
-            "rateLimitDelay": "",
-            "rateLimitLater": ""
         }
     }
 }

@@ -1,419 +1,10 @@
 {
     "components": {
-        "auth": {
-            "Authorize": {
-                "header": {
-                    "access": "",
-                    "authorize": "",
-                    "authorizeFailure": "",
-                    "fetchFailure": "",
-                    "allScopes": "",
-                    "readOnly": "Tɣuri kan",
-                    "writeOnly": ""
-                },
-                "title": "",
-                "button": {
-                    "authorize": ""
-                },
-                "help": {
-                    "pasteCode": "",
-                    "redirect": "",
-                    "copyCode": ""
-                },
-                "message": {
-                    "unknownPermissions": ""
-                }
-            },
-            "SubsonicTokenForm": {
-                "message": {
-                    "accessDisabled": "",
-                    "passwordUpdated": "Awal uffir yettwalqem",
-                    "unavailable": ""
-                },
-                "button": {
-                    "confirmDisable": "",
-                    "disable": "",
-                    "newPassword": "",
-                    "confirmNewPassword": ""
-                },
-                "modal": {
-                    "disableSubsonic": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "newPassword": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "link": {
-                    "apps": ""
-                },
-                "header": {
-                    "error": "Erreur",
-                    "subsonic": ""
-                },
-                "description": {
-                    "subsonic": {
-                        "paragraph1": "",
-                        "paragraph3": "",
-                        "paragraph2": ""
-                    }
-                },
-                "label": {
-                    "subsonicField": ""
-                }
-            },
-            "ApplicationEdit": {
-                "label": {
-                    "accessToken": "Azemz n unekcum",
-                    "appId": "",
-                    "appSecret": ""
-                },
-                "header": {
-                    "appDetails": "",
-                    "editApp": "Ẓreg asnas"
-                },
-                "help": {
-                    "appDetails": ""
-                },
-                "link": {
-                    "settings": ""
-                },
-                "title": "Ẓreg asnas",
-                "button": {
-                    "regenerateToken": ""
-                }
-            },
-            "Settings": {
-                "title": "",
-                "header": {
-                    "accountSettings": "Iɣewwaṛen n umiḍan",
-                    "authorizedApps": "Isnasen yettussirgen",
-                    "avatar": "Tugna n umaɣnu",
-                    "changeEmail": "Tansa n imayl",
-                    "changePassword": "Bddel awal-iw uffir",
-                    "contentFilters": "",
-                    "deleteAccount": "",
-                    "hiddenArtists": "",
-                    "plugins": "",
-                    "settingsUpdated": "",
-                    "emailFailure": "Tansa n imayl",
-                    "accountFailure": "",
-                    "noApps": "",
-                    "noPersonalApps": "",
-                    "yourApps": "Isnasen-ik",
-                    "avatarFailure": "",
-                    "passwordFailure": "",
-                    "updateFailure": ""
-                },
-                "table": {
-                    "authorizedApps": {
-                        "header": {
-                            "application": "Asnas",
-                            "permissions": "Tisirag"
-                        }
-                    },
-                    "yourApps": {
-                        "header": {
-                            "application": "Asnas",
-                            "creationDate": "Azemz n usnulfu",
-                            "scopes": ""
-                        }
-                    },
-                    "artists": {
-                        "header": {
-                            "creationDate": "Azemz n usnulfu",
-                            "name": "Isem"
-                        }
-                    }
-                },
-                "label": {
-                    "avatar": "Tugna n umaɣnu",
-                    "currentPassword": "Awal uffir amaynut",
-                    "newEmail": "Tansa n imayl",
-                    "newPassword": "Awal uffir amaynut",
-                    "password": "Awal n uɛeddi"
-                },
-                "button": {
-                    "password": "Beddel awal uffir",
-                    "delete": "Kkes",
-                    "deleteAccountConfirm": "",
-                    "deleteAccount": "",
-                    "disableSubsonic": "",
-                    "edit": "Beddel",
-                    "refresh": "Smiren",
-                    "remove": "Supprimer",
-                    "removeApp": "Isnasen-ik",
-                    "revoke": "Ḥwi",
-                    "revokeAccess": "",
-                    "update": "Leqqem",
-                    "updateSettings": ""
-                },
-                "description": {
-                    "changeEmail": "",
-                    "changePassword": {
-                        "paragraph1": "",
-                        "paragraph2": ""
-                    },
-                    "contentFilters": "",
-                    "authorizedApps": "",
-                    "yourApps": "",
-                    "plugins": "",
-                    "deleteAccount": ""
-                },
-                "modal": {
-                    "changePassword": {
-                        "header": "",
-                        "content": {
-                            "warning": "",
-                            "logout": "",
-                            "subsonic": ""
-                        }
-                    },
-                    "deleteAccount": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "deleteApp": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "revokeApp": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "help": {
-                    "noApps": "",
-                    "changePassword": "",
-                    "noPersonalApps": ""
-                },
-                "link": {
-                    "managePlugins": "Sefrek iseqdacen",
-                    "newApp": "Ẓreg asnas"
-                },
-                "warning": {
-                    "deleteAccount": ""
-                },
-                "message": {
-                    "currentEmail": "",
-                    "confirmDelete": ""
-                }
-            },
-            "Logout": {
-                "header": {
-                    "confirm": "D tidet tebɣiḍ ad teffɣeḍ?",
-                    "unauthenticated": ""
-                },
-                "link": {
-                    "login": "Qqen"
-                },
-                "title": "Ffeɣ",
-                "button": {
-                    "logout": ""
-                },
-                "message": {
-                    "loggedIn": ""
-                }
-            },
-            "ApplicationNew": {
-                "link": {
-                    "settings": ""
-                },
-                "title": ""
-            },
-            "ApplicationForm": {
-                "label": {
-                    "scopes": {
-                        "description": "",
-                        "read": {
-                            "label": "Ɣeṛ",
-                            "description": ""
-                        },
-                        "write": {
-                            "label": "",
-                            "description": ""
-                        }
-                    },
-                    "name": "Isem",
-                    "redirectUri": "URI n uwelleh"
-                },
-                "button": {
-                    "create": "",
-                    "update": ""
-                },
-                "help": {
-                    "redirectUri": ""
-                },
-                "header": {
-                    "failure": ""
-                }
-            },
-            "LoginForm": {
-                "link": {
-                    "createAccount": "Rnu amiḍan",
-                    "resetPassword": ""
-                },
-                "placeholder": {
-                    "username": "Sekcem isem-ik(im) n useqdac"
-                },
-                "help": {
-                    "approvalRequired": "",
-                    "invalidCredentials": ""
-                },
-                "button": {
-                    "login": "Qqen"
-                },
-                "label": {
-                    "password": "Awal n uɛeddi",
-                    "username": "Isem n useqdac neɣ tansa imayl"
-                },
-                "header": {
-                    "loginFailure": ""
-                }
-            },
-            "SignupForm": {
-                "button": {
-                    "create": ""
-                },
-                "label": {
-                    "email": "Tansa n imayl",
-                    "password": "Awal n uɛeddi",
-                    "username": "Isem n useqdac"
-                },
-                "placeholder": {
-                    "email": "Tansa n imayl",
-                    "invitation": "",
-                    "username": "Sekcem isem-ik(im) n useqdac"
-                },
-                "header": {
-                    "login": "",
-                    "signupFailure": ""
-                },
-                "message": {
-                    "registrationClosed": "",
-                    "requiresReview": "",
-                    "awaitingReview": "",
-                    "accountCreated": ""
-                }
-            },
-            "Plugin": {
-                "link": {
-                    "documentation": "Amnir"
-                },
-                "label": {
-                    "pluginEnabled": "Yermed",
-                    "library": "Tanedlist"
-                },
-                "header": {
-                    "failure": ""
-                },
-                "description": {
-                    "library": ""
-                },
-                "button": {
-                    "save": "Sekles",
-                    "scan": "Snirem tura"
-                }
-            }
-        },
-        "About": {
-            "stat": {
-                "activeUsers": "",
-                "hoursOfMusic": ""
-            },
-            "header": {
-                "funkwhale": "",
-                "aboutPod": "",
-                "publicContent": "",
-                "findApp": "",
-                "signup": "Jerred"
-            },
-            "title": "",
-            "link": {
-                "findOtherPod": "",
-                "learnMore": "Issin ugar"
-            },
-            "description": {
-                "funkwhale": "",
-                "publicContent": "",
-                "signup": "",
-                "findApp": "",
-                "quota": ""
-            },
-            "placeholder": {
-                "noDescription": ""
-            },
-            "message": {
-                "loggedIn": ""
-            }
-        },
-        "Home": {
-            "stat": {
-                "activeUsers": "",
-                "hoursOfMusic": ""
-            },
-            "header": {
-                "aboutFunkwhale": "",
-                "about": "",
-                "contact": "Anermis",
-                "login": "Qqen",
-                "newChannels": "",
-                "newAlbums": "",
-                "signup": "Jerred",
-                "statistics": "Statistiques",
-                "links": "",
-                "welcome": ""
-            },
-            "link": {
-                "publicContent": {
-                    "label": "",
-                    "description": ""
-                },
-                "userGuides": {
-                    "description": "",
-                    "label": ""
-                },
-                "findOtherPod": "",
-                "learnMore": "Issin ugar",
-                "mobileApps": {
-                    "label": "Isnasen izirazen",
-                    "description": ""
-                },
-                "rules": "",
-                "viewMore": "",
-                "funkwhale": ""
-            },
-            "description": {
-                "funkwhale": {
-                    "paragraph2": "",
-                    "paragraph1": ""
-                },
-                "signup": "",
-                "quota": ""
-            },
-            "title": "Agejdan",
-            "placeholder": {
-                "noDescription": ""
-            }
-        },
         "audio": {
             "artist": {
                 "Card": {
                     "meta": {
-                        "episodes": "Iɣewwaṛen n umiḍan | Iɣewwaṛen n umiḍan",
-                        "tracks": ""
+                        "episodes": "Iɣewwaṛen n umiḍan | Iɣewwaṛen n umiḍan"
                     }
                 },
                 "Widget": {
@@ -424,90 +15,22 @@
             },
             "ChannelCard": {
                 "meta": {
-                    "episodes": "Iɣewwaṛen n umiḍan | Iɣewwaṛen n umiḍan",
-                    "tracks": ""
-                },
-                "title": ""
+                    "episodes": "Iɣewwaṛen n umiḍan | Iɣewwaṛen n umiḍan"
+                }
             },
             "ChannelSerieCard": {
                 "meta": {
                     "episodes": "Iɣewwaṛen n umiḍan | Iɣewwaṛen n umiḍan"
                 }
             },
-            "album": {
-                "Card": {
-                    "meta": {
-                        "tracks": ""
-                    }
-                },
-                "Widget": {
-                    "button": {
-                        "more": "Ssken-d ugar"
-                    }
-                }
-            },
-            "Player": {
-                "meta": {
-                    "position": ""
-                },
-                "header": {
-                    "player": ""
-                },
-                "label": {
-                    "clearQueue": "",
-                    "expandQueue": "",
-                    "addArtistContentFilter": "",
-                    "loopingDisabled": "",
-                    "loopingSingle": "",
-                    "loopingWholeQueue": "",
-                    "audioPlayer": "Imeɣri n ugetmedia",
-                    "mute": "Sgugem",
-                    "nextTrack": "Tafuɣalt tuḍfirt",
-                    "pause": "En Pause",
-                    "play": "Seddu",
-                    "previousTrack": "Tafuɣalt tuzwirt",
-                    "shuffleQueue": "",
-                    "unmute": "Rétablir le son"
-                }
-            },
-            "PlayButton": {
-                "button": {
-                    "addToQueue": "",
-                    "addToPlaylist": "",
-                    "episodeDetails": "",
-                    "hideArtist": "",
-                    "discretePlay": "Seddu",
-                    "playAlbum": "",
-                    "playArtist": "Liste de lecture",
-                    "playNext": "",
-                    "playNow": "",
-                    "playPlaylist": "Liste de lecture",
-                    "startRadio": "",
-                    "playTrack": "",
-                    "playTracks": "",
-                    "report": "",
-                    "trackDetails": "Timkaṛdiyin"
-                },
-                "title": {
-                    "more": "Ugar…",
-                    "unavailable": ""
-                }
-            },
             "podcast": {
                 "Modal": {
                     "button": {
                         "addToFavorites": "Rnu ismal",
-                        "addToPlaylist": "",
-                        "addToQueue": "",
-                        "episodeDetails": "",
-                        "playNext": "",
-                        "playNow": "",
                         "startRadio": "Liste de lecture",
                         "removeFromFavorites": "Kkes-it seg ismal",
                         "trackDetails": "Timkaṛdiyin",
-                        "albumDetails": "",
                         "artistDetails": "Liste de lecture",
-                        "channelDetails": "",
                         "seriesDetails": "SÃ©ries"
                     }
                 },
@@ -521,17 +44,10 @@
                 "Modal": {
                     "button": {
                         "addToFavorites": "Rnu ismal",
-                        "addToPlaylist": "",
-                        "addToQueue": "",
-                        "episodeDetails": "",
-                        "playNext": "",
-                        "playNow": "",
                         "startRadio": "Liste de lecture",
                         "removeFromFavorites": "Kkes-it seg ismal",
                         "trackDetails": "Timkaṛdiyin",
-                        "albumDetails": "",
                         "artistDetails": "Liste de lecture",
-                        "channelDetails": "",
                         "seriesDetails": "SÃ©ries"
                     }
                 },
@@ -558,15 +74,6 @@
                     }
                 }
             },
-            "VolumeControl": {
-                "label": {
-                    "slider": ""
-                },
-                "button": {
-                    "mute": "Sgugem",
-                    "unmute": "Rétablir le son"
-                }
-            },
             "SearchBar": {
                 "label": {
                     "album": "Album",
@@ -579,68 +86,8 @@
                     "tag": "Tabzimt",
                     "track": "Piste"
                 },
-                "link": {
-                    "more": "",
-                    "fediverse": "",
-                    "rss": ""
-                },
                 "header": {
                     "noResults": "Ur d-nufi ara inmeɣrayen"
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "empty": {
-                    "noResults": ""
-                }
-            },
-            "Search": {
-                "header": {
-                    "albums": "",
-                    "artists": "",
-                    "search": ""
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "empty": {
-                    "noAlbums": "",
-                    "noArtists": ""
-                }
-            },
-            "ChannelForm": {
-                "label": {
-                    "discography": "",
-                    "category": "Taggayt",
-                    "image": "",
-                    "description": "Aglam",
-                    "username": "",
-                    "language": "Tameslayt",
-                    "name": "Isem",
-                    "email": "Tansa n imayl",
-                    "owner": "Bab",
-                    "podcast": "Podcasts",
-                    "subcategory": "Taggayt tasnawant",
-                    "tags": "Tibzimin"
-                },
-                "placeholder": {
-                    "name": "",
-                    "username": ""
-                },
-                "header": {
-                    "error": ""
-                },
-                "help": {
-                    "podcast": "",
-                    "discography": "",
-                    "podcastFields": "",
-                    "username": ""
-                },
-                "loader": {
-                    "loading": "Asali..."
-                },
-                "legend": {
-                    "purpose": ""
                 }
             },
             "LibraryFollowButton": {
@@ -650,142 +97,83 @@
                     "unfollow": "Ur ḍḍafaṛ ara"
                 }
             },
+            "ChannelForm": {
+                "label": {
+                    "category": "Taggayt",
+                    "description": "Aglam",
+                    "language": "Tameslayt",
+                    "name": "Isem",
+                    "email": "Tansa n imayl",
+                    "owner": "Bab",
+                    "podcast": "Podcasts",
+                    "subcategory": "Taggayt tasnawant",
+                    "tags": "Tibzimin"
+                },
+                "loader": {
+                    "loading": "Asali..."
+                }
+            },
             "EmbedWizard": {
                 "button": {
                     "copy": "Copier"
                 },
-                "help": {
-                    "embed": "",
-                    "width": "",
-                    "anonymous": ""
-                },
-                "label": {
-                    "embed": "",
-                    "height": "",
-                    "width": ""
-                },
                 "header": {
                     "preview": "Timeẓriwt"
+                }
+            },
+            "Player": {
+                "label": {
+                    "audioPlayer": "Imeɣri n ugetmedia",
+                    "mute": "Sgugem",
+                    "nextTrack": "Tafuɣalt tuḍfirt",
+                    "pause": "En Pause",
+                    "play": "Seddu",
+                    "previousTrack": "Tafuɣalt tuzwirt",
+                    "unmute": "Rétablir le son"
+                }
+            },
+            "PlayButton": {
+                "title": {
+                    "more": "Ugar…"
                 },
-                "warning": {
-                    "anonymous": ""
-                },
-                "message": {
-                    "copy": ""
+                "button": {
+                    "discretePlay": "Seddu",
+                    "playArtist": "Liste de lecture",
+                    "playPlaylist": "Liste de lecture",
+                    "trackDetails": "Timkaṛdiyin"
+                }
+            },
+            "VolumeControl": {
+                "button": {
+                    "mute": "Sgugem",
+                    "unmute": "Rétablir le son"
+                }
+            },
+            "album": {
+                "Widget": {
+                    "button": {
+                        "more": "Ssken-d ugar"
+                    }
                 }
             },
             "ChannelSeries": {
                 "button": {
                     "showMore": "Ssken-d ugar"
-                },
-                "help": {
-                    "subscribe": ""
                 }
             },
             "ChannelsWidget": {
                 "button": {
                     "showMore": "Ssken-d ugar"
                 }
-            },
-            "ChannelEntries": {
-                "help": {
-                    "subscribe": ""
-                }
             }
         },
         "library": {
             "AlbumBase": {
                 "meta": {
-                    "episodes": "Iɣewwaṛen n umiḍan | Iɣewwaṛen n umiḍan",
-                    "tracks": ""
-                },
-                "link": {
-                    "addDescription": ""
-                }
-            },
-            "ArtistBase": {
-                "meta": {
-                    "tracks": ""
-                },
-                "title": "Artiste",
-                "button": {
-                    "cancel": "Sefex",
-                    "edit": "Beddel",
-                    "embed": "Seddu",
-                    "more": "Ugar…",
-                    "play": ""
-                },
-                "modal": {
-                    "embed": {
-                        "header": ""
-                    }
-                },
-                "link": {
-                    "moderation": "",
-                    "discogs": "",
-                    "wikipedia": "",
-                    "django": "",
-                    "domain": "",
-                    "musicbrainz": ""
-                }
-            },
-            "radios": {
-                "Builder": {
-                    "header": {
-                        "matches": "",
-                        "builder": "",
-                        "created": "",
-                        "updated": ""
-                    },
-                    "table": {
-                        "filter": {
-                            "header": {
-                                "actions": "Actions",
-                                "candidates": "",
-                                "config": "Aswel",
-                                "exclude": "Suffeɣ",
-                                "name": ""
-                            }
-                        }
-                    },
-                    "button": {
-                        "filter": "Rni imzizdig",
-                        "save": "Sekles"
-                    },
-                    "label": {
-                        "filter": "",
-                        "description": "Aglam",
-                        "public": "",
-                        "name": ""
-                    },
-                    "placeholder": {
-                        "description": "",
-                        "name": ""
-                    },
-                    "title": "",
-                    "option": {
-                        "filter": ""
-                    },
-                    "description": {
-                        "builder": ""
-                    }
-                },
-                "Filter": {
-                    "cancelButton": "Sefex",
-                    "excludeLabel": "Suffeɣ",
-                    "removeButton": "Supprimer",
-                    "matchingTracksModalHeader": ""
+                    "episodes": "Iɣewwaṛen n umiḍan | Iɣewwaṛen n umiḍan"
                 }
             },
             "FileUpload": {
-                "tooltip": {
-                    "network": "",
-                    "size": "",
-                    "extension": "",
-                    "retry": "Eɛreḍ tikkelt-nniḍen",
-                    "denied": "",
-                    "timeout": ""
-                },
                 "table": {
                     "upload": {
                         "header": {
@@ -796,138 +184,46 @@
                         },
                         "status": {
                             "pending": "Yegguni",
-                            "uploaded": "",
                             "uploading": "Asali …"
                         }
                     }
                 },
                 "button": {
-                    "cancel": "Sefex",
-                    "retry": ""
-                },
-                "label": {
-                    "uploadWidget": "",
-                    "remainingSpace": "",
-                    "extensions": ""
+                    "cancel": "Sefex"
                 },
                 "header": {
-                    "failure": "",
-                    "server": "",
-                    "status": "Addad n umiḍan",
-                    "local": ""
+                    "status": "Addad n umiḍan"
+                },
+                "tooltip": {
+                    "retry": "Eɛreḍ tikkelt-nniḍen"
                 },
                 "link": {
-                    "processing": "",
-                    "uploading": "Tuzzna n ifuyla",
-                    "picard": ""
-                },
-                "description": {
-                    "import": "",
-                    "previousImport": ""
-                },
-                "message": {
-                    "local": {
-                        "format": "",
-                        "tag": "",
-                        "message": "",
-                        "copyright": ""
+                    "uploading": "Tuzzna n ifuyla"
+                }
+            },
+            "radios": {
+                "Builder": {
+                    "table": {
+                        "filter": {
+                            "header": {
+                                "actions": "Actions",
+                                "config": "Aswel",
+                                "exclude": "Suffeɣ"
+                            }
+                        }
+                    },
+                    "button": {
+                        "filter": "Rni imzizdig",
+                        "save": "Sekles"
+                    },
+                    "label": {
+                        "description": "Aglam"
                     }
-                }
-            },
-            "EditForm": {
-                "placeholder": {
-                    "summary": ""
                 },
-                "button": {
-                    "cancel": "Sefex",
-                    "clear": "Effacer",
-                    "reset": "",
-                    "showUnreviewed": "",
-                    "showAll": "",
-                    "submit": "",
-                    "new": "",
-                    "suggest": ""
-                },
-                "header": {
-                    "failure": "",
-                    "recentEdits": "",
-                    "unreviewed": "",
-                    "success": ""
-                },
-                "notApplicable": "Wlac",
-                "empty": {
-                    "suggestEdit": ""
-                },
-                "label": {
-                    "summary": ""
-                },
-                "message": {
-                    "noPermission": ""
-                }
-            },
-            "Albums": {
-                "link": {
-                    "addMusic": ""
-                },
-                "title": "",
-                "ordering": {
-                    "direction": {
-                        "ascending": "Croissant",
-                        "descending": "Décroissant",
-                        "label": ""
-                    },
-                    "label": "Tri"
-                },
-                "header": {
-                    "browse": ""
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "empty": {
-                    "noResults": ""
-                },
-                "pagination": {
-                    "results": ""
-                },
-                "label": {
-                    "search": "Anadi",
-                    "tags": "Tibzimin"
-                },
-                "button": {
-                    "search": "Anadi"
-                }
-            },
-            "Artists": {
-                "button": {
-                    "upload": "",
-                    "search": "Anadi"
-                },
-                "label": {
-                    "search": "Isem n unaẓur",
-                    "excludeCompilation": "",
-                    "tags": "Tibzimin"
-                },
-                "title": "",
-                "ordering": {
-                    "direction": {
-                        "ascending": "Croissant",
-                        "descending": "Décroissant",
-                        "label": ""
-                    },
-                    "label": "Tri"
-                },
-                "header": {
-                    "browse": ""
-                },
-                "empty": {
-                    "noResults": ""
-                },
-                "pagination": {
-                    "results": ""
-                },
-                "placeholder": {
-                    "search": ""
+                "Filter": {
+                    "cancelButton": "Sefex",
+                    "excludeLabel": "Suffeɣ",
+                    "removeButton": "Supprimer"
                 }
             },
             "TrackDetail": {
@@ -937,7 +233,6 @@
                         "artist": "Artiste",
                         "copyright": "Izerfan ttwaḥerzen",
                         "license": "Licence",
-                        "series": "",
                         "url": "Tansa URL",
                         "year": "Iseggasen"
                     },
@@ -951,88 +246,20 @@
                         "size": "Teγzi"
                     }
                 },
-                "header": {
-                    "episode": "",
-                    "library": "",
-                    "playlists": "",
-                    "release": "",
-                    "track": ""
-                },
-                "notApplicable": "Wlac",
-                "description": {
-                    "library": ""
-                },
-                "link": {
-                    "musicbrainz": ""
-                }
-            },
-            "TagDetail": {
-                "link": {
-                    "albums": "",
-                    "artists": "",
-                    "moderation": ""
-                },
-                "header": {
-                    "channels": "Canaux ",
-                    "tracks": "Pistes"
-                }
-            },
-            "ArtistDetail": {
-                "header": {
-                    "album": "",
-                    "track": "",
-                    "library": ""
-                },
-                "button": {
-                    "more": "",
-                    "filter": ""
-                },
-                "link": {
-                    "filter": ""
-                },
-                "description": {
-                    "library": ""
-                },
-                "message": {
-                    "filter": ""
-                }
+                "notApplicable": "Wlac"
             },
             "ImportStatusModal": {
                 "error": {
-                    "importFailure": "",
                     "unknownError": {
                         "message": "Teḍra tuccḍa tarussint",
                         "label": "Tuccḍa tarussint"
                     },
                     "invalidMetadata": {
-                        "label": "Yir iɣf-isefka",
-                        "message": ""
+                        "label": "Yir iɣf-isefka"
                     }
                 },
                 "button": {
                     "close": "Mdel"
-                },
-                "table": {
-                    "error": {
-                        "debug": "",
-                        "errorDetail": "",
-                        "errorType": "",
-                        "help": ""
-                    }
-                },
-                "header": {
-                    "importDetail": ""
-                },
-                "link": {
-                    "support": "",
-                    "documentation": ""
-                },
-                "message": {
-                    "importDetail": "",
-                    "importSuccess": ""
-                },
-                "warning": {
-                    "importSkipped": ""
                 }
             },
             "EditCard": {
@@ -1043,41 +270,64 @@
                 },
                 "status": {
                     "approved": "Yettwaqbel",
-                    "applied": "",
                     "pending": "Ittraǧu acegger",
                     "rejected": "Yerrad"
-                },
-                "modal": {
-                    "delete": {
-                        "header": ""
-                    },
-                    "content": {
-                        "warning": ""
-                    }
                 },
                 "table": {
                     "update": {
                         "header": {
-                            "field": "Urti",
-                            "newValue": "",
-                            "oldValue": ""
+                            "field": "Urti"
                         },
                         "notApplicable": "Wlac"
                     }
+                }
+            },
+            "ArtistBase": {
+                "title": "Artiste",
+                "button": {
+                    "cancel": "Sefex",
+                    "edit": "Beddel",
+                    "embed": "Seddu",
+                    "more": "Ugar…"
+                }
+            },
+            "Artists": {
+                "label": {
+                    "search": "Isem n unaẓur",
+                    "tags": "Tibzimin"
                 },
-                "header": {
-                    "modification": ""
+                "ordering": {
+                    "direction": {
+                        "ascending": "Croissant",
+                        "descending": "Décroissant"
+                    },
+                    "label": "Tri"
                 },
-                "link": {
-                    "track": ""
+                "button": {
+                    "search": "Anadi"
+                }
+            },
+            "Albums": {
+                "ordering": {
+                    "direction": {
+                        "ascending": "Croissant",
+                        "descending": "Décroissant"
+                    },
+                    "label": "Tri"
+                },
+                "label": {
+                    "search": "Anadi",
+                    "tags": "Tibzimin"
+                },
+                "button": {
+                    "search": "Anadi"
                 }
             },
             "Podcasts": {
                 "ordering": {
                     "direction": {
                         "ascending": "Croissant",
-                        "descending": "Décroissant",
-                        "label": ""
+                        "descending": "Décroissant"
                     },
                     "label": "Tri"
                 },
@@ -1091,20 +341,11 @@
                     "subscribe": "Jerred",
                     "feed": "Jerred"
                 },
-                "empty": {
-                    "noResults": ""
-                },
                 "label": {
                     "search": "Podcasts",
                     "tags": "Tibzimin"
                 },
                 "title": "Podcasts",
-                "pagination": {
-                    "results": ""
-                },
-                "placeholder": {
-                    "search": ""
-                },
                 "modal": {
                     "subscription": {
                         "header": "Souscription"
@@ -1120,25 +361,6 @@
                     },
                     "label": "Tri"
                 },
-                "header": {
-                    "browse": "",
-                    "instance": "",
-                    "user": ""
-                },
-                "button": {
-                    "add": "",
-                    "create": ""
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "empty": {
-                    "noResults": ""
-                },
-                "title": "",
-                "pagination": {
-                    "results": ""
-                },
                 "label": {
                     "search": "Anadi"
                 }
@@ -1146,98 +368,33 @@
             "AlbumDropdown": {
                 "button": {
                     "cancel": "Sefex",
-                    "delete": "",
                     "edit": "Beddel",
                     "embed": "Seddu",
                     "more": "Ugar…"
-                },
-                "modal": {
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "embed": {
-                        "header": ""
-                    }
-                },
-                "link": {
-                    "moderation": "",
-                    "discogs": "",
-                    "django": "",
-                    "domain": "",
-                    "musicbrainz": ""
                 }
+            },
+            "EditForm": {
+                "button": {
+                    "cancel": "Sefex",
+                    "clear": "Effacer"
+                },
+                "notApplicable": "Wlac"
             },
             "TrackBase": {
                 "button": {
                     "cancel": "Sefex",
-                    "delete": "",
                     "download": "Sider",
                     "edit": "Beddel",
                     "embed": "Seddu",
                     "more": "Ugar…",
                     "play": "Seddu"
                 },
-                "modal": {
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "embed": {
-                        "header": ""
-                    }
-                },
-                "link": {
-                    "moderation": "",
-                    "discogs": "",
-                    "wikipedia": "",
-                    "django": "",
-                    "domain": ""
-                },
                 "title": "Piste"
             },
-            "AlbumEdit": {
+            "TagDetail": {
                 "header": {
-                    "edit": "",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
-                }
-            },
-            "ArtistEdit": {
-                "header": {
-                    "edit": "",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
-                }
-            },
-            "TrackEdit": {
-                "header": {
-                    "edit": "",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
-                }
-            },
-            "AlbumDetail": {
-                "header": {
-                    "episodes": "",
-                    "tracks": "Pistes",
-                    "libraries": ""
-                },
-                "description": {
-                    "libraries": ""
-                },
-                "meta": {
-                    "volume": ""
+                    "channels": "Canaux ",
+                    "tracks": "Pistes"
                 }
             },
             "FsBrowser": {
@@ -1245,587 +402,156 @@
                     "import": "Ineqqisen"
                 }
             },
-            "FsLogs": {
-                "empty": {
-                    "notStarted": ""
-                }
-            },
             "Home": {
                 "title": "Tanedlist",
                 "header": {
-                    "newChannels": "",
-                    "playlists": "Tibdarin n tɣuri",
-                    "recentlyAdded": "",
-                    "recentlyFavorited": "",
-                    "recentlyListened": ""
+                    "playlists": "Tibdarin n tɣuri"
                 }
             },
             "TagSelector": {
                 "placeholder": {
                     "search": "Anadi"
                 }
-            }
-        },
-        "favorites": {
-            "List": {
-                "header": {
-                    "favorites": ""
-                },
-                "ordering": {
-                    "direction": {
-                        "ascending": "Croissant",
-                        "descending": "Décroissant",
-                        "label": "Smizzwer"
-                    },
-                    "label": "Tri"
-                },
-                "link": {
-                    "library": ""
-                },
-                "loader": {
-                    "loading": ""
-                },
-                "empty": {
-                    "noFavorites": ""
-                },
-                "pagination": {
-                    "results": ""
-                },
-                "title": ""
             },
-            "TrackFavoriteIcon": {
-                "button": {
-                    "add": "Rnu ismal",
-                    "remove": "Kkes-it seg ismal"
-                },
-                "label": {
-                    "inFavorites": ""
+            "AlbumDetail": {
+                "header": {
+                    "tracks": "Pistes"
                 }
             }
         },
-        "channels": {
-            "UploadModal": {
-                "meta": {
-                    "files": "",
-                    "quota": ""
-                },
-                "button": {
-                    "cancel": "Sefex",
-                    "close": "Mdel",
-                    "finishLater": "",
-                    "next": "",
-                    "previous": "",
-                    "publish": "Suffeɣ-d",
-                    "update": "Leqqem"
-                },
-                "header": {
-                    "uploadFiles": "",
-                    "processing": "",
-                    "publish": "",
-                    "uploadDetails": ""
-                }
-            },
-            "AlbumSelect": {
-                "meta": {
-                    "tracks": ""
-                },
+        "auth": {
+            "ApplicationEdit": {
                 "label": {
-                    "album": "Album",
-                    "series": "SÃ©ries"
+                    "accessToken": "Azemz n unekcum"
                 },
-                "option": {
-                    "none": "Ulac"
-                }
-            },
-            "LicenseSelect": {
-                "link": {
-                    "license": ""
-                },
-                "label": {
-                    "license": "Licence"
-                },
-                "option": {
-                    "none": "Ulac"
-                }
-            },
-            "UploadForm": {
-                "help": {
-                    "license": ""
-                },
-                "label": {
-                    "openBrowser": "Snirem...",
-                    "channel": ""
-                },
-                "message": {
-                    "dragAndDrop": "",
-                    "pending": ""
-                },
-                "button": {
-                    "edit": "Beddel",
-                    "ignore": "Ignorer",
-                    "remove": "Supprimer",
-                    "resume": "Reprendre",
-                    "retry": "Eɛreḍ tikkelt-nniḍen"
-                },
+                "title": "Ẓreg asnas",
                 "header": {
-                    "error": ""
-                },
-                "status": {
-                    "errored": "",
-                    "pending": "Yegguni",
-                    "uploading": "Tuzzna n ifuyla"
-                },
-                "description": {
-                    "extensions": ""
-                },
-                "warning": {
-                    "quota": ""
+                    "editApp": "Ẓreg asnas"
                 }
             },
-            "AlbumModal": {
-                "button": {
-                    "cancel": "Sefex",
-                    "create": "Snulfu-d"
-                },
+            "Settings": {
                 "header": {
-                    "newAlbum": "",
-                    "newSeries": "SÃ©ries"
-                }
-            },
-            "UploadMetadataForm": {
-                "label": {
-                    "description": "Aglam",
-                    "position": "Adeg",
-                    "tags": "Tibzimin",
-                    "title": "Azwel",
-                    "image": ""
-                }
-            },
-            "AlbumForm": {
-                "header": {
-                    "error": ""
-                },
-                "label": {
-                    "albumTitle": "Azwel"
-                }
-            },
-            "SubscribeButton": {
-                "title": {
-                    "subscribe": "Jerred",
-                    "unsubscribe": "Ur ṭafar ara"
-                },
-                "help": {
-                    "auth": ""
-                }
-            }
-        },
-        "AboutPod": {
-            "stat": {
-                "hoursOfMusic": "",
-                "activeUsers": "D arurmid | D arurmid",
-                "albumsCount": "Album | Album",
-                "artistsCount": "Artiste | Artiste",
-                "listeningsCount": "Iɣewwaṛen n umiḍan | Iɣewwaṛen n umiḍan",
-                "tracksCount": "Piste | Piste"
-            },
-            "title": "",
-            "link": {
-                "about": "",
-                "features": "",
-                "introduction": "",
-                "rules": "Ilugan",
-                "statistics": "Statistiques",
-                "terms": ""
-            },
-            "header": {
-                "about": "",
-                "contact": "Anermis",
-                "features": "",
-                "rules": "Ilugan",
-                "statistics": "Statistiques",
-                "terms": ""
-            },
-            "feature": {
-                "allowList": "",
-                "anonymousAccess": "",
-                "status": {
-                    "closed": "Ifukk",
-                    "disabled": "Ssens",
-                    "enabled": "Yermed",
-                    "open": "Ldi"
-                },
-                "federation": "Tamatut",
-                "version": "",
-                "registrations": "Ajerred",
-                "quota": ""
-            },
-            "notApplicable": "Wlac",
-            "placeholder": {
-                "noDescription": "",
-                "noRules": "",
-                "noTerms": ""
-            },
-            "message": {
-                "contact": ""
-            }
-        },
-        "common": {
-            "ActionTable": {
-                "button": {
-                    "selected": "",
-                    "allSelected": "",
-                    "go": "Ruḥ",
-                    "launch": "Sker",
-                    "refresh": "",
-                    "select": "",
-                    "selectAll": "",
-                    "selectElement": "",
-                    "selectCurrentPage": ""
-                },
-                "message": {
-                    "success": "",
-                    "needsRefresh": ""
-                },
-                "label": {
-                    "actions": "Actions",
-                    "performAction": "Isnasen-ik"
-                },
-                "modal": {
-                    "performAction": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "header": {
-                    "error": ""
-                }
-            },
-            "Duration": {
-                "meta": {
-                    "hours": "",
-                    "minutes": ""
-                }
-            },
-            "UserMenu": {
-                "link": {
-                    "about": "",
-                    "chat": "",
-                    "docs": "Amnir",
-                    "forum": "",
-                    "support": "",
-                    "git": "Tafuɣalt tuḍfirt",
-                    "login": "Qqen",
-                    "logout": "Ffeɣ",
-                    "notifications": "Tilγa",
-                    "profile": "Ameγnu",
-                    "settings": "Iɣewwaṛen",
-                    "signup": "Jerred"
-                },
-                "label": {
-                    "shortcuts": "Inegzumen n unasiw",
-                    "language": "Tameslayt",
-                    "theme": ""
-                }
-            },
-            "UserModal": {
-                "link": {
-                    "about": "",
-                    "chat": "",
-                    "forum": "",
-                    "support": "",
-                    "git": "Tafuɣalt tuḍfirt",
-                    "login": "Qqen",
-                    "logout": "Ffeɣ",
-                    "notifications": "Tilγa",
-                    "profile": "Ameγnu",
-                    "settings": "Iɣewwaṛen",
-                    "signup": "Jerred"
-                },
-                "label": {
-                    "shortcuts": "Inegzumen n unasiw",
-                    "language": "Tameslayt",
-                    "theme": ""
-                },
-                "header": {
-                    "options": "Actions"
-                },
-                "button": {
-                    "switchInstance": ""
-                }
-            },
-            "DangerousButton": {
-                "button": {
-                    "cancel": "Sefex",
-                    "confirm": "Sentem"
-                },
-                "header": {
-                    "confirm": ""
-                }
-            },
-            "RenderedDescription": {
-                "button": {
-                    "cancel": "Sefex",
-                    "edit": "Beddel",
-                    "less": "Ssken-d drus",
-                    "more": "Ssken-d ugar",
-                    "update": ""
-                },
-                "header": {
-                    "failure": ""
-                },
-                "empty": {
-                    "noDescription": ""
-                }
-            },
-            "InlineSearchBar": {
-                "button": {
-                    "clear": "Effacer"
-                },
-                "label": {
-                    "search": "Anadi"
-                },
-                "placeholder": {
-                    "search": ""
-                }
-            },
-            "CollapseLink": {
-                "button": {
-                    "collapse": "Fneẓ",
-                    "expand": "Développer"
-                }
-            },
-            "CopyInput": {
-                "button": {
-                    "copy": "Copier"
-                },
-                "message": {
-                    "success": ""
-                }
-            },
-            "LoginModal": {
-                "link": {
-                    "login": "Qqen",
-                    "signup": "Jerred"
-                },
-                "header": {
-                    "unauthenticated": ""
-                },
-                "description": {
-                    "noAccess": ""
-                }
-            },
-            "ContentForm": {
-                "help": {
-                    "markdown": ""
-                },
-                "empty": {
-                    "noContent": ""
-                },
-                "button": {
-                    "preview": "Timeẓriwt",
-                    "write": ""
-                },
-                "placeholder": {
-                    "input": ""
-                }
-            },
-            "EmptyState": {
-                "header": {
-                    "noResults": ""
-                },
-                "button": {
-                    "refresh": "Smiren"
-                }
-            },
-            "AttachmentInput": {
-                "help": {
-                    "upload": ""
-                },
-                "button": {
-                    "remove": "Supprimer"
-                },
-                "label": {
-                    "upload": ""
-                },
-                "loader": {
-                    "uploading": ""
-                },
-                "header": {
-                    "failure": ""
-                }
-            },
-            "ExpandableDiv": {
-                "button": {
-                    "less": "Ssken-d drus",
-                    "more": "Ssken-d ugar"
-                }
-            }
-        },
-        "playlists": {
-            "Card": {
-                "meta": {
-                    "tracks": ""
-                }
-            },
-            "PlaylistModal": {
-                "warning": {
-                    "duplicate": ""
-                },
-                "button": {
-                    "addDuplicate": "",
-                    "addToPlaylist": "",
-                    "addTrack": "",
-                    "cancel": "Sefex",
-                    "edit": "Beddel"
-                },
-                "header": {
-                    "addToPlaylist": "Rnu ar tebdart n tɣuri",
-                    "available": "",
-                    "manage": "",
-                    "noResults": "",
-                    "addFailure": ""
+                    "accountSettings": "Iɣewwaṛen n umiḍan",
+                    "authorizedApps": "Isnasen yettussirgen",
+                    "avatar": "Tugna n umaɣnu",
+                    "changeEmail": "Tansa n imayl",
+                    "changePassword": "Bddel awal-iw uffir",
+                    "emailFailure": "Tansa n imayl",
+                    "yourApps": "Isnasen-ik"
                 },
                 "table": {
-                    "edit": {
+                    "authorizedApps": {
                         "header": {
-                            "edit": "Beddel",
-                            "lastModification": "",
-                            "name": "Isem",
-                            "tracks": "Pistes"
+                            "application": "Asnas",
+                            "permissions": "Tisirag"
+                        }
+                    },
+                    "yourApps": {
+                        "header": {
+                            "application": "Asnas",
+                            "creationDate": "Azemz n usnulfu"
+                        }
+                    },
+                    "artists": {
+                        "header": {
+                            "creationDate": "Azemz n usnulfu",
+                            "name": "Isem"
                         }
                     }
                 },
-                "placeholder": {
-                    "filterPlaylist": ""
-                },
                 "label": {
-                    "filter": "Imzizdig"
+                    "avatar": "Tugna n umaɣnu",
+                    "currentPassword": "Awal uffir amaynut",
+                    "newEmail": "Tansa n imayl",
+                    "newPassword": "Awal uffir amaynut",
+                    "password": "Awal n uɛeddi"
                 },
-                "empty": {
-                    "noPlaylists": ""
+                "button": {
+                    "password": "Beddel awal uffir",
+                    "delete": "Kkes",
+                    "edit": "Beddel",
+                    "refresh": "Smiren",
+                    "remove": "Supprimer",
+                    "removeApp": "Isnasen-ik",
+                    "revoke": "Ḥwi",
+                    "update": "Leqqem"
+                },
+                "link": {
+                    "managePlugins": "Sefrek iseqdacen",
+                    "newApp": "Ẓreg asnas"
                 }
             },
-            "Editor": {
-                "button": {
-                    "addDuplicate": "",
-                    "clear": "",
-                    "copy": "",
-                    "insertFromQueue": ""
+            "Logout": {
+                "header": {
+                    "confirm": "D tidet tebɣiḍ ad teffɣeḍ?"
                 },
-                "error": {
-                    "sync": ""
+                "link": {
+                    "login": "Qqen"
+                },
+                "title": "Ffeɣ"
+            },
+            "LoginForm": {
+                "link": {
+                    "createAccount": "Rnu amiḍan"
+                },
+                "placeholder": {
+                    "username": "Sekcem isem-ik(im) n useqdac"
+                },
+                "button": {
+                    "login": "Qqen"
+                },
+                "label": {
+                    "password": "Awal n uɛeddi",
+                    "username": "Isem n useqdac neɣ tansa imayl"
+                }
+            },
+            "Plugin": {
+                "link": {
+                    "documentation": "Amnir"
+                },
+                "label": {
+                    "pluginEnabled": "Yermed",
+                    "library": "Tanedlist"
+                },
+                "button": {
+                    "save": "Sekles",
+                    "scan": "Snirem tura"
+                }
+            },
+            "SignupForm": {
+                "label": {
+                    "email": "Tansa n imayl",
+                    "password": "Awal n uɛeddi",
+                    "username": "Isem n useqdac"
+                },
+                "placeholder": {
+                    "email": "Tansa n imayl",
+                    "username": "Sekcem isem-ik(im) n useqdac"
+                }
+            },
+            "SubsonicTokenForm": {
+                "header": {
+                    "error": "Erreur"
                 },
                 "message": {
-                    "sync": ""
-                },
-                "modal": {
-                    "clearPlaylist": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
+                    "passwordUpdated": "Awal uffir yettwalqem"
+                }
+            },
+            "ApplicationForm": {
+                "label": {
+                    "name": "Isem",
+                    "scopes": {
+                        "read": {
+                            "label": "Ɣeṛ"
                         }
-                    }
-                },
-                "help": {
-                    "reorder": ""
-                },
+                    },
+                    "redirectUri": "URI n uwelleh"
+                }
+            },
+            "Authorize": {
                 "header": {
-                    "editor": ""
-                },
-                "warning": {
-                    "duplicate": ""
-                },
-                "loading": {
-                    "sync": ""
+                    "readOnly": "Tɣuri kan"
                 }
-            },
-            "TrackPlaylistIcon": {
-                "button": {
-                    "add": ""
-                }
-            },
-            "Form": {
-                "header": {
-                    "createPlaylist": "Snulfu-d tabdart n tɣuri tamaynutt",
-                    "createSuccess": "",
-                    "updateSuccess": "",
-                    "createFailure": ""
-                },
-                "button": {
-                    "create": "",
-                    "update": ""
-                },
-                "placeholder": {
-                    "name": ""
-                },
-                "label": {
-                    "name": "",
-                    "visibility": ""
-                }
-            },
-            "Widget": {
-                "button": {
-                    "create": "",
-                    "more": "Ssken-d ugar"
-                },
-                "placeholder": {
-                    "noPlaylists": ""
-                }
-            }
-        },
-        "notifications": {
-            "NotificationRow": {
-                "message": {
-                    "libraryAcceptFollow": "",
-                    "libraryFollow": "",
-                    "libraryPendingFollow": ""
-                },
-                "button": {
-                    "approve": "Qbel",
-                    "markRead": "Creḍ yettwaɣṛa",
-                    "markUnread": "Creḍ ur yettwaɣra ara",
-                    "reject": "Agi"
-                }
-            }
-        },
-        "Sidebar": {
-            "link": {
-                "about": "",
-                "albums": "",
-                "artists": "",
-                "browse": "Parcourir ",
-                "channels": "Canaux ",
-                "createAccount": "Rnu amiḍan",
-                "favorites": "Imenyafen",
-                "home": "Agejdan",
-                "library": "Tanedlist",
-                "login": "Qqen",
-                "moderation": "",
-                "playlists": "Tibdarin n tɣuri",
-                "podcasts": "Podcasts",
-                "radios": "",
-                "search": "Anadi",
-                "settings": "Iɣewwaṛen",
-                "users": "Iseqdacen"
-            },
-            "label": {
-                "add": "",
-                "administration": "Tadbelt",
-                "language": "Tameslayt",
-                "main": "Umuɣ agejdan",
-                "follows": "",
-                "edits": "",
-                "play": "",
-                "theme": ""
-            },
-            "header": {
-                "administration": "Tadbelt",
-                "explore": "Snirem",
-                "main": "Tissubtert",
-                "more": "Ugar",
-                "library": ""
             }
         },
         "manage": {
@@ -1838,7 +564,6 @@
                                 "account": "Amiḍan",
                                 "creationDate": "Azemz n usnulfu",
                                 "domain": "Taγult",
-                                "importStatus": "",
                                 "library": "Tanedlist",
                                 "name": "Isem",
                                 "size": "Teγzi",
@@ -1856,15 +581,13 @@
                     "ordering": {
                         "direction": {
                             "ascending": "Croissant",
-                            "descending": "Décroissant",
-                            "label": ""
+                            "descending": "Décroissant"
                         },
                         "label": "Tri"
                     },
                     "action": {
                         "delete": {
-                            "label": "Kkes",
-                            "warning": ""
+                            "label": "Kkes"
                         }
                     },
                     "link": {
@@ -1875,12 +598,6 @@
                         "search": "Anadi",
                         "status": "Addad",
                         "visibility": "Tametwalant"
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "LibrariesTable": {
@@ -1903,15 +620,13 @@
                     "ordering": {
                         "direction": {
                             "ascending": "Croissant",
-                            "descending": "Décroissant",
-                            "label": ""
+                            "descending": "Décroissant"
                         },
                         "label": "Tri"
                     },
                     "action": {
                         "delete": {
-                            "label": "Kkes",
-                            "warning": ""
+                            "label": "Kkes"
                         }
                     },
                     "link": {
@@ -1920,12 +635,6 @@
                     "label": {
                         "search": "Anadi",
                         "visibility": "Tametwalant"
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "TracksTable": {
@@ -1944,15 +653,13 @@
                     "ordering": {
                         "direction": {
                             "ascending": "Croissant",
-                            "descending": "Décroissant",
-                            "label": ""
+                            "descending": "Décroissant"
                         },
                         "label": "Tri"
                     },
                     "action": {
                         "delete": {
-                            "label": "Kkes",
-                            "warning": ""
+                            "label": "Kkes"
                         }
                     },
                     "link": {
@@ -1961,34 +668,16 @@
                     "notApplicable": "Wlac",
                     "label": {
                         "search": "Anadi"
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "ArtistsTable": {
-                    "table": {
-                        "artist": {
-                            "header": {
-                                "albums": "",
-                                "creationDate": "Azemz n usnulfu",
-                                "domain": "Taγult",
-                                "name": "Isem",
-                                "tracks": "Pistes"
-                            }
-                        }
-                    },
                     "option": {
                         "all": "Akkw"
                     },
                     "ordering": {
                         "direction": {
                             "ascending": "Croissant",
-                            "descending": "Décroissant",
-                            "label": ""
+                            "descending": "Décroissant"
                         },
                         "label": "Tri"
                     },
@@ -1996,56 +685,23 @@
                         "category": "Taggayt",
                         "search": "Anadi"
                     },
-                    "action": {
-                        "delete": {
-                            "label": "Kkes",
-                            "warning": ""
-                        }
-                    },
-                    "link": {
-                        "local": "Local"
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
-                    }
-                },
-                "TagsTable": {
                     "table": {
-                        "tag": {
+                        "artist": {
                             "header": {
-                                "albums": "",
-                                "artists": "",
                                 "creationDate": "Azemz n usnulfu",
+                                "domain": "Taγult",
                                 "name": "Isem",
                                 "tracks": "Pistes"
                             }
                         }
                     },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "Croissant",
-                            "descending": "Décroissant",
-                            "label": ""
-                        },
-                        "label": "Tri"
-                    },
                     "action": {
                         "delete": {
-                            "label": "Kkes",
-                            "warning": ""
+                            "label": "Kkes"
                         }
                     },
-                    "label": {
-                        "search": "Anadi"
-                    },
-                    "placeholder": {
-                        "search": "Anadi s yisem"
-                    },
-                    "pagination": {
-                        "results": ""
+                    "link": {
+                        "local": "Local"
                     }
                 },
                 "EditsCardList": {
@@ -2063,12 +719,6 @@
                         },
                         "label": "Tri"
                     },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
-                    },
                     "label": {
                         "status": "Addad"
                     }
@@ -2081,7 +731,6 @@
                                 "creationDate": "Azemz n usnulfu",
                                 "domain": "Taγult",
                                 "name": "Azwel",
-                                "releaseDate": "",
                                 "tracks": "Pistes"
                             }
                         }
@@ -2089,30 +738,50 @@
                     "ordering": {
                         "direction": {
                             "ascending": "Croissant",
-                            "descending": "Décroissant",
-                            "label": ""
+                            "descending": "Décroissant"
                         },
                         "label": "Tri"
                     },
                     "action": {
                         "delete": {
-                            "label": "Kkes",
-                            "warning": ""
+                            "label": "Kkes"
                         }
                     },
                     "link": {
-                        "local": "Local",
-                        "moderation": ""
+                        "local": "Local"
                     },
                     "notApplicable": "Wlac",
                     "label": {
                         "search": "Anadi"
+                    }
+                },
+                "TagsTable": {
+                    "ordering": {
+                        "direction": {
+                            "ascending": "Croissant",
+                            "descending": "Décroissant"
+                        },
+                        "label": "Tri"
+                    },
+                    "table": {
+                        "tag": {
+                            "header": {
+                                "creationDate": "Azemz n usnulfu",
+                                "name": "Isem",
+                                "tracks": "Pistes"
+                            }
+                        }
+                    },
+                    "action": {
+                        "delete": {
+                            "label": "Kkes"
+                        }
+                    },
+                    "label": {
+                        "search": "Anadi"
                     },
                     "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
+                        "search": "Anadi s yisem"
                     }
                 }
             },
@@ -2126,145 +795,52 @@
                             "owner": "Bab",
                             "type": "Tawsit"
                         },
+                        "report": {
+                            "category": "Taggayt",
+                            "creationDate": "Azemz n usnulfu"
+                        },
                         "status": {
-                            "assignedTo": "",
-                            "internalNotes": "",
-                            "resolutionDate": "",
                             "resolved": "Fran",
                             "status": "Addad",
                             "unresolved": "Ur yefra ara"
-                        },
-                        "report": {
-                            "category": "Taggayt",
-                            "creationDate": "Azemz n usnulfu",
-                            "submittedBy": ""
                         }
                     },
                     "header": {
                         "actions": "Actions",
-                        "notes": "",
-                        "message": "Izen",
-                        "reportedObject": ""
+                        "message": "Izen"
                     },
                     "button": {
                         "confirmDelete": "Kkes",
-                        "delete": "",
-                        "resolve": "Fru",
-                        "unresolve": ""
+                        "resolve": "Fru"
                     },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "notApplicable": "Wlac",
-                    "link": {
-                        "moderation": "",
-                        "report": "",
-                        "publicPage": ""
-                    },
-                    "warning": {
-                        "objectDeleted": ""
-                    }
+                    "notApplicable": "Wlac"
                 },
                 "UserRequestCard": {
                     "header": {
                         "actions": "Actions",
-                        "notes": "",
                         "signup": "Izen"
                     },
                     "button": {
-                        "approve": "Qbel",
-                        "reject": ""
+                        "approve": "Qbel"
                     },
                     "table": {
                         "status": {
                             "approved": "Yettwaqbel",
-                            "assignedTo": "",
-                            "internalNotes": "",
                             "pending": "Yegguni",
-                            "refused": "",
                             "status": "Addad"
                         },
                         "request": {
-                            "creationDate": "Azemz n usnulfu",
-                            "submittedBy": ""
+                            "creationDate": "Azemz n usnulfu"
                         }
                     },
-                    "notApplicable": "Wlac",
-                    "link": {
-                        "request": ""
-                    },
-                    "message": {
-                        "signup": ""
-                    }
-                },
-                "InstancePolicyForm": {
-                    "header": {
-                        "addRule": "",
-                        "editRule": "",
-                        "failure": ""
-                    },
-                    "label": {
-                        "blockAll": "",
-                        "policyDisabled": "Ssens",
-                        "policyEnabled": "Yermed",
-                        "silenceActivity": "",
-                        "silenceNotifications": "",
-                        "customizeRule": "",
-                        "policyReason": "Taɣzent",
-                        "rejectMedia": ""
-                    },
-                    "tooltip": {
-                        "blockAll": "",
-                        "rejectMedia": "",
-                        "summary": "",
-                        "silenceActivity": "",
-                        "silenceNotifications": "",
-                        "isActive": ""
-                    },
-                    "button": {
-                        "cancel": "Sefex",
-                        "create": "Snulfu-d",
-                        "delete": "Kkes",
-                        "confirm": "",
-                        "update": "Leqqem"
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    }
+                    "notApplicable": "Wlac"
                 },
                 "NoteForm": {
                     "button": {
                         "add": "Rnu tamawt"
-                    },
-                    "placeholder": {
-                        "summary": ""
-                    },
-                    "header": {
-                        "failure": ""
                     }
                 },
                 "DomainsTable": {
-                    "action": {
-                        "add": {
-                            "label": ""
-                        },
-                        "purge": {
-                            "label": "Sfeḍ"
-                        },
-                        "remove": {
-                            "label": ""
-                        }
-                    },
                     "option": {
                         "all": "Akkw",
                         "no": "Uhu",
@@ -2273,64 +849,21 @@
                     "ordering": {
                         "direction": {
                             "ascending": "Croissant",
-                            "descending": "Décroissant",
-                            "label": ""
+                            "descending": "Décroissant"
                         },
                         "label": "Tri"
                     },
                     "table": {
                         "domain": {
                             "header": {
-                                "firstSeen": "",
                                 "name": "Isem",
-                                "receivedMessages": "",
-                                "moderationRule": "",
                                 "users": "Iseqdacen"
                             },
                             "moderationRule": "Ih"
                         }
                     },
-                    "label": {
-                        "inList": "",
-                        "search": "Anadi"
-                    },
                     "empty": {
                         "noPods": "Ur d-nufi ara inmeɣrayen"
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
-                    },
-                    "link": {
-                        "list": ""
-                    }
-                },
-                "AccountsTable": {
-                    "ordering": {
-                        "direction": {
-                            "ascending": "Croissant",
-                            "descending": "Décroissant",
-                            "label": ""
-                        },
-                        "label": "Tri"
-                    },
-                    "table": {
-                        "account": {
-                            "header": {
-                                "domain": "Taγult",
-                                "firstSeen": "",
-                                "lastSeen": "",
-                                "name": "Isem",
-                                "moderationRule": "",
-                                "uploads": "Ifuyla yettwaznen"
-                            },
-                            "moderationRule": "Ih"
-                        }
-                    },
-                    "link": {
-                        "local": ""
                     },
                     "action": {
                         "purge": {
@@ -2339,22 +872,59 @@
                     },
                     "label": {
                         "search": "Anadi"
+                    }
+                },
+                "AccountsTable": {
+                    "ordering": {
+                        "direction": {
+                            "ascending": "Croissant",
+                            "descending": "Décroissant"
+                        },
+                        "label": "Tri"
                     },
-                    "placeholder": {
-                        "search": ""
+                    "table": {
+                        "account": {
+                            "header": {
+                                "domain": "Taγult",
+                                "name": "Isem",
+                                "uploads": "Ifuyla yettwaznen"
+                            },
+                            "moderationRule": "Ih"
+                        }
                     },
-                    "pagination": {
-                        "results": ""
+                    "action": {
+                        "purge": {
+                            "label": "Sfeḍ"
+                        }
+                    },
+                    "label": {
+                        "search": "Anadi"
+                    }
+                },
+                "InstancePolicyForm": {
+                    "button": {
+                        "cancel": "Sefex",
+                        "create": "Snulfu-d",
+                        "delete": "Kkes",
+                        "update": "Leqqem"
+                    },
+                    "label": {
+                        "policyDisabled": "Ssens",
+                        "policyEnabled": "Yermed",
+                        "policyReason": "Taɣzent"
+                    }
+                },
+                "InstancePolicyModal": {
+                    "button": {
+                        "close": "Mdel"
+                    }
+                },
+                "NotesThread": {
+                    "button": {
+                        "delete": "Kkes"
                     }
                 },
                 "InstancePolicyCard": {
-                    "label": {
-                        "blockAll": "",
-                        "muteActivity": "",
-                        "muteNotifications": "",
-                        "reason": "Taɣzent",
-                        "rejectMedia": ""
-                    },
                     "button": {
                         "edit": "Beddel"
                     },
@@ -2362,35 +932,11 @@
                         "enabled": "Yermed",
                         "paused": "En Pause"
                     },
+                    "label": {
+                        "reason": "Taɣzent"
+                    },
                     "header": {
                         "rule": "Alugen"
-                    }
-                },
-                "InstancePolicyModal": {
-                    "button": {
-                        "close": "Mdel",
-                        "show": ""
-                    },
-                    "modal": {
-                        "manage": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    }
-                },
-                "NotesThread": {
-                    "button": {
-                        "delete": "Kkes"
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
                     }
                 }
             },
@@ -2399,7 +945,6 @@
                     "channel": {
                         "header": {
                             "account": "Amiḍan",
-                            "albums": "",
                             "creationDate": "Azemz n usnulfu",
                             "domain": "Taγult",
                             "name": "Isem",
@@ -2413,8 +958,7 @@
                 "ordering": {
                     "direction": {
                         "ascending": "Croissant",
-                        "descending": "Décroissant",
-                        "label": ""
+                        "descending": "Décroissant"
                     },
                     "label": "Tri"
                 },
@@ -2423,14 +967,7 @@
                     "search": "Anadi"
                 },
                 "link": {
-                    "local": "Local",
-                    "moderation": ""
-                },
-                "placeholder": {
-                    "search": ""
-                },
-                "pagination": {
-                    "results": ""
+                    "local": "Local"
                 }
             },
             "users": {
@@ -2442,7 +979,6 @@
                                 "email": "Imayl",
                                 "lastActivity": "Armud aneggaru",
                                 "permissions": "Tisirag",
-                                "signup": "",
                                 "status": "Addad",
                                 "username": "Isem n useqdac"
                             },
@@ -2451,37 +987,26 @@
                                 "inactive": "D arurmid"
                             },
                             "status": {
-                                "admin": "Anedbal",
-                                "regular": "",
-                                "staff": ""
+                                "admin": "Anedbal"
                             }
                         }
                     },
                     "ordering": {
                         "direction": {
                             "ascending": "Croissant",
-                            "descending": "Décroissant",
-                            "label": ""
+                            "descending": "Décroissant"
                         },
                         "label": "Tri"
                     },
                     "permission": {
                         "library": "Tanedlist",
-                        "moderation": "",
                         "settings": "Iɣewwaṛen"
                     },
-                    "notApplicable": "Wlac",
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
-                    }
+                    "notApplicable": "Wlac"
                 },
                 "InvitationsTable": {
                     "option": {
                         "all": "Akkw",
-                        "expired": "",
                         "open": "Ldi"
                     },
                     "table": {
@@ -2489,7 +1014,6 @@
                             "header": {
                                 "code": "Tangalt",
                                 "creationDate": "Azemz n usnulfu",
-                                "expirationDate": "",
                                 "owner": "Bab",
                                 "status": "Addad"
                             }
@@ -2500,25 +1024,16 @@
                     },
                     "label": {
                         "expired": "Ifat",
-                        "unused": "",
                         "search": "Anadi",
-                        "status": "Addad",
-                        "used": ""
+                        "status": "Addad"
                     },
                     "ordering": {
                         "label": "Tri"
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "InvitationForm": {
                     "button": {
-                        "clear": "Effacer",
-                        "new": ""
+                        "clear": "Effacer"
                     },
                     "table": {
                         "invitation": {
@@ -2527,16 +1042,113 @@
                                 "link": "Fren aseɣwen"
                             }
                         }
-                    },
-                    "header": {
-                        "failure": ""
-                    },
-                    "label": {
-                        "invite": ""
-                    },
-                    "placeholder": {
-                        "invitation": ""
                     }
+                }
+            }
+        },
+        "common": {
+            "ActionTable": {
+                "label": {
+                    "actions": "Actions",
+                    "performAction": "Isnasen-ik"
+                },
+                "button": {
+                    "go": "Ruḥ",
+                    "launch": "Sker"
+                }
+            },
+            "DangerousButton": {
+                "button": {
+                    "cancel": "Sefex",
+                    "confirm": "Sentem"
+                }
+            },
+            "RenderedDescription": {
+                "button": {
+                    "cancel": "Sefex",
+                    "edit": "Beddel",
+                    "less": "Ssken-d drus",
+                    "more": "Ssken-d ugar"
+                }
+            },
+            "InlineSearchBar": {
+                "button": {
+                    "clear": "Effacer"
+                },
+                "label": {
+                    "search": "Anadi"
+                }
+            },
+            "CollapseLink": {
+                "button": {
+                    "collapse": "Fneẓ",
+                    "expand": "Développer"
+                }
+            },
+            "CopyInput": {
+                "button": {
+                    "copy": "Copier"
+                }
+            },
+            "UserMenu": {
+                "link": {
+                    "docs": "Amnir",
+                    "git": "Tafuɣalt tuḍfirt",
+                    "login": "Qqen",
+                    "logout": "Ffeɣ",
+                    "notifications": "Tilγa",
+                    "profile": "Ameγnu",
+                    "settings": "Iɣewwaṛen",
+                    "signup": "Jerred"
+                },
+                "label": {
+                    "shortcuts": "Inegzumen n unasiw",
+                    "language": "Tameslayt"
+                }
+            },
+            "UserModal": {
+                "link": {
+                    "git": "Tafuɣalt tuḍfirt",
+                    "login": "Qqen",
+                    "logout": "Ffeɣ",
+                    "notifications": "Tilγa",
+                    "profile": "Ameγnu",
+                    "settings": "Iɣewwaṛen",
+                    "signup": "Jerred"
+                },
+                "label": {
+                    "shortcuts": "Inegzumen n unasiw",
+                    "language": "Tameslayt"
+                },
+                "header": {
+                    "options": "Actions"
+                }
+            },
+            "LoginModal": {
+                "link": {
+                    "login": "Qqen",
+                    "signup": "Jerred"
+                }
+            },
+            "ContentForm": {
+                "button": {
+                    "preview": "Timeẓriwt"
+                }
+            },
+            "EmptyState": {
+                "button": {
+                    "refresh": "Smiren"
+                }
+            },
+            "AttachmentInput": {
+                "button": {
+                    "remove": "Supprimer"
+                }
+            },
+            "ExpandableDiv": {
+                "button": {
+                    "less": "Ssken-d drus",
+                    "more": "Ssken-d ugar"
                 }
             }
         },
@@ -2546,13 +1158,7 @@
                     "additionalFields": {
                         "header": {
                             "actions": "Actions",
-                            "label": "",
-                            "type": "",
                             "required": "Ilaq"
-                        },
-                        "type": {
-                            "long": "",
-                            "short": ""
                         },
                         "required": {
                             "false": "Uhu",
@@ -2560,34 +1166,193 @@
                         }
                     }
                 },
-                "button": {
-                    "add": "",
-                    "edit": "",
-                    "preview": ""
-                },
                 "label": {
-                    "additionalField": "",
-                    "additionalFields": "",
                     "delete": "Kkes",
-                    "helpText": "",
                     "moveDown": "Ader d akesser",
                     "moveUp": "Ali d asawen"
-                },
-                "help": {
-                    "additionalFields": "",
-                    "helpText": ""
                 }
             },
             "SettingsGroup": {
-                "header": {
-                    "image": "",
-                    "error": ""
-                },
                 "button": {
                     "save": "Sekles"
+                }
+            }
+        },
+        "AboutPod": {
+            "stat": {
+                "activeUsers": "D arurmid | D arurmid",
+                "albumsCount": "Album | Album",
+                "artistsCount": "Artiste | Artiste",
+                "listeningsCount": "Iɣewwaṛen n umiḍan | Iɣewwaṛen n umiḍan",
+                "tracksCount": "Piste | Piste"
+            },
+            "feature": {
+                "status": {
+                    "closed": "Ifukk",
+                    "disabled": "Ssens",
+                    "enabled": "Yermed",
+                    "open": "Ldi"
                 },
-                "message": {
-                    "success": ""
+                "federation": "Tamatut",
+                "registrations": "Ajerred"
+            },
+            "header": {
+                "contact": "Anermis",
+                "rules": "Ilugan",
+                "statistics": "Statistiques"
+            },
+            "notApplicable": "Wlac",
+            "link": {
+                "rules": "Ilugan",
+                "statistics": "Statistiques"
+            }
+        },
+        "favorites": {
+            "TrackFavoriteIcon": {
+                "button": {
+                    "add": "Rnu ismal",
+                    "remove": "Kkes-it seg ismal"
+                }
+            },
+            "List": {
+                "ordering": {
+                    "direction": {
+                        "ascending": "Croissant",
+                        "descending": "Décroissant",
+                        "label": "Smizzwer"
+                    },
+                    "label": "Tri"
+                }
+            }
+        },
+        "playlists": {
+            "PlaylistModal": {
+                "header": {
+                    "addToPlaylist": "Rnu ar tebdart n tɣuri"
+                },
+                "button": {
+                    "cancel": "Sefex",
+                    "edit": "Beddel"
+                },
+                "table": {
+                    "edit": {
+                        "header": {
+                            "edit": "Beddel",
+                            "name": "Isem",
+                            "tracks": "Pistes"
+                        }
+                    }
+                },
+                "label": {
+                    "filter": "Imzizdig"
+                }
+            },
+            "Form": {
+                "header": {
+                    "createPlaylist": "Snulfu-d tabdart n tɣuri tamaynutt"
+                }
+            },
+            "Widget": {
+                "button": {
+                    "more": "Ssken-d ugar"
+                }
+            }
+        },
+        "Sidebar": {
+            "label": {
+                "administration": "Tadbelt",
+                "language": "Tameslayt",
+                "main": "Umuɣ agejdan"
+            },
+            "header": {
+                "administration": "Tadbelt",
+                "explore": "Snirem",
+                "main": "Tissubtert",
+                "more": "Ugar"
+            },
+            "link": {
+                "browse": "Parcourir ",
+                "channels": "Canaux ",
+                "createAccount": "Rnu amiḍan",
+                "favorites": "Imenyafen",
+                "home": "Agejdan",
+                "library": "Tanedlist",
+                "login": "Qqen",
+                "playlists": "Tibdarin n tɣuri",
+                "podcasts": "Podcasts",
+                "search": "Anadi",
+                "settings": "Iɣewwaṛen",
+                "users": "Iseqdacen"
+            }
+        },
+        "channels": {
+            "AlbumSelect": {
+                "label": {
+                    "album": "Album",
+                    "series": "SÃ©ries"
+                },
+                "option": {
+                    "none": "Ulac"
+                }
+            },
+            "UploadForm": {
+                "label": {
+                    "openBrowser": "Snirem..."
+                },
+                "button": {
+                    "edit": "Beddel",
+                    "ignore": "Ignorer",
+                    "remove": "Supprimer",
+                    "resume": "Reprendre",
+                    "retry": "Eɛreḍ tikkelt-nniḍen"
+                },
+                "status": {
+                    "pending": "Yegguni",
+                    "uploading": "Tuzzna n ifuyla"
+                }
+            },
+            "AlbumModal": {
+                "button": {
+                    "cancel": "Sefex",
+                    "create": "Snulfu-d"
+                },
+                "header": {
+                    "newSeries": "SÃ©ries"
+                }
+            },
+            "UploadModal": {
+                "button": {
+                    "cancel": "Sefex",
+                    "close": "Mdel",
+                    "publish": "Suffeɣ-d",
+                    "update": "Leqqem"
+                }
+            },
+            "UploadMetadataForm": {
+                "label": {
+                    "description": "Aglam",
+                    "position": "Adeg",
+                    "tags": "Tibzimin",
+                    "title": "Azwel"
+                }
+            },
+            "LicenseSelect": {
+                "label": {
+                    "license": "Licence"
+                },
+                "option": {
+                    "none": "Ulac"
+                }
+            },
+            "SubscribeButton": {
+                "title": {
+                    "subscribe": "Jerred",
+                    "unsubscribe": "Ur ṭafar ara"
+                }
+            },
+            "AlbumForm": {
+                "label": {
+                    "albumTitle": "Azwel"
                 }
             }
         },
@@ -2600,135 +1365,72 @@
                     "category": "Taggayt"
                 }
             },
-            "ReportModal": {
-                "header": {
-                    "disabled": "",
-                    "modal": "",
-                    "submissionFailure": ""
-                },
+            "FilterModal": {
                 "button": {
-                    "cancel": "Sefex",
-                    "submit": ""
+                    "cancel": "Sefex"
+                }
+            },
+            "ReportModal": {
+                "button": {
+                    "cancel": "Sefex"
                 },
                 "label": {
                     "email": "Imayl",
-                    "forwardToDomain": "",
                     "message": "Izen"
-                },
-                "description": {
-                    "forwardToDomain": "",
-                    "message": "",
-                    "modal": "",
-                    "email": ""
-                },
-                "message": {
-                    "submissionSuccess": ""
                 }
-            },
-            "FilterModal": {
+            }
+        },
+        "notifications": {
+            "NotificationRow": {
                 "button": {
-                    "cancel": "Sefex",
-                    "hide": ""
-                },
-                "message": {
-                    "success": ""
-                },
-                "header": {
-                    "modal": "",
-                    "failure": ""
-                },
-                "warning": {
-                    "createFilter": {
-                        "listItem2": "",
-                        "listItem3": "",
-                        "listItem1": "",
-                        "listItem4": "",
-                        "listIntro": ""
-                    }
-                },
-                "help": {
-                    "createFilter": ""
+                    "approve": "Qbel",
+                    "markRead": "Creḍ yettwaɣṛa",
+                    "markUnread": "Creḍ ur yettwaɣra ara",
+                    "reject": "Agi"
                 }
+            }
+        },
+        "SetInstanceModal": {
+            "button": {
+                "cancel": "Sefex",
+                "submit": "Envoyer"
+            }
+        },
+        "Queue": {
+            "button": {
+                "clear": "Effacer",
+                "close": "Mdel"
+            },
+            "label": {
+                "duration": "Durée",
+                "next": "Tafuɣalt tuḍfirt",
+                "pause": "En Pause",
+                "play": "Seddu",
+                "previous": "Tafuɣalt tuzwirt",
+                "remove": "Supprimer",
+                "restart": "Tafuɣalt tuḍfirt"
             }
         },
         "federation": {
             "FetchButton": {
-                "description": {
-                    "failure": "",
-                    "success": "",
-                    "pending": "",
-                    "skipped": ""
+                "button": {
+                    "close": "Mdel"
                 },
                 "table": {
                     "error": {
                         "value": {
-                            "httpError": "",
-                            "invalidAttributesError": "",
-                            "connectionError": "",
-                            "httpStatus": "",
-                            "timeoutError": "",
-                            "invalidJsonError": "",
                             "unknownError": "Tuccḍa tarussint"
-                        },
-                        "label": {
-                            "detail": "",
-                            "type": ""
                         }
                     }
-                },
-                "button": {
-                    "close": "Mdel",
-                    "reload": ""
-                },
-                "header": {
-                    "saveFailure": "",
-                    "failure": "",
-                    "pending": "",
-                    "success": "",
-                    "skipped": "",
-                    "refresh": ""
-                },
-                "loader": {
-                    "fetchRequest": "",
-                    "awaitingResult": ""
                 }
             },
             "LibraryWidget": {
-                "empty": {
-                    "noMatch": ""
-                },
                 "button": {
                     "showMore": "Ssken-d ugar"
                 }
             }
         },
         "ShortcutsModal": {
-            "shortcut": {
-                "audio": {
-                    "label": "",
-                    "clearQueue": "",
-                    "decreaseVolume": "",
-                    "expandQueue": "",
-                    "increaseVolume": "",
-                    "playPause": "",
-                    "playNext": "",
-                    "playPrevious": "",
-                    "seekBack30": "",
-                    "seekBack5": "",
-                    "seekForward30": "",
-                    "seekForward5": "",
-                    "shuffleQueue": "",
-                    "toggleFavorite": "",
-                    "toggleMute": "",
-                    "toggleLoop": ""
-                },
-                "general": {
-                    "focus": "",
-                    "label": "",
-                    "show": "",
-                    "unfocus": ""
-                }
-            },
             "button": {
                 "close": "Mdel"
             },
@@ -2736,68 +1438,25 @@
                 "modal": "Inegzumen n unasiw"
             }
         },
-        "SetInstanceModal": {
-            "button": {
-                "cancel": "Sefex",
-                "submit": "Envoyer"
-            },
+        "Home": {
             "header": {
-                "chooseInstance": "",
-                "failure": "",
-                "suggestions": ""
+                "contact": "Anermis",
+                "login": "Qqen",
+                "signup": "Jerred",
+                "statistics": "Statistiques"
             },
-            "label": {
-                "url": ""
-            },
-            "help": {
-                "notFunkwhaleServer": "",
-                "serverDown": "",
-                "selectPod": ""
-            },
-            "message": {
-                "newUrl": ""
-            }
-        },
-        "Queue": {
-            "button": {
-                "clear": "Effacer",
-                "close": "Mdel",
-                "stopRadio": ""
-            },
-            "label": {
-                "duration": "Durée",
-                "addArtistContentFilter": "",
-                "next": "Tafuɣalt tuḍfirt",
-                "pause": "En Pause",
-                "play": "Seddu",
-                "previous": "Tafuɣalt tuzwirt",
-                "queue": "",
-                "remove": "Supprimer",
-                "restart": "Tafuɣalt tuḍfirt"
-            },
-            "message": {
-                "radio": "",
-                "automaticPlay": ""
-            },
-            "header": {
-                "failure": "",
-                "radio": ""
-            },
-            "meta": {
-                "queuePosition": ""
-            },
-            "warning": {
-                "connectivity": ""
+            "title": "Agejdan",
+            "link": {
+                "learnMore": "Issin ugar",
+                "mobileApps": {
+                    "label": "Isnasen izirazen"
+                }
             }
         },
         "forms": {
             "PasswordInput": {
                 "button": {
                     "copy": "Copier"
-                },
-                "title": "",
-                "message": {
-                    "copy": ""
                 }
             }
         },
@@ -2808,51 +1467,15 @@
                 }
             },
             "Button": {
-                "startRadio": "Liste de lecture",
-                "stopRadio": ""
+                "startRadio": "Liste de lecture"
             }
         },
-        "RemoteSearchForm": {
-            "header": {
-                "fetchFailed": ""
-            },
-            "button": {
-                "fediverse": "",
-                "rss": "",
-                "search": "Anadi"
-            },
-            "label": {
-                "fediverse": {
-                    "fieldLabel": "",
-                    "title": ""
-                },
-                "rss": {
-                    "fieldPlaceholder": "",
-                    "fieldLabel": "",
-                    "title": ""
-                }
-            },
-            "warning": {
-                "unsupported": ""
-            },
-            "error": {
-                "fetchFailed": ""
-            },
-            "description": {
-                "fediverse": "",
-                "rss": ""
-            }
-        },
-        "PageNotFound": {
+        "About": {
             "link": {
-                "home": ""
+                "learnMore": "Issin ugar"
             },
-            "title": "Ulac asebter",
             "header": {
-                "pageNotFound": ""
-            },
-            "message": {
-                "pageNotFound": ""
+                "signup": "Jerred"
             }
         },
         "vui": {
@@ -2862,11 +1485,12 @@
                 "previous": "Tafuɣalt tuzwirt"
             }
         },
-        "tags": {
-            "List": {
-                "button": {
-                    "more": ""
-                }
+        "PageNotFound": {
+            "title": "Ulac asebter"
+        },
+        "RemoteSearchForm": {
+            "button": {
+                "search": "Anadi"
             }
         }
     },
@@ -2874,84 +1498,27 @@
         "channels": {
             "DetailBase": {
                 "meta": {
-                    "episodes": "",
-                    "listenings": "Iɣewwaṛen n umiḍan | Iɣewwaṛen n umiḍan",
-                    "subscribers": "",
-                    "tracks": ""
-                },
-                "link": {
-                    "channelEpisodes": "",
-                    "mirrored": "",
-                    "moderation": "",
-                    "channelOverview": "Agzul",
-                    "channelTracks": "Pistes",
-                    "domainView": ""
-                },
-                "header": {
-                    "artistChannel": "",
-                    "podcastChannel": ""
+                    "listenings": "Iɣewwaṛen n umiḍan | Iɣewwaṛen n umiḍan"
                 },
                 "button": {
                     "cancel": "Sefex",
                     "confirm": "Kkes",
-                    "delete": "",
                     "edit": "Ẓreg…",
                     "embed": "Seddu",
                     "play": "Seddu",
-                    "updateChannel": "",
                     "upload": "Sali"
                 },
-                "title": "",
-                "modal": {
-                    "subscribe": {
-                        "rss": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
-                        },
-                        "fediverse": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
-                        },
-                        "funkwhale": {
-                            "header": ""
-                        },
-                        "header": ""
-                    },
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "embed": {
-                        "header": ""
-                    }
+                "link": {
+                    "channelOverview": "Agzul",
+                    "channelTracks": "Pistes"
                 }
             },
             "DetailOverview": {
                 "link": {
-                    "addAlbum": "Rnu amaynut",
-                    "erroredUploads": "",
-                    "skippedUploads": ""
+                    "addAlbum": "Rnu amaynut"
                 },
                 "header": {
-                    "albums": "",
-                    "latestEpisodes": "",
-                    "latestTracks": "",
-                    "series": "SÃ©ries",
-                    "uploadsFailure": "",
-                    "uploadsProcessing": "",
-                    "uploadsSuccess": ""
-                },
-                "meta": {
-                    "progress": ""
-                },
-                "message": {
-                    "processing": ""
+                    "series": "SÃ©ries"
                 }
             },
             "SubscriptionsList": {
@@ -2962,10 +1529,6 @@
                     "cancel": "Sefex",
                     "subscribe": "Jerred"
                 },
-                "placeholder": {
-                    "search": ""
-                },
-                "title": "",
                 "modal": {
                     "subscription": {
                         "header": "Souscription"
@@ -2973,306 +1536,19 @@
                 }
             }
         },
-        "content": {
-            "libraries": {
-                "Card": {
-                    "meta": {
-                        "tracks": ""
-                    },
-                    "link": {
-                        "details": "Timkaṛdiyin"
-                    },
-                    "label": {
-                        "size": ""
-                    },
-                    "button": {
-                        "upload": "Sali"
-                    }
-                },
-                "Quota": {
-                    "label": {
-                        "currentUsage": "",
-                        "errored": "",
-                        "pending": "",
-                        "skipped": ""
-                    },
-                    "header": {
-                        "currentUsage": ""
-                    },
-                    "loading": {
-                        "currentUsage": ""
-                    },
-                    "button": {
-                        "purge": "Sfeḍ"
-                    },
-                    "modal": {
-                        "purgeErrored": {
-                            "header": "",
-                            "content": {
-                                "description": ""
-                            }
-                        },
-                        "purgePending": {
-                            "header": "",
-                            "content": {
-                                "description": ""
-                            }
-                        },
-                        "purgeSkipped": {
-                            "header": "",
-                            "content": {
-                                "description": ""
-                            }
-                        }
-                    },
-                    "link": {
-                        "viewFiles": ""
-                    }
-                },
-                "FilesTable": {
-                    "table": {
-                        "file": {
-                            "header": {
-                                "album": "Album",
-                                "artist": "Artiste",
-                                "duration": "Durée",
-                                "importStatus": "",
-                                "size": "Teγzi",
-                                "title": "Azwel",
-                                "uploadDate": ""
-                            }
-                        }
-                    },
-                    "option": {
-                        "status": {
-                            "all": "Akkw",
-                            "draft": "Arewway",
-                            "failed": "Yecceḍ",
-                            "finished": "Immed",
-                            "pending": "Yegguni",
-                            "skipped": "Yettawazgel"
-                        }
-                    },
-                    "ordering": {
-                        "direction": {
-                            "ascending": "Croissant",
-                            "descending": "Décroissant",
-                            "label": ""
-                        },
-                        "label": "Tri"
-                    },
-                    "action": {
-                        "delete": "Kkes",
-                        "restartImport": ""
-                    },
-                    "label": {
-                        "importStatus": "",
-                        "search": "Anadi"
-                    },
-                    "notApplicable": "Wlac",
-                    "empty": {
-                        "noTracks": ""
-                    },
-                    "placeholder": {
-                        "search": ""
-                    },
-                    "button": {
-                        "showStatus": ""
-                    },
-                    "pagination": {
-                        "results": ""
-                    }
-                },
-                "Home": {
-                    "link": {
-                        "createLibrary": ""
-                    },
-                    "loading": {
-                        "libraries": ""
-                    },
-                    "empty": {
-                        "noLibrary": ""
-                    },
-                    "header": {
-                        "libraries": ""
-                    }
-                },
-                "Form": {
-                    "button": {
-                        "create": "",
-                        "delete": "Kkes",
-                        "confirm": "",
-                        "update": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "label": {
-                        "description": "Aglam",
-                        "name": "Isem",
-                        "visibility": "Tametwalant"
-                    },
-                    "header": {
-                        "failure": "Erreur"
-                    },
-                    "description": {
-                        "library": "",
-                        "visibility": ""
-                    },
-                    "message": {
-                        "libraryCreated": "",
-                        "libraryDeleted": "",
-                        "libraryUpdated": ""
-                    },
-                    "placeholder": {
-                        "name": "",
-                        "description": ""
-                    }
+        "Notifications": {
+            "option": {
+                "delay": {
+                    "30": "30 n wussan",
+                    "never": "Werǧin"
                 }
             },
-            "remote": {
-                "Card": {
-                    "meta": {
-                        "tracks": "",
-                        "failedTracks": "",
-                        "lastUpdate": ""
-                    },
-                    "modal": {
-                        "unfollow": {
-                            "content": {
-                                "warning": ""
-                            },
-                            "header": ""
-                        }
-                    },
-                    "button": {
-                        "cancel": "Sefsex asuter n uḍfaṛ",
-                        "follow": "Ḍfeṛ",
-                        "pending": "",
-                        "unfollow": "Ur ḍḍafaṛ ara"
-                    },
-                    "link": {
-                        "scanDetails": "Talqayt",
-                        "scan": "Snirem tura"
-                    },
-                    "label": {
-                        "scanFailure": "",
-                        "scanPending": "",
-                        "scanSuccess": "",
-                        "scanPartialSuccess": "",
-                        "scanProgress": "",
-                        "sharingLink": ""
-                    },
-                    "message": {
-                        "scanLaunched": "",
-                        "scanSkipped": ""
-                    },
-                    "tooltip": {
-                        "private": "",
-                        "public": ""
-                    }
-                },
-                "ScanForm": {
-                    "header": {
-                        "failure": ""
-                    },
-                    "placeholder": {
-                        "url": ""
-                    },
-                    "label": {
-                        "search": ""
-                    },
-                    "button": {
-                        "submit": "Envoyer"
-                    }
-                },
-                "Home": {
-                    "header": {
-                        "knownLibraries": "",
-                        "remoteLibraries": ""
-                    },
-                    "loading": {
-                        "remoteLibraries": ""
-                    },
-                    "button": {
-                        "refresh": "Smiren"
-                    },
-                    "description": {
-                        "remoteLibraries": ""
-                    }
-                }
+            "link": {
+                "donate": "Tawsa"
             },
-            "Home": {
-                "title": "",
-                "description": {
-                    "follow": "",
-                    "channel": {
-                        "1": "",
-                        "2": ""
-                    },
-                    "upload": ""
-                },
-                "header": {
-                    "follow": "",
-                    "channel": "",
-                    "upload": ""
-                },
-                "button": {
-                    "start": "Aha bdu tura"
-                },
-                "help": {
-                    "uploadQuota": ""
-                }
-            },
-            "Base": {
-                "title": "",
-                "link": {
-                    "libraries": "Timkaṛdiyin",
-                    "tracks": "Pistes"
-                },
-                "menu": {
-                    "secondary": "Umuɣ wis sin"
-                }
-            }
+            "title": "Tilγa"
         },
         "library": {
-            "LibraryBase": {
-                "meta": {
-                    "tracks": ""
-                },
-                "link": {
-                    "albums": "",
-                    "artists": "",
-                    "moderation": "",
-                    "owner": "",
-                    "tracks": "Pistes",
-                    "domain": ""
-                },
-                "button": {
-                    "edit": "Beddel",
-                    "upload": "Sali"
-                },
-                "title": "Tanedlist",
-                "label": {
-                    "private": "Uslig",
-                    "public": "Azayez",
-                    "instance": "",
-                    "sharingLink": ""
-                },
-                "description": {
-                    "sharingLink": ""
-                },
-                "tooltip": {
-                    "private": "",
-                    "public": "",
-                    "instance": ""
-                }
-            },
             "Edit": {
                 "button": {
                     "accept": "Qbel",
@@ -3282,7 +1558,6 @@
                     "action": {
                         "status": {
                             "accepted": "Yettwaqbel",
-                            "pending": "",
                             "rejected": "Yerrad"
                         },
                         "header": {
@@ -3294,207 +1569,257 @@
                     }
                 },
                 "header": {
-                    "followers": "Imeḍfaṛen",
-                    "libraryContents": ""
-                },
-                "loading": {
-                    "followers": ""
-                },
-                "empty": {
-                    "noFollowers": ""
+                    "followers": "Imeḍfaṛen"
                 }
             },
-            "DetailAlbums": {
-                "empty": {
-                    "upload": "",
-                    "follow": ""
-                }
-            },
-            "DetailOverview": {
-                "empty": {
-                    "upload": "",
-                    "follow": ""
-                }
-            },
-            "DetailTracks": {
-                "empty": {
-                    "upload": "",
-                    "follow": ""
-                }
-            }
-        },
-        "auth": {
-            "ProfileBase": {
-                "title": "",
-                "link": {
-                    "activity": "Aqeddic",
-                    "moderation": "",
-                    "overview": "Agzul",
-                    "domainView": ""
-                },
-                "label": {
-                    "self": ""
-                }
-            },
-            "PasswordReset": {
-                "label": {
-                    "email": "Tansa n imayl"
-                },
+            "LibraryBase": {
                 "button": {
-                    "requestReset": ""
+                    "edit": "Beddel",
+                    "upload": "Sali"
                 },
-                "link": {
-                    "back": "Uγal γer unekcum"
-                },
-                "placeholder": {
-                    "email": ""
-                },
-                "header": {
-                    "failure": "",
-                    "reset": ""
-                },
-                "title": "",
-                "help": {
-                    "form": ""
-                }
-            },
-            "ProfileOverview": {
-                "link": {
-                    "addNew": "Rnu amaynut"
-                },
-                "modal": {
-                    "createChannel": {
-                        "artist": {
-                            "header": ""
-                        },
-                        "header": "",
-                        "podcast": {
-                            "header": ""
-                        }
-                    }
-                },
-                "button": {
-                    "cancel": "Sefex",
-                    "createChannel": "",
-                    "next": "",
-                    "previous": ""
-                },
-                "header": {
-                    "channels": "Canaux ",
-                    "sharedLibraries": "",
-                    "libraries": ""
-                }
-            },
-            "PasswordResetConfirm": {
-                "link": {
-                    "back": "Uγal γer unekcum",
-                    "login": ""
-                },
-                "title": "",
-                "header": {
-                    "failure": "",
-                    "success": ""
-                },
-                "message": {
-                    "requestSent": "",
-                    "success": ""
-                },
+                "title": "Tanedlist",
                 "label": {
-                    "newPassword": "Awal uffir amaynut"
-                },
-                "button": {
-                    "update": ""
-                }
-            },
-            "EmailConfirm": {
-                "title": "",
-                "label": {
-                    "confirmationCode": ""
-                },
-                "header": {
-                    "failure": "",
-                    "success": ""
+                    "private": "Uslig",
+                    "public": "Azayez"
                 },
                 "link": {
-                    "login": "",
-                    "back": ""
-                },
-                "message": {
-                    "success": ""
+                    "tracks": "Pistes"
                 }
-            },
-            "Signup": {
-                "header": {
-                    "createAccount": "Rnu amiḍan"
-                },
-                "title": "Jerred"
-            },
-            "Login": {
-                "title": "Qqen",
-                "header": {
-                    "login": ""
-                }
-            },
-            "Callback": {
-                "header": {
-                    "loggingIn": ""
-                }
-            },
-            "Plugins": {
-                "title": "Sefrek iseqdacen"
-            },
-            "ProfileActivity": {
-                "header": {
-                    "playlists": "Tibdarin n tɣuri",
-                    "recentlyFavorited": "",
-                    "recentlyListened": ""
-                }
-            }
-        },
-        "Notifications": {
-            "option": {
-                "delay": {
-                    "30": "30 n wussan",
-                    "60": "",
-                    "90": "",
-                    "never": "Werǧin"
-                }
-            },
-            "link": {
-                "help": "",
-                "donate": "Tawsa"
-            },
-            "header": {
-                "funkwhaleSupport": "",
-                "instanceSupport": "",
-                "messages": "",
-                "notifications": ""
-            },
-            "button": {
-                "submit": "",
-                "read": ""
-            },
-            "loading": {
-                "notifications": ""
-            },
-            "empty": {
-                "notifications": ""
-            },
-            "title": "Tilγa",
-            "label": {
-                "reminder": "",
-                "showRead": ""
-            },
-            "message": {
-                "funkwhaleSupport": ""
             }
         },
         "admin": {
+            "library": {
+                "UploadDetail": {
+                    "table": {
+                        "activity": {
+                            "accessedDate": "Azemz n unekcum"
+                        },
+                        "audioContent": {
+                            "bitrate": {
+                                "label": "Débit "
+                            },
+                            "duration": "Durée",
+                            "size": "Teγzi",
+                            "track": "Piste"
+                        },
+                        "upload": {
+                            "name": "Isem"
+                        }
+                    },
+                    "link": {
+                        "account": "Amiḍan",
+                        "domain": "Taγult",
+                        "library": "Tanedlist",
+                        "type": "Tawsit",
+                        "visibility": "Tametwalant"
+                    },
+                    "header": {
+                        "activity": "Aqeddic",
+                        "local": "Local"
+                    },
+                    "button": {
+                        "delete": "Kkes",
+                        "download": "Sider"
+                    },
+                    "notApplicable": "Wlac"
+                },
+                "LibraryDetail": {
+                    "link": {
+                        "account": "Amiḍan",
+                        "domain": "Taγult",
+                        "tracks": "Pistes",
+                        "uploads": "Ifuyla yettwaznen",
+                        "visibility": "Tametwalant"
+                    },
+                    "header": {
+                        "activity": "Aqeddic",
+                        "local": "Local"
+                    },
+                    "button": {
+                        "delete": "Kkes"
+                    },
+                    "table": {
+                        "library": {
+                            "description": "Aglam",
+                            "name": "Isem"
+                        },
+                        "activity": {
+                            "followers": "Imeḍfaṛen"
+                        }
+                    }
+                },
+                "AlbumDetail": {
+                    "header": {
+                        "activity": "Aqeddic",
+                        "local": "Local"
+                    },
+                    "link": {
+                        "artist": "Artiste",
+                        "domain": "Taγult",
+                        "edits": "Tiẓrigin",
+                        "libraries": "Timkaṛdiyin",
+                        "tracks": "Pistes",
+                        "uploads": "Ifuyla yettwaznen"
+                    },
+                    "button": {
+                        "delete": "Kkes",
+                        "edit": "Beddel"
+                    },
+                    "table": {
+                        "album": {
+                            "description": "Aglam",
+                            "title": "Azwel"
+                        },
+                        "activity": {
+                            "playlists": "Tibdarin n tɣuri"
+                        }
+                    }
+                },
+                "ArtistDetail": {
+                    "header": {
+                        "activity": "Aqeddic",
+                        "local": "Local"
+                    },
+                    "link": {
+                        "category": "Taggayt",
+                        "domain": "Taγult",
+                        "edits": "Tiẓrigin",
+                        "libraries": "Timkaṛdiyin",
+                        "tracks": "Pistes",
+                        "uploads": "Ifuyla yettwaznen"
+                    },
+                    "button": {
+                        "delete": "Kkes",
+                        "edit": "Beddel"
+                    },
+                    "table": {
+                        "artist": {
+                            "description": "Aglam",
+                            "name": "Isem"
+                        },
+                        "activity": {
+                            "playlists": "Tibdarin n tɣuri"
+                        }
+                    }
+                },
+                "TagDetail": {
+                    "header": {
+                        "activity": "Aqeddic"
+                    },
+                    "button": {
+                        "delete": "Kkes"
+                    },
+                    "table": {
+                        "tag": {
+                            "name": "Isem"
+                        }
+                    },
+                    "link": {
+                        "tracks": "Pistes"
+                    }
+                },
+                "TrackDetail": {
+                    "header": {
+                        "activity": "Aqeddic",
+                        "local": "Local"
+                    },
+                    "link": {
+                        "album": "Album",
+                        "artist": "Artiste",
+                        "domain": "Taγult",
+                        "edits": "Tiẓrigin",
+                        "libraries": "Timkaṛdiyin",
+                        "uploads": "Ifuyla yettwaznen"
+                    },
+                    "table": {
+                        "track": {
+                            "copyright": "Izerfan ttwaḥerzen",
+                            "description": "Aglam",
+                            "license": "Licence",
+                            "position": "Adeg",
+                            "title": "Azwel"
+                        },
+                        "activity": {
+                            "playlists": "Tibdarin n tɣuri"
+                        }
+                    },
+                    "button": {
+                        "delete": "Kkes",
+                        "edit": "Beddel"
+                    }
+                },
+                "Base": {
+                    "link": {
+                        "channels": "Canaux ",
+                        "edits": "Tiẓrigin",
+                        "libraries": "Timkaṛdiyin",
+                        "tags": "Tibzimin",
+                        "tracks": "Pistes",
+                        "uploads": "Ifuyla yettwaznen"
+                    },
+                    "menu": {
+                        "secondary": "Umuɣ wis sin"
+                    }
+                },
+                "EditsList": {
+                    "title": "Tiẓrigin"
+                }
+            },
+            "ChannelDetail": {
+                "table": {
+                    "channelData": {
+                        "account": "Amiḍan",
+                        "category": "Taggayt",
+                        "description": "Aglam",
+                        "domain": "Taγult",
+                        "name": "Isem",
+                        "rss": "Asuddem RSS",
+                        "url": "Tansa URL"
+                    },
+                    "activity": {
+                        "edits": "Tiẓrigin",
+                        "playlists": "Tibdarin n tɣuri"
+                    },
+                    "audioContent": {
+                        "tracks": "Pistes",
+                        "uploads": "Ifuyla yettwaznen"
+                    }
+                },
+                "header": {
+                    "activity": "Aqeddic"
+                },
+                "button": {
+                    "delete": "Kkes"
+                },
+                "label": {
+                    "local": "Local"
+                }
+            },
             "moderation": {
+                "Base": {
+                    "link": {
+                        "accounts": "Imiḍanen",
+                        "domains": "Tiɣula",
+                        "reports": "Ineqqisen",
+                        "userRequests": "Tuttriwin n useqdac"
+                    },
+                    "menu": {
+                        "secondary": "Umuɣ wis sin"
+                    }
+                },
                 "AccountsDetail": {
+                    "header": {
+                        "activity": "Aqeddic"
+                    },
+                    "link": {
+                        "channels": "Canaux ",
+                        "domain": "Taγult",
+                        "libraries": "Timkaṛdiyin",
+                        "tracks": "Pistes",
+                        "uploads": "Ifuyla yettwaznen"
+                    },
                     "table": {
                         "accountData": {
-                            "username": "Isem n useqdac",
                             "loginStatus": {
                                 "disabled": "Ssens",
                                 "enabled": "Yermed",
@@ -3503,153 +1828,56 @@
                             "displayName": "Isem ara d-yettwaskanen",
                             "email": "Tansa n imayl",
                             "lastActivity": "Armud aneggaru",
-                            "lastChecked": "",
                             "permissions": "Tisirag",
-                            "signupDate": "",
-                            "userType": "Tawsit"
+                            "userType": "Tawsit",
+                            "username": "Isem n useqdac"
                         },
                         "audioContent": {
-                            "cachedSize": "",
-                            "megabyte": "KAṬ",
-                            "totalSize": "",
-                            "uploadQuota": ""
-                        },
-                        "activity": {
-                            "emittedFollows": "",
-                            "emittedMessages": "",
-                            "firstSeen": "",
-                            "receivedFollows": ""
+                            "megabyte": "KAṬ"
                         }
-                    },
-                    "header": {
-                        "accountData": "",
-                        "activity": "Aqeddic",
-                        "audioContent": "",
-                        "localAccount": "",
-                        "activePolicy": "",
-                        "noPolicy": ""
-                    },
-                    "button": {
-                        "addPolicy": ""
-                    },
-                    "link": {
-                        "albums": "",
-                        "artists": "",
-                        "channels": "Canaux ",
-                        "domain": "Taγult",
-                        "libraries": "Timkaṛdiyin",
-                        "linkedReports": "",
-                        "openProfile": "",
-                        "remoteProfile": "",
-                        "requests": "",
-                        "tracks": "Pistes",
-                        "uploads": "Ifuyla yettwaznen",
-                        "django": ""
-                    },
-                    "tooltip": {
-                        "uploadQuota": ""
                     },
                     "option": {
                         "permission": {
                             "library": "Tanedlist",
-                            "moderation": "",
                             "settings": "Iɣewwaṛen"
                         }
                     },
-                    "description": {
-                        "policy": ""
-                    },
-                    "notApplicable": "Wlac",
-                    "warning": {
-                        "stats": ""
-                    }
-                },
-                "Base": {
-                    "link": {
-                        "accounts": "Imiḍanen",
-                        "domains": "Tiɣula",
-                        "reports": "Ineqqisen",
-                        "userRequests": "Tuttriwin n useqdac"
-                    },
-                    "title": "",
-                    "menu": {
-                        "secondary": "Umuɣ wis sin"
-                    }
+                    "notApplicable": "Wlac"
                 },
                 "DomainsDetail": {
                     "header": {
-                        "activity": "Aqeddic",
-                        "audioContent": "",
-                        "instanceData": "",
-                        "activePolicy": "",
-                        "noPolicy": ""
-                    },
-                    "button": {
-                        "addPolicy": "",
-                        "addToAllowList": "",
-                        "refreshNodeInfo": "",
-                        "removeFromAllowList": ""
+                        "activity": "Aqeddic"
                     },
                     "link": {
-                        "albums": "",
-                        "artists": "",
                         "channels": "Canaux ",
-                        "knownAccounts": "",
                         "libraries": "Timkaṛdiyin",
-                        "website": "",
                         "tracks": "Pistes",
-                        "uploads": "Ifuyla yettwaznen",
-                        "django": ""
+                        "uploads": "Ifuyla yettwaznen"
                     },
+                    "notApplicable": "Wlac",
                     "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "activity": {
-                            "emittedFollows": "",
-                            "emittedMessages": "",
-                            "firstSeen": "",
-                            "receivedFollows": ""
-                        },
                         "instanceData": {
-                            "nodeInfoStatus": {
-                                "value": "",
-                                "label": "Addad"
-                            },
+                            "domainName": "Isem",
                             "inAllowList": {
-                                "label": "",
                                 "false": "Uhu",
                                 "true": "Ih"
                             },
-                            "lastChecked": "",
-                            "domainName": "Isem",
                             "software": {
                                 "label": "Aseɣẓan"
                             },
-                            "totalUsers": ""
+                            "nodeInfoStatus": {
+                                "label": "Addad"
+                            }
                         }
-                    },
-                    "description": {
-                        "policy": ""
-                    },
-                    "notApplicable": "Wlac",
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "DomainsList": {
                     "button": {
                         "add": "Rnu"
                     },
-                    "label": {
-                        "addDomain": "",
-                        "addToAllowList": ""
-                    },
                     "title": "Tiɣula",
                     "header": {
-                        "domains": "Tiɣula",
-                        "failure": ""
+                        "domains": "Tiɣula"
                     }
                 },
                 "ReportsList": {
@@ -3675,9 +1903,6 @@
                     "label": {
                         "search": "Anadi",
                         "status": "Addad"
-                    },
-                    "placeholder": {
-                        "search": ""
                     }
                 },
                 "RequestsList": {
@@ -3685,8 +1910,7 @@
                         "status": {
                             "all": "Akkw",
                             "approved": "Yettwaqbel",
-                            "pending": "Yegguni",
-                            "refused": ""
+                            "pending": "Yegguni"
                         }
                     },
                     "ordering": {
@@ -3701,396 +1925,16 @@
                         "search": "Anadi",
                         "status": "Addad"
                     },
-                    "placeholder": {
-                        "search": ""
-                    },
                     "title": "Tuttriwin n useqdac",
                     "header": {
                         "userRequests": "Tuttriwin n useqdac"
                     }
                 }
             },
-            "library": {
-                "UploadDetail": {
-                    "table": {
-                        "activity": {
-                            "accessedDate": "Azemz n unekcum",
-                            "firstSeen": ""
-                        },
-                        "audioContent": {
-                            "bitrate": {
-                                "label": "Débit "
-                            },
-                            "cachedSize": "",
-                            "duration": "Durée",
-                            "size": "Teγzi",
-                            "track": "Piste"
-                        },
-                        "upload": {
-                            "name": "Isem"
-                        }
-                    },
-                    "link": {
-                        "account": "Amiḍan",
-                        "domain": "Taγult",
-                        "importStatus": "",
-                        "library": "Tanedlist",
-                        "remoteProfile": "",
-                        "type": "Tawsit",
-                        "django": "",
-                        "visibility": "Tametwalant"
-                    },
-                    "header": {
-                        "activity": "Aqeddic",
-                        "audioContent": "",
-                        "local": "Local",
-                        "uploadData": ""
-                    },
-                    "button": {
-                        "delete": "Kkes",
-                        "download": "Sider"
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "notApplicable": "Wlac"
-                },
-                "LibraryDetail": {
-                    "link": {
-                        "account": "Amiḍan",
-                        "albums": "",
-                        "artists": "",
-                        "domain": "Taγult",
-                        "reports": "",
-                        "remoteProfile": "",
-                        "tracks": "Pistes",
-                        "uploads": "Ifuyla yettwaznen",
-                        "django": "",
-                        "visibility": "Tametwalant"
-                    },
-                    "header": {
-                        "activity": "Aqeddic",
-                        "audioContent": "",
-                        "libraryData": "",
-                        "local": "Local"
-                    },
-                    "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "library": {
-                            "description": "Aglam",
-                            "name": "Isem"
-                        },
-                        "activity": {
-                            "firstSeen": "",
-                            "followers": "Imeḍfaṛen"
-                        }
-                    },
-                    "button": {
-                        "delete": "Kkes"
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
-                    }
-                },
-                "AlbumDetail": {
-                    "header": {
-                        "activity": "Aqeddic",
-                        "albumData": "",
-                        "audioContent": "",
-                        "local": "Local"
-                    },
-                    "link": {
-                        "artist": "Artiste",
-                        "domain": "Taγult",
-                        "edits": "Tiẓrigin",
-                        "libraries": "Timkaṛdiyin",
-                        "reports": "",
-                        "localProfile": "",
-                        "musicbrainz": "",
-                        "remoteProfile": "",
-                        "tracks": "Pistes",
-                        "uploads": "Ifuyla yettwaznen",
-                        "django": ""
-                    },
-                    "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "album": {
-                            "description": "Aglam",
-                            "title": "Azwel"
-                        },
-                        "activity": {
-                            "favorited": "",
-                            "firstSeen": "",
-                            "listenings": "",
-                            "playlists": "Tibdarin n tɣuri"
-                        }
-                    },
-                    "button": {
-                        "delete": "Kkes",
-                        "edit": "Beddel",
-                        "remoteRefresh": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
-                    }
-                },
-                "ArtistDetail": {
-                    "header": {
-                        "activity": "Aqeddic",
-                        "artistData": "",
-                        "audioContent": "",
-                        "local": "Local"
-                    },
-                    "link": {
-                        "albums": "",
-                        "category": "Taggayt",
-                        "domain": "Taγult",
-                        "edits": "Tiẓrigin",
-                        "libraries": "Timkaṛdiyin",
-                        "reports": "",
-                        "localProfile": "",
-                        "musicbrainz": "",
-                        "remoteProfile": "",
-                        "tracks": "Pistes",
-                        "uploads": "Ifuyla yettwaznen",
-                        "django": ""
-                    },
-                    "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "artist": {
-                            "description": "Aglam",
-                            "name": "Isem"
-                        },
-                        "activity": {
-                            "favorited": "",
-                            "firstSeen": "",
-                            "listenings": "",
-                            "playlists": "Tibdarin n tɣuri"
-                        }
-                    },
-                    "button": {
-                        "delete": "Kkes",
-                        "edit": "Beddel",
-                        "remoteRefresh": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
-                    }
-                },
-                "TagDetail": {
-                    "header": {
-                        "activity": "Aqeddic",
-                        "audioContent": "",
-                        "tagData": ""
-                    },
-                    "link": {
-                        "albums": "",
-                        "artists": "",
-                        "localProfile": "",
-                        "tracks": "Pistes",
-                        "django": ""
-                    },
-                    "button": {
-                        "delete": "Kkes"
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "table": {
-                        "activity": {
-                            "firstSeen": ""
-                        },
-                        "tag": {
-                            "name": "Isem"
-                        }
-                    }
-                },
-                "TrackDetail": {
-                    "header": {
-                        "activity": "Aqeddic",
-                        "local": "Local",
-                        "trackData": ""
-                    },
-                    "link": {
-                        "album": "Album",
-                        "albumArtist": "",
-                        "artist": "Artiste",
-                        "domain": "Taγult",
-                        "edits": "Tiẓrigin",
-                        "libraries": "Timkaṛdiyin",
-                        "reports": "",
-                        "localProfile": "",
-                        "musicbrainz": "",
-                        "remoteProfile": "",
-                        "uploads": "Ifuyla yettwaznen",
-                        "django": ""
-                    },
-                    "table": {
-                        "trackData": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "track": {
-                            "copyright": "Izerfan ttwaḥerzen",
-                            "description": "Aglam",
-                            "discNumber": "",
-                            "license": "Licence",
-                            "position": "Adeg",
-                            "title": "Azwel"
-                        },
-                        "activity": {
-                            "favorited": "",
-                            "firstSeen": "",
-                            "listenings": "",
-                            "playlists": "Tibdarin n tɣuri"
-                        }
-                    },
-                    "button": {
-                        "delete": "Kkes",
-                        "edit": "Beddel",
-                        "remoteRefresh": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
-                    }
-                },
-                "Base": {
-                    "link": {
-                        "albums": "",
-                        "artists": "",
-                        "channels": "Canaux ",
-                        "edits": "Tiẓrigin",
-                        "libraries": "Timkaṛdiyin",
-                        "tags": "Tibzimin",
-                        "tracks": "Pistes",
-                        "uploads": "Ifuyla yettwaznen"
-                    },
-                    "title": "",
-                    "menu": {
-                        "secondary": "Umuɣ wis sin"
-                    }
-                },
-                "EditsList": {
-                    "title": "Tiẓrigin",
-                    "header": {
-                        "edits": ""
-                    }
-                }
-            },
-            "ChannelDetail": {
-                "table": {
-                    "channelData": {
-                        "account": "Amiḍan",
-                        "category": "Taggayt",
-                        "description": "Aglam",
-                        "domain": "Taγult",
-                        "name": "Isem",
-                        "rss": "Asuddem RSS",
-                        "url": "Tansa URL"
-                    },
-                    "audioContent": {
-                        "albums": "",
-                        "cachedSize": "",
-                        "totalSize": "",
-                        "tracks": "Pistes",
-                        "uploads": "Ifuyla yettwaznen"
-                    },
-                    "activity": {
-                        "edits": "Tiẓrigin",
-                        "favorited": "",
-                        "firstSeen": "",
-                        "linkedReports": "",
-                        "listenings": "",
-                        "playlists": "Tibdarin n tɣuri"
-                    }
-                },
-                "header": {
-                    "activity": "Aqeddic",
-                    "audioContent": "",
-                    "channelData": ""
-                },
-                "button": {
-                    "delete": "Kkes",
-                    "openRemote": "",
-                    "refresh": ""
-                },
-                "modal": {
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "label": {
-                    "local": "Local"
-                },
-                "link": {
-                    "localProfile": "",
-                    "django": ""
-                },
-                "warning": {
-                    "stats": ""
-                }
-            },
             "CommonList": {
                 "title": {
                     "accounts": "Imiḍanen",
-                    "albums": "",
-                    "artists": "",
                     "channels": "Canaux ",
-                    "invitations": "",
                     "libraries": "Timkaṛdiyin",
                     "tags": "Tibzimin",
                     "tracks": "Pistes",
@@ -4102,50 +1946,180 @@
                 "header": {
                     "channels": "Canaux ",
                     "federation": "Tamatut",
-                    "instanceInfo": "",
-                    "settings": "",
-                    "moderation": "",
                     "music": "Aẓawan",
                     "playlists": "Tibdarin n tɣuri",
                     "sections": "Sections",
                     "security": "Taγellist",
-                    "signups": "",
                     "stats": "Statistiques",
-                    "subsonic": "",
                     "ui": "Interface utilisateur"
                 }
             },
             "users": {
                 "Base": {
-                    "link": {
-                        "invitations": "",
-                        "users": "Iseqdacen"
-                    },
                     "title": "Sefrek iseqdacen",
                     "menu": {
                         "secondary": "Umuɣ wis sin"
+                    },
+                    "link": {
+                        "users": "Iseqdacen"
                     }
                 }
             }
         },
-        "Search": {
-            "label": {
-                "albums": "",
-                "artists": "",
-                "playlists": "Tibdarin n tɣuri",
-                "podcasts": "Podcasts",
-                "radios": "",
-                "series": "SÃ©ries",
-                "tags": "Tibzimin",
-                "tracks": "Pistes"
+        "auth": {
+            "PasswordReset": {
+                "label": {
+                    "email": "Tansa n imayl"
+                },
+                "link": {
+                    "back": "Uγal γer unekcum"
+                }
             },
-            "header": {
-                "search": "Anadi",
-                "remote": "",
-                "rss": ""
+            "ProfileBase": {
+                "link": {
+                    "activity": "Aqeddic",
+                    "overview": "Agzul"
+                }
             },
-            "button": {
-                "submit": ""
+            "ProfileOverview": {
+                "link": {
+                    "addNew": "Rnu amaynut"
+                },
+                "button": {
+                    "cancel": "Sefex"
+                },
+                "header": {
+                    "channels": "Canaux "
+                }
+            },
+            "PasswordResetConfirm": {
+                "link": {
+                    "back": "Uγal γer unekcum"
+                },
+                "label": {
+                    "newPassword": "Awal uffir amaynut"
+                }
+            },
+            "Signup": {
+                "header": {
+                    "createAccount": "Rnu amiḍan"
+                },
+                "title": "Jerred"
+            },
+            "Login": {
+                "title": "Qqen"
+            },
+            "Plugins": {
+                "title": "Sefrek iseqdacen"
+            },
+            "ProfileActivity": {
+                "header": {
+                    "playlists": "Tibdarin n tɣuri"
+                }
+            }
+        },
+        "content": {
+            "libraries": {
+                "FilesTable": {
+                    "table": {
+                        "file": {
+                            "header": {
+                                "album": "Album",
+                                "artist": "Artiste",
+                                "duration": "Durée",
+                                "size": "Teγzi",
+                                "title": "Azwel"
+                            }
+                        }
+                    },
+                    "option": {
+                        "status": {
+                            "all": "Akkw",
+                            "draft": "Arewway",
+                            "failed": "Yecceḍ",
+                            "finished": "Immed",
+                            "pending": "Yegguni",
+                            "skipped": "Yettawazgel"
+                        }
+                    },
+                    "ordering": {
+                        "direction": {
+                            "ascending": "Croissant",
+                            "descending": "Décroissant"
+                        },
+                        "label": "Tri"
+                    },
+                    "action": {
+                        "delete": "Kkes"
+                    },
+                    "notApplicable": "Wlac",
+                    "label": {
+                        "search": "Anadi"
+                    }
+                },
+                "Form": {
+                    "button": {
+                        "delete": "Kkes"
+                    },
+                    "label": {
+                        "description": "Aglam",
+                        "name": "Isem",
+                        "visibility": "Tametwalant"
+                    },
+                    "header": {
+                        "failure": "Erreur"
+                    }
+                },
+                "Card": {
+                    "link": {
+                        "details": "Timkaṛdiyin"
+                    },
+                    "button": {
+                        "upload": "Sali"
+                    }
+                },
+                "Quota": {
+                    "button": {
+                        "purge": "Sfeḍ"
+                    }
+                }
+            },
+            "remote": {
+                "Card": {
+                    "button": {
+                        "cancel": "Sefsex asuter n uḍfaṛ",
+                        "follow": "Ḍfeṛ",
+                        "unfollow": "Ur ḍḍafaṛ ara"
+                    },
+                    "link": {
+                        "scanDetails": "Talqayt",
+                        "scan": "Snirem tura"
+                    }
+                },
+                "Home": {
+                    "button": {
+                        "refresh": "Smiren"
+                    }
+                },
+                "ScanForm": {
+                    "button": {
+                        "submit": "Envoyer"
+                    }
+                }
+            },
+            "Home": {
+                "button": {
+                    "start": "Aha bdu tura"
+                }
+            },
+            "Base": {
+                "link": {
+                    "libraries": "Timkaṛdiyin",
+                    "tracks": "Pistes"
+                },
+                "menu": {
+                    "secondary": "Umuɣ wis sin"
+                }
             }
         },
         "playlists": {
@@ -4159,24 +2133,12 @@
                     "label": "Tri"
                 },
                 "header": {
-                    "browse": "",
                     "playlists": "Tibdarin n tɣuri"
                 },
-                "button": {
-                    "create": "",
-                    "manage": "",
+                "label": {
                     "search": "Anadi"
                 },
-                "placeholder": {
-                    "search": ""
-                },
-                "empty": {
-                    "noResults": ""
-                },
-                "pagination": {
-                    "results": ""
-                },
-                "label": {
+                "button": {
                     "search": "Anadi"
                 }
             },
@@ -4184,30 +2146,10 @@
                 "button": {
                     "cancel": "Sefex",
                     "delete": "Kkes",
-                    "confirm": "",
                     "edit": "Beddel",
-                    "embed": "Seddu",
-                    "playAll": "",
-                    "stopEdit": ""
-                },
-                "modal": {
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "embed": {
-                        "header": ""
-                    }
+                    "embed": "Seddu"
                 },
                 "title": "Liste de lecture",
-                "meta": {
-                    "tracks": ""
-                },
-                "empty": {
-                    "noTracks": ""
-                },
                 "header": {
                     "tracks": "Pistes"
                 }
@@ -4216,84 +2158,29 @@
         "radios": {
             "Detail": {
                 "button": {
-                    "confirm": "",
                     "edit": "Ẓreg…"
                 },
-                "modal": {
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "empty": {
-                    "noTracks": ""
-                },
-                "title": "",
                 "header": {
                     "tracks": "Pistes"
                 }
             }
+        },
+        "Search": {
+            "label": {
+                "playlists": "Tibdarin n tɣuri",
+                "podcasts": "Podcasts",
+                "series": "SÃ©ries",
+                "tags": "Tibzimin",
+                "tracks": "Pistes"
+            },
+            "header": {
+                "search": "Anadi"
+            }
         }
     },
     "composables": {
-        "audio": {
-            "usePlayOptions": {
-                "addToQueueMessage": ""
-            }
-        },
         "locale": {
             "useSharedLabels": {
-                "scopes": {
-                    "libraries": {
-                        "description": "",
-                        "label": ""
-                    },
-                    "filters": {
-                        "description": "",
-                        "label": ""
-                    },
-                    "profile": {
-                        "description": "",
-                        "label": "Ameγnu"
-                    },
-                    "edits": {
-                        "description": "",
-                        "label": "Tiẓrigin"
-                    },
-                    "follows": {
-                        "description": "",
-                        "label": "I yeṭṭafaṛ"
-                    },
-                    "listenings": {
-                        "description": "",
-                        "label": ""
-                    },
-                    "reports": {
-                        "description": "",
-                        "label": "Ineqqisen"
-                    },
-                    "notifications": {
-                        "description": "",
-                        "label": "Tilγa"
-                    },
-                    "playlists": {
-                        "description": "",
-                        "label": "Tibdarin n tɣuri"
-                    },
-                    "radios": {
-                        "description": "",
-                        "label": ""
-                    },
-                    "security": {
-                        "description": "",
-                        "label": "Taγellist"
-                    },
-                    "favorites": {
-                        "label": "Imenyafen"
-                    }
-                },
                 "filters": {
                     "accessedDate": "Azemz n unekcum",
                     "albumTitle": "Isem n walbum",
@@ -4302,83 +2189,78 @@
                     "creationDate": "Azemz n usnulfu",
                     "domain": "Taγult",
                     "duration": "Durée",
-                    "expirationDate": "",
-                    "firstSeen": "",
                     "followers": "Imeḍfaṛen",
                     "itemsCount": "Iferdisen",
                     "lastActivity": "Armud aneggaru",
-                    "lastSeen": "",
-                    "modificationDate": "",
                     "name": "Isem",
-                    "receivedMessages": "",
-                    "releaseDate": "",
-                    "dateJoined": "",
                     "size": "Teγzi",
-                    "trackTitle": "",
                     "uploads": "Ifuyla yettwaznen",
                     "username": "Isem n useqdac",
                     "users": "Iseqdacen"
                 },
                 "fields": {
-                    "privacyLevel": {
-                        "label": "",
-                        "help": "",
-                        "shortChoices": {
-                            "public": "",
-                            "instance": "",
-                            "private": "Uslig"
-                        },
-                        "choices": {
-                            "instance": "",
-                            "public": "",
-                            "private": ""
-                        }
-                    },
                     "summary": {
                         "label": "Tameddurt"
                     },
                     "reportType": {
                         "label": "Taggayt",
                         "choices": {
-                            "illegalContent": "",
                             "invalidMetadata": "Yir iɣf-isefka",
-                            "offensiveContent": "",
-                            "other": "Wiyaḍ",
-                            "takedownRequest": ""
+                            "other": "Wiyaḍ"
                         }
                     },
                     "importStatus": {
-                        "label": "",
                         "choices": {
                             "draft": {
-                                "label": "Arewway",
-                                "help": ""
-                            },
-                            "errored": {
-                                "label": "",
-                                "help": ""
+                                "label": "Arewway"
                             },
                             "finished": {
-                                "label": "Immed",
-                                "help": ""
+                                "label": "Immed"
                             },
                             "pending": {
-                                "label": "Yegguni",
-                                "help": ""
+                                "label": "Yegguni"
                             },
                             "skipped": {
-                                "label": "Yettawazgel",
-                                "help": ""
+                                "label": "Yettawazgel"
                             }
                         }
                     },
                     "contentCategory": {
-                        "label": "",
                         "choices": {
                             "music": "Aẓawan",
-                            "other": "Wiyaḍ",
-                            "podcast": ""
+                            "other": "Wiyaḍ"
                         }
+                    },
+                    "privacyLevel": {
+                        "shortChoices": {
+                            "private": "Uslig"
+                        }
+                    }
+                },
+                "scopes": {
+                    "edits": {
+                        "label": "Tiẓrigin"
+                    },
+                    "favorites": {
+                        "label": "Imenyafen"
+                    },
+                    "follows": {
+                        "label": "I yeṭṭafaṛ"
+                    },
+                    "notifications": {
+                        "label": "Tilγa"
+                    },
+                    "playlists": {
+                        "label": "Tibdarin n tɣuri"
+                    },
+                    "profile": {
+                        "label": "Ameγnu"
+                    },
+                    "reports": {
+                        "label": "Ineqqisen"
+                    },
+                    "security": {
+                        "label": "Taγellist"
                     }
                 }
             }
@@ -4389,27 +2271,18 @@
                     "typeLabel": "Amiḍan"
                 },
                 "album": {
-                    "typeLabel": "Album",
-                    "label": ""
+                    "typeLabel": "Album"
                 },
                 "artist": {
-                    "typeLabel": "Artiste",
-                    "label": ""
-                },
-                "channel": {
-                    "typeLabel": "",
-                    "label": ""
+                    "typeLabel": "Artiste"
                 },
                 "library": {
-                    "typeLabel": "Tanedlist",
-                    "label": ""
+                    "typeLabel": "Tanedlist"
                 },
                 "playlist": {
-                    "typeLabel": "Liste de lecture",
-                    "label": ""
+                    "typeLabel": "Liste de lecture"
                 },
                 "track": {
-                    "label": "",
                     "typeLabel": "Piste"
                 }
             },
@@ -4420,14 +2293,10 @@
                 },
                 "album": {
                     "label": "Album",
-                    "releaseDate": "",
                     "title": "Azwel"
                 },
                 "artist": {
                     "label": "Artiste"
-                },
-                "channel": {
-                    "label": ""
                 },
                 "track": {
                     "copyright": "Izerfan ttwaḥerzen",
@@ -4442,9 +2311,6 @@
                 "library": {
                     "description": "Aglam",
                     "label": "Tanedlist"
-                },
-                "musicbrainzId": {
-                    "label": ""
                 },
                 "name": {
                     "label": "Isem"
@@ -4475,12 +2341,11 @@
                 "artist": {
                     "name": "Isem"
                 },
-                "album": {
-                    "releaseDate": "",
-                    "title": "Azwel"
-                },
                 "tags": {
                     "label": "Tibzimin"
+                },
+                "album": {
+                    "title": "Azwel"
                 }
             }
         },
@@ -4491,15 +2356,10 @@
     },
     "init": {
         "serviceWorker": {
-            "newAppVersion": "",
             "actions": {
                 "later": "Ticki",
                 "update": "Leqqem"
             }
-        },
-        "axios": {
-            "rateLimitDelay": "",
-            "rateLimitLater": ""
         }
     }
 }

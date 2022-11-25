@@ -4,24 +4,13 @@
             "Authorize": {
                 "header": {
                     "access": "الدخول إلى حسابك على فانك وايل Funkwhale",
-                    "authorize": "",
                     "authorizeFailure": "حدث خطأ أثناء تطبيق الإجراء",
                     "fetchFailure": "حدث خطأ أثناء إنشاء الدعوة",
-                    "allScopes": "تعطيل النفاذ",
-                    "readOnly": "",
-                    "writeOnly": ""
+                    "allScopes": "تعطيل النفاذ"
                 },
                 "title": "ترخيص التطبيق",
                 "button": {
                     "authorize": "ترخيص { app }"
-                },
-                "help": {
-                    "pasteCode": "",
-                    "redirect": "",
-                    "copyCode": ""
-                },
-                "message": {
-                    "unknownPermissions": ""
                 }
             },
             "SubsonicTokenForm": {
@@ -38,10 +27,7 @@
                 },
                 "modal": {
                     "disableSubsonic": {
-                        "header": "تعطيل النفاذ عبر واجهة برمجة التطبيقات صاب سونيك ؟",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "تعطيل النفاذ عبر واجهة برمجة التطبيقات صاب سونيك ؟"
                     },
                     "newPassword": {
                         "header": "متأكد مِن أنك تريد إعادة طلب كلمة سرية جديدة لواجهة برمجة تطبيقات صاب سونيك Subsonic API؟",
@@ -59,9 +45,7 @@
                 },
                 "description": {
                     "subsonic": {
-                        "paragraph1": "فانك وايل Funkwhale متوافق مع برمجيات تشغيل الموسيقى التي تدعم واجهة برمجية تطبيقات صاب سونيك.",
-                        "paragraph3": "",
-                        "paragraph2": ""
+                        "paragraph1": "فانك وايل Funkwhale متوافق مع برمجيات تشغيل الموسيقى التي تدعم واجهة برمجية تطبيقات صاب سونيك."
                     }
                 },
                 "label": {
@@ -78,16 +62,10 @@
                     "appDetails": "تفاصيل التطبيق",
                     "editApp": "حدث خطأ أثناء تطبيق الإجراء"
                 },
-                "help": {
-                    "appDetails": ""
-                },
                 "link": {
                     "settings": "العودة إلى الإعدادات"
                 },
-                "title": "حدث خطأ أثناء تطبيق الإجراء",
-                "button": {
-                    "regenerateToken": ""
-                }
+                "title": "حدث خطأ أثناء تطبيق الإجراء"
             },
             "Settings": {
                 "title": "إعدادات الحساب",
@@ -100,14 +78,12 @@
                     "contentFilters": "عوامل تصفية المحتوى",
                     "deleteAccount": "أنشئ حسابي",
                     "hiddenArtists": "الفنانون المخفيون",
-                    "plugins": "",
                     "settingsUpdated": "تم تحديث الإعدادات",
                     "emailFailure": "لم نتمكن مِن تأكيد عنوان بريدك الإلكتروني",
                     "accountFailure": "تعذر علينا تسجيل دخولك",
                     "noApps": "ليس لديك أي تطبيق متصل بحسابك.",
                     "noPersonalApps": "ليس لديك أي تطبيق مُعدّ بعد.",
                     "yourApps": "تطبيقاتك",
-                    "avatarFailure": "",
                     "passwordFailure": "لا يمكن تعديل كلمتك السرية",
                     "updateFailure": "تم تحديث الإعدادات"
                 },
@@ -121,8 +97,7 @@
                     "yourApps": {
                         "header": {
                             "application": "الإجراء",
-                            "creationDate": "تاريخ الإنشاء",
-                            "scopes": ""
+                            "creationDate": "تاريخ الإنشاء"
                         }
                     },
                     "artists": {
@@ -149,66 +124,42 @@
                     "refresh": "إنعاش",
                     "remove": "حذف",
                     "removeApp": "حذف قائمة الأغاني",
-                    "revoke": "",
-                    "revokeAccess": "",
                     "update": "تحديث",
                     "updateSettings": "تحديث الإعدادات"
-                },
-                "description": {
-                    "changeEmail": "",
-                    "changePassword": {
-                        "paragraph1": "سوف تتأثر كذلك الكلمة السرية لواجهة برمجة تطبيقات صاب سونيك Subsonic إن قمت بتعديل كلمتك السرية.",
-                        "paragraph2": "يتوجب عليك تحديث كلمتك السرية على العملاء الآخرين اللذين يشتغلون بها."
-                    },
-                    "contentFilters": "",
-                    "authorizedApps": "",
-                    "yourApps": "هذه هي قائمة التطبيقات التي قمتَ بإنشائها.",
-                    "plugins": "",
-                    "deleteAccount": ""
                 },
                 "modal": {
                     "changePassword": {
                         "header": "هل تريد تغيير كلمتك السريّة؟",
                         "content": {
-                            "warning": "سوف ينجرّ ما يلي عند تعديل كلمتك السرية:",
-                            "logout": "",
-                            "subsonic": ""
+                            "warning": "سوف ينجرّ ما يلي عند تعديل كلمتك السرية:"
                         }
                     },
                     "deleteAccount": {
-                        "header": "هل تريد استرجاع قائمة الإنتظار السابقة للأغاني ؟",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "هل تريد استرجاع قائمة الإنتظار السابقة للأغاني ؟"
                     },
                     "deleteApp": {
                         "header": "حذف تطبيق \"{ application }\"؟",
                         "content": {
                             "warning": "سوف يؤدي ذلك إلى الحذف الكُلّي لقائمة التشغيل هذه و لا يُمكن إلغاء العملية و العودة."
                         }
-                    },
-                    "revokeApp": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
                     }
                 },
-                "help": {
-                    "noApps": "",
-                    "changePassword": "يرجى التأكّد مِن صحة الكلمة السرية",
-                    "noPersonalApps": ""
+                "description": {
+                    "changePassword": {
+                        "paragraph1": "سوف تتأثر كذلك الكلمة السرية لواجهة برمجة تطبيقات صاب سونيك Subsonic إن قمت بتعديل كلمتك السرية.",
+                        "paragraph2": "يتوجب عليك تحديث كلمتك السرية على العملاء الآخرين اللذين يشتغلون بها."
+                    },
+                    "yourApps": "هذه هي قائمة التطبيقات التي قمتَ بإنشائها."
                 },
                 "link": {
                     "managePlugins": "إدارة قوائم المَقاطِع الموسيقية",
                     "newApp": "أنشئ تطبيقا جديدا"
                 },
-                "warning": {
-                    "deleteAccount": ""
+                "help": {
+                    "changePassword": "يرجى التأكّد مِن صحة الكلمة السرية"
                 },
                 "message": {
-                    "currentEmail": "أنت متّصل حاليا بصفة { username }",
-                    "confirmDelete": ""
+                    "currentEmail": "أنت متّصل حاليا بصفة { username }"
                 }
             },
             "Logout": {
@@ -233,33 +184,6 @@
                 },
                 "title": "أنشئ تطبيقا جديدا"
             },
-            "ApplicationForm": {
-                "label": {
-                    "scopes": {
-                        "description": "",
-                        "read": {
-                            "label": "قراءة",
-                            "description": ""
-                        },
-                        "write": {
-                            "label": "",
-                            "description": ""
-                        }
-                    },
-                    "name": "الإسم",
-                    "redirectUri": "عنوان إعادة التوجيه"
-                },
-                "button": {
-                    "create": "أنشئ قائمة مَقاطع موسيقية",
-                    "update": "تحديث قائمة المَقاطِع الموسيقية"
-                },
-                "help": {
-                    "redirectUri": ""
-                },
-                "header": {
-                    "failure": "لا يمكننا إنشاء حسابك"
-                }
-            },
             "LoginForm": {
                 "link": {
                     "createAccount": "أنشئ حسابا",
@@ -268,10 +192,6 @@
                 "placeholder": {
                     "username": "أدخل اسم المستخدِم أو البريد الإلكتروني"
                 },
-                "help": {
-                    "approvalRequired": "",
-                    "invalidCredentials": "الرجاء التأكّد مِن صحة اسم المستخدِم و الكلمة السرية"
-                },
                 "button": {
                     "login": "تسجيل الدخول"
                 },
@@ -279,8 +199,29 @@
                     "password": "كلمة السر",
                     "username": "اسم المستخدِم أو عنوان البريد الإلكتروني"
                 },
+                "help": {
+                    "invalidCredentials": "الرجاء التأكّد مِن صحة اسم المستخدِم و الكلمة السرية"
+                },
                 "header": {
                     "loginFailure": "تعذر علينا تسجيل دخولك"
+                }
+            },
+            "ApplicationForm": {
+                "button": {
+                    "create": "أنشئ قائمة مَقاطع موسيقية",
+                    "update": "تحديث قائمة المَقاطِع الموسيقية"
+                },
+                "label": {
+                    "name": "الإسم",
+                    "scopes": {
+                        "read": {
+                            "label": "قراءة"
+                        }
+                    },
+                    "redirectUri": "عنوان إعادة التوجيه"
+                },
+                "header": {
+                    "failure": "لا يمكننا إنشاء حسابك"
                 }
             },
             "SignupForm": {
@@ -302,10 +243,7 @@
                     "signupFailure": "لا يمكن إنشاء حسابك."
                 },
                 "message": {
-                    "registrationClosed": "إنّ التسجيلات مُغلَقة حاليًا على هذا الخادوم، يلزمك رمز دعوة للتسجيل فيه.",
-                    "requiresReview": "",
-                    "awaitingReview": "",
-                    "accountCreated": ""
+                    "registrationClosed": "إنّ التسجيلات مُغلَقة حاليًا على هذا الخادوم، يلزمك رمز دعوة للتسجيل فيه."
                 }
             },
             "Plugin": {
@@ -319,9 +257,6 @@
                 "header": {
                     "failure": "حدث خطأ أثناء حفظ الإعدادات"
                 },
-                "description": {
-                    "library": ""
-                },
                 "button": {
                     "save": "احفظ",
                     "scan": "تم مسحها"
@@ -333,30 +268,17 @@
                 "activeUsers": "{ count } مقطع | { count } مَقطَع",
                 "hoursOfMusic": "{ count } مقطع | { count } مَقطَع"
             },
+            "title": "عن الصفحة",
             "header": {
-                "funkwhale": "",
                 "aboutPod": "عن مثيل الخادوم هذا",
                 "publicContent": "تحديث محتوى الجدول",
-                "findApp": "",
                 "signup": "التسجيل"
             },
-            "title": "عن الصفحة",
             "link": {
-                "findOtherPod": "",
                 "learnMore": "جارٍ تحميل المتابِعين…"
-            },
-            "description": {
-                "funkwhale": "",
-                "publicContent": "",
-                "signup": "",
-                "findApp": "",
-                "quota": ""
             },
             "placeholder": {
                 "noDescription": "الوصف غير متوفر."
-            },
-            "message": {
-                "loggedIn": ""
             }
         },
         "Home": {
@@ -372,36 +294,26 @@
                 "newChannels": "القنوات الجديدة",
                 "newAlbums": "تمت إضافتها مؤخرا",
                 "signup": "التسجيل",
-                "statistics": "الإحصائيات",
-                "links": "",
-                "welcome": ""
+                "statistics": "الإحصائيات"
             },
             "link": {
                 "publicContent": {
-                    "label": "تحديث محتوى الجدول",
-                    "description": ""
+                    "label": "تحديث محتوى الجدول"
                 },
-                "userGuides": {
-                    "description": "",
-                    "label": "مكتبات المستخدِم"
-                },
-                "findOtherPod": "",
                 "learnMore": "جارٍ تحميل المتابِعين…",
                 "mobileApps": {
-                    "label": "تطبيقات الكمبيوتر والأجهزة المحمولة",
-                    "description": ""
+                    "label": "تطبيقات الكمبيوتر والأجهزة المحمولة"
                 },
-                "rules": "",
+                "userGuides": {
+                    "label": "مكتبات المستخدِم"
+                },
                 "viewMore": "جارٍ تحميل المتابِعين…",
                 "funkwhale": "لاستخدام Funkwhale"
             },
             "description": {
                 "funkwhale": {
-                    "paragraph2": "فانك وايل Funkwhale مجاني و يُعيد التحكّم في موسيقاكم بين أيديكم.",
-                    "paragraph1": ""
-                },
-                "signup": "",
-                "quota": ""
+                    "paragraph2": "فانك وايل Funkwhale مجاني و يُعيد التحكّم في موسيقاكم بين أيديكم."
+                }
             },
             "title": "الرئيسية",
             "placeholder": {
@@ -414,11 +326,6 @@
                     "meta": {
                         "episodes": "{ count } مقطع | { count } مَقطَع",
                         "tracks": "{ count } مقطع | { count } مَقطَع"
-                    }
-                },
-                "Widget": {
-                    "button": {
-                        "more": ""
                     }
                 }
             },
@@ -439,11 +346,6 @@
                     "meta": {
                         "tracks": "{ count } مقطع | { count } مَقطَع"
                     }
-                },
-                "Widget": {
-                    "button": {
-                        "more": ""
-                    }
                 }
             },
             "Player": {
@@ -457,9 +359,6 @@
                     "clearQueue": "مسح قائمة الانتظار الخاصة بك",
                     "expandQueue": "مسح قائمة الانتظار الخاصة بك",
                     "addArtistContentFilter": "إخفاء المحتوى القادم مِن هذا الفنان…",
-                    "loopingDisabled": "",
-                    "loopingSingle": "",
-                    "loopingWholeQueue": "",
                     "audioPlayer": "مُشغّل الوسائط",
                     "mute": "كتم",
                     "nextTrack": "المَقطَع التالي",
@@ -482,15 +381,9 @@
                     "playNext": "إعزف التالي",
                     "playNow": "إعزف الآن",
                     "playPlaylist": "مسح قائمة المَقاطع الموسيقية",
-                    "startRadio": "",
                     "playTrack": "إعزف المَقطَع",
                     "playTracks": "إعزف المَقطَع",
-                    "report": "",
                     "trackDetails": "التفاصيل"
-                },
-                "title": {
-                    "more": "",
-                    "unavailable": ""
                 }
             },
             "podcast": {
@@ -547,9 +440,6 @@
                 "Widget": {
                     "empty": {
                         "noResults": "لاشيء موجود"
-                    },
-                    "button": {
-                        "more": ""
                     }
                 },
                 "MobileRow": {
@@ -558,40 +448,21 @@
                     }
                 }
             },
-            "VolumeControl": {
-                "label": {
-                    "slider": ""
-                },
-                "button": {
-                    "mute": "كتم",
-                    "unmute": "إلغاء الكتم"
-                }
-            },
             "SearchBar": {
                 "label": {
                     "album": "الألبوم",
                     "artist": "الفنان",
                     "category": {
-                        "federation": "الفديرالية",
-                        "podcasts": ""
+                        "federation": "الفديرالية"
                     },
                     "search": "البحث عن بعض مِن الموسيقى",
-                    "tag": "",
                     "track": "المَقطَع"
-                },
-                "link": {
-                    "more": "",
-                    "fediverse": "البحث في ويكيبيديا",
-                    "rss": ""
-                },
-                "header": {
-                    "noResults": ""
                 },
                 "placeholder": {
                     "search": "البحث عن فنانين أو ألبومات أو مَقاطِع صوتية…"
                 },
-                "empty": {
-                    "noResults": ""
+                "link": {
+                    "fediverse": "البحث في ويكيبيديا"
                 }
             },
             "Search": {
@@ -612,35 +483,18 @@
                 "label": {
                     "discography": "إسم الفنان",
                     "category": "الفئة",
-                    "image": "",
                     "description": "الوصف",
-                    "username": "",
                     "language": "تغيير اللغة",
                     "name": "الإسم",
                     "email": "أكّد بريدك الإلكتروني",
                     "owner": "المالك",
-                    "podcast": "",
-                    "subcategory": "الفئة",
-                    "tags": ""
-                },
-                "placeholder": {
-                    "name": "",
-                    "username": ""
+                    "subcategory": "الفئة"
                 },
                 "header": {
                     "error": "حدث خطأ أثناء حفظ الإعدادات"
                 },
-                "help": {
-                    "podcast": "",
-                    "discography": "",
-                    "podcastFields": "",
-                    "username": ""
-                },
                 "loader": {
                     "loading": "عملية الإرسال جارية"
-                },
-                "legend": {
-                    "purpose": ""
                 }
             },
             "LibraryFollowButton": {
@@ -656,8 +510,7 @@
                 },
                 "help": {
                     "embed": "انسخ والصق هذا الرمز في نص HTML على موقعك",
-                    "width": "أتركه فارغًا للحصول على ودجات تناسبي",
-                    "anonymous": ""
+                    "width": "أتركه فارغًا للحصول على ودجات تناسبي"
                 },
                 "label": {
                     "embed": "رمز الإدماج",
@@ -667,27 +520,22 @@
                 "header": {
                     "preview": "معاينة"
                 },
-                "warning": {
-                    "anonymous": ""
-                },
                 "message": {
                     "copy": "تم نسخ النص إلى الحافظة!"
                 }
             },
-            "ChannelSeries": {
+            "VolumeControl": {
                 "button": {
-                    "showMore": ""
-                },
+                    "mute": "كتم",
+                    "unmute": "إلغاء الكتم"
+                }
+            },
+            "ChannelEntries": {
                 "help": {
                     "subscribe": "إن قمت بإلغاء متابعة هذه المكتبة فسوف لن تتمكن مِن الوصول إلى محتواها."
                 }
             },
-            "ChannelsWidget": {
-                "button": {
-                    "showMore": ""
-                }
-            },
-            "ChannelEntries": {
+            "ChannelSeries": {
                 "help": {
                     "subscribe": "إن قمت بإلغاء متابعة هذه المكتبة فسوف لن تتمكن مِن الوصول إلى محتواها."
                 }
@@ -712,7 +560,6 @@
                     "cancel": "إلغاء",
                     "edit": "تعديل",
                     "embed": "ادمج",
-                    "more": "",
                     "play": "إعزف كافة الألبومات"
                 },
                 "modal": {
@@ -724,7 +571,6 @@
                     "moderation": "تحديث قاعدة الإشراف",
                     "discogs": "البحث عن بعض مِن الموسيقى",
                     "wikipedia": "البحث في ويكيبيديا",
-                    "django": "",
                     "domain": "عضو منذ { date }",
                     "musicbrainz": "إطّلع عليه على ميوزيك براينز"
                 }
@@ -781,8 +627,6 @@
                 "tooltip": {
                     "network": "حدث خطأ في الشبكة أثناء تحميل هذا الملف",
                     "size": "لا يمكن تحميل هذا الملف، تحقق أنّ حجم الملف ليس ضخما",
-                    "extension": "",
-                    "retry": "",
                     "denied": "تم رفض الإرسال، تحقق أن حجم الملف ليس ضخما و أنّ مساحة التخرين المسموح بها كافية",
                     "timeout": "انتهت مهلة الإرسال، الرجاء إعادة المحاولة"
                 },
@@ -812,9 +656,8 @@
                 },
                 "header": {
                     "failure": "حدث خطأ أثناء حفظ الإعدادات",
-                    "server": "حالة الاستيراد",
                     "status": "حالة الاستيراد",
-                    "local": ""
+                    "server": "حالة الاستيراد"
                 },
                 "link": {
                     "processing": "جارٍ العمل",
@@ -822,8 +665,7 @@
                     "picard": "ننصحكم باستخدام برنامج Picard لهذا الغرض."
                 },
                 "description": {
-                    "import": "إعادة محاولة الإستيراد",
-                    "previousImport": ""
+                    "import": "إعادة محاولة الإستيراد"
                 },
                 "message": {
                     "local": {
@@ -840,30 +682,13 @@
                 },
                 "button": {
                     "cancel": "إلغاء",
-                    "clear": "امسح",
-                    "reset": "",
-                    "showUnreviewed": "",
-                    "showAll": "",
-                    "submit": "",
-                    "new": "",
-                    "suggest": ""
+                    "clear": "امسح"
                 },
                 "header": {
                     "failure": "حدث خطأ أثناء إرسال التعديلات",
-                    "recentEdits": "تمت إضافتها مؤخرا",
-                    "unreviewed": "",
-                    "success": ""
+                    "recentEdits": "تمت إضافتها مؤخرا"
                 },
-                "notApplicable": "غير متوفر",
-                "empty": {
-                    "suggestEdit": ""
-                },
-                "label": {
-                    "summary": ""
-                },
-                "message": {
-                    "noPermission": ""
-                }
+                "notApplicable": "غير متوفر"
             },
             "Albums": {
                 "link": {
@@ -891,8 +716,7 @@
                     "results": "عدد نتائج البحث في كل صفحة"
                 },
                 "label": {
-                    "search": "البحث",
-                    "tags": ""
+                    "search": "البحث"
                 },
                 "button": {
                     "search": "البحث"
@@ -904,9 +728,7 @@
                     "search": "البحث"
                 },
                 "label": {
-                    "search": "إسم الفنان",
-                    "excludeCompilation": "",
-                    "tags": ""
+                    "search": "إسم الفنان"
                 },
                 "title": "الفنانون",
                 "ordering": {
@@ -936,10 +758,7 @@
                         "album": "الألبوم",
                         "artist": "الفنان",
                         "copyright": "الحقوق",
-                        "license": "الرخصة",
-                        "series": "",
-                        "url": "",
-                        "year": ""
+                        "license": "الرخصة"
                     },
                     "track": {
                         "bitrate": {
@@ -973,7 +792,6 @@
                     "moderation": "تحديث قاعدة الإشراف"
                 },
                 "header": {
-                    "channels": "",
                     "tracks": "المَقاطِع"
                 }
             },
@@ -992,21 +810,12 @@
                 },
                 "description": {
                     "library": "هذا الفنان متوفر على المكتبات التالية:"
-                },
-                "message": {
-                    "filter": ""
                 }
             },
             "ImportStatusModal": {
                 "error": {
-                    "importFailure": "",
                     "unknownError": {
-                        "message": "حدث خطأ مجهول",
-                        "label": ""
-                    },
-                    "invalidMetadata": {
-                        "label": "",
-                        "message": ""
+                        "message": "حدث خطأ مجهول"
                     }
                 },
                 "button": {
@@ -1023,16 +832,8 @@
                 "header": {
                     "importDetail": "حالة الإستيراد"
                 },
-                "link": {
-                    "support": "",
-                    "documentation": ""
-                },
                 "message": {
-                    "importDetail": "",
                     "importSuccess": "تم تحميله بنجاح على الخادم."
-                },
-                "warning": {
-                    "importSkipped": ""
                 }
             },
             "EditCard": {
@@ -1043,16 +844,12 @@
                 },
                 "status": {
                     "approved": "التي تم قبولها",
-                    "applied": "",
                     "pending": "الملفات المعلّقة",
                     "rejected": "تم رفضه"
                 },
                 "modal": {
                     "delete": {
                         "header": "أتريد حذف هذا الإقتراح؟"
-                    },
-                    "content": {
-                        "warning": ""
                     }
                 },
                 "table": {
@@ -1067,9 +864,6 @@
                 },
                 "header": {
                     "modification": "تاريخ التعديل"
-                },
-                "link": {
-                    "track": ""
                 }
             },
             "Podcasts": {
@@ -1088,17 +882,11 @@
                     "cancel": "إلغاء",
                     "channel": "أنشئ مكتبة جديدة",
                     "search": "البحث",
-                    "subscribe": "",
                     "feed": "لاستخدام Funkwhale"
                 },
                 "empty": {
                     "noResults": "لم نتمكّن مِن العثور على أي فنان يناسب طلب بحثك"
                 },
-                "label": {
-                    "search": "",
-                    "tags": ""
-                },
-                "title": "",
                 "pagination": {
                     "results": "عدد نتائج البحث في كل صفحة"
                 },
@@ -1148,8 +936,7 @@
                     "cancel": "إلغاء",
                     "delete": "حذف",
                     "edit": "تعديل",
-                    "embed": "ادمج",
-                    "more": ""
+                    "embed": "ادمج"
                 },
                 "modal": {
                     "delete": {
@@ -1165,7 +952,6 @@
                 "link": {
                     "moderation": "تحديث قاعدة الإشراف",
                     "discogs": "البحث عن بعض مِن الموسيقى",
-                    "django": "",
                     "domain": "عضو منذ { date }",
                     "musicbrainz": "إطّلع عليه على ميوزيك براينز"
                 }
@@ -1177,7 +963,6 @@
                     "download": "تنزيل",
                     "edit": "تعديل",
                     "embed": "ادمج",
-                    "more": "",
                     "play": "غنّي"
                 },
                 "modal": {
@@ -1195,7 +980,6 @@
                     "moderation": "تحديث قاعدة الإشراف",
                     "discogs": "البحث عن بعض مِن الموسيقى",
                     "wikipedia": "البحث في ويكيبيديا",
-                    "django": "",
                     "domain": "عضو منذ { date }"
                 },
                 "title": "المَقطَع"
@@ -1204,50 +988,23 @@
                 "header": {
                     "edit": "شغِّل هذا المَقطَع",
                     "suggest": "لا يمكننا تحميل هذا المَقطَع"
-                },
-                "message": {
-                    "remote": ""
                 }
             },
             "ArtistEdit": {
                 "header": {
                     "edit": "شغِّل هذا المَقطَع",
                     "suggest": "لا يمكننا تحميل هذا المَقطَع"
-                },
-                "message": {
-                    "remote": ""
                 }
             },
             "TrackEdit": {
                 "header": {
                     "edit": "شغِّل هذا المَقطَع",
                     "suggest": "لا يمكننا تحميل هذا المَقطَع"
-                },
-                "message": {
-                    "remote": ""
-                }
-            },
-            "AlbumDetail": {
-                "header": {
-                    "episodes": "",
-                    "tracks": "المَقاطِع",
-                    "libraries": "مكتبات المستخدِم"
-                },
-                "description": {
-                    "libraries": "هذا الألبوم متوفر على المكتبات التالية:"
-                },
-                "meta": {
-                    "volume": "مستوى الصوت { number }"
                 }
             },
             "FsBrowser": {
                 "button": {
                     "import": "تم استيراده"
-                }
-            },
-            "FsLogs": {
-                "empty": {
-                    "notStarted": ""
                 }
             },
             "Home": {
@@ -1263,6 +1020,18 @@
             "TagSelector": {
                 "placeholder": {
                     "search": "البحث"
+                }
+            },
+            "AlbumDetail": {
+                "description": {
+                    "libraries": "هذا الألبوم متوفر على المكتبات التالية:"
+                },
+                "header": {
+                    "tracks": "المَقاطِع",
+                    "libraries": "مكتبات المستخدِم"
+                },
+                "meta": {
+                    "volume": "مستوى الصوت { number }"
                 }
             }
         },
@@ -1321,7 +1090,6 @@
                 "header": {
                     "uploadFiles": "أتريد حذف هذا التحميل؟",
                     "processing": "جارٍ العمل",
-                    "publish": "",
                     "uploadDetails": "تاريخ التحميل"
                 }
             },
@@ -1330,11 +1098,7 @@
                     "tracks": "{ count } مقطع | { count } مَقطَع"
                 },
                 "label": {
-                    "album": "الألبوم",
-                    "series": ""
-                },
-                "option": {
-                    "none": ""
+                    "album": "الألبوم"
                 }
             },
             "LicenseSelect": {
@@ -1343,29 +1107,15 @@
                 },
                 "label": {
                     "license": "الرخصة"
-                },
-                "option": {
-                    "none": ""
                 }
             },
             "UploadForm": {
-                "help": {
-                    "license": ""
-                },
                 "label": {
-                    "openBrowser": "تصفّح",
-                    "channel": ""
-                },
-                "message": {
-                    "dragAndDrop": "",
-                    "pending": ""
+                    "openBrowser": "تصفّح"
                 },
                 "button": {
                     "edit": "تعديل",
-                    "ignore": "",
-                    "remove": "حذف",
-                    "resume": "",
-                    "retry": ""
+                    "remove": "حذف"
                 },
                 "header": {
                     "error": "حدث خطأ أثناء إرسال التعديلات"
@@ -1377,9 +1127,6 @@
                 },
                 "description": {
                     "extensions": "امتدادات الملفات المدعومة: { extensions }"
-                },
-                "warning": {
-                    "quota": ""
                 }
             },
             "AlbumModal": {
@@ -1396,7 +1143,6 @@
                 "label": {
                     "description": "الوصف",
                     "position": "تتابُع الصفحات",
-                    "tags": "",
                     "title": "العنوان",
                     "image": "اسم المَقطَع"
                 }
@@ -1411,7 +1157,6 @@
             },
             "SubscribeButton": {
                 "title": {
-                    "subscribe": "",
                     "unsubscribe": "{ count } مفضّلة"
                 },
                 "help": {
@@ -1431,22 +1176,17 @@
             "title": "عن الصفحة",
             "link": {
                 "about": "عن مثيل الخادوم هذا",
-                "features": "",
                 "introduction": "الدعوات",
                 "rules": "القاعدة",
-                "statistics": "الإحصائيات",
-                "terms": ""
+                "statistics": "الإحصائيات"
             },
             "header": {
                 "about": "عن مثيل الخادوم هذا",
                 "contact": "للإتصال",
-                "features": "",
                 "rules": "القاعدة",
-                "statistics": "الإحصائيات",
-                "terms": ""
+                "statistics": "الإحصائيات"
             },
             "feature": {
-                "allowList": "",
                 "anonymousAccess": "وصول مجهول",
                 "status": {
                     "closed": "إغلاق",
@@ -1455,7 +1195,6 @@
                     "open": "مفتوح"
                 },
                 "federation": "الفديرالية",
-                "version": "",
                 "registrations": "الإدارة",
                 "quota": "حصة التحميل"
             },
@@ -1464,203 +1203,6 @@
                 "noDescription": "الوصف غير متوفر.",
                 "noRules": "ليس هناك أية قاعدة متوفرة.",
                 "noTerms": "الشروط غير متوفرة."
-            },
-            "message": {
-                "contact": ""
-            }
-        },
-        "common": {
-            "ActionTable": {
-                "button": {
-                    "selected": "",
-                    "allSelected": "",
-                    "go": "هيا",
-                    "launch": "إبدأ",
-                    "refresh": "تحديث محتوى الجدول",
-                    "select": "",
-                    "selectAll": "إختيار عامل تصفية",
-                    "selectElement": "تحديد الصفحة الحالية فقط | تحديد الصفحة الحالية فقط",
-                    "selectCurrentPage": "تحديد الصفحة الحالية فقط"
-                },
-                "message": {
-                    "success": "",
-                    "needsRefresh": ""
-                },
-                "label": {
-                    "actions": "الإجراءات",
-                    "performAction": "معلومات عن المَقطَع"
-                },
-                "modal": {
-                    "performAction": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "header": {
-                    "error": "حدث خطأ أثناء تطبيق الإجراء"
-                }
-            },
-            "Duration": {
-                "meta": {
-                    "hours": "{ hours } سا { minutes } د",
-                    "minutes": "{ minutes } د"
-                }
-            },
-            "UserMenu": {
-                "link": {
-                    "about": "عن الصفحة",
-                    "chat": "قاعة المحادثة",
-                    "docs": "الدليل",
-                    "forum": "",
-                    "support": "",
-                    "git": "متعقّب المشاكل",
-                    "login": "الدخول",
-                    "logout": "الخروج",
-                    "notifications": "الإشعارات",
-                    "profile": "افتح الصفحة الشخصية",
-                    "settings": "الإعدادات",
-                    "signup": "التسجيل"
-                },
-                "label": {
-                    "shortcuts": "اختصارات لوحة المفاتيح",
-                    "language": "تغيير اللغة",
-                    "theme": ""
-                }
-            },
-            "UserModal": {
-                "link": {
-                    "about": "عن الصفحة",
-                    "chat": "قاعة المحادثة",
-                    "forum": "",
-                    "support": "",
-                    "git": "متعقّب المشاكل",
-                    "login": "الدخول",
-                    "logout": "الخروج",
-                    "notifications": "الإشعارات",
-                    "profile": "افتح الصفحة الشخصية",
-                    "settings": "الإعدادات",
-                    "signup": "التسجيل"
-                },
-                "label": {
-                    "shortcuts": "اختصارات لوحة المفاتيح",
-                    "language": "تغيير اللغة",
-                    "theme": ""
-                },
-                "header": {
-                    "options": "الإجراءات"
-                },
-                "button": {
-                    "switchInstance": "إستخدم مثيل خادوم آخَر"
-                }
-            },
-            "DangerousButton": {
-                "button": {
-                    "cancel": "إلغاء",
-                    "confirm": "تأكيد"
-                },
-                "header": {
-                    "confirm": "هل تؤكّد هذا الإجراء ؟"
-                }
-            },
-            "RenderedDescription": {
-                "button": {
-                    "cancel": "إلغاء",
-                    "edit": "تعديل",
-                    "less": "",
-                    "more": "",
-                    "update": "وصفي الرائع"
-                },
-                "header": {
-                    "failure": "حدث خطأ أثناء تطبيق الإجراء"
-                },
-                "empty": {
-                    "noDescription": "الوصف غير متوفر"
-                }
-            },
-            "InlineSearchBar": {
-                "button": {
-                    "clear": "امسح"
-                },
-                "label": {
-                    "search": "البحث"
-                },
-                "placeholder": {
-                    "search": "البحث"
-                }
-            },
-            "CollapseLink": {
-                "button": {
-                    "collapse": "تصغير",
-                    "expand": ""
-                }
-            },
-            "CopyInput": {
-                "button": {
-                    "copy": "نسخ"
-                },
-                "message": {
-                    "success": "تم نسخ النص إلى الحافظة!"
-                }
-            },
-            "LoginModal": {
-                "link": {
-                    "login": "الدخول",
-                    "signup": "التسجيل"
-                },
-                "header": {
-                    "unauthenticated": ""
-                },
-                "description": {
-                    "noAccess": ""
-                }
-            },
-            "ContentForm": {
-                "help": {
-                    "markdown": ""
-                },
-                "empty": {
-                    "noContent": "لا شيء للمعاينة."
-                },
-                "button": {
-                    "preview": "معاينة",
-                    "write": ""
-                },
-                "placeholder": {
-                    "input": ""
-                }
-            },
-            "EmptyState": {
-                "header": {
-                    "noResults": "لم يتم العثور على أية نتيجة."
-                },
-                "button": {
-                    "refresh": "إنعاش"
-                }
-            },
-            "AttachmentInput": {
-                "help": {
-                    "upload": ""
-                },
-                "button": {
-                    "remove": "حذف"
-                },
-                "label": {
-                    "upload": "إرسال مقاطع موسيقية جديدة"
-                },
-                "loader": {
-                    "uploading": "الإرسال جارٍ…"
-                },
-                "header": {
-                    "failure": "لا يمكن إنشاء حسابك."
-                }
-            },
-            "ExpandableDiv": {
-                "button": {
-                    "less": "",
-                    "more": ""
-                }
             }
         },
         "playlists": {
@@ -1669,10 +1211,38 @@
                     "tracks": "{ count } مقطع | { count } مَقطَع"
                 }
             },
-            "PlaylistModal": {
-                "warning": {
-                    "duplicate": ""
+            "Editor": {
+                "button": {
+                    "addDuplicate": "أضفه على أي حال",
+                    "clear": "مسح قائمة المَقاطع الموسيقية",
+                    "copy": "نسخ المَقاطِع مِن قائمة الإنتظار الحالية إلى قائمة التشغيل",
+                    "insertFromQueue": "{ count } مقطع | { count } مَقطَع"
                 },
+                "error": {
+                    "sync": "حدث خطأ أثناء عملية حفظ التغييرات"
+                },
+                "message": {
+                    "sync": "تمت مزامنة التعديلات مع السيرفر"
+                },
+                "modal": {
+                    "clearPlaylist": {
+                        "header": "هل تودّ إفراغ قائمة المَقاطِع الموسيقية \"{ playlist }\" ؟",
+                        "content": {
+                            "warning": "سوف يؤدي ذلك إلى الحذف الكُلّي لقائمة التشغيل هذه و لا يُمكن إلغاء العملية و العودة."
+                        }
+                    }
+                },
+                "help": {
+                    "reorder": "اسحب والقي أعمدةً قصد ترتيب المقاطِع على قائمة التشغيل"
+                },
+                "header": {
+                    "editor": "محرّر قوائم تشغيل الموسيقى"
+                },
+                "loading": {
+                    "sync": "مزامنة التغييرات مع الخادم…"
+                }
+            },
+            "PlaylistModal": {
                 "button": {
                     "addDuplicate": "أضفه على أي حال",
                     "addToPlaylist": "أضفه إلى قائمة التشغيل هذه",
@@ -1707,40 +1277,6 @@
                     "noPlaylists": "تم إنشاء قائمة تشغيل الموسيقى"
                 }
             },
-            "Editor": {
-                "button": {
-                    "addDuplicate": "أضفه على أي حال",
-                    "clear": "مسح قائمة المَقاطع الموسيقية",
-                    "copy": "نسخ المَقاطِع مِن قائمة الإنتظار الحالية إلى قائمة التشغيل",
-                    "insertFromQueue": "{ count } مقطع | { count } مَقطَع"
-                },
-                "error": {
-                    "sync": "حدث خطأ أثناء عملية حفظ التغييرات"
-                },
-                "message": {
-                    "sync": "تمت مزامنة التعديلات مع السيرفر"
-                },
-                "modal": {
-                    "clearPlaylist": {
-                        "header": "هل تودّ إفراغ قائمة المَقاطِع الموسيقية \"{ playlist }\" ؟",
-                        "content": {
-                            "warning": "سوف يؤدي ذلك إلى الحذف الكُلّي لقائمة التشغيل هذه و لا يُمكن إلغاء العملية و العودة."
-                        }
-                    }
-                },
-                "help": {
-                    "reorder": "اسحب والقي أعمدةً قصد ترتيب المقاطِع على قائمة التشغيل"
-                },
-                "header": {
-                    "editor": "محرّر قوائم تشغيل الموسيقى"
-                },
-                "warning": {
-                    "duplicate": ""
-                },
-                "loading": {
-                    "sync": "مزامنة التغييرات مع الخادم…"
-                }
-            },
             "TrackPlaylistIcon": {
                 "button": {
                     "add": "إضافة إلى قائمة المقاطع الموسيقية…"
@@ -1767,11 +1303,158 @@
             },
             "Widget": {
                 "button": {
-                    "create": "أنشئ قائمة مَقاطع موسيقية",
-                    "more": ""
+                    "create": "أنشئ قائمة مَقاطع موسيقية"
                 },
                 "placeholder": {
                     "noPlaylists": "تم إنشاء قائمة تشغيل الموسيقى"
+                }
+            }
+        },
+        "common": {
+            "Duration": {
+                "meta": {
+                    "hours": "{ hours } سا { minutes } د",
+                    "minutes": "{ minutes } د"
+                }
+            },
+            "UserMenu": {
+                "link": {
+                    "about": "عن الصفحة",
+                    "chat": "قاعة المحادثة",
+                    "docs": "الدليل",
+                    "git": "متعقّب المشاكل",
+                    "login": "الدخول",
+                    "logout": "الخروج",
+                    "notifications": "الإشعارات",
+                    "profile": "افتح الصفحة الشخصية",
+                    "settings": "الإعدادات",
+                    "signup": "التسجيل"
+                },
+                "label": {
+                    "shortcuts": "اختصارات لوحة المفاتيح",
+                    "language": "تغيير اللغة"
+                }
+            },
+            "UserModal": {
+                "link": {
+                    "about": "عن الصفحة",
+                    "chat": "قاعة المحادثة",
+                    "git": "متعقّب المشاكل",
+                    "login": "الدخول",
+                    "logout": "الخروج",
+                    "notifications": "الإشعارات",
+                    "profile": "افتح الصفحة الشخصية",
+                    "settings": "الإعدادات",
+                    "signup": "التسجيل"
+                },
+                "label": {
+                    "shortcuts": "اختصارات لوحة المفاتيح",
+                    "language": "تغيير اللغة"
+                },
+                "header": {
+                    "options": "الإجراءات"
+                },
+                "button": {
+                    "switchInstance": "إستخدم مثيل خادوم آخَر"
+                }
+            },
+            "ActionTable": {
+                "label": {
+                    "actions": "الإجراءات",
+                    "performAction": "معلومات عن المَقطَع"
+                },
+                "header": {
+                    "error": "حدث خطأ أثناء تطبيق الإجراء"
+                },
+                "button": {
+                    "go": "هيا",
+                    "launch": "إبدأ",
+                    "refresh": "تحديث محتوى الجدول",
+                    "selectAll": "إختيار عامل تصفية",
+                    "selectElement": "تحديد الصفحة الحالية فقط | تحديد الصفحة الحالية فقط",
+                    "selectCurrentPage": "تحديد الصفحة الحالية فقط"
+                }
+            },
+            "DangerousButton": {
+                "button": {
+                    "cancel": "إلغاء",
+                    "confirm": "تأكيد"
+                },
+                "header": {
+                    "confirm": "هل تؤكّد هذا الإجراء ؟"
+                }
+            },
+            "RenderedDescription": {
+                "button": {
+                    "cancel": "إلغاء",
+                    "edit": "تعديل",
+                    "update": "وصفي الرائع"
+                },
+                "header": {
+                    "failure": "حدث خطأ أثناء تطبيق الإجراء"
+                },
+                "empty": {
+                    "noDescription": "الوصف غير متوفر"
+                }
+            },
+            "InlineSearchBar": {
+                "button": {
+                    "clear": "امسح"
+                },
+                "label": {
+                    "search": "البحث"
+                },
+                "placeholder": {
+                    "search": "البحث"
+                }
+            },
+            "CollapseLink": {
+                "button": {
+                    "collapse": "تصغير"
+                }
+            },
+            "CopyInput": {
+                "button": {
+                    "copy": "نسخ"
+                },
+                "message": {
+                    "success": "تم نسخ النص إلى الحافظة!"
+                }
+            },
+            "LoginModal": {
+                "link": {
+                    "login": "الدخول",
+                    "signup": "التسجيل"
+                }
+            },
+            "EmptyState": {
+                "header": {
+                    "noResults": "لم يتم العثور على أية نتيجة."
+                },
+                "button": {
+                    "refresh": "إنعاش"
+                }
+            },
+            "ContentForm": {
+                "empty": {
+                    "noContent": "لا شيء للمعاينة."
+                },
+                "button": {
+                    "preview": "معاينة"
+                }
+            },
+            "AttachmentInput": {
+                "button": {
+                    "remove": "حذف"
+                },
+                "label": {
+                    "upload": "إرسال مقاطع موسيقية جديدة"
+                },
+                "loader": {
+                    "uploading": "الإرسال جارٍ…"
+                },
+                "header": {
+                    "failure": "لا يمكن إنشاء حسابك."
                 }
             }
         },
@@ -1796,7 +1479,6 @@
                 "albums": "الألبومات",
                 "artists": "الفنانون",
                 "browse": "تصفّح",
-                "channels": "",
                 "createAccount": "أنشئ حسابا",
                 "favorites": "المفضلة",
                 "home": "الرئيسية",
@@ -1804,7 +1486,6 @@
                 "login": "تسجيل الدخول",
                 "moderation": "الإشراف",
                 "playlists": "قوائم المَقاطِع",
-                "podcasts": "",
                 "radios": "الإذاعات",
                 "search": "البحث",
                 "settings": "الإعدادات",
@@ -1817,14 +1498,11 @@
                 "main": "القائمة الرئيسية",
                 "follows": "طلبات المتابَعة المعلَّقة",
                 "edits": "الملفات المعلّقة",
-                "play": "شغِّل هذا المَقطَع",
-                "theme": ""
+                "play": "شغِّل هذا المَقطَع"
             },
             "header": {
                 "administration": "الإدارة",
-                "explore": "",
                 "main": "تتابُع الصفحات",
-                "more": "",
                 "library": "المكتبة"
             }
         },
@@ -1867,9 +1545,6 @@
                             "warning": "لا يمكن الغاء هذا الإجراء."
                         }
                     },
-                    "link": {
-                        "local": ""
-                    },
                     "notApplicable": "غير متوفر",
                     "label": {
                         "search": "البحث",
@@ -1910,12 +1585,8 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "حذف",
-                            "warning": ""
+                            "label": "حذف"
                         }
-                    },
-                    "link": {
-                        "local": ""
                     },
                     "label": {
                         "search": "البحث",
@@ -1951,12 +1622,8 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "حذف",
-                            "warning": ""
+                            "label": "حذف"
                         }
-                    },
-                    "link": {
-                        "local": ""
                     },
                     "notApplicable": "غير متوفر",
                     "label": {
@@ -1998,12 +1665,8 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "حذف",
-                            "warning": ""
+                            "label": "حذف"
                         }
-                    },
-                    "link": {
-                        "local": ""
                     },
                     "placeholder": {
                         "search": "البحث عبر اسم نطاق أو مستخدِم أو نبذة…"
@@ -2096,15 +1759,13 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "حذف",
-                            "warning": ""
+                            "label": "حذف"
                         }
                     },
+                    "notApplicable": "غير متوفر",
                     "link": {
-                        "local": "",
                         "moderation": "تحديث قاعدة الإشراف"
                     },
-                    "notApplicable": "غير متوفر",
                     "label": {
                         "search": "البحث"
                     },
@@ -2122,17 +1783,13 @@
                         "object": {
                             "account": "الحسابات",
                             "domain": "النطاق",
-                            "local": "",
                             "owner": "المالك",
                             "type": "النوع"
                         },
                         "status": {
                             "assignedTo": "نُسِب إلى",
-                            "internalNotes": "",
                             "resolutionDate": "تاريخ الإنشاء",
-                            "resolved": "",
-                            "status": "الحالة",
-                            "unresolved": ""
+                            "status": "الحالة"
                         },
                         "report": {
                             "category": "الفئة",
@@ -2141,50 +1798,27 @@
                         }
                     },
                     "header": {
-                        "actions": "الإجراءات",
-                        "notes": "",
-                        "message": "",
-                        "reportedObject": ""
+                        "actions": "الإجراءات"
                     },
                     "button": {
-                        "confirmDelete": "حذف",
-                        "delete": "",
-                        "resolve": "",
-                        "unresolve": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
+                        "confirmDelete": "حذف"
                     },
                     "notApplicable": "غير متوفر",
                     "link": {
-                        "moderation": "تحديث قاعدة الإشراف",
-                        "report": "",
-                        "publicPage": ""
-                    },
-                    "warning": {
-                        "objectDeleted": ""
+                        "moderation": "تحديث قاعدة الإشراف"
                     }
                 },
                 "UserRequestCard": {
                     "header": {
-                        "actions": "الإجراءات",
-                        "notes": "",
-                        "signup": ""
+                        "actions": "الإجراءات"
                     },
                     "button": {
-                        "approve": "قبول",
-                        "reject": ""
+                        "approve": "قبول"
                     },
                     "table": {
                         "status": {
                             "approved": "التي تم قبولها",
                             "assignedTo": "نُسِب إلى",
-                            "internalNotes": "",
                             "pending": "معلّق",
                             "refused": "تم توقيفه مؤقتا",
                             "status": "الحالة"
@@ -2197,9 +1831,6 @@
                     "notApplicable": "غير متوفر",
                     "link": {
                         "request": "طلب كلمة سرية"
-                    },
-                    "message": {
-                        "signup": ""
                     }
                 },
                 "InstancePolicyForm": {
@@ -2218,14 +1849,6 @@
                         "policyReason": "السبب",
                         "rejectMedia": "ارفض الوسائط"
                     },
-                    "tooltip": {
-                        "blockAll": "",
-                        "rejectMedia": "",
-                        "summary": "",
-                        "silenceActivity": "إخفاء الحساب أو محتوى النطاق مِن الجميع باستثناء المتابِعين.",
-                        "silenceNotifications": "إخفاء الحساب أو محتوى النطاق مِن الجميع باستثناء المتابِعين.",
-                        "isActive": ""
-                    },
                     "button": {
                         "cancel": "إلغاء",
                         "create": "إنشاء",
@@ -2240,14 +1863,15 @@
                                 "warning": "لا يمكن الغاء هذا الإجراء."
                             }
                         }
+                    },
+                    "tooltip": {
+                        "silenceActivity": "إخفاء الحساب أو محتوى النطاق مِن الجميع باستثناء المتابِعين.",
+                        "silenceNotifications": "إخفاء الحساب أو محتوى النطاق مِن الجميع باستثناء المتابِعين."
                     }
                 },
                 "NoteForm": {
                     "button": {
                         "add": "إضافة محتوى"
-                    },
-                    "placeholder": {
-                        "summary": ""
                     },
                     "header": {
                         "failure": "حدث خطأ أثناء حفظ الإعدادات"
@@ -2290,12 +1914,11 @@
                             "moderationRule": "نعم"
                         }
                     },
-                    "label": {
-                        "inList": "",
-                        "search": "البحث"
-                    },
                     "empty": {
                         "noPods": "لاشيء موجود"
+                    },
+                    "label": {
+                        "search": "البحث"
                     },
                     "placeholder": {
                         "search": "البحث باستخدام اسم…"
@@ -2373,10 +1996,7 @@
                     },
                     "modal": {
                         "manage": {
-                            "header": "تحديث قاعدة الإشراف",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "تحديث قاعدة الإشراف"
                         }
                     }
                 },
@@ -2423,7 +2043,6 @@
                     "search": "البحث"
                 },
                 "link": {
-                    "local": "",
                     "moderation": "تحديث قاعدة الإشراف"
                 },
                 "placeholder": {
@@ -2547,12 +2166,7 @@
                         "header": {
                             "actions": "الإجراءات",
                             "label": "الحقل",
-                            "type": "الحقل",
-                            "required": ""
-                        },
-                        "type": {
-                            "long": "",
-                            "short": ""
+                            "type": "الحقل"
                         },
                         "required": {
                             "false": "لا",
@@ -2560,22 +2174,12 @@
                         }
                     }
                 },
+                "label": {
+                    "delete": "حذف"
+                },
                 "button": {
-                    "add": "",
                     "edit": "تعديل",
                     "preview": "معاينة"
-                },
-                "label": {
-                    "additionalField": "",
-                    "additionalFields": "",
-                    "delete": "حذف",
-                    "helpText": "",
-                    "moveDown": "",
-                    "moveUp": ""
-                },
-                "help": {
-                    "additionalFields": "",
-                    "helpText": ""
                 }
             },
             "SettingsGroup": {
@@ -2600,38 +2204,10 @@
                     "category": "الفئة"
                 }
             },
-            "ReportModal": {
-                "header": {
-                    "disabled": "",
-                    "modal": "أترغب في الإبلاغ عن هذا العنصر؟",
-                    "submissionFailure": "حدث خطأ أثناء حفظ الإعدادات"
-                },
-                "button": {
-                    "cancel": "إلغاء",
-                    "submit": "إرسال"
-                },
-                "label": {
-                    "email": "البريد الإلكتروني",
-                    "forwardToDomain": "",
-                    "message": ""
-                },
-                "description": {
-                    "forwardToDomain": "",
-                    "message": "",
-                    "modal": "",
-                    "email": ""
-                },
-                "message": {
-                    "submissionSuccess": ""
-                }
-            },
             "FilterModal": {
                 "button": {
                     "cancel": "إلغاء",
                     "hide": "إخفاء المحتوى"
-                },
-                "message": {
-                    "success": ""
                 },
                 "header": {
                     "modal": "أتريد حقا إخفاء محتوى هذا الفنان \"{ name }\"؟",
@@ -2640,35 +2216,35 @@
                 "warning": {
                     "createFilter": {
                         "listItem2": "تمت إضافتها مؤخرا",
-                        "listItem3": "",
-                        "listItem1": "",
-                        "listItem4": "في اقتراحات الإذاعات",
-                        "listIntro": ""
+                        "listItem4": "في اقتراحات الإذاعات"
                     }
+                }
+            },
+            "ReportModal": {
+                "button": {
+                    "cancel": "إلغاء",
+                    "submit": "إرسال"
                 },
-                "help": {
-                    "createFilter": ""
+                "header": {
+                    "modal": "أترغب في الإبلاغ عن هذا العنصر؟",
+                    "submissionFailure": "حدث خطأ أثناء حفظ الإعدادات"
+                },
+                "label": {
+                    "email": "البريد الإلكتروني"
                 }
             }
         },
         "federation": {
             "FetchButton": {
                 "description": {
-                    "failure": "حدث خطأ أثناء عملية إنعاش البيانات:",
-                    "success": "",
-                    "pending": "",
-                    "skipped": ""
+                    "failure": "حدث خطأ أثناء عملية إنعاش البيانات:"
                 },
                 "table": {
                     "error": {
                         "value": {
                             "httpError": "حدث خطأ أثناء عملية حفظ التغييرات",
-                            "invalidAttributesError": "",
                             "connectionError": "تعذر الاتصال بالخادم البُعدي",
-                            "httpStatus": "ردَّ الخادم البُعدي بإجابة HTTP { status }",
-                            "timeoutError": "",
-                            "invalidJsonError": "",
-                            "unknownError": ""
+                            "httpStatus": "ردَّ الخادم البُعدي بإجابة HTTP { status }"
                         },
                         "label": {
                             "detail": "سِجِل الأخطاء",
@@ -2683,22 +2259,15 @@
                 "header": {
                     "saveFailure": "حدث خطأ أثناء حفظ الإعدادات",
                     "failure": "إنعاش",
-                    "pending": "تحديث معلومات العُقدة",
-                    "success": "",
-                    "skipped": "",
-                    "refresh": ""
+                    "pending": "تحديث معلومات العُقدة"
                 },
                 "loader": {
-                    "fetchRequest": "",
                     "awaitingResult": "جارٍ تحميل مفضلاتك…"
                 }
             },
             "LibraryWidget": {
                 "empty": {
                     "noMatch": "ليس هناك أية مكتبة مطابِقة."
-                },
-                "button": {
-                    "showMore": ""
                 }
             }
         },
@@ -2708,25 +2277,16 @@
                     "label": "اختصارات المُشغّل الصوتي",
                     "clearQueue": "مسح قائمة الانتظار الخاصة بك",
                     "decreaseVolume": "تخفيض الصوت",
-                    "expandQueue": "",
                     "increaseVolume": "زيادة حجم الصوت",
                     "playPause": "إيقاف/تشغيل المقطع الحالي",
                     "playNext": "شغِّل المَقطَع التالي",
                     "playPrevious": "شغِّل المَقطَع السابق",
-                    "seekBack30": "",
-                    "seekBack5": "",
-                    "seekForward30": "",
-                    "seekForward5": "",
                     "shuffleQueue": "خلط قائمة الإنتظار",
-                    "toggleFavorite": "{ count } مفضّلة",
-                    "toggleMute": "",
-                    "toggleLoop": ""
+                    "toggleFavorite": "{ count } مفضّلة"
                 },
                 "general": {
-                    "focus": "",
                     "label": "الاختصارات العامة",
-                    "show": "عرض اختصارات لوحة المفاتيح المتوفّرة",
-                    "unfocus": ""
+                    "show": "عرض اختصارات لوحة المفاتيح المتوفّرة"
                 }
             },
             "button": {
@@ -2743,16 +2303,10 @@
             },
             "header": {
                 "chooseInstance": "اختر خادومك",
-                "failure": "",
                 "suggestions": "الخيارات المتاحة"
             },
             "label": {
                 "url": "بيانات مثيل الخادم"
-            },
-            "help": {
-                "notFunkwhaleServer": "",
-                "serverDown": "",
-                "selectPod": ""
             },
             "message": {
                 "newUrl": "إنك الآن تستخدم خادم Funkwhale على { url }"
@@ -2779,12 +2333,11 @@
                 "radio": "سوف يتم إضافة المَقاطِع الجديدة هنا آليًا.",
                 "automaticPlay": "سيتم تشغيل المقطَع اللاحق تلقائيا خلال بضع ثوان…"
             },
-            "header": {
-                "failure": "",
-                "radio": "إنك تستمع إلى إذاعة"
-            },
             "meta": {
                 "queuePosition": "({ index } مِن { length })"
+            },
+            "header": {
+                "radio": "إنك تستمع إلى إذاعة"
             },
             "warning": {
                 "connectivity": "ربما عندك مشكلة في الاتصال."
@@ -2816,31 +2369,19 @@
             "header": {
                 "fetchFailed": "حدث خطأ أثناء عملية جلب معلومات العقدة"
             },
-            "button": {
-                "fediverse": "",
-                "rss": "",
-                "search": "البحث"
-            },
             "label": {
-                "fediverse": {
-                    "fieldLabel": "",
-                    "title": "البحث في ويكيبيديا"
-                },
                 "rss": {
-                    "fieldPlaceholder": "",
-                    "fieldLabel": "أنشئ قائمة مَقاطع موسيقية",
-                    "title": ""
+                    "fieldLabel": "أنشئ قائمة مَقاطع موسيقية"
+                },
+                "fediverse": {
+                    "title": "البحث في ويكيبيديا"
                 }
             },
-            "warning": {
-                "unsupported": ""
+            "button": {
+                "search": "البحث"
             },
             "error": {
                 "fetchFailed": "لا يمكن استرداد هذا المكوّن"
-            },
-            "description": {
-                "fediverse": "",
-                "rss": ""
             }
         },
         "PageNotFound": {
@@ -2879,17 +2420,8 @@
                     "subscribers": "{ count } مفضّلة | مفضلة",
                     "tracks": "{ count } مقطع | { count } مَقطَع"
                 },
-                "link": {
-                    "channelEpisodes": "",
-                    "mirrored": "",
-                    "moderation": "تحديث قاعدة الإشراف",
-                    "channelOverview": "معاينة",
-                    "channelTracks": "المَقاطِع",
-                    "domainView": "عضو منذ { date }"
-                },
                 "header": {
-                    "artistChannel": "إسم الفنان",
-                    "podcastChannel": ""
+                    "artistChannel": "إسم الفنان"
                 },
                 "button": {
                     "cancel": "إلغاء",
@@ -2901,26 +2433,7 @@
                     "updateChannel": "تحديث قائمة المَقاطِع الموسيقية",
                     "upload": "أرسل"
                 },
-                "title": "",
                 "modal": {
-                    "subscribe": {
-                        "rss": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
-                        },
-                        "fediverse": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
-                        },
-                        "funkwhale": {
-                            "header": "لاستخدام Funkwhale"
-                        },
-                        "header": ""
-                    },
                     "delete": {
                         "header": "أتريد حذف هذه المكتبة؟",
                         "content": {
@@ -2929,29 +2442,32 @@
                     },
                     "embed": {
                         "header": "ادمج هذا المَقطع على موقعك"
+                    },
+                    "subscribe": {
+                        "funkwhale": {
+                            "header": "لاستخدام Funkwhale"
+                        }
                     }
+                },
+                "link": {
+                    "moderation": "تحديث قاعدة الإشراف",
+                    "channelOverview": "معاينة",
+                    "channelTracks": "المَقاطِع",
+                    "domainView": "عضو منذ { date }"
                 }
             },
             "DetailOverview": {
                 "link": {
                     "addAlbum": "إضافة محتوى",
-                    "erroredUploads": "تم تحديث المكتبة",
-                    "skippedUploads": ""
+                    "erroredUploads": "تم تحديث المكتبة"
                 },
                 "header": {
                     "albums": "الألبومات",
-                    "latestEpisodes": "",
                     "latestTracks": "المَقطَع التالي",
-                    "series": "",
-                    "uploadsFailure": "",
-                    "uploadsProcessing": "",
                     "uploadsSuccess": "تم تحديث كلمة السر بنجاح"
                 },
                 "meta": {
                     "progress": "تم تحديث المكتبة"
-                },
-                "message": {
-                    "processing": ""
                 }
             },
             "SubscriptionsList": {
@@ -2959,13 +2475,11 @@
                     "addNew": "إضافة محتوى"
                 },
                 "button": {
-                    "cancel": "إلغاء",
-                    "subscribe": ""
+                    "cancel": "إلغاء"
                 },
                 "placeholder": {
                     "search": "إسم عامل التصفية"
                 },
-                "title": "",
                 "modal": {
                     "subscription": {
                         "header": "الوصف"
@@ -3007,22 +2521,13 @@
                     },
                     "modal": {
                         "purgeErrored": {
-                            "header": "تنظيف الملفات الخاطئة وحذفها؟",
-                            "content": {
-                                "description": ""
-                            }
+                            "header": "تنظيف الملفات الخاطئة وحذفها؟"
                         },
                         "purgePending": {
-                            "header": "هل تريد إزالة الملفات المعلّقة؟",
-                            "content": {
-                                "description": ""
-                            }
+                            "header": "هل تريد إزالة الملفات المعلّقة؟"
                         },
                         "purgeSkipped": {
-                            "header": "هل تريد إزالة الملفات المتخطاة؟",
-                            "content": {
-                                "description": ""
-                            }
+                            "header": "هل تريد إزالة الملفات المتخطاة؟"
                         }
                     },
                     "link": {
@@ -3046,7 +2551,6 @@
                     "option": {
                         "status": {
                             "all": "الكل",
-                            "draft": "",
                             "failed": "فشل",
                             "finished": "إكتمل",
                             "pending": "معلّق",
@@ -3120,10 +2624,6 @@
                     "header": {
                         "failure": "خطأ"
                     },
-                    "description": {
-                        "library": "",
-                        "visibility": ""
-                    },
                     "message": {
                         "libraryCreated": "تم إنشاء المكتبة",
                         "libraryDeleted": "تم حذف المكتبة",
@@ -3169,12 +2669,7 @@
                         "sharingLink": "رابط المشاركة"
                     },
                     "message": {
-                        "scanLaunched": "بدأ الاستكشاف",
-                        "scanSkipped": ""
-                    },
-                    "tooltip": {
-                        "private": "",
-                        "public": ""
+                        "scanLaunched": "بدأ الاستكشاف"
                     }
                 },
                 "ScanForm": {
@@ -3201,26 +2696,14 @@
                     },
                     "button": {
                         "refresh": "إنعاش"
-                    },
-                    "description": {
-                        "remoteLibraries": ""
                     }
                 }
             },
             "Home": {
                 "title": "إضافة المحتوى وإدارته",
-                "description": {
-                    "follow": "",
-                    "channel": {
-                        "1": "",
-                        "2": ""
-                    },
-                    "upload": ""
-                },
                 "header": {
                     "follow": "متابعة المكتبات عن بُعد",
-                    "channel": "انشر مؤلفاتك في قناة",
-                    "upload": ""
+                    "channel": "انشر مؤلفاتك في قناة"
                 },
                 "button": {
                     "start": "إبدأ هنا"
@@ -3266,11 +2749,6 @@
                 },
                 "description": {
                     "sharingLink": "قم بمشاركة هذا الرابط مع مستخدمين آخرين ليتمكنوا مِن طلب الوصول إلى مكتبتك."
-                },
-                "tooltip": {
-                    "private": "",
-                    "public": "",
-                    "instance": ""
                 }
             },
             "Edit": {
@@ -3306,19 +2784,16 @@
             },
             "DetailAlbums": {
                 "empty": {
-                    "upload": "",
                     "follow": "إن قمت بإلغاء متابعة هذه المكتبة فسوف لن تتمكن مِن الوصول إلى محتواها."
                 }
             },
             "DetailOverview": {
                 "empty": {
-                    "upload": "",
                     "follow": "إن قمت بإلغاء متابعة هذه المكتبة فسوف لن تتمكن مِن الوصول إلى محتواها."
                 }
             },
             "DetailTracks": {
                 "empty": {
-                    "upload": "",
                     "follow": "إن قمت بإلغاء متابعة هذه المكتبة فسوف لن تتمكن مِن الوصول إلى محتواها."
                 }
             }
@@ -3367,10 +2842,7 @@
                         "artist": {
                             "header": "إسم الفنان"
                         },
-                        "header": "أنشئ مكتبة جديدة",
-                        "podcast": {
-                            "header": ""
-                        }
+                        "header": "أنشئ مكتبة جديدة"
                     }
                 },
                 "button": {
@@ -3380,7 +2852,6 @@
                     "previous": "المَقطَع السابق"
                 },
                 "header": {
-                    "channels": "",
                     "sharedLibraries": "هذا الألبوم متوفر على المكتبات التالية:",
                     "libraries": "مكتبات المستخدِم"
                 }
@@ -3395,15 +2866,14 @@
                     "failure": "حدث خطأ أثناء عملية تعديل كلمتك السرية",
                     "success": "تم تحديث كلمة السر بنجاح"
                 },
-                "message": {
-                    "requestSent": "",
-                    "success": "تم تحديث كلمتك السرية بنجاح."
-                },
                 "label": {
                     "newPassword": "الكلمة السرية الجديدة"
                 },
                 "button": {
                     "update": "قم بتحديث كلمتك السرية"
+                },
+                "message": {
+                    "success": "تم تحديث كلمتك السرية بنجاح."
                 }
             },
             "EmailConfirm": {
@@ -3456,37 +2926,26 @@
                 "delay": {
                     "30": "30 يوما",
                     "60": "60 يوما",
-                    "90": "90 يوما",
-                    "never": ""
+                    "90": "90 يوما"
                 }
-            },
-            "link": {
-                "help": "",
-                "donate": ""
             },
             "header": {
                 "funkwhaleSupport": "عن فانك وايل Funkwhale",
-                "instanceSupport": "",
                 "messages": "الرسائل المُرسَلة",
                 "notifications": "إشعاراتك"
             },
-            "button": {
-                "submit": "",
-                "read": "تحديد الكل كمقروء"
-            },
             "loading": {
                 "notifications": "عملية تحميل الإشعارات جارية…"
+            },
+            "button": {
+                "read": "تحديد الكل كمقروء"
             },
             "empty": {
                 "notifications": "ليس هناك أي إشعار للعرض."
             },
             "title": "الإشعارات",
             "label": {
-                "reminder": "",
                 "showRead": "عرض الإشعارات المقروءة"
-            },
-            "message": {
-                "funkwhaleSupport": ""
             }
         },
         "admin": {
@@ -3508,17 +2967,16 @@
                             "signupDate": "تاريخ التسجيل",
                             "userType": "النوع"
                         },
-                        "audioContent": {
-                            "cachedSize": "",
-                            "megabyte": "MB",
-                            "totalSize": "الحجم الإجمالي",
-                            "uploadQuota": "حصة التحميل"
-                        },
                         "activity": {
                             "emittedFollows": "أدخِل عنوان رابط لمكتبة ما",
                             "emittedMessages": "الرسائل المُرسَلة",
                             "firstSeen": "أول زيارة",
                             "receivedFollows": "الطلبات الواردة لمتابعة المكتبات"
+                        },
+                        "audioContent": {
+                            "megabyte": "MB",
+                            "totalSize": "الحجم الإجمالي",
+                            "uploadQuota": "حصة التحميل"
                         }
                     },
                     "header": {
@@ -3526,7 +2984,6 @@
                         "activity": "النشاط",
                         "audioContent": "المحتوى الصوتي",
                         "localAccount": "حساب محلي",
-                        "activePolicy": "",
                         "noPolicy": "ليس لديك أية قاعدة لهذا الحساب بعد."
                     },
                     "button": {
@@ -3535,19 +2992,13 @@
                     "link": {
                         "albums": "الألبومات",
                         "artists": "الفنانون",
-                        "channels": "",
                         "domain": "النطاق",
                         "libraries": "المكتبات",
-                        "linkedReports": "",
                         "openProfile": "افتح الصفحة الشخصية",
                         "remoteProfile": "افتح الصفحة الشخصية",
                         "requests": "طلب كلمة سرية",
                         "tracks": "المَقاطِع",
-                        "uploads": "المُرسَلة",
-                        "django": ""
-                    },
-                    "tooltip": {
-                        "uploadQuota": ""
+                        "uploads": "المُرسَلة"
                     },
                     "option": {
                         "permission": {
@@ -3559,16 +3010,12 @@
                     "description": {
                         "policy": "قواعد الإشراف تساعدكم على التحكم في كيفية تفاعل مثيل خادومكم مع النطاقات و الحسابات الأخرى."
                     },
-                    "notApplicable": "غير متوفر",
-                    "warning": {
-                        "stats": ""
-                    }
+                    "notApplicable": "غير متوفر"
                 },
                 "Base": {
                     "link": {
                         "accounts": "الحسابات",
                         "domains": "النطاقات",
-                        "reports": "",
                         "userRequests": "مكتبات المستخدِم"
                     },
                     "title": "الإشراف",
@@ -3581,7 +3028,6 @@
                         "activity": "النشاط",
                         "audioContent": "المحتوى الصوتي",
                         "instanceData": "بيانات مثيل الخادم",
-                        "activePolicy": "",
                         "noPolicy": "ليس لديك أية قاعدة خاصة باسم النطاق هذا."
                     },
                     "button": {
@@ -3593,19 +3039,13 @@
                     "link": {
                         "albums": "الألبومات",
                         "artists": "الفنانون",
-                        "channels": "",
                         "knownAccounts": "الحسابات المعروفة",
                         "libraries": "المكتبات",
                         "website": "افتح موقع الويب",
                         "tracks": "المَقاطِع",
-                        "uploads": "المُرسَلة",
-                        "django": ""
+                        "uploads": "المُرسَلة"
                     },
                     "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": "الحجم الإجمالي"
-                        },
                         "activity": {
                             "emittedFollows": "أدخِل عنوان رابط لمكتبة ما",
                             "emittedMessages": "الرسائل المُرسَلة",
@@ -3617,26 +3057,25 @@
                                 "value": "حدث خطأ أثناء عملية جلب معلومات العقدة",
                                 "label": "الحالة"
                             },
+                            "lastChecked": "آخِر فحص",
+                            "domainName": "الإسم",
                             "inAllowList": {
-                                "label": "",
                                 "false": "لا",
                                 "true": "نعم"
                             },
-                            "lastChecked": "آخِر فحص",
-                            "domainName": "الإسم",
                             "software": {
                                 "label": "البرمجيات"
                             },
                             "totalUsers": "العدد الإجمالي للمستخدِمين"
+                        },
+                        "audioContent": {
+                            "totalSize": "الحجم الإجمالي"
                         }
                     },
                     "description": {
                         "policy": "قواعد الإشراف تساعدكم على التحكم في كيفية تفاعل مثيل خادومكم مع النطاقات و الحسابات الأخرى."
                     },
-                    "notApplicable": "غير متوفر",
-                    "warning": {
-                        "stats": ""
-                    }
+                    "notApplicable": "غير متوفر"
                 },
                 "DomainsList": {
                     "button": {
@@ -3655,9 +3094,7 @@
                 "ReportsList": {
                     "option": {
                         "status": {
-                            "all": "الكل",
-                            "resolved": "",
-                            "unresolved": ""
+                            "all": "الكل"
                         }
                     },
                     "ordering": {
@@ -3667,10 +3104,6 @@
                             "label": "الترتيب"
                         },
                         "label": "الترتيب"
-                    },
-                    "title": "",
-                    "header": {
-                        "reports": ""
                     },
                     "label": {
                         "search": "البحث",
@@ -3721,7 +3154,6 @@
                             "bitrate": {
                                 "label": "معدل البت"
                             },
-                            "cachedSize": "",
                             "duration": "المدّة",
                             "size": "الحجم",
                             "track": "المَقطَع"
@@ -3737,13 +3169,11 @@
                         "library": "المكتبة",
                         "remoteProfile": "افتح الصفحة الشخصية",
                         "type": "النوع",
-                        "django": "",
                         "visibility": "المشاهدة"
                     },
                     "header": {
                         "activity": "النشاط",
                         "audioContent": "المحتوى الصوتي",
-                        "local": "",
                         "uploadData": "تاريخ التحميل"
                     },
                     "button": {
@@ -3766,24 +3196,25 @@
                         "albums": "الألبومات",
                         "artists": "الفنانون",
                         "domain": "النطاق",
-                        "reports": "",
                         "remoteProfile": "افتح الصفحة الشخصية",
                         "tracks": "المَقاطِع",
                         "uploads": "المُرسَلة",
-                        "django": "",
                         "visibility": "المشاهدة"
                     },
                     "header": {
                         "activity": "النشاط",
                         "audioContent": "المحتوى الصوتي",
-                        "libraryData": "تم تحديث المكتبة",
-                        "local": ""
+                        "libraryData": "تم تحديث المكتبة"
+                    },
+                    "button": {
+                        "delete": "حذف"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "أتريد حذف هذه المكتبة؟"
+                        }
                     },
                     "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": "الحجم الإجمالي"
-                        },
                         "library": {
                             "description": "الوصف",
                             "name": "الإسم"
@@ -3791,48 +3222,39 @@
                         "activity": {
                             "firstSeen": "أول زيارة",
                             "followers": "المتابِعون"
+                        },
+                        "audioContent": {
+                            "totalSize": "الحجم الإجمالي"
                         }
-                    },
-                    "button": {
-                        "delete": "حذف"
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "أتريد حذف هذه المكتبة؟",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "AlbumDetail": {
                     "header": {
                         "activity": "النشاط",
                         "albumData": "عنوان الألبوم",
-                        "audioContent": "المحتوى الصوتي",
-                        "local": ""
+                        "audioContent": "المحتوى الصوتي"
                     },
                     "link": {
                         "artist": "الفنان",
                         "domain": "النطاق",
                         "edits": "تعديل",
                         "libraries": "المكتبات",
-                        "reports": "",
                         "localProfile": "افتح الصفحة الشخصية",
                         "musicbrainz": "إطّلع عليه على ميوزيك براينز",
                         "remoteProfile": "افتح الصفحة الشخصية",
                         "tracks": "المَقاطِع",
-                        "uploads": "المُرسَلة",
-                        "django": ""
+                        "uploads": "المُرسَلة"
+                    },
+                    "button": {
+                        "delete": "حذف",
+                        "edit": "تعديل"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "أتريد حذف هذه المكتبة؟"
+                        }
                     },
                     "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": "الحجم الإجمالي"
-                        },
                         "album": {
                             "description": "الوصف",
                             "title": "العنوان"
@@ -3840,33 +3262,18 @@
                         "activity": {
                             "favorited": "المَقاطع الصوتية المفضلة",
                             "firstSeen": "أول زيارة",
-                            "listenings": "",
                             "playlists": "قوائم المَقاطِع"
+                        },
+                        "audioContent": {
+                            "totalSize": "الحجم الإجمالي"
                         }
-                    },
-                    "button": {
-                        "delete": "حذف",
-                        "edit": "تعديل",
-                        "remoteRefresh": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "أتريد حذف هذه المكتبة؟",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "ArtistDetail": {
                     "header": {
                         "activity": "النشاط",
                         "artistData": "إسم الفنان",
-                        "audioContent": "المحتوى الصوتي",
-                        "local": ""
+                        "audioContent": "المحتوى الصوتي"
                     },
                     "link": {
                         "albums": "الألبومات",
@@ -3874,19 +3281,22 @@
                         "domain": "النطاق",
                         "edits": "تعديل",
                         "libraries": "المكتبات",
-                        "reports": "",
                         "localProfile": "افتح الصفحة الشخصية",
                         "musicbrainz": "إطّلع عليه على ميوزيك براينز",
                         "remoteProfile": "افتح الصفحة الشخصية",
                         "tracks": "المَقاطِع",
-                        "uploads": "المُرسَلة",
-                        "django": ""
+                        "uploads": "المُرسَلة"
+                    },
+                    "button": {
+                        "delete": "حذف",
+                        "edit": "تعديل"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "أتريد حذف هذا الفنان؟"
+                        }
                     },
                     "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": "الحجم الإجمالي"
-                        },
                         "artist": {
                             "description": "الوصف",
                             "name": "الإسم"
@@ -3894,25 +3304,11 @@
                         "activity": {
                             "favorited": "المَقاطع الصوتية المفضلة",
                             "firstSeen": "أول زيارة",
-                            "listenings": "",
                             "playlists": "قوائم المَقاطِع"
+                        },
+                        "audioContent": {
+                            "totalSize": "الحجم الإجمالي"
                         }
-                    },
-                    "button": {
-                        "delete": "حذف",
-                        "edit": "تعديل",
-                        "remoteRefresh": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "أتريد حذف هذا الفنان؟",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "TagDetail": {
@@ -3925,8 +3321,7 @@
                         "albums": "الألبومات",
                         "artists": "الفنانون",
                         "localProfile": "افتح الصفحة الشخصية",
-                        "tracks": "المَقاطِع",
-                        "django": ""
+                        "tracks": "المَقاطِع"
                     },
                     "button": {
                         "delete": "حذف"
@@ -3951,7 +3346,6 @@
                 "TrackDetail": {
                     "header": {
                         "activity": "النشاط",
-                        "local": "",
                         "trackData": "اسم المَقطَع"
                     },
                     "link": {
@@ -3961,18 +3355,12 @@
                         "domain": "النطاق",
                         "edits": "تعديل",
                         "libraries": "المكتبات",
-                        "reports": "",
                         "localProfile": "افتح الصفحة الشخصية",
                         "musicbrainz": "إطّلع عليه على ميوزيك براينز",
                         "remoteProfile": "افتح الصفحة الشخصية",
-                        "uploads": "المُرسَلة",
-                        "django": ""
+                        "uploads": "المُرسَلة"
                     },
                     "table": {
-                        "trackData": {
-                            "cachedSize": "",
-                            "totalSize": "الحجم الإجمالي"
-                        },
                         "track": {
                             "copyright": "الحقوق",
                             "description": "الوصف",
@@ -3984,35 +3372,28 @@
                         "activity": {
                             "favorited": "المَقاطع الصوتية المفضلة",
                             "firstSeen": "أول زيارة",
-                            "listenings": "",
                             "playlists": "قوائم المَقاطِع"
+                        },
+                        "trackData": {
+                            "totalSize": "الحجم الإجمالي"
                         }
                     },
                     "button": {
                         "delete": "حذف",
-                        "edit": "تعديل",
-                        "remoteRefresh": ""
+                        "edit": "تعديل"
                     },
                     "modal": {
                         "delete": {
-                            "header": "أتريد حذف هذا الوسم؟",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "أتريد حذف هذا الوسم؟"
                         }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "Base": {
                     "link": {
                         "albums": "الألبومات",
                         "artists": "الفنانون",
-                        "channels": "",
                         "edits": "تعديل",
                         "libraries": "المكتبات",
-                        "tags": "",
                         "tracks": "المَقاطِع",
                         "uploads": "المُرسَلة"
                     },
@@ -4035,13 +3416,10 @@
                         "category": "الفئة",
                         "description": "الوصف",
                         "domain": "النطاق",
-                        "name": "الإسم",
-                        "rss": "",
-                        "url": ""
+                        "name": "الإسم"
                     },
                     "audioContent": {
                         "albums": "الألبومات",
-                        "cachedSize": "",
                         "totalSize": "الحجم الإجمالي",
                         "tracks": "المَقاطِع",
                         "uploads": "المُرسَلة"
@@ -4050,8 +3428,6 @@
                         "edits": "تعديل",
                         "favorited": "المَقاطع الصوتية المفضلة",
                         "firstSeen": "أول زيارة",
-                        "linkedReports": "",
-                        "listenings": "",
                         "playlists": "قوائم المَقاطِع"
                     }
                 },
@@ -4062,8 +3438,7 @@
                 },
                 "button": {
                     "delete": "حذف",
-                    "openRemote": "افتح الصفحة الشخصية",
-                    "refresh": ""
+                    "openRemote": "افتح الصفحة الشخصية"
                 },
                 "modal": {
                     "delete": {
@@ -4073,15 +3448,8 @@
                         }
                     }
                 },
-                "label": {
-                    "local": ""
-                },
                 "link": {
-                    "localProfile": "افتح الصفحة الشخصية",
-                    "django": ""
-                },
-                "warning": {
-                    "stats": ""
+                    "localProfile": "افتح الصفحة الشخصية"
                 }
             },
             "CommonList": {
@@ -4089,10 +3457,8 @@
                     "accounts": "الحسابات",
                     "albums": "الألبومات",
                     "artists": "الفنانون",
-                    "channels": "",
                     "invitations": "الدعوات",
                     "libraries": "المكتبات",
-                    "tags": "",
                     "tracks": "المَقاطِع",
                     "uploads": "المُرسَلة",
                     "users": "المستخدِمون"
@@ -4100,7 +3466,6 @@
             },
             "Settings": {
                 "header": {
-                    "channels": "",
                     "federation": "الفديرالية",
                     "instanceInfo": "معلومات عن مثيل الخادوم",
                     "settings": "إعدادات مثيل الخادوم",
@@ -4108,7 +3473,6 @@
                     "music": "الموسيقى",
                     "playlists": "قوائم المَقاطِع",
                     "sections": "الأقسام",
-                    "security": "",
                     "signups": "التسجيل",
                     "stats": "الإحصائيات",
                     "subsonic": "صاب سونيك",
@@ -4133,16 +3497,12 @@
                 "albums": "الألبومات",
                 "artists": "الفنانون",
                 "playlists": "قوائم المَقاطِع",
-                "podcasts": "",
                 "radios": "الإذاعات",
-                "series": "",
-                "tags": "",
                 "tracks": "المَقاطِع"
             },
             "header": {
                 "search": "البحث",
-                "remote": "البحث عن مكتبة بُعدية",
-                "rss": ""
+                "remote": "البحث عن مكتبة بُعدية"
             },
             "button": {
                 "submit": "إرسال"
@@ -4202,9 +3562,6 @@
                     }
                 },
                 "title": "قائمة المَقاطِع",
-                "meta": {
-                    "tracks": ""
-                },
                 "empty": {
                     "noTracks": "اسحب والقي أعمدةً قصد ترتيب المقاطِع على قائمة التشغيل"
                 },
@@ -4238,11 +3595,6 @@
         }
     },
     "composables": {
-        "audio": {
-            "usePlayOptions": {
-                "addToQueueMessage": ""
-            }
-        },
         "locale": {
             "useSharedLabels": {
                 "scopes": {
@@ -4254,10 +3606,6 @@
                         "description": "إختيار عامل تصفية",
                         "label": "عوامل تصفية المحتوى"
                     },
-                    "profile": {
-                        "description": "",
-                        "label": "افتح الصفحة الشخصية"
-                    },
                     "edits": {
                         "description": "عُطّل النفاذ",
                         "label": "تعديل"
@@ -4266,13 +3614,8 @@
                         "description": "النفاذ إلى المتابَعين",
                         "label": "إتبع"
                     },
-                    "listenings": {
-                        "description": "",
-                        "label": ""
-                    },
                     "reports": {
-                        "description": "عُطّل النفاذ",
-                        "label": ""
+                        "description": "عُطّل النفاذ"
                     },
                     "notifications": {
                         "description": "كتم الإشعارات",
@@ -4286,12 +3629,11 @@
                         "description": "عُطّل النفاذ",
                         "label": "الإذاعات"
                     },
-                    "security": {
-                        "description": "",
-                        "label": ""
-                    },
                     "favorites": {
                         "label": "المفضلة"
+                    },
+                    "profile": {
+                        "label": "افتح الصفحة الشخصية"
                     }
                 },
                 "filters": {
@@ -4305,7 +3647,6 @@
                     "expirationDate": "تاريخ نهاية الصلاحية",
                     "firstSeen": "تاريخ أول اكتشاف",
                     "followers": "المتابِعون",
-                    "itemsCount": "",
                     "lastActivity": "آخر نشاط",
                     "lastSeen": "آخِر زيارة",
                     "modificationDate": "تاريخ التعديل",
@@ -4322,7 +3663,6 @@
                 "fields": {
                     "privacyLevel": {
                         "label": "عرض النشاط",
-                        "help": "",
                         "shortChoices": {
                             "public": "الجميع",
                             "instance": "بيانات مثيل الخادم",
@@ -4334,14 +3674,10 @@
                             "private": "لا أحد غيري"
                         }
                     },
-                    "summary": {
-                        "label": ""
-                    },
                     "reportType": {
                         "label": "الفئة",
                         "choices": {
                             "illegalContent": "إخفاء المحتوى",
-                            "invalidMetadata": "",
                             "offensiveContent": "إخفاء المحتوى",
                             "other": "أخرى",
                             "takedownRequest": "طلبات المتابَعة المعلَّقة"
@@ -4350,13 +3686,8 @@
                     "importStatus": {
                         "label": "اضغط لعرض المزيد من المعلومات حول عملية استيراد هذا التحميل",
                         "choices": {
-                            "draft": {
-                                "label": "",
-                                "help": "تم ارسال المقطع ولكن لم تتم معالجته بعد على الخادم"
-                            },
                             "errored": {
-                                "label": "فيه خطأ",
-                                "help": ""
+                                "label": "فيه خطأ"
                             },
                             "finished": {
                                 "label": "إكتمل",
@@ -4369,6 +3700,9 @@
                             "skipped": {
                                 "label": "تمّ تجاهله",
                                 "help": "إنّ المقطع متوفّر مِن قبل في إحدى مكتباتك"
+                            },
+                            "draft": {
+                                "help": "تم ارسال المقطع ولكن لم تتم معالجته بعد على الخادم"
                             }
                         }
                     },
@@ -4376,8 +3710,7 @@
                         "label": "عوامل تصفية المحتوى",
                         "choices": {
                             "music": "الموسيقى",
-                            "other": "أخرى",
-                            "podcast": ""
+                            "other": "أخرى"
                         }
                     }
                 }
@@ -4396,10 +3729,6 @@
                     "typeLabel": "الفنان",
                     "label": "ابلغ عن هذا الفنان…"
                 },
-                "channel": {
-                    "typeLabel": "",
-                    "label": "ابلغ عن هذا الألبوم…"
-                },
                 "library": {
                     "typeLabel": "المكتبة",
                     "label": "ابلغ عن هذه المكتبة…"
@@ -4408,6 +3737,9 @@
                     "typeLabel": "قائمة المَقاطِع",
                     "label": "ابلغ عن قائمة التشغيل هذه…"
                 },
+                "channel": {
+                    "label": "ابلغ عن هذا الألبوم…"
+                },
                 "track": {
                     "label": "ابلغ عن هذا المقطع…",
                     "typeLabel": "المَقطَع"
@@ -4415,8 +3747,7 @@
             },
             "useReportConfigs": {
                 "account": {
-                    "label": "الحسابات",
-                    "summary": ""
+                    "label": "الحسابات"
                 },
                 "album": {
                     "label": "الألبوم",
@@ -4425,9 +3756,6 @@
                 },
                 "artist": {
                     "label": "الفنان"
-                },
-                "channel": {
-                    "label": ""
                 },
                 "track": {
                     "copyright": "الحقوق",
@@ -4452,9 +3780,6 @@
                 "playlist": {
                     "label": "قائمة المَقاطِع"
                 },
-                "tags": {
-                    "label": ""
-                },
                 "visibility": {
                     "label": "المشاهدة"
                 }
@@ -4466,9 +3791,6 @@
                     "position": "تتابُع الصفحات",
                     "title": "العنوان"
                 },
-                "cover": {
-                    "label": ""
-                },
                 "description": {
                     "label": "الوصف"
                 },
@@ -4478,9 +3800,6 @@
                 "album": {
                     "releaseDate": "آخِر زيارة",
                     "title": "العنوان"
-                },
-                "tags": {
-                    "label": ""
                 }
             }
         },
@@ -4491,15 +3810,9 @@
     },
     "init": {
         "serviceWorker": {
-            "newAppVersion": "",
             "actions": {
-                "later": "",
                 "update": "تحديث"
             }
-        },
-        "axios": {
-            "rateLimitDelay": "",
-            "rateLimitLater": ""
         }
     }
 }

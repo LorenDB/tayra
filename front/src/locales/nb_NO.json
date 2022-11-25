@@ -4,24 +4,9 @@
             "Authorize": {
                 "header": {
                     "access": "Logg inn på din Funkwhale-konto",
-                    "authorize": "",
                     "authorizeFailure": "Kunne ikke legge til handling",
                     "fetchFailure": "Kunne ikke opprette invitasjon",
-                    "allScopes": "Skru av tilgang",
-                    "readOnly": "",
-                    "writeOnly": ""
-                },
-                "title": "",
-                "button": {
-                    "authorize": ""
-                },
-                "help": {
-                    "pasteCode": "",
-                    "redirect": "",
-                    "copyCode": ""
-                },
-                "message": {
-                    "unknownPermissions": ""
+                    "allScopes": "Skru av tilgang"
                 }
             },
             "SubsonicTokenForm": {
@@ -71,44 +56,31 @@
             "ApplicationEdit": {
                 "label": {
                     "accessToken": "Tilgang avskrudd",
-                    "appId": "Handling",
-                    "appSecret": ""
-                },
-                "header": {
-                    "appDetails": "",
-                    "editApp": "Kunne ikke legge til handling"
-                },
-                "help": {
-                    "appDetails": ""
+                    "appId": "Handling"
                 },
                 "link": {
                     "settings": "Oppdater innstillinger"
                 },
                 "title": "Kunne ikke legge til handling",
-                "button": {
-                    "regenerateToken": ""
+                "header": {
+                    "editApp": "Kunne ikke legge til handling"
                 }
             },
             "Settings": {
                 "title": "Kontoinnstillinger",
                 "header": {
                     "accountSettings": "Kontoinnstillinger",
-                    "authorizedApps": "",
                     "avatar": "Avatar",
                     "changeEmail": "Bekreft din e-postadresse",
                     "changePassword": "Endre mitt passord",
                     "contentFilters": "Velg et filter",
                     "deleteAccount": "Lag konto",
                     "hiddenArtists": "Utforsker artister",
-                    "plugins": "",
                     "settingsUpdated": "Innstillinger oppdatert",
                     "emailFailure": "Bekreft din e-postadresse",
                     "accountFailure": "Kan ikke logge inn",
-                    "noApps": "",
                     "noPersonalApps": "Ingen merknad å vise.",
                     "yourApps": "Dine merknader",
-                    "avatarFailure": "",
-                    "passwordFailure": "",
                     "updateFailure": "Innstillinger oppdatert"
                 },
                 "table": {
@@ -121,8 +93,7 @@
                     "yourApps": {
                         "header": {
                             "application": "Handling",
-                            "creationDate": "Opprettelsesdato",
-                            "scopes": ""
+                            "creationDate": "Opprettelsesdato"
                         }
                     },
                     "artists": {
@@ -149,22 +120,8 @@
                     "refresh": "Gjenoppfrisk",
                     "remove": "Fjern",
                     "removeApp": "Slett spilleliste",
-                    "revoke": "",
-                    "revokeAccess": "",
                     "update": "Opplastingsdato",
                     "updateSettings": "Oppdater innstillinger"
-                },
-                "description": {
-                    "changeEmail": "",
-                    "changePassword": {
-                        "paragraph1": "Endring av ditt passord endrer også ditt Subsonic API-passord, hvis du har skaffet deg det.",
-                        "paragraph2": "Du vil måtte oppdatere ditt passord på klienter som bruker dette passordet."
-                    },
-                    "contentFilters": "",
-                    "authorizedApps": "",
-                    "yourApps": "",
-                    "plugins": "",
-                    "deleteAccount": ""
                 },
                 "modal": {
                     "changePassword": {
@@ -176,39 +133,29 @@
                         }
                     },
                     "deleteAccount": {
-                        "header": "Ønsker du å gjenopprette din tidligere spillekø?",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "Ønsker du å gjenopprette din tidligere spillekø?"
                     },
                     "deleteApp": {
-                        "header": "",
                         "content": {
                             "warning": "Dette vil slette denne spillelisten for godt, og kan ikke angres."
                         }
-                    },
-                    "revokeApp": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
                     }
                 },
-                "help": {
-                    "noApps": "",
-                    "changePassword": "Dobbeltsjekk at passordet ditt stemmer",
-                    "noPersonalApps": ""
+                "description": {
+                    "changePassword": {
+                        "paragraph1": "Endring av ditt passord endrer også ditt Subsonic API-passord, hvis du har skaffet deg det.",
+                        "paragraph2": "Du vil måtte oppdatere ditt passord på klienter som bruker dette passordet."
+                    }
                 },
                 "link": {
                     "managePlugins": "Behandle spillelister",
                     "newApp": "Opprett en ny spilleliste"
                 },
-                "warning": {
-                    "deleteAccount": ""
+                "help": {
+                    "changePassword": "Dobbeltsjekk at passordet ditt stemmer"
                 },
                 "message": {
-                    "currentEmail": "Du er innlogget som { username }",
-                    "confirmDelete": ""
+                    "currentEmail": "Du er innlogget som { username }"
                 }
             },
             "Logout": {
@@ -233,33 +180,6 @@
                 },
                 "title": "Opprett en ny spilleliste"
             },
-            "ApplicationForm": {
-                "label": {
-                    "scopes": {
-                        "description": "",
-                        "read": {
-                            "label": "",
-                            "description": ""
-                        },
-                        "write": {
-                            "label": "",
-                            "description": ""
-                        }
-                    },
-                    "name": "Navn",
-                    "redirectUri": ""
-                },
-                "button": {
-                    "create": "Opprett spilleliste",
-                    "update": "Oppdater spilleliste"
-                },
-                "help": {
-                    "redirectUri": ""
-                },
-                "header": {
-                    "failure": "Kan ikke lagre innstillingene"
-                }
-            },
             "LoginForm": {
                 "link": {
                     "createAccount": "Opprett en konto",
@@ -268,10 +188,6 @@
                 "placeholder": {
                     "username": "Skriv inn brukernavnet eller e-postadressen din"
                 },
-                "help": {
-                    "approvalRequired": "",
-                    "invalidCredentials": "Dobbeltsjekk at brukernavnet/passordet ditt stemmer"
-                },
                 "button": {
                     "login": "Logg inn"
                 },
@@ -279,8 +195,23 @@
                     "password": "Passord",
                     "username": "Brukernavn eller e-post"
                 },
+                "help": {
+                    "invalidCredentials": "Dobbeltsjekk at brukernavnet/passordet ditt stemmer"
+                },
                 "header": {
                     "loginFailure": "Kan ikke logge inn"
+                }
+            },
+            "ApplicationForm": {
+                "button": {
+                    "create": "Opprett spilleliste",
+                    "update": "Oppdater spilleliste"
+                },
+                "label": {
+                    "name": "Navn"
+                },
+                "header": {
+                    "failure": "Kan ikke lagre innstillingene"
                 }
             },
             "SignupForm": {
@@ -298,14 +229,10 @@
                     "username": "Skriv inn brukernavnet ditt"
                 },
                 "header": {
-                    "login": "Logg inn på din Funkwhale-konto",
-                    "signupFailure": ""
+                    "login": "Logg inn på din Funkwhale-konto"
                 },
                 "message": {
-                    "registrationClosed": "Registreringer er lukket på denne instansen, du trenger en invitasjonskode for å registrere deg.",
-                    "requiresReview": "",
-                    "awaitingReview": "",
-                    "accountCreated": ""
+                    "registrationClosed": "Registreringer er lukket på denne instansen, du trenger en invitasjonskode for å registrere deg."
                 }
             },
             "Plugin": {
@@ -319,9 +246,6 @@
                 "header": {
                     "failure": "Kunne ikke lagre innstillinger"
                 },
-                "description": {
-                    "library": ""
-                },
                 "button": {
                     "save": "Lagre",
                     "scan": "Skanning igangsatt"
@@ -333,30 +257,14 @@
                 "activeUsers": "{ count } spor | { count } spor",
                 "hoursOfMusic": "{ count } spor | { count } spor"
             },
+            "title": "Albumside",
             "header": {
-                "funkwhale": "",
                 "aboutPod": "Om denne instansen",
-                "publicContent": "",
                 "findApp": "Send inn en annen forespørsel",
                 "signup": "Registrering"
             },
-            "title": "Albumside",
             "link": {
-                "findOtherPod": "Send inn en annen forespørsel",
-                "learnMore": ""
-            },
-            "description": {
-                "funkwhale": "",
-                "publicContent": "",
-                "signup": "",
-                "findApp": "",
-                "quota": ""
-            },
-            "placeholder": {
-                "noDescription": ""
-            },
-            "message": {
-                "loggedIn": ""
+                "findOtherPod": "Send inn en annen forespørsel"
             }
         },
         "Home": {
@@ -367,46 +275,24 @@
             "header": {
                 "aboutFunkwhale": "Om Funkwhale",
                 "about": "Om Funkwhale",
-                "contact": "",
                 "login": "Logg inn",
-                "newChannels": "",
                 "newAlbums": "Nylig lagt til",
                 "signup": "Registrering",
-                "statistics": "Statistikk",
-                "links": "",
-                "welcome": ""
+                "statistics": "Statistikk"
             },
             "link": {
-                "publicContent": {
-                    "label": "",
-                    "description": ""
-                },
+                "findOtherPod": "Send inn en annen forespørsel",
                 "userGuides": {
-                    "description": "",
                     "label": "Brukerbibliotek"
                 },
-                "findOtherPod": "Send inn en annen forespørsel",
-                "learnMore": "",
-                "mobileApps": {
-                    "label": "",
-                    "description": ""
-                },
-                "rules": "",
-                "viewMore": "",
                 "funkwhale": "Om Funkwhale"
             },
             "description": {
                 "funkwhale": {
-                    "paragraph2": "Funkwhale er fritt og gir deg kontroll over din musikk.",
-                    "paragraph1": ""
-                },
-                "signup": "",
-                "quota": ""
+                    "paragraph2": "Funkwhale er fritt og gir deg kontroll over din musikk."
+                }
             },
-            "title": "Hjem",
-            "placeholder": {
-                "noDescription": ""
-            }
+            "title": "Hjem"
         },
         "audio": {
             "artist": {
@@ -450,17 +336,12 @@
                 "meta": {
                     "position": "({ index } av { length })"
                 },
-                "header": {
-                    "player": ""
-                },
                 "label": {
                     "clearQueue": "Tøm spillekøen",
                     "expandQueue": "Tøm spillekøen",
-                    "addArtistContentFilter": "",
                     "loopingDisabled": "Gjentagelse avskrudd. Klikk for å bytte til enkeltsporsgjentagelse.",
                     "loopingSingle": "Gjentar enkelt spor. Klikk for å bytte til gjentagelse av hele spillekøen.",
                     "loopingWholeQueue": "Gjentar hele spillekøen. Klikk for å skru av gjentagelse.",
-                    "audioPlayer": "",
                     "mute": "Forstum",
                     "nextTrack": "Neste spor",
                     "pause": "Sett spor på pause",
@@ -475,22 +356,15 @@
                     "addToQueue": "Legg til i kø",
                     "addToPlaylist": "Legg til i spilleliste…",
                     "episodeDetails": "Detaljer",
-                    "hideArtist": "",
                     "discretePlay": "Spill av",
                     "playAlbum": "Spill av alle album",
                     "playArtist": "Spilleliste",
                     "playNext": "Spill neste",
                     "playNow": "Spill nå",
                     "playPlaylist": "Tøm spilleliste",
-                    "startRadio": "",
                     "playTrack": "Spill spor",
                     "playTracks": "Spill spor",
-                    "report": "",
                     "trackDetails": "Detaljer"
-                },
-                "title": {
-                    "more": "",
-                    "unavailable": ""
                 }
             },
             "podcast": {
@@ -545,9 +419,6 @@
                     }
                 },
                 "Widget": {
-                    "empty": {
-                        "noResults": ""
-                    },
                     "button": {
                         "more": "Vis ett album til"
                     }
@@ -558,40 +429,21 @@
                     }
                 }
             },
-            "VolumeControl": {
-                "label": {
-                    "slider": ""
-                },
-                "button": {
-                    "mute": "Forstum",
-                    "unmute": "Opphev forstumming"
-                }
-            },
             "SearchBar": {
                 "label": {
                     "album": "Album",
                     "artist": "Artist",
                     "category": {
-                        "federation": "Føderasjon",
-                        "podcasts": ""
+                        "federation": "Føderasjon"
                     },
                     "search": "Søk etter noe musikk",
-                    "tag": "",
                     "track": "Spor"
-                },
-                "link": {
-                    "more": "",
-                    "fediverse": "Søk på Wikipedia",
-                    "rss": ""
-                },
-                "header": {
-                    "noResults": ""
                 },
                 "placeholder": {
                     "search": "Søk etter artister, album, spor…"
                 },
-                "empty": {
-                    "noResults": ""
+                "link": {
+                    "fediverse": "Søk på Wikipedia"
                 }
             },
             "Search": {
@@ -611,36 +463,17 @@
             "ChannelForm": {
                 "label": {
                     "discography": "Artistnavn",
-                    "category": "",
-                    "image": "",
                     "description": "Beskrivelse",
-                    "username": "",
                     "language": "Endre språk",
                     "name": "Navn",
                     "email": "Bekreft din e-postadresse",
-                    "owner": "Eier",
-                    "podcast": "",
-                    "subcategory": "",
-                    "tags": ""
-                },
-                "placeholder": {
-                    "name": "",
-                    "username": ""
+                    "owner": "Eier"
                 },
                 "header": {
                     "error": "Kunne ikke lagre innstillinger"
                 },
-                "help": {
-                    "podcast": "",
-                    "discography": "",
-                    "podcastFields": "",
-                    "username": ""
-                },
                 "loader": {
                     "loading": "Laster opp"
-                },
-                "legend": {
-                    "purpose": ""
                 }
             },
             "LibraryFollowButton": {
@@ -655,23 +488,16 @@
                     "copy": "Kopier"
                 },
                 "help": {
-                    "embed": "",
-                    "width": "La stå tom for tilfeldig kode",
-                    "anonymous": ""
-                },
-                "label": {
-                    "embed": "",
-                    "height": "",
-                    "width": ""
-                },
-                "header": {
-                    "preview": ""
-                },
-                "warning": {
-                    "anonymous": ""
+                    "width": "La stå tom for tilfeldig kode"
                 },
                 "message": {
                     "copy": "Tekst kopiert til utklippstavle."
+                }
+            },
+            "VolumeControl": {
+                "button": {
+                    "mute": "Forstum",
+                    "unmute": "Opphev forstumming"
                 }
             },
             "ChannelSeries": {
@@ -711,20 +537,11 @@
                 "button": {
                     "cancel": "Avbryt",
                     "edit": "Rediger",
-                    "embed": "",
-                    "more": "",
                     "play": "Spill av alle album"
                 },
-                "modal": {
-                    "embed": {
-                        "header": ""
-                    }
-                },
                 "link": {
-                    "moderation": "",
                     "discogs": "Søk etter noe musikk",
                     "wikipedia": "Søk på Wikipedia",
-                    "django": "",
                     "domain": "Registrert siden { date }",
                     "musicbrainz": "Vis på MusicBrainz"
                 }
@@ -781,8 +598,6 @@
                 "tooltip": {
                     "network": "Kunne ikke laste opp denne filen som følge av nettverksfeil",
                     "size": "Kunne ikke laste opp denne filen, sjekk at den ikke er for stor",
-                    "extension": "",
-                    "retry": "",
                     "denied": "Opplasting nektet, forsikre deg om at filen ikke er for stor, og at du ikke har brukt opp kvoten din.",
                     "timeout": "Tidsavbrudd for opplasting, prøv igjen"
                 },
@@ -806,15 +621,12 @@
                     "retry": "Bibliotek oppdatert"
                 },
                 "label": {
-                    "uploadWidget": "Klikk for å velge filer å laste opp, eller dra og slipp filer eller mapper",
-                    "remainingSpace": "",
-                    "extensions": ""
+                    "uploadWidget": "Klikk for å velge filer å laste opp, eller dra og slipp filer eller mapper"
                 },
                 "header": {
                     "failure": "Kunne ikke lagre innstillinger",
-                    "server": "Importer status",
                     "status": "Importer status",
-                    "local": ""
+                    "server": "Importer status"
                 },
                 "link": {
                     "processing": "Behandler",
@@ -822,15 +634,13 @@
                     "picard": "Til dette formålet anbefales Picard"
                 },
                 "description": {
-                    "import": "Opprett import",
-                    "previousImport": ""
+                    "import": "Opprett import"
                 },
                 "message": {
                     "local": {
                         "format": "Musikkfilene du laster opp har korrekte etiketter:",
                         "tag": "Musikkfilene du laster opp har korrekte etiketter:",
-                        "message": "Du er i ferd med å laste opp musikk til ditt bibliotek. Før du fortsetter, forsikre deg om at:",
-                        "copyright": ""
+                        "message": "Du er i ferd med å laste opp musikk til ditt bibliotek. Før du fortsetter, forsikre deg om at:"
                     }
                 }
             },
@@ -841,29 +651,13 @@
                 "button": {
                     "cancel": "Avbryt",
                     "clear": "Tøm",
-                    "reset": "",
-                    "showUnreviewed": "",
-                    "showAll": "",
-                    "submit": "",
-                    "new": "Send inn en annen forespørsel",
-                    "suggest": ""
+                    "new": "Send inn en annen forespørsel"
                 },
                 "header": {
                     "failure": "Kunne ikke lagre innstillinger",
-                    "recentEdits": "Nylig lagt til",
-                    "unreviewed": "",
-                    "success": ""
+                    "recentEdits": "Nylig lagt til"
                 },
-                "notApplicable": "I/T",
-                "empty": {
-                    "suggestEdit": ""
-                },
-                "label": {
-                    "summary": ""
-                },
-                "message": {
-                    "noPermission": ""
-                }
+                "notApplicable": "I/T"
             },
             "Albums": {
                 "link": {
@@ -891,8 +685,7 @@
                     "results": "Resultater per side"
                 },
                 "label": {
-                    "search": "Søk",
-                    "tags": ""
+                    "search": "Søk"
                 },
                 "button": {
                     "search": "Søk"
@@ -904,9 +697,7 @@
                     "search": "Søk"
                 },
                 "label": {
-                    "search": "Artistnavn",
-                    "excludeCompilation": "",
-                    "tags": ""
+                    "search": "Artistnavn"
                 },
                 "title": "Artister",
                 "ordering": {
@@ -935,11 +726,7 @@
                     "release": {
                         "album": "Album",
                         "artist": "Artist",
-                        "copyright": "Kopier",
-                        "license": "",
-                        "series": "",
-                        "url": "",
-                        "year": ""
+                        "copyright": "Kopier"
                     },
                     "track": {
                         "bitrate": {
@@ -969,11 +756,9 @@
             "TagDetail": {
                 "link": {
                     "albums": "Album",
-                    "artists": "Artister",
-                    "moderation": ""
+                    "artists": "Artister"
                 },
                 "header": {
-                    "channels": "",
                     "tracks": "Spor"
                 }
             },
@@ -984,7 +769,6 @@
                     "library": "Brukerbibliotek"
                 },
                 "button": {
-                    "more": "",
                     "filter": "Fjern avatar"
                 },
                 "link": {
@@ -992,84 +776,6 @@
                 },
                 "description": {
                     "library": "Denne artisten er å finne i følgende bibliotek:"
-                },
-                "message": {
-                    "filter": ""
-                }
-            },
-            "ImportStatusModal": {
-                "error": {
-                    "importFailure": "",
-                    "unknownError": {
-                        "message": "",
-                        "label": ""
-                    },
-                    "invalidMetadata": {
-                        "label": "",
-                        "message": ""
-                    }
-                },
-                "button": {
-                    "close": ""
-                },
-                "table": {
-                    "error": {
-                        "debug": "Sporinfo",
-                        "errorDetail": "Feilrapportering",
-                        "errorType": "Feilede",
-                        "help": "Innstillinger"
-                    }
-                },
-                "header": {
-                    "importDetail": "Importdato"
-                },
-                "link": {
-                    "support": "",
-                    "documentation": ""
-                },
-                "message": {
-                    "importDetail": "",
-                    "importSuccess": "Sporet er lastet opp, men ikke behandlet av tjeneren enda"
-                },
-                "warning": {
-                    "importSkipped": ""
-                }
-            },
-            "EditCard": {
-                "button": {
-                    "approve": "",
-                    "delete": "Slett",
-                    "reject": "Avslå"
-                },
-                "status": {
-                    "approved": "",
-                    "applied": "",
-                    "pending": "Ventende filer",
-                    "rejected": "Avslått"
-                },
-                "modal": {
-                    "delete": {
-                        "header": "Slett dette biblioteket?"
-                    },
-                    "content": {
-                        "warning": "Biblioteket og alle dets spor vil bli slettet. Dette kan ikke angres."
-                    }
-                },
-                "table": {
-                    "update": {
-                        "header": {
-                            "field": "",
-                            "newValue": "",
-                            "oldValue": ""
-                        },
-                        "notApplicable": "I/T"
-                    }
-                },
-                "header": {
-                    "modification": "Endringsdato"
-                },
-                "link": {
-                    "track": ""
                 }
             },
             "Podcasts": {
@@ -1088,17 +794,11 @@
                     "cancel": "Avbryt",
                     "channel": "Opprett et nytt bibliotek",
                     "search": "Søk",
-                    "subscribe": "",
                     "feed": "Om Funkwhale"
                 },
                 "empty": {
                     "noResults": "Fant ikke noen artist som samsvarer med søket ditt"
                 },
-                "label": {
-                    "search": "",
-                    "tags": ""
-                },
-                "title": "",
                 "pagination": {
                     "results": "Resultater per side"
                 },
@@ -1147,9 +847,7 @@
                 "button": {
                     "cancel": "Avbryt",
                     "delete": "Slett",
-                    "edit": "Rediger",
-                    "embed": "",
-                    "more": ""
+                    "edit": "Rediger"
                 },
                 "modal": {
                     "delete": {
@@ -1157,15 +855,10 @@
                         "content": {
                             "warning": "Biblioteket og alle dets spor vil bli slettet. Dette kan ikke angres."
                         }
-                    },
-                    "embed": {
-                        "header": ""
                     }
                 },
                 "link": {
-                    "moderation": "",
                     "discogs": "Søk etter noe musikk",
-                    "django": "",
                     "domain": "Registrert siden { date }",
                     "musicbrainz": "Vis på MusicBrainz"
                 }
@@ -1176,8 +869,6 @@
                     "delete": "Slett",
                     "download": "Last ned",
                     "edit": "Rediger",
-                    "embed": "",
-                    "more": "",
                     "play": "Spill av"
                 },
                 "modal": {
@@ -1186,58 +877,65 @@
                         "content": {
                             "warning": "Biblioteket og alle dets spor vil bli slettet. Dette kan ikke angres."
                         }
-                    },
-                    "embed": {
-                        "header": ""
                     }
                 },
                 "link": {
-                    "moderation": "",
                     "discogs": "Søk etter noe musikk",
                     "wikipedia": "Søk på Wikipedia",
-                    "django": "",
                     "domain": "Registrert siden { date }"
                 },
                 "title": "Spor"
             },
-            "AlbumEdit": {
+            "ImportStatusModal": {
+                "table": {
+                    "error": {
+                        "debug": "Sporinfo",
+                        "errorDetail": "Feilrapportering",
+                        "errorType": "Feilede",
+                        "help": "Innstillinger"
+                    }
+                },
                 "header": {
-                    "edit": "",
-                    "suggest": ""
+                    "importDetail": "Importdato"
                 },
                 "message": {
-                    "remote": ""
+                    "importSuccess": "Sporet er lastet opp, men ikke behandlet av tjeneren enda"
+                }
+            },
+            "EditCard": {
+                "button": {
+                    "delete": "Slett",
+                    "reject": "Avslå"
+                },
+                "modal": {
+                    "delete": {
+                        "header": "Slett dette biblioteket?"
+                    },
+                    "content": {
+                        "warning": "Biblioteket og alle dets spor vil bli slettet. Dette kan ikke angres."
+                    }
+                },
+                "header": {
+                    "modification": "Endringsdato"
+                },
+                "table": {
+                    "update": {
+                        "notApplicable": "I/T"
+                    }
+                },
+                "status": {
+                    "pending": "Ventende filer",
+                    "rejected": "Avslått"
                 }
             },
             "ArtistEdit": {
                 "header": {
-                    "edit": "Legg til i denne spillelisten",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
+                    "edit": "Legg til i denne spillelisten"
                 }
             },
             "TrackEdit": {
                 "header": {
-                    "edit": "Rediger instans-info",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
-                }
-            },
-            "AlbumDetail": {
-                "header": {
-                    "episodes": "",
-                    "tracks": "Spor",
-                    "libraries": "Brukerbibliotek"
-                },
-                "description": {
-                    "libraries": "Dette albumet er å finne i følgende bibliotek:"
-                },
-                "meta": {
-                    "volume": ""
+                    "edit": "Rediger instans-info"
                 }
             },
             "FsBrowser": {
@@ -1245,15 +943,9 @@
                     "import": "Importdato"
                 }
             },
-            "FsLogs": {
-                "empty": {
-                    "notStarted": ""
-                }
-            },
             "Home": {
                 "title": "Bibliotek",
                 "header": {
-                    "newChannels": "",
                     "playlists": "Spillelister",
                     "recentlyAdded": "Nylig lagt til",
                     "recentlyFavorited": "Nylig favorisert",
@@ -1263,6 +955,15 @@
             "TagSelector": {
                 "placeholder": {
                     "search": "Søk"
+                }
+            },
+            "AlbumDetail": {
+                "description": {
+                    "libraries": "Dette albumet er å finne i følgende bibliotek:"
+                },
+                "header": {
+                    "tracks": "Spor",
+                    "libraries": "Brukerbibliotek"
                 }
             }
         },
@@ -1306,22 +1007,18 @@
         "channels": {
             "UploadModal": {
                 "meta": {
-                    "files": "Én favoritt | { count } favoritter",
-                    "quota": ""
+                    "files": "Én favoritt | { count } favoritter"
                 },
                 "button": {
                     "cancel": "Avbryt",
-                    "close": "",
                     "finishLater": "Fullført",
                     "next": "Neste spor",
                     "previous": "Forrige spor",
-                    "publish": "",
                     "update": "Opplastingsdato"
                 },
                 "header": {
                     "uploadFiles": "Slett dette biblioteket?",
                     "processing": "Behandler",
-                    "publish": "",
                     "uploadDetails": "Opplastingsdato"
                 }
             },
@@ -1330,42 +1027,21 @@
                     "tracks": "{ count } spor | { count } spor"
                 },
                 "label": {
-                    "album": "Album",
-                    "series": ""
-                },
-                "option": {
-                    "none": ""
+                    "album": "Album"
                 }
             },
             "LicenseSelect": {
                 "link": {
                     "license": "Om denne instansen"
-                },
-                "label": {
-                    "license": ""
-                },
-                "option": {
-                    "none": ""
                 }
             },
             "UploadForm": {
-                "help": {
-                    "license": ""
-                },
                 "label": {
-                    "openBrowser": "Utforsk",
-                    "channel": ""
-                },
-                "message": {
-                    "dragAndDrop": "",
-                    "pending": ""
+                    "openBrowser": "Utforsk"
                 },
                 "button": {
                     "edit": "Rediger",
-                    "ignore": "",
-                    "remove": "Fjern",
-                    "resume": "",
-                    "retry": ""
+                    "remove": "Fjern"
                 },
                 "header": {
                     "error": "Kunne ikke lagre innstillinger"
@@ -1374,12 +1050,6 @@
                     "errored": "Feilede",
                     "pending": "Ventende",
                     "uploading": "Laster opp"
-                },
-                "description": {
-                    "extensions": ""
-                },
-                "warning": {
-                    "quota": ""
                 }
             },
             "AlbumModal": {
@@ -1396,7 +1066,6 @@
                 "label": {
                     "description": "Beskrivelse",
                     "position": "Beskrivelse",
-                    "tags": "",
                     "title": "Tittel",
                     "image": "Spornavn"
                 }
@@ -1411,7 +1080,6 @@
             },
             "SubscribeButton": {
                 "title": {
-                    "subscribe": "",
                     "unsubscribe": "Én favoritt"
                 },
                 "help": {
@@ -1431,43 +1099,25 @@
             "title": "Albumside",
             "link": {
                 "about": "Om denne instansen",
-                "features": "",
                 "introduction": "Invitasjoner",
-                "rules": "",
-                "statistics": "Statistikk",
-                "terms": ""
+                "statistics": "Statistikk"
             },
             "header": {
                 "about": "Om denne instansen",
                 "contact": "Velg et filter",
-                "features": "",
-                "rules": "",
-                "statistics": "Statistikk",
-                "terms": ""
+                "statistics": "Statistikk"
             },
             "feature": {
-                "allowList": "",
-                "anonymousAccess": "",
                 "status": {
-                    "closed": "",
                     "disabled": "Skru av tilgang",
                     "enabled": "Skru av tilgang",
                     "open": "Åpen"
                 },
                 "federation": "Føderasjon",
-                "version": "",
                 "registrations": "Administrasjon",
                 "quota": "Opplastingskvote"
             },
-            "notApplicable": "I/T",
-            "placeholder": {
-                "noDescription": "",
-                "noRules": "",
-                "noTerms": ""
-            },
-            "message": {
-                "contact": ""
-            }
+            "notApplicable": "I/T"
         },
         "common": {
             "ActionTable": {
@@ -1476,15 +1126,12 @@
                     "allSelected": "{ count } på { total } valgt | { count } på { total } valgt",
                     "go": "Kjør",
                     "launch": "Kjør",
-                    "refresh": "",
-                    "select": "",
                     "selectAll": "Velg et filter",
                     "selectElement": "Velg alle { total } elementer | Velg alle { total } elementer",
                     "selectCurrentPage": "Velg kun gjeldende side"
                 },
                 "message": {
-                    "success": "Handlingen { action } ble kjørt på { count } element | Handlingen { action } ble kjørt på { count } elementer",
-                    "needsRefresh": ""
+                    "success": "Handlingen { action } ble kjørt på { count } element | Handlingen { action } ble kjørt på { count } elementer"
                 },
                 "label": {
                     "actions": "Handlinger",
@@ -1511,10 +1158,7 @@
             "UserMenu": {
                 "link": {
                     "about": "Albumside",
-                    "chat": "",
                     "docs": "Dokumentasjon",
-                    "forum": "",
-                    "support": "",
                     "git": "Feilsporer",
                     "login": "Logg inn",
                     "logout": "Logg ut",
@@ -1524,17 +1168,12 @@
                     "signup": "Registrering"
                 },
                 "label": {
-                    "shortcuts": "",
-                    "language": "Endre språk",
-                    "theme": ""
+                    "language": "Endre språk"
                 }
             },
             "UserModal": {
                 "link": {
                     "about": "Albumside",
-                    "chat": "",
-                    "forum": "",
-                    "support": "",
                     "git": "Feilsporer",
                     "login": "Logg inn",
                     "logout": "Logg ut",
@@ -1544,9 +1183,7 @@
                     "signup": "Registrering"
                 },
                 "label": {
-                    "shortcuts": "",
-                    "language": "Endre språk",
-                    "theme": ""
+                    "language": "Endre språk"
                 },
                 "header": {
                     "options": "Handlinger"
@@ -1568,15 +1205,11 @@
                 "button": {
                     "cancel": "Avbryt",
                     "edit": "Rediger",
-                    "less": "",
                     "more": "Vis ett album til",
                     "update": "Min flotte beskrivelse"
                 },
                 "header": {
                     "failure": "Kunne ikke legge til handling"
-                },
-                "empty": {
-                    "noDescription": ""
                 }
             },
             "InlineSearchBar": {
@@ -1592,8 +1225,7 @@
             },
             "CollapseLink": {
                 "button": {
-                    "collapse": "Fold sammen",
-                    "expand": ""
+                    "collapse": "Fold sammen"
                 }
             },
             "CopyInput": {
@@ -1608,41 +1240,22 @@
                 "link": {
                     "login": "Logg inn",
                     "signup": "Registrering"
-                },
-                "header": {
-                    "unauthenticated": ""
-                },
-                "description": {
-                    "noAccess": ""
                 }
             },
             "ContentForm": {
-                "help": {
-                    "markdown": ""
-                },
                 "empty": {
                     "noContent": "Ventende filer"
                 },
                 "button": {
-                    "preview": "Ventende filer",
-                    "write": ""
-                },
-                "placeholder": {
-                    "input": ""
+                    "preview": "Ventende filer"
                 }
             },
             "EmptyState": {
-                "header": {
-                    "noResults": ""
-                },
                 "button": {
                     "refresh": "Gjenoppfrisk"
                 }
             },
             "AttachmentInput": {
-                "help": {
-                    "upload": ""
-                },
                 "button": {
                     "remove": "Fjern"
                 },
@@ -1658,7 +1271,6 @@
             },
             "ExpandableDiv": {
                 "button": {
-                    "less": "",
                     "more": "Vis ett album til"
                 }
             }
@@ -1670,22 +1282,18 @@
                 }
             },
             "PlaylistModal": {
-                "warning": {
-                    "duplicate": ""
-                },
-                "button": {
-                    "addDuplicate": "",
-                    "addToPlaylist": "Legg til i denne spillelisten",
-                    "addTrack": "Legg til spor",
-                    "cancel": "Avbryt",
-                    "edit": "Rediger"
-                },
                 "header": {
                     "addToPlaylist": "Legg til i spilleliste…",
                     "available": "Tilgjengelige spillelister",
                     "manage": "Behandle spillelister",
                     "noResults": "Sporsamsvarsfilter",
                     "addFailure": "Kan ikke legge til sporet i en spilleliste"
+                },
+                "button": {
+                    "addToPlaylist": "Legg til i denne spillelisten",
+                    "addTrack": "Legg til spor",
+                    "cancel": "Avbryt",
+                    "edit": "Rediger"
                 },
                 "table": {
                     "edit": {
@@ -1707,18 +1315,22 @@
                     "noPlaylists": "Spilleliste opprettet"
                 }
             },
-            "Editor": {
+            "TrackPlaylistIcon": {
                 "button": {
-                    "addDuplicate": "",
-                    "clear": "Tøm spilleliste",
-                    "copy": "Kopier fra nåværende kø til spilleliste",
-                    "insertFromQueue": "Sett inn ({ count } track) fra spillekø | Sett inn ({ count } track) fra spillekø"
-                },
+                    "add": "Legg til i spilleliste…"
+                }
+            },
+            "Editor": {
                 "error": {
                     "sync": "Kunne ikke lagre endringer"
                 },
                 "message": {
                     "sync": "Endringer synkronisert med tjener"
+                },
+                "button": {
+                    "clear": "Tøm spilleliste",
+                    "copy": "Kopier fra nåværende kø til spilleliste",
+                    "insertFromQueue": "Sett inn ({ count } track) fra spillekø | Sett inn ({ count } track) fra spillekø"
                 },
                 "modal": {
                     "clearPlaylist": {
@@ -1734,16 +1346,8 @@
                 "header": {
                     "editor": "Spillelisteredigering"
                 },
-                "warning": {
-                    "duplicate": ""
-                },
                 "loading": {
                     "sync": "Synkroniserer endringer til tjener…"
-                }
-            },
-            "TrackPlaylistIcon": {
-                "button": {
-                    "add": "Legg til i spilleliste…"
                 }
             },
             "Form": {
@@ -1775,28 +1379,12 @@
                 }
             }
         },
-        "notifications": {
-            "NotificationRow": {
-                "message": {
-                    "libraryAcceptFollow": "",
-                    "libraryFollow": "",
-                    "libraryPendingFollow": ""
-                },
-                "button": {
-                    "approve": "",
-                    "markRead": "Marker alle som lest",
-                    "markUnread": "Marker alle som lest",
-                    "reject": "Avslå"
-                }
-            }
-        },
         "Sidebar": {
             "link": {
                 "about": "Om denne instansen",
                 "albums": "Album",
                 "artists": "Artister",
                 "browse": "Utforsk",
-                "channels": "",
                 "createAccount": "Opprett en konto",
                 "favorites": "Favoritter",
                 "home": "Hjem",
@@ -1804,7 +1392,6 @@
                 "login": "Logg inn",
                 "moderation": "Føderasjon",
                 "playlists": "Spillelister",
-                "podcasts": "",
                 "radios": "Radiostasjoner",
                 "search": "Søk",
                 "settings": "Innstillinger",
@@ -1814,17 +1401,13 @@
                 "add": "Legg til innhold",
                 "administration": "Administrasjon",
                 "language": "Endre språk",
-                "main": "",
                 "follows": "Ventende følgingsforespørsler",
                 "edits": "Ventende forespørsler",
-                "play": "Spill spor",
-                "theme": ""
+                "play": "Spill spor"
             },
             "header": {
                 "administration": "Administrasjon",
-                "explore": "",
                 "main": "Få en invitasjon",
-                "more": "",
                 "library": "Bibliotek"
             }
         },
@@ -1837,7 +1420,6 @@
                                 "accessedDate": "Tilgangsdato",
                                 "account": "Min konto",
                                 "creationDate": "Opprettelsesdato",
-                                "domain": "",
                                 "importStatus": "Importer status",
                                 "library": "Bibliotek",
                                 "name": "Navn",
@@ -1848,7 +1430,6 @@
                     },
                     "option": {
                         "all": "Alle",
-                        "failed": "",
                         "finished": "Fullført",
                         "pending": "Ventende",
                         "skipped": "Hoppet over"
@@ -1867,17 +1448,11 @@
                             "warning": "Biblioteket og alle dets spor vil bli slettet. Dette kan ikke angres."
                         }
                     },
-                    "link": {
-                        "local": ""
-                    },
                     "notApplicable": "I/T",
                     "label": {
                         "search": "Søk",
                         "status": "Status",
                         "visibility": "Synlighet"
-                    },
-                    "placeholder": {
-                        "search": ""
                     },
                     "pagination": {
                         "results": "Viser resultater { start }-{ end } på { total }"
@@ -1889,7 +1464,6 @@
                             "header": {
                                 "account": "Min konto",
                                 "creationDate": "Opprettelsesdato",
-                                "domain": "",
                                 "followers": "Følgere",
                                 "name": "Navn",
                                 "uploads": "Last opp",
@@ -1914,15 +1488,9 @@
                             "warning": "Biblioteket og alle dets spor vil bli slettet. Dette kan ikke angres."
                         }
                     },
-                    "link": {
-                        "local": ""
-                    },
                     "label": {
                         "search": "Søk",
                         "visibility": "Synlighet"
-                    },
-                    "placeholder": {
-                        "search": ""
                     },
                     "pagination": {
                         "results": "Viser resultater { start }-{ end } på { total }"
@@ -1935,8 +1503,6 @@
                                 "album": "Album",
                                 "artist": "Artist",
                                 "creationDate": "Opprettelsesdato",
-                                "domain": "",
-                                "license": "",
                                 "title": "Tittel"
                             }
                         }
@@ -1951,12 +1517,8 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Slett",
-                            "warning": ""
+                            "label": "Slett"
                         }
-                    },
-                    "link": {
-                        "local": ""
                     },
                     "notApplicable": "I/T",
                     "label": {
@@ -1975,7 +1537,6 @@
                             "header": {
                                 "albums": "Album",
                                 "creationDate": "Opprettelsesdato",
-                                "domain": "",
                                 "name": "Navn",
                                 "tracks": "Spor"
                             }
@@ -1992,21 +1553,13 @@
                         },
                         "label": "Rekkefølge"
                     },
-                    "label": {
-                        "category": "",
-                        "search": "Søk"
-                    },
                     "action": {
                         "delete": {
-                            "label": "Slett",
-                            "warning": ""
+                            "label": "Slett"
                         }
                     },
-                    "link": {
-                        "local": ""
-                    },
-                    "placeholder": {
-                        "search": ""
+                    "label": {
+                        "search": "Søk"
                     },
                     "pagination": {
                         "results": "Viser resultater { start }-{ end } på { total }"
@@ -2041,9 +1594,6 @@
                     "label": {
                         "search": "Søk"
                     },
-                    "placeholder": {
-                        "search": ""
-                    },
                     "pagination": {
                         "results": "Viser resultater { start }-{ end } på { total }"
                     }
@@ -2051,7 +1601,6 @@
                 "EditsCardList": {
                     "option": {
                         "all": "Alle",
-                        "approved": "",
                         "pending": "Ventende filer",
                         "rejected": "Avslått"
                     },
@@ -2079,7 +1628,6 @@
                             "header": {
                                 "artist": "Artist",
                                 "creationDate": "Opprettelsesdato",
-                                "domain": "",
                                 "name": "Tittel",
                                 "releaseDate": "Tilgangsdato",
                                 "tracks": "Spor"
@@ -2096,15 +1644,13 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Slett",
-                            "warning": ""
+                            "label": "Slett"
                         }
                     },
+                    "notApplicable": "I/T",
                     "link": {
-                        "local": "",
                         "moderation": "Slett dette biblioteket?"
                     },
-                    "notApplicable": "I/T",
                     "label": {
                         "search": "Søk"
                     },
@@ -2121,133 +1667,48 @@
                     "table": {
                         "object": {
                             "account": "Min konto",
-                            "domain": "",
-                            "local": "",
                             "owner": "Eier",
                             "type": "Type"
                         },
-                        "status": {
-                            "assignedTo": "",
-                            "internalNotes": "",
-                            "resolutionDate": "Opprettelsesdato",
-                            "resolved": "",
-                            "status": "Status",
-                            "unresolved": ""
-                        },
                         "report": {
-                            "category": "",
                             "creationDate": "Opprettelsesdato",
                             "submittedBy": "Send inn"
+                        },
+                        "status": {
+                            "resolutionDate": "Opprettelsesdato",
+                            "status": "Status"
                         }
                     },
                     "header": {
-                        "actions": "Handlinger",
-                        "notes": "",
-                        "message": "",
-                        "reportedObject": ""
+                        "actions": "Handlinger"
                     },
                     "button": {
-                        "confirmDelete": "Slett",
-                        "delete": "",
-                        "resolve": "",
-                        "unresolve": ""
+                        "confirmDelete": "Slett"
                     },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "notApplicable": "I/T",
-                    "link": {
-                        "moderation": "",
-                        "report": "",
-                        "publicPage": ""
-                    },
-                    "warning": {
-                        "objectDeleted": ""
-                    }
+                    "notApplicable": "I/T"
                 },
                 "UserRequestCard": {
                     "header": {
-                        "actions": "Handlinger",
-                        "notes": "",
-                        "signup": ""
-                    },
-                    "button": {
-                        "approve": "",
-                        "reject": ""
+                        "actions": "Handlinger"
                     },
                     "table": {
-                        "status": {
-                            "approved": "",
-                            "assignedTo": "",
-                            "internalNotes": "",
-                            "pending": "Ventende",
-                            "refused": "",
-                            "status": "Status"
-                        },
                         "request": {
                             "creationDate": "Opprettelsesdato",
                             "submittedBy": "Send inn"
+                        },
+                        "status": {
+                            "pending": "Ventende",
+                            "status": "Status"
                         }
                     },
                     "notApplicable": "I/T",
                     "link": {
                         "request": "Forespør et passord"
-                    },
-                    "message": {
-                        "signup": ""
-                    }
-                },
-                "InstancePolicyForm": {
-                    "header": {
-                        "addRule": "",
-                        "editRule": "",
-                        "failure": "Kunne ikke opprette invitasjon"
-                    },
-                    "label": {
-                        "blockAll": "",
-                        "policyDisabled": "Skru av tilgang",
-                        "policyEnabled": "Skru av tilgang",
-                        "silenceActivity": "Siste aktivitet",
-                        "silenceNotifications": "Dine merknader",
-                        "customizeRule": "Legg til filter for å tilpasse din radiostasjon",
-                        "policyReason": "",
-                        "rejectMedia": "Avslått"
-                    },
-                    "tooltip": {
-                        "blockAll": "",
-                        "rejectMedia": "",
-                        "summary": "",
-                        "silenceActivity": "",
-                        "silenceNotifications": "",
-                        "isActive": ""
-                    },
-                    "button": {
-                        "cancel": "Avbryt",
-                        "create": "Opprett import",
-                        "delete": "Slett",
-                        "confirm": "Slett radiostasjon",
-                        "update": "Opplastingsdato"
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "Slett dette biblioteket?",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
                     }
                 },
                 "NoteForm": {
                     "button": {
                         "add": "Legg til innhold"
-                    },
-                    "placeholder": {
-                        "summary": ""
                     },
                     "header": {
                         "failure": "Kunne ikke lagre innstillinger"
@@ -2281,24 +1742,14 @@
                     "table": {
                         "domain": {
                             "header": {
-                                "firstSeen": "",
                                 "name": "Navn",
-                                "receivedMessages": "",
-                                "moderationRule": "",
                                 "users": "Brukere"
                             },
                             "moderationRule": "Ja"
                         }
                     },
                     "label": {
-                        "inList": "",
                         "search": "Søk"
-                    },
-                    "empty": {
-                        "noPods": ""
-                    },
-                    "placeholder": {
-                        "search": ""
                     },
                     "pagination": {
                         "results": "Viser resultater { start }-{ end } på { total }"
@@ -2316,21 +1767,17 @@
                         },
                         "label": "Rekkefølge"
                     },
+                    "link": {
+                        "local": "Min konto"
+                    },
                     "table": {
                         "account": {
                             "header": {
-                                "domain": "",
-                                "firstSeen": "",
-                                "lastSeen": "",
                                 "name": "Navn",
-                                "moderationRule": "",
                                 "uploads": "Last opp"
                             },
                             "moderationRule": "Ja"
                         }
-                    },
-                    "link": {
-                        "local": "Min konto"
                     },
                     "action": {
                         "purge": {
@@ -2347,37 +1794,29 @@
                         "results": "Viser resultater { start }-{ end } på { total }"
                     }
                 },
-                "InstancePolicyCard": {
-                    "label": {
-                        "blockAll": "",
-                        "muteActivity": "Siste aktivitet",
-                        "muteNotifications": "Dine merknader",
-                        "reason": "",
-                        "rejectMedia": "Avslått"
-                    },
+                "InstancePolicyForm": {
                     "button": {
-                        "edit": "Rediger"
-                    },
-                    "status": {
-                        "enabled": "Skru av tilgang",
-                        "paused": ""
-                    },
-                    "header": {
-                        "rule": ""
-                    }
-                },
-                "InstancePolicyModal": {
-                    "button": {
-                        "close": "",
-                        "show": "Føderasjon"
+                        "cancel": "Avbryt",
+                        "create": "Opprett import",
+                        "delete": "Slett",
+                        "confirm": "Slett radiostasjon",
+                        "update": "Opplastingsdato"
                     },
                     "modal": {
-                        "manage": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
+                        "delete": {
+                            "header": "Slett dette biblioteket?"
                         }
+                    },
+                    "label": {
+                        "policyDisabled": "Skru av tilgang",
+                        "policyEnabled": "Skru av tilgang",
+                        "silenceActivity": "Siste aktivitet",
+                        "silenceNotifications": "Dine merknader",
+                        "customizeRule": "Legg til filter for å tilpasse din radiostasjon",
+                        "rejectMedia": "Avslått"
+                    },
+                    "header": {
+                        "failure": "Kunne ikke opprette invitasjon"
                     }
                 },
                 "NotesThread": {
@@ -2392,6 +1831,24 @@
                             }
                         }
                     }
+                },
+                "InstancePolicyCard": {
+                    "button": {
+                        "edit": "Rediger"
+                    },
+                    "status": {
+                        "enabled": "Skru av tilgang"
+                    },
+                    "label": {
+                        "muteActivity": "Siste aktivitet",
+                        "muteNotifications": "Dine merknader",
+                        "rejectMedia": "Avslått"
+                    }
+                },
+                "InstancePolicyModal": {
+                    "button": {
+                        "show": "Føderasjon"
+                    }
                 }
             },
             "ChannelsTable": {
@@ -2401,7 +1858,6 @@
                             "account": "Min konto",
                             "albums": "Album",
                             "creationDate": "Opprettelsesdato",
-                            "domain": "",
                             "name": "Navn",
                             "tracks": "Spor"
                         }
@@ -2418,13 +1874,11 @@
                     },
                     "label": "Rekkefølge"
                 },
-                "label": {
-                    "category": "",
-                    "search": "Søk"
-                },
                 "link": {
-                    "local": "",
                     "moderation": "Slett dette biblioteket?"
+                },
+                "label": {
+                    "search": "Søk"
                 },
                 "placeholder": {
                     "search": "Søk etter brukernavn, e-postadresse, kode…"
@@ -2473,9 +1927,6 @@
                     "notApplicable": "I/T",
                     "placeholder": {
                         "search": "Søk etter brukernavn, e-post, navn…"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "InvitationsTable": {
@@ -2510,9 +1961,6 @@
                     },
                     "placeholder": {
                         "search": "Søk etter brukernavn, e-postadresse, kode…"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "InvitationForm": {
@@ -2545,14 +1993,7 @@
                 "table": {
                     "additionalFields": {
                         "header": {
-                            "actions": "Handlinger",
-                            "label": "",
-                            "type": "",
-                            "required": ""
-                        },
-                        "type": {
-                            "long": "",
-                            "short": ""
+                            "actions": "Handlinger"
                         },
                         "required": {
                             "false": "Nei",
@@ -2560,22 +2001,11 @@
                         }
                     }
                 },
-                "button": {
-                    "add": "",
-                    "edit": "Rediger",
-                    "preview": ""
-                },
                 "label": {
-                    "additionalField": "",
-                    "additionalFields": "",
-                    "delete": "Slett",
-                    "helpText": "",
-                    "moveDown": "",
-                    "moveUp": ""
+                    "delete": "Slett"
                 },
-                "help": {
-                    "additionalFields": "",
-                    "helpText": ""
+                "button": {
+                    "edit": "Rediger"
                 }
             },
             "SettingsGroup": {
@@ -2595,34 +2025,6 @@
             "ReportCategoryDropdown": {
                 "option": {
                     "all": "Alle"
-                },
-                "label": {
-                    "category": ""
-                }
-            },
-            "ReportModal": {
-                "header": {
-                    "disabled": "",
-                    "modal": "Ønsker du å bekrefte denne handlingen?",
-                    "submissionFailure": "Kunne ikke lagre innstillinger"
-                },
-                "button": {
-                    "cancel": "Avbryt",
-                    "submit": "Send inn"
-                },
-                "label": {
-                    "email": "E-postadresse",
-                    "forwardToDomain": "",
-                    "message": ""
-                },
-                "description": {
-                    "forwardToDomain": "",
-                    "message": "",
-                    "modal": "",
-                    "email": ""
-                },
-                "message": {
-                    "submissionSuccess": ""
                 }
             },
             "FilterModal": {
@@ -2639,36 +2041,33 @@
                 },
                 "warning": {
                     "createFilter": {
-                        "listItem2": "Nylig lagt til",
-                        "listItem3": "",
-                        "listItem1": "",
-                        "listItem4": "",
-                        "listIntro": ""
+                        "listItem2": "Nylig lagt til"
                     }
+                }
+            },
+            "ReportModal": {
+                "button": {
+                    "cancel": "Avbryt",
+                    "submit": "Send inn"
                 },
-                "help": {
-                    "createFilter": ""
+                "header": {
+                    "modal": "Ønsker du å bekrefte denne handlingen?",
+                    "submissionFailure": "Kunne ikke lagre innstillinger"
+                },
+                "label": {
+                    "email": "E-postadresse"
                 }
             }
         },
         "federation": {
             "FetchButton": {
                 "description": {
-                    "failure": "Kunne ikke lagre endringer",
-                    "success": "",
-                    "pending": "",
-                    "skipped": ""
+                    "failure": "Kunne ikke lagre endringer"
                 },
                 "table": {
                     "error": {
                         "value": {
-                            "httpError": "Kunne ikke lagre endringer",
-                            "invalidAttributesError": "",
-                            "connectionError": "",
-                            "httpStatus": "",
-                            "timeoutError": "",
-                            "invalidJsonError": "",
-                            "unknownError": ""
+                            "httpError": "Kunne ikke lagre endringer"
                         },
                         "label": {
                             "detail": "Feilrapportering",
@@ -2676,21 +2075,11 @@
                         }
                     }
                 },
-                "button": {
-                    "close": "",
-                    "reload": ""
-                },
                 "header": {
                     "saveFailure": "Kunne ikke lagre innstillinger",
                     "failure": "Gjenoppfrisk",
                     "pending": "Synkende",
-                    "success": "Skannet",
-                    "skipped": "",
-                    "refresh": ""
-                },
-                "loader": {
-                    "fetchRequest": "",
-                    "awaitingResult": ""
+                    "success": "Skannet"
                 }
             },
             "LibraryWidget": {
@@ -2702,40 +2091,6 @@
                 }
             }
         },
-        "ShortcutsModal": {
-            "shortcut": {
-                "audio": {
-                    "label": "",
-                    "clearQueue": "Tøm spillekøen",
-                    "decreaseVolume": "",
-                    "expandQueue": "",
-                    "increaseVolume": "",
-                    "playPause": "",
-                    "playNext": "Spill spor",
-                    "playPrevious": "Forrige spor",
-                    "seekBack30": "",
-                    "seekBack5": "",
-                    "seekForward30": "",
-                    "seekForward5": "",
-                    "shuffleQueue": "Omstokk spillekøen",
-                    "toggleFavorite": "Én favoritt",
-                    "toggleMute": "",
-                    "toggleLoop": ""
-                },
-                "general": {
-                    "focus": "",
-                    "label": "",
-                    "show": "",
-                    "unfocus": ""
-                }
-            },
-            "button": {
-                "close": ""
-            },
-            "header": {
-                "modal": ""
-            }
-        },
         "SetInstanceModal": {
             "button": {
                 "cancel": "Avbryt",
@@ -2743,30 +2098,19 @@
             },
             "header": {
                 "chooseInstance": "Velg din instans",
-                "failure": "",
                 "suggestions": "Anbefalte valg"
             },
             "label": {
                 "url": "Instansradiostasjoner"
-            },
-            "help": {
-                "notFunkwhaleServer": "",
-                "serverDown": "",
-                "selectPod": ""
-            },
-            "message": {
-                "newUrl": ""
             }
         },
         "Queue": {
             "button": {
                 "clear": "Tøm",
-                "close": "",
                 "stopRadio": "Stopp radiostasjon"
             },
             "label": {
                 "duration": "Varighet",
-                "addArtistContentFilter": "",
                 "next": "Neste spor",
                 "pause": "Sett spor på pause",
                 "play": "Spill av",
@@ -2776,18 +2120,24 @@
                 "restart": "Neste spor"
             },
             "message": {
-                "radio": "Nye spor vil bli lagt til her automatisk.",
-                "automaticPlay": ""
-            },
-            "header": {
-                "failure": "",
-                "radio": "Du har en spillende radiostasjon"
+                "radio": "Nye spor vil bli lagt til her automatisk."
             },
             "meta": {
                 "queuePosition": "({ index } av { length })"
             },
-            "warning": {
-                "connectivity": ""
+            "header": {
+                "radio": "Du har en spillende radiostasjon"
+            }
+        },
+        "ShortcutsModal": {
+            "shortcut": {
+                "audio": {
+                    "clearQueue": "Tøm spillekøen",
+                    "playNext": "Spill spor",
+                    "playPrevious": "Forrige spor",
+                    "shuffleQueue": "Omstokk spillekøen",
+                    "toggleFavorite": "Én favoritt"
+                }
             }
         },
         "forms": {
@@ -2816,31 +2166,16 @@
             "header": {
                 "fetchFailed": "Klarte ikke å hente bibliotek annensteds hen"
             },
-            "button": {
-                "fediverse": "",
-                "rss": "",
-                "search": "Søk"
-            },
             "label": {
-                "fediverse": {
-                    "fieldLabel": "",
-                    "title": "Søk på Wikipedia"
-                },
                 "rss": {
-                    "fieldPlaceholder": "",
-                    "fieldLabel": "Opprett spilleliste",
-                    "title": ""
+                    "fieldLabel": "Opprett spilleliste"
+                },
+                "fediverse": {
+                    "title": "Søk på Wikipedia"
                 }
             },
-            "warning": {
-                "unsupported": ""
-            },
-            "error": {
-                "fetchFailed": ""
-            },
-            "description": {
-                "fediverse": "",
-                "rss": ""
+            "button": {
+                "search": "Søk"
             }
         },
         "PageNotFound": {
@@ -2855,10 +2190,18 @@
                 "pageNotFound": "Siden du forespurte finnes ikke:"
             }
         },
+        "notifications": {
+            "NotificationRow": {
+                "button": {
+                    "markRead": "Marker alle som lest",
+                    "markUnread": "Marker alle som lest",
+                    "reject": "Avslå"
+                }
+            }
+        },
         "vui": {
             "Pagination": {
                 "next": "Neste spor",
-                "label": "",
                 "previous": "Forrige spor"
             }
         },
@@ -2879,79 +2222,48 @@
                     "subscribers": "Én favoritt | { count } favoritter",
                     "tracks": "{ count } spor | { count } spor"
                 },
-                "link": {
-                    "channelEpisodes": "",
-                    "mirrored": "",
-                    "moderation": "",
-                    "channelOverview": "",
-                    "channelTracks": "Spor",
-                    "domainView": "Registrert siden { date }"
-                },
                 "header": {
-                    "artistChannel": "Artistnavn",
-                    "podcastChannel": ""
+                    "artistChannel": "Artistnavn"
                 },
                 "button": {
                     "cancel": "Avbryt",
                     "confirm": "Slett",
                     "delete": "Slett",
                     "edit": "Rediger",
-                    "embed": "",
                     "play": "Spill av",
                     "updateChannel": "Oppdater spilleliste",
                     "upload": "Last opp"
                 },
-                "title": "",
                 "modal": {
-                    "subscribe": {
-                        "rss": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
-                        },
-                        "fediverse": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
-                        },
-                        "funkwhale": {
-                            "header": "Om Funkwhale"
-                        },
-                        "header": ""
-                    },
                     "delete": {
                         "header": "Slett dette biblioteket?",
                         "content": {
                             "warning": "Biblioteket og alle dets spor vil bli slettet. Dette kan ikke angres."
                         }
                     },
-                    "embed": {
-                        "header": ""
+                    "subscribe": {
+                        "funkwhale": {
+                            "header": "Om Funkwhale"
+                        }
                     }
+                },
+                "link": {
+                    "channelTracks": "Spor",
+                    "domainView": "Registrert siden { date }"
                 }
             },
             "DetailOverview": {
                 "link": {
                     "addAlbum": "Legg til innhold",
-                    "erroredUploads": "Bibliotek oppdatert",
-                    "skippedUploads": ""
+                    "erroredUploads": "Bibliotek oppdatert"
                 },
                 "header": {
                     "albums": "Album",
-                    "latestEpisodes": "",
                     "latestTracks": "Neste spor",
-                    "series": "",
-                    "uploadsFailure": "",
-                    "uploadsProcessing": "",
                     "uploadsSuccess": "Passord oppdatert"
                 },
                 "meta": {
                     "progress": "Bibliotek oppdatert"
-                },
-                "message": {
-                    "processing": ""
                 }
             },
             "SubscriptionsList": {
@@ -2959,13 +2271,11 @@
                     "addNew": "Legg til innhold"
                 },
                 "button": {
-                    "cancel": "Avbryt",
-                    "subscribe": ""
+                    "cancel": "Avbryt"
                 },
                 "placeholder": {
                     "search": "Filternavn"
                 },
-                "title": "",
                 "modal": {
                     "subscription": {
                         "header": "Beskrivelse"
@@ -3013,10 +2323,7 @@
                             }
                         },
                         "purgePending": {
-                            "header": "Fjern ventende filer?",
-                            "content": {
-                                "description": ""
-                            }
+                            "header": "Fjern ventende filer?"
                         },
                         "purgeSkipped": {
                             "header": "Fjern ignorerte filer?",
@@ -3046,8 +2353,6 @@
                     "option": {
                         "status": {
                             "all": "Alle",
-                            "draft": "",
-                            "failed": "",
                             "finished": "Fullført",
                             "pending": "Ventende",
                             "skipped": "Hoppet over"
@@ -3075,9 +2380,6 @@
                     },
                     "placeholder": {
                         "search": "Søk etter tittel, artist, album…"
-                    },
-                    "button": {
-                        "showStatus": ""
                     },
                     "pagination": {
                         "results": "Viser resultater { start }-{ end } på { total }"
@@ -3171,10 +2473,6 @@
                     "message": {
                         "scanLaunched": "Skanning igangsatt",
                         "scanSkipped": "Skanning hoppet over (forrige skanning er for fersk)"
-                    },
-                    "tooltip": {
-                        "private": "",
-                        "public": ""
                     }
                 },
                 "ScanForm": {
@@ -3210,17 +2508,10 @@
             "Home": {
                 "title": "Legg til og behandle innhold",
                 "description": {
-                    "follow": "Følg bibliotek fra andre brukere for å få tilgang til ny musikk. Offentlige bibliotek kan følges umiddelbart, mens å følge et privat bibliotek krever samtykke fra dets eier.",
-                    "channel": {
-                        "1": "",
-                        "2": ""
-                    },
-                    "upload": ""
+                    "follow": "Følg bibliotek fra andre brukere for å få tilgang til ny musikk. Offentlige bibliotek kan følges umiddelbart, mens å følge et privat bibliotek krever samtykke fra dets eier."
                 },
                 "header": {
-                    "follow": "Følg bibliotek annensteds hen",
-                    "channel": "",
-                    "upload": ""
+                    "follow": "Følg bibliotek annensteds hen"
                 },
                 "button": {
                     "start": "Kom igang"
@@ -3234,9 +2525,6 @@
                 "link": {
                     "libraries": "Bibliotek",
                     "tracks": "Spor"
-                },
-                "menu": {
-                    "secondary": ""
                 }
             }
         },
@@ -3248,7 +2536,6 @@
                 "link": {
                     "albums": "Album",
                     "artists": "Artister",
-                    "moderation": "",
                     "owner": "Innlogget som { username }",
                     "tracks": "Spor",
                     "domain": "Registrert siden { date }"
@@ -3259,18 +2546,11 @@
                 },
                 "title": "Bibliotek",
                 "label": {
-                    "private": "",
-                    "public": "",
                     "instance": "Avslått",
                     "sharingLink": "Delingslenke"
                 },
                 "description": {
                     "sharingLink": "Del denne lenken med andre brukere slik at de kan forespørre tilgang til ditt bibliotek."
-                },
-                "tooltip": {
-                    "private": "",
-                    "public": "",
-                    "instance": ""
                 }
             },
             "Edit": {
@@ -3306,19 +2586,16 @@
             },
             "DetailAlbums": {
                 "empty": {
-                    "upload": "",
                     "follow": "Ved å slutte å følge dette biblioteket, mister du tilgang til dets innhold."
                 }
             },
             "DetailOverview": {
                 "empty": {
-                    "upload": "",
                     "follow": "Ved å slutte å følge dette biblioteket, mister du tilgang til dets innhold."
                 }
             },
             "DetailTracks": {
                 "empty": {
-                    "upload": "",
                     "follow": "Ved å slutte å følge dette biblioteket, mister du tilgang til dets innhold."
                 }
             }
@@ -3328,8 +2605,6 @@
                 "title": "{ username } sin profil",
                 "link": {
                     "activity": "Aktivitet",
-                    "moderation": "",
-                    "overview": "",
                     "domainView": "Registrert siden { date }"
                 },
                 "label": {
@@ -3345,9 +2620,6 @@
                 },
                 "link": {
                     "back": "Tilbake til innlogging"
-                },
-                "placeholder": {
-                    "email": ""
                 },
                 "header": {
                     "failure": "Klarte ikke å forespørre passordtilbakestilling",
@@ -3367,10 +2639,7 @@
                         "artist": {
                             "header": "Artistnavn"
                         },
-                        "header": "Opprett et nytt bibliotek",
-                        "podcast": {
-                            "header": ""
-                        }
+                        "header": "Opprett et nytt bibliotek"
                     }
                 },
                 "button": {
@@ -3380,7 +2649,6 @@
                     "previous": "Forrige spor"
                 },
                 "header": {
-                    "channels": "",
                     "sharedLibraries": "Dette albumet er å finne i følgende bibliotek:",
                     "libraries": "Brukerbibliotek"
                 }
@@ -3451,44 +2719,6 @@
                 }
             }
         },
-        "Notifications": {
-            "option": {
-                "delay": {
-                    "30": "",
-                    "60": "",
-                    "90": "",
-                    "never": ""
-                }
-            },
-            "link": {
-                "help": "",
-                "donate": ""
-            },
-            "header": {
-                "funkwhaleSupport": "Om Funkwhale",
-                "instanceSupport": "",
-                "messages": "",
-                "notifications": "Dine merknader"
-            },
-            "button": {
-                "submit": "",
-                "read": "Marker alle som lest"
-            },
-            "loading": {
-                "notifications": "Laster merknader…"
-            },
-            "empty": {
-                "notifications": "Dine merknader"
-            },
-            "title": "Merknader",
-            "label": {
-                "reminder": "",
-                "showRead": "Vis lesningsmerkander"
-            },
-            "message": {
-                "funkwhaleSupport": ""
-            }
-        },
         "admin": {
             "moderation": {
                 "AccountsDetail": {
@@ -3503,48 +2733,31 @@
                             "displayName": "Filnavn",
                             "email": "E-postadresse",
                             "lastActivity": "Siste aktivitet",
-                            "lastChecked": "",
                             "permissions": "Tilganger",
                             "signupDate": "Registreringsdato",
                             "userType": "Type"
                         },
-                        "audioContent": {
-                            "cachedSize": "",
-                            "megabyte": "MB",
-                            "totalSize": "",
-                            "uploadQuota": "Opplastingskvote"
-                        },
                         "activity": {
-                            "emittedFollows": "Skriv inn biblioteksnettadresse",
-                            "emittedMessages": "",
-                            "firstSeen": "",
-                            "receivedFollows": ""
+                            "emittedFollows": "Skriv inn biblioteksnettadresse"
+                        },
+                        "audioContent": {
+                            "megabyte": "MB",
+                            "uploadQuota": "Opplastingskvote"
                         }
                     },
                     "header": {
                         "accountData": "Konto aktiv",
                         "activity": "Aktivitet",
                         "audioContent": "Legg til innhold",
-                        "localAccount": "Min konto",
-                        "activePolicy": "",
-                        "noPolicy": ""
-                    },
-                    "button": {
-                        "addPolicy": ""
+                        "localAccount": "Min konto"
                     },
                     "link": {
                         "albums": "Album",
                         "artists": "Artister",
-                        "channels": "",
-                        "domain": "",
                         "libraries": "Bibliotek",
-                        "linkedReports": "",
-                        "openProfile": "",
-                        "remoteProfile": "",
                         "requests": "Forespør et passord",
                         "tracks": "Spor",
-                        "uploads": "Last opp",
-                        "django": ""
+                        "uploads": "Last opp"
                     },
                     "tooltip": {
                         "uploadQuota": "Bestem hvor mye innhold brukeren kan late opp. La stå tomt for å bruke forvalgt verdi på instansen."
@@ -3556,108 +2769,65 @@
                             "settings": "Innstillinger"
                         }
                     },
-                    "description": {
-                        "policy": ""
-                    },
-                    "notApplicable": "I/T",
-                    "warning": {
-                        "stats": ""
-                    }
+                    "notApplicable": "I/T"
                 },
                 "Base": {
                     "link": {
                         "accounts": "Kontostatus",
-                        "domains": "",
-                        "reports": "",
                         "userRequests": "Brukerbibliotek"
                     },
-                    "title": "Føderasjon",
-                    "menu": {
-                        "secondary": ""
-                    }
+                    "title": "Føderasjon"
                 },
                 "DomainsDetail": {
                     "header": {
                         "activity": "Aktivitet",
                         "audioContent": "Legg til innhold",
-                        "instanceData": "Instansradiostasjoner",
-                        "activePolicy": "",
-                        "noPolicy": ""
+                        "instanceData": "Instansradiostasjoner"
                     },
                     "button": {
-                        "addPolicy": "",
                         "addToAllowList": "Legg til i spilleliste…",
-                        "refreshNodeInfo": "",
                         "removeFromAllowList": "Fjern fra favoritter"
                     },
                     "link": {
                         "albums": "Album",
                         "artists": "Artister",
-                        "channels": "",
                         "knownAccounts": "Min konto",
                         "libraries": "Bibliotek",
                         "website": "Offisiell nettside",
                         "tracks": "Spor",
-                        "uploads": "Last opp",
-                        "django": ""
+                        "uploads": "Last opp"
                     },
                     "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
                         "activity": {
-                            "emittedFollows": "Skriv inn biblioteksnettadresse",
-                            "emittedMessages": "",
-                            "firstSeen": "",
-                            "receivedFollows": ""
+                            "emittedFollows": "Skriv inn biblioteksnettadresse"
                         },
                         "instanceData": {
                             "nodeInfoStatus": {
                                 "value": "Klarte ikke å hente bibliotek annensteds hen",
                                 "label": "Status"
                             },
+                            "domainName": "Navn",
                             "inAllowList": {
-                                "label": "",
                                 "false": "Nei",
                                 "true": "Ja"
-                            },
-                            "lastChecked": "",
-                            "domainName": "Navn",
-                            "software": {
-                                "label": ""
                             },
                             "totalUsers": "Ikke brukt"
                         }
                     },
-                    "description": {
-                        "policy": ""
-                    },
-                    "notApplicable": "I/T",
-                    "warning": {
-                        "stats": ""
-                    }
+                    "notApplicable": "I/T"
                 },
                 "DomainsList": {
-                    "button": {
-                        "add": ""
-                    },
                     "label": {
-                        "addDomain": "",
                         "addToAllowList": "Legg til i spilleliste…"
                     },
-                    "title": "",
                     "header": {
-                        "domains": "",
                         "failure": "Kunne ikke opprette invitasjon"
                     }
                 },
                 "ReportsList": {
                     "option": {
                         "status": {
-                            "all": "Alle",
-                            "resolved": "",
-                            "unresolved": ""
+                            "all": "Alle"
                         }
                     },
                     "ordering": {
@@ -3667,10 +2837,6 @@
                             "label": "Rekkefølge"
                         },
                         "label": "Rekkefølge"
-                    },
-                    "title": "",
-                    "header": {
-                        "reports": ""
                     },
                     "label": {
                         "search": "Søk",
@@ -3684,9 +2850,7 @@
                     "option": {
                         "status": {
                             "all": "Alle",
-                            "approved": "",
-                            "pending": "Ventende",
-                            "refused": ""
+                            "pending": "Ventende"
                         }
                     },
                     "ordering": {
@@ -3714,14 +2878,12 @@
                 "UploadDetail": {
                     "table": {
                         "activity": {
-                            "accessedDate": "Tilgangsdato",
-                            "firstSeen": ""
+                            "accessedDate": "Tilgangsdato"
                         },
                         "audioContent": {
                             "bitrate": {
                                 "label": "Bitrate"
                             },
-                            "cachedSize": "",
                             "duration": "Varighet",
                             "size": "Størrelse",
                             "track": "Spor"
@@ -3732,18 +2894,14 @@
                     },
                     "link": {
                         "account": "Min konto",
-                        "domain": "",
                         "importStatus": "Importer status",
                         "library": "Bibliotek",
-                        "remoteProfile": "",
                         "type": "Type",
-                        "django": "",
                         "visibility": "Synlighet"
                     },
                     "header": {
                         "activity": "Aktivitet",
                         "audioContent": "Legg til innhold",
-                        "local": "",
                         "uploadData": "Opplastingsdato"
                     },
                     "button": {
@@ -3765,33 +2923,14 @@
                         "account": "Min konto",
                         "albums": "Album",
                         "artists": "Artister",
-                        "domain": "",
-                        "reports": "",
-                        "remoteProfile": "",
                         "tracks": "Spor",
                         "uploads": "Last opp",
-                        "django": "",
                         "visibility": "Synlighet"
                     },
                     "header": {
                         "activity": "Aktivitet",
                         "audioContent": "Legg til innhold",
-                        "libraryData": "Bibliotek oppdatert",
-                        "local": ""
-                    },
-                    "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "library": {
-                            "description": "Beskrivelse",
-                            "name": "Navn"
-                        },
-                        "activity": {
-                            "firstSeen": "",
-                            "followers": "Følgere"
-                        }
+                        "libraryData": "Bibliotek oppdatert"
                     },
                     "button": {
                         "delete": "Slett"
@@ -3804,50 +2943,33 @@
                             }
                         }
                     },
-                    "warning": {
-                        "stats": ""
+                    "table": {
+                        "library": {
+                            "description": "Beskrivelse",
+                            "name": "Navn"
+                        },
+                        "activity": {
+                            "followers": "Følgere"
+                        }
                     }
                 },
                 "AlbumDetail": {
                     "header": {
                         "activity": "Aktivitet",
                         "albumData": "Albumside",
-                        "audioContent": "Legg til innhold",
-                        "local": ""
+                        "audioContent": "Legg til innhold"
                     },
                     "link": {
                         "artist": "Artist",
-                        "domain": "",
                         "edits": "Rediger",
                         "libraries": "Bibliotek",
-                        "reports": "",
-                        "localProfile": "",
                         "musicbrainz": "Vis på MusicBrainz",
-                        "remoteProfile": "",
                         "tracks": "Spor",
-                        "uploads": "Last opp",
-                        "django": ""
-                    },
-                    "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "album": {
-                            "description": "Beskrivelse",
-                            "title": "Tittel"
-                        },
-                        "activity": {
-                            "favorited": "Favoritter",
-                            "firstSeen": "",
-                            "listenings": "",
-                            "playlists": "Spillelister"
-                        }
+                        "uploads": "Last opp"
                     },
                     "button": {
                         "delete": "Slett",
-                        "edit": "Rediger",
-                        "remoteRefresh": ""
+                        "edit": "Rediger"
                     },
                     "modal": {
                         "delete": {
@@ -3857,62 +2979,49 @@
                             }
                         }
                     },
-                    "warning": {
-                        "stats": ""
+                    "table": {
+                        "album": {
+                            "description": "Beskrivelse",
+                            "title": "Tittel"
+                        },
+                        "activity": {
+                            "favorited": "Favoritter",
+                            "playlists": "Spillelister"
+                        }
                     }
                 },
                 "ArtistDetail": {
                     "header": {
                         "activity": "Aktivitet",
                         "artistData": "Artistnavn",
-                        "audioContent": "Legg til innhold",
-                        "local": ""
+                        "audioContent": "Legg til innhold"
                     },
                     "link": {
                         "albums": "Album",
-                        "category": "",
-                        "domain": "",
                         "edits": "Rediger",
                         "libraries": "Bibliotek",
-                        "reports": "",
-                        "localProfile": "",
                         "musicbrainz": "Vis på MusicBrainz",
-                        "remoteProfile": "",
                         "tracks": "Spor",
-                        "uploads": "Last opp",
-                        "django": ""
+                        "uploads": "Last opp"
+                    },
+                    "button": {
+                        "delete": "Slett",
+                        "edit": "Rediger"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "Slett dette biblioteket?"
+                        }
                     },
                     "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
                         "artist": {
                             "description": "Beskrivelse",
                             "name": "Navn"
                         },
                         "activity": {
                             "favorited": "Favoritter",
-                            "firstSeen": "",
-                            "listenings": "",
                             "playlists": "Spillelister"
                         }
-                    },
-                    "button": {
-                        "delete": "Slett",
-                        "edit": "Rediger",
-                        "remoteRefresh": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "Slett dette biblioteket?",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "TagDetail": {
@@ -3924,9 +3033,7 @@
                     "link": {
                         "albums": "Album",
                         "artists": "Artister",
-                        "localProfile": "",
-                        "tracks": "Spor",
-                        "django": ""
+                        "tracks": "Spor"
                     },
                     "button": {
                         "delete": "Slett"
@@ -3940,9 +3047,6 @@
                         }
                     },
                     "table": {
-                        "activity": {
-                            "firstSeen": ""
-                        },
                         "tag": {
                             "name": "Navn"
                         }
@@ -3951,75 +3055,49 @@
                 "TrackDetail": {
                     "header": {
                         "activity": "Aktivitet",
-                        "local": "",
                         "trackData": "Spornavn"
                     },
                     "link": {
                         "album": "Album",
                         "albumArtist": "Album fra denne artisten",
                         "artist": "Artist",
-                        "domain": "",
                         "edits": "Rediger",
                         "libraries": "Bibliotek",
-                        "reports": "",
-                        "localProfile": "",
                         "musicbrainz": "Vis på MusicBrainz",
-                        "remoteProfile": "",
-                        "uploads": "Last opp",
-                        "django": ""
+                        "uploads": "Last opp"
                     },
                     "table": {
-                        "trackData": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
                         "track": {
                             "copyright": "Kopier",
                             "description": "Beskrivelse",
-                            "discNumber": "",
-                            "license": "",
                             "position": "Beskrivelse",
                             "title": "Tittel"
                         },
                         "activity": {
                             "favorited": "Favoritter",
-                            "firstSeen": "",
-                            "listenings": "",
                             "playlists": "Spillelister"
                         }
                     },
                     "button": {
                         "delete": "Slett",
-                        "edit": "Rediger",
-                        "remoteRefresh": ""
+                        "edit": "Rediger"
                     },
                     "modal": {
                         "delete": {
-                            "header": "Slett dette biblioteket?",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "Slett dette biblioteket?"
                         }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "Base": {
                     "link": {
                         "albums": "Album",
                         "artists": "Artister",
-                        "channels": "",
                         "edits": "Rediger",
                         "libraries": "Bibliotek",
-                        "tags": "",
                         "tracks": "Spor",
                         "uploads": "Last opp"
                     },
-                    "title": "Behandle bibliotek",
-                    "menu": {
-                        "secondary": ""
-                    }
+                    "title": "Behandle bibliotek"
                 },
                 "EditsList": {
                     "title": "Rediger",
@@ -4032,26 +3110,17 @@
                 "table": {
                     "channelData": {
                         "account": "Min konto",
-                        "category": "",
                         "description": "Beskrivelse",
-                        "domain": "",
-                        "name": "Navn",
-                        "rss": "",
-                        "url": ""
+                        "name": "Navn"
                     },
                     "audioContent": {
                         "albums": "Album",
-                        "cachedSize": "",
-                        "totalSize": "",
                         "tracks": "Spor",
                         "uploads": "Last opp"
                     },
                     "activity": {
                         "edits": "Rediger",
                         "favorited": "Favoritter",
-                        "firstSeen": "",
-                        "linkedReports": "",
-                        "listenings": "",
                         "playlists": "Spillelister"
                     }
                 },
@@ -4061,9 +3130,7 @@
                     "channelData": "Instansradiostasjoner"
                 },
                 "button": {
-                    "delete": "Slett",
-                    "openRemote": "",
-                    "refresh": ""
+                    "delete": "Slett"
                 },
                 "modal": {
                     "delete": {
@@ -4072,16 +3139,6 @@
                             "warning": "Biblioteket og alle dets spor vil bli slettet. Dette kan ikke angres."
                         }
                     }
-                },
-                "label": {
-                    "local": ""
-                },
-                "link": {
-                    "localProfile": "",
-                    "django": ""
-                },
-                "warning": {
-                    "stats": ""
                 }
             },
             "CommonList": {
@@ -4089,10 +3146,8 @@
                     "accounts": "Kontostatus",
                     "albums": "Album",
                     "artists": "Artister",
-                    "channels": "",
                     "invitations": "Invitasjoner",
                     "libraries": "Bibliotek",
-                    "tags": "",
                     "tracks": "Spor",
                     "uploads": "Last opp",
                     "users": "Brukere"
@@ -4100,7 +3155,6 @@
             },
             "Settings": {
                 "header": {
-                    "channels": "",
                     "federation": "Føderasjon",
                     "instanceInfo": "Instansinfo",
                     "settings": "Instansinnstillinger",
@@ -4108,7 +3162,6 @@
                     "music": "Musikk",
                     "playlists": "Spillelister",
                     "sections": "Seksjoner",
-                    "security": "",
                     "signups": "Registrering",
                     "stats": "Statistikk",
                     "subsonic": "Subsonic",
@@ -4121,10 +3174,7 @@
                         "invitations": "Invitasjoner",
                         "users": "Brukere"
                     },
-                    "title": "Behandle brukere",
-                    "menu": {
-                        "secondary": ""
-                    }
+                    "title": "Behandle brukere"
                 }
             }
         },
@@ -4133,16 +3183,12 @@
                 "albums": "Album",
                 "artists": "Artister",
                 "playlists": "Spillelister",
-                "podcasts": "",
                 "radios": "Radiostasjoner",
-                "series": "",
-                "tags": "",
                 "tracks": "Spor"
             },
             "header": {
                 "search": "Søk",
-                "remote": "Søk i et bibliotek annensteds hen",
-                "rss": ""
+                "remote": "Søk i et bibliotek annensteds hen"
             },
             "button": {
                 "submit": "Send inn"
@@ -4186,7 +3232,6 @@
                     "delete": "Slett",
                     "confirm": "Slett spilleliste",
                     "edit": "Rediger",
-                    "embed": "",
                     "playAll": "Spill av alle",
                     "stopEdit": "Stopp radiostasjon"
                 },
@@ -4196,9 +3241,6 @@
                         "content": {
                             "warning": "Dette vil slette denne spillelisten for godt, og kan ikke angres."
                         }
-                    },
-                    "embed": {
-                        "header": ""
                     }
                 },
                 "title": "Spilleliste",
@@ -4235,6 +3277,25 @@
                     "tracks": "Spor"
                 }
             }
+        },
+        "Notifications": {
+            "header": {
+                "funkwhaleSupport": "Om Funkwhale",
+                "notifications": "Dine merknader"
+            },
+            "loading": {
+                "notifications": "Laster merknader…"
+            },
+            "button": {
+                "read": "Marker alle som lest"
+            },
+            "empty": {
+                "notifications": "Dine merknader"
+            },
+            "title": "Merknader",
+            "label": {
+                "showRead": "Vis lesningsmerkander"
+            }
         }
     },
     "composables": {
@@ -4246,33 +3307,12 @@
         "locale": {
             "useSharedLabels": {
                 "scopes": {
-                    "libraries": {
-                        "description": "",
-                        "label": "Bibliotek oppdatert"
-                    },
-                    "filters": {
-                        "description": "",
-                        "label": "Velg et filter"
-                    },
-                    "profile": {
-                        "description": "",
-                        "label": "Feilaktige filer"
-                    },
                     "edits": {
                         "description": "Tilgang avskrudd",
                         "label": "Rediger"
                     },
-                    "follows": {
-                        "description": "",
-                        "label": "Følg"
-                    },
-                    "listenings": {
-                        "description": "",
-                        "label": ""
-                    },
                     "reports": {
-                        "description": "Tilgang avskrudd",
-                        "label": ""
+                        "description": "Tilgang avskrudd"
                     },
                     "notifications": {
                         "description": "Dine merknader",
@@ -4286,12 +3326,20 @@
                         "description": "Tilgang avskrudd",
                         "label": "Radiostasjoner"
                     },
-                    "security": {
-                        "description": "",
-                        "label": ""
+                    "filters": {
+                        "label": "Velg et filter"
                     },
                     "favorites": {
                         "label": "Favoritter"
+                    },
+                    "follows": {
+                        "label": "Følg"
+                    },
+                    "libraries": {
+                        "label": "Bibliotek oppdatert"
+                    },
+                    "profile": {
+                        "label": "Feilaktige filer"
                     }
                 },
                 "filters": {
@@ -4300,17 +3348,14 @@
                     "artistName": "Artistnavn",
                     "bitrate": "Bitrate",
                     "creationDate": "Opprettelsesdato",
-                    "domain": "",
                     "duration": "Varighet",
                     "expirationDate": "Utløpsdato",
                     "firstSeen": "Utløpsdato",
                     "followers": "Følgere",
-                    "itemsCount": "",
                     "lastActivity": "Siste aktivitet",
                     "lastSeen": "Siste oppdatering:",
                     "modificationDate": "Endringsdato",
                     "name": "Navn",
-                    "receivedMessages": "",
                     "releaseDate": "Tilgangsdato",
                     "dateJoined": "Registreringsdato",
                     "size": "Størrelse",
@@ -4325,8 +3370,7 @@
                         "help": "Bestem synlighetsnivået for din aktivitet",
                         "shortChoices": {
                             "public": "Alle",
-                            "instance": "Instansradiostasjoner",
-                            "private": ""
+                            "instance": "Instansradiostasjoner"
                         },
                         "choices": {
                             "instance": "Alle på denne instansen",
@@ -4334,29 +3378,16 @@
                             "private": "Ingen unntatt meg"
                         }
                     },
-                    "summary": {
-                        "label": ""
-                    },
-                    "reportType": {
-                        "label": "",
+                    "contentCategory": {
+                        "label": "Velg et filter",
                         "choices": {
-                            "illegalContent": "Legg til innhold",
-                            "invalidMetadata": "",
-                            "offensiveContent": "Legg til innhold",
-                            "other": "",
-                            "takedownRequest": "Ventende følgingsforespørsler"
+                            "music": "Musikk"
                         }
                     },
                     "importStatus": {
-                        "label": "",
                         "choices": {
-                            "draft": {
-                                "label": "",
-                                "help": "Sporet er lastet opp, men ikke behandlet av tjeneren enda"
-                            },
                             "errored": {
-                                "label": "Feilede",
-                                "help": ""
+                                "label": "Feilede"
                             },
                             "finished": {
                                 "label": "Fullført",
@@ -4369,15 +3400,17 @@
                             "skipped": {
                                 "label": "Hoppet over",
                                 "help": "Sporet finnes allerede i ett av bibliotekene dine"
+                            },
+                            "draft": {
+                                "help": "Sporet er lastet opp, men ikke behandlet av tjeneren enda"
                             }
                         }
                     },
-                    "contentCategory": {
-                        "label": "Velg et filter",
+                    "reportType": {
                         "choices": {
-                            "music": "Musikk",
-                            "other": "",
-                            "podcast": ""
+                            "illegalContent": "Legg til innhold",
+                            "offensiveContent": "Legg til innhold",
+                            "takedownRequest": "Ventende følgingsforespørsler"
                         }
                     }
                 }
@@ -4396,10 +3429,6 @@
                     "typeLabel": "Artist",
                     "label": "Legg til i denne spillelisten"
                 },
-                "channel": {
-                    "typeLabel": "",
-                    "label": "Slett dette biblioteket?"
-                },
                 "library": {
                     "typeLabel": "Bibliotek",
                     "label": "Slett dette biblioteket?"
@@ -4408,6 +3437,9 @@
                     "typeLabel": "Spilleliste",
                     "label": "Legg til i denne spillelisten"
                 },
+                "channel": {
+                    "label": "Slett dette biblioteket?"
+                },
                 "track": {
                     "label": "Rediger instans-info",
                     "typeLabel": "Spor"
@@ -4415,8 +3447,7 @@
             },
             "useReportConfigs": {
                 "account": {
-                    "label": "Min konto",
-                    "summary": ""
+                    "label": "Min konto"
                 },
                 "album": {
                     "label": "Album",
@@ -4426,12 +3457,8 @@
                 "artist": {
                     "label": "Artist"
                 },
-                "channel": {
-                    "label": ""
-                },
                 "track": {
                     "copyright": "Kopier",
-                    "license": "",
                     "position": "Beskrivelse",
                     "title": "Tittel",
                     "label": "Spor"
@@ -4452,9 +3479,6 @@
                 "playlist": {
                     "label": "Spilleliste"
                 },
-                "tags": {
-                    "label": ""
-                },
                 "visibility": {
                     "label": "Synlighet"
                 }
@@ -4462,12 +3486,8 @@
             "useEditConfigs": {
                 "track": {
                     "copyright": "Kopier",
-                    "license": "",
                     "position": "Beskrivelse",
                     "title": "Tittel"
-                },
-                "cover": {
-                    "label": ""
                 },
                 "description": {
                     "label": "Beskrivelse"
@@ -4478,28 +3498,15 @@
                 "album": {
                     "releaseDate": "Tilgangsdato",
                     "title": "Tittel"
-                },
-                "tags": {
-                    "label": ""
                 }
             }
-        },
-        "useThemeList": {
-            "darkTheme": "",
-            "lightTheme": ""
         }
     },
     "init": {
         "serviceWorker": {
-            "newAppVersion": "",
             "actions": {
-                "later": "",
                 "update": "Opplastingsdato"
             }
-        },
-        "axios": {
-            "rateLimitDelay": "",
-            "rateLimitLater": ""
         }
     }
 }

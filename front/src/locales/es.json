@@ -8,20 +8,14 @@
                     "authorizeFailure": "Error al aplicar la acción",
                     "fetchFailure": "Error al crear la invitación",
                     "allScopes": "Desactivar acceso",
-                    "readOnly": "Sólo lectura",
-                    "writeOnly": ""
+                    "readOnly": "Sólo lectura"
                 },
                 "title": "Autorizar la aplicación",
                 "button": {
                     "authorize": "Autorizar { app }"
                 },
                 "help": {
-                    "pasteCode": "Copie y pegue el siguiente código en la aplicación:",
-                    "redirect": "",
-                    "copyCode": ""
-                },
-                "message": {
-                    "unknownPermissions": ""
+                    "pasteCode": "Copie y pegue el siguiente código en la aplicación:"
                 }
             },
             "SubsonicTokenForm": {
@@ -107,8 +101,6 @@
                     "noApps": "No tienes ninguna regla para esta cuenta.",
                     "noPersonalApps": "No tienes ninguna regla para esta cuenta.",
                     "yourApps": "Tus notificaciones",
-                    "avatarFailure": "",
-                    "passwordFailure": "",
                     "updateFailure": "Ajustes actualizados"
                 },
                 "table": {
@@ -121,8 +113,7 @@
                     "yourApps": {
                         "header": {
                             "application": "Aplicación",
-                            "creationDate": "Fecha de creación",
-                            "scopes": ""
+                            "creationDate": "Fecha de creación"
                         }
                     },
                     "artists": {
@@ -149,8 +140,6 @@
                     "refresh": "Recargar",
                     "remove": "Quitar",
                     "removeApp": "Borrar lista de reproducción",
-                    "revoke": "",
-                    "revokeAccess": "",
                     "update": "Actualizar",
                     "updateSettings": "Actualizar ajustes"
                 },
@@ -160,11 +149,7 @@
                         "paragraph1": "Cambiar tu contraseña también cambiará la contraseña de la API de Subsonic, si pediste una.",
                         "paragraph2": "Tendrás que actualizar tu contraseña en los clientes que usan esta contraseña."
                     },
-                    "contentFilters": "Los filtros de contenido te ayudan a ocultar los contenidos que no quieres ver en el servicio.",
-                    "authorizedApps": "",
-                    "yourApps": "",
-                    "plugins": "",
-                    "deleteAccount": ""
+                    "contentFilters": "Los filtros de contenido te ayudan a ocultar los contenidos que no quieres ver en el servicio."
                 },
                 "modal": {
                     "changePassword": {
@@ -176,21 +161,11 @@
                         }
                     },
                     "deleteAccount": {
-                        "header": "¿Quieres restaurar tu cola de reproducción anterior?",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "¿Quieres restaurar tu cola de reproducción anterior?"
                     },
                     "deleteApp": {
-                        "header": "",
                         "content": {
                             "warning": "Esto borrará por completo esta lista de reproducción y no se podrá deshacer."
-                        }
-                    },
-                    "revokeApp": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
                         }
                     }
                 },
@@ -203,12 +178,8 @@
                     "managePlugins": "Gestionar listas de reproducción",
                     "newApp": "Crear una nueva lista de reproducción"
                 },
-                "warning": {
-                    "deleteAccount": ""
-                },
                 "message": {
-                    "currentEmail": "Tienes iniciada actualmente sesión como { email }.",
-                    "confirmDelete": ""
+                    "currentEmail": "Tienes iniciada actualmente sesión como { email }."
                 }
             },
             "Logout": {
@@ -240,10 +211,6 @@
                         "read": {
                             "label": "Leer",
                             "description": "Acceso de sólo lectura a los datos del usuario"
-                        },
-                        "write": {
-                            "label": "",
-                            "description": ""
                         }
                     },
                     "name": "Nombre",
@@ -252,9 +219,6 @@
                 "button": {
                     "create": "Crear aplicación",
                     "update": "Actualizar lista de reproducción"
-                },
-                "help": {
-                    "redirectUri": ""
                 },
                 "header": {
                     "failure": "No podemos crear tu cuenta"
@@ -303,9 +267,7 @@
                 },
                 "message": {
                     "registrationClosed": "La inscripción a esta instancia está cerrada, necesitarás un código de invitación para inscribirte.",
-                    "requiresReview": "Las inscripciones en este pod están abiertas, pero son revisadas por los moderadores antes de su aprobación.",
-                    "awaitingReview": "",
-                    "accountCreated": ""
+                    "requiresReview": "Las inscripciones en este pod están abiertas, pero son revisadas por los moderadores antes de su aprobación."
                 }
             },
             "Plugin": {
@@ -347,16 +309,10 @@
             },
             "description": {
                 "funkwhale": "Funkwhale es un proyecto impulsado por la comunidad que permite escuchar y compartir música y audio dentro de una red descentralizada y abierta.",
-                "publicContent": "Escuche los álbumes públicos y las listas de reproducción compartidas en este pod.",
-                "signup": "",
-                "findApp": "",
-                "quota": ""
+                "publicContent": "Escuche los álbumes públicos y las listas de reproducción compartidas en este pod."
             },
             "placeholder": {
                 "noDescription": "No hay descripción disponible."
-            },
-            "message": {
-                "loggedIn": ""
             }
         },
         "Home": {
@@ -372,9 +328,7 @@
                 "newChannels": "Nuevos canales",
                 "newAlbums": "Añadidos recientemente",
                 "signup": "Inscripción",
-                "statistics": "Estadísticas",
-                "links": "",
-                "welcome": ""
+                "statistics": "Estadísticas"
             },
             "link": {
                 "publicContent": {
@@ -388,20 +342,15 @@
                 "findOtherPod": "Encontrar otro pod",
                 "learnMore": "Cargando seguidores…",
                 "mobileApps": {
-                    "label": "Apps móviles y de escritorio",
-                    "description": ""
+                    "label": "Apps móviles y de escritorio"
                 },
-                "rules": "",
                 "viewMore": "Cargando seguidores…",
                 "funkwhale": "Usando Funkwhale"
             },
             "description": {
                 "funkwhale": {
-                    "paragraph2": "Funkwhale es gratis y te da el control de tu música.",
-                    "paragraph1": ""
-                },
-                "signup": "",
-                "quota": ""
+                    "paragraph2": "Funkwhale es gratis y te da el control de tu música."
+                }
             },
             "title": "Inicio",
             "placeholder": {
@@ -485,7 +434,6 @@
                     "startRadio": "Reproducir canciones similares",
                     "playTrack": "Reproducir canción",
                     "playTracks": "Reproducir canción",
-                    "report": "",
                     "trackDetails": "Detalles"
                 },
                 "title": {
@@ -576,22 +524,17 @@
                         "podcasts": "Podcasts"
                     },
                     "search": "Buscar música",
-                    "tag": "",
                     "track": "Canción"
                 },
                 "link": {
                     "more": "Más resultados 🡒",
-                    "fediverse": "Buscar en Wikipedia",
-                    "rss": ""
+                    "fediverse": "Buscar en Wikipedia"
                 },
                 "header": {
                     "noResults": "No se han encontrado coincidencias"
                 },
                 "placeholder": {
                     "search": "Buscar artistas, álbumes, canciones…"
-                },
-                "empty": {
-                    "noResults": ""
                 }
             },
             "Search": {
@@ -619,9 +562,7 @@
                     "name": "Nombre",
                     "email": "Confirma tu correo electrónico",
                     "owner": "Propietario",
-                    "podcast": "Podcasts",
-                    "subcategory": "",
-                    "tags": ""
+                    "podcast": "Podcasts"
                 },
                 "placeholder": {
                     "name": "Un nombre de canal increíble",
@@ -632,15 +573,10 @@
                 },
                 "help": {
                     "podcast": "Aloja tus episodios y mantén a tu comunidad actualizada.",
-                    "discography": "Publica la música que haces como una bonita discografía de álbumes y sencillos.",
-                    "podcastFields": "",
-                    "username": ""
+                    "discography": "Publica la música que haces como una bonita discografía de álbumes y sencillos."
                 },
                 "loader": {
                     "loading": "Subiendo"
-                },
-                "legend": {
-                    "purpose": ""
                 }
             },
             "LibraryFollowButton": {
@@ -666,9 +602,6 @@
                 },
                 "header": {
                     "preview": "Previsualización"
-                },
-                "warning": {
-                    "anonymous": ""
                 },
                 "message": {
                     "copy": "¡Texto copiado al portapapeles!"
@@ -724,7 +657,6 @@
                     "moderation": "Actualizar regla de moderación",
                     "discogs": "Buscar música",
                     "wikipedia": "Buscar en Wikipedia",
-                    "django": "",
                     "domain": "Miembro desde { date }",
                     "musicbrainz": "Ver en MusicBrainz"
                 }
@@ -782,7 +714,6 @@
                     "network": "Ha ocurrido un error de red al subir este archivo",
                     "size": "No es posible cargar este archivo, asegúrate que no es demasiado grande",
                     "extension": "Tipo de archivo no válido, asegúrese de que está cargando un archivo de audio. Las extensiones de archivo admitidas son { extensions }",
-                    "retry": "",
                     "denied": "Subida rechazada, asegúrate que el archivo no es demasiado grande y que no has alcanzado tu cuota",
                     "timeout": "Timeout en la subida, intentalo de nuevo"
                 },
@@ -807,14 +738,12 @@
                 },
                 "label": {
                     "uploadWidget": "Haga clic para seleccionar los archivos que desea cargar o arrastre y suelte los archivos o directorios",
-                    "remainingSpace": "",
                     "extensions": "Extensiones soportadas: { extensions }"
                 },
                 "header": {
                     "failure": "Error al guardar los cambios",
                     "server": "Estado de la importación",
-                    "status": "Estado de la importación",
-                    "local": ""
+                    "status": "Estado de la importación"
                 },
                 "link": {
                     "processing": "Procesando",
@@ -822,15 +751,13 @@
                     "picard": "Recomendamos usar Picard para este propósito."
                 },
                 "description": {
-                    "import": "Reiniciar importación",
-                    "previousImport": ""
+                    "import": "Reiniciar importación"
                 },
                 "message": {
                     "local": {
                         "format": "Las canciones que estás subiendo estén etiquetadas correctamente:",
                         "tag": "Las canciones que estás subiendo estén etiquetadas correctamente.",
-                        "message": "Estás a punto de subir música a tu biblioteca. Antes de continuar asegúrate que:",
-                        "copyright": ""
+                        "message": "Estás a punto de subir música a tu biblioteca. Antes de continuar asegúrate que:"
                     }
                 }
             },
@@ -840,30 +767,14 @@
                 },
                 "button": {
                     "cancel": "Cancelar",
-                    "clear": "Borrar",
-                    "reset": "",
-                    "showUnreviewed": "",
-                    "showAll": "",
-                    "submit": "",
-                    "new": "",
-                    "suggest": ""
+                    "clear": "Borrar"
                 },
                 "header": {
                     "failure": "Error al guardar los cambios",
                     "recentEdits": "Añadidos recientemente",
-                    "unreviewed": "Ediciones recientes en espera de revisión",
-                    "success": ""
+                    "unreviewed": "Ediciones recientes en espera de revisión"
                 },
-                "notApplicable": "N/A",
-                "empty": {
-                    "suggestEdit": ""
-                },
-                "label": {
-                    "summary": ""
-                },
-                "message": {
-                    "noPermission": ""
-                }
+                "notApplicable": "N/A"
             },
             "Albums": {
                 "link": {
@@ -891,8 +802,7 @@
                     "results": "Resultados por página"
                 },
                 "label": {
-                    "search": "Buscar",
-                    "tags": ""
+                    "search": "Buscar"
                 },
                 "button": {
                     "search": "Buscar"
@@ -905,8 +815,7 @@
                 },
                 "label": {
                     "search": "Nombre del artista",
-                    "excludeCompilation": "Excluir recopilación de artistas",
-                    "tags": ""
+                    "excludeCompilation": "Excluir recopilación de artistas"
                 },
                 "title": "Artistas",
                 "ordering": {
@@ -936,10 +845,7 @@
                         "album": "Álbum",
                         "artist": "Artista",
                         "copyright": "Derechos de autor",
-                        "license": "Licencia",
-                        "series": "",
-                        "url": "",
-                        "year": ""
+                        "license": "Licencia"
                     },
                     "track": {
                         "bitrate": {
@@ -992,21 +898,16 @@
                 },
                 "description": {
                     "library": "Este artista ya está en las siguientes bibliotecas:"
-                },
-                "message": {
-                    "filter": ""
                 }
             },
             "ImportStatusModal": {
                 "error": {
                     "importFailure": "Ocurrió un error durante el proceso de carga. Encontrará más información abajo.",
                     "unknownError": {
-                        "message": "Ha ocurrido un error desconocido",
-                        "label": ""
+                        "message": "Ha ocurrido un error desconocido"
                     },
                     "invalidMetadata": {
-                        "label": "Metadatos inválidos",
-                        "message": ""
+                        "label": "Metadatos inválidos"
                     }
                 },
                 "button": {
@@ -1026,13 +927,6 @@
                 "link": {
                     "support": "Abra un hilo de soporte (incluya la información de depuración en su mensaje)",
                     "documentation": "Lee nuestra documentación sobre este error"
-                },
-                "message": {
-                    "importDetail": "",
-                    "importSuccess": ""
-                },
-                "warning": {
-                    "importSkipped": ""
                 }
             },
             "EditCard": {
@@ -1050,9 +944,6 @@
                 "modal": {
                     "delete": {
                         "header": "¿Borrar esta sugerencia?"
-                    },
-                    "content": {
-                        "warning": ""
                     }
                 },
                 "table": {
@@ -1067,9 +958,6 @@
                 },
                 "header": {
                     "modification": "Fecha de modificación"
-                },
-                "link": {
-                    "track": ""
                 }
             },
             "Podcasts": {
@@ -1088,15 +976,13 @@
                     "cancel": "Cancelar",
                     "channel": "Crear un nuevo canal",
                     "search": "Buscar",
-                    "subscribe": "",
                     "feed": "Usando Funkwhale"
                 },
                 "empty": {
                     "noResults": "Lo sentimos, no hemos encontrado ningún artista que corresponda con tu búsqueda"
                 },
                 "label": {
-                    "search": "Título del podcast",
-                    "tags": ""
+                    "search": "Título del podcast"
                 },
                 "title": "Podcasts",
                 "pagination": {
@@ -1165,7 +1051,6 @@
                 "link": {
                     "moderation": "Actualizar regla de moderación",
                     "discogs": "Buscar música",
-                    "django": "",
                     "domain": "Miembro desde { date }",
                     "musicbrainz": "Ver en MusicBrainz"
                 }
@@ -1195,7 +1080,6 @@
                     "moderation": "Actualizar regla de moderación",
                     "discogs": "Buscar música",
                     "wikipedia": "Buscar en Wikipedia",
-                    "django": "",
                     "domain": "Miembro desde { date }"
                 },
                 "title": "Canción"
@@ -1204,27 +1088,18 @@
                 "header": {
                     "edit": "Reproducir canción",
                     "suggest": "No podemos añadir la canción a una lista de reproducción"
-                },
-                "message": {
-                    "remote": ""
                 }
             },
             "ArtistEdit": {
                 "header": {
                     "edit": "Reproducir canción",
                     "suggest": "No podemos añadir la canción a una lista de reproducción"
-                },
-                "message": {
-                    "remote": ""
                 }
             },
             "TrackEdit": {
                 "header": {
                     "edit": "Reproducir canción",
                     "suggest": "No podemos añadir la canción a una lista de reproducción"
-                },
-                "message": {
-                    "remote": ""
                 }
             },
             "AlbumDetail": {
@@ -1306,8 +1181,7 @@
         "channels": {
             "UploadModal": {
                 "meta": {
-                    "files": "{ count } archivo | { count } archivos",
-                    "quota": ""
+                    "files": "{ count } archivo | { count } archivos"
                 },
                 "button": {
                     "cancel": "Cancelar",
@@ -1330,8 +1204,7 @@
                     "tracks": "{ count } canción | { count } canciones"
                 },
                 "label": {
-                    "album": "Álbum",
-                    "series": ""
+                    "album": "Álbum"
                 },
                 "option": {
                     "none": "Ninguno"
@@ -1357,15 +1230,12 @@
                     "channel": "Canal"
                 },
                 "message": {
-                    "dragAndDrop": "Arrastre y suelte sus archivos aquí o abra el navegador para cargar sus archivos",
-                    "pending": ""
+                    "dragAndDrop": "Arrastre y suelte sus archivos aquí o abra el navegador para cargar sus archivos"
                 },
                 "button": {
                     "edit": "Editar",
                     "ignore": "Ignorar",
-                    "remove": "Quitar",
-                    "resume": "",
-                    "retry": ""
+                    "remove": "Quitar"
                 },
                 "header": {
                     "error": "Error al guardar los cambios"
@@ -1377,9 +1247,6 @@
                 },
                 "description": {
                     "extensions": "Extensiones soportadas: { extensions }"
-                },
-                "warning": {
-                    "quota": ""
                 }
             },
             "AlbumModal": {
@@ -1396,7 +1263,6 @@
                 "label": {
                     "description": "Descripción",
                     "position": "Paginación",
-                    "tags": "",
                     "title": "Título",
                     "image": "Nombre"
                 }
@@ -1411,7 +1277,6 @@
             },
             "SubscribeButton": {
                 "title": {
-                    "subscribe": "",
                     "unsubscribe": "{ count } favorito"
                 },
                 "help": {
@@ -1434,16 +1299,14 @@
                 "features": "Características",
                 "introduction": "Invitaciones",
                 "rules": "Regla",
-                "statistics": "Estadísticas",
-                "terms": ""
+                "statistics": "Estadísticas"
             },
             "header": {
                 "about": "Acerca de este pod",
                 "contact": "Contacto",
                 "features": "Características",
                 "rules": "Regla",
-                "statistics": "Estadísticas",
-                "terms": ""
+                "statistics": "Estadísticas"
             },
             "feature": {
                 "allowList": "Lista-autorizada",
@@ -1464,9 +1327,6 @@
                 "noDescription": "No hay descripción disponible.",
                 "noRules": "No hay normas disponibles.",
                 "noTerms": "No hay condiciones disponibles."
-            },
-            "message": {
-                "contact": ""
             }
         },
         "common": {
@@ -1477,7 +1337,6 @@
                     "go": "Ir",
                     "launch": "Iniciar",
                     "refresh": "Actualiza el contenido de la tabla",
-                    "select": "",
                     "selectAll": "Seleccionar un filtro",
                     "selectElement": "Seleccionar { total } elemento | Seleccionar los { total } elementos",
                     "selectCurrentPage": "Seleccionar solo la página actual"
@@ -1525,8 +1384,7 @@
                 },
                 "label": {
                     "shortcuts": "Atajos de teclado",
-                    "language": "Cambiar idioma",
-                    "theme": ""
+                    "language": "Cambiar idioma"
                 }
             },
             "UserModal": {
@@ -1545,8 +1403,7 @@
                 },
                 "label": {
                     "shortcuts": "Atajos de teclado",
-                    "language": "Cambiar idioma",
-                    "theme": ""
+                    "language": "Cambiar idioma"
                 },
                 "header": {
                     "options": "Acciones"
@@ -1568,7 +1425,6 @@
                 "button": {
                     "cancel": "Cancelar",
                     "edit": "Editar",
-                    "less": "",
                     "more": "Mostrar 1 álbum adicional",
                     "update": "Mi descripción molona"
                 },
@@ -1608,12 +1464,6 @@
                 "link": {
                     "login": "Iniciar sesión",
                     "signup": "Inscripción"
-                },
-                "header": {
-                    "unauthenticated": ""
-                },
-                "description": {
-                    "noAccess": ""
                 }
             },
             "ContentForm": {
@@ -1624,11 +1474,7 @@
                     "noContent": "Archivos pendientes."
                 },
                 "button": {
-                    "preview": "Previsualización",
-                    "write": ""
-                },
-                "placeholder": {
-                    "input": ""
+                    "preview": "Previsualización"
                 }
             },
             "EmptyState": {
@@ -1658,7 +1504,6 @@
             },
             "ExpandableDiv": {
                 "button": {
-                    "less": "",
                     "more": "Mostrar 1 álbum adicional"
                 }
             }
@@ -1733,9 +1578,6 @@
                 },
                 "header": {
                     "editor": "Editor de listas de reproducción"
-                },
-                "warning": {
-                    "duplicate": ""
                 },
                 "loading": {
                     "sync": "Sincronizando los cambios con el servidor…"
@@ -1817,8 +1659,7 @@
                 "main": "Menú principal",
                 "follows": "Solicitudes de seguimiento pendientes",
                 "edits": "Archivos pendientes",
-                "play": "Reproducir canción",
-                "theme": ""
+                "play": "Reproducir canción"
             },
             "header": {
                 "administration": "Administración",
@@ -1910,8 +1751,7 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Borrar",
-                            "warning": ""
+                            "label": "Borrar"
                         }
                     },
                     "link": {
@@ -1951,8 +1791,7 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Borrar",
-                            "warning": ""
+                            "label": "Borrar"
                         }
                     },
                     "link": {
@@ -1998,8 +1837,7 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Borrar",
-                            "warning": ""
+                            "label": "Borrar"
                         }
                     },
                     "link": {
@@ -2096,8 +1934,7 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Borrar",
-                            "warning": ""
+                            "label": "Borrar"
                         }
                     },
                     "link": {
@@ -2130,9 +1967,7 @@
                             "assignedTo": "Asignado a",
                             "internalNotes": "Notas internas",
                             "resolutionDate": "Fecha de creación",
-                            "resolved": "",
-                            "status": "Estado",
-                            "unresolved": ""
+                            "status": "Estado"
                         },
                         "report": {
                             "category": "Categoría",
@@ -2143,31 +1978,20 @@
                     "header": {
                         "actions": "Acciones",
                         "notes": "Notas internas",
-                        "message": "Mensaje",
-                        "reportedObject": ""
+                        "message": "Mensaje"
                     },
                     "button": {
                         "confirmDelete": "Borrar",
-                        "delete": "Borrar objeto reportado",
-                        "resolve": "",
-                        "unresolve": ""
+                        "delete": "Borrar objeto reportado"
                     },
                     "modal": {
                         "delete": {
-                            "header": "Borrar objeto reportado?",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "Borrar objeto reportado?"
                         }
                     },
                     "notApplicable": "N/A",
                     "link": {
-                        "moderation": "Actualizar regla de moderación",
-                        "report": "",
-                        "publicPage": ""
-                    },
-                    "warning": {
-                        "objectDeleted": ""
+                        "moderation": "Actualizar regla de moderación"
                     }
                 },
                 "UserRequestCard": {
@@ -2197,9 +2021,6 @@
                     "notApplicable": "N/A",
                     "link": {
                         "request": "Solicitar una contraseña"
-                    },
-                    "message": {
-                        "signup": ""
                     }
                 },
                 "InstancePolicyForm": {
@@ -2547,12 +2368,10 @@
                         "header": {
                             "actions": "Acciones",
                             "label": "Etiqueta de campo",
-                            "type": "Tipo de campo",
-                            "required": ""
+                            "type": "Tipo de campo"
                         },
                         "type": {
-                            "long": "Texto largo",
-                            "short": ""
+                            "long": "Texto largo"
                         },
                         "required": {
                             "false": "No",
@@ -2616,13 +2435,7 @@
                     "message": "Mensaje"
                 },
                 "description": {
-                    "forwardToDomain": "Envíe una copia anónima de su informe al servidor que aloja este elemento.",
-                    "message": "",
-                    "modal": "",
-                    "email": ""
-                },
-                "message": {
-                    "submissionSuccess": ""
+                    "forwardToDomain": "Envíe una copia anónima de su informe al servidor que aloja este elemento."
                 }
             },
             "FilterModal": {
@@ -2642,12 +2455,8 @@
                         "listItem2": "Añadidos recientemente",
                         "listItem3": "En las listas de artistas y álbumes",
                         "listItem1": "En los favoritos e historial de escucha de otros usuarios",
-                        "listItem4": "En sugerencias de radio",
-                        "listIntro": ""
+                        "listItem4": "En sugerencias de radio"
                     }
-                },
-                "help": {
-                    "createFilter": ""
                 }
             }
         },
@@ -2655,20 +2464,14 @@
             "FetchButton": {
                 "description": {
                     "failure": "Ocurrió un error al intentar actualizar los datos:",
-                    "success": "Los datos se han actualizado con éxito desde el servidor remoto.",
-                    "pending": "",
-                    "skipped": ""
+                    "success": "Los datos se han actualizado con éxito desde el servidor remoto."
                 },
                 "table": {
                     "error": {
                         "value": {
                             "httpError": "Ha ocurrido un error HTTP al contactar con el servidor remoto",
                             "invalidAttributesError": "Los datos devueltos por el servidor remoto tenían atributos inválidos o faltaban",
-                            "connectionError": "Imposible conectar con el servidor remoto",
-                            "httpStatus": "",
-                            "timeoutError": "",
-                            "invalidJsonError": "",
-                            "unknownError": ""
+                            "connectionError": "Imposible conectar con el servidor remoto"
                         },
                         "label": {
                             "detail": "Informes de error",
@@ -2689,7 +2492,6 @@
                     "refresh": "Actualizando el objeto desde el servidor remoto…"
                 },
                 "loader": {
-                    "fetchRequest": "",
                     "awaitingResult": "Cargando tus favoritos…"
                 }
             },
@@ -2713,20 +2515,14 @@
                     "playPause": "Pausar / reproducir la pista actual",
                     "playNext": "Reproducir siguiente canción",
                     "playPrevious": "Canción anterior",
-                    "seekBack30": "",
-                    "seekBack5": "",
-                    "seekForward30": "",
-                    "seekForward5": "",
                     "shuffleQueue": "Mezclar tu cola de reproducción",
                     "toggleFavorite": "1 favorito",
-                    "toggleMute": "",
                     "toggleLoop": "Alternar cola en bucle"
                 },
                 "general": {
                     "focus": "Enfoque la barra de búsqueda",
                     "label": "Atajos generales",
-                    "show": "Mostrar atajos de teclado disponibles",
-                    "unfocus": ""
+                    "show": "Mostrar atajos de teclado disponibles"
                 }
             },
             "button": {
@@ -2748,14 +2544,6 @@
             },
             "label": {
                 "url": "Datos de Instancia"
-            },
-            "help": {
-                "notFunkwhaleServer": "",
-                "serverDown": "",
-                "selectPod": ""
-            },
-            "message": {
-                "newUrl": ""
             }
         },
         "Queue": {
@@ -2779,12 +2567,11 @@
                 "radio": "Las nuevas canciones se agregarán aquí de forma automática.",
                 "automaticPlay": "La siguiente pista se reproducirá automáticamente en unos segundos…"
             },
-            "header": {
-                "failure": "",
-                "radio": "Estás escuchando una radio"
-            },
             "meta": {
                 "queuePosition": "({ index } de { length })"
+            },
+            "header": {
+                "radio": "Estás escuchando una radio"
             },
             "warning": {
                 "connectivity": "Puede tener un problema de conectividad."
@@ -2818,7 +2605,6 @@
             },
             "button": {
                 "fediverse": "Fediverse",
-                "rss": "",
                 "search": "Buscar"
             },
             "label": {
@@ -2828,19 +2614,11 @@
                 },
                 "rss": {
                     "fieldPlaceholder": "@channel@pod.example o https://website.example/rss.xml",
-                    "fieldLabel": "Crear una lista de reproducción",
-                    "title": ""
+                    "fieldLabel": "Crear una lista de reproducción"
                 }
-            },
-            "warning": {
-                "unsupported": ""
             },
             "error": {
                 "fetchFailed": "Lista de reproducción creada"
-            },
-            "description": {
-                "fediverse": "",
-                "rss": ""
             }
         },
         "PageNotFound": {
@@ -2907,19 +2685,16 @@
                         "rss": {
                             "content": {
                                 "help": "Copie y pegue la siguiente URL en su podcaster favorito:"
-                            },
-                            "header": ""
+                            }
                         },
                         "fediverse": {
                             "content": {
                                 "help": "Si utiliza Mastodon u otras aplicaciones de Fediverse, puede suscribirse a esta cuenta:"
-                            },
-                            "header": ""
+                            }
                         },
                         "funkwhale": {
                             "header": "Usando Funkwhale"
-                        },
-                        "header": ""
+                        }
                     },
                     "delete": {
                         "header": "¿Borrar este Canal?",
@@ -2935,23 +2710,16 @@
             "DetailOverview": {
                 "link": {
                     "addAlbum": "Añadir nuevo",
-                    "erroredUploads": "Biblioteca actualizada",
-                    "skippedUploads": ""
+                    "erroredUploads": "Biblioteca actualizada"
                 },
                 "header": {
                     "albums": "Álbumes",
                     "latestEpisodes": "Últimos episodios",
                     "latestTracks": "Próxima canción",
-                    "series": "",
-                    "uploadsFailure": "",
-                    "uploadsProcessing": "",
                     "uploadsSuccess": "Contraseña actualizada con éxito"
                 },
                 "meta": {
                     "progress": "Biblioteca actualizada"
-                },
-                "message": {
-                    "processing": ""
                 }
             },
             "SubscriptionsList": {
@@ -2959,13 +2727,11 @@
                     "addNew": "Añadir nuevo"
                 },
                 "button": {
-                    "cancel": "Cancelar",
-                    "subscribe": ""
+                    "cancel": "Cancelar"
                 },
                 "placeholder": {
                     "search": "Nombre del filtro"
                 },
-                "title": "",
                 "modal": {
                     "subscription": {
                         "header": "Descripción"
@@ -3075,9 +2841,6 @@
                     },
                     "placeholder": {
                         "search": "Buscar por título, artista, álbum…"
-                    },
-                    "button": {
-                        "showStatus": ""
                     },
                     "pagination": {
                         "results": "Mostrando resultados { start }-{ end } de { total }"
@@ -3212,15 +2975,12 @@
                 "description": {
                     "follow": "Puedes seguir bibliotecas de otros usuarios para obtener nueva música. Puedes seguir bibliotecas públicas instantáneamente, mientras que las biliotecas privadas necesitan aprovación por parte de su dueño.",
                     "channel": {
-                        "1": "Si eres músico o podcaster, los canales están diseñados para ti!",
-                        "2": ""
-                    },
-                    "upload": ""
+                        "1": "Si eres músico o podcaster, los canales están diseñados para ti!"
+                    }
                 },
                 "header": {
                     "follow": "Seguir bibliotecas remotas",
-                    "channel": "Publica tu trabajo en un canal",
-                    "upload": ""
+                    "channel": "Publica tu trabajo en un canal"
                 },
                 "button": {
                     "start": "Comenzar"
@@ -3269,8 +3029,7 @@
                 },
                 "tooltip": {
                     "private": "Esta biblioteca es privada y se necesita la aprobación de su propietario para acceder a su contenido",
-                    "public": "Esta biblioteca es pública y puedes acceder a su contenido libremente",
-                    "instance": ""
+                    "public": "Esta biblioteca es pública y puedes acceder a su contenido libremente"
                 }
             },
             "Edit": {
@@ -3306,19 +3065,16 @@
             },
             "DetailAlbums": {
                 "empty": {
-                    "upload": "",
                     "follow": "Si dejas de seguir esta biblioteca, perderás acceso a su contenido."
                 }
             },
             "DetailOverview": {
                 "empty": {
-                    "upload": "",
                     "follow": "Si dejas de seguir esta biblioteca, perderás acceso a su contenido."
                 }
             },
             "DetailTracks": {
                 "empty": {
-                    "upload": "",
                     "follow": "Si dejas de seguir esta biblioteca, perderás acceso a su contenido."
                 }
             }
@@ -3466,7 +3222,6 @@
             },
             "header": {
                 "funkwhaleSupport": "Acerca de Funkwhale",
-                "instanceSupport": "",
                 "messages": "Mensajes emitidos",
                 "notifications": "Tus notificaciones"
             },
@@ -3482,11 +3237,7 @@
             },
             "title": "Notificaciones",
             "label": {
-                "reminder": "",
                 "showRead": "Mostrar notificaciones leídas"
-            },
-            "message": {
-                "funkwhaleSupport": ""
             }
         },
         "admin": {
@@ -3543,8 +3294,7 @@
                         "remoteProfile": "Abrir perfil",
                         "requests": "Solicitar una contraseña",
                         "tracks": "Canciones",
-                        "uploads": "Subidas",
-                        "django": ""
+                        "uploads": "Subidas"
                     },
                     "tooltip": {
                         "uploadQuota": "Establecer cuanto contenido puede subir el usuario. Déjalo en blanco para usar el valor por defecto de la instancia."
@@ -3568,7 +3318,6 @@
                     "link": {
                         "accounts": "Cuentas",
                         "domains": "Dominios",
-                        "reports": "",
                         "userRequests": "Bibliotecas de usuarios"
                     },
                     "title": "Moderación",
@@ -3598,8 +3347,7 @@
                         "libraries": "Bibliotecas",
                         "website": "Abrir website",
                         "tracks": "Canciones",
-                        "uploads": "Subidas",
-                        "django": ""
+                        "uploads": "Subidas"
                     },
                     "table": {
                         "audioContent": {
@@ -3655,9 +3403,7 @@
                 "ReportsList": {
                     "option": {
                         "status": {
-                            "all": "Todo",
-                            "resolved": "",
-                            "unresolved": ""
+                            "all": "Todo"
                         }
                     },
                     "ordering": {
@@ -3667,10 +3413,6 @@
                             "label": "Orden"
                         },
                         "label": "Orden"
-                    },
-                    "title": "",
-                    "header": {
-                        "reports": ""
                     },
                     "label": {
                         "search": "Buscar",
@@ -3737,7 +3479,6 @@
                         "library": "Biblioteca",
                         "remoteProfile": "Abrir perfil",
                         "type": "Tipo",
-                        "django": "",
                         "visibility": "Visibilidad"
                     },
                     "header": {
@@ -3770,7 +3511,6 @@
                         "remoteProfile": "Abrir perfil",
                         "tracks": "Canciones",
                         "uploads": "Subidas",
-                        "django": "",
                         "visibility": "Visibilidad"
                     },
                     "header": {
@@ -3798,10 +3538,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "¿Borrar esta biblioteca?",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "¿Borrar esta biblioteca?"
                         }
                     },
                     "warning": {
@@ -3825,8 +3562,7 @@
                         "musicbrainz": "Ver en MusicBrainz",
                         "remoteProfile": "Abrir perfil",
                         "tracks": "Canciones",
-                        "uploads": "Subidas",
-                        "django": ""
+                        "uploads": "Subidas"
                     },
                     "table": {
                         "audioContent": {
@@ -3851,10 +3587,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "¿Borrar este álbum?",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "¿Borrar este álbum?"
                         }
                     },
                     "warning": {
@@ -3879,8 +3612,7 @@
                         "musicbrainz": "Ver en MusicBrainz",
                         "remoteProfile": "Abrir perfil",
                         "tracks": "Canciones",
-                        "uploads": "Subidas",
-                        "django": ""
+                        "uploads": "Subidas"
                     },
                     "table": {
                         "audioContent": {
@@ -3905,10 +3637,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "¿Borrar este artista?",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "¿Borrar este artista?"
                         }
                     },
                     "warning": {
@@ -3925,8 +3654,7 @@
                         "albums": "Álbumes",
                         "artists": "Artistas",
                         "localProfile": "Abrir perfil",
-                        "tracks": "Canciones",
-                        "django": ""
+                        "tracks": "Canciones"
                     },
                     "button": {
                         "delete": "Borrar"
@@ -3965,8 +3693,7 @@
                         "localProfile": "Abrir perfil",
                         "musicbrainz": "Ver en MusicBrainz",
                         "remoteProfile": "Abrir perfil",
-                        "uploads": "Subidas",
-                        "django": ""
+                        "uploads": "Subidas"
                     },
                     "table": {
                         "trackData": {
@@ -3995,10 +3722,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Borrar esta canción?",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "Borrar esta canción?"
                         }
                     },
                     "warning": {
@@ -4012,7 +3736,6 @@
                         "channels": "Canales",
                         "edits": "Editar",
                         "libraries": "Bibliotecas",
-                        "tags": "",
                         "tracks": "Canciones",
                         "uploads": "Subidas"
                     },
@@ -4035,9 +3758,7 @@
                         "category": "Categoría",
                         "description": "Descripción",
                         "domain": "Dominio",
-                        "name": "Nombre",
-                        "rss": "",
-                        "url": ""
+                        "name": "Nombre"
                     },
                     "audioContent": {
                         "albums": "Álbumes",
@@ -4077,8 +3798,7 @@
                     "local": "Local"
                 },
                 "link": {
-                    "localProfile": "Abrir perfil",
-                    "django": ""
+                    "localProfile": "Abrir perfil"
                 },
                 "warning": {
                     "stats": "Las estadísticas se calculan a partir de la actividad y el contenido conocidos en tu instancia y no reflejan la actividad general de esta cuenta"
@@ -4092,7 +3812,6 @@
                     "channels": "Canales",
                     "invitations": "Invitaciones",
                     "libraries": "Bibliotecas",
-                    "tags": "",
                     "tracks": "Canciones",
                     "uploads": "Subidas",
                     "users": "Usuario"
@@ -4108,7 +3827,6 @@
                     "music": "Música",
                     "playlists": "Listas de reproducción",
                     "sections": "Secciones",
-                    "security": "",
                     "signups": "Inscripción",
                     "stats": "Estadísticas",
                     "subsonic": "Subsonic",
@@ -4135,14 +3853,11 @@
                 "playlists": "Listas de reproducción",
                 "podcasts": "Podcasts",
                 "radios": "Radios",
-                "series": "",
-                "tags": "",
                 "tracks": "Canciones"
             },
             "header": {
                 "search": "Buscar",
-                "remote": "Buscar una biblioteca externa",
-                "rss": ""
+                "remote": "Buscar una biblioteca externa"
             },
             "button": {
                 "submit": "Enviar"
@@ -4271,8 +3986,7 @@
                         "label": "Escuchas"
                     },
                     "reports": {
-                        "description": "Acceso deshabilitado",
-                        "label": ""
+                        "description": "Acceso deshabilitado"
                     },
                     "notifications": {
                         "description": "Silenciar notificaciones",
@@ -4287,8 +4001,7 @@
                         "label": "Radios"
                     },
                     "security": {
-                        "description": "Acceso a los parámetros de seguridad como los pasaportes y las autorizaciones",
-                        "label": ""
+                        "description": "Acceso a los parámetros de seguridad como los pasaportes y las autorizaciones"
                     },
                     "favorites": {
                         "label": "Favoritos"
@@ -4452,9 +4165,6 @@
                 "playlist": {
                     "label": "Lista de reproducción"
                 },
-                "tags": {
-                    "label": ""
-                },
                 "visibility": {
                     "label": "Visibilidad"
                 }
@@ -4478,15 +4188,8 @@
                 "album": {
                     "releaseDate": "Última visualización",
                     "title": "Título"
-                },
-                "tags": {
-                    "label": ""
                 }
             }
-        },
-        "useThemeList": {
-            "darkTheme": "",
-            "lightTheme": ""
         }
     },
     "init": {
@@ -4496,10 +4199,6 @@
                 "later": "Más tarde",
                 "update": "Actualizar"
             }
-        },
-        "axios": {
-            "rateLimitDelay": "",
-            "rateLimitLater": ""
         }
     }
 }

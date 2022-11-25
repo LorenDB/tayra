@@ -4,24 +4,9 @@
             "Authorize": {
                 "header": {
                     "access": "{ app } vill ha tillgång till ditt Funkwhalekonto",
-                    "authorize": "",
                     "authorizeFailure": "Fel vid handling",
                     "fetchFailure": "Fel vid skapande av inbjudan",
-                    "allScopes": "Lyckades",
-                    "readOnly": "",
-                    "writeOnly": ""
-                },
-                "title": "",
-                "button": {
-                    "authorize": ""
-                },
-                "help": {
-                    "pasteCode": "",
-                    "redirect": "",
-                    "copyCode": ""
-                },
-                "message": {
-                    "unknownPermissions": ""
+                    "allScopes": "Lyckades"
                 }
             },
             "SubsonicTokenForm": {
@@ -70,45 +55,29 @@
             },
             "ApplicationEdit": {
                 "label": {
-                    "accessToken": "Accepterad",
-                    "appId": "",
-                    "appSecret": ""
-                },
-                "header": {
-                    "appDetails": "",
-                    "editApp": "Fel vid handling"
-                },
-                "help": {
-                    "appDetails": ""
+                    "accessToken": "Accepterad"
                 },
                 "link": {
                     "settings": "Uppdatera inställningar"
                 },
                 "title": "Fel vid handling",
-                "button": {
-                    "regenerateToken": ""
+                "header": {
+                    "editApp": "Fel vid handling"
                 }
             },
             "Settings": {
                 "title": "Kontoinställningar",
                 "header": {
                     "accountSettings": "Kontoinställningar",
-                    "authorizedApps": "",
                     "avatar": "Avatar",
                     "changeEmail": "E-postadress",
                     "changePassword": "Ändra mitt lösenord",
                     "contentFilters": "Välj ett filter",
                     "deleteAccount": "Skapa mitt konto",
                     "hiddenArtists": "Bläddra artister",
-                    "plugins": "",
                     "settingsUpdated": "Inställningar uppdaterade",
                     "emailFailure": "Vi kan inte spara din avatar",
                     "accountFailure": "Vi kan inte skapa ditt konto",
-                    "noApps": "",
-                    "noPersonalApps": "",
-                    "yourApps": "",
-                    "avatarFailure": "",
-                    "passwordFailure": "",
                     "updateFailure": "Inställningar uppdaterade"
                 },
                 "table": {
@@ -121,8 +90,7 @@
                     "yourApps": {
                         "header": {
                             "application": "Åtgärder",
-                            "creationDate": "Skapningsdatum",
-                            "scopes": ""
+                            "creationDate": "Skapningsdatum"
                         }
                     },
                     "artists": {
@@ -149,22 +117,9 @@
                     "refresh": "Uppdatera",
                     "remove": "Radera",
                     "removeApp": "Radera avatar",
-                    "revoke": "",
                     "revokeAccess": "Godkänn åtkomst?",
                     "update": "Uppdatera avatar",
                     "updateSettings": "Uppdatera inställningar"
-                },
-                "description": {
-                    "changeEmail": "",
-                    "changePassword": {
-                        "paragraph1": "Ändring av lösenord kommer också att ändra ditt lösenord för Subsonic API:n om du har efterfrågat ett.",
-                        "paragraph2": "Du måste uppdatera ditt lösenord på dina klienter som använder detta lösenord."
-                    },
-                    "contentFilters": "",
-                    "authorizedApps": "",
-                    "yourApps": "",
-                    "plugins": "",
-                    "deleteAccount": ""
                 },
                 "modal": {
                     "changePassword": {
@@ -176,39 +131,24 @@
                         }
                     },
                     "deleteAccount": {
-                        "header": "Vill du återställa din föregående kö?",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "deleteApp": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "revokeApp": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "Vill du återställa din föregående kö?"
                     }
                 },
-                "help": {
-                    "noApps": "",
-                    "changePassword": "Kontrollera att ditt lösenord är korrekt",
-                    "noPersonalApps": ""
+                "description": {
+                    "changePassword": {
+                        "paragraph1": "Ändring av lösenord kommer också att ändra ditt lösenord för Subsonic API:n om du har efterfrågat ett.",
+                        "paragraph2": "Du måste uppdatera ditt lösenord på dina klienter som använder detta lösenord."
+                    }
                 },
                 "link": {
                     "managePlugins": "Hantera spellista",
                     "newApp": "Få en ny inbjudan"
                 },
-                "warning": {
-                    "deleteAccount": ""
+                "help": {
+                    "changePassword": "Kontrollera att ditt lösenord är korrekt"
                 },
                 "message": {
-                    "currentEmail": "Du är för närvarande inloggad som { username }",
-                    "confirmDelete": ""
+                    "currentEmail": "Du är för närvarande inloggad som { username }"
                 }
             },
             "Logout": {
@@ -233,33 +173,6 @@
                 },
                 "title": "Skapa en ny spellista"
             },
-            "ApplicationForm": {
-                "label": {
-                    "scopes": {
-                        "description": "",
-                        "read": {
-                            "label": "",
-                            "description": ""
-                        },
-                        "write": {
-                            "label": "",
-                            "description": ""
-                        }
-                    },
-                    "name": "Namn",
-                    "redirectUri": ""
-                },
-                "button": {
-                    "create": "Skapa spellista",
-                    "update": "Uppdatera spellista"
-                },
-                "help": {
-                    "redirectUri": ""
-                },
-                "header": {
-                    "failure": "Vi kan inte spara dina inställningar"
-                }
-            },
             "LoginForm": {
                 "link": {
                     "createAccount": "Skapa ett konto",
@@ -268,10 +181,6 @@
                 "placeholder": {
                     "username": "Ange ditt användarnamn eller e-post"
                 },
-                "help": {
-                    "approvalRequired": "",
-                    "invalidCredentials": "Kontrollera att ditt användarnamn/lösenordspar är korrekt"
-                },
                 "button": {
                     "login": "Inlogg"
                 },
@@ -279,8 +188,23 @@
                     "password": "Lösenord",
                     "username": "Användarnamn eller e-post"
                 },
+                "help": {
+                    "invalidCredentials": "Kontrollera att ditt användarnamn/lösenordspar är korrekt"
+                },
                 "header": {
                     "loginFailure": "Vi kan inte logga in dig"
+                }
+            },
+            "ApplicationForm": {
+                "button": {
+                    "create": "Skapa spellista",
+                    "update": "Uppdatera spellista"
+                },
+                "label": {
+                    "name": "Namn"
+                },
+                "header": {
+                    "failure": "Vi kan inte spara dina inställningar"
                 }
             },
             "SignupForm": {
@@ -298,33 +222,24 @@
                     "username": "Ange ditt användarnamn"
                 },
                 "header": {
-                    "login": "Logga in till ditt Funkwhale konto",
-                    "signupFailure": ""
+                    "login": "Logga in till ditt Funkwhale konto"
                 },
                 "message": {
-                    "registrationClosed": "Registrering på denna instans är stängd, du behöver en inbjudningskod för att registrera dig.",
-                    "requiresReview": "",
-                    "awaitingReview": "",
-                    "accountCreated": ""
+                    "registrationClosed": "Registrering på denna instans är stängd, du behöver en inbjudningskod för att registrera dig."
                 }
             },
             "Plugin": {
                 "link": {
                     "documentation": "Dokumentation"
                 },
-                "label": {
-                    "pluginEnabled": "",
-                    "library": "Bibliotek"
-                },
                 "header": {
                     "failure": "Fel vid sparning av inställningar"
                 },
-                "description": {
-                    "library": ""
+                "label": {
+                    "library": "Bibliotek"
                 },
                 "button": {
-                    "save": "Spara",
-                    "scan": ""
+                    "save": "Spara"
                 }
             }
         },
@@ -336,28 +251,9 @@
             "header": {
                 "funkwhale": "En social plattform för att avnjuta och dela musik",
                 "aboutPod": "Om denna podd",
-                "publicContent": "",
-                "findApp": "",
                 "signup": "Bli Medlem"
             },
-            "title": "Om",
-            "link": {
-                "findOtherPod": "",
-                "learnMore": ""
-            },
-            "description": {
-                "funkwhale": "",
-                "publicContent": "",
-                "signup": "",
-                "findApp": "",
-                "quota": ""
-            },
-            "placeholder": {
-                "noDescription": ""
-            },
-            "message": {
-                "loggedIn": ""
-            }
+            "title": "Om"
         },
         "Home": {
             "stat": {
@@ -367,45 +263,22 @@
             "header": {
                 "aboutFunkwhale": "Om Funkwhale",
                 "about": "Om denna Funkwhalepodd",
-                "contact": "",
                 "login": "Logga in",
-                "newChannels": "",
                 "newAlbums": "Senast inlagda",
                 "signup": "Bli Medlem",
-                "statistics": "Statistik",
-                "links": "",
-                "welcome": ""
-            },
-            "link": {
-                "publicContent": {
-                    "label": "",
-                    "description": ""
-                },
-                "userGuides": {
-                    "description": "",
-                    "label": "Användarradio"
-                },
-                "findOtherPod": "",
-                "learnMore": "",
-                "mobileApps": {
-                    "label": "",
-                    "description": ""
-                },
-                "rules": "",
-                "viewMore": "",
-                "funkwhale": "library@demo.funkwhale.audio"
+                "statistics": "Statistik"
             },
             "description": {
                 "funkwhale": {
-                    "paragraph2": "Funkwhale är gratis och ger dig kontroll över din musik.",
-                    "paragraph1": ""
-                },
-                "signup": "",
-                "quota": ""
+                    "paragraph2": "Funkwhale är gratis och ger dig kontroll över din musik."
+                }
             },
             "title": "Hem",
-            "placeholder": {
-                "noDescription": ""
+            "link": {
+                "userGuides": {
+                    "label": "Användarradio"
+                },
+                "funkwhale": "library@demo.funkwhale.audio"
             }
         },
         "audio": {
@@ -450,17 +323,12 @@
                 "meta": {
                     "position": "{ index } av { length }"
                 },
-                "header": {
-                    "player": ""
-                },
                 "label": {
                     "clearQueue": "Rensa din kö",
                     "expandQueue": "Utöka",
-                    "addArtistContentFilter": "",
                     "loopingDisabled": "Looping inaktiverad. Klicka för att växla till enkel spår looping.",
                     "loopingSingle": "Looping inaktiverad. Klicka för att växla till enkel spår looping.",
                     "loopingWholeQueue": "Loopa hela kön. Klicka för att inaktivera looping.",
-                    "audioPlayer": "",
                     "mute": "Tyst",
                     "nextTrack": "Nästa spår",
                     "pause": "Pausa spår",
@@ -474,22 +342,17 @@
                 "button": {
                     "addToQueue": "Lägg till i nuvarande kö",
                     "addToPlaylist": "Lägg till i spellista…",
-                    "episodeDetails": "",
-                    "hideArtist": "",
                     "discretePlay": "Spela",
                     "playAlbum": "Spela alla album",
                     "playArtist": "Spellista",
                     "playNext": "Spela upp nästa",
                     "playNow": "Spela upp nu",
                     "playPlaylist": "Rensa spellista",
-                    "startRadio": "",
                     "playTrack": "Spela upp spår",
                     "playTracks": "Spela upp spår",
-                    "report": "",
                     "trackDetails": "Låtar"
                 },
                 "title": {
-                    "more": "",
                     "unavailable": "Låtar tillgängliga i detta bibliotek"
                 }
             },
@@ -499,21 +362,12 @@
                         "addToFavorites": "Lägg till i favoriter",
                         "addToPlaylist": "Lägg till i spellista…",
                         "addToQueue": "Lägg till i kö",
-                        "episodeDetails": "",
                         "playNext": "Spela upp nästa",
                         "playNow": "Spela upp nu",
                         "startRadio": "Spela upp spår",
                         "removeFromFavorites": "Radera från favoriter",
                         "trackDetails": "Låtar",
-                        "albumDetails": "1 album",
-                        "artistDetails": "",
-                        "channelDetails": "",
-                        "seriesDetails": ""
-                    }
-                },
-                "MobileRow": {
-                    "button": {
-                        "actions": ""
+                        "albumDetails": "1 album"
                     }
                 }
             },
@@ -523,16 +377,12 @@
                         "addToFavorites": "Lägg till i favoriter",
                         "addToPlaylist": "Lägg till i spellista…",
                         "addToQueue": "Lägg till i kö",
-                        "episodeDetails": "",
                         "playNext": "Spela upp nästa",
                         "playNow": "Spela upp nu",
                         "startRadio": "Spela upp spår",
                         "removeFromFavorites": "Radera från favoriter",
                         "trackDetails": "Låtar",
-                        "albumDetails": "1 album",
-                        "artistDetails": "",
-                        "channelDetails": "",
-                        "seriesDetails": ""
+                        "albumDetails": "1 album"
                     }
                 },
                 "Table": {
@@ -545,26 +395,9 @@
                     }
                 },
                 "Widget": {
-                    "empty": {
-                        "noResults": ""
-                    },
                     "button": {
                         "more": "Visa 1 mer album"
                     }
-                },
-                "MobileRow": {
-                    "button": {
-                        "actions": ""
-                    }
-                }
-            },
-            "VolumeControl": {
-                "label": {
-                    "slider": ""
-                },
-                "button": {
-                    "mute": "Tyst",
-                    "unmute": "Slå på ljudet"
                 }
             },
             "SearchBar": {
@@ -572,26 +405,16 @@
                     "album": "Album",
                     "artist": "Artist",
                     "category": {
-                        "federation": "Federation",
-                        "podcasts": ""
+                        "federation": "Federation"
                     },
                     "search": "Sök efter lite musik",
-                    "tag": "",
                     "track": "Låt"
-                },
-                "link": {
-                    "more": "",
-                    "fediverse": "Sök på Wikipedia",
-                    "rss": ""
-                },
-                "header": {
-                    "noResults": ""
                 },
                 "placeholder": {
                     "search": "Sök efter artister, album, låtar…"
                 },
-                "empty": {
-                    "noResults": ""
+                "link": {
+                    "fediverse": "Sök på Wikipedia"
                 }
             },
             "Search": {
@@ -608,41 +431,6 @@
                     "noArtists": "Vi hittade tyvärr ingen artist som matchade din sökfråga"
                 }
             },
-            "ChannelForm": {
-                "label": {
-                    "discography": "",
-                    "category": "",
-                    "image": "",
-                    "description": "Tid",
-                    "username": "",
-                    "language": "Ändra språk",
-                    "name": "Namn",
-                    "email": "E-postadress",
-                    "owner": "Filternamn",
-                    "podcast": "",
-                    "subcategory": "",
-                    "tags": ""
-                },
-                "placeholder": {
-                    "name": "",
-                    "username": ""
-                },
-                "header": {
-                    "error": "Fel vid sparning av inställningar"
-                },
-                "help": {
-                    "podcast": "",
-                    "discography": "",
-                    "podcastFields": "",
-                    "username": ""
-                },
-                "loader": {
-                    "loading": "Laddar upp…"
-                },
-                "legend": {
-                    "purpose": ""
-                }
-            },
             "LibraryFollowButton": {
                 "button": {
                     "cancel": "Pågående följförfrågningar",
@@ -650,46 +438,43 @@
                     "unfollow": "Följ"
                 }
             },
-            "EmbedWizard": {
-                "button": {
-                    "copy": ""
-                },
-                "help": {
-                    "embed": "",
-                    "width": "Lämna tomt för en slumpmässig kod",
-                    "anonymous": ""
-                },
+            "ChannelForm": {
                 "label": {
-                    "embed": "",
-                    "height": "",
-                    "width": ""
+                    "description": "Tid",
+                    "language": "Ändra språk",
+                    "name": "Namn",
+                    "email": "E-postadress",
+                    "owner": "Filternamn"
+                },
+                "header": {
+                    "error": "Fel vid sparning av inställningar"
+                },
+                "loader": {
+                    "loading": "Laddar upp…"
+                }
+            },
+            "EmbedWizard": {
+                "help": {
+                    "width": "Lämna tomt för en slumpmässig kod"
                 },
                 "header": {
                     "preview": "Föregående steg"
-                },
-                "warning": {
-                    "anonymous": ""
-                },
-                "message": {
-                    "copy": ""
+                }
+            },
+            "VolumeControl": {
+                "button": {
+                    "mute": "Tyst",
+                    "unmute": "Slå på ljudet"
                 }
             },
             "ChannelSeries": {
                 "button": {
                     "showMore": "Visa 1 mer album"
-                },
-                "help": {
-                    "subscribe": ""
                 }
             },
             "ChannelsWidget": {
                 "button": {
                     "showMore": "Visa 1 mer album"
-                }
-            },
-            "ChannelEntries": {
-                "help": {
-                    "subscribe": ""
                 }
             }
         },
@@ -698,9 +483,6 @@
                 "meta": {
                     "episodes": "{ count } avsnitt | { count } avsnitt",
                     "tracks": "{ count } spår | { count } spår"
-                },
-                "link": {
-                    "addDescription": ""
                 }
             },
             "ArtistBase": {
@@ -711,21 +493,11 @@
                 "button": {
                     "cancel": "Ångra",
                     "edit": "Redigera…",
-                    "embed": "",
-                    "more": "",
                     "play": "Spela alla album"
                 },
-                "modal": {
-                    "embed": {
-                        "header": ""
-                    }
-                },
                 "link": {
-                    "moderation": "",
                     "discogs": "Sök på lyrics.wikia.com",
                     "wikipedia": "Sök på Wikipedia",
-                    "django": "",
-                    "domain": "",
                     "musicbrainz": "Visa på MusicBrainz"
                 }
             },
@@ -779,12 +551,7 @@
             },
             "FileUpload": {
                 "tooltip": {
-                    "network": "Ett nätverksfel inträffade medan filen uppladdades",
-                    "size": "",
-                    "extension": "",
-                    "retry": "",
-                    "denied": "",
-                    "timeout": ""
+                    "network": "Ett nätverksfel inträffade medan filen uppladdades"
                 },
                 "table": {
                     "upload": {
@@ -805,33 +572,17 @@
                     "cancel": "Ångra",
                     "retry": "Filuppladdning"
                 },
-                "label": {
-                    "uploadWidget": "",
-                    "remainingSpace": "",
-                    "extensions": ""
-                },
                 "header": {
                     "failure": "Fel vid skanning av bibliotek",
-                    "server": "Import status",
                     "status": "Import status",
-                    "local": ""
-                },
-                "link": {
-                    "processing": "",
-                    "uploading": "Laddar upp…",
-                    "picard": "Vi rekommenderar att du använder Picard för det ändamålet."
+                    "server": "Import status"
                 },
                 "description": {
-                    "import": "Återställ ditt lösenord",
-                    "previousImport": ""
+                    "import": "Återställ ditt lösenord"
                 },
-                "message": {
-                    "local": {
-                        "format": "",
-                        "tag": "",
-                        "message": "",
-                        "copyright": ""
-                    }
+                "link": {
+                    "uploading": "Laddar upp…",
+                    "picard": "Vi rekommenderar att du använder Picard för det ändamålet."
                 }
             },
             "EditForm": {
@@ -841,29 +592,13 @@
                 "button": {
                     "cancel": "Ångra",
                     "clear": "Rensa",
-                    "reset": "",
-                    "showUnreviewed": "",
-                    "showAll": "",
-                    "submit": "",
-                    "new": "Skicka in en ny begäran",
-                    "suggest": ""
+                    "new": "Skicka in en ny begäran"
                 },
                 "header": {
                     "failure": "Fel vid sparning av inställningar",
-                    "recentEdits": "Senast inlagda",
-                    "unreviewed": "",
-                    "success": ""
+                    "recentEdits": "Senast inlagda"
                 },
-                "notApplicable": "N/A",
-                "empty": {
-                    "suggestEdit": ""
-                },
-                "label": {
-                    "summary": ""
-                },
-                "message": {
-                    "noPermission": ""
-                }
+                "notApplicable": "N/A"
             },
             "Albums": {
                 "link": {
@@ -891,8 +626,7 @@
                     "results": "Resultat per sida"
                 },
                 "label": {
-                    "search": "Sök",
-                    "tags": ""
+                    "search": "Sök"
                 },
                 "button": {
                     "search": "Sök"
@@ -904,9 +638,7 @@
                     "search": "Sök"
                 },
                 "label": {
-                    "search": "Artistnamn",
-                    "excludeCompilation": "",
-                    "tags": ""
+                    "search": "Artistnamn"
                 },
                 "title": "Artister",
                 "ordering": {
@@ -934,12 +666,7 @@
                 "table": {
                     "release": {
                         "album": "Album",
-                        "artist": "Artist",
-                        "copyright": "",
-                        "license": "",
-                        "series": "",
-                        "url": "",
-                        "year": ""
+                        "artist": "Artist"
                     },
                     "track": {
                         "bitrate": {
@@ -951,16 +678,11 @@
                         "size": "Storlek"
                     }
                 },
+                "notApplicable": "N/A",
                 "header": {
-                    "episode": "",
                     "library": "Bibliotek",
                     "playlists": "Skapa spellista",
-                    "release": "",
                     "track": "Detalj"
-                },
-                "notApplicable": "N/A",
-                "description": {
-                    "library": ""
                 },
                 "link": {
                     "musicbrainz": "Visa på MusicBrainz"
@@ -969,11 +691,9 @@
             "TagDetail": {
                 "link": {
                     "albums": "Album",
-                    "artists": "Artister",
-                    "moderation": ""
+                    "artists": "Artister"
                 },
                 "header": {
-                    "channels": "",
                     "tracks": "Låtar"
                 }
             },
@@ -989,87 +709,21 @@
                 },
                 "link": {
                     "filter": "Välj ett filter"
-                },
-                "description": {
-                    "library": ""
-                },
-                "message": {
-                    "filter": ""
-                }
-            },
-            "ImportStatusModal": {
-                "error": {
-                    "importFailure": "",
-                    "unknownError": {
-                        "message": "",
-                        "label": "Okänd"
-                    },
-                    "invalidMetadata": {
-                        "label": "Vad är metadata?",
-                        "message": ""
-                    }
-                },
-                "button": {
-                    "close": "Stängd"
-                },
-                "table": {
-                    "error": {
-                        "debug": "Låtinformation",
-                        "errorDetail": "Felrapportering",
-                        "errorType": "Ett fel uppstod",
-                        "help": "Inställningar"
-                    }
-                },
-                "header": {
-                    "importDetail": "Import detaljsida"
-                },
-                "link": {
-                    "support": "",
-                    "documentation": ""
-                },
-                "message": {
-                    "importDetail": "",
-                    "importSuccess": ""
-                },
-                "warning": {
-                    "importSkipped": ""
                 }
             },
             "EditCard": {
                 "button": {
                     "approve": "Godkänn",
-                    "delete": "Radera",
-                    "reject": ""
+                    "delete": "Radera"
                 },
                 "status": {
                     "approved": "Godkännt",
-                    "applied": "",
-                    "pending": "Pågående förfrågningar",
-                    "rejected": ""
-                },
-                "modal": {
-                    "delete": {
-                        "header": ""
-                    },
-                    "content": {
-                        "warning": ""
-                    }
+                    "pending": "Pågående förfrågningar"
                 },
                 "table": {
                     "update": {
-                        "header": {
-                            "field": "",
-                            "newValue": "",
-                            "oldValue": ""
-                        },
                         "notApplicable": "N/A"
                     }
-                },
-                "header": {
-                    "modification": ""
-                },
-                "link": {
-                    "track": ""
                 }
             },
             "Podcasts": {
@@ -1087,18 +741,11 @@
                 "button": {
                     "cancel": "Ångra",
                     "channel": "Skapa ett konto",
-                    "search": "Sök",
-                    "subscribe": "",
-                    "feed": ""
+                    "search": "Sök"
                 },
                 "empty": {
                     "noResults": "Vi hittade tyvärr ingen artist som matchade din sökfråga"
                 },
-                "label": {
-                    "search": "",
-                    "tags": ""
-                },
-                "title": "",
                 "pagination": {
                     "results": "Resultat per sida"
                 },
@@ -1147,26 +794,10 @@
                 "button": {
                     "cancel": "Ångra",
                     "delete": "Radera",
-                    "edit": "Redigera…",
-                    "embed": "",
-                    "more": ""
-                },
-                "modal": {
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "embed": {
-                        "header": ""
-                    }
+                    "edit": "Redigera…"
                 },
                 "link": {
-                    "moderation": "",
                     "discogs": "Sök på lyrics.wikia.com",
-                    "django": "",
-                    "domain": "",
                     "musicbrainz": "Visa på MusicBrainz"
                 }
             },
@@ -1176,68 +807,51 @@
                     "delete": "Radera",
                     "download": "Ladda ner",
                     "edit": "Redigera…",
-                    "embed": "",
-                    "more": "",
                     "play": "Spela"
                 },
                 "modal": {
                     "delete": {
-                        "header": "Importera det här spåret",
-                        "content": {
-                            "warning": ""
-                        }
-                    },
-                    "embed": {
-                        "header": ""
+                        "header": "Importera det här spåret"
                     }
                 },
                 "link": {
-                    "moderation": "",
                     "discogs": "Sök på lyrics.wikia.com",
-                    "wikipedia": "Sök på Wikipedia",
-                    "django": "",
-                    "domain": ""
+                    "wikipedia": "Sök på Wikipedia"
                 },
                 "title": "Låt"
             },
-            "AlbumEdit": {
-                "header": {
-                    "edit": "",
-                    "suggest": ""
+            "ImportStatusModal": {
+                "button": {
+                    "close": "Stängd"
                 },
-                "message": {
-                    "remote": ""
+                "table": {
+                    "error": {
+                        "debug": "Låtinformation",
+                        "errorDetail": "Felrapportering",
+                        "errorType": "Ett fel uppstod",
+                        "help": "Inställningar"
+                    }
+                },
+                "header": {
+                    "importDetail": "Import detaljsida"
+                },
+                "error": {
+                    "invalidMetadata": {
+                        "label": "Vad är metadata?"
+                    },
+                    "unknownError": {
+                        "label": "Okänd"
+                    }
                 }
             },
             "ArtistEdit": {
                 "header": {
-                    "edit": "Lägg till i denna spellista",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
+                    "edit": "Lägg till i denna spellista"
                 }
             },
             "TrackEdit": {
                 "header": {
-                    "edit": "Importera det här spåret",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
-                }
-            },
-            "AlbumDetail": {
-                "header": {
-                    "episodes": "",
-                    "tracks": "Låtar",
-                    "libraries": "Användarradio"
-                },
-                "description": {
-                    "libraries": ""
-                },
-                "meta": {
-                    "volume": ""
+                    "edit": "Importera det här spåret"
                 }
             },
             "FsBrowser": {
@@ -1245,15 +859,9 @@
                     "import": "Importera"
                 }
             },
-            "FsLogs": {
-                "empty": {
-                    "notStarted": ""
-                }
-            },
             "Home": {
                 "title": "Bibliotek",
                 "header": {
-                    "newChannels": "",
                     "playlists": "Spellistor",
                     "recentlyAdded": "Senast inlagda",
                     "recentlyFavorited": "Senast favorit",
@@ -1263,6 +871,12 @@
             "TagSelector": {
                 "placeholder": {
                     "search": "Sök"
+                }
+            },
+            "AlbumDetail": {
+                "header": {
+                    "tracks": "Låtar",
+                    "libraries": "Användarradio"
                 }
             }
         },
@@ -1285,9 +899,6 @@
                 "loader": {
                     "loading": "Laddar dina favoriter…"
                 },
-                "empty": {
-                    "noFavorites": ""
-                },
                 "pagination": {
                     "results": "Resultat per sida"
                 },
@@ -1306,8 +917,7 @@
         "channels": {
             "UploadModal": {
                 "meta": {
-                    "files": "{ count } fil | { count } filer",
-                    "quota": ""
+                    "files": "{ count } fil | { count } filer"
                 },
                 "button": {
                     "cancel": "Ångra",
@@ -1330,42 +940,21 @@
                     "tracks": "{ count } spår | { count } spår"
                 },
                 "label": {
-                    "album": "Album",
-                    "series": ""
-                },
-                "option": {
-                    "none": ""
+                    "album": "Album"
                 }
             },
             "LicenseSelect": {
                 "link": {
                     "license": "Om denna licens"
-                },
-                "label": {
-                    "license": ""
-                },
-                "option": {
-                    "none": ""
                 }
             },
             "UploadForm": {
-                "help": {
-                    "license": ""
-                },
                 "label": {
-                    "openBrowser": "Bläddra",
-                    "channel": ""
-                },
-                "message": {
-                    "dragAndDrop": "",
-                    "pending": ""
+                    "openBrowser": "Bläddra"
                 },
                 "button": {
                     "edit": "Redigera…",
-                    "ignore": "",
-                    "remove": "Radera",
-                    "resume": "",
-                    "retry": ""
+                    "remove": "Radera"
                 },
                 "header": {
                     "error": "Fel vid handling"
@@ -1374,12 +963,6 @@
                     "errored": "Ett fel uppstod",
                     "pending": "Väntar",
                     "uploading": "Laddar upp…"
-                },
-                "description": {
-                    "extensions": ""
-                },
-                "warning": {
-                    "quota": ""
                 }
             },
             "AlbumModal": {
@@ -1388,17 +971,13 @@
                     "create": "Skapa import"
                 },
                 "header": {
-                    "newAlbum": "1 album",
-                    "newSeries": ""
+                    "newAlbum": "1 album"
                 }
             },
             "UploadMetadataForm": {
                 "label": {
                     "description": "Tid",
-                    "position": "",
-                    "tags": "",
-                    "title": "Titel",
-                    "image": ""
+                    "title": "Titel"
                 }
             },
             "AlbumForm": {
@@ -1408,15 +987,6 @@
                 "label": {
                     "albumTitle": "Titel"
                 }
-            },
-            "SubscribeButton": {
-                "title": {
-                    "subscribe": "",
-                    "unsubscribe": ""
-                },
-                "help": {
-                    "auth": ""
-                }
             }
         },
         "AboutPod": {
@@ -1425,49 +995,30 @@
                 "activeUsers": "Inaktiv | Inaktiv",
                 "albumsCount": "1 album | { count } album",
                 "artistsCount": "Artist | Artist",
-                "listeningsCount": "",
                 "tracksCount": "låtar | låtar"
             },
             "title": "Om",
             "link": {
                 "about": "Om denna podd",
-                "features": "",
                 "introduction": "Inbjudningar",
-                "rules": "",
-                "statistics": "Statistik",
-                "terms": ""
+                "statistics": "Statistik"
             },
             "header": {
                 "about": "Om denna podd",
-                "contact": "",
-                "features": "",
-                "rules": "",
-                "statistics": "Statistik",
-                "terms": ""
+                "statistics": "Statistik"
             },
             "feature": {
-                "allowList": "",
                 "anonymousAccess": "Neka åtkomst?",
                 "status": {
                     "closed": "Stängd",
                     "disabled": "Inaktivera åtkomst",
-                    "enabled": "",
                     "open": "Öppna"
                 },
                 "federation": "Federation",
-                "version": "",
                 "registrations": "Administration",
                 "quota": "Ladda upp"
             },
-            "notApplicable": "N/A",
-            "placeholder": {
-                "noDescription": "",
-                "noRules": "",
-                "noTerms": ""
-            },
-            "message": {
-                "contact": ""
-            }
+            "notApplicable": "N/A"
         },
         "common": {
             "ActionTable": {
@@ -1476,15 +1027,12 @@
                     "allSelected": "{ count } av { total } vald | { count } av { total } valda",
                     "go": "Kör",
                     "launch": "Starta",
-                    "refresh": "",
-                    "select": "",
                     "selectAll": "Välj ett filter",
                     "selectElement": "Välj endast aktuell sida | Välj endast aktuell sida",
                     "selectCurrentPage": "Välj endast aktuell sida"
                 },
                 "message": {
-                    "success": "Åtgärd { action } togs framgångrikt på { count } element | Åtgärd { action } togs framgångrikt på { count } element",
-                    "needsRefresh": ""
+                    "success": "Åtgärd { action } togs framgångrikt på { count } element | Åtgärd { action } togs framgångrikt på { count } element"
                 },
                 "label": {
                     "actions": "Åtgärder",
@@ -1511,42 +1059,30 @@
             "UserMenu": {
                 "link": {
                     "about": "Om",
-                    "chat": "",
                     "docs": "Dokumentation",
-                    "forum": "",
-                    "support": "",
                     "git": "Problemspårare",
                     "login": "Logga in",
                     "logout": "Logga ut",
                     "notifications": "Senaste ändring",
-                    "profile": "",
                     "settings": "Inställningar",
                     "signup": "Bli Medlem"
                 },
                 "label": {
-                    "shortcuts": "",
-                    "language": "Ändra språk",
-                    "theme": ""
+                    "language": "Ändra språk"
                 }
             },
             "UserModal": {
                 "link": {
                     "about": "Om",
-                    "chat": "",
-                    "forum": "",
-                    "support": "",
                     "git": "Problemspårare",
                     "login": "Logga in",
                     "logout": "Logga ut",
                     "notifications": "Senaste ändring",
-                    "profile": "",
                     "settings": "Inställningar",
                     "signup": "Bli Medlem"
                 },
                 "label": {
-                    "shortcuts": "",
-                    "language": "Ändra språk",
-                    "theme": ""
+                    "language": "Ändra språk"
                 },
                 "header": {
                     "options": "Alternativ"
@@ -1568,15 +1104,11 @@
                 "button": {
                     "cancel": "Ångra",
                     "edit": "Redigera…",
-                    "less": "",
                     "more": "Visa 1 mer album",
                     "update": "Uppdatera inställningar"
                 },
                 "header": {
                     "failure": "Fel vid handling"
-                },
-                "empty": {
-                    "noDescription": ""
                 }
             },
             "InlineSearchBar": {
@@ -1596,53 +1128,26 @@
                     "expand": "Utöka"
                 }
             },
-            "CopyInput": {
-                "button": {
-                    "copy": ""
-                },
-                "message": {
-                    "success": ""
-                }
-            },
             "LoginModal": {
                 "link": {
                     "login": "Logga in",
                     "signup": "Bli Medlem"
-                },
-                "header": {
-                    "unauthenticated": ""
-                },
-                "description": {
-                    "noAccess": ""
                 }
             },
             "ContentForm": {
                 "help": {
                     "markdown": "Markera som importerat"
                 },
-                "empty": {
-                    "noContent": ""
-                },
                 "button": {
-                    "preview": "Föregående steg",
-                    "write": ""
-                },
-                "placeholder": {
-                    "input": ""
+                    "preview": "Föregående steg"
                 }
             },
             "EmptyState": {
-                "header": {
-                    "noResults": ""
-                },
                 "button": {
                     "refresh": "Uppdatera"
                 }
             },
             "AttachmentInput": {
-                "help": {
-                    "upload": ""
-                },
                 "button": {
                     "remove": "Radera"
                 },
@@ -1651,14 +1156,10 @@
                 },
                 "loader": {
                     "uploading": "Laddar upp…"
-                },
-                "header": {
-                    "failure": ""
                 }
             },
             "ExpandableDiv": {
                 "button": {
-                    "less": "",
                     "more": "Visa 1 mer album"
                 }
             }
@@ -1734,9 +1235,6 @@
                 "header": {
                     "editor": "Spellistredigerare"
                 },
-                "warning": {
-                    "duplicate": ""
-                },
                 "loading": {
                     "sync": "Synkroniserar ändringar till servern…"
                 }
@@ -1785,8 +1283,7 @@
                 "button": {
                     "approve": "Godkänn",
                     "markRead": "Markera som importerat",
-                    "markUnread": "Markera som importerat",
-                    "reject": ""
+                    "markUnread": "Markera som importerat"
                 }
             }
         },
@@ -1796,7 +1293,6 @@
                 "albums": "Album",
                 "artists": "Artister",
                 "browse": "Bläddra",
-                "channels": "",
                 "createAccount": "Skapa ett konto",
                 "favorites": "Favoriter",
                 "home": "Hem",
@@ -1804,27 +1300,21 @@
                 "login": "Inlogg",
                 "moderation": "Federation",
                 "playlists": "Spellistor",
-                "podcasts": "",
                 "radios": "Radio",
                 "search": "Sök",
                 "settings": "Inställningar",
                 "users": "Användare"
             },
             "label": {
-                "add": "",
                 "administration": "Administration",
                 "language": "Ändra språk",
-                "main": "",
                 "follows": "Pågående följförfrågningar",
                 "edits": "Pågående förfrågningar",
-                "play": "Spela upp spår",
-                "theme": ""
+                "play": "Spela upp spår"
             },
             "header": {
                 "administration": "Administration",
-                "explore": "",
                 "main": "Få en ny inbjudan",
-                "more": "",
                 "library": "Bibliotek"
             }
         },
@@ -1837,7 +1327,6 @@
                                 "accessedDate": "Tillgång inaktiverad",
                                 "account": "Mitt konto",
                                 "creationDate": "Skapningsdatum",
-                                "domain": "",
                                 "importStatus": "Import status",
                                 "library": "Bibliotek",
                                 "name": "Namn",
@@ -1848,10 +1337,8 @@
                     },
                     "option": {
                         "all": "Allt",
-                        "failed": "",
                         "finished": "Avslutad",
-                        "pending": "Väntar",
-                        "skipped": ""
+                        "pending": "Väntar"
                     },
                     "ordering": {
                         "direction": {
@@ -1863,12 +1350,8 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Radera",
-                            "warning": ""
+                            "label": "Radera"
                         }
-                    },
-                    "link": {
-                        "local": ""
                     },
                     "notApplicable": "N/A",
                     "label": {
@@ -1889,7 +1372,6 @@
                             "header": {
                                 "account": "Mitt konto",
                                 "creationDate": "Skapningsdatum",
-                                "domain": "",
                                 "followers": "Följare",
                                 "name": "Namn",
                                 "uploads": "Ladda upp",
@@ -1910,12 +1392,8 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Radera",
-                            "warning": ""
+                            "label": "Radera"
                         }
-                    },
-                    "link": {
-                        "local": ""
                     },
                     "label": {
                         "search": "Sök",
@@ -1935,8 +1413,6 @@
                                 "album": "Album",
                                 "artist": "Artist",
                                 "creationDate": "Skapningsdatum",
-                                "domain": "",
-                                "license": "",
                                 "title": "Titel"
                             }
                         }
@@ -1951,12 +1427,8 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Radera",
-                            "warning": ""
+                            "label": "Radera"
                         }
-                    },
-                    "link": {
-                        "local": ""
                     },
                     "notApplicable": "N/A",
                     "label": {
@@ -1975,7 +1447,6 @@
                             "header": {
                                 "albums": "Album",
                                 "creationDate": "Skapningsdatum",
-                                "domain": "",
                                 "name": "Namn",
                                 "tracks": "Låtar"
                             }
@@ -1992,18 +1463,13 @@
                         },
                         "label": "Order"
                     },
-                    "label": {
-                        "category": "",
-                        "search": "Sök"
-                    },
                     "action": {
                         "delete": {
-                            "label": "Radera",
-                            "warning": ""
+                            "label": "Radera"
                         }
                     },
-                    "link": {
-                        "local": ""
+                    "label": {
+                        "search": "Sök"
                     },
                     "placeholder": {
                         "search": "Sök efter artist, användarnamn, kommentar…"
@@ -2034,8 +1500,7 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Radera",
-                            "warning": ""
+                            "label": "Radera"
                         }
                     },
                     "label": {
@@ -2052,8 +1517,7 @@
                     "option": {
                         "all": "Allt",
                         "approved": "Godkännt",
-                        "pending": "Pågående förfrågningar",
-                        "rejected": ""
+                        "pending": "Pågående förfrågningar"
                     },
                     "ordering": {
                         "direction": {
@@ -2079,7 +1543,6 @@
                             "header": {
                                 "artist": "Artist",
                                 "creationDate": "Skapningsdatum",
-                                "domain": "",
                                 "name": "Titel",
                                 "releaseDate": "Publicerat datum",
                                 "tracks": "Låtar"
@@ -2096,13 +1559,8 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "Radera",
-                            "warning": ""
+                            "label": "Radera"
                         }
-                    },
-                    "link": {
-                        "local": "",
-                        "moderation": ""
                     },
                     "notApplicable": "N/A",
                     "label": {
@@ -2121,60 +1579,32 @@
                     "table": {
                         "object": {
                             "account": "Mitt konto",
-                            "domain": "",
-                            "local": "",
                             "owner": "Ägare",
                             "type": "Typ"
                         },
-                        "status": {
-                            "assignedTo": "",
-                            "internalNotes": "",
-                            "resolutionDate": "Skapningsdatum",
-                            "resolved": "",
-                            "status": "Status",
-                            "unresolved": ""
-                        },
                         "report": {
-                            "category": "",
                             "creationDate": "Skapningsdatum",
                             "submittedBy": "Insänd av"
+                        },
+                        "status": {
+                            "resolutionDate": "Skapningsdatum",
+                            "status": "Status"
                         }
                     },
                     "header": {
-                        "actions": "Åtgärder",
-                        "notes": "",
-                        "message": "",
-                        "reportedObject": ""
+                        "actions": "Åtgärder"
                     },
                     "button": {
-                        "confirmDelete": "Radera",
-                        "delete": "",
-                        "resolve": "",
-                        "unresolve": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
+                        "confirmDelete": "Radera"
                     },
                     "notApplicable": "N/A",
                     "link": {
-                        "moderation": "",
-                        "report": "Import batch #{ id }",
-                        "publicPage": ""
-                    },
-                    "warning": {
-                        "objectDeleted": ""
+                        "report": "Import batch #{ id }"
                     }
                 },
                 "UserRequestCard": {
                     "header": {
-                        "actions": "Åtgärder",
-                        "notes": "",
-                        "signup": ""
+                        "actions": "Åtgärder"
                     },
                     "button": {
                         "approve": "Godkänn",
@@ -2183,8 +1613,6 @@
                     "table": {
                         "status": {
                             "approved": "Godkännt",
-                            "assignedTo": "",
-                            "internalNotes": "",
                             "pending": "Väntar",
                             "refused": "Nekade",
                             "status": "Status"
@@ -2197,34 +1625,12 @@
                     "notApplicable": "N/A",
                     "link": {
                         "request": "Begär musik"
-                    },
-                    "message": {
-                        "signup": ""
                     }
                 },
                 "InstancePolicyForm": {
                     "header": {
                         "addRule": "Lägg till ett nytt bibliotek",
-                        "editRule": "",
                         "failure": "Fel vid skapande av inbjudan"
-                    },
-                    "label": {
-                        "blockAll": "",
-                        "policyDisabled": "Inaktivera åtkomst",
-                        "policyEnabled": "",
-                        "silenceActivity": "Senaste aktivitet",
-                        "silenceNotifications": "Senaste ändring",
-                        "customizeRule": "Lägg till filter för att skräddarsy din radio",
-                        "policyReason": "",
-                        "rejectMedia": ""
-                    },
-                    "tooltip": {
-                        "blockAll": "",
-                        "rejectMedia": "",
-                        "summary": "",
-                        "silenceActivity": "",
-                        "silenceNotifications": "",
-                        "isActive": ""
                     },
                     "button": {
                         "cancel": "Ångra",
@@ -2233,21 +1639,16 @@
                         "confirm": "Radera radiostation",
                         "update": "Uppdatera avatar"
                     },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
+                    "label": {
+                        "policyDisabled": "Inaktivera åtkomst",
+                        "silenceActivity": "Senaste aktivitet",
+                        "silenceNotifications": "Senaste ändring",
+                        "customizeRule": "Lägg till filter för att skräddarsy din radio"
                     }
                 },
                 "NoteForm": {
                     "button": {
                         "add": "Lägg till filter"
-                    },
-                    "placeholder": {
-                        "summary": ""
                     },
                     "header": {
                         "failure": "Fel vid sparning av inställningar"
@@ -2257,9 +1658,6 @@
                     "action": {
                         "add": {
                             "label": "Lägg till i spellista…"
-                        },
-                        "purge": {
-                            "label": ""
                         },
                         "remove": {
                             "label": "Radera från favoriter"
@@ -2281,30 +1679,20 @@
                     "table": {
                         "domain": {
                             "header": {
-                                "firstSeen": "",
                                 "name": "Namn",
-                                "receivedMessages": "",
-                                "moderationRule": "",
                                 "users": "Användare"
                             },
                             "moderationRule": "Ja"
                         }
                     },
                     "label": {
-                        "inList": "",
                         "search": "Sök"
-                    },
-                    "empty": {
-                        "noPods": ""
                     },
                     "placeholder": {
                         "search": "Sök efter källa…"
                     },
                     "pagination": {
                         "results": "Visar resultat { start }-{ end } av { total }"
-                    },
-                    "link": {
-                        "list": ""
                     }
                 },
                 "AccountsTable": {
@@ -2319,11 +1707,8 @@
                     "table": {
                         "account": {
                             "header": {
-                                "domain": "",
-                                "firstSeen": "",
                                 "lastSeen": "Senast hämtad",
                                 "name": "Namn",
-                                "moderationRule": "",
                                 "uploads": "Ladda upp"
                             },
                             "moderationRule": "Ja"
@@ -2331,11 +1716,6 @@
                     },
                     "link": {
                         "local": "Mitt konto"
-                    },
-                    "action": {
-                        "purge": {
-                            "label": ""
-                        }
                     },
                     "label": {
                         "search": "Sök"
@@ -2347,37 +1727,9 @@
                         "results": "Visar resultat { start }-{ end } av { total }"
                     }
                 },
-                "InstancePolicyCard": {
-                    "label": {
-                        "blockAll": "",
-                        "muteActivity": "Senaste aktivitet",
-                        "muteNotifications": "Senaste ändring",
-                        "reason": "",
-                        "rejectMedia": ""
-                    },
-                    "button": {
-                        "edit": "Redigera…"
-                    },
-                    "status": {
-                        "enabled": "",
-                        "paused": "Nekade"
-                    },
-                    "header": {
-                        "rule": ""
-                    }
-                },
                 "InstancePolicyModal": {
                     "button": {
-                        "close": "Stängd",
-                        "show": ""
-                    },
-                    "modal": {
-                        "manage": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
+                        "close": "Stängd"
                     }
                 },
                 "NotesThread": {
@@ -2386,11 +1738,20 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Radera spellista",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "Radera spellista"
                         }
+                    }
+                },
+                "InstancePolicyCard": {
+                    "button": {
+                        "edit": "Redigera…"
+                    },
+                    "label": {
+                        "muteActivity": "Senaste aktivitet",
+                        "muteNotifications": "Senaste ändring"
+                    },
+                    "status": {
+                        "paused": "Nekade"
                     }
                 }
             },
@@ -2401,7 +1762,6 @@
                             "account": "Mitt konto",
                             "albums": "Album",
                             "creationDate": "Skapningsdatum",
-                            "domain": "",
                             "name": "Namn",
                             "tracks": "Låtar"
                         }
@@ -2419,12 +1779,7 @@
                     "label": "Order"
                 },
                 "label": {
-                    "category": "",
                     "search": "Sök"
-                },
-                "link": {
-                    "local": "",
-                    "moderation": ""
                 },
                 "placeholder": {
                     "search": "Sök efter artist, användarnamn, kommentar…"
@@ -2452,8 +1807,7 @@
                             },
                             "status": {
                                 "admin": "Administratör",
-                                "regular": "standard användare",
-                                "staff": ""
+                                "regular": "standard användare"
                             }
                         }
                     },
@@ -2473,9 +1827,6 @@
                     "notApplicable": "N/A",
                     "placeholder": {
                         "search": "Sök efter användarnamn, e-post, namn…"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "InvitationsTable": {
@@ -2510,9 +1861,6 @@
                     },
                     "placeholder": {
                         "search": "Sök efter användarnamn, e-post, kod…"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "InvitationForm": {
@@ -2546,13 +1894,7 @@
                     "additionalFields": {
                         "header": {
                             "actions": "Åtgärder",
-                            "label": "",
-                            "type": "Filtrera albumtyper",
-                            "required": ""
-                        },
-                        "type": {
-                            "long": "",
-                            "short": ""
+                            "type": "Filtrera albumtyper"
                         },
                         "required": {
                             "false": "Nej",
@@ -2561,21 +1903,10 @@
                     }
                 },
                 "button": {
-                    "add": "Lägg till ett nytt bibliotek",
-                    "edit": "",
-                    "preview": ""
+                    "add": "Lägg till ett nytt bibliotek"
                 },
                 "label": {
-                    "additionalField": "",
-                    "additionalFields": "",
-                    "delete": "Radera",
-                    "helpText": "",
-                    "moveDown": "",
-                    "moveUp": ""
-                },
-                "help": {
-                    "additionalFields": "",
-                    "helpText": ""
+                    "delete": "Radera"
                 }
             },
             "SettingsGroup": {
@@ -2595,43 +1926,11 @@
             "ReportCategoryDropdown": {
                 "option": {
                     "all": "Allt"
-                },
-                "label": {
-                    "category": ""
-                }
-            },
-            "ReportModal": {
-                "header": {
-                    "disabled": "",
-                    "modal": "Vill du bekräfta denna handling?",
-                    "submissionFailure": "Fel vid sparning av inställningar"
-                },
-                "button": {
-                    "cancel": "Ångra",
-                    "submit": "Skicka in"
-                },
-                "label": {
-                    "email": "E-post",
-                    "forwardToDomain": "",
-                    "message": ""
-                },
-                "description": {
-                    "forwardToDomain": "",
-                    "message": "",
-                    "modal": "Använd det här formuläret för att skanna en instans och konfigurera federation.",
-                    "email": ""
-                },
-                "message": {
-                    "submissionSuccess": ""
                 }
             },
             "FilterModal": {
                 "button": {
-                    "cancel": "Ångra",
-                    "hide": ""
-                },
-                "message": {
-                    "success": ""
+                    "cancel": "Ångra"
                 },
                 "header": {
                     "modal": "Vill du radera spellistan \"{ playlist }\"?",
@@ -2639,35 +1938,36 @@
                 },
                 "warning": {
                     "createFilter": {
-                        "listItem2": "Senast inlagda",
-                        "listItem3": "",
-                        "listItem1": "",
-                        "listItem4": "",
-                        "listIntro": ""
+                        "listItem2": "Senast inlagda"
                     }
+                }
+            },
+            "ReportModal": {
+                "button": {
+                    "cancel": "Ångra",
+                    "submit": "Skicka in"
                 },
-                "help": {
-                    "createFilter": ""
+                "header": {
+                    "modal": "Vill du bekräfta denna handling?",
+                    "submissionFailure": "Fel vid sparning av inställningar"
+                },
+                "label": {
+                    "email": "E-post"
+                },
+                "description": {
+                    "modal": "Använd det här formuläret för att skanna en instans och konfigurera federation."
                 }
             }
         },
         "federation": {
             "FetchButton": {
                 "description": {
-                    "failure": "Ett fel inträffade när dina ändringar sparades",
-                    "success": "",
-                    "pending": "",
-                    "skipped": ""
+                    "failure": "Ett fel inträffade när dina ändringar sparades"
                 },
                 "table": {
                     "error": {
                         "value": {
                             "httpError": "Ett fel inträffade när dina ändringar sparades",
-                            "invalidAttributesError": "",
-                            "connectionError": "",
-                            "httpStatus": "",
-                            "timeoutError": "",
-                            "invalidJsonError": "",
                             "unknownError": "Okänd"
                         },
                         "label": {
@@ -2677,19 +1977,14 @@
                     }
                 },
                 "button": {
-                    "close": "Stängd",
-                    "reload": ""
+                    "close": "Stängd"
                 },
                 "header": {
                     "saveFailure": "Fel vid sparning av inställningar",
                     "failure": "Uppdatera",
-                    "pending": "Sjunkande",
-                    "success": "",
-                    "skipped": "",
-                    "refresh": ""
+                    "pending": "Sjunkande"
                 },
                 "loader": {
-                    "fetchRequest": "",
                     "awaitingResult": "Laddar dina favoriter…"
                 }
             },
@@ -2702,40 +1997,6 @@
                 }
             }
         },
-        "ShortcutsModal": {
-            "shortcut": {
-                "audio": {
-                    "label": "",
-                    "clearQueue": "Rensa din kö",
-                    "decreaseVolume": "",
-                    "expandQueue": "",
-                    "increaseVolume": "",
-                    "playPause": "",
-                    "playNext": "Spela upp spår",
-                    "playPrevious": "Föregående spår",
-                    "seekBack30": "",
-                    "seekBack5": "",
-                    "seekForward30": "",
-                    "seekForward5": "",
-                    "shuffleQueue": "Blanda din kö",
-                    "toggleFavorite": "I favoriter",
-                    "toggleMute": "",
-                    "toggleLoop": ""
-                },
-                "general": {
-                    "focus": "",
-                    "label": "",
-                    "show": "",
-                    "unfocus": ""
-                }
-            },
-            "button": {
-                "close": "Stängd"
-            },
-            "header": {
-                "modal": ""
-            }
-        },
         "SetInstanceModal": {
             "button": {
                 "cancel": "Ångra",
@@ -2743,19 +2004,10 @@
             },
             "header": {
                 "chooseInstance": "Välj din instans",
-                "failure": "",
                 "suggestions": "Föreslagna val"
             },
             "label": {
                 "url": "Instansradio"
-            },
-            "help": {
-                "notFunkwhaleServer": "",
-                "serverDown": "",
-                "selectPod": ""
-            },
-            "message": {
-                "newUrl": ""
             }
         },
         "Queue": {
@@ -2766,7 +2018,6 @@
             },
             "label": {
                 "duration": "Tid",
-                "addArtistContentFilter": "",
                 "next": "Nästa spår",
                 "pause": "Pausa spår",
                 "play": "Spela",
@@ -2776,8 +2027,7 @@
                 "restart": "Nästa spår"
             },
             "message": {
-                "radio": "Nya spår läggs till här automatiskt.",
-                "automaticPlay": ""
+                "radio": "Nya spår läggs till här automatiskt."
             },
             "header": {
                 "failure": "Den här låten är inte importerad och kan inte spelas",
@@ -2785,20 +2035,20 @@
             },
             "meta": {
                 "queuePosition": "({ index } av { length })"
-            },
-            "warning": {
-                "connectivity": ""
             }
         },
-        "forms": {
-            "PasswordInput": {
-                "button": {
-                    "copy": ""
-                },
-                "title": "Visa/dölj lösenord",
-                "message": {
-                    "copy": ""
+        "ShortcutsModal": {
+            "shortcut": {
+                "audio": {
+                    "clearQueue": "Rensa din kö",
+                    "playNext": "Spela upp spår",
+                    "playPrevious": "Föregående spår",
+                    "shuffleQueue": "Blanda din kö",
+                    "toggleFavorite": "I favoriter"
                 }
+            },
+            "button": {
+                "close": "Stängd"
             }
         },
         "radios": {
@@ -2817,30 +2067,7 @@
                 "fetchFailed": "Fel vid handling"
             },
             "button": {
-                "fediverse": "",
-                "rss": "",
                 "search": "Sök"
-            },
-            "label": {
-                "fediverse": {
-                    "fieldLabel": "",
-                    "title": ""
-                },
-                "rss": {
-                    "fieldPlaceholder": "",
-                    "fieldLabel": "",
-                    "title": ""
-                }
-            },
-            "warning": {
-                "unsupported": ""
-            },
-            "error": {
-                "fetchFailed": ""
-            },
-            "description": {
-                "fediverse": "",
-                "rss": ""
             }
         },
         "PageNotFound": {
@@ -2850,15 +2077,11 @@
             "title": "Sidan hittas inte",
             "header": {
                 "pageNotFound": "Sidan hittas inte!"
-            },
-            "message": {
-                "pageNotFound": ""
             }
         },
         "vui": {
             "Pagination": {
                 "next": "Nästa steg",
-                "label": "",
                 "previous": "Föregående steg"
             }
         },
@@ -2867,6 +2090,11 @@
                 "button": {
                     "more": "Visa 1 mer låt | Visa { count } mår låtar"
                 }
+            }
+        },
+        "forms": {
+            "PasswordInput": {
+                "title": "Visa/dölj lösenord"
             }
         }
     },
@@ -2879,93 +2107,43 @@
                     "subscribers": "{ count } prenumerant | { count } prenumeranter",
                     "tracks": "{ count } spår | { count } spår"
                 },
-                "link": {
-                    "channelEpisodes": "",
-                    "mirrored": "",
-                    "moderation": "",
-                    "channelOverview": "",
-                    "channelTracks": "Låtar",
-                    "domainView": ""
-                },
                 "header": {
-                    "artistChannel": "Artistnamn",
-                    "podcastChannel": ""
+                    "artistChannel": "Artistnamn"
                 },
                 "button": {
                     "cancel": "Ångra",
                     "confirm": "Radera",
                     "delete": "Radera",
                     "edit": "Redigera…",
-                    "embed": "",
                     "play": "Spela",
                     "updateChannel": "Uppdatera spellista",
                     "upload": "Ladda upp"
                 },
-                "title": "",
                 "modal": {
                     "subscribe": {
-                        "rss": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
-                        },
-                        "fediverse": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
-                        },
                         "funkwhale": {
                             "header": "Välkommen till Funkwhale"
-                        },
-                        "header": ""
-                    },
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
                         }
-                    },
-                    "embed": {
-                        "header": ""
                     }
+                },
+                "link": {
+                    "channelTracks": "Låtar"
                 }
             },
             "DetailOverview": {
-                "link": {
-                    "addAlbum": "",
-                    "erroredUploads": "",
-                    "skippedUploads": ""
-                },
                 "header": {
                     "albums": "Album",
-                    "latestEpisodes": "",
                     "latestTracks": "Nästa spår",
-                    "series": "",
-                    "uploadsFailure": "",
-                    "uploadsProcessing": "",
                     "uploadsSuccess": "Lösenordet har uppdaterats"
-                },
-                "meta": {
-                    "progress": ""
-                },
-                "message": {
-                    "processing": ""
                 }
             },
             "SubscriptionsList": {
-                "link": {
-                    "addNew": ""
-                },
                 "button": {
-                    "cancel": "Ångra",
-                    "subscribe": ""
+                    "cancel": "Ångra"
                 },
                 "placeholder": {
                     "search": "Filternamn"
                 },
-                "title": "",
                 "modal": {
                     "subscription": {
                         "header": "Tid"
@@ -2993,37 +2171,13 @@
                     "label": {
                         "currentUsage": "{ count } av { total } vald",
                         "errored": "Ett fel uppstod",
-                        "pending": "Väntar",
-                        "skipped": ""
+                        "pending": "Väntar"
                     },
                     "header": {
                         "currentUsage": "Nuvarande spår"
                     },
                     "loading": {
                         "currentUsage": "Laddar dina favoriter…"
-                    },
-                    "button": {
-                        "purge": ""
-                    },
-                    "modal": {
-                        "purgeErrored": {
-                            "header": "",
-                            "content": {
-                                "description": ""
-                            }
-                        },
-                        "purgePending": {
-                            "header": "",
-                            "content": {
-                                "description": ""
-                            }
-                        },
-                        "purgeSkipped": {
-                            "header": "",
-                            "content": {
-                                "description": ""
-                            }
-                        }
                     },
                     "link": {
                         "viewFiles": "Filer i bibliotek"
@@ -3046,11 +2200,8 @@
                     "option": {
                         "status": {
                             "all": "Allt",
-                            "draft": "",
-                            "failed": "",
                             "finished": "Avslutad",
-                            "pending": "Väntar",
-                            "skipped": ""
+                            "pending": "Väntar"
                         }
                     },
                     "ordering": {
@@ -3076,9 +2227,6 @@
                     "placeholder": {
                         "search": "Sök efter titel, artist, domän…"
                     },
-                    "button": {
-                        "showStatus": ""
-                    },
                     "pagination": {
                         "results": "Visar resultat { start }-{ end } av { total }"
                     }
@@ -3089,9 +2237,6 @@
                     },
                     "loading": {
                         "libraries": "Laddar dina favoriter…"
-                    },
-                    "empty": {
-                        "noLibrary": ""
                     },
                     "header": {
                         "libraries": "Bibliotek"
@@ -3120,18 +2265,13 @@
                     "header": {
                         "failure": "Fel"
                     },
-                    "description": {
-                        "library": "",
-                        "visibility": ""
-                    },
                     "message": {
                         "libraryCreated": "Biblioteksnamn",
                         "libraryDeleted": "Filer i bibliotek",
                         "libraryUpdated": "Biblioteksnamn"
                     },
                     "placeholder": {
-                        "name": "Mitt fantastiska radio",
-                        "description": ""
+                        "name": "Mitt fantastiska radio"
                     }
                 }
             },
@@ -3141,14 +2281,6 @@
                         "tracks": "{ count } spår | { count } spår",
                         "failedTracks": "Federerade spår",
                         "lastUpdate": "Spellistan uppdaterad"
-                    },
-                    "modal": {
-                        "unfollow": {
-                            "content": {
-                                "warning": ""
-                            },
-                            "header": "Bläddra i biblioteket"
-                        }
                     },
                     "button": {
                         "cancel": "Pågående följförfrågningar",
@@ -3161,26 +2293,17 @@
                         "scan": "Spela upp nu"
                     },
                     "label": {
-                        "scanFailure": "",
                         "scanPending": "Stigande",
-                        "scanSuccess": "",
                         "scanPartialSuccess": "Ändringar synkade med servern",
-                        "scanProgress": "",
                         "sharingLink": "Dela länk"
                     },
-                    "message": {
-                        "scanLaunched": "",
-                        "scanSkipped": ""
-                    },
-                    "tooltip": {
-                        "private": "",
-                        "public": ""
+                    "modal": {
+                        "unfollow": {
+                            "header": "Bläddra i biblioteket"
+                        }
                     }
                 },
                 "ScanForm": {
-                    "header": {
-                        "failure": ""
-                    },
                     "placeholder": {
                         "url": "Ange ett biblioteks domännamn..."
                     },
@@ -3201,42 +2324,18 @@
                     },
                     "button": {
                         "refresh": "Uppdatera"
-                    },
-                    "description": {
-                        "remoteLibraries": ""
                     }
                 }
             },
             "Home": {
-                "title": "",
-                "description": {
-                    "follow": "",
-                    "channel": {
-                        "1": "",
-                        "2": ""
-                    },
-                    "upload": ""
-                },
-                "header": {
-                    "follow": "",
-                    "channel": "",
-                    "upload": ""
-                },
                 "button": {
                     "start": "Nästa steg"
-                },
-                "help": {
-                    "uploadQuota": ""
                 }
             },
             "Base": {
-                "title": "",
                 "link": {
                     "libraries": "Bibliotek",
                     "tracks": "Låtar"
-                },
-                "menu": {
-                    "secondary": ""
                 }
             }
         },
@@ -3248,10 +2347,8 @@
                 "link": {
                     "albums": "Album",
                     "artists": "Artister",
-                    "moderation": "",
                     "owner": "Inloggad som { username }",
-                    "tracks": "Låtar",
-                    "domain": ""
+                    "tracks": "Låtar"
                 },
                 "button": {
                     "edit": "Redigera…",
@@ -3259,35 +2356,21 @@
                 },
                 "title": "Bibliotek",
                 "label": {
-                    "private": "",
-                    "public": "",
-                    "instance": "",
                     "sharingLink": "Dela länk"
-                },
-                "description": {
-                    "sharingLink": ""
-                },
-                "tooltip": {
-                    "private": "",
-                    "public": "",
-                    "instance": ""
                 }
             },
             "Edit": {
                 "button": {
-                    "accept": "Acceptera",
-                    "reject": ""
+                    "accept": "Acceptera"
                 },
                 "table": {
                     "action": {
                         "status": {
                             "accepted": "Accepterad",
-                            "pending": "Inväntar godkännande",
-                            "rejected": ""
+                            "pending": "Inväntar godkännande"
                         },
                         "header": {
                             "action": "Åtgärder",
-                            "date": "",
                             "status": "Status",
                             "user": "Användare"
                         }
@@ -3299,27 +2382,6 @@
                 },
                 "loading": {
                     "followers": "Bläddrar genom följare"
-                },
-                "empty": {
-                    "noFollowers": ""
-                }
-            },
-            "DetailAlbums": {
-                "empty": {
-                    "upload": "",
-                    "follow": ""
-                }
-            },
-            "DetailOverview": {
-                "empty": {
-                    "upload": "",
-                    "follow": ""
-                }
-            },
-            "DetailTracks": {
-                "empty": {
-                    "upload": "",
-                    "follow": ""
                 }
             }
         },
@@ -3327,10 +2389,7 @@
             "ProfileBase": {
                 "title": "{ username }s profil",
                 "link": {
-                    "activity": "Aktivitet",
-                    "moderation": "",
-                    "overview": "",
-                    "domainView": ""
+                    "activity": "Aktivitet"
                 },
                 "label": {
                     "self": "Detta är du!"
@@ -3359,18 +2418,12 @@
                 }
             },
             "ProfileOverview": {
-                "link": {
-                    "addNew": ""
-                },
                 "modal": {
                     "createChannel": {
                         "artist": {
                             "header": "Artistnamn"
                         },
-                        "header": "Skapa ett konto",
-                        "podcast": {
-                            "header": ""
-                        }
+                        "header": "Skapa ett konto"
                     }
                 },
                 "button": {
@@ -3380,8 +2433,6 @@
                     "previous": "Föregående steg"
                 },
                 "header": {
-                    "channels": "",
-                    "sharedLibraries": "",
                     "libraries": "Bibliotek"
                 }
             },
@@ -3456,37 +2507,22 @@
                 "delay": {
                     "30": "30 dagar",
                     "60": "60 dagar",
-                    "90": "90 dagar",
-                    "never": ""
+                    "90": "90 dagar"
                 }
-            },
-            "link": {
-                "help": "",
-                "donate": ""
             },
             "header": {
                 "funkwhaleSupport": "Om Funkwhale",
-                "instanceSupport": "",
-                "messages": "",
                 "notifications": "Senaste ändring"
-            },
-            "button": {
-                "submit": "",
-                "read": "Markera som importerat"
             },
             "loading": {
                 "notifications": "Laddar tidslinje…"
             },
-            "empty": {
-                "notifications": ""
+            "button": {
+                "read": "Markera som importerat"
             },
             "title": "Senaste ändring",
             "label": {
-                "reminder": "",
                 "showRead": "Senaste ändring"
-            },
-            "message": {
-                "funkwhaleSupport": ""
             }
         },
         "admin": {
@@ -3497,7 +2533,6 @@
                             "username": "Användarnamn",
                             "loginStatus": {
                                 "disabled": "Inaktivera åtkomst",
-                                "enabled": "",
                                 "label": "Kontostatus"
                             },
                             "displayName": "Biblioteksnamn",
@@ -3509,45 +2544,21 @@
                             "userType": "Typ"
                         },
                         "audioContent": {
-                            "cachedSize": "",
-                            "megabyte": "",
-                            "totalSize": "",
                             "uploadQuota": "Ladda upp"
-                        },
-                        "activity": {
-                            "emittedFollows": "",
-                            "emittedMessages": "",
-                            "firstSeen": "",
-                            "receivedFollows": ""
                         }
                     },
                     "header": {
                         "accountData": "Konto aktivt",
                         "activity": "Aktivitet",
-                        "audioContent": "",
-                        "localAccount": "Mitt konto",
-                        "activePolicy": "",
-                        "noPolicy": ""
-                    },
-                    "button": {
-                        "addPolicy": ""
+                        "localAccount": "Mitt konto"
                     },
                     "link": {
                         "albums": "Album",
                         "artists": "Artister",
-                        "channels": "",
-                        "domain": "",
                         "libraries": "Bibliotek",
-                        "linkedReports": "",
-                        "openProfile": "",
-                        "remoteProfile": "",
                         "requests": "Begär musik",
                         "tracks": "Låtar",
-                        "uploads": "Ladda upp",
-                        "django": ""
-                    },
-                    "tooltip": {
-                        "uploadQuota": ""
+                        "uploads": "Ladda upp"
                     },
                     "option": {
                         "permission": {
@@ -3556,108 +2567,63 @@
                             "settings": "Inställningar"
                         }
                     },
-                    "description": {
-                        "policy": ""
-                    },
-                    "notApplicable": "N/A",
-                    "warning": {
-                        "stats": ""
-                    }
+                    "notApplicable": "N/A"
                 },
                 "Base": {
                     "link": {
                         "accounts": "Kontostatus",
-                        "domains": "",
                         "reports": "Importer",
                         "userRequests": "Importera förfrågningar"
                     },
-                    "title": "Federation",
-                    "menu": {
-                        "secondary": ""
-                    }
+                    "title": "Federation"
                 },
                 "DomainsDetail": {
                     "header": {
                         "activity": "Aktivitet",
-                        "audioContent": "",
-                        "instanceData": "Instansradio",
-                        "activePolicy": "",
-                        "noPolicy": ""
+                        "instanceData": "Instansradio"
                     },
                     "button": {
-                        "addPolicy": "",
                         "addToAllowList": "Lägg till i spellista…",
-                        "refreshNodeInfo": "",
                         "removeFromAllowList": "Radera från favoriter"
                     },
                     "link": {
                         "albums": "Album",
                         "artists": "Artister",
-                        "channels": "",
                         "knownAccounts": "Mitt konto",
                         "libraries": "Bibliotek",
                         "website": "Officiell hemsida",
                         "tracks": "Låtar",
-                        "uploads": "Ladda upp",
-                        "django": ""
+                        "uploads": "Ladda upp"
                     },
                     "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "activity": {
-                            "emittedFollows": "",
-                            "emittedMessages": "",
-                            "firstSeen": "",
-                            "receivedFollows": ""
-                        },
                         "instanceData": {
                             "nodeInfoStatus": {
                                 "value": "Fel vid skapande av inbjudan",
                                 "label": "Status"
                             },
-                            "inAllowList": {
-                                "label": "",
-                                "false": "Nej",
-                                "true": "Ja"
-                            },
                             "lastChecked": "Senast hämtad",
                             "domainName": "Namn",
-                            "software": {
-                                "label": ""
+                            "inAllowList": {
+                                "false": "Nej",
+                                "true": "Ja"
                             },
                             "totalUsers": "Ej använd"
                         }
                     },
-                    "description": {
-                        "policy": ""
-                    },
-                    "notApplicable": "N/A",
-                    "warning": {
-                        "stats": ""
-                    }
+                    "notApplicable": "N/A"
                 },
                 "DomainsList": {
-                    "button": {
-                        "add": ""
-                    },
                     "label": {
-                        "addDomain": "",
                         "addToAllowList": "Lägg till i spellista…"
                     },
-                    "title": "",
                     "header": {
-                        "domains": "",
                         "failure": "Fel vid skapande av inbjudan"
                     }
                 },
                 "ReportsList": {
                     "option": {
                         "status": {
-                            "all": "Allt",
-                            "resolved": "",
-                            "unresolved": ""
+                            "all": "Allt"
                         }
                     },
                     "ordering": {
@@ -3714,14 +2680,12 @@
                 "UploadDetail": {
                     "table": {
                         "activity": {
-                            "accessedDate": "Tillgång inaktiverad",
-                            "firstSeen": ""
+                            "accessedDate": "Tillgång inaktiverad"
                         },
                         "audioContent": {
                             "bitrate": {
                                 "label": "Bitrate"
                             },
-                            "cachedSize": "",
                             "duration": "Tid",
                             "size": "Storlek",
                             "track": "Låt"
@@ -3732,18 +2696,13 @@
                     },
                     "link": {
                         "account": "Mitt konto",
-                        "domain": "",
                         "importStatus": "Import status",
                         "library": "Bibliotek",
-                        "remoteProfile": "",
                         "type": "Typ",
-                        "django": "",
                         "visibility": "Visa spellista"
                     },
                     "header": {
                         "activity": "Aktivitet",
-                        "audioContent": "",
-                        "local": "",
                         "uploadData": "Ladda upp"
                     },
                     "button": {
@@ -3752,10 +2711,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Välj filer att ladda upp…",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "Välj filer att ladda upp…"
                         }
                     },
                     "notApplicable": "N/A"
@@ -3765,184 +2721,112 @@
                         "account": "Mitt konto",
                         "albums": "Album",
                         "artists": "Artister",
-                        "domain": "",
-                        "reports": "",
-                        "remoteProfile": "",
                         "tracks": "Låtar",
                         "uploads": "Ladda upp",
-                        "django": "",
                         "visibility": "Visa spellista"
                     },
                     "header": {
                         "activity": "Aktivitet",
-                        "audioContent": "",
-                        "libraryData": "Biblioteksnamn",
-                        "local": ""
-                    },
-                    "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
-                        "library": {
-                            "description": "Tid",
-                            "name": "Namn"
-                        },
-                        "activity": {
-                            "firstSeen": "",
-                            "followers": "Följare"
-                        }
+                        "libraryData": "Biblioteksnamn"
                     },
                     "button": {
                         "delete": "Radera"
                     },
                     "modal": {
                         "delete": {
-                            "header": "Ta mig till biblioteket",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "Ta mig till biblioteket"
                         }
                     },
-                    "warning": {
-                        "stats": ""
+                    "table": {
+                        "library": {
+                            "description": "Tid",
+                            "name": "Namn"
+                        },
+                        "activity": {
+                            "followers": "Följare"
+                        }
                     }
                 },
                 "AlbumDetail": {
                     "header": {
                         "activity": "Aktivitet",
-                        "albumData": "Albumsida",
-                        "audioContent": "",
-                        "local": ""
+                        "albumData": "Albumsida"
                     },
                     "link": {
                         "artist": "Artist",
-                        "domain": "",
                         "edits": "Redigera…",
                         "libraries": "Bibliotek",
-                        "reports": "",
-                        "localProfile": "",
                         "musicbrainz": "Visa på MusicBrainz",
-                        "remoteProfile": "",
                         "tracks": "Låtar",
-                        "uploads": "Ladda upp",
-                        "django": ""
+                        "uploads": "Ladda upp"
+                    },
+                    "button": {
+                        "delete": "Radera",
+                        "edit": "Redigera…"
                     },
                     "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
                         "album": {
                             "description": "Tid",
                             "title": "Titel"
                         },
                         "activity": {
                             "favorited": "Federerade spår",
-                            "firstSeen": "",
-                            "listenings": "",
                             "playlists": "Spellistor"
                         }
-                    },
-                    "button": {
-                        "delete": "Radera",
-                        "edit": "Redigera…",
-                        "remoteRefresh": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "ArtistDetail": {
                     "header": {
                         "activity": "Aktivitet",
-                        "artistData": "Artistnamn",
-                        "audioContent": "",
-                        "local": ""
+                        "artistData": "Artistnamn"
                     },
                     "link": {
                         "albums": "Album",
-                        "category": "",
-                        "domain": "",
                         "edits": "Redigera…",
                         "libraries": "Bibliotek",
-                        "reports": "",
-                        "localProfile": "",
                         "musicbrainz": "Visa på MusicBrainz",
-                        "remoteProfile": "",
                         "tracks": "Låtar",
-                        "uploads": "Ladda upp",
-                        "django": ""
+                        "uploads": "Ladda upp"
+                    },
+                    "button": {
+                        "delete": "Radera",
+                        "edit": "Redigera…"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "Album av denna artist"
+                        }
                     },
                     "table": {
-                        "audioContent": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
                         "artist": {
                             "description": "Tid",
                             "name": "Namn"
                         },
                         "activity": {
                             "favorited": "Federerade spår",
-                            "firstSeen": "",
-                            "listenings": "",
                             "playlists": "Spellistor"
                         }
-                    },
-                    "button": {
-                        "delete": "Radera",
-                        "edit": "Redigera…",
-                        "remoteRefresh": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "Album av denna artist",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "TagDetail": {
                     "header": {
                         "activity": "Aktivitet",
-                        "audioContent": "",
                         "tagData": "Metadata"
                     },
                     "link": {
                         "albums": "Album",
                         "artists": "Artister",
-                        "localProfile": "",
-                        "tracks": "Låtar",
-                        "django": ""
+                        "tracks": "Låtar"
                     },
                     "button": {
                         "delete": "Radera"
                     },
                     "modal": {
                         "delete": {
-                            "header": "Radera spellista",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "Radera spellista"
                         }
                     },
                     "table": {
-                        "activity": {
-                            "firstSeen": ""
-                        },
                         "tag": {
                             "name": "Namn"
                         }
@@ -3951,75 +2835,47 @@
                 "TrackDetail": {
                     "header": {
                         "activity": "Aktivitet",
-                        "local": "",
                         "trackData": "Låt"
                     },
                     "link": {
                         "album": "Album",
                         "albumArtist": "Album av denna artist",
                         "artist": "Artist",
-                        "domain": "",
                         "edits": "Redigera…",
                         "libraries": "Bibliotek",
-                        "reports": "",
-                        "localProfile": "",
                         "musicbrainz": "Visa på MusicBrainz",
-                        "remoteProfile": "",
-                        "uploads": "Ladda upp",
-                        "django": ""
+                        "uploads": "Ladda upp"
+                    },
+                    "button": {
+                        "delete": "Radera",
+                        "edit": "Redigera…"
+                    },
+                    "modal": {
+                        "delete": {
+                            "header": "Importera det här spåret"
+                        }
                     },
                     "table": {
-                        "trackData": {
-                            "cachedSize": "",
-                            "totalSize": ""
-                        },
                         "track": {
-                            "copyright": "",
                             "description": "Tid",
-                            "discNumber": "",
-                            "license": "",
-                            "position": "",
                             "title": "Titel"
                         },
                         "activity": {
                             "favorited": "Federerade spår",
-                            "firstSeen": "",
-                            "listenings": "",
                             "playlists": "Spellistor"
                         }
-                    },
-                    "button": {
-                        "delete": "Radera",
-                        "edit": "Redigera…",
-                        "remoteRefresh": ""
-                    },
-                    "modal": {
-                        "delete": {
-                            "header": "Importera det här spåret",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "Base": {
                     "link": {
                         "albums": "Album",
                         "artists": "Artister",
-                        "channels": "",
                         "edits": "Redigera…",
                         "libraries": "Bibliotek",
-                        "tags": "",
                         "tracks": "Låtar",
                         "uploads": "Ladda upp"
                     },
-                    "title": "Hantera mediabiblioteket",
-                    "menu": {
-                        "secondary": ""
-                    }
+                    "title": "Hantera mediabiblioteket"
                 },
                 "EditsList": {
                     "title": "Redigera…",
@@ -4032,56 +2888,25 @@
                 "table": {
                     "channelData": {
                         "account": "Mitt konto",
-                        "category": "",
                         "description": "Tid",
-                        "domain": "",
-                        "name": "Namn",
-                        "rss": "",
-                        "url": ""
+                        "name": "Namn"
                     },
                     "audioContent": {
                         "albums": "Album",
-                        "cachedSize": "",
-                        "totalSize": "",
                         "tracks": "Låtar",
                         "uploads": "Ladda upp"
                     },
                     "activity": {
                         "edits": "Redigera…",
                         "favorited": "Federerade spår",
-                        "firstSeen": "",
-                        "linkedReports": "",
-                        "listenings": "",
                         "playlists": "Spellistor"
                     }
                 },
                 "header": {
-                    "activity": "Aktivitet",
-                    "audioContent": "",
-                    "channelData": ""
+                    "activity": "Aktivitet"
                 },
                 "button": {
-                    "delete": "Radera",
-                    "openRemote": "",
-                    "refresh": ""
-                },
-                "modal": {
-                    "delete": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
-                },
-                "label": {
-                    "local": ""
-                },
-                "link": {
-                    "localProfile": "",
-                    "django": ""
-                },
-                "warning": {
-                    "stats": ""
+                    "delete": "Radera"
                 }
             },
             "CommonList": {
@@ -4089,10 +2914,8 @@
                     "accounts": "Kontostatus",
                     "albums": "Album",
                     "artists": "Artister",
-                    "channels": "",
                     "invitations": "Inbjudningar",
                     "libraries": "Bibliotek",
-                    "tags": "",
                     "tracks": "Låtar",
                     "uploads": "Ladda upp",
                     "users": "Användare"
@@ -4100,7 +2923,6 @@
             },
             "Settings": {
                 "header": {
-                    "channels": "",
                     "federation": "Federation",
                     "instanceInfo": "Instansinformation",
                     "settings": "Inställningar för instans",
@@ -4108,7 +2930,6 @@
                     "music": "Musik",
                     "playlists": "Spellistor",
                     "sections": "Avsnitt",
-                    "security": "",
                     "signups": "Bli-Medlem",
                     "stats": "Statistik",
                     "subsonic": "Subsonic",
@@ -4121,10 +2942,7 @@
                         "invitations": "Inbjudningar",
                         "users": "Användare"
                     },
-                    "title": "Hantera användare",
-                    "menu": {
-                        "secondary": ""
-                    }
+                    "title": "Hantera användare"
                 }
             }
         },
@@ -4133,16 +2951,11 @@
                 "albums": "Album",
                 "artists": "Artister",
                 "playlists": "Spellistor",
-                "podcasts": "",
                 "radios": "Radio",
-                "series": "",
-                "tags": "",
                 "tracks": "Låtar"
             },
             "header": {
-                "search": "Sök",
-                "remote": "",
-                "rss": ""
+                "search": "Sök"
             },
             "button": {
                 "submit": "Sökfråga"
@@ -4186,7 +2999,6 @@
                     "delete": "Radera",
                     "confirm": "Radera spellista",
                     "edit": "Redigera…",
-                    "embed": "",
                     "playAll": "Spela alla",
                     "stopEdit": "Stoppa radio"
                 },
@@ -4196,9 +3008,6 @@
                         "content": {
                             "warning": "Detta raderar denna spellista helt och kan inte ångras."
                         }
-                    },
-                    "embed": {
-                        "header": ""
                     }
                 },
                 "title": "Spellista",
@@ -4227,9 +3036,6 @@
                         }
                     }
                 },
-                "empty": {
-                    "noTracks": ""
-                },
                 "title": "Radio",
                 "header": {
                     "tracks": "Låtar"
@@ -4255,24 +3061,14 @@
                         "label": "Välj ett filter"
                     },
                     "profile": {
-                        "description": "Tillgång till emailadress, användarnamn och profilinformation",
-                        "label": ""
+                        "description": "Tillgång till emailadress, användarnamn och profilinformation"
                     },
                     "edits": {
                         "description": "Tillgång till ändringar",
                         "label": "Redigera…"
                     },
-                    "follows": {
-                        "description": "",
-                        "label": "Följ"
-                    },
                     "listenings": {
-                        "description": "Tillgång till spelningshistorik",
-                        "label": ""
-                    },
-                    "reports": {
-                        "description": "",
-                        "label": "Importer"
+                        "description": "Tillgång till spelningshistorik"
                     },
                     "notifications": {
                         "description": "Senaste ändring",
@@ -4286,12 +3082,14 @@
                         "description": "Tillgång inaktiverad",
                         "label": "Radio"
                     },
-                    "security": {
-                        "description": "",
-                        "label": ""
-                    },
                     "favorites": {
                         "label": "Favoriter"
+                    },
+                    "follows": {
+                        "label": "Följ"
+                    },
+                    "reports": {
+                        "label": "Importer"
                     }
                 },
                 "filters": {
@@ -4300,17 +3098,14 @@
                     "artistName": "Artistnamn",
                     "bitrate": "Bitrate",
                     "creationDate": "Skapningsdatum",
-                    "domain": "",
                     "duration": "Tid",
                     "expirationDate": "Utgångsdatum",
                     "firstSeen": "Utgångsdatum",
                     "followers": "Följare",
-                    "itemsCount": "",
                     "lastActivity": "Senaste aktivitet",
                     "lastSeen": "Lanseringsdag",
                     "modificationDate": "Utgångsdatum",
                     "name": "Namn",
-                    "receivedMessages": "",
                     "releaseDate": "Publicerat datum",
                     "dateJoined": "Bli-Medlem",
                     "size": "Storlek",
@@ -4322,11 +3117,9 @@
                 "fields": {
                     "privacyLevel": {
                         "label": "Visa spellista",
-                        "help": "",
                         "shortChoices": {
                             "public": "Alla",
-                            "instance": "Instansradio",
-                            "private": ""
+                            "instance": "Instansradio"
                         },
                         "choices": {
                             "instance": "Alla på den här instansen",
@@ -4334,50 +3127,29 @@
                             "private": "Ingen utom jag"
                         }
                     },
-                    "summary": {
-                        "label": ""
-                    },
-                    "reportType": {
-                        "label": "",
-                        "choices": {
-                            "illegalContent": "",
-                            "invalidMetadata": "Vad är metadata?",
-                            "offensiveContent": "",
-                            "other": "",
-                            "takedownRequest": "Pågående förfrågningar"
-                        }
-                    },
                     "importStatus": {
-                        "label": "",
                         "choices": {
-                            "draft": {
-                                "label": "",
-                                "help": ""
-                            },
                             "errored": {
-                                "label": "Ett fel uppstod",
-                                "help": ""
+                                "label": "Ett fel uppstod"
                             },
                             "finished": {
                                 "label": "Avslutad",
                                 "help": "Importerad"
                             },
                             "pending": {
-                                "label": "Väntar",
-                                "help": ""
-                            },
-                            "skipped": {
-                                "label": "",
-                                "help": ""
+                                "label": "Väntar"
                             }
                         }
                     },
-                    "contentCategory": {
-                        "label": "",
+                    "reportType": {
                         "choices": {
-                            "music": "Musik",
-                            "other": "",
-                            "podcast": ""
+                            "invalidMetadata": "Vad är metadata?",
+                            "takedownRequest": "Pågående förfrågningar"
+                        }
+                    },
+                    "contentCategory": {
+                        "choices": {
+                            "music": "Musik"
                         }
                     }
                 }
@@ -4396,10 +3168,6 @@
                     "typeLabel": "Artist",
                     "label": "Låtar av denna artist"
                 },
-                "channel": {
-                    "typeLabel": "",
-                    "label": ""
-                },
                 "library": {
                     "typeLabel": "Bibliotek",
                     "label": "Importera det här spåret"
@@ -4415,8 +3183,7 @@
             },
             "useReportConfigs": {
                 "account": {
-                    "label": "Mitt konto",
-                    "summary": ""
+                    "label": "Mitt konto"
                 },
                 "album": {
                     "label": "Album",
@@ -4425,16 +3192,6 @@
                 },
                 "artist": {
                     "label": "Artist"
-                },
-                "channel": {
-                    "label": ""
-                },
-                "track": {
-                    "copyright": "",
-                    "license": "",
-                    "position": "",
-                    "title": "Titel",
-                    "label": "Låt"
                 },
                 "creationDate": {
                     "label": "Skapningsdatum"
@@ -4452,23 +3209,15 @@
                 "playlist": {
                     "label": "Spellista"
                 },
-                "tags": {
-                    "label": ""
+                "track": {
+                    "title": "Titel",
+                    "label": "Låt"
                 },
                 "visibility": {
                     "label": "Visa spellista"
                 }
             },
             "useEditConfigs": {
-                "track": {
-                    "copyright": "",
-                    "license": "",
-                    "position": "",
-                    "title": "Titel"
-                },
-                "cover": {
-                    "label": ""
-                },
                 "description": {
                     "label": "Tid"
                 },
@@ -4479,27 +3228,18 @@
                     "releaseDate": "Publicerat datum",
                     "title": "Titel"
                 },
-                "tags": {
-                    "label": ""
+                "track": {
+                    "title": "Titel"
                 }
             }
-        },
-        "useThemeList": {
-            "darkTheme": "",
-            "lightTheme": ""
         }
     },
     "init": {
         "serviceWorker": {
             "newAppVersion": "En ny version av appen är tillgänglig.",
             "actions": {
-                "later": "",
                 "update": "Uppdatera avatar"
             }
-        },
-        "axios": {
-            "rateLimitDelay": "",
-            "rateLimitLater": ""
         }
     }
 }

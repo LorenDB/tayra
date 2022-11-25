@@ -84,10 +84,7 @@
                 "link": {
                     "settings": "Tornar a la configuració"
                 },
-                "title": "Editar l'aplicació",
-                "button": {
-                    "regenerateToken": ""
-                }
+                "title": "Editar l'aplicació"
             },
             "Settings": {
                 "title": "Configuració del compte",
@@ -100,7 +97,6 @@
                     "contentFilters": "Filtres de continguts",
                     "deleteAccount": "Esborrar el meu compte",
                     "hiddenArtists": "Artistes ocults",
-                    "plugins": "",
                     "settingsUpdated": "Paràmetres actualitzats",
                     "emailFailure": "No hem pogut confirmar la teva adreça de correu electrònic",
                     "accountFailure": "No es pot suprimir el vostre compte",
@@ -154,18 +150,6 @@
                     "update": "Actualitzar",
                     "updateSettings": "Actualitza els paràmetres"
                 },
-                "description": {
-                    "changeEmail": "",
-                    "changePassword": {
-                        "paragraph1": "Si canvieu la vostra contrasenya també canviarà la vostra contrasenya de l’API Subsonic si l’heu sol·licitat.",
-                        "paragraph2": "Haureu d’actualitzar la vostra contrasenya als vostres clients que utilitzin aquesta contrasenya."
-                    },
-                    "contentFilters": "Els filtres de contingut us ajuden a amagar el contingut que no voleu veure al servei.",
-                    "authorizedApps": "Aquesta és la llista d'aplicacions que tenen accés a les dades del teu compte.",
-                    "yourApps": "Aquesta és la llista d'aplicacions que has creat.",
-                    "plugins": "",
-                    "deleteAccount": "Podeu suprimir de manera permanent i irreversible el vostre compte i totes les dades associades mitjançant el formulari següent. Se us demanarà confirmació."
-                },
                 "modal": {
                     "changePassword": {
                         "header": "Canviar la teva contrasenya?",
@@ -193,6 +177,16 @@
                             "warning": "Això evitarà que aquesta aplicació accedeixi al servei en nom vostre."
                         }
                     }
+                },
+                "description": {
+                    "changePassword": {
+                        "paragraph1": "Si canvieu la vostra contrasenya també canviarà la vostra contrasenya de l’API Subsonic si l’heu sol·licitat.",
+                        "paragraph2": "Haureu d’actualitzar la vostra contrasenya als vostres clients que utilitzin aquesta contrasenya."
+                    },
+                    "contentFilters": "Els filtres de contingut us ajuden a amagar el contingut que no voleu veure al servei.",
+                    "authorizedApps": "Aquesta és la llista d'aplicacions que tenen accés a les dades del teu compte.",
+                    "yourApps": "Aquesta és la llista d'aplicacions que has creat.",
+                    "deleteAccount": "Podeu suprimir de manera permanent i irreversible el vostre compte i totes les dades associades mitjançant el formulari següent. Se us demanarà confirmació."
                 },
                 "help": {
                     "noApps": "Si autoritzes a donar les teves dades a aplicacions de tercers, aquestes aplicacions seran llistades aquí.",
@@ -319,9 +313,6 @@
                 "header": {
                     "failure": "Error guardant els canvis"
                 },
-                "description": {
-                    "library": ""
-                },
                 "button": {
                     "save": "Guardar",
                     "scan": "Anàlisis realitzat"
@@ -333,14 +324,13 @@
                 "activeUsers": "{ count } usuari actiu | { count } usuaris actius",
                 "hoursOfMusic": "{ count } hora de música | { count } hores de música"
             },
+            "title": "Pàgina d’informació",
             "header": {
-                "funkwhale": "",
                 "aboutPod": "Quant a aquesta instància",
                 "publicContent": "Explorar el contingut públic",
                 "findApp": "Trobar una altra instàncies",
                 "signup": "Inscripció"
             },
-            "title": "Pàgina d’informació",
             "link": {
                 "findOtherPod": "Trobar una altra instàncies",
                 "learnMore": "Aprèn més"
@@ -354,9 +344,6 @@
             },
             "placeholder": {
                 "noDescription": "Descripció no disponible."
-            },
-            "message": {
-                "loggedIn": ""
             }
         },
         "Home": {
@@ -558,15 +545,6 @@
                     }
                 }
             },
-            "VolumeControl": {
-                "label": {
-                    "slider": ""
-                },
-                "button": {
-                    "mute": "Silencia",
-                    "unmute": "Activar el so"
-                }
-            },
             "SearchBar": {
                 "label": {
                     "album": "Àlbum",
@@ -579,16 +557,15 @@
                     "tag": "Etiqueta",
                     "track": "Pista"
                 },
-                "link": {
-                    "more": "",
-                    "fediverse": "Cercar a la fediverse",
-                    "rss": "Subscriu-te a un podcast a través de RSS"
-                },
                 "header": {
                     "noResults": "No s'han trobat coincidències"
                 },
                 "placeholder": {
                     "search": "Cercar per artista, àlbum, pistes, …"
+                },
+                "link": {
+                    "fediverse": "Cercar a la fediverse",
+                    "rss": "Subscriu-te a un podcast a través de RSS"
                 },
                 "empty": {
                     "noResults": "Disculpeu, no hi ha resultats per a aquesta cerca"
@@ -614,7 +591,6 @@
                     "category": "Categoria",
                     "image": "Imatge del canal",
                     "description": "Descripció",
-                    "username": "",
                     "language": "Idioma",
                     "name": "Nom",
                     "email": "Confirma el teu correu electrònic",
@@ -633,7 +609,6 @@
                 "help": {
                     "podcast": "Allotja els teus episodis i mantén la teva comunitat actualitzada.",
                     "discography": "Publiqueu música que feu com ara una bonica discografia d'àlbums o senzills.",
-                    "podcastFields": "",
                     "username": "S'utilitza en URLs i per seguir aquest canal a la federació. No es pot canviar més tard."
                 },
                 "loader": {
@@ -672,6 +647,12 @@
                 },
                 "message": {
                     "copy": "Text copiat al porta-retalls!"
+                }
+            },
+            "VolumeControl": {
+                "button": {
+                    "mute": "Silencia",
+                    "unmute": "Activar el so"
                 }
             },
             "ChannelSeries": {
@@ -812,9 +793,8 @@
                 },
                 "header": {
                     "failure": "Error al enviar l'informe",
-                    "server": "Estat de la importació",
                     "status": "Estat de la importació",
-                    "local": ""
+                    "server": "Estat de la importació"
                 },
                 "link": {
                     "processing": "Processant",
@@ -822,8 +802,7 @@
                     "picard": "Us recomanem que utilitzeu Picard per a aquest propòsit."
                 },
                 "description": {
-                    "import": "Rellançar la importació",
-                    "previousImport": ""
+                    "import": "Rellançar la importació"
                 },
                 "message": {
                     "local": {
@@ -905,7 +884,6 @@
                 },
                 "label": {
                     "search": "Nom de l'artista",
-                    "excludeCompilation": "",
                     "tags": "Eitquetes"
                 },
                 "title": "Artistes",
@@ -1245,11 +1223,6 @@
                     "import": "Importat"
                 }
             },
-            "FsLogs": {
-                "empty": {
-                    "notStarted": ""
-                }
-            },
             "Home": {
                 "title": "Biblioteca",
                 "header": {
@@ -1431,7 +1404,6 @@
             "title": "Pàgina d’informació",
             "link": {
                 "about": "Quant a aquesta instància",
-                "features": "",
                 "introduction": "Invitacions",
                 "rules": "Regles",
                 "statistics": "Estadístiques",
@@ -1440,7 +1412,6 @@
             "header": {
                 "about": "Quant a aquesta instància",
                 "contact": "Contacte",
-                "features": "",
                 "rules": "Regles",
                 "statistics": "Estadístiques",
                 "terms": "Termes i política de privacitat"
@@ -1464,9 +1435,6 @@
                 "noDescription": "Descripció no disponible.",
                 "noRules": "Sense regles disponibles.",
                 "noTerms": "No hi ha termes disponibles."
-            },
-            "message": {
-                "contact": ""
             }
         },
         "common": {
@@ -1477,7 +1445,6 @@
                     "go": "Vés",
                     "launch": "Iniciar",
                     "refresh": "El contingut de la taula s'ha actualitzat",
-                    "select": "",
                     "selectAll": "Seleccionar un filtre",
                     "selectElement": "Selecciona l'element | Selecciona tots els { total } elements",
                     "selectCurrentPage": "Seleccionar només la pàgina actual"
@@ -1513,7 +1480,6 @@
                     "about": "Pàgina d’informació",
                     "chat": "Sala de xat",
                     "docs": "Documentació",
-                    "forum": "",
                     "support": "Text d'ajuda",
                     "git": "Seguiment de problemes",
                     "login": "Iniciar sessió",
@@ -1525,15 +1491,13 @@
                 },
                 "label": {
                     "shortcuts": "Dreceres de teclat",
-                    "language": "Idioma",
-                    "theme": ""
+                    "language": "Idioma"
                 }
             },
             "UserModal": {
                 "link": {
                     "about": "Pàgina d’informació",
                     "chat": "Sala de xat",
-                    "forum": "",
                     "support": "Text d'ajuda",
                     "git": "Seguiment de problemes",
                     "login": "Iniciar sessió",
@@ -1545,8 +1509,7 @@
                 },
                 "label": {
                     "shortcuts": "Dreceres de teclat",
-                    "language": "Idioma",
-                    "theme": ""
+                    "language": "Idioma"
                 },
                 "header": {
                     "options": "Accions"
@@ -1608,12 +1571,6 @@
                 "link": {
                     "login": "Iniciar sessió",
                     "signup": "Inscripció"
-                },
-                "header": {
-                    "unauthenticated": ""
-                },
-                "description": {
-                    "noAccess": ""
                 }
             },
             "ContentForm": {
@@ -1817,8 +1774,7 @@
                 "main": "Menú principal",
                 "follows": "Sol·licituds de seguiment pendents",
                 "edits": "Revisió de modificacions pendents",
-                "play": "Reprodueix aquesta pista",
-                "theme": ""
+                "play": "Reprodueix aquesta pista"
             },
             "header": {
                 "administration": "Administració",
@@ -2816,11 +2772,6 @@
             "header": {
                 "fetchFailed": "Error obtenint l'objecte"
             },
-            "button": {
-                "fediverse": "",
-                "rss": "",
-                "search": "Buscar"
-            },
             "label": {
                 "fediverse": {
                     "fieldLabel": "Element informat",
@@ -2832,6 +2783,9 @@
                     "title": "Subscriu-te al flux RSS d'un podcast"
                 }
             },
+            "button": {
+                "search": "Buscar"
+            },
             "warning": {
                 "unsupported": "Aquest tipus d'objecte encara no és compatible"
             },
@@ -2839,8 +2793,7 @@
                 "fetchFailed": "No es pot recuperar aquest objecte"
             },
             "description": {
-                "fediverse": "Utilitzeu aquest formulari per recuperar un objecte allotjat en algun altre lloc en la fediverse.",
-                "rss": ""
+                "fediverse": "Utilitzeu aquest formulari per recuperar un objecte allotjat en algun altre lloc en la fediverse."
             }
         },
         "PageNotFound": {
@@ -4286,12 +4239,11 @@
                         "description": "Accés a les ràdios",
                         "label": "Ràdios"
                     },
-                    "security": {
-                        "description": "",
-                        "label": "Seguretat"
-                    },
                     "favorites": {
                         "label": "Preferides"
+                    },
+                    "security": {
+                        "label": "Seguretat"
                     }
                 },
                 "filters": {

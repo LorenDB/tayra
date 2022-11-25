@@ -84,10 +84,7 @@
                 "link": {
                     "settings": "Zpět k nastavení"
                 },
-                "title": "Upravit aplikaci",
-                "button": {
-                    "regenerateToken": ""
-                }
+                "title": "Upravit aplikaci"
             },
             "Settings": {
                 "title": "Nastavení účtu",
@@ -100,7 +97,6 @@
                     "contentFilters": "Filtry obsahu",
                     "deleteAccount": "Smazat můj účet",
                     "hiddenArtists": "Skrytí interpreti",
-                    "plugins": "",
                     "settingsUpdated": "Nastavení aktualizováno",
                     "emailFailure": "Nepovedlo se ověřit vaší emailovou adresu",
                     "accountFailure": "Nemůžeme smazat váš účet",
@@ -154,18 +150,6 @@
                     "update": "Aktualizovat",
                     "updateSettings": "Aktualizovat nastavení"
                 },
-                "description": {
-                    "changeEmail": "",
-                    "changePassword": {
-                        "paragraph1": "Změna vašeho hesla vyvolá také změnu hesla pro Subsonic API, pokud je používáno.",
-                        "paragraph2": "Budete muset aktualizovat heslo na všech klientech kde je používáno."
-                    },
-                    "contentFilters": "Filtry obsahu vám pomáhají skrýt obsah který ve službě nechcete vidět.",
-                    "authorizedApps": "Tento seznam obsahuje všechny aplikace které mají přístup k datům vašeho účtu.",
-                    "yourApps": "Tento seznam obsahuje všechny aplikace které jste vytvořili.",
-                    "plugins": "",
-                    "deleteAccount": "Můžete natrvalo a nevratně smazat svůj účet a všechna související data pomocí formuláře níže. Budete požádáni o další potvrzení akce."
-                },
                 "modal": {
                     "changePassword": {
                         "header": "Změnit vaše heslo?",
@@ -193,6 +177,16 @@
                             "warning": "Zabrání této aplikaci v přístupu ke službě pod vaším účtem."
                         }
                     }
+                },
+                "description": {
+                    "changePassword": {
+                        "paragraph1": "Změna vašeho hesla vyvolá také změnu hesla pro Subsonic API, pokud je používáno.",
+                        "paragraph2": "Budete muset aktualizovat heslo na všech klientech kde je používáno."
+                    },
+                    "contentFilters": "Filtry obsahu vám pomáhají skrýt obsah který ve službě nechcete vidět.",
+                    "authorizedApps": "Tento seznam obsahuje všechny aplikace které mají přístup k datům vašeho účtu.",
+                    "yourApps": "Tento seznam obsahuje všechny aplikace které jste vytvořili.",
+                    "deleteAccount": "Můžete natrvalo a nevratně smazat svůj účet a všechna související data pomocí formuláře níže. Budete požádáni o další potvrzení akce."
                 },
                 "help": {
                     "noApps": "Zde jsou vypsány aplikace třetích stran, kterým byl udělen přístup k vašim datům.",
@@ -268,16 +262,15 @@
                 "placeholder": {
                     "username": "Zadejte vaše uživatelské jméno nebo email"
                 },
-                "help": {
-                    "approvalRequired": "",
-                    "invalidCredentials": "Prosím ujistěte se, že zadané uživatelské jméno a heslo je správné"
-                },
                 "button": {
                     "login": "Přihlášení"
                 },
                 "label": {
                     "password": "Heslo",
                     "username": "Uživatelské jméno nebo email"
+                },
+                "help": {
+                    "invalidCredentials": "Prosím ujistěte se, že zadané uživatelské jméno a heslo je správné"
                 },
                 "header": {
                     "loginFailure": "Nemůžeme vás přihlásit"
@@ -302,10 +295,7 @@
                     "signupFailure": "Váš účet nemůže být vytvořen."
                 },
                 "message": {
-                    "registrationClosed": "Registrace není na této instanci povolena. Pro založení účtu budete potřebovat pozvánku.",
-                    "requiresReview": "",
-                    "awaitingReview": "",
-                    "accountCreated": ""
+                    "registrationClosed": "Registrace není na této instanci povolena. Pro založení účtu budete potřebovat pozvánku."
                 }
             },
             "Plugin": {
@@ -319,9 +309,6 @@
                 "header": {
                     "failure": "Chyba při ukládání nastavení"
                 },
-                "description": {
-                    "library": ""
-                },
                 "button": {
                     "save": "Uložit",
                     "scan": "Skenováno"
@@ -333,14 +320,13 @@
                 "activeUsers": "{ count } aktivní uživatel | { count } aktivní uživatelé",
                 "hoursOfMusic": "{ count } hodina hudby | { count } hodiny hudby"
             },
+            "title": "O aplikaci",
             "header": {
-                "funkwhale": "",
                 "aboutPod": "O této instanci",
                 "publicContent": "Procházet veřejně dostupný obsah",
                 "findApp": "Hledat další pody",
                 "signup": "Zaregistrovat se"
             },
-            "title": "O aplikaci",
             "link": {
                 "findOtherPod": "Hledat další pody",
                 "learnMore": "Dozvědět se více"
@@ -354,9 +340,6 @@
             },
             "placeholder": {
                 "noDescription": "Popis není dostupný."
-            },
-            "message": {
-                "loggedIn": ""
             }
         },
         "Home": {
@@ -369,7 +352,6 @@
                 "about": "O tomto Funkwhale podu",
                 "contact": "Kontakt",
                 "login": "Přihlásit se",
-                "newChannels": "",
                 "newAlbums": "Nedávno přidaná alba",
                 "signup": "Zaregistrovat se",
                 "statistics": "Statistiky",
@@ -545,9 +527,6 @@
                     }
                 },
                 "Widget": {
-                    "empty": {
-                        "noResults": ""
-                    },
                     "button": {
                         "more": "Zobrazit více"
                     }
@@ -558,40 +537,22 @@
                     }
                 }
             },
-            "VolumeControl": {
-                "label": {
-                    "slider": ""
-                },
-                "button": {
-                    "mute": "Ztišit",
-                    "unmute": "Zrušit ztišení"
-                }
-            },
             "SearchBar": {
                 "label": {
                     "album": "Album",
                     "artist": "Interpret",
                     "category": {
-                        "federation": "Federace",
-                        "podcasts": ""
+                        "federation": "Federace"
                     },
                     "search": "Hledat trochu muziky",
                     "tag": "Tag",
                     "track": "Stopa"
                 },
-                "link": {
-                    "more": "",
-                    "fediverse": "Hledat na Wikipedii",
-                    "rss": ""
-                },
-                "header": {
-                    "noResults": ""
-                },
                 "placeholder": {
                     "search": "Hledat interprety, alba, stopy…"
                 },
-                "empty": {
-                    "noResults": ""
+                "link": {
+                    "fediverse": "Hledat na Wikipedii"
                 }
             },
             "Search": {
@@ -612,35 +573,19 @@
                 "label": {
                     "discography": "Data interpreta",
                     "category": "Kategorie",
-                    "image": "",
                     "description": "Popis",
-                    "username": "",
                     "language": "Změnit jazyk",
                     "name": "Název",
                     "email": "Potvrďte svou emailovou adresu",
                     "owner": "Vlastník",
-                    "podcast": "",
                     "subcategory": "Kategorie",
                     "tags": "Tagy"
-                },
-                "placeholder": {
-                    "name": "",
-                    "username": ""
                 },
                 "header": {
                     "error": "Chyba při ukládání nastavení"
                 },
-                "help": {
-                    "podcast": "",
-                    "discography": "",
-                    "podcastFields": "",
-                    "username": ""
-                },
                 "loader": {
                     "loading": "Nahrávání"
-                },
-                "legend": {
-                    "purpose": ""
                 }
             },
             "LibraryFollowButton": {
@@ -656,8 +601,7 @@
                 },
                 "help": {
                     "embed": "Zkopírujte a vložte tento kód do HTML kódu webové stránky",
-                    "width": "Ponechte prázdné pro responzivní widget",
-                    "anonymous": ""
+                    "width": "Ponechte prázdné pro responzivní widget"
                 },
                 "label": {
                     "embed": "Kód pro vložení",
@@ -667,11 +611,14 @@
                 "header": {
                     "preview": "Náhled"
                 },
-                "warning": {
-                    "anonymous": ""
-                },
                 "message": {
                     "copy": "Text vložen do schránky!"
+                }
+            },
+            "VolumeControl": {
+                "button": {
+                    "mute": "Ztišit",
+                    "unmute": "Zrušit ztišení"
                 }
             },
             "ChannelSeries": {
@@ -782,7 +729,6 @@
                     "network": "Během nahrávání tohoto souboru došlo k chybě sítě",
                     "size": "Nelze nahrát tento soubor, zkontrolujte zda není příliš velký",
                     "extension": "Neplatný typ souboru. Ujistěte se, že nahrávate zvukový soubor. Podporovány jsou soubory typu { extensions }",
-                    "retry": "",
                     "denied": "Nahrání zamítnuto, zkontrolujte zda soubor není příliš velký a že nedošlo k vyčerpání povolené kapacity",
                     "timeout": "Vypršel čas nahrávání, zkuste to prosím znovu"
                 },
@@ -812,9 +758,8 @@
                 },
                 "header": {
                     "failure": "Chyba při odesílání hlášení",
-                    "server": "Stav importu",
                     "status": "Stav importu",
-                    "local": ""
+                    "server": "Stav importu"
                 },
                 "link": {
                     "processing": "Zpracování",
@@ -822,8 +767,7 @@
                     "picard": "Doporučujeme pro tyto účely použít MusicBrainz Picard."
                 },
                 "description": {
-                    "import": "Znovu spustit import",
-                    "previousImport": ""
+                    "import": "Znovu spustit import"
                 },
                 "message": {
                     "local": {
@@ -905,7 +849,6 @@
                 },
                 "label": {
                     "search": "Jméno interpreta",
-                    "excludeCompilation": "",
                     "tags": "Tagy"
                 },
                 "title": "Interpreti",
@@ -936,10 +879,7 @@
                         "album": "Album",
                         "artist": "Interpret",
                         "copyright": "Copyright",
-                        "license": "Licence",
-                        "series": "",
-                        "url": "",
-                        "year": ""
+                        "license": "Licence"
                     },
                     "track": {
                         "bitrate": {
@@ -973,7 +913,6 @@
                     "moderation": "Otevřít v rozhraní pro moderaci"
                 },
                 "header": {
-                    "channels": "",
                     "tracks": "Stopy"
                 }
             },
@@ -1088,17 +1027,11 @@
                     "cancel": "Zrušit",
                     "channel": "Vytvořit novou knihovnu",
                     "search": "Hledat",
-                    "subscribe": "",
                     "feed": "Použití Funkwhale"
                 },
                 "empty": {
                     "noResults": "Žádný interpret neodpovídá zadání"
                 },
-                "label": {
-                    "search": "",
-                    "tags": "Tagy"
-                },
-                "title": "",
                 "pagination": {
                     "results": "Výsledků na stránku"
                 },
@@ -1109,6 +1042,9 @@
                     "subscription": {
                         "header": "Popis"
                     }
+                },
+                "label": {
+                    "tags": "Tagy"
                 }
             },
             "Radios": {
@@ -1227,33 +1163,14 @@
                     "remote": "Tento objekt je spravován jiným serverem, nemůžete ho upravovat."
                 }
             },
-            "AlbumDetail": {
-                "header": {
-                    "episodes": "",
-                    "tracks": "Stopy",
-                    "libraries": "Knihovny uživatele"
-                },
-                "description": {
-                    "libraries": "Toto album se vyskytuje v následujících knihovnách:"
-                },
-                "meta": {
-                    "volume": "Hlasitost { number }"
-                }
-            },
             "FsBrowser": {
                 "button": {
                     "import": "Importováno"
                 }
             },
-            "FsLogs": {
-                "empty": {
-                    "notStarted": ""
-                }
-            },
             "Home": {
                 "title": "Knihovna",
                 "header": {
-                    "newChannels": "",
                     "playlists": "Playlisty",
                     "recentlyAdded": "Poslední přidané",
                     "recentlyFavorited": "Poslední oblíbené",
@@ -1263,6 +1180,18 @@
             "TagSelector": {
                 "placeholder": {
                     "search": "Hledat"
+                }
+            },
+            "AlbumDetail": {
+                "description": {
+                    "libraries": "Toto album se vyskytuje v následujících knihovnách:"
+                },
+                "header": {
+                    "tracks": "Stopy",
+                    "libraries": "Knihovny uživatele"
+                },
+                "meta": {
+                    "volume": "Hlasitost { number }"
                 }
             }
         },
@@ -1315,13 +1244,11 @@
                     "finishLater": "Dokončeno",
                     "next": "Další stopa",
                     "previous": "Předchozí stopa",
-                    "publish": "",
                     "update": "Aktualizovat"
                 },
                 "header": {
                     "uploadFiles": "Odstranit tyto nahrané soubory?",
                     "processing": "Zpracování",
-                    "publish": "",
                     "uploadDetails": "Nahrát data"
                 }
             },
@@ -1330,11 +1257,7 @@
                     "tracks": "{ count } stopa | { count } stopy"
                 },
                 "label": {
-                    "album": "Album",
-                    "series": ""
-                },
-                "option": {
-                    "none": ""
+                    "album": "Album"
                 }
             },
             "LicenseSelect": {
@@ -1343,29 +1266,15 @@
                 },
                 "label": {
                     "license": "Licence"
-                },
-                "option": {
-                    "none": ""
                 }
             },
             "UploadForm": {
-                "help": {
-                    "license": ""
-                },
                 "label": {
-                    "openBrowser": "Procházet",
-                    "channel": ""
-                },
-                "message": {
-                    "dragAndDrop": "",
-                    "pending": ""
+                    "openBrowser": "Procházet"
                 },
                 "button": {
                     "edit": "Upravit",
-                    "ignore": "",
-                    "remove": "Odstranit",
-                    "resume": "",
-                    "retry": ""
+                    "remove": "Odstranit"
                 },
                 "header": {
                     "error": "Chyba při odesílání změn"
@@ -1377,9 +1286,6 @@
                 },
                 "description": {
                     "extensions": "Podporované přípony: { extensions }"
-                },
-                "warning": {
-                    "quota": ""
                 }
             },
             "AlbumModal": {
@@ -1411,7 +1317,6 @@
             },
             "SubscribeButton": {
                 "title": {
-                    "subscribe": "",
                     "unsubscribe": "{ count } oblíbená"
                 },
                 "help": {
@@ -1431,7 +1336,6 @@
             "title": "O aplikaci",
             "link": {
                 "about": "O této instanci",
-                "features": "",
                 "introduction": "Pozvánky",
                 "rules": "Pravidla",
                 "statistics": "Statistiky",
@@ -1440,7 +1344,6 @@
             "header": {
                 "about": "O této instanci",
                 "contact": "Kontakt",
-                "features": "",
                 "rules": "Pravidla",
                 "statistics": "Statistiky",
                 "terms": "Podmínky a zásady ochrany osobních údajů"
@@ -1464,9 +1367,6 @@
                 "noDescription": "Popis není dostupný.",
                 "noRules": "Nejsou dostupná žádná pravidla.",
                 "noTerms": "Bez podmínek užití."
-            },
-            "message": {
-                "contact": ""
             }
         },
         "common": {
@@ -1477,7 +1377,6 @@
                     "go": "Pokračovat",
                     "launch": "Spustit",
                     "refresh": "Obnovit obsah tabulky",
-                    "select": "",
                     "selectAll": "Vybrat filtr",
                     "selectElement": "Vybrat { total } prvek | Vybrat všechny { total } prvky",
                     "selectCurrentPage": "Vybrat pouze aktuální stránku"
@@ -1513,8 +1412,6 @@
                     "about": "O aplikaci",
                     "chat": "Diskuzní místnost",
                     "docs": "Dokumentace",
-                    "forum": "",
-                    "support": "",
                     "git": "Databáze problémů",
                     "login": "Přihlásit se",
                     "logout": "Odhlásit se",
@@ -1525,16 +1422,13 @@
                 },
                 "label": {
                     "shortcuts": "Klávesové zkratky",
-                    "language": "Změnit jazyk",
-                    "theme": ""
+                    "language": "Změnit jazyk"
                 }
             },
             "UserModal": {
                 "link": {
                     "about": "O aplikaci",
                     "chat": "Diskuzní místnost",
-                    "forum": "",
-                    "support": "",
                     "git": "Databáze problémů",
                     "login": "Přihlásit se",
                     "logout": "Odhlásit se",
@@ -1545,8 +1439,7 @@
                 },
                 "label": {
                     "shortcuts": "Klávesové zkratky",
-                    "language": "Změnit jazyk",
-                    "theme": ""
+                    "language": "Změnit jazyk"
                 },
                 "header": {
                     "options": "Akce"
@@ -1608,27 +1501,6 @@
                 "link": {
                     "login": "Přihlásit se",
                     "signup": "Zaregistrovat se"
-                },
-                "header": {
-                    "unauthenticated": ""
-                },
-                "description": {
-                    "noAccess": ""
-                }
-            },
-            "ContentForm": {
-                "help": {
-                    "markdown": ""
-                },
-                "empty": {
-                    "noContent": "Čekající na kontrolu"
-                },
-                "button": {
-                    "preview": "Náhled",
-                    "write": "Zapsat"
-                },
-                "placeholder": {
-                    "input": ""
                 }
             },
             "EmptyState": {
@@ -1639,10 +1511,16 @@
                     "refresh": "Obnovit"
                 }
             },
-            "AttachmentInput": {
-                "help": {
-                    "upload": ""
+            "ContentForm": {
+                "empty": {
+                    "noContent": "Čekající na kontrolu"
                 },
+                "button": {
+                    "preview": "Náhled",
+                    "write": "Zapsat"
+                }
+            },
+            "AttachmentInput": {
                 "button": {
                     "remove": "Odstranit"
                 },
@@ -1796,7 +1674,6 @@
                 "albums": "Alba",
                 "artists": "Interpreti",
                 "browse": "Procházet",
-                "channels": "",
                 "createAccount": "Vytvořit účet",
                 "favorites": "Oblíbené",
                 "home": "Domů",
@@ -1804,7 +1681,6 @@
                 "login": "Přihlášení",
                 "moderation": "Moderování",
                 "playlists": "Playlisty",
-                "podcasts": "",
                 "radios": "Rádia",
                 "search": "Hledat",
                 "settings": "Nastavení",
@@ -1817,12 +1693,10 @@
                 "main": "Hlavní menu",
                 "follows": "Čekající žádosti o sledování",
                 "edits": "Úpravy čekající na kontrolu",
-                "play": "Přehrát tuto stopu",
-                "theme": ""
+                "play": "Přehrát tuto stopu"
             },
             "header": {
                 "administration": "Administrace",
-                "explore": "",
                 "main": "Stránkování",
                 "more": "Další…",
                 "library": "Knihovna"
@@ -2177,8 +2051,7 @@
                         "signup": "Zpráva"
                     },
                     "button": {
-                        "approve": "Schválit",
-                        "reject": ""
+                        "approve": "Schválit"
                     },
                     "table": {
                         "status": {
@@ -2197,9 +2070,6 @@
                     "notApplicable": "N/A",
                     "link": {
                         "request": "Ohlásit { id }"
-                    },
-                    "message": {
-                        "signup": ""
                     }
                 },
                 "InstancePolicyForm": {
@@ -2293,9 +2163,6 @@
                     "label": {
                         "inList": "Nachází se na seznamu povolených",
                         "search": "Hledat"
-                    },
-                    "empty": {
-                        "noPods": ""
                     },
                     "placeholder": {
                         "search": "Hledat dle názvu…"
@@ -2547,12 +2414,7 @@
                         "header": {
                             "actions": "Akce",
                             "label": "Pole",
-                            "type": "Pole",
-                            "required": ""
-                        },
-                        "type": {
-                            "long": "",
-                            "short": ""
+                            "type": "Pole"
                         },
                         "required": {
                             "false": "Ne",
@@ -2560,22 +2422,12 @@
                         }
                     }
                 },
+                "label": {
+                    "delete": "Odstranit"
+                },
                 "button": {
-                    "add": "",
                     "edit": "Upravit",
                     "preview": "Náhled"
-                },
-                "label": {
-                    "additionalField": "",
-                    "additionalFields": "",
-                    "delete": "Odstranit",
-                    "helpText": "",
-                    "moveDown": "",
-                    "moveUp": ""
-                },
-                "help": {
-                    "additionalFields": "",
-                    "helpText": ""
                 }
             },
             "SettingsGroup": {
@@ -2612,17 +2464,15 @@
                 },
                 "label": {
                     "email": "Email",
-                    "forwardToDomain": "",
                     "message": "Zpráva"
-                },
-                "description": {
-                    "forwardToDomain": "",
-                    "message": "Použijte toto pole pro poskytnutí doplňujících informací pro moderátora, který bude zpracovávat vaše hlášení.",
-                    "modal": "Použijte tento formulář pro odeslání hlášení našemu týmu moderátorů.",
-                    "email": "Použijeme uvedený email v případě potřeby vás kontaktovat ohledně tohoto hlášení."
                 },
                 "message": {
                     "submissionSuccess": "Hlášení úspěšně odesláno, děkujeme"
+                },
+                "description": {
+                    "message": "Použijte toto pole pro poskytnutí doplňujících informací pro moderátora, který bude zpracovávat vaše hlášení.",
+                    "modal": "Použijte tento formulář pro odeslání hlášení našemu týmu moderátorů.",
+                    "email": "Použijeme uvedený email v případě potřeby vás kontaktovat ohledně tohoto hlášení."
                 }
             },
             "FilterModal": {
@@ -2708,7 +2558,6 @@
                     "label": "Klávesové zkratky přehrávače",
                     "clearQueue": "Vymazat frontu",
                     "decreaseVolume": "Snížit hlasitost",
-                    "expandQueue": "",
                     "increaseVolume": "Zvýšit hlasitost",
                     "playPause": "Pozastavit/spustit aktuální stopu",
                     "playNext": "Přehrát následující stopu",
@@ -2816,31 +2665,20 @@
             "header": {
                 "fetchFailed": "Chyba při získávání dat uzlu"
             },
-            "button": {
-                "fediverse": "",
-                "rss": "",
-                "search": "Hledat"
-            },
             "label": {
                 "fediverse": {
                     "fieldLabel": "Ohlášený objekt",
                     "title": "Hledat na Wikipedii"
                 },
                 "rss": {
-                    "fieldPlaceholder": "",
-                    "fieldLabel": "Vytvořit aplikaci",
-                    "title": ""
+                    "fieldLabel": "Vytvořit aplikaci"
                 }
             },
-            "warning": {
-                "unsupported": ""
+            "button": {
+                "search": "Hledat"
             },
             "error": {
                 "fetchFailed": "Váš účet nemůže být vytvořen."
-            },
-            "description": {
-                "fediverse": "",
-                "rss": ""
             }
         },
         "PageNotFound": {
@@ -2879,17 +2717,8 @@
                     "subscribers": "{ count } oblíbená | { count } oblíbené",
                     "tracks": "{ count } stopa | { count } stopy"
                 },
-                "link": {
-                    "channelEpisodes": "",
-                    "mirrored": "",
-                    "moderation": "Otevřít v rozhraní pro moderaci",
-                    "channelOverview": "Náhled",
-                    "channelTracks": "Stopy",
-                    "domainView": "Členem od { date }"
-                },
                 "header": {
-                    "artistChannel": "Jméno interpreta",
-                    "podcastChannel": ""
+                    "artistChannel": "Jméno interpreta"
                 },
                 "button": {
                     "cancel": "Zrušit",
@@ -2901,25 +2730,16 @@
                     "updateChannel": "Aktualizovat aplikaci",
                     "upload": "Nahrát"
                 },
-                "title": "",
                 "modal": {
                     "subscribe": {
                         "rss": {
                             "content": {
                                 "help": "Zkopírujte a vložte následující kód do aplikace:"
-                            },
-                            "header": ""
-                        },
-                        "fediverse": {
-                            "content": {
-                                "help": ""
-                            },
-                            "header": ""
+                            }
                         },
                         "funkwhale": {
                             "header": "Použití Funkwhale"
-                        },
-                        "header": ""
+                        }
                     },
                     "delete": {
                         "header": "Odstranit tuto poznámku?",
@@ -2930,28 +2750,26 @@
                     "embed": {
                         "header": "Vložit díla tohoto interpreta do webové stránky"
                     }
+                },
+                "link": {
+                    "moderation": "Otevřít v rozhraní pro moderaci",
+                    "channelOverview": "Náhled",
+                    "channelTracks": "Stopy",
+                    "domainView": "Členem od { date }"
                 }
             },
             "DetailOverview": {
                 "link": {
                     "addAlbum": "Přidat obsah",
-                    "erroredUploads": "Knihovny a nahrané soubory",
-                    "skippedUploads": ""
+                    "erroredUploads": "Knihovny a nahrané soubory"
                 },
                 "header": {
                     "albums": "Alba",
-                    "latestEpisodes": "",
                     "latestTracks": "Další stopa",
-                    "series": "",
-                    "uploadsFailure": "",
-                    "uploadsProcessing": "",
                     "uploadsSuccess": "Heslo úspěšně změněno"
                 },
                 "meta": {
                     "progress": "Knihovny a nahrané soubory"
-                },
-                "message": {
-                    "processing": ""
                 }
             },
             "SubscriptionsList": {
@@ -2959,13 +2777,11 @@
                     "addNew": "Přidat obsah"
                 },
                 "button": {
-                    "cancel": "Zrušit",
-                    "subscribe": ""
+                    "cancel": "Zrušit"
                 },
                 "placeholder": {
                     "search": "Název filtru"
                 },
-                "title": "",
                 "modal": {
                     "subscription": {
                         "header": "Popis"
@@ -3046,7 +2862,6 @@
                     "option": {
                         "status": {
                             "all": "Vše",
-                            "draft": "",
                             "failed": "Neúspěšné",
                             "finished": "Dokončeno",
                             "pending": "Čeká",
@@ -3210,17 +3025,10 @@
             "Home": {
                 "title": "Přidat a spravovat obsah",
                 "description": {
-                    "follow": "Můžete sledovat knihovny jiných uživatelů pro získání přístupu k nové hudbě. Veřejné knihovny můžete začít sledovat okamžitě, privátní knihovny vyžadují schválení vlastníka.",
-                    "channel": {
-                        "1": "",
-                        "2": ""
-                    },
-                    "upload": ""
+                    "follow": "Můžete sledovat knihovny jiných uživatelů pro získání přístupu k nové hudbě. Veřejné knihovny můžete začít sledovat okamžitě, privátní knihovny vyžadují schválení vlastníka."
                 },
                 "header": {
-                    "follow": "Sledovat vzdálené knihovny",
-                    "channel": "",
-                    "upload": ""
+                    "follow": "Sledovat vzdálené knihovny"
                 },
                 "button": {
                     "start": "Začínáme"
@@ -3260,7 +3068,6 @@
                 "title": "Knihovna",
                 "label": {
                     "private": "Soukromé",
-                    "public": "",
                     "instance": "Odmítnuto",
                     "sharingLink": "Odkaz pro sdílení"
                 },
@@ -3269,8 +3076,7 @@
                 },
                 "tooltip": {
                     "private": "Tato knihovna je soukromá a pro přístup k ní je nutný souhlas vlastníka",
-                    "public": "Tato knihovna je veřejná a její obsah je volně přístupný",
-                    "instance": ""
+                    "public": "Tato knihovna je veřejná a její obsah je volně přístupný"
                 }
             },
             "Edit": {
@@ -3306,19 +3112,16 @@
             },
             "DetailAlbums": {
                 "empty": {
-                    "upload": "",
                     "follow": "Ukončením sledování této knihovny ztratíte přístup k jejímu obsahu."
                 }
             },
             "DetailOverview": {
                 "empty": {
-                    "upload": "",
                     "follow": "Ukončením sledování této knihovny ztratíte přístup k jejímu obsahu."
                 }
             },
             "DetailTracks": {
                 "empty": {
-                    "upload": "",
                     "follow": "Ukončením sledování této knihovny ztratíte přístup k jejímu obsahu."
                 }
             }
@@ -3367,10 +3170,7 @@
                         "artist": {
                             "header": "Jméno interpreta"
                         },
-                        "header": "Vytvořit novou knihovnu",
-                        "podcast": {
-                            "header": ""
-                        }
+                        "header": "Vytvořit novou knihovnu"
                     }
                 },
                 "button": {
@@ -3380,7 +3180,6 @@
                     "previous": "Předchozí stopa"
                 },
                 "header": {
-                    "channels": "",
                     "sharedLibraries": "Toto album se vyskytuje v následujících knihovnách:",
                     "libraries": "Knihovny uživatele"
                 }
@@ -3535,7 +3334,6 @@
                     "link": {
                         "albums": "Alba",
                         "artists": "Interpreti",
-                        "channels": "",
                         "domain": "Doména",
                         "libraries": "Knihovny",
                         "linkedReports": "Odkazy na hlášení",
@@ -3593,7 +3391,6 @@
                     "link": {
                         "albums": "Alba",
                         "artists": "Interpreti",
-                        "channels": "",
                         "knownAccounts": "Známé účty",
                         "libraries": "Knihovny",
                         "website": "Otevřít web",
@@ -4009,7 +3806,6 @@
                     "link": {
                         "albums": "Alba",
                         "artists": "Interpreti",
-                        "channels": "",
                         "edits": "Úpravy",
                         "libraries": "Knihovny",
                         "tags": "Tagy",
@@ -4035,9 +3831,7 @@
                         "category": "Kategorie",
                         "description": "Popis",
                         "domain": "Doména",
-                        "name": "Název",
-                        "rss": "",
-                        "url": ""
+                        "name": "Název"
                     },
                     "audioContent": {
                         "albums": "Alba",
@@ -4089,7 +3883,6 @@
                     "accounts": "Účty",
                     "albums": "Alba",
                     "artists": "Interpreti",
-                    "channels": "",
                     "invitations": "Pozvánky",
                     "libraries": "Knihovny",
                     "tags": "Tagy",
@@ -4100,7 +3893,6 @@
             },
             "Settings": {
                 "header": {
-                    "channels": "",
                     "federation": "Federace",
                     "instanceInfo": "Informace o instanci",
                     "settings": "Nastavení instance",
@@ -4108,7 +3900,6 @@
                     "music": "Hudba",
                     "playlists": "Playlisty",
                     "sections": "Sekce",
-                    "security": "",
                     "signups": "Registrace",
                     "stats": "Statistiky",
                     "subsonic": "Subsonic",
@@ -4133,16 +3924,13 @@
                 "albums": "Alba",
                 "artists": "Interpreti",
                 "playlists": "Playlisty",
-                "podcasts": "",
                 "radios": "Rádia",
-                "series": "",
                 "tags": "Tagy",
                 "tracks": "Stopy"
             },
             "header": {
                 "search": "Hledat",
-                "remote": "Hledat ve vzdálené knihovně",
-                "rss": ""
+                "remote": "Hledat ve vzdálené knihovně"
             },
             "button": {
                 "submit": "Odeslat hlášení"
@@ -4286,10 +4074,6 @@
                         "description": "Přístup k rádiím",
                         "label": "Rádia"
                     },
-                    "security": {
-                        "description": "",
-                        "label": ""
-                    },
                     "favorites": {
                         "label": "Oblíbené"
                     }
@@ -4334,9 +4118,6 @@
                             "private": "Nikdo kromě mě"
                         }
                     },
-                    "summary": {
-                        "label": ""
-                    },
                     "reportType": {
                         "label": "Kategorie",
                         "choices": {
@@ -4350,10 +4131,6 @@
                     "importStatus": {
                         "label": "Klikněte pro zobrazení více informací o procesu importování",
                         "choices": {
-                            "draft": {
-                                "label": "",
-                                "help": "Tato stopa byla nahrána a čeká na zpracování serverem"
-                            },
                             "errored": {
                                 "label": "Skončilo chybou",
                                 "help": "Tato stopa nemůže být zpracována, prosím zajistěte její korektní otagování"
@@ -4369,6 +4146,9 @@
                             "skipped": {
                                 "label": "Vynecháno",
                                 "help": "Tato stopa se již nachází v některé z vašich knihoven"
+                            },
+                            "draft": {
+                                "help": "Tato stopa byla nahrána a čeká na zpracování serverem"
                             }
                         }
                     },
@@ -4376,8 +4156,7 @@
                         "label": "Filtry obsahu",
                         "choices": {
                             "music": "Hudba",
-                            "other": "Ostatní",
-                            "podcast": ""
+                            "other": "Ostatní"
                         }
                     }
                 }
@@ -4396,10 +4175,6 @@
                     "typeLabel": "Interpret",
                     "label": "Nahlásit tohoto interpreta…"
                 },
-                "channel": {
-                    "typeLabel": "",
-                    "label": "Nahlásit toto album…"
-                },
                 "library": {
                     "typeLabel": "Knihovna",
                     "label": "Nahlásit tuto knihovnu…"
@@ -4408,6 +4183,9 @@
                     "typeLabel": "Playlist",
                     "label": "Nahlásit tento playlist…"
                 },
+                "channel": {
+                    "label": "Nahlásit toto album…"
+                },
                 "track": {
                     "label": "Nahlásit tuto stopu…",
                     "typeLabel": "Stopa"
@@ -4415,8 +4193,7 @@
             },
             "useReportConfigs": {
                 "account": {
-                    "label": "Účet",
-                    "summary": ""
+                    "label": "Účet"
                 },
                 "album": {
                     "label": "Album",
@@ -4425,9 +4202,6 @@
                 },
                 "artist": {
                     "label": "Interpret"
-                },
-                "channel": {
-                    "label": ""
                 },
                 "track": {
                     "copyright": "Copyright",
@@ -4466,9 +4240,6 @@
                     "position": "Pozice",
                     "title": "Název"
                 },
-                "cover": {
-                    "label": ""
-                },
                 "description": {
                     "label": "Popis"
                 },
@@ -4491,9 +4262,7 @@
     },
     "init": {
         "serviceWorker": {
-            "newAppVersion": "",
             "actions": {
-                "later": "",
                 "update": "Aktualizovat"
             }
         },

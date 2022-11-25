@@ -17,8 +17,7 @@
                 },
                 "help": {
                     "pasteCode": "アプリ内にこのコードをコピーアンドペースト:",
-                    "redirect": "<strong>{ url }</strong>にリダイレクトされます",
-                    "copyCode": ""
+                    "redirect": "<strong>{ url }</strong>にリダイレクトされます"
                 },
                 "message": {
                     "unknownPermissions": "またアプリケーションは以下の未知の許可を求めています。"
@@ -38,16 +37,10 @@
                 },
                 "modal": {
                     "disableSubsonic": {
-                        "header": "Subsonic APIへのアクセスを無効化しますか？",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "Subsonic APIへのアクセスを無効化しますか？"
                     },
                     "newPassword": {
-                        "header": "新しいSubsonic API パスワードをリクエストしますか？",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "新しいSubsonic API パスワードをリクエストしますか？"
                     }
                 },
                 "link": {
@@ -121,8 +114,7 @@
                     "yourApps": {
                         "header": {
                             "application": "アプリケーション",
-                            "creationDate": "作成日時",
-                            "scopes": ""
+                            "creationDate": "作成日時"
                         }
                     },
                     "artists": {
@@ -163,8 +155,7 @@
                     "contentFilters": "コンテンツフィルターは見たくないコンテンツを隠すのに役立ちます。",
                     "authorizedApps": "あなたのアカウントのデータにアクセスしたアプリケーションのリストです。",
                     "yourApps": "あなたが登録したアプリケーションのリストです。",
-                    "plugins": "プラグインを使うことでFunkwhaleを拡張し、追加の機能を導入します。",
-                    "deleteAccount": ""
+                    "plugins": "プラグインを使うことでFunkwhaleを拡張し、追加の機能を導入します。"
                 },
                 "modal": {
                     "changePassword": {
@@ -176,22 +167,13 @@
                         }
                     },
                     "deleteAccount": {
-                        "header": "アカウントを削除しますか？",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "アカウントを削除しますか？"
                     },
                     "deleteApp": {
-                        "header": "「{ application }」を削除しますか？",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "「{ application }」を削除しますか？"
                     },
                     "revokeApp": {
-                        "header": "\"{ application }\"のアプリケーションへのアクセスを取り消しますか?",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "\"{ application }\"のアプリケーションへのアクセスを取り消しますか?"
                     }
                 },
                 "help": {
@@ -238,7 +220,6 @@
                     "scopes": {
                         "description": "「読み取り」または「書き込み」スコープをチェックすると、対応するすべての子スコープにアクセスできます。",
                         "read": {
-                            "label": "",
                             "description": "ユーザーデータに読込専用でアクセスする"
                         },
                         "write": {
@@ -252,9 +233,6 @@
                 "button": {
                     "create": "アプリを作成",
                     "update": "アプリケーションの更新"
-                },
-                "help": {
-                    "redirectUri": ""
                 },
                 "header": {
                     "failure": "変更を保存できません"
@@ -489,8 +467,7 @@
                     "trackDetails": "曲情報"
                 },
                 "title": {
-                    "more": "もっと…",
-                    "unavailable": ""
+                    "more": "もっと…"
                 }
             },
             "podcast": {
@@ -630,12 +607,6 @@
                 "header": {
                     "error": "チャンネルの保存中にエラーが発生しました"
                 },
-                "help": {
-                    "podcast": "",
-                    "discography": "",
-                    "podcastFields": "",
-                    "username": ""
-                },
                 "loader": {
                     "loading": "読み込み中"
                 },
@@ -666,9 +637,6 @@
                 },
                 "header": {
                     "preview": "プレビュー"
-                },
-                "warning": {
-                    "anonymous": ""
                 },
                 "message": {
                     "copy": "クリップボードにコピーされました！"
@@ -724,7 +692,6 @@
                     "moderation": "モデレーション画面で開く",
                     "discogs": "Discogsで検索する",
                     "wikipedia": "Wikipediaで調べる",
-                    "django": "",
                     "domain": "{ domain }で聞く",
                     "musicbrainz": "MusicBrainzで見る"
                 }
@@ -773,8 +740,7 @@
                 "Filter": {
                     "cancelButton": "キャンセル",
                     "excludeLabel": "除く",
-                    "removeButton": "除く",
-                    "matchingTracksModalHeader": ""
+                    "removeButton": "除く"
                 }
             },
             "FileUpload": {
@@ -783,7 +749,6 @@
                     "size": "このファイルをアップロードできません。ファイルが大きさを確認してください",
                     "extension": "有効なファイルタイプで、オーディオファイルをアップロードしようとしているのを確認して下さい。サポートされているファイル拡張子は{ extensions }",
                     "retry": "再度試す",
-                    "denied": "",
                     "timeout": "タイムアウトしました。もう一度試して下さい"
                 },
                 "table": {
@@ -795,7 +760,6 @@
                             "status": "状態"
                         },
                         "status": {
-                            "pending": "",
                             "uploaded": "アップロードされました",
                             "uploading": "アップロードしています…"
                         }
@@ -818,20 +782,11 @@
                 },
                 "link": {
                     "processing": "処理中",
-                    "uploading": "アップロード中",
-                    "picard": ""
+                    "uploading": "アップロード中"
                 },
                 "description": {
                     "import": "インポートの結果:",
                     "previousImport": "過去のインポートの結果:"
-                },
-                "message": {
-                    "local": {
-                        "format": "",
-                        "tag": "",
-                        "message": "",
-                        "copyright": ""
-                    }
                 }
             },
             "EditForm": {
@@ -841,28 +796,15 @@
                 "button": {
                     "cancel": "キャンセル",
                     "clear": "クリア",
-                    "reset": "初期値にリセットする",
-                    "showUnreviewed": "",
-                    "showAll": "",
-                    "submit": "",
-                    "new": "",
-                    "suggest": ""
-                },
-                "header": {
-                    "failure": "",
-                    "recentEdits": "最近の編集",
-                    "unreviewed": "チェック待ちの最近の編集",
-                    "success": ""
+                    "reset": "初期値にリセットする"
                 },
                 "notApplicable": "N/A",
-                "empty": {
-                    "suggestEdit": ""
+                "header": {
+                    "recentEdits": "最近の編集",
+                    "unreviewed": "チェック待ちの最近の編集"
                 },
                 "label": {
                     "summary": "概要（オプション）"
-                },
-                "message": {
-                    "noPermission": ""
                 }
             },
             "Albums": {
@@ -937,7 +879,6 @@
                         "artist": "アーティスト",
                         "copyright": "コピーライト",
                         "license": "ライセンス",
-                        "series": "",
                         "url": "URL",
                         "year": "年"
                     },
@@ -987,9 +928,6 @@
                     "more": "さらに読み込む…",
                     "filter": "フィルターの除去"
                 },
-                "link": {
-                    "filter": ""
-                },
                 "description": {
                     "library": "このアーティストは、次のライブラリにあります:"
                 },
@@ -1024,15 +962,11 @@
                     "importDetail": "インポートの詳細"
                 },
                 "link": {
-                    "support": "",
                     "documentation": "このエラーに関するドキュメントを読む"
                 },
                 "message": {
                     "importDetail": "アップロードは保留となっていますが、まもなくサーバーによってアップロード処理がされるでしょう。",
                     "importSuccess": "サーバーによるアップロード処理は成功しました。"
-                },
-                "warning": {
-                    "importSkipped": ""
                 }
             },
             "EditCard": {
@@ -1050,26 +984,18 @@
                 "modal": {
                     "delete": {
                         "header": "この提案を削除しますか？"
-                    },
-                    "content": {
-                        "warning": ""
                     }
                 },
                 "table": {
                     "update": {
                         "header": {
-                            "field": "フィールド",
-                            "newValue": "",
-                            "oldValue": ""
+                            "field": "フィールド"
                         },
                         "notApplicable": "N/A"
                     }
                 },
                 "header": {
                     "modification": "修正 { id }"
-                },
-                "link": {
-                    "track": ""
                 }
             },
             "Podcasts": {
@@ -1165,7 +1091,6 @@
                 "link": {
                     "moderation": "モデレーション画面で開く",
                     "discogs": "Discogsで検索する",
-                    "django": "",
                     "domain": "{ domain }で聞く",
                     "musicbrainz": "MusicBrainzで見る"
                 }
@@ -1195,36 +1120,23 @@
                     "moderation": "モデレーション画面で開く",
                     "discogs": "Discogsで検索する",
                     "wikipedia": "Wikipediaで調べる",
-                    "django": "",
                     "domain": "{ domain }で聞く"
                 },
                 "title": "曲"
             },
             "AlbumEdit": {
                 "header": {
-                    "edit": "このアルバムを編集する",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
+                    "edit": "このアルバムを編集する"
                 }
             },
             "ArtistEdit": {
                 "header": {
-                    "edit": "このアーティストを編集する",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
+                    "edit": "このアーティストを編集する"
                 }
             },
             "TrackEdit": {
                 "header": {
-                    "edit": "この曲を編集する",
-                    "suggest": ""
-                },
-                "message": {
-                    "remote": ""
+                    "edit": "この曲を編集する"
                 }
             },
             "AlbumDetail": {
@@ -1297,9 +1209,6 @@
                 "button": {
                     "add": "お気に入りに追加",
                     "remove": "お気に入りから外す"
-                },
-                "label": {
-                    "inFavorites": ""
                 }
             }
         },
@@ -1312,7 +1221,6 @@
                 "button": {
                     "cancel": "キャンセル",
                     "close": "閉じる",
-                    "finishLater": "",
                     "next": "次へ",
                     "previous": "前のステップ",
                     "publish": "公開",
@@ -1356,10 +1264,6 @@
                     "openBrowser": "探す…",
                     "channel": "チャンネル"
                 },
-                "message": {
-                    "dragAndDrop": "",
-                    "pending": ""
-                },
                 "button": {
                     "edit": "編集する",
                     "ignore": "無視する",
@@ -1377,9 +1281,6 @@
                 },
                 "description": {
                     "extensions": "サポートされている拡張子: { extensions }"
-                },
-                "warning": {
-                    "quota": ""
                 }
             },
             "AlbumModal": {
@@ -1395,7 +1296,6 @@
             "UploadMetadataForm": {
                 "label": {
                     "description": "説明",
-                    "position": "",
                     "tags": "タグ",
                     "title": "曲名",
                     "image": "曲画像"
@@ -1474,29 +1374,18 @@
                 "button": {
                     "selected": "{ total } 中 { count } 選択",
                     "allSelected": "{ count } 個すべての要素が選択されています",
-                    "go": "",
-                    "launch": "",
                     "refresh": "テーブルのコンテンツを更新しました",
                     "select": "選ぶ",
                     "selectAll": "全てのアイテムを選択",
                     "selectElement": "Select all { total } elements",
                     "selectCurrentPage": "現在のページのみ選択"
                 },
-                "message": {
-                    "success": "",
-                    "needsRefresh": "コンテンツがアップデートされました。クリックして最新のコンテンツを見てみましょう"
-                },
                 "label": {
                     "actions": "アクション",
                     "performAction": "Perform actions"
                 },
-                "modal": {
-                    "performAction": {
-                        "header": "",
-                        "content": {
-                            "warning": ""
-                        }
-                    }
+                "message": {
+                    "needsRefresh": "コンテンツがアップデートされました。クリックして最新のコンテンツを見てみましょう"
                 },
                 "header": {
                     "error": "アクションの適用中にエラーが発生しました"
@@ -1722,23 +1611,14 @@
                 },
                 "modal": {
                     "clearPlaylist": {
-                        "header": "このプレイリスト「{ playlist }」をクリアしますか？",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "このプレイリスト「{ playlist }」をクリアしますか？"
                     }
-                },
-                "help": {
-                    "reorder": ""
                 },
                 "header": {
                     "editor": "プレイリストエディター"
                 },
                 "warning": {
                     "duplicate": "再生キューにある複数の曲が既にプレイリストにあります:"
-                },
-                "loading": {
-                    "sync": ""
                 }
             },
             "TrackPlaylistIcon": {
@@ -1816,7 +1696,6 @@
                 "language": "言語",
                 "main": "メインメニュー",
                 "follows": "フォローリクエストを保留中",
-                "edits": "",
                 "play": "再生する",
                 "theme": "テーマ"
             },
@@ -1841,8 +1720,7 @@
                                 "importStatus": "インポートの状態",
                                 "library": "ライブラリ",
                                 "name": "ユーザーネーム",
-                                "size": "サイズ",
-                                "visibility": ""
+                                "size": "サイズ"
                             }
                         }
                     },
@@ -1850,7 +1728,6 @@
                         "all": "すべて",
                         "failed": "失敗しました",
                         "finished": "完了しました",
-                        "pending": "",
                         "skipped": "スキップ"
                     },
                     "ordering": {
@@ -1873,14 +1750,10 @@
                     "notApplicable": "N/A",
                     "label": {
                         "search": "検索",
-                        "status": "状態",
-                        "visibility": ""
+                        "status": "状態"
                     },
                     "placeholder": {
                         "search": "ドメイン、アクター、ライブラリ名、参照、ソースで検索…"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "LibrariesTable": {
@@ -1892,8 +1765,7 @@
                                 "domain": "ドメイン",
                                 "followers": "フォロワー",
                                 "name": "ユーザーネーム",
-                                "uploads": "アップロード",
-                                "visibility": ""
+                                "uploads": "アップロード"
                             }
                         }
                     },
@@ -1918,14 +1790,10 @@
                         "local": "ローカル"
                     },
                     "label": {
-                        "search": "検索",
-                        "visibility": ""
+                        "search": "検索"
                     },
                     "placeholder": {
                         "search": "ドメイン、アクター、ライブラリ名、説明で検索…"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "TracksTable": {
@@ -1964,9 +1832,6 @@
                     },
                     "placeholder": {
                         "search": "ドメイン、曲名、アーティスト、アルバム、MusicBrainz IDで検索…"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "ArtistsTable": {
@@ -2007,9 +1872,6 @@
                     },
                     "placeholder": {
                         "search": "ドメイン、ライブラリ名、MusicBrainz IDで検索…"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "TagsTable": {
@@ -2034,8 +1896,7 @@
                     },
                     "action": {
                         "delete": {
-                            "label": "削除",
-                            "warning": ""
+                            "label": "削除"
                         }
                     },
                     "label": {
@@ -2043,9 +1904,6 @@
                     },
                     "placeholder": {
                         "search": "名前で検索"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "EditsCardList": {
@@ -2065,9 +1923,6 @@
                     },
                     "placeholder": {
                         "search": "アカウント、概要、ドメインで検索…"
-                    },
-                    "pagination": {
-                        "results": ""
                     },
                     "label": {
                         "status": "状態"
@@ -2110,9 +1965,6 @@
                     },
                     "placeholder": {
                         "search": "ドメイン、曲名、アーティスト名、MusicBrainz IDで検索…"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 }
             },
@@ -2136,8 +1988,7 @@
                         },
                         "report": {
                             "category": "カテゴリ",
-                            "creationDate": "作成日時",
-                            "submittedBy": ""
+                            "creationDate": "作成日時"
                         }
                     },
                     "header": {
@@ -2154,10 +2005,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "通報されたコンテンツを削除しますか？",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "通報されたコンテンツを削除しますか？"
                         }
                     },
                     "notApplicable": "N/A",
@@ -2185,13 +2033,11 @@
                             "approved": "承認されました",
                             "assignedTo": "割り当てられました:",
                             "internalNotes": "管理用ノート",
-                            "pending": "",
                             "refused": "拒否",
                             "status": "状態"
                         },
                         "request": {
-                            "creationDate": "作成日時",
-                            "submittedBy": ""
+                            "creationDate": "作成日時"
                         }
                     },
                     "notApplicable": "N/A",
@@ -2214,17 +2060,13 @@
                         "policyEnabled": "有効",
                         "silenceActivity": "アクティビティのミュート",
                         "silenceNotifications": "通知のミュート",
-                        "customizeRule": "",
                         "policyReason": "理由",
                         "rejectMedia": "拒否したメディア"
                     },
                     "tooltip": {
                         "blockAll": "Block everything from this account or domain. This will prevent any interaction with the entity, and purge related content (uploads, libraries, follows, etc.)",
                         "rejectMedia": "このアカウントまたはドメインからメディアファイル（オーディオ、アルバムカバー、アカウントアバター…）をダウンロードしないでください。 これにより、既存のコンテンツも削除されます。",
-                        "summary": "",
-                        "silenceActivity": "フォロワーを除いた、アカウントまたはドメインに属するコンテンツを隠す。",
-                        "silenceNotifications": "",
-                        "isActive": ""
+                        "silenceActivity": "フォロワーを除いた、アカウントまたはドメインに属するコンテンツを隠す。"
                     },
                     "button": {
                         "cancel": "キャンセル",
@@ -2248,9 +2090,6 @@
                     },
                     "placeholder": {
                         "summary": "実行したアクションや処理について説明してください…"
-                    },
-                    "header": {
-                        "failure": ""
                     }
                 },
                 "DomainsTable": {
@@ -2284,27 +2123,19 @@
                                 "firstSeen": "最初のログイン",
                                 "name": "ユーザーネーム",
                                 "receivedMessages": "受け取ったメッセージ",
-                                "moderationRule": "",
                                 "users": "ユーザー"
                             },
                             "moderationRule": "はい"
                         }
                     },
-                    "label": {
-                        "inList": "",
-                        "search": "検索"
-                    },
                     "empty": {
                         "noPods": "他のポッドが見つかりません"
                     },
+                    "label": {
+                        "search": "検索"
+                    },
                     "placeholder": {
                         "search": "名前で検索…"
-                    },
-                    "pagination": {
-                        "results": ""
-                    },
-                    "link": {
-                        "list": ""
                     }
                 },
                 "AccountsTable": {
@@ -2323,7 +2154,6 @@
                                 "firstSeen": "最初のログイン",
                                 "lastSeen": "最後のログイン",
                                 "name": "ユーザーネーム",
-                                "moderationRule": "",
                                 "uploads": "アップロード"
                             },
                             "moderationRule": "はい"
@@ -2342,9 +2172,6 @@
                     },
                     "placeholder": {
                         "search": "ドメイン、ユーザーネーム、自己紹介で検索…"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "InstancePolicyCard": {
@@ -2370,14 +2197,6 @@
                     "button": {
                         "close": "閉じる",
                         "show": "モデレーションルール…"
-                    },
-                    "modal": {
-                        "manage": {
-                            "header": "",
-                            "content": {
-                                "warning": ""
-                            }
-                        }
                     }
                 },
                 "NotesThread": {
@@ -2428,9 +2247,6 @@
                 },
                 "placeholder": {
                     "search": "ドメイン、チャンネル名、アカウントで検索…"
-                },
-                "pagination": {
-                    "results": ""
                 }
             },
             "users": {
@@ -2473,15 +2289,11 @@
                     "notApplicable": "N/A",
                     "placeholder": {
                         "search": "ユーザーネーム、メールアドレス、アカウント名で検索…"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "InvitationsTable": {
                     "option": {
                         "all": "すべて",
-                        "expired": "",
                         "open": "開く"
                     },
                     "table": {
@@ -2500,25 +2312,19 @@
                     },
                     "label": {
                         "expired": "失効",
-                        "unused": "",
                         "search": "検索",
-                        "status": "状態",
-                        "used": ""
+                        "status": "状態"
                     },
                     "ordering": {
                         "label": "並び替え"
                     },
                     "placeholder": {
                         "search": "ユーザーネーム、メールアドレス、招待コードで検索…"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "InvitationForm": {
                     "button": {
-                        "clear": "クリア",
-                        "new": ""
+                        "clear": "クリア"
                     },
                     "table": {
                         "invitation": {
@@ -2533,9 +2339,6 @@
                     },
                     "label": {
                         "invite": "招待コード"
-                    },
-                    "placeholder": {
-                        "invitation": ""
                     }
                 }
             }
@@ -2569,9 +2372,7 @@
                     "additionalField": "追加情報",
                     "additionalFields": "追加情報",
                     "delete": "削除",
-                    "helpText": "ヘルプテキスト",
-                    "moveDown": "",
-                    "moveUp": ""
+                    "helpText": "ヘルプテキスト"
                 },
                 "help": {
                     "additionalFields": "フォームに表示される追加のフィールド。 マニュアルでのアカウント登録の検査が有効な場合にのみ、表示されます。",
@@ -2636,18 +2437,6 @@
                 "header": {
                     "modal": "アーティスト\"{ name }\"のコンテンツを隠しますか？",
                     "failure": "フィルター作成中にエラーが発生しました"
-                },
-                "warning": {
-                    "createFilter": {
-                        "listItem2": "",
-                        "listItem3": "",
-                        "listItem1": "",
-                        "listItem4": "",
-                        "listIntro": ""
-                    }
-                },
-                "help": {
-                    "createFilter": ""
                 }
             }
         },
@@ -2655,9 +2444,7 @@
             "FetchButton": {
                 "description": {
                     "failure": "データの更新中にエラーが発生しました:",
-                    "success": "リモートサーバーからのデータが正常に更新されました。",
-                    "pending": "",
-                    "skipped": ""
+                    "success": "リモートサーバーからのデータが正常に更新されました。"
                 },
                 "table": {
                     "error": {
@@ -2665,8 +2452,6 @@
                             "httpError": "リモートサーバーとの通信中にHTTPエラーが発生しました",
                             "invalidAttributesError": "リモートサーバーから返されたデータに無効な属性があるか、属性がありません",
                             "connectionError": "リモートのサーバーに接続できません",
-                            "httpStatus": "",
-                            "timeoutError": "",
                             "invalidJsonError": "リモートのサーバーが無効なJSONまたはJSON-LDデータを返しました",
                             "unknownError": "不明なエラー"
                         },
@@ -2683,7 +2468,6 @@
                 "header": {
                     "saveFailure": "設定の保存中にエラーが発生しました",
                     "failure": "更新エラー",
-                    "pending": "",
                     "success": "更新に成功しました",
                     "skipped": "更新がスキップされました",
                     "refresh": "リモートサーバーからのコンテンツを更新中…"
@@ -2738,8 +2522,7 @@
         },
         "SetInstanceModal": {
             "button": {
-                "cancel": "キャンセル",
-                "submit": ""
+                "cancel": "キャンセル"
             },
             "header": {
                 "chooseInstance": "インスタンスを選んでください",
@@ -2751,8 +2534,7 @@
             },
             "help": {
                 "notFunkwhaleServer": "入力されたURL先はFunkwhaleのサーバーではありません",
-                "serverDown": "サーバーがダウンしてるかもしれません",
-                "selectPod": ""
+                "serverDown": "サーバーがダウンしてるかもしれません"
             },
             "message": {
                 "newUrl": "現在{ url }のFunkwhaleインスタンスを利用しています"
@@ -2772,8 +2554,7 @@
                 "play": "再生",
                 "previous": "前の曲",
                 "queue": "再生キュー",
-                "remove": "除く",
-                "restart": ""
+                "remove": "除く"
             },
             "message": {
                 "radio": "新しい曲は自動的に追加されます。",
@@ -2835,12 +2616,8 @@
             "warning": {
                 "unsupported": "このようなタイプのオブジェクトは、サポートしていません"
             },
-            "error": {
-                "fetchFailed": ""
-            },
             "description": {
-                "fediverse": "Use this form to subscribe to a channel hosted somewhere else on the Fediverse.",
-                "rss": ""
+                "fediverse": "Use this form to subscribe to a channel hosted somewhere else on the Fediverse."
             }
         },
         "PageNotFound": {
@@ -2944,14 +2721,10 @@
                     "latestTracks": "最新の曲",
                     "series": "シリーズ",
                     "uploadsFailure": "複数のアップロードファイルが公開できませんでした",
-                    "uploadsProcessing": "アップロードは処理中です",
-                    "uploadsSuccess": ""
+                    "uploadsProcessing": "アップロードは処理中です"
                 },
                 "meta": {
                     "progress": "処理されたアップロードデータ:"
-                },
-                "message": {
-                    "processing": ""
                 }
             },
             "SubscriptionsList": {
@@ -2993,7 +2766,6 @@
                     "label": {
                         "currentUsage": "{ max } 中の { current } 使用済み",
                         "errored": "エラーファイル",
-                        "pending": "",
                         "skipped": "スキップしたファイル"
                     },
                     "header": {
@@ -3007,22 +2779,10 @@
                     },
                     "modal": {
                         "purgeErrored": {
-                            "header": "エラーファイルを削除しますか？",
-                            "content": {
-                                "description": ""
-                            }
-                        },
-                        "purgePending": {
-                            "header": "",
-                            "content": {
-                                "description": ""
-                            }
+                            "header": "エラーファイルを削除しますか？"
                         },
                         "purgeSkipped": {
-                            "header": "スキップしたファイルを削除しますか？",
-                            "content": {
-                                "description": ""
-                            }
+                            "header": "スキップしたファイルを削除しますか？"
                         }
                     },
                     "link": {
@@ -3049,7 +2809,6 @@
                             "draft": "下書き",
                             "failed": "失敗しました",
                             "finished": "完了しました",
-                            "pending": "",
                             "skipped": "スキップ"
                         }
                     },
@@ -3078,9 +2837,6 @@
                     },
                     "button": {
                         "showStatus": "この曲のアップロード経過の情報を表示"
-                    },
-                    "pagination": {
-                        "results": ""
                     }
                 },
                 "Home": {
@@ -3114,15 +2870,13 @@
                     },
                     "label": {
                         "description": "説明",
-                        "name": "ユーザーネーム",
-                        "visibility": ""
+                        "name": "ユーザーネーム"
                     },
                     "header": {
                         "failure": "エラー"
                     },
                     "description": {
-                        "library": "ライブラリはあなたの音楽コレクションをまとめたり、シェアするための助けになります。あなただけの音楽コレクションをFunkwhaleにアップロードし、友達や家族とシェアすることができます。",
-                        "visibility": ""
+                        "library": "ライブラリはあなたの音楽コレクションをまとめたり、シェアするための助けになります。あなただけの音楽コレクションをFunkwhaleにアップロードし、友達や家族とシェアすることができます。"
                     },
                     "message": {
                         "libraryCreated": "ライブラリが作成されました",
@@ -3130,8 +2884,7 @@
                         "libraryUpdated": "ライブラリがアップデートされました"
                     },
                     "placeholder": {
-                        "name": "あなたが考えた最高のライブラリ名をここに",
-                        "description": ""
+                        "name": "あなたが考えた最高のライブラリ名をここに"
                     }
                 }
             },
@@ -3164,7 +2917,6 @@
                         "scanFailure": "スキャン中に問題が発生しました",
                         "scanPending": "スキャンの保留",
                         "scanSuccess": "スキャンしました",
-                        "scanPartialSuccess": "",
                         "scanProgress": "スキャンしています… ({ progress }%)",
                         "sharingLink": "リンクをシェア"
                     },
@@ -3173,7 +2925,6 @@
                         "scanSkipped": "スキャンをスキップしました（つい最近、スキャンされているため）"
                     },
                     "tooltip": {
-                        "private": "",
                         "public": "このライブラリは公開されており、ライブラリのコンテンツに自由にアクセスできます"
                     }
                 },
@@ -3186,21 +2937,17 @@
                     },
                     "label": {
                         "search": "リモートのライブラリを検索する"
-                    },
-                    "button": {
-                        "submit": ""
                     }
                 },
                 "Home": {
-                    "header": {
-                        "knownLibraries": "",
-                        "remoteLibraries": "リモートのライブラリ"
-                    },
                     "loading": {
                         "remoteLibraries": "リモートライブラリを読み込んでいます…"
                     },
                     "button": {
                         "refresh": "更新"
+                    },
+                    "header": {
+                        "remoteLibraries": "リモートのライブラリ"
                     },
                     "description": {
                         "remoteLibraries": "リモートのライブラリは、Funkwhaleネットワーク上の他のユーザーが所有しています。ライブラリが公開されている、またはライブラリへのアクセス権を得ている限りは、アクセスできます。"
@@ -3212,14 +2959,11 @@
                 "description": {
                     "follow": "他のユーザーのライブラリをフォローして、新しい音楽に出会いましょう。公開ライブラリはすぐにフォローできますが、プライベートライブラリへのフォローはその所有者からの承認が必須です。",
                     "channel": {
-                        "1": "あなたがミュージシャンまたはポッドキャスターなら、専用のチャンネルが提供されます！",
-                        "2": ""
-                    },
-                    "upload": ""
+                        "1": "あなたがミュージシャンまたはポッドキャスターなら、専用のチャンネルが提供されます！"
+                    }
                 },
                 "header": {
                     "follow": "リモートのライブラリをフォローする",
-                    "channel": "",
                     "upload": "サードパーティー・コンテンツをライブラリにアップロード"
                 },
                 "button": {
@@ -3234,9 +2978,6 @@
                 "link": {
                     "libraries": "ライブラリ",
                     "tracks": "曲一覧"
-                },
-                "menu": {
-                    "secondary": ""
                 }
             }
         },
@@ -3261,14 +3002,12 @@
                 "label": {
                     "private": "プライベート",
                     "public": "公開",
-                    "instance": "",
                     "sharingLink": "リンクをシェア"
                 },
                 "description": {
                     "sharingLink": "以下のリンクを他のユーザーとシェアしてみましょう。そのユーザーが属するポッドの検索バーに以下のリンクをコピー＆ペーストすることで、このライブラリにアクセスすることができます。"
                 },
                 "tooltip": {
-                    "private": "",
                     "public": "このライブラリは公開されており、ライブラリのコンテンツに自由にアクセスできます",
                     "instance": "このライブラリはこのポッドのユーザーのみアクセスできます"
                 }
@@ -3395,15 +3134,14 @@
                     "failure": "パスワードの変更中にエラーが発生しました",
                     "success": "パスワードの変更に成功しました"
                 },
-                "message": {
-                    "requestSent": "",
-                    "success": "パスワードの変更に成功しました。"
-                },
                 "label": {
                     "newPassword": "新しいパスワード"
                 },
                 "button": {
                     "update": "パスワードの変更"
+                },
+                "message": {
+                    "success": "パスワードの変更に成功しました。"
                 }
             },
             "EmailConfirm": {
@@ -3418,9 +3156,6 @@
                 "link": {
                     "login": "ログインに進む",
                     "back": "ログインに戻る"
-                },
-                "message": {
-                    "success": ""
                 }
             },
             "Signup": {
@@ -3456,8 +3191,7 @@
                 "delay": {
                     "30": "30日",
                     "60": "60日",
-                    "90": "90日",
-                    "never": ""
+                    "90": "90日"
                 }
             },
             "link": {
@@ -3470,12 +3204,11 @@
                 "messages": "あなたへのメッセージ",
                 "notifications": "あなたへの通知"
             },
-            "button": {
-                "submit": "",
-                "read": "全てを既読にする"
-            },
             "loading": {
                 "notifications": "通知を読み込んでいます…"
+            },
+            "button": {
+                "read": "全てを既読にする"
             },
             "empty": {
                 "notifications": "通知はありません。"
@@ -3484,9 +3217,6 @@
             "label": {
                 "reminder": "自分へのリマインダー:",
                 "showRead": "既読の通知を表示する"
-            },
-            "message": {
-                "funkwhaleSupport": ""
             }
         },
         "admin": {
@@ -3515,19 +3245,14 @@
                             "uploadQuota": "アップロード上限"
                         },
                         "activity": {
-                            "emittedFollows": "",
-                            "emittedMessages": "",
-                            "firstSeen": "最初のログイン",
-                            "receivedFollows": ""
+                            "firstSeen": "最初のログイン"
                         }
                     },
                     "header": {
                         "accountData": "アカウント情報",
                         "activity": "アクティビティ",
                         "audioContent": "オーディオコンテンツ",
-                        "localAccount": "ローカルアカウント",
-                        "activePolicy": "",
-                        "noPolicy": ""
+                        "localAccount": "ローカルアカウント"
                     },
                     "button": {
                         "addPolicy": "モデレーションポリシーを追加"
@@ -3538,13 +3263,11 @@
                         "channels": "チャンネル",
                         "domain": "ドメイン",
                         "libraries": "ライブラリ",
-                        "linkedReports": "",
                         "openProfile": "プロフィールを開く",
                         "remoteProfile": "リモートのプロフィールを開く",
                         "requests": "リクエスト",
                         "tracks": "曲一覧",
-                        "uploads": "アップロード",
-                        "django": ""
+                        "uploads": "アップロード"
                     },
                     "tooltip": {
                         "uploadQuota": "ユーザーがアップロードできるコンテンツの容量を決定します。 空のままにすると、インスタンスのデフォルトの値が使用されます。"
@@ -3559,10 +3282,7 @@
                     "description": {
                         "policy": "モデレーションポリシーはあなたのインスタンスが関わるドメインまたはアカウントを管理するのに役立ちます。"
                     },
-                    "notApplicable": "N/A",
-                    "warning": {
-                        "stats": ""
-                    }
+                    "notApplicable": "N/A"
                 },
                 "Base": {
                     "link": {
@@ -3571,18 +3291,13 @@
                         "reports": "通報",
                         "userRequests": "ユーザーリクエスト"
                     },
-                    "title": "モデレーション",
-                    "menu": {
-                        "secondary": ""
-                    }
+                    "title": "モデレーション"
                 },
                 "DomainsDetail": {
                     "header": {
                         "activity": "アクティビティ",
                         "audioContent": "オーディオコンテンツ",
-                        "instanceData": "インスタンスのデータ",
-                        "activePolicy": "",
-                        "noPolicy": ""
+                        "instanceData": "インスタンスのデータ"
                     },
                     "button": {
                         "addPolicy": "モデレーションポリシーを追加",
@@ -3594,49 +3309,40 @@
                         "albums": "アルバム",
                         "artists": "アーティスト",
                         "channels": "チャンネル",
-                        "knownAccounts": "",
                         "libraries": "ライブラリ",
                         "website": "Webサイトを開く",
                         "tracks": "曲一覧",
-                        "uploads": "アップロード",
-                        "django": ""
+                        "uploads": "アップロード"
                     },
                     "table": {
                         "audioContent": {
                             "cachedSize": "キャッシュサイズ",
                             "totalSize": "合計サイズ"
                         },
-                        "activity": {
-                            "emittedFollows": "",
-                            "emittedMessages": "",
-                            "firstSeen": "最初のログイン",
-                            "receivedFollows": ""
-                        },
                         "instanceData": {
                             "nodeInfoStatus": {
                                 "value": "node infoをフェッチ中にエラーが発生しました",
                                 "label": "状態"
                             },
+                            "lastChecked": "最後のチェック",
+                            "domainName": "ユーザーネーム",
                             "inAllowList": {
-                                "label": "",
                                 "false": "いいえ",
                                 "true": "はい"
                             },
-                            "lastChecked": "最後のチェック",
-                            "domainName": "ユーザーネーム",
                             "software": {
                                 "label": "ソフトウェア"
                             },
                             "totalUsers": "合計ユーザー"
+                        },
+                        "activity": {
+                            "firstSeen": "最初のログイン"
                         }
                     },
                     "description": {
                         "policy": "モデレーションポリシーはあなたのインスタンスが関わるドメインまたはアカウントを管理するのに役立ちます。"
                     },
-                    "notApplicable": "N/A",
-                    "warning": {
-                        "stats": ""
-                    }
+                    "notApplicable": "N/A"
                 },
                 "DomainsList": {
                     "button": {
@@ -3685,7 +3391,6 @@
                         "status": {
                             "all": "すべて",
                             "approved": "承認されました",
-                            "pending": "",
                             "refused": "拒否"
                         }
                     },
@@ -3736,9 +3441,7 @@
                         "importStatus": "インポートの状態",
                         "library": "ライブラリ",
                         "remoteProfile": "リモートのプロフィールを開く",
-                        "type": "タイプ",
-                        "django": "",
-                        "visibility": ""
+                        "type": "タイプ"
                     },
                     "header": {
                         "activity": "アクティビティ",
@@ -3766,12 +3469,9 @@
                         "albums": "アルバム",
                         "artists": "アーティスト",
                         "domain": "ドメイン",
-                        "reports": "",
                         "remoteProfile": "リモートのプロフィールを開く",
                         "tracks": "曲一覧",
-                        "uploads": "アップロード",
-                        "django": "",
-                        "visibility": ""
+                        "uploads": "アップロード"
                     },
                     "header": {
                         "activity": "アクティビティ",
@@ -3803,9 +3503,6 @@
                                 "warning": "ライブラリは削除され、関連したアップロードファイルやフォロワーも削除されます。元には戻せません。"
                             }
                         }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "AlbumDetail": {
@@ -3820,13 +3517,11 @@
                         "domain": "ドメイン",
                         "edits": "編集",
                         "libraries": "ライブラリ",
-                        "reports": "",
                         "localProfile": "ローカルのプロフィールを開く",
                         "musicbrainz": "MusicBrainzで開く",
                         "remoteProfile": "リモートのプロフィールを開く",
                         "tracks": "曲一覧",
-                        "uploads": "アップロード",
-                        "django": ""
+                        "uploads": "アップロード"
                     },
                     "table": {
                         "audioContent": {
@@ -3856,9 +3551,6 @@
                                 "warning": "アルバムは削除され、アップロードファイルや曲やいいね！や視聴履歴も削除されます。元には戻せません。"
                             }
                         }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "ArtistDetail": {
@@ -3874,13 +3566,11 @@
                         "domain": "ドメイン",
                         "edits": "編集",
                         "libraries": "ライブラリ",
-                        "reports": "",
                         "localProfile": "ローカルのプロフィールを開く",
                         "musicbrainz": "MusicBrainzで開く",
                         "remoteProfile": "リモートのプロフィールを開く",
                         "tracks": "曲一覧",
-                        "uploads": "アップロード",
-                        "django": ""
+                        "uploads": "アップロード"
                     },
                     "table": {
                         "audioContent": {
@@ -3910,9 +3600,6 @@
                                 "warning": "アーティストは削除され、関連したアップロードファイルや曲やいいね！や視聴履歴も削除されます。元には戻せません。"
                             }
                         }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "TagDetail": {
@@ -3925,18 +3612,14 @@
                         "albums": "アルバム",
                         "artists": "アーティスト",
                         "localProfile": "ローカルのプロフィールを開く",
-                        "tracks": "曲一覧",
-                        "django": ""
+                        "tracks": "曲一覧"
                     },
                     "button": {
                         "delete": "削除"
                     },
                     "modal": {
                         "delete": {
-                            "header": "このタグを削除しますか？",
-                            "content": {
-                                "warning": ""
-                            }
+                            "header": "このタグを削除しますか？"
                         }
                     },
                     "table": {
@@ -3961,12 +3644,10 @@
                         "domain": "ドメイン",
                         "edits": "編集",
                         "libraries": "ライブラリ",
-                        "reports": "",
                         "localProfile": "ローカルのプロフィールを開く",
                         "musicbrainz": "MusicBrainzで開く",
                         "remoteProfile": "リモートのプロフィールを開く",
-                        "uploads": "アップロード",
-                        "django": ""
+                        "uploads": "アップロード"
                     },
                     "table": {
                         "trackData": {
@@ -3978,7 +3659,6 @@
                             "description": "説明",
                             "discNumber": "ディスク番号",
                             "license": "ライセンス",
-                            "position": "",
                             "title": "曲名"
                         },
                         "activity": {
@@ -4000,9 +3680,6 @@
                                 "warning": "曲は削除され、関連したアップロードファイルやいいね！や視聴履歴も削除されます。元には戻せません。"
                             }
                         }
-                    },
-                    "warning": {
-                        "stats": ""
                     }
                 },
                 "Base": {
@@ -4016,10 +3693,7 @@
                         "tracks": "曲一覧",
                         "uploads": "アップロード"
                     },
-                    "title": "ライブラリの管理",
-                    "menu": {
-                        "secondary": ""
-                    }
+                    "title": "ライブラリの管理"
                 },
                 "EditsList": {
                     "title": "編集",
@@ -4050,7 +3724,6 @@
                         "edits": "編集",
                         "favorited": "お気に入りの曲",
                         "firstSeen": "最初のログイン",
-                        "linkedReports": "",
                         "listenings": "再生数",
                         "playlists": "プレイリスト"
                     }
@@ -4077,11 +3750,7 @@
                     "local": "ローカル"
                 },
                 "link": {
-                    "localProfile": "ローカルのプロフィールを開く",
-                    "django": ""
-                },
-                "warning": {
-                    "stats": ""
+                    "localProfile": "ローカルのプロフィールを開く"
                 }
             },
             "CommonList": {
@@ -4121,10 +3790,7 @@
                         "invitations": "招待",
                         "users": "ユーザー"
                     },
-                    "title": "ユーザーの管理",
-                    "menu": {
-                        "secondary": ""
-                    }
+                    "title": "ユーザーの管理"
                 }
             }
         },
@@ -4143,9 +3809,6 @@
                 "search": "検索",
                 "remote": "リモートのコンテンツを検索する",
                 "rss": "ポッドキャストをRSSで購読する"
-            },
-            "button": {
-                "submit": ""
             }
         },
         "playlists": {
@@ -4192,10 +3855,7 @@
                 },
                 "modal": {
                     "delete": {
-                        "header": "このプレイリスト「{ playlist }」を削除しますか？",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "このプレイリスト「{ playlist }」を削除しますか？"
                     },
                     "embed": {
                         "header": "このプレイリストをWebサイトに埋め込む"
@@ -4221,10 +3881,7 @@
                 },
                 "modal": {
                     "delete": {
-                        "header": "ラジオ「{ radio }」を削除しますか？",
-                        "content": {
-                            "warning": ""
-                        }
+                        "header": "ラジオ「{ radio }」を削除しますか？"
                     }
                 },
                 "empty": {
@@ -4258,10 +3915,6 @@
                         "description": "メールアドレス、ユーザーネーム、プロフィールへのアクセス",
                         "label": "プロフィール"
                     },
-                    "edits": {
-                        "description": "",
-                        "label": "編集"
-                    },
                     "follows": {
                         "description": "フォローへのアクセス",
                         "label": "フォロー"
@@ -4289,6 +3942,9 @@
                     "security": {
                         "description": "パスワードや認証のような、セキュリティ設定にアクセス",
                         "label": "セキュリティ"
+                    },
+                    "edits": {
+                        "label": "編集"
                     },
                     "favorites": {
                         "label": "お気に入り"
@@ -4351,24 +4007,17 @@
                         "label": "クリックすると、このアップロードのインポートプロセスに関する詳細情報が表示されます",
                         "choices": {
                             "draft": {
-                                "label": "下書き",
-                                "help": ""
+                                "label": "下書き"
                             },
                             "errored": {
-                                "label": "エラー",
-                                "help": ""
+                                "label": "エラー"
                             },
                             "finished": {
                                 "label": "完了しました",
                                 "help": "インポートされました"
                             },
-                            "pending": {
-                                "label": "",
-                                "help": ""
-                            },
                             "skipped": {
-                                "label": "スキップ",
-                                "help": ""
+                                "label": "スキップ"
                             }
                         }
                     },
@@ -4432,7 +4081,6 @@
                 "track": {
                     "copyright": "コピーライト",
                     "license": "ライセンス",
-                    "position": "",
                     "title": "曲名",
                     "label": "曲"
                 },
@@ -4454,16 +4102,12 @@
                 },
                 "tags": {
                     "label": "タグ"
-                },
-                "visibility": {
-                    "label": ""
                 }
             },
             "useEditConfigs": {
                 "track": {
                     "copyright": "コピーライト",
                     "license": "ライセンス",
-                    "position": "",
                     "title": "曲名"
                 },
                 "cover": {
@@ -4496,10 +4140,6 @@
                 "later": "後で",
                 "update": "更新"
             }
-        },
-        "axios": {
-            "rateLimitDelay": "",
-            "rateLimitLater": ""
         }
     }
 }
