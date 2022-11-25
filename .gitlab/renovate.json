@@ -17,7 +17,7 @@
     {
       "matchPaths": ["api/*", "front/*", "docs/*"],
       "additionalBranchPrefix": "{{parentDir}}-",
-      "commitMessageSuffix": "{{parentDir}}"
+      "commitMessageSuffix": "[/{{parentDir}}]"
     },
     {
       "matchUpdateTypes": ["major", "minor"],
