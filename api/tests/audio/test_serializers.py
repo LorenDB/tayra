@@ -13,7 +13,6 @@ from funkwhale_api.common import utils as common_utils
 from funkwhale_api.federation import actors
 from funkwhale_api.federation import serializers as federation_serializers
 from funkwhale_api.federation import utils as federation_utils
-from funkwhale_api.music import serializers as music_serializers
 
 
 def test_channel_serializer_create(factories, mocker):
@@ -215,7 +214,7 @@ def test_channel_serializer_representation(factories, to_api_date):
     channel = factories["audio.Channel"](artist__description=content)
     setattr(channel, "_downloads_count", 12)
     expected = {
-        "artist": music_serializers.SimpleArtistSerializer(channel.artist).data,
+        "artist": serializers.SimpleChannelArtistSerializer(channel.artist).data,
         "uuid": str(channel.uuid),
         "creation_date": to_api_date(channel.creation_date),
         "actor": federation_serializers.APIActorSerializer(channel.actor).data,
@@ -239,7 +238,7 @@ def test_channel_serializer_external_representation(factories, to_api_date):
     channel = factories["audio.Channel"](artist__description=content, external=True)
 
     expected = {
-        "artist": music_serializers.SimpleArtistSerializer(channel.artist).data,
+        "artist": serializers.SimpleChannelArtistSerializer(channel.artist).data,
         "uuid": str(channel.uuid),
         "creation_date": to_api_date(channel.creation_date),
         "actor": None,
