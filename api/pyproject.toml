@@ -72,7 +72,7 @@ pytest-sugar = "==0.9.6"
 pytest-asyncio = "==0.20.2"
 requests-mock = "==1.10.0"
 Faker = "==15.3.3"
-coverage = "==6.5.0"
+coverage = { version = "==6.5.0", extras = ["toml"] }
 django-coverage-plugin = "==2.0.4"
 factory-boy = "==3.2.1"
 django-debug-toolbar = "==3.7.0"
@@ -86,3 +86,66 @@ debugpy = "==1.6.3"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.master]
+load-plugins = [
+  "pylint_common",
+  "pylint_django",
+  "pylint_celery",
+]
+
+[tool.pylint.messages_control]
+disable = [
+  "invalid-name",
+  "missing-class-docstring",
+  "missing-function-docstring",
+  "missing-module-docstring",
+]
+
+[tool.pylint.design]
+max-parents = 13
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pytest.ini_options]
+python_files = [
+  "tests.py",
+  "test_*.py",
+  "*_tests.py",
+]
+testpaths = ["tests"]
+addopts = "-p no:warnings"
+env = [
+  "SECRET_KEY=test",
+  "EMAIL_CONFIG=consolemail://",
+  "CELERY_BROKER_URL=memory://",
+  "CELERY_TASK_ALWAYS_EAGER=True",
+  "FUNKWHALE_HOSTNAME_SUFFIX=",
+  "FUNKWHALE_HOSTNAME_PREFIX=",
+  "FUNKWHALE_HOSTNAME=test.federation",
+  "FEDERATION_HOSTNAME=test.federation",
+  "FUNKWHALE_URL=https://test.federation",
+  "DEBUG_TOOLBAR_ENABLED=False",
+  "DEBUG=False",
+  "WEAK_PASSWORDS=True",
+  "CREATE_IMAGE_THUMBNAILS=False",
+  "FORCE_HTTPS_URLS=False",
+  "FUNKWHALE_SPA_HTML_ROOT=http://noop/",
+  "PROXY_MEDIA=true",
+  "MUSIC_USE_DENORMALIZATION=true",
+  "EXTERNAL_MEDIA_PROXY_ENABLED=true",
+  "DISABLE_PASSWORD_VALIDATORS=false",
+  "DISABLE_PASSWORD_VALIDATORS=false",
+  "FUNKWHALE_PLUGINS=",
+  "MUSIC_DIRECTORY_PATH=/music",
+]
+
+[tool.coverage.run]
+plugins = ["django_coverage_plugin"]
+include = ["funkwhale_api/*"]
+omit = [
+  "*migrations*",
+  "*tests*",
+  "funkwhale_api/schema.py",
+]

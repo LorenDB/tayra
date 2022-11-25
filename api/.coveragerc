@@ -1,5 +1,0 @@
-[run]
-include = funkwhale_api/*
-omit = *migrations*, *tests*, funkwhale_api/schema.py
-plugins =
-    django_coverage_plugin
