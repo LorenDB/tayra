@@ -4,8 +4,8 @@ module.exports = {
     es6: true
   },
   extends: [
-    'plugin:vue/vue3-recommended',
     'plugin:@intlify/vue-i18n/recommended',
+    'plugin:vue/vue3-recommended',
     '@vue/typescript/recommended',
     '@vue/standard'
   ],
@@ -37,6 +37,7 @@ module.exports = {
     '@intlify/vue-i18n/valid-message-syntax': 'error',
     '@intlify/vue-i18n/no-missing-keys': 'error',
     '@intlify/vue-i18n/no-dynamic-keys': 'error',
+    '@intlify/vue-i18n/no-unused-keys': 'error',
 
     // TODO (wvffle): Remove after VUI and #1618
     'vue/multi-word-component-names': 'off',
@@ -56,11 +57,15 @@ module.exports = {
         //       brings <!-- eslint-disable --> comments support for the <template> tag in SFCs
         'vue/comment-directive': 'off'
       }
+    },
+    {
+      files: ['*.json'],
+      parser: 'jsonc-eslint-parser'
     }
   ],
   settings: {
     'vue-i18n': {
-      localeDir: 'src/locales/*.{json,json5,yaml,yml}',
+      localeDir: './src/locales/*.json',
       messageSyntaxVersion: '^9.0.0'
     }
   }

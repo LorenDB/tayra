@@ -11,7 +11,7 @@
     "serve": "vite preview",
     "test": "vitest run",
     "test:unit": "vitest run",
-    "lint": "eslint --ext .ts,.js,.vue,.html src public/embed.html",
+    "lint": "eslint --ext .ts,.js,.vue,.json,.html src public/embed.html",
     "lint:tsc": "vue-tsc --noEmit",
     "fix-fomantic-css": "scripts/fix-fomantic-css.sh",
     "postinstall": "yarn run fix-fomantic-css"
@@ -86,6 +86,7 @@
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-vue": "9.8.0",
     "jsdom": "20.0.3",
+    "jsonc-eslint-parser": "2.1.0",
     "moxios": "0.4.0",
     "sass": "1.56.1",
     "sinon": "14.0.2",
