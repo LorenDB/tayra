@@ -10,6 +10,48 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.2.9 (2022-11-25)
+------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Bugfixes:
+
+- Ensure index.html files get loaded with UTF-8 encoding
+- Fixed invitation reuse after the invited user has been deleted (#1952)
+- Fixed unplayable skipped upload (#1349)
+
+ Committers:
+
+- Georg Krause
+- Marcos Peña
+- Philipp Wolfer
+- Travis Briggs
+
+Contributors to our Issues:
+
+- Ciarán Ainsworth
+- Georg Krause
+- JuniorJPDJ
+- Kasper Seweryn
+- Marcos Peña
+- Mathieu Jourdan
+- Micha Gläß-Stöcker
+- fuomag9
+- gammelalf
+- myOmikron
+- petitminion
+
+Contributors to our Merge Requests:
+
+- Georg Krause
+- JuniorJPDJ
+- Marcos Peña
+- Philipp Wolfer
+- fuomag9
+
+
 1.2.8 (2022-09-12)
 ------------------
 
