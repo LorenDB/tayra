@@ -15,6 +15,10 @@
   "ignoreDeps": ["$CI_REGISTRY/funkwhale/backend-test-docker"],
   "packageRules": [
     {
+      "matchPaths": ["api/*", "front/*", "docs/*"],
+      "additionalBranchPrefix": "{{parentDir}}-"
+    },
+    {
       "matchUpdateTypes": ["major", "minor"],
       "matchBaseBranches": ["stable"],
       "enabled": false
