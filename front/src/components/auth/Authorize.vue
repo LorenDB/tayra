@@ -219,7 +219,9 @@ whenever(() => props.clientId, fetchApplication, { immediate: true })
           <p
             v-else
           >
-            {{ $t('components.auth.Authorize.help.redirect', {url: redirectUri}) }}
+            <i18n-t keypath="components.auth.Authorize.help.redirect">
+              <strong>{{ redirectUri }}</strong>
+            </i18n-t>
           </p>
         </form>
         <div v-else-if="code">

@@ -87,16 +87,15 @@ export const install: InitModule = async ({ app, router, store }) => {
 
     if (allowed === undefined) {
       const { hostname, origin } = new URL(import.meta.env.FUNKWHALE_SENTRY_DSN)
+
+      const message = t('init.sentry.message', [
+        `<a href="${origin}">${hostname === 'am.funkwhale.audio' ? t('init.sentry.funkwhaleInstance') : hostname}</a>`
+      ])
+
+      const content = `${t('init.sentry.title')}<br><sub>${message}</sub>`
+
       return store.commit('ui/addMessage', {
-        content: hostname === 'am.funkwhale.audio'
-          ? t(
-            'init.sentry.funkwhaleGlitchtipMessage',
-            { origin }
-          )
-          : t(
-            'init.sentry.ownGlitchtipMessage',
-            { hostname, origin }
-          ),
+        content,
         date: new Date(),
         key: 'allowSentryTracing',
         displayTime: 0,

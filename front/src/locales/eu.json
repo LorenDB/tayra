@@ -17,7 +17,7 @@
                 },
                 "help": {
                     "pasteCode": "Kopiatu eta itsatsi honako kodea aplikazioan:",
-                    "redirect": "<strong>{ url }</strong>(e)ra birbideratua izango zara",
+                    "redirect": "{ 0 }(e)ra birbideratua izango zara",
                     "copyCode": "Aplikazioan kopiatu eta itsasteko kodea erakutsiko zaizu."
                 },
                 "message": {
@@ -1671,7 +1671,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> jada badago <strong>{ playlist }</strong>(e)n."
+                    "duplicate": "{ 0 } jada badago { 1 }(e)n."
                 },
                 "button": {
                     "addDuplicate": "Gehitu halere",

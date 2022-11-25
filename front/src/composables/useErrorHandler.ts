@@ -35,7 +35,7 @@ async function useErrorHandler (error: Error | BackendError, eventId?: string): 
 
     const { get } = useCookies()
     if (get(COOKIE) === 'yes') {
-      content = t('composables.useErrorHandler.errorReport')
+      content = `${t('composables.useErrorHandler.errorReportTitle')}<br><sub>${t('composables.useErrorHandler.errorReportMessage')}</sub>`
       const user = store.state.auth.authenticated
         ? {
             name: store.state.auth.username,

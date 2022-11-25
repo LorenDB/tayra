@@ -226,7 +226,7 @@
             },
             "message": {
                 "newUrl": "You are now using the Funkwhale instance at {url}",
-                "currentConnection": "You are currently connected to <a href=\"{url}\" target=\"_blank\">{hostName}&nbsp;<i class=\"external icon\" /></a>. If you continue, you will be disconnected from your current instance and all your local data will be deleted."
+                "currentConnection": "You are currently connected to { 0 }. If you continue, you will be disconnected from your current instance and all your local data will be deleted."
             },
             "help": {
                 "serverDown": "The server might be down",
@@ -726,7 +726,7 @@
                 },
                 "help": {
                     "copyCode": "You will be shown a code to copy-past in the application",
-                    "redirect": "You will be redirected to <strong>{url}</strong>",
+                    "redirect": "You will be redirected to { 0 }",
                     "pasteCode": "Copy-paste the following code in the application:"
                 }
             },
@@ -2867,7 +2867,7 @@
                     "noResults": "No results matching your filter"
                 },
                 "warning": {
-                    "duplicate": "<strong>{track}</strong> is already in <strong>{playlist}</strong>."
+                    "duplicate": "{ 0 } is already in { 1 }."
                 },
                 "table": {
                     "edit": {
@@ -2934,7 +2934,8 @@
     "composables": {
         "useErrorHandler": {
             "unexpectedError": "An unexpected error occurred.",
-            "errorReport": "An unexpected error occured. <br><sub>To help us understand why it happened, please attach a detailed description of what you did that has triggered the error.</sub>",
+            "errorReportTitle": "An unexpected error occured.",
+            "errorReportMessage": "To help us understand why it happened, please attach a detailed description of what you did that has triggered the error.",
             "leaveFeedback": "Leave feedback"
         },
         "useThemeList": {
@@ -3217,8 +3218,9 @@
             "rateLimitLater": "You sent too many requests and have been rate limited, please try again later"
         },
         "sentry": {
-            "funkwhaleGlitchtipMessage": "To enhance the quality of our services, we would like to collect information about crashes during your session.<br><sub>The stack traces will be shared to <a href=\"{origin}\">Funkwhale's official Glitchtip instance</a> in order to help us understand how and when the errors occur.</sub>",
-            "ownGlitchtipMessage": "To enhance the quality of our services, we would like to collect information about crashes during your session.<br><sub>The stack traces will be shared to <a href=\"{origin}\">{hostname}</a> in order to help us understand how and when the errors occur.</sub>",
+            "title": "To enhance the quality of our services, we would like to collect information about crashes during your session.",
+            "message": "The stack traces will be shared to { 0 } in order to help us understand how and when the errors occur.",
+            "funkwhaleInstance": "Funkwhale's official Glitchtip instance",
             "allow": "Allow",
             "deny": "Deny"
         },

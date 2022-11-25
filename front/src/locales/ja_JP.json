@@ -17,7 +17,7 @@
                 },
                 "help": {
                     "pasteCode": "アプリ内にこのコードをコピーアンドペースト:",
-                    "redirect": "<strong>{ url }</strong>にリダイレクトされます"
+                    "redirect": "{ 0 }にリダイレクトされます"
                 },
                 "message": {
                     "unknownPermissions": "またアプリケーションは以下の未知の許可を求めています。"
@@ -1560,7 +1560,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> はすでに<strong>{ playlist }</strong>内にあります。"
+                    "duplicate": "{ 0 } はすでに{ 1 }内にあります。"
                 },
                 "button": {
                     "addDuplicate": "とにかく追加する",

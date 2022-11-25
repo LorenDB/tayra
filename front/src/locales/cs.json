@@ -17,7 +17,7 @@
                 },
                 "help": {
                     "pasteCode": "Zkopírujte a vložte následující kód do aplikace:",
-                    "redirect": "Budete přesměrováni na <strong>{ url }</strong>",
+                    "redirect": "Budete přesměrováni na { 0 }",
                     "copyCode": "Zobrazí se vám kód pro vložení do aplikace."
                 },
                 "message": {
@@ -1549,7 +1549,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> se už nachází v <strong>{ playlist }</strong>."
+                    "duplicate": "{ 0 } se už nachází v { 1 }."
                 },
                 "button": {
                     "addDuplicate": "Přesto přidat",

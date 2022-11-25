@@ -16,12 +16,12 @@
                     "authorize": "Autoriser { app }"
                 },
                 "help": {
-                    "pasteCode": "Copiez-coller le code suivant dans votre application :",
-                    "redirect": "Vous allez être redirigé·e vers <strong>{ url }</strong>",
+                    "pasteCode": "Copiez-coller le code suivant dans votre application :",
+                    "redirect": "Vous allez être redirigé·e vers { 0 }",
                     "copyCode": "Un code à copier-coller dans l'application vous sera présenté."
                 },
                 "message": {
-                    "unknownPermissions": "L'application demande également les permissions inconnues suivantes :"
+                    "unknownPermissions": "L'application demande également les permissions inconnues suivantes :"
                 }
             },
             "SubsonicTokenForm": {
@@ -168,9 +168,9 @@
                 },
                 "modal": {
                     "changePassword": {
-                        "header": "Changer le mot de passe ?",
+                        "header": "Changer le mot de passe ?",
                         "content": {
-                            "warning": "Modifier votre mot de passe aura les conséquences suivantes :",
+                            "warning": "Modifier votre mot de passe aura les conséquences suivantes :",
                             "logout": "Vous allez être déconnecté⋅e de cette session et vous devrez vous connecter avec votre nouveau mot de passe",
                             "subsonic": "Votre mot de passe Subsonic sera remplacé par un nouveau mot de passe aléatoire, ce qui vous déconnectera de tous les appareils utilisant l'ancien mot de passe"
                         }
@@ -182,13 +182,13 @@
                         }
                     },
                     "deleteApp": {
-                        "header": "Supprimer l'application « { application } » ?",
+                        "header": "Supprimer l'application « { application } » ?",
                         "content": {
                             "warning": "Cela supprimera définitivement l'application et tous les jetons associés."
                         }
                     },
                     "revokeApp": {
-                        "header": "Révoquer l'accès pour l'application « { application } » ?",
+                        "header": "Révoquer l'accès pour l'application « { application } » ?",
                         "content": {
                             "warning": "Cela empêchera cette application d'accéder au service en votre nom."
                         }
@@ -356,7 +356,7 @@
                 "noDescription": "Pas de description disponible."
             },
             "message": {
-                "loggedIn": "Vous êtes déjà connecté !"
+                "loggedIn": "Vous êtes déjà connecté !"
             }
         },
         "Home": {
@@ -671,7 +671,7 @@
                     "anonymous": "Le partage ne fonctionnera car ce pod n'autorise pas les utilisateur·ices anonymes à accéder aux contenus."
                 },
                 "message": {
-                    "copy": "La texte a été copié dans le presse-papier !"
+                    "copy": "La texte a été copié dans le presse-papier !"
                 }
             },
             "ChannelSeries": {
@@ -808,7 +808,7 @@
                 "label": {
                     "uploadWidget": "Cliquez pour sélectionner les fichiers a téléverser ou glisser-déposer les fichiers ou répertoires",
                     "remainingSpace": "Espace de stockage restant",
-                    "extensions": "Extensions prises en charge : { extensions }"
+                    "extensions": "Extensions prises en charge : { extensions }"
                 },
                 "header": {
                     "failure": "Erreur pendant le démarrage de l'importation",
@@ -829,7 +829,7 @@
                     "local": {
                         "format": "Les fichiers musicaux que vous téléversez sont en format OGG, Flac, MP3 ou AIFF",
                         "tag": "Les fichiers musicaux que vous téléversez sont correctement tagués.",
-                        "message": "Vous êtes sur le point de transférer de la musique dans votre audiothèque. Avant de procéder, veuillez vous assurer que :",
+                        "message": "Vous êtes sur le point de transférer de la musique dans votre audiothèque. Avant de procéder, veuillez vous assurer que :",
                         "copyright": "Vous n'envoyez pas de contenu sous copyright dans une audiothèque publique car, dans le cas contraire, vous être probablement en infraction"
                     }
                 }
@@ -960,7 +960,7 @@
                 },
                 "notApplicable": "ND",
                 "description": {
-                    "library": "Cette piste est présente dans les audiothèques suivantes :"
+                    "library": "Cette piste est présente dans les audiothèques suivantes :"
                 },
                 "link": {
                     "musicbrainz": "Voir sur MusicBrainz"
@@ -991,7 +991,7 @@
                     "filter": "Afficher les fichiers"
                 },
                 "description": {
-                    "library": "Cet artiste est présent dans les audiothèques suivantes :"
+                    "library": "Cet artiste est présent dans les audiothèques suivantes :"
                 },
                 "message": {
                     "filter": "Vous masquez actuellement le contenu associé à cet artiste."
@@ -1049,7 +1049,7 @@
                 },
                 "modal": {
                     "delete": {
-                        "header": "Supprimer cette suggestion ?"
+                        "header": "Supprimer cette suggestion ?"
                     },
                     "content": {
                         "warning": "La suggestion sera entièrement supprimée, cette action est irréversible."
@@ -1153,7 +1153,7 @@
                 },
                 "modal": {
                     "delete": {
-                        "header": "Supprimer cet album ?",
+                        "header": "Supprimer cet album ?",
                         "content": {
                             "warning": "L'album sera supprimé, ainsi que tous les fichiers et données associés. Cette action est irréversible."
                         }
@@ -1234,7 +1234,7 @@
                     "libraries": "Audiothèques de l’utilisateur"
                 },
                 "description": {
-                    "libraries": "Cet album est présent dans les audiothèques suivantes :"
+                    "libraries": "Cet album est présent dans les audiothèques suivantes :"
                 },
                 "meta": {
                     "volume": "Volume { number }"
@@ -1376,7 +1376,7 @@
                     "uploading": "Envoi en cours"
                 },
                 "description": {
-                    "extensions": "Extensions prises en charge : { extensions }"
+                    "extensions": "Extensions prises en charge : { extensions }"
                 },
                 "warning": {
                     "quota": "Vous ne disposez plus de suffisamment d'espace de stockage pour envoyer de nouveaux fichiers. Merci de contacter l'équipe de modération."
@@ -1601,7 +1601,7 @@
                     "copy": "Copier"
                 },
                 "message": {
-                    "success": "La texte a été copié dans le presse-papier !"
+                    "success": "La texte a été copié dans le presse-papier !"
                 }
             },
             "LoginModal": {
@@ -1671,7 +1671,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> est déjà dans <strong>{ playlist }</strong>."
+                    "duplicate": "{ 0 } est déjà dans { 1 }."
                 },
                 "button": {
                     "addDuplicate": "Ajouter quand même",
@@ -1735,7 +1735,7 @@
                     "editor": "Éditeur de playlist"
                 },
                 "warning": {
-                    "duplicate": "Certaines pistes de votre file d'attente sont déjà dans cette liste de lecture :"
+                    "duplicate": "Certaines pistes de votre file d'attente sont déjà dans cette liste de lecture :"
                 },
                 "loading": {
                     "sync": "Synchronisation des changements avec le serveur…"
@@ -1780,7 +1780,7 @@
                 "message": {
                     "libraryAcceptFollow": "{ username } a accepté votre suivi de l’audiothèque « { library } »",
                     "libraryFollow": "{ username } suit votre audiothèque « { library } »",
-                    "libraryPendingFollow": "{ username } veut suivre votre audiothèque « { library } »"
+                    "libraryPendingFollow": "{ username } veut suivre votre audiothèque « { library } »"
                 },
                 "button": {
                     "approve": "Approuver",
@@ -2154,7 +2154,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Supprimer l’objet signalé ?",
+                            "header": "Supprimer l’objet signalé ?",
                             "content": {
                                 "warning": "Cela supprimera l'élément associé avec ce signalement et marquera le rapport comme résolu. La suppression est irreversible."
                             }
@@ -2235,7 +2235,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Supprimer cette règle de modération ?",
+                            "header": "Supprimer cette règle de modération ?",
                             "content": {
                                 "warning": "Cette action est irréversible."
                             }
@@ -2386,7 +2386,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Supprimer cette note ?",
+                            "header": "Supprimer cette note ?",
                             "content": {
                                 "warning": "La note sera supprimée. Cette action est irréversible."
                             }
@@ -2634,7 +2634,7 @@
                     "success": "Filtre de contenu ajouté avec succès"
                 },
                 "header": {
-                    "modal": "Voulez-vous cacher le contenu de l’artiste « { name } » ?",
+                    "modal": "Voulez-vous cacher le contenu de l’artiste « { name } » ?",
                     "failure": "Erreur lors de la création de la règle"
                 },
                 "warning": {
@@ -2643,7 +2643,7 @@
                         "listItem3": "Dans les listes d'artistes et d'albums",
                         "listItem1": "Dans les favoris des autres utilisateurs et dans l'historique d'écoute",
                         "listItem4": "Dans les suggestions radio",
-                        "listIntro": "Vous ne verrez plus les pistes, albums et activité utilisateur liées à cet artiste :"
+                        "listIntro": "Vous ne verrez plus les pistes, albums et activité utilisateur liées à cet artiste :"
                     }
                 },
                 "help": {
@@ -2654,7 +2654,7 @@
         "federation": {
             "FetchButton": {
                 "description": {
-                    "failure": "Une erreur s'est produite pendant la mise à jour des données :",
+                    "failure": "Une erreur s'est produite pendant la mise à jour des données :",
                     "success": "Les données ont été rafraîchies avec succès depuis le serveur distant.",
                     "pending": "La requête de rafraîchissement n'a pas été effectuée à temps par notre serveur. Elle sera exécutée plus tard.",
                     "skipped": "Le serveur distant a répondu, mais les données envoyées ne sont pas prises en charge par Funkwhale."
@@ -2797,7 +2797,7 @@
                 },
                 "title": "Afficher/masquer le mot de passe",
                 "message": {
-                    "copy": "La texte a été copié dans le presse-papier !"
+                    "copy": "La texte a été copié dans le presse-papier !"
                 }
             }
         },
@@ -2852,7 +2852,7 @@
                 "pageNotFound": "Page introuvable !"
             },
             "message": {
-                "pageNotFound": "Désolé, la page demandée n’existe pas :"
+                "pageNotFound": "Désolé, la page demandée n’existe pas :"
             }
         },
         "vui": {
@@ -2906,7 +2906,7 @@
                     "subscribe": {
                         "rss": {
                             "content": {
-                                "help": "Copiez-collez l'URL suivante dans votre application de lecture de podcasts :"
+                                "help": "Copiez-collez l'URL suivante dans votre application de lecture de podcasts :"
                             },
                             "header": "S'abonner via RSS"
                         },
@@ -2922,7 +2922,7 @@
                         "header": "S'abonner à cette chaîne"
                     },
                     "delete": {
-                        "header": "Supprimer cette chaîne ?",
+                        "header": "Supprimer cette chaîne ?",
                         "content": {
                             "warning": "La chaîne sera supprimée, ainsi que tous les fichiers et données associés. Cette action est irréversible."
                         }
@@ -3106,7 +3106,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Supprimer cette audiothèque ?",
+                            "header": "Supprimer cette audiothèque ?",
                             "content": {
                                 "warning": "L’audiothèque et toutes ses pistes seront supprimées. Cette action est irréversible."
                             }
@@ -3147,7 +3147,7 @@
                             "content": {
                                 "warning": "En cessant de suivre cette audiothèque, vous perdez l’accès à son contenu."
                             },
-                            "header": "Se désabonner de cette audiothèque ?"
+                            "header": "Se désabonner de cette audiothèque ?"
                         }
                     },
                     "button": {
@@ -3471,7 +3471,7 @@
                 "notifications": "Vos notifications"
             },
             "button": {
-                "submit": "Compris !",
+                "submit": "Compris !",
                 "read": "Tout marquer comme lu"
             },
             "loading": {
@@ -3482,7 +3482,7 @@
             },
             "title": "Notifications",
             "label": {
-                "reminder": "Me le rappeler dans :",
+                "reminder": "Me le rappeler dans :",
                 "showRead": "Afficher les notifications lues"
             },
             "message": {
@@ -3752,7 +3752,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Supprimer cet envoi ?",
+                            "header": "Supprimer cet envoi ?",
                             "content": {
                                 "warning": "Cette action est irréversible."
                             }
@@ -3798,7 +3798,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Supprimer cette audiothèque ?",
+                            "header": "Supprimer cette audiothèque ?",
                             "content": {
                                 "warning": "L’audiothèque sera supprimée, ainsi que les téléversements et abonnements associés. Cette action est irréversible."
                             }
@@ -3851,7 +3851,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Supprimer cet album ?",
+                            "header": "Supprimer cet album ?",
                             "content": {
                                 "warning": "L’album sera supprimé, ainsi que les téléversements, pistes, favoris et historique d'écoute associés. Cette action est irréversible."
                             }
@@ -3905,7 +3905,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Supprimer cet artiste ?",
+                            "header": "Supprimer cet artiste ?",
                             "content": {
                                 "warning": "L’artiste sera supprimé, ainsi que les téléversements, pistes, albums, favoris et historique d'écoute associés. Cette action est irréversible."
                             }
@@ -4067,7 +4067,7 @@
                 },
                 "modal": {
                     "delete": {
-                        "header": "Supprimer cette chaîne ?",
+                        "header": "Supprimer cette chaîne ?",
                         "content": {
                             "warning": "La chaîne sera supprimée, ainsi que tous les envois, pistes et albums associés. Cette action est irréversible."
                         }
@@ -4221,7 +4221,7 @@
                 },
                 "modal": {
                     "delete": {
-                        "header": "Voulez-vous supprimer la radio « { radio } » ?",
+                        "header": "Voulez-vous supprimer la radio « { radio } » ?",
                         "content": {
                             "warning": "Cela supprimera définitivement cette radio et ne pourra pas être annulé."
                         }

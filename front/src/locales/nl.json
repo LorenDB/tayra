@@ -17,7 +17,7 @@
                 },
                 "help": {
                     "pasteCode": "Kopieer en plak de volgende code in de applicatie:",
-                    "redirect": "Je wordt doorgestuurd naar <strong>{ url }</strong>",
+                    "redirect": "Je wordt doorgestuurd naar { 0 }",
                     "copyCode": "Je zult een code te zien krijgen om te kopiëren naar de applicatie."
                 },
                 "message": {
@@ -1671,7 +1671,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> staat al in <strong>{ playlist }</strong>."
+                    "duplicate": "{ 0 } staat al in { 1 }."
                 },
                 "button": {
                     "addDuplicate": "Toch toevoegen",

@@ -17,7 +17,7 @@
                 },
                 "help": {
                     "pasteCode": "Wklej następujący kod do aplikacji:",
-                    "redirect": "Zostaniesz przekierowany na <strong>{ url }</strong>",
+                    "redirect": "Zostaniesz przekierowany na { 0 }",
                     "copyCode": "Pokazany zostanie kod do wklejenia w aplikacji."
                 },
                 "message": {
@@ -269,7 +269,7 @@
                     "username": "Wprowadź swoją nazwę użytkownika lub adres e-mail"
                 },
                 "help": {
-                    "approvalRequired": "Jeżeli niedawno się rejestrowałeś, może być koniecznie odczekanie, aż zespół moderujący rozpatrzy twoją aplikację.",
+                    "approvalRequired": "Jeżeli niedawno się rejestrowałeś, może być koniecznie odczekanie, aż zespół moderujący rozpatrzy twoją aplikację.",
                     "invalidCredentials": "Upewnij się, że Twoja kombinacja nazwy użytkownika i hasła są poprawne oraz zweryfikuj poprawność adresu e-mail."
                 },
                 "button": {
@@ -356,7 +356,7 @@
                 "noDescription": "Opis nie jest dostępny."
             },
             "message": {
-                "loggedIn": "Jesteś już zalogowany!"
+                "loggedIn": "Jesteś już zalogowany!"
             }
         },
         "Home": {
@@ -1671,7 +1671,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> jest już w liście odtwarzania <strong>{ playlist }</strong>."
+                    "duplicate": "{ 0 } jest już w liście odtwarzania { 1 }."
                 },
                 "button": {
                     "addDuplicate": "Dodaj mimo to",
@@ -3212,7 +3212,7 @@
                 "description": {
                     "follow": "Możesz zaobserwować biblioteki innych użytkowników, aby uzyskać dostęp do nowej muzyki. Publiczne biblioteki mogą być zaobserwowane natychmiast, a do zaobserwowania prywatnej biblioteki będziesz potrzebował zgody jej właściciela.",
                     "channel": {
-                        "1": "Jeżeli jesteś muzykiem lub tworzysz podcasty, kanały są stworzone dla Ciebie!",
+                        "1": "Jeżeli jesteś muzykiem lub tworzysz podcasty, kanały są stworzone dla Ciebie!",
                         "2": "Udostępnij twoje utwory publicznie i zdobądź obserwatorów na Funkwhale, Fediverse albo jakiejkolwiek aplikacji do podcastów."
                     },
                     "upload": "Prześlij swoją osobistą muzykę do Funkwhale, aby czerpać z niej przyjemność w każdym miejscu oraz dzielić się nią z przyjaciółmi i rodziną."

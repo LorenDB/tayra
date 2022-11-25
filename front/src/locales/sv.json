@@ -1172,7 +1172,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> är redan i <strong>{ playlist }</strong>."
+                    "duplicate": "{ 0 } är redan i { 1 }."
                 },
                 "button": {
                     "addDuplicate": "Lägg till ett nytt bibliotek",

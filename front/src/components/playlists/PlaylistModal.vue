@@ -112,7 +112,11 @@ store.dispatch('playlists/fetchOwn')
           class="ui warning message"
         >
           <p>
-            {{ $t('components.playlists.PlaylistModal.warning.duplicate', {track: track?.title, playlist: duplicateTrackAddInfo.playlist_name}) }}
+            <i18n-t keypath="components.playlists.PlaylistModal.warning.duplicate">
+              <strong>{{ track?.title }}</strong>
+              <strong>{{ duplicateTrackAddInfo.playlist_name }}</strong>
+              <p>{{ track?.title }}</p>
+            </i18n-t>
           </p>
           <button
             class="ui small basic cancel button"

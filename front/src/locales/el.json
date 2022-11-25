@@ -831,7 +831,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "Το <strong>{ track }</strong> είναι ήδη στην λίστα <strong>{ playlist }</strong>."
+                    "duplicate": "Το { 0 } είναι ήδη στην λίστα { 1 }."
                 },
                 "button": {
                     "addDuplicate": "Προσθήκη ούτως ή άλλως",

@@ -17,7 +17,7 @@
                 },
                 "help": {
                     "pasteCode": "Copiatz-pegatz lo còdi seguent dins l’aplicacion :",
-                    "redirect": "Seretz mandat a <strong>{ url }</strong>",
+                    "redirect": "Seretz mandat a { 0 }",
                     "copyCode": "Vos mostrarem un còdi de copiar-pegar dins l’aplicacion."
                 },
                 "message": {
@@ -38,13 +38,13 @@
                 },
                 "modal": {
                     "disableSubsonic": {
-                        "header": "Desactivar l’accès a l’API Subsonic ?",
+                        "header": "Desactivar l’accès a l’API Subsonic ?",
                         "content": {
                             "warning": "Aquò desactivarà complètament l’accès a l’API Subsonic de vòstre compte estant."
                         }
                     },
                     "newPassword": {
-                        "header": "Demandar un nòu senhal per l’API Subsonic ?",
+                        "header": "Demandar un nòu senhal per l’API Subsonic ?",
                         "content": {
                             "warning": "Aquò vos desconnectarà de totes los periferics qu’utilizan aqueste senhal."
                         }
@@ -168,15 +168,15 @@
                 },
                 "modal": {
                     "changePassword": {
-                        "header": "Cambiar lo senhal ?",
+                        "header": "Cambiar lo senhal ?",
                         "content": {
-                            "warning": "Lo cambiament de senhal a las consequéncias seguentas :",
+                            "warning": "Lo cambiament de senhal a las consequéncias seguentas :",
                             "logout": "Sètz per èsser desconnectat d’aquesta session e vos caldrà vos connectar amb lo nòu senhal",
                             "subsonic": "Vòstre senhal Subsonic serà remplaçat per un nòu aleatòri, aquò vos desconnectarà de totes los periferics qu’utilizan l’ancian senhal"
                         }
                     },
                     "deleteAccount": {
-                        "header": "Volètz suprimir vòstre compte ?",
+                        "header": "Volètz suprimir vòstre compte ?",
                         "content": {
                             "warning": "Aquò es irreversible e suprimirà d’un biais permanent vòstras donadas de nòstres servidors. Seretz immediatament desconnectat."
                         }
@@ -213,15 +213,15 @@
             },
             "Logout": {
                 "header": {
-                    "confirm": "Volètz vertadièrament vos desconnectar ?",
+                    "confirm": "Volètz vertadièrament vos desconnectar ?",
                     "unauthenticated": "Sètz pas connectat actualament"
                 },
                 "link": {
-                    "login": "Connectatz-vos !"
+                    "login": "Connectatz-vos !"
                 },
                 "title": "Desconnexion",
                 "button": {
-                    "logout": "Òc-ben, desconnectatz-me !"
+                    "logout": "Òc-ben, desconnectatz-me !"
                 },
                 "message": {
                     "loggedIn": "Sètz connectat coma { username }"
@@ -356,7 +356,7 @@
                 "noDescription": "Cap de descripcion pas disponibla."
             },
             "message": {
-                "loggedIn": "Sètz ja connectat !"
+                "loggedIn": "Sètz ja connectat !"
             }
         },
         "Home": {
@@ -640,7 +640,7 @@
                     "loading": "Cargament"
                 },
                 "legend": {
-                    "purpose": "A qué servirà aquesta cadena ?"
+                    "purpose": "A qué servirà aquesta cadena ?"
                 }
             },
             "LibraryFollowButton": {
@@ -671,7 +671,7 @@
                     "anonymous": "Lo partatge foncionarà pas perque aqueste pod autoriza pas los utilizaires anonimes a accedir al contengut."
                 },
                 "message": {
-                    "copy": "Tèxte copiat al quichapapièr !"
+                    "copy": "Tèxte copiat al quichapapièr !"
                 }
             },
             "ChannelSeries": {
@@ -808,7 +808,7 @@
                 "label": {
                     "uploadWidget": "Clicatz per causir los fichièrs d’enviar o lisatz los fichièrs o repertòris",
                     "remainingSpace": "Espaci liure",
-                    "extensions": "Extensions compatiblas : { extensions }"
+                    "extensions": "Extensions compatiblas : { extensions }"
                 },
                 "header": {
                     "failure": "Error en aviant l’import",
@@ -822,14 +822,14 @@
                     "picard": "Vos recomandam d’utilizar lo logicial Picard per aquò far."
                 },
                 "description": {
-                    "import": "Resultats de vòstre l’import :",
-                    "previousImport": "Resultats de vòstre import precedent :"
+                    "import": "Resultats de vòstre l’import :",
+                    "previousImport": "Resultats de vòstre import precedent :"
                 },
                 "message": {
                     "local": {
                         "format": "Los fichièrs musicals que sètz a enviar son al format OGG, Flac, MP3 o AIFF",
                         "tag": "Los fichièrs musicals que sètz a enviar son etiquetats coma cal.",
-                        "message": "Sètz a man d’enviar de la musica a vòstra bibliotèca. Abans de començar, mercés de vos assegurar que :",
+                        "message": "Sètz a man d’enviar de la musica a vòstra bibliotèca. Abans de començar, mercés de vos assegurar que :",
                         "copyright": "Envietz pas cap de contengut jos dreches a una bibliotèca publica, autrament enfranhètz la lei"
                     }
                 }
@@ -960,7 +960,7 @@
                 },
                 "notApplicable": "ND",
                 "description": {
-                    "library": "Aquesta pista es presenta a las bibliotècas seguentas :"
+                    "library": "Aquesta pista es presenta a las bibliotècas seguentas :"
                 },
                 "link": {
                     "musicbrainz": "Veire sus MusicBrainz"
@@ -991,7 +991,7 @@
                     "filter": "Validar mos filtres"
                 },
                 "description": {
-                    "library": "Aqueste artista es present a las bibliotècas seguentas :"
+                    "library": "Aqueste artista es present a las bibliotècas seguentas :"
                 },
                 "message": {
                     "filter": "Amagatz lo contengut ligat a aqueste artista."
@@ -1049,7 +1049,7 @@
                 },
                 "modal": {
                     "delete": {
-                        "header": "Suprimir aquesta règla de moderacion ?"
+                        "header": "Suprimir aquesta règla de moderacion ?"
                     },
                     "content": {
                         "warning": "La suggestion serà complètament tirada, aquesta accion es irreversibla."
@@ -1153,7 +1153,7 @@
                 },
                 "modal": {
                     "delete": {
-                        "header": "Suprimir aqueste album ?",
+                        "header": "Suprimir aqueste album ?",
                         "content": {
                             "warning": "Aqueste album serà tirat, e mai los mandadisses e abonaments ligats. Aquesta accions es irreversibla."
                         }
@@ -1182,7 +1182,7 @@
                 },
                 "modal": {
                     "delete": {
-                        "header": "Suprimir aquesta pista ?",
+                        "header": "Suprimir aquesta pista ?",
                         "content": {
                             "warning": "Aquesta pista serà tirada, e mai totes los fichièrs e donadas ligats. Aquesta accions es irreversibla."
                         }
@@ -1234,7 +1234,7 @@
                     "libraries": "Bibliotècas de l’utilizaire"
                 },
                 "description": {
-                    "libraries": "Aqueste album es present a las bibliotècas seguentas :"
+                    "libraries": "Aqueste album es present a las bibliotècas seguentas :"
                 },
                 "meta": {
                     "volume": "Volum { number }"
@@ -1307,7 +1307,7 @@
             "UploadModal": {
                 "meta": {
                     "files": "{ count } fichièr | { count } fichièrs",
-                    "quota": "Espaci liure restant :"
+                    "quota": "Espaci liure restant :"
                 },
                 "button": {
                     "cancel": "Anullar",
@@ -1376,7 +1376,7 @@
                     "uploading": "Mandadís en cors"
                 },
                 "description": {
-                    "extensions": "Extensions compatiblas : { extensions }"
+                    "extensions": "Extensions compatiblas : { extensions }"
                 },
                 "warning": {
                     "quota": "Avètz pas mai d’espaci per enviar los fichièrs. Mercés de contactar los moderators."
@@ -1466,7 +1466,7 @@
                 "noTerms": "Cap de condicion pas disponibla."
             },
             "message": {
-                "contact": "Enviatz-nos un messatge : {'{{'} contactEmail {'}}'}"
+                "contact": "Enviatz-nos un messatge : {'{{'} contactEmail {'}}'}"
             }
         },
         "common": {
@@ -1492,7 +1492,7 @@
                 },
                 "modal": {
                     "performAction": {
-                        "header": "Volètz lançar l’accion « { action } » sus { count } element ? | Volètz lançar l’accion « { action } » sus { count } elements ?",
+                        "header": "Volètz lançar l’accion « { action } » sus { count } element ? | Volètz lançar l’accion « { action } » sus { count } elements ?",
                         "content": {
                             "warning": "Aquesta operacion pòt afectar mantun elements o pòt pas èsser anullada, mercés de verificar s’es ben çò que desiratz."
                         }
@@ -1561,7 +1561,7 @@
                     "confirm": "Confirmar"
                 },
                 "header": {
-                    "confirm": "Volètz confirmar aquesta accion ?"
+                    "confirm": "Volètz confirmar aquesta accion ?"
                 }
             },
             "RenderedDescription": {
@@ -1601,7 +1601,7 @@
                     "copy": "Copiar"
                 },
                 "message": {
-                    "success": "Tèxte copiat al quichapapièr !"
+                    "success": "Tèxte copiat al quichapapièr !"
                 }
             },
             "LoginModal": {
@@ -1613,7 +1613,7 @@
                     "unauthenticated": "Desconnectat"
                 },
                 "description": {
-                    "noAccess": "Avètz pas accès a aquò !"
+                    "noAccess": "Avètz pas accès a aquò !"
                 }
             },
             "ContentForm": {
@@ -1641,7 +1641,7 @@
             },
             "AttachmentInput": {
                 "help": {
-                    "upload": "PNG o JPG. Las dimensions devon èsser entre 1400x1400px e 3000x3000px. La talha maximala autorizada es 5 Mo."
+                    "upload": "PNG o JPG. Las dimensions devon èsser entre 1400x1400px e 3000x3000px. La talha maximala autorizada es 5 Mo."
                 },
                 "button": {
                     "remove": "Tirar"
@@ -1671,7 +1671,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> es ja dins <strong>{ playlist }</strong>."
+                    "duplicate": "{ 0 } es ja dins { 1 }."
                 },
                 "button": {
                     "addDuplicate": "Ajustar pr’aquò",
@@ -1722,7 +1722,7 @@
                 },
                 "modal": {
                     "clearPlaylist": {
-                        "header": "Volètz voidar la lista de lectura « { playlist } »  ?",
+                        "header": "Volètz voidar la lista de lectura « { playlist } »  ?",
                         "content": {
                             "warning": "Aquò escafarà totas las pistas de la lista de lectura e poirà pas èsser anullat."
                         }
@@ -1778,9 +1778,9 @@
         "notifications": {
             "NotificationRow": {
                 "message": {
-                    "libraryAcceptFollow": "{ username } acceptèt vòstra demanda de seguiment de la bibliotèca « { library } »",
-                    "libraryFollow": "{ username } seguís vòstra bibliotèca « { library } »",
-                    "libraryPendingFollow": "{ username } vòl seguir vòstra bibliotèca « { library } »"
+                    "libraryAcceptFollow": "{ username } acceptèt vòstra demanda de seguiment de la bibliotèca « { library } »",
+                    "libraryFollow": "{ username } seguís vòstra bibliotèca « { library } »",
+                    "libraryPendingFollow": "{ username } vòl seguir vòstra bibliotèca « { library } »"
                 },
                 "button": {
                     "approve": "Validar",
@@ -2221,7 +2221,7 @@
                     "tooltip": {
                         "blockAll": "O blocar tot d’aqueste compte estant. Empacharà totas interaccion amb l’entitat e purgarà lo contengut ligat (pistas, bibliotèca, seguiments, etc.)",
                         "rejectMedia": "Telecargar pas cap de mèdia (àudio, album, tampa, avatar de compte…) d’aqueste compte o domeni. Purgarà tanben lo contengut existent.",
-                        "summary": "Explicatz perque aplicatz aquesta politica : vos ajudarà a vos remembrar perque apondèretz aquesta règla. Segon la configuracion de l’instància, aquò pòt èsser mostrat publicament per ajudar als utilizaires a comprendre qualas règlas de moderacion son en plaça.",
+                        "summary": "Explicatz perque aplicatz aquesta politica : vos ajudarà a vos remembrar perque apondèretz aquesta règla. Segon la configuracion de l’instància, aquò pòt èsser mostrat publicament per ajudar als utilizaires a comprendre qualas règlas de moderacion son en plaça.",
                         "silenceActivity": "Amagar lo contengut del compte o del demoni, levat pels seguidors.",
                         "silenceNotifications": "Empacha lo compte o domeni de far veire de notificacions, levat pels seguidors.",
                         "isActive": "Utilizatz aqueste paramètre per activar/desactivar temporàriament la règla sens la suprimir complètament."
@@ -2235,7 +2235,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Suprimir aquesta règla de moderacion ?",
+                            "header": "Suprimir aquesta règla de moderacion ?",
                             "content": {
                                 "warning": "Aquesta accion se pòt pas anullar."
                             }
@@ -2603,7 +2603,7 @@
             "ReportModal": {
                 "header": {
                     "disabled": "Los senhalaments anonims son desactivats, marcatz-vos per realizar un senhalament.",
-                    "modal": "Volètz senhalar aqueste objècte ?",
+                    "modal": "Volètz senhalar aqueste objècte ?",
                     "submissionFailure": "Error en enviar lo senhalament"
                 },
                 "button": {
@@ -2634,7 +2634,7 @@
                     "success": "Filtre de contengut corrèctament ajustat"
                 },
                 "header": {
-                    "modal": "Volètz rescondre lo contengut de l’artista « { name } »  ?",
+                    "modal": "Volètz rescondre lo contengut de l’artista « { name } »  ?",
                     "failure": "Error en crear lo filtre"
                 },
                 "warning": {
@@ -2643,7 +2643,7 @@
                         "listItem3": "Dins las listas d’artistas e d’albums",
                         "listItem1": "Dins los favorits e istorics d’escota d’autres utilizaires",
                         "listItem4": "Dins las suggestions de ràdios",
-                        "listIntro": "Veiretz pas mai las pistas, albums e las activitats d’utilizaires ligadas a aqueste artista :"
+                        "listIntro": "Veiretz pas mai las pistas, albums e las activitats d’utilizaires ligadas a aqueste artista :"
                     }
                 },
                 "help": {
@@ -2797,7 +2797,7 @@
                 },
                 "title": "Mostrar/amagar lo senhal",
                 "message": {
-                    "copy": "Tèxte copiat al quichapapièr !"
+                    "copy": "Tèxte copiat al quichapapièr !"
                 }
             }
         },
@@ -2849,10 +2849,10 @@
             },
             "title": "Pagina pas trobada",
             "header": {
-                "pageNotFound": "Pagina pas trobada !"
+                "pageNotFound": "Pagina pas trobada !"
             },
             "message": {
-                "pageNotFound": "O planhèm, la pagina demandada existís pas :"
+                "pageNotFound": "O planhèm, la pagina demandada existís pas :"
             }
         },
         "vui": {
@@ -2912,7 +2912,7 @@
                         },
                         "fediverse": {
                             "content": {
-                                "help": "S’utilizatz Mastodon o una autra aplicacion del fediverse, podètz tanben vos abonar a aqueste compte :"
+                                "help": "S’utilizatz Mastodon o una autra aplicacion del fediverse, podètz tanben vos abonar a aqueste compte :"
                             },
                             "header": "S’abonar sul fediverse"
                         },
@@ -2948,7 +2948,7 @@
                     "uploadsSuccess": "Mandadisses corrèctament publicats"
                 },
                 "meta": {
-                    "progress": "Bibliotèca e mandadís :"
+                    "progress": "Bibliotèca e mandadís :"
                 },
                 "message": {
                     "processing": "Funkwhale tracta vòstres mandadisses e seràn lèu publicats."
@@ -3007,19 +3007,19 @@
                     },
                     "modal": {
                         "purgeErrored": {
-                            "header": "Purgar los fichièrs amb errors ?",
+                            "header": "Purgar los fichièrs amb errors ?",
                             "content": {
                                 "description": "Las pistas enviadas mas pas complètament tractadas pel servidor seràn complètament suprimidas. Vos donarà de nòu lo quòta escafat."
                             }
                         },
                         "purgePending": {
-                            "header": "Purgar los fichièrs en espèra ?",
+                            "header": "Purgar los fichièrs en espèra ?",
                             "content": {
                                 "description": "Las pistas importadas que lo servidor a pas encara tractadas seràn complètament suprimidas. Lo quòta correspondent vos serà tornat."
                             }
                         },
                         "purgeSkipped": {
-                            "header": "Purgar los fichièrs ignorats ?",
+                            "header": "Purgar los fichièrs ignorats ?",
                             "content": {
                                 "description": "Las pistas enviadas mas ignoradas pendent lo processús d’importacion per mantun rasons seràn complètament suprimidas. Vos donarà de nòu lo quòta escafat."
                             }
@@ -3106,7 +3106,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Suprimir aquesta bibliotèca ?",
+                            "header": "Suprimir aquesta bibliotèca ?",
                             "content": {
                                 "warning": "Aquesta bibliotèca e totas sas pistas seràn suprimidas. Aquesta accion se pòt pas anullar."
                             }
@@ -3139,15 +3139,15 @@
                 "Card": {
                     "meta": {
                         "tracks": "{ count } pista | { count } pistas",
-                        "failedTracks": "Pistas en error :",
-                        "lastUpdate": "Darrièra actualizacion :"
+                        "failedTracks": "Pistas en error :",
+                        "lastUpdate": "Darrièra actualizacion :"
                     },
                     "modal": {
                         "unfollow": {
                             "content": {
                                 "warning": "En quitar de seguir aquesta bibliotèca, perdretz l’accès a son contengut."
                             },
-                            "header": "Quitar de seguir aquesta bibliotèca ?"
+                            "header": "Quitar de seguir aquesta bibliotèca ?"
                         }
                     },
                     "button": {
@@ -3212,7 +3212,7 @@
                 "description": {
                     "follow": "Podètz seguir las bibliotècas d’autres utilizaires per accedir a de nòvas musicas. Las bibliotècas publicas pòdon èsser seguidas còp sec, mentre qu’una bibliotèca privada demanda una aprovacion de sus proprietaris.",
                     "channel": {
-                        "1": "Se sètz musician o creator de podcasts, las cadenas son fachas per vos !",
+                        "1": "Se sètz musician o creator de podcasts, las cadenas son fachas per vos !",
                         "2": "Partejatz vòstre trabalh publicament e obtenètz de seguidors sus Funkwhale, sul Fediverse o de las aplicacions de podcast estant."
                     },
                     "upload": "Enviatz vòstra bibliotèca musicala personala a Funkwhale e aprofechatz-ne pertot e partejatz-la amb vòstres amics e familha."
@@ -3306,19 +3306,19 @@
             },
             "DetailAlbums": {
                 "empty": {
-                    "upload": "Aquesta bibliotèca es voida, deuriatz enviar quicòm !",
+                    "upload": "Aquesta bibliotèca es voida, deuriatz enviar quicòm !",
                     "follow": "Es possible que vos calga seguir aquesta bibliotèca per veire son contengut."
                 }
             },
             "DetailOverview": {
                 "empty": {
-                    "upload": "Aquesta bibliotèca es voida, deuriatz enviar quicòm !",
+                    "upload": "Aquesta bibliotèca es voida, deuriatz enviar quicòm !",
                     "follow": "Es possible que vos calga seguir aquesta bibliotèca per veire son contengut."
                 }
             },
             "DetailTracks": {
                 "empty": {
-                    "upload": "Aquesta bibliotèca es voida, deuriatz enviar quicòm !",
+                    "upload": "Aquesta bibliotèca es voida, deuriatz enviar quicòm !",
                     "follow": "Es possible que vos calga seguir aquesta bibliotèca per veire son contengut."
                 }
             }
@@ -3333,7 +3333,7 @@
                     "domainView": "Veire sus { domain }"
                 },
                 "label": {
-                    "self": "Sètz vos !"
+                    "self": "Sètz vos !"
                 }
             },
             "PasswordReset": {
@@ -3752,7 +3752,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Suprimir aqueste mandadís ?",
+                            "header": "Suprimir aqueste mandadís ?",
                             "content": {
                                 "warning": "La suggestion serà complètament tirada, aquesta accion es irreversibla."
                             }
@@ -3798,7 +3798,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Suprimir aquesta bibliotèca ?",
+                            "header": "Suprimir aquesta bibliotèca ?",
                             "content": {
                                 "warning": "Aquesta bibliotèca serà tirada, e mai los mandadisses e abonaments ligats. Aquesta accions es irreversibla."
                             }
@@ -3851,7 +3851,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Suprimir aqueste album ?",
+                            "header": "Suprimir aqueste album ?",
                             "content": {
                                 "warning": "L’album serà tirat, e mai los mandadisses, pistas, favorits e istorics d’escota ligats. Aquesta accion es irreversibla."
                             }
@@ -3905,7 +3905,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Suprimir aqueste artista ?",
+                            "header": "Suprimir aqueste artista ?",
                             "content": {
                                 "warning": "L’artista serà tirat, e mai los mandadisses, pistas, albums, favorits e istorics d’escota ligats. Aquesta accion es irreversibla."
                             }
@@ -3933,7 +3933,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Suprimir aquesta etiqueta ?",
+                            "header": "Suprimir aquesta etiqueta ?",
                             "content": {
                                 "warning": "L’etiqueta seguenta serà tirada e desligada de las entitats existentas. Aquesta accion es irreversibla."
                             }
@@ -3995,7 +3995,7 @@
                     },
                     "modal": {
                         "delete": {
-                            "header": "Suprimir aquesta pista ?",
+                            "header": "Suprimir aquesta pista ?",
                             "content": {
                                 "warning": "La pista serà tirada, e mai las pistas, mandadisses, favorits e istorics d’escota ligats. Aquesta accion es irreversibla."
                             }
@@ -4192,7 +4192,7 @@
                 },
                 "modal": {
                     "delete": {
-                        "header": "Volètz suprimir la lista de lectura « { playlist } »  ?",
+                        "header": "Volètz suprimir la lista de lectura « { playlist } »  ?",
                         "content": {
                             "warning": "Aquò escafarà aquesta lista de lectura per totjorn e poirà pas èsser anullat."
                         }
@@ -4221,7 +4221,7 @@
                 },
                 "modal": {
                     "delete": {
-                        "header": "Volètz suprimir la ràdio « { playlist } »  ?",
+                        "header": "Volètz suprimir la ràdio « { playlist } »  ?",
                         "content": {
                             "warning": "Aquò escafarà aquesta ràdio per totjorn e poirà pas èsser anullat."
                         }

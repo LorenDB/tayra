@@ -17,7 +17,7 @@
                 },
                 "help": {
                     "pasteCode": "Copy-paste the following code in the application:",
-                    "redirect": "You will be redirected to <strong>{ url }</strong>",
+                    "redirect": "You will be redirected to { 0 }",
                     "copyCode": "You will be shown a code to copy-paste in the application."
                 },
                 "message": {
@@ -1671,7 +1671,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> is already in <strong>{ playlist }</strong>."
+                    "duplicate": "{ 0 } is already in { 1 }."
                 },
                 "button": {
                     "addDuplicate": "Add anyway",

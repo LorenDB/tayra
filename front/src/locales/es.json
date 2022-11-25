@@ -1516,7 +1516,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> ya está en <strong>{ playlist }</strong>."
+                    "duplicate": "{ 0 } ya está en { 1 }."
                 },
                 "button": {
                     "addDuplicate": "Añade igualmente",

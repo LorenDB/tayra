@@ -17,7 +17,7 @@
                 },
                 "help": {
                     "pasteCode": "Copie e cole no aplicativo o seguinte código:",
-                    "redirect": "Você será redirecionado para <strong>{ url }</strong>",
+                    "redirect": "Você será redirecionado para { 0 }",
                     "copyCode": "Você verá um código para copiar e colar no aplicativo."
                 },
                 "message": {
@@ -1572,7 +1572,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> já está em <strong>{ playlist }</strong>."
+                    "duplicate": "{ 0 } já está em { 1 }."
                 },
                 "button": {
                     "addDuplicate": "Adicionar assim mesmo",

@@ -99,7 +99,16 @@ const checkAndSwitch = async (url: string) => {
           v-if="$store.state.instance.instanceUrl"
           class="description"
         >
-          {{ $t('components.SetInstanceModal.message.currentConnection', {url: $store.state.instance.instanceUrl, hostname: $store.getters['instance/domain']}) }}
+          <i18n-t keypath="components.SetInstanceModal.message.currentConnection">
+            <a
+              :href="$store.state.instance.instanceUrl"
+              target="_blank"
+            >
+              {{ $store.getters['instance/domain'] }}
+              <i class="external icon" />
+            </a>
+          </i18n-t>
+          {{ $t('', {url: $store.state.instance.instanceUrl, hostname: $store.getters['instance/domain']}) }}
         </p>
         <p v-else>
           {{ $t('components.SetInstanceModal.help.selectPod') }}

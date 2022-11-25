@@ -313,7 +313,7 @@
                     "episodes": "{ count } spor | { count } spor",
                     "tracks": "{ count } spor | { count } spor"
                 },
-                "title": "Registrert siden { date }"
+                "title": "Registrert siden { date }"
             },
             "ChannelSerieCard": {
                 "meta": {
@@ -542,7 +542,7 @@
                 "link": {
                     "discogs": "Søk etter noe musikk",
                     "wikipedia": "Søk på Wikipedia",
-                    "domain": "Registrert siden { date }",
+                    "domain": "Registrert siden { date }",
                     "musicbrainz": "Vis på MusicBrainz"
                 }
             },
@@ -859,7 +859,7 @@
                 },
                 "link": {
                     "discogs": "Søk etter noe musikk",
-                    "domain": "Registrert siden { date }",
+                    "domain": "Registrert siden { date }",
                     "musicbrainz": "Vis på MusicBrainz"
                 }
             },
@@ -882,7 +882,7 @@
                 "link": {
                     "discogs": "Søk etter noe musikk",
                     "wikipedia": "Søk på Wikipedia",
-                    "domain": "Registrert siden { date }"
+                    "domain": "Registrert siden { date }"
                 },
                 "title": "Spor"
             },
@@ -2208,7 +2208,7 @@
         "tags": {
             "List": {
                 "button": {
-                    "more": "Vis ett album til | Vis % { count } flere album"
+                    "more": "Vis ett album til | Vis % { count } flere album"
                 }
             }
         }
@@ -2249,7 +2249,7 @@
                 },
                 "link": {
                     "channelTracks": "Spor",
-                    "domainView": "Registrert siden { date }"
+                    "domainView": "Registrert siden { date }"
                 }
             },
             "DetailOverview": {
@@ -2538,7 +2538,7 @@
                     "artists": "Artister",
                     "owner": "Innlogget som { username }",
                     "tracks": "Spor",
-                    "domain": "Registrert siden { date }"
+                    "domain": "Registrert siden { date }"
                 },
                 "button": {
                     "edit": "Rediger",
@@ -2605,7 +2605,7 @@
                 "title": "{ username } sin profil",
                 "link": {
                     "activity": "Aktivitet",
-                    "domainView": "Registrert siden { date }"
+                    "domainView": "Registrert siden { date }"
                 },
                 "label": {
                     "self": "Dette er deg."

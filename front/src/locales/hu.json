@@ -368,7 +368,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> már benne van <strong>{ playlist }</strong>ban."
+                    "duplicate": "{ 0 } már benne van { 1 }ban."
                 },
                 "button": {
                     "addDuplicate": "Mindenképp adja hozzá",

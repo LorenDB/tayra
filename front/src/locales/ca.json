@@ -17,7 +17,7 @@
                 },
                 "help": {
                     "pasteCode": "Copia i enganxa el codi de seguiment a la vostra aplicació:",
-                    "redirect": "Es redirigirà a <strong>{ url }</strong>",
+                    "redirect": "Es redirigirà a { 0 }",
                     "copyCode": "Se us mostrarà un codi per copiar i enganxar a l’aplicació."
                 },
                 "message": {
@@ -1628,7 +1628,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "<strong>{ track }</strong> ja és a <strong>{ playlist }</strong>."
+                    "duplicate": "{ 0 } ja és a { 1 }."
                 },
                 "button": {
                     "addDuplicate": "Afegeix de totes maneres",

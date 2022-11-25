@@ -34,10 +34,15 @@ module.exports = {
     'no-undef': 'off',
 
     // NOTE: i18n
+    '@intlify/vue-i18n/no-deprecated-i18n-component': 'error',
     '@intlify/vue-i18n/valid-message-syntax': 'error',
+    '@intlify/vue-i18n/no-i18n-t-path-prop': 'error',
     '@intlify/vue-i18n/no-missing-keys': 'error',
     '@intlify/vue-i18n/no-dynamic-keys': 'error',
-    '@intlify/vue-i18n/no-unused-keys': 'error',
+    '@intlify/vue-i18n/no-unused-keys': ['error', {
+      extensions: ['.ts', '.vue'],
+      enableFix: true
+    }],
 
     // TODO (wvffle): Remove after VUI and #1618
     'vue/multi-word-component-names': 'off',

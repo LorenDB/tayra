@@ -17,7 +17,7 @@
                 },
                 "help": {
                     "pasteCode": "在应用程序中复制粘贴以下代码：",
-                    "redirect": "您将会被跳转到 <strong>{ url }</strong>",
+                    "redirect": "您将会被跳转到 { 0 }",
                     "copyCode": "您将会看到一串需要粘贴到应用程序的字符。"
                 },
                 "message": {
@@ -1671,7 +1671,7 @@
             },
             "PlaylistModal": {
                 "warning": {
-                    "duplicate": "歌曲 <strong>{ track }</strong> 已经在歌单 <strong>{ playlist }</strong> 中。"
+                    "duplicate": "歌曲 { 0 } 已经在歌单 { 1 } 中。"
                 },
                 "button": {
                     "addDuplicate": "继续添加",
