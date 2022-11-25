@@ -330,8 +330,8 @@
         },
         "About": {
             "stat": {
-                "activeUsers": " | ",
-                "hoursOfMusic": " | "
+                "activeUsers": "",
+                "hoursOfMusic": ""
             },
             "header": {
                 "funkwhale": "",
@@ -361,8 +361,8 @@
         },
         "Home": {
             "stat": {
-                "activeUsers": " | ",
-                "hoursOfMusic": " | "
+                "activeUsers": "",
+                "hoursOfMusic": ""
             },
             "header": {
                 "aboutFunkwhale": "",
@@ -412,8 +412,8 @@
             "artist": {
                 "Card": {
                     "meta": {
-                        "episodes": " | ",
-                        "tracks": " | "
+                        "episodes": "",
+                        "tracks": ""
                     }
                 },
                 "Widget": {
@@ -424,20 +424,20 @@
             },
             "ChannelCard": {
                 "meta": {
-                    "episodes": " | ",
-                    "tracks": " | "
+                    "episodes": "",
+                    "tracks": ""
                 },
                 "title": "به روز شده در { date }"
             },
             "ChannelSerieCard": {
                 "meta": {
-                    "episodes": " | "
+                    "episodes": ""
                 }
             },
             "album": {
                 "Card": {
                     "meta": {
-                        "tracks": " | "
+                        "tracks": ""
                     }
                 },
                 "Widget": {
@@ -696,8 +696,8 @@
         "library": {
             "AlbumBase": {
                 "meta": {
-                    "episodes": " | ",
-                    "tracks": " | "
+                    "episodes": "",
+                    "tracks": ""
                 },
                 "link": {
                     "addDescription": ""
@@ -705,7 +705,7 @@
             },
             "ArtistBase": {
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "title": "",
                 "button": {
@@ -732,7 +732,7 @@
             "radios": {
                 "Builder": {
                     "header": {
-                        "matches": " | ",
+                        "matches": "",
                         "builder": "",
                         "created": "",
                         "updated": ""
@@ -1269,7 +1269,7 @@
         "favorites": {
             "List": {
                 "header": {
-                    "favorites": " | "
+                    "favorites": ""
                 },
                 "ordering": {
                     "direction": {
@@ -1306,7 +1306,7 @@
         "channels": {
             "UploadModal": {
                 "meta": {
-                    "files": " | ",
+                    "files": "",
                     "quota": ""
                 },
                 "button": {
@@ -1327,7 +1327,7 @@
             },
             "AlbumSelect": {
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "label": {
                     "album": "",
@@ -1421,12 +1421,12 @@
         },
         "AboutPod": {
             "stat": {
-                "hoursOfMusic": " | ",
-                "activeUsers": " | ",
-                "albumsCount": " | ",
-                "artistsCount": " | ",
-                "listeningsCount": " | ",
-                "tracksCount": " | "
+                "hoursOfMusic": "",
+                "activeUsers": "",
+                "albumsCount": "",
+                "artistsCount": "",
+                "listeningsCount": "",
+                "tracksCount": ""
             },
             "title": "",
             "link": {
@@ -1472,18 +1472,18 @@
         "common": {
             "ActionTable": {
                 "button": {
-                    "selected": " | ",
-                    "allSelected": " | ",
+                    "selected": "",
+                    "allSelected": "",
                     "go": "",
                     "launch": "",
                     "refresh": "",
                     "select": "",
                     "selectAll": "",
-                    "selectElement": " | ",
+                    "selectElement": "",
                     "selectCurrentPage": ""
                 },
                 "message": {
-                    "success": " | ",
+                    "success": "",
                     "needsRefresh": ""
                 },
                 "label": {
@@ -1492,7 +1492,7 @@
                 },
                 "modal": {
                     "performAction": {
-                        "header": " | ",
+                        "header": "",
                         "content": {
                             "warning": ""
                         }
@@ -1666,7 +1666,7 @@
         "playlists": {
             "Card": {
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 }
             },
             "PlaylistModal": {
@@ -1712,7 +1712,7 @@
                     "addDuplicate": "",
                     "clear": "",
                     "copy": "",
-                    "insertFromQueue": " | "
+                    "insertFromQueue": ""
                 },
                 "error": {
                     "sync": ""
@@ -2475,7 +2475,7 @@
                         "search": ""
                     },
                     "pagination": {
-                        "results": " | "
+                        "results": ""
                     }
                 },
                 "InvitationsTable": {
@@ -2512,7 +2512,7 @@
                         "search": ""
                     },
                     "pagination": {
-                        "results": " | "
+                        "results": ""
                     }
                 },
                 "InvitationForm": {
@@ -2865,7 +2865,7 @@
         "tags": {
             "List": {
                 "button": {
-                    "more": " | "
+                    "more": ""
                 }
             }
         }
@@ -2874,10 +2874,10 @@
         "channels": {
             "DetailBase": {
                 "meta": {
-                    "episodes": " | ",
-                    "listenings": " | ",
-                    "subscribers": " | ",
-                    "tracks": " | "
+                    "episodes": "",
+                    "listenings": "",
+                    "subscribers": "",
+                    "tracks": ""
                 },
                 "link": {
                     "channelEpisodes": "",
@@ -2977,7 +2977,7 @@
             "libraries": {
                 "Card": {
                     "meta": {
-                        "tracks": " | "
+                        "tracks": ""
                     },
                     "link": {
                         "details": ""
@@ -3138,7 +3138,7 @@
             "remote": {
                 "Card": {
                     "meta": {
-                        "tracks": " | ",
+                        "tracks": "",
                         "failedTracks": "",
                         "lastUpdate": ""
                     },
@@ -3243,7 +3243,7 @@
         "library": {
             "LibraryBase": {
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "link": {
                     "albums": "",
@@ -4203,7 +4203,7 @@
                 },
                 "title": "",
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "empty": {
                     "noTracks": ""
@@ -4240,7 +4240,7 @@
     "composables": {
         "audio": {
             "usePlayOptions": {
-                "addToQueueMessage": " | "
+                "addToQueueMessage": ""
             }
         },
         "locale": {

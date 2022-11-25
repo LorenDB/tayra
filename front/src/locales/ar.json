@@ -1472,8 +1472,8 @@
         "common": {
             "ActionTable": {
                 "button": {
-                    "selected": " | ",
-                    "allSelected": " | ",
+                    "selected": "",
+                    "allSelected": "",
                     "go": "هيا",
                     "launch": "إبدأ",
                     "refresh": "تحديث محتوى الجدول",
@@ -1483,7 +1483,7 @@
                     "selectCurrentPage": "تحديد الصفحة الحالية فقط"
                 },
                 "message": {
-                    "success": " | ",
+                    "success": "",
                     "needsRefresh": ""
                 },
                 "label": {
@@ -1492,7 +1492,7 @@
                 },
                 "modal": {
                     "performAction": {
-                        "header": " | ",
+                        "header": "",
                         "content": {
                             "warning": ""
                         }
@@ -4203,7 +4203,7 @@
                 },
                 "title": "قائمة المَقاطِع",
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "empty": {
                     "noTracks": "اسحب والقي أعمدةً قصد ترتيب المقاطِع على قائمة التشغيل"
@@ -4240,7 +4240,7 @@
     "composables": {
         "audio": {
             "usePlayOptions": {
-                "addToQueueMessage": " | "
+                "addToQueueMessage": ""
             }
         },
         "locale": {

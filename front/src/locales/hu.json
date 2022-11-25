@@ -1472,14 +1472,14 @@
         "common": {
             "ActionTable": {
                 "button": {
-                    "selected": " | ",
+                    "selected": "",
                     "allSelected": "Mind az egy elem ki van választva | Mind az { count } elem ki van választva",
                     "go": "",
                     "launch": "",
                     "refresh": "",
                     "select": "",
                     "selectAll": "",
-                    "selectElement": " | ",
+                    "selectElement": "",
                     "selectCurrentPage": ""
                 },
                 "message": {
@@ -1492,7 +1492,7 @@
                 },
                 "modal": {
                     "performAction": {
-                        "header": " | ",
+                        "header": "",
                         "content": {
                             "warning": ""
                         }
@@ -1712,7 +1712,7 @@
                     "addDuplicate": "Mindenképp adja hozzá",
                     "clear": "",
                     "copy": "",
-                    "insertFromQueue": " | "
+                    "insertFromQueue": ""
                 },
                 "error": {
                     "sync": "Hiba történt a módosítások mentése közben"
@@ -2475,7 +2475,7 @@
                         "search": ""
                     },
                     "pagination": {
-                        "results": " | "
+                        "results": ""
                     }
                 },
                 "InvitationsTable": {
@@ -2512,7 +2512,7 @@
                         "search": ""
                     },
                     "pagination": {
-                        "results": " | "
+                        "results": ""
                     }
                 },
                 "InvitationForm": {
@@ -2865,7 +2865,7 @@
         "tags": {
             "List": {
                 "button": {
-                    "more": " | "
+                    "more": ""
                 }
             }
         }
@@ -4203,7 +4203,7 @@
                 },
                 "title": "",
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "empty": {
                     "noTracks": ""
@@ -4240,7 +4240,7 @@
     "composables": {
         "audio": {
             "usePlayOptions": {
-                "addToQueueMessage": " | "
+                "addToQueueMessage": ""
             }
         },
         "locale": {

@@ -331,7 +331,7 @@
         "About": {
             "stat": {
                 "activeUsers": "{ count } aktif kullanıcı | { count } aktif kullanıcılar",
-                "hoursOfMusic": " | "
+                "hoursOfMusic": ""
             },
             "header": {
                 "funkwhale": "",
@@ -705,7 +705,7 @@
             },
             "ArtistBase": {
                 "meta": {
-                    "tracks": "{ albumsCount } albümde { count } parça | "
+                    "tracks": ""
                 },
                 "title": "",
                 "button": {
@@ -1421,12 +1421,12 @@
         },
         "AboutPod": {
             "stat": {
-                "hoursOfMusic": " | ",
-                "activeUsers": " | ",
-                "albumsCount": " | ",
-                "artistsCount": " | ",
-                "listeningsCount": " | ",
-                "tracksCount": " | "
+                "hoursOfMusic": "",
+                "activeUsers": "",
+                "albumsCount": "",
+                "artistsCount": "",
+                "listeningsCount": "",
+                "tracksCount": ""
             },
             "title": "",
             "link": {
@@ -1472,18 +1472,18 @@
         "common": {
             "ActionTable": {
                 "button": {
-                    "selected": "{ count }'nin { total }'i seçildi | ",
-                    "allSelected": " | ",
+                    "selected": "",
+                    "allSelected": "",
                     "go": "",
                     "launch": "",
                     "refresh": "",
                     "select": "",
                     "selectAll": "",
-                    "selectElement": " | ",
+                    "selectElement": "",
                     "selectCurrentPage": ""
                 },
                 "message": {
-                    "success": " | ",
+                    "success": "",
                     "needsRefresh": ""
                 },
                 "label": {
@@ -1492,7 +1492,7 @@
                 },
                 "modal": {
                     "performAction": {
-                        "header": " | ",
+                        "header": "",
                         "content": {
                             "warning": ""
                         }
@@ -1712,7 +1712,7 @@
                     "addDuplicate": "",
                     "clear": "",
                     "copy": "",
-                    "insertFromQueue": " | "
+                    "insertFromQueue": ""
                 },
                 "error": {
                     "sync": ""
@@ -2475,7 +2475,7 @@
                         "search": ""
                     },
                     "pagination": {
-                        "results": " | "
+                        "results": ""
                     }
                 },
                 "InvitationsTable": {
@@ -2512,7 +2512,7 @@
                         "search": ""
                     },
                     "pagination": {
-                        "results": " | "
+                        "results": ""
                     }
                 },
                 "InvitationForm": {
@@ -2865,7 +2865,7 @@
         "tags": {
             "List": {
                 "button": {
-                    "more": " | "
+                    "more": ""
                 }
             }
         }
@@ -2875,7 +2875,7 @@
             "DetailBase": {
                 "meta": {
                     "episodes": "{ count } bölüm | { count } bölümler",
-                    "listenings": "{ count } dinliyor | ",
+                    "listenings": "",
                     "subscribers": "{ count } abone | { count } abone",
                     "tracks": "{ count } parça | { count } parça"
                 },
@@ -4203,7 +4203,7 @@
                 },
                 "title": "",
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "empty": {
                     "noTracks": ""
@@ -4240,7 +4240,7 @@
     "composables": {
         "audio": {
             "usePlayOptions": {
-                "addToQueueMessage": " | "
+                "addToQueueMessage": ""
             }
         },
         "locale": {

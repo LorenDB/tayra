@@ -2475,7 +2475,7 @@
                         "search": "Søk etter brukernavn, e-post, navn…"
                     },
                     "pagination": {
-                        "results": " | "
+                        "results": ""
                     }
                 },
                 "InvitationsTable": {
@@ -2512,7 +2512,7 @@
                         "search": "Søk etter brukernavn, e-postadresse, kode…"
                     },
                     "pagination": {
-                        "results": " | "
+                        "results": ""
                     }
                 },
                 "InvitationForm": {

@@ -413,7 +413,7 @@
                 "Card": {
                     "meta": {
                         "episodes": "{ count } 正在聽",
-                        "tracks": " | "
+                        "tracks": ""
                     }
                 },
                 "Widget": {
@@ -425,7 +425,7 @@
             "ChannelCard": {
                 "meta": {
                     "episodes": "{ count } 正在聽",
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "title": ""
             },
@@ -437,7 +437,7 @@
             "album": {
                 "Card": {
                     "meta": {
-                        "tracks": " | "
+                        "tracks": ""
                     }
                 },
                 "Widget": {
@@ -697,7 +697,7 @@
             "AlbumBase": {
                 "meta": {
                     "episodes": "{ count } 正在聽",
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "link": {
                     "addDescription": ""
@@ -705,7 +705,7 @@
             },
             "ArtistBase": {
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "title": "",
                 "button": {
@@ -732,7 +732,7 @@
             "radios": {
                 "Builder": {
                     "header": {
-                        "matches": " | ",
+                        "matches": "",
                         "builder": "",
                         "created": "",
                         "updated": ""
@@ -1306,7 +1306,7 @@
         "channels": {
             "UploadModal": {
                 "meta": {
-                    "files": " | ",
+                    "files": "",
                     "quota": ""
                 },
                 "button": {
@@ -1327,7 +1327,7 @@
             },
             "AlbumSelect": {
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "label": {
                     "album": "",
@@ -1473,7 +1473,7 @@
             "ActionTable": {
                 "button": {
                     "selected": "{ count } 中 { total } 選中",
-                    "allSelected": " | ",
+                    "allSelected": "",
                     "go": "",
                     "launch": "",
                     "refresh": "",
@@ -1483,7 +1483,7 @@
                     "selectCurrentPage": ""
                 },
                 "message": {
-                    "success": " | ",
+                    "success": "",
                     "needsRefresh": ""
                 },
                 "label": {
@@ -1492,7 +1492,7 @@
                 },
                 "modal": {
                     "performAction": {
-                        "header": " | ",
+                        "header": "",
                         "content": {
                             "warning": ""
                         }
@@ -1666,7 +1666,7 @@
         "playlists": {
             "Card": {
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 }
             },
             "PlaylistModal": {
@@ -1712,7 +1712,7 @@
                     "addDuplicate": "",
                     "clear": "",
                     "copy": "",
-                    "insertFromQueue": " | "
+                    "insertFromQueue": ""
                 },
                 "error": {
                     "sync": ""
@@ -2865,7 +2865,7 @@
         "tags": {
             "List": {
                 "button": {
-                    "more": " | "
+                    "more": ""
                 }
             }
         }
@@ -2874,10 +2874,10 @@
         "channels": {
             "DetailBase": {
                 "meta": {
-                    "episodes": " | ",
+                    "episodes": "",
                     "listenings": "{ count } 正在聽",
-                    "subscribers": " | ",
-                    "tracks": " | "
+                    "subscribers": "",
+                    "tracks": ""
                 },
                 "link": {
                     "channelEpisodes": "",
@@ -2977,7 +2977,7 @@
             "libraries": {
                 "Card": {
                     "meta": {
-                        "tracks": " | "
+                        "tracks": ""
                     },
                     "link": {
                         "details": ""
@@ -3138,7 +3138,7 @@
             "remote": {
                 "Card": {
                     "meta": {
-                        "tracks": " | ",
+                        "tracks": "",
                         "failedTracks": "",
                         "lastUpdate": ""
                     },
@@ -3243,7 +3243,7 @@
         "library": {
             "LibraryBase": {
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "link": {
                     "albums": "",
@@ -4203,7 +4203,7 @@
                 },
                 "title": "",
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "empty": {
                     "noTracks": ""
@@ -4240,7 +4240,7 @@
     "composables": {
         "audio": {
             "usePlayOptions": {
-                "addToQueueMessage": " | "
+                "addToQueueMessage": ""
             }
         },
         "locale": {

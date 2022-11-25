@@ -1425,7 +1425,7 @@
                 "activeUsers": "Inaktiv | Inaktiv",
                 "albumsCount": "1 album | { count } album",
                 "artistsCount": "Artist | Artist",
-                "listeningsCount": " | ",
+                "listeningsCount": "",
                 "tracksCount": "låtar | låtar"
             },
             "title": "Om",
@@ -2475,7 +2475,7 @@
                         "search": "Sök efter användarnamn, e-post, namn…"
                     },
                     "pagination": {
-                        "results": " | "
+                        "results": ""
                     }
                 },
                 "InvitationsTable": {
@@ -2512,7 +2512,7 @@
                         "search": "Sök efter användarnamn, e-post, kod…"
                     },
                     "pagination": {
-                        "results": " | "
+                        "results": ""
                     }
                 },
                 "InvitationForm": {

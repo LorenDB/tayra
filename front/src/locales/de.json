@@ -1464,9 +1464,6 @@
                 "noDescription": "Keine Beschreibung verfügbar.",
                 "noRules": "Keine Regeln verfügbar.",
                 "noTerms": "Keine Bedingungen verfügbar."
-            },
-            "message": {
-                "contact": "Schicke uns eine E-Mail: {{ contactEmail }}"
             }
         },
         "common": {

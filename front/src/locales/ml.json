@@ -331,7 +331,7 @@
         "About": {
             "stat": {
                 "activeUsers": "% {count} സജീവ ഉപയോക്താവ് | % {count} സജീവ ഉപയോക്താക്കൾ",
-                "hoursOfMusic": " | "
+                "hoursOfMusic": ""
             },
             "header": {
                 "funkwhale": "",
@@ -362,7 +362,7 @@
         "Home": {
             "stat": {
                 "activeUsers": "% {count} സജീവ ഉപയോക്താവ് | % {count} സജീവ ഉപയോക്താക്കൾ",
-                "hoursOfMusic": " | "
+                "hoursOfMusic": ""
             },
             "header": {
                 "aboutFunkwhale": "Funkwhale നെ കുറിച്ച്",
@@ -413,7 +413,7 @@
                 "Card": {
                     "meta": {
                         "episodes": "{ count } എപ്പിസോഡ് | { count } എപ്പിസോഡുകൾ",
-                        "tracks": " | "
+                        "tracks": ""
                     }
                 },
                 "Widget": {
@@ -425,7 +425,7 @@
             "ChannelCard": {
                 "meta": {
                     "episodes": "{ count } എപ്പിസോഡ് | { count } എപ്പിസോഡുകൾ",
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "title": ""
             },
@@ -437,7 +437,7 @@
             "album": {
                 "Card": {
                     "meta": {
-                        "tracks": " | "
+                        "tracks": ""
                     }
                 },
                 "Widget": {
@@ -697,7 +697,7 @@
             "AlbumBase": {
                 "meta": {
                     "episodes": "{ count } എപ്പിസോഡ് | { count } എപ്പിസോഡുകൾ",
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "link": {
                     "addDescription": "ഒരു വിവരണം ചേർക്കുക…"
@@ -705,7 +705,7 @@
             },
             "ArtistBase": {
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "title": "കലാകാരൻ",
                 "button": {
@@ -732,7 +732,7 @@
             "radios": {
                 "Builder": {
                     "header": {
-                        "matches": " | ",
+                        "matches": "",
                         "builder": "",
                         "created": "",
                         "updated": ""
@@ -1269,7 +1269,7 @@
         "favorites": {
             "List": {
                 "header": {
-                    "favorites": " | "
+                    "favorites": ""
                 },
                 "ordering": {
                     "direction": {
@@ -1327,7 +1327,7 @@
             },
             "AlbumSelect": {
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "label": {
                     "album": "ആൽബം",
@@ -1421,11 +1421,11 @@
         },
         "AboutPod": {
             "stat": {
-                "hoursOfMusic": " | ",
+                "hoursOfMusic": "",
                 "activeUsers": "% {count} സജീവ ഉപയോക്താവ് | % {count} സജീവ ഉപയോക്താക്കൾ",
                 "albumsCount": "ആൽബം | ആൽബം",
                 "artistsCount": "കലാകാരൻ | കലാകാരൻ",
-                "listeningsCount": " | ",
+                "listeningsCount": "",
                 "tracksCount": "ട്രാക്ക് ചേർക്കുക | ട്രാക്ക് ചേർക്കുക"
             },
             "title": "കുറിച്ച്",
@@ -1472,18 +1472,18 @@
         "common": {
             "ActionTable": {
                 "button": {
-                    "selected": " | ",
-                    "allSelected": " | ",
+                    "selected": "",
+                    "allSelected": "",
                     "go": "",
                     "launch": "",
                     "refresh": "",
                     "select": "",
                     "selectAll": "",
-                    "selectElement": " | ",
+                    "selectElement": "",
                     "selectCurrentPage": ""
                 },
                 "message": {
-                    "success": " | ",
+                    "success": "",
                     "needsRefresh": ""
                 },
                 "label": {
@@ -1492,7 +1492,7 @@
                 },
                 "modal": {
                     "performAction": {
-                        "header": " | ",
+                        "header": "",
                         "content": {
                             "warning": ""
                         }
@@ -1666,7 +1666,7 @@
         "playlists": {
             "Card": {
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 }
             },
             "PlaylistModal": {
@@ -1712,7 +1712,7 @@
                     "addDuplicate": "എന്തായാലും ചേർക്കുക",
                     "clear": "",
                     "copy": "",
-                    "insertFromQueue": " | "
+                    "insertFromQueue": ""
                 },
                 "error": {
                     "sync": ""
@@ -2475,7 +2475,7 @@
                         "search": ""
                     },
                     "pagination": {
-                        "results": " | "
+                        "results": ""
                     }
                 },
                 "InvitationsTable": {
@@ -2512,7 +2512,7 @@
                         "search": ""
                     },
                     "pagination": {
-                        "results": " | "
+                        "results": ""
                     }
                 },
                 "InvitationForm": {
@@ -2865,7 +2865,7 @@
         "tags": {
             "List": {
                 "button": {
-                    "more": " | "
+                    "more": ""
                 }
             }
         }
@@ -2874,10 +2874,10 @@
         "channels": {
             "DetailBase": {
                 "meta": {
-                    "episodes": " | ",
-                    "listenings": " | ",
-                    "subscribers": " | ",
-                    "tracks": " | "
+                    "episodes": "",
+                    "listenings": "",
+                    "subscribers": "",
+                    "tracks": ""
                 },
                 "link": {
                     "channelEpisodes": "എല്ലാ എപ്പിസോഡുകൾ",
@@ -2977,7 +2977,7 @@
             "libraries": {
                 "Card": {
                     "meta": {
-                        "tracks": " | "
+                        "tracks": ""
                     },
                     "link": {
                         "details": ""
@@ -3138,7 +3138,7 @@
             "remote": {
                 "Card": {
                     "meta": {
-                        "tracks": " | ",
+                        "tracks": "",
                         "failedTracks": "",
                         "lastUpdate": ""
                     },
@@ -3243,7 +3243,7 @@
         "library": {
             "LibraryBase": {
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "link": {
                     "albums": "ആൽബങ്ങളും",
@@ -4203,7 +4203,7 @@
                 },
                 "title": "പ്ലേലിസ്റ്റ്",
                 "meta": {
-                    "tracks": " | "
+                    "tracks": ""
                 },
                 "empty": {
                     "noTracks": ""
@@ -4240,7 +4240,7 @@
     "composables": {
         "audio": {
             "usePlayOptions": {
-                "addToQueueMessage": " | "
+                "addToQueueMessage": ""
             }
         },
         "locale": {
