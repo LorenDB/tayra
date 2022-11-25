@@ -1466,7 +1466,7 @@
                 "noTerms": "Нет доступных условий."
             },
             "message": {
-                "contact": "Напишите нам: {{ contactEmail }}"
+                "contact": "Напишите нам: {'{{'} contactEmail {'}}'}"
             }
         },
         "common": {

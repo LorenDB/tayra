@@ -1466,7 +1466,7 @@
                 "noTerms": "Nessun termine disponibile."
             },
             "message": {
-                "contact": "Scrivici un'email: {{ contactEmail }}"
+                "contact": "Scrivici un'email: {'{{'} contactEmail {'}}'}"
             }
         },
         "common": {

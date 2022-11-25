@@ -1466,7 +1466,7 @@
                 "noTerms": "Cap de condicion pas disponibla."
             },
             "message": {
-                "contact": "Enviatz-nos un messatge : {{ contactEmail }}"
+                "contact": "Enviatz-nos un messatge : {'{{'} contactEmail {'}}'}"
             }
         },
         "common": {

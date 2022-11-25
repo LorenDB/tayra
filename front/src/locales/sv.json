@@ -4221,7 +4221,7 @@
                 },
                 "modal": {
                     "delete": {
-                        "header": "Vill du radera radiokanalen \"{{ radio }}\"?",
+                        "header": "Vill du radera radiokanalen \"{'{{'} radio {'}}'}\"?",
                         "content": {
                             "warning": "Detta tar bort radion helt och kan inte ångras."
                         }

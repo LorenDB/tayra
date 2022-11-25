@@ -1466,7 +1466,7 @@
                 "noTerms": "No terms available."
             },
             "message": {
-                "contact": "Send us an email: {{ contactEmail }}"
+                "contact": "Send us an email: {'{{'} contactEmail {'}}'}"
             }
         },
         "common": {

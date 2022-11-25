@@ -1466,7 +1466,7 @@
                 "noTerms": "Nie ustalono warunków."
             },
             "message": {
-                "contact": "Wyślij nam wiadomość e-mail: {{ contactEmail }}"
+                "contact": "Wyślij nam wiadomość e-mail: {'{{'} contactEmail {'}}'}"
             }
         },
         "common": {

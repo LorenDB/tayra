@@ -1466,7 +1466,7 @@
                 "noTerms": "Aucune condition disponible."
             },
             "message": {
-                "contact": "Envoyez-nous un courriel : {{ contactEmail }}"
+                "contact": "Envoyez-nous un courriel : {'{{'} contactEmail {'}}'}"
             }
         },
         "common": {

@@ -1466,7 +1466,7 @@
                 "noTerms": "Ez dago baldintzarik eskuragarri."
             },
             "message": {
-                "contact": "Bidal iezaguzu mezu elektroniko bat: {{ contactEmail }}"
+                "contact": "Bidal iezaguzu mezu elektroniko bat: {'{{'} contactEmail {'}}'}"
             }
         },
         "common": {

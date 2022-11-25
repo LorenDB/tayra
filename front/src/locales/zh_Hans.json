@@ -1466,7 +1466,7 @@
                 "noTerms": "无适用条款。"
             },
             "message": {
-                "contact": "给我们发邮件：{{ contactEmail }}"
+                "contact": "给我们发邮件：{'{{'} contactEmail {'}}'}"
             }
         },
         "common": {

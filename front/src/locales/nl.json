@@ -1466,7 +1466,7 @@
                 "noTerms": "Geen termen beschikbaar."
             },
             "message": {
-                "contact": "Stuur ons een e-mail: {{ contactEmail }}"
+                "contact": "Stuur ons een e-mail: {'{{'} contactEmail {'}}'}"
             }
         },
         "common": {

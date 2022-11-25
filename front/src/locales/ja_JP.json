@@ -1466,7 +1466,7 @@
                 "noTerms": "まだ利用規約やプライバシーポリシーがありません。"
             },
             "message": {
-                "contact": "メールを送る: {{ contactEmail }}"
+                "contact": "メールを送る: {'{{'} contactEmail {'}}'}"
             }
         },
         "common": {

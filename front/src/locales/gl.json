@@ -1466,7 +1466,7 @@
                 "noTerms": "Non hai termos dispoñibles."
             },
             "message": {
-                "contact": "Envíanos un email: {{ contactEmail }}"
+                "contact": "Envíanos un email: {'{{'} contactEmail {'}}'}"
             }
         },
         "common": {
