@@ -3,8 +3,14 @@
 set -eux
 
 cd "$(dirname "$0")/.." # change into base directory
-# shellcheck disable=SC1091
-source scripts/utils.sh
+
+npm_binaries()  {
+  if command -v yarn > /dev/null; then
+    yarn bin
+  else
+    npm bin
+  fi
+}
 
 locales=$(jq -r '.[].code' src/locales.json | grep -v 'en_US')
 mkdir -p src/translations
