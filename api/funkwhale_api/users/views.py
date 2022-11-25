@@ -38,6 +38,9 @@ class RegisterView(registration_views.RegisterView):
         if not user.is_active:
             # manual approval, we need to send the confirmation e-mail by hand
             authentication.send_email_confirmation(self.request, user)
+        if user.invitation:
+            user.invitation.set_invited_user(user)
+
         return user
 
 

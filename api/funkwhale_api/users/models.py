@@ -335,6 +335,9 @@ class Invitation(models.Model):
     owner = models.ForeignKey(
         User, related_name="invitations", on_delete=models.CASCADE
     )
+    invited_user = models.ForeignKey(
+        User, related_name="user_invitations", null=True, on_delete=models.CASCADE
+    )
     code = models.CharField(max_length=50, unique=True)
 
     objects = InvitationQuerySet.as_manager()
@@ -348,6 +351,10 @@ class Invitation(models.Model):
             )
 
         return super().save(**kwargs)
+
+    def set_invited_user(self, user):
+        self.invited_user = user
+        super().save()
 
 
 class Application(oauth2_models.AbstractApplication):

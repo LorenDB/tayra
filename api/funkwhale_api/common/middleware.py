@@ -126,6 +126,7 @@ def get_spa_file(spa_url, name):
         utils.join_url(spa_url, name),
     )
     response.raise_for_status()
+    response.encoding = "utf-8"
     content = response.text
     caches["local"].set(cache_key, content, settings.FUNKWHALE_SPA_HTML_CACHE_DURATION)
     return content

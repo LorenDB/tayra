@@ -105,6 +105,13 @@ def test_invitation_generates_random_code_on_save(factories):
     assert len(invitation.code) >= 6
 
 
+def test_invitation_get_deleted_when_user_is_deleted(factories):
+    invitation = factories["users.Invitation"](with_invited_user=True)
+    invitation.invited_user.delete()
+
+    assert models.Invitation.objects.count() == 0
+
+
 def test_invitation_expires_after_delay(factories, settings):
     delay = settings.USERS_INVITATION_EXPIRATION_DAYS
     invitation = factories["users.Invitation"]()
