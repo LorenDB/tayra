@@ -4,20 +4,21 @@
     ":dependencyDashboard",
     ":maintainLockFilesWeekly",
     ":enablePreCommit",
+    ":semanticCommits",
+    ":semanticCommitScopeDisabled",
     "group:monorepos",
     "group:recommended"
   ],
   "baseBranches": ["stable", "develop"],
   "branchConcurrentLimit": 2,
   "prConcurrentLimit": 1,
-  "semanticCommits": "disabled",
   "rangeStrategy": "pin",
   "ignoreDeps": ["$CI_REGISTRY/funkwhale/backend-test-docker"],
   "packageRules": [
     {
       "matchPaths": ["api/*", "front/*", "docs/*"],
       "additionalBranchPrefix": "{{parentDir}}-",
-      "commitMessageSuffix": "[/{{parentDir}}]"
+      "semanticCommitScope": "{{parentDir}}"
     },
     {
       "matchUpdateTypes": ["major", "minor"],
