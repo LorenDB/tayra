@@ -449,12 +449,12 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
           @visible="scrollToCurrent('auto')"
           @hidden="scrollLoop"
         >
-          <template #default="{ index, item, classList }">
+          <template #default="{ index, item, classlist }">
             <queue-item
               :data-index="index"
               :index="index"
               :source="item"
-              :class="[...classList, currentIndex === index && 'active']"
+              :class="[...classlist, currentIndex === index && 'active']"
               @play="play"
               @remove="dequeue"
             />

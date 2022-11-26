@@ -167,6 +167,7 @@ defineExpose({
       key-field="key"
       :items="list"
       :item-size="size"
+      :grid-items="1"
       @mousedown="onMousedown"
       @touchstart="onMousedown"
       @touchmove="onTouchmove"
@@ -180,7 +181,7 @@ defineExpose({
 
       <template #default="{ item, index }">
         <slot
-          :class-list="[draggedItem && hoveredIndex === index && `drop-${position}`, 'drag-item']"
+          :classlist="[draggedItem && hoveredIndex === index && `drop-${position}`, 'drag-item']"
           :item="item"
           :index="index"
         />
@@ -244,5 +245,9 @@ defineExpose({
 
 .theme-light .ghost-container {
   background: rgba(0, 0, 0, 0.1);
+}
+
+.vue-recycle-scroller__item-view {
+  width: 100% !important;
 }
 </style>
