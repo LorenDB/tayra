@@ -76,14 +76,10 @@ watchEffect(() => {
               class="ui fluid image track-cover-image"
             >
             <h3 class="ui header">
-              <span
-                v-if="track.artist?.content_category === 'music'"
-              >
+              <span v-if="track.artist?.content_category === 'music'">
                 {{ $t('components.library.TrackDetail.header.track') }}
               </span>
-              <span
-                v-else
-              >
+              <span v-else>
                 {{ $t('components.library.TrackDetail.header.episode') }}
               </span>
             </h3>
@@ -97,9 +93,7 @@ watchEffect(() => {
                     <template v-if="upload.duration">
                       {{ time.parse(upload.duration) }}
                     </template>
-                    <span
-                      v-else
-                    >
+                    <span v-else>
                       {{ $t('components.library.TrackDetail.notApplicable') }}
                     </span>
                   </td>
@@ -112,9 +106,7 @@ watchEffect(() => {
                     <template v-if="upload.size">
                       {{ humanSize(upload.size) }}
                     </template>
-                    <span
-                      v-else
-                    >
+                    <span v-else>
                       {{ $t('components.library.TrackDetail.notApplicable') }}
                     </span>
                   </td>
@@ -127,9 +119,7 @@ watchEffect(() => {
                     <template v-if="upload.extension">
                       {{ upload.extension }}
                     </template>
-                    <span
-                      v-else
-                    >
+                    <span v-else>
                       {{ $t('components.library.TrackDetail.notApplicable') }}
                     </span>
                   </td>
@@ -142,9 +132,7 @@ watchEffect(() => {
                     <template v-if="upload.bitrate">
                       {{ $t('components.library.TrackDetail.table.track.bitrate.value', {bitrate: humanSize(upload.bitrate)}) }}
                     </template>
-                    <span
-                      v-else
-                    >
+                    <span v-else>
                       {{ $t('components.library.TrackDetail.notApplicable') }}
                     </span>
                   </td>
@@ -188,14 +176,10 @@ watchEffect(() => {
               </tr>
               <tr v-if="track.album">
                 <td>
-                  <span
-                    v-if="track.album.artist.content_category === 'music'"
-                  >
+                  <span v-if="track.album.artist.content_category === 'music'">
                     {{ $t('components.library.TrackDetail.table.release.album') }}
                   </span>
-                  <span
-                    v-else
-                  >
+                  <span v-else>
                     {{ $t('components.library.TrackDetail.table.release.series') }}
                   </span>
                 </td>
@@ -243,9 +227,7 @@ watchEffect(() => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >{{ license.name }}</a>
-                  <span
-                    v-else
-                  >
+                  <span v-else>
                     {{ $t('components.library.TrackDetail.notApplicable') }}
                   </span>
                 </td>

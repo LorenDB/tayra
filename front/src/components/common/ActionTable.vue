@@ -211,9 +211,7 @@ const launchAction = async () => {
                     {{ $t('components.common.ActionTable.button.go') }}
                     <template #modal-header>
                       <p>
-                        <span
-                          key="1"
-                        >
+                        <span key="1">
                           {{ $t('components.common.ActionTable.modal.performAction.header', {action: currentActionName, count: affectedObjectsCount} ) }}
                         </span>
                       </p>
@@ -223,9 +221,7 @@ const launchAction = async () => {
                         <template v-if="currentAction?.confirmationMessage">
                           {{ currentAction?.confirmationMessage }}
                         </template>
-                        <span
-                          v-else
-                        >
+                        <span v-else>
                           {{ $t('components.common.ActionTable.modal.performAction.content.warning') }}
                         </span>
                       </p>
@@ -247,14 +243,10 @@ const launchAction = async () => {
                   </button>
                 </div>
                 <div class="count field">
-                  <span
-                    v-if="selectAll"
-                  >
+                  <span v-if="selectAll">
                     {{ $t('components.common.ActionTable.button.allSelected', {count: objectsData.count}) }}
                   </span>
-                  <span
-                    v-else
-                  >
+                  <span v-else>
                     {{ $t('components.common.ActionTable.button.selected', {count: checked.length, total: objectsData.count}) }}
                   </span>
                   <template v-if="currentAction?.allowAll && checkable.length > 0 && checkable.length === checked.length">
@@ -263,9 +255,7 @@ const launchAction = async () => {
                       href=""
                       @click.prevent="selectAll = true"
                     >
-                      <span
-                        key="3"
-                      >
+                      <span key="3">
                         {{ $t('components.common.ActionTable.button.selectElement', {total: objectsData.count}) }}
                       </span>
                     </a>
@@ -274,9 +264,9 @@ const launchAction = async () => {
                       href=""
                       @click.prevent="selectAll = false"
                     >
-                      <span
-                        key="4"
-                      >{{ $t('components.common.ActionTable.button.selectCurrentPage') }}</span>
+                      <span key="4">
+                        {{ $t('components.common.ActionTable.button.selectCurrentPage') }}
+                      </span>
                     </a>
                   </template>
                 </div>

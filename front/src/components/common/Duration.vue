@@ -18,11 +18,11 @@ const duration = computed(() => {
 
 <template>
   <span>
-    <span
-      v-if="duration.hours > 0"
-    >{{ $t('components.common.Duration.meta.hours', {hours: duration.hours, minutes: duration.minutes}) }}</span>
-    <span
-      v-else
-    >{{ $t('components.common.Duration.meta.minutes', {minutes: duration.minutes}) }}</span>
+    <span v-if="duration.hours > 0">
+      {{ $t('components.common.Duration.meta.hours', duration) }}
+    </span>
+    <span v-else>
+      {{ $t('components.common.Duration.meta.minutes', duration) }}
+    </span>
   </span>
 </template>

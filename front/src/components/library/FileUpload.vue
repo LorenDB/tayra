@@ -462,28 +462,25 @@ useEventListener(window, 'beforeunload', (event) => {
                   v-else-if="file.success"
                   class="ui success label"
                 >
-                  <span
-                    key="1"
-                  >{{ $t('components.library.FileUpload.table.upload.status.uploaded') }}</span>
+                  <span key="1">
+                    {{ $t('components.library.FileUpload.table.upload.status.uploaded') }}
+                  </span>
                 </span>
                 <span
                   v-else-if="file.active"
                   class="ui warning label"
                 >
-                  <span
-                    key="2"
-                  >
+                  <span key="2">
                     {{ $t('components.library.FileUpload.table.upload.status.uploading') }}
                   </span>
+
                   {{ $t('components.library.FileUpload.table.upload.progress', {percent: parseFloat(file.progress ?? '0.00')}) }}
                 </span>
                 <span
                   v-else
                   class="ui label"
                 >
-                  <span
-                    key="3"
-                  >
+                  <span key="3">
                     {{ $t('components.library.FileUpload.table.upload.status.pending') }}
                   </span>
                 </span>

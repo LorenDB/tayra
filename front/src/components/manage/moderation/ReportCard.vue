@@ -227,9 +227,7 @@ const handleRemovedNote = (uuid: string) => {
                         :actor="obj.assigned_to"
                       />
                     </div>
-                    <span
-                      v-else
-                    >
+                    <span v-else>
                       {{ $t('components.manage.moderation.ReportCard.notApplicable') }}
                     </span>
                   </td>
@@ -244,9 +242,7 @@ const handleRemovedNote = (uuid: string) => {
                       :date="obj.handled_date"
                       :icon="true"
                     />
-                    <span
-                      v-else
-                    >
+                    <span v-else>
                       {{ $t('components.manage.moderation.ReportCard.notApplicable') }}
                     </span>
                   </td>

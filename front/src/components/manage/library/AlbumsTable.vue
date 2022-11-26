@@ -233,9 +233,7 @@ const labels = computed(() => ({
               v-if="scope.obj.release_date"
               :date="scope.obj.release_date"
             />
-            <span
-              v-else
-            >
+            <span v-else>
               {{ $t('components.manage.library.AlbumsTable.notApplicable') }}
             </span>
           </td>

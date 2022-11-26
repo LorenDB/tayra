@@ -20,14 +20,10 @@ const value = useVModel(props, 'modelValue', emit)
     class="collapse link"
     @click.prevent="value = !value"
   >
-    <span
-      v-if="value"
-    >
+    <span v-if="value">
       {{ $t('components.common.CollapseLink.button.expand') }}
     </span>
-    <span
-      v-else
-    >
+    <span v-else>
       {{ $t('components.common.CollapseLink.button.collapse') }}
     </span>
     <i :class="[{ down: !value, right: value }, 'angle', 'icon']" />

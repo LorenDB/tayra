@@ -26,12 +26,12 @@ const truncated = computed(() => props.content.slice(0, props.length))
       @click.prevent="toggleExpanded()"
     >
       <br>
-      <span
-        v-if="expanded"
-      >{{ $t('components.common.ExpandableDiv.button.less') }}</span>
-      <span
-        v-else
-      >{{ $t('components.common.ExpandableDiv.button.more') }}</span>
+      <span v-if="expanded">
+        {{ $t('components.common.ExpandableDiv.button.less') }}
+      </span>
+      <span v-else>
+        {{ $t('components.common.ExpandableDiv.button.more') }}
+      </span>
     </a>
   </div>
 </template>

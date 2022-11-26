@@ -665,8 +665,9 @@ fetchOwnedApps()
                 >
                   {{ $t('components.auth.Settings.button.remove') }}
                   <template #modal-header>
-                    <p />
-                    {{ $t('components.auth.Settings.modal.deleteApp.header', {app: app.name}) }}
+                    <p>
+                      {{ $t('components.auth.Settings.modal.deleteApp.header', {app: app.name}) }}
+                    </p>
                   </template>
                   <template #modal-content>
                     <p>

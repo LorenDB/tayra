@@ -56,9 +56,6 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
     v-if="isLoadingTracks"
     class="ui vertical segment"
   >
-    <div :class="['ui', 'centered', 'active', 'inline', 'loader']" />
-  </div>
-  <div v-else-if="object">
     <h2 class="ui header">
       <span v-if="isSerie">
         {{ $t('components.library.AlbumDetail.header.episodes') }}

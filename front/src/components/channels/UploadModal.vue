@@ -54,24 +54,16 @@ const isLoading = ref(false)
     class="small"
   >
     <h4 class="header">
-      <span
-        v-if="step === 1"
-      >
+      <span v-if="step === 1">
         {{ $t('components.channels.UploadModal.header.publish') }}
       </span>
-      <span
-        v-else-if="step === 2"
-      >
+      <span v-else-if="step === 2">
         {{ $t('components.channels.UploadModal.header.uploadFiles') }}
       </span>
-      <span
-        v-else-if="step === 3"
-      >
+      <span v-else-if="step === 3">
         {{ $t('components.channels.UploadModal.header.uploadDetails') }}
       </span>
-      <span
-        v-else-if="step === 4"
-      >
+      <span v-else-if="step === 4">
         {{ $t('components.channels.UploadModal.header.processing') }}
       </span>
     </h4>

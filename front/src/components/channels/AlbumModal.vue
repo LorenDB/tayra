@@ -33,14 +33,10 @@ const albumForm = ref()
     class="small"
   >
     <h4 class="header">
-      <span
-        v-if="channel.content_category === 'podcast'"
-      >
+      <span v-if="channel.content_category === 'podcast'">
         {{ $t('components.channels.AlbumModal.header.newSeries') }}
       </span>
-      <span
-        v-else
-      >
+      <span v-else>
         {{ $t('components.channels.AlbumModal.header.newAlbum') }}
       </span>
     </h4>

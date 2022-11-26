@@ -177,14 +177,10 @@ const remove = async () => {
                   />
                   <template v-if="totalTracks > 0">
                     <div class="ui hidden very small divider" />
-                    <span
-                      v-if="isSerie"
-                    >
+                    <span v-if="isSerie">
                       {{ $t('components.library.AlbumBase.meta.episodes', {episode_count: totalTracks}) }}
                     </span>
-                    <span
-                      v-else
-                    >
+                    <span v-else>
                       {{ $t('components.library.AlbumBase.meta.tracks', {tracks_count: totalTracks}) }}
                     </span>
                   </template>
@@ -260,14 +256,10 @@ const remove = async () => {
                 <span class="middle middledot symbol" />
               </template>
               <template v-if="totalTracks > 0">
-                <span
-                  v-if="isSerie"
-                >
+                <span v-if="isSerie">
                   {{ $t('components.library.AlbumBase.meta.episodes', {episode_count: totalTracks}) }}
                 </span>
-                <span
-                  v-else
-                >
+                <span v-else>
                   {{ $t('components.library.AlbumBase.meta.tracks', {tracks_count: totalTracks}) }}
                 </span>
                 <span class="middle middledot symbol" />

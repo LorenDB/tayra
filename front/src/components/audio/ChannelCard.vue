@@ -70,9 +70,7 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
         >
           {{ $t('components.audio.ChannelCard.meta.episodes', {episode_count: object.artist.tracks_count}) }}
         </span>
-        <span
-          v-else
-        >
+        <span v-else>
           {{ $t('components.audio.ChannelCard.meta.tracks', {tracks_count: object.artist?.tracks_count}) }}
         </span>
         <tags-list

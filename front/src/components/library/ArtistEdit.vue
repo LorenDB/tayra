@@ -22,14 +22,10 @@ const canEdit = store.state.auth.availablePermissions.library
   <section class="ui vertical stripe segment">
     <div class="ui text container">
       <h2>
-        <span
-          v-if="canEdit"
-        >
+        <span v-if="canEdit">
           {{ $t('components.library.ArtistEdit.header.edit') }}
         </span>
-        <span
-          v-else
-        >
+        <span v-else>
           {{ $t('components.library.ArtistEdit.header.suggest') }}
         </span>
       </h2>

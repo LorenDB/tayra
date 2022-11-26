@@ -334,9 +334,7 @@ onMounted(() => {
           </tbody>
         </table>
         <template v-if="checkResult && checkResult.candidates && checkResult.candidates.count">
-          <h3
-            class="ui header"
-          >
+          <h3 class="ui header">
             {{ $t('components.library.radios.Builder.header.matches', {count: checkResult.candidates.count}) }}
           </h3>
           <track-table

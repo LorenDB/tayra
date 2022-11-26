@@ -117,9 +117,7 @@ watch(() => props.id, fetchData, { immediate: true })
                 v-if="albums"
                 class="sub header"
               >
-                <div>
-                  {{ $t('components.library.ArtistBase.meta.tracks', {count: totalTracks, albums: totalAlbums}) }}
-                </div>
+                {{ $t('components.library.ArtistBase.meta.tracks', {count: totalTracks, albums: totalAlbums}) }}
               </div>
             </div>
           </h2>

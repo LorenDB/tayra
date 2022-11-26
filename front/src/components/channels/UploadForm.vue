@@ -530,25 +530,17 @@ const labels = computed(() => ({
                   {{ humanSize(file.size ?? 0) }}
                   <template v-if="file.response.duration">
                     <span class="middle middledot symbol" />
-                    <human-duration
-                      :duration="file.response.duration"
-                    />
+                    <human-duration :duration="file.response.duration" />
                   </template>
                 </template>
                 <template v-else>
-                  <span
-                    v-if="file.active"
-                  >
+                  <span v-if="file.active">
                     {{ $t('components.channels.UploadForm.status.uploading') }}
                   </span>
-                  <span
-                    v-else-if="file.error"
-                  >
+                  <span v-else-if="file.error">
                     {{ $t('components.channels.UploadForm.status.errored') }}
                   </span>
-                  <span
-                    v-else
-                  >
+                  <span v-else>
                     {{ $t('components.channels.UploadForm.status.pending') }}
                   </span>
                   <span class="middle middledot symbol" />

@@ -243,9 +243,7 @@ const labels = computed(() => ({
               :title="scope.obj.license"
               @click.prevent="addSearchToken('license', scope.obj.license)"
             >{{ scope.obj.license }}</a>
-            <span
-              v-else
-            >
+            <span v-else>
               {{ $t('components.manage.library.TracksTable.notApplicable') }}
             </span>
           </td>

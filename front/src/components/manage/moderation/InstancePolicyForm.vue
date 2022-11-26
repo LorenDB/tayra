@@ -162,12 +162,12 @@ const remove = async () => {
           type="checkbox"
         >
         <label for="policy-is-active">
-          <span
-            v-if="current.isActive"
-          >{{ $t('components.manage.moderation.InstancePolicyForm.label.policyEnabled') }}</span>
-          <span
-            v-else
-          >{{ $t('components.manage.moderation.InstancePolicyForm.label.policyDisabled') }}</span>
+          <span v-if="current.isActive">
+            {{ $t('components.manage.moderation.InstancePolicyForm.label.policyEnabled') }}
+          </span>
+          <span v-else>
+            {{ $t('components.manage.moderation.InstancePolicyForm.label.policyDisabled') }}
+          </span>
           <tooltip :content="labels.isActiveHelp" />
         </label>
       </div>
@@ -229,14 +229,10 @@ const remove = async () => {
       :class="['ui', 'right', 'floated', 'success', {'disabled loading': isLoading}, 'button']"
       :disabled="isLoading"
     >
-      <span
-        v-if="object"
-      >
+      <span v-if="object">
         {{ $t('components.manage.moderation.InstancePolicyForm.button.update') }}
       </span>
-      <span
-        v-else
-      >
+      <span v-else>
         {{ $t('components.manage.moderation.InstancePolicyForm.button.create') }}
       </span>
     </button>

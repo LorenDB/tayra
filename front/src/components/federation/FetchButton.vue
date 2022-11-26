@@ -131,44 +131,28 @@ const { start: startPolling } = useTimeoutFn(poll, 1000, { immediate: false })
                     {{ $t('components.federation.FetchButton.table.error.label.detail') }}
                   </td>
                   <td>
-                    <span
-                      v-if="data.detail.error_code === 'http' && data.detail.status_code"
-                    >
+                    <span v-if="data.detail.error_code === 'http' && data.detail.status_code">
                       {{ $t('components.federation.FetchButton.table.error.value.httpStatus', {status: data.detail.status_code}) }}
                     </span>
-                    <span
-                      v-else-if="['http', 'request'].indexOf(data.detail.error_code) > -1"
-                    >
+                    <span v-else-if="['http', 'request'].includes(data.detail.error_code)">
                       {{ $t('components.federation.FetchButton.table.error.value.httpError') }}
                     </span>
-                    <span
-                      v-else-if="data.detail.error_code === 'timeout'"
-                    >
+                    <span v-else-if="data.detail.error_code === 'timeout'">
                       {{ $t('components.federation.FetchButton.table.error.value.timeoutError') }}
                     </span>
-                    <span
-                      v-else-if="data.detail.error_code === 'connection'"
-                    >
+                    <span v-else-if="data.detail.error_code === 'connection'">
                       {{ $t('components.federation.FetchButton.table.error.value.connectionError') }}
                     </span>
-                    <span
-                      v-else-if="['invalid_json', 'invalid_jsonld', 'missing_jsonld_type'].indexOf(data.detail.error_code) > -1"
-                    >
+                    <span v-else-if="['invalid_json', 'invalid_jsonld', 'missing_jsonld_type'].includes(data.detail.error_code)">
                       {{ $t('components.federation.FetchButton.table.error.value.invalidJsonError') }}
                     </span>
-                    <span
-                      v-else-if="data.detail.error_code === 'validation'"
-                    >
+                    <span v-else-if="data.detail.error_code === 'validation'">
                       {{ $t('components.federation.FetchButton.table.error.value.invalidAttributesError') }}
                     </span>
-                    <span
-                      v-else-if="data.detail.error_code === 'unhandled'"
-                    >
+                    <span v-else-if="data.detail.error_code === 'unhandled'">
                       {{ $t('components.federation.FetchButton.table.error.value.unknownError') }}
                     </span>
-                    <span
-                      v-else
-                    >
+                    <span v-else>
                       {{ $t('components.federation.FetchButton.table.error.value.unknownError') }}
                     </span>
                   </td>

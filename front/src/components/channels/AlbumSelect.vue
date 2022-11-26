@@ -47,12 +47,12 @@ watch(() => props.channel, fetchData, { immediate: true })
 <template>
   <div>
     <label for="album-dropdown">
-      <span
-        v-if="channel && channel.artist && channel.artist.content_category === 'podcast'"
-      >{{ $t('components.channels.AlbumSelect.label.series') }}</span>
-      <span
-        v-else
-      >{{ $t('components.channels.AlbumSelect.label.album') }}</span>
+      <span v-if="channel && channel.artist && channel.artist.content_category === 'podcast'">
+        {{ $t('components.channels.AlbumSelect.label.series') }}
+      </span>
+      <span v-else>
+        {{ $t('components.channels.AlbumSelect.label.album') }}
+      </span>
     </label>
     <select
       id="album-dropdown"

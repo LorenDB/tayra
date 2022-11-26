@@ -35,14 +35,10 @@ const title = computed(() => isFavorite.value
     @click.stop="$store.dispatch('favorites/toggle', track.id)"
   >
     <i class="heart icon" />
-    <span
-      v-if="isFavorite"
-    >
+    <span v-if="isFavorite">
       {{ $t('components.favorites.TrackFavoriteIcon.label.inFavorites') }}
     </span>
-    <span
-      v-else
-    >
+    <span v-else>
       {{ $t('components.favorites.TrackFavoriteIcon.button.add') }}
     </span>
   </button>

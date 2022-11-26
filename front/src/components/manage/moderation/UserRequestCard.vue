@@ -155,9 +155,7 @@ const handleRemovedNote = (uuid: string) => {
                       :date="obj.handled_date"
                       :icon="true"
                     />
-                    <span
-                      v-else
-                    >
+                    <span v-else>
                       {{ $t('components.manage.moderation.UserRequestCard.notApplicable') }}
                     </span>
                   </td>
@@ -199,9 +197,7 @@ const handleRemovedNote = (uuid: string) => {
               <p v-if="value">
                 {{ value }}
               </p>
-              <span
-                v-else
-              >
+              <span v-else>
                 {{ $t('components.manage.moderation.UserRequestCard.notApplicable') }}
               </span>
               <div class="ui hidden divider" />

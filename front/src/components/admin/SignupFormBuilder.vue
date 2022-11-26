@@ -45,7 +45,7 @@ if (!value.value?.fields) {
 
 const addField = () => {
   value.value.fields.push({
-    label: t('components.admin.SignupFormBuilder.label.additionalField') + ' ' + (value.value.fields.length + 1),
+    label: t('components.admin.SignupFormBuilder.label.additionalField', { fieldNumber: value.value.fields.length + 1 }),
     required: true,
     input_type: 'short_text'
   })

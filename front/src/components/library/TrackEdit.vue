@@ -44,14 +44,10 @@ fetchLicenses()
   <section class="ui vertical stripe segment">
     <div class="ui text container">
       <h2>
-        <span
-          v-if="canEdit"
-        >
+        <span v-if="canEdit">
           {{ $t('components.library.TrackEdit.header.edit') }}
         </span>
-        <span
-          key="2"
-        >
+        <span key="2">
           {{ $t('components.library.TrackEdit.header.suggest') }}
         </span>
       </h2>

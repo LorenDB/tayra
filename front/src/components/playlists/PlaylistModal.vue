@@ -86,16 +86,12 @@ store.dispatch('playlists/fetchOwn')
       <template v-if="track">
         <h2 class="ui header">
           {{ $t('components.playlists.PlaylistModal.header.addToPlaylist') }}
-          <div
-            class="ui sub header"
-          >
+          <div class="ui sub header">
             {{ $t('components.playlists.PlaylistModal.header.track', {artist: track.artist?.name, title: track.title}) }}
           </div>
         </h2>
       </template>
-      <span
-        v-else
-      >
+      <span v-else>
         {{ $t('components.playlists.PlaylistModal.header.manage') }}
       </span>
     </h4>

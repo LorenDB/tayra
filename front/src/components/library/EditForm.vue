@@ -340,14 +340,10 @@ const resetField = (fieldId: string) => {
         type="submit"
         :disabled="isLoading || !mutationPayload"
       >
-        <span
-          v-if="canEdit"
-        >
+        <span v-if="canEdit">
           {{ $t('components.library.EditForm.button.submit') }}
         </span>
-        <span
-          v-else
-        >
+        <span v-else>
           {{ $t('components.library.EditForm.button.suggest') }}
         </span>
       </button>
