@@ -29,8 +29,7 @@ const statusInfo = computed(() => {
   }
 
   if (statusData.value.totalFiles) {
-    const msg = t('components.channels.UploadModal.meta.files', { count: statusData.value.totalFiles })
-    info.push(msg)
+    info.push(t('components.channels.UploadModal.meta.files', { count: statusData.value.totalFiles }))
   }
 
   if (statusData.value.progress) {
