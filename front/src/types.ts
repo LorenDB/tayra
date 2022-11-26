@@ -227,13 +227,13 @@ export interface BackendResponse<T> {
 }
 
 export interface RateLimitStatus {
-  limit: string
-  scope: string
-  remaining: string
-  duration: string
+  limit?: string
+  scope?: string
+  remaining?: string
+  duration?: string
   availableSeconds: number
-  reset: string
-  resetSeconds: string
+  reset?: string
+  resetSeconds?: string
 }
 
 // WebSocket stuff

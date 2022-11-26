@@ -13,7 +13,6 @@ import { useStore } from '~/store'
 
 import axios from 'axios'
 import $ from 'jquery'
-import qs from 'qs'
 
 import TagsSelector from '~/components/library/TagsSelector.vue'
 import AlbumCard from '~/components/audio/album/Card.vue'
@@ -77,8 +76,8 @@ const fetchData = async () => {
   try {
     const response = await axios.get('albums/', {
       params,
-      paramsSerializer: function (params) {
-        return qs.stringify(params, { indices: false })
+      paramsSerializer: {
+        indexes: null
       }
     })
 

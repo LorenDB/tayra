@@ -6,7 +6,6 @@ import { whenever } from '@vueuse/core'
 import { useStore } from '~/store'
 
 import axios from 'axios'
-import qs from 'qs'
 
 import ChannelEntries from '~/components/audio/ChannelEntries.vue'
 import ChannelSeries from '~/components/audio/ChannelSeries.vue'
@@ -64,8 +63,8 @@ const fetchPendingUploads = async () => {
   try {
     const response = await axios.get('uploads/', {
       params: { channel: props.object.uuid, import_status: ['pending', 'skipped', 'errored'], include_channels: 'true' },
-      paramsSerializer: function (params) {
-        return qs.stringify(params, { indices: false })
+      paramsSerializer: {
+        indexes: null
       }
     })
 

@@ -65,7 +65,7 @@ export const install: InitModule = ({ store, router }) => {
           scope: error.response?.headers['x-ratelimit-scope'],
           remaining: error.response?.headers['x-ratelimit-remaining'],
           duration: error.response?.headers['x-ratelimit-duration'],
-          availableSeconds: parseInt(error.response?.headers['retry-after'] ?? 60),
+          availableSeconds: parseInt(error.response?.headers['retry-after'] ?? '60'),
           reset: error.response?.headers['x-ratelimit-reset'],
           resetSeconds: error.response?.headers['x-ratelimit-resetseconds']
         }
