@@ -115,7 +115,6 @@ store.dispatch('playlists/fetchOwn')
             <i18n-t keypath="components.playlists.PlaylistModal.warning.duplicate">
               <strong>{{ track?.title }}</strong>
               <strong>{{ duplicateTrackAddInfo.playlist_name }}</strong>
-              <p>{{ track?.title }}</p>
             </i18n-t>
           </p>
           <button
