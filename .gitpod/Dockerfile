@@ -1,4 +1,4 @@
-FROM gitpod/workspace-full:2022-07-12-11-05-29
+FROM gitpod/workspace-full:2022-11-15-17-00-18
 USER gitpod
 
 RUN sudo apt update -y \
