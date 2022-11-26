@@ -21,6 +21,11 @@
       "semanticCommitScope": "{{parentDir}}"
     },
     {
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "branchConcurrentLimit": 0,
+      "prConcurrentLimit": 0
+    },
+    {
       "matchUpdateTypes": ["major", "minor"],
       "matchBaseBranches": ["stable"],
       "enabled": false
