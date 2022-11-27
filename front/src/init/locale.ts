@@ -1,10 +1,11 @@
 import type { InitModule } from '~/types'
+import type { SupportedLanguages } from '~/locales'
 
 import { usePreferredLanguages } from '@vueuse/core'
 import { createI18n } from 'vue-i18n'
 import { nextTick } from 'vue'
 
-import locales from '~/locales.json'
+import { locales } from '~/locales'
 import store from '~/store'
 
 import useLogger from '~/composables/useLogger'
@@ -16,10 +17,11 @@ const localeFactory = import.meta.glob('../locales/*.json') as Record<string, ()
 const logger = useLogger()
 
 const defaultLanguage = store.state.ui.currentLanguage ?? 'en'
-export const SUPPORTED_LOCALES = locales.reduce((map: Record<string, string>, locale) => {
-  map[locale.code] = locale.label
-  return map
-}, {})
+
+export const SUPPORTED_LOCALES = Object.fromEntries(
+  Object.entries(locales)
+    .map(([key, value]) => [key, value.label])
+) as Record<SupportedLanguages, string>
 
 export const i18n = createI18n<false>({
   formatFallbackMessages: true,
@@ -27,11 +29,16 @@ export const i18n = createI18n<false>({
   fallbackLocale: 'en_US',
   legacy: false,
   locale: 'en_US',
-  messages: { en_US: en }
+  messages: { en_US: en },
+  pluralizationRules: Object.fromEntries(
+    Object.entries(locales)
+      .map(([key, value]) => [key, value.pluralizationRule])
+      .filter(i => i[1])
+  )
 })
 
 export const setI18nLanguage = async (locale: string) => {
-  if (!Object.keys(SUPPORTED_LOCALES).includes(locale)) {
+  if (!(locale in locales)) {
     throw new Error(`Unsupported locale: ${locale}`)
   }
 
