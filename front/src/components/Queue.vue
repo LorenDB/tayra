@@ -1,11 +1,3 @@
-<i18n>
-{
-  "en": {
-    "00:00": "00:00"
-  }
-}
-</i18n>
-
 <script setup lang="ts">
 import type { QueueItemSource } from '~/types'
 
