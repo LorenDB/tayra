@@ -68,4 +68,4 @@ known_first_party = ["funkwhale_api", "config"]
 
 [tool.codespell]
 ignore-words = ".codespellignore"
-skip = "*.po,*.pot,*.lock,api/funkwhale_api/common/locales.py"
+skip = "*.po,*.pot,*.lock,api/funkwhale_api/common/locales.py,front/src/locales/*.json"
