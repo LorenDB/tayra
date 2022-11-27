@@ -227,7 +227,7 @@ const radioConfig = computed(() => {
         <h2>{{ labels.title }}</h2>
         <remote-search-form
           :initial-id="id"
-          :type="type"
+          :initial-type="type === 'rss' ? 'rss' : 'artists'"
         />
       </div>
       <div
