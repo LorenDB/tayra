@@ -1031,7 +1031,7 @@
           "none": "None"
         },
         "meta": {
-          "tracks": "(No tracks | {tracks_count} track | {tracks_count} tracks)"
+          "tracks": "No tracks | {tracks_count} track | {tracks_count} tracks"
         }
       },
       "LicenseSelect": {
@@ -1422,7 +1422,7 @@
       "AlbumBase": {
         "title": "Album",
         "meta": {
-          "tracks": "(No tracks | {tracks_count} track | {tracks_count} tracks)",
+          "tracks": "No tracks | {tracks_count} track | {tracks_count} tracks",
           "episodes": "No episodes | {episode_count} episode | {episode_count} episodes"
         },
         "link": {
@@ -2810,7 +2810,7 @@
           "copy": "Copy the current queue to this playlist",
           "addDuplicate": "Add anyways",
           "clear": "Clear playlist",
-          "insertFromQueue": "Insert from queue ({count} track) | Insert from queue ({count} tracks)"
+          "insertFromQueue": "Insert from queue ({count} track) | Insert from queue ({count} tracks"
         },
         "header": {
           "editor": "Playlist editor"
