@@ -103,10 +103,10 @@ initializeFirstTrack()
 const loopingTitle = computed(() => {
   const mode = looping.value
   return mode === LoopingMode.None
-    ? t('components.audio.Player.label.loopingDisabledLabel')
+    ? t('components.audio.Player.label.loopingDisabled')
     : mode === LoopingMode.LoopTrack
-      ? t('components.audio.Player.label.loopingSingleLabel')
-      : t('components.audio.Player.label.loopingWholeQueueLabel')
+      ? t('components.audio.Player.label.loopingSingle')
+      : t('components.audio.Player.label.loopingWholeQueue')
 })
 
 const hideArtist = () => {
@@ -276,8 +276,14 @@ const hideArtist = () => {
                   v-if="looping !== LoopingMode.None"
                   class="ui circular tiny vibrant label"
                 >
-                  <template v-if="looping === LoopingMode.LoopTrack">1</template>
-                  <span v-else-if="looping === LoopingMode.LoopQueue" class="infinity symbol" />
+                  <span
+                    v-if="looping === LoopingMode.LoopTrack"
+                    class="symbol single"
+                  />
+                  <span
+                    v-else-if="looping === LoopingMode.LoopQueue"
+                    class="infinity symbol"
+                  />
                 </span>
               </i>
             </button>

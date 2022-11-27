@@ -102,7 +102,7 @@ onMounted(() => $('.ui.dropdown').dropdown())
 const { t } = useI18n()
 const labels = computed(() => ({
   searchPlaceholder: t('components.library.Radios.placeholder.search'),
-  title: t('components.library.Podcasts.title')
+  title: t('components.library.Radios.title')
 }))
 
 const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value].sort((a, b) => a - b)))

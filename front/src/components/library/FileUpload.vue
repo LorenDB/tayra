@@ -306,7 +306,7 @@ useEventListener(window, 'beforeunload', (event) => {
           class="ui warning label"
         >
           {{ uploadedFilesCount + erroredFilesCount }}
-          <span class="nospace slash symbol" />
+          <span class="slash symbol" />
           {{ files.length }}
         </div>
         <div
@@ -314,7 +314,7 @@ useEventListener(window, 'beforeunload', (event) => {
           :class="['ui', {'success': erroredFilesCount === 0}, {'danger': erroredFilesCount > 0}, 'label']"
         >
           {{ uploadedFilesCount + erroredFilesCount }}
-          <span class="nospace slash symbol" />
+          <span class="slash symbol" />
           {{ files.length }}
         </div>
       </a>
@@ -335,7 +335,7 @@ useEventListener(window, 'beforeunload', (event) => {
           class="ui warning label"
         >
           {{ processedFilesCount }}
-          <span class="nospace slash symbol" />
+          <span class="slash symbol" />
           {{ processableFiles }}
         </div>
         <div
@@ -343,7 +343,7 @@ useEventListener(window, 'beforeunload', (event) => {
           :class="['ui', {'success': uploads.errored === 0}, {'danger': uploads.errored > 0}, 'label']"
         >
           {{ processedFilesCount }}
-          <span class="nospace slash symbol" />
+          <span class="slash symbol" />
           {{ processableFiles }}
         </div>
       </a>

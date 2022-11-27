@@ -1,131 +1,131 @@
 {
-    "components": {
-        "auth": {
-            "Authorize": {
-                "header": {
-                    "access": "{ app } Funkwhale hesabına erişmek istiyor"
-                }
-            }
-        },
-        "About": {
-            "stat": {
-                "activeUsers": "{ count } aktif kullanıcı | { count } aktif kullanıcılar",
-                "hoursOfMusic": "{ count } müzik saati | { count } müzik saatleri"
-            }
-        },
-        "Home": {
-            "stat": {
-                "activeUsers": "{ count } aktif kullanıcı | { count } aktif kullanıcılar",
-                "hoursOfMusic": "{ count } müzik saati | { count } müzik saatleri"
-            }
-        },
-        "audio": {
-            "artist": {
-                "Card": {
-                    "meta": {
-                        "episodes": "{ count } bölüm | { count } bölümler",
-                        "tracks": "{ count } parça | { count } parça"
-                    }
-                }
-            },
-            "ChannelCard": {
-                "meta": {
-                    "episodes": "{ count } bölüm | { count } bölümler",
-                    "tracks": "{ count } parça | { count } parça"
-                }
-            },
-            "ChannelSerieCard": {
-                "meta": {
-                    "episodes": "{ count } bölüm | { count } bölümler"
-                }
-            },
-            "album": {
-                "Card": {
-                    "meta": {
-                        "tracks": "{ count } parça | { count } parça"
-                    }
-                }
-            }
-        },
-        "library": {
-            "AlbumBase": {
-                "meta": {
-                    "episodes": "{ count } bölüm | { count } bölümler",
-                    "tracks": "{ count } parça | { count } parça"
-                }
-            },
-            "radios": {
-                "Builder": {
-                    "header": {
-                        "matches": "{ count } tane parça filtrelendi | { count } tane parça filtrelendi"
-                    }
-                }
-            }
-        },
-        "favorites": {
-            "List": {
-                "header": {
-                    "favorites": "{ count } favori | { count } favoriler"
-                }
-            }
-        },
-        "channels": {
-            "UploadModal": {
-                "meta": {
-                    "files": "{ count } dosya | { count } dosyalar"
-                }
-            },
-            "AlbumSelect": {
-                "meta": {
-                    "tracks": "{ count } parça | { count } parça"
-                }
-            }
-        },
-        "AboutPod": {
-            "stat": {
-                "hoursOfMusic": "{ count } müzik saati | { count } müzik saatleri"
-            }
-        },
-        "playlists": {
-            "Card": {
-                "meta": {
-                    "tracks": "{ count } parça | { count } parça"
-                }
-            }
+  "components": {
+    "auth": {
+      "Authorize": {
+        "header": {
+          "access": "{ app } Funkwhale hesabına erişmek istiyor"
         }
+      }
     },
-    "views": {
-        "channels": {
-            "DetailBase": {
-                "meta": {
-                    "episodes": "{ count } bölüm | { count } bölümler",
-                    "subscribers": "{ count } abone | { count } abone",
-                    "tracks": "{ count } parça | { count } parça"
-                }
-            }
-        },
-        "content": {
-            "libraries": {
-                "Card": {
-                    "meta": {
-                        "tracks": "{ count } parça | { count } parça"
-                    }
-                }
-            },
-            "remote": {
-                "Card": {
-                    "meta": {
-                        "tracks": "{ count } parça | { count } parça"
-                    }
-                }
-            }
-        },
-        "library": {
-            "LibraryBase": {
-                "meta": {
-                    "tracks": "{ count } parça | { count } parça"
-                }
-            }
+    "About": {
+      "stat": {
+        "activeUsers": "{ count } aktif kullanıcı | { count } aktif kullanıcılar",
+        "hoursOfMusic": "{ count } müzik saati | { count } müzik saatleri"
+      }
+    },
+    "Home": {
+      "stat": {
+        "activeUsers": "{ count } aktif kullanıcı | { count } aktif kullanıcılar",
+        "hoursOfMusic": "{ count } müzik saati | { count } müzik saatleri"
+      }
+    },
+    "audio": {
+      "artist": {
+        "Card": {
+          "meta": {
+            "episodes": "{ count } bölüm | { count } bölümler",
+            "tracks": "{ count } parça | { count } parça"
+          }
         }
+      },
+      "ChannelCard": {
+        "meta": {
+          "episodes": "{ count } bölüm | { count } bölümler",
+          "tracks": "{ count } parça | { count } parça"
+        }
+      },
+      "ChannelSerieCard": {
+        "meta": {
+          "episodes": "{ count } bölüm | { count } bölümler"
+        }
+      },
+      "album": {
+        "Card": {
+          "meta": {
+            "tracks": "{ count } parça | { count } parça"
+          }
+        }
+      }
+    },
+    "library": {
+      "AlbumBase": {
+        "meta": {
+          "episodes": "{ count } bölüm | { count } bölümler",
+          "tracks": "{ count } parça | { count } parça"
+        }
+      },
+      "radios": {
+        "Builder": {
+          "header": {
+            "matches": "{ count } tane parça filtrelendi | { count } tane parça filtrelendi"
+          }
+        }
+      }
+    },
+    "favorites": {
+      "List": {
+        "header": {
+          "favorites": "{ count } favori | { count } favoriler"
+        }
+      }
+    },
+    "channels": {
+      "UploadModal": {
+        "meta": {
+          "files": "{ count } dosya | { count } dosyalar"
+        }
+      },
+      "AlbumSelect": {
+        "meta": {
+          "tracks": "{ count } parça | { count } parça"
+        }
+      }
+    },
+    "AboutPod": {
+      "stat": {
+        "hoursOfMusic": "{ count } müzik saati | { count } müzik saatleri"
+      }
+    },
+    "playlists": {
+      "Card": {
+        "meta": {
+          "tracks": "{ count } parça | { count } parça"
+        }
+      }
     }
+  },
+  "views": {
+    "channels": {
+      "DetailBase": {
+        "meta": {
+          "episodes": "{ count } bölüm | { count } bölümler",
+          "subscribers": "{ count } abone | { count } abone",
+          "tracks": "{ count } parça | { count } parça"
+        }
+      }
+    },
+    "content": {
+      "libraries": {
+        "Card": {
+          "meta": {
+            "tracks": "{ count } parça | { count } parça"
+          }
+        }
+      },
+      "remote": {
+        "Card": {
+          "meta": {
+            "tracks": "{ count } parça | { count } parça"
+          }
+        }
+      }
+    },
+    "library": {
+      "LibraryBase": {
+        "meta": {
+          "tracks": "{ count } parça | { count } parça"
+        }
+      }
+    }
+  }
 }

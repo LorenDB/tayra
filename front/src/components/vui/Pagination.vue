@@ -97,7 +97,7 @@ const labels = computed(() => ({
           href="#"
           class="item disabled"
         >
-          <span class="nospace ellipses symbol" />
+          <span class="ellipses symbol" />
         </a>
         <a
           v-else

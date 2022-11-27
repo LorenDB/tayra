@@ -725,7 +725,7 @@ fetchOwnedApps()
           {{ $t('components.auth.Settings.description.changeEmail') }}
         </p>
         <p>
-          {{ $t('components.auth.Settings.message.currentEmail', { email: email }) }}
+          {{ $t('components.auth.Settings.message.currentEmail', { email: $store.state.auth.profile?.email }) }}
         </p>
         <form
           class="ui form"

@@ -93,7 +93,7 @@ const deletePlaylist = async () => {
           <div class="content">
             {{ playlist.name }}
             <div class="sub header">
-              {{ $t('views.playlists.Detail.meta.tracks', {count: tracks_count, username: playlist.user.username}) }}
+              {{ $t('views.playlists.Detail.meta.tracks', {count: playlist.tracks_count, username: playlist.user.username}) }}
               <br>
               <duration :seconds="playlist.duration" />
             </div>

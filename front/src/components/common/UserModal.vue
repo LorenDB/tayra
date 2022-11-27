@@ -2,9 +2,12 @@
 import SemanticModal from '~/components/semantic/Modal.vue'
 import useThemeList from '~/composables/useThemeList'
 import useTheme from '~/composables/useTheme'
+
 import { useVModel } from '@vueuse/core'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+import { SUPPORTED_LOCALES } from '~/init/locale'
 
 interface Events {
   (e: 'update:show', value: boolean): void
@@ -94,7 +97,7 @@ const labels = computed(() => ({
               <span class="left colon symbol" />
             </span>
             <div class="right floated">
-              <span class="user-modal list-item">{{ $language.available[$language.current] }}</span>
+              <span class="user-modal list-item">{{ SUPPORTED_LOCALES[$i18n.locale] }}</span>
               <i class="action-hint chevron right icon" />
             </div>
           </div>

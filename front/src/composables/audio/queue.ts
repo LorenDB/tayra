@@ -1,19 +1,18 @@
 import type { Track, Upload } from '~/types'
 
 import { createGlobalState, useNow, useStorage, useTimeAgo, whenever } from '@vueuse/core'
-import { shuffle as shuffleArray, sum } from 'lodash-es'
 import { computed, ref, shallowReactive, watchEffect } from 'vue'
+import { shuffle as shuffleArray, sum } from 'lodash-es'
 import { useClamp } from '@vueuse/math'
-
-import { delMany, getMany, setMany } from '~/composables/data/indexedDB'
-import { looping, LoopingMode, isPlaying } from '~/composables/audio/player'
+import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
+import { looping, LoopingMode, isPlaying } from '~/composables/audio/player'
+import { delMany, getMany, setMany } from '~/composables/data/indexedDB'
+import { setGain } from '~/composables/audio/audio-api'
 import { useTracks } from '~/composables/audio/tracks'
-import { gettext } from '~/init/locale'
 
 import axios from 'axios'
-import { setGain } from './audio-api'
 
 export interface QueueTrackSource {
   uuid: string
@@ -102,7 +101,7 @@ export const useQueue = createGlobalState(() => {
   const { currentSound } = useTracks()
 
   const createQueueTrack = async (track: Track): Promise<QueueTrack> => {
-    const { $pgettext } = gettext
+    const { t } = useI18n()
     const { default: store } = await import('~/store')
 
     if (track.uploads.length === 0) {
@@ -116,8 +115,8 @@ export const useQueue = createGlobalState(() => {
     return {
       id: track.id,
       title: track.title,
-      artistName: track.artist?.name ?? $pgettext('*/*/*', 'Unknown artist'),
-      albumTitle: track.album?.title ?? $pgettext('*/*/*', 'Unknown album'),
+      artistName: track.artist?.name ?? t('composables.audio.queue.unknownArtist'),
+      albumTitle: track.album?.title ?? t('composables.audio.queue.unknownAlbum'),
       position: track.position,
       artistId: track.artist?.id ?? -1,
       albumId: track.album?.id ?? -1,

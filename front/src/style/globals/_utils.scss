@@ -127,68 +127,32 @@ span.diff.removed {
 }
 
 .symbol {
+  &.left::after {
+    padding-right: 0.25em;
+  }
+
+  &.right::after {
+    padding-left: 0.25em;
+  }
+
+  &.middle::after {
+    padding: 0 0.25em;
+  }
+
   &.at::after {
     content: "@";
   }
 
-  &.slash {
-    &.left::after {
-      padding-right: 0.25em;
-      content: "/";
-    }
-
-    &.right::after {
-      padding-left: 0.25em;
-      content: "/";
-    }
-
-    &.middle::after {
-      padding: 0.25em;
-      content: "/";
-    }
-
-    &.nospace::after {
-      content: "/";
-    }
+  &.slash::after {
+    content: "/";
   }
 
-  &.pipe {
-    &.left::after {
-      padding-right: 0.25em;
-      content: "|";
-    }
-
-    &.right::after {
-      padding-left: 0.25em;
-      content: "|";
-    }
-
-    &.middle::after {
-      padding: 0.25em;
-      content: "|";
-    }
+  &.pipe::after {
+    content: "|";
   }
 
-  &.middledot {
-
-    &.left::before {
-      padding-right: 0.25em;
-      content: "·";
-    }
-
-    &.right::after {
-      padding-left: 0.25em;
-      content: "·";
-    }
-
-    &.middle::after {
-      padding: 0.25em;
-      content: "·";
-    }
-
-    &.nospace::after {
-      content: "·"; 
-    }
+  &.middledot::after {
+    content: "·";
   }
 
   &.infinity::after {
@@ -203,56 +167,20 @@ span.diff.removed {
     content: "#";
   }
 
-  &.ellipses {
-
-    &.nospace::after {
-      content: "…";
-    }
-
-    &.middle::after {
-      padding: 0.25em;
-      content: "…";
-    }
+  &.ellipses::after {
+    content: "…";
   }
 
   &.doubledot::after {
     content: "..";
   }
 
-  &.hyphen {
-
-    &.left::before {
-      padding-right: 0.25em;
-      content: "-";
-    }
-
-    &.right {
-      padding-left: 0.25em;
-      content: "-";
-    }
-
-    &.middle::after {
-      padding: 0.25em;
-      content: "-";
-    }
+  &.hyphen::after {
+    content: "-";
   }
 
-  &.colon {
-
-    &.left::before {
-      padding-right: 0.25em;
-      content: ":";
-    }
-
-    &.right::after {
-      padding-left: 0.25em;
-      content: ":";
-    }
-
-    &.middle::after {
-      padding: 0.25em;
-      content: ":";
-    }
+  &.colon::after {
+    content: ":";
   }
 
   &.percent::after {

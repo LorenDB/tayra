@@ -44,7 +44,7 @@ const toggle = () => {
     <span v-else-if="isPending">
       {{ $t('components.audio.LibraryFollowButton.button.cancel') }}
     </span>
-    <spanv-else>
+    <span v-else>
       {{ $t('components.audio.LibraryFollowButton.button.follow') }}
     </span>
   </button>

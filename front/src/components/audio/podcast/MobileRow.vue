@@ -116,7 +116,7 @@ const actionsButtonLabel = computed(() => t('components.audio.podcast.MobileRow.
           class="really discrete"
           :date="track.creation_date"
         />
-        <span class="nospace middledot symbol" />
+        <span class="middledot symbol" />
         <human-duration
           v-if="track.uploads[0] && track.uploads[0].duration"
           :duration="track.uploads[0].duration"
@@ -127,7 +127,7 @@ const actionsButtonLabel = computed(() => t('components.audio.podcast.MobileRow.
         class="track-meta mobile"
       >
         {{ track.artist?.name }}
-        <span class="nospace middledot symbol" />
+        <span class="middledot symbol" />
         <human-duration
           v-if="track.uploads[0] && track.uploads[0].duration"
           :duration="track.uploads[0].duration"

@@ -1,3 +1,11 @@
+<i18n>
+{
+  "en": {
+    "00:00": "00:00"
+  }
+}
+</i18n>
+
 <script setup lang="ts">
 import type { QueueItemSource } from '~/types'
 
@@ -56,7 +64,7 @@ const store = useStore()
 
 const labels = computed(() => ({
   queue: t('components.Queue.label.queue'),
-  populating: t('components.Queue.queue.label.populatingRadio'),
+  populating: t('components.Queue.label.populatingRadio'),
   duration: t('components.Queue.label.duration'),
   addArtistContentFilter: t('components.Queue.label.addArtistContentFilter'),
   restart: t('components.Queue.label.restart'),
@@ -129,8 +137,7 @@ const queueItems = computed(() => queue.value.map((track, index) => ({
     remove: t('components.Queue.label.remove'),
     selectTrack: t('components.Queue.label.selectTrack'),
     favorite: t('components.Queue.label.favorite')
-  },
-  duration: time.durationFormatted(track.uploads[0]?.duration ?? 0) ?? ''
+  }
 }) as QueueItemSource))
 
 const reorderTracks = async (from: number, to: number) => {
@@ -261,7 +268,11 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                   @click="loadRandomPreset()"
                 >
                   <h1>{{ currentTrack.title }}</h1>
-                  <h2>{{ currentTrack.artistName }} &mdash; {{ currentTrack.albumTitle }}</h2>
+                  <h2>
+                    {{ currentTrack.artistName }}
+                    <span class="symbol hyphen middle" />
+                    {{ currentTrack.albumTitle }}
+                  </h2>
                 </div>
               </Transition>
             </div>
@@ -313,14 +324,10 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
             class="ui small warning message"
           >
             <h3 class="header">
-              <translate translate-context="Sidebar/Player/No sources">
-                The track has no available sources
-              </translate>
+              {{ $t('components.Queue.header.noSources') }}
             </h3>
             <p v-if="hasNext && isPlaying">
-              <translate translate-context="Sidebar/Player/Error message.Paragraph">
-                The next track will play automatically in a few seconds…
-              </translate>
+              {{ $t('components.Queue.message.automaticPlay') }}
               <i class="loading spinner icon" />
             </p>
           </div>
@@ -388,8 +395,8 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                 <span class="right floated timer total">{{ time.parse(Math.round(duration)) }}</span>
               </template>
               <template v-else>
-                <span class="left floated timer">{{ durationFormatted(0) }}</span>
-                <span class="right floated timer">{{ durationFormatted(0) }}</span>
+                <span class="left floated timer">{{ $t('components.Queue.meta.startTime') }}</span>
+                <span class="right floated timer">{{ $t('components.Queue.meta.startTime') }}</span>
               </template>
             </div>
           </div>
@@ -470,7 +477,7 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                   class="ui basic primary button"
                   @click="$store.dispatch('radios/stop')"
                 >
-                  {{ $t('components.Queue.stopRadio') }}
+                  {{ $t('components.Queue.button.stopRadio') }}
                 </button>
               </div>
             </div>

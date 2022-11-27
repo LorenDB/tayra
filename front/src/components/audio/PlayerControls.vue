@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useGettext } from 'vue3-gettext'
+import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
 import { usePlayer } from '~/composables/audio/player'
@@ -8,12 +8,12 @@ import { useQueue } from '~/composables/audio/queue'
 const { hasPrevious, playPrevious, hasNext, playNext, currentTrack } = useQueue()
 const { isPlaying } = usePlayer()
 
-const { $pgettext } = useGettext()
+const { t } = useI18n()
 const labels = computed(() => ({
-  previous: $pgettext('Sidebar/Player/Icon.Tooltip', 'Previous track'),
-  play: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Play'),
-  pause: $pgettext('Sidebar/Player/Icon.Tooltip/Verb', 'Pause'),
-  next: $pgettext('Sidebar/Player/Icon.Tooltip', 'Next track')
+  previous: t('components.audio.PlayerControls.labels.previous'),
+  play: t('components.audio.PlayerControls.labels.play'),
+  pause: t('components.audio.PlayerControls.labels.pause'),
+  next: t('components.audio.PlayerControls.labels.next')
 }))
 </script>
 

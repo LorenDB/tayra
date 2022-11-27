@@ -58,7 +58,7 @@ const created = (application: Application) => {
           {{ $t('components.auth.ApplicationNew.link.settings') }}
         </router-link>
         <h2 class="ui header">
-          {{ title }}
+          {{ labels.title }}
         </h2>
         <application-form
           :defaults="defaults"

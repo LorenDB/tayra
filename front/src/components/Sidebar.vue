@@ -104,7 +104,7 @@ const moderationNotifications = computed(() =>
 const showLanguageModal = ref(false)
 const locale = ref(i18nLocale.value)
 watch(locale, (locale) => {
-  // setI18nLanguage(locale)
+  setI18nLanguage(locale)
 })
 
 const isProduction = import.meta.env.PROD

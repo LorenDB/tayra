@@ -165,7 +165,7 @@ const getCurrentState = (target?: StateTarget): ReviewState => {
     <div class="ui inline form">
       <div class="fields">
         <div class="ui field">
-          <label for="search-edits">{{ $t('components.manage.library.EditsCardList.placeholder.search') }}</label>
+          <label for="search-edits">{{ $t('components.manage.library.EditsCardList.label.search') }}</label>
           <form @submit.prevent="query = search.value">
             <input
               id="search-edits"
