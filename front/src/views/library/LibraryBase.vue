@@ -178,7 +178,7 @@ const updateUploads = (count: number) => {
             </span>
             <span class="middledot icon">
               <i class="music icon" />
-              {{ $t('views.library.LibraryBase.meta.tracks', {count: object.uploads_count}) }}
+              {{ $t('views.library.LibraryBase.meta.tracks', object.uploads_count) }}
             </span>
             <span v-if="object.size">
               <i class="database icon" />

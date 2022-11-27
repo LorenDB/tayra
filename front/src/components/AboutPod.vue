@@ -342,7 +342,7 @@ const headerStyle = computed(() => {
                     <span class="statistics-figure ui text">
                       <span class="ui big text"><strong>{{ stats.hours.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
-                      {{ $t('components.AboutPod.stat.hoursOfMusic', {hours: stats.hours}) }}
+                      {{ $t('components.AboutPod.stat.hoursOfMusic', stats.hours) }}
                     </span>
                   </div>
                   <div
@@ -352,7 +352,7 @@ const headerStyle = computed(() => {
                     <span class="statistics-figure ui text">
                       <span class="ui big text"><strong>{{ stats.artists.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
-                      {{ $t('components.AboutPod.stat.artistsCount', {artists: stats.artists}) }}
+                      {{ $t('components.AboutPod.stat.artistsCount', stats.artists) }}
                     </span>
                   </div>
                   <div
@@ -362,7 +362,7 @@ const headerStyle = computed(() => {
                     <span class="statistics-figure ui text">
                       <span class="ui big text"><strong>{{ stats.albums.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
-                      {{ $t('components.AboutPod.stat.albumsCount', {albums: stats.albums}) }}
+                      {{ $t('components.AboutPod.stat.albumsCount', stats.albums) }}
                     </span>
                   </div>
                   <div
@@ -372,7 +372,7 @@ const headerStyle = computed(() => {
                     <span class="statistics-figure ui text">
                       <span class="ui big text"><strong>{{ stats.tracks.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
-                      {{ $t('components.AboutPod.stat.tracksCount', {tracks: stats.tracks}) }}
+                      {{ $t('components.AboutPod.stat.tracksCount', stats.tracks) }}
                     </span>
                   </div>
                   <div
@@ -382,7 +382,7 @@ const headerStyle = computed(() => {
                     <span class="statistics-figure ui text">
                       <span class="ui big text"><strong>{{ stats.users.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
-                      {{ $t('components.AboutPod.stat.activeUsers', {users: stats.users}) }}
+                      {{ $t('components.AboutPod.stat.activeUsers', stats.users) }}
                     </span>
                   </div>
                   <div
@@ -392,7 +392,7 @@ const headerStyle = computed(() => {
                     <span class="statistics-figure ui text">
                       <span class="ui big text"><strong>{{ stats.listenings.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                       <br>
-                      {{ $t('components.AboutPod.stat.listeningsCount', {listenings: stats.listenings}) }}
+                      {{ $t('components.AboutPod.stat.listeningsCount', stats.listenings) }}
                     </span>
                   </div>
                 </div>
@@ -409,7 +409,7 @@ const headerStyle = computed(() => {
                   v-if="contactEmail"
                   :href="`mailto:${contactEmail}`"
                 >
-                  {{ $t('components.AboutPod.message.contact', {contactEmail: contactEmail}) }}
+                  {{ $t('components.AboutPod.message.contact', { contactEmail }) }}
                 </a>
               </template>
 

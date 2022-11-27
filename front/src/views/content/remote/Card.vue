@@ -191,7 +191,7 @@ watch(showScan, (shouldShow) => {
       </div>
       <div class="meta">
         <i class="music icon" />
-        {{ $t('views.content.remote.Card.meta.tracks', {count: library.uploads_count}) }}
+        {{ $t('views.content.remote.Card.meta.tracks', library.uploads_count) }}
       </div>
       <div
         v-if="displayScan && latestScan"

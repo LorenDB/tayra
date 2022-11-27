@@ -330,7 +330,7 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } actieve gebruiker | { count } actieve gebruikers",
+        "activeUsers": "{ n } actieve gebruiker | { n } actieve gebruikers",
         "hoursOfMusic": "uur muziek | uur muziek"
       },
       "header": {
@@ -361,8 +361,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } actieve gebruiker | { count } actieve gebruikers",
-        "hoursOfMusic": "{ count } uur muziek | { count } uren muziek"
+        "activeUsers": "{ n } actieve gebruiker | { n } actieve gebruikers",
+        "hoursOfMusic": "{ n } uur muziek | { n } uren muziek"
       },
       "header": {
         "aboutFunkwhale": "Over Funkwhale",
@@ -412,8 +412,8 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } aflevering | { count } afleveringen",
-            "tracks": "{ count } nummer | { count } nummers"
+            "episodes": "{ n } aflevering | { n } afleveringen",
+            "tracks": "{ n } nummer | { n } nummers"
           }
         },
         "Widget": {
@@ -424,20 +424,20 @@
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } aflevering | { count } afleveringen",
-          "tracks": "{ count } nummer | { count } nummers"
+          "episodes": "{ n } aflevering | { n } afleveringen",
+          "tracks": "{ n } nummer | { n } nummers"
         },
         "title": "Bijgewerkt op { date }"
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } aflevering | { count } afleveringen"
+          "episodes": "{ n } aflevering | { n } afleveringen"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "{ count } nummer | { count } nummers"
+            "tracks": "{ n } nummer | { n } nummers"
           }
         },
         "Widget": {
@@ -696,8 +696,8 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } aflevering | { count } afleveringen",
-          "tracks": "{ count } nummer | { count } nummers"
+          "episodes": "{ n } aflevering | { n } afleveringen",
+          "tracks": "{ n } nummer | { n } nummers"
         },
         "link": {
           "addDescription": "Voeg een omschrijving toe…"
@@ -705,7 +705,8 @@
       },
       "ArtistBase": {
         "meta": {
-          "tracks": "{ count } nummer in { albumsCount } albums | { count } nummers in { albumsCount } albums"
+          "tracks": "{ n } nummer in | { n } nummers in",
+          "albums": "{ n } albums | { n } albums"
         },
         "title": "Artiest",
         "button": {
@@ -732,7 +733,7 @@
       "radios": {
         "Builder": {
           "header": {
-            "matches": "{ count } nummer komt overeen met de gecombineerde filters | { count } nummers komen overeen met de gecombineerde filters",
+            "matches": "{ n } nummer komt overeen met de gecombineerde filters | { n } nummers komen overeen met de gecombineerde filters",
             "builder": "Bouwer",
             "created": "Radio gecreëerd",
             "updated": "Radio bijgewerkt"
@@ -1269,7 +1270,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "{ count } favoriet | { count } favorieten"
+          "favorites": "{ n } favoriet | { n } favorieten"
         },
         "ordering": {
           "direction": {
@@ -1306,7 +1307,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "{ count } bestand | { count } bestanden",
+          "files": "{ n } bestand | { n } bestanden",
           "quota": "Resterende opslagruimte:"
         },
         "button": {
@@ -1327,7 +1328,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "{ count } nummer | { count } nummers"
+          "tracks": "{ n } nummer | { n } nummers"
         },
         "label": {
           "album": "Album",
@@ -1472,18 +1473,18 @@
     "common": {
       "ActionTable": {
         "button": {
-          "selected": "{ count } van { total } geselecteerd | { count } van { total } geselecteerd",
-          "allSelected": "Één element geselecteerd | Alle { count } elementen geselecteerd",
+          "selected": "{ n } van { total } geselecteerd | { n } van { total } geselecteerd",
+          "allSelected": "Één element geselecteerd | Alle { n } elementen geselecteerd",
           "go": "Ga",
           "launch": "Opstarten",
           "refresh": "Vernieuw inhoud tabel",
           "select": "Selecteer",
           "selectAll": "Selecteer alle voorwerpen",
-          "selectElement": "Selecteer { total } element | Selecteer alle { total } elementen",
+          "selectElement": "Selecteer { n } element | Selecteer alle { n } elementen",
           "selectCurrentPage": "Alleen deze pagina kiezen"
         },
         "message": {
-          "success": "Actie { action } is begonnen voor { count } element | Actie { action } is begonnen voor { count } elementen",
+          "success": "Actie { action } is begonnen voor { n } element | Actie { action } is begonnen voor { n } elementen",
           "needsRefresh": "Inhoud is geüpdatet. Klik vernieuwen om actuele inhoud te zien"
         },
         "label": {
@@ -1492,7 +1493,7 @@
         },
         "modal": {
           "performAction": {
-            "header": "Wil je { action } toepassen op { count } element? | Wil je { action } toepassen op { count } elementen?",
+            "header": "Wil je { action } toepassen op { n } element? | Wil je { action } toepassen op { n } elementen?",
             "content": {
               "warning": "Dit kan gevolgen hebben voor veel elementen of onomkeerbare consequenties hebben. Controleer of je dit écht wilt doen."
             }
@@ -1666,7 +1667,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "{ count } nummer | { count } nummers"
+          "tracks": "{ n } nummer | { n } nummers"
         }
       },
       "PlaylistModal": {

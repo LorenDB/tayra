@@ -245,7 +245,7 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } aktiv användare | { count } aktiva användare",
+        "activeUsers": "{ n } aktiv användare | { n } aktiva användare",
         "hoursOfMusic": "Timmar av musik | Timmar av musik"
       },
       "header": {
@@ -257,8 +257,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } aktiv användare | { count } aktiva användare",
-        "hoursOfMusic": "{ count } timme musik | { count } timmar musik"
+        "activeUsers": "{ n } aktiv användare | { n } aktiva användare",
+        "hoursOfMusic": "{ n } timme musik | { n } timmar musik"
       },
       "header": {
         "aboutFunkwhale": "Om Funkwhale",
@@ -285,8 +285,8 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } avsnitt | { count } avsnitt",
-            "tracks": "{ count } spår | { count } spår"
+            "episodes": "{ n } avsnitt | { n } avsnitt",
+            "tracks": "{ n } spår | { n } spår"
           }
         },
         "Widget": {
@@ -297,20 +297,20 @@
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } avsnitt | { count } avsnitt",
-          "tracks": "{ count } spår | { count } spår"
+          "episodes": "{ n } avsnitt | { n } avsnitt",
+          "tracks": "{ n } spår | { n } spår"
         },
         "title": "Registrerad sedan % { date }"
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } avsnitt | { count } avsnitt"
+          "episodes": "{ n } avsnitt | { n } avsnitt"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "{ count } spår | { count } spår"
+            "tracks": "{ n } spår | { n } spår"
           }
         },
         "Widget": {
@@ -481,13 +481,14 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } avsnitt | { count } avsnitt",
-          "tracks": "{ count } spår | { count } spår"
+          "episodes": "{ n } avsnitt | { n } avsnitt",
+          "tracks": "{ n } spår | { n } spår"
         }
       },
       "ArtistBase": {
         "meta": {
-          "tracks": "{ count } spår i { albumsCount } album | { count } spår i { albumsCount } album"
+          "tracks": "{ n } spår i | { n } spår i album",
+          "albums": "{ n } album | { n } album"
         },
         "title": "Artist",
         "button": {
@@ -504,7 +505,7 @@
       "radios": {
         "Builder": {
           "header": {
-            "matches": "{ count } spår som matchar kombinerade filter | { count } spår som matchar kombinerade filter",
+            "matches": "{ n } spår som matchar kombinerade filter | { n } spår som matchar kombinerade filter",
             "builder": "Byggare",
             "created": "Radio titel",
             "updated": "Radio titel"
@@ -883,7 +884,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "{ count } favorit | { count } favoriter"
+          "favorites": "{ n } favorit | { n } favoriter"
         },
         "ordering": {
           "direction": {
@@ -917,7 +918,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "{ count } fil | { count } filer"
+          "files": "{ n } fil | { n } filer"
         },
         "button": {
           "cancel": "Ångra",
@@ -937,7 +938,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "{ count } spår | { count } spår"
+          "tracks": "{ n } spår | { n } spår"
         },
         "label": {
           "album": "Album"
@@ -1023,8 +1024,8 @@
     "common": {
       "ActionTable": {
         "button": {
-          "selected": "{ count } av { total } vald | { count } av { total } valda",
-          "allSelected": "{ count } av { total } vald | { count } av { total } valda",
+          "selected": "{ n } av { total } vald | { n } av { total } valda",
+          "allSelected": "{ n } av { total } vald | { n } av { total } valda",
           "go": "Kör",
           "launch": "Starta",
           "selectAll": "Välj ett filter",
@@ -1032,7 +1033,7 @@
           "selectCurrentPage": "Välj endast aktuell sida"
         },
         "message": {
-          "success": "Åtgärd { action } togs framgångrikt på { count } element | Åtgärd { action } togs framgångrikt på { count } element"
+          "success": "Åtgärd { action } togs framgångrikt på { n } element | Åtgärd { action } togs framgångrikt på { n } element"
         },
         "label": {
           "actions": "Åtgärder",
@@ -1040,7 +1041,7 @@
         },
         "modal": {
           "performAction": {
-            "header": "Vill du starta { action } på { count } element? | Vill du starta { action } på { count } element?",
+            "header": "Vill du starta { action } på { n } element? | Vill du starta { action } på { n } element?",
             "content": {
               "warning": "Detta kan påverka många element. Kontrollera att detta verkligen är vad du vill ha."
             }
@@ -1167,7 +1168,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "{ count } spår | { count } spår"
+          "tracks": "{ n } spår | { n } spår"
         }
       },
       "PlaylistModal": {
@@ -1213,7 +1214,7 @@
           "addDuplicate": "Lägg till ett nytt bibliotek",
           "clear": "Rensa spellista",
           "copy": "Kopiera spår från nuvarande kö till spellista",
-          "insertFromQueue": "Infoga ({ count } spår från kön) | Infoga ({ count } spår från kön)"
+          "insertFromQueue": "Infoga ({ n } spår från kön) | Infoga ({ n } spår från kön)"
         },
         "error": {
           "sync": "Ett fel inträffade när dina ändringar sparades"
@@ -2088,7 +2089,7 @@
     "tags": {
       "List": {
         "button": {
-          "more": "Visa 1 mer låt | Visa { count } mår låtar"
+          "more": "Visa 1 mer låt | Visa { n } mår låtar"
         }
       }
     },
@@ -2102,10 +2103,10 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "{ count } avsnitt | { count } avsnitt",
-          "listenings": "{ count } spelning | { count } spelningar",
-          "subscribers": "{ count } prenumerant | { count } prenumeranter",
-          "tracks": "{ count } spår | { count } spår"
+          "episodes": "{ n } avsnitt | { n } avsnitt",
+          "listenings": "{ n } spelning | { n } spelningar",
+          "subscribers": "{ n } prenumerant | { n } prenumeranter",
+          "tracks": "{ n } spår | { n } spår"
         },
         "header": {
           "artistChannel": "Artistnamn"
@@ -2155,7 +2156,7 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "{ count } spår | { count } spår"
+            "tracks": "{ n } spår | { n } spår"
           },
           "link": {
             "details": "Filer i bibliotek"
@@ -2278,7 +2279,7 @@
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "{ count } spår | { count } spår",
+            "tracks": "{ n } spår | { n } spår",
             "failedTracks": "Federerade spår",
             "lastUpdate": "Spellistan uppdaterad"
           },
@@ -2342,7 +2343,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "{ count } spår | { count } spår"
+          "tracks": "{ n } spår | { n } spår"
         },
         "link": {
           "albums": "Album",
@@ -3012,7 +3013,7 @@
         },
         "title": "Spellista",
         "meta": {
-          "tracks": "Spellista som innehåller % { count } spår, av % { username } | Spellista som innehåller % { count } spår, av % { username }"
+          "tracks": "Spellista som innehåller % { n } spår, av % { username } | Spellista som innehåller % { n } spår, av % { username }"
         },
         "empty": {
           "noTracks": "Dra och släpp rader för att omordna spår i spellistan"
@@ -3046,7 +3047,7 @@
   "composables": {
     "audio": {
       "usePlayOptions": {
-        "addToQueueMessage": "{ count } spår lades till i din kö | { count } spår lades till i din kö"
+        "addToQueueMessage": "{ n } spår lades till i din kö | { n } spår lades till i din kö"
       }
     },
     "locale": {

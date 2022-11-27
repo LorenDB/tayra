@@ -164,14 +164,14 @@ const headerStyle = computed(() => {
                         <span class="statistics-figure ui text">
                           <span class="ui big text"><strong>{{ stats.users.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                           <br>
-                          {{ $t('components.About.stat.activeUsers', {users: stats.users}) }}
+                          {{ $t('components.About.stat.activeUsers', stats.users) }}
                         </span>
                       </div>
                       <div class="column">
                         <span class="statistics-figure ui text">
                           <span class="ui big text"><strong>{{ stats.hours.toLocaleString($store.state.ui.momentLocale) }}</strong></span>
                           <br>
-                          {{ $t('components.About.stat.hoursOfMusic', {hours: stats.hours}) }}
+                          {{ $t('components.About.stat.hoursOfMusic', stats.hours) }}
                         </span>
                       </div>
                     </div>

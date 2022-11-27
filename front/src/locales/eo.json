@@ -255,8 +255,8 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } kanto | { count } kantoj",
-        "hoursOfMusic": "{ count } kanto | { count } kantoj"
+        "activeUsers": "{ n } kanto | { n } kantoj",
+        "hoursOfMusic": "{ n } kanto | { n } kantoj"
       },
       "title": "Pripaĝo",
       "header": {
@@ -270,8 +270,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } kanto | { count } kantoj",
-        "hoursOfMusic": "{ count } kanto | { count } kantoj"
+        "activeUsers": "{ n } kanto | { n } kantoj",
+        "hoursOfMusic": "{ n } kanto | { n } kantoj"
       },
       "header": {
         "aboutFunkwhale": "Pri Funkwhale",
@@ -306,8 +306,8 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } kanto | { count } kantoj",
-            "tracks": "{ count } kanto | { count } kantoj"
+            "episodes": "{ n } kanto | { n } kantoj",
+            "tracks": "{ n } kanto | { n } kantoj"
           }
         },
         "Widget": {
@@ -318,20 +318,20 @@
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } kanto | { count } kantoj",
-          "tracks": "{ count } kanto | { count } kantoj"
+          "episodes": "{ n } kanto | { n } kantoj",
+          "tracks": "{ n } kanto | { n } kantoj"
         },
         "title": "Aligis je {date}"
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } kanto | { count } kantoj"
+          "episodes": "{ n } kanto | { n } kantoj"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "{ count } kanto | { count } kantoj"
+            "tracks": "{ n } kanto | { n } kantoj"
           }
         },
         "Widget": {
@@ -546,8 +546,8 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } kanto | { count } kantoj",
-          "tracks": "{ count } kanto | { count } kantoj"
+          "episodes": "{ n } kanto | { n } kantoj",
+          "tracks": "{ n } kanto | { n } kantoj"
         },
         "link": {
           "addDescription": "Mia mojosa priskribo"
@@ -555,7 +555,8 @@
       },
       "ArtistBase": {
         "meta": {
-          "tracks": "{ count } kanto en { albumsCount } albumo | { count } kantoj en { albumsCount } albumoj"
+          "tracks": "{ n } kanto en | { n } kantoj en",
+          "albums": "{ n } albumo | { n } albumoj"
         },
         "title": "Artisto",
         "button": {
@@ -580,7 +581,7 @@
       "radios": {
         "Builder": {
           "header": {
-            "matches": "{count} kanto kongruas kun la tutaj filtriloj | {count} kantoj kongruas kun la tutaj filtriloj",
+            "matches": "{ n } kanto kongruas kun la tutaj filtriloj | { n } kantoj kongruas kun la tutaj filtriloj",
             "builder": "Konstruilo",
             "created": "Kreis radion",
             "updated": "Ĝisdatigas radion"
@@ -1023,7 +1024,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "Unu stelumo | { count } stelumoj"
+          "favorites": "Unu stelumo | { n } stelumoj"
         },
         "ordering": {
           "direction": {
@@ -1060,7 +1061,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "Unu stelumo | { count } stelumoj"
+          "files": "Unu stelumo | { n } stelumoj"
         },
         "button": {
           "cancel": "Nuligi",
@@ -1078,7 +1079,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "{ count } kanto | { count } kantoj"
+          "tracks": "{ n } kanto | { n } kantoj"
         },
         "label": {
           "album": "Albumo"
@@ -1149,11 +1150,11 @@
     },
     "AboutPod": {
       "stat": {
-        "hoursOfMusic": "{ count } kanto | { count } kantoj",
-        "activeUsers": "{ count } kanto | { count } kantoj",
+        "hoursOfMusic": "{ n } kanto | { n } kantoj",
+        "activeUsers": "{ n } kanto | { n } kantoj",
         "albumsCount": "Albumo | Albumo",
         "artistsCount": "Artisto | Artisto",
-        "listeningsCount": "{ count } kanto | { count } kantoj",
+        "listeningsCount": "{ n } kanto | { n } kantoj",
         "tracksCount": "Kanto | Kanto"
       },
       "title": "Pripaĝo",
@@ -1185,17 +1186,17 @@
     "common": {
       "ActionTable": {
         "button": {
-          "selected": "Unu el { total } estas selektita | { count } el { total } estas selektitaj",
-          "allSelected": "Ĉiu { count } ero estas selekta | Ĉiuj { count } eroj estas selektaj",
+          "selected": "Unu el { total } estas selektita | { n } el { total } estas selektitaj",
+          "allSelected": "Ĉiu { n } ero estas selekta | Ĉiuj { n } eroj estas selektaj",
           "go": "Komenci",
           "launch": "Lanĉi",
           "refresh": "Aktualiĝi datumon de tabelo",
           "selectAll": "Elekti filtrilon",
-          "selectElement": "Elekti unu eron | Elekti ĉiun la {total} erojn",
+          "selectElement": "Elekti unu eron | Elekti ĉiun la { n } erojn",
           "selectCurrentPage": "Elekti nur la aktualan uzon"
         },
         "message": {
-          "success": "Ago { action } sukcese komenciĝis por { count } ero | Agoj { action } sukcese komenciĝis por { count } eroj",
+          "success": "Ago { action } sukcese komenciĝis por { n } ero | Agoj { action } sukcese komenciĝis por { n } eroj",
           "needsRefresh": "Ĝisdatigis datumon, alklaku aktualigi por vidi novan datumon"
         },
         "label": {
@@ -1204,7 +1205,7 @@
         },
         "modal": {
           "performAction": {
-            "header": "Ĉu vi volas komenci {action} por {count} ero? | Ĉu vi volas komenci {action} por {count} eroj?",
+            "header": "Ĉu vi volas komenci {action} por { n } ero? | Ĉu vi volas komenci {action} por { n } eroj?",
             "content": {
               "warning": "Tiu efektus multe da ero aŭ havus malfarontajn konsekvencojn, bonvolu recertiĝi vi vere volas tiun."
             }
@@ -1347,7 +1348,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "{ count } kanto | { count } kantoj"
+          "tracks": "{ n } kanto | { n } kantoj"
         }
       },
       "PlaylistModal": {
@@ -1399,7 +1400,7 @@
         "button": {
           "clear": "Purigi ludliston",
           "copy": "Kopii kantojn el la aktuala atendovico en tiu ludlisto",
-          "insertFromQueue": "Internigi el atendovico (unu kanto) | Internigi el atendovico ({count} kantoj)"
+          "insertFromQueue": "Internigi el atendovico (unu kanto) | Internigi el atendovico ({ n } kantoj)"
         },
         "modal": {
           "clearPlaylist": {
@@ -2386,7 +2387,7 @@
     "tags": {
       "List": {
         "button": {
-          "more": "Afiŝi unu alian albumon | Afiŝi {count} aliajn albumojn"
+          "more": "Afiŝi unu alian albumon | Afiŝi { n } aliajn albumojn"
         }
       }
     }
@@ -2395,10 +2396,10 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "{ count } kanto | { count } kantoj",
-          "listenings": "{ count } kanto | { count } kantoj",
-          "subscribers": "Unu stelumo | { count } stelumoj",
-          "tracks": "{ count } kanto | { count } kantoj"
+          "episodes": "{ n } kanto | { n } kantoj",
+          "listenings": "{ n } kanto | { n } kantoj",
+          "subscribers": "Unu stelumo | { n } stelumoj",
+          "tracks": "{ n } kanto | { n } kantoj"
         },
         "header": {
           "artistChannel": "Nomo de artisto"
@@ -2471,7 +2472,7 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "{ count } kanto | { count } kantoj"
+            "tracks": "{ n } kanto | { n } kantoj"
           },
           "link": {
             "details": "Muzikejaj dosieroj"
@@ -2628,7 +2629,7 @@
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "{ count } kanto | { count } kantoj",
+            "tracks": "{ n } kanto | { n } kantoj",
             "failedTracks": "Erarintaj kantoj:",
             "lastUpdate": "Lasta ĝisdatigo:"
           },
@@ -2726,7 +2727,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "{ count } kanto | { count } kantoj"
+          "tracks": "{ n } kanto | { n } kantoj"
         },
         "link": {
           "albums": "Albumoj",
@@ -3597,7 +3598,7 @@
         },
         "title": "Ludlisto",
         "meta": {
-          "tracks": "Ludisto enhavanta unu kanto, je {username} | Ludisto enhavanta {count} kantoj, je {username}"
+          "tracks": "Ludisto enhavanta unu kanto, je {username} | Ludisto enhavanta { n } kantoj, je {username}"
         },
         "empty": {
           "noTracks": "Treni kaj guti horizontaloj por reordigi kantojn en la ludlisto"
@@ -3634,7 +3635,7 @@
   "composables": {
     "audio": {
       "usePlayOptions": {
-        "addToQueueMessage": "Aldonis unu kanto al atendovico | Aldonis { count }kantoj al atendovico"
+        "addToQueueMessage": "Aldonis unu kanto al atendovico | Aldonis { n } kantoj al atendovico"
       }
     },
     "locale": {

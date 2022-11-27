@@ -170,19 +170,19 @@ const updateSubscriptionCount = (delta: number) => {
                   <span
                     v-if="object.artist?.content_category === 'podcast'"
                   >
-                    {{ $t('views.channels.DetailBase.meta.episodes', {count: totalTracks}) }}
+                    {{ $t('views.channels.DetailBase.meta.episodes', totalTracks) }}
                   </span>
                   <span
                     v-else
                   >
-                    {{ $t('views.channels.DetailBase.meta.tracks', {count: totalTracks}) }}
+                    {{ $t('views.channels.DetailBase.meta.tracks', totalTracks) }}
                   </span>
                 </template>
                 <template v-if="object.attributed_to.full_username === $store.state.auth.fullUsername || $store.getters['channels/isSubscribed'](object.uuid)">
                   <br>
-                  {{ $t('views.channels.DetailBase.meta.subscribers', {count: object?.subscriptions_count}) }}
+                  {{ $t('views.channels.DetailBase.meta.subscribers', object?.subscriptions_count ?? 0) }}
                   <br>
-                  {{ $t('views.channels.DetailBase.meta.listenings', {count: object?.downloads_count}) }}
+                  {{ $t('views.channels.DetailBase.meta.listenings', object?.downloads_count ?? 0) }}
                 </template>
                 <div class="ui hidden small divider" />
                 <a

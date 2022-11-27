@@ -2,7 +2,7 @@
   "components": {
     "About": {
       "stat": {
-        "activeUsers": "% {count} സജീവ ഉപയോക്താവ് | % {count} സജീവ ഉപയോക്താക്കൾ"
+        "activeUsers": "% { n } സജീവ ഉപയോക്താവ് | % { n } സജീവ ഉപയോക്താക്കൾ"
       },
       "title": "കുറിച്ച്",
       "header": {
@@ -11,7 +11,7 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "% {count} സജീവ ഉപയോക്താവ് | % {count} സജീവ ഉപയോക്താക്കൾ"
+        "activeUsers": "% { n } സജീവ ഉപയോക്താവ് | % { n } സജീവ ഉപയോക്താക്കൾ"
       },
       "header": {
         "aboutFunkwhale": "Funkwhale നെ കുറിച്ച്",
@@ -24,18 +24,18 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } എപ്പിസോഡ് | { count } എപ്പിസോഡുകൾ"
+            "episodes": "{ n } എപ്പിസോഡ് | { n } എപ്പിസോഡുകൾ"
           }
         }
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } എപ്പിസോഡ് | { count } എപ്പിസോഡുകൾ"
+          "episodes": "{ n } എപ്പിസോഡ് | { n } എപ്പിസോഡുകൾ"
         }
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } എപ്പിസോഡ് | { count } എപ്പിസോഡുകൾ"
+          "episodes": "{ n } എപ്പിസോഡ് | { n } എപ്പിസോഡുകൾ"
         }
       },
       "podcast": {
@@ -129,7 +129,7 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } എപ്പിസോഡ് | { count } എപ്പിസോഡുകൾ"
+          "episodes": "{ n } എപ്പിസോഡ് | { n } എപ്പിസോഡുകൾ"
         },
         "link": {
           "addDescription": "ഒരു വിവരണം ചേർക്കുക…"
@@ -331,7 +331,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "{ count } ഫയൽ | { count } ഫയലുകൾ"
+          "files": "{ n } ഫയൽ | { n } ഫയലുകൾ"
         },
         "button": {
           "cancel": "റദ്ദാക്കുക",
@@ -454,7 +454,7 @@
         "statistics": "അവസ്ഥ"
       },
       "stat": {
-        "activeUsers": "% {count} സജീവ ഉപയോക്താവ് | % {count} സജീവ ഉപയോക്താക്കൾ",
+        "activeUsers": "% { n } സജീവ ഉപയോക്താവ് | % { n } സജീവ ഉപയോക്താക്കൾ",
         "albumsCount": "ആൽബം | ആൽബം",
         "artistsCount": "കലാകാരൻ | കലാകാരൻ",
         "tracksCount": "ട്രാക്ക് ചേർക്കുക | ട്രാക്ക് ചേർക്കുക"

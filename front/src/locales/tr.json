@@ -9,40 +9,40 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } aktif kullanıcı | { count } aktif kullanıcılar",
-        "hoursOfMusic": "{ count } müzik saati | { count } müzik saatleri"
+        "activeUsers": "{ n } aktif kullanıcı | { n } aktif kullanıcılar",
+        "hoursOfMusic": "{ n } müzik saati | { n } müzik saatleri"
       }
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } aktif kullanıcı | { count } aktif kullanıcılar",
-        "hoursOfMusic": "{ count } müzik saati | { count } müzik saatleri"
+        "activeUsers": "{ n } aktif kullanıcı | { n } aktif kullanıcılar",
+        "hoursOfMusic": "{ n } müzik saati | { n } müzik saatleri"
       }
     },
     "audio": {
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } bölüm | { count } bölümler",
-            "tracks": "{ count } parça | { count } parça"
+            "episodes": "{ n } bölüm | { n } bölümler",
+            "tracks": "{ n } parça | { n } parça"
           }
         }
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } bölüm | { count } bölümler",
-          "tracks": "{ count } parça | { count } parça"
+          "episodes": "{ n } bölüm | { n } bölümler",
+          "tracks": "{ n } parça | { n } parça"
         }
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } bölüm | { count } bölümler"
+          "episodes": "{ n } bölüm | { n } bölümler"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "{ count } parça | { count } parça"
+            "tracks": "{ n } parça | { n } parça"
           }
         }
       }
@@ -50,14 +50,14 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } bölüm | { count } bölümler",
-          "tracks": "{ count } parça | { count } parça"
+          "episodes": "{ n } bölüm | { n } bölümler",
+          "tracks": "{ n } parça | { n } parça"
         }
       },
       "radios": {
         "Builder": {
           "header": {
-            "matches": "{ count } tane parça filtrelendi | { count } tane parça filtrelendi"
+            "matches": "{ n } tane parça filtrelendi | { n } tane parça filtrelendi"
           }
         }
       }
@@ -65,31 +65,31 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "{ count } favori | { count } favoriler"
+          "favorites": "{ n } favori | { n } favoriler"
         }
       }
     },
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "{ count } dosya | { count } dosyalar"
+          "files": "{ n } dosya | { n } dosyalar"
         }
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "{ count } parça | { count } parça"
+          "tracks": "{ n } parça | { n } parça"
         }
       }
     },
     "AboutPod": {
       "stat": {
-        "hoursOfMusic": "{ count } müzik saati | { count } müzik saatleri"
+        "hoursOfMusic": "{ n } müzik saati | { n } müzik saatleri"
       }
     },
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "{ count } parça | { count } parça"
+          "tracks": "{ n } parça | { n } parça"
         }
       }
     }
@@ -98,9 +98,9 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "{ count } bölüm | { count } bölümler",
-          "subscribers": "{ count } abone | { count } abone",
-          "tracks": "{ count } parça | { count } parça"
+          "episodes": "{ n } bölüm | { n } bölümler",
+          "subscribers": "{ n } abone | { n } abone",
+          "tracks": "{ n } parça | { n } parça"
         }
       }
     },
@@ -108,14 +108,14 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "{ count } parça | { count } parça"
+            "tracks": "{ n } parça | { n } parça"
           }
         }
       },
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "{ count } parça | { count } parça"
+            "tracks": "{ n } parça | { n } parça"
           }
         }
       }
@@ -123,7 +123,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "{ count } parça | { count } parça"
+          "tracks": "{ n } parça | { n } parça"
         }
       }
     }

@@ -330,7 +330,7 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } utilizaire actiu | { count } utilizaires actius",
+        "activeUsers": "{ n } utilizaire actiu | { n } utilizaires actius",
         "hoursOfMusic": "ora de musica | oras de musica"
       },
       "header": {
@@ -361,8 +361,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } utilizaire actiu | { count } utilizaires actius",
-        "hoursOfMusic": "{ count } ora de musica | { count } oras de musica"
+        "activeUsers": "{ n } utilizaire actiu | { n } utilizaires actius",
+        "hoursOfMusic": "{ n } ora de musica | { n } oras de musica"
       },
       "header": {
         "aboutFunkwhale": "A prepaus de Funkwhale",
@@ -412,8 +412,8 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } episòdi | { count } episòdis",
-            "tracks": "{ count } pista | { count } pistas"
+            "episodes": "{ n } episòdi | { n } episòdis",
+            "tracks": "{ n } pista | { n } pistas"
           }
         },
         "Widget": {
@@ -424,20 +424,20 @@
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } episòdi | { count } episòdis",
-          "tracks": "{ count } pista | { count } pistas"
+          "episodes": "{ n } episòdi | { n } episòdis",
+          "tracks": "{ n } pista | { n } pistas"
         },
         "title": "Actualizat lo { date }"
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } episòdi | { count } episòdis"
+          "episodes": "{ n } episòdi | { n } episòdis"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "{ count } pista | { count } pistas"
+            "tracks": "{ n } pista | { n } pistas"
           }
         },
         "Widget": {
@@ -696,8 +696,8 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } episòdi | { count } episòdis",
-          "tracks": "{ count } pista | { count } pistas"
+          "episodes": "{ n } episòdi | { n } episòdis",
+          "tracks": "{ n } pista | { n } pistas"
         },
         "link": {
           "addDescription": "Ajustar una descripcion…"
@@ -705,7 +705,8 @@
       },
       "ArtistBase": {
         "meta": {
-          "tracks": "{ count } pista dins { albumsCount } albums | { count } pistas dins { albumsCount } albums"
+          "tracks": "{ n } pista dins | { n } pistas dins",
+          "albums": "{ n } albums | { n } albums"
         },
         "title": "Artista",
         "button": {
@@ -732,7 +733,7 @@
       "radios": {
         "Builder": {
           "header": {
-            "matches": "{ count } pista correspond als filtres seleccionats | { count } pistas correspondon als filtres seleccionats",
+            "matches": "{ n } pista correspond als filtres seleccionats | { n } pistas correspondon als filtres seleccionats",
             "builder": "Editor",
             "created": "Nom de la ràdio",
             "updated": "Ràdio actualizada"
@@ -1269,7 +1270,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "{ count } favorit | { count } favorits"
+          "favorites": "{ n } favorit | { n } favorits"
         },
         "ordering": {
           "direction": {
@@ -1306,7 +1307,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "{ count } fichièr | { count } fichièrs",
+          "files": "{ n } fichièr | { n } fichièrs",
           "quota": "Espaci liure restant :"
         },
         "button": {
@@ -1327,7 +1328,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "{ count } pista | { count } pistas"
+          "tracks": "{ n } pista | { n } pistas"
         },
         "label": {
           "album": "Album",
@@ -1472,18 +1473,18 @@
     "common": {
       "ActionTable": {
         "button": {
-          "selected": "{ count } sus { total } element seleccionat | { count } sus { total } elements seleccionats",
-          "allSelected": "{ count } sus { total } element seleccionat | { count } sus { total } elements seleccionats",
+          "selected": "{ n } sus { total } element seleccionat | { n } sus { total } elements seleccionats",
+          "allSelected": "{ n } sus { total } element seleccionat | { n } sus { total } elements seleccionats",
           "go": "Zo",
           "launch": "Aviar",
           "refresh": "Actualizar lo contengut de la tabla",
           "select": "Seleccionar",
           "selectAll": "Seleccionar totes los elements",
-          "selectElement": "Seleccionar un element | Seleccionar l’ensemble dels { total } elements",
+          "selectElement": "Seleccionar un element | Seleccionar l’ensemble dels { n } elements",
           "selectCurrentPage": "Seleccionar solament la pagina actuala"
         },
         "message": {
-          "success": "L’action { action } es estada lançada corrèctament sus { count } element | L’action { action } es estada lançada corrèctament sus { count } elements",
+          "success": "L’action { action } es estada lançada corrèctament sus { n } element | L’action { action } es estada lançada corrèctament sus { n } elements",
           "needsRefresh": "Lo contengut es estat actualizat, clicar per tornar cargar e veire lo contengut a jorn"
         },
         "label": {
@@ -1492,7 +1493,7 @@
         },
         "modal": {
           "performAction": {
-            "header": "Volètz lançar l’accion « { action } » sus { count } element ? | Volètz lançar l’accion « { action } » sus { count } elements ?",
+            "header": "Volètz lançar l’accion « { action } » sus { n } element ? | Volètz lançar l’accion « { action } » sus { n } elements ?",
             "content": {
               "warning": "Aquesta operacion pòt afectar mantun elements o pòt pas èsser anullada, mercés de verificar s’es ben çò que desiratz."
             }
@@ -1666,7 +1667,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "{ count } pista | { count } pistas"
+          "tracks": "{ n } pista | { n } pistas"
         }
       },
       "PlaylistModal": {
@@ -1712,7 +1713,7 @@
           "addDuplicate": "Ajustar pr’aquò",
           "clear": "Escafar la lista de lectura",
           "copy": "Copiar las pistas de la fila a la lista de lectura",
-          "insertFromQueue": "Inserir de la fila estant ({ count } pista) | Inserir de la fila estant ({ count } pistas)"
+          "insertFromQueue": "Inserir de la fila estant ({ n } pista) | Inserir de la fila estant ({ n } pistas)"
         },
         "error": {
           "sync": "Una error s’es producha en enregistrar vòstras modificacions"
@@ -2865,7 +2866,7 @@
     "tags": {
       "List": {
         "button": {
-          "more": "Mostrar 1 etiqueta de mai | Mostrar { count } etiquetas de mai"
+          "more": "Mostrar 1 etiqueta de mai | Mostrar { n } etiquetas de mai"
         }
       }
     }
@@ -2874,10 +2875,10 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "{ count } episòdi | { count } episòdis",
-          "listenings": "{ count } escota | { count } escotas",
-          "subscribers": "{ count } abonat | { count } abonats",
-          "tracks": "{ count } pista | { count } pistas"
+          "episodes": "{ n } episòdi | { n } episòdis",
+          "listenings": "{ n } escota | { n } escotas",
+          "subscribers": "{ n } abonat | { n } abonats",
+          "tracks": "{ n } pista | { n } pistas"
         },
         "link": {
           "channelEpisodes": "Totes los episòdis",
@@ -2977,7 +2978,7 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "{ count } pista | { count } pistas"
+            "tracks": "{ n } pista | { n } pistas"
           },
           "link": {
             "details": "Detalhs de la bibliotèca"
@@ -3138,7 +3139,7 @@
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "{ count } pista | { count } pistas",
+            "tracks": "{ n } pista | { n } pistas",
             "failedTracks": "Pistas en error :",
             "lastUpdate": "Darrièra actualizacion :"
           },
@@ -3243,7 +3244,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "{ count } pista | { count } pistas"
+          "tracks": "{ n } pista | { n } pistas"
         },
         "link": {
           "albums": "Albums",
@@ -4203,7 +4204,7 @@
         },
         "title": "Lista de lectura",
         "meta": {
-          "tracks": "Lista de lectura contenent { count } pista, per { username } | Lista de lectura contenent { count } pistas, per { username }"
+          "tracks": "Lista de lectura contenent { n } pista, per { username } | Lista de lectura contenent { n } pistas, per { username }"
         },
         "empty": {
           "noTracks": "I a pas encara de pistas ajustadas a aquesta lista de lectura"
@@ -4240,7 +4241,7 @@
   "composables": {
     "audio": {
       "usePlayOptions": {
-        "addToQueueMessage": "{ count } pista ajustada a la fila | { count } pistas ajustadas a la fila"
+        "addToQueueMessage": "{ n } pista ajustada a la fila | { n } pistas ajustadas a la fila"
       }
     },
     "locale": {

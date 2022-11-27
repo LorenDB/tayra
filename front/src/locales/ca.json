@@ -321,8 +321,8 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } usuari actiu | { count } usuaris actius",
-        "hoursOfMusic": "{ count } hora de música | { count } hores de música"
+        "activeUsers": "{ n } usuari actiu | { n } usuaris actius",
+        "hoursOfMusic": "{ n } hora de música | { n } hores de música"
       },
       "title": "Pàgina d’informació",
       "header": {
@@ -348,8 +348,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } usuari actiu | { count } usuaris actius",
-        "hoursOfMusic": "{ count } hora de música | { count } hores de música"
+        "activeUsers": "{ n } usuari actiu | { n } usuaris actius",
+        "hoursOfMusic": "{ n } hora de música | { n } hores de música"
       },
       "header": {
         "aboutFunkwhale": "Quant a Funkwhale",
@@ -399,8 +399,8 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } episodi | { count } episodis",
-            "tracks": "{ count } pista | { count } pistes"
+            "episodes": "{ n } episodi | { n } episodis",
+            "tracks": "{ n } pista | { n } pistes"
           }
         },
         "Widget": {
@@ -411,20 +411,20 @@
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } episodi | { count } episodis",
-          "tracks": "{ count } pista | { count } pistes"
+          "episodes": "{ n } episodi | { n } episodis",
+          "tracks": "{ n } pista | { n } pistes"
         },
         "title": "Actualitzat el { date }"
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } episodi | { count } episodis"
+          "episodes": "{ n } episodi | { n } episodis"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "{ count } pista | { count } pistes"
+            "tracks": "{ n } pista | { n } pistes"
           }
         },
         "Widget": {
@@ -677,8 +677,8 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } episodi | { count } episodis",
-          "tracks": "{ count } pista | { count } pistes"
+          "episodes": "{ n } episodi | { n } episodis",
+          "tracks": "{ n } pista | { n } pistes"
         },
         "link": {
           "addDescription": "Afegeix una descripció …"
@@ -686,7 +686,8 @@
       },
       "ArtistBase": {
         "meta": {
-          "tracks": "{ count } pista dins { albumsCount } àlbums | { count } pistes dins { albumsCount } àlbums"
+          "tracks": "{ n } pista dins | { n } pistes dins",
+          "albums": "{ n } àlbums | { n } àlbums"
         },
         "title": "Artista",
         "button": {
@@ -713,7 +714,7 @@
       "radios": {
         "Builder": {
           "header": {
-            "matches": "{ count } pista corresponent als filtres seleccionats | { count } pistes corresponents als filtres seleccionats",
+            "matches": "{ n } pista corresponent als filtres seleccionats | { n } pistes corresponents als filtres seleccionats",
             "builder": "Editor",
             "created": "Ràdio creada",
             "updated": "Ràdio actualitzada"
@@ -1242,7 +1243,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "{ count } favorit | { count } favorits"
+          "favorites": "{ n } favorit | { n } favorits"
         },
         "ordering": {
           "direction": {
@@ -1279,7 +1280,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "{ count } fitxer | { count } fitxers",
+          "files": "{ n } fitxer | { n } fitxers",
           "quota": "Espai d’emmagatzematge restant:"
         },
         "button": {
@@ -1300,7 +1301,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "{ count } pista | { count } pistes"
+          "tracks": "{ n } pista | { n } pistes"
         },
         "label": {
           "album": "Àlbum",
@@ -1394,8 +1395,8 @@
     },
     "AboutPod": {
       "stat": {
-        "hoursOfMusic": "{ count } hora de música | { count } hores de música",
-        "activeUsers": "{ count } usuari actiu | { count } usuaris actius",
+        "hoursOfMusic": "{ n } hora de música | { n } hores de música",
+        "activeUsers": "{ n } usuari actiu | { n } usuaris actius",
         "albumsCount": "Àlbum | Àlbum",
         "artistsCount": "Artista | Artista",
         "listeningsCount": "Audicions | Audicions",
@@ -1440,8 +1441,8 @@
     "common": {
       "ActionTable": {
         "button": {
-          "selected": "{ count } de { total } seleccionat | { count } de { total } seleccionats",
-          "allSelected": "Únic element seleccionat | Tots els { count } elements seleccionats",
+          "selected": "{ n } de { total } seleccionat | { n } de { total } seleccionats",
+          "allSelected": "Únic element seleccionat | Tots els { n } elements seleccionats",
           "go": "Vés",
           "launch": "Iniciar",
           "refresh": "El contingut de la taula s'ha actualitzat",
@@ -1450,7 +1451,7 @@
           "selectCurrentPage": "Seleccionar només la pàgina actual"
         },
         "message": {
-          "success": "L'acció  { action } està en marxa en { count } element | L'acció  { action } està en marxa en { count } elements",
+          "success": "L'acció  { action } està en marxa en { n } element | L'acció  { action } està en marxa en { n } elements",
           "needsRefresh": "S'ha actualitzat el contingut, refresca per veure el contingut actualitzat"
         },
         "label": {
@@ -1459,7 +1460,7 @@
         },
         "modal": {
           "performAction": {
-            "header": "Vols executar l'acció { action } de { count } element? | Vols executar l'acció { action } de { count } elements?",
+            "header": "Vols executar l'acció { action } de { n } element? | Vols executar l'acció { action } de { n } elements?",
             "content": {
               "warning": "Això pot afectar molts elements o tenir conseqüències irreversibles, comproveu que és realment el que voleu."
             }
@@ -1623,7 +1624,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "{ count } pista | { count } pistes"
+          "tracks": "{ n } pista | { n } pistes"
         }
       },
       "PlaylistModal": {
@@ -1669,7 +1670,7 @@
           "addDuplicate": "Afegeix de totes maneres",
           "clear": "Buidar la llista de reproducció",
           "copy": "Copiar les cançons de la cua de reproducció a la llista de reproducció",
-          "insertFromQueue": "Insereix des de la cua ({ count } pista) | Insereix des de la cua ({ count } pistes)"
+          "insertFromQueue": "Insereix des de la cua ({ n } pista) | Insereix des de la cua ({ n } pistes)"
         },
         "error": {
           "sync": "S'ha produït una error mentre es guardaven els canvis"
@@ -2818,7 +2819,7 @@
     "tags": {
       "List": {
         "button": {
-          "more": "Mostra una etiqueta extra | Mostra { count } etiquetes extres"
+          "more": "Mostra una etiqueta extra | Mostra { n } etiquetes extres"
         }
       }
     }
@@ -2827,10 +2828,10 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "{ count } episodi | { count } episodis",
-          "listenings": "{ count } pista | { count } pistes",
-          "subscribers": "{ count } subscriptor | { count } subscriptors",
-          "tracks": "{ count } pista | { count } pistes"
+          "episodes": "{ n } episodi | { n } episodis",
+          "listenings": "{ n } pista | { n } pistes",
+          "subscribers": "{ n } subscriptor | { n } subscriptors",
+          "tracks": "{ n } pista | { n } pistes"
         },
         "link": {
           "channelEpisodes": "Episodis",
@@ -2930,7 +2931,7 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "{ count } pista | { count } pistes"
+            "tracks": "{ n } pista | { n } pistes"
           },
           "link": {
             "details": "Modificacions de la biblioteca"
@@ -3091,7 +3092,7 @@
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "{ count } pista | { count } pistes",
+            "tracks": "{ n } pista | { n } pistes",
             "failedTracks": "Pistes fallides:",
             "lastUpdate": "Última actualització:"
           },
@@ -3196,7 +3197,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "{ count } pista | { count } pistes"
+          "tracks": "{ n } pista | { n } pistes"
         },
         "link": {
           "albums": "Àlbums",
@@ -4156,7 +4157,7 @@
         },
         "title": "Llista de reproducció",
         "meta": {
-          "tracks": "La llista de reproducció conté { count } cançó, de { username } | La llista de reproducció conté { count } cançons, de { username }"
+          "tracks": "La llista de reproducció conté { n } cançó, de { username } | La llista de reproducció conté { n } cançons, de { username }"
         },
         "empty": {
           "noTracks": "Encara no hi ha pistes en aquesta llista de reproducció"
@@ -4193,7 +4194,7 @@
   "composables": {
     "audio": {
       "usePlayOptions": {
-        "addToQueueMessage": "{ count } pista ha estat afegida a la teva cua | { count } pistes han estat afegides a la teva cua"
+        "addToQueueMessage": "{ n } pista ha estat afegida a la teva cua | { n } pistes han estat afegides a la teva cua"
       }
     },
     "locale": {

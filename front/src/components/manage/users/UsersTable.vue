@@ -260,7 +260,7 @@ const labels = computed(() => ({
       />
 
       <span v-if="result && result.results.length > 0">
-        {{ $t('components.manage.users.UsersTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}) }}
+        {{ $t('components.manage.users.UsersTable.pagination.results', {start: ((page-1) * paginateBy) + 1, end: ((page-1) * paginateBy) + result.results.length, total: result.count}, result.results.length) }}
       </span>
     </div>
   </div>

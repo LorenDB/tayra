@@ -56,7 +56,7 @@ export default (props: PlayOptionsProps) => {
     }
 
     store.commit('ui/addMessage', {
-      content: t('composables.audio.usePlayOptions.addToQueueMessage', { count: tracks.length }),
+      content: t('composables.audio.usePlayOptions.addToQueueMessage', tracks.length),
       date: new Date()
     })
   }

@@ -179,8 +179,8 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } ενεργός χρήστης | { count } ενεργοί χρήστες",
-        "hoursOfMusic": "{ count } ώρα μουσικής | { count } ώρες μουσικής"
+        "activeUsers": "{ n } ενεργός χρήστης | { n } ενεργοί χρήστες",
+        "hoursOfMusic": "{ n } ώρα μουσικής | { n } ώρες μουσικής"
       },
       "title": "Σχετικά με",
       "header": {
@@ -194,8 +194,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } ενεργός χρήστης | { count } ενεργοί χρήστες",
-        "hoursOfMusic": "{ count } ώρα μουσικής | { count } ώρες μουσικής"
+        "activeUsers": "{ n } ενεργός χρήστης | { n } ενεργοί χρήστες",
+        "hoursOfMusic": "{ n } ώρα μουσικής | { n } ώρες μουσικής"
       },
       "header": {
         "aboutFunkwhale": "Σχετικά με το Funkwhale",
@@ -222,26 +222,26 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } επεισόδιο | { count } επεισόδια",
-            "tracks": "{ count } κομμάτι | { count } κομμάτια"
+            "episodes": "{ n } επεισόδιο | { n } επεισόδια",
+            "tracks": "{ n } κομμάτι | { n } κομμάτια"
           }
         }
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } επεισόδιο | { count } επεισόδια",
-          "tracks": "{ count } κομμάτι | { count } κομμάτια"
+          "episodes": "{ n } επεισόδιο | { n } επεισόδια",
+          "tracks": "{ n } κομμάτι | { n } κομμάτια"
         }
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } επεισόδιο | { count } επεισόδια"
+          "episodes": "{ n } επεισόδιο | { n } επεισόδια"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "{ count } κομμάτι | { count } κομμάτια"
+            "tracks": "{ n } κομμάτι | { n } κομμάτια"
           }
         }
       },
@@ -355,8 +355,8 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } επεισόδιο | { count } επεισόδια",
-          "tracks": "{ count } κομμάτι | { count } κομμάτια"
+          "episodes": "{ n } επεισόδιο | { n } επεισόδια",
+          "tracks": "{ n } κομμάτι | { n } κομμάτια"
         },
         "link": {
           "addDescription": "Προσθήκη περιγραφής…"
@@ -364,7 +364,8 @@
       },
       "ArtistBase": {
         "meta": {
-          "tracks": "{ count } κομμάτι σε { albumsCount } άλμπουμ | { count } κομμάτια σε { albumsCount } άλμπουμ"
+          "tracks": "{ n } κομμάτι σε | { n } κομμάτια σε",
+          "albums": "{ n } άλμπουμ | { n } άλμπουμ"
         },
         "title": "Καλλιτέχνης",
         "button": {
@@ -381,7 +382,7 @@
       "radios": {
         "Builder": {
           "header": {
-            "matches": "{ count } κομμάτι που ταιριάζει στα συνδυασμένα φίλτρα | { count } κομμάτια που ταιριάζουν στα συνδυασμένα φίλτρα",
+            "matches": "{ n } κομμάτι που ταιριάζει στα συνδυασμένα φίλτρα | { n } κομμάτια που ταιριάζουν στα συνδυασμένα φίλτρα",
             "builder": "Κατασκευαστής"
           },
           "table": {
@@ -636,7 +637,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "{ count } αγαπημένο | { count } αγαπημένα"
+          "favorites": "{ n } αγαπημένο | { n } αγαπημένα"
         },
         "ordering": {
           "direction": {
@@ -657,7 +658,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "{ count } αρχείο | { count } αρχεία"
+          "files": "{ n } αρχείο | { n } αρχεία"
         },
         "button": {
           "cancel": "Ακύρωση",
@@ -669,7 +670,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "{ count } κομμάτι | { count } κομμάτια"
+          "tracks": "{ n } κομμάτι | { n } κομμάτια"
         },
         "label": {
           "album": "Άλμπουμ"
@@ -717,11 +718,11 @@
     },
     "AboutPod": {
       "stat": {
-        "hoursOfMusic": "{ count } ώρα μουσικής | { count } ώρες μουσικής",
-        "activeUsers": "{ count } ενεργός χρήστης | { count } ενεργοί χρήστες",
+        "hoursOfMusic": "{ n } ώρα μουσικής | { n } ώρες μουσικής",
+        "activeUsers": "{ n } ενεργός χρήστης | { n } ενεργοί χρήστες",
         "albumsCount": "Άλμπουμ | Άλμπουμ",
         "artistsCount": "Καλλιτέχνης | Καλλιτέχνης",
-        "listeningsCount": "{ count } ακρόαση | { count } ακροάσεις",
+        "listeningsCount": "{ n } ακρόαση | { n } ακροάσεις",
         "tracksCount": "Προσθήκη κομματιού | Προσθήκη κομματιού"
       },
       "title": "Σχετικά με",
@@ -746,12 +747,12 @@
     "common": {
       "ActionTable": {
         "button": {
-          "selected": "{ count } απο τα { total } επιλεγμένο | { count } απο τα { total } επιλεγμένα",
-          "allSelected": "{ count } στοιχείο επιλεγμένο | { count } στοιχεία επιλεγμένα",
+          "selected": "{ n } απο τα { total } επιλεγμένο | { n } απο τα { total } επιλεγμένα",
+          "allSelected": "{ n } στοιχείο επιλεγμένο | { n } στοιχεία επιλεγμένα",
           "go": "Ξεκινήστε"
         },
         "message": {
-          "success": "Η ενέργεια { action } πραγματοποιήθηκε επιτυχώς σε { count } στοιχείο | Η ενέργεια { action } πραγματοποιήθηκε επιτυχώς σε { count } στοιχεία",
+          "success": "Η ενέργεια { action } πραγματοποιήθηκε επιτυχώς σε { n } στοιχείο | Η ενέργεια { action } πραγματοποιήθηκε επιτυχώς σε { n } στοιχεία",
           "needsRefresh": "Το περιεχόμενο έχει ανανεωθεί, κάντε ανανέωση για να δείτε το ενημερωμένο περιεχόμενο"
         },
         "label": {
@@ -759,7 +760,7 @@
         },
         "modal": {
           "performAction": {
-            "header": "Θέλετε να εκκινήσετε την δράση { action } σε { count } στοιχεία; | Θέλετε να εκκινήσετε την δράση { action } σε { count } στοιχείο;"
+            "header": "Θέλετε να εκκινήσετε την δράση { action } σε { n } στοιχεία; | Θέλετε να εκκινήσετε την δράση { action } σε { n } στοιχείο;"
           }
         }
       },
@@ -826,7 +827,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "{ count } κομμάτι | { count } κομμάτια"
+          "tracks": "{ n } κομμάτι | { n } κομμάτια"
         }
       },
       "PlaylistModal": {
@@ -1481,10 +1482,10 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "{ count } επεισόδιο | { count } επεισόδια",
-          "listenings": "{ count } ακρόαση | { count } ακροάσεις",
-          "subscribers": "{ count } εγγεγραμμένος | { count } εγγεγραμμένοι",
-          "tracks": "{ count } κομμάτι | { count } κομμάτια"
+          "episodes": "{ n } επεισόδιο | { n } επεισόδια",
+          "listenings": "{ n } ακρόαση | { n } ακροάσεις",
+          "subscribers": "{ n } εγγεγραμμένος | { n } εγγεγραμμένοι",
+          "tracks": "{ n } κομμάτι | { n } κομμάτια"
         },
         "link": {
           "channelEpisodes": "Όλα τα Επεισόδια"
@@ -1542,7 +1543,7 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "{ count } κομμάτι | { count } κομμάτια"
+            "tracks": "{ n } κομμάτι | { n } κομμάτια"
           }
         },
         "Quota": {
@@ -1606,7 +1607,7 @@
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "{ count } κομμάτι | { count } κομμάτια",
+            "tracks": "{ n } κομμάτι | { n } κομμάτια",
             "failedTracks": "Αποτυχημένα κομμάτια:"
           },
           "modal": {
@@ -1655,7 +1656,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "{ count } κομμάτι | { count } κομμάτια"
+          "tracks": "{ n } κομμάτι | { n } κομμάτια"
         },
         "link": {
           "albums": "Άλμπουμ",
@@ -2163,7 +2164,7 @@
   "composables": {
     "audio": {
       "usePlayOptions": {
-        "addToQueueMessage": "{ count } κομμάτι προστέθηκε στην ουρά σας | { count } κομμάτια προστέθηκαν στην ουρά σας"
+        "addToQueueMessage": "{ n } κομμάτι προστέθηκε στην ουρά σας | { n } κομμάτια προστέθηκαν στην ουρά σας"
       }
     },
     "locale": {

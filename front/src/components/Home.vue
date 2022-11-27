@@ -147,11 +147,11 @@ whenever(() => store.state.auth.authenticated, () => {
                   </h3>
                   <p>
                     <i class="user icon" />
-                    {{ $t('components.Home.stat.activeUsers', {users: stats.users}) }}
+                    {{ $t('components.Home.stat.activeUsers', stats.users) }}
                   </p>
                   <p>
                     <i class="music icon" />
-                    {{ $t('components.Home.stat.hoursOfMusic', {hours: stats.hours}) }}
+                    {{ $t('components.Home.stat.hoursOfMusic', stats.hours) }}
                   </p>
                 </template>
                 <template v-if="contactEmail">

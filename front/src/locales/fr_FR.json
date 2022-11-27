@@ -330,7 +330,7 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } compte actif | { count } comptes actifs",
+        "activeUsers": "{ n } compte actif | { n } comptes actifs",
         "hoursOfMusic": "heure de musique | heures de musique"
       },
       "header": {
@@ -361,8 +361,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } compte actif | { count } comptes actifs",
-        "hoursOfMusic": "{ count } heure de musique | { count } heures de musique"
+        "activeUsers": "{ n } compte actif | { n } comptes actifs",
+        "hoursOfMusic": "{ n } heure de musique | { n } heures de musique"
       },
       "header": {
         "aboutFunkwhale": "À propos de Funkwhale",
@@ -412,8 +412,8 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } épisode | { count } épisodes",
-            "tracks": "{ count } piste | { count } pistes"
+            "episodes": "{ n } épisode | { n } épisodes",
+            "tracks": "{ n } piste | { n } pistes"
           }
         },
         "Widget": {
@@ -424,20 +424,20 @@
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } épisode | { count } épisodes",
-          "tracks": "{ count } piste | { count } pistes"
+          "episodes": "{ n } épisode | { n } épisodes",
+          "tracks": "{ n } piste | { n } pistes"
         },
         "title": "Mise à jour le { date }"
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } épisode | { count } épisodes"
+          "episodes": "{ n } épisode | { n } épisodes"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "{ count } piste | { count } pistes"
+            "tracks": "{ n } piste | { n } pistes"
           }
         },
         "Widget": {
@@ -696,8 +696,8 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } épisode | { count } épisodes",
-          "tracks": "{ count } piste | { count } pistes"
+          "episodes": "{ n } épisode | { n } épisodes",
+          "tracks": "{ n } piste | { n } pistes"
         },
         "link": {
           "addDescription": "Ajouter une description…"
@@ -705,7 +705,8 @@
       },
       "ArtistBase": {
         "meta": {
-          "tracks": "{ count } piste dans { albumsCount } albums | { count } pistes dans { albumsCount } albums"
+          "tracks": "{ n } piste dans | { n } pistes dans",
+          "albums": "{ n } album | { n } albums"
         },
         "title": "Artiste",
         "button": {
@@ -732,7 +733,7 @@
       "radios": {
         "Builder": {
           "header": {
-            "matches": "{ count } piste correspondante aux filtres sélectionnés | { count } pistes correspondantes aux filtres sélectionnés",
+            "matches": "{ n } piste correspondante aux filtres sélectionnés | { n } pistes correspondantes aux filtres sélectionnés",
             "builder": "Éditeur",
             "created": "Radio créée",
             "updated": "Radio mise à jour"
@@ -1269,7 +1270,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "{ count } favori | { count } favoris"
+          "favorites": "{ n } favori | { n } favoris"
         },
         "ordering": {
           "direction": {
@@ -1306,7 +1307,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "{ count } fichier | { count } fichiers",
+          "files": "{ n } fichier | { n } fichiers",
           "quota": "Espace de stockage restant :"
         },
         "button": {
@@ -1327,7 +1328,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "{ count } piste | { count } pistes"
+          "tracks": "{ n } piste | { n } pistes"
         },
         "label": {
           "album": "Album",
@@ -1472,18 +1473,18 @@
     "common": {
       "ActionTable": {
         "button": {
-          "selected": "{ count } sur { total } élément sélectionné | { count } sur { total } éléments sélectionnés",
-          "allSelected": "Unique élément sélectionné | Tous les { count } éléments sélectionnés",
+          "selected": "{ n } sur { total } élément sélectionné | { n } sur { total } éléments sélectionnés",
+          "allSelected": "Unique élément sélectionné | Tous les { n } éléments sélectionnés",
           "go": "Aller",
           "launch": "Démarrer",
           "refresh": "Rafraîchir le contenu de la table",
           "select": "Sélectionner",
           "selectAll": "Tout sélectionner",
-          "selectElement": "Sélectionner un élément | Sélectionner l'ensemble des { total } éléments",
+          "selectElement": "Sélectionner un élément | Sélectionner l'ensemble des { n } éléments",
           "selectCurrentPage": "Sélectionner seulement la page actuelle"
         },
         "message": {
-          "success": "L'action { action } a été lancée avec succès sur { count } élément | L'action { action } a été lancée avec succès sur { count } éléments",
+          "success": "L'action { action } a été lancée avec succès sur { n } élément | L'action { action } a été lancée avec succès sur { n } éléments",
           "needsRefresh": "Le contenu a été modifié, cliquez sur rafraîchir pour voir le contenu à jour"
         },
         "label": {
@@ -1492,7 +1493,7 @@
         },
         "modal": {
           "performAction": {
-            "header": "Voulez-vous effectuer l'action « { action } » sur { count } élément ? | Voulez-vous effectuer l'action « \"{ action } » sur { count } éléments ?",
+            "header": "Voulez-vous effectuer l'action « { action } » sur { n } élément ? | Voulez-vous effectuer l'action « \"{ action } » sur { n } éléments ?",
             "content": {
               "warning": "Cela peut affecter de nombreux éléments ou avoir des conséquences irréversibles, merci de vérifier que c'est bien ce que vous souhaitez."
             }
@@ -1666,7 +1667,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "{ count } piste | { count } pistes"
+          "tracks": "{ n } piste | { n } pistes"
         }
       },
       "PlaylistModal": {
@@ -1712,7 +1713,7 @@
           "addDuplicate": "Ajouter quand même",
           "clear": "Vider la liste de lecture",
           "copy": "Copier les pistes de la file d’attente dans la liste de lecture",
-          "insertFromQueue": "Insérer depuis la file d'attente ({ count } piste) | Insérer depuis la file d'attente ({ count } pistes)"
+          "insertFromQueue": "Insérer depuis la file d'attente ({ n } piste) | Insérer depuis la file d'attente ({ n } pistes)"
         },
         "error": {
           "sync": "Une erreur s'est produite pendant l'enregistrement de vos modifications"
@@ -2865,7 +2866,7 @@
     "tags": {
       "List": {
         "button": {
-          "more": "Montrer 1 tag supplémentaire | Montrer { count } tags supplémentaires"
+          "more": "Montrer 1 tag supplémentaire | Montrer { n } tags supplémentaires"
         }
       }
     }
@@ -2874,10 +2875,10 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "{ count } épisode | { count } épisodes",
-          "listenings": "{ count } écoute | { count } écoutes",
-          "subscribers": "{ count } abonné·e | { count } abonné·e·s",
-          "tracks": "{ count } piste | { count } pistes"
+          "episodes": "{ n } épisode | { n } épisodes",
+          "listenings": "{ n } écoute | { n } écoutes",
+          "subscribers": "{ n } abonné·e | { n } abonné·e·s",
+          "tracks": "{ n } piste | { n } pistes"
         },
         "link": {
           "channelEpisodes": "Tous les épisodes",
@@ -2977,7 +2978,7 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "{ count } piste | { count } pistes"
+            "tracks": "{ n } piste | { n } pistes"
           },
           "link": {
             "details": "Détails de l'audiothèque"
@@ -3138,7 +3139,7 @@
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "{ count } piste | { count } pistes",
+            "tracks": "{ n } piste | { n } pistes",
             "failedTracks": "Pistes échouées :",
             "lastUpdate": "Dernière mise à jour :"
           },
@@ -3243,7 +3244,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "{ count } piste | { count } pistes"
+          "tracks": "{ n } piste | { n } pistes"
         },
         "link": {
           "albums": "Albums",
@@ -4203,7 +4204,7 @@
         },
         "title": "Liste de lecture",
         "meta": {
-          "tracks": "Liste de lecture contenant { count } piste, par { username } | Liste de lecture contenant { count } pistes, par { username }"
+          "tracks": "Liste de lecture contenant { n } piste, par { username } | Liste de lecture contenant { n } pistes, par { username }"
         },
         "empty": {
           "noTracks": "Il n'y a aucune piste dans cette liste de lecture pour le moment"
@@ -4240,7 +4241,7 @@
   "composables": {
     "audio": {
       "usePlayOptions": {
-        "addToQueueMessage": "{ count } piste a été ajoutée à votre liste d'attente | { count } pistes ont été ajoutées à votre liste d'attente"
+        "addToQueueMessage": "{ n } piste a été ajoutée à votre liste d'attente | { n } pistes ont été ajoutées à votre liste d'attente"
       }
     },
     "locale": {

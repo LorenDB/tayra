@@ -330,7 +330,7 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } активный пользователь | { count } активных пользователя",
+        "activeUsers": "{ n } активный пользователь | { n } активных пользователя",
         "hoursOfMusic": "час музыки | часа музыки"
       },
       "header": {
@@ -361,8 +361,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } активный пользователь | { count } активных пользователя",
-        "hoursOfMusic": "{ count } час музыки | { count } часа музыки"
+        "activeUsers": "{ n } активный пользователь | { n } активных пользователя",
+        "hoursOfMusic": "{ n } час музыки | { n } часа музыки"
       },
       "header": {
         "aboutFunkwhale": "О Funkwhale",
@@ -412,8 +412,8 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } эпизод | { count } эпизода",
-            "tracks": "{ count } трек | { count } трека"
+            "episodes": "{ n } эпизод | { n } эпизода",
+            "tracks": "{ n } трек | { n } трека"
           }
         },
         "Widget": {
@@ -424,20 +424,20 @@
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } эпизод | { count } эпизода",
-          "tracks": "{ count } трек | { count } трека"
+          "episodes": "{ n } эпизод | { n } эпизода",
+          "tracks": "{ n } трек | { n } трека"
         },
         "title": "Обновлено { date }"
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } эпизод | { count } эпизода"
+          "episodes": "{ n } эпизод | { n } эпизода"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "{ count } трек | { count } трека"
+            "tracks": "{ n } трек | { n } трека"
           }
         },
         "Widget": {
@@ -696,8 +696,8 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } эпизод | { count } эпизода",
-          "tracks": "{ count } трек | { count } трека"
+          "episodes": "{ n } эпизод | { n } эпизода",
+          "tracks": "{ n } трек | { n } трека"
         },
         "link": {
           "addDescription": "Добавить описание…"
@@ -705,7 +705,8 @@
       },
       "ArtistBase": {
         "meta": {
-          "tracks": "{ count } трек из { albumsCount } альбомов | { count } трека из { albumsCount } альбомов"
+          "tracks": "{ n } трек из | { n } трека из",
+          "albums": "{ n } альбомов | { n } альбомов"
         },
         "title": "Исполнитель",
         "button": {
@@ -732,7 +733,7 @@
       "radios": {
         "Builder": {
           "header": {
-            "matches": "{ count } подходящий трек | { count } подходящих трека",
+            "matches": "{ n } подходящий трек | { n } подходящих трека",
             "builder": "Конструктор",
             "created": "Радио создано",
             "updated": "Радио обновлено"
@@ -1269,7 +1270,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "{ count } избранный | { count } избранных"
+          "favorites": "{ n } избранный | { n } избранных"
         },
         "ordering": {
           "direction": {
@@ -1306,7 +1307,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "{ count } файл | { count } файла",
+          "files": "{ n } файл | { n } файла",
           "quota": "Свободное место:"
         },
         "button": {
@@ -1327,7 +1328,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "{ count } трек | { count } трека"
+          "tracks": "{ n } трек | { n } трека"
         },
         "label": {
           "album": "Альбом",
@@ -1472,18 +1473,18 @@
     "common": {
       "ActionTable": {
         "button": {
-          "selected": "выбран { count } из { total } | выбраны { count } из { total }",
-          "allSelected": "Выбран { count } из { total } | Выбраны { count } из { total }",
+          "selected": "выбран { n } из { total } | выбраны { n } из { total }",
+          "allSelected": "Выбран { n } из { total } | Выбраны { n } из { total }",
           "go": "Перейти",
           "launch": "Запустить",
           "refresh": "Обновить данные таблицы",
           "select": "Выбрать",
           "selectAll": "Выбрать всё",
-          "selectElement": "Выделить { total } элемент | Выделить все { total } элемента",
+          "selectElement": "Выделить { n } элемент | Выделить все { n } элемента",
           "selectCurrentPage": "Выбрать только текущую страницу"
         },
         "message": {
-          "success": "Действие { action } было успешно запущено на { count } элементе | Действие { action } было успешно запущено на { count } элементах",
+          "success": "Действие { action } было успешно запущено на { n } элементе | Действие { action } было успешно запущено на { n } элементах",
           "needsRefresh": "Контент обновлён, нажмите \"Обновить\", чтобы увидеть его"
         },
         "label": {
@@ -1492,7 +1493,7 @@
         },
         "modal": {
           "performAction": {
-            "header": "Вы хотите запустить { action } на { count } элементе? | Вы хотите запустить { action } на { count } элементах?",
+            "header": "Вы хотите запустить { action } на { n } элементе? | Вы хотите запустить { action } на { n } элементах?",
             "content": {
               "warning": "Это может повлиять на многие элементы, пожалуйста перепроверьте что Вы действительно хотите этого."
             }
@@ -1666,7 +1667,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "{ count } трек | { count } трека"
+          "tracks": "{ n } трек | { n } трека"
         }
       },
       "PlaylistModal": {
@@ -1712,7 +1713,7 @@
           "addDuplicate": "Всё равно добавить",
           "clear": "Очистить список воспроизведения",
           "copy": "Копировать треки из текущей очереди в список воспроизведения",
-          "insertFromQueue": "Вставить из очереди ({ count } трек) | Вставить из очереди ({ count } трека)"
+          "insertFromQueue": "Вставить из очереди ({ n } трек) | Вставить из очереди ({ n } трека)"
         },
         "error": {
           "sync": "При сохранении Ваших изменений произошла ошибка"
@@ -2865,7 +2866,7 @@
     "tags": {
       "List": {
         "button": {
-          "more": "Показать ещё один тег | Показать ещё { count } тега"
+          "more": "Показать ещё один тег | Показать ещё { n } тега"
         }
       }
     }
@@ -2874,10 +2875,10 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "{ count } эпизод | { count } эпизода",
-          "listenings": "{ count } прослушивание | { count } прослушивания",
-          "subscribers": "{ count } подписчик | { count } подписчика",
-          "tracks": "{ count } трек | { count } трека"
+          "episodes": "{ n } эпизод | { n } эпизода",
+          "listenings": "{ n } прослушивание | { n } прослушивания",
+          "subscribers": "{ n } подписчик | { n } подписчика",
+          "tracks": "{ n } трек | { n } трека"
         },
         "link": {
           "channelEpisodes": "Все Эпизоды",
@@ -2977,7 +2978,7 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "{ count } трек | { count } трека"
+            "tracks": "{ n } трек | { n } трека"
           },
           "link": {
             "details": "Информация о библиотеке"
@@ -3138,7 +3139,7 @@
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "{ count } трек | { count } трека",
+            "tracks": "{ n } трек | { n } трека",
             "failedTracks": "Ошибочные треки:",
             "lastUpdate": "Последнее обновление:"
           },
@@ -3243,7 +3244,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "{ count } трек | { count } трека"
+          "tracks": "{ n } трек | { n } трека"
         },
         "link": {
           "albums": "Альбомы",
@@ -4203,7 +4204,7 @@
         },
         "title": "Список воспроизведения",
         "meta": {
-          "tracks": "Список воспроизведения содержит { count } трек от { username } | Список воспроизведения содержит { count } трека от { username }"
+          "tracks": "Список воспроизведения содержит { n } трек от { username } | Список воспроизведения содержит { n } трека от { username }"
         },
         "empty": {
           "noTracks": "В этом списке пока нет треков"
@@ -4240,7 +4241,7 @@
   "composables": {
     "audio": {
       "usePlayOptions": {
-        "addToQueueMessage": "{ count } трек добавлен в вашу очередь | { count } трека добавлено в вашу очередь"
+        "addToQueueMessage": "{ n } трек добавлен в вашу очередь | { n } трека добавлено в вашу очередь"
       }
     },
     "locale": {

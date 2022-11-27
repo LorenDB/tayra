@@ -64,8 +64,8 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } aktív felhasználó | { count } aktív felhasználó",
-        "hoursOfMusic": "{ count } óra zene | { count } óra zene"
+        "activeUsers": "{ n } aktív felhasználó | { n } aktív felhasználó",
+        "hoursOfMusic": "{ n } óra zene | { n } óra zene"
       },
       "title": "Rólunk",
       "header": {
@@ -74,8 +74,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } aktív felhasználó | { count } aktív felhasználó",
-        "hoursOfMusic": "{ count } óra zene | { count } óra zene"
+        "activeUsers": "{ n } aktív felhasználó | { n } aktív felhasználó",
+        "hoursOfMusic": "{ n } óra zene | { n } óra zene"
       },
       "header": {
         "aboutFunkwhale": "Funkwhaleról",
@@ -86,26 +86,26 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } epizód | { count } epizód",
-            "tracks": "Egy szám | % {count} szám"
+            "episodes": "{ n } epizód | { n } epizód",
+            "tracks": "Egy szám | % { n } szám"
           }
         }
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } epizód | { count } epizód",
-          "tracks": "Egy szám | % {count} szám"
+          "episodes": "{ n } epizód | { n } epizód",
+          "tracks": "Egy szám | % { n } szám"
         }
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } epizód | { count } epizód"
+          "episodes": "{ n } epizód | { n } epizód"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "Egy szám | % {count} szám"
+            "tracks": "Egy szám | % { n } szám"
           }
         }
       },
@@ -181,23 +181,20 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } epizód | { count } epizód",
-          "tracks": "Egy szám | % {count} szám"
+          "episodes": "{ n } epizód | { n } epizód",
+          "tracks": "Egy szám | % { n } szám"
         },
         "link": {
           "addDescription": "Adj hozzá leírást…"
         }
       },
       "ArtistBase": {
-        "meta": {
-          "tracks": "% { count } szám{ albumsCount } albumban | % { count } szám { albumsCount } albumban"
-        },
         "title": "Előadó"
       },
       "radios": {
         "Builder": {
           "header": {
-            "matches": "Egy szám megfelelő a kombinált szűrőkkel | % {count} szám megfelelő a kombinált szűrőkkel"
+            "matches": "Egy szám megfelelő a kombinált szűrőkkel | % { n } szám megfelelő a kombinált szűrőkkel"
           },
           "table": {
             "filter": {
@@ -291,7 +288,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "Egy kedvenc | { count } kedvenc"
+          "favorites": "Egy kedvenc | { n } kedvenc"
         }
       },
       "TrackFavoriteIcon": {
@@ -303,7 +300,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "Egy kedvenc | { count } kedvenc"
+          "files": "Egy kedvenc | { n } kedvenc"
         },
         "header": {
           "uploadDetails": "A kérelemre vonatkozó adatok"
@@ -311,7 +308,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "Egy szám | % {count} szám"
+          "tracks": "Egy szám | % { n } szám"
         },
         "label": {
           "album": "Album"
@@ -341,11 +338,11 @@
     },
     "AboutPod": {
       "stat": {
-        "hoursOfMusic": "{ count } óra zene | { count } óra zene",
-        "activeUsers": "{ count } aktív felhasználó | { count } aktív felhasználó",
+        "hoursOfMusic": "{ n } óra zene | { n } óra zene",
+        "activeUsers": "{ n } aktív felhasználó | { n } aktív felhasználó",
         "albumsCount": "Album | Album",
         "artistsCount": "Előadó | Előadó",
-        "listeningsCount": "{ count } meghalgatás | { count } meghalgatás",
+        "listeningsCount": "{ n } meghalgatás | { n } meghalgatás",
         "tracksCount": "Dal hozzáadása | Dal hozzáadása"
       },
       "title": "Rólunk",
@@ -363,7 +360,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "Egy szám | % {count} szám"
+          "tracks": "Egy szám | % { n } szám"
         }
       },
       "PlaylistModal": {
@@ -418,13 +415,13 @@
       },
       "ActionTable": {
         "message": {
-          "success": "Egy elemen sikeresen végrehajtódott a(z) { action } művelet | { count } elemen sikeresen végrehajtódott a(z) { action } művelet"
+          "success": "Egy elemen sikeresen végrehajtódott a(z) { action } művelet | { n } elemen sikeresen végrehajtódott a(z) { action } művelet"
         },
         "label": {
           "actions": "műveletek"
         },
         "button": {
-          "allSelected": "Mind az egy elem ki van választva | Mind az { count } elem ki van választva"
+          "allSelected": "Mind az egy elem ki van választva | Mind az { n } elem ki van választva"
         }
       }
     },
@@ -681,10 +678,10 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "{ count } epizód | { count } epizód",
-          "listenings": "{ count } meghalgatás | { count } meghalgatás",
-          "subscribers": "Egy kedvenc | { count } kedvenc",
-          "tracks": "Egy szám | % {count} szám"
+          "episodes": "{ n } epizód | { n } epizód",
+          "listenings": "{ n } meghalgatás | { n } meghalgatás",
+          "subscribers": "Egy kedvenc | { n } kedvenc",
+          "tracks": "Egy szám | % { n } szám"
         }
       },
       "DetailOverview": {
@@ -705,7 +702,7 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "Egy szám | % {count} szám"
+            "tracks": "Egy szám | % { n } szám"
           }
         },
         "Quota": {
@@ -732,7 +729,7 @@
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "Egy szám | % {count} szám"
+            "tracks": "Egy szám | % { n } szám"
           }
         }
       },
@@ -746,7 +743,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "Egy szám | % {count} szám"
+          "tracks": "Egy szám | % { n } szám"
         },
         "link": {
           "albums": "Albumok",

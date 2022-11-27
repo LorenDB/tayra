@@ -330,7 +330,7 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "Erabiltzaile aktibo { count } | { count } erabiltzaile aktibo",
+        "activeUsers": "Erabiltzaile aktibo { n } | { n } erabiltzaile aktibo",
         "hoursOfMusic": "ordu musika | ordu musika"
       },
       "header": {
@@ -361,8 +361,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "Erabiltzaile aktibo { count } | { count } erabiltzaile aktibo",
-        "hoursOfMusic": "Ordubete musika | { count } ordu musika"
+        "activeUsers": "Erabiltzaile aktibo { n } | { n } erabiltzaile aktibo",
+        "hoursOfMusic": "Ordubete musika | { n } ordu musika"
       },
       "header": {
         "aboutFunkwhale": "Funkwhale-ri buruz",
@@ -412,8 +412,8 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "Saio { count } | { count } saio",
-            "tracks": "Pista { count } | { count } pista"
+            "episodes": "Saio { n } | { n } saio",
+            "tracks": "Pista { n } | { n } pista"
           }
         },
         "Widget": {
@@ -424,20 +424,20 @@
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "Saio { count } | { count } saio",
-          "tracks": "Pista { count } | { count } pista"
+          "episodes": "Saio { n } | { n } saio",
+          "tracks": "Pista { n } | { n } pista"
         },
         "title": "{ date }-(e)an eguneratua"
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "Saio { count } | { count } saio"
+          "episodes": "Saio { n } | { n } saio"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "Pista { count } | { count } pista"
+            "tracks": "Pista { n } | { n } pista"
           }
         },
         "Widget": {
@@ -696,17 +696,14 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "Saio { count } | { count } saio",
-          "tracks": "Pista { count } | { count } pista"
+          "episodes": "Saio { n } | { n } saio",
+          "tracks": "Pista { n } | { n } pista"
         },
         "link": {
           "addDescription": "Gehitu deskribapena…"
         }
       },
       "ArtistBase": {
-        "meta": {
-          "tracks": "Pista { count } album { albumsCount }ean | { count } pista { albumsCount } albumetan"
-        },
         "title": "Artista",
         "button": {
           "cancel": "Ezeztatu",
@@ -732,7 +729,7 @@
       "radios": {
         "Builder": {
           "header": {
-            "matches": "Pista { count } dator bat iragazki konbinatuekin | { count } pista datoz bat iragazki konbinatuekin",
+            "matches": "Pista { n } dator bat iragazki konbinatuekin | { n } pista datoz bat iragazki konbinatuekin",
             "builder": "Eraikitzailea",
             "created": "Irratia sortuta",
             "updated": "Irratia eguneratuta"
@@ -1269,7 +1266,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "Gogoko { count } | { count } gogoko"
+          "favorites": "Gogoko { n } | { n } gogoko"
         },
         "ordering": {
           "direction": {
@@ -1306,7 +1303,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "Fitxategi { count } | { count } fitxategi",
+          "files": "Fitxategi { n } | { n } fitxategi",
           "quota": "Gelditzen den biltegiratze-lekua:"
         },
         "button": {
@@ -1327,7 +1324,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "Pista { count } | { count } pista"
+          "tracks": "Pista { n } | { n } pista"
         },
         "label": {
           "album": "Albuma",
@@ -1472,18 +1469,18 @@
     "common": {
       "ActionTable": {
         "button": {
-          "selected": "Aaukeratutako { count },{ total }(e)tik | { count } aukeratutako { total }(e)tik",
-          "allSelected": "Elementu bakarra hautatuta | { count } elementu hautatuta",
+          "selected": "Aaukeratutako { n },{ total }(e)tik | { n } aukeratutako { total }(e)tik",
+          "allSelected": "Elementu bakarra hautatuta | { n } elementu hautatuta",
           "go": "Joan",
           "launch": "Abiarazi",
           "refresh": "Freskatu taularen edukia",
           "select": "Hautatu",
           "selectAll": "Hautatu elementu guztiak",
-          "selectElement": "Hautatu elementu { total } | Hautatu { total } elementuak",
+          "selectElement": "Hautatu elementu { n } | Hautatu { n } elementuak",
           "selectCurrentPage": "Aukeratu orrialde hau bakarrik"
         },
         "message": {
-          "success": "{ action } ekintza arrakastaz gauzatu da elementu batean | { action } ekintza arrakastaz gauzatu da { count } elementutan",
+          "success": "{ action } ekintza arrakastaz gauzatu da elementu batean | { action } ekintza arrakastaz gauzatu da { n } elementutan",
           "needsRefresh": "Edukia eguneratu da, sakatu Freskatu eduki eguneratua ikusteko"
         },
         "label": {
@@ -1492,7 +1489,7 @@
         },
         "modal": {
           "performAction": {
-            "header": "{ action } abiarazi nahi duzu elementu batean? | { action } abiarazi nahi duzu { count } elementutan?",
+            "header": "{ action } abiarazi nahi duzu elementu batean? | { action } abiarazi nahi duzu { n } elementutan?",
             "content": {
               "warning": "Honek elementu askori eragin diezaieke edo ondorio konponezinak eduki, egiaztatu hau den benetan nahi duzuna."
             }
@@ -1666,7 +1663,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "Pista { count } | { count } pista"
+          "tracks": "Pista { n } | { n } pista"
         }
       },
       "PlaylistModal": {
@@ -1712,7 +1709,7 @@
           "addDuplicate": "Gehitu halere",
           "clear": "Garbitu zerrenda",
           "copy": "Kopiatu uneko ilara erreprodukzio-zerrenda honetara",
-          "insertFromQueue": "Gehitu ilaratik (abesti { count }) | Gehitu ilaratik ({ count } abesti)"
+          "insertFromQueue": "Gehitu ilaratik (abesti { n }) | Gehitu ilaratik ({ n } abesti)"
         },
         "error": {
           "sync": "Errorea gertatu da aldaketak gordetzerakoan"
@@ -2865,7 +2862,7 @@
     "tags": {
       "List": {
         "button": {
-          "more": "Erakutsi etiketa 1 gehiago | Erakutsi { count } etiketa gehiago"
+          "more": "Erakutsi etiketa 1 gehiago | Erakutsi { n } etiketa gehiago"
         }
       }
     }
@@ -2874,10 +2871,10 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "Saio { count } | { count } saio",
-          "listenings": "Entzunaldi { count } | { count } entzunaldi",
-          "subscribers": "Harpidetu { count } | { count } harpidetu",
-          "tracks": "Pista { count } | { count } pista"
+          "episodes": "Saio { n } | { n } saio",
+          "listenings": "Entzunaldi { n } | { n } entzunaldi",
+          "subscribers": "Harpidetu { n } | { n } harpidetu",
+          "tracks": "Pista { n } | { n } pista"
         },
         "link": {
           "channelEpisodes": "Saio guztiak",
@@ -2977,7 +2974,7 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "Pista { count } | { count } pista"
+            "tracks": "Pista { n } | { n } pista"
           },
           "link": {
             "details": "Liburutegiaren xehetasunak"
@@ -3138,7 +3135,7 @@
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "Pista { count } | { count } pista",
+            "tracks": "Pista { n } | { n } pista",
             "failedTracks": "Erroredun pistak:",
             "lastUpdate": "Azken eguneraketa:"
           },
@@ -3243,7 +3240,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "Pista { count } | { count } pista"
+          "tracks": "Pista { n } | { n } pista"
         },
         "link": {
           "albums": "Albumak",
@@ -4203,7 +4200,7 @@
         },
         "title": "Zerrenda",
         "meta": {
-          "tracks": "Zerrendak { username }-(r)en pista { count } du | Zerrendak { username }-(r)en { count } pista ditu"
+          "tracks": "Zerrendak { username }-(r)en pista { n } du | Zerrendak { username }-(r)en { n } pista ditu"
         },
         "empty": {
           "noTracks": "Oraindik ez dago pistarik zerrenda honetan"
@@ -4240,7 +4237,7 @@
   "composables": {
     "audio": {
       "usePlayOptions": {
-        "addToQueueMessage": "Pista { count } gehitu da zure ilaran | { count } pista gehitu dira zure ilaran"
+        "addToQueueMessage": "Pista { n } gehitu da zure ilaran | { n } pista gehitu dira zure ilaran"
       }
     },
     "locale": {

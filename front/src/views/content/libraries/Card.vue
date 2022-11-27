@@ -69,7 +69,7 @@ const privacyTooltips = (level: PrivacyLevel) => `Visibility: ${sharedLabels.fie
           {{ humanSize(library.size) }}
         </span>
         <i class="music icon" />
-        {{ $t('views.content.libraries.Card.meta.tracks') }}
+        {{ $t('views.content.libraries.Card.meta.tracks', library.uploads_count) }}
       </div>
     </div>
     <div class="ui bottom basic attached buttons">

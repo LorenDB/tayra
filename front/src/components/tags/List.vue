@@ -47,7 +47,7 @@ const tags = computed(() => {
       class="ui circular inverted accent label"
       @click.prevent="honorLimit = false"
     >
-      {{ $t('components.tags.List.button.more', {count: props.tags.length - tags.length}) }}
+      {{ $t('components.tags.List.button.more', props.tags.length - tags.length) }}
     </div>
   </div>
 </template>

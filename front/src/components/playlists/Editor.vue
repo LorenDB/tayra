@@ -229,7 +229,7 @@ const insertMany = async (insertedTracks: number[], allowDuplicates: boolean) =>
         @click="insertMany(queueTracks, false)"
       >
         <i class="plus icon" />
-        {{ $t('components.playlists.Editor.button.insertFromQueue', {count: queueTracks.length}) }}
+        {{ $t('components.playlists.Editor.button.insertFromQueue', queueTracks.length) }}
       </button>
 
       <dangerous-button

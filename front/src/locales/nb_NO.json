@@ -254,8 +254,8 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } spor | { count } spor",
-        "hoursOfMusic": "{ count } spor | { count } spor"
+        "activeUsers": "{ n } spor | { n } spor",
+        "hoursOfMusic": "{ n } spor | { n } spor"
       },
       "title": "Albumside",
       "header": {
@@ -269,8 +269,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } spor | { count } spor",
-        "hoursOfMusic": "{ count } spor | { count } spor"
+        "activeUsers": "{ n } spor | { n } spor",
+        "hoursOfMusic": "{ n } spor | { n } spor"
       },
       "header": {
         "aboutFunkwhale": "Om Funkwhale",
@@ -298,8 +298,8 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } spor | { count } spor",
-            "tracks": "{ count } spor | { count } spor"
+            "episodes": "{ n } spor | { n } spor",
+            "tracks": "{ n } spor | { n } spor"
           }
         },
         "Widget": {
@@ -310,20 +310,20 @@
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } spor | { count } spor",
-          "tracks": "{ count } spor | { count } spor"
+          "episodes": "{ n } spor | { n } spor",
+          "tracks": "{ n } spor | { n } spor"
         },
         "title": "Registrert siden { date }"
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } spor | { count } spor"
+          "episodes": "{ n } spor | { n } spor"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "{ count } spor | { count } spor"
+            "tracks": "{ n } spor | { n } spor"
           }
         },
         "Widget": {
@@ -522,8 +522,8 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } spor | { count } spor",
-          "tracks": "{ count } spor | { count } spor"
+          "episodes": "{ n } spor | { n } spor",
+          "tracks": "{ n } spor | { n } spor"
         },
         "link": {
           "addDescription": "Min flotte beskrivelse"
@@ -531,7 +531,8 @@
       },
       "ArtistBase": {
         "meta": {
-          "tracks": "{ count } spor i { albumsCount } album | { count } spor i { albumsCount } album"
+          "tracks": "{ n } spor i | { n } spor i",
+          "albums": "{ n } album | { n } album"
         },
         "title": "Artist",
         "button": {
@@ -549,7 +550,7 @@
       "radios": {
         "Builder": {
           "header": {
-            "matches": "{ count } spor samsvarer med kombinerte filter | { count } spor samsvarer med kombinerte filter",
+            "matches": "{ n } spor samsvarer med kombinerte filter | { n } spor samsvarer med kombinerte filter",
             "builder": "Bygger",
             "created": "Radiostasjon opprettet",
             "updated": "Radiostasjon oppdatert"
@@ -970,7 +971,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "Én favoritt | { count } favoritter"
+          "favorites": "Én favoritt | { n } favoritter"
         },
         "ordering": {
           "direction": {
@@ -1007,7 +1008,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "Én favoritt | { count } favoritter"
+          "files": "Én favoritt | { n } favoritter"
         },
         "button": {
           "cancel": "Avbryt",
@@ -1024,7 +1025,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "{ count } spor | { count } spor"
+          "tracks": "{ n } spor | { n } spor"
         },
         "label": {
           "album": "Album"
@@ -1089,11 +1090,11 @@
     },
     "AboutPod": {
       "stat": {
-        "hoursOfMusic": "{ count } spor | { count } spor",
-        "activeUsers": "{ count } spor | { count } spor",
+        "hoursOfMusic": "{ n } spor | { n } spor",
+        "activeUsers": "{ n } spor | { n } spor",
         "albumsCount": "Album | Album",
         "artistsCount": "Artist | Artist",
-        "listeningsCount": "{ count } spor | { count } spor",
+        "listeningsCount": "{ n } spor | { n } spor",
         "tracksCount": "Spor | Spor"
       },
       "title": "Albumside",
@@ -1122,16 +1123,16 @@
     "common": {
       "ActionTable": {
         "button": {
-          "selected": "{ count } på { total } valgt | { count } på { total } valgt",
-          "allSelected": "{ count } på { total } valgt | { count } på { total } valgt",
+          "selected": "{ n } på { total } valgt | { n } på { total } valgt",
+          "allSelected": "{ n } på { total } valgt | { n } på { total } valgt",
           "go": "Kjør",
           "launch": "Kjør",
           "selectAll": "Velg et filter",
-          "selectElement": "Velg alle { total } elementer | Velg alle { total } elementer",
+          "selectElement": "Velg alle { n } elementer | Velg alle { n } elementer",
           "selectCurrentPage": "Velg kun gjeldende side"
         },
         "message": {
-          "success": "Handlingen { action } ble kjørt på { count } element | Handlingen { action } ble kjørt på { count } elementer"
+          "success": "Handlingen { action } ble kjørt på { n } element | Handlingen { action } ble kjørt på { n } elementer"
         },
         "label": {
           "actions": "Handlinger",
@@ -1139,7 +1140,7 @@
         },
         "modal": {
           "performAction": {
-            "header": "Ønsker du å utføre { action } på { count } element? | Ønsker du å utføre { action } på { count } elementer?",
+            "header": "Ønsker du å utføre { action } på { n } element? | Ønsker du å utføre { action } på { n } elementer?",
             "content": {
               "warning": "Dette kan ha innvirkning på mange elementer, dobbeltsjekk at dette er det du faktisk ønsker."
             }
@@ -1278,7 +1279,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "{ count } spor | { count } spor"
+          "tracks": "{ n } spor | { n } spor"
         }
       },
       "PlaylistModal": {
@@ -1330,7 +1331,7 @@
         "button": {
           "clear": "Tøm spilleliste",
           "copy": "Kopier fra nåværende kø til spilleliste",
-          "insertFromQueue": "Sett inn ({ count } track) fra spillekø | Sett inn ({ count } track) fra spillekø"
+          "insertFromQueue": "Sett inn ({ n } track) fra spillekø | Sett inn ({ n } track) fra spillekø"
         },
         "modal": {
           "clearPlaylist": {
@@ -2208,7 +2209,7 @@
     "tags": {
       "List": {
         "button": {
-          "more": "Vis ett album til | Vis % { count } flere album"
+          "more": "Vis ett album til | Vis % { n } flere album"
         }
       }
     }
@@ -2217,10 +2218,10 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "{ count } spor | { count } spor",
-          "listenings": "{ count } spor | { count } spor",
-          "subscribers": "Én favoritt | { count } favoritter",
-          "tracks": "{ count } spor | { count } spor"
+          "episodes": "{ n } spor | { n } spor",
+          "listenings": "{ n } spor | { n } spor",
+          "subscribers": "Én favoritt | { n } favoritter",
+          "tracks": "{ n } spor | { n } spor"
         },
         "header": {
           "artistChannel": "Artistnavn"
@@ -2287,7 +2288,7 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "{ count } spor | { count } spor"
+            "tracks": "{ n } spor | { n } spor"
           },
           "link": {
             "details": "Bibliotekfiler"
@@ -2440,7 +2441,7 @@
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "{ count } spor | { count } spor",
+            "tracks": "{ n } spor | { n } spor",
             "failedTracks": "Feilaktige spor:",
             "lastUpdate": "Siste oppdatering:"
           },
@@ -2531,7 +2532,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "{ count } spor | { count } spor"
+          "tracks": "{ n } spor | { n } spor"
         },
         "link": {
           "albums": "Album",
@@ -3245,7 +3246,7 @@
         },
         "title": "Spilleliste",
         "meta": {
-          "tracks": "Spilleliste inneholdende { count } spor, av { username } | Spilleliste inneholdende { count } spor, av { username }"
+          "tracks": "Spilleliste inneholdende { n } spor, av { username } | Spilleliste inneholdende { n } spor, av { username }"
         },
         "empty": {
           "noTracks": "Dra og slipp rader for å endre sporrekkefølge i spillelisten"
@@ -3301,7 +3302,7 @@
   "composables": {
     "audio": {
       "usePlayOptions": {
-        "addToQueueMessage": "{ count } spor ble lagt til i din spillekø | { count } spor ble lagt til i din spillekø"
+        "addToQueueMessage": "{ n } spor ble lagt til i din spillekø | { n } spor ble lagt til i din spillekø"
       }
     },
     "locale": {

@@ -31,8 +31,8 @@
         "findOtherPod": "Find another pod"
       },
       "stat": {
-        "activeUsers": "{users} active user | {users} active users",
-        "hoursOfMusic": "{hours} hour of music | {hours} hours of music"
+        "activeUsers": "No active users | {n} active user | {n} active users",
+        "hoursOfMusic": "0 hours of music | {n} hour of music | {n} hours of music"
       },
       "help": {
         "closedRegistrations": "Registrations are closed on this pod. You can signup on another pod using the link below."
@@ -55,7 +55,7 @@
         "noTerms": "No terms available"
       },
       "message": {
-        "contact": "Send us an email: {contactEmail}"
+        "contact": "Send us an email: { contactEmail }"
       },
       "link": {
         "about": "About this pod",
@@ -80,12 +80,12 @@
         }
       },
       "stat": {
-        "activeUsers": "{users} active user | {users} active users",
-        "hoursOfMusic": "{hours} hour of music | {hours} hours of music",
-        "artistsCount": "{artists} artist | {artists} artists",
-        "albumsCount": "{albums} album | {albums} albums",
-        "tracksCount": "{tracks} track | {tracks} tracks",
-        "listeningsCount": "{listenings} listening | {listenings} listenings"
+        "activeUsers": "No active users | {n} active user | {n} active users",
+        "hoursOfMusic": "0 hours of music | {n} hour of music | {n} hours of music",
+        "artistsCount": "0 artists | {n} artist | {n} artists",
+        "albumsCount": "0 albums | {n} album | {n} albums",
+        "tracksCount": "0 tracks | {n} track | {n} tracks",
+        "listeningsCount": "0 listenings | {n} listening | {n} listenings"
       }
     },
     "Home": {
@@ -133,8 +133,8 @@
         }
       },
       "stat": {
-        "activeUsers": "{users} active user | {users} active users",
-        "hoursOfMusic": "{hours} hour of music | {hours} hours of music"
+        "activeUsers": "No active users | {n} active user | {n} active users",
+        "hoursOfMusic": "0 hours of music | {n} hour of music | {n} hours of music"
       },
       "help": {
         "registrationsClosed": "Registrations are closed on this pod. You can signup on another pod using the link below."
@@ -377,8 +377,8 @@
       "ChannelCard": {
         "title": "Updated on {date}",
         "meta": {
-          "episodes": "No episodes | {episode_count} episode | {episode_count} episodes",
-          "tracks": "No tracks | {tracks_count} track | {tracks_count} tracks"
+          "episodes": "No episodes | {n} episode | {n} episodes",
+          "tracks": "No tracks | {n} track | {n} tracks"
         }
       },
       "ChannelEntries": {
@@ -423,7 +423,7 @@
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "No episodes | {episode_count} episode | {episode_count} episodes"
+          "episodes": "No episodes | {n} episode | {n} episodes"
         }
       },
       "ChannelSeries": {
@@ -570,7 +570,7 @@
       "album": {
         "Card": {
           "meta": {
-            "tracks": "No tracks | {tracks_count} track | {tracks_count} tracks"
+            "tracks": "No tracks | {n} track | {n} tracks"
           }
         },
         "Widget": {
@@ -582,8 +582,8 @@
       "artist": {
         "Card": {
           "meta": {
-            "tracks": "No tracks | {tracks_count} track | {tracks_count} tracks",
-            "episodes": "No episodes | {episode_count} episode | {episode_count} episodes"
+            "tracks": "No tracks | {n} track | {n} tracks",
+            "episodes": "No episodes | {n} episode | {n} episodes"
           }
         },
         "Widget": {
@@ -1031,7 +1031,7 @@
           "none": "None"
         },
         "meta": {
-          "tracks": "No tracks | {tracks_count} track | {tracks_count} tracks"
+          "tracks": "No tracks | {n} track | {n} tracks"
         }
       },
       "LicenseSelect": {
@@ -1099,7 +1099,7 @@
       },
       "UploadModal": {
         "meta": {
-          "files": "no files | {count} file | {count} files",
+          "files": "no files | {n} file | {n} files",
           "quota": "Remaining storage space: {space}"
         },
         "header": {
@@ -1126,17 +1126,17 @@
         },
         "message": {
           "needsRefresh": "Content has been updated, click refresh to see up-to-date content",
-          "success": "Action {action} was launched successfully on {count} element | Action {action} was launched successfully on {count} elements"
+          "success": "Action {action} was launched successfully on {n} element | Action {action} was launched successfully on {n} elements"
         },
         "button": {
           "refresh": "Refresh table content",
           "go": "Go",
           "launch": "Launch",
           "select": "Select",
-          "selected": "{count} on {total} selected",
+          "selected": "{ n } on {total} selected",
           "selectAll": "Select all items",
-          "allSelected": "No elements selected | {count} element selected | All {count} elements selected",
-          "selectElement": "Select one element | Select all {total} elements",
+          "allSelected": "No elements selected | {n} element selected | All {n} elements selected",
+          "selectElement": "Select one element | Select all {n} elements",
           "selectCurrentPage": "Select only current page"
         },
         "label": {
@@ -1145,7 +1145,7 @@
         },
         "modal": {
           "performAction": {
-            "header": "Do you want to launch {action} on {count} element? | Do you want to launch {action} on {count} elements?",
+            "header": "Do you want to launch {action} on {n} element? | Do you want to launch {action} on {n} elements?",
             "content": {
               "warning": "This may affect a lot of elements or have irreversible consequences, please double check this is really what you want."
             }
@@ -1323,7 +1323,7 @@
       "List": {
         "title": "Your favorites",
         "header": {
-          "favorites": "No favorites | {count} favorite | {count} favorites"
+          "favorites": "No favorites | {n} favorite | {n} favorites"
         },
         "empty": {
           "noFavorites": "No tracks have been added to your favorites yet"
@@ -1422,8 +1422,8 @@
       "AlbumBase": {
         "title": "Album",
         "meta": {
-          "tracks": "No tracks | {tracks_count} track | {tracks_count} tracks",
-          "episodes": "No episodes | {episode_count} episode | {episode_count} episodes"
+          "tracks": "No tracks | {n} track | {n} tracks",
+          "episodes": "No episodes | {n} episode | {n} episodes"
         },
         "link": {
           "addDescription": "Add a description…"
@@ -1514,7 +1514,8 @@
       "ArtistBase": {
         "title": "Artist",
         "meta": {
-          "tracks": "{count} track in {albums} albums | {count} tracks in {albums} albums"
+          "tracks": "0 tracks in | {count} track in | {count} tracks in",
+          "albums": "0 albums | {n} album | {n} albums"
         },
         "button": {
           "play": "Play all albums",
@@ -1962,7 +1963,7 @@
             "builder": "Builder",
             "updated": "Radio updated",
             "created": "Radio created",
-            "matches": "{count} track matching combined filters | {count} tracks matching combined filters"
+            "matches": "0 tracks matching combined filters | {n} track matching combined filters | {n} tracks matching combined filters"
           },
           "description": {
             "builder": "You can use this interface to build your own custom radio, which will play tracks according to your criteria."
@@ -1994,7 +1995,7 @@
         },
         "Filter": {
           "excludeLabel": "Exclude",
-          "matchingTracks": "{count} track matching combined filters | {count} tracks matching filter",
+          "matchingTracks": "0 tracks matching filter | {n} track matching filter | {n} tracks matching filter",
           "matchingTracksModalHeader": "Tracks matching filter",
           "cancelButton": "Cancel",
           "removeButton": "Remove"
@@ -2668,7 +2669,7 @@
             }
           },
           "pagination": {
-            "results": "Showing one result | Showing results {start} to {end} from {total}"
+            "results": "Showing zero results | Showing one result | Showing results {start} to {end} from {total}"
           }
         },
         "UsersTable": {
@@ -2715,7 +2716,7 @@
           },
           "notApplicable": "N/A",
           "pagination": {
-            "results": "Showing one result | Showing results {start} to {end} from {total}"
+            "results": "Showing zero results | Showing one result | Showing results {start} to {end} from {total}"
           }
         }
       }
@@ -2802,7 +2803,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "No tracks | {tracks_count} track | {tracks_count} tracks"
+          "tracks": "No tracks | {n} track | {n} tracks"
         }
       },
       "Editor": {
@@ -2810,7 +2811,7 @@
           "copy": "Copy the current queue to this playlist",
           "addDuplicate": "Add anyways",
           "clear": "Clear playlist",
-          "insertFromQueue": "Insert from queue ({count} track) | Insert from queue ({count} tracks"
+          "insertFromQueue": "Insert from queue ({n} track) | Insert from queue ({n} tracks"
         },
         "header": {
           "editor": "Playlist editor"
@@ -2932,7 +2933,7 @@
     "tags": {
       "List": {
         "button": {
-          "more": "Show 1 more tag | Show {count} more tags"
+          "more": "Show 1 more tag | Show {n} more tags"
         }
       }
     },
@@ -2958,7 +2959,7 @@
     },
     "audio": {
       "usePlayOptions": {
-        "addToQueueMessage": "{count} tracks were added to your queue | {count} track was added to your queue | {count} tracks were added to your queue"
+        "addToQueueMessage": "{n} tracks were added to your queue | {n} track was added to your queue | {n} tracks were added to your queue"
       },
       "queue": {
         "unknownArtist": "Unknown Artist",
@@ -4064,10 +4065,10 @@
       "DetailBase": {
         "title": "Channel",
         "meta": {
-          "episodes": "No episodes | {count} episode | {count} episodes",
-          "tracks": "No tracks | {count} track | {count} tracks",
-          "subscribers": "No subscribers | {count} subscriber | {count} subscribers",
-          "listenings": "No listenings | {count} listening | {count} listenings"
+          "episodes": "No episodes | {n} episode | {n} episodes",
+          "tracks": "No tracks | {n} track | {n} tracks",
+          "subscribers": "No subscribers | {n} subscriber | {n} subscribers",
+          "listenings": "No listenings | {n} listening | {n} listenings"
         },
         "header": {
           "podcastChannel": "Podcast channel",
@@ -4201,7 +4202,7 @@
             "size": "Total size of the files in this library"
           },
           "meta": {
-            "tracks": "No tracks | {count} track | {count} tracks"
+            "tracks": "No tracks | {n} track | {n} tracks"
           },
           "button": {
             "upload": "Upload"
@@ -4372,7 +4373,7 @@
             "unfollow": "Cannot unfollow remote library: {error}"
           },
           "meta": {
-            "tracks": "No tracks | {count} track | {count} tracks",
+            "tracks": "No tracks | {n} track | {n} tracks",
             "lastUpdate": "Last update: ",
             "failedTracks": "Failed tracks: {tracks}"
           },
@@ -4509,7 +4510,7 @@
           "tracks": "Tracks"
         },
         "meta": {
-          "tracks": "No tracks | {count} track | {count} tracks"
+          "tracks": "No tracks | {n} track | {n} tracks"
         },
         "button": {
           "upload": "Upload",
@@ -4521,7 +4522,7 @@
       "Detail": {
         "title": "Playlist",
         "meta": {
-          "tracks": "Playlist containing {count} track, by {username} | Playlist containing {count} tracks, by {username}"
+          "tracks": "Playlist containing {n} track, by {username} | Playlist containing {n} tracks, by {username}"
         },
         "header": {
           "tracks": "Tracks"

@@ -173,7 +173,7 @@ watch(exclude, fetchCandidates)
         :class="['ui', {'success': checkResult.candidates.count > 10}, 'label']"
         @click.prevent="showCandidadesModal = !showCandidadesModal"
       >
-        {{ $t('components.library.radios.Filter.matchingTracks', {count: checkResult.candidates.count}) }}
+        {{ $t('components.library.radios.Filter.matchingTracks', checkResult.candidates.count) }}
       </a>
       <semantic-modal
         v-if="checkResult"

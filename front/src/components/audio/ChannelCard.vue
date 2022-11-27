@@ -68,10 +68,10 @@ const updatedAgo = computed(() => moment(props.object.artist?.modification_date)
           v-if="object.artist?.content_category === 'podcast'"
           class="meta ellipsis"
         >
-          {{ $t('components.audio.ChannelCard.meta.episodes', {episode_count: object.artist.tracks_count}) }}
+          {{ $t('components.audio.ChannelCard.meta.episodes', object.artist.tracks_count) }}
         </span>
         <span v-else>
-          {{ $t('components.audio.ChannelCard.meta.tracks', {tracks_count: object.artist?.tracks_count}) }}
+          {{ $t('components.audio.ChannelCard.meta.tracks', object.artist?.tracks_count ?? 0) }}
         </span>
         <tags-list
           label-classes="tiny"

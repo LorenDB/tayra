@@ -317,8 +317,8 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } aktivní uživatel | { count } aktivní uživatelé",
-        "hoursOfMusic": "{ count } hodina hudby | { count } hodiny hudby"
+        "activeUsers": "{ n } aktivní uživatel | { n } aktivní uživatelé",
+        "hoursOfMusic": "{ n } hodina hudby | { n } hodiny hudby"
       },
       "title": "O aplikaci",
       "header": {
@@ -344,8 +344,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } aktivní uživatel | { count } aktivní uživatelé",
-        "hoursOfMusic": "{ count } hodina hudby | { count } hodiny hudby"
+        "activeUsers": "{ n } aktivní uživatel | { n } aktivní uživatelé",
+        "hoursOfMusic": "{ n } hodina hudby | { n } hodiny hudby"
       },
       "header": {
         "aboutFunkwhale": "O Funkwhale",
@@ -394,8 +394,8 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } interpret | { count } interpreti",
-            "tracks": "{ count } stopa | { count } stopy"
+            "episodes": "{ n } interpret | { n } interpreti",
+            "tracks": "{ n } stopa | { n } stopy"
           }
         },
         "Widget": {
@@ -406,20 +406,20 @@
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } interpret | { count } interpreti",
-          "tracks": "{ count } stopa | { count } stopy"
+          "episodes": "{ n } interpret | { n } interpreti",
+          "tracks": "{ n } stopa | { n } stopy"
         },
         "title": "Členem od { date }"
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } interpret | { count } interpreti"
+          "episodes": "{ n } interpret | { n } interpreti"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "{ count } stopa | { count } stopy"
+            "tracks": "{ n } stopa | { n } stopy"
           }
         },
         "Widget": {
@@ -643,8 +643,8 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } interpret | { count } interpreti",
-          "tracks": "{ count } stopa | { count } stopy"
+          "episodes": "{ n } interpret | { n } interpreti",
+          "tracks": "{ n } stopa | { n } stopy"
         },
         "link": {
           "addDescription": "Můj úžasný popis"
@@ -652,7 +652,8 @@
       },
       "ArtistBase": {
         "meta": {
-          "tracks": "{ count } stopa v { albumsCount } albu | { count } stopy v { albumsCount } albech"
+          "tracks": "{ n } stopa v  | { n } stopy v",
+          "albums": "{ n } albu | { n } albech"
         },
         "title": "Interpret",
         "button": {
@@ -679,7 +680,7 @@
       "radios": {
         "Builder": {
           "header": {
-            "matches": "{ count } stopa odpovídá zadaným filtrům | { count } stopy odpovídají zadaným filtrům",
+            "matches": "{ n } stopa odpovídá zadaným filtrům | { n } stopy odpovídají zadaným filtrům",
             "builder": "Výroba rádia",
             "created": "Rádio vytvořeno",
             "updated": "Rádio aktualizováno"
@@ -1198,7 +1199,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "{ count } oblíbená | { count } oblíbené"
+          "favorites": "{ n } oblíbená | { n } oblíbené"
         },
         "ordering": {
           "direction": {
@@ -1235,7 +1236,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "{ count } oblíbená | { count } oblíbené",
+          "files": "{ n } oblíbená | { n } oblíbené",
           "quota": "Zbývající prostor úložiště"
         },
         "button": {
@@ -1254,7 +1255,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "{ count } stopa | { count } stopy"
+          "tracks": "{ n } stopa | { n } stopy"
         },
         "label": {
           "album": "Album"
@@ -1326,8 +1327,8 @@
     },
     "AboutPod": {
       "stat": {
-        "hoursOfMusic": "{ count } hodina hudby | { count } hodiny hudby",
-        "activeUsers": "{ count } aktivní uživatel | { count } aktivní uživatelé",
+        "hoursOfMusic": "{ n } hodina hudby | { n } hodiny hudby",
+        "activeUsers": "{ n } aktivní uživatel | { n } aktivní uživatelé",
         "albumsCount": "Album | Album",
         "artistsCount": "Interpret | Interpret",
         "listeningsCount": "Poslechy | Poslechy",
@@ -1372,17 +1373,17 @@
     "common": {
       "ActionTable": {
         "button": {
-          "selected": "{ count } z { total } vybrán | { count } z { total } vybrány",
-          "allSelected": "{ count } položka vybrána | Všechny { count } položky vybrány",
+          "selected": "{ n } z { total } vybrán | { n } z { total } vybrány",
+          "allSelected": "{ n } položka vybrána | Všechny { n } položky vybrány",
           "go": "Pokračovat",
           "launch": "Spustit",
           "refresh": "Obnovit obsah tabulky",
           "selectAll": "Vybrat filtr",
-          "selectElement": "Vybrat { total } prvek | Vybrat všechny { total } prvky",
+          "selectElement": "Vybrat { n } prvek | Vybrat všechny { n } prvky",
           "selectCurrentPage": "Vybrat pouze aktuální stránku"
         },
         "message": {
-          "success": "Akce { action } byla úspěšně zahájena pro { count } položku | Akce { action } byla úspěšně zahájena pro { count } položky",
+          "success": "Akce { action } byla úspěšně zahájena pro { n } položku | Akce { action } byla úspěšně zahájena pro { n } položky",
           "needsRefresh": "Obsah byl aktualizován, klikněte na obnovit pro zobrazení aktuálního obsahu"
         },
         "label": {
@@ -1391,7 +1392,7 @@
         },
         "modal": {
           "performAction": {
-            "header": "Přejete si provést operaci { action } na { count } položce? | Přejete si provést operaci { action } na { count } položkách?",
+            "header": "Přejete si provést operaci { action } na { n } položce? | Přejete si provést operaci { action } na { n } položkách?",
             "content": {
               "warning": "Tato akce může ovlivnit mnoho prvků nebo může mít nevratné následky - prosím ujistěte se, že si to opravdu přejete."
             }
@@ -1544,7 +1545,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "{ count } stopa | { count } stopy"
+          "tracks": "{ n } stopa | { n } stopy"
         }
       },
       "PlaylistModal": {
@@ -1590,7 +1591,7 @@
           "addDuplicate": "Přesto přidat",
           "clear": "Vyčistit playlist",
           "copy": "Kopírovat stopy ve frontě do playlistu",
-          "insertFromQueue": "Vložit z fronty ({ count } stopa) | Vložit z fronty ({ count } stopy)"
+          "insertFromQueue": "Vložit z fronty ({ n } stopa) | Vložit z fronty ({ n } stopy)"
         },
         "error": {
           "sync": "Došlo k chybě při ukládání změn"
@@ -2703,7 +2704,7 @@
     "tags": {
       "List": {
         "button": {
-          "more": "Zobrazit 1 další tag | Zobrazit { count } další tagy"
+          "more": "Zobrazit 1 další tag | Zobrazit { n } další tagy"
         }
       }
     }
@@ -2712,10 +2713,10 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "{ count } interpret | { count } interpreti",
-          "listenings": "{ count } poslech | { count } poslechy",
-          "subscribers": "{ count } oblíbená | { count } oblíbené",
-          "tracks": "{ count } stopa | { count } stopy"
+          "episodes": "{ n } interpret | { n } interpreti",
+          "listenings": "{ n } poslech | { n } poslechy",
+          "subscribers": "{ n } oblíbená | { n } oblíbené",
+          "tracks": "{ n } stopa | { n } stopy"
         },
         "header": {
           "artistChannel": "Jméno interpreta"
@@ -2793,7 +2794,7 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "{ count } stopa | { count } stopy"
+            "tracks": "{ n } stopa | { n } stopy"
           },
           "link": {
             "details": "Úpravy knihovny"
@@ -2953,7 +2954,7 @@
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "{ count } stopa | { count } stopy",
+            "tracks": "{ n } stopa | { n } stopy",
             "failedTracks": "Neúspěšné stopy:",
             "lastUpdate": "Poslední aktualizace:"
           },
@@ -3051,7 +3052,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "{ count } stopa | { count } stopy"
+          "tracks": "{ n } stopa | { n } stopy"
         },
         "link": {
           "albums": "Alba",
@@ -3991,7 +3992,7 @@
         },
         "title": "Playlist",
         "meta": {
-          "tracks": "Playlist obsahující { count } stopu, od { username } | Playlist obsahující { count } stopy, od { username }"
+          "tracks": "Playlist obsahující { n } stopu, od { username } | Playlist obsahující { n } stopy, od { username }"
         },
         "empty": {
           "noTracks": "Přetáhněte myší řádky pro změnu pořadí stop v playlistu"
@@ -4028,7 +4029,7 @@
   "composables": {
     "audio": {
       "usePlayOptions": {
-        "addToQueueMessage": "{ count } stopa byla přidána do fronty | { count } stopy byly přidány do fronty"
+        "addToQueueMessage": "{ n } stopa byla přidána do fronty | { n } stopy byly přidány do fronty"
       }
     },
     "locale": {

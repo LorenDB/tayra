@@ -120,7 +120,7 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
         class="ui center aligned icon header"
       >
         <i class="circular inverted heart pink icon" />
-        {{ $t('components.favorites.List.header.favorites', {count: $store.state.favorites.count}) }}
+        {{ $t('components.favorites.List.header.favorites', $store.state.favorites.count) }}
       </h2>
       <radio-button
         v-if="$store.state.favorites.count > 0"

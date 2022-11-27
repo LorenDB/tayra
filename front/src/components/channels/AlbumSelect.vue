@@ -69,7 +69,7 @@ watch(() => props.channel, fetchData, { immediate: true })
       >
         {{ album.title }}
         <span>
-          {{ $t('components.channels.AlbumSelect.meta.tracks', { tracks_count: album.tracks_count }) }}
+          {{ $t('components.channels.AlbumSelect.meta.tracks', album.tracks_count) }}
         </span>
       </option>
     </select>

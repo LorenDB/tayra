@@ -265,8 +265,8 @@
     },
     "About": {
       "stat": {
-        "activeUsers": "{ count } مقطع | { count } مَقطَع",
-        "hoursOfMusic": "{ count } مقطع | { count } مَقطَع"
+        "activeUsers": "{ n } مقطع | { n } مَقطَع",
+        "hoursOfMusic": "{ n } مقطع | { n } مَقطَع"
       },
       "title": "عن الصفحة",
       "header": {
@@ -283,8 +283,8 @@
     },
     "Home": {
       "stat": {
-        "activeUsers": "{ count } مقطع | { count } مَقطَع",
-        "hoursOfMusic": "{ count } مقطع | { count } مَقطَع"
+        "activeUsers": "{ n } مقطع | { n } مَقطَع",
+        "hoursOfMusic": "{ n } مقطع | { n } مَقطَع"
       },
       "header": {
         "aboutFunkwhale": "عن فانك وايل Funkwhale",
@@ -324,27 +324,27 @@
       "artist": {
         "Card": {
           "meta": {
-            "episodes": "{ count } مقطع | { count } مَقطَع",
-            "tracks": "{ count } مقطع | { count } مَقطَع"
+            "episodes": "{ n } مقطع | { n } مَقطَع",
+            "tracks": "{ n } مقطع | { n } مَقطَع"
           }
         }
       },
       "ChannelCard": {
         "meta": {
-          "episodes": "{ count } مقطع | { count } مَقطَع",
-          "tracks": "{ count } مقطع | { count } مَقطَع"
+          "episodes": "{ n } مقطع | { n } مَقطَع",
+          "tracks": "{ n } مقطع | { n } مَقطَع"
         },
         "title": "عضو منذ { date }"
       },
       "ChannelSerieCard": {
         "meta": {
-          "episodes": "{ count } مقطع | { count } مَقطَع"
+          "episodes": "{ n } مقطع | { n } مَقطَع"
         }
       },
       "album": {
         "Card": {
           "meta": {
-            "tracks": "{ count } مقطع | { count } مَقطَع"
+            "tracks": "{ n } مقطع | { n } مَقطَع"
           }
         }
       },
@@ -544,8 +544,8 @@
     "library": {
       "AlbumBase": {
         "meta": {
-          "episodes": "{ count } مقطع | { count } مَقطَع",
-          "tracks": "{ count } مقطع | { count } مَقطَع"
+          "episodes": "{ n } مقطع | { n } مَقطَع",
+          "tracks": "{ n } مقطع | { n } مَقطَع"
         },
         "link": {
           "addDescription": "وصفي الرائع"
@@ -553,7 +553,8 @@
       },
       "ArtistBase": {
         "meta": {
-          "tracks": "{ count } مقاطع في { albumsCount } ألبومات | { count } مَقطَع في { albumsCount } ألبومات"
+          "tracks": "{ n } مقاطع في  | { n } مَقطَع في ",
+          "albums": "{ n } ألبومات | { n } ألبومات"
         },
         "title": "الفنان",
         "button": {
@@ -1038,7 +1039,7 @@
     "favorites": {
       "List": {
         "header": {
-          "favorites": "{ count } مفضّلة | مفضلة"
+          "favorites": "{ n } مفضّلة | مفضلة"
         },
         "ordering": {
           "direction": {
@@ -1075,7 +1076,7 @@
     "channels": {
       "UploadModal": {
         "meta": {
-          "files": "{ count } مفضّلة | مفضلة",
+          "files": "{ n } مفضّلة | مفضلة",
           "quota": "مساحة التخزين المتبقية"
         },
         "button": {
@@ -1095,7 +1096,7 @@
       },
       "AlbumSelect": {
         "meta": {
-          "tracks": "{ count } مقطع | { count } مَقطَع"
+          "tracks": "{ n } مقطع | { n } مَقطَع"
         },
         "label": {
           "album": "الألبوم"
@@ -1166,11 +1167,11 @@
     },
     "AboutPod": {
       "stat": {
-        "hoursOfMusic": "{ count } مقطع | { count } مَقطَع",
-        "activeUsers": "{ count } مقطع | { count } مَقطَع",
+        "hoursOfMusic": "{ n } مقطع | { n } مَقطَع",
+        "activeUsers": "{ n } مقطع | { n } مَقطَع",
         "albumsCount": "الألبوم | الألبوم",
         "artistsCount": "الفنان | الفنان",
-        "listeningsCount": "{ count } مقطع | { count } مَقطَع",
+        "listeningsCount": "{ n } مقطع | { n } مَقطَع",
         "tracksCount": "المَقطَع | المَقطَع"
       },
       "title": "عن الصفحة",
@@ -1208,7 +1209,7 @@
     "playlists": {
       "Card": {
         "meta": {
-          "tracks": "{ count } مقطع | { count } مَقطَع"
+          "tracks": "{ n } مقطع | { n } مَقطَع"
         }
       },
       "Editor": {
@@ -1216,7 +1217,7 @@
           "addDuplicate": "أضفه على أي حال",
           "clear": "مسح قائمة المَقاطع الموسيقية",
           "copy": "نسخ المَقاطِع مِن قائمة الإنتظار الحالية إلى قائمة التشغيل",
-          "insertFromQueue": "{ count } مقطع | { count } مَقطَع"
+          "insertFromQueue": "{ n } مقطع | { n } مَقطَع"
         },
         "error": {
           "sync": "حدث خطأ أثناء عملية حفظ التغييرات"
@@ -2406,7 +2407,7 @@
     "tags": {
       "List": {
         "button": {
-          "more": "اعرض { count } مقاطع | اعرض { count } مَقطَع"
+          "more": "اعرض { n } مقاطع | اعرض { n } مَقطَع"
         }
       }
     }
@@ -2415,10 +2416,10 @@
     "channels": {
       "DetailBase": {
         "meta": {
-          "episodes": "{ count } مقطع | { count } مَقطَع",
-          "listenings": "{ count } مقطع | { count } مَقطَع",
-          "subscribers": "{ count } مفضّلة | مفضلة",
-          "tracks": "{ count } مقطع | { count } مَقطَع"
+          "episodes": "{ n } مقطع | { n } مَقطَع",
+          "listenings": "{ n } مقطع | { n } مَقطَع",
+          "subscribers": "{ n } مفضّلة | مفضلة",
+          "tracks": "{ n } مقطع | { n } مَقطَع"
         },
         "header": {
           "artistChannel": "إسم الفنان"
@@ -2491,7 +2492,7 @@
       "libraries": {
         "Card": {
           "meta": {
-            "tracks": "{ count } مقطع | { count } مَقطَع"
+            "tracks": "{ n } مقطع | { n } مَقطَع"
           },
           "link": {
             "details": "ملفّات المكتبة"
@@ -2638,7 +2639,7 @@
       "remote": {
         "Card": {
           "meta": {
-            "tracks": "{ count } مقطع | { count } مَقطَع",
+            "tracks": "{ n } مقطع | { n } مَقطَع",
             "failedTracks": "المَقاطع الصوتية المخفقة:",
             "lastUpdate": "آخِر تحديث:"
           },
@@ -2726,7 +2727,7 @@
     "library": {
       "LibraryBase": {
         "meta": {
-          "tracks": "{ count } مقطع | { count } مَقطَع"
+          "tracks": "{ n } مقطع | { n } مَقطَع"
         },
         "link": {
           "albums": "الألبومات",
