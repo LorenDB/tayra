@@ -706,7 +706,7 @@
       "ArtistBase": {
         "meta": {
           "tracks": "{ n } Titel in | { n } Titel in ",
-          "alubms": "{ n } Alben | { n } Alben"
+          "albums": "{ n } Alben | { n } Alben"
         },
         "title": "Künstler·in",
         "button": {
