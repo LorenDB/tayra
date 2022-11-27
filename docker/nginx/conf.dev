@@ -84,7 +84,7 @@ http {
         }
 
         location / {
-            proxy_pass   http://funkwhale-front/front/;
+            proxy_pass   http://funkwhale-front/;
             expires 1d;
         }
 
