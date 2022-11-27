@@ -36,7 +36,7 @@ tasks:
       VUE_EDITOR: code
     before: cd front
     init: |
-      [ -d "node_modules" ] || yarn install
+      yarn install
       yarn run i18n-compile
     command: yarn dev --host 0.0.0.0 --base /front/
 

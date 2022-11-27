@@ -16,5 +16,9 @@ echo "Replacing hardcoded values by CSS vars…"
 scripts/fix-fomantic-css.py "$FOMANTIC_SRC_PATH" "$FOMANTIC_SRC_PATH/tweaked"
 
 echo 'Fixing jQuery import…'
+
+# shellcheck disable=SC2046
+sed -i '1s/^import jQuery from "jquery"//' $(find "$FOMANTIC_SRC_PATH" -name '*.js')
+
 # shellcheck disable=SC2046
 sed -i '1s/^/import jQuery from "jquery"\n/' $(find "$FOMANTIC_SRC_PATH" -name '*.js')
