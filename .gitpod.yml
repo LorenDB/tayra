@@ -31,6 +31,14 @@ tasks:
       poetry run python manage.py collectstatic --no-input
       poetry run python manage.py gitpod dev
 
+  - name: Celery Worker
+    env:
+      ENV_FILE: /workspace/funkwhale/.gitpod/.env
+    before: cd api
+    command: |
+      gp ports await 5000
+      poetry run celery -A funkwhale_api.taskapp worker -l debug -B --concurrency=0
+
   - name: Frontend
     env:
       VUE_EDITOR: code
