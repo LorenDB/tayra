@@ -1,4 +1,5 @@
 import type { QueueTrack, QueueTrackSource } from '~/composables/audio/queue'
+import type { Track, Upload } from '~/types'
 import type { Sound } from '~/api/player'
 
 import { createGlobalState, syncRef, useTimeoutFn, whenever } from '@vueuse/core'
@@ -12,13 +13,28 @@ import { soundImplementation } from '~/api/player'
 import useLRUCache from '~/composables/data/useLRUCache'
 import store from '~/store'
 
+import axios from 'axios'
+
 const ALLOWED_PLAY_TYPES: (CanPlayTypeResult | undefined)[] = ['maybe', 'probably']
 const AUDIO_ELEMENT = document.createElement('audio')
 
 const soundPromises = new Map<number, Promise<Sound>>()
 const soundCache = useLRUCache<number, Sound>({ max: 10 })
 
-const getTrackSources = (track: QueueTrack): QueueTrackSource[] => {
+export const fetchTrackSources = async (id: number): Promise<QueueTrackSource[]> => {
+  const { uploads } = await axios.get(`tracks/${id}/`)
+    .then(response => response.data as Track, () => ({ uploads: [] as Upload[] }))
+
+  return uploads.map(upload => ({
+    uuid: upload.uuid,
+    duration: upload.duration,
+    mimetype: upload.mimetype,
+    bitrate: upload.bitrate,
+    url: store.getters['instance/absoluteUrl'](upload.listen_url)
+  }))
+}
+
+const getTrackSources = async (track: QueueTrack): Promise<QueueTrackSource[]> => {
   const token = store.state.auth.authenticated && store.state.auth.scopedTokens.listen
   const appendToken = (url: string) => {
     if (token) {
@@ -28,6 +44,10 @@ const getTrackSources = (track: QueueTrack): QueueTrackSource[] => {
     }
 
     return url
+  }
+
+  if (track.sources.length === 0) {
+    track.sources = await fetchTrackSources(track.id)
   }
 
   const sources: QueueTrackSource[] = track.sources
@@ -65,7 +85,7 @@ export const useTracks = createGlobalState(() => {
     }
 
     const createSoundPromise = async () => {
-      const sources = getTrackSources(track)
+      const sources = await getTrackSources(track)
       const { playNext } = useQueue()
 
       const SoundImplementation = soundImplementation.value
