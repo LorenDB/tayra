@@ -188,7 +188,7 @@ const hideArtist = () => {
                 :to="{name: 'library.artists.detail', params: {id: currentTrack.artistId }}"
                 @click.stop.prevent=""
               >
-                {{ currentTrack.artistName }}
+                {{ currentTrack.artistName ?? $t('components.audio.Player.meta.unknownArtist') }}
               </router-link>
               <template v-if="currentTrack.albumId !== -1">
                 <span class="middle slash symbol" />
@@ -197,7 +197,7 @@ const hideArtist = () => {
                   :to="{name: 'library.albums.detail', params: {id: currentTrack.albumId }}"
                   @click.stop.prevent=""
                 >
-                  {{ currentTrack.albumTitle }}
+                  {{ currentTrack.albumTitle ?? $t('components.audio.Player.meta.unknownAlbum') }}
                 </router-link>
               </template>
             </div>
@@ -216,10 +216,10 @@ const hideArtist = () => {
               {{ currentTrack.title }}
             </strong>
             <div class="meta">
-              {{ currentTrack.artistName }}
+              {{ currentTrack.artistName ?? $t('components.audio.Player.meta.unknownArtist') }}
               <template v-if="currentTrack.albumId !== -1">
                 <span class="middle slash symbol" />
-                {{ currentTrack.albumTitle }}
+                {{ currentTrack.albumTitle ?? $t('components.audio.Player.meta.unknownAlbum') }}
               </template>
             </div>
           </div>

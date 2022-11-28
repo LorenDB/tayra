@@ -261,9 +261,9 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                 >
                   <h1>{{ currentTrack.title }}</h1>
                   <h2>
-                    {{ currentTrack.artistName }}
+                    {{ currentTrack.artistName ?? $t('components.Queue.meta.unknownArtist') }}
                     <span class="symbol hyphen middle" />
-                    {{ currentTrack.albumTitle }}
+                    {{ currentTrack.albumTitle ?? $t('components.Queue.meta.unknownAlbum') }}
                   </h2>
                 </div>
               </Transition>
@@ -282,7 +282,7 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                   class="discrete link artist"
                   :to="{name: 'library.artists.detail', params: {id: currentTrack.artistId }}"
                 >
-                  {{ currentTrack.artistName }}
+                  {{ currentTrack.artistName ?? $t('components.Queue.meta.unknownArtist') }}
                 </router-link>
                 <template v-if="currentTrack.albumId !== -1">
                   <span class="middle slash symbol" />
@@ -290,7 +290,7 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                     class="discrete link album"
                     :to="{name: 'library.albums.detail', params: {id: currentTrack.albumId }}"
                   >
-                    {{ currentTrack.albumTitle }}
+                    {{ currentTrack.albumTitle ?? $t('components.Queue.meta.unknownAlbum') }}
                   </router-link>
                 </template>
               </div>

@@ -190,7 +190,9 @@
       },
       "meta": {
         "queuePosition": "Track {index} of {length}",
-        "startTime": "00:00"
+        "startTime": "00:00",
+        "unknownArtist": "Unknown Artist",
+        "unknownAlbum": "Unknown Album"
       }
     },
     "RemoteSearchForm": {
@@ -514,7 +516,9 @@
           "player": "Audio player and controls"
         },
         "meta": {
-          "position": "{index} of {length}"
+          "position": "{index} of {length}",
+          "unknownArtist": "Unknown Artist",
+          "unknownAlbum": "Unknown Album"
         }
       },
       "Search": {
@@ -2960,10 +2964,6 @@
     "audio": {
       "usePlayOptions": {
         "addToQueueMessage": "{n} tracks were added to your queue | {n} track was added to your queue | {n} tracks were added to your queue"
-      },
-      "queue": {
-        "unknownArtist": "Unknown Artist",
-        "unknownAlbum": "Unknown Album"
       }
     },
     "locale": {

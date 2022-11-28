@@ -4,7 +4,6 @@ import { createGlobalState, useNow, useStorage, useTimeAgo, whenever } from '@vu
 import { computed, ref, shallowReactive, watchEffect } from 'vue'
 import { shuffle as shuffleArray, sum } from 'lodash-es'
 import { useClamp } from '@vueuse/math'
-import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
 import { looping, LoopingMode, isPlaying } from '~/composables/audio/player'
@@ -25,8 +24,8 @@ export interface QueueTrackSource {
 export interface QueueTrack {
   id: number
   title: string
-  artistName: string
-  albumTitle: string
+  artistName?: string
+  albumTitle?: string
   position?: number
 
   // TODO: Add urls for those
@@ -99,9 +98,9 @@ export const currentTrack = computed(() => queue.value[currentIndex.value])
 // Use Queue
 export const useQueue = createGlobalState(() => {
   const { currentSound } = useTracks()
+  // const { t } = useI18n()
 
   const createQueueTrack = async (track: Track): Promise<QueueTrack> => {
-    const { t } = useI18n()
     const { default: store } = await import('~/store')
 
     if (track.uploads.length === 0) {
@@ -115,8 +114,8 @@ export const useQueue = createGlobalState(() => {
     return {
       id: track.id,
       title: track.title,
-      artistName: track.artist?.name ?? t('composables.audio.queue.unknownArtist'),
-      albumTitle: track.album?.title ?? t('composables.audio.queue.unknownAlbum'),
+      artistName: track.artist?.name,
+      albumTitle: track.album?.title,
       position: track.position,
       artistId: track.artist?.id ?? -1,
       albumId: track.album?.id ?? -1,
