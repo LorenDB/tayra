@@ -98,12 +98,11 @@ export const currentTrack = computed(() => queue.value[currentIndex.value])
 // Use Queue
 export const useQueue = createGlobalState(() => {
   const { currentSound } = useTracks()
-  // const { t } = useI18n()
 
-  const createQueueTrack = async (track: Track): Promise<QueueTrack> => {
+  const createQueueTrack = async (track: Track, skipFetch = false): Promise<QueueTrack> => {
     const { default: store } = await import('~/store')
 
-    if (track.uploads.length === 0) {
+    if (track.uploads.length === 0 && skipFetch === false) {
       // we don't have any information for this track, we need to fetch it
       const { uploads } = await axios.get(`tracks/${track.id}/`)
         .then(response => response.data as Track, () => ({ uploads: [] as Upload[] }))
@@ -131,9 +130,19 @@ export const useQueue = createGlobalState(() => {
     }
   }
 
+  const isTrack = (track: Track | boolean): track is Track => typeof track !== 'boolean'
+
   // Adding tracks
-  const enqueueAt = async (index: number, ...newTracks: Track[]) => {
-    const queueTracks = await Promise.all(newTracks.map(createQueueTrack))
+  async function enqueueAt (index: number, ...newTracks: Track[]): Promise<void>
+  // NOTE: Only last boolean of newTracks is considered as skipFetch
+  async function enqueueAt (index: number, ...newTracks: (Track | boolean)[]) : Promise<void>
+  async function enqueueAt (index: number, ...newTracks: (Track | boolean)[]) : Promise<void> {
+    let skipFetch = false
+    if (!isTrack(newTracks[newTracks.length - 1])) {
+      skipFetch = newTracks.pop() as boolean
+    }
+
+    const queueTracks = await Promise.all(newTracks.filter(isTrack).map((track) => createQueueTrack(track, skipFetch)))
     await setMany(queueTracks.map(track => [track.id, track]))
 
     const ids = queueTracks.map(track => track.id)
@@ -152,7 +161,10 @@ export const useQueue = createGlobalState(() => {
     }
   }
 
-  const enqueue = async (...newTracks: Track[]) => {
+  async function enqueue (...newTracks: Track[]): Promise<void>
+  // NOTE: Only last boolean of newTracks is considered as skipFetch
+  async function enqueue (...newTracks: (Track | boolean)[]): Promise<void>
+  async function enqueue (...newTracks: (Track | boolean)[]): Promise<void> {
     return enqueueAt(tracks.value.length, ...newTracks)
   }
 
@@ -320,7 +332,7 @@ export const useQueue = createGlobalState(() => {
 
         if (oldTracks.length !== 0) {
           tracks.value.length = 0
-          await enqueue(...oldTracks)
+          await enqueue(...oldTracks, true)
         }
 
         // NOTE: There is a race condition between clearing queue and adding new tracks that resets the radio.
