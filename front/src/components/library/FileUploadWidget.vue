@@ -83,17 +83,17 @@ export default { inheritAttrs: false }
 </script>
 
 <template>
-  <!-- <component
-    ref="fileUpload"
-    :is="FileUpload"
-  >
-    <slot />
-  </component> -->
   <file-upload
     ref="upload"
     v-bind="$attrs"
+    :post-action="$store.getters['instance/absoluteUrl']('/api/v1/uploads/')"
+    :multiple="true"
+    :thread="1"
     :custom-action="uploadAction"
     :headers="headers"
+    :extensions="$store.state.ui.supportedExtensions"
+    :drop="true"
+    name="audio_file"
   >
     <slot />
   </file-upload>

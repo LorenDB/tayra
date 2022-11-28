@@ -263,7 +263,7 @@ const inputFile = (newFile: VueUploadItem) => {
   if (remainingSpace.value < (newFile.size ?? Infinity) / 1e6) {
     newFile.error = 'denied'
   } else {
-    upload.value.active = true
+    newFile.active = true
   }
 }
 
@@ -386,13 +386,7 @@ useEventListener(window, 'beforeunload', (event) => {
           ref="upload"
           v-model="files"
           :class="['ui', 'icon', 'basic', 'button']"
-          :post-action="$store.getters['instance/absoluteUrl']('/api/v1/uploads/')"
-          :multiple="true"
           :data="uploadData"
-          :drop="true"
-          :extensions="supportedExtensions"
-          name="audio_file"
-          :thread="1"
           @input-file="inputFile"
         >
           <i class="upload icon" />&nbsp;

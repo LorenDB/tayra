@@ -583,13 +583,7 @@ const labels = computed(() => ({
           ref="upload"
           v-model="files"
           :class="['ui', 'icon', 'basic', 'button', 'channels', {hidden: step === 3}]"
-          :post-action="$store.getters['instance/absoluteUrl']('/api/v1/uploads/')"
-          :multiple="true"
           :data="baseImportMetadata"
-          :drop="true"
-          :extensions="$store.state.ui.supportedExtensions"
-          name="audio_file"
-          :thread="1"
           @input-file="beforeFileUpload"
         >
           <div>
