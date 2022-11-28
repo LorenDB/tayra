@@ -28,10 +28,14 @@ const equalizerFilters = [
   GAIN_NODE
 ]
 
+let lastNode: IAudioNode<IAudioContext> | null = null
 export const connectAudioSource = (sourceNode: IAudioNode<IAudioContext>) => {
   for (const filter of equalizerFilters) {
+    if (lastNode !== null) filter.disconnect(lastNode)
     sourceNode.connect(filter)
   }
+
+  lastNode = sourceNode
 }
 
 export const createAudioSource = (sourceElement: HTMLAudioElement) => {
