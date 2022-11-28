@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { SupportedLanguages } from '~/locales'
+
 import SemanticModal from '~/components/semantic/Modal.vue'
 import useThemeList from '~/composables/useThemeList'
 import useTheme from '~/composables/useTheme'
@@ -27,7 +29,7 @@ const show = useVModel(props, 'show', emit)
 const { theme } = useTheme()
 const themes = useThemeList()
 
-const { t } = useI18n()
+const { t, locale: i18nLocale } = useI18n()
 const labels = computed(() => ({
   header: t('components.common.UserModal.header.options'),
   profile: t('components.common.UserModal.link.profile'),
@@ -48,6 +50,8 @@ const labels = computed(() => ({
   notifications: t('components.common.UserModal.link.notifications'),
   useOtherInstance: t('components.common.UserModal.button.switchInstance')
 }))
+
+const locale = computed(() => SUPPORTED_LOCALES[i18nLocale.value as SupportedLanguages])
 </script>
 
 <template>
@@ -97,7 +101,7 @@ const labels = computed(() => ({
               <span class="left colon symbol" />
             </span>
             <div class="right floated">
-              <span class="user-modal list-item">{{ SUPPORTED_LOCALES[$i18n.locale] }}</span>
+              <span class="user-modal list-item">{{ locale }}</span>
               <i class="action-hint chevron right icon" />
             </div>
           </div>
