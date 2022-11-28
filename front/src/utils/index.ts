@@ -4,22 +4,27 @@ import { startCase } from 'lodash-es'
 
 export function parseAPIErrors (responseData: APIErrorResponse, parentField?: string): string[] {
   const errors = []
+
+  const getErrorMessage = (err: string, fieldName?: string) => err.toLocaleLowerCase().includes('this field ')
+    ? `${fieldName}: ${err}`
+    : err
+
   for (const [field, value] of Object.entries(responseData)) {
     let fieldName = startCase(field.replace(/_/g, ' '))
     if (parentField) {
       fieldName = `${parentField} - ${fieldName}`
     }
 
-    if (Array.isArray(value)) {
-      errors.push(...value.map(err => {
-        if (typeof err === 'string') {
-          return err.toLocaleLowerCase().includes('this field ')
-            ? `${fieldName}: ${err}`
-            : err
-        }
+    if (typeof value === 'string') {
+      errors.push(getErrorMessage(value, fieldName))
+      continue
+    }
 
-        return startCase(err.code.replace(/_/g, ' '))
-      }))
+    if (Array.isArray(value)) {
+      errors.push(...value.map(err => typeof err === 'string'
+        ? getErrorMessage(err, fieldName)
+        : startCase(err.code.replace(/_/g, ' '))
+      ))
 
       continue
     }

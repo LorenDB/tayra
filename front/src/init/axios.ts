@@ -117,18 +117,27 @@ export const install: InitModule = ({ store, router }) => {
     return Promise.reject(error)
   })
 
-  const refreshAuth = (failedRequest: AxiosError) => {
+  const refreshAuth = async (failedRequest: AxiosError) => {
     if (store.state.auth.oauth.accessToken) {
       console.log('Failed request, refreshing auth…')
-      // maybe the token was expired, let's try to refresh it
-      return store.dispatch('auth/refreshOauthToken').then(() => {
-        if (failedRequest.response) {
-          failedRequest.response.config.headers ??= {}
-          failedRequest.response.config.headers.Authorization = store.getters['auth/header']
+
+      try {
+        // maybe the token was expired, let's try to refresh it
+        await store.dispatch('auth/refreshOauthToken')
+      } catch (error) {
+        if ((error as BackendError).backendErrors.includes('invalid_grant')) {
+          setTimeout(() => store.dispatch('auth/logout'), 0)
         }
 
-        return Promise.resolve()
-      })
+        return Promise.reject(error)
+      }
+
+      if (failedRequest.response) {
+        failedRequest.response.config.headers ??= {}
+        failedRequest.response.config.headers.Authorization = store.getters['auth/header']
+      }
+
+      return Promise.resolve()
     }
 
     return Promise.resolve()

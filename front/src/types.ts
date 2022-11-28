@@ -213,7 +213,7 @@ export interface Listening {
 
 // API stuff
 // eslint-disable-next-line
-export interface APIErrorResponse extends Record<string, APIErrorResponse | string[] | { code: string }[]> {}
+export interface APIErrorResponse extends Record<string, APIErrorResponse | string | string[] | { code: string }[]> {}
 
 export interface BackendError extends AxiosError {
   isHandled: boolean
