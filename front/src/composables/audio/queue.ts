@@ -315,10 +315,21 @@ export const useQueue = createGlobalState(() => {
     if (localStorage.queue) {
       (async () => {
         const { queue: { currentIndex: index, tracks: oldTracks } } = JSON.parse(localStorage.queue) as { queue: { currentIndex: number, tracks: Track[] } }
+
+        const oldRadios = localStorage.radios
+
         if (oldTracks.length !== 0) {
           tracks.value.length = 0
           await enqueue(...oldTracks)
         }
+
+        // NOTE: There is a race condition between clearing queue and adding new tracks that resets the radio.
+        //       We need to reset the radio to the old state
+        try {
+          const radios = JSON.parse(oldRadios)
+          store.commit('radios/current', radios.radios.current)
+          store.commit('radios/running', radios.radios.running)
+        } catch (err) {}
 
         currentIndex.value = index
         delete localStorage.queue
