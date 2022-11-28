@@ -3,6 +3,7 @@ import type { BackendError } from '~/types'
 import type { RouteLocationRaw } from 'vue-router'
 
 import { ref, reactive, computed, onMounted, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useStore } from '~/store'
 
@@ -23,6 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
 const domain = location.hostname
 const { t } = useI18n()
 const store = useStore()
+const router = useRouter()
 
 const credentials = reactive({
   username: '',
@@ -47,6 +49,7 @@ const submit = async () => {
   try {
     if (domain === store.getters['instance/domain']) {
       await store.dispatch('auth/login', { credentials })
+      await router.push(props.next)
     } else {
       await store.dispatch('auth/oauthLogin', props.next)
     }

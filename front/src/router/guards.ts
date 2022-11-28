@@ -2,7 +2,6 @@
 import type { NavigationGuardNext, RouteLocationNamedRaw, RouteLocationNormalized } from 'vue-router'
 import type { Permission } from '~/store/auth'
 
-import router from '~/router'
 import store from '~/store'
 
 export const hasPermissions = (permission: Permission) => (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
@@ -16,7 +15,8 @@ export const hasPermissions = (permission: Permission) => (to: RouteLocationNorm
 
 export const requireLoggedIn = (fallbackLocation?: RouteLocationNamedRaw) => (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
   if (store.state.auth.authenticated) return next()
-  return next(fallbackLocation ?? { name: 'login', query: { next: router.currentRoute.value.fullPath } })
+  console.log('!', to)
+  return next(fallbackLocation ?? { name: 'login', query: { next: to.fullPath } })
 }
 
 export const requireLoggedOut = (fallbackLocation: RouteLocationNamedRaw) => (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
