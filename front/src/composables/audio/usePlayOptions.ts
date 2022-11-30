@@ -49,12 +49,12 @@ export default (props: PlayOptionsProps) => {
   const filterableArtist = computed(() => props.track?.artist ?? props.album?.artist ?? props.artist)
   const filterArtist = async () => store.dispatch('moderation/hide', { type: 'artist', target: filterableArtist.value })
 
-  const { t } = useI18n()
   const addMessage = (tracks: Track[]) => {
     if (!tracks.length) {
       return
     }
 
+    const { t } = useI18n()
     store.commit('ui/addMessage', {
       content: t('composables.audio.usePlayOptions.addToQueueMessage', tracks.length),
       date: new Date()
