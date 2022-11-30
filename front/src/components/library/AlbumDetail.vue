@@ -53,7 +53,7 @@ const paginatedDiscs = computed(() => props.object.tracks.slice(props.paginateBy
 
 <template>
   <div
-    v-if="isLoadingTracks"
+    v-if="!isLoadingTracks"
     class="ui vertical segment"
   >
     <h2 class="ui header">
