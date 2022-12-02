@@ -140,5 +140,9 @@ http {
             alias   /music/;
             add_header Access-Control-Allow-Origin '*';
         }
+
+        location /manifest.json {
+            return 302 /api/v1/instance/spa-manifest.json;
+        }
     }
 }
