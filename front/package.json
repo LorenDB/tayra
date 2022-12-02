@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --mode development",
-    "build:deployment": "vite build --base /front/",
+    "build:deployment": "vite build",
     "serve": "vite preview",
     "test": "vitest run",
     "test:unit": "vitest run",
