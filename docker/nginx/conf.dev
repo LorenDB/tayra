@@ -80,7 +80,7 @@ http {
             include /etc/nginx/funkwhale_proxy.conf;
             # This is needed if you have file import via upload enabled.
             client_max_body_size ${NGINX_MAX_BODY_SIZE};
-            proxy_pass   http://funkwhale-api/;
+            proxy_pass   http://funkwhale-api/api/;
         }
 
         location / {
