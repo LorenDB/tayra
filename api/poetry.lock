@@ -236,14 +236,14 @@ dev = ["Sphinx (==4.3.2)", "black (==22.3.0)", "build (==0.8.0)", "flake8 (==4.0
 
 [[package]]
 name = "boto3"
-version = "1.26.20"
+version = "1.26.21"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 
 [package.dependencies]
-botocore = ">=1.29.20,<1.30.0"
+botocore = ">=1.29.21,<1.30.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.6.0,<0.7.0"
 
@@ -252,7 +252,7 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.29.20"
+version = "1.29.21"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
@@ -2182,7 +2182,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "027a4e47bd4544183c31c6f55ad8c432ee36187bd30b436f55257a47886e7d04"
+content-hash = "a338303ba39e24678607ada1fa9867f04c0de78e50358052058377c71e9ef736"
 
 [metadata.files]
 aiohttp = [
@@ -2357,12 +2357,12 @@ bleach = [
     {file = "bleach-5.0.1.tar.gz", hash = "sha256:0d03255c47eb9bd2f26aa9bb7f2107732e7e8fe195ca2f64709fcf3b0a4a085c"},
 ]
 boto3 = [
-    {file = "boto3-1.26.20-py3-none-any.whl", hash = "sha256:6b2e04ea415f375f607e6c633f7699e6a56bdc35c294116c5a6dc02da6aaa2ba"},
-    {file = "boto3-1.26.20.tar.gz", hash = "sha256:0d61243999adaddee22855ada1fdf7fe3d89cc95821e82f3b3a9dbe56c1589ba"},
+    {file = "boto3-1.26.21-py3-none-any.whl", hash = "sha256:cd66fee0b1d533c69b6ba2b7f8d3825cb0f5459e2cdbc604e2fe9e9c0a15609c"},
+    {file = "boto3-1.26.21.tar.gz", hash = "sha256:311f1c7223f8298f3f175b581c56fad04ea4849a144c69934daf1658db4ae7dd"},
 ]
 botocore = [
-    {file = "botocore-1.29.20-py3-none-any.whl", hash = "sha256:7c26cb870d0cae26349df2926a7bf6277c1326db6d42c650807a519d50a83786"},
-    {file = "botocore-1.29.20.tar.gz", hash = "sha256:806dab6358b0b44d7b283f133aadd26846f31fab12c97d348a1849b3b5a36c74"},
+    {file = "botocore-1.29.21-py3-none-any.whl", hash = "sha256:ac620727f7b8c81e7c0c841d30be4a01a898e0b6aeed1ddf1ba653742d8f6319"},
+    {file = "botocore-1.29.21.tar.gz", hash = "sha256:02d1f864e13d219887cc35a3f6e197e9f52c47b0e8f568b3fbbf5f69e667c7f5"},
 ]
 cached-property = [
     {file = "cached-property-1.5.2.tar.gz", hash = "sha256:9fa5755838eecbb2d234c3aa390bd80fbd3ac6b6869109bfc1b499f7bd89a130"},
