@@ -168,9 +168,7 @@ else:
 FUNKWHALE_PROTOCOL = FUNKWHALE_PROTOCOL.lower()
 FUNKWHALE_HOSTNAME = FUNKWHALE_HOSTNAME.lower()
 FUNKWHALE_URL = f"{FUNKWHALE_PROTOCOL}://{FUNKWHALE_HOSTNAME}"
-FUNKWHALE_SPA_HTML_ROOT = env(
-    "FUNKWHALE_SPA_HTML_ROOT", default=FUNKWHALE_URL + "/front/"
-)
+FUNKWHALE_SPA_HTML_ROOT = env("FUNKWHALE_SPA_HTML_ROOT", default=FUNKWHALE_URL)
 """
 URL or path to the Web Application files.
 Funkwhale needs access to it so that it can inject <meta> tags relevant
