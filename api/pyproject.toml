@@ -75,7 +75,7 @@ Faker = "==15.3.4"
 coverage = { version = "==6.5.0", extras = ["toml"] }
 django-coverage-plugin = "==2.0.4"
 factory-boy = "==3.2.1"
-django-debug-toolbar = "==3.7.0"
+django-debug-toolbar = "==3.8.1"
 asynctest = "==0.13.0"
 aioresponses = "==0.7.3"
 prompt-toolkit = "==3.0.33"
