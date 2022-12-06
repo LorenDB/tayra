@@ -111,9 +111,13 @@ find_broken_links:
   image:
     name: lycheeverse/lychee
     entrypoint: [""]
+  cache:
+    paths:
+      - .lycheecache
   script:
     - >
       lychee
+      --cache
       --exclude-all-private
       --exclude-mail
       --exclude 'demo\.funkwhale\.audio'
