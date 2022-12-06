@@ -87,7 +87,7 @@ server {
         include /etc/nginx/funkwhale_proxy.conf;
         # This is needed if you have file import via upload enabled.
         client_max_body_size ${NGINX_MAX_BODY_SIZE};
-        proxy_pass   http://funkwhale-api/;
+        proxy_pass   http://funkwhale-api;
     }
 
     location / {
@@ -106,7 +106,7 @@ server {
 
     location /federation/ {
         include /etc/nginx/funkwhale_proxy.conf;
-        proxy_pass   http://funkwhale-api/federation/;
+        proxy_pass   http://funkwhale-api;
     }
 
     # You can comment this if you do not plan to use the Subsonic API.
@@ -117,7 +117,7 @@ server {
 
     location /.well-known/ {
         include /etc/nginx/funkwhale_proxy.conf;
-        proxy_pass   http://funkwhale-api/.well-known/;
+        proxy_pass   http://funkwhale-api;
     }
 
     location /media/ {
