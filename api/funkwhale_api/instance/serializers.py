@@ -201,11 +201,36 @@ class NodeInfo20Serializer(serializers.Serializer):
         return MetadataSerializer(obj).data
 
 
+class SpaManifestIconSerializer(serializers.Serializer):
+    src = serializers.CharField()
+    sizes = serializers.CharField()
+    type = serializers.CharField()
+
+
+class SpaManifestRelatedApplicationsSerializer(serializers.Serializer):
+    platform = serializers.CharField()
+    url = serializers.URLField()
+    id = serializers.CharField()
+
+
+class SpaManifestShortcutSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    url = serializers.CharField()
+    icons = SpaManifestIconSerializer(many=True, required=False)
+
+
 class SpaManifestSerializer(serializers.Serializer):
     name = serializers.CharField(default="Funkwhale")
     short_name = serializers.CharField(default="Funkwhale")
     display = serializers.CharField(required=False)
     background_color = serializers.CharField(required=False)
     lang = serializers.CharField(required=False)
+    categories = serializers.ListField(child=serializers.CharField(), required=False)
     description = serializers.CharField(required=False)
+    icons = SpaManifestIconSerializer(many=True, required=False)
     start_url = serializers.CharField(required=False)
+    prefer_related_applications = serializers.BooleanField(required=False)
+    related_applications = SpaManifestRelatedApplicationsSerializer(
+        many=True, required=False
+    )
+    shortcuts = SpaManifestShortcutSerializer(many=True, required=False)
