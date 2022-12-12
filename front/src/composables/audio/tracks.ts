@@ -165,6 +165,7 @@ export const useTracks = createGlobalState(() => {
     whenever(track, () => {
       createTrack(currentIndex.value)
     }, { immediate: true })
+
     syncRef(track, currentTrack, {
       direction: 'ltr'
     })

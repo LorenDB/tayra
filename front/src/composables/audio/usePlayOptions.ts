@@ -3,7 +3,7 @@ import type { ContentFilter } from '~/store/moderation'
 
 import { useCurrentElement } from '@vueuse/core'
 import { computed, markRaw, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { i18n } from '~/init/locale'
 import { useStore } from '~/store'
 
 import { usePlayer } from '~/composables/audio/player'
@@ -54,7 +54,7 @@ export default (props: PlayOptionsProps) => {
       return
     }
 
-    const { t } = useI18n()
+    const { t } = i18n.global
     store.commit('ui/addMessage', {
       content: t('composables.audio.usePlayOptions.addToQueueMessage', tracks.length),
       date: new Date()

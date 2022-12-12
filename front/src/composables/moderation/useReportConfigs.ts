@@ -1,7 +1,7 @@
 import type { EntityObjectType } from '~/types'
 import type { RouteLocationRaw } from 'vue-router'
 
-import { useI18n } from 'vue-i18n'
+import { i18n } from '~/init/locale'
 
 interface ModeratedField {
   id: string
@@ -23,7 +23,7 @@ export interface Entity {
 type Configs = Record<EntityObjectType, Entity>
 
 export default (): Configs => {
-  const { t } = useI18n()
+  const { t } = i18n.global
 
   const tags: ModeratedField = {
     id: 'tags',

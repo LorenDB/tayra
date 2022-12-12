@@ -1,6 +1,6 @@
 import type { Album, Artist, Content, Track, Actor } from '~/types'
 
-import { useI18n } from 'vue-i18n'
+import { i18n } from '~/init/locale'
 
 export interface ConfigField {
   id: string
@@ -24,7 +24,7 @@ const getContentValueRepr = (val: Content) => val.text
 
 // TODO: Get params from typescript type somehow?
 export default (): Configs => {
-  const { t } = useI18n()
+  const { t } = i18n.global
 
   const description: ConfigField = {
     id: 'description',
