@@ -1,18 +1,27 @@
+import type { NodeInfo } from '~/store/instance'
 import type { InitModule } from '~/types'
 
-import { watch } from 'vue'
+import { whenever } from '@vueuse/core'
+
 import axios from 'axios'
 
 export const install: InitModule = async ({ store, router }) => {
   await store.dispatch('instance/fetchFrontSettings')
-  watch(() => store.state.instance.instanceUrl, async () => {
+
+  const fetchNodeInfo = async () => {
     const [{ data }] = await Promise.all([
-      axios.get('instance/nodeinfo/2.0/'),
+      axios.get<NodeInfo>('instance/nodeinfo/2.0/'),
       store.dispatch('instance/fetchSettings')
     ])
 
+    if (data.metadata.library.music?.hours) {
+      data.metadata.library.music.hours = Math.floor(data.metadata.library.music.hours)
+    }
+
     store.commit('instance/nodeinfo', data)
-  })
+  }
+
+  whenever(() => store.state.instance.instanceUrl, fetchNodeInfo)
 
   const urlParams = new URLSearchParams(window.location.search)
   const serverUrl = urlParams.get('_server')
@@ -34,4 +43,6 @@ export const install: InitModule = async ({ store, router }) => {
     // TODO (wvffle): Check if it is really needed
     store.commit('instance/instanceUrl', store.state.instance.instanceUrl)
   }
+
+  return fetchNodeInfo()
 }

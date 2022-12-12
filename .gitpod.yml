@@ -45,7 +45,7 @@ tasks:
     before: cd front
     init: |
       yarn install
-    command: yarn dev --host 0.0.0.0 --base /front/
+    command: yarn dev --host 0.0.0.0 --base ./
 
   - name: Welcome to Funkwhale development!
     env:
