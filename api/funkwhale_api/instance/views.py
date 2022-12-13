@@ -4,6 +4,8 @@ import logging
 from cache_memoize import cache_memoize
 from django.conf import settings
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 from drf_spectacular.utils import extend_schema
 from dynamic_preferences.api import viewsets as preferences_viewsets
 from dynamic_preferences.api.serializers import GlobalPreferenceSerializer
@@ -55,6 +57,7 @@ class InstanceSettings(generics.GenericAPIView):
         return Response(data, status=200)
 
 
+@method_decorator(ensure_csrf_cookie, name="dispatch")
 class NodeInfo(views.APIView):
     permission_classes = []
     authentication_classes = []

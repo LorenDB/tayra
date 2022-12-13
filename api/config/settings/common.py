@@ -1173,7 +1173,7 @@ Examples:
 - ``^api/mycustompath/``
 
 """
-CSRF_USE_SESSIONS = True
+CSRF_USE_SESSIONS = False
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 ACCOUNT_USERNAME_BLACKLIST = [
