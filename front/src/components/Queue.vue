@@ -437,6 +437,7 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
         >
           <template #default="{ index, item, classlist }">
             <queue-item
+              v-if="index !== undefined"
               :data-index="index"
               :index="index"
               :source="item"

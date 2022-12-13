@@ -31,7 +31,12 @@ const equalizerFilters = [
 let lastNode: IAudioNode<IAudioContext> | null = null
 export const connectAudioSource = (sourceNode: IAudioNode<IAudioContext>) => {
   for (const filter of equalizerFilters) {
-    lastNode?.disconnect(filter)
+    try {
+      lastNode?.disconnect(filter)
+    } catch (e) {
+      // NOTE: The error is probably InvalidAccessError, because the nodes aren't connected. We just ignore it.
+    }
+
     sourceNode.connect(filter)
   }
 
