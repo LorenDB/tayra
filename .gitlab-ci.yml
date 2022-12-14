@@ -19,7 +19,7 @@ workflow:
     - if: $CI_COMMIT_BRANCH
 
 stages:
-  - deploy
+  - review
   - lint
   - test
   - build
@@ -27,7 +27,7 @@ stages:
 
 review_front:
   interruptible: true
-  stage: deploy
+  stage: review
   image: node:18-alpine
   when: manual
   allow_failure: true
@@ -66,7 +66,7 @@ review_front:
 
 review_docs:
   interruptible: true
-  stage: deploy
+  stage: review
   allow_failure: true
   image: python:3.11
   variables:
