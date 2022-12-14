@@ -1,4 +1,10 @@
 ---
+include:
+  - project: funkwhale/ci
+    file: /templates/pre-commit.yml
+  - project: funkwhale/ci
+    file: /templates/lychee.yml
+
 variables:
   PYTHONDONTWRITEBYTECODE: "true"
 
@@ -107,14 +113,7 @@ review_docs:
       when: manual
 
 find_broken_links:
-  stage: lint
-  needs: []
-  image:
-    name: lycheeverse/lychee
-    entrypoint: [""]
-  cache:
-    paths:
-      - .lycheecache
+  extends: [.lychee]
   script:
     - >
       lychee
@@ -142,19 +141,7 @@ changelog_snippet:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 pre-commit:
-  stage: lint
-  image: python:3.11
-  variables:
-    PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
-    PRE_COMMIT_HOME: $CI_PROJECT_DIR/.cache/pre-commit
-  cache:
-    paths:
-      - $PIP_CACHE_DIR
-      - $PRE_COMMIT_HOME
-  before_script:
-    - pip3 install pre-commit
-  script:
-    - pre-commit run --verbose --all --color=always --show-diff-on-failure
+  extends: [.pre-commit]
 
 eslint:
   interruptible: true
