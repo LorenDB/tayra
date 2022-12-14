@@ -11,6 +11,10 @@ variables:
     GIT_DEPTH: "5"
     FF_DISABLE_UMASK_FOR_DOCKER_EXECUTOR: "true"
 
+default:
+  tags:
+    - docker
+
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -58,8 +62,6 @@ review_front:
     paths:
       - front/node_modules
       - front/yarn.lock
-  tags:
-    - docker
   environment:
     name: review/front/$CI_COMMIT_REF_NAME
     url: http://$CI_PROJECT_NAMESPACE.pages.funkwhale.audio/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/index.html
@@ -92,8 +94,6 @@ review_docs:
     expire_in: 2 weeks
     paths:
       - docs-review
-  tags:
-    - docker
   environment:
     name: review/docs/$CI_COMMIT_REF_NAME
     url: http://$CI_PROJECT_NAMESPACE.pages.funkwhale.audio/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/docs-review/index.html
@@ -196,8 +196,6 @@ test_api:
     - poetry install --no-root
   script:
     - poetry run pytest --cov-report xml --cov-report term-missing:skip-covered --cov=funkwhale_api --junitxml=report.xml tests/
-  tags:
-    - docker
   artifacts:
     expire_in: 2 weeks
     reports:
@@ -273,8 +271,6 @@ build_openapi_schema:
     - poetry run python manage.py migrate
   script:
     - poetry run python manage.py spectacular --file ../docs/schema.yml
-  tags:
-    - docker
   artifacts:
     expire_in: 2 weeks
     paths:
@@ -315,8 +311,6 @@ build_documentation:
     - changes:
         - docs/**/*
       when: always
-  tags:
-    - docker
 
 build_front:
   stage: build
@@ -339,8 +333,6 @@ build_front:
     - tags@funkwhale/funkwhale
     - stable@funkwhale/funkwhale
     - develop@funkwhale/funkwhale
-  tags:
-    - docker
 
 build_api:
   stage: build
