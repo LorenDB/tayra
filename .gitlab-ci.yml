@@ -1,16 +1,8 @@
+---
 variables:
-  IMAGE_NAME: funkwhale/funkwhale
-  IMAGE: $IMAGE_NAME:$CI_COMMIT_REF_NAME
-  IMAGE_LATEST: $IMAGE_NAME:latest
-
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/pip-cache"
   PYTHONDONTWRITEBYTECODE: "true"
-  REVIEW_DOMAIN: preview.funkwhale.audio
-  REVIEW_INSTANCE_URL: https://funkwhale.juniorjpdj.pl
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
-  BUILD_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
+
+  PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
 
 workflow:
   rules:
@@ -33,6 +25,8 @@ review_front:
   when: manual
   allow_failure: true
   variables:
+    REVIEW_DOMAIN: preview.funkwhale.audio
+    REVIEW_INSTANCE_URL: https://funkwhale.juniorjpdj.pl
     BASE_URL: /-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/
     VUE_APP_ROUTER_BASE_URL: /-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/
     VUE_APP_INSTANCE_URL: $REVIEW_INSTANCE_URL
@@ -387,8 +381,19 @@ deploy_documentation:
 .docker_publish:
   stage: publish
   image: egon0/docker-with-buildx-and-git:bash
+  parallel:
+    matrix:
+      - COMPONENT: ["api", "front"]
   variables:
     IMAGE_NAME: funkwhale/$COMPONENT
+    IMAGE: $IMAGE_NAME:$CI_COMMIT_REF_NAME
+    IMAGE_LATEST: $IMAGE_NAME:latest
+
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+    BUILD_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
+
     FF_DISABLE_UMASK_FOR_DOCKER_EXECUTOR: "true"
   tags:
     - multiarch
@@ -414,15 +419,10 @@ docker_publish_stable_release:
     - cd $COMPONENT
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
     - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE $DOCKER_LATEST_TAG -t $IMAGE_NAME:$major -t $IMAGE_NAME:$minor .
-  parallel:
-    matrix:
-      - COMPONENT: ["api", "front"]
 
 docker_publish_unstable_release:
   # Publish a docker image for releases
   extends: .docker_publish
-  variables:
-    IMAGE_NAME: funkwhale/$COMPONENT
   rules:
     - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_NAME !~ /^[0-9]+(.[0-9]+){1,2}$/
   script:
@@ -430,15 +430,10 @@ docker_publish_unstable_release:
     - cd $COMPONENT
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
     - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE .
-  parallel:
-    matrix:
-      - COMPONENT: ["api", "front"]
 
 docker_publish_non-release:
   # Publish a docker image for each commit on develop
   extends: .docker_publish
-  variables:
-    IMAGE_NAME: funkwhale/$COMPONENT
   only:
     - develop@funkwhale/funkwhale
     - stable@funkwhale/funkwhale
@@ -447,6 +442,3 @@ docker_publish_non-release:
     - cd $COMPONENT
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
     - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE .
-  parallel:
-    matrix:
-      - COMPONENT: ["api", "front"]
