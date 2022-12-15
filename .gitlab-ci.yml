@@ -419,7 +419,6 @@ docker_publish_non-release:
     - develop@funkwhale/funkwhale
     - stable@funkwhale/funkwhale
   script:
-    - ./scripts/set-api-build-metadata.sh $CI_COMMIT_SHORT_SHA
     - cd $COMPONENT
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
     - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE .
