@@ -129,11 +129,22 @@ const paginateOptions = computed(() => sortedUniq([12, 25, 50, paginateBy.value]
             v-if="isAuthenticated && hasFavorites"
             :type="'favorites'"
           />
-          <radio-card :type="'random'" />
+          <radio-card
+            v-if="scope === 'all'"
+            :type="'random'"
+          />
+          <radio-card
+            v-if="scope === 'me'"
+            :type="'random_library'"
+          />
           <radio-card :type="'recently-added'" />
           <radio-card
-            v-if="$store.state.auth.authenticated"
+            v-if="$store.state.auth.authenticated && scope === 'all'"
             :type="'less-listened'"
+          />
+          <radio-card
+            v-if="$store.state.auth.authenticated && scope === 'me'"
+            :type="'less-listened_library'"
           />
         </div>
       </div>

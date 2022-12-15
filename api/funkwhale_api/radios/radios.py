@@ -119,6 +119,17 @@ class RandomRadio(SessionRadio):
         return qs.filter(artist__content_category="music").order_by("?")
 
 
+@registry.register(name="random_library")
+class RandomLibraryRadio(SessionRadio):
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        tracks_ids = self.session.user.actor.attributed_tracks.all().values_list(
+            "id", flat=True
+        )
+        query = Q(artist__content_category="music") & Q(pk__in=tracks_ids)
+        return qs.filter(query).order_by("?")
+
+
 @registry.register(name="favorites")
 class FavoritesRadio(SessionRadio):
     def get_queryset_kwargs(self):
@@ -321,6 +332,22 @@ class LessListenedRadio(SessionRadio):
             .exclude(pk__in=listened)
             .order_by("?")
         )
+
+
+@registry.register(name="less-listened_library")
+class LessListenedLibraryRadio(SessionRadio):
+    def clean(self, instance):
+        instance.related_object = instance.user
+        super().clean(instance)
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        listened = self.session.user.listenings.all().values_list("track", flat=True)
+        tracks_ids = self.session.user.actor.attributed_tracks.all().values_list(
+            "id", flat=True
+        )
+        query = Q(artist__content_category="music") & Q(pk__in=tracks_ids)
+        return qs.filter(query).exclude(pk__in=listened).order_by("?")
 
 
 @registry.register(name="actor-content")

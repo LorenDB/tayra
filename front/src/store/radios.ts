@@ -52,6 +52,10 @@ const store: Module<State, RootState> = {
           name: 'Random',
           description: "Totally random picks, maybe you'll discover new things?"
         },
+        random_library: {
+          name: 'Random',
+          description: 'Random picks from your library, be surprise by yourself ?'
+        },
         favorites: {
           name: 'Favorites',
           description: 'Play your favorites tunes in a never-ending happiness loop.'
@@ -59,6 +63,10 @@ const store: Module<State, RootState> = {
         'less-listened': {
           name: 'Less listened',
           description: "Listen to tracks you usually don't. It's time to restore some balance."
+        },
+        'less-listened_library': {
+          name: 'Less listened',
+          description: "Listen to tracks from your library you usually don't. It's time to restore some balance."
         },
         'recently-added': {
           name: 'Recently Added',
