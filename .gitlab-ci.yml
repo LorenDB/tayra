@@ -44,11 +44,9 @@ review_front:
   when: manual
   allow_failure: true
   variables:
-    REVIEW_DOMAIN: preview.funkwhale.audio
-    REVIEW_INSTANCE_URL: https://funkwhale.juniorjpdj.pl
     BASE_URL: /-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/
     VUE_APP_ROUTER_BASE_URL: /-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/
-    VUE_APP_INSTANCE_URL: $REVIEW_INSTANCE_URL
+    VUE_APP_INSTANCE_URL: https://demo.funkwhale.audio
     NODE_ENV: review
   before_script:
     - apk add --no-cache jq bash coreutils python3
