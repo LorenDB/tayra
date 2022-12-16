@@ -119,6 +119,7 @@ find_broken_links:
       --exclude-all-private
       --exclude-mail
       --exclude 'demo\.funkwhale\.audio'
+      --exclude 'nginx\.com'
       --exclude-path 'docs/_templates/'
       -- .
 
