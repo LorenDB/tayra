@@ -132,19 +132,19 @@ find_broken_links:
 
 require_changelog:
   interruptible: true
-  image: alpine:3.17
   stage: lint
-  before_script:
-    - apk add git
-    - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
-  script:
-    - git diff --name-only FETCH_HEAD | grep "changes/changelog.d/*"
   rules:
-    - if: $CI_COMMIT_AUTHOR == 'Renovate Bot <bot@dev.funkwhale.audio>'
+    # Don't run on merge request that mention NOCHANGELOG or renovate bot commits
+    - if: >
+        $CI_MERGE_REQUEST_TITLE =~ /NOCHANGELOG/ ||
+        $CI_COMMIT_AUTHOR == "Renovate Bot <bot@dev.funkwhale.audio>"
       when: never
-    - if: $CI_MERGE_REQUEST_TITLE =~ /NOCHANGELOG/
-      when: never
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+  image: python:3.11
+  script:
+    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - git diff --name-only FETCH_HEAD | grep "changes/changelog.d/*"
 
 pre-commit:
   extends: [.pre-commit]
