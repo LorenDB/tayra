@@ -130,7 +130,7 @@ find_broken_links:
       --exclude-path 'docs/_templates/'
       -- . || exit $?
 
-changelog_snippet:
+require_changelog:
   interruptible: true
   image: alpine:3.17
   stage: lint
@@ -161,7 +161,7 @@ lint_api:
   script:
     - make lint
 
-eslint:
+lint_front:
   interruptible: true
   image: node:18-alpine
   stage: lint
@@ -254,7 +254,7 @@ test_api:
 #    - if: $CI_COMMIT_REF_PROTECTED == "true"
 #      when: always
 
-build_openapi_schema:
+build_api_schema:
   stage: build
   image: $CI_REGISTRY/funkwhale/backend-test-docker:3.11
   services:
@@ -283,11 +283,11 @@ build_openapi_schema:
     paths:
       - docs/schema.yml
 
-build_documentation:
+build_docs:
   stage: build
   image: python:3.11
   needs:
-    - job: build_openapi_schema
+    - job: build_api_schema
       artifacts: true
   variables:
     BUILD_PATH: "../public"
@@ -360,11 +360,11 @@ build_api:
     - stable@funkwhale/funkwhale
     - develop@funkwhale/funkwhale
 
-deploy_documentation:
+deploy_docs:
   stage: publish
   image: alpine
   needs:
-    - job: build_documentation
+    - job: build_docs
       artifacts: true
   before_script:
     - apk add openssh-client rsync
@@ -406,13 +406,11 @@ deploy_documentation:
     paths:
       - ~/.cargo
 
-docker_publish_stable_release:
-  # Publish a docker image for releases
+docker_stable:
   extends: .docker_publish
   rules:
     - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_NAME =~ /^[0-9]+(.[0-9]+){1,2}$/
   script:
-    # Check if this is the latest release
     - ./docs/get-releases-json.py | scripts/is-docker-latest.py $CI_COMMIT_TAG - && export DOCKER_LATEST_TAG="-t $IMAGE_LATEST" || export DOCKER_LATEST_TAG=;
     - export major="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1)"
     - export minor="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1,2)"
@@ -420,19 +418,16 @@ docker_publish_stable_release:
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
     - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE $DOCKER_LATEST_TAG -t $IMAGE_NAME:$major -t $IMAGE_NAME:$minor .
 
-docker_publish_unstable_release:
-  # Publish a docker image for releases
+docker_unstable:
   extends: .docker_publish
   rules:
     - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_NAME !~ /^[0-9]+(.[0-9]+){1,2}$/
   script:
-    # Check if this is the latest release
     - cd $COMPONENT
     - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
     - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE .
 
-docker_publish_non-release:
-  # Publish a docker image for each commit on develop
+docker_dev:
   extends: .docker_publish
   only:
     - develop@funkwhale/funkwhale
