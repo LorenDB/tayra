@@ -652,7 +652,7 @@ def check_single_remote_instance_availability(domain):
 
     if "version" in nodeinfo.keys():
         domain.reachable = True
-        domain.last_successful_contact = datetime.datetime.now()
+        domain.last_successful_contact = timezone.now()
         domain.save()
         return domain.reachable
     else:
