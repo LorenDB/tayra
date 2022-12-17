@@ -1,0 +1,48 @@
+{
+  "name": "Funkwhale",
+  "categories": ["music", "entertainment"],
+  "short_name": "Funkwhale",
+  "description": "Your free and federated audio platform",
+  "icons": [
+    {
+      "src": "android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=audio.funkwhale.ffa",
+      "id": "audio.funkwhale.ffa"
+    },
+    {
+      "platform": "f-droid",
+      "url": "https://f-droid.org/en/packages/audio.funkwhale.ffa/",
+      "id": "audio.funkwhale.ffa"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Search",
+      "url": "/search",
+      "icons": []
+    },
+    {
+      "name": "Library",
+      "url": "/library",
+      "icons": []
+    },
+    {
+      "name": "Channels",
+      "url": "/subscriptions",
+      "icons": []
+    }
+  ]
+}

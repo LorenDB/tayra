@@ -62,3 +62,13 @@ repos:
     rev: v0.8.0.4
     hooks:
       - id: shellcheck
+
+  - repo: local
+    hooks:
+      - id: pwa-manifest.json
+        name: pwa-manifest.json
+        description: Sync pwa-manifest.json
+        entry: scripts/sync-pwa-manifest.sh
+        pass_filenames: false
+        language: script
+        files: pwa-manifest.json$

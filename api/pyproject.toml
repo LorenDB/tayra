@@ -14,9 +14,10 @@ packages = [
     { include = "config" },
 ]
 include = [
-    { path = "*.txt" },
-    { path = "*.png" },
-    { path = "*.html" },
+  { path = "*.html" },
+  { path = "*.json" },
+  { path = "*.png" },
+  { path = "*.txt" },
 ]
 exclude = ["tests"]
 

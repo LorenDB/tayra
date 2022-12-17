@@ -1,8 +1,8 @@
 import json
 import logging
+from pathlib import Path
 
 from cache_memoize import cache_memoize
-from django.conf import settings
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -14,7 +14,7 @@ from rest_framework import generics, views
 from rest_framework.response import Response
 
 from funkwhale_api import __version__ as funkwhale_version
-from funkwhale_api.common import middleware, preferences
+from funkwhale_api.common import preferences
 from funkwhale_api.common.renderers import ActivityStreamRenderer
 from funkwhale_api.federation.actors import get_service_actor
 from funkwhale_api.federation.models import Domain
@@ -118,6 +118,10 @@ class NodeInfo(views.APIView):
         )
 
 
+PWA_MANIFEST_PATH = Path(__file__).parent / "pwa-manifest.json"
+PWA_MANIFEST: dict = json.loads(PWA_MANIFEST_PATH.read_text(encoding="utf-8"))
+
+
 class SpaManifest(generics.GenericAPIView):
     permission_classes = []
     authentication_classes = []
@@ -126,18 +130,15 @@ class SpaManifest(generics.GenericAPIView):
 
     @extend_schema(operation_id="get_spa_manifest")
     def get(self, request):
-        existing_manifest = middleware.get_spa_file(
-            settings.FUNKWHALE_SPA_HTML_ROOT, "manifest.json"
-        )
-        parsed_manifest = json.loads(existing_manifest)
+        manifest = PWA_MANIFEST.copy()
         instance_name = preferences.get("instance__name")
         if instance_name:
-            parsed_manifest["short_name"] = instance_name
-            parsed_manifest["name"] = instance_name
+            manifest["short_name"] = instance_name
+            manifest["name"] = instance_name
         instance_description = preferences.get("instance__short_description")
         if instance_description:
-            parsed_manifest["description"] = instance_description
-        serializer = self.get_serializer(parsed_manifest)
+            manifest["description"] = instance_description
+        serializer = self.get_serializer(manifest)
         return Response(
             serializer.data, status=200, content_type="application/manifest+json"
         )

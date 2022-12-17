@@ -1,4 +1,4 @@
-import json
+from unittest import mock
 
 from django.urls import reverse
 
@@ -38,20 +38,21 @@ def test_admin_settings_correct_permission(db, logged_in_api_client, preferences
     assert len(response.data) == len(preferences.all())
 
 
-def test_manifest_endpoint(api_client, mocker, preferences, tmp_path, settings):
-    settings.FUNKWHALE_SPA_HTML_ROOT = str(tmp_path / "index.html")
-    preferences["instance__name"] = "Test pod"
-    preferences["instance__short_description"] = "Test description"
-    base_payload = {}
-    manifest = tmp_path / "manifest.json"
-    expected = {
-        "name": "Test pod",
-        "short_name": "Test pod",
-        "description": "Test description",
-    }
-    manifest.write_bytes(json.dumps(base_payload).encode())
+def test_manifest_endpoint(api_client, preferences):
+    with mock.patch(
+        "funkwhale_api.instance.views.PWA_MANIFEST",
+        {"lang": "unchanged"},
+    ):
+        preferences["instance__name"] = "Test pod"
+        preferences["instance__short_description"] = "Test description"
+        expected = {
+            "lang": "unchanged",
+            "name": "Test pod",
+            "short_name": "Test pod",
+            "description": "Test description",
+        }
 
-    url = reverse("api:v1:instance:spa-manifest")
-    response = api_client.get(url)
-    assert response.status_code == 200
-    assert response.data == expected
+        url = reverse("api:v1:instance:spa-manifest")
+        response = api_client.get(url)
+        assert response.status_code == 200
+        assert response.data == expected
