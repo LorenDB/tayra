@@ -9,6 +9,7 @@ variables:
   PYTHONDONTWRITEBYTECODE: "true"
 
   PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
+  YARN_CACHE_FOLDER: $CI_PROJECT_DIR/.cache/yarn
 
 .shared_variables:
   # Keep the git files permissions during job setup
@@ -154,23 +155,20 @@ lint_api:
 
 lint_front:
   interruptible: true
-  image: node:18-alpine
   stage: lint
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [front/**/*]
+
+  image: $CI_REGISTRY/funkwhale/ci/node-python:18
+  cache:
+    paths: [$YARN_CACHE_FOLDER]
   before_script:
     - cd front
-    - apk add --no-cache jq bash coreutils python3
-    - yarn install
+    - yarn install --frozen-lockfile
   script:
     - yarn lint --max-warnings 0
     - yarn lint:tsc
-  cache:
-    key: "$CI_PROJECT_ID__eslint_npm_cache"
-    paths:
-      - front/node_modules
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - front/**/*
 
 test_api:
   interruptible: true
