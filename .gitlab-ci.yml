@@ -42,38 +42,34 @@ stages:
 
 review_front:
   interruptible: true
-  stage: review
-  image: node:18-alpine
-  when: manual
   allow_failure: true
+  stage: review
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
+
+  image: $CI_REGISTRY/funkwhale/ci/node-python:18
   variables:
     BASE_URL: /-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/
     VUE_APP_ROUTER_BASE_URL: /-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/
     VUE_APP_INSTANCE_URL: https://demo.funkwhale.audio
     NODE_ENV: review
+  environment:
+    name: review/front/$CI_COMMIT_REF_NAME
+    url: http://$CI_PROJECT_NAMESPACE.pages.funkwhale.audio/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/index.html
+  cache:
+    paths: [$YARN_CACHE_FOLDER]
   before_script:
-    - apk add --no-cache jq bash coreutils python3
-    - rm -rf front-review
     - mkdir front-review
     - cd front
+    - yarn install --frozen-lockfile
   script:
-    - yarn install
-    # this is to ensure we don't have any errors in the output,
-    # cf https://dev.funkwhale.audio/funkwhale/funkwhale/issues/169
-    - yarn run build --base ./ | tee /dev/stderr | (! grep -i 'ERROR in')
+    - yarn run build --base ./
     - cp -r dist/* ../front-review
   artifacts:
     expire_in: 2 weeks
     paths:
       - front-review
-  cache:
-    key: "funkwhale__front_dependencies"
-    paths:
-      - front/node_modules
-      - front/yarn.lock
-  environment:
-    name: review/front/$CI_COMMIT_REF_NAME
-    url: http://$CI_PROJECT_NAMESPACE.pages.funkwhale.audio/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/front-review/index.html
 
 review_docs:
   interruptible: true
