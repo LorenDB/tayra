@@ -92,7 +92,7 @@
     "sinon": "15.0.1",
     "typescript": "4.9.4",
     "utility-types": "3.10.0",
-    "vite": "4.0.1",
+    "vite": "4.0.2",
     "vite-plugin-pwa": "0.14.0",
     "vite-plugin-vue-inspector": "1.1.4",
     "vitest": "0.25.8",
