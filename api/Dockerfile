@@ -4,11 +4,17 @@ FROM alpine:3.17 as pre-build
 # dependencies. This is only required until alpine 3.16 is released, since this
 # allows us to install poetry as package.
 
-RUN apk add --no-cache python3 py3-cryptography py3-pip poetry
-COPY pyproject.toml poetry.lock /
-RUN poetry export --without-hashes > requirements.txt
-RUN poetry export --with dev --without-hashes > dev-requirements.txt
+RUN set -eux; \
+  apk add --no-cache \
+  poetry \
+  py3-cryptography \
+  py3-pip \
+  python3
 
+COPY pyproject.toml poetry.lock /
+RUN set -eux; \
+  poetry export --without-hashes > requirements.txt; \
+  poetry export --without-hashes --with dev > dev-requirements.txt;
 
 FROM alpine:3.17 as builder
 
@@ -40,9 +46,8 @@ RUN set -eux; \
   py3-watchfiles=0.18.1-r0 \
   python3-dev
 
-# create virtual env for next stage
+# Create virtual env
 RUN python3 -m venv --system-site-packages /venv
-# emulate activation by prefixing PATH
 ENV PATH="/venv/bin:/root/.local/bin:$PATH" VIRTUAL_ENV=/venv
 
 COPY --from=pre-build /requirements.txt /requirements.txt
@@ -100,7 +105,6 @@ RUN set -eux; \
   python3
 
 COPY --from=builder /venv /venv
-# emulate activation by prefixing PATH
 ENV PATH="/venv/bin:$PATH"
 
 COPY . /app
