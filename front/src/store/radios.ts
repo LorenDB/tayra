@@ -54,7 +54,7 @@ const store: Module<State, RootState> = {
         },
         random_library: {
           name: 'Random',
-          description: 'Random picks from your library, be surprise by yourself ?'
+          description: 'Play something random from your library. Maybe you\'ll surprise yourself!'
         },
         favorites: {
           name: 'Favorites',
