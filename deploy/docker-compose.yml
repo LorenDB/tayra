@@ -81,7 +81,7 @@ services:
 
       - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_PATH-/music}:ro"
       - "${MEDIA_ROOT}:${MEDIA_ROOT}:ro"
-      - "${STATIC_ROOT}:${STATIC_ROOT}:ro"
+      - "${STATIC_ROOT}:/usr/share/nginx/html/staticfiles:ro"
     ports:
       # override those variables in your .env file if needed
       - "${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT}:80"
