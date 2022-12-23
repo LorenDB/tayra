@@ -112,4 +112,4 @@ RUN set -eux; \
 ENV CACHE_URL="redis://redis:6379/0"
 ENV CELERY_BROKER_URL="redis://redis:6379/0"
 
-CMD ["./compose/django/server.sh"]
+CMD ["./docker/server.sh"]
