@@ -327,23 +327,20 @@ build_front:
 
 build_api:
   stage: build
-  image: bash
+
+  image: $CI_REGISTRY/funkwhale/ci/python:3.11
   variables:
     <<: *keep_git_files_permissions
   script:
     - rm -rf api/tests
     - >
-      if [ "$CI_COMMIT_REF_NAME" == "develop" ] || [ "$CI_COMMIT_REF_NAME" == "stable" ]; then
+      if [[ "$CI_COMMIT_REF_NAME" =~ ^develop|stable$ ]]; then
         ./scripts/set-api-build-metadata.sh $CI_COMMIT_SHORT_SHA;
       fi
   artifacts:
     name: api_${CI_COMMIT_REF_NAME}
     paths:
       - api
-  only:
-    - tags@funkwhale/funkwhale
-    - stable@funkwhale/funkwhale
-    - develop@funkwhale/funkwhale
 
 deploy_docs:
   stage: publish
