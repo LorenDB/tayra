@@ -305,25 +305,21 @@ build_docs:
 
 build_front:
   stage: build
-  image: node:18-alpine
+
+  image: $CI_REGISTRY/funkwhale/ci/node-python:18
   variables:
     <<: *keep_git_files_permissions
+  cache:
+    paths: [$YARN_CACHE_FOLDER]
   before_script:
-    - apk add --no-cache jq bash coreutils python3
     - cd front
+    - yarn install --frozen-lockfile
   script:
-    - yarn install
-    # this is to ensure we don't have any errors in the output,
-    # cf https://dev.funkwhale.audio/funkwhale/funkwhale/issues/169
-    - yarn run build:deployment | tee /dev/stderr | (! grep -i 'ERROR in')
+    - yarn run build:deployment
   artifacts:
     name: front_${CI_COMMIT_REF_NAME}
     paths:
-      - front/dist/
-  only:
-    - tags@funkwhale/funkwhale
-    - stable@funkwhale/funkwhale
-    - develop@funkwhale/funkwhale
+      - front/dist
 
 build_api:
   stage: build
