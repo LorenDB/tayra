@@ -178,7 +178,7 @@ const uploadedFiles = computed(() => {
 
     if (file.response?.uuid) {
       const uuid = file.response.uuid as string
-      data.metadata = uploadImportData[uuid] ?? uploadData[uuid].import_metadata ?? {}
+      data.metadata = uploadImportData[uuid] ?? uploadData[uuid]?.import_metadata ?? {}
       data.removed = removed.has(uuid)
     }
 
