@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const newValues = reactive<Values>({
-  ...(props.values ?? props.upload.import_metadata ?? {}) as Values
+  ...(props.values ?? props.upload.import_metadata ?? { description: '' }) as Values
 })
 
 const isLoading = computed(() => !props.upload)

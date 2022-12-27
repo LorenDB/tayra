@@ -153,7 +153,7 @@ const beforeFileUpload = (newFile: VueUploadItem) => {
   if (remainingSpace.value < (newFile.size ?? Infinity) / 1e6) {
     newFile.error = 'denied'
   } else {
-    upload.value.active = true
+    newFile.active = true
   }
 }
 
