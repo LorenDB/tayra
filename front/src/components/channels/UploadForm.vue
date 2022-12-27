@@ -399,6 +399,34 @@ watchEffect(() => {
 const labels = computed(() => ({
   editTitle: t('components.channels.UploadForm.button.edit')
 }))
+
+const isLoading = ref(false)
+const publish = async () => {
+  isLoading.value = true
+
+  errors.value = []
+
+  try {
+    await axios.post('uploads/action/', {
+      action: 'publish',
+      objects: uploadedFiles.value.map((file) => file.response?.uuid)
+    })
+
+    store.commit('channels/publish', {
+      uploads: uploadedFiles.value.map((file) => ({ ...file.response, import_status: 'pending' })),
+      channel: selectedChannel.value
+    })
+  } catch (error) {
+    errors.value = (error as BackendError).backendErrors
+  }
+
+  isLoading.value = false
+}
+
+defineExpose({
+  step,
+  publish
+})
 </script>
 
 <template>
