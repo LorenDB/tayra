@@ -64,29 +64,6 @@ const attributedToUrl = computed(() => router.resolve({
   }
 })?.href)
 
-const escapeHtml = (unsafe: string) => document.createTextNode(unsafe).textContent ?? ''
-const subtitle = computed(() => {
-  if (track.value?.attributed_to) {
-    return t(
-      'Uploaded by <a class="internal" href="%{ uploaderUrl }">%{ uploader }</a> on <time title="%{ date }" datetime="%{ date }">%{ prettyDate }</time>',
-      {
-        uploaderUrl: attributedToUrl.value,
-        uploader: escapeHtml(`@${track.value.attributed_to.full_username}`),
-        date: escapeHtml(track.value.creation_date),
-        prettyDate: escapeHtml(momentFormat(new Date(track.value.creation_date), 'LL'))
-      }
-    )
-  }
-
-  return t(
-    'Uploaded on <time title="%{ date }" datetime="%{ date }">%{ prettyDate }</time>',
-    {
-      date: escapeHtml(track.value?.creation_date ?? ''),
-      prettyDate: escapeHtml(momentFormat(new Date(track.value?.creation_date ?? '1970-01-01'), 'LL'))
-    }
-  )
-})
-
 const { t } = useI18n()
 const labels = computed(() => ({
   title: t('components.library.TrackBase.title'),
@@ -144,10 +121,36 @@ const remove = async () => {
             <div class="eight wide left aligned column">
               <h1 class="ui header">
                 {{ track.title }}
-                <sanitized-html
-                  class="sub header"
-                  :html="subtitle"
-                />
+
+                <i18n-t
+                  v-if="track.attributed_to"
+                  keypath="components.library.TrackBase.subtitle.with-uploader"
+                >
+                  <a
+                    class="internal"
+                    :href="attributedToUrl"
+                  >
+                    <span class="symbol at left" />
+                    {{ track.attributed_to.full_username }}
+                  </a>
+                  <time
+                    :title="track.creation_date"
+                    :datetime="track.creation_date"
+                  >
+                    {{ momentFormat(new Date(track.creation_date), 'LL') }}
+                  </time>
+                </i18n-t>
+                <i18n-t
+                  v-else
+                  keypath="components.library.TrackBase.subtitle.without-uploader"
+                >
+                  <time
+                    :title="track.creation_date"
+                    :datetime="track.creation_date"
+                  >
+                    {{ momentFormat(new Date(track.creation_date), 'LL') }}
+                  </time>
+                </i18n-t>
               </h1>
             </div>
             <div class="eight wide right aligned column button-group">

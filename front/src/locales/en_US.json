@@ -1882,6 +1882,10 @@
       },
       "TrackBase": {
         "title": "Track",
+        "subtitle": {
+          "with-uploader": "Uploaded by {0} on {1}",
+          "without-uploader": "Uploaded on {0}"
+        },
         "button": {
           "download": "Download",
           "more": "More…",
