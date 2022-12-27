@@ -91,9 +91,12 @@ const fetchData = async () => {
 }
 
 watch(() => props.id, fetchData, { immediate: true })
-watchEffect(() => {
-  const publication = store.state.channels.latestPublication
-  if (publication?.uploads && publication.channel.uuid === object.value?.uuid) {
+
+const uuid = computed(() => store.state.channels.latestPublication?.channel.uuid)
+watch([uuid, object], ([uuid, object], [lastUuid, lastObject]) => {
+  if (object?.uuid && object.uuid === lastObject?.uuid) return
+
+  if (uuid && uuid === object?.uuid) {
     fetchData()
   }
 })
