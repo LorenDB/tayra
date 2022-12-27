@@ -543,7 +543,7 @@ defineExpose({
                 <i class="warning sign icon" />
               </div>
               <div
-                v-else-if="file.active && !file.uploaded"
+                v-else-if="file.active && !file.response"
                 class="ui active slow inline loader"
               />
             </div>
