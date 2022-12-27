@@ -128,6 +128,15 @@ useWebSocketHandler('import.status_updated', async (event) => {
   // TODO (wvffle): Why?
   await nextTick()
 
+  if (event.new_status === 'errored') {
+    for (const file of files.value) {
+      if (file.response?.uuid === event.upload.uuid) {
+        file.error = event.new_status
+        break
+      }
+    }
+  }
+
   uploads[event.old_status] -= 1
   uploads[event.new_status] += 1
   uploads.objects[event.upload.uuid] = event.upload
