@@ -31,6 +31,7 @@ const submit = async () => {
   try {
     const response = await axios.post('manage/users/invitations/', { code: code.value })
     invitations.unshift(response.data)
+    code.value = ''
   } catch (error) {
     errors.value = (error as BackendError).backendErrors
   }

@@ -100,10 +100,16 @@ const fetchData = async () => {
   }
 }
 
-watchDebounced(query, () => (page.value = 1), { debounce: 300 })
+const forceFetchFirstPage = async () => {
+  page.value = 1
+  return fetchData()
+}
+
+watchDebounced(query, forceFetchFirstPage, { debounce: 300 })
+onOrderingUpdate(forceFetchFirstPage)
+watch(allowed, forceFetchFirstPage)
+
 watch(page, fetchData)
-watch(allowed, fetchData)
-onOrderingUpdate(fetchData)
 fetchData()
 
 const sharedLabels = useSharedLabels()

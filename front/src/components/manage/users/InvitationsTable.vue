@@ -81,10 +81,16 @@ const fetchData = async () => {
   }
 }
 
-watchDebounced(query, () => (page.value = 1), { debounce: 300 })
-watch(isOpen, () => (page.value = 1))
+const forceFetchFirstPage = async () => {
+  page.value = 1
+  return fetchData()
+}
+
+watchDebounced(query, forceFetchFirstPage, { debounce: 300 })
+onOrderingUpdate(forceFetchFirstPage)
+watch(isOpen, forceFetchFirstPage)
+
 watch(page, fetchData)
-onOrderingUpdate(fetchData)
 fetchData()
 
 const sharedLabels = useSharedLabels()
@@ -182,7 +188,7 @@ const labels = computed(() => ({
           #row-cells="scope"
         >
           <td>
-            <router-link :to="{name: 'manage.users.users.detail', params: {id: scope.obj.id }}">
+            <router-link :to="{name: 'manage.moderation.accounts.detail', params: {id: scope.obj.id }}">
               {{ scope.obj.owner.username }}
             </router-link>
           </td>
