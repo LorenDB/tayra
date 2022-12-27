@@ -63,6 +63,8 @@ const values = reactive({
   album: null
 })
 
+const files = ref([] as VueUploadItem[])
+
 //
 // Channels
 //
@@ -164,7 +166,6 @@ const baseImportMetadata = computed(() => ({
 //
 // Uploaded files
 //
-const files = ref([] as VueUploadItem[])
 const removed = reactive(new Set<string>())
 const uploadedFiles = computed(() => {
   const uploadedFiles = files.value.map(file => {
