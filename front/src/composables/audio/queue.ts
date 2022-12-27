@@ -183,15 +183,15 @@ export const useQueue = createGlobalState(() => {
 
   // Play track
   const playTrack = async (trackIndex: number, forceRestartIfCurrent = false) => {
-    if (isPlaying.value) currentSound.value?.pause()
-    if (currentIndex.value !== trackIndex) currentSound.value?.seekTo(0)
+    if (isPlaying.value) await currentSound.value?.pause()
+    if (currentIndex.value !== trackIndex) await currentSound.value?.seekTo(0)
 
     const shouldRestart = forceRestartIfCurrent && currentIndex.value === trackIndex
     const nextTrackIsTheSame = queue.value[trackIndex]?.id === currentTrack.value?.id
 
     if (shouldRestart || nextTrackIsTheSame) {
-      currentSound.value?.seekTo(0)
-      if (isPlaying.value) currentSound.value?.play()
+      await currentSound.value?.seekTo(0)
+      if (isPlaying.value) await currentSound.value?.play()
       if (shouldRestart) return
     }
 
@@ -303,8 +303,8 @@ export const useQueue = createGlobalState(() => {
   // Clear
   const clearRadio = ref(false)
   const clear = async () => {
-    currentSound.value?.pause()
-    currentSound.value?.seekTo(0)
+    await currentSound.value?.pause()
+    await currentSound.value?.seekTo(0)
     currentSound.value?.dispose()
 
     clearRadio.value = true

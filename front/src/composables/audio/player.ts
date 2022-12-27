@@ -36,11 +36,10 @@ export const usePlayer = createGlobalState(() => {
     if (!sound) return
 
     if (isPlaying.value) {
-      sound.play()
-      return
+      return sound.play()
     }
 
-    sound.pause()
+    return sound.pause()
   })
 
   // Create first track when we initialize the page

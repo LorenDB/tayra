@@ -96,11 +96,11 @@ export class HTMLSound implements Sound {
   }
 
   async play () {
-    this.#audio.play()
+    return this.#audio.play()
   }
 
   async pause () {
-    this.#audio.pause()
+    return this.#audio.pause()
   }
 
   async seekTo (seconds: number) {
