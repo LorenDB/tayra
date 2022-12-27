@@ -5,7 +5,7 @@ import { computed } from 'vue'
 import { usePlayer } from '~/composables/audio/player'
 import { useQueue } from '~/composables/audio/queue'
 
-const { hasPrevious, playPrevious, hasNext, playNext, currentTrack } = useQueue()
+const { playPrevious, hasNext, playNext, currentTrack } = useQueue()
 const { isPlaying } = usePlayer()
 
 const { t } = useI18n()
@@ -22,11 +22,10 @@ const labels = computed(() => ({
     <button
       :title="labels.previous"
       :aria-label="labels.previous"
-      :disabled="!hasPrevious"
       class="circular button control tablet-and-up"
       @click.prevent.stop="playPrevious()"
     >
-      <i :class="['ui', 'large', {'disabled': !hasPrevious}, 'backward step', 'icon']" />
+      <i :class="['ui', 'large', 'backward step', 'icon']" />
     </button>
     <button
       v-if="!isPlaying"

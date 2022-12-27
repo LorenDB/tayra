@@ -6,7 +6,7 @@ import { shuffle as shuffleArray, sum } from 'lodash-es'
 import { useClamp } from '@vueuse/math'
 import { useStore } from '~/store'
 
-import { looping, LoopingMode, isPlaying } from '~/composables/audio/player'
+import { looping, LoopingMode, isPlaying, usePlayer } from '~/composables/audio/player'
 import { delMany, getMany, setMany } from '~/composables/data/indexedDB'
 import { setGain } from '~/composables/audio/audio-api'
 import { useTracks } from '~/composables/audio/tracks'
@@ -199,13 +199,22 @@ export const useQueue = createGlobalState(() => {
   }
 
   // Previous track
-  const hasPrevious = computed(() => looping.value === LoopingMode.LoopQueue || currentIndex.value !== 0)
   const playPrevious = async (force = false) => {
+    // If we're only 3 seconds into track, we seek to the beginning
+    const { currentTime } = usePlayer()
+    if (currentTime.value >= 3) {
+      return playTrack(currentIndex.value, true)
+    }
+
     // Loop entire queue / change track to the next one
     if (looping.value === LoopingMode.LoopQueue && currentIndex.value === 0 && force !== true) {
       // Loop track programmatically if it is the only track in the queue
       if (tracks.value.length === 1) return playTrack(currentIndex.value, true)
       return playTrack(tracks.value.length - 1)
+    }
+
+    if (currentIndex.value === 0) {
+      return playTrack(currentIndex.value, true)
     }
 
     return playTrack(currentIndex.value - 1)
@@ -369,7 +378,6 @@ export const useQueue = createGlobalState(() => {
     currentIndex,
     currentTrack,
     playTrack,
-    hasPrevious,
     hasNext,
     playPrevious,
     playNext,
