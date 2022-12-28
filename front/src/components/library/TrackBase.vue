@@ -122,7 +122,7 @@ const remove = async () => {
               <h1 class="ui header">
                 {{ track.title }}
               </h1>
-                <h2 class="ui header">
+              <h2 class="ui header">
                 <i18n-t
                   v-if="track.attributed_to"
                   keypath="components.library.TrackBase.subtitle.with-uploader"
