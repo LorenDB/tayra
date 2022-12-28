@@ -268,9 +268,8 @@ build_documentation:
   stage: build
   image: python:3.11
   needs:
-    - build_openapi_schema
-  dependencies:
-    - build_openapi_schema
+    - job: build_openapi_schema
+      artifacts: true
   variables:
     BUILD_PATH: "../public"
     GIT_STRATEGY: clone
@@ -345,8 +344,9 @@ build_api:
 deploy_documentation:
   stage: publish
   image: alpine
-  dependencies:
-    - build_documentation
+  needs:
+    - job: build_documentation
+      artifacts: true
   before_script:
     - apk add openssh-client rsync
     - mkdir -p ~/.ssh
