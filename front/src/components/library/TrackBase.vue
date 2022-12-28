@@ -122,7 +122,7 @@ const remove = async () => {
               <h1 class="ui header">
                 {{ track.title }}
               </h1>
-              <h2 class="ui header">
+              <span class="ui header">
                 <i18n-t
                   v-if="track.attributed_to"
                   keypath="components.library.TrackBase.subtitle.with-uploader"
@@ -151,7 +151,7 @@ const remove = async () => {
                     {{ momentFormat(new Date(track.creation_date), 'LL') }}
                   </time>
                 </i18n-t>
-              </h2>
+              </span>
             </div>
             <div class="eight wide right aligned column button-group">
               <play-button
