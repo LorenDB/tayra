@@ -121,7 +121,8 @@ const remove = async () => {
             <div class="eight wide left aligned column">
               <h1 class="ui header">
                 {{ track.title }}
-
+              </h1>
+                <h2 class="ui header">
                 <i18n-t
                   v-if="track.attributed_to"
                   keypath="components.library.TrackBase.subtitle.with-uploader"
@@ -130,8 +131,7 @@ const remove = async () => {
                     class="internal"
                     :href="attributedToUrl"
                   >
-                    <span class="symbol at left" />
-                    {{ track.attributed_to.full_username }}
+                    <span class="symbol at" />{{ track.attributed_to.full_username }}
                   </a>
                   <time
                     :title="track.creation_date"
@@ -151,7 +151,7 @@ const remove = async () => {
                     {{ momentFormat(new Date(track.creation_date), 'LL') }}
                   </time>
                 </i18n-t>
-              </h1>
+              </h2>
             </div>
             <div class="eight wide right aligned column button-group">
               <play-button
