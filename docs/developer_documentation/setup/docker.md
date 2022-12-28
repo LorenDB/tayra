@@ -84,7 +84,7 @@ You need to create some local data to mimic a production environment.
 1. Create a superuser so you can log in to your local app:
 
    ```sh
-   docker-compose -f dev.yml run --rm api pythong manage.py createsuperuser
+   docker-compose -f dev.yml run --rm api python manage.py createsuperuser
    ```
 
 2. Add some fake data to populate the database. The following command creates 25 artists with random albums, tracks, and metadata.

@@ -26,7 +26,36 @@ This guide assumes you are using a [Debian](https://debian.org)-based system.
   sudo apt install curl
   ```
 
-## 1. Download the project files
+## 1. Create a Funkwhale user
+
+It's good practice to create a user on your server for Funkwhale administration. Doing this makes it easy to make sure you're running commands from the right place. Follow these steps to set up your user.
+
+1. Create the `funkwhale` user and set its shell to `bash` and its home directory to `/srv/funkwhale`.
+
+```{code-block} sh
+sudo useradd --system --shell /bin/bash --create-home --home-dir /srv/funkwhale funkwhale
+```
+
+2. Follow the [Docker post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/) to give the `funkwhale` user the ability to use Docker without `sudo`.
+
+````{note}
+To perform any tasks as the `funkwhale` user, prefix your commands with `sudo -u funkwhale`.
+
+```{code-block} sh
+sudo -u funkwhale <command>
+```
+
+Or log in as `funkwhale` with `sudo su funkwhale` before running your commands.
+
+```{code-block} sh
+sudo su funkwhale
+<command>
+```
+````
+
+That's it! You've created your `funkwhale` user.
+
+## 2. Download the project files
 
 1. Create the project directory structure.
 
@@ -48,7 +77,7 @@ This guide assumes you are using a [Debian](https://debian.org)-based system.
 
 That's it! You've set up your project files.
 
-## 2. Set up your environment file
+## 3. Set up your environment file
 
 The environment file contains options you can use to control your Funkwhale pod. Follow these steps to get a working environment up and running.
 
@@ -91,7 +120,7 @@ The environment file contains options you can use to control your Funkwhale pod.
 
 You're done! Your environment file is now ready to go. You can check out a full list of configuration options in our Environment file guide.
 
-## 3. Set up Funkwhale
+## 4. Set up Funkwhale
 
 Once you've filled in your environment file, you can set up Funkwhale. Follow these steps to create your database and create a superuser.
 
@@ -138,7 +167,7 @@ Once you've filled in your environment file, you can set up Funkwhale. Follow th
 
 That's it! Your Funkwhale pod is now up and running.
 
-## 4. Set up your reverse proxy
+## 5. Set up your reverse proxy
 
 Funkwhale requires a reverse proxy to serve content to users. We recommend using [Nginx](https://nginx.com) to handle requests to your container. To do this:
 
@@ -231,7 +260,7 @@ The frontend container ships default Nginx templates which serve content to the 
 
 That's it! The container mounts your custom nginx files and uses its values to serve Funkwhale content. To revert to the default values, comment out the volumes by adding a `#` in front of them and bring the `front` container back up.
 
-## 5. Set up TLS
+## 6. Set up TLS
 
 To enable your users to connect to your pod securely, you need to set up {abbr}`TLS (Transport Layer Security)`. To do this, we recommend using the <acme.sh> script.
 
