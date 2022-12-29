@@ -308,7 +308,7 @@ HTMl_CLEANER = bleach.sanitizer.Cleaner(strip=True, tags=SAFE_TAGS)
 HTML_PERMISSIVE_CLEANER = bleach.sanitizer.Cleaner(
     strip=True,
     tags=SAFE_TAGS + ["h1", "h2", "h3", "h4", "h5", "h6", "div", "section", "article"],
-    attributes=["class", "rel", "alt", "title"],
+    attributes=["class", "rel", "alt", "title", "href"],
 )
 
 # support for additional tlds
