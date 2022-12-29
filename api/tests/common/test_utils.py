@@ -134,6 +134,13 @@ def test_join_url(start, end, expected):
             True,
             '<p class="foo">hello world</p>',
         ),
+        # Links should render with their href intact
+        (
+            "hello world\n[link](src)",
+            "text/markdown",
+            False,
+            '<p>hello world<br><a href="src">link</a></p>',
+        ),
     ],
 )
 def test_render_html(text, content_type, permissive, expected):
