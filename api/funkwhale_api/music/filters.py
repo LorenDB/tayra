@@ -210,7 +210,7 @@ class UploadFilter(audio_filters.IncludeChannelsFilterSet):
         distinct=True,
         library_field="library",
     )
-    import_status = common_filters.MultipleQueryFilter(coerce=str)
+    import_status = common_filters.MultipleQueryFilter(coerce=str, distinct=False)
     q = fields.SmartSearchFilter(
         config=search.SearchConfig(
             search_fields={
