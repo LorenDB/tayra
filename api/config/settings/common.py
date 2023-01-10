@@ -369,7 +369,15 @@ vars().update(EMAIL_CONFIG)
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASE_URL = env.db("DATABASE_URL")
+DATABASE_USER = env.str("POSTGRES_ENV_POSTGRES_USER", "postgres")
+DATABASE_PASSWORD = env.str("POSTGRES_ENV_POSTGRES_PASSWORD")
+DATABASE_NAME = env.str("POSTGRES_ENV_POSTGRES_USER")
+DATABASE_HOST = "postgres"
+DATABASE_PORT = 5432
+DATABASE_URL = env.db(
+    "DATABASE_URL",
+    f"postgres://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}",
+)
 """
 The URL used to connect to the PostgreSQL database. Examples:
 

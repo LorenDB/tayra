@@ -54,7 +54,6 @@ services:
       args:
         install_dev_deps: 1
     image: funkwhale-api
-    entrypoint: compose/django/dev-entrypoint.sh
     command: >
       bash -c "python manage.py collectstatic --no-input
       && uvicorn --reload config.asgi:application --host 0.0.0.0 --port 5000  --reload-dir config/ --reload-dir=funkwhale_api/"

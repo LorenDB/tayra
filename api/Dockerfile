@@ -112,5 +112,4 @@ RUN set -eux; \
 ENV CACHE_URL="redis://redis:6379/0"
 ENV CELERY_BROKER_URL="redis://redis:6379/0"
 
-ENTRYPOINT ["./compose/django/entrypoint.sh"]
 CMD ["./compose/django/server.sh"]
