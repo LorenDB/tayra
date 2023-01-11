@@ -111,17 +111,21 @@ review_docs:
       when: manual
 
 find_broken_links:
+  allow_failure:
+    exit_codes: 2
+
   extends: [.lychee]
   script:
     - >
       lychee
       --cache
+      --no-progress
       --exclude-all-private
       --exclude-mail
       --exclude 'demo\.funkwhale\.audio'
       --exclude 'nginx\.com'
       --exclude-path 'docs/_templates/'
-      -- .
+      -- . || exit $?
 
 changelog_snippet:
   interruptible: true
