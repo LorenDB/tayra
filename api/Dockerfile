@@ -16,30 +16,29 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ARG PIP_NO_CACHE_DIR=1
 
-RUN \
-    echo 'installing dependencies' && \
-    apk add --no-cache \
-    git \
-    musl-dev \
-    gcc \
-    postgresql-dev \
-    python3-dev \
-    py3-psycopg2=2.9.5-r0 \
-    py3-cryptography=38.0.3-r0 \
-    py3-lxml=4.9.2-r0 \
-    py3-pillow=9.3.0-r0 \
-    py3-watchfiles=0.18.1-r0 \
-    libldap \
-    libffi-dev \
-    make \
-    zlib-dev \
-    jpeg-dev \
-    openldap-dev \
-    openssl-dev \
-    cargo \
-    libxml2-dev \
-    libxslt-dev \
-    curl
+RUN set -eux; \
+  apk add --no-cache \
+  cargo \
+  curl \
+  gcc \
+  git \
+  jpeg-dev \
+  libffi-dev \
+  libldap \
+  libxml2-dev \
+  libxslt-dev \
+  make \
+  musl-dev \
+  openldap-dev \
+  openssl-dev \
+  postgresql-dev \
+  zlib-dev \
+  py3-cryptography=38.0.3-r0 \
+  py3-lxml=4.9.2-r0 \
+  py3-pillow=9.3.0-r0 \
+  py3-psycopg2=2.9.5-r0 \
+  py3-watchfiles=0.18.1-r0 \
+  python3-dev
 
 # create virtual env for next stage
 RUN python -m venv --system-site-packages /venv
@@ -86,22 +85,23 @@ COPY --from=builder /venv /venv
 # emulate activation by prefixing PATH
 ENV PATH="/venv/bin:$PATH"
 
-RUN apk add --no-cache \
-    libmagic \
-    bash \
-    gettext \
-    python3 \
-    jpeg-dev \
-    ffmpeg \
-    libpq \
-    libxml2 \
-    libxslt \
-    py3-psycopg2=2.9.5-r0 \
-    py3-cryptography=38.0.3-r0 \
-    py3-lxml=4.9.2-r0 \
-    py3-pillow=9.3.0-r0 \
-    py3-watchfiles=0.18.1-r0 \
-    libldap
+RUN set -eux; \
+  apk add --no-cache \
+  bash \
+  ffmpeg \
+  gettext \
+  jpeg-dev \
+  libldap \
+  libmagic \
+  libpq \
+  libxml2 \
+  libxslt \
+  py3-cryptography=38.0.3-r0 \
+  py3-lxml=4.9.2-r0 \
+  py3-pillow=9.3.0-r0 \
+  py3-psycopg2=2.9.5-r0 \
+  py3-watchfiles=0.18.1-r0 \
+  python3
 
 COPY . /app
 WORKDIR /app
