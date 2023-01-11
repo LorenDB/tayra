@@ -48,29 +48,33 @@ ENV PATH="/venv/bin:/root/.local/bin:$PATH" VIRTUAL_ENV=/venv
 
 COPY --from=pre-build /requirements.txt /requirements.txt
 COPY --from=pre-build /dev-requirements.txt /dev-requirements.txt
-# hack around https://github.com/pypa/pip/issues/6158#issuecomment-456619072
-ARG PIP_DOWNLOAD_CACHE=/noop/
-RUN \
-    echo 'installing pip requirements' && \
-    pip3 install --upgrade pip && \
-    pip3 install setuptools wheel && \
-    # Currently we are unable to relieably build rust-based packages on armv7. This
-    # is why we need to use the packages shipped by Alpine Linux.
-    # Since poetry does not allow in-place dependency pinning, we need
-    # to install the deps using pip.
-    grep -Ev 'cryptography|watchfiles|lxml|pillow|psycopg2' /requirements.txt | pip3 install -r /dev/stdin cryptography==38.0.3 watchfiles==0.18.1 lxml==4.9.2 pillow==9.3.0 psycopg2==2.9.5 && \
-    rm -rf "$PIP_DOWNLOAD_CACHE"
+
+RUN set -eux; \
+  pip3 install --upgrade pip; \
+  pip3 install setuptools wheel; \
+  # Currently we are unable to relieably build rust-based packages on armv7. This
+  # is why we need to use the packages shipped by Alpine Linux.
+  # Since poetry does not allow in-place dependency pinning, we need
+  # to install the deps using pip.
+  grep -Ev 'cryptography|lxml|pillow|psycopg2|watchfiles' /requirements.txt \
+  | pip3 install -r /dev/stdin \
+  cryptography==38.0.3 \
+  lxml==4.9.2 \
+  pillow==9.3.0 \
+  psycopg2==2.9.5 \
+  watchfiles==0.18.1
 
 ARG install_dev_deps=0
-RUN \
-    if [ "$install_dev_deps" = "1" ] ; then \
-      echo "Installing dev dependencies" && \
-      grep -Ev 'cryptography|watchfiles|lxml|pillow|psycopg2' /dev-requirements.txt | pip3 install -r /dev/stdin cryptography==38.0.3 watchfiles==0.18.1 lxml==4.9.2 pillow==9.3.0 psycopg2==2.9.5 && \
-      rm -rf "$PIP_DOWNLOAD_CACHE" \
-    ; else \
-      echo "Skipping dev deps installation" \
-    ; fi
-
+RUN set -eux; \
+  if [ "$install_dev_deps" = "1" ] ; then \
+    grep -Ev 'cryptography|lxml|pillow|psycopg2|watchfiles' /dev-requirements.txt \
+    | pip3 install -r /dev/stdin \
+    cryptography==38.0.3 \
+    lxml==4.9.2 \
+    pillow==9.3.0 \
+    psycopg2==2.9.5 \
+    watchfiles==0.18.1; \
+  fi
 
 FROM alpine:3.17 as image
 
