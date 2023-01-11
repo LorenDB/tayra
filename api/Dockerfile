@@ -14,6 +14,7 @@ FROM alpine:3.17 as builder
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ARG PIP_NO_CACHE_DIR=1
 
 RUN \
     echo 'installing dependencies' && \
@@ -75,6 +76,7 @@ FROM alpine:3.17 as image
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ARG PIP_NO_CACHE_DIR=1
 
 COPY --from=builder /venv /venv
 # emulate activation by prefixing PATH
