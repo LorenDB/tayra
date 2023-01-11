@@ -102,6 +102,9 @@ RUN apk add --no-cache \
 COPY . /app
 WORKDIR /app
 
+RUN set -eux; \
+  pip3 install --no-deps --editable .
+
 ENV CACHE_URL="redis://redis:6379/0"
 ENV CELERY_BROKER_URL="redis://redis:6379/0"
 
