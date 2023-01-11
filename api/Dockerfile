@@ -13,6 +13,7 @@ RUN poetry export --with dev --without-hashes > dev-requirements.txt
 FROM alpine:3.17 as builder
 
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 RUN \
     echo 'installing dependencies' && \
@@ -73,6 +74,7 @@ RUN \
 FROM alpine:3.17 as image
 
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 COPY --from=builder /venv /venv
 # emulate activation by prefixing PATH
