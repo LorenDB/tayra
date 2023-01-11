@@ -1,5 +1,6 @@
 import logging.config
 import sys
+import warnings
 from collections import OrderedDict
 from urllib.parse import urlsplit
 
@@ -369,22 +370,73 @@ vars().update(EMAIL_CONFIG)
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASE_USER = env.str("POSTGRES_ENV_POSTGRES_USER", "postgres")
-DATABASE_PASSWORD = env.str("POSTGRES_ENV_POSTGRES_PASSWORD")
-DATABASE_NAME = env.str("POSTGRES_ENV_POSTGRES_USER")
-DATABASE_HOST = "postgres"
-DATABASE_PORT = 5432
+
+_DOCKER_DATABASE_HOST = "postgres"
+_DOCKER_DATABASE_PORT = 5432
+_DOCKER_DATABASE_USER = env.str("POSTGRES_ENV_POSTGRES_USER", "postgres")
+_DOCKER_DATABASE_PASSWORD = env.str("POSTGRES_ENV_POSTGRES_PASSWORD", None)
+_DOCKER_DATABASE_NAME = _DOCKER_DATABASE_USER
+
+# The `_database_url_docker` variable will only by used as default for DATABASE_URL
+# in the context of a docker deployment.
+_database_url_docker = None
+# When POSTGRES_ENV_POSTGRES_PASSWORD is set, we are in the context of a docker deployment.
+if _DOCKER_DATABASE_PASSWORD is not None:
+    warnings.warn(
+        DeprecationWarning(
+            "the 'POSTGRES_ENV_POSTGRES_USER' and 'POSTGRES_ENV_POSTGRES_PASSWORD' "
+            "environment variables are deprecated, please use the dedicated "
+            "'DATABASE_USER' and 'DATABASE_PASSWORD' environment variables instead"
+        )
+    )
+    _database_url_docker = (
+        f"postgres:"
+        f"//{_DOCKER_DATABASE_USER}:{_DOCKER_DATABASE_PASSWORD}"
+        f"@{_DOCKER_DATABASE_HOST}:{_DOCKER_DATABASE_PORT}"
+        f"/{_DOCKER_DATABASE_NAME}"
+    )
+
+DATABASE_HOST = env.str("DATABASE_HOST", "localhost")
+"""
+The hostname of the PostgreSQL server. Defaults to ``localhost``.
+"""
+DATABASE_PORT = env.int("DATABASE_PORT", 5432)
+"""
+The port of the PostgreSQL server. Defaults to ``5432``.
+"""
+DATABASE_USER = env.str("DATABASE_USER", "funkwhale")
+"""
+The name of the PostgreSQL user. Defaults to ``funkwhale``.
+"""
+DATABASE_PASSWORD = env.str("DATABASE_PASSWORD", "funkwhale")
+"""
+The password of the PostgreSQL user. Defaults to ``funkwhale``.
+"""
+DATABASE_NAME = env.str("DATABASE_NAME", "funkwhale")
+"""
+The name of the PostgreSQL database. Defaults to ``funkwhale``.
+"""
 DATABASE_URL = env.db(
     "DATABASE_URL",
-    f"postgres://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}",
+    _database_url_docker  # This is only set in the context of a docker deployment.
+    or (
+        f"postgres:"
+        f"//{DATABASE_USER}:{DATABASE_PASSWORD}"
+        f"@{DATABASE_HOST}:{DATABASE_PORT}"
+        f"/{DATABASE_NAME}"
+    ),
 )
 """
-The URL used to connect to the PostgreSQL database. Examples:
+The URL used to connect to the PostgreSQL database. Defaults to an auto generated url
+build using the `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD`
+and `DATABASE_NAME` variables.
 
+Examples:
 - ``postgresql://funkwhale@:5432/funkwhale``
 - ``postgresql://<user>:<password>@<host>:<port>/<database>``
 - ``postgresql://funkwhale:passw0rd@localhost:5432/funkwhale_database``
 """
+
 DATABASES = {
     # Raises ImproperlyConfigured exception if DATABASE_URL not in os.environ
     "default": DATABASE_URL
