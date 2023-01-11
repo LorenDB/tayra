@@ -81,10 +81,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ARG PIP_NO_CACHE_DIR=1
 
-COPY --from=builder /venv /venv
-# emulate activation by prefixing PATH
-ENV PATH="/venv/bin:$PATH"
-
 RUN set -eux; \
   apk add --no-cache \
   bash \
@@ -102,6 +98,10 @@ RUN set -eux; \
   py3-psycopg2=2.9.5-r0 \
   py3-watchfiles=0.18.1-r0 \
   python3
+
+COPY --from=builder /venv /venv
+# emulate activation by prefixing PATH
+ENV PATH="/venv/bin:$PATH"
 
 COPY . /app
 WORKDIR /app
