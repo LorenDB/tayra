@@ -91,7 +91,7 @@ review_docs:
     - git switch stable && git pull
     - git switch $CI_COMMIT_BRANCH && git pull
   script:
-    - poetry run python -m sphinx . $BUILD_PATH
+    - poetry run python3 -m sphinx . $BUILD_PATH
   cache:
     key: "$CI_PROJECT_ID__sphinx"
     paths:
@@ -260,9 +260,9 @@ build_openapi_schema:
     - cd api
     - pip3 install poetry
     - poetry install
-    - poetry run python manage.py migrate
+    - poetry run python3 manage.py migrate
   script:
-    - poetry run python manage.py spectacular --file ../docs/schema.yml
+    - poetry run python3 manage.py spectacular --file ../docs/schema.yml
   artifacts:
     expire_in: 2 weeks
     paths:

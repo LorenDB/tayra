@@ -28,7 +28,7 @@ Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make 
    :sync: debian
 
    ```{code-block} sh
-   poetry run python manage.py fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
+   poetry run python3 manage.py fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
    ```
 
    :::
@@ -37,7 +37,7 @@ Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make 
    :sync: docker
 
    ```{code-block} sh
-   docker-compose run --rm api python manage.py fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
+   docker-compose run --rm api python3 manage.py fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
    ```
 
    :::

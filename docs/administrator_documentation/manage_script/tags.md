@@ -27,7 +27,7 @@ To add tags to untagged albums:
 3. Run the `manage.py` script to generate tags for untagged albums.
 
    ```{code-block} sh
-   poetry run python manage.py fw albums add-tags-from-tracks
+   poetry run python3 manage.py fw albums add-tags-from-tracks
    ```
 
 :::
@@ -45,7 +45,7 @@ To add tags to untagged albums:
 3. Run the `manage.py` script to generate tags for untagged albums.
 
    ```{code-block} sh
-   docker-compose run --rm api python manage.py fw albums add-tags-from-tracks
+   docker-compose run --rm api python3 manage.py fw albums add-tags-from-tracks
    ```
 
 :::
@@ -70,7 +70,7 @@ To add tags to untagged artists:
 3. Run the `manage.py` script to generate tags for untagged artists.
 
    ```{code-block} sh
-   poetry run python manage.py fw artists add-tags-from-tracks
+   poetry run python3 manage.py fw artists add-tags-from-tracks
    ```
 
 :::
@@ -88,7 +88,7 @@ To add tags to untagged artists:
 3. Run the `manage.py` script to generate tags for untagged artists.
 
    ```{code-block} sh
-   docker-compose run --rm api python manage.py fw artists add-tags-from-tracks
+   docker-compose run --rm api python3 manage.py fw artists add-tags-from-tracks
    ```
 
 :::

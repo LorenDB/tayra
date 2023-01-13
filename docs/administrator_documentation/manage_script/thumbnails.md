@@ -29,7 +29,7 @@ To generate new thumbnails:
 4. Run the `manage.py` script to regenerate the thumbnails.
 
    ```{code-block} sh
-   poetry run python manage.py fw media generate-thumbnails
+   poetry run python3 manage.py fw media generate-thumbnails
    ```
 
 :::
@@ -53,7 +53,7 @@ To generate new thumbnails:
 4. Run the `manage.py` script to regenerate the thumbnails.
 
    ```{code-block} sh
-   docker-compose run --rm api python manage.py fw media generate-thumbnails
+   docker-compose run --rm api python3 manage.py fw media generate-thumbnails
    ```
 
 :::

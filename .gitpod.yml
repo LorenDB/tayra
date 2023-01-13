@@ -18,8 +18,8 @@ tasks:
 
       gp ports await 5432
 
-      poetry run python manage.py migrate
-      poetry run python manage.py gitpod init
+      poetry run python3 manage.py migrate
+      poetry run python3 manage.py gitpod init
     command: |
       echo "MEDIA_URL=`gp url 8000`/media/" >> ../.gitpod/.env
       echo "STATIC_URL=`gp url 8000`/staticfiles/" >> ../.gitpod/.env
@@ -28,8 +28,8 @@ tasks:
 
       docker-compose up -d
       gp ports await 5432
-      poetry run python manage.py collectstatic --no-input
-      poetry run python manage.py gitpod dev
+      poetry run python3 manage.py collectstatic --no-input
+      poetry run python3 manage.py gitpod dev
 
   - name: Celery Worker
     env:

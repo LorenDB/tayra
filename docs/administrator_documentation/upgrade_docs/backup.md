@@ -115,7 +115,7 @@ To restore your database, do the following:
 
    ```{code-block} sh
    cd /srv/funkwhale/api
-   poetry run python manage.py migrate
+   poetry run python3 manage.py migrate
    ```
 
 :::
@@ -132,7 +132,7 @@ To restore your database, do the following:
 2. Run the `manage.py migrate` command to set up the database.
 
    ```{code-block} sh
-   docker-compose run --rm api python manage.py migrate
+   docker-compose run --rm api python3 manage.py migrate
    ```
 
 :::

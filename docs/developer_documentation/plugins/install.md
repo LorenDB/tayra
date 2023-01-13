@@ -32,7 +32,7 @@ You can install third-party plugins using the `manage.py` script. To do this:
    :::{tab-item} Debian
 
    ```{code-block} shell
-   python manage.py fw plugins install https://plugin_url.zip
+   python3 manage.py fw plugins install https://plugin_url.zip
    ```
 
    :::
@@ -40,7 +40,7 @@ You can install third-party plugins using the `manage.py` script. To do this:
    :::{tab-item} Docker
 
    ```{code-block} shell
-   docker-compose run --rm api python manage.py fw plugins install https://plugin_url.zip
+   docker-compose run --rm api python3 manage.py fw plugins install https://plugin_url.zip
    ```
 
    :::

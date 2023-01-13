@@ -140,7 +140,7 @@ When the import finishes, run the `manage.py migrate` command to set up the data
 
 ```{code-block} sh
 cd /srv/funkwhale/api
-poetry run python manage.py migrate
+poetry run python3 manage.py migrate
 ```
 
 :::
@@ -169,7 +169,7 @@ You need to initialize the postgres container on your {term}`destination server`
 3. When the import finishes, run the `manage.py migrate` command to set up the database.
 
    ```{code-block} sh
-   docker-compose run --rm api python manage.py migrate
+   docker-compose run --rm api python3 manage.py migrate
    ```
 
 :::

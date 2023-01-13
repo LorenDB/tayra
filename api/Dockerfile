@@ -41,7 +41,7 @@ RUN set -eux; \
   python3-dev
 
 # create virtual env for next stage
-RUN python -m venv --system-site-packages /venv
+RUN python3 -m venv --system-site-packages /venv
 # emulate activation by prefixing PATH
 ENV PATH="/venv/bin:/root/.local/bin:$PATH" VIRTUAL_ENV=/venv
 

@@ -244,7 +244,7 @@ Funkwhale uses a [PostgreSQL](https://www.postgresql.org/) database to store inf
 
    ```{code-block} sh
    cd /srv/funkwhale/api
-   sudo -u funkwhale poetry run python manage.py migrate
+   sudo -u funkwhale poetry run python3 manage.py migrate
    ```
 
 ````{note}
@@ -272,7 +272,7 @@ You can create several superusers.
 To start using Funkwhale, you need to create a superuser for your pod. This user has all the permissions needed to administrate the pod. Follow these steps to create a superuser.
 
 ```{code-block} sh
-sudo -u funkwhale poetry run python manage.py createsuperuser
+sudo -u funkwhale poetry run python3 manage.py createsuperuser
 ```
 
 That's it! You can log in as this user when you finish setting up Funkwhale.
@@ -282,7 +282,7 @@ That's it! You can log in as this user when you finish setting up Funkwhale.
 Funkwhale uses several static assets to serve its frontend. Use `manage.py` to collect these files so that the webserver can serve them.
 
 ```{code-block} sh
-sudo poetry run python manage.py collectstatic
+sudo poetry run python3 manage.py collectstatic
 ```
 
 ## 8. Set up systemd unit files

@@ -55,7 +55,7 @@ services:
         install_dev_deps: 1
     image: funkwhale-api
     command: >
-      bash -c "python manage.py collectstatic --no-input
+      bash -c "python3 manage.py collectstatic --no-input
       && uvicorn --reload config.asgi:application --host 0.0.0.0 --port 5000  --reload-dir config/ --reload-dir=funkwhale_api/"
     volumes:
       - ./api:/app
@@ -158,7 +158,7 @@ services:
 
   docs:
     build: docs
-    command: python serve.py
+    command: python3 serve.py
     volumes:
       - ".:/app/"
     ports:

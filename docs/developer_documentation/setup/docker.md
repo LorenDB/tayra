@@ -72,7 +72,7 @@ docker-compose -f dev.yml build
 Funkwhale relies on a postgresql database to store information. To set this up, you need to run the `manage.py migrate` command:
 
 ```sh
-docker-compose -f dev.yml run --rm api python manage.py migrate
+docker-compose -f dev.yml run --rm api python3 manage.py migrate
 ```
 
 This command creates all the required tables. You need to run this whenever there are changes to the API schema. You can run this at any time without causing issues.
@@ -84,7 +84,7 @@ You need to create some local data to mimic a production environment.
 1. Create a superuser so you can log in to your local app:
 
    ```sh
-   docker-compose -f dev.yml run --rm api python manage.py createsuperuser
+   docker-compose -f dev.yml run --rm api python3 manage.py createsuperuser
    ```
 
 2. Add some fake data to populate the database. The following command creates 25 artists with random albums, tracks, and metadata.
@@ -92,7 +92,7 @@ You need to create some local data to mimic a production environment.
    ```sh
    artists=25 # Adds 25 fake artists
    command="from funkwhale_api.music import fake_data; fake_data.create_data($artists)"
-   echo $command | docker-compose -f dev.yml run --rm -T api python manage.py shell -i python
+   echo $command | docker-compose -f dev.yml run --rm -T api python3 manage.py shell -i python
    ```
 
 ## Manage services
@@ -194,8 +194,8 @@ To run a reverse proxy for your app:
    ```sh
    export COMPOSE_PROJECT_NAME=node2
    export VUE_PORT=1234  # this has to be unique for each instance
-   docker-compose -f dev.yml run --rm api python manage.py migrate
-   docker-compose -f dev.yml run --rm api python manage.py createsuperuser
+   docker-compose -f dev.yml run --rm api python3 manage.py migrate
+   docker-compose -f dev.yml run --rm api python3 manage.py createsuperuser
    docker-compose -f dev.yml up nginx api front nginx api celeryworker
    ```
 

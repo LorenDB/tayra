@@ -140,7 +140,7 @@ Once you've filled in your environment file, you can set up Funkwhale. Follow th
 3. Run the database migrations.
 
    ```{code-block} sh
-   docker-compose run --rm api python manage.py migrate
+   docker-compose run --rm api python3 manage.py migrate
    ```
 
    ````{note}
@@ -156,7 +156,7 @@ Once you've filled in your environment file, you can set up Funkwhale. Follow th
 4. Create your superuser.
 
    ```{code-block} sh
-   docker-compose run --rm api python manage.py createsuperuser
+   docker-compose run --rm api python3 manage.py createsuperuser
    ```
 
 5. Launch all the containers to bring up your pod.

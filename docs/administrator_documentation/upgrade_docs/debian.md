@@ -100,13 +100,13 @@ Once you have downloaded the new files, you can update your Funkwhale instance. 
 4. Collect the new static files to serve.
 
    ```{code-block} sh
-   poetry run python manage.py collectstatic --no-input
+   poetry run python3 manage.py collectstatic --no-input
    ```
 
 5. Apply new database migrations.
 
    ```{code-block} sh
-   poetry run python manage.py migrate
+   poetry run python3 manage.py migrate
    ```
 
 6. Restart the Funkwhale services.
