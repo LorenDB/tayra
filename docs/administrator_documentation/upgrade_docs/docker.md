@@ -44,7 +44,7 @@ If you installed Funkwhale following the [Docker guide](../installation_docs/doc
 8. Apply the database migrations.
 
    ```{code-block} sh
-   docker-compose run --rm api python3 manage.py migrate
+   docker-compose run --rm api funkwhale-manage migrate
    ```
 
 9. Relaunch your containers.

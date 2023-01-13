@@ -125,7 +125,7 @@ Check the file and remove any duplicated settings after copying.
 3. Run the database migrations.
 
    ```{code-block} sh
-   docker-compose run --rm api python3 manage.py migrate
+   docker-compose run --rm api funkwhale-manage migrate
    ```
 
 ## Start your Funkwhale instance

@@ -1,6 +1,6 @@
 # Add artist and album tags from track metadata
 
-Funkwhale extracts track tags from the file's metadata. Funkwhale applies these tags to the track's album and artist by running a check every few days. You can run the process at any time using the `manage.py` script.
+Funkwhale extracts track tags from the file's metadata. Funkwhale applies these tags to the track's album and artist by running a check every few days. You can run the process at any time using the `funkwhale-manage` command line interface.
 
 The command performs the following actions:
 
@@ -24,10 +24,10 @@ To add tags to untagged albums:
    cd /srv/funkwhale
    ```
 
-3. Run the `manage.py` script to generate tags for untagged albums.
+3. Run the `funkwhale-manage` command line interface to generate tags for untagged albums.
 
    ```{code-block} sh
-   poetry run python3 manage.py fw albums add-tags-from-tracks
+   venv/bin/funkwhale-manage fw albums add-tags-from-tracks
    ```
 
 :::
@@ -42,10 +42,10 @@ To add tags to untagged albums:
    cd /srv/funkwhale
    ```
 
-3. Run the `manage.py` script to generate tags for untagged albums.
+3. Run the `funkwhale-manage` command line interface to generate tags for untagged albums.
 
    ```{code-block} sh
-   docker-compose run --rm api python3 manage.py fw albums add-tags-from-tracks
+   docker-compose run --rm api funkwhale-manage fw albums add-tags-from-tracks
    ```
 
 :::
@@ -67,10 +67,10 @@ To add tags to untagged artists:
    cd /srv/funkwhale
    ```
 
-3. Run the `manage.py` script to generate tags for untagged artists.
+3. Run the `funkwhale-manage` command line interface to generate tags for untagged artists.
 
    ```{code-block} sh
-   poetry run python3 manage.py fw artists add-tags-from-tracks
+   venv/bin/funkwhale-manage fw artists add-tags-from-tracks
    ```
 
 :::
@@ -85,10 +85,10 @@ To add tags to untagged artists:
    cd /srv/funkwhale
    ```
 
-3. Run the `manage.py` script to generate tags for untagged artists.
+3. Run the `funkwhale-manage` command line interface to generate tags for untagged artists.
 
    ```{code-block} sh
-   docker-compose run --rm api python3 manage.py fw artists add-tags-from-tracks
+   docker-compose run --rm api funkwhale-manage fw artists add-tags-from-tracks
    ```
 
 :::

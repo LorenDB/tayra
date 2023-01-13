@@ -10,7 +10,7 @@ Your instance URL is your pod's unique identifier in the {term}`fediverse`. If y
 - The instance URL in your webserver config.
 - Any references to the old URL in your database.
 
-To clean the database, the {file}`manage.py` script contains a `fix_federation_ids` command.
+To clean the database, the `funkwhale-manage` command line interface contains a `fix_federation_ids` command.
 
 ```{warning}
 Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make sure you [back up your data](../upgrade_docs/backup.md).
@@ -28,7 +28,7 @@ Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make 
    :sync: debian
 
    ```{code-block} sh
-   poetry run python3 manage.py fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
+   venv/bin/funkwhale-manage fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
    ```
 
    :::
@@ -37,7 +37,7 @@ Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make 
    :sync: docker
 
    ```{code-block} sh
-   docker-compose run --rm api python3 manage.py fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
+   docker-compose run --rm api funkwhale-manage fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
    ```
 
    :::

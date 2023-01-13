@@ -4,7 +4,7 @@ Funkwhale doesn't delete data objects from the database when you delete a file. 
 
 Sometimes you may want to clear out dangling metadata. For example, if you import a lot of files with incorrect tags and then delete them.
 
-To help with this, the {file}`manage.py` script includes commands to prune dangling metadata from your database. All prune commands are available under the python3 manage.py prune_library namespace. To ensure you don't remove data by accident, all commands run in dry run mode by default. Run commands with the `--no-dry-run` flag to perform the pruning action.
+To help with this, the `funkwhale-manage` command line interface includes commands to prune dangling metadata from your database. All prune commands are available under the `funkwhale-manage prune_library` namespace. To ensure you don't remove data by accident, all commands run in dry run mode by default. Run commands with the `--no-dry-run` flag to perform the pruning action.
 
 ```{warning}
 Running `prune_library` commands with the `--no-dry-run` flag is irreversible. Make sure you [back up your data](../upgrade_docs/backup.md).
@@ -20,7 +20,7 @@ Running `prune_library` commands with the `--no-dry-run` flag is irreversible. M
 :sync: debian
 
 ```bash
-poetry run python3 manage.py prune_library --tracks
+venv/bin/funkwhale-manage prune_library --tracks
 ```
 
 :::
@@ -29,7 +29,7 @@ poetry run python3 manage.py prune_library --tracks
 :sync: docker
 
 ```bash
-docker-compose run --rm api python3 manage.py prune_library --tracks
+docker-compose run --rm api funkwhale-manage prune_library --tracks
 ```
 
 :::
@@ -43,7 +43,7 @@ docker-compose run --rm api python3 manage.py prune_library --tracks
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py prune_library --albums
+venv/bin/funkwhale-manage prune_library --albums
 ```
 
 :::
@@ -52,7 +52,7 @@ poetry run python3 manage.py prune_library --albums
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py prune_library --albums
+docker-compose run --rm api funkwhale-manage prune_library --albums
 ```
 
 :::
@@ -66,7 +66,7 @@ docker-compose run --rm api python3 manage.py prune_library --albums
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py prune_library --artists
+venv/bin/funkwhale-manage prune_library --artists
 ```
 
 :::
@@ -75,7 +75,7 @@ poetry run python3 manage.py prune_library --artists
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py prune_library --artists
+docker-compose run --rm api funkwhale-manage prune_library --artists
 ```
 
 :::
@@ -89,7 +89,7 @@ docker-compose run --rm api python3 manage.py prune_library --artists
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py prune_library --tracks --albums --artists
+venv/bin/funkwhale-manage prune_library --tracks --albums --artists
 ```
 
 :::
@@ -98,7 +98,7 @@ poetry run python3 manage.py prune_library --tracks --albums --artists
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py prune_library --tracks --albums --artists
+docker-compose run --rm api funkwhale-manage prune_library --tracks --albums --artists
 ```
 
 :::
@@ -112,7 +112,7 @@ There are extra options for pruning your database. Check the command help for mo
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py prune_library --help
+venv/bin/funkwhale-manage prune_library --help
 ```
 
 :::
@@ -121,7 +121,7 @@ poetry run python3 manage.py prune_library --help
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py prune_library --help
+docker-compose run --rm api funkwhale-manage prune_library --help
 ```
 
 :::

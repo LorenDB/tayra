@@ -1,6 +1,6 @@
-# Funkwhale management script
+# Funkwhale management command line interface
 
-Funkwhale includes a {file}`manage.py` script that can help you automate a lot of admin tasks. Check out the guides in this section for instructions on how to use this tool.
+Funkwhale includes a `funkwhale-manage` command line interface that can help you automate a lot of admin tasks. Check out the guides in this section for instructions on how to use this tool.
 
 ```{toctree}
 ---

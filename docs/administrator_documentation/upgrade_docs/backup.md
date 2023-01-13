@@ -111,11 +111,11 @@ To restore your database, do the following:
    sudo -u postgres psql -f /path/to/your/backup/dump.sql funkwhale
    ```
 
-2. Run the `manage.py migrate` command to set up the database.
+2. Run the `funkwhale-manage migrate` command to set up the database.
 
    ```{code-block} sh
-   cd /srv/funkwhale/api
-   poetry run python3 manage.py migrate
+   cd /srv/funkwhale
+   venv/bin/funkwhale-manage migrate
    ```
 
 :::
@@ -129,10 +129,10 @@ To restore your database, do the following:
     docker-compose run --rm -T postgres psql -U postgres postgres < "/path/to/your/backup/dump.sql"
    ```
 
-2. Run the `manage.py migrate` command to set up the database.
+2. Run the `funkwhale-manage migrate` command to set up the database.
 
    ```{code-block} sh
-   docker-compose run --rm api python3 manage.py migrate
+   docker-compose run --rm api funkwhale-manage migrate
    ```
 
 :::

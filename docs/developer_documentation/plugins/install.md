@@ -17,7 +17,7 @@ To install a plugin located on your server:
 
 ## Install a third-party plugin
 
-You can install third-party plugins using the `manage.py` script. To do this:
+You can install third-party plugins using the `funkwhale-manage` command line interface. To do this:
 
 1. Add the plugin name to the `FUNKWHALE_PLUGINS` variable in your `.env` file
 
@@ -25,14 +25,14 @@ You can install third-party plugins using the `manage.py` script. To do this:
    FUNKWHALE_PLUGINS=myplugin,anotherplugin
    ```
 
-2. Call the `manage.py` script with the location of the plugin archive
+2. Call the `funkwhale-manage` command line interface with the location of the plugin archive
 
    :::: {tab-set}
 
    :::{tab-item} Debian
 
    ```{code-block} shell
-   python3 manage.py fw plugins install https://plugin_url.zip
+   venv/bin/funkwhale-manage fw plugins install https://plugin_url.zip
    ```
 
    :::
@@ -40,7 +40,7 @@ You can install third-party plugins using the `manage.py` script. To do this:
    :::{tab-item} Docker
 
    ```{code-block} shell
-   docker-compose run --rm api python3 manage.py fw plugins install https://plugin_url.zip
+   docker-compose run --rm api funkwhale-manage fw plugins install https://plugin_url.zip
    ```
 
    :::

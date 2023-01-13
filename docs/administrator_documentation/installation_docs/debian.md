@@ -234,11 +234,11 @@ Funkwhale uses a [PostgreSQL](https://www.postgresql.org/) database to store inf
    sudo -u postgres psql funkwhale -c 'CREATE EXTENSION "citext";'
    ```
 
-7. Your database is ready to be populated! Use the `manage.py` script to create the database structure.
+7. Your database is ready to be populated! Use the `funkwhale-manage` command line interface to create the database structure.
 
    ```{code-block} sh
-   cd /srv/funkwhale/api
-   sudo -u funkwhale poetry run python3 manage.py migrate
+   cd /srv/funkwhale
+   sudo -u funkwhale venv/bin/funkwhale-manage migrate
    ```
 
 ````{note}
@@ -255,7 +255,7 @@ That's it! You've finished setting up your database.
 
 ## 7. Set up Funkwhale
 
-Once you have got your database up and running, you can get Funkwhale ready to launch. Use the built-in `manage.py` script to get things ready.
+Once you have got your database up and running, you can get Funkwhale ready to launch. Use the built-in `funkwhale-manage` command line interface to get things ready.
 
 ### Create a superuser for your pod
 
@@ -266,17 +266,17 @@ You can create several superusers.
 To start using Funkwhale, you need to create a superuser for your pod. This user has all the permissions needed to administrate the pod. Follow these steps to create a superuser.
 
 ```{code-block} sh
-sudo -u funkwhale poetry run python3 manage.py createsuperuser
+sudo -u funkwhale venv/bin/funkwhale-manage createsuperuser
 ```
 
 That's it! You can log in as this user when you finish setting up Funkwhale.
 
 ### Collect static files
 
-Funkwhale uses several static assets to serve its frontend. Use `manage.py` to collect these files so that the webserver can serve them.
+Funkwhale uses several static assets to serve its frontend. Use the `funkwhale-manage` command line interface to collect these files so that the webserver can serve them.
 
 ```{code-block} sh
-sudo poetry run python3 manage.py collectstatic
+sudo venv/bin/funkwhale-manage collectstatic
 ```
 
 ## 8. Set up systemd unit files

@@ -18,8 +18,8 @@ tasks:
 
       gp ports await 5432
 
-      poetry run python3 manage.py migrate
-      poetry run python3 manage.py gitpod init
+      poetry run funkwhale-manage migrate
+      poetry run funkwhale-manage gitpod init
     command: |
       echo "MEDIA_URL=`gp url 8000`/media/" >> ../.gitpod/.env
       echo "STATIC_URL=`gp url 8000`/staticfiles/" >> ../.gitpod/.env
@@ -28,8 +28,8 @@ tasks:
 
       docker-compose up -d
       gp ports await 5432
-      poetry run python3 manage.py collectstatic --no-input
-      poetry run python3 manage.py gitpod dev
+      poetry run funkwhale-manage collectstatic --no-input
+      poetry run funkwhale-manage gitpod dev
 
   - name: Celery Worker
     env:

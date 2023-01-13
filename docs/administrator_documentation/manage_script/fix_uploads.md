@@ -14,7 +14,7 @@ Check and fix file mimetypes with the `--mimetype` flag. This helps prevent issu
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py fix_uploads --mimetype
+venv/bin/funkwhale-manage fix_uploads --mimetype
 ```
 
 :::
@@ -23,7 +23,7 @@ poetry run python3 manage.py fix_uploads --mimetype
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py fix_uploads --mimetype
+docker-compose run --rm api funkwhale-manage fix_uploads --mimetype
 ```
 
 :::
@@ -39,7 +39,7 @@ Check and fix bitrate and duration with the `--audio-data` flag. This process ca
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py fix_uploads --audio-data
+venv/bin/funkwhale-manage fix_uploads --audio-data
 ```
 
 :::
@@ -48,7 +48,7 @@ poetry run python3 manage.py fix_uploads --audio-data
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py fix_uploads --audio-data
+docker-compose run --rm api funkwhale-manage fix_uploads --audio-data
 ```
 
 :::
@@ -64,7 +64,7 @@ Check and fix the file size with the `--size` flag.
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py fix_uploads --size
+venv/bin/funkwhale-manage fix_uploads --size
 ```
 
 :::
@@ -73,7 +73,7 @@ poetry run python3 manage.py fix_uploads --size
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py fix_uploads --size
+docker-compose run --rm api funkwhale-manage fix_uploads --size
 ```
 
 :::
@@ -89,7 +89,7 @@ Check and fix file checksums with the `--checksum` flag.
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py fix_uploads --checksum
+venv/bin/funkwhale-manage fix_uploads --checksum
 ```
 
 :::
@@ -98,7 +98,7 @@ poetry run python3 manage.py fix_uploads --checksum
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py fix_uploads --checksum
+docker-compose run --rm api funkwhale-manage fix_uploads --checksum
 ```
 
 :::
@@ -114,7 +114,7 @@ Choose the batch size you want to process with the `--batch-size` or -`s` flag. 
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py fix_uploads --batch-size 500
+venv/bin/funkwhale-manage fix_uploads --batch-size 500
 ```
 
 :::
@@ -123,7 +123,7 @@ poetry run python3 manage.py fix_uploads --batch-size 500
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py fix_uploads --batch-size 500
+docker-compose run --rm api funkwhale-manage fix_uploads --batch-size 500
 ```
 
 :::

@@ -1,6 +1,6 @@
 # Regenerate thumbnails
 
-We increased the quality of thumbnails from 70px to 95px in Funkwhale 1.0. This action removes visual artifacts that affect lower quality thumbnails. You can run the `manage.py` script to generate new thumbnails. If you want to keep thumbnails at their original quality, add `THUMBNAIL_JPEG_RESIZE_QUALITY=70` to your `.env` file.
+We increased the quality of thumbnails from 70px to 95px in Funkwhale 1.0. This action removes visual artifacts that affect lower quality thumbnails. You can run the `funkwhale-manage` command line interface to generate new thumbnails. If you want to keep thumbnails at their original quality, add `THUMBNAIL_JPEG_RESIZE_QUALITY=70` to your `.env` file.
 
 ```{note}
 If you're using S3 storage, the `__sized__` folder is located in your S3 bucket.
@@ -26,10 +26,10 @@ To generate new thumbnails:
    rm -r __sized__/
    ```
 
-4. Run the `manage.py` script to regenerate the thumbnails.
+4. Run the `funkwhale-manage` command line interface to regenerate the thumbnails.
 
    ```{code-block} sh
-   poetry run python3 manage.py fw media generate-thumbnails
+   venv/bin/funkwhale-manage fw media generate-thumbnails
    ```
 
 :::
@@ -50,10 +50,10 @@ To generate new thumbnails:
    rm -r data/media/__sized__/
    ```
 
-4. Run the `manage.py` script to regenerate the thumbnails.
+4. Run the `funkwhale-manage` command line interface to regenerate the thumbnails.
 
    ```{code-block} sh
-   docker-compose run --rm api python3 manage.py fw media generate-thumbnails
+   docker-compose run --rm api funkwhale-manage fw media generate-thumbnails
    ```
 
 :::

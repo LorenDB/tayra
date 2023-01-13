@@ -260,9 +260,9 @@ build_openapi_schema:
     - cd api
     - pip3 install poetry
     - poetry install
-    - poetry run python3 manage.py migrate
+    - poetry run funkwhale-manage migrate
   script:
-    - poetry run python3 manage.py spectacular --file ../docs/schema.yml
+    - poetry run funkwhale-manage spectacular --file ../docs/schema.yml
   artifacts:
     expire_in: 2 weeks
     paths:

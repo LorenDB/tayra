@@ -40,7 +40,7 @@ Before you move your data, you need to install Funkwhale on your {term}`destinat
 On your {term}`destination server`, follow the [installation guide](debian.md). Skip the following steps:
 
 - Don't enable the `unaccent` and `citext` extensions when you set up the database.
-- Don't run the `manage.py migrate` command to migrate the database.
+- Don't run the `funkwhale-manage migrate` command to migrate the database.
 - Don't create a superuser.
 
 Once you have finished the installation, stop the Funkwhale services. These shouldn't be running when you copy your existing data over.
@@ -56,7 +56,7 @@ sudo systemctl stop funkwhale.target
 
 On your {term}`destination server`, follow the [installation guide](docker.md). Skip the following steps:
 
-- Don't run the `manage.py migrate` command to migrate the database.
+- Don't run the `funkwhale-manage migrate` command to migrate the database.
 - Don't create a superuser.
 
 Once you have finished the installation, stop the Funkwhale services. These shouldn't be running when you copy your existing data over.
@@ -136,11 +136,11 @@ Run the following on your {term}`destination server`:
 sudo psql -d funkwhale dump.sql
 ```
 
-When the import finishes, run the `manage.py migrate` command to set up the database.
+When the import finishes, run the `funkwhale-manage migrate` command to set up the database.
 
 ```{code-block} sh
-cd /srv/funkwhale/api
-poetry run python3 manage.py migrate
+cd /srv/funkwhale
+venv/bin/funkwhale-manage migrate
 ```
 
 :::
@@ -166,10 +166,10 @@ You need to initialize the postgres container on your {term}`destination server`
    docker-compose run --rm postgres psql -U postgres -d postgres < "dump.sql"
    ```
 
-3. When the import finishes, run the `manage.py migrate` command to set up the database.
+3. When the import finishes, run the `funkwhale-manage migrate` command to set up the database.
 
    ```{code-block} sh
-   docker-compose run --rm api python3 manage.py migrate
+   docker-compose run --rm api funkwhale-manage migrate
    ```
 
 :::

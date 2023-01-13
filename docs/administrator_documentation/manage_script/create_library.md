@@ -38,7 +38,7 @@ Use the following command to create a new library with a custom name and privacy
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py create_library username1 --name="Library 1" --privacy-level="everyone"
+venv/bin/funkwhale-manage create_library username1 --name="Library 1" --privacy-level="everyone"
 ```
 
 :::
@@ -47,7 +47,7 @@ poetry run python3 manage.py create_library username1 --name="Library 1" --priva
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py create_library username1 --name="Library 1" --privacy-level="everyone"
+docker-compose run --rm api funkwhale-manage create_library username1 --name="Library 1" --privacy-level="everyone"
 ```
 
 :::
@@ -70,7 +70,7 @@ You can create a library using only a username. The script substitutes default v
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py create_library username1
+venv/bin/funkwhale-manage create_library username1
 ```
 
 :::
@@ -79,7 +79,7 @@ poetry run python3 manage.py create_library username1
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py create_library username1
+docker-compose run --rm api funkwhale-manage create_library username1
 ```
 
 :::
@@ -102,7 +102,7 @@ If a library with the same name already exists for the given user, the script wi
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py create_library username1 --name="Library 1" --privacy-level="everyone"
+venv/bin/funkwhale-manage create_library username1 --name="Library 1" --privacy-level="everyone"
 ```
 
 :::
@@ -111,7 +111,7 @@ poetry run python3 manage.py create_library username1 --name="Library 1" --priva
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py create_library username1 --name="Library 1" --privacy-level="everyone"
+docker-compose run --rm api funkwhale-manage create_library username1 --name="Library 1" --privacy-level="everyone"
 ```
 
 :::

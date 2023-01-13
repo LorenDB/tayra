@@ -16,7 +16,7 @@ To ensure you don't remove data by accident, this command runs in dry run mode b
 :sync: debian
 
 ```{code-block} sh
-poetry run python3 manage.py check_inplace_files
+venv/bin/funkwhale-manage check_inplace_files
 ```
 
 :::
@@ -25,7 +25,7 @@ poetry run python3 manage.py check_inplace_files
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api python3 manage.py check_inplace_files
+docker-compose run --rm api funkwhale-manage check_inplace_files
 ```
 
 :::

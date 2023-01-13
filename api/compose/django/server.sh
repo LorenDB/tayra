@@ -2,8 +2,8 @@
 
 set -eux
 
-python3 /app/manage.py collectstatic --noinput
-python3 /app/manage.py migrate
+funkwhale-manage collectstatic --noinput
+funkwhale-manage migrate
 
 # shellcheck disable=SC2086
 gunicorn config.asgi:application \
