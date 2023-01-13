@@ -2,78 +2,37 @@
 
 If you installed Funkwhale following the [Debian guide](../installation_docs/debian.md), follow these steps to upgrade.
 
-:::{dropdown} Upgrading to a new version of Python
-:icon: alert
-:color: warning
+## Cleanup old funkwhale files
 
-If you upgrade your Python version, you need to update your virtualenv. Python is updated with each new version of Debian.
-
-To upgrade your virtualenv:
-
-1. Change to your api directory.
-
-   ```{code-block} sh
-   cd /srv/funkwhale/api
-   ```
-
-2. Rerun `poetry install` to reinstall your dependencies in a new virtualenv.
-
-   ```{code-block} sh
-   poetry install
-   ```
-
-:::
-
-## Download the updated files
-
-1. SSH into your server.
-2. Log in as your `funkwhale` user.
-
-   ```{code-block} sh
-   su funkwhale
-   ```
-
-3. Navigate to your Funkwhale directory.
-
-   ```{code-block} sh
-   cd /srv/funkwhale
-   ```
-
-4. Stop the Funkwhale services.
+1. Stop the Funkwhale services.
 
    ```{code-block} sh
    sudo systemctl stop funkwhale.target
    ```
 
-5. Export the Funkwhale version you want to update to. You'll use this in the rest of the commands in this guide.
+2. Navigate to your Funkwhale directory.
+
+   ```{code-block} sh
+   cd /srv/funkwhale
+   ```
+
+3. Remove the old files.
+
+   ```{code-block} sh
+   sudo rm -Rf api/* front/* venv
+   ```
+
+## Download Funkwhale
+
+1. Export the Funkwhale version you want to update to. You'll use this in the rest of the commands in this guide.
 
    ```{parsed-literal}
    export FUNKWHALE_VERSION={sub-ref}`version`
    ```
 
-6. Download the API files for your chosen Funkwhale version.
+2. Follow the [3. Download Funkwhale](../installation_docs/debian.md#3-download-funkwhale) installation section.
 
-   ```{code-block} sh
-   curl -L -o "api-$FUNKWHALE_VERSION.zip" "https://dev.funkwhale.audio/funkwhale/funkwhale/-/jobs/artifacts/$FUNKWHALE_VERSION/download?job=build_api"
-   ```
-
-7. Extract the downloaded archive to a new directory.
-
-   ```{code-block} sh
-   unzip "api-$FUNKWHALE_VERSION.zip" -o api_new
-   ```
-
-8. Remove the old `api` directory and move the extracted directory to the `api` directory.
-
-   ```{code-block} sh
-   rm -rf api/ && mv api_new api
-   ```
-
-9. Remove the downloaded archive file.
-
-   ```{code-block} sh
-   rm api-$FUNKWHALE_VERSION.zip
-   ```
+3. Follow the [4. Install the Funkwhale API](../installation_docs/debian.md#4-install-the-funkwhale-api) installation section.
 
 ## Update your Funkwhale instance
 
@@ -85,31 +44,19 @@ Once you have downloaded the new files, you can update your Funkwhale instance. 
    sudo api/install_os_dependencies.sh install
    ```
 
-2. Enter the `api` directory to run the following commands.
+2. Collect the new static files to serve.
 
    ```{code-block} sh
-   cd api
+   sudo venv/bin/funkwhale-manage collectstatic --no-input
    ```
 
-3. Install all Python dependencies using `poetry`.
+3. Apply new database migrations.
 
    ```{code-block} sh
-   poetry install
+   sudo -u funkwhale venv/bin/funkwhale-manage migrate
    ```
 
-4. Collect the new static files to serve.
-
-   ```{code-block} sh
-   poetry run python3 manage.py collectstatic --no-input
-   ```
-
-5. Apply new database migrations.
-
-   ```{code-block} sh
-   poetry run python3 manage.py migrate
-   ```
-
-6. Restart the Funkwhale services.
+4. Restart the Funkwhale services.
 
    ```{code-block} sh
    sudo systemctl start funkwhale.target

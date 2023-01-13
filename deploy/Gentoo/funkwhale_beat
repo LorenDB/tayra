@@ -5,7 +5,7 @@ NAME="funkwhalebeat"
 PIDFILE="/var/run/$NAME.pid"
 USER="funkwhale"
 WORKDIR="/srv/funkwhale/api"
-Celery="/srv/funkwhale/virtualenv/bin/celery"
+Celery="/srv/funkwhale/venv/bin/celery"
 BEAT_ARGS="--app funkwhale_api.taskapp beat --loglevel INFO"
 
 depend() {

@@ -122,31 +122,25 @@ Once you've created the directory structure you can download Funkwhale. Funkwhal
 
 You're done! These commands put the software in the correct location for Funkwhale to serve them.
 
-## 4. Install Python dependencies
+## 4. Install the Funkwhale API
 
-The Funkwhale API is written in Python. You need to install the API's dependencies to run the software. We use [Poetry](https://python-poetry.org) to handle Python dependencies.
+The Funkwhale API is written in Python. You need to install the API's package to run the software:
 
-1. Install Poetry. Follow the steps in this wizard to set it up.
-
-   ```{code-block} sh
-   curl -sSL https://install.python-poetry.org | python3 -
-   ```
-
-2. Add Poetry to your `$PATH`. This allows you to use `poetry` commands.
+1. Setup a Python virtual environment:
 
    ```{code-block} sh
-   export "PATH=$HOME/.local/bin:$PATH" >> ~/.bashrc
-   echo 'export "PATH=$HOME/.local/bin:$PATH"' >> ~/.bashrc
+   cd /srv/funkwhale
+   sudo python3 -m venv venv
+   sudo venv/bin/pip install --upgrade pip wheel
    ```
 
-3. Set up poetry in your `/srv/funkwhale/api` directory.
+2. Install the Funkwhale API package and dependencies:
 
    ```{code-block} sh
-   cd /srv/funkwhale/api
-   sudo poetry install
+   sudo venv/bin/pip install --editable ./api
    ```
 
-You're done! Poetry installs all Python dependencies.
+You're done!
 
 ## 5. Set up your environment file
 
@@ -369,37 +363,31 @@ grep '${' /etc/nginx/sites-enabled/funkwhale.conf
 
 To enable your users to connect to your pod securely, you need to set up {abbr}`TLS (Transport Layer Security)`. To do this, we recommend using the <acme.sh> script.
 
-1. Log in as the superuser account to run these commands.
+1. Create the `/etc/certs` folder to store the certificates.
 
    ```{code-block} sh
-   su
+   sudo mkdir /etc/certs
    ```
 
-2. Create the `/etc/certs` folder to store the certificates.
+2. Download and run `acme.sh`. Replace `my@example.com` with your email address.
 
    ```{code-block} sh
-   mkdir /etc/certs
+   curl https://get.acme.sh | sudo sh -s email=my@example.com
    ```
 
-3. Download and run `acme.sh`. Replace `my@example.com` with your email address.
+3. Generate a certificate. Replace `example.com` with your Funkwhale pod name. Use `/srv/funkwhale/front` as your web root folder.
 
    ```{code-block} sh
-   curl https://get.acme.sh | sh -s email=my@example.com
+   sudo acme.sh --issue -d example.com -w /srv/funkwhale/front
    ```
 
-4. Generate a certificate. Replace `example.com` with your Funkwhale pod name. Use `/srv/funkwhale/front` as your web root folder.
+4. Install the certificate to your Nginx config. Replace `example.com` with your Funkwhale pod name.
 
    ```{code-block} sh
-   acme.sh --issue -d example.com -w /srv/funkwhale/front
-   ```
-
-5. Install the certificate to your Nginx config. Replace `example.com` with your Funkwhale pod name.
-
-   ```{code-block} sh
-   acme.sh --install-cert -d example.com \
-   --key-file       /etc/certs/key.pem  \
-   --fullchain-file /etc/certs/cert.pem \
-   --reloadcmd     "service nginx force-reload"
+   sudo acme.sh --install-cert -d example.com \
+      --key-file       /etc/certs/key.pem  \
+      --fullchain-file /etc/certs/cert.pem \
+      --reloadcmd     "service nginx force-reload"
    ```
 
 That's it! acme.sh renews your certificate every 60 days, so you don't need to about renewing it.

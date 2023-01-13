@@ -26,9 +26,9 @@ funkwhale_beat_chdir="/usr/local/www/funkwhale/api"
 funkwhale_beat_user="funkwhale"
 funkwhale_beat_env="$(grep -v '^#' /usr/local/www/funkwhale/config/.env | xargs)"
 pidfile="/var/run/funkwhale/${name##funkwhale_}.pid"
-command_interpreter="/usr/local/www/funkwhale/virtualenv/bin/python3"
+command_interpreter="/usr/local/www/funkwhale/venv/bin/python3"
 
-command="/usr/local/www/funkwhale/virtualenv/bin/celery"
+command="/usr/local/www/funkwhale/venv/bin/celery"
 command_args="\
 --app funkwhale_api.taskapp \
 beat \

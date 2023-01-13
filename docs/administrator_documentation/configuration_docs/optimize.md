@@ -30,7 +30,12 @@ Celery uses a `prefork` pool by default. This enables the server to process many
 2. Add the `--pool=solo` flag to the `ExecStart` line of your unit file.
 
    ```{code-block} text
-   ExecStart=/srv/funkwhale/.local/bin/poetry run celery -A --pool=solo funkwhale_api.taskapp worker -l INFO --concurrency=${CELERYD_CONCURRENCY}
+   ExecStart=/srv/funkwhale/venv/bin/celery \
+      --app funkwhale_api.taskapp \
+      --pool solo \
+      worker \
+      --loglevel INFO \
+      --concurrency=${CELERYD_CONCURRENCY}
    ```
 
 3. Restart the Celery service.
