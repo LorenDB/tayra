@@ -30,9 +30,9 @@ If you installed Funkwhale following the [Debian guide](../installation_docs/deb
    export FUNKWHALE_VERSION={sub-ref}`version`
    ```
 
-2. Follow the [3. Download Funkwhale](../installation_docs/debian.md#3-download-funkwhale) installation section.
+2. Follow the [Download Funkwhale](../installation_docs/debian.md#3-download-funkwhale) instructions in the installation guide.
 
-3. Follow the [4. Install the Funkwhale API](../installation_docs/debian.md#4-install-the-funkwhale-api) installation section.
+3. Follow the [Install the Funkwhale API](../installation_docs/debian.md#4-install-the-funkwhale-api) instructions in the installation guide.
 
 ## Update your Funkwhale instance
 

@@ -126,7 +126,7 @@ You're done! These commands put the software in the correct location for Funkwha
 
 The Funkwhale API is written in Python. You need to install the API's package to run the software:
 
-1. Setup a Python virtual environment:
+1. Set up a Python virtual environment:
 
    ```{code-block} sh
    cd /srv/funkwhale
@@ -255,7 +255,7 @@ That's it! You've finished setting up your database.
 
 ## 7. Set up Funkwhale
 
-Once you have got your database up and running, you can get Funkwhale ready to launch. Use the built-in `funkwhale-manage` command line interface to get things ready.
+Once you've got your database up and running, you can get Funkwhale ready to launch. Use the built-in `funkwhale-manage` command line interface to get things ready.
 
 ### Create a superuser for your pod
 
