@@ -366,8 +366,8 @@ To enable your users to connect to your pod securely, you need to set up {abbr}`
 1. Install certbot
 
    ```{code-block} sh
-   apt-get update
-   apt-get install certbot python3-certbot-nginx
+   sudo apt-get update
+   sudo apt-get install certbot python3-certbot-nginx
    ```
 
 2. Run certbot
