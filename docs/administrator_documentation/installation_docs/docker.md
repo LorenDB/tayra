@@ -262,39 +262,19 @@ That's it! The container mounts your custom nginx files and uses its values to s
 
 ## 6. Set up TLS
 
-To enable your users to connect to your pod securely, you need to set up {abbr}`TLS (Transport Layer Security)`. To do this, we recommend using the <acme.sh> script.
+To enable your users to connect to your pod securely, you need to set up {abbr}`TLS (Transport Layer Security)`. To do this, we recommend using [certbot](https://certbot.eff.org/).
 
-1. Log in as the superuser account to run these commands.
-
-   ```{code-block} sh
-   su
-   ```
-
-2. Create the `/etc/certs` folder to store the certificates.
+1. Install certbot
 
    ```{code-block} sh
-   mkdir /etc/certs
+   apt-get update
+   apt-get install certbot python3-certbot-nginx
    ```
 
-3. Download and run `acme.sh`. Replace `my@example.com` with your email address.
+2. Run certbot
 
    ```{code-block} sh
-   curl https://get.acme.sh | sh -s email=my@example.com
+   sudo certbot --nginx -d $FUNKWHALE_HOSTNAME
    ```
 
-4. Generate a certificate. Replace `example.com` with your Funkwhale pod name. Use `/srv/funkwhale/front` as your web root folder.
-
-   ```{code-block} sh
-   acme.sh --issue -d example.com -w /srv/funkwhale/front
-   ```
-
-5. Install the certificate to your Nginx config. Replace `example.com` with your Funkwhale pod name.
-
-   ```{code-block} sh
-   acme.sh --install-cert -d example.com \
-   --key-file       /etc/certs/key.pem  \
-   --fullchain-file /etc/certs/cert.pem \
-   --reloadcmd     "service nginx force-reload"
-   ```
-
-That's it! acme.sh renews your certificate every 60 days, so you don't need to worry about renewing it.
+That's it! certbot renews your certificate every 60 days, so you don't need to worry about renewing it.
