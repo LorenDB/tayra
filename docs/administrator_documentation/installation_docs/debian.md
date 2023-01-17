@@ -361,7 +361,7 @@ grep '${' /etc/nginx/sites-enabled/funkwhale.conf
 
 ## 10. Set up TLS
 
-To enable your users to connect to your pod securely, you need to set up {abbr}`TLS (Transport Layer Security)`. To do this, we recommend using certbot.
+To enable your users to connect to your pod securely, you need to set up {abbr}`TLS (Transport Layer Security)`. To do this, we recommend using [certbot](https://certbot.eff.org/).
 
 1. Install certbot
 
