@@ -12,6 +12,7 @@ variables:
 
   PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
   YARN_CACHE_FOLDER: $CI_PROJECT_DIR/.cache/yarn
+  POETRY_VIRTUALENVS_IN_PROJECT: "true"
 
 .shared_variables:
   # Keep the git files permissions during job setup
@@ -29,6 +30,16 @@ variables:
         prefix: front-node_modules
         files: [front/yarn.lock]
       paths: [front/node_modules]
+
+  # Cache for api related jobs
+  # Include the python version to prevent loosing caches in the test matrix
+  api_cache: &api_cache
+    - key: api-pip-$PYTHON_VERSION
+      paths: [$PIP_CACHE_DIR]
+    - key:
+        prefix: api-venv-$PYTHON_VERSION
+        files: [api/poetry.lock]
+      paths: [api/.venv]
 
 default:
   tags:
@@ -195,8 +206,7 @@ test_api:
   services:
     - postgres:15-alpine
     - redis:7-alpine
-  cache:
-    paths: ["$PIP_CACHE_DIR"]
+  cache: *api_cache
   variables:
     DATABASE_URL: "postgresql://postgres@postgres/postgres"
     FUNKWHALE_URL: "https://funkwhale.ci"
@@ -255,10 +265,7 @@ build_api_schema:
   services:
     - postgres:15-alpine
     - redis:7-alpine
-  cache:
-    key: "$CI_PROJECT_ID__pip_cache"
-    paths:
-      - "$PIP_CACHE_DIR"
+  cache: *api_cache
   variables:
     DATABASE_URL: "postgresql://postgres@postgres/postgres"
     FUNKWHALE_URL: "https://funkwhale.ci"
