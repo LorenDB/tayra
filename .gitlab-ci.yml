@@ -351,10 +351,13 @@ deploy_docs:
 
 .docker_publish:
   stage: publish
-  image: egon0/docker-with-buildx-and-git:bash
+
+  image: $CI_REGISTRY/funkwhale/ci/docker
   parallel:
     matrix:
       - COMPONENT: ["api", "front"]
+  services:
+    - docker:20-dind
   variables:
     <<: *keep_git_files_permissions
 
@@ -368,8 +371,6 @@ deploy_docs:
     BUILD_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
   tags:
     - multiarch
-  services:
-    - docker:20-dind
   before_script:
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
   cache:
