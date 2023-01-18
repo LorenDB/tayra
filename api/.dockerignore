@@ -1,6 +1,6 @@
 # Exclude everything and allow only the necessary files
 *
-!/compose/
+!/docker/
 !/config/
 !/funkwhale_api/
 !/manage.py
