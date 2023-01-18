@@ -238,7 +238,11 @@ test_front:
 
 build_api_schema:
   stage: build
-  image: $CI_REGISTRY/funkwhale/backend-test-docker:3.11
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [api/**/*]
+
+  image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-api:3.11
   services:
     - postgres:15-alpine
     - redis:7-alpine
@@ -255,7 +259,6 @@ build_api_schema:
     API_TYPE: "v1"
   before_script:
     - cd api
-    - pip3 install poetry
     - poetry install
     - poetry run funkwhale-manage migrate
   script:
