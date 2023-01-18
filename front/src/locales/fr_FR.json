@@ -1714,7 +1714,7 @@
               "size": "Taille",
               "status": "Statut"
             },
-            "progress": "{percent}%",
+            "progress": "{percent} %",
             "status": {
               "pending": "En attente",
               "uploaded": "Téléversé",
@@ -2771,7 +2771,7 @@
           "modal": "Utilisez ce formulaire pour envoyer un signalement à notre équipe de modération."
         },
         "error": {
-          "nodeinfoFetch": "Impossible de récupérer les informations sur le nœud: {error}"
+          "nodeinfoFetch": "Impossible de récupérer les informations sur le nœud : {error}"
         },
         "header": {
           "disabled": "Les signalements anonymes sont désactivés, inscrivez-vous pour faire un signalement.",
