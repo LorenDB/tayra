@@ -56,9 +56,9 @@ If you installed Funkwhale following the [Docker guide](../installation_docs/doc
 
 10. Exit the root shell.
 
-   ```{code-block} sh
-   exit
-   ```
+```{code-block} sh
+exit
+```
 
 That’s it! You’ve updated your Funkwhale pod. You should now see the new version running in your web browser.
 
