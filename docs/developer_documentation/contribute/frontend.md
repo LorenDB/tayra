@@ -26,11 +26,11 @@ The Funkwhale frontend contains some tests to catch errors before changes go liv
 To run the test suite, run the following command:
 
 ```sh
-docker-compose -f dev.yml run --rm front yarn test:unit
+sudo docker compose -f dev.yml run --rm front yarn test:unit
 ```
 
 To run tests as you make changes, launch the test suite with the `-w` flag:
 
 ```sh
-docker-compose -f dev.yml run --rm front yarn test:unit -w
+sudo docker compose -f dev.yml run --rm front yarn test:unit -w
 ```

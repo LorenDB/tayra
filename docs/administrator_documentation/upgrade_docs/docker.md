@@ -29,28 +29,35 @@ If you installed Funkwhale following the [Docker guide](../installation_docs/doc
    nano .env
    ```
 
-6. Load the configuration from your `.env` file.
+6. Log in as `su` to load the configuration from your `.env` file.
 
    ```{code-block} sh
+   sudo su
    source .env
    ```
 
 7. Pull the updated containers.
 
    ```{code-block} sh
-   docker-compose pull
+   docker compose pull
    ```
 
 8. Apply the database migrations.
 
    ```{code-block} sh
-   docker-compose run --rm api funkwhale-manage migrate
+   docker compose run --rm api funkwhale-manage migrate
    ```
 
 9. Relaunch your containers.
 
    ```{code-block} sh
-   docker-compose up -d
+   docker compose up -d
+   ```
+
+10. Exit the root shell.
+
+   ```{code-block} sh
+   exit
    ```
 
 That’s it! You’ve updated your Funkwhale pod. You should now see the new version running in your web browser.
@@ -76,13 +83,13 @@ To upgrade postgres on Docker we use the [`postgres-upgrade`](https://hub.docker
 3. Stop the postgres container. This means no data changes while you are upgrading.
 
    ```{code-block} sh
-   docker-compose stop postgres
+   sudo docker compose stop postgres
    ```
 
 4. Run the migration using the `postgres-upgrade` container. This creates a new version of the database in the `/srv/funkwhale/data/postgres-new` directory.
 
    ```{code-block} sh
-   docker run --rm \
+   sudo -E docker run --rm \
    -v $(pwd)/data/postgres:/var/lib/postgresql/${OLD_POSTGRES}/data \
    -v $(pwd)/data/postgres-new:/var/lib/postgresql/${NEW_POSTGRES}/data \
    tianon/postgres-upgrade:${OLD_POSTGRES}-to-${NEW_POSTGRES}
@@ -104,13 +111,13 @@ To upgrade postgres on Docker we use the [`postgres-upgrade`](https://hub.docker
 7. Pull the new postgres version.
 
    ```{code-block} sh
-   docker-compose pull
+   sudo docker compose pull
    ```
 
 8. Restart your containers.
 
    ```{code-block} sh
-   docker-compose up -d
+   sudo docker compose up -d
    ```
 
 That's it! Your Funkwhale pod is now running the new version of postgres. The old database is available in `/srv/funkwhale/data/postgres-old`. You can back this up and remove it from your server once you've confirmed everything is working.

@@ -24,7 +24,7 @@ venv/bin/funkwhale-manage import_files --help
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage import_files --help
+sudo docker compose run --rm api funkwhale-manage import_files --help
 ```
 
 :::
@@ -188,7 +188,7 @@ Funkwhale imports the music in your storage directory into the specified library
 2. Run your import command against your music storage directory:
 
    ```{code-block} sh
-   docker-compose run --rm api funkwhale-manage import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place
+   sudo docker compose run --rm api funkwhale-manage import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place
    ```
 
 Funkwhale imports the music in your storage directory into the specified library.
@@ -250,7 +250,7 @@ venv/bin/funkwhale-manage import_files $LIBRARY_ID "/srv/funkwhale/data/music/nf
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place --watch
+sudo docker compose run --rm api funkwhale-manage import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place --watch
 ```
 
 :::
@@ -281,7 +281,7 @@ venv/bin/funkwhale-manage import_files $LIBRARY_ID "/srv/funkwhale/data/music/nf
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place --watch --prune
+sudo docker compose run --rm api funkwhale-manage import_files $LIBRARY_ID "/srv/funkwhale/data/music/nfsshare/" --recursive --noinput --in-place --watch --prune
 ```
 
 :::

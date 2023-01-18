@@ -47,7 +47,7 @@ journalctl -xn -u funkwhale-server
 :sync: docker
 
 ```{code-block} sh
-docker-compose logs -f --tail=50 api # Follow the last 50 messages
+sudo docker compose logs -f --tail=50 api # Follow the last 50 messages
 ```
 
 :::
@@ -70,7 +70,7 @@ journalctl -xn -u funkwhale-worker
 :sync: docker
 
 ```{code-block} sh
-docker-compose logs -f --tail=50 celery # Follow the last 50 messages
+sudo docker compose logs -f --tail=50 celery # Follow the last 50 messages
 ```
 
 :::
@@ -150,7 +150,7 @@ If your Funkwhale server uses more memory than expected, you can check the footp
    :sync: docker
 
    ```{code-block} sh
-   docker-compose restart
+   sudo docker compose restart
    ```
 
    :::
@@ -189,7 +189,7 @@ To disable memory tracing:
    :sync: docker
 
    ```{code-block} sh
-   docker-compose restart
+   sudo docker compose restart
    ```
 
    :::

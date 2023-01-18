@@ -35,7 +35,7 @@ Follow this guide to migrate a mono-container installation to a multi-container 
 1. Create a backup of your Funkwhale database. We will import this into the new postgres container later.
 
    ```{code-block} sh
-   docker-compose exec funkwhale /usr/bin/pg_dumpall -U funkwhale > db_dump.sql
+   sudo docker compose exec funkwhale /usr/bin/pg_dumpall -U funkwhale > db_dump.sql
    ```
 
 ## Stop your Funkwhale instance
@@ -43,7 +43,7 @@ Follow this guide to migrate a mono-container installation to a multi-container 
 1. Stop all Funkwhale services. This ensures that no data is changed while you migrate your instance.
 
    ```{code-block} sh
-   docker-compose down
+   sudo docker compose down
    ```
 
 ## Prepare the multi-container setup
@@ -113,19 +113,19 @@ Check the file and remove any duplicated settings after copying.
 1. Start up your new database container.
 
    ```{code-block} sh
-   docker-compose up -d postgres
+   sudo docker compose up -d postgres
    ```
 
 2. Import your database dump into the new container.
 
    ```{code-block} sh
-   cat db_dump.sql | docker-compose exec -T postgres psql -U postgres
+   cat db_dump.sql | sudo docker compose exec -T postgres psql -U postgres
    ```
 
 3. Run the database migrations.
 
    ```{code-block} sh
-   docker-compose run --rm api funkwhale-manage migrate
+   sudo docker compose run --rm api funkwhale-manage migrate
    ```
 
 ## Start your Funkwhale instance
@@ -133,5 +133,5 @@ Check the file and remove any duplicated settings after copying.
 Once you have imported your database and run migrations, you can start all containers.
 
 ```{code-block} sh
-docker-compose up -d
+sudo docker compose up -d
 ```

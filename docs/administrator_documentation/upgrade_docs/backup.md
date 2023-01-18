@@ -19,7 +19,7 @@ Before performing big changes, we recommend you back up your database and media 
    :sync: docker
 
    ```{code-block} sh
-   docker-compose exec postgres pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+   sudo docker compose exec postgres pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
    ```
 
    :::
@@ -126,13 +126,13 @@ To restore your database, do the following:
 1. Restore your database backup.
 
    ```{code-block} sh
-    docker-compose run --rm -T postgres psql -U postgres postgres < "/path/to/your/backup/dump.sql"
+    sudo docker compose run --rm -T postgres psql -U postgres postgres < "/path/to/your/backup/dump.sql"
    ```
 
 2. Run the `funkwhale-manage migrate` command to set up the database.
 
    ```{code-block} sh
-   docker-compose run --rm api funkwhale-manage migrate
+   sudo docker compose run --rm api funkwhale-manage migrate
    ```
 
 :::

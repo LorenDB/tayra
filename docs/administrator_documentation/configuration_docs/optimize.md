@@ -60,7 +60,7 @@ Celery uses a `prefork` pool by default. This enables the server to process many
 2. Restart Celery.
 
    ```{code-block} sh
-   docker-compose restart celerybeat
+   sudo docker compose restart celerybeat
    ```
 
 :::

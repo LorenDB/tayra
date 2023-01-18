@@ -1,6 +1,6 @@
 # Install Funkwhale using Docker
 
-Funkwhale is available as a containerized application. This enables you to run each service in containers rather than install them on your server. You can run Funkwhale using [Docker](https://docker.com) and Docker-Compose.
+Funkwhale is available as a containerized application. This enables you to run each service in containers rather than install them on your server. You can run Funkwhale using [Docker](https://docker.com).
 
 ```{note}
 This guide assumes you are using a [Debian](https://debian.org)-based system.
@@ -18,7 +18,7 @@ This guide assumes you are using a [Debian](https://debian.org)-based system.
   export FUNKWHALE_VERSION={sub-ref}`version`
   ```
 
-- Install [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
+- Install [Docker](https://docs.docker.com/engine/install/) and the [compose plugin](https://docs.docker.com/compose/install/linux/#install-using-the-repository).
 - Install `curl`.
 
   ```{code-block} sh
@@ -32,11 +32,9 @@ It's good practice to create a user on your server for Funkwhale administration.
 
 1. Create the `funkwhale` user and set its shell to `bash` and its home directory to `/srv/funkwhale`.
 
-```{code-block} sh
-sudo useradd --system --shell /bin/bash --create-home --home-dir /srv/funkwhale funkwhale
-```
-
-2. Follow the [Docker post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/) to give the `funkwhale` user the ability to use Docker without `sudo`.
+   ```{code-block} sh
+   sudo useradd --system --shell /bin/bash --create-home --home-dir /srv/funkwhale funkwhale
+   ```
 
 ````{note}
 To perform any tasks as the `funkwhale` user, prefix your commands with `sudo -u funkwhale`.
@@ -69,7 +67,7 @@ That's it! You've created your `funkwhale` user.
    cd /srv/funkwhale
    ```
 
-3. Download the `docker-compose` template. This contains information about the containers and how they work together.
+3. Download the `docker compose` template. This contains information about the containers and how they work together.
 
    ```{code-block} sh
    curl -L -o /srv/funkwhale/docker-compose.yml "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker-compose.yml"
@@ -128,19 +126,19 @@ Once you've filled in your environment file, you can set up Funkwhale. Follow th
 
    ```{code-block} sh
    cd /srv/funkwhale
-   docker-compose pull
+   sudo docker compose pull
    ```
 
 2. Bring up the database container so you can run the database migrations.
 
    ```{code-block} sh
-   docker-compose up -d postgres
+   sudo docker compose up -d postgres
    ```
 
 3. Run the database migrations.
 
    ```{code-block} sh
-   docker-compose run --rm api funkwhale-manage migrate
+   sudo docker compose run --rm api funkwhale-manage migrate
    ```
 
    ````{note}
@@ -156,13 +154,13 @@ Once you've filled in your environment file, you can set up Funkwhale. Follow th
 4. Create your superuser.
 
    ```{code-block} sh
-   docker-compose run --rm api funkwhale-manage createsuperuser
+   sudo docker compose run --rm api funkwhale-manage createsuperuser
    ```
 
 5. Launch all the containers to bring up your pod.
 
    ```{code-block} sh
-   docker-compose up -d
+   sudo docker compose up -d
    ```
 
 That's it! Your Funkwhale pod is now up and running.
@@ -255,7 +253,7 @@ The frontend container ships default Nginx templates which serve content to the 
 6. Bring the `front` container up again to pick up the changes.
 
    ```{code-block} sh
-   docker-compose up -d front
+   sudo docker compose up -d front
    ```
 
 That's it! The container mounts your custom nginx files and uses its values to serve Funkwhale content. To revert to the default values, comment out the volumes by adding a `#` in front of them and bring the `front` container back up.
@@ -267,8 +265,8 @@ To enable your users to connect to your pod securely, you need to set up {abbr}`
 1. Install certbot
 
    ```{code-block} sh
-   apt-get update
-   apt-get install certbot python3-certbot-nginx
+   sudo apt-get update
+   sudo apt-get install certbot python3-certbot-nginx
    ```
 
 2. Run certbot

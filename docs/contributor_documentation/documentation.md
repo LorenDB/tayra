@@ -47,19 +47,19 @@ We provide a docker container for our documentation to make it easy to work on d
 2. Create a dummy federation network
 
    ```{code-block} sh
-   docker network create federation
+   sudo docker network create federation
    ```
 
 3. Build the container
 
    ```{code-block} sh
-   docker-compose -f dev.yml build docs
+   sudo docker compose -f dev.yml build docs
    ```
 
 4. Run the container
 
    ```{code-block} sh
-   docker-compose -f dev.yml up docs
+   sudo docker compose -f dev.yml up docs
    ```
 
 A real-time preview of the documentation is available on `http://0.0.0.1:8001`

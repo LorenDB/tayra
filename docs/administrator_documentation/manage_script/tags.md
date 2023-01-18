@@ -45,7 +45,7 @@ To add tags to untagged albums:
 3. Run the `funkwhale-manage` command line interface to generate tags for untagged albums.
 
    ```{code-block} sh
-   docker-compose run --rm api funkwhale-manage fw albums add-tags-from-tracks
+   sudo docker compose run --rm api funkwhale-manage fw albums add-tags-from-tracks
    ```
 
 :::
@@ -88,7 +88,7 @@ To add tags to untagged artists:
 3. Run the `funkwhale-manage` command line interface to generate tags for untagged artists.
 
    ```{code-block} sh
-   docker-compose run --rm api funkwhale-manage fw artists add-tags-from-tracks
+   sudo docker compose run --rm api funkwhale-manage fw artists add-tags-from-tracks
    ```
 
 :::

@@ -25,7 +25,7 @@ venv/bin/funkwhale-manage fw users create
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage fw users create
+sudo docker compose run --rm api funkwhale-manage fw users create
 ```
 
 :::
@@ -48,7 +48,7 @@ venv/bin/funkwhale-manage fw users create --username <username> --email <user em
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage fw users create --username <username> --email <user email> -p ""
+sudo docker compose run --rm api funkwhale-manage fw users create --username <username> --email <user email> -p ""
 ```
 
 :::
@@ -73,7 +73,7 @@ venv/bin/funkwhale-manage fw users create --username <username> --email <user em
 
 ```{code-block} sh
 export FUNKWHALE_CLI_USER_PASSWORD=<password>
-docker-compose run --rm api funkwhale-manage fw users create --username <username> --email <user email>
+sudo docker compose run --rm api funkwhale-manage fw users create --username <username> --email <user email>
 ```
 
 :::
@@ -96,7 +96,7 @@ venv/bin/funkwhale-manage fw users --help
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage fw users --help
+sudo docker compose run --rm api funkwhale-manage fw users --help
 ```
 
 :::
@@ -123,7 +123,7 @@ venv/bin/funkwhale-manage fw users set --upload-quota 500 <user>
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage fw users set --upload-quota 500 <user>
+sudo docker compose run --rm api funkwhale-manage fw users set --upload-quota 500 <user>
 ```
 
 :::
@@ -146,7 +146,7 @@ venv/bin/funkwhale-manage fw users set --staff --superuser <user 1> <user 2>
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage fw users set --staff --superuser <user 1> <user 2>
+sudo docker compose run --rm api funkwhale-manage fw users set --staff --superuser <user 1> <user 2>
 ```
 
 :::
@@ -169,7 +169,7 @@ venv/bin/funkwhale-manage fw users set --no-staff --no-superuser <user>
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage fw users set --no-staff --no-superuser <user>
+sudo docker compose run --rm api funkwhale-manage fw users set --no-staff --no-superuser <user>
 ```
 
 :::
@@ -192,7 +192,7 @@ venv/bin/funkwhale-manage fw users set --permission-moderation <user>
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage fw users set --permission-moderation <user>
+sudo docker compose run --rm api funkwhale-manage fw users set --permission-moderation <user>
 ```
 
 :::
@@ -215,7 +215,7 @@ venv/bin/funkwhale-manage fw users set --password "<password>" <user>
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage fw users set --password "<password>" <user>
+sudo docker compose run --rm api funkwhale-manage fw users set --password "<password>" <user>
 ```
 
 :::
@@ -240,7 +240,7 @@ venv/bin/funkwhale-manage fw users set <user>
 
 ```{code-block} sh
 export FUNKWHALE_CLI_USER_UPDATE_PASSWORD=<password>
-docker-compose run --rm api funkwhale-manage fw users set <user>
+sudo docker compose run --rm api funkwhale-manage fw users set <user>
 ```
 
 :::
@@ -263,7 +263,7 @@ venv/bin/funkwhale-manage fw users set --help
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage fw users set --help
+sudo docker compose run --rm api funkwhale-manage fw users set --help
 ```
 
 :::
@@ -290,7 +290,7 @@ venv/bin/funkwhale-manage fw users rm <user>
 :sync: docker
 
 ```{code-block} py
-docker-compose run --rm api funkwhale-manage fw users rm <user>
+sudo docker compose run --rm api funkwhale-manage fw users rm <user>
 ```
 
 :::
@@ -315,7 +315,7 @@ venv/bin/funkwhale-manage fw users rm --hard <user>
 :sync: docker
 
 ```{code-block} py
-docker-compose run --rm api funkwhale-manage fw users rm --hard <user>
+sudo docker compose run --rm api funkwhale-manage fw users rm --hard <user>
 ```
 
 :::
@@ -338,7 +338,7 @@ venv/bin/funkwhale-manage fw users rm --help
 :sync: docker
 
 ```{code-block} sh
-docker-compose run --rm api funkwhale-manage fw users rm --help
+sudo docker compose run --rm api funkwhale-manage fw users rm --help
 ```
 
 :::

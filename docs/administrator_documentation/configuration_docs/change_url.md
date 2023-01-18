@@ -37,7 +37,7 @@ Running `fix_federation_ids` with the `--no-dry-run` flag is irreversible. Make 
    :sync: docker
 
    ```{code-block} sh
-   docker-compose run --rm api funkwhale-manage fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
+   sudo docker compose run --rm api funkwhale-manage fix_federation_ids https://old-url https://new-url --no-dry-run --no-input
    ```
 
    :::

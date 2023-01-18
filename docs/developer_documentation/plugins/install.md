@@ -40,7 +40,7 @@ You can install third-party plugins using the `funkwhale-manage` command line in
    :::{tab-item} Docker
 
    ```{code-block} shell
-   docker-compose run --rm api funkwhale-manage fw plugins install https://plugin_url.zip
+   sudo docker compose run --rm api funkwhale-manage fw plugins install https://plugin_url.zip
    ```
 
    :::

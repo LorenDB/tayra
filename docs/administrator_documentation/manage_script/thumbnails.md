@@ -53,7 +53,7 @@ To generate new thumbnails:
 4. Run the `funkwhale-manage` command line interface to regenerate the thumbnails.
 
    ```{code-block} sh
-   docker-compose run --rm api funkwhale-manage fw media generate-thumbnails
+   sudo docker compose run --rm api funkwhale-manage fw media generate-thumbnails
    ```
 
 :::

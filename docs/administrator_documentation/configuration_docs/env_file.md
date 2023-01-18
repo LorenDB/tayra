@@ -19,7 +19,7 @@ sudo systemctl restart funkwhale.target
 :sync: docker
 
 ```{code-block} sh
-docker-compose restart
+sudo docker compose restart
 ```
 
 :::
