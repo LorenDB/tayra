@@ -66,6 +66,12 @@ module.exports = {
     {
       files: ['*.json'],
       parser: 'jsonc-eslint-parser'
+    },
+    {
+      files: ['src/locales/*.json'],
+      rules: {
+        'no-irregular-whitespace': 'off'
+      }
     }
   ],
   settings: {
