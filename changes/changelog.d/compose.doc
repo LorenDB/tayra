@@ -1,0 +1,14 @@
+The Docker instructions now use the updated Docker compose plugin. If you previously used the ``docker-compose`` standalone installation, do the following while upgrading:
+
+1. Download the `Docker compose plugin <https://docs.docker.com/compose/install/linux/#install-using-the-repository>`_
+2. Stop your containers using the **docker-compose** syntax.
+
+.. code-block:: sh
+   sudo docker-compose down
+
+3. Bring the containers back up using the **docker compose** syntax.
+
+.. code-block:: sh
+   sudo docker compose up -d
+
+After this you can continue to use the **docker compose** syntax for all Docker management tasks.
