@@ -175,7 +175,7 @@ env = [
 
 [tool.coverage.run]
 plugins = ["django_coverage_plugin"]
-include = ["funkwhale_api/*"]
+source = ["funkwhale_api"]
 omit = [
   "*migrations*",
   "*tests*",
