@@ -30,7 +30,7 @@
         "loggedIn": "Vous êtes déjà connecté !"
       },
       "placeholder": {
-        "noDescription": "Pas de description disponible."
+        "noDescription": "Pas de description disponible"
       },
       "stat": {
         "activeUsers": "{ n } compte actif | { n } comptes actifs",
@@ -74,8 +74,8 @@
       },
       "notApplicable": "ND",
       "placeholder": {
-        "noDescription": "Pas de description disponible.",
-        "noRules": "Aucune règle disponible.",
+        "noDescription": "Pas de description disponible",
+        "noRules": "Aucune règle disponible",
         "noTerms": "Aucune condition disponible."
       },
       "stat": {
