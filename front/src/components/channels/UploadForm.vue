@@ -213,7 +213,7 @@ const uploadedFilesById = computed(() => uploadedFiles.value.reduce((acc: Record
 //
 // Metadata
 //
-type Metadata = Pick<Track, 'title' | 'description' | 'position' | 'tags'> & { cover: string }
+type Metadata = Pick<Track, 'title' | 'position' | 'tags'> & { cover: string | null, description: string }
 const uploadImportData = reactive({} as Record<string, Metadata>)
 const audioMetadata = reactive({} as Record<string, Record<string, string>>)
 const uploadData = reactive({} as Record<string, { import_metadata: Metadata }>)

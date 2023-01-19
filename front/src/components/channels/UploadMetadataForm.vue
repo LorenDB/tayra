@@ -6,14 +6,14 @@ import { reactive, computed, watch } from 'vue'
 import TagsSelector from '~/components/library/TagsSelector.vue'
 import AttachmentInput from '~/components/common/AttachmentInput.vue'
 
-type Values = Pick<Track, 'title' | 'description' | 'position' | 'tags'> & { cover: string }
+type Values = Pick<Track, 'title' | 'position' | 'tags'> & { cover: string | null, description: string }
 interface Events {
   (e: 'update:values', values: Values): void
 }
 
 interface Props {
   upload: Upload
-  values: Values | null
+  values: Partial<Values> | null
 }
 
 const emit = defineEmits<Events>()
@@ -23,7 +23,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const newValues = reactive<Values>({
   description: '',
-  ...(props.values ?? props.upload.import_metadata ?? {}) as Values
+  title: '',
+  tags: [],
+  cover: null,
+  ...(props.values ?? props.upload.import_metadata ?? {})
 })
 
 const isLoading = computed(() => !props.upload)
