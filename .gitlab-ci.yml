@@ -270,38 +270,34 @@ build_api_schema:
 
 build_docs:
   stage: build
-  image: python:3.11
   needs:
     - job: build_api_schema
       artifacts: true
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [docs/**/*]
+
+  image: $CI_REGISTRY/funkwhale/ci/python:3.11
   variables:
     BUILD_PATH: "../public"
     GIT_STRATEGY: clone
     GIT_DEPTH: 0
+  cache:
+    key: "$CI_PROJECT_ID__sphinx"
+    paths: [$PIP_CACHE_DIR]
   before_script:
     - cd docs
     - apt-get update
     - apt-get install -y graphviz
-    - pip install poetry
     - poetry install
     - git branch stable --track origin/stable || true
     - git branch develop --track origin/develop || true
   script:
     - ./build_docs.sh
-  cache:
-    key: "$CI_PROJECT_ID__sphinx"
-    paths:
-      - "$PIP_CACHE_DIR"
   artifacts:
     expire_in: 2 weeks
     paths:
       - public
-  rules:
-    - if: $CI_COMMIT_BRANCH == "stable" || $CI_COMMIT_BRANCH == "develop"
-      when: always
-    - changes:
-        - docs/**/*
-      when: always
 
 build_front:
   stage: build
