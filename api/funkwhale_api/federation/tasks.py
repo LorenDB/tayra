@@ -633,7 +633,12 @@ def fetch_collection(url, max_pages, channel, is_page=False):
 def check_all_remote_instance_availability():
     domains = models.Domain.objects.all().prefetch_related()
     for domain in domains:
-        check_single_remote_instance_availability(domain)
+        if domain == settings.FUNKWHALE_HOSTNAME:
+            # No need to check the instance itself: Its always reachable
+            domain.reachable = True
+            domain.last_successful_contact = timezone.now()
+        else:
+            check_single_remote_instance_availability(domain)
 
 
 @celery.app.task(name="federation.check_single_remote_instance_availability")

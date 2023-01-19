@@ -1173,7 +1173,9 @@ class LibraryQuerySet(models.QuerySet):
             )
             .values_list("target__channel__library", flat=True)
         )
-        domains_reachable = federation_models.Domain.objects.filter(reachable=True)
+        domains_reachable = federation_models.Domain.objects.filter(
+            reachable=True
+        ) | federation_models.Domain.objects.filter(name=settings.FUNKWHALE_HOSTNAME)
 
         return self.filter(
             me_query
