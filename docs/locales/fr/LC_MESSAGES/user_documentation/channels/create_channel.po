@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-18 07:48+0000\n"
+"PO-Revision-Date: 2023-01-20 19:42+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/user_documentation-channels-create_channel/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.14.2\n"
 "Generated-By: Babel 2.10.1\n"
 
 #: ../../user_documentation/channels/create_channel.md:1
@@ -65,6 +65,8 @@ msgstr ""
 #: ../../user_documentation/channels/create_channel.md:60
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
+"Sélectionnez l’icône de téléchargement ({fa}`upload`) en haut de la barre "
+"latérale."
 
 #: ../../user_documentation/channels/create_channel.md:23
 #: ../../user_documentation/channels/create_channel.md:39
@@ -150,12 +152,13 @@ msgstr ""
 
 #: ../../user_documentation/channels/create_channel.md
 msgid "Mobile"
-msgstr "Mobile"
+msgstr "Portable"
 
 #: ../../user_documentation/channels/create_channel.md:38
 #: ../../user_documentation/channels/create_channel.md:81
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
 msgstr ""
+"Sélectionnez l’icône de téléchargement ({fa}`upload`) en haut de l’écran."
 
 #: ../../user_documentation/channels/create_channel.md:51
 msgid ""
