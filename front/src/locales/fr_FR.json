@@ -76,7 +76,7 @@
       "placeholder": {
         "noDescription": "Pas de description disponible",
         "noRules": "Aucune règle disponible",
-        "noTerms": "Aucune condition disponible."
+        "noTerms": "Aucune condition disponible"
       },
       "stat": {
         "activeUsers": "utilisateur actif | utilisateurs actifs",
@@ -121,7 +121,7 @@
           "label": "Applications mobiles"
         },
         "publicContent": {
-          "description": "Écouter les albums publics et les playlists disponibles sur ce pod",
+          "description": "Écouter les albums publics et les playlists disponibles sur ce pod.",
           "label": "Parcourir le contenu public"
         },
         "rules": "Règles du serveur",
@@ -132,7 +132,7 @@
         "viewMore": "Voir plus…"
       },
       "placeholder": {
-        "noDescription": "Pas de description disponible."
+        "noDescription": "Pas de description disponible"
       },
       "stat": {
         "activeUsers": "{ n } compte actif | { n } comptes actifs",
@@ -330,7 +330,7 @@
           "save": "Enregistrer"
         },
         "header": {
-          "error": "Erreur lors de l'enregistrement des paramètres",
+          "error": "Erreur lors de l'enregistrement des paramètres.",
           "image": "Image actuelle"
         },
         "message": {
@@ -390,7 +390,7 @@
       },
       "ChannelForm": {
         "header": {
-          "error": "Erreur lors de l'enregistrement de la chaîne"
+          "error": "Erreur lors de l'enregistrement de la chaîne."
         },
         "help": {
           "discography": "Publier la musique que vous créez comme une discographie d'albums et de singles.",
@@ -474,7 +474,7 @@
       },
       "PlayButton": {
         "button": {
-          "addToPlaylist": "Ajouter à la liste de lecture…",
+          "addToPlaylist": "Ajouter à la liste de lecture",
           "addToQueue": "Ajouter à la file d'attente actuelle",
           "discretePlay": "Jouer",
           "episodeDetails": "Détails de l'épisode",
@@ -613,7 +613,7 @@
         "Modal": {
           "button": {
             "addToFavorites": "Ajouter aux favoris",
-            "addToPlaylist": "Ajouter à la liste de lecture…",
+            "addToPlaylist": "Ajouter à la liste de lecture",
             "addToQueue": "Ajouter à la file d'attente",
             "albumDetails": "Voir l'album",
             "artistDetails": "Voir l'artiste",
@@ -637,7 +637,7 @@
         "Modal": {
           "button": {
             "addToFavorites": "Ajouter aux favoris",
-            "addToPlaylist": "Ajouter à la liste de lecture…",
+            "addToPlaylist": "Ajouter à la liste de lecture",
             "addToQueue": "Ajouter à la file d'attente",
             "albumDetails": "Voir l'album",
             "artistDetails": "Voir l'artiste",
@@ -712,6 +712,7 @@
           "redirectUri": "URI de redirection",
           "scopes": {
             "description": "Cocher le périmètre \"Lecture\" ou \"Écriture\" sur le parent implique l'accès à tous les périmètres enfants correspondants.",
+            "label": "Espaces",
             "read": {
               "description": "Accès en lecture seule aux données utilisateur",
               "label": "Lire"
@@ -743,7 +744,7 @@
           "writeOnly": "Écriture seule"
         },
         "help": {
-          "copyCode": "Un code à copier-coller dans l'application vous sera présenté.",
+          "copyCode": "Un code à copier-coller dans l'application vous sera présenté",
           "pasteCode": "Copiez-coller le code suivant dans votre application :",
           "redirect": "Vous allez être redirigé·e vers { 0 }"
         },
@@ -879,14 +880,14 @@
         },
         "message": {
           "confirmDelete": "Votre demande de suppression a été envoyée, votre compte et le contenu associé sera supprimé sous peu",
-          "currentEmail": "Votre adresse courriel actuelle est { email }."
+          "currentEmail": "Votre adresse courriel actuelle est {email}"
         },
         "modal": {
           "changePassword": {
             "content": {
               "logout": "Vous allez être déconnecté⋅e de cette session et vous devrez vous connecter avec votre nouveau mot de passe",
               "subsonic": "Votre mot de passe Subsonic sera remplacé par un nouveau mot de passe aléatoire, ce qui vous déconnectera de tous les appareils utilisant l'ancien mot de passe",
-              "warning": "Modifier votre mot de passe aura les conséquences suivantes :"
+              "warning": "Modifier votre mot de passe aura les conséquences suivantes"
             },
             "header": "Changer le mot de passe ?"
           },
@@ -1118,7 +1119,7 @@
         },
         "meta": {
           "files": "{ n } fichier | { n } fichiers",
-          "quota": "Espace de stockage restant :"
+          "quota": "Espace de stockage restant : {space}"
         }
       }
     },
@@ -1144,7 +1145,7 @@
         },
         "message": {
           "needsRefresh": "Le contenu a été modifié, cliquez sur rafraîchir pour voir le contenu à jour",
-          "success": "L'action { action } a été lancée avec succès sur { n } élément | L'action { action } a été lancée avec succès sur { n } éléments"
+          "success": "L'action {action} a été lancée avec succès sur {n} élément | L'action {action} a été lancée avec succès sur {n} éléments"
         },
         "modal": {
           "performAction": {
@@ -1184,10 +1185,10 @@
           "write": "Écrire"
         },
         "empty": {
-          "noContent": "Rien à prévisualiser."
+          "noContent": "Rien à prévisualiser"
         },
         "help": {
-          "markdown": "La syntaxe Markdown est prise en charge."
+          "markdown": "La syntaxe Markdown est prise en charge"
         },
         "placeholder": {
           "input": "Écrire quelques mots ici…"
@@ -1243,7 +1244,7 @@
       },
       "LoginModal": {
         "description": {
-          "noAccess": "Vous n'avez pas accès à ceci !"
+          "noAccess": "Vous n'avez pas accès à ceci"
         },
         "header": {
           "unauthenticated": "Déconnecté⋅e"
@@ -1448,7 +1449,7 @@
       "AlbumDropdown": {
         "button": {
           "cancel": "Annuler",
-          "delete": "Supprimer…",
+          "delete": "Supprimer",
           "edit": "Éditer",
           "embed": "Insérer",
           "more": "Plus…"
@@ -1651,7 +1652,7 @@
           "suggest": "Soumettre la suggestion"
         },
         "empty": {
-          "suggestEdit": "Suggérer un changement avec le formulaire ci-dessous."
+          "suggestEdit": "Suggérer un changement avec le formulaire ci-dessous"
         },
         "header": {
           "failure": "Erreur durant l'envoi des modifications",
@@ -1676,7 +1677,7 @@
           "retry": "Retenter les envois échoués"
         },
         "description": {
-          "import": "Résultats de votre importation :",
+          "import": "Résultats de votre importation",
           "previousImport": "Résultats de votre dernière importation :"
         },
         "empty": {
@@ -1881,7 +1882,7 @@
       "TrackBase": {
         "button": {
           "cancel": "Annuler",
-          "delete": "Supprimer…",
+          "delete": "Supprimer",
           "download": "Télécharger",
           "edit": "Éditer",
           "embed": "Insérer",
@@ -2476,13 +2477,13 @@
           "modal": {
             "delete": {
               "content": {
-                "warning": "Cette action est irréversible."
+                "warning": "Cette action est irréversible"
               },
               "header": "Supprimer cette règle de modération ?"
             }
           },
           "tooltip": {
-            "blockAll": "Bloquer tout de ce compte ou domaine. Cela empêche toute interaction avec l'entité, et purge le contenu lié (pistes, librairies, suivis, etc.)",
+            "blockAll": "Tout bloquer de ce compte ou domaine. Cela empêche toute interaction avec l'entité, et purge le contenu lié (pistes, librairies, suivis, etc.)",
             "isActive": "Utilisez ce paramètre pour activer/désactiver temporairement la règle sans la supprimer complètement.",
             "rejectMedia": "Ne jamais télécharger de médias (audio, album, couverture, avatar de compte…) de ce compte ou domaine. Cela purgera aussi le contenu existant.",
             "silenceActivity": "Cacher le contenu du compte ou du domaine, sauf aux abonnés.",
@@ -2769,7 +2770,7 @@
           "email": "Nous utiliserons cette adresse courriel si nous devons vous contacter au sujet de ce rapport.",
           "forwardToDomain": "Faire suivre une copie anonymisée du signalement au serveur hébergeant cet élément.",
           "message": "Utilisez ce champ pour fournir du contexte supplémentaire aux modérateur·ices qui traiteront votre signalement.",
-          "modal": "Utilisez ce formulaire pour envoyer un signalement à notre équipe de modération."
+          "modal": "Utilisez ce formulaire pour envoyer un signalement à notre équipe de modération"
         },
         "error": {
           "nodeinfoFetch": "Impossible de récupérer les informations sur le nœud : {error}"
@@ -3241,7 +3242,7 @@
         "submit": "Compris !"
       },
       "empty": {
-        "notifications": "Pas encore de notifications."
+        "notifications": "Pas encore de notifications"
       },
       "header": {
         "funkwhaleSupport": "Vous aimez Funkwhale ?",
@@ -3706,7 +3707,7 @@
             "addPolicy": "Ajouter une politique de modération"
           },
           "description": {
-            "policy": "Les règles de modération vous aident à contrôler comment votre instance interagit avec un domaine ou compte donné."
+            "policy": "Les règles de modération vous aident à contrôler comment votre instance interagit avec un domaine ou compte donné"
           },
           "header": {
             "accountData": "Données du compte",
@@ -3794,7 +3795,7 @@
             "removeFromAllowList": "Retirer de la liste d'autorisations"
           },
           "description": {
-            "policy": "Les règles de modération vous aident à contrôler comment votre instance interagit avec un domaine ou compte donné."
+            "policy": "Les règles de modération vous aident à contrôler comment votre instance interagit avec un domaine ou compte donné"
           },
           "header": {
             "activePolicy": "Ce domaine est sujet à des règles de modération spécifiques",
@@ -3916,7 +3917,7 @@
             "label": "Trier par"
           },
           "placeholder": {
-            "search": "Rechercher par nom d'utilisateur.trice…"
+            "search": "Rechercher par nom d'utilisateur.trice"
           },
           "title": "Demandes d'utilisateur.trice.s"
         }
@@ -3953,7 +3954,7 @@
           "login": "Poursuivre vers la page de connexion"
         },
         "message": {
-          "success": "Vous pouvez maintenant utiliser le service sans limitations."
+          "success": "Vous pouvez maintenant utiliser le service sans limitation"
         },
         "title": "Confirmer votre courriel"
       },
@@ -4142,7 +4143,7 @@
           "processing": "Vos envois sont en cours de traitement par Funkwhale et seront bientôt prêts à être diffusés."
         },
         "meta": {
-          "progress": "Envois traités :"
+          "progress": "Envois traités : {finished}/{total}"
         }
       },
       "SubscriptionsList": {
@@ -4380,7 +4381,7 @@
             "sharingLink": "Lien de partage"
           },
           "link": {
-            "scan": "Analyser maintenant",
+            "scan": "Analyser maintenant ",
             "scanDetails": "Détails"
           },
           "message": {
@@ -4388,8 +4389,8 @@
             "scanSkipped": "Scan non lancé (le scan précédent est trop récent)"
           },
           "meta": {
-            "failedTracks": "Pistes échouées :",
-            "lastUpdate": "Dernière mise à jour :",
+            "failedTracks": "Pistes échouées : {tracks}",
+            "lastUpdate": "Dernière mise à jour : ",
             "tracks": "{ n } piste | { n } pistes"
           },
           "modal": {
