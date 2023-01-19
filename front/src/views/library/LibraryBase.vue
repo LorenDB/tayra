@@ -231,21 +231,24 @@ const updateUploads = (count: number) => {
               <div class="ui secondary pointing center aligned menu">
                 <router-link
                   class="item"
-
+                  exact-active-class="active"
+                  active-class=""
                   :to="{name: 'library.detail'}"
                 >
                   {{ $t('views.library.LibraryBase.link.artists') }}
                 </router-link>
                 <router-link
                   class="item"
-
+                  exact-active-class="active"
+                  active-class=""
                   :to="{name: 'library.detail.albums'}"
                 >
                   {{ $t('views.library.LibraryBase.link.albums') }}
                 </router-link>
                 <router-link
                   class="item"
-
+                  exact-active-class="active"
+                  active-class=""
                   :to="{name: 'library.detail.tracks'}"
                 >
                   {{ $t('views.library.LibraryBase.link.tracks') }}
@@ -253,7 +256,8 @@ const updateUploads = (count: number) => {
                 <router-link
                   v-if="isOwner"
                   class="item"
-
+                  exact-active-class="active"
+                  active-class=""
                   :to="{name: 'library.detail.upload'}"
                 >
                   <i class="upload icon" />
@@ -262,7 +266,8 @@ const updateUploads = (count: number) => {
                 <router-link
                   v-if="isOwner"
                   class="item"
-
+                  exact-active-class="active"
+                  active-class=""
                   :to="{name: 'library.detail.edit'}"
                 >
                   <i class="pencil icon" />
