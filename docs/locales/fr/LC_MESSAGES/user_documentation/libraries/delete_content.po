@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-18 07:48+0000\n"
+"PO-Revision-Date: 2023-01-20 19:42+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/user_documentation-libraries-delete_content/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.14.2\n"
 "Generated-By: Babel 2.10.1\n"
 
 #: ../../user_documentation/libraries/delete_content.md:1
@@ -47,6 +47,8 @@ msgstr ""
 #: ../../user_documentation/libraries/delete_content.md:12
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
+"Sélectionnez l’icône de téléchargement ({fa}`upload`) en haut de la barre "
+"latérale."
 
 #: ../../user_documentation/libraries/delete_content.md:13
 #: ../../user_documentation/libraries/delete_content.md:29
@@ -54,16 +56,22 @@ msgid ""
 "Select {guilabel}`Get started` under {guilabel}`Upload third-party "
 "content in a library`."
 msgstr ""
+"Sélectionné {guilabel}`Commencer` sous {guilabel}`Envoyer un contenu tiers "
+"dans une audiothèque`."
 
 #: ../../user_documentation/libraries/delete_content.md:14
 #: ../../user_documentation/libraries/delete_content.md:30
 msgid "A screen appears showing your upload quota and your libraries."
 msgstr ""
+"Un écran apparaît, indiquant votre quota de téléchargement et vos "
+"audiothèques."
 
 #: ../../user_documentation/libraries/delete_content.md:15
 #: ../../user_documentation/libraries/delete_content.md:31
 msgid "Select {guilabel}`Library Details` under the library you want to edit."
 msgstr ""
+"Sélectionnez {guilabel}`Détails de l’audiothèque`sous l’audiothèque que vous "
+"désirez éditer."
 
 #: ../../user_documentation/libraries/delete_content.md:16
 #: ../../user_documentation/libraries/delete_content.md:32
@@ -101,11 +109,12 @@ msgstr ""
 
 #: ../../user_documentation/libraries/delete_content.md
 msgid "Mobile"
-msgstr "Mobile"
+msgstr "Portable"
 
 #: ../../user_documentation/libraries/delete_content.md:28
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
 msgstr ""
+"Sélectionnez l’icône de téléchargement ({fa}`upload`) en haut de l’écran."
 
 #: ../../user_documentation/libraries/delete_content.md:41
 msgid "That's it! You've successfully deleted the content from your library."
