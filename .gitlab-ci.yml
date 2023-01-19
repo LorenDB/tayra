@@ -41,6 +41,15 @@ variables:
         files: [api/poetry.lock]
       paths: [api/.venv]
 
+  # Cache for docs related jobs
+  docs_cache: &docs_cache
+    - key: docs-pip
+      paths: [$PIP_CACHE_DIR]
+    - key:
+        prefix: docs-venv
+        files: [docs/poetry.lock]
+      paths: [docs/.venv]
+
 default:
   tags:
     - docker
@@ -108,9 +117,7 @@ review_docs:
   environment:
     name: review/docs/$CI_COMMIT_REF_NAME
     url: http://$CI_PROJECT_NAMESPACE.pages.funkwhale.audio/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/docs-review/index.html
-  cache:
-    key: "$CI_PROJECT_ID__sphinx"
-    paths: [$PIP_CACHE_DIR]
+  cache: *docs_cache
   before_script:
     - mkdir docs-review
     - cd docs
@@ -298,9 +305,7 @@ build_docs:
     BUILD_PATH: "../public"
     GIT_STRATEGY: clone
     GIT_DEPTH: 0
-  cache:
-    key: "$CI_PROJECT_ID__sphinx"
-    paths: [$PIP_CACHE_DIR]
+  cache: *docs_cache
   before_script:
     - cd docs
     - apt-get update
