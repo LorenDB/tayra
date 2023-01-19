@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-18 07:48+0000\n"
+"PO-Revision-Date: 2023-01-20 19:42+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.14.2\n"
 "Generated-By: Babel 2.10.1\n"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:1
@@ -65,7 +65,7 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Mobile"
-msgstr "Mobile"
+msgstr "Portable"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:17
 msgid ""
@@ -180,10 +180,13 @@ msgid ""
 "A short message you can display to your pod's users to ask for support or"
 " just send a periodic message. Supports markdown."
 msgstr ""
+"Un court message que vous pouvez afficher sur vos utilisateurs de pod pour "
+"demander du soutien ou juste envoyer un message périodique. Supporte "
+"markdown."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:56
 msgid "Sign-ups"
-msgstr ""
+msgstr "Inscriptions"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Open registration to new users"
@@ -192,6 +195,8 @@ msgstr ""
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:60
 msgid "Enable this setting to allow new users to create an account on your pod."
 msgstr ""
+"Activez ce paramètre pour permettre aux nouveaux utilisateurs de créer un "
+"compte sur votre pod."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:3
 msgid "Enable manual sign-up validation"
@@ -202,6 +207,8 @@ msgid ""
 "Enable this setting to require all new registrations to be validated by a"
 " moderator."
 msgstr ""
+"Activez ce paramètre pour exiger que toutes les nouvelles inscriptions "
+"soient validées par un modérateur."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:6
 msgid "Sign-up form customization"
@@ -212,10 +219,13 @@ msgid ""
 "Use this tool to create a custom sign-up form. New users see this form "
 "when creating a new account. Supports markdown"
 msgstr ""
+"Utilisez cet outil pour créer un formulaire d’inscription personnalisé. Les "
+"nouveaux utilisateurs voient ce formulaire lorsqu’ils créent un nouveau "
+"compte. Supporte markdown"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:73
 msgid "Security"
-msgstr ""
+msgstr "Sécurité"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "API Requires authentication"
@@ -228,6 +238,11 @@ msgid ""
 "your pod to access content. If __disabled__, users without an account can"
 " listen to content stored in public libraries."
 msgstr ""
+"Contrôle si les {term}`utilisateurs non authentifiés <Anonymous>` peuvent "
+"accéder au contenu de votre pod. Si __activé__, les utilisateurs doivent "
+"avoir un compte sur votre pod pour accéder au contenu. Si __désactivé__, les "
+"utilisateurs sans compte peuvent écouter le contenu stocké dans les "
+"bibliothèques publiques."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:80
 msgid "{doc}`../../moderator_documentation/content/library_visibility`."
@@ -242,6 +257,9 @@ msgid ""
 "A list of {term}`permissions` that are added to users by default. If your"
 " pod is publicly accessible, you should leave this empty."
 msgstr ""
+"Une liste de {term}`permissions` qui sont ajoutées à l’utilisateur par "
+"défaut. Si votre pod est publiquement accessible, vous devriez laisser ceci "
+"vide."
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:10
 msgid "Upload quota"
@@ -259,7 +277,7 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md:98
 msgid "Music"
-msgstr ""
+msgstr "Musiques"
 
 #: ../../administrator_documentation/configuration_docs/instance_settings.md
 msgid "Transcoding enabled"
