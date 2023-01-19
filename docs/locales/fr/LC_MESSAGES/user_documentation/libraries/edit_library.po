@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: 2022-06-28 19:55+0000\n"
+"PO-Revision-Date: 2023-01-20 19:42+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/user_documentation-libraries-edit_library/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: ../../user_documentation/libraries/edit_library.md:1
 msgid "Edit a library"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: ../../user_documentation/libraries/edit_library.md:0
 msgid "Mobile"
-msgstr "Mobile"
+msgstr "Portable"
 
 #: ../../user_documentation/libraries/edit_library.md:24
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
