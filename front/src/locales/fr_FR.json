@@ -178,6 +178,7 @@
         "remove": "Retirer",
         "restart": "Rejouer la piste",
         "selectTrack": "Sélectionner la piste",
+        "showCoverArt": "Afficher la pochette",
         "showVisualizer": "Montrer le visualiseur MoonDrop"
       },
       "message": {
@@ -3022,8 +3023,9 @@
         "filters": {
           "accessedDate": "Date d'accès",
           "albumTitle": "Nom de l'album",
+          "appliedDate": "Date d’application",
           "artistName": "Nom de l'artiste",
-          "bitrate": "Bitrate",
+          "bitrate": "Débit",
           "creationDate": "Date de création",
           "dateJoined": "Date d'inscription",
           "domain": "Domaine",
@@ -3031,6 +3033,7 @@
           "expirationDate": "Date d'expiration",
           "firstSeen": "Date de découverte",
           "followers": "Abonnés",
+          "handledDate": "Date de traitement",
           "itemsCount": "Éléments",
           "lastActivity": "Dernière activité",
           "lastSeen": "Date de dernier aperçu",
@@ -3050,6 +3053,7 @@
             "label": "Modifications"
           },
           "favorites": {
+            "description": "Accéder aux favoris",
             "label": "Favoris"
           },
           "filters": {
@@ -3122,6 +3126,7 @@
       },
       "useReport": {
         "account": {
+          "label": "Signaler {'@'}{username}",
           "typeLabel": "Compte"
         },
         "album": {
@@ -3130,7 +3135,8 @@
         },
         "artist": {
           "label": "Signaler cet artiste…",
-          "typeLabel": "Artiste"
+          "typeLabel": "Artiste",
+          "unknownLabel": "Artiste inconnu"
         },
         "channel": {
           "label": "Signaler cette chaîne…",
@@ -3203,6 +3209,7 @@
       "unexpectedError": "Une erreur inattendue s’est produite."
     },
     "useThemeList": {
+      "browserDefault": "Défaut du navigateur",
       "darkTheme": "Sombre",
       "lightTheme": "Clair"
     }
@@ -3211,6 +3218,13 @@
     "axios": {
       "rateLimitDelay": "Vous avez envoyé trop de requêtes et êtes actuellement limité·e, merci de réessayer dans { delay }",
       "rateLimitLater": "Vous avez envoyé trop de requêtes et êtes actuellement limité·e, merci de réessayer plus tard"
+    },
+    "sentry": {
+      "allow": "Autoriser",
+      "deny": "Refuser",
+      "funkwhaleInstance": "Instance Glitchtip officielle de Funkwhale",
+      "message": "Les traces de la pile seront partagées avec { 0 } afin de nous aider à comprendre comment et quand les erreurs se produisent.",
+      "title": "Pour améliorer la qualité de nos services, nous souhaitons recueillir des informations sur les crashs pendant votre session."
     },
     "serviceWorker": {
       "actions": {
@@ -3672,7 +3686,8 @@
             },
             "audioContent": {
               "bitrate": {
-                "label": "Bitrate"
+                "label": "Bitrate",
+                "value": "{bitrate}/s"
               },
               "cachedSize": "Taille du cache",
               "duration": "Durée",
@@ -3824,7 +3839,8 @@
                 "value": "Erreur lors de la récupération des informations du nœud"
               },
               "software": {
-                "label": "Logiciel"
+                "label": "Logiciel",
+                "value": "{name} ({version})"
               },
               "totalUsers": "Nombre total d'utilisateurs"
             }
@@ -4312,6 +4328,7 @@
             "currentUsage": "{ current } utilisé·s sur { max } autorisé·s",
             "errored": "Fichiers erronés",
             "pending": "Fichiers en attente",
+            "percentUsed": "{progress} %",
             "skipped": "Fichiers ignorés"
           },
           "link": {
@@ -4349,6 +4366,10 @@
             "follow": "Suivre",
             "pending": "Demande de suivi en attente de validation",
             "unfollow": "Se désabonner"
+          },
+          "error": {
+            "follow": "Impossible de suivre la bibliothèque distante : {error}",
+            "unfollow": "Impossible d’arrêter le suivi de la bibliothèque distante : {error}"
           },
           "label": {
             "scanFailure": "Problème lors de l'analyse",
@@ -4567,12 +4588,14 @@
       "Detail": {
         "button": {
           "confirm": "Supprimer la radio",
+          "delete": "Supprimer",
           "edit": "Éditer…"
         },
         "empty": {
           "noTracks": "Aucune piste n'a été ajoutée à cette radio pour le moment"
         },
         "header": {
+          "radio": "La radio contient {tracks} pistes, de ",
           "tracks": "Pistes"
         },
         "modal": {
