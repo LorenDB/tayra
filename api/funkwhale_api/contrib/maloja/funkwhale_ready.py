@@ -22,7 +22,7 @@ def submit_listen(listening, conf, **kwargs):
     logger.debug("Majola payload: %r", payload)
     url = server_url.rstrip("/") + "/apis/mlj_1/newscrobble"
     session = plugins.get_session()
-    response = session.post(url, payload)
+    response = session.post(url, json=payload)
     response.raise_for_status()
     details = json.loads(response.text)
     if details["status"] == "success":
@@ -35,12 +35,13 @@ def get_payload(listening, api_key):
     track = listening.track
     payload = {
         "key": api_key,
-        "artists": track.artist.name,
+        "artists": [track.artist.name],
         "title": track.title,
         "time": int(listening.creation_date.timestamp()),
     }
 
     if track.album:
-        payload["album"] = track.album.title
+        if track.album.title:
+            payload["album"] = track.album.title
 
     return payload
