@@ -55,10 +55,12 @@ Once we're ready to release a new version of the software, we can use the follow
    nano CHANGELOG # Add these lists to the CHANGELOG
    ```
 
-7. Update the `__version__` variable to the next release version
+7. Update the next release version
 
    ```sh
-   nano api/funkwhale_api/__init__.py
+   cd api
+   poetry version "$NEXT_RELEASE"
+   cd ..
    ```
 
 8. Commit all changes
