@@ -14,6 +14,7 @@ export interface State {
   current: null | CurrentRadio
   running: boolean
   populating: boolean
+  retries: number
 }
 
 export interface ObjectId {
@@ -39,7 +40,8 @@ const store: Module<State, RootState> = {
   state: {
     current: null,
     running: false,
-    populating: false
+    populating: false,
+    retries: 0
   },
   getters: {
     types: () => {
@@ -80,6 +82,7 @@ const store: Module<State, RootState> = {
       state.running = false
       state.current = null
       state.populating = false
+      state.retries = 0
     },
     current: (state, value) => {
       state.current = value
@@ -121,7 +124,7 @@ const store: Module<State, RootState> = {
       commit('current', null)
       commit('running', false)
     },
-    async populateQueue ({ commit, state }, playNow) {
+    async populateQueue ({ commit, dispatch, state }, playNow) {
       if (!state.running || state.populating) {
         return
       }
@@ -139,6 +142,8 @@ const store: Module<State, RootState> = {
         const track = state.current?.clientOnly
           ? await CLIENT_RADIOS[state.current.type].fetchNextTrack(state.current)
           : await axios.post('radios/tracks/', params).then(response => response.data.track as Track)
+
+        state.retries = 0
 
         if (track === undefined) {
           isPlaying.value = false
@@ -158,8 +163,14 @@ const store: Module<State, RootState> = {
           }, { root: true })
         } else {
           logger.error('Error while adding track to queue from radio', error)
+          if (state.retries++ < 5) {
+            logger.info(`Retrying (${state.retries})...`)
+            return dispatch('populateQueue', playNow)
+          }
         }
 
+
+        logger.info('Resetting radio queue due to error or lack of new candidates')
         commit('reset')
       } finally {
         state.populating = false
