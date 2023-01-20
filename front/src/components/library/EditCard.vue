@@ -32,11 +32,7 @@ const configs = useEditConfigs()
 const router = useRouter()
 const store = useStore()
 
-const canApprove = computed(() => !props.obj.is_applied && store.state.auth.availablePermissions.library
-  ? true
-  : false
-)
-
+const canApprove = computed(() => !props.obj.is_applied && store.state.auth.availablePermissions.library)
 const canDelete = computed(() => {
   if (props.obj.is_applied || props.obj.is_approved) return false
   if (!store.state.auth.authenticated) return false
