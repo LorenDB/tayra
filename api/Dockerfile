@@ -111,5 +111,6 @@ RUN set -eux; \
 
 ENV CACHE_URL="redis://redis:6379/0"
 ENV CELERY_BROKER_URL="redis://redis:6379/0"
+ENV IS_DOCKER_SETUP=true
 
 CMD ["./docker/server.sh"]

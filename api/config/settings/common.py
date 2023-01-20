@@ -371,24 +371,24 @@ vars().update(EMAIL_CONFIG)
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
-_DOCKER_DATABASE_HOST = "postgres"
-_DOCKER_DATABASE_PORT = 5432
-_DOCKER_DATABASE_USER = env.str("POSTGRES_ENV_POSTGRES_USER", "postgres")
-_DOCKER_DATABASE_PASSWORD = env.str("POSTGRES_ENV_POSTGRES_PASSWORD", None)
-_DOCKER_DATABASE_NAME = _DOCKER_DATABASE_USER
-
 # The `_database_url_docker` variable will only by used as default for DATABASE_URL
 # in the context of a docker deployment.
 _database_url_docker = None
-# When POSTGRES_ENV_POSTGRES_PASSWORD is set, we are in the context of a docker deployment.
-if _DOCKER_DATABASE_PASSWORD is not None:
+if env.bool("IS_DOCKER_SETUP", False) and env.str("DATABASE_URL", None) is None:
     warnings.warn(
         DeprecationWarning(
-            "the 'POSTGRES_ENV_POSTGRES_USER' and 'POSTGRES_ENV_POSTGRES_PASSWORD' "
-            "environment variables are deprecated, please use the dedicated "
-            "'DATABASE_USER' and 'DATABASE_PASSWORD' environment variables instead"
+            "the automatically generated 'DATABASE_URL' configuration in the docker "
+            "setup is deprecated, please configure either the 'DATABASE_URL' "
+            "environment variable or the 'DATABASE_HOST', 'DATABASE_USER' and "
+            "'DATABASE_PASSWORD' environment variables instead"
         )
     )
+    _DOCKER_DATABASE_HOST = "postgres"
+    _DOCKER_DATABASE_PORT = 5432
+    _DOCKER_DATABASE_USER = env.str("POSTGRES_ENV_POSTGRES_USER", "postgres")
+    _DOCKER_DATABASE_PASSWORD = env.str("POSTGRES_ENV_POSTGRES_PASSWORD", "")
+    _DOCKER_DATABASE_NAME = _DOCKER_DATABASE_USER
+
     _database_url_docker = (
         f"postgres:"
         f"//{_DOCKER_DATABASE_USER}:{_DOCKER_DATABASE_PASSWORD}"
