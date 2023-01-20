@@ -108,7 +108,10 @@ const updatedFields = computed(() => {
     if (state?.[id]) {
       const oldState = state[id]
       result.old = oldState
-      result.oldRepr = getValueRepr(('value' in oldState && oldState.value) ?? oldState) ?? ''
+      result.oldRepr = getValueRepr('value' in oldState
+        ? oldState.value
+        : oldState
+      ) ?? ''
 
       // we compute the diffs between the old and new values
       result.diff = diffWordsWithSpace(result.oldRepr, result.newRepr)
