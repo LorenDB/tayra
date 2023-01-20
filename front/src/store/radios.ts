@@ -169,7 +169,6 @@ const store: Module<State, RootState> = {
           }
         }
 
-
         logger.info('Resetting radio queue due to error or lack of new candidates')
         commit('reset')
       } finally {
