@@ -25,6 +25,9 @@ watch(show, () => {
 })
 
 const albumForm = ref()
+defineExpose({
+  show
+})
 </script>
 
 <template>
