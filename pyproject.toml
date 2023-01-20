@@ -13,6 +13,11 @@ underlines = "-"
 path = ""
 
 [[tool.towncrier.type]]
+directory = "update"
+name = "Update instructions"
+showcontent = true
+
+[[tool.towncrier.type]]
 directory = "feature"
 name = "Features"
 showcontent = true
@@ -50,11 +55,6 @@ showcontent = true
 [[tool.towncrier.type]]
 directory = "removal"
 name = "Removal"
-showcontent = true
-
-[[tool.towncrier.type]]
-directory = "update"
-name = "Update instructions"
 showcontent = true
 
 [tool.black]
