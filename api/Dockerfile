@@ -48,7 +48,7 @@ RUN set -eux; \
 
 # Create virtual env
 RUN python3 -m venv --system-site-packages /venv
-ENV PATH="/venv/bin:/root/.local/bin:$PATH" VIRTUAL_ENV=/venv
+ENV PATH="/venv/bin:$PATH"
 
 COPY --from=pre-build /requirements.txt /requirements.txt
 COPY --from=pre-build /dev-requirements.txt /dev-requirements.txt
