@@ -10,6 +10,245 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.3.0-rc1 (2023-01-20)
+----------------------
+
+Upgrade instructions are available at
+https://docs.funkwhale.audio/admin/upgrading.html
+
+Update instructions:
+
+- If you are running the docker deployment, make sure to update our compose file.
+  In this small example we show you how to save the old config and update it
+  correctly:
+
+  ```
+  export FUNKWHALE_VERSION="1.3.0"
+  cd /srv/funkwhale
+  docker-compose down
+  mv docker-compose.yml docker-compose.bak
+  curl -L -o /srv/funkwhale/docker-compose.yml "https://dev.funkwhale.audio/funkwhale/funkwhale/raw/${FUNKWHALE_VERSION}/deploy/docker-compose.yml"
+  ```
+
+  .. note::
+     If you need to customize your nginx template, e.g. to work around `problems with
+     Docker's resolver <https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found>`_, you can mount your
+     custom nginx configuration into the container. Uncomment the commented volumes in the `nginx` section of your `docker-compose.yml`.
+  	 Additionally you need to update the paths in `nginx/funkwhale.template`.
+  	 Replace all occurrences of `/funkwhale` by `/usr/share/nginx/html`.
+     This loads the templates from your `nginx` folder and overrides the template files in the Docker container.
+
+  ```
+  docker-compose up -d
+  ```
+- The Docker instructions now use the updated Docker compose plugin. If you previously used the ``docker-compose`` standalone installation, do the following while upgrading:
+
+  1. Download the `Docker compose plugin <https://docs.docker.com/compose/install/linux/#install-using-the-repository>`_
+  2. Stop your containers using the **docker-compose** syntax.
+
+  .. code-block:: sh
+     sudo docker-compose down
+
+  3. Bring the containers back up using the **docker compose** syntax.
+
+  .. code-block:: sh
+     sudo docker compose up -d
+
+  After this you can continue to use the **docker compose** syntax for all Docker management tasks.
+- Upgrade Postgres to version 15. [Make sure to migrate!](https://docs.funkwhale.audio/administrator_documentation/upgrade_docs/docker.html#upgrade-the-postgres-container)
+- With this update Funkwhale starts using poetry to maintain its dependencies. We therefore recommend
+  removing the old virtualenv by running `rm -rf /srv/funkwhale/virtualenv`.
+
+
+Features:
+
+- Add a management command to create a new library for a user
+- Add Gitpod configuration and guide
+- Add Sentry SDK to collect #1479
+- Prepare API for the upcoming version 2
+- Rewrite player to be based on Web Audio API
+
+
+Enhancements:
+
+- Add a celery task to scan remote library (#1712)
+- Add coverage report for Frontend Tests
+- Add hint which serializer is used for OembedView (#1901)
+- Add music visualizer (#1135)
+- Add playlists radio to search page (#1968)
+- Add proper serialization for TextPreviewView (#1903)
+- Add Serializer for SpaManifest endpoint
+- Add support for python 3.11
+- Added proper serializers for the rate-limit endpoint.
+- Added type hints to the API.
+- All administrator documentation has been rewritten to improve clarity and update outdated information.
+- Allow arbitrary length names for artists, albums and tracks
+- Allow installing the funkwhale_api package
+- Allow using default browser dark mode and update UI dynamically on change
+- Apply migrations on API container start (!1879)
+- Automatically fetch next page of tracks (#1526)
+- Build frontend natively for cross-arch docker images
+- Change unmaintained PyMemoize library to django-cache-memoize
+  to enable Python 3.10 support
+- Cleaned up frontend docker container
+- Cleanup Gitlab CI and Dockerfiles (!1796)
+- Create the funkwhale-manage entrypoint in the api package
+- Created migration guide for the deprecated all-in-one docker container.
+- Don't buffer python stdout/err in docker
+- Don't compile python byte code in docker
+- Don't use poetry in production deployments
+- Drop direct dependency on pyopenssl (#1975)
+- Exclude /api/v1/oauth/authorize from the specs since its not supported yet (#1899)
+- Fix openapi specs for user endpoints (#1892, #1894)
+- Fix Serializer for inline channel artists (#1833)
+- Fix specs for ListenViewSet (#1898)
+- Handle PWA correctly and provide better cache strategy for album covers (#1721)
+- Improve docker caching
+- Improve specification of LibraryFollowViewSet (#1896)
+- Install API python package in docker image
+- Make CI always run all tests on protected branches.
+- Make mutations endpoint appear in openapi specs
+- Make Python 3.10 tests in CI mandatory
+- Make sure ChannelViewSet always has a serializer (#1895)
+- Migrate to new queue system from old localStorage keys
+- Migrate to Vue 3
+- Migrate to vue-i18n (#1831)
+  Fix locale changing (#1862)
+- Migrated to sphinx-design.
+- New task checking if remote instance is reachable to avoid playback latence (#1711)
+- OAuth Application client secrets are now hashed before storing them to the DB. Those are only displayed once from now on!
+- Parameterize the default S3 ACL when uploading objects. (#1319)
+- Pin Alpine package versions in API Dockerfile (fixes part of CI build issues).
+- Prefer using the funkwhale-manage entrypoint
+- Prevent running two pipelines for MRs
+- Random and less listened radio filter out un-owned content on library section (#2007)
+- Refactor node info endpoint to use proper serializers
+- Refactor SettingsView to use a proper serializer
+- Remove unnecessary or wrong `is` keyword usage from backend
+- Rename OpenAPI schema's operation ids for nicer API client method names.
+- Replace django-channels package with web socket implementation from @vueuse/core (#1715)
+- Rewrite embedded player to petite-vue
+- Split DATABASE_URL into multiple configuration variables
+- The ListenBrainz plugin submits the track duration
+- Update Django OAuth Toolkit to version 2, ref #1944
+- Update migration after django update (#1815)
+- Update upload status when import fails (#1999)
+- Updated the installation guides to make installation steps clearer.
+- Upgrade docker base image to alpine 3.17
+- Use proper serializer for Search endpoint (#1902)
+
+
+Refactoring:
+
+- Instead of requesting the right spa content from the API using a middleware we now serve the
+  Frontend directly with nginx and only proxy-forward for API endpoints
+- Replace django-rest-auth with dj-rest-auth (#1877)
+
+
+Bugfixes:
+
+- Allow enabling systemd funkwhale.target
+- Allow playback of media from external frontend (#1937).
+- Channel overview was displaying foreign tracks (#1773) (1773)
+- Fix adding same track multiple times (#1933)
+- Fix changing visualizer CORS error (#1934).
+- Fix content form autofocus despite `autofocus` prop being set to `false` (#1924)
+- Fix CSP header issues
+- Fix CSP issue caused by django-channels package (#1752)
+- Fix docker API image building with removing autobahn workaround version pin
+- Fix docker builds on armv7
+- Fix docker nginx entrypoint
+- Fix editing playlist tracks (#1362)
+- Fix embedded player not working on social posts (1946)
+- Fix favorite button in queue
+- Fix fetching pages of albums in album detail view (#1927)
+- Fix global keyboard shortcuts firing when input is focused (#1876)
+- Fix OAuth login (#1890)
+- Fix play button in albums with multi-page volumes (#1928)
+- Fix player closing when queue ends (#1931)
+- Fix purging of dangling files #1929
+- Fix remote search (#1857)
+- Fix search by text in affected views (#1858)
+- Fix timeout on spa manifest requests
+- Fix track table showing all tracks and double pagination in some cases (#1923)
+- Fix user requests and reports filtering (#1924)
+- Fix validity issues in openapi/swagger spec files (#1171)
+- Fixed an issue which caused links in Markdown forms to not render correctly. (#2023)
+- Fixed login redirect (1736)
+- Fixed remote subscription form in Podcast and search views (#1708)
+- Fixed upload form VUE errors (#1738) (1738)
+- Fixes channel page (#1729) (1729)
+- Fixes development environment set-up with docker (1726)
+- Fixes embed player (#1783) (1783)
+- Fixes service worker (#1634)
+- Fixes track listenings not being sent when tab is not focused
+- Hide create custom radio to un-authenticated users (#1720)
+- Remove trailing slash from reverse proxy configuration
+- Remove unused Footer component (#1660)
+- Remove usage of deprecated Model and Serializer fields (#1663)
+- Skip refreshing local actors in celery federation.refresh_actor_data task - fixes disappearing avatars (!1873)
+
+
+Documentation:
+
+- Add ability to translate documentation into multiple languages
+- Add restore instructions to backup docs (#1627).
+- Added virtualenv upgrade instructions for Debian (#1562).
+- Cleaned up documentation
+- Document the new login flow of the CLI-tool (#1800)
+- Documented LOGLEVEL command (#1541).
+- Documented the `NGINX_MAX_BODY_SIZE` .env variable (#1624).
+- Harden security for debian install docs
+- Rewrote documentation contributor guide.
+- Rewrote the architecture file (#1908)
+- Rewrote the federation developer documentation (#1911)
+- Rewrote the plugins documentation (#1910)
+- Rewrote translators file
+- Updated API developer documentation (#1912, #1909)
+- Updated CONTRIBUTING guide with up-to-date documentation. Created layout in documentation hub.
+
+
+Other:
+
+- Add a CI job to check if changelog snippet is available
+- Add CI broken links checker
+- Add pre-commit hooks
+
+  - flake8
+  - black
+  - isort
+  - pyupgrade
+  - prettier
+  - codespell
+- Add pre-commit to development tools
+- Align the openapi spec to the actual API wherever possible
+- Cache lychee checked urls for 1 day in CI
+- Fix api tests warnings by renaming fixtures
+- Fix permissions for build artifacts
+- Fix shell scripts lint errors
+- Format api pyproject.toml
+- Format or fix files using pre-commit
+
+  - Upgrade code to >=python3.7
+  - Fix flake8 warnings
+  - Fix spelling errors
+  - Format files using black
+  - Format files using isort
+  - Format files using prettier
+- Move api tools config to pyproject.toml
+- Move database url composition from custom script to django settings
+- Remove docker_all_in_one_release ci job
+- Rename api composer/django/ dir to docker/
+- Unpin asgiref in API dependencies
+- Use vite for building the frontend, #1644
+
+
+Removal:
+
+- This release removes support for Python 3.6. Please make sure you update your python version before
+  Updating Funkwhale!
+
+
 1.2.9 (2022-11-25)
 ------------------
 
