@@ -390,11 +390,11 @@ export interface Plugin {
   enabled: boolean
   description?: string
   source?: string
-  values?: Record<string, string>
+  values?: Record<string, any>
   conf?: {
     name: string
     label: string
-    type: 'text' | 'long_text' | 'url' | 'password'
+    type: 'text' | 'long_text' | 'url' | 'password' | 'boolean'
     help?: string
   }[]
 }
