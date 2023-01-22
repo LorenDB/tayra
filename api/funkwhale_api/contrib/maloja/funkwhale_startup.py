@@ -5,10 +5,16 @@ PLUGIN = plugins.get_plugin_config(
     label="Maloja",
     description="A plugin that allows you to submit your listens to your Maloja server.",
     homepage="https://docs.funkwhale.audio/users/builtinplugins.html#maloja-plugin",
-    version="0.1.1",
+    version="0.2",
     user=True,
     conf=[
         {"name": "server_url", "type": "text", "label": "Maloja server URL"},
         {"name": "api_key", "type": "text", "label": "Your Maloja API key"},
+        {
+            "name": "nofix",
+            "type": "boolean",
+            "label": "Skip server-side metadata fixing",
+            "default": False,
+        },
     ],
 )
