@@ -53,6 +53,11 @@ name = "Other"
 showcontent = true
 
 [[tool.towncrier.type]]
+directory = "deprecation"
+name = "Deprecation"
+showcontent = true
+
+[[tool.towncrier.type]]
 directory = "removal"
 name = "Removal"
 showcontent = true
