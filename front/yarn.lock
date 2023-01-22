@@ -2405,10 +2405,10 @@ automation-events@^4.0.25:
     "@babel/runtime" "^7.20.6"
     tslib "^2.4.1"
 
-axios-auth-refresh@3.3.4:
-  version "3.3.4"
-  resolved "https://registry.yarnpkg.com/axios-auth-refresh/-/axios-auth-refresh-3.3.4.tgz#95a2b1dc89a566b67ba525fb54de2f9dd7b65d20"
-  integrity sha512-cGq3bZu+lip5j+byaQRZaZ3wpCUxs93jGV0614VYP5k2H1vbdoaw6HGazaUJxcRsFMctR3DItCAx1Dn7KerlcA==
+axios-auth-refresh@3.3.6:
+  version "3.3.6"
+  resolved "https://registry.yarnpkg.com/axios-auth-refresh/-/axios-auth-refresh-3.3.6.tgz#a879f6296a889d6616e51069c2a8135b697966e7"
+  integrity sha512-2CeBUce/SxIfFxow5/n8vApJ97yYF6qoV4gh1UrswT7aEOnlOdBLxxyhOI4IaxGs6BY0l8YujU2jlc4aCmK17Q==
 
 axios@1.2.3:
   version "1.2.3"
