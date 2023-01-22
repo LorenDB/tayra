@@ -60,8 +60,8 @@ class LibraryFollowViewSet(
     ordering_fields = ("creation_date",)
 
     @extend_schema(operation_id="get_federation_library_follow")
-    def retrieve(self, request):
-        return super().retrieve(request)
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
 
     @extend_schema(operation_id="delete_federation_library_follow")
     def destroy(self, request, uuid=None):
