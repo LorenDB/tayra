@@ -2,7 +2,7 @@ import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/
 import type { ContentFilter } from '~/store/moderation'
 
 import { useCurrentElement } from '@vueuse/core'
-import { computed, markRaw, nextTick, ref } from 'vue'
+import { computed, markRaw, ref } from 'vue'
 import { i18n } from '~/init/locale'
 import { useStore } from '~/store'
 
