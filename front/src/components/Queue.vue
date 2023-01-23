@@ -427,6 +427,7 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
           </h2>
         </div>
         <virtual-list
+          v-if="queueItems.length !== 0"
           ref="list"
           :list="queueItems"
           :component="QueueItem"
