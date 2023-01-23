@@ -26,7 +26,10 @@ workflow:
     # Run for any event on the default branches in the funkwhale namespace
     - if: >
         $CI_PROJECT_NAMESPACE == "funkwhale" &&
-        $CI_COMMIT_BRANCH =~ /(stable|develop)/
+        (
+          $CI_COMMIT_BRANCH =~ /(stable|develop)/ ||
+          $CI_COMMIT_TAG
+        )
     # Run for merge requests from any repo or branches
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
