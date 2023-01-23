@@ -10,6 +10,25 @@ This changelog is viewable on the web at https://docs.funkwhale.audio/changelog.
 
 .. towncrier
 
+1.3.0-rc2 (2023-01-23)
+----------------------
+
+Update since 1.3.0-rc1:
+
+Enhancements:
+
+- Retry fetching new radio track 5 times if error occurred before resetting radio session (#2022)
+
+Bugfixes:
+
+- Docker setup: do not export the API port 5000 publicly
+- Fix artist name submission in Maloja plugin
+
+Deprecations:
+
+- That's the last minor version series that supports python3.7. Funkwhale 1.4 will remove support for
+it. #1693
+
 1.3.0-rc1 (2023-01-20)
 ----------------------
 
