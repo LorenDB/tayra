@@ -3,45 +3,54 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-23 12:18+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2023-01-23 21:42+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/changelog/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.14.2\n"
 "Generated-By: Babel 2.10.3\n"
 
 #: ../../../CHANGELOG:2
 msgid "Changelog"
-msgstr ""
+msgstr "Journal des modifications"
 
 #: ../../../CHANGELOG:4
 msgid "You can subscribe to release announcements by:"
-msgstr ""
+msgstr "Vous pouvez vous abonner aux annonces de publications :"
 
 #: ../../../CHANGELOG:6
 msgid ""
 "Following `@funkwhale@fosstodon.org <https://fosstodon.org/@funkwhale>`_ "
 "on Mastodon"
 msgstr ""
+"En suivant `@funkwhale@fosstodon.org <https://fosstodon.org/@funkwhale>`_ "
+"sur Mastodon"
 
 #: ../../../CHANGELOG:7
 msgid ""
 "Subscribing to the following Atom feed: "
 "https://dev.funkwhale.audio/funkwhale/funkwhale/commits/develop?format=atom&search=Merge+tag"
 msgstr ""
+"En vous abonnant au flux Atom suivant : https://dev.funkwhale.audio/"
+"funkwhale/funkwhale/commits/develop?format=atom&search=Merge+tag"
 
 #: ../../../CHANGELOG:9
 msgid ""
 "This changelog is viewable on the web at "
 "https://docs.funkwhale.audio/changelog.html."
 msgstr ""
+"Ce journal des modifications est consultable sur le web à l’adresse "
+"https://docs.funkwhale.audio/changelog.html."
 
 #: ../../../CHANGELOG:14
 msgid "1.2.7 (2022-07-14)"
@@ -7906,4 +7915,3 @@ msgid ""
 "Library: fixen broken \"play all albums\" button on artist cards in "
 "Artist browsing view (#43)"
 msgstr ""
-
