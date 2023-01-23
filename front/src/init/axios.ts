@@ -9,7 +9,6 @@ import moment from 'moment'
 import axios from 'axios'
 
 import useLogger from '~/composables/useLogger'
-import { getDepOptimizationConfig } from 'vite'
 
 const { t } = i18n.global
 const logger = useLogger()
@@ -19,7 +18,7 @@ export const install: InitModule = ({ store, router }) => {
   axios.defaults.xsrfHeaderName = 'X-CSRFToken'
   axios.interceptors.request.use(function (config) {
     // Do something before request is sent
-    if (store.state.auth.oauth.accesscToken) {
+    if (store.state.auth.oauth.accessToken) {
       config.headers.Authorization = store.getters['auth/header']
     }
     return config
