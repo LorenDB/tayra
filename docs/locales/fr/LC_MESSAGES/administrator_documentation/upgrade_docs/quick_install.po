@@ -3,23 +3,26 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2023-01-23 21:42+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/administrator_documentation-upgrade_docs-quick_install/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.14.2\n"
 "Generated-By: Babel 2.10.1\n"
 
 #: ../../administrator_documentation/upgrade_docs/quick_install.md:1
 msgid "Upgrade using the quick install script"
-msgstr ""
+msgstr "Mettre à jour en utilisant le script d’installation rapide"
 
 #: ../../administrator_documentation/upgrade_docs/quick_install.md:3
 msgid ""
@@ -27,8 +30,10 @@ msgid ""
 "script](../installation_docs/quick_install), upgrading your instance is "
 "as simple as running the following command on your server:"
 msgstr ""
+"Si vous avez installé Funkwhale en utilisant le [script d’installation "
+"rapide](../installation_docs/quick_install), mettre à jour votre instance "
+"est aussi simple que d’exécuter la commande suivante dans votre serveur :"
 
 #: ../../administrator_documentation/upgrade_docs/quick_install.md:9
 msgid "The script runs through the necessary setup instructions."
-msgstr ""
-
+msgstr "Le script exécute les instructions de configuration nécessaires."
