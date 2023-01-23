@@ -3,18 +3,21 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2023-01-23 21:42+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/administrator_documentation-upgrade_docs-docker/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.14.2\n"
 "Generated-By: Babel 2.10.1\n"
 
 #: ../../administrator_documentation/upgrade_docs/docker.md:1
@@ -37,17 +40,19 @@ msgstr ""
 
 #: ../../administrator_documentation/upgrade_docs/docker.md:8
 msgid "Log in as your `funkwhale` user."
-msgstr ""
+msgstr "Connectez-vous comme votre utilisateur `funkwhale`."
 
 #: ../../administrator_documentation/upgrade_docs/docker.md:14
 msgid "Navigate to your Funkwhale directory."
-msgstr ""
+msgstr "Naviguez jusque dans votre répertoire Funkwhale."
 
 #: ../../administrator_documentation/upgrade_docs/docker.md:20
 msgid ""
 "Export the Funkwhale version you want to update to. You'll use this in "
 "the rest of the commands in this guide."
 msgstr ""
+"Exportez la version de Funkwhale vers laquelle vous voulez mettre à jour. "
+"Vous utiliserez ceci pour les commandes suivantes dans ce guide."
 
 #: ../../administrator_documentation/upgrade_docs/docker.md:26
 msgid ""
@@ -143,4 +148,3 @@ msgid ""
 " can back this up and remove it from your server once you've confirmed "
 "everything is working."
 msgstr ""
-
