@@ -108,11 +108,16 @@ interface SubsonicSettings {
   enabled: { value: boolean }
 }
 
+interface UISettings {
+  custom_css: { value: string }
+}
+
 interface Settings {
   instance: InstanceSettings
   users: UsersSettings
   moderation: ModerationSettings
   subsonic: SubsonicSettings
+  ui: UISettings
 }
 
 const logger = useLogger()
@@ -168,6 +173,11 @@ const store: Module<State, RootState> = {
       subsonic: {
         enabled: {
           value: true
+        }
+      },
+      ui: {
+        custom_css: {
+          value: ''
         }
       }
     }
