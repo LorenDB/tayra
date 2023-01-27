@@ -322,6 +322,7 @@ build_docs:
     - apt-get update
     - apt-get install -y graphviz
     - poetry install
+    - poetry run pip install --no-deps --editable ../api
     - git branch stable --track origin/stable || true
     - git branch develop --track origin/develop || true
   script:
