@@ -111,7 +111,6 @@ export const useTracks = createGlobalState(() => {
 
   // Preload next track
   const { start: startPreloadTimeout } = useTimeoutFn(async (index) => {
-    console.log('@@@@', index)
     const { queue } = useQueue()
     const sound = await createSound(queue.value[index as number])
     await sound.preload()
@@ -170,7 +169,7 @@ export const useTracks = createGlobalState(() => {
       // NOTE: Preload next track
       //       Calling this function clears previous timeout and starts a new one.
       //       Since this watchEffect fires whenever currentIndex / nextTrack changes, it will automatically cleanup previous preload.
-      // @ts-expect-error vueuse is wrongly typed?
+      // @ts-expect-error vueuse is wrongly typed: https://github.com/vueuse/vueuse/issues/2691
       startPreloadTimeout(currentIndex.value + 1)
     })
 

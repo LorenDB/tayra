@@ -174,7 +174,12 @@ export const useQueue = createGlobalState(() => {
       await playNext(true)
     }
 
-    tracks.value.splice(index, 1)
+    if (isShuffled.value) {
+      tracks.value.splice(tracks.value.indexOf(shuffledIds.value[index]), 1)
+      shuffledIds.value.splice(index, 1)
+    } else {
+      tracks.value.splice(index, 1)
+    }
 
     if (index <= currentIndex.value) {
       currentIndex.value -= 1
@@ -239,8 +244,12 @@ export const useQueue = createGlobalState(() => {
 
   // Reorder
   const reorder = (from: number, to: number) => {
-    const [id] = tracks.value.splice(from, 1)
-    tracks.value.splice(to, 0, id)
+    const list = isShuffled.value
+      ? shuffledIds
+      : tracks
+
+    const [id] = list.value.splice(from, 1)
+    list.value.splice(to, 0, id)
 
     const current = currentIndex.value
     if (current === from) {
