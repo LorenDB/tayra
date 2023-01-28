@@ -192,7 +192,14 @@ export const usePlayer = createGlobalState(() => {
     return sound.isErrored.value
   })
 
-  const { start: startErrorTimeout, stop: stopErrorTimeout } = useTimeoutFn(() => playNext(), 3000, { immediate: false })
+  const { start: startErrorTimeout, stop: stopErrorTimeout } = useTimeoutFn(() => {
+    if (looping.value !== LoopingMode.LoopTrack) {
+      return playNext()
+    }
+
+    isPlaying.value = false
+  }, 3000, { immediate: false })
+
   watch(currentIndex, stopErrorTimeout)
   whenever(errored, startErrorTimeout)
 
