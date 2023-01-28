@@ -4,6 +4,8 @@ include:
     file: /templates/pre-commit.yml
   - project: funkwhale/ci
     file: /templates/lychee.yml
+  - project: funkwhale/ci
+    file: /templates/ssh-agent.yml
 
 variables:
   PYTHONDONTWRITEBYTECODE: "true"
@@ -335,22 +337,17 @@ build_api:
       - api
 
 deploy_docs:
+  extends: .ssh-agent
   stage: publish
-  image: alpine
   needs:
     - job: build_docs
       artifacts: true
-  before_script:
-    - apk add openssh-client rsync
-    - mkdir -p ~/.ssh
-    - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-    - eval `ssh-agent -s`
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+  rules:
+    - if: $CI_COMMIT_BRANCH == "stable"
+
+  image: $CI_REGISTRY/funkwhale/ci/python:3.11
   script:
     - rsync -r -e "ssh -p 2282" $CI_PROJECT_DIR/public/ docs@docs.funkwhale.audio:/htdocs/
-  only:
-    - stable
 
 .docker_publish:
   stage: publish
