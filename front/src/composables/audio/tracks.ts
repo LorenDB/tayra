@@ -3,7 +3,7 @@ import type { Track, Upload } from '~/types'
 import type { Sound } from '~/api/player'
 
 import { createGlobalState, syncRef, useTimeoutFn, whenever } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 
 import { connectAudioSource } from '~/composables/audio/audio-api'
 import { usePlayer } from '~/composables/audio/player'
@@ -110,7 +110,8 @@ export const useTracks = createGlobalState(() => {
   }
 
   // Preload next track
-  const { start: startPreloadTimeout, stop: stopPreloadTimeout } = useTimeoutFn(async (index) => {
+  const { start: startPreloadTimeout } = useTimeoutFn(async (index) => {
+    console.log('@@@@', index)
     const { queue } = useQueue()
     const sound = await createSound(queue.value[index as number])
     await sound.preload()
@@ -118,8 +119,6 @@ export const useTracks = createGlobalState(() => {
 
   // Create track from queue
   const createTrack = async (index: number) => {
-    stopPreloadTimeout()
-
     const { queue, currentIndex, playNext, hasNext } = useQueue()
     if (queue.value.length <= index || index === -1) return
     console.log('LOADING TRACK', index)
@@ -148,23 +147,32 @@ export const useTracks = createGlobalState(() => {
     if (isPlaying.value && index === currentIndex.value) {
       await sound.play()
     }
-
-    // NOTE: Preload next track
-    if (index === currentIndex.value && index + 1 < queue.value.length) {
-      // @ts-expect-error vueuse is wrongly typed?
-      startPreloadTimeout(index + 1)
-    }
   }
-
+  
   const currentTrack = ref<QueueTrack>()
 
   // NOTE: We want to have it called only once, hence we're using createGlobalState
   const initialize = createGlobalState(() => {
-    const { currentIndex, currentTrack: track } = useQueue()
+    const { currentIndex, currentTrack: track, queue, hasNext } = useQueue()
 
     whenever(track, () => {
       createTrack(currentIndex.value)
     }, { immediate: true })
+
+    let lastTrack: QueueTrack
+    watchEffect(async () => {
+      if (!hasNext.value) return
+
+      const nextTrack = queue.value[currentIndex.value + 1]
+      if (lastTrack === nextTrack) return
+      lastTrack = nextTrack
+
+      // NOTE: Preload next track
+      //       Calling this function clears previous timeout and starts a new one.
+      //       Since this watchEffect fires whenever currentIndex / nextTrack changes, it will automatically cleanup previous preload.
+      // @ts-expect-error vueuse is wrongly typed?
+      startPreloadTimeout(currentIndex.value + 1)
+    })
 
     syncRef(track, currentTrack, {
       direction: 'ltr'
