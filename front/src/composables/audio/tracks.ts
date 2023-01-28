@@ -109,6 +109,18 @@ export const useTracks = createGlobalState(() => {
     return soundPromise
   }
 
+  // Skip when errored
+  const { start: soundUnplayable, stop: abortSoundUnplayableTimeout } = useTimeoutFn(() => {
+    const { isPlaying, looping, LoopingMode } = usePlayer()
+    const { playNext } = useQueue()
+
+    if (looping.value !== LoopingMode.LoopTrack) {
+      return playNext()
+    }
+
+    isPlaying.value = false
+  }, 3000, { immediate: false })
+
   // Preload next track
   const { start: startPreloadTimeout } = useTimeoutFn(async (index) => {
     const { queue } = useQueue()
@@ -118,7 +130,9 @@ export const useTracks = createGlobalState(() => {
 
   // Create track from queue
   const createTrack = async (index: number) => {
-    const { queue, currentIndex, playNext, hasNext } = useQueue()
+    abortSoundUnplayableTimeout()
+
+    const { queue, currentIndex } = useQueue()
     if (queue.value.length <= index || index === -1) return
     console.log('LOADING TRACK', index)
 
@@ -126,14 +140,7 @@ export const useTracks = createGlobalState(() => {
     const sound = await createSound(track)
 
     if (!sound.playable) {
-      setTimeout(() => {
-        if (hasNext.value && index !== queue.value.length - 1) {
-          return playNext(true)
-        }
-
-        const { isPlaying } = usePlayer()
-        isPlaying.value = false
-      }, 3000)
+      soundUnplayable()
       return
     }
 
