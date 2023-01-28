@@ -214,37 +214,27 @@ test_api:
         path: api/coverage.xml
   coverage: '/TOTAL\s*\d*\s*\d*\s*(\d*%)/'
 
-# Those tests are disabled for now since no vitest dom emulation is providing
-# AudioContext, which is required for our HTML audio player
-#test_front:
-#  interruptible: true
-#  stage: test
-#  image: node:18-alpine
-#  before_script:
-#    - cd front
-#    - apk add --no-cache jq bash coreutils python3
-#  script:
-#    - yarn install --check-files
-#    - yarn test:unit
-#  cache:
-#    key: "funkwhale__front_dependencies"
-#    paths:
-#      - front/node_modules
-#      - front/yarn.lock
-#  artifacts:
-#    name: "front_${CI_COMMIT_REF_NAME}"
-#    paths:
-#      - front/dist/
-#    reports:
-#      junit: front/coverage/cobertura-coverage.xml
-#  tags:
-#    - docker
-#  rules:
-#    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
-#      changes:
-#        - front/**/*
-#    - if: $CI_COMMIT_REF_PROTECTED == "true"
-#      when: always
+test_front:
+  interruptible: true
+  stage: test
+  rules:
+    # Disabled for now since no vitest dom emulation is providing
+    # AudioContext, which is required for our HTML audio player
+    - when: never
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [front/**/*]
+
+  image: $CI_REGISTRY/funkwhale/ci/node-python:18
+  cache:
+    paths: [$YARN_CACHE_FOLDER]
+  before_script:
+    - cd front
+    - yarn install --frozen-lockfile
+  script:
+    - yarn test:unit
+  artifacts:
+    reports:
+      junit: front/coverage/cobertura-coverage.xml
 
 build_api_schema:
   stage: build
