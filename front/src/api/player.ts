@@ -69,6 +69,8 @@ export class HTMLSound implements Sound {
     this.#audio.src = source
     this.#audio.preload = 'auto'
 
+    console.log('CREATED SOUND INSTANCE', this)
+
     useEventListener(this.#audio, 'ended', () => this.#soundEndEventHook.trigger(this))
     useEventListener(this.#audio, 'timeupdate', () => {
       if (this.#audio.currentTime === 0) {
