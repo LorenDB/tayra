@@ -51,6 +51,7 @@ variables:
       paths: [docs/.venv]
 
 default:
+  interruptible: true
   tags:
     - docker
 
@@ -74,7 +75,6 @@ stages:
   - publish
 
 review_front:
-  interruptible: true
   allow_failure: true
   stage: review
   rules:
@@ -104,7 +104,6 @@ review_front:
       - front-review
 
 review_docs:
-  interruptible: true
   allow_failure: true
   stage: review
   rules:
@@ -152,7 +151,6 @@ find_broken_links:
       -- . || exit $?
 
 require_changelog:
-  interruptible: true
   stage: lint
   rules:
     # Don't run on merge request that mention NOCHANGELOG or renovate bot commits
@@ -171,7 +169,6 @@ pre-commit:
   extends: [.pre-commit]
 
 lint_api:
-  interruptible: true
   allow_failure: true
   stage: lint
 
@@ -183,7 +180,6 @@ lint_api:
     - make lint
 
 lint_front:
-  interruptible: true
   stage: lint
   rules:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
@@ -199,7 +195,6 @@ lint_front:
     - yarn lint:tsc
 
 test_api:
-  interruptible: true
   retry: 1
   stage: test
   rules:
@@ -242,7 +237,6 @@ test_api:
   coverage: '/TOTAL\s*\d*\s*\d*\s*(\d*%)/'
 
 test_front:
-  interruptible: true
   stage: test
   rules:
     # Disabled for now since no vitest dom emulation is providing
@@ -355,6 +349,7 @@ build_api:
       - api
 
 deploy_docs:
+  interruptible: false
   extends: .ssh-agent
   stage: publish
   needs:
@@ -368,6 +363,7 @@ deploy_docs:
     - rsync -r -e "ssh -p 2282" $CI_PROJECT_DIR/public/ docs@docs.funkwhale.audio:/htdocs/
 
 .docker_publish:
+  interruptible: false
   stage: publish
 
   image: $CI_REGISTRY/funkwhale/ci/docker
