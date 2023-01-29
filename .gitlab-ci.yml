@@ -77,6 +77,7 @@ stages:
 review_front:
   allow_failure: true
   stage: review
+  dependencies: []
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: manual
@@ -106,6 +107,7 @@ review_front:
 review_docs:
   allow_failure: true
   stage: review
+  dependencies: []
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: [docs/**/*]
@@ -152,6 +154,7 @@ find_broken_links:
 
 require_changelog:
   stage: lint
+  dependencies: []
   rules:
     # Don't run on merge request that mention NOCHANGELOG or renovate bot commits
     - if: >
@@ -171,6 +174,7 @@ pre-commit:
 lint_api:
   allow_failure: true
   stage: lint
+  dependencies: []
 
   image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-api:3.11
   before_script:
@@ -181,6 +185,7 @@ lint_api:
 
 lint_front:
   stage: lint
+  dependencies: []
   rules:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
     - changes: [front/**/*]
@@ -197,6 +202,7 @@ lint_front:
 test_api:
   retry: 1
   stage: test
+  dependencies: []
   rules:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
     - changes: [api/**/*]
@@ -238,6 +244,7 @@ test_api:
 
 test_front:
   stage: test
+  dependencies: []
   rules:
     # Disabled for now since no vitest dom emulation is providing
     # AudioContext, which is required for our HTML audio player
@@ -258,6 +265,7 @@ test_front:
 
 build_api_schema:
   stage: build
+  dependencies: []
   rules:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
     - changes: [api/**/*]
@@ -287,9 +295,7 @@ build_api_schema:
 
 build_docs:
   stage: build
-  needs:
-    - job: build_api_schema
-      artifacts: true
+  dependencies: [build_api_schema]
   rules:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
     - changes: [docs/**/*]
@@ -316,6 +322,7 @@ build_docs:
 
 build_front:
   stage: build
+  dependencies: []
 
   image: $CI_REGISTRY/funkwhale/ci/node-python:18
   variables:
@@ -333,6 +340,7 @@ build_front:
 
 build_api:
   stage: build
+  dependencies: []
 
   image: $CI_REGISTRY/funkwhale/ci/python:3.11
   variables:
@@ -352,9 +360,7 @@ deploy_docs:
   interruptible: false
   extends: .ssh-agent
   stage: publish
-  needs:
-    - job: build_docs
-      artifacts: true
+  dependencies: [build_docs]
   rules:
     - if: $CI_COMMIT_BRANCH == "stable"
 
@@ -365,6 +371,7 @@ deploy_docs:
 .docker_publish:
   interruptible: false
   stage: publish
+  dependencies: []
 
   image: $CI_REGISTRY/funkwhale/ci/docker
   parallel:
@@ -387,6 +394,10 @@ deploy_docs:
     - multiarch
   before_script:
     - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+    - >
+      if [[ "$CI_COMMIT_REF_NAME" =~ ^develop|stable$ ]]; then
+        ./scripts/set-api-build-metadata.sh $CI_COMMIT_SHORT_SHA;
+      fi
   cache:
     key: docker_public_${CI_COMMIT_REF_NAME}
     paths:
