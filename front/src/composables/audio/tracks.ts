@@ -175,7 +175,6 @@ export const useTracks = createGlobalState(() => {
       lastTrack = nextTrack
 
       // NOTE: Preload next track
-      // @ts-expect-error vueuse is wrongly typed: https://github.com/vueuse/vueuse/issues/2691
       preload(nextTrack)
     })
 
