@@ -114,10 +114,10 @@ review_docs:
       when: manual
 
 find_broken_links:
+  extends: [.lychee]
   allow_failure:
     exit_codes: 2
 
-  extends: [.lychee]
   script:
     - >
       lychee
