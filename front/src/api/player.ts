@@ -90,11 +90,16 @@ export class HTMLSound implements Sound {
   }
 
   preload () {
+    console.log('CALLING PRELOAD ON', this)
     this.#audio.load()
   }
 
   dispose () {
     this.audioNode.disconnect()
+
+    // Cancel any request downloading the source
+    this.#audio.src = ''
+    this.#audio.load()
   }
 
   async play () {
