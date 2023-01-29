@@ -19,7 +19,10 @@ const ALLOWED_PLAY_TYPES: (CanPlayTypeResult | undefined)[] = ['maybe', 'probabl
 const AUDIO_ELEMENT = document.createElement('audio')
 
 const soundPromises = new Map<number, Promise<Sound>>()
-const soundCache = useLRUCache<number, Sound>({ max: 10 })
+const soundCache = useLRUCache<number, Sound>({
+  max: 10,
+  dispose: (sound) => sound.dispose()
+})
 
 export const fetchTrackSources = async (id: number): Promise<QueueTrackSource[]> => {
   const { uploads } = await axios.get(`tracks/${id}/`)
@@ -124,6 +127,7 @@ export const useTracks = createGlobalState(() => {
   // Preload next track
   const { start: preload, stop: abortPreload } = useTimeoutFn(async (track: QueueTrack) => {
     const sound = await createSound(track)
+    sound.__track = track
     await sound.preload()
   }, 100, { immediate: false })
 
@@ -153,7 +157,7 @@ export const useTracks = createGlobalState(() => {
       await sound.play()
     }
   }
-  
+
   const currentTrack = ref<QueueTrack>()
 
   // NOTE: We want to have it called only once, hence we're using createGlobalState
