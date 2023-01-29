@@ -122,9 +122,8 @@ export const useTracks = createGlobalState(() => {
   }, 3000, { immediate: false })
 
   // Preload next track
-  const { start: startPreloadTimeout, stop: abortPreload } = useTimeoutFn(async (index) => {
-    const { queue } = useQueue()
-    const sound = await createSound(queue.value[index as number])
+  const { start: preload, stop: abortPreload } = useTimeoutFn(async (track: QueueTrack) => {
+    const sound = await createSound(track)
     await sound.preload()
   }, 100, { immediate: false })
 
@@ -172,12 +171,12 @@ export const useTracks = createGlobalState(() => {
       if (!hasNext.value) return
 
       const nextTrack = queue.value[currentIndex.value + 1]
-      if (nextTrack && lastTrack === nextTrack) return
+      if (!nextTrack || lastTrack === nextTrack) return
       lastTrack = nextTrack
 
       // NOTE: Preload next track
       // @ts-expect-error vueuse is wrongly typed: https://github.com/vueuse/vueuse/issues/2691
-      startPreloadTimeout(currentIndex.value + 1)
+      preload(nextTrack)
     })
 
     syncRef(track, currentTrack, {
