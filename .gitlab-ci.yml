@@ -373,9 +373,9 @@ deploy_docs:
   script:
     - rsync -r -e "ssh -p 2282" $CI_PROJECT_DIR/public/ docs@docs.funkwhale.audio:/htdocs/
 
-.docker_publish:
+.docker:
   interruptible: false
-  stage: publish
+  stage: build
   dependencies: []
 
   image: $CI_REGISTRY/funkwhale/ci/docker
@@ -409,7 +409,7 @@ deploy_docs:
       - ~/.cargo
 
 docker_stable:
-  extends: .docker_publish
+  extends: .docker
   rules:
     - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_NAME =~ /^[0-9]+(.[0-9]+){1,2}$/
   script:
@@ -421,7 +421,7 @@ docker_stable:
     - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE $DOCKER_LATEST_TAG -t $IMAGE_NAME:$major -t $IMAGE_NAME:$minor .
 
 docker_unstable:
-  extends: .docker_publish
+  extends: .docker
   rules:
     - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_NAME !~ /^[0-9]+(.[0-9]+){1,2}$/
   script:
@@ -430,7 +430,7 @@ docker_unstable:
     - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE .
 
 docker_dev:
-  extends: .docker_publish
+  extends: .docker
   only:
     - develop@funkwhale/funkwhale
     - stable@funkwhale/funkwhale
