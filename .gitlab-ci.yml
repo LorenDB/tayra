@@ -269,6 +269,8 @@ build_api_schema:
   rules:
     - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
     - changes: [api/**/*]
+    # Add build_docs rules because it depends on the build_api_schema artifact
+    - changes: [docs/**/*]
 
   image: $CI_REGISTRY/funkwhale/ci/python-funkwhale-api:3.11
   services:
