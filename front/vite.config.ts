@@ -1,9 +1,10 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type PluginOption } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import Inspector from 'vite-plugin-vue-inspector'
 import VueI18n from '@intlify/vite-plugin-vue-i18n'
 import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 import manifest from './pwa-manifest.json'
 
@@ -25,6 +26,9 @@ export default defineConfig(({ mode }) => ({
     Inspector({
       toggleComboKey: 'alt-shift-d'
     }),
+
+    // https://github.com/btd/rollup-plugin-visualizer
+    visualizer() as unknown as PluginOption,
 
     // https://github.com/antfu/vite-plugin-pwa
     VitePWA({
