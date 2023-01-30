@@ -12,7 +12,7 @@ You can open Gitpod directly by clicking the link below. This checks out the `de
 
 If you want to work on a particular branch, commit, or merge request, you can do this straight from the GitLab interface. Select the arrow icon on the {guilabel}`Web IDE` button and select {guilabel}`Gitpod` to open Gitpod with the currently selected branch checked out.
 
-![Select Gitpod as the default web IDE](/_static/images/select-gitpod-in-gitlab.png)
+![Select Gitpod as the default web IDE](./gitpod-select-gitpod-in-gitlab.png)
 
 When you start Gitpod, it creates the following using the selected branch:
 
