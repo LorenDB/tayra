@@ -9,7 +9,7 @@ tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 
 pushd "$tmpdir"
-wget "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v$SWAGGER_VERSION.tar.gz" -O swagger-ui.tgz
+curl -sSL "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v$SWAGGER_VERSION.tar.gz" -o swagger-ui.tgz
 tar -xzf swagger-ui.tgz
 popd
 mv "$tmpdir/"*/dist "$TARGET_PATH"
