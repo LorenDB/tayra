@@ -147,7 +147,7 @@ export const useTracks = createGlobalState(() => {
       return
     }
 
-    console.log('CONNECTING NODE')
+    console.log('CONNECTING NODE', sound)
 
     sound.audioNode.disconnect()
     connectAudioSource(sound.audioNode)
