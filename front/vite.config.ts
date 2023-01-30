@@ -54,6 +54,23 @@ export default defineConfig(({ mode }) => ({
       '~': resolve(__dirname, './src')
     }
   },
+  build: {
+    // https://rollupjs.org/configuration-options/
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'axios': ['axios', 'axios-auth-refresh'],
+          'dompurify': ['dompurify'],
+          'jquery': ['jquery'],
+          'lodash': ['lodash-es'],
+          'moment': ['moment'],
+          'sentry': ['@sentry/vue', '@sentry/tracing'],
+          'standardized-audio-context': ['standardized-audio-context'],
+          'vue-router': ['vue-router'],
+        }
+      }
+    }
+  },
   test: {
     environment: 'jsdom',
     globals: true,

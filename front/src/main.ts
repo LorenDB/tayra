@@ -8,6 +8,8 @@ import { createApp, defineAsyncComponent, h } from 'vue'
 import useLogger from '~/composables/useLogger'
 import useTheme from '~/composables/useTheme'
 
+import '~/style/_main.scss'
+
 import '~/api'
 
 // NOTE: Set the theme as fast as possible

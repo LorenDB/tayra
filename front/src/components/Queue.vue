@@ -2,7 +2,7 @@
 import type { QueueItemSource } from '~/types'
 
 import { whenever, watchDebounced, useCurrentElement, useScrollLock, useFullscreen, useIdle, refAutoReset, useStorage } from '@vueuse/core'
-import { nextTick, ref, computed, watchEffect, onMounted } from 'vue'
+import { nextTick, ref, computed, watchEffect, onMounted, defineAsyncComponent } from 'vue'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -17,10 +17,11 @@ import time from '~/utils/time'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import PlayerControls from '~/components/audio/PlayerControls.vue'
-import MilkDrop from '~/components/audio/visualizer/MilkDrop.vue'
 
 import VirtualList from '~/components/vui/list/VirtualList.vue'
 import QueueItem from '~/components/QueueItem.vue'
+
+const MilkDrop = defineAsyncComponent(() => import('~/components/audio/visualizer/MilkDrop.vue'))
 
 const {
   isPlaying,
