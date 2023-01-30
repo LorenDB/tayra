@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
-import { NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies'
+import { NetworkFirst } from 'workbox-strategies'
 import { ExpirationPlugin } from 'workbox-expiration'
 import { registerRoute } from 'workbox-routing'
 import { clientsClaim } from 'workbox-core'
@@ -38,13 +38,6 @@ registerRoute(({ url }) => {
     new ExpirationPlugin({ maxAgeSeconds: 7 * 24 * 3600 })
   ]
 }))
-
-// NOTE: Stale-While-Revalidate cache for album covers
-//       We're serving from cache if available and making a request
-//       in the background to update the cache for next request
-registerRoute(({ url }) => {
-  return url.pathname.startsWith('/media')
-}, new StaleWhileRevalidate())
 
 // Precache all assets and add routes for them
 // https://developer.chrome.com/docs/workbox/reference/workbox-precaching/#method-precacheAndRoute
