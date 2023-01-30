@@ -78,6 +78,18 @@ export class HTMLSound implements Sound {
       }
     })
 
+    useEventListener(this.#audio, 'waiting', () => {
+      console.log('>> AUDIO WAITING', this.__track?.title)
+    })
+
+    useEventListener(this.#audio, 'playing', () => {
+      console.log('>> AUDIO PLAYING', this.__track?.title)
+    })
+
+    useEventListener(this.#audio, 'stalled', () => {
+      console.log('>> AUDIO STALLED', this.__track?.title)
+    })
+
     useEventListener(this.#audio, 'loadeddata', () => {
       // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
       this.isLoaded.value = this.#audio.readyState >= 2
@@ -90,7 +102,7 @@ export class HTMLSound implements Sound {
   }
 
   preload () {
-    console.log('CALLING PRELOAD ON', this)
+    console.log('CALLING PRELOAD ON', this.__track?.title)
     this.#audio.load()
   }
 
@@ -119,7 +131,7 @@ export class HTMLSound implements Sound {
   }
 
   get playable () {
-    return this.#audio.src !== ''
+    return this.#audio.src !== '' || this.isErrored.value
   }
 
   get duration () {
