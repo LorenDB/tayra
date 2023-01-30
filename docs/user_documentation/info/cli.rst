@@ -82,7 +82,7 @@ To get started, you need to create an application for the CLI. To do this:
 
 Once you have your app's Access Token, you can either:
 
-1. Run ``funkwhale login`. The CLI asks you for your token and stores it in your machine's keyring. The CLI uses this token to authenticate.
+1. Run ``funkwhale login``. The CLI asks you for your token and stores it in your machine's keyring. The CLI uses this token to authenticate.
 2. Explicitly pass a token to the command via the ``-t`` flag or the ``FUNKWHALE_TOKEN`` environment variable
 
 If you use ``funkwhale login``, you can delete the local token with ``funkwhale logout``.

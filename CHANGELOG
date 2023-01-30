@@ -57,28 +57,31 @@ Update instructions:
   ```
 
   .. note::
-     If you need to customize your nginx template, e.g. to work around `problems with
-     Docker's resolver <https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found>`_, you can mount your
-     custom nginx configuration into the container. Uncomment the commented volumes in the `nginx` section of your `docker-compose.yml`.
-  	 Additionally you need to update the paths in `nginx/funkwhale.template`.
-  	 Replace all occurrences of `/funkwhale` by `/usr/share/nginx/html`.
-     This loads the templates from your `nginx` folder and overrides the template files in the Docker container.
+    If you need to customize your nginx template, e.g. to work around `problems with
+    Docker's resolver <https://docs.funkwhale.audio/admin/external-storages.html#no-resolver-found>`_, you can mount your
+    custom nginx configuration into the container. Uncomment the commented volumes in the `nginx` section of your `docker-compose.yml`.
+    Additionally you need to update the paths in `nginx/funkwhale.template`.
+    Replace all occurrences of `/funkwhale` by `/usr/share/nginx/html`.
+    This loads the templates from your `nginx` folder and overrides the template files in the Docker container.
 
   ```
   docker-compose up -d
   ```
+
 - The Docker instructions now use the updated Docker compose plugin. If you previously used the ``docker-compose`` standalone installation, do the following while upgrading:
 
   1. Download the `Docker compose plugin <https://docs.docker.com/compose/install/linux/#install-using-the-repository>`_
   2. Stop your containers using the **docker-compose** syntax.
 
-  .. code-block:: sh
-     sudo docker-compose down
+  ```sh
+  sudo docker-compose down
+  ```
 
   3. Bring the containers back up using the **docker compose** syntax.
 
-  .. code-block:: sh
-     sudo docker compose up -d
+  ```sh
+  sudo docker compose up -d
+  ```
 
   After this you can continue to use the **docker compose** syntax for all Docker management tasks.
 - Upgrade Postgres to version 15. [Make sure to migrate!](https://docs.funkwhale.audio/administrator_documentation/upgrade_docs/docker.html#upgrade-the-postgres-container)
@@ -3842,7 +3845,7 @@ tend to be a lot bigger than other files, you may want to increase the
 to upload flac files.
 
 Missing subsonic configuration block in vhost files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Because of a missing block in the sample Nginx and Apache configurations,
 instances that were deployed after the 0.13 release are likely to be unable
