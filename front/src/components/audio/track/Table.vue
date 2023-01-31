@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Track } from '~/types'
 
-import { useElementByPoint, useMouse } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import { clone, uniqBy } from 'lodash-es'
 import { ref, computed } from 'vue'
@@ -69,15 +68,6 @@ const props = withDefaults(defineProps<Props>(), {
   paginateBy: 25,
 
   unique: true
-})
-
-const { x, y } = useMouse({ type: 'client' })
-const { element } = useElementByPoint({ x, y })
-const hover = computed(() => {
-  const row = element.value?.closest('.track-row') ?? null
-  return row && allTracks.value.find(track => {
-    return `${track.id}` === row.getAttribute('data-track-id') && `${track.position}` === row.getAttribute('data-track-position')
-  })
 })
 
 const currentPage = ref(props.page)
@@ -235,8 +225,6 @@ const updatePage = (page: number) => {
         <track-row
           v-for="(track, index) in allTracks"
           :key="`${track.id} ${track.position}`"
-          :data-track-id="track.id"
-          :data-track-position="track.position"
           :track="track"
           :index="index"
           :tracks="allTracks"
@@ -247,7 +235,6 @@ const updatePage = (page: number) => {
           :display-actions="displayActions"
           :show-duration="showDuration"
           :is-podcast="isPodcast"
-          :hover="hover === track"
         />
       </div>
       <div

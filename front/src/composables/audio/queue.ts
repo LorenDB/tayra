@@ -296,7 +296,6 @@ export const useQueue = createGlobalState(() => {
   }
 
   // Ends in
-  const now = useNow()
   const endsIn = useTimeAgo(computed(() => {
     const seconds = sum(
       queue.value
@@ -304,10 +303,12 @@ export const useQueue = createGlobalState(() => {
         .map((track) => track.sources[0]?.duration ?? 0)
     )
 
-    const date = new Date(now.value)
+    const date = new Date()
     date.setSeconds(date.getSeconds() + seconds)
     return date
-  }))
+  }), {
+    updateInterval: 0
+  })
 
   // Clear
   const clearRadio = ref(false)

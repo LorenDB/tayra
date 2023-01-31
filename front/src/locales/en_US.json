@@ -192,7 +192,8 @@
         "queuePosition": "Track {index} of {length}",
         "startTime": "00:00",
         "unknownArtist": "Unknown Artist",
-        "unknownAlbum": "Unknown Album"
+        "unknownAlbum": "Unknown Album",
+        "end": "End"
       }
     },
     "RemoteSearchForm": {

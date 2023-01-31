@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@intlify/eslint-plugin-vue-i18n": "2.0.0",
-    "@intlify/vite-plugin-vue-i18n": "6.0.3",
+    "@intlify/unplugin-vue-i18n": "^0.8.1",
     "@types/diff": "5.0.2",
     "@types/dompurify": "2.4.0",
     "@types/howler": "2.2.7",
@@ -73,6 +73,7 @@
     "@vitejs/plugin-vue": "4.0.0",
     "@vitest/coverage-c8": "0.25.8",
     "@vue/compiler-sfc": "3.2.45",
+    "@vue/devtools": "^6.5.0",
     "@vue/eslint-config-standard": "8.0.1",
     "@vue/eslint-config-typescript": "11.0.2",
     "@vue/test-utils": "2.2.7",

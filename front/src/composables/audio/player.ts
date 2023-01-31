@@ -168,15 +168,6 @@ export const usePlayer = createGlobalState(() => {
 
   // Progress
   const progress = ref(0)
-  useRafFn(() => {
-    const sound = currentSound.value
-    if (!sound) {
-      progress.value = 0
-      return
-    }
-
-    progress.value = sound.currentTime / sound.duration * 100
-  })
 
   // Loading
   const loading = computed(() => {

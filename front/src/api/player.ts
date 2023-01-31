@@ -11,8 +11,8 @@ export interface SoundSource {
 }
 
 export interface Sound {
-  preload(): void | Promise<void>
-  dispose(): void
+  preload(): Promise<void>
+  dispose(): Promise<void>
 
   readonly audioNode: IAudioNode<IAudioContext>
   readonly isErrored: Ref<boolean>
@@ -23,11 +23,11 @@ export interface Sound {
   readonly buffered: number
   looping: boolean
 
-  pause(): void | Promise<void>
-  play(): void | Promise<void>
+  pause(): Promise<void>
+  play(): Promise<void>
 
-  seekTo(seconds: number): void | Promise<void>
-  seekBy(seconds: number): void | Promise<void>
+  seekTo(seconds: number): Promise<void>
+  seekBy(seconds: number): Promise<void>
 
   onSoundLoop: EventHookOn<Sound>
   onSoundEnd: EventHookOn<Sound>
@@ -95,19 +95,22 @@ export class HTMLSound implements Sound {
       this.isLoaded.value = this.#audio.readyState >= 2
     })
 
-    useEventListener(this.#audio, 'error', () => {
+    useEventListener(this.#audio, 'error', (err) => {
+      console.error('>> AUDIO ERRORED', err, this.__track?.title)
       this.isErrored.value = true
       this.isLoaded.value = true
     })
   }
 
-  preload () {
+  async preload () {
+    this.isErrored.value = false
     console.log('CALLING PRELOAD ON', this.__track?.title)
     this.#audio.load()
   }
 
-  dispose () {
+  async dispose () {
     this.audioNode.disconnect()
+    this.#audio.pause()
 
     // Cancel any request downloading the source
     this.#audio.src = ''

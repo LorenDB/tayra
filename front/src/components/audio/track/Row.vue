@@ -2,7 +2,7 @@
 import type { Track, Artist, Album, Playlist, Library, Channel, Actor } from '~/types'
 import type { PlayOptionsProps } from '~/composables/audio/usePlayOptions'
 
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 import usePlayOptions from '~/composables/audio/usePlayOptions'
 
@@ -22,8 +22,6 @@ interface Props extends PlayOptionsProps {
   showDuration?: boolean
   showPosition?: boolean
   displayActions?: boolean
-
-  hover: boolean
 
   // TODO(wvffle): Remove after https://github.com/vuejs/core/pull/4512 is merged
   tracks: Track[]
@@ -57,12 +55,15 @@ const { isPlaying, loading } = usePlayer()
 const { currentTrack } = useQueue()
 
 const active = computed(() => props.track.id === currentTrack.value?.id && props.track.position === currentTrack.value?.position)
+const hover = ref(false)
 </script>
 
 <template>
   <div
     :class="[{ active }, 'track-row row']"
     @dblclick="activateTrack(track, index)"
+    @mousemove="hover = true"
+    @mouseout="hover = false"
   >
     <div
       class="actions one wide left floated column"

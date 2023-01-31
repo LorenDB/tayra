@@ -20,7 +20,7 @@ const AUDIO_ELEMENT = document.createElement('audio')
 
 const soundPromises = new Map<number, Promise<Sound>>()
 const soundCache = useLRUCache<number, Sound>({
-  max: 10,
+  max: 3,
   dispose: (sound) => sound.dispose()
 })
 
