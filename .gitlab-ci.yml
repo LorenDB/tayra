@@ -403,7 +403,7 @@ deploy_docs:
     - job: test_front
       optional: true
 
-  image: $CI_REGISTRY/funkwhale/ci/docker
+  image: $CI_REGISTRY/funkwhale/ci/docker:20
   parallel:
     matrix:
       - COMPONENT: ["api", "front"]
