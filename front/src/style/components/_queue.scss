@@ -171,6 +171,18 @@
   .ui.progress:not(.indeterminate)
     .bar.position:not(.buffer) {
     background: var(--vibrant-color);
+    will-change: transform;
+    
+    
+    &.animated {
+      @keyframes progress {
+        0% { transform: translate3d(-100%, 0, 0) }
+        100% { transform: translate3d(0, 0, 0) }
+      }
+      
+      animation-name: progress;
+      animation-timing-function: linear;
+    }
   }
 
   .indicating.progress .bar {

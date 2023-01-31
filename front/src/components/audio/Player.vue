@@ -150,7 +150,6 @@ const hideArtist = () => {
         />
         <div
           class="position bar"
-          :style="{ 'transform': `translateX(${progress - 100}%)` }"
         />
         <div
           class="seek bar"

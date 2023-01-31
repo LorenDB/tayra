@@ -2,6 +2,7 @@ import type { InitModule } from '~/types'
 
 import store, { key } from '~/store'
 import router from '~/router'
+import devtools from '@vue/devtools'
 
 import { createApp, defineAsyncComponent, h } from 'vue'
 
@@ -12,6 +13,10 @@ import '~/api'
 
 // NOTE: Set the theme as fast as possible
 useTheme()
+
+if (import.meta.env.MODE === 'development') {
+  devtools.connect(/* host, port */)
+}
 
 const logger = useLogger()
 logger.info('Loading environment:', import.meta.env.MODE)
@@ -31,6 +36,8 @@ const app = createApp({
     return null
   }
 })
+
+app.config.performance = false
 
 app.use(router)
 app.use(store, key)

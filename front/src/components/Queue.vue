@@ -2,7 +2,7 @@
 import type { QueueItemSource } from '~/types'
 
 import { whenever, watchDebounced, useCurrentElement, useScrollLock, useFullscreen, useIdle, refAutoReset, useStorage } from '@vueuse/core'
-import { nextTick, ref, computed, watchEffect, onMounted } from 'vue'
+import { nextTick, ref, computed, watchEffect, watch, defineAsyncComponent } from 'vue'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -17,10 +17,11 @@ import time from '~/utils/time'
 import TrackFavoriteIcon from '~/components/favorites/TrackFavoriteIcon.vue'
 import TrackPlaylistIcon from '~/components/playlists/TrackPlaylistIcon.vue'
 import PlayerControls from '~/components/audio/PlayerControls.vue'
-import MilkDrop from '~/components/audio/visualizer/MilkDrop.vue'
 
 import VirtualList from '~/components/vui/list/VirtualList.vue'
 import QueueItem from '~/components/QueueItem.vue'
+
+const MilkDrop = defineAsyncComponent(() => import('~/components/audio/visualizer/MilkDrop.vue'))
 
 const {
   isPlaying,
@@ -41,7 +42,7 @@ const {
   dequeue,
   playTrack,
   reorder,
-  endsIn: timeLeft,
+  endsIn,
   clear
 } = useQueue()
 
@@ -92,16 +93,6 @@ const scrollToCurrent = (behavior: ScrollBehavior = 'smooth') => {
 
 watchDebounced(currentTrack, () => scrollToCurrent(), { debounce: 100 })
 
-const scrollLoop = () => {
-  const visible = [...(list.value?.scroller.$_views.values() ?? [])].map(item => item.nr.index)
-  if (!visible.includes(currentIndex.value)) {
-    list.value?.scrollToIndex(currentIndex.value)
-    requestAnimationFrame(scrollLoop)
-  }
-}
-
-onMounted(scrollLoop)
-
 whenever(
   () => queue.value.length === 0,
   () => store.commit('ui/queueFocused', null),
@@ -116,6 +107,13 @@ const touchProgress = (event: MouseEvent) => {
   const time = ((event.clientX - ((event.target as Element).closest('.progress')?.getBoundingClientRect().left ?? 0)) / progressBar.value.offsetWidth) * duration.value
   seekTo(time)
 }
+
+const animated = ref(false)
+watch(currentTrack, async track => {
+  animated.value = false
+  await nextTick()
+  animated.value = true
+})
 
 const play = async (index: number) => {
   isPlaying.value = true
@@ -357,8 +355,13 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                   :style="{ 'transform': `translateX(${bufferProgress - 100}%)` }"
                 />
                 <div
-                  class="position bar"
-                  :style="{ 'transform': `translateX(calc(${progress}% - 100%)` }"
+                  :class="['position bar', { animated }]"
+                  :style="{
+                    animationDuration: duration + 's',
+                    animationPlayState: isPlaying
+                      ? 'running'
+                      : 'paused'
+                  }"
                 />
               </div>
             </div>
@@ -415,12 +418,11 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
               <div class="sub header">
                 <div>
                   {{ $t('components.Queue.meta.queuePosition', {index: currentIndex +1, length: queue.length}) }}
-                  <template v-if="!$store.state.radios.running">
-                    <span class="middle ellipses symbol" />
-                    <span :title="labels.duration">
-                      {{ timeLeft }}
-                    </span>
-                  </template>
+                  <span class="middle pipe symbol" />
+                  {{ $t('components.Queue.meta.end') }}
+                  <span :title="labels.duration">
+                    {{ endsIn }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -433,8 +435,7 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
           :component="QueueItem"
           :size="50"
           @reorder="reorderTracks"
-          @visible="scrollToCurrent('auto')"
-          @hidden="scrollLoop"
+          @visible="list.scrollToIndex(currentIndex, 'center')"
         >
           <template #default="{ index, item, classlist }">
             <queue-item

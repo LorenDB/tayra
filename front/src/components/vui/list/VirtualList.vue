@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useMouse, useCurrentElement, useRafFn, useElementByPoint } from '@vueuse/core'
-import { ref, watchEffect, reactive } from 'vue'
+import { ref, watchEffect, reactive, watch } from 'vue'
 
 // @ts-expect-error no typings
 import { RecycleScroller } from 'vue-virtual-scroller'
@@ -9,7 +9,6 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 interface Events {
   (e: 'reorder', from: number, to: number): void
   (e: 'visible'): void
-  (e: 'hidden'): void
 }
 
 interface Props {
@@ -97,7 +96,19 @@ const cleanup = () => {
 const scrollDirection = ref()
 const containerSize = reactive({ bottom: 0, top: 0 })
 const { x, y: screenY } = useMouse({ type: 'client' })
-const { element: hoveredElement } = useElementByPoint({ x, y: screenY })
+
+const { element: hoveredElement, pause: dragTrackPause, resume: dragTrackStart } = useElementByPoint({ x, y: screenY })
+dragTrackPause()
+
+// Disable element lookup
+watch(draggedItem, (dragging) => {
+  if (dragging) {
+    dragTrackStart()
+    return
+  }
+
+  dragTrackPause()
+}, { immediate: true })
 
 // Find current index and position on both desktop and mobile devices
 watchEffect(() => {
@@ -138,23 +149,35 @@ const resize = () => {
   containerSize.bottom = element.offsetHeight + containerSize.top
 }
 
+// Scrolling when item held near top/bottom border
 let lastDate = +new Date()
 const { resume, pause } = useRafFn(() => {
   const now = +new Date()
-  const delta = now - lastDate
   const direction = scrollDirection.value
 
   if (direction && el.value?.children[0] && !isTouch.value) {
-    el.value.children[0].scrollTop += 200 / delta * (direction === 'up' ? -1 : 1)
+    el.value.children[0].scrollTop += 200 / (now - lastDate) * (direction === 'up' ? -1 : 1)
   }
 
   lastDate = now
 }, { immediate: false })
 
 const virtualList = ref()
+const scrollToIndex = (index: number, block: 'center' | 'start' | 'end' = 'start') => {
+  if (!virtualList.value) return
+
+  const position = block === 'start'
+    ? index * props.size
+    : block === 'end'
+      ? (index + 1) * props.size - virtualList.value.$el.offsetHeight
+      : (index + 0.5) * props.size - virtualList.value.$el.offsetHeight / 2
+
+  virtualList.value.scrollToPosition(position)
+}
+
 defineExpose({
-  scrollToIndex: (index: number) => virtualList.value?.scrollToItem(index),
   scroller: virtualList,
+  scrollToIndex,
   cleanup
 })
 </script>
@@ -173,7 +196,6 @@ defineExpose({
       @touchmove="onTouchmove"
       @resize="resize"
       @visible="emit('visible')"
-      @hidden="emit('hidden')"
     >
       <template #before>
         <slot name="header" />
