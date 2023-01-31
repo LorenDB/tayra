@@ -1,6 +1,6 @@
 # Tag your content with Picard
 
-Funkwhale relies on [ID3 tags](https://id3.org/) to sort audio content. ID3 tags tell Funkwhale information about your files. Funkwhale uses this information to display your content in your {term}`pod`.
+Funkwhale relies on [ID3 tags](https://en.wikipedia.org/wiki/ID3) to sort audio content. ID3 tags tell Funkwhale information about your files. Funkwhale uses this information to display your content in your {term}`pod`.
 
 We recommend using [MusicBrainz Picard](https://picard.musicbrainz.org/) to tag your content. MusicBrainz Picard is free and open source software that connects to [MusicBrainz](https://musicbrainz.org). Funkwhale uses MusicBrainz as its primary data source.
 
