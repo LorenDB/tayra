@@ -391,6 +391,8 @@ deploy_docs:
     - if: $CI_COMMIT_BRANCH == "stable"
 
   image: $CI_REGISTRY/funkwhale/ci/python:3.11
+  variables:
+    GIT_STRATEGY: none
   script:
     - rsync -r -e "ssh -p 2282" $CI_PROJECT_DIR/public/ docs@docs.funkwhale.audio:/htdocs/
 
