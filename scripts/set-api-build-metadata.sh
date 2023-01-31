@@ -10,7 +10,11 @@ error() {
   exit 1
 }
 
+command -v git > /dev/null || error "git command not found!"
 command -v poetry > /dev/null || error "poetry command not found!"
+
+# We assume this script only runs in a git repository
+cd "$(git rev-parse --show-toplevel)/api"
 
 COMMIT_SHA="$1"
 
