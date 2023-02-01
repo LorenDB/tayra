@@ -1,6 +1,6 @@
 # Create a library
 
-Use the `create` command to create new libraries for a given user.
+Use the `create_library` command to create new libraries for a given user.
 
 ```{list-table}
 :header-rows: 1
@@ -38,7 +38,7 @@ Use the following command to create a new library with a custom name and privacy
 :sync: debian
 
 ```{code-block} sh
-venv/bin/funkwhale-manage create username1 --name="Library 1" --privacy-level="everyone"
+venv/bin/funkwhale-manage create_library username1 --name="Library 1" --privacy-level="everyone"
 ```
 
 :::
@@ -47,7 +47,7 @@ venv/bin/funkwhale-manage create username1 --name="Library 1" --privacy-level="e
 :sync: docker
 
 ```{code-block} sh
-sudo docker compose run --rm api funkwhale-manage create username1 --name="Library 1" --privacy-level="everyone"
+sudo docker compose run --rm api funkwhale-manage create_library username1 --name="Library 1" --privacy-level="everyone"
 ```
 
 :::
@@ -70,7 +70,7 @@ You can create a library using only a username. The script substitutes default v
 :sync: debian
 
 ```{code-block} sh
-venv/bin/funkwhale-manage create username1
+venv/bin/funkwhale-manage create_library username1
 ```
 
 :::
@@ -79,7 +79,7 @@ venv/bin/funkwhale-manage create username1
 :sync: docker
 
 ```{code-block} sh
-sudo docker compose run --rm api funkwhale-manage create username1
+sudo docker compose run --rm api funkwhale-manage create_library username1
 ```
 
 :::
@@ -102,7 +102,7 @@ If a library with the same name already exists for the given user, the script wi
 :sync: debian
 
 ```{code-block} sh
-venv/bin/funkwhale-manage create username1 --name="Library 1" --privacy-level="everyone"
+venv/bin/funkwhale-manage create_library username1 --name="Library 1" --privacy-level="everyone"
 ```
 
 :::
@@ -111,7 +111,7 @@ venv/bin/funkwhale-manage create username1 --name="Library 1" --privacy-level="e
 :sync: docker
 
 ```{code-block} sh
-sudo docker compose run --rm api funkwhale-manage create username1 --name="Library 1" --privacy-level="everyone"
+sudo docker compose run --rm api funkwhale-manage create_library username1 --name="Library 1" --privacy-level="everyone"
 ```
 
 :::
