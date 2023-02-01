@@ -1,15 +1,25 @@
 <script setup lang="ts">
 
 interface Props {
-  content: string
+  content: string | false
+  tag?: string
 }
 
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  tag: 'span'
+})
 </script>
 
 <template>
-  <span
-    class="tooltip"
+  <component
+    :is="tag"
+    v-if="content"
     :data-tooltip="content"
-  ><i class="question circle icon" /></span>
+    class="tooltip"
+  >
+    <slot>
+      <i class="question circle icon" />
+    </slot>
+  </component>
+  <slot v-else />
 </template>

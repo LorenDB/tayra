@@ -168,7 +168,16 @@ enum CoverType {
   MILK_DROP
 }
 
+let isWebGLSupported = false
+try {
+  const canvas = document.createElement('canvas')
+  isWebGLSupported = !!canvas.getContext('webgl2')
+} catch (error) {}
+
 const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
+if (!isWebGLSupported) {
+  coverType.value = CoverType.COVER_ART
+}
 </script>
 
 <template>
@@ -212,24 +221,28 @@ const coverType = useStorage('queue:cover-type', CoverType.COVER_ART)
                   v-if="!fullscreen || !idle"
                   class="cover-buttons"
                 >
-                  <button
-                    v-if="coverType === CoverType.COVER_ART"
-                    class="ui secondary button"
-                    :aria-label="labels.showVisualizer"
-                    :title="labels.showVisualizer"
-                    @click="coverType = CoverType.MILK_DROP"
-                  >
-                    <i class="icon signal" />
-                  </button>
-                  <button
-                    v-else-if="coverType === CoverType.MILK_DROP"
-                    class="ui secondary button"
-                    :aria-label="labels.showCoverArt"
-                    :title="labels.showCoverArt"
-                    @click="coverType = CoverType.COVER_ART"
-                  >
-                    <i class="icon image outline" />
-                  </button>
+                  <tooltip :content="!isWebGLSupported && $t('components.Queue.message.webglUnsupported')">
+                    <button
+                      v-if="coverType === CoverType.COVER_ART"
+                      class="ui secondary button"
+                      :aria-label="labels.showVisualizer"
+                      :title="labels.showVisualizer"
+                      :disabled="!isWebGLSupported"
+                      @click="coverType = CoverType.MILK_DROP"
+                    >
+                      <i class="icon signal" />
+                    </button>
+                    <button
+                      v-else-if="coverType === CoverType.MILK_DROP"
+                      class="ui secondary button"
+                      :aria-label="labels.showCoverArt"
+                      :title="labels.showCoverArt"
+                      :disabled="!isWebGLSupported"
+                      @click="coverType = CoverType.COVER_ART"
+                    >
+                      <i class="icon image outline" />
+                    </button>
+                  </tooltip>
 
                   <button
                     v-if="!fullscreen"
