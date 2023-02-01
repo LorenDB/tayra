@@ -1,6 +1,6 @@
 # Import music from your server
 
-You can import music files you have saved on your server. You need to make sure your files have the [required ID3 tags](../../user/libraries/content/tag.md). We recommend using [Musicbrainz Picard](https://picard.musicbrainz.org/) for tagging.
+You can import music files you have saved on your server. You need to make sure your files have the [required ID3 tags](../user/libraries/content/tag.md). We recommend using [Musicbrainz Picard](https://picard.musicbrainz.org/) for tagging.
 
 Funkwhale supports the following import methods:
 
@@ -60,7 +60,7 @@ This downloads a set compressed albums to your `data/music` directory and unzips
 
 ## Find your library ID
 
-You need to create a library before you can import music. Follow the instructions in [Create a library](../../user/libraries/create.md) to get started.
+You need to create a library before you can import music. Follow the instructions in [Create a library](../user/libraries/create.md) to get started.
 
 Once you've created your library, you can find its ID by following these steps:
 
@@ -164,7 +164,7 @@ To use the in-place import method, follow these steps:
    cd /srv/funkwhale
    ```
 
-2. Add your storage location to your `.env` file if you don't want to link it to the Funkwhale store. See the [in-place import configuration variables](../configuration/env_file.md#in-place-import-configuration) for more information.
+2. Add your storage location to your `.env` file if you don't want to link it to the Funkwhale store. See the [in-place import configuration variables](configuration/env_file.md#in-place-import-configuration) for more information.
 3. Export your library ID to reference it later. In this example, the library ID is "769a2bc3". Replace this with your library ID.
 
    ```{code-block} sh
@@ -184,7 +184,7 @@ Funkwhale imports the music in your storage directory into the specified library
 :::{tab-item} Docker
 :sync: docker
 
-1. Add your storage location to your `.env` file if you don't want to bind it to the Funkwhale store. See the [in-place import configuration variables](../configuration/env_file.md#in-place-import-configuration) for more information.
+1. Add your storage location to your `.env` file if you don't want to bind it to the Funkwhale store. See the [in-place import configuration variables](configuration/env_file.md#in-place-import-configuration) for more information.
 2. Run your import command against your music storage directory:
 
    ```{code-block} sh
