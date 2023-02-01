@@ -364,6 +364,11 @@
               opacity: 0;
               transform: translateY(0.5em);
             }
+            
+            .tooltip {
+              z-index: 2;
+              pointer-events: all;
+            }
 
             button {
               z-index: 2;

@@ -178,7 +178,8 @@
       },
       "message": {
         "automaticPlay": "The next track will play automatically in a few seconds…",
-        "radio": "New tracks will be appended here automatically."
+        "radio": "New tracks will be appended here automatically.",
+        "webglUnsupported": "Your browser does not support WebGL2 context"
       },
       "warning": {
         "connectivity": "You may have a connectivity issue."
