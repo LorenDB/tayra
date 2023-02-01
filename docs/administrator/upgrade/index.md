@@ -24,7 +24,7 @@ caption: Choose your installation method
 maxdepth: 1
 ---
 
-Quick install script <quick_install>
+Quick install script <quick-install>
 Docker <docker>
 Debian <debian>
 

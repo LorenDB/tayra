@@ -8,13 +8,13 @@ caption: Configuration options
 maxdepth: 1
 ---
 
-Environment file <env_file>
-Instance settings <instance_settings>
-object_storage
+Environment file <env-file>
+Instance settings <instance-settings>
+object-storage
 Frontend customization <frontend>
 optimize
 ldap
-change_url
+change-url
 mrf
 rate-limiting
 

@@ -8,12 +8,12 @@ caption: Administration tasks
 maxdepth: 1
 ---
 
-create_library
+create-library
 Manage users <users>
 Prune library <library>
 Clean database <database>
 Add album and artist tags <tags>
 thumbnails
-fix_uploads
+fix-uploads
 
 ```

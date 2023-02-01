@@ -18,6 +18,6 @@ maxdepth: 1
 
 frontend
 backend
-get_help
+help
 
 ```

@@ -13,6 +13,6 @@ caption: Administrative tasks
 maxdepth: 1
 ---
 
-delete_content
+delete-content
 
 ```

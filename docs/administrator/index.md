@@ -16,8 +16,8 @@ Once you've installed Funkwhale, you can use [the guides in this section](config
 
 ## Upgrade your Funkwhale pod
 
-Funkwhale releases new updates regularly. To keep up-to-date with these changes, check out our [upgrade guides](upgrade/index.md). If you're moving from our deprecated mono-container Docker setup, check out our [migration guide](migration_guide.md).
+Funkwhale releases new updates regularly. To keep up-to-date with these changes, check out our [upgrade guides](upgrade/index.md). If you're moving from our deprecated mono-container Docker setup, check out our [migration guide](migration.md).
 
 ## Manage your Funkwhale pod
 
-Funkwhale provides tools for managing content and users on your Funkwhale pod. In addition to the [frontend moderation tools](../moderator/index.md), pod admins can use some extra tools for more powerful administration. Check out our [guide to the Django dashboard](django/index.md) and our [management script](manage_script/index.md) to get started.
+Funkwhale provides tools for managing content and users on your Funkwhale pod. In addition to the [frontend moderation tools](../moderator/index.md), pod admins can use some extra tools for more powerful administration. Check out our [guide to the Django dashboard](django/index.md) and our [management script](manage-script/index.md) to get started.

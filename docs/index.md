@@ -38,9 +38,9 @@ administrator/installation/index
 administrator/configuration/index
 administrator/import
 administrator/upgrade/index
-administrator/migration_guide
+administrator/migration
 administrator/django/index
-administrator/manage_script/index
+administrator/manage-script/index
 administrator/uninstall/index
 administrator/troubleshooting/index
 
@@ -55,11 +55,11 @@ hidden: true
 
 moderator/index
 moderator/reports/index
-moderator/internal_users/index
+moderator/internal-users/index
 moderator/content/index
 moderator/domains/index
-moderator/external_users/index
-moderator/allow_listing/index
+moderator/external-users/index
+moderator/allow-listing/index
 
 ```
 

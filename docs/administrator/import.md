@@ -164,7 +164,7 @@ To use the in-place import method, follow these steps:
    cd /srv/funkwhale
    ```
 
-2. Add your storage location to your `.env` file if you don't want to link it to the Funkwhale store. See the [in-place import configuration variables](configuration/env_file.md#in-place-import-configuration) for more information.
+2. Add your storage location to your `.env` file if you don't want to link it to the Funkwhale store. See the [in-place import configuration variables](configuration/env-file.md#in-place-import-configuration) for more information.
 3. Export your library ID to reference it later. In this example, the library ID is "769a2bc3". Replace this with your library ID.
 
    ```{code-block} sh
@@ -184,7 +184,7 @@ Funkwhale imports the music in your storage directory into the specified library
 :::{tab-item} Docker
 :sync: docker
 
-1. Add your storage location to your `.env` file if you don't want to bind it to the Funkwhale store. See the [in-place import configuration variables](configuration/env_file.md#in-place-import-configuration) for more information.
+1. Add your storage location to your `.env` file if you don't want to bind it to the Funkwhale store. See the [in-place import configuration variables](configuration/env-file.md#in-place-import-configuration) for more information.
 2. Run your import command against your music storage directory:
 
    ```{code-block} sh

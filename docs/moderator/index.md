@@ -17,7 +17,7 @@ One of the most important duties of a moderator is handling reports. If a user f
 
 ## Moderate your pod's users
 
-As a moderator, you are responsible for moderating the behavior of users on your pod. Funkwhale provides you with tools to help you handle users that violate your pod's rules. Check out our [Moderate your pod's users](internal_users/index.md) section for more information.
+As a moderator, you are responsible for moderating the behavior of users on your pod. Funkwhale provides you with tools to help you handle users that violate your pod's rules. Check out our [Moderate your pod's users](internal-users/index.md) section for more information.
 
 ## Moderate content on your pod
 
@@ -29,8 +29,8 @@ As {term}`fediverse` software, Funkwhale interacts with other software over fede
 
 ## Moderate external users
 
-You can moderate how external users interact with users on your pod. Check out the [Moderate external users](external_users/index.md) guides to learn how to manage users from other servers.
+You can moderate how external users interact with users on your pod. Check out the [Moderate external users](external-users/index.md) guides to learn how to manage users from other servers.
 
 ## Manage your allow-list
 
-If your pod admin has set up allow-listing, you can add and remove domains from your pod's list. Follow the guides in the [Allow-listing](allow_listing/index.md) section to learn how to handle your allow-list.
+If your pod admin has set up allow-listing, you can add and remove domains from your pod's list. Follow the guides in the [Allow-listing](allow-listing/index.md) section to learn how to handle your allow-list.

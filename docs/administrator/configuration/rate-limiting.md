@@ -1,6 +1,6 @@
 # Rate limit API endpoints
 
-This article contains a summary of the endpoints you can control using rate-limiting. You can change the rate limits for these endpoints using the [`THROTTLING_RATES`](env_file.md#api-configuration) environment variable.
+This article contains a summary of the endpoints you can control using rate-limiting. You can change the rate limits for these endpoints using the [`THROTTLING_RATES`](env-file.md#api-configuration) environment variable.
 
 ## Standard endpoints
 

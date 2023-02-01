@@ -13,10 +13,10 @@ caption: Choose your installation method
 maxdepth: 1
 ---
 
-quick_install
+quick-install
 docker
 debian
-third_party
+third-party
 
 ```
 

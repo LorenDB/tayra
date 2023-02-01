@@ -19,7 +19,7 @@ moderator/index.html, ../moderator/index.html
 moderator/reports.html, ../moderator/reports/index.html
 moderator/domains.html, ../moderator/domains/index.html
 moderator/users.html, ../moderator/users/index.html
-moderator/listing.html, ../moderator/allow_listing/index.html
+moderator/listing.html, ../moderator/allow-listing/index.html
 admin/index.html, ../administrator/index.html
 installation/index.html, ../administrator/installation/index.html
 installation/index.html#quick-install, ../administrator/installation/quick_install.html
@@ -37,7 +37,7 @@ upgrading/index.html, ../administrator/upgrade/index.html
 users/django.html, ../administrator/django/index.html
 backup.html, ../administrator/upgrade/backup.html
 admin/migration.html, ../administrator/installation/migrate.html
-admin/commands.html, ../administrator/manage_script/index.html
+admin/commands.html, ../administrator/manage-script/index.html
 admin/mrf.html, ../administrator/configuration/mrf.html
 admin/url.html, ../administrator/configuration/change_url.html
 admin/optimization.html, ../administrator/configuration/optimize.html

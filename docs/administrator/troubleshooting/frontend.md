@@ -57,4 +57,4 @@ If you are receiving `4XX` or `5XX` responses, this means the API isn't serving 
 
 ## Get help
 
-If you can't solve the issue yourself, ask the community for help. Check out the [get help](get_help.md) guide for information about where to ask your question and what details to provide.
+If you can't solve the issue yourself, ask the community for help. Check out the [get help](help.md) guide for information about where to ask your question and what details to provide.

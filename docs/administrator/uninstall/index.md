@@ -12,7 +12,7 @@ caption: Choose your setup
 maxdepth: 1
 ---
 
-quick_install
+quick-install
 debian
 docker
 
