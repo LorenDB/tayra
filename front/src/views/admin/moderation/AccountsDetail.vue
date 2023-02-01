@@ -51,7 +51,7 @@ const fetchPolicy = async (id: number) => {
   isLoadingPolicy.value = false
 }
 
-const permissions = reactive([] as string[])
+const permissions = ref([] as string[])
 const isLoading = ref(false)
 const object = ref()
 const fetchData = async () => {
@@ -68,7 +68,7 @@ const fetchData = async () => {
     if (response.data.user) {
       for (const { code } of allPermissions.value) {
         if (response.data.user.permissions[code]) {
-          permissions.push(code)
+          permissions.value.push(code)
         }
       }
     }
@@ -120,7 +120,7 @@ const updateUser = async (attr: string, toNull = false) => {
 
   if (attr === 'permissions') {
     params.permissions = allPermissions.value.reduce((acc, { code }) => {
-      acc[code] = permissions.includes(code)
+      acc[code] = permissions.value.includes(code)
       return acc
     }, {} as Record<string, boolean>)
   }

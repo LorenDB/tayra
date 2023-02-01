@@ -205,7 +205,7 @@ fetchQuota()
 //
 // Filesystem
 //
-const fsPath = reactive([])
+const fsPath = ref([])
 const fsStatus = ref({
   import: {
     status: 'pending'
@@ -223,7 +223,7 @@ const fetchFilesystem = async (updateLoading: boolean) => {
   pause()
 
   try {
-    const response = await axios.get('libraries/fs-import', { params: { path: fsPath.join('/') } })
+    const response = await axios.get('libraries/fs-import', { params: { path: fsPath.value.join('/') } })
     fsStatus.value = response.data
   } catch (error) {
     useErrorHandler(error as Error)
@@ -243,7 +243,7 @@ const importFs = async () => {
 
   try {
     const response = await axios.post('libraries/fs-import', {
-      path: fsPath.join('/'),
+      path: fsPath.value.join('/'),
       library: props.library.uuid,
       import_reference: importReference.value
     })
