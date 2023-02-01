@@ -120,7 +120,7 @@ const getUrl = (code: string) => store.getters['instance/absoluteUrl'](router.re
       </table>
       <button
         class="ui basic button"
-        @click="invitations = []"
+        @click="invitations.length = 0"
       >
         {{ $t('components.manage.users.InvitationForm.button.clear') }}
       </button>
