@@ -179,7 +179,7 @@
       "message": {
         "automaticPlay": "The next track will play automatically in a few seconds…",
         "radio": "New tracks will be appended here automatically.",
-        "webglUnsupported": "Your browser does not support WebGL2 context"
+        "webglUnsupported": "Your browser doesn't appear to support WebGL2."
       },
       "warning": {
         "connectivity": "You may have a connectivity issue."
