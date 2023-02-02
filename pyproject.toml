@@ -1,13 +1,13 @@
 [tool.towncrier]
 package = "changes"
 package_dir = ""
-filename = "CHANGELOG"
-directory = "changes/changelog.d/"
-start_string = ".. towncrier\n"
-template = "changes/template.rst"
+filename = "CHANGELOG.md"
+directory = "changes/changelog.d"
+start_string = "<!-- towncrier -->\n"
+template = "changes/template.md.j2"
 issue_format = ""
-title_format = "{version} (unreleased)"
-underlines = "-"
+title_format = ""
+underlines = [""]
 
 [[tool.towncrier.section]]
 path = ""

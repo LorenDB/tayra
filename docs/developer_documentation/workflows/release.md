@@ -52,7 +52,7 @@ Once we're ready to release a new version of the software, we can use the follow
    ```sh
    python3 scripts/get-contributions-stats.py $NEXT_RELEASE # Output a list of contributors
    git log $PREVIOUS_RELEASE.. --format="- %aN" --reverse | sort | uniq # Get a list of all commit authors
-   nano CHANGELOG # Add these lists to the CHANGELOG
+   nano CHANGELOG.md # Add these lists to the CHANGELOG.md
    ```
 
 7. Update the next release version
