@@ -43,11 +43,11 @@
     },
     {
       "matchManagers": ["npm"],
-      "addLabels": ["Area: Frontend"]
+      "addLabels": ["Area::Frontend"]
     },
     {
       "matchManagers": ["poetry"],
-      "addLabels": ["Area: Backend"]
+      "addLabels": ["Area::Backend"]
     },
     {
       "matchPackagePatterns": ["^@vueuse/.*"],
