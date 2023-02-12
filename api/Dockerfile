@@ -1,4 +1,4 @@
-FROM alpine:3.17 as pre-build
+FROM alpine:3.17 as requirements
 
 # We need this additional step to avoid having poetrys deps interacting with our
 # dependencies. This is only required until alpine 3.16 is released, since this
@@ -50,8 +50,8 @@ RUN set -eux; \
 RUN python3 -m venv --system-site-packages /venv
 ENV PATH="/venv/bin:$PATH"
 
-COPY --from=pre-build /requirements.txt /requirements.txt
-COPY --from=pre-build /dev-requirements.txt /dev-requirements.txt
+COPY --from=requirements /requirements.txt /requirements.txt
+COPY --from=requirements /dev-requirements.txt /dev-requirements.txt
 
 RUN set -eux; \
   pip3 install --upgrade pip; \
@@ -80,7 +80,7 @@ RUN set -eux; \
    watchfiles==0.18.1; \
   fi
 
-FROM alpine:3.17 as image
+FROM alpine:3.17 as production
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1

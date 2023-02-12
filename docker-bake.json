@@ -1,0 +1,17 @@
+{
+  "group": {
+    "default": {
+      "targets": ["api", "front"]
+    }
+  },
+  "target": {
+    "api": {
+      "context": "api",
+      "target": "production"
+    },
+    "front": {
+      "context": "front",
+      "target": "production"
+    }
+  }
+}

@@ -431,72 +431,66 @@ deploy_docs:
   script:
     - rsync -r -e "ssh -p 2282" $CI_PROJECT_DIR/public/ docs@docs.funkwhale.audio:/htdocs/$CI_COMMIT_REF_NAME
 
-.docker:
+docker:
   interruptible: false
+  tags: [docker, privileged, multiarch]
   stage: build
   needs:
     - job: test_api
       optional: true
     - job: test_front
       optional: true
+  rules:
+    - if: $CI_COMMIT_TAG
+      variables:
+        BUILD_ARGS: >
+          --set *.platform=linux/amd64,linux/arm64,linux/arm/v7
+          --set *.no-cache
+          --push
+
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+      variables:
+        BUILD_ARGS: >
+          --set *.platform=linux/amd64,linux/arm64,linux/arm/v7
+          --set *.cache-from=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_COMMIT_BRANCH
+          --set *.cache-to=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_COMMIT_BRANCH,mode=max
+          --push
+
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      variables:
+        BUILD_ARGS: >
+          --set *.platform=linux/amd64
+          --set *.cache-from=type=registry,ref=$DOCKER_CACHE_IMAGE:$CI_MERGE_REQUEST_TARGET_BRANCH_NAME
 
   image: $CI_REGISTRY/funkwhale/ci/docker:20
-  parallel:
-    matrix:
-      - COMPONENT: ["api", "front"]
   services:
     - docker:20-dind
   variables:
     <<: *keep_git_files_permissions
-
-    IMAGE_NAME: funkwhale/$COMPONENT
-    IMAGE: $IMAGE_NAME:$CI_COMMIT_REF_NAME
-    IMAGE_LATEST: $IMAGE_NAME:latest
-
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
-    BUILD_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
-  tags:
-    - multiarch
+    BUILDKIT_PROGRESS: plain
+
+    DOCKER_CACHE_IMAGE: $CI_REGISTRY/funkwhale/funkwhale/cache
   before_script:
-    - docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+    - >
+      echo "$CI_REGISTRY_PASSWORD" | docker login --username "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY";
+      if [[ "$BUILD_ARGS" =~ "--push" ]]; then
+        echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_LOGIN" --password-stdin docker.io;
+      fi
+  script:
     - >
       if [[ -z "$CI_COMMIT_TAG" ]]; then
         ./scripts/set-api-build-metadata.sh $CI_COMMIT_SHORT_SHA;
       fi
-  cache:
-    key: docker_public_${CI_COMMIT_REF_NAME}
+    - docker buildx create --use
+    - make docker-build BUILD_ARGS="--metadata-file metadata.json $BUILD_ARGS"
+    - cat metadata.json
+  artifacts:
+    name: docker_build_files_${CI_COMMIT_REF_NAME}
     paths:
-      - ~/.cargo
-
-docker_stable:
-  extends: .docker
-  rules:
-    - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_NAME =~ /^[0-9]+(.[0-9]+){1,2}$/
-  script:
-    - ./docs/get-releases-json.py | scripts/is-docker-latest.py $CI_COMMIT_TAG - && export DOCKER_LATEST_TAG="-t $IMAGE_LATEST" || export DOCKER_LATEST_TAG=;
-    - export major="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1)"
-    - export minor="$(echo $CI_COMMIT_REF_NAME | cut -d '.' -f 1,2)"
-    - cd $COMPONENT
-    - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
-    - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE $DOCKER_LATEST_TAG -t $IMAGE_NAME:$major -t $IMAGE_NAME:$minor .
-
-docker_unstable:
-  extends: .docker
-  rules:
-    - if: $CI_COMMIT_TAG && $CI_COMMIT_REF_NAME !~ /^[0-9]+(.[0-9]+){1,2}$/
-  script:
-    - cd $COMPONENT
-    - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
-    - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE .
-
-docker_dev:
-  extends: .docker
-  only:
-    - develop@funkwhale/funkwhale
-    - stable@funkwhale/funkwhale
-  script:
-    - cd $COMPONENT
-    - docker buildx create --use --name A$CI_COMMIT_SHORT_SHA
-    - docker buildx build --platform $BUILD_PLATFORMS --push -t $IMAGE .
+      - docker-bake.json
+      - docker-bake.api.json
+      - docker-bake.front.json
+      - metadata.json

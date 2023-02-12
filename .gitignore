@@ -93,3 +93,7 @@ po/*.po
 docs/swagger
 _build
 *.prof
+
+# Docker
+docker-bake.*.json
+metadata.json
