@@ -154,7 +154,6 @@ find_broken_links:
 
 require_changelog:
   stage: lint
-  needs: []
   rules:
     # Don't run on merge request that mention NOCHANGELOG or renovate bot commits
     - if: >
@@ -165,8 +164,7 @@ require_changelog:
 
   image: python:3.11
   script:
-    - git fetch origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
-    - git diff --name-only FETCH_HEAD | grep "changes/changelog.d/*"
+    - git diff --name-only $CI_MERGE_REQUEST_DIFF_BASE_SHA..$CI_COMMIT_SHA | grep "changes/changelog.d/*"
 
 pre-commit:
   extends: [.pre-commit]
