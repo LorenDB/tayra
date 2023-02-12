@@ -202,6 +202,27 @@ lint_front:
     - yarn lint --max-warnings 0
     - yarn lint:tsc
 
+test_scripts:
+  stage: test
+  needs: []
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /(stable|develop)/
+    - changes: [scripts/**/*]
+
+  image: $CI_REGISTRY/funkwhale/ci/python:3.11
+  cache:
+    - key: scripts-pip
+      paths: [$PIP_CACHE_DIR]
+    - key:
+        prefix: scripts-venv
+        files: [scripts/poetry.lock]
+      paths: [scripts/.venv]
+  before_script:
+    - cd scripts
+    - make install
+  script:
+    - make test
+
 test_api:
   retry: 1
   stage: test
