@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-23 12:18+0200\n"
-"PO-Revision-Date: 2023-01-23 21:42+0000\n"
+"PO-Revision-Date: 2023-02-17 19:42+0000\n"
 "Last-Translator: Thomas <thovi98@gmail.com>\n"
 "Language-Team: French <https://translate.funkwhale.audio/projects/"
 "documentation/changelog/fr/>\n"
@@ -54,7 +54,7 @@ msgstr ""
 
 #: ../../../CHANGELOG:14
 msgid "1.2.7 (2022-07-14)"
-msgstr ""
+msgstr "1.2.7 (2022-07-14)"
 
 #: ../../../CHANGELOG:16 ../../../CHANGELOG:41 ../../../CHANGELOG:93
 #: ../../../CHANGELOG:145 ../../../CHANGELOG:191 ../../../CHANGELOG:250
