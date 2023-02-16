@@ -3,18 +3,21 @@
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2023-02-17 19:42+0000\n"
+"Last-Translator: Thomas <thovi98@gmail.com>\n"
+"Language-Team: French <https://translate.funkwhale.audio/projects/"
+"documentation/moderator_documentation-index/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.14.2\n"
 "Generated-By: Babel 2.10.1\n"
 
 #: ../../moderator_documentation/index.md:1
@@ -73,7 +76,7 @@ msgstr ""
 
 #: ../../moderator_documentation/index.md:22
 msgid "Moderate content on your pod"
-msgstr ""
+msgstr "Modérer le contenu de votre pod"
 
 #: ../../moderator_documentation/index.md:24
 msgid ""
@@ -117,4 +120,3 @@ msgid ""
 "listing](allow_listing/index.md) section to learn how to handle your "
 "allow-list."
 msgstr ""
-
