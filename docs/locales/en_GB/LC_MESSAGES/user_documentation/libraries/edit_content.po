@@ -1,296 +1,288 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.3\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-04 09:00+0200\n"
-"PO-Revision-Date: 2022-07-03 21:29+0000\n"
-"Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
-"Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
-"projects/documentation/user_documentation-libraries-edit_content/en_GB/>\n"
-"Language: en_GB\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../user_documentation/libraries/edit_content.md:1
 msgid "Edit library content"
-msgstr "Edit library content"
+msgstr ""
 
 #: ../../user_documentation/libraries/edit_content.md:4
-msgid "You can only edit content in libraries you own. {term}`Pod` admins can edit all content."
+msgid ""
+"You can only edit content in libraries you own. {term}`Pod` admins can "
+"edit all content."
 msgstr ""
-"You can only edit content in libraries you own. {term}`Pod` admins can edit "
-"all content."
 
 #: ../../user_documentation/libraries/edit_content.md:7
-msgid "You can edit library content after you have uploaded it. This is helpful if the content isn't [tagged](tag_music)."
+msgid ""
+"You can edit library content after you have uploaded it. This is helpful "
+"if the content isn't [tagged](./tag_music.md)."
 msgstr ""
-"You can edit library content after you have uploaded it. This is helpful if "
-"the content isn't [tagged](tag_music)."
 
 #: ../../user_documentation/libraries/edit_content.md:13
 msgid "Edit artist"
-msgstr "Edit artist"
+msgstr ""
 
 #: ../../user_documentation/libraries/edit_content.md:15
 msgid "To edit an artist:"
-msgstr "To edit an artist:"
+msgstr ""
 
-#: ../../user_documentation/libraries/edit_content.md:0
-#: ../../user_documentation/libraries/edit_content.md:0
-#: ../../user_documentation/libraries/edit_content.md:0
+#: ../../user_documentation/libraries/edit_content.md
 msgid "Desktop"
-msgstr "Desktop"
-
-#: ../../user_documentation/libraries/edit_content.md:19
-msgid "Search for the artist in the sidebar or go to the {guilabel}`Artists` page in {guilabel}`My Library` and search there."
 msgstr ""
-"Search for the artist in the sidebar or go to the {guilabel}`Artists` page "
-"in {guilabel}`My Library` and search there."
-
-#: ../../user_documentation/libraries/edit_content.md:20
-#: ../../user_documentation/libraries/edit_content.md:37
-msgid "Select the artist you want to edit. The artist details page opens."
-msgstr "Select the artist you want to edit. The artist details page opens."
-
-#: ../../user_documentation/libraries/edit_content.md:21
-#: ../../user_documentation/libraries/edit_content.md:38
-msgid "Select the {guilabel}`More…` button. The artist options menu opens."
-msgstr "Select the {guilabel}`More…` button. The artist options menu opens."
-
-#: ../../user_documentation/libraries/edit_content.md:22
-#: ../../user_documentation/libraries/edit_content.md:39
-msgid "Select {guilabel}`✎ Edit`. The {guilabel}`Edit this artist` screen opens."
-msgstr ""
-"Select {guilabel}`✎ Edit`. The {guilabel}`Edit this artist` screen opens."
 
 #: ../../user_documentation/libraries/edit_content.md:23
-#: ../../user_documentation/libraries/edit_content.md:40
-#: ../../user_documentation/libraries/edit_content.md:62
-#: ../../user_documentation/libraries/edit_content.md:80
-#: ../../user_documentation/libraries/edit_content.md:103
-#: ../../user_documentation/libraries/edit_content.md:123
-msgid "Change the details in any of these fields:"
-msgstr "Change the details in any of these fields:"
+msgid ""
+"Search for the artist in the sidebar or go to the {guilabel}`Artists` "
+"page in {guilabel}`My Library` and search there."
+msgstr ""
 
 #: ../../user_documentation/libraries/edit_content.md:24
-#: ../../user_documentation/libraries/edit_content.md:41
-msgid "{guilabel}`Name` – the name of the artist."
-msgstr "{guilabel}`Name` – the name of the artist."
+#: ../../user_documentation/libraries/edit_content.md:42
+msgid "Select the artist you want to edit. The artist details page opens."
+msgstr ""
 
 #: ../../user_documentation/libraries/edit_content.md:25
-#: ../../user_documentation/libraries/edit_content.md:42
-msgid "{guilabel}`Description` – a description of the artist. This appears on the artist details page."
+#: ../../user_documentation/libraries/edit_content.md:43
+msgid "Select the {guilabel}`More…` button. The artist options menu opens."
 msgstr ""
-"{guilabel}`Description` – a description of the artist. This appears on the "
-"artist details page."
 
 #: ../../user_documentation/libraries/edit_content.md:26
-#: ../../user_documentation/libraries/edit_content.md:43
-msgid "{guilabel}`Cover` – the cover image for the artist. This appears on the artist details page."
+#: ../../user_documentation/libraries/edit_content.md:44
+msgid "Select {guilabel}`✎ Edit`. The {guilabel}`Edit this artist` screen opens."
 msgstr ""
-"{guilabel}`Cover` – the cover image for the artist. This appears on the "
-"artist details page."
 
 #: ../../user_documentation/libraries/edit_content.md:27
-#: ../../user_documentation/libraries/edit_content.md:44
-msgid "{guilabel}`Tags` – the genre(s) the artist fits in."
-msgstr "{guilabel}`Tags` – the genre(s) the artist fits in."
+#: ../../user_documentation/libraries/edit_content.md:45
+#: ../../user_documentation/libraries/edit_content.md:71
+#: ../../user_documentation/libraries/edit_content.md:90
+#: ../../user_documentation/libraries/edit_content.md:117
+#: ../../user_documentation/libraries/edit_content.md:138
+msgid "Change the details in any of these fields:"
+msgstr ""
 
 #: ../../user_documentation/libraries/edit_content.md:28
-#: ../../user_documentation/libraries/edit_content.md:45
-#: ../../user_documentation/libraries/edit_content.md:68
-#: ../../user_documentation/libraries/edit_content.md:86
-#: ../../user_documentation/libraries/edit_content.md:111
-#: ../../user_documentation/libraries/edit_content.md:131
-msgid "__Optional__ – enter a {guilabel}`Summary` of your edits."
-msgstr "__Optional__ – enter a {guilabel}`Summary` of your edits."
+#: ../../user_documentation/libraries/edit_content.md:46
+msgid "{guilabel}`Name` – the name of the artist."
+msgstr ""
 
 #: ../../user_documentation/libraries/edit_content.md:29
-#: ../../user_documentation/libraries/edit_content.md:46
-#: ../../user_documentation/libraries/edit_content.md:69
-#: ../../user_documentation/libraries/edit_content.md:87
-#: ../../user_documentation/libraries/edit_content.md:112
-#: ../../user_documentation/libraries/edit_content.md:132
-msgid "Select {guilabel}`Submit and apply edit` to save your changes."
-msgstr "Select {guilabel}`Submit and apply edit` to save your changes."
-
-#: ../../user_documentation/libraries/edit_content.md:0
-#: ../../user_documentation/libraries/edit_content.md:0
-#: ../../user_documentation/libraries/edit_content.md:0
-msgid "Mobile"
-msgstr "Mobile"
-
-#: ../../user_documentation/libraries/edit_content.md:35
-#: ../../user_documentation/libraries/edit_content.md:75
-#: ../../user_documentation/libraries/edit_content.md:118
-msgid "Select the hamburger menu ({fa}`bars`) to open the menu bar."
-msgstr "Select the hamburger menu ({fa}`bars`) to open the menu bar."
-
-#: ../../user_documentation/libraries/edit_content.md:36
-msgid "Use the search bar to search for your artist. You can also select {menuselection}`My Library --> Artists` to open the artist search page."
+#: ../../user_documentation/libraries/edit_content.md:47
+msgid ""
+"{guilabel}`Description` – a description of the artist. This appears on "
+"the artist details page."
 msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:30
+#: ../../user_documentation/libraries/edit_content.md:48
+msgid ""
+"{guilabel}`Cover` – the cover image for the artist. This appears on the "
+"artist details page."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:31
+#: ../../user_documentation/libraries/edit_content.md:49
+msgid "{guilabel}`Tags` – the genre(s) the artist fits in."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:32
+#: ../../user_documentation/libraries/edit_content.md:50
+#: ../../user_documentation/libraries/edit_content.md:77
+#: ../../user_documentation/libraries/edit_content.md:96
+#: ../../user_documentation/libraries/edit_content.md:125
+#: ../../user_documentation/libraries/edit_content.md:146
+msgid "**Optional** – enter a {guilabel}`Summary` of your edits."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:33
+#: ../../user_documentation/libraries/edit_content.md:51
+#: ../../user_documentation/libraries/edit_content.md:78
+#: ../../user_documentation/libraries/edit_content.md:97
+#: ../../user_documentation/libraries/edit_content.md:126
+#: ../../user_documentation/libraries/edit_content.md:147
+msgid "Select {guilabel}`Submit and apply edit` to save your changes."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md
+msgid "Mobile"
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:40
+#: ../../user_documentation/libraries/edit_content.md:85
+#: ../../user_documentation/libraries/edit_content.md:133
+msgid "Select the hamburger menu ({fa}`bars`) to open the menu bar."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:41
+msgid ""
 "Use the search bar to search for your artist. You can also select "
 "{menuselection}`My Library --> Artists` to open the artist search page."
-
-#: ../../user_documentation/libraries/edit_content.md:50
-msgid "That's it! You've edited the artist's details. You can see these details by visiting the artist page."
 msgstr ""
-"That's it! You've edited the artist's details. You can see these details by "
-"visiting the artist page."
 
-#: ../../user_documentation/libraries/edit_content.md:52
+#: ../../user_documentation/libraries/edit_content.md:55
+msgid ""
+"That's it! You've edited the artist's details. You can see these details "
+"by visiting the artist page."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:57
 msgid "Edit album"
-msgstr "Edit album"
-
-#: ../../user_documentation/libraries/edit_content.md:54
-msgid "To edit an album:"
-msgstr "To edit an album:"
-
-#: ../../user_documentation/libraries/edit_content.md:58
-msgid "Search for the album in the sidebar or go to the {guilabel}`Albums` page in {guilabel}`My Library` and search there."
 msgstr ""
-"Search for the album in the sidebar or go to the {guilabel}`Albums` page in "
-"{guilabel}`My Library` and search there."
 
 #: ../../user_documentation/libraries/edit_content.md:59
-#: ../../user_documentation/libraries/edit_content.md:77
-msgid "Select the album you want to edit. The album details page opens."
-msgstr "Select the album you want to edit. The album details page opens."
-
-#: ../../user_documentation/libraries/edit_content.md:60
-#: ../../user_documentation/libraries/edit_content.md:78
-msgid "Select the kebab menu ({fa}`ellipsis-v`) to show the album options."
-msgstr "Select the kebab menu ({fa}`ellipsis-v`) to show the album options."
-
-#: ../../user_documentation/libraries/edit_content.md:61
-#: ../../user_documentation/libraries/edit_content.md:79
-msgid "Select {guilabel}`✎ Edit`. The {guilabel}`Edit this album` screen opens."
+msgid "To edit an album:"
 msgstr ""
-"Select {guilabel}`✎ Edit`. The {guilabel}`Edit this album` screen opens."
-
-#: ../../user_documentation/libraries/edit_content.md:63
-#: ../../user_documentation/libraries/edit_content.md:81
-msgid "{guilabel}`Title` – the title of the album."
-msgstr "{guilabel}`Title` – the title of the album."
-
-#: ../../user_documentation/libraries/edit_content.md:64
-#: ../../user_documentation/libraries/edit_content.md:82
-msgid "{guilabel}`Description` – a description of the album. This appears on the album details page."
-msgstr ""
-"{guilabel}`Description` – a description of the album. This appears on the "
-"album details page."
-
-#: ../../user_documentation/libraries/edit_content.md:65
-#: ../../user_documentation/libraries/edit_content.md:83
-msgid "{guilabel}`Release date` – the release date of the album."
-msgstr "{guilabel}`Release date` – the release date of the album."
-
-#: ../../user_documentation/libraries/edit_content.md:66
-#: ../../user_documentation/libraries/edit_content.md:84
-msgid "{guilabel}`Cover` – the album cover art."
-msgstr "{guilabel}`Cover` – the album cover art."
 
 #: ../../user_documentation/libraries/edit_content.md:67
-#: ../../user_documentation/libraries/edit_content.md:85
-msgid "{guilabel}`Tags` – the genre(s) associated with the album."
-msgstr "{guilabel}`Tags` – the genre(s) associated with the album."
+msgid ""
+"Search for the album in the sidebar or go to the {guilabel}`Albums` page "
+"in {guilabel}`My Library` and search there."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:68
+#: ../../user_documentation/libraries/edit_content.md:87
+msgid "Select the album you want to edit. The album details page opens."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:69
+#: ../../user_documentation/libraries/edit_content.md:88
+msgid "Select the kebab menu ({fa}`ellipsis-v`) to show the album options."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:70
+#: ../../user_documentation/libraries/edit_content.md:89
+msgid "Select {guilabel}`✎ Edit`. The {guilabel}`Edit this album` screen opens."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:72
+#: ../../user_documentation/libraries/edit_content.md:91
+msgid "{guilabel}`Title` – the title of the album."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:73
+#: ../../user_documentation/libraries/edit_content.md:92
+msgid ""
+"{guilabel}`Description` – a description of the album. This appears on the"
+" album details page."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:74
+#: ../../user_documentation/libraries/edit_content.md:93
+msgid "{guilabel}`Release date` – the release date of the album."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:75
+#: ../../user_documentation/libraries/edit_content.md:94
+msgid "{guilabel}`Cover` – the album cover art."
+msgstr ""
 
 #: ../../user_documentation/libraries/edit_content.md:76
-msgid "Use the search bar to search for your album. You can also select {menuselection}`My Library --> Albums` to open the album search page."
+#: ../../user_documentation/libraries/edit_content.md:95
+msgid "{guilabel}`Tags` – the genre(s) associated with the album."
 msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:86
+msgid ""
 "Use the search bar to search for your album. You can also select "
 "{menuselection}`My Library --> Albums` to open the album search page."
-
-#: ../../user_documentation/libraries/edit_content.md:91
-msgid "That's it! You've edited the album's details. You can see these details by visiting the album page."
 msgstr ""
-"That's it! You've edited the album's details. You can see these details by "
-"visiting the album page."
-
-#: ../../user_documentation/libraries/edit_content.md:93
-msgid "Edit track"
-msgstr "Edit track"
-
-#: ../../user_documentation/libraries/edit_content.md:95
-msgid "To edit a track:"
-msgstr "To edit a track:"
-
-#: ../../user_documentation/libraries/edit_content.md:99
-msgid "Search for the track in the sidebar."
-msgstr "Search for the track in the sidebar."
-
-#: ../../user_documentation/libraries/edit_content.md:100
-#: ../../user_documentation/libraries/edit_content.md:120
-msgid "Select the track you want to edit. The track details page opens."
-msgstr "Select the track you want to edit. The track details page opens."
 
 #: ../../user_documentation/libraries/edit_content.md:101
-#: ../../user_documentation/libraries/edit_content.md:121
-msgid "Select the kebab menu ({fa}`ellipsis-v`) to show the track options."
-msgstr "Select the kebab menu ({fa}`ellipsis-v`) to show the track options."
-
-#: ../../user_documentation/libraries/edit_content.md:102
-#: ../../user_documentation/libraries/edit_content.md:122
-msgid "Select {guilabel}`✎ Edit`. The {guilabel}`Edit this track` screen opens."
+msgid ""
+"That's it! You've edited the album's details. You can see these details "
+"by visiting the album page."
 msgstr ""
-"Select {guilabel}`✎ Edit`. The {guilabel}`Edit this track` screen opens."
 
-#: ../../user_documentation/libraries/edit_content.md:104
-#: ../../user_documentation/libraries/edit_content.md:124
-msgid "{guilabel}`Title` – the title of the track."
-msgstr "{guilabel}`Title` – the title of the track."
+#: ../../user_documentation/libraries/edit_content.md:103
+msgid "Edit track"
+msgstr ""
 
 #: ../../user_documentation/libraries/edit_content.md:105
-#: ../../user_documentation/libraries/edit_content.md:125
-msgid "{guilabel}`Description` – a description of the track. This appears on the track details page."
+msgid "To edit a track:"
 msgstr ""
-"{guilabel}`Description` – a description of the track. This appears on the "
-"track details page."
 
-#: ../../user_documentation/libraries/edit_content.md:106
-#: ../../user_documentation/libraries/edit_content.md:126
-msgid "{guilabel}`Cover` – the track cover art. This appears on the track details page."
+#: ../../user_documentation/libraries/edit_content.md:113
+msgid "Search for the track in the sidebar."
 msgstr ""
-"{guilabel}`Cover` – the track cover art. This appears on the track details "
-"page."
 
-#: ../../user_documentation/libraries/edit_content.md:107
-#: ../../user_documentation/libraries/edit_content.md:127
-msgid "{guilabel}`Position` – the position of the track in its album."
-msgstr "{guilabel}`Position` – the position of the track in its album."
-
-#: ../../user_documentation/libraries/edit_content.md:108
-#: ../../user_documentation/libraries/edit_content.md:128
-msgid "{guilabel}`Copyright` – the name of the copyright holder."
-msgstr "{guilabel}`Copyright` – the name of the copyright holder."
-
-#: ../../user_documentation/libraries/edit_content.md:109
-#: ../../user_documentation/libraries/edit_content.md:129
-msgid "{guilabel}`License` – the license of the track. Funkwhale supports [Creative Commons](https://creativecommons.org) licenses. Leave this blank if you aren't sure."
+#: ../../user_documentation/libraries/edit_content.md:114
+#: ../../user_documentation/libraries/edit_content.md:135
+msgid "Select the track you want to edit. The track details page opens."
 msgstr ""
-"{guilabel}`License` – the licence of the track. Funkwhale supports [Creative "
-"Commons](https://creativecommons.org) licences. Leave this blank if you "
-"aren't sure."
 
-#: ../../user_documentation/libraries/edit_content.md:110
-#: ../../user_documentation/libraries/edit_content.md:130
-msgid "{guilabel}`Tags` – the genre(s) associated with the track."
-msgstr "{guilabel}`Tags` – the genre(s) associated with the track."
+#: ../../user_documentation/libraries/edit_content.md:115
+#: ../../user_documentation/libraries/edit_content.md:136
+msgid "Select the kebab menu ({fa}`ellipsis-v`) to show the track options."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:116
+#: ../../user_documentation/libraries/edit_content.md:137
+msgid "Select {guilabel}`✎ Edit`. The {guilabel}`Edit this track` screen opens."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:118
+#: ../../user_documentation/libraries/edit_content.md:139
+msgid "{guilabel}`Title` – the title of the track."
+msgstr ""
 
 #: ../../user_documentation/libraries/edit_content.md:119
-msgid "Use the search bar to search for your track."
-msgstr "Use the search bar to search for your track."
-
-#: ../../user_documentation/libraries/edit_content.md:136
-msgid "That's it! You've edited the track's details. You can see these details by visiting the track details page."
+#: ../../user_documentation/libraries/edit_content.md:140
+msgid ""
+"{guilabel}`Description` – a description of the track. This appears on the"
+" track details page."
 msgstr ""
-"That's it! You've edited the track's details. You can see these details by "
-"visiting the track details page."
+
+#: ../../user_documentation/libraries/edit_content.md:120
+#: ../../user_documentation/libraries/edit_content.md:141
+msgid ""
+"{guilabel}`Cover` – the track cover art. This appears on the track "
+"details page."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:121
+#: ../../user_documentation/libraries/edit_content.md:142
+msgid "{guilabel}`Position` – the position of the track in its album."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:122
+#: ../../user_documentation/libraries/edit_content.md:143
+msgid "{guilabel}`Copyright` – the name of the copyright holder."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:123
+#: ../../user_documentation/libraries/edit_content.md:144
+msgid ""
+"{guilabel}`License` – the license of the track. Funkwhale supports "
+"[Creative Commons](https://creativecommons.org) licenses. Leave this "
+"blank if you aren't sure."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:124
+#: ../../user_documentation/libraries/edit_content.md:145
+msgid "{guilabel}`Tags` – the genre(s) associated with the track."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:134
+msgid "Use the search bar to search for your track."
+msgstr ""
+
+#: ../../user_documentation/libraries/edit_content.md:151
+msgid ""
+"That's it! You've edited the track's details. You can see these details "
+"by visiting the track details page."
+msgstr ""
+

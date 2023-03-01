@@ -1,24 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2023-01-20 19:42+0000\n"
-"Last-Translator: Thomas <thovi98@gmail.com>\n"
-"Language-Team: French <https://translate.funkwhale.audio/projects/"
-"documentation/user_documentation-accounts-check_quota/fr/>\n"
-"Language: fr\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14.2\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../user_documentation/accounts/check_quota.md:1
 msgid "Check your upload quota"
@@ -26,7 +23,7 @@ msgstr ""
 
 #: ../../user_documentation/accounts/check_quota.md:3
 msgid ""
-"Your {term}`pod` admin can assign users an __upload quota__. This is the "
+"Your {term}`pod` admin can assign users an **upload quota**. This is the "
 "amount of storage you have access to. Pod admins can assign a default "
 "quota to all users. They can also increase or decrease quotas for "
 "individual users. Your upload quota applies to content in "
@@ -43,37 +40,33 @@ msgstr ""
 
 #: ../../user_documentation/accounts/check_quota.md
 msgid "Desktop"
-msgstr "Bureau"
+msgstr ""
 
-#: ../../user_documentation/accounts/check_quota.md:11
-#: ../../user_documentation/accounts/check_quota.md:21
+#: ../../user_documentation/accounts/check_quota.md:15
+#: ../../user_documentation/accounts/check_quota.md:26
 msgid "Log in to your pod."
 msgstr ""
 
-#: ../../user_documentation/accounts/check_quota.md:12
+#: ../../user_documentation/accounts/check_quota.md:16
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
-"Sélectionnez l’icône de téléchargement ({fa}`upload`) en haut de la barre "
-"latérale."
 
-#: ../../user_documentation/accounts/check_quota.md:13
-#: ../../user_documentation/accounts/check_quota.md:23
+#: ../../user_documentation/accounts/check_quota.md:17
+#: ../../user_documentation/accounts/check_quota.md:28
 msgid ""
 "Select {guilabel}`Get started` under {guilabel}`Upload third-party "
 "content in a library`."
 msgstr ""
-"Sélectionné {guilabel}`Commencer` sous {guilabel}`Envoyer un contenu tiers "
-"dans une audiothèque`."
 
-#: ../../user_documentation/accounts/check_quota.md:14
-#: ../../user_documentation/accounts/check_quota.md:24
+#: ../../user_documentation/accounts/check_quota.md:18
+#: ../../user_documentation/accounts/check_quota.md:29
 msgid ""
 "The {guilabel}`My libraries` screen appears showing your upload quota and"
 " your libraries."
 msgstr ""
 
-#: ../../user_documentation/accounts/check_quota.md:15
-#: ../../user_documentation/accounts/check_quota.md:25
+#: ../../user_documentation/accounts/check_quota.md:19
+#: ../../user_documentation/accounts/check_quota.md:30
 msgid ""
 "The {guilabel}`Current usage` section shows you how much of your quota "
 "you are using."
@@ -81,8 +74,9 @@ msgstr ""
 
 #: ../../user_documentation/accounts/check_quota.md
 msgid "Mobile"
-msgstr "Portable"
+msgstr ""
 
-#: ../../user_documentation/accounts/check_quota.md:22
+#: ../../user_documentation/accounts/check_quota.md:27
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen"
 msgstr ""
+

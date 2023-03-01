@@ -1,24 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2023-01-20 19:42+0000\n"
-"Last-Translator: Thomas <thovi98@gmail.com>\n"
-"Language-Team: French <https://translate.funkwhale.audio/projects/"
-"documentation/user_documentation-channels-subscribe_rss/fr/>\n"
-"Language: fr\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14.2\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../user_documentation/channels/subscribe_rss.md:1
 msgid "Subscribe to an RSS feed"
@@ -39,51 +36,52 @@ msgstr ""
 
 #: ../../user_documentation/channels/subscribe_rss.md
 msgid "Desktop"
-msgstr "Bureau"
+msgstr ""
 
-#: ../../user_documentation/channels/subscribe_rss.md:11
+#: ../../user_documentation/channels/subscribe_rss.md:15
 msgid ""
 "Select {guilabel}`Channels` in the sidebar. The {guilabel}`Channels` page"
 " opens."
 msgstr ""
 
-#: ../../user_documentation/channels/subscribe_rss.md:12
-#: ../../user_documentation/channels/subscribe_rss.md:23
+#: ../../user_documentation/channels/subscribe_rss.md:16
+#: ../../user_documentation/channels/subscribe_rss.md:28
 msgid ""
 "Select {guilabel}`+ Add new` at the top of the page. The "
 "{guilabel}`Subscriptions` screen appears."
 msgstr ""
 
-#: ../../user_documentation/channels/subscribe_rss.md:13
-#: ../../user_documentation/channels/subscribe_rss.md:24
+#: ../../user_documentation/channels/subscribe_rss.md:17
+#: ../../user_documentation/channels/subscribe_rss.md:29
 msgid "Select {guilabel}`RSS`."
 msgstr ""
 
-#: ../../user_documentation/channels/subscribe_rss.md:14
-#: ../../user_documentation/channels/subscribe_rss.md:25
+#: ../../user_documentation/channels/subscribe_rss.md:18
+#: ../../user_documentation/channels/subscribe_rss.md:30
 msgid "Enter the URL of the RSS feed in the {guilabel}`RSS feed location` input."
 msgstr ""
 
-#: ../../user_documentation/channels/subscribe_rss.md:15
-#: ../../user_documentation/channels/subscribe_rss.md:26
+#: ../../user_documentation/channels/subscribe_rss.md:19
+#: ../../user_documentation/channels/subscribe_rss.md:31
 msgid "Select {guilabel}`Subscribe`."
 msgstr ""
 
 #: ../../user_documentation/channels/subscribe_rss.md
 msgid "Mobile"
-msgstr "Portable"
+msgstr ""
 
-#: ../../user_documentation/channels/subscribe_rss.md:21
+#: ../../user_documentation/channels/subscribe_rss.md:26
 msgid "Select the hamburger menu ({fa}`bars`) to open the menu bar."
 msgstr ""
 
-#: ../../user_documentation/channels/subscribe_rss.md:22
+#: ../../user_documentation/channels/subscribe_rss.md:27
 msgid "Select {guilabel}`Channels`. The {guilabel}`Channels` page opens."
 msgstr ""
 
-#: ../../user_documentation/channels/subscribe_rss.md:30
+#: ../../user_documentation/channels/subscribe_rss.md:35
 msgid ""
 "That's it! Your favorite podcast is now available in the "
 "{guilabel}`Channels` page. Funkwhale updates the feed to make sure you "
 "always have the latest episodes."
 msgstr ""
+

@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../moderator_documentation/reports/view_reports.md:1
 msgid "View unresolved reports"
@@ -32,17 +32,17 @@ msgstr ""
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:8
+#: ../../moderator_documentation/reports/view_reports.md:9
 msgid ""
 "{guilabel}`Moderation` – provides access to the administration and "
 "moderation menus."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:11
+#: ../../moderator_documentation/reports/view_reports.md:12
 msgid "Check the Reports page"
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:13
+#: ../../moderator_documentation/reports/view_reports.md:14
 msgid ""
 "You can see a list of unresolved reports by going to the "
 "{guilabel}`Reports` page. To do this:"
@@ -52,19 +52,19 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:21
-#: ../../moderator_documentation/reports/view_reports.md:30
+#: ../../moderator_documentation/reports/view_reports.md:22
+#: ../../moderator_documentation/reports/view_reports.md:31
 msgid "Log in to your {term}`pod`."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:22
+#: ../../moderator_documentation/reports/view_reports.md:23
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
 "the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:23
-#: ../../moderator_documentation/reports/view_reports.md:32
+#: ../../moderator_documentation/reports/view_reports.md:24
+#: ../../moderator_documentation/reports/view_reports.md:33
 msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
@@ -72,89 +72,89 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:31
+#: ../../moderator_documentation/reports/view_reports.md:32
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the screen to open "
 "the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:36
+#: ../../moderator_documentation/reports/view_reports.md:37
 msgid ""
 "That's it! A list of unresolved reports appears on the screen. The "
 "summary contains the following information:"
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:38
-#: ../../moderator_documentation/reports/view_reports.md:53
+#: ../../moderator_documentation/reports/view_reports.md:39
+#: ../../moderator_documentation/reports/view_reports.md:54
 msgid "The user who submitted the report."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:39
+#: ../../moderator_documentation/reports/view_reports.md:40
 msgid "The report {guilabel}`Category`."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:40
+#: ../../moderator_documentation/reports/view_reports.md:41
 msgid "The date the user submitted the report."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:41
-#: ../../moderator_documentation/reports/view_reports.md:57
+#: ../../moderator_documentation/reports/view_reports.md:42
+#: ../../moderator_documentation/reports/view_reports.md:58
 msgid "The message the user posted with the report (if applicable)."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:42
+#: ../../moderator_documentation/reports/view_reports.md:43
 msgid "The {guilabel}`Status` of the report."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:43
+#: ../../moderator_documentation/reports/view_reports.md:44
 msgid "Any {guilabel}`Internal notes` left by moderators."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:44
+#: ../../moderator_documentation/reports/view_reports.md:45
 msgid "A summary of the {guilabel}`Reported object`."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:45
+#: ../../moderator_documentation/reports/view_reports.md:46
 msgid "A list of available {guilabel}`Actions`."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:47
+#: ../../moderator_documentation/reports/view_reports.md:48
 msgid ""
 "Use the tools on this page the handle the reported "
 "[content](handle_content.md) or [user](handle_users.md)."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:49
+#: ../../moderator_documentation/reports/view_reports.md:50
 msgid "Email notifications"
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:51
+#: ../../moderator_documentation/reports/view_reports.md:52
 msgid ""
 "When a user submits a report, an email gets sent to all pod moderators. "
 "This email contains a summary of the report including:"
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:54
+#: ../../moderator_documentation/reports/view_reports.md:55
 msgid "The object that the user reported."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:55
+#: ../../moderator_documentation/reports/view_reports.md:56
 msgid "A link to the object on your pod."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:56
+#: ../../moderator_documentation/reports/view_reports.md:57
 msgid "A link to the object's moderation page."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:58
+#: ../../moderator_documentation/reports/view_reports.md:59
 msgid "A link to the report."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:59
+#: ../../moderator_documentation/reports/view_reports.md:60
 msgid "A link to the {guilabel}`Reports` page."
 msgstr ""
 
-#: ../../moderator_documentation/reports/view_reports.md:61
+#: ../../moderator_documentation/reports/view_reports.md:62
 msgid "Follow the links in the email to view the report."
 msgstr ""
 

@@ -1,24 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
-"PO-Revision-Date: 2022-07-03 23:09+0000\n"
-"Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
-"Language: en_GB\n"
-"Language-Team: English (United Kingdom) "
-"<https://translate.funkwhale.audio/projects/documentation"
-"/moderator_documentation-reports-handle_users/en_GB/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../moderator_documentation/reports/handle_users.md:1
 msgid "Handle reported users"
@@ -35,42 +32,38 @@ msgstr ""
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:8
+#: ../../moderator_documentation/reports/handle_users.md:9
 msgid ""
 "{guilabel}`Moderation` – provides access to the administration and "
 "moderation menus."
 msgstr ""
-"{guilabel}`Moderation` – provides access to the administration and "
-"moderation menus."
 
-#: ../../moderator_documentation/reports/handle_users.md:11
+#: ../../moderator_documentation/reports/handle_users.md:12
 msgid "To open a user's moderation page:"
 msgstr ""
 
 #: ../../moderator_documentation/reports/handle_users.md
 msgid "Desktop"
-msgstr "Desktop"
-
-#: ../../moderator_documentation/reports/handle_users.md:19
-#: ../../moderator_documentation/reports/handle_users.md:29
-msgid "Log in to your {term}`pod`."
-msgstr "Log in to your {term}`pod`."
+msgstr ""
 
 #: ../../moderator_documentation/reports/handle_users.md:20
+#: ../../moderator_documentation/reports/handle_users.md:30
+msgid "Log in to your {term}`pod`."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_users.md:21
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
 "the {guilabel}`Administration` menu."
 msgstr ""
-"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
-"the {guilabel}`Administration` menu."
-
-#: ../../moderator_documentation/reports/handle_users.md:21
-#: ../../moderator_documentation/reports/handle_users.md:31
-msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
-msgstr "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 
 #: ../../moderator_documentation/reports/handle_users.md:22
 #: ../../moderator_documentation/reports/handle_users.md:32
+msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_users.md:23
+#: ../../moderator_documentation/reports/handle_users.md:33
 msgid ""
 "[Search for the report](search_reports.md) and select {guilabel}`Open in "
 "moderation interface` under {guilabel}`Reported object`. The user's "
@@ -79,39 +72,37 @@ msgstr ""
 
 #: ../../moderator_documentation/reports/handle_users.md
 msgid "Mobile"
-msgstr "Mobile"
+msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:30
+#: ../../moderator_documentation/reports/handle_users.md:31
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the page to open the "
 "{guilabel}`Administration` menu."
 msgstr ""
-"Select the wrench icon ({fa}`wrench`) at the top of the page to open the "
-"{guilabel}`Administration` menu."
 
-#: ../../moderator_documentation/reports/handle_users.md:36
+#: ../../moderator_documentation/reports/handle_users.md:37
 msgid "You can change the following settings in the moderation interface:"
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:38
+#: ../../moderator_documentation/reports/handle_users.md:39
 msgid ""
 "{guilabel}`Login status` – disable this switch to prevent the user being "
 "able to log in."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:39
+#: ../../moderator_documentation/reports/handle_users.md:40
 msgid ""
 "{guilabel}`Permissions` – add or remove permissions associated with the "
 "user."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:40
+#: ../../moderator_documentation/reports/handle_users.md:41
 msgid ""
 "{guilabel}`Upload quota` – change the amount of data (in megabytes) that "
 "the user can upload."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:42
+#: ../../moderator_documentation/reports/handle_users.md:43
 msgid ""
 "Once you have made your changes, return to the {guilabel}`Reports` page "
 "and {guilabel}`Resolve` the report. Resolving the report assigns it to "

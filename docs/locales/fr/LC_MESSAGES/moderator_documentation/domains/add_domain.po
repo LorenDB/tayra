@@ -1,24 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
-"PO-Revision-Date: 2023-01-20 19:42+0000\n"
-"Last-Translator: Thomas <thovi98@gmail.com>\n"
-"Language-Team: French <https://translate.funkwhale.audio/projects/"
-"documentation/moderator_documentation-domains-add_domain/fr/>\n"
-"Language: fr\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14.2\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../moderator_documentation/domains/add_domain.md:1
 msgid "Add a domain to your pod's domain list"
@@ -26,24 +23,22 @@ msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md:3
 msgid ""
-"Funkwhale records the domains of other {term}`Fediverse` servers when users "
-"interact with them. Once a domain is in your domains list, you can [add "
-"moderation rules](add_rule.md) to it."
+"Funkwhale records the domains of other {term}`Fediverse` servers when "
+"users interact with them. Once a domain is in your domains list, you can "
+"[add moderation rules](add_rule.md) to it."
 msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:8
-#: ../../moderator_documentation/domains/add_domain.md:6
+#: ../../moderator_documentation/domains/add_domain.md:9
 msgid ""
 "{guilabel}`Moderation` – provides access to the administration and "
 "moderation menus."
 msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:11
-#: ../../moderator_documentation/domains/add_domain.md:9
+#: ../../moderator_documentation/domains/add_domain.md:12
 msgid ""
 "You can also add domains to this list at any time to create rules before "
 "users interact with them. To do this:"
@@ -51,69 +46,59 @@ msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md
 msgid "Desktop"
-msgstr "Bureau"
-
-#: ../../moderator_documentation/domains/add_domain.md:13
-#: ../../moderator_documentation/domains/add_domain.md:24
-msgid "Log in to your {term}`pod`."
-msgstr "Connectez-vous à votre {term}`pod`."
-
-#: ../../moderator_documentation/domains/add_domain.md:14
-msgid ""
-"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the "
-"{guilabel}`Administration` menu."
 msgstr ""
-"Sélectionnez l'icône de la clé à molette ({fa}`wrench`) en haut de la barre "
-"latérale pour ouvrir le menu {guilabel}`Administration`."
+
+#: ../../moderator_documentation/domains/add_domain.md:20
+#: ../../moderator_documentation/domains/add_domain.md:32
+msgid "Log in to your {term}`pod`."
+msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md:21
-#: ../../moderator_documentation/domains/add_domain.md:33
-#: ../../moderator_documentation/domains/add_domain.md:15
-#: ../../moderator_documentation/domains/add_domain.md:26
-msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
+msgid ""
+"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
+"the {guilabel}`Administration` menu."
 msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md:22
 #: ../../moderator_documentation/domains/add_domain.md:34
-#: ../../moderator_documentation/domains/add_domain.md:16
-#: ../../moderator_documentation/domains/add_domain.md:27
-msgid ""
-"Select {guilabel}`Domains` at the top of the page. The {guilabel}`Domains` "
-"page opens. You can see a list of known domains on this page."
+msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md:23
 #: ../../moderator_documentation/domains/add_domain.md:35
-#: ../../moderator_documentation/domains/add_domain.md:17
-#: ../../moderator_documentation/domains/add_domain.md:28
 msgid ""
-"Enter the URL of the Fediverse server you want to add in the {guilabel}`Add "
-"a domain` field."
+"Select {guilabel}`Domains` at the top of the page. The "
+"{guilabel}`Domains` page opens. You can see a list of known domains on "
+"this page."
 msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md:24
 #: ../../moderator_documentation/domains/add_domain.md:36
-#: ../../moderator_documentation/domains/add_domain.md:18
-#: ../../moderator_documentation/domains/add_domain.md:29
 msgid ""
-"Select {guilabel}`Add` to add the domain. The domain moderation page opens."
+"Enter the URL of the Fediverse server you want to add in the "
+"{guilabel}`Add a domain` field."
+msgstr ""
+
+#: ../../moderator_documentation/domains/add_domain.md:25
+#: ../../moderator_documentation/domains/add_domain.md:37
+msgid ""
+"Select {guilabel}`Add` to add the domain. The domain moderation page "
+"opens."
 msgstr ""
 
 #: ../../moderator_documentation/domains/add_domain.md
 msgid "Mobile"
-msgstr "Portable"
+msgstr ""
 
-#: ../../moderator_documentation/domains/add_domain.md:25
+#: ../../moderator_documentation/domains/add_domain.md:33
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the page to open the "
 "{guilabel}`Administration` menu."
 msgstr ""
-"Sélectionnez l'icône de la clé à molette ({fa}`wrench`) en haut page pour "
-"ouvrir le menu {guilabel}`Administration`."
 
-#: ../../moderator_documentation/domains/add_domain.md:40
-#: ../../moderator_documentation/domains/add_domain.md:33
+#: ../../moderator_documentation/domains/add_domain.md:41
 msgid ""
 "That's it! The domain is now in your domains list. You can now add "
 "moderation rules to this domain."
 msgstr ""
+

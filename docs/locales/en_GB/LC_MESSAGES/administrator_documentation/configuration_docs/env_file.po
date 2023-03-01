@@ -1,29 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-03 01:39+0200\n"
-"PO-Revision-Date: 2022-07-03 21:04+0000\n"
-"Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
-"Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
-"projects/documentation/"
-"administrator_documentation-configuration_docs-env_file/en_GB/>\n"
-"Language: en_GB\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:1
 msgid "Customize your environment file"
-msgstr "Customise your environment file"
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:3
 msgid ""
@@ -31,120 +27,102 @@ msgid ""
 "customize your pod. You can change these variables at any time to alter "
 "how your pod runs."
 msgstr ""
-"Your `.env` (environment) file contains variables you can change to "
-"customise your pod. You can change these variables at any time to alter "
-"how your pod runs."
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:5
 msgid ""
 "You need to restart your Funkwhale services after changing your `.env` "
 "file."
 msgstr ""
-"You need to restart your Funkwhale services after changing your `.env` "
-"file."
 
 #: ../../administrator_documentation/configuration_docs/env_file.md
 msgid "Debian"
-msgstr "Debian"
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/env_file.md
 msgid "Docker"
-msgstr "Docker"
+msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:23
+#: ../../administrator_documentation/configuration_docs/env_file.md:28
 msgid "Variables"
-msgstr "Variables"
+msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:27
+#: ../../administrator_documentation/configuration_docs/env_file.md:32
 msgid ""
 "Some environment variables accept a URL as a value. To encode URLs and "
 "avoid problems with special characters, use `urllib.parse` on your URL "
 "value."
 msgstr ""
-"Some environment variables accept a URL as a value. To encode URLs and "
-"avoid problems with special characters, use `urllib.parse` on your URL "
-"value."
-
-#: ../../administrator_documentation/configuration_docs/env_file.md:34
-msgid ""
-"The [django-environ documentation](https://github.com/joke2k/django-"
-"environ/blob/main/docs/tips.rst#using-unsafe-characters-in-urls)."
-msgstr ""
-"The [django-environ documentation](https://github.com/joke2k/django-"
-"environ/blob/main/docs/tips.rst#using-unsafe-characters-in-urls)."
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:39
+msgid ""
+"The [django-environ documentation](https://github.com/joke2k/django-"
+"environ/blob/main/docs/tips.rst#using-unsafe-characters-in-urls)."
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/env_file.md:44
 msgid "Pod configuration"
-msgstr "Pod configuration"
+msgstr ""
 
 #: ../../docstring config.settings.common.FUNKWHALE_HOSTNAME:1 of
 msgid "Hostname of your Funkwhale pod, e.g. ``mypod.audio``."
-msgstr "Hostname of your Funkwhale pod, e.g. ``mypod.audio``."
+msgstr ""
 
 #: ../../docstring config.settings.common.FUNKWHALE_PROTOCOL:1 of
 msgid ""
 "Protocol end users will use to access your pod, either ``http`` or "
 "``https``."
 msgstr ""
-"Protocol end users will use to access your pod, either ``http`` or "
-"``https``."
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:48
+#: ../../administrator_documentation/configuration_docs/env_file.md:53
 msgid "Database and redis configuration"
-msgstr "Database and redis configuration"
+msgstr ""
 
 #: ../../docstring config.settings.common.DATABASE_URL:1 of
-msgid "The URL used to connect to the PostgreSQL database. Examples:"
-msgstr "The URL used to connect to the PostgreSQL database. Examples:"
-
-#: ../../docstring config.settings.common.DATABASE_URL:3 of
-msgid "``postgresql://funkwhale@:5432/funkwhale``"
-msgstr "``postgresql://funkwhale@:5432/funkwhale``"
-
-#: ../../docstring config.settings.common.DATABASE_URL:4 of
-msgid "``postgresql://<user>:<password>@<host>:<port>/<database>``"
-msgstr "``postgresql://<user>:<password>@<host>:<port>/<database>``"
+msgid ""
+"The URL used to connect to the PostgreSQL database. Defaults to an auto "
+"generated url build using the `DATABASE_HOST`, `DATABASE_PORT`, "
+"`DATABASE_USER`, `DATABASE_PASSWORD` and `DATABASE_NAME` variables."
+msgstr ""
 
 #: ../../docstring config.settings.common.DATABASE_URL:5 of
-msgid "``postgresql://funkwhale:passw0rd@localhost:5432/funkwhale_database``"
-msgstr "``postgresql://funkwhale:passw0rd@localhost:5432/funkwhale_database``"
+msgid ""
+"Examples: - ``postgresql://funkwhale@:5432/funkwhale`` - "
+"``postgresql://<user>:<password>@<host>:<port>/<database>`` - "
+"``postgresql://funkwhale:passw0rd@localhost:5432/funkwhale_database``"
+msgstr ""
 
 #: ../../docstring config.settings.common.DB_CONN_MAX_AGE:1 of
 msgid "The maximum time in seconds before database connections close."
-msgstr "The maximum time in seconds before database connections close."
+msgstr ""
 
 #: ../../docstring config.settings.common.CACHE_URL:1 of
 msgid "The URL of your redis server. For example:"
-msgstr "The URL of your redis server. For example:"
+msgstr ""
 
 #: ../../docstring config.settings.common.CACHE_URL:3 of
 msgid "``redis://<host>:<port>/<database>``"
-msgstr "``redis://<host>:<port>/<database>``"
+msgstr ""
 
 #: ../../docstring config.settings.common.CACHE_URL:4
 #: config.settings.common.CELERY_BROKER_URL:7 of
 msgid "``redis://127.0.0.1:6379/0``"
-msgstr "``redis://127.0.0.1:6379/0``"
+msgstr ""
 
 #: ../../docstring config.settings.common.CACHE_URL:5 of
 msgid "``redis://:password@localhost:6379/0``"
-msgstr "``redis://:password@localhost:6379/0``"
+msgstr ""
 
 #: ../../docstring config.settings.common.CACHE_URL:7 of
 msgid ""
 "If you're using password auth (the extra slash is important) - "
 "``redis:///run/redis/redis.sock?db=0`` over unix sockets"
 msgstr ""
-"If you're using password auth (the extra slash is important) - "
-"``redis:///run/redis/redis.sock?db=0`` over unix sockets"
 
 #: ../../docstring config.settings.common.CACHE_URL:12 of
 msgid ""
 "If you want to use Redis over unix sockets, you also need to update "
 ":attr:`CELERY_BROKER_URL`"
 msgstr ""
-"If you want to use Redis over unix sockets, you also need to update "
-":attr:`CELERY_BROKER_URL`"
 
 #: ../../docstring config.settings.common.CELERY_BROKER_URL:1 of
 msgid ""
@@ -152,23 +130,20 @@ msgid ""
 " to tweak this unless you want to use a different server or use Redis "
 "sockets to connect."
 msgstr ""
-"The celery task broker URL. Defaults to :attr:`CACHE_URL`. You don't need"
-" to tweak this unless you want to use a different server or use Redis "
-"sockets to connect."
 
 #: ../../docstring config.settings.common.AWS_S3_REGION_NAME:4
 #: config.settings.common.CELERY_BROKER_URL:5
 #: config.settings.common.THROTTLING_RATES:6 of
 msgid "Example:"
-msgstr "Example:"
+msgstr ""
 
 #: ../../docstring config.settings.common.CELERY_BROKER_URL:8 of
 msgid "``redis+socket:///run/redis/redis.sock?virtual_host=0``"
-msgstr "``redis+socket:///run/redis/redis.sock?virtual_host=0``"
+msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:60
+#: ../../administrator_documentation/configuration_docs/env_file.md:65
 msgid "Accounts and registration"
-msgstr "Accounts and registration"
+msgstr ""
 
 #: ../../docstring config.settings.common.ACCOUNT_EMAIL_VERIFICATION_ENFORCE:1
 #: of
@@ -178,10 +153,6 @@ msgid ""
 "To use this setting you need to configure a mail server to send "
 "verification emails. See :attr:`EMAIL_CONFIG`."
 msgstr ""
-"Set whether users need to verify their email address before using your "
-"pod. Enabling this setting is useful for reducing spam and bot accounts. "
-"To use this setting you need to configure a mail server to send "
-"verification emails. See :attr:`EMAIL_CONFIG`."
 
 #: ../../docstring config.settings.common.ACCOUNT_EMAIL_VERIFICATION_ENFORCE:6
 #: of
@@ -189,12 +160,10 @@ msgid ""
 "Superusers created through the command line never need to verify their "
 "email address."
 msgstr ""
-"Superusers created through the command line never need to verify their "
-"email address."
 
 #: ../../docstring config.settings.common.USERS_INVITATION_EXPIRATION_DAYS:1 of
 msgid "The number of days before a user invite expires."
-msgstr "The number of days before a user invite expires."
+msgstr ""
 
 #: ../../docstring config.settings.common.DISABLE_PASSWORD_VALIDATORS:1 of
 msgid ""
@@ -202,33 +171,26 @@ msgid ""
 "Validators include password length, common words, similarity with "
 "username."
 msgstr ""
-"Whether to disable password validation rules during registration. "
-"Validators include password length, common words, similarity with "
-"username."
 
 #: ../../docstring config.settings.common.ACCOUNT_USERNAME_BLACKLIST:1 of
 msgid ""
 "List of usernames that can't be used for registration. Given as a list of"
 " strings."
 msgstr ""
-"List of usernames that can't be used for registration. Given as a list of"
-" strings."
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:80
 msgid "Whether to enable LDAP authentication."
-msgstr "Whether to enable LDAP authentication."
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/env_file.md:82
 msgid ""
 "See {doc}`/administrator_documentation/configuration_docs/ldap` for more "
 "information."
 msgstr ""
-"See {doc}`/administrator_documentation/configuration_docs/ldap` for more "
-"information."
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:85
+#: ../../administrator_documentation/configuration_docs/env_file.md:90
 msgid "Media storage and serving configuration"
-msgstr "Media storage and serving configuration"
+msgstr ""
 
 #: ../../docstring config.settings.common.MEDIA_URL:1 of
 msgid ""
@@ -236,33 +198,24 @@ msgid ""
 "hosting media files on a separate domain, or if you host Funkwhale on a "
 "non-standard port."
 msgstr ""
-"The URL from which your pod serves media files. Change this if you're "
-"hosting media files on a separate domain, or if you host Funkwhale on a "
-"non-standard port."
 
 #: ../../docstring config.settings.common.MEDIA_ROOT:1 of
 msgid ""
 "The path where you store media files (such as album covers or audio "
 "tracks) on your system. Make sure this directory actually exists."
 msgstr ""
-"The path where you store media files (such as album covers or audio "
-"tracks) on your system. Make sure this directory actually exists."
 
 #: ../../docstring config.settings.common.PROXY_MEDIA:1 of
 msgid ""
 "Whether to proxy audio files through your reverse proxy. We recommend you"
 " leave this enabled to enforce access control."
 msgstr ""
-"Whether to proxy audio files through your reverse proxy. We recommend you"
-" leave this enabled to enforce access control."
 
 #: ../../docstring config.settings.common.PROXY_MEDIA:4 of
 msgid ""
 "If you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH` enabled, "
 "it's safe to disable this setting."
 msgstr ""
-"If you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH` enabled, "
-"it's safe to disable this setting."
 
 #: ../../docstring config.settings.common.EXTERNAL_MEDIA_PROXY_ENABLED:1 of
 msgid ""
@@ -271,10 +224,6 @@ msgid ""
 "risk of leaking user browsing information and reduces the bandwidth used "
 "on remote pods."
 msgstr ""
-"Whether to proxy attachment files hosted on third party pods and and "
-"servers. We recommend you leave this set to ``true``. This reduces the risk "
-"of leaking user browsing information and reduces the bandwidth used on "
-"remote pods."
 
 #: ../../docstring config.settings.common.ATTACHMENTS_UNATTACHED_PRUNE_DELAY:1
 #: of
@@ -282,118 +231,114 @@ msgid ""
 "The delay in seconds before Funkwhale prunes uploaded but detached "
 "attachments from the system."
 msgstr ""
-"The delay in seconds before Funkwhale prunes uploaded but detached "
-"attachments from the system."
 
 #: ../../docstring config.settings.common.REVERSE_PROXY_TYPE:1 of
 msgid ""
 "Set your reverse proxy type. This changes the headers the API uses to "
 "serve audio files. Allowed values:"
 msgstr ""
-"Set your reverse proxy type. This changes the headers the API uses to "
-"serve audio files. Allowed values:"
 
 #: ../../docstring config.settings.common.REVERSE_PROXY_TYPE:4 of
 msgid "``nginx``"
-msgstr "``nginx``"
+msgstr ""
 
 #: ../../docstring config.settings.common.REVERSE_PROXY_TYPE:5 of
 msgid "``apache2``"
-msgstr "``apache2``"
+msgstr ""
 
 #: ../../docstring config.settings.common.PROTECT_FILES_PATH:1 of
 msgid "The path used to process internal redirection to the reverse proxy."
-msgstr "The path used to process internal redirection to the reverse proxy."
+msgstr ""
 
 #: ../../docstring config.settings.common.PROTECT_FILES_PATH:6 of
 msgid "Don't insert a slash at the end of this path."
-msgstr "Don't insert a slash at the end of this path."
+msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:106
+#: ../../administrator_documentation/configuration_docs/env_file.md:111
+msgid "Controls the maximum size of file that users can upload."
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/env_file.md:114
+msgid ""
+"You can control how much total storage a user can access with the "
+":term:`Upload Quota` setting."
+msgstr ""
+
+#: ../../administrator_documentation/configuration_docs/env_file.md:118
 msgid "S3 storage configuration"
-msgstr "S3 storage configuration"
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_QUERYSTRING_AUTH:1 of
 msgid ""
 "Whether to include signatures in S3 URLs. Signatures are used to enforce "
 "access control."
 msgstr ""
-"Whether to include signatures in S3 URLs. Signatures are used to enforce "
-"access control."
 
 #: ../../docstring config.settings.common.AWS_QUERYSTRING_AUTH:4 of
 msgid "Defaults to the opposite of :attr:`PROXY_MEDIA`."
-msgstr "Defaults to the opposite of :attr:`PROXY_MEDIA`."
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_QUERYSTRING_EXPIRE:1 of
 msgid ""
 "The time in seconds before AWS signatures expire. Only takes effect you "
 "enable :attr:`AWS_QUERYSTRING_AUTH`"
 msgstr ""
-"The time in seconds before AWS signatures expire. Only takes effect you "
-"enable :attr:`AWS_QUERYSTRING_AUTH`"
 
 #: ../../docstring config.settings.common.AWS_ACCESS_KEY_ID:1 of
 msgid "Access-key ID for your S3 storage."
-msgstr "Access-key ID for your S3 storage."
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_SECRET_ACCESS_KEY:1 of
 msgid "Secret access key for your S3 storage."
-msgstr "Secret access key for your S3 storage."
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_STORAGE_BUCKET_NAME:1 of
 msgid "Your S3 bucket name."
-msgstr "Your S3 bucket name."
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_CUSTOM_DOMAIN:1 of
 msgid "Custom domain to use for your S3 storage."
-msgstr "Custom domain to use for your S3 storage."
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:1 of
 msgid ""
 "If you use a S3-compatible storage such as minio, set the following "
 "variable to the full URL to the storage server."
 msgstr ""
-"If you use a S3-compatible storage such as minio, set the following "
-"variable to the full URL to the storage server."
 
 #: ../../docstring config.settings.common.ADMIN_URL:3
 #: config.settings.common.AWS_S3_ENDPOINT_URL:4
 #: config.settings.common.MUSICBRAINZ_HOSTNAME:5 of
 msgid "Examples:"
-msgstr "Examples:"
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:6 of
 msgid "``https://minio.mydomain.com``"
-msgstr "``https://minio.mydomain.com``"
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:7 of
 msgid "``https://s3.wasabisys.com``"
-msgstr "``https://s3.wasabisys.com``"
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_REGION_NAME:1 of
 msgid ""
 "If you're using Amazon S3 to serve media without a proxy, you need to "
 "specify your region name to access files."
 msgstr ""
-"If you're using Amazon S3 to serve media without a proxy, you need to "
-"specify your region name to access files."
 
 #: ../../docstring config.settings.common.AWS_S3_REGION_NAME:6 of
 msgid "``eu-west-2``"
-msgstr "``eu-west-2``"
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_LOCATION:1 of
 msgid ""
 "A directory in your S3 bucket where you store files. Use this if you plan"
 " to share the bucket between services."
 msgstr ""
-"A directory in your S3 bucket where you store files. Use this if you plan"
-" to share the bucket between services."
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:125
+#: ../../administrator_documentation/configuration_docs/env_file.md:137
 msgid "In-place import configuration"
-msgstr "In-place import configuration"
+msgstr ""
 
 #: ../../docstring config.settings.common.MUSIC_DIRECTORY_PATH:1 of
 msgid ""
@@ -401,14 +346,11 @@ msgid ""
 "imports. This path needs to be readable by the webserver and ``api`` and "
 "``worker`` processes."
 msgstr ""
-"The path on your server where Funkwhale places files from in-place "
-"imports. This path needs to be readable by the webserver and ``api`` and "
-"``worker`` processes."
 
 #: ../../docstring config.settings.common.MUSIC_DIRECTORY_PATH:8
 #: config.settings.common.MUSIC_DIRECTORY_SERVE_PATH:14 of
 msgid "Don’t insert a slash at the end of this path."
-msgstr "Don’t insert a slash at the end of this path."
+msgstr ""
 
 #: ../../docstring config.settings.common.MUSIC_DIRECTORY_PATH:10 of
 msgid ""
@@ -416,17 +358,12 @@ msgid ""
 "path. On Debian installations you can use any absolute path. Defaults to "
 "``/srv/funkwhale/data/music``."
 msgstr ""
-"On Docker installations, we recommend you use the default ``/music`` "
-"path. On Debian installations you can use any absolute path. Defaults to "
-"``/srv/funkwhale/data/music``."
 
 #: ../../docstring config.settings.common.MUSIC_DIRECTORY_PATH:16 of
 msgid ""
 "You need to add this path to your reverse proxy configuration. Add the "
 "directory to your ``/_protected/music`` server block."
 msgstr ""
-"You need to add this path to your reverse proxy configuration. Add the "
-"directory to your ``/_protected/music`` server block."
 
 #: ../../docstring config.settings.common.MUSIC_DIRECTORY_SERVE_PATH:1 of
 msgid ""
@@ -434,9 +371,6 @@ msgid ""
 "different from the actual path on your server. You can specify this path "
 "in your :file:`docker-compose.yml` file::"
 msgstr ""
-"On Docker setups the value of :attr:`MUSIC_DIRECTORY_PATH` may be "
-"different from the actual path on your server. You can specify this path "
-"in your :file:`docker-compose.yml` file::"
 
 #: ../../docstring config.settings.common.MUSIC_DIRECTORY_SERVE_PATH:8 of
 msgid ""
@@ -444,13 +378,10 @@ msgid ""
 "``/srv/funkwhale/data/music``. The webserver needs to be able to read "
 "this directory."
 msgstr ""
-"In this case, you need to set :attr:`MUSIC_DIRECTORY_SERVE_PATH` to "
-"``/srv/funkwhale/data/music``. The webserver needs to be able to read "
-"this directory."
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:136
+#: ../../administrator_documentation/configuration_docs/env_file.md:148
 msgid "API configuration"
-msgstr "API configuration"
+msgstr ""
 
 #: ../../docstring config.settings.common.THROTTLING_ENABLED:1 of
 msgid ""
@@ -458,9 +389,6 @@ msgid ""
 "you leave this enabled to improve the quality of the service, especially "
 "on public pods ."
 msgstr ""
-"Whether to enable throttling (also known as rate-limiting). We recommend "
-"you leave this enabled to improve the quality of the service, especially "
-"on public pods ."
 
 #: ../../docstring config.settings.common.THROTTLING_RATES:1 of
 msgid ""
@@ -469,78 +397,66 @@ msgid ""
 " of specific endpoints. Takes the format ``<endpoint "
 "name>=<number>/<interval>``."
 msgstr ""
-"Throttling rates for specific endpoints and app features. Tweak this if "
-"you're hitting rate limit issues or if you want to reduce the consumption"
-" of specific endpoints. Takes the format ``<endpoint "
-"name>=<number>/<interval>``."
 
 #: ../../docstring config.settings.common.THROTTLING_RATES:8 of
 msgid "``signup=5/d,password-reset=2/d,anonymous-reports=5/d``"
-msgstr "``signup=5/d,password-reset=2/d,anonymous-reports=5/d``"
+msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:146
+#: ../../administrator_documentation/configuration_docs/env_file.md:158
 msgid ""
 "See [Rate limit API endpoints](rate-limiting.md) for a list of available "
 "endpoints and their default limits."
 msgstr ""
-"See [Rate limit API endpoints](rate-limiting.md) for a list of available "
-"endpoints and their default limits."
 
 #: ../../docstring config.settings.common.ADMIN_URL:1 of
 msgid "Path to the Django admin dashboard."
-msgstr "Path to the Django admin dashboard."
+msgstr ""
 
 #: ../../docstring config.settings.common.ADMIN_URL:5 of
 msgid "``^api/admin/``"
-msgstr "``^api/admin/``"
+msgstr ""
 
 #: ../../docstring config.settings.common.ADMIN_URL:6 of
 msgid "``^api/mycustompath/``"
-msgstr "``^api/mycustompath/``"
+msgstr ""
 
 #: ../../docstring config.settings.common.EXTERNAL_REQUESTS_VERIFY_SSL:1 of
 msgid ""
 "Whether to enforce TLS certificate verification when performing outgoing "
 "HTTP requests."
 msgstr ""
-"Whether to enforce TLS certificate verification when performing outgoing "
-"HTTP requests."
 
 #: ../../docstring config.settings.common.EXTERNAL_REQUESTS_VERIFY_SSL:4 of
 msgid "We recommend you leave this setting enabled."
-msgstr "We recommend you leave this setting enabled."
+msgstr ""
 
 #: ../../docstring config.settings.common.EXTERNAL_REQUESTS_TIMEOUT:1 of
 msgid "Default timeout for external requests."
-msgstr "Default timeout for external requests."
+msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:156
+#: ../../administrator_documentation/configuration_docs/env_file.md:168
 msgid "Federation configuration"
-msgstr "Federation configuration"
+msgstr ""
 
 #: ../../docstring config.settings.common.FEDERATION_OBJECT_FETCH_DELAY:1 of
 msgid ""
 "The delay in minutes before a remote object is automatically refetched "
 "when accessed in the UI."
 msgstr ""
-"The delay in minutes before a remote object is automatically refetched "
-"when accessed in the UI."
 
 #: ../../docstring config.settings.common.FEDERATION_DUPLICATE_FETCH_DELAY:1 of
 msgid "The delay in seconds between two manual fetches of the same remote object."
-msgstr "The delay in seconds between two manual fetches of the same remote object."
+msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:165
+#: ../../administrator_documentation/configuration_docs/env_file.md:177
 msgid "Metadata configuration"
-msgstr "Metadata configuration"
+msgstr ""
 
 #: ../../docstring config.settings.common.TAGS_MAX_BY_OBJ:1 of
 msgid ""
 "Maximum number of tags that can be associated with an object. Extra tags "
 "are ignored."
 msgstr ""
-"Maximum number of tags that can be associated with an object. Extra tags "
-"are ignored."
 
 #: ../../docstring config.settings.common.MUSICBRAINZ_HOSTNAME:1 of
 msgid ""
@@ -548,41 +464,36 @@ msgid ""
 " your own server or use a mirror. You can include a port number in the "
 "hostname."
 msgstr ""
-"The hostname of your MusicBrainz instance. Change this setting if you run"
-" your own server or use a mirror. You can include a port number in the "
-"hostname."
 
 #: ../../docstring config.settings.common.MUSICBRAINZ_HOSTNAME:7 of
 msgid "``mymusicbrainz.mirror``"
-msgstr "``mymusicbrainz.mirror``"
+msgstr ""
 
 #: ../../docstring config.settings.common.MUSICBRAINZ_HOSTNAME:8 of
 msgid "``localhost:5000``"
-msgstr "``localhost:5000``"
+msgstr ""
 
 #: ../../docstring config.settings.common.MUSICBRAINZ_CACHE_DURATION:1 of
 msgid "Length of time in seconds to cache MusicBrainz results."
-msgstr "Length of time in seconds to cache MusicBrainz results."
+msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:175
+#: ../../administrator_documentation/configuration_docs/env_file.md:187
 msgid "Channels and podcast configuration"
-msgstr "Channels and podcast configuration"
+msgstr ""
 
 #: ../../docstring config.settings.common.PODCASTS_RSS_FEED_REFRESH_DELAY:1 of
 msgid "The delay in seconds between two fetch of RSS feeds."
-msgstr "The delay in seconds between two fetch of RSS feeds."
+msgstr ""
 
 #: ../../docstring config.settings.common.PODCASTS_RSS_FEED_REFRESH_DELAY:3 of
 msgid ""
 "A lower rate means new episodes are fetched sooner, but requires more "
 "resources."
 msgstr ""
-"A lower rate means new episodes are fetched sooner, but requires more "
-"resources."
 
 #: ../../docstring config.settings.common.PODCASTS_RSS_FEED_MAX_ITEMS:1 of
 msgid "Maximum number of RSS items to load in each podcast feed."
-msgstr "Maximum number of RSS items to load in each podcast feed."
+msgstr ""
 
 #: ../../docstring config.settings.common.PODCASTS_THIRD_PARTY_VISIBILITY:1 of
 msgid ""
@@ -590,118 +501,105 @@ msgid ""
 " episodes. Change to ``instance`` or ``everyone`` to change the default "
 "visibility."
 msgstr ""
-"By default, only people who subscribe to a podcast RSS have access to its "
-"episodes. Change to ``instance`` or ``everyone`` to change the default "
-"visibility."
 
 #: ../../docstring config.settings.common.PODCASTS_THIRD_PARTY_VISIBILITY:7 of
 msgid "Changing this value only affect new podcasts."
-msgstr "Changing this value only affect new podcasts."
+msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:185
+#: ../../administrator_documentation/configuration_docs/env_file.md:197
 msgid "Subsonic configuration"
-msgstr "Subsonic configuration"
+msgstr ""
 
 #: ../../docstring config.settings.common.SUBSONIC_DEFAULT_TRANSCODING_FORMAT:1
 #: of
 msgid "The default format files are transcoded into when using the Subsonic API."
-msgstr "The default format files are transcoded into when using the Subsonic API."
+msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:193
+#: ../../administrator_documentation/configuration_docs/env_file.md:205
 msgid "Email configuration"
-msgstr "Email configuration"
+msgstr ""
 
 #: ../../docstring config.settings.common.EMAIL_CONFIG:1 of
 msgid "SMTP configuration for sending emails. Possible values:"
-msgstr "SMTP configuration for sending emails. Possible values:"
+msgstr ""
 
 #: ../../docstring config.settings.common.EMAIL_CONFIG:3 of
 msgid "``EMAIL_CONFIG=consolemail://``: output emails to console (the default)"
-msgstr "``EMAIL_CONFIG=consolemail://``: output emails to console (the default)"
+msgstr ""
 
 #: ../../docstring config.settings.common.EMAIL_CONFIG:4 of
 msgid "``EMAIL_CONFIG=dummymail://``: disable email sending completely"
-msgstr "``EMAIL_CONFIG=dummymail://``: disable email sending completely"
+msgstr ""
 
 #: ../../docstring config.settings.common.EMAIL_CONFIG:6 of
 msgid ""
 "On a production instance, you'll usually want to use an external SMTP "
 "server:"
 msgstr ""
-"On a production instance, you'll usually want to use an external SMTP "
-"server:"
 
 #: ../../docstring config.settings.common.EMAIL_CONFIG:8 of
 msgid "``EMAIL_CONFIG=smtp://user:password@youremail.host:25``"
-msgstr "``EMAIL_CONFIG=smtp://user:password@youremail.host:25``"
+msgstr ""
 
 #: ../../docstring config.settings.common.EMAIL_CONFIG:9 of
 msgid "``EMAIL_CONFIG=smtp+ssl://user:password@youremail.host:465``"
-msgstr "``EMAIL_CONFIG=smtp+ssl://user:password@youremail.host:465``"
+msgstr ""
 
 #: ../../docstring config.settings.common.EMAIL_CONFIG:10 of
 msgid "``EMAIL_CONFIG=smtp+tls://user:password@youremail.host:587``"
-msgstr "``EMAIL_CONFIG=smtp+tls://user:password@youremail.host:587``"
+msgstr ""
 
 #: ../../docstring config.settings.common.DEFAULT_FROM_EMAIL:1 of
 msgid ""
 "The name and email address used to send system emails. Defaults to "
 "``Funkwhale <noreply@yourdomain>``."
 msgstr ""
-"The name and email address used to send system emails. Defaults to ``"
-"Funkwhale <noreply@yourdomain>``."
 
 #: ../../docstring config.settings.common.DEFAULT_FROM_EMAIL:4 of
 msgid "Available formats:"
-msgstr "Available formats:"
+msgstr ""
 
 #: ../../docstring config.settings.common.DEFAULT_FROM_EMAIL:6 of
 msgid "``Name <email address>``"
-msgstr "``Name <email address>``"
+msgstr ""
 
 #: ../../docstring config.settings.common.DEFAULT_FROM_EMAIL:7 of
 msgid "``<Email address>``"
-msgstr "``<Email address>``"
+msgstr ""
 
 #: ../../docstring config.settings.common.EMAIL_SUBJECT_PREFIX:1 of
 msgid "Subject prefix for system emails."
-msgstr "Subject prefix for system emails."
+msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:205
+#: ../../administrator_documentation/configuration_docs/env_file.md:217
 msgid "Plugin configuration"
-msgstr "Plugin configuration"
+msgstr ""
 
 #: ../../docstring config.settings.common.FUNKWHALE_PLUGINS_PATH:1 of
 msgid ""
 "Path to a directory containing Funkwhale plugins. These are imported at "
 "runtime."
 msgstr ""
-"Path to a directory containing Funkwhale plugins. These are imported at "
-"runtime."
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:218
+#: ../../administrator_documentation/configuration_docs/env_file.md:226
 msgid "List of Funkwhale plugins to load."
-msgstr "List of Funkwhale plugins to load."
+msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/env_file.md:221
+#: ../../administrator_documentation/configuration_docs/env_file.md:233
 msgid "Other settings"
-msgstr "Other settings"
+msgstr ""
 
 #: ../../docstring config.settings.common.INSTANCE_SUPPORT_MESSAGE_DELAY:1 of
 msgid ""
 "The number of days before your pod shows the \"support your pod\" "
 "message. The timer starts after the user signs up."
 msgstr ""
-"The number of days before your pod shows the \"support your pod\" message. "
-"The timer starts after the user signs up."
 
 #: ../../docstring config.settings.common.FUNKWHALE_SUPPORT_MESSAGE_DELAY:1 of
 msgid ""
 "The number of days before your pod shows the \"support Funkwhale\" "
 "message. The timer starts after the user signs up."
 msgstr ""
-"The number of days before your pod shows the \"support Funkwhale\" message. "
-"The timer starts after the user signs up."
 
 #: ../../docstring config.settings.common.MIN_DELAY_BETWEEN_DOWNLOADS_COUNT:1
 #: of
@@ -709,92 +607,29 @@ msgid ""
 "The required number of seconds between downloads of a track by the same "
 "IP or user to be counted separately in listen statistics."
 msgstr ""
-"The required number of seconds between downloads of a track by the same "
-"IP or user to be counted separately in listen statistics."
 
 #: ../../docstring config.settings.common.MARKDOWN_EXTENSIONS:1 of
 msgid "A list of markdown extensions to enable."
-msgstr "A list of markdown extensions to enable."
+msgstr ""
 
 #: ../../docstring config.settings.common.MARKDOWN_EXTENSIONS:3 of
 msgid "See `<https://python-markdown.github.io/extensions/>`_."
-msgstr "See `<https://python-markdown.github.io/extensions/>`_."
+msgstr ""
 
 #: ../../docstring config.settings.common.LINKIFIER_SUPPORTED_TLDS:1 of
 msgid "Additional TLDs to support with our markdown linkifier."
-msgstr "Additional TLDs to support with our markdown linkifier."
+msgstr ""
 
-#~ msgid ""
-#~ "Whether to proxy attachment files hosted"
-#~ " on third party pods and and "
-#~ "servers. Leaving this set to ``true``"
-#~ " is recommended. This reduces the "
-#~ "risk of leaking user browsing "
-#~ "information and reduces the bandwidth "
-#~ "used on remote pods."
-#~ msgstr ""
-#~ "Whether to proxy attachment files hosted"
-#~ " on third party pods and and "
-#~ "servers. Leaving this set to ``true``"
-#~ " is recommended. This reduces the "
-#~ "risk of leaking user browsing "
-#~ "information and reduces the bandwidth "
-#~ "used on remote pods."
+#: ../../docstring config.settings.common.LOGLEVEL:1 of
+msgid "str(object='') -> str str(bytes_or_buffer[, encoding[, errors]]) -> str"
+msgstr ""
 
-#~ msgid "Disabling this feature is not recommended."
-#~ msgstr "Disabling this feature is not recommended."
+#: ../../docstring config.settings.common.LOGLEVEL:4 of
+msgid ""
+"Create a new string object from the given object. If encoding or errors "
+"is specified, then the object must expose a data buffer that will be "
+"decoded using the given encoding and error handler. Otherwise, returns "
+"the result of object.__str__() (if defined) or repr(object). encoding "
+"defaults to sys.getdefaultencoding(). errors defaults to 'strict'."
+msgstr ""
 
-#~ msgid ""
-#~ "By default, only people who subscribe"
-#~ " to a podcast RSS have access "
-#~ "to its episodes. Switch to \"instance\""
-#~ " or \"everyone\" to change the "
-#~ "default visibility."
-#~ msgstr ""
-#~ "By default, only people who subscribe"
-#~ " to a podcast RSS have access "
-#~ "to its episodes. Switch to \"instance\""
-#~ " or \"everyone\" to change the "
-#~ "default visibility."
-
-#~ msgid "Name and email address used to send system emails."
-#~ msgstr "Name and email address used to send system emails."
-
-#~ msgid "Default: ``Funkwhale <noreply@yourdomain>``"
-#~ msgstr "Default: ``Funkwhale <noreply@yourdomain>``"
-
-#~ msgid ""
-#~ "Both the forms ``Funkwhale "
-#~ "<noreply@yourdomain>`` and ``noreply@yourdomain`` "
-#~ "work."
-#~ msgstr ""
-#~ "Both the forms ``Funkwhale "
-#~ "<noreply@yourdomain>`` and ``noreply@yourdomain`` "
-#~ "work."
-
-#~ msgid ""
-#~ "Path to a directory containing Funkwhale"
-#~ " plugins. These will be imported at"
-#~ " runtime."
-#~ msgstr ""
-#~ "Path to a directory containing Funkwhale"
-#~ " plugins. These will be imported at"
-#~ " runtime."
-
-#~ msgid ""
-#~ "The number of days after signup "
-#~ "before the \"support your pod\" message"
-#~ " is shown."
-#~ msgstr ""
-#~ "The number of days after signup "
-#~ "before the \"support your pod\" message"
-#~ " is shown."
-
-#~ msgid ""
-#~ "The number of days after signup "
-#~ "before the \"support Funkwhale\" message "
-#~ "is shown."
-#~ msgstr ""
-#~ "The number of days after signup "
-#~ "before the \"support Funkwhale\" message "
-#~ "is shown."

@@ -1,28 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
-"PO-Revision-Date: 2022-07-05 19:34+0000\n"
-"Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
-"Language: en_GB\n"
-"Language-Team: English (United Kingdom) "
-"<https://translate.funkwhale.audio/projects/documentation"
-"/administrator_documentation-configuration_docs-object_storage/en_GB/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:1
 msgid "Store media in an object store"
-msgstr "Store media in an object store"
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:3
 msgid ""
@@ -30,13 +27,10 @@ msgid ""
 "`/srv/funkwhale/data/media` directory. If you prefer to use an "
 "S3-compatible object store, follow the instructions in this guide."
 msgstr ""
-"By default, Funkwhale stores all media data in the "
-"`/srv/funkwhale/data/media` directory. If you prefer to use an "
-"S3-compatible object store, follow the instructions in this guide."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:10
 msgid "Secure your object store"
-msgstr "Secure your object store"
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:12
 msgid ""
@@ -45,30 +39,22 @@ msgid ""
 "the URLs of your audio files and means that users can bypass "
 "authentication."
 msgstr ""
-"Before you begin, you need to secure your object store. Many "
-"S3-compatible stores list contents in the root by default. This exposes "
-"the URLs of your audio files and means that users can bypass "
-"authentication."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:14
 msgid ""
 "To prevent listing content, add the following policy to your "
 "S3-compatible object store."
 msgstr ""
-"To prevent listing content, add the following policy to your "
-"S3-compatible object store."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:39
 msgid ""
 "If you're using `awscli`, you can store this policy in a `/tmp/policy` "
 "file and apply it using the following command:"
 msgstr ""
-"If you're using `awscli`, you can store this policy in a `/tmp/policy` "
-"file and apply it using the following command:"
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:45
 msgid "Update your environment file"
-msgstr "Update your environment file"
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:47
 msgid ""
@@ -76,178 +62,152 @@ msgid ""
 "`.env` file. If you want to serve audio files from the bucket, set "
 "`PROXY_MEDIA` to `false`."
 msgstr ""
-"To set up S3-compatible storage, fill out the relevant details in the "
-"`.env` file. If you want to serve audio files from the bucket, set "
-"`PROXY_MEDIA` to `false`."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md
-#, fuzzy
 msgid "Environment variables"
-msgstr "Update your environment file"
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_QUERYSTRING_AUTH:1 of
 msgid ""
 "Whether to include signatures in S3 URLs. Signatures are used to enforce "
 "access control."
 msgstr ""
-"Whether to include signatures in S3 URLs. Signatures are used to enforce "
-"access control."
 
 #: ../../docstring config.settings.common.AWS_QUERYSTRING_AUTH:4 of
 msgid "Defaults to the opposite of :attr:`PROXY_MEDIA`."
-msgstr "Defaults to the opposite of :attr:`PROXY_MEDIA`."
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_QUERYSTRING_EXPIRE:1 of
 msgid ""
 "The time in seconds before AWS signatures expire. Only takes effect you "
 "enable :attr:`AWS_QUERYSTRING_AUTH`"
 msgstr ""
-"The time in seconds before AWS signatures expire. Only takes effect you "
-"enable :attr:`AWS_QUERYSTRING_AUTH`"
 
 #: ../../docstring config.settings.common.AWS_ACCESS_KEY_ID:1 of
 msgid "Access-key ID for your S3 storage."
-msgstr "Access-key ID for your S3 storage."
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_SECRET_ACCESS_KEY:1 of
 msgid "Secret access key for your S3 storage."
-msgstr "Secret access key for your S3 storage."
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_STORAGE_BUCKET_NAME:1 of
 msgid "Your S3 bucket name."
-msgstr "Your S3 bucket name."
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_CUSTOM_DOMAIN:1 of
 msgid "Custom domain to use for your S3 storage."
-msgstr "Custom domain to use for your S3 storage."
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:1 of
 msgid ""
 "If you use a S3-compatible storage such as minio, set the following "
 "variable to the full URL to the storage server."
 msgstr ""
-"If you use a S3-compatible storage such as minio, set the following "
-"variable to the full URL to the storage server."
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:4 of
 msgid "Examples:"
-msgstr "Examples:"
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:6 of
 msgid "``https://minio.mydomain.com``"
-msgstr "``https://minio.mydomain.com``"
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:7 of
 msgid "``https://s3.wasabisys.com``"
-msgstr "``https://s3.wasabisys.com``"
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_REGION_NAME:1 of
 msgid ""
 "If you're using Amazon S3 to serve media without a proxy, you need to "
 "specify your region name to access files."
 msgstr ""
-"If you're using Amazon S3 to serve media without a proxy, you need to "
-"specify your region name to access files."
 
 #: ../../docstring config.settings.common.AWS_S3_REGION_NAME:4 of
 msgid "Example:"
-msgstr "Example:"
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_REGION_NAME:6 of
 msgid "``eu-west-2``"
-msgstr "``eu-west-2``"
+msgstr ""
 
 #: ../../docstring config.settings.common.AWS_LOCATION:1 of
 msgid ""
 "A directory in your S3 bucket where you store files. Use this if you plan"
 " to share the bucket between services."
 msgstr ""
-"A directory in your S3 bucket where you store files. Use this if you plan"
-" to share the bucket between services."
 
 #: ../../docstring config.settings.common.PROXY_MEDIA:1 of
 msgid ""
 "Whether to proxy audio files through your reverse proxy. We recommend you"
 " leave this enabled to enforce access control."
 msgstr ""
-"Whether to proxy audio files through your reverse proxy. We recommend you"
-" leave this enabled to enforce access control."
 
 #: ../../docstring config.settings.common.PROXY_MEDIA:4 of
 msgid ""
 "If you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH` enabled, "
 "it's safe to disable this setting."
 msgstr ""
-"If you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH` enabled, "
-"it's safe to disable this setting."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:81
 msgid "Set up your reverse proxy"
-msgstr "Set up your reverse proxy"
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:84
 msgid ""
 "Serving files from object storage is not currently supported on Apache "
 "deployments."
 msgstr ""
-"Serving files from object storage is not currently supported on Apache "
-"deployments."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:87
 msgid ""
 "Serving files from an object store requires some changes to the reverse "
 "proxy."
 msgstr ""
-"Serving files from an object store requires some changes to the reverse "
-"proxy."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:89
 msgid "Open your Nginx configuration file in an editor."
-msgstr "Open your Nginx configuration file in an editor."
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md
 msgid "Debian"
-msgstr "Debian"
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md
 msgid "Docker"
-msgstr "Docker"
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:112
 msgid ""
 "Comment out the `location /_protected/media/` block by adding a `#` to "
 "the start of each line."
 msgstr ""
-"Comment out the `location /_protected/media/` block by adding a `#` to "
-"the start of each line."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:121
 msgid ""
 "Uncomment the `location ~ /_protected/media/(.+)` block by removing the "
 "`#` from the start of each line."
 msgstr ""
-"Uncomment the `location ~ /_protected/media/(.+)` block by removing the "
-"`#` from the start of each line."
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:131
 msgid "Add your S3 store URL to the `img-src` and `media-src` headers."
-msgstr "Add your S3 store URL to the `img-src` and `media-src` headers."
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:137
 msgid "Test your Nginx configuration."
-msgstr "Test your Nginx configuration."
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:143
 msgid "Restart Funkwhale and Nginx to pick up the changes."
-msgstr "Restart Funkwhale and Nginx to pick up the changes."
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:168
 msgid "That's it! Files are now uploaded to and stored from your S3 bucket."
-msgstr "That's it! Files are now uploaded to and stored from your S3 bucket."
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:170
 msgid "Troubleshooting"
-msgstr "Troubleshooting"
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md
 msgid "No Resolver Found"
@@ -258,8 +218,6 @@ msgid ""
 "You may see the following error when streaming music from your "
 "S3-compatible store:"
 msgstr ""
-"You may see the following error when streaming music from your "
-"S3-compatible store:"
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:180
 msgid ""
@@ -267,7 +225,4 @@ msgid ""
 "resolver. We're still looking into this issue. You can work around this "
 "by adding a resolver to the `location ~/_protected/media/(.+)` block."
 msgstr ""
-"This happens when the Nginx config is unable to use your server’s DNS "
-"resolver. We're still looking into this issue. You can work around this "
-"by adding a resolver to the `location ~/_protected/media/(.+)` block."
 

@@ -1,24 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
-"PO-Revision-Date: 2023-01-20 19:42+0000\n"
-"Last-Translator: Thomas <thovi98@gmail.com>\n"
-"Language-Team: French <https://translate.funkwhale.audio/projects/"
-"documentation/moderator_documentation-content-delete_content/fr/>\n"
-"Language: fr\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14.2\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../moderator_documentation/content/delete_content.md:1
 msgid "Delete content from your pod"
@@ -26,265 +23,194 @@ msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:4
 msgid ""
-"Deleting content from your pod deletes the files from the server. Deleting "
-"objects like channels and libraries deletes all associated content. This "
-"action is irreversible."
+"Deleting content from your pod deletes the files from the server. "
+"Deleting objects like channels and libraries deletes all associated "
+"content. This action is irreversible."
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:7
 msgid ""
-"Moderators can delete content from their {term}`pod` if required. Use this "
-"feature to handle content that violates your pod's rules."
+"Moderators can delete content from their {term}`pod` if required. Use "
+"this feature to handle content that violates your pod's rules."
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/content/delete_content.md:12
-#: ../../moderator_documentation/content/delete_content.md:10
+#: ../../moderator_documentation/content/delete_content.md:13
 msgid "{guilabel}`Moderation` – provides access to the administration menu."
 msgstr ""
 
-#: ../../moderator_documentation/content/delete_content.md:13
-#: ../../moderator_documentation/content/delete_content.md:11
+#: ../../moderator_documentation/content/delete_content.md:14
 msgid "{guilabel}`Library` – provides access to the library menu."
 msgstr ""
 
-#: ../../moderator_documentation/content/delete_content.md:16
-#: ../../moderator_documentation/content/delete_content.md:14
+#: ../../moderator_documentation/content/delete_content.md:17
 msgid "There are two ways to delete content:"
 msgstr ""
 
-#: ../../moderator_documentation/content/delete_content.md:22
-#: ../../moderator_documentation/content/delete_content.md:20
+#: ../../moderator_documentation/content/delete_content.md:23
 msgid "Delete individual objects"
 msgstr ""
 
-#: ../../moderator_documentation/content/delete_content.md:24
-#: ../../moderator_documentation/content/delete_content.md:22
+#: ../../moderator_documentation/content/delete_content.md:25
 msgid "If you want to delete a specific object:"
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md
 msgid "Desktop"
-msgstr "Bureau"
+msgstr ""
 
-#: ../../moderator_documentation/content/delete_content.md:32
-#: ../../moderator_documentation/content/delete_content.md:53
-#: ../../moderator_documentation/content/delete_content.md:83
-#: ../../moderator_documentation/content/delete_content.md:105
-#: ../../moderator_documentation/content/delete_content.md:26
-#: ../../moderator_documentation/content/delete_content.md:46
-#: ../../moderator_documentation/content/delete_content.md:72
-#: ../../moderator_documentation/content/delete_content.md:93
+#: ../../moderator_documentation/content/delete_content.md:33
+#: ../../moderator_documentation/content/delete_content.md:54
+#: ../../moderator_documentation/content/delete_content.md:84
+#: ../../moderator_documentation/content/delete_content.md:106
 msgid "Log in to your pod."
 msgstr ""
 
-#: ../../moderator_documentation/content/delete_content.md:27
-#: ../../moderator_documentation/content/delete_content.md:73
-msgid ""
-"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the "
-"{guilabel}`Administration` menu."
-msgstr ""
-"Sélectionnez l'icône de la clé à molette ({fa}`wrench`) en haut de la barre "
-"latérale pour ouvrir le menu {guilabel}`Administration`."
-
 #: ../../moderator_documentation/content/delete_content.md:34
-#: ../../moderator_documentation/content/delete_content.md:55
 #: ../../moderator_documentation/content/delete_content.md:85
-#: ../../moderator_documentation/content/delete_content.md:107
-#: ../../moderator_documentation/content/delete_content.md:28
-#: ../../moderator_documentation/content/delete_content.md:48
-#: ../../moderator_documentation/content/delete_content.md:74
-#: ../../moderator_documentation/content/delete_content.md:95
-msgid "Select {guilabel}`Library`. The {guilabel}`Edits` page opens."
+msgid ""
+"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
+"the {guilabel}`Administration` menu."
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:35
 #: ../../moderator_documentation/content/delete_content.md:56
 #: ../../moderator_documentation/content/delete_content.md:86
 #: ../../moderator_documentation/content/delete_content.md:108
-#: ../../moderator_documentation/content/delete_content.md:29
-#: ../../moderator_documentation/content/delete_content.md:49
-#: ../../moderator_documentation/content/delete_content.md:75
-#: ../../moderator_documentation/content/delete_content.md:96
-msgid "Select the type of content you want to delete from the top of the page:"
+msgid "Select {guilabel}`Library`. The {guilabel}`Edits` page opens."
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:36
 #: ../../moderator_documentation/content/delete_content.md:57
 #: ../../moderator_documentation/content/delete_content.md:87
 #: ../../moderator_documentation/content/delete_content.md:109
-#: ../../moderator_documentation/content/delete_content.md:30
-#: ../../moderator_documentation/content/delete_content.md:50
-#: ../../moderator_documentation/content/delete_content.md:76
-#: ../../moderator_documentation/content/delete_content.md:97
-msgid "{guilabel}`Channels`"
+msgid "Select the type of content you want to delete from the top of the page:"
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:37
 #: ../../moderator_documentation/content/delete_content.md:58
 #: ../../moderator_documentation/content/delete_content.md:88
 #: ../../moderator_documentation/content/delete_content.md:110
-#: ../../moderator_documentation/content/delete_content.md:31
-#: ../../moderator_documentation/content/delete_content.md:51
-#: ../../moderator_documentation/content/delete_content.md:77
-#: ../../moderator_documentation/content/delete_content.md:98
-msgid "{guilabel}`Artists`"
+msgid "{guilabel}`Channels`"
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:38
 #: ../../moderator_documentation/content/delete_content.md:59
 #: ../../moderator_documentation/content/delete_content.md:89
 #: ../../moderator_documentation/content/delete_content.md:111
-#: ../../moderator_documentation/content/delete_content.md:32
-#: ../../moderator_documentation/content/delete_content.md:52
-#: ../../moderator_documentation/content/delete_content.md:78
-#: ../../moderator_documentation/content/delete_content.md:99
-msgid "{guilabel}`Albums`"
+msgid "{guilabel}`Artists`"
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:39
 #: ../../moderator_documentation/content/delete_content.md:60
 #: ../../moderator_documentation/content/delete_content.md:90
 #: ../../moderator_documentation/content/delete_content.md:112
-#: ../../moderator_documentation/content/delete_content.md:33
-#: ../../moderator_documentation/content/delete_content.md:53
-#: ../../moderator_documentation/content/delete_content.md:79
-#: ../../moderator_documentation/content/delete_content.md:100
-msgid "{guilabel}`Tracks`"
+msgid "{guilabel}`Albums`"
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:40
 #: ../../moderator_documentation/content/delete_content.md:61
 #: ../../moderator_documentation/content/delete_content.md:91
 #: ../../moderator_documentation/content/delete_content.md:113
-#: ../../moderator_documentation/content/delete_content.md:34
-#: ../../moderator_documentation/content/delete_content.md:54
-#: ../../moderator_documentation/content/delete_content.md:80
-#: ../../moderator_documentation/content/delete_content.md:101
-msgid "{guilabel}`Libraries`"
+msgid "{guilabel}`Tracks`"
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:41
 #: ../../moderator_documentation/content/delete_content.md:62
 #: ../../moderator_documentation/content/delete_content.md:92
 #: ../../moderator_documentation/content/delete_content.md:114
-#: ../../moderator_documentation/content/delete_content.md:35
-#: ../../moderator_documentation/content/delete_content.md:55
-#: ../../moderator_documentation/content/delete_content.md:81
-#: ../../moderator_documentation/content/delete_content.md:102
-msgid "{guilabel}`Uploads`"
+msgid "{guilabel}`Libraries`"
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:42
 #: ../../moderator_documentation/content/delete_content.md:63
 #: ../../moderator_documentation/content/delete_content.md:93
 #: ../../moderator_documentation/content/delete_content.md:115
-#: ../../moderator_documentation/content/delete_content.md:36
-#: ../../moderator_documentation/content/delete_content.md:56
-#: ../../moderator_documentation/content/delete_content.md:82
-#: ../../moderator_documentation/content/delete_content.md:103
-msgid "{guilabel}`Tags`"
+msgid "{guilabel}`Uploads`"
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:43
 #: ../../moderator_documentation/content/delete_content.md:64
 #: ../../moderator_documentation/content/delete_content.md:94
 #: ../../moderator_documentation/content/delete_content.md:116
-#: ../../moderator_documentation/content/delete_content.md:37
-#: ../../moderator_documentation/content/delete_content.md:57
-#: ../../moderator_documentation/content/delete_content.md:83
-#: ../../moderator_documentation/content/delete_content.md:104
-msgid ""
-"Use the filters on the content page to find the object you want to delete."
+msgid "{guilabel}`Tags`"
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:44
 #: ../../moderator_documentation/content/delete_content.md:65
-#: ../../moderator_documentation/content/delete_content.md:38
-#: ../../moderator_documentation/content/delete_content.md:58
-msgid "Select the object to go to its moderation page."
+#: ../../moderator_documentation/content/delete_content.md:95
+#: ../../moderator_documentation/content/delete_content.md:117
+msgid "Use the filters on the content page to find the object you want to delete."
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:45
 #: ../../moderator_documentation/content/delete_content.md:66
-#: ../../moderator_documentation/content/delete_content.md:39
-#: ../../moderator_documentation/content/delete_content.md:59
+msgid "Select the object to go to its moderation page."
+msgstr ""
+
+#: ../../moderator_documentation/content/delete_content.md:46
+#: ../../moderator_documentation/content/delete_content.md:67
 msgid ""
 "Select {guilabel}`Delete`. A {guilabel}`Delete this {object}` warning "
 "appears."
 msgstr ""
 
-#: ../../moderator_documentation/content/delete_content.md:46
-#: ../../moderator_documentation/content/delete_content.md:67
-#: ../../moderator_documentation/content/delete_content.md:40
-#: ../../moderator_documentation/content/delete_content.md:60
+#: ../../moderator_documentation/content/delete_content.md:47
+#: ../../moderator_documentation/content/delete_content.md:68
 msgid "Select {guilabel}`Delete`."
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md
 msgid "Mobile"
-msgstr "Portable"
-
-#: ../../moderator_documentation/content/delete_content.md:54
-#: ../../moderator_documentation/content/delete_content.md:106
-#: ../../moderator_documentation/content/delete_content.md:47
-#: ../../moderator_documentation/content/delete_content.md:94
-msgid ""
-"Select the wrench icon ({fa}`wrench`) at the top of the screen to open the "
-"{guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/content/delete_content.md:71
-#: ../../moderator_documentation/content/delete_content.md:64
+#: ../../moderator_documentation/content/delete_content.md:55
+#: ../../moderator_documentation/content/delete_content.md:107
+msgid ""
+"Select the wrench icon ({fa}`wrench`) at the top of the screen to open "
+"the {guilabel}`Administration` menu."
+msgstr ""
+
+#: ../../moderator_documentation/content/delete_content.md:72
 msgid "That's it! You've deleted the object."
 msgstr ""
 
-#: ../../moderator_documentation/content/delete_content.md:73
-#: ../../moderator_documentation/content/delete_content.md:66
+#: ../../moderator_documentation/content/delete_content.md:74
 msgid "Delete objects in bulk"
 msgstr ""
 
-#: ../../moderator_documentation/content/delete_content.md:75
-#: ../../moderator_documentation/content/delete_content.md:68
+#: ../../moderator_documentation/content/delete_content.md:76
 msgid "To delete several items at once:"
-msgstr ""
-
-#: ../../moderator_documentation/content/delete_content.md:95
-#: ../../moderator_documentation/content/delete_content.md:117
-#: ../../moderator_documentation/content/delete_content.md:84
-#: ../../moderator_documentation/content/delete_content.md:105
-msgid ""
-"Select the checkbox ({fa}`square`) next to the objects you want to delete. "
-"Selected objects show a tick ({fa}`check-square`)."
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:96
 #: ../../moderator_documentation/content/delete_content.md:118
-#: ../../moderator_documentation/content/delete_content.md:85
-#: ../../moderator_documentation/content/delete_content.md:106
-msgid "Select {guilabel}`Delete` in the {guilabel}`Actions` dropdown."
+msgid ""
+"Select the checkbox ({fa}`square`) next to the objects you want to "
+"delete. Selected objects show a tick ({fa}`check-square`)."
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:97
 #: ../../moderator_documentation/content/delete_content.md:119
-#: ../../moderator_documentation/content/delete_content.md:86
-#: ../../moderator_documentation/content/delete_content.md:107
-msgid ""
-"Select {guilabel}`Go`. A {guilabel}`Do you want to launch delete on {count} "
-"items` warning appears."
+msgid "Select {guilabel}`Delete` in the {guilabel}`Actions` dropdown."
 msgstr ""
 
 #: ../../moderator_documentation/content/delete_content.md:98
 #: ../../moderator_documentation/content/delete_content.md:120
-#: ../../moderator_documentation/content/delete_content.md:87
-#: ../../moderator_documentation/content/delete_content.md:108
+msgid ""
+"Select {guilabel}`Go`. A {guilabel}`Do you want to launch delete on "
+"{count} items` warning appears."
+msgstr ""
+
+#: ../../moderator_documentation/content/delete_content.md:99
+#: ../../moderator_documentation/content/delete_content.md:121
 msgid "Select {guilabel}`Launch`."
 msgstr ""
 
-#: ../../moderator_documentation/content/delete_content.md:124
-#: ../../moderator_documentation/content/delete_content.md:112
+#: ../../moderator_documentation/content/delete_content.md:125
 msgid "You're done! You've deleted the selected objects from your pod."
 msgstr ""
+

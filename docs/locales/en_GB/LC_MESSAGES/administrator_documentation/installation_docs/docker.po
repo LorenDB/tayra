@@ -1,313 +1,317 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.3\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-02 21:06+0000\n"
-"Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
-"Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
-"projects/documentation/administrator_documentation-installation_docs-docker/"
-"en_GB/>\n"
-"Language: en_GB\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../administrator_documentation/installation_docs/docker.md:1
 msgid "Install Funkwhale using Docker"
-msgstr "Install Funkwhale using Docker"
+msgstr ""
 
 #: ../../administrator_documentation/installation_docs/docker.md:3
 msgid ""
 "Funkwhale is available as a containerized application. This enables you "
 "to run each service in containers rather than install them on your "
-"server. You can run Funkwhale using [Docker](https://docker.com) and "
-"Docker-Compose."
+"server. You can run Funkwhale using [Docker](https://docker.com)."
 msgstr ""
-"Funkwhale is available as a containerised application. This enables you "
-"to run each service in containers rather than install them on your "
-"server. You can run Funkwhale using [Docker](https://docker.com) and "
-"Docker-Compose."
 
 #: ../../administrator_documentation/installation_docs/docker.md:6
 msgid ""
 "This guide assumes you are using a [Debian](https://debian.org)-based "
 "system."
 msgstr ""
-"This guide assumes you are using a [Debian](https://debian.org)-based "
-"system."
 
 #: ../../administrator_documentation/installation_docs/docker.md:13
 msgid "Before you begin"
-msgstr "Before you begin"
+msgstr ""
 
 #: ../../administrator_documentation/installation_docs/docker.md:15
 msgid ""
 "Set a `FUNKWHALE_VERSION` variable to the version you want to install. "
 "You will use this version for all commands in this guide."
 msgstr ""
-"Set a `FUNKWHALE_VERSION` variable to the version you want to install. "
-"You will use this version for all commands in this guide."
 
 #: ../../administrator_documentation/installation_docs/docker.md:21
 msgid ""
-"Install [Docker](https://docs.docker.com/engine/install/) and [Docker "
-"Compose](https://docs.docker.com/compose/install/)."
+"Install [Docker](https://docs.docker.com/engine/install/) and the "
+"[compose plugin](https://docs.docker.com/compose/install/linux/#install-"
+"using-the-repository)."
 msgstr ""
-"Install [Docker](https://docs.docker.com/engine/install/) and [Docker "
-"Compose](https://docs.docker.com/compose/install/)."
 
 #: ../../administrator_documentation/installation_docs/docker.md:22
 msgid "Install `curl`."
-msgstr "Install `curl`."
+msgstr ""
 
 #: ../../administrator_documentation/installation_docs/docker.md:29
-msgid "1. Download the project files"
-msgstr "1. Download the project files"
+msgid "1. Create a Funkwhale user"
+msgstr ""
 
 #: ../../administrator_documentation/installation_docs/docker.md:31
-msgid "Create the project directory structure."
-msgstr "Create the project directory structure."
-
-#: ../../administrator_documentation/installation_docs/docker.md:37
-msgid "Navigate to the project directory"
-msgstr "Navigate to the project directory"
-
-#: ../../administrator_documentation/installation_docs/docker.md:43
 msgid ""
-"Download the `docker-compose` template. This contains information about "
+"It's good practice to create a user on your server for Funkwhale "
+"administration. Doing this makes it easy to make sure you're running "
+"commands from the right place. Follow these steps to set up your user."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:33
+msgid ""
+"Create the `funkwhale` user and set its shell to `bash` and its home "
+"directory to `/srv/funkwhale`."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:40
+msgid ""
+"To perform any tasks as the `funkwhale` user, prefix your commands with "
+"`sudo -u funkwhale`."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:46
+msgid ""
+"Or log in as `funkwhale` with `sudo su funkwhale` before running your "
+"commands."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:54
+msgid "That's it! You've created your `funkwhale` user."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:56
+msgid "2. Download the project files"
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:58
+msgid "Create the project directory structure."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:64
+msgid "Navigate to the project directory"
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:70
+msgid ""
+"Download the `docker compose` template. This contains information about "
 "the containers and how they work together."
 msgstr ""
-"Download the `docker-compose` template. This contains information about "
-"the containers and how they work together."
 
-#: ../../administrator_documentation/installation_docs/docker.md:49
-#, fuzzy
+#: ../../administrator_documentation/installation_docs/docker.md:76
 msgid "That's it! You've set up your project files."
 msgstr ""
-"That's it! You've set up your project files. The directory structure "
-"looks like this:"
 
-#: ../../administrator_documentation/installation_docs/docker.md:51
-msgid "2. Set up your environment file"
-msgstr "2. Set up your environment file"
+#: ../../administrator_documentation/installation_docs/docker.md:78
+msgid "3. Set up your environment file"
+msgstr ""
 
-#: ../../administrator_documentation/installation_docs/docker.md:53
+#: ../../administrator_documentation/installation_docs/docker.md:80
 msgid ""
 "The environment file contains options you can use to control your "
 "Funkwhale pod. Follow these steps to get a working environment up and "
 "running."
 msgstr ""
-"The environment file contains options you can use to control your "
-"Funkwhale pod. Follow these steps to get a working environment up and "
-"running."
 
-#: ../../administrator_documentation/installation_docs/docker.md:55
+#: ../../administrator_documentation/installation_docs/docker.md:82
 msgid "Download the `.env` template to your `/srv/funkwhale` directory."
-msgstr "Download the `.env` template to your `/srv/funkwhale` directory."
+msgstr ""
 
-#: ../../administrator_documentation/installation_docs/docker.md:61
+#: ../../administrator_documentation/installation_docs/docker.md:88
 msgid ""
 "Update `FUNKWHALE_VERSION` in the `.env` file to the `$FUNKWHALE_VERSION`"
 " variable you set earlier."
 msgstr ""
-"Update `FUNKWHALE_VERSION` in the `.env` file to the `$FUNKWHALE_VERSION`"
-" variable you set earlier."
 
-#: ../../administrator_documentation/installation_docs/docker.md:67
+#: ../../administrator_documentation/installation_docs/docker.md:94
 msgid ""
 "Reduce the permissions on your `.env` file to `600`. This means that only"
 " your user can read and write this file."
 msgstr ""
-"Reduce the permissions on your `.env` file to `600`. This means that only"
-" your user can read and write this file."
 
-#: ../../administrator_documentation/installation_docs/docker.md:73
+#: ../../administrator_documentation/installation_docs/docker.md:100
 msgid ""
 "Generate a secret key for Django. This keeps your Funkwhale data secure. "
 "Do not share this key with anybody."
 msgstr ""
-"Generate a secret key for Django. This keeps your Funkwhale data secure. "
-"Do not share this key with anybody."
 
-#: ../../administrator_documentation/installation_docs/docker.md:79
+#: ../../administrator_documentation/installation_docs/docker.md:106
 msgid ""
 "Open the `.env` file in a text editor. For this example, we will use "
 "`nano`."
 msgstr ""
-"Open the `.env` file in a text editor. For this example, we will use "
-"`nano`."
 
-#: ../../administrator_documentation/installation_docs/docker.md:85
+#: ../../administrator_documentation/installation_docs/docker.md:112
 msgid "Update the following settings:"
-msgstr "Update the following settings:"
+msgstr ""
 
-#: ../../administrator_documentation/installation_docs/docker.md:86
+#: ../../administrator_documentation/installation_docs/docker.md:114
 msgid "Paste the secret key in the `DJANGO_SECRET_KEY` field."
-msgstr "Paste the secret key in the `DJANGO_SECRET_KEY` field."
+msgstr ""
 
-#: ../../administrator_documentation/installation_docs/docker.md:87
+#: ../../administrator_documentation/installation_docs/docker.md:115
 msgid "Populate the `FUNKWHALE_HOSTNAME` field with the URL of your server."
-msgstr "Populate the `FUNKWHALE_HOSTNAME` field with the URL of your server."
-
-#: ../../administrator_documentation/installation_docs/docker.md:89
-msgid "Hit {kbd}`ctrl + x` then {kbd}`y` to save the file and close `nano`."
-msgstr "Hit {kbd}`ctrl + x` then {kbd}`y` to save the file and close `nano`."
-
-#: ../../administrator_documentation/installation_docs/docker.md:91
-msgid ""
-"You're done! Your environment file is now ready to go. You can check out "
-"a full list of configuration options in our Environment file guide."
 msgstr ""
-"You're done! Your environment file is now ready to go. You can check out "
-"a full list of configuration options in our Environment file guide."
-
-#: ../../administrator_documentation/installation_docs/docker.md:93
-msgid "3. Set up Funkwhale"
-msgstr "3. Set up Funkwhale"
-
-#: ../../administrator_documentation/installation_docs/docker.md:95
-msgid ""
-"Once you've filled in your environment file, you can set up Funkwhale. "
-"Follow these steps to create your database and create a superuser."
-msgstr ""
-"Once you've filled in your environment file, you can set up Funkwhale. "
-"Follow these steps to create your database and create a superuser."
-
-#: ../../administrator_documentation/installation_docs/docker.md:97
-msgid "Pull the containers to download all the required services."
-msgstr "Pull the containers to download all the required services."
-
-#: ../../administrator_documentation/installation_docs/docker.md:104
-msgid "Bring up the database container so you can run the database migrations."
-msgstr "Bring up the database container so you can run the database migrations."
-
-#: ../../administrator_documentation/installation_docs/docker.md:110
-msgid "Run the database migrations."
-msgstr "Run the database migrations."
 
 #: ../../administrator_documentation/installation_docs/docker.md:117
-msgid "You may see the following warning when applying migrations:"
-msgstr "You may see the following warning when applying migrations:"
+msgid "Hit {kbd}`ctrl + x` then {kbd}`y` to save the file and close `nano`."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:119
+msgid ""
+"You're done! Your environment file is now ready to go. You can check out "
+"a full list of configuration options in our Environment file guide."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:121
+msgid "4. Set up Funkwhale"
+msgstr ""
 
 #: ../../administrator_documentation/installation_docs/docker.md:123
-msgid "You can safely ignore this warning."
-msgstr "You can safely ignore this warning."
+msgid ""
+"Once you've filled in your environment file, you can set up Funkwhale. "
+"Follow these steps to create your database and create a superuser."
+msgstr ""
 
-#: ../../administrator_documentation/installation_docs/docker.md:126
-msgid "Create your superuser."
-msgstr "Create your superuser."
+#: ../../administrator_documentation/installation_docs/docker.md:125
+msgid "Pull the containers to download all the required services."
+msgstr ""
 
 #: ../../administrator_documentation/installation_docs/docker.md:132
-msgid "Launch all the containers to bring up your pod."
-msgstr "Launch all the containers to bring up your pod."
+msgid "Bring up the database container so you can run the database migrations."
+msgstr ""
 
 #: ../../administrator_documentation/installation_docs/docker.md:138
-msgid "That's it! Your Funkwhale pod is now up and running."
-msgstr "That's it! Your Funkwhale pod is now up and running."
-
-#: ../../administrator_documentation/installation_docs/docker.md:140
-msgid "4. Set up your reverse proxy"
-msgstr "4. Set up your reverse proxy"
-
-#: ../../administrator_documentation/installation_docs/docker.md:142
-msgid ""
-"Funkwhale uses a reverse proxy to serve content to users. We use "
-"[Nginx](https://nginx.com) to serve this proxy. Follow this guide to "
-"install an Nginx configuration using details from your `.env` file."
+msgid "Run the database migrations."
 msgstr ""
-"Funkwhale uses a reverse proxy to serve content to users. We use "
-"[Nginx](https://nginx.com) to serve this proxy. Follow this guide to "
-"install an Nginx configuration using details from your `.env` file."
 
-#: ../../administrator_documentation/installation_docs/docker.md:144
-msgid "Install Nginx."
-msgstr "Install Nginx."
+#: ../../administrator_documentation/installation_docs/docker.md:145
+msgid "You may see the following warning when applying migrations:"
+msgstr ""
 
 #: ../../administrator_documentation/installation_docs/docker.md:151
+msgid "You can safely ignore this warning."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:154
+msgid "Create your superuser."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:160
+msgid "Launch all the containers to bring up your pod."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:166
+msgid "That's it! Your Funkwhale pod is now up and running."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:168
+msgid "5. Set up your reverse proxy"
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:170
+msgid ""
+"Funkwhale requires a reverse proxy to serve content to users. We "
+"recommend using [Nginx](https://nginx.com) to handle requests to your "
+"container. To do this:"
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:172
+msgid "Install Nginx."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:179
 msgid "Download the Nginx templates from Funkwhale."
-msgstr "Download the Nginx templates from Funkwhale."
+msgstr ""
 
-#: ../../administrator_documentation/installation_docs/docker.md:158
+#: ../../administrator_documentation/installation_docs/docker.md:186
 msgid "Create an Nginx template with details from your `.env` file."
-msgstr "Create an Nginx template with details from your `.env` file."
-
-#: ../../administrator_documentation/installation_docs/docker.md:181
-msgid ""
-"That's it! You've created your Nginx file. Run the following command to "
-"check the `.env` details populated correctly."
 msgstr ""
-"That's it! You've created your Nginx file. Run the following command to "
-"check the `.env` details populated correctly."
-
-#: ../../administrator_documentation/installation_docs/docker.md:187
-msgid "5. Set up TLS"
-msgstr "5. Set up TLS"
-
-#: ../../administrator_documentation/installation_docs/docker.md:189
-msgid ""
-"To enable your users to connect to your pod securely, you need to set up "
-"{abbr}`TLS (Transport Layer Security)`. To do this, we recommend using "
-"the <acme.sh> script."
-msgstr ""
-"To enable your users to connect to your pod securely, you need to set up "
-"{abbr}`TLS (Transport Layer Security)`. To do this, we recommend using "
-"the <acme.sh> script."
-
-#: ../../administrator_documentation/installation_docs/docker.md:191
-msgid "Log in as the superuser account to run these commands."
-msgstr "Log in as the superuser account to run these commands."
-
-#: ../../administrator_documentation/installation_docs/docker.md:197
-msgid "Create the `/etc/certs` folder to store the certificates."
-msgstr "Create the `/etc/certs` folder to store the certificates."
-
-#: ../../administrator_documentation/installation_docs/docker.md:203
-msgid ""
-"Download and run `acme.sh`. Replace `my@example.com` with your email "
-"address."
-msgstr ""
-"Download and run `acme.sh`. Replace `my@example.com` with your email "
-"address."
 
 #: ../../administrator_documentation/installation_docs/docker.md:209
 msgid ""
-"Generate a certificate. Replace `example.com` with your Funkwhale pod "
-"name. Use `/srv/funkwhale/front` as your web root folder."
+"That's it! You've created your Nginx file. Run the following command to "
+"check the `.env` details populated correctly."
 msgstr ""
-"Generate a certificate. Replace `example.com` with your Funkwhale pod "
-"name. Use `/srv/funkwhale/front` as your web root folder."
 
 #: ../../administrator_documentation/installation_docs/docker.md:215
-msgid ""
-"Install the certificate to your Nginx config. Replace `example.com` with "
-"your Funkwhale pod name."
+msgid "Override default Nginx templates"
 msgstr ""
-"Install the certificate to your Nginx config. Replace `example.com` with "
-"your Funkwhale pod name."
 
-#: ../../administrator_documentation/installation_docs/docker.md:224
-#, fuzzy
+#: ../../administrator_documentation/installation_docs/docker.md:217
 msgid ""
-"That's it! acme.sh renews your certificate every 60 days, so you don't "
+"The frontend container ships default Nginx templates which serve content "
+"to the reverse proxy. These files read variables from your `.env` file to"
+" correctly serve content. In some cases, you might want to override these"
+" defaults. To do this:"
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:219
+msgid "Create a `/srv/funkwhale/nginx` directory to house your files."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:225
+msgid "Download the Nginx template files to the `/srv/funkwhale/nginx` directory."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:232
+msgid "Make any changes you want to make to these files."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:233
+msgid ""
+"Open your `docker-compose.yml` file in a text editor. For this example, "
+"we will use `nano`."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:239
+msgid ""
+"Uncomment the lines in the `volumes` section of the `front` service by "
+"deleting the `#` in front of them."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:253
+msgid "Bring the `front` container up again to pick up the changes."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:259
+msgid ""
+"That's it! The container mounts your custom nginx files and uses its "
+"values to serve Funkwhale content. To revert to the default values, "
+"comment out the volumes by adding a `#` in front of them and bring the "
+"`front` container back up."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:261
+msgid "6. Set up TLS"
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:263
+msgid ""
+"To enable your users to connect to your pod securely, you need to set up "
+"{abbr}`TLS (Transport Layer Security)`. To do this, we recommend using "
+"[certbot](https://certbot.eff.org/)."
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:265
+msgid "Install certbot"
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:272
+msgid "Run certbot"
+msgstr ""
+
+#: ../../administrator_documentation/installation_docs/docker.md:278
+msgid ""
+"That's it! certbot renews your certificate every 60 days, so you don't "
 "need to worry about renewing it."
 msgstr ""
-"That's it! acme.sh renews your certificate every 60 days, so you don't "
-"need to about renewing it."
 
-#~ msgid ""
-#~ "Download the nginx templates. You need"
-#~ " these to set up your reverse "
-#~ "proxy."
-#~ msgstr ""
-#~ "Download the nginx templates. You need"
-#~ " these to set up your reverse "
-#~ "proxy."

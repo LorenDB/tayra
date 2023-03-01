@@ -1,24 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 23:09+0000\n"
-"Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
-"Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
-"projects/documentation/user_documentation-libraries-follow_library/en_GB/>\n"
-"Language: en_GB\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../user_documentation/libraries/follow_library.md:1
 msgid "Follow a library"
@@ -42,41 +39,41 @@ msgstr ""
 
 #: ../../user_documentation/libraries/follow_library.md
 msgid "Desktop"
-msgstr "Desktop"
+msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:15
-#: ../../user_documentation/libraries/follow_library.md:26
-#: ../../user_documentation/libraries/follow_library.md:45
+#: ../../user_documentation/libraries/follow_library.md:19
+#: ../../user_documentation/libraries/follow_library.md:31
+#: ../../user_documentation/libraries/follow_library.md:50
 msgid "Log in to your pod."
-msgstr "Log in to your pod."
+msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:16
+#: ../../user_documentation/libraries/follow_library.md:20
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
-msgstr "Select the upload icon ({fa}`upload`) in the top of the sidebar."
+msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:17
-#: ../../user_documentation/libraries/follow_library.md:28
+#: ../../user_documentation/libraries/follow_library.md:21
+#: ../../user_documentation/libraries/follow_library.md:33
 msgid ""
 "Select {guilabel}`Get started` under {guilabel}`Follow remote libraries`."
 " A screen appears showing you the libraries you are following."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:18
-#: ../../user_documentation/libraries/follow_library.md:29
+#: ../../user_documentation/libraries/follow_library.md:22
+#: ../../user_documentation/libraries/follow_library.md:34
 msgid ""
 "Paste the sharing link into the {guilabel}`Search a remote library` "
 "search bar."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:19
-#: ../../user_documentation/libraries/follow_library.md:30
+#: ../../user_documentation/libraries/follow_library.md:23
+#: ../../user_documentation/libraries/follow_library.md:35
 msgid ""
 "Select the {guilabel}`Search` icon or hit {kbd}`⏎ Return` to search for "
 "the library. If the library exists, a library card appears."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:20
-#: ../../user_documentation/libraries/follow_library.md:31
+#: ../../user_documentation/libraries/follow_library.md:24
+#: ../../user_documentation/libraries/follow_library.md:36
 msgid ""
 "Select {guilabel}`Follow` on the library card. If the library's privacy "
 "level is {guilabel}`Nobody except me`, the owner needs to approve the "
@@ -85,50 +82,51 @@ msgstr ""
 
 #: ../../user_documentation/libraries/follow_library.md
 msgid "Mobile"
-msgstr "Mobile"
+msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:27
+#: ../../user_documentation/libraries/follow_library.md:32
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen"
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:35
+#: ../../user_documentation/libraries/follow_library.md:40
 msgid ""
 "That's it! The server then scans the content and you can see it on your "
 "{term}`pod`."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:37
+#: ../../user_documentation/libraries/follow_library.md:42
 msgid "Follow from content on your pod"
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:40
+#: ../../user_documentation/libraries/follow_library.md:45
 msgid ""
 "You can only follow a library from content pages if its privacy level is "
 "not {guilabel}`Nobody except me`."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:43
+#: ../../user_documentation/libraries/follow_library.md:48
 msgid ""
 "If a user on your {term}`pod` has already followed a library, you can "
 "find it by selecting content from that library. To do this:"
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:46
+#: ../../user_documentation/libraries/follow_library.md:51
 msgid "Select a track, album, or artist from the library you want to follow."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:47
+#: ../../user_documentation/libraries/follow_library.md:52
 msgid ""
 "Scroll to the bottom of the page. The library card appears in the "
 "{guilabel}`User libraries` section."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:48
+#: ../../user_documentation/libraries/follow_library.md:53
 msgid "Select {guilabel}`Follow` on the library card."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:50
+#: ../../user_documentation/libraries/follow_library.md:55
 msgid ""
 "You're done! The content will remain on the server even if the other user"
 " stops following the library."
 msgstr ""
+

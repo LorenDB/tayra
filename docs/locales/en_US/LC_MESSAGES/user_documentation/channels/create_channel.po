@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../user_documentation/channels/create_channel.md:1
 msgid "Create a channel"
@@ -44,104 +44,104 @@ msgid "Artist discography"
 msgstr ""
 
 #: ../../user_documentation/channels/create_channel.md:17
-msgid "To create an __Artist discography__ channel:"
+msgid "To create an **Artist discography** channel:"
 msgstr ""
 
 #: ../../user_documentation/channels/create_channel.md
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:21
-#: ../../user_documentation/channels/create_channel.md:37
-#: ../../user_documentation/channels/create_channel.md:59
-#: ../../user_documentation/channels/create_channel.md:80
+#: ../../user_documentation/channels/create_channel.md:25
+#: ../../user_documentation/channels/create_channel.md:42
+#: ../../user_documentation/channels/create_channel.md:68
+#: ../../user_documentation/channels/create_channel.md:90
 msgid "Log in to your pod."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:22
-#: ../../user_documentation/channels/create_channel.md:60
+#: ../../user_documentation/channels/create_channel.md:26
+#: ../../user_documentation/channels/create_channel.md:69
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:23
-#: ../../user_documentation/channels/create_channel.md:39
-#: ../../user_documentation/channels/create_channel.md:61
-#: ../../user_documentation/channels/create_channel.md:82
+#: ../../user_documentation/channels/create_channel.md:27
+#: ../../user_documentation/channels/create_channel.md:44
+#: ../../user_documentation/channels/create_channel.md:70
+#: ../../user_documentation/channels/create_channel.md:92
 msgid ""
 "Select {guilabel}`Get started` under {guilabel}`Publish your work in a "
 "channel`. Your user profile opens."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:24
-#: ../../user_documentation/channels/create_channel.md:40
-#: ../../user_documentation/channels/create_channel.md:62
-#: ../../user_documentation/channels/create_channel.md:83
+#: ../../user_documentation/channels/create_channel.md:28
+#: ../../user_documentation/channels/create_channel.md:45
+#: ../../user_documentation/channels/create_channel.md:71
+#: ../../user_documentation/channels/create_channel.md:93
 msgid ""
 "Select {guilabel}`+ Add new` next to the {guilabel}`Channels` header. A "
 "{guilabel}`Create channel` pop-up window appears."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:25
-#: ../../user_documentation/channels/create_channel.md:41
+#: ../../user_documentation/channels/create_channel.md:29
+#: ../../user_documentation/channels/create_channel.md:46
 msgid ""
 "Select {guilabel}`Artist discography` and select {guilabel}`Next step`. "
 "The {guilabel}`Artist channel` form appears."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:26
-#: ../../user_documentation/channels/create_channel.md:42
-#: ../../user_documentation/channels/create_channel.md:64
-#: ../../user_documentation/channels/create_channel.md:85
+#: ../../user_documentation/channels/create_channel.md:30
+#: ../../user_documentation/channels/create_channel.md:47
+#: ../../user_documentation/channels/create_channel.md:73
+#: ../../user_documentation/channels/create_channel.md:95
 msgid ""
 "Enter the {guilabel}`Name` of your channel. Users see this when they "
 "visit your channel page."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:27
-#: ../../user_documentation/channels/create_channel.md:43
-#: ../../user_documentation/channels/create_channel.md:65
-#: ../../user_documentation/channels/create_channel.md:86
+#: ../../user_documentation/channels/create_channel.md:31
+#: ../../user_documentation/channels/create_channel.md:48
+#: ../../user_documentation/channels/create_channel.md:74
+#: ../../user_documentation/channels/create_channel.md:96
 msgid ""
 "Enter the {guilabel}`Fediverse handle` of your channel. This is how other"
 " Fediverse software identifies your channel."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:28
-#: ../../user_documentation/channels/create_channel.md:44
-#: ../../user_documentation/channels/create_channel.md:66
-#: ../../user_documentation/channels/create_channel.md:87
+#: ../../user_documentation/channels/create_channel.md:32
+#: ../../user_documentation/channels/create_channel.md:49
+#: ../../user_documentation/channels/create_channel.md:75
+#: ../../user_documentation/channels/create_channel.md:97
 msgid ""
-"__Optional__ – upload a {guilabel}`Channel picture`. Users see this when "
+"**Optional** – upload a {guilabel}`Channel picture`. Users see this when "
 "they visit your channel page. Select {guilabel}`Browse…` to open a file "
 "picker."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:29
-#: ../../user_documentation/channels/create_channel.md:45
-#: ../../user_documentation/channels/create_channel.md:67
-#: ../../user_documentation/channels/create_channel.md:88
+#: ../../user_documentation/channels/create_channel.md:33
+#: ../../user_documentation/channels/create_channel.md:50
+#: ../../user_documentation/channels/create_channel.md:76
+#: ../../user_documentation/channels/create_channel.md:98
 msgid ""
-"__Optional__ – add {guilabel}`Tags` that describe your channel. Start "
+"**Optional** – add {guilabel}`Tags` that describe your channel. Start "
 "typing in the {guilabel}`Search…` input box to find existing tags. You "
 "can also create new tags by typing them in and selecting them or hitting "
 "{kbd}`⏎ Return`."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:30
-#: ../../user_documentation/channels/create_channel.md:46
-#: ../../user_documentation/channels/create_channel.md:69
-#: ../../user_documentation/channels/create_channel.md:90
+#: ../../user_documentation/channels/create_channel.md:34
+#: ../../user_documentation/channels/create_channel.md:51
+#: ../../user_documentation/channels/create_channel.md:78
+#: ../../user_documentation/channels/create_channel.md:100
 msgid ""
-"__Optional__ – enter a {guilabel}`Description` of your channel. You can "
+"**Optional** – enter a {guilabel}`Description` of your channel. You can "
 "{guilabel}`Write` using [Markdown](https://www.markdownguide.org/) syntax"
 " and {guilabel}`Preview` how it will look. Users see this when they visit"
 " your channel page."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:31
-#: ../../user_documentation/channels/create_channel.md:47
-#: ../../user_documentation/channels/create_channel.md:74
-#: ../../user_documentation/channels/create_channel.md:95
+#: ../../user_documentation/channels/create_channel.md:35
+#: ../../user_documentation/channels/create_channel.md:52
+#: ../../user_documentation/channels/create_channel.md:83
+#: ../../user_documentation/channels/create_channel.md:105
 msgid "Select {guilabel}`Create channel` to create your channel."
 msgstr ""
 
@@ -149,67 +149,67 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:38
-#: ../../user_documentation/channels/create_channel.md:81
+#: ../../user_documentation/channels/create_channel.md:43
+#: ../../user_documentation/channels/create_channel.md:91
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:51
+#: ../../user_documentation/channels/create_channel.md:56
 msgid ""
 "That's it! You've created your artist channel. You can now [add some "
 "music to it](upload_artist.md)."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:53
+#: ../../user_documentation/channels/create_channel.md:58
 msgid "Podcast"
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:55
-msgid "To create a __Podcast__ channel:"
+#: ../../user_documentation/channels/create_channel.md:60
+msgid "To create a **Podcast** channel:"
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:63
-#: ../../user_documentation/channels/create_channel.md:84
+#: ../../user_documentation/channels/create_channel.md:72
+#: ../../user_documentation/channels/create_channel.md:94
 msgid ""
 "Select {guilabel}`Podcasts` and select {guilabel}`Next step`. The "
 "{guilabel}`Podcast channel` form appears."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:68
-#: ../../user_documentation/channels/create_channel.md:89
+#: ../../user_documentation/channels/create_channel.md:77
+#: ../../user_documentation/channels/create_channel.md:99
 msgid "Choose the {guilabel}`Language` of your podcast."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:70
-#: ../../user_documentation/channels/create_channel.md:91
+#: ../../user_documentation/channels/create_channel.md:79
+#: ../../user_documentation/channels/create_channel.md:101
 msgid ""
 "Select the {guilabel}`Category` of your podcast. "
 "{term}`Podcatchers<Podcatcher>` use this information to sort your podcast"
 " content."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:71
-#: ../../user_documentation/channels/create_channel.md:92
-msgid "__Optional__ – select the {guilabel}`Subcategory` of your podcast."
+#: ../../user_documentation/channels/create_channel.md:80
+#: ../../user_documentation/channels/create_channel.md:102
+msgid "**Optional** – select the {guilabel}`Subcategory` of your podcast."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:72
-#: ../../user_documentation/channels/create_channel.md:93
+#: ../../user_documentation/channels/create_channel.md:81
+#: ../../user_documentation/channels/create_channel.md:103
 msgid ""
-"__Optional__ – enter the {guilabel}`Owner e-mail address`. This populates"
-" the ``itunes:email`` field of your podcast's {abbr}`RSS (Really Simple "
+"**Optional** – enter the {guilabel}`Owner e-mail address`. This populates"
+" the `itunes:email` field of your podcast's {abbr}`RSS (Really Simple "
 "Syndication)` feed."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:73
-#: ../../user_documentation/channels/create_channel.md:94
+#: ../../user_documentation/channels/create_channel.md:82
+#: ../../user_documentation/channels/create_channel.md:104
 msgid ""
-"__Optional__ – enter the {guilabel}`Owner name`. This populates the "
-"``itunes:name`` field of your podcast's {abbr}`RSS (Really Simple "
+"**Optional** – enter the {guilabel}`Owner name`. This populates the "
+"`itunes:name` field of your podcast's {abbr}`RSS (Really Simple "
 "Syndication)` feed."
 msgstr ""
 
-#: ../../user_documentation/channels/create_channel.md:99
+#: ../../user_documentation/channels/create_channel.md:109
 msgid ""
 "You're done! You've created your podcast channel. Now you can [add some "
 "episodes to it](upload_podcast.md)."

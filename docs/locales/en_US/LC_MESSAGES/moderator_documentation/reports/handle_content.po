@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../moderator_documentation/reports/handle_content.md:1
 msgid "Handle reported content"
@@ -38,21 +38,21 @@ msgstr ""
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:12
+#: ../../moderator_documentation/reports/handle_content.md:13
 msgid ""
 "{guilabel}`Moderation` – provides access to the administration and "
 "moderation menus."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:13
+#: ../../moderator_documentation/reports/handle_content.md:14
 msgid "{guilabel}`Library` – enables the moderator to delete objects."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:20
+#: ../../moderator_documentation/reports/handle_content.md:21
 msgid "Handle reports from the Reports page"
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:22
+#: ../../moderator_documentation/reports/handle_content.md:23
 msgid "To handle a content report from the {guilabel}`Reports` page:"
 msgstr ""
 
@@ -60,46 +60,46 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:30
-#: ../../moderator_documentation/reports/handle_content.md:43
-#: ../../moderator_documentation/reports/handle_content.md:65
-#: ../../moderator_documentation/reports/handle_content.md:82
+#: ../../moderator_documentation/reports/handle_content.md:31
+#: ../../moderator_documentation/reports/handle_content.md:44
+#: ../../moderator_documentation/reports/handle_content.md:66
+#: ../../moderator_documentation/reports/handle_content.md:83
 msgid "Log in to your {term}`pod`."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:31
-#: ../../moderator_documentation/reports/handle_content.md:66
+#: ../../moderator_documentation/reports/handle_content.md:32
+#: ../../moderator_documentation/reports/handle_content.md:67
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
 "the {guilabel}`Administration` menu."
-msgstr ""
-
-#: ../../moderator_documentation/reports/handle_content.md:32
-#: ../../moderator_documentation/reports/handle_content.md:45
-#: ../../moderator_documentation/reports/handle_content.md:67
-#: ../../moderator_documentation/reports/handle_content.md:84
-msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
 #: ../../moderator_documentation/reports/handle_content.md:33
 #: ../../moderator_documentation/reports/handle_content.md:46
 #: ../../moderator_documentation/reports/handle_content.md:68
 #: ../../moderator_documentation/reports/handle_content.md:85
-msgid "[Search for the report](search_reports.md)."
+msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
 #: ../../moderator_documentation/reports/handle_content.md:34
 #: ../../moderator_documentation/reports/handle_content.md:47
-msgid "Select an action from the {guilabel}`Actions` section:"
+#: ../../moderator_documentation/reports/handle_content.md:69
+#: ../../moderator_documentation/reports/handle_content.md:86
+msgid "[Search for the report](search_reports.md)."
 msgstr ""
 
 #: ../../moderator_documentation/reports/handle_content.md:35
 #: ../../moderator_documentation/reports/handle_content.md:48
-msgid "{guilabel}`Resolve` – resolve the report with no further action."
+msgid "Select an action from the {guilabel}`Actions` section:"
 msgstr ""
 
 #: ../../moderator_documentation/reports/handle_content.md:36
 #: ../../moderator_documentation/reports/handle_content.md:49
+msgid "{guilabel}`Resolve` – resolve the report with no further action."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:37
+#: ../../moderator_documentation/reports/handle_content.md:50
 msgid ""
 "{guilabel}`Delete reported object` – delete the object associated with "
 "the report. If you delete an artist or album, this deletes all files "
@@ -110,65 +110,65 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:44
-#: ../../moderator_documentation/reports/handle_content.md:83
+#: ../../moderator_documentation/reports/handle_content.md:45
+#: ../../moderator_documentation/reports/handle_content.md:84
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the screen to open "
 "the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:53
-#: ../../moderator_documentation/reports/handle_content.md:96
+#: ../../moderator_documentation/reports/handle_content.md:54
+#: ../../moderator_documentation/reports/handle_content.md:97
 msgid ""
 "Resolving the report assigns it to you so other moderators know who "
 "handled the report. Add [internal notes](internal_notes.md) to keep a "
 "record of your changes."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:55
+#: ../../moderator_documentation/reports/handle_content.md:56
 msgid "Edit content in the moderation page"
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:57
+#: ../../moderator_documentation/reports/handle_content.md:58
 msgid "If you want to edit an object to change its metadata:"
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:69
-#: ../../moderator_documentation/reports/handle_content.md:86
+#: ../../moderator_documentation/reports/handle_content.md:70
+#: ../../moderator_documentation/reports/handle_content.md:87
 msgid ""
 "Select {guilabel}`Open in moderation interface` in the "
 "{guilabel}`Reported object` section. The object's moderation page opens."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:70
-#: ../../moderator_documentation/reports/handle_content.md:87
+#: ../../moderator_documentation/reports/handle_content.md:71
+#: ../../moderator_documentation/reports/handle_content.md:88
 msgid "Select {guilabel}`Edit`. The {guilabel}`Edit` page opens."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:71
-#: ../../moderator_documentation/reports/handle_content.md:88
+#: ../../moderator_documentation/reports/handle_content.md:72
+#: ../../moderator_documentation/reports/handle_content.md:89
 msgid ""
 "Edit the details on this page. Leave a {guilabel}`Summary` of your "
 "changes for reference."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_content.md:72
-#: ../../moderator_documentation/reports/handle_content.md:89
-msgid "Select {guilabel}`Submit and apply edit`."
-msgstr ""
-
 #: ../../moderator_documentation/reports/handle_content.md:73
 #: ../../moderator_documentation/reports/handle_content.md:90
-msgid "Return to the {guilabel}`Reports` page."
+msgid "Select {guilabel}`Submit and apply edit`."
 msgstr ""
 
 #: ../../moderator_documentation/reports/handle_content.md:74
 #: ../../moderator_documentation/reports/handle_content.md:91
-msgid "Search for the report."
+msgid "Return to the {guilabel}`Reports` page."
 msgstr ""
 
 #: ../../moderator_documentation/reports/handle_content.md:75
 #: ../../moderator_documentation/reports/handle_content.md:92
+msgid "Search for the report."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_content.md:76
+#: ../../moderator_documentation/reports/handle_content.md:93
 msgid "Select {guilabel}`Resolve` in the {guilabel}`Actions` section."
 msgstr ""
 

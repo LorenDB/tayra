@@ -1,36 +1,33 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.3\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-03 22:11+0000\n"
-"Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
-"Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
-"projects/documentation/administrator_documentation-index/en_GB/>\n"
-"Language: en_GB\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../administrator_documentation/index.md:1
 msgid "Get started"
-msgstr "Get started"
+msgstr ""
 
 #: ../../administrator_documentation/index.md:3
 msgid "Follow the guides in this section to set up and administrate your pod."
-msgstr "Follow the guides in this section to set up and administrate your pod."
+msgstr ""
 
 #: ../../administrator_documentation/index.md:9
 msgid "Install Funkwhale on your server"
-msgstr "Install Funkwhale on your server"
+msgstr ""
 
 #: ../../administrator_documentation/index.md:11
 msgid ""
@@ -39,14 +36,10 @@ msgid ""
 "guides](installation_docs/index.md). Choose the installation method that "
 "works for you!"
 msgstr ""
-"Funkwhale is self-hosted, meaning you run it on your own server. To set "
-"up your own Funkwhale pod, check out [our installation "
-"guides](installation_docs/index.md). Choose the installation method that "
-"works for you!"
 
 #: ../../administrator_documentation/index.md:13
 msgid "Configure your Funkwhale pod"
-msgstr "Configure your Funkwhale pod"
+msgstr ""
 
 #: ../../administrator_documentation/index.md:15
 msgid ""
@@ -79,3 +72,4 @@ msgid ""
 " Django dashboard](django/index.md) and our [management "
 "script](manage_script/index.md) to get started."
 msgstr ""
+

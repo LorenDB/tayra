@@ -1,24 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-18 07:48+0000\n"
-"Last-Translator: Thomas <thovi98@gmail.com>\n"
-"Language-Team: French <https://translate.funkwhale.audio/projects/"
-"documentation/administrator_documentation-upgrade_docs-backup/fr/>\n"
-"Language: fr\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../administrator_documentation/upgrade_docs/backup.md:1
 msgid "Back up your Funkwhale instance"
@@ -37,25 +34,67 @@ msgstr ""
 
 #: ../../administrator_documentation/upgrade_docs/backup.md
 msgid "Debian"
-msgstr "Debian"
+msgstr ""
 
 #: ../../administrator_documentation/upgrade_docs/backup.md
 msgid "Docker"
-msgstr "Docker"
+msgstr ""
 
-#: ../../administrator_documentation/upgrade_docs/backup.md:23
+#: ../../administrator_documentation/upgrade_docs/backup.md:28
 msgid ""
 "Back up your media files. In this example we use "
 "[rsync](https://rsync.samba.org) to back up the files."
 msgstr ""
 
-#: ../../administrator_documentation/upgrade_docs/backup.md:44
+#: ../../administrator_documentation/upgrade_docs/backup.md:54
 msgid "Back up your configuration files."
 msgstr ""
 
-#: ../../administrator_documentation/upgrade_docs/backup.md:62
+#: ../../administrator_documentation/upgrade_docs/backup.md:77
 msgid ""
 "If you are performing regular backups, you may need deduplication and "
 "compression to keep the size down. In this case, a tool like "
 "[`borg`](https://www.borgbackup.org/) is more appropriate."
 msgstr ""
+
+#: ../../administrator_documentation/upgrade_docs/backup.md:79
+msgid "Restore a backup"
+msgstr ""
+
+#: ../../administrator_documentation/upgrade_docs/backup.md:81
+msgid "Restore your files"
+msgstr ""
+
+#: ../../administrator_documentation/upgrade_docs/backup.md:83
+msgid "To restart your files, do the following:"
+msgstr ""
+
+#: ../../administrator_documentation/upgrade_docs/backup.md:85
+msgid "Rename your current file directories."
+msgstr ""
+
+#: ../../administrator_documentation/upgrade_docs/backup.md:92
+msgid "Restore your backed-up files to the original directories."
+msgstr ""
+
+#: ../../administrator_documentation/upgrade_docs/backup.md:99
+msgid "Restore the database"
+msgstr ""
+
+#: ../../administrator_documentation/upgrade_docs/backup.md:101
+msgid "To restore your database, do the following:"
+msgstr ""
+
+#: ../../administrator_documentation/upgrade_docs/backup.md:109
+msgid "Restore your database backup:"
+msgstr ""
+
+#: ../../administrator_documentation/upgrade_docs/backup.md:115
+#: ../../administrator_documentation/upgrade_docs/backup.md:133
+msgid "Run the `funkwhale-manage migrate` command to set up the database."
+msgstr ""
+
+#: ../../administrator_documentation/upgrade_docs/backup.md:127
+msgid "Restore your database backup."
+msgstr ""
+

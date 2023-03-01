@@ -1,25 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
-"PO-Revision-Date: 2022-07-02 21:07+0000\n"
-"Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
-"Language-Team: English (United Kingdom) <https://translate.funkwhale.audio/"
-"projects/documentation/administrator_documentation-manage_script-fix_uploads/"
-"en_GB/>\n"
-"Language: en_GB\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../administrator_documentation/manage_script/fix_uploads.md:1
 msgid "Fix uploads"
@@ -47,44 +43,45 @@ msgstr ""
 
 #: ../../administrator_documentation/manage_script/fix_uploads.md
 msgid "Debian"
-msgstr "Debian"
+msgstr ""
 
 #: ../../administrator_documentation/manage_script/fix_uploads.md
 msgid "Docker"
-msgstr "Docker"
+msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:27
+#: ../../administrator_documentation/manage_script/fix_uploads.md:32
 msgid "Fix bitrate and duration"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:29
+#: ../../administrator_documentation/manage_script/fix_uploads.md:34
 msgid ""
 "Check and fix bitrate and duration with the `--audio-data` flag. This "
 "process can take a long time as it needs to access all files."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:47
+#: ../../administrator_documentation/manage_script/fix_uploads.md:57
 msgid "Fix file size"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:49
+#: ../../administrator_documentation/manage_script/fix_uploads.md:59
 msgid "Check and fix the file size with the `--size` flag."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:67
+#: ../../administrator_documentation/manage_script/fix_uploads.md:82
 msgid "Fix file checksums"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:69
+#: ../../administrator_documentation/manage_script/fix_uploads.md:84
 msgid "Check and fix file checksums with the `--checksum` flag."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:87
+#: ../../administrator_documentation/manage_script/fix_uploads.md:107
 msgid "Change command batch size"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:89
+#: ../../administrator_documentation/manage_script/fix_uploads.md:109
 msgid ""
 "Choose the batch size you want to process with the `--batch-size` or -`s`"
 " flag. Smaller batches process faster. Defaults to `1000`."
 msgstr ""
+

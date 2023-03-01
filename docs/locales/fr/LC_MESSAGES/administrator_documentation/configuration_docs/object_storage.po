@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:1
 msgid "Store media in an object store"
@@ -23,9 +23,9 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:3
 msgid ""
-"By default, Funkwhale stores all media data in the `/srv/funkwhale/data/"
-"media` directory. If you prefer to use an S3-compatible object store, follow "
-"the instructions in this guide."
+"By default, Funkwhale stores all media data in the "
+"`/srv/funkwhale/data/media` directory. If you prefer to use an "
+"S3-compatible object store, follow the instructions in this guide."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:10
@@ -34,21 +34,22 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:12
 msgid ""
-"Before you begin, you need to secure your object store. Many S3-compatible "
-"stores list contents in the root by default. This exposes the URLs of your "
-"audio files and means that users can bypass authentication."
+"Before you begin, you need to secure your object store. Many "
+"S3-compatible stores list contents in the root by default. This exposes "
+"the URLs of your audio files and means that users can bypass "
+"authentication."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:14
 msgid ""
-"To prevent listing content, add the following policy to your S3-compatible "
-"object store."
+"To prevent listing content, add the following policy to your "
+"S3-compatible object store."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:39
 msgid ""
-"If you're using `awscli`, you can store this policy in a `/tmp/policy` file "
-"and apply it using the following command:"
+"If you're using `awscli`, you can store this policy in a `/tmp/policy` "
+"file and apply it using the following command:"
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:45
@@ -57,9 +58,9 @@ msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:47
 msgid ""
-"To set up S3-compatible storage, fill out the relevant details in the `.env` "
-"file. If you want to serve audio files from the bucket, set `PROXY_MEDIA` to "
-"`false`."
+"To set up S3-compatible storage, fill out the relevant details in the "
+"`.env` file. If you want to serve audio files from the bucket, set "
+"`PROXY_MEDIA` to `false`."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md
@@ -100,8 +101,8 @@ msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:1 of
 msgid ""
-"If you use a S3-compatible storage such as minio, set the following variable "
-"to the full URL to the storage server."
+"If you use a S3-compatible storage such as minio, set the following "
+"variable to the full URL to the storage server."
 msgstr ""
 
 #: ../../docstring config.settings.common.AWS_S3_ENDPOINT_URL:4 of
@@ -132,90 +133,79 @@ msgstr ""
 
 #: ../../docstring config.settings.common.AWS_LOCATION:1 of
 msgid ""
-"A directory in your S3 bucket where you store files. Use this if you plan to "
-"share the bucket between services."
+"A directory in your S3 bucket where you store files. Use this if you plan"
+" to share the bucket between services."
 msgstr ""
 
 #: ../../docstring config.settings.common.PROXY_MEDIA:1 of
 msgid ""
-"Whether to proxy audio files through your reverse proxy. We recommend you "
-"leave this enabled to enforce access control."
+"Whether to proxy audio files through your reverse proxy. We recommend you"
+" leave this enabled to enforce access control."
 msgstr ""
 
 #: ../../docstring config.settings.common.PROXY_MEDIA:4 of
 msgid ""
-"If you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH` enabled, it's "
-"safe to disable this setting."
+"If you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH` enabled, "
+"it's safe to disable this setting."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:81
-#: ../../administrator_documentation/configuration_docs/object_storage.md:71
 msgid "Set up your reverse proxy"
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:84
-#: ../../administrator_documentation/configuration_docs/object_storage.md:74
 msgid ""
 "Serving files from object storage is not currently supported on Apache "
 "deployments."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:87
-#: ../../administrator_documentation/configuration_docs/object_storage.md:77
 msgid ""
 "Serving files from an object store requires some changes to the reverse "
 "proxy."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:89
-#: ../../administrator_documentation/configuration_docs/object_storage.md:79
 msgid "Open your Nginx configuration file in an editor."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md
 msgid "Debian"
-msgstr "Debian"
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md
 msgid "Docker"
-msgstr "Docker"
+msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:112
-#: ../../administrator_documentation/configuration_docs/object_storage.md:97
 msgid ""
-"Comment out the `location /_protected/media/` block by adding a `#` to the "
-"start of each line."
+"Comment out the `location /_protected/media/` block by adding a `#` to "
+"the start of each line."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:121
-#: ../../administrator_documentation/configuration_docs/object_storage.md:106
 msgid ""
-"Uncomment the `location ~ /_protected/media/(.+)` block by removing the `#` "
-"from the start of each line."
+"Uncomment the `location ~ /_protected/media/(.+)` block by removing the "
+"`#` from the start of each line."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:131
-#: ../../administrator_documentation/configuration_docs/object_storage.md:116
 msgid "Add your S3 store URL to the `img-src` and `media-src` headers."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:137
-#: ../../administrator_documentation/configuration_docs/object_storage.md:122
 msgid "Test your Nginx configuration."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:143
-#: ../../administrator_documentation/configuration_docs/object_storage.md:128
 msgid "Restart Funkwhale and Nginx to pick up the changes."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:168
-#: ../../administrator_documentation/configuration_docs/object_storage.md:148
 msgid "That's it! Files are now uploaded to and stored from your S3 bucket."
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:170
-#: ../../administrator_documentation/configuration_docs/object_storage.md:150
 msgid "Troubleshooting"
 msgstr ""
 
@@ -224,16 +214,15 @@ msgid "No Resolver Found"
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:174
-#: ../../administrator_documentation/configuration_docs/object_storage.md:154
 msgid ""
-"You may see the following error when streaming music from your S3-compatible "
-"store:"
+"You may see the following error when streaming music from your "
+"S3-compatible store:"
 msgstr ""
 
 #: ../../administrator_documentation/configuration_docs/object_storage.md:180
-#: ../../administrator_documentation/configuration_docs/object_storage.md:160
 msgid ""
 "This happens when the Nginx config is unable to use your server’s DNS "
-"resolver. We're still looking into this issue. You can work around this by "
-"adding a resolver to the `location ~/_protected/media/(.+)` block."
+"resolver. We're still looking into this issue. You can work around this "
+"by adding a resolver to the `location ~/_protected/media/(.+)` block."
 msgstr ""
+

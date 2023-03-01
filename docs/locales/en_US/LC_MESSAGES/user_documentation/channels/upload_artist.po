@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 10:35+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../user_documentation/channels/upload_artist.md:1
 msgid "Upload content to an Artist channel"
@@ -46,53 +46,53 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:17
-#: ../../user_documentation/channels/upload_artist.md:29
-#: ../../user_documentation/channels/upload_artist.md:61
-#: ../../user_documentation/channels/upload_artist.md:78
-#: ../../user_documentation/channels/upload_artist.md:115
-#: ../../user_documentation/channels/upload_artist.md:132
+#: ../../user_documentation/channels/upload_artist.md:21
+#: ../../user_documentation/channels/upload_artist.md:34
+#: ../../user_documentation/channels/upload_artist.md:70
+#: ../../user_documentation/channels/upload_artist.md:88
+#: ../../user_documentation/channels/upload_artist.md:129
+#: ../../user_documentation/channels/upload_artist.md:147
 msgid "Log in to your pod."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:18
-#: ../../user_documentation/channels/upload_artist.md:62
-#: ../../user_documentation/channels/upload_artist.md:116
+#: ../../user_documentation/channels/upload_artist.md:22
+#: ../../user_documentation/channels/upload_artist.md:71
+#: ../../user_documentation/channels/upload_artist.md:130
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:19
-#: ../../user_documentation/channels/upload_artist.md:31
-#: ../../user_documentation/channels/upload_artist.md:63
-#: ../../user_documentation/channels/upload_artist.md:80
-#: ../../user_documentation/channels/upload_artist.md:117
-#: ../../user_documentation/channels/upload_artist.md:134
+#: ../../user_documentation/channels/upload_artist.md:23
+#: ../../user_documentation/channels/upload_artist.md:36
+#: ../../user_documentation/channels/upload_artist.md:72
+#: ../../user_documentation/channels/upload_artist.md:90
+#: ../../user_documentation/channels/upload_artist.md:131
+#: ../../user_documentation/channels/upload_artist.md:149
 msgid ""
 "Select {guilabel}`Get started` under {guilabel}`Publish your work in a "
 "channel`. Your user profile opens."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:20
-#: ../../user_documentation/channels/upload_artist.md:32
+#: ../../user_documentation/channels/upload_artist.md:24
+#: ../../user_documentation/channels/upload_artist.md:37
 msgid ""
 "Select the channel you want to add an album to under the "
 "{guilabel}`Channels` header. The channel's page opens."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:21
-#: ../../user_documentation/channels/upload_artist.md:33
+#: ../../user_documentation/channels/upload_artist.md:25
+#: ../../user_documentation/channels/upload_artist.md:38
 msgid ""
 "Select {guilabel}`+ Add new` next to the {guilabel}`Albums` section. A "
 "{guilabel}`New album` screen appears."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:22
-#: ../../user_documentation/channels/upload_artist.md:34
+#: ../../user_documentation/channels/upload_artist.md:26
+#: ../../user_documentation/channels/upload_artist.md:39
 msgid "Enter the {guilabel}`Title` of your album."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:23
-#: ../../user_documentation/channels/upload_artist.md:35
+#: ../../user_documentation/channels/upload_artist.md:27
+#: ../../user_documentation/channels/upload_artist.md:40
 msgid ""
 "Select {guilabel}`Create` to create your new album. The album appears on "
 "the screen."
@@ -102,241 +102,241 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:30
-#: ../../user_documentation/channels/upload_artist.md:79
-#: ../../user_documentation/channels/upload_artist.md:133
+#: ../../user_documentation/channels/upload_artist.md:35
+#: ../../user_documentation/channels/upload_artist.md:89
+#: ../../user_documentation/channels/upload_artist.md:148
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:39
+#: ../../user_documentation/channels/upload_artist.md:44
 msgid ""
 "Once you've created your album, you can add some details to it. To do "
 "this:"
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:41
+#: ../../user_documentation/channels/upload_artist.md:46
 msgid "Select the album. The album details screen opens."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:42
+#: ../../user_documentation/channels/upload_artist.md:47
 msgid "Select the kebab menu ({fa}`ellipsis-v`) to show the album options."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:43
+#: ../../user_documentation/channels/upload_artist.md:48
 msgid "Select {guilabel}`Edit`. The {guilabel}`Edit this album` screen opens."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:44
-#: ../../user_documentation/channels/upload_artist.md:97
+#: ../../user_documentation/channels/upload_artist.md:49
+#: ../../user_documentation/channels/upload_artist.md:107
 msgid "Change the details in any of these fields:"
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:45
+#: ../../user_documentation/channels/upload_artist.md:50
 msgid "{guilabel}`Title` – the title of the album."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:46
+#: ../../user_documentation/channels/upload_artist.md:51
 msgid "{guilabel}`Description` – a description of the album."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:47
+#: ../../user_documentation/channels/upload_artist.md:52
 msgid "{guilabel}`Release date` – the release date of the album."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:48
+#: ../../user_documentation/channels/upload_artist.md:53
 msgid "{guilabel}`Cover` – the cover art of the album."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:49
+#: ../../user_documentation/channels/upload_artist.md:54
 msgid "{guilabel}`Tags` – the genre of the album."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:50
-msgid "__Optional__ – enter a {guilabel}`Summary` of your changes."
+#: ../../user_documentation/channels/upload_artist.md:55
+msgid "**Optional** – enter a {guilabel}`Summary` of your changes."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:51
+#: ../../user_documentation/channels/upload_artist.md:56
 msgid "Select {guilabel}`Submit and apply edit` to save your changes."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:53
+#: ../../user_documentation/channels/upload_artist.md:58
 msgid "That's it! You can now add content to your album."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:55
+#: ../../user_documentation/channels/upload_artist.md:60
 msgid "Add your content"
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:57
+#: ../../user_documentation/channels/upload_artist.md:62
 msgid "To add content to your channel:"
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:64
-#: ../../user_documentation/channels/upload_artist.md:81
-#: ../../user_documentation/channels/upload_artist.md:118
-#: ../../user_documentation/channels/upload_artist.md:135
+#: ../../user_documentation/channels/upload_artist.md:73
+#: ../../user_documentation/channels/upload_artist.md:91
+#: ../../user_documentation/channels/upload_artist.md:132
+#: ../../user_documentation/channels/upload_artist.md:150
 msgid ""
 "Select the channel you want to add content to under the "
 "{guilabel}`Channels` header. The channel's page opens."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:65
-#: ../../user_documentation/channels/upload_artist.md:82
-#: ../../user_documentation/channels/upload_artist.md:119
-#: ../../user_documentation/channels/upload_artist.md:136
+#: ../../user_documentation/channels/upload_artist.md:74
+#: ../../user_documentation/channels/upload_artist.md:92
+#: ../../user_documentation/channels/upload_artist.md:133
+#: ../../user_documentation/channels/upload_artist.md:151
 msgid "Select {guilabel}`⇧ Upload`. The {guilabel}`Publish audio` screen appears."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:66
-#: ../../user_documentation/channels/upload_artist.md:83
-#: ../../user_documentation/channels/upload_artist.md:120
-#: ../../user_documentation/channels/upload_artist.md:137
+#: ../../user_documentation/channels/upload_artist.md:75
+#: ../../user_documentation/channels/upload_artist.md:93
+#: ../../user_documentation/channels/upload_artist.md:134
+#: ../../user_documentation/channels/upload_artist.md:152
 msgid ""
 "Select the {guilabel}`Channel` you want to publish your audio in. This "
 "populates with the channel you selected by default."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:67
-#: ../../user_documentation/channels/upload_artist.md:84
-#: ../../user_documentation/channels/upload_artist.md:121
-#: ../../user_documentation/channels/upload_artist.md:138
+#: ../../user_documentation/channels/upload_artist.md:76
+#: ../../user_documentation/channels/upload_artist.md:94
+#: ../../user_documentation/channels/upload_artist.md:135
+#: ../../user_documentation/channels/upload_artist.md:153
 msgid ""
-"__Optional__ – choose which [{guilabel}`Album`](#create-an-album-"
+"**Optional** – choose which [{guilabel}`Album`](#create-an-album-"
 "optional) you want to publish the music in."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:68
-#: ../../user_documentation/channels/upload_artist.md:85
-#: ../../user_documentation/channels/upload_artist.md:122
-#: ../../user_documentation/channels/upload_artist.md:139
+#: ../../user_documentation/channels/upload_artist.md:77
+#: ../../user_documentation/channels/upload_artist.md:95
+#: ../../user_documentation/channels/upload_artist.md:136
+#: ../../user_documentation/channels/upload_artist.md:154
 msgid ""
-"__Optional__ – choose a {guilabel}`License` to apply to your music. "
+"**Optional** – choose a {guilabel}`License` to apply to your music. "
 "Funkwhale supports [Creative Commons](https://creativecommons.org/) "
 "licenses."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:69
-#: ../../user_documentation/channels/upload_artist.md:86
-#: ../../user_documentation/channels/upload_artist.md:123
-#: ../../user_documentation/channels/upload_artist.md:140
+#: ../../user_documentation/channels/upload_artist.md:78
+#: ../../user_documentation/channels/upload_artist.md:96
+#: ../../user_documentation/channels/upload_artist.md:137
+#: ../../user_documentation/channels/upload_artist.md:155
 msgid ""
 "Select {guilabel}`Next step`. The {guilabel}`Files to upload` screen "
 "appears."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:70
+#: ../../user_documentation/channels/upload_artist.md:79
 msgid ""
 "Click on the section marked {guilabel}`Browse…` to open a file picker, or"
 " drag and drop your files on to it."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:71
+#: ../../user_documentation/channels/upload_artist.md:80
 msgid ""
 "If you opened the file picker, select the files you want to upload and "
 "confirm."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:72
-#: ../../user_documentation/channels/upload_artist.md:88
+#: ../../user_documentation/channels/upload_artist.md:81
+#: ../../user_documentation/channels/upload_artist.md:98
 msgid ""
 "The files appear at the top when you upload them. Select "
 "{guilabel}`Remove` to remove them."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:87
+#: ../../user_documentation/channels/upload_artist.md:97
 msgid ""
 "Click on the section marked {guilabel}`Browse…` to open a file picker. "
 "Select the files you want to upload and confirm."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:92
+#: ../../user_documentation/channels/upload_artist.md:102
 msgid "Edit your uploads"
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:94
+#: ../../user_documentation/channels/upload_artist.md:104
 msgid ""
 "Once you have uploaded your files, you can change their details. To do "
 "this:"
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:96
+#: ../../user_documentation/channels/upload_artist.md:106
 msgid ""
 "Select the edit icon ({fa}`edit`) to edit the track details. The "
 "{guilabel}`Upload details` screen appears."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:98
+#: ../../user_documentation/channels/upload_artist.md:108
 msgid "{guilabel}`Title` – the title of the track"
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:99
+#: ../../user_documentation/channels/upload_artist.md:109
 msgid "{guilabel}`Track Picture` – the picture that shows up next to the track."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:100
+#: ../../user_documentation/channels/upload_artist.md:110
 msgid "{guilabel}`Tags` – the genre of the track."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:101
+#: ../../user_documentation/channels/upload_artist.md:111
 msgid "{guilabel}`Position` – the position of the track in the album."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:102
+#: ../../user_documentation/channels/upload_artist.md:112
 msgid "{guilabel}`Description` – a description of the track."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:103
+#: ../../user_documentation/channels/upload_artist.md:113
 msgid "Select {guilabel}`Update` to save the track details."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:104
+#: ../../user_documentation/channels/upload_artist.md:114
 msgid "Do this for all tracks you want to publish."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:105
+#: ../../user_documentation/channels/upload_artist.md:115
 msgid ""
 "Select {guilabel}`Publish` to publish the content. To save the content to"
 " [upload later](#continue-your-upload-later), select {menuselection}`Down"
 " arrow --> Finish later`."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:107
+#: ../../user_documentation/channels/upload_artist.md:117
 msgid ""
 "That's it! You've added content to your channel. Your followers can now "
 "listen to your content from their pods."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:109
+#: ../../user_documentation/channels/upload_artist.md:119
 msgid "Continue your upload later"
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:111
+#: ../../user_documentation/channels/upload_artist.md:121
 msgid ""
 "If you selected {guilabel}`Finish later`, Funkwhale saves your files and "
 "edits. You can continue your upload later by doing the following:"
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:124
-#: ../../user_documentation/channels/upload_artist.md:141
+#: ../../user_documentation/channels/upload_artist.md:138
+#: ../../user_documentation/channels/upload_artist.md:156
 msgid ""
 "If there are pending uploads, a {guilabel}`You have some draft uploads "
 "pending publication` note shows. Select {guilabel}`Resume` to resume your"
 " upload."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:125
-#: ../../user_documentation/channels/upload_artist.md:142
+#: ../../user_documentation/channels/upload_artist.md:139
+#: ../../user_documentation/channels/upload_artist.md:157
 msgid ""
 "[Add new files](#add-your-content) or [edit the pending files](#edit-"
 "your-uploads)."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:126
-#: ../../user_documentation/channels/upload_artist.md:143
+#: ../../user_documentation/channels/upload_artist.md:140
+#: ../../user_documentation/channels/upload_artist.md:158
 msgid "Once you're finished, select {guilabel}`Publish` to publish your music."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:147
+#: ../../user_documentation/channels/upload_artist.md:162
 msgid ""
 "Congratulations! You've finished uploading the saved content. Your "
 "followers can now listen to your content from their pods."

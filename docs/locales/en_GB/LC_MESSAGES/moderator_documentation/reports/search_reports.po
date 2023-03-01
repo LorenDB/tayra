@@ -1,24 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.5\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
-"PO-Revision-Date: 2022-07-03 23:09+0000\n"
-"Last-Translator: Ciarán Ainsworth <sporiff@funkwhale.audio>\n"
-"Language: en_GB\n"
-"Language-Team: English (United Kingdom) "
-"<https://translate.funkwhale.audio/projects/documentation"
-"/moderator_documentation-reports-search_reports/en_GB/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: ../../moderator_documentation/reports/search_reports.md:1
 msgid "Search for reports"
@@ -35,80 +32,76 @@ msgstr ""
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/reports/search_reports.md:8
+#: ../../moderator_documentation/reports/search_reports.md:9
 msgid ""
 "{guilabel}`Moderation` – provides access to the administration and "
 "moderation menus."
 msgstr ""
-"{guilabel}`Moderation` – provides access to the administration and "
-"moderation menus."
 
 #: ../../moderator_documentation/reports/search_reports.md
 msgid "Desktop"
-msgstr "Desktop"
-
-#: ../../moderator_documentation/reports/search_reports.md:17
-#: ../../moderator_documentation/reports/search_reports.md:32
-msgid "Log in to your {term}`pod`."
-msgstr "Log in to your {term}`pod`."
+msgstr ""
 
 #: ../../moderator_documentation/reports/search_reports.md:18
+#: ../../moderator_documentation/reports/search_reports.md:33
+msgid "Log in to your {term}`pod`."
+msgstr ""
+
+#: ../../moderator_documentation/reports/search_reports.md:19
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
 "the {guilabel}`Administration` menu."
 msgstr ""
-"Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open "
-"the {guilabel}`Administration` menu."
-
-#: ../../moderator_documentation/reports/search_reports.md:19
-#: ../../moderator_documentation/reports/search_reports.md:34
-msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
-msgstr "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 
 #: ../../moderator_documentation/reports/search_reports.md:20
 #: ../../moderator_documentation/reports/search_reports.md:35
-msgid "Use the filters to find the report you want:"
+msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
 #: ../../moderator_documentation/reports/search_reports.md:21
 #: ../../moderator_documentation/reports/search_reports.md:36
+msgid "Use the filters to find the report you want:"
+msgstr ""
+
+#: ../../moderator_documentation/reports/search_reports.md:22
+#: ../../moderator_documentation/reports/search_reports.md:37
 msgid ""
 "Enter key words in the {guilabel}`Search` field. This enables you to "
 "search for content in the report's {guilabel}`Message` section. Hit "
 "{kbd}`⏎ Return` to update your search."
 msgstr ""
 
-#: ../../moderator_documentation/reports/search_reports.md:22
-#: ../../moderator_documentation/reports/search_reports.md:37
-msgid "Filter reports by {guilabel}`Status`."
-msgstr ""
-
 #: ../../moderator_documentation/reports/search_reports.md:23
 #: ../../moderator_documentation/reports/search_reports.md:38
-msgid "Filter reports by {guilabel}`Category`."
+msgid "Filter reports by {guilabel}`Status`."
 msgstr ""
 
 #: ../../moderator_documentation/reports/search_reports.md:24
 #: ../../moderator_documentation/reports/search_reports.md:39
-msgid "Select the criteria for {guilabel}`Ordering` of your search results."
+msgid "Filter reports by {guilabel}`Category`."
 msgstr ""
 
 #: ../../moderator_documentation/reports/search_reports.md:25
 #: ../../moderator_documentation/reports/search_reports.md:40
+msgid "Select the criteria for {guilabel}`Ordering` of your search results."
+msgstr ""
+
+#: ../../moderator_documentation/reports/search_reports.md:26
+#: ../../moderator_documentation/reports/search_reports.md:41
 msgid "Select which {guilabel}`Order` you want to see your search results in."
 msgstr ""
 
 #: ../../moderator_documentation/reports/search_reports.md
 msgid "Mobile"
-msgstr "Mobile"
+msgstr ""
 
-#: ../../moderator_documentation/reports/search_reports.md:33
+#: ../../moderator_documentation/reports/search_reports.md:34
 msgid ""
 "Select the wrench icon ({fa}`wrench`) at the top of the screen to open "
 "the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/reports/search_reports.md:44
+#: ../../moderator_documentation/reports/search_reports.md:45
 msgid ""
 "Once you have found the required report, you can handle the reported "
 "[user](handle_users.md) or [content](handle_content.md). You can also "
