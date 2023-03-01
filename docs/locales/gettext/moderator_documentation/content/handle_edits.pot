@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.7\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,54 +25,54 @@ msgid "Users can edit content in their own libraries. Moderators don't need to a
 msgstr ""
 
 #: ../../moderator_documentation/content/handle_edits.md:7
-msgid "Users can suggest metadata edits on objects they can access. When a user suggests an edit, it's sent to the __Edits__ queue for review. Moderators and pod admins can accept or reject these edits."
+msgid "Users can suggest metadata edits on objects they can access. When a user suggests an edit, it's sent to the **Edits** queue for review. Moderators and pod admins can accept or reject these edits."
 msgstr ""
 
 #: ../../moderator_documentation/content/handle_edits.md:0
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:12
+#: ../../moderator_documentation/content/handle_edits.md:13
 msgid "{guilabel}`Moderation` – provides access to the administration menu."
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:13
+#: ../../moderator_documentation/content/handle_edits.md:14
 msgid "{guilabel}`Library` – provides access to the library menu."
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:16
+#: ../../moderator_documentation/content/handle_edits.md:17
 msgid "Each edit object contains the following information:"
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:18
+#: ../../moderator_documentation/content/handle_edits.md:19
 msgid "A {guilabel}`Modification` ID – the unique ID of the modification. Select this to show the modification in context with the edited object."
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:19
+#: ../../moderator_documentation/content/handle_edits.md:20
 msgid "A timestamp of when the user suggested the edit."
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:20
+#: ../../moderator_documentation/content/handle_edits.md:21
 msgid "The status of the edit."
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:21
+#: ../../moderator_documentation/content/handle_edits.md:22
 msgid "The {guilabel}`Field` that the user edited."
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:22
+#: ../../moderator_documentation/content/handle_edits.md:23
 msgid "The {guilabel}`Old value` that the user edited."
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:23
+#: ../../moderator_documentation/content/handle_edits.md:24
 msgid "The {guilabel}`New value` that the user entered."
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:24
+#: ../../moderator_documentation/content/handle_edits.md:25
 msgid "The user who suggested the edit."
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:26
+#: ../../moderator_documentation/content/handle_edits.md:27
 msgid "To review suggested edits:"
 msgstr ""
 
@@ -80,37 +80,37 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:34
-#: ../../moderator_documentation/content/handle_edits.md:47
+#: ../../moderator_documentation/content/handle_edits.md:35
+#: ../../moderator_documentation/content/handle_edits.md:48
 msgid "Log in to your {term}`pod`."
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:35
-msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
-msgstr ""
-
 #: ../../moderator_documentation/content/handle_edits.md:36
-#: ../../moderator_documentation/content/handle_edits.md:49
-msgid "Select {guilabel}`Library`. The {guilabel}`Edits` page opens. The {guilabel}`Library edits` section displays a list of unresolved edits."
+msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
 msgstr ""
 
 #: ../../moderator_documentation/content/handle_edits.md:37
 #: ../../moderator_documentation/content/handle_edits.md:50
-msgid "Review the edit and select on of the following options:"
+msgid "Select {guilabel}`Library`. The {guilabel}`Edits` page opens. The {guilabel}`Library edits` section displays a list of unresolved edits."
 msgstr ""
 
 #: ../../moderator_documentation/content/handle_edits.md:38
 #: ../../moderator_documentation/content/handle_edits.md:51
-msgid "{guilabel}`Approve` – approve the edit and apply it to the object."
+msgid "Review the edit and select on of the following options:"
 msgstr ""
 
 #: ../../moderator_documentation/content/handle_edits.md:39
 #: ../../moderator_documentation/content/handle_edits.md:52
-msgid "{guilabel}`Reject` – reject the edit and leave the object in its current state."
+msgid "{guilabel}`Approve` – approve the edit and apply it to the object."
 msgstr ""
 
 #: ../../moderator_documentation/content/handle_edits.md:40
 #: ../../moderator_documentation/content/handle_edits.md:53
+msgid "{guilabel}`Reject` – reject the edit and leave the object in its current state."
+msgstr ""
+
+#: ../../moderator_documentation/content/handle_edits.md:41
+#: ../../moderator_documentation/content/handle_edits.md:54
 msgid "{guilabel}`Delete` – delete the edit suggestion without taking further action. The object remains in its current state."
 msgstr ""
 
@@ -118,10 +118,10 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:48
+#: ../../moderator_documentation/content/handle_edits.md:49
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/content/handle_edits.md:57
+#: ../../moderator_documentation/content/handle_edits.md:58
 msgid "That's it! You've handled the edit request. You can use the filters on this page to search for historical requests."
 msgstr ""

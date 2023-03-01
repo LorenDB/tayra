@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.7\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,11 +28,11 @@ msgstr ""
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:8
+#: ../../moderator_documentation/reports/handle_users.md:9
 msgid "{guilabel}`Moderation` – provides access to the administration and moderation menus."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:11
+#: ../../moderator_documentation/reports/handle_users.md:12
 msgid "To open a user's moderation page:"
 msgstr ""
 
@@ -40,22 +40,22 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:19
-#: ../../moderator_documentation/reports/handle_users.md:29
+#: ../../moderator_documentation/reports/handle_users.md:20
+#: ../../moderator_documentation/reports/handle_users.md:30
 msgid "Log in to your {term}`pod`."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:20
-msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
-msgstr ""
-
 #: ../../moderator_documentation/reports/handle_users.md:21
-#: ../../moderator_documentation/reports/handle_users.md:31
-msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
+msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
 msgstr ""
 
 #: ../../moderator_documentation/reports/handle_users.md:22
 #: ../../moderator_documentation/reports/handle_users.md:32
+msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
+msgstr ""
+
+#: ../../moderator_documentation/reports/handle_users.md:23
+#: ../../moderator_documentation/reports/handle_users.md:33
 msgid "[Search for the report](search_reports.md) and select {guilabel}`Open in moderation interface` under {guilabel}`Reported object`. The user's moderation page opens."
 msgstr ""
 
@@ -63,26 +63,26 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:30
+#: ../../moderator_documentation/reports/handle_users.md:31
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the page to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:36
+#: ../../moderator_documentation/reports/handle_users.md:37
 msgid "You can change the following settings in the moderation interface:"
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:38
+#: ../../moderator_documentation/reports/handle_users.md:39
 msgid "{guilabel}`Login status` – disable this switch to prevent the user being able to log in."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:39
+#: ../../moderator_documentation/reports/handle_users.md:40
 msgid "{guilabel}`Permissions` – add or remove permissions associated with the user."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:40
+#: ../../moderator_documentation/reports/handle_users.md:41
 msgid "{guilabel}`Upload quota` – change the amount of data (in megabytes) that the user can upload."
 msgstr ""
 
-#: ../../moderator_documentation/reports/handle_users.md:42
+#: ../../moderator_documentation/reports/handle_users.md:43
 msgid "Once you have made your changes, return to the {guilabel}`Reports` page and {guilabel}`Resolve` the report. Resolving the report assigns it to you so other moderators know who handled the report. Add [internal notes](internal_notes.md) to keep a record of your changes."
 msgstr ""

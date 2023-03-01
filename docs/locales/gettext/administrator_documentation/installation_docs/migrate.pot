@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.7\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,9 +73,6 @@ msgid "Before you move your data, you need to install Funkwhale on your {term}`d
 msgstr ""
 
 #: ../../administrator_documentation/installation_docs/migrate.md:0
-#: ../../administrator_documentation/installation_docs/migrate.md:0
-#: ../../administrator_documentation/installation_docs/migrate.md:0
-#: ../../administrator_documentation/installation_docs/migrate.md:0
 msgid "Debian"
 msgstr ""
 
@@ -89,7 +86,7 @@ msgstr ""
 
 #: ../../administrator_documentation/installation_docs/migrate.md:44
 #: ../../administrator_documentation/installation_docs/migrate.md:60
-msgid "Don't run the `manage.py migrate` command to migrate the database."
+msgid "Don't run the `funkwhale-manage migrate` command to migrate the database."
 msgstr ""
 
 #: ../../administrator_documentation/installation_docs/migrate.md:45
@@ -102,9 +99,6 @@ msgstr ""
 msgid "Once you have finished the installation, stop the Funkwhale services. These shouldn't be running when you copy your existing data over."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:0
-#: ../../administrator_documentation/installation_docs/migrate.md:0
-#: ../../administrator_documentation/installation_docs/migrate.md:0
 #: ../../administrator_documentation/installation_docs/migrate.md:0
 msgid "Docker"
 msgstr ""
@@ -175,7 +169,7 @@ msgstr ""
 
 #: ../../administrator_documentation/installation_docs/migrate.md:140
 #: ../../administrator_documentation/installation_docs/migrate.md:170
-msgid "When the import finishes, run the `manage.py migrate` command to set up the database."
+msgid "When the import finishes, run the `funkwhale-manage migrate` command to set up the database."
 msgstr ""
 
 #: ../../administrator_documentation/installation_docs/migrate.md:152
@@ -195,7 +189,7 @@ msgid "5. Check your DNS settings"
 msgstr ""
 
 #: ../../administrator_documentation/installation_docs/migrate.md:180
-msgid "Before you start Funkwhale on your {term}`destination server`, check your DNS changes have propogated. Once your hostname is pointing to your {term}`destination server's <destination server>` IP address, proceed to the next step."
+msgid "Before you start Funkwhale on your {term}`destination server`, check your DNS changes have propagated. Once your hostname is pointing to your {term}`destination server's <destination server>` IP address, proceed to the next step."
 msgstr ""
 
 #: ../../administrator_documentation/installation_docs/migrate.md:182

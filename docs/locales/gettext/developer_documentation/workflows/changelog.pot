@@ -1,0 +1,73 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, The Funkwhale Collective
+# This file is distributed under the same license as the funkwhale package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../developer_documentation/workflows/changelog.md:1
+msgid "Changelog fragments"
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:3
+msgid "We try to add changelog fragments when we make changes so that we can show users what we've done. These fragments are small text files that contain a summary of changes. When we make a release, we compile these into a full changelog using [towncrier](https://pypi.org/project/towncrier/)."
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:5
+msgid "Each changelog fragment should contain a short and meaningful summary of changes and include the issue number (where applicable). For example:"
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:11
+msgid "If there's no issue, insert the merge request identifier instead:"
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:17
+msgid "Naming"
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:19
+msgid "Changelog fragments use the following naming convention: `changes/changelog.d/<name>.category>`. The `<name>` can be anything that describes your work, or the issue ID. The category can be one of the following:"
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:21
+msgid "`feature` – a new feature"
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:22
+msgid "`enhancement` – an extension of an existing feature"
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:23
+msgid "`bugfix` – a bugfix or patch"
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:24
+msgid "`refactoring` – refactored code"
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:25
+msgid "`doc` – new documentation"
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:26
+msgid "`i18n` – internationalization-related work"
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:27
+msgid "`misc` – any work that doesn't fit into the above categories"
+msgstr ""
+
+#: ../../developer_documentation/workflows/changelog.md:29
+msgid "You can create these files manually or use the following command to create a fragment:"
+msgstr ""

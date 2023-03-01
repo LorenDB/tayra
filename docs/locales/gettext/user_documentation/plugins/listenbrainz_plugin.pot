@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.7\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,10 +21,9 @@ msgid "ListenBrainz plugin"
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:3
-msgid "The __ListenBrainz__ plugin enables you to submit ({term}`scrobble<Scrobbling>`) listens to your [ListenBrainz](https://listenbrainz.org) account. Scrobbling listens helps you build up a profile of your music tastes. It also enables you to keep a record of your listens. To set up the __ListenBrainz plugin__:"
+msgid "The **ListenBrainz** plugin enables you to submit ({term}`scrobble<Scrobbling>`) listens to your [ListenBrainz](https://listenbrainz.org) account. Scrobbling listens helps you build up a profile of your music tastes. It also enables you to keep a record of your listens. To set up the **ListenBrainz plugin**:"
 msgstr ""
 
-#: ../../user_documentation/plugins/listenbrainz_plugin.md:0
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:0
 msgid "Desktop"
 msgstr ""
@@ -78,5 +77,5 @@ msgid "Select the cog icon ({fa}`cog`) or your avatar to open the {guilabel}`Opt
 msgstr ""
 
 #: ../../user_documentation/plugins/listenbrainz_plugin.md:38
-msgid "That's it! You've set up the __ListenBrainz__ plugin. When you listen to tracks, the plugin sends the information to ListenBrainz."
+msgid "That's it! You've set up the **ListenBrainz** plugin. When you listen to tracks, the plugin sends the information to ListenBrainz."
 msgstr ""

@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.7\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,11 +29,9 @@ msgid "Remove tracks from your favorites page"
 msgstr ""
 
 #: ../../user_documentation/favorites/remove_favorites.md:11
-msgid "The easiest way to remove tracks from your favorites is using the __Favorites__ page. This page includes a list of all your favorites. To remove a track from this page:"
+msgid "The easiest way to remove tracks from your favorites is using the **Favorites** page. This page includes a list of all your favorites. To remove a track from this page:"
 msgstr ""
 
-#: ../../user_documentation/favorites/remove_favorites.md:0
-#: ../../user_documentation/favorites/remove_favorites.md:0
 #: ../../user_documentation/favorites/remove_favorites.md:0
 msgid "Desktop"
 msgstr ""
@@ -51,8 +49,6 @@ msgstr ""
 msgid "Select the pink heart icon ({fa}`heart`) next to the track you want to remove. The heart turns gray to show that the track isn't in your favorites."
 msgstr ""
 
-#: ../../user_documentation/favorites/remove_favorites.md:0
-#: ../../user_documentation/favorites/remove_favorites.md:0
 #: ../../user_documentation/favorites/remove_favorites.md:0
 msgid "Mobile"
 msgstr ""

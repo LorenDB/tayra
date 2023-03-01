@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.7\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,8 +36,6 @@ msgstr ""
 msgid "Albums are a good way of organizing your content. You can create as many albums as you want. To create a new album:"
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:0
-#: ../../user_documentation/channels/upload_artist.md:0
 #: ../../user_documentation/channels/upload_artist.md:0
 msgid "Desktop"
 msgstr ""
@@ -86,8 +84,6 @@ msgstr ""
 msgid "Select {guilabel}`Create` to create your new album. The album appears on the screen."
 msgstr ""
 
-#: ../../user_documentation/channels/upload_artist.md:0
-#: ../../user_documentation/channels/upload_artist.md:0
 #: ../../user_documentation/channels/upload_artist.md:0
 msgid "Mobile"
 msgstr ""
@@ -140,7 +136,7 @@ msgid "{guilabel}`Tags` – the genre of the album."
 msgstr ""
 
 #: ../../user_documentation/channels/upload_artist.md:55
-msgid "__Optional__ – enter a {guilabel}`Summary` of your changes."
+msgid "**Optional** – enter a {guilabel}`Summary` of your changes."
 msgstr ""
 
 #: ../../user_documentation/channels/upload_artist.md:56
@@ -184,14 +180,14 @@ msgstr ""
 #: ../../user_documentation/channels/upload_artist.md:94
 #: ../../user_documentation/channels/upload_artist.md:135
 #: ../../user_documentation/channels/upload_artist.md:153
-msgid "__Optional__ – choose which [{guilabel}`Album`](#create-an-album-optional) you want to publish the music in."
+msgid "**Optional** – choose which [{guilabel}`Album`](#create-an-album-optional) you want to publish the music in."
 msgstr ""
 
 #: ../../user_documentation/channels/upload_artist.md:77
 #: ../../user_documentation/channels/upload_artist.md:95
 #: ../../user_documentation/channels/upload_artist.md:136
 #: ../../user_documentation/channels/upload_artist.md:154
-msgid "__Optional__ – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses."
+msgid "**Optional** – choose a {guilabel}`License` to apply to your music. Funkwhale supports [Creative Commons](https://creativecommons.org/) licenses."
 msgstr ""
 
 #: ../../user_documentation/channels/upload_artist.md:78

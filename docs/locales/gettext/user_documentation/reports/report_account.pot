@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.7\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,23 +41,23 @@ msgid "Select a {guilabel}`Category`. Choose one of the following:"
 msgstr ""
 
 #: ../../user_documentation/reports/report_account.md:9
-msgid "__Takedown request__ – request removal of copyrighted material."
+msgid "**Takedown request** – request removal of copyrighted material."
 msgstr ""
 
 #: ../../user_documentation/reports/report_account.md:10
-msgid "__Illegal content__ – report an account that features illegal content."
+msgid "**Illegal content** – report an account that features illegal content."
 msgstr ""
 
 #: ../../user_documentation/reports/report_account.md:11
-msgid "__Offensive content__ – report an account that features offensive or abusive content."
+msgid "**Offensive content** – report an account that features offensive or abusive content."
 msgstr ""
 
 #: ../../user_documentation/reports/report_account.md:12
-msgid "__Other__ – submit details of your report in the {guilabel}`Message` field."
+msgid "**Other** – submit details of your report in the {guilabel}`Message` field."
 msgstr ""
 
 #: ../../user_documentation/reports/report_account.md:13
-msgid "__If you are not logged in__ – enter your {guilabel}`Email`. Pod moderators use this address to contact you."
+msgid "**If you are not logged in** – enter your {guilabel}`Email`. Pod moderators use this address to contact you."
 msgstr ""
 
 #: ../../user_documentation/reports/report_account.md:14

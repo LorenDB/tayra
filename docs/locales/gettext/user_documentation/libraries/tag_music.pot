@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, The Funkwhale Collective
+# Copyright (C) 2023, The Funkwhale Collective
 # This file is distributed under the same license as the funkwhale package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: funkwhale 1.2.7\n"
+"Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 12:18+0200\n"
+"POT-Creation-Date: 2023-03-01 14:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,7 +101,7 @@ msgid "`Genre`"
 msgstr ""
 
 #: ../../user_documentation/libraries/tag_music.md:37
-msgid "A comma separated list of tags to associate with the track.   Other supported separators: `;` and `/`."
+msgid "A comma separated list of tags to associate with the track. Other supported separators: `;` and `/`."
 msgstr ""
 
 #: ../../user_documentation/libraries/tag_music.md:39
@@ -149,7 +149,7 @@ msgid "`License`"
 msgstr ""
 
 #: ../../user_documentation/libraries/tag_music.md:50
-msgid "The license associated with this work.   The first URL found is checked against our list of supported licenses."
+msgid "The license associated with this work. The first URL found is checked against our list of supported licenses."
 msgstr ""
 
 #: ../../user_documentation/libraries/tag_music.md:52
@@ -162,7 +162,7 @@ msgid "`Copyright`"
 msgstr ""
 
 #: ../../user_documentation/libraries/tag_music.md:54
-msgid "The license associated with this work. The first URL found is checked against our list of supported licenses.   Used if no license found in the `License` tag."
+msgid "The license associated with this work. The first URL found is checked against our list of supported licenses. Used if no license found in the `License` tag."
 msgstr ""
 
 #: ../../user_documentation/libraries/tag_music.md:57
@@ -170,7 +170,7 @@ msgid "`Pictures`"
 msgstr ""
 
 #: ../../user_documentation/libraries/tag_music.md:58
-msgid "The first embeded picture found is used as the album cover."
+msgid "The first embedded picture found is used as the album cover."
 msgstr ""
 
 #: ../../user_documentation/libraries/tag_music.md:60
