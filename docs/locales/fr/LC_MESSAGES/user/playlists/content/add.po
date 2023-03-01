@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,167 +17,173 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
 
-#: ../../user_documentation/playlists/add_content.md:1
+#: ../../user/playlists/content/add.md:1
 msgid "Add content to a playlist"
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:3
+#: ../../user/playlists/content/add.md:3
 msgid ""
 "To build a playlist, you need to add content to it. You can add content "
 "in a few different ways:"
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:9
+#: ../../user/playlists/content/add.md:9
 msgid "Add the currently playing track"
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:11
+#: ../../user/playlists/content/add.md:11
 msgid "If you want to add the currently playing track to a playlist:"
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md
+#: ../../user/playlists/content/add.md
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:19
+#: ../../user/playlists/content/add.md:19
 msgid ""
 "Select the playlist icon ({fa}`list`) on the player. The "
 "{guilabel}`Manage playlists` screen appears."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:20
-#: ../../user_documentation/playlists/add_content.md:29
-#: ../../user_documentation/playlists/add_content.md:73
-#: ../../user_documentation/playlists/add_content.md:84
+#: ../../user/playlists/content/add.md:20
+#: ../../user/playlists/content/add.md:29
+#: ../../user/playlists/content/add.md:73
+#: ../../user/playlists/content/add.md:84
 msgid ""
 "Select {guilabel}`+ Add track` next to the playlist you want to add the "
 "track to."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md
+#: ../../user/playlists/content/add.md
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:27
+#: ../../user/playlists/content/add.md:27
 msgid "Select the player at the bottom of the screen to expand it."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:28
+#: ../../user/playlists/content/add.md:28
 msgid ""
 "Select the playlist icon ({fa}`list`) under the track art. The "
 "{guilabel}`Manage playlists` screen appears."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:33
+#: ../../user/playlists/content/add.md:33
 msgid "That's it! The currently playing track is now in your playlist."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:35
+#: ../../user/playlists/content/add.md:35
 msgid "Add content from queue"
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:37
+#: ../../user/playlists/content/add.md:37
 msgid ""
 "You can add all content that is currently in your [player "
-"queue](../queue/index.md). To do this:"
+"queue](../../queue/index.md). To do this:"
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:45
+#: ../../user/playlists/content/add.md:45
 msgid ""
 "Select {guilabel}`Playlists` under the {guilabel}`My Library` section of "
 "the sidebar. The {guilabel}`Browsing playlists` screen opens."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:46
-#: ../../user_documentation/playlists/add_content.md:58
+#: ../../user/playlists/content/add.md:46
+#: ../../user/playlists/content/add.md:58
 msgid ""
 "Select {guilabel}`Manage your playlists`. The {guilabel}`Manage "
 "playlists` screen appears."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:47
-#: ../../user_documentation/playlists/add_content.md:59
+#: ../../user/playlists/content/add.md:47
+#: ../../user/playlists/content/add.md:59
 msgid ""
 "Select the edit icon ({fa}`edit`) next to the playlist you want to edit. "
 "The playlist edit screen appears."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:48
-#: ../../user_documentation/playlists/add_content.md:60
+#: ../../user/playlists/content/add.md:48
+#: ../../user/playlists/content/add.md:60
 msgid ""
 "Select {guilabel}`+ Insert from queue`. Your tracks appear in the "
 "playlist. The changes save to the server."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:49
-#: ../../user_documentation/playlists/add_content.md:61
+#: ../../user/playlists/content/add.md:49
+#: ../../user/playlists/content/add.md:61
 msgid "Select {guilabel}`Stop editing` to stop editing."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:56
+#: ../../user/playlists/content/add.md:56
 msgid "Select the hamburger menu ({fa}`bars`) to open the menu bar."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:57
+#: ../../user/playlists/content/add.md:57
 msgid ""
 "Select {menuselection}`My Library --> Playlists`. The {guilabel}`Browsing"
 " playlists` screen opens."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:65
+#: ../../user/playlists/content/add.md:65
 msgid "That's it! You've added the contents from your queue to a playlist."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:67
+#: ../../user/playlists/content/add.md:67
 msgid "Add track from track details page"
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:69
+#: ../../user/playlists/content/add.md:69
 msgid "You can add a track to a playlist from the track details page. To do this:"
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:71
+#: ../../user/playlists/content/add.md:71
 msgid "Go to the track details page of the track you want to add."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:72
+#: ../../user/playlists/content/add.md:72
 msgid ""
 "Select the playlist icon ({fa}`list`) at the top of the screen. The "
 "{guilabel}`Manage playlists` screen appears."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:75
+#: ../../user/playlists/content/add.md:75
 msgid "That's it! The track is available in your playlist."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:77
+#: ../../user/playlists/content/add.md:77
 msgid "Add track from track table"
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:79
+#: ../../user/playlists/content/add.md:79
 msgid ""
 "You can add tracks from any page with a track table. This includes artist"
 " pages, album pages, and the search page. To add tracks from the track "
 "table:"
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:81
+#: ../../user/playlists/content/add.md:81
 msgid "Find your track in a track table."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:82
+#: ../../user/playlists/content/add.md:82
 msgid ""
 "Select the kebab menu ({fa}`ellipsis-v`) next to the track to open the "
 "track options menu."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:83
+#: ../../user/playlists/content/add.md:83
 msgid ""
 "Select {guilabel}`Add to playlist…`. The {guilabel}`Manage playlists` "
 "screen appears."
 msgstr ""
 
-#: ../../user_documentation/playlists/add_content.md:86
+#: ../../user/playlists/content/add.md:86
 msgid "Well done! You've added the track to your playlist."
 msgstr ""
+
+#~ msgid ""
+#~ "You can add all content that is"
+#~ " currently in your [player "
+#~ "queue](../queue/index.md). To do this:"
+#~ msgstr ""
 

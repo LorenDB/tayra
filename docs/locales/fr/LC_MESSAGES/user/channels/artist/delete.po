@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,150 +17,164 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
 
-#: ../../user_documentation/channels/delete_artist.md:1
+#: ../../user/channels/artist/delete.md:1
 msgid "Delete content from an Artist channel"
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:3
+#: ../../user/channels/artist/delete.md:3
 msgid ""
 "You can delete content from your artist channel. This means that your "
 "followers won't be able to listen to the deleted content any more."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:9
+#: ../../user/channels/artist/delete.md:9
 msgid "Delete a track"
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:12
+#: ../../user/channels/artist/delete.md:12
 msgid ""
 "Deleting a track also deletes the file from your {term}`Funkwhale pod "
 "<Pod>`. This action is irreversible."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:15
+#: ../../user/channels/artist/delete.md:15
 msgid "To delete a single track from a channel:"
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md
+#: ../../user/channels/artist/delete.md
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:23
-#: ../../user_documentation/channels/delete_artist.md:38
-#: ../../user_documentation/channels/delete_artist.md:66
-#: ../../user_documentation/channels/delete_artist.md:80
+#: ../../user/channels/artist/delete.md:23
+#: ../../user/channels/artist/delete.md:38
+#: ../../user/channels/artist/delete.md:66
+#: ../../user/channels/artist/delete.md:80
 msgid "Log in to your pod."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:24
-#: ../../user_documentation/channels/delete_artist.md:67
+#: ../../user/channels/artist/delete.md:24
+#: ../../user/channels/artist/delete.md:67
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:25
-#: ../../user_documentation/channels/delete_artist.md:40
-#: ../../user_documentation/channels/delete_artist.md:68
-#: ../../user_documentation/channels/delete_artist.md:82
+#: ../../user/channels/artist/delete.md:25
+#: ../../user/channels/artist/delete.md:40
+#: ../../user/channels/artist/delete.md:68
+#: ../../user/channels/artist/delete.md:82
 msgid ""
 "Select {guilabel}`Get started` under {guilabel}`Publish your work in a "
 "channel`. Your user profile opens."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:26
-#: ../../user_documentation/channels/delete_artist.md:41
-#: ../../user_documentation/channels/delete_artist.md:69
-#: ../../user_documentation/channels/delete_artist.md:83
+#: ../../user/channels/artist/delete.md:26
+#: ../../user/channels/artist/delete.md:41
+#: ../../user/channels/artist/delete.md:69
+#: ../../user/channels/artist/delete.md:83
 msgid ""
 "Select the channel containing the content under the {guilabel}`Channels` "
 "header. The channel's page opens."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:27
-#: ../../user_documentation/channels/delete_artist.md:42
+#: ../../user/channels/artist/delete.md:27
+#: ../../user/channels/artist/delete.md:42
 msgid ""
 "Select the kebab menu ({fa}`ellipsis-v`) next to the track in question. "
 "This opens the track options menu."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:28
-#: ../../user_documentation/channels/delete_artist.md:43
+#: ../../user/channels/artist/delete.md:28
+#: ../../user/channels/artist/delete.md:43
 msgid "Select {guilabel}`ℹ︎ Track details`. The track details page opens."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:29
-#: ../../user_documentation/channels/delete_artist.md:44
+#: ../../user/channels/artist/delete.md:29
+#: ../../user/channels/artist/delete.md:44
 msgid "Select the kebab menu ({fa}`ellipsis-v`) at the top of the page."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:30
-#: ../../user_documentation/channels/delete_artist.md:45
+#: ../../user/channels/artist/delete.md:30
+#: ../../user/channels/artist/delete.md:45
 msgid ""
 "Select {guilabel}`Delete…`. A {guilabel}`Delete this track?` warning "
 "appears."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:31
-#: ../../user_documentation/channels/delete_artist.md:46
+#: ../../user/channels/artist/delete.md:31
+#: ../../user/channels/artist/delete.md:46
 msgid "Select {guilabel}`Delete` to delete the track."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md
+#: ../../user/channels/artist/delete.md
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:39
-#: ../../user_documentation/channels/delete_artist.md:81
+#: ../../user/channels/artist/delete.md:39
+#: ../../user/channels/artist/delete.md:81
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:50
+#: ../../user/channels/artist/delete.md:50
 msgid ""
 "That's it! You've deleted your track. You can add it again by [uploading "
-"it to your channel](upload_artist.md)."
+"it to your channel](upload.md)."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:52
+#: ../../user/channels/artist/delete.md:52
 msgid "Delete an album"
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:55
+#: ../../user/channels/artist/delete.md:55
 msgid ""
 "Deleting an album also deletes all tracks in the album and removes the "
 "files from the server. This action is irreversible."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:58
+#: ../../user/channels/artist/delete.md:58
 msgid "Delete an album to remove all tracks it contains. To do this:"
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:70
-#: ../../user_documentation/channels/delete_artist.md:84
+#: ../../user/channels/artist/delete.md:70
+#: ../../user/channels/artist/delete.md:84
 msgid ""
 "Select your album in the {guilabel}`Albums` section. The album detail "
 "page opens."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:71
-#: ../../user_documentation/channels/delete_artist.md:85
+#: ../../user/channels/artist/delete.md:71
+#: ../../user/channels/artist/delete.md:85
 msgid "Select the kebab menu ({fa}`ellipsis-v`) to open the options menu."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:72
-#: ../../user_documentation/channels/delete_artist.md:86
+#: ../../user/channels/artist/delete.md:72
+#: ../../user/channels/artist/delete.md:86
 msgid ""
 "Select {guilabel}`Delete…`. A {guilabel}`Delete this album?` warning "
 "appears."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:73
-#: ../../user_documentation/channels/delete_artist.md:87
+#: ../../user/channels/artist/delete.md:73
+#: ../../user/channels/artist/delete.md:87
 msgid "Select {guilabel}`Delete` to delete the album."
 msgstr ""
 
-#: ../../user_documentation/channels/delete_artist.md:91
+#: ../../user/channels/artist/delete.md:91
 msgid ""
 "You're done! You've deleted the album and all the tracks it contained. "
-"You can add them again by [uploading it to your "
-"channel](upload_artist.md)."
+"You can add them again by [uploading it to your channel](upload.md)."
 msgstr ""
+
+#~ msgid ""
+#~ "That's it! You've deleted your track."
+#~ " You can add it again by "
+#~ "[uploading it to your "
+#~ "channel](upload_artist.md)."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "You're done! You've deleted the album"
+#~ " and all the tracks it contained. "
+#~ "You can add them again by "
+#~ "[uploading it to your "
+#~ "channel](upload_artist.md)."
+#~ msgstr ""
 

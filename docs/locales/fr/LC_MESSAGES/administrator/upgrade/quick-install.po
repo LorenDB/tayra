@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,18 +17,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
 
-#: ../../administrator_documentation/upgrade_docs/quick_install.md:1
+#: ../../administrator/upgrade/quick-install.md:1
 msgid "Upgrade using the quick install script"
 msgstr ""
 
-#: ../../administrator_documentation/upgrade_docs/quick_install.md:3
+#: ../../administrator/upgrade/quick-install.md:3
 msgid ""
 "If you installed Funkwhale using the [quick install "
-"script](../installation_docs/quick_install.md), upgrading your instance "
-"is as simple as running the following command on your server:"
+"script](../installation/quick-install.md), upgrading your instance is as "
+"simple as running the following command on your server:"
 msgstr ""
 
-#: ../../administrator_documentation/upgrade_docs/quick_install.md:9
+#: ../../administrator/upgrade/quick-install.md:9
 msgid "The script runs through the necessary setup instructions."
 msgstr ""
+
+#~ msgid ""
+#~ "If you installed Funkwhale using the "
+#~ "[quick install "
+#~ "script](../installation_docs/quick_install.md), upgrading "
+#~ "your instance is as simple as "
+#~ "running the following command on your"
+#~ " server:"
+#~ msgstr ""
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,98 +17,96 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
 
-#: ../../user_documentation/playlists/create_playlist.md:1
+#: ../../user/playlists/create.md:1
 msgid "Create a playlist"
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:3
+#: ../../user/playlists/create.md:3
 msgid "Create playlists to share your favorite tracks with other Funkwhale users."
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:5
+#: ../../user/playlists/create.md:5
 msgid "To create a playlist:"
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md
+#: ../../user/playlists/create.md
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:13
-#: ../../user_documentation/playlists/create_playlist.md:28
+#: ../../user/playlists/create.md:13 ../../user/playlists/create.md:28
 msgid "Log in to your account."
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:14
+#: ../../user/playlists/create.md:14
 msgid ""
 "Select {guilabel}`Playlists` under the {guilabel}`My Library` section of "
 "the sidebar. The {guilabel}`Browsing playlists` screen opens."
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:15
-#: ../../user_documentation/playlists/create_playlist.md:31
+#: ../../user/playlists/create.md:15 ../../user/playlists/create.md:31
 msgid ""
 "Select {guilabel}`Manage your playlists`. The {guilabel}`Manage "
 "playlists` screen appears."
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:16
-#: ../../user_documentation/playlists/create_playlist.md:32
+#: ../../user/playlists/create.md:16 ../../user/playlists/create.md:32
 msgid "Enter a {guilabel}`Playlist name` for your new playlist."
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:17
-#: ../../user_documentation/playlists/create_playlist.md:33
+#: ../../user/playlists/create.md:17 ../../user/playlists/create.md:33
 msgid ""
 "Select the {guilabel}`Playlist visibility` for your playlist. Choose from"
 " the following options:"
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:18
-#: ../../user_documentation/playlists/create_playlist.md:34
+#: ../../user/playlists/create.md:18 ../../user/playlists/create.md:34
 msgid ""
 "{guilabel}`Everyone, across all instances` – the playlist is available to"
 " everybody who interacts with your {term}`pod`. This includes users of "
 "other pods."
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:19
-#: ../../user_documentation/playlists/create_playlist.md:35
+#: ../../user/playlists/create.md:19 ../../user/playlists/create.md:35
 msgid ""
 "{guilabel}`Everyone on this instance` – the playlist is available to all "
 "users on your pod. This does not include users of other pods."
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:20
-#: ../../user_documentation/playlists/create_playlist.md:36
+#: ../../user/playlists/create.md:20 ../../user/playlists/create.md:36
 msgid ""
 "{guilabel}`Nobody except me` – the playlist is only available to you and "
 "people you share it with."
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:21
-#: ../../user_documentation/playlists/create_playlist.md:37
+#: ../../user/playlists/create.md:21 ../../user/playlists/create.md:37
 msgid ""
 "Select {guilabel}`Create playlist`. A {guilabel}`Playlist created` "
 "message appears."
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md
+#: ../../user/playlists/create.md
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:29
+#: ../../user/playlists/create.md:29
 msgid "Select the hamburger menu ({fa}`bars`) to open the menu bar."
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:30
+#: ../../user/playlists/create.md:30
 msgid ""
 "Select {menuselection}`My Library --> Playlists`. The {guilabel}`Browsing"
 " playlists` screen opens."
 msgstr ""
 
-#: ../../user_documentation/playlists/create_playlist.md:41
+#: ../../user/playlists/create.md:41
 msgid ""
 "Congratulations! You've created your playlist. Now you can [add some "
-"content to it](add_content.md)."
+"content to it](content/add.md)."
 msgstr ""
+
+#~ msgid ""
+#~ "Congratulations! You've created your playlist."
+#~ " Now you can [add some content "
+#~ "to it](add_content.md)."
+#~ msgstr ""
 

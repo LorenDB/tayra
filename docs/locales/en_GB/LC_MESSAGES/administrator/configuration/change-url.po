@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,90 +17,96 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:1
+#: ../../administrator/configuration/change-url.md:1
 msgid "Change your instance URL"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:4
+#: ../../administrator/configuration/change-url.md:4
 msgid ""
 "We recommend you don't change your instance URL. Changing it __will__ "
 "cause instability and problems with federation. If you change your URL, "
 "the Funkwhale project can't offer support for problems that arise."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:7
+#: ../../administrator/configuration/change-url.md:7
 msgid ""
 "Your instance URL is your pod's unique identifier in the "
 "{term}`fediverse`. If you want to change it, you need to update a lot of "
 "information"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:9
+#: ../../administrator/configuration/change-url.md:9
 msgid "The instance URL in your {file}`.env` file."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:10
+#: ../../administrator/configuration/change-url.md:10
 msgid "The instance URL in your webserver config."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:11
+#: ../../administrator/configuration/change-url.md:11
 msgid "Any references to the old URL in your database."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:13
+#: ../../administrator/configuration/change-url.md:13
 msgid ""
 "To clean the database, the `funkwhale-manage` command line interface "
 "contains a `fix_federation_ids` command."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:16
+#: ../../administrator/configuration/change-url.md:16
 msgid ""
 "Running `fix_federation_ids` with the `--no-dry-run` flag is "
-"irreversible. Make sure you [back up your "
-"data](../upgrade_docs/backup.md)."
+"irreversible. Make sure you [back up your data](../upgrade/backup.md)."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:19
+#: ../../administrator/configuration/change-url.md:19
 msgid "Update your instance URL"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:21
+#: ../../administrator/configuration/change-url.md:21
 msgid ""
 "Change the `FUNKWHALE_HOSTNAME` and `DJANGO_ALLOWED_HOSTS` value in your "
 "{file}`.env` file."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:22
+#: ../../administrator/configuration/change-url.md:22
 msgid ""
 "Change the `server_name` values in your {file}`/etc/nginx/sites-"
 "enabled/funkwhale.conf` file."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:23
+#: ../../administrator/configuration/change-url.md:23
 msgid "Run the `fix_federation_ids` command to clean up your database."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md
+#: ../../administrator/configuration/change-url.md
 msgid "Debian"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md
+#: ../../administrator/configuration/change-url.md
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:46
+#: ../../administrator/configuration/change-url.md:46
 msgid "Example output:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md:72
+#: ../../administrator/configuration/change-url.md:72
 msgid "Restart your webserver to pick up the changes."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md
+#: ../../administrator/configuration/change-url.md
 msgid "Nginx"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/change_url.md
+#: ../../administrator/configuration/change-url.md
 msgid "Apache"
 msgstr ""
+
+#~ msgid ""
+#~ "Running `fix_federation_ids` with the "
+#~ "`--no-dry-run` flag is irreversible. "
+#~ "Make sure you [back up your "
+#~ "data](../upgrade_docs/backup.md)."
+#~ msgstr ""
 

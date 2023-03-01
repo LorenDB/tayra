@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,18 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
 
-#: ../../contributor_documentation/index.md:1
+#: ../../contributor/index.md:1
 msgid "Get started"
 msgstr ""
 
-#: ../../contributor_documentation/index.md:4
+#: ../../contributor/index.md:4
 msgid ""
 "Are you a software developer? Check out our [developer "
-"documentation](../developer_documentation/index.md) to contribute to our "
-"codebase."
+"documentation](../developer/index.md) to contribute to our codebase."
 msgstr ""
 
-#: ../../contributor_documentation/index.md:7
+#: ../../contributor/index.md:7
 msgid ""
 "Funkwhale is a community-led software project, so we depend on our "
 "community donating their time and skills. Whether you're experienced in a"
@@ -36,26 +35,33 @@ msgid ""
 "will support you with any task you take on."
 msgstr ""
 
-#: ../../contributor_documentation/index.md:9
+#: ../../contributor/index.md:9
 msgid "Contribute to Funkwhale's documentation"
 msgstr ""
 
-#: ../../contributor_documentation/index.md:11
+#: ../../contributor/index.md:11
 msgid ""
 "Got a knack for writing? Want to teach people how things work? Our "
 "[documentation guide](documentation.md) takes you through everything you "
 "need to know to contribute to the Funkwhale documentation hub."
 msgstr ""
 
-#: ../../contributor_documentation/index.md:13
+#: ../../contributor/index.md:13
 msgid "Translate Funkwhale"
 msgstr ""
 
-#: ../../contributor_documentation/index.md:15
+#: ../../contributor/index.md:15
 msgid ""
 "Are you a confident linguist? We're always looking to expand the number "
 "of languages we offer in our apps, websites, and documentation. Check out"
 " the [translation guide](translation.md) to start contributing "
 "translations in your language."
 msgstr ""
+
+#~ msgid ""
+#~ "Are you a software developer? Check "
+#~ "out our [developer "
+#~ "documentation](../developer_documentation/index.md) to "
+#~ "contribute to our codebase."
+#~ msgstr ""
 

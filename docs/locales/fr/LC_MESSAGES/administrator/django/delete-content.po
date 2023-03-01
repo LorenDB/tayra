@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,166 +17,173 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
 
-#: ../../administrator_documentation/django/delete_content.md:1
+#: ../../administrator/django/delete-content.md:1
 msgid "Delete content in the Django dashboard"
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:4
+#: ../../administrator/django/delete-content.md:4
 msgid ""
 "Deleting content using the Django dashboard isn't recommended. Use an "
-"object's [moderation "
-"page](../../moderator_documentation/content/delete_content.md) where "
+"object's [moderation page](../../moderator/content/delete.md) where "
 "possible."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:7
+#: ../../administrator/django/delete-content.md:7
 msgid ""
 "You can delete content from your pod in the Django dashboard. The "
 "dashboard gives you access to all data associated with the content."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:10
+#: ../../administrator/django/delete-content.md:10
 msgid ""
 "Deleting content removes it from associated playlists, channels, "
 "libraries, and favorites lists."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:13
+#: ../../administrator/django/delete-content.md:13
 msgid "Delete tracks"
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:15
+#: ../../administrator/django/delete-content.md:15
 msgid "To delete tracks in the Django dashboard:"
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:17
-#: ../../administrator_documentation/django/delete_content.md:29
-#: ../../administrator_documentation/django/delete_content.md:41
-#: ../../administrator_documentation/django/delete_content.md:53
+#: ../../administrator/django/delete-content.md:17
+#: ../../administrator/django/delete-content.md:29
+#: ../../administrator/django/delete-content.md:41
+#: ../../administrator/django/delete-content.md:53
 msgid "Open the Django dashboard."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:18
+#: ../../administrator/django/delete-content.md:18
 msgid "Select {guilabel}`Tracks` in the {guilabel}`MUSIC` table."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:19
+#: ../../administrator/django/delete-content.md:19
 msgid "Search for the track(s) you want to delete."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:20
+#: ../../administrator/django/delete-content.md:20
 msgid ""
 "Check ({fa}`check-square`) the checkbox next to the track(s) you want to "
 "delete."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:21
+#: ../../administrator/django/delete-content.md:21
 msgid ""
 "Select {guilabel}`Delete selected tracks` in the {guilabel}`Action` "
 "dropdown."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:22
-#: ../../administrator_documentation/django/delete_content.md:34
-#: ../../administrator_documentation/django/delete_content.md:46
-#: ../../administrator_documentation/django/delete_content.md:58
+#: ../../administrator/django/delete-content.md:22
+#: ../../administrator/django/delete-content.md:34
+#: ../../administrator/django/delete-content.md:46
+#: ../../administrator/django/delete-content.md:58
 msgid ""
 "Select {guilabel}`Go`. A confirmation page opens showing you the items "
 "that are affected by the action."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:23
-#: ../../administrator_documentation/django/delete_content.md:35
-#: ../../administrator_documentation/django/delete_content.md:47
-#: ../../administrator_documentation/django/delete_content.md:59
+#: ../../administrator/django/delete-content.md:23
+#: ../../administrator/django/delete-content.md:35
+#: ../../administrator/django/delete-content.md:47
+#: ../../administrator/django/delete-content.md:59
 msgid ""
 "Review the information and select {guilabel}`Yes, I'm sure` to delete the"
 " item(s)."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:25
+#: ../../administrator/django/delete-content.md:25
 msgid "Delete albums"
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:27
+#: ../../administrator/django/delete-content.md:27
 msgid "To delete albums in the Django dashboard:"
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:30
+#: ../../administrator/django/delete-content.md:30
 msgid "Select {guilabel}`Albums` in the {guilabel}`MUSIC` table."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:31
+#: ../../administrator/django/delete-content.md:31
 msgid "Search for the album(s) you want to delete."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:32
+#: ../../administrator/django/delete-content.md:32
 msgid ""
 "Check ({fa}`check-square`) the checkbox next to the album(s) you want to "
 "delete."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:33
+#: ../../administrator/django/delete-content.md:33
 msgid ""
 "Select {guilabel}`Delete selected albums` in the {guilabel}`Action` "
 "dropdown."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:37
+#: ../../administrator/django/delete-content.md:37
 msgid "Delete artists"
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:39
+#: ../../administrator/django/delete-content.md:39
 msgid "To delete artists in the Django dashboard:"
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:42
+#: ../../administrator/django/delete-content.md:42
 msgid "Select {guilabel}`Artists` in the {guilabel}`MUSIC` table."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:43
+#: ../../administrator/django/delete-content.md:43
 msgid "Search for the artist(s) you want to delete."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:44
+#: ../../administrator/django/delete-content.md:44
 msgid ""
 "Check ({fa}`check-square`) the checkbox next to the artist(s) you want to"
 " delete."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:45
+#: ../../administrator/django/delete-content.md:45
 msgid ""
 "Select {guilabel}`Delete selected artists` in the {guilabel}`Action` "
 "dropdown."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:49
+#: ../../administrator/django/delete-content.md:49
 msgid "Delete followed libraries"
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:51
+#: ../../administrator/django/delete-content.md:51
 msgid ""
 "In Funkwhale, unfollowing a library leaves the items in place but you "
 "can't access them. To completely remove them:"
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:54
+#: ../../administrator/django/delete-content.md:54
 msgid "Select {guilabel}`Librarys` in the {guilabel}`MUSIC` table."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:55
+#: ../../administrator/django/delete-content.md:55
 msgid "Search for the libraries you want to delete."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:56
+#: ../../administrator/django/delete-content.md:56
 msgid ""
 "Check ({fa}`check-square`) the checkbox next to the libraries you want to"
 " delete."
 msgstr ""
 
-#: ../../administrator_documentation/django/delete_content.md:57
+#: ../../administrator/django/delete-content.md:57
 msgid ""
 "Select {guilabel}`Delete selected libraries` in the {guilabel}`Action` "
 "dropdown."
 msgstr ""
+
+#~ msgid ""
+#~ "Deleting content using the Django "
+#~ "dashboard isn't recommended. Use an "
+#~ "object's [moderation "
+#~ "page](../../moderator_documentation/content/delete_content.md) "
+#~ "where possible."
+#~ msgstr ""
 

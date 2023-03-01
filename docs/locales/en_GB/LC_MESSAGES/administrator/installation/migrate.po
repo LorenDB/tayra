@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,212 +17,212 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
 
-#: ../../administrator_documentation/installation_docs/migrate.md:1
+#: ../../administrator/installation/migrate.md:1
 msgid "Migrate to a new server"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:3
+#: ../../administrator/installation/migrate.md:3
 msgid ""
 "You can migrate your Funkwhale installation if you are setting up a new "
 "server. This can be useful if you are moving to a different hosting "
 "provider or upgrading your server."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:5
+#: ../../administrator/installation/migrate.md:5
 msgid "In this guide we refer to your servers like this:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md
+#: ../../administrator/installation/migrate.md
 msgid "Original server"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:9
+#: ../../administrator/installation/migrate.md:9
 msgid "The server on which you are running Funkwhale."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:3
+#: ../../administrator/installation/migrate.md:3
 msgid "Destination server"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:12
+#: ../../administrator/installation/migrate.md:12
 msgid "The server to which you want to move your Funkwhale installation."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:17
+#: ../../administrator/installation/migrate.md:17
 msgid ""
-"Make sure you [back up your data](../upgrade_docs/backup.md) before "
+"Make sure you [back up your data](../upgrade/backup.md) before "
 "proceeding. This ensures you don't lose anything during the migration."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:24
+#: ../../administrator/installation/migrate.md:24
 msgid "Requirements"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:26
+#: ../../administrator/installation/migrate.md:26
 msgid "To get started with your new setup, you need to do the following:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:28
+#: ../../administrator/installation/migrate.md:28
 msgid ""
 "[Set up SSH access between both servers](https://kerneltalks.com/howto"
 "/establish-passwordless-ssh-between-two-servers/)."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:29
+#: ../../administrator/installation/migrate.md:29
 msgid ""
 "Install [rsync](https://linux.die.net/man/1/rsync) on the "
 "{term}`destination server`."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:31
+#: ../../administrator/installation/migrate.md:31
 msgid "1. Install Funkwhale on your destination server"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:33
+#: ../../administrator/installation/migrate.md:33
 msgid ""
 "Before you move your data, you need to install Funkwhale on your "
 "{term}`destination server`."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md
+#: ../../administrator/installation/migrate.md
 msgid "Debian"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:41
+#: ../../administrator/installation/migrate.md:41
 msgid ""
 "On your {term}`destination server`, follow the [installation "
 "guide](debian.md). Skip the following steps:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:43
+#: ../../administrator/installation/migrate.md:43
 msgid ""
 "Don't enable the `unaccent` and `citext` extensions when you set up the "
 "database."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:44
-#: ../../administrator_documentation/installation_docs/migrate.md:60
+#: ../../administrator/installation/migrate.md:44
+#: ../../administrator/installation/migrate.md:60
 msgid "Don't run the `funkwhale-manage migrate` command to migrate the database."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:45
-#: ../../administrator_documentation/installation_docs/migrate.md:61
+#: ../../administrator/installation/migrate.md:45
+#: ../../administrator/installation/migrate.md:61
 msgid "Don't create a superuser."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:47
-#: ../../administrator_documentation/installation_docs/migrate.md:63
+#: ../../administrator/installation/migrate.md:47
+#: ../../administrator/installation/migrate.md:63
 msgid ""
 "Once you have finished the installation, stop the Funkwhale services. "
 "These shouldn't be running when you copy your existing data over."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md
+#: ../../administrator/installation/migrate.md
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:58
+#: ../../administrator/installation/migrate.md:58
 msgid ""
 "On your {term}`destination server`, follow the [installation "
 "guide](docker.md). Skip the following steps:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:71
+#: ../../administrator/installation/migrate.md:71
 msgid "2. Create a database backup"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:73
+#: ../../administrator/installation/migrate.md:73
 msgid ""
 "You need to create a database backup on your {term}`original server` so "
 "that you can migrate your database. To do this, run the following "
 "command:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:96
+#: ../../administrator/installation/migrate.md:96
 msgid "3. Copy files to your destination server"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:98
+#: ../../administrator/installation/migrate.md:98
 msgid ""
 "Next, you can copy your files from your {term}`original server` to your "
 "{term}`destination server`. You need to copy the following data:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:100
+#: ../../administrator/installation/migrate.md:100
 msgid "Your `.env` file."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:101
+#: ../../administrator/installation/migrate.md:101
 msgid "The database backup."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:102
+#: ../../administrator/installation/migrate.md:102
 msgid "The `/srv/funkwhale/data/media` directory."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:103
+#: ../../administrator/installation/migrate.md:103
 msgid "The `/srv/funkwhale/data/music` directory."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:105
+#: ../../administrator/installation/migrate.md:105
 msgid "To do this:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:107
+#: ../../administrator/installation/migrate.md:107
 msgid "Log in to your {term}`destination server`."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:108
+#: ../../administrator/installation/migrate.md:108
 msgid ""
 "Export your server hostname or IP address and your user name on the "
 "server. In this example, the IP address is `123.123.123.123` and the "
 "username is `funkwhale`."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:115
+#: ../../administrator/installation/migrate.md:115
 msgid "Use `rsync` to copy the information to your {term}`destination server`."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:124
+#: ../../administrator/installation/migrate.md:124
 msgid "4. Restore your database backup"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:126
+#: ../../administrator/installation/migrate.md:126
 msgid ""
 "When you've copied everything to the {term}`destination server`, you need"
 " to import your database backup. To do this:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:134
+#: ../../administrator/installation/migrate.md:134
 msgid "Run the following on your {term}`destination server`:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:140
-#: ../../administrator_documentation/installation_docs/migrate.md:170
+#: ../../administrator/installation/migrate.md:140
+#: ../../administrator/installation/migrate.md:170
 msgid ""
 "When the import finishes, run the `funkwhale-manage migrate` command to "
 "set up the database."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:152
+#: ../../administrator/installation/migrate.md:152
 msgid ""
 "You need to initialize the postgres container on your {term}`destination "
 "server`. To do this:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:154
+#: ../../administrator/installation/migrate.md:154
 msgid "Export the permissions and create an `init.sql` database dump."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:164
+#: ../../administrator/installation/migrate.md:164
 msgid "Import your database backup."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:178
+#: ../../administrator/installation/migrate.md:178
 msgid "5. Check your DNS settings"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:180
+#: ../../administrator/installation/migrate.md:180
 msgid ""
 "Before you start Funkwhale on your {term}`destination server`, check your"
 " DNS changes have propagated. Once your hostname is pointing to your "
@@ -230,17 +230,24 @@ msgid ""
 "the next step."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:182
+#: ../../administrator/installation/migrate.md:182
 msgid "6. Start your new Funkwhale installation"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:184
+#: ../../administrator/installation/migrate.md:184
 msgid ""
 "Once you confirm DNS points to your {term}`destination server`, start the"
 " Funkwhale services:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/migrate.md:207
+#: ../../administrator/installation/migrate.md:207
 msgid "That's it! You've migrated your Funkwhale instance to a new server."
 msgstr ""
+
+#~ msgid ""
+#~ "Make sure you [back up your "
+#~ "data](../upgrade_docs/backup.md) before proceeding. "
+#~ "This ensures you don't lose anything "
+#~ "during the migration."
+#~ msgstr ""
 
