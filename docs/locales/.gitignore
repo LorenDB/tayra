@@ -1,4 +1,2 @@
-*
-!.gitignore
-!*/LC_MESSAGES/**/*.po
-!gettext/**/*.pot
+.*
+_*
