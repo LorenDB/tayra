@@ -79,15 +79,15 @@ export class HTMLSound implements Sound {
     })
 
     useEventListener(this.#audio, 'waiting', () => {
-      console.log('>> AUDIO WAITING', this.__track?.title)
+      console.log('>> AUDIO WAITING', this)
     })
 
     useEventListener(this.#audio, 'playing', () => {
-      console.log('>> AUDIO PLAYING', this.__track?.title)
+      console.log('>> AUDIO PLAYING', this)
     })
 
     useEventListener(this.#audio, 'stalled', () => {
-      console.log('>> AUDIO STALLED', this.__track?.title)
+      console.log('>> AUDIO STALLED', this)
     })
 
     useEventListener(this.#audio, 'loadeddata', () => {
@@ -96,7 +96,7 @@ export class HTMLSound implements Sound {
     })
 
     useEventListener(this.#audio, 'error', (err) => {
-      console.error('>> AUDIO ERRORED', err, this.__track?.title)
+      console.error('>> AUDIO ERRORED', err, this)
       this.isErrored.value = true
       this.isLoaded.value = true
     })
@@ -104,7 +104,7 @@ export class HTMLSound implements Sound {
 
   async preload () {
     this.isErrored.value = false
-    console.log('CALLING PRELOAD ON', this.__track?.title)
+    console.log('CALLING PRELOAD ON', this)
     this.#audio.load()
   }
 

@@ -2,7 +2,7 @@
 import type { QueueItemSource } from '~/types'
 
 import { whenever, watchDebounced, useCurrentElement, useScrollLock, useFullscreen, useIdle, refAutoReset, useStorage } from '@vueuse/core'
-import { nextTick, ref, computed, watchEffect, watch, defineAsyncComponent } from 'vue'
+import { nextTick, ref, computed, watchEffect, defineAsyncComponent } from 'vue'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -27,7 +27,6 @@ const {
   isPlaying,
   currentTime,
   duration,
-  progress,
   bufferProgress,
   seekTo,
   loading: isLoadingAudio,
@@ -107,13 +106,6 @@ const touchProgress = (event: MouseEvent) => {
   const time = ((event.clientX - ((event.target as Element).closest('.progress')?.getBoundingClientRect().left ?? 0)) / progressBar.value.offsetWidth) * duration.value
   seekTo(time)
 }
-
-const animated = ref(false)
-watch(currentTrack, async track => {
-  animated.value = false
-  await nextTick()
-  animated.value = true
-})
 
 const play = async (index: number) => {
   isPlaying.value = true
@@ -368,7 +360,7 @@ if (!isWebGLSupported) {
                   :style="{ 'transform': `translateX(${bufferProgress - 100}%)` }"
                 />
                 <div
-                  :class="['position bar', { animated }]"
+                  class="position bar"
                   :style="{
                     animationDuration: duration + 's',
                     animationPlayState: isPlaying
@@ -416,23 +408,21 @@ if (!isWebGLSupported) {
           <h2 class="ui header">
             <div class="content">
               <button
+                v-t="'components.Queue.button.close'"
                 class="ui right floated basic button"
                 @click="$store.commit('ui/queueFocused', null)"
-              >
-                {{ $t('components.Queue.button.close') }}
-              </button>
+              />
               <button
+                v-t="'components.Queue.button.clear'"
                 class="ui right floated basic button danger"
                 @click="clear"
-              >
-                {{ $t('components.Queue.button.clear') }}
-              </button>
+              />
               {{ labels.queue }}
               <div class="sub header">
                 <div>
-                  {{ $t('components.Queue.meta.queuePosition', {index: currentIndex +1, length: queue.length}) }}
+                  <span v-t="{ path: 'components.Queue.meta.queuePosition', args: { index: currentIndex + 1, length: queue.length } }" />
                   <span class="middle pipe symbol" />
-                  {{ $t('components.Queue.meta.end') }}
+                  <span v-t="'components.Queue.meta.end'" />
                   <span :title="labels.duration">
                     {{ endsIn }}
                   </span>

@@ -27,7 +27,6 @@ const {
   seekTo,
   currentTime,
   duration,
-  progress,
   bufferProgress,
   loading: isLoadingAudio
 } = usePlayer()
@@ -131,10 +130,9 @@ const hideArtist = () => {
   >
     <h1
       id="player-label"
+      v-t="'components.audio.Player.header.player'"
       class="visually-hidden"
-    >
-      {{ $t('components.audio.Player.header.player') }}
-    </h1>
+    />
     <div
       class="ui inverted segment fixed-controls"
       @click.prevent.stop="toggleMobilePlayer"
@@ -305,18 +303,14 @@ const hideArtist = () => {
                 @click.stop="toggleMobilePlayer"
               >
                 <i class="stream icon" />
-                <span>
-                  {{ $t('components.audio.Player.meta.position', { index: currentIndex + 1, length: queue.length }) }}
-                </span>
+                <span v-t="{ path: 'components.audio.Player.meta.position', args: { index: currentIndex + 1, length: queue.length } }" />
               </button>
               <button
                 class="position circular control button desktop-and-below"
                 @click.stop="switchTab"
               >
                 <i class="stream icon" />
-                <span>
-                  {{ $t('components.audio.Player.meta.position', { index: currentIndex + 1, length: queue.length }) }}
-                </span>
+                <span v-t="{ path: 'components.audio.Player.meta.position', args: { index: currentIndex + 1, length: queue.length } }" />
               </button>
 
               <button

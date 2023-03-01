@@ -127,7 +127,6 @@ export const useTracks = createGlobalState(() => {
   // Preload next track
   const { start: preload, stop: abortPreload } = useTimeoutFn(async (track: QueueTrack) => {
     const sound = await createSound(track)
-    sound.__track = track
     await sound.preload()
   }, 100, { immediate: false })
 
