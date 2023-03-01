@@ -167,7 +167,13 @@ export const usePlayer = createGlobalState(() => {
   }, 1000)
 
   // Progress
-  const progress = ref(0)
+  useRafFn(() => {
+    const sound = currentSound.value
+    document.documentElement.style.setProperty('--fw-track-progress', sound
+      ? `${(sound.currentTime / sound.duration * 100).toFixed(Math.log(window.innerWidth))}%`
+      : '0'
+    )
+  })
 
   // Loading
   const loading = computed(() => {
@@ -207,7 +213,6 @@ export const usePlayer = createGlobalState(() => {
     seekBy,
     seekTo,
     bufferProgress,
-    progress,
     loading,
     errored
   }

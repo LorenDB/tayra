@@ -1,10 +1,11 @@
-import { defineConfig } from 'vite'
-import Vue from '@vitejs/plugin-vue'
-import VueI18n from '@intlify/unplugin-vue-i18n/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
+import { defineConfig } from 'vite'
+
+import VueI18n from '@intlify/unplugin-vue-i18n/vite'
 
 import manifest from './pwa-manifest.json'
+import Vue from '@vitejs/plugin-vue'
 
 const port = +(process.env.VUE_PORT ?? 8080)
 

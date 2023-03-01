@@ -48,7 +48,7 @@
   .ui.progress .bar {
     transition: none;
     width: 100%;
-    transform: translateX(-100%);
+    transform: translateX(calc(var(--fw-track-progress) - 100%));
     transform-origin: top left;
     will-change: transform;
     position: absolute;

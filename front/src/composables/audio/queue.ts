@@ -1,6 +1,6 @@
 import type { Track, Upload } from '~/types'
 
-import { createGlobalState, useNow, useStorage, useTimeAgo, whenever } from '@vueuse/core'
+import { createGlobalState, useStorage, useTimeAgo, whenever } from '@vueuse/core'
 import { computed, ref, shallowReactive, watchEffect } from 'vue'
 import { shuffle as shuffleArray, sum } from 'lodash-es'
 import { useClamp } from '@vueuse/math'

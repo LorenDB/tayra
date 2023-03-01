@@ -2,6 +2,11 @@
 html {
   scroll-behavior: smooth;
 }
+
+:root {
+  --fw-track-progress: 0;
+}
+
 @media screen and (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
