@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,18 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../moderator_documentation/allow_listing/index.md:7
+#: ../../moderator/allow-listing/index.md:7
 msgid "Manage your pod's allow-list"
 msgstr ""
 
-#: ../../moderator_documentation/allow_listing/index.md:1
+#: ../../moderator/allow-listing/index.md:1
 msgid "Allow-listing"
 msgstr ""
 
-#: ../../moderator_documentation/allow_listing/index.md:3
+#: ../../moderator/allow-listing/index.md:3
 msgid "By default, Funkwhale communicates with all reachable pods on the {term}`Fediverse`. If you want to lock down which pods you interact with, your pod admin can enable **allow-listing**. With this enabled, only pods on your allow-list can interact with your pod."
 msgstr ""
 
-#: ../../moderator_documentation/allow_listing/index.md:5
-msgid "If you didn't use allow-listing before, you can remove all content from pods not on your list. Check out our guide on [purging content](../domains/purge_domain.md) to remove this content."
+#: ../../moderator/allow-listing/index.md:5
+msgid "If you didn't use allow-listing before, you can remove all content from pods not on your list. Check out our guide on [purging content](../domains/purge.md) to remove this content."
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,81 +16,81 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../moderator_documentation/external_users/purge_users.md:1
+#: ../../moderator/external-users/purge.md:1
 msgid "Purge user data"
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:4
+#: ../../moderator/external-users/purge.md:4
 msgid "Purging a user's data removes all objects and caches associated to that user. This impacts users who have objects from these users in their libraries."
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:7
+#: ../../moderator/external-users/purge.md:7
 msgid "When users follow users from another domain their content is visible on your {term}`pod`. If a user posts illegal or offensive content you can purge the content associated with them."
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:0
+#: ../../moderator/external-users/purge.md:0
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:13
+#: ../../moderator/external-users/purge.md:13
 msgid "{guilabel}`Moderation` – provides access to the administration and moderation menus."
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:16
+#: ../../moderator/external-users/purge.md:16
 msgid "To purge a user's content:"
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:0
+#: ../../moderator/external-users/purge.md:0
 msgid "Desktop"
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:24
-#: ../../moderator_documentation/external_users/purge_users.md:38
+#: ../../moderator/external-users/purge.md:24
+#: ../../moderator/external-users/purge.md:38
 msgid "Log in to your {term}`pod`."
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:25
+#: ../../moderator/external-users/purge.md:25
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:26
-#: ../../moderator_documentation/external_users/purge_users.md:40
+#: ../../moderator/external-users/purge.md:26
+#: ../../moderator/external-users/purge.md:40
 msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:27
-#: ../../moderator_documentation/external_users/purge_users.md:41
+#: ../../moderator/external-users/purge.md:27
+#: ../../moderator/external-users/purge.md:41
 msgid "Select {guilabel}`Accounts` at the top of the page. The {guilabel}`Accounts` page opens. You can see a list of known accounts on this page."
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:28
-#: ../../moderator_documentation/external_users/purge_users.md:42
+#: ../../moderator/external-users/purge.md:28
+#: ../../moderator/external-users/purge.md:42
 msgid "Select the checkbox ({fa}`square`) next to the account(s) you want to purge. Selected accounts show a tick ({fa}`check-square`)."
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:29
-#: ../../moderator_documentation/external_users/purge_users.md:43
+#: ../../moderator/external-users/purge.md:29
+#: ../../moderator/external-users/purge.md:43
 msgid "Select {guilabel}`Purge` in the {guilabel}`Actions` dropdown."
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:30
-#: ../../moderator_documentation/external_users/purge_users.md:44
+#: ../../moderator/external-users/purge.md:30
+#: ../../moderator/external-users/purge.md:44
 msgid "Select {guilabel}`Go`. A {guilabel}`Do you want to launch purge on {count} element(s)` warning appears."
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:31
-#: ../../moderator_documentation/external_users/purge_users.md:45
+#: ../../moderator/external-users/purge.md:31
+#: ../../moderator/external-users/purge.md:45
 msgid "Select {guilabel}`Launch`."
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:0
+#: ../../moderator/external-users/purge.md:0
 msgid "Mobile"
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:39
+#: ../../moderator/external-users/purge.md:39
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/external_users/purge_users.md:49
+#: ../../moderator/external-users/purge.md:49
 msgid "You're done! Your pod clears all the content associated with the selected users."
 msgstr ""

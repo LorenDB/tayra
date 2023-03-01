@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,46 +16,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../administrator_documentation/installation_docs/quick_install.md:1
+#: ../../administrator/installation/quick-install.md:1
 msgid "Install Funkwhale with the quick install script"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/quick_install.md:3
+#: ../../administrator/installation/quick-install.md:3
 msgid "The quick install script is the easiest way to install Funkwhale. Run this script on a [Debian](https://debian.org)-based server to get your pod set up."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/quick_install.md:5
+#: ../../administrator/installation/quick-install.md:5
 msgid "Before you begin"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/quick_install.md:7
+#: ../../administrator/installation/quick-install.md:7
 msgid "You need `sudo` access to run the quick install script."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/quick_install.md:8
+#: ../../administrator/installation/quick-install.md:8
 msgid "The quick install script installs Nginx, PostgreSQL, and Redis by default. You can customize this behavior by selecting the options in the script."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/quick_install.md:10
+#: ../../administrator/installation/quick-install.md:10
 msgid "1. Install dependencies"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/quick_install.md:12
+#: ../../administrator/installation/quick-install.md:12
 msgid "To download the quick install script, install `curl`:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/quick_install.md:19
+#: ../../administrator/installation/quick-install.md:19
 msgid "2. Install Funkwhale"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/quick_install.md:21
+#: ../../administrator/installation/quick-install.md:21
 msgid "Now that you have `curl` installed, download and run the quick install script:"
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/quick_install.md:27
+#: ../../administrator/installation/quick-install.md:27
 msgid "The script will prompt you to enter information about your instance. Follow the onscreen prompts until the script completes."
 msgstr ""
 
-#: ../../administrator_documentation/installation_docs/quick_install.md:29
+#: ../../administrator/installation/quick-install.md:29
 msgid "That's it! You've finished installing Funkwhale. You should now be able to visit your pod in your web browser."
 msgstr ""

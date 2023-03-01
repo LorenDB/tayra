@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,22 +16,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../moderator_documentation/internal_users/index.md:7
+#: ../../moderator/internal-users/index.md:7
 msgid "Moderate users"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/index.md:17
+#: ../../moderator/internal-users/index.md:17
 msgid "Handle user registrations"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/index.md:1
+#: ../../moderator/internal-users/index.md:1
 msgid "Moderate your pod's users"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/index.md:3
+#: ../../moderator/internal-users/index.md:3
 msgid "Funkwhale provides you the tools you need to moderate users on your pod. Use these tools to tackle harassment and problematic content."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/index.md:5
+#: ../../moderator/internal-users/index.md:5
 msgid "{term}`Pod` admins can also enable manual sign-up validation. With this setting enabled, moderators need to approve or reject any user who signs up."
 msgstr ""

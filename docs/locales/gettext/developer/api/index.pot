@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,22 +16,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../developer_documentation/api/index.md:7
+#: ../../developer/api/index.md:7
 msgid "API explorer"
 msgstr ""
 
-#: ../../developer_documentation/api/index.md:7
+#: ../../developer/api/index.md:7
 msgid "Resources"
 msgstr ""
 
-#: ../../developer_documentation/api/index.md:1
+#: ../../developer/api/index.md:1
 msgid "Funkwhale API"
 msgstr ""
 
-#: ../../developer_documentation/api/index.md:3
+#: ../../developer/api/index.md:3
 msgid "The Funkwhale API is a [REST API](https://developer.mozilla.org/en-US/docs/Glossary/REST) written in [Python](https://www.python.org/) using the [Django REST framework](https://www.django-rest-framework.org/). It is the central component of the project and houses the application's logic."
 msgstr ""
 
-#: ../../developer_documentation/api/index.md:5
+#: ../../developer/api/index.md:5
 msgid "The current API (v1) is **stable**, meaning we are committed to not introducing breaking changes and to maintaining compatibility. We are currently working on Funkwhale API v2, but this is a work in progress and not yet ready for production use."
 msgstr ""

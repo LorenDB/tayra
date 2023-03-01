@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,14 +16,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../moderator_documentation/content/index.md:5
+#: ../../moderator/content/index.md:5
 msgid "Manage your pod's content"
 msgstr ""
 
-#: ../../moderator_documentation/content/index.md:1
+#: ../../moderator/content/index.md:1
 msgid "Moderate content on your pod"
 msgstr ""
 
-#: ../../moderator_documentation/content/index.md:3
+#: ../../moderator/content/index.md:3
 msgid "If you have the **Library** permission, you can change content on your pod. Use this permission to hide copyrighted content and remove offensive material."
 msgstr ""

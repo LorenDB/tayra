@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,14 +16,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../user_documentation/favorites/index.md:5
+#: ../../user/favorites/index.md:5
 msgid "Manage your favorites"
 msgstr ""
 
-#: ../../user_documentation/favorites/index.md:1
+#: ../../user/favorites/index.md:1
 msgid "Favorites"
 msgstr ""
 
-#: ../../user_documentation/favorites/index.md:3
+#: ../../user/favorites/index.md:3
 msgid "Your favorites is a list of tracks you've liked while listening on Funkwhale. Follow the guides in this section to manage your favorites."
 msgstr ""

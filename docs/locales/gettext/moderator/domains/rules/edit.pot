@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,106 +16,106 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../moderator_documentation/domains/edit_rule.md:1
+#: ../../moderator/domains/rules/edit.md:1
 msgid "Edit a moderation rule"
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:4
+#: ../../moderator/domains/rules/edit.md:4
 msgid "Purging a domain's data removes all objects and caches associated to that domain. This impacts users who have objects from these domains in their libraries."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:7
+#: ../../moderator/domains/rules/edit.md:7
 msgid "You can change a moderation rule on a domain at any time."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:0
+#: ../../moderator/domains/rules/edit.md:0
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:13
+#: ../../moderator/domains/rules/edit.md:13
 msgid "{guilabel}`Moderation` – provides access to the administration and moderation menus."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:16
+#: ../../moderator/domains/rules/edit.md:16
 msgid "To update an existing moderation rule:"
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:0
+#: ../../moderator/domains/rules/edit.md:0
 msgid "Desktop"
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:24
-#: ../../moderator_documentation/domains/edit_rule.md:43
+#: ../../moderator/domains/rules/edit.md:24
+#: ../../moderator/domains/rules/edit.md:43
 msgid "Log in to your {term}`pod`."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:25
+#: ../../moderator/domains/rules/edit.md:25
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:26
-#: ../../moderator_documentation/domains/edit_rule.md:45
+#: ../../moderator/domains/rules/edit.md:26
+#: ../../moderator/domains/rules/edit.md:45
 msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:27
-#: ../../moderator_documentation/domains/edit_rule.md:46
+#: ../../moderator/domains/rules/edit.md:27
+#: ../../moderator/domains/rules/edit.md:46
 msgid "Select {guilabel}`Domains` at the top of the page. The {guilabel}`Domains` page opens. You can see a list of known domains on this page."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:28
-#: ../../moderator_documentation/domains/edit_rule.md:47
+#: ../../moderator/domains/rules/edit.md:28
+#: ../../moderator/domains/rules/edit.md:47
 msgid "Select the domain with the moderation rule you want to edit. The domain's moderation page opens."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:29
-#: ../../moderator_documentation/domains/edit_rule.md:48
+#: ../../moderator/domains/rules/edit.md:29
+#: ../../moderator/domains/rules/edit.md:48
 msgid "Select {guilabel}`Edit` under the {guilabel}`This domain is subject to specific moderation rules` header. The moderation policy form opens."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:30
-#: ../../moderator_documentation/domains/edit_rule.md:49
+#: ../../moderator/domains/rules/edit.md:30
+#: ../../moderator/domains/rules/edit.md:49
 msgid "**Optional** – Edit the following settings:"
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:31
-#: ../../moderator_documentation/domains/edit_rule.md:50
+#: ../../moderator/domains/rules/edit.md:31
+#: ../../moderator/domains/rules/edit.md:50
 msgid "{guilabel}`Enabled` – toggle this switch to enable or disable the rule without deleting it."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:32
-#: ../../moderator_documentation/domains/edit_rule.md:51
+#: ../../moderator/domains/rules/edit.md:32
+#: ../../moderator/domains/rules/edit.md:51
 msgid "{guilabel}`Reason` – update the reason for the moderation rule."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:33
-#: ../../moderator_documentation/domains/edit_rule.md:52
+#: ../../moderator/domains/rules/edit.md:33
+#: ../../moderator/domains/rules/edit.md:52
 msgid "**Optional** – Update your moderation rule:"
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:34
-#: ../../moderator_documentation/domains/edit_rule.md:53
+#: ../../moderator/domains/rules/edit.md:34
+#: ../../moderator/domains/rules/edit.md:53
 msgid "{guilabel}`Block everything` – purge all content from this domain and block all content."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:35
-#: ../../moderator_documentation/domains/edit_rule.md:54
+#: ../../moderator/domains/rules/edit.md:35
+#: ../../moderator/domains/rules/edit.md:54
 msgid "{guilabel}`Reject media` – only reject media files such as audio files, avatars, and album art."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:36
-#: ../../moderator_documentation/domains/edit_rule.md:55
+#: ../../moderator/domains/rules/edit.md:36
+#: ../../moderator/domains/rules/edit.md:55
 msgid "Select {guilabel}`Update` to save your rule."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:0
+#: ../../moderator/domains/rules/edit.md:0
 msgid "Mobile"
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:44
+#: ../../moderator/domains/rules/edit.md:44
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/domains/edit_rule.md:59
+#: ../../moderator/domains/rules/edit.md:59
 msgid "You're done! The changes to the rule take effect as soon as you update it."
 msgstr ""

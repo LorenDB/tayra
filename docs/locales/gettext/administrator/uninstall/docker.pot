@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,80 +16,80 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:1
+#: ../../administrator/uninstall/docker.md:1
 msgid "Uninstall Docker installation"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:3
+#: ../../administrator/uninstall/docker.md:3
 msgid "To uninstall a Docker-based Funkwhale installation from your server, follow the instructions in this guide."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:6
-msgid "Removing Funkwhale data is __irreversible__. Make sure you [back up your data](../upgrade_docs/backup.md)."
+#: ../../administrator/uninstall/docker.md:6
+msgid "Removing Funkwhale data is __irreversible__. Make sure you [back up your data](../upgrade/backup.md)."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:14
+#: ../../administrator/uninstall/docker.md:14
 msgid "Stop the Docker containers"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:16
+#: ../../administrator/uninstall/docker.md:16
 msgid "Before you remove any data, you need to stop the Funkwhale containers."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:18
+#: ../../administrator/uninstall/docker.md:18
 msgid "Navigate to your Funkwhale directory."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:24
+#: ../../administrator/uninstall/docker.md:24
 msgid "Stop the containers"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:30
+#: ../../administrator/uninstall/docker.md:30
 msgid "Remove the reverse proxy"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:32
+#: ../../administrator/uninstall/docker.md:32
 msgid "To stop serving Funkwhale from your web server, you need to remove your reverse proxy configuration."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:0
+#: ../../administrator/uninstall/docker.md:0
 msgid "Nginx"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:40
-#: ../../administrator_documentation/uninstall_docs/docker.md:59
+#: ../../administrator/uninstall/docker.md:40
+#: ../../administrator/uninstall/docker.md:59
 msgid "Remove the configuration files from your web host."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:48
-#: ../../administrator_documentation/uninstall_docs/docker.md:66
+#: ../../administrator/uninstall/docker.md:48
+#: ../../administrator/uninstall/docker.md:66
 msgid "Reload the web server."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:0
+#: ../../administrator/uninstall/docker.md:0
 msgid "Apache2"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:74
+#: ../../administrator/uninstall/docker.md:74
 msgid "Remove the containers and their volumes"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:77
-msgid "This action is __irreversible__. Make sure you have [backed up your data](../upgrade_docs/backup.md) before proceeding."
+#: ../../administrator/uninstall/docker.md:77
+msgid "This action is __irreversible__. Make sure you have [backed up your data](../upgrade/backup.md) before proceeding."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:80
+#: ../../administrator/uninstall/docker.md:80
 msgid "Once you have stopped the containers, you can delete all containers and associated volumes."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:86
+#: ../../administrator/uninstall/docker.md:86
 msgid "Remove the Funkwhale directory"
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:88
+#: ../../administrator/uninstall/docker.md:88
 msgid "Once you have removed the containers and volumes, you can delete the Funkwhale directory."
 msgstr ""
 
-#: ../../administrator_documentation/uninstall_docs/docker.md:94
+#: ../../administrator/uninstall/docker.md:94
 msgid "This deletes everything in the (`/srv/funkwhale/`) directory. If your content is hosted in an S3-compatible store, you need to delete this data separately."
 msgstr ""

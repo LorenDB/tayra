@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,10 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../developer_documentation/contribute/index.md:1
+#: ../../developer/contribute/index.md:1
 msgid "Contribute to the Funkwhale codebase"
 msgstr ""
 
-#: ../../developer_documentation/contribute/index.md:3
+#: ../../developer/contribute/index.md:3
 msgid "Funkwhale is an open source project, which means we welcome contributions from anyone! If you want to get involved with Funkwhale development, check the guides in this section."
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,136 +16,136 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:1
+#: ../../administrator/troubleshooting/frontend.md:1
 msgid "Troubleshoot frontend issues"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:3
+#: ../../administrator/troubleshooting/frontend.md:3
 msgid "The Funkwhale frontend is a {abbr}`SPA (Single Page Application)` written in [Vue.js](https://vuejs.org). It consumes the Funkwhale API to serve content and to federate with other Fediverse software."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:5
+#: ../../administrator/troubleshooting/frontend.md:5
 msgid "Tools"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:7
+#: ../../administrator/troubleshooting/frontend.md:7
 msgid "The most useful tools for troubleshooting issues with the Funkwhale frontend are your web browser's developer tools. The `Console` and `Network` tabs are particularly useful for tracking down issues in the Javascript code and API responses respectively. Use the following shortcut to open the developer tools for your browser:"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:13
+#: ../../administrator/troubleshooting/frontend.md:13
 msgid "Browser"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:14
+#: ../../administrator/troubleshooting/frontend.md:14
 msgid "Shortcut"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:15
+#: ../../administrator/troubleshooting/frontend.md:15
 msgid "Google Chrome/Chromium"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:16
-#: ../../administrator_documentation/troubleshooting/frontend.md:18
-#: ../../administrator_documentation/troubleshooting/frontend.md:20
-#: ../../administrator_documentation/troubleshooting/frontend.md:22
-#: ../../administrator_documentation/troubleshooting/frontend.md:24
+#: ../../administrator/troubleshooting/frontend.md:16
+#: ../../administrator/troubleshooting/frontend.md:18
+#: ../../administrator/troubleshooting/frontend.md:20
+#: ../../administrator/troubleshooting/frontend.md:22
+#: ../../administrator/troubleshooting/frontend.md:24
 msgid "{kbd}`F12`"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:17
+#: ../../administrator/troubleshooting/frontend.md:17
 msgid "Microsoft Edge"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:19
+#: ../../administrator/troubleshooting/frontend.md:19
 msgid "Opera"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:21
+#: ../../administrator/troubleshooting/frontend.md:21
 msgid "Vivaldi"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:23
+#: ../../administrator/troubleshooting/frontend.md:23
 msgid "Firefox"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:25
+#: ../../administrator/troubleshooting/frontend.md:25
 msgid "Safari"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:26
+#: ../../administrator/troubleshooting/frontend.md:26
 msgid "{kbd}`Command+Option+U`"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:29
+#: ../../administrator/troubleshooting/frontend.md:29
 msgid "Troubleshoot the issue"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:31
+#: ../../administrator/troubleshooting/frontend.md:31
 msgid "Crashes or performance issues"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:33
+#: ../../administrator/troubleshooting/frontend.md:33
 msgid "To start troubleshooting your issue, try the following:"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:35
-#: ../../administrator_documentation/troubleshooting/frontend.md:51
+#: ../../administrator/troubleshooting/frontend.md:35
+#: ../../administrator/troubleshooting/frontend.md:51
 msgid "Open your browser's developer tools."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:36
+#: ../../administrator/troubleshooting/frontend.md:36
 msgid "Select the `Console` tab."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:37
-#: ../../administrator_documentation/troubleshooting/frontend.md:53
+#: ../../administrator/troubleshooting/frontend.md:37
+#: ../../administrator/troubleshooting/frontend.md:53
 msgid "Open Funkwhale and try to replicate the issue."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:38
+#: ../../administrator/troubleshooting/frontend.md:38
 msgid "Take note of any errors or warnings that appear in the `Console` tab."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:40
+#: ../../administrator/troubleshooting/frontend.md:40
 msgid "If applicable, try these steps while logged in and again while logged out to see if there is any difference."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:42
+#: ../../administrator/troubleshooting/frontend.md:42
 msgid "Content not appearing"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:44
+#: ../../administrator/troubleshooting/frontend.md:44
 msgid "If content isn't appearing, it is usually due to one of the following reasons:"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:46
+#: ../../administrator/troubleshooting/frontend.md:46
 msgid "A conditional statement in the frontend code isn't working."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:47
+#: ../../administrator/troubleshooting/frontend.md:47
 msgid "The API is not serving content."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:49
+#: ../../administrator/troubleshooting/frontend.md:49
 msgid "You can confirm which of these is causing the issue by checking the `Network` tab in your browser's developer tools."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:52
+#: ../../administrator/troubleshooting/frontend.md:52
 msgid "Select the `Network` tab."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:54
+#: ../../administrator/troubleshooting/frontend.md:54
 msgid "Take not of any `4XX` or `5XX` responses in the API calls."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:56
+#: ../../administrator/troubleshooting/frontend.md:56
 msgid "If you are receiving `4XX` or `5XX` responses, this means the API isn't serving your content properly. You can investigate further by following the [backend troubleshooting guide](backend.md)."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:58
+#: ../../administrator/troubleshooting/frontend.md:58
 msgid "Get help"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/frontend.md:60
-msgid "If you can't solve the issue yourself, ask the community for help. Check out the [get help](get_help.md) guide for information about where to ask your question and what details to provide."
+#: ../../administrator/troubleshooting/frontend.md:60
+msgid "If you can't solve the issue yourself, ask the community for help. Check out the [get help](help.md) guide for information about where to ask your question and what details to provide."
 msgstr ""

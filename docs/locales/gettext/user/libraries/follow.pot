@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,92 +16,92 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../user_documentation/libraries/follow_library.md:1
+#: ../../user/libraries/follow.md:1
 msgid "Follow a library"
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:3
+#: ../../user/libraries/follow.md:3
 msgid "Follow a library to get access to its content. There are two ways to follow a library:"
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:9
+#: ../../user/libraries/follow.md:9
 msgid "Use a sharing link"
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:11
+#: ../../user/libraries/follow.md:11
 msgid "If you've received a sharing link, you can use this to follow a library. To do this:"
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:0
+#: ../../user/libraries/follow.md:0
 msgid "Desktop"
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:19
-#: ../../user_documentation/libraries/follow_library.md:31
-#: ../../user_documentation/libraries/follow_library.md:50
+#: ../../user/libraries/follow.md:19
+#: ../../user/libraries/follow.md:31
+#: ../../user/libraries/follow.md:50
 msgid "Log in to your pod."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:20
+#: ../../user/libraries/follow.md:20
 msgid "Select the upload icon ({fa}`upload`) in the top of the sidebar."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:21
-#: ../../user_documentation/libraries/follow_library.md:33
+#: ../../user/libraries/follow.md:21
+#: ../../user/libraries/follow.md:33
 msgid "Select {guilabel}`Get started` under {guilabel}`Follow remote libraries`. A screen appears showing you the libraries you are following."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:22
-#: ../../user_documentation/libraries/follow_library.md:34
+#: ../../user/libraries/follow.md:22
+#: ../../user/libraries/follow.md:34
 msgid "Paste the sharing link into the {guilabel}`Search a remote library` search bar."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:23
-#: ../../user_documentation/libraries/follow_library.md:35
+#: ../../user/libraries/follow.md:23
+#: ../../user/libraries/follow.md:35
 msgid "Select the {guilabel}`Search` icon or hit {kbd}`⏎ Return` to search for the library. If the library exists, a library card appears."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:24
-#: ../../user_documentation/libraries/follow_library.md:36
+#: ../../user/libraries/follow.md:24
+#: ../../user/libraries/follow.md:36
 msgid "Select {guilabel}`Follow` on the library card. If the library's privacy level is {guilabel}`Nobody except me`, the owner needs to approve the request."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:0
+#: ../../user/libraries/follow.md:0
 msgid "Mobile"
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:32
+#: ../../user/libraries/follow.md:32
 msgid "Select the upload icon ({fa}`upload`) at the top of the screen"
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:40
+#: ../../user/libraries/follow.md:40
 msgid "That's it! The server then scans the content and you can see it on your {term}`pod`."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:42
+#: ../../user/libraries/follow.md:42
 msgid "Follow from content on your pod"
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:45
+#: ../../user/libraries/follow.md:45
 msgid "You can only follow a library from content pages if its privacy level is not {guilabel}`Nobody except me`."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:48
+#: ../../user/libraries/follow.md:48
 msgid "If a user on your {term}`pod` has already followed a library, you can find it by selecting content from that library. To do this:"
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:51
+#: ../../user/libraries/follow.md:51
 msgid "Select a track, album, or artist from the library you want to follow."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:52
+#: ../../user/libraries/follow.md:52
 msgid "Scroll to the bottom of the page. The library card appears in the {guilabel}`User libraries` section."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:53
+#: ../../user/libraries/follow.md:53
 msgid "Select {guilabel}`Follow` on the library card."
 msgstr ""
 
-#: ../../user_documentation/libraries/follow_library.md:55
+#: ../../user/libraries/follow.md:55
 msgid "You're done! The content will remain on the server even if the other user stops following the library."
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,81 +16,81 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../moderator_documentation/domains/purge_domain.md:1
+#: ../../moderator/domains/purge.md:1
 msgid "Purge domain data"
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:4
+#: ../../moderator/domains/purge.md:4
 msgid "Purging a domain's data removes all objects and caches associated to that domain. This impacts users who have objects from these domains in their libraries."
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:7
+#: ../../moderator/domains/purge.md:7
 msgid "When users follow content from another domain that content is visible on your {term}`pod`. If a domain hosts illegal or offensive content you can purge the content associated with it."
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:0
+#: ../../moderator/domains/purge.md:0
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:13
+#: ../../moderator/domains/purge.md:13
 msgid "{guilabel}`Moderation` – provides access to the administration and moderation menus."
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:16
+#: ../../moderator/domains/purge.md:16
 msgid "To purge content from a domain:"
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:0
+#: ../../moderator/domains/purge.md:0
 msgid "Desktop"
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:24
-#: ../../moderator_documentation/domains/purge_domain.md:38
+#: ../../moderator/domains/purge.md:24
+#: ../../moderator/domains/purge.md:38
 msgid "Log in to your {term}`pod`."
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:25
+#: ../../moderator/domains/purge.md:25
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:26
-#: ../../moderator_documentation/domains/purge_domain.md:40
+#: ../../moderator/domains/purge.md:26
+#: ../../moderator/domains/purge.md:40
 msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:27
-#: ../../moderator_documentation/domains/purge_domain.md:41
+#: ../../moderator/domains/purge.md:27
+#: ../../moderator/domains/purge.md:41
 msgid "Select {guilabel}`Domains` at the top of the page. The {guilabel}`Domains` page opens. You can see a list of known domains on this page."
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:28
-#: ../../moderator_documentation/domains/purge_domain.md:42
+#: ../../moderator/domains/purge.md:28
+#: ../../moderator/domains/purge.md:42
 msgid "Select the checkbox ({fa}`square`) next to the domain(s) you want to purge. Selected domains show a tick ({fa}`check-square`)."
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:29
-#: ../../moderator_documentation/domains/purge_domain.md:43
+#: ../../moderator/domains/purge.md:29
+#: ../../moderator/domains/purge.md:43
 msgid "Select {guilabel}`Purge` in the {guilabel}`Actions` dropdown."
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:30
-#: ../../moderator_documentation/domains/purge_domain.md:44
+#: ../../moderator/domains/purge.md:30
+#: ../../moderator/domains/purge.md:44
 msgid "Select {guilabel}`Go`. A {guilabel}`Do you want to launch purge on {count} items` warning appears."
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:31
-#: ../../moderator_documentation/domains/purge_domain.md:45
+#: ../../moderator/domains/purge.md:31
+#: ../../moderator/domains/purge.md:45
 msgid "Select {guilabel}`Launch`."
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:0
+#: ../../moderator/domains/purge.md:0
 msgid "Mobile"
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:39
+#: ../../moderator/domains/purge.md:39
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/domains/purge_domain.md:49
+#: ../../moderator/domains/purge.md:49
 msgid "You're done! Your pod clears all the content associated with the selected domains."
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,130 +16,130 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:1
+#: ../../moderator/internal-users/registration.md:1
 msgid "Handle user registrations"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:3
+#: ../../moderator/internal-users/registration.md:3
 msgid "{term}`Pod` admins can enable manual sign-up validation. This setting requires moderators to approve or refuse account creations."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:0
+#: ../../moderator/internal-users/registration.md:0
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:9
+#: ../../moderator/internal-users/registration.md:9
 msgid "{guilabel}`Moderation` – provides access to the administration and moderation menus."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:12
+#: ../../moderator/internal-users/registration.md:12
 msgid "Requests appear in the {guilabel}`User Requests` list. Each request contains the following information:"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:14
+#: ../../moderator/internal-users/registration.md:14
 msgid "The user the request was {guilabel}`Submitted by`"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:15
+#: ../../moderator/internal-users/registration.md:15
 msgid "The {guilabel}`Creation date` of the request."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:16
+#: ../../moderator/internal-users/registration.md:16
 msgid "**Optional** – any responses the user left to fields in the sign-up form."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:17
+#: ../../moderator/internal-users/registration.md:17
 msgid "The {guilabel}`Status` of the request."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:18
+#: ../../moderator/internal-users/registration.md:18
 msgid "Which moderator the request is {guilabel}`Assigned to`."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:19
+#: ../../moderator/internal-users/registration.md:19
 msgid "The {guilabel}`Resolution date` of the request."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:20
+#: ../../moderator/internal-users/registration.md:20
 msgid "Any {guilabel}`Internal notes` left by the moderators."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:26
+#: ../../moderator/internal-users/registration.md:26
 msgid "Approve a sign-up request"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:28
+#: ../../moderator/internal-users/registration.md:28
 msgid "To approve a sign-up request:"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:0
+#: ../../moderator/internal-users/registration.md:0
 msgid "Desktop"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:36
-#: ../../moderator_documentation/internal_users/handle_registration.md:48
-#: ../../moderator_documentation/internal_users/handle_registration.md:69
-#: ../../moderator_documentation/internal_users/handle_registration.md:81
+#: ../../moderator/internal-users/registration.md:36
+#: ../../moderator/internal-users/registration.md:48
+#: ../../moderator/internal-users/registration.md:69
+#: ../../moderator/internal-users/registration.md:81
 msgid "Log in to your {term}`pod`."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:37
-#: ../../moderator_documentation/internal_users/handle_registration.md:70
+#: ../../moderator/internal-users/registration.md:37
+#: ../../moderator/internal-users/registration.md:70
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:38
-#: ../../moderator_documentation/internal_users/handle_registration.md:50
-#: ../../moderator_documentation/internal_users/handle_registration.md:71
-#: ../../moderator_documentation/internal_users/handle_registration.md:83
+#: ../../moderator/internal-users/registration.md:38
+#: ../../moderator/internal-users/registration.md:50
+#: ../../moderator/internal-users/registration.md:71
+#: ../../moderator/internal-users/registration.md:83
 msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:39
-#: ../../moderator_documentation/internal_users/handle_registration.md:51
-#: ../../moderator_documentation/internal_users/handle_registration.md:72
-#: ../../moderator_documentation/internal_users/handle_registration.md:84
+#: ../../moderator/internal-users/registration.md:39
+#: ../../moderator/internal-users/registration.md:51
+#: ../../moderator/internal-users/registration.md:72
+#: ../../moderator/internal-users/registration.md:84
 msgid "Select {guilabel}`User Requests` at the top of the screen. A list of pending requests appears."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:40
-#: ../../moderator_documentation/internal_users/handle_registration.md:52
-#: ../../moderator_documentation/internal_users/handle_registration.md:73
-#: ../../moderator_documentation/internal_users/handle_registration.md:85
+#: ../../moderator/internal-users/registration.md:40
+#: ../../moderator/internal-users/registration.md:52
+#: ../../moderator/internal-users/registration.md:73
+#: ../../moderator/internal-users/registration.md:85
 msgid "Read through the details of the request."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:41
-#: ../../moderator_documentation/internal_users/handle_registration.md:53
+#: ../../moderator/internal-users/registration.md:41
+#: ../../moderator/internal-users/registration.md:53
 msgid "Select {guilabel}`Approve` in the {guilabel}`Actions` section."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:0
+#: ../../moderator/internal-users/registration.md:0
 msgid "Mobile"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:49
-#: ../../moderator_documentation/internal_users/handle_registration.md:82
+#: ../../moderator/internal-users/registration.md:49
+#: ../../moderator/internal-users/registration.md:82
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:57
+#: ../../moderator/internal-users/registration.md:57
 msgid "That's it! You've approved the user's sign-up request. The user can now log in."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:59
+#: ../../moderator/internal-users/registration.md:59
 msgid "Refuse a sign-up request"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:61
+#: ../../moderator/internal-users/registration.md:61
 msgid "To refuse a sign-up request:"
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:74
-#: ../../moderator_documentation/internal_users/handle_registration.md:86
+#: ../../moderator/internal-users/registration.md:74
+#: ../../moderator/internal-users/registration.md:86
 msgid "Select {guilabel}`Refuse` in the {guilabel}`Actions` section."
 msgstr ""
 
-#: ../../moderator_documentation/internal_users/handle_registration.md:90
+#: ../../moderator/internal-users/registration.md:90
 msgid "That's it! You've refused the user's sign-up request. The user can't log in to your pod."
 msgstr ""

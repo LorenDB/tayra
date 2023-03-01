@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,59 +16,59 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../developer_documentation/plugins/create.md:1
+#: ../../developer/plugins/create.md:1
 msgid "Write a plugin"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:3
+#: ../../developer/plugins/create.md:3
 msgid "You can write plugins to extend the features of your Funkwhale pod. Follow the instructions in this guide to get started with your first plugin."
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:10
+#: ../../developer/plugins/create.md:10
 msgid "Before you begin"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:12
+#: ../../developer/plugins/create.md:12
 msgid "Before you start writing your plugin, you need to understand the following core concepts:"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:19
+#: ../../developer/plugins/create.md:19
 msgid "We'll explain each of these concepts in the next few sections"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:21
+#: ../../developer/plugins/create.md:21
 msgid "Scopes"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:23
+#: ../../developer/plugins/create.md:23
 msgid "Plugins fall into two different **scopes**:"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:25
+#: ../../developer/plugins/create.md:25
 msgid "User-level plugins that are configured by end-users for their own use"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:26
+#: ../../developer/plugins/create.md:26
 msgid "Pod-level plugins that are configured by pod admins and are not connected to a particular user"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:28
+#: ../../developer/plugins/create.md:28
 msgid "User-level plugins can also be used to import files from a third-party service, such as cloud storage or FTP."
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:30
+#: ../../developer/plugins/create.md:30
 msgid "Hooks"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:32
+#: ../../developer/plugins/create.md:32
 msgid "**Hooks** are entrypoints that allow your plugin to listen to changes. You can create hooks to react to different events that occur in the Funkwhale application."
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:34
+#: ../../developer/plugins/create.md:34
 msgid "An example of this can be seen in our Scrobbler plugin. We register a `LISTENING_CREATED` hook to notify any registered callback function when a listening is recorded. When a user listens to a track, the `notfy_lastfm` function fires."
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:45
+#: ../../developer/plugins/create.md:45
 msgid "Available hooks"
 msgstr ""
 
@@ -76,19 +76,19 @@ msgstr ""
 msgid "Called when a track is being listened"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:51
+#: ../../developer/plugins/create.md:51
 msgid "Filters"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:53
+#: ../../developer/plugins/create.md:53
 msgid "**Filters** are entrypoints that allow you to modify or add information. When you use the `register_filter` decorator, your function should return a value to be used by the server."
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:55
+#: ../../developer/plugins/create.md:55
 msgid "In this example, the `PLUGINS_DEPENDENCIES` filter is used to install additional dependencies required by your plugin. The `dependencies` function returns the additional dependency `django_prometheus` to request the dependency be installed by the server."
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:68
+#: ../../developer/plugins/create.md:68
 msgid "Available filters"
 msgstr ""
 
@@ -112,173 +112,173 @@ msgstr ""
 msgid "Called with an empty list, use this filter to register new urls and views"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:78
+#: ../../developer/plugins/create.md:78
 msgid "Write your plugin"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:80
+#: ../../developer/plugins/create.md:80
 msgid "Once you know what type of plugin you want to write and what entrypoint you want to use, you can start writing your plugin."
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:82
+#: ../../developer/plugins/create.md:82
 msgid "Plugins are made up of the following 3 files:"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:84
+#: ../../developer/plugins/create.md:84
 msgid "`__init__.py` - indicates that the directory is a Python package"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:85
+#: ../../developer/plugins/create.md:85
 msgid "`funkwhale_startup.py` - the file that loads during Funkwhale initialization"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:86
+#: ../../developer/plugins/create.md:86
 msgid "`funkwhale_ready.py` - the file that loads when Funkwhale is configured and ready"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:88
+#: ../../developer/plugins/create.md:88
 msgid "Declare your plugin"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:90
+#: ../../developer/plugins/create.md:90
 msgid "You need to declare your plugin and its configuration options so that Funkwhale knows how to load the plugin. To do this, you must declare a new `plugins` instance in your `funkwhale_startup.py` file."
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:92
+#: ../../developer/plugins/create.md:92
 msgid "Your `plugins` should include the following information:"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:98
+#: ../../developer/plugins/create.md:98
 msgid "Parameter"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:99
+#: ../../developer/plugins/create.md:99
 msgid "Data type"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:100
+#: ../../developer/plugins/create.md:100
 msgid "Description"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:101
+#: ../../developer/plugins/create.md:101
 msgid "`name`"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:102
-#: ../../developer_documentation/plugins/create.md:105
-#: ../../developer_documentation/plugins/create.md:108
-#: ../../developer_documentation/plugins/create.md:111
+#: ../../developer/plugins/create.md:102
+#: ../../developer/plugins/create.md:105
+#: ../../developer/plugins/create.md:108
+#: ../../developer/plugins/create.md:111
 msgid "String"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:103
+#: ../../developer/plugins/create.md:103
 msgid "The name of your plugin, used in the `.env` file"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:104
+#: ../../developer/plugins/create.md:104
 msgid "`label`"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:106
+#: ../../developer/plugins/create.md:106
 msgid "The readable label that appears in the Funkwhale frontend"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:107
+#: ../../developer/plugins/create.md:107
 msgid "`description`"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:109
+#: ../../developer/plugins/create.md:109
 msgid "A meaningful description of your plugin and what it does"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:110
+#: ../../developer/plugins/create.md:110
 msgid "`version`"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:112
+#: ../../developer/plugins/create.md:112
 msgid "The version number of your plugin"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:113
+#: ../../developer/plugins/create.md:113
 msgid "`user`"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:114
+#: ../../developer/plugins/create.md:114
 msgid "Boolean"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:115
+#: ../../developer/plugins/create.md:115
 msgid "Whether the plugin is a **user-level** plugin or a **pod-level** plugin. See [scopes](#scopes) for more information"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:116
+#: ../../developer/plugins/create.md:116
 msgid "`conf`"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:117
+#: ../../developer/plugins/create.md:117
 msgid "Array of Objects"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:118
+#: ../../developer/plugins/create.md:118
 msgid "A list of configuration options"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:121
+#: ../../developer/plugins/create.md:121
 msgid "In this example, we declare a new **user-level** plugin called \"My Plugin\". The user can configure a `greeting` in the plugin configuration."
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:140
+#: ../../developer/plugins/create.md:140
 msgid "Write your plugin logic"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:142
+#: ../../developer/plugins/create.md:142
 msgid "Once you've declared your plugin, you can write the plugin code in your `funkwhale_ready.py` file."
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:145
+#: ../../developer/plugins/create.md:145
 msgid "You must import your plugin declaration from your `funkwhale_startup.py` file."
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:148
+#: ../../developer/plugins/create.md:148
 msgid "In this example, we create a simple API endpoint that returns a greeting to the user. To do this:"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:150
+#: ../../developer/plugins/create.md:150
 msgid "We create a new APIView class that accepts a `GET` request"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:151
+#: ../../developer/plugins/create.md:151
 msgid "We read the greeting value from the plugin `conf`"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:152
+#: ../../developer/plugins/create.md:152
 msgid "We return the greeting value with the user's username"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:153
+#: ../../developer/plugins/create.md:153
 msgid "We register this view at the endpoint `/greeting`"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:193
+#: ../../developer/plugins/create.md:193
 msgid "Result"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:195
+#: ../../developer/plugins/create.md:195
 msgid "Here is an example of how the above plugin works:"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:197
+#: ../../developer/plugins/create.md:197
 msgid "User \"Harry\" enables the plugin"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:198
+#: ../../developer/plugins/create.md:198
 msgid "\"Harry\" changes the greeting to \"You're a wizard\""
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:199
+#: ../../developer/plugins/create.md:199
 msgid "\"Harry\" visits the `/greeting` endpoint in their browser"
 msgstr ""
 
-#: ../../developer_documentation/plugins/create.md:200
+#: ../../developer/plugins/create.md:200
 msgid "The browser returns the message \"You're a wizard Harry\""
 msgstr ""

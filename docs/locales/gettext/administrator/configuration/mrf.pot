@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,102 +16,102 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:1
+#: ../../administrator/configuration/mrf.md:1
 msgid "Message Rewrite Facility (MRF)"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:3
-msgid "Funkwhale includes a feature that mimics [Pleroma’s Message Rewrite Facility (MRF)](https://docs-develop.pleroma.social/backend/configuration/mrf/). The MRF enables instance admins to create custom moderation rules. You can use these rules to complement Funkwhale's [built-in moderation tools](../../moderator_documentation/index.md)."
+#: ../../administrator/configuration/mrf.md:3
+msgid "Funkwhale includes a feature that mimics [Pleroma’s Message Rewrite Facility (MRF)](https://docs-develop.pleroma.social/backend/configuration/mrf/). The MRF enables instance admins to create custom moderation rules. You can use these rules to complement Funkwhale's [built-in moderation tools](../../moderator/index.md)."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:5
+#: ../../administrator/configuration/mrf.md:5
 msgid "Architecture"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:7
+#: ../../administrator/configuration/mrf.md:7
 msgid "The MRF is a pluggable system that processes messages and forwards them to a list of registered policies. Each policy can mutate the message, leave it as is, or discard it."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:9
+#: ../../administrator/configuration/mrf.md:9
 msgid "We implement some of Funkwhale's built-in moderation tools as a MRF policy. For example:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:11
+#: ../../administrator/configuration/mrf.md:11
 msgid "Allow-list, when checking incoming messages ([code](https://dev.funkwhale.audio/funkwhale/funkwhale/blob/stable/api/funkwhale_api/moderation/mrf_policies.py))."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:12
+#: ../../administrator/configuration/mrf.md:12
 msgid "Domain and user blocking, when checking incoming messages ([code](https://dev.funkwhale.audio/funkwhale/funkwhale/blob/stable/api/funkwhale_api/federation/mrf_policies.py))"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:15
+#: ../../administrator/configuration/mrf.md:15
 msgid "Pleroma MRF policies can also affect outgoing messages. This is not currently supported in Funkwhale."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:18
+#: ../../administrator/configuration/mrf.md:18
 msgid "Disclaimer"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:20
+#: ../../administrator/configuration/mrf.md:20
 msgid "Writing custom MRF rules can impact the performance and stability of your pod. It can also affect message delivery. Every time your pod receives a message it calls your policy."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:22
+#: ../../administrator/configuration/mrf.md:22
 msgid "The Funkwhale project consider all custom MRF policies to fall under the purview of the AGPL. This means you're required to release the source of your custom MRF policy modules publicly."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:24
+#: ../../administrator/configuration/mrf.md:24
 msgid "Write your first MRF policy"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:26
+#: ../../administrator/configuration/mrf.md:26
 msgid "MRF policies are written as Python 3 functions that take at least one `payload` parameter. This payload is the raw ActivityPub message, received via HTTP, following the HTTP signature check."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:28
+#: ../../administrator/configuration/mrf.md:28
 msgid "In the example below we write a policy that discards all Follow requests from listed domains:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:55
+#: ../../administrator/configuration/mrf.md:55
 msgid "You need to store this code in a Funkwhale plugin. To create one, execute the following:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:79
+#: ../../administrator/configuration/mrf.md:79
 msgid "Once you've created the plugin, put your code in an `mrf_policies.py` file. Place this file inside the plugin directory. Next, enable the plugin in your {file}`.env` file by adding its name to the {attr}`FUNKWHALE_PLUGINS` list. Add this variable if it's not there."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:81
+#: ../../administrator/configuration/mrf.md:81
 msgid "Test your MRF policy"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:83
+#: ../../administrator/configuration/mrf.md:83
 msgid "To make the job of writing and debugging MRF policies easier, we provide a management command."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:85
+#: ../../administrator/configuration/mrf.md:85
 msgid "List registered MRF policies."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:0
+#: ../../administrator/configuration/mrf.md:0
 msgid "Debian"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:0
+#: ../../administrator/configuration/mrf.md:0
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:108
+#: ../../administrator/configuration/mrf.md:108
 msgid "Check how your MRF policy handles a follow."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:132
+#: ../../administrator/configuration/mrf.md:132
 msgid "Check how your MRF handles a problematic follow."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:157
+#: ../../administrator/configuration/mrf.md:157
 msgid "Check a payload against activity already present in the database. You can find the UUID of an activity by visiting `/api/admin/federation/activity`."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/mrf.md:185
+#: ../../administrator/configuration/mrf.md:185
 msgid "There are extra options for testing MRF policies. Check the command help for more options."
 msgstr ""

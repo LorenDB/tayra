@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,97 +16,97 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../moderator_documentation/reports/internal_notes.md:1
+#: ../../moderator/reports/notes.md:1
 msgid "Use internal notes"
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:3
+#: ../../moderator/reports/notes.md:3
 msgid "Use internal notes to add information to a report. This can be a summary of your actions or an update on your investigation. Internal notes are only visible to pod admins and moderators."
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:0
+#: ../../moderator/reports/notes.md:0
 msgid "Required permissions"
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:9
+#: ../../moderator/reports/notes.md:9
 msgid "{guilabel}`Moderation` – provides access to the administration and moderation menus."
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:12
+#: ../../moderator/reports/notes.md:12
 msgid "Add notes to a report"
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:14
+#: ../../moderator/reports/notes.md:14
 msgid "You can add notes to **Unresolved** and **Resolved** reports. To add an internal note:"
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:0
+#: ../../moderator/reports/notes.md:0
 msgid "Desktop"
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:22
-#: ../../moderator_documentation/reports/internal_notes.md:34
-#: ../../moderator_documentation/reports/internal_notes.md:57
-#: ../../moderator_documentation/reports/internal_notes.md:69
+#: ../../moderator/reports/notes.md:22
+#: ../../moderator/reports/notes.md:34
+#: ../../moderator/reports/notes.md:57
+#: ../../moderator/reports/notes.md:69
 msgid "Log in to your {term}`pod`."
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:23
-#: ../../moderator_documentation/reports/internal_notes.md:58
+#: ../../moderator/reports/notes.md:23
+#: ../../moderator/reports/notes.md:58
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the sidebar to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:24
-#: ../../moderator_documentation/reports/internal_notes.md:36
-#: ../../moderator_documentation/reports/internal_notes.md:59
-#: ../../moderator_documentation/reports/internal_notes.md:71
+#: ../../moderator/reports/notes.md:24
+#: ../../moderator/reports/notes.md:36
+#: ../../moderator/reports/notes.md:59
+#: ../../moderator/reports/notes.md:71
 msgid "Select {guilabel}`Moderation`. The {guilabel}`Reports` page opens."
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:25
-#: ../../moderator_documentation/reports/internal_notes.md:37
-#: ../../moderator_documentation/reports/internal_notes.md:60
-#: ../../moderator_documentation/reports/internal_notes.md:72
-msgid "[Search for the report](search_reports.md)."
+#: ../../moderator/reports/notes.md:25
+#: ../../moderator/reports/notes.md:37
+#: ../../moderator/reports/notes.md:60
+#: ../../moderator/reports/notes.md:72
+msgid "[Search for the report](search.md)."
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:26
-#: ../../moderator_documentation/reports/internal_notes.md:38
+#: ../../moderator/reports/notes.md:26
+#: ../../moderator/reports/notes.md:38
 msgid "{guilabel}`Write` your note in the {guilabel}`Internal notes` section. This input field supports Markdown syntax. You can {guilabel}`Preview` how the note will look to other users."
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:27
-#: ../../moderator_documentation/reports/internal_notes.md:39
+#: ../../moderator/reports/notes.md:27
+#: ../../moderator/reports/notes.md:39
 msgid "Select {guilabel}`Add note` to save your note."
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:0
+#: ../../moderator/reports/notes.md:0
 msgid "Mobile"
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:35
-#: ../../moderator_documentation/reports/internal_notes.md:70
+#: ../../moderator/reports/notes.md:35
+#: ../../moderator/reports/notes.md:70
 msgid "Select the wrench icon ({fa}`wrench`) at the top of the screen to open the {guilabel}`Administration` menu."
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:43
+#: ../../moderator/reports/notes.md:43
 msgid "Delete notes from a report"
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:46
+#: ../../moderator/reports/notes.md:46
 msgid "Deleting an internal note is irreversible. Make sure you are not deleting anything important."
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:49
+#: ../../moderator/reports/notes.md:49
 msgid "You can delete your own notes and the notes of other moderators. You can do this for both **Resolved** and **Unresolved** reports. To delete an internal note:"
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:61
-#: ../../moderator_documentation/reports/internal_notes.md:73
+#: ../../moderator/reports/notes.md:61
+#: ../../moderator/reports/notes.md:73
 msgid "Find the note you want to delete in the {guilabel}`Internal notes` section."
 msgstr ""
 
-#: ../../moderator_documentation/reports/internal_notes.md:62
-#: ../../moderator_documentation/reports/internal_notes.md:74
+#: ../../moderator/reports/notes.md:62
+#: ../../moderator/reports/notes.md:74
 msgid "Select {guilabel}`Delete`"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,38 +16,38 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../administrator_documentation/troubleshooting/index.md:13
+#: ../../administrator/troubleshooting/index.md:13
 msgid "Troubleshoot"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/index.md:1
+#: ../../administrator/troubleshooting/index.md:1
 msgid "Troubleshoot Funkwhale"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/index.md:3
+#: ../../administrator/troubleshooting/index.md:3
 msgid "If you're running into issues with Funkwhale, follow the guides in this section. If you need to report an issue, make sure you include as much information as possible to help us get to the bottom of it."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/index.md:5
+#: ../../administrator/troubleshooting/index.md:5
 msgid "Issues usually fall into one of the following categories:"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/index.md:7
+#: ../../administrator/troubleshooting/index.md:7
 msgid "Frontend – issues relating to the Funkwhale web interface."
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/index.md:8
+#: ../../administrator/troubleshooting/index.md:8
 msgid "Backend – issues affecting one or more of the following:"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/index.md:9
+#: ../../administrator/troubleshooting/index.md:9
 msgid "API – tracks or data not being returned properly"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/index.md:10
+#: ../../administrator/troubleshooting/index.md:10
 msgid "Imports – tracks you have added aren't being imported correctly"
 msgstr ""
 
-#: ../../administrator_documentation/troubleshooting/index.md:11
+#: ../../administrator/troubleshooting/index.md:11
 msgid "Federation – your pod can't contact other fediverse servers or access federated content"
 msgstr ""

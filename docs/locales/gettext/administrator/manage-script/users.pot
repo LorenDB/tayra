@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,106 +16,106 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../administrator_documentation/manage_script/users.md:1
+#: ../../administrator/manage-script/users.md:1
 msgid "Manage users"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:3
+#: ../../administrator/manage-script/users.md:3
 msgid "The `funkwhale-manage` command line interface includes commands for user management. Use these commands to automate managing users from the command line."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:5
+#: ../../administrator/manage-script/users.md:5
 msgid "All users-related commands are available under the `funkwhale-manage fw users` namespace."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:7
+#: ../../administrator/manage-script/users.md:7
 msgid "Create users"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:9
+#: ../../administrator/manage-script/users.md:9
 msgid "You can create users with the `funkwhale-manage` command line interface. There are different ways to create users depending on what approach you want to take."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:11
+#: ../../administrator/manage-script/users.md:11
 msgid "Create a user interactively"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:0
+#: ../../administrator/manage-script/users.md:0
 msgid "Debian"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:0
+#: ../../administrator/manage-script/users.md:0
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:34
+#: ../../administrator/manage-script/users.md:34
 msgid "Create a user with a random password"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:57
+#: ../../administrator/manage-script/users.md:57
 msgid "Create a user with a password set from an environment variable"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:82
+#: ../../administrator/manage-script/users.md:82
 msgid "There are extra options for user configuration, such as quota and {term}`permissions`. Check the command help for more options."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:105
+#: ../../administrator/manage-script/users.md:105
 msgid "Update users"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:107
+#: ../../administrator/manage-script/users.md:107
 msgid "You can update user accounts using the `funkwhale-manage` command line interface. Update commands are available under the `funkwhale-manage fw users set` namespace."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:109
+#: ../../administrator/manage-script/users.md:109
 msgid "Set upload quota for a user"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:132
+#: ../../administrator/manage-script/users.md:132
 msgid "Make users staff members"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:155
+#: ../../administrator/manage-script/users.md:155
 msgid "Remove a user's staff privileges"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:178
+#: ../../administrator/manage-script/users.md:178
 msgid "Give a user moderation permissions"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:201
+#: ../../administrator/manage-script/users.md:201
 msgid "Reset a user's password"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:224
+#: ../../administrator/manage-script/users.md:224
 msgid "Reset a user's password using an environment variable"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:249
+#: ../../administrator/manage-script/users.md:249
 msgid "There are extra options for updating users. Check the command help for more options."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:272
+#: ../../administrator/manage-script/users.md:272
 msgid "Delete users"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:274
+#: ../../administrator/manage-script/users.md:274
 msgid "Delete a user's account but leave a reference to them in the database"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:276
+#: ../../administrator/manage-script/users.md:276
 msgid "This prevents the same username being used in future."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:299
+#: ../../administrator/manage-script/users.md:299
 msgid "Delete a user's account, including all references in the database"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:301
+#: ../../administrator/manage-script/users.md:301
 msgid "This means the username can be reused."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/users.md:324
+#: ../../administrator/manage-script/users.md:324
 msgid "There are extra options for deleting users. Check the command help for more options."
 msgstr ""

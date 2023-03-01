@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,26 +16,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../administrator_documentation/configuration_docs/index.md:5
+#: ../../administrator/configuration/index.md:5
 msgid "Environment file"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/index.md:5
+#: ../../administrator/configuration/index.md:5
 msgid "Instance settings"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/index.md:5
+#: ../../administrator/configuration/index.md:5
 msgid "Frontend customization"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/index.md:5
+#: ../../administrator/configuration/index.md:5
 msgid "Configuration options"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/index.md:1
+#: ../../administrator/configuration/index.md:1
 msgid "Configure your Funkwhale pod"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/index.md:3
+#: ../../administrator/configuration/index.md:3
 msgid "You can customize a lot of settings relating to your Funkwhale pod. These range from server-level settings to user-specific settings. Check out the guides in this section to get started."
 msgstr ""

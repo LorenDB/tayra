@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,70 +16,70 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../administrator_documentation/manage_script/library.md:1
+#: ../../administrator/manage-script/library.md:1
 msgid "Prune your Funkwhale library"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:3
+#: ../../administrator/manage-script/library.md:3
 msgid "Funkwhale doesn't delete data objects from the database when you delete a file. This is because they might exist in users' playlists, favorites, and listening history. These objects might also be present in another user's private libraries."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:5
+#: ../../administrator/manage-script/library.md:5
 msgid "Sometimes you may want to clear out dangling metadata. For example, if you import a lot of files with incorrect tags and then delete them."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:7
+#: ../../administrator/manage-script/library.md:7
 msgid "To help with this, the `funkwhale-manage` command line interface includes commands to prune dangling metadata from your database. All prune commands are available under the `funkwhale-manage prune_library` namespace. To ensure you don't remove data by accident, all commands run in dry run mode by default. Run commands with the `--no-dry-run` flag to perform the pruning action."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:10
-msgid "Running `prune_library` commands with the `--no-dry-run` flag is irreversible. Make sure you [back up your data](../upgrade_docs/backup.md)."
+#: ../../administrator/manage-script/library.md:10
+msgid "Running `prune_library` commands with the `--no-dry-run` flag is irreversible. Make sure you [back up your data](../upgrade/backup.md)."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:13
+#: ../../administrator/manage-script/library.md:13
 msgid "Commands"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:15
+#: ../../administrator/manage-script/library.md:15
 msgid "Prune tracks with no associated uploads"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:0
+#: ../../administrator/manage-script/library.md:0
 msgid "Debian"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:0
+#: ../../administrator/manage-script/library.md:0
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:38
+#: ../../administrator/manage-script/library.md:38
 msgid "Prune albums with no associated tracks"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:61
+#: ../../administrator/manage-script/library.md:61
 msgid "Prune artists with no associated tracks or albums"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:84
+#: ../../administrator/manage-script/library.md:84
 msgid "Prune all tracks, albums, and artist without associated data"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:107
+#: ../../administrator/manage-script/library.md:107
 msgid "There are extra options for pruning your database. Check the command help for more options."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:131
+#: ../../administrator/manage-script/library.md:131
 msgid "The command excludes tracks that are in users' favorites, playlists, and listen history. To include these tracks, add the corresponding `ignore` flag:"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:133
+#: ../../administrator/manage-script/library.md:133
 msgid "`--ignore-favorites`"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:134
+#: ../../administrator/manage-script/library.md:134
 msgid "`--ignore-playlists`"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/library.md:135
+#: ../../administrator/manage-script/library.md:135
 msgid "`--ignore-listenings`"
 msgstr ""

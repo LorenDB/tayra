@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,62 +16,62 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:1
+#: ../../administrator/manage-script/fix-uploads.md:1
 msgid "Fix uploads"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:3
+#: ../../administrator/manage-script/fix-uploads.md:3
 msgid "Use the `fix_uploads` command to let Funkwhale sort out common issues with your audio files."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:5
+#: ../../administrator/manage-script/fix-uploads.md:5
 msgid "Commands"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:7
+#: ../../administrator/manage-script/fix-uploads.md:7
 msgid "Fix mimetypes"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:9
+#: ../../administrator/manage-script/fix-uploads.md:9
 msgid "Check and fix file mimetypes with the `--mimetype` flag. This helps prevent issues with serving music files."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:0
+#: ../../administrator/manage-script/fix-uploads.md:0
 msgid "Debian"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:0
+#: ../../administrator/manage-script/fix-uploads.md:0
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:32
+#: ../../administrator/manage-script/fix-uploads.md:32
 msgid "Fix bitrate and duration"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:34
+#: ../../administrator/manage-script/fix-uploads.md:34
 msgid "Check and fix bitrate and duration with the `--audio-data` flag. This process can take a long time as it needs to access all files."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:57
+#: ../../administrator/manage-script/fix-uploads.md:57
 msgid "Fix file size"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:59
+#: ../../administrator/manage-script/fix-uploads.md:59
 msgid "Check and fix the file size with the `--size` flag."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:82
+#: ../../administrator/manage-script/fix-uploads.md:82
 msgid "Fix file checksums"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:84
+#: ../../administrator/manage-script/fix-uploads.md:84
 msgid "Check and fix file checksums with the `--checksum` flag."
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:107
+#: ../../administrator/manage-script/fix-uploads.md:107
 msgid "Change command batch size"
 msgstr ""
 
-#: ../../administrator_documentation/manage_script/fix_uploads.md:109
+#: ../../administrator/manage-script/fix-uploads.md:109
 msgid "Choose the batch size you want to process with the `--batch-size` or -`s` flag. Smaller batches process faster. Defaults to `1000`."
 msgstr ""

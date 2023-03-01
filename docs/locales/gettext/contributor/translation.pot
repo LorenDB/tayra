@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,74 +16,74 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../contributor_documentation/translation.md:1
+#: ../../contributor/translation.md:1
 msgid "Translate Funkwhale"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:3
+#: ../../contributor/translation.md:3
 msgid "Funkwhale depends on community translations to provide a localized experience to all users. All of our UX copy and documentation is written in American English. This isn't accessible to all users."
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:5
+#: ../../contributor/translation.md:5
 msgid "If you are interested in helping us reach more users, we welcome contributions in all languages!"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:7
+#: ../../contributor/translation.md:7
 msgid "Language coordination"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:9
+#: ../../contributor/translation.md:9
 msgid "Each language team requires a lead who can verify translations. You can see a list of languages and team leads [on our forum](https://forum.funkwhale.audio/d/107-coordinate-translations). If your language isn't available in our platform yet, reach out on the forum and we'll set it up."
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:11
+#: ../../contributor/translation.md:11
 msgid "We can also create language-specific sections of the forum to enable users to discuss things in languages other than English. Language-specific sections require moderators who can enforce the code of conduct. If you're interested in moderating a language-specific section, let us know [on the forum](https://forum.funkwhale.audio/d/18-language-specific-communities)."
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:13
+#: ../../contributor/translation.md:13
 msgid "Weblate"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:15
+#: ../../contributor/translation.md:15
 msgid "Funkwhale uses [Weblate](https://weblate.org) as its translation platform. Weblate provides an easy-to-use web frontend for submitting localized strings."
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:17
+#: ../../contributor/translation.md:17
 msgid "To get started, sign up to our [Weblate instance](https://translate.funkwhale.audio) and follow the instructions to set up your language preferences. The following projects are available for translation:"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:19
+#: ../../contributor/translation.md:19
 msgid "Funkwhale: The Funkwhale web app"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:20
+#: ../../contributor/translation.md:20
 msgid "Funkwhale for Android: Our official Android app"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:21
+#: ../../contributor/translation.md:21
 msgid "Funkwhale.audio: Our website"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:22
+#: ../../contributor/translation.md:22
 msgid "Documentation: This documentation hub"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:24
+#: ../../contributor/translation.md:24
 msgid "Guidelines"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:26
+#: ../../contributor/translation.md:26
 msgid "We trust each language team to deliver translations that are tonally consistent with the source language. Where applicable, follow these guidelines:"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:28
+#: ../../contributor/translation.md:28
 msgid "Use gender-neutral language"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:29
+#: ../../contributor/translation.md:29
 msgid "Use informal speech patterns, including contractions"
 msgstr ""
 
-#: ../../contributor_documentation/translation.md:30
+#: ../../contributor/translation.md:30
 msgid "Use sentence case for all content, including titles. For example: \"Language coordination\" rather than \"Language Coordination\""
 msgstr ""

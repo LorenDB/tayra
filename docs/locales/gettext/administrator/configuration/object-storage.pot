@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkwhale 1.3.0-rc3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 14:05+0100\n"
+"POT-Creation-Date: 2023-03-01 14:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,39 +16,39 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:1
+#: ../../administrator/configuration/object-storage.md:1
 msgid "Store media in an object store"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:3
+#: ../../administrator/configuration/object-storage.md:3
 msgid "By default, Funkwhale stores all media data in the `/srv/funkwhale/data/media` directory. If you prefer to use an S3-compatible object store, follow the instructions in this guide."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:10
+#: ../../administrator/configuration/object-storage.md:10
 msgid "Secure your object store"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:12
+#: ../../administrator/configuration/object-storage.md:12
 msgid "Before you begin, you need to secure your object store. Many S3-compatible stores list contents in the root by default. This exposes the URLs of your audio files and means that users can bypass authentication."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:14
+#: ../../administrator/configuration/object-storage.md:14
 msgid "To prevent listing content, add the following policy to your S3-compatible object store."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:39
+#: ../../administrator/configuration/object-storage.md:39
 msgid "If you're using `awscli`, you can store this policy in a `/tmp/policy` file and apply it using the following command:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:45
+#: ../../administrator/configuration/object-storage.md:45
 msgid "Update your environment file"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:47
+#: ../../administrator/configuration/object-storage.md:47
 msgid "To set up S3-compatible storage, fill out the relevant details in the `.env` file. If you want to serve audio files from the bucket, set `PROXY_MEDIA` to `false`."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:0
+#: ../../administrator/configuration/object-storage.md:0
 msgid "Environment variables"
 msgstr ""
 
@@ -120,66 +120,66 @@ msgstr ""
 msgid "If you're using S3 storage with :attr:`AWS_QUERYSTRING_AUTH` enabled, it's safe to disable this setting."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:81
+#: ../../administrator/configuration/object-storage.md:81
 msgid "Set up your reverse proxy"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:84
+#: ../../administrator/configuration/object-storage.md:84
 msgid "Serving files from object storage is not currently supported on Apache deployments."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:87
+#: ../../administrator/configuration/object-storage.md:87
 msgid "Serving files from an object store requires some changes to the reverse proxy."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:89
+#: ../../administrator/configuration/object-storage.md:89
 msgid "Open your Nginx configuration file in an editor."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:0
+#: ../../administrator/configuration/object-storage.md:0
 msgid "Debian"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:0
+#: ../../administrator/configuration/object-storage.md:0
 msgid "Docker"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:112
+#: ../../administrator/configuration/object-storage.md:112
 msgid "Comment out the `location /_protected/media/` block by adding a `#` to the start of each line."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:121
+#: ../../administrator/configuration/object-storage.md:121
 msgid "Uncomment the `location ~ /_protected/media/(.+)` block by removing the `#` from the start of each line."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:131
+#: ../../administrator/configuration/object-storage.md:131
 msgid "Add your S3 store URL to the `img-src` and `media-src` headers."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:137
+#: ../../administrator/configuration/object-storage.md:137
 msgid "Test your Nginx configuration."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:143
+#: ../../administrator/configuration/object-storage.md:143
 msgid "Restart Funkwhale and Nginx to pick up the changes."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:168
+#: ../../administrator/configuration/object-storage.md:168
 msgid "That's it! Files are now uploaded to and stored from your S3 bucket."
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:170
+#: ../../administrator/configuration/object-storage.md:170
 msgid "Troubleshooting"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:0
+#: ../../administrator/configuration/object-storage.md:0
 msgid "No Resolver Found"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:174
+#: ../../administrator/configuration/object-storage.md:174
 msgid "You may see the following error when streaming music from your S3-compatible store:"
 msgstr ""
 
-#: ../../administrator_documentation/configuration_docs/object_storage.md:180
+#: ../../administrator/configuration/object-storage.md:180
 msgid "This happens when the Nginx config is unable to use your server’s DNS resolver. We're still looking into this issue. You can work around this by adding a resolver to the `location ~/_protected/media/(.+)` block."
 msgstr ""
