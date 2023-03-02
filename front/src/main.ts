@@ -32,8 +32,6 @@ const app = createApp({
   }
 })
 
-app.config.performance = false
-
 app.use(router)
 app.use(store, key)
 
