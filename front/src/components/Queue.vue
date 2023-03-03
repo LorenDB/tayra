@@ -346,39 +346,16 @@ if (!isWebGLSupported) {
             </button>
           </div>
           <div class="progress-wrapper">
-            <div
-              v-if="currentTrack && !errored"
-              class="progress-area"
-            >
+            <div class="progress-area">
               <div
                 ref="progressBar"
-                :class="['ui', 'small', 'vibrant', {'indicating': isLoadingAudio}, 'progress']"
+                :class="['ui', 'small', 'vibrant', {'indicating': isLoadingAudio && !errored}, 'progress']"
                 @click="touchProgress"
               >
                 <div
                   class="buffer bar"
                   :style="{ 'transform': `translateX(${bufferProgress - 100}%)` }"
                 />
-                <div
-                  class="position bar"
-                  :style="{
-                    animationDuration: duration + 's',
-                    animationPlayState: isPlaying
-                      ? 'running'
-                      : 'paused'
-                  }"
-                />
-              </div>
-            </div>
-            <div
-              v-else
-              class="progress-area"
-            >
-              <div
-                ref="progress"
-                :class="['ui', 'small', 'vibrant', 'progress']"
-              >
-                <div class="buffer bar" />
                 <div class="position bar" />
               </div>
             </div>
