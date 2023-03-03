@@ -48,7 +48,6 @@
   .ui.progress .bar {
     transition: none;
     width: 100%;
-    transform: translateX(calc(var(--fw-track-progress) - 100%));
     transform-origin: top left;
     will-change: transform;
     position: absolute;
@@ -58,6 +57,10 @@
       opacity: 0;
       transition: opacity .2s ease;
       mix-blend-mode: overlay;
+    }
+
+    &.position {
+      transform: translate3d(calc(var(--fw-track-progress) - 100%), 0, 0);
     }
   }
   .ui.progress:hover .bar.seek {

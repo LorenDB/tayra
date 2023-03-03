@@ -160,10 +160,14 @@
   .ui.progress .bar {
     transition: none;
     width: 100%;
-    transform: translateX(calc(var(--fw-track-progress) - 100%));
     transform-origin: top left;
     will-change: transform;
+    
+    &.position {
+      transform: translate3d(calc(var(--fw-track-progress) - 100%), 0, 0);
+    }
   }
+
   .ui.progress .buffer.bar {
     position: absolute;
     background-color: rgba(255, 255, 255, 0.15);
@@ -189,6 +193,10 @@
     animation-duration: 2s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
+    
+    &:not(.buffer) {
+      background: transparent !important;
+    }
   }
   .ui.progress {
     margin: 0.5rem 0;

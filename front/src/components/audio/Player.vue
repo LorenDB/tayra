@@ -146,9 +146,7 @@ const hideArtist = () => {
           class="buffer bar"
           :style="{ 'transform': `translateX(${bufferProgress - 100}%)` }"
         />
-        <div
-          class="position bar"
-        />
+        <div class="position bar" />
         <div
           class="seek bar"
           :style="{ 'transform': `translateX(${x / screenWidth * 100 - 100}%)` }"
