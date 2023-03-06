@@ -179,7 +179,9 @@ export const usePlayer = createGlobalState(() => {
         ? progress
         : 0
 
-      document.documentElement.style.setProperty('--fw-track-progress', `${lastProgress}%`)
+      for (const bar of document.querySelectorAll<HTMLElement>('.ui.progress .position.bar')) {
+        bar.style.setProperty('--fw-track-progress', `${lastProgress}%`)
+      }
     }
   })
 
