@@ -2,7 +2,7 @@ import type { IAudioContext, IAudioNode } from 'standardized-audio-context'
 
 import { createEventHook, refDefault, type EventHookOn, useEventListener } from '@vueuse/core'
 import { createAudioSource } from '~/composables/audio/audio-api'
-import { reactive, ref, type Ref } from 'vue'
+import { effectScope, reactive, ref, type Ref } from 'vue'
 
 export interface SoundSource {
   uuid: string
@@ -46,6 +46,7 @@ export class HTMLSound implements Sound {
   #audio = new Audio()
   #soundLoopEventHook = createEventHook<HTMLSound>()
   #soundEndEventHook = createEventHook<HTMLSound>()
+  #ignoreError = false
 
   readonly isErrored = ref(false)
   readonly isLoaded = ref(false)
@@ -90,12 +91,17 @@ export class HTMLSound implements Sound {
       console.log('>> AUDIO STALLED', this)
     })
 
+    useEventListener(this.#audio, 'suspend', () => {
+      console.log('>> AUDIO SUSPEND', this)
+    })
+
     useEventListener(this.#audio, 'loadeddata', () => {
       // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
       this.isLoaded.value = this.#audio.readyState >= 2
     })
 
     useEventListener(this.#audio, 'error', (err) => {
+      if (this.#ignoreError) return
       console.error('>> AUDIO ERRORED', err, this)
       this.isErrored.value = true
       this.isLoaded.value = true
@@ -112,9 +118,14 @@ export class HTMLSound implements Sound {
     this.audioNode.disconnect()
     this.#audio.pause()
 
-    // Cancel any request downloading the source
-    this.#audio.src = ''
-    this.#audio.load()
+    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
+    if (this.#audio.readyState !== 4) {
+      this.#ignoreError = true
+      // Cancel any request downloading the source
+      this.#audio.src = ''
+      this.#audio.load()
+      this.#ignoreError = false
+    }
   }
 
   async play () {
