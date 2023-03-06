@@ -47,6 +47,7 @@ export class HTMLSound implements Sound {
   #soundLoopEventHook = createEventHook<HTMLSound>()
   #soundEndEventHook = createEventHook<HTMLSound>()
   #ignoreError = false
+  #scope = effectScope()
 
   readonly isErrored = ref(false)
   readonly isLoaded = ref(false)
@@ -72,39 +73,41 @@ export class HTMLSound implements Sound {
 
     console.log('CREATED SOUND INSTANCE', this)
 
-    useEventListener(this.#audio, 'ended', () => this.#soundEndEventHook.trigger(this))
-    useEventListener(this.#audio, 'timeupdate', () => {
-      if (this.#audio.currentTime === 0) {
-        this.#soundLoopEventHook.trigger(this)
-      }
-    })
+    this.#scope.run(() => {
+      useEventListener(this.#audio, 'ended', () => this.#soundEndEventHook.trigger(this))
+      useEventListener(this.#audio, 'timeupdate', () => {
+        if (this.#audio.currentTime === 0) {
+          this.#soundLoopEventHook.trigger(this)
+        }
+      })
 
-    useEventListener(this.#audio, 'waiting', () => {
-      console.log('>> AUDIO WAITING', this)
-    })
+      useEventListener(this.#audio, 'waiting', () => {
+        console.log('>> AUDIO WAITING', this)
+      })
 
-    useEventListener(this.#audio, 'playing', () => {
-      console.log('>> AUDIO PLAYING', this)
-    })
+      useEventListener(this.#audio, 'playing', () => {
+        console.log('>> AUDIO PLAYING', this)
+      })
 
-    useEventListener(this.#audio, 'stalled', () => {
-      console.log('>> AUDIO STALLED', this)
-    })
+      useEventListener(this.#audio, 'stalled', () => {
+        console.log('>> AUDIO STALLED', this)
+      })
 
-    useEventListener(this.#audio, 'suspend', () => {
-      console.log('>> AUDIO SUSPEND', this)
-    })
+      useEventListener(this.#audio, 'suspend', () => {
+        console.log('>> AUDIO SUSPEND', this)
+      })
 
-    useEventListener(this.#audio, 'loadeddata', () => {
-      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
-      this.isLoaded.value = this.#audio.readyState >= 2
-    })
+      useEventListener(this.#audio, 'loadeddata', () => {
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
+        this.isLoaded.value = this.#audio.readyState >= 2
+      })
 
-    useEventListener(this.#audio, 'error', (err) => {
-      if (this.#ignoreError) return
-      console.error('>> AUDIO ERRORED', err, this)
-      this.isErrored.value = true
-      this.isLoaded.value = true
+      useEventListener(this.#audio, 'error', (err) => {
+        if (this.#ignoreError) return
+        console.error('>> AUDIO ERRORED', err, this)
+        this.isErrored.value = true
+        this.isLoaded.value = true
+      })
     })
   }
 
@@ -115,17 +118,16 @@ export class HTMLSound implements Sound {
   }
 
   async dispose () {
+    // Remove all event listeners
+    this.#scope.stop()
+
+    // Stop audio playback
     this.audioNode.disconnect()
     this.#audio.pause()
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
-    if (this.#audio.readyState !== 4) {
-      this.#ignoreError = true
-      // Cancel any request downloading the source
-      this.#audio.src = ''
-      this.#audio.load()
-      this.#ignoreError = false
-    }
+    // Cancel any request downloading the source
+    this.#audio.src = ''
+    this.#audio.load()
   }
 
   async play () {
