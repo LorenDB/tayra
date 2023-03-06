@@ -7,6 +7,7 @@ import { useQueue, currentIndex, currentTrack } from './queue'
 import { useStore } from '~/store'
 
 import axios from 'axios'
+import { useClamp } from '@vueuse/math'
 
 // Looping
 export enum LoopingMode {
@@ -57,7 +58,7 @@ export const usePlayer = createGlobalState(() => {
   // Volume
   const lastVolume = useStorage('player:last-volume', 0.7)
 
-  const volume: Ref<number> = useStorage('player:volume', 0.7)
+  const volume: Ref<number> = useClamp(useStorage('player:volume', 0.7), 0, 1)
   watch(volume, (gain) => setGain(gain), { immediate: true })
 
   const mute = () => {
