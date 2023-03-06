@@ -25,6 +25,10 @@ const handleLeave = () => {
   stop()
   start()
 }
+
+const scroll = (event: WheelEvent) => {
+  volume.value += -Math.sign(event.deltaY) * 0.05
+}
 </script>
 
 <template>
@@ -34,6 +38,7 @@ const handleLeave = () => {
     @click.prevent.stop=""
     @mouseover="handleOver"
     @mouseleave="handleLeave"
+    @wheel.stop.prevent="scroll"
   >
     <span
       v-if="volume === 0"
