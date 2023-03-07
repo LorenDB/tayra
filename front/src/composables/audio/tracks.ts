@@ -114,7 +114,7 @@ export const useTracks = createGlobalState(() => {
 
   // Skip when errored
   const { start: soundUnplayable, stop: abortSoundUnplayableTimeout } = useTimeoutFn(() => {
-    const { isPlaying, looping, LoopingMode } = usePlayer()
+    const { isPlaying, looping, LoopingMode, pauseReason, PauseReason } = usePlayer()
     const { playNext } = useQueue()
 
     if (looping.value !== LoopingMode.LoopTrack) {
@@ -122,6 +122,7 @@ export const useTracks = createGlobalState(() => {
     }
 
     isPlaying.value = false
+    pauseReason.value = PauseReason.Errored
   }, 3000, { immediate: false })
 
   // Preload next track

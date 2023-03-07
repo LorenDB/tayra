@@ -132,7 +132,7 @@ const store: Module<State, RootState> = {
       state.populating = true
 
       const { enqueue, playTrack, tracks } = useQueue()
-      const { isPlaying } = usePlayer()
+      const { isPlaying, pauseReason, PauseReason } = usePlayer()
 
       const params = { session: state.current?.session }
 
@@ -147,10 +147,15 @@ const store: Module<State, RootState> = {
 
         if (track === undefined) {
           isPlaying.value = false
+          pauseReason.value = PauseReason.EndOfRadio
           return
         }
 
         await enqueue(track)
+
+        if (isPlaying.value === false && pauseReason.value === PauseReason.EndOfQueue) {
+          playNow = true
+        }
 
         if (playNow) {
           await playTrack(tracks.value.length - 1)
