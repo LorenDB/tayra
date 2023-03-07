@@ -93,7 +93,6 @@ export const useTracks = createGlobalState(() => {
 
       const SoundImplementation = soundImplementation.value
       const sound = new SoundImplementation(sources)
-      sound.track = track.title
 
       sound.onSoundEnd(() => {
         console.log('TRACK ENDED, PLAYING NEXT')
