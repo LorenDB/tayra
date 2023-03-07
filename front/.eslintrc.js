@@ -38,6 +38,7 @@ module.exports = {
     '@intlify/vue-i18n/valid-message-syntax': 'error',
     '@intlify/vue-i18n/no-i18n-t-path-prop': 'error',
     '@intlify/vue-i18n/no-missing-keys': 'error',
+    '@intlify/vue-i18n/no-dynamic-keys': 'error',
     '@intlify/vue-i18n/no-unused-keys': ['error', {
       extensions: ['.ts', '.vue'],
       enableFix: true
