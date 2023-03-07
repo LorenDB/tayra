@@ -1,29 +1,30 @@
 #audio-bars {
   height: 1em;
-  position: relative;
+  display: flex;
+  width: 12px;
 }
 
 .audio-bar {
   background: var(--main-color);
-  bottom: 0;
-  height: .1em;
-  position: absolute;
   width: 3px;
+  height: 1em;
   animation: sound 1s cubic-bezier(.17,.37,.43,.67) infinite alternate;
+  will-change: opacity, transform;
+  transform-origin: bottom;
 }
 
 @keyframes sound {
   0% {
     opacity: .35;
-    height: .1em;
+    transform: scaleY(0.1) translateZ(0);
   }
   100% {
     opacity: 1;
-    height: 1em;
+    transform: scaleY(1) translateZ(0);
   }
 }
 
-.audio-bar:nth-child(1)  { left:  0em; animation-duration: 0.4s; }
-.audio-bar:nth-child(2)  { left: .25em; animation-duration: 0.2s; }
-.audio-bar:nth-child(3)  { left: .50em; animation-duration: 1.0s; }
-.audio-bar:nth-child(4)  { left: .75em; animation-duration: 0.3s; }
+.audio-bar:nth-child(1)  { animation-duration: 0.4s; }
+.audio-bar:nth-child(2)  { animation-duration: 0.2s; }
+.audio-bar:nth-child(3)  { animation-duration: 1.0s; }
+.audio-bar:nth-child(4)  { animation-duration: 0.3s; }
