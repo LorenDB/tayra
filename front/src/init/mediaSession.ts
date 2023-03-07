@@ -6,12 +6,15 @@ import { usePlayer } from '~/composables/audio/player'
 
 export const install: InitModule = ({ app }) => {
   const { currentTrack, playNext, playPrevious } = useQueue()
-  const { isPlaying, seekBy } = usePlayer()
+  const { isPlaying, seekBy, pauseReason, PauseReason } = usePlayer()
 
   // Add controls for notification drawer
   if ('mediaSession' in navigator) {
     navigator.mediaSession.setActionHandler('play', () => (isPlaying.value = true))
-    navigator.mediaSession.setActionHandler('pause', () => (isPlaying.value = false))
+    navigator.mediaSession.setActionHandler('pause', () => {
+      isPlaying.value = false
+      pauseReason.value = PauseReason.MediaSession
+    })
     navigator.mediaSession.setActionHandler('seekforward', () => seekBy(5))
     navigator.mediaSession.setActionHandler('seekbackward', () => seekBy(-5))
     navigator.mediaSession.setActionHandler('nexttrack', () => playNext())

@@ -16,6 +16,16 @@ export enum LoopingMode {
   LoopQueue
 }
 
+// Pausing
+
+export enum PauseReason {
+  UserInput,
+  EndOfQueue,
+  MediaSession,
+  Errored,
+  EndOfRadio
+}
+
 const MODE_MAX = 1 + Math.max(...Object.values(LoopingMode).filter(mode => typeof mode === 'number') as number[])
 
 export const looping: Ref<number> = useStorage('player:looping', LoopingMode.None)
@@ -32,6 +42,8 @@ export const usePlayer = createGlobalState(() => {
   const { currentSound } = useTracks()
   const { playNext } = useQueue()
 
+  const pauseReason = ref(PauseReason.UserInput)
+
   watchEffect(() => {
     const sound = currentSound.value
     if (!sound) return
@@ -40,6 +52,7 @@ export const usePlayer = createGlobalState(() => {
       return sound.play()
     }
 
+    pauseReason.value = PauseReason.UserInput
     return sound.pause()
   })
 
@@ -206,6 +219,7 @@ export const usePlayer = createGlobalState(() => {
     }
 
     isPlaying.value = false
+    pauseReason.value = PauseReason.Errored
   }, 3000, { immediate: false })
 
   watch(currentIndex, stopErrorTimeout)
@@ -214,6 +228,8 @@ export const usePlayer = createGlobalState(() => {
   return {
     initializeFirstTrack,
     isPlaying,
+    pauseReason,
+    PauseReason,
     volume,
     mute,
     looping,

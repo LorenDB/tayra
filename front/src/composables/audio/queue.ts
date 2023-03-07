@@ -233,10 +233,15 @@ export const useQueue = createGlobalState(() => {
       if (looping.value === LoopingMode.LoopQueue && force !== true) {
         // Loop track programmatically if it is the only track in the queue
         if (tracks.value.length === 1) return playTrack(currentIndex.value, true)
+
+        // Loop entire queue
         return playTrack(0)
       }
 
       isPlaying.value = false
+
+      const { pauseReason, PauseReason } = usePlayer()
+      pauseReason.value = PauseReason.EndOfQueue
     }
 
     return playTrack(currentIndex.value + 1)
